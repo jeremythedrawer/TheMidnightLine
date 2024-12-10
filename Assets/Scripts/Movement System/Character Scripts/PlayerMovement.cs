@@ -11,8 +11,8 @@ public class PlayerMovement : StateCore
     private float jumpBufferTime = 0.2f;
     public float lastJumpTime { get; private set; }
     private bool earlyFallEnabled = false;
-    private float cmjSmoothing = 0.1f;
-    private float cmjSmoothingCurrent;
+    private float cbcSmoothing = 0.15f;
+    private float cbcSmoothingCurrent;
 
     void Start()
     {
@@ -124,20 +124,20 @@ public class PlayerMovement : StateCore
 
     private void SetCollisionAdjustment() //TODO put SetCollisionAdjustment() in a script that can be used by all state game objects
     {
-        // Catch Missed Jumps
-        if (collisionChecker.cmjEnabled && collisionChecker.characterBoxCollider.offset.y == 0 && Mathf.Abs(inputChecker.walkInput) > 0)
+        // Correct Box Collider trigger
+        if (collisionChecker.cbcEnabled && collisionChecker.characterBoxCollider.offset.y == 0 && Mathf.Abs(inputChecker.walkInput) > 0)
         {
-            float currentOffsetY = collisionChecker.CMJThreshold;
+            float currentOffsetY = collisionChecker.cbcThreshold;
             collisionChecker.characterBoxCollider.offset = new Vector2(0.0f, currentOffsetY); // moving collider 1 unit up
-            Debug.Log("cmj enabled");
+            Debug.Log("cbc enabled");
 
         }
-        //catch missed jump (corrects box collider when CMJ is enabled)
+        // Correct Box Collider reset
         if (collisionChecker.characterBoxCollider.offset.y > 0.0001)
         {
-            cmjSmoothingCurrent += Time.fixedDeltaTime;
+            cbcSmoothingCurrent += Time.fixedDeltaTime;
 
-            float t = cmjSmoothingCurrent / cmjSmoothing;
+            float t = cbcSmoothingCurrent / cbcSmoothing;
             float currentOffsetY = Mathf.Lerp(collisionChecker.characterBoxCollider.offset.y, 0.0f, t);
 
             if (Mathf.Abs(currentOffsetY) < 0.00001f)
@@ -146,11 +146,11 @@ public class PlayerMovement : StateCore
             }
 
             collisionChecker.characterBoxCollider.offset = new Vector2(0.0f, currentOffsetY);
-            collisionChecker.cmjEnabled = false;
+            collisionChecker.cbcEnabled = false;
         }
         else
         {
-            cmjSmoothingCurrent = 0.0f;
+            cbcSmoothingCurrent = 0.0f;
         }
     }
 }
