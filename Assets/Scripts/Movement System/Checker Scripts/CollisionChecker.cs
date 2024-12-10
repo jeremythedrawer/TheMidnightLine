@@ -8,6 +8,8 @@ public class CollisionChecker : MonoBehaviour
 
     public bool collisionGizmos;
 
+    public Vector2 TotalOffset = new Vector2(0, 0);
+    public float YOffset = 0f;
     [Range(0f, 2.0f)] 
     public float YSensorScale = 0.0f;
 
@@ -60,27 +62,27 @@ public class CollisionChecker : MonoBehaviour
             float horizontalColliderSizeX = colliderSize.x + wallXSensorScale;
 
             // Ground origin
-            Vector2 groundLeftOrigin = (Vector2)transform.position + new Vector2(-verticalColliderSizeX, groundedThreshold);
-            Vector2 groundRightOrigin = (Vector2)transform.position + new Vector2(verticalColliderSizeX, groundedThreshold);
+            Vector2 groundLeftOrigin = (Vector2)transform.position + new Vector2(-verticalColliderSizeX, groundedThreshold) + TotalOffset;
+            Vector2 groundRightOrigin = (Vector2)transform.position + new Vector2(verticalColliderSizeX, groundedThreshold) + TotalOffset;
 
             // Feet
-            Vector2 feetLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, groundedThreshold);
-            Vector2 feetRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, groundedThreshold);
+            Vector2 feetLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, groundedThreshold) + TotalOffset;
+            Vector2 feetRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, groundedThreshold) + TotalOffset;
 
             // Shin origin
-            Vector2 shinLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, CMJThreshold);
-            Vector2 shinRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, CMJThreshold);
+            Vector2 shinLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, CMJThreshold) + TotalOffset;
+            Vector2 shinRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, CMJThreshold) + TotalOffset;
 
             // Head origin wall 
-            Vector2 headWallLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, colliderSizeY);
-            Vector2 headWallRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, colliderSizeY);
+            Vector2 headWallLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, colliderSizeY) + TotalOffset;
+            Vector2 headWallRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, colliderSizeY) + TotalOffset;
 
             // Head origin ceiling
-            Vector2 headCeilingLeftOrigin = (Vector2)transform.position + new Vector2(-verticalColliderSizeX, colliderSizeY);
-            Vector2 headCeilingRightOrigin = (Vector2)transform.position + new Vector2(verticalColliderSizeX, colliderSizeY);
+            Vector2 headCeilingLeftOrigin = (Vector2)transform.position + new Vector2(-verticalColliderSizeX, colliderSizeY) + TotalOffset;
+            Vector2 headCeilingRightOrigin = (Vector2)transform.position + new Vector2(verticalColliderSizeX, colliderSizeY) + TotalOffset;
 
-            Vector2 middleLeftOrigin = (Vector2)transform.position + new Vector2(-BHCThreshold, colliderSizeY);
-            Vector2 middleRightOrigin = (Vector2)transform.position + new Vector2(BHCThreshold, colliderSizeY);
+            Vector2 middleLeftOrigin = (Vector2)transform.position + new Vector2(-BHCThreshold, colliderSizeY) + TotalOffset;
+            Vector2 middleRightOrigin = (Vector2)transform.position + new Vector2(BHCThreshold, colliderSizeY) + TotalOffset;
 
             Gizmos.color = grounded ? Color.green : Color.red;
             Gizmos.DrawLine(groundLeftOrigin, groundRightOrigin);
@@ -118,24 +120,24 @@ public class CollisionChecker : MonoBehaviour
         float horizontalColliderSizeX = colliderSize.x + wallXSensorScale;
 
         //ground origin
-        Vector2 groundLeftOrigin = (Vector2)transform.position + new Vector2(-verticalColliderSizeX, groundedThreshold);
-        Vector2 groundRightOrigin = (Vector2)transform.position + new Vector2(verticalColliderSizeX, groundedThreshold);
+        Vector2 groundLeftOrigin = (Vector2)transform.position + new Vector2(-verticalColliderSizeX, groundedThreshold) + TotalOffset;
+        Vector2 groundRightOrigin = (Vector2)transform.position + new Vector2(verticalColliderSizeX, groundedThreshold) + TotalOffset;
 
         //feet origin
-        Vector2 feetLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, 0.0f);
-        Vector2 feetRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, 0.0f);
+        Vector2 feetLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, 0.0f) + TotalOffset;
+        Vector2 feetRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, 0.0f) + TotalOffset;
 
         //shin origin
-        Vector2 shinLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, CMJThreshold);
-        Vector2 shinRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, CMJThreshold);
+        Vector2 shinLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, CMJThreshold) + TotalOffset;
+        Vector2 shinRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, CMJThreshold) + TotalOffset;
 
         //head origin wall 
-        Vector2 headWallLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, colliderSizeY);
-        Vector2 headWallRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, colliderSizeY);
+        Vector2 headWallLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, colliderSizeY) + TotalOffset;
+        Vector2 headWallRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, colliderSizeY) + TotalOffset;
 
         //head origin ceiling
-        Vector2 headCeilingLeftOrigin = (Vector2)transform.position + new Vector2(-verticalColliderSizeX, colliderSizeY);
-        Vector2 headCeilingRightOrigin = (Vector2)transform.position + new Vector2(verticalColliderSizeX, colliderSizeY);
+        Vector2 headCeilingLeftOrigin = (Vector2)transform.position + new Vector2(-verticalColliderSizeX, colliderSizeY) + TotalOffset;
+        Vector2 headCeilingRightOrigin = (Vector2)transform.position + new Vector2(verticalColliderSizeX, colliderSizeY) + TotalOffset;
 
         CheckGround(colliderSize, groundLeftOrigin, groundRightOrigin);
         CheckWall(colliderSize, feetLeftOrigin, feetRightOrigin, shinLeftOrigin, shinRightOrigin, headWallLeftOrigin, headWallRightOrigin);

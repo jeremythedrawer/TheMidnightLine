@@ -649,9 +649,49 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 652159984}
     m_Modifications:
+    - target: {fileID: 4161541657112090268, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+      propertyPath: m_Size.x
+      value: 0.32
+      objectReference: {fileID: 0}
+    - target: {fileID: 4161541657112090268, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+      propertyPath: m_Size.y
+      value: 2.88
+      objectReference: {fileID: 0}
     - target: {fileID: 4406493656620320848, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
       propertyPath: m_Name
       value: Tourist
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242132147326788535, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+      propertyPath: BHCThreshold
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242132147326788535, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+      propertyPath: CMJThreshold
+      value: 0.354
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242132147326788535, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+      propertyPath: YSensorScale
+      value: 0.3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242132147326788535, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+      propertyPath: TotalOffset.x
+      value: 0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242132147326788535, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+      propertyPath: collisionGizmos
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242132147326788535, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+      propertyPath: wallXSensorScale
+      value: -0.144
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242132147326788535, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+      propertyPath: groundedThreshold
+      value: -0.052
+      objectReference: {fileID: 0}
+    - target: {fileID: 6242132147326788535, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+      propertyPath: groundXSensorScale
+      value: -0.177
       objectReference: {fileID: 0}
     - target: {fileID: 8671146431177964929, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
       propertyPath: m_LocalPosition.x
@@ -692,6 +732,14 @@ PrefabInstance:
     - target: {fileID: 8671146431177964929, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 9059439773755129952, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.22
+      objectReference: {fileID: 0}
+    - target: {fileID: 9059439773755129952, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 1.46
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
