@@ -7,7 +7,7 @@ public abstract class StateCore : MonoBehaviour
 
     public SpriteRenderer spriteRenderer;
 
-    //public Animator animator;
+    public Animator animator;
 
     public CollisionChecker collisionChecker;
 

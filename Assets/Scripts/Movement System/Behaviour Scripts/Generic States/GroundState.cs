@@ -6,6 +6,7 @@ public class GroundState : State
     //child states
     public IdleState idleState;
     public RunState runState;
+    public MeleeState meleeState;
 
     public override void Enter()
     {
@@ -13,31 +14,8 @@ public class GroundState : State
     }
     public override void Do()
     {
-
-        //setting states
-        if (inputChecker.xInput == 0)
-        {
-            Set(idleState, true);
-        }
-        else
-        {
-            Set(runState, true);
-        }
-
-
-        //bumped head correction (corrects box collider when grounded and jumped state failed to move the collider in time
-        if (Mathf.Abs(collisionChecker.characterBoxCollider.offset.x) > 0)
-        {
-            Vector2 currentOffset = collisionChecker.characterBoxCollider.offset;
-            currentOffset.x = 0;
-            collisionChecker.characterBoxCollider.offset = currentOffset;
-        }
-
-        //state completed
-        if (!collisionChecker.grounded || inputChecker.xInput != 0)
-        {
-            isComplete = true;
-        }
+        BHCCorrection();
+        SelectState();
     }
 
     public override void FixedDo()
@@ -47,5 +25,39 @@ public class GroundState : State
     public override void Exit()
     {
 
+    }
+
+    void SelectState()
+    {
+        if (inputChecker.walkInput == 0 && !inputChecker.meleeInput)
+        {
+            Set(idleState, true);
+        }
+        else
+        {
+            Set(runState, true);
+        }
+
+        if (inputChecker.meleeInput)
+        {
+            Set(meleeState, true);
+        }
+    }
+
+    private void BHCCorrection()
+    {
+        //bumped head correction (corrects box collider when grounded and jumped state failed to move the collider in time
+        if (Mathf.Abs(collisionChecker.characterBoxCollider.offset.x) > 0)
+        {
+            Vector2 currentOffset = collisionChecker.characterBoxCollider.offset;
+            currentOffset.x = 0;
+            collisionChecker.characterBoxCollider.offset = currentOffset;
+        }
+
+        //state completed
+        if (!collisionChecker.grounded || inputChecker.walkInput != 0)
+        {
+            isComplete = true;
+        }
     }
 }

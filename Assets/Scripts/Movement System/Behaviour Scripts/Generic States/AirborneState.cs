@@ -18,7 +18,7 @@ public class AirborneState : State
     private bool jumped;
     public override void Enter()
     {
-        if (body.linearVelocityY > 0 || inputChecker.yInput != 0) jumped = true;
+        if (body.linearVelocityY > 0 || inputChecker.jumpInput) jumped = true;
         //setting states
         if (jumped)
         {
@@ -37,7 +37,7 @@ public class AirborneState : State
         body.linearVelocityY = Mathf.Max(body.linearVelocityY, clampedFallSpeed * -1); //using max because Y velocity would be negative when falling
 
         //sticky feet on land
-        if (body.linearVelocityY <= 0 && Mathf.Sign(inputChecker.xInput) != Mathf.Sign(body.linearVelocityX))
+        if (body.linearVelocityY <= 0 && Mathf.Sign(inputChecker.walkInput) != Mathf.Sign(body.linearVelocityX))
         {
             body.linearVelocityX = 0;
         }

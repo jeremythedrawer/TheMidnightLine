@@ -21,13 +21,13 @@ public class IdleState : State
     }
     public override void FixedDo()
     {
-        if (collisionChecker.grounded && inputChecker.xInput == 0 && body.linearVelocityY <= 0)
+        if (collisionChecker.grounded && inputChecker.walkInput == 0 && body.linearVelocityY <= 0)
         {
             body.linearVelocity *= groundDrag;
         }
         float velX = body.linearVelocityX;
 
-        if (!collisionChecker.grounded || inputChecker.xInput != 0)
+        if (!collisionChecker.grounded || inputChecker.walkInput != 0)
         {
             isComplete = true;
         }

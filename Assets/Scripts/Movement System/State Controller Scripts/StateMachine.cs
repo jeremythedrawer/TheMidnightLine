@@ -7,7 +7,7 @@ public class StateMachine
 
     public void Set(State newState, bool forceReset = false)
     {
-        if (state! == newState || forceReset)
+        if (state != newState || forceReset)
         {
             state?.Exit();
             state = newState;

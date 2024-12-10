@@ -6,16 +6,24 @@ public class BystanderMovement : StateCore
     public CalmState calmState;
     public PanicState panicState;
 
+    private GameObject player;
+    private PlayerMovement playerMovement;
+
+    public bool isCalm {  get; private set; }
+    public bool isPanic { get; private set; }
     void Start()
     {
         SetupInstances();
         Set(calmState, true);
 
         initialGravityScale = body.gravityScale;
+        player = GameObject.FindGameObjectWithTag("Player");
+        playerMovement = player.GetComponent<PlayerMovement>();
     }
 
     void Update()
     {
+        PanicChecker();
         SelectState();
 
         state.DoBranch();
@@ -30,9 +38,31 @@ public class BystanderMovement : StateCore
 
     void SelectState()
     {
+
         if (state.isComplete)
         {
-            //state logic
+            if (isCalm)
+            {
+                Set(calmState, true);
+            }
+            if (isPanic)
+            {
+                Set(panicState, true);
+            }
+        }
+    }
+
+    private void PanicChecker()
+    {
+       if (playerMovement.groundState.meleeState.landedHit)
+        {
+            isPanic = true;
+            isCalm = false;
+        }
+       else
+        {
+            isPanic = false;
+            isCalm = true;
         }
     }
 }

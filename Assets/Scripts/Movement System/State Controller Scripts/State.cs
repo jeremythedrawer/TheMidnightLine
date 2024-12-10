@@ -16,7 +16,6 @@ public abstract class State : MonoBehaviour
     //protected Animator animator => core.animator;
 
     protected CollisionChecker collisionChecker => core.collisionChecker;
-
     protected InputChecker inputChecker => core.inputChecker;
 
     public StateMachine machine;

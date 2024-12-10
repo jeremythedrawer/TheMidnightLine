@@ -15,7 +15,7 @@ public class RunState : State
 
         //animator.speed = Helpers.Remap(maxXSpeed, 0, 1, 0, 1.6f, true);
 
-        if (!collisionChecker.grounded || inputChecker.xInput == 0)
+        if (!collisionChecker.grounded || inputChecker.walkInput == 0)
         {
             isComplete = true;
         }

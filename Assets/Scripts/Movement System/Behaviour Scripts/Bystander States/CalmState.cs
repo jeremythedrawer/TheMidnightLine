@@ -2,15 +2,24 @@ using UnityEngine;
 
 public class CalmState : State
 {
-    // Start is called once before the first execution of Update after the MonoBehaviour is created
-    void Start()
-    {
-        
-    }
+    public BystanderMovement bystanderMovement;
 
-    // Update is called once per frame
-    void Update()
+    public float runSpeedMultiplier;
+    public float walkSpeedMultiplier;
+    public override void Enter()
     {
-        
+    }
+    public override void Do()
+    {
+        if (bystanderMovement.isPanic)
+        {
+            isComplete = true;
+        }
+    }
+    public override void FixedDo()
+    {
+    }
+    public override void Exit()
+    {
     }
 }

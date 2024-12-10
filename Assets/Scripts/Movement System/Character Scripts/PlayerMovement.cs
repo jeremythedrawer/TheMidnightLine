@@ -8,12 +8,9 @@ public class PlayerMovement : StateCore
     public GroundState groundState;
 
     public bool jumpRequested { get; private set; }
-
     private float jumpBufferTime = 0.2f;
     public float lastJumpTime { get; private set; }
-
     private bool earlyFallEnabled = false;
-
     private float cmjSmoothing = 0.1f;
     private float cmjSmoothingCurrent;
 
@@ -58,32 +55,21 @@ public class PlayerMovement : StateCore
 
     private void GetInput()
     {
-        inputChecker.xInput = Input.GetAxisRaw("Horizontal");
-        inputChecker.yInput = Input.GetAxisRaw("Vertical");
-
+        inputChecker.walkInput = Input.GetAxisRaw("Horizontal");
         inputChecker.runInput = Input.GetKey(KeyCode.LeftShift);
 
-        if (Input.GetButtonDown("Jump"))
-        {
-            jumpRequested = true;
-            lastJumpTime = Time.time;
-            earlyFallEnabled = false;
-        }
+        inputChecker.jumpInput = Input.GetButtonDown("Jump");
+        inputChecker.releaseJumpInput = Input.GetButtonUp("Jump");
 
-        //early fall
-        if (body.linearVelocityY > 0 && Input.GetButtonUp("Jump"))
-        {
-            body.linearVelocityY = 0;
-            earlyFallEnabled = true;
-        }
+        inputChecker.meleeInput = Input.GetKeyDown(KeyCode.E);
     }
 
     private void MoveWithInput()
     {
-        if (Mathf.Abs(inputChecker.xInput) > 0) //check when moving
+        if (Mathf.Abs(inputChecker.walkInput) > 0) //check when moving
         {
             float newSpeed;
-            float increment = inputChecker.xInput;
+            float increment = inputChecker.walkInput;
 
             if (inputChecker.runInput)
             {
@@ -97,7 +83,7 @@ public class PlayerMovement : StateCore
             body.linearVelocityX = newSpeed;
 
             // update sprite direction
-            bool posDirection =  Mathf.Sign(inputChecker.xInput) > 0;
+            bool posDirection =  Mathf.Sign(inputChecker.walkInput) > 0;
             spriteRenderer.flipX = !posDirection;
         }
         else if (!collisionChecker.grounded)
@@ -108,6 +94,22 @@ public class PlayerMovement : StateCore
 
     private void JumpController()
     {
+        //initiate jump
+        if (inputChecker.jumpInput)
+        {
+            jumpRequested = true;
+            lastJumpTime = Time.time;
+            earlyFallEnabled = false;
+        }
+
+        //early fall
+        if (body.linearVelocityY > 0 && inputChecker.releaseJumpInput)
+        {
+            body.linearVelocityY = 0;
+            earlyFallEnabled = true;
+        }
+
+        //jump logic
         if ((jumpRequested && Time.time - lastJumpTime <= jumpBufferTime) && !earlyFallEnabled)
         {
             if (collisionChecker.grounded || airborneState.fallState.coyoteEnabled)
@@ -123,7 +125,7 @@ public class PlayerMovement : StateCore
     private void SetCollisionAdjustment() //TODO put SetCollisionAdjustment() in a script that can be used by all state game objects
     {
         // Catch Missed Jumps
-        if (collisionChecker.cmjEnabled && collisionChecker.characterBoxCollider.offset.y == 0 && Mathf.Abs(inputChecker.xInput) > 0)
+        if (collisionChecker.cmjEnabled && collisionChecker.characterBoxCollider.offset.y == 0 && Mathf.Abs(inputChecker.walkInput) > 0)
         {
             float currentOffsetY = collisionChecker.CMJThreshold;
             collisionChecker.characterBoxCollider.offset = new Vector2(0.0f, currentOffsetY); // moving collider 1 unit up
