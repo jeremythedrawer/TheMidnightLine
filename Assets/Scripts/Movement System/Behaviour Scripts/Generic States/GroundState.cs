@@ -29,7 +29,7 @@ public class GroundState : State
 
     void SelectState()
     {
-        if (inputChecker.walkInput == 0 && !inputChecker.meleeInput)
+        if (movementInputs.walkInput == 0 && !movementInputs.meleeInput)
         {
             Set(idleState, true);
         }
@@ -38,7 +38,7 @@ public class GroundState : State
             Set(runState, true);
         }
 
-        if (inputChecker.meleeInput)
+        if (movementInputs.meleeInput)
         {
             Set(meleeState, true);
         }
@@ -55,7 +55,7 @@ public class GroundState : State
         }
 
         //state completed
-        if (!collisionChecker.grounded || inputChecker.walkInput != 0)
+        if (!collisionChecker.grounded || movementInputs.walkInput != 0)
         {
             isComplete = true;
         }

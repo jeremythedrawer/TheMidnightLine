@@ -6,17 +6,19 @@ public class BystanderMovement : StateCore
     public CalmState calmState;
     public PanicState panicState;
 
-    private GameObject player;
+    public GameObject player { get; private set; }
     private PlayerMovement playerMovement;
 
     public bool isCalm {  get; private set; }
     public bool isPanic { get; private set; }
+
     void Start()
     {
         SetupInstances();
         Set(calmState, true);
 
         initialGravityScale = body.gravityScale;
+
         player = GameObject.FindGameObjectWithTag("Player");
         playerMovement = player.GetComponent<PlayerMovement>();
     }
@@ -31,9 +33,10 @@ public class BystanderMovement : StateCore
 
     private void FixedUpdate()
     {
-
-        
         state.FixedDoBranch();
+
+        movementInputs.MoveWithInput();
+        movementInputs.SetCollisionAdjustment();
     }
 
     void SelectState()

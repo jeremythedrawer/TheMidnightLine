@@ -42,17 +42,16 @@ public class CollisionChecker : MonoBehaviour
     public bool bhcRightEnabled { get; private set; }
     public bool bhcEnabled { get; private set; }
 
-    //Stairs Bools
-    private bool stairsShinEnabled;
-    private bool stairsHeadEnabled;
-    public bool stairsEnabled { get; private set; }
 
+    private Vector2 collisionCheckerOrigin;
     private void OnDrawGizmos()
     {
+        #if UNITY_EDITOR
         if (Application.isPlaying) return;
 
         if (collisionGizmos)
         {
+            collisionCheckerOrigin = new Vector2(characterBoxCollider.bounds.center.x, characterBoxCollider.bounds.min.y);
             OriginPoints originPoints = CalculateOriginPoints();
 
             Vector2 colliderSizeY = new Vector2(0, originPoints.ColliderSizeY);
@@ -86,12 +85,12 @@ public class CollisionChecker : MonoBehaviour
             Gizmos.color = cbcShinEnabled ? Color.green : Color.red;
             Gizmos.DrawLine(feetLeftOrigin, shinLeftOrigin);
             Gizmos.DrawLine(shinLeftOrigin, headWallLeftOrigin);
-            Gizmos.DrawLine(shinLeftOrigin, new Vector2(transform.position.x, shinLeftOrigin.y));
+            Gizmos.DrawLine(shinLeftOrigin, new Vector2(collisionCheckerOrigin.x, shinLeftOrigin.y));
 
             Gizmos.color = cbcShinEnabled ? Color.green : Color.blue;
             Gizmos.DrawLine(feetRightOrigin, shinRightOrigin);
             Gizmos.DrawLine(shinRightOrigin, headWallRightOrigin);
-            Gizmos.DrawLine(shinRightOrigin, new Vector2(transform.position.x, shinRightOrigin.y));
+            Gizmos.DrawLine(shinRightOrigin, new Vector2(collisionCheckerOrigin.x, shinRightOrigin.y));
 
             Gizmos.color = bhcleftEnabled ? Color.green : Color.red;
             Gizmos.DrawLine(headCeilingLeftOrigin, middleLeftOrigin);
@@ -104,9 +103,12 @@ public class CollisionChecker : MonoBehaviour
             Gizmos.color = bhcMiddleEnabled ? Color.green : Color.yellow;
             Gizmos.DrawLine(middleLeftOrigin, middleRightOrigin);
         }
+        #endif
     }
     private void FixedUpdate()
     {
+        collisionCheckerOrigin = new Vector2(characterBoxCollider.bounds.center.x, characterBoxCollider.bounds.min.y);
+
         //box collider size
         Vector2 colliderSize = characterBoxCollider.size;
         OriginPoints originPoints = CalculateOriginPoints();
@@ -147,7 +149,9 @@ public class CollisionChecker : MonoBehaviour
         RaycastHit2D groundHit = Physics2D.Linecast(groundLeftOrigin, groundRightOrigin, groundLayer);
         grounded = groundHit.collider != null;
 
+        #if UNITY_EDITOR
         Debug.DrawLine(groundLeftOrigin, groundRightOrigin, grounded ? Color.green : Color.red);
+        #endif
     }
 
     private void CheckWall(Vector2 colliderSize,
@@ -177,14 +181,16 @@ public class CollisionChecker : MonoBehaviour
         }
         if (collisionGizmos)
         {
+            #if UNITY_EDITOR
             Debug.DrawLine(feetLeftOrigin, shinLeftOrigin, cbcShinEnabled ? Color.green : Color.red);
             Debug.DrawLine(feetRightOrigin, shinRightOrigin, cbcShinEnabled ? Color.green : Color.blue);
 
             Debug.DrawLine(shinLeftOrigin, headWallLeftOrigin, cbcHeadEnabled ? Color.green : Color.red);
             Debug.DrawLine(shinRightOrigin, headWallRightOrigin, cbcHeadEnabled ? Color.green : Color.blue);
 
-            Debug.DrawLine(shinLeftOrigin, new Vector2(transform.position.x, shinLeftOrigin.y), cbcShinEnabled ? Color.green : Color.red);
-            Debug.DrawLine(shinRightOrigin, new Vector2(transform.position.x, shinRightOrigin.y), cbcShinEnabled ? Color.green : Color.blue);
+            Debug.DrawLine(shinLeftOrigin, new Vector2(collisionCheckerOrigin.x, shinLeftOrigin.y), cbcShinEnabled ? Color.green : Color.red);
+            Debug.DrawLine(shinRightOrigin, new Vector2(collisionCheckerOrigin.x, shinRightOrigin.y), cbcShinEnabled ? Color.green : Color.blue);
+            #endif
         }
 
 
@@ -194,8 +200,8 @@ public class CollisionChecker : MonoBehaviour
     private void CheckCeiling(Vector2 colliderSize, Vector2 headCeilingLeftOrigin, Vector2 headCeilingRightOrigin, float colliderSizeY)
     {
 
-        Vector2 middleLeftOrigin = (Vector2)transform.position + new Vector2(-bhcThreshold, colliderSizeY);
-        Vector2 middleRightOrigin = (Vector2)transform.position + new Vector2(bhcThreshold, colliderSizeY);
+        Vector2 middleLeftOrigin = (Vector2)collisionCheckerOrigin + new Vector2(-bhcThreshold, colliderSizeY);
+        Vector2 middleRightOrigin = (Vector2)collisionCheckerOrigin + new Vector2(bhcThreshold, colliderSizeY);
 
         RaycastHit2D leftHit = Physics2D.Linecast(headCeilingLeftOrigin, middleLeftOrigin, groundLayer);
         RaycastHit2D middleHit = Physics2D.Linecast(middleLeftOrigin, middleRightOrigin, groundLayer);
@@ -217,12 +223,14 @@ public class CollisionChecker : MonoBehaviour
 
         if (collisionGizmos)
         {
+            #if UNITY_EDITOR
             Debug.DrawLine(headCeilingLeftOrigin, middleLeftOrigin, bhcleftEnabled ? Color.green : Color.red);
             Debug.DrawLine(middleLeftOrigin, middleRightOrigin, bhcMiddleEnabled ? Color.green : Color.yellow);
             Debug.DrawLine(headCeilingRightOrigin, middleRightOrigin, bhcRightEnabled ? Color.green : Color.blue);
 
             Debug.DrawLine(middleLeftOrigin, middleLeftOrigin - new Vector2(0, colliderSizeY), bhcleftEnabled ? Color.green : Color.red);
             Debug.DrawLine(middleRightOrigin, middleRightOrigin - new Vector2(0, colliderSizeY), bhcRightEnabled ? Color.green : Color.blue);
+            #endif  
         }
 
     }
@@ -259,25 +267,25 @@ public class CollisionChecker : MonoBehaviour
         {
             ColliderSizeY = colliderSizeY,
 
-            GroundLeftOrigin = (Vector2)transform.position + new Vector2(-verticalColliderSizeX, groundedThreshold) + TotalOffset,
-            GroundRightOrigin = (Vector2)transform.position + new Vector2(verticalColliderSizeX, groundedThreshold) + TotalOffset,
+            GroundLeftOrigin = (Vector2)collisionCheckerOrigin + new Vector2(-verticalColliderSizeX, groundedThreshold) + TotalOffset,
+            GroundRightOrigin = (Vector2)collisionCheckerOrigin + new Vector2(verticalColliderSizeX, groundedThreshold) + TotalOffset,
 
 
-            FeetLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, 0.0f) + TotalOffset,
-            FeetRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, 0.0f) + TotalOffset,
+            FeetLeftOrigin = (Vector2)collisionCheckerOrigin + new Vector2(-horizontalColliderSizeX, 0.0f) + TotalOffset,
+            FeetRightOrigin = (Vector2)collisionCheckerOrigin + new Vector2(horizontalColliderSizeX, 0.0f) + TotalOffset,
 
 
-            ShinLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, cbcThreshold) + TotalOffset,
-            ShinRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, cbcThreshold) + TotalOffset,
+            ShinLeftOrigin = (Vector2)collisionCheckerOrigin + new Vector2(-horizontalColliderSizeX, cbcThreshold) + TotalOffset,
+            ShinRightOrigin = (Vector2)collisionCheckerOrigin + new Vector2(horizontalColliderSizeX, cbcThreshold) + TotalOffset,
 
-            HeadWallLeftOrigin = (Vector2)transform.position + new Vector2(-horizontalColliderSizeX, colliderSizeY) + TotalOffset,
-            HeadWallRightOrigin = (Vector2)transform.position + new Vector2(horizontalColliderSizeX, colliderSizeY) + TotalOffset,
+            HeadWallLeftOrigin = (Vector2)collisionCheckerOrigin + new Vector2(-horizontalColliderSizeX, colliderSizeY) + TotalOffset,
+            HeadWallRightOrigin = (Vector2)collisionCheckerOrigin + new Vector2(horizontalColliderSizeX, colliderSizeY) + TotalOffset,
 
-            HeadCeilingLeftOrigin = (Vector2)transform.position + new Vector2(-verticalColliderSizeX, colliderSizeY) + TotalOffset,
-            HeadCeilingRightOrigin = (Vector2)transform.position + new Vector2(verticalColliderSizeX, colliderSizeY) + TotalOffset,
+            HeadCeilingLeftOrigin = (Vector2)collisionCheckerOrigin + new Vector2(-verticalColliderSizeX, colliderSizeY) + TotalOffset,
+            HeadCeilingRightOrigin = (Vector2)collisionCheckerOrigin + new Vector2(verticalColliderSizeX, colliderSizeY) + TotalOffset,
 
-            MiddleLeftOrigin = (Vector2)transform.position + new Vector2(-bhcThreshold, colliderSizeY) + TotalOffset,
-            MiddleRightOrigin = (Vector2)transform.position + new Vector2(bhcThreshold, colliderSizeY) + TotalOffset
+            MiddleLeftOrigin = (Vector2)collisionCheckerOrigin + new Vector2(-bhcThreshold, colliderSizeY) + TotalOffset,
+            MiddleRightOrigin = (Vector2)collisionCheckerOrigin + new Vector2(bhcThreshold, colliderSizeY) + TotalOffset
         };
 
         return originPoints;

@@ -29,7 +29,7 @@ public class MeleeState : State
 
     void SelectState()
     {
-        if (inputChecker.walkInput == 0 && !inputChecker.meleeInput)
+        if (movementInputs.walkInput == 0 && !movementInputs.meleeInput)
         {
             Set(idleState, true);
         }
