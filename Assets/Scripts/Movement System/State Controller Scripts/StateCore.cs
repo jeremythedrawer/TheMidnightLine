@@ -11,7 +11,7 @@ public abstract class StateCore : MonoBehaviour
 
     public CollisionChecker collisionChecker;
 
-    public InputChecker inputChecker;
+    public MovementInputs movementInputs;
 
     public CharacterStats characterStats;
 
@@ -44,12 +44,12 @@ public abstract class StateCore : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-#if UNITY_EDITOR
+        #if UNITY_EDITOR
         if (Application.isPlaying && state != null)
         {
             List<State> states = machine.GetActiveStateBranch();
             UnityEditor.Handles.Label(transform.position, "Active States: " + string.Join(" > ", states));
         }
-#endif
+        #endif
     }
 }
