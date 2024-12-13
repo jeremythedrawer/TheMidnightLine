@@ -47,7 +47,6 @@ public class PanicState : State
 
         if (playerHit.collider != null)
         {
-            Debug.Log($"Linecast hit: {playerHit.collider.gameObject.name}");
             if (currentPlayerPos.x > currentPos.x)
             {
                 movementInputs.walkInput = -1;

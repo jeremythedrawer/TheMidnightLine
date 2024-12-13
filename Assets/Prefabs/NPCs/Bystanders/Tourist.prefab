@@ -45,8 +45,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bystanderMovement: {fileID: 4144621108444965492}
+  groundState: {fileID: 901033779143189791}
   runSpeedMultiplier: 0
   walkSpeedMultiplier: 0
+  breathLoops: 5
 --- !u!1 &1740033813937342041
 GameObject:
   m_ObjectHideFlags: 0
@@ -92,8 +94,13 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   bystanderMovement: {fileID: 4144621108444965492}
+  groundState: {fileID: 901033779143189791}
   runSpeedMultiplier: 0
   walkSpeedMultiplier: 0
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
+  avoidPlayerDistance: 5
 --- !u!1 &3647915884786737660
 GameObject:
   m_ObjectHideFlags: 0
@@ -247,7 +254,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   m_Interpolate: 1
   m_SleepingMode: 1
   m_CollisionDetection: 1
@@ -317,7 +324,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 0
+  m_SortingOrder: 5
   m_Sprite: {fileID: 614800973, guid: d8c707d13e283cd4f86c5b646ed2934b, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -345,7 +352,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 7628201130985039182}
   animator: {fileID: 5602924533705069211}
   collisionChecker: {fileID: 6242132147326788535}
-  inputChecker: {fileID: 4490734383750937007}
+  movementInputs: {fileID: 4490734383750937007}
   characterStats: {fileID: 415244996423126682}
   calmState: {fileID: 969704802312656875}
   panicState: {fileID: 408894430215660595}
@@ -381,13 +388,15 @@ MonoBehaviour:
     m_Bits: 128
   characterBoxCollider: {fileID: 4161541657112090268}
   collisionGizmos: 1
-  YSensorScale: 0.55
-  groundedThreshold: -0.019
-  groundXSensorScale: -0.25
-  wallXSensorScale: -0.222
-  CMJThreshold: 0.23
-  BHCThreshold: 0
-  cmjEnabled: 0
+  TotalOffset: {x: 0, y: 0}
+  YOffset: 0
+  YSensorScale: 0.3
+  groundedThreshold: -0.052
+  groundXSensorScale: -0.177
+  wallXSensorScale: -0.144
+  cbcThreshold: 0.5
+  bhcThreshold: 0
+  cbcEnabled: 0
 --- !u!114 &4490734383750937007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -400,6 +409,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7c8c9816f824f04b9acefb7b311c693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  core: {fileID: 4144621108444965492}
 --- !u!1 &6051593538122785202
 GameObject:
   m_ObjectHideFlags: 0
@@ -460,7 +470,7 @@ Transform:
   m_GameObject: {fileID: 6843679621861268008}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.5, z: 0}
+  m_LocalPosition: {x: 0.22, y: 1.41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -510,5 +520,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.5, y: 1}
+  m_Size: {x: 0.32, y: 2.88}
   m_EdgeRadius: 0

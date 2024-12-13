@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7295423304541140548}
   - component: {fileID: 6207222510939091140}
   m_Layer: 6
-  m_Name: Collider
+  m_Name: PlayerCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -87,7 +87,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4265203560178826556}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Behaviours
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -124,7 +124,7 @@ GameObject:
   - component: {fileID: 79855899776776402}
   - component: {fileID: 965159718817112335}
   - component: {fileID: 6960523697587595809}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -214,7 +214,7 @@ GameObject:
   - component: {fileID: 1810548854547567896}
   - component: {fileID: 4210922695891752456}
   - component: {fileID: 3611081317677061277}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Airborne
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -414,7 +414,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 5
+  m_SortingOrder: 6
   m_Sprite: {fileID: 21300000, guid: d922cbfd82d21c04a916cce564e5d856, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -439,10 +439,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   body: {fileID: 6574141234835530042}
-  spriteRenderer: {fileID: 0}
+  spriteRenderer: {fileID: 2777033409117370694}
   animator: {fileID: 5569901885537800629}
   collisionChecker: {fileID: 6655092737606140929}
-  inputChecker: {fileID: 8911714753198091239}
+  movementInputs: {fileID: 8911714753198091239}
   characterStats: {fileID: 7752829070841774031}
   airborneState: {fileID: 1810548854547567896}
   groundState: {fileID: 4604699258691990960}
@@ -478,13 +478,15 @@ MonoBehaviour:
     m_Bits: 128
   characterBoxCollider: {fileID: 6207222510939091140}
   collisionGizmos: 1
+  TotalOffset: {x: 0, y: 0}
+  YOffset: 0
   YSensorScale: 0.259
-  groundedThreshold: -0.03
+  groundedThreshold: -0.036
   groundXSensorScale: -0.25
   wallXSensorScale: -0.222
-  CMJThreshold: 0.23
-  BHCThreshold: 0
-  cmjEnabled: 0
+  cbcThreshold: 0.5
+  bhcThreshold: 0
+  cbcEnabled: 0
 --- !u!114 &8911714753198091239
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -497,3 +499,4 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7c8c9816f824f04b9acefb7b311c693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  core: {fileID: 3141435046242817171}
