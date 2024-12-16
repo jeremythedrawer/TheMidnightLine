@@ -1,11 +1,13 @@
 using UnityEngine;
 using System;
 
-public class CarriageCamBounds : MonoBehaviour
+public class ActivateCarriageBounds : MonoBehaviour
 {
-    public static CarriageCamBounds Instance { get; private set; }
+    public static ActivateCarriageBounds Instance { get; private set; }
 
     private BoxCollider2D Collider2D;
+
+    public int bystanderCount { get; private set; }
 
     public bool activeBoundary {  get; private set; }
     public float leftEdge {  get; private set; }
@@ -19,13 +21,19 @@ public class CarriageCamBounds : MonoBehaviour
         activeBoundary = false;
         leftEdge = Collider2D.bounds.min.x;
         rightEdge = Collider2D.bounds.max.x;
+        bystanderCount = 0;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player Collider"))
         {
             Instance = this;
+        }
+
+        if (collision.gameObject.CompareTag("Bystander Collider"))
+        {
+            bystanderCount++;
         }
     }
 
@@ -43,6 +51,10 @@ public class CarriageCamBounds : MonoBehaviour
         {
             activeBoundary = false;
             Instance = null;
+        }
+        if (collision.gameObject.CompareTag("Bystander Collider"))
+        {
+            bystanderCount--;
         }
     }
 }

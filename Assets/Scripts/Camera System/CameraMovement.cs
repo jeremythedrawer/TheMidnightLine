@@ -98,11 +98,11 @@ public class CameraMovement : MonoBehaviour
         horizontalDamping = Mathf.Abs(widthOffset) > 0 ? initialDamping : initialDamping * 2;
         FallingCamera();
 
-        if (CarriageCamBounds.Instance != null)
+        if (ActivateCarriageBounds.Instance != null)
         {
             CalculateCarriageBoundOffset();
 
-            target.x = Mathf.Clamp(target.x, CarriageCamBounds.Instance.leftEdge + updatingBoundOffset, CarriageCamBounds.Instance.rightEdge - updatingBoundOffset);
+            target.x = Mathf.Clamp(target.x, ActivateCarriageBounds.Instance.leftEdge + updatingBoundOffset, ActivateCarriageBounds.Instance.rightEdge - updatingBoundOffset);
             target.y = trainCamBounds.camBoundBottomOffset + cam.orthographicSize;
         }
         else
@@ -138,9 +138,9 @@ public class CameraMovement : MonoBehaviour
 
     private void CalculateCarriageBoundOffset()
     {
-        float carriageOriginX = CarriageCamBounds.Instance.transform.position.x;
+        float carriageOriginX = ActivateCarriageBounds.Instance.transform.position.x;
         float playerOriginX = player.transform.position.x;
-        float carriageSize = CarriageCamBounds.Instance.rightEdge - CarriageCamBounds.Instance.leftEdge;
+        float carriageSize = ActivateCarriageBounds.Instance.rightEdge - ActivateCarriageBounds.Instance.leftEdge;
         float normalizedCarriageX = 1.0f - ((Mathf.Abs(carriageOriginX - playerOriginX) / carriageSize) * 2.0f);
 
         rootFourT = Mathf.Pow(normalizedCarriageX, 0.25f);
