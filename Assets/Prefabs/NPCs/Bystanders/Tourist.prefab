@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7351850811854246125}
   - component: {fileID: 969704802312656875}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Calm
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -59,7 +59,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4980023758921377598}
   - component: {fileID: 408894430215660595}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Panic
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -113,8 +113,7 @@ GameObject:
   - component: {fileID: 901033779143189791}
   - component: {fileID: 2092524970338930886}
   - component: {fileID: 3513126210600548214}
-  - component: {fileID: 9090846173891813946}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -150,7 +149,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   idleState: {fileID: 2092524970338930886}
   runState: {fileID: 3513126210600548214}
-  meleeState: {fileID: 9090846173891813946}
+  meleeState: {fileID: 0}
+  shootState: {fileID: 0}
+  canMelee: 0
+  canShoot: 0
 --- !u!114 &2092524970338930886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -178,20 +180,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   groundState: {fileID: 901033779143189791}
---- !u!114 &9090846173891813946
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3647915884786737660}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: aefa32b988cb0c341b30f79ca0414055, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  idleState: {fileID: 2092524970338930886}
-  runState: {fileID: 3513126210600548214}
 --- !u!1 &4406493656620320848
 GameObject:
   m_ObjectHideFlags: 0
@@ -208,7 +196,7 @@ GameObject:
   - component: {fileID: 415244996423126682}
   - component: {fileID: 6242132147326788535}
   - component: {fileID: 4490734383750937007}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Tourist
   m_TagString: Untagged
   m_Icon: {fileID: 3936346786652291628, guid: 0000000000000000d000000000000000, type: 0}
@@ -419,7 +407,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1444046756319251011}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Behaviours
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -454,9 +442,9 @@ GameObject:
   m_Component:
   - component: {fileID: 9059439773755129952}
   - component: {fileID: 4161541657112090268}
-  m_Layer: 6
+  m_Layer: 0
   m_Name: Collider
-  m_TagString: Untagged
+  m_TagString: Bystander Collider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
