@@ -9,6 +9,7 @@ public class MovementInputs : MonoBehaviour
     internal bool jumpInput;
     internal bool releaseJumpInput;
     internal bool meleeInput;
+    internal bool shootInput;
 
     //Jump Controller
     private bool jumpRequested;
