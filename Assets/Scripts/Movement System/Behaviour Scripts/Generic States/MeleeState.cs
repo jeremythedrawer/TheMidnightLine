@@ -15,7 +15,7 @@ public class MeleeState : State
     public override void Do()
     {
         SelectState();
-        DamagedGiven();
+        GivenDamage();
     }
 
     public override void FixedDo()
@@ -39,7 +39,7 @@ public class MeleeState : State
         }
     }
 
-    private void DamagedGiven()
+    private void GivenDamage()
     {
         if (landedHit == false)
         {
@@ -50,5 +50,10 @@ public class MeleeState : State
             landedHit = false;
         }
         //TODO damage logic
+    }
+
+    private void MeleeTime()
+    {
+        //TODO lerp using animation clip time as t
     }
 }

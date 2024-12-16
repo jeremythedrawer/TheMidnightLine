@@ -1,4 +1,3 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class GroundState : State
@@ -6,7 +5,11 @@ public class GroundState : State
     //child states
     public IdleState idleState;
     public RunState runState;
-    public MeleeState meleeState;
+    [HideInInspector] public MeleeState meleeState;
+    [HideInInspector] public ShootState shootState;
+
+    public bool canMelee;
+    public bool canShoot;
 
     public override void Enter()
     {
@@ -38,9 +41,14 @@ public class GroundState : State
             Set(runState, true);
         }
 
-        if (movementInputs.meleeInput)
+        if (movementInputs.meleeInput && canMelee)
         {
             Set(meleeState, true);
+        }
+
+        if (movementInputs.shootInput && canShoot)
+        {
+            Set(shootState, true);
         }
     }
 
