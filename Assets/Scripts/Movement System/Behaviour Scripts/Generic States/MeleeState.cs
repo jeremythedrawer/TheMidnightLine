@@ -2,11 +2,19 @@ using UnityEngine;
 
 public class MeleeState : State
 {
+    //parent state
+    public StateCore stateCore;
+    public GroundState groundState;
+
     //child states
     public IdleState idleState;
-    public RunState runState;
+
+    private string rightAnimation = "meleeRight";
 
     public bool landedHit {  get; private set; }
+
+    private bool playingAnimation = false;
+
 
     public override void Enter()
     {
@@ -14,7 +22,8 @@ public class MeleeState : State
     }
     public override void Do()
     {
-        SelectState();
+        SuspendInputs();
+        MeleeAnimationController();
         GivenDamage();
     }
 
@@ -26,19 +35,6 @@ public class MeleeState : State
     {
 
     }
-
-    void SelectState()
-    {
-        if (movementInputs.walkInput == 0 && !movementInputs.meleeInput)
-        {
-            Set(idleState, true);
-        }
-        else
-        {
-            Set(runState, true);
-        }
-    }
-
     private void GivenDamage()
     {
         if (landedHit == false)
@@ -52,8 +48,28 @@ public class MeleeState : State
         //TODO damage logic
     }
 
-    private void MeleeTime()
+    private void MeleeAnimationController()
     {
-        //TODO lerp using animation clip time as t
+
+        if (!playingAnimation)
+        {
+            animator.Play(rightAnimation, 0, 0);
+            playingAnimation = true;
+        }
+        if (stateCore.currentAnimStateInfo.normalizedTime >= 1f)
+        {
+            playingAnimation = false;
+            isComplete = true;
+            groundState.isAttacking = false;
+        }
+
+        // TODO implement right and left animation logic and also logic for symetrical animations (agents)
+    }
+
+    private void SuspendInputs()
+    {
+        movementInputs.walkInput = 0;
+        movementInputs.jumpInput = false;
+        movementInputs.runInput = false;
     }
 }

@@ -49,11 +49,9 @@ public class CalmState : State
     {
         if (!groundState.idleState) return;
 
-        AnimatorStateInfo currentState = animator.GetCurrentAnimatorStateInfo(0);
-
-        if (!isBlinking && currentState.IsName(breathingAnimation))
+        if (!isBlinking && bystanderMovement.currentAnimStateInfo.IsName(breathingAnimation))
         {
-            if (currentState.normalizedTime >= 1f)
+            if (bystanderMovement.currentAnimStateInfo.normalizedTime >= 1f)
             {
                 breathCount++;
                 animator.Play(breathingAnimation, 0, 0);
@@ -65,9 +63,9 @@ public class CalmState : State
                 }
             }
         }
-        else if (isBlinking && currentState.IsName(blinkingAnimation))
+        else if (isBlinking && bystanderMovement.currentAnimStateInfo.IsName(blinkingAnimation))
         {
-            if (currentState.normalizedTime >= 1f)
+            if (bystanderMovement.currentAnimStateInfo.normalizedTime >= 1f)
             {
                 PlayBreathing();
             }

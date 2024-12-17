@@ -6,15 +6,12 @@ public abstract class StateCore : MonoBehaviour
     public Rigidbody2D body;
 
     public SpriteRenderer spriteRenderer;
-
     public Animator animator;
+    public AnimatorStateInfo currentAnimStateInfo;
 
     public CollisionChecker collisionChecker;
-
     public MovementInputs movementInputs;
-
     public CharacterStats characterStats;
-
     public StateMachine machine;
 
     public State state => machine.state;

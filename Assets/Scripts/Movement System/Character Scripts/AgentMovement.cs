@@ -45,6 +45,8 @@ public class AgentMovement : StateCore
 
     void Update()
     {
+        currentAnimStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
         CheckInCameraView();
         CheckPlayerCharacterSight();
         CheckBystandersInCarriage();

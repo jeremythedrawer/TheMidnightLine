@@ -11,6 +11,12 @@ public class GroundState : State
     public bool canMelee;
     public bool canShoot;
 
+    [Tooltip("How sticky the floor is")]
+    [Range(0f, 1f)]
+    public float groundDrag;
+
+    public bool isAttacking { private get; set; } = false;
+
     public override void Enter()
     {
 
@@ -23,7 +29,10 @@ public class GroundState : State
 
     public override void FixedDo()
     {
-
+        if (state == idleState || state == meleeState || state == shootState)
+        {
+            body.linearVelocity *= groundDrag;
+        }
     }
     public override void Exit()
     {
@@ -32,22 +41,27 @@ public class GroundState : State
 
     void SelectState()
     {
-        if (movementInputs.walkInput == 0 && !movementInputs.meleeInput)
+        if (!isAttacking)
         {
-            Set(idleState, true);
-        }
-        else
-        {
-            Set(runState, true);
+            if (movementInputs.walkInput == 0)
+            {
+                Set(idleState, true);
+            }
+            else
+            {
+                Set(runState, true);
+            }
         }
 
-        if (movementInputs.meleeInput && canMelee)
+        if (canMelee && movementInputs.meleeInput)
         {
+            isAttacking = true;
             Set(meleeState, true);
         }
 
         if (movementInputs.shootInput && canShoot)
         {
+            isAttacking = true;
             Set(shootState, true);
         }
     }
@@ -63,7 +77,7 @@ public class GroundState : State
         }
 
         //state completed
-        if (!collisionChecker.grounded || movementInputs.walkInput != 0)
+        if (!collisionChecker.grounded)
         {
             isComplete = true;
         }

@@ -10,24 +10,11 @@ public class ShootState : State
     }
     public override void Do()
     {
-        SelectState();
     }
     public override void FixedDo()
     {
     }
     public override void Exit()
     {
-    }
-
-    void SelectState()
-    {
-        if (movementInputs.walkInput == 0 && !movementInputs.shootInput)
-        {
-            Set(idleState, true);
-        }
-        else
-        {
-            Set(runState, true);
-        }
     }
 }

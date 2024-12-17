@@ -25,6 +25,8 @@ public class BystanderMovement : StateCore
 
     void Update()
     {
+        currentAnimStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
         PanicChecker();
         SelectState();
 
