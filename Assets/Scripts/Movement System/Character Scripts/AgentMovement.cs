@@ -56,6 +56,7 @@ public class AgentMovement : StateCore
 
         SelectState();
         state.DoBranch();
+
     }
     private void FixedUpdate()
     {

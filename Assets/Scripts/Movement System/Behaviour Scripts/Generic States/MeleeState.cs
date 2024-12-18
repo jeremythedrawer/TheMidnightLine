@@ -8,17 +8,15 @@ public class MeleeState : State
 
     //child states
     public IdleState idleState;
-
-    private string groundRightAnimation = "groundMeleeRight";
-
     public bool landedHit {  get; private set; }
 
     private bool playingAnimation = false;
 
+    private string groundRightAnimation = "groundMeleeRight";
+
 
     public override void Enter()
     {
-
     }
     public override void Do()
     {
@@ -35,8 +33,11 @@ public class MeleeState : State
     {
 
     }
+
+
     private void GivenDamage()
     {
+
 
         if (landedHit == false)
         {

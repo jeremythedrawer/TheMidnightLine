@@ -3,6 +3,7 @@ using UnityEngine;
 public class MovementInputs : MonoBehaviour
 {
     public StateCore core;
+    public Transform meleeBoxColliderTransform;
 
     internal float walkInput;
     internal bool runInput;
@@ -37,10 +38,7 @@ public class MovementInputs : MonoBehaviour
             }
 
             core.body.linearVelocityX = newSpeed;
-
-            // update sprite direction
-            bool posDirection = Mathf.Sign(walkInput) > 0;
-            core.spriteRenderer.flipX = !posDirection;
+            FlipGameObject();
         }
         else if (!core.collisionChecker.grounded)
         {
@@ -105,6 +103,24 @@ public class MovementInputs : MonoBehaviour
         else
         {
             cbcSmoothingCurrent = 0.0f;
+        }
+    }
+
+    private void FlipGameObject()
+    {
+        // update sprite direction
+        bool posDirection = Mathf.Sign(walkInput) > 0; // 0 is left, 1 is right
+        core.spriteRenderer.flipX = !posDirection;
+
+        if (core is not BystanderMovement)
+        {
+            Vector3 meleeBoxScale = meleeBoxColliderTransform.localScale;
+            float intendedScaleX = Mathf.Abs(meleeBoxScale.x) * (posDirection ? 1: -1);
+            if (meleeBoxScale.x != intendedScaleX)
+            {
+                meleeBoxScale.x = intendedScaleX;
+                meleeBoxColliderTransform.localScale = meleeBoxScale;
+            }
         }
     }
 

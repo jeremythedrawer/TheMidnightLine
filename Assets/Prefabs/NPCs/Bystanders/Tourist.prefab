@@ -153,6 +153,7 @@ MonoBehaviour:
   shootState: {fileID: 0}
   canMelee: 0
   canShoot: 0
+  groundDrag: 0
 --- !u!114 &2092524970338930886
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -165,8 +166,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc210d234ed951489eaa8f7cc137eff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateCore: {fileID: 4144621108444965492}
   groundState: {fileID: 901033779143189791}
-  groundDrag: 0.208
 --- !u!114 &3513126210600548214
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -179,6 +180,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ede407c0c928c8f4d800a95c4e0a358b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  stateCore: {fileID: 4144621108444965492}
   groundState: {fileID: 901033779143189791}
 --- !u!1 &4406493656620320848
 GameObject:
@@ -196,6 +198,7 @@ GameObject:
   - component: {fileID: 415244996423126682}
   - component: {fileID: 6242132147326788535}
   - component: {fileID: 4490734383750937007}
+  - component: {fileID: 3820185767879755702}
   m_Layer: 0
   m_Name: Tourist
   m_TagString: Untagged
@@ -342,6 +345,7 @@ MonoBehaviour:
   collisionChecker: {fileID: 6242132147326788535}
   movementInputs: {fileID: 4490734383750937007}
   characterStats: {fileID: 415244996423126682}
+  healthSystem: {fileID: 3820185767879755702}
   calmState: {fileID: 969704802312656875}
   panicState: {fileID: 408894430215660595}
 --- !u!114 &415244996423126682
@@ -359,6 +363,8 @@ MonoBehaviour:
   runSpeed: 4
   walkSpeed: 2
   jumpSpeed: 0
+  health: 50
+  meleeStrength: 0
 --- !u!114 &6242132147326788535
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -398,6 +404,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   core: {fileID: 4144621108444965492}
+--- !u!114 &3820185767879755702
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4406493656620320848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b976958a5d1757049be4966e9fc0d76e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  characterStats: {fileID: 415244996423126682}
 --- !u!1 &6051593538122785202
 GameObject:
   m_ObjectHideFlags: 0
@@ -458,7 +477,7 @@ Transform:
   m_GameObject: {fileID: 6843679621861268008}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.22, y: 1.41, z: 0}
+  m_LocalPosition: {x: 0, y: 1.41, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
