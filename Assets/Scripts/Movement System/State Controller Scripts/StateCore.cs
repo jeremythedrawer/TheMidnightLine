@@ -12,6 +12,7 @@ public abstract class StateCore : MonoBehaviour
     public CollisionChecker collisionChecker;
     public MovementInputs movementInputs;
     public CharacterStats characterStats;
+    public HealthSystem healthSystem;
     public StateMachine machine;
 
     public State state => machine.state;

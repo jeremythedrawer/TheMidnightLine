@@ -6,9 +6,9 @@ public class CharacterStats : MonoBehaviour
     public float walkSpeed;
     public float jumpSpeed;
 
+    public int health;
+    public int meleeStrength;
     /*
-     * Health
-     * Strength
      * Gun Ability
      */ 
 }
