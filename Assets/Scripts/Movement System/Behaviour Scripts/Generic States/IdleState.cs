@@ -35,12 +35,15 @@ public class IdleState : State
 
     private void IdleAnimationController()
     {
-        //TODO Exclude bystanders
-        // TODO implement right and left animation logic and also logic for symetrical animations (agents)
-        if (stateCore.currentAnimStateInfo.normalizedTime >= 1)
+        if (stateCore is BystanderMovement) // idle animation is handeled in the behavioural states
+        {
+            return;
+        }
+        else if (stateCore.currentAnimStateInfo.normalizedTime >= 1)
         {
             animator.Play(breathingRightAnimation,0,0);
         }
+        // TODO implement right and left animation logic and also logic for symetrical animations (agents)
     }
 
 }

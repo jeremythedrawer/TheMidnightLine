@@ -31,7 +31,7 @@ public class GroundState : State
     {
         if (state == idleState || state == meleeState || state == shootState)
         {
-            body.linearVelocity *= groundDrag;
+            body.linearVelocityX *= groundDrag;
         }
     }
     public override void Exit()

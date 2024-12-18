@@ -16,7 +16,6 @@ public class PlayerMovement : StateCore
     void Update()
     {
         currentAnimStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        Debug.Log(currentAnimStateInfo.normalizedTime);
         GetPlayerInputs();
         movementInputs.JumpController(airborneState);
         SelectState();

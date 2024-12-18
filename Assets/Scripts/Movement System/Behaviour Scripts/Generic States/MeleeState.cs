@@ -9,7 +9,7 @@ public class MeleeState : State
     //child states
     public IdleState idleState;
 
-    private string rightAnimation = "meleeRight";
+    private string groundRightAnimation = "groundMeleeRight";
 
     public bool landedHit {  get; private set; }
 
@@ -37,6 +37,7 @@ public class MeleeState : State
     }
     private void GivenDamage()
     {
+
         if (landedHit == false)
         {
             landedHit = true;
@@ -53,7 +54,7 @@ public class MeleeState : State
 
         if (!playingAnimation)
         {
-            animator.Play(rightAnimation, 0, 0);
+            animator.Play(groundRightAnimation, 0, 0);
             playingAnimation = true;
         }
         if (stateCore.currentAnimStateInfo.normalizedTime >= 1f)
