@@ -35,7 +35,7 @@ public class IdleState : State
 
     private void IdleAnimationController()
     {
-        if (stateCore is BystanderMovement) // idle animation is handeled in the behavioural states
+        if (stateCore is not PlayerMovement) // idle animation is handeled in the behavioural states
         {
             return;
         }

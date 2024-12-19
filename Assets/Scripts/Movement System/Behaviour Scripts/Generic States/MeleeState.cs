@@ -5,6 +5,7 @@ public class MeleeState : State
     //parent state
     public StateCore stateCore;
     public GroundState groundState;
+    public MeleeColliderData meleeColliderData;
 
     //child states
     public IdleState idleState;
@@ -17,12 +18,11 @@ public class MeleeState : State
 
     public override void Enter()
     {
+
     }
     public override void Do()
     {
-        SuspendInputs();
         MeleeAnimationController();
-        GivenDamage();
     }
 
     public override void FixedDo()
@@ -35,19 +35,22 @@ public class MeleeState : State
     }
 
 
-    private void GivenDamage()
+    public void DealDamage()
     {
-
-
-        if (landedHit == false)
+        if (stateCore is PlayerMovement)
         {
-            landedHit = true;
+            foreach (Collider2D agentCollider in meleeColliderData.agentColliders)
+            {
+                agentCollider.GetComponentInParent<HealthSystem>().TakeDamage(core.characterStats.meleeStrength);
+            }  
         }
-        else
+        if (stateCore is AgentMovement)
         {
-            landedHit = false;
+            if (meleeColliderData.hitPlayerCollider)
+            {
+                meleeColliderData.playerCollider.GetComponentInParent<HealthSystem>().TakeDamage(core.characterStats.meleeStrength);
+            }
         }
-        //TODO damage logic
     }
 
     private void MeleeAnimationController()
@@ -66,12 +69,5 @@ public class MeleeState : State
         }
 
         // TODO implement right and left animation logic and also logic for symetrical animations (agents)
-    }
-
-    private void SuspendInputs()
-    {
-        movementInputs.walkInput = 0;
-        movementInputs.jumpInput = false;
-        movementInputs.runInput = false;
     }
 }

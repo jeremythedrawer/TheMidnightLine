@@ -2,10 +2,10 @@ using UnityEngine;
 
 public class AnimationEventHandler : MonoBehaviour
 {
-    public MeleeCollider meleeCollider;
+    public MeleeState meleeState;
     public void InvokeDealDamage()
     {
-        meleeCollider.DealDamage();
+        meleeState.DealDamage();
     }
 }
 

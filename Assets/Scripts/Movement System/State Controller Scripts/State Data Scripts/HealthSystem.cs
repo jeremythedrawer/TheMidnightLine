@@ -3,6 +3,7 @@ using UnityEngine;
 public class HealthSystem : MonoBehaviour
 {
     public CharacterStats characterStats;
+
     public bool isDead {  get; private set; }
 
     private int currentHealth;
@@ -14,10 +15,10 @@ public class HealthSystem : MonoBehaviour
 
     private void Update()
     {
-        TakeDamage();
     }
-    public void TakeDamage()
+    public void TakeDamage(int attackStats)
     {
-
+        currentHealth = Mathf.Max(currentHealth - attackStats, 0);
+        characterStats.health = currentHealth;
     }
 }
