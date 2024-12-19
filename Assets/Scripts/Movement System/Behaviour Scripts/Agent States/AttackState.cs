@@ -29,16 +29,16 @@ public class AttackState : State
 
     private void SelectState()
     {
-        if (state.isComplete)
+
+        if (collisionChecker.grounded)
         {
-            if (collisionChecker.grounded)
-            {
-                Set(groundState, true);
-            }
-            else
-            {
-                Set(airborneState, true);
-            }
+            Set(groundState, true);
+        }
+        else
+        {
+            Set(airborneState, true);
         }
     }
+
+    //private void 
 }

@@ -24,7 +24,7 @@ public class AgentMovement : StateCore
     public bool inCameraView { get; private set; }
     public bool inPlayerCharacterSight { get; private set; }
     public bool isCloseToPlayer { get; private set; }
-    private float closeToPlayerThreshold = 1f;
+    private float closeToPlayerThreshold = 2f;
 
     public bool isCarriageEmpty { get; private set; }
     private ActivateCarriageBounds currentCarriage;
@@ -182,10 +182,12 @@ public class AgentMovement : StateCore
         if (hit != null)
         {
             isCloseToPlayer = true;
+            movementInputs.meleeInput = true;
         }
         else
         {
             isCloseToPlayer = false;
+            movementInputs.meleeInput = false;
         }
 
         Helpers.DrawCircle(agentPos, closeToPlayerThreshold, isCloseToPlayer ? Color.red : Color.green, 8);
