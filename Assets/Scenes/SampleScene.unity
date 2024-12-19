@@ -349,6 +349,17 @@ Transform:
   - {fileID: 4962279850686064392}
   m_Father: {fileID: 1720769660}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &674127055 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7881672385200450172, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
+  m_PrefabInstance: {fileID: 76116506591165685}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceaf4f0a855651e4f886a7ffa5a7ff67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &832575517
 GameObject:
   m_ObjectHideFlags: 0
@@ -403,6 +414,22 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5029582999761189244, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
   m_PrefabInstance: {fileID: 908825791190272049}
   m_PrefabAsset: {fileID: 0}
+--- !u!61 &1658121709 stripped
+BoxCollider2D:
+  m_CorrespondingSourceObject: {fileID: 6207222510939091140, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
+  m_PrefabInstance: {fileID: 76116506591165685}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1685803504 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 6960523697587595809, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
+  m_PrefabInstance: {fileID: 76116506591165685}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: aefa32b988cb0c341b30f79ca0414055, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1720769659
 GameObject:
   m_ObjectHideFlags: 0
@@ -484,6 +511,30 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 5575892676826473437, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1.2
+      objectReference: {fileID: 0}
+    - target: {fileID: 6960523697587595809, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
+      propertyPath: meleeColliderData
+      value: 
+      objectReference: {fileID: 674127055}
+    - target: {fileID: 7752829070841774031, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
+      propertyPath: meleeStrength
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 7881672385200450172, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
+      propertyPath: playerCollider
+      value: 
+      objectReference: {fileID: 1658121709}
+    - target: {fileID: 7881672385200450172, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
+      propertyPath: meleeColliderIsPlayer
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7975908150685175985, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
+      propertyPath: meleeState
+      value: 
+      objectReference: {fileID: 1685803504}
     - target: {fileID: 8451971257262523574, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_Name
       value: Player
@@ -706,6 +757,10 @@ PrefabInstance:
     - target: {fileID: 1760437334605092239, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: m_Name
       value: Henchman
+      objectReference: {fileID: 0}
+    - target: {fileID: 3655542353893840654, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
+      propertyPath: meleeStrength
+      value: 50
       objectReference: {fileID: 0}
     - target: {fileID: 5454002635820018757, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: m_LocalPosition.x
