@@ -23,7 +23,7 @@ public class MeleeState : State
 
     private string primaryHitToStanceAnimation = "primaryHitToStance";
     private string secondaryHitToStanceAnimation = "secondaryHitToStance";
-    private string stanceToSecondaryHitAnimation = "stanceToSecondaryHit"; //index 2 in Animation Event
+    private string stanceToSecondaryHitAnimation = "stanceToSecondaryHit"; // TODO: randomly choose when to start at primary secondary or final attack //index 2 in Animation Event 
 
 
     public override void Enter()
