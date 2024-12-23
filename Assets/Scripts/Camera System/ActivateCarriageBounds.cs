@@ -8,8 +8,6 @@ public class ActivateCarriageBounds : MonoBehaviour
     private BoxCollider2D Collider2D;
 
     public int bystanderCount { get; private set; }
-
-    public bool activeBoundary {  get; private set; }
     public float leftEdge {  get; private set; }
     public float rightEdge { get; private set; }
 
@@ -18,7 +16,6 @@ public class ActivateCarriageBounds : MonoBehaviour
     {
         Collider2D = this.GetComponent<BoxCollider2D>();
 
-        activeBoundary = false;
         leftEdge = Collider2D.bounds.min.x;
         rightEdge = Collider2D.bounds.max.x;
         bystanderCount = 0;
@@ -39,17 +36,12 @@ public class ActivateCarriageBounds : MonoBehaviour
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
-        {
-            activeBoundary = true;
-        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player"))
+        if (collision.gameObject.CompareTag("Player Collider"))
         {
-            activeBoundary = false;
             Instance = null;
         }
         if (collision.gameObject.CompareTag("Bystander Collider"))

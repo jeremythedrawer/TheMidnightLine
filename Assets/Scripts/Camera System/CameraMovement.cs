@@ -101,7 +101,7 @@ public class CameraMovement : MonoBehaviour
         if (ActivateCarriageBounds.Instance != null)
         {
             CalculateCarriageBoundOffset();
-
+            Debug.Log(ActivateCarriageBounds.Instance);
             target.x = Mathf.Clamp(target.x, ActivateCarriageBounds.Instance.leftEdge + updatingBoundOffset, ActivateCarriageBounds.Instance.rightEdge - updatingBoundOffset);
             target.y = trainCamBounds.camBoundBottomOffset + cam.orthographicSize;
         }
