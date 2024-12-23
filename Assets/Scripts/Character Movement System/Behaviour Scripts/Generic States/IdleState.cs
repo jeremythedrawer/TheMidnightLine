@@ -10,6 +10,8 @@ public class IdleState : State
 
     private string breathingRightAnimation = "idleBreathingRight";
 
+    private bool startAnimation = false;
+
 
     //public AnimationClip anim;
     public override void Enter()
@@ -23,6 +25,8 @@ public class IdleState : State
         if (!collisionChecker.grounded || movementInputs.walkInput != 0)
         {
             isComplete = true;
+            startAnimation = false;
+            groundState.pendingState = false;
         }
     }
     public override void FixedDo()
@@ -39,8 +43,9 @@ public class IdleState : State
         {
             return;
         }
-        else if (stateCore.currentAnimStateInfo.normalizedTime >= 1)
+        else if (stateCore.currentAnimStateInfo.normalizedTime >= 1 || !startAnimation)
         {
+            startAnimation = true;
             animator.Play(breathingRightAnimation,0,0);
         }
         // TODO implement right and left animation logic and also logic for symetrical animations (agents)

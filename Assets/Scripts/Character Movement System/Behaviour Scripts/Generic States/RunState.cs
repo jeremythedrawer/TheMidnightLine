@@ -1,3 +1,4 @@
+using System.Runtime.CompilerServices;
 using UnityEngine;
 
 public class RunState : State
@@ -5,22 +6,26 @@ public class RunState : State
     public StateCore stateCore;
     public GroundState groundState;
 
-    private string breathingRightAnimation = "idleBreathingRight";
+    private string runRightAnimation = "runRight";
+    private string startRunRightAnimation = "startRunRight";
+    private bool startRunAnimation = false;
     public override void Enter()
     {
     }
     public override void Do()
     {
         RunAnimationController();
-
-        if (!collisionChecker.grounded || movementInputs.walkInput == 0)
+        if (!collisionChecker.grounded || Mathf.Abs(movementInputs.walkInput) < 1)
         {
             isComplete = true;
+            startRunAnimation = false;
+            groundState.pendingState = false;
         }
     }
 
     public override void FixedDo()
     {
+
     }
     public override void Exit()
     {
@@ -35,9 +40,14 @@ public class RunState : State
         {
             return;
         }
+        else if (!startRunAnimation)
+        {
+            animator.Play(startRunRightAnimation, 0, 0);
+            startRunAnimation = true;
+        }
         else if (stateCore.currentAnimStateInfo.normalizedTime >= 1)
         {
-            animator.Play(breathingRightAnimation, 0, 0); //TODO replace with run animation
+            animator.Play(runRightAnimation, 0, 0);
         }
     }
 }

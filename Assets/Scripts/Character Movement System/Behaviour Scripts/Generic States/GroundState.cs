@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class GroundState : State
@@ -16,6 +17,8 @@ public class GroundState : State
     public float groundDrag;
 
     public bool isAttacking { private get; set; } = false;
+
+    public bool pendingState { get; set; }
 
     public override void Enter()
     {
@@ -41,16 +44,9 @@ public class GroundState : State
 
     void SelectState()
     {
-        if (!isAttacking)
+        if (!pendingState)
         {
-            if (movementInputs.walkInput == 0)
-            {
-                Set(idleState, true);
-            }
-            else
-            {
-                Set(runState, true);
-            }
+            StartCoroutine(DelayState());
         }
 
         if (canMelee && movementInputs.meleeInput)
@@ -64,6 +60,25 @@ public class GroundState : State
             isAttacking = true;
             Set(shootState, true);
         }
+    }
+
+    private IEnumerator DelayState()
+    {
+        yield return null; // one frame delay
+        
+        if (!isAttacking)
+        {
+            if (movementInputs.walkInput == 0)
+            {
+                Set(idleState, true);
+            }
+            else
+            {
+                Set(runState, true);
+            }
+        }
+
+        pendingState = false; // reset bool
     }
 
     private void BHCCorrection()
