@@ -17,6 +17,7 @@ GameObject:
   - component: {fileID: 9091029623637560231}
   - component: {fileID: 6190765102839442715}
   - component: {fileID: 3072139848597519722}
+  - component: {fileID: 2087542226778429504}
   m_Layer: 0
   m_Name: Henchman
   m_TagString: Untagged
@@ -187,7 +188,7 @@ MonoBehaviour:
   walkSpeed: 4
   jumpSpeed: 30
   health: 80
-  meleeStrength: 0
+  meleeStrength: 10
 --- !u!114 &9091029623637560231
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -241,6 +242,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   characterStats: {fileID: 3655542353893840654}
+--- !u!114 &2087542226778429504
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760437334605092239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 778c63f6bfcfe4d45811dddf51d1dedc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meleeState: {fileID: 738171133792652513}
 --- !u!1 &2298445315329970892
 GameObject:
   m_ObjectHideFlags: 0
@@ -251,7 +265,8 @@ GameObject:
   m_Component:
   - component: {fileID: 1906092951935376622}
   - component: {fileID: 7931573007388169628}
-  m_Layer: 6
+  - component: {fileID: 3745966099705942146}
+  m_Layer: 0
   m_Name: MeleeCollider
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -319,6 +334,20 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.73, y: 3.18}
   m_EdgeRadius: 0
+--- !u!114 &3745966099705942146
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2298445315329970892}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ceaf4f0a855651e4f886a7ffa5a7ff67, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  meleeColliderIsPlayer: 0
+  playerCollider: {fileID: 0}
 --- !u!1 &3184649447383413633
 GameObject:
   m_ObjectHideFlags: 0
@@ -386,7 +415,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc210d234ed951489eaa8f7cc137eff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateCore: {fileID: 0}
+  stateCore: {fileID: 3089367829224165299}
   groundState: {fileID: 1308872781844731811}
 --- !u!114 &1986788647519097889
 MonoBehaviour:
@@ -400,7 +429,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ede407c0c928c8f4d800a95c4e0a358b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateCore: {fileID: 0}
+  stateCore: {fileID: 3089367829224165299}
   groundState: {fileID: 1308872781844731811}
 --- !u!114 &738171133792652513
 MonoBehaviour:
@@ -414,9 +443,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aefa32b988cb0c341b30f79ca0414055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateCore: {fileID: 0}
-  groundState: {fileID: 0}
-  idleState: {fileID: 3199717325248714412}
+  stateCore: {fileID: 3089367829224165299}
+  groundState: {fileID: 1308872781844731811}
+  meleeColliderData: {fileID: 3745966099705942146}
 --- !u!114 &4422377048161283432
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -429,8 +458,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5c093c8351a7a48a8d16fd44ecba51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idleState: {fileID: 0}
-  runState: {fileID: 0}
+  idleState: {fileID: 3199717325248714412}
+  runState: {fileID: 1986788647519097889}
 --- !u!1 &4948649449756918074
 GameObject:
   m_ObjectHideFlags: 0
@@ -681,7 +710,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   jumpedState: {fileID: 1379844891400480527}
-  fallState: {fileID: 0}
+  fallState: {fileID: 7321518446667272505}
   antiGravityApexThreshold: 2
   antiGravityApexScale: 2
   clampedFallSpeed: 15
@@ -759,3 +788,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   agentMovement: {fileID: 3089367829224165299}
+  groundState: {fileID: 1308872781844731811}
+  airborneState: {fileID: 529999968232398323}
