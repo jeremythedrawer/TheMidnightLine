@@ -21,13 +21,21 @@ public class MovementInputs : MonoBehaviour
     //Set Collision Adjustment
     private float cbcSmoothing = 0.15f;
     private float cbcSmoothingCurrent;
+
+    public bool canMove { get; set; } = true;
+    public bool adjustingCollider { get; private set; } = false;
     public void MoveWithInput()
     {
         if (Mathf.Abs(walkInput) > 0) //check when moving
         {
+            if (!canMove)
+            {
+                core.body.linearVelocityX = 0;
+                return;
+            }
+
             float newSpeed;
             float increment = walkInput;
-
             if (runInput)
             {
                 newSpeed = Mathf.Clamp(core.body.linearVelocityX + increment, -core.characterStats.runSpeed, core.characterStats.runSpeed);
@@ -83,6 +91,7 @@ public class MovementInputs : MonoBehaviour
         {
             float currentOffsetY = core.collisionChecker.cbcThreshold;
             core.collisionChecker.characterBoxCollider.offset = new Vector2(0.0f, currentOffsetY); // moving collider 1 unit up
+            adjustingCollider = true;
         }
         // Correct Box Collider reset
         if (core.collisionChecker.characterBoxCollider.offset.y > 0.0001)
@@ -94,6 +103,7 @@ public class MovementInputs : MonoBehaviour
 
             if (Mathf.Abs(currentOffsetY) < 0.00001f)
             {
+                adjustingCollider = false;
                 currentOffsetY = 0.0f;
             }
 

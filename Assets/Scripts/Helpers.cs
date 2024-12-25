@@ -12,6 +12,16 @@ public static class Helpers
         return newValue;
     }
 
+    public static float Step(float edge, float value)
+    {
+        return value < edge ? 0f : 1f;
+    }
+
+    public static float Posterize(float value, float steps)
+    {
+        return Mathf.Floor(value / (1 / steps) * (1 /  steps));
+    }
+
     public static void DrawBoxCastDebug(Vector2 origin, Vector2 size, Vector2 direction, Color color)
     {
         Vector2 halfSize = size / 2;

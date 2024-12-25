@@ -34,7 +34,7 @@ public class PlayerMovement : StateCore
     {
         if (state.isComplete)
         {
-            if (collisionChecker.grounded)
+            if (collisionChecker.grounded || movementInputs.adjustingCollider)
             {
                 Set(groundState, true);
             }

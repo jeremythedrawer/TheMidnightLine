@@ -10,7 +10,7 @@ public class IdleState : State
 
     private string breathingRightAnimation = "idleBreathingRight";
 
-    private bool startAnimation = false;
+    public bool startAnimation { get; set; } = false;
 
 
     //public AnimationClip anim;

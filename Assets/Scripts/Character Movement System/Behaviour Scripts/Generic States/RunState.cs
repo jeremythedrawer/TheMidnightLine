@@ -3,12 +3,12 @@ using UnityEngine;
 
 public class RunState : State
 {
-    public StateCore stateCore;
     public GroundState groundState;
 
     private string runRightAnimation = "runRight";
     private string startRunRightAnimation = "startRunRight";
-    private bool startRunAnimation = false;
+    public bool startRunAnimation { get; set; } = false;
+    public bool startWalkAnimation { get; set; } = false;
     public override void Enter()
     {
     }
@@ -17,9 +17,12 @@ public class RunState : State
         RunAnimationController();
         if (!collisionChecker.grounded || Mathf.Abs(movementInputs.walkInput) < 1)
         {
-            isComplete = true;
-            startRunAnimation = false;
-            groundState.pendingState = false;
+            if (!movementInputs.adjustingCollider)
+            {
+                isComplete = true;
+                startRunAnimation = false;
+                groundState.pendingState = false;
+            }
         }
     }
 
@@ -36,7 +39,7 @@ public class RunState : State
     {
         // TODO implement right and left animation logic and also logic for symetrical animations (agents)
 
-        if (stateCore is BystanderMovement) // run animation is handeled in the behavioural states in bystanders
+        if (core is BystanderMovement) // run animation is handeled in the behavioural states in bystanders
         {
             return;
         }
@@ -45,7 +48,7 @@ public class RunState : State
             animator.Play(startRunRightAnimation, 0, 0);
             startRunAnimation = true;
         }
-        else if (stateCore.currentAnimStateInfo.normalizedTime >= 1)
+        else if (core.currentAnimStateInfo.normalizedTime >= 1)
         {
             animator.Play(runRightAnimation, 0, 0);
         }

@@ -3,6 +3,8 @@ using UnityEngine;
 
 public class GroundState : State
 {
+    public AirborneState airborneState;
+
     //child states
     public IdleState idleState;
     public RunState runState;
@@ -20,6 +22,9 @@ public class GroundState : State
 
     public bool pendingState { get; set; }
 
+    public bool finishedHeavyLanding { get; set; } = true;
+    private string heavyLandingAnimation = "heavyLandingRight";
+
     public override void Enter()
     {
 
@@ -27,6 +32,7 @@ public class GroundState : State
     public override void Do()
     {
         BHCCorrection();
+        HeavyLand();
         SelectState();
     }
 
@@ -72,7 +78,7 @@ public class GroundState : State
             {
                 Set(idleState, true);
             }
-            else
+            else if (movementInputs.canMove)
             {
                 Set(runState, true);
             }
@@ -95,6 +101,34 @@ public class GroundState : State
         if (!collisionChecker.grounded)
         {
             isComplete = true;
+        }
+    }
+
+    private void HeavyLand()
+    {
+        if ( core is BystanderMovement)
+        {
+            return;
+        }
+
+        if (!finishedHeavyLanding)
+        {
+            idleState.startAnimation = true;
+            runState.startRunAnimation = true;
+            runState.startWalkAnimation = true;
+
+            if (airborneState.heavyLanding) // triggered on one frame
+            {
+                movementInputs.canMove = false;
+                animator.Play(heavyLandingAnimation, 0, 0);
+                airborneState.heavyLanding = false;
+            }
+
+            if (core.currentAnimStateInfo.normalizedTime >= 1) // when heavylanding is finished
+            {
+                finishedHeavyLanding = true;
+                movementInputs.canMove = true;
+            } 
         }
     }
 }

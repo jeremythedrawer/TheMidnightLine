@@ -33,7 +33,6 @@ public class MeleeState : State
     public override void Do()
     {
         MeleeAnimationController();
-        Debug.Log(hitCombos);
     }
 
     public override void FixedDo()
@@ -75,6 +74,7 @@ public class MeleeState : State
             if (!playingAnimation)
             {
                 animator.Play(groundRightAnimation, 0, 0);
+                movementInputs.canMove = false;
                 playingAnimation = true;
             }
             if (stateCore.currentAnimStateInfo.normalizedTime >= 1f)
@@ -82,6 +82,7 @@ public class MeleeState : State
                 playingAnimation = false;
                 isComplete = true;
                 groundState.isAttacking = false;
+                movementInputs.canMove = true;
             }
             // TODO implement right and left animation logic and also logic for symetrical animations (agents)
         }

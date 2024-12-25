@@ -39,6 +39,4 @@ public class AttackState : State
             Set(airborneState, true);
         }
     }
-
-    //private void 
 }
