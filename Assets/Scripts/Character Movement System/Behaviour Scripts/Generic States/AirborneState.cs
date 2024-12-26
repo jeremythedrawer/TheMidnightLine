@@ -8,6 +8,7 @@ public class AirborneState : State
     //child states
     public JumpedState jumpedState;
     public FallState fallState;
+    public WallState wallState;
 
     [Tooltip("The apex threshold when the antiGravityApexScale is applied")]
     public float antiGravityApexThreshold = 2.0f;
@@ -19,6 +20,7 @@ public class AirborneState : State
     public float clampedFallSpeed = 20.0f;
 
     private bool jumped;
+    private bool hanging = false;
     public bool heavyLanding { get; set; } = false;
 
     private string jumpAnimation = "jumpRight";
@@ -27,15 +29,27 @@ public class AirborneState : State
     private float fallAnimationProgress = 0f; // Normalized time for animation
     public override void Enter()
     {
+        if (CarriageClimbingBounds.Instance != null)
+        {
+            Debug.Log("CarriageClimbingBounds is instantieded");
+            hanging = true;
+        }
         if (body.linearVelocityY > 0 || movementInputs.jumpInput) jumped = true;
 
-        if (jumped)
+        if (!hanging)
         {
-            Set(jumpedState, true);
+            if (jumped)
+            {
+                Set(jumpedState, true);
+            }
+            else
+            {
+                Set(fallState, true);
+            }
         }
         else
         {
-            Set(fallState, true);
+            Set(wallState, true);
         }
     }
     public override void Do()
@@ -47,6 +61,7 @@ public class AirborneState : State
         if (collisionChecker.grounded)
         {
             jumped = false;
+            hanging = false;
             isComplete = true;
         }
     }

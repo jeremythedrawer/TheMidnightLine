@@ -66,8 +66,8 @@ public class CameraMovement : MonoBehaviour
         camWidth = cam.pixelWidth;
         camHeight = cam.pixelHeight;
 
-        camHalfWidthWorld = 
-
+        //camHalfWidthWorld = 
+        //TODO: find the start value of camHalfWidthWorld
         initialDamping = damping;
         initialHeight = height;
     }
