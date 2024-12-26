@@ -128,6 +128,10 @@ public class GroundState : State
             {
                 finishedHeavyLanding = true;
                 movementInputs.canMove = true;
+
+                idleState.startAnimation = false;
+                runState.startRunAnimation = false;
+                runState.startWalkAnimation = false;
             } 
         }
     }

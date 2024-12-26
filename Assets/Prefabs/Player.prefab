@@ -251,6 +251,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9199ded63a8f76f48abdd41d1560f69e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  airborneState: {fileID: 1810548854547567896}
   idleState: {fileID: 79855899776776402}
   runState: {fileID: 965159718817112335}
   meleeState: {fileID: 6960523697587595809}
@@ -284,7 +285,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ede407c0c928c8f4d800a95c4e0a358b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateCore: {fileID: 3141435046242817171}
   groundState: {fileID: 4604699258691990960}
 --- !u!114 &6960523697587595809
 MonoBehaviour:
@@ -347,11 +347,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3a76300dc794d847919a881516058d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundState: {fileID: 4604699258691990960}
   jumpedState: {fileID: 4210922695891752456}
   fallState: {fileID: 3611081317677061277}
   antiGravityApexThreshold: 4
   antiGravityApexScale: 3
-  clampedFallSpeed: 15
+  clampedFallSpeed: 25
 --- !u!114 &4210922695891752456
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -564,7 +565,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   runSpeed: 8
   walkSpeed: 4
-  jumpSpeed: 30
+  jumpSpeed: 15
   health: 100
   meleeStrength: 10
 --- !u!114 &6655092737606140929
@@ -587,7 +588,7 @@ MonoBehaviour:
   TotalOffset: {x: 0, y: 0}
   YOffset: 0
   YSensorScale: 0.259
-  groundedThreshold: -0.036
+  groundedThreshold: -0.084
   groundXSensorScale: -0.25
   wallXSensorScale: -0.222
   cbcThreshold: 0.5
