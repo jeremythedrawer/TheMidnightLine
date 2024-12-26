@@ -10,7 +10,7 @@ public class WallState : State
     }
     public override void Do()
     {
-        Debug.Log("Entered WallState");
+        Debug.Log("in wall state");
     }
 
     public override void FixedDo()

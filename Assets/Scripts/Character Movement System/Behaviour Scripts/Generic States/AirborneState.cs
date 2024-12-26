@@ -29,11 +29,39 @@ public class AirborneState : State
     private float fallAnimationProgress = 0f; // Normalized time for animation
     public override void Enter()
     {
+
+    }
+    public override void Do()
+    {
+        SelectState();
+        ClampFallSpeed();
+        StickyFeetOnLand();
+        AnimationController();
+
+
+        //complete state
+        if (collisionChecker.grounded)
+        {
+            jumped = false;
+            hanging = false;
+            isComplete = true;
+        }
+    }
+
+    public override void FixedDo()
+    {
         if (CarriageClimbingBounds.Instance != null)
         {
-            Debug.Log("CarriageClimbingBounds is instantieded");
             hanging = true;
         }
+
+    }
+    public override void Exit()
+    {
+    }
+
+    private void SelectState()
+    {
         if (body.linearVelocityY > 0 || movementInputs.jumpInput) jumped = true;
 
         if (!hanging)
@@ -52,28 +80,6 @@ public class AirborneState : State
             Set(wallState, true);
         }
     }
-    public override void Do()
-    {
-        ClampFallSpeed();
-        StickyFeetOnLand();
-        AnimationController();
-        //complete state
-        if (collisionChecker.grounded)
-        {
-            jumped = false;
-            hanging = false;
-            isComplete = true;
-        }
-    }
-
-    public override void FixedDo()
-    {
-
-    }
-    public override void Exit()
-    {
-    }
-
     private void ClampFallSpeed()
     {
         body.linearVelocityY = Mathf.Max(body.linearVelocityY, clampedFallSpeed * -1); //using max because Y velocity would be negative when falling
