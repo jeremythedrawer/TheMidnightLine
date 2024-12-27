@@ -9,6 +9,7 @@ public class MovementInputs : MonoBehaviour
     internal bool runInput;
     internal bool jumpInput;
     internal bool releaseJumpInput;
+    internal bool crouchInput;
     internal bool meleeInput;
     internal bool shootInput;
 
@@ -85,6 +86,10 @@ public class MovementInputs : MonoBehaviour
         }
     }
 
+    public void ClimbController()
+    {
+        //TODO: put in climb mechanic
+    }
     public void SetCollisionAdjustment()
     {
         // Correct Box Collider trigger
@@ -134,6 +139,7 @@ public class MovementInputs : MonoBehaviour
             }
         }
     }
+
 
 
 }

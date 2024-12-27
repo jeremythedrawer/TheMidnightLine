@@ -217,6 +217,7 @@ GameObject:
   - component: {fileID: 79855899776776402}
   - component: {fileID: 965159718817112335}
   - component: {fileID: 6960523697587595809}
+  - component: {fileID: 3302260865698991706}
   m_Layer: 0
   m_Name: Ground
   m_TagString: Untagged
@@ -255,9 +256,9 @@ MonoBehaviour:
   idleState: {fileID: 79855899776776402}
   runState: {fileID: 965159718817112335}
   meleeState: {fileID: 6960523697587595809}
-  shootState: {fileID: 0}
+  shootState: {fileID: 3302260865698991706}
   canMelee: 1
-  canShoot: 0
+  canShoot: 1
   groundDrag: 0.492
 --- !u!114 &79855899776776402
 MonoBehaviour:
@@ -301,6 +302,20 @@ MonoBehaviour:
   stateCore: {fileID: 3141435046242817171}
   groundState: {fileID: 4604699258691990960}
   meleeColliderData: {fileID: 7881672385200450172}
+--- !u!114 &3302260865698991706
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4675878951714792291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9a5c093c8351a7a48a8d16fd44ecba51, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  idleState: {fileID: 79855899776776402}
+  runState: {fileID: 965159718817112335}
 --- !u!1 &5360606228185169135
 GameObject:
   m_ObjectHideFlags: 0
@@ -350,6 +365,7 @@ MonoBehaviour:
   groundState: {fileID: 4604699258691990960}
   jumpedState: {fileID: 4210922695891752456}
   fallState: {fileID: 3611081317677061277}
+  wallState: {fileID: 0}
   antiGravityApexThreshold: 4
   antiGravityApexScale: 3
   clampedFallSpeed: 25
@@ -422,8 +438,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7295423304541140548}
-  - {fileID: 4265203560178826556}
   - {fileID: 5575892676826473437}
+  - {fileID: 4265203560178826556}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!50 &6574141234835530042

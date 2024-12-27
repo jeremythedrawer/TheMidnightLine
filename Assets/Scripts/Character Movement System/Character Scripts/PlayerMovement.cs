@@ -53,6 +53,8 @@ public class PlayerMovement : StateCore
         movementInputs.jumpInput = Input.GetButtonDown("Jump");
         movementInputs.releaseJumpInput = Input.GetButtonUp("Jump");
 
+        movementInputs.crouchInput = Input.GetKey(KeyCode.S);
+
         movementInputs.meleeInput = Input.GetKeyDown(KeyCode.E);
     }
 }

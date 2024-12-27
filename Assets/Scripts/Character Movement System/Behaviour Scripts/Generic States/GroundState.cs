@@ -119,6 +119,7 @@ public class GroundState : State
 
             if (airborneState.heavyLanding) // triggered on one frame
             {
+                //TODO: roll when x input
                 movementInputs.canMove = false;
                 animator.Play(heavyLandingAnimation, 0, 0);
                 airborneState.heavyLanding = false;

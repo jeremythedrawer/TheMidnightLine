@@ -36,7 +36,11 @@ public class AirborneState : State
         SelectState();
         ClampFallSpeed();
         StickyFeetOnLand();
-        AnimationController();
+
+        if (!hanging)
+        {
+            AnimationController();
+        }
 
 
         //complete state
@@ -54,7 +58,10 @@ public class AirborneState : State
         {
             hanging = true;
         }
-
+        else
+        {
+            hanging = false;
+        }
     }
     public override void Exit()
     {
@@ -69,6 +76,7 @@ public class AirborneState : State
             if (jumped)
             {
                 Set(jumpedState, true);
+                Debug.Log("in jumpState");
             }
             else
             {
