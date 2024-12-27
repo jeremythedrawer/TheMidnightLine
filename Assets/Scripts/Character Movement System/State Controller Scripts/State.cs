@@ -13,6 +13,7 @@ public abstract class State : MonoBehaviour
     protected Rigidbody2D body => core.body;
     protected float initialGravityScale => core.initialGravityScale;
     protected Animator animator => core.animator;
+    protected bool playingAnimation = false;
     protected CollisionChecker collisionChecker => core.collisionChecker;
     protected MovementInputs movementInputs => core.movementInputs;
 
@@ -25,11 +26,19 @@ public abstract class State : MonoBehaviour
     {
         machine.Set(newState, forceReset);
     }
+    protected void PlayAnimation(string animationName)
+    {
+        Debug.Log(core.currentAnimStateInfo.normalizedTime);
+        animator.Play(animationName, 0, 0);
+        playingAnimation = true;
+    }
+
     public void SetCore(StateCore _core)
     {
         machine = new StateMachine();
         core = _core;
     }
+
 
     public virtual void Enter()
     { 

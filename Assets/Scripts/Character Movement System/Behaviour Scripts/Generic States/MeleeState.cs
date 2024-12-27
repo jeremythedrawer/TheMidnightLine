@@ -9,7 +9,6 @@ public class MeleeState : State
 
     public bool landedHit {  get; private set; }
 
-    private bool playingAnimation = false;
     private int hitCombos = 0;
 
     //player animation state names
@@ -153,11 +152,5 @@ public class MeleeState : State
         {
             playingAnimation = false;
         }
-    }
-
-    private void PlayAnimation(string animationName)
-    {
-        animator.Play(animationName, 0, 0);
-        playingAnimation = true;
     }
 }
