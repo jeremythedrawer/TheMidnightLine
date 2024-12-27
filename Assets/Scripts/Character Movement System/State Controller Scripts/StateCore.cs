@@ -10,6 +10,7 @@ public abstract class StateCore : MonoBehaviour
     public AnimatorStateInfo currentAnimStateInfo;
 
     public CollisionChecker collisionChecker;
+    public BoxCollider2D boxCollider2D;
     public MovementInputs movementInputs;
     public CharacterStats characterStats;
     public HealthSystem healthSystem;

@@ -163,6 +163,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 7636991861150971996}
   animator: {fileID: 4374384087322266987}
   collisionChecker: {fileID: 9091029623637560231}
+  boxCollider2D: {fileID: 58726244203209126}
   movementInputs: {fileID: 6190765102839442715}
   characterStats: {fileID: 3655542353893840654}
   healthSystem: {fileID: 3072139848597519722}
@@ -396,6 +397,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9199ded63a8f76f48abdd41d1560f69e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  airborneState: {fileID: 0}
   idleState: {fileID: 3199717325248714412}
   runState: {fileID: 1986788647519097889}
   meleeState: {fileID: 738171133792652513}
@@ -429,7 +431,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ede407c0c928c8f4d800a95c4e0a358b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateCore: {fileID: 3089367829224165299}
   groundState: {fileID: 1308872781844731811}
 --- !u!114 &738171133792652513
 MonoBehaviour:
@@ -675,6 +676,9 @@ GameObject:
   - component: {fileID: 529999968232398323}
   - component: {fileID: 1379844891400480527}
   - component: {fileID: 7321518446667272505}
+  - component: {fileID: 2266419640423568923}
+  - component: {fileID: 5261760226461258634}
+  - component: {fileID: 5149484736750942574}
   m_Layer: 0
   m_Name: Airborne
   m_TagString: Untagged
@@ -709,8 +713,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3a76300dc794d847919a881516058d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  groundState: {fileID: 1308872781844731811}
   jumpedState: {fileID: 1379844891400480527}
   fallState: {fileID: 7321518446667272505}
+  wallState: {fileID: 2266419640423568923}
   antiGravityApexThreshold: 2
   antiGravityApexScale: 2
   clampedFallSpeed: 15
@@ -743,6 +749,46 @@ MonoBehaviour:
   coyoteTime: 0.2
   initialCoyoteTime: 0
   coyoteEnabled: 0
+--- !u!114 &2266419640423568923
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7217924372878975001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af706fe6cdbb4e47a8ea7148d369659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hangState: {fileID: 5261760226461258634}
+  climbState: {fileID: 5149484736750942574}
+--- !u!114 &5261760226461258634
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7217924372878975001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0bc8cd128cc1024787ee7e602aeffcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallState: {fileID: 2266419640423568923}
+--- !u!114 &5149484736750942574
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7217924372878975001}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a21a04ebc2d8f8a4db5541beda504d2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallState: {fileID: 0}
 --- !u!1 &8092280888936232919
 GameObject:
   m_ObjectHideFlags: 0

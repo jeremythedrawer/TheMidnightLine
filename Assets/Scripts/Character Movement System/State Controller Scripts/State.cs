@@ -11,6 +11,7 @@ public abstract class State : MonoBehaviour
     protected StateCore core;
 
     protected Rigidbody2D body => core.body;
+    protected BoxCollider2D boxCollider2D => core.boxCollider2D;
     protected float initialGravityScale => core.initialGravityScale;
     protected Animator animator => core.animator;
     protected bool playingAnimation = false;
@@ -28,7 +29,6 @@ public abstract class State : MonoBehaviour
     }
     protected void PlayAnimation(string animationName)
     {
-        Debug.Log(core.currentAnimStateInfo.normalizedTime);
         animator.Play(animationName, 0, 0);
         playingAnimation = true;
     }

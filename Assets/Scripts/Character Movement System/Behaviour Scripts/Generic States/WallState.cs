@@ -1,13 +1,18 @@
+using UnityEngine;
 using System.Collections;
-using Unity.VisualScripting;
 
 public class WallState : State
 {
+    //parent states
+    public AirborneState airborneState;
+
+    //child states
     public HangState hangState;
     public ClimbState climbState;
 
     public bool pendingState { get; set; }
     public bool isClimbing { get; set; } = false;
+    public bool droppingDown { get; set; } = false;
     public override void Enter()
     {
 
@@ -15,6 +20,18 @@ public class WallState : State
     public override void Do()
     {
         SelectState();
+        if (movementInputs.jumpInput)
+        {
+            isClimbing = true;
+        }
+        if (movementInputs.crouchInput)
+        {
+            isClimbing = false;
+            droppingDown = true;
+            airborneState.hanging = false;
+            isComplete = true;
+            
+        }
     }
 
     public override void FixedDo()
@@ -36,14 +53,6 @@ public class WallState : State
 
     private IEnumerator DelayState()
     {
-        if (movementInputs.jumpInput)
-        {
-            isClimbing = true;
-        }
-        if (movementInputs.crouchInput)
-        {
-            isClimbing = false;
-        }
 
         yield return null; // one frame delay
 

@@ -5,7 +5,15 @@ public class CarriageClimbingBounds : MonoBehaviour
     public static CarriageClimbingBounds Instance { get; private set; }
     private BoxCollider2D Collider2D;
 
-    public bool activated {  get; set; }
+    [Range(0f, 1f)]
+    public float hangActivationThreshold = 0f;
+
+    public bool isLeftEdge;
+    private float hangThresholdLine;
+    public bool hangActivated { get; set; }
+    public bool activated { get; set; }
+
+    public float newPos { get; private set; }
 
     private void OnDrawGizmos()
     {
@@ -14,6 +22,7 @@ public class CarriageClimbingBounds : MonoBehaviour
 
         Collider2D = this.GetComponent<BoxCollider2D>();
 
+        //draw box collider
         Gizmos.color = activated ? Color.green : Color.red;
         Vector2 bottomLeft = new Vector2(Collider2D.bounds.min.x, Collider2D.bounds.min.y);
         Vector2 bottomRight = new Vector2(Collider2D.bounds.max.x, Collider2D.bounds.min.y);
@@ -23,6 +32,12 @@ public class CarriageClimbingBounds : MonoBehaviour
         Gizmos.DrawLine(bottomRight, topRight);
         Gizmos.DrawLine(topRight, topLeft);
         Gizmos.DrawLine(topLeft, bottomLeft);
+
+        //draw hangThresholdLine
+        Gizmos.color = hangActivated ? Color.green : Color.red;
+        Vector2 leftOrigin = new Vector2(Collider2D.bounds.min.x, (Collider2D.bounds.max.y - Collider2D.bounds.min.y) * (hangActivationThreshold-0.5f) + transform.position.y);
+        Vector2 rightOrigin = new Vector2(Collider2D.bounds.max.x, (Collider2D.bounds.max.y - Collider2D.bounds.min.y) * (hangActivationThreshold - 0.5f) + transform.position.y);
+        Gizmos.DrawLine(rightOrigin, leftOrigin);
         #endif
 
     }
@@ -30,14 +45,13 @@ public class CarriageClimbingBounds : MonoBehaviour
     void Start()
     {
         Collider2D = this.GetComponent<BoxCollider2D>();
-
-
-
+        hangThresholdLine = (Collider2D.bounds.max.y - Collider2D.bounds.min.y) * (hangActivationThreshold - 0.5f) + transform.position.y;
     }
 
     private void FixedUpdate()
     {
 #if UNITY_EDITOR
+        // draw box collider
         Vector2 bottomLeft = new Vector2(Collider2D.bounds.min.x, Collider2D.bounds.min.y);
         Vector2 bottomRight = new Vector2(Collider2D.bounds.max.x, Collider2D.bounds.min.y);
         Vector2 topLeft = new Vector2(Collider2D.bounds.min.x, Collider2D.bounds.max.y);
@@ -46,6 +60,11 @@ public class CarriageClimbingBounds : MonoBehaviour
         Debug.DrawLine(bottomRight, topRight, activated ? Color.green : Color.red);
         Debug.DrawLine(topRight, topLeft, activated ? Color.green : Color.red);
         Debug.DrawLine(topLeft, bottomLeft, activated ? Color.green : Color.red);
+
+        //draw hangThresholdLine
+        Vector2 leftOrigin = new Vector2(Collider2D.bounds.min.x, (Collider2D.bounds.max.y - Collider2D.bounds.min.y) * (hangActivationThreshold - 0.5f) + transform.position.y);
+        Vector2 rightOrigin = new Vector2(Collider2D.bounds.max.x, (Collider2D.bounds.max.y - Collider2D.bounds.min.y) * (hangActivationThreshold - 0.5f) + transform.position.y);
+        Debug.DrawLine(rightOrigin, leftOrigin, hangActivated ? Color.green : Color.red);
 #endif
     }
 
@@ -56,6 +75,13 @@ public class CarriageClimbingBounds : MonoBehaviour
             Instance = this;
             activated = true;
         }
+
+        newPos = Collider2D.bounds.min.y - collision.bounds.size.y;
+    }
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        HangActivationThresholdDetection(collision);
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -63,6 +89,15 @@ public class CarriageClimbingBounds : MonoBehaviour
         {
             Instance = null;
             activated = false;
+            hangActivated = false;
+        }
+    }
+
+    private void HangActivationThresholdDetection(Collider2D collision)
+    {
+        if (collision.bounds.max.y <= hangThresholdLine)
+        {
+            hangActivated = true;
         }
     }
 

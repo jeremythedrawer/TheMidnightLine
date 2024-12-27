@@ -1,5 +1,4 @@
 using UnityEngine;
-using Unity.Mathematics;
 
 public class AirborneState : State
 {
@@ -20,7 +19,7 @@ public class AirborneState : State
     public float clampedFallSpeed = 20.0f;
 
     private bool jumped;
-    private bool hanging = false;
+    public bool hanging { get; set; } = false;
     public bool heavyLanding { get; set; } = false;
 
     private string jumpAnimation = "jumpRight";
@@ -39,7 +38,7 @@ public class AirborneState : State
 
         if (!hanging)
         {
-            AnimationController();
+            JumpAndFallAnimController();
         }
 
 
@@ -48,13 +47,14 @@ public class AirborneState : State
         {
             jumped = false;
             hanging = false;
+            wallState.droppingDown = false;
             isComplete = true;
         }
     }
 
     public override void FixedDo()
     {
-        if (CarriageClimbingBounds.Instance != null)
+        if (CarriageClimbingBounds.Instance != null && !wallState.droppingDown)
         {
             hanging = true;
         }
@@ -76,7 +76,6 @@ public class AirborneState : State
             if (jumped)
             {
                 Set(jumpedState, true);
-                Debug.Log("in jumpState");
             }
             else
             {
@@ -107,7 +106,7 @@ public class AirborneState : State
         }
     }
 
-    private void AnimationController()
+    private void JumpAndFallAnimController()
     {
         if (body.linearVelocityY > 0)
         {

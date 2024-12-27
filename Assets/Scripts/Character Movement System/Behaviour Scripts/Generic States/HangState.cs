@@ -32,8 +32,19 @@ public class HangState : State
 
     private void HangController()
     {
-        movementInputs.canMove = false;
-        body.gravityScale = 0;
-        body.linearVelocityY = 0;
+
+        if (CarriageClimbingBounds.Instance.hangActivated)
+        {
+            movementInputs.canMove = false;
+            body.gravityScale = 0;
+            body.linearVelocityY = 0;
+
+            //snap player to position
+            Vector2 newPosition = core.transform.position;
+            newPosition.y = CarriageClimbingBounds.Instance.newPos;
+            core.transform.position = newPosition;
+
+            core.spriteRenderer.flipX = !CarriageClimbingBounds.Instance.isLeftEdge;
+        }
     }
 }

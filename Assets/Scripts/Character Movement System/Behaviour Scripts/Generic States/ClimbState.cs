@@ -2,8 +2,8 @@ using UnityEngine;
 
 public class ClimbState : State
 {
-    public StateCore stateCore;
     public WallState wallState;
+
     private string climbPullUpRightAnimation = "climbPullUpRight";
     private string climbPushUpRightAnimation = "climbPushUpRight";
     private string climbGetUpRightAnimation = "climbGetUpRight";
@@ -15,16 +15,8 @@ public class ClimbState : State
     }
     public override void Do()
     {
-        AnimationController();
-        if (!wallState.isClimbing)
-        {
-            isComplete = true;
-            body.gravityScale = initialGravityScale;
 
-        }
-        else
-        {
-        }
+        ClimbingController();
 
     }
 
@@ -37,14 +29,13 @@ public class ClimbState : State
 
     }
 
-    private void AnimationController()
+    private void ClimbingController()
     {
         if (!playingAnimation)
         {
             switch (animationClipInt)
             {
                 case 0:
-
                     PlayAnimation(climbPullUpRightAnimation);
                     break;
 
@@ -57,16 +48,19 @@ public class ClimbState : State
                     break;
 
                 case 3:
+                    isComplete = true;
+                    body.gravityScale = initialGravityScale;
                     wallState.isClimbing = false;
+                    animationClipInt = 0;
                     break;
 
             }
 
         }
 
-        if (playingAnimation && stateCore.currentAnimStateInfo.IsName(GetCurrentAnimationName()))
+        if (playingAnimation && core.currentAnimStateInfo.IsName(GetCurrentAnimationName()))
         {
-            if (stateCore.currentAnimStateInfo.normalizedTime >= 1f)
+            if (core.currentAnimStateInfo.normalizedTime >= 1f)
             {
                 animationClipInt++;
                 playingAnimation = false;

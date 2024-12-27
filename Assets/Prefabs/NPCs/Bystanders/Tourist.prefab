@@ -147,6 +147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9199ded63a8f76f48abdd41d1560f69e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  airborneState: {fileID: 0}
   idleState: {fileID: 2092524970338930886}
   runState: {fileID: 3513126210600548214}
   meleeState: {fileID: 0}
@@ -180,7 +181,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ede407c0c928c8f4d800a95c4e0a358b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateCore: {fileID: 4144621108444965492}
   groundState: {fileID: 901033779143189791}
 --- !u!1 &4406493656620320848
 GameObject:
@@ -343,6 +343,7 @@ MonoBehaviour:
   spriteRenderer: {fileID: 7628201130985039182}
   animator: {fileID: 5602924533705069211}
   collisionChecker: {fileID: 6242132147326788535}
+  boxCollider2D: {fileID: 4161541657112090268}
   movementInputs: {fileID: 4490734383750937007}
   characterStats: {fileID: 415244996423126682}
   healthSystem: {fileID: 3820185767879755702}
@@ -404,6 +405,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   core: {fileID: 4144621108444965492}
+  meleeBoxColliderTransform: {fileID: 0}
 --- !u!114 &3820185767879755702
 MonoBehaviour:
   m_ObjectHideFlags: 0
