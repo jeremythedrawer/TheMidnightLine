@@ -1,10 +1,9 @@
+using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class ClimbState : State
 {
     public WallState wallState;
-
-    public BoxCollider2D boxCollider;
 
     private string climbRightAnimation = "climbRight";
 
@@ -14,11 +13,13 @@ public class ClimbState : State
     private float newPosX;
     private float newPosY;
 
+    private float offsetX;
+    private float offsetY;
+
     private Vector2 currentPos;
     private bool checkPos = true;
     public override void Enter()
     {
-
     }
     public override void Do()
     {
@@ -44,21 +45,44 @@ public class ClimbState : State
             cachePosX = core.transform.position.x;
             cachePosY = core.transform.position.y;
 
-            newPosX = cachePosX + boxCollider2D.bounds.size.x;
-            newPosY = cachePosY + boxCollider2D.bounds.size.y + (CarriageClimbingBounds.Instance.boxHeight - CarriageClimbingBounds.Instance.hangActivationThreshold); 
+            offsetX = boxCollider2D.bounds.size.x;
+            offsetY = (boxCollider2D.bounds.size.y + CarriageClimbingBounds.Instance.boxHeight) - (CarriageClimbingBounds.Instance.hangThresholdLine - CarriageClimbingBounds.Instance.boundsMinY);
+
+            newPosX = cachePosX + offsetX;
+            newPosY = cachePosY + offsetY; 
             checkPos = false;
         }
 
         if (core.currentAnimStateInfo.normalizedTime < 1f && !checkPos)
         {
-            currentPos = new Vector2(newPosX, newPosY);
+            if (movementInputs.crouchInput)
+            {
+                boxCollider2D.offset = Vector2.zero;
+                currentPos = new Vector2(cachePosX, cachePosY);
+                playingAnimation = false;
+                checkPos = true;
+                isComplete = true;
+
+                body.linearVelocityY = 0f;
+
+                wallState.isClimbing = false;
+                wallState.isDropping = true;
+                offsetX = 0f; offsetY = 0f;
+            }
+            else
+            {
+                UpdateBoxCollider(-offsetX,-offsetY);
+                currentPos = new Vector2(newPosX, newPosY);
+            }
             core.transform.position = currentPos;
         }
     }
 
-    private void UpdateBoxCollider()
+    private void UpdateBoxCollider(float offsetX, float offsetY)
     {
+        Vector2 offset = new Vector2(offsetX, offsetY);
 
+        boxCollider2D.offset = Vector2.Lerp(offset, Vector2.zero, core.currentAnimStateInfo.normalizedTime);
     }
 
     private void AnimationController()

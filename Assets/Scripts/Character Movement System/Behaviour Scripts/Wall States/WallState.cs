@@ -6,8 +6,6 @@ public class WallState : State
     //child states
     public HangState hangState;
     public ClimbState climbState;
-
-    public bool pendingState { get; set; }
     public bool isClimbing { get; set; } = false;
     public bool isHanging { get; set; } = true;
     public bool isDropping { get; set; } = false;
@@ -22,6 +20,8 @@ public class WallState : State
 
         if ((!isClimbing && !isHanging) || isDropping)
         {
+            body.gravityScale = initialGravityScale;
+            movementInputs.canMove = true;
             isComplete = true;
         }
     }
@@ -36,10 +36,7 @@ public class WallState : State
     }
     private void SelectState()
     {
-        if (!pendingState)
-        {
             StartCoroutine(DelayState());
-        }
     }
 
     private IEnumerator DelayState()
@@ -56,8 +53,6 @@ public class WallState : State
         {
             Set(hangState, true);
         }
-
-        pendingState = false; // reset bool
     }
 
     private void MovementInputDetection()
@@ -67,9 +62,9 @@ public class WallState : State
             body.gravityScale = initialGravityScale;
             movementInputs.canMove = true;
 
+            body.linearVelocityY = 0;
             isDropping = true;
             isClimbing = false;
-            isHanging = false;
         }
 
         if (movementInputs.jumpInput)

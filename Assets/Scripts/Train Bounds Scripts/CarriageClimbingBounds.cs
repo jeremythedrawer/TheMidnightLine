@@ -9,17 +9,14 @@ public class CarriageClimbingBounds : MonoBehaviour
     public float hangActivationThreshold = 0f;
 
     public bool isLeftEdge;
-    private float hangThresholdLine;
+    public float hangThresholdLine { get; private set; }
     public bool hangActivated { get; set; }
     public bool activated { get; set; }
 
     public Vector2 newPos { get; private set; }
 
     public float boxHeight { get; private set; }
-
-    private bool isLeftCollision;
-    private bool isRightCollision;
-    private bool isBottomCollision;
+    public float boundsMinY { get; private set; }
 
     private void OnDrawGizmos()
     {
@@ -53,6 +50,7 @@ public class CarriageClimbingBounds : MonoBehaviour
         Collider2D = this.GetComponent<BoxCollider2D>();
         hangThresholdLine = (Collider2D.bounds.size.y) * (hangActivationThreshold - 0.5f) + transform.position.y;
         boxHeight = Collider2D.size.y;
+        boundsMinY = Collider2D.bounds.min.y;
     }
 
     private void FixedUpdate()
@@ -92,10 +90,6 @@ public class CarriageClimbingBounds : MonoBehaviour
             Instance = null;
             activated = false;
             hangActivated = false;
-
-            isLeftCollision = false;
-            isRightCollision = false;
-            isBottomCollision = false;
         }
     }
 
@@ -103,8 +97,8 @@ public class CarriageClimbingBounds : MonoBehaviour
     {
         if (collision.gameObject.CompareTag("Player Collider") || collision.gameObject.CompareTag("Agent Collider"))
         {
-            float thisColliderTopBound = GetComponent<Collider2D>().bounds.max.y;
             float collisionBottomBound = collision.bounds.min.y;
+            float thisColliderTopBound = Collider2D.bounds.max.y;
 
             if (collisionBottomBound >= thisColliderTopBound)
             {

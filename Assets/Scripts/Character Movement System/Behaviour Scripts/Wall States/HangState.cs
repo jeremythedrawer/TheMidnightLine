@@ -4,19 +4,16 @@ public class HangState : State
 {
     public WallState wallState;
 
-    private bool startAnimation = false;
     private string hangRightAnimation = "hangRight";
     public override void Enter()
     {
-
     }
     public override void Do()
     {
         if (collisionChecker.grounded || wallState.isClimbing || movementInputs.crouchInput)
         {
-            wallState.pendingState = false;
             movementInputs.canMove = true;
-            startAnimation = false;
+            playingAnimation = false;
             isComplete = true;
         }
         else
@@ -61,10 +58,9 @@ public class HangState : State
 
     private void AnimationController()
     {
-        if (!startAnimation)
+        if (!playingAnimation)
         {
-            startAnimation = true;
-            animator.Play(hangRightAnimation, 0, 0);
+            PlayAnimation(hangRightAnimation);
         }
     }
 }
