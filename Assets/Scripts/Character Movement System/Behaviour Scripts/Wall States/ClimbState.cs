@@ -70,7 +70,10 @@ public class ClimbState : State
         {
             isComplete = true;
             body.gravityScale = initialGravityScale;
+            playingAnimation = false;
+
             wallState.isClimbing = false;
+            wallState.isDropping = true;
         }
     }
 

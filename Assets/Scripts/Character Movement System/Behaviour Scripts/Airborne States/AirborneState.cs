@@ -39,7 +39,7 @@ public class AirborneState : State
 
 
         //complete state
-        if (collisionChecker.grounded)
+        if (collisionChecker.grounded || CarriageClimbingBounds.Instance != null)
         {
             jumped = false;
             isComplete = true;

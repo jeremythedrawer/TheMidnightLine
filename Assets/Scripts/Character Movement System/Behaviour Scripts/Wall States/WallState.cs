@@ -9,24 +9,20 @@ public class WallState : State
 
     public bool pendingState { get; set; }
     public bool isClimbing { get; set; } = false;
-    public bool droppingDown { get; set; } = false;
+    public bool isHanging { get; set; } = true;
+    public bool isDropping { get; set; } = false;
     public override void Enter()
     {
 
     }
     public override void Do()
     {
+        MovementInputDetection();
         SelectState();
-        if (movementInputs.jumpInput)
+
+        if ((!isClimbing && !isHanging) || isDropping)
         {
-            isClimbing = true;
-        }
-        if (movementInputs.crouchInput)
-        {
-            isClimbing = false;
-            droppingDown = true;
             isComplete = true;
-            
         }
     }
 
@@ -38,7 +34,6 @@ public class WallState : State
     {
 
     }
-
     private void SelectState()
     {
         if (!pendingState)
@@ -57,11 +52,30 @@ public class WallState : State
         {
             Set(climbState, true);
         }
-        else
+        else if (isHanging)
         {
             Set(hangState, true);
         }
 
         pendingState = false; // reset bool
+    }
+
+    private void MovementInputDetection()
+    {
+        if (movementInputs.crouchInput)
+        {
+            body.gravityScale = initialGravityScale;
+            movementInputs.canMove = true;
+
+            isDropping = true;
+            isClimbing = false;
+            isHanging = false;
+        }
+
+        if (movementInputs.jumpInput)
+        {
+            isClimbing = true;
+        }
+
     }
 }

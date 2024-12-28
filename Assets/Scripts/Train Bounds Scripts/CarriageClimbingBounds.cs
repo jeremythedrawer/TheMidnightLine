@@ -13,9 +13,13 @@ public class CarriageClimbingBounds : MonoBehaviour
     public bool hangActivated { get; set; }
     public bool activated { get; set; }
 
-    public float newPos { get; private set; }
+    public Vector2 newPos { get; private set; }
 
     public float boxHeight { get; private set; }
+
+    private bool isLeftCollision;
+    private bool isRightCollision;
+    private bool isBottomCollision;
 
     private void OnDrawGizmos()
     {
@@ -37,8 +41,8 @@ public class CarriageClimbingBounds : MonoBehaviour
 
         //draw hangThresholdLine
         Gizmos.color = hangActivated ? Color.green : Color.red;
-        Vector2 leftOrigin = new Vector2(Collider2D.bounds.min.x, (Collider2D.bounds.max.y - Collider2D.bounds.min.y) * (hangActivationThreshold-0.5f) + transform.position.y);
-        Vector2 rightOrigin = new Vector2(Collider2D.bounds.max.x, (Collider2D.bounds.max.y - Collider2D.bounds.min.y) * (hangActivationThreshold - 0.5f) + transform.position.y);
+        Vector2 leftOrigin = new Vector2(Collider2D.bounds.min.x, (Collider2D.bounds.size.y) * (hangActivationThreshold - 0.5f) + transform.position.y);
+        Vector2 rightOrigin = new Vector2(Collider2D.bounds.max.x, (Collider2D.bounds.size.y) * (hangActivationThreshold - 0.5f) + transform.position.y);
         Gizmos.DrawLine(rightOrigin, leftOrigin);
         #endif
 
@@ -47,7 +51,7 @@ public class CarriageClimbingBounds : MonoBehaviour
     void Start()
     {
         Collider2D = this.GetComponent<BoxCollider2D>();
-        hangThresholdLine = (Collider2D.bounds.max.y - Collider2D.bounds.min.y) * (hangActivationThreshold - 0.5f) + transform.position.y;
+        hangThresholdLine = (Collider2D.bounds.size.y) * (hangActivationThreshold - 0.5f) + transform.position.y;
         boxHeight = Collider2D.size.y;
     }
 
@@ -65,25 +69,20 @@ public class CarriageClimbingBounds : MonoBehaviour
         Debug.DrawLine(topLeft, bottomLeft, activated ? Color.green : Color.red);
 
         //draw hangThresholdLine
-        Vector2 leftOrigin = new Vector2(Collider2D.bounds.min.x, (Collider2D.bounds.max.y - Collider2D.bounds.min.y) * (hangActivationThreshold - 0.5f) + transform.position.y);
-        Vector2 rightOrigin = new Vector2(Collider2D.bounds.max.x, (Collider2D.bounds.max.y - Collider2D.bounds.min.y) * (hangActivationThreshold - 0.5f) + transform.position.y);
+        Vector2 leftOrigin = new Vector2(Collider2D.bounds.min.x, hangThresholdLine);
+        Vector2 rightOrigin = new Vector2(Collider2D.bounds.max.x, hangThresholdLine);
         Debug.DrawLine(rightOrigin, leftOrigin, hangActivated ? Color.green : Color.red);
 #endif
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player Collider") || collision.gameObject.CompareTag("Agent Collider"))
-        {
-            Instance = this;
-            activated = true;
-        }
-
-        newPos = Collider2D.bounds.min.y - collision.bounds.size.y;
+        newPos = new Vector2(Collider2D.bounds.min.x, hangThresholdLine - collision.bounds.size.y);
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
+        TriggerInstance(collision);
         HangActivationThresholdDetection(collision);
     }
     private void OnTriggerExit2D(Collider2D collision)
@@ -93,6 +92,27 @@ public class CarriageClimbingBounds : MonoBehaviour
             Instance = null;
             activated = false;
             hangActivated = false;
+
+            isLeftCollision = false;
+            isRightCollision = false;
+            isBottomCollision = false;
+        }
+    }
+
+    private void TriggerInstance(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player Collider") || collision.gameObject.CompareTag("Agent Collider"))
+        {
+            float thisColliderTopBound = GetComponent<Collider2D>().bounds.max.y;
+            float collisionBottomBound = collision.bounds.min.y;
+
+            if (collisionBottomBound >= thisColliderTopBound)
+            {
+                return;
+            }
+
+            Instance = this;
+            activated = true;
         }
     }
 
@@ -103,6 +123,4 @@ public class CarriageClimbingBounds : MonoBehaviour
             hangActivated = true;
         }
     }
-
-    //TODO: adjust side origins to teleport the players x position towards for hanging on the left or right side
 }

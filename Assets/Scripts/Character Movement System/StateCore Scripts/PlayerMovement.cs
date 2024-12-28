@@ -35,13 +35,24 @@ public class PlayerMovement : StateCore
     {
         if (state.isComplete)
         {
-            if (collisionChecker.grounded || movementInputs.adjustingCollider)
+            if (CarriageClimbingBounds.Instance != null && !wallState.isDropping)
             {
-                Set(groundState, true);
+                Set(wallState, true);
             }
             else
             {
-                Set(airborneState, true);
+                if (collisionChecker.grounded || movementInputs.adjustingCollider)
+                {
+                    //reset wall bools
+                    wallState.isDropping = false;
+                    wallState.isHanging = true;
+
+                    Set(groundState, true);
+                }
+                else
+                {
+                    Set(airborneState, true);
+                }
             }
         }
     }

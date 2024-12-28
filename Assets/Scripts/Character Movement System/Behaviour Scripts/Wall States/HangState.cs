@@ -38,6 +38,7 @@ public class HangState : State
     {
         if (CarriageClimbingBounds.Instance == null)
         {
+            wallState.isHanging = false;
             return;
         }
 
@@ -49,7 +50,7 @@ public class HangState : State
 
             //snap player to position
             Vector2 newPosition = core.transform.position;
-            newPosition.y = CarriageClimbingBounds.Instance.newPos;
+            newPosition = CarriageClimbingBounds.Instance.newPos;
             core.transform.position = newPosition;
 
             core.spriteRenderer.flipX = !CarriageClimbingBounds.Instance.isLeftEdge;
