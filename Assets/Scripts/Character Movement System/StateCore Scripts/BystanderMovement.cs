@@ -5,12 +5,16 @@ public class BystanderMovement : StateCore
     //child states
     public CalmState calmState;
     public PanicState panicState;
+    public FleeState fleeState;
+    public LeaveState leaveState;
 
     public GameObject player { get; private set; }
     private PlayerMovement playerMovement;
 
     public bool isCalm {  get; private set; }
     public bool isPanic { get; private set; }
+    public bool isFleeing { get; private set; }
+    public bool isLeaving { get; private set; }
 
     void Start()
     {
@@ -53,6 +57,14 @@ public class BystanderMovement : StateCore
             if (isPanic)
             {
                 Set(panicState, true);
+            }
+            if (isFleeing)
+            {
+                Set(fleeState, true);
+            }
+            if (isLeaving)
+            {
+                Set(leaveState, true);
             }
         }
     }

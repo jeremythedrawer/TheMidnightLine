@@ -5,6 +5,7 @@ public class PlayerMovement : StateCore
     //child states
     public AirborneState airborneState;
     public GroundState groundState;
+    public WallState wallState;
 
     void Start()
     {

@@ -7,8 +7,8 @@ public class AgentMovement : StateCore
     public HidingState hidingState;
     public StalkState stalkState;
     public AttackState attackState;
-    public GameObject player { get; private set; }
     public LayerMask playerLayer;
+    public GameObject player { get; private set; }
     private PlayerMovement playerMovement;
     private SpriteRenderer playerSpriteRenderer;
 
@@ -24,9 +24,10 @@ public class AgentMovement : StateCore
     public bool inCameraView { get; private set; }
     public bool inPlayerCharacterSight { get; private set; }
     public bool isCloseToPlayer { get; private set; }
+    public bool isCarriageEmpty { get; private set; }
+
     private float closeToPlayerThreshold = 2f;
 
-    public bool isCarriageEmpty { get; private set; }
     private ActivateCarriageBounds currentCarriage;
 
     void Start()
@@ -110,7 +111,7 @@ public class AgentMovement : StateCore
 
     private void CheckHidingTriggers()
     {
-        if (!isAttacking && !isStalking)
+        if (!isAttacking && !isStalking) //default is isHiding
         {
             isHiding = true;
         }

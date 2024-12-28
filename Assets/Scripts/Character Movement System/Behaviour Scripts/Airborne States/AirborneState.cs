@@ -2,12 +2,13 @@ using UnityEngine;
 
 public class AirborneState : State
 {
-    public GroundState groundState;
 
     //child states
     public JumpedState jumpedState;
     public FallState fallState;
-    public WallState wallState;
+
+    //sibling states
+    public GroundState groundState;
 
     [Tooltip("The apex threshold when the antiGravityApexScale is applied")]
     public float antiGravityApexThreshold = 2.0f;
@@ -19,7 +20,6 @@ public class AirborneState : State
     public float clampedFallSpeed = 20.0f;
 
     private bool jumped;
-    public bool hanging { get; set; } = false;
     public bool heavyLanding { get; set; } = false;
 
     private string jumpAnimation = "jumpRight";
@@ -35,33 +35,19 @@ public class AirborneState : State
         SelectState();
         ClampFallSpeed();
         StickyFeetOnLand();
-
-        if (!hanging)
-        {
-            JumpAndFallAnimController();
-        }
+        JumpAndFallAnimController();
 
 
         //complete state
         if (collisionChecker.grounded)
         {
             jumped = false;
-            hanging = false;
-            wallState.droppingDown = false;
             isComplete = true;
         }
     }
 
     public override void FixedDo()
     {
-        if (CarriageClimbingBounds.Instance != null && !wallState.droppingDown)
-        {
-            hanging = true;
-        }
-        else
-        {
-            hanging = false;
-        }
     }
     public override void Exit()
     {
@@ -71,8 +57,6 @@ public class AirborneState : State
     {
         if (body.linearVelocityY > 0 || movementInputs.jumpInput) jumped = true;
 
-        if (!hanging)
-        {
             if (jumped)
             {
                 Set(jumpedState, true);
@@ -81,11 +65,6 @@ public class AirborneState : State
             {
                 Set(fallState, true);
             }
-        }
-        else
-        {
-            Set(wallState, true);
-        }
     }
     private void ClampFallSpeed()
     {

@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class PanicState : State
 {
+    //parent state
     public BystanderMovement bystanderMovement;
 
     //child state

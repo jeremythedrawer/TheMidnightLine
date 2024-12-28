@@ -15,6 +15,8 @@ public class CarriageClimbingBounds : MonoBehaviour
 
     public float newPos { get; private set; }
 
+    public float boxHeight { get; private set; }
+
     private void OnDrawGizmos()
     {
         #if UNITY_EDITOR
@@ -46,6 +48,7 @@ public class CarriageClimbingBounds : MonoBehaviour
     {
         Collider2D = this.GetComponent<BoxCollider2D>();
         hangThresholdLine = (Collider2D.bounds.max.y - Collider2D.bounds.min.y) * (hangActivationThreshold - 0.5f) + transform.position.y;
+        boxHeight = Collider2D.size.y;
     }
 
     private void FixedUpdate()

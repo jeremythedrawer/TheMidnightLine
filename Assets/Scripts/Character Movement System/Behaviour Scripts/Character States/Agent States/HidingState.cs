@@ -9,7 +9,7 @@ public class HidingState : State
     }
     public override void Do()
     {
-        if (agentMovement.isAttacking)
+        if (agentMovement.isAttacking || agentMovement.isStalking)
         {
             isComplete = true;
         }

@@ -3,6 +3,9 @@ using UnityEngine;
 public class HangState : State
 {
     public WallState wallState;
+
+    private bool startAnimation = false;
+    private string hangRightAnimation = "hangRight";
     public override void Enter()
     {
 
@@ -13,6 +16,7 @@ public class HangState : State
         {
             wallState.pendingState = false;
             movementInputs.canMove = true;
+            startAnimation = false;
             isComplete = true;
         }
         else
@@ -32,6 +36,10 @@ public class HangState : State
 
     private void HangController()
     {
+        if (CarriageClimbingBounds.Instance == null)
+        {
+            return;
+        }
 
         if (CarriageClimbingBounds.Instance.hangActivated)
         {
@@ -45,6 +53,17 @@ public class HangState : State
             core.transform.position = newPosition;
 
             core.spriteRenderer.flipX = !CarriageClimbingBounds.Instance.isLeftEdge;
+
+            AnimationController();
+        }
+    }
+
+    private void AnimationController()
+    {
+        if (!startAnimation)
+        {
+            startAnimation = true;
+            animator.Play(hangRightAnimation, 0, 0);
         }
     }
 }

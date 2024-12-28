@@ -3,9 +3,6 @@ using System.Collections;
 
 public class WallState : State
 {
-    //parent states
-    public AirborneState airborneState;
-
     //child states
     public HangState hangState;
     public ClimbState climbState;
@@ -28,7 +25,6 @@ public class WallState : State
         {
             isClimbing = false;
             droppingDown = true;
-            airborneState.hanging = false;
             isComplete = true;
             
         }
