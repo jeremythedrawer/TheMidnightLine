@@ -75,7 +75,14 @@ public class CarriageClimbingBounds : MonoBehaviour
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        newPos = new Vector2(Collider2D.bounds.min.x, hangThresholdLine - collision.bounds.size.y);
+        if ( isLeftEdge)
+        {
+            newPos = new Vector2(Collider2D.bounds.min.x, hangThresholdLine - collision.bounds.size.y);  
+        }
+        else
+        {
+            newPos = new Vector2(Collider2D.bounds.max.x, hangThresholdLine - collision.bounds.size.y);
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)

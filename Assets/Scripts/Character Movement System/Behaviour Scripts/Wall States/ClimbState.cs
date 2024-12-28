@@ -40,15 +40,27 @@ public class ClimbState : State
 
     private void UpdatePos()
     {
+        if (CarriageClimbingBounds.Instance == null)
+        {
+            return;
+        }
+
         if (checkPos)
         {
             cachePosX = core.transform.position.x;
             cachePosY = core.transform.position.y;
-
-            offsetX = boxCollider2D.bounds.size.x;
-            offsetY = (boxCollider2D.bounds.size.y + CarriageClimbingBounds.Instance.boxHeight) - (CarriageClimbingBounds.Instance.hangThresholdLine - CarriageClimbingBounds.Instance.boundsMinY);
+            if (CarriageClimbingBounds.Instance.isLeftEdge)
+            {
+                offsetX = boxCollider2D.bounds.size.x;
+            }
+            else
+            {
+                offsetX = -boxCollider2D.bounds.size.x;
+            }
 
             newPosX = cachePosX + offsetX;
+            offsetY = (boxCollider2D.bounds.size.y + CarriageClimbingBounds.Instance.boxHeight) - (CarriageClimbingBounds.Instance.hangThresholdLine - CarriageClimbingBounds.Instance.boundsMinY);
+
             newPosY = cachePosY + offsetY; 
             checkPos = false;
         }
@@ -57,17 +69,7 @@ public class ClimbState : State
         {
             if (movementInputs.crouchInput)
             {
-                boxCollider2D.offset = Vector2.zero;
-                currentPos = new Vector2(cachePosX, cachePosY);
-                playingAnimation = false;
-                checkPos = true;
-                isComplete = true;
-
-                body.linearVelocityY = 0f;
-
-                wallState.isClimbing = false;
-                wallState.isDropping = true;
-                offsetX = 0f; offsetY = 0f;
+                ResetClimbingParaemeters();
             }
             else
             {
@@ -93,15 +95,24 @@ public class ClimbState : State
         }
         else if (core.currentAnimStateInfo.normalizedTime >= 1f)
         {
-            isComplete = true;
-            body.gravityScale = initialGravityScale;
-            playingAnimation = false;
-
-            wallState.isClimbing = false;
-            wallState.isDropping = true;
+            ResetClimbingParaemeters();
         }
     }
 
+    private void ResetClimbingParaemeters()
+    {
+        boxCollider2D.offset = Vector2.zero;
+        currentPos = new Vector2(cachePosX, cachePosY);
+        playingAnimation = false;
+        checkPos = true;
+        isComplete = true;
+
+        body.linearVelocityY = 0f;
+
+        wallState.isClimbing = false;
+        wallState.isDropping = true;
+        offsetX = 0f; offsetY = 0f;
+    }
 
 
 }
