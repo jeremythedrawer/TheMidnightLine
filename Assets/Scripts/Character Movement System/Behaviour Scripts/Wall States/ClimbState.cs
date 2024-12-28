@@ -4,9 +4,7 @@ public class ClimbState : State
 {
     public WallState wallState;
 
-    private string climbPullUpRightAnimation = "climbPullUpRight";
-    private string climbPushUpRightAnimation = "climbPushUpRight";
-    private string climbGetUpRightAnimation = "climbGetUpRight";
+    public BoxCollider2D boxCollider;
 
     private string climbRightAnimation = "climbRight";
 
@@ -47,17 +45,20 @@ public class ClimbState : State
             cachePosY = core.transform.position.y;
 
             newPosX = cachePosX + boxCollider2D.bounds.size.x;
-            newPosY = cachePosY + boxCollider2D.bounds.size.y + CarriageClimbingBounds.Instance.boxHeight; 
+            newPosY = cachePosY + boxCollider2D.bounds.size.y + (CarriageClimbingBounds.Instance.boxHeight - CarriageClimbingBounds.Instance.hangActivationThreshold); 
             checkPos = false;
         }
 
         if (core.currentAnimStateInfo.normalizedTime < 1f && !checkPos)
         {
-            float xPos = Mathf.Lerp(cachePosX, newPosX, core.currentAnimStateInfo.normalizedTime);
-            float yPos = Mathf.Lerp(cachePosY, newPosY, core.currentAnimStateInfo.normalizedTime);
-            currentPos = new Vector2(xPos, yPos);
+            currentPos = new Vector2(newPosX, newPosY);
             core.transform.position = currentPos;
         }
+    }
+
+    private void UpdateBoxCollider()
+    {
+
     }
 
     private void AnimationController()

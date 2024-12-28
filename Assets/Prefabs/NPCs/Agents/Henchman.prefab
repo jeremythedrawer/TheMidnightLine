@@ -24,7 +24,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5454002635820018757
 Transform:
   m_ObjectHideFlags: 0
@@ -713,10 +713,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3a76300dc794d847919a881516058d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundState: {fileID: 1308872781844731811}
   jumpedState: {fileID: 1379844891400480527}
   fallState: {fileID: 7321518446667272505}
-  wallState: {fileID: 2266419640423568923}
+  groundState: {fileID: 1308872781844731811}
   antiGravityApexThreshold: 2
   antiGravityApexScale: 2
   clampedFallSpeed: 15
@@ -789,6 +788,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   wallState: {fileID: 0}
+  boxCollider: {fileID: 0}
 --- !u!1 &8092280888936232919
 GameObject:
   m_ObjectHideFlags: 0

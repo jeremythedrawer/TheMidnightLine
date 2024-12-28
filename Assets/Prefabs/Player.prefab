@@ -202,6 +202,7 @@ Transform:
   m_Children:
   - {fileID: 5249858849254192052}
   - {fileID: 2482328639398128721}
+  - {fileID: 4544342316930994955}
   m_Father: {fileID: 779573762761806031}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &4675878951714792291
@@ -328,6 +329,9 @@ GameObject:
   - component: {fileID: 1810548854547567896}
   - component: {fileID: 4210922695891752456}
   - component: {fileID: 3611081317677061277}
+  - component: {fileID: 6772737498432176046}
+  - component: {fileID: 2064790226215339840}
+  - component: {fileID: 5785384820261268607}
   m_Layer: 0
   m_Name: Airborne
   m_TagString: Untagged
@@ -362,10 +366,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3a76300dc794d847919a881516058d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundState: {fileID: 4604699258691990960}
   jumpedState: {fileID: 4210922695891752456}
   fallState: {fileID: 3611081317677061277}
-  wallState: {fileID: 0}
+  groundState: {fileID: 4604699258691990960}
   antiGravityApexThreshold: 4
   antiGravityApexScale: 3
   clampedFallSpeed: 25
@@ -398,6 +401,122 @@ MonoBehaviour:
   coyoteTime: 0.14
   initialCoyoteTime: 0
   coyoteEnabled: 0
+--- !u!114 &6772737498432176046
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5360606228185169135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af706fe6cdbb4e47a8ea7148d369659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hangState: {fileID: 5785384820261268607}
+  climbState: {fileID: 2064790226215339840}
+--- !u!114 &2064790226215339840
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5360606228185169135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a21a04ebc2d8f8a4db5541beda504d2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallState: {fileID: 6772737498432176046}
+  boxCollider: {fileID: 0}
+--- !u!114 &5785384820261268607
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5360606228185169135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0bc8cd128cc1024787ee7e602aeffcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallState: {fileID: 6772737498432176046}
+--- !u!1 &6685006070101908677
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4544342316930994955}
+  - component: {fileID: 5875007179056365094}
+  - component: {fileID: 4816147745226771777}
+  - component: {fileID: 7254581161091077788}
+  m_Layer: 0
+  m_Name: Wall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4544342316930994955
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6685006070101908677}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4265203560178826556}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5875007179056365094
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6685006070101908677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9af706fe6cdbb4e47a8ea7148d369659, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hangState: {fileID: 4816147745226771777}
+  climbState: {fileID: 7254581161091077788}
+--- !u!114 &4816147745226771777
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6685006070101908677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c0bc8cd128cc1024787ee7e602aeffcb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallState: {fileID: 5875007179056365094}
+--- !u!114 &7254581161091077788
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6685006070101908677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a21a04ebc2d8f8a4db5541beda504d2c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  wallState: {fileID: 5875007179056365094}
+  boxCollider: {fileID: 0}
 --- !u!1 &8451971257262523574
 GameObject:
   m_ObjectHideFlags: 0
@@ -562,11 +681,13 @@ MonoBehaviour:
   spriteRenderer: {fileID: 2777033409117370694}
   animator: {fileID: 5569901885537800629}
   collisionChecker: {fileID: 6655092737606140929}
+  boxCollider2D: {fileID: 6207222510939091140}
   movementInputs: {fileID: 8911714753198091239}
   characterStats: {fileID: 7752829070841774031}
   healthSystem: {fileID: 3318510828591014836}
   airborneState: {fileID: 1810548854547567896}
   groundState: {fileID: 4604699258691990960}
+  wallState: {fileID: 5875007179056365094}
 --- !u!114 &7752829070841774031
 MonoBehaviour:
   m_ObjectHideFlags: 0
