@@ -4,11 +4,6 @@ using UnityEngine;
 public class RunState : State
 {
     public GroundState groundState;
-
-    private string runRightAnimation = "runRight";
-    private string startRunRightAnimation = "startRunRight";
-
-    private string walkRightAnimation = "walkRight";
     public bool startRunAnimation { get; set; } = false;
     public bool startWalkAnimation { get; set; } = false;
     public override void Enter()
@@ -56,13 +51,13 @@ public class RunState : State
         }
         else if (!startRunAnimation)
         {
-            animator.Play(startRunRightAnimation, 0, 0);
+            animator.Play(animStates.startRunAnimState, 0, 0);
             startRunAnimation = true;
             startWalkAnimation = false;
         }
         else if (core.currentAnimStateInfo.normalizedTime >= 1)
         {
-            animator.Play(runRightAnimation, 0, 0);
+            animator.Play(animStates.runAnimState, 0, 0);
         }
     }
 
@@ -76,7 +71,7 @@ public class RunState : State
         }
         else if (!startWalkAnimation || core.currentAnimStateInfo.normalizedTime >= 1)
         {
-            animator.Play(walkRightAnimation, 0, 0);
+            animator.Play(animStates.walkAnimState, 0, 0);
             startWalkAnimation = true;
             startRunAnimation = false;
         }

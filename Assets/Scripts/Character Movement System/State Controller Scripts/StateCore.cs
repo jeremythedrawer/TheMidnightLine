@@ -3,17 +3,18 @@ using UnityEngine;
 
 public abstract class StateCore : MonoBehaviour
 {
+    [Header("State Core Data")]
     public Rigidbody2D body;
-
     public SpriteRenderer spriteRenderer;
     public Animator animator;
     public AnimatorStateInfo currentAnimStateInfo;
-
     public CollisionChecker collisionChecker;
     public BoxCollider2D boxCollider2D;
     public MovementInputs movementInputs;
     public CharacterStats characterStats;
     public HealthSystem healthSystem;
+
+    public AnimStateStrings animStates;
     public StateMachine machine;
 
     public State state => machine.state;
@@ -28,6 +29,7 @@ public abstract class StateCore : MonoBehaviour
     public void SetupInstances()
     {
         machine = new StateMachine();
+        animStates = new AnimStateStrings();
 
         State[] allChildStates = GetComponentsInChildren<State>();
 

@@ -11,20 +11,6 @@ public class MeleeState : State
 
     private int hitCombos = 0;
 
-    //player animation state names
-    private string groundRightAnimation = "groundMeleeRight";
-
-    //agent animation state names
-    private string stanceToPrimaryHitAnimation = "stanceToPrimaryHit"; //index 1 in Animation Event
-    private string primaryHitToSecondaryHitAnimation = "primaryHitToSecondaryHit"; //index 2 in Animation Event
-    private string secondaryHitToFinalHitAnimation = "secondaryHitToFinalHit";
-    private string finalHitToStanceAnimation = "finalHitToStance"; //index 3 in Animation Event
-
-    private string primaryHitToStanceAnimation = "primaryHitToStance";
-    private string secondaryHitToStanceAnimation = "secondaryHitToStance";
-    private string stanceToSecondaryHitAnimation = "stanceToSecondaryHit"; // TODO: randomly choose when to start at primary secondary or final attack //index 2 in Animation Event 
-
-
     public override void Enter()
     {
 
@@ -72,7 +58,7 @@ public class MeleeState : State
         {
             if (!playingAnimation)
             {
-                animator.Play(groundRightAnimation, 0, 0);
+                animator.Play(animStates.groundMeleeAnimState, 0, 0);
                 movementInputs.canMove = false;
                 playingAnimation = true;
             }
@@ -89,6 +75,8 @@ public class MeleeState : State
         {
             PlayComboAnimation();
         }
+
+        // TODO: randomly choose when to start at primary secondary or final attack //index 2 in Animation Event 
     }
 
     private void PlayComboAnimation()
@@ -99,30 +87,30 @@ public class MeleeState : State
             {
                 case 0:
 
-                    PlayAnimation(stanceToPrimaryHitAnimation);
+                    PlayAnimation(animStates.stanceToPrimaryAnimState);
 
-                    if (stateCore.currentAnimStateInfo.IsName(stanceToPrimaryHitAnimation) &&
+                    if (stateCore.currentAnimStateInfo.IsName(animStates.stanceToPrimaryAnimState) &&
                         stateCore.currentAnimStateInfo.normalizedTime >= 1f && hitCombos == 0) // missed hit
                     {
-                        PlayAnimation(primaryHitToStanceAnimation);
+                        PlayAnimation(animStates.primaryHitToStanceAnimState);
                         hitCombos = -1;
                     }
 
                     break;
 
                 case 1:
-                    PlayAnimation(primaryHitToSecondaryHitAnimation);
+                    PlayAnimation(animStates.primaryHitToSecondaryAnimState);
 
-                    if (stateCore.currentAnimStateInfo.IsName(primaryHitToSecondaryHitAnimation) && 
+                    if (stateCore.currentAnimStateInfo.IsName(animStates.primaryHitToSecondaryAnimState) && 
                         stateCore.currentAnimStateInfo.normalizedTime >= 1f && hitCombos == 1) // missed hit
                     {
-                        PlayAnimation(secondaryHitToStanceAnimation);
+                        PlayAnimation(animStates.secondaryHitToStanceAnimState);
                         hitCombos= -1;
                     }
                     break;
 
                 case 2:
-                    PlayAnimation(secondaryHitToFinalHitAnimation);
+                    PlayAnimation(animStates.secondaryHitToFinalAnimState);
                     if (stateCore.currentAnimStateInfo.normalizedTime >= 1f)
                     {
                         hitCombos++;
@@ -130,7 +118,7 @@ public class MeleeState : State
                     break;
 
                 case 3:
-                    PlayAnimation(finalHitToStanceAnimation);
+                    PlayAnimation(animStates.finalHitToStanceAnimState);
                         hitCombos = -1;
                     break;
 

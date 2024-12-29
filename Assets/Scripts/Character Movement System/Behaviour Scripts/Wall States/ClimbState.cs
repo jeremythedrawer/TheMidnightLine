@@ -5,8 +5,6 @@ public class ClimbState : State
 {
     public WallState wallState;
 
-    private string climbRightAnimation = "climbRight";
-
     private float cachePosX;
     private float cachePosY;
 
@@ -91,7 +89,7 @@ public class ClimbState : State
     {
         if (!playingAnimation)
         {
-            PlayAnimation(climbRightAnimation);
+            PlayAnimation(animStates.climbAnimState);
         }
         else if (core.currentAnimStateInfo.normalizedTime >= 1f)
         {

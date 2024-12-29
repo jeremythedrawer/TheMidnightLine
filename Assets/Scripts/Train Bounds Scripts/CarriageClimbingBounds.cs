@@ -103,15 +103,7 @@ public class CarriageClimbingBounds : MonoBehaviour
     private void TriggerInstance(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player Collider") || collision.gameObject.CompareTag("Agent Collider"))
-        {
-            float collisionBottomBound = collision.bounds.min.y;
-            float thisColliderTopBound = Collider2D.bounds.max.y;
-
-            if (collisionBottomBound >= thisColliderTopBound)
-            {
-                return;
-            }
-
+        { 
             Instance = this;
             activated = true;
         }

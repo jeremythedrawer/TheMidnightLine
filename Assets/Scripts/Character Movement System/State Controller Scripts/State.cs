@@ -9,14 +9,23 @@ public abstract class State : MonoBehaviour
     public float time => Time.time - startTime;
 
     protected StateCore core;
+    protected NPCCore npcCore;
 
+    protected AnimStateStrings animStates => core.animStates;
     protected Rigidbody2D body => core.body;
+
     protected BoxCollider2D boxCollider2D => core.boxCollider2D;
+
     protected float initialGravityScale => core.initialGravityScale;
+
     protected Animator animator => core.animator;
     protected bool playingAnimation = false;
+
     protected CollisionChecker collisionChecker => core.collisionChecker;
+
     protected MovementInputs movementInputs => core.movementInputs;
+
+    protected NavigationSystem navigationSystem => npcCore.navigationSystem;
 
     public StateMachine machine;
     public StateMachine parent;

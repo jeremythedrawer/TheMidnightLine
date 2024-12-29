@@ -14,9 +14,6 @@ public class CalmState : State
     [Tooltip("number of breathes until blinking")]
     public int breathLoops = 5;
 
-    private string breathingAnimState = "calmBreathing";
-    private string blinkingAnimState = "calmBlinking";
-
     private int breathCount = 0;
     private bool isBlinking = false;
     public override void Enter()
@@ -49,27 +46,27 @@ public class CalmState : State
     {
         if (!groundState.idleState) return;
 
-        if (!isBlinking && bystanderMovement.currentAnimStateInfo.IsName(breathingAnimState))
+        if (!isBlinking && bystanderMovement.currentAnimStateInfo.IsName(animStates.calmBreathingAnimState))
         {
             if (bystanderMovement.currentAnimStateInfo.normalizedTime >= 1f)
             {
                 breathCount++;
-                animator.Play(breathingAnimState, 0, 0);
+                animator.Play(animStates.calmBreathingAnimState, 0, 0);
 
                 if (breathCount >= breathLoops)
                 {
                     breathCount = 0;
                     isBlinking = true;
-                    PlayAnimation(blinkingAnimState);
+                    PlayAnimation(animStates.calmBlinkingAnimState);
                 }
             }
         }
-        else if (isBlinking && bystanderMovement.currentAnimStateInfo.IsName(blinkingAnimState))
+        else if (isBlinking && bystanderMovement.currentAnimStateInfo.IsName(animStates.calmBlinkingAnimState))
         {
             if (bystanderMovement.currentAnimStateInfo.normalizedTime >= 1f)
             {
                 isBlinking = false;
-                PlayAnimation(breathingAnimState);
+                PlayAnimation(animStates.calmBreathingAnimState);
             }
         } 
     }

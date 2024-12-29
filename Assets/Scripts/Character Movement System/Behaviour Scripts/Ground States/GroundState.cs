@@ -23,7 +23,7 @@ public class GroundState : State
     public bool pendingState { get; set; }
 
     public bool finishedHeavyLanding { get; set; } = true;
-    private string heavyLandingAnimation = "heavyLandingRight";
+
 
     public override void Enter()
     {
@@ -121,7 +121,7 @@ public class GroundState : State
             {
                 //TODO: roll when x input
                 movementInputs.canMove = false;
-                animator.Play(heavyLandingAnimation, 0, 0);
+                animator.Play(animStates.heavyAnimState, 0, 0);
                 airborneState.heavyLanding = false;
             }
 

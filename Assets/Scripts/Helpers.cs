@@ -39,7 +39,7 @@ public static class Helpers
         Debug.DrawLine(bottomLeft, topLeft, color);
     }
 
-    public static void DrawCircle(Vector2 center, float radius, Color color, int segments = 36)
+    public static void DrawCircle(Vector2 center, float radius, Color color, int segments, bool useGizmos)
     {
         float angleStep = 360f / segments;
 
@@ -51,7 +51,15 @@ public static class Helpers
             Vector2 point1 = center + new Vector2(Mathf.Cos(angle1), Mathf.Sin(angle1)) * radius;
             Vector2 point2 = center + new Vector2(Mathf.Cos(angle2), Mathf.Sin(angle2)) * radius;
 
-            Debug.DrawLine(point1, point2, color);
+            if (useGizmos)
+            {
+                Gizmos.DrawLine(point1, point2);
+            }
+            else
+            {
+
+                Debug.DrawLine(point1, point2, color);
+            }
         }
     }
 }

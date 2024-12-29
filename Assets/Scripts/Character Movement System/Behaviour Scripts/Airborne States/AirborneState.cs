@@ -22,8 +22,7 @@ public class AirborneState : State
     private bool jumped;
     public bool heavyLanding { get; set; } = false;
 
-    private string jumpAnimation = "jumpRight";
-    private string fallAnimation = "fallRight";
+
     private float jumpAnimationProgress = 0f; // Normalized time for animation
     private float fallAnimationProgress = 0f; // Normalized time for animation
     public override void Enter()
@@ -93,14 +92,13 @@ public class AirborneState : State
             float t = Mathf.InverseLerp(core.characterStats.jumpSpeed, 0, velocityY);
             jumpAnimationProgress = Mathf.Lerp(0, 1, t);
             if (jumpAnimationProgress > 0.95) jumpAnimationProgress = 1f;
-            animator.Play(jumpAnimation, 0, jumpAnimationProgress);
+            animator.Play(animStates.jumpAnimState, 0, jumpAnimationProgress);
         }
         else
         {
             float t = Mathf.InverseLerp(0, clampedFallSpeed, Mathf.Abs(body.linearVelocityY));
             fallAnimationProgress = Mathf.Lerp(0,1, t);
-
-            animator.Play(fallAnimation, 0, fallAnimationProgress);
+            animator.Play(animStates.fallAnimState, 0, fallAnimationProgress);
         }
     }
 }

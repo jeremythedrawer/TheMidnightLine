@@ -8,7 +8,7 @@ public class IdleState : State
     //parent state
     public GroundState groundState;
 
-    private string breathingRightAnimation = "idleBreathingRight";
+
 
     public bool startAnimation { get; set; } = false;
 
@@ -46,7 +46,7 @@ public class IdleState : State
         else if (stateCore.currentAnimStateInfo.normalizedTime >= 1 || !startAnimation)
         {
             startAnimation = true;
-            animator.Play(breathingRightAnimation,0,0);
+            animator.Play(animStates.breathingAnimState,0,0);
         }
         // TODO implement right and left animation logic and also logic for symetrical animations (agents)
     }

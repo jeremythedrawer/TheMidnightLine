@@ -3,8 +3,6 @@ using UnityEngine;
 public class HangState : State
 {
     public WallState wallState;
-
-    private string hangRightAnimation = "hangRight";
     public override void Enter()
     {
     }
@@ -60,7 +58,7 @@ public class HangState : State
     {
         if (!playingAnimation)
         {
-            PlayAnimation(hangRightAnimation);
+            PlayAnimation(animStates.hangAnimState);
         }
     }
 }
