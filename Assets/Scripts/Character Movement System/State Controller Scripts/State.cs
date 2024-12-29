@@ -25,7 +25,7 @@ public abstract class State : MonoBehaviour
 
     protected MovementInputs movementInputs => core.movementInputs;
 
-    protected NavigationSystem navigationSystem => npcCore.navigationSystem;
+    protected BehaviourParams navigationSystem => npcCore.behaviourParams;
 
     public StateMachine machine;
     public StateMachine parent;

@@ -53,6 +53,7 @@ public static class Helpers
 
             if (useGizmos)
             {
+                Gizmos.color = color;
                 Gizmos.DrawLine(point1, point2);
             }
             else

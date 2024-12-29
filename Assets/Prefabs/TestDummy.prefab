@@ -1,5 +1,36 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &930449770441290387
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1999678595317102167}
+  m_Layer: 0
+  m_Name: Wall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1999678595317102167
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 930449770441290387}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 5067740643519435891}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &1038792872506874762
 GameObject:
   m_ObjectHideFlags: 0
@@ -18,6 +49,8 @@ GameObject:
   - component: {fileID: 475575063324337565}
   - component: {fileID: 839727647192934597}
   - component: {fileID: 6771688364865113951}
+  - component: {fileID: 2858751759886631980}
+  - component: {fileID: 44307276160904815}
   m_Layer: 0
   m_Name: TestDummy
   m_TagString: Untagged
@@ -167,12 +200,11 @@ MonoBehaviour:
   movementInputs: {fileID: 475575063324337565}
   characterStats: {fileID: 7874639682025641219}
   healthSystem: {fileID: 839727647192934597}
+  behaviourParams: {fileID: 2858751759886631980}
+  navigationSystem: {fileID: 44307276160904815}
   hidingState: {fileID: 1677176017343952772}
   stalkState: {fileID: 2245852976785465087}
   attackState: {fileID: 7484806552564373507}
-  playerLayer:
-    serializedVersion: 2
-    m_Bits: 64
 --- !u!114 &7874639682025641219
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -186,8 +218,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   runSpeed: 8
-  walkSpeed: 4
-  jumpSpeed: 30
+  walkSpeed: 2
+  jumpSpeed: 15
   health: 80
   meleeStrength: 10
 --- !u!114 &3473488405433073638
@@ -256,6 +288,44 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meleeState: {fileID: 5909223569918247090}
+--- !u!114 &2858751759886631980
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038792872506874762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8814db1c8dedcdf498ad18ded07b9471, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  armDistance: 2
+  awareOfPlayerDistance: 10
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 64
+--- !u!114 &44307276160904815
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1038792872506874762}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7f5e1c7bd6528ad429cb7d5c64625f63, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updatePlayerPosTicRate: 1
+  stopMovementBuffer: 1
+  movementInputs: {fileID: 475575063324337565}
+  playerTransform: {fileID: 0}
+  climbingLayer:
+    serializedVersion: 2
+    m_Bits: 1024
+  boxCollider: {fileID: 5255001227995777648}
+  playerCollider: {fileID: 0}
 --- !u!1 &1678218009885354600
 GameObject:
   m_ObjectHideFlags: 0
@@ -268,9 +338,6 @@ GameObject:
   - component: {fileID: 6553677998705775670}
   - component: {fileID: 8290768608634890975}
   - component: {fileID: 5236618355395432097}
-  - component: {fileID: 5186487368988975738}
-  - component: {fileID: 4972926494528580555}
-  - component: {fileID: 556844682919632246}
   m_Layer: 0
   m_Name: Airborne
   m_TagString: Untagged
@@ -340,46 +407,6 @@ MonoBehaviour:
   coyoteTime: 0.2
   initialCoyoteTime: 0
   coyoteEnabled: 0
---- !u!114 &5186487368988975738
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1678218009885354600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9af706fe6cdbb4e47a8ea7148d369659, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  hangState: {fileID: 4972926494528580555}
-  climbState: {fileID: 556844682919632246}
---- !u!114 &4972926494528580555
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1678218009885354600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: c0bc8cd128cc1024787ee7e602aeffcb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wallState: {fileID: 5186487368988975738}
---- !u!114 &556844682919632246
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1678218009885354600}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a21a04ebc2d8f8a4db5541beda504d2c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  wallState: {fileID: 0}
 --- !u!1 &2388253361570019190
 GameObject:
   m_ObjectHideFlags: 0
@@ -414,6 +441,7 @@ Transform:
   - {fileID: 8744490769117331252}
   - {fileID: 2074876977603952516}
   - {fileID: 583444653075656638}
+  - {fileID: 1999678595317102167}
   m_Father: {fileID: 8927831735639462334}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &3172234694146526112

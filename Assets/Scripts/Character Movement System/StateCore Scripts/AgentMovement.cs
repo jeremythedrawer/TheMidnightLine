@@ -25,9 +25,11 @@ public class AgentMovement : NPCCore
     void Update()
     {
         currentAnimStateInfo = animator.GetCurrentAnimatorStateInfo(0);
-        navigationSystem.CheckInCameraView();
-        navigationSystem.CheckPlayerCharacterSight();
-        navigationSystem.CheckBystandersInCarriage();
+        behaviourParams.CheckInCameraView();
+        behaviourParams.CheckPlayerCharacterSight();
+        behaviourParams.CheckBystandersInCarriage();
+
+        navigationSystem.MoveToTarget();
 
         CheckAttackTriggers();
         CheckHidingTriggers();
@@ -73,11 +75,12 @@ public class AgentMovement : NPCCore
     }
     private void CheckStalkTriggers()
     {
-
+        //outside camera view
+        //player is not facing npc and player is not too close
     }
     private void CheckAttackTriggers()
     {
-        if (navigationSystem.isCarriageEmpty || !navigationSystem.inCarriage)
+        if (behaviourParams.isCarriageEmpty || !behaviourParams.inCarriage)
         {
             isAttacking = true;
         }

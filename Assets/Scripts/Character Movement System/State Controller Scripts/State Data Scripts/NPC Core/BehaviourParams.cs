@@ -1,45 +1,75 @@
+using Unity.VisualScripting;
 using UnityEngine;
 
-public class NavigationSystem : MonoBehaviour
+public class BehaviourParams : MonoBehaviour
 {
-    public float closeToPlayerThreshold = 2f;
+    [Header("Radius Thesholds")]
+    public float armDistance = 2f;
+    public float awareOfPlayerDistance = 10f;
 
     [Header("Player Data")]
     public LayerMask playerLayer;
 
+
+    //parameter bools
+    public bool armDistanceFromPlayer { get; private set; }
+    public bool awareOfPlayer { get; private set; }
+    public bool playerIsFacingNPC { get; private set; }
+    public bool isCarriageEmpty { get; private set; }
+    public bool inCameraView { get; private set; }
+    public bool inCarriage {  get; private set; }
+
+    public bool onRoof { get; private set; }
+
+    //types
     public GameObject player { get; private set; }
     private PlayerMovement playerMovement;
     private SpriteRenderer playerSpriteRenderer;
 
     private Camera cam;
 
-    //parameter bools
-    public bool armDistanceFromPlayer { get; private set; }
-    public bool facingPlayer { get; private set; }
-    public bool isCarriageEmpty { get; private set; }
-    public bool inCameraView { get; private set; }
-    public bool inCarriage {  get; private set; }
-
-
     private ActivateCarriageBounds currentCarriage;
-
+    private TrainBounds trainBounds;
 
     private void OnDrawGizmos()
     {
 #if UNITY_EDITOR
         if (Application.isPlaying) return;
-        Gizmos.color = Color.green;
-        Helpers.DrawCircle(transform.position, closeToPlayerThreshold, Color.green, 36, true);
+        Helpers.DrawCircle(transform.position, armDistance, Color.red, 36, true);
+        Helpers.DrawCircle(transform.position, awareOfPlayerDistance, Color.yellow, 36, true);
 #endif
     }
-    void Start()
+    private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
         playerMovement = player.GetComponent<PlayerMovement>();
         playerSpriteRenderer = player.GetComponent<SpriteRenderer>();
 
         cam = Camera.main;
+
+        trainBounds = Object.FindFirstObjectByType<TrainBounds>();
     }
+
+    private void Update()
+    {
+        CheckInCameraView();
+        CheckPlayerCharacterSight();
+        CheckBystandersInCarriage();
+        CheckOnRoof();
+
+#if UNITY_EDITOR
+        GizmosLines();
+#endif
+    }
+
+    private void FixedUpdate()
+    {
+        ChechRadiusThreshold(armDistance, armDistanceFromPlayer);
+        ChechRadiusThreshold(awareOfPlayerDistance, awareOfPlayer);
+        
+    }
+
+
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Inside Bounds"))
@@ -59,24 +89,17 @@ public class NavigationSystem : MonoBehaviour
         }
     }
 
-    void Update()
+    public void ChechRadiusThreshold(float distanceThreshold, bool parameter)
     {
-#if UNITY_EDITOR
-        GizmosLines();
-#endif
-    }
-
-    public void CheckifCloseToPlayer()
-    {
-        Collider2D hit = Physics2D.OverlapCircle(transform.position, closeToPlayerThreshold, playerLayer);
+        Collider2D hit = Physics2D.OverlapCircle(transform.position, distanceThreshold, playerLayer);
 
         if (hit != null)
         {
-            armDistanceFromPlayer = true;
+            parameter = true;
         }
         else
         {
-            armDistanceFromPlayer = false;
+            parameter = false;
         }
     }
 
@@ -109,11 +132,11 @@ public class NavigationSystem : MonoBehaviour
         {
             if ((!playerSpriteRenderer.flipX && player.transform.position.x < transform.position.x) || (playerSpriteRenderer.flipX && player.transform.position.x > transform.position.x))
             {
-                facingPlayer = true;
+                playerIsFacingNPC = true;
             }
             else
             {
-                facingPlayer = false;
+                playerIsFacingNPC = false;
             }
         }
     }
@@ -136,8 +159,20 @@ public class NavigationSystem : MonoBehaviour
         }
     }
 
+    public void CheckOnRoof()
+    {
+        if (transform.position.y > trainBounds.roofLevel)
+        {
+            onRoof = true;
+        }
+        else
+        {
+            onRoof = false;
+        }
+    }
+
     private void GizmosLines()
     {
-        Helpers.DrawCircle(transform.position, closeToPlayerThreshold, armDistanceFromPlayer ? Color.red : Color.green, 8, false);
+        Helpers.DrawCircle(transform.position, armDistance, armDistanceFromPlayer ? Color.red : Color.green, 8, false);
     }
 }

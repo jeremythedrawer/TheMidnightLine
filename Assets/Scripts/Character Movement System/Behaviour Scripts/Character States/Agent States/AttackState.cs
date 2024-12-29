@@ -8,12 +8,14 @@ public class AttackState : State
     //child states
     public GroundState groundState;
     public AirborneState airborneState;
+    public WallState wallState;
     public override void Enter()
     {
     }
     public override void Do()
     {
         SelectState();
+        movementInputs.JumpController(airborneState);
 
         if (agentMovement.isHiding)
         {
@@ -29,14 +31,24 @@ public class AttackState : State
 
     private void SelectState()
     {
-
-        if (collisionChecker.grounded)
+        if (CarriageClimbingBounds.Instance != null && !wallState.isDropping)
         {
-            Set(groundState, true);
+            Set(wallState, true);
         }
         else
         {
-            Set(airborneState, true);
+            if (collisionChecker.grounded || movementInputs.adjustingCollider)
+            {
+                //reset wall bools
+                wallState.isDropping = false;
+                wallState.isHanging = true;
+
+                Set(groundState, true);
+            }
+            else
+            {
+                Set(airborneState, true);
+            }
         }
     }
 }

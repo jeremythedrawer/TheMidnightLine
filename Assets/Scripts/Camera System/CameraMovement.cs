@@ -44,7 +44,7 @@ public class CameraMovement : MonoBehaviour
     private Camera cam;
 
     //train components
-    private TrainCamBounds trainCamBounds;
+    private TrainBounds trainCamBounds;
 
     //player components
     private SpriteRenderer spriteRenderer;
@@ -61,7 +61,7 @@ public class CameraMovement : MonoBehaviour
         playerMovement = player.GetComponent<PlayerMovement>();
         airborneState = playerMovement.airborneState;
 
-        trainCamBounds = Object.FindFirstObjectByType<TrainCamBounds>();
+        trainCamBounds = Object.FindFirstObjectByType<TrainBounds>();
 
         camWidth = cam.pixelWidth;
         camHeight = cam.pixelHeight;
@@ -102,11 +102,11 @@ public class CameraMovement : MonoBehaviour
         {
             CalculateCarriageBoundOffset();
             target.x = Mathf.Clamp(target.x, ActivateCarriageBounds.Instance.leftEdge + updatingBoundOffset, ActivateCarriageBounds.Instance.rightEdge - updatingBoundOffset);
-            target.y = trainCamBounds.camBoundBottomOffset + cam.orthographicSize;
+            target.y = trainCamBounds.wheelLevel + cam.orthographicSize;
         }
         else
         {
-            target.y = Mathf.Max(target.y, trainCamBounds.camBoundBottomOffset + cam.orthographicSize);
+            target.y = Mathf.Max(target.y, trainCamBounds.wheelLevel + cam.orthographicSize);
         }
     }
 
@@ -153,7 +153,7 @@ public class CameraMovement : MonoBehaviour
         float endTime = 1.0f;
         float t = currentCamSizeTransTime / endTime;
 
-        if (player.transform.position.y > trainCamBounds.camBoundRoofOffset)
+        if (player.transform.position.y > trainCamBounds.roofLevel)
         {
             currentCamSizeTransTime = Mathf.Min(currentCamSizeTransTime + Time.deltaTime, endTime);
         }
