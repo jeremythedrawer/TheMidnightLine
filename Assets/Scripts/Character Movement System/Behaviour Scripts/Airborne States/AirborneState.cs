@@ -2,14 +2,6 @@ using UnityEngine;
 
 public class AirborneState : State
 {
-
-    //child states
-    public JumpedState jumpedState;
-    public FallState fallState;
-
-    //sibling states
-    public GroundState groundState;
-
     [Tooltip("The apex threshold when the antiGravityApexScale is applied")]
     public float antiGravityApexThreshold = 2.0f;
 
@@ -58,11 +50,11 @@ public class AirborneState : State
 
             if (jumped)
             {
-                Set(jumpedState, true);
+                Set(core.stateList.jumpedState, true);
             }
             else
             {
-                Set(fallState, true);
+                Set(core.stateList.fallState, true);
             }
     }
     private void ClampFallSpeed()
@@ -71,7 +63,7 @@ public class AirborneState : State
         if (body.linearVelocityY <= clampedFallSpeed * -1)
         {
             heavyLanding = true;
-            groundState.finishedHeavyLanding = false;
+            core.stateList.groundState.finishedHeavyLanding = false;
         }
     }
 

@@ -44,7 +44,7 @@ public class CalmState : State
 
     private void IdleBehaviours()
     {
-        if (!groundState.idleState) return;
+        if (!core.stateList.idleState) return;
 
         if (!isBlinking && bystanderMovement.currentAnimStateInfo.IsName(animStates.calmBreathingAnimState))
         {

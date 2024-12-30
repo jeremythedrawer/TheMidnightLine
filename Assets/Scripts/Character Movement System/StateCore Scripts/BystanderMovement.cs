@@ -2,12 +2,6 @@ using UnityEngine;
 
 public class BystanderMovement : StateCore
 {
-    //child states
-    public CalmState calmState;
-    public PanicState panicState;
-    public FleeState fleeState;
-    public LeaveState leaveState;
-
     public GameObject player { get; private set; }
     private PlayerMovement playerMovement;
 
@@ -19,7 +13,7 @@ public class BystanderMovement : StateCore
     void Start()
     {
         SetupInstances();
-        Set(calmState, true);
+        Set(stateList.calmState, true);
 
         initialGravityScale = body.gravityScale;
 
@@ -52,26 +46,26 @@ public class BystanderMovement : StateCore
         {
             if (isCalm)
             {
-                Set(calmState, true);
+                Set(stateList.calmState, true);
             }
             if (isPanic)
             {
-                Set(panicState, true);
+                Set(stateList.panicState, true);
             }
             if (isFleeing)
             {
-                Set(fleeState, true);
+                Set(stateList.fleeState, true);
             }
             if (isLeaving)
             {
-                Set(leaveState, true);
+                Set(stateList.leaveState, true);
             }
         }
     }
 
     private void PanicChecker()
     {
-       if (playerMovement.groundState.meleeState.landedHit)
+       if (playerMovement.stateList.meleeState.landedHit)
         {
             isPanic = true;
             isCalm = false;

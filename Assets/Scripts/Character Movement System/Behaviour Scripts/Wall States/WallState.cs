@@ -3,9 +3,6 @@ using System.Collections;
 
 public class WallState : State
 {
-    //child states
-    public HangState hangState;
-    public ClimbState climbState;
     public bool isClimbing { get; set; } = false;
     public bool isHanging { get; set; } = true;
     public bool isDropping { get; set; } = false;
@@ -47,11 +44,11 @@ public class WallState : State
 
         if (isClimbing)
         {
-            Set(climbState, true);
+            Set(core.stateList.climbState, true);
         }
         else if (isHanging)
         {
-            Set(hangState, true);
+            Set(core.stateList.hangState, true);
         }
     }
 

@@ -2,9 +2,6 @@ using UnityEngine;
 
 public class FallState : State
 {
-    //parent states
-    public AirborneState airborneState;
-
     public float coyoteTime = 0.2f;
     [HideInInspector] public float initialCoyoteTime;
     [HideInInspector] public bool coyoteEnabled;

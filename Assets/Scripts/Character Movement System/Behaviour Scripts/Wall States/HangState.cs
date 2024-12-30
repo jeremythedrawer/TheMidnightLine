@@ -2,13 +2,12 @@ using UnityEngine;
 
 public class HangState : State
 {
-    public WallState wallState;
     public override void Enter()
     {
     }
     public override void Do()
     {
-        if (collisionChecker.grounded || wallState.isClimbing || movementInputs.crouchInput)
+        if (collisionChecker.grounded || core.stateList.wallState.isClimbing || movementInputs.crouchInput)
         {
             movementInputs.canMove = true;
             playingAnimation = false;
@@ -33,7 +32,7 @@ public class HangState : State
     {
         if (CarriageClimbingBounds.Instance == null)
         {
-            wallState.isHanging = false;
+            core.stateList.wallState.isHanging = false;
             return;
         }
 

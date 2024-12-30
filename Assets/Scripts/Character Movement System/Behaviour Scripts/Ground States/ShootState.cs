@@ -2,9 +2,6 @@ using UnityEngine;
 
 public class ShootState : State
 {
-    //child states
-    public IdleState idleState;
-    public RunState runState;
     public override void Enter()
     {
     }

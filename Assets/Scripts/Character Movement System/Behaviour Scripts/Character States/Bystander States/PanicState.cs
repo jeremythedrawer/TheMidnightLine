@@ -6,9 +6,6 @@ public class PanicState : State
     //parent state
     public BystanderMovement bystanderMovement;
 
-    //child state
-    public GroundState groundState;
-
     public float runSpeedMultiplier;
     public float walkSpeedMultiplier;
 
@@ -35,7 +32,7 @@ public class PanicState : State
     }
     private void SelectState()
     {
-        Set(groundState, true);
+        Set(core.stateList.groundState, true);
     }
     private void AvoidPlayer()
     {

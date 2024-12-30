@@ -59,7 +59,7 @@ public class CameraMovement : MonoBehaviour
         spriteRenderer = player.GetComponentInChildren<SpriteRenderer>();
         playerRb = player.GetComponent<Rigidbody2D>();
         playerMovement = player.GetComponent<PlayerMovement>();
-        airborneState = playerMovement.airborneState;
+        airborneState = playerMovement.stateList.airborneState;
 
         trainCamBounds = Object.FindFirstObjectByType<TrainBounds>();
 

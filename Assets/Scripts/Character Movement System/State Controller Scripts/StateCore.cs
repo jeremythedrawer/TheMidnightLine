@@ -13,6 +13,7 @@ public abstract class StateCore : MonoBehaviour
     public MovementInputs movementInputs;
     public CharacterStats characterStats;
     public HealthSystem healthSystem;
+    public StateList stateList;
 
     public AnimStateStrings animStates;
     public StateMachine machine;

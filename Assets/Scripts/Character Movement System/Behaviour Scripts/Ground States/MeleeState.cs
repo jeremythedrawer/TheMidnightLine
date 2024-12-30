@@ -2,9 +2,6 @@ using UnityEngine;
 
 public class MeleeState : State
 {
-    //parent state
-    public StateCore stateCore;
-    public GroundState groundState;
     public MeleeColliderData meleeColliderData;
 
     public bool landedHit {  get; private set; }
@@ -32,14 +29,14 @@ public class MeleeState : State
 
     public void DealDamage(int attackIndex)
     {
-        if (stateCore is PlayerMovement)
+        if (core is PlayerMovement)
         {
             foreach (Collider2D agentCollider in meleeColliderData.agentColliders)
             {
                 agentCollider.GetComponentInParent<HealthSystem>().TakeDamage(core.characterStats.meleeStrength);
             }  
         }
-        if (stateCore is AgentMovement)
+        if (core is AgentMovement)
         {
             if (meleeColliderData.hitPlayerCollider)
             {
@@ -54,7 +51,7 @@ public class MeleeState : State
 
     private void MeleeAnimationController()
     {
-        if (stateCore is PlayerMovement)
+        if (core is PlayerMovement)
         {
             if (!playingAnimation)
             {
@@ -62,16 +59,16 @@ public class MeleeState : State
                 movementInputs.canMove = false;
                 playingAnimation = true;
             }
-            if (stateCore.currentAnimStateInfo.normalizedTime >= 1f)
+            if (core.currentAnimStateInfo.normalizedTime >= 1f)
             {
                 playingAnimation = false;
                 isComplete = true;
-                groundState.isAttacking = false;
+                core.stateList.groundState.isAttacking = false;
                 movementInputs.canMove = true;
             }
             // TODO implement right and left animation logic and also logic for symetrical animations (agents)
         }
-        else if (stateCore is AgentMovement)
+        else if (core is AgentMovement)
         {
             PlayComboAnimation();
         }
@@ -89,8 +86,8 @@ public class MeleeState : State
 
                     PlayAnimation(animStates.stanceToPrimaryAnimState);
 
-                    if (stateCore.currentAnimStateInfo.IsName(animStates.stanceToPrimaryAnimState) &&
-                        stateCore.currentAnimStateInfo.normalizedTime >= 1f && hitCombos == 0) // missed hit
+                    if (core.currentAnimStateInfo.IsName(animStates.stanceToPrimaryAnimState) &&
+                        core.currentAnimStateInfo.normalizedTime >= 1f && hitCombos == 0) // missed hit
                     {
                         PlayAnimation(animStates.primaryHitToStanceAnimState);
                         hitCombos = -1;
@@ -101,8 +98,8 @@ public class MeleeState : State
                 case 1:
                     PlayAnimation(animStates.primaryHitToSecondaryAnimState);
 
-                    if (stateCore.currentAnimStateInfo.IsName(animStates.primaryHitToSecondaryAnimState) && 
-                        stateCore.currentAnimStateInfo.normalizedTime >= 1f && hitCombos == 1) // missed hit
+                    if (core.currentAnimStateInfo.IsName(animStates.primaryHitToSecondaryAnimState) && 
+                        core.currentAnimStateInfo.normalizedTime >= 1f && hitCombos == 1) // missed hit
                     {
                         PlayAnimation(animStates.secondaryHitToStanceAnimState);
                         hitCombos= -1;
@@ -111,7 +108,7 @@ public class MeleeState : State
 
                 case 2:
                     PlayAnimation(animStates.secondaryHitToFinalAnimState);
-                    if (stateCore.currentAnimStateInfo.normalizedTime >= 1f)
+                    if (core.currentAnimStateInfo.normalizedTime >= 1f)
                     {
                         hitCombos++;
                     }
@@ -123,10 +120,10 @@ public class MeleeState : State
                     break;
 
                 case -1:
-                    if (stateCore.currentAnimStateInfo.normalizedTime >= 1f) // wait to get back to stance before leaving
+                    if (core.currentAnimStateInfo.normalizedTime >= 1f) // wait to get back to stance before leaving
                     {
                         playingAnimation = false;
-                        groundState.isAttacking = false;
+                        core.stateList.groundState.isAttacking = false;
                         hitCombos = 0;
                         isComplete = true;
                     }
@@ -136,7 +133,7 @@ public class MeleeState : State
 
         }
 
-        if (stateCore.currentAnimStateInfo.normalizedTime >= 1f)
+        if (core.currentAnimStateInfo.normalizedTime >= 1f)
         {
             playingAnimation = false;
         }

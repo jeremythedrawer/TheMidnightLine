@@ -2,10 +2,6 @@ using UnityEngine;
 
 public class JumpedState : State
 {
-    //parent state
-    public AirborneState airborneState;
-
-
     private int bhcFrameSmoothing = 2;
     private int frameSmoothingCurrent;
 
@@ -17,10 +13,10 @@ public class JumpedState : State
     {
 
         //anti gravity apex
-        if (Mathf.Abs(body.linearVelocityY) < airborneState.antiGravityApexThreshold && body.linearVelocityY != 0 && Input.GetButton("Jump"))
+        if (Mathf.Abs(body.linearVelocityY) < core.stateList.airborneState.antiGravityApexThreshold && body.linearVelocityY != 0 && Input.GetButton("Jump"))
         {
-            float lerpFactor = Mathf.InverseLerp(0, airborneState.antiGravityApexThreshold, Mathf.Abs(body.linearVelocityY));
-            body.gravityScale = airborneState.antiGravityApexScale;
+            float lerpFactor = Mathf.InverseLerp(0, core.stateList.airborneState.antiGravityApexThreshold, Mathf.Abs(body.linearVelocityY));
+            body.gravityScale = core.stateList.airborneState.antiGravityApexScale;
         }
         else
         {

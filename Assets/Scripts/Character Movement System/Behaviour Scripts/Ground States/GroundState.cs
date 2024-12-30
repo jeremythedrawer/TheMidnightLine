@@ -3,14 +3,6 @@ using UnityEngine;
 
 public class GroundState : State
 {
-    public AirborneState airborneState;
-
-    //child states
-    public IdleState idleState;
-    public RunState runState;
-    [HideInInspector] public MeleeState meleeState;
-    [HideInInspector] public ShootState shootState;
-
     public bool canMelee;
     public bool canShoot;
 
@@ -38,7 +30,7 @@ public class GroundState : State
 
     public override void FixedDo()
     {
-        if (state == idleState || state == meleeState || state == shootState)
+        if (state == core.stateList.idleState || state == core.stateList.meleeState || state == core.stateList.shootState)
         {
             body.linearVelocityX *= groundDrag;
         }
@@ -58,13 +50,13 @@ public class GroundState : State
         if (canMelee && movementInputs.meleeInput)
         {
             isAttacking = true;
-            Set(meleeState, true);
+            Set(core.stateList.meleeState, true);
         }
 
         if (movementInputs.shootInput && canShoot)
         {
             isAttacking = true;
-            Set(shootState, true);
+            Set(core.stateList.shootState, true);
         }
     }
 
@@ -76,11 +68,11 @@ public class GroundState : State
         {
             if (movementInputs.walkInput == 0)
             {
-                Set(idleState, true);
+                Set(core.stateList.idleState, true);
             }
             else if (movementInputs.canMove)
             {
-                Set(runState, true);
+                Set(core.stateList.runState, true);
             }
         }
 
@@ -113,16 +105,16 @@ public class GroundState : State
 
         if (!finishedHeavyLanding)
         {
-            idleState.startAnimation = true;
-            runState.startRunAnimation = true;
-            runState.startWalkAnimation = true;
+            core.stateList.idleState.startAnimation = true;
+            core.stateList.runState.startRunAnimation = true;
+            core.stateList.runState.startWalkAnimation = true;
 
-            if (airborneState.heavyLanding) // triggered on one frame
+            if (core.stateList.airborneState.heavyLanding) // triggered on one frame
             {
                 //TODO: roll when x input
                 movementInputs.canMove = false;
                 animator.Play(animStates.heavyAnimState, 0, 0);
-                airborneState.heavyLanding = false;
+                core.stateList.airborneState.heavyLanding = false;
             }
 
             if (core.currentAnimStateInfo.normalizedTime >= 1) // when heavylanding is finished
@@ -130,9 +122,9 @@ public class GroundState : State
                 finishedHeavyLanding = true;
                 movementInputs.canMove = true;
 
-                idleState.startAnimation = false;
-                runState.startRunAnimation = false;
-                runState.startWalkAnimation = false;
+                core.stateList.idleState.startAnimation = false;
+                core.stateList.runState.startRunAnimation = false;
+                core.stateList.runState.startWalkAnimation = false;
             } 
         }
     }

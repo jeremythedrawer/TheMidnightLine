@@ -55,7 +55,7 @@ public class MovementInputs : MonoBehaviour
         }
     }
 
-    public void JumpController(AirborneState airborneState)
+    public void JumpController()
     {
 
         //initiate jump
@@ -76,10 +76,10 @@ public class MovementInputs : MonoBehaviour
         //jump logic
         if (jumpRequested && Time.time - lastJumpTime <= jumpBufferTime && !earlyFallEnabled)
         {
-            if (canMove && (core.collisionChecker.grounded || airborneState.fallState.coyoteEnabled))
+            if (canMove && (core.collisionChecker.grounded || core.stateList.fallState.coyoteEnabled))
             {
-                airborneState.fallState.coyoteEnabled = false;
-                airborneState.fallState.coyoteTime = airborneState.fallState.initialCoyoteTime;
+                core.stateList.fallState.coyoteEnabled = false;
+                core.stateList.fallState.coyoteTime = core.stateList.fallState.initialCoyoteTime;
                 jumpRequested = false;
                 core.body.linearVelocityY = core.characterStats.jumpSpeed;
             }

@@ -3,12 +3,6 @@ using UnityEngine.UIElements;
 
 public class AgentMovement : NPCCore
 {
-    //child states
-    [Header("Child States")]
-    public HidingState hidingState;
-    public StalkState stalkState;
-    public AttackState attackState;
-
     // state bool
     public bool isHiding { get; private set; }
     public bool isStalking { get; private set; }
@@ -17,7 +11,7 @@ public class AgentMovement : NPCCore
     void Start()
     {
         SetupInstances();
-        Set(hidingState, true);
+        Set(stateList.hidingState, true);
 
         initialGravityScale = body.gravityScale;
     }
@@ -53,15 +47,15 @@ public class AgentMovement : NPCCore
         {
             if (isHiding)
             {
-                Set(hidingState, true);
+                Set(stateList.hidingState, true);
             }
             if (isStalking)
             {
-                Set(stalkState, true);
+                Set(stateList.stalkState, true);
             }
             if (isAttacking)
             {
-                Set(attackState, true);
+                Set(stateList.attackState, true);
             }
         }
     }

@@ -3,13 +3,6 @@ using UnityEngine.Windows;
 
 public class IdleState : State
 {
-    public StateCore stateCore;
-
-    //parent state
-    public GroundState groundState;
-
-
-
     public bool startAnimation { get; set; } = false;
 
 
@@ -26,7 +19,7 @@ public class IdleState : State
         {
             isComplete = true;
             startAnimation = false;
-            groundState.pendingState = false;
+            core.stateList.groundState.pendingState = false;
         }
     }
     public override void FixedDo()
@@ -39,11 +32,11 @@ public class IdleState : State
 
     private void IdleAnimationController()
     {
-        if (stateCore is not PlayerMovement) // idle animation is handeled in the behavioural states
+        if (core is not PlayerMovement) // idle animation is handeled in the behavioural states
         {
             return;
         }
-        else if (stateCore.currentAnimStateInfo.normalizedTime >= 1 || !startAnimation)
+        else if (core.currentAnimStateInfo.normalizedTime >= 1 || !startAnimation)
         {
             startAnimation = true;
             animator.Play(animStates.breathingAnimState,0,0);

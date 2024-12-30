@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class RunState : State
 {
-    public GroundState groundState;
     public bool startRunAnimation { get; set; } = false;
     public bool startWalkAnimation { get; set; } = false;
     public override void Enter()
@@ -27,7 +26,7 @@ public class RunState : State
                 isComplete = true;
                 startRunAnimation = false;
                 startWalkAnimation = false;
-                groundState.pendingState = false;
+                core.stateList.groundState.pendingState = false;
             }
         }
     }

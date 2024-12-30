@@ -2,15 +2,10 @@ using UnityEngine;
 
 public class PlayerMovement : StateCore
 {
-    //child states
-    public AirborneState airborneState;
-    public GroundState groundState;
-    public WallState wallState;
-
     void Start()
     {
         SetupInstances();
-        Set(airborneState, true);
+        Set(stateList.airborneState, true);
 
         initialGravityScale = body.gravityScale;
     }
@@ -18,7 +13,7 @@ public class PlayerMovement : StateCore
     {
         currentAnimStateInfo = animator.GetCurrentAnimatorStateInfo(0);
         GetPlayerInputs();
-        movementInputs.JumpController(airborneState);
+        movementInputs.JumpController();
         SelectState();
 
         state.DoBranch();
@@ -35,23 +30,23 @@ public class PlayerMovement : StateCore
     {
         if (state.isComplete)
         {
-            if (CarriageClimbingBounds.Instance != null && !wallState.isDropping)
+            if (CarriageClimbingBounds.Instance != null && !stateList.wallState.isDropping)
             {
-                Set(wallState, true);
+                Set(stateList.wallState, true);
             }
             else
             {
                 if (collisionChecker.grounded || movementInputs.adjustingCollider)
                 {
                     //reset wall bools
-                    wallState.isDropping = false;
-                    wallState.isHanging = true;
+                    stateList.wallState.isDropping = false;
+                    stateList.wallState.isHanging = true;
 
-                    Set(groundState, true);
+                    Set(stateList.groundState, true);
                 }
                 else
                 {
-                    Set(airborneState, true);
+                    Set(stateList.airborneState, true);
                 }
             }
         }
