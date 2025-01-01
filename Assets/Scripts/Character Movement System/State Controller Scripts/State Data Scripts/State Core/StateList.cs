@@ -4,33 +4,33 @@ public class StateList : MonoBehaviour
 {
     [Header("States to use")]
     public bool airborne;
-     public bool jumped;
-     public bool fall;
-     public bool airMelee;
-     public bool airShoot;
+    public bool jumped;
+    public bool fall;
+    public bool airMelee;
+    public bool airShoot;
            
-     public bool ground;
-     public bool idle;
-     public bool run;
-     public bool melee;
-     public bool shoot;
+    public bool ground;
+    public bool idle;
+    public bool run;
+    public bool melee;
+    public bool shoot;
            
-     public bool wall;
-     public bool hang;
-     public bool climb;
+    public bool wall;
+    public bool hang;
+    public bool climb;
            
-     public bool attack;
-     public bool hiding;
-     public bool stalk;
+    public bool attack;
+    public bool hiding;
+    public bool stalk;
            
-     public bool calm;
-     public bool flee;
-     public bool leave;
-     public bool panic;
+    public bool calm;
+    public bool flee;
+    public bool leave;
+    public bool panic;
            
-     public bool sacrifice;
+    public bool sacrifice;
            
-     public bool checkTicket;
+    public bool checkTicket;
 
     [HideInInspector] public AirborneState airborneState;
     [HideInInspector] public JumpedState jumpedState;

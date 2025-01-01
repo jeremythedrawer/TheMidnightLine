@@ -253,11 +253,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9199ded63a8f76f48abdd41d1560f69e, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  airborneState: {fileID: 1810548854547567896}
-  idleState: {fileID: 79855899776776402}
-  runState: {fileID: 965159718817112335}
-  meleeState: {fileID: 6960523697587595809}
-  shootState: {fileID: 3302260865698991706}
   canMelee: 1
   canShoot: 1
   groundDrag: 0.492
@@ -273,8 +268,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc210d234ed951489eaa8f7cc137eff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateCore: {fileID: 3141435046242817171}
-  groundState: {fileID: 4604699258691990960}
 --- !u!114 &965159718817112335
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -287,7 +280,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ede407c0c928c8f4d800a95c4e0a358b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundState: {fileID: 4604699258691990960}
 --- !u!114 &6960523697587595809
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -300,8 +292,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: aefa32b988cb0c341b30f79ca0414055, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  stateCore: {fileID: 3141435046242817171}
-  groundState: {fileID: 4604699258691990960}
   meleeColliderData: {fileID: 7881672385200450172}
 --- !u!114 &3302260865698991706
 MonoBehaviour:
@@ -315,8 +305,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9a5c093c8351a7a48a8d16fd44ecba51, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  idleState: {fileID: 79855899776776402}
-  runState: {fileID: 965159718817112335}
 --- !u!1 &5360606228185169135
 GameObject:
   m_ObjectHideFlags: 0
@@ -365,9 +353,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e3a76300dc794d847919a881516058d5, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  jumpedState: {fileID: 4210922695891752456}
-  fallState: {fileID: 3611081317677061277}
-  groundState: {fileID: 4604699258691990960}
   antiGravityApexThreshold: 4
   antiGravityApexScale: 3
   clampedFallSpeed: 25
@@ -383,7 +368,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eff18b444bc6d774e8c2683925a89c35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  airborneState: {fileID: 1810548854547567896}
 --- !u!114 &3611081317677061277
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -396,7 +380,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 86a89c2789e86de44a3bee148ab29eb6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  airborneState: {fileID: 1810548854547567896}
   coyoteTime: 0.14
   initialCoyoteTime: 0
   coyoteEnabled: 0
@@ -470,8 +453,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9af706fe6cdbb4e47a8ea7148d369659, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  hangState: {fileID: 4816147745226771777}
-  climbState: {fileID: 7254581161091077788}
 --- !u!114 &4816147745226771777
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -484,7 +465,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c0bc8cd128cc1024787ee7e602aeffcb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wallState: {fileID: 5875007179056365094}
 --- !u!114 &7254581161091077788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -517,6 +497,7 @@ GameObject:
   - component: {fileID: 3318510828591014836}
   - component: {fileID: 7975908150685175985}
   - component: {fileID: 8968270098963992003}
+  - component: {fileID: 2283059566483282482}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -666,19 +647,7 @@ MonoBehaviour:
   movementInputs: {fileID: 8911714753198091239}
   characterStats: {fileID: 7752829070841774031}
   healthSystem: {fileID: 3318510828591014836}
-  airborneState: {fileID: 1810548854547567896}
-  jumpedState: {fileID: 4210922695891752456}
-  fallState: {fileID: 3611081317677061277}
-  airMeleeState: {fileID: 6947177868614442360}
-  airShootState: {fileID: 2561642385191702471}
-  groundState: {fileID: 4604699258691990960}
-  idleState: {fileID: 79855899776776402}
-  runState: {fileID: 965159718817112335}
-  meleeState: {fileID: 6960523697587595809}
-  shootState: {fileID: 3302260865698991706}
-  wallState: {fileID: 5875007179056365094}
-  hangState: {fileID: 4816147745226771777}
-  climbState: {fileID: 7254581161091077788}
+  stateList: {fileID: 2283059566483282482}
 --- !u!114 &7752829070841774031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -779,3 +748,59 @@ PlayableDirector:
   m_SceneBindings: []
   m_ExposedReferences:
     m_References: []
+--- !u!114 &2283059566483282482
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8451971257262523574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 45dc9ebb926a8ff40866720079d04cfe, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  airborne: 1
+  jumped: 1
+  fall: 1
+  airMelee: 1
+  airShoot: 1
+  ground: 1
+  idle: 1
+  run: 1
+  melee: 1
+  shoot: 1
+  wall: 1
+  hang: 1
+  climb: 1
+  attack: 0
+  hiding: 0
+  stalk: 0
+  calm: 0
+  flee: 0
+  leave: 0
+  panic: 0
+  sacrifice: 0
+  checkTicket: 0
+  airborneState: {fileID: 1810548854547567896}
+  jumpedState: {fileID: 4210922695891752456}
+  fallState: {fileID: 3611081317677061277}
+  airMeleeState: {fileID: 6947177868614442360}
+  airShootState: {fileID: 2561642385191702471}
+  groundState: {fileID: 4604699258691990960}
+  idleState: {fileID: 79855899776776402}
+  runState: {fileID: 965159718817112335}
+  meleeState: {fileID: 6960523697587595809}
+  shootState: {fileID: 3302260865698991706}
+  wallState: {fileID: 5875007179056365094}
+  hangState: {fileID: 4816147745226771777}
+  climbState: {fileID: 7254581161091077788}
+  attackState: {fileID: 0}
+  hidingState: {fileID: 0}
+  stalkState: {fileID: 0}
+  calmState: {fileID: 0}
+  fleeState: {fileID: 0}
+  leaveState: {fileID: 0}
+  panicState: {fileID: 0}
+  sacrificeState: {fileID: 0}
+  checkTicketState: {fileID: 0}
