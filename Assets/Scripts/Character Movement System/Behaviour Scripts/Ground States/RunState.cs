@@ -71,6 +71,7 @@ public class RunState : State
         else if (!startWalkAnimation || core.currentAnimStateInfo.normalizedTime >= 1)
         {
             animator.Play(animStates.walkAnimState, 0, 0);
+            
             startWalkAnimation = true;
             startRunAnimation = false;
         }

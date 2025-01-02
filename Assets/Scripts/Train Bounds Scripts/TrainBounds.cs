@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class TrainBounds : MonoBehaviour
+public class TrainBounds : Bounds
 {
     public float wheelLevel = 1.0f;
     public float roofLevel = 1.0f;

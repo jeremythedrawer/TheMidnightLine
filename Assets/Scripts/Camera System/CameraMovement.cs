@@ -11,7 +11,7 @@ public class CameraMovement : MonoBehaviour
     public float roofProjectionSize = 8.0f;
     public float damping = 5.0f;
     public float cameraBiasOffset = 1f;
-
+    public bool seeGizmos;
     //Camera bias
     private float widthOffset;
 
@@ -98,15 +98,15 @@ public class CameraMovement : MonoBehaviour
         horizontalDamping = Mathf.Abs(widthOffset) > 0 ? initialDamping : initialDamping * 2;
         FallingCamera();
 
-        if (ActivateCarriageBounds.Instance != null)
+        if (ActivateCarriageBounds.Instance == null || ActivateCarriageBounds.Instance.CompareTag("Outside Bounds"))
+        {
+            target.y = Mathf.Max(target.y, trainCamBounds.wheelLevel + cam.orthographicSize);
+        }
+        else if (ActivateCarriageBounds.Instance.CompareTag("Inside Bounds"))
         {
             CalculateCarriageBoundOffset();
             target.x = Mathf.Clamp(target.x, ActivateCarriageBounds.Instance.leftEdge + updatingBoundOffset, ActivateCarriageBounds.Instance.rightEdge - updatingBoundOffset);
             target.y = trainCamBounds.wheelLevel + cam.orthographicSize;
-        }
-        else
-        {
-            target.y = Mathf.Max(target.y, trainCamBounds.wheelLevel + cam.orthographicSize);
         }
     }
 
@@ -166,16 +166,21 @@ public class CameraMovement : MonoBehaviour
 
     private void DrawDebugLines()
     {
-        if (cam == null) return;
+#if UNITY_EDITOR
+        if (seeGizmos)
+        {
+            if (cam == null) return;
 
-        Vector3 top = cam.ScreenToWorldPoint(new Vector3(camWidth / 2.0f, camHeight, 0.0f));
-        Vector3 bottom = cam.ScreenToWorldPoint(new Vector3(camWidth / 2.0f, 0.0f, 0.0f));
-        Vector3 left = cam.ScreenToWorldPoint(new Vector3(0.0f, camHeight / 2.0f, 0.0f));
-        Vector3 right = cam.ScreenToWorldPoint(new Vector3(camWidth, camHeight / 2.0f, 0.0f));
+            Vector3 top = cam.ScreenToWorldPoint(new Vector3(camWidth / 2.0f, camHeight, 0.0f));
+            Vector3 bottom = cam.ScreenToWorldPoint(new Vector3(camWidth / 2.0f, 0.0f, 0.0f));
+            Vector3 left = cam.ScreenToWorldPoint(new Vector3(0.0f, camHeight / 2.0f, 0.0f));
+            Vector3 right = cam.ScreenToWorldPoint(new Vector3(camWidth, camHeight / 2.0f, 0.0f));
 
-        // Draw the lines
-        Debug.DrawLine(top, bottom, Color.red); // Vertical line
-        Debug.DrawLine(left, right, Color.blue); // Horizontal line
+            // Draw the lines
+            Debug.DrawLine(top, bottom, Color.red); // Vertical line
+            Debug.DrawLine(left, right, Color.blue); // Horizontal line
+        }
+#endif
     }
 
 }

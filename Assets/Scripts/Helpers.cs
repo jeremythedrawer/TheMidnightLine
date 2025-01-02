@@ -2,6 +2,7 @@ using UnityEngine;
 
 public static class Helpers
 {
+    //Math
     public static float Remap(float value, float inMin, float inMax, float outMin, float outMax, bool clamp)
     {
         float newValue = (value - inMin) / (inMax - inMin) * (outMax - outMin) + outMin;
@@ -22,15 +23,14 @@ public static class Helpers
         return Mathf.Floor(value / (1 / steps) * (1 /  steps));
     }
 
-    public static void DrawBoxCastDebug(Vector2 origin, Vector2 size, Vector2 direction, Color color)
+    //Debug
+    public static void DrawBoxCastDebug(Vector2 start, Vector2 end, Color color)
     {
-        Vector2 halfSize = size / 2;
-
         // box corners
-        Vector2 topLeft = origin + new Vector2(-halfSize.x, halfSize.y);
-        Vector2 topRight = origin + new Vector2(halfSize.x, halfSize.y);
-        Vector2 bottomLeft = origin + new Vector2(-halfSize.x, -halfSize.y);
-        Vector2 bottomRight = origin + new Vector2(halfSize.x, -halfSize.y);
+        Vector2 topLeft = new Vector2(start.x, end.y);
+        Vector2 topRight = end;
+        Vector2 bottomLeft = start;
+        Vector2 bottomRight = new Vector2(end.x, start.y);
 
         // edges
         Debug.DrawLine(topLeft, topRight, color);
@@ -63,4 +63,5 @@ public static class Helpers
             }
         }
     }
+
 }

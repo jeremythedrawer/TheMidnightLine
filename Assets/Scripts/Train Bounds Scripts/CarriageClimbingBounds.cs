@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CarriageClimbingBounds : MonoBehaviour
+public class CarriageClimbingBounds : Bounds
 {
     public static CarriageClimbingBounds Instance { get; private set; }
     private BoxCollider2D Collider2D;

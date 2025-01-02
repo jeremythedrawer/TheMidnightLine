@@ -23,20 +23,20 @@ public class AgentMovement : NPCCore
         behaviourParams.CheckPlayerCharacterSight();
         behaviourParams.CheckBystandersInCarriage();
 
-        navigationSystem.MoveToTarget();
 
         CheckAttackTriggers();
         CheckHidingTriggers();
+        movementInputs.MoveWithInput();
 
         SelectState();
         state.DoBranch();
+        navigationSystem.MoveToTarget();
     }
     private void FixedUpdate()
     {
-
+        movementInputs.JumpController();
         state.FixedDoBranch();
 
-        movementInputs.MoveWithInput();
         movementInputs.SetCollisionAdjustment();
     }
 

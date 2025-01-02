@@ -10,7 +10,7 @@ public class AttackState : State
     public override void Do()
     {
         SelectState();
-        movementInputs.JumpController();
+        
 
         if (agentMovement.isHiding)
         {

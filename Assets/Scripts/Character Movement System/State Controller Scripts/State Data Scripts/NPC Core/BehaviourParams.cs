@@ -23,7 +23,9 @@ public class BehaviourParams : MonoBehaviour
 
     //types
     public GameObject player { get; private set; }
-    private PlayerMovement playerMovement;
+
+    public bool seeGizmos;
+
     private SpriteRenderer playerSpriteRenderer;
 
     private Camera cam;
@@ -42,7 +44,6 @@ public class BehaviourParams : MonoBehaviour
     private void Start()
     {
         player = GameObject.FindGameObjectWithTag("Player");
-        playerMovement = player.GetComponent<PlayerMovement>();
         playerSpriteRenderer = player.GetComponent<SpriteRenderer>();
 
         cam = Camera.main;
@@ -58,7 +59,10 @@ public class BehaviourParams : MonoBehaviour
         CheckOnRoof();
 
 #if UNITY_EDITOR
-        GizmosLines();
+        if (seeGizmos)
+        {
+            GizmosLines();
+        }
 #endif
     }
 

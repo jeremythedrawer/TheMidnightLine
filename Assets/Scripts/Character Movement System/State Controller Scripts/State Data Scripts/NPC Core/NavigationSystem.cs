@@ -20,8 +20,15 @@ public class NavigationSystem : MonoBehaviour
     private Vector2 currentPos;
     private bool foundClimbingBounds;
 
+    private Vector2 targetPos;
+    private Vector2 closestGangway;
+    private Vector2 closestClimbingPoint;
+    private Vector2 startPos;
 
-    
+
+
+
+
     void Start()
     {
         StartCoroutine(UpdatePlayerPosition());
@@ -34,6 +41,7 @@ public class NavigationSystem : MonoBehaviour
     public void MoveToTarget()
     {
         CreatePath();
+        /*
         currentPos = transform.position;
         if (playerPos.x - stopMovementBuffer > currentPos.x + stopMovementBuffer)
         {
@@ -51,30 +59,53 @@ public class NavigationSystem : MonoBehaviour
         if (foundClimbingBounds)
         {
             Debug.Log(movementInputs.jumpInput);
+            //TODO: find outside carriage bounds
             movementInputs.jumpInput = true;
         }
         else
         {
             movementInputs.jumpInput = false;
         }
+        */
     }
 
     private void CreatePath()
     {
-        Vector2 start = new Vector2(transform.position.x, transform.position.y) + new Vector2(0,(boxCollider.size.y/2f));
-        Vector2 target = new Vector2(playerPos.x, playerPos.y) + new Vector2(0, (playerCollider.size.y/2f));
+        startPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0,(boxCollider.size.y/2f));
+        targetPos = new Vector2(playerPos.x, playerPos.y) + new Vector2(0, (playerCollider.size.y/2f));
 
-        RaycastHit2D hit = Physics2D.Linecast(start, target, climbingLayer);
+        if (ActivateCarriageBounds.Instance != null && ActivateCarriageBounds.Instance.gameObject.CompareTag("Inside Bounds"))
+        {
+            Vector2 rightGangwayPos = ActivateCarriageBounds.Instance.rightGangwayPos;
+            Vector2 leftGangwayPos = ActivateCarriageBounds.Instance.leftGangwayPos;
+            
+            if (ActivateCarriageBounds.Instance.isBackCarriage)
+            {
+                closestGangway = rightGangwayPos;
 
-        if (hit.collider != null)
-        {
-            foundClimbingBounds = true;
+            }
+            else if (ActivateCarriageBounds.Instance.isFrontCarriage)
+            {
+                closestGangway = leftGangwayPos;
+
+            }
+            else if (transform.position.x - leftGangwayPos.x < rightGangwayPos.x - transform.position.x)
+            {
+                closestGangway = ActivateCarriageBounds.Instance.leftGangwayPos;
+
+            }
+            else
+            {
+                closestGangway = rightGangwayPos;
+
+            }
+
+            closestClimbingPoint = new Vector2(closestGangway.x, closestGangway.y + ActivateCarriageBounds.Instance.boundsHeight);
         }
-        else
-        {
-            foundClimbingBounds = false;
-        }
-        Debug.DrawLine(start, target, foundClimbingBounds ? Color.red : Color.green);
+
+            Debug.DrawLine(startPos, closestGangway, Color.magenta);
+            Debug.DrawLine(closestGangway, closestClimbingPoint, Color.magenta);
+            Debug.DrawLine(closestClimbingPoint, targetPos, Color.magenta);
     }
 
     private IEnumerator UpdatePlayerPosition()
