@@ -36,9 +36,12 @@ public class BehaviourParams : MonoBehaviour
     private void OnDrawGizmos()
     {
 #if UNITY_EDITOR
-        if (Application.isPlaying) return;
-        Helpers.DrawCircle(transform.position, armDistance, Color.red, 36, true);
-        Helpers.DrawCircle(transform.position, awareOfPlayerDistance, Color.yellow, 36, true);
+        if(seeGizmos)
+        {
+            if (Application.isPlaying) return;
+            Helpers.DrawCircle(transform.position, armDistance, Color.red, 36, true);
+            Helpers.DrawCircle(transform.position, awareOfPlayerDistance, Color.yellow, 36, true);
+        }
 #endif
     }
     private void Start()

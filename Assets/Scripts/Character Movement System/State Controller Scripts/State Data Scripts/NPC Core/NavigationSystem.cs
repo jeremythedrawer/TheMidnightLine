@@ -1,5 +1,5 @@
 using System.Collections;
-using Unity.VisualScripting;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class NavigationSystem : MonoBehaviour
@@ -15,19 +15,14 @@ public class NavigationSystem : MonoBehaviour
     public BoxCollider2D boxCollider;
     public BoxCollider2D playerCollider;
 
-    
+    public ActivateCarriageBounds currentInsideBounds { private get; set; }
+    public GangwayBounds currentGangwayBounds { private get; set; }
+
     private Vector2 playerPos;
-    private Vector2 currentPos;
-    private bool foundClimbingBounds;
-
     private Vector2 targetPos;
-    private Vector2 closestGangway;
-    private Vector2 closestClimbingPoint;
+    private Vector2 chosenGangwayPos;
+    private Vector2 afterGangwayPos;
     private Vector2 startPos;
-
-
-
-
 
     void Start()
     {
@@ -40,7 +35,13 @@ public class NavigationSystem : MonoBehaviour
 
     public void MoveToTarget()
     {
-        CreatePath();
+        startPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0,(boxCollider.size.y/2f));
+        targetPos = new Vector2(playerPos.x, playerPos.y) + new Vector2(0, (playerCollider.size.y/2f));
+
+        if (currentInsideBounds != null)
+        {
+            InsideCarriageToGangway();
+        }
         /*
         currentPos = transform.position;
         if (playerPos.x - stopMovementBuffer > currentPos.x + stopMovementBuffer)
@@ -68,44 +69,47 @@ public class NavigationSystem : MonoBehaviour
         }
         */
     }
-
-    private void CreatePath()
+    private void GangwayToTarget()
     {
-        startPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0,(boxCollider.size.y/2f));
-        targetPos = new Vector2(playerPos.x, playerPos.y) + new Vector2(0, (playerCollider.size.y/2f));
+       // Debug.DrawLine(chosenGangwayPos, )
+    }
 
-        if (ActivateCarriageBounds.Instance != null && ActivateCarriageBounds.Instance.gameObject.CompareTag("Inside Bounds"))
-        {
-            Vector2 rightGangwayPos = ActivateCarriageBounds.Instance.rightGangwayPos;
-            Vector2 leftGangwayPos = ActivateCarriageBounds.Instance.leftGangwayPos;
+
+    private void InsideCarriageToGangway()
+    {
+
+        Vector2 rightGangwayPos = currentInsideBounds.rightGangwayPos;
+        Vector2 leftGangwayPos = currentInsideBounds.leftGangwayPos;
             
-            if (ActivateCarriageBounds.Instance.isBackCarriage)
-            {
-                closestGangway = rightGangwayPos;
+        if (currentInsideBounds.isBackCarriage) 
+        { 
+            chosenGangwayPos = rightGangwayPos;
+        }
+        else if (currentInsideBounds.isFrontCarriage) 
+        { 
+            chosenGangwayPos = leftGangwayPos;
+        }
+        else 
+        {
+            float leftDistance = startPos.x - leftGangwayPos.x;
+            float rightDistance = rightGangwayPos.x - startPos.x;
 
-            }
-            else if (ActivateCarriageBounds.Instance.isFrontCarriage)
-            {
-                closestGangway = leftGangwayPos;
+            float targetLeftDistance = targetPos.x - leftGangwayPos.x;
+            float targetRightDistance = rightGangwayPos.x - targetPos.x;
 
-            }
-            else if (transform.position.x - leftGangwayPos.x < rightGangwayPos.x - transform.position.x)
-            {
-                closestGangway = ActivateCarriageBounds.Instance.leftGangwayPos;
+            bool bothClosestToLeft = leftDistance < rightDistance && targetLeftDistance < targetRightDistance;
+            bool bothClosestToRight = rightDistance < leftDistance && targetRightDistance < targetLeftDistance;
 
+            if (bothClosestToLeft || leftDistance < targetRightDistance)
+            {
+                chosenGangwayPos = leftGangwayPos;
             }
             else
             {
-                closestGangway = rightGangwayPos;
-
+                chosenGangwayPos = rightGangwayPos;
             }
-
-            closestClimbingPoint = new Vector2(closestGangway.x, closestGangway.y + ActivateCarriageBounds.Instance.boundsHeight);
         }
-
-            Debug.DrawLine(startPos, closestGangway, Color.magenta);
-            Debug.DrawLine(closestGangway, closestClimbingPoint, Color.magenta);
-            Debug.DrawLine(closestClimbingPoint, targetPos, Color.magenta);
+        Debug.DrawLine(startPos, chosenGangwayPos, Color.magenta);
     }
 
     private IEnumerator UpdatePlayerPosition()

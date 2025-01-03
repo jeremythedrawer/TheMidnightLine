@@ -1,22 +1,31 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class GangwayBounds : Bounds
 {
-    public static GangwayBounds Instance { get; private set; }
-
     public LayerMask OutsideBoundsLayer;
+    public LayerMask InsideBoundsLayer;
     public bool seeGizmos;
+
     private Collider2D Collider2D;
+
     private Component leftOutsideBounds;
     private Component rightOutsideBounds;
+    private Component leftInsideBounds;
+    private Component rightInsideBounds;
 
     public bool playerOnLeftRoof {  get; private set; }
     public bool playerOnRightRoof { get; private set; }
+    public bool playerInLeftCarriage { get; private set; }
+    public bool playerInRightCarriage { get; private set; }
 
     private void Start()
     {
         Collider2D = GetComponent<Collider2D>();
-        SetNeighbouringBounds(Collider2D, 5, OutsideBoundsLayer, typeof(ActivateCarriageBounds), ref leftOutsideBounds, ref rightOutsideBounds);
+
+        float detectionSizeBuffer = 5;
+        SetNeighbouringBounds(Collider2D, detectionSizeBuffer, OutsideBoundsLayer, typeof(ActivateCarriageBounds), ref leftOutsideBounds, ref rightOutsideBounds);
+        SetNeighbouringBounds(Collider2D, detectionSizeBuffer, InsideBoundsLayer, typeof(ActivateCarriageBounds), ref leftInsideBounds, ref rightInsideBounds);
     }
 
     private void OnDrawGizmos()
@@ -42,16 +51,33 @@ public class GangwayBounds : Bounds
         
     }
 
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Agent Collider"))
+        {
+            var navSystem = collision.gameObject.GetComponentInParent<NavigationSystem>();
+            if (navSystem != null)
+            {
+                navSystem.currentGangwayBounds = this;
+            }
+        }
+    }
+
     private void OnTriggerStay2D (Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Agent Collider"))
         {
-            Instance = this;
-            var foundLeftBounds = leftOutsideBounds as ActivateCarriageBounds;
-            playerOnLeftRoof = foundLeftBounds.instanceActivated;
+            var foundRightOutsideBounds = rightOutsideBounds as ActivateCarriageBounds;
+            playerOnRightRoof = foundRightOutsideBounds.playerInActiveArea;
 
-            var foundRightBounds = rightOutsideBounds as ActivateCarriageBounds;
-            playerOnRightRoof = foundRightBounds.instanceActivated;
+            var foundLeftOutsideBounds = leftOutsideBounds as ActivateCarriageBounds;
+            playerOnLeftRoof = foundLeftOutsideBounds.playerInActiveArea;
+
+            var foundRightInsideBounds = rightInsideBounds as ActivateCarriageBounds;
+            playerInRightCarriage = foundRightInsideBounds.playerInActiveArea;
+
+            var foundLeftInsideBounds = leftInsideBounds as ActivateCarriageBounds;
+            playerInLeftCarriage = foundLeftInsideBounds.playerInActiveArea;
         }
     }
 
@@ -59,7 +85,12 @@ public class GangwayBounds : Bounds
     {
         if (collision.gameObject.CompareTag("Agent Collider"))
         {
-            Instance = null;
+            var navSystem = collision.gameObject.GetComponentInParent<NavigationSystem>();
+
+            if (navSystem != null)
+            {
+                navSystem.currentGangwayBounds = null;
+            }
         }
     }
 }

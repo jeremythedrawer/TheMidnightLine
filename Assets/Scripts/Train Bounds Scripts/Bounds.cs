@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Bounds : MonoBehaviour
@@ -21,11 +22,6 @@ public class Bounds : MonoBehaviour
         if (righCollider != null)
         {
             rightComponent = righCollider.GetComponent(boundsComponentToFind);
-        }
-
-        if (leftCollider == null || righCollider == null)
-        {
-            Debug.LogError("Did not find 'Outside Bounds'"); // TODO: need front part of train
         }
     }
 }

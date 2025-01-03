@@ -1,5 +1,6 @@
+using System.Collections.Generic;
 using UnityEngine;
-using System;
+using UnityEngine.Rendering;
 
 public class ActivateCarriageBounds : Bounds
 {
@@ -8,14 +9,15 @@ public class ActivateCarriageBounds : Bounds
     public LayerMask gangwayTriggerLayer;
     public bool isBackCarriage;
     public bool isFrontCarriage;
+
     private BoxCollider2D Collider2D;
 
+    public bool playerInActiveArea {  get; private set; }
     public int bystanderCount { get; private set; }
     public float leftEdge {  get; private set; }
     public float rightEdge { get; private set; }
     public float boundsHeight { get; private set; }
 
-    public bool instanceActivated { get; private set; } = false;
     private Component leftGangwayBounds;
     private Component rightGangwayBounds;
 
@@ -58,24 +60,37 @@ public class ActivateCarriageBounds : Bounds
         {
             bystanderCount++;
         }
-    }
-
-    private void OnTriggerStay2D(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player Collider") || collision.gameObject.CompareTag("Agent Collider"))
+        if (collision.gameObject.CompareTag("Player Collider"))
         {
             Instance = this;
-            instanceActivated = true;
+            playerInActiveArea = true;
         }
-        
+
+        if (collision.gameObject.CompareTag("Agent Collider") && this.CompareTag("Inside Bounds"))
+        {
+            var navSystem = collision.gameObject.GetComponentInParent<NavigationSystem>();
+            if (navSystem != null)
+            {
+                navSystem.currentInsideBounds = this;
+            }
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player Collider") || collision.gameObject.CompareTag("Agent Collider"))
+        if (collision.gameObject.CompareTag("Player Collider"))
         {
             Instance = null;
-            instanceActivated = false;
+            playerInActiveArea = false;
+        }
+        if (collision.gameObject.CompareTag("Agent Collider"))
+        {
+            var navSystem = collision.gameObject.GetComponentInParent<NavigationSystem>();
+
+            if(navSystem != null)
+            {
+                navSystem.currentInsideBounds = null;
+            }
         }
         if (collision.gameObject.CompareTag("Bystander Collider"))
         {

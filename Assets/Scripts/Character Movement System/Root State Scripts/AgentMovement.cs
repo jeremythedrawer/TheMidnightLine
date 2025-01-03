@@ -30,6 +30,7 @@ public class AgentMovement : NPCCore
 
         SelectState();
         state.DoBranch();
+
         navigationSystem.MoveToTarget();
     }
     private void FixedUpdate()
