@@ -22,7 +22,8 @@ public class NavigationSystem : MonoBehaviour
     public ActivateCarriageBounds currentOutsideBounds { private get; set; }
 
 
-    private Queue<Vector2> pathToTarget = new Queue<Vector2>();
+    private List<Vector2> pathToTarget = new List<Vector2>();
+    private bool pathIsSet;
     public Vector2 nextPos { get; private set; }
 
     private Vector2 playerPos;
@@ -47,6 +48,16 @@ public class NavigationSystem : MonoBehaviour
 
         FindPathToTarget(currentPos, targetPos);
 
+        if (Vector2.Distance(currentPos, pathToTarget[0])  < closeEnoughToNextPos)
+        {
+            Debug.Log("removed pos from pathToTarget List");
+            pathToTarget.Remove(pathToTarget[0]);
+        }
+        if (targetPos != pathToTarget[pathToTarget.Count - 1])
+        {
+            pathIsSet = false;
+            pathToTarget.Clear();
+        }
         //if (currentPos.x < nextPos.x)
         //{
         //    movementInputs.walkInput = 1;
@@ -73,43 +84,61 @@ public class NavigationSystem : MonoBehaviour
     public void FindPathToTarget(Vector2 currentPos, Vector2 targetPos)
     {
 
-        if (currentInsideBounds != null)
+        if (currentInsideBounds != null && !pathIsSet)
         {
+
             if (currentInsideBounds.playerInActiveArea)
             {
-                pathToTarget.Enqueue(FindTarget());
+                pathToTarget.Add(targetPos);
             }
             else
             {
                 FindChosenGangway(currentInsideBounds);
                 FindChosenClimbBounds(chosenGangway);
-                FindTarget();
 
-                pathToTarget.Enqueue(chosenGangway.transform.position);
+                pathToTarget.Add(chosenGangway.transform.position);
                 if (chosenClimbingBounds != null)
                 {
-                    pathToTarget.Enqueue(chosenClimbingBounds.transform.position);
+                    pathToTarget.Add(chosenClimbingBounds.transform.position);
                 }
-                //pathToTarget.Enqueue(targetPos);
+
+                pathToTarget.Add(targetPos);
             }
+            pathIsSet = true;
         }
 
-        //if (currentGangwayBounds != null)
-        //{
-        //    pathToTarget.Enqueue(GangwayToAfterGangway());
-        //}
+        if (currentGangwayBounds != null && !pathIsSet)
+        {
 
-        //if (currentOutsideBounds != null)
-        //{
-        //    if (targetPos.y >= trainBounds.roofLevel)
-        //    {
-        //        pathToTarget.Enqueue(FindTarget());
-        //    }
-        //    else
-        //    {
-        //        pathToTarget.Enqueue(FindChosenGangway(currentOutsideBounds));
-        //    }
-        //}
+            FindChosenClimbBounds(chosenGangway);
+            if (chosenClimbingBounds != null)
+            {
+                pathToTarget.Add(chosenClimbingBounds.transform.position);
+            }
+            pathToTarget.Add (targetPos);
+            pathIsSet = true;
+        }
+
+        if (currentOutsideBounds != null && !pathIsSet)
+        {
+            if (targetPos.y >= trainBounds.roofLevel)
+            {
+                pathToTarget.Add(targetPos);
+            }
+            else
+            {
+                FindChosenGangway(currentOutsideBounds);
+                FindChosenClimbBounds(chosenGangway);
+                pathToTarget.Add(chosenGangway.transform.position);
+
+                if(chosenClimbingBounds != null)
+                {
+                    pathToTarget.Add(chosenClimbingBounds.transform.position);
+                }
+                pathToTarget.Add(targetPos);
+            }
+            pathIsSet= true;
+        }
 
         DrawDebugPath();
     }
@@ -118,18 +147,12 @@ public class NavigationSystem : MonoBehaviour
     {
         Vector2 pos = currentPos;
 
-        var pathList = pathToTarget.ToArray();
-
-        for (int i = 0; i < pathList.Length; i++)
+        for (int i = 0; i < pathToTarget.ToArray().Length; i++)
         {
-            Vector2 nextPos = pathList[i];
+            Vector2 nextPos = pathToTarget[i];
             Debug.DrawLine(pos, nextPos, Color.magenta);
             pos = nextPos;
         }
-    }
-    private Vector2 FindTarget()
-    {
-        return targetPos;
     }
 
     private void FindChosenClimbBounds(GangwayBounds chosenGangway)

@@ -11,7 +11,8 @@ public class CarriageClimbingBounds : Bounds
     public bool isLeftEdge;
     public float hangThresholdLine { get; private set; }
     public bool hangActivated { get; set; }
-    public bool activated { get; set; }
+    public bool activatedByAgent { get; set; }
+    public bool activatedByPlayer { get; set; }
 
     public Vector2 newPos { get; private set; }
 
@@ -26,7 +27,7 @@ public class CarriageClimbingBounds : Bounds
         Collider2D = this.GetComponent<BoxCollider2D>();
 
         //draw box collider
-        Gizmos.color = activated ? Color.green : Color.red;
+        Gizmos.color = activatedByAgent ? Color.green : Color.red;
         Vector2 bottomLeft = new Vector2(Collider2D.bounds.min.x, Collider2D.bounds.min.y);
         Vector2 bottomRight = new Vector2(Collider2D.bounds.max.x, Collider2D.bounds.min.y);
         Vector2 topLeft = new Vector2(Collider2D.bounds.min.x, Collider2D.bounds.max.y);
@@ -61,10 +62,10 @@ public class CarriageClimbingBounds : Bounds
         Vector2 bottomRight = new Vector2(Collider2D.bounds.max.x, Collider2D.bounds.min.y);
         Vector2 topLeft = new Vector2(Collider2D.bounds.min.x, Collider2D.bounds.max.y);
         Vector2 topRight = new Vector2(Collider2D.bounds.max.x, Collider2D.bounds.max.y);
-        Debug.DrawLine(bottomLeft, bottomRight, activated ? Color.green : Color.red);
-        Debug.DrawLine(bottomRight, topRight, activated ? Color.green : Color.red);
-        Debug.DrawLine(topRight, topLeft, activated ? Color.green : Color.red);
-        Debug.DrawLine(topLeft, bottomLeft, activated ? Color.green : Color.red);
+        Debug.DrawLine(bottomLeft, bottomRight, activatedByAgent || activatedByPlayer ? Color.green : Color.red);
+        Debug.DrawLine(bottomRight, topRight, activatedByAgent || activatedByPlayer ? Color.green : Color.red);
+        Debug.DrawLine(topRight, topLeft, activatedByAgent || activatedByPlayer ? Color.green : Color.red);
+        Debug.DrawLine(topLeft, bottomLeft, activatedByAgent || activatedByPlayer ? Color.green : Color.red);
 
         //draw hangThresholdLine
         Vector2 leftOrigin = new Vector2(Collider2D.bounds.min.x, hangThresholdLine);
@@ -92,21 +93,33 @@ public class CarriageClimbingBounds : Bounds
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player Collider") || collision.gameObject.CompareTag("Agent Collider"))
+        if (collision.gameObject.CompareTag("Player Collider"))
         {
             Instance = null;
-            activated = false;
+            activatedByPlayer = false;
+            hangActivated = false;
+        } 
+        if (collision.gameObject.CompareTag("Agent Collider"))
+        {
+            Instance = null;
+            activatedByAgent = false;
             hangActivated = false;
         }
     }
 
     private void TriggerInstance(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player Collider") || collision.gameObject.CompareTag("Agent Collider"))
+        if (collision.gameObject.CompareTag("Player Collider"))
         { 
             Instance = this;
-            activated = true;
+            activatedByPlayer = true;
         }
+        if (collision.gameObject.CompareTag("Agent Collider"))
+        { 
+            Instance = this;
+            activatedByAgent = true;
+        }
+
     }
 
     private void HangActivationThresholdDetection(Collider2D collision)

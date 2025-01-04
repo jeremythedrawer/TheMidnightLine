@@ -81,8 +81,8 @@ public class GangwayBounds : Bounds
         playerInLeftCarriage = foundLeftInsideBounds.playerInActiveArea;
         playerInRightCarriage = foundRightInsideBounds.playerInActiveArea;
 
-        leftClimbActivated = foundsLeftClimbBounds.activated;
-        righhtClimbActivated = foundsRightClimbBounds.activated;
+        leftClimbActivated = foundsLeftClimbBounds.activatedByAgent;
+        righhtClimbActivated = foundsRightClimbBounds.activatedByAgent;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
