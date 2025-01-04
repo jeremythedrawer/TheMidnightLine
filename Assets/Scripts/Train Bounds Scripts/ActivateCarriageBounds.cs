@@ -18,9 +18,11 @@ public class ActivateCarriageBounds : Bounds
     public float rightEdge { get; private set; }
     public float boundsHeight { get; private set; }
 
-    private Component leftGangwayBounds;
-    private Component rightGangwayBounds;
+    private Component leftComponentBounds;
+    private Component rightComponentBounds;
 
+    public GangwayBounds leftGangwayBounds { get; private set; }
+    public GangwayBounds rightGangwayBounds { get; private set; }
     public Vector2 leftGangwayPos { get; private set; }
     public Vector2 rightGangwayPos { get; private set; }
 
@@ -34,22 +36,23 @@ public class ActivateCarriageBounds : Bounds
         boundsHeight = Collider2D.bounds.size.y;
         bystanderCount = 0;
 
-        if (this.gameObject.CompareTag("Inside Bounds")) 
+        SetNeighbouringBounds(Collider2D, 5, gangwayTriggerLayer, typeof(GangwayBounds), ref leftComponentBounds, ref rightComponentBounds);
+        leftGangwayBounds = leftComponentBounds as GangwayBounds;
+        rightGangwayBounds = rightComponentBounds as GangwayBounds;
+
+
+        if (isBackCarriage)
         {
-            SetNeighbouringBounds(Collider2D, 5, gangwayTriggerLayer, typeof(GangwayBounds), ref leftGangwayBounds, ref rightGangwayBounds);
-            if (isBackCarriage)
-            {
-                rightGangwayPos = rightGangwayBounds.transform.position;
-            }
-            else if (isFrontCarriage)
-            {
-                leftGangwayPos = leftGangwayBounds.transform.position;
-            }
-            else
-            {
-                leftGangwayPos = leftGangwayBounds.transform.position;
-                rightGangwayPos = rightGangwayBounds.transform.position;
-            }
+            rightGangwayPos = rightComponentBounds.transform.position;
+        }
+        else if (isFrontCarriage)
+        {
+            leftGangwayPos = leftComponentBounds.transform.position;
+        }
+        else
+        {
+            leftGangwayPos = leftComponentBounds.transform.position;
+            rightGangwayPos = rightComponentBounds.transform.position;
         }
     }
 
@@ -66,12 +69,24 @@ public class ActivateCarriageBounds : Bounds
             playerInActiveArea = true;
         }
 
-        if (collision.gameObject.CompareTag("Agent Collider") && this.CompareTag("Inside Bounds"))
+        if (collision.gameObject.CompareTag("Agent Collider"))
         {
-            var navSystem = collision.gameObject.GetComponentInParent<NavigationSystem>();
-            if (navSystem != null)
+            if (this.CompareTag("Inside Bounds"))
             {
-                navSystem.currentInsideBounds = this;
+                var navSystem = collision.gameObject.GetComponentInParent<NavigationSystem>();
+                if (navSystem != null)
+                {
+                    navSystem.currentInsideBounds = this;
+                }
+            }
+
+            if (this.CompareTag("Outside Bounds"))
+            {
+                var navSystem = collision.gameObject.GetComponentInParent<NavigationSystem>();
+                if (navSystem != null)
+                {
+                    navSystem.currentOutsideBounds = this;
+                }
             }
         }
     }
@@ -90,6 +105,7 @@ public class ActivateCarriageBounds : Bounds
             if(navSystem != null)
             {
                 navSystem.currentInsideBounds = null;
+                navSystem.currentOutsideBounds = null;
             }
         }
         if (collision.gameObject.CompareTag("Bystander Collider"))

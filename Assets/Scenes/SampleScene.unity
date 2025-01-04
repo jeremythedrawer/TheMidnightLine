@@ -129,27 +129,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 5454002635820018757, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
   m_PrefabInstance: {fileID: 8408415366794038343}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &308434721 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 8586128716431588609, guid: 5c0e581121940e14a9cb0746c95278bc, type: 3}
-  m_PrefabInstance: {fileID: 1138307642}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &308434723
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 308434721}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e6de0bc3bfe85e4894f9143eae9d992, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  OutsideBoundsLayer:
-    serializedVersion: 2
-    m_Bits: 512
-  seeGizmos: 0
 --- !u!1 &330585543
 GameObject:
   m_ObjectHideFlags: 0
@@ -592,7 +571,19 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6065378150939056599, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
+      propertyPath: isBackCarriage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065378150939056599, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
       propertyPath: isFrontCarriage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7693348402995976174, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
+      propertyPath: isFrontCarriage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7693348402995976174, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
+      propertyPath: seeBoundsGizmos
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8761142624639553961, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
@@ -739,29 +730,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gangway 2
       objectReference: {fileID: 0}
-    - target: {fileID: 3848780741362186379, guid: 5c0e581121940e14a9cb0746c95278bc, type: 3}
-      propertyPath: m_Size.x
-      value: 5.62
-      objectReference: {fileID: 0}
-    - target: {fileID: 3848780741362186379, guid: 5c0e581121940e14a9cb0746c95278bc, type: 3}
-      propertyPath: m_IsTrigger
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 4031870423960239491, guid: 5c0e581121940e14a9cb0746c95278bc, type: 3}
-      propertyPath: m_SortingOrder
-      value: 6
-      objectReference: {fileID: 0}
-    - target: {fileID: 5472894024535241573, guid: 5c0e581121940e14a9cb0746c95278bc, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.08
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 8586128716431588609, guid: 5c0e581121940e14a9cb0746c95278bc, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 308434723}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 5c0e581121940e14a9cb0746c95278bc, type: 3}
 --- !u!114 &1232611974 stripped
 MonoBehaviour:
@@ -900,10 +872,6 @@ PrefabInstance:
     - target: {fileID: 2291648027470868421, guid: 5c0e581121940e14a9cb0746c95278bc, type: 3}
       propertyPath: m_Name
       value: Gangway 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6369169429096181740, guid: 5c0e581121940e14a9cb0746c95278bc, type: 3}
-      propertyPath: seeGizmos
-      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1098,9 +1066,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0e6de0bc3bfe85e4894f9143eae9d992, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  OutsideBoundsLayer:
+  seeBoundsGizmos: 0
+  outsideBoundsLayer:
     serializedVersion: 2
-    m_Bits: 512
+    m_Bits: 0
+  insideBoundsLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  climbingBoundsLayer:
+    serializedVersion: 2
+    m_Bits: 0
   seeGizmos: 0
 --- !u!1001 &76116506591165685
 PrefabInstance:
@@ -1112,11 +1087,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 779573762761806031, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 30.91
+      value: 26.66
       objectReference: {fileID: 0}
     - target: {fileID: 779573762761806031, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.13
+      value: 7.45
       objectReference: {fileID: 0}
     - target: {fileID: 779573762761806031, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1150,6 +1125,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 6574141234835530042, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
+      propertyPath: m_SleepingMode
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 6655092737606140929, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: collisionGizmos
       value: 0
@@ -1175,9 +1154,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cfe7ace4609f0ea47ac6e8e2d07c22da, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  seeBoundsGizmos: 0
   wheelLevel: 0.45
   roofLevel: 7.04
-  seeGizmos: 0
+  seeTrainGizmos: 1
 --- !u!1001 &908825791190272049
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1245,6 +1225,14 @@ PrefabInstance:
     - target: {fileID: 5029582999761189244, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6065378150939056599, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
+      propertyPath: isBackCarriage
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7693348402995976174, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
+      propertyPath: seeBoundsGizmos
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8761142624639553961, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
       propertyPath: trainMovement
@@ -1438,11 +1426,7 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6065378150939056599, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
-      propertyPath: isEndCarriage
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 6065378150939056599, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
+    - target: {fileID: 7693348402995976174, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
       propertyPath: isBackCarriage
       value: 1
       objectReference: {fileID: 0}
@@ -1668,6 +1652,10 @@ PrefabInstance:
     m_TransformParent: {fileID: 607729331}
     m_Modifications:
     - target: {fileID: 410805700643269504, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
+      propertyPath: trainBounds
+      value: 
+      objectReference: {fileID: 447883163799734803}
+    - target: {fileID: 410805700643269504, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: playerCollider
       value: 
       objectReference: {fileID: 1658121709}
@@ -1693,11 +1681,11 @@ PrefabInstance:
       objectReference: {fileID: 1658121709}
     - target: {fileID: 5454002635820018757, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -3.39
+      value: -10.3
       objectReference: {fileID: 0}
     - target: {fileID: 5454002635820018757, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.21
+      value: 2.32
       objectReference: {fileID: 0}
     - target: {fileID: 5454002635820018757, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1734,6 +1722,14 @@ PrefabInstance:
     - target: {fileID: 5769503658216925530, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: seeGizmos
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6503016544083589490, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
+      propertyPath: m_SleepingMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6503016544083589490, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
+      propertyPath: m_CollisionDetection
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9091029623637560231, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: collisionGizmos

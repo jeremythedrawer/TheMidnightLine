@@ -5,12 +5,12 @@ public class TrainBounds : Bounds
 
     public float wheelLevel = 1.0f;
     public float roofLevel = 1.0f;
-    public bool seeGizmos;
+    public bool seeTrainGizmos;
 
     private void OnDrawGizmos()
     {
 #if UNITY_EDITOR
-        if (seeGizmos)
+        if (seeTrainGizmos)
         {
             if (Application.isPlaying) return;
 
@@ -34,7 +34,7 @@ public class TrainBounds : Bounds
 
     private void Update()
     {
-        if (seeGizmos)
+        if (seeTrainGizmos)
         {
             Debug.DrawLine(new Vector3(transform.position.x - 3, wheelLevel), new Vector3(transform.position.x + 3, wheelLevel), Color.yellow);
             Debug.DrawLine(new Vector3(transform.position.x - 3, roofLevel), new Vector3(transform.position.x + 3, roofLevel), Color.yellow);        

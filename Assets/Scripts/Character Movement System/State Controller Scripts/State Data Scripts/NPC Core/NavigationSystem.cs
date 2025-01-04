@@ -14,103 +14,180 @@ public class NavigationSystem : MonoBehaviour
     public LayerMask climbingLayer;
     public BoxCollider2D boxCollider;
     public BoxCollider2D playerCollider;
+    public TrainBounds trainBounds;
 
+    //where NPC is
     public ActivateCarriageBounds currentInsideBounds { private get; set; }
     public GangwayBounds currentGangwayBounds { private get; set; }
+    public ActivateCarriageBounds currentOutsideBounds { private get; set; }
+
+
+    private Queue<Vector2> pathToTarget = new Queue<Vector2>();
+    public Vector2 nextPos { get; private set; }
 
     private Vector2 playerPos;
     private Vector2 targetPos;
-    private Vector2 chosenGangwayPos;
-    private Vector2 afterGangwayPos;
-    private Vector2 startPos;
+    private GangwayBounds chosenGangway;
+    private CarriageClimbingBounds chosenClimbingBounds;
+    private Vector2 currentPos;
+
+    private float closeEnoughToNextPos = 0.5f;
+    private float distanceToNextPos;
+    private bool hasJumped;
 
     void Start()
     {
         StartCoroutine(UpdatePlayerPosition());
     }
-
-    void Update()
+    public void MoveToNextPos()
     {
+
+        currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, (boxCollider.size.y / 2f));
+        targetPos = new Vector2(playerPos.x, playerPos.y) + new Vector2(0, (playerCollider.size.y / 2f));
+
+        FindPathToTarget(currentPos, targetPos);
+
+        //if (currentPos.x < nextPos.x)
+        //{
+        //    movementInputs.walkInput = 1;
+        //}
+        //else
+        //{
+        //    movementInputs.walkInput = -1;
+        //}
+
+        //if (currentPos.y < nextPos.y)
+        //{
+        //    if (!hasJumped)
+        //    {
+        //        movementInputs.jumpInput = true;
+        //        hasJumped = true;
+        //    }
+        //}
+        //else
+        //{
+        //    movementInputs.jumpInput = false;
+        //    hasJumped = false;
+        //}
     }
-
-    public void MoveToTarget()
+    public void FindPathToTarget(Vector2 currentPos, Vector2 targetPos)
     {
-        startPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0,(boxCollider.size.y/2f));
-        targetPos = new Vector2(playerPos.x, playerPos.y) + new Vector2(0, (playerCollider.size.y/2f));
 
         if (currentInsideBounds != null)
         {
-            InsideCarriageToGangway();
+            if (currentInsideBounds.playerInActiveArea)
+            {
+                pathToTarget.Enqueue(FindTarget());
+            }
+            else
+            {
+                FindChosenGangway(currentInsideBounds);
+                FindChosenClimbBounds(chosenGangway);
+                FindTarget();
+
+                pathToTarget.Enqueue(chosenGangway.transform.position);
+                if (chosenClimbingBounds != null)
+                {
+                    pathToTarget.Enqueue(chosenClimbingBounds.transform.position);
+                }
+                //pathToTarget.Enqueue(targetPos);
+            }
         }
-        /*
-        currentPos = transform.position;
-        if (playerPos.x - stopMovementBuffer > currentPos.x + stopMovementBuffer)
+
+        //if (currentGangwayBounds != null)
+        //{
+        //    pathToTarget.Enqueue(GangwayToAfterGangway());
+        //}
+
+        //if (currentOutsideBounds != null)
+        //{
+        //    if (targetPos.y >= trainBounds.roofLevel)
+        //    {
+        //        pathToTarget.Enqueue(FindTarget());
+        //    }
+        //    else
+        //    {
+        //        pathToTarget.Enqueue(FindChosenGangway(currentOutsideBounds));
+        //    }
+        //}
+
+        DrawDebugPath();
+    }
+
+    private void DrawDebugPath()
+    {
+        Vector2 pos = currentPos;
+
+        var pathList = pathToTarget.ToArray();
+
+        for (int i = 0; i < pathList.Length; i++)
         {
-            movementInputs.walkInput = 1;
+            Vector2 nextPos = pathList[i];
+            Debug.DrawLine(pos, nextPos, Color.magenta);
+            pos = nextPos;
         }
-        else if (playerPos.x + stopMovementBuffer < currentPos.x - stopMovementBuffer)
+    }
+    private Vector2 FindTarget()
+    {
+        return targetPos;
+    }
+
+    private void FindChosenClimbBounds(GangwayBounds chosenGangway)
+    {
+        Vector2 boundsMin = chosenGangway.Bounds.min;
+        Vector2 boundsMax = chosenGangway.Bounds.max;
+        Vector2 boundsCenter = chosenGangway.Bounds.center;
+
+        if (chosenGangway.playerOnLeftRoof)
         {
-            movementInputs.walkInput = -1;
+            chosenClimbingBounds = chosenGangway.foundsLeftClimbBounds;
+        }
+        else if (chosenGangway.playerOnRightRoof)
+        {
+            chosenClimbingBounds = chosenGangway.foundsRightClimbBounds;
         }
         else
         {
-            movementInputs.walkInput = 0;
+            chosenClimbingBounds = null;
         }
 
-        if (foundClimbingBounds)
-        {
-            Debug.Log(movementInputs.jumpInput);
-            //TODO: find outside carriage bounds
-            movementInputs.jumpInput = true;
-        }
-        else
-        {
-            movementInputs.jumpInput = false;
-        }
-        */
-    }
-    private void GangwayToTarget()
-    {
-       // Debug.DrawLine(chosenGangwayPos, )
     }
 
-
-    private void InsideCarriageToGangway()
+    private void FindChosenGangway(ActivateCarriageBounds activateCarriageBounds)
     {
-
-        Vector2 rightGangwayPos = currentInsideBounds.rightGangwayPos;
-        Vector2 leftGangwayPos = currentInsideBounds.leftGangwayPos;
+        GangwayBounds rightGangway = activateCarriageBounds.rightGangwayBounds;
+        GangwayBounds leftGangway = activateCarriageBounds.leftGangwayBounds;
             
-        if (currentInsideBounds.isBackCarriage) 
+        if (activateCarriageBounds.isBackCarriage) 
         { 
-            chosenGangwayPos = rightGangwayPos;
+            chosenGangway = rightGangway;
         }
-        else if (currentInsideBounds.isFrontCarriage) 
+        else if (activateCarriageBounds.isFrontCarriage) 
         { 
-            chosenGangwayPos = leftGangwayPos;
+            chosenGangway = leftGangway;
         }
         else 
         {
-            float leftDistance = startPos.x - leftGangwayPos.x;
-            float rightDistance = rightGangwayPos.x - startPos.x;
+            float leftDistance = currentPos.x - leftGangway.transform.position.x;
+            float rightDistance = rightGangway.transform.position.x - currentPos.x;
 
-            float targetLeftDistance = targetPos.x - leftGangwayPos.x;
-            float targetRightDistance = rightGangwayPos.x - targetPos.x;
+            float targetLeftDistance = targetPos.x - leftGangway.transform.position.x;
+            float targetRightDistance = rightGangway.transform.position.x - targetPos.x;
 
             bool bothClosestToLeft = leftDistance < rightDistance && targetLeftDistance < targetRightDistance;
             bool bothClosestToRight = rightDistance < leftDistance && targetRightDistance < targetLeftDistance;
 
             if (bothClosestToLeft || leftDistance < targetRightDistance)
             {
-                chosenGangwayPos = leftGangwayPos;
+                chosenGangway = leftGangway;
             }
             else
             {
-                chosenGangwayPos = rightGangwayPos;
+                chosenGangway = rightGangway;
             }
         }
-        Debug.DrawLine(startPos, chosenGangwayPos, Color.magenta);
     }
+
 
     private IEnumerator UpdatePlayerPosition()
     {

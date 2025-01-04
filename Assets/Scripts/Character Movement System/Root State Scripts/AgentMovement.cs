@@ -31,7 +31,7 @@ public class AgentMovement : NPCCore
         SelectState();
         state.DoBranch();
 
-        navigationSystem.MoveToTarget();
+        navigationSystem.MoveToNextPos();
     }
     private void FixedUpdate()
     {
