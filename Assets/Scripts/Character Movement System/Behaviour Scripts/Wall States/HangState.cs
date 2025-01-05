@@ -7,7 +7,7 @@ public class HangState : State
     }
     public override void Do()
     {
-        if (collisionChecker.grounded || core.stateList.wallState.isClimbing || movementInputs.crouchInput)
+        if (collisionChecker.grounded || stateList.wallState.isClimbing || movementInputs.crouchInput)
         {
             movementInputs.canMove = true;
             playingAnimation = false;
@@ -30,13 +30,13 @@ public class HangState : State
 
     private void HangController()
     {
-        if (CarriageClimbingBounds.Instance == null)
+        if (core.currentClimbBounds == null)
         {
-            core.stateList.wallState.isHanging = false;
+            stateList.wallState.isHanging = false;
             return;
         }
 
-        if (CarriageClimbingBounds.Instance.hangActivated)
+        if (core.currentClimbBounds.hangActivated)
         {
             movementInputs.canMove = false;
             body.gravityScale = 0;
@@ -44,10 +44,10 @@ public class HangState : State
 
             //snap player to position
             Vector2 newPosition = core.transform.position;
-            newPosition = CarriageClimbingBounds.Instance.newPos;
+            newPosition = core.currentClimbBounds.newPos;
             core.transform.position = newPosition;
 
-            core.spriteRenderer.flipX = !CarriageClimbingBounds.Instance.isLeftEdge;
+            core.spriteRenderer.flipX = !core.currentClimbBounds.isLeftEdge;
 
             AnimationController();
         }

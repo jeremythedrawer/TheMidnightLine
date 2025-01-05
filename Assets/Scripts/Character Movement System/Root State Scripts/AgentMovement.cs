@@ -11,6 +11,7 @@ public class AgentMovement : NPCCore
     void Start()
     {
         SetupInstances();
+        SetupNPCInstances();
         Set(stateList.hidingState, true);
 
         initialGravityScale = body.gravityScale;

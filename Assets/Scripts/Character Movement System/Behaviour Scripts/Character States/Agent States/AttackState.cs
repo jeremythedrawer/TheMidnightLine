@@ -26,23 +26,23 @@ public class AttackState : State
 
     private void SelectState()
     {
-        if (CarriageClimbingBounds.Instance != null && !core.stateList.wallState.isDropping)
+        if (core.currentClimbBounds != null && !stateList.wallState.isDropping)
         {
-            Set(core.stateList.wallState, true);
+            Set(stateList.wallState, true);
         }
         else
         {
             if (collisionChecker.grounded || movementInputs.adjustingCollider)
             {
                 //reset wall bools
-                core.stateList.wallState.isDropping = false;
-                core.stateList.wallState.isHanging = true;
+                stateList.wallState.isDropping = false;
+                stateList.wallState.isHanging = true;
 
-                Set(core.stateList.groundState, true);
+                Set(stateList.groundState, true);
             }
             else
             {
-                Set(core.stateList.airborneState, true);
+                Set(stateList.airborneState, true);
             }
         }
     }

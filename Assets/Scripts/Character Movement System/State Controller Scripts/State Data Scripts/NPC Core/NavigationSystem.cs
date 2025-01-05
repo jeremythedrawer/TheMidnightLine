@@ -22,7 +22,7 @@ public class NavigationSystem : MonoBehaviour
     public ActivateCarriageBounds currentOutsideBounds { private get; set; }
 
 
-    private List<Vector2> pathToTarget = new List<Vector2>();
+    public List<Vector2> pathToTarget { get; set; } = new List<Vector2>();
     private bool pathIsSet;
     public Vector2 nextPos { get; private set; }
 
@@ -30,61 +30,83 @@ public class NavigationSystem : MonoBehaviour
     private Vector2 targetPos;
     private GangwayBounds chosenGangway;
     private CarriageClimbingBounds chosenClimbingBounds;
+    private ActivateCarriageBounds chosenInsideBounds;
     private Vector2 currentPos;
 
     private float closeEnoughToNextPos = 0.5f;
     private float distanceToNextPos;
     private bool hasJumped;
+    private bool nextPosIsClimbBounds;
 
     void Start()
     {
         StartCoroutine(UpdatePlayerPosition());
     }
+
     public void MoveToNextPos()
     {
+        SetPath();
 
+        if (currentPos.x < pathToTarget[0].x)
+        {
+            movementInputs.walkInput = 1;
+        }
+        else
+        {
+            movementInputs.walkInput = -1;
+        }
+
+        if (chosenClimbingBounds != null)
+        {
+            if (pathToTarget[0] == (Vector2)chosenClimbingBounds.transform.position && !hasJumped)
+            {
+                nextPosIsClimbBounds = true;
+            }
+        }
+
+        if (nextPosIsClimbBounds)
+        {
+            if (!hasJumped)
+            {
+                movementInputs.runInput = true;
+                movementInputs.jumpInput = true;
+                hasJumped = true;
+            }
+            nextPosIsClimbBounds = false;
+        }
+        else
+        {
+            movementInputs.runInput = false;
+            movementInputs.jumpInput = false;
+            hasJumped = false;
+        }
+    }
+    private void SetPath()
+    {
         currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, (boxCollider.size.y / 2f));
         targetPos = new Vector2(playerPos.x, playerPos.y) + new Vector2(0, (playerCollider.size.y / 2f));
 
-        FindPathToTarget(currentPos, targetPos);
-
-        if (Vector2.Distance(currentPos, pathToTarget[0])  < closeEnoughToNextPos)
+        if (!pathIsSet)
         {
-            Debug.Log("removed pos from pathToTarget List");
-            pathToTarget.Remove(pathToTarget[0]);
+            Debug.Log("finding new path");
+            FindPathToTarget(currentPos, targetPos);
         }
-        if (targetPos != pathToTarget[pathToTarget.Count - 1])
+
+        distanceToNextPos = Vector2.Distance(currentPos, pathToTarget[0]);
+
+        if (distanceToNextPos < closeEnoughToNextPos || targetPos != pathToTarget[pathToTarget.Count - 1])
         {
             pathIsSet = false;
-            pathToTarget.Clear();
         }
-        //if (currentPos.x < nextPos.x)
-        //{
-        //    movementInputs.walkInput = 1;
-        //}
-        //else
-        //{
-        //    movementInputs.walkInput = -1;
-        //}
-
-        //if (currentPos.y < nextPos.y)
-        //{
-        //    if (!hasJumped)
-        //    {
-        //        movementInputs.jumpInput = true;
-        //        hasJumped = true;
-        //    }
-        //}
-        //else
-        //{
-        //    movementInputs.jumpInput = false;
-        //    hasJumped = false;
-        //}
+        DrawDebugPath();
     }
     public void FindPathToTarget(Vector2 currentPos, Vector2 targetPos)
     {
+        pathToTarget.Clear();
 
-        if (currentInsideBounds != null && !pathIsSet)
+        float currentYPos = currentPos.y;
+
+        if (currentInsideBounds != null) // Agent in Inside Bounds
         {
 
             if (currentInsideBounds.playerInActiveArea)
@@ -96,7 +118,8 @@ public class NavigationSystem : MonoBehaviour
                 FindChosenGangway(currentInsideBounds);
                 FindChosenClimbBounds(chosenGangway);
 
-                pathToTarget.Add(chosenGangway.transform.position);
+                pathToTarget.Add(new Vector2 (chosenGangway.transform.position.x, currentYPos));
+
                 if (chosenClimbingBounds != null)
                 {
                     pathToTarget.Add(chosenClimbingBounds.transform.position);
@@ -104,23 +127,24 @@ public class NavigationSystem : MonoBehaviour
 
                 pathToTarget.Add(targetPos);
             }
-            pathIsSet = true;
         }
-
-        if (currentGangwayBounds != null && !pathIsSet)
+        else if (currentGangwayBounds != null) // Agent in Gangway Bounds
         {
-
             FindChosenClimbBounds(chosenGangway);
             if (chosenClimbingBounds != null)
             {
                 pathToTarget.Add(chosenClimbingBounds.transform.position);
             }
+            else
+            {
+                FindChosenInsideBounds(chosenGangway);
+                pathToTarget.Add(new Vector2 (chosenInsideBounds.transform.position.x, currentYPos));
+            }
             pathToTarget.Add (targetPos);
-            pathIsSet = true;
         }
-
-        if (currentOutsideBounds != null && !pathIsSet)
+        else if (currentOutsideBounds != null) // Agent in Outside Bounds
         {
+
             if (targetPos.y >= trainBounds.roofLevel)
             {
                 pathToTarget.Add(targetPos);
@@ -129,7 +153,7 @@ public class NavigationSystem : MonoBehaviour
             {
                 FindChosenGangway(currentOutsideBounds);
                 FindChosenClimbBounds(chosenGangway);
-                pathToTarget.Add(chosenGangway.transform.position);
+                pathToTarget.Add(new Vector2 (chosenGangway.transform.position.x, currentYPos));
 
                 if(chosenClimbingBounds != null)
                 {
@@ -137,10 +161,8 @@ public class NavigationSystem : MonoBehaviour
                 }
                 pathToTarget.Add(targetPos);
             }
-            pathIsSet= true;
         }
-
-        DrawDebugPath();
+        pathIsSet = true;
     }
 
     private void DrawDebugPath()
@@ -172,8 +194,21 @@ public class NavigationSystem : MonoBehaviour
         else
         {
             chosenClimbingBounds = null;
+
         }
 
+    }
+
+    private void FindChosenInsideBounds(GangwayBounds chosenGangway)
+    {
+        if (currentPos.x < targetPos.x)
+        {
+            chosenInsideBounds = chosenGangway.foundRightInsideBounds;
+        }
+        else
+        {
+            chosenInsideBounds = chosenGangway.foundLeftInsideBounds;
+        }
     }
 
     private void FindChosenGangway(ActivateCarriageBounds activateCarriageBounds)

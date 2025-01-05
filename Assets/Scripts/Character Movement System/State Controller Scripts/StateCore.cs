@@ -22,6 +22,8 @@ public abstract class StateCore : MonoBehaviour
 
     internal float initialGravityScale;
 
+    public CarriageClimbingBounds currentClimbBounds { get; set; }
+
     protected void Set(State newState, bool forceReset = false)
     {
         machine.Set(newState, forceReset);

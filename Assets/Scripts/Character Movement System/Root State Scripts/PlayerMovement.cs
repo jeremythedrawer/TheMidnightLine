@@ -30,7 +30,7 @@ public class PlayerMovement : StateCore
     {
         if (state.isComplete)
         {
-            if (CarriageClimbingBounds.Instance != null && !stateList.wallState.isDropping)
+            if (currentClimbBounds != null && !stateList.wallState.isDropping)
             {
                 Set(stateList.wallState, true);
             }

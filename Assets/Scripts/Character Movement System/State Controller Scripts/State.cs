@@ -4,28 +4,23 @@ public abstract class State : MonoBehaviour
 {
     public bool isComplete { get; protected set; }
 
-    protected float startTime;
-
-    public float time => Time.time - startTime;
-
     protected StateCore core;
     protected NPCCore npcCore;
 
-    protected AnimStateStrings animStates => core.animStates;
     protected Rigidbody2D body => core.body;
-
     protected BoxCollider2D boxCollider2D => core.boxCollider2D;
+    protected Animator animator => core.animator;
+    protected CollisionChecker collisionChecker => core.collisionChecker;
+    protected MovementInputs movementInputs => core.movementInputs;
+    protected StateList stateList => core.stateList;
+    protected AnimStateStrings animStates => core.animStates;
+
+    protected BehaviourParams behaviourParams => npcCore.behaviourParams;
+    protected NavigationSystem navigationSystem => npcCore.navigationSystem;
 
     protected float initialGravityScale => core.initialGravityScale;
 
-    protected Animator animator => core.animator;
     protected bool playingAnimation = false;
-
-    protected CollisionChecker collisionChecker => core.collisionChecker;
-
-    protected MovementInputs movementInputs => core.movementInputs;
-
-    protected BehaviourParams navigationSystem => npcCore.behaviourParams;
 
     public StateMachine machine;
     public StateMachine parent;
@@ -46,6 +41,11 @@ public abstract class State : MonoBehaviour
     {
         machine = new StateMachine();
         core = _core;
+    }
+
+    public void SetNpcCore(NPCCore _npcCore)
+    {
+        npcCore = _npcCore;
     }
 
 
@@ -77,6 +77,5 @@ public abstract class State : MonoBehaviour
     {
         parent = _parent;
         isComplete = false;
-        startTime = Time.time;
     }
 }

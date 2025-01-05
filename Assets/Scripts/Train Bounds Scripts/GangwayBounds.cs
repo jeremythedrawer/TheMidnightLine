@@ -101,14 +101,6 @@ public class GangwayBounds : Bounds
     {
         if (collision.gameObject.CompareTag("Agent Collider"))
         {
-            var foundLeftOutsideBounds = leftOutsideBounds as ActivateCarriageBounds;
-            var foundRightOutsideBounds = rightOutsideBounds as ActivateCarriageBounds;
-
-            var foundLeftInsideBounds = leftInsideBounds as ActivateCarriageBounds;
-            var foundRightInsideBounds = rightInsideBounds as ActivateCarriageBounds;
-
-            var foundLeftClimbBounds = leftClimbingBounds as CarriageClimbingBounds;
-            var foundRightClimbBounds = rightClimbingBounds as CarriageClimbingBounds;
         }
     }
 

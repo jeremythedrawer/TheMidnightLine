@@ -3,8 +3,6 @@ using UnityEngine;
 
 public class ClimbState : State
 {
-    public WallState wallState;
-
     private float cachePosX;
     private float cachePosY;
 
@@ -38,7 +36,7 @@ public class ClimbState : State
 
     private void UpdatePos()
     {
-        if (CarriageClimbingBounds.Instance == null)
+        if (core.currentClimbBounds == null)
         {
             return;
         }
@@ -47,7 +45,7 @@ public class ClimbState : State
         {
             cachePosX = core.transform.position.x;
             cachePosY = core.transform.position.y;
-            if (CarriageClimbingBounds.Instance.isLeftEdge)
+            if (core.currentClimbBounds.isLeftEdge)
             {
                 offsetX = boxCollider2D.bounds.size.x;
             }
@@ -57,7 +55,7 @@ public class ClimbState : State
             }
 
             newPosX = cachePosX + offsetX;
-            offsetY = (boxCollider2D.bounds.size.y + CarriageClimbingBounds.Instance.boxHeight) - (CarriageClimbingBounds.Instance.hangThresholdLine - CarriageClimbingBounds.Instance.boundsMinY);
+            offsetY = (boxCollider2D.bounds.size.y + core.currentClimbBounds.boxHeight) - (core.currentClimbBounds.hangThresholdLine - core.currentClimbBounds.boundsMinY);
 
             newPosY = cachePosY + offsetY; 
             checkPos = false;
@@ -107,10 +105,8 @@ public class ClimbState : State
 
         body.linearVelocityY = 0f;
 
-        wallState.isClimbing = false;
-        wallState.isDropping = true;
+        stateList.wallState.isClimbing = false;
+        stateList.wallState.isDropping = true;
         offsetX = 0f; offsetY = 0f;
     }
-
-
 }

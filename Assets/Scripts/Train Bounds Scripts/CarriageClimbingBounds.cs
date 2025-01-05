@@ -13,11 +13,12 @@ public class CarriageClimbingBounds : Bounds
     public bool hangActivated { get; set; }
     public bool activatedByAgent { get; set; }
     public bool activatedByPlayer { get; set; }
-
     public Vector2 newPos { get; private set; }
 
     public float boxHeight { get; private set; }
     public float boundsMinY { get; private set; }
+
+
 
     private void OnDrawGizmos()
     {
@@ -76,7 +77,7 @@ public class CarriageClimbingBounds : Bounds
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if ( isLeftEdge)
+        if (isLeftEdge)
         {
             newPos = new Vector2(Collider2D.bounds.min.x, hangThresholdLine - collision.bounds.size.y);  
         }
@@ -84,40 +85,32 @@ public class CarriageClimbingBounds : Bounds
         {
             newPos = new Vector2(Collider2D.bounds.max.x, hangThresholdLine - collision.bounds.size.y);
         }
+        activatedByPlayer =  collision.gameObject.CompareTag("Player Collider");
+        activatedByAgent = collision.gameObject.CompareTag("Agent Collider");
+
+        if (activatedByPlayer || activatedByAgent)
+        {
+            var core = collision.gameObject.GetComponentInParent<StateCore>();
+            core.currentClimbBounds = this;
+        }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        TriggerInstance(collision);
         HangActivationThresholdDetection(collision);
     }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (collision.gameObject.CompareTag("Player Collider"))
-        {
-            Instance = null;
-            activatedByPlayer = false;
-            hangActivated = false;
-        } 
-        if (collision.gameObject.CompareTag("Agent Collider"))
-        {
-            Instance = null;
-            activatedByAgent = false;
-            hangActivated = false;
-        }
-    }
+        activatedByPlayer = collision.gameObject.CompareTag("Player Collider");
+        activatedByAgent = collision.gameObject.CompareTag("Agent Collider");
 
-    private void TriggerInstance(Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Player Collider"))
-        { 
-            Instance = this;
-            activatedByPlayer = true;
-        }
-        if (collision.gameObject.CompareTag("Agent Collider"))
-        { 
-            Instance = this;
-            activatedByAgent = true;
+        if (activatedByPlayer || activatedByAgent)
+        {
+            var core = collision.gameObject.GetComponentInParent<StateCore>();
+            if (core == null) return;
+
+            core.currentClimbBounds = null;
         }
 
     }
