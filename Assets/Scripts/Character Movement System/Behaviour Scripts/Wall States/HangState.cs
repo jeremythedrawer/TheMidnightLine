@@ -30,7 +30,7 @@ public class HangState : State
 
     private void HangController()
     {
-        if (core.currentClimbBounds == null)
+        if (core.currentClimbBounds == null || stateList.wallState.isClimbing)
         {
             stateList.wallState.isHanging = false;
             return;

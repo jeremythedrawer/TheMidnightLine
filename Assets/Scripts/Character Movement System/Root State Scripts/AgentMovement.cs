@@ -20,26 +20,26 @@ public class AgentMovement : NPCCore
     void Update()
     {
         currentAnimStateInfo = animator.GetCurrentAnimatorStateInfo(0);
+
         behaviourParams.CheckInCameraView();
         behaviourParams.CheckPlayerCharacterSight();
         behaviourParams.CheckBystandersInCarriage();
 
+        movementInputs.JumpController();
 
         CheckAttackTriggers();
         CheckHidingTriggers();
-        movementInputs.MoveWithInput();
 
         SelectState();
         state.DoBranch();
-
-        navigationSystem.MoveToNextPos();
     }
     private void FixedUpdate()
     {
-        movementInputs.JumpController();
+        movementInputs.MoveWithInput();
+        movementInputs.SetCollisionAdjustment();
+
         state.FixedDoBranch();
 
-        movementInputs.SetCollisionAdjustment();
     }
 
     void SelectState()

@@ -10,7 +10,8 @@ public class AttackState : State
     public override void Do()
     {
         SelectState();
-        
+
+        npcCore.npcController.FollowAttackPath();
 
         if (agentMovement.isHiding)
         {

@@ -6,8 +6,6 @@ public class WallState : State
     public bool isClimbing { get; set; } = false;
     public bool isHanging { get; set; } = true;
     public bool isDropping { get; set; } = false;
-
-    private bool removedClimbingPoint;
     public override void Enter()
     {
 
@@ -22,7 +20,6 @@ public class WallState : State
             body.gravityScale = initialGravityScale;
             movementInputs.canMove = true;
             isComplete = true;
-            //removedClimbingPoint = false;
         }
     }
 
@@ -70,11 +67,7 @@ public class WallState : State
         if (movementInputs.jumpInput)
         {
             isClimbing = true;
-            if (core is AgentMovement && !removedClimbingPoint)
-            {
-                removedClimbingPoint = true;
-                navigationSystem.pathToTarget.RemoveAt(0);
-            }
+            isHanging = false;
         }
 
     }

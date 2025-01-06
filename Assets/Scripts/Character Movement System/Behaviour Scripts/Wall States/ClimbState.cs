@@ -19,7 +19,7 @@ public class ClimbState : State
     }
     public override void Do()
     {
-
+        Debug.Log(core.currentAnimStateInfo.normalizedTime);
         AnimationController();
         UpdatePos();
 
@@ -65,7 +65,7 @@ public class ClimbState : State
         {
             if (movementInputs.crouchInput)
             {
-                ResetClimbingParaemeters();
+                ResetClimbingParameters();
             }
             else
             {
@@ -91,11 +91,11 @@ public class ClimbState : State
         }
         else if (core.currentAnimStateInfo.normalizedTime >= 1f)
         {
-            ResetClimbingParaemeters();
+            ResetClimbingParameters();
         }
     }
 
-    private void ResetClimbingParaemeters()
+    private void ResetClimbingParameters()
     {
         boxCollider2D.offset = Vector2.zero;
         currentPos = new Vector2(cachePosX, cachePosY);

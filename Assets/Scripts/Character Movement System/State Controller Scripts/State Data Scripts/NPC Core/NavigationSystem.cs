@@ -4,128 +4,83 @@ using UnityEngine;
 
 public class NavigationSystem : MonoBehaviour
 {
-    [Header("Parameters")]
-    public float updatePlayerPosTicRate = 1f;
-    public float stopMovementBuffer = 1f;
-
     [Header("References")]
-    public MovementInputs movementInputs;
-    public Transform playerTransform;
-    public LayerMask climbingLayer;
-    public BoxCollider2D boxCollider;
-    public BoxCollider2D playerCollider;
     public TrainBounds trainBounds;
 
-    //where NPC is
     public ActivateCarriageBounds currentInsideBounds { private get; set; }
     public GangwayBounds currentGangwayBounds { private get; set; }
     public ActivateCarriageBounds currentOutsideBounds { private get; set; }
 
+    public List<NamedPosition> pathToTarget { get; set; } = new List<NamedPosition>();
+    public enum PosType
+    {
+        InsideBound,
+        Gangway,
+        ClimbingBound,
+        Target
+    }
 
-    public List<Vector2> pathToTarget { get; set; } = new List<Vector2>();
+    [System.Serializable]
+    public struct NamedPosition
+    {  
+        public Vector2 value;  
+        public PosType type;
+        
+        public NamedPosition(Vector2 value, PosType type)
+        {
+            this.value = value;
+            this.type = type;
+        }
+    }
     private bool pathIsSet;
-    public Vector2 nextPos { get; private set; }
 
-    private Vector2 playerPos;
-    private Vector2 targetPos;
     private GangwayBounds chosenGangway;
     private CarriageClimbingBounds chosenClimbingBounds;
     private ActivateCarriageBounds chosenInsideBounds;
-    private Vector2 currentPos;
 
     private float closeEnoughToNextPos = 0.5f;
     private float distanceToNextPos;
-    private bool hasJumped;
-    private bool nextPosIsClimbBounds;
 
-    void Start()
+    public void SetPath(Vector2 currentPos, Vector2 targetPos)
     {
-        StartCoroutine(UpdatePlayerPosition());
-    }
-
-    public void MoveToNextPos()
-    {
-        SetPath();
-
-        if (currentPos.x < pathToTarget[0].x)
-        {
-            movementInputs.walkInput = 1;
-        }
-        else
-        {
-            movementInputs.walkInput = -1;
-        }
-
-        if (chosenClimbingBounds != null)
-        {
-            if (pathToTarget[0] == (Vector2)chosenClimbingBounds.transform.position && !hasJumped)
-            {
-                nextPosIsClimbBounds = true;
-            }
-        }
-
-        if (nextPosIsClimbBounds)
-        {
-            if (!hasJumped)
-            {
-                movementInputs.runInput = true;
-                movementInputs.jumpInput = true;
-                hasJumped = true;
-            }
-            nextPosIsClimbBounds = false;
-        }
-        else
-        {
-            movementInputs.runInput = false;
-            movementInputs.jumpInput = false;
-            hasJumped = false;
-        }
-    }
-    private void SetPath()
-    {
-        currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, (boxCollider.size.y / 2f));
-        targetPos = new Vector2(playerPos.x, playerPos.y) + new Vector2(0, (playerCollider.size.y / 2f));
-
         if (!pathIsSet)
         {
             Debug.Log("finding new path");
             FindPathToTarget(currentPos, targetPos);
         }
 
-        distanceToNextPos = Vector2.Distance(currentPos, pathToTarget[0]);
+        distanceToNextPos = Vector2.Distance(currentPos, pathToTarget[0].value);
 
-        if (distanceToNextPos < closeEnoughToNextPos || targetPos != pathToTarget[pathToTarget.Count - 1])
+        if (distanceToNextPos < closeEnoughToNextPos || targetPos != pathToTarget[pathToTarget.Count - 1].value)
         {
             pathIsSet = false;
         }
-        DrawDebugPath();
+        DrawDebugPath(currentPos);
     }
     public void FindPathToTarget(Vector2 currentPos, Vector2 targetPos)
     {
         pathToTarget.Clear();
-
-        float currentYPos = currentPos.y;
 
         if (currentInsideBounds != null) // Agent in Inside Bounds
         {
 
             if (currentInsideBounds.playerInActiveArea)
             {
-                pathToTarget.Add(targetPos);
+                AddToPath(targetPos, PosType.Target);
             }
             else
             {
-                FindChosenGangway(currentInsideBounds);
+                FindChosenGangway(currentInsideBounds, currentPos.x, targetPos.x);
                 FindChosenClimbBounds(chosenGangway);
 
-                pathToTarget.Add(new Vector2 (chosenGangway.transform.position.x, currentYPos));
+                AddToPath(new Vector2 (chosenGangway.transform.position.x, currentPos.y), PosType.Gangway);
 
                 if (chosenClimbingBounds != null)
                 {
-                    pathToTarget.Add(chosenClimbingBounds.transform.position);
+                    AddToPath(chosenClimbingBounds.transform.position, PosType.ClimbingBound);
                 }
 
-                pathToTarget.Add(targetPos);
+                AddToPath(targetPos, PosType.Target);
             }
         }
         else if (currentGangwayBounds != null) // Agent in Gangway Bounds
@@ -133,45 +88,45 @@ public class NavigationSystem : MonoBehaviour
             FindChosenClimbBounds(chosenGangway);
             if (chosenClimbingBounds != null)
             {
-                pathToTarget.Add(chosenClimbingBounds.transform.position);
+                AddToPath(chosenClimbingBounds.transform.position, PosType.ClimbingBound);
             }
             else
             {
-                FindChosenInsideBounds(chosenGangway);
-                pathToTarget.Add(new Vector2 (chosenInsideBounds.transform.position.x, currentYPos));
+                FindChosenInsideBounds(chosenGangway, currentPos.x, targetPos.x);
+                AddToPath(new Vector2 (chosenInsideBounds.transform.position.x, currentPos.y), PosType.InsideBound);
             }
-            pathToTarget.Add (targetPos);
+            AddToPath(targetPos, PosType.Target);
         }
         else if (currentOutsideBounds != null) // Agent in Outside Bounds
         {
 
             if (targetPos.y >= trainBounds.roofLevel)
             {
-                pathToTarget.Add(targetPos);
+                AddToPath(targetPos, PosType.Target);
             }
             else
             {
-                FindChosenGangway(currentOutsideBounds);
+                FindChosenGangway(currentOutsideBounds, currentPos.x, targetPos.x);
                 FindChosenClimbBounds(chosenGangway);
-                pathToTarget.Add(new Vector2 (chosenGangway.transform.position.x, currentYPos));
+                AddToPath(new Vector2(chosenGangway.transform.position.x, currentPos.y), PosType.Gangway);
 
                 if(chosenClimbingBounds != null)
                 {
-                    pathToTarget.Add(chosenClimbingBounds.transform.position);
+                    AddToPath(chosenClimbingBounds.transform.position, PosType.ClimbingBound);
                 }
-                pathToTarget.Add(targetPos);
+                AddToPath(targetPos, PosType.Target);
             }
         }
         pathIsSet = true;
     }
 
-    private void DrawDebugPath()
+    private void DrawDebugPath(Vector2 currentPos)
     {
         Vector2 pos = currentPos;
 
         for (int i = 0; i < pathToTarget.ToArray().Length; i++)
         {
-            Vector2 nextPos = pathToTarget[i];
+            Vector2 nextPos = pathToTarget[i].value;
             Debug.DrawLine(pos, nextPos, Color.magenta);
             pos = nextPos;
         }
@@ -179,10 +134,6 @@ public class NavigationSystem : MonoBehaviour
 
     private void FindChosenClimbBounds(GangwayBounds chosenGangway)
     {
-        Vector2 boundsMin = chosenGangway.Bounds.min;
-        Vector2 boundsMax = chosenGangway.Bounds.max;
-        Vector2 boundsCenter = chosenGangway.Bounds.center;
-
         if (chosenGangway.playerOnLeftRoof)
         {
             chosenClimbingBounds = chosenGangway.foundsLeftClimbBounds;
@@ -196,12 +147,11 @@ public class NavigationSystem : MonoBehaviour
             chosenClimbingBounds = null;
 
         }
-
     }
 
-    private void FindChosenInsideBounds(GangwayBounds chosenGangway)
+    private void FindChosenInsideBounds(GangwayBounds chosenGangway, float currentXPos, float targetXPos)
     {
-        if (currentPos.x < targetPos.x)
+        if (currentXPos < targetXPos)
         {
             chosenInsideBounds = chosenGangway.foundRightInsideBounds;
         }
@@ -211,7 +161,7 @@ public class NavigationSystem : MonoBehaviour
         }
     }
 
-    private void FindChosenGangway(ActivateCarriageBounds activateCarriageBounds)
+    private void FindChosenGangway(ActivateCarriageBounds activateCarriageBounds, float currentXPos, float targetXPos)
     {
         GangwayBounds rightGangway = activateCarriageBounds.rightGangwayBounds;
         GangwayBounds leftGangway = activateCarriageBounds.leftGangwayBounds;
@@ -226,11 +176,11 @@ public class NavigationSystem : MonoBehaviour
         }
         else 
         {
-            float leftDistance = currentPos.x - leftGangway.transform.position.x;
-            float rightDistance = rightGangway.transform.position.x - currentPos.x;
+            float leftDistance = currentXPos - leftGangway.transform.position.x;
+            float rightDistance = rightGangway.transform.position.x - currentXPos;
 
-            float targetLeftDistance = targetPos.x - leftGangway.transform.position.x;
-            float targetRightDistance = rightGangway.transform.position.x - targetPos.x;
+            float targetLeftDistance = targetXPos - leftGangway.transform.position.x;
+            float targetRightDistance = rightGangway.transform.position.x - targetXPos;
 
             bool bothClosestToLeft = leftDistance < rightDistance && targetLeftDistance < targetRightDistance;
             bool bothClosestToRight = rightDistance < leftDistance && targetRightDistance < targetLeftDistance;
@@ -246,13 +196,8 @@ public class NavigationSystem : MonoBehaviour
         }
     }
 
-
-    private IEnumerator UpdatePlayerPosition()
+    private void AddToPath(Vector2 position, PosType type)
     {
-        while (true)
-        {
-            playerPos = playerTransform.position;
-            yield return new WaitForSeconds(updatePlayerPosTicRate);
-        }
+        pathToTarget.Add(new NamedPosition(position, type));
     }
 }
