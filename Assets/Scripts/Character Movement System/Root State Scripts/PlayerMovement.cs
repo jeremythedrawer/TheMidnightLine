@@ -2,6 +2,17 @@ using UnityEngine;
 
 public class PlayerMovement : StateCore
 {
+    private GUIStyle debugMessage;
+    private void OnGUI()
+    {
+        if (debugMessage == null)
+        {
+            debugMessage = new GUIStyle();
+            debugMessage.fontSize = 24;
+            debugMessage.normal.textColor = Color.white;
+        }
+        GUI.Label(new Rect(10, 10, 300, 20), currentAnimStateInfo.normalizedTime.ToString(), debugMessage);
+    }
     void Start()
     {
         SetupInstances();
@@ -30,7 +41,7 @@ public class PlayerMovement : StateCore
     {
         if (state.isComplete)
         {
-            if (currentClimbBounds != null && !stateList.wallState.isDropping)
+            if (currentClimbBounds != null && !movementInputs.crouchInput)
             {
                 Set(stateList.wallState, true);
             }
@@ -38,9 +49,6 @@ public class PlayerMovement : StateCore
             {
                 if (collisionChecker.grounded || movementInputs.adjustingCollider)
                 {
-                    //reset wall bools
-                    stateList.wallState.isDropping = false;
-                    stateList.wallState.isHanging = true;
 
                     Set(stateList.groundState, true);
                 }

@@ -3,9 +3,11 @@ using System.Collections;
 
 public class WallState : State
 {
-    public bool isClimbing { get; set; } = false;
-    public bool isHanging { get; set; } = true;
-    public bool isDropping { get; set; } = false;
+    public bool hasClimbed { get; set; }
+    public bool startClimb { get; set; }
+
+    public bool isDropping { get; set; }
+
     public override void Enter()
     {
 
@@ -13,13 +15,28 @@ public class WallState : State
     public override void Do()
     {
         MovementInputDetection();
-        SelectState();
 
-        if ((!isClimbing && !isHanging) || isDropping)
+        if(movementInputs.crouchInput)
+        {
+            bool canDrop = !startClimb || core.currentAnimStateInfo.normalizedTime < 0.5;
+
+            if (canDrop)
+            {
+                isDropping = true;
+            }
+        }
+
+        if (isDropping || hasClimbed)
         {
             body.gravityScale = initialGravityScale;
             movementInputs.canMove = true;
+            startClimb = false;
             isComplete = true;
+
+        }
+        else
+        {
+            SelectState();
         }
     }
 
@@ -31,22 +48,15 @@ public class WallState : State
     {
 
     }
+
     private void SelectState()
     {
-            StartCoroutine(DelayState());
-    }
 
-    private IEnumerator DelayState()
-    {
-
-        yield return null; // one frame delay
-
-
-        if (isClimbing)
+        if (startClimb && !hasClimbed)
         {
             Set(stateList.climbState, true);
         }
-        else if (isHanging)
+        else
         {
             Set(stateList.hangState, true);
         }
@@ -60,15 +70,6 @@ public class WallState : State
             movementInputs.canMove = true;
 
             body.linearVelocityY = 0;
-            isDropping = true;
-            isClimbing = false;
         }
-
-        if (movementInputs.jumpInput)
-        {
-            isClimbing = true;
-            isHanging = false;
-        }
-
     }
 }

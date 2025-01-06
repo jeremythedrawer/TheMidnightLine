@@ -1,5 +1,5 @@
 fileFormatVersion: 2
-guid: 70af9aa18a90a2a44a7a9917a4d06aa5
+guid: 2714e8d4444fd5642a36df47de8fa674
 TextureImporter:
   internalIDToNameTable: []
   externalObjects: {}
@@ -69,7 +69,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 1024
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -110,13 +110,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: sp_player_hang_0
+      name: sp_henchman_hang_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 200
-        height: 385
+        width: 112
+        height: 290
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -125,20 +125,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 8d6701d726bceb94eb6dbcdea97c08cb
-      internalID: -2003370522
+      spriteID: 9b1a9e341f04c1943a6f39728c7cb0fc
+      internalID: -58081997
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sp_player_hang_1
+      name: sp_henchman_hang_1
       rect:
         serializedVersion: 2
-        x: 200
+        x: 112
         y: 0
-        width: 200
-        height: 385
+        width: 112
+        height: 290
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -147,20 +147,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 0a0ff33728faa7941a9b63b564ca7fee
-      internalID: -1925038311
+      spriteID: d691b40ee91cd9b43b170301a0ea79e0
+      internalID: 1148672434
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sp_player_hang_2
+      name: sp_henchman_hang_2
       rect:
         serializedVersion: 2
-        x: 400
+        x: 224
         y: 0
-        width: 200
-        height: 385
+        width: 112
+        height: 290
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -169,20 +169,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 76b5665aa9c837c40b0ddae0c8c1bc00
-      internalID: 912974069
+      spriteID: 479e7e7ff8bdcb344a26800c43ac4904
+      internalID: 1758449787
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sp_player_hang_3
+      name: sp_henchman_hang_3
       rect:
         serializedVersion: 2
-        x: 600
+        x: 336
         y: 0
-        width: 200
-        height: 385
+        width: 112
+        height: 290
       alignment: 7
       pivot: {x: 0.5, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -191,8 +191,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: d24caefb9e0a03b4d84581f8059ed6c3
-      internalID: 436868761
+      spriteID: 6d32e0d921ecf9e488e804c64c27743e
+      internalID: -1021115392
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sp_henchman_hang_4
+      rect:
+        serializedVersion: 2
+        x: 448
+        y: 0
+        width: 112
+        height: 290
+      alignment: 7
+      pivot: {x: 0.5, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: bec98f097f9a39843964d53b2716b86a
+      internalID: -725403171
       vertices: []
       indices: 
       edges: []
@@ -201,7 +223,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 5ddeeabb3223fe84fa7dfb2360062cf3
+    spriteID: b043be59058beb344973d7ce8bf93e6c
     internalID: 0
     vertices: []
     indices: 
@@ -211,10 +233,11 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      sp_player_hang_0: -2003370522
-      sp_player_hang_1: -1925038311
-      sp_player_hang_2: 912974069
-      sp_player_hang_3: 436868761
+      sp_henchman_hang_0: -58081997
+      sp_henchman_hang_1: 1148672434
+      sp_henchman_hang_2: 1758449787
+      sp_henchman_hang_3: -1021115392
+      sp_henchman_hang_4: -725403171
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

@@ -35,7 +35,6 @@ public class JumpedState : State
                                    collisionChecker.characterBoxCollider.offset.x;
 
             collisionChecker.characterBoxCollider.offset = new Vector2(currentOffsetX, collisionChecker.characterBoxCollider.offset.y);
-            Debug.Log("bhc enabled");
         }
 
         if (Mathf.Abs(collisionChecker.characterBoxCollider.offset.x) > 0.0001)

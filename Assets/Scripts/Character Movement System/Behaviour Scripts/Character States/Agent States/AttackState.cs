@@ -27,7 +27,7 @@ public class AttackState : State
 
     private void SelectState()
     {
-        if (core.currentClimbBounds != null && !stateList.wallState.isDropping)
+        if (core.currentClimbBounds != null && !movementInputs.crouchInput)
         {
             Set(stateList.wallState, true);
         }
@@ -35,9 +35,6 @@ public class AttackState : State
         {
             if (collisionChecker.grounded || movementInputs.adjustingCollider)
             {
-                //reset wall bools
-                stateList.wallState.isDropping = false;
-                stateList.wallState.isHanging = true;
 
                 Set(stateList.groundState, true);
             }

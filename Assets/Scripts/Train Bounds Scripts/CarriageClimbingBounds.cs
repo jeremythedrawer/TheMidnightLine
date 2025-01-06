@@ -14,9 +14,7 @@ public class CarriageClimbingBounds : Bounds
     public bool activatedByAgent { get; set; }
     public bool activatedByPlayer { get; set; }
     public Vector2 newPos { get; private set; }
-
-    public float boxHeight { get; private set; }
-    public float boundsMinY { get; private set; }
+    public float boundsMaxY { get; private set; }
 
 
 
@@ -51,8 +49,7 @@ public class CarriageClimbingBounds : Bounds
     {
         Collider2D = this.GetComponent<BoxCollider2D>();
         hangThresholdLine = (Collider2D.bounds.size.y) * (hangActivationThreshold - 0.5f) + transform.position.y;
-        boxHeight = Collider2D.size.y;
-        boundsMinY = Collider2D.bounds.min.y;
+        boundsMaxY = Collider2D.bounds.max.y;
     }
 
     private void FixedUpdate()
@@ -91,7 +88,12 @@ public class CarriageClimbingBounds : Bounds
         if (activatedByPlayer || activatedByAgent)
         {
             var core = collision.gameObject.GetComponentInParent<StateCore>();
-            core.currentClimbBounds = this;
+            bool cancelInit = core.stateList.wallState.isDropping || core.stateList.wallState.hasClimbed;
+
+            if (!cancelInit)
+            {
+                core.currentClimbBounds = this;
+            }
         }
     }
 

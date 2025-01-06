@@ -20,7 +20,7 @@ public abstract class State : MonoBehaviour
 
     protected float initialGravityScale => core.initialGravityScale;
 
-    protected bool playingAnimation = false;
+    public bool playingAnimation { get; set; } = false;
 
     public StateMachine machine;
     public StateMachine parent;

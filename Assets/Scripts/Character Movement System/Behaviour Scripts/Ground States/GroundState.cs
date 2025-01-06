@@ -26,6 +26,10 @@ public class GroundState : State
         BHCCorrection();
         HeavyLand();
         SelectState();
+
+
+        stateList.wallState.isDropping = false;
+        stateList.wallState.hasClimbed = false;
     }
 
     public override void FixedDo()

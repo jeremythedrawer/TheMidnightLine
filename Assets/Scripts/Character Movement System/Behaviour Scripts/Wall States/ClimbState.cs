@@ -19,7 +19,6 @@ public class ClimbState : State
     }
     public override void Do()
     {
-        Debug.Log(core.currentAnimStateInfo.normalizedTime);
         AnimationController();
         UpdatePos();
 
@@ -41,7 +40,7 @@ public class ClimbState : State
             return;
         }
 
-        if (checkPos)
+        if (checkPos) //find next position
         {
             cachePosX = core.transform.position.x;
             cachePosY = core.transform.position.y;
@@ -55,15 +54,15 @@ public class ClimbState : State
             }
 
             newPosX = cachePosX + offsetX;
-            offsetY = (boxCollider2D.bounds.size.y + core.currentClimbBounds.boxHeight) - (core.currentClimbBounds.hangThresholdLine - core.currentClimbBounds.boundsMinY);
+            offsetY = core.currentClimbBounds.boundsMaxY - transform.position.y;
 
             newPosY = cachePosY + offsetY; 
             checkPos = false;
         }
 
-        if (core.currentAnimStateInfo.normalizedTime < 1f && !checkPos)
+        if (core.currentAnimStateInfo.normalizedTime < 1f) //move to next position
         {
-            if (movementInputs.crouchInput)
+            if (stateList.wallState.isDropping)
             {
                 ResetClimbingParameters();
             }
@@ -85,11 +84,11 @@ public class ClimbState : State
 
     private void AnimationController()
     {
-        if (!playingAnimation)
+        if (!playingAnimation && stateList.wallState.startClimb && !stateList.wallState.isDropping)
         {
             PlayAnimation(animStates.climbAnimState);
         }
-        else if (core.currentAnimStateInfo.normalizedTime >= 1f)
+        else if (core.currentAnimStateInfo.normalizedTime >= 1f && !checkPos)
         {
             ResetClimbingParameters();
         }
@@ -97,16 +96,14 @@ public class ClimbState : State
 
     private void ResetClimbingParameters()
     {
+
         boxCollider2D.offset = Vector2.zero;
         currentPos = new Vector2(cachePosX, cachePosY);
         playingAnimation = false;
         checkPos = true;
         isComplete = true;
-
+        stateList.wallState.hasClimbed = true;
         body.linearVelocityY = 0f;
-
-        stateList.wallState.isClimbing = false;
-        stateList.wallState.isDropping = true;
         offsetX = 0f; offsetY = 0f;
     }
 }

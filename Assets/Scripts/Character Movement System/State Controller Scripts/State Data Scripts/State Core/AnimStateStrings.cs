@@ -20,8 +20,9 @@ public class AnimStateStrings
     internal string secondaryHitToStanceAnimState = "secondaryHitToStance";
     internal string stanceToSecondaryAnimState = "stanceToSecondaryHit";
 
-    internal string climbAnimState = "climb";
+    internal string grabLedgeState = "grabLedge";
     internal string hangAnimState = "hang";
+    internal string climbAnimState = "climb";
 
     //Player
     internal string groundMeleeAnimState = "groundMelee";
