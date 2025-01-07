@@ -10,11 +10,8 @@ public class GroundState : State
     [Range(0f, 1f)]
     public float groundDrag;
 
-    public bool isAttacking { private get; set; } = false;
-
-    public bool pendingState { get; set; }
-
-    public bool finishedHeavyLanding { get; set; } = true;
+    public bool isAttacking { private get; set; } 
+    public bool isHeavyLanding { get; set; }
 
 
     public override void Enter()
@@ -27,9 +24,10 @@ public class GroundState : State
         HeavyLand();
         SelectState();
 
-
-        stateList.wallState.isDropping = false;
-        stateList.wallState.hasClimbed = false;
+        if (!collisionChecker.grounded)
+        {
+            Exit();
+        }
     }
 
     public override void FixedDo()
@@ -41,46 +39,31 @@ public class GroundState : State
     }
     public override void Exit()
     {
-
+        base.Exit();
     }
 
     void SelectState()
     {
-        if (!pendingState)
+        if (isAttacking)
         {
-            StartCoroutine(DelayState());
-        }
-
-        if (canMelee && movementInputs.meleeInput)
-        {
-            isAttacking = true;
-            Set(core.stateList.meleeState, true);
-        }
-
-        if (movementInputs.shootInput && canShoot)
-        {
-            isAttacking = true;
-            Set(core.stateList.shootState, true);
-        }
-    }
-
-    private IEnumerator DelayState()
-    {
-        yield return null; // one frame delay
-        
-        if (!isAttacking)
-        {
-            if (movementInputs.walkInput == 0)
+            if (canMelee && movementInputs.meleeInput)
             {
-                Set(core.stateList.idleState, true);
+                Set(core.stateList.meleeState, false);
             }
-            else if (movementInputs.canMove)
+
+            if (movementInputs.shootInput && canShoot)
             {
-                Set(core.stateList.runState, true);
+                Set(core.stateList.shootState, false);
             }
         }
-
-        pendingState = false; // reset bool
+        else if (movementInputs.walkInput != 0 && movementInputs.canMove)
+        {
+            Set(core.stateList.runState, false);
+        }
+        else
+        {
+            Set(core.stateList.idleState, false);
+        }
     }
 
     private void BHCCorrection()
@@ -93,11 +76,6 @@ public class GroundState : State
             collisionChecker.characterBoxCollider.offset = currentOffset;
         }
 
-        //state completed
-        if (!collisionChecker.grounded)
-        {
-            isComplete = true;
-        }
     }
 
     private void HeavyLand()
@@ -107,28 +85,21 @@ public class GroundState : State
             return;
         }
 
-        if (!finishedHeavyLanding)
+        if (isHeavyLanding)
         {
-            core.stateList.idleState.startAnimation = true;
-            core.stateList.runState.startRunAnimation = true;
-            core.stateList.runState.startWalkAnimation = true;
 
-            if (core.stateList.airborneState.heavyLanding) // triggered on one frame
+            if (core.stateList.airborneState.aboutToHeavyLand) // triggered on one frame
             {
                 //TODO: roll when x input
                 movementInputs.canMove = false;
-                animator.Play(animStates.heavyAnimState, 0, 0);
-                core.stateList.airborneState.heavyLanding = false;
+                PlayAnimation(animStates.heavyAnimState);
+                core.stateList.airborneState.aboutToHeavyLand = false;
             }
 
             if (core.currentAnimStateInfo.normalizedTime >= 1) // when heavylanding is finished
             {
-                finishedHeavyLanding = true;
+                isHeavyLanding = false;
                 movementInputs.canMove = true;
-
-                core.stateList.idleState.startAnimation = false;
-                core.stateList.runState.startRunAnimation = false;
-                core.stateList.runState.startWalkAnimation = false;
             } 
         }
     }

@@ -2,29 +2,23 @@ using UnityEngine;
 
 public class HangState : State
 {
-    private bool startGrabLedgeAnim;
+    private bool isGrabbingLedge;
     public override void Enter()
     {
     }
     public override void Do()
     {
-        if (stateList.wallState.isDropping || movementInputs.jumpInput)
+        HangController();
+        stateList.wallState.isHanging = true;
+        if (movementInputs.jumpInput)
         {
-            startGrabLedgeAnim = false;
-            playingAnimation = false;
-            isComplete = true;
-            if (movementInputs.jumpInput)
-            {
-                core.stateList.wallState.startClimb = true;
-            }
-            if (stateList.wallState.isDropping)
-            {
-                movementInputs.canMove = true;
-            }
+            core.stateList.wallState.isClimbing = true;
+            Exit();
         }
-        else
+
+        if (movementInputs.crouchInput)
         {
-            HangController();
+            Exit();
         }
     }
 
@@ -34,19 +28,17 @@ public class HangState : State
     }
     public override void Exit()
     {
-
+        isGrabbingLedge = false;
+        core.stateList.wallState.isHanging = false;
     }
 
     private void HangController()
     {
-        if (core.currentClimbBounds == null)
-        {
-            return;
-        }
+        if (core.currentClimbBounds == null) return;
 
         if (core.currentClimbBounds.hangActivated)
         {
-            stateList.wallState.hasClimbed = false;
+            stateList.wallState.isHanging = false;
             movementInputs.canMove = false;
             body.gravityScale = 0;
             body.linearVelocityY = 0;
@@ -64,9 +56,9 @@ public class HangState : State
 
     private void AnimationController()
     {
-        if (!startGrabLedgeAnim)
+        if (!isGrabbingLedge)
         {
-            startGrabLedgeAnim = true;
+            isGrabbingLedge = true;
             PlayAnimation(animStates.grabLedgeState);
         }
         else if (core.currentAnimStateInfo.normalizedTime >= 1)

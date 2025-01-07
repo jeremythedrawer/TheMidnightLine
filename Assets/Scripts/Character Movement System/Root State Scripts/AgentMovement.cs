@@ -32,6 +32,8 @@ public class AgentMovement : NPCCore
 
         SelectState();
         state.DoBranch();
+
+        normalizedAnimTime = currentAnimStateInfo.normalizedTime;
     }
     private void FixedUpdate()
     {

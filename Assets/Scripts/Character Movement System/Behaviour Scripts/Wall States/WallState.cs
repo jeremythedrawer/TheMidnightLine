@@ -3,10 +3,8 @@ using System.Collections;
 
 public class WallState : State
 {
-    public bool hasClimbed { get; set; }
-    public bool startClimb { get; set; }
-
-    public bool isDropping { get; set; }
+    public bool isHanging { get; set; }
+    public bool isClimbing { get; set; }
 
     public override void Enter()
     {
@@ -14,30 +12,20 @@ public class WallState : State
     }
     public override void Do()
     {
-        MovementInputDetection();
-
         if(movementInputs.crouchInput)
         {
-            bool canDrop = !startClimb || core.currentAnimStateInfo.normalizedTime < 0.5;
+            bool canDrop = !isClimbing || core.currentAnimStateInfo.normalizedTime < 0.5; // cannot drop in the second half of the climbing animation
 
             if (canDrop)
             {
-                isDropping = true;
+                Exit();
             }
         }
-
-        if (isDropping || hasClimbed)
+        if (isClimbing && core.currentAnimStateInfo.normalizedTime >= 1f)
         {
-            body.gravityScale = initialGravityScale;
-            movementInputs.canMove = true;
-            startClimb = false;
-            isComplete = true;
-
+            Exit();
         }
-        else
-        {
-            SelectState();
-        }
+        SelectState();
     }
 
     public override void FixedDo()
@@ -46,30 +34,23 @@ public class WallState : State
     }
     public override void Exit()
     {
-
+        base.Exit();
+        body.gravityScale = initialGravityScale;
+        movementInputs.canMove = true;
+        body.linearVelocityY = 0;
+        isHanging = false;
+        isClimbing = false;
     }
 
     private void SelectState()
     {
-
-        if (startClimb && !hasClimbed)
+        if (isClimbing)
         {
-            Set(stateList.climbState, true);
+            Set(stateList.climbState, false);
         }
         else
         {
-            Set(stateList.hangState, true);
-        }
-    }
-
-    private void MovementInputDetection()
-    {
-        if (movementInputs.crouchInput)
-        {
-            body.gravityScale = initialGravityScale;
-            movementInputs.canMove = true;
-
-            body.linearVelocityY = 0;
+            Set(stateList.hangState, false);
         }
     }
 }

@@ -23,7 +23,10 @@ public class MeleeState : State
     }
     public override void Exit()
     {
-
+        base.Exit();
+        core.stateList.groundState.isAttacking = false;
+        movementInputs.canMove = true;
+        hitCombos = 0;
     }
 
 
@@ -43,9 +46,6 @@ public class MeleeState : State
                 hitCombos++;
                 meleeColliderData.playerCollider.GetComponentInParent<HealthSystem>().TakeDamage(core.characterStats.meleeStrength);
             }
-            else
-            {
-            }
         }
     }
 
@@ -55,16 +55,12 @@ public class MeleeState : State
         {
             if (!playingAnimation)
             {
-                animator.Play(animStates.groundMeleeAnimState, 0, 0);
+                PlayAnimation(animStates.groundMeleeAnimState);
                 movementInputs.canMove = false;
-                playingAnimation = true;
             }
             if (core.currentAnimStateInfo.normalizedTime >= 1f)
             {
-                playingAnimation = false;
-                isComplete = true;
-                core.stateList.groundState.isAttacking = false;
-                movementInputs.canMove = true;
+                Exit();
             }
             // TODO implement right and left animation logic and also logic for symetrical animations (agents)
         }
@@ -122,10 +118,7 @@ public class MeleeState : State
                 case -1:
                     if (core.currentAnimStateInfo.normalizedTime >= 1f) // wait to get back to stance before leaving
                     {
-                        playingAnimation = false;
-                        core.stateList.groundState.isAttacking = false;
-                        hitCombos = 0;
-                        isComplete = true;
+                        Exit();
                     }
 
                     break;

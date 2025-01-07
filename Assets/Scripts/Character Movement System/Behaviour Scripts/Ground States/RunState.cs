@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class RunState : State
 {
-    public bool startRunAnimation { get; set; } = false;
-    public bool startWalkAnimation { get; set; } = false;
+    private bool startRunAnimation;
     public override void Enter()
     {
     }
@@ -23,10 +22,7 @@ public class RunState : State
         {
             if (!movementInputs.adjustingCollider)
             {
-                isComplete = true;
-                startRunAnimation = false;
-                startWalkAnimation = false;
-                core.stateList.groundState.pendingState = false;
+                Exit();
             }
         }
     }
@@ -37,43 +33,30 @@ public class RunState : State
     }
     public override void Exit()
     {
-
+        base.Exit();
+        startRunAnimation = false;
     }
 
     private void RunAnimationController()
     {
-        // TODO implement right and left animation logic and also logic for symetrical animations (agents)
+        if (core is BystanderMovement) return;
 
-        if (core is BystanderMovement) // run animation is handeled in the behavioural states in bystanders
+        if (!startRunAnimation)
         {
-            return;
-        }
-        else if (!startRunAnimation)
-        {
-            animator.Play(animStates.startRunAnimState, 0, 0);
+            Debug.Log("starting to run");
             startRunAnimation = true;
-            startWalkAnimation = false;
+            animator.Play(animStates.startRunAnimState, 0, 0);
         }
-        else if (core.currentAnimStateInfo.normalizedTime >= 1)
+        else
         {
-            animator.Play(animStates.runAnimState, 0, 0);
+            Debug.Log("now in run cycle");
+            PlayAnimation(animStates.runAnimState);
         }
     }
 
     private void WalkAnimationController()
     {
-        // TODO implement right and left animation logic and also logic for symetrical animations (agents)
-
-        if (core is BystanderMovement) // run animation is handeled in the behavioural states in bystanders
-        {
-            return;
-        }
-        else if (!startWalkAnimation || core.currentAnimStateInfo.normalizedTime >= 1)
-        {
-            animator.Play(animStates.walkAnimState, 0, 0);
-            
-            startWalkAnimation = true;
-            startRunAnimation = false;
-        }
+        if (core is BystanderMovement) return;
+            PlayAnimation(animStates.walkAnimState);
     }
 }

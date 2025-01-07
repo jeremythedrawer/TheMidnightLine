@@ -12,7 +12,7 @@ public class AirborneState : State
     public float clampedFallSpeed = 20.0f;
 
     private bool jumped;
-    public bool heavyLanding { get; set; } = false;
+    public bool aboutToHeavyLand { get; set; }
 
 
     private float jumpAnimationProgress = 0f; // Normalized time for animation
@@ -32,8 +32,7 @@ public class AirborneState : State
         //complete state
         if (collisionChecker.grounded || core.currentClimbBounds != null)
         {
-            jumped = false;
-            isComplete = true;
+            Exit();
         }
     }
 
@@ -42,6 +41,9 @@ public class AirborneState : State
     }
     public override void Exit()
     {
+        base.Exit();
+        jumped = false;
+        aboutToHeavyLand = false;
     }
 
     private void SelectState()
@@ -62,8 +64,8 @@ public class AirborneState : State
         body.linearVelocityY = Mathf.Max(body.linearVelocityY, clampedFallSpeed * -1); //using max because Y velocity would be negative when falling
         if (body.linearVelocityY <= clampedFallSpeed * -1)
         {
-            heavyLanding = true;
-            core.stateList.groundState.finishedHeavyLanding = false;
+            aboutToHeavyLand = true;
+            core.stateList.groundState.isHeavyLanding = true;
         }
     }
 

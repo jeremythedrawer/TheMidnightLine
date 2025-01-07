@@ -3,13 +3,8 @@ using UnityEngine.Windows;
 
 public class IdleState : State
 {
-    public bool startAnimation { get; set; } = false;
-
-
-    //public AnimationClip anim;
     public override void Enter()
     {
-        //animator.Play(anim.name);
     }
     public override void Do()
     {
@@ -17,9 +12,7 @@ public class IdleState : State
 
         if (!collisionChecker.grounded || movementInputs.walkInput != 0)
         {
-            isComplete = true;
-            startAnimation = false;
-            core.stateList.groundState.pendingState = false;
+            Exit();
         }
     }
     public override void FixedDo()
@@ -27,7 +20,7 @@ public class IdleState : State
     }
     public override void Exit()
     {
-
+        base.Exit();
     }
 
     private void IdleAnimationController()
@@ -36,12 +29,10 @@ public class IdleState : State
         {
             return;
         }
-        else if (core.currentAnimStateInfo.normalizedTime >= 1 || !startAnimation)
+        else
         {
-            startAnimation = true;
-            animator.Play(animStates.breathingAnimState,0,0);
+            PlayAnimation(animStates.breathingAnimState);
         }
-        // TODO implement right and left animation logic and also logic for symetrical animations (agents)
     }
 
 }

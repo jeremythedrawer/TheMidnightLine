@@ -33,7 +33,7 @@ public class NpcController : MonoBehaviour
         navigationSystem.SetPath(currentPos, targetPos);
 
         movementInputs.runInput = true;
-
+        bool jumpedToClimbBounds = false;
         if (currentPos.x < pathToTarget[0].value.x)
         {
             movementInputs.walkInput = 1;
@@ -45,22 +45,26 @@ public class NpcController : MonoBehaviour
 
         if (pathToTarget[0].type == NavigationSystem.PosType.ClimbingBound)
         {
-            if (!hasJumped && npcCore.currentClimbBounds == null)
+            if (npcCore.currentClimbBounds == null && !jumpedToClimbBounds)
             {
-                Debug.Log("jumped once");
-                StartCoroutine(HandleJumpInput());
+                Debug.Log("jumped to climbing bounds");
+                jumpedToClimbBounds = true;
+                movementInputs.jumpInput = true;
+            }
+            else
+            {
+                movementInputs.jumpInput = false;
             }
             if (npcCore.currentClimbBounds != null)
             {
-                Debug.Log("removed climbing bounds");
                 pathToTarget.RemoveAt(0);
             }
         }
         if (npcCore.currentClimbBounds != null)
         {
-            Debug.Log(npcCore.currentAnimStateInfo.normalizedTime);
-            if (!hasJumped && npcCore.currentAnimStateInfo.normalizedTime >= 1 && !npcCore.stateList.wallState.startClimb)
+            if (!hasJumped && npcCore.currentAnimStateInfo.normalizedTime >= 1 && npcCore.stateList.wallState.isHanging)
             {
+                Debug.Log("agent started climbing");
                 StartCoroutine(HandleJumpInput());
             }
         }
@@ -83,7 +87,6 @@ public class NpcController : MonoBehaviour
     {
         hasJumped = true;
         movementInputs.jumpInput = true;
-        Debug.Log("Jumped");
         yield return null;
         movementInputs.jumpInput = false;
         hasJumped = false;

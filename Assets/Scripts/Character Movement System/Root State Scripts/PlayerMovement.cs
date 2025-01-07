@@ -16,6 +16,7 @@ public class PlayerMovement : StateCore
         movementInputs.JumpController();
         SelectState();
 
+        normalizedAnimTime = currentAnimStateInfo.normalizedTime;
         state.DoBranch();
     }
 
@@ -32,18 +33,18 @@ public class PlayerMovement : StateCore
         {
             if (currentClimbBounds != null && !movementInputs.crouchInput)
             {
-                Set(stateList.wallState, true);
+                Set(stateList.wallState, false);
             }
             else
             {
                 if (collisionChecker.grounded || movementInputs.adjustingCollider)
                 {
 
-                    Set(stateList.groundState, true);
+                    Set(stateList.groundState, false);
                 }
                 else
                 {
-                    Set(stateList.airborneState, true);
+                    Set(stateList.airborneState, false);
                 }
             }
         }

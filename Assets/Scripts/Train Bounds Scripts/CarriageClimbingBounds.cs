@@ -88,12 +88,8 @@ public class CarriageClimbingBounds : Bounds
         if (activatedByPlayer || activatedByAgent)
         {
             var core = collision.gameObject.GetComponentInParent<StateCore>();
-            bool cancelInit = core.stateList.wallState.isDropping || core.stateList.wallState.hasClimbed;
-
-            if (!cancelInit)
-            {
-                core.currentClimbBounds = this;
-            }
+            if (core == null) return;
+            core.currentClimbBounds = this;
         }
     }
 

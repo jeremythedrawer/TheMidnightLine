@@ -21,7 +21,6 @@ public class ClimbState : State
     {
         AnimationController();
         UpdatePos();
-
     }
 
     public override void FixedDo()
@@ -30,18 +29,22 @@ public class ClimbState : State
     }
     public override void Exit()
     {
+        base.Exit();
+        boxCollider2D.offset = Vector2.zero;
+        currentPos = new Vector2(cachePosX, cachePosY);
+        checkPos = true;
+        body.linearVelocityY = 0f;
+        offsetX = 0f; offsetY = 0f;
 
     }
 
     private void UpdatePos()
     {
-        if (core.currentClimbBounds == null)
-        {
-            return;
-        }
+        if (core.currentClimbBounds == null) return;
 
         if (checkPos) //find next position
         {
+            Debug.Log("checking new pos");
             cachePosX = core.transform.position.x;
             cachePosY = core.transform.position.y;
             if (core.currentClimbBounds.isLeftEdge)
@@ -59,12 +62,11 @@ public class ClimbState : State
             newPosY = cachePosY + offsetY; 
             checkPos = false;
         }
-
-        if (core.currentAnimStateInfo.normalizedTime < 1f) //move to next position
+        else //move to next position
         {
-            if (stateList.wallState.isDropping)
+            if (movementInputs.crouchInput)
             {
-                ResetClimbingParameters();
+                Exit();
             }
             else
             {
@@ -72,6 +74,11 @@ public class ClimbState : State
                 currentPos = new Vector2(newPosX, newPosY);
             }
             core.transform.position = currentPos;
+
+            if (core.currentAnimStateInfo.normalizedTime >= 1f)
+            {
+                Exit();
+            }
         }
     }
 
@@ -84,26 +91,9 @@ public class ClimbState : State
 
     private void AnimationController()
     {
-        if (!playingAnimation && stateList.wallState.startClimb && !stateList.wallState.isDropping)
+        if (!playingAnimation)
         {
             PlayAnimation(animStates.climbAnimState);
         }
-        else if (core.currentAnimStateInfo.normalizedTime >= 1f && !checkPos)
-        {
-            ResetClimbingParameters();
-        }
-    }
-
-    private void ResetClimbingParameters()
-    {
-
-        boxCollider2D.offset = Vector2.zero;
-        currentPos = new Vector2(cachePosX, cachePosY);
-        playingAnimation = false;
-        checkPos = true;
-        isComplete = true;
-        stateList.wallState.hasClimbed = true;
-        body.linearVelocityY = 0f;
-        offsetX = 0f; offsetY = 0f;
     }
 }

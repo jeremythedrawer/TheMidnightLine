@@ -3,6 +3,7 @@ using UnityEngine;
 public abstract class State : MonoBehaviour
 {
     public bool isComplete { get; protected set; } = true;
+    public bool playingAnimation { get; set; } = false;
 
     protected StateCore core;
     protected NPCCore npcCore;
@@ -20,7 +21,6 @@ public abstract class State : MonoBehaviour
 
     protected float initialGravityScale => core.initialGravityScale;
 
-    public bool playingAnimation { get; set; } = false;
 
     public StateMachine machine;
     public StateMachine parent;
@@ -33,8 +33,15 @@ public abstract class State : MonoBehaviour
     }
     protected void PlayAnimation(string animationName)
     {
-        animator.Play(animationName, 0, 0);
-        playingAnimation = true;
+        if (!playingAnimation)
+        {
+            animator.Play(animationName, 0, 0);
+            playingAnimation = true;
+        }
+        if (core.currentAnimStateInfo.normalizedTime >= 1)
+        {
+            playingAnimation = false;
+        }
     }
 
     public void SetCore(StateCore _core)
@@ -53,25 +60,34 @@ public abstract class State : MonoBehaviour
     { 
     }
     public virtual void Do()
-    { 
+    {
+
     }
     public virtual void FixedDo()
     {
     }
     public virtual void Exit()
-    { 
+    {
+        isComplete = true;
+        playingAnimation = false;
     }
 
     public void DoBranch()
     {
-        Do();
-        state?.DoBranch(); // finds leaf state by calling Do() on every branch
+        if (!isComplete)
+        {
+            Do();
+            state?.DoBranch(); // finds leaf state by calling Do() on every branch
+        }
     }
     
     public void FixedDoBranch()
     {
-        FixedDo();
-        state?.FixedDoBranch(); // finds leaf state by calling Do() on every branch
+        if (!isComplete)
+        {
+            FixedDo();
+            state?.FixedDoBranch(); // finds leaf state by calling Do() on every branch
+        }
     }
     public void Initialise(StateMachine _parent)
     {
