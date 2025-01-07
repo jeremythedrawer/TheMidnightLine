@@ -32,7 +32,7 @@ public class NavigationSystem : MonoBehaviour
             this.type = type;
         }
     }
-    private bool pathIsSet;
+    public bool pathIsSet { get; set; }
 
     private GangwayBounds chosenGangway;
     private CarriageClimbingBounds chosenClimbingBounds;

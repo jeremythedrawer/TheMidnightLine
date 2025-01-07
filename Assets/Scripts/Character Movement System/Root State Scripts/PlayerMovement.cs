@@ -2,17 +2,6 @@ using UnityEngine;
 
 public class PlayerMovement : StateCore
 {
-    private GUIStyle debugMessage;
-    private void OnGUI()
-    {
-        if (debugMessage == null)
-        {
-            debugMessage = new GUIStyle();
-            debugMessage.fontSize = 24;
-            debugMessage.normal.textColor = Color.white;
-        }
-        GUI.Label(new Rect(10, 10, 300, 20), currentAnimStateInfo.normalizedTime.ToString(), debugMessage);
-    }
     void Start()
     {
         SetupInstances();

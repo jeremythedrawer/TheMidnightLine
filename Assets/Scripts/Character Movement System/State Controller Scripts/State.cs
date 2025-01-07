@@ -2,7 +2,7 @@ using UnityEngine;
 
 public abstract class State : MonoBehaviour
 {
-    public bool isComplete { get; protected set; }
+    public bool isComplete { get; protected set; } = true;
 
     protected StateCore core;
     protected NPCCore npcCore;

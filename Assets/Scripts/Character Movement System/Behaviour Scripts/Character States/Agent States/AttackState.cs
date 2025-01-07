@@ -33,15 +33,22 @@ public class AttackState : State
         }
         else
         {
-            if (collisionChecker.grounded || movementInputs.adjustingCollider)
+            if (stateList.wallState.isComplete)
             {
+                if (collisionChecker.grounded || movementInputs.adjustingCollider)
+                {
 
-                Set(stateList.groundState, true);
+                    Set(stateList.groundState, true);
+                }
+                else
+                {
+                    Set(stateList.airborneState, true);
+                }
             }
             else
             {
-                Set(stateList.airborneState, true);
+                Set(stateList.wallState, true);
             }
-        }
+        }   
     }
 }

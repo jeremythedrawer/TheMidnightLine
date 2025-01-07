@@ -1147,6 +1147,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb7e800b36daee34d960ab599fa202a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  seeBoundsGizmos: 1
   gangwayTriggerLayer:
     serializedVersion: 2
     m_Bits: 2048
@@ -1840,6 +1841,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f990338ea43e6a40ac440cd99195486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  seeBoundsGizmos: 0
   hangActivationThreshold: 0.628
   isLeftEdge: 0
 --- !u!1 &4027897108219757473
@@ -2494,10 +2496,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: eb7e800b36daee34d960ab599fa202a4, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  seeBoundsGizmos: 0
   gangwayTriggerLayer:
     serializedVersion: 2
     m_Bits: 2048
-  isBackCarriage: 1
+  isBackCarriage: 0
   isFrontCarriage: 0
 --- !u!1 &5472315037222246400
 GameObject:
@@ -3058,6 +3061,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5f990338ea43e6a40ac440cd99195486, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  seeBoundsGizmos: 0
   hangActivationThreshold: 0.628
   isLeftEdge: 1
 --- !u!1 &6152874169164790827
