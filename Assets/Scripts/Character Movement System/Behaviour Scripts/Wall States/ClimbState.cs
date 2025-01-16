@@ -44,7 +44,6 @@ public class ClimbState : State
 
         if (checkPos) //find next position
         {
-            Debug.Log("checking new pos");
             cachePosX = core.transform.position.x;
             cachePosY = core.transform.position.y;
             if (core.currentClimbBounds.isLeftEdge)

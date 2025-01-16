@@ -28,10 +28,14 @@ public class FallState : State
 
         if (collisionChecker.grounded)
         {
-            coyoteTime = initialCoyoteTime;
-            coyoteEnabled = false;
-
-            isComplete = true;
+            Exit();
         }
+    }
+
+    public override void Exit()
+    {
+        base.Exit();
+        coyoteTime = initialCoyoteTime;
+        coyoteEnabled = false;
     }
 }

@@ -29,18 +29,18 @@ public class AttackState : State
     {
         if (core.currentClimbBounds != null && !movementInputs.crouchInput)
         {
-            Set(stateList.wallState, false);
+            Set(stateList.wallState);
         }
         else
         {
             if (collisionChecker.grounded || movementInputs.adjustingCollider)
             {
 
-                Set(stateList.groundState, false);
+                Set(stateList.groundState);
             }
             else
             {
-                Set(stateList.airborneState, false);
+                Set(stateList.airborneState);
             }
         }   
     }

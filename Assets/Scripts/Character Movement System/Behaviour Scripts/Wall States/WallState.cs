@@ -21,10 +21,6 @@ public class WallState : State
                 Exit();
             }
         }
-        if (isClimbing && core.currentAnimStateInfo.normalizedTime >= 1f)
-        {
-            Exit();
-        }
         SelectState();
     }
 
@@ -46,11 +42,11 @@ public class WallState : State
     {
         if (isClimbing)
         {
-            Set(stateList.climbState, false);
+            Set(stateList.climbState);
         }
         else
         {
-            Set(stateList.hangState, false);
+            Set(stateList.hangState);
         }
     }
 }

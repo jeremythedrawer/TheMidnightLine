@@ -20,7 +20,6 @@ public class NpcController : MonoBehaviour
     private Vector2 currentPos;
     private Vector2 targetPos;
 
-    private bool hasJumped;
     private void Start()
     {
         StartCoroutine(UpdatePlayerPosition());
@@ -47,7 +46,6 @@ public class NpcController : MonoBehaviour
         {
             if (npcCore.currentClimbBounds == null && !jumpedToClimbBounds)
             {
-                Debug.Log("jumped to climbing bounds");
                 jumpedToClimbBounds = true;
                 movementInputs.jumpInput = true;
             }
@@ -62,9 +60,8 @@ public class NpcController : MonoBehaviour
         }
         if (npcCore.currentClimbBounds != null)
         {
-            if (!hasJumped && npcCore.currentAnimStateInfo.normalizedTime >= 1 && npcCore.stateList.wallState.isHanging)
+            if (!movementInputs.jumpInput && npcCore.currentAnimStateInfo.normalizedTime >= 1 && npcCore.stateList.wallState.isHanging)
             {
-                Debug.Log("agent started climbing");
                 StartCoroutine(HandleJumpInput());
             }
         }
@@ -85,10 +82,8 @@ public class NpcController : MonoBehaviour
     }
     private IEnumerator HandleJumpInput()
     {
-        hasJumped = true;
         movementInputs.jumpInput = true;
         yield return null;
         movementInputs.jumpInput = false;
-        hasJumped = false;
     }
 }

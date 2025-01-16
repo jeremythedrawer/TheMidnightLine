@@ -4,15 +4,19 @@ using UnityEngine;
 public class StateMachine
 {
     public State state;
+    public bool forceState { private get; set; } = true;
 
-    public void Set(State newState, bool forceReset = false)
+    public void Set(State newState)
     {
-        if (state != newState || forceReset)
+        if (state != newState || forceState == true)
         {
             state?.Exit();
+            //Debug.Log("left state of " + state + " and entered into " + newState);
             state = newState;
             state.Initialise(this);
             state.Enter();
+
+            forceState = false;
         }
     }
 

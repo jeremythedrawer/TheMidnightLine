@@ -27,9 +27,9 @@ public abstract class State : MonoBehaviour
 
     public State state => machine.state;
 
-    protected void Set(State newState, bool forceReset = false)
+    protected void Set(State newState)
     {
-        machine.Set(newState, forceReset);
+        machine.Set(newState);
     }
     protected void PlayAnimation(string animationName)
     {
@@ -70,6 +70,7 @@ public abstract class State : MonoBehaviour
     {
         isComplete = true;
         playingAnimation = false;
+        machine.forceState = true;
     }
 
     public void DoBranch()

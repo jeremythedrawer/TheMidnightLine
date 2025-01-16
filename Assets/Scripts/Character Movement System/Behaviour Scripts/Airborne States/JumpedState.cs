@@ -23,6 +23,11 @@ public class JumpedState : State
             body.gravityScale = initialGravityScale;
         }
 
+        if (collisionChecker.grounded)
+        {
+            Exit();
+        }
+
     }
     public override void FixedDo()
     {
@@ -46,5 +51,7 @@ public class JumpedState : State
     }
     public override void Exit()
     {
+        base.Exit();
+        collisionChecker.characterBoxCollider.offset = Vector2.zero;
     }
 }

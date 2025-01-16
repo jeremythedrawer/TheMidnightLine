@@ -29,10 +29,11 @@ public class PanicState : State
     }
     public override void Exit()
     {
+        base.Exit();
     }
     private void SelectState()
     {
-        Set(core.stateList.groundState, true);
+        Set(core.stateList.groundState);
     }
     private void AvoidPlayer()
     {

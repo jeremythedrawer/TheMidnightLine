@@ -43,13 +43,11 @@ public class RunState : State
 
         if (!startRunAnimation)
         {
-            Debug.Log("starting to run");
             startRunAnimation = true;
             animator.Play(animStates.startRunAnimState, 0, 0);
         }
         else
         {
-            Debug.Log("now in run cycle");
             PlayAnimation(animStates.runAnimState);
         }
     }

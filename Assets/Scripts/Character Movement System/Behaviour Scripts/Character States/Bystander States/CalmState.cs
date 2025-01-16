@@ -34,11 +34,12 @@ public class CalmState : State
     }
     public override void Exit()
     {
+        base.Exit();
     }
 
     private void SelectState()
     {
-        Set(groundState, true);
+        Set(groundState);
     }
 
 

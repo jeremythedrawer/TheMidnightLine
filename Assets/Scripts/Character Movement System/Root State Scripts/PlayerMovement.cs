@@ -29,25 +29,23 @@ public class PlayerMovement : StateCore
     }
     void SelectState()
     {
-        if (state.isComplete)
+        if (currentClimbBounds != null && !movementInputs.crouchInput)
         {
-            if (currentClimbBounds != null && !movementInputs.crouchInput)
+            Set(stateList.wallState, false);
+        }
+        else
+        {
+            if (collisionChecker.grounded || movementInputs.adjustingCollider)
             {
-                Set(stateList.wallState, false);
+
+                Set(stateList.groundState, false);
             }
             else
             {
-                if (collisionChecker.grounded || movementInputs.adjustingCollider)
-                {
-
-                    Set(stateList.groundState, false);
-                }
-                else
-                {
-                    Set(stateList.airborneState, false);
-                }
+                Set(stateList.airborneState, false);
             }
         }
+
     }
 
     private void GetPlayerInputs()

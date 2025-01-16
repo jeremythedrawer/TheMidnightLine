@@ -27,7 +27,7 @@ public abstract class StateCore : MonoBehaviour
     protected float normalizedAnimTime;
     protected void Set(State newState, bool forceReset = false)
     {
-        machine.Set(newState, forceReset);
+        machine.Set(newState);
     }
 
     public void SetupInstances()

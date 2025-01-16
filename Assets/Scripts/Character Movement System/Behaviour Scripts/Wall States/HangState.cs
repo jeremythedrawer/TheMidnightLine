@@ -9,6 +9,8 @@ public class HangState : State
     public override void Do()
     {
         HangController();
+        AnimationController();
+
         stateList.wallState.isHanging = true;
         if (movementInputs.jumpInput)
         {
@@ -28,6 +30,7 @@ public class HangState : State
     }
     public override void Exit()
     {
+        base.Exit();
         isGrabbingLedge = false;
         core.stateList.wallState.isHanging = false;
     }
@@ -49,8 +52,6 @@ public class HangState : State
             core.transform.position = newPosition;
 
             core.spriteRenderer.flipX = !core.currentClimbBounds.isLeftEdge;
-
-            AnimationController();
         }
     }
 
@@ -61,9 +62,9 @@ public class HangState : State
             isGrabbingLedge = true;
             PlayAnimation(animStates.grabLedgeState);
         }
-        else if (core.currentAnimStateInfo.normalizedTime >= 1)
+        else
         {
-            animator.Play(animStates.hangAnimState, 0, 0);
+            PlayAnimation(animStates.hangAnimState);
         }
     }
 }

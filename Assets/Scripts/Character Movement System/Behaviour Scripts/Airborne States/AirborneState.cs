@@ -27,13 +27,6 @@ public class AirborneState : State
         ClampFallSpeed();
         StickyFeetOnLand();
         JumpAndFallAnimController();
-
-
-        //complete state
-        if (collisionChecker.grounded || core.currentClimbBounds != null)
-        {
-            Exit();
-        }
     }
 
     public override void FixedDo()
@@ -44,6 +37,8 @@ public class AirborneState : State
         base.Exit();
         jumped = false;
         aboutToHeavyLand = false;
+        fallAnimationProgress = 0;
+        jumpAnimationProgress = 0;
     }
 
     private void SelectState()
@@ -52,11 +47,11 @@ public class AirborneState : State
 
             if (jumped)
             {
-                Set(core.stateList.jumpedState, true);
+                Set(core.stateList.jumpedState);
             }
             else
             {
-                Set(core.stateList.fallState, true);
+                Set(core.stateList.fallState);
             }
     }
     private void ClampFallSpeed()

@@ -9,7 +9,6 @@ public class IdleState : State
     public override void Do()
     {
         IdleAnimationController();
-
         if (!collisionChecker.grounded || movementInputs.walkInput != 0)
         {
             Exit();

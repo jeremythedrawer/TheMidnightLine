@@ -23,11 +23,6 @@ public class GroundState : State
         BHCCorrection();
         HeavyLand();
         SelectState();
-
-        if (!collisionChecker.grounded)
-        {
-            Exit();
-        }
     }
 
     public override void FixedDo()
@@ -48,21 +43,21 @@ public class GroundState : State
         {
             if (canMelee && movementInputs.meleeInput)
             {
-                Set(core.stateList.meleeState, false);
+                Set(core.stateList.meleeState);
             }
 
             if (movementInputs.shootInput && canShoot)
             {
-                Set(core.stateList.shootState, false);
+                Set(core.stateList.shootState);
             }
         }
         else if (movementInputs.walkInput != 0 && movementInputs.canMove)
         {
-            Set(core.stateList.runState, false);
+            Set(core.stateList.runState);
         }
         else
         {
-            Set(core.stateList.idleState, false);
+            Set(core.stateList.idleState);
         }
     }
 
