@@ -126,15 +126,8 @@ public class NavigationSystem : MonoBehaviour
             {
                 FindChosenGangway(currentOutsideBounds, currentPos.x, targetPos.x);
                 FindChosenClimbBounds(chosenGangway);
-                if(chosenGangway.transform.position.x > currentPos.x)
-                {
-                    AddToPath(new Vector2(chosenGangway.Bounds.max.x, chosenGangway.Bounds.min.y + colliderCentre), PosType.Gangway);
-                }
-                else
-                {
-                    AddToPath(new Vector2(chosenGangway.Bounds.min.x, chosenGangway.Bounds.min.y + colliderCentre), PosType.Gangway);
 
-                }
+                AddToPath(new Vector2(chosenGangway.Bounds.center.x, chosenGangway.Bounds.min.y + colliderCentre), PosType.Gangway);
 
                 if(chosenClimbingBounds != null)
                 {

@@ -104,7 +104,7 @@ public class NpcController : MonoBehaviour
     private IEnumerator HandleCrouchInput()
     {
         movementInputs.crouchInput = true;
-        yield return null;
+        yield return new WaitForSeconds(0.2f);
         movementInputs.crouchInput = false;
     }
 }
