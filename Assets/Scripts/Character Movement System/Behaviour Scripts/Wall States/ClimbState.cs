@@ -21,6 +21,10 @@ public class ClimbState : State
     {
         AnimationController();
         UpdatePos();
+        if (core.currentAnimStateInfo.normalizedTime >= 1f && core.currentAnimStateInfo.IsName("climb"))
+        {
+            Exit();
+        }
     }
 
     public override void FixedDo()
@@ -30,12 +34,12 @@ public class ClimbState : State
     public override void Exit()
     {
         base.Exit();
+        stateList.wallState.isClimbing = false;
         boxCollider2D.offset = Vector2.zero;
         currentPos = new Vector2(cachePosX, cachePosY);
         checkPos = true;
         body.linearVelocityY = 0f;
         offsetX = 0f; offsetY = 0f;
-
     }
 
     private void UpdatePos()
@@ -56,9 +60,8 @@ public class ClimbState : State
             }
 
             newPosX = cachePosX + offsetX;
-            offsetY = core.currentClimbBounds.boundsMaxY - transform.position.y;
 
-            newPosY = cachePosY + offsetY; 
+            newPosY = core.currentClimbBounds.boundsMaxY; 
             checkPos = false;
         }
         else //move to next position
@@ -69,15 +72,14 @@ public class ClimbState : State
             }
             else
             {
-                UpdateBoxCollider(-offsetX,-offsetY);
-                currentPos = new Vector2(newPosX, newPosY);
+                if (playingAnimation)
+                {
+                    currentPos = new Vector2(newPosX, newPosY);
+                    UpdateBoxCollider(-offsetX,-offsetY);
+                }
             }
-            core.transform.position = currentPos;
 
-            if (core.currentAnimStateInfo.normalizedTime >= 1f)
-            {
-                Exit();
-            }
+            core.transform.position = currentPos;
         }
     }
 

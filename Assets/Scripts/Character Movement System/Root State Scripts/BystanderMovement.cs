@@ -13,7 +13,7 @@ public class BystanderMovement : StateCore
     void Start()
     {
         SetupInstances();
-        Set(stateList.calmState, true);
+        Set(stateList.calmState);
 
         initialGravityScale = body.gravityScale;
 
@@ -46,19 +46,19 @@ public class BystanderMovement : StateCore
         {
             if (isCalm)
             {
-                Set(stateList.calmState, true);
+                Set(stateList.calmState);
             }
             if (isPanic)
             {
-                Set(stateList.panicState, true);
+                Set(stateList.panicState);
             }
             if (isFleeing)
             {
-                Set(stateList.fleeState, true);
+                Set(stateList.fleeState);
             }
             if (isLeaving)
             {
-                Set(stateList.leaveState, true);
+                Set(stateList.leaveState);
             }
         }
     }

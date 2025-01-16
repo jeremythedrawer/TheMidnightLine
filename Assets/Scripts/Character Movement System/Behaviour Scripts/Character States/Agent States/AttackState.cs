@@ -27,7 +27,7 @@ public class AttackState : State
 
     private void SelectState()
     {
-        if (core.currentClimbBounds != null && !movementInputs.crouchInput)
+        if ((core.currentClimbBounds != null || stateList.wallState.isClimbing == true) && !movementInputs.crouchInput)
         {
             Set(stateList.wallState);
         }

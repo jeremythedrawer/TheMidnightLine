@@ -5,7 +5,7 @@ public class PlayerMovement : StateCore
     void Start()
     {
         SetupInstances();
-        Set(stateList.airborneState, true);
+        Set(stateList.airborneState);
 
         initialGravityScale = body.gravityScale;
     }
@@ -29,20 +29,20 @@ public class PlayerMovement : StateCore
     }
     void SelectState()
     {
-        if (currentClimbBounds != null && !movementInputs.crouchInput)
+        if ((currentClimbBounds != null || stateList.wallState.isClimbing == true) && !movementInputs.crouchInput)
         {
-            Set(stateList.wallState, false);
+            Set(stateList.wallState);
         }
         else
         {
             if (collisionChecker.grounded || movementInputs.adjustingCollider)
             {
 
-                Set(stateList.groundState, false);
+                Set(stateList.groundState);
             }
             else
             {
-                Set(stateList.airborneState, false);
+                Set(stateList.airborneState);
             }
         }
 

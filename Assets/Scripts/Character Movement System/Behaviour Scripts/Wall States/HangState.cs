@@ -15,7 +15,6 @@ public class HangState : State
         if (movementInputs.jumpInput)
         {
             core.stateList.wallState.isClimbing = true;
-            Exit();
         }
 
         if (movementInputs.crouchInput)

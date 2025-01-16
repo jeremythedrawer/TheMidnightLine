@@ -57,13 +57,18 @@ public class NpcController : MonoBehaviour
                 pathToTarget.RemoveAt(0);
             }
         }
+
+        //start climbing
         if (npcCore.currentClimbBounds != null)
         {
             if (!movementInputs.jumpInput && npcCore.currentAnimStateInfo.normalizedTime >= 1 && npcCore.stateList.wallState.isHanging)
             {
+                Debug.Log("npc is climbing");
                 StartCoroutine(HandleJumpInput());
             }
         }
+
+        //jumping to next roof
         if (pathToTarget[0].type == NavigationSystem.PosType.RoofEdge && navigationSystem.distanceToNextPos < navigationSystem.closeEnoughToNextPos)
         {
             StartCoroutine(HandleJumpInput());

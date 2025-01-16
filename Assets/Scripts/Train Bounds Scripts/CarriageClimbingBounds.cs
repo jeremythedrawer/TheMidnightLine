@@ -107,7 +107,6 @@ public class CarriageClimbingBounds : Bounds
         {
             var core = collision.gameObject.GetComponentInParent<StateCore>();
             if (core == null) return;
-
             core.currentClimbBounds = null;
         }
 

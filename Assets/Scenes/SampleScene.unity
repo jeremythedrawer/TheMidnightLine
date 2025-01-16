@@ -787,6 +787,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gangway 2
       objectReference: {fileID: 0}
+    - target: {fileID: 2662104954679093991, guid: 5c0e581121940e14a9cb0746c95278bc, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.09
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1148,11 +1152,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 779573762761806031, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 59.52
+      value: 7.96
       objectReference: {fileID: 0}
     - target: {fileID: 779573762761806031, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 9.05
+      value: 8.15
       objectReference: {fileID: 0}
     - target: {fileID: 779573762761806031, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1192,7 +1196,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6655092737606140929, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: collisionGizmos
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8451971257262523574, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_Name
@@ -1217,7 +1221,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   seeBoundsGizmos: 0
   wheelLevel: 0.45
-  roofLevel: 7.04
+  roofLevel: 6.96
   seeTrainGizmos: 1
 --- !u!1001 &908825791190272049
 PrefabInstance:
@@ -1286,6 +1290,14 @@ PrefabInstance:
     - target: {fileID: 5029582999761189244, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5923958350039707715, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.7
+      objectReference: {fileID: 0}
+    - target: {fileID: 6394926755933949657, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 6.7
       objectReference: {fileID: 0}
     - target: {fileID: 8761142624639553961, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
       propertyPath: trainMovement
@@ -1435,10 +1447,6 @@ PrefabInstance:
       propertyPath: trainMovement
       value: 
       objectReference: {fileID: 9087803296732725202}
-    - target: {fileID: 4035364250139040991, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
-      propertyPath: m_Size.x
-      value: 33.9
-      objectReference: {fileID: 0}
     - target: {fileID: 4760351642055166634, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
       propertyPath: trainMovement
       value: 
@@ -1749,8 +1757,12 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 284894925}
     - target: {fileID: 3655542353893840654, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
+      propertyPath: runSpeed
+      value: 6
+      objectReference: {fileID: 0}
+    - target: {fileID: 3655542353893840654, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: jumpSpeed
-      value: 17
+      value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 3655542353893840654, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: walkSpeed
@@ -1762,11 +1774,11 @@ PrefabInstance:
       objectReference: {fileID: 1658121709}
     - target: {fileID: 5454002635820018757, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 31.4
+      value: 18.3
       objectReference: {fileID: 0}
     - target: {fileID: 5454002635820018757, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.31
+      value: 2.22
       objectReference: {fileID: 0}
     - target: {fileID: 5454002635820018757, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1838,7 +1850,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9091029623637560231, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: collisionGizmos
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 9091029623637560231, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: wallXSensorScale
