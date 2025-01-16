@@ -22,6 +22,7 @@ public class MovementInputs : MonoBehaviour
     //Set Collision Adjustment
     private float cbcSmoothing = 0.15f;
     private float cbcSmoothingCurrent;
+    private float currentOffsetY = 0f;
 
     public bool canMove { get; set; } = true;
     public bool adjustingCollider { get; private set; } = false;
@@ -85,11 +86,6 @@ public class MovementInputs : MonoBehaviour
             }
         }
     }
-
-    public void ClimbController()
-    {
-        //TODO: put in climb mechanic
-    }
     public void SetCollisionAdjustment()
     {
         // Correct Box Collider trigger
@@ -105,12 +101,12 @@ public class MovementInputs : MonoBehaviour
             cbcSmoothingCurrent += Time.fixedDeltaTime;
 
             float t = cbcSmoothingCurrent / cbcSmoothing;
-            float currentOffsetY = Mathf.Lerp(core.collisionChecker.characterBoxCollider.offset.y, 0.0f, t);
+            currentOffsetY = Mathf.Lerp(core.collisionChecker.characterBoxCollider.offset.y, 0.0f, t);
 
             if (Mathf.Abs(currentOffsetY) < 0.00001f)
             {
                 adjustingCollider = false;
-                currentOffsetY = 0.0f;
+                currentOffsetY = 0f;
             }
 
             core.collisionChecker.characterBoxCollider.offset = new Vector2(0.0f, currentOffsetY);
@@ -119,6 +115,8 @@ public class MovementInputs : MonoBehaviour
         else
         {
             cbcSmoothingCurrent = 0.0f;
+            currentOffsetY = 0f;
+            core.collisionChecker.characterBoxCollider.offset = Vector2.zero;
         }
     }
 

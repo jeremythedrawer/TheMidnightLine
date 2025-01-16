@@ -19,6 +19,7 @@ public class NpcController : MonoBehaviour
 
     private Vector2 currentPos;
     private Vector2 targetPos;
+    private float colliderCenter; 
 
     private void Start()
     {
@@ -27,9 +28,10 @@ public class NpcController : MonoBehaviour
 
     public void FollowAttackPath()
     {
-        currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, (thisCollider.size.y / 2f));
+        colliderCenter = thisCollider.size.y / 2f;
+        currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, colliderCenter);
 
-        navigationSystem.SetPath(currentPos, targetPos);
+        navigationSystem.SetPath(currentPos, targetPos, colliderCenter);
 
         movementInputs.runInput = true;
 

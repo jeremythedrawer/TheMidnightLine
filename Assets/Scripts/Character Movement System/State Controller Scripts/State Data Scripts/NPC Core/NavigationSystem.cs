@@ -43,23 +43,22 @@ public class NavigationSystem : MonoBehaviour
     public float closeEnoughToNextPos { get; private set; } = 0.5f;
     public float distanceToNextPos {  get; private set; }
 
-    public void SetPath(Vector2 currentPos, Vector2 targetPos)
+    public void SetPath(Vector2 currentPos, Vector2 targetPos, float colliderCentre)
     {
         if (!pathIsSet)
         {
-            Debug.Log("finding new path");
-            FindPathToTarget(currentPos, targetPos);
+            FindPathToTarget(currentPos, targetPos, colliderCentre);
         }
 
         distanceToNextPos = Vector2.Distance(currentPos, pathToTarget[0].value);
 
-        if (distanceToNextPos < closeEnoughToNextPos || targetPos != pathToTarget[pathToTarget.Count - 1].value)
+        if (distanceToNextPos < closeEnoughToNextPos || targetPos.x != pathToTarget[pathToTarget.Count - 1].value.x)
         {
             pathIsSet = false;
         }
         DrawDebugPath(currentPos);
     }
-    public void FindPathToTarget(Vector2 currentPos, Vector2 targetPos)
+    public void FindPathToTarget(Vector2 currentPos, Vector2 targetPos, float colliderCentre)
     {
         pathToTarget.Clear();
 
@@ -127,12 +126,21 @@ public class NavigationSystem : MonoBehaviour
             {
                 FindChosenGangway(currentOutsideBounds, currentPos.x, targetPos.x);
                 FindChosenClimbBounds(chosenGangway);
-                AddToPath(new Vector2(chosenGangway.transform.position.x, currentPos.y), PosType.Gangway);
+                if(chosenGangway.transform.position.x > currentPos.x)
+                {
+                    AddToPath(new Vector2(chosenGangway.Bounds.max.x, chosenGangway.Bounds.min.y + colliderCentre), PosType.Gangway);
+                }
+                else
+                {
+                    AddToPath(new Vector2(chosenGangway.Bounds.min.x, chosenGangway.Bounds.min.y + colliderCentre), PosType.Gangway);
+
+                }
 
                 if(chosenClimbingBounds != null)
                 {
                     AddToPath(chosenClimbingBounds.transform.position, PosType.ClimbingBound);
                 }
+
                 AddToPath(targetPos, PosType.Target);
             }
         }
