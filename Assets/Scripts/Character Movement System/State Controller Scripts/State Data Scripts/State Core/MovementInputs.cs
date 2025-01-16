@@ -25,7 +25,7 @@ public class MovementInputs : MonoBehaviour
     private float currentOffsetY = 0f;
 
     public bool canMove { get; set; } = true;
-    public bool adjustingCollider { get; private set; } = false;
+    public bool adjustingCollider { get; private set; }
     public void MoveWithInput()
     {
         if (Mathf.Abs(walkInput) > 0) //check when moving
@@ -137,7 +137,4 @@ public class MovementInputs : MonoBehaviour
             }
         }
     }
-
-
-
 }

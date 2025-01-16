@@ -63,10 +63,17 @@ public class NpcController : MonoBehaviour
         {
             if (!movementInputs.jumpInput && npcCore.currentAnimStateInfo.normalizedTime >= 1 && npcCore.stateList.wallState.isHanging)
             {
-                Debug.Log("npc is climbing");
-                StartCoroutine(HandleJumpInput());
+                if (targetPos.y > navigationSystem.trainBounds.roofLevel)
+                {
+                    StartCoroutine(HandleJumpInput());
+                }
+                else
+                {
+                    StartCoroutine(HandleCrouchInput());
+                }
             }
         }
+
 
         //jumping to next roof
         if (pathToTarget[0].type == NavigationSystem.PosType.RoofEdge && navigationSystem.distanceToNextPos < navigationSystem.closeEnoughToNextPos)
@@ -93,5 +100,11 @@ public class NpcController : MonoBehaviour
         movementInputs.jumpInput = true;
         yield return null;
         movementInputs.jumpInput = false;
+    }
+    private IEnumerator HandleCrouchInput()
+    {
+        movementInputs.crouchInput = true;
+        yield return null;
+        movementInputs.crouchInput = false;
     }
 }

@@ -25,6 +25,7 @@ public abstract class StateCore : MonoBehaviour
     public CarriageClimbingBounds currentClimbBounds { get; set; }
 
     protected float normalizedAnimTime;
+    public bool isDropping {  get; set; }
     protected void Set(State newState)
     {
         machine.Set(newState);

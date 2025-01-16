@@ -96,6 +96,14 @@ public class CarriageClimbingBounds : Bounds
     private void OnTriggerStay2D(Collider2D collision)
     {
         HangActivationThresholdDetection(collision);
+        var core = collision.gameObject.GetComponentInParent<StateCore>();
+        if (core == null) return;
+
+        if (core.movementInputs.crouchInput) core.isDropping = true;
+        if (core.isDropping)
+        {
+            core.currentClimbBounds = null;
+        }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -107,6 +115,7 @@ public class CarriageClimbingBounds : Bounds
         {
             var core = collision.gameObject.GetComponentInParent<StateCore>();
             if (core == null) return;
+            core.isDropping = false;
             core.currentClimbBounds = null;
         }
 

@@ -37,7 +37,6 @@ public class PlayerMovement : StateCore
         {
             if (collisionChecker.grounded || movementInputs.adjustingCollider)
             {
-
                 Set(stateList.groundState);
             }
             else
@@ -45,7 +44,6 @@ public class PlayerMovement : StateCore
                 Set(stateList.airborneState);
             }
         }
-
     }
 
     private void GetPlayerInputs()
