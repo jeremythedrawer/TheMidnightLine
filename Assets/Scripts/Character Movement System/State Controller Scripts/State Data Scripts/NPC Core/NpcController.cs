@@ -32,7 +32,8 @@ public class NpcController : MonoBehaviour
         navigationSystem.SetPath(currentPos, targetPos);
 
         movementInputs.runInput = true;
-        bool jumpedToClimbBounds = false;
+
+        //handle direction
         if (currentPos.x < pathToTarget[0].value.x)
         {
             movementInputs.walkInput = 1;
@@ -42,16 +43,12 @@ public class NpcController : MonoBehaviour
             movementInputs.walkInput = -1;
         }
 
-        if (pathToTarget[0].type == NavigationSystem.PosType.ClimbingBound)
+        //handle jump
+        if (pathToTarget[0].type == NavigationSystem.PosType.ClimbingBound) // next position is climbing bounds
         {
-            if (npcCore.currentClimbBounds == null && !jumpedToClimbBounds)
+            if (npcCore.currentClimbBounds == null && !movementInputs.jumpInput)
             {
-                jumpedToClimbBounds = true;
-                movementInputs.jumpInput = true;
-            }
-            else
-            {
-                movementInputs.jumpInput = false;
+                StartCoroutine(HandleJumpInput());
             }
             if (npcCore.currentClimbBounds != null)
             {
@@ -64,6 +61,10 @@ public class NpcController : MonoBehaviour
             {
                 StartCoroutine(HandleJumpInput());
             }
+        }
+        if (pathToTarget[0].type == NavigationSystem.PosType.RoofEdge && navigationSystem.distanceToNextPos < navigationSystem.closeEnoughToNextPos)
+        {
+            StartCoroutine(HandleJumpInput());
         }
     }
 

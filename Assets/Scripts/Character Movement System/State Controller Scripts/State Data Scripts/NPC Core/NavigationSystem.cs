@@ -15,8 +15,10 @@ public class NavigationSystem : MonoBehaviour
     public enum PosType
     {
         InsideBound,
+        OutsideBound,
         Gangway,
         ClimbingBound,
+        RoofEdge,
         Target
     }
 
@@ -38,8 +40,8 @@ public class NavigationSystem : MonoBehaviour
     private CarriageClimbingBounds chosenClimbingBounds;
     private ActivateCarriageBounds chosenInsideBounds;
 
-    private float closeEnoughToNextPos = 0.5f;
-    private float distanceToNextPos;
+    public float closeEnoughToNextPos { get; private set; } = 0.5f;
+    public float distanceToNextPos {  get; private set; }
 
     public void SetPath(Vector2 currentPos, Vector2 targetPos)
     {
@@ -85,16 +87,22 @@ public class NavigationSystem : MonoBehaviour
         }
         else if (currentGangwayBounds != null) // Agent in Gangway Bounds
         {
-            FindChosenClimbBounds(chosenGangway);
+            if (chosenGangway != null)
+            {
+                FindChosenClimbBounds(chosenGangway);
+                
+            }
+
             if (chosenClimbingBounds != null && currentPos.y < trainBounds.roofLevel)
             {
                 AddToPath(chosenClimbingBounds.transform.position, PosType.ClimbingBound);
             }
-            else
+            else if (chosenGangway != null)
             {
                 FindChosenInsideBounds(chosenGangway, currentPos.x, targetPos.x);
                 AddToPath(new Vector2 (chosenInsideBounds.transform.position.x, currentPos.y), PosType.InsideBound);
             }
+
             AddToPath(targetPos, PosType.Target);
         }
         else if (currentOutsideBounds != null) // Agent in Outside Bounds
@@ -102,6 +110,17 @@ public class NavigationSystem : MonoBehaviour
 
             if (targetPos.y >= trainBounds.roofLevel)
             {
+                if (!currentOutsideBounds.playerInActiveArea)
+                {
+                    if (targetPos.x > currentPos.x)
+                    {
+                        AddToPath(new Vector2(currentOutsideBounds.rightEdge, currentPos.y), PosType.RoofEdge);
+                    }
+                    else
+                    {
+                        AddToPath(new Vector2(currentOutsideBounds.leftEdge, currentPos.y), PosType.RoofEdge);
+                    }
+                }
                 AddToPath(targetPos, PosType.Target);
             }
             else
@@ -120,17 +139,6 @@ public class NavigationSystem : MonoBehaviour
         pathIsSet = true;
     }
 
-    private void DrawDebugPath(Vector2 currentPos)
-    {
-        Vector2 pos = currentPos;
-
-        for (int i = 0; i < pathToTarget.ToArray().Length; i++)
-        {
-            Vector2 nextPos = pathToTarget[i].value;
-            Debug.DrawLine(pos, nextPos, Color.magenta);
-            pos = nextPos;
-        }
-    }
 
     private void FindChosenClimbBounds(GangwayBounds chosenGangway)
     {
@@ -199,5 +207,18 @@ public class NavigationSystem : MonoBehaviour
     private void AddToPath(Vector2 position, PosType type)
     {
         pathToTarget.Add(new NamedPosition(position, type));
+    }
+
+    private void DrawDebugPath(Vector2 currentPos)
+    {
+        Vector2 pos = currentPos;
+
+        for (int i = 0; i < pathToTarget.ToArray().Length; i++)
+        {
+            Vector2 nextPos = pathToTarget[i].value;
+            Debug.DrawLine(pos, nextPos, Color.magenta);
+            Debug.DrawLine(nextPos, nextPos + (Vector2.up * 0.5f), Color.cyan);
+            pos = nextPos;
+        }
     }
 }
