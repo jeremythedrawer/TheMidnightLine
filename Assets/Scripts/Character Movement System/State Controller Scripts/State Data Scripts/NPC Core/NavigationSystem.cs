@@ -86,7 +86,7 @@ public class NavigationSystem : MonoBehaviour
         else if (currentGangwayBounds != null) // Agent in Gangway Bounds
         {
             FindChosenClimbBounds(chosenGangway);
-            if (chosenClimbingBounds != null)
+            if (chosenClimbingBounds != null && currentPos.y < trainBounds.roofLevel)
             {
                 AddToPath(chosenClimbingBounds.transform.position, PosType.ClimbingBound);
             }
