@@ -19,10 +19,13 @@ public class NpcController : MonoBehaviour
 
     private Vector2 currentPos;
     private Vector2 targetPos;
-    private float colliderCenter; 
+    private float colliderCenter;
+
+    private float originalrunSpeed;
 
     private void Start()
     {
+        originalrunSpeed = npcCore.characterStats.runSpeed;
         StartCoroutine(UpdatePlayerPosition());
     }
 
@@ -78,7 +81,15 @@ public class NpcController : MonoBehaviour
         //jumping to next roof
         if (pathToTarget[0].type == NavigationSystem.PosType.RoofEdge && navigationSystem.distanceToNextPos < navigationSystem.closeEnoughToNextPos)
         {
+            float boostSpeed = originalrunSpeed * 1.1f;
+            npcCore.characterStats.runSpeed = boostSpeed;
             StartCoroutine(HandleJumpInput());
+        }
+        else
+        {
+            float t = 0;
+            t += Time.deltaTime/0.5f;
+            npcCore.characterStats.runSpeed = Mathf.Lerp(npcCore.characterStats.runSpeed, originalrunSpeed, Mathf.Clamp01(t));
         }
     }
 

@@ -27,7 +27,7 @@ public class AttackState : State
 
     private void SelectState()
     {
-        if ((core.currentClimbBounds != null || stateList.wallState.isClimbing == true) && !movementInputs.crouchInput)
+        if ((core.currentClimbBounds?.hangActivated ?? false || stateList.wallState.isClimbing == true) && !movementInputs.crouchInput) // checks if climb bounds is not null, if it is hangActivated returns false using "??"
         {
             Set(stateList.wallState);
         }

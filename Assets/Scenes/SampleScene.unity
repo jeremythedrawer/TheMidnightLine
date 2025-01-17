@@ -787,10 +787,6 @@ PrefabInstance:
       propertyPath: m_Name
       value: Gangway 2
       objectReference: {fileID: 0}
-    - target: {fileID: 2662104954679093991, guid: 5c0e581121940e14a9cb0746c95278bc, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.09
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1152,11 +1148,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 779573762761806031, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.96
+      value: 55.1875
       objectReference: {fileID: 0}
     - target: {fileID: 779573762761806031, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 8.15
+      value: 2.8125
       objectReference: {fileID: 0}
     - target: {fileID: 779573762761806031, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1190,13 +1186,9 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 6574141234835530042, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
-      propertyPath: m_SleepingMode
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 6655092737606140929, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: collisionGizmos
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 8451971257262523574, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_Name
@@ -1290,14 +1282,6 @@ PrefabInstance:
     - target: {fileID: 5029582999761189244, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5923958350039707715, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6.7
-      objectReference: {fileID: 0}
-    - target: {fileID: 6394926755933949657, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 6.7
       objectReference: {fileID: 0}
     - target: {fileID: 8761142624639553961, guid: 000ae4dae132f1f4fbcf79c886de0566, type: 3}
       propertyPath: trainMovement
@@ -1730,7 +1714,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 58726244203209126, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: m_Size.y
-      value: 3.04
+      value: 2.97
       objectReference: {fileID: 0}
     - target: {fileID: 410805700643269504, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: trainBounds
@@ -1762,7 +1746,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3655542353893840654, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: jumpSpeed
-      value: 18
+      value: 20
       objectReference: {fileID: 0}
     - target: {fileID: 3655542353893840654, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: walkSpeed
@@ -1774,11 +1758,11 @@ PrefabInstance:
       objectReference: {fileID: 1658121709}
     - target: {fileID: 5454002635820018757, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 18.3
+      value: 28.3125
       objectReference: {fileID: 0}
     - target: {fileID: 5454002635820018757, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.22
+      value: 7.5
       objectReference: {fileID: 0}
     - target: {fileID: 5454002635820018757, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1842,27 +1826,27 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9091029623637560231, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: cbcThreshold
-      value: 0.546
+      value: 0.783
       objectReference: {fileID: 0}
     - target: {fileID: 9091029623637560231, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: TotalOffset.y
-      value: -0.04
+      value: 0.01
       objectReference: {fileID: 0}
     - target: {fileID: 9091029623637560231, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: collisionGizmos
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9091029623637560231, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: wallXSensorScale
-      value: -0.269
+      value: -0.274
       objectReference: {fileID: 0}
     - target: {fileID: 9091029623637560231, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: groundedThreshold
-      value: -0.052
+      value: -0.061
       objectReference: {fileID: 0}
     - target: {fileID: 9091029623637560231, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: groundXSensorScale
-      value: -0.295
+      value: -0.283
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

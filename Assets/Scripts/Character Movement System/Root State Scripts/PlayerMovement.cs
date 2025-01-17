@@ -29,7 +29,7 @@ public class PlayerMovement : StateCore
     }
     void SelectState()
     {
-        if ((currentClimbBounds != null || stateList.wallState.isClimbing == true) && !movementInputs.crouchInput)
+        if ((currentClimbBounds?.hangActivated ?? false || stateList.wallState.isClimbing == true) && !movementInputs.crouchInput)
         {
             Set(stateList.wallState);
         }
