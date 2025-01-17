@@ -23,6 +23,11 @@ public class GroundState : State
         BHCCorrection();
         HeavyLand();
         SelectState();
+
+        if (movementInputs.meleeInput)
+        {
+            isAttacking = true;
+        }
     }
 
     public override void FixedDo()

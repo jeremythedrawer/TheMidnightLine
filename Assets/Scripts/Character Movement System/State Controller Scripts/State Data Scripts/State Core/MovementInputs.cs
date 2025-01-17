@@ -103,6 +103,11 @@ public class MovementInputs : MonoBehaviour
             float t = cbcSmoothingCurrent / cbcSmoothing;
             currentOffsetY = Mathf.Lerp(core.collisionChecker.characterBoxCollider.offset.y, 0.0f, t);
 
+            float direction = Mathf.Sign(walkInput);
+            float boostAmount = 0.5f;
+            float xVelocityBoost = core.body.linearVelocity.x + (boostAmount * direction);
+            core.body.linearVelocityX = xVelocityBoost;
+
             if (Mathf.Abs(currentOffsetY) < 0.00001f)
             {
                 adjustingCollider = false;

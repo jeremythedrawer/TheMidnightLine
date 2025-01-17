@@ -9,13 +9,11 @@ public class NpcController : MonoBehaviour
 
     [Header("References")]
     public NPCCore npcCore;
-    public NavigationSystem navigationSystem;
     public Transform playerTransform;
     public BoxCollider2D playerCollider;
-    public BoxCollider2D thisCollider;
     public MovementInputs movementInputs;
 
-    public List<NavigationSystem.NamedPosition> pathToTarget => navigationSystem.pathToTarget;
+    public List<NavigationSystem.NamedPosition> pathToTarget => npcCore.navigationSystem.pathToTarget;
 
     private Vector2 currentPos;
     private Vector2 targetPos;
@@ -29,12 +27,25 @@ public class NpcController : MonoBehaviour
         StartCoroutine(UpdatePlayerPosition());
     }
 
-    public void FollowAttackPath()
+    public void AttackInputs()
     {
-        colliderCenter = thisCollider.size.y / 2f;
+        if (npcCore.behaviourParams.isArmDistance)
+        {
+            movementInputs.meleeInput = true;
+        }
+        else
+        {
+            movementInputs.meleeInput = false;
+            FollowAttackPath();
+        }
+    }
+
+    private void FollowAttackPath()
+    {
+        colliderCenter = npcCore.boxCollider2D.size.y / 2f;
         currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, colliderCenter);
 
-        navigationSystem.SetPath(currentPos, targetPos, colliderCenter);
+        npcCore.navigationSystem.SetPath(currentPos, targetPos, colliderCenter);
 
         movementInputs.runInput = true;
 
@@ -66,7 +77,7 @@ public class NpcController : MonoBehaviour
         {
             if (!movementInputs.jumpInput && npcCore.currentAnimStateInfo.normalizedTime >= 1 && npcCore.stateList.wallState.isHanging)
             {
-                if (targetPos.y > navigationSystem.trainBounds.roofLevel)
+                if (targetPos.y > npcCore.navigationSystem.trainBounds.roofLevel)
                 {
                     StartCoroutine(HandleJumpInput());
                 }
@@ -79,7 +90,7 @@ public class NpcController : MonoBehaviour
 
 
         //jumping to next roof
-        if (pathToTarget[0].type == NavigationSystem.PosType.RoofEdge && navigationSystem.distanceToNextPos < navigationSystem.closeEnoughToNextPos)
+        if (pathToTarget[0].type == NavigationSystem.PosType.RoofEdge && npcCore.navigationSystem.distanceToNextPos < npcCore.navigationSystem.closeEnoughToNextPos)
         {
             float boostSpeed = originalrunSpeed * 1.1f;
             npcCore.characterStats.runSpeed = boostSpeed;
@@ -91,6 +102,8 @@ public class NpcController : MonoBehaviour
             t += Time.deltaTime/0.5f;
             npcCore.characterStats.runSpeed = Mathf.Lerp(npcCore.characterStats.runSpeed, originalrunSpeed, Mathf.Clamp01(t));
         }
+
+
     }
 
     public void FollowStalkPath()

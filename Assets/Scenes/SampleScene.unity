@@ -145,17 +145,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bc8f22ea2c4317a469a4b19097775fcd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &284894914 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 410805700643269504, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
-  m_PrefabInstance: {fileID: 8408415366794038343}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 106142103}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f5e1c7bd6528ad429cb7d5c64625f63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!114 &284894919 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 6190765102839442715, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
@@ -181,10 +170,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   updatePlayerPosTicRate: 1
   npcCore: {fileID: 284894913}
-  navigationSystem: {fileID: 284894914}
   playerTransform: {fileID: 4588777139182120250}
   playerCollider: {fileID: 1658121709}
-  thisCollider: {fileID: 1190105507}
   movementInputs: {fileID: 284894919}
 --- !u!1 &330585543
 GameObject:
@@ -1734,7 +1721,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1760437334605092239, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3089367829224165299, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: npcController
@@ -1797,9 +1784,21 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5769503658216925530, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
+      propertyPath: npcCore
+      value: 
+      objectReference: {fileID: 284894913}
+    - target: {fileID: 5769503658216925530, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: seeGizmos
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 5769503658216925530, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
+      propertyPath: armDistance
+      value: 2.03
+      objectReference: {fileID: 0}
+    - target: {fileID: 5769503658216925530, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
+      propertyPath: thisBoxCollider
+      value: 
+      objectReference: {fileID: 1190105507}
     - target: {fileID: 6503016544083589490, guid: b654dfa617bb48e4fb320624fba76f0c, type: 3}
       propertyPath: m_GravityScale
       value: 6

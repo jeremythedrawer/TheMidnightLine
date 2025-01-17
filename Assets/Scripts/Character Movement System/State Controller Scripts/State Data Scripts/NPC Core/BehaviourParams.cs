@@ -1,8 +1,10 @@
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class BehaviourParams : MonoBehaviour
 {
+    [Header("References")]
+    public NPCCore npcCore;
+
     [Header("Radius Thesholds")]
     public float armDistance = 2f;
     public float awareOfPlayerDistance = 10f;
@@ -12,7 +14,7 @@ public class BehaviourParams : MonoBehaviour
 
 
     //parameter bools
-    public bool armDistanceFromPlayer { get; private set; }
+    public bool isArmDistance { get; private set; }
     public bool awareOfPlayer { get; private set; }
     public bool playerIsFacingNPC { get; private set; }
     public bool isCarriageEmpty { get; private set; }
@@ -25,7 +27,7 @@ public class BehaviourParams : MonoBehaviour
     public GameObject player { get; private set; }
 
     public bool seeGizmos;
-
+    
     private SpriteRenderer playerSpriteRenderer;
 
     private Camera cam;
@@ -39,8 +41,8 @@ public class BehaviourParams : MonoBehaviour
         if(seeGizmos)
         {
             if (Application.isPlaying) return;
-            Helpers.DrawCircle(transform.position, armDistance, Color.red, 36, true);
-            Helpers.DrawCircle(transform.position, awareOfPlayerDistance, Color.yellow, 36, true);
+            Helpers.DrawCircle(npcCore.boxCollider2D.bounds.center, armDistance, Color.red, 36, true);
+            Helpers.DrawCircle(npcCore.boxCollider2D.bounds.center, awareOfPlayerDistance, Color.yellow, 36, true);
         }
 #endif
     }
@@ -71,8 +73,8 @@ public class BehaviourParams : MonoBehaviour
 
     private void FixedUpdate()
     {
-        ChechRadiusThreshold(armDistance, armDistanceFromPlayer);
-        ChechRadiusThreshold(awareOfPlayerDistance, awareOfPlayer);
+        isArmDistance = ChechRadiusThreshold(armDistance);
+        awareOfPlayer = ChechRadiusThreshold(awareOfPlayerDistance);
         
     }
 
@@ -96,18 +98,10 @@ public class BehaviourParams : MonoBehaviour
         }
     }
 
-    public void ChechRadiusThreshold(float distanceThreshold, bool parameter)
+    public bool ChechRadiusThreshold(float distanceThreshold)
     {
         Collider2D hit = Physics2D.OverlapCircle(transform.position, distanceThreshold, playerLayer);
-
-        if (hit != null)
-        {
-            parameter = true;
-        }
-        else
-        {
-            parameter = false;
-        }
+        return hit != null;
     }
 
     public void CheckInCameraView()
@@ -180,6 +174,6 @@ public class BehaviourParams : MonoBehaviour
 
     private void GizmosLines()
     {
-        Helpers.DrawCircle(transform.position, armDistance, armDistanceFromPlayer ? Color.red : Color.green, 8, false);
+        Helpers.DrawCircle(npcCore.boxCollider2D.bounds.center, armDistance, isArmDistance ? Color.green : Color.red, 8, false);
     }
 }
