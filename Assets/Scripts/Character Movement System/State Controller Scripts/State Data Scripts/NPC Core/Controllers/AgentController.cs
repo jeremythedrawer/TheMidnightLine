@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class NpcController : MonoBehaviour
+public class AgentController : NPCController
 {
     [Header("Parameters")]
     public float updatePlayerPosTicRate = 1f;
@@ -12,9 +12,9 @@ public class NpcController : MonoBehaviour
     public Transform playerTransform;
     public BoxCollider2D playerCollider;
     public MovementInputs movementInputs;
+    public AttackPath attackPath; 
 
-    public List<NavigationSystem.NamedPosition> pathToTarget => npcCore.navigationSystem.pathToTarget;
-
+    public List<PathData.NamedPosition> pathToTarget => attackPath.pathData.pathToTarget;
     private Vector2 currentPos;
     private Vector2 targetPos;
     private float colliderCenter;
@@ -45,7 +45,7 @@ public class NpcController : MonoBehaviour
         colliderCenter = npcCore.boxCollider2D.size.y / 2f;
         currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, colliderCenter);
 
-        npcCore.navigationSystem.SetPath(currentPos, targetPos, colliderCenter);
+        attackPath.SetAttackPath(currentPos, targetPos, colliderCenter); //cant find attackPath from pathlist
 
         movementInputs.runInput = true;
 
@@ -60,7 +60,7 @@ public class NpcController : MonoBehaviour
         }
 
         //handle jump
-        if (pathToTarget[0].type == NavigationSystem.PosType.ClimbingBound) // next position is climbing bounds
+        if (pathToTarget[0].type == PathData.PosType.ClimbingBound) // next position is climbing bounds
         {
             if (npcCore.currentClimbBounds == null && !movementInputs.jumpInput)
             {
@@ -77,7 +77,7 @@ public class NpcController : MonoBehaviour
         {
             if (!movementInputs.jumpInput && npcCore.currentAnimStateInfo.normalizedTime >= 1 && npcCore.stateList.wallState.isHanging)
             {
-                if (targetPos.y > npcCore.navigationSystem.trainBounds.roofLevel)
+                if (targetPos.y > attackPath.pathData.trainBounds.roofLevel)
                 {
                     StartCoroutine(HandleJumpInput());
                 }
@@ -90,7 +90,7 @@ public class NpcController : MonoBehaviour
 
 
         //jumping to next roof
-        if (pathToTarget[0].type == NavigationSystem.PosType.RoofEdge && npcCore.navigationSystem.distanceToNextPos < npcCore.navigationSystem.closeEnoughToNextPos)
+        if (pathToTarget[0].type == PathData.PosType.RoofEdge && attackPath.distanceToNextPos < attackPath.closeEnoughToNextPos)
         {
             float boostSpeed = originalrunSpeed * 1.1f;
             npcCore.characterStats.runSpeed = boostSpeed;
@@ -106,11 +106,15 @@ public class NpcController : MonoBehaviour
 
     }
 
-    public void FollowStalkPath()
+    private void FollowStalkPath()
     {
 
     }
 
+    private void FollowHiddenPath()
+    {
+
+    }
     private IEnumerator UpdatePlayerPosition()
     {
         while (true)

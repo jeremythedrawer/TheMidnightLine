@@ -89,10 +89,10 @@ public class GangwayBounds : Bounds
     {
         if (collision.gameObject.CompareTag("Agent Collider"))
         {
-            var navSystem = collision.gameObject.GetComponentInParent<NavigationSystem>();
-            if (navSystem != null)
+            var pathData = collision.gameObject.GetComponentInParent<PathData>();
+            if (pathData != null)
             {
-                navSystem.currentGangwayBounds = this;
+                pathData.currentGangwayBounds = this;
             }
         }
     }
@@ -108,11 +108,11 @@ public class GangwayBounds : Bounds
     {
         if (collision.gameObject.CompareTag("Agent Collider"))
         {
-            var navSystem = collision.gameObject.GetComponentInParent<NavigationSystem>();
+            var pathData = collision.gameObject.GetComponentInParent<PathData>();
 
-            if (navSystem != null)
+            if (pathData != null)
             {
-                navSystem.currentGangwayBounds = null;
+                pathData.currentGangwayBounds = null;
             }
         }
     }

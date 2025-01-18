@@ -11,7 +11,7 @@ public class AttackState : State
     {
         SelectState();
 
-        npcCore.npcController.AttackInputs();
+        npcCore.agentController.AttackInputs();
 
         if (agentMovement.isHiding)
         {

@@ -58,7 +58,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a21a04ebc2d8f8a4db5541beda504d2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wallState: {fileID: 0}
 --- !u!114 &3745649641116699742
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -89,9 +88,9 @@ GameObject:
   - component: {fileID: 6190765102839442715}
   - component: {fileID: 3072139848597519722}
   - component: {fileID: 2087542226778429504}
-  - component: {fileID: 410805700643269504}
   - component: {fileID: 5769503658216925530}
   - component: {fileID: 5816397449932316439}
+  - component: {fileID: 6356972868755096491}
   m_Layer: 0
   m_Name: Henchman
   m_TagString: Untagged
@@ -132,7 +131,7 @@ Rigidbody2D:
   m_Mass: 1
   m_LinearDamping: 0
   m_AngularDamping: 0.05
-  m_GravityScale: 1
+  m_GravityScale: 6
   m_Material: {fileID: 0}
   m_IncludeLayers:
     serializedVersion: 2
@@ -141,8 +140,8 @@ Rigidbody2D:
     serializedVersion: 2
     m_Bits: 0
   m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
+  m_SleepingMode: 0
+  m_CollisionDetection: 1
   m_Constraints: 4
 --- !u!212 &7636991861150971996
 SpriteRenderer:
@@ -243,7 +242,9 @@ MonoBehaviour:
   healthSystem: {fileID: 3072139848597519722}
   stateList: {fileID: 5816397449932316439}
   behaviourParams: {fileID: 5769503658216925530}
-  navigationSystem: {fileID: 410805700643269504}
+  agentController: {fileID: 6356972868755096491}
+  attackPath: {fileID: 0}
+  bystanderController: {fileID: 0}
 --- !u!114 &3655542353893840654
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -256,9 +257,9 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5b2a792a91855a143880af7978d73e34, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  runSpeed: 8
-  walkSpeed: 4
-  jumpSpeed: 30
+  runSpeed: 6
+  walkSpeed: 2
+  jumpSpeed: 20
   health: 80
   meleeStrength: 10
 --- !u!114 &9091029623637560231
@@ -277,14 +278,14 @@ MonoBehaviour:
     serializedVersion: 2
     m_Bits: 128
   characterBoxCollider: {fileID: 58726244203209126}
-  collisionGizmos: 1
-  TotalOffset: {x: 0, y: 0}
+  collisionGizmos: 0
+  TotalOffset: {x: 0, y: 0.01}
   YOffset: 0
   YSensorScale: 0.135
-  groundedThreshold: -0.02
-  groundXSensorScale: -0.5
-  wallXSensorScale: -0.51
-  cbcThreshold: 0.5
+  groundedThreshold: -0.061
+  groundXSensorScale: -0.283
+  wallXSensorScale: -0.274
+  cbcThreshold: 0.783
   bhcThreshold: 0
   cbcEnabled: 0
 --- !u!114 &6190765102839442715
@@ -327,27 +328,6 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   meleeState: {fileID: 738171133792652513}
---- !u!114 &410805700643269504
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1760437334605092239}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7f5e1c7bd6528ad429cb7d5c64625f63, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  updatePlayerPosTicRate: 1
-  stopMovementBuffer: 1
-  movementInputs: {fileID: 6190765102839442715}
-  playerTransform: {fileID: 0}
-  climbingLayer:
-    serializedVersion: 2
-    m_Bits: 1024
-  boxCollider: {fileID: 58726244203209126}
-  playerCollider: {fileID: 0}
 --- !u!114 &5769503658216925530
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -360,11 +340,13 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8814db1c8dedcdf498ad18ded07b9471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  armDistance: 2
+  npcCore: {fileID: 3089367829224165299}
+  armDistance: 1.69
   awareOfPlayerDistance: 10
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
+  seeGizmos: 0
 --- !u!114 &5816397449932316439
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -421,6 +403,23 @@ MonoBehaviour:
   panicState: {fileID: 0}
   sacrificeState: {fileID: 0}
   checkTicketState: {fileID: 0}
+--- !u!114 &6356972868755096491
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760437334605092239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 898ffe0e2d007de4f90320d18ad7e8c0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  updatePlayerPosTicRate: 1
+  npcCore: {fileID: 3089367829224165299}
+  playerTransform: {fileID: 0}
+  playerCollider: {fileID: 0}
+  movementInputs: {fileID: 6190765102839442715}
 --- !u!1 &2298445315329970892
 GameObject:
   m_ObjectHideFlags: 0
@@ -729,7 +728,7 @@ Transform:
   m_GameObject: {fileID: 5923783712963540814}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.15, y: 1.52, z: 0}
+  m_LocalPosition: {x: 0.15, y: 1.49, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -779,7 +778,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.27, y: 3.01}
+  m_Size: {x: 0.71, y: 2.97}
   m_EdgeRadius: 0
 --- !u!1 &6844904609606789410
 GameObject:
@@ -935,7 +934,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a21a04ebc2d8f8a4db5541beda504d2c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  wallState: {fileID: 0}
 --- !u!114 &6365366477955378623
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -71,24 +71,24 @@ public class ActivateCarriageBounds : Bounds
 
         if (collision.gameObject.CompareTag("Agent Collider"))
         {
-            if (this.CompareTag("Inside Bounds"))
+            var pathData = collision.gameObject.GetComponentInParent<PathData>();
+            if (pathData != null)
             {
-                var navSystem = collision.gameObject.GetComponentInParent<NavigationSystem>();
-                if (navSystem != null)
+                if (this.CompareTag("Inside Bounds"))
                 {
-                    navSystem.currentInsideBounds = this;
+                    pathData.currentInsideBounds = this;
+                }
+                else if (this.CompareTag("Outside Bounds"))
+                {
+                    pathData.currentOutsideBounds = this;
                 }
             }
-
-            if (this.CompareTag("Outside Bounds"))
+            else
             {
-                var navSystem = collision.gameObject.GetComponentInParent<NavigationSystem>();
-                if (navSystem != null)
-                {
-                    navSystem.currentOutsideBounds = this;
-                }
+                Debug.LogWarning("no navsystem was found");
             }
         }
+
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -100,12 +100,11 @@ public class ActivateCarriageBounds : Bounds
         }
         if (collision.gameObject.CompareTag("Agent Collider"))
         {
-            var navSystem = collision.gameObject.GetComponentInParent<NavigationSystem>();
-
-            if(navSystem != null)
+            var pathData = collision.gameObject.GetComponentInParent<PathData>();
+            if (pathData != null)
             {
-                navSystem.currentInsideBounds = null;
-                navSystem.currentOutsideBounds = null;
+                pathData.currentInsideBounds = null;
+                pathData.currentOutsideBounds = null;
             }
         }
         if (collision.gameObject.CompareTag("Bystander Collider"))

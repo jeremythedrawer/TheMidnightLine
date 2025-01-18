@@ -6,6 +6,7 @@ public class StateSelectionEditor : Editor
 {
     public override void OnInspectorGUI()
     {
+
         StateList stateList = (StateList)target;
 
         SerializedObject serializedObject = new SerializedObject(stateList);
@@ -41,7 +42,6 @@ public class StateSelectionEditor : Editor
         if (stateList.sacrifice) EditorGUILayout.PropertyField(serializedObject.FindProperty("sacrificeState"), new GUIContent("Sacrifice State"));
         if (stateList.checkTicket) EditorGUILayout.PropertyField(serializedObject.FindProperty("checkTicketState"), new GUIContent("Check Ticket State"));
 
-        // Apply changes to the serialized object
         serializedObject.ApplyModifiedProperties();
     }
 }

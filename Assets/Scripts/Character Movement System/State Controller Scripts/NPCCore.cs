@@ -4,8 +4,10 @@ public abstract class NPCCore : StateCore
 {
     [Header("NPC Core Data")]
     public BehaviourParams behaviourParams;
-    public NavigationSystem navigationSystem;
-    public NpcController npcController;
+    //agent
+    [HideInInspector] public AgentController agentController;
+    //bystander
+    [HideInInspector] public BystanderController bystanderController;
     public void SetupNPCInstances()
     {
         State[] allChildStates = GetComponentsInChildren<State>();

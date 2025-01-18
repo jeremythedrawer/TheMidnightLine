@@ -17,7 +17,6 @@ public abstract class State : MonoBehaviour
     protected AnimStateStrings animStates => core.animStates;
 
     protected BehaviourParams behaviourParams => npcCore.behaviourParams;
-    protected NavigationSystem navigationSystem => npcCore.navigationSystem;
 
     protected float initialGravityScale => core.initialGravityScale;
 
