@@ -36,6 +36,4 @@ public class PathData : MonoBehaviour
             this.type = type;
         }
     }
-
-
 }

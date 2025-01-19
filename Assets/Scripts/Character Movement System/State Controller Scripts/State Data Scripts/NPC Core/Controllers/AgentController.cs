@@ -12,6 +12,8 @@ public class AgentController : NPCController
     public Transform playerTransform;
     public BoxCollider2D playerCollider;
     public MovementInputs movementInputs;
+
+    [Header ("Paths")]
     public AttackPath attackPath; 
 
     public List<PathData.NamedPosition> pathToTarget => attackPath.pathData.pathToTarget;
