@@ -29,6 +29,8 @@ public class BystanderMovement : StateCore
         SelectState();
 
         state.DoBranch();
+
+        normalizedAnimTime = currentAnimStateInfo.normalizedTime;
     }
 
     private void FixedUpdate()

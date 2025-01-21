@@ -1,3 +1,6 @@
+using System.Collections;
+using System.Threading;
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class CalmState : State
@@ -15,19 +18,14 @@ public class CalmState : State
     public int breathLoops = 5;
 
     private int breathCount = 0;
-    private bool isBlinking = false;
+
     public override void Enter()
     {
     }
     public override void Do()
     {
-        IdleBehaviours();
+        StartCoroutine(IdleAnimSequences());
         SelectState();
-
-        if (bystanderMovement.isPanic)
-        {
-            isComplete = true;
-        }
     }
     public override void FixedDo()
     {
@@ -35,6 +33,7 @@ public class CalmState : State
     public override void Exit()
     {
         base.Exit();
+        StopAllCoroutines();
     }
 
     private void SelectState()
@@ -42,33 +41,33 @@ public class CalmState : State
         Set(groundState);
     }
 
-
-    private void IdleBehaviours()
+    private IEnumerator IdleAnimSequences()
     {
-        if (!core.stateList.idleState) return;
-
-        if (!isBlinking && bystanderMovement.currentAnimStateInfo.IsName(animStates.calmBreathingAnimState))
+        if (!playingAnimation)
         {
-            if (bystanderMovement.currentAnimStateInfo.normalizedTime >= 1f)
+            if (breathCount < breathLoops)
             {
+                playingAnimation = true;
+                yield return StartCoroutine(PlayAnimationCoroutine(animStates.calmBreathingAnimState));
                 breathCount++;
-                animator.Play(animStates.calmBreathingAnimState, 0, 0);
-
-                if (breathCount >= breathLoops)
-                {
-                    breathCount = 0;
-                    isBlinking = true;
-                    PlayAnimation(animStates.calmBlinkingAnimState);
-                }
+            }
+            else
+            {
+                playingAnimation = true;
+                yield return StartCoroutine(PlayAnimationCoroutine(animStates.calmBlinkingAnimState));
+                breathCount = 0;
             }
         }
-        else if (isBlinking && bystanderMovement.currentAnimStateInfo.IsName(animStates.calmBlinkingAnimState))
+    }
+
+    private IEnumerator PlayAnimationCoroutine(string animState)
+    {
+
+        while (core.currentAnimStateInfo.normalizedTime < 1)
         {
-            if (bystanderMovement.currentAnimStateInfo.normalizedTime >= 1f)
-            {
-                isBlinking = false;
-                PlayAnimation(animStates.calmBreathingAnimState);
-            }
-        } 
+            yield return null;
+        }
+        animator.Play(animState, 0, 0);
+        playingAnimation = false;
     }
 }
