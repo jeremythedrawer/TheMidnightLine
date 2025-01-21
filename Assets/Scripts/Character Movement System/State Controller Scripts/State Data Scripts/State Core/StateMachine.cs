@@ -15,7 +15,6 @@ public class StateMachine
             state = newState;
             state.Initialise(this);
             state.Enter();
-
             forceState = false;
         }
     }

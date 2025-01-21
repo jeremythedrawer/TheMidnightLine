@@ -12,17 +12,14 @@ public class AttackState : State
         SelectState();
 
         npcCore.agentController.AttackInputs();
-
-        if (agentMovement.isHiding)
-        {
-            isComplete = true;
-        }
     }
     public override void FixedDo()
     {
     }
     public override void Exit()
     {
+        base.Exit();
+        StopAllCoroutines();
     }
 
     private void SelectState()

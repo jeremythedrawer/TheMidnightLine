@@ -7,7 +7,6 @@ public class BehaviourParams : MonoBehaviour
 
     [Header("Radius Thesholds")]
     public float armDistance = 2f;
-    public float awareOfPlayerDistance = 10f;
 
     [Header("Player Data")]
     public LayerMask playerLayer;
@@ -15,7 +14,6 @@ public class BehaviourParams : MonoBehaviour
 
     //parameter bools
     public bool isArmDistance { get; private set; }
-    public bool awareOfPlayer { get; private set; }
     public bool playerIsFacingNPC { get; private set; }
     public bool isCarriageEmpty { get; private set; }
     public bool inCameraView { get; private set; }
@@ -42,7 +40,6 @@ public class BehaviourParams : MonoBehaviour
         {
             if (Application.isPlaying) return;
             Helpers.DrawCircle(npcCore.boxCollider2D.bounds.center, armDistance, Color.red, 36, true);
-            Helpers.DrawCircle(npcCore.boxCollider2D.bounds.center, awareOfPlayerDistance, Color.yellow, 36, true);
         }
 #endif
     }
@@ -74,7 +71,6 @@ public class BehaviourParams : MonoBehaviour
     private void FixedUpdate()
     {
         isArmDistance = ChechRadiusThreshold(armDistance);
-        awareOfPlayer = ChechRadiusThreshold(awareOfPlayerDistance);
         
     }
 

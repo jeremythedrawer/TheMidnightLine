@@ -9,15 +9,19 @@ public class HidingState : State
     }
     public override void Do()
     {
-        if (agentMovement.isAttacking || agentMovement.isStalking)
-        {
-            isComplete = true;
-        }
+        SelectState();
     }
     public override void FixedDo()
     {
     }
     public override void Exit()
     {
+        base.Exit();
+    }
+
+    private void SelectState()
+    {
+        Set(stateList.groundState);
     }
 }
+

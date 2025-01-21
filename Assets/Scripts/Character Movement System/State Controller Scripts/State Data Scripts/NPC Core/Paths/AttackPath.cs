@@ -3,21 +3,6 @@ using UnityEngine;
 
 public class AttackPath : PathFinder
 {
-    public bool pathIsSet { get; set; }
-    public float distanceToNextPos {  get; private set; }
-    public float closeEnoughToNextPos { get; set; } = 0.5f;
-    public List<PathData.NamedPosition> pathToTarget => pathData.pathToTarget;
-
-    private TrainBounds trainBounds => pathData.trainBounds;
-
-    private ActivateCarriageBounds currentInsideBounds => pathData.currentInsideBounds;
-    private GangwayBounds currentGangwayBounds => pathData.currentGangwayBounds;
-    private ActivateCarriageBounds currentOutsideBounds => pathData.currentOutsideBounds;
-
-    private GangwayBounds chosenGangway => pathData.chosenGangway;
-    private CarriageClimbingBounds chosenClimbingBounds => pathData.chosenClimbingBounds;
-    private ActivateCarriageBounds chosenInsideBounds => pathData.chosenInsideBounds;
-
     public void SetAttackPath(Vector2 currentPos, Vector2 targetPos, float colliderCentre)
     {
         if (!pathIsSet)
@@ -44,7 +29,7 @@ public class AttackPath : PathFinder
         }
         else if (currentGangwayBounds != null)
         {
-            GangwayBoundsPath(currentPos, targetPos);
+            GangwayBoundsPath(currentPos, targetPos, colliderCentre);
         }
         else if (currentOutsideBounds != null)
         {
@@ -62,7 +47,7 @@ public class AttackPath : PathFinder
         else
         {
             FindChosenGangway(currentInsideBounds, currentPos.x, targetPos.x);
-            FindChosenClimbBounds(chosenGangway);
+            FindChosenClimbBounds(chosenGangway, this, targetPos, currentPos);
 
             AddToPath(new Vector2(chosenGangway.transform.position.x, currentPos.y), PathData.PosType.Gangway);
 
@@ -79,6 +64,8 @@ public class AttackPath : PathFinder
     {
         if (targetPos.y >= trainBounds.roofLevel)
         {
+            FindChosenGangway(currentOutsideBounds, currentPos.x, targetPos.x);
+
             if (!currentOutsideBounds.playerInActiveArea)
             {
                 if (targetPos.x > currentPos.x)
@@ -95,7 +82,7 @@ public class AttackPath : PathFinder
         else
         {
             FindChosenGangway(currentOutsideBounds, currentPos.x, targetPos.x);
-            FindChosenClimbBounds(chosenGangway);
+            FindChosenClimbBounds(chosenGangway, this, targetPos, currentPos);
 
             AddToPath(new Vector2(chosenGangway.Bounds.center.x, chosenGangway.Bounds.min.y + colliderCentre), PathData.PosType.Gangway);
 
@@ -108,24 +95,29 @@ public class AttackPath : PathFinder
         }
     }
 
-    private void GangwayBoundsPath(Vector2 currentPos, Vector2 targetPos)
+    private void GangwayBoundsPath(Vector2 currentPos, Vector2 targetPos, float colliderCenter)
     {
-        if (chosenGangway != null)
-        {
-            FindChosenClimbBounds(chosenGangway);
-        }
+        FindChosenClimbBounds(chosenGangway, this, targetPos, currentPos);
 
-        if (chosenClimbingBounds != null && currentPos.y < trainBounds.roofLevel)
+        if (chosenClimbingBounds != null) // player is on roof and agent is on gangway
         {
             AddToPath(chosenClimbingBounds.transform.position, PathData.PosType.ClimbingBound);
         }
-        else if (chosenGangway != null)
+        else // player is in train and agent is on gangway
         {
-            FindChosenInsideBounds(chosenGangway, currentPos.x, targetPos.x);
+            FindChosenInsideBounds(chosenGangway, currentPos, targetPos.x);
+
             if (chosenInsideBounds != null)
             {
                 AddToPath(new Vector2(chosenInsideBounds.transform.position.x, currentPos.y), PathData.PosType.InsideBound);
             }
+        }
+
+        FindChosenOutsideBounds(chosenGangway, targetPos, currentPos.x);
+
+        if (chosenOutsideBounds != null) //player is on roof and agent is directly above gangway
+        {
+            AddToPath(chosenOutsideBounds.transform.position, PathData.PosType.OutsideBound);
         }
 
         AddToPath(targetPos, PathData.PosType.Target);

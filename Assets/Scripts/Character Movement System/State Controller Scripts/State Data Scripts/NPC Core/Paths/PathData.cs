@@ -12,6 +12,7 @@ public class PathData : MonoBehaviour
 
     public GangwayBounds chosenGangway { get; set; }
     public CarriageClimbingBounds chosenClimbingBounds { get; set; }
+    public ActivateCarriageBounds chosenOutsideBounds { get; set; }
     public ActivateCarriageBounds chosenInsideBounds { get; set; }
     public List<NamedPosition> pathToTarget { get; set; } = new List<NamedPosition>();
     public enum PosType

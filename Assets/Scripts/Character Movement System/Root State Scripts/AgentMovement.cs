@@ -46,30 +46,23 @@ public class AgentMovement : NPCCore
 
     void SelectState()
     {
-
-        if (state.isComplete)
+        if (isHiding)
         {
-            if (isHiding)
-            {
-                Set(stateList.hidingState);
-            }
-            if (isStalking)
-            {
-                Set(stateList.stalkState);
-            }
-            if (isAttacking)
-            {
-                Set(stateList.attackState);
-            }
+            Set(stateList.hidingState);
+        }
+        if (isStalking)
+        {
+            Set(stateList.stalkState);
+        }
+        if (isAttacking)
+        {
+            Set(stateList.attackState);
         }
     }
 
     private void CheckHidingTriggers()
     {
-        if (!isAttacking && !isStalking) //default is isHiding
-        {
-            isHiding = true;
-        }
+        isHiding = (!isAttacking && !isStalking) ? true : false;
     }
     private void CheckStalkTriggers()
     {

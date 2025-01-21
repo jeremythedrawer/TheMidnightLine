@@ -4,40 +4,125 @@ using UnityEngine;
 public abstract class PathFinder : MonoBehaviour
 {
     public PathData pathData;
-    protected void FindChosenClimbBounds(GangwayBounds chosenGangway)
+
+    public bool pathIsSet { get; set; }
+    public float distanceToNextPos { get; protected set; }
+    public float closeEnoughToNextPos { get; set; } = 1f;
+    public List<PathData.NamedPosition> pathToTarget => pathData.pathToTarget;
+
+    protected TrainBounds trainBounds => pathData.trainBounds;
+
+    protected ActivateCarriageBounds currentInsideBounds => pathData.currentInsideBounds;
+    protected GangwayBounds currentGangwayBounds => pathData.currentGangwayBounds;
+    protected ActivateCarriageBounds currentOutsideBounds => pathData.currentOutsideBounds;
+
+    protected GangwayBounds chosenGangway => pathData.chosenGangway;
+    protected CarriageClimbingBounds chosenClimbingBounds => pathData.chosenClimbingBounds;
+    protected ActivateCarriageBounds chosenOutsideBounds => pathData.chosenOutsideBounds;
+    protected ActivateCarriageBounds chosenInsideBounds => pathData.chosenInsideBounds;
+
+    protected void FindChosenClimbBounds(GangwayBounds chosenGangway, PathFinder path, Vector2 targetPos, Vector2 currentPos)
     {
-        if (pathData.chosenGangway.playerOnLeftRoof)
+        if (currentPos.y > trainBounds.roofLevel)
         {
-            pathData.chosenClimbingBounds = chosenGangway.foundsLeftClimbBounds;
+            pathData.chosenClimbingBounds = null;
+            return;
         }
-        else if (chosenGangway.playerOnRightRoof)
+
+        if (path is AttackPath)
         {
-            pathData.chosenClimbingBounds = chosenGangway.foundsRightClimbBounds;
+            if (targetPos.y > trainBounds.roofLevel)
+            {
+                pathData.chosenClimbingBounds = chosenGangway.transform.position.x < targetPos.x ? chosenGangway.foundsRightClimbBounds : chosenGangway.foundsLeftClimbBounds;
+            }
+            else
+            {
+                pathData.chosenClimbingBounds = null;
+            }
+        }
+
+        if (path is StalkPath)
+        {
+            if (pathData.chosenGangway.playerOnLeftRoof)
+            {
+                pathData.chosenClimbingBounds = chosenGangway.foundsLeftClimbBounds;
+            }
+            else if (chosenGangway.playerOnRightRoof)
+            {
+                pathData.chosenClimbingBounds = chosenGangway.foundsRightClimbBounds;
+            }
+            else
+            {
+                pathData.chosenClimbingBounds = null;
+            }
+        }
+
+    }
+
+    protected void FindChosenOutsideBounds(GangwayBounds chosenGangway, Vector2 targetPos, float currentXPos)
+    {
+        if (targetPos.y < trainBounds.roofLevel)
+        {
+            pathData.chosenOutsideBounds = null;
+            return;
+        }
+
+        if (currentXPos < targetPos.x)
+        {
+            if (!chosenGangway.foundRightOutsideBounds.playerInActiveArea)
+            {
+                pathData.chosenOutsideBounds = chosenGangway.foundRightOutsideBounds;
+            }
+            else
+            {
+                pathData.chosenOutsideBounds = null;
+            }
         }
         else
         {
-            pathData.chosenClimbingBounds = null;
+            if (!chosenGangway.foundLeftOutsideBounds.playerInActiveArea)
+            {
+                pathData.chosenOutsideBounds = chosenGangway.foundLeftInsideBounds;
 
+            }
+            else
+            {
+                pathData.chosenOutsideBounds = null;
+            }
         }
     }
 
-    protected void FindChosenInsideBounds(GangwayBounds chosenGangway, float currentXPos, float targetXPos)
+    protected void FindChosenInsideBounds(GangwayBounds chosenGangway, Vector2 currentPos, float targetXPos)
     {
-        if (chosenGangway.CompareTag("Inside Bounds"))
+        if (currentPos.y >= trainBounds.roofLevel)
         {
-            if (currentXPos < targetXPos)
+            pathData.chosenInsideBounds = null;
+            return;
+        }
+
+        if (currentPos.x < targetXPos)
+        {
+            if (!chosenGangway.foundRightInsideBounds.playerInActiveArea)
             {
                 pathData.chosenInsideBounds = chosenGangway.foundRightInsideBounds;
             }
             else
             {
-                pathData.chosenInsideBounds = chosenGangway.foundLeftInsideBounds;
+                pathData.chosenInsideBounds = null;
             }
         }
         else
         {
-            pathData.chosenInsideBounds = null;
+            if (!chosenGangway.foundLeftInsideBounds.playerInActiveArea)
+            {
+                pathData.chosenInsideBounds = chosenGangway.foundLeftInsideBounds;
+            }
+            else
+            {
+                pathData.chosenInsideBounds = null;
+            }
         }
+
     }
 
     protected void FindChosenGangway(ActivateCarriageBounds activateCarriageBounds, float currentXPos, float targetXPos)
@@ -76,13 +161,13 @@ public abstract class PathFinder : MonoBehaviour
     }
 
 
-    public void AddToPath(Vector2 position, PathData.PosType type)
+    protected void AddToPath(Vector2 position, PathData.PosType type)
     {
         pathData.pathToTarget.Add(new PathData.NamedPosition(position, type));
     }
 
 
-    public void DrawDebugPath(Vector2 currentPos)
+    protected void DrawDebugPath(Vector2 currentPos)
     {
         Vector2 pos = currentPos;
 

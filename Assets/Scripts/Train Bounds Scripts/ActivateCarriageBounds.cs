@@ -11,7 +11,7 @@ public class ActivateCarriageBounds : Bounds
     public bool isFrontCarriage;
 
     private BoxCollider2D Collider2D;
-
+    public UnityEngine.Bounds Bounds { get; private set; }
     public bool playerInActiveArea {  get; private set; }
     public int bystanderCount { get; private set; }
     public float leftEdge {  get; private set; }
@@ -30,6 +30,7 @@ public class ActivateCarriageBounds : Bounds
     private void Start()
     {
         Collider2D = this.GetComponent<BoxCollider2D>();
+        Bounds = Collider2D.bounds;
 
         leftEdge = Collider2D.bounds.min.x;
         rightEdge = Collider2D.bounds.max.x;

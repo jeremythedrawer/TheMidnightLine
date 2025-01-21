@@ -14,7 +14,8 @@ public class AgentController : NPCController
     public MovementInputs movementInputs;
 
     [Header ("Paths")]
-    public AttackPath attackPath; 
+    public AttackPath attackPath;
+    public StalkPath stalkPath;
 
     public List<PathData.NamedPosition> pathToTarget => attackPath.pathData.pathToTarget;
     private Vector2 currentPos;
@@ -47,7 +48,7 @@ public class AgentController : NPCController
         colliderCenter = npcCore.boxCollider2D.size.y / 2f;
         currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, colliderCenter);
 
-        attackPath.SetAttackPath(currentPos, targetPos, colliderCenter); //cant find attackPath from pathlist
+        attackPath.SetAttackPath(currentPos, targetPos, colliderCenter);
 
         movementInputs.runInput = true;
 
@@ -94,7 +95,7 @@ public class AgentController : NPCController
         //jumping to next roof
         if (pathToTarget[0].type == PathData.PosType.RoofEdge && attackPath.distanceToNextPos < attackPath.closeEnoughToNextPos)
         {
-            float boostSpeed = originalrunSpeed * 1.1f;
+            float boostSpeed = originalrunSpeed * 1.5f;
             npcCore.characterStats.runSpeed = boostSpeed;
             StartCoroutine(HandleJumpInput());
         }
