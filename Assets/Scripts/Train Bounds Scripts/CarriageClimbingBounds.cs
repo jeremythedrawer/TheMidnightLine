@@ -20,7 +20,7 @@ public class CarriageClimbingBounds : Bounds
 
     private void OnDrawGizmos()
     {
-        #if UNITY_EDITOR
+#if UNITY_EDITOR
         if (Application.isPlaying) return;
 
         Collider2D = this.GetComponent<BoxCollider2D>();
@@ -41,7 +41,7 @@ public class CarriageClimbingBounds : Bounds
         Vector2 leftOrigin = new Vector2(Collider2D.bounds.min.x, (Collider2D.bounds.size.y) * (hangActivationThreshold - 0.5f) + transform.position.y);
         Vector2 rightOrigin = new Vector2(Collider2D.bounds.max.x, (Collider2D.bounds.size.y) * (hangActivationThreshold - 0.5f) + transform.position.y);
         Gizmos.DrawLine(rightOrigin, leftOrigin);
-        #endif
+#endif
 
     }
 

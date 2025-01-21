@@ -55,7 +55,7 @@ public class MeleeState : State
         {
             if (!playingAnimation)
             {
-                PlayAnimation(animStates.groundMeleeAnimState);
+                PlayAnimation(animStates.meleeAnimState);
                 movementInputs.canMove = false;
             }
             if (core.currentAnimStateInfo.normalizedTime >= 1f)

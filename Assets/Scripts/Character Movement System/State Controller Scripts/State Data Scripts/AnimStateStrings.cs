@@ -25,21 +25,20 @@ public class AnimStateStrings
     internal string climbAnimState = "climb";
 
     //Player
-    internal string groundMeleeAnimState = "groundMelee";
+    internal string meleeAnimState = "melee";
     internal string breathingAnimState = "idleBreathing";
 
 
     //Bystander
-    internal string calmBreathingAnimState = "calmBreathing";
-    internal string calmBlinkingAnimState = "calmBlinking";
-
     internal string panicBreathingAnimState = "panicBreathing";
     internal string panicBlinkingAnimState = "panicBlinking";
 
     //Agent
-    internal string hiddenBreathingAnimState = "hiddenBreathing";
-    internal string hiddenBlinkingAnimState = "hiddenBlinking";
-
     internal string attackBreathingAnimState = "attackBreathing";
+
+    //Agent & Bystander
+    internal string calmBreathingAnimState = "calmBreathing";
+    internal string calmBlinkingAnimState = "calmBlinking";
+    internal string sitAnimState = "sit";
 }
 
