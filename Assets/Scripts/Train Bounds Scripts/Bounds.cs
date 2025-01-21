@@ -1,7 +1,6 @@
-using System.Collections.Generic;
 using UnityEngine;
 
-public class Bounds : MonoBehaviour
+public abstract class Bounds : MonoBehaviour
 {
     public bool seeBoundsGizmos;
     public void SetNeighbouringBounds(Collider2D Collider2D, float dectectionBuffer, LayerMask layerToFind, System.Type boundsComponentToFind, ref Component leftComponent, ref Component rightComponent)
