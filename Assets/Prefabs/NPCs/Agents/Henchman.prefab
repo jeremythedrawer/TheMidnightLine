@@ -343,7 +343,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npcCore: {fileID: 3089367829224165299}
   armDistance: 1.69
-  awareOfPlayerDistance: 10
   playerLayer:
     serializedVersion: 2
     m_Bits: 64
@@ -422,6 +421,7 @@ MonoBehaviour:
   playerCollider: {fileID: 0}
   movementInputs: {fileID: 6190765102839442715}
   attackPath: {fileID: 2777687635069219349}
+  stalkPath: {fileID: 0}
 --- !u!114 &606374522409701807
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -729,7 +729,7 @@ GameObject:
   - component: {fileID: 58726244203209126}
   m_Layer: 0
   m_Name: HenchmanCollider
-  m_TagString: Agent Collider
+  m_TagString: Bystander Collider
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0

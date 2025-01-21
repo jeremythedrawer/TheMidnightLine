@@ -9,8 +9,6 @@ public class CalmState : State
     public BystanderMovement bystanderMovement;
 
     //child state
-    public GroundState groundState;
-
     public float runSpeedMultiplier;
     public float walkSpeedMultiplier;
 
@@ -38,7 +36,7 @@ public class CalmState : State
 
     private void SelectState()
     {
-        Set(groundState);
+        Set(stateList.groundState);
     }
 
     private IEnumerator IdleAnimSequences()

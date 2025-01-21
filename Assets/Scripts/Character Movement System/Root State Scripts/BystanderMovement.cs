@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class BystanderMovement : StateCore
+public class BystanderMovement : NPCCore
 {
     public GameObject player { get; private set; }
     private PlayerMovement playerMovement;

@@ -235,6 +235,8 @@ GameObject:
   - component: {fileID: 4490734383750937007}
   - component: {fileID: 3820185767879755702}
   - component: {fileID: 7373441171486428705}
+  - component: {fileID: 898099057580638841}
+  - component: {fileID: 593755450897370765}
   m_Layer: 0
   m_Name: Tourist
   m_TagString: Untagged
@@ -384,6 +386,9 @@ MonoBehaviour:
   characterStats: {fileID: 415244996423126682}
   healthSystem: {fileID: 3820185767879755702}
   stateList: {fileID: 7373441171486428705}
+  behaviourParams: {fileID: 593755450897370765}
+  agentController: {fileID: 0}
+  bystanderController: {fileID: 898099057580638841}
 --- !u!114 &415244996423126682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -510,6 +515,36 @@ MonoBehaviour:
   panicState: {fileID: 408894430215660595}
   sacrificeState: {fileID: 0}
   checkTicketState: {fileID: 0}
+--- !u!114 &898099057580638841
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4406493656620320848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 119401c4382e88c42a5217a653b9740a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!114 &593755450897370765
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4406493656620320848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8814db1c8dedcdf498ad18ded07b9471, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  npcCore: {fileID: 0}
+  armDistance: 2
+  playerLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  seeGizmos: 0
 --- !u!1 &6051593538122785202
 GameObject:
   m_ObjectHideFlags: 0

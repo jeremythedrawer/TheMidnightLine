@@ -1,5 +1,6 @@
 using UnityEngine;
 using UnityEditor;
+using UnityEditor.Rendering;
 
 [CustomEditor(typeof(StateList))]
 public class StateSelectionEditor : Editor
@@ -13,36 +14,98 @@ public class StateSelectionEditor : Editor
 
         DrawDefaultInspector();
 
-        // Conditionally display the state fields
-        if (stateList.airborne) EditorGUILayout.PropertyField(serializedObject.FindProperty("airborneState"), new GUIContent("Airborne State"));
-        if (stateList.jumped) EditorGUILayout.PropertyField(serializedObject.FindProperty("jumpedState"), new GUIContent("Jumped State"));
-        if (stateList.fall) EditorGUILayout.PropertyField(serializedObject.FindProperty("fallState"), new GUIContent("Fall State"));
-        if (stateList.airMelee) EditorGUILayout.PropertyField(serializedObject.FindProperty("airMeleeState"), new GUIContent("Air Melee State"));
-        if (stateList.airShoot) EditorGUILayout.PropertyField(serializedObject.FindProperty("airShootState"), new GUIContent("Air Shoot State"));
+        EditorGUILayout.LabelField("Character States", EditorStyles.boldLabel);
 
-        if (stateList.ground) EditorGUILayout.PropertyField(serializedObject.FindProperty("groundState"), new GUIContent("Ground State"));
-        if (stateList.idle) EditorGUILayout.PropertyField(serializedObject.FindProperty("idleState"), new GUIContent("Idle State"));
-        if (stateList.run) EditorGUILayout.PropertyField(serializedObject.FindProperty("runState"), new GUIContent("Run State"));
-        if (stateList.melee) EditorGUILayout.PropertyField(serializedObject.FindProperty("meleeState"), new GUIContent("Melee State"));
-        if (stateList.shoot) EditorGUILayout.PropertyField(serializedObject.FindProperty("shootState"), new GUIContent("Shoot State"));
+        switch (stateList.characterType)
+        {
+            case StateList.CharacterType.Player:
+                DrawPlayerStates(stateList, serializedObject);
+                break;
+            case StateList.CharacterType.Agent:
+                DrawAgentStates(stateList, serializedObject);
+                break;
+            case StateList.CharacterType.Bystander:
+                DrawBystanderStates(stateList, serializedObject);
+                break;
 
-        if (stateList.wall) EditorGUILayout.PropertyField(serializedObject.FindProperty("wallState"), new GUIContent("Wall State"));
-        if (stateList.hang) EditorGUILayout.PropertyField(serializedObject.FindProperty("hangState"), new GUIContent("Hang State"));
-        if (stateList.climb) EditorGUILayout.PropertyField(serializedObject.FindProperty("climbState"), new GUIContent("Climb State"));
-
-        if (stateList.attack) EditorGUILayout.PropertyField(serializedObject.FindProperty("attackState"), new GUIContent("Attack State"));
-        if (stateList.hiding) EditorGUILayout.PropertyField(serializedObject.FindProperty("hidingState"), new GUIContent("Hiding State"));
-        if (stateList.stalk) EditorGUILayout.PropertyField(serializedObject.FindProperty("stalkState"), new GUIContent("Stalk State"));
-
-        if (stateList.calm) EditorGUILayout.PropertyField(serializedObject.FindProperty("calmState"), new GUIContent("Calm State"));
-        if (stateList.flee) EditorGUILayout.PropertyField(serializedObject.FindProperty("fleeState"), new GUIContent("Flee State"));
-        if (stateList.leave) EditorGUILayout.PropertyField(serializedObject.FindProperty("leaveState"), new GUIContent("Leave State"));
-        if (stateList.panic) EditorGUILayout.PropertyField(serializedObject.FindProperty("panicState"), new GUIContent("Panic State"));
-
-        if (stateList.sacrifice) EditorGUILayout.PropertyField(serializedObject.FindProperty("sacrificeState"), new GUIContent("Sacrifice State"));
-        if (stateList.checkTicket) EditorGUILayout.PropertyField(serializedObject.FindProperty("checkTicketState"), new GUIContent("Check Ticket State"));
+        }
 
         serializedObject.ApplyModifiedProperties();
     }
+    private void DrawPlayerStates(StateList stateList, SerializedObject serializedObject)
+    {
+        EditorGUILayout.LabelField("Environmental States", EditorStyles.miniBoldLabel);
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("groundState"), new GUIContent("Ground State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("airborneState"), new GUIContent("Airborne State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("wallState"), new GUIContent("Wall State"));
+
+        EditorGUILayout.LabelField("Action States", EditorStyles.miniBoldLabel);
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("idleState"), new GUIContent("Idle State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("runState"), new GUIContent("Run State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("meleeState"), new GUIContent("Melee State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("shootState"), new GUIContent("Shoot State"));
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("jumpedState"), new GUIContent("Jumped State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("fallState"), new GUIContent("Fall State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("airMeleeState"), new GUIContent("Air Melee State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("airShootState"), new GUIContent("Air Shoot State"));
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("hangState"), new GUIContent("Hang State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("climbState"), new GUIContent("Climb State"));
+    }
+
+    private void DrawAgentStates(StateList stateList, SerializedObject serializedObject)
+    {
+        EditorGUILayout.LabelField("Behavioural States", EditorStyles.miniBoldLabel);
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("calmState"), new GUIContent("Calm State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("stalkState"), new GUIContent("Stalk State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("attackState"), new GUIContent("Attack State"));
+
+        EditorGUILayout.LabelField("Environmental States", EditorStyles.miniBoldLabel);
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("groundState"), new GUIContent("Ground State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("airborneState"), new GUIContent("Airborne State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("wallState"), new GUIContent("Wall State"));
+
+        EditorGUILayout.LabelField("Action States", EditorStyles.miniBoldLabel);
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("idleState"), new GUIContent("Idle State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("runState"), new GUIContent("Run State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("meleeState"), new GUIContent("Melee State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("shootState"), new GUIContent("Shoot State"));
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("jumpedState"), new GUIContent("Jumped State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("fallState"), new GUIContent("Fall State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("airMeleeState"), new GUIContent("Air Melee State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("airShootState"), new GUIContent("Air Shoot State"));
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("hangState"), new GUIContent("Hang State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("climbState"), new GUIContent("Climb State"));
+
+    }
+
+    private void DrawBystanderStates(StateList stateList, SerializedObject serializedObject)
+    {
+        EditorGUILayout.LabelField("Behavioural States", EditorStyles.miniBoldLabel);
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("calmState"), new GUIContent("Calm State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("panicState"), new GUIContent("Panic State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("leaveState"), new GUIContent("Leave State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("fleeState"), new GUIContent("Flee State"));
+
+        EditorGUILayout.LabelField("Environmental States", EditorStyles.miniBoldLabel);
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("groundState"), new GUIContent("Ground State"));
+
+        EditorGUILayout.LabelField("Action States", EditorStyles.miniBoldLabel);
+
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("idleState"), new GUIContent("Idle State"));
+        EditorGUILayout.PropertyField(serializedObject.FindProperty("runState"), new GUIContent("Run State"));
+
+    }
 }
+
 

@@ -12,7 +12,7 @@ public class AgentMovement : NPCCore
     {
         SetupInstances();
         SetupNPCInstances();
-        Set(stateList.hidingState);
+        Set(stateList.calmState);
 
         initialGravityScale = body.gravityScale;
     }
@@ -48,7 +48,7 @@ public class AgentMovement : NPCCore
     {
         if (isHiding)
         {
-            Set(stateList.hidingState);
+            Set(stateList.calmState);
         }
         if (isStalking)
         {
