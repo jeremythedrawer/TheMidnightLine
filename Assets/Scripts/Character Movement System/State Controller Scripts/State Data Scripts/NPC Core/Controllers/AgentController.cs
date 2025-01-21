@@ -78,17 +78,10 @@ public class AgentController : NPCController
         //start climbing
         if (npcCore.currentClimbBounds != null)
         {
-            if (!movementInputs.jumpInput && npcCore.currentAnimStateInfo.normalizedTime >= 1 && npcCore.stateList.wallState.isHanging)
+            if (npcCore.currentAnimStateInfo.IsName(npcCore.animStates.hangAnimState))
             {
-                if (targetPos.y > attackPath.pathData.trainBounds.roofLevel)
-                {
-                    StartCoroutine(HandleJumpInput());
-                }
-                else
-                {
-                    StartCoroutine(HandleCrouchInput());
-                }
-            }
+                StartCoroutine(WallSequence());
+            }    
         }
 
 
@@ -124,6 +117,18 @@ public class AgentController : NPCController
         {
             targetPos = new Vector2(playerTransform.position.x, playerTransform.position.y) + new Vector2(0, (playerCollider.size.y / 2f));
             yield return new WaitForSeconds(updatePlayerPosTicRate);
+        }
+    }
+
+    private IEnumerator WallSequence()
+    {
+        if (targetPos.y > attackPath.pathData.trainBounds.roofLevel)
+        {
+            yield return StartCoroutine(HandleJumpInput());
+        }
+        else
+        {
+            yield return StartCoroutine(HandleCrouchInput());
         }
     }
     private IEnumerator HandleJumpInput()

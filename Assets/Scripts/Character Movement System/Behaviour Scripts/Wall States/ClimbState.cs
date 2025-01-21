@@ -1,4 +1,3 @@
-using UnityEditor.ShaderGraph.Internal;
 using UnityEngine;
 
 public class ClimbState : State
@@ -16,12 +15,12 @@ public class ClimbState : State
     private bool checkPos = true;
     public override void Enter()
     {
+        AnimationController();
     }
     public override void Do()
     {
-        AnimationController();
         UpdatePos();
-        if (core.currentAnimStateInfo.normalizedTime >= 1f && core.currentAnimStateInfo.IsName("climb"))
+        if (core.currentAnimStateInfo.normalizedTime >= 1f && core.currentAnimStateInfo.IsName(core.animStates.climbAnimState))
         {
             Exit();
         }
