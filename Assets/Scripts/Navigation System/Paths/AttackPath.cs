@@ -3,25 +3,14 @@ using UnityEngine;
 
 public class AttackPath : PathFinder
 {
-    public void SetAttackPath(Vector2 currentPos, Vector2 targetPos, float colliderCentre)
+    public override void SetPath(Vector2 currentPos, Vector2 targetPos, float colliderCentre)
     {
-        if (!pathIsSet)
-        {
-            FindAttackPath(currentPos, targetPos, colliderCentre);
-        }
-
-        distanceToNextPos = Vector2.Distance(currentPos, pathToTarget[0].value);
-
-        if (distanceToNextPos < closeEnoughToNextPos || targetPos.x != pathToTarget[pathToTarget.Count - 1].value.x)
-        {
-            pathIsSet = false;
-        }
-        DrawDebugPath(currentPos);
+        base.SetPath(currentPos, targetPos, colliderCentre);
     }
 
-    private void FindAttackPath(Vector2 currentPos, Vector2 targetPos, float colliderCentre)
+    public override void FindPath(Vector2 currentPos, Vector2 targetPos, float colliderCentre)
     {
-        pathToTarget.Clear();
+        base.FindPath(currentPos, targetPos, colliderCentre);
 
         if (currentInsideBounds != null)
         {
@@ -35,7 +24,6 @@ public class AttackPath : PathFinder
         {
             OutsideBoundsPath(currentPos, targetPos, colliderCentre);
         }
-        pathIsSet = true;
     }
 
     private void InsideBoundsPath(Vector2 currentPos, Vector2 targetPos)

@@ -14,8 +14,9 @@ public class AgentController : NPCController
     public MovementInputs movementInputs;
 
     [Header ("Paths")]
-    public AttackPath attackPath;
+    public CalmPath calmPath;
     public StalkPath stalkPath;
+    public AttackPath attackPath;
 
     public List<PathData.NamedPosition> pathToTarget => attackPath.pathData.pathToTarget;
     private Vector2 currentPos;
@@ -48,7 +49,7 @@ public class AgentController : NPCController
         colliderCenter = npcCore.boxCollider2D.size.y / 2f;
         currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, colliderCenter);
 
-        attackPath.SetAttackPath(currentPos, targetPos, colliderCenter);
+        attackPath.SetPath(currentPos, targetPos, colliderCenter);
 
         movementInputs.runInput = true;
 

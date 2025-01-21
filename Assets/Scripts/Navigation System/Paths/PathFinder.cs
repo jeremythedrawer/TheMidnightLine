@@ -166,7 +166,6 @@ public abstract class PathFinder : MonoBehaviour
         pathData.pathToTarget.Add(new PathData.NamedPosition(position, type));
     }
 
-
     protected void DrawDebugPath(Vector2 currentPos)
     {
         Vector2 pos = currentPos;
@@ -178,5 +177,26 @@ public abstract class PathFinder : MonoBehaviour
             Debug.DrawLine(nextPos, nextPos + (Vector2.up * 0.5f), Color.cyan);
             pos = nextPos;
         }
+    }
+
+    public virtual void SetPath(Vector2 currentPos, Vector2 targetPos, float colliderCentre)
+    {
+        DrawDebugPath(currentPos);
+
+        if (!pathIsSet)
+        {
+            FindPath(currentPos, targetPos, colliderCentre);
+        }
+        distanceToNextPos = Vector2.Distance(currentPos, pathToTarget[0].value);
+        if (distanceToNextPos < closeEnoughToNextPos || targetPos.x != pathToTarget[pathToTarget.Count - 1].value.x)
+        {
+            pathIsSet = false;
+        }
+    }
+
+    public virtual void FindPath(Vector2 currentPos, Vector2 targetPos, float colliderCentre)
+    {
+        pathToTarget.Clear();
+        pathIsSet = true;
     }
 }
