@@ -18,6 +18,7 @@ public class BystanderController : NPCController
         if (distanceToChair < 0.1 && calmPath.pathData.chosenSeatBounds != null)
         {
             movementInputs.walkInput = 0;
+            npcCore.isSitting = true;
 
             var seatData = calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex];
             seatData.filled = true;

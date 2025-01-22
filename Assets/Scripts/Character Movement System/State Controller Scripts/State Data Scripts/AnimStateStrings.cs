@@ -39,6 +39,7 @@ public class AnimStateStrings
     //Agent & Bystander
     internal string calmBreathingAnimState = "calmBreathing";
     internal string calmBlinkingAnimState = "calmBlinking";
-    internal string sitAnimState = "sit";
+    internal string sitBreathingAnimState = "sitBreathing";
+    internal string sitBlinkingAnimState = "sitBlinking";
 }
 

@@ -7,7 +7,7 @@ AnimatorState:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: sit
+  m_Name: sitBreathing
   m_Speed: 1
   m_CycleOffset: 0
   m_Transitions: []
@@ -20,7 +20,7 @@ AnimatorState:
   m_MirrorParameterActive: 0
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
-  m_Motion: {fileID: 7400000, guid: ac8f9f42fb1e72d43977285c19665f77, type: 2}
+  m_Motion: {fileID: 7400000, guid: 047f3ca7eb5452a459782a98054ce448, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 
@@ -46,16 +46,19 @@ AnimatorStateMachine:
     m_Position: {x: 190, y: -150, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -6423004321437191704}
-    m_Position: {x: 190, y: -100, z: 0}
-  - serializedVersion: 1
-    m_State: {fileID: 2275793524597976482}
     m_Position: {x: 400, y: -250, z: 0}
   - serializedVersion: 1
+    m_State: {fileID: 2275793524597976482}
+    m_Position: {x: 610, y: -250, z: 0}
+  - serializedVersion: 1
     m_State: {fileID: 3989651078930584231}
-    m_Position: {x: 400, y: -200, z: 0}
+    m_Position: {x: 610, y: -200, z: 0}
   - serializedVersion: 1
     m_State: {fileID: -5407293377120726969}
-    m_Position: {x: 190, y: -50, z: 0}
+    m_Position: {x: 400, y: -200, z: 0}
+  - serializedVersion: 1
+    m_State: {fileID: 8298030536963854557}
+    m_Position: {x: 190, y: -100, z: 0}
   m_ChildStateMachines: []
   m_AnyStateTransitions: []
   m_EntryTransitions: []
@@ -63,7 +66,7 @@ AnimatorStateMachine:
   m_StateMachineBehaviours: []
   m_AnyStatePosition: {x: -150, y: -250, z: 0}
   m_EntryPosition: {x: 20, y: -250, z: 0}
-  m_ExitPosition: {x: 610, y: -250, z: 0}
+  m_ExitPosition: {x: 820, y: -250, z: 0}
   m_ParentStateMachinePosition: {x: 800, y: 20, z: 0}
   m_DefaultState: {fileID: -2450680876892647679}
 --- !u!1102 &-6423004321437191704
@@ -239,6 +242,32 @@ AnimatorState:
   m_CycleOffsetParameterActive: 0
   m_TimeParameterActive: 0
   m_Motion: {fileID: 7400000, guid: ff585800cb0ee004dab65638914d77a4, type: 2}
+  m_Tag: 
+  m_SpeedParameter: 
+  m_MirrorParameter: 
+  m_CycleOffsetParameter: 
+  m_TimeParameter: 
+--- !u!1102 &8298030536963854557
+AnimatorState:
+  serializedVersion: 6
+  m_ObjectHideFlags: 1
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: sitBlinking
+  m_Speed: 1
+  m_CycleOffset: 0
+  m_Transitions: []
+  m_StateMachineBehaviours: []
+  m_Position: {x: 50, y: 50, z: 0}
+  m_IKOnFeet: 0
+  m_WriteDefaultValues: 1
+  m_Mirror: 0
+  m_SpeedParameterActive: 0
+  m_MirrorParameterActive: 0
+  m_CycleOffsetParameterActive: 0
+  m_TimeParameterActive: 0
+  m_Motion: {fileID: 7400000, guid: a5c64db5317e416448d3e28f5e0f3a69, type: 2}
   m_Tag: 
   m_SpeedParameter: 
   m_MirrorParameter: 

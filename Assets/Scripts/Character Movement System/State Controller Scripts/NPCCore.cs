@@ -1,4 +1,5 @@
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 
 public abstract class NPCCore : StateCore
 {
@@ -8,6 +9,8 @@ public abstract class NPCCore : StateCore
     [HideInInspector] public AgentController agentController;
     //bystander
     [HideInInspector] public BystanderController bystanderController;
+
+    public bool isSitting {  get; set; }
     public void SetupNPCInstances()
     {
         State[] allChildStates = GetComponentsInChildren<State>();

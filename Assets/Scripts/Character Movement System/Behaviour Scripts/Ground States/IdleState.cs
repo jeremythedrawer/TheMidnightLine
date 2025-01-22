@@ -29,10 +29,22 @@ public class IdleState : State
 
     private void IdleAnimationController()
     {
-        if (core is not PlayerMovement) // idle animation is handeled in the behavioural states
+        if (core is NPCCore)
         {
-            StartCoroutine(IdleAnimSequences());
-            return;
+            if (!playingAnimation)
+            {
+                if (!npcCore.isSitting)
+                {
+                    StopAllCoroutines();
+                    StartCoroutine(IdleAnimSequences(animStates.calmBreathingAnimState, animStates.calmBlinkingAnimState));
+                }
+                else
+                {
+                    StopAllCoroutines();
+                    StartCoroutine(IdleAnimSequences(animStates.sitBreathingAnimState, animStates.sitBlinkingAnimState));
+                }
+
+            }
         }
         else
         {
@@ -40,18 +52,17 @@ public class IdleState : State
         }
     }
 
-    private IEnumerator IdleAnimSequences()
+    private IEnumerator IdleAnimSequences(string breathingState, string blinkingState)
     {
         if (breathCount < breathLoops)
         {
-            PlayAnimation(animStates.calmBreathingAnimState);
+            PlayAnimation(breathingState);
             yield return null;
             breathCount++;
         }
         else
         {
-            playingAnimation = true;
-            PlayAnimation(animStates.calmBlinkingAnimState);
+            PlayAnimation(blinkingState);
             yield return null;
             breathCount = 0;
         }
