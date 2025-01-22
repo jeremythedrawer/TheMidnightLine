@@ -4,31 +4,20 @@ using UnityEngine;
 
 public class AgentController : NPCController
 {
-    [Header("Parameters")]
-    public float updatePlayerPosTicRate = 1f;
-
-    [Header("References")]
-    public NPCCore npcCore;
-    public Transform playerTransform;
-    public BoxCollider2D playerCollider;
-    public MovementInputs movementInputs;
-
     [Header ("Paths")]
     public CalmPath calmPath;
     public StalkPath stalkPath;
     public AttackPath attackPath;
 
-    public List<PathData.NamedPosition> pathToTarget => attackPath.pathData.pathToTarget;
-    private Vector2 currentPos;
-    private Vector2 targetPos;
-    private float colliderCenter;
+    private List<PathData.NamedPosition> attackPathToTarget => attackPath.pathData.pathToTarget;
+
 
     private float originalrunSpeed;
 
     private void Start()
     {
         originalrunSpeed = npcCore.characterStats.runSpeed;
-        StartCoroutine(UpdatePlayerPosition());
+        StartCoroutine(TargetPosIsPlayer());
     }
 
     public void AttackInputs()
@@ -54,7 +43,7 @@ public class AgentController : NPCController
         movementInputs.runInput = true;
 
         //handle direction
-        if (currentPos.x < pathToTarget[0].value.x)
+        if (currentPos.x < attackPathToTarget[0].value.x)
         {
             movementInputs.walkInput = 1;
         }
@@ -64,7 +53,7 @@ public class AgentController : NPCController
         }
 
         //handle jump
-        if (pathToTarget[0].type == PathData.PosType.ClimbingBound) // next position is climbing bounds
+        if (attackPathToTarget[0].type == PathData.PosType.ClimbingBound) // next position is climbing bounds
         {
             if (npcCore.currentClimbBounds == null && !movementInputs.jumpInput)
             {
@@ -72,7 +61,7 @@ public class AgentController : NPCController
             }
             if (npcCore.currentClimbBounds != null)
             {
-                pathToTarget.RemoveAt(0);
+                attackPathToTarget.RemoveAt(0);
             }
         }
 
@@ -87,7 +76,7 @@ public class AgentController : NPCController
 
 
         //jumping to next roof
-        if (pathToTarget[0].type == PathData.PosType.RoofEdge && attackPath.distanceToNextPos < attackPath.closeEnoughToNextPos)
+        if (attackPathToTarget[0].type == PathData.PosType.RoofEdge && attackPath.distanceToNextPos < attackPath.closeEnoughToNextPos)
         {
             float boostSpeed = originalrunSpeed * 1.5f;
             npcCore.characterStats.runSpeed = boostSpeed;
@@ -108,17 +97,9 @@ public class AgentController : NPCController
 
     }
 
-    private void FollowHiddenPath()
+    private void FollowCalmPath()
     {
 
-    }
-    private IEnumerator UpdatePlayerPosition()
-    {
-        while (true)
-        {
-            targetPos = new Vector2(playerTransform.position.x, playerTransform.position.y) + new Vector2(0, (playerCollider.size.y / 2f));
-            yield return new WaitForSeconds(updatePlayerPosTicRate);
-        }
     }
 
     private IEnumerator WallSequence()

@@ -12,14 +12,14 @@ public abstract class PathFinder : MonoBehaviour
 
     protected TrainBounds trainBounds => pathData.trainBounds;
 
-    protected ActivateCarriageBounds currentInsideBounds => pathData.currentInsideBounds;
+    protected InsideBounds currentInsideBounds => pathData.currentInsideBounds;
+    protected OutsideBounds currentOutsideBounds => pathData.currentOutsideBounds;
     protected GangwayBounds currentGangwayBounds => pathData.currentGangwayBounds;
-    protected ActivateCarriageBounds currentOutsideBounds => pathData.currentOutsideBounds;
 
+    protected InsideBounds chosenInsideBounds => pathData.chosenInsideBounds;
+    protected OutsideBounds chosenOutsideBounds => pathData.chosenOutsideBounds;
     protected GangwayBounds chosenGangway => pathData.chosenGangway;
     protected CarriageClimbingBounds chosenClimbingBounds => pathData.chosenClimbingBounds;
-    protected ActivateCarriageBounds chosenOutsideBounds => pathData.chosenOutsideBounds;
-    protected ActivateCarriageBounds chosenInsideBounds => pathData.chosenInsideBounds;
 
     protected void FindChosenClimbBounds(GangwayBounds chosenGangway, PathFinder path, Vector2 targetPos, Vector2 currentPos)
     {
@@ -82,7 +82,7 @@ public abstract class PathFinder : MonoBehaviour
         {
             if (!chosenGangway.foundLeftOutsideBounds.playerInActiveArea)
             {
-                pathData.chosenOutsideBounds = chosenGangway.foundLeftInsideBounds;
+                pathData.chosenOutsideBounds = chosenGangway.foundRightOutsideBounds;
 
             }
             else
@@ -125,7 +125,7 @@ public abstract class PathFinder : MonoBehaviour
 
     }
 
-    protected void FindChosenGangway(ActivateCarriageBounds activateCarriageBounds, float currentXPos, float targetXPos)
+    protected void FindChosenGangway(CarriageBounds activateCarriageBounds, float currentXPos, float targetXPos)
     {
         GangwayBounds rightGangway = activateCarriageBounds.rightGangwayBounds;
         GangwayBounds leftGangway = activateCarriageBounds.leftGangwayBounds;

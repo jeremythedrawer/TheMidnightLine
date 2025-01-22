@@ -13,13 +13,13 @@ public class GangwayBounds : Bounds
 
     private Component leftOutsideBounds;
     private Component rightOutsideBounds;
-    public ActivateCarriageBounds foundLeftOutsideBounds { get; private set; }
-    public ActivateCarriageBounds foundRightOutsideBounds { get; private set; }
+    public OutsideBounds foundLeftOutsideBounds { get; private set; }
+    public OutsideBounds foundRightOutsideBounds { get; private set; }
 
     private Component leftInsideBounds;
     private Component rightInsideBounds;
-    public ActivateCarriageBounds foundLeftInsideBounds { get; private set; }
-    public ActivateCarriageBounds foundRightInsideBounds { get; private set; }
+    public InsideBounds foundLeftInsideBounds { get; private set; }
+    public InsideBounds foundRightInsideBounds { get; private set; }
 
     private Component leftClimbingBounds;
     private Component rightClimbingBounds;
@@ -61,14 +61,14 @@ public class GangwayBounds : Bounds
         Bounds = Collider2D.bounds;
 
         float detectionSizeBuffer = 5;
-        SetNeighbouringBounds(Collider2D, detectionSizeBuffer, outsideBoundsLayer, typeof(ActivateCarriageBounds), ref leftOutsideBounds, ref rightOutsideBounds);
-        SetNeighbouringBounds(Collider2D, detectionSizeBuffer, insideBoundsLayer, typeof(ActivateCarriageBounds), ref leftInsideBounds, ref rightInsideBounds);
+        SetNeighbouringBounds(Collider2D, detectionSizeBuffer, outsideBoundsLayer, typeof(OutsideBounds), ref leftOutsideBounds, ref rightOutsideBounds);
+        SetNeighbouringBounds(Collider2D, detectionSizeBuffer, insideBoundsLayer, typeof(InsideBounds), ref leftInsideBounds, ref rightInsideBounds);
         SetNeighbouringBounds(Collider2D, detectionSizeBuffer, climbingBoundsLayer, typeof(CarriageClimbingBounds), ref leftClimbingBounds, ref rightClimbingBounds);
 
-        foundLeftOutsideBounds = leftOutsideBounds as ActivateCarriageBounds;
-        foundRightOutsideBounds = rightOutsideBounds as ActivateCarriageBounds;
-        foundLeftInsideBounds = leftInsideBounds as ActivateCarriageBounds;
-        foundRightInsideBounds = rightInsideBounds as ActivateCarriageBounds;
+        foundLeftOutsideBounds = leftOutsideBounds as OutsideBounds;
+        foundRightOutsideBounds = rightOutsideBounds as OutsideBounds;
+        foundLeftInsideBounds = leftInsideBounds as InsideBounds;
+        foundRightInsideBounds = rightInsideBounds as InsideBounds;
 
         foundsLeftClimbBounds = leftClimbingBounds as CarriageClimbingBounds;
         foundsRightClimbBounds = rightClimbingBounds as CarriageClimbingBounds; 
@@ -94,13 +94,6 @@ public class GangwayBounds : Bounds
             {
                 pathData.currentGangwayBounds = this;
             }
-        }
-    }
-
-    private void OnTriggerStay2D (Collider2D collision)
-    {
-        if (collision.gameObject.CompareTag("Agent Collider"))
-        {
         }
     }
 

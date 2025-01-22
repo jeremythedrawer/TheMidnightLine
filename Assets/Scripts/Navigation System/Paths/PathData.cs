@@ -6,14 +6,16 @@ public class PathData : MonoBehaviour
     [Header("References")]
     public TrainBounds trainBounds;
 
-    public ActivateCarriageBounds currentInsideBounds { get; set; }
+    public InsideBounds currentInsideBounds { get; set; }
+    public OutsideBounds currentOutsideBounds { get; set; }
     public GangwayBounds currentGangwayBounds { get; set; }
-    public ActivateCarriageBounds currentOutsideBounds { get; set; }
 
+    public SlideDoorBounds currentSlideDoorBounds { get; set; }
+
+    public InsideBounds chosenInsideBounds { get; set; }
     public GangwayBounds chosenGangway { get; set; }
+    public OutsideBounds chosenOutsideBounds { get; set; }
     public CarriageClimbingBounds chosenClimbingBounds { get; set; }
-    public ActivateCarriageBounds chosenOutsideBounds { get; set; }
-    public ActivateCarriageBounds chosenInsideBounds { get; set; }
     public List<NamedPosition> pathToTarget { get; set; } = new List<NamedPosition>();
     public enum PosType
     {

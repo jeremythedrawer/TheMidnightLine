@@ -10,31 +10,17 @@ public class CalmPath : PathFinder
     public override void FindPath(Vector2 currentPos, Vector2 targetPos, float colliderCentre)
     {
         base.FindPath(currentPos, targetPos, colliderCentre);
-        if (currentInsideBounds != null)
-        {
-            InsideBoundsPath(currentPos, targetPos);
-        }
+
+        //TODO: if chairs in nearby radius is more than 0, trigger Chair Path, else trigger Stand Path
     }
 
-    private void InsideBoundsPath(Vector2 currentPos, Vector2 targetPos)
+    private void ChairPath()
     {
-        if (currentInsideBounds.playerInActiveArea)
-        {
-            AddToPath(targetPos, PathData.PosType.Target);
-        }
-        else
-        {
-            FindChosenGangway(currentInsideBounds, currentPos.x, targetPos.x);
-            FindChosenClimbBounds(chosenGangway, this, targetPos, currentPos);
+        //TODO: find closest chair in nearby radius
+    }
 
-            AddToPath(new Vector2(chosenGangway.transform.position.x, currentPos.y), PathData.PosType.Gangway);
-
-            if (chosenClimbingBounds != null)
-            {
-                AddToPath(chosenClimbingBounds.transform.position, PathData.PosType.ClimbingBound);
-            }
-
-            AddToPath(targetPos, PathData.PosType.Target);
-        }
+    private void StandPath()
+    {
+        //TODO: find largest space in nearby radius
     }
 }

@@ -3,7 +3,8 @@ using UnityEngine;
 public abstract class Bounds : MonoBehaviour
 {
     public bool seeBoundsGizmos;
-    public void SetNeighbouringBounds(Collider2D Collider2D, float dectectionBuffer, LayerMask layerToFind, System.Type boundsComponentToFind, ref Component leftComponent, ref Component rightComponent)
+    public bool playerInActiveArea { get; protected set; }
+    protected void SetNeighbouringBounds(Collider2D Collider2D, float dectectionBuffer, LayerMask layerToFind, System.Type boundsComponentToFind, ref Component leftComponent, ref Component rightComponent)
     {
 
         Vector2 LeftPointA = new Vector2 (Collider2D.bounds.min.x, Collider2D.bounds.min.y - dectectionBuffer);
@@ -32,4 +33,21 @@ public abstract class Bounds : MonoBehaviour
         }
 #endif
     }
+
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player Collider"))
+        {
+            playerInActiveArea = true;
+        }
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player Collider"))
+        {
+            playerInActiveArea = false;
+        }
+    }
+
 }

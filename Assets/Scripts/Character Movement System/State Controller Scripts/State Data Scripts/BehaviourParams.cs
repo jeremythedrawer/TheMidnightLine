@@ -30,7 +30,7 @@ public class BehaviourParams : MonoBehaviour
 
     private Camera cam;
 
-    private ActivateCarriageBounds currentCarriage;
+    private InsideBounds currentCarriage;
     private TrainBounds trainBounds;
 
     private void OnDrawGizmos()
@@ -80,7 +80,7 @@ public class BehaviourParams : MonoBehaviour
         if (collision.gameObject.CompareTag("Inside Bounds"))
         {
             inCarriage = true;
-            currentCarriage = collision.GetComponent<ActivateCarriageBounds>();
+            currentCarriage = collision.GetComponent<InsideBounds>();
             CheckBystandersInCarriage();
         }
     }
