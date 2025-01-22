@@ -39,8 +39,6 @@ public class RunState : State
 
     private void RunAnimationController()
     {
-        if (core is BystanderMovement) return;
-
         if (!startRunAnimation)
         {
             startRunAnimation = true;
@@ -54,7 +52,6 @@ public class RunState : State
 
     private void WalkAnimationController()
     {
-        if (core is BystanderMovement) return;
             PlayAnimation(animStates.walkAnimState);
     }
 }

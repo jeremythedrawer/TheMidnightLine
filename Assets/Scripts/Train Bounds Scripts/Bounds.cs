@@ -1,9 +1,11 @@
+using NUnit.Framework;
 using UnityEngine;
 
 public abstract class Bounds : MonoBehaviour
 {
     public bool seeBoundsGizmos;
     public bool playerInActiveArea { get; protected set; }
+
     protected void SetNeighbouringBounds(Collider2D Collider2D, float dectectionBuffer, LayerMask layerToFind, System.Type boundsComponentToFind, ref Component leftComponent, ref Component rightComponent)
     {
 

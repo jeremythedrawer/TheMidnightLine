@@ -1,4 +1,6 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public abstract class PathFinder : MonoBehaviour
@@ -7,7 +9,7 @@ public abstract class PathFinder : MonoBehaviour
 
     public bool pathIsSet { get; set; }
     public float distanceToNextPos { get; protected set; }
-    public float closeEnoughToNextPos { get; set; } = 1f;
+    public float closeEnoughToNextPos { get; set; } = 0.5f;
     public List<PathData.NamedPosition> pathToTarget => pathData.pathToTarget;
 
     protected TrainBounds trainBounds => pathData.trainBounds;
@@ -18,8 +20,9 @@ public abstract class PathFinder : MonoBehaviour
 
     protected InsideBounds chosenInsideBounds => pathData.chosenInsideBounds;
     protected OutsideBounds chosenOutsideBounds => pathData.chosenOutsideBounds;
-    protected GangwayBounds chosenGangway => pathData.chosenGangway;
+    protected GangwayBounds chosenGangway => pathData.chosenGangwayBounds;
     protected CarriageClimbingBounds chosenClimbingBounds => pathData.chosenClimbingBounds;
+    protected SeatBounds chosenChairBounds => pathData.chosenSeatBounds;
 
     protected void FindChosenClimbBounds(GangwayBounds chosenGangway, PathFinder path, Vector2 targetPos, Vector2 currentPos)
     {
@@ -43,7 +46,7 @@ public abstract class PathFinder : MonoBehaviour
 
         if (path is StalkPath)
         {
-            if (pathData.chosenGangway.playerOnLeftRoof)
+            if (pathData.chosenGangwayBounds.playerOnLeftRoof)
             {
                 pathData.chosenClimbingBounds = chosenGangway.foundsLeftClimbBounds;
             }
@@ -125,18 +128,19 @@ public abstract class PathFinder : MonoBehaviour
 
     }
 
-    protected void FindChosenGangway(CarriageBounds activateCarriageBounds, float currentXPos, float targetXPos)
+    protected void FindChosenGangway(CarriageBounds currentCarriageBounds, float currentXPos, float targetXPos)
     {
-        GangwayBounds rightGangway = activateCarriageBounds.rightGangwayBounds;
-        GangwayBounds leftGangway = activateCarriageBounds.leftGangwayBounds;
+        GangwayBounds rightGangway = currentCarriageBounds.rightGangwayBounds;
+        Debug.Log(currentCarriageBounds);
+        GangwayBounds leftGangway = currentCarriageBounds.leftGangwayBounds;
 
-        if (activateCarriageBounds.isBackCarriage) 
+        if (currentCarriageBounds.isBackCarriage) 
         {
-            pathData.chosenGangway = rightGangway;
+            pathData.chosenGangwayBounds = rightGangway;
         }
-        else if (activateCarriageBounds.isFrontCarriage) 
+        else if (currentCarriageBounds.isFrontCarriage) 
         {
-            pathData.chosenGangway = leftGangway;
+            pathData.chosenGangwayBounds = leftGangway;
         }
         else 
         {
@@ -151,16 +155,61 @@ public abstract class PathFinder : MonoBehaviour
 
             if (bothClosestToLeft || leftDistance < targetRightDistance)
             {
-                pathData.chosenGangway = leftGangway;
+                pathData.chosenGangwayBounds = leftGangway;
             }
             else
             {
-                pathData.chosenGangway = rightGangway;
+                pathData.chosenGangwayBounds = rightGangway;
             }
         }
     }
 
+    protected void FindChosenChairBounds(Vector2 currentPos)
+    {
+        SeatBounds[] setsOfSeats = currentInsideBounds.setsOfChairs.ToArray();
 
+        float[] setOfSeatsDistances = new float[setsOfSeats.Length];
+
+        for (int i = 0; i < setsOfSeats.Length; i++)
+        {
+            float distanceToSetOfSeats = Vector2.Distance(currentPos, setsOfSeats[i].transform.position);
+            setOfSeatsDistances[i] = distanceToSetOfSeats;
+        }
+
+        float smallestDistance = float.MaxValue;
+        float secondSmallestDistance = float.MaxValue;
+
+        foreach (float distance in setOfSeatsDistances)
+        {
+            if(distance < smallestDistance) //iterating and comparing each index until the smallest value is found
+            {
+                secondSmallestDistance = smallestDistance;
+                smallestDistance = distance;
+            }
+            else if (distance < secondSmallestDistance && distance != smallestDistance) //whatever is left is check one more time to find the second smallest distance
+            {
+                secondSmallestDistance = distance;
+            }
+        }
+
+        int closestPosIndex = Array.IndexOf(setOfSeatsDistances, smallestDistance);
+        int secondClosestPosIndex = Array.IndexOf(setOfSeatsDistances, secondSmallestDistance);
+
+        if (!setsOfSeats[closestPosIndex].seats.All(seat => seat.filled)) // check if all seats in the found set of chairs are full
+        {
+            pathData.chosenSeatBounds = setsOfSeats[closestPosIndex];  
+        }
+        else if (!setsOfSeats[secondClosestPosIndex].seats.All(seat => seat.filled)) //check the second closest set of chairs
+        {
+            pathData.chosenSeatBounds = setsOfSeats[secondClosestPosIndex];
+        }
+        else // all chairs are already filled
+        {
+            pathData.chosenSeatBounds = null;
+        }
+
+
+    }
     protected void AddToPath(Vector2 position, PathData.PosType type)
     {
         pathData.pathToTarget.Add(new PathData.NamedPosition(position, type));

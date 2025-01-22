@@ -13,6 +13,7 @@ public class BystanderMovement : NPCCore
     void Start()
     {
         SetupInstances();
+        SetupNPCInstances();
         Set(stateList.calmState);
 
         initialGravityScale = body.gravityScale;

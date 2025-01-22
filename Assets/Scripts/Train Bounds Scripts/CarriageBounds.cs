@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CarriageBounds : Bounds
+public abstract class CarriageBounds : Bounds
 {
     public LayerMask gangwayTriggerLayer;
     public bool isBackCarriage;
@@ -21,7 +21,7 @@ public class CarriageBounds : Bounds
     public Vector2 leftGangwayPos { get; private set; }
     public Vector2 rightGangwayPos { get; private set; }
 
-    private void Start()
+    protected void SetUpCarriageBounds()
     {
         Collider2D = this.GetComponent<BoxCollider2D>();
         Bounds = Collider2D.bounds;

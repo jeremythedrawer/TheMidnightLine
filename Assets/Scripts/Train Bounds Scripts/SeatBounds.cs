@@ -1,8 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
-public class ChairBounds : Bounds
+public class SeatBounds : Bounds
 {
     [Header ("Parameters")]
     [Range(1,20)]
@@ -10,6 +9,8 @@ public class ChairBounds : Bounds
 
     [Header ("References")]
     public BoxCollider2D boxCollider2D;
+
+    public bool isFull {  get; private set; }
 
 
     [System.Serializable]
@@ -24,7 +25,7 @@ public class ChairBounds : Bounds
             this.filled = filled;
         }
     }
-    public List<SeatData> seats = new List<SeatData>();
+    public List<SeatData> seats { get; set; } = new List<SeatData>();
 
     private float seatWidth;
     private float seatOffset;
@@ -59,7 +60,7 @@ public class ChairBounds : Bounds
         for (int i = 0; i < seatsCount; i++)
         {
             seatPosX = boxCollider2D.bounds.min.x + (i * seatWidth) + seatOffset;
-           AddToSeatData(new Vector2(seatPosX, boxCollider2D.bounds.center.y), false);
+            AddToSeatData(new Vector2(seatPosX, boxCollider2D.bounds.center.y), false);
         }
     }
 

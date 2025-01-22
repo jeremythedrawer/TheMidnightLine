@@ -10,20 +10,20 @@ public class PathData : MonoBehaviour
     public OutsideBounds currentOutsideBounds { get; set; }
     public GangwayBounds currentGangwayBounds { get; set; }
 
-    public SlideDoorBounds currentSlideDoorBounds { get; set; }
-
     public InsideBounds chosenInsideBounds { get; set; }
-    public GangwayBounds chosenGangway { get; set; }
     public OutsideBounds chosenOutsideBounds { get; set; }
+    public GangwayBounds chosenGangwayBounds { get; set; }
     public CarriageClimbingBounds chosenClimbingBounds { get; set; }
+    public SeatBounds chosenSeatBounds { get; set; }
     public List<NamedPosition> pathToTarget { get; set; } = new List<NamedPosition>();
     public enum PosType
     {
         InsideBound,
         OutsideBound,
-        Gangway,
+        GangwayBound,
         ClimbingBound,
         RoofEdge,
+        Chair,
         Target
     }
 

@@ -37,7 +37,7 @@ public class AttackPath : PathFinder
             FindChosenGangway(currentInsideBounds, currentPos.x, targetPos.x);
             FindChosenClimbBounds(chosenGangway, this, targetPos, currentPos);
 
-            AddToPath(new Vector2(chosenGangway.transform.position.x, currentPos.y), PathData.PosType.Gangway);
+            AddToPath(new Vector2(chosenGangway.transform.position.x, currentPos.y), PathData.PosType.GangwayBound);
 
             if (chosenClimbingBounds != null)
             {
@@ -72,7 +72,7 @@ public class AttackPath : PathFinder
             FindChosenGangway(currentOutsideBounds, currentPos.x, targetPos.x);
             FindChosenClimbBounds(chosenGangway, this, targetPos, currentPos);
 
-            AddToPath(new Vector2(chosenGangway.Bounds.center.x, chosenGangway.Bounds.min.y + colliderCentre), PathData.PosType.Gangway);
+            AddToPath(new Vector2(chosenGangway.Bounds.center.x, chosenGangway.Bounds.min.y + colliderCentre), PathData.PosType.GangwayBound);
 
             if (chosenClimbingBounds != null)
             {

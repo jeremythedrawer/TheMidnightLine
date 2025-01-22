@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public abstract class State : MonoBehaviour
@@ -30,17 +31,23 @@ public abstract class State : MonoBehaviour
     {
         machine.Set(newState);
     }
-    protected void PlayAnimation(string animationName)
+
+    protected void PlayAnimation(string animState)
     {
         if (!playingAnimation)
         {
-            animator.Play(animationName, 0, 0);
             playingAnimation = true;
+            StartCoroutine(PlayAnimationCoroutine(animState));
         }
-        if (core.currentAnimStateInfo.normalizedTime >= 1)
+    }
+    protected IEnumerator PlayAnimationCoroutine(string animState)
+    {
+        animator.Play(animState, 0, 0);
+        while (core.currentAnimStateInfo.normalizedTime < 1)
         {
-            playingAnimation = false;
+            yield return null;
         }
+        playingAnimation = false;
     }
 
     public void SetCore(StateCore _core)

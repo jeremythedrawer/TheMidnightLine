@@ -2,6 +2,10 @@ using UnityEngine;
 
 public class OutsideBounds : CarriageBounds
 {
+    private void Start()
+    {
+        SetUpCarriageBounds();
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player Collider"))

@@ -8,15 +8,23 @@ public class BystanderController : NPCController
 
     private List<PathData.NamedPosition> calmPathToTarget => calmPath.pathData.pathToTarget;
 
+    private void Update()
+    {
+        targetPos = calmPath.chosenSeat.pos;
+    }
     public void CalmInputs()
     {
-        if (npcCore.behaviourParams.isArmDistance) //TODO: and seat is not filled
+        float distanceToChair = Mathf.Abs(transform.position.x - calmPath.chosenSeat.pos.x);
+        if (distanceToChair < 0.1 && calmPath.pathData.chosenSeatBounds != null)
         {
-            //sit input is true
+            movementInputs.walkInput = 0;
+
+            var seatData = calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex];
+            seatData.filled = true;
+            calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex] = seatData;
         }
         else
         {
-            //sit input is false
             FollowCalmPath();
         }
     }
