@@ -15,7 +15,6 @@ public class PathData : MonoBehaviour
     public GangwayBounds chosenGangwayBounds { get; set; }
     public CarriageClimbingBounds chosenClimbingBounds { get; set; }
     public SeatBounds chosenSeatBounds { get; set; }
-    public List<NamedPosition> pathToTarget { get; set; } = new List<NamedPosition>();
     public enum PosType
     {
         InsideBound,
@@ -23,8 +22,9 @@ public class PathData : MonoBehaviour
         GangwayBound,
         ClimbingBound,
         RoofEdge,
-        Chair,
-        Target
+        Seat,
+        Stand,
+        Player
     }
 
     [System.Serializable]
@@ -39,4 +39,6 @@ public class PathData : MonoBehaviour
             this.type = type;
         }
     }
+    public List<NamedPosition> pathToTarget { get; set; } = new List<NamedPosition>();
+    public bool pathIsSet { get; set; }
 }

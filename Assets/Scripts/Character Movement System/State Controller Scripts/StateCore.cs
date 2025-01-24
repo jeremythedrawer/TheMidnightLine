@@ -18,6 +18,8 @@ public abstract class StateCore : MonoBehaviour
     public AnimStateStrings animStates;
     public StateMachine machine;
 
+    public bool showStateList;
+
     public State state => machine.state;
 
     internal float initialGravityScale;
@@ -53,8 +55,11 @@ public abstract class StateCore : MonoBehaviour
         #if UNITY_EDITOR
         if (Application.isPlaying && state != null)
         {
-            List<State> states = machine.GetActiveStateBranch();
-            UnityEditor.Handles.Label(transform.position, "Active States: " + string.Join(" > ", states));
+            if (showStateList)
+            {
+                List<State> states = machine.GetActiveStateBranch();
+                UnityEditor.Handles.Label(transform.position, "Active States: " + string.Join(" > ", states));
+            }
         }
         #endif
     }

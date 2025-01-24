@@ -1,5 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
+using static SeatBounds;
 
 public class BystanderController : NPCController
 {
@@ -8,42 +9,62 @@ public class BystanderController : NPCController
 
     private List<PathData.NamedPosition> calmPathToTarget => calmPath.pathData.pathToTarget;
 
-    private void Update()
-    {
-        targetPos = calmPath.chosenSeat.pos;
-    }
-    public void CalmInputs()
-    {
-        float distanceToChair = Mathf.Abs(transform.position.x - calmPath.chosenSeat.pos.x);
-        if (distanceToChair < 0.1 && calmPath.pathData.chosenSeatBounds != null)
-        {
-            movementInputs.walkInput = 0;
-            npcCore.isSitting = true;
 
-            var seatData = calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex];
-            seatData.filled = true;
-            calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex] = seatData;
-        }
-        else
-        {
-            FollowCalmPath();
-        }
-    }
-    private void FollowCalmPath()
+    public void CalmInputs()
     {
         colliderCenter = npcCore.boxCollider2D.size.y / 2f;
         currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, colliderCenter);
-
-        calmPath.SetPath(currentPos, targetPos, colliderCenter);
-
-        //handle direction
-        if (currentPos.x < calmPathToTarget[0].value.x)
+        if (calmPath.pathData.chosenSeatBounds != null)
         {
-            movementInputs.walkInput = 1;
+            lastPos.value = calmPath.chosenSeat.pos;
+            float distanceToSeat = Mathf.Abs(transform.position.x - calmPath.chosenSeat.pos.x);
+            if (distanceToSeat < 0.1)
+            {
+                //set sitting parameters
+                movementInputs.walkInput = 0;
+                npcCore.isSitting = true;
+
+                //set chosen seat to filled
+                SeatData seatData = calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex];
+                seatData.filled = true;
+                calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex] = seatData;
+            }
+            else
+            {
+                FollowCalmPath(currentPos, lastPos, colliderCenter);
+            }
         }
         else
         {
-            movementInputs.walkInput = -1;
+            lastPos.value = calmPath.chosenStandPos;
+            float distanceToStandPos = Mathf.Abs(transform.position.x - calmPath.chosenStandPos.x);
+            if (distanceToStandPos < 0.1)
+            {
+                movementInputs.walkInput = 0;
+                npcCore.isStanding = true;
+            }
+            else
+            {
+                FollowCalmPath(currentPos, lastPos, colliderCenter);
+            }
+        }
+    }
+    private void FollowCalmPath(Vector2 currentPos, PathData.NamedPosition _lastpos, float colliderCenter)
+    {
+
+        calmPath.SetPath(currentPos, _lastpos, colliderCenter);
+
+        //handle direction
+        if (calmPathToTarget.Count > 0)
+        {
+            if (currentPos.x < calmPathToTarget[0].value.x)
+            {
+                movementInputs.walkInput = 1;
+            }
+            else
+            {
+                movementInputs.walkInput = -1;
+            }
         }
     }
 }

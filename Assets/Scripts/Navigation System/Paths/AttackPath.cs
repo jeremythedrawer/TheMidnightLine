@@ -3,7 +3,7 @@ using UnityEngine;
 
 public class AttackPath : PathFinder
 {
-    public override void SetPath(Vector2 currentPos, Vector2 targetPos, float colliderCentre)
+    public override void SetPath(Vector2 currentPos, PathData.NamedPosition targetPos, float colliderCentre)
     {
         base.SetPath(currentPos, targetPos, colliderCentre);
     }
@@ -30,7 +30,7 @@ public class AttackPath : PathFinder
     {
         if (currentInsideBounds.playerInActiveArea)
         {
-            AddToPath(targetPos, PathData.PosType.Target);
+            AddToPath(targetPos, PathData.PosType.Player);
         }
         else
         {
@@ -44,7 +44,7 @@ public class AttackPath : PathFinder
                 AddToPath(chosenClimbingBounds.transform.position, PathData.PosType.ClimbingBound);
             }
 
-            AddToPath(targetPos, PathData.PosType.Target);
+            AddToPath(targetPos, PathData.PosType.Player);
         }
     }
 
@@ -65,7 +65,7 @@ public class AttackPath : PathFinder
                     AddToPath(new Vector2(currentOutsideBounds.leftEdge, currentPos.y), PathData.PosType.RoofEdge);
                 }
             }
-            AddToPath(targetPos, PathData.PosType.Target);
+            AddToPath(targetPos, PathData.PosType.Player);
         }
         else
         {
@@ -79,7 +79,7 @@ public class AttackPath : PathFinder
                 AddToPath(chosenClimbingBounds.transform.position, PathData.PosType.ClimbingBound);
             }
 
-            AddToPath(targetPos, PathData.PosType.Target);
+            AddToPath(targetPos, PathData.PosType.Player);
         }
     }
 
@@ -108,6 +108,6 @@ public class AttackPath : PathFinder
             AddToPath(chosenOutsideBounds.transform.position, PathData.PosType.OutsideBound);
         }
 
-        AddToPath(targetPos, PathData.PosType.Target);
+        AddToPath(targetPos, PathData.PosType.Player);
     }
 }

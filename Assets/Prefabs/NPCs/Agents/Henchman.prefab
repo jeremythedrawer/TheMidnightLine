@@ -28,7 +28,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &5454002635820018757
 Transform:
   m_ObjectHideFlags: 0
@@ -173,7 +173,9 @@ MonoBehaviour:
   characterStats: {fileID: 3655542353893840654}
   healthSystem: {fileID: 3072139848597519722}
   stateList: {fileID: 5816397449932316439}
+  showStateList: 0
   behaviourParams: {fileID: 5769503658216925530}
+  pathData: {fileID: 8494960036256250038}
   agentController: {fileID: 6356972868755096491}
   bystanderController: {fileID: 0}
 --- !u!114 &3655542353893840654
@@ -323,7 +325,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 898ffe0e2d007de4f90320d18ad7e8c0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  updatePlayerPosTicRate: 1
+  updateTargetTickRate: 1
   npcCore: {fileID: 3089367829224165299}
   playerTransform: {fileID: 0}
   playerCollider: {fileID: 0}
@@ -566,6 +568,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: abc210d234ed951489eaa8f7cc137eff, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  breathLoops: 5
 --- !u!114 &8218185540035134103
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -827,10 +830,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 4f395c63528e96048a45d8b16be51044, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bystanderMovement: {fileID: 0}
   runSpeedMultiplier: 0
   walkSpeedMultiplier: 0
-  breathLoops: 5
 --- !u!1 &6844904609606789410
 GameObject:
   m_ObjectHideFlags: 0

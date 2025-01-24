@@ -38,7 +38,7 @@ public class AgentController : NPCController
         colliderCenter = npcCore.boxCollider2D.size.y / 2f;
         currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, colliderCenter);
 
-        attackPath.SetPath(currentPos, targetPos, colliderCenter);
+        attackPath.SetPath(currentPos, lastPos, colliderCenter);
 
         movementInputs.runInput = true;
 
@@ -104,7 +104,7 @@ public class AgentController : NPCController
 
     private IEnumerator WallSequence()
     {
-        if (targetPos.y > attackPath.pathData.trainBounds.roofLevel)
+        if (lastPos.value.y > attackPath.pathData.trainBounds.roofLevel)
         {
             yield return StartCoroutine(HandleJumpInput());
         }

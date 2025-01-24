@@ -6,8 +6,6 @@ using UnityEngine;
 public abstract class PathFinder : MonoBehaviour
 {
     public PathData pathData;
-
-    public bool pathIsSet { get; set; }
     public float distanceToNextPos { get; protected set; }
     public float closeEnoughToNextPos { get; set; } = 0.5f;
     public List<PathData.NamedPosition> pathToTarget => pathData.pathToTarget;
@@ -21,7 +19,7 @@ public abstract class PathFinder : MonoBehaviour
     protected InsideBounds chosenInsideBounds => pathData.chosenInsideBounds;
     protected OutsideBounds chosenOutsideBounds => pathData.chosenOutsideBounds;
     protected GangwayBounds chosenGangway => pathData.chosenGangwayBounds;
-    protected CarriageClimbingBounds chosenClimbingBounds => pathData.chosenClimbingBounds;
+    public CarriageClimbingBounds chosenClimbingBounds => pathData.chosenClimbingBounds;
     protected SeatBounds chosenChairBounds => pathData.chosenSeatBounds;
 
     protected void FindChosenClimbBounds(GangwayBounds chosenGangway, PathFinder path, Vector2 targetPos, Vector2 currentPos)
@@ -131,7 +129,6 @@ public abstract class PathFinder : MonoBehaviour
     protected void FindChosenGangway(CarriageBounds currentCarriageBounds, float currentXPos, float targetXPos)
     {
         GangwayBounds rightGangway = currentCarriageBounds.rightGangwayBounds;
-        Debug.Log(currentCarriageBounds);
         GangwayBounds leftGangway = currentCarriageBounds.leftGangwayBounds;
 
         if (currentCarriageBounds.isBackCarriage) 
@@ -163,63 +160,16 @@ public abstract class PathFinder : MonoBehaviour
             }
         }
     }
-
-    protected void FindChosenChairBounds(Vector2 currentPos)
-    {
-        SeatBounds[] setsOfSeats = currentInsideBounds.setsOfChairs.ToArray();
-
-        float[] setOfSeatsDistances = new float[setsOfSeats.Length];
-
-        for (int i = 0; i < setsOfSeats.Length; i++)
-        {
-            float distanceToSetOfSeats = Vector2.Distance(currentPos, setsOfSeats[i].transform.position);
-            setOfSeatsDistances[i] = distanceToSetOfSeats;
-        }
-
-        float smallestDistance = float.MaxValue;
-        float secondSmallestDistance = float.MaxValue;
-
-        foreach (float distance in setOfSeatsDistances)
-        {
-            if(distance < smallestDistance) //iterating and comparing each index until the smallest value is found
-            {
-                secondSmallestDistance = smallestDistance;
-                smallestDistance = distance;
-            }
-            else if (distance < secondSmallestDistance && distance != smallestDistance) //whatever is left is check one more time to find the second smallest distance
-            {
-                secondSmallestDistance = distance;
-            }
-        }
-
-        int closestPosIndex = Array.IndexOf(setOfSeatsDistances, smallestDistance);
-        int secondClosestPosIndex = Array.IndexOf(setOfSeatsDistances, secondSmallestDistance);
-
-        if (!setsOfSeats[closestPosIndex].seats.All(seat => seat.filled)) // check if all seats in the found set of chairs are full
-        {
-            pathData.chosenSeatBounds = setsOfSeats[closestPosIndex];  
-        }
-        else if (!setsOfSeats[secondClosestPosIndex].seats.All(seat => seat.filled)) //check the second closest set of chairs
-        {
-            pathData.chosenSeatBounds = setsOfSeats[secondClosestPosIndex];
-        }
-        else // all chairs are already filled
-        {
-            pathData.chosenSeatBounds = null;
-        }
-
-
-    }
     protected void AddToPath(Vector2 position, PathData.PosType type)
     {
         pathData.pathToTarget.Add(new PathData.NamedPosition(position, type));
     }
 
-    protected void DrawDebugPath(Vector2 currentPos)
+    private void DrawDebugPath(Vector2 currentPos)
     {
         Vector2 pos = currentPos;
 
-        for (int i = 0; i < pathData.pathToTarget.ToArray().Length; i++)
+        for (int i = 0; i < pathData.pathToTarget.Count; i++)
         {
             Vector2 nextPos = pathData.pathToTarget[i].value;
             Debug.DrawLine(pos, nextPos, Color.magenta);
@@ -228,24 +178,29 @@ public abstract class PathFinder : MonoBehaviour
         }
     }
 
-    public virtual void SetPath(Vector2 currentPos, Vector2 targetPos, float colliderCentre)
+    public virtual void SetPath(Vector2 currentPos, PathData.NamedPosition lastPos, float colliderCentre)
     {
         DrawDebugPath(currentPos);
 
-        if (!pathIsSet)
+        if (!pathData.pathIsSet)
         {
-            FindPath(currentPos, targetPos, colliderCentre);
+            FindPath(currentPos, lastPos.value, colliderCentre);
         }
-        distanceToNextPos = Vector2.Distance(currentPos, pathToTarget[0].value);
-        if (distanceToNextPos < closeEnoughToNextPos || targetPos.x != pathToTarget[pathToTarget.Count - 1].value.x)
+        if (pathToTarget.Count > 0)
         {
-            pathIsSet = false;
+            distanceToNextPos = Vector2.Distance(currentPos, pathToTarget[0].value);
+
+            if (distanceToNextPos < closeEnoughToNextPos || (lastPos.type == PathData.PosType.Player && lastPos.value.x != pathToTarget[pathToTarget.Count - 1].value.x))
+            {
+                pathData.pathIsSet = false;
+            }
         }
+
     }
 
-    public virtual void FindPath(Vector2 currentPos, Vector2 targetPos, float colliderCentre)
+    public virtual void FindPath(Vector2 currentPos, Vector2 lastPos, float colliderCentre)
     {
         pathToTarget.Clear();
-        pathIsSet = true;
+        pathData.pathIsSet = true;
     }
 }

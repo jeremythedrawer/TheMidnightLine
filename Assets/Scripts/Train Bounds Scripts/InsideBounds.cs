@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class InsideBounds : CarriageBounds
@@ -8,9 +9,12 @@ public class InsideBounds : CarriageBounds
     public int bystanderCount { get; private set; } = 0;
 
     public Collider2D thisCollider;
-    public List<SeatBounds> setsOfChairs = new List<SeatBounds>();
+    public List<SeatBounds> setsOfSeats { get; set; } = new List<SeatBounds>();
+    public List<float> npcStandingPosList { get; set; } = new List<float>();
+    private Dictionary<Collider2D, float> npcStandingPosDic = new Dictionary<Collider2D, float>();
 
 
+    public bool inEmergency; //TODO: find when fighting or when gun is shot
     private void Start()
     {
         SetUpCarriageBounds();
@@ -30,7 +34,7 @@ public class InsideBounds : CarriageBounds
             SeatBounds chairBounds = collider.GetComponent<SeatBounds>();
             if (chairBounds != null)
             {
-                setsOfChairs.Add(chairBounds);
+                setsOfSeats.Add(chairBounds);
             }
         }
     }
@@ -45,15 +49,17 @@ public class InsideBounds : CarriageBounds
 
         if (collision.gameObject.CompareTag("Agent Collider") || collision.gameObject.CompareTag("Bystander Collider"))
         {
-            var pathData = collision.gameObject.GetComponentInParent<PathData>();
+            PathData pathData = collision.gameObject.GetComponentInParent<PathData>();
+
             if (pathData != null)
             {
-                    pathData.currentInsideBounds = this;
+                pathData.currentInsideBounds = this;
             }
             else
             {
                 Debug.LogWarning("No PathData was found in " + this.name + " for " + collision.gameObject.name);
             }
+
         }
 
         if (collision.gameObject.CompareTag("Bystander Collider"))
@@ -62,6 +68,33 @@ public class InsideBounds : CarriageBounds
         }
     }
 
+
+    private void OnTriggerStay2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Bystander Collider") || collision.gameObject.CompareTag("Agent Collider"))
+        {
+            NPCCore colliderNpcCore = collision.gameObject.GetComponentInParent<NPCCore>();
+
+            if (!npcStandingPosDic.ContainsKey(collision) && colliderNpcCore.isStanding)
+            {
+                npcStandingPosDic[collision] = collision.transform.position.x; //Storing standing pos x
+            }
+
+            if (npcStandingPosDic.ContainsKey(collision))
+            {
+                float storedPosition = npcStandingPosDic[collision];
+
+                if (colliderNpcCore.isStanding && !npcStandingPosList.Contains(storedPosition))
+                {
+                    npcStandingPosList.Add(storedPosition);
+                }
+                else if (!colliderNpcCore.isStanding && npcStandingPosList.Contains(storedPosition))
+                {
+                    npcStandingPosList.Remove(storedPosition);
+                }
+            }
+        }
+    }
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player Collider"))
@@ -72,11 +105,11 @@ public class InsideBounds : CarriageBounds
 
         if (collision.gameObject.CompareTag("Agent Collider") || collision.gameObject.CompareTag("Bystander Collider"))
         {
-            var pathData = collision.gameObject.GetComponentInParent<PathData>();
+            PathData pathData = collision.gameObject.GetComponentInParent<PathData>();
             if (pathData != null)
             {
                 pathData.currentInsideBounds = null;
-            }
+            };
         }
         if (collision.gameObject.CompareTag("Bystander Collider"))
         {
