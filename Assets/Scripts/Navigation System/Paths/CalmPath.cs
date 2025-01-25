@@ -120,12 +120,10 @@ public class CalmPath : PathFinder
         float insideBoundsMin = currentInsideBounds.Bounds.min.x;
         float insideBoundsMax = currentInsideBounds.Bounds.max.x;
 
+        List<float> standingNpcAndWallPosList = currentInsideBounds.standingNpcAndWallPosList;
 
         //TODO find larget distances between bystanders
-        if (currentInsideBounds.npcStandingPosList.Count == 0)
-        {
-            float randomPosX = UnityEngine.Random.Range(insideBoundsMax, insideBoundsMin);
-            chosenStandPos = new Vector2(randomPosX, currentPos.y);
-        }
+        float randomPosX = UnityEngine.Random.Range(insideBoundsMax, insideBoundsMin);
+        chosenStandPos = new Vector2(randomPosX, currentPos.y);
     }
 }
