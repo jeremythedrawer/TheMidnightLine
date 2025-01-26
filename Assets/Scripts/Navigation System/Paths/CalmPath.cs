@@ -2,6 +2,7 @@ using System.Collections.Generic;
 using System;
 using System.Linq;
 using UnityEngine;
+using static InsideBounds;
 
 public class CalmPath : PathFinder
 {
@@ -9,6 +10,8 @@ public class CalmPath : PathFinder
     public SeatBounds.SeatData chosenSeat {  get; private set; }
     public Vector2 chosenStandPos { get; private set; }
     public int chosenSeatIndex { get; private set; }
+
+    private float standingPosThreshold = 8f;
     public override void SetPath(Vector2 currentPos, PathData.NamedPosition lastPos, float colliderCentre)
     {
         base.SetPath(currentPos, lastPos, colliderCentre);
@@ -27,6 +30,8 @@ public class CalmPath : PathFinder
     }
     public override void FindPath(Vector2 currentPos, Vector2 lastPos, float colliderCentre)
     {
+        if (currentInsideBounds == null) return;
+
         base.FindPath(currentPos, lastPos, colliderCentre);
         FindChosenChairBounds(currentPos);
 
@@ -120,10 +125,30 @@ public class CalmPath : PathFinder
         float insideBoundsMin = currentInsideBounds.Bounds.min.x;
         float insideBoundsMax = currentInsideBounds.Bounds.max.x;
 
-        List<float> standingNpcAndWallPosList = currentInsideBounds.standingNpcAndWallPosList;
+        float standingPosThresholdMin = Math.Max(currentPos.x - standingPosThreshold, insideBoundsMin);
+        float standingPosThresholdMax = Math.Min(currentPos.x + standingPosThreshold, insideBoundsMax);
 
-        //TODO find larget distances between bystanders
-        float randomPosX = UnityEngine.Random.Range(insideBoundsMax, insideBoundsMin);
+        List<StandNpcPosData> standingNpcAndWallPosList = currentInsideBounds.standingNpcAndWallPosList;
+
+        StandNpcPosData largestDistanceSelected = new StandNpcPosData(standingPosThresholdMin, standingPosThresholdMax);
+        float largestDistance = float.MaxValue;
+
+
+        for (int i = 0; i < standingNpcAndWallPosList.Count - 1; i++)
+        {
+            if (standingNpcAndWallPosList[i].startPos > standingPosThresholdMin || standingNpcAndWallPosList[i].endPos < standingPosThresholdMax)
+            {
+                float distance = standingNpcAndWallPosList[i].endPos - standingNpcAndWallPosList[i].startPos;
+                if (distance > largestDistance)
+                {
+                    largestDistance = distance;
+                    Debug.Log(largestDistance);
+                    largestDistanceSelected = standingNpcAndWallPosList[i];
+                }
+            }
+        }
+
+        float randomPosX = UnityEngine.Random.Range(largestDistanceSelected.startPos, largestDistanceSelected.endPos);
         chosenStandPos = new Vector2(randomPosX, currentPos.y);
     }
 }

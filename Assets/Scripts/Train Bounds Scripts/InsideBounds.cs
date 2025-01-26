@@ -3,6 +3,7 @@ using System.Linq;
 using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static PathData;
 
 public class InsideBounds : CarriageBounds
 {
@@ -14,8 +15,20 @@ public class InsideBounds : CarriageBounds
     public bool inEmergency { get; private set; } //TODO: find when fighting or when gun is shot
 
     public List<SeatBounds> setsOfSeats { get; set; } = new List<SeatBounds>();
-    public List<float> standingNpcAndWallPosList { get; set; } = new List<float>();
-    public List<float> distancesBetweenNpcs { get; set; } = new List<float>();
+
+    [System.Serializable]
+    public struct StandNpcPosData
+    {
+        public float startPos;
+        public float endPos;
+
+        public StandNpcPosData(float startPos, float endPos)
+        {
+            this.startPos = startPos;
+            this.endPos = endPos;
+        }
+    }
+    public List<StandNpcPosData> standingNpcAndWallPosList { get; set; } = new List<StandNpcPosData>();
 
     private Dictionary<Collider2D, float> npcStandingPosDic = new Dictionary<Collider2D, float>();
 
@@ -73,17 +86,9 @@ public class InsideBounds : CarriageBounds
 
                 if (colliderNpcCore.isStanding)
                 {
-                    if (!standingNpcAndWallPosList.Contains(storedPosition))
+                    if (!standingNpcAndWallPosList.Any(posData => posData.startPos == storedPosition))
                     {
-                        InsertSorted(standingNpcAndWallPosList, storedPosition);
-                        FindDistances(storedPosition);
-                    }
-                }
-                else
-                {
-                    if (standingNpcAndWallPosList.Contains(storedPosition))
-                    {
-                        standingNpcAndWallPosList.Remove(storedPosition);
+                        InsertSorted(new StandNpcPosData(storedPosition, 0));
                     }
                 }
             }
@@ -134,43 +139,28 @@ public class InsideBounds : CarriageBounds
 
     private void AddWallsPosToList()
     {
-        standingNpcAndWallPosList.Insert(0, Bounds.min.x);
-        standingNpcAndWallPosList.Add(Bounds.max.x);
+        InsertSorted(new StandNpcPosData(Bounds.min.x, 0));
     }
 
-    private void InsertSorted(List<float> list, float value)
+    private void InsertSorted(StandNpcPosData currentPosData)
     {
-        int index = list.BinarySearch(value);
+        int index = standingNpcAndWallPosList.BinarySearch(currentPosData, Comparer<StandNpcPosData>.Create((x,y) => x.startPos.CompareTo(y.startPos)));
         if (index < 0) index = ~index; // finds the insertion index
-        list.Insert(index, value);
-    }
-
-    private void FindDistances(float position)
-    {
-        int index = standingNpcAndWallPosList.IndexOf(position);
-        int leftIndex = index - 1;
-        int rightIndex = index + 1;
-
-        //Debug.Log("left index: " + leftIndex + " right index: " + rightIndex + " index count " + distancesBetweenNpcs.Length);
-        float lefttDistance = standingNpcAndWallPosList[index] - standingNpcAndWallPosList[leftIndex];
-        float rightDistance = standingNpcAndWallPosList[rightIndex] - standingNpcAndWallPosList[index];
-        if (distancesBetweenNpcs.Count == 0)
+        standingNpcAndWallPosList.Insert(index, currentPosData);
+        if (index > 0)
         {
-            distancesBetweenNpcs.Insert(0, lefttDistance);
-
-            distancesBetweenNpcs.Insert(1, rightDistance);
+            StandNpcPosData prevItem = standingNpcAndWallPosList[index - 1];
+            standingNpcAndWallPosList[index - 1] = new StandNpcPosData(prevItem.startPos, currentPosData.startPos);
+            if (currentPosData.endPos == 0 && standingNpcAndWallPosList.Count > index + 1) // check if index skips over the previous index
+            {
+                StandNpcPosData nextItem = standingNpcAndWallPosList[index + 1];
+                standingNpcAndWallPosList[index] = new StandNpcPosData(currentPosData.startPos, nextItem.startPos);
+            }
+            if (index == standingNpcAndWallPosList.Count - 1) // add wall to endpos on the las index
+            {
+                standingNpcAndWallPosList[index] = new StandNpcPosData(currentPosData.startPos, Bounds.max.x);
+            }
+            
         }
-        else
-        {
-            float totalDistance = lefttDistance + rightDistance;
-            distancesBetweenNpcs.Remove(totalDistance);
-            distancesBetweenNpcs.Insert(leftIndex, lefttDistance);
-            distancesBetweenNpcs.Insert(index, rightDistance);
-        }
-    }
-
-    private void UpdateDistancesBeforeRemoval(float position)
-    {
-       
     }
 }
