@@ -29,6 +29,8 @@ public class IdleState : State
 
     private void IdleAnimationController()
     {
+        if (core.stateList.airborneState != null && core.stateList.airborneState.isHeavyLanding) return;
+
         if (core is NPCCore)
         {
             if (!playingAnimation)

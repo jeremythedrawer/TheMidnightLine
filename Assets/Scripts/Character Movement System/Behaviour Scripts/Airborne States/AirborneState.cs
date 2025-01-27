@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class AirborneState : State
@@ -9,10 +10,11 @@ public class AirborneState : State
     public float antiGravityApexScale = 2.0f;
 
     [Tooltip("Maximum falling speed")]
-    public float clampedFallSpeed = 20.0f;
+    public float clampedFallSpeed = 15.0f;
+
+    public bool isHeavyLanding {  get; private set; }
 
     private bool jumped;
-    public bool aboutToHeavyLand { get; set; }
 
 
     private float jumpAnimationProgress = 0f; // Normalized time for animation
@@ -27,6 +29,7 @@ public class AirborneState : State
         ClampFallSpeed();
         StickyFeetOnLand();
         JumpAndFallAnimController();
+        HeavyLand();
     }
 
     public override void FixedDo()
@@ -36,7 +39,6 @@ public class AirborneState : State
     {
         base.Exit();
         jumped = false;
-        aboutToHeavyLand = false;
         fallAnimationProgress = 0;
         jumpAnimationProgress = 0;
     }
@@ -57,11 +59,7 @@ public class AirborneState : State
     private void ClampFallSpeed()
     {
         body.linearVelocityY = Mathf.Max(body.linearVelocityY, clampedFallSpeed * -1); //using max because Y velocity would be negative when falling
-        if (body.linearVelocityY <= clampedFallSpeed * -1)
-        {
-            aboutToHeavyLand = true;
-            core.stateList.groundState.isHeavyLanding = true;
-        }
+
     }
 
     private void StickyFeetOnLand()
@@ -89,5 +87,32 @@ public class AirborneState : State
             fallAnimationProgress = Mathf.Lerp(0,1, t);
             animator.Play(animStates.fallAnimState, 0, fallAnimationProgress);
         }
+    }
+
+    private void HeavyLand()
+    {
+        if (body.linearVelocityY <= clampedFallSpeed * -1)
+        {
+
+            if (!isHeavyLanding)
+            {
+                isHeavyLanding = true;
+                StartCoroutine(HeavyLandSequence());
+            }
+        }
+    }
+
+    private IEnumerator HeavyLandSequence()
+    {
+        Debug.Log("now heavy landing");
+        yield return new WaitUntil(() => collisionChecker.grounded == true);
+
+        movementInputs.canMove = false;
+        PlayAnimation(animStates.heavyAnimState);
+        yield return null;
+        yield return new WaitUntil(() => core.currentAnimStateInfo.normalizedTime >= 1);
+
+        movementInputs.canMove = true;
+        isHeavyLanding = false;
     }
 }

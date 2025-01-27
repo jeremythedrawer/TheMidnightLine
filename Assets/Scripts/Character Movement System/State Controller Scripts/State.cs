@@ -43,6 +43,8 @@ public abstract class State : MonoBehaviour
     protected IEnumerator PlayAnimationCoroutine(string animState)
     {
         animator.Play(animState, 0, 0);
+        yield return new WaitForEndOfFrame();
+
         while (core.currentAnimStateInfo.normalizedTime < 1)
         {
             yield return null;

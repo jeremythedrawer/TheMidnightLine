@@ -9,14 +9,7 @@ public class RunState : State
     }
     public override void Do()
     {
-        if (movementInputs.runInput)
-        {
-            RunAnimationController();
-        }
-        else
-        {
-            WalkAnimationController();
-        }
+        AnimationController();
 
         if (!collisionChecker.grounded || Mathf.Abs(movementInputs.walkInput) < 1)
         {
@@ -37,6 +30,19 @@ public class RunState : State
         startRunAnimation = false;
     }
 
+    private void AnimationController()
+    {
+        if (core.stateList.airborneState != null && core.stateList.airborneState.isHeavyLanding) return;
+
+        if (movementInputs.runInput)
+        {
+            RunAnimationController();
+        }
+        else
+        {
+            WalkAnimationController();
+        }
+    }
     private void RunAnimationController()
     {
         if (!startRunAnimation)
@@ -52,6 +58,6 @@ public class RunState : State
 
     private void WalkAnimationController()
     {
-            PlayAnimation(animStates.walkAnimState);
+        PlayAnimation(animStates.walkAnimState);
     }
 }

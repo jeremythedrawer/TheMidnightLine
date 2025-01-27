@@ -11,7 +11,6 @@ public class GroundState : State
     public float groundDrag;
 
     public bool isAttacking { private get; set; } 
-    public bool isHeavyLanding { get; set; }
 
 
     public override void Enter()
@@ -21,7 +20,6 @@ public class GroundState : State
     public override void Do()
     {
         BHCCorrection();
-        HeavyLand();
         SelectState();
 
         if (movementInputs.meleeInput)
@@ -76,31 +74,5 @@ public class GroundState : State
             collisionChecker.characterBoxCollider.offset = currentOffset;
         }
 
-    }
-
-    private void HeavyLand()
-    {
-        if ( core is BystanderBrain)
-        {
-            return;
-        }
-
-        if (isHeavyLanding)
-        {
-
-            if (core.stateList.airborneState.aboutToHeavyLand) // triggered on one frame
-            {
-                //TODO: roll when x input
-                movementInputs.canMove = false;
-                PlayAnimation(animStates.heavyAnimState);
-                core.stateList.airborneState.aboutToHeavyLand = false;
-            }
-
-            if (core.currentAnimStateInfo.normalizedTime >= 1) // when heavylanding is finished
-            {
-                isHeavyLanding = false;
-                movementInputs.canMove = true;
-            } 
-        }
     }
 }
