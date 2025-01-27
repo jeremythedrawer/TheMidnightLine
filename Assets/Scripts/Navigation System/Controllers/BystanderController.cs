@@ -43,6 +43,7 @@ public class BystanderController : NPCController
             {
                 movementInputs.walkInput = 0;
                 npcCore.isStanding = true;
+                npcCore.characterMaterial.SendCharToStandLayer();
             }
             else
             {
