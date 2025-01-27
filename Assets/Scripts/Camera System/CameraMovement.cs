@@ -49,7 +49,7 @@ public class CameraMovement : MonoBehaviour
     //player components
     private SpriteRenderer spriteRenderer;
     private Rigidbody2D playerRb;
-    private PlayerMovement playerMovement;
+    private PlayerBrain playerBrain;
     private AirborneState airborneState;
 
     private void Start()
@@ -58,8 +58,8 @@ public class CameraMovement : MonoBehaviour
 
         spriteRenderer = player.GetComponentInChildren<SpriteRenderer>();
         playerRb = player.GetComponent<Rigidbody2D>();
-        playerMovement = player.GetComponent<PlayerMovement>();
-        airborneState = playerMovement.stateList.airborneState;
+        playerBrain = player.GetComponent<PlayerBrain>();
+        airborneState = playerBrain.stateList.airborneState;
 
         trainCamBounds = Object.FindFirstObjectByType<TrainBounds>();
 
@@ -79,7 +79,7 @@ public class CameraMovement : MonoBehaviour
     }
     private void CameraBias()
     {
-        if (Mathf.Abs(playerRb.linearVelocityX) < playerMovement.characterStats.runSpeed)
+        if (Mathf.Abs(playerRb.linearVelocityX) < playerBrain.characterStats.runSpeed)
         {
             widthOffset = spriteRenderer.flipX ? -cameraBiasOffset : cameraBiasOffset;
         }

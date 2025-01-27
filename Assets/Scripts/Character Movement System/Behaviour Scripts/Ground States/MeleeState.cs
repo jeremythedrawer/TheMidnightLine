@@ -32,14 +32,14 @@ public class MeleeState : State
 
     public void DealDamage(int attackIndex)
     {
-        if (core is PlayerMovement)
+        if (core is PlayerBrain)
         {
             foreach (Collider2D agentCollider in meleeColliderData.agentColliders)
             {
                 agentCollider.GetComponentInParent<HealthSystem>().TakeDamage(core.characterStats.meleeStrength);
             }  
         }
-        if (core is AgentMovement)
+        if (core is AgentBrain)
         {
             if (meleeColliderData.hitPlayerCollider)
             {
@@ -51,7 +51,7 @@ public class MeleeState : State
 
     private void MeleeAnimationController()
     {
-        if (core is PlayerMovement)
+        if (core is PlayerBrain)
         {
             if (!playingAnimation)
             {
@@ -64,7 +64,7 @@ public class MeleeState : State
             }
             // TODO implement right and left animation logic and also logic for symetrical animations (agents)
         }
-        else if (core is AgentMovement)
+        else if (core is AgentBrain)
         {
             PlayComboAnimation();
         }

@@ -5,6 +5,7 @@ Shader "Unlit/s_character"
         [NoScaleOffset] _MainTex ("Sprite Texture", 2D) = "white" {}
 
         _Color ("Tint", Color) = (1,1,1,1)
+        _Brightness ("Brightness", Range(0, 0.2)) = 0
     }
     SubShader
     {
@@ -51,6 +52,7 @@ Shader "Unlit/s_character"
 
             CBUFFER_START(UnityPerMaterial)
                 half4 _Color;
+                half _Brightness;
             CBUFFER_END
 
             #if USE_SHAPE_LIGHT_TYPE_0
@@ -91,7 +93,8 @@ Shader "Unlit/s_character"
             half4 frag (Varyings i) : SV_Target
             {
                 const half4 sampledMainTex =  SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                const half3 main = (i.color.rgb + sampledMainTex.rgb);
+                const half3 color = i.color.rgb + _Brightness;
+                const half3 main = (color + sampledMainTex.rgb);
                 const half mask = sampledMainTex.a;
 
                 SurfaceData2D surfaceData;

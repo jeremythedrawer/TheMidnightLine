@@ -119,7 +119,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a44aadab004ebc409d962eaea6ca701, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  bystanderMovement: {fileID: 4144621108444965492}
   runSpeedMultiplier: 0
   walkSpeedMultiplier: 0
   playerLayer:
@@ -162,7 +161,7 @@ GameObject:
   - component: {fileID: 5545342954787818127}
   - component: {fileID: 5602924533705069211}
   - component: {fileID: 7628201130985039182}
-  - component: {fileID: 4144621108444965492}
+  - component: {fileID: 1100232100378541386}
   - component: {fileID: 415244996423126682}
   - component: {fileID: 6242132147326788535}
   - component: {fileID: 4490734383750937007}
@@ -268,7 +267,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 89cf95fe1752a184b84817b191e91e09, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -300,7 +299,7 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &4144621108444965492
+--- !u!114 &1100232100378541386
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -309,7 +308,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 4406493656620320848}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 81320bb64d4abf84fb10986061614a82, type: 3}
+  m_Script: {fileID: 11500000, guid: 202edd4f8084593459f8face399feb97, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   body: {fileID: 5545342954787818127}
@@ -321,7 +320,7 @@ MonoBehaviour:
   characterStats: {fileID: 415244996423126682}
   healthSystem: {fileID: 3820185767879755702}
   stateList: {fileID: 7373441171486428705}
-  showStateList: 1
+  showStateList: 0
   behaviourParams: {fileID: 593755450897370765}
   pathData: {fileID: 9149327920002695015}
   agentController: {fileID: 0}
@@ -381,7 +380,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a7c8c9816f824f04b9acefb7b311c693, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  core: {fileID: 4144621108444965492}
+  core: {fileID: 1100232100378541386}
   meleeBoxColliderTransform: {fileID: 0}
 --- !u!114 &3820185767879755702
 MonoBehaviour:
@@ -443,7 +442,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   updateTargetTickRate: 1
-  npcCore: {fileID: 4144621108444965492}
+  npcCore: {fileID: 1100232100378541386}
   playerTransform: {fileID: 8671146431177964929}
   playerCollider: {fileID: 4161541657112090268}
   movementInputs: {fileID: 4490734383750937007}
@@ -460,11 +459,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8814db1c8dedcdf498ad18ded07b9471, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  npcCore: {fileID: 4144621108444965492}
+  npcCore: {fileID: 1100232100378541386}
   armDistance: 1.52
   playerLayer:
     serializedVersion: 2
-    m_Bits: 0
+    m_Bits: 64
   seeGizmos: 0
 --- !u!114 &9149327920002695015
 MonoBehaviour:

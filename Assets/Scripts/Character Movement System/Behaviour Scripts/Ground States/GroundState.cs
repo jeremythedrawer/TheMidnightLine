@@ -80,7 +80,7 @@ public class GroundState : State
 
     private void HeavyLand()
     {
-        if ( core is BystanderMovement)
+        if ( core is BystanderBrain)
         {
             return;
         }

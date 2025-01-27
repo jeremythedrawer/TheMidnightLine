@@ -1,9 +1,9 @@
 using UnityEngine;
 
-public class BystanderMovement : NPCCore
+public class BystanderBrain : NPCCore
 {
     public GameObject player { get; private set; }
-    private PlayerMovement playerMovement;
+    private PlayerBrain playerBrain;
 
     public bool isCalm {  get; private set; }
     public bool isPanic { get; private set; }
@@ -19,7 +19,7 @@ public class BystanderMovement : NPCCore
         initialGravityScale = body.gravityScale;
 
         player = GameObject.FindGameObjectWithTag("Player");
-        playerMovement = player.GetComponent<PlayerMovement>();
+        playerBrain = player.GetComponent<PlayerBrain>();
     }
 
     void Update()
@@ -68,7 +68,7 @@ public class BystanderMovement : NPCCore
 
     private void PanicChecker()
     {
-       if (playerMovement.stateList.meleeState.landedHit)
+       if (playerBrain.stateList.meleeState.landedHit)
         {
             isPanic = true;
             isCalm = false;

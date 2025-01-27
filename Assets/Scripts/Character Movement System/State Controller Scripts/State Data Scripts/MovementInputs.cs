@@ -131,7 +131,7 @@ public class MovementInputs : MonoBehaviour
         bool posDirection = Mathf.Sign(walkInput) > 0; // 0 is left, 1 is right
         core.spriteRenderer.flipX = !posDirection;
 
-        if (core is not BystanderMovement)
+        if (core is not BystanderBrain)
         {
             Vector3 meleeBoxScale = meleeBoxColliderTransform.localScale;
             float intendedScaleX = Mathf.Abs(meleeBoxScale.x) * (posDirection ? 1: -1);

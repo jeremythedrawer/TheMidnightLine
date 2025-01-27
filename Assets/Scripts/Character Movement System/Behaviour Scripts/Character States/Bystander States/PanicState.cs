@@ -4,7 +4,7 @@ using UnityEngine;
 public class PanicState : State
 {
     //parent state
-    public BystanderMovement bystanderMovement;
+    public BystanderBrain bystanderBrain {  get; private set; }
 
     public float runSpeedMultiplier;
     public float walkSpeedMultiplier;
@@ -17,7 +17,7 @@ public class PanicState : State
     public override void Do()
     {
         AvoidPlayer();
-        if (bystanderMovement.isCalm)
+        if (bystanderBrain.isCalm)
         {
             isComplete = true;
         }
@@ -38,7 +38,7 @@ public class PanicState : State
     private void AvoidPlayer()
     {
         Vector2 currentPos = transform.position;
-        Vector2 currentPlayerPos = bystanderMovement.player.transform.position;
+        Vector2 currentPlayerPos = bystanderBrain.player.transform.position;
         Vector2 directionToPlayer = (currentPlayerPos - currentPos).normalized;
         Vector2 thresholdPos = currentPos + directionToPlayer * avoidPlayerDistance;
 

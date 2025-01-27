@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class PlayerMovement : StateCore
+public class PlayerBrain : StateCore
 {
     void Start()
     {

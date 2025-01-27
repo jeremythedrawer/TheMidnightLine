@@ -15,7 +15,7 @@ public class CalmState : State
     public override void Do()
     {
         SelectState();
-        if (npcCore is BystanderMovement)
+        if (npcCore is BystanderBrain)
         {
             npcCore.bystanderController.CalmInputs();
         }

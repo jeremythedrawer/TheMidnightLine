@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.UIElements;
 
-public class AgentMovement : NPCCore
+public class AgentBrain : NPCCore
 {
     // state bool
     public bool isHiding { get; private set; }

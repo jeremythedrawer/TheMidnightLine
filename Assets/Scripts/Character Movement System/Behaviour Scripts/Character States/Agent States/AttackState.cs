@@ -2,8 +2,6 @@ using UnityEngine;
 
 public class AttackState : State
 {
-    //parent state
-    public AgentMovement agentMovement;
     public override void Enter()
     {
     }
