@@ -22,6 +22,7 @@ GameObject:
   - component: {fileID: 5816397449932316439}
   - component: {fileID: 6356972868755096491}
   - component: {fileID: 8494960036256250038}
+  - component: {fileID: 5036945226976848612}
   m_Layer: 0
   m_Name: Henchman
   m_TagString: Untagged
@@ -98,7 +99,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 89cf95fe1752a184b84817b191e91e09, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -167,12 +168,13 @@ MonoBehaviour:
   body: {fileID: 6503016544083589490}
   spriteRenderer: {fileID: 7636991861150971996}
   animator: {fileID: 4374384087322266987}
-  collisionChecker: {fileID: 9091029623637560231}
   boxCollider2D: {fileID: 58726244203209126}
+  collisionChecker: {fileID: 9091029623637560231}
   movementInputs: {fileID: 6190765102839442715}
   characterStats: {fileID: 3655542353893840654}
   healthSystem: {fileID: 3072139848597519722}
   stateList: {fileID: 5816397449932316439}
+  characterMaterial: {fileID: 5036945226976848612}
   showStateList: 0
   behaviourParams: {fileID: 5769503658216925530}
   pathData: {fileID: 8494960036256250038}
@@ -346,6 +348,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trainBounds: {fileID: 0}
+--- !u!114 &5036945226976848612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1760437334605092239}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a730a58a59e564387af61b4bddc4f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRen: {fileID: 7636991861150971996}
 --- !u!1 &2298445315329970892
 GameObject:
   m_ObjectHideFlags: 0

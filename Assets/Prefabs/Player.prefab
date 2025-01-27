@@ -465,6 +465,7 @@ GameObject:
   - component: {fileID: 3318510828591014836}
   - component: {fileID: 7975908150685175985}
   - component: {fileID: 2283059566483282482}
+  - component: {fileID: 5501752874284210901}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -562,7 +563,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
+  - {fileID: 2100000, guid: 89cf95fe1752a184b84817b191e91e09, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -609,12 +610,13 @@ MonoBehaviour:
   body: {fileID: 6574141234835530042}
   spriteRenderer: {fileID: 2777033409117370694}
   animator: {fileID: 5569901885537800629}
-  collisionChecker: {fileID: 6655092737606140929}
   boxCollider2D: {fileID: 6207222510939091140}
+  collisionChecker: {fileID: 6655092737606140929}
   movementInputs: {fileID: 8911714753198091239}
   characterStats: {fileID: 7752829070841774031}
   healthSystem: {fileID: 3318510828591014836}
   stateList: {fileID: 2283059566483282482}
+  characterMaterial: {fileID: 5501752874284210901}
   showStateList: 0
 --- !u!114 &7752829070841774031
 MonoBehaviour:
@@ -733,3 +735,16 @@ MonoBehaviour:
   airShootState: {fileID: 6677303139734392730}
   hangState: {fileID: 8254101074954535483}
   climbState: {fileID: 8446222402745511252}
+--- !u!114 &5501752874284210901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8451971257262523574}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a730a58a59e564387af61b4bddc4f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRen: {fileID: 0}

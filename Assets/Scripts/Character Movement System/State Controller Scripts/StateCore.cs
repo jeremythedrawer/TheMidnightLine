@@ -7,16 +7,18 @@ public abstract class StateCore : MonoBehaviour
     public Rigidbody2D body;
     public SpriteRenderer spriteRenderer;
     public Animator animator;
-    public AnimatorStateInfo currentAnimStateInfo;
-    public CollisionChecker collisionChecker;
     public BoxCollider2D boxCollider2D;
+    public AnimatorStateInfo currentAnimStateInfo;
+
+    [Header ("State Core References")]
+    public CollisionChecker collisionChecker;
     public MovementInputs movementInputs;
     public CharacterStats characterStats;
     public HealthSystem healthSystem;
     public StateList stateList;
-
     public AnimStateStrings animStates;
     public StateMachine machine;
+    public CharacterMaterial characterMaterial;
 
     public bool showStateList;
 

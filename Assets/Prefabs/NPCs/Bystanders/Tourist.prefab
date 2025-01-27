@@ -170,6 +170,7 @@ GameObject:
   - component: {fileID: 898099057580638841}
   - component: {fileID: 593755450897370765}
   - component: {fileID: 9149327920002695015}
+  - component: {fileID: 7993344629850196798}
   m_Layer: 0
   m_Name: Tourist
   m_TagString: Untagged
@@ -314,12 +315,13 @@ MonoBehaviour:
   body: {fileID: 5545342954787818127}
   spriteRenderer: {fileID: 7628201130985039182}
   animator: {fileID: 5602924533705069211}
-  collisionChecker: {fileID: 6242132147326788535}
   boxCollider2D: {fileID: 4161541657112090268}
+  collisionChecker: {fileID: 6242132147326788535}
   movementInputs: {fileID: 4490734383750937007}
   characterStats: {fileID: 415244996423126682}
   healthSystem: {fileID: 3820185767879755702}
   stateList: {fileID: 7373441171486428705}
+  characterMaterial: {fileID: 7993344629850196798}
   showStateList: 0
   behaviourParams: {fileID: 593755450897370765}
   pathData: {fileID: 9149327920002695015}
@@ -478,6 +480,19 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trainBounds: {fileID: 0}
+--- !u!114 &7993344629850196798
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4406493656620320848}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f0a730a58a59e564387af61b4bddc4f0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  spriteRen: {fileID: 7628201130985039182}
 --- !u!1 &4662284211415316462
 GameObject:
   m_ObjectHideFlags: 0

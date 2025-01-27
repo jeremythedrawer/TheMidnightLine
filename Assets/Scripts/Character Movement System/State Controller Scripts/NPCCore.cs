@@ -3,7 +3,7 @@ using UnityEngine.Rendering.Universal;
 
 public abstract class NPCCore : StateCore
 {
-    [Header("NPC Core Data")]
+    [Header("NPC Core References")]
     public BehaviourParams behaviourParams;
     public PathData pathData;
     //agent

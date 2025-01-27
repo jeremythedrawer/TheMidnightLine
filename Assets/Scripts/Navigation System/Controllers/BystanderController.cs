@@ -23,6 +23,7 @@ public class BystanderController : NPCController
                 //set sitting parameters
                 movementInputs.walkInput = 0;
                 npcCore.isSitting = true;
+                npcCore.characterMaterial.SendCharToSeatLayer();
 
                 //set chosen seat to filled
                 SeatData seatData = calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex];
