@@ -27,7 +27,7 @@ public class CharacterMaterial : MonoBehaviour
 
             spriteRen.SetPropertyBlock(propBlock);
 
-            spriteRen.sortingOrder = 3;
+            spriteRen.sortingOrder = 4;
             charIsSeated = true;
         }
     }
