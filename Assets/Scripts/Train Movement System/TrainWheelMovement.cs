@@ -2,9 +2,9 @@ using UnityEngine;
 
 public class TrainWheelMovement : MonoBehaviour
 {
-    public TrainMovement trainMovement;
+    public TrainController trainMovement;
     void Update()
     {
-        transform.Rotate(0,0, trainMovement.trainSpeed * Time.deltaTime);
+        transform.Rotate(0,0, -trainMovement.maxSpeed);
     }
 }

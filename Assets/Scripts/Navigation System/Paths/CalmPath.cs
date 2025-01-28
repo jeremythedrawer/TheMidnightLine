@@ -142,7 +142,6 @@ public class CalmPath : PathFinder
                 if (distance > largestDistance)
                 {
                     largestDistance = distance;
-                    Debug.Log(largestDistance);
                     largestDistanceSelected = standingNpcAndWallPosList[i];
                 }
             }
