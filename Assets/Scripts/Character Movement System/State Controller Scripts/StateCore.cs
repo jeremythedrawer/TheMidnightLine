@@ -26,7 +26,7 @@ public abstract class StateCore : MonoBehaviour
 
     internal float initialGravityScale;
 
-    public CarriageClimbingBounds currentClimbBounds { get; set; }
+    public ClimbingBounds currentClimbBounds { get; set; }
 
     protected float normalizedAnimTime;
     public bool isDropping {  get; set; }

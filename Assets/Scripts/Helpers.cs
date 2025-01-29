@@ -24,19 +24,30 @@ public static class Helpers
     }
 
     //Debug
-    public static void DrawBoxCastDebug(Vector2 start, Vector2 end, Color color)
+    public static void DrawSquare(Vector2 start, Vector2 end, Color color, float zDepth = 0, bool usingGizmos = false)
     {
         // box corners
-        Vector2 topLeft = new Vector2(start.x, end.y);
-        Vector2 topRight = end;
-        Vector2 bottomLeft = start;
-        Vector2 bottomRight = new Vector2(end.x, start.y);
+        Vector3 topLeft = new Vector3(start.x, end.y, zDepth);
+        Vector3 topRight = new Vector3(end.x, end.y, zDepth);
+        Vector3 bottomLeft = new Vector3(start.x, start.y, zDepth);
+        Vector3 bottomRight = new Vector3(end.x, start.y, zDepth);
 
         // edges
-        Debug.DrawLine(topLeft, topRight, color);
-        Debug.DrawLine(topRight, bottomRight, color);
-        Debug.DrawLine(bottomRight, bottomLeft, color);
-        Debug.DrawLine(bottomLeft, topLeft, color);
+        if (usingGizmos)
+        {
+            Gizmos.color = color;
+            Gizmos.DrawLine(topLeft, topRight);
+            Gizmos.DrawLine(topRight, bottomRight);
+            Gizmos.DrawLine(bottomRight, bottomLeft);
+            Gizmos.DrawLine(bottomLeft, topLeft);
+        }
+        else
+        {
+            Debug.DrawLine(topLeft, topRight, color);
+            Debug.DrawLine(topRight, bottomRight, color);
+            Debug.DrawLine(bottomRight, bottomLeft, color);
+            Debug.DrawLine(bottomLeft, topLeft, color);
+        }
     }
 
     public static void DrawCircle(Vector2 center, float radius, Color color, int segments, bool useGizmos)

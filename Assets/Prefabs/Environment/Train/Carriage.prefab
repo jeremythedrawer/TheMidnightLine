@@ -254,6 +254,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5029582999761189244}
+  - component: {fileID: 1446221525180156118}
   m_Layer: 0
   m_Name: Carriage
   m_TagString: Untagged
@@ -283,6 +284,19 @@ Transform:
   - {fileID: 6313164941440206156}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1446221525180156118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 665926796445240803}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49c21c351b0b2864090746dafb5f2d6c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  insideBounds: {fileID: 4484639525074998217}
 --- !u!1 &689620012078080742
 GameObject:
   m_ObjectHideFlags: 0
@@ -921,11 +935,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seeBoundsGizmos: 1
+  carriageBounds: {fileID: 1446221525180156118}
   gangwayTriggerLayer:
     serializedVersion: 2
     m_Bits: 2048
-  isBackCarriage: 0
-  isFrontCarriage: 0
 --- !u!1 &1656514348289034394
 GameObject:
   m_ObjectHideFlags: 0
@@ -2006,11 +2019,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seeBoundsGizmos: 0
+  carriageBounds: {fileID: 1446221525180156118}
   gangwayTriggerLayer:
     serializedVersion: 2
     m_Bits: 2048
-  isBackCarriage: 0
-  isFrontCarriage: 0
 --- !u!1 &5550120008611827804
 GameObject:
   m_ObjectHideFlags: 0

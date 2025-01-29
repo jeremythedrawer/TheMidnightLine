@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class OutsideBounds : CarriageBounds
+public class OutsideBounds : InsideOutsideBounds
 {
     private void Start()
     {

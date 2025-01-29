@@ -1,5 +1,3 @@
-using System.Collections;
-using UnityEditor.Profiling;
 using UnityEngine;
 
 public class CameraMovement : MonoBehaviour
@@ -7,7 +5,7 @@ public class CameraMovement : MonoBehaviour
     public GameObject player;
 
     public float height = 0f;
-    public float regularProjectionSize = 5.0f;
+    public float carriageProjectionSize = 5.0f;
     public float roofProjectionSize = 8.0f;
     public float damping = 5.0f;
     public float cameraBiasOffset = 1f;
@@ -52,6 +50,18 @@ public class CameraMovement : MonoBehaviour
     private PlayerBrain playerBrain;
     private AirborneState airborneState;
 
+
+    private void OnDrawGizmos()
+    {
+#if UNITY_EDITOR
+        cam = Camera.main;
+        Vector2 topRight = cam.ScreenToWorldPoint(new Vector2(0, cam.pixelHeight));
+        Vector3 bottomLeft = cam.ScreenToWorldPoint(new Vector3(cam.pixelWidth, 0.0f));
+
+        Helpers.DrawSquare(topRight, bottomLeft, Color.blue, cam.farClipPlane, true);
+        Gizmos.color = Color.blue;
+#endif
+    }
     private void Start()
     {
         cam = Camera.main;
@@ -159,7 +169,7 @@ public class CameraMovement : MonoBehaviour
         {
             currentCamSizeTransTime = Mathf.Max(currentCamSizeTransTime - Time.deltaTime, 0);
         }
-        Camera.main.orthographicSize = Mathf.Lerp(regularProjectionSize, roofProjectionSize, t);
+        Camera.main.orthographicSize = Mathf.Lerp(carriageProjectionSize, roofProjectionSize, t);
     }
 
     private void DrawDebugLines()

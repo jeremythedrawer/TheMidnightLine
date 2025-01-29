@@ -1,43 +1,58 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class TrainBounds : Bounds
 {
+    [Header("References")]
+    public Collider2D backCarriageCollider;
+    public Collider2D frontCarriageCollider;
 
+    [Header("Parameters")]
     public float wheelLevel = 1.0f;
     public float roofLevel = 1.0f;
-    public bool seeTrainGizmos;
 
+    public float boundsMinX => backCarriageCollider.bounds.min.x;
+    public float boundsMaxX => frontCarriageCollider.bounds.max.x;
     private void OnDrawGizmos()
     {
-#if UNITY_EDITOR
-        if (seeTrainGizmos)
-        {
-            if (Application.isPlaying) return;
-
-            float bottom = transform.position.y - this.wheelLevel;
-            float roof = transform.position.y + this.roofLevel;
-
-            Gizmos.color = Color.yellow;
-            Gizmos.DrawLine(transform.position, new Vector3(transform.position.x, bottom));
-            Gizmos.DrawLine(transform.position, new Vector3(transform.position.x, roof));
-            Gizmos.DrawLine(new Vector3(transform.position.x - 3, bottom), new Vector3(transform.position.x + 3, bottom));
-            Gizmos.DrawLine(new Vector3(transform.position.x - 3, roof), new Vector3(transform.position.x + 3, roof));
-        }
-#endif
+        DebugLines(true);
     }
 
     private void Start()
     {
+        DebugLines(false);
         wheelLevel = transform.position.y - wheelLevel;
         roofLevel = transform.position.y + roofLevel;    
     }
 
-    private void Update()
+    private void DebugLines(bool usingGizmos)
     {
-        if (seeTrainGizmos)
+#if UNITY_EDITOR
+        if (seeBoundsGizmos)
         {
-            Debug.DrawLine(new Vector3(transform.position.x - 3, wheelLevel), new Vector3(transform.position.x + 3, wheelLevel), Color.yellow);
-            Debug.DrawLine(new Vector3(transform.position.x - 3, roofLevel), new Vector3(transform.position.x + 3, roofLevel), Color.yellow);        
+            Vector2 wheelsMin = new Vector2 (boundsMinX, wheelLevel);
+            Vector2 wheelsMax = new Vector2 (boundsMaxX, wheelLevel);
+            Vector2 roofMin = new Vector2 (boundsMinX, roofLevel);
+            Vector2 roofMax = new Vector2 (boundsMaxX, roofLevel);
+
+            if (!usingGizmos)
+            {
+                Debug.DrawLine(wheelsMin, wheelsMax, Color.yellow);
+                Debug.DrawLine(roofMin, roofMax, Color.yellow);
+            }
+            else
+            {
+                if (Application.isPlaying) return;
+
+                float wheels = transform.position.y - this.wheelLevel;
+                float roof = transform.position.y + this.roofLevel;
+
+                Gizmos.color = Color.yellow;
+                Gizmos.DrawLine(wheelsMin, wheelsMax);
+                Gizmos.DrawLine(roofMin, roofMax);
+            }
+
         }
+#endif
     }
 }

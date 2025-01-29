@@ -5,15 +5,11 @@ using UnityEngine;
 using UnityEngine.UIElements;
 using static PathData;
 
-public class InsideBounds : CarriageBounds
+public class InsideBounds : InsideOutsideBounds
 {
     public static InsideBounds Instance { get; private set; }
-
     public int bystanderCount { get; private set; } = 0;
-
-    public Collider2D thisCollider;
     public bool inEmergency { get; private set; } //TODO: find when fighting or when gun is shot
-
     public List<SeatBounds> setsOfSeats { get; set; } = new List<SeatBounds>();
 
     [System.Serializable]
@@ -118,14 +114,13 @@ public class InsideBounds : CarriageBounds
 
     private void AddToSetsOfSeats()
     {
-        thisCollider = GetComponent<Collider2D>();
         ContactFilter2D filter2D = new ContactFilter2D();
         filter2D.SetLayerMask(LayerMask.GetMask("Chairs"));
         filter2D.useTriggers = true;
 
         List<Collider2D> results = new List<Collider2D>();
 
-        thisCollider.Overlap(filter2D, results);
+        Collider2D.Overlap(filter2D, results);
 
         foreach (var collider in results)
         {

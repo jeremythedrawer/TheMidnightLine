@@ -1,8 +1,7 @@
 using UnityEngine;
 
-public class CarriageClimbingBounds : Bounds
+public class ClimbingBounds : Bounds
 {
-    public static CarriageClimbingBounds Instance { get; private set; }
     private BoxCollider2D Collider2D;
 
     [Range(0f, 1f)]

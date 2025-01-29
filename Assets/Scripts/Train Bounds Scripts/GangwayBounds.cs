@@ -23,8 +23,8 @@ public class GangwayBounds : Bounds
 
     private Component leftClimbingBounds;
     private Component rightClimbingBounds;
-    public CarriageClimbingBounds foundsLeftClimbBounds { get; private set; }
-    public CarriageClimbingBounds foundsRightClimbBounds { get; private set; }
+    public ClimbingBounds foundsLeftClimbBounds { get; private set; }
+    public ClimbingBounds foundsRightClimbBounds { get; private set; }
 
     public bool playerOnLeftRoof {  get; private set; }
     public bool playerOnRightRoof { get; private set; }
@@ -49,8 +49,8 @@ public class GangwayBounds : Bounds
 
             Collider2D leftCollider = Physics2D.OverlapArea(LeftPointA, LeftPointB, outsideBoundsLayer);
             Collider2D righCollider = Physics2D.OverlapArea(RightPointA, RightPointB, outsideBoundsLayer);
-            Helpers.DrawBoxCastDebug(LeftPointA, LeftPointB, leftCollider != null ? Color.green : Color.red);
-            Helpers.DrawBoxCastDebug(RightPointA, RightPointB, righCollider != null ? Color.green : Color.red);
+            Helpers.DrawSquare(LeftPointA, LeftPointB, leftCollider != null ? Color.green : Color.red);
+            Helpers.DrawSquare(RightPointA, RightPointB, righCollider != null ? Color.green : Color.red);
         }
 #endif
         
@@ -63,15 +63,15 @@ public class GangwayBounds : Bounds
         float detectionSizeBuffer = 5;
         SetNeighbouringBounds(Collider2D, detectionSizeBuffer, outsideBoundsLayer, typeof(OutsideBounds), ref leftOutsideBounds, ref rightOutsideBounds);
         SetNeighbouringBounds(Collider2D, detectionSizeBuffer, insideBoundsLayer, typeof(InsideBounds), ref leftInsideBounds, ref rightInsideBounds);
-        SetNeighbouringBounds(Collider2D, detectionSizeBuffer, climbingBoundsLayer, typeof(CarriageClimbingBounds), ref leftClimbingBounds, ref rightClimbingBounds);
+        SetNeighbouringBounds(Collider2D, detectionSizeBuffer, climbingBoundsLayer, typeof(ClimbingBounds), ref leftClimbingBounds, ref rightClimbingBounds);
 
         foundLeftOutsideBounds = leftOutsideBounds as OutsideBounds;
         foundRightOutsideBounds = rightOutsideBounds as OutsideBounds;
         foundLeftInsideBounds = leftInsideBounds as InsideBounds;
         foundRightInsideBounds = rightInsideBounds as InsideBounds;
 
-        foundsLeftClimbBounds = leftClimbingBounds as CarriageClimbingBounds;
-        foundsRightClimbBounds = rightClimbingBounds as CarriageClimbingBounds; 
+        foundsLeftClimbBounds = leftClimbingBounds as ClimbingBounds;
+        foundsRightClimbBounds = rightClimbingBounds as ClimbingBounds; 
     }
 
     private void Update()

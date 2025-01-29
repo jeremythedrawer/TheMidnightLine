@@ -13,7 +13,7 @@ public class PathData : MonoBehaviour
     public InsideBounds chosenInsideBounds { get; set; }
     public OutsideBounds chosenOutsideBounds { get; set; }
     public GangwayBounds chosenGangwayBounds { get; set; }
-    public CarriageClimbingBounds chosenClimbingBounds { get; set; }
+    public ClimbingBounds chosenClimbingBounds { get; set; }
     public SeatBounds chosenSeatBounds { get; set; }
     public enum PosType
     {

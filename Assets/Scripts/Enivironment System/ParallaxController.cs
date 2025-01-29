@@ -2,48 +2,50 @@ using UnityEngine;
 
 public class ParallaxController : MonoBehaviour
 {
-    [Header("References")]
-    public Camera cam;
-    public TrainController trainController;
-    public Transform playerTransform;
+    private Camera cam;
+    private TrainController trainController;
+    private Transform playerTransform;
 
     private Vector2 startPos;
     private float startZ;
 
     private Vector2 playerDistanceMoved;
-    private float trainDistanceMoved;
+    private float currentTrainDistanceMoved;
+    private float totalTrainDistanceMoved;
     private float distanceFromPlayerZ;
     private float distanceFromClipPlaneZ;
     private float clipPlaneZ;
     private float parallaxFactor;
-    private void Start()
-    {
-        startPos = transform.position;
-        startZ = transform.position.z;
-    }
 
+    private void OnEnable()
+    {
+        Initialize();
+        
+    }
     private void Update()
     {
         GetParralaxData();
         UpdatePos();
     }
+    public void Initialize()
+    {
+        cam = Camera.main;
+        trainController = GameObject.FindWithTag("Train Object").GetComponent<TrainController>();
+        playerTransform = GameObject.FindWithTag("Player").GetComponent<Transform>();
 
+        startPos = transform.position;
+        startZ = transform.position.z;
+        totalTrainDistanceMoved = trainController.distanceTravelled;
+    }
     private void UpdatePos()
     {
         playerDistanceMoved = (Vector2)playerTransform.position;
-        trainDistanceMoved = trainController.distanceTravelled;
+        currentTrainDistanceMoved = trainController.distanceTravelled - totalTrainDistanceMoved;
 
         float newPosXPlayerFactor = playerDistanceMoved.x * parallaxFactor;
-        float newPosXTrainFactor = trainDistanceMoved * parallaxFactor;
+        float newPosXTrainFactor = currentTrainDistanceMoved * parallaxFactor;
         float newPosX = startPos.x + (newPosXPlayerFactor - newPosXTrainFactor);
-        float newPosY = startPos.y + (playerDistanceMoved.y * parallaxFactor);
-
-        transform.position = new Vector3(newPosX, newPosY, startZ);
-    }
-
-    private float NewPos(float startPos, float distanceMoved)
-    {
-        return startPos + (distanceMoved * parallaxFactor);
+        transform.position = new Vector3(newPosX, startPos.y, startZ);
     }
 
     private void GetParralaxData()

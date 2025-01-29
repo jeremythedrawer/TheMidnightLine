@@ -30,8 +30,8 @@ public abstract class Bounds : MonoBehaviour
 #if UNITY_EDITOR
         if(seeBoundsGizmos)
         {
-            Helpers.DrawBoxCastDebug(LeftPointA, LeftPointB, leftCollider != null ? Color.green : Color.red);
-            Helpers.DrawBoxCastDebug(RightPointA, RightPointB, leftCollider != null ? Color.green : Color.red);
+            Helpers.DrawSquare(LeftPointA, LeftPointB, leftCollider != null ? Color.green : Color.red);
+            Helpers.DrawSquare(RightPointA, RightPointB, leftCollider != null ? Color.green : Color.red);
         }
 #endif
     }

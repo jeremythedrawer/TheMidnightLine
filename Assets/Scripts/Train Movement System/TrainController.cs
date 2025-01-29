@@ -1,13 +1,12 @@
 using UnityEngine;
 
-public enum Direction { Left, Right }
 public class TrainController : MonoBehaviour
 {
-    public float maxSpeed = 1f;
+    public enum Direction { Left, Right }
     public Direction trainDirection;
+    public float maxSpeed = 1f;
 
     public float distanceTravelled {  get; private set; }
-
     private float currentSpeed;
 
 

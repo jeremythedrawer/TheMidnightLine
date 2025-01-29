@@ -19,7 +19,7 @@ public abstract class PathFinder : MonoBehaviour
     protected InsideBounds chosenInsideBounds => pathData.chosenInsideBounds;
     protected OutsideBounds chosenOutsideBounds => pathData.chosenOutsideBounds;
     protected GangwayBounds chosenGangway => pathData.chosenGangwayBounds;
-    public CarriageClimbingBounds chosenClimbingBounds => pathData.chosenClimbingBounds;
+    public ClimbingBounds chosenClimbingBounds => pathData.chosenClimbingBounds;
     protected SeatBounds chosenChairBounds => pathData.chosenSeatBounds;
 
     protected void FindChosenClimbBounds(GangwayBounds chosenGangway, PathFinder path, Vector2 targetPos, Vector2 currentPos)
@@ -126,7 +126,7 @@ public abstract class PathFinder : MonoBehaviour
 
     }
 
-    protected void FindChosenGangway(CarriageBounds currentCarriageBounds, float currentXPos, float targetXPos)
+    protected void FindChosenGangway(InsideOutsideBounds currentCarriageBounds, float currentXPos, float targetXPos)
     {
         GangwayBounds rightGangway = currentCarriageBounds.rightGangwayBounds;
         GangwayBounds leftGangway = currentCarriageBounds.leftGangwayBounds;
