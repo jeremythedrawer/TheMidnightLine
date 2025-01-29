@@ -6,7 +6,6 @@ public class GangwayBounds : Bounds
     public LayerMask outsideBoundsLayer;
     public LayerMask insideBoundsLayer;
     public LayerMask climbingBoundsLayer;
-    public bool seeGizmos;
 
     public Collider2D Collider2D {  get; private set; }
     public UnityEngine.Bounds Bounds { get; private set; }
@@ -31,12 +30,12 @@ public class GangwayBounds : Bounds
     public bool playerInLeftCarriage { get; private set; }
     public bool playerInRightCarriage { get; private set; }
     public bool leftClimbActivated { get; private set; }
-    public bool righhtClimbActivated { get; private set; }
+    public bool rightClimbActivated { get; private set; }
 
     private void OnDrawGizmos()
     {
 #if UNITY_EDITOR
-        if (seeGizmos)
+        if (seeBoundsGizmos)
         {
             Collider2D = GetComponent<Collider2D>();
             float dectectionBuffer = 5f;
@@ -82,7 +81,7 @@ public class GangwayBounds : Bounds
         playerInRightCarriage = foundRightInsideBounds.playerInActiveArea;
 
         leftClimbActivated = foundsLeftClimbBounds.activatedByAgent;
-        righhtClimbActivated = foundsRightClimbBounds.activatedByAgent;
+        rightClimbActivated = foundsRightClimbBounds.activatedByAgent;
     }
 
     private void OnTriggerEnter2D(Collider2D collision)
