@@ -83,7 +83,9 @@ public class BackgroundSpawner : MonoBehaviour
         float randomX = UnityEngine.Random.Range(spawnOrigin.position.x, spawnOrigin.position.x + randomXFactor);
         float randomY = UnityEngine.Random.Range(spawnOrigin.position.y - randomYFactor, spawnOrigin.position.y + randomYFactor);
         float randomZ = UnityEngine.Random.Range(canvasBounds.minDepthNormalized, canvasBounds.maxDepthNormalized);
+
         Vector3 newPos = new Vector3(randomX, randomY, randomZ);
+
         buildingPrefab.transform.position = newPos;
     }
 

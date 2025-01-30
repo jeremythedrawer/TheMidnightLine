@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -113,23 +113,67 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: sp_bg_building0_0
+      name: sp_bg_building_0_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 499
-        height: 2026
+        width: 1001
+        height: 4088
       alignment: 0
-      pivot: {x: 0, y: 0}
+      pivot: {x: 0.5, y: 0.5}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: f52914098463d7df0800000000000000
-      internalID: -180928724739190177
+      spriteID: 64c402054c438194586d10109740758d
+      internalID: 1434169954
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sp_bg_building_0_1
+      rect:
+        serializedVersion: 2
+        x: 1007
+        y: 0
+        width: 502
+        height: 2029
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 9aba53c7e8fed7a499c9fe3267d343e5
+      internalID: -778566536
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sp_bg_building_0_2
+      rect:
+        serializedVersion: 2
+        x: 2017
+        y: 0
+        width: 253
+        height: 1017
+      alignment: 0
+      pivot: {x: 0.5, y: 0.5}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 0b554946365586f47bbb8ea413f51184
+      internalID: -35475343
       vertices: []
       indices: 
       edges: []
@@ -148,7 +192,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      sp_bg_building0_0: -180928724739190177
+      sp_bg_building_0_0: 1434169954
+      sp_bg_building_0_1: -778566536
+      sp_bg_building_0_2: -35475343
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

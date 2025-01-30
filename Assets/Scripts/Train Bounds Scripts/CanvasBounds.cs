@@ -17,6 +17,8 @@ public class CanvasBounds : Bounds
 
     public float minDepthNormalized {  get; private set; }
     public float maxDepthNormalized {  get; private set; }
+    public float oneThirdClipPlane { get; private set; }
+    public float twoThirdsClipPlane { get; private set; }
 
     private float camHalfWidth => cam.orthographicSize * cam.aspect;
     private float top => transform.position.y + canvasHeight;
@@ -32,16 +34,22 @@ public class CanvasBounds : Bounds
 
     private void OnValidate()
     {
-        minDepthNormalized = Mathf.Lerp(cam.transform.position.z, cam.farClipPlane, backgroundDepthMin);
-        maxDepthNormalized = Mathf.Lerp(cam.transform.position.z, cam.farClipPlane, backgroundDepthMax);
+        minDepthNormalized = Mathf.Lerp(cam.nearClipPlane, cam.farClipPlane, backgroundDepthMin);
+        maxDepthNormalized = Mathf.Lerp(cam.nearClipPlane, cam.farClipPlane, backgroundDepthMax);
+        oneThirdClipPlane = (cam.farClipPlane - cam.nearClipPlane) * 0.333f;
+        twoThirdsClipPlane = (cam.farClipPlane - cam.nearClipPlane) * 0.667f;
 
     }
 
     private void OnDrawGizmos()
     {
         Helpers.DrawSquare(topRight, bottomLeft, Color.black, cam.farClipPlane, true);
-        Helpers.DrawSquare(topRight, bottomLeft, Color.red, minDepthNormalized, true);
-        Helpers.DrawSquare(topRight, bottomLeft, Color.blue, maxDepthNormalized, true);
+        Helpers.DrawSquare(topRight, bottomLeft, Color.green, oneThirdClipPlane, true);
+        Helpers.DrawSquare(topRight, bottomLeft, Color.green, twoThirdsClipPlane, true);
+        Helpers.DrawSquare(topRight, bottomLeft, Color.black, cam.nearClipPlane, true);
+
+        Helpers.DrawSquare(topRight, bottomLeft, Color.white, minDepthNormalized, true);
+        Helpers.DrawSquare(topRight, bottomLeft, Color.white, maxDepthNormalized, true);
     }
 
     private void Awake()

@@ -44,7 +44,7 @@ public class ParallaxController : MonoBehaviour
 
         float newPosXPlayerFactor = playerDistanceMoved.x * parallaxFactor;
         float newPosXTrainFactor = currentTrainDistanceMoved * parallaxFactor;
-        float newPosX = startPos.x + (newPosXPlayerFactor - newPosXTrainFactor);
+        float newPosX = startPos.x - newPosXTrainFactor;
         transform.position = new Vector3(newPosX, startPos.y, startZ);
     }
 

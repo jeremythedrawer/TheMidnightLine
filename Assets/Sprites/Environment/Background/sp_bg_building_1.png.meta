@@ -46,7 +46,7 @@ TextureImporter:
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
-  spriteMode: 1
+  spriteMode: 2
   spriteExtrude: 1
   spriteMeshType: 1
   alignment: 0
@@ -72,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -118,8 +118,8 @@ TextureImporter:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 585
-        height: 2031
+        width: 1148
+        height: 3992
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -130,6 +130,50 @@ TextureImporter:
       bones: []
       spriteID: aed0a15dc0d9efe30800000000000000
       internalID: 4539238152876461546
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sp_bg_building_1_1
+      rect:
+        serializedVersion: 2
+        x: 1164
+        y: 0
+        width: 587
+        height: 2032
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: e0bd7ecb056ec5d41b369d448cb678fa
+      internalID: -1379806501
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sp_bg_building_1_2
+      rect:
+        serializedVersion: 2
+        x: 2326
+        y: 0
+        width: 291
+        height: 1008
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 6ad97f26a9eb8124d8ea56e0729b68ea
+      internalID: 2040959090
       vertices: []
       indices: 
       edges: []
@@ -149,6 +193,8 @@ TextureImporter:
       entries: []
     nameFileIdTable:
       sp_bg_building_1_0: 4539238152876461546
+      sp_bg_building_1_1: -1379806501
+      sp_bg_building_1_2: 2040959090
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

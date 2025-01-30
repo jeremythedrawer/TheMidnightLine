@@ -1,27 +1,24 @@
 using System.Collections;
 using UnityEngine;
+using UnityEngine.U2D;
 
 public class SpawnedBuilding : MonoBehaviour
 {
-    private CanvasBounds canvasBounds;
+    public Sprite[] spriteLods;
 
+    private SpriteRenderer spriteRenderer;
+    private CanvasBounds canvasBounds;
     private ParallaxController parallaxController;
     private string buildingName => gameObject.name.Replace("(Clone)", "");
 
-    private void Awake()
-    {
-    }
     private void OnEnable()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
         parallaxController = GetComponent<ParallaxController>();
         canvasBounds = GameObject.FindFirstObjectByType<CanvasBounds>();
         StartCoroutine(SetLifeTime());
     }
 
-    private void Start()
-    {
-        
-    }
     private void OnDisable()
     {
         StopCoroutine(SetLifeTime());
@@ -44,5 +41,22 @@ public class SpawnedBuilding : MonoBehaviour
     public void Initialize()
     {
         parallaxController.Initialize();
+        ChooseLOD();
+    }
+
+    private void ChooseLOD()
+    {
+        if (transform.position.z < canvasBounds.oneThirdClipPlane)
+        {
+            spriteRenderer.sprite = spriteLods[0];
+        }
+        else if (transform.position.z > canvasBounds.twoThirdsClipPlane)
+        {
+            spriteRenderer.sprite = spriteLods[2];
+        }
+        else
+        {
+            spriteRenderer.sprite = spriteLods[1];
+        }
     }
 }
