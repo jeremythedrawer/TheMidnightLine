@@ -823,7 +823,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.74, g: 0.74, b: 0.74, a: 0}
+  m_BackGroundColor: {r: 1, g: 0.9814745, b: 0.75, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -1387,7 +1387,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvasBounds: {fileID: 106009634}
   spawnOrigin: {fileID: 892729984}
-  spawnRate: 3
+  spawnRate: 1
   maxSpawns: 100
   randomXFactor: 100
   randomYFactor: 1
@@ -1400,6 +1400,14 @@ MonoBehaviour:
     building: {fileID: 6742930161525043669, guid: 3fe75399ee6240e4a892d0efa469c566, type: 3}
   - buildingName: Building_3
     building: {fileID: 265105475483247867, guid: e7f2fee3abac5754a83257810430da94, type: 3}
+  - buildingName: Building_4
+    building: {fileID: 8629652754355821874, guid: 4f5819d1ebcf66243aa30efdace321fc, type: 3}
+  - buildingName: Building_5
+    building: {fileID: 6937523518459478176, guid: 833965826c9b5bf4daccd274f6e3119a, type: 3}
+  - buildingName: Building_6
+    building: {fileID: 150374155500911757, guid: e30401413891f374d8a84a002b8dd97f, type: 3}
+  - buildingName: Building_7
+    building: {fileID: 4533472343061177973, guid: 343ae8bd05d63e442ad469cf554b7862, type: 3}
 --- !u!4 &968493437 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8671146431177964929, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
