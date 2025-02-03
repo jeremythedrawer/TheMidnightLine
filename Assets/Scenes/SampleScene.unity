@@ -823,7 +823,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 2
-  m_BackGroundColor: {r: 0.9303915, g: 1, b: 0.5707547, a: 0}
+  m_BackGroundColor: {r: 0.48983333, g: 0.5, b: 0.3475, a: 1}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
@@ -845,7 +845,7 @@ Camera:
     width: 1
     height: 1
   near clip plane: 0
-  far clip plane: 100
+  far clip plane: 99.93
   field of view: 60
   orthographic: 1
   orthographic size: 5
@@ -873,7 +873,7 @@ Transform:
   m_GameObject: {fileID: 330585543}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -2.6, y: 4.31, z: -15.5}
+  m_LocalPosition: {x: -2.6, y: 4.31, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1390,7 +1390,7 @@ MonoBehaviour:
   spawnRate: 1
   maxSpawns: 100
   randomXFactor: 100
-  randomYFactor: 1
+  randomYFactor: 9.15
   buildingPrefabs:
   - buildingName: Building_0
     building: {fileID: 6195792028487517015, guid: 0541bf2c52408cc488cf2eb67c8d536a, type: 3}

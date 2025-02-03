@@ -1,19 +1,16 @@
 using System.Collections;
 using UnityEngine;
-using UnityEngine.U2D;
 
-public class SpawnedBuilding : MonoBehaviour
+public class SpawnedBGPrefab : SpawnedPrefab
 {
     public Sprite[] spriteLods;
 
-    private SpriteRenderer spriteRenderer;
     private CanvasBounds canvasBounds;
     private ParallaxController parallaxController;
     private string buildingName => gameObject.name.Replace("(Clone)", "");
 
     private void OnEnable()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
         parallaxController = GetComponent<ParallaxController>();
         canvasBounds = GameObject.FindFirstObjectByType<CanvasBounds>();
         StartCoroutine(SetLifeTime());
@@ -34,13 +31,12 @@ public class SpawnedBuilding : MonoBehaviour
 
         if (gameObject != null && gameObject.activeSelf)
         {
-            BackgroundSpawner.Instance.buildingPools[buildingName].Release(this);
+            Spawner.Instance.buildingPools[buildingName].Release(this);
         }
     }
 
-    public void Initialize()
+    public override void Initialize()
     {
-        parallaxController.Initialize();
         ChooseLOD();
     }
 

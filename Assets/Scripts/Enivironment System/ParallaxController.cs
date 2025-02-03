@@ -51,7 +51,7 @@ public class ParallaxController : MonoBehaviour
     private void GetParralaxData()
     {
         distanceFromPlayerZ = transform.position.z - playerTransform.position.z;
-        clipPlaneZ = (cam.transform.position.z + (distanceFromPlayerZ > 0 ? cam.farClipPlane : cam.nearClipPlane));
+        clipPlaneZ = (cam.transform.position.z + cam.farClipPlane);
         distanceFromClipPlaneZ = transform.position.z - clipPlaneZ;
         parallaxFactor = Mathf.Abs(distanceFromClipPlaneZ) / clipPlaneZ;
     }

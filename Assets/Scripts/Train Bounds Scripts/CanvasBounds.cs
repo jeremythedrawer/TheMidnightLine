@@ -21,6 +21,8 @@ public class CanvasBounds : Bounds
     public float twoThirdsClipPlane { get; private set; }
 
     private float camHalfWidth => cam.orthographicSize * cam.aspect;
+    private float farClipPlanePos => cam.transform.position.z + cam.farClipPlane;
+    private float nearClipPlanePos => cam.transform.position.z + cam.nearClipPlane;
     private float top => transform.position.y + canvasHeight;
     private float bottom => (transform.position.y - canvasHeight);
     private float left => (trainBounds.boundsMinX - camHalfWidth) - canvasWidthBuffer;
@@ -34,19 +36,19 @@ public class CanvasBounds : Bounds
 
     private void OnValidate()
     {
-        minDepthNormalized = Mathf.Lerp(cam.nearClipPlane, cam.farClipPlane, backgroundDepthMin);
-        maxDepthNormalized = Mathf.Lerp(cam.nearClipPlane, cam.farClipPlane, backgroundDepthMax);
-        oneThirdClipPlane = (cam.farClipPlane - cam.nearClipPlane) * 0.333f;
-        twoThirdsClipPlane = (cam.farClipPlane - cam.nearClipPlane) * 0.667f;
+        minDepthNormalized = Mathf.Lerp(nearClipPlanePos, farClipPlanePos, backgroundDepthMin);
+        maxDepthNormalized = Mathf.Lerp(nearClipPlanePos, farClipPlanePos, backgroundDepthMax);
+        oneThirdClipPlane = (farClipPlanePos - nearClipPlanePos) * 0.333f;
+        twoThirdsClipPlane = (farClipPlanePos - nearClipPlanePos) * 0.667f;
 
     }
 
     private void OnDrawGizmos()
     {
-        Helpers.DrawSquare(topRight, bottomLeft, Color.black, cam.farClipPlane, true);
+        Helpers.DrawSquare(topRight, bottomLeft, Color.black, farClipPlanePos, true);
         Helpers.DrawSquare(topRight, bottomLeft, Color.green, oneThirdClipPlane, true);
         Helpers.DrawSquare(topRight, bottomLeft, Color.green, twoThirdsClipPlane, true);
-        Helpers.DrawSquare(topRight, bottomLeft, Color.black, cam.nearClipPlane, true);
+        Helpers.DrawSquare(topRight, bottomLeft, Color.black, nearClipPlanePos, true);
 
         Helpers.DrawSquare(topRight, bottomLeft, Color.white, minDepthNormalized, true);
         Helpers.DrawSquare(topRight, bottomLeft, Color.white, maxDepthNormalized, true);
@@ -54,8 +56,8 @@ public class CanvasBounds : Bounds
 
     private void Awake()
     {
-        spawnPoint = new Vector3(right, transform.position.y, cam.farClipPlane);
-        despawnPoint = new Vector3(left, transform.position.y, cam.farClipPlane);        
+        spawnPoint = new Vector3(right, transform.position.y, farClipPlanePos);
+        despawnPoint = new Vector3(left, transform.position.y, farClipPlanePos);        
     }
     void Start()
     {

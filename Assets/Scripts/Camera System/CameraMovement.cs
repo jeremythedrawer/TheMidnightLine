@@ -123,7 +123,7 @@ public class CameraMovement : MonoBehaviour
         float camWorldPosX = Mathf.Lerp(transform.position.x, target.x, Time.deltaTime * horizontalDamping);
         float camWorldPosY = Mathf.Lerp(transform.position.y, target.y, Time.deltaTime * verticalDamping);
 
-        transform.position = new Vector2 (camWorldPosX, camWorldPosY);
+        transform.position = new Vector3 (camWorldPosX, camWorldPosY, transform.position.z);
     }
 
     private void FallingCamera()
