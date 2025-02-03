@@ -1,20 +1,32 @@
 using System.Collections;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class SpawnedBGPrefab : SpawnedPrefab
 {
-    public Sprite[] spriteLods;
+    [System.Serializable]
+    public struct LodSprites
+    {
+        public Sprite low;
+        public Sprite med;
+        public Sprite high;
 
-    private CanvasBounds canvasBounds;
-    private ParallaxController parallaxController;
-    private string buildingName => gameObject.name.Replace("(Clone)", "");
+        public LodSprites(Sprite low, Sprite med, Sprite high)
+        {
+            this.low = low;
+            this.med = med;
+            this.high = high;
+        }
+    }
+    public List<LodSprites> lodSprites;
+
+    public LodSprites chosenLods { get; set; }
 
     private void OnEnable()
     {
-        parallaxController = GetComponent<ParallaxController>();
-        canvasBounds = GameObject.FindFirstObjectByType<CanvasBounds>();
         StartCoroutine(SetLifeTime());
     }
+
 
     private void OnDisable()
     {
@@ -31,12 +43,13 @@ public class SpawnedBGPrefab : SpawnedPrefab
 
         if (gameObject != null && gameObject.activeSelf)
         {
-            Spawner.Instance.buildingPools[buildingName].Release(this);
+            BackgroundSpawner.Instance.prefabPool.Release(this);
         }
     }
 
     public override void Initialize()
     {
+        base.Initialize();
         ChooseLOD();
     }
 
@@ -44,15 +57,15 @@ public class SpawnedBGPrefab : SpawnedPrefab
     {
         if (transform.position.z < canvasBounds.oneThirdClipPlane)
         {
-            spriteRenderer.sprite = spriteLods[0];
+            spriteRenderer.sprite = chosenLods.low;
         }
         else if (transform.position.z > canvasBounds.twoThirdsClipPlane)
         {
-            spriteRenderer.sprite = spriteLods[2];
+            spriteRenderer.sprite = chosenLods.high;
         }
         else
         {
-            spriteRenderer.sprite = spriteLods[1];
+            spriteRenderer.sprite = chosenLods.med;
         }
     }
 }

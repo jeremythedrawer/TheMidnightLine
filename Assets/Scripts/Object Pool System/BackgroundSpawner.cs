@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.Pool;
+using static UnityEditor.PlayerSettings;
 
 public class BackgroundSpawner : Spawner
 {
@@ -9,10 +10,6 @@ public class BackgroundSpawner : Spawner
 
     [Header("Pool Prefabs")]
     [SerializeField] private SpawnedBGPrefab spawnedBGPrefab;
-
-    [SerializeField] private List<Sprite> bgSprites;
-
-    ObjectPool<SpawnedBGPrefab> backgroundPool;
 
     private void Awake()
     {
@@ -35,13 +32,12 @@ public class BackgroundSpawner : Spawner
             float randomX = UnityEngine.Random.Range(spawnOrigin.position.x, spawnOrigin.position.x + randomXFactor);
             float randomY = UnityEngine.Random.Range(spawnOrigin.position.y - randomYFactor, spawnOrigin.position.y + randomYFactor);
             float randomZ = UnityEngine.Random.Range(canvasBounds.minDepthNormalized, canvasBounds.maxDepthNormalized);
-            Vector3 newPos = new Vector3(randomX, randomY, randomZ);
-            prefab.transform.position = newPos;
 
-            if (bgSprites.Count > 0 )
+            bgPrefab.transform.position = new Vector3(randomX, randomY, randomZ);
+            if (bgPrefab.lodSprites.Count > 0)
             {
-                Sprite randonSprite = bgSprites[UnityEngine.Random.Range(0, bgSprites.Count)];
-                bgPrefab.spriteRenderer.sprite = randonSprite;
+                SpawnedBGPrefab.LodSprites randomLodSprites = bgPrefab.lodSprites[UnityEngine.Random.Range(0, bgPrefab.lodSprites.Count)];
+                bgPrefab.chosenLods = randomLodSprites;
             }
 
         }
@@ -60,5 +56,7 @@ public class BackgroundSpawner : Spawner
             yield return null;
          }
     }
+
+
 }
 

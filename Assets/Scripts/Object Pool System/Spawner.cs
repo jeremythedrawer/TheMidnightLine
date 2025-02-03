@@ -16,9 +16,14 @@ public class Spawner : MonoBehaviour
     public float randomXFactor = 15f;
     public float randomYFactor = 0.2f;
 
-    protected ObjectPool<SpawnedPrefab> prefabPool;
-    
-    public void CreatePool(SpawnedPrefab prefab)
+    public ObjectPool<SpawnedPrefab> prefabPool {  get; private set; }
+
+
+    private void Start()
+    {
+        transform.position = canvasBounds.spawnPoint;
+    }
+    protected void CreatePool(SpawnedPrefab prefab)
     {
         prefabPool = new ObjectPool<SpawnedPrefab>(
             () => CreatepPrefab(prefab),
@@ -37,7 +42,6 @@ public class Spawner : MonoBehaviour
     public virtual void ActivatePrefab(SpawnedPrefab prefab)
     {
         prefab.gameObject.SetActive(true);
-        prefab.transform.position = spawnOrigin.position;
     }
 
     private void DeactivateBuilding(SpawnedPrefab prefab)
