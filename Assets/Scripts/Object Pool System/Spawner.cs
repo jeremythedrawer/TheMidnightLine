@@ -18,11 +18,6 @@ public class Spawner : MonoBehaviour
 
     public ObjectPool<SpawnedPrefab> prefabPool {  get; private set; }
 
-
-    private void Start()
-    {
-        transform.position = canvasBounds.spawnPoint;
-    }
     protected void CreatePool(SpawnedPrefab prefab)
     {
         prefabPool = new ObjectPool<SpawnedPrefab>(

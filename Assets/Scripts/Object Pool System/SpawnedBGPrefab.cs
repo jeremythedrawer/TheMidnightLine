@@ -22,18 +22,7 @@ public class SpawnedBGPrefab : SpawnedPrefab
 
     public LodSprites chosenLods { get; set; }
 
-    private void OnEnable()
-    {
-        StartCoroutine(SetLifeTime());
-    }
-
-
-    private void OnDisable()
-    {
-        StopCoroutine(SetLifeTime());
-    }
-
-    private IEnumerator SetLifeTime()
+    public override IEnumerator SetLifeTime()
     {
         while (canvasBounds == null)
         {

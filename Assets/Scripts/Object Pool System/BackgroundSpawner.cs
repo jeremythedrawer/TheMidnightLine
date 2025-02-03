@@ -1,15 +1,12 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.Pool;
-using static UnityEditor.PlayerSettings;
 
 public class BackgroundSpawner : Spawner
 {
     public static BackgroundSpawner Instance { get; private set; }
 
-    [Header("Pool Prefabs")]
-    [SerializeField] private SpawnedBGPrefab spawnedBGPrefab;
+    [Header("Pool Prefab")]
+    [SerializeField] private SpawnedBGPrefab spawnedBgPrefab;
 
     private void Awake()
     {
@@ -18,8 +15,8 @@ public class BackgroundSpawner : Spawner
 
     private void Start()
     {
-        transform.position = canvasBounds.spawnPoint;
-        CreatePool(spawnedBGPrefab);
+        transform.position = canvasBounds.farPlaneSpawnPoint;
+        CreatePool(spawnedBgPrefab);
         StartCoroutine(SpawnPrefabs());
     }
 

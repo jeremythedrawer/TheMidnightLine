@@ -28,7 +28,10 @@ public class CanvasBounds : Bounds
     private float left => (trainBounds.boundsMinX - camHalfWidth) - canvasWidthBuffer;
     private  float right => (trainBounds.boundsMaxX + camHalfWidth) + canvasWidthBuffer;
 
-    public Vector3 spawnPoint { get; private set; }
+    public float width => right - left;
+
+    public Vector3 farPlaneSpawnPoint { get; private set; }
+    public Vector3 nearPlaneSpawnPoint { get; private set; }
     public Vector3 despawnPoint { get; private set; }
 
     private Vector2 topRight => new Vector2(right, top);
@@ -56,7 +59,8 @@ public class CanvasBounds : Bounds
 
     private void Awake()
     {
-        spawnPoint = new Vector3(right, transform.position.y, farClipPlanePos);
+        farPlaneSpawnPoint = new Vector3(right, transform.position.y, farClipPlanePos);
+        nearPlaneSpawnPoint = new Vector3(right, transform.position.y, nearClipPlanePos);
         despawnPoint = new Vector3(left, transform.position.y, farClipPlanePos);        
     }
     void Start()

@@ -1,3 +1,4 @@
+using System.Collections;
 using UnityEngine;
 
 public class SpawnedPrefab : MonoBehaviour
@@ -11,8 +12,26 @@ public class SpawnedPrefab : MonoBehaviour
     {
         canvasBounds = GameObject.FindFirstObjectByType<CanvasBounds>();
     }
+
+    private void OnEnable()
+    {
+        StartCoroutine(SetLifeTime());
+    }
+
+
+    private void OnDisable()
+    {
+        StopCoroutine(SetLifeTime());
+    }
+
+
     public virtual void Initialize()
     {
         parallaxController.Initialize();
+    }
+
+    public virtual IEnumerator SetLifeTime()
+    {
+        yield return null;
     }
 }
