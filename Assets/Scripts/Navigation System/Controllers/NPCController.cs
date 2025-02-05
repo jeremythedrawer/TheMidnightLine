@@ -9,7 +9,7 @@ public abstract class NPCController : MonoBehaviour
 
     [Header("References")]
     public NPCCore npcCore;
-    public Transform playerTransform;
+    public UnityEngine.Transform playerTransform;
     public BoxCollider2D playerCollider;
     public MovementInputs movementInputs;
 

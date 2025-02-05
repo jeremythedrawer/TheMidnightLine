@@ -25,17 +25,18 @@ public class CanvasBounds : Bounds
     private float nearClipPlanePos => cam.transform.position.z + cam.nearClipPlane;
     private float top => transform.position.y + canvasHeight;
     private float bottom => (transform.position.y - canvasHeight);
-    private float left => (trainBounds.boundsMinX - camHalfWidth) - canvasWidthBuffer;
-    private  float right => (trainBounds.boundsMaxX + camHalfWidth) + canvasWidthBuffer;
 
-    public float width => right - left;
+    private float left;
+    private float right;
+
+    public float width {  get; private set; }
 
     public Vector3 farPlaneSpawnPoint { get; private set; }
     public Vector3 nearPlaneSpawnPoint { get; private set; }
     public Vector3 despawnPoint { get; private set; }
 
-    private Vector2 topRight => new Vector2(right, top);
-    private Vector2 bottomLeft => new Vector2(left, bottom);
+    private Vector2 topRight;
+    private Vector2 bottomLeft;
 
     private void OnValidate()
     {
@@ -44,6 +45,10 @@ public class CanvasBounds : Bounds
         oneThirdClipPlane = (farClipPlanePos - nearClipPlanePos) * 0.333f;
         twoThirdsClipPlane = (farClipPlanePos - nearClipPlanePos) * 0.667f;
 
+        right = (trainBounds.boundsMaxX + camHalfWidth) + canvasWidthBuffer;
+        left = (trainBounds.boundsMinX - camHalfWidth) - canvasWidthBuffer;
+        topRight = new Vector2(right, top);
+        bottomLeft = new Vector2(left, bottom);
     }
 
     private void OnDrawGizmos()
@@ -61,7 +66,8 @@ public class CanvasBounds : Bounds
     {
         farPlaneSpawnPoint = new Vector3(right, transform.position.y, farClipPlanePos);
         nearPlaneSpawnPoint = new Vector3(right, transform.position.y, nearClipPlanePos);
-        despawnPoint = new Vector3(left, transform.position.y, farClipPlanePos);        
+        despawnPoint = new Vector3(left, transform.position.y, farClipPlanePos);
+        width = right - left;
     }
     void Start()
     {

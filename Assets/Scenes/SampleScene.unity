@@ -942,6 +942,67 @@ MonoBehaviour:
   damping: 5
   cameraBiasOffset: 0.5
   seeGizmos: 0
+--- !u!1001 &370451368
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1912773013}
+    m_Modifications:
+    - target: {fileID: 493857937072800695, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: canvasBounds
+      value: 
+      objectReference: {fileID: 106009634}
+    - target: {fileID: 3725105603912254949, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_Name
+      value: City Bridge
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -100.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.0168276
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
 --- !u!4 &424846057 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8671146431177964929, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
@@ -1167,6 +1228,54 @@ Transform:
   - {fileID: 284894912}
   m_Father: {fileID: 1720769660}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &611596300
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 611596301}
+  - component: {fileID: 611596302}
+  m_Layer: 0
+  m_Name: Railway Line Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &611596301
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611596300}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -70.18739, y: -25.285345, z: 13.562444}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1905324207}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &611596302
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 611596300}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6c5221dde2a04e4c841a33965e8eadc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasBounds: {fileID: 106009634}
+  loopingTile1: {fileID: 0}
+  loopingTile2: {fileID: 0}
+  loopingTile3: {fileID: 0}
 --- !u!1 &652159983
 GameObject:
   m_ObjectHideFlags: 0
@@ -1352,7 +1461,7 @@ GameObject:
   - component: {fileID: 892729984}
   - component: {fileID: 892729985}
   m_Layer: 0
-  m_Name: Background Spawner
+  m_Name: Building Spawner
   m_TagString: Background Canvas
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1463,6 +1572,67 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+--- !u!1001 &1091613767
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 1912773013}
+    m_Modifications:
+    - target: {fileID: 493857937072800695, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: canvasBounds
+      value: 
+      objectReference: {fileID: 106009634}
+    - target: {fileID: 3725105603912254949, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_Name
+      value: City Bridge (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 362.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -2.0168276
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
 --- !u!1001 &1128144362
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1814,6 +1984,22 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+--- !u!4 &1515945952 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+  m_PrefabInstance: {fileID: 370451368}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1515945953 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 493857937072800695, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+  m_PrefabInstance: {fileID: 370451368}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 141a2cb0fd883eb45b3e9d9b2ce32eac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1592010774 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8671146431177964929, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
@@ -1923,6 +2109,22 @@ Transform:
   - {fileID: 652159984}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!4 &1801294981 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7947245687558150525, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+  m_PrefabInstance: {fileID: 1091613767}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1801294982 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 493857937072800695, guid: 8beb3f46e2a3281439758ab152ed4921, type: 3}
+  m_PrefabInstance: {fileID: 1091613767}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 141a2cb0fd883eb45b3e9d9b2ce32eac, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!4 &1811507233 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 8671146431177964929, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
@@ -2028,8 +2230,60 @@ Transform:
   - {fileID: 159732046}
   - {fileID: 892729984}
   - {fileID: 2058189620}
+  - {fileID: 1912773013}
+  - {fileID: 611596301}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &1912773012
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1912773013}
+  - component: {fileID: 1912773014}
+  m_Layer: 0
+  m_Name: City Bridge Spawner
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1912773013
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1912773012}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -70.18739, y: -25.285345, z: 13.562444}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1515945952}
+  - {fileID: 1801294981}
+  m_Father: {fileID: 1905324207}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1912773014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1912773012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d6c5221dde2a04e4c841a33965e8eadc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvasBounds: {fileID: 106009634}
+  loopingTile1: {fileID: 1515945953}
+  loopingTile2: {fileID: 1801294982}
+  loopingTile3: {fileID: 0}
 --- !u!1001 &1922738959
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2183,7 +2437,7 @@ GameObject:
   - component: {fileID: 2058189620}
   - component: {fileID: 2058189619}
   m_Layer: 0
-  m_Name: Forground Spawner
+  m_Name: Metal Fence Spawner
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -2202,12 +2456,9 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasBounds: {fileID: 106009634}
-  spawnOrigin: {fileID: 2058189620}
-  spawnRate: 1
-  maxSpawns: 2
-  randomXFactor: 0
-  randomYFactor: 0
-  spawnedFgPrefab: {fileID: 349933782109768704, guid: c0fe3203ba740c64e912f442c6ba2aea, type: 3}
+  loopingTile1: {fileID: 0}
+  loopingTile2: {fileID: 0}
+  loopingTile3: {fileID: 0}
 --- !u!4 &2058189620
 Transform:
   m_ObjectHideFlags: 0

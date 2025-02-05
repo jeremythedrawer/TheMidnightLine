@@ -7,7 +7,7 @@ public class Spawner : MonoBehaviour
 {
     [Header("References")]
     public CanvasBounds canvasBounds;
-    public Transform spawnOrigin;
+    public UnityEngine.Transform spawnOrigin;
 
     [Header("Parameters")]
     [Tooltip("Spawns per second")]

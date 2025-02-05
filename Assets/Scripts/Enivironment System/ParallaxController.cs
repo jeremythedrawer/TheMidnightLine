@@ -16,9 +16,9 @@ public class ParallaxController : MonoBehaviour
 
     private void OnEnable()
     {
-        Initialize();
-       
+        Initialize(); 
     }
+
     private void Update()
     {
         GetParralaxData();
@@ -32,13 +32,14 @@ public class ParallaxController : MonoBehaviour
         startPos = transform.position;
         startZ = transform.position.z;
         totalTrainDistanceMoved = trainController.distanceTravelled;
+
     }
     private void UpdatePos()
     {
         currentTrainDistanceMoved = trainController.distanceTravelled - totalTrainDistanceMoved;
         float newPosXTrainFactor = currentTrainDistanceMoved * parallaxFactor;
         float newPosX = startPos.x - newPosXTrainFactor;
-        transform.position = new Vector3(newPosX, startPos.y, startZ); ;
+        transform.position = new Vector3(newPosX, startPos.y, startZ);
     }
 
     private void GetParralaxData()

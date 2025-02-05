@@ -21,7 +21,7 @@ public class TrainBounds : Bounds
     private void Start()
     {
         DebugLines(false);
-        wheelLevel = transform.position.y - wheelLevel;
+        wheelLevel = transform.position.y + wheelLevel;
         roofLevel = transform.position.y + roofLevel;    
     }
 
@@ -44,7 +44,7 @@ public class TrainBounds : Bounds
             {
                 if (Application.isPlaying) return;
 
-                float wheels = transform.position.y - this.wheelLevel;
+                float wheels = transform.position.y + this.wheelLevel;
                 float roof = transform.position.y + this.roofLevel;
 
                 Gizmos.color = Color.yellow;

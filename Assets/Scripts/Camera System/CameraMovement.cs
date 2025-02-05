@@ -106,15 +106,16 @@ public class CameraMovement : MonoBehaviour
         horizontalDamping = Mathf.Abs(widthOffset) > 0 ? initialDamping : initialDamping * 2;
         FallingCamera();
 
-        if (InsideBounds.Instance == null)
+        float camOffsetY = 1f;
+        if (InsideBounds.Instance == null) // outside carriage
         {
-            target.y = Mathf.Max(target.y, trainCamBounds.wheelLevel + cam.orthographicSize);
+            target.y = Mathf.Max(target.y + camOffsetY, trainCamBounds.wheelLevel + cam.orthographicSize);
         }
         else
         {
             CalculateCarriageBoundOffset();
             target.x = Mathf.Clamp(target.x, InsideBounds.Instance.leftEdge + updatingBoundOffset, InsideBounds.Instance.rightEdge - updatingBoundOffset);
-            target.y = trainCamBounds.wheelLevel + cam.orthographicSize;
+            target.y = Mathf.Max(target.y + camOffsetY, trainCamBounds.wheelLevel + cam.orthographicSize);
         }
     }
 
