@@ -4,18 +4,20 @@ public class TrainController : MonoBehaviour
 {
     public enum Direction { Left, Right }
     public Direction trainDirection;
-    public float maxSpeed = 1f;
+    public float KmPerHour = 10f;
 
-    public float distanceTravelled {  get; private set; }
+    public float metersTravelled { get; private set; }
     private float currentSpeed;
-
+    private const float kmConversion = 3.6f; // 1 m/s = 3.6 km/h
 
     private void Update()
     {
-        currentSpeed = trainDirection == Direction.Right ? maxSpeed : -maxSpeed;
+        float mPerSec = KmPerHour / kmConversion;
+
+        currentSpeed = trainDirection == Direction.Right ? mPerSec : -mPerSec;
 
         float frameDistance = currentSpeed * Time.deltaTime;
 
-        distanceTravelled += frameDistance;
+        metersTravelled += frameDistance;
     }
 }
