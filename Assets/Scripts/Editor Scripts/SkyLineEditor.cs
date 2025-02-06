@@ -16,7 +16,7 @@ public class SkyLineEditor : Editor
             {
                 Camera cam = Camera.main;
                 skyLine.parallaxController.GetParralaxData(cam);
-                skyLine.ApplyLength();
+                skyLine.ApplyTileAndOffset();
             }
             else
             {

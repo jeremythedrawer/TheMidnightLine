@@ -8,12 +8,15 @@ public class SkyLine : MonoBehaviour
 
     [Header("Parameters")]
     public float lengthInMeters  = 1000f;
+    public float positionFromStart = 0f;
 
 #if UNITY_EDITOR
-    public void ApplyLength()
+    public void ApplyTileAndOffset()
     {
         spriteRenderer.size = new Vector2(lengthInMeters * parallaxController.parallaxFactor, spriteRenderer.size.y);
         transform.localScale = Vector2.one;
+
+        transform.position = new Vector3(positionFromStart, transform.position.y, transform.position.z);
     }
 #endif
 }
