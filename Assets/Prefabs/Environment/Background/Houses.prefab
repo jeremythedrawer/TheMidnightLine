@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 5535953156247541291}
   - component: {fileID: 7540808941337281392}
   m_Layer: 0
-  m_Name: Buildings
+  m_Name: Houses
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -78,7 +78,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1434169954, guid: 6a3ba67a47e313c41ac042a9efbda5e1, type: 3}
+  m_Sprite: {fileID: 2128807671829311838, guid: 3dd24a89ec3c3554bb0103702b3f3408, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -116,27 +116,27 @@ MonoBehaviour:
   spriteRenderer: {fileID: 6076294889837155832}
   parallaxController: {fileID: 5535953156247541291}
   lodSprites:
-  - low: {fileID: -35475343, guid: 6a3ba67a47e313c41ac042a9efbda5e1, type: 3}
-    med: {fileID: -778566536, guid: 6a3ba67a47e313c41ac042a9efbda5e1, type: 3}
-    high: {fileID: 1434169954, guid: 6a3ba67a47e313c41ac042a9efbda5e1, type: 3}
-  - low: {fileID: 2040959090, guid: 1ae48e8817ba27d48a819c84b49be618, type: 3}
-    med: {fileID: -1379806501, guid: 1ae48e8817ba27d48a819c84b49be618, type: 3}
-    high: {fileID: 4539238152876461546, guid: 1ae48e8817ba27d48a819c84b49be618, type: 3}
-  - low: {fileID: -1485503564, guid: de4973c867c92774db39a67cb3d8e2e0, type: 3}
-    med: {fileID: 571397112, guid: de4973c867c92774db39a67cb3d8e2e0, type: 3}
-    high: {fileID: 6774542870101203627, guid: de4973c867c92774db39a67cb3d8e2e0, type: 3}
-  - low: {fileID: 1102494610, guid: 2edd74613e99fa946b858810f196bda0, type: 3}
-    med: {fileID: -605225180, guid: 2edd74613e99fa946b858810f196bda0, type: 3}
-    high: {fileID: 1444851515324702838, guid: 2edd74613e99fa946b858810f196bda0, type: 3}
-  - low: {fileID: -1193297079, guid: 15aaed61da36a154bb95fa2c88d6d640, type: 3}
-    med: {fileID: 2032563433, guid: 15aaed61da36a154bb95fa2c88d6d640, type: 3}
-    high: {fileID: 4147171375090152073, guid: 15aaed61da36a154bb95fa2c88d6d640, type: 3}
-  - low: {fileID: -1028818764, guid: d623c5663784a2e4fb5af8cd59a9aadf, type: 3}
-    med: {fileID: 448311268, guid: d623c5663784a2e4fb5af8cd59a9aadf, type: 3}
-    high: {fileID: 7219706533392095631, guid: d623c5663784a2e4fb5af8cd59a9aadf, type: 3}
-  - low: {fileID: 308590152, guid: 18ab261ab8740734ca4834bcc12755a3, type: 3}
-    med: {fileID: 1422082730, guid: 18ab261ab8740734ca4834bcc12755a3, type: 3}
-    high: {fileID: 768922107514529924, guid: 18ab261ab8740734ca4834bcc12755a3, type: 3}
-  - low: {fileID: 815053851, guid: 05bf7b6bed220b64c95b627956f1bcd2, type: 3}
-    med: {fileID: -504078983, guid: 05bf7b6bed220b64c95b627956f1bcd2, type: 3}
-    high: {fileID: -514091379762826894, guid: 05bf7b6bed220b64c95b627956f1bcd2, type: 3}
+  - low: {fileID: 0}
+    med: {fileID: -4954908823027691731, guid: 3dd24a89ec3c3554bb0103702b3f3408, type: 3}
+    high: {fileID: 2128807671829311838, guid: 3dd24a89ec3c3554bb0103702b3f3408, type: 3}
+  - low: {fileID: 0}
+    med: {fileID: -1205545885447297480, guid: 4fdfdd2b74f27e545bc94fd0386c8f14, type: 3}
+    high: {fileID: -6965670613568603758, guid: 4fdfdd2b74f27e545bc94fd0386c8f14, type: 3}
+  - low: {fileID: 0}
+    med: {fileID: -8221803776555302346, guid: 867a166677f5c3942b3448870b08dfee, type: 3}
+    high: {fileID: 7335979579926787626, guid: 867a166677f5c3942b3448870b08dfee, type: 3}
+  - low: {fileID: 0}
+    med: {fileID: 1234958324560409146, guid: 4fb54021ec2a20e4298ba0a5babb87fc, type: 3}
+    high: {fileID: -6984602960436715157, guid: 4fb54021ec2a20e4298ba0a5babb87fc, type: 3}
+  - low: {fileID: 0}
+    med: {fileID: 8628242638608205965, guid: e315e6e3ba1891c459e63e309cbdae1f, type: 3}
+    high: {fileID: -2839763290860251492, guid: e315e6e3ba1891c459e63e309cbdae1f, type: 3}
+  - low: {fileID: 0}
+    med: {fileID: -2468571886373932856, guid: 63a3cba301585814eba708372f772bc6, type: 3}
+    high: {fileID: -5713358634940256364, guid: 63a3cba301585814eba708372f772bc6, type: 3}
+  - low: {fileID: 0}
+    med: {fileID: 5446071237868673742, guid: 66daa4b6c7fcf7143a60e5b8e1f5d625, type: 3}
+    high: {fileID: 7112935579845806969, guid: 66daa4b6c7fcf7143a60e5b8e1f5d625, type: 3}
+  - low: {fileID: 0}
+    med: {fileID: 5084413934667213014, guid: c91ba6f3f606b8140b2a73dac83bcaa4, type: 3}
+    high: {fileID: 4935121084166055422, guid: c91ba6f3f606b8140b2a73dac83bcaa4, type: 3}

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &6137777807325332695
+--- !u!1 &1541480774484133029
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,51 +8,49 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7155210105867933181}
-  - component: {fileID: 6214680262345530729}
+  - component: {fileID: 5664349278569546485}
+  - component: {fileID: 6824817940857632030}
   m_Layer: 0
-  m_Name: Building Spawner
-  m_TagString: Background Canvas
+  m_Name: House Spawner
+  m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7155210105867933181
+--- !u!4 &5664349278569546485
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6137777807325332695}
+  m_GameObject: {fileID: 1541480774484133029}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6214680262345530729
+--- !u!114 &6824817940857632030
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6137777807325332695}
+  m_GameObject: {fileID: 1541480774484133029}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 0a47a3a71b4d5ae40b44be6db2021080, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   canvasBounds: {fileID: 0}
-  spawnOrigin: {fileID: 7155210105867933181}
+  spawnOrigin: {fileID: 5664349278569546485}
   trainController: {fileID: 0}
-  spawnRate: 2
+  spawnRate: 10
   maxSpawns: 50
-  randomXFactor: 100
-  randomYFactor: 0.2
-  startSpawnDistance: 0
-  endSpawnDistance: 0
-  minDepth: 0
-  maxDepth: 1
-  spawnedBgPrefab: {fileID: 7540808941337281392, guid: 0541bf2c52408cc488cf2eb67c8d536a, type: 3}
+  randomXFactor: 15
+  randomYFactor: 0
+  startDistance: 0
+  endDistance: 4000
+  spawnedBgPrefab: {fileID: 7540808941337281392, guid: 99f9b06794a71a14ebcb732b7c00be9e, type: 3}

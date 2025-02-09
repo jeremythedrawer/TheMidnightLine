@@ -24,11 +24,11 @@ public class SpawnedBGPrefab : SpawnedPrefab
 
     public override IEnumerator SetLifeTime()
     {
-        while (canvasBounds == null)
+        while (spawner == null)
         {
             yield return null;
         }
-        yield return new WaitUntil(() => transform.position.x < canvasBounds.despawnPoint.x);
+        yield return new WaitUntil(() => transform.position.x < spawner.despawnPos.x);
 
         if (gameObject != null && gameObject.activeSelf)
         {
@@ -44,13 +44,13 @@ public class SpawnedBGPrefab : SpawnedPrefab
 
     private void ChooseLOD()
     {
-        if (transform.position.z < canvasBounds.oneThirdClipPlane)
-        {
-            spriteRenderer.sprite = chosenLods.low;
-        }
-        else if (transform.position.z > canvasBounds.twoThirdsClipPlane)
+        if (transform.position.z < spawner.oneThirdPlane)
         {
             spriteRenderer.sprite = chosenLods.high;
+        }
+        else if (transform.position.z > spawner.twoThirdsPlane)
+        {
+            spriteRenderer.sprite = chosenLods.low;
         }
         else
         {

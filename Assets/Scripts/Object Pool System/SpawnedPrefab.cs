@@ -6,11 +6,11 @@ public class SpawnedPrefab : MonoBehaviour
     [Header ("References")]
     public SpriteRenderer spriteRenderer;
     public ParallaxController parallaxController;
-    public CanvasBounds canvasBounds {  get; private set; }
+    public Spawner spawner {  get; private set; }
 
     private void Awake()
     {
-        canvasBounds = GameObject.FindFirstObjectByType<CanvasBounds>();
+        spawner = gameObject.GetComponentInParent<Spawner>();
     }
 
     private void OnEnable()

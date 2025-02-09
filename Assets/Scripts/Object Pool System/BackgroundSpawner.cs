@@ -13,9 +13,9 @@ public class BackgroundSpawner : Spawner
         Instance = this;
     }
 
-    private void Start()
+    public override void Start()
     {
-        transform.position = canvasBounds.farPlaneSpawnPoint;
+        base.Start();
         CreatePool(spawnedBgPrefab);
         StartCoroutine(SpawnPrefabs());
     }
@@ -26,9 +26,9 @@ public class BackgroundSpawner : Spawner
 
         if (prefab is SpawnedBGPrefab bgPrefab)
         {
-            float randomX = UnityEngine.Random.Range(spawnOrigin.position.x, spawnOrigin.position.x + randomXFactor);
-            float randomY = UnityEngine.Random.Range(spawnOrigin.position.y - randomYFactor, spawnOrigin.position.y + randomYFactor);
-            float randomZ = UnityEngine.Random.Range(canvasBounds.minDepthNormalized, canvasBounds.maxDepthNormalized);
+            float randomX = UnityEngine.Random.Range(transform.position.x, transform.position.x + randomXFactor);
+            float randomY = UnityEngine.Random.Range(transform.position.y - randomYFactor, transform.position.y + randomYFactor);
+            float randomZ = UnityEngine.Random.Range(minXPos, maxXPos);
 
             bgPrefab.transform.position = new Vector3(randomX, randomY, randomZ);
             if (bgPrefab.lodSprites.Count > 0)
