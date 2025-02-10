@@ -24,20 +24,20 @@ public class Spawner : MonoBehaviour
 
     [Range(0f, 1f)]
     public float minDepth = 0;
-    [Range (0f, 1f)]
+    [Range(0f, 1f)]
     public float maxDepth = 1;
 
     public float oneThirdPlane { get; private set; }
     public float oneHalfPlane { get; private set; }
     public float twoThirdsPlane { get; private set; }
 
-    public float minXPos {  get; private set; }
+    public float minXPos { get; private set; }
     public float maxXPos { get; private set; }
 
-    public Vector3 spawnPos {  get; private set; }
+    public Vector3 spawnPos { get; private set; }
     public Vector3 despawnPos { get; private set; }
 
-    public ObjectPool<SpawnedPrefab> prefabPool {  get; private set; }
+    public ObjectPool<SpawnedPrefab> prefabPool { get; private set; }
 
     private void OnValidate()
     {
@@ -68,7 +68,7 @@ public class Spawner : MonoBehaviour
 
         Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, oneThirdPlane), new Vector3(despawnPos.x, despawnPos.y, oneThirdPlane));
         Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, twoThirdsPlane), new Vector3(despawnPos.x, despawnPos.y, twoThirdsPlane));
-        
+
         //depth
         Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, minXPos), new Vector3(spawnPos.x, spawnPos.y, maxXPos));
         Gizmos.DrawLine(new Vector3(despawnPos.x, despawnPos.y, minXPos), new Vector3(despawnPos.x, despawnPos.y, maxXPos));
@@ -93,14 +93,16 @@ public class Spawner : MonoBehaviour
 
         transform.position = new Vector3(spawnPos.x, transform.position.y, oneHalfPlane);
 
+        StartCoroutine(SpawnPrefabs());
+
     }
     protected void CreatePool(SpawnedPrefab prefab)
     {
         prefabPool = new ObjectPool<SpawnedPrefab>(
             () => CreatePrefab(prefab),
             ActivatePrefab,
-            DeactivateBuilding,
-            DestroyBuilding,
+            DeactivatePrefab,
+            DestroyPrefab,
             false,
             maxSpawns,
             maxSpawns);
@@ -121,26 +123,42 @@ public class Spawner : MonoBehaviour
         prefab.gameObject.SetActive(true);
     }
 
-    private void DeactivateBuilding(SpawnedPrefab prefab)
+    private void DeactivatePrefab(SpawnedPrefab prefab)
     {
         prefab.gameObject.SetActive(false);
     }
 
-    private void DestroyBuilding(SpawnedPrefab prefab)
+    private void DestroyPrefab(SpawnedPrefab prefab)
     {
+        Debug.Log(maxSpawns);
         Destroy(prefab.gameObject);
     }
 
-    public virtual IEnumerator SpawnPrefabs()
+    private IEnumerator SpawnPrefabs()
     {
-        yield return null;
+        while (true)
+        {
+            float travelled = trainController.metersTravelled;
+
+            if (travelled >= startSpawnDistance && travelled <= endSpawnDistance)
+            {
+                if (prefabPool.CountActive < maxSpawns)
+                {
+                    SpawnPrefab();
+                }
+            }
+            else
+            {
+                Debug.Log(travelled + " is less than " + startSpawnDistance + " or greater than " + endSpawnDistance);
+            }
+
+            yield return new WaitForSeconds(1f / spawnRate);
+        }
     }
     protected void SpawnPrefab()
     {
-        if (trainController.metersTravelled >= startSpawnDistance && trainController.metersTravelled <= endSpawnDistance)
-        {
-            SpawnedPrefab newPrefab = prefabPool.Get();
-            newPrefab.Initialize();
-        }
+        SpawnedPrefab newPrefab = prefabPool.Get();
+
+        newPrefab.Initialize();
     }
 }

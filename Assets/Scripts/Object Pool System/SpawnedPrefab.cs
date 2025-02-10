@@ -13,7 +13,7 @@ public class SpawnedPrefab : MonoBehaviour
         spawner = gameObject.GetComponentInParent<Spawner>();
     }
 
-    private void OnEnable()
+    public virtual void OnEnable()
     {
         StartCoroutine(SetLifeTime());
     }

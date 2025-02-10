@@ -2705,7 +2705,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6824817940857632030, guid: 09217af32c220994a982ed5675e9ef83, type: 3}
       propertyPath: startSpawnDistance
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6824817940857632030, guid: 09217af32c220994a982ed5675e9ef83, type: 3}
       propertyPath: <maxXPos>k__BackingField
@@ -2713,7 +2713,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6824817940857632030, guid: 09217af32c220994a982ed5675e9ef83, type: 3}
       propertyPath: <minXPos>k__BackingField
-      value: 2.2
+      value: -2
       objectReference: {fileID: 0}
     - target: {fileID: 6824817940857632030, guid: 09217af32c220994a982ed5675e9ef83, type: 3}
       propertyPath: <spawnPos>k__BackingField.x
@@ -2733,15 +2733,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6824817940857632030, guid: 09217af32c220994a982ed5675e9ef83, type: 3}
       propertyPath: <oneHalfPlane>k__BackingField
-      value: 31.1
+      value: 29
       objectReference: {fileID: 0}
     - target: {fileID: 6824817940857632030, guid: 09217af32c220994a982ed5675e9ef83, type: 3}
       propertyPath: <oneThirdPlane>k__BackingField
-      value: 21.447401
+      value: 18.646
       objectReference: {fileID: 0}
     - target: {fileID: 6824817940857632030, guid: 09217af32c220994a982ed5675e9ef83, type: 3}
       propertyPath: <twoThirdsPlane>k__BackingField
-      value: 40.7526
+      value: 39.354
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2794,7 +2794,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3786597635763625539, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
       propertyPath: KmPerHour
-      value: 70
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 3786597635763625539, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
       propertyPath: maxKmPerHour
@@ -2955,6 +2955,10 @@ PrefabInstance:
     - target: {fileID: 6137777807325332695, guid: 72046507362b7384db23615d92c25696, type: 3}
       propertyPath: m_Name
       value: Building Spawner
+      objectReference: {fileID: 0}
+    - target: {fileID: 6137777807325332695, guid: 72046507362b7384db23615d92c25696, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6214680262345530729, guid: 72046507362b7384db23615d92c25696, type: 3}
       propertyPath: maxLerp

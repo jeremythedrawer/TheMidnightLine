@@ -3,21 +3,13 @@ using UnityEngine;
 
 public class BackgroundSpawner : Spawner
 {
-    public static BackgroundSpawner Instance { get; private set; }
-
     [Header("Pool Prefab")]
     [SerializeField] private SpawnedBGPrefab spawnedBgPrefab;
 
-    private void Awake()
-    {
-        Instance = this;
-    }
-
     public override void Start()
     {
-        base.Start();
         CreatePool(spawnedBgPrefab);
-        StartCoroutine(SpawnPrefabs());
+        base.Start();
     }
 
     public override void ActivatePrefab(SpawnedPrefab prefab)
@@ -40,20 +32,5 @@ public class BackgroundSpawner : Spawner
         }
 
     }
-
-    public override IEnumerator SpawnPrefabs()
-    {
-        while (true)
-        {
-            if (prefabPool.CountActive < maxSpawns)
-            {
-                SpawnPrefab();
-                yield return new WaitForSeconds(1f / spawnRate);
-            }
-            yield return null;
-         }
-    }
-
-
 }
 

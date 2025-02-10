@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class SpawnedBGPrefab : SpawnedPrefab
 {
+
     [System.Serializable]
     public struct LodSprites
     {
@@ -22,6 +23,17 @@ public class SpawnedBGPrefab : SpawnedPrefab
 
     public LodSprites chosenLods { get; set; }
 
+    private BackgroundSpawner backgroundSpawner;
+
+    public override void OnEnable()
+    {
+        base.OnEnable();
+        if (backgroundSpawner == null)
+        {
+            backgroundSpawner = GetComponentInParent<BackgroundSpawner>();
+        }
+    }
+
     public override IEnumerator SetLifeTime()
     {
         while (spawner == null)
@@ -32,12 +44,13 @@ public class SpawnedBGPrefab : SpawnedPrefab
 
         if (gameObject != null && gameObject.activeSelf)
         {
-            BackgroundSpawner.Instance.prefabPool.Release(this);
+            backgroundSpawner.prefabPool.Release(this);
         }
     }
 
     public override void Initialize()
     {
+
         base.Initialize();
         ChooseLOD();
     }
