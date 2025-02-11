@@ -25,13 +25,10 @@ public class SpawnedBGPrefab : SpawnedPrefab
 
     private BackgroundSpawner backgroundSpawner;
 
-    public override void OnEnable()
+    private void Start()
     {
-        base.OnEnable();
-        if (backgroundSpawner == null)
-        {
             backgroundSpawner = GetComponentInParent<BackgroundSpawner>();
-        }
+        
     }
 
     public override IEnumerator SetLifeTime()

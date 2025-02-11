@@ -27,6 +27,8 @@ public class Spawner : MonoBehaviour
     [Range(0f, 1f)]
     public float maxDepth = 1;
 
+
+    // For BackgroundSpawner and LoopingTileSpawner
     public float oneThirdPlane { get; private set; }
     public float oneHalfPlane { get; private set; }
     public float twoThirdsPlane { get; private set; }
@@ -37,9 +39,7 @@ public class Spawner : MonoBehaviour
     public Vector3 spawnPos { get; private set; }
     public Vector3 despawnPos { get; private set; }
 
-    public ObjectPool<SpawnedPrefab> prefabPool { get; private set; }
-
-    private void OnValidate()
+    protected void SetLodParams()
     {
         if (canvasBounds == null) return;
         minDepth = Mathf.Clamp(minDepth, 0f, maxDepth);
@@ -59,9 +59,9 @@ public class Spawner : MonoBehaviour
         transform.position = new Vector3(spawnPos.x, transform.position.y, oneHalfPlane);
     }
 
-    private void OnDrawGizmosSelected()
+    protected void DrawLodRange()
     {
-        Gizmos.color = spawnRangeColor;
+        Gizmos.color = Color.red;
         //length
         Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, minXPos), new Vector3(despawnPos.x, despawnPos.y, minXPos));
         Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, maxXPos), new Vector3(despawnPos.x, despawnPos.y, maxXPos));
@@ -72,93 +72,10 @@ public class Spawner : MonoBehaviour
         //depth
         Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, minXPos), new Vector3(spawnPos.x, spawnPos.y, maxXPos));
         Gizmos.DrawLine(new Vector3(despawnPos.x, despawnPos.y, minXPos), new Vector3(despawnPos.x, despawnPos.y, maxXPos));
-
     }
 
-    public virtual void Start()
-    {
-        minDepth = Mathf.Clamp(minDepth, 0f, maxDepth);
-        maxDepth = Mathf.Clamp(maxDepth, minDepth, 1f);
-
-        minXPos = Mathf.Lerp(canvasBounds.nearClipPlanePos, canvasBounds.farClipPlanePos, minDepth);
-        maxXPos = Mathf.Lerp(canvasBounds.nearClipPlanePos, canvasBounds.farClipPlanePos, maxDepth);
 
 
-        oneThirdPlane = minXPos + ((maxXPos - minXPos) * 0.333f);
-        oneHalfPlane = minXPos + ((maxXPos - minXPos) * 0.5f);
-        twoThirdsPlane = minXPos + ((maxXPos - minXPos) * 0.667f);
 
-        spawnPos = new Vector3(canvasBounds.right, transform.position.y, canvasBounds.nearClipPlanePos);
-        despawnPos = new Vector3(canvasBounds.left, transform.position.y, canvasBounds.nearClipPlanePos);
 
-        transform.position = new Vector3(spawnPos.x, transform.position.y, oneHalfPlane);
-
-        StartCoroutine(SpawnPrefabs());
-
-    }
-    protected void CreatePool(SpawnedPrefab prefab)
-    {
-        prefabPool = new ObjectPool<SpawnedPrefab>(
-            () => CreatePrefab(prefab),
-            ActivatePrefab,
-            DeactivatePrefab,
-            DestroyPrefab,
-            false,
-            maxSpawns,
-            maxSpawns);
-
-        for (int i = 0; i < maxSpawns; i++)
-        {
-            prefabPool.Release(CreatePrefab(prefab));
-        }
-    }
-
-    private SpawnedPrefab CreatePrefab(SpawnedPrefab prefab)
-    {
-        return Instantiate(prefab, transform);
-    }
-
-    public virtual void ActivatePrefab(SpawnedPrefab prefab)
-    {
-        prefab.gameObject.SetActive(true);
-    }
-
-    private void DeactivatePrefab(SpawnedPrefab prefab)
-    {
-        prefab.gameObject.SetActive(false);
-    }
-
-    private void DestroyPrefab(SpawnedPrefab prefab)
-    {
-        Debug.Log(maxSpawns);
-        Destroy(prefab.gameObject);
-    }
-
-    private IEnumerator SpawnPrefabs()
-    {
-        while (true)
-        {
-            float travelled = trainController.metersTravelled;
-
-            if (travelled >= startSpawnDistance && travelled <= endSpawnDistance)
-            {
-                if (prefabPool.CountActive < maxSpawns)
-                {
-                    SpawnPrefab();
-                }
-            }
-            else
-            {
-                Debug.Log(travelled + " is less than " + startSpawnDistance + " or greater than " + endSpawnDistance);
-            }
-
-            yield return new WaitForSeconds(1f / spawnRate);
-        }
-    }
-    protected void SpawnPrefab()
-    {
-        SpawnedPrefab newPrefab = prefabPool.Get();
-
-        newPrefab.Initialize();
-    }
 }

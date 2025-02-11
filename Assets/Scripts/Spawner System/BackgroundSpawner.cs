@@ -1,13 +1,23 @@
 using System.Collections;
 using UnityEngine;
 
-public class BackgroundSpawner : Spawner
+public class BackgroundSpawner : ObjectPoolSpawner
 {
     [Header("Pool Prefab")]
     [SerializeField] private SpawnedBGPrefab spawnedBgPrefab;
 
+    private void OnValidate()
+    {
+        SetLodParams();
+    }
+    private void OnDrawGizmosSelected()
+    {
+        DrawLodRange();
+    }
+
     public override void Start()
     {
+        SetLodParams();
         CreatePool(spawnedBgPrefab);
         base.Start();
     }
@@ -23,6 +33,7 @@ public class BackgroundSpawner : Spawner
             float randomZ = UnityEngine.Random.Range(minXPos, maxXPos);
 
             bgPrefab.transform.position = new Vector3(randomX, randomY, randomZ);
+
             if (bgPrefab.lodSprites.Count > 0)
             {
                 SpawnedBGPrefab.LodSprites randomLodSprites = bgPrefab.lodSprites[UnityEngine.Random.Range(0, bgPrefab.lodSprites.Count)];
