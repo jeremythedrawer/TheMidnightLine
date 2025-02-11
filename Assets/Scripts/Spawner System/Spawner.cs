@@ -9,24 +9,11 @@ public class Spawner : MonoBehaviour
     public CanvasBounds canvasBounds;
     public TrainController trainController;
 
-    [Header("Parameters")]
-    [Tooltip("Spawns per second")]
-    public int spawnRate = 10;
-    public int maxSpawns = 50;
-    public float randomXFactor = 15f;
-    public float randomYFactor = 0.2f;
-
-    public Color spawnRangeColor = Color.red;
-    [Tooltip("In meters")]
-    public float startSpawnDistance = 0;
-    [Tooltip("In meters")]
-    public float endSpawnDistance = 0;
 
     [Range(0f, 1f)]
     public float minDepth = 0;
     [Range(0f, 1f)]
     public float maxDepth = 1;
-
 
     // For BackgroundSpawner and LoopingTileSpawner
     public float oneThirdPlane { get; private set; }

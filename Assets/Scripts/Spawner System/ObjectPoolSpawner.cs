@@ -4,6 +4,20 @@ using UnityEngine.Pool;
 
 public class ObjectPoolSpawner : Spawner
 {
+
+    [Header("Parameters")]
+    [Tooltip("Spawns per second")]
+    public int spawnRate = 10;
+    public int maxSpawns = 50;
+    public float randomXFactor = 15f;
+    public float randomYFactor = 0.2f;
+
+    public Color spawnRangeColor = Color.red;
+    [Tooltip("In meters")]
+    public float startSpawnDistance = 0;
+    [Tooltip("In meters")]
+    public float endSpawnDistance = 0;
+
     public ObjectPool<SpawnedPrefab> prefabPool { get; private set; }
 
     public virtual void Start()

@@ -47,8 +47,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasBounds: {fileID: 0}
-  loopingTile1: {fileID: 6884848069551396193}
-  loopingTile2: {fileID: 8897985643031475486}
+  trainController: {fileID: 0}
+  minDepth: 0
+  maxDepth: 0.87
+  loopingTiles:
+  - {fileID: 4489580199048083729}
+  - {fileID: 1927025504178461038}
 --- !u!1001 &6436046263579203286
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -123,15 +127,15 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7947245687558150525, guid: c4e562839deb9a4469c2bc95c538940c, type: 3}
   m_PrefabInstance: {fileID: 6436046263579203286}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6884848069551396193 stripped
+--- !u!114 &4489580199048083729 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 493857937072800695, guid: c4e562839deb9a4469c2bc95c538940c, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7430759741048827847, guid: c4e562839deb9a4469c2bc95c538940c, type: 3}
   m_PrefabInstance: {fileID: 6436046263579203286}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 141a2cb0fd883eb45b3e9d9b2ce32eac, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a53dd21c3f611c4c81738eb225af357, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
 --- !u!1001 &9052648534810162857
@@ -208,14 +212,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7947245687558150525, guid: c4e562839deb9a4469c2bc95c538940c, type: 3}
   m_PrefabInstance: {fileID: 9052648534810162857}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8897985643031475486 stripped
+--- !u!114 &1927025504178461038 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 493857937072800695, guid: c4e562839deb9a4469c2bc95c538940c, type: 3}
+  m_CorrespondingSourceObject: {fileID: 7430759741048827847, guid: c4e562839deb9a4469c2bc95c538940c, type: 3}
   m_PrefabInstance: {fileID: 9052648534810162857}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 141a2cb0fd883eb45b3e9d9b2ce32eac, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a53dd21c3f611c4c81738eb225af357, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 7947245687558150525}
   - component: {fileID: 1722240125355061680}
   - component: {fileID: 6129084459193792890}
-  - component: {fileID: 493857937072800695}
+  - component: {fileID: 7430759741048827847}
   m_Layer: 0
   m_Name: Railway Lines
   m_TagString: Untagged
@@ -101,7 +101,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a63531c5cc14e424ebdf6bee5611f9fb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &493857937072800695
+--- !u!114 &7430759741048827847
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -110,8 +110,9 @@ MonoBehaviour:
   m_GameObject: {fileID: 3725105603912254949}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 141a2cb0fd883eb45b3e9d9b2ce32eac, type: 3}
+  m_Script: {fileID: 11500000, guid: 3a53dd21c3f611c4c81738eb225af357, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   canvasBounds: {fileID: 0}
   parallaxController: {fileID: 6129084459193792890}
+  spriteRenderer: {fileID: 1722240125355061680}

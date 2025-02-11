@@ -3,6 +3,7 @@ using UnityEngine;
 
 public class BackgroundSpawner : ObjectPoolSpawner
 {
+
     [Header("Pool Prefab")]
     [SerializeField] private SpawnedBGPrefab spawnedBgPrefab;
 
