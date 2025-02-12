@@ -57,11 +57,16 @@ public class LoopingTileSpawner : Spawner
             else //index zero needs to follow the last index instead of the next
             {
                 yield return new WaitUntil(() => loopingTiles[loopingTiles.Count - 1].endPosX < transform.position.x);
+                if (loopingTile.parallaxController.enabled == false)
+                {
+                    loopingTile.parallaxController.enabled = true;
+                }
             }
             loopingTile.parallaxController.Initialize();
             yield return new WaitUntil(() => loopingTile.endPosX < despawnPos.x + frameBuffer); //waiting to despawn
             loopingTile.transform.position = transform.position;
             loopingTile.parallaxController.Initialize();
+            loopingTile.parallaxController.enabled = false;
         }
     }
 }
