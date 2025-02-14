@@ -15,16 +15,16 @@ public class LoopingTileSpawner : Spawner
     {
         DrawLodRange();
     }
-
+    private void Awake()
+    {
+        
+    }
     private void Start()
     {
         SetLodParams();
-
-        foreach (LoopingTiles loopingtile in loopingTiles)
+        foreach (LoopingTiles loopingTile in loopingTiles)
         {
-            loopingtile.parallaxController.enabled = false;
-            loopingtile.transform.position = transform.position;
-            StartCoroutine(LoopTiles(loopingtile));
+            StartCoroutine(LoopTiles(loopingTile));
         }
     }
     public IEnumerator LoopTiles(LoopingTiles loopingTile)
@@ -33,12 +33,17 @@ public class LoopingTileSpawner : Spawner
         float frameBuffer = 0.85f;
 
         //initialize first index straight away
+        while (loopingTile.parallaxController == null)
+        {
+            yield return null;
+        }
+        loopingTile.parallaxController.enabled = false;
+        loopingTile.transform.position = transform.position;
         if (index == 0)
         {
             loopingTile.parallaxController.enabled = true;
         }
 
-        
         while (true)
         {
             if (index != 0)
