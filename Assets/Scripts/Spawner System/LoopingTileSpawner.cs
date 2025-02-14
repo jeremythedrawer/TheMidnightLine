@@ -7,6 +7,8 @@ public class LoopingTileSpawner : Spawner
     [Header("Game Objects")]
     public List<LoopingTiles> loopingTiles = new List<LoopingTiles>();
 
+    private bool inSpawnRange = false;
+
     private void OnValidate()
     {
         SetLodParams();
@@ -27,24 +29,32 @@ public class LoopingTileSpawner : Spawner
             StartCoroutine(LoopTiles(loopingTile));
         }
     }
+
+    private void Update()
+    {
+        float travelled = trainController.metersTravelled;
+        inSpawnRange = travelled >= startSpawnDistance && travelled <= endSpawnDistance;
+        
+    }
     public IEnumerator LoopTiles(LoopingTiles loopingTile)
     {
+        loopingTile.transform.position = transform.position;
+
+        //initialize first index straight away
+        yield return new WaitUntil(() => loopingTile.parallaxController != null);
+
+        loopingTile.parallaxController.enabled = false;
+        yield return new WaitUntil(() => inSpawnRange);
+
         int index = loopingTiles.IndexOf(loopingTile);
         float frameBuffer = 0.85f;
 
-        //initialize first index straight away
-        while (loopingTile.parallaxController == null)
-        {
-            yield return null;
-        }
-        loopingTile.parallaxController.enabled = false;
-        loopingTile.transform.position = transform.position;
         if (index == 0)
         {
             loopingTile.parallaxController.enabled = true;
         }
 
-        while (true)
+        while (inSpawnRange)
         {
             if (index != 0)
             {

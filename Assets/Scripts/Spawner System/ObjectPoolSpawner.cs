@@ -13,10 +13,6 @@ public class ObjectPoolSpawner : Spawner
     public float randomYFactor = 0.2f;
 
     public Color spawnRangeColor = Color.red;
-    [Tooltip("In meters")]
-    public float startSpawnDistance = 0;
-    [Tooltip("In meters")]
-    public float endSpawnDistance = 0;
 
     public ObjectPool<SpawnedPrefab> prefabPool { get; private set; }
 

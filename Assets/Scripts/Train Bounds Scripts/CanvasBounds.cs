@@ -34,14 +34,7 @@ public class CanvasBounds : Bounds
 
     private void OnValidate()
     {
-        farClipPlanePos = cam.transform.position.z + cam.farClipPlane;
-        nearClipPlanePos = cam.transform.position.z + cam.nearClipPlane;
-
-        right = (trainBounds.boundsMaxX + camHalfWidth) + canvasWidthBuffer;
-        left = (trainBounds.boundsMinX - camHalfWidth) - canvasWidthBuffer;
-        topRight = new Vector2(right, top);
-        bottomLeft = new Vector2(left, bottom);
-        width = right - left;
+        SetCanvasData();
     }
 
     private void OnDrawGizmos()
@@ -55,5 +48,22 @@ public class CanvasBounds : Bounds
         farPlaneSpawnPoint = new Vector3(right, transform.position.y, farClipPlanePos);
         nearPlaneSpawnPoint = new Vector3(right, transform.position.y, nearClipPlanePos);
         despawnPoint = new Vector3(left, transform.position.y, farClipPlanePos);
+    }
+
+    private void Start()
+    {
+        SetCanvasData();
+    }
+
+    public void SetCanvasData()
+    {
+        farClipPlanePos = cam.transform.position.z + cam.farClipPlane;
+        nearClipPlanePos = cam.transform.position.z + cam.nearClipPlane;
+
+        right = (trainBounds.boundsMaxX + camHalfWidth) + canvasWidthBuffer;
+        left = (trainBounds.boundsMinX - camHalfWidth) - canvasWidthBuffer;
+        topRight = new Vector2(right, top);
+        bottomLeft = new Vector2(left, bottom);
+        width = right - left;
     }
 }

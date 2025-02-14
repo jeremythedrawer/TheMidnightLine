@@ -9,11 +9,15 @@ public class Spawner : MonoBehaviour
     public CanvasBounds canvasBounds;
     public TrainController trainController;
 
-
+    [Header("Parameters")]
     [Range(0f, 1f)]
     public float minDepth = 0;
     [Range(0f, 1f)]
     public float maxDepth = 1;
+    [Tooltip("In meters")]
+    public float startSpawnDistance = 0;
+    [Tooltip("In meters")]
+    public float endSpawnDistance = 0;
 
     // For BackgroundSpawner and LoopingTileSpawner
     public float oneThirdPlane { get; private set; }
@@ -28,7 +32,12 @@ public class Spawner : MonoBehaviour
 
     protected void SetLodParams()
     {
-        if (canvasBounds == null) return;
+        if (canvasBounds == null)
+        {
+            canvasBounds = FindAnyObjectByType<CanvasBounds>();
+        }
+
+        canvasBounds.SetCanvasData();
         minDepth = Mathf.Clamp(minDepth, 0f, maxDepth);
         maxDepth = Mathf.Clamp(maxDepth, minDepth, 1f);
 
@@ -42,6 +51,7 @@ public class Spawner : MonoBehaviour
 
         spawnPos = new Vector3(canvasBounds.right, transform.position.y, canvasBounds.nearClipPlanePos);
         transform.position = new Vector3(spawnPos.x, transform.position.y, oneHalfPlane);
+        Debug.Log(transform.position);
     }
 
     protected void DrawLodRange()

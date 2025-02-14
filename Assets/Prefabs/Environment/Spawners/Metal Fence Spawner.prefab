@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 4074926253202445553}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalPosition: {x: 214.40887, y: 0, z: 98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -48,15 +48,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   canvasBounds: {fileID: 0}
   trainController: {fileID: 0}
-  spawnRate: 10
-  maxSpawns: 50
-  randomXFactor: 15
-  randomYFactor: 0.2
-  spawnRangeColor: {r: 1, g: 0, b: 0, a: 1}
-  startSpawnDistance: 0
-  endSpawnDistance: 0
   minDepth: 0
   maxDepth: 1
+  startSpawnDistance: 0
+  endSpawnDistance: 0
   loopingTiles:
   - {fileID: 6758870915268616864}
   - {fileID: 2380482749482584253}

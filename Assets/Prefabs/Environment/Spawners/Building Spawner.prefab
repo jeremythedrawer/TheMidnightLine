@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 6137777807325332695}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 214.40887, y: 0, z: 98}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -45,14 +45,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   canvasBounds: {fileID: 0}
-  spawnOrigin: {fileID: 7155210105867933181}
   trainController: {fileID: 0}
+  minDepth: 0
+  maxDepth: 1
+  startSpawnDistance: 0
+  endSpawnDistance: 0
   spawnRate: 2
   maxSpawns: 50
   randomXFactor: 100
   randomYFactor: 0.2
-  startSpawnDistance: 0
-  endSpawnDistance: 0
-  minDepth: 0
-  maxDepth: 1
+  spawnRangeColor: {r: 1, g: 0, b: 0, a: 1}
   spawnedBgPrefab: {fileID: 7540808941337281392, guid: 0541bf2c52408cc488cf2eb67c8d536a, type: 3}
