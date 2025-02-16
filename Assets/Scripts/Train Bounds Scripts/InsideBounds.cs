@@ -1,9 +1,6 @@
 using System.Collections.Generic;
 using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
-using UnityEngine.UIElements;
-using static PathData;
 
 public class InsideBounds : InsideOutsideBounds
 {

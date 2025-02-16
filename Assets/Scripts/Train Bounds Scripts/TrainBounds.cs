@@ -13,6 +13,7 @@ public class TrainBounds : Bounds
 
     public float boundsMinX => backCarriageCollider.bounds.min.x;
     public float boundsMaxX => frontCarriageCollider.bounds.max.x;
+    public float boundsHalfX => boundsMinX + ((boundsMaxX - boundsMinX) / 2);
     private void OnDrawGizmos()
     {
         DebugLines(true);
@@ -35,10 +36,15 @@ public class TrainBounds : Bounds
             Vector2 roofMin = new Vector2 (boundsMinX, roofLevel);
             Vector2 roofMax = new Vector2 (boundsMaxX, roofLevel);
 
+            Vector2 halfUpperOrigin = new Vector2(boundsHalfX, roofLevel);
+            Vector2 halfLowerOrigin = new Vector2(boundsHalfX, wheelLevel);
+
             if (!usingGizmos)
             {
                 Debug.DrawLine(wheelsMin, wheelsMax, Color.yellow);
                 Debug.DrawLine(roofMin, roofMax, Color.yellow);
+                Debug.DrawLine(halfLowerOrigin, halfUpperOrigin, Color.yellow);
+
             }
             else
             {
@@ -50,6 +56,7 @@ public class TrainBounds : Bounds
                 Gizmos.color = Color.yellow;
                 Gizmos.DrawLine(wheelsMin, wheelsMax);
                 Gizmos.DrawLine(roofMin, roofMax);
+                Gizmos.DrawLine(halfLowerOrigin, halfUpperOrigin);
             }
 
         }

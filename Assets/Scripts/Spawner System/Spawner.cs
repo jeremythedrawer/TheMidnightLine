@@ -51,7 +51,6 @@ public class Spawner : MonoBehaviour
 
         spawnPos = new Vector3(canvasBounds.right, transform.position.y, canvasBounds.nearClipPlanePos);
         transform.position = new Vector3(spawnPos.x, transform.position.y, oneHalfPlane);
-        Debug.Log(transform.position);
     }
 
     protected void DrawLodRange()

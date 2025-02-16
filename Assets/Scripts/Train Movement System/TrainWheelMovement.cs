@@ -5,6 +5,6 @@ public class TrainWheelMovement : MonoBehaviour
     public TrainController trainMovement;
     void Update()
     {
-        transform.Rotate(0,0, -trainMovement.KmPerHour);
+        transform.Rotate(0,0, -trainMovement.kmPerHour);
     }
 }
