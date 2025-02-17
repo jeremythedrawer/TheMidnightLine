@@ -53,7 +53,10 @@ public class LevelManager : MonoBehaviour
 
         Vector2 initialPos = trainController.transform.position;
         Vector2 targetPos = new Vector2(0, initialPos.y);
+        float stoppingDistance = targetPos.x - initialPos.x;
+        float startSpeedInMPS = (2 * stoppingDistance) / duration; // from the equation of motion v=u+at
 
+        float startSpeed = startSpeedInMPS * 3.6f;
         while (elaspedTime < duration)
         {
             if (trainController == null) return;
@@ -61,9 +64,11 @@ public class LevelManager : MonoBehaviour
 
             trainController.transform.position = Vector2.Lerp(initialPos, targetPos, startingDecelCurve.Evaluate(t));
             elaspedTime += Time.deltaTime;
+
+            trainController.kmPerHour = Mathf.Lerp(startSpeed, 0, startingDecelCurve.Evaluate(t));
             await Task.Yield();
         }
-
+        trainController.kmPerHour = 0;
         trainController.transform.position = targetPos;
     }
 }

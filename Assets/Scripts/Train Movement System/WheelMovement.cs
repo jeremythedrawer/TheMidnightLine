@@ -5,7 +5,7 @@ public class WheelMovement : MonoBehaviour
     private TrainController trainController;
     private SpriteRenderer spriteRenderer;
 
-    private float radius => (spriteRenderer.sprite.rect.size.x / 2) / spriteRenderer.sprite.pixelsPerUnit;
+    private float radius => (spriteRenderer.sprite.bounds.size.x / 2);
     private float circumference => 2 * Mathf.PI * radius;
     private float degreesPerMeter => 360f / circumference;
     void Start()
