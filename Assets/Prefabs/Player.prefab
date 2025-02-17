@@ -563,7 +563,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 89cf95fe1752a184b84817b191e91e09, type: 2}
+  - {fileID: 2100000, guid: 90db00ecb3290f048952b1a762ff6d70, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -617,7 +617,7 @@ MonoBehaviour:
   healthSystem: {fileID: 3318510828591014836}
   stateList: {fileID: 2283059566483282482}
   characterMaterial: {fileID: 5501752874284210901}
-  showStateList: 0
+  showStateList: 1
 --- !u!114 &7752829070841774031
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -647,9 +647,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43db11a65caa0c84db24c296e2a3464a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 128
   characterBoxCollider: {fileID: 6207222510939091140}
   collisionGizmos: 0
   TotalOffset: {x: 0, y: 0}
@@ -660,7 +657,6 @@ MonoBehaviour:
   wallXSensorScale: -0.222
   cbcThreshold: 0.5
   bhcThreshold: 0
-  cbcEnabled: 0
 --- !u!114 &8911714753198091239
 MonoBehaviour:
   m_ObjectHideFlags: 0

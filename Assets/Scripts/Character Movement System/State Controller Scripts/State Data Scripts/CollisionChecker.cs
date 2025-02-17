@@ -2,14 +2,14 @@ using UnityEngine;
 
 public class CollisionChecker : MonoBehaviour
 {
-    public LayerMask groundLayer;
-
+    [Header("References")]
     public BoxCollider2D characterBoxCollider;
 
+    [Header("Parameters")]
     public bool collisionGizmos;
-
     public Vector2 TotalOffset = new Vector2(0, 0);
     public float YOffset = 0f;
+
     [Range(0f, 2.0f)]
     public float YSensorScale = 0.0f;
 
@@ -30,11 +30,16 @@ public class CollisionChecker : MonoBehaviour
 
     public bool grounded { get; private set; }
 
+    //Layer Masks
+    private int stationGroundLayer => LayerMask.NameToLayer("Station Ground");
+    private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
+
+    public LayerMask activeGroundLayer { get; set; }
 
     //Catch Missed Jump(cmj) Bools
     private bool cbcShinEnabled;
     private bool cbcHeadEnabled;
-    public bool cbcEnabled;
+    public bool cbcEnabled { get; set; }
 
     //Bumped Head Correction (bhc) Bools
     private bool bhcMiddleEnabled;
@@ -44,6 +49,7 @@ public class CollisionChecker : MonoBehaviour
 
 
     private Vector2 collisionCheckerOrigin;
+
     private void OnDrawGizmos()
     {
         #if UNITY_EDITOR
@@ -105,6 +111,11 @@ public class CollisionChecker : MonoBehaviour
         }
         #endif
     }
+
+    private void Start()
+    {
+        activeGroundLayer = 1 << stationGroundLayer;
+    }
     private void FixedUpdate()
     {
         collisionCheckerOrigin = new Vector2(characterBoxCollider.bounds.center.x, characterBoxCollider.bounds.min.y);
@@ -146,7 +157,7 @@ public class CollisionChecker : MonoBehaviour
     private void CheckGround(Vector2 colliderSize, Vector2 groundLeftOrigin, Vector2 groundRightOrigin)
     {
 
-        RaycastHit2D groundHit = Physics2D.Linecast(groundLeftOrigin, groundRightOrigin, groundLayer);
+        RaycastHit2D groundHit = Physics2D.Linecast(groundLeftOrigin, groundRightOrigin, activeGroundLayer);
         grounded = groundHit.collider != null;
 
         #if UNITY_EDITOR
@@ -164,12 +175,12 @@ public class CollisionChecker : MonoBehaviour
     {
 
         //feet raycasts
-        RaycastHit2D feetLeftHit = Physics2D.Linecast(feetLeftOrigin, shinLeftOrigin, groundLayer);
-        RaycastHit2D feetRightHit = Physics2D.Linecast(feetRightOrigin, shinRightOrigin, groundLayer);
+        RaycastHit2D feetLeftHit = Physics2D.Linecast(feetLeftOrigin, shinLeftOrigin, activeGroundLayer);
+        RaycastHit2D feetRightHit = Physics2D.Linecast(feetRightOrigin, shinRightOrigin, activeGroundLayer);
 
         //head raycasts
-        RaycastHit2D headLeftHit = Physics2D.Linecast(shinLeftOrigin, headWallLeftOrigin, groundLayer);
-        RaycastHit2D headRightHit = Physics2D.Linecast(shinRightOrigin, headWallRightOrigin, groundLayer);
+        RaycastHit2D headLeftHit = Physics2D.Linecast(shinLeftOrigin, headWallLeftOrigin, activeGroundLayer);
+        RaycastHit2D headRightHit = Physics2D.Linecast(shinRightOrigin, headWallRightOrigin, activeGroundLayer);
 
 
         cbcShinEnabled = feetLeftHit.collider != null || feetRightHit.collider != null;
@@ -203,9 +214,9 @@ public class CollisionChecker : MonoBehaviour
         Vector2 middleLeftOrigin = (Vector2)collisionCheckerOrigin + new Vector2(-bhcThreshold, colliderSizeY);
         Vector2 middleRightOrigin = (Vector2)collisionCheckerOrigin + new Vector2(bhcThreshold, colliderSizeY);
 
-        RaycastHit2D leftHit = Physics2D.Linecast(headCeilingLeftOrigin, middleLeftOrigin, groundLayer);
-        RaycastHit2D middleHit = Physics2D.Linecast(middleLeftOrigin, middleRightOrigin, groundLayer);
-        RaycastHit2D rightHit = Physics2D.Linecast(headCeilingRightOrigin, middleRightOrigin, groundLayer);
+        RaycastHit2D leftHit = Physics2D.Linecast(headCeilingLeftOrigin, middleLeftOrigin, activeGroundLayer);
+        RaycastHit2D middleHit = Physics2D.Linecast(middleLeftOrigin, middleRightOrigin, activeGroundLayer);
+        RaycastHit2D rightHit = Physics2D.Linecast(headCeilingRightOrigin, middleRightOrigin, activeGroundLayer);
 
         if (!grounded)
         {

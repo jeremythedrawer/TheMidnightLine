@@ -6,17 +6,17 @@ using System.Linq;
 public class TrainController : MonoBehaviour
 {
     //controls
-    public enum Direction { Left, Right }
-    public Direction trainDirection;
     public float kmPerHour = 10f;
 
     //stats
+    public float mPerSec {  get; private set; }
     public float metersTravelled { get; private set; }
     private float currentSpeed;
     private const float kmConversion = 3.6f; // 1 m/s = 3.6 km/h
 
     //References
     private TrainBounds trainBounds => GetComponent<TrainBounds>();
+    private List<Transform> trainWheels = new List<Transform>();
 
     //StationData
     [SerializeField] private List<StationData> stationDataList = new List<StationData>();
@@ -24,30 +24,18 @@ public class TrainController : MonoBehaviour
 
     private void Start()
     {
-        StationData[] stations = FindObjectsByType<StationData>(FindObjectsSortMode.None);
-        stationDataList.AddRange(stations);
-
-        //stations order by position
-        stationDataList = stations.OrderBy(station => station.transform.position.x).ToList();
-
-        foreach (StationData stationData in stationDataList)
-        {
-            stationDataQueue.Enqueue(stationData);
-        }
-
-        StartCoroutine(AccelationController());
+        SetStationDataList();
     }
 
     private void Update()
     {
-        float mPerSec = kmPerHour / kmConversion;
-        currentSpeed = trainDirection == Direction.Right ? mPerSec : -mPerSec;
+        mPerSec = kmPerHour / kmConversion;
         float frameDistance = currentSpeed * Time.deltaTime;
         metersTravelled += frameDistance;
     }
 
 
-    private IEnumerator AccelationController()
+    public IEnumerator AccelationController()
     {
         while (stationDataQueue.Count > 0)
         {
@@ -62,7 +50,6 @@ public class TrainController : MonoBehaviour
             float elapsedTime = 0f;
             while (kmPerHour > 0)
             {
-                Debug.Log(accelationSpeed);
                 elapsedTime += Time.deltaTime;
 
                 float normalizedTime = Mathf.Clamp01(elapsedTime / accelationSpeed);
@@ -76,5 +63,19 @@ public class TrainController : MonoBehaviour
     private void Decelerate()
     {
 
+    }
+
+    private void SetStationDataList()
+    {
+        StationData[] stations = FindObjectsByType<StationData>(FindObjectsSortMode.None);
+        stationDataList.AddRange(stations);
+
+        //stations order by position
+        stationDataList = stations.OrderBy(station => station.transform.position.x).ToList();
+
+        foreach (StationData stationData in stationDataList)
+        {
+            stationDataQueue.Enqueue(stationData);
+        }
     }
 }

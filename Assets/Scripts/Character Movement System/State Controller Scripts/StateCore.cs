@@ -30,6 +30,7 @@ public abstract class StateCore : MonoBehaviour
 
     protected float normalizedAnimTime;
     public bool isDropping {  get; set; }
+    public bool onPlatform {  get; protected set; } = true;
     protected void Set(State newState)
     {
         machine.Set(newState);
