@@ -16,7 +16,7 @@ public class TrainController : MonoBehaviour
 
     //References
     private TrainBounds trainBounds => GetComponent<TrainBounds>();
-    private List<Transform> trainWheels = new List<Transform>();
+    public List<SlideDoorBounds> slideDoorsList = new List<SlideDoorBounds>();
 
     //StationData
     [SerializeField] private List<StationData> stationDataList = new List<StationData>();
@@ -25,6 +25,7 @@ public class TrainController : MonoBehaviour
     private void Start()
     {
         SetStationDataList();
+        SetTrainDoors();
     }
 
     private void Update()
@@ -77,5 +78,11 @@ public class TrainController : MonoBehaviour
         {
             stationDataQueue.Enqueue(stationData);
         }
+    }
+
+    private void SetTrainDoors()
+    {
+        SlideDoorBounds[] slideDoors = FindObjectsByType<SlideDoorBounds>(FindObjectsSortMode.None);
+        slideDoorsList.AddRange(slideDoors);
     }
 }

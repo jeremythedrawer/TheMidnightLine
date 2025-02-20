@@ -2819,6 +2819,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   playerBrain: {fileID: 4588777139182120258}
   trainController: {fileID: 447883163799734805}
+  canvasBounds: {fileID: 106009634}
   startingDecelCurve:
     serializedVersion: 2
     m_Curve:
@@ -3419,6 +3420,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: Train
       objectReference: {fileID: 0}
+    - target: {fileID: 5198003271787176260, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
+      propertyPath: m_Size.x
+      value: 6.73
+      objectReference: {fileID: 0}
+    - target: {fileID: 5198003271787176260, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
+      propertyPath: m_DrawMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5262139183390830301, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 5262139183390830301, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 7769836793105225521, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
       propertyPath: m_LocalPosition.x
       value: -302.7
@@ -3458,6 +3475,18 @@ PrefabInstance:
     - target: {fileID: 7769836793105225521, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8542285386075966767, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
+      propertyPath: m_DrawMode
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622581939180421814, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
+      propertyPath: m_LocalScale.x
+      value: 0.98285717
+      objectReference: {fileID: 0}
+    - target: {fileID: 8622581939180421814, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
+      propertyPath: m_LocalScale.y
+      value: 0.98285717
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

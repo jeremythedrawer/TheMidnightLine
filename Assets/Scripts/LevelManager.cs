@@ -1,11 +1,13 @@
 using UnityEngine;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Collections;
 public class LevelManager : MonoBehaviour
 {
     [Header("References")]
     public PlayerBrain playerBrain;
     public TrainController trainController;
+    public CanvasBounds canvasBounds;
 
     [Header("Parameters")]
     [SerializeField] private AnimationCurve startingDecelCurve;
@@ -37,21 +39,29 @@ public class LevelManager : MonoBehaviour
         playerBrain.boxCollider2D.excludeLayers |= 1 << trainGroundLayer;
         playerBrain.spriteRenderer.sortingOrder = 1;
 
-        BeginStartSequence();
+        StartSequence();
     }
 
-    private async void BeginStartSequence()
+    private async void StartSequence()
     {
         await MoveTrainToStart();
+        canvasBounds.SetCanvasData();
+        await OpenTrainDoors();
+        //TODO NPCS enter train
+        //TODO NPCS enable calm path
+        //TODO UI to enter ("E")
+        //TODO switch sprite depth and collisions
+        //TODO Close slide doors
+        //TODO Enable parallax objects
     }
 
     private async Task MoveTrainToStart()
     {
-        float duration = 20f;
+        float duration = 5f;
         float elaspedTime = 0f;
 
 
-        Vector2 initialPos = trainController.transform.position;
+        Vector2 initialPos = trainController.transform.position; 
         Vector2 targetPos = new Vector2(0, initialPos.y);
         float stoppingDistance = targetPos.x - initialPos.x;
         float startSpeedInMPS = (2 * stoppingDistance) / duration; // from the equation of motion v=u+at
@@ -70,5 +80,14 @@ public class LevelManager : MonoBehaviour
         }
         trainController.kmPerHour = 0;
         trainController.transform.position = targetPos;
+    }
+
+    private async Task OpenTrainDoors()
+    {
+        foreach (SlideDoorBounds slideDoor in trainController.slideDoorsList)
+        {
+            StartCoroutine(slideDoor.OpeningDoors());
+            await Task.Yield();
+        }
     }
 }
