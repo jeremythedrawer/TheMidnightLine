@@ -2,7 +2,8 @@ using UnityEngine;
 
 public class BystanderBrain : NPCCore
 {
-    public GameObject player { get; private set; }
+    public StationData departureStation; //TODO: fill in this variable for every bystander
+    public Transform playerTransform { get; private set; }
     private PlayerBrain playerBrain;
 
     public bool isCalm {  get; private set; }
@@ -18,8 +19,8 @@ public class BystanderBrain : NPCCore
 
         initialGravityScale = body.gravityScale;
 
-        player = GameObject.FindGameObjectWithTag("Player");
-        playerBrain = player.GetComponent<PlayerBrain>();
+        playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
+        playerBrain = playerTransform.GetComponent<PlayerBrain>();
     }
 
     void Update()

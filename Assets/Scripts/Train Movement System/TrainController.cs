@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
+using Unity.VisualScripting;
 
 public class TrainController : MonoBehaviour
 {
@@ -17,15 +18,19 @@ public class TrainController : MonoBehaviour
     //References
     private TrainBounds trainBounds => GetComponent<TrainBounds>();
     public List<SlideDoorBounds> slideDoorsList = new List<SlideDoorBounds>();
-
+    public List<InsideBounds> insideBoundsList = new List<InsideBounds>();
+    public List<SeatBounds> seatBoundsList =  new List<SeatBounds>();
     //StationData
     [SerializeField] private List<StationData> stationDataList = new List<StationData>();
     public Queue<StationData> stationDataQueue = new Queue<StationData>();
+    public StationData currentStation {  get; private set; }
 
     private void Start()
     {
         SetStationDataList();
         SetTrainDoors();
+        SetInsideBoundsList();
+        SetSeats();
     }
 
     private void Update()
@@ -35,12 +40,15 @@ public class TrainController : MonoBehaviour
         metersTravelled += frameDistance;
     }
 
-
-    public IEnumerator AccelationController()
+    public void AccelationController()
+    {
+        StartCoroutine(AcceleratingTrain());
+    }
+    private IEnumerator AcceleratingTrain()
     {
         while (stationDataQueue.Count > 0)
         {
-            StationData currentStation = stationDataQueue.Peek();
+            currentStation = stationDataQueue.Peek();
 
             yield return new WaitUntil(() => trainBounds.boundsMaxX > currentStation.decelThreshold);
 
@@ -61,11 +69,6 @@ public class TrainController : MonoBehaviour
         }
     }
 
-    private void Decelerate()
-    {
-
-    }
-
     private void SetStationDataList()
     {
         StationData[] stations = FindObjectsByType<StationData>(FindObjectsSortMode.None);
@@ -78,11 +81,23 @@ public class TrainController : MonoBehaviour
         {
             stationDataQueue.Enqueue(stationData);
         }
+        currentStation = stationDataQueue.Peek();
     }
 
     private void SetTrainDoors()
     {
         SlideDoorBounds[] slideDoors = FindObjectsByType<SlideDoorBounds>(FindObjectsSortMode.None);
         slideDoorsList.AddRange(slideDoors);
+    }
+
+    private void SetSeats()
+    {
+        SeatBounds[] setsOfSeats = FindObjectsByType<SeatBounds>(FindObjectsSortMode.None);
+        seatBoundsList.AddRange(setsOfSeats);
+    }
+    private void SetInsideBoundsList()
+    {
+        InsideBounds[] insideBounds = FindObjectsByType<InsideBounds>(FindObjectsSortMode.None);
+        insideBoundsList.AddRange(insideBounds);
     }
 }

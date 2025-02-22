@@ -8,13 +8,14 @@ public class BystanderController : NPCController
     public CalmPath calmPath;
 
     private List<PathData.NamedPosition> calmPathToTarget => calmPath.pathData.pathToTarget;
-
+    private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
+    private int stationGroundLayer => LayerMask.NameToLayer("Station Ground");
 
     public void CalmInputs()
     {
         colliderCenter = npcCore.boxCollider2D.size.y / 2f;
         currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, colliderCenter);
-        if (calmPath.pathData.chosenSeatBounds != null)
+        if (calmPath.pathData.chosenSeatBounds != null) //Seat Path
         {
             lastPos.value = calmPath.chosenSeat.pos;
             float distanceToSeat = Mathf.Abs(transform.position.x - calmPath.chosenSeat.pos.x);
@@ -35,7 +36,7 @@ public class BystanderController : NPCController
                 FollowCalmPath(currentPos, lastPos, colliderCenter);
             }
         }
-        else
+        else if (calmPath.chosenStandPos != Vector2.zero) //Stand Path
         {
             lastPos.value = calmPath.chosenStandPos;
             float distanceToStandPos = Mathf.Abs(transform.position.x - calmPath.chosenStandPos.x);
@@ -49,6 +50,27 @@ public class BystanderController : NPCController
             {
                 FollowCalmPath(currentPos, lastPos, colliderCenter);
             }
+        }
+        else if (calmPath.pathData.chosenSlideDoorBounds != null)
+        {
+            lastPos.value = calmPath.chosenSlidingDoorsPos;
+            float distanceToSlideDoor = Mathf.Abs(transform.position.x - calmPath.chosenSlidingDoorsPos.x);
+            if (distanceToSlideDoor < 0.1)
+            {
+                calmPath.pathData.chosenSlideDoorBounds.OpenDoors();
+                npcCore.spriteRenderer.sortingOrder = 6;
+                npcCore.boxCollider2D.excludeLayers |= 1 << stationGroundLayer;
+                npcCore.boxCollider2D.excludeLayers &= 1 << trainGroundLayer;
+                npcCore.collisionChecker.activeGroundLayer = 1 << trainGroundLayer;
+            }
+            else
+            {
+                FollowCalmPath(currentPos, lastPos, colliderCenter);
+            }
+        }
+        else
+        {
+            FollowCalmPath(currentPos, lastPos, colliderCenter);
         }
     }
     private void FollowCalmPath(Vector2 currentPos, PathData.NamedPosition _lastpos, float colliderCenter)

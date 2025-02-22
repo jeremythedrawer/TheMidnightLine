@@ -14,45 +14,36 @@ public class LevelManager : MonoBehaviour
 
     private List<ParallaxController> parallaxObjects = new List<ParallaxController>();
     private List<Spawner> spawners = new List<Spawner>();
+    public List<NPCCore> npcsInFirstStation => trainController.currentStation.npcs;
     private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
     void Start()
     {
-        parallaxObjects.AddRange(FindObjectsByType<ParallaxController>(FindObjectsSortMode.None));
-        spawners.AddRange(FindObjectsByType<Spawner>(FindObjectsSortMode.None));
-
-        foreach (ParallaxController parallaxController in parallaxObjects)
-        { 
-            parallaxController.enabled = false;
-        }
-        foreach (Spawner spawner in spawners)
-        {
-            if (spawner is LoopingTileSpawner)
-            {
-                if (spawner.startSpawnDistance != 0)
-                {
-                    spawner.gameObject.SetActive(false);
-                }
-            }
-            spawner.enabled = false;
-        }
-
-        playerBrain.boxCollider2D.excludeLayers |= 1 << trainGroundLayer;
-        playerBrain.spriteRenderer.sortingOrder = 1;
-
         StartSequence();
     }
 
     private async void StartSequence()
     {
+        parallaxObjects.AddRange(FindObjectsByType<ParallaxController>(FindObjectsSortMode.None));
+        spawners.AddRange(FindObjectsByType<Spawner>(FindObjectsSortMode.None));
+
+        EnableParallaxAndSpawners(false);
+
+        playerBrain.boxCollider2D.excludeLayers |= 1 << trainGroundLayer;
+        playerBrain.spriteRenderer.sortingOrder = 1;
+        while (trainController.currentStation == null) await Task.Yield();
+
+        foreach (NPCCore npc in npcsInFirstStation)
+        {
+            npc.spriteRenderer.sortingOrder = 1;
+            npc.boxCollider2D.excludeLayers |= 1 << trainGroundLayer;
+        }
+
+
         await MoveTrainToStart();
         canvasBounds.SetCanvasData();
-        await OpenTrainDoors();
-        //TODO NPCS enter train
-        //TODO NPCS enable calm path
-        //TODO UI to enter ("E")
-        //TODO switch sprite depth and collisions
-        //TODO Close slide doors
-        //TODO Enable parallax objects
+        await SetAllSeatData();
+        EnableParallaxAndSpawners(true);
+        //Player Enters onto train
     }
 
     private async Task MoveTrainToStart()
@@ -82,12 +73,31 @@ public class LevelManager : MonoBehaviour
         trainController.transform.position = targetPos;
     }
 
-    private async Task OpenTrainDoors()
+    private async Task SetAllSeatData()
     {
-        foreach (SlideDoorBounds slideDoor in trainController.slideDoorsList)
+        while (trainController.kmPerHour != 0) await Task.Yield();
+        foreach (SeatBounds setsOfSeats in trainController.seatBoundsList)
         {
-            StartCoroutine(slideDoor.OpeningDoors());
-            await Task.Yield();
+            setsOfSeats.SetSeatData();
+        }
+    }
+
+    private void EnableParallaxAndSpawners(bool isEnabled)
+    {
+        foreach (ParallaxController parallaxController in parallaxObjects)
+        {
+            parallaxController.enabled = isEnabled;
+        }
+        foreach (Spawner spawner in spawners)
+        {
+            if (spawner is LoopingTileSpawner)
+            {
+                if (spawner.startSpawnDistance != 0)
+                {
+                    spawner.gameObject.SetActive(isEnabled);
+                }
+            }
+            spawner.enabled = false;
         }
     }
 }

@@ -7,7 +7,7 @@ public class CarriageBounds : Bounds
     public enum CarriageType { backCarriage, middleCarriage, frontCarriage }
     public CarriageType carriageType;
 
-    public UnityEngine.Bounds bounds => insideBounds.Bounds;
+    public UnityEngine.Bounds bounds => insideBounds.objectBounds;
     void Start()
     {
         

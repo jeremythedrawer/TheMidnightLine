@@ -50,7 +50,8 @@ public class SeatBounds : Bounds
         }
 #endif
     }
-    private void Start()
+
+    public void SetSeatData()
     {
         if (boxCollider2D == null || seatsCount <= 0) return;
 
@@ -63,7 +64,6 @@ public class SeatBounds : Bounds
             AddToSeatData(new Vector2(seatPosX, boxCollider2D.bounds.center.y), false);
         }
     }
-
     private void AddToSeatData(Vector2 position, bool filled)
     {
         seats.Add(new SeatData(position, filled));

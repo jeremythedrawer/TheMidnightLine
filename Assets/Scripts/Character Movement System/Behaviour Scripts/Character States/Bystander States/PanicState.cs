@@ -38,7 +38,7 @@ public class PanicState : State
     private void AvoidPlayer()
     {
         Vector2 currentPos = transform.position;
-        Vector2 currentPlayerPos = bystanderBrain.player.transform.position;
+        Vector2 currentPlayerPos = bystanderBrain.playerTransform.position;
         Vector2 directionToPlayer = (currentPlayerPos - currentPos).normalized;
         Vector2 thresholdPos = currentPos + directionToPlayer * avoidPlayerDistance;
 

@@ -1940,6 +1940,7 @@ GameObject:
   - component: {fileID: 5495895805796259454}
   - component: {fileID: 8643959058028543678}
   - component: {fileID: 4484639525074998217}
+  - component: {fileID: 7507076656840590311}
   m_Layer: 8
   m_Name: InsideBounds
   m_TagString: Inside Bounds
@@ -2025,6 +2026,33 @@ MonoBehaviour:
   gangwayTriggerLayer:
     serializedVersion: 2
     m_Bits: 2048
+--- !u!50 &7507076656840590311
+Rigidbody2D:
+  serializedVersion: 5
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5438926695850872170}
+  m_BodyType: 1
+  m_Simulated: 1
+  m_UseFullKinematicContacts: 0
+  m_UseAutoMass: 0
+  m_Mass: 1
+  m_LinearDamping: 0
+  m_AngularDamping: 0.05
+  m_GravityScale: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_Interpolate: 0
+  m_SleepingMode: 1
+  m_CollisionDetection: 0
+  m_Constraints: 0
 --- !u!1 &5550120008611827804
 GameObject:
   m_ObjectHideFlags: 0

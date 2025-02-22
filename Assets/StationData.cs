@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 public class StationData : MonoBehaviour
@@ -7,6 +8,12 @@ public class StationData : MonoBehaviour
     public float decelThreshold => transform.position.x - accelerationThresholds;
     public float accelThreshold => transform.position.x + accelerationThresholds;
 
+    public List<NPCCore> npcs;
+
+    private void Awake()
+    {
+        npcs = new List<NPCCore>(GetComponentsInChildren<NPCCore>());
+    }
     private void OnDrawGizmos()
     {
         DrawAccelThresholds(true);

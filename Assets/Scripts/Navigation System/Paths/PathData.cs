@@ -5,6 +5,7 @@ public class PathData : MonoBehaviour
 {
     [Header("References")]
     public TrainBounds trainBounds;
+    public TrainController trainController;
 
     public InsideBounds currentInsideBounds { get; set; }
     public OutsideBounds currentOutsideBounds { get; set; }
@@ -15,6 +16,7 @@ public class PathData : MonoBehaviour
     public GangwayBounds chosenGangwayBounds { get; set; }
     public ClimbingBounds chosenClimbingBounds { get; set; }
     public SeatBounds chosenSeatBounds { get; set; }
+    public SlideDoorBounds chosenSlideDoorBounds { get; set; }
     public enum PosType
     {
         InsideBound,
@@ -24,6 +26,7 @@ public class PathData : MonoBehaviour
         RoofEdge,
         Seat,
         Stand,
+        SlidingDoors,
         Player
     }
 

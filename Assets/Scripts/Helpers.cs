@@ -74,4 +74,16 @@ public static class Helpers
             }
         }
     }
+
+
+    public static int GetLayerInt(int layerValue)
+    {
+        int layerInt = 0;
+        while (layerValue > 1)
+        {
+            layerValue = layerValue >> 1;
+            layerInt++;
+        }
+        return layerInt;
+    }
 }

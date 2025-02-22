@@ -1,6 +1,8 @@
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+
 
 public class InsideBounds : InsideOutsideBounds
 {
@@ -8,6 +10,8 @@ public class InsideBounds : InsideOutsideBounds
     public int bystanderCount { get; private set; } = 0;
     public bool inEmergency { get; private set; } //TODO: find when fighting or when gun is shot
     public List<SeatBounds> setsOfSeats { get; set; } = new List<SeatBounds>();
+    public List<SlideDoorBounds> setOfSlideDoors { get; set; } = new List<SlideDoorBounds>();
+    public Collider2D boxCollider => GetComponent<Collider2D>();
 
     [System.Serializable]
     public struct StandNpcPosData
@@ -29,11 +33,18 @@ public class InsideBounds : InsideOutsideBounds
     {
         SetUpCarriageBounds();
         AddToSetsOfSeats();
+        AddToSetsOfSlideDoors();
         AddWallsPosToList();
     }
 
-    private void OnTriggerEnter2D(Collider2D collision)
+    public void OnTriggerEnter2D(Collider2D collision)
     {
+        CollisionChecker collisionChecker = collision.gameObject.GetComponentInParent<CollisionChecker>();
+        if (collisionChecker == null) return;
+        int activeLayerInt = Helpers.GetLayerInt(collisionChecker.activeGroundLayer.value);
+        string activeLayerName = LayerMask.LayerToName(activeLayerInt);
+        if (activeLayerName != "Train Ground") return;
+
         if (collision.gameObject.CompareTag("Player Collider"))
         {
             Instance = this;
@@ -52,7 +63,6 @@ public class InsideBounds : InsideOutsideBounds
             {
                 Debug.LogWarning("No PathData was found in " + this.name + " for " + collision.gameObject.name);
             }
-
         }
 
         if (collision.gameObject.CompareTag("Bystander Collider"))
@@ -109,29 +119,41 @@ public class InsideBounds : InsideOutsideBounds
         }
     }
 
-    private void AddToSetsOfSeats()
+    public void AddToSetsOfSeats()
+    {
+        string layerName = "Chairs";
+        AddToTrainObjectLists<SeatBounds>(layerName, setsOfSeats);
+    }
+
+    private void AddToSetsOfSlideDoors()
+    {
+        string layerName = "Slide Doors";
+        AddToTrainObjectLists<SlideDoorBounds>(layerName, setOfSlideDoors);
+    }
+
+    private void AddToTrainObjectLists<T>(string layerName, List<T> trainObjectList)
     {
         ContactFilter2D filter2D = new ContactFilter2D();
-        filter2D.SetLayerMask(LayerMask.GetMask("Chairs"));
+        filter2D.SetLayerMask(LayerMask.GetMask(layerName));
         filter2D.useTriggers = true;
 
         List<Collider2D> results = new List<Collider2D>();
 
-        Collider2D.Overlap(filter2D, results);
+        Collider2D.Overlap(filter2D , results);
 
-        foreach (var collider in results)
+        foreach (Collider2D collider in results)
         {
-            SeatBounds chairBounds = collider.GetComponent<SeatBounds>();
-            if (chairBounds != null)
+            T bounds = collider.GetComponent<T>();
+            if (bounds != null)
             {
-                setsOfSeats.Add(chairBounds);
+                trainObjectList.Add(bounds);
             }
         }
     }
 
     private void AddWallsPosToList()
     {
-        InsertSorted(new StandNpcPosData(Bounds.min.x, 0));
+        InsertSorted(new StandNpcPosData(objectBounds.min.x, 0));
     }
 
     private void InsertSorted(StandNpcPosData currentPosData)
@@ -150,7 +172,7 @@ public class InsideBounds : InsideOutsideBounds
             }
             if (index == standingNpcAndWallPosList.Count - 1) // add wall to endpos on the las index
             {
-                standingNpcAndWallPosList[index] = new StandNpcPosData(currentPosData.startPos, Bounds.max.x);
+                standingNpcAndWallPosList[index] = new StandNpcPosData(currentPosData.startPos, objectBounds.max.x);
             }
             
         }

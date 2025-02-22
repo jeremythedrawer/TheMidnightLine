@@ -1,5 +1,5 @@
-using System.Collections.Generic;
 using System;
+using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using static InsideBounds;
@@ -9,9 +9,12 @@ public class CalmPath : PathFinder
     public List<SeatBounds.SeatData> seats => pathData.chosenSeatBounds.seats;
     public SeatBounds.SeatData chosenSeat {  get; private set; }
     public Vector2 chosenStandPos { get; private set; }
+    public Vector2 chosenSlidingDoorsPos { get; private set; }
     public int chosenSeatIndex { get; private set; }
 
     private float standingPosThreshold = 8f;
+
+    //Setting paths
     public override void SetPath(Vector2 currentPos, PathData.NamedPosition lastPos, float colliderCentre)
     {
         base.SetPath(currentPos, lastPos, colliderCentre);
@@ -30,9 +33,20 @@ public class CalmPath : PathFinder
     }
     public override void FindPath(Vector2 currentPos, Vector2 lastPos, float colliderCentre)
     {
-        if (currentInsideBounds == null) return;
 
         base.FindPath(currentPos, lastPos, colliderCentre);
+
+        //In station
+        if (pathData.trainController.kmPerHour == 0 && currentInsideBounds == null)
+        {
+            FindChosenSlidingDoors(currentPos);
+            SlideDoorsPath();
+            return;
+        }
+
+        if (currentInsideBounds == null) return;
+
+        //In train
         FindChosenChairBounds(currentPos);
 
         if (pathData.chosenSeatBounds != null)
@@ -46,6 +60,7 @@ public class CalmPath : PathFinder
         }
     }
 
+    //Adding to Paths
     private void SeatPath(Vector2 currentPos)
     {
 
@@ -73,8 +88,14 @@ public class CalmPath : PathFinder
     private void StandPath()
     {
         AddToPath(chosenStandPos, PathData.PosType.Stand);
-
     }
+
+    private void SlideDoorsPath()
+    {
+        AddToPath(chosenSlidingDoorsPos, PathData.PosType.SlidingDoors);
+    }
+
+    //Find target
     private void FindChosenChairBounds(Vector2 currentPos)
     {
         List<SeatBounds> setsOfSeats = currentInsideBounds.setsOfSeats;
@@ -122,8 +143,8 @@ public class CalmPath : PathFinder
 
     private void FindChosenStandingArea(Vector2 currentPos)
     {
-        float insideBoundsMin = currentInsideBounds.Bounds.min.x;
-        float insideBoundsMax = currentInsideBounds.Bounds.max.x;
+        float insideBoundsMin = currentInsideBounds.objectBounds.min.x;
+        float insideBoundsMax = currentInsideBounds.objectBounds.max.x;
 
         float standingPosThresholdMin = Math.Max(currentPos.x - standingPosThreshold, insideBoundsMin);
         float standingPosThresholdMax = Math.Min(currentPos.x + standingPosThreshold, insideBoundsMax);
@@ -149,5 +170,24 @@ public class CalmPath : PathFinder
 
         float randomPosX = UnityEngine.Random.Range(largestDistanceSelected.startPos, largestDistanceSelected.endPos);
         chosenStandPos = new Vector2(randomPosX, currentPos.y);
+    }
+
+    private void FindChosenSlidingDoors(Vector2 currentPos)
+    {
+        List<SlideDoorBounds> slideDoorsList = pathData.trainController.slideDoorsList;
+
+        float shortestDistance = float.MaxValue;
+        int chosenSlideDoorsIndex = -1;
+        for (int i = 0; i < slideDoorsList.Count - 1; i++)
+        {
+            float distance = Mathf.Abs(currentPos.x - slideDoorsList[i].transform.position.x);
+            if (distance < shortestDistance)
+            {
+                shortestDistance = distance;
+                chosenSlideDoorsIndex = i;
+            }
+        }
+        pathData.chosenSlideDoorBounds = slideDoorsList[chosenSlideDoorsIndex];
+        chosenSlidingDoorsPos = new Vector2(pathData.chosenSlideDoorBounds.transform.position.x, currentPos.y);
     }
 }

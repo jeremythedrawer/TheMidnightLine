@@ -9,7 +9,7 @@ public abstract class InsideOutsideBounds : Bounds
     public GangwayBounds leftGangwayBounds { get; private set; }
     public GangwayBounds rightGangwayBounds { get; private set; }
     protected BoxCollider2D Collider2D { get; private set; }
-    public UnityEngine.Bounds Bounds { get; private set; }
+    public UnityEngine.Bounds objectBounds { get; private set; }
 
     public float leftEdge { get; private set; }
     public float rightEdge { get; private set; }
@@ -33,7 +33,7 @@ public abstract class InsideOutsideBounds : Bounds
     protected void SetUpCarriageBounds()
     {
         Collider2D = this.GetComponent<BoxCollider2D>();
-        Bounds = Collider2D.bounds;
+        objectBounds = Collider2D.bounds;
 
         leftEdge = Collider2D.bounds.min.x;
         rightEdge = Collider2D.bounds.max.x;
