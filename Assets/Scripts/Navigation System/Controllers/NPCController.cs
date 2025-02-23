@@ -26,21 +26,5 @@ public abstract class NPCController : MonoBehaviour
         }
     }
 
-    protected IEnumerator TargetPosIsSeat()
-    {
-        while(true)
-        {
-            //TODO: targetPos = new Vector2() set position to the next closest seat
-            yield return new WaitForSeconds(updateTargetTickRate);
-        }
-    }
 
-    protected IEnumerator TargetPosIsStandArea()
-    {
-        while(true)
-        {
-            //TODO: targetPos = new Vector2() set position to the next larget area
-            yield return new WaitForSeconds(updateTargetTickRate);
-        }
-    }
 }

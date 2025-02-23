@@ -2,7 +2,7 @@ using UnityEngine;
 using System.Collections.Generic;
 using System.Collections;
 using System.Linq;
-using Unity.VisualScripting;
+using System.Threading.Tasks;
 
 public class TrainController : MonoBehaviour
 {
@@ -12,11 +12,10 @@ public class TrainController : MonoBehaviour
     //stats
     public float mPerSec {  get; private set; }
     public float metersTravelled { get; private set; }
-    private float currentSpeed;
     private const float kmConversion = 3.6f; // 1 m/s = 3.6 km/h
 
     //References
-    private TrainBounds trainBounds => GetComponent<TrainBounds>();
+    public TrainBounds trainBounds => GetComponent<TrainBounds>();
     public List<SlideDoorBounds> slideDoorsList = new List<SlideDoorBounds>();
     public List<InsideBounds> insideBoundsList = new List<InsideBounds>();
     public List<SeatBounds> seatBoundsList =  new List<SeatBounds>();
@@ -25,6 +24,7 @@ public class TrainController : MonoBehaviour
     public Queue<StationData> stationDataQueue = new Queue<StationData>();
     public StationData currentStation {  get; private set; }
 
+    public float normalizedTime { get; private set; }
     private void Start()
     {
         SetStationDataList();
@@ -36,36 +36,57 @@ public class TrainController : MonoBehaviour
     private void Update()
     {
         mPerSec = kmPerHour / kmConversion;
-        float frameDistance = currentSpeed * Time.deltaTime;
+        float frameDistance = mPerSec * Time.deltaTime;
         metersTravelled += frameDistance;
     }
 
-    public void AccelationController()
-    {
-        StartCoroutine(AcceleratingTrain());
+    public async void TrainInputs()
+    {   
+        while (stationDataQueue.Count == 0) {  await Task.Yield(); } //wait for queue to fill
+        currentStation = stationDataQueue.Peek();
+        while (trainBounds.boundsMaxX < currentStation.decelThreshold) { await Task.Yield(); } // wait until train cross decel threshold
+        await UpdateSpeed(0);
+        await UnlockDoors();
+        await LockDoors();
     }
-    private IEnumerator AcceleratingTrain()
+    private async Task UpdateSpeed(float newSpeed)
     {
-        while (stationDataQueue.Count > 0)
+        float startSpeed = kmPerHour;
+        float stoppingDistance = currentStation.accelerationThresholds + (trainBounds.boundsMaxX - trainBounds.boundsHalfX);
+        float accelationTime = (2 * stoppingDistance) / (startSpeed / kmConversion); // using the equation of motion v=u+at where t is equal to 2s/u
+        float elapsedTime = 0f;
+        while (kmPerHour != newSpeed)
         {
-            currentStation = stationDataQueue.Peek();
+            elapsedTime += Time.deltaTime;
 
-            yield return new WaitUntil(() => trainBounds.boundsMaxX > currentStation.decelThreshold);
+            normalizedTime = Mathf.Clamp01(elapsedTime / accelationTime);
+            kmPerHour = Mathf.Lerp(startSpeed, newSpeed, normalizedTime);
 
-            float startSpeed = kmPerHour;
-            float stoppingDistance = currentStation.accelerationThresholds + (trainBounds.boundsMaxX - trainBounds.boundsHalfX);
-            float accelationSpeed = (2 * stoppingDistance) / (startSpeed / kmConversion); // using the equation of motion v=u+at where t is equal to 2s/u
+            await Task.Yield();
+        }
+    }
+    private async Task UnlockDoors()
+    {
+        foreach (SlideDoorBounds slideDoors in slideDoorsList)
+        {
+            slideDoors.UnlockDoors();
+        }
+        await Task.Yield();
+    }
 
-            float elapsedTime = 0f;
-            while (kmPerHour > 0)
-            {
-                elapsedTime += Time.deltaTime;
-
-                float normalizedTime = Mathf.Clamp01(elapsedTime / accelationSpeed);
-                kmPerHour = Mathf.Lerp(startSpeed, 0, normalizedTime);
-
-                yield return null;
-            }
+    private async Task LockDoors()
+    {
+        while (currentStation.charactersList.Count != 0) { await Task.Yield(); }
+        await Task.Delay(1000);
+        List<SlideDoorBounds> openDoors = slideDoorsList.Where(slideDoors => slideDoors.openDoor).ToList();
+        foreach (SlideDoorBounds slideDoors in openDoors)
+        {
+            slideDoors.CloseDoors();
+        }
+        while (openDoors.Any(openDoor => openDoor.normMoveDoorTime < 1.0f)) { await Task.Yield(); }
+        foreach (SlideDoorBounds slideDoors in slideDoorsList)
+        {
+            slideDoors.LockDoors();
         }
     }
 
@@ -83,13 +104,11 @@ public class TrainController : MonoBehaviour
         }
         currentStation = stationDataQueue.Peek();
     }
-
     private void SetTrainDoors()
     {
         SlideDoorBounds[] slideDoors = FindObjectsByType<SlideDoorBounds>(FindObjectsSortMode.None);
         slideDoorsList.AddRange(slideDoors);
     }
-
     private void SetSeats()
     {
         SeatBounds[] setsOfSeats = FindObjectsByType<SeatBounds>(FindObjectsSortMode.None);

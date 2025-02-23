@@ -19,6 +19,7 @@ public class SlideDoorBounds : Bounds
 
     private InsideBounds insideBounds;
     private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
+    public float normMoveDoorTime {  get; private set; }
     private void Start()
     {
         leftDoorSprite = leftDoor.gameObject.GetComponent<SpriteRenderer>();
@@ -34,6 +35,7 @@ public class SlideDoorBounds : Bounds
         if (collision.gameObject.CompareTag("Agent Collider") || collision.gameObject.CompareTag("Bystander Collider"))
         {
             NPCCore nPCCore = collision.GetComponentInParent<NPCCore>();
+            if (nPCCore.pathData.chosenInsideBounds != null) return;
             StartCoroutine(TriggeringInsideBounds(collision, nPCCore));
         }
     }
@@ -41,7 +43,6 @@ public class SlideDoorBounds : Bounds
     private IEnumerator TriggeringInsideBounds(Collider2D collision, NPCCore npcCore)
     {
         yield return new WaitUntil(() => npcCore.collisionChecker.activeGroundLayer == 1 << trainGroundLayer);
-        if (npcCore.pathData.chosenInsideBounds != null) yield break;
         if (insideBounds.boxCollider.bounds.Intersects(collision.bounds))
         {
             insideBounds.OnTriggerEnter2D(collision);
@@ -104,11 +105,11 @@ public class SlideDoorBounds : Bounds
         while (elsapedTime < openingTime)
         {
             elsapedTime += Time.deltaTime;
-            float normalizedTime = elsapedTime / openingTime;
-            normalizedTime = doorOpeningCurve.Evaluate(normalizedTime);
+            normMoveDoorTime = elsapedTime / openingTime;
+            normMoveDoorTime = doorOpeningCurve.Evaluate(normMoveDoorTime);
 
-            MoveDoor(leftDoor, initialPositions[0], -moveDistance, normalizedTime);
-            MoveDoor(rightDoor, initialPositions[1], moveDistance, normalizedTime);
+            MoveDoor(leftDoor, initialPositions[0], -moveDistance, normMoveDoorTime);
+            MoveDoor(rightDoor, initialPositions[1], moveDistance, normMoveDoorTime);
 
             yield return null;
         }

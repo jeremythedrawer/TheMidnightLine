@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class StationData : MonoBehaviour
@@ -8,11 +9,12 @@ public class StationData : MonoBehaviour
     public float decelThreshold => transform.position.x - accelerationThresholds;
     public float accelThreshold => transform.position.x + accelerationThresholds;
 
-    public List<NPCCore> npcs;
+    public List<StateCore> charactersList {  get; private set; }
+    private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
 
     private void Awake()
     {
-        npcs = new List<NPCCore>(GetComponentsInChildren<NPCCore>());
+        charactersList = new List<StateCore>(GetComponentsInChildren<StateCore>());
     }
     private void OnDrawGizmos()
     {
@@ -22,8 +24,18 @@ public class StationData : MonoBehaviour
     private void Start()
     {
         DrawAccelThresholds(false);
+
+        foreach (StateCore character in charactersList)
+        {
+            character.spriteRenderer.sortingOrder = 1;
+            character.boxCollider2D.excludeLayers |= 1 << trainGroundLayer;
+        }
     }
 
+    private void Update()
+    {
+        charactersList.RemoveAll(character => character.collisionChecker.activeGroundLayer == 1 <<  trainGroundLayer);
+    }
     private void DrawAccelThresholds(bool usingGizmos)
     {
 #if UNITY_EDITOR

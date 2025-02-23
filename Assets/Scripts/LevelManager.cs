@@ -14,8 +14,10 @@ public class LevelManager : MonoBehaviour
 
     private List<ParallaxController> parallaxObjects = new List<ParallaxController>();
     private List<Spawner> spawners = new List<Spawner>();
-    public List<NPCCore> npcsInFirstStation => trainController.currentStation.npcs;
     private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
+
+    private float startingTrainSpeed => trainController.kmPerHour;
+    private Vector2 startingTrainPos;
     void Start()
     {
         StartSequence();
@@ -28,49 +30,38 @@ public class LevelManager : MonoBehaviour
 
         EnableParallaxAndSpawners(false);
 
-        playerBrain.boxCollider2D.excludeLayers |= 1 << trainGroundLayer;
-        playerBrain.spriteRenderer.sortingOrder = 1;
-        while (trainController.currentStation == null) await Task.Yield();
-
-        foreach (NPCCore npc in npcsInFirstStation)
-        {
-            npc.spriteRenderer.sortingOrder = 1;
-            npc.boxCollider2D.excludeLayers |= 1 << trainGroundLayer;
-        }
-
-
+        startingTrainPos = trainController.transform.position;
+        trainController.TrainInputs();
+        await MoveTrainToDecelThreshold();
         await MoveTrainToStart();
+
         canvasBounds.SetCanvasData();
         await SetAllSeatData();
         EnableParallaxAndSpawners(true);
         //Player Enters onto train
     }
 
-    private async Task MoveTrainToStart()
+
+    private async Task MoveTrainToDecelThreshold()
     {
-        float duration = 5f;
-        float elaspedTime = 0f;
-
-
-        Vector2 initialPos = trainController.transform.position; 
-        Vector2 targetPos = new Vector2(0, initialPos.y);
-        float stoppingDistance = targetPos.x - initialPos.x;
-        float startSpeedInMPS = (2 * stoppingDistance) / duration; // from the equation of motion v=u+at
-
-        float startSpeed = startSpeedInMPS * 3.6f;
-        while (elaspedTime < duration)
+        while (trainController.currentStation == null) { await Task.Yield(); }
+        while (trainController.trainBounds.boundsMaxX < trainController.currentStation.decelThreshold)
         {
-            if (trainController == null) return;
-            float t =  elaspedTime / duration;
-
-            trainController.transform.position = Vector2.Lerp(initialPos, targetPos, startingDecelCurve.Evaluate(t));
-            elaspedTime += Time.deltaTime;
-
-            trainController.kmPerHour = Mathf.Lerp(startSpeed, 0, startingDecelCurve.Evaluate(t));
+            float newTrainPosX = startingTrainPos.x + trainController.metersTravelled;
+            trainController.transform.position = new Vector2(newTrainPosX, startingTrainPos.y);
             await Task.Yield();
         }
-        trainController.kmPerHour = 0;
-        trainController.transform.position = targetPos;
+    }
+    private async Task MoveTrainToStart()
+    {
+        float initialPosX = trainController.transform.position.x;
+        while (trainController.transform.position.x < 0)
+        {
+            float currentPosX = Mathf.Lerp(initialPosX, 0, trainController.normalizedTime);
+            trainController.transform.position = new Vector2(currentPosX, startingTrainPos.y);
+            await Task.Yield();
+        }
+        trainController.transform.position = new Vector2(0, startingTrainPos.y);
     }
 
     private async Task SetAllSeatData()

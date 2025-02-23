@@ -37,15 +37,14 @@ public class CalmPath : PathFinder
         base.FindPath(currentPos, lastPos, colliderCentre);
 
         //In station
-        if (pathData.trainController.kmPerHour == 0 && currentInsideBounds == null)
+        if (pathData.trainController.kmPerHour == 0 && currentInsideBounds == null )
         {
             FindChosenSlidingDoors(currentPos);
             SlideDoorsPath();
             return;
         }
 
-        if (currentInsideBounds == null) return;
-
+        if (currentInsideBounds == null) return; // TODO: Wait until doors fully open.
         //In train
         FindChosenChairBounds(currentPos);
 
