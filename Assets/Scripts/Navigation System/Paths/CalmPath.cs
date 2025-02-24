@@ -37,7 +37,7 @@ public class CalmPath : PathFinder
         base.FindPath(currentPos, lastPos, colliderCentre);
 
         //In station
-        if (pathData.trainController.kmPerHour == 0 && currentInsideBounds == null )
+        if (pathData.trainData.kmPerHour == 0 && currentInsideBounds == null )
         {
             FindChosenSlidingDoors(currentPos);
             SlideDoorsPath();
@@ -173,7 +173,7 @@ public class CalmPath : PathFinder
 
     private void FindChosenSlidingDoors(Vector2 currentPos)
     {
-        List<SlideDoorBounds> slideDoorsList = pathData.trainController.slideDoorsList;
+        List<SlideDoorBounds> slideDoorsList = pathData.trainData.slideDoorsList;
 
         float shortestDistance = float.MaxValue;
         int chosenSlideDoorsIndex = -1;

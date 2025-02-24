@@ -4,6 +4,7 @@ using UnityEngine;
 
 public class StationData : MonoBehaviour
 {
+    [Header("Parameters")]
     public float accelerationThresholds;
 
     public float decelThreshold => transform.position.x - accelerationThresholds;
@@ -11,10 +12,11 @@ public class StationData : MonoBehaviour
 
     public List<StateCore> charactersList {  get; private set; }
     private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
-
+    private static TrainData trainData;
     private void Awake()
     {
         charactersList = new List<StateCore>(GetComponentsInChildren<StateCore>());
+        trainData = GameObject.FindGameObjectWithTag("Train Object").GetComponent<TrainData>();
     }
     private void OnDrawGizmos()
     {
@@ -30,11 +32,6 @@ public class StationData : MonoBehaviour
             character.spriteRenderer.sortingOrder = 1;
             character.boxCollider2D.excludeLayers |= 1 << trainGroundLayer;
         }
-    }
-
-    private void Update()
-    {
-        charactersList.RemoveAll(character => character.collisionChecker.activeGroundLayer == 1 <<  trainGroundLayer);
     }
     private void DrawAccelThresholds(bool usingGizmos)
     {

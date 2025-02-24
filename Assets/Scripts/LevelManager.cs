@@ -6,17 +6,13 @@ public class LevelManager : MonoBehaviour
 {
     [Header("References")]
     public PlayerBrain playerBrain;
+    public TrainData trainData;
     public TrainController trainController;
     public CanvasBounds canvasBounds;
 
-    [Header("Parameters")]
-    [SerializeField] private AnimationCurve startingDecelCurve;
-
     private List<ParallaxController> parallaxObjects = new List<ParallaxController>();
     private List<Spawner> spawners = new List<Spawner>();
-    private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
 
-    private float startingTrainSpeed => trainController.kmPerHour;
     private Vector2 startingTrainPos;
     void Start()
     {
@@ -30,7 +26,7 @@ public class LevelManager : MonoBehaviour
 
         EnableParallaxAndSpawners(false);
 
-        startingTrainPos = trainController.transform.position;
+        startingTrainPos = trainData.transform.position;
         trainController.TrainInputs();
         await MoveTrainToDecelThreshold();
         await MoveTrainToStart();
@@ -44,30 +40,30 @@ public class LevelManager : MonoBehaviour
 
     private async Task MoveTrainToDecelThreshold()
     {
-        while (trainController.currentStation == null) { await Task.Yield(); }
-        while (trainController.trainBounds.boundsMaxX < trainController.currentStation.decelThreshold)
+        while (trainData.currentStation == null) { await Task.Yield(); }
+        while (trainData.boundsMaxX < trainData.currentStation.decelThreshold)
         {
-            float newTrainPosX = startingTrainPos.x + trainController.metersTravelled;
-            trainController.transform.position = new Vector2(newTrainPosX, startingTrainPos.y);
+            float newTrainPosX = startingTrainPos.x + trainData.metersTravelled;
+            trainData.transform.position = new Vector2(newTrainPosX, startingTrainPos.y);
             await Task.Yield();
         }
     }
     private async Task MoveTrainToStart()
     {
-        float initialPosX = trainController.transform.position.x;
-        while (trainController.transform.position.x < 0)
+        float initialPosX = trainData.transform.position.x;
+        while (trainData.transform.position.x < 0)
         {
             float currentPosX = Mathf.Lerp(initialPosX, 0, trainController.normalizedTime);
-            trainController.transform.position = new Vector2(currentPosX, startingTrainPos.y);
+            trainData.transform.position = new Vector2(currentPosX, startingTrainPos.y);
             await Task.Yield();
         }
-        trainController.transform.position = new Vector2(0, startingTrainPos.y);
+        trainData.transform.position = new Vector2(0, startingTrainPos.y);
     }
 
     private async Task SetAllSeatData()
     {
-        while (trainController.kmPerHour != 0) await Task.Yield();
-        foreach (SeatBounds setsOfSeats in trainController.seatBoundsList)
+        while (trainData.kmPerHour != 0) await Task.Yield();
+        foreach (SeatBounds setsOfSeats in trainData.seatBoundsList)
         {
             setsOfSeats.SetSeatData();
         }
@@ -88,7 +84,7 @@ public class LevelManager : MonoBehaviour
                     spawner.gameObject.SetActive(isEnabled);
                 }
             }
-            spawner.enabled = false;
+            spawner.enabled = isEnabled;
         }
     }
 }

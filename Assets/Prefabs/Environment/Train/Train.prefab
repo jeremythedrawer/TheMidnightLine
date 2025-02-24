@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7769836793105225521}
-  - component: {fileID: 1982229998825130963}
   - component: {fileID: 3786597635763625539}
+  - component: {fileID: 2604864496259337355}
   m_Layer: 0
   m_Name: Train
   m_TagString: Train Object
@@ -43,23 +43,6 @@ Transform:
   - {fileID: 5260262510719031641}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1982229998825130963
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 910040912071322976}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cfe7ace4609f0ea47ac6e8e2d07c22da, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  seeBoundsGizmos: 1
-  backCarriageCollider: {fileID: 3411835585105238207}
-  frontCarriageCollider: {fileID: 4121620057982583066}
-  wheelLevel: -4.11
-  roofLevel: 6.96
 --- !u!114 &3786597635763625539
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -72,11 +55,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 786e04b4cb8f88c468b8e7029b2ac24b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  kmPerHour: 70
+  accelerationCurve:
+    serializedVersion: 2
+    m_Curve: []
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+--- !u!114 &2604864496259337355
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 910040912071322976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8b4f5870ba18223439d5cbd2375ad564, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  backCarriageCollider: {fileID: 3411835585105238207}
+  frontCarriageCollider: {fileID: 4121620057982583066}
+  agentsParent: {fileID: 8221064782987586497}
+  bystandersParent: {fileID: 2982453632012195784}
+  wheelLevel: 1
+  roofLevel: 1
+  seeBoundsGizmos: 0
+  kmPerHour: 10
   slideDoorsList: []
   insideBoundsList: []
   seatBoundsList: []
   stationDataList: []
+  charactersList: []
 --- !u!1 &2780884722590115148
 GameObject:
   m_ObjectHideFlags: 0
@@ -856,6 +865,10 @@ PrefabInstance:
     - target: {fileID: 665926796445240803, guid: e571c845f3a03a540add761ca3c5d202, type: 3}
       propertyPath: m_Name
       value: BackCarriage
+      objectReference: {fileID: 0}
+    - target: {fileID: 1446221525180156118, guid: e571c845f3a03a540add761ca3c5d202, type: 3}
+      propertyPath: seeBoundsGizmos
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2546121598146836128, guid: e571c845f3a03a540add761ca3c5d202, type: 3}
       propertyPath: trainMovement

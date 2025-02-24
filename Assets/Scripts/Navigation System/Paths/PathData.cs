@@ -3,9 +3,7 @@ using UnityEngine;
 
 public class PathData : MonoBehaviour
 {
-    [Header("References")]
-    public TrainBounds trainBounds;
-    public TrainController trainController;
+    public TrainData trainData {  get; private set; }
 
     public InsideBounds currentInsideBounds { get; set; }
     public OutsideBounds currentOutsideBounds { get; set; }
@@ -44,4 +42,9 @@ public class PathData : MonoBehaviour
     }
     public List<NamedPosition> pathToTarget { get; set; } = new List<NamedPosition>();
     public bool pathIsSet { get; set; }
+
+    private void Awake()
+    {
+        trainData = GameObject.FindGameObjectWithTag("Train Object").GetComponent<TrainData>();
+    }
 }

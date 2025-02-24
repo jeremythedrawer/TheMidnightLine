@@ -5,9 +5,8 @@ using UnityEngine.Pool;
 
 public class Spawner : MonoBehaviour
 {
-    [Header("References")]
-    public CanvasBounds canvasBounds;
-    public TrainController trainController;
+    protected static CanvasBounds canvasBounds;
+    protected static TrainData trainData;
 
     [Header("Parameters")]
     [Range(0f, 1f)]
@@ -30,6 +29,23 @@ public class Spawner : MonoBehaviour
     public Vector3 spawnPos { get; private set; }
     public Vector3 despawnPos { get; private set; }
 
+    private void Awake()
+    {
+        if (canvasBounds == null)
+        {
+            canvasBounds = GameObject.FindGameObjectWithTag("Background Canvas").GetComponent<CanvasBounds>();
+        }
+
+        if (trainData == null)
+        {
+            trainData = GameObject.FindGameObjectWithTag("Train Object").GetComponent<TrainData>();
+        }
+
+        if (canvasBounds == null || trainData == null)
+        {
+            Debug.LogError("Failed to find required references in Spawner!");
+        }
+    }
     protected void SetLodParams()
     {
         if (canvasBounds == null)

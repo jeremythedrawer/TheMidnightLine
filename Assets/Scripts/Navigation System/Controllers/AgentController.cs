@@ -104,7 +104,7 @@ public class AgentController : NPCController
 
     private IEnumerator WallSequence()
     {
-        if (lastPos.value.y > attackPath.pathData.trainBounds.roofLevel)
+        if (lastPos.value.y > attackPath.pathData.trainData.roofLevel)
         {
             yield return StartCoroutine(HandleJumpInput());
         }

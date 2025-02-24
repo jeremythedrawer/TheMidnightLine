@@ -50,7 +50,7 @@ public class AttackPath : PathFinder
 
     private void OutsideBoundsPath(Vector2 currentPos, Vector2 targetPos, float colliderCentre)
     {
-        if (targetPos.y >= trainBounds.roofLevel)
+        if (targetPos.y >= trainData.roofLevel)
         {
             FindChosenGangway(currentOutsideBounds, currentPos.x, targetPos.x);
 

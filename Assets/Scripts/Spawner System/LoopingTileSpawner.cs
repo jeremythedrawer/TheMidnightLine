@@ -32,7 +32,7 @@ public class LoopingTileSpawner : Spawner
 
     private void Update()
     {
-        float travelled = trainController.metersTravelled;
+        float travelled = trainData.metersTravelled;
         inSpawnRange = travelled >= startSpawnDistance && travelled <= endSpawnDistance;
         
     }

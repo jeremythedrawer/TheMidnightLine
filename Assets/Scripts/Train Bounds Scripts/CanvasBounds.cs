@@ -3,7 +3,7 @@ using UnityEngine;
 public class CanvasBounds : Bounds
 {
     [Header("References")]
-    public TrainBounds trainBounds;
+    public TrainData trainData;
     public Camera cam;
 
     [Header("Parameters")]
@@ -60,8 +60,8 @@ public class CanvasBounds : Bounds
         farClipPlanePos = cam.transform.position.z + cam.farClipPlane;
         nearClipPlanePos = cam.transform.position.z + cam.nearClipPlane;
 
-        right = (trainBounds.boundsMaxX + camHalfWidth) + canvasWidthBuffer;
-        left = (trainBounds.boundsMinX - camHalfWidth) - canvasWidthBuffer;
+        right = (trainData.boundsMaxX + camHalfWidth) + canvasWidthBuffer;
+        left = (trainData.boundsMinX - camHalfWidth) - canvasWidthBuffer;
         topRight = new Vector2(right, top);
         bottomLeft = new Vector2(left, bottom);
         width = right - left;

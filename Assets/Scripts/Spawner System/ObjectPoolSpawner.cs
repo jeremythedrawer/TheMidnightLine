@@ -62,7 +62,7 @@ public class ObjectPoolSpawner : Spawner
     {
         while (true)
         {
-            float travelled = trainController.metersTravelled;
+            float travelled = trainData.metersTravelled;
 
             if (travelled >= startSpawnDistance && travelled <= endSpawnDistance)
             {

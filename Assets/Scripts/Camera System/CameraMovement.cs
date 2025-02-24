@@ -42,7 +42,7 @@ public class CameraMovement : MonoBehaviour
     private Camera cam;
 
     //train components
-    private TrainBounds trainCamBounds;
+    private TrainData trainCamBounds;
 
     //player components
     private SpriteRenderer spriteRenderer;
@@ -71,7 +71,7 @@ public class CameraMovement : MonoBehaviour
         playerBrain = player.GetComponent<PlayerBrain>();
         airborneState = playerBrain.stateList.airborneState;
 
-        trainCamBounds = Object.FindFirstObjectByType<TrainBounds>();
+        trainCamBounds = Object.FindFirstObjectByType<TrainData>();
 
         camWidth = cam.pixelWidth;
         camHeight = cam.pixelHeight;

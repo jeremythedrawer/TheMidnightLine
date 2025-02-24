@@ -40,8 +40,10 @@ public class BystanderController : NPCController
                     {
                         npcCore.spriteRenderer.sortingOrder = 6;
                         npcCore.boxCollider2D.excludeLayers |= 1 << stationGroundLayer;
-                        npcCore.boxCollider2D.excludeLayers &= 1 << trainGroundLayer;
+                        npcCore.boxCollider2D.excludeLayers &= ~(1 << trainGroundLayer);
                         npcCore.collisionChecker.activeGroundLayer = 1 << trainGroundLayer;
+                        npcCore.pathData.trainData.charactersList.Add(npcCore);
+                        npcCore.pathData.trainData.currentStation.charactersList.Remove(npcCore);
                         FollowCalmPath(currentPos, lastPos, colliderCenter);
                     }
                 }

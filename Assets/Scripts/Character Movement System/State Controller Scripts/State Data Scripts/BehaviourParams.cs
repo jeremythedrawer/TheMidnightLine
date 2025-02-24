@@ -31,7 +31,7 @@ public class BehaviourParams : MonoBehaviour
     private Camera cam;
 
     private InsideBounds currentCarriage;
-    private TrainBounds trainBounds;
+    private TrainData trainBounds;
 
     private void OnDrawGizmos()
     {
@@ -50,7 +50,7 @@ public class BehaviourParams : MonoBehaviour
 
         cam = Camera.main;
 
-        trainBounds = Object.FindFirstObjectByType<TrainBounds>();
+        trainBounds = Object.FindFirstObjectByType<TrainData>();
     }
 
     private void Update()

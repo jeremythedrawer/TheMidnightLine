@@ -7,10 +7,10 @@ public abstract class PathFinder : MonoBehaviour
 {
     public PathData pathData;
     public float distanceToNextPos { get; protected set; }
-    public float closeEnoughToNextPos { get; set; } = 0.5f;
+    public float closeEnoughToNextPos { get; private set; } = 0.5f;
     public List<PathData.NamedPosition> pathToTarget => pathData.pathToTarget;
 
-    protected TrainBounds trainBounds => pathData.trainBounds;
+    protected TrainData trainData => pathData.trainData;
 
     protected InsideBounds currentInsideBounds => pathData.currentInsideBounds;
     protected OutsideBounds currentOutsideBounds => pathData.currentOutsideBounds;
@@ -24,7 +24,7 @@ public abstract class PathFinder : MonoBehaviour
 
     protected void FindChosenClimbBounds(GangwayBounds chosenGangway, PathFinder path, Vector2 targetPos, Vector2 currentPos)
     {
-        if (currentPos.y > trainBounds.roofLevel)
+        if (currentPos.y > trainData.roofLevel)
         {
             pathData.chosenClimbingBounds = null;
             return;
@@ -32,7 +32,7 @@ public abstract class PathFinder : MonoBehaviour
 
         if (path is AttackPath)
         {
-            if (targetPos.y > trainBounds.roofLevel)
+            if (targetPos.y > trainData.roofLevel)
             {
                 pathData.chosenClimbingBounds = chosenGangway.transform.position.x < targetPos.x ? chosenGangway.foundsRightClimbBounds : chosenGangway.foundsLeftClimbBounds;
             }
@@ -62,7 +62,7 @@ public abstract class PathFinder : MonoBehaviour
 
     protected void FindChosenOutsideBounds(GangwayBounds chosenGangway, Vector2 targetPos, float currentXPos)
     {
-        if (targetPos.y < trainBounds.roofLevel)
+        if (targetPos.y < trainData.roofLevel)
         {
             pathData.chosenOutsideBounds = null;
             return;
@@ -95,7 +95,7 @@ public abstract class PathFinder : MonoBehaviour
 
     protected void FindChosenInsideBounds(GangwayBounds chosenGangway, Vector2 currentPos, float targetXPos)
     {
-        if (currentPos.y >= trainBounds.roofLevel)
+        if (currentPos.y >= trainData.roofLevel)
         {
             pathData.chosenInsideBounds = null;
             return;

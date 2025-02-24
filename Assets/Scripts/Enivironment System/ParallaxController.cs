@@ -3,7 +3,7 @@ using UnityEngine;
 public class ParallaxController : MonoBehaviour
 {
     private Camera cam;
-    private TrainController trainController;
+    private TrainData trainData;
 
     private Vector2 startPos;
     private float startZ;
@@ -18,7 +18,7 @@ public class ParallaxController : MonoBehaviour
     private void Awake()
     {
         cam = Camera.main;
-        trainController = GameObject.FindWithTag("Train Object").GetComponent<TrainController>();
+        trainData = GameObject.FindWithTag("Train Object").GetComponent<TrainData>();
         GetParralaxData(cam);
         
     }
@@ -37,12 +37,12 @@ public class ParallaxController : MonoBehaviour
 
         startPos = transform.position;
         startZ = transform.position.z;
-        totalTrainDistanceMoved = trainController.metersTravelled;
+        totalTrainDistanceMoved = trainData.metersTravelled;
 
     }
     private void UpdatePos()
     {
-        currentTrainDistanceMoved = trainController.metersTravelled - totalTrainDistanceMoved;
+        currentTrainDistanceMoved = trainData.metersTravelled - totalTrainDistanceMoved;
         float newPosXTrainFactor = currentTrainDistanceMoved * parallaxFactor;
         float newPosX = startPos.x - newPosXTrainFactor;
         transform.position = new Vector3(newPosX, startPos.y, startZ);
