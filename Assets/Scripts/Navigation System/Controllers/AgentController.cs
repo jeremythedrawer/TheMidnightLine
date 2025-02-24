@@ -5,7 +5,6 @@ using UnityEngine;
 public class AgentController : NPCController
 {
     [Header ("Paths")]
-    public CalmPath calmPath;
     public StalkPath stalkPath;
     public AttackPath attackPath;
 

@@ -1,9 +1,17 @@
+using System.Threading.Tasks;
 using UnityEngine;
 
 public class OutsideBounds : InsideOutsideBounds
 {
-    private void Start()
+
+    public override void Start()
     {
+        base.Start();
+        SetBounds();
+    }
+    public async void SetBounds()
+    {
+        while (trainData.kmPerHour != 0) { await Task.Yield(); }
         SetUpCarriageBounds();
     }
     private void OnTriggerEnter2D(Collider2D collision)

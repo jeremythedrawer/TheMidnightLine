@@ -1,6 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 
 
@@ -29,12 +29,12 @@ public class InsideBounds : InsideOutsideBounds
 
     private Dictionary<Collider2D, float> npcStandingPosDic = new Dictionary<Collider2D, float>();
 
-    private void Start()
+    public override void Start()
     {
-        SetUpCarriageBounds();
+        base.Start();
         AddToSetsOfSeats();
         AddToSetsOfSlideDoors();
-        AddWallsPosToList();
+        SetBounds();
     }
 
     public void OnTriggerEnter2D(Collider2D collision)
@@ -71,7 +71,6 @@ public class InsideBounds : InsideOutsideBounds
         }
     }
 
-
     private void OnTriggerStay2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Bystander Collider") || collision.gameObject.CompareTag("Agent Collider"))
@@ -97,6 +96,7 @@ public class InsideBounds : InsideOutsideBounds
             }
         }
     }
+
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (collision.gameObject.CompareTag("Player Collider"))
@@ -117,6 +117,13 @@ public class InsideBounds : InsideOutsideBounds
         {
             bystanderCount--;
         }
+    }
+
+    public async void SetBounds()
+    {
+        while (trainData.kmPerHour != 0) { await Task.Yield(); }
+        SetUpCarriageBounds();
+        AddWallsPosToList();
     }
 
     public void AddToSetsOfSeats()
@@ -151,7 +158,7 @@ public class InsideBounds : InsideOutsideBounds
         }
     }
 
-    private void AddWallsPosToList()
+    public void AddWallsPosToList()
     {
         InsertSorted(new StandNpcPosData(objectBounds.min.x, 0));
     }

@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using System.Collections;
 using System.Linq;
 using UnityEngine;
 using static InsideBounds;
@@ -13,22 +14,32 @@ public class CalmPath : PathFinder
     public int chosenSeatIndex { get; private set; }
 
     private float standingPosThreshold = 8f;
+    private bool foundStandingArea;
 
     //Setting paths
     public override void SetPath(Vector2 currentPos, PathData.NamedPosition lastPos, float colliderCentre)
     {
         base.SetPath(currentPos, lastPos, colliderCentre);
-
-        if (pathData.chosenSeatBounds != null)
+        if (pathData.collisionChecker.activeGroundLayer == 1 << stationGroundLayer)
         {
-            if (seats[chosenSeatIndex].filled) // find new path
+            if (chosenSlidingDoorsPos == Vector2.zero)
             {
                 pathData.pathIsSet = false;
             }
         }
-        else if (chosenStandPos == Vector2.zero)
+        else
         {
-            pathData.pathIsSet = false;
+            if (pathData.chosenSeatBounds != null)
+            {
+                if (seats[chosenSeatIndex].filled) // find new path
+                {
+                    pathData.pathIsSet = false;
+                }
+            }
+            else if (chosenStandPos == Vector2.zero)
+            {
+                pathData.pathIsSet = false;
+            }
         }
     }
     public override void FindPath(Vector2 currentPos, Vector2 lastPos, float colliderCentre)
@@ -37,14 +48,14 @@ public class CalmPath : PathFinder
         base.FindPath(currentPos, lastPos, colliderCentre);
 
         //In station
-        if (pathData.trainData.kmPerHour == 0 && currentInsideBounds == null )
+        if (pathData.trainData.kmPerHour == 0 && currentInsideBounds == null && chosenSlidingDoorsPos == Vector2.zero )
         {
             FindChosenSlidingDoors(currentPos);
             SlideDoorsPath();
             return;
         }
 
-        if (currentInsideBounds == null) return; // TODO: Wait until doors fully open.
+        if (currentInsideBounds == null) return;
         //In train
         FindChosenChairBounds(currentPos);
 
@@ -52,10 +63,14 @@ public class CalmPath : PathFinder
         {
             SeatPath(currentPos);
         }
-        else if (chosenStandPos == Vector2.zero)
+        else
         {
             FindChosenStandingArea(currentPos);
-            StandPath();
+
+            if(chosenStandPos != Vector2.zero)
+            {
+                StandPath();
+            }
         }
     }
 
@@ -82,7 +97,7 @@ public class CalmPath : PathFinder
         chosenSeat = seats[chosenSeatIndex];
 
         AddToPath(chosenSeat.pos, PathData.PosType.Seat);
-    }
+    } 
 
     private void StandPath()
     {
@@ -142,6 +157,16 @@ public class CalmPath : PathFinder
 
     private void FindChosenStandingArea(Vector2 currentPos)
     {
+        if (!foundStandingArea)
+        {
+            StartCoroutine(LookingForStandingArea(currentPos));
+            foundStandingArea = true;
+        }
+    }
+    private IEnumerator LookingForStandingArea(Vector2 currentPos)
+    {
+        float randomTime = UnityEngine.Random.Range(1, 3);
+        yield return new WaitForSeconds(randomTime);
         float insideBoundsMin = currentInsideBounds.objectBounds.min.x;
         float insideBoundsMax = currentInsideBounds.objectBounds.max.x;
 
@@ -169,6 +194,7 @@ public class CalmPath : PathFinder
 
         float randomPosX = UnityEngine.Random.Range(largestDistanceSelected.startPos, largestDistanceSelected.endPos);
         chosenStandPos = new Vector2(randomPosX, currentPos.y);
+        StandPath();
     }
 
     private void FindChosenSlidingDoors(Vector2 currentPos)
@@ -187,6 +213,8 @@ public class CalmPath : PathFinder
             }
         }
         pathData.chosenSlideDoorBounds = slideDoorsList[chosenSlideDoorsIndex];
-        chosenSlidingDoorsPos = new Vector2(pathData.chosenSlideDoorBounds.transform.position.x, currentPos.y);
+        BoxCollider2D chosenSlideDoorCollider = pathData.chosenSlideDoorBounds.boxCollider;
+        float randomPosX = UnityEngine.Random.Range(chosenSlideDoorCollider.bounds.min.x, chosenSlideDoorCollider.bounds.max.x);
+        chosenSlidingDoorsPos = new Vector2(randomPosX, currentPos.y);
     }
 }

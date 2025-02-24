@@ -11,6 +11,7 @@ public class StationData : MonoBehaviour
     public float accelThreshold => transform.position.x + accelerationThresholds;
 
     public List<StateCore> charactersList {  get; private set; }
+    private int stationGroundLayer => LayerMask.NameToLayer("Station Ground");
     private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
     private static TrainData trainData;
     private void Awake()
@@ -31,6 +32,8 @@ public class StationData : MonoBehaviour
         {
             character.spriteRenderer.sortingOrder = 1;
             character.boxCollider2D.excludeLayers |= 1 << trainGroundLayer;
+            character.boxCollider2D.excludeLayers &= ~(1 << stationGroundLayer);
+            character.collisionChecker.activeGroundLayer = 1 << stationGroundLayer;
         }
     }
     private void DrawAccelThresholds(bool usingGizmos)

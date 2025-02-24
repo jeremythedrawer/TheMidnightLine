@@ -1,9 +1,13 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using static SeatBounds;
 
 public abstract class NPCController : MonoBehaviour
 {
+    [Header("Paths")]
+    public CalmPath calmPath;
+
     [Header("Parameters")]
     public float updateTargetTickRate = 1f;
 
@@ -17,6 +21,116 @@ public abstract class NPCController : MonoBehaviour
     protected PathData.NamedPosition lastPos;
     protected float colliderCenter;
 
+    private float distanceToTarget;
+    private bool closeEnough;
+    private List<PathData.NamedPosition> calmPathToTarget => calmPath.pathData.pathToTarget;
+    private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
+    private int stationGroundLayer => LayerMask.NameToLayer("Station Ground");
+    private float targetPosX = float.MaxValue;
+
+
+    public void CalmInputs()
+    {
+        colliderCenter = npcCore.boxCollider2D.size.y / 2f;
+        currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, colliderCenter);
+        if (calmPathToTarget.Count == 0)
+        {
+            if(!closeEnough)
+            {
+                FollowCalmPath(currentPos, lastPos, colliderCenter);
+                return;
+            }
+            else
+            {
+                return;
+            }
+        }
+
+        PathData.PosType nextPosType = calmPathToTarget[0].type;
+        targetPosX = calmPathToTarget[0].value.x;
+        distanceToTarget = Mathf.Abs(currentPos.x - targetPosX);
+        closeEnough = distanceToTarget < 0.1;
+
+        switch (nextPosType)
+        {
+            case PathData.PosType.SlidingDoors:
+                if (closeEnough)
+                {
+                    calmPath.pathData.chosenSlideDoorBounds.OpenDoors();
+                    movementInputs.walkInput = 0;
+                    if (calmPath.pathData.chosenSlideDoorBounds.normMoveDoorTime >= 1)
+                    {
+                        calmPath.pathData.chosenSlideDoorBounds.npcsToEnterTrain.Add(npcCore);
+                        if (npcCore.collisionChecker.activeGroundLayer == 1 << trainGroundLayer)
+                        {
+                            FollowCalmPath(currentPos, lastPos, colliderCenter);
+                        }
+                    }
+                }
+                else
+                {
+                    FollowCalmPath(currentPos, lastPos, colliderCenter);
+                }
+                break;
+
+            case PathData.PosType.Seat:
+                if (closeEnough)
+                {
+                    Debug.Log(gameObject.name + " , " + targetPosX);
+                    //set sitting parameters
+                    movementInputs.walkInput = 0;
+                    npcCore.isSitting = true;
+                    npcCore.characterMaterial.SendCharToSeatLayer();
+
+                    //set chosen seat to filled
+                    SeatData seatData = calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex];
+                    seatData.filled = true;
+                    calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex] = seatData;
+                }
+                else
+                {
+                    FollowCalmPath(currentPos, lastPos, colliderCenter);
+                }
+                break;
+
+            case PathData.PosType.Stand:
+                if (closeEnough)
+                {
+                    movementInputs.walkInput = 0;
+                    npcCore.isStanding = true;
+                    npcCore.characterMaterial.SendCharToStandLayer();
+                }
+                else
+                {
+                    FollowCalmPath(currentPos, lastPos, colliderCenter);
+                }
+                break;
+        }
+    }
+
+    private void FollowCalmPath(Vector2 currentPos, PathData.NamedPosition _lastpos, float colliderCenter)
+    {
+
+        calmPath.SetPath(currentPos, _lastpos, colliderCenter);
+
+        //handle direction
+        if (calmPathToTarget.Count > 0)
+        {
+            if (currentPos.x < calmPathToTarget[0].value.x)
+            {
+                movementInputs.walkInput = 1;
+            }
+            else
+            {
+                movementInputs.walkInput = -1;
+            }
+        }
+        else
+        {
+            movementInputs.walkInput = 0;
+        }
+    }
+
     protected IEnumerator TargetPosIsPlayer() // TODO: lastPOs.value cannot be updated
     {
         while (true)
@@ -25,6 +139,5 @@ public abstract class NPCController : MonoBehaviour
             yield return new WaitForSeconds(updateTargetTickRate);
         }
     }
-
 
 }

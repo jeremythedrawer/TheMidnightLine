@@ -1,7 +1,9 @@
 using UnityEngine;
+using UnityEngine.InputSystem.XR;
 
 public class AttackState : State
 {
+    private AgentBrain agentBrain => transform.parent.transform.parent.GetComponent<AgentBrain>();
     public override void Enter()
     {
     }
@@ -9,7 +11,7 @@ public class AttackState : State
     {
         SelectState();
 
-        npcCore.agentController.AttackInputs();
+        agentBrain.agentController.AttackInputs();
     }
     public override void FixedDo()
     {

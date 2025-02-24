@@ -325,8 +325,8 @@ MonoBehaviour:
   showStateList: 0
   behaviourParams: {fileID: 593755450897370765}
   pathData: {fileID: 9149327920002695015}
-  agentController: {fileID: 0}
-  bystanderController: {fileID: 898099057580638841}
+  controller: {fileID: 898099057580638841}
+  departureStation: {fileID: 0}
 --- !u!114 &415244996423126682
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -356,9 +356,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 43db11a65caa0c84db24c296e2a3464a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  groundLayer:
-    serializedVersion: 2
-    m_Bits: 128
   characterBoxCollider: {fileID: 4161541657112090268}
   collisionGizmos: 0
   TotalOffset: {x: 0, y: 0}
@@ -369,7 +366,6 @@ MonoBehaviour:
   wallXSensorScale: -0.144
   cbcThreshold: 0.5
   bhcThreshold: 0
-  cbcEnabled: 0
 --- !u!114 &4490734383750937007
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -443,12 +439,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 119401c4382e88c42a5217a653b9740a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  calmPath: {fileID: 195271955327736033}
   updateTargetTickRate: 1
   npcCore: {fileID: 1100232100378541386}
   playerTransform: {fileID: 8671146431177964929}
   playerCollider: {fileID: 4161541657112090268}
   movementInputs: {fileID: 4490734383750937007}
-  calmPath: {fileID: 195271955327736033}
 --- !u!114 &593755450897370765
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -479,7 +475,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 61cfb3c239836b74f9aa939abd87f6ad, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trainBounds: {fileID: 0}
 --- !u!114 &7993344629850196798
 MonoBehaviour:
   m_ObjectHideFlags: 0

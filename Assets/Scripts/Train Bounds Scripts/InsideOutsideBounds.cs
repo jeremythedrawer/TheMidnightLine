@@ -1,3 +1,5 @@
+using System.Threading.Tasks;
+using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
 public abstract class InsideOutsideBounds : Bounds
@@ -20,6 +22,7 @@ public abstract class InsideOutsideBounds : Bounds
     public Vector2 leftGangwayPos { get; private set; }
     public Vector2 rightGangwayPos { get; private set; }
 
+    protected TrainData trainData => transform.root.GetComponent<TrainData>();
 
     private Component rightComponentBounds;
     private Component leftComponentBounds;
@@ -30,9 +33,14 @@ public abstract class InsideOutsideBounds : Bounds
         if (carriageBounds.carriageType == CarriageBounds.CarriageType.frontCarriage) isFrontCarriage = true;
 
     }
-    protected void SetUpCarriageBounds()
+
+    public virtual void Start()
     {
         Collider2D = this.GetComponent<BoxCollider2D>();
+    }
+
+    public void SetUpCarriageBounds()
+    {
         objectBounds = Collider2D.bounds;
 
         leftEdge = Collider2D.bounds.min.x;

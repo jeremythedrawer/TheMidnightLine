@@ -7,7 +7,7 @@ public class AgentBrain : NPCCore
     public bool isHiding { get; private set; }
     public bool isStalking { get; private set; }
     public bool isAttacking { get; private set; }
-
+    public AgentController agentController => controller as AgentController;
     void Start()
     {
         SetupInstances();

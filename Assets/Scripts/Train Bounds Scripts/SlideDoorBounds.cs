@@ -1,5 +1,7 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Threading.Tasks;
 
 public class SlideDoorBounds : Bounds
 {
@@ -19,13 +21,47 @@ public class SlideDoorBounds : Bounds
 
     private InsideBounds insideBounds;
     private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
+    private int stationGroundLayer => LayerMask.NameToLayer("Station Ground");
+
     public float normMoveDoorTime {  get; private set; }
+    public BoxCollider2D boxCollider => GetComponent<BoxCollider2D>();
+
+    public List<NPCCore> npcsToEnterTrain = new List<NPCCore>();
     private void Start()
     {
         leftDoorSprite = leftDoor.gameObject.GetComponent<SpriteRenderer>();
         doorWidth = leftDoorSprite.sprite.bounds.size.x;
+        TransferNPCsToTrain();
+
+    }
+    
+    private async void TransferNPCsToTrain()
+    {
+        while (true)
+        {
+            while (npcsToEnterTrain.Count == 0) { await Task.Yield(); }
+            int npcIndex = npcsToEnterTrain.Count - 1;
+
+            while (npcIndex >= 0)
+            {
+                BoardNpcs(npcsToEnterTrain[npcIndex]);
+                await Task.Delay(250);
+                npcIndex--;
+            }
+            
+        }
+
     }
 
+    private void BoardNpcs(NPCCore npcCore)
+    {
+        npcCore.spriteRenderer.sortingOrder = 6;
+        npcCore.boxCollider2D.excludeLayers |= 1 << stationGroundLayer;
+        npcCore.boxCollider2D.excludeLayers &= ~(1 << trainGroundLayer);
+        npcCore.collisionChecker.activeGroundLayer = 1 << trainGroundLayer;
+        npcCore.pathData.trainData.charactersList.Add(npcCore);
+        npcCore.pathData.trainData.currentStation.charactersList.Remove(npcCore);
+    }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (collision.CompareTag("Inside Bounds") && insideBounds == null)

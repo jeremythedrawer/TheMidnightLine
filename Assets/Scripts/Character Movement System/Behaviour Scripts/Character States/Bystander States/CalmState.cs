@@ -17,7 +17,7 @@ public class CalmState : State
         SelectState();
         if (npcCore is BystanderBrain)
         {
-            npcCore.bystanderController.CalmInputs();
+            npcCore.controller.CalmInputs();
         }
     }
     public override void FixedDo()

@@ -32,7 +32,7 @@ public class LevelManager : MonoBehaviour
         await MoveTrainToStart();
 
         canvasBounds.SetCanvasData();
-        await SetAllSeatData();
+        await SetTrainObjectsData();
         EnableParallaxAndSpawners(true);
         //Player Enters onto train
     }
@@ -60,7 +60,7 @@ public class LevelManager : MonoBehaviour
         trainData.transform.position = new Vector2(0, startingTrainPos.y);
     }
 
-    private async Task SetAllSeatData()
+    private async Task SetTrainObjectsData()
     {
         while (trainData.kmPerHour != 0) await Task.Yield();
         foreach (SeatBounds setsOfSeats in trainData.seatBoundsList)

@@ -4,7 +4,7 @@ using UnityEngine;
 public class PathData : MonoBehaviour
 {
     public TrainData trainData {  get; private set; }
-
+    public CollisionChecker collisionChecker { get; private set; }
     public InsideBounds currentInsideBounds { get; set; }
     public OutsideBounds currentOutsideBounds { get; set; }
     public GangwayBounds currentGangwayBounds { get; set; }
@@ -46,5 +46,6 @@ public class PathData : MonoBehaviour
     private void Awake()
     {
         trainData = GameObject.FindGameObjectWithTag("Train Object").GetComponent<TrainData>();
+        collisionChecker = gameObject.GetComponent<CollisionChecker>();
     }
 }

@@ -1,15 +1,13 @@
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 
 public abstract class NPCCore : StateCore
 {
     [Header("NPC Core References")]
     public BehaviourParams behaviourParams;
     public PathData pathData;
-    //agent
-    [HideInInspector] public AgentController agentController;
-    //bystander
-    [HideInInspector] public BystanderController bystanderController;
+    
+    public NPCController controller;
+
     public bool isSitting {  get; set; }
     public bool isStanding { get; set; }
     public void SetupNPCInstances()

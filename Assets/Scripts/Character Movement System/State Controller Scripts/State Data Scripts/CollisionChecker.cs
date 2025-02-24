@@ -114,7 +114,7 @@ public class CollisionChecker : MonoBehaviour
 
     private void Start()
     {
-        activeGroundLayer = 1 << stationGroundLayer;
+        activeGroundLayer = 1 << trainGroundLayer;
     }
     private void FixedUpdate()
     {

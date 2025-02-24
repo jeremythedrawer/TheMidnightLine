@@ -7,7 +7,7 @@ public abstract class PathFinder : MonoBehaviour
 {
     public PathData pathData;
     public float distanceToNextPos { get; protected set; }
-    public float closeEnoughToNextPos { get; private set; } = 0.5f;
+    public float closeEnoughToNextPos { get; private set; } = 0.1f;
     public List<PathData.NamedPosition> pathToTarget => pathData.pathToTarget;
 
     protected TrainData trainData => pathData.trainData;
@@ -21,6 +21,8 @@ public abstract class PathFinder : MonoBehaviour
     protected GangwayBounds chosenGangway => pathData.chosenGangwayBounds;
     public ClimbingBounds chosenClimbingBounds => pathData.chosenClimbingBounds;
     protected SeatBounds chosenChairBounds => pathData.chosenSeatBounds;
+
+    protected int stationGroundLayer => LayerMask.NameToLayer("Station Ground");
 
     protected void FindChosenClimbBounds(GangwayBounds chosenGangway, PathFinder path, Vector2 targetPos, Vector2 currentPos)
     {
