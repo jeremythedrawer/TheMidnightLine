@@ -3,7 +3,7 @@ using UnityEngine;
 public class MovementInputs : MonoBehaviour
 {
     public StateCore core;
-    public UnityEngine.Transform meleeBoxColliderTransform;
+    public Transform meleeBoxColliderTransform;
 
     internal float walkInput;
     internal bool runInput;

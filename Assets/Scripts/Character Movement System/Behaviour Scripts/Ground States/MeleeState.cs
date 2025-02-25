@@ -62,14 +62,11 @@ public class MeleeState : State
             {
                 Exit();
             }
-            // TODO implement right and left animation logic and also logic for symetrical animations (agents)
         }
         else if (core is AgentBrain)
         {
             PlayComboAnimation();
         }
-
-        // TODO: randomly choose when to start at primary secondary or final attack //index 2 in Animation Event 
     }
 
     private void PlayComboAnimation()

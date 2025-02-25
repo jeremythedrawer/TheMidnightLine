@@ -107,7 +107,7 @@ public class CameraMovement : MonoBehaviour
         FallingCamera();
 
         float camOffsetY = 1f;
-        if (InsideBounds.Instance == null || playerBrain.onPlatform) // outside carriage
+        if (InsideBounds.Instance == null || playerBrain.onTrain) // outside carriage
         {
             target.y = Mathf.Max(target.y + camOffsetY, trainCamBounds.wheelLevel + cam.orthographicSize);
         }

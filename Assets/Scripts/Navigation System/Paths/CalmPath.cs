@@ -165,7 +165,7 @@ public class CalmPath : PathFinder
     }
     private IEnumerator LookingForStandingArea(Vector2 currentPos)
     {
-        float randomTime = UnityEngine.Random.Range(1, 3);
+        float randomTime = UnityEngine.Random.Range(0.5f, 1.5f);
         yield return new WaitForSeconds(randomTime);
         float insideBoundsMin = currentInsideBounds.objectBounds.min.x;
         float insideBoundsMax = currentInsideBounds.objectBounds.max.x;

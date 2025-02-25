@@ -30,10 +30,6 @@ public class CollisionChecker : MonoBehaviour
 
     public bool grounded { get; private set; }
 
-    //Layer Masks
-    private int stationGroundLayer => LayerMask.NameToLayer("Station Ground");
-    private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
-
     public LayerMask activeGroundLayer { get; set; }
 
     //Catch Missed Jump(cmj) Bools
@@ -46,7 +42,7 @@ public class CollisionChecker : MonoBehaviour
     public bool bhcleftEnabled { get; private set; }
     public bool bhcRightEnabled { get; private set; }
     public bool bhcEnabled { get; private set; }
-
+    private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
 
     private Vector2 collisionCheckerOrigin;
 

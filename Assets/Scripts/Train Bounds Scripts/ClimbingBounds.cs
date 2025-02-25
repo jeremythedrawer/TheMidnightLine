@@ -2,27 +2,27 @@ using UnityEngine;
 
 public class ClimbingBounds : Bounds
 {
-    private BoxCollider2D Collider2D;
+    private BoxCollider2D Collider2D => this.GetComponent<BoxCollider2D>();
 
     [Range(0f, 1f)]
     public float hangActivationThreshold = 0f;
 
     public bool isLeftEdge;
-    public float hangThresholdLine { get; private set; }
+    public float hangThresholdLine => (Collider2D.bounds.size.y) * (hangActivationThreshold - 0.5f) + transform.position.y;
     public bool hangActivated { get; set; }
     public bool activatedByAgent { get; set; }
     public bool activatedByPlayer { get; set; }
-    public Vector2 newPos { get; private set; }
-    public float boundsMaxY { get; private set; }
+
+    public float newPosX => isLeftEdge ? Collider2D.bounds.min.x : Collider2D.bounds.max.x;
+    public Vector2 newPos {  get; private set; }
+    public float boundsMaxY => Collider2D.bounds.max.y;
 
 
-
+    private StateCore activeCharacter;
     private void OnDrawGizmos()
     {
 #if UNITY_EDITOR
         if (Application.isPlaying) return;
-
-        Collider2D = this.GetComponent<BoxCollider2D>();
 
         //draw box collider
         Gizmos.color = activatedByAgent ? Color.green : Color.red;
@@ -42,13 +42,6 @@ public class ClimbingBounds : Bounds
         Gizmos.DrawLine(rightOrigin, leftOrigin);
 #endif
 
-    }
-
-    void Start()
-    {
-        Collider2D = this.GetComponent<BoxCollider2D>();
-        hangThresholdLine = (Collider2D.bounds.size.y) * (hangActivationThreshold - 0.5f) + transform.position.y;
-        boundsMaxY = Collider2D.bounds.max.y;
     }
 
     private void FixedUpdate()
@@ -73,58 +66,34 @@ public class ClimbingBounds : Bounds
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (isLeftEdge)
-        {
-            newPos = new Vector2(Collider2D.bounds.min.x, hangThresholdLine - collision.bounds.size.y);  
-        }
-        else
-        {
-            newPos = new Vector2(Collider2D.bounds.max.x, hangThresholdLine - collision.bounds.size.y);
-        }
+        newPos = new Vector2(newPosX, hangThresholdLine - collision.bounds.size.y);
+
         activatedByPlayer =  collision.gameObject.CompareTag("Player Collider");
         activatedByAgent = collision.gameObject.CompareTag("Agent Collider");
 
         if (activatedByPlayer || activatedByAgent)
         {
-            var core = collision.gameObject.GetComponentInParent<StateCore>();
-            if (core == null) return;
-            core.currentClimbBounds = this;
+            activeCharacter = collision.gameObject.GetComponentInParent<StateCore>();
+            if (activeCharacter.onTrain) activeCharacter.currentClimbBounds = this;
         }
     }
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        HangActivationThresholdDetection(collision);
-        var core = collision.gameObject.GetComponentInParent<StateCore>();
-        if (core == null) return;
-
-        if (core.movementInputs.crouchInput) core.isDropping = true;
-        if (core.isDropping)
+        hangActivated = collision.bounds.max.y <= hangThresholdLine;
+        if (activatedByPlayer || activatedByAgent)
         {
-            core.currentClimbBounds = null;
+            if (activeCharacter.movementInputs.crouchInput) activeCharacter.isDropping = true;
+            if (activeCharacter.isDropping) activeCharacter.currentClimbBounds = null;
         }
     }
 
     private void OnTriggerExit2D(Collider2D collision)
     {
-        activatedByPlayer = collision.gameObject.CompareTag("Player Collider");
-        activatedByAgent = collision.gameObject.CompareTag("Agent Collider");
-
         if (activatedByPlayer || activatedByAgent)
         {
-            var core = collision.gameObject.GetComponentInParent<StateCore>();
-            if (core == null) return;
-            core.isDropping = false;
-            core.currentClimbBounds = null;
-        }
-
-    }
-
-    private void HangActivationThresholdDetection(Collider2D collision)
-    {
-        if (collision.bounds.max.y <= hangThresholdLine)
-        {
-            hangActivated = true;
+            activeCharacter.isDropping = false;
+            activeCharacter.currentClimbBounds = null;
         }
     }
 }
