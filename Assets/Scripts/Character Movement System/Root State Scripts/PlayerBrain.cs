@@ -56,6 +56,7 @@ public class PlayerBrain : StateCore
 
         movementInputs.crouchInput = Input.GetKey(KeyCode.S);
 
-        movementInputs.meleeInput = Input.GetKeyDown(KeyCode.E);
+        movementInputs.meleeInput = Input.GetKeyDown(KeyCode.E) && onTrain;
+        movementInputs.enterTrainInput = Input.GetKeyDown(KeyCode.E) && !onTrain;
     }
 }

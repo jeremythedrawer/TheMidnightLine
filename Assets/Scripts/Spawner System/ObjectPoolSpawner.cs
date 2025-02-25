@@ -54,7 +54,6 @@ public class ObjectPoolSpawner : Spawner
 
     private void DestroyPrefab(SpawnedPrefab prefab)
     {
-        Debug.Log(maxSpawns);
         Destroy(prefab.gameObject);
     }
 

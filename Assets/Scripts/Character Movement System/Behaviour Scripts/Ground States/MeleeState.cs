@@ -24,7 +24,7 @@ public class MeleeState : State
     public override void Exit()
     {
         base.Exit();
-        core.stateList.groundState.isAttacking = false;
+        core.movementInputs.meleeInput = false;
         movementInputs.canMove = true;
         hitCombos = 0;
     }

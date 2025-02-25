@@ -85,6 +85,7 @@ public class LevelManager : MonoBehaviour
                 }
             }
             spawner.enabled = isEnabled;
+            if (isEnabled) spawner.SetLodParams();
         }
     }
 }

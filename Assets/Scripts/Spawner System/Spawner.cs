@@ -46,7 +46,7 @@ public class Spawner : MonoBehaviour
             Debug.LogError("Failed to find required references in Spawner!");
         }
     }
-    protected void SetLodParams()
+    public void SetLodParams()
     {
         if (canvasBounds == null)
         {

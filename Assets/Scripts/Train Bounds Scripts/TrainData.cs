@@ -8,8 +8,10 @@ public class TrainData : MonoBehaviour
     [Header("References")]
     public Collider2D backCarriageCollider;
     public Collider2D frontCarriageCollider;
+
     public Transform agentsParent;
     public Transform bystandersParent;
+    public Transform playerParent;
 
     [Header("Parameters")]
     public float wheelLevel = 1.0f;

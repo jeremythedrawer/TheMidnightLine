@@ -16,6 +16,7 @@ public class TrainController : MonoBehaviour
 
     public async void TrainInputs()
     {   
+        while (currentStation == null) { await Task.Yield(); }
         while (boundsMaxX < currentStation.decelThreshold) { await Task.Yield(); } // wait until train cross decel threshold
         await UpdateSpeed(0);
         await UnlockDoors();
@@ -70,7 +71,8 @@ public class TrainController : MonoBehaviour
         foreach (StateCore character in trainData.charactersList)
         {
             if (character is BystanderBrain) character.transform.SetParent(trainData.bystandersParent);
-            if (character is AgentBrain) character.transform.SetParent(trainData.agentsParent);
+            else if (character is AgentBrain) character.transform.SetParent(trainData.agentsParent);
+            else if (character is PlayerBrain) character.transform.SetParent(trainData.playerParent);
         }
         await Task.Yield();
     }

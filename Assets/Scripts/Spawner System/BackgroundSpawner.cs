@@ -18,9 +18,8 @@ public class BackgroundSpawner : ObjectPoolSpawner
 
     public override void Start()
     {
-        SetLodParams();
-        CreatePool(spawnedBgPrefab);
         base.Start();
+        CreatePool(spawnedBgPrefab);
     }
 
     public override void ActivatePrefab(SpawnedPrefab prefab)

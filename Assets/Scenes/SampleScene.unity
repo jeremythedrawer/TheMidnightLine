@@ -211,7 +211,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1541480774484133029, guid: fc3dfc9bfcf9a2a4bab1a56174815127, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5664349278569546485, guid: fc3dfc9bfcf9a2a4bab1a56174815127, type: 3}
       propertyPath: m_LocalPosition.x
@@ -461,7 +461,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   seeBoundsGizmos: 0
-  trainBounds: {fileID: 0}
+  trainData: {fileID: 3864713998332473162}
   cam: {fileID: 330585545}
   canvasHeight: 16.1
   canvasWidthBuffer: 22.84
@@ -2345,6 +2345,7 @@ Transform:
   m_Children:
   - {fileID: 607729331}
   - {fileID: 652159984}
+  - {fileID: 4588777139182120250}
   m_Father: {fileID: 514530465}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!4 &1811507233 stripped
@@ -2559,7 +2560,6 @@ Transform:
   - {fileID: 2007657853}
   - {fileID: 1199066708}
   - {fileID: 159732046}
-  - {fileID: 4588777139182120250}
   - {fileID: 1429784084}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -3007,15 +3007,15 @@ PrefabInstance:
   serializedVersion: 2
   m_Modification:
     serializedVersion: 3
-    m_TransformParent: {fileID: 1905324207}
+    m_TransformParent: {fileID: 1720769660}
     m_Modifications:
     - target: {fileID: 779573762761806031, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 79.4
+      value: 13.092558
       objectReference: {fileID: 0}
     - target: {fileID: 779573762761806031, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 2.02
+      value: 2.103979
       objectReference: {fileID: 0}
     - target: {fileID: 779573762761806031, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3418,7 +3418,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1541480774484133029, guid: 09217af32c220994a982ed5675e9ef83, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5664349278569546485, guid: 09217af32c220994a982ed5675e9ef83, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3560,6 +3560,10 @@ PrefabInstance:
     - target: {fileID: 910040912071322976, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
       propertyPath: m_Name
       value: Train
+      objectReference: {fileID: 0}
+    - target: {fileID: 2604864496259337355, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
+      propertyPath: kmPerHour
+      value: 200
       objectReference: {fileID: 0}
     - target: {fileID: 3786597635763625539, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
       propertyPath: kmPerHour
@@ -4134,7 +4138,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6137777807325332695, guid: 72046507362b7384db23615d92c25696, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6214680262345530729, guid: 72046507362b7384db23615d92c25696, type: 3}
       propertyPath: maxLerp

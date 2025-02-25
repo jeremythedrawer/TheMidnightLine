@@ -50,11 +50,6 @@ public class CanvasBounds : Bounds
         despawnPoint = new Vector3(left, transform.position.y, farClipPlanePos);
     }
 
-    private void Start()
-    {
-        SetCanvasData();
-    }
-
     public void SetCanvasData()
     {
         farClipPlanePos = cam.transform.position.z + cam.farClipPlane;

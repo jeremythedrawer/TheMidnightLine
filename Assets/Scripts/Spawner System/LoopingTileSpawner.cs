@@ -17,13 +17,9 @@ public class LoopingTileSpawner : Spawner
     {
         DrawLodRange();
     }
-    private void Awake()
-    {
-        
-    }
+
     private void Start()
     {
-        SetLodParams();
         foreach (LoopingTiles loopingTile in loopingTiles)
         {
             StartCoroutine(LoopTiles(loopingTile));

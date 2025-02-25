@@ -2,6 +2,7 @@ using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
+using System.Linq;
 
 public class SlideDoorBounds : Bounds
 {
@@ -12,8 +13,10 @@ public class SlideDoorBounds : Bounds
     [Header("Parameters")]
     public AnimationCurve doorOpeningCurve;
 
-    private SpriteRenderer leftDoorSprite;
+    public static SlideDoorBounds Instance { get; private set; }
 
+    private SpriteRenderer leftDoorSprite;
+    private static TrainData trainData => GameObject.FindFirstObjectByType<TrainData>();
     public bool openDoor {  get; private set; }
 
     private float doorWidth;
@@ -26,7 +29,9 @@ public class SlideDoorBounds : Bounds
     public float normMoveDoorTime {  get; private set; }
     public BoxCollider2D boxCollider => GetComponent<BoxCollider2D>();
 
-    public List<NPCCore> npcsToEnterTrain = new List<NPCCore>();
+    public Queue<StateCore> characterQueue = new Queue<StateCore>();
+    private int characterCount;
+
     private void Start()
     {
         leftDoorSprite = leftDoor.gameObject.GetComponent<SpriteRenderer>();
@@ -34,33 +39,37 @@ public class SlideDoorBounds : Bounds
         TransferNPCsToTrain();
 
     }
-    
+
+    private void Update()
+    {
+        characterCount = characterQueue.Count;
+    }
     private async void TransferNPCsToTrain()
     {
         while (true)
         {
-            while (npcsToEnterTrain.Count == 0) { await Task.Yield(); }
-            int npcIndex = npcsToEnterTrain.Count - 1;
-
-            while (npcIndex >= 0)
+            while (characterQueue.Count > 0 && normMoveDoorTime >= 1)
             {
-                BoardNpcs(npcsToEnterTrain[npcIndex]);
+                StateCore characterEnteringTrain = characterQueue.Peek();
+                await BoardCharacters(characterEnteringTrain);
                 await Task.Delay(250);
-                npcIndex--;
+                characterQueue.Dequeue();
             }
-            
+            await Task.Yield();
         }
 
     }
 
-    private void BoardNpcs(NPCCore npcCore)
+    private async Task BoardCharacters(StateCore character)
     {
-        npcCore.spriteRenderer.sortingOrder = 6;
-        npcCore.boxCollider2D.excludeLayers |= 1 << stationGroundLayer;
-        npcCore.boxCollider2D.excludeLayers &= ~(1 << trainGroundLayer);
-        npcCore.collisionChecker.activeGroundLayer = 1 << trainGroundLayer;
-        npcCore.pathData.trainData.charactersList.Add(npcCore);
-        npcCore.pathData.trainData.currentStation.charactersList.Remove(npcCore);
+        character.spriteRenderer.sortingOrder = 6;
+        character.boxCollider2D.excludeLayers |= 1 << stationGroundLayer;
+        character.boxCollider2D.excludeLayers &= ~(1 << trainGroundLayer);
+        character.collisionChecker.activeGroundLayer = 1 << trainGroundLayer;
+        trainData.charactersList.Add(character);
+        trainData.currentStation.charactersList.Remove(character);
+        Debug.Log("sent character to layer: " + character.spriteRenderer.sortingOrder + "from slidedoors");
+        await Task.Yield();
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
@@ -68,17 +77,25 @@ public class SlideDoorBounds : Bounds
         {
             insideBounds = collision.GetComponent<InsideBounds>();
         }
+
         if (collision.gameObject.CompareTag("Agent Collider") || collision.gameObject.CompareTag("Bystander Collider"))
         {
             NPCCore nPCCore = collision.GetComponentInParent<NPCCore>();
-            if (nPCCore.pathData.chosenInsideBounds != null) return;
-            StartCoroutine(TriggeringInsideBounds(collision, nPCCore));
+            if (!nPCCore.onTrain) StartCoroutine(TriggeringInsideBounds(collision, nPCCore));
         }
+
+        if (collision.gameObject.CompareTag("Player Collider")) Instance = this;
+    }
+
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (collision.gameObject.CompareTag("Player Collider")) Instance = null;
     }
 
     private IEnumerator TriggeringInsideBounds(Collider2D collision, NPCCore npcCore)
     {
-        yield return new WaitUntil(() => npcCore.collisionChecker.activeGroundLayer == 1 << trainGroundLayer);
+        yield return new WaitUntil(() => npcCore.onTrain);
+
         if (insideBounds.boxCollider.bounds.Intersects(collision.bounds))
         {
             insideBounds.OnTriggerEnter2D(collision);

@@ -10,8 +10,6 @@ public class GroundState : State
     [Range(0f, 1f)]
     public float groundDrag;
 
-    public bool isAttacking { private get; set; } 
-
 
     public override void Enter()
     {
@@ -21,11 +19,7 @@ public class GroundState : State
     {
         BHCCorrection();
         SelectState();
-
-        if (movementInputs.meleeInput)
-        {
-            isAttacking = true;
-        }
+        EnterTrain();
     }
 
     public override void FixedDo()
@@ -42,7 +36,7 @@ public class GroundState : State
 
     void SelectState()
     {
-        if (isAttacking)
+        if (movementInputs.meleeInput)
         {
             if (canMelee && movementInputs.meleeInput)
             {
@@ -73,6 +67,26 @@ public class GroundState : State
             currentOffset.x = 0;
             collisionChecker.characterBoxCollider.offset = currentOffset;
         }
+    }
 
+    private void EnterTrain()
+    {
+        if(movementInputs.enterTrainInput)
+        {
+            if (SlideDoorBounds.Instance != null)
+            {
+                StartCoroutine(EnteringTrain());
+            }
+        }    
+    }
+
+    private IEnumerator EnteringTrain()
+    {
+        movementInputs.canMove = false;
+        SlideDoorBounds.Instance.OpenDoors();
+        yield return new WaitUntil(() => SlideDoorBounds.Instance.normMoveDoorTime >= 1);
+        SlideDoorBounds.Instance.characterQueue.Enqueue(core);
+        yield return new WaitUntil(() => core.onTrain);
+        movementInputs.canMove = true;
     }
 }

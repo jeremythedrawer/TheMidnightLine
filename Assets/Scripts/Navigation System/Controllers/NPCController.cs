@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using static SeatBounds;
 
 public abstract class NPCController : MonoBehaviour
@@ -24,8 +25,6 @@ public abstract class NPCController : MonoBehaviour
     private float distanceToTarget;
     private bool closeEnough;
     private List<PathData.NamedPosition> calmPathToTarget => calmPath.pathData.pathToTarget;
-    private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
-    private int stationGroundLayer => LayerMask.NameToLayer("Station Ground");
     private float targetPosX = float.MaxValue;
 
 
@@ -58,10 +57,14 @@ public abstract class NPCController : MonoBehaviour
                 {
                     calmPath.pathData.chosenSlideDoorBounds.OpenDoors();
                     movementInputs.walkInput = 0;
+
+                    if (!calmPath.pathData.chosenSlideDoorBounds.characterQueue.Contains(npcCore))
+                    {
+                        calmPath.pathData.chosenSlideDoorBounds.characterQueue.Enqueue(npcCore);
+                    }
                     if (calmPath.pathData.chosenSlideDoorBounds.normMoveDoorTime >= 1)
                     {
-                        calmPath.pathData.chosenSlideDoorBounds.npcsToEnterTrain.Add(npcCore);
-                        if (npcCore.collisionChecker.activeGroundLayer == 1 << trainGroundLayer)
+                        if (npcCore.onTrain)
                         {
                             FollowCalmPath(currentPos, lastPos, colliderCenter);
                         }
@@ -76,12 +79,11 @@ public abstract class NPCController : MonoBehaviour
             case PathData.PosType.Seat:
                 if (closeEnough)
                 {
-                    Debug.Log(gameObject.name + " , " + targetPosX);
                     //set sitting parameters
                     movementInputs.walkInput = 0;
                     npcCore.isSitting = true;
                     npcCore.characterMaterial.SendCharToSeatLayer();
-
+                    Debug.Log("sent character to layer: " + npcCore.spriteRenderer.sortingOrder + "from seat");
                     //set chosen seat to filled
                     SeatData seatData = calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex];
                     seatData.filled = true;
