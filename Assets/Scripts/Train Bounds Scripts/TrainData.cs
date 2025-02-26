@@ -23,6 +23,7 @@ public class TrainData : MonoBehaviour
     public float boundsMinX => backCarriageCollider.bounds.min.x;
     public float boundsMaxX => frontCarriageCollider.bounds.max.x;
     public float boundsHalfX => boundsMinX + ((boundsMaxX - boundsMinX) / 2);
+    public float boundsHalfXDistance {  get; private set; }
 
     //controls
     public float kmPerHour = 10f;
@@ -59,6 +60,7 @@ public class TrainData : MonoBehaviour
 
         UpdateStationQueue();
 
+        boundsHalfXDistance = boundsMaxX - boundsHalfX;
         wheelLevel = transform.position.y + wheelLevel;
         roofLevel = transform.position.y + roofLevel;
 

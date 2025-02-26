@@ -35,15 +35,13 @@ public class TrainController : MonoBehaviour
 
         float startSpeed = trainData.kmPerHour;
 
-        float stoppingDistance = currentStation.accelerationThresholds + (boundsMaxX - trainData.boundsHalfX);
+        float stoppingDistance = currentStation.accelerationThresholds + trainData.boundsHalfXDistance;
 
         float startMetersTravelled = trainData.metersTravelled;
         float newMetersTravelled = startMetersTravelled + stoppingDistance;
 
         WheelData sampledWheel = trainData.wheels[0];
-        float startWheelRotation = sampledWheel.transform.rotation.z;
-        float totalRotations = (newMetersTravelled / sampledWheel.circumference);
-        float newWheelRotation = startWheelRotation + (totalRotations * 360f);
+        float startWheelRotation = sampledWheel.transform.localEulerAngles.z;
 
         float accelationTime = (2 * stoppingDistance) / (Mathf.Max(startSpeed, newSpeed) * trainData.kmConversion); // using the equation of motion v=u+at where t is equal to 2s/u
         float elapsedTime = 0f;
@@ -56,13 +54,14 @@ public class TrainController : MonoBehaviour
             normalizedTime = accelerationCurve.Evaluate(normalizedTime);
 
             trainData.kmPerHour = Mathf.Lerp(startSpeed, newSpeed, normalizedTime);
-
             trainData.metersTravelled = Mathf.Lerp(startMetersTravelled, newMetersTravelled, normalizedTime);
 
-            float currentRotation = Mathf.Lerp(startWheelRotation, newWheelRotation, normalizedTime);
+            float distanceTravelled = trainData.metersTravelled - startMetersTravelled;
+            float wheelRotation = (distanceTravelled / sampledWheel.circumference) * 360f;
+            float currentRotation = startWheelRotation - wheelRotation;
             foreach (WheelData wheel in trainData.wheels)
             {
-                wheel.transform.localEulerAngles = new Vector3(0, 0, -currentRotation);
+                wheel.transform.localEulerAngles = new Vector3(0, 0, currentRotation);
             }
 
             await Task.Yield();
