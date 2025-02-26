@@ -53,7 +53,7 @@ public class LevelManager : MonoBehaviour
         float initialPosX = trainData.transform.position.x;
         while (trainData.transform.position.x < 0)
         {
-            float currentPosX = Mathf.Lerp(initialPosX, 0, trainController.normalizedTime);
+            float currentPosX = Mathf.Lerp(initialPosX, 0, trainController.easeOutTime);
             trainData.transform.position = new Vector2(currentPosX, startingTrainPos.y);
             await Task.Yield();
         }

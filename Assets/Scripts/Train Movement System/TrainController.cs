@@ -8,7 +8,8 @@ public class TrainController : MonoBehaviour
     [Header("Parameters")]
     [SerializeField] private AnimationCurve accelerationCurve;
 
-    public float normalizedTime { get; private set; }
+    public float easeOutTime { get; private set; }
+    public float easeInTime { get; private set; }
     private TrainData trainData => GetComponent<TrainData>();
     private StationData currentStation => trainData.currentStation;
     private float boundsMaxX => trainData.boundsMaxX;
@@ -46,15 +47,19 @@ public class TrainController : MonoBehaviour
         float accelationTime = (2 * stoppingDistance) / (Mathf.Max(startSpeed, newSpeed) * trainData.kmConversion); // using the equation of motion v=u+at where t is equal to 2s/u
         float elapsedTime = 0f;
 
+
         while (trainData.kmPerHour != newSpeed)
         {
             elapsedTime += Time.deltaTime;
 
-            normalizedTime = Mathf.Clamp01(elapsedTime / accelationTime);
-            normalizedTime = accelerationCurve.Evaluate(normalizedTime);
+            easeOutTime = Mathf.Clamp01(elapsedTime / accelationTime);
+            easeInTime = Mathf.Clamp01(elapsedTime / accelationTime);
+            easeOutTime = 1 - Mathf.Pow(1 - easeOutTime, 2f);
+            easeInTime = Mathf.Pow(easeInTime, 2f);
 
-            trainData.kmPerHour = Mathf.Lerp(startSpeed, newSpeed, normalizedTime);
-            trainData.metersTravelled = Mathf.Lerp(startMetersTravelled, newMetersTravelled, normalizedTime);
+            trainData.kmPerHour = Mathf.Lerp(startSpeed, newSpeed, easeOutTime);
+            float meterTravelledT = startSpeed > newSpeed ? easeOutTime : easeInTime;
+            trainData.metersTravelled = Mathf.Lerp(startMetersTravelled, newMetersTravelled, meterTravelledT);
 
             float distanceTravelled = trainData.metersTravelled - startMetersTravelled;
             float wheelRotation = (distanceTravelled / sampledWheel.circumference) * 360f;
