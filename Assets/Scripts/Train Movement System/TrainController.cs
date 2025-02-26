@@ -14,6 +14,11 @@ public class TrainController : MonoBehaviour
     private float boundsMaxX => trainData.boundsMaxX;
     private List<SlideDoorBounds> slideDoorsList => trainData.slideDoorsList;
 
+    public float setSpeed { get; private set; }
+    private void Start()
+    {
+        setSpeed = trainData.kmPerHour;
+    }
     public async void TrainInputs()
     {   
         while (currentStation == null) { await Task.Yield(); }
@@ -26,17 +31,39 @@ public class TrainController : MonoBehaviour
     }
     private async Task UpdateSpeed(float newSpeed)
     {
+        setSpeed = newSpeed;
+
         float startSpeed = trainData.kmPerHour;
+
         float stoppingDistance = currentStation.accelerationThresholds + (boundsMaxX - trainData.boundsHalfX);
-        float accelationTime = (2 * stoppingDistance) / (Mathf.Max(startSpeed, newSpeed) / trainData.kmConversion); // using the equation of motion v=u+at where t is equal to 2s/u
+
+        float startMetersTravelled = trainData.metersTravelled;
+        float newMetersTravelled = startMetersTravelled + stoppingDistance;
+
+        WheelData sampledWheel = trainData.wheels[0];
+        float startWheelRotation = sampledWheel.transform.rotation.z;
+        float totalRotations = (newMetersTravelled / sampledWheel.circumference);
+        float newWheelRotation = startWheelRotation + (totalRotations * 360f);
+
+        float accelationTime = (2 * stoppingDistance) / (Mathf.Max(startSpeed, newSpeed) * trainData.kmConversion); // using the equation of motion v=u+at where t is equal to 2s/u
         float elapsedTime = 0f;
+
         while (trainData.kmPerHour != newSpeed)
         {
             elapsedTime += Time.deltaTime;
 
             normalizedTime = Mathf.Clamp01(elapsedTime / accelationTime);
             normalizedTime = accelerationCurve.Evaluate(normalizedTime);
+
             trainData.kmPerHour = Mathf.Lerp(startSpeed, newSpeed, normalizedTime);
+
+            trainData.metersTravelled = Mathf.Lerp(startMetersTravelled, newMetersTravelled, normalizedTime);
+
+            float currentRotation = Mathf.Lerp(startWheelRotation, newWheelRotation, normalizedTime);
+            foreach (WheelData wheel in trainData.wheels)
+            {
+                wheel.transform.localEulerAngles = new Vector3(0, 0, -currentRotation);
+            }
 
             await Task.Yield();
         }

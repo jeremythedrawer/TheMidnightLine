@@ -83,7 +83,6 @@ public abstract class NPCController : MonoBehaviour
                     movementInputs.walkInput = 0;
                     npcCore.isSitting = true;
                     npcCore.characterMaterial.SendCharToSeatLayer();
-                    Debug.Log("sent character to layer: " + npcCore.spriteRenderer.sortingOrder + "from seat");
                     //set chosen seat to filled
                     SeatData seatData = calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex];
                     seatData.filled = true;

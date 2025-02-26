@@ -71,9 +71,10 @@ public class GroundState : State
 
     private void EnterTrain()
     {
-        if(movementInputs.enterTrainInput)
+        if (SlideDoorBounds.Instance != null)
         {
-            if (SlideDoorBounds.Instance != null)
+            //TODO: Enable UI to encourage player to press "E"
+            if (movementInputs.enterTrainInput)
             {
                 StartCoroutine(EnteringTrain());
             }

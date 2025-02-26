@@ -17,6 +17,8 @@ public class TrainData : MonoBehaviour
     public float wheelLevel = 1.0f;
     public float roofLevel = 1.0f;
 
+
+    private TrainController trainController => GetComponent<TrainController>();
     [SerializeField] private bool seeBoundsGizmos;
     public float boundsMinX => backCarriageCollider.bounds.min.x;
     public float boundsMaxX => frontCarriageCollider.bounds.max.x;
@@ -26,12 +28,13 @@ public class TrainData : MonoBehaviour
     public float kmPerHour = 10f;
 
     //stats
-    public float mPerSec { get; protected set; }
-    public float metersTravelled { get; protected set; }
-    public float kmConversion { get; private set; } = 3.6f;
+    public float mPerSec { get; set; }
+    public float metersTravelled { get; set; }
+    public float kmConversion => 5f/18f;
 
     //References
     public List<SlideDoorBounds> slideDoorsList = new List<SlideDoorBounds>();
+    public List<WheelData> wheels = new List<WheelData>();
     public List<InsideBounds> insideBoundsList = new List<InsideBounds>();
     public List<SeatBounds> seatBoundsList = new List<SeatBounds>();
     //StationData
@@ -52,6 +55,7 @@ public class TrainData : MonoBehaviour
         SetTrainDoors();
         SetInsideBoundsList();
         SetSeats();
+        SetWheels();
 
         UpdateStationQueue();
 
@@ -63,9 +67,19 @@ public class TrainData : MonoBehaviour
 
     private void Update()
     {
-        mPerSec = kmPerHour / kmConversion;
-        float frameDistance = mPerSec * Time.deltaTime;
-        metersTravelled += frameDistance;
+        mPerSec = kmPerHour * kmConversion;
+
+        if (trainController.setSpeed == kmPerHour)
+        {
+            metersTravelled += mPerSec * Time.deltaTime;
+            foreach (WheelData wheel in wheels)
+            {
+                float deltaX = mPerSec * Time.deltaTime;
+                float rotation = -deltaX * wheel.degreesPerMeter;
+                wheel.transform.Rotate(0, 0, rotation);
+            }
+        }
+
     }
 
     private async void UpdateStationQueue()
@@ -92,6 +106,11 @@ public class TrainData : MonoBehaviour
     {
         SlideDoorBounds[] slideDoors = FindObjectsByType<SlideDoorBounds>(FindObjectsSortMode.None);
         slideDoorsList.AddRange(slideDoors);
+    }    
+    private void SetWheels()
+    {
+        WheelData[] wheelsList = FindObjectsByType<WheelData>(FindObjectsSortMode.None);
+        wheels.AddRange(wheelsList);
     }
     private void SetSeats()
     {
