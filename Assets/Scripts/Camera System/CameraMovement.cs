@@ -27,7 +27,7 @@ public class CameraMovement : MonoBehaviour
     private float horizontalDamping;
     private float verticalDamping;
 
-    private float rootFourT;
+    private float offsetT;
 
     private Vector3 target;
 
@@ -151,10 +151,10 @@ public class CameraMovement : MonoBehaviour
         float carriageSize = InsideBounds.Instance.rightEdge - InsideBounds.Instance.leftEdge;
         float normalizedCarriageX = 1.0f - ((Mathf.Abs(carriageOriginX - playerOriginX) / carriageSize) * 2.0f);
 
-        rootFourT = Mathf.Pow(normalizedCarriageX, 0.25f);
+        offsetT = Mathf.Pow(normalizedCarriageX, 0.5f);
         camHalfWidthWorld = cam.orthographicSize * cam.aspect;
 
-        updatingBoundOffset = Mathf.Lerp(0, camHalfWidthWorld, rootFourT);
+        updatingBoundOffset = Mathf.Lerp(0, camHalfWidthWorld, offsetT);
     }
 
     private void SetCameraSize()

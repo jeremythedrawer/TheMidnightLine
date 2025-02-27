@@ -29,7 +29,7 @@ public class Spawner : MonoBehaviour
     public Vector3 spawnPos { get; private set; }
     public Vector3 despawnPos { get; private set; }
 
-    public void SetLodParams()
+    public void SetSpawnerPos()
     {
         if (GlobalReferenceManager.Instance == null) return;
 

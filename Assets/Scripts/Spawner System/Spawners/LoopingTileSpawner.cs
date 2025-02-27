@@ -11,10 +11,38 @@ public class LoopingTileSpawner : Spawner
         DrawLodRange();
     }
 
+    private void Start()
+    {
+        SetLoopingTilesList();
+        LoopTiles();
+    }
+
+    private void LoopTiles()
+    {
+        foreach (LoopingTiles tile in loopingTiles)
+        {
+            StartCoroutine(LoopingTiles(tile));
+        }
+    }
+    private IEnumerator LoopingTiles(LoopingTiles tile)
+    {
+        while (true)
+        {
+            int index = loopingTiles.IndexOf(tile);
+            int lastIndex = loopingTiles.Count - 1;
+            int prevIndex = index - 1;
+            int indexToCheck = index == 0 ? lastIndex : prevIndex;
+            yield return new WaitUntil(() => tile.spriteBoundsMaxX < canvasBounds.left);
+            tile.transform.position = new Vector3(loopingTiles[indexToCheck].spriteBoundsMaxX, transform.position.y, transform.position.z);
+            tile.parallaxController.Initialize();
+        }
+
+    }
 
     public void PresetTilePositions()
     {
-        SetLodParams();
+        SetSpawnerPos();
+        SetLoopingTilesList();
         if (startSpawnDistance == 0)
         {
             for(int i = 0; i < loopingTiles.Count; i++)

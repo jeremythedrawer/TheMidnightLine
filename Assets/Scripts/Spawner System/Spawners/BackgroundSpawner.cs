@@ -19,7 +19,7 @@ public class BackgroundSpawner : ObjectPoolSpawner
     private void OnValidate()
     {
         //PresetPrefabs();
-        SetLodParams();
+        SetSpawnerPos();
     }
     private void OnDrawGizmosSelected()
     {

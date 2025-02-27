@@ -11,7 +11,7 @@ public class StationPlatformSetUp : MonoBehaviour
         if (boxCollider != null && spriteRenderer != null)
         {
             boxCollider.offset = new Vector2(spriteRenderer.size.x/2, spriteRenderer.size.y/2);
-            boxCollider.size = spriteRenderer.size;
+            boxCollider.size = new Vector2(spriteRenderer.size.x, spriteRenderer.size.y - 0.25f);
         }
         else
         {
