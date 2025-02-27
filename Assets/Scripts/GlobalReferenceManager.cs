@@ -13,24 +13,29 @@ public class GlobalReferenceManager : MonoBehaviour
     private void Awake()
     {
         //ensure this instance exists once and to this
-        if (Instance != null && Instance != this)
-        {
-            Destroy(gameObject);
-            return;
-        }
-        Instance = this;
         CacheReferences();
     }
     private void OnValidate() => CacheReferences();
 
     private void CacheReferences()
     {
+        InstantiateManager();
         if (trainController == null) trainController = FindFirstObjectByType<TrainController>();
         if (trainData == null) trainData = FindFirstObjectByType<TrainData>();
         if (canvasBounds == null) canvasBounds = FindFirstObjectByType<CanvasBounds>();
 
         stationGroundLayer = LayerMask.NameToLayer("Station Ground");
         trainGroundLayer = LayerMask.NameToLayer("Train Ground");
+    }
 
+    private void InstantiateManager()
+    {
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+
+        if (Instance == null) Instance = this;
     }
 }

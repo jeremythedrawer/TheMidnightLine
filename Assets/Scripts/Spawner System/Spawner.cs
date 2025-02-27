@@ -5,8 +5,8 @@ using UnityEngine.Pool;
 
 public class Spawner : MonoBehaviour
 {
-    protected static CanvasBounds canvasBounds;
-    protected static TrainData trainData;
+    protected CanvasBounds canvasBounds => GlobalReferenceManager.Instance.canvasBounds;
+    protected TrainData trainData => GlobalReferenceManager.Instance.trainData;
 
     [Header("Parameters")]
     [Range(0f, 1f)]
@@ -29,28 +29,12 @@ public class Spawner : MonoBehaviour
     public Vector3 spawnPos { get; private set; }
     public Vector3 despawnPos { get; private set; }
 
-    private void Awake()
-    {
-        if (canvasBounds == null)
-        {
-            canvasBounds = GameObject.FindGameObjectWithTag("Background Canvas").GetComponent<CanvasBounds>();
-        }
-
-        if (trainData == null)
-        {
-            trainData = GameObject.FindGameObjectWithTag("Train Object").GetComponent<TrainData>();
-        }
-
-        if (canvasBounds == null || trainData == null)
-        {
-            Debug.LogError("Failed to find required references in Spawner!");
-        }
-    }
     public void SetLodParams()
     {
-        if (canvasBounds == null)
+        if (GlobalReferenceManager.Instance == null)
         {
-            canvasBounds = FindAnyObjectByType<CanvasBounds>();
+            Debug.Log("global reference is not instantiated");
+            return;
         }
 
         canvasBounds.SetCanvasData();
