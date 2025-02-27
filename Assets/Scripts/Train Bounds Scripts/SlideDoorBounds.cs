@@ -16,33 +16,31 @@ public class SlideDoorBounds : Bounds
     public static SlideDoorBounds Instance { get; private set; }
 
     private SpriteRenderer leftDoorSprite;
-    private static TrainData trainData => GameObject.FindFirstObjectByType<TrainData>();
+    private static TrainData trainData => GlobalReferenceManager.Instance.trainData;
     public bool openDoor {  get; private set; }
 
     private float doorWidth;
     private Vector3[] initialPositions;
 
     private InsideBounds insideBounds;
-    private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
-    private int stationGroundLayer => LayerMask.NameToLayer("Station Ground");
+    private int trainGroundLayer => GlobalReferenceManager.Instance.trainGroundLayer;
+    private int stationGroundLayer => GlobalReferenceManager.Instance.stationGroundLayer;
 
     public float normMoveDoorTime {  get; private set; }
-    public BoxCollider2D boxCollider => GetComponent<BoxCollider2D>();
+    public BoxCollider2D boxCollider { get; private set; }
 
     public Queue<StateCore> characterQueue = new Queue<StateCore>();
-    private int characterCount;
 
+    private void Awake()
+    {
+        boxCollider = GetComponent<BoxCollider2D>();
+    }
     private void Start()
     {
         leftDoorSprite = leftDoor.gameObject.GetComponent<SpriteRenderer>();
         doorWidth = leftDoorSprite.sprite.bounds.size.x;
         TransferNPCsToTrain();
 
-    }
-
-    private void Update()
-    {
-        characterCount = characterQueue.Count;
     }
     private async void TransferNPCsToTrain()
     {
@@ -68,7 +66,6 @@ public class SlideDoorBounds : Bounds
         character.collisionChecker.activeGroundLayer = 1 << trainGroundLayer;
         trainData.charactersList.Add(character);
         trainData.currentStation.charactersList.Remove(character);
-        Debug.Log("sent character to layer: " + character.spriteRenderer.sortingOrder + "from slidedoors");
         await Task.Yield();
     }
     private void OnTriggerEnter2D(Collider2D collision)

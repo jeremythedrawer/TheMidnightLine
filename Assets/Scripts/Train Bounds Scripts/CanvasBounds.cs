@@ -55,8 +55,8 @@ public class CanvasBounds : Bounds
         farClipPlanePos = cam.transform.position.z + cam.farClipPlane;
         nearClipPlanePos = cam.transform.position.z + cam.nearClipPlane;
 
-        right = (trainData.boundsMaxX + camHalfWidth) + canvasWidthBuffer;
-        left = (trainData.boundsMinX - camHalfWidth) - canvasWidthBuffer;
+        right = trainData.trainWidth + canvasWidthBuffer;
+        left = 0 - canvasWidthBuffer;
         topRight = new Vector2(right, top);
         bottomLeft = new Vector2(left, bottom);
         width = right - left;

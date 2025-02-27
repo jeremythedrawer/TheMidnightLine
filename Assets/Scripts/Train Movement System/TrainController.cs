@@ -5,12 +5,9 @@ using UnityEngine;
 
 public class TrainController : MonoBehaviour
 {
-    [Header("Parameters")]
-    [SerializeField] private AnimationCurve accelerationCurve;
-
     public float easeOutTime { get; private set; }
     public float easeInTime { get; private set; }
-    private TrainData trainData => GetComponent<TrainData>();
+    private TrainData trainData => GlobalReferenceManager.Instance.trainData;
     private StationData currentStation => trainData.currentStation;
     private float boundsMaxX => trainData.boundsMaxX;
     private List<SlideDoorBounds> slideDoorsList => trainData.slideDoorsList;
@@ -22,6 +19,7 @@ public class TrainController : MonoBehaviour
     }
     public async void TrainInputs()
     {   
+        while (trainData == null) { await Task.Yield(); }
         while (currentStation == null) { await Task.Yield(); }
         while (boundsMaxX < currentStation.decelThreshold) { await Task.Yield(); } // wait until train cross decel threshold
         await UpdateSpeed(0);
@@ -54,13 +52,15 @@ public class TrainController : MonoBehaviour
 
             easeOutTime = Mathf.Clamp01(elapsedTime / accelationTime);
             easeInTime = Mathf.Clamp01(elapsedTime / accelationTime);
+
             easeOutTime = 1 - Mathf.Pow(1 - easeOutTime, 2f);
             easeInTime = Mathf.Pow(easeInTime, 2f);
 
-            trainData.kmPerHour = Mathf.Lerp(startSpeed, newSpeed, easeOutTime);
-            float meterTravelledT = startSpeed > newSpeed ? easeOutTime : easeInTime;
+            trainData.kmPerHour = Mathf.Lerp(startSpeed, newSpeed, easeOutTime); // kmPerHours only uses easeOut
+            float meterTravelledT = startSpeed > newSpeed ? easeOutTime : easeInTime; //metersTravelled uses both depending if the train is accerlating or decelerating
             trainData.metersTravelled = Mathf.Lerp(startMetersTravelled, newMetersTravelled, meterTravelledT);
 
+            //wheels
             float distanceTravelled = trainData.metersTravelled - startMetersTravelled;
             float wheelRotation = (distanceTravelled / sampledWheel.circumference) * 360f;
             float currentRotation = startWheelRotation - wheelRotation;

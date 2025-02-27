@@ -42,7 +42,6 @@ public class CollisionChecker : MonoBehaviour
     public bool bhcleftEnabled { get; private set; }
     public bool bhcRightEnabled { get; private set; }
     public bool bhcEnabled { get; private set; }
-    private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
 
     private Vector2 collisionCheckerOrigin;
 
@@ -110,7 +109,7 @@ public class CollisionChecker : MonoBehaviour
 
     private void Start()
     {
-        activeGroundLayer = 1 << trainGroundLayer;
+        activeGroundLayer = 1 << GlobalReferenceManager.Instance.trainGroundLayer;
     }
     private void FixedUpdate()
     {

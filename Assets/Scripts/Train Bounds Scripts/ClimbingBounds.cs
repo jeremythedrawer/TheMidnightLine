@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class ClimbingBounds : Bounds
 {
-    private BoxCollider2D Collider2D => this.GetComponent<BoxCollider2D>();
+    private BoxCollider2D Collider2D;
 
     [Range(0f, 1f)]
     public float hangActivationThreshold = 0f;
@@ -19,12 +19,17 @@ public class ClimbingBounds : Bounds
 
 
     private StateCore activeCharacter;
+
+    private void Awake()
+    {
+        Collider2D = GetComponent<BoxCollider2D>();
+    }
     private void OnDrawGizmos()
     {
 #if UNITY_EDITOR
         if (Application.isPlaying) return;
-
         //draw box collider
+        Collider2D = GetComponent<BoxCollider2D>();
         Gizmos.color = activatedByAgent ? Color.green : Color.red;
         Vector2 bottomLeft = new Vector2(Collider2D.bounds.min.x, Collider2D.bounds.min.y);
         Vector2 bottomRight = new Vector2(Collider2D.bounds.max.x, Collider2D.bounds.min.y);

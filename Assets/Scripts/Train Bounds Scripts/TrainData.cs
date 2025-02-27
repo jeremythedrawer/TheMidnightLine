@@ -17,12 +17,15 @@ public class TrainData : MonoBehaviour
     public float wheelLevel = 1.0f;
     public float roofLevel = 1.0f;
 
-
-    private TrainController trainController => GetComponent<TrainController>();
     [SerializeField] private bool seeBoundsGizmos;
+
+    private TrainController trainController => GlobalReferenceManager.Instance.trainController;
+
     public float boundsMinX => backCarriageCollider.bounds.min.x;
     public float boundsMaxX => frontCarriageCollider.bounds.max.x;
     public float boundsHalfX => boundsMinX + ((boundsMaxX - boundsMinX) / 2);
+
+    public float trainWidth {  get; private set; }
     public float boundsHalfXDistance {  get; private set; }
 
     //controls
@@ -45,6 +48,14 @@ public class TrainData : MonoBehaviour
     //Characters
     public List<StateCore> charactersList = new List<StateCore>();
 
+    private void Awake()
+    {
+        trainWidth = boundsMaxX - boundsMinX;
+    }
+    private void OnValidate()
+    {
+        trainWidth = boundsMaxX - boundsMinX;
+    }
     private void OnDrawGizmos()
     {
         DebugLines(true);

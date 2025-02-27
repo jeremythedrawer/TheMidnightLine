@@ -13,11 +13,9 @@ public class StationData : MonoBehaviour
     public List<StateCore> charactersList {  get; private set; }
     private int stationGroundLayer => LayerMask.NameToLayer("Station Ground");
     private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
-    private static TrainData trainData;
     private void Awake()
     {
         charactersList = new List<StateCore>(GetComponentsInChildren<StateCore>());
-        trainData = GameObject.FindGameObjectWithTag("Train Object").GetComponent<TrainData>();
     }
     private void OnDrawGizmos()
     {
