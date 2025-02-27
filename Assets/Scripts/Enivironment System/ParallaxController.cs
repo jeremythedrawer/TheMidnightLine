@@ -25,11 +25,6 @@ public class ParallaxController : MonoBehaviour
         parentSpawner = GetComponentInParent<Spawner>();
         spriteRenderer = GetComponent<SpriteRenderer>();
     }
-    private void Start()
-    {
-        GetParralaxData(cam);
-    }
-
     private void OnEnable()
     {
         ScrollObject();
@@ -48,6 +43,7 @@ public class ParallaxController : MonoBehaviour
         startPos = transform.position;
         startZ = transform.position.z;
         totalTrainDistanceMoved = trainData.metersTravelled;
+        GetParralaxData(cam);
     }
 
     private void ScrollObject()
