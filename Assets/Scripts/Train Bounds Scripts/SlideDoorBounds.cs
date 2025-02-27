@@ -1,8 +1,7 @@
-using UnityEngine;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
-using System.Linq;
+using UnityEngine;
 
 public class SlideDoorBounds : Bounds
 {
@@ -16,7 +15,6 @@ public class SlideDoorBounds : Bounds
     public static SlideDoorBounds Instance { get; private set; }
 
     private SpriteRenderer leftDoorSprite;
-    private static TrainData trainData => GlobalReferenceManager.Instance.trainData;
     public bool openDoor {  get; private set; }
 
     private float doorWidth;

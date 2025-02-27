@@ -5,7 +5,9 @@ public class ParallaxController : MonoBehaviour
 {
     private Camera cam => GlobalReferenceManager.Instance.mainCam;
     private TrainData trainData => GlobalReferenceManager.Instance.trainData;
-
+    private CanvasBounds canvasBounds => GlobalReferenceManager.Instance.canvasBounds;
+    private SpriteRenderer spriteRenderer;
+    private Spawner parentSpawner;
     private Vector2 startPos;
     private float startZ;
 
@@ -16,6 +18,13 @@ public class ParallaxController : MonoBehaviour
     private float distanceFromClipPlaneZ;
     private float clipPlaneZ;
 
+    private bool parallaxEnabled;
+
+    private void Awake()
+    {
+        parentSpawner = GetComponentInParent<Spawner>();
+        spriteRenderer = GetComponent<SpriteRenderer>();
+    }
     private void Start()
     {
         GetParralaxData(cam);
@@ -26,6 +35,13 @@ public class ParallaxController : MonoBehaviour
         ScrollObject();
     }
 
+    private void Update()
+    {
+        bool withinDistance = trainData.metersTravelled > parentSpawner.startSpawnDistance && trainData.metersTravelled < parentSpawner.endSpawnDistance;
+        bool inCanvasBounds =  spriteRenderer.bounds.min.x < canvasBounds.right && spriteRenderer.bounds.max.x > canvasBounds.left;
+        parallaxEnabled = withinDistance || inCanvasBounds;
+        
+    }
     public void Initialize()
     {
         startPos = transform.position;
@@ -40,8 +56,9 @@ public class ParallaxController : MonoBehaviour
     private IEnumerator ScrollingObject()
     {
         yield return new WaitUntil(()=> trainData.arrivedToStartPosition);
+        yield return new WaitUntil(()=> parallaxEnabled);
         Initialize();
-        while (true)
+        while (parallaxEnabled)
         {
             UpdatePos();
             yield return null;

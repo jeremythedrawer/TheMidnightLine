@@ -22,8 +22,6 @@ public abstract class InsideOutsideBounds : Bounds
     public Vector2 leftGangwayPos { get; private set; }
     public Vector2 rightGangwayPos { get; private set; }
 
-    protected TrainData trainData => transform.root.GetComponent<TrainData>();
-
     private Component rightComponentBounds;
     private Component leftComponentBounds;
 

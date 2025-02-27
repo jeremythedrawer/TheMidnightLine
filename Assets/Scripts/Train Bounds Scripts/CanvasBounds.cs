@@ -6,9 +6,6 @@ public class CanvasBounds : Bounds
     public float canvasHeight;
     public float canvasWidthBuffer;
 
-    private TrainData trainData => GlobalReferenceManager.Instance.trainData;
-    private Camera cam => GlobalReferenceManager.Instance.mainCam;
-
     [Range(0, 1)]
     public float backgroundDepthMin = 0.9f;
     [Range(0, 1)]

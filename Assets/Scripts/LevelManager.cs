@@ -5,13 +5,8 @@ using System.Collections;
 public class LevelManager : MonoBehaviour
 {
     [Header("References")]
-    public PlayerBrain playerBrain;
-    public TrainData trainData;
-    public TrainController trainController;
-    public CanvasBounds canvasBounds;
-
-    private List<ParallaxController> parallaxObjects = new List<ParallaxController>();
-    private List<Spawner> spawners = new List<Spawner>();
+    private TrainData trainData => GlobalReferenceManager.Instance.trainData;
+    private TrainController trainController => GlobalReferenceManager.Instance.trainController;
 
     private Vector2 startingTrainPos;
     void Start()
@@ -21,20 +16,11 @@ public class LevelManager : MonoBehaviour
 
     private async void StartSequence()
     {
-        parallaxObjects.AddRange(FindObjectsByType<ParallaxController>(FindObjectsSortMode.None));
-        spawners.AddRange(FindObjectsByType<Spawner>(FindObjectsSortMode.None));
-
-        EnableParallaxAndSpawners(false);
-
         startingTrainPos = trainData.transform.position;
         trainController.TrainInputs();
         await MoveTrainToDecelThreshold();
         await MoveTrainToStart();
-
-        canvasBounds.SetCanvasData();
         await SetTrainObjectsData();
-        EnableParallaxAndSpawners(true);
-        //Player Enters onto train
     }
 
 
@@ -67,14 +53,6 @@ public class LevelManager : MonoBehaviour
         foreach (SeatBounds setsOfSeats in trainData.seatBoundsList)
         {
             setsOfSeats.SetSeatData();
-        }
-    }
-
-    private void EnableParallaxAndSpawners(bool isEnabled)
-    {
-        foreach (ParallaxController parallaxController in parallaxObjects)
-        {
-            parallaxController.enabled = isEnabled;
         }
     }
 }

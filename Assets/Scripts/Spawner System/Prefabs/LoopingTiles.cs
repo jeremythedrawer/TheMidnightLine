@@ -3,8 +3,7 @@ using UnityEngine;
 
 public class LoopingTiles : MonoBehaviour
 {
-    [Header("References")]
-    public CanvasBounds canvasBounds;
+    public CanvasBounds canvasBounds => GlobalReferenceManager.Instance.canvasBounds;
     public SpriteRenderer spriteRenderer;
     public ParallaxController parallaxController {  get; private set; }
     public float endPosX {  get; private set; }

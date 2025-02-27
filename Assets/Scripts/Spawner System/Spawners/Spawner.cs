@@ -45,7 +45,7 @@ public class Spawner : MonoBehaviour
         oneHalfPlane = minXPos + ((maxXPos - minXPos) * 0.5f);
         twoThirdsPlane = minXPos + ((maxXPos - minXPos) * 0.667f);
 
-        spawnPos = new Vector3(canvasBounds.right, transform.position.y, canvasBounds.nearClipPlanePos);
+        spawnPos = new Vector3(canvasBounds.right + 1, transform.position.y, canvasBounds.nearClipPlanePos);
         transform.position = new Vector3(spawnPos.x, transform.position.y, oneHalfPlane);
     }
 

@@ -17,6 +17,7 @@ public class ObjectPoolSpawner : Spawner
 
     public virtual void Start()
     {
+        SetLodParams();
         StartCoroutine(SpawnPrefabs());
     }
     protected void CreatePool(SpawnedPrefab prefab)

@@ -211,7 +211,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1541480774484133029, guid: fc3dfc9bfcf9a2a4bab1a56174815127, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5664349278569546485, guid: fc3dfc9bfcf9a2a4bab1a56174815127, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1267,6 +1267,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 652159984}
     m_Modifications:
+    - target: {fileID: 4161541657112090268, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+      propertyPath: m_ExcludeLayers.m_Bits
+      value: 57408
+      objectReference: {fileID: 0}
     - target: {fileID: 4406493656620320848, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
       propertyPath: m_Name
       value: Tourist (3)
@@ -1274,6 +1278,10 @@ PrefabInstance:
     - target: {fileID: 4406493656620320848, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
       propertyPath: m_IsActive
       value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7628201130985039182, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
+      propertyPath: m_SortingOrder
+      value: 6
       objectReference: {fileID: 0}
     - target: {fileID: 8671146431177964929, guid: 37b2f435f8dea77448b165a47b644f73, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2205,6 +2213,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1429784084}
+  - component: {fileID: 1429784085}
   m_Layer: 0
   m_Name: Stations
   m_TagString: Untagged
@@ -2228,6 +2237,22 @@ Transform:
   - {fileID: 514530465}
   m_Father: {fileID: 1905324207}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1429784085
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1429784083}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba59ef90d507e0f4eafab7271c5869ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minDepth: 0
+  maxDepth: 1
+  startSpawnDistance: 0
+  endSpawnDistance: 10000
 --- !u!114 &1454130292 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 1927025504178461038, guid: db586a0f5428723419ef4e31b742364d, type: 3}
@@ -2558,6 +2583,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Grasslands Skyline
       objectReference: {fileID: 0}
+    - target: {fileID: 100612859935055948, guid: 99ebf08000000f143baaf8bab590a25d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 527340929630863449, guid: 99ebf08000000f143baaf8bab590a25d, type: 3}
       propertyPath: canvasBounds
       value: 
@@ -2876,6 +2905,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2007657853}
+  - component: {fileID: 2007657854}
   m_Layer: 0
   m_Name: SkyLines
   m_TagString: Untagged
@@ -2900,6 +2930,22 @@ Transform:
   - {fileID: 610246572}
   m_Father: {fileID: 1905324207}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2007657854
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2007657852}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ba59ef90d507e0f4eafab7271c5869ec, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  minDepth: 0
+  maxDepth: 1
+  startSpawnDistance: 0
+  endSpawnDistance: 10000
 --- !u!114 &2044934241 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 4489580199048083729, guid: db586a0f5428723419ef4e31b742364d, type: 3}
@@ -3316,7 +3362,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3451316146259524856, guid: 4457c9fa10a9d3b46b1a7f52a887e9a1, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5387658941558490801, guid: 4457c9fa10a9d3b46b1a7f52a887e9a1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3382,6 +3428,10 @@ PrefabInstance:
     - target: {fileID: 100612859935055948, guid: 99ebf08000000f143baaf8bab590a25d, type: 3}
       propertyPath: m_Name
       value: City Skyline
+      objectReference: {fileID: 0}
+    - target: {fileID: 100612859935055948, guid: 99ebf08000000f143baaf8bab590a25d, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 527340929630863449, guid: 99ebf08000000f143baaf8bab590a25d, type: 3}
       propertyPath: canvasBounds
@@ -3482,7 +3532,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4572423973658126071, guid: db586a0f5428723419ef4e31b742364d, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5229636588506981074, guid: db586a0f5428723419ef4e31b742364d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3587,7 +3637,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1541480774484133029, guid: 09217af32c220994a982ed5675e9ef83, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5664349278569546485, guid: 09217af32c220994a982ed5675e9ef83, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4061,7 +4111,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4074926253202445553, guid: fbadbe504eb4fe149b3a97e9d45ff5e3, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 5380943045039740346, guid: fbadbe504eb4fe149b3a97e9d45ff5e3, type: 3}
       propertyPath: m_LocalPosition.y
@@ -4298,7 +4348,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7135286057359570087, guid: 319201e251af9094ea1f8b777d447ffc, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4323,7 +4373,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6137777807325332695, guid: 72046507362b7384db23615d92c25696, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 6214680262345530729, guid: 72046507362b7384db23615d92c25696, type: 3}
       propertyPath: maxLerp
