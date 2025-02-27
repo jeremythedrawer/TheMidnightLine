@@ -4,7 +4,7 @@ using UnityEngine;
 public class LoopingTiles : MonoBehaviour
 {
     public CanvasBounds canvasBounds => GlobalReferenceManager.Instance.canvasBounds;
-    public SpriteRenderer spriteRenderer;
+    public SpriteRenderer spriteRenderer {  get; private set; }
     public ParallaxController parallaxController {  get; private set; }
 
     public float spriteBoundsMaxX {  get; private set; }

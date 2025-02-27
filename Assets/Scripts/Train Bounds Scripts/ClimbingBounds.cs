@@ -13,7 +13,7 @@ public class ClimbingBounds : Bounds
     public bool activatedByAgent { get; set; }
     public bool activatedByPlayer { get; set; }
 
-    public float newPosX => isLeftEdge ? Collider2D.bounds.min.x : Collider2D.bounds.max.x;
+    public float newPosX;
     public Vector2 newPos {  get; private set; }
     public float boundsMaxY => Collider2D.bounds.max.y;
 
@@ -71,6 +71,7 @@ public class ClimbingBounds : Bounds
 
     private void OnTriggerEnter2D(Collider2D collision)
     {
+        newPosX = isLeftEdge ? Collider2D.bounds.min.x : Collider2D.bounds.max.x;
         newPos = new Vector2(newPosX, hangThresholdLine - collision.bounds.size.y);
 
         activatedByPlayer =  collision.gameObject.CompareTag("Player Collider");
@@ -85,9 +86,10 @@ public class ClimbingBounds : Bounds
 
     private void OnTriggerStay2D(Collider2D collision)
     {
-        hangActivated = collision.bounds.max.y <= hangThresholdLine;
+
         if (activatedByPlayer || activatedByAgent)
         {
+            hangActivated = collision.bounds.max.y <= hangThresholdLine || activeCharacter.state == activeCharacter.stateList.wallState;
             if (activeCharacter.movementInputs.crouchInput) activeCharacter.isDropping = true;
             if (activeCharacter.isDropping) activeCharacter.currentClimbBounds = null;
         }
@@ -95,6 +97,7 @@ public class ClimbingBounds : Bounds
 
     private void OnTriggerExit2D(Collider2D collision)
     {
+        hangActivated = false;
         if (activatedByPlayer || activatedByAgent)
         {
             activeCharacter.isDropping = false;

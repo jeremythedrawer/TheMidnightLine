@@ -940,7 +940,6 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 991202924768012511}
   - {fileID: 2058189620}
   - {fileID: 1912773013}
   - {fileID: 611596301}
@@ -5931,6 +5930,11 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!4 &1714918009 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 1435309323272679380, guid: db586a0f5428723419ef4e31b742364d, type: 3}
+  m_PrefabInstance: {fileID: 3289808607009879088}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &1720769659
 GameObject:
   m_ObjectHideFlags: 0
@@ -8191,11 +8195,11 @@ Transform:
   m_GameObject: {fileID: 5780660226143908935}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 173.1445, y: -2.54, z: -2}
+  m_LocalPosition: {x: -57.25551, y: -13.25, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 159732046}
+  m_Father: {fileID: 1714918009}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1566574725317811422
 PrefabInstance:
@@ -8400,7 +8404,10 @@ PrefabInstance:
       objectReference: {fileID: 106009634}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 1435309323272679380, guid: db586a0f5428723419ef4e31b742364d, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 991202924768012511}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: db586a0f5428723419ef4e31b742364d, type: 3}
 --- !u!1001 &3648871410423034183
@@ -8807,18 +8814,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 15beeb1acb6f5d04d840fa3eca646b73, type: 3}
---- !u!114 &3928790074809141464
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5780660226143908935}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: a63531c5cc14e424ebdf6bee5611f9fb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &4588777139182120249 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 8451971257262523574, guid: 625e7d4348db7154aa38e408be0e58eb, type: 3}
@@ -8839,7 +8834,6 @@ GameObject:
   m_Component:
   - component: {fileID: 991202924768012511}
   - component: {fileID: 8389533559735369746}
-  - component: {fileID: 3928790074809141464}
   m_Layer: 0
   m_Name: Caternary Mast
   m_TagString: Untagged
