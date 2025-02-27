@@ -26,7 +26,7 @@ public class TrainController : MonoBehaviour
         await UnlockDoors();
         await LockDoors();
         await ParentCharacters();
-        await UpdateSpeed(1000);
+        await UpdateSpeed(100);
     }
     private async Task UpdateSpeed(float newSpeed)
     {

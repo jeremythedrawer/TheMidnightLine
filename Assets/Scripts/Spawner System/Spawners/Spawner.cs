@@ -46,6 +46,7 @@ public class Spawner : MonoBehaviour
         twoThirdsPlane = minZPos + ((maxZPos - minZPos) * 0.667f);
 
         spawnPos = new Vector3(canvasBounds.right + 1, transform.position.y, canvasBounds.nearClipPlanePos);
+        despawnPos = new Vector3(canvasBounds.left, transform.position.y, canvasBounds.nearClipPlanePos);
         transform.position = new Vector3(spawnPos.x, transform.position.y, oneHalfPlane);
     }
 
@@ -63,9 +64,4 @@ public class Spawner : MonoBehaviour
         Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, minZPos), new Vector3(spawnPos.x, spawnPos.y, maxZPos));
         Gizmos.DrawLine(new Vector3(despawnPos.x, despawnPos.y, minZPos), new Vector3(despawnPos.x, despawnPos.y, maxZPos));
     }
-
-
-
-
-
 }
