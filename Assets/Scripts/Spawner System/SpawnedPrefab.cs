@@ -3,13 +3,16 @@ using UnityEngine;
 
 public class SpawnedPrefab : MonoBehaviour
 {
-    [Header ("References")]
-    public SpriteRenderer spriteRenderer;
-    public ParallaxController parallaxController;
+    public SpriteRenderer spriteRenderer {  get; private set; }
+    public ParallaxController parallaxController { get; private set; }
     public Spawner spawner {  get; private set; }
+
+    private TrainData trainData => GlobalReferenceManager.Instance.trainData;
 
     private void Awake()
     {
+        spriteRenderer = GetComponent<SpriteRenderer>();
+        parallaxController = GetComponent<ParallaxController>();
         spawner = gameObject.GetComponentInParent<Spawner>();
     }
 

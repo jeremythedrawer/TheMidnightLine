@@ -2,19 +2,17 @@ using UnityEngine;
 
 public class CanvasBounds : Bounds
 {
-    [Header("References")]
-    public TrainData trainData;
-    public Camera cam;
-
     [Header("Parameters")]
     public float canvasHeight;
     public float canvasWidthBuffer;
+
+    private TrainData trainData => GlobalReferenceManager.Instance.trainData;
+    private Camera cam => GlobalReferenceManager.Instance.mainCam;
 
     [Range(0, 1)]
     public float backgroundDepthMin = 0.9f;
     [Range(0, 1)]
     public float backgroundDepthMax = 0.6f;
-    private float camHalfWidth => cam.orthographicSize * cam.aspect;
     public float farClipPlanePos { get; private set; }
     public float nearClipPlanePos { get; private set; }
     private float top => transform.position.y + canvasHeight;

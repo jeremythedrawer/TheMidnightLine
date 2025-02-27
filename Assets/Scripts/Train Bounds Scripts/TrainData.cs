@@ -36,6 +36,7 @@ public class TrainData : MonoBehaviour
     public float metersTravelled { get; set; }
     public float kmConversion => 5f/18f;
 
+    public bool arrivedToStartPosition { get; set; }
     //References
     public List<SlideDoorBounds> slideDoorsList = new List<SlideDoorBounds>();
     public List<WheelData> wheels = new List<WheelData>();

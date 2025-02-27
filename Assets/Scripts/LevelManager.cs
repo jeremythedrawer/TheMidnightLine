@@ -58,6 +58,7 @@ public class LevelManager : MonoBehaviour
             await Task.Yield();
         }
         trainData.transform.position = new Vector2(0, startingTrainPos.y);
+        trainData.arrivedToStartPosition = true;
     }
 
     private async Task SetTrainObjectsData()
@@ -74,18 +75,6 @@ public class LevelManager : MonoBehaviour
         foreach (ParallaxController parallaxController in parallaxObjects)
         {
             parallaxController.enabled = isEnabled;
-        }
-        foreach (Spawner spawner in spawners)
-        {
-            if (spawner is LoopingTileSpawner)
-            {
-                if (spawner.startSpawnDistance != 0)
-                {
-                    spawner.gameObject.SetActive(isEnabled);
-                }
-            }
-            spawner.enabled = isEnabled;
-            if (isEnabled) spawner.SetLodParams();
         }
     }
 }

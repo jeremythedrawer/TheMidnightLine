@@ -1,9 +1,10 @@
 using UnityEngine;
+using System.Collections;
 
 public class ParallaxController : MonoBehaviour
 {
-    private Camera cam;
-    private TrainData trainData;
+    private Camera cam => GlobalReferenceManager.Instance.mainCam;
+    private TrainData trainData => GlobalReferenceManager.Instance.trainData;
 
     private Vector2 startPos;
     private float startZ;
@@ -15,30 +16,36 @@ public class ParallaxController : MonoBehaviour
     private float distanceFromClipPlaneZ;
     private float clipPlaneZ;
 
-    private void Awake()
+    private void Start()
     {
-        cam = Camera.main;
-        trainData = GameObject.FindWithTag("Train Object").GetComponent<TrainData>();
         GetParralaxData(cam);
-        
     }
 
     private void OnEnable()
     {
-        Initialize(); 
+        ScrollObject();
     }
 
-    private void Update()
-    {
-        UpdatePos();
-    }
     public void Initialize()
     {
-
         startPos = transform.position;
         startZ = transform.position.z;
         totalTrainDistanceMoved = trainData.metersTravelled;
+    }
 
+    private void ScrollObject()
+    {
+        StartCoroutine(ScrollingObject());
+    }
+    private IEnumerator ScrollingObject()
+    {
+        yield return new WaitUntil(()=> trainData.arrivedToStartPosition);
+        Initialize();
+        while (true)
+        {
+            UpdatePos();
+            yield return null;
+        }
     }
     private void UpdatePos()
     {

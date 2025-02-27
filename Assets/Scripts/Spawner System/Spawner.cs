@@ -31,11 +31,7 @@ public class Spawner : MonoBehaviour
 
     public void SetLodParams()
     {
-        if (GlobalReferenceManager.Instance == null)
-        {
-            Debug.Log("global reference is not instantiated");
-            return;
-        }
+        if (GlobalReferenceManager.Instance == null) return;
 
         canvasBounds.SetCanvasData();
         minDepth = Mathf.Clamp(minDepth, 0f, maxDepth);

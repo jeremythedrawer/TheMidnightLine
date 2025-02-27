@@ -7,12 +7,13 @@ public class StationData : MonoBehaviour
     [Header("Parameters")]
     public float accelerationThresholds;
 
+    private int stationGroundLayer => GlobalReferenceManager.Instance.stationGroundLayer;
+    private int trainGroundLayer => GlobalReferenceManager.Instance.trainGroundLayer;
     public float decelThreshold => transform.position.x - accelerationThresholds;
     public float accelThreshold => transform.position.x + accelerationThresholds;
 
     public List<StateCore> charactersList {  get; private set; }
-    private int stationGroundLayer => LayerMask.NameToLayer("Station Ground");
-    private int trainGroundLayer => LayerMask.NameToLayer("Train Ground");
+
     private void Awake()
     {
         charactersList = new List<StateCore>(GetComponentsInChildren<StateCore>());
