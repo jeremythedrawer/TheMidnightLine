@@ -4,7 +4,7 @@ using UnityEngine;
 public abstract class Bounds : MonoBehaviour
 {
     protected TrainData trainData => GlobalReferenceManager.Instance.trainData;
-    protected Camera cam => GlobalReferenceManager.Instance.mainCam;
+    protected Camera mainCam => GlobalReferenceManager.Instance.mainCam;
 
     public bool seeBoundsGizmos;
     public bool playerInActiveArea { get; protected set; }

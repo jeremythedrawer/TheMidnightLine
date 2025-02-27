@@ -47,8 +47,8 @@ public class CanvasBounds : Bounds
 
     public void SetCanvasData()
     {
-        farClipPlanePos = cam.transform.position.z + cam.farClipPlane;
-        nearClipPlanePos = cam.transform.position.z + cam.nearClipPlane;
+        farClipPlanePos = mainCam.transform.position.z + mainCam.farClipPlane;
+        nearClipPlanePos = mainCam.transform.position.z + mainCam.nearClipPlane;
 
         right = trainData.trainWidth + canvasWidthBuffer;
         left = 0 - canvasWidthBuffer;

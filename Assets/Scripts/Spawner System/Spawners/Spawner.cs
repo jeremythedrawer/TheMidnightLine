@@ -23,8 +23,8 @@ public class Spawner : MonoBehaviour
     public float oneHalfPlane { get; private set; }
     public float twoThirdsPlane { get; private set; }
 
-    public float minXPos { get; private set; }
-    public float maxXPos { get; private set; }
+    public float minZPos { get; private set; }
+    public float maxZPos { get; private set; }
 
     public Vector3 spawnPos { get; private set; }
     public Vector3 despawnPos { get; private set; }
@@ -37,13 +37,13 @@ public class Spawner : MonoBehaviour
         minDepth = Mathf.Clamp(minDepth, 0f, maxDepth);
         maxDepth = Mathf.Clamp(maxDepth, minDepth, 1f);
 
-        minXPos = Mathf.Lerp(canvasBounds.nearClipPlanePos, canvasBounds.farClipPlanePos, minDepth);
-        maxXPos = Mathf.Lerp(canvasBounds.nearClipPlanePos, canvasBounds.farClipPlanePos, maxDepth);
+        minZPos = Mathf.Lerp(canvasBounds.nearClipPlanePos, canvasBounds.farClipPlanePos, minDepth);
+        maxZPos = Mathf.Lerp(canvasBounds.nearClipPlanePos, canvasBounds.farClipPlanePos, maxDepth);
 
 
-        oneThirdPlane = minXPos + ((maxXPos - minXPos) * 0.333f);
-        oneHalfPlane = minXPos + ((maxXPos - minXPos) * 0.5f);
-        twoThirdsPlane = minXPos + ((maxXPos - minXPos) * 0.667f);
+        oneThirdPlane = minZPos + ((maxZPos - minZPos) * 0.333f);
+        oneHalfPlane = minZPos + ((maxZPos - minZPos) * 0.5f);
+        twoThirdsPlane = minZPos + ((maxZPos - minZPos) * 0.667f);
 
         spawnPos = new Vector3(canvasBounds.right + 1, transform.position.y, canvasBounds.nearClipPlanePos);
         transform.position = new Vector3(spawnPos.x, transform.position.y, oneHalfPlane);
@@ -53,15 +53,15 @@ public class Spawner : MonoBehaviour
     {
         Gizmos.color = Color.red;
         //length
-        Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, minXPos), new Vector3(despawnPos.x, despawnPos.y, minXPos));
-        Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, maxXPos), new Vector3(despawnPos.x, despawnPos.y, maxXPos));
+        Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, minZPos), new Vector3(despawnPos.x, despawnPos.y, minZPos));
+        Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, maxZPos), new Vector3(despawnPos.x, despawnPos.y, maxZPos));
 
         Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, oneThirdPlane), new Vector3(despawnPos.x, despawnPos.y, oneThirdPlane));
         Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, twoThirdsPlane), new Vector3(despawnPos.x, despawnPos.y, twoThirdsPlane));
 
         //depth
-        Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, minXPos), new Vector3(spawnPos.x, spawnPos.y, maxXPos));
-        Gizmos.DrawLine(new Vector3(despawnPos.x, despawnPos.y, minXPos), new Vector3(despawnPos.x, despawnPos.y, maxXPos));
+        Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, minZPos), new Vector3(spawnPos.x, spawnPos.y, maxZPos));
+        Gizmos.DrawLine(new Vector3(despawnPos.x, despawnPos.y, minZPos), new Vector3(despawnPos.x, despawnPos.y, maxZPos));
     }
 
 

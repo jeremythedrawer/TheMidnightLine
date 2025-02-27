@@ -1,14 +1,24 @@
-using System.Collections;
+using UnityEditor;
 using UnityEngine;
 
 public class BackgroundSpawner : ObjectPoolSpawner
 {
-
     [Header("Pool Prefab")]
     [SerializeField] private SpawnedBGPrefab spawnedBgPrefab;
 
+    [Header("Parameters")]
+    [Range(0, 50)]
+
+    private float randomX;
+    private float randomY;
+    private float randomZ;
+    private void Awake()
+    {
+        //PresetPrefabs();
+    }
     private void OnValidate()
     {
+        //PresetPrefabs();
         SetLodParams();
     }
     private void OnDrawGizmosSelected()
@@ -28,9 +38,9 @@ public class BackgroundSpawner : ObjectPoolSpawner
 
         if (prefab is SpawnedBGPrefab bgPrefab)
         {
-            float randomX = UnityEngine.Random.Range(transform.position.x, transform.position.x + randomXFactor);
-            float randomY = UnityEngine.Random.Range(transform.position.y - randomYFactor, transform.position.y + randomYFactor);
-            float randomZ = UnityEngine.Random.Range(minXPos, maxXPos);
+            randomX = Random.Range(transform.position.x, transform.position.x + randomXFactor);
+            randomY = Random.Range(transform.position.y - randomYFactor, transform.position.y + randomYFactor);
+            randomZ = Random.Range(minZPos, maxZPos);
 
             bgPrefab.transform.position = new Vector3(randomX, randomY, randomZ);
 
@@ -42,6 +52,24 @@ public class BackgroundSpawner : ObjectPoolSpawner
 
         }
 
+    }
+
+    public void IncreasePresetPrefabs()
+    {
+        float canvasMin = canvasBounds.left;
+        float canvasMax = canvasBounds.right;
+
+        randomX = Random.Range(canvasMin, canvasMax);
+        randomY = Random.Range(transform.position.y - randomYFactor, transform.position.y + randomYFactor);
+        randomZ = Random.Range(minZPos, maxZPos);
+        Vector3 spawnPos = new Vector3(randomX, transform.position.y, randomZ);
+
+        SpawnedBGPrefab prefab = Instantiate(spawnedBgPrefab, spawnPos, Quaternion.identity);
+        prefab.transform.SetParent(transform);
+    }
+    public void DecreasePresetPrefabs()
+    {
+        DestroyImmediate(transform.GetChild(transform.childCount - 1).gameObject);
     }
 }
 

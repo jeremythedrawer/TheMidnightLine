@@ -37,6 +37,7 @@ public class ParallaxController : MonoBehaviour
 
     private void Update()
     {
+        if (trainData == null || parentSpawner == null) return;
         bool withinDistance = trainData.metersTravelled > parentSpawner.startSpawnDistance && trainData.metersTravelled < parentSpawner.endSpawnDistance;
         bool inCanvasBounds =  spriteRenderer.bounds.min.x < canvasBounds.right && spriteRenderer.bounds.max.x > canvasBounds.left;
         parallaxEnabled = withinDistance || inCanvasBounds;

@@ -13,7 +13,12 @@ public class GlobalReferenceManager : MonoBehaviour
 
     private void Awake()
     {
-        //ensure this instance exists once and to this
+        if (Instance != null && Instance != this)
+        {
+            Destroy(gameObject);
+            return;
+        }
+        Instance = this;
         CacheReferences();
     }
     private void OnValidate() => CacheReferences();
