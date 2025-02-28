@@ -7,13 +7,9 @@ public class SpawnedPrefab : MonoBehaviour
     public ParallaxController parallaxController { get; private set; }
     public Spawner spawner {  get; private set; }
 
-    private TrainData trainData => GlobalReferenceManager.Instance.trainData;
-
     private void Awake()
     {
-        spriteRenderer = GetComponent<SpriteRenderer>();
-        parallaxController = GetComponent<ParallaxController>();
-        spawner = gameObject.GetComponentInParent<Spawner>();
+        SetComponents();
     }
 
     private void OnEnable()
@@ -30,11 +26,19 @@ public class SpawnedPrefab : MonoBehaviour
 
     public virtual void Initialize()
     {
+        SetComponents();
         parallaxController.Initialize();
     }
 
     public virtual IEnumerator SetLifeTime()
     {
         yield return null;
+    }
+
+    private void SetComponents()
+    {
+       if (spriteRenderer  == null) spriteRenderer = GetComponent<SpriteRenderer>();
+       if (parallaxController  == null) parallaxController = GetComponent<ParallaxController>();
+       if (spawner == null) spawner = gameObject.GetComponentInParent<Spawner>();
     }
 }

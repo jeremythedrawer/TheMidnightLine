@@ -1,4 +1,5 @@
-using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 using UnityEngine.Pool;
 
@@ -19,6 +20,11 @@ public class Spawner : MonoBehaviour
     public float endSpawnDistance = 0;
 
     // For BackgroundSpawner and LoopingTileSpawner
+    [Range (1f, 3f)]
+    public int lodSpriteCount = 1;
+    public float[] lodThresholdValues {  get; private set; }
+    private int maxIndex;
+
     public float oneThirdPlane { get; private set; }
     public float oneHalfPlane { get; private set; }
     public float twoThirdsPlane { get; private set; }
@@ -28,6 +34,21 @@ public class Spawner : MonoBehaviour
 
     public Vector3 spawnPos { get; private set; }
     public Vector3 despawnPos { get; private set; }
+
+    private void Awake()
+    {
+        maxIndex = Mathf.Max(lodSpriteCount - 1, 0);
+        lodThresholdValues = new float[maxIndex];
+    }
+    public virtual void OnValidate()
+    {
+        maxIndex = Mathf.Max(lodSpriteCount - 1, 0);
+        if(lodThresholdValues == null || lodThresholdValues.Length != maxIndex)
+        {
+            lodThresholdValues = new float[maxIndex];
+        }
+        SetSpawnerPos();
+    }
 
     public void SetSpawnerPos()
     {
@@ -39,15 +60,20 @@ public class Spawner : MonoBehaviour
 
         minZPos = Mathf.Lerp(canvasBounds.nearClipPlanePos, canvasBounds.farClipPlanePos, minDepth);
         maxZPos = Mathf.Lerp(canvasBounds.nearClipPlanePos, canvasBounds.farClipPlanePos, maxDepth);
+        lodSpriteCount = Mathf.Max(1, lodSpriteCount);
 
-
+        for (int i = 0; i < lodThresholdValues.Length; i++)
+        {
+            float decimalThreshold = (1f / lodSpriteCount) * (i + 1);
+            lodThresholdValues[i] = Mathf.Lerp(minZPos, maxZPos, decimalThreshold);
+        }
         oneThirdPlane = minZPos + ((maxZPos - minZPos) * 0.333f);
         oneHalfPlane = minZPos + ((maxZPos - minZPos) * 0.5f);
         twoThirdsPlane = minZPos + ((maxZPos - minZPos) * 0.667f);
 
-        spawnPos = new Vector3(canvasBounds.right + 1, transform.position.y, canvasBounds.nearClipPlanePos);
-        despawnPos = new Vector3(canvasBounds.left, transform.position.y, canvasBounds.nearClipPlanePos);
-        transform.position = new Vector3(spawnPos.x, transform.position.y, oneHalfPlane);
+        spawnPos = new Vector3(canvasBounds.right + 1, transform.position.y, transform.position.z);
+        despawnPos = new Vector3(canvasBounds.left, transform.position.y, transform.position.z);
+        transform.position = spawnPos;
     }
 
     protected void DrawLodRange()
@@ -57,8 +83,10 @@ public class Spawner : MonoBehaviour
         Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, minZPos), new Vector3(despawnPos.x, despawnPos.y, minZPos));
         Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, maxZPos), new Vector3(despawnPos.x, despawnPos.y, maxZPos));
 
-        Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, oneThirdPlane), new Vector3(despawnPos.x, despawnPos.y, oneThirdPlane));
-        Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, twoThirdsPlane), new Vector3(despawnPos.x, despawnPos.y, twoThirdsPlane));
+        for (int i = 0; i < maxIndex; i++)
+        {
+            Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, lodThresholdValues[i]), new Vector3(despawnPos.x, despawnPos.y, lodThresholdValues[i]));
+        }
 
         //depth
         Gizmos.DrawLine(new Vector3(spawnPos.x, spawnPos.y, minZPos), new Vector3(spawnPos.x, spawnPos.y, maxZPos));

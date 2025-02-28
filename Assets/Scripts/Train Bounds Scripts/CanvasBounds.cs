@@ -29,7 +29,7 @@ public class CanvasBounds : Bounds
 
     private void OnValidate()
     {
-        SetCanvasData();
+        if (GlobalReferenceManager.Instance != null) SetCanvasData();
     }
 
     private void OnDrawGizmos()

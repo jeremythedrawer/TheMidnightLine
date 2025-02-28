@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditorInternal;
 using UnityEngine;
 
 public class SpawnedBGPrefab : SpawnedPrefab
@@ -47,24 +48,52 @@ public class SpawnedBGPrefab : SpawnedPrefab
 
     public override void Initialize()
     {
-
         base.Initialize();
         ChooseLOD();
     }
 
     private void ChooseLOD()
     {
-        if (transform.position.z < spawner.oneThirdPlane)
+        float zPos = transform.position.z;
+        float[] thresholds = spawner.lodThresholdValues;
+
+        switch(thresholds.Length)
         {
-            spriteRenderer.sprite = chosenLods.high;
-        }
-        else if (transform.position.z > spawner.twoThirdsPlane)
-        {
-            spriteRenderer.sprite = chosenLods.low;
-        }
-        else
-        {
-            spriteRenderer.sprite = chosenLods.med;
+            case 0:
+            {
+                spriteRenderer.sprite = chosenLods.high;
+            }
+            break;
+
+            case 1:
+            {
+                if (transform.position.z < spawner.lodThresholdValues[0])
+                {
+                    spriteRenderer.sprite = chosenLods.high;
+                }
+                else
+                {
+                    spriteRenderer.sprite = chosenLods.med;
+                }
+            }
+            break;
+
+            case 2:
+            {
+                if (transform.position.z < spawner.lodThresholdValues[0])
+                {
+                    spriteRenderer.sprite = chosenLods.high;
+                }
+                else if (transform.position.z > spawner.lodThresholdValues[0] && transform.position.z < spawner.lodThresholdValues[1])
+                {
+                    spriteRenderer.sprite = chosenLods.low;
+                }
+                else
+                {
+                    spriteRenderer.sprite = chosenLods.med;
+                }                
+            }
+            break;
         }
     }
 }
