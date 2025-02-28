@@ -96,8 +96,12 @@ public class TrainData : MonoBehaviour
 
     }
 
-    private async void UpdateStationQueue()
+    public async void UpdateStationQueue()
     {
+        if (currentStation != null)
+        {
+            stationDataQueue.Dequeue();
+        }
         while (stationDataQueue.Count == 0) { await Task.Yield(); } //wait for queue to fill
 
         currentStation = stationDataQueue.Peek();
@@ -114,7 +118,6 @@ public class TrainData : MonoBehaviour
         {
             stationDataQueue.Enqueue(stationData);
         }
-        currentStation = stationDataQueue.Peek();
     }
     private void SetTrainDoors()
     {

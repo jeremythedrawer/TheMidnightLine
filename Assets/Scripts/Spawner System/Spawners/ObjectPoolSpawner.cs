@@ -15,6 +15,8 @@ public class ObjectPoolSpawner : Spawner
     public Color spawnRangeColor = Color.red;
     public ObjectPool<SpawnedPrefab> prefabPool { get; private set; }
 
+
+
     public virtual void Start()
     {
         SetSpawnerPos();
