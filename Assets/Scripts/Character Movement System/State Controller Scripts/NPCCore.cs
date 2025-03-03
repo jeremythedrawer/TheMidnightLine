@@ -7,9 +7,14 @@ public abstract class NPCCore : StateCore
     public PathData pathData;
     
     public NPCController controller;
-
+    public StationData startingStation {  get; private set; }
     public bool isSitting {  get; set; }
     public bool isStanding { get; set; }
+
+    private void Awake()
+    {
+        startingStation = transform.parent.transform.parent.transform.parent.GetComponent<StationData>();
+    }
     public void SetupNPCInstances()
     {
         State[] allChildStates = GetComponentsInChildren<State>();

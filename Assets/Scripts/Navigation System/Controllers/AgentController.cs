@@ -16,7 +16,6 @@ public class AgentController : NPCController
     private void Start()
     {
         originalrunSpeed = npcCore.characterStats.runSpeed;
-        StartCoroutine(TargetPosIsPlayer());
     }
 
     public void AttackInputs()
@@ -36,8 +35,6 @@ public class AgentController : NPCController
     {
         colliderCenter = npcCore.boxCollider2D.size.y / 2f;
         currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, colliderCenter);
-
-        attackPath.SetPath(currentPos, lastPos, colliderCenter);
 
         movementInputs.runInput = true;
 

@@ -53,7 +53,6 @@ public class SlideDoorBounds : Bounds
             }
             await Task.Yield();
         }
-
     }
 
     private async Task BoardCharacters(StateCore character)

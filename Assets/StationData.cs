@@ -1,12 +1,11 @@
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 public class StationData : MonoBehaviour
 {
     [Header("Parameters")]
     public float accelerationThresholds;
-
+    public float trainExitSpeed;
     private int stationGroundLayer => GlobalReferenceManager.Instance.stationGroundLayer;
     private int trainGroundLayer => GlobalReferenceManager.Instance.trainGroundLayer;
     public float decelThreshold => transform.position.x - accelerationThresholds;

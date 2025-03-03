@@ -43,7 +43,7 @@ public class TrainData : MonoBehaviour
     public List<InsideBounds> insideBoundsList = new List<InsideBounds>();
     public List<SeatBounds> seatBoundsList = new List<SeatBounds>();
     //StationData
-    [SerializeField] protected List<StationData> stationDataList = new List<StationData>();
+    private List<StationData> stationDataList => GlobalReferenceManager.Instance.stations;
     public Queue<StationData> stationDataQueue = new Queue<StationData>();
     public StationData currentStation { get; private set; }
     //Characters
@@ -108,12 +108,6 @@ public class TrainData : MonoBehaviour
     }
     private void SetStationDataList()
     {
-        StationData[] stations = FindObjectsByType<StationData>(FindObjectsSortMode.None);
-        stationDataList.AddRange(stations);
-
-        //stations order by position
-        stationDataList = stations.OrderBy(station => station.transform.position.x).ToList();
-
         foreach (StationData stationData in stationDataList)
         {
             stationDataQueue.Enqueue(stationData);

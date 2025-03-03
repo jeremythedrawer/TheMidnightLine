@@ -1,7 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.TextCore.Text;
 using static SeatBounds;
 
 public abstract class NPCController : MonoBehaviour
@@ -9,25 +8,30 @@ public abstract class NPCController : MonoBehaviour
     [Header("Paths")]
     public CalmPath calmPath;
 
-    [Header("Parameters")]
-    public float updateTargetTickRate = 1f;
-
     [Header("References")]
     public NPCCore npcCore;
-    public UnityEngine.Transform playerTransform;
+    public Transform playerTransform;
     public BoxCollider2D playerCollider;
     public MovementInputs movementInputs;
+    protected PathData pathData;
 
+    private TrainData trainData => GlobalReferenceManager.Instance.trainData;
     protected Vector2 currentPos;
     protected PathData.NamedPosition lastPos;
     protected float colliderCenter;
 
     private float distanceToTarget;
     private bool closeEnough;
+    private bool finishedPath;
     private List<PathData.NamedPosition> calmPathToTarget => calmPath.pathData.pathToTarget;
     private float targetPosX = float.MaxValue;
 
+    private bool adjustPath = true;
 
+    private void Awake()
+    {
+        pathData = GetComponent<PathData>();
+    }
     public void CalmInputs()
     {
         colliderCenter = npcCore.boxCollider2D.size.y / 2f;
@@ -36,7 +40,7 @@ public abstract class NPCController : MonoBehaviour
         {
             if(!closeEnough)
             {
-                FollowCalmPath(currentPos, lastPos, colliderCenter);
+                FollowCalmPath(currentPos, colliderCenter);
                 return;
             }
             else
@@ -48,31 +52,35 @@ public abstract class NPCController : MonoBehaviour
         PathData.PosType nextPosType = calmPathToTarget[0].type;
         targetPosX = calmPathToTarget[0].value.x;
         distanceToTarget = Mathf.Abs(currentPos.x - targetPosX);
-        closeEnough = distanceToTarget < 0.1;
-
+        closeEnough = distanceToTarget < 0.1;;
         switch (nextPosType)
         {
             case PathData.PosType.SlidingDoors:
                 if (closeEnough)
                 {
-                    calmPath.pathData.chosenSlideDoorBounds.OpenDoors();
-                    movementInputs.walkInput = 0;
-
-                    if (!calmPath.pathData.chosenSlideDoorBounds.characterQueue.Contains(npcCore))
+                    if (trainData.kmPerHour == 0)
                     {
-                        calmPath.pathData.chosenSlideDoorBounds.characterQueue.Enqueue(npcCore);
+                        pathData.chosenSlideDoorBounds.OpenDoors();
+                        movementInputs.walkInput = 0;
                     }
-                    if (calmPath.pathData.chosenSlideDoorBounds.normMoveDoorTime >= 1)
+                    if (pathData.chosenSlideDoorBounds.boxCollider.bounds.Intersects(npcCore.boxCollider2D.bounds))
+                    {
+                        if (!pathData.chosenSlideDoorBounds.characterQueue.Contains(npcCore))
+                        {
+                            pathData.chosenSlideDoorBounds.characterQueue.Enqueue(npcCore);
+                        }
+                    }
+                    if (pathData.chosenSlideDoorBounds.normMoveDoorTime >= 1)
                     {
                         if (npcCore.onTrain)
                         {
-                            FollowCalmPath(currentPos, lastPos, colliderCenter);
+                            FollowCalmPath(currentPos, colliderCenter);
                         }
                     }
                 }
                 else
                 {
-                    FollowCalmPath(currentPos, lastPos, colliderCenter);
+                    FollowCalmPath(currentPos, colliderCenter);
                 }
                 break;
 
@@ -86,11 +94,11 @@ public abstract class NPCController : MonoBehaviour
                     //set chosen seat to filled
                     SeatData seatData = calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex];
                     seatData.filled = true;
-                    calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex] = seatData;
+                    pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex] = seatData;
                 }
                 else
                 {
-                    FollowCalmPath(currentPos, lastPos, colliderCenter);
+                    FollowCalmPath(currentPos, colliderCenter);
                 }
                 break;
 
@@ -103,19 +111,24 @@ public abstract class NPCController : MonoBehaviour
                 }
                 else
                 {
-                    FollowCalmPath(currentPos, lastPos, colliderCenter);
+                    FollowCalmPath(currentPos, colliderCenter);
                 }
                 break;
         }
     }
 
-    private void FollowCalmPath(Vector2 currentPos, PathData.NamedPosition _lastpos, float colliderCenter)
+    private void FollowCalmPath(Vector2 currentPos, float colliderCenter)
     {
+        CheckToAdjustPath();
 
-        calmPath.SetPath(currentPos, _lastpos, colliderCenter);
+        if (adjustPath)
+        {
+            calmPath.SetPath(currentPos, colliderCenter);
+            adjustPath = false;
+        }
 
         //handle direction
-        if (calmPathToTarget.Count > 0)
+        if (calmPathToTarget.Count > 0 && !closeEnough)
         {
             if (currentPos.x < calmPathToTarget[0].value.x)
             {
@@ -130,15 +143,28 @@ public abstract class NPCController : MonoBehaviour
         {
             movementInputs.walkInput = 0;
         }
+        DrawDebugPath(currentPos);
     }
 
-    protected IEnumerator TargetPosIsPlayer() // TODO: lastPOs.value cannot be updated
+    private void CheckToAdjustPath()
     {
-        while (true)
+        if (closeEnough)
         {
-            lastPos.value = new Vector2(playerTransform.position.x, playerTransform.position.y) + new Vector2(0, (playerCollider.size.y / 2f));
-            yield return new WaitForSeconds(updateTargetTickRate);
+            calmPathToTarget.RemoveAt(0);
+            adjustPath = true;
         }
     }
 
+    private void DrawDebugPath(Vector2 currentPos)
+    {
+        Vector2 pos = currentPos;
+
+        for (int i = 0; i < pathData.pathToTarget.Count; i++)
+        {
+            Vector2 nextPos = pathData.pathToTarget[i].value;
+            Debug.DrawLine(pos, nextPos, Color.magenta);
+            Debug.DrawLine(nextPos, nextPos + (Vector2.up * 0.5f), Color.cyan);
+            pos = nextPos;
+        }
+    }
 }

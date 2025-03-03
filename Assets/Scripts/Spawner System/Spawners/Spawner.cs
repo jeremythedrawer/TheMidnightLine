@@ -25,10 +25,6 @@ public class Spawner : MonoBehaviour
     public float[] lodThresholdValues {  get; private set; }
     private int maxIndex;
 
-    public float oneThirdPlane { get; private set; }
-    public float oneHalfPlane { get; private set; }
-    public float twoThirdsPlane { get; private set; }
-
     public float minZPos { get; private set; }
     public float maxZPos { get; private set; }
 
@@ -47,7 +43,6 @@ public class Spawner : MonoBehaviour
         {
             lodThresholdValues = new float[maxIndex];
         }
-        SetSpawnerPos();
     }
 
     public void SetSpawnerPos()
@@ -67,9 +62,6 @@ public class Spawner : MonoBehaviour
             float decimalThreshold = (1f / lodSpriteCount) * (i + 1);
             lodThresholdValues[i] = Mathf.Lerp(minZPos, maxZPos, decimalThreshold);
         }
-        oneThirdPlane = minZPos + ((maxZPos - minZPos) * 0.333f);
-        oneHalfPlane = minZPos + ((maxZPos - minZPos) * 0.5f);
-        twoThirdsPlane = minZPos + ((maxZPos - minZPos) * 0.667f);
 
         spawnPos = new Vector3(canvasBounds.right + 1, transform.position.y, transform.position.z);
         despawnPos = new Vector3(canvasBounds.left, transform.position.y, transform.position.z);

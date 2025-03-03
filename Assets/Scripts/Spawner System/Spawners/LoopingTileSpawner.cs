@@ -6,6 +6,11 @@ public class LoopingTileSpawner : Spawner
 {
     private List<LoopingTiles> loopingTiles = new List<LoopingTiles>();
 
+    public override void OnValidate()
+    {
+        base.OnValidate();
+        SetSpawnerPos();
+    }
     private void OnDrawGizmosSelected()
     {
         DrawLodRange();

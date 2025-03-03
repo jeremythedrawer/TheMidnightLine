@@ -1,118 +1,125 @@
 using System;
-using System.Collections.Generic;
 using System.Collections;
+using System.Collections.Generic;
 using System.Linq;
+using System.Threading.Tasks;
 using UnityEngine;
 using static InsideBounds;
 
-public class CalmPath : PathFinder
+public class CalmPath : ToEnvironmentPaths
 {
+    protected SeatBounds chosenChairBounds => pathData.chosenSeatBounds;
     public List<SeatBounds.SeatData> seats => pathData.chosenSeatBounds.seats;
     public SeatBounds.SeatData chosenSeat {  get; private set; }
     public Vector2 chosenStandPos { get; private set; }
-    public Vector2 chosenSlidingDoorsPos { get; private set; }
     public int chosenSeatIndex { get; private set; }
 
+    private BystanderBrain bystanderBrain;
+
     private float standingPosThreshold = 8f;
-    private bool foundStandingArea;
 
-    //Setting paths
-    public override void SetPath(Vector2 currentPos, PathData.NamedPosition lastPos, float colliderCentre)
+    public override void Awake()
     {
-        base.SetPath(currentPos, lastPos, colliderCentre);
-        if (pathData.collisionChecker.activeGroundLayer == 1 << stationGroundLayer)
-        {
-            if (chosenSlidingDoorsPos == Vector2.zero)
-            {
-                pathData.pathIsSet = false;
-            }
-        }
-        else
-        {
-            if (pathData.chosenSeatBounds != null)
-            {
-                if (seats[chosenSeatIndex].filled) // find new path
-                {
-                    pathData.pathIsSet = false;
-                }
-            }
-            else if (chosenStandPos == Vector2.zero)
-            {
-                pathData.pathIsSet = false;
-            }
-        }
-    }
-    public override void FindPath(Vector2 currentPos, Vector2 lastPos, float colliderCentre)
-    {
-
-        base.FindPath(currentPos, lastPos, colliderCentre);
-
-        //In station
-        if (pathData.trainData.kmPerHour == 0 && currentInsideBounds == null && chosenSlidingDoorsPos == Vector2.zero )
-        {
-            FindChosenSlidingDoors(currentPos);
-            SlideDoorsPath();
-            return;
-        }
-
-        if (currentInsideBounds == null) return;
-        //In train
-        FindChosenChairBounds(currentPos);
-
-        if (pathData.chosenSeatBounds != null)
-        {
-            SeatPath(currentPos);
-        }
-        else
-        {
-            FindChosenStandingArea(currentPos);
-
-            if(chosenStandPos != Vector2.zero)
-            {
-                StandPath();
-            }
-        }
+        base.Awake();
+        bystanderBrain = npcCore as BystanderBrain;
     }
 
-    //Adding to Paths
-    private void SeatPath(Vector2 currentPos)
+    public override async void SetPath(Vector2 currentPos, float colliderCentre)
     {
+        base.SetPath(currentPos, colliderCentre);
 
-        float[] seatDistances = new float[seats.Count];
-        for (int i = 0; i < seatDistances.Length; i++)
+        //slide doors
+        bool onStationGround = pathData.collisionChecker.activeGroundLayer == 1 << stationGroundLayer;
+        bool arrivedAtDepartureStation = bystanderBrain?.departureStation == trainData.currentStation;
+        bool enteringTrain = onStationGround && !arrivedAtDepartureStation;
+        bool exitingTrain = pathData.trainData.kmPerHour == 0 && arrivedAtDepartureStation;
+
+        if (enteringTrain || exitingTrain)
         {
-            if (!seats[i].filled) // check if seat is empty and add to array
+            //when train position is updating at start of level
+            if (npcCore.startingStation == GlobalReferenceManager.Instance.stations[0] && enteringTrain)
             {
-                float distanceToSeat = Vector2.Distance(currentPos, seats[i].pos);
-                seatDistances[i] = distanceToSeat;
+                await EnterTrain(currentPos);
             }
             else
             {
-                seatDistances[i] = float.MaxValue;
+                AddToPath(SlideDoorsPath(currentPos), PathData.PosType.SlidingDoors);
             }
         }
+        else
+        {
+            await GetSeatPath(currentPos);
 
-        float smallestDistance = seatDistances.Min();
-        chosenSeatIndex = Array.IndexOf(seatDistances, smallestDistance);
-        chosenSeat = seats[chosenSeatIndex];
-
-        AddToPath(chosenSeat.pos, PathData.PosType.Seat);
-    } 
-
-    private void StandPath()
+            if (pathData.chosenSeatBounds == null || chosenSeat.filled)
+            {
+                await GetStandPath(currentPos);
+            }
+        }
+    }
+    private async Task EnterTrain(Vector2 currentPos)
     {
+        while (trainData.kmPerHour > 0) { await Task.Yield(); }
+        chosenSlidingDoorsPos = SlideDoorsPath(currentPos);
+        AddToPath(chosenSlidingDoorsPos, PathData.PosType.SlidingDoors);
+    }
+    private async Task GetSeatPath(Vector2 currentPos)
+    {
+        while (pathData.currentInsideBounds == null) { await Task.Yield(); }
+
+        while (!npcCore.isSitting)
+        {
+            pathData.chosenSeatBounds = FindChosenChairBounds(currentPos);
+            if (pathData.chosenSeatBounds == null) return;
+
+            float[] seatDistances = new float[seats.Count];
+            for (int i = 0; i < seatDistances.Length; i++)
+            {
+                if (!seats[i].filled) // check if seat is empty and add to array
+                {
+                    float distanceToSeat = Vector2.Distance(currentPos, seats[i].pos);
+                    seatDistances[i] = distanceToSeat;
+                }
+                else
+                {
+                    seatDistances[i] = float.MaxValue;
+                }
+            }
+
+            float smallestDistance = seatDistances.Min();
+            chosenSeatIndex = Array.IndexOf(seatDistances, smallestDistance);
+
+            if (!seats[chosenSeatIndex].filled)
+            {
+                chosenSeat = seats[chosenSeatIndex];
+                if (pathToTarget.Count == 0)
+                {
+                    AddToPath(chosenSeat.pos, PathData.PosType.Seat);
+                }
+                else if (pathToTarget[pathToTarget.Count - 1].value != chosenSeat.pos)
+                {
+                    npcCore.movementInputs.canMove = false;
+                    pathToTarget[pathToTarget.Count - 1] = new PathData.NamedPosition(chosenSeat.pos, PathData.PosType.Seat);
+                    await Task.Delay(500);
+                    npcCore.movementInputs.canMove = true;
+                }
+            }
+            
+            if (chosenSeat.filled) continue;
+            if (chosenChairBounds.isFull) break;
+            await Task.Yield();
+        }
+    }
+    private async Task GetStandPath(Vector2 currentPos)
+    {
+        while (pathData.currentInsideBounds == null) { await Task.Yield(); }
+        chosenStandPos = FindChosenStandingArea(currentPos);
         AddToPath(chosenStandPos, PathData.PosType.Stand);
     }
 
-    private void SlideDoorsPath()
-    {
-        AddToPath(chosenSlidingDoorsPos, PathData.PosType.SlidingDoors);
-    }
-
     //Find target
-    private void FindChosenChairBounds(Vector2 currentPos)
+    private SeatBounds FindChosenChairBounds(Vector2 currentPos)
     {
-        List<SeatBounds> setsOfSeats = currentInsideBounds.setsOfSeats;
+        List<SeatBounds> setsOfSeats = pathData.currentInsideBounds.setsOfSeats;
         int setsOfSeatsCount = setsOfSeats.Count;
 
         float[] setOfSeatsDistances = new float[setsOfSeatsCount];
@@ -141,39 +148,29 @@ public class CalmPath : PathFinder
         int closestPosIndex = Array.IndexOf(setOfSeatsDistances, smallestDistance);
         int secondClosestPosIndex = Array.IndexOf(setOfSeatsDistances, secondSmallestDistance);
 
-        if (!currentInsideBounds.setsOfSeats[closestPosIndex].seats.All(seat => seat.filled)) // check if all seats in the found set of seats are full
+        if (!pathData.currentInsideBounds.setsOfSeats[closestPosIndex].seats.All(seat => seat.filled)) // check if all seats in the found set of seats are full
         {
-            pathData.chosenSeatBounds = setsOfSeats[closestPosIndex];
+            return setsOfSeats[closestPosIndex];
         }
         else if (!setsOfSeats[secondClosestPosIndex].seats.All(seat => seat.filled)) //check the second closest set of seats
         {
-            pathData.chosenSeatBounds = setsOfSeats[secondClosestPosIndex];
+            return setsOfSeats[secondClosestPosIndex];
         }
         else // all seats are already filled
         {
-            pathData.chosenSeatBounds = null;
+            return null;
         }
     }
 
-    private void FindChosenStandingArea(Vector2 currentPos)
+    private Vector2 FindChosenStandingArea(Vector2 currentPos)
     {
-        if (!foundStandingArea)
-        {
-            StartCoroutine(LookingForStandingArea(currentPos));
-            foundStandingArea = true;
-        }
-    }
-    private IEnumerator LookingForStandingArea(Vector2 currentPos)
-    {
-        float randomTime = UnityEngine.Random.Range(0.5f, 1.5f);
-        yield return new WaitForSeconds(randomTime);
-        float insideBoundsMin = currentInsideBounds.objectBounds.min.x;
-        float insideBoundsMax = currentInsideBounds.objectBounds.max.x;
+        float insideBoundsMin = pathData.currentInsideBounds.objectBounds.min.x;
+        float insideBoundsMax = pathData.currentInsideBounds.objectBounds.max.x;
 
         float standingPosThresholdMin = Math.Max(currentPos.x - standingPosThreshold, insideBoundsMin);
         float standingPosThresholdMax = Math.Min(currentPos.x + standingPosThreshold, insideBoundsMax);
 
-        List<StandNpcPosData> standingNpcAndWallPosList = currentInsideBounds.standingNpcAndWallPosList;
+        List<StandNpcPosData> standingNpcAndWallPosList = pathData.currentInsideBounds.standingNpcAndWallPosList;
 
         StandNpcPosData largestDistanceSelected = new StandNpcPosData(standingPosThresholdMin, standingPosThresholdMax);
         float largestDistance = float.MaxValue;
@@ -193,28 +190,6 @@ public class CalmPath : PathFinder
         }
 
         float randomPosX = UnityEngine.Random.Range(largestDistanceSelected.startPos, largestDistanceSelected.endPos);
-        chosenStandPos = new Vector2(randomPosX, currentPos.y);
-        StandPath();
-    }
-
-    private void FindChosenSlidingDoors(Vector2 currentPos)
-    {
-        List<SlideDoorBounds> slideDoorsList = pathData.trainData.slideDoorsList;
-
-        float shortestDistance = float.MaxValue;
-        int chosenSlideDoorsIndex = -1;
-        for (int i = 0; i < slideDoorsList.Count - 1; i++)
-        {
-            float distance = Mathf.Abs(currentPos.x - slideDoorsList[i].transform.position.x);
-            if (distance < shortestDistance)
-            {
-                shortestDistance = distance;
-                chosenSlideDoorsIndex = i;
-            }
-        }
-        pathData.chosenSlideDoorBounds = slideDoorsList[chosenSlideDoorsIndex];
-        BoxCollider2D chosenSlideDoorCollider = pathData.chosenSlideDoorBounds.boxCollider;
-        float randomPosX = UnityEngine.Random.Range(chosenSlideDoorCollider.bounds.min.x, chosenSlideDoorCollider.bounds.max.x);
-        chosenSlidingDoorsPos = new Vector2(randomPosX, currentPos.y);
+        return new Vector2(randomPosX, currentPos.y);  
     }
 }

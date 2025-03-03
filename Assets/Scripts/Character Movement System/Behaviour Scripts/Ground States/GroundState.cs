@@ -83,9 +83,10 @@ public class GroundState : State
 
     private IEnumerator EnteringTrain()
     {
-        movementInputs.canMove = false;
+        movementInputs.canMove = false;;
         SlideDoorBounds.Instance.OpenDoors();
         yield return new WaitUntil(() => SlideDoorBounds.Instance.normMoveDoorTime >= 1);
+
         SlideDoorBounds.Instance.characterQueue.Enqueue(core);
         yield return new WaitUntil(() => core.onTrain);
         movementInputs.canMove = true;

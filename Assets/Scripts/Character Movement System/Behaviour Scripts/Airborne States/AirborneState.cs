@@ -104,7 +104,6 @@ public class AirborneState : State
 
     private IEnumerator HeavyLandSequence()
     {
-        Debug.Log("now heavy landing");
         yield return new WaitUntil(() => collisionChecker.grounded == true);
 
         movementInputs.canMove = false;

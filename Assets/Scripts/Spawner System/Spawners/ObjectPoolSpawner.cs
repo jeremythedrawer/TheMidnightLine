@@ -16,7 +16,11 @@ public class ObjectPoolSpawner : Spawner
     public ObjectPool<SpawnedPrefab> prefabPool { get; private set; }
 
 
-
+    public override void OnValidate()
+    {
+        base.OnValidate();
+        SetSpawnerPos();
+    }
     public virtual void Start()
     {
         SetSpawnerPos();

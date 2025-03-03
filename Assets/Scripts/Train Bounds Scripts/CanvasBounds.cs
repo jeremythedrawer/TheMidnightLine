@@ -7,9 +7,9 @@ public class CanvasBounds : Bounds
     public float canvasWidthBuffer;
 
     [Range(0, 1)]
-    public float backgroundDepthMin = 0.9f;
+    public float bgDepthMin = 0.9f;
     [Range(0, 1)]
-    public float backgroundDepthMax = 0.6f;
+    public float bgDepthMax = 0.6f;
     public float farClipPlanePos { get; private set; }
     public float nearClipPlanePos { get; private set; }
     private float top => transform.position.y + canvasHeight;

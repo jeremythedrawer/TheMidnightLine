@@ -3,6 +3,7 @@ using System.Collections;
 
 public class ParallaxController : MonoBehaviour
 {
+    [HideInInspector] public float spawnPosition;
     private Camera cam => GlobalReferenceManager.Instance.mainCam;
     private TrainData trainData => GlobalReferenceManager.Instance.trainData;
     private CanvasBounds canvasBounds => GlobalReferenceManager.Instance.canvasBounds;
@@ -11,6 +12,8 @@ public class ParallaxController : MonoBehaviour
     private Vector2 startPos;
     private float startZ;
 
+    private SpriteRenderer[] spriteRenderers;
+    private SpriteRenderer rightMostSprite;
     public float parallaxFactor {  get; private set; }
 
     private float currentTrainDistanceMoved;
@@ -18,12 +21,37 @@ public class ParallaxController : MonoBehaviour
     private float distanceFromClipPlaneZ;
     private float clipPlaneZ;
 
-    private bool parallaxEnabled;
+    private bool parallaxActive;
+    private bool isOneShot;
+    private bool withinDistance;
 
     private void Awake()
     {
         parentSpawner = GetComponentInParent<Spawner>();
         spriteRenderer = GetComponent<SpriteRenderer>();
+        isOneShot = parentSpawner is OneShotSpawner;
+
+
+        if (isOneShot)
+        {
+            spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
+            SpriteRenderer currentSpriteRen;
+            for (int i = 0; i < spriteRenderers.Length; i++)
+            {
+                currentSpriteRen = spriteRenderers[i];
+                if (i == 0)
+                {
+                    rightMostSprite = currentSpriteRen;
+                }
+                else
+                {
+                    if (currentSpriteRen.bounds.max.x > rightMostSprite.bounds.max.x)
+                    {
+                        rightMostSprite = currentSpriteRen;
+                    }
+                }
+            }
+        }
     }
     private void OnEnable()
     {
@@ -33,9 +61,18 @@ public class ParallaxController : MonoBehaviour
     private void Update()
     {
         if (trainData == null || parentSpawner == null) return;
-        bool withinDistance = trainData.metersTravelled > parentSpawner.startSpawnDistance && trainData.metersTravelled < parentSpawner.endSpawnDistance;
+
+        if (isOneShot)
+        {
+            withinDistance = trainData.metersTravelled >= spawnPosition && rightMostSprite.bounds.max.x > canvasBounds.left;
+        }
+        else
+        {
+            withinDistance = trainData.metersTravelled > parentSpawner.startSpawnDistance && trainData.metersTravelled < parentSpawner.endSpawnDistance;
+        }
+
         bool inCanvasBounds =  spriteRenderer.bounds.min.x < canvasBounds.right && spriteRenderer.bounds.max.x > canvasBounds.left;
-        parallaxEnabled = withinDistance || inCanvasBounds;
+        parallaxActive = withinDistance || inCanvasBounds;
         
     }
     public void Initialize()
@@ -53,9 +90,9 @@ public class ParallaxController : MonoBehaviour
     private IEnumerator ScrollingObject()
     {
         yield return new WaitUntil(()=> trainData.arrivedToStartPosition);
-        yield return new WaitUntil(()=> parallaxEnabled);
+        yield return new WaitUntil(()=> parallaxActive);
         Initialize();
-        while (parallaxEnabled)
+        while (parallaxActive)
         {
             UpdatePos();
             yield return null;

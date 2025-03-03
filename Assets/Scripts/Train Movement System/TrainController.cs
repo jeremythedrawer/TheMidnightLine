@@ -21,13 +21,18 @@ public class TrainController : MonoBehaviour
     {   
         while (trainData == null) { await Task.Yield(); }
         while (currentStation == null) { await Task.Yield(); }
-        while (boundsMaxX < currentStation.decelThreshold) { await Task.Yield(); } // wait until train cross decel threshold
-        await UpdateSpeed(0);
-        await UnlockDoors();
-        await LockDoors();
-        await ParentCharacters();
-        trainData.UpdateStationQueue();
-        await UpdateSpeed(100);
+
+        while (trainData.stationDataQueue.Count > 0)
+        {
+            while (boundsMaxX < currentStation.decelThreshold) { await Task.Yield(); } // wait until train cross decel threshold
+            await UpdateSpeed(0);
+            await UnlockDoors();
+            await LockDoors();
+            await ParentCharacters();
+            trainData.UpdateStationQueue();
+            float currentMaxSpeed = currentStation.trainExitSpeed;
+            await UpdateSpeed(currentMaxSpeed);
+        }
 
     }
     private async Task UpdateSpeed(float newSpeed)
@@ -86,7 +91,7 @@ public class TrainController : MonoBehaviour
     private async Task LockDoors()
     {
         while (currentStation.charactersList.Count != 0) { await Task.Yield(); }
-        await Task.Delay(1000);
+        await Task.Delay(8000);
         List<SlideDoorBounds> openDoors = slideDoorsList.Where(slideDoors => slideDoors.openDoor).ToList();
         foreach (SlideDoorBounds slideDoors in openDoors)
         {
