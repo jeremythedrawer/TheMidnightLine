@@ -45,7 +45,7 @@ public class TrainData : MonoBehaviour
     //StationData
     private List<StationData> stationDataList => GlobalReferenceManager.Instance.stations;
     public Queue<StationData> stationDataQueue = new Queue<StationData>();
-    public StationData currentStation { get; private set; }
+    public StationData nextStation { get; private set; }
     //Characters
     public List<StateCore> charactersList = new List<StateCore>();
 
@@ -98,13 +98,13 @@ public class TrainData : MonoBehaviour
 
     public async void UpdateStationQueue()
     {
-        if (currentStation != null)
+        if (nextStation != null)
         {
             stationDataQueue.Dequeue();
         }
         while (stationDataQueue.Count == 0) { await Task.Yield(); } //wait for queue to fill
 
-        currentStation = stationDataQueue.Peek();
+        nextStation = stationDataQueue.Peek();
     }
     private void SetStationDataList()
     {

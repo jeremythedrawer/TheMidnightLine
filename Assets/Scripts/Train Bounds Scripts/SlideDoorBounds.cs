@@ -62,7 +62,7 @@ public class SlideDoorBounds : Bounds
         character.boxCollider2D.excludeLayers &= ~(1 << trainGroundLayer);
         character.collisionChecker.activeGroundLayer = 1 << trainGroundLayer;
         trainData.charactersList.Add(character);
-        trainData.currentStation.charactersList.Remove(character);
+        trainData.nextStation.charactersList.Remove(character);
         await Task.Yield();
     }
     private void OnTriggerEnter2D(Collider2D collision)

@@ -1,5 +1,4 @@
 using System;
-using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -30,23 +29,14 @@ public class CalmPath : ToEnvironmentPaths
 
         //slide doors
         bool onStationGround = pathData.collisionChecker.activeGroundLayer == 1 << stationGroundLayer;
-        bool arrivedAtDepartureStation = bystanderBrain?.departureStation == trainData.currentStation;
-        bool enteringTrain = onStationGround && !arrivedAtDepartureStation;
-        bool exitingTrain = pathData.trainData.kmPerHour == 0 && arrivedAtDepartureStation;
+        bool departingAtNextStation = bystanderBrain?.departureStation == trainData.nextStation;
+        bool enteringTrain = onStationGround && !departingAtNextStation;
 
-        if (enteringTrain || exitingTrain)
+        if (enteringTrain)
         {
-            //when train position is updating at start of level
-            if (npcCore.startingStation == GlobalReferenceManager.Instance.stations[0] && enteringTrain)
-            {
-                await EnterTrain(currentPos);
-            }
-            else
-            {
-                AddToPath(SlideDoorsPath(currentPos), PathData.PosType.SlidingDoors);
-            }
+            await EnterTrain(currentPos);
         }
-        else
+        else if (!departingAtNextStation)
         {
             await GetSeatPath(currentPos);
 
@@ -55,12 +45,23 @@ public class CalmPath : ToEnvironmentPaths
                 await GetStandPath(currentPos);
             }
         }
+        else
+        {
+            await ExitTrain(currentPos);
+        }
     }
     private async Task EnterTrain(Vector2 currentPos)
     {
         while (trainData.kmPerHour > 0) { await Task.Yield(); }
         chosenSlidingDoorsPos = SlideDoorsPath(currentPos);
         AddToPath(chosenSlidingDoorsPos, PathData.PosType.SlidingDoors);
+    }
+    private async Task ExitTrain(Vector2 currentPos)
+    {
+        chosenSlidingDoorsPos = SlideDoorsPath(currentPos);
+        AddToPath(chosenSlidingDoorsPos, PathData.PosType.SlidingDoors);
+        while (trainData.kmPerHour > 0) await Task.Yield();
+        //Exit Train
     }
     private async Task GetSeatPath(Vector2 currentPos)
     {
@@ -99,7 +100,8 @@ public class CalmPath : ToEnvironmentPaths
                 {
                     npcCore.movementInputs.canMove = false;
                     pathToTarget[pathToTarget.Count - 1] = new PathData.NamedPosition(chosenSeat.pos, PathData.PosType.Seat);
-                    await Task.Delay(500);
+                    int randomDelay = UnityEngine.Random.Range(0, 500);
+                    await Task.Delay(randomDelay);
                     npcCore.movementInputs.canMove = true;
                 }
             }

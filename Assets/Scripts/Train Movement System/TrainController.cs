@@ -8,7 +8,7 @@ public class TrainController : MonoBehaviour
     public float easeOutTime { get; private set; }
     public float easeInTime { get; private set; }
     private TrainData trainData => GlobalReferenceManager.Instance.trainData;
-    private StationData currentStation => trainData.currentStation;
+    private StationData currentStation => trainData.nextStation;
     private float boundsMaxX => trainData.boundsMaxX;
     private List<SlideDoorBounds> slideDoorsList => trainData.slideDoorsList;
 

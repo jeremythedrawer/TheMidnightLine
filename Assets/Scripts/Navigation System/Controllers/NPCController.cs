@@ -23,14 +23,18 @@ public abstract class NPCController : MonoBehaviour
     private float distanceToTarget;
     private bool closeEnough;
     private bool finishedPath;
-    private List<PathData.NamedPosition> calmPathToTarget => calmPath.pathData.pathToTarget;
+    private List<PathData.NamedPosition> calmPathToTarget => pathData.pathToTarget;
     private float targetPosX = float.MaxValue;
 
     private bool adjustPath = true;
+    private bool isBystander;
+    private BystanderBrain bystanderBrain;
 
     private void Awake()
     {
         pathData = GetComponent<PathData>();
+        isBystander = npcCore is BystanderBrain;
+        if (isBystander) { bystanderBrain = npcCore as BystanderBrain; }
     }
     public void CalmInputs()
     {
@@ -80,6 +84,8 @@ public abstract class NPCController : MonoBehaviour
                 }
                 else
                 {
+                    movementInputs.canMove = true;
+                    npcCore.isSitting = false;
                     FollowCalmPath(currentPos, colliderCenter);
                 }
                 break;
@@ -88,13 +94,22 @@ public abstract class NPCController : MonoBehaviour
                 if (closeEnough)
                 {
                     //set sitting parameters
-                    movementInputs.walkInput = 0;
+                    movementInputs.canMove = false;
                     npcCore.isSitting = true;
                     npcCore.characterMaterial.SendCharToSeatLayer();
                     //set chosen seat to filled
-                    SeatData seatData = calmPath.pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex];
+                    if(pathData.chosenSeatBounds == null) return;
+                    SeatData seatData = pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex];
                     seatData.filled = true;
                     pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex] = seatData;
+
+                    if (isBystander)
+                    {
+                        if (bystanderBrain.departureStation == trainData.nextStation)
+                        {
+                            FollowCalmPath(currentPos, colliderCenter);
+                        }
+                    }
                 }
                 else
                 {
@@ -108,6 +123,13 @@ public abstract class NPCController : MonoBehaviour
                     movementInputs.walkInput = 0;
                     npcCore.isStanding = true;
                     npcCore.characterMaterial.SendCharToStandLayer();
+                    if (isBystander)
+                    {
+                        if (bystanderBrain.departureStation == trainData.nextStation)
+                        {
+                            FollowCalmPath(currentPos, colliderCenter);
+                        }
+                    }
                 }
                 else
                 {

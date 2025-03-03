@@ -26,8 +26,8 @@ public class LevelManager : MonoBehaviour
 
     private async Task MoveTrainToDecelThreshold()
     {
-        while (trainData.currentStation == null) { await Task.Yield(); }
-        while (trainData.boundsMaxX < trainData.currentStation.decelThreshold)
+        while (trainData.nextStation == null) { await Task.Yield(); }
+        while (trainData.boundsMaxX < trainData.nextStation.decelThreshold)
         {
             float newTrainPosX = startingTrainPos.x + trainData.metersTravelled;
             trainData.transform.position = new Vector2(newTrainPosX, startingTrainPos.y);
