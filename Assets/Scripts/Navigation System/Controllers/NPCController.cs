@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+
 using UnityEngine;
 using static SeatBounds;
 
@@ -40,27 +41,29 @@ public abstract class NPCController : MonoBehaviour
     {
         colliderCenter = npcCore.boxCollider2D.size.y / 2f;
         currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, colliderCenter);
+
         if (calmPathToTarget.Count == 0)
         {
-            if(!closeEnough)
-            {
-                FollowCalmPath(currentPos, colliderCenter);
-                return;
-            }
-            else
-            {
-                return;
-            }
+            FollowCalmPath(currentPos, colliderCenter);
+            return;
+        }
+        targetPosX = calmPathToTarget[0].value.x;
+        distanceToTarget = Mathf.Abs(currentPos.x - targetPosX);
+        closeEnough = distanceToTarget < 0.1;
+
+        if (!closeEnough)
+        {
+            npcCore.isSitting = false;
+            FollowCalmPath(currentPos, colliderCenter);
+            return;
         }
 
         PathData.PosType nextPosType = calmPathToTarget[0].type;
-        targetPosX = calmPathToTarget[0].value.x;
-        distanceToTarget = Mathf.Abs(currentPos.x - targetPosX);
-        closeEnough = distanceToTarget < 0.1;;
         switch (nextPosType)
         {
-            case PathData.PosType.SlidingDoors:
-                if (closeEnough)
+            case PathData.PosType.SlidingDoors: //TODO: seperate from entering and exiting
+            {
+                if (bystanderBrain?.departureStation != trainData.nextStation)
                 {
                     if (trainData.kmPerHour == 0)
                     {
@@ -74,6 +77,7 @@ public abstract class NPCController : MonoBehaviour
                             pathData.chosenSlideDoorBounds.characterQueue.Enqueue(npcCore);
                         }
                     }
+
                     if (pathData.chosenSlideDoorBounds.normMoveDoorTime >= 1)
                     {
                         if (npcCore.onTrain)
@@ -84,58 +88,51 @@ public abstract class NPCController : MonoBehaviour
                 }
                 else
                 {
-                    movementInputs.canMove = true;
-                    npcCore.isSitting = false;
-                    FollowCalmPath(currentPos, colliderCenter);
+                    movementInputs.walkInput = 0;
+                    if (trainData.kmPerHour == 0)
+                    {
+                        FollowCalmPath(currentPos, colliderCenter);
+                    }
                 }
+            }
                 break;
 
             case PathData.PosType.Seat:
-                if (closeEnough)
-                {
-                    //set sitting parameters
-                    movementInputs.canMove = false;
-                    npcCore.isSitting = true;
-                    npcCore.characterMaterial.SendCharToSeatLayer();
-                    //set chosen seat to filled
-                    if(pathData.chosenSeatBounds == null) return;
-                    SeatData seatData = pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex];
-                    seatData.filled = true;
-                    pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex] = seatData;
+            {
+                //set sitting parameters
+                movementInputs.walkInput = 0;
+                npcCore.isSitting = true;
+                npcCore.characterMaterial.SendCharToSeatLayer();
+                //set chosen seat to filled
+                if(pathData.chosenSeatBounds == null) return;
+                SeatData seatData = pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex];
+                seatData.filled = true;
+                pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex] = seatData;
 
-                    if (isBystander)
+                if (isBystander)
+                {
+                    if (bystanderBrain.departureStation == trainData.nextStation)
                     {
-                        if (bystanderBrain.departureStation == trainData.nextStation)
-                        {
-                            FollowCalmPath(currentPos, colliderCenter);
-                        }
+                        FollowCalmPath(currentPos, colliderCenter);
                     }
                 }
-                else
-                {
-                    FollowCalmPath(currentPos, colliderCenter);
-                }
-                break;
+            }
+            break;
 
             case PathData.PosType.Stand:
-                if (closeEnough)
+            {
+                movementInputs.walkInput = 0;
+                npcCore.isStanding = true;
+                npcCore.characterMaterial.SendCharToStandLayer();
+                if (isBystander)
                 {
-                    movementInputs.walkInput = 0;
-                    npcCore.isStanding = true;
-                    npcCore.characterMaterial.SendCharToStandLayer();
-                    if (isBystander)
+                    if (bystanderBrain.departureStation == trainData.nextStation)
                     {
-                        if (bystanderBrain.departureStation == trainData.nextStation)
-                        {
-                            FollowCalmPath(currentPos, colliderCenter);
-                        }
+                        FollowCalmPath(currentPos, colliderCenter);
                     }
                 }
-                else
-                {
-                    FollowCalmPath(currentPos, colliderCenter);
-                }
-                break;
+            }
+            break;
         }
     }
 

@@ -98,9 +98,10 @@ public class CalmPath : ToEnvironmentPaths
                 }
                 else if (pathToTarget[pathToTarget.Count - 1].value != chosenSeat.pos)
                 {
+                    Debug.Log("changing seats");
                     npcCore.movementInputs.canMove = false;
                     pathToTarget[pathToTarget.Count - 1] = new PathData.NamedPosition(chosenSeat.pos, PathData.PosType.Seat);
-                    int randomDelay = UnityEngine.Random.Range(0, 500);
+                    int randomDelay = UnityEngine.Random.Range(100, 500);
                     await Task.Delay(randomDelay);
                     npcCore.movementInputs.canMove = true;
                 }
