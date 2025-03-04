@@ -47,7 +47,8 @@ public class TrainData : MonoBehaviour
     public Queue<StationData> stationDataQueue = new Queue<StationData>();
     public StationData nextStation { get; private set; }
     //Characters
-    public List<StateCore> charactersList = new List<StateCore>();
+    public List<StateCore> charactersOnTrain = new List<StateCore>();
+    public List<StateCore> bystandersDeparting = new List<StateCore>();
 
     private void Awake()
     {

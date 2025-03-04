@@ -14,6 +14,7 @@ public class GlobalReferenceManager : MonoBehaviour
 
     public int stationGroundLayer { get; private set; }
     public int trainGroundLayer { get; private set; }
+    public int exitGroundLayer { get; private set; }
 
     private void Awake()
     {
@@ -37,6 +38,7 @@ public class GlobalReferenceManager : MonoBehaviour
         SetStationDataList();
         stationGroundLayer = LayerMask.NameToLayer("Station Ground");
         trainGroundLayer = LayerMask.NameToLayer("Train Ground");
+        exitGroundLayer = LayerMask.NameToLayer("Exit Ground");
     }
 
     private void InstantiateManager()

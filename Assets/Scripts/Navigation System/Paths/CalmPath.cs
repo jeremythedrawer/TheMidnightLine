@@ -47,8 +47,32 @@ public class CalmPath : ToEnvironmentPaths
         }
         else
         {
-            await ExitTrain(currentPos);
+            if (bystanderBrain.onTrain)
+            {
+                await ExitTrain(currentPos);
+            }
+            else if (pathData.chosenExitBounds == null)
+            {
+                await GetExitBoundsPath(currentPos);
+            }
+            else
+            {
+                await GetDisableBoundsPath(currentPos);
+            }
         }
+    }
+
+    private async Task GetDisableBoundsPath(Vector2 currentPos)
+    {
+        Vector2 disablePos = pathData.chosenExitBounds.disableBounds.transform.position;
+        AddToPath(disablePos, PathData.PosType.DisableBound);
+        await Task.Yield();
+    }
+    private async Task GetExitBoundsPath(Vector2 currentPos)
+    {
+        chosenExitPos = ExitBoundsPath(currentPos);
+        AddToPath(chosenExitPos, PathData.PosType.ExitBound);
+        await Task.Yield();
     }
     private async Task EnterTrain(Vector2 currentPos)
     {
@@ -98,7 +122,6 @@ public class CalmPath : ToEnvironmentPaths
                 }
                 else if (pathToTarget[pathToTarget.Count - 1].value != chosenSeat.pos)
                 {
-                    Debug.Log("changing seats");
                     npcCore.movementInputs.canMove = false;
                     pathToTarget[pathToTarget.Count - 1] = new PathData.NamedPosition(chosenSeat.pos, PathData.PosType.Seat);
                     int randomDelay = UnityEngine.Random.Range(100, 500);

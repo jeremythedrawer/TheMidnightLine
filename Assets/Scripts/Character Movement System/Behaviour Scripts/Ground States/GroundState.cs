@@ -87,7 +87,7 @@ public class GroundState : State
         SlideDoorBounds.Instance.OpenDoors();
         yield return new WaitUntil(() => SlideDoorBounds.Instance.normMoveDoorTime >= 1);
 
-        SlideDoorBounds.Instance.characterQueue.Enqueue(core);
+        SlideDoorBounds.Instance.enteringcharacterQueue.Enqueue(core);
         yield return new WaitUntil(() => core.onTrain);
         movementInputs.canMove = true;
     }

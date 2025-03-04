@@ -2,6 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 
 using UnityEngine;
+using UnityEngine.TextCore.Text;
 using static SeatBounds;
 
 public abstract class NPCController : MonoBehaviour
@@ -72,9 +73,9 @@ public abstract class NPCController : MonoBehaviour
                     }
                     if (pathData.chosenSlideDoorBounds.boxCollider.bounds.Intersects(npcCore.boxCollider2D.bounds))
                     {
-                        if (!pathData.chosenSlideDoorBounds.characterQueue.Contains(npcCore))
+                        if (!pathData.chosenSlideDoorBounds.enteringcharacterQueue.Contains(npcCore))
                         {
-                            pathData.chosenSlideDoorBounds.characterQueue.Enqueue(npcCore);
+                            pathData.chosenSlideDoorBounds.enteringcharacterQueue.Enqueue(npcCore);
                         }
                     }
 
@@ -89,9 +90,24 @@ public abstract class NPCController : MonoBehaviour
                 else
                 {
                     movementInputs.walkInput = 0;
+                    if (!trainData.bystandersDeparting.Contains(npcCore))
+                    {
+                        trainData.bystandersDeparting.Add(npcCore);
+                    }
                     if (trainData.kmPerHour == 0)
                     {
-                        FollowCalmPath(currentPos, colliderCenter);
+                        pathData.chosenSlideDoorBounds.OpenDoors();
+                        if (pathData.chosenSlideDoorBounds.normMoveDoorTime >= 1 && pathData.chosenExitBounds == null)
+                        {
+                            FollowCalmPath(currentPos, colliderCenter);
+                        }
+                        else if (pathData.chosenSlideDoorBounds.boxCollider.bounds.Intersects(npcCore.boxCollider2D.bounds))
+                        {
+                            if (!pathData.chosenSlideDoorBounds.exitingcharacterQueue.Contains(npcCore))
+                            {
+                                pathData.chosenSlideDoorBounds.exitingcharacterQueue.Enqueue(npcCore);
+                            }
+                        }
                     }
                 }
             }
@@ -133,6 +149,22 @@ public abstract class NPCController : MonoBehaviour
                 }
             }
             break;
+
+            case PathData.PosType.ExitBound:
+            {
+                npcCore.collisionChecker.activeGroundLayer = 1 << GlobalReferenceManager.Instance.exitGroundLayer;
+                npcCore.spriteRenderer.sortingOrder = -1;
+                npcCore.boxCollider2D.excludeLayers |= 1 << GlobalReferenceManager.Instance.stationGroundLayer;
+                FollowCalmPath(currentPos, colliderCenter );
+            }
+            break;
+
+            case PathData.PosType.DisableBound:
+            {
+                //insert bystander to object pool
+            }
+            break;
+
         }
     }
 
@@ -142,6 +174,7 @@ public abstract class NPCController : MonoBehaviour
 
         if (adjustPath)
         {
+            Debug.Log("setting path");
             calmPath.SetPath(currentPos, colliderCenter);
             adjustPath = false;
         }
@@ -169,7 +202,10 @@ public abstract class NPCController : MonoBehaviour
     {
         if (closeEnough)
         {
-            calmPathToTarget.RemoveAt(0);
+            if (calmPathToTarget.Count > 0)
+            {
+                calmPathToTarget.RemoveAt(0);
+            }
             adjustPath = true;
         }
     }

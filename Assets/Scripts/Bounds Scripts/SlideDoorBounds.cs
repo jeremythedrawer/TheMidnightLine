@@ -27,7 +27,8 @@ public class SlideDoorBounds : Bounds
     public float normMoveDoorTime {  get; private set; }
     public BoxCollider2D boxCollider { get; private set; }
 
-    public Queue<StateCore> characterQueue = new Queue<StateCore>();
+    public Queue<StateCore> enteringcharacterQueue = new Queue<StateCore>();
+    public Queue<StateCore> exitingcharacterQueue = new Queue<StateCore>();
 
     private void Awake()
     {
@@ -37,32 +38,48 @@ public class SlideDoorBounds : Bounds
     {
         leftDoorSprite = leftDoor.gameObject.GetComponent<SpriteRenderer>();
         doorWidth = leftDoorSprite.sprite.bounds.size.x;
-        TransferNPCsToTrain();
+        TransferCharacters();
 
     }
-    private async void TransferNPCsToTrain()
+    private async void TransferCharacters()
     {
         while (true)
         {
-            while (characterQueue.Count > 0 && normMoveDoorTime >= 1)
+            while (exitingcharacterQueue.Count > 0 && normMoveDoorTime >= 1)
             {
-                StateCore characterEnteringTrain = characterQueue.Peek();
-                await BoardCharacters(characterEnteringTrain);
+                StateCore characterExitingTrain = exitingcharacterQueue.Peek();
+                await TransferCharacter(characterExitingTrain, false);
                 await Task.Delay(250);
-                characterQueue.Dequeue();
+                exitingcharacterQueue.Dequeue();
+            }
+
+            while (enteringcharacterQueue.Count > 0 && normMoveDoorTime >= 1)
+            {
+                StateCore characterEnteringTrain = enteringcharacterQueue.Peek();
+                await TransferCharacter(characterEnteringTrain, true);
+                await Task.Delay(250);
+                enteringcharacterQueue.Dequeue();
             }
             await Task.Yield();
         }
     }
 
-    private async Task BoardCharacters(StateCore character)
+    private async Task TransferCharacter(StateCore character, bool enteringTrain)
     {
-        character.spriteRenderer.sortingOrder = 6;
-        character.boxCollider2D.excludeLayers |= 1 << stationGroundLayer;
-        character.boxCollider2D.excludeLayers &= ~(1 << trainGroundLayer);
-        character.collisionChecker.activeGroundLayer = 1 << trainGroundLayer;
-        trainData.charactersList.Add(character);
-        trainData.nextStation.charactersList.Remove(character);
+        character.spriteRenderer.sortingOrder = enteringTrain? 6 : 1;
+        character.boxCollider2D.excludeLayers |= 1 << (enteringTrain ? stationGroundLayer : trainGroundLayer);
+        character.boxCollider2D.excludeLayers &= ~(1 << (enteringTrain ? trainGroundLayer : stationGroundLayer));
+        character.collisionChecker.activeGroundLayer = 1 << (enteringTrain ? trainGroundLayer : stationGroundLayer);
+
+        if (enteringTrain)
+        {
+            trainData.charactersOnTrain.Add(character);
+            trainData.nextStation.charactersList.Remove(character);
+        }
+        else
+        {
+            trainData.charactersOnTrain.Remove(character);
+        }
         await Task.Yield();
     }
     private void OnTriggerEnter2D(Collider2D collision)

@@ -15,6 +15,7 @@ public class PathData : MonoBehaviour
     public ClimbingBounds chosenClimbingBounds { get; set; }
     public SeatBounds chosenSeatBounds { get; set; }
     public SlideDoorBounds chosenSlideDoorBounds { get; set; }
+    public ExitBounds chosenExitBounds { get; set; }
     public enum PosType
     {
         InsideBound,
@@ -25,6 +26,8 @@ public class PathData : MonoBehaviour
         Seat,
         Stand,
         SlidingDoors,
+        ExitBound,
+        DisableBound,
         Player
     }
 

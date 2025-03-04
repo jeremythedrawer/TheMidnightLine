@@ -7,30 +7,33 @@ public class TrainController : MonoBehaviour
 {
     public float easeOutTime { get; private set; }
     public float easeInTime { get; private set; }
-    private TrainData trainData => GlobalReferenceManager.Instance.trainData;
-    private StationData currentStation => trainData.nextStation;
+    
+    private TrainData trainData;
+    private StationData nextStation => trainData.nextStation;
     private float boundsMaxX => trainData.boundsMaxX;
     private List<SlideDoorBounds> slideDoorsList => trainData.slideDoorsList;
 
     public float setSpeed { get; private set; }
     private void Start()
     {
+        trainData = GlobalReferenceManager.Instance.trainData;
         setSpeed = trainData.kmPerHour;
     }
     public async void TrainInputs()
     {   
         while (trainData == null) { await Task.Yield(); }
-        while (currentStation == null) { await Task.Yield(); }
+        while (nextStation == null) { await Task.Yield(); }
 
         while (trainData.stationDataQueue.Count > 0)
         {
-            while (boundsMaxX < currentStation.decelThreshold) { await Task.Yield(); } // wait until train cross decel threshold
+            while (boundsMaxX < nextStation.decelThreshold) { await Task.Yield(); } // wait until train cross decel threshold
             await UpdateSpeed(0);
             await UnlockDoors();
+            await UnparentCharactersDeparting();
             await LockDoors();
-            await ParentCharacters();
+            await ParentCharactersBoarding();
             trainData.UpdateStationQueue();
-            float currentMaxSpeed = currentStation.trainExitSpeed;
+            float currentMaxSpeed = nextStation.trainExitSpeed;
             await UpdateSpeed(currentMaxSpeed);
         }
 
@@ -41,7 +44,7 @@ public class TrainController : MonoBehaviour
 
         float startSpeed = trainData.kmPerHour;
 
-        float stoppingDistance = currentStation.accelerationThresholds + trainData.boundsHalfXDistance;
+        float stoppingDistance = nextStation.accelerationThresholds + trainData.boundsHalfXDistance;
 
         float startMetersTravelled = trainData.metersTravelled;
         float newMetersTravelled = startMetersTravelled + stoppingDistance;
@@ -90,8 +93,8 @@ public class TrainController : MonoBehaviour
 
     private async Task LockDoors()
     {
-        while (currentStation.charactersList.Count != 0) { await Task.Yield(); }
-        await Task.Delay(8000);
+        while (nextStation.charactersList.Count != 0 || trainData.bystandersDeparting.Count != 0) { await Task.Yield(); }
+        await Task.Delay(5000);
         List<SlideDoorBounds> openDoors = slideDoorsList.Where(slideDoors => slideDoors.openDoor).ToList();
         foreach (SlideDoorBounds slideDoors in openDoors)
         {
@@ -104,14 +107,24 @@ public class TrainController : MonoBehaviour
         }
     }
 
-    private async Task ParentCharacters()
+    private async Task ParentCharactersBoarding()
     {
-        foreach (StateCore character in trainData.charactersList)
+        foreach (StateCore character in trainData.charactersOnTrain)
         {
             if (character is BystanderBrain) character.transform.SetParent(trainData.bystandersParent);
             else if (character is AgentBrain) character.transform.SetParent(trainData.agentsParent);
             else if (character is PlayerBrain) character.transform.SetParent(trainData.playerParent);
         }
+        await Task.Yield();
+    }
+    private async Task UnparentCharactersDeparting()
+    {
+        foreach (StateCore character in trainData.bystandersDeparting)
+        {
+            character.transform.SetParent(trainData.nextStation.bystanderParent);
+            trainData.nextStation.charactersList.Add(character);
+        }
+        trainData.bystandersDeparting.Clear();
         await Task.Yield();
     }
 }

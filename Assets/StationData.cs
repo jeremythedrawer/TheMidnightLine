@@ -3,19 +3,27 @@ using UnityEngine;
 
 public class StationData : MonoBehaviour
 {
+    [Header("References")]
+    public Transform bystanderParent;
     [Header("Parameters")]
     public float accelerationThresholds;
     public float trainExitSpeed;
+
     private int stationGroundLayer => GlobalReferenceManager.Instance.stationGroundLayer;
     private int trainGroundLayer => GlobalReferenceManager.Instance.trainGroundLayer;
     public float decelThreshold => transform.position.x - accelerationThresholds;
     public float accelThreshold => transform.position.x + accelerationThresholds;
 
+    public DisableBounds disableBounds { get; private set; }
+
+    public List<ExitBounds> exitBoundsList {  get; private set; }
     public List<StateCore> charactersList {  get; private set; }
 
     private void Awake()
     {
         charactersList = new List<StateCore>(GetComponentsInChildren<StateCore>());
+        exitBoundsList = new List<ExitBounds>(GetComponentsInChildren<ExitBounds>());
+        disableBounds = GetComponentInChildren<DisableBounds>();
     }
     private void OnDrawGizmos()
     {
