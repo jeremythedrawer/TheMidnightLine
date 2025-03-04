@@ -31,6 +31,10 @@ public class AgentController : NPCController
         }
     }
 
+    public void StalkInputs()
+    {
+
+    }
     private void FollowAttackPath()
     {
         colliderCenter = npcCore.boxCollider2D.size.y / 2f;

@@ -64,6 +64,7 @@ public abstract class ToEnvironmentPaths : PathController
                 chosenSlideDoorsIndex = i;
             }
         }
+        
         return chosenSlideDoorsIndex;
     }
 }

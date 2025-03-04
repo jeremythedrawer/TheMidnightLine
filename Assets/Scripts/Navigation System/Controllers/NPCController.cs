@@ -32,17 +32,29 @@ public abstract class NPCController : MonoBehaviour
     private bool isBystander;
     private BystanderBrain bystanderBrain;
 
+    private int startingStationIndex;
+    private int currentStationIndex => GlobalReferenceManager.Instance.stations.IndexOf(trainData.nextStation);
+
+    private bool startInputs;
     private void Awake()
     {
         pathData = GetComponent<PathData>();
         isBystander = npcCore is BystanderBrain;
         if (isBystander) { bystanderBrain = npcCore as BystanderBrain; }
     }
+    private void Start()
+    {
+        
+        startingStationIndex = GlobalReferenceManager.Instance.stations.IndexOf(npcCore.startingStation);
+    }
     public void CalmInputs()
     {
+        if (currentStationIndex >= startingStationIndex && trainData.kmPerHour == 0) startInputs = true;
+
+        if (!startInputs) return;
+
         colliderCenter = npcCore.boxCollider2D.size.y / 2f;
         currentPos = new Vector2(transform.position.x, transform.position.y) + new Vector2(0, colliderCenter);
-
         if (calmPathToTarget.Count == 0)
         {
             FollowCalmPath(currentPos, colliderCenter);
@@ -174,7 +186,6 @@ public abstract class NPCController : MonoBehaviour
 
         if (adjustPath)
         {
-            Debug.Log("setting path");
             calmPath.SetPath(currentPos, colliderCenter);
             adjustPath = false;
         }
