@@ -7,9 +7,9 @@ using static InsideBounds;
 
 public class CalmPath : ToEnvironmentPaths
 {
-    protected SeatBounds chosenChairBounds => pathData.chosenSeatBounds;
+    protected SeatBounds chosenSeatBounds => pathData.chosenSeatBounds;
     public List<SeatBounds.SeatData> seats => pathData.chosenSeatBounds.seats;
-    public SeatBounds.SeatData chosenSeat {  get; private set; }
+    public SeatBounds.SeatData chosenSeat {  get; set; }
     public Vector2 chosenStandPos { get; private set; }
     public int chosenSeatIndex { get; private set; }
 
@@ -38,12 +38,7 @@ public class CalmPath : ToEnvironmentPaths
         }
         else if (!departingAtNextStation)
         {
-            await GetSeatPath(currentPos);
-
-            if (pathData.chosenSeatBounds == null || chosenSeat.filled)
-            {
-                await GetStandPath(currentPos);
-            }
+            await GetOnTrainPath(currentPos);
         }
         else
         {
@@ -87,52 +82,71 @@ public class CalmPath : ToEnvironmentPaths
         while (trainData.kmPerHour > 0) await Task.Yield();
         //Exit Train
     }
-    private async Task GetSeatPath(Vector2 currentPos)
+    private async Task GetOnTrainPath(Vector2 currentPos)
     {
         while (pathData.currentInsideBounds == null) { await Task.Yield(); }
 
+        await FindSeat(currentPos);
+       
         while (!npcCore.isSitting)
         {
-            pathData.chosenSeatBounds = FindChosenChairBounds(currentPos);
-            if (pathData.chosenSeatBounds == null) return;
-
-            float[] seatDistances = new float[seats.Count];
-            for (int i = 0; i < seatDistances.Length; i++)
+            if (chosenSeatBounds == null)
             {
-                if (!seats[i].filled) // check if seat is empty and add to array
-                {
-                    float distanceToSeat = Vector2.Distance(currentPos, seats[i].pos);
-                    seatDistances[i] = distanceToSeat;
-                }
-                else
-                {
-                    seatDistances[i] = float.MaxValue;
-                }
+                pathToTarget.RemoveAt(0);
+                await GetStandPath(currentPos);
+                return;
             }
 
-            float smallestDistance = seatDistances.Min();
-            chosenSeatIndex = Array.IndexOf(seatDistances, smallestDistance);
-
-            if (!seats[chosenSeatIndex].filled)
+            if (chosenSeat.filled)
+            {
+                await FindSeat(currentPos);
+            }
+            else
             {
                 chosenSeat = seats[chosenSeatIndex];
-                if (pathToTarget.Count == 0)
-                {
-                    AddToPath(chosenSeat.pos, PathData.PosType.Seat);
-                }
-                else if (pathToTarget[pathToTarget.Count - 1].value != chosenSeat.pos)
-                {
-                    npcCore.movementInputs.canMove = false;
-                    pathToTarget[pathToTarget.Count - 1] = new PathData.NamedPosition(chosenSeat.pos, PathData.PosType.Seat);
-                    int randomDelay = UnityEngine.Random.Range(100, 500);
-                    await Task.Delay(randomDelay);
-                    npcCore.movementInputs.canMove = true;
-                }
             }
-            
-            if (chosenSeat.filled) continue;
-            if (chosenChairBounds.isFull) break;
+
             await Task.Yield();
+        }
+    }
+
+    private async Task FindSeat(Vector2 currentPos)
+    {
+        pathData.chosenSeatBounds = FindChosenChairBounds(currentPos);
+        if (pathData.chosenSeatBounds == null) return;
+
+        float[] seatDistances = new float[seats.Count];
+        for (int i = 0; i < seatDistances.Length; i++)
+        {
+            if (!seats[i].filled) // check if seat is empty and add to array
+            {
+                float distanceToSeat = Vector2.Distance(currentPos, seats[i].pos);
+                seatDistances[i] = distanceToSeat;
+            }
+            else
+            {
+                seatDistances[i] = float.MaxValue;
+            }
+        }
+
+        float smallestDistance = seatDistances.Min();
+        chosenSeatIndex = Array.IndexOf(seatDistances, smallestDistance);
+
+        if (!seats[chosenSeatIndex].filled)
+        {
+            chosenSeat = seats[chosenSeatIndex];
+            if (pathToTarget.Count == 0)
+            {
+                AddToPath(chosenSeat.pos, PathData.PosType.Seat);
+            }
+            else
+            {
+                npcCore.movementInputs.canMove = false;
+                pathToTarget[pathToTarget.Count - 1] = new PathData.NamedPosition(chosenSeat.pos, PathData.PosType.Seat);
+                int randomDelay = UnityEngine.Random.Range(100, 500);
+                await Task.Delay(randomDelay);
+                npcCore.movementInputs.canMove = true;
+            }
         }
     }
     private async Task GetStandPath(Vector2 currentPos)

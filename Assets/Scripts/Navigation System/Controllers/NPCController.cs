@@ -66,7 +66,6 @@ public abstract class NPCController : MonoBehaviour
 
         if (!closeEnough)
         {
-            npcCore.isSitting = false;
             FollowCalmPath(currentPos, colliderCenter);
             return;
         }
@@ -141,6 +140,9 @@ public abstract class NPCController : MonoBehaviour
                 {
                     if (bystanderBrain.departureStation == trainData.nextStation)
                     {
+                        seatData.filled = false;
+                        pathData.chosenSeatBounds.seats[calmPath.chosenSeatIndex] = seatData;
+                        npcCore.isSitting = false;
                         FollowCalmPath(currentPos, colliderCenter);
                     }
                 }
