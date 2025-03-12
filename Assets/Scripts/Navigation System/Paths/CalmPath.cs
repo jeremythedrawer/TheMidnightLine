@@ -1,4 +1,5 @@
 using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
@@ -17,10 +18,10 @@ public class CalmPath : ToEnvironmentPaths
 
     private float standingPosThreshold = 8f;
 
-    public override void Awake()
+    public override void Start()
     {
-        base.Awake();
-        bystanderBrain = npcCore as BystanderBrain;
+        base.Start();
+        bystanderBrain = npcCore as BystanderBrain;   
     }
 
     public override async void SetPath(Vector2 currentPos, float colliderCentre)

@@ -109,7 +109,7 @@ public class CollisionChecker : MonoBehaviour
 
     private void Start()
     {
-        activeGroundLayer = 1 << GlobalReferenceManager.Instance.trainGroundLayer;
+        activeGroundLayer = 1 << GlobalReferenceManager.Instance.stationGroundLayer;
     }
     private void FixedUpdate()
     {

@@ -13,10 +13,10 @@ public class PathController : MonoBehaviour
     protected TrainData trainData => pathData.trainData;
     public bool isFindingMovingPathPoint { get; private set; }
 
-    public virtual void Awake()
+    public virtual void Start()
     {
         pathData = GetComponentInParent<PathData>();
-        npcCore = GetComponentInParent<NPCCore>();
+        npcCore = GetComponentInParent<NPCCore>();    
     }
     public virtual void SetPath(Vector2 currentPos, float colliderCentre)
     {

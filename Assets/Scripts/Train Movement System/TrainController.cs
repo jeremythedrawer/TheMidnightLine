@@ -121,7 +121,7 @@ public class TrainController : MonoBehaviour
     {
         foreach (StateCore character in trainData.bystandersDeparting)
         {
-            character.transform.SetParent(trainData.nextStation.bystanderParent);
+            character.transform.SetParent(trainData.nextStation.bystanderSpawner.transform);
         }
         await Task.Yield();
     }

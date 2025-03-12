@@ -11,7 +11,8 @@ public class BystanderBrain : NPCCore
     public bool isFleeing { get; private set; }
     public bool isLeaving { get; private set; }
 
-    void Start()
+
+    private void Start()
     {
         SetupInstances();
         SetupNPCInstances();
@@ -21,6 +22,7 @@ public class BystanderBrain : NPCCore
 
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
         playerBrain = playerTransform.GetComponent<PlayerBrain>();
+        
     }
 
     void Update()

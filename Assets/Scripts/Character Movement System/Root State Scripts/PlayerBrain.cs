@@ -2,12 +2,15 @@ using UnityEngine;
 
 public class PlayerBrain : StateCore
 {
+    int stationGroundLayer => GlobalReferenceManager.Instance.stationGroundLayer;
     void Start()
     {
         SetupInstances();
         Set(stateList.airborneState);
 
         initialGravityScale = body.gravityScale;
+
+        StartPlayerAtStation();
     }
     void Update()
     {
@@ -27,7 +30,7 @@ public class PlayerBrain : StateCore
 
         state.FixedDoBranch();
     }
-    void SelectState()
+    private void SelectState()
     {
         if ((currentClimbBounds?.hangActivated ?? false || stateList.wallState.isClimbing == true) && !movementInputs.crouchInput)
         {
@@ -45,7 +48,6 @@ public class PlayerBrain : StateCore
             }
         }
     }
-
     private void GetPlayerInputs()
     {
         movementInputs.walkInput = Input.GetAxisRaw("Horizontal");
@@ -58,5 +60,15 @@ public class PlayerBrain : StateCore
 
         movementInputs.meleeInput = Input.GetKeyDown(KeyCode.E) && onTrain;
         movementInputs.enterTrainInput = Input.GetKeyDown(KeyCode.E) && !onTrain;
+    }
+
+    private void StartPlayerAtStation()
+    {
+        spriteRenderer.sortingOrder = 1;
+
+        boxCollider2D.excludeLayers |= 1 << trainGroundLayer;
+        boxCollider2D.excludeLayers &= ~(1 << stationGroundLayer);
+
+        collisionChecker.activeGroundLayer = 1 << stationGroundLayer;
     }
 }

@@ -4,13 +4,14 @@ using System.Threading.Tasks;
 using System.Collections;
 public class LevelManager : MonoBehaviour
 {
-    [Header("References")]
-    private TrainData trainData => GlobalReferenceManager.Instance.trainData;
-    private TrainController trainController => GlobalReferenceManager.Instance.trainController;
+    private TrainData trainData;
+    private TrainController trainController;
 
     private Vector2 startingTrainPos;
+
     void Start()
     {
+        SetCompenents();
         StartSequence();
     }
 
@@ -22,8 +23,6 @@ public class LevelManager : MonoBehaviour
         await MoveTrainToStart();
         await SetTrainObjectsData();
     }
-
-
     private async Task MoveTrainToDecelThreshold()
     {
         while (trainData.nextStation == null) { await Task.Yield(); }
@@ -46,7 +45,6 @@ public class LevelManager : MonoBehaviour
         trainData.transform.position = new Vector2(0, startingTrainPos.y);
         trainData.arrivedToStartPosition = true;
     }
-
     private async Task SetTrainObjectsData()
     {
         while (trainData.kmPerHour != 0) await Task.Yield();
@@ -54,5 +52,11 @@ public class LevelManager : MonoBehaviour
         {
             setsOfSeats.SetSeatData();
         }
+    }
+
+    private void SetCompenents()
+    {
+        trainData = GlobalReferenceManager.Instance.trainData;
+        trainController = GlobalReferenceManager.Instance.trainController;
     }
 }

@@ -7,9 +7,10 @@ public class SpawnedPrefab : MonoBehaviour
     public ParallaxController parallaxController { get; private set; }
     public Spawner spawner {  get; private set; }
 
-    private void Awake()
+    private void Start()
     {
         SetComponents();
+        
     }
 
     private void OnEnable()

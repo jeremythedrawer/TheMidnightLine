@@ -8,15 +8,16 @@ public class AgentBrain : NPCCore
     public bool isStalking { get; private set; }
     public bool isAttacking { get; private set; }
     public AgentController agentController => controller as AgentController;
-    void Start()
+
+    private void OnEnable()
     {
         SetupInstances();
         SetupNPCInstances();
         Set(stateList.calmState);
 
         initialGravityScale = body.gravityScale;
+       
     }
-
     void Update()
     {
         currentAnimStateInfo = animator.GetCurrentAnimatorStateInfo(0);

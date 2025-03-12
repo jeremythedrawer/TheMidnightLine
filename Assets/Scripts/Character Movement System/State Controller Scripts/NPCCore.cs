@@ -1,19 +1,23 @@
 using UnityEngine;
 
-public abstract class NPCCore : StateCore
+public class NPCCore : StateCore
 {
     [Header("NPC Core References")]
     public BehaviourParams behaviourParams;
     public PathData pathData;
     
     public NPCController controller;
-    public StationData startingStation {  get; private set; }
+    public StationData startingStation {  get; set; }
+    public AnimatorOverrideController animatorOverride { get; set; }
+    public Material material { get; set; }
     public bool isSitting {  get; set; }
     public bool isStanding { get; set; }
 
-    private void Awake()
+    private void OnEnable()
     {
-        startingStation = transform.parent.transform.parent.transform.parent.GetComponent<StationData>();
+        //controlled by npc pool
+        animator.runtimeAnimatorController = animatorOverride;
+        spriteRenderer.material = material;       
     }
     public void SetupNPCInstances()
     {

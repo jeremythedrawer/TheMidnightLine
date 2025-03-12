@@ -30,7 +30,7 @@ public abstract class StateCore : MonoBehaviour
 
     protected float normalizedAnimTime;
     public bool isDropping {  get; set; }
-    private int trainGroundLayer => GlobalReferenceManager.Instance.trainGroundLayer;
+    protected int trainGroundLayer => GlobalReferenceManager.Instance.trainGroundLayer;
     public bool onTrain => collisionChecker.activeGroundLayer == 1 << trainGroundLayer;
     protected void Set(State newState)
     {
