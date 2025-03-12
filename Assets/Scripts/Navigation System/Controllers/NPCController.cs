@@ -73,7 +73,7 @@ public abstract class NPCController : MonoBehaviour
         PathData.PosType nextPosType = calmPathToTarget[0].type;
         switch (nextPosType)
         {
-            case PathData.PosType.SlidingDoors: //TODO: seperate from entering and exiting
+            case PathData.PosType.SlidingDoors:
             {
                 if (bystanderBrain?.departureStation != trainData.nextStation)
                 {
@@ -98,13 +98,14 @@ public abstract class NPCController : MonoBehaviour
                         }
                     }
                 }
-                else
+                else // bystander leaving train
                 {
                     movementInputs.walkInput = 0;
-                    if (!trainData.bystandersDeparting.Contains(npcCore))
+                    if (!trainData.bystandersDeparting.Contains(npcCore) && npcCore.onTrain)
                     {
                         trainData.bystandersDeparting.Add(npcCore);
                     }
+
                     if (trainData.kmPerHour == 0)
                     {
                         pathData.chosenSlideDoorBounds.OpenDoors();
@@ -166,6 +167,10 @@ public abstract class NPCController : MonoBehaviour
 
             case PathData.PosType.ExitBound:
             {
+                if (trainData.bystandersDeparting.Contains(npcCore))
+                {
+                    trainData.bystandersDeparting.Remove(npcCore);
+                }
                 npcCore.collisionChecker.activeGroundLayer = 1 << GlobalReferenceManager.Instance.exitGroundLayer;
                 npcCore.spriteRenderer.sortingOrder = -1;
                 npcCore.boxCollider2D.excludeLayers |= 1 << GlobalReferenceManager.Instance.stationGroundLayer;
@@ -175,7 +180,7 @@ public abstract class NPCController : MonoBehaviour
 
             case PathData.PosType.DisableBound:
             {
-                //insert bystander to object pool
+                //TODO: insert bystander to object pool
             }
             break;
 

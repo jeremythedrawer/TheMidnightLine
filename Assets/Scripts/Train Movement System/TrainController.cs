@@ -122,9 +122,7 @@ public class TrainController : MonoBehaviour
         foreach (StateCore character in trainData.bystandersDeparting)
         {
             character.transform.SetParent(trainData.nextStation.bystanderParent);
-            trainData.nextStation.charactersList.Add(character);
         }
-        trainData.bystandersDeparting.Clear();
         await Task.Yield();
     }
 }

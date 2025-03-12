@@ -79,6 +79,7 @@ public class SlideDoorBounds : Bounds
         else
         {
             trainData.charactersOnTrain.Remove(character);
+            trainData.bystandersDeparting.Remove(character);
         }
         await Task.Yield();
     }
