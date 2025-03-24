@@ -1,27 +1,12 @@
 using System.Collections.Generic;
-using System.Linq;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class StationData : MonoBehaviour
 {
-    public BystanderSpawner bystanderSpawner {  get; private set; }
-    public AgentSpawner agentSpawner {  get; private set; }
-
-    public ParallaxController parallaxController { get; private set; }
     [Header("Parameters")]
     public float accelerationThresholds;
     public float trainExitSpeed;
     public bool drawDebugLines;
-
-    public float decelThreshold => transform.position.x - accelerationThresholds;
-    public float accelThreshold => transform.position.x + accelerationThresholds;
-
-    public DisableBounds disableBounds { get; private set; }
-
-    public List<ExitBounds> exitBoundsList {  get; private set; }
-    public List<StateCore> charactersList { get; set; } = new List<StateCore>();
-
     [System.Serializable]
     public struct SpawnArea
     {
@@ -42,19 +27,26 @@ public class StationData : MonoBehaviour
     [SerializeField]
     public SpawnArea[] spawnAreas;
 
+
+    public BystanderSpawner bystanderSpawner {  get; private set; }
+    public AgentSpawner agentSpawner {  get; private set; }
+
+    public ParallaxController parallaxController { get; private set; }
+
+    public float decelThreshold => transform.position.x - accelerationThresholds;
+    public float accelThreshold => transform.position.x + accelerationThresholds;
+
+    public DisableBounds disableBounds { get; private set; }
+
+    public List<ExitBounds> exitBoundsList {  get; private set; }
+    public List<StateCore> charactersList { get; set; } = new List<StateCore>();
+
+
     private InsideBounds[] trainDataInsideBounds;
 
 
     public int bystanderSpawnCount { get; private set; }
     public int agentSpawnCount { get; private set; }
-    private void OnDrawGizmos()
-    {
-        if (drawDebugLines)
-        {
-            DrawAccelThresholds(true);
-            DrawSpawnAreas();
-        }
-    }
 
     private void Start()
     {
@@ -77,9 +69,17 @@ public class StationData : MonoBehaviour
             agentSpawnCount += spawnArea.agentCount;
         }
     }
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        if (drawDebugLines)
+        {
+            DrawAccelThresholds(true);
+            DrawSpawnAreas();
+        }
+    }
     private void DrawAccelThresholds(bool usingGizmos)
     {
-#if UNITY_EDITOR
         float decelX = transform.position.x - accelerationThresholds;
         float accelX = transform.position.x + accelerationThresholds;
         float height = 10;
@@ -101,8 +101,8 @@ public class StationData : MonoBehaviour
             Debug.DrawLine(decelUpperOrigin , decelLowerOrigin, Color.red);
             Debug.DrawLine(accelLowerOrigin , accelUpperOrigin, Color.blue);
         }
-#endif
     }
+#endif
     public void SetSpawnAreas()
     {
         GetInsideBounds();

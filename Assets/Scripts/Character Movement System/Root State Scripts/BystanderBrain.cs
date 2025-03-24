@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class BystanderBrain : NPCCore
 {
-    public StationData departureStation; //TODO: fill in this variable for every bystander
+    public StationData departureStation;
     public Transform playerTransform { get; private set; }
     private PlayerBrain playerBrain;
 

@@ -7,6 +7,20 @@ public class BystanderSpawner : NPCSpawner
     private int trainGroundLayer => GlobalReferenceManager.Instance.trainGroundLayer;
     private int stationGroundLayer => GlobalReferenceManager.Instance.stationGroundLayer;
 
+    [System.Serializable]
+    public struct StationToDepartAt
+    {
+        public StationData station;
+        public int bystandersToDepart;
+
+        public StationToDepartAt(StationData station, int bystandersToDepart)
+        {
+            this.station = station;
+            this.bystandersToDepart = bystandersToDepart;
+        }
+    }
+
+    public List<StationToDepartAt> stationsToDepartAt;
     private int bystandersToGet;
     private StationData station;
     private BystanderPool pool;
