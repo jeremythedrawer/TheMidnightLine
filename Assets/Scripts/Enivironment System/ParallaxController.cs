@@ -1,5 +1,8 @@
 using UnityEngine;
 using System.Collections;
+using System.Collections.Generic;
+using System.Linq;
+using UnityEngine.U2D;
 
 public class ParallaxController : MonoBehaviour
 {
@@ -7,13 +10,11 @@ public class ParallaxController : MonoBehaviour
     private Camera cam => GlobalReferenceManager.Instance.mainCam;
     private TrainData trainData => GlobalReferenceManager.Instance.trainData;
     private CanvasBounds canvasBounds => GlobalReferenceManager.Instance.canvasBounds;
-    private SpriteRenderer spriteRenderer;
     private Spawner parentSpawner;
     private Vector2 startPos;
     private float startZ;
 
-    private SpriteRenderer[] spriteRenderers;
-    private SpriteRenderer rightMostSprite;
+    private Renderer[] edgeRenderers;
     public float parallaxFactor {  get; private set; }
 
     private float currentTrainDistanceMoved;
@@ -28,29 +29,27 @@ public class ParallaxController : MonoBehaviour
     private void Awake()
     {
         parentSpawner = GetComponentInParent<Spawner>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
         isOneShot = parentSpawner is OneShotSpawner;
 
+        List<Renderer> allRenderers = new List<Renderer>(GetComponents<Renderer>());
+        allRenderers.AddRange(GetComponentsInChildren<Renderer>());
 
-        if (isOneShot)
+        if (allRenderers.Count > 1)
         {
-            spriteRenderers = GetComponentsInChildren<SpriteRenderer>();
-            SpriteRenderer currentSpriteRen;
-            for (int i = 0; i < spriteRenderers.Length; i++)
+            Renderer leftMost = allRenderers[0];
+            Renderer rightMost = allRenderers[0];
+
+            foreach (Renderer r in allRenderers)
             {
-                currentSpriteRen = spriteRenderers[i];
-                if (i == 0)
-                {
-                    rightMostSprite = currentSpriteRen;
-                }
-                else
-                {
-                    if (currentSpriteRen.bounds.max.x > rightMostSprite.bounds.max.x)
-                    {
-                        rightMostSprite = currentSpriteRen;
-                    }
-                }
+                if (r.bounds.min.x < leftMost.bounds.min.x) leftMost = r;
+                if (r.bounds.max.x > rightMost.bounds.max.x) rightMost = r;
             }
+
+            edgeRenderers = new Renderer[] { leftMost, rightMost };
+        }
+        else
+        {
+            edgeRenderers = allRenderers.ToArray();
         }
     }
     private void OnEnable()
@@ -62,16 +61,22 @@ public class ParallaxController : MonoBehaviour
     {
         if (trainData == null || parentSpawner == null) return;
 
+        Renderer leftRenderer = edgeRenderers[0];
+        Renderer rightRenderer = edgeRenderers.Length > 1 ? edgeRenderers[^1] : leftRenderer;
+
         if (isOneShot)
         {
-            withinDistance = trainData.metersTravelled >= spawnPosition && rightMostSprite.bounds.max.x > canvasBounds.left;
+            withinDistance = trainData.metersTravelled >= spawnPosition && rightRenderer.bounds.max.x > canvasBounds.left;
         }
         else
         {
             withinDistance = trainData.metersTravelled > parentSpawner.startSpawnDistance && trainData.metersTravelled < parentSpawner.endSpawnDistance;
         }
 
-        bool inCanvasBounds =  spriteRenderer.bounds.min.x < canvasBounds.right && spriteRenderer.bounds.max.x > canvasBounds.left;
+
+        bool inCanvasBounds = leftRenderer.bounds.min.x < canvasBounds.right &&
+                              rightRenderer.bounds.max.x > canvasBounds.left;
+
         parallaxActive = withinDistance || inCanvasBounds;
         
     }

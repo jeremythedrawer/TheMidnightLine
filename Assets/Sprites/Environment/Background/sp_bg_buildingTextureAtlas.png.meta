@@ -1,10 +1,10 @@
 fileFormatVersion: 2
-guid: 0dd4e9f513284c64a9e1960098c18ff8
+guid: 34fd626a9efbf154c81a0479a6963304
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8477944250225702492
-    second: sp_bg_stationPlatform_atlas_0
+      213: 947332178560538909
+    second: sp_bg_buildingTextureAtlas_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -40,9 +40,9 @@ TextureImporter:
     filterMode: 0
     aniso: 1
     mipBias: 0
-    wrapU: 1
-    wrapV: 1
-    wrapW: 1
+    wrapU: 0
+    wrapV: 0
+    wrapW: 0
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -51,10 +51,10 @@ TextureImporter:
   spriteMeshType: 0
   alignment: 0
   spritePivot: {x: 0.5, y: 0.5}
-  spritePixelsToUnits: 37
+  spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
-  alphaUsage: 1
+  alphaUsage: 0
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
   textureType: 8
@@ -75,7 +75,7 @@ TextureImporter:
     maxTextureSize: 2048
     resizeAlgorithm: 1
     textureFormat: -1
-    textureCompression: 1
+    textureCompression: 0
     compressionQuality: 50
     crunchedCompression: 0
     allowsAlphaSplitting: 0
@@ -113,14 +113,14 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: sp_bg_stationPlatform_atlas_0
+      name: sp_bg_buildingTextureAtlas_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 256
-        width: 1024
-        height: 128
-      alignment: 6
+        y: 0
+        width: 511
+        height: 256
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -128,52 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4a94bbb5f9a485a80800000000000000
-      internalID: -8477944250225702492
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: sp_bg_stationPlatform_atlas_1
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 128
-        width: 1024
-        height: 128
-      alignment: 6
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 6d78e1ac30ac7e3409f6ec628eb05bff
-      internalID: 1510167421
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: sp_bg_stationPlatform_atlas_2
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 0
-        width: 1024
-        height: 128
-      alignment: 6
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: 0
-      bones: []
-      spriteID: 1964e136be19e4b4d99364c158df09b9
-      internalID: -1416276798
+      spriteID: d19d563e899952d00800000000000000
+      internalID: 947332178560538909
       vertices: []
       indices: 
       edges: []
@@ -182,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 4bea60e9a96a00c4c9e7d0690906e270
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -192,9 +148,7 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      sp_bg_stationPlatform_atlas_0: -8477944250225702492
-      sp_bg_stationPlatform_atlas_1: 1510167421
-      sp_bg_stationPlatform_atlas_2: -1416276798
+      sp_bg_buildingTextureAtlas_0: 947332178560538909
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
