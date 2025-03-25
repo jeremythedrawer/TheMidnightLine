@@ -4,7 +4,7 @@ float HorizontalPos(float uvX, float atlasSizeX, float index)
 	xPos = floor(xPos);
 	xPos = xPos / atlasSizeX;
 
-	float uvXScale = uvX / atlasSizeX;
+    float uvXScale = uvX / atlasSizeX;
 	
 	xPos = xPos + uvXScale;
 	return xPos;
@@ -17,16 +17,19 @@ float VerticalPos(float uvY, float2 atlasSize, float index)
 	yPos = atlasSize.y - yPos - 1;
 	yPos = yPos / atlasSize.y;
 	
-	float uvYScale = uvY / atlasSize.y;
+    float uvYScale = uvY / atlasSize.y;
 	
 	yPos = yPos + uvYScale;
 	
 	return yPos;
 }
 
-float2 TextureAtlasUV (float2 uv, float2 atlasSize, float index)
+float2 TextureAtlasUV (float2 uv, float2 atlasSize, float index, float scale)
 {
+    float maxSize = max(atlasSize.x, atlasSize.y);
+    uv *= scale;
+    uv = abs(fmod(uv, 1 / maxSize));
 	float xPos = HorizontalPos(uv.x, atlasSize.x, index);
 	float yPos = VerticalPos(uv.y, atlasSize, index);
-	return float2(xPos, yPos);
+    return float2(xPos, yPos);
 }

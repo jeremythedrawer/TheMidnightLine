@@ -34,8 +34,8 @@ public class CanvasBounds : Bounds
 
     private void OnDrawGizmos()
     {
-        Helpers.DrawSquare(topRight, bottomLeft, Color.black, farClipPlanePos, true);
-        Helpers.DrawSquare(topRight, bottomLeft, Color.black, nearClipPlanePos, true);
+        Helpers.DrawSquare(topRight, bottomLeft, Color.red, farClipPlanePos, true);
+        Helpers.DrawSquare(topRight, bottomLeft, Color.red, nearClipPlanePos, true);
     }
 
     private void Awake()

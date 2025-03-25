@@ -2,7 +2,10 @@ Shader "Unlit/s_bgAtlas"
 {
     Properties
     {
-        [NoScaleOffset] _MainTex ("Main Texture", 2D) = "white" {}
+        [HideInInspector] _MainTex ("Main Texture", 2D) = "white" {}
+        _AtlasSize ("Atlas Size", vector) = (1,1,0,0)
+        _Index ("Index", float) = 0
+        _Scale("Scale", float) = 1
     }
     SubShader
     {
@@ -26,6 +29,7 @@ Shader "Unlit/s_bgAtlas"
             CBUFFER_START(UnityPerMaterial)                
                 vector _AtlasSize;
                 int _Index;
+                float _Scale;
             CBUFFER_END
 
 
@@ -100,7 +104,9 @@ Shader "Unlit/s_bgAtlas"
 
                 half4 frag (Varyings i) : SV_TARGET
                 {
-                    const half4 sampledMainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                    float2 atlasUV = TextureAtlasUV(i.uv, _AtlasSize, _Index, _Scale);
+                    //return half4(atlasUV, 0, 1);
+                    const half4 sampledMainTex = SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, atlasUV);
                     const half3 mainTex = i.color + sampledMainTex.rgb;
                     const half mask = sampledMainTex.a;
 
@@ -108,7 +114,7 @@ Shader "Unlit/s_bgAtlas"
                     InputData2D inputData;
 
                     InitializeSurfaceData(mainTex.rgb, sampledMainTex.a, mask, surfaceData);
-                    InitializeInputData(i.uv, i.lightingUV, inputData);
+                    InitializeInputData(atlasUV, i.lightingUV, inputData);
 
                     return CombinedShapeLightShared(surfaceData, inputData);
                 }
