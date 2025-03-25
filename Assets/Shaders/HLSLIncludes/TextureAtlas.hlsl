@@ -27,8 +27,8 @@ float VerticalPos(float uvY, float2 atlasSize, float index)
 float2 TextureAtlasUV (float2 uv, float2 atlasSize, float index, float scale)
 {
     float maxSize = max(atlasSize.x, atlasSize.y);
-    uv *= scale;
-    uv = abs(fmod(uv, 1 / maxSize));
+    uv *= atlasSize * scale;
+    uv = fmod(uv, 1 / maxSize);
 	float xPos = HorizontalPos(uv.x, atlasSize.x, index);
 	float yPos = VerticalPos(uv.y, atlasSize, index);
     return float2(xPos, yPos);
