@@ -18,7 +18,6 @@ public class BackgroundSpawner : ObjectPoolSpawner
     }
     private void OnDrawGizmosSelected()
     {
-        Debug.Log("Drawing gizmos");
         DrawRandomXFactor();
         DrawLodRange();
     }

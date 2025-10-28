@@ -32,7 +32,7 @@ public class MeleeState : State
 
     public void DealDamage(int attackIndex)
     {
-        if (core is PlayerBrain)
+        if (core is SpyBrain)
         {
             foreach (Collider2D agentCollider in meleeColliderData.agentColliders)
             {
@@ -51,7 +51,7 @@ public class MeleeState : State
 
     private void MeleeAnimationController()
     {
-        if (core is PlayerBrain)
+        if (core is SpyBrain)
         {
             if (!playingAnimation)
             {

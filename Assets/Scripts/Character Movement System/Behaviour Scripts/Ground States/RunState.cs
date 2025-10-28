@@ -48,7 +48,6 @@ public class RunState : State
         if (!startRunAnimation)
         {
             startRunAnimation = true;
-            animator.Play(animStates.startRunAnimState, 0, 0);
         }
         else
         {

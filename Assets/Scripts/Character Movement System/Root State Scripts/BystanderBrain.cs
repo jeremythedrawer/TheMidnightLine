@@ -4,7 +4,7 @@ public class BystanderBrain : NPCCore
 {
     public StationData departureStation;
     public Transform playerTransform { get; private set; }
-    private PlayerBrain playerBrain;
+    private SpyBrain playerBrain;
 
     public bool isCalm {  get; private set; }
     public bool isPanic { get; private set; }
@@ -21,7 +21,7 @@ public class BystanderBrain : NPCCore
         initialGravityScale = body.gravityScale;
 
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        playerBrain = playerTransform.GetComponent<PlayerBrain>();
+        playerBrain = playerTransform.GetComponent<SpyBrain>();
         
     }
 
@@ -71,15 +71,15 @@ public class BystanderBrain : NPCCore
 
     private void PanicChecker()
     {
-       if (playerBrain.stateList.meleeState.landedHit)
-        {
-            isPanic = true;
-            isCalm = false;
-        }
-       else
-        {
-            isPanic = false;
-            isCalm = true;
-        }
+       //if (playerBrain.stateList.meleeState.landedHit)
+       // {
+       //     isPanic = true;
+       //     isCalm = false;
+       // }
+       //else
+       // {
+       //     isPanic = false;
+       //     isCalm = true;
+       // }
     }
 }
