@@ -116,6 +116,7 @@ public class SpyBrain : MonoBehaviour
         soData.stats.gravityScale = componentData.rigidBody.gravityScale;
         soData.stats.startPos = componentData.rigidBody.position;
         soData.stats.curGroundMask = LayerMask.GetMask("Station Ground");
+        componentData.rigidBody.excludeLayers |= LayerMask.GetMask("Train Ground");
         soData.stats.curRunSpeed = 1.0f;
         soData.stats.curJumpHorizontalForce = 0.0f;
     }
