@@ -12,10 +12,10 @@ public class SpySettingsSO : ScriptableObject
     public float groundDecelaration = 14f;
 
     [Header("Jumping")]
-    public float jumpForce = 4f;
+    public float jumpVerticalForce = 4f;
+    [Range(1f, 40f)] public float jumpHorizontalForce = 20f;
     [Range(0f, 1f)] public float jumpBufferTime = 0.2f;
     public float maxFallSpeed = 6f;
-    [Range(1f, 40f)] public float horizontalJumpForceMultiplier = 20f;
     [Range(0f, 0.25f)] public float coyoteTime = 0.125f;
 
 

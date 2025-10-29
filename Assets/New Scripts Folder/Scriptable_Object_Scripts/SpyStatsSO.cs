@@ -15,6 +15,7 @@ public class SpyStatsSO : ScriptableObject
     internal float curRunSpeed;
     internal float gravityScale;
 
+    internal float curJumpHorizontalForce;
     internal bool willJump;
     internal float lastJumpTime;
     internal bool isGrounded;

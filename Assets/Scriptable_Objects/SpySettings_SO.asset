@@ -13,13 +13,14 @@ MonoBehaviour:
   m_Name: SpySettings_SO
   m_EditorClassIdentifier: 
   health: 100
-  runSpeed: 5
+  moveSpeed: 5
+  runSpeedMultiplier: 2
   groundAccelation: 12
   groundDecelaration: 0.5
-  jumpForce: 15
+  jumpVerticalForce: 15
+  jumpHorizontalForce: 5
   jumpBufferTime: 0.2
   maxFallSpeed: 20
-  horizontalJumpForceMultiplier: 5
   coyoteTime: 0.125
   antiGravApexThreshold: 5
   gravityScale: 6
