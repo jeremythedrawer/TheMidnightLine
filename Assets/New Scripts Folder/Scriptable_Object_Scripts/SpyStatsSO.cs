@@ -12,6 +12,7 @@ public class SpyStatsSO : ScriptableObject
 
     internal Vector2 moveVelocity;
     internal float targetXVelocity;
+    internal float curRunSpeed;
     internal float gravityScale;
 
     internal bool willJump;

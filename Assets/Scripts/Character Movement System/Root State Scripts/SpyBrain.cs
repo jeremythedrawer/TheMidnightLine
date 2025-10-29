@@ -84,7 +84,6 @@ public class SpyBrain : MonoBehaviour
     {
         CalculateCollisionPoints();
     }
-
     private void Awake()
     {
         componentData.animController = componentData.animator.runtimeAnimatorController;
@@ -112,6 +111,7 @@ public class SpyBrain : MonoBehaviour
         soData.stats.gravityScale = componentData.rigidBody.gravityScale;
         soData.stats.startPos = componentData.rigidBody.position;
         soData.stats.curGroundMask = LayerMask.GetMask("Station Ground");
+        soData.stats.curRunSpeed = 1.0f;
     }
     void Update()
     {
@@ -121,21 +121,20 @@ public class SpyBrain : MonoBehaviour
         soData.stats.curWorldPos = transform.position;
         soData.stats.willJump = Time.time - soData.stats.lastJumpTime <= soData.settings.jumpBufferTime && stateData.curStateType != State.Jump;
         componentData.spriteRenderer.flipX = soData.inputs.move < 0;
+        soData.stats.targetXVelocity = soData.settings.moveSpeed * soData.stats.curRunSpeed * soData.inputs.move;
     }
-
     private void FixedUpdate()
     {
         HandleVelocity();
         FixedUpdateStates();
         CalculateCollisionPoints();
         soData.stats.isGrounded = Physics2D.Linecast(collisionPoints.groundLeft, collisionPoints.groundRight, soData.stats.curGroundMask);
-        soData.stats.targetXVelocity = soData.settings.runSpeed * soData.inputs.move;
     }
 
     private void SelectingStates()
     {
         //TODO do heavy land logic
-        if ((soData.stats.isGrounded && soData.stats.willJump) || componentData.rigidBody.linearVelocityY > 0.1f || soData.stats.coyoteJump)
+        if ((soData.stats.isGrounded && soData.stats.willJump) || componentData.rigidBody.linearVelocityY > 0.01f || soData.stats.coyoteJump)
         {
             SetState(State.Jump);
         }
@@ -160,14 +159,28 @@ public class SpyBrain : MonoBehaviour
     {
         switch (stateData.curStateType)
         {
+            case State.Idle:
+            {
+                if (soData.inputs.jump) { soData.stats.lastJumpTime = Time.time; }
+            }
+            break;
             case State.Move:
             {
+                if (soData.inputs.jump) { soData.stats.lastJumpTime = Time.time; }
+
+                soData.stats.curRunSpeed = soData.inputs.run ? soData.settings.runSpeedMultiplier : 1;
             }
             break;
             case State.Fall:
             {
                 soData.stats.coyoteTimeElapsed += Time.deltaTime;
                 soData.stats.coyoteJump = soData.stats.coyoteTimeElapsed < soData.settings.coyoteTime && soData.inputs.jump;
+
+                if (soData.inputs.jump)
+                { 
+                    soData.stats.lastJumpTime = Time.time; 
+                    soData.inputs.jump = false;
+                }
             }
             break;
         }
@@ -176,14 +189,18 @@ public class SpyBrain : MonoBehaviour
     {
         switch (stateData.curStateType)
         {
+            case State.Move:
+            {
+            }
+            break;
             case State.Jump:
             {
-                soData.stats.targetXVelocity = soData.settings.runSpeed;
+                soData.stats.targetXVelocity = soData.settings.moveSpeed;
 
-                if (!soData.inputs.jump) // enable early fall
-                {
-                    componentData.rigidBody.linearVelocityY = 0;
-                }
+                //if (!soData.inputs.jump) // enable early fall //NOTE: If i want early fall, this will need to be fixed because the velocity is being set to both jump force and 0 at the same time
+                //{
+                //    componentData.rigidBody.linearVelocityY = 0;
+                //}
 
                 if (componentData.rigidBody.linearVelocityY < soData.settings.antiGravApexThreshold)
                 {
@@ -275,22 +292,20 @@ public class SpyBrain : MonoBehaviour
         {
             case State.Idle:
             {
-                if (soData.inputs.jump) { soData.stats.lastJumpTime = Time.time; }
+                
             }
             break;
             case State.Move:
             {
-                if (soData.inputs.jump) { soData.stats.lastJumpTime = Time.time; }
+                soData.stats.curRunSpeed = 1;
             }
             break;
             case State.Melee:
             {
-                if (soData.inputs.jump) { soData.stats.lastJumpTime = Time.time; }
             }
             break;
             case State.Jump:
             {
-                soData.inputs.jump = false;
             }
             break;
 
@@ -321,7 +336,6 @@ public class SpyBrain : MonoBehaviour
         collisionPoints.groundLeft = new Vector2(transform.position.x - soData.settings.groundBufferHorizontal, transform.position.y - soData.settings.groundBufferVertical);
         collisionPoints.groundRight = new Vector2(transform.position.x + soData.settings.groundBufferHorizontal, transform.position.y - soData.settings.groundBufferVertical);
     }
-
     private void ResetStats()
     {
         soData.stats.curHealth = 100;
@@ -331,6 +345,7 @@ public class SpyBrain : MonoBehaviour
         soData.stats.checkpointPos = Vector2.zero;
         soData.stats.moveVelocity = Vector2.zero;
         soData.stats.targetXVelocity = 0.0f;
+        soData.stats.curRunSpeed = 1.0f;
         soData.stats.gravityScale = soData.settings.gravityScale;
         soData.stats.willJump = false;
         soData.stats.lastJumpTime = 0.0f;

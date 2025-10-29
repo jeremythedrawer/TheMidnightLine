@@ -6,7 +6,8 @@ public class SpySettingsSO : ScriptableObject
     [Header("Stats")]
     public int health = 100;
     [Header("Running")]
-    public float runSpeed = 5f;
+    public float moveSpeed = 5f;
+    public float runSpeedMultiplier = 1.5f;
     public float groundAccelation = 12f;
     public float groundDecelaration = 14f;
 
