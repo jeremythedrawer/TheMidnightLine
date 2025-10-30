@@ -80,11 +80,6 @@ public class TrainBrain : MonoBehaviour
 
         gameEventData.OnUnlockSlideDoors.Raise();
     }
-
-    private void SwitchDoorsOpen()
-    {
-        soData.stats.doorsOpen = true;
-    }
     private void ResetStats()
     { 
         soData.stats.curStationIndex = 0;

@@ -7,5 +7,4 @@ public class SpyInputsSO : ScriptableObject
     internal int move;
     internal bool run;
     internal bool melee;
-
 }

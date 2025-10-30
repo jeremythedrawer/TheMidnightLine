@@ -3,8 +3,17 @@ using Proselyte.Sigils;
 using System;
 using UnityEngine;
 
-public class SliderDoors : MonoBehaviour
+public class SlideDoors : MonoBehaviour
 {
+    public enum State
+    { 
+        Locked,
+        Unlocked,
+        Opening,
+        Opened,
+        Closing,
+    }
+
     [Serializable] public struct SOData
     {
         public TrainStatsSO trainStats;
@@ -24,14 +33,16 @@ public class SliderDoors : MonoBehaviour
     }
     [SerializeField] ComponentData componentData;
 
-    [Serializable] public struct StatData
+    [Serializable] public struct StateData
     {
-        internal bool unlocked;
-        internal bool opened;
+       public State curState;
     }
-    [SerializeField] StatData stats;
+    public StateData stateData;
 
-    private delegate void OnMoveDoor();
+    private void Awake()
+    {
+        stateData.curState = State.Locked;
+    }
     private void OnEnable()
     {
         gameEventData.OnUnlockSlideDoors.RegisterListener(UnlockDoors);
@@ -44,14 +55,15 @@ public class SliderDoors : MonoBehaviour
 
     private void UnlockDoors()
     {
-        MoveDoors(moveAmount: soData.trainSettings.slideDoorSprite.bounds.size.x * 0.1f, moveTime: 0.3f, onMoveDoor: () => stats.unlocked = true).Forget();
+        MoveDoors(moveAmount: soData.trainSettings.slideDoorSprite.bounds.size.x * 0.01f, moveTime: 0.3f, State.Unlocked).Forget();
     }
 
     public void OpenDoors()
     {
-        MoveDoors(moveAmount: soData.trainSettings.slideDoorSprite.bounds.size.x * 0.9f, moveTime: soData.trainStats.doorMovingTime, onMoveDoor: () => soData.trainStats.doorsOpen = true).Forget();
+        stateData.curState = State.Opening;
+        MoveDoors(moveAmount: soData.trainSettings.slideDoorSprite.bounds.size.x * 0.99f, moveTime: soData.trainStats.doorMovingTime, State.Opened).Forget();
     }
-    private async UniTaskVoid MoveDoors(float moveAmount, float moveTime, OnMoveDoor onMoveDoor = null)
+    private async UniTaskVoid MoveDoors(float moveAmount, float moveTime, State newState)
     {
         float elapsedTime = 0.0f;
 
@@ -73,6 +85,7 @@ public class SliderDoors : MonoBehaviour
             }
             await UniTask.Yield();
         }
-        onMoveDoor?.Invoke();
+
+        stateData.curState = newState;
     }
 }

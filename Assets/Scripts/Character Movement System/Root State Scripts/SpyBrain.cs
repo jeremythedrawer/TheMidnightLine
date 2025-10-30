@@ -27,6 +27,7 @@ public class SpyBrain : MonoBehaviour
         public Animator animator;
         public SpriteRenderer spriteRenderer;
         internal RuntimeAnimatorController animController;
+        internal SlideDoors slideDoors;
     }
     [SerializeField] ComponentData componentData;
 
@@ -73,6 +74,7 @@ public class SpyBrain : MonoBehaviour
         public SpyStatsSO stats;
         public SpyInputsSO inputs;
         public TrainStatsSO trainStats;
+        public TrainSettingsSO trainSettings;
         public LayerSettingsSO layerSettings;
     }
     [SerializeField] SOData soData;
@@ -113,11 +115,13 @@ public class SpyBrain : MonoBehaviour
     private void OnEnable()
     {
         gameEventData.OnUnlockSlideDoors.RegisterListener(() => soData.stats.canBoardTrain = true);
+        gameEventData.OnInteract.RegisterListener(OpenSlideDoor);
         gameEventData.OnInteract.RegisterListener(EnterTrain);
     }
     private void OnDisable()
     {
         gameEventData.OnUnlockSlideDoors.UnregisterListener(() => soData.stats.canBoardTrain = true);
+        gameEventData.OnInteract.UnregisterListener(OpenSlideDoor);
         gameEventData.OnInteract.UnregisterListener(EnterTrain);
     }
     private void Start()
@@ -138,7 +142,6 @@ public class SpyBrain : MonoBehaviour
         soData.stats.curWorldPos = transform.position;
         soData.stats.willJump = Time.time - soData.stats.lastJumpTime <= soData.settings.jumpBufferTime && stateData.curStateType != State.Jump;
         
-        soData.stats.targetXVelocity = (soData.settings.moveSpeed * soData.stats.curRunSpeed * soData.inputs.move) + (soData.stats.curJumpHorizontalForce * soData.inputs.move);
     }
     private void FixedUpdate()
     {
@@ -146,6 +149,7 @@ public class SpyBrain : MonoBehaviour
         CalculateCollisionPoints();
         soData.stats.isGrounded = Physics2D.Linecast(collisionPoints.groundLeft, collisionPoints.groundRight, componentData.rigidBody.includeLayers);
         
+        soData.stats.targetXVelocity = (soData.settings.moveSpeed * soData.stats.curRunSpeed * soData.inputs.move) + (soData.stats.curJumpHorizontalForce * soData.inputs.move);
         componentData.rigidBody.linearVelocityX = Mathf.Lerp(soData.stats.moveVelocity.x, soData.stats.targetXVelocity, soData.settings.groundAccelation * Time.fixedDeltaTime);
         
         soData.stats.moveVelocity = componentData.rigidBody.linearVelocity;
@@ -386,6 +390,23 @@ public class SpyBrain : MonoBehaviour
         collisionPoints.groundLeft = new Vector2(transform.position.x - soData.settings.groundBufferHorizontal, transform.position.y - soData.settings.groundBufferVertical);
         collisionPoints.groundRight = new Vector2(transform.position.x + soData.settings.groundBufferHorizontal, transform.position.y - soData.settings.groundBufferVertical);
     }
+    private void OpenSlideDoor()
+    {
+        if (componentData.rigidBody.includeLayers == soData.layerSettings.stationGround && soData.stats.canBoardTrain)
+        {
+            RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.slideDoors);
+
+            if (slideDoorHit.collider != null)
+            {
+                componentData.slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
+                if (componentData.slideDoors != null && componentData.slideDoors.stateData.curState == SlideDoors.State.Unlocked) 
+                {
+                    componentData.slideDoors.OpenDoors();
+                }
+            }
+        }
+    }
+
     private void EnterTrain()
     {
         if (componentData.rigidBody.includeLayers == soData.layerSettings.stationGround && soData.stats.canBoardTrain)
@@ -394,8 +415,12 @@ public class SpyBrain : MonoBehaviour
 
             if (slideDoorHit.collider != null)
             {
-                SliderDoors slideDoor = slideDoorHit.collider.GetComponent<SliderDoors>();
-                if (slideDoor != null) { slideDoor.OpenDoors(); }
+                componentData.slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
+                if (componentData.slideDoors != null && componentData.slideDoors.stateData.curState == SlideDoors.State.Opened)
+                {
+                    componentData.rigidBody.includeLayers = soData.layerSettings.trainGround;
+                    transform.position = new Vector3(transform.position.x, transform.position.y, soData.trainSettings.entityDepthRange.x - soData.settings.depthPositionInTrain);
+                }
             }
         }
     }

@@ -7,6 +7,7 @@ public class Carriage : MonoBehaviour
     [Serializable] public struct SOData
     {
         public TrainStatsSO trainStats;
+        public TrainSettingsSO trainSettings;
     }
     [SerializeField] SOData soData;
 
@@ -56,4 +57,10 @@ public class Carriage : MonoBehaviour
         ResetStats();
     }
 
+    private void OnDrawGizmos()
+    {
+        if (soData.trainSettings == null) return;
+        Gizmos.color = Color.blue;
+        Gizmos.DrawLine(new Vector3(transform.position.x, transform.position.y + 2, soData.trainSettings.entityDepthRange.x), new Vector3(transform.position.x, transform.position.y + 2, soData.trainSettings.entityDepthRange.y));
+    }
 }

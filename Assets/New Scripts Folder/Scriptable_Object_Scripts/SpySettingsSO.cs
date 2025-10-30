@@ -5,6 +5,7 @@ public class SpySettingsSO : ScriptableObject
 {
     [Header("Stats")]
     public int health = 100;
+
     [Header("Running")]
     public float moveSpeed = 5f;
     public float runSpeedMultiplier = 1.5f;
@@ -17,8 +18,6 @@ public class SpySettingsSO : ScriptableObject
     [Range(0f, 1f)] public float jumpBufferTime = 0.2f;
     public float maxFallSpeed = 6f;
     [Range(0f, 0.25f)] public float coyoteTime = 0.125f;
-
-
     public float antiGravApexThreshold = 3f;
     public float gravityScale = 6f;
     [Range(0f, 1f)] public float antiGravMultiplier = 0.5f;
@@ -26,4 +25,7 @@ public class SpySettingsSO : ScriptableObject
     [Header("Collisions")]
     [Range(0f, 0.5f)] public float groundBufferVertical = 0.02f;
     [Range(0f, 1f)] public float groundBufferHorizontal = 0.5f;
+
+    [Header("Train")]
+    public int depthPositionInTrain = 1;
 }
