@@ -38,7 +38,16 @@
                     "id": "29cb3758-e4c2-47f0-8d05-8a604357ab6e",
                     "expectedControlType": "",
                     "processors": "",
-                    "interactions": "Hold",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "0019b702-153e-4405-9d44-74cf08b254b0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
                     "initialStateCheck": false
                 }
             ],
@@ -46,7 +55,7 @@
                 {
                     "name": "",
                     "id": "6aca1f18-d5d7-4695-9384-53419fcb33c9",
-                    "path": "<Keyboard>/w",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard",
@@ -77,7 +86,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "WASD",
+                    "name": "AD",
                     "id": "626d557e-2c9d-402c-b9bc-8e7ac09481f2",
                     "path": "2DVector",
                     "interactions": "",
@@ -150,6 +159,28 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Melee",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "53ed4e0b-cf3b-4be7-8c70-37f46505c7a9",
+                    "path": "<Keyboard>/w",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse;Keyboard",
+                    "action": "Interact",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "78a21926-7677-4e99-84ae-eb92f0c6106a",
+                    "path": "<Gamepad>/buttonEast",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

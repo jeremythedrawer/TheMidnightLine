@@ -20,7 +20,7 @@ public class TrainBrain : MonoBehaviour
     [Serializable] public struct GameEventData
     {
         public GameEvent OnReset;
-        public GameEvent OnOpenSlideDoors;
+        public GameEvent OnUnlockSlideDoors;
     }
     [SerializeField] GameEventData gameEventData;
 
@@ -78,9 +78,13 @@ public class TrainBrain : MonoBehaviour
             await UniTask.Yield();
         }
 
-        gameEventData.OnOpenSlideDoors.Raise();
+        gameEventData.OnUnlockSlideDoors.Raise();
     }
 
+    private void SwitchDoorsOpen()
+    {
+        soData.stats.doorsOpen = true;
+    }
     private void ResetStats()
     { 
         soData.stats.curStationIndex = 0;
@@ -92,6 +96,7 @@ public class TrainBrain : MonoBehaviour
         soData.stats.distanceToNextStation = Mathf.Infinity;    
         soData.stats.stoppingDistance = 0.0f;
         soData.stats.startXPos = transform.position.x;
+        soData.stats.degPerMeter = 360.0f / ((soData.settings.wheelSprite.rect.size.x / soData.settings.wheelSprite.pixelsPerUnit) * Mathf.PI);
     }
 
     private void OnDrawGizmos()

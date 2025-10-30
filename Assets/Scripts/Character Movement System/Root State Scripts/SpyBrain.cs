@@ -1,3 +1,4 @@
+using Proselyte.Sigils;
 using System;
 using Unity.Multiplayer.Center.Common.Analytics;
 using Unity.VisualScripting;
@@ -27,7 +28,7 @@ public class SpyBrain : MonoBehaviour
         public SpriteRenderer spriteRenderer;
         internal RuntimeAnimatorController animController;
     }
-    public ComponentData componentData;
+    [SerializeField] ComponentData componentData;
 
     [Serializable]
     public struct StateData
@@ -35,16 +36,16 @@ public class SpyBrain : MonoBehaviour
         public StateSO[] stateSOs;
         internal State curStateType;
     }
-    public StateData stateData;
+    [SerializeField] StateData stateData;
 
-    [Serializable]
-    public struct GameEventData
+    [Serializable] public struct GameEventData
     {
+        public GameEvent OnUnlockSlideDoors;
+        public GameEvent OnInteract;
     }
-    public GameEventData gameEventData;
+    [SerializeField] GameEventData gameEventData;
 
-    [Serializable]
-    public struct AnimClipData
+    [Serializable] public struct AnimClipData
     {
         public AnimationClip startRunClip;
 
@@ -64,24 +65,24 @@ public class SpyBrain : MonoBehaviour
         internal int hangHash;
         internal int climbHash;
     }
-    public AnimClipData animClipData;
+    [SerializeField] AnimClipData animClipData;
 
     [Serializable] public struct SOData
     {
         public SpySettingsSO settings;
         public SpyStatsSO stats;
         public SpyInputsSO inputs;
+        public TrainStatsSO trainStats;
+        public LayerSettingsSO layerSettings;
     }
-    public SOData soData;
+    [SerializeField] SOData soData;
 
-    [Serializable]
-    public struct CollisionPoints
+    [Serializable] public struct CollisionPoints
     {
         internal Vector2 groundLeft;
         internal Vector2 groundRight;
     }
-    public CollisionPoints collisionPoints;
-
+    [SerializeField] CollisionPoints collisionPoints;
 
     private void OnValidate()
     {
@@ -109,18 +110,27 @@ public class SpyBrain : MonoBehaviour
 
         SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));
     }
-    void Start()
+    private void OnEnable()
+    {
+        gameEventData.OnUnlockSlideDoors.RegisterListener(() => soData.stats.canBoardTrain = true);
+        gameEventData.OnInteract.RegisterListener(EnterTrain);
+    }
+    private void OnDisable()
+    {
+        gameEventData.OnUnlockSlideDoors.UnregisterListener(() => soData.stats.canBoardTrain = true);
+        gameEventData.OnInteract.UnregisterListener(EnterTrain);
+    }
+    private void Start()
     {
         stateData.curStateType = State.Idle;
         componentData.rigidBody.gravityScale = soData.settings.gravityScale;
         soData.stats.gravityScale = componentData.rigidBody.gravityScale;
         soData.stats.startPos = componentData.rigidBody.position;
-        soData.stats.curGroundMask = LayerMask.GetMask("Station Ground");
-        componentData.rigidBody.excludeLayers |= LayerMask.GetMask("Train Ground");
+        componentData.rigidBody.includeLayers = soData.layerSettings.stationGround;
         soData.stats.curRunSpeed = 1.0f;
         soData.stats.curJumpHorizontalForce = 0.0f;
     }
-    void Update()
+    private void Update()
     {
         SelectingStates();
         UpdateStates();
@@ -134,14 +144,12 @@ public class SpyBrain : MonoBehaviour
     {
         FixedUpdateStates();
         CalculateCollisionPoints();
-        soData.stats.isGrounded = Physics2D.Linecast(collisionPoints.groundLeft, collisionPoints.groundRight, soData.stats.curGroundMask);
+        soData.stats.isGrounded = Physics2D.Linecast(collisionPoints.groundLeft, collisionPoints.groundRight, componentData.rigidBody.includeLayers);
         
-        componentData.rigidBody.linearVelocityX = 
-        Mathf.Lerp(soData.stats.moveVelocity.x, soData.stats.targetXVelocity, soData.settings.groundAccelation * Time.fixedDeltaTime);
+        componentData.rigidBody.linearVelocityX = Mathf.Lerp(soData.stats.moveVelocity.x, soData.stats.targetXVelocity, soData.settings.groundAccelation * Time.fixedDeltaTime);
         
         soData.stats.moveVelocity = componentData.rigidBody.linearVelocity;
     }
-
     private void SelectingStates()
     {
         //TODO do heavy land logic
@@ -161,13 +169,9 @@ public class SpyBrain : MonoBehaviour
         {
             SetState(State.Run);
         }
-        else if (soData.stats.isGrounded && soData.inputs.move == 0)
-        {
-            SetState(State.Idle);
-        }
         else
         {
-            Debug.LogWarning($" {gameObject.name} is currently not in a state");
+            SetState(State.Idle);
         }
     }
     private void UpdateStates()
@@ -217,6 +221,11 @@ public class SpyBrain : MonoBehaviour
     {
         switch (stateData.curStateType)
         {
+            case State.Idle:
+            {
+
+            }
+            break;
             case State.Walk:
             {
             }
@@ -377,6 +386,19 @@ public class SpyBrain : MonoBehaviour
         collisionPoints.groundLeft = new Vector2(transform.position.x - soData.settings.groundBufferHorizontal, transform.position.y - soData.settings.groundBufferVertical);
         collisionPoints.groundRight = new Vector2(transform.position.x + soData.settings.groundBufferHorizontal, transform.position.y - soData.settings.groundBufferVertical);
     }
+    private void EnterTrain()
+    {
+        if (componentData.rigidBody.includeLayers == soData.layerSettings.stationGround && soData.stats.canBoardTrain)
+        {
+            RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.slideDoors);
+
+            if (slideDoorHit.collider != null)
+            {
+                SliderDoors slideDoor = slideDoorHit.collider.GetComponent<SliderDoors>();
+                if (slideDoor != null) { slideDoor.OpenDoors(); }
+            }
+        }
+    }
     private void ResetStats()
     {
         soData.stats.curHealth = 100;
@@ -394,9 +416,7 @@ public class SpyBrain : MonoBehaviour
         soData.stats.isGrounded = false;
         soData.stats.coyoteJump = false;
         soData.stats.coyoteTimeElapsed = 0.0f;
-        soData.stats.onTrain = false;
-        soData.stats.curGroundMask = LayerMask.NameToLayer("Station Ground");
-
+        soData.stats.canBoardTrain = false;
     }
 
     private void OnApplicationQuit()

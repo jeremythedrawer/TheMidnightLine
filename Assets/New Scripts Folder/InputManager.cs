@@ -18,6 +18,7 @@ public class InputManager : MonoBehaviour
     public struct GameEventData
     {
         public GameEvent OnReset;
+        public GameEvent OnInteract;
     }
     [SerializeField] GameEventData gameEventData;
 
@@ -26,6 +27,7 @@ public class InputManager : MonoBehaviour
     public InputAction jumpAction { get; private set; }
     public InputAction runAction { get; private set; }
     public InputAction meleeAction { get; private set; }
+    public InputAction interactAction { get; private set; }
     public Action<string> OnDeviceChanged { get; private set; }
 
     public static InputDevice curDevice;
@@ -42,6 +44,7 @@ public class InputManager : MonoBehaviour
         jumpAction = playerInput.actions["Player/Jump"];
         runAction = playerInput.actions["Player/Run"];
         meleeAction = playerInput.actions["Player/Melee"];
+        interactAction = playerInput.actions["Player/Interact"];
 
         moveAction.performed += context =>
         {
@@ -60,6 +63,11 @@ public class InputManager : MonoBehaviour
         runAction.canceled += context => soData.spyInputs.run = false;
 
         meleeAction.started += context => soData.spyInputs.melee = true;
+
+        interactAction.started += context =>
+        {
+            gameEventData.OnInteract.Raise();
+        };
     }
 
     private void OnEnable()

@@ -15,4 +15,10 @@ public class TrainStatsSO : ScriptableObject
     internal float startXPos;
     internal float curCenterXPos;
     internal float halfXSize;
+
+    internal bool doorsOpen;
+    internal bool boardPassengers;
+
+    public float doorMovingTime = 2.0f;
+    internal float degPerMeter;
 }

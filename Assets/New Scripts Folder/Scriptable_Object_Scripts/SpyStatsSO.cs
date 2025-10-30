@@ -21,6 +21,6 @@ public class SpyStatsSO : ScriptableObject
     internal bool isGrounded;
     internal bool coyoteJump;
     internal float coyoteTimeElapsed;
-    internal bool onTrain;
-    internal LayerMask curGroundMask; 
+
+    internal bool canBoardTrain;
 }
