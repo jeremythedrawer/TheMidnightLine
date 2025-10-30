@@ -77,7 +77,8 @@ public class TrainBrain : MonoBehaviour
 
             await UniTask.Yield();
         }
-
+        soData.stats.targetKMPerHour = 0f;
+        soData.stats.curKMPerHour = 0f;
         gameEventData.OnUnlockSlideDoors.Raise();
     }
     private void ResetStats()
@@ -91,7 +92,7 @@ public class TrainBrain : MonoBehaviour
         soData.stats.distanceToNextStation = Mathf.Infinity;    
         soData.stats.stoppingDistance = 0.0f;
         soData.stats.startXPos = transform.position.x;
-        soData.stats.degPerMeter = 360.0f / ((soData.settings.wheelSprite.rect.size.x / soData.settings.wheelSprite.pixelsPerUnit) * Mathf.PI);
+        soData.stats.wheelCircumference = (soData.settings.wheelSprite.rect.size.x / soData.settings.wheelSprite.pixelsPerUnit) * Mathf.PI;
     }
 
     private void OnDrawGizmos()

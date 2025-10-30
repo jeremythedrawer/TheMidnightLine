@@ -41,12 +41,11 @@ public class Carriage : MonoBehaviour
     }
     private void Update()
     {
-        float metersMoved = soData.trainStats.curMPerSec * Time.deltaTime;
-        float wheelRotation = -metersMoved * soData.trainStats.degPerMeter;
+        float wheelRotation = (soData.trainStats.metersTravelled / soData.trainStats.wheelCircumference) * 360.0f;
 
         foreach (Transform wheel in componentData.wheelTransforms)
         {
-            wheel.transform.Rotate(0, 0, wheelRotation);
+            wheel.transform.localEulerAngles = new Vector3(0, 0, -wheelRotation);
         }
     }
     private void ResetStats()

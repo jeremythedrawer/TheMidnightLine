@@ -1,7 +1,5 @@
 using Proselyte.Sigils;
 using System;
-using Unity.Multiplayer.Center.Common.Analytics;
-using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpyBrain : MonoBehaviour

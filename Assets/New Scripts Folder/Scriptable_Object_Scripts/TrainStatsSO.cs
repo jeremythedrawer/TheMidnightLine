@@ -19,5 +19,5 @@ public class TrainStatsSO : ScriptableObject
     internal bool boardPassengers;
 
     public float doorMovingTime = 2.0f;
-    internal float degPerMeter;
+    internal float wheelCircumference;
 }
