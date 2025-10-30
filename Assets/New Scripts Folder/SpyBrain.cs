@@ -10,11 +10,8 @@ public class SpyBrain : MonoBehaviour
         Walk,
         Run,
         Melee,
-        Shoot,
         Jump,
         Fall,
-        AirMelee,
-        AirShoot,
         Hang,
         Climb
     }
@@ -32,7 +29,6 @@ public class SpyBrain : MonoBehaviour
     [Serializable]
     public struct StateData
     {
-        public StateSO[] stateSOs;
         internal State curStateType;
     }
     [SerializeField] StateData stateData;
@@ -54,9 +50,6 @@ public class SpyBrain : MonoBehaviour
         internal int startRunHash;
         internal int runHash;
         internal int meleeHash;
-        internal int shootHash;
-        internal int airMeleeHash;
-        internal int airShootHash;
         internal int jumpHash;
         internal int fallHash;
         internal int heavyLandingHash;
@@ -98,9 +91,6 @@ public class SpyBrain : MonoBehaviour
         animClipData.startRunHash = Animator.StringToHash("StartRun");
         animClipData.runHash = Animator.StringToHash("Run");
         animClipData.meleeHash = Animator.StringToHash("Melee");
-        animClipData.shootHash = Animator.StringToHash("Shoot");
-        animClipData.airMeleeHash = Animator.StringToHash("AirBorneMelee");
-        animClipData.airShootHash = Animator.StringToHash("AirShoot");
         animClipData.jumpHash = Animator.StringToHash("Jump");
         animClipData.fallHash = Animator.StringToHash("Fall");
         animClipData.heavyLandingHash = Animator.StringToHash("HeavyLanding");
@@ -138,8 +128,7 @@ public class SpyBrain : MonoBehaviour
         UpdateStates();
 
         soData.stats.curWorldPos = transform.position;
-        soData.stats.willJump = Time.time - soData.stats.lastJumpTime <= soData.settings.jumpBufferTime && stateData.curStateType != State.Jump;
-        
+        soData.stats.willJump = Time.time - soData.stats.lastJumpTime <= soData.settings.jumpBufferTime && stateData.curStateType != State.Jump;     
     }
     private void FixedUpdate()
     {
@@ -290,11 +279,6 @@ public class SpyBrain : MonoBehaviour
                 componentData.animator.Play(animClipData.meleeHash);
             }
             break;
-            case State.Shoot:
-            {
-                componentData.animator.Play(animClipData.shootHash);
-            }
-            break;
             case State.Jump:
             {
                 componentData.animator.Play(animClipData.jumpHash);
@@ -310,16 +294,6 @@ public class SpyBrain : MonoBehaviour
             case State.Fall:
             {
                 componentData.animator.Play(animClipData.fallHash);
-            }
-            break;
-            case State.AirMelee:
-            {
-                componentData.animator.Play(animClipData.airMeleeHash);
-            }
-            break;
-            case State.AirShoot:
-            {
-                componentData.animator.Play(animClipData.airShootHash);
             }
             break;
             case State.Hang:

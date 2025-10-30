@@ -9,7 +9,11 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 71e74def5c8113747b8d13626ceecdf9, type: 3}
-  m_Name: ShootState_SO
+  m_Script: {fileID: 11500000, guid: 315feb52fc04b9148823f375f15cd275, type: 3}
+  m_Name: Tourist_NPC_SO
   m_EditorClassIdentifier: 
-  stateType: 3
+  moveSpeed: 5
+  runSpeedMultiplier: 1.5
+  groundAccelation: 12
+  groundDecelaration: 14
+  depthPositionInTrain: 1

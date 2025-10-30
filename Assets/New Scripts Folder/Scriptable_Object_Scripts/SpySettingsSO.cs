@@ -3,9 +3,6 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SpySettings_SO", menuName = "Midnight Line SOs / Spy Settings SO")]
 public class SpySettingsSO : ScriptableObject
 {
-    [Header("Stats")]
-    public int health = 100;
-
     [Header("Running")]
     public float moveSpeed = 5f;
     public float runSpeedMultiplier = 1.5f;
