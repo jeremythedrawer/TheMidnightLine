@@ -98,7 +98,7 @@ public class SpyBrain : MonoBehaviour
         animClipData.hangHash = Animator.StringToHash("Hang");
         animClipData.climbHash  = Animator.StringToHash("Climb");
 
-        SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));
+        BrainUtils.SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));
     }
     private void OnEnable()
     {
@@ -344,15 +344,6 @@ public class SpyBrain : MonoBehaviour
             }
             break;
         }
-    }
-    private void SetAnimationEvent(AnimationClip clip, string inputFunction, float? inputTime = null)
-    {
-        AnimationEvent animationEvent = new AnimationEvent
-        {
-            time = inputTime ?? clip.length,
-            functionName = inputFunction
-        };
-        clip.AddEvent(animationEvent);
     }
     private void PlayRunningClip()
     {

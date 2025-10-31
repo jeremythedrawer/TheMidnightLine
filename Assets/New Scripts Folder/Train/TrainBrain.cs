@@ -63,7 +63,7 @@ public class TrainBrain : MonoBehaviour
         {
             float curMPreSec = soData.stats.GetMetersPerSecond();
 
-            soData.stats.stoppingDistance = (curMPreSec * curMPreSec) / (2f * soData.settings.accelerationSpeed);
+            soData.stats.stoppingDistance = (curMPreSec * curMPreSec) / (2f * soData.settings.accelerationSpeed); // v^2 / 2D
 
             if (soData.stats.distanceToNextStation <= soData.stats.stoppingDistance)
             {

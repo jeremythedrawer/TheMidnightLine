@@ -11,7 +11,7 @@ public class NPCBrain : MonoBehaviour
         Run,
         Dead,
     }
-
+    
     public enum Type
     {
         Agent,
@@ -97,9 +97,8 @@ public class NPCBrain : MonoBehaviour
         animClipData.panicBreathingHash = Animator.StringToHash("PanicBreathing");
         animClipData.panicBlinkingHash = Animator.StringToHash("PanicBlinking");
 
-        SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));
+        //SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));  // TODO: uncomment when run clip is ready
     }
-
     private void OnEnable()
     {
         gameEventData.OnUnlockSlideDoors.RegisterListener(() => statData.canBoardTrain = true);
@@ -108,20 +107,17 @@ public class NPCBrain : MonoBehaviour
     {
         gameEventData.OnUnlockSlideDoors.UnregisterListener(() => statData.canBoardTrain = true);
     }
-
     private void Start()
     {
         stateData.curState = State.Idle;
         componentData.rigidBody.includeLayers = soData.layerSettings.stationGround;
         statData.curRunSpeed = 1.0f;
     }
-
     private void Update()
     {
         SelectingStates();
         UpdateStates();
     }
-
     private void FixedUpdate()
     {
         FixedUpdateStates();
@@ -129,7 +125,6 @@ public class NPCBrain : MonoBehaviour
         statData.targetXVelocity = soData.settings.moveSpeed * statData.curRunSpeed * inputData.move;
         componentData.rigidBody.linearVelocityX = Mathf.Lerp(componentData.rigidBody.linearVelocityX, statData.targetXVelocity, soData.settings.groundAccelation * Time.fixedDeltaTime);
     }
-
     private void SelectingStates()
     {
         if (inputData.move != 0 && !inputData.run)
@@ -145,7 +140,6 @@ public class NPCBrain : MonoBehaviour
             SetState(State.Idle);
         }
     }
-
     private void UpdateStates()
     {
         switch (stateData.curState)
@@ -181,7 +175,6 @@ public class NPCBrain : MonoBehaviour
             break;
         }
     }
-
     private void SetState(State newState)
     {
         if (stateData.curState == newState) return;
@@ -211,7 +204,6 @@ public class NPCBrain : MonoBehaviour
             break;
         }
     }
-
     private void ExitState()
     {
         switch (stateData.curState)
@@ -233,21 +225,10 @@ public class NPCBrain : MonoBehaviour
         }
 
     }
-    private void SetAnimationEvent(AnimationClip clip, string inputFunction, float? inputTime = null)
-    {
-        AnimationEvent animationEvent = new AnimationEvent
-        {
-            time = inputTime ?? clip.length,
-            functionName = inputFunction
-        };
-        clip.AddEvent(animationEvent);
-    }
-
     private void PlayRunningClip()
     {
         componentData.animator.Play(animClipData.runHash);
     }
-
     private void OpenSlideDoor()
     {
         if (componentData.rigidBody.includeLayers == soData.layerSettings.stationGround && statData.canBoardTrain)
@@ -264,7 +245,6 @@ public class NPCBrain : MonoBehaviour
             }
         }
     }
-
     private void EnterTrain()
     {
         if (componentData.rigidBody.includeLayers == soData.layerSettings.stationGround && statData.canBoardTrain)
