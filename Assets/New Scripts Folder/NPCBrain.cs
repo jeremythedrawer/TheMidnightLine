@@ -1,7 +1,6 @@
 using Proselyte.Sigils;
 using System;
 using UnityEngine;
-using static SpyBrain;
 
 public class NPCBrain : MonoBehaviour
 {
@@ -137,7 +136,7 @@ public class NPCBrain : MonoBehaviour
         {
             SetState(State.Walk);
         }
-        else if (inputData.move != 0 && inputData.run)
+        else if (inputData.move != 0 && inputData.run) 
         {
             SetState(State.Run);
         }

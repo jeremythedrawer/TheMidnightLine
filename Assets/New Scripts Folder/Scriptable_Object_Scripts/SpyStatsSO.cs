@@ -23,4 +23,5 @@ public class SpyStatsSO : ScriptableObject
     internal float coyoteTimeElapsed;
 
     internal bool canBoardTrain;
+    internal bool inCarriage;
 }

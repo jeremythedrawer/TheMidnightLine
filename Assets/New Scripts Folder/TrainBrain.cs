@@ -7,7 +7,6 @@ using UnityEngine;
 
 public class TrainBrain : MonoBehaviour
 {
-    const float KM_TO_MPS = 0.27777777778f;
 
     [Serializable] public struct SOData
     {
@@ -48,8 +47,7 @@ public class TrainBrain : MonoBehaviour
     private void Update()
     {
         soData.stats.curKMPerHour = Mathf.Lerp(soData.stats.curKMPerHour, soData.stats.targetKMPerHour, soData.settings.accelerationSpeed * Time.deltaTime);
-        soData.stats.curMPerSec = soData.stats.curKMPerHour * KM_TO_MPS;
-        soData.stats.metersTravelled += soData.stats.curMPerSec * Time.deltaTime;
+        soData.stats.metersTravelled += soData.stats.GetMetersPerSecond() * Time.deltaTime;
         soData.stats.curCenterXPos = transform.position.x + soData.stats.halfXSize;
         soData.stats.distanceToNextStation = soData.stations[soData.stats.curStationIndex].metersPosition - soData.stats.metersTravelled - (soData.stats.startXPos + soData.stats.halfXSize);
     }
@@ -63,7 +61,9 @@ public class TrainBrain : MonoBehaviour
 
         while (soData.stats.distanceToNextStation > 0.1f)
         {
-            soData.stats.stoppingDistance = (soData.stats.curMPerSec * soData.stats.curMPerSec) / (2f * soData.settings.accelerationSpeed);
+            float curMPreSec = soData.stats.GetMetersPerSecond();
+
+            soData.stats.stoppingDistance = (curMPreSec * curMPreSec) / (2f * soData.settings.accelerationSpeed);
 
             if (soData.stats.distanceToNextStation <= soData.stats.stoppingDistance)
             {
@@ -85,7 +85,6 @@ public class TrainBrain : MonoBehaviour
     { 
         soData.stats.curStationIndex = 0;
         soData.stats.curKMPerHour = 0;
-        soData.stats.curMPerSec = 0;
         soData.stats.targetKMPerHour = 100;
         soData.stats.metersTravelled = 0.0f;
         soData.stats.arrivedAtStartPos = false;

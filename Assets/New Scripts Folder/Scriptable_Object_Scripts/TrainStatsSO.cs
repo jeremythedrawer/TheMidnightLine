@@ -3,9 +3,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "TrainStats_SO", menuName = "Midnight Line SOs / Train Stats SO")]
 public class TrainStatsSO : ScriptableObject
 {
+    internal const float KM_TO_MPS = 0.27777777778f;
+    
     internal int curStationIndex = 0;
     internal float curKMPerHour = 0;
-    internal float curMPerSec = 0;
     public float targetKMPerHour = 10;
     internal float metersTravelled;
     internal bool arrivedAtStartPos;
@@ -19,4 +20,9 @@ public class TrainStatsSO : ScriptableObject
 
     public float doorMovingTime = 2.0f;
     internal float wheelCircumference;
+
+    public float GetMetersPerSecond()
+    {
+        return curKMPerHour  * KM_TO_MPS;
+    }
 }

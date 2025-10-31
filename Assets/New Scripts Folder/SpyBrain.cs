@@ -156,7 +156,7 @@ public class SpyBrain : MonoBehaviour
         {
             SetState(State.Walk);
         }
-        else if (soData.stats.isGrounded && soData.inputs.move != 0 && soData.inputs.run)
+        else if (soData.stats.isGrounded && soData.inputs.move != 0 && soData.inputs.run) //TODO: not in carriage
         {
             SetState(State.Run);
         }
@@ -319,6 +319,7 @@ public class SpyBrain : MonoBehaviour
             break;
             case State.Walk:
             {
+
             }
             break;
             case State.Run:
@@ -378,7 +379,6 @@ public class SpyBrain : MonoBehaviour
             }
         }
     }
-
     private void EnterTrain()
     {
         if (componentData.rigidBody.includeLayers == soData.layerSettings.stationGround && soData.stats.canBoardTrain)
