@@ -30,7 +30,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8772790425813503437}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 86.15256, y: 1.691, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -80,7 +80,7 @@ SpriteRenderer:
   m_LightmapParameters: {fileID: 0}
   m_SortingLayerID: 0
   m_SortingLayer: 0
-  m_SortingOrder: 1
+  m_SortingOrder: 0
   m_Sprite: {fileID: 1428451887, guid: 3a2181f974105a8459dd0b4e368f8d38, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
@@ -233,7 +233,7 @@ Rigidbody2D:
     m_Bits: 0
   m_ExcludeLayers:
     serializedVersion: 2
-    m_Bits: 24576
+    m_Bits: 0
   m_Interpolate: 1
   m_SleepingMode: 0
   m_CollisionDetection: 1
@@ -301,19 +301,15 @@ MonoBehaviour:
     boxCollider: {fileID: 4281581721833017353}
     animator: {fileID: 1375239234905724419}
     spriteRenderer: {fileID: 6679470100855546196}
-  stateData:
-    stateSOs:
-    - {fileID: 11400000, guid: 0ea5464afb86f324d8588d1449e26cbd, type: 2}
-    - {fileID: 11400000, guid: b2758a4e20440c94eb7a1ec48ab85413, type: 2}
-    - {fileID: 11400000, guid: ee2be382a9de4c34788d7aab6a4e6242, type: 2}
-    - {fileID: 11400000, guid: 10a5cc90925783f4aa88ad8c47e2f12d, type: 2}
-    - {fileID: 11400000, guid: 324cb5927aeeef44f9044a50ad1626e6, type: 2}
-    - {fileID: 11400000, guid: 1f290eb3ab3dece42908ae2e181d6cbf, type: 2}
-    - {fileID: 11400000, guid: 853bfcc58793e7449b1f71758af0ebd4, type: 2}
-    - {fileID: 11400000, guid: 6583a8c3ad2f45e40bfe30330d1bdc38, type: 2}
-    - {fileID: 11400000, guid: fd61a27945d4fa34091a3a22b8fb6137, type: 2}
-    - {fileID: 11400000, guid: 73cd8bc5ca624cf4e8b24b55e6194f3a, type: 2}
+  gameEventData:
+    OnUnlockSlideDoors: {fileID: 11400000, guid: 66ebc69e00594fa428a1c7a6b986b1d9, type: 2}
+    OnInteract: {fileID: 11400000, guid: 002b663aff97ed2478b83fb93d55e857, type: 2}
+  animClipData:
+    startRunClip: {fileID: 7400000, guid: 1f10883464f3f8446b9745ce02f6f50c, type: 2}
   soData:
     settings: {fileID: 11400000, guid: ff622072eaf75a443bdc1bbda3340ef0, type: 2}
     stats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
     inputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
+    trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+    trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
+    layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}

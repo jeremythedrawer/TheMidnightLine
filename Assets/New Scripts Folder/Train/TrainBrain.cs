@@ -29,6 +29,16 @@ public class TrainBrain : MonoBehaviour
     }
     [SerializeField] ComponentData componentData;
 
+    [Serializable] public struct ShaderData
+    {
+        internal int entityDepthRangeID;
+    }
+    [SerializeField] ShaderData shaderData;
+
+    private void Awake()
+    {
+        shaderData.entityDepthRangeID = Shader.PropertyToID("_EntityDepthRange");
+    }
     private void OnEnable()
     {
         ResetStats();
@@ -43,6 +53,7 @@ public class TrainBrain : MonoBehaviour
     private void Start()
     {
         soData.stats.halfXSize = (componentData.frontCarriageSpriteRenderer.bounds.max.x - transform.position.x) * 0.5f;
+        Shader.SetGlobalVector(shaderData.entityDepthRangeID, (Vector2)soData.settings.entityDepthRange);
     }
     private void Update()
     {

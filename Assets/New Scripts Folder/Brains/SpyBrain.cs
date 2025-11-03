@@ -363,7 +363,7 @@ public class SpyBrain : MonoBehaviour
             if (slideDoorHit.collider != null)
             {
                 componentData.slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-                if (componentData.slideDoors != null && componentData.slideDoors.stateData.curState == SlideDoors.State.Unlocked) 
+                if (componentData.slideDoors.stateData.curState == SlideDoors.State.Unlocked) 
                 {
                     componentData.slideDoors.OpenDoors();
                 }
@@ -379,7 +379,7 @@ public class SpyBrain : MonoBehaviour
             if (slideDoorHit.collider != null)
             {
                 componentData.slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-                if (componentData.slideDoors != null && componentData.slideDoors.stateData.curState == SlideDoors.State.Opened)
+                if (componentData.slideDoors.stateData.curState == SlideDoors.State.Opened)
                 {
                     componentData.rigidBody.includeLayers = soData.layerSettings.trainGround;
                     transform.position = new Vector3(transform.position.x, transform.position.y, soData.trainSettings.entityDepthRange.x - soData.settings.depthPositionInTrain);

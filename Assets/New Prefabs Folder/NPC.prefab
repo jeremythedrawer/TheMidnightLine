@@ -17,7 +17,7 @@ GameObject:
   - component: {fileID: 94976023300698573}
   m_Layer: 0
   m_Name: NPC
-  m_TagString: Player
+  m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
@@ -60,7 +60,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 90db00ecb3290f048952b1a762ff6d70, type: 2}
+  - {fileID: 2100000, guid: b1ca0aa0ccee2a54eb98366912a961e5, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -309,3 +309,5 @@ MonoBehaviour:
     OnUnlockSlideDoors: {fileID: 11400000, guid: 66ebc69e00594fa428a1c7a6b986b1d9, type: 2}
   animClipData:
     startRunClip: {fileID: 0}
+  materialData:
+    renderer: {fileID: 7411105796806815275}

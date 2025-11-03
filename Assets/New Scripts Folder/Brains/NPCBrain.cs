@@ -1,6 +1,7 @@
 using Proselyte.Sigils;
 using System;
 using UnityEngine;
+using static SpyBrain;
 
 public class NPCBrain : MonoBehaviour
 {
@@ -48,13 +49,14 @@ public class NPCBrain : MonoBehaviour
         internal bool canBoardTrain;
         internal float targetXVelocity;
         internal float curRunSpeed;
+        internal Vector2 targetPos;
     }
     [SerializeField] StatData statData;
 
     [Serializable] public struct InputData
     {
         internal bool jump;
-        internal int move;
+        internal float move;
         internal bool run;
     }
     [SerializeField] InputData inputData;
@@ -82,6 +84,15 @@ public class NPCBrain : MonoBehaviour
     }
     [SerializeField] AnimClipData animClipData;
 
+    [Serializable] public struct MaterialData
+    {
+        public SpriteRenderer renderer;
+        internal MaterialPropertyBlock mpb;
+        internal int colorID;
+        internal int zPosID;
+        internal int mainTexID;
+    }
+    [SerializeField] MaterialData materialData;
     private void Awake()
     {
         componentData.animController = componentData.animator.runtimeAnimatorController;
@@ -96,6 +107,11 @@ public class NPCBrain : MonoBehaviour
         animClipData.deadHash = Animator.StringToHash("Dead");
         animClipData.panicBreathingHash = Animator.StringToHash("PanicBreathing");
         animClipData.panicBlinkingHash = Animator.StringToHash("PanicBlinking");
+
+        materialData.mpb = new MaterialPropertyBlock();
+        materialData.colorID = Shader.PropertyToID("_Color");
+        materialData.zPosID = Shader.PropertyToID("_ZPos");
+        materialData.mainTexID = Shader.PropertyToID("_MainTex");
 
         //SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));  // TODO: uncomment when run clip is ready
     }
@@ -112,15 +128,23 @@ public class NPCBrain : MonoBehaviour
         stateData.curState = State.Idle;
         componentData.rigidBody.includeLayers = soData.layerSettings.stationGround;
         statData.curRunSpeed = 1.0f;
+
+        materialData.mpb.SetFloat(materialData.zPosID, soData.trainSettings.entityDepthRange.x);
+        materialData.renderer.SetPropertyBlock(materialData.mpb);
+
     }
     private void Update()
     {
         SelectingStates();
         UpdateStates();
+
+        materialData.mpb.SetTexture(materialData.mainTexID, componentData.spriteRenderer.sprite.texture);
+        materialData.renderer.SetPropertyBlock(materialData.mpb);
     }
     private void FixedUpdate()
     {
         FixedUpdateStates();
+        BoardTrain();
 
         statData.targetXVelocity = soData.settings.moveSpeed * statData.curRunSpeed * inputData.move;
         componentData.rigidBody.linearVelocityX = Mathf.Lerp(componentData.rigidBody.linearVelocityX, statData.targetXVelocity, soData.settings.groundAccelation * Time.fixedDeltaTime);
@@ -229,37 +253,55 @@ public class NPCBrain : MonoBehaviour
     {
         componentData.animator.Play(animClipData.runHash);
     }
-    private void OpenSlideDoor()
+    private void BoardTrain()
     {
-        if (componentData.rigidBody.includeLayers == soData.layerSettings.stationGround && statData.canBoardTrain)
-        {
-            RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.slideDoors);
+        if (!statData.canBoardTrain || componentData.rigidBody.includeLayers != soData.layerSettings.stationGround) return; // only board train when you can board and npc is on the station ground
 
-            if (slideDoorHit.collider != null)
+        if (componentData.slideDoors == null) // find slide door in one frame
+        { 
+            Vector2 startLinecast = new Vector2(componentData.boxCollider.bounds.center.x - soData.settings.maxSlideDoorDistanceDetection, componentData.boxCollider.bounds.center.y);
+            Vector2 endLinecast = new Vector2(componentData.boxCollider.bounds.center.x + soData.settings.maxSlideDoorDistanceDetection, componentData.boxCollider.bounds.center.y);
+            RaycastHit2D slideDoorHit = Physics2D.Linecast(startLinecast, endLinecast, soData.layerSettings.slideDoors);
+
+            if (slideDoorHit.collider == null) { Debug.LogWarning($"{name} did not find a slide door to go to"); return; }
+
+            componentData.slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>(); 
+        }
+        else
+        {
+            float distToSlideDoor = componentData.slideDoors.transform.position.x - transform.position.x;
+
+            if (Mathf.Abs(distToSlideDoor) > 0.1f)
             {
-                componentData.slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-                if (componentData.slideDoors != null && componentData.slideDoors.stateData.curState == SlideDoors.State.Unlocked)
+                inputData.move = Mathf.Sign(distToSlideDoor);
+            }
+            else
+            {
+                inputData.move = 0;
+                if (componentData.slideDoors.stateData.curState == SlideDoors.State.Unlocked)
                 {
                     componentData.slideDoors.OpenDoors();
                 }
+                else if (componentData.slideDoors.stateData.curState == SlideDoors.State.Opened) // enter train when slide door is opened
+                {
+                    float zPos = UnityEngine.Random.Range(soData.trainSettings.entityDepthRange.x, soData.trainSettings.entityDepthRange.y);
+
+                    materialData.mpb.SetFloat(materialData.zPosID, zPos);
+                    materialData.renderer.SetPropertyBlock(materialData.mpb);
+
+                    transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
+                    componentData.rigidBody.includeLayers = soData.layerSettings.trainGround;                   
+                }
+
             }
         }
     }
-    private void EnterTrain()
-    {
-        if (componentData.rigidBody.includeLayers == soData.layerSettings.stationGround && statData.canBoardTrain)
-        {
-            RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.slideDoors);
 
-            if (slideDoorHit.collider != null)
-            {
-                componentData.slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-                if (componentData.slideDoors != null && componentData.slideDoors.stateData.curState == SlideDoors.State.Opened)
-                {
-                    componentData.rigidBody.includeLayers = soData.layerSettings.trainGround;
-                    transform.position = new Vector3(transform.position.x, transform.position.y, soData.trainSettings.entityDepthRange.x - soData.settings.depthPositionInTrain);
-                }
-            }
-        }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Vector2 startLinecast = new Vector2(componentData.boxCollider.bounds.center.x - soData.settings.maxSlideDoorDistanceDetection, componentData.boxCollider.bounds.center.y);
+        Vector2 endLinecast = new Vector2(componentData.boxCollider.bounds.center.x + soData.settings.maxSlideDoorDistanceDetection, componentData.boxCollider.bounds.center.y);
+        Gizmos.DrawLine(startLinecast, endLinecast);
     }
 }

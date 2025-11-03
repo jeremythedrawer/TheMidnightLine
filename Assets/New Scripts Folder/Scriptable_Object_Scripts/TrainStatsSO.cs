@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TrainStats_SO", menuName = "Midnight Line SOs / Train Stats SO")]
@@ -21,6 +22,7 @@ public class TrainStatsSO : ScriptableObject
     public float doorMovingTime = 2.0f;
     internal float wheelCircumference;
 
+    internal List<Vector2> slideDoorPositions = new List<Vector2>(); 
     public float GetMetersPerSecond()
     {
         return curKMPerHour  * KM_TO_MPS;

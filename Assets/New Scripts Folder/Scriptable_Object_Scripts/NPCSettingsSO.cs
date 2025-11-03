@@ -9,6 +9,9 @@ public class NPCSettingsSO : ScriptableObject
     public float groundAccelation = 12f;
     public float groundDecelaration = 14f;
 
-    [Header("Train")]
-    public int depthPositionInTrain = 1;
+    [Header("Station")]
+    public float maxSlideDoorDistanceDetection = 6.0f;
+
+    [Header("Colors")]
+    public Color suspectColor = Color.red;
 }
