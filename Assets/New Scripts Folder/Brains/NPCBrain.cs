@@ -25,8 +25,10 @@ public class NPCBrain : MonoBehaviour
         public BoxCollider2D boxCollider;
         public Animator animator;
         public SpriteRenderer spriteRenderer;
+        internal MaterialPropertyBlock mpb;
         internal RuntimeAnimatorController animController;
         internal SlideDoors slideDoors;
+        internal CarriageChairs carriageChairs;
     }
     [SerializeField] ComponentData componentData;
 
@@ -49,7 +51,8 @@ public class NPCBrain : MonoBehaviour
         internal bool canBoardTrain;
         internal float targetXVelocity;
         internal float curRunSpeed;
-        internal Vector2 targetPos;
+        internal float targetXPos;
+        internal float targetDist;
     }
     [SerializeField] StatData statData;
 
@@ -86,8 +89,6 @@ public class NPCBrain : MonoBehaviour
 
     [Serializable] public struct MaterialData
     {
-        public SpriteRenderer renderer;
-        internal MaterialPropertyBlock mpb;
         internal int colorID;
         internal int zPosID;
         internal int mainTexID;
@@ -96,6 +97,7 @@ public class NPCBrain : MonoBehaviour
     private void Awake()
     {
         componentData.animController = componentData.animator.runtimeAnimatorController;
+        componentData.mpb = new MaterialPropertyBlock();
 
         animClipData.calmBreathingHash = Animator.StringToHash("CalmBreathing");
         animClipData.calmBlinkingHash = Animator.StringToHash("CalmBlinking");
@@ -108,7 +110,6 @@ public class NPCBrain : MonoBehaviour
         animClipData.panicBreathingHash = Animator.StringToHash("PanicBreathing");
         animClipData.panicBlinkingHash = Animator.StringToHash("PanicBlinking");
 
-        materialData.mpb = new MaterialPropertyBlock();
         materialData.colorID = Shader.PropertyToID("_Color");
         materialData.zPosID = Shader.PropertyToID("_ZPos");
         materialData.mainTexID = Shader.PropertyToID("_MainTex");
@@ -129,17 +130,21 @@ public class NPCBrain : MonoBehaviour
         componentData.rigidBody.includeLayers = soData.layerSettings.stationGround;
         statData.curRunSpeed = 1.0f;
 
-        materialData.mpb.SetFloat(materialData.zPosID, soData.trainSettings.entityDepthRange.x);
-        materialData.renderer.SetPropertyBlock(materialData.mpb);
+        componentData.mpb.SetFloat(materialData.zPosID, soData.trainSettings.entityDepthRange.x);
+        componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
+
+        statData.targetXPos = transform.position.x;
 
     }
     private void Update()
     {
         SelectingStates();
         UpdateStates();
+        componentData.mpb.SetTexture(materialData.mainTexID, componentData.spriteRenderer.sprite.texture);
+        componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
-        materialData.mpb.SetTexture(materialData.mainTexID, componentData.spriteRenderer.sprite.texture);
-        materialData.renderer.SetPropertyBlock(materialData.mpb);
+        statData.targetDist = statData.targetXPos - transform.position.x;
+        inputData.move = Mathf.Abs(statData.targetDist) > 0.1f ? Mathf.Sign(statData.targetDist) : 0.0f;
     }
     private void FixedUpdate()
     {
@@ -170,6 +175,7 @@ public class NPCBrain : MonoBehaviour
         {
             case State.Idle:
             {
+
             }
             break;
             case State.Walk:
@@ -205,6 +211,7 @@ public class NPCBrain : MonoBehaviour
         ExitState();
         stateData.curState = newState;
         EnterState();
+
     }
     private void EnterState()
     {
@@ -212,7 +219,14 @@ public class NPCBrain : MonoBehaviour
         {
             case State.Idle:
             {
-                componentData.animator.Play(animClipData.calmBreathingHash);
+                if (componentData.carriageChairs != null)
+                {
+                    componentData.animator.Play(animClipData.sitBreathingHash);
+                }
+                else
+                {
+                    componentData.animator.Play(animClipData.calmBreathingHash);
+                }
             }
             break;
             case State.Walk:
@@ -255,29 +269,23 @@ public class NPCBrain : MonoBehaviour
     }
     private void BoardTrain()
     {
-        if (!statData.canBoardTrain || componentData.rigidBody.includeLayers != soData.layerSettings.stationGround) return; // only board train when you can board and npc is on the station ground
+        if (!statData.canBoardTrain) return; // only board train when you can board and npc is on the station ground
 
-        if (componentData.slideDoors == null) // find slide door in one frame
-        { 
-            Vector2 startLinecast = new Vector2(componentData.boxCollider.bounds.center.x - soData.settings.maxSlideDoorDistanceDetection, componentData.boxCollider.bounds.center.y);
-            Vector2 endLinecast = new Vector2(componentData.boxCollider.bounds.center.x + soData.settings.maxSlideDoorDistanceDetection, componentData.boxCollider.bounds.center.y);
-            RaycastHit2D slideDoorHit = Physics2D.Linecast(startLinecast, endLinecast, soData.layerSettings.slideDoors);
-
-            if (slideDoorHit.collider == null) { Debug.LogWarning($"{name} did not find a slide door to go to"); return; }
-
-            componentData.slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>(); 
-        }
-        else
+        if (componentData.rigidBody.includeLayers == soData.layerSettings.stationGround)
         {
-            float distToSlideDoor = componentData.slideDoors.transform.position.x - transform.position.x;
+            if (componentData.slideDoors == null) // find slide door in one frame
+            {
+                RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, new Vector2(soData.settings.maxDistanceDetection, componentData.boxCollider.size.y), 0.0f, transform.right, soData.settings.maxDistanceDetection, soData.layerSettings.slideDoors);
 
-            if (Mathf.Abs(distToSlideDoor) > 0.1f)
-            {
-                inputData.move = Mathf.Sign(distToSlideDoor);
+                if (slideDoorHit.collider == null) { Debug.LogWarning($"{name} did not find a slide door to go to"); return; }
+
+                SlideDoors selectedDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
+                statData.targetXPos = selectedDoors.transform.position.x;
+                componentData.slideDoors = selectedDoors;
+
             }
-            else
+            else if (statData.targetDist < 0.1f)
             {
-                inputData.move = 0;
                 if (componentData.slideDoors.stateData.curState == SlideDoors.State.Unlocked)
                 {
                     componentData.slideDoors.OpenDoors();
@@ -286,22 +294,57 @@ public class NPCBrain : MonoBehaviour
                 {
                     float zPos = UnityEngine.Random.Range(soData.trainSettings.entityDepthRange.x, soData.trainSettings.entityDepthRange.y);
 
-                    materialData.mpb.SetFloat(materialData.zPosID, zPos);
-                    materialData.renderer.SetPropertyBlock(materialData.mpb);
+                    componentData.mpb.SetFloat(materialData.zPosID, zPos);
+                    componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
                     transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
                     componentData.rigidBody.includeLayers = soData.layerSettings.trainGround;                   
                 }
-
+            }
+        }
+        else if (componentData.rigidBody.includeLayers == soData.layerSettings.trainGround)
+        {
+            if (!NPCManager.boardingNPCQueue.Contains(this) && componentData.carriageChairs == null)
+            {
+                NPCManager.boardingNPCQueue.Enqueue(this);
             }
         }
     }
 
+    public void FindCarriageChair()
+    {
+        Vector2 boxCastSize = new Vector2(soData.settings.maxDistanceDetection * 2, componentData.boxCollider.bounds.size.y);
+        RaycastHit2D carriageChairsHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, boxCastSize, 0.0f, transform.right, soData.settings.maxDistanceDetection, soData.layerSettings.carriageChairs);
+
+        CarriageChairs selectedChairs = carriageChairsHit.collider.GetComponent<CarriageChairs>();
+
+        for (int i = 0; i < selectedChairs.chairData.Length; i++)
+        {
+            if(!selectedChairs.chairData[i].filled)
+            {
+                statData.targetXPos = selectedChairs.chairData[i].chairXPos;
+                selectedChairs.chairData[i].filled = true;
+
+                float zPos = selectedChairs.transform.position.z - 1;
+                transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
+                componentData.mpb.SetFloat(materialData.zPosID, zPos);
+                componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
+
+                break;
+            }
+        }
+        componentData.carriageChairs = selectedChairs;
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (!Application.isPlaying) return;
+        Gizmos.color = Color.magenta;
+        Gizmos.DrawLine(componentData.boxCollider.bounds.center, new Vector2(statData.targetXPos, componentData.boxCollider.bounds.center.y));
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Vector2 startLinecast = new Vector2(componentData.boxCollider.bounds.center.x - soData.settings.maxSlideDoorDistanceDetection, componentData.boxCollider.bounds.center.y);
-        Vector2 endLinecast = new Vector2(componentData.boxCollider.bounds.center.x + soData.settings.maxSlideDoorDistanceDetection, componentData.boxCollider.bounds.center.y);
-        Gizmos.DrawLine(startLinecast, endLinecast);
+        Gizmos.DrawWireCube(componentData.boxCollider.bounds.center, new Vector2(soData.settings.maxDistanceDetection, componentData.boxCollider.bounds.extents.y));
     }
 }

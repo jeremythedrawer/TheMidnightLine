@@ -6,4 +6,5 @@ public class LayerSettingsSO : ScriptableObject
     public LayerMask stationGround;
     public LayerMask trainGround;
     public LayerMask slideDoors;
+    public LayerMask carriageChairs;
 }

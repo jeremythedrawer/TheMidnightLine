@@ -10,7 +10,7 @@ public class NPCSettingsSO : ScriptableObject
     public float groundDecelaration = 14f;
 
     [Header("Station")]
-    public float maxSlideDoorDistanceDetection = 6.0f;
+    public float maxDistanceDetection = 6.0f;
 
     [Header("Colors")]
     public Color suspectColor = Color.red;

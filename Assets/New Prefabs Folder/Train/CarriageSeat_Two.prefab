@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8818809066458373299}
   - component: {fileID: 6621097369789174722}
+  - component: {fileID: 813361315605476118}
   m_Layer: 12
   m_Name: CarriageSeat_Two
   m_TagString: Chair Bounds
@@ -87,3 +88,21 @@ SpriteRenderer:
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
+--- !u!114 &813361315605476118
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4012469874647406101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 01ed582691155d24482c7c34e406de1a, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  componentData:
+    spriteRenderer: {fileID: 6621097369789174722}
+  settingsData:
+    chairAmount: 2
+  gameEventData:
+    OnUnlockSlideDoors: {fileID: 11400000, guid: 66ebc69e00594fa428a1c7a6b986b1d9, type: 2}

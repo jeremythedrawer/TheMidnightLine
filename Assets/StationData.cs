@@ -52,7 +52,7 @@ public class StationData : MonoBehaviour
     {
         exitBoundsList = new List<ExitBounds>(GetComponentsInChildren<ExitBounds>());
         disableBounds = GetComponentInChildren<DisableBounds>();
-        DrawAccelThresholds(false);
+        //DrawAccelThresholds(false);
 
         bystanderSpawner = GetComponentInChildren<BystanderSpawner>();
         agentSpawner = GetComponentInChildren<AgentSpawner>();
