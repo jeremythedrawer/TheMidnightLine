@@ -21,12 +21,12 @@ Material:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_Name: m_npc
-  m_Shader: {fileID: -6465566751694194690, guid: 23bb353ec76838e499adc25bf328b5da, type: 3}
+  m_Shader: {fileID: 4800000, guid: 0443fd5624f235c4e953c114b53e2b4e, type: 3}
   m_Parent: {fileID: 2100000, guid: 35dca9db1b5ec9f4d83d340afb303887, type: 2}
   m_ModifiedSerializedProperties: 0
-  m_ValidKeywords:
-  - _ENTITY_TYPE_NPC
+  m_ValidKeywords: []
   m_InvalidKeywords:
+  - _ENTITY_TYPE_NPC
   - _SKINNED_SPRITE
   - _SKINNED_SPRITE_A
   - _UNITY_INSTANCING_BUFFER_START_A
@@ -47,6 +47,7 @@ Material:
     - _ENTITY_TYPE: 1
     - _QueueControl: 0
     - _SKINNED_SPRITE: 1
-    m_Colors: []
+    m_Colors:
+    - _Color: {r: 0, g: 0, b: 0, a: 1}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

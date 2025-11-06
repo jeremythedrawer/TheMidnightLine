@@ -130,8 +130,8 @@ public class NPCBrain : MonoBehaviour
         componentData.rigidBody.includeLayers = soData.layerSettings.stationGround;
         statData.curRunSpeed = 1.0f;
 
-        componentData.mpb.SetFloat(materialData.zPosID, soData.trainSettings.entityDepthRange.x);
-        componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
+        //componentData.mpb.SetFloat(materialData.zPosID, soData.trainSettings.entityDepthRange.x);
+        //componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
         statData.targetXPos = transform.position.x;
 
@@ -284,7 +284,7 @@ public class NPCBrain : MonoBehaviour
                 componentData.slideDoors = selectedDoors;
 
             }
-            else if (statData.targetDist < 0.1f)
+            else if (inputData.move == 0.0f)
             {
                 if (componentData.slideDoors.stateData.curState == SlideDoors.State.Unlocked)
                 {

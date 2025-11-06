@@ -4,18 +4,21 @@ Shader "Unlit/s_character"
     {
         [NoScaleOffset] _MainTex ("Sprite Texture", 2D) = "white" {}
 
-        _Color ("Tint", Color) = (1,1,1,1)
-        _Brightness ("Brightness", Range(0, 0.2)) = 0
+        _Color ("Color", Color) = (1,1,1,1)
+        _ZPos ("ZPos", float) = 1
+        _EntityDepthRange ("Entity Depth Range", Vector) = (-9, -5, 0, 0)
+        _DepthGreyScale ("Depth Grey Scale", Range(0, 1)) = 0.5
     }
     SubShader
     {
-        Tags {"Queue" = "Geometry" "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
+        Tags {"Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
 
         Cull Off
 
         Pass
         {
-
+            AlphaToMask On
+            AlphaTest Greater 0.5
             Tags { "LightMode" = "Universal2D" }
 
             HLSLPROGRAM
@@ -24,8 +27,6 @@ Shader "Unlit/s_character"
 
             #pragma vertex vert
             #pragma fragment frag
-
-            #include_with_pragmas "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/ShapeLightShared.hlsl"
 
             struct Attributes
             {
@@ -40,36 +41,20 @@ Shader "Unlit/s_character"
                 float4  positionCS      : SV_POSITION;
                 float4  color           : COLOR;
                 float2  uv              : TEXCOORD0;
-                half2   lightingUV      : TEXCOORD1;
                 float3  positionWS      : TEXCOORD2;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
-            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/LightingUtility.hlsl"
 
             TEXTURE2D(_MainTex);
             SAMPLER(sampler_MainTex);
 
             CBUFFER_START(UnityPerMaterial)
                 half4 _Color;
-                half _Brightness;
+                half _ZPos;
+                float2 _EntityDepthRange;
+                half _DepthGreyScale;
             CBUFFER_END
-
-            #if USE_SHAPE_LIGHT_TYPE_0
-            SHAPE_LIGHT(0)
-            #endif
-
-            #if USE_SHAPE_LIGHT_TYPE_1
-            SHAPE_LIGHT(1)
-            #endif
-
-            #if USE_SHAPE_LIGHT_TYPE_2
-            SHAPE_LIGHT(2)
-            #endif
-
-            #if USE_SHAPE_LIGHT_TYPE_3
-            SHAPE_LIGHT(3)
-            #endif
 
             Varyings vert(Attributes v)
             {
@@ -82,27 +67,22 @@ Shader "Unlit/s_character"
                 o.positionWS = TransformObjectToWorld(v.positionOS);
 
                 o.uv = v.uv;
-                o.lightingUV = half2(ComputeScreenPos(o.positionCS / o.positionCS.w).xy);
 
                 o.color = v.color * _Color * unity_SpriteColor;
                 return o;
             }
 
-            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/CombinedShapeLightShared.hlsl"
 
             half4 frag (Varyings i) : SV_Target
             {
-                const half4 sampledMainTex =  SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-                const half3 color = i.color.rgb + _Brightness;
-                const half3 main = (color + sampledMainTex.rgb);
-                const half mask = sampledMainTex.a;
+                half4 sampledMainTex =  SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
 
-                SurfaceData2D surfaceData;
-                InputData2D inputData;
+                float greyScale = ((_ZPos - _EntityDepthRange.x) / (_EntityDepthRange.y - _EntityDepthRange.x)) * _DepthGreyScale;
 
-                InitializeSurfaceData(main.rgb, sampledMainTex.a, mask, surfaceData);
-                InitializeInputData(i.uv, i.lightingUV, inputData);
-                return CombinedShapeLightShared(surfaceData, inputData);
+                half3 col = sampledMainTex.rgb + _Color + greyScale;
+
+
+                return half4(col, sampledMainTex.a);
             }
             ENDHLSL
         }
