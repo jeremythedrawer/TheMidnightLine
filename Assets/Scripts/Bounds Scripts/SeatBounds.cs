@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class SeatBounds : Bounds
+public class SeatBounds : OldBounds
 {
     [Header ("Parameters")]
     [Range(1,20)]

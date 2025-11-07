@@ -2,7 +2,7 @@ using System.Threading.Tasks;
 using Unity.IO.LowLevel.Unsafe;
 using UnityEngine;
 
-public abstract class InsideOutsideBounds : Bounds
+public abstract class InsideOutsideBounds : OldBounds
 {
     [Header ("References")]
     public CarriageBounds carriageBounds;

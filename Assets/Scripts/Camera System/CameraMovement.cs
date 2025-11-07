@@ -1,8 +1,8 @@
 using Cysharp.Threading.Tasks;
 using Proselyte.Sigils;
 using System;
-using UnityEditor;
 using UnityEngine;
+using static NPCBrain;
 
 public class CameraMovement : MonoBehaviour
 {
@@ -10,10 +10,12 @@ public class CameraMovement : MonoBehaviour
 
     [Serializable] public struct SOData
     {
+        public CameraSettingsSO cameraSettings;
+        public CameraStatsSO cameraStats;
         public SpyStatsSO spyStats;
         public SpySettingsSO spySettings;
         public SpyInputsSO spyInputs;
-        public CameraSettingsSO cameraSettings;
+        public LayerSettingsSO layerSettings;
     }
     [SerializeField] SOData soData;
 
@@ -22,40 +24,11 @@ public class CameraMovement : MonoBehaviour
         public GameEvent OnReset;
     }
     [SerializeField] GameEventData gameEventData;
-    public enum Target
-    {
-        Spy,
-    }
 
-    public enum StateVerb
-    {
-        InCarriage,
-        OnRoof,
-        AtStation
-    }
-
-    [Serializable] public struct StateData
-    {
-        internal Target curTarget;
-        internal StateVerb curStateVerb;
-    }
-    public StateData stateData;
-
-    [Serializable] public struct StatData
-    {
-        internal float initialSize;
-        internal float curHorOffset;
-        internal float curVertOffset;
-        internal float targetSize;
-        internal Vector2 targetWorldPos;
-        internal Vector2 skullRunnerScreenPos;
-    }
-    public StatData statData;
     private void Awake()
     {
         cam = Camera.main;
     }
-
     private void OnEnable()
     {
         gameEventData.OnReset.RegisterListener(ResetCamera);
@@ -67,105 +40,134 @@ public class CameraMovement : MonoBehaviour
     }
     private void Start()
     {
-        statData.targetSize = cam.orthographicSize;
-        statData.initialSize = cam.orthographicSize;
+        soData.cameraStats.targetSize = cam.orthographicSize;
+        soData.cameraStats.initialSize = cam.orthographicSize;
     }
-
     private void Update()
     {
-        switch (stateData.curTarget)
+        SelectingStates();
+        UpdateStates();
+        if (soData.spyStats.moveVelocity.x > 0)
         {
-            case Target.Spy:
-            {
-                if (soData.spyStats.moveVelocity.x > 0)
-                {
-                    statData.curHorOffset = soData.spyStats.spriteFlip ? -soData.cameraSettings.horizontalOffset : soData.cameraSettings.horizontalOffset; // camera offsets when player is running
-                }
-                statData.targetWorldPos.x = soData.spyStats.curWorldPos.x + statData.curHorOffset;
-
-                SelectStateVerb();
-            }
-            break;
+            soData.cameraStats.curHorOffset = soData.spyStats.spriteFlip ? -soData.cameraSettings.horizontalOffset : soData.cameraSettings.horizontalOffset; // camera offsets when player is moving
         }
 
         //Set size and position
-        Vector2 camWorldPos = Vector2.Lerp(transform.position, statData.targetWorldPos, Time.unscaledDeltaTime * soData.cameraSettings.damping);
-        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, statData.targetSize, Time.deltaTime * soData.cameraSettings.damping);
+        Vector2 camWorldPos = Vector2.Lerp(transform.position, soData.cameraStats.targetWorldPos, Time.unscaledDeltaTime * soData.cameraSettings.damping);
+        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, soData.cameraStats.targetSize, Time.deltaTime * soData.cameraSettings.damping);
         transform.position = new Vector3(camWorldPos.x, camWorldPos.y, transform.position.z);
-
-        statData.skullRunnerScreenPos = Camera.main.WorldToScreenPoint(soData.spyStats.curWorldPos);
     }
-
-    private void SelectStateVerb()
+    private void SelectingStates()
     {
-
-    }
-
-    private void UpdatingStateVerb()
-    {
-        switch (stateData.curStateVerb)
+        if (!soData.spyStats.onTrain)
         {
-            case StateVerb.OnRoof:
-            {
-
-            }
-            break;
-
-            case StateVerb.InCarriage:
-            {
-
-            }
-            break;
-
-            case StateVerb.AtStation:
-            {
-            }
-            break;
+            SetState(CameraStatsSO.State.Station);
+        }
+        else if (soData.spyStats.curLocationLayer == soData.layerSettings.insideCarriageBounds)
+        {
+            SetState(CameraStatsSO.State.Carriage);
+        }
+        else if (soData.spyStats.curLocationLayer == soData.layerSettings.roofBounds)
+        {
+            SetState(CameraStatsSO.State.Roof);
+        }
+        else if (soData.spyStats.curLocationLayer == soData.layerSettings.gangwayBounds)
+        {
+            SetState(CameraStatsSO.State.Gangway);
         }
     }
-    private void SetStateVerb(StateVerb newStateVerb)
+    private void UpdateStates()
     {
-        if (stateData.curStateVerb == newStateVerb) return;
-        ExitStateVerb();
-        stateData.curStateVerb = newStateVerb;
-        EnterStateVerb();
-    }
-    private void EnterStateVerb()
-    {
-        //Exit Method
-        switch (stateData.curStateVerb)
+        switch (soData.cameraStats.curState)
         {
-            case StateVerb.OnRoof:
+            case CameraStatsSO.State.Station:
             {
+                soData.cameraStats.targetWorldPos.x = soData.spyStats.curWorldPos.x + soData.cameraStats.curHorOffset;
             }
             break;
-            case StateVerb.InCarriage:
+
+            case CameraStatsSO.State.Carriage:
+            {
+                float halfSize = soData.spyStats.curLocationBounds.extents.x;
+                float distFromCenter = soData.spyStats.curWorldPos.x - soData.spyStats.curLocationBounds.center.x;
+
+                float t = (1.0f - Mathf.Pow(2.71828f, -(distFromCenter * distFromCenter / halfSize)));
+                t *= t * 0.5f;
+
+                soData.cameraStats.targetWorldPos.x = Mathf.Lerp(soData.spyStats.curLocationBounds.center.x, soData.spyStats.curWorldPos.x + soData.cameraStats.curHorOffset, t);
+            }
+            break;
+
+            case CameraStatsSO.State.Roof:
             {
 
             }
             break;
-            case StateVerb.AtStation:
+
+            case CameraStatsSO.State.Gangway:
             {
 
             }
             break;
         }
     }
-    private void ExitStateVerb()
+    private void SetState(CameraStatsSO.State newState)
     {
-        //Exit Method
-        switch (stateData.curStateVerb)
+        if (soData.cameraStats.curState == newState) return;
+        ExitState();
+        soData.cameraStats.curState = newState;
+        EnterState();
+    }
+    private void EnterState()
+    {
+        switch (soData.cameraStats.curState)
         {
-            case StateVerb.OnRoof:
+            case CameraStatsSO.State.Station:
             {
+                soData.cameraStats.targetWorldPos.y = soData.spyStats.curWorldPos.y;
             }
             break;
-            case StateVerb.InCarriage:
+
+            case CameraStatsSO.State.Carriage:
+            {
+                soData.cameraStats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y;
+            }
+            break;
+
+            case CameraStatsSO.State.Roof:
+            {
+                soData.cameraStats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y;
+            }
+            break;
+
+            case CameraStatsSO.State.Gangway:
             {
 
             }
             break;
-            case StateVerb.AtStation:
+        }
+    }
+    private void ExitState()
+    {
+        switch (soData.cameraStats.curState)
+        {
+            case CameraStatsSO.State.Station:
+            {
+            }
+            break;
+
+            case CameraStatsSO.State.Carriage:
+            {
+            }
+            break;
+
+            case CameraStatsSO.State.Roof:
+            {
+
+            }
+            break;
+
+            case CameraStatsSO.State.Gangway:
             {
 
             }
@@ -174,7 +176,10 @@ public class CameraMovement : MonoBehaviour
     }
     private void ResetCamera()
     {
-        stateData.curTarget = Target.Spy;
+        soData.cameraStats.curState = CameraStatsSO.State.Station;
+        soData.cameraStats.initialSize = cam.orthographicSize;
+        soData.cameraStats.curHorOffset = 0.0f;
+        soData.cameraStats.targetSize = cam.orthographicSize;
     }
     private async UniTaskVoid ShakingCamera()
     {
@@ -188,98 +193,4 @@ public class CameraMovement : MonoBehaviour
             await UniTask.Yield();
         }
     }
-
-//    private void SetCameraTarget()
-//    {
-
-//        target = player.transform.TransformPoint(widthOffset, height, 0);
-//        horizontalDamping = Mathf.Abs(widthOffset) > 0 ? initialDamping : initialDamping * 2;
-//        FallingCamera();
-
-//        float camOffsetY = 1f;
-//        if (InsideBounds.Instance == null || !playerBrain.onTrain) // outside carriage
-//        {
-//            target.y = Mathf.Max(target.y + camOffsetY, trainCamBounds.wheelLevel + cam.orthographicSize);
-//        }
-//        else
-//        {
-//            CalculateCarriageBoundOffset();
-//            target.x = Mathf.Clamp(target.x, InsideBounds.Instance.leftEdge + updatingBoundOffset, InsideBounds.Instance.rightEdge - updatingBoundOffset);
-//            target.y = Mathf.Max(target.y + camOffsetY, trainCamBounds.wheelLevel + cam.orthographicSize);
-//        }
-//    }
-
-//    private void SetCameraPos()
-//    {
-//        float camWorldPosX = Mathf.Lerp(transform.position.x, target.x, Time.deltaTime * horizontalDamping);
-//        float camWorldPosY = Mathf.Lerp(transform.position.y, target.y, Time.deltaTime * verticalDamping);
-
-//        transform.position = new Vector3 (camWorldPosX, camWorldPosY, transform.position.z);
-//    }
-
-//    private void FallingCamera()
-//    {
-//        if (playerRb.linearVelocityY <= -airborneState.clampedFallSpeed) // when player is falling
-//        {
-//            currentfallStateTime += Time.deltaTime;
-//            verticalDamping = initialDamping * 2f;
-//            float t = Mathf.Clamp(currentfallStateTime / fallstateEndTime, 0f, 1f);
-//            height = initialHeight - Mathf.Lerp(initialHeight, 0.5f * cam.orthographicSize, t);
-//        }
-//        else
-//        {
-//            currentfallStateTime = 0;
-//            verticalDamping = initialDamping;
-//            height = initialHeight;
-//        }
-//    }
-
-//    private void CalculateCarriageBoundOffset()
-//    {
-//        float carriageOriginX = InsideBounds.Instance.transform.position.x;
-//        float playerOriginX = player.transform.position.x;
-//        float carriageSize = InsideBounds.Instance.rightEdge - InsideBounds.Instance.leftEdge;
-//        float normalizedCarriageX = 1.0f - ((Mathf.Abs(carriageOriginX - playerOriginX) / carriageSize) * 2.0f);
-
-//        offsetT = Mathf.Pow(normalizedCarriageX, 0.5f);
-//        camHalfWidthWorld = cam.orthographicSize * cam.aspect;
-
-//        updatingBoundOffset = Mathf.Lerp(0, camHalfWidthWorld, offsetT);
-//    }
-
-//    private void SetCameraSize()
-//    {
-//        float endTime = 1.0f;
-//        float t = currentCamSizeTransTime / endTime;
-
-//        if (player.transform.position.y > trainCamBounds.roofLevel)
-//        {
-//            currentCamSizeTransTime = Mathf.Min(currentCamSizeTransTime + Time.deltaTime, endTime);
-//        }
-//        else
-//        {
-//            currentCamSizeTransTime = Mathf.Max(currentCamSizeTransTime - Time.deltaTime, 0);
-//        }
-//        Camera.main.orthographicSize = Mathf.Lerp(carriageProjectionSize, roofProjectionSize, t);
-//    }
-
-//    private void DrawDebugLines()
-//    {
-//#if UNITY_EDITOR
-//        if (seeGizmos)
-//        {
-//            if (cam == null) return;
-
-//            Vector3 top = cam.ScreenToWorldPoint(new Vector3(camWidth / 2.0f, camHeight, 0.0f));
-//            Vector3 bottom = cam.ScreenToWorldPoint(new Vector3(camWidth / 2.0f, 0.0f, 0.0f));
-//            Vector3 left = cam.ScreenToWorldPoint(new Vector3(0.0f, camHeight / 2.0f, 0.0f));
-//            Vector3 right = cam.ScreenToWorldPoint(new Vector3(camWidth, camHeight / 2.0f, 0.0f));
-
-//            // Draw the lines
-//            Debug.DrawLine(top, bottom, Color.red); // Vertical line
-//            Debug.DrawLine(left, right, Color.blue); // Horizontal line
-//        }
-//#endif
-//    }
-
 }

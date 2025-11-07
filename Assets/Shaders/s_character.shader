@@ -2,11 +2,9 @@ Shader "Unlit/s_character"
 {
     Properties
     {
-        [NoScaleOffset] _MainTex ("Sprite Texture", 2D) = "white" {}
+        [HideInInspector][NoScaleOffset] _MainTex ("Sprite Texture", 2D) = "white" {}
 
         _Color ("Color", Color) = (1,1,1,1)
-        _ZPos ("ZPos", float) = 1
-        _EntityDepthRange ("Entity Depth Range", Vector) = (-9, -5, 0, 0)
         _DepthGreyScale ("Depth Grey Scale", Range(0, 1)) = 0.5
     }
     SubShader
@@ -51,10 +49,11 @@ Shader "Unlit/s_character"
 
             CBUFFER_START(UnityPerMaterial)
                 half4 _Color;
-                half _ZPos;
-                float2 _EntityDepthRange;
-                half _DepthGreyScale;
+                float _DepthGreyScale;
+                float _ZPos;
             CBUFFER_END
+
+            float2 _EntityDepthRange;
 
             Varyings vert(Attributes v)
             {

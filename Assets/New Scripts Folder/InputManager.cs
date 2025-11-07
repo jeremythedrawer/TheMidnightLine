@@ -113,6 +113,7 @@ public class InputManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
+        gameEventData.OnReset.Raise();
         ResetData();
     }
 }

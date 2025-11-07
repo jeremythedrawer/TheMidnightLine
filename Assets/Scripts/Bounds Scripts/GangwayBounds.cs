@@ -1,7 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
-public class GangwayBounds : Bounds
+public class GangwayBounds : OldBounds
 {
     public LayerMask outsideBoundsLayer;
     public LayerMask insideBoundsLayer;

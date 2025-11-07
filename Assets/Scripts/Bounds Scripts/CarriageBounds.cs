@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CarriageBounds : Bounds
+public class CarriageBounds : OldBounds
 {
     [Header("References")]
     public InsideBounds insideBounds;

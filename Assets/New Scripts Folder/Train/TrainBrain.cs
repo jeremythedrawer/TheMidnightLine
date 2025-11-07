@@ -1,7 +1,6 @@
 using Cysharp.Threading.Tasks;
 using Proselyte.Sigils;
 using System;
-using System.Collections.Generic;
 using UnityEngine;
 
 
@@ -64,11 +63,11 @@ public class TrainBrain : MonoBehaviour
     }
     private async UniTaskVoid MovingTrainToStart()
     {
-        while (Mathf.Abs(soData.stats.curKMPerHour - soData.stats.targetKMPerHour) > 0.1f)
-        {
-            transform.position = new Vector3(soData.stats.startXPos + soData.stats.metersTravelled, transform.position.y, transform.position.z);
-            await UniTask.Yield();
-        }
+        //while (Mathf.Abs(soData.stats.curKMPerHour - soData.stats.targetKMPerHour) > 0.1f)
+        //{
+        //    transform.position = new Vector3(soData.stats.startXPos + soData.stats.metersTravelled, transform.position.y, transform.position.z);
+        //    await UniTask.Yield();
+        //}
 
         while (soData.stats.distanceToNextStation > 0.1f)
         {
@@ -95,8 +94,8 @@ public class TrainBrain : MonoBehaviour
     private void ResetStats()
     { 
         soData.stats.curStationIndex = 0;
-        soData.stats.curKMPerHour = 0;
-        soData.stats.targetKMPerHour = 100;
+        soData.stats.curKMPerHour = 1000;
+        soData.stats.targetKMPerHour = 1000;
         soData.stats.metersTravelled = 0.0f;
         soData.stats.arrivedAtStartPos = false;
         soData.stats.distanceToNextStation = Mathf.Infinity;    

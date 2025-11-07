@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LayerSettings_SO", menuName = "Midnight Line SOs / Layer Settings SO")]
@@ -7,4 +8,7 @@ public class LayerSettingsSO : ScriptableObject
     public LayerMask trainGround;
     public LayerMask slideDoors;
     public LayerMask carriageChairs;
+    public LayerMask insideCarriageBounds;
+    public LayerMask gangwayBounds;
+    public LayerMask roofBounds;
 }

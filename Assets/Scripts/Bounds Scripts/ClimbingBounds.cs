@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ClimbingBounds : Bounds
+public class ClimbingBounds : OldBounds
 {
     private BoxCollider2D Collider2D;
 

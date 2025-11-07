@@ -41,16 +41,18 @@ public class SlideDoors : MonoBehaviour
 
     private void Awake()
     {
-        stateData.curState = State.Locked;
+        ResetDoors();
     }
     private void OnEnable()
     {
         gameEventData.OnUnlockSlideDoors.RegisterListener(UnlockDoors);
+        gameEventData.OnReset.RegisterListener(ResetDoors);
     }
 
     private void OnDisable()
     {
         gameEventData.OnUnlockSlideDoors.UnregisterListener(UnlockDoors);
+        gameEventData.OnReset.UnregisterListener(ResetDoors);
     }
 
     private void UnlockDoors()
@@ -87,5 +89,15 @@ public class SlideDoors : MonoBehaviour
         }
 
         stateData.curState = newState;
+    }
+
+    private void ResetDoors()
+    {
+        stateData.curState = State.Locked;
+        for (int i = 0; i < componentData.sliderDoors.Length; i++)
+        {
+            float xPos = soData.trainSettings.slideDoorSprite.bounds.size.x * -componentData.sliderDoors[i].transform.localScale.x;
+            componentData.sliderDoors[i].transform.localPosition = new Vector3(xPos, 0, 0);
+        }
     }
 }

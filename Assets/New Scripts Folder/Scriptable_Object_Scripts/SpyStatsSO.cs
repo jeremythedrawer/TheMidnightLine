@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SpyStats_SO", menuName = "Midnight Line SOs / Spy Stats SO")]
@@ -23,5 +24,8 @@ public class SpyStatsSO : ScriptableObject
     internal float coyoteTimeElapsed;
 
     internal bool canBoardTrain;
-    internal bool inCarriage;
+    internal bool onTrain;
+    internal Bounds curLocationBounds;
+    internal LayerMask curLocationLayer;
+    
 }

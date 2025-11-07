@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class CanvasBounds : Bounds
+public class CanvasBounds : OldBounds
 {
     [Header("Parameters")]
     public float canvasHeight;

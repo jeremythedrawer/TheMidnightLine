@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class DisableBounds : Bounds
+public class DisableBounds : OldBounds
 {
     private void OnTriggerEnter2D(Collider2D collision)
     {

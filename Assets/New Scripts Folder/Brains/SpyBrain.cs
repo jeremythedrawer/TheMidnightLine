@@ -1,5 +1,6 @@
 using Proselyte.Sigils;
 using System;
+using Unity.VisualScripting;
 using UnityEngine;
 
 public class SpyBrain : MonoBehaviour
@@ -140,6 +141,15 @@ public class SpyBrain : MonoBehaviour
         componentData.rigidBody.linearVelocityX = Mathf.Lerp(soData.stats.moveVelocity.x, soData.stats.targetXVelocity, soData.settings.groundAccelation * Time.fixedDeltaTime);
         
         soData.stats.moveVelocity = componentData.rigidBody.linearVelocity;
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        Debug.Log("Trigger entered: " + collision.name);
+        if ((soData.layerSettings.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0 && soData.stats.onTrain)
+        {
+            Debug.Log("setting new carriage bounds");
+            SetLocationData(collision.bounds, soData.layerSettings.insideCarriageBounds);
+        }
     }
     private void SelectingStates()
     {
@@ -381,11 +391,23 @@ public class SpyBrain : MonoBehaviour
                 componentData.slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
                 if (componentData.slideDoors.stateData.curState == SlideDoors.State.Opened)
                 {
+                    RaycastHit2D insideCarriageHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, soData.layerSettings.insideCarriageBounds);
+
+                    if (insideCarriageHit.collider != null)
+                    {
+                        SetLocationData(insideCarriageHit.collider.bounds, soData.layerSettings.insideCarriageBounds);
+                    }
                     componentData.rigidBody.includeLayers = soData.layerSettings.trainGround;
-                    transform.position = new Vector3(transform.position.x, transform.position.y, soData.trainSettings.entityDepthRange.x - soData.settings.depthPositionInTrain);
+                    soData.stats.onTrain = true;
+                    transform.position = new Vector3(transform.position.x, transform.position.y, soData.trainSettings.entityDepthRange.x + soData.settings.depthPositionInTrain);
                 }
             }
         }
+    }
+    private void SetLocationData(Bounds bounds, LayerMask layerMask)
+    {
+        soData.stats.curLocationBounds = bounds;
+        soData.stats.curLocationLayer = layerMask;
     }
     private void ResetStats()
     {
@@ -405,8 +427,8 @@ public class SpyBrain : MonoBehaviour
         soData.stats.coyoteJump = false;
         soData.stats.coyoteTimeElapsed = 0.0f;
         soData.stats.canBoardTrain = false;
+        soData.stats.onTrain = false;
     }
-
     private void OnApplicationQuit()
     {
         ResetStats();

@@ -1,7 +1,7 @@
 using NUnit.Framework;
 using UnityEngine;
 
-public abstract class Bounds : MonoBehaviour
+public abstract class OldBounds : MonoBehaviour
 {
     protected TrainData trainData => GlobalReferenceManager.Instance.trainData;
     protected Camera mainCam => GlobalReferenceManager.Instance.mainCam;

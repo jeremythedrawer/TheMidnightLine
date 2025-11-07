@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Threading.Tasks;
 using UnityEngine;
 
-public class SlideDoorBounds : Bounds
+public class SlideDoorBounds : OldBounds
 {
     [Header("References")]
     public Transform leftDoor;

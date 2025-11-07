@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class ExitBounds : Bounds
+public class ExitBounds : OldBounds
 {
     public BoxCollider2D boxCollider2D {  get; private set; }
     public DisableBounds disableBounds { get; private set; }
