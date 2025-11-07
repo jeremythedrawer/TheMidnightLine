@@ -12,7 +12,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf0d793ee487e47449a2d13d1680f678, type: 3}
   m_Name: SpySettings_SO
   m_EditorClassIdentifier: 
-  health: 100
   moveSpeed: 5
   runSpeedMultiplier: 2
   groundAccelation: 12
@@ -25,8 +24,7 @@ MonoBehaviour:
   antiGravApexThreshold: 5
   gravityScale: 6
   antiGravMultiplier: 0.5
-  groundBufferVertical: 0.125
-  groundBufferHorizontal: 0.5
-  sliderDoorLayer:
-    serializedVersion: 2
-    m_Bits: 65536
+  groundBufferVertical: 0.115
+  groundBufferHorizontal: 0.649
+  stepBuffer: 0.06
+  depthPositionInTrain: 1

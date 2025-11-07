@@ -1,7 +1,7 @@
 using Proselyte.Sigils;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
+using static SpyBrain;
 
 public class SpyBrain : MonoBehaviour
 {
@@ -75,6 +75,9 @@ public class SpyBrain : MonoBehaviour
     {
         internal Vector2 groundLeft;
         internal Vector2 groundRight;
+
+        internal Vector2 stepLeft;
+        internal Vector2 stepRight;
     }
     [SerializeField] CollisionPoints collisionPoints;
 
@@ -119,6 +122,7 @@ public class SpyBrain : MonoBehaviour
         componentData.rigidBody.gravityScale = soData.settings.gravityScale;
         soData.stats.gravityScale = componentData.rigidBody.gravityScale;
         soData.stats.startPos = componentData.rigidBody.position;
+        soData.stats.curGroundLayer = soData.layerSettings.stationGround;
         componentData.rigidBody.includeLayers = soData.layerSettings.stationGround;
         soData.stats.curRunSpeed = 1.0f;
         soData.stats.curJumpHorizontalForce = 0.0f;
@@ -135,8 +139,13 @@ public class SpyBrain : MonoBehaviour
     {
         FixedUpdateStates();
         CalculateCollisionPoints();
-        soData.stats.isGrounded = Physics2D.Linecast(collisionPoints.groundLeft, collisionPoints.groundRight, componentData.rigidBody.includeLayers);
-        
+        soData.stats.isGrounded = Physics2D.Linecast(collisionPoints.groundLeft, collisionPoints.groundRight, soData.stats.curGroundLayer);
+        soData.stats.isStepping =   Physics2D.Linecast(new Vector2(collisionPoints.groundLeft.x, transform.position.y), collisionPoints.stepLeft, soData.stats.curGroundLayer) || 
+                                    Physics2D.Linecast(new Vector2(collisionPoints.groundRight.x, transform.position.y), collisionPoints.stepRight, soData.stats.curGroundLayer);
+        if (soData.stats.isStepping)
+        {
+            componentData.rigidBody.position = new Vector2(componentData.rigidBody.position.x, componentData.rigidBody.position.y + (collisionPoints.stepRight.y - transform.position.y));
+        }
         soData.stats.targetXVelocity = (soData.settings.moveSpeed * soData.stats.curRunSpeed * soData.inputs.move) + (soData.stats.curJumpHorizontalForce * soData.inputs.move);
         componentData.rigidBody.linearVelocityX = Mathf.Lerp(soData.stats.moveVelocity.x, soData.stats.targetXVelocity, soData.settings.groundAccelation * Time.fixedDeltaTime);
         
@@ -144,10 +153,8 @@ public class SpyBrain : MonoBehaviour
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        Debug.Log("Trigger entered: " + collision.name);
         if ((soData.layerSettings.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0 && soData.stats.onTrain)
         {
-            Debug.Log("setting new carriage bounds");
             SetLocationData(collision.bounds, soData.layerSettings.insideCarriageBounds);
         }
     }
@@ -363,6 +370,9 @@ public class SpyBrain : MonoBehaviour
     {
         collisionPoints.groundLeft = new Vector2(transform.position.x - soData.settings.groundBufferHorizontal, transform.position.y - soData.settings.groundBufferVertical);
         collisionPoints.groundRight = new Vector2(transform.position.x + soData.settings.groundBufferHorizontal, transform.position.y - soData.settings.groundBufferVertical);
+
+        collisionPoints.stepLeft = new Vector2(transform.position.x - soData.settings.groundBufferHorizontal, transform.position.y + soData.settings.stepBuffer);
+        collisionPoints.stepRight = new Vector2(transform.position.x + soData.settings.groundBufferHorizontal, transform.position.y + soData.settings.stepBuffer);
     }
     private void OpenSlideDoor()
     {
@@ -382,7 +392,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void EnterTrain()
     {
-        if (componentData.rigidBody.includeLayers == soData.layerSettings.stationGround && soData.stats.canBoardTrain)
+        if (!soData.stats.onTrain && soData.stats.canBoardTrain)
         {
             RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.slideDoors);
 
@@ -397,7 +407,12 @@ public class SpyBrain : MonoBehaviour
                     {
                         SetLocationData(insideCarriageHit.collider.bounds, soData.layerSettings.insideCarriageBounds);
                     }
+                    soData.stats.curGroundLayer = soData.layerSettings.trainGround;
                     componentData.rigidBody.includeLayers = soData.layerSettings.trainGround;
+                    componentData.rigidBody.includeLayers |= soData.layerSettings.insideCarriageBounds;
+                    componentData.rigidBody.includeLayers |= soData.layerSettings.gangwayBounds;
+                    componentData.rigidBody.includeLayers |= soData.layerSettings.roofBounds;
+
                     soData.stats.onTrain = true;
                     transform.position = new Vector3(transform.position.x, transform.position.y, soData.trainSettings.entityDepthRange.x + soData.settings.depthPositionInTrain);
                 }
@@ -438,6 +453,10 @@ public class SpyBrain : MonoBehaviour
         CalculateCollisionPoints();
         Gizmos.color = soData.stats.isGrounded ? Color.green : Color.red;
         Gizmos.DrawLine(collisionPoints.groundLeft, collisionPoints.groundRight);
+        Gizmos.color = soData.stats.isStepping ? Color.green : Color.red;
+        Gizmos.DrawLine(collisionPoints.stepLeft, collisionPoints.stepRight);
+        Gizmos.DrawLine(collisionPoints.groundRight, collisionPoints.stepRight);
+        Gizmos.DrawLine(collisionPoints.stepLeft, collisionPoints.groundLeft);
     }
 
 #if UNITY_EDITOR

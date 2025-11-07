@@ -20,6 +20,7 @@ public class SpyStatsSO : ScriptableObject
     internal bool willJump;
     internal float lastJumpTime;
     internal bool isGrounded;
+    internal bool isStepping;
     internal bool coyoteJump;
     internal float coyoteTimeElapsed;
 
@@ -27,5 +28,6 @@ public class SpyStatsSO : ScriptableObject
     internal bool onTrain;
     internal Bounds curLocationBounds;
     internal LayerMask curLocationLayer;
+    internal LayerMask curGroundLayer;
     
 }
