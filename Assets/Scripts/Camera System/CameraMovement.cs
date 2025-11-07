@@ -106,7 +106,7 @@ public class CameraMovement : MonoBehaviour
 
             case CameraStatsSO.State.Gangway:
             {
-
+                soData.cameraStats.targetWorldPos.x = soData.spyStats.curWorldPos.x + soData.cameraStats.curHorOffset;
             }
             break;
         }

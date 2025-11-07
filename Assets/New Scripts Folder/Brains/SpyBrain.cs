@@ -132,6 +132,7 @@ public class SpyBrain : MonoBehaviour
         SelectingStates();
         UpdateStates();
 
+        soData.stats.spriteFlip = componentData.spriteRenderer.flipX;
         soData.stats.curWorldPos = transform.position;
         soData.stats.willJump = Time.time - soData.stats.lastJumpTime <= soData.settings.jumpBufferTime && stateData.curStateType != State.Jump;     
     }
@@ -156,6 +157,11 @@ public class SpyBrain : MonoBehaviour
         if ((soData.layerSettings.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0 && soData.stats.onTrain)
         {
             SetLocationData(collision.bounds, soData.layerSettings.insideCarriageBounds);
+        }
+
+        if ((soData.layerSettings.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0 && soData.stats.onTrain)
+        {
+            SetLocationData(collision.bounds, soData.layerSettings.gangwayBounds);
         }
     }
     private void SelectingStates()
