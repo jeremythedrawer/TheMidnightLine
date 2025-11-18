@@ -2,7 +2,6 @@ using Cysharp.Threading.Tasks;
 using Proselyte.Sigils;
 using System;
 using UnityEngine;
-using static NPCBrain;
 
 public class CameraMovement : MonoBehaviour
 {
@@ -45,7 +44,7 @@ public class CameraMovement : MonoBehaviour
     }
     private void Update()
     {
-        SelectingStates();
+        SelectStates();
         UpdateStates();
         if (soData.spyStats.moveVelocity.x > 0)
         {
@@ -57,21 +56,21 @@ public class CameraMovement : MonoBehaviour
         cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, soData.cameraStats.targetSize, Time.deltaTime * soData.cameraSettings.damping);
         transform.position = new Vector3(camWorldPos.x, camWorldPos.y, transform.position.z);
     }
-    private void SelectingStates()
+    private void SelectStates()
     {
         if (!soData.spyStats.onTrain)
         {
             SetState(CameraStatsSO.State.Station);
         }
-        else if (soData.spyStats.curLocationLayer == soData.layerSettings.insideCarriageBounds)
+        else if (soData.spyStats.curLocationLayer == soData.layerSettings.trainLayers.insideCarriageBounds)
         {
             SetState(CameraStatsSO.State.Carriage);
         }
-        else if (soData.spyStats.curLocationLayer == soData.layerSettings.roofBounds)
+        else if (soData.spyStats.curLocationLayer == soData.layerSettings.trainLayers.roofBounds)
         {
             SetState(CameraStatsSO.State.Roof);
         }
-        else if (soData.spyStats.curLocationLayer == soData.layerSettings.gangwayBounds)
+        else if (soData.spyStats.curLocationLayer == soData.layerSettings.trainLayers.gangwayBounds)
         {
             SetState(CameraStatsSO.State.Gangway);
         }

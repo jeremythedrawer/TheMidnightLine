@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5067654855350696790}
   - component: {fileID: 3550855786354622186}
   - component: {fileID: 7563791839315885761}
-  - component: {fileID: 7936634460930120195}
+  - component: {fileID: 8500479615796181518}
   m_Layer: 12
   m_Name: CarriageSeat_Five
   m_TagString: Chair Bounds
@@ -107,7 +107,7 @@ MonoBehaviour:
     chairAmount: 5
   gameEventData:
     OnUnlockSlideDoors: {fileID: 11400000, guid: 66ebc69e00594fa428a1c7a6b986b1d9, type: 2}
---- !u!61 &7936634460930120195
+--- !u!61 &8500479615796181518
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -137,7 +137,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0

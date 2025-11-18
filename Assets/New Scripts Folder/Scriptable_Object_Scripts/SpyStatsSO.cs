@@ -21,6 +21,7 @@ public class SpyStatsSO : ScriptableObject
     internal float lastJumpTime;
     internal bool isGrounded;
     internal bool isStepping;
+    internal bool isHanging;
     internal bool coyoteJump;
     internal float coyoteTimeElapsed;
 

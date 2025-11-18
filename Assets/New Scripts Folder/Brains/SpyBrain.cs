@@ -122,8 +122,8 @@ public class SpyBrain : MonoBehaviour
         componentData.rigidBody.gravityScale = soData.settings.gravityScale;
         soData.stats.gravityScale = componentData.rigidBody.gravityScale;
         soData.stats.startPos = componentData.rigidBody.position;
-        soData.stats.curGroundLayer = soData.layerSettings.stationGround;
-        componentData.rigidBody.includeLayers = soData.layerSettings.stationGround;
+        soData.stats.curGroundLayer = soData.layerSettings.stationLayers.ground;
+        componentData.rigidBody.includeLayers = soData.layerSettings.stationMask;
         soData.stats.curRunSpeed = 1.0f;
         soData.stats.curJumpHorizontalForce = 0.0f;
     }
@@ -152,16 +152,22 @@ public class SpyBrain : MonoBehaviour
         
         soData.stats.moveVelocity = componentData.rigidBody.linearVelocity;
     }
-    private void OnTriggerEnter2D(Collider2D collision)
+    private void OnTriggerStay2D(Collider2D collision)
     {
-        if ((soData.layerSettings.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0 && soData.stats.onTrain)
+        if (!soData.stats.onTrain) return;
+
+        if ((soData.layerSettings.trainLayers.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            SetLocationData(collision.bounds, soData.layerSettings.insideCarriageBounds);
+            SetLocationData(collision.bounds, soData.layerSettings.trainLayers.insideCarriageBounds);
+        }
+        else if ((soData.layerSettings.trainLayers.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
+        {
+            SetLocationData(collision.bounds, soData.layerSettings.trainLayers.gangwayBounds);
         }
 
-        if ((soData.layerSettings.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0 && soData.stats.onTrain)
+        if ((soData.layerSettings.trainLayers.climbingBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            SetLocationData(collision.bounds, soData.layerSettings.gangwayBounds);
+            soData.stats.isHanging = true;
         }
     }
     private void SelectingStates()
@@ -170,6 +176,10 @@ public class SpyBrain : MonoBehaviour
         if ((soData.stats.isGrounded && soData.stats.willJump) || componentData.rigidBody.linearVelocityY > 0.01f || soData.stats.coyoteJump)
         {
             SetState(State.Jump);
+        }
+        else if (soData.stats.isHanging)
+        {
+            SetState(State.Hang);
         }
         else if (componentData.rigidBody.linearVelocityY < 0 && !soData.stats.isGrounded)
         {
@@ -382,9 +392,9 @@ public class SpyBrain : MonoBehaviour
     }
     private void OpenSlideDoor()
     {
-        if (componentData.rigidBody.includeLayers == soData.layerSettings.stationGround && soData.stats.canBoardTrain)
+        if (componentData.rigidBody.includeLayers == soData.layerSettings.stationLayers.ground && soData.stats.canBoardTrain)
         {
-            RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.slideDoors);
+            RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.trainLayers.slideDoors);
 
             if (slideDoorHit.collider != null)
             {
@@ -400,24 +410,21 @@ public class SpyBrain : MonoBehaviour
     {
         if (!soData.stats.onTrain && soData.stats.canBoardTrain)
         {
-            RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.slideDoors);
+            RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.trainLayers.slideDoors);
 
             if (slideDoorHit.collider != null)
             {
                 componentData.slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
                 if (componentData.slideDoors.stateData.curState == SlideDoors.State.Opened)
                 {
-                    RaycastHit2D insideCarriageHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, soData.layerSettings.insideCarriageBounds);
+                    RaycastHit2D insideCarriageHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, soData.layerSettings.trainLayers.insideCarriageBounds);
 
                     if (insideCarriageHit.collider != null)
                     {
-                        SetLocationData(insideCarriageHit.collider.bounds, soData.layerSettings.insideCarriageBounds);
+                        SetLocationData(insideCarriageHit.collider.bounds, soData.layerSettings.trainLayers.insideCarriageBounds);
                     }
-                    soData.stats.curGroundLayer = soData.layerSettings.trainGround;
-                    componentData.rigidBody.includeLayers = soData.layerSettings.trainGround;
-                    componentData.rigidBody.includeLayers |= soData.layerSettings.insideCarriageBounds;
-                    componentData.rigidBody.includeLayers |= soData.layerSettings.gangwayBounds;
-                    componentData.rigidBody.includeLayers |= soData.layerSettings.roofBounds;
+                    soData.stats.curGroundLayer = soData.layerSettings.trainLayers.ground;
+                    componentData.rigidBody.includeLayers = soData.layerSettings.trainMask;
 
                     soData.stats.onTrain = true;
                     transform.position = new Vector3(transform.position.x, transform.position.y, soData.trainSettings.entityDepthRange.x + soData.settings.depthPositionInTrain);
@@ -445,6 +452,7 @@ public class SpyBrain : MonoBehaviour
         soData.stats.willJump = false;
         soData.stats.lastJumpTime = 0.0f;
         soData.stats.isGrounded = false;
+        soData.stats.isHanging = false;
         soData.stats.coyoteJump = false;
         soData.stats.coyoteTimeElapsed = 0.0f;
         soData.stats.canBoardTrain = false;

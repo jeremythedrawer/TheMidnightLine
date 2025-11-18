@@ -114,7 +114,7 @@ public class NPCBrain : MonoBehaviour
         materialData.zPosID = Shader.PropertyToID("_ZPos");
         materialData.mainTexID = Shader.PropertyToID("_MainTex");
 
-        //SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));  // TODO: uncomment when run clip is ready
+        BrainUtils.SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));
     }
     private void OnEnable()
     {
@@ -127,11 +127,11 @@ public class NPCBrain : MonoBehaviour
     private void Start()
     {
         stateData.curState = State.Idle;
-        componentData.rigidBody.includeLayers = soData.layerSettings.stationGround;
+        componentData.rigidBody.includeLayers = soData.layerSettings.stationLayers.ground;
         statData.curRunSpeed = 1.0f;
 
-        //componentData.mpb.SetFloat(materialData.zPosID, soData.trainSettings.entityDepthRange.x);
-        //componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
+        componentData.mpb.SetFloat(materialData.zPosID, soData.trainSettings.entityDepthRange.x);
+        componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
         statData.targetXPos = transform.position.x;
 
@@ -271,11 +271,11 @@ public class NPCBrain : MonoBehaviour
     {
         if (!statData.canBoardTrain) return; // only board train when you can board and npc is on the station ground
 
-        if (componentData.rigidBody.includeLayers == soData.layerSettings.stationGround)
+        if (componentData.rigidBody.includeLayers == soData.layerSettings.stationMask)
         {
             if (componentData.slideDoors == null) // find slide door in one frame
             {
-                RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, new Vector2(soData.settings.maxDistanceDetection, componentData.boxCollider.size.y), 0.0f, transform.right, soData.settings.maxDistanceDetection, soData.layerSettings.slideDoors);
+                RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, new Vector2(soData.settings.maxDistanceDetection, componentData.boxCollider.size.y), 0.0f, transform.right, soData.settings.maxDistanceDetection, soData.layerSettings.trainLayers.slideDoors);
 
                 if (slideDoorHit.collider == null) { Debug.LogWarning($"{name} did not find a slide door to go to"); return; }
 
@@ -298,11 +298,11 @@ public class NPCBrain : MonoBehaviour
                     componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
                     transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
-                    componentData.rigidBody.includeLayers = soData.layerSettings.trainGround;                   
+                    componentData.rigidBody.includeLayers = soData.layerSettings.trainMask;                   
                 }
             }
         }
-        else if (componentData.rigidBody.includeLayers == soData.layerSettings.trainGround)
+        else if (componentData.rigidBody.includeLayers == soData.layerSettings.trainMask)
         {
             if (!NPCManager.boardingNPCQueue.Contains(this) && componentData.carriageChairs == null)
             {
@@ -314,7 +314,7 @@ public class NPCBrain : MonoBehaviour
     public void FindCarriageChair()
     {
         Vector2 boxCastSize = new Vector2(soData.settings.maxDistanceDetection * 2, componentData.boxCollider.bounds.size.y);
-        RaycastHit2D carriageChairsHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, boxCastSize, 0.0f, transform.right, soData.settings.maxDistanceDetection, soData.layerSettings.carriageChairs);
+        RaycastHit2D carriageChairsHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, boxCastSize, 0.0f, transform.right, soData.settings.maxDistanceDetection, soData.layerSettings.trainLayers.carriageChairs);
 
         CarriageChairs selectedChairs = carriageChairsHit.collider.GetComponent<CarriageChairs>();
 

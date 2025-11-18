@@ -12,24 +12,29 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 661c2b44082fc6b408caf3db91e74752, type: 3}
   m_Name: LayerSettings_SO
   m_EditorClassIdentifier: 
-  stationGround:
-    serializedVersion: 2
-    m_Bits: 32768
-  trainGround:
-    serializedVersion: 2
-    m_Bits: 128
-  slideDoors:
-    serializedVersion: 2
-    m_Bits: 65536
-  carriageChairs:
-    serializedVersion: 2
-    m_Bits: 4096
-  insideCarriageBounds:
-    serializedVersion: 2
-    m_Bits: 256
-  gangwayBounds:
-    serializedVersion: 2
-    m_Bits: 2048
-  roofBounds:
-    serializedVersion: 2
-    m_Bits: 0
+  stationLayers:
+    ground:
+      serializedVersion: 2
+      m_Bits: 32768
+  trainLayers:
+    ground:
+      serializedVersion: 2
+      m_Bits: 128
+    slideDoors:
+      serializedVersion: 2
+      m_Bits: 65536
+    carriageChairs:
+      serializedVersion: 2
+      m_Bits: 4096
+    insideCarriageBounds:
+      serializedVersion: 2
+      m_Bits: 256
+    gangwayBounds:
+      serializedVersion: 2
+      m_Bits: 2048
+    roofBounds:
+      serializedVersion: 2
+      m_Bits: 512
+    climbingBounds:
+      serializedVersion: 2
+      m_Bits: 1024
