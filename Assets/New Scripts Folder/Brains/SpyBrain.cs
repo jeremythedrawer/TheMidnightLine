@@ -22,8 +22,9 @@ public class SpyBrain : MonoBehaviour
         public BoxCollider2D boxCollider;
         public Animator animator;
         public SpriteRenderer spriteRenderer;
-        internal RuntimeAnimatorController animController;
         internal SlideDoors slideDoors;
+        internal GangwayDoor gangwayDoor;
+        internal Collider2D curClimbCollider;
     }
     [SerializeField] ComponentData componentData;
 
@@ -87,8 +88,6 @@ public class SpyBrain : MonoBehaviour
     }
     private void Awake()
     {
-        componentData.animController = componentData.animator.runtimeAnimatorController;
-
         animClipData.idleBreathingHash = Animator.StringToHash("IdleBreathing");
         animClipData.idleLookAroundHash = Animator.StringToHash("IdleLookAround");
         animClipData.walkHash = Animator.StringToHash("Walk");
@@ -102,19 +101,21 @@ public class SpyBrain : MonoBehaviour
         animClipData.hangHash = Animator.StringToHash("Hang");
         animClipData.climbHash  = Animator.StringToHash("Climb");
 
-        BrainUtils.SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));
+        Utils.SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));
     }
     private void OnEnable()
     {
         gameEventData.OnUnlockSlideDoors.RegisterListener(() => soData.stats.canBoardTrain = true);
         gameEventData.OnInteract.RegisterListener(OpenSlideDoor);
         gameEventData.OnInteract.RegisterListener(EnterTrain);
+        gameEventData.OnInteract.RegisterListener(OpenGangwayDoor);
     }
     private void OnDisable()
     {
         gameEventData.OnUnlockSlideDoors.UnregisterListener(() => soData.stats.canBoardTrain = true);
         gameEventData.OnInteract.UnregisterListener(OpenSlideDoor);
         gameEventData.OnInteract.UnregisterListener(EnterTrain);
+        gameEventData.OnInteract.UnregisterListener(OpenGangwayDoor);
     }
     private void Start()
     {
@@ -147,12 +148,25 @@ public class SpyBrain : MonoBehaviour
         {
             componentData.rigidBody.position = new Vector2(componentData.rigidBody.position.x, componentData.rigidBody.position.y + (collisionPoints.stepRight.y - transform.position.y));
         }
-        soData.stats.targetXVelocity = (soData.settings.moveSpeed * soData.stats.curRunSpeed * soData.inputs.move) + (soData.stats.curJumpHorizontalForce * soData.inputs.move);
-        componentData.rigidBody.linearVelocityX = Mathf.Lerp(soData.stats.moveVelocity.x, soData.stats.targetXVelocity, soData.settings.groundAccelation * Time.fixedDeltaTime);
-        
+
+        if (stateData.curStateType != State.Hang)
+        {
+            soData.stats.targetXVelocity = (soData.settings.moveSpeed * soData.stats.curRunSpeed * soData.inputs.move) + (soData.stats.curJumpHorizontalForce * soData.inputs.move);
+            componentData.rigidBody.linearVelocityX = Mathf.Lerp(soData.stats.moveVelocity.x, soData.stats.targetXVelocity, soData.settings.groundAccelation * Time.fixedDeltaTime);
+        }
+
         soData.stats.moveVelocity = componentData.rigidBody.linearVelocity;
+
+        if (soData.stats.isGrounded)
+        {
+            soData.stats.canHang = true;
+        }
+        else
+        {
+            componentData.curClimbCollider = Physics2D.OverlapBox(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.size, angle: 0, soData.layerSettings.trainLayers.climbingBounds);
+        }
     }
-    private void OnTriggerStay2D(Collider2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!soData.stats.onTrain) return;
 
@@ -164,10 +178,19 @@ public class SpyBrain : MonoBehaviour
         {
             SetLocationData(collision.bounds, soData.layerSettings.trainLayers.gangwayBounds);
         }
+    }
 
-        if ((soData.layerSettings.trainLayers.climbingBounds.value & (1 << collision.gameObject.layer)) != 0)
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if (!soData.stats.onTrain) return;
+
+        if ((soData.layerSettings.trainLayers.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            soData.stats.isHanging = true;
+            soData.stats.curLocationLayer = 0;
+        }
+        else if ((soData.layerSettings.trainLayers.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
+        {
+            soData.stats.curLocationLayer = 0;
         }
     }
     private void SelectingStates()
@@ -177,7 +200,7 @@ public class SpyBrain : MonoBehaviour
         {
             SetState(State.Jump);
         }
-        else if (soData.stats.isHanging)
+        else if (soData.stats.canHang && componentData.curClimbCollider != null && componentData.boxCollider.bounds.max.y < componentData.curClimbCollider.bounds.max.y)
         {
             SetState(State.Hang);
         }
@@ -237,6 +260,14 @@ public class SpyBrain : MonoBehaviour
                     soData.inputs.jump = false;
                 }
                 componentData.spriteRenderer.flipX = soData.inputs.move < 0;
+            }
+            break;
+            case State.Hang:
+            {
+                if (soData.inputs.cancel)
+                {
+                    soData.stats.canHang = false;
+                }
             }
             break;
         }
@@ -331,7 +362,16 @@ public class SpyBrain : MonoBehaviour
             break;
             case State.Hang:
             {
+                bool leftClimbBound = componentData.rigidBody.position.x > componentData.curClimbCollider.bounds.center.x;
+
                 componentData.animator.Play(animClipData.grabLedgeHash);
+                componentData.rigidBody.gravityScale = 0;
+                componentData.rigidBody.linearVelocity = Vector2.zero;
+
+                float hangXPos = leftClimbBound ? componentData.curClimbCollider.bounds.max.x : componentData.curClimbCollider.bounds.min.x;
+                float hangYPos = componentData.curClimbCollider.bounds.center.y - componentData.boxCollider.bounds.size.y;
+                componentData.rigidBody.position = new Vector2(hangXPos, hangYPos);
+                componentData.spriteRenderer.flipX = leftClimbBound; 
             }
             break;
             case State.Climb:
@@ -374,6 +414,12 @@ public class SpyBrain : MonoBehaviour
             {
                 soData.stats.coyoteTimeElapsed = 0.0f;
                 soData.stats.coyoteJump = false;
+            }
+            break;
+
+            case State.Hang:
+            {
+                componentData.rigidBody.gravityScale = 1;
             }
             break;
         }
@@ -432,6 +478,18 @@ public class SpyBrain : MonoBehaviour
             }
         }
     }
+
+    private void OpenGangwayDoor()
+    {
+        if (!soData.stats.onTrain) return;
+        RaycastHit2D gangwayDoorHit = Physics2D.Linecast(componentData.boxCollider.bounds.center, new Vector2(componentData.boxCollider.bounds.center.x + (componentData.spriteRenderer.flipX ? -1 : 1), componentData.boxCollider.bounds.center.y), soData.layerSettings.trainLayers.gangwayDoor);
+
+        if (gangwayDoorHit.collider != null)
+        {
+            componentData.gangwayDoor = gangwayDoorHit.collider.GetComponent<GangwayDoor>();
+            componentData.gangwayDoor.OpenDoor();
+        }
+    }
     private void SetLocationData(Bounds bounds, LayerMask layerMask)
     {
         soData.stats.curLocationBounds = bounds;
@@ -452,7 +510,6 @@ public class SpyBrain : MonoBehaviour
         soData.stats.willJump = false;
         soData.stats.lastJumpTime = 0.0f;
         soData.stats.isGrounded = false;
-        soData.stats.isHanging = false;
         soData.stats.coyoteJump = false;
         soData.stats.coyoteTimeElapsed = 0.0f;
         soData.stats.canBoardTrain = false;
@@ -471,6 +528,9 @@ public class SpyBrain : MonoBehaviour
         Gizmos.DrawLine(collisionPoints.stepLeft, collisionPoints.stepRight);
         Gizmos.DrawLine(collisionPoints.groundRight, collisionPoints.stepRight);
         Gizmos.DrawLine(collisionPoints.stepLeft, collisionPoints.groundLeft);
+
+        Gizmos.color = componentData.gangwayDoor != null ? Color.green : Color.red;
+        Gizmos.DrawLine(componentData.boxCollider.bounds.center, new Vector2(componentData.boxCollider.bounds.center.x + (componentData.spriteRenderer.flipX ? -1 : 1), componentData.boxCollider.bounds.center.y));
     }
 
 #if UNITY_EDITOR

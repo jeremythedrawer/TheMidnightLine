@@ -19,6 +19,7 @@ public class InputManager : MonoBehaviour
     {
         public GameEvent OnReset;
         public GameEvent OnInteract;
+        public GameEvent OnCancel;
     }
     [SerializeField] GameEventData gameEventData;
 
@@ -28,6 +29,7 @@ public class InputManager : MonoBehaviour
     public InputAction runAction { get; private set; }
     public InputAction meleeAction { get; private set; }
     public InputAction interactAction { get; private set; }
+    public InputAction cancelAction { get; private set; }
     public Action<string> OnDeviceChanged { get; private set; }
 
     public static InputDevice curDevice;
@@ -45,6 +47,7 @@ public class InputManager : MonoBehaviour
         runAction = playerInput.actions["Player/Run"];
         meleeAction = playerInput.actions["Player/Melee"];
         interactAction = playerInput.actions["Player/Interact"];
+        cancelAction = playerInput.actions["Player/Cancel"];
 
         moveAction.performed += context =>
         {
@@ -68,6 +71,8 @@ public class InputManager : MonoBehaviour
         {
             gameEventData.OnInteract.Raise();
         };
+
+        cancelAction.started += context => soData.spyInputs.cancel = true;
     }
 
     private void OnEnable()
@@ -99,6 +104,7 @@ public class InputManager : MonoBehaviour
     private void LateUpdate()
     {
         soData.spyInputs.melee = false;
+        soData.spyInputs.cancel = false;
     }
     private void CheckDevice(InputControl value, InputEventPtr ptr)
     {

@@ -20,8 +20,11 @@ public class LayerSettingsSO : ScriptableObject
         public LayerMask gangwayBounds;
         public LayerMask roofBounds;
         public LayerMask climbingBounds;
+        public LayerMask gangwayDoor;
     }
     public TrainLayers trainLayers;
+
+    public LayerMask spy;
 
     internal LayerMask stationMask;
     internal LayerMask trainMask;

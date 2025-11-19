@@ -114,7 +114,7 @@ public class NPCBrain : MonoBehaviour
         materialData.zPosID = Shader.PropertyToID("_ZPos");
         materialData.mainTexID = Shader.PropertyToID("_MainTex");
 
-        BrainUtils.SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));
+        Utils.SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));
     }
     private void OnEnable()
     {

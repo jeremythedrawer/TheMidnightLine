@@ -1,7 +1,6 @@
 using UnityEngine;
-using static UnityEngine.RuleTile.TilingRuleOutput;
 
-public static class BrainUtils
+public static class Utils
 {
     public static void SetAnimationEvent(AnimationClip clip, string inputFunction, float? inputTime = null)
     {
