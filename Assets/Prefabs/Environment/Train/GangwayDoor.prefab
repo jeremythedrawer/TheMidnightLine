@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 1683582563031047517}
   - component: {fileID: 849303082101705705}
-  - component: {fileID: 7203357704779332827}
   - component: {fileID: 7944728294014543636}
   - component: {fileID: 8785919927134914366}
   - component: {fileID: 7530147970625824386}
@@ -80,35 +79,8 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.76, y: 4.75}
+  m_Size: {x: 0.7177228, y: 4.018321}
   m_EdgeRadius: 0
---- !u!50 &7203357704779332827
-Rigidbody2D:
-  serializedVersion: 5
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6568009190840624138}
-  m_BodyType: 1
-  m_Simulated: 1
-  m_UseFullKinematicContacts: 0
-  m_UseAutoMass: 0
-  m_Mass: 1
-  m_LinearDamping: 0
-  m_AngularDamping: 0.05
-  m_GravityScale: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_Interpolate: 0
-  m_SleepingMode: 1
-  m_CollisionDetection: 0
-  m_Constraints: 0
 --- !u!95 &7944728294014543636
 Animator:
   serializedVersion: 7
@@ -177,7 +149,7 @@ SpriteRenderer:
   m_SortingOrder: 0
   m_Sprite: {fileID: -1957952457, guid: e0d866264f02b994885a46bfcc1a3105, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_FlipX: 0
+  m_FlipX: 1
   m_FlipY: 0
   m_DrawMode: 0
   m_Size: {x: 3.63, y: 4}

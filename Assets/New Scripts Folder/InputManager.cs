@@ -70,6 +70,7 @@ public class InputManager : MonoBehaviour
         interactAction.started += context =>
         {
             gameEventData.OnInteract.Raise();
+            soData.spyInputs.interact = true;
         };
 
         cancelAction.started += context => soData.spyInputs.cancel = true;
@@ -105,6 +106,7 @@ public class InputManager : MonoBehaviour
     {
         soData.spyInputs.melee = false;
         soData.spyInputs.cancel = false;
+        soData.spyInputs.interact = false;
     }
     private void CheckDevice(InputControl value, InputEventPtr ptr)
     {

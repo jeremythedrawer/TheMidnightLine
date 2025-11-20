@@ -19,16 +19,50 @@ public class SpyStatsSO : ScriptableObject
     internal float curJumpHorizontalForce;
     internal bool willJump;
     internal float lastJumpTime;
+    internal bool coyoteJump;
+    internal float coyoteTimeElapsed;
+
     internal bool isGrounded;
     internal bool isStepping;
     internal bool canHang;
-    internal bool coyoteJump;
-    internal float coyoteTimeElapsed;
+    internal bool isClimbing;
+    internal bool isLeftClimbBound;
+    internal bool firstFixedFrameClimb;
 
     internal bool canBoardTrain;
     internal bool onTrain;
     internal Bounds curLocationBounds;
     internal LayerMask curLocationLayer;
     internal LayerMask curGroundLayer;
-    
+
+    public void ResetStats()
+    {
+        curHealth = 100;
+
+        curWorldPos = Vector2.zero;
+        spriteFlip = false;
+        startPos = Vector2.zero;
+        checkpointPos = Vector2.zero;
+
+        moveVelocity = Vector2.zero;
+        targetXVelocity = 0.0f;
+        curRunSpeed = 1.0f;
+        gravityScale = 1;
+
+        curJumpHorizontalForce = 0.0f;
+        willJump = false;
+        lastJumpTime = 0.0f;
+        coyoteJump = false;
+        coyoteTimeElapsed = 0.0f;
+
+        isGrounded = false;
+        isStepping = false;
+        canHang = false;
+        isClimbing = false;
+        firstFixedFrameClimb = true;
+
+        canBoardTrain = false;
+        onTrain = false;
+    }
+
 }

@@ -8,4 +8,5 @@ public class SpyInputsSO : ScriptableObject
     internal bool run;
     internal bool melee;
     internal bool cancel;
+    internal bool interact;
 }

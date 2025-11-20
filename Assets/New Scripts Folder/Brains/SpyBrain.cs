@@ -45,6 +45,7 @@ public class SpyBrain : MonoBehaviour
     [Serializable] public struct AnimClipData
     {
         public AnimationClip startRunClip;
+        public AnimationClip climbClip;
 
         internal int idleBreathingHash;
         internal int idleLookAroundHash;
@@ -102,6 +103,7 @@ public class SpyBrain : MonoBehaviour
         animClipData.climbHash  = Animator.StringToHash("Climb");
 
         Utils.SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));
+        Utils.SetAnimationEvent(animClipData.climbClip, nameof(ExitClimbClip));
     }
     private void OnEnable()
     {
@@ -127,6 +129,7 @@ public class SpyBrain : MonoBehaviour
         componentData.rigidBody.includeLayers = soData.layerSettings.stationMask;
         soData.stats.curRunSpeed = 1.0f;
         soData.stats.curJumpHorizontalForce = 0.0f;
+        soData.stats.firstFixedFrameClimb = true;
     }
     private void Update()
     {
@@ -178,8 +181,11 @@ public class SpyBrain : MonoBehaviour
         {
             SetLocationData(collision.bounds, soData.layerSettings.trainLayers.gangwayBounds);
         }
+        else if ((soData.layerSettings.trainLayers.roofBounds.value & (1 << collision.gameObject.layer)) != 0)
+        {
+            SetLocationData(collision.bounds, soData.layerSettings.trainLayers.roofBounds);
+        }
     }
-
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (!soData.stats.onTrain) return;
@@ -199,6 +205,10 @@ public class SpyBrain : MonoBehaviour
         if ((soData.stats.isGrounded && soData.stats.willJump) || componentData.rigidBody.linearVelocityY > 0.01f || soData.stats.coyoteJump)
         {
             SetState(State.Jump);
+        }
+        else if (soData.stats.isClimbing)
+        {
+            SetState(State.Climb);
         }
         else if (soData.stats.canHang && componentData.curClimbCollider != null && componentData.boxCollider.bounds.max.y < componentData.curClimbCollider.bounds.max.y)
         {
@@ -266,7 +276,12 @@ public class SpyBrain : MonoBehaviour
             {
                 if (soData.inputs.cancel)
                 {
+                    componentData.rigidBody.gravityScale = soData.settings.gravityScale;
                     soData.stats.canHang = false;
+                }
+                else if (soData.inputs.interact)
+                {
+                    soData.stats.isClimbing = true;
                 }
             }
             break;
@@ -305,6 +320,17 @@ public class SpyBrain : MonoBehaviour
                 if (componentData.rigidBody.linearVelocityY < -soData.settings.antiGravApexThreshold)
                 {
                     componentData.rigidBody.gravityScale = soData.stats.gravityScale;
+                }
+            }
+            break;
+            case State.Climb:
+            {
+                if (soData.stats.firstFixedFrameClimb)
+                {
+                    float climbXPos = soData.stats.isLeftClimbBound ? componentData.curClimbCollider.bounds.min.x : componentData.curClimbCollider.bounds.max.x;
+                    componentData.rigidBody.position = new Vector2(climbXPos, componentData.curClimbCollider.bounds.max.y);
+                    componentData.animator.Play(animClipData.climbHash, 0, 0f);
+                    soData.stats.firstFixedFrameClimb = false;
                 }
             }
             break;
@@ -362,21 +388,21 @@ public class SpyBrain : MonoBehaviour
             break;
             case State.Hang:
             {
-                bool leftClimbBound = componentData.rigidBody.position.x > componentData.curClimbCollider.bounds.center.x;
+                soData.stats.isLeftClimbBound = componentData.rigidBody.position.x > componentData.curClimbCollider.bounds.center.x;
 
                 componentData.animator.Play(animClipData.grabLedgeHash);
                 componentData.rigidBody.gravityScale = 0;
                 componentData.rigidBody.linearVelocity = Vector2.zero;
 
-                float hangXPos = leftClimbBound ? componentData.curClimbCollider.bounds.max.x : componentData.curClimbCollider.bounds.min.x;
+                float hangXPos = soData.stats.isLeftClimbBound ? componentData.curClimbCollider.bounds.max.x : componentData.curClimbCollider.bounds.min.x;
                 float hangYPos = componentData.curClimbCollider.bounds.center.y - componentData.boxCollider.bounds.size.y;
                 componentData.rigidBody.position = new Vector2(hangXPos, hangYPos);
-                componentData.spriteRenderer.flipX = leftClimbBound; 
+                componentData.spriteRenderer.flipX = soData.stats.isLeftClimbBound; 
             }
             break;
             case State.Climb:
             {
-                componentData.animator.Play(animClipData.climbHash);
+                
             }
             break;
         }
@@ -417,9 +443,10 @@ public class SpyBrain : MonoBehaviour
             }
             break;
 
-            case State.Hang:
+            case State.Climb:
             {
-                componentData.rigidBody.gravityScale = 1;
+                componentData.rigidBody.gravityScale = soData.settings.gravityScale;
+                soData.stats.firstFixedFrameClimb = true;
             }
             break;
         }
@@ -427,6 +454,10 @@ public class SpyBrain : MonoBehaviour
     private void PlayRunningClip()
     {
         componentData.animator.Play(animClipData.runHash);
+    }
+    private void ExitClimbClip()
+    {
+        soData.stats.isClimbing = false;
     }
     private void CalculateCollisionPoints()
     {
@@ -478,10 +509,9 @@ public class SpyBrain : MonoBehaviour
             }
         }
     }
-
     private void OpenGangwayDoor()
     {
-        if (!soData.stats.onTrain) return;
+        if (!soData.stats.onTrain || !soData.stats.isGrounded) return;
         RaycastHit2D gangwayDoorHit = Physics2D.Linecast(componentData.boxCollider.bounds.center, new Vector2(componentData.boxCollider.bounds.center.x + (componentData.spriteRenderer.flipX ? -1 : 1), componentData.boxCollider.bounds.center.y), soData.layerSettings.trainLayers.gangwayDoor);
 
         if (gangwayDoorHit.collider != null)
@@ -495,29 +525,9 @@ public class SpyBrain : MonoBehaviour
         soData.stats.curLocationBounds = bounds;
         soData.stats.curLocationLayer = layerMask;
     }
-    private void ResetStats()
-    {
-        soData.stats.curHealth = 100;
-        soData.stats.curWorldPos = Vector2.zero;
-        soData.stats.spriteFlip = false;
-        soData.stats.startPos = Vector2.zero;
-        soData.stats.checkpointPos = Vector2.zero;
-        soData.stats.moveVelocity = Vector2.zero;
-        soData.stats.targetXVelocity = 0.0f;
-        soData.stats.curRunSpeed = 1.0f;
-        soData.stats.gravityScale = soData.settings.gravityScale;
-        soData.stats.curJumpHorizontalForce = 0.0f;
-        soData.stats.willJump = false;
-        soData.stats.lastJumpTime = 0.0f;
-        soData.stats.isGrounded = false;
-        soData.stats.coyoteJump = false;
-        soData.stats.coyoteTimeElapsed = 0.0f;
-        soData.stats.canBoardTrain = false;
-        soData.stats.onTrain = false;
-    }
     private void OnApplicationQuit()
     {
-        ResetStats();
+        soData.stats.ResetStats();
     }
     private void OnDrawGizmos()
     {

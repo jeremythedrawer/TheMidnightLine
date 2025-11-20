@@ -99,7 +99,7 @@ public class CameraMovement : MonoBehaviour
 
             case CameraStatsSO.State.Roof:
             {
-
+                soData.cameraStats.targetWorldPos.x = soData.spyStats.curWorldPos.x + soData.cameraStats.curHorOffset;
             }
             break;
 
@@ -124,24 +124,29 @@ public class CameraMovement : MonoBehaviour
             case CameraStatsSO.State.Station:
             {
                 soData.cameraStats.targetWorldPos.y = soData.spyStats.curWorldPos.y;
+                soData.cameraStats.targetSize = soData.cameraStats.initialSize;
+
             }
             break;
 
             case CameraStatsSO.State.Carriage:
             {
                 soData.cameraStats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y;
+                soData.cameraStats.targetSize = soData.cameraStats.initialSize;
             }
             break;
 
             case CameraStatsSO.State.Roof:
             {
                 soData.cameraStats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y;
+                soData.cameraStats.targetSize = soData.cameraSettings.roofProjectionSize;
             }
             break;
 
             case CameraStatsSO.State.Gangway:
             {
-
+                soData.cameraStats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y;
+                soData.cameraStats.targetSize = soData.cameraStats.initialSize;
             }
             break;
         }

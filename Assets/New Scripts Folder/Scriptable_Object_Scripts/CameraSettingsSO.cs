@@ -11,10 +11,9 @@ public class CameraSettingsSO : ScriptableObject
     public float shakeTime = 0.5f;
     public float shakeIntensity = 0.4f;
 
-    [Header("Airborne")]
     [Range(1f, 2f)] public float fallingSizeMultiplier = 1.5f;
     public float fallingOffset = 0.3f;
-    [Range(0, 640)] public int fallThreshold;
-
+    public int fallThreshold;
+    public float roofProjectionSize = 10.0f;
     public bool turnOnGUI;
 }
