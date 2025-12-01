@@ -5,6 +5,7 @@ public class CameraStatsSO : ScriptableObject
 {
     public enum State
     {
+        None,
         Station,
         Carriage,
         Roof,

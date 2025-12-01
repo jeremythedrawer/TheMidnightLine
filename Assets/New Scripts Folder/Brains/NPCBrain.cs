@@ -39,22 +39,18 @@ public class NPCBrain : MonoBehaviour
         public TrainSettingsSO trainSettings;
     }
     [SerializeField] SOData soData;
-    [Serializable] public struct StateData
-    {
-        internal State curState;
-        internal Type type;
-    }
-    [SerializeField] StateData stateData;
 
     [Serializable] public struct StatData
     {
+        internal State curState;
+        internal Type type;
         internal bool canBoardTrain;
         internal float targetXVelocity;
         internal float curRunSpeed;
         internal float targetXPos;
         internal float targetDist;
     }
-    [SerializeField] StatData statData;
+    [SerializeField] StatData stats;
 
     [Serializable] public struct InputData
     {
@@ -118,22 +114,22 @@ public class NPCBrain : MonoBehaviour
     }
     private void OnEnable()
     {
-        gameEventData.OnUnlockSlideDoors.RegisterListener(() => statData.canBoardTrain = true);
+        gameEventData.OnUnlockSlideDoors.RegisterListener(() => stats.canBoardTrain = true);
     }
     private void OnDisable()
     {
-        gameEventData.OnUnlockSlideDoors.UnregisterListener(() => statData.canBoardTrain = true);
+        gameEventData.OnUnlockSlideDoors.UnregisterListener(() => stats.canBoardTrain = true);
     }
     private void Start()
     {
-        stateData.curState = State.Idle;
+        stats.curState = State.Idle;
         componentData.rigidBody.includeLayers = soData.layerSettings.stationLayers.ground;
-        statData.curRunSpeed = 1.0f;
+        stats.curRunSpeed = 1.0f;
 
         componentData.mpb.SetFloat(materialData.zPosID, soData.trainSettings.entityDepthRange.x);
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
-        statData.targetXPos = transform.position.x;
+        stats.targetXPos = transform.position.x;
 
     }
     private void Update()
@@ -143,16 +139,20 @@ public class NPCBrain : MonoBehaviour
         componentData.mpb.SetTexture(materialData.mainTexID, componentData.spriteRenderer.sprite.texture);
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
-        statData.targetDist = statData.targetXPos - transform.position.x;
-        inputData.move = Mathf.Abs(statData.targetDist) > 0.1f ? Mathf.Sign(statData.targetDist) : 0.0f;
+        stats.targetDist = stats.targetXPos - transform.position.x;
+        inputData.move = Mathf.Abs(stats.targetDist) > 0.1f ? Mathf.Sign(stats.targetDist) : 0.0f;
     }
     private void FixedUpdate()
     {
         FixedUpdateStates();
         BoardTrain();
 
-        statData.targetXVelocity = soData.settings.moveSpeed * statData.curRunSpeed * inputData.move;
-        componentData.rigidBody.linearVelocityX = Mathf.Lerp(componentData.rigidBody.linearVelocityX, statData.targetXVelocity, soData.settings.groundAccelation * Time.fixedDeltaTime);
+        stats.targetXVelocity = soData.settings.moveSpeed * stats.curRunSpeed * inputData.move;
+        componentData.rigidBody.linearVelocityX = Mathf.Lerp(componentData.rigidBody.linearVelocityX, stats.targetXVelocity, soData.settings.groundAccelation * Time.fixedDeltaTime);
+    }
+    private void OnApplicationQuit()
+    {
+        ResetData();
     }
     private void SelectingStates()
     {
@@ -171,7 +171,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void UpdateStates()
     {
-        switch (stateData.curState)
+        switch (stats.curState)
         {
             case State.Idle:
             {
@@ -192,7 +192,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void FixedUpdateStates()
     {
-        switch (stateData.curState)
+        switch (stats.curState)
         {
             case State.Idle:
             {
@@ -207,15 +207,15 @@ public class NPCBrain : MonoBehaviour
     }
     private void SetState(State newState)
     {
-        if (stateData.curState == newState) return;
+        if (stats.curState == newState) return;
         ExitState();
-        stateData.curState = newState;
+        stats.curState = newState;
         EnterState();
 
     }
     private void EnterState()
     {
-        switch (stateData.curState)
+        switch (stats.curState)
         {
             case State.Idle:
             {
@@ -237,14 +237,14 @@ public class NPCBrain : MonoBehaviour
             case State.Run:
             {
                 componentData.animator.Play(animClipData.startRunHash);
-                statData.curRunSpeed = soData.settings.runSpeedMultiplier;
+                stats.curRunSpeed = soData.settings.runSpeedMultiplier;
             }
             break;
         }
     }
     private void ExitState()
     {
-        switch (stateData.curState)
+        switch (stats.curState)
         {
             case State.Idle:
             {
@@ -257,7 +257,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case State.Run:
             {
-                statData.curRunSpeed = 1.0f;
+                stats.curRunSpeed = 1.0f;
             }
             break;
         }
@@ -269,7 +269,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void BoardTrain()
     {
-        if (!statData.canBoardTrain) return; // only board train when you can board and npc is on the station ground
+        if (!stats.canBoardTrain) return; // only board train when you can board and npc is on the station ground
 
         if (componentData.rigidBody.includeLayers == soData.layerSettings.stationMask)
         {
@@ -280,17 +280,17 @@ public class NPCBrain : MonoBehaviour
                 if (slideDoorHit.collider == null) { Debug.LogWarning($"{name} did not find a slide door to go to"); return; }
 
                 SlideDoors selectedDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-                statData.targetXPos = selectedDoors.transform.position.x;
+                stats.targetXPos = selectedDoors.transform.position.x;
                 componentData.slideDoors = selectedDoors;
 
             }
             else if (inputData.move == 0.0f)
             {
-                if (componentData.slideDoors.stateData.curState == SlideDoors.State.Unlocked)
+                if (componentData.slideDoors.stats.curState == SlideDoors.State.Unlocked)
                 {
                     componentData.slideDoors.OpenDoors();
                 }
-                else if (componentData.slideDoors.stateData.curState == SlideDoors.State.Opened) // enter train when slide door is opened
+                else if (componentData.slideDoors.stats.curState == SlideDoors.State.Opened) // enter train when slide door is opened
                 {
                     float zPos = UnityEngine.Random.Range(soData.trainSettings.entityDepthRange.x, soData.trainSettings.entityDepthRange.y);
 
@@ -310,7 +310,6 @@ public class NPCBrain : MonoBehaviour
             }
         }
     }
-
     public void FindCarriageChair()
     {
         Vector2 boxCastSize = new Vector2(soData.settings.maxDistanceDetection * 2, componentData.boxCollider.bounds.size.y);
@@ -322,7 +321,7 @@ public class NPCBrain : MonoBehaviour
         {
             if(!selectedChairs.chairData[i].filled)
             {
-                statData.targetXPos = selectedChairs.chairData[i].chairXPos;
+                stats.targetXPos = selectedChairs.chairData[i].chairXPos;
                 selectedChairs.chairData[i].filled = true;
 
                 float zPos = selectedChairs.transform.position.z - 1;
@@ -335,12 +334,16 @@ public class NPCBrain : MonoBehaviour
         }
         componentData.carriageChairs = selectedChairs;
     }
-
+    private void ResetData()
+    {
+        componentData.mpb.SetFloat(materialData.zPosID, 0f);
+        componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
+    }
     private void OnDrawGizmos()
     {
         if (!Application.isPlaying) return;
         Gizmos.color = Color.magenta;
-        Gizmos.DrawLine(componentData.boxCollider.bounds.center, new Vector2(statData.targetXPos, componentData.boxCollider.bounds.center.y));
+        Gizmos.DrawLine(componentData.boxCollider.bounds.center, new Vector2(stats.targetXPos, componentData.boxCollider.bounds.center.y));
     }
     private void OnDrawGizmosSelected()
     {

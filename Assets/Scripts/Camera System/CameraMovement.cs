@@ -56,6 +56,10 @@ public class CameraMovement : MonoBehaviour
         cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, soData.cameraStats.targetSize, Time.deltaTime * soData.cameraSettings.damping);
         transform.position = new Vector3(camWorldPos.x, camWorldPos.y, transform.position.z);
     }
+    private void OnApplicationQuit()
+    {
+        ResetCamera();
+    }
     private void SelectStates()
     {
         if (!soData.spyStats.onTrain)
@@ -180,7 +184,7 @@ public class CameraMovement : MonoBehaviour
     }
     private void ResetCamera()
     {
-        soData.cameraStats.curState = CameraStatsSO.State.Station;
+        soData.cameraStats.curState = CameraStatsSO.State.None;
         soData.cameraStats.initialSize = cam.orthographicSize;
         soData.cameraStats.curHorOffset = 0.0f;
         soData.cameraStats.targetSize = cam.orthographicSize;

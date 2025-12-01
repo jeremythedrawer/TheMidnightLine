@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 7710432186302196377}
   - component: {fileID: 8532004092906431702}
   m_Layer: 16
-  m_Name: SlideDoors
+  m_Name: InteriorSlideDoors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -47,6 +47,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874bf1172ab6e7047bd479128420855f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  settings:
+    type: 0
   soData:
     trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
     trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
@@ -57,8 +59,7 @@ MonoBehaviour:
     sliderDoors:
     - {fileID: 2478155904691476959}
     - {fileID: 5676414161251035514}
-  stateData:
-    curState: 0
+    collider: {fileID: 8532004092906431702}
 --- !u!61 &8532004092906431702
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -181,7 +182,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -3745207728158878997, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
+  m_Sprite: {fileID: -3775900651498836916, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
@@ -268,7 +269,7 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: -3745207728158878997, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
+  m_Sprite: {fileID: -3775900651498836916, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0

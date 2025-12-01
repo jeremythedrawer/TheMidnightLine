@@ -8,7 +8,7 @@ public class TrainStatsSO : ScriptableObject
     
     internal int curStationIndex = 0;
     internal float curKMPerHour = 0;
-    public float targetKMPerHour = 10;
+    internal float targetKMPerHour = 10;
     internal float metersTravelled;
     internal bool arrivedAtStartPos;
     internal float distanceToNextStation;
@@ -18,11 +18,10 @@ public class TrainStatsSO : ScriptableObject
     internal float halfXSize;
 
     internal bool boardPassengers;
-
-    public float doorMovingTime = 2.0f;
     internal float wheelCircumference;
 
-    internal List<Vector2> slideDoorPositions = new List<Vector2>(); 
+    internal List<Vector2> slideDoorPositions = new List<Vector2>();
+    internal SlideDoors.Type slideDoorsToUnlock;
     public float GetMetersPerSecond()
     {
         return curKMPerHour  * KM_TO_MPS;

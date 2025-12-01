@@ -89,6 +89,7 @@ public class TrainBrain : MonoBehaviour
         }
         soData.stats.targetKMPerHour = 0f;
         soData.stats.curKMPerHour = 0f;
+        soData.stats.slideDoorsToUnlock = SlideDoors.Type.Exterior;
         gameEventData.OnUnlockSlideDoors.Raise();
     }
     private void ResetStats()

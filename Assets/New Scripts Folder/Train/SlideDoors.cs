@@ -5,6 +5,12 @@ using UnityEngine;
 
 public class SlideDoors : MonoBehaviour
 {
+    public enum Type
+    { 
+        Interior,
+        Exterior
+    }
+
     public enum State
     { 
         Locked,
@@ -13,7 +19,16 @@ public class SlideDoors : MonoBehaviour
         Opened,
         Closing,
     }
-
+    [Serializable] public struct Settings
+    { 
+        public Type type;
+    }
+    [SerializeField] Settings settings;
+    [Serializable] public struct Stats
+    {
+        internal State curState;
+    }
+    public Stats stats;
     [Serializable] public struct SOData
     {
         public TrainStatsSO trainStats;
@@ -30,14 +45,10 @@ public class SlideDoors : MonoBehaviour
     [Serializable] public struct ComponentData
     {
         public SpriteRenderer[] sliderDoors;
+        public BoxCollider2D collider;
     }
     [SerializeField] ComponentData componentData;
 
-    [Serializable] public struct StateData
-    {
-       public State curState;
-    }
-    public StateData stateData;
 
     private void Awake()
     {
@@ -55,15 +66,22 @@ public class SlideDoors : MonoBehaviour
         gameEventData.OnReset.UnregisterListener(ResetDoors);
     }
 
+    private void Start()
+    {
+        stats.curState = State.Locked;
+        componentData.collider.enabled = false;
+    }
     private void UnlockDoors()
     {
+        if (soData.trainStats.slideDoorsToUnlock != settings.type) return;
+        componentData.collider.enabled = true;
         MoveDoors(moveAmount: soData.trainSettings.slideDoorSprite.bounds.size.x * 0.01f, moveTime: 0.3f, State.Unlocked).Forget();
     }
 
     public void OpenDoors()
     {
-        stateData.curState = State.Opening;
-        MoveDoors(moveAmount: soData.trainSettings.slideDoorSprite.bounds.size.x * 0.99f, moveTime: soData.trainStats.doorMovingTime, State.Opened).Forget();
+        stats.curState = State.Opening;
+        MoveDoors(moveAmount: soData.trainSettings.slideDoorSprite.bounds.size.x * 0.99f, moveTime: soData.trainSettings.doorMoveTime, State.Opened).Forget();
     }
     private async UniTaskVoid MoveDoors(float moveAmount, float moveTime, State newState)
     {
@@ -88,12 +106,12 @@ public class SlideDoors : MonoBehaviour
             await UniTask.Yield();
         }
 
-        stateData.curState = newState;
+        stats.curState = newState;
     }
 
     private void ResetDoors()
     {
-        stateData.curState = State.Locked;
+        stats.curState = State.Locked;
         for (int i = 0; i < componentData.sliderDoors.Length; i++)
         {
             float xPos = soData.trainSettings.slideDoorSprite.bounds.size.x * -componentData.sliderDoors[i].transform.localScale.x;

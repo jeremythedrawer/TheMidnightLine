@@ -39,6 +39,7 @@ public class SpyBrain : MonoBehaviour
     {
         public GameEvent OnUnlockSlideDoors;
         public GameEvent OnInteract;
+        public GameEvent OnBoardingSpy;
     }
     [SerializeField] GameEventData gameEventData;
 
@@ -152,7 +153,7 @@ public class SpyBrain : MonoBehaviour
             componentData.rigidBody.position = new Vector2(componentData.rigidBody.position.x, componentData.rigidBody.position.y + (collisionPoints.stepRight.y - transform.position.y));
         }
 
-        if (stateData.curStateType != State.Hang)
+        if (stateData.curStateType != State.Hang && stateData.curStateType != State.Climb)
         {
             soData.stats.targetXVelocity = (soData.settings.moveSpeed * soData.stats.curRunSpeed * soData.inputs.move) + (soData.stats.curJumpHorizontalForce * soData.inputs.move);
             componentData.rigidBody.linearVelocityX = Mathf.Lerp(soData.stats.moveVelocity.x, soData.stats.targetXVelocity, soData.settings.groundAccelation * Time.fixedDeltaTime);
@@ -402,7 +403,8 @@ public class SpyBrain : MonoBehaviour
             break;
             case State.Climb:
             {
-                
+                componentData.rigidBody.gravityScale = 0;
+                componentData.rigidBody.linearVelocity = Vector2.zero;
             }
             break;
         }
@@ -471,14 +473,15 @@ public class SpyBrain : MonoBehaviour
     {
         if (componentData.rigidBody.includeLayers == soData.layerSettings.stationLayers.ground && soData.stats.canBoardTrain)
         {
-            RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.trainLayers.slideDoors);
+            RaycastHit2D[] slideDoorHit = Physics2D.BoxCastAll(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.trainLayers.slideDoors);
 
-            if (slideDoorHit.collider != null)
+            for (int i = 0; i < slideDoorHit.Length; i++)
             {
-                componentData.slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-                if (componentData.slideDoors.stateData.curState == SlideDoors.State.Unlocked) 
+                componentData.slideDoors = slideDoorHit[i].collider.GetComponent<SlideDoors>();
+                if (componentData.slideDoors.stats.curState == SlideDoors.State.Unlocked) 
                 {
                     componentData.slideDoors.OpenDoors();
+                    break;
                 }
             }
         }
@@ -492,7 +495,7 @@ public class SpyBrain : MonoBehaviour
             if (slideDoorHit.collider != null)
             {
                 componentData.slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-                if (componentData.slideDoors.stateData.curState == SlideDoors.State.Opened)
+                if (componentData.slideDoors.stats.curState == SlideDoors.State.Opened)
                 {
                     RaycastHit2D insideCarriageHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, soData.layerSettings.trainLayers.insideCarriageBounds);
 
@@ -505,6 +508,7 @@ public class SpyBrain : MonoBehaviour
 
                     soData.stats.onTrain = true;
                     transform.position = new Vector3(transform.position.x, transform.position.y, soData.trainSettings.entityDepthRange.x + soData.settings.depthPositionInTrain);
+                    gameEventData.OnBoardingSpy.Raise();
                 }
             }
         }
