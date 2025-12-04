@@ -211,7 +211,7 @@ public class SpyBrain : MonoBehaviour
         {
             SetState(State.Climb);
         }
-        else if (soData.stats.canHang && componentData.curClimbCollider != null && componentData.boxCollider.bounds.max.y < componentData.curClimbCollider.bounds.max.y)
+        else if (soData.stats.canHang && componentData.curClimbCollider != null && componentData.boxCollider.bounds.max.y < componentData.curClimbCollider.bounds.max.y && soData.stats.onTrain)
         {
             SetState(State.Hang);
         }

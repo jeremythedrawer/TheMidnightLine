@@ -25,30 +25,19 @@ public class CarriageExteriorWall : MonoBehaviour
     MaterialPropertyBlock mpb;
     float alpha;
 
-    CancellationTokenSource ctsFade = new();
+    CancellationTokenSource ctsFade;
     private void Awake()
     {
         materialIDs.alphaID = Shader.PropertyToID("_Alpha");
         mpb = new MaterialPropertyBlock();
+        ctsFade = new CancellationTokenSource();
         alpha = 1;
-    }
-
-    private void OnEnable()
-    {
-        //OnBoardingSpy.RegisterListener(BoardSpy);
-    }
-
-    private void OnDisable()
-    {
-        //OnBoardingSpy.UnregisterListener(BoardSpy);
-        
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if ((layerSettings.spy.value & (1 << collision.gameObject.layer)) != 0 && spyStats.onTrain)
         {
             StartFade(fadeIn: false);
-
         }
     }
 

@@ -51,7 +51,7 @@ public class SpyStatsSO : ScriptableObject
 
         curJumpHorizontalForce = 0.0f;
         willJump = false;
-        lastJumpTime = 0.0f;
+        lastJumpTime = float.MinValue;
         coyoteJump = false;
         coyoteTimeElapsed = 0.0f;
 

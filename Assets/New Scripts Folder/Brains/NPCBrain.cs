@@ -9,14 +9,25 @@ public class NPCBrain : MonoBehaviour
     {
         Idle,
         Walk,
-        Run,
-        Dead,
     }
     
     public enum Type
     {
         Agent,
         Bystander
+    }
+
+    [Flags] public enum Behaviours
+    {
+        Nothing = 0,
+        Smoker = 1 << 0,
+        Isolater = 1 << 1,
+        TimeTracker = 1 << 2,
+        Sleeper = 1 << 3,
+        Stander = 1 << 4,
+        Puker = 1 << 5,
+        Eater = 1 << 6,
+        HeavyMetalEnjoyer = 1 << 7,
     }
 
     [Serializable] public struct ComponentData
@@ -44,6 +55,7 @@ public class NPCBrain : MonoBehaviour
     {
         internal State curState;
         internal Type type;
+        internal Behaviours behaviours;
         internal bool canBoardTrain;
         internal float targetXVelocity;
         internal float curRunSpeed;
@@ -56,7 +68,6 @@ public class NPCBrain : MonoBehaviour
     {
         internal bool jump;
         internal float move;
-        internal bool run;
     }
     [SerializeField] InputData inputData;
 
@@ -66,20 +77,24 @@ public class NPCBrain : MonoBehaviour
     }
     [SerializeField] GameEventData gameEventData;
 
+    [Serializable] public struct AnimHashData
+    {
+        internal int calmBreathingHash;
+        internal int calmBlinkingHash;
+
+        internal int sitBreathingHash;
+        internal int sitBlinkingHash;
+        
+        internal int walkHash;
+    }
+    [SerializeField] AnimHashData animHashData;
+
     [Serializable] public struct AnimClipData
     {
         public AnimationClip startRunClip;
+        public AnimationClip[] standingCalmClips;
+        public AnimationClip[] sittingCalmClips;
 
-        internal int calmBreathingHash;
-        internal int calmBlinkingHash;
-        internal int sitBreathingHash;
-        internal int sitBlinkingHash;
-        internal int walkHash;
-        internal int startRunHash;
-        internal int runHash;
-        internal int deadHash;
-        internal int panicBreathingHash;
-        internal int panicBlinkingHash;
     }
     [SerializeField] AnimClipData animClipData;
 
@@ -95,22 +110,15 @@ public class NPCBrain : MonoBehaviour
         componentData.animController = componentData.animator.runtimeAnimatorController;
         componentData.mpb = new MaterialPropertyBlock();
 
-        animClipData.calmBreathingHash = Animator.StringToHash("CalmBreathing");
-        animClipData.calmBlinkingHash = Animator.StringToHash("CalmBlinking");
-        animClipData.sitBreathingHash = Animator.StringToHash("SitBreathing");
-        animClipData.sitBlinkingHash = Animator.StringToHash("SitBlinking");
-        animClipData.walkHash = Animator.StringToHash("Walk");
-        animClipData.startRunHash = Animator.StringToHash("StartRun");
-        animClipData.runHash = Animator.StringToHash("Run");
-        animClipData.deadHash = Animator.StringToHash("Dead");
-        animClipData.panicBreathingHash = Animator.StringToHash("PanicBreathing");
-        animClipData.panicBlinkingHash = Animator.StringToHash("PanicBlinking");
+        animHashData.calmBreathingHash = Animator.StringToHash("CalmBreathing");
+        animHashData.calmBlinkingHash = Animator.StringToHash("CalmBlinking");
+        animHashData.sitBreathingHash = Animator.StringToHash("SitBreathing");
+        animHashData.sitBlinkingHash = Animator.StringToHash("SitBlinking");
+        animHashData.walkHash = Animator.StringToHash("Walk");
 
         materialData.colorID = Shader.PropertyToID("_Color");
         materialData.zPosID = Shader.PropertyToID("_ZPos");
         materialData.mainTexID = Shader.PropertyToID("_MainTex");
-
-        Utils.SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));
     }
     private void OnEnable()
     {
@@ -130,6 +138,7 @@ public class NPCBrain : MonoBehaviour
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
         stats.targetXPos = transform.position.x;
+        stats.behaviours = Utils.GetBehaviours();
 
     }
     private void Update()
@@ -156,13 +165,9 @@ public class NPCBrain : MonoBehaviour
     }
     private void SelectingStates()
     {
-        if (inputData.move != 0 && !inputData.run)
+        if (inputData.move != 0)
         {
             SetState(State.Walk);
-        }
-        else if (inputData.move != 0 && inputData.run) 
-        {
-            SetState(State.Run);
         }
         else
         {
@@ -179,11 +184,6 @@ public class NPCBrain : MonoBehaviour
             }
             break;
             case State.Walk:
-            {
-                componentData.spriteRenderer.flipX = inputData.move < 0;
-            }
-            break;
-            case State.Run:
             {
                 componentData.spriteRenderer.flipX = inputData.move < 0;
             }
@@ -221,23 +221,17 @@ public class NPCBrain : MonoBehaviour
             {
                 if (componentData.carriageChairs != null)
                 {
-                    componentData.animator.Play(animClipData.sitBreathingHash);
+                    componentData.animator.Play(animHashData.sitBreathingHash);
                 }
                 else
                 {
-                    componentData.animator.Play(animClipData.calmBreathingHash);
+                    componentData.animator.Play(animHashData.calmBreathingHash);
                 }
             }
             break;
             case State.Walk:
             {
-                componentData.animator.Play(animClipData.walkHash);
-            }
-            break;
-            case State.Run:
-            {
-                componentData.animator.Play(animClipData.startRunHash);
-                stats.curRunSpeed = soData.settings.runSpeedMultiplier;
+                componentData.animator.Play(animHashData.walkHash);
             }
             break;
         }
@@ -255,17 +249,8 @@ public class NPCBrain : MonoBehaviour
             {
             }
             break;
-            case State.Run:
-            {
-                stats.curRunSpeed = 1.0f;
-            }
-            break;
         }
 
-    }
-    private void PlayRunningClip()
-    {
-        componentData.animator.Play(animClipData.runHash);
     }
     private void BoardTrain()
     {
