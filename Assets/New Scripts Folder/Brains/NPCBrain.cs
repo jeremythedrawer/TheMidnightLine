@@ -50,7 +50,7 @@ public class NPCBrain : MonoBehaviour
         internal float targetXPos;
         internal float targetDist;
     }
-    [SerializeField] StatData stats;
+    [SerializeField] public StatData stats;
 
     [Serializable] public struct InputData
     {

@@ -754,8 +754,12 @@ MonoBehaviour:
   soData:
     station: {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
     trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+    trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
+    npcData: {fileID: 11400000, guid: 90e42f02b18db81488fae58b46492ae1, type: 2}
   gameEvents:
     OnStationLeave: {fileID: 11400000, guid: 91da1d51e2e24c946a31d14f91be008d, type: 2}
+  components:
+    platformCollider: {fileID: 5939122199044154566}
 --- !u!1 &8757817511839388079
 GameObject:
   m_ObjectHideFlags: 0
