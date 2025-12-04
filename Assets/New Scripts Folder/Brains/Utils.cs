@@ -13,9 +13,9 @@ public static class Utils
         clip.AddEvent(animationEvent);
     }
 
-    public static NPCBrain.Behaviours GetBehaviours()
+    public static Behaviours GetBehaviours()
     {
-        int numBehaviours = Enum.GetValues(typeof(NPCBrain.Behaviours)).Length - 1;
+        int numBehaviours = Enum.GetValues(typeof(Behaviours)).Length - 1;
 
         int firstBehave = 1 << UnityEngine.Random.Range(0, numBehaviours);
 
@@ -26,6 +26,6 @@ public static class Utils
         }
         while (secondBehave == firstBehave);
 
-        return (NPCBrain.Behaviours)(firstBehave | secondBehave);
+        return (Behaviours)(firstBehave | secondBehave);
     }
 }

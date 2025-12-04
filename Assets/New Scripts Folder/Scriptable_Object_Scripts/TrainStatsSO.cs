@@ -6,7 +6,7 @@ public class TrainStatsSO : ScriptableObject
 {
     internal const float KM_TO_MPS = 0.27777777778f;
     
-    internal int curStationIndex = 0;
+    internal int nextStationIndex = 0;
     internal float curKMPerHour = 0;
     internal float targetKMPerHour = 10;
     internal float metersTravelled;

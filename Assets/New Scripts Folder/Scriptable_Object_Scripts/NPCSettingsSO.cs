@@ -16,21 +16,5 @@ public class NPCSettingsSO : ScriptableObject
     [Header("Colors")]
     public Color suspectColor = Color.red;
 
-    [Flags]
-    public enum Appearence
-    {
-        Nothing = 0,
-        Heavy = 1 << 0,
-        Tall = 1 << 1,
-        Old = 1 << 2,
-        Glasses = 1 << 3,
-        SuitAndTie = 1 << 4,
-        Bald = 1 << 5,
-        DarkHair = 1 << 6,
-        Dress = 1 << 7,
-        Shorts = 1 << 8,
-        Bag = 1 << 9,
-        Headware = 1 << 10,
-    }
     public Appearence appearence;
 }

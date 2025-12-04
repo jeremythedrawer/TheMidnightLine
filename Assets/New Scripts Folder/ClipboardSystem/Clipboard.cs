@@ -6,7 +6,6 @@ public class Clipboard : MonoBehaviour
     [Serializable] public struct ComponentData
     {
         public RectTransform rectTransform;
-        public Canvas canvas;
     }
     [SerializeField] ComponentData components;
     [Serializable] public struct SOData

@@ -6,7 +6,6 @@ using UnityEngine;
 
 public class TrainBrain : MonoBehaviour
 {
-
     [Serializable] public struct SOData
     {
         public TrainSettingsSO settings;
@@ -19,6 +18,10 @@ public class TrainBrain : MonoBehaviour
     {
         public GameEvent OnReset;
         public GameEvent OnUnlockSlideDoors;
+        public GameEvent OnCloseSlideDoors;
+        public GameEvent OnStationArrival;
+        public GameEvent OnStationLeave; //TODO raise when train leaves a station
+        public GameEvent OnBoardingSpy;
     }
     [SerializeField] GameEventData gameEventData;
 
@@ -40,14 +43,14 @@ public class TrainBrain : MonoBehaviour
     }
     private void OnEnable()
     {
-        ResetStats();
         gameEventData.OnReset.RegisterListener(ResetStats);
+        gameEventData.OnBoardingSpy.RegisterListener(SpyHasBoarded);
         MovingTrainToStart().Forget();
     }
-
     private void OnDisable()
     {
         gameEventData.OnReset.UnregisterListener(ResetStats);     
+        gameEventData.OnBoardingSpy.UnregisterListener(SpyHasBoarded);
     }
     private void Start()
     {
@@ -59,16 +62,18 @@ public class TrainBrain : MonoBehaviour
         soData.stats.curKMPerHour = Mathf.Lerp(soData.stats.curKMPerHour, soData.stats.targetKMPerHour, soData.settings.accelerationSpeed * Time.deltaTime);
         soData.stats.metersTravelled += soData.stats.GetMetersPerSecond() * Time.deltaTime;
         soData.stats.curCenterXPos = transform.position.x + soData.stats.halfXSize;
-        soData.stats.distanceToNextStation = soData.stations[soData.stats.curStationIndex].metersPosition - soData.stats.metersTravelled - (soData.stats.startXPos + soData.stats.halfXSize);
+        soData.stats.distanceToNextStation = soData.stations[soData.stats.nextStationIndex].metersPosition - soData.stats.metersTravelled - (soData.stats.startXPos + soData.stats.halfXSize);
     }
-    private async UniTaskVoid MovingTrainToStart()
+    private void OnApplicationQuit()
     {
-        //while (Mathf.Abs(soData.stats.curKMPerHour - soData.stats.targetKMPerHour) > 0.1f)
-        //{
-        //    transform.position = new Vector3(soData.stats.startXPos + soData.stats.metersTravelled, transform.position.y, transform.position.z);
-        //    await UniTask.Yield();
-        //}
-
+        ResetStats();
+    }
+    private void SpyHasBoarded()
+    {
+        gameEventData.OnCloseSlideDoors.Raise();
+    }
+    private async UniTask MovingTrainToStart()
+    {
         while (soData.stats.distanceToNextStation > 0.1f)
         {
             float curMPreSec = soData.stats.GetMetersPerSecond();
@@ -91,10 +96,11 @@ public class TrainBrain : MonoBehaviour
         soData.stats.curKMPerHour = 0f;
         soData.stats.slideDoorsToUnlock = SlideDoors.Type.Exterior;
         gameEventData.OnUnlockSlideDoors.Raise();
+        gameEventData.OnStationArrival.Raise();
     }
     private void ResetStats()
     { 
-        soData.stats.curStationIndex = 0;
+        soData.stats.nextStationIndex = 0;
         soData.stats.curKMPerHour = 1000;
         soData.stats.targetKMPerHour = 1000;
         soData.stats.metersTravelled = 0.0f;
@@ -104,7 +110,6 @@ public class TrainBrain : MonoBehaviour
         soData.stats.startXPos = transform.position.x;
         soData.stats.wheelCircumference = (soData.settings.wheelSprite.rect.size.x / soData.settings.wheelSprite.pixelsPerUnit) * Mathf.PI;
     }
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

@@ -1,7 +1,13 @@
+using System;
+using TMPro;
 using UnityEngine;
 
 public class ProfilePage : MonoBehaviour
 {
-    //TODO: write down the two behaviours
-    //TODO: Image selector
+    [Serializable] public struct ComponentData
+    {
+        public TMP_Text behaviours;
+        public TMP_Text appearences;
+    }
+    [SerializeField] ComponentData components;
 }

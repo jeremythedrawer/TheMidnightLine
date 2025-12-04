@@ -12,7 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 5023d0cbb18a91949b78d39b876a00f5, type: 3}
   m_Name: TrainSettings_SO
   m_EditorClassIdentifier: 
+  stations:
+  - {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
+  - {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
   wheelSprite: {fileID: 21300000, guid: 474395c223aee904995d5ebfdaeca978, type: 3}
   slideDoorSprite: {fileID: 21300000, guid: d434529a4cb72fe4587bcd6e9913b885, type: 3}
   accelerationSpeed: 0.7
+  doorMoveTime: 2
   entityDepthRange: {x: -9, y: -5}

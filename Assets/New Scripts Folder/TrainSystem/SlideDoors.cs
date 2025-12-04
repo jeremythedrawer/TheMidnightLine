@@ -39,6 +39,7 @@ public class SlideDoors : MonoBehaviour
     {
         public GameEvent OnReset;
         public GameEvent OnUnlockSlideDoors;
+        public GameEvent OnCloseSlideDoors;
     }
     [SerializeField] GameEventData gameEventData;
 
@@ -57,12 +58,14 @@ public class SlideDoors : MonoBehaviour
     private void OnEnable()
     {
         gameEventData.OnUnlockSlideDoors.RegisterListener(UnlockDoors);
+        gameEventData.OnCloseSlideDoors.RegisterListener(CloseDoors);
         gameEventData.OnReset.RegisterListener(ResetDoors);
     }
 
     private void OnDisable()
     {
         gameEventData.OnUnlockSlideDoors.UnregisterListener(UnlockDoors);
+        gameEventData.OnCloseSlideDoors.UnregisterListener(CloseDoors);
         gameEventData.OnReset.UnregisterListener(ResetDoors);
     }
 
@@ -82,6 +85,13 @@ public class SlideDoors : MonoBehaviour
     {
         stats.curState = State.Opening;
         MoveDoors(moveAmount: soData.trainSettings.slideDoorSprite.bounds.size.x * 0.99f, moveTime: soData.trainSettings.doorMoveTime, State.Opened).Forget();
+    }
+
+    private void CloseDoors()
+    {
+        if (stats.curState == State.Locked) return;
+        stats.curState = State.Closing;
+        MoveDoors(moveAmount: -soData.trainSettings.slideDoorSprite.bounds.size.x, moveTime: soData.trainSettings.doorMoveTime, State.Locked).Forget();
     }
     private async UniTaskVoid MoveDoors(float moveAmount, float moveTime, State newState)
     {

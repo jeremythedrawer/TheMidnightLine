@@ -1,7 +1,6 @@
 using Proselyte.Sigils;
 using System;
 using UnityEngine;
-using static SpyBrain;
 
 public class NPCBrain : MonoBehaviour
 {
@@ -16,20 +15,6 @@ public class NPCBrain : MonoBehaviour
         Agent,
         Bystander
     }
-
-    [Flags] public enum Behaviours
-    {
-        Nothing = 0,
-        Smoker = 1 << 0,
-        Isolater = 1 << 1,
-        TimeTracker = 1 << 2,
-        Sleeper = 1 << 3,
-        Stander = 1 << 4,
-        Puker = 1 << 5,
-        Eater = 1 << 6,
-        HeavyMetalEnjoyer = 1 << 7,
-    }
-
     [Serializable] public struct ComponentData
     {
         public Rigidbody2D rigidBody;
@@ -48,6 +33,9 @@ public class NPCBrain : MonoBehaviour
         public NPCSettingsSO settings;
         public LayerSettingsSO layerSettings;
         public TrainSettingsSO trainSettings;
+
+        internal StationSO startStation;
+        internal StationSO endStation;
     }
     [SerializeField] SOData soData;
 
