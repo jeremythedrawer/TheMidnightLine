@@ -4,16 +4,16 @@ public class MaxBounds : MonoBehaviour
 {
     [SerializeField] MaxBoundsStatsSO stats;
     [SerializeField] TrainStatsSO trainStats;
-    [SerializeField] TrainSettingsSO trainSettings;
+    [SerializeField] StationsDataSO stationsData;
     [SerializeField] CameraSettingsSO camSettings;
     [SerializeField] CameraStatsSO camStats;
     [SerializeField] float bufferAmount = 1.1f;
     private void OnValidate()
     {
         float camMeterWidth = camSettings.maxProjectionSize * camStats.aspect;
-        stats.min.x = ((trainSettings.stations[0].metersPosition - trainStats.trainHalfLength) - camMeterWidth);
+        stats.min.x = ((stationsData.stations[0].metersPosition - trainStats.trainHalfLength) - camMeterWidth);
         stats.min.y = -camSettings.maxProjectionSize;
-        stats.max.x = ((trainSettings.stations[0].metersPosition + trainStats.trainHalfLength) + camMeterWidth);
+        stats.max.x = ((stationsData.stations[0].metersPosition + trainStats.trainHalfLength) + camMeterWidth);
         stats.max.y = (trainStats.trainMaxHeight + camSettings.maxProjectionSize);
         float aspectBufferAmount = bufferAmount * ((stats.max.x - stats.min.x) / (stats.max.y - stats.min.y));
         Vector2 bufferOffet = new Vector2(bufferAmount, bufferAmount);

@@ -10,6 +10,7 @@ public class TrainBrain : MonoBehaviour
     {
         public TrainSettingsSO settings;
         public TrainStatsSO stats;
+        public StationsDataSO stationsData;
     }
     [SerializeField] SOData soData;
 
@@ -65,7 +66,7 @@ public class TrainBrain : MonoBehaviour
     {
         soData.stats.curKMPerHour = Mathf.Lerp(soData.stats.curKMPerHour, soData.stats.targetKMPerHour, soData.settings.accelerationSpeed * Time.deltaTime);
         soData.stats.metersTravelled += soData.stats.GetMetersPerSecond() * Time.deltaTime;
-        soData.stats.distToNextStation = soData.settings.stations[soData.stats.nextStationIndex].metersPosition - soData.stats.metersTravelled - soData.stats.startCenterXPos;
+        soData.stats.distToNextStation = soData.stationsData.stations[soData.stats.nextStationIndex].metersPosition - soData.stats.metersTravelled - soData.stats.startCenterXPos;
     }
     private void OnApplicationQuit()
     {

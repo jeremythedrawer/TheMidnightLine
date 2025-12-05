@@ -2,29 +2,32 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class NPCManager : MonoBehaviour
 {
     [Serializable] public struct SOData
     {
-        public NPCDataSO npcData;
-        public TrainSettingsSO trainSettings;
+        public NPCsDataSO npcData;
+        public StationsDataSO stationsData;
     }
     [SerializeField] SOData soData;
 
     [SerializeField] float waitingForSeatTickRate = 0.3f;
-    public static Queue<NPCBrain> boardingNPCQueue = new Queue<NPCBrain>();
-    public static Queue<NPCBrain> agentNPCPool = new Queue<NPCBrain>();
     bool npcFindingChair;
 
+    private void Awake()
+    {
+        soData.npcData.npcsToPick = new List<NPCBrain>(soData.npcData.npcPrefabs);
+    }
     private void Start()
     {
         CreateNPCAgents();
     }
     private void Update()
     {
-        if (boardingNPCQueue.Count > 0 && npcFindingChair == false)
+        if (soData.npcData.boardingNPCQueue.Count > 0 && npcFindingChair == false)
         {
             SeatingBoardingNPCs().Forget();
         }
@@ -32,18 +35,19 @@ public class NPCManager : MonoBehaviour
 
     private void CreateNPCAgents()
     {
-        for (int i = 0; i < soData.trainSettings.stations.Length; i++)
+        for (int i = 0; i < soData.stationsData.stations.Length; i++)
         {
-            for (int j = 0; j < soData.trainSettings.stations[i].agentSpawnAmount; j++)
+            for (int j = 0; j < soData.stationsData.stations[i].agentSpawnAmount; j++)
             {
-                int randNPCIndex = UnityEngine.Random.Range(0, soData.npcData.npcsToPick.Count - 1); // pick from list
-                NPCBrain npc = Instantiate(soData.npcData.npcsToPick[randNPCIndex], transform.position, Quaternion.identity, transform);
+                int randNPCIndex = UnityEngine.Random.Range(0, soData.npcData.npcsToPick.Count); // pick from list
+
+                NPCBrain npc = Instantiate(soData.npcData.npcsToPick[randNPCIndex], transform.position, Quaternion.identity, null);
                 soData.npcData.npcsToPick.RemoveAt(randNPCIndex);
                 npc.stats.type = NPCBrain.Type.Agent;
 
                 Behaviours profilePageBehaviours = npc.stats.behaviours;
                 Appearence profilePageAppearence = npc.soData.settings.appearence;
-                agentNPCPool.Enqueue(npc);
+                soData.npcData.agentPool.Enqueue(npc);
                 npc.gameObject.SetActive(false);
             }
         }
@@ -51,9 +55,8 @@ public class NPCManager : MonoBehaviour
     private async UniTask SeatingBoardingNPCs()
     {
         npcFindingChair = true;
-        NPCBrain curNPC = boardingNPCQueue.Peek();
+        NPCBrain curNPC = soData.npcData.boardingNPCQueue.Dequeue();
         curNPC.FindCarriageChair();
-        boardingNPCQueue.Dequeue();
         await UniTask.WaitForSeconds(waitingForSeatTickRate);
         npcFindingChair = false;
     }

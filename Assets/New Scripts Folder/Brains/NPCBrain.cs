@@ -33,7 +33,7 @@ public class NPCBrain : MonoBehaviour
         public NPCSettingsSO settings;
         public LayerSettingsSO layerSettings;
         public TrainSettingsSO trainSettings;
-
+        public NPCsDataSO npcData;
         internal StationSO startStation;
         internal StationSO endStation;
     }
@@ -276,9 +276,9 @@ public class NPCBrain : MonoBehaviour
         }
         else if (componentData.rigidBody.includeLayers == soData.layerSettings.trainMask)
         {
-            if (!NPCManager.boardingNPCQueue.Contains(this) && componentData.carriageChairs == null)
+            if (!soData.npcData.boardingNPCQueue.Contains(this) && componentData.carriageChairs == null)
             {
-                NPCManager.boardingNPCQueue.Enqueue(this);
+                soData.npcData.boardingNPCQueue.Enqueue(this);
             }
         }
     }
