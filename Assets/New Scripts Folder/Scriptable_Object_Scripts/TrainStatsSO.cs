@@ -10,7 +10,7 @@ public class TrainStatsSO : ScriptableObject
     internal float curKMPerHour = 0;
     internal float targetKMPerHour = 10;
     internal float metersTravelled;
-    internal bool arrivedAtStartPos;
+
     internal float distToNextStation;
     internal float stoppingDistance;
     internal float startMinXPos;
@@ -19,8 +19,11 @@ public class TrainStatsSO : ScriptableObject
     internal float trainMaxHeight;
     internal float trainHalfLength;
 
-    internal bool boardPassengers;
+    internal bool closingDoors;
     internal float wheelCircumference;
+
+    internal int curPassengerCount;
+    internal int targetPassengerCount;
 
     internal List<Vector2> slideDoorPositions = new List<Vector2>();
     internal SlideDoors.Type slideDoorsToUnlock;

@@ -17,7 +17,8 @@ public class Station : MonoBehaviour
     [SerializeField] public SOData soData;
     [Serializable] public struct GameEventData
     {
-        public GameEvent OnStationLeave;
+        public GameEvent OnStationLeave; // not in use atm
+        public GameEvent OnBoardingSpy;
     }
     [SerializeField] GameEventData gameEvents;
 
@@ -30,19 +31,24 @@ public class Station : MonoBehaviour
     Parallax.ParallaxData parallaxData = new Parallax.ParallaxData();
     private void OnEnable()
     {
-        gameEvents.OnStationLeave.RegisterListener(SpawnNPCs);
-        parallaxData = Parallax.GetParallaxData(soData.camStats, soData.trainStats, transform);
-    }
-    private void OnDisable()
-    {
-        gameEvents.OnStationLeave.UnregisterListener(SpawnNPCs);
-    }
-    private void Start()
-    {
         if (soData.station == soData.stationsData.stations[0])
         {
             InitialiseFirstStation().Forget();
         }
+        else
+        {
+            SpawnNPCs();
+            InitialiseParallax();
+        }
+        gameEvents.OnBoardingSpy.RegisterListener(InitialiseParallax);
+    }
+    private void OnDisable()
+    {
+        gameEvents.OnBoardingSpy.UnregisterListener(InitialiseParallax);
+    }
+    private void Start()
+    {
+
     }
     private void Update()
     {
@@ -52,7 +58,10 @@ public class Station : MonoBehaviour
             transform.position = new Vector3(parallaxXPos, transform.position.y, transform.position.z);
         }
     }
-
+    private void InitialiseParallax()
+    {
+        parallaxData = Parallax.GetParallaxData(soData.camStats, soData.trainStats, transform);
+    }
     private async UniTask InitialiseFirstStation()
     {
         while(soData.npcData.agentPool.Count == 0) {  await UniTask.Yield(); }
@@ -60,22 +69,24 @@ public class Station : MonoBehaviour
     }
     private void SpawnNPCs()
     {
-        for(int i = 0; i < soData.station.agentSpawnAmount; i++)
+        for (int i = 0; i < soData.station.agentSpawnAmount; i++)
         {
-            if (soData.npcData.agentPool.Count == 0) { Debug.LogWarning("Agent Pool is empty"); return; }
+            if (soData.npcData.agentPool.Count == 0) { Debug.LogError($"Agent Pool is empty at {gameObject.name}"); return; }
             NPCBrain agentNPC =  soData.npcData.agentPool.Dequeue();
             agentNPC.gameObject.SetActive(true);
             float randXPos = UnityEngine.Random.Range(components.platformCollider.bounds.min.x, components.platformCollider.bounds.max.x);
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y, components.platformCollider.transform.position.z);
             agentNPC.transform.position = spawnPos;
+            agentNPC.transform.SetParent(transform, true);
         }
         for (int i = 0; i < soData.station.bystanderSpawnAmount; i++)
         {
             int randNPCIndex = UnityEngine.Random.Range(0, soData.npcData.npcPrefabs.Length);
             float randXPos = UnityEngine.Random.Range(components.platformCollider.bounds.min.x, components.platformCollider.bounds.max.x);
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y, components.platformCollider.transform.position.z);
-            NPCBrain npc = Instantiate(soData.npcData.npcPrefabs[randNPCIndex], spawnPos, Quaternion.identity, null); // spawn at random point on station
-            npc.stats.type = NPCBrain.Type.Bystander;
+            NPCBrain bystanderNPC = Instantiate(soData.npcData.npcPrefabs[randNPCIndex], spawnPos, Quaternion.identity, null); // spawn at random point on station
+            bystanderNPC.stats.type = NPCBrain.Type.Bystander;
+            bystanderNPC.transform.SetParent(transform, true);
         }
     }
 }

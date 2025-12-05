@@ -33,6 +33,7 @@ public class NPCBrain : MonoBehaviour
         public NPCSettingsSO settings;
         public LayerSettingsSO layerSettings;
         public TrainSettingsSO trainSettings;
+        public TrainStatsSO trainStats;
         public NPCsDataSO npcData;
         internal StationSO startStation;
         internal StationSO endStation;
@@ -249,7 +250,7 @@ public class NPCBrain : MonoBehaviour
             {
                 RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, new Vector2(soData.settings.maxDistanceDetection, componentData.boxCollider.size.y), 0.0f, transform.right, soData.settings.maxDistanceDetection, soData.layerSettings.trainLayers.slideDoors);
 
-                if (slideDoorHit.collider == null) { Debug.LogWarning($"{name} did not find a slide door to go to"); return; }
+                if (slideDoorHit.collider == null) { Debug.LogError($"{name} did not find a slide door to go to"); return; }
 
                 SlideDoors selectedDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
                 stats.targetXPos = selectedDoors.transform.position.x;
@@ -270,6 +271,7 @@ public class NPCBrain : MonoBehaviour
                     componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
                     transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
+                    soData.trainStats.curPassengerCount++;
                     componentData.rigidBody.includeLayers = soData.layerSettings.trainMask;                   
                 }
             }

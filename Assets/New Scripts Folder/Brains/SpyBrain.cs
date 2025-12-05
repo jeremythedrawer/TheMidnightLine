@@ -508,6 +508,7 @@ public class SpyBrain : MonoBehaviour
 
                     soData.stats.onTrain = true;
                     transform.position = new Vector3(transform.position.x, transform.position.y, soData.trainSettings.entityDepthRange.x + soData.settings.depthPositionInTrain);
+                    soData.trainStats.curPassengerCount ++;
                     gameEventData.OnBoardingSpy.Raise();
                 }
             }

@@ -30,9 +30,9 @@ public class StationManager : MonoBehaviour
 
     private void InstaniateStation()
     {
-        Station nextStation = soData.stationsData.stations[soData.trainStats.nextStationIndex].stationPrefab;
+        Station nextStationPrefab = soData.stationsData.stations[soData.trainStats.nextStationIndex].stationPrefab;
+        Station nextStation = Instantiate(nextStationPrefab, transform);
         float stationXPos = soData.maxBounds.max.x + nextStation.components.platformCollider.bounds.extents.x;
-        Vector3 stationPos = new Vector3(stationXPos, 0, 0);
-        Instantiate(nextStation, stationPos, Quaternion.identity, null);
+        nextStation.transform.position = new Vector3(stationXPos, 0, 0);
     }
 }

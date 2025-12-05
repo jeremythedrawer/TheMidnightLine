@@ -20,7 +20,7 @@ public class TrainBrain : MonoBehaviour
         public GameEvent OnUnlockSlideDoors;
         public GameEvent OnCloseSlideDoors;
         public GameEvent OnStationArrival;
-        public GameEvent OnStationLeave; //TODO raise when train leaves a station
+        public GameEvent OnStationLeave;
         public GameEvent OnBoardingSpy;
     }
     [SerializeField] GameEventData gameEventData;
@@ -44,13 +44,10 @@ public class TrainBrain : MonoBehaviour
     private void OnEnable()
     {
         gameEventData.OnReset.RegisterListener(ResetStats);
-        gameEventData.OnBoardingSpy.RegisterListener(SpyHasBoarded);
-        MovingTrainToStart().Forget();
     }
     private void OnDisable()
     {
         gameEventData.OnReset.UnregisterListener(ResetStats);     
-        gameEventData.OnBoardingSpy.UnregisterListener(SpyHasBoarded);
     }
     private void Start()
     {
@@ -59,22 +56,34 @@ public class TrainBrain : MonoBehaviour
         soData.stats.startMinXPos = transform.position.x;
         soData.stats.startCenterXPos = soData.stats.startMinXPos + soData.stats.trainHalfLength;
         soData.stats.trainMaxHeight = componentData.frontCarriageSpriteRenderer.bounds.max.y;
-
+        soData.stats.targetPassengerCount = soData.stationsData.stations[0].bystanderSpawnAmount + soData.stationsData.stations[0].agentSpawnAmount + 1; // +1 for spy himself
         Shader.SetGlobalVector(shaderData.entityDepthRangeID, (Vector2)soData.settings.entityDepthRange);
+        MovingTrainToStart().Forget();
     }
     private void Update()
     {
         soData.stats.curKMPerHour = Mathf.Lerp(soData.stats.curKMPerHour, soData.stats.targetKMPerHour, soData.settings.accelerationSpeed * Time.deltaTime);
         soData.stats.metersTravelled += soData.stats.GetMetersPerSecond() * Time.deltaTime;
         soData.stats.distToNextStation = soData.stationsData.stations[soData.stats.nextStationIndex].metersPosition - soData.stats.metersTravelled - soData.stats.startCenterXPos;
+
+        if (soData.stats.curPassengerCount == soData.stats.targetPassengerCount && !soData.stats.closingDoors) // meters travel != 0 is so close slide doors is not called at the start
+        {
+            LeavingStation().Forget();
+        }
     }
     private void OnApplicationQuit()
     {
         ResetStats();
     }
-    private void SpyHasBoarded()
+    private async UniTask LeavingStation()
     {
         gameEventData.OnCloseSlideDoors.Raise();
+        soData.stats.closingDoors = true;
+        await UniTask.WaitForSeconds(soData.settings.doorMoveTime); // wait for doors to close
+
+        soData.stats.nextStationIndex++;
+        soData.stats.targetKMPerHour = soData.stationsData.stations[soData.stats.nextStationIndex].targetTrainSpeed;
+        gameEventData.OnStationLeave.Raise();
     }
     private async UniTask MovingTrainToStart()
     {
@@ -108,11 +117,13 @@ public class TrainBrain : MonoBehaviour
         soData.stats.curKMPerHour = 1000;
         soData.stats.targetKMPerHour = 1000;
         soData.stats.metersTravelled = 0.0f;
-        soData.stats.arrivedAtStartPos = false;
         soData.stats.distToNextStation = Mathf.Infinity;    
         soData.stats.stoppingDistance = 0.0f;
         soData.stats.startMinXPos = transform.position.x;
         soData.stats.wheelCircumference = (soData.settings.wheelSprite.rect.size.x / soData.settings.wheelSprite.pixelsPerUnit) * Mathf.PI;
+        soData.stats.curPassengerCount = 0;
+        soData.stats.targetPassengerCount = 0;
+        soData.stats.closingDoors = false;
     }
     private void OnDrawGizmos()
     {

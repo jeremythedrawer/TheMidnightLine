@@ -41,7 +41,7 @@ public class NPCManager : MonoBehaviour
             {
                 int randNPCIndex = UnityEngine.Random.Range(0, soData.npcData.npcsToPick.Count); // pick from list
 
-                NPCBrain npc = Instantiate(soData.npcData.npcsToPick[randNPCIndex], transform.position, Quaternion.identity, null);
+                NPCBrain npc = Instantiate(soData.npcData.npcsToPick[randNPCIndex], transform.position, Quaternion.identity, transform);
                 soData.npcData.npcsToPick.RemoveAt(randNPCIndex);
                 npc.stats.type = NPCBrain.Type.Agent;
 

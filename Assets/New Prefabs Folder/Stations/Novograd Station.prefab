@@ -344,7 +344,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2137423930263663368}
   - component: {fileID: 5097759012913676240}
-  - component: {fileID: 884383309763776333}
   m_Layer: 17
   m_Name: Ramp
   m_TagString: Untagged
@@ -420,18 +419,6 @@ PolygonCollider2D:
       - {x: 2.525, y: -12.01038}
       - {x: -50, y: -12.01038}
   m_UseDelaunayMesh: 0
---- !u!114 &884383309763776333
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2007327773314685102}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34cf3301d9e9bb5468630459b8dd2368, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!1 &5638508218447076873
 GameObject:
   m_ObjectHideFlags: 0
@@ -665,6 +652,7 @@ MonoBehaviour:
     spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   gameEvents:
     OnStationLeave: {fileID: 11400000, guid: 91da1d51e2e24c946a31d14f91be008d, type: 2}
+    OnBoardingSpy: {fileID: 11400000, guid: c66de94f5bb061a4ba86a69b88270b62, type: 2}
   components:
     platformCollider: {fileID: 5939122199044154566}
 --- !u!1 &8757817511839388079
