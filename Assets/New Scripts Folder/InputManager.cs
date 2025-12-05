@@ -11,17 +11,9 @@ public class InputManager : MonoBehaviour
     {
         public SpyInputsSO spyInputs;
         public SpyStatsSO spyStats;
+        public GameEventDataSO gameEventData;
     }
     [SerializeField] SOData soData;
-
-    [Serializable]
-    public struct GameEventData
-    {
-        public GameEvent OnReset;
-        public GameEvent OnInteract;
-        public GameEvent OnCancel;
-    }
-    [SerializeField] GameEventData gameEventData;
 
     PlayerInput playerInput;
     public InputAction moveAction { get; private set; }
@@ -69,7 +61,7 @@ public class InputManager : MonoBehaviour
 
         interactAction.started += context =>
         {
-            gameEventData.OnInteract.Raise();
+            soData.gameEventData.OnInteract.Raise();
             soData.spyInputs.interact = true;
         };
 
@@ -97,7 +89,7 @@ public class InputManager : MonoBehaviour
             if (resetElaspedTime > resetThresholdTime)
             {
                 resetElaspedTime = 0;
-                gameEventData.OnReset.Raise();
+                soData.gameEventData.OnReset.Raise();
             }
         }
     }
@@ -121,7 +113,7 @@ public class InputManager : MonoBehaviour
 
     private void OnApplicationQuit()
     {
-        gameEventData.OnReset.Raise();
+        soData.gameEventData.OnReset.Raise();
         ResetData();
     }
 }

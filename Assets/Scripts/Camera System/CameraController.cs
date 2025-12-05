@@ -15,14 +15,9 @@ public class CameraController : MonoBehaviour
         public SpySettingsSO spySettings;
         public SpyInputsSO spyInputs;
         public LayerSettingsSO layerSettings;
+        public GameEventDataSO gameEventData;
     }
     [SerializeField] SOData soData;
-
-    [Serializable] public struct GameEventData
-    {
-        public GameEvent OnReset;
-    }
-    [SerializeField] GameEventData gameEventData;
 
     private void Awake()
     {
@@ -30,11 +25,11 @@ public class CameraController : MonoBehaviour
     }
     private void OnEnable()
     {
-        gameEventData.OnReset.RegisterListener(ResetCamera);
+        soData.gameEventData.OnReset.RegisterListener(ResetCamera);
     }
     private void OnDisable()
     {
-        gameEventData.OnReset.UnregisterListener(ResetCamera);
+        soData.gameEventData.OnReset.UnregisterListener(ResetCamera);
 
     }
     private void Start()

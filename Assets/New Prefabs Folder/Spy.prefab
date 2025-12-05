@@ -15,7 +15,7 @@ GameObject:
   - component: {fileID: 2814450545205291383}
   - component: {fileID: 4281581721833017353}
   - component: {fileID: 8541590373058370183}
-  m_Layer: 0
+  m_Layer: 6
   m_Name: Spy
   m_TagString: Player
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
@@ -60,7 +60,7 @@ SpriteRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 90db00ecb3290f048952b1a762ff6d70, type: 2}
+  - {fileID: 2100000, guid: b1c99e7105aaf0244b60cc07d4f5d15c, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -301,11 +301,9 @@ MonoBehaviour:
     boxCollider: {fileID: 4281581721833017353}
     animator: {fileID: 1375239234905724419}
     spriteRenderer: {fileID: 6679470100855546196}
-  gameEventData:
-    OnUnlockSlideDoors: {fileID: 11400000, guid: 66ebc69e00594fa428a1c7a6b986b1d9, type: 2}
-    OnInteract: {fileID: 11400000, guid: 002b663aff97ed2478b83fb93d55e857, type: 2}
   animClipData:
     startRunClip: {fileID: 7400000, guid: 1f10883464f3f8446b9745ce02f6f50c, type: 2}
+    climbClip: {fileID: 7400000, guid: 61e00143c221b154ea8f9fa58efb1d57, type: 2}
   soData:
     settings: {fileID: 11400000, guid: ff622072eaf75a443bdc1bbda3340ef0, type: 2}
     stats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
@@ -313,3 +311,4 @@ MonoBehaviour:
     trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
     trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
     layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
+    gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}

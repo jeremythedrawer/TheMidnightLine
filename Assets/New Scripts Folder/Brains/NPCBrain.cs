@@ -35,6 +35,7 @@ public class NPCBrain : MonoBehaviour
         public TrainSettingsSO trainSettings;
         public TrainStatsSO trainStats;
         public NPCsDataSO npcData;
+        public GameEventDataSO gameEventData;
         internal StationSO startStation;
         internal StationSO endStation;
     }
@@ -59,12 +60,6 @@ public class NPCBrain : MonoBehaviour
         internal float move;
     }
     [SerializeField] InputData inputData;
-
-    [Serializable] public struct GameEventData
-    {
-        public GameEvent OnUnlockSlideDoors;
-    }
-    [SerializeField] GameEventData gameEventData;
 
     [Serializable] public struct AnimHashData
     {
@@ -110,11 +105,11 @@ public class NPCBrain : MonoBehaviour
     }
     private void OnEnable()
     {
-        gameEventData.OnUnlockSlideDoors.RegisterListener(() => stats.canBoardTrain = true);
+        soData.gameEventData.OnUnlockSlideDoors.RegisterListener(() => stats.canBoardTrain = true);
     }
     private void OnDisable()
     {
-        gameEventData.OnUnlockSlideDoors.UnregisterListener(() => stats.canBoardTrain = true);
+        soData.gameEventData.OnUnlockSlideDoors.UnregisterListener(() => stats.canBoardTrain = true);
     }
     private void Start()
     {
@@ -271,6 +266,7 @@ public class NPCBrain : MonoBehaviour
                     componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
                     transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
+                    transform.SetParent(null, true);
                     soData.trainStats.curPassengerCount++;
                     componentData.rigidBody.includeLayers = soData.layerSettings.trainMask;                   
                 }

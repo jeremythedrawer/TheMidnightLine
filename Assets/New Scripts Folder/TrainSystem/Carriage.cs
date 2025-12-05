@@ -8,6 +8,7 @@ public class Carriage : MonoBehaviour
     {
         public TrainStatsSO trainStats;
         public TrainSettingsSO trainSettings;
+        public GameEventDataSO gameEventData;
     }
     [SerializeField] SOData soData;
 
@@ -16,22 +17,17 @@ public class Carriage : MonoBehaviour
         public Transform[] wheelTransforms;
     }
     [SerializeField] ComponentData componentData;
-    [Serializable] public struct GameEventData
-    {
-        public GameEvent OnReset;
-    }
-    [SerializeField] GameEventData gameEventData;
 
     private void OnEnable()
     {
         ResetStats();
-        gameEventData.OnReset.RegisterListener(ResetStats);
+        soData.gameEventData.OnReset.RegisterListener(ResetStats);
 
     }
 
     private void OnDisable()
     {
-        gameEventData.OnReset.UnregisterListener(ResetStats);
+        soData.gameEventData.OnReset.UnregisterListener(ResetStats);
 
     }
 

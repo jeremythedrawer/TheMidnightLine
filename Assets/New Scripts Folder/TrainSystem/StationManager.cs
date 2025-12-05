@@ -9,23 +9,18 @@ public class StationManager : MonoBehaviour
         public StationsDataSO stationsData;
         public TrainStatsSO trainStats;
         public MaxBoundsStatsSO maxBounds;
+        public GameEventDataSO gameEventData;
     }
     [SerializeField] SOData soData;
 
-    [Serializable] public struct GameEventData
-    {
-        public GameEvent OnStationLeave;
-    }
-    [SerializeField] GameEventData gameEvents;
-
     private void OnEnable()
     {
-        gameEvents.OnStationLeave.RegisterListener(InstaniateStation);
+        soData.gameEventData.OnStationLeave.RegisterListener(InstaniateStation);
     }
 
     private void OnDisable()
     {
-        gameEvents.OnStationLeave.UnregisterListener(InstaniateStation);
+        soData.gameEventData.OnStationLeave.UnregisterListener(InstaniateStation);
     }
 
     private void InstaniateStation()

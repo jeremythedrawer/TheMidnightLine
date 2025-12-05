@@ -11,19 +11,9 @@ public class TrainBrain : MonoBehaviour
         public TrainSettingsSO settings;
         public TrainStatsSO stats;
         public StationsDataSO stationsData;
+        public GameEventDataSO gameEventData;
     }
     [SerializeField] SOData soData;
-
-    [Serializable] public struct GameEventData
-    {
-        public GameEvent OnReset;
-        public GameEvent OnUnlockSlideDoors;
-        public GameEvent OnCloseSlideDoors;
-        public GameEvent OnStationArrival;
-        public GameEvent OnStationLeave;
-        public GameEvent OnBoardingSpy;
-    }
-    [SerializeField] GameEventData gameEventData;
 
     [Serializable] public struct ComponentData
     {
@@ -43,11 +33,11 @@ public class TrainBrain : MonoBehaviour
     }
     private void OnEnable()
     {
-        gameEventData.OnReset.RegisterListener(ResetStats);
+        soData.gameEventData.OnReset.RegisterListener(ResetStats);
     }
     private void OnDisable()
     {
-        gameEventData.OnReset.UnregisterListener(ResetStats);     
+        soData.gameEventData.OnReset.UnregisterListener(ResetStats);     
     }
     private void Start()
     {
@@ -77,13 +67,13 @@ public class TrainBrain : MonoBehaviour
     }
     private async UniTask LeavingStation()
     {
-        gameEventData.OnCloseSlideDoors.Raise();
+        soData.gameEventData.OnCloseSlideDoors.Raise();
         soData.stats.closingDoors = true;
         await UniTask.WaitForSeconds(soData.settings.doorMoveTime); // wait for doors to close
 
         soData.stats.nextStationIndex++;
         soData.stats.targetKMPerHour = soData.stationsData.stations[soData.stats.nextStationIndex].targetTrainSpeed;
-        gameEventData.OnStationLeave.Raise();
+        soData.gameEventData.OnStationLeave.Raise();
     }
     private async UniTask MovingTrainToStart()
     {
@@ -108,8 +98,8 @@ public class TrainBrain : MonoBehaviour
         soData.stats.targetKMPerHour = 0f;
         soData.stats.curKMPerHour = 0f;
         soData.stats.slideDoorsToUnlock = SlideDoors.Type.Exterior;
-        gameEventData.OnUnlockSlideDoors.Raise();
-        gameEventData.OnStationArrival.Raise();
+        soData.gameEventData.OnUnlockSlideDoors.Raise();
+        soData.gameEventData.OnStationArrival.Raise();
     }
     private void ResetStats()
     { 

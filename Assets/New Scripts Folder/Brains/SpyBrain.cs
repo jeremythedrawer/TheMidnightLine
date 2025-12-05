@@ -35,14 +35,6 @@ public class SpyBrain : MonoBehaviour
     }
     [SerializeField] StateData stateData;
 
-    [Serializable] public struct GameEventData
-    {
-        public GameEvent OnUnlockSlideDoors;
-        public GameEvent OnInteract;
-        public GameEvent OnBoardingSpy;
-    }
-    [SerializeField] GameEventData gameEventData;
-
     [Serializable] public struct AnimClipData
     {
         public AnimationClip startRunClip;
@@ -71,6 +63,7 @@ public class SpyBrain : MonoBehaviour
         public TrainStatsSO trainStats;
         public TrainSettingsSO trainSettings;
         public LayerSettingsSO layerSettings;
+        public GameEventDataSO gameEventData;
     }
     [SerializeField] SOData soData;
 
@@ -108,17 +101,17 @@ public class SpyBrain : MonoBehaviour
     }
     private void OnEnable()
     {
-        gameEventData.OnUnlockSlideDoors.RegisterListener(() => soData.stats.canBoardTrain = true);
-        gameEventData.OnInteract.RegisterListener(OpenSlideDoor);
-        gameEventData.OnInteract.RegisterListener(EnterTrain);
-        gameEventData.OnInteract.RegisterListener(OpenGangwayDoor);
+        soData.gameEventData.OnUnlockSlideDoors.RegisterListener(() => soData.stats.canBoardTrain = true);
+        soData.gameEventData.OnInteract.RegisterListener(OpenSlideDoor);
+        soData.gameEventData.OnInteract.RegisterListener(EnterTrain);
+        soData.gameEventData.OnInteract.RegisterListener(OpenGangwayDoor);
     }
     private void OnDisable()
     {
-        gameEventData.OnUnlockSlideDoors.UnregisterListener(() => soData.stats.canBoardTrain = true);
-        gameEventData.OnInteract.UnregisterListener(OpenSlideDoor);
-        gameEventData.OnInteract.UnregisterListener(EnterTrain);
-        gameEventData.OnInteract.UnregisterListener(OpenGangwayDoor);
+        soData.gameEventData.OnUnlockSlideDoors.UnregisterListener(() => soData.stats.canBoardTrain = true);
+        soData.gameEventData.OnInteract.UnregisterListener(OpenSlideDoor);
+        soData.gameEventData.OnInteract.UnregisterListener(EnterTrain);
+        soData.gameEventData.OnInteract.UnregisterListener(OpenGangwayDoor);
     }
     private void Start()
     {
@@ -509,7 +502,7 @@ public class SpyBrain : MonoBehaviour
                     soData.stats.onTrain = true;
                     transform.position = new Vector3(transform.position.x, transform.position.y, soData.trainSettings.entityDepthRange.x + soData.settings.depthPositionInTrain);
                     soData.trainStats.curPassengerCount ++;
-                    gameEventData.OnBoardingSpy.Raise();
+                    soData.gameEventData.OnBoardingSpy.Raise();
                 }
             }
         }
