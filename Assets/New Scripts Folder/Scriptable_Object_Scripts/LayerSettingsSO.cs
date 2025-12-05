@@ -21,7 +21,7 @@ public class LayerSettingsSO : ScriptableObject
         public LayerMask roofBounds;
         public LayerMask climbingBounds;
         public LayerMask gangwayDoor;
-        public LayerMask carriageExteriorWalls;
+        public LayerMask carriagExteriorWalls;
     }
     public TrainLayers trainLayers;
 

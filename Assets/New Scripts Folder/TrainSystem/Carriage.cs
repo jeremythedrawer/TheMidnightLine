@@ -31,10 +31,6 @@ public class Carriage : MonoBehaviour
 
     }
 
-    private void Start()
-    {
-
-    }
     private void Update()
     {
         float wheelRotation = (soData.trainStats.metersTravelled / Mathf.Max(soData.trainStats.wheelCircumference, float.Epsilon)) * 360.0f;

@@ -7,10 +7,8 @@ using UnityEngine;
 public class CarriageExteriorWall : MonoBehaviour
 {
     [SerializeField] SpriteRenderer[] spriteRenderers;
-    [SerializeField] BoxCollider2D boxCollider;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] SpyStatsSO spyStats;
-    [SerializeField] GameEvent OnBoardingSpy;
     [Serializable] public struct MaterialIDs
     {
         internal int alphaID;
@@ -47,10 +45,6 @@ public class CarriageExteriorWall : MonoBehaviour
         {
             StartFade(fadeIn: true);
         }
-    }
-
-    private void BoardSpy()
-    {
     }
     private void StartFade(bool fadeIn)
     {

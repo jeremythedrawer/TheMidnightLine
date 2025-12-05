@@ -264,15 +264,17 @@ public class NPCBrain : MonoBehaviour
 
                     componentData.mpb.SetFloat(materialData.zPosID, zPos);
                     componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
+                    componentData.rigidBody.includeLayers = soData.layerSettings.trainMask;                   
 
                     transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
                     transform.SetParent(null, true);
+
                     soData.trainStats.curPassengerCount++;
-                    componentData.rigidBody.includeLayers = soData.layerSettings.trainMask;                   
+
                 }
             }
         }
-        else if (componentData.rigidBody.includeLayers == soData.layerSettings.trainMask)
+        else if (componentData.rigidBody.includeLayers == soData.layerSettings.trainMask) // now on train
         {
             if (!soData.npcData.boardingNPCQueue.Contains(this) && componentData.carriageChairs == null)
             {
@@ -283,7 +285,8 @@ public class NPCBrain : MonoBehaviour
     public void FindCarriageChair()
     {
         Vector2 boxCastSize = new Vector2(soData.settings.maxDistanceDetection * 2, componentData.boxCollider.bounds.size.y);
-        RaycastHit2D carriageChairsHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, boxCastSize, 0.0f, transform.right, soData.settings.maxDistanceDetection, soData.layerSettings.trainLayers.carriageChairs);
+        RaycastHit2D insideBoundHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.size, 0.0f, transform.right, soData.settings.maxDistanceDetection, soData.layerSettings.trainLayers.insideCarriageBounds);
+        RaycastHit2D carriageChairsHit = Physics2D.BoxCast(insideBoundHit.collider.bounds.center, insideBoundHit.collider.bounds.size, 0.0f, transform.right, soData.settings.maxDistanceDetection, soData.layerSettings.trainLayers.carriageChairs);
 
         CarriageChairs selectedChairs = carriageChairsHit.collider.GetComponent<CarriageChairs>();
 
