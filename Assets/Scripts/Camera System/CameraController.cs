@@ -3,7 +3,7 @@ using Proselyte.Sigils;
 using System;
 using UnityEngine;
 
-public class CameraMovement : MonoBehaviour
+public class CameraController : MonoBehaviour
 {
     Camera cam;
 
@@ -42,6 +42,7 @@ public class CameraMovement : MonoBehaviour
         soData.stats.targetSize = cam.orthographicSize;
         soData.stats.initialSize = cam.orthographicSize;
         soData.stats.farClipPlane = cam.farClipPlane;
+        soData.stats.aspect = cam.aspect;
     }
     private void Update()
     {
@@ -145,7 +146,7 @@ public class CameraMovement : MonoBehaviour
             case CameraStatsSO.State.Roof:
             {
                 soData.stats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y;
-                soData.stats.targetSize = soData.settings.roofProjectionSize;
+                soData.stats.targetSize = soData.settings.maxProjectionSize;
             }
             break;
 

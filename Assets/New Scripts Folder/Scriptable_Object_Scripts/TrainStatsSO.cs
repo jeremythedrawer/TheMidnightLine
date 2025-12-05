@@ -16,6 +16,7 @@ public class TrainStatsSO : ScriptableObject
     internal float startMinXPos;
     internal float startCenterXPos;
     internal float trainLength;
+    internal float trainMaxHeight;
     internal float trainHalfLength;
 
     internal bool boardPassengers;

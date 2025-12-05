@@ -57,6 +57,7 @@ public class TrainBrain : MonoBehaviour
         soData.stats.trainHalfLength = soData.stats.trainLength * 0.5f;
         soData.stats.startMinXPos = transform.position.x;
         soData.stats.startCenterXPos = soData.stats.startMinXPos + soData.stats.trainHalfLength;
+        soData.stats.trainMaxHeight = componentData.frontCarriageSpriteRenderer.bounds.max.y;
 
         Shader.SetGlobalVector(shaderData.entityDepthRangeID, (Vector2)soData.settings.entityDepthRange);
     }
