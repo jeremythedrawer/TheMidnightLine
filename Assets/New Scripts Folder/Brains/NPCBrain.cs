@@ -37,7 +37,7 @@ public class NPCBrain : MonoBehaviour
         internal StationSO startStation;
         internal StationSO endStation;
     }
-    [SerializeField] SOData soData;
+    [SerializeField] public SOData soData;
 
     [Serializable] public struct StatData
     {
@@ -79,7 +79,6 @@ public class NPCBrain : MonoBehaviour
 
     [Serializable] public struct AnimClipData
     {
-        public AnimationClip startRunClip;
         public AnimationClip[] standingCalmClips;
         public AnimationClip[] sittingCalmClips;
 

@@ -10,7 +10,7 @@ public class Clipboard : MonoBehaviour
     [SerializeField] ComponentData components;
     [Serializable] public struct SOData
     { 
-        public ClipboardSO clipboard;
+        public ClipboardSettingsSO settings;
         public SpyInputsSO inputs;
     }
     [SerializeField] SOData soData;
@@ -27,8 +27,8 @@ public class Clipboard : MonoBehaviour
     private void Update()
     {
         if (soData.inputs.clipboard) stats.active = stats.active ? false : true;
-        float targetYPos = stats.active ? soData.clipboard.onScreenYPos : stats.startYPos;
-        float curRectYPos = Mathf.Lerp(components.rectTransform.localPosition.y, targetYPos, soData.clipboard.moveTime * Time.deltaTime);
+        float targetYPos = stats.active ? soData.settings.onScreenYPos : stats.startYPos;
+        float curRectYPos = Mathf.Lerp(components.rectTransform.localPosition.y, targetYPos, soData.settings.moveTime * Time.deltaTime);
         components.rectTransform.localPosition = new Vector3(components.rectTransform.localPosition.x, curRectYPos, components.rectTransform.localPosition.z);
     }
 

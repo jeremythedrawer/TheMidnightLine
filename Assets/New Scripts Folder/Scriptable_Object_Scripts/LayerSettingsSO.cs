@@ -41,11 +41,11 @@ public class LayerSettingsSO : ScriptableObject
 
         FieldInfo[] fields = layers.GetType().GetFields(BindingFlags.Public | BindingFlags.NonPublic | BindingFlags.Instance);
 
-        foreach (FieldInfo field in fields)
+        for(int i = 0; i < fields.Length; i++)
         {
-            if (field.FieldType == typeof(LayerMask))
+            if (fields[i].FieldType == typeof(LayerMask))
             {
-                LayerMask layerMask = (LayerMask)field.GetValue(layers);
+                LayerMask layerMask = (LayerMask)fields[i].GetValue(layers);
                 mask |= layerMask.value;
             }
         }

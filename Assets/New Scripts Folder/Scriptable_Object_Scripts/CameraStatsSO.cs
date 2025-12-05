@@ -17,5 +17,7 @@ public class CameraStatsSO : ScriptableObject
     internal float initialSize;
     internal float curHorOffset;
     internal float targetSize;
+    internal Vector3 curWorldPos;
+    internal float farClipPlane;
     internal Vector2 targetWorldPos;
 }

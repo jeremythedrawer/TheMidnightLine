@@ -10,7 +10,6 @@ public class TrainBrain : MonoBehaviour
     {
         public TrainSettingsSO settings;
         public TrainStatsSO stats;
-        public StationSO[] stations;
     }
     [SerializeField] SOData soData;
 
@@ -54,15 +53,18 @@ public class TrainBrain : MonoBehaviour
     }
     private void Start()
     {
-        soData.stats.halfXSize = (componentData.frontCarriageSpriteRenderer.bounds.max.x - transform.position.x) * 0.5f;
+        soData.stats.trainLength = (componentData.frontCarriageSpriteRenderer.bounds.max.x - transform.position.x);
+        soData.stats.trainHalfLength = soData.stats.trainLength * 0.5f;
+        soData.stats.startMinXPos = transform.position.x;
+        soData.stats.startCenterXPos = soData.stats.startMinXPos + soData.stats.trainHalfLength;
+
         Shader.SetGlobalVector(shaderData.entityDepthRangeID, (Vector2)soData.settings.entityDepthRange);
     }
     private void Update()
     {
         soData.stats.curKMPerHour = Mathf.Lerp(soData.stats.curKMPerHour, soData.stats.targetKMPerHour, soData.settings.accelerationSpeed * Time.deltaTime);
         soData.stats.metersTravelled += soData.stats.GetMetersPerSecond() * Time.deltaTime;
-        soData.stats.curCenterXPos = transform.position.x + soData.stats.halfXSize;
-        soData.stats.distanceToNextStation = soData.stations[soData.stats.nextStationIndex].metersPosition - soData.stats.metersTravelled - (soData.stats.startXPos + soData.stats.halfXSize);
+        soData.stats.distToNextStation = soData.settings.stations[soData.stats.nextStationIndex].metersPosition - soData.stats.metersTravelled - soData.stats.startCenterXPos;
     }
     private void OnApplicationQuit()
     {
@@ -74,13 +76,13 @@ public class TrainBrain : MonoBehaviour
     }
     private async UniTask MovingTrainToStart()
     {
-        while (soData.stats.distanceToNextStation > 0.1f)
+        while (soData.stats.distToNextStation > 0.1f)
         {
             float curMPreSec = soData.stats.GetMetersPerSecond();
 
             soData.stats.stoppingDistance = (curMPreSec * curMPreSec) / (2f * soData.settings.accelerationSpeed); // v^2 / 2D
 
-            if (soData.stats.distanceToNextStation <= soData.stats.stoppingDistance)
+            if (soData.stats.distToNextStation <= soData.stats.stoppingDistance)
             {
                 soData.stats.targetKMPerHour = 0f;
             }
@@ -88,7 +90,7 @@ public class TrainBrain : MonoBehaviour
             {
                 soData.stats.targetKMPerHour = soData.stats.curKMPerHour;
             }
-            transform.position = new Vector3(soData.stats.startXPos + soData.stats.metersTravelled, transform.position.y, transform.position.z);
+            transform.position = new Vector3(soData.stats.startMinXPos + soData.stats.metersTravelled, transform.position.y, transform.position.z);
 
             await UniTask.Yield();
         }
@@ -105,9 +107,9 @@ public class TrainBrain : MonoBehaviour
         soData.stats.targetKMPerHour = 1000;
         soData.stats.metersTravelled = 0.0f;
         soData.stats.arrivedAtStartPos = false;
-        soData.stats.distanceToNextStation = Mathf.Infinity;    
+        soData.stats.distToNextStation = Mathf.Infinity;    
         soData.stats.stoppingDistance = 0.0f;
-        soData.stats.startXPos = transform.position.x;
+        soData.stats.startMinXPos = transform.position.x;
         soData.stats.wheelCircumference = (soData.settings.wheelSprite.rect.size.x / soData.settings.wheelSprite.pixelsPerUnit) * Mathf.PI;
     }
     private void OnDrawGizmos()

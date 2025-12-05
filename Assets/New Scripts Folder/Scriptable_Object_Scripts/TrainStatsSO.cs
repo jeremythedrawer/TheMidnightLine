@@ -4,18 +4,19 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "TrainStats_SO", menuName = "Midnight Line SOs / Train Stats SO")]
 public class TrainStatsSO : ScriptableObject
 {
-    internal const float KM_TO_MPS = 0.27777777778f;
+    const float KM_TO_MPS = 0.27777777778f;
     
     internal int nextStationIndex = 0;
     internal float curKMPerHour = 0;
     internal float targetKMPerHour = 10;
     internal float metersTravelled;
     internal bool arrivedAtStartPos;
-    internal float distanceToNextStation;
+    internal float distToNextStation;
     internal float stoppingDistance;
-    internal float startXPos;
-    internal float curCenterXPos;
-    internal float halfXSize;
+    internal float startMinXPos;
+    internal float startCenterXPos;
+    internal float trainLength;
+    internal float trainHalfLength;
 
     internal bool boardPassengers;
     internal float wheelCircumference;
@@ -24,6 +25,6 @@ public class TrainStatsSO : ScriptableObject
     internal SlideDoors.Type slideDoorsToUnlock;
     public float GetMetersPerSecond()
     {
-        return curKMPerHour  * KM_TO_MPS;
+        return curKMPerHour * KM_TO_MPS;
     }
 }

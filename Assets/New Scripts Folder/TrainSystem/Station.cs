@@ -10,6 +10,7 @@ public class Station : MonoBehaviour
         public TrainStatsSO trainStats;
         public TrainSettingsSO trainSettings;
         public NPCDataSO npcData;
+        public CameraStatsSO camStats;
     }
     [SerializeField] public SOData soData;
     [Serializable] public struct GameEventData
@@ -23,11 +24,13 @@ public class Station : MonoBehaviour
         public BoxCollider2D platformCollider;
     }
     [SerializeField] ComponentData components;
+
+    Parallax.ParallaxData parallaxData = new Parallax.ParallaxData();
     private void OnEnable()
     {
         gameEvents.OnStationLeave.RegisterListener(SpawnNPCs);
+        parallaxData = Parallax.GetParallaxData(soData.camStats, soData.trainStats, transform);
     }
-
     private void OnDisable()
     {
         gameEvents.OnStationLeave.UnregisterListener(SpawnNPCs);
@@ -39,24 +42,28 @@ public class Station : MonoBehaviour
             SpawnNPCs();
         }
     }
+    private void Update()
+    {
+        float parallaxXPos = Parallax.UpdateParallax(soData.trainStats, parallaxData);
+        transform.position = new Vector3(parallaxXPos, transform.position.y, transform.position.z);
+    }
     private void SpawnNPCs()
     {
         for(int i = 0; i < soData.station.agentSpawnAmount; i++)
         {
-            int randNPCIndex = UnityEngine.Random.Range(0, soData.npcData.npcPrefabs.Length - 1);
+            if (NPCManager.agentNPCPool.Count == 0) { Debug.LogWarning("Agent Pool is empty"); return; }
+            NPCBrain agentNPC =  NPCManager.agentNPCPool.Dequeue();
+            agentNPC.gameObject.SetActive(true);
             float randXPos = UnityEngine.Random.Range(components.platformCollider.bounds.min.x, components.platformCollider.bounds.max.x);
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y, components.platformCollider.transform.position.z);
-            NPCBrain npc = Instantiate(soData.npcData.npcPrefabs[randNPCIndex], spawnPos, Quaternion.identity, transform); // spawn at random point on station
-            npc.stats.type = NPCBrain.Type.Agent;
-
-
+            agentNPC.transform.position = spawnPos;
         }
         for (int i = 0; i < soData.station.bystanderSpawnAmount; i++)
         {
             int randNPCIndex = UnityEngine.Random.Range(0, soData.npcData.npcPrefabs.Length - 1);
             float randXPos = UnityEngine.Random.Range(components.platformCollider.bounds.min.x, components.platformCollider.bounds.max.x);
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y, components.platformCollider.transform.position.z);
-            NPCBrain npc = Instantiate(soData.npcData.npcPrefabs[randNPCIndex], spawnPos, Quaternion.identity, transform); // spawn at random point on station
+            NPCBrain npc = Instantiate(soData.npcData.npcPrefabs[randNPCIndex], spawnPos, Quaternion.identity, null); // spawn at random point on station
             npc.stats.type = NPCBrain.Type.Bystander;
         }
     }
