@@ -12,20 +12,4 @@ public static class Utils
         };
         clip.AddEvent(animationEvent);
     }
-
-    public static Behaviours GetBehaviours()
-    {
-        int numBehaviours = Enum.GetValues(typeof(Behaviours)).Length - 1;
-
-        int firstBehave = 1 << UnityEngine.Random.Range(0, numBehaviours);
-
-        int secondBehave;
-        do
-        {
-            secondBehave = 1 << (UnityEngine.Random.Range(0, numBehaviours));
-        }
-        while (secondBehave == firstBehave);
-
-        return (Behaviours)(firstBehave | secondBehave);
-    }
 }

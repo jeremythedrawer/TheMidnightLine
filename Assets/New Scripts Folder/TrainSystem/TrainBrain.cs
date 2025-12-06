@@ -98,31 +98,6 @@ public class TrainBrain : MonoBehaviour
         soData.stats.brakeDist = GetBrakeDistance();
         soData.gameEventData.OnStationLeave.Raise();
     }
-    //private async UniTask ArrivingAtStation(SlideDoors.Type slideDoorsToUnlock)
-    //{
-    //    while (soData.stats.distToNextStation > 0.1f)
-    //    {
-    //        float curMPreSec = soData.stats.GetMetersPerSecond(soData.stats.curKMPerHour);
-
-    //        soData.stats.brakeDist = (curMPreSec * curMPreSec) / soData.stats.accellation2; // v^2 / 2A
-
-    //        if (soData.stats.distToNextStation <= soData.stats.brakeDist)
-    //        {
-    //            soData.stats.targetKMPerHour = 0f;
-    //        }
-    //        else
-    //        {
-    //            soData.stats.targetKMPerHour = soData.stats.curKMPerHour;
-    //        }
-
-    //        await UniTask.Yield();
-    //    }
-    //    soData.stats.targetKMPerHour = 0f;
-    //    soData.stats.curKMPerHour = 0f;
-    //    soData.stats.slideDoorsToUnlock = slideDoorsToUnlock;
-    //    soData.gameEventData.OnUnlockSlideDoors.Raise();
-    //    soData.gameEventData.OnStationArrival.Raise();
-    //}
 
     private float GetBrakeDistance()
     {

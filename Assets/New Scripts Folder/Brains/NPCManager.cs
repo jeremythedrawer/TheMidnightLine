@@ -1,9 +1,8 @@
 using Cysharp.Threading.Tasks;
 using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
+using static UnityEngine.InputSystem.OnScreen.OnScreenStick;
 
 public class NPCManager : MonoBehaviour
 {
@@ -11,6 +10,7 @@ public class NPCManager : MonoBehaviour
     {
         public NPCsDataSO npcData;
         public StationsDataSO stationsData;
+        public ClipboardStatsSO clipBoardStats;
     }
     [SerializeField] SOData soData;
 
@@ -45,8 +45,12 @@ public class NPCManager : MonoBehaviour
                 soData.npcData.npcsToPick.RemoveAt(randNPCIndex);
                 npc.stats.type = NPCBrain.Type.Agent;
 
-                Behaviours profilePageBehaviours = npc.stats.behaviours;
-                Appearence profilePageAppearence = npc.soData.settings.appearence;
+                NPCTraits.Behaviours profilePageBehaviours = npc.stats.behaviours;
+                NPCTraits.Appearence profilePageAppearence = NPCTraits.GetRandomAppearence(npc.soData.settings.appearence);
+                ClipboardStatsSO.ProfilePageData profilePageData = new ClipboardStatsSO.ProfilePageData { behaviours = profilePageBehaviours, appearence = profilePageAppearence };
+                soData.clipBoardStats.profilePageData.Add(profilePageData);
+
+                Debug.Log(profilePageAppearence.ToString() + " | " + profilePageBehaviours.ToString() + " | " + npc.gameObject.name);
                 soData.npcData.agentPool.Enqueue(npc);
                 npc.gameObject.SetActive(false);
             }

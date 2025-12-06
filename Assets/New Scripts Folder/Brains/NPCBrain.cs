@@ -45,7 +45,7 @@ public class NPCBrain : MonoBehaviour
     {
         internal State curState;
         internal Type type;
-        internal Behaviours behaviours;
+        internal NPCTraits.Behaviours behaviours;
         internal bool canBoardTrain;
         internal float targetXVelocity;
         internal float curRunSpeed;
@@ -106,6 +106,10 @@ public class NPCBrain : MonoBehaviour
     private void OnEnable()
     {
         soData.gameEventData.OnUnlockSlideDoors.RegisterListener(() => stats.canBoardTrain = true);
+        if (stats.behaviours == 0)
+        {
+            stats.behaviours = NPCTraits.GetBehaviours();
+        }
     }
     private void OnDisable()
     {
@@ -121,7 +125,6 @@ public class NPCBrain : MonoBehaviour
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
         stats.targetXPos = transform.position.x;
-        stats.behaviours = Utils.GetBehaviours();
 
     }
     private void Update()

@@ -16,5 +16,5 @@ public class NPCSettingsSO : ScriptableObject
     [Header("Colors")]
     public Color suspectColor = Color.red;
 
-    public Appearence appearence;
+    public NPCTraits.Appearence appearence;
 }
