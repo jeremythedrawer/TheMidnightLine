@@ -1,5 +1,6 @@
 using Proselyte.Sigils;
 using System;
+using UnityEditor;
 using UnityEngine;
 
 public class NPCBrain : MonoBehaviour
@@ -320,10 +321,24 @@ public class NPCBrain : MonoBehaviour
         if (!Application.isPlaying) return;
         Gizmos.color = Color.magenta;
         Gizmos.DrawLine(componentData.boxCollider.bounds.center, new Vector2(stats.targetXPos, componentData.boxCollider.bounds.center.y));
+
+        // Position above the sprite
+        Vector3 labelPos = componentData.spriteRenderer.bounds.max + Vector3.up * 0.2f;
+
+        // Create style
+        GUIStyle style = new GUIStyle();
+        style.normal.textColor = stats.type == Type.Agent ? Color.red : Color.green;
+        style.alignment = TextAnchor.UpperCenter;
+        style.fontSize = 12;
+
+        // Draw the label in Scene view
+        Handles.Label(labelPos, stats.type.ToString(), style);
+
     }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
         Gizmos.DrawWireCube(componentData.boxCollider.bounds.center, new Vector2(soData.settings.maxDistanceDetection, componentData.boxCollider.bounds.extents.y));
     }
+
 }
