@@ -19,6 +19,7 @@ public class MaxBounds : MonoBehaviour
         Vector2 bufferOffet = new Vector2(bufferAmount, bufferAmount);
         stats.min -= bufferOffet;
         stats.max += bufferOffet;
+
     }
 
     private void OnDrawGizmosSelected()

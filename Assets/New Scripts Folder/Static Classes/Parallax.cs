@@ -1,8 +1,9 @@
+using System;
 using UnityEngine;
 
 public static class Parallax
 {
-    public struct ParallaxData
+    [Serializable] public struct ParallaxData
     {
         internal float parallaxFactor;
         internal float initXPos;

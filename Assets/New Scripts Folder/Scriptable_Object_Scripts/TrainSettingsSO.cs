@@ -6,6 +6,7 @@ public class TrainSettingsSO : ScriptableObject
     public Sprite wheelSprite;
     public Sprite slideDoorSprite;
     public float accelerationSpeed = 10f;
+    public float startKMPerHour = 100;
     public float doorMoveTime = 2.0f;
     public Vector2Int entityDepthRange = new Vector2Int(1, 5);
 }

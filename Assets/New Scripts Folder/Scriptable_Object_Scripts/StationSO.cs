@@ -4,6 +4,7 @@ using UnityEngine;
 public class StationSO : ScriptableObject
 {
     public Station stationPrefab;
+    public SlideDoors.Type slideDoorsType;
     public int targetTrainSpeed = 100;
     public int metersPosition = 0;
     public int bystanderSpawnAmount = 10;
