@@ -82,7 +82,7 @@ public static class NPCTraits
         Array appearArray = Enum.GetValues(typeof(Appearence));
         appearenceDescriptions = new string[appearArray.Length - 1];
         int i = 0;
-        foreach (Appearence flag in Enum.GetValues(typeof(Appearence)))
+        foreach (Appearence flag in appearArray)
         {
             if (flag == Appearence.Nothing) continue;
             appearenceDescriptions[i] = flag.ToString().Replace("_", " ");
@@ -98,8 +98,6 @@ public static class NPCTraits
             behaviourDescriptions[i] = flag.ToString().Replace("_", " ");
             i++;
         }
-
-        Debug.Log($"Appearances: {string.Join(", ", appearenceDescriptions)} | Behaviours: {string.Join(", ", behaviourDescriptions)}");
     }
 }
 

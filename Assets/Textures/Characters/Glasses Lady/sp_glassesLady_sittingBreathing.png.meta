@@ -1,7 +1,16 @@
 fileFormatVersion: 2
-guid: 1d82be0cebe8b3d4aba6a28fa6d49fe5
+guid: 0daa7c38b599a624380f172648a418c9
 TextureImporter:
-  internalIDToNameTable: []
+  internalIDToNameTable:
+  - first:
+      213: -353960779378932703
+    second: sp_glassesLady_sittingBreathing_0
+  - first:
+      213: -294778082695428606
+    second: sp_glassesLady_sittingBreathing_1
+  - first:
+      213: -71297462332253757
+    second: sp_glassesLady_sittingBreathing_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -34,12 +43,12 @@ TextureImporter:
   maxTextureSize: 2048
   textureSettings:
     serializedVersion: 2
-    filterMode: 0
+    filterMode: 1
     aniso: 1
     mipBias: 0
     wrapU: 1
     wrapV: 1
-    wrapW: 0
+    wrapW: 1
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -69,7 +78,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 1024
+    maxTextureSize: 2048
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 1
@@ -110,45 +119,67 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: sp_testDummy_0
+      name: sp_glassesLady_sittingBreathing_0
       rect:
         serializedVersion: 2
         x: 0
         y: 0
-        width: 60
-        height: 316
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 75
+        height: 239
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 178b71b4bf746ea4fbaa55cbac34d341
-      internalID: 319214775
+      spriteID: 124c2b8eb8a761bf0800000000000000
+      internalID: -353960779378932703
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sp_testDummy_1
+      name: sp_glassesLady_sittingBreathing_1
       rect:
         serializedVersion: 2
-        x: 60
+        x: 75
         y: 0
-        width: 60
-        height: 316
-      alignment: 7
-      pivot: {x: 0.5, y: 0}
+        width: 76
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: 0
+      tessellationDetail: -1
       bones: []
-      spriteID: 910e44a2542bd8f48b50db5043cfc420
-      internalID: 1216775660
+      spriteID: 2064e5545ecb8ebf0800000000000000
+      internalID: -294778082695428606
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: sp_glassesLady_sittingBreathing_2
+      rect:
+        serializedVersion: 2
+        x: 151
+        y: 0
+        width: 76
+        height: 240
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 3c99c44f553b20ff0800000000000000
+      internalID: -71297462332253757
       vertices: []
       indices: 
       edges: []
@@ -157,7 +188,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 0d7d6eab4b88214478fa7024db48497b
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -166,9 +197,7 @@ TextureImporter:
     secondaryTextures: []
     spriteCustomMetadata:
       entries: []
-    nameFileIdTable:
-      sp_testDummy_0: 319214775
-      sp_testDummy_1: 1216775660
+    nameFileIdTable: {}
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

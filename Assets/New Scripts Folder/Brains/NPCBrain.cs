@@ -322,10 +322,8 @@ public class NPCBrain : MonoBehaviour
         Gizmos.color = Color.magenta;
         Gizmos.DrawLine(componentData.boxCollider.bounds.center, new Vector2(stats.targetXPos, componentData.boxCollider.bounds.center.y));
 
-        // Position above the sprite
         Vector3 labelPos = componentData.spriteRenderer.bounds.max + Vector3.up * 0.2f;
 
-        // Create style
         GUIStyle style = new GUIStyle();
         style.normal.textColor = stats.type == Type.Agent ? Color.red : Color.green;
         style.alignment = TextAnchor.UpperCenter;
