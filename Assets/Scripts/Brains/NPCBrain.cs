@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using Proselyte.Sigils;
 using System;
 using UnityEditor;
@@ -21,9 +22,9 @@ public class NPCBrain : MonoBehaviour
         public Rigidbody2D rigidBody;
         public BoxCollider2D boxCollider;
         public Animator animator;
+        public AnimatorOverrideController animController;
         public SpriteRenderer spriteRenderer;
         internal MaterialPropertyBlock mpb;
-        internal RuntimeAnimatorController animController;
         internal SlideDoors slideDoors;
         internal CarriageChairs carriageChairs;
     }
@@ -64,20 +65,26 @@ public class NPCBrain : MonoBehaviour
 
     [Serializable] public struct AnimHashData
     {
-        internal int calmBreathingHash;
-        internal int calmBlinkingHash;
-
-        internal int sitBreathingHash;
-        internal int sitBlinkingHash;
-        
-        internal int walkHash;
+        internal int sittingBlinking;
+        internal int sittingBreathing;
+        internal int sittingEating;
+        internal int sittingSick;
+        internal int sittingSleeping;
+        internal int smoking;
+        internal int standingAboutToEat;
+        internal int standingBlinking;
+        internal int standingBreathing;
+        internal int standingEating;
+        internal int standingSick;
+        internal int standingSleeping;
+        internal int walking;
     }
     [SerializeField] AnimHashData animHashData;
 
     [Serializable] public struct AnimClipData
     {
-        public AnimationClip[] standingCalmClips;
-        public AnimationClip[] sittingCalmClips;
+        public AnimationClip[] standingIdleClips;
+        public AnimationClip[] sittingIdleClips;
 
     }
     [SerializeField] AnimClipData animClipData;
@@ -91,14 +98,22 @@ public class NPCBrain : MonoBehaviour
     [SerializeField] MaterialData materialData;
     private void Awake()
     {
-        componentData.animController = componentData.animator.runtimeAnimatorController;
         componentData.mpb = new MaterialPropertyBlock();
 
-        animHashData.calmBreathingHash = Animator.StringToHash("CalmBreathing");
-        animHashData.calmBlinkingHash = Animator.StringToHash("CalmBlinking");
-        animHashData.sitBreathingHash = Animator.StringToHash("SitBreathing");
-        animHashData.sitBlinkingHash = Animator.StringToHash("SitBlinking");
-        animHashData.walkHash = Animator.StringToHash("Walk");
+        animHashData.sittingBlinking = Animator.StringToHash("SittingBlinking");
+        animHashData.sittingBreathing = Animator.StringToHash("SittingBreathing");
+        animHashData.sittingEating = Animator.StringToHash("SittingEating");
+        animHashData.sittingSick = Animator.StringToHash("SittingSick");
+        animHashData.sittingSleeping = Animator.StringToHash("SittingSleeping");
+        animHashData.smoking = Animator.StringToHash("Smoking");
+        animHashData.standingAboutToEat = Animator.StringToHash("StandingAboutToEat");
+        animHashData.standingBlinking = Animator.StringToHash("StandingBlinking");
+        animHashData.standingBreathing = Animator.StringToHash("StandingBreathing");
+        animHashData.standingEating = Animator.StringToHash("StandingEating");
+        animHashData.standingSick = Animator.StringToHash("StandingSick");
+        animHashData.standingSleeping = Animator.StringToHash("StandingSleeping");
+        animHashData.walking = Animator.StringToHash("Walking");
+
 
         materialData.colorID = Shader.PropertyToID("_Color");
         materialData.zPosID = Shader.PropertyToID("_ZPos");
@@ -126,7 +141,6 @@ public class NPCBrain : MonoBehaviour
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
         stats.targetXPos = transform.position.x;
-
     }
     private void Update()
     {
@@ -208,17 +222,17 @@ public class NPCBrain : MonoBehaviour
             {
                 if (componentData.carriageChairs != null)
                 {
-                    componentData.animator.Play(animHashData.sitBreathingHash);
+                    componentData.animator.Play(animHashData.sittingBreathing);
                 }
                 else
                 {
-                    componentData.animator.Play(animHashData.calmBreathingHash);
+                    componentData.animator.Play(animHashData.standingBreathing);
                 }
             }
             break;
             case State.Walk:
             {
-                componentData.animator.Play(animHashData.walkHash);
+                componentData.animator.Play(animHashData.walking);
             }
             break;
         }
