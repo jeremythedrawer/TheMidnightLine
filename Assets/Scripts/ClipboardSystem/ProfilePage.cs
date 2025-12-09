@@ -1,7 +1,7 @@
 using System;
-using System.Linq;
 using TMPro;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class ProfilePage : MonoBehaviour
 {
@@ -9,6 +9,7 @@ public class ProfilePage : MonoBehaviour
     {
         public TMP_Text behaviours;
         public TMP_Text appearences;
+        public Image border;
     }
     [SerializeField] ComponentData components;
 
@@ -21,13 +22,14 @@ public class ProfilePage : MonoBehaviour
     [Serializable] public struct Stats
     {
         internal int pageIndex;
+        internal Color borderColor;
     }
     public Stats stats;
 
     private void OnEnable()
     {
-        NPCTraits.Behaviours rawBehave = soData.clipboardStats.profilePageData[stats.pageIndex].behaviours;
-        NPCTraits.Appearence rawAppear = soData.clipboardStats.profilePageData[stats.pageIndex].appearence;
+        NPCTraits.Behaviours rawBehave = soData.clipboardStats.profilePageList[stats.pageIndex].behaviours;
+        NPCTraits.Appearence rawAppear = soData.clipboardStats.profilePageList[stats.pageIndex].appearence;
 
         int[] behavePositions = new int[2];
         int appearPosition = 0;
@@ -61,5 +63,6 @@ public class ProfilePage : MonoBehaviour
         components.behaviours.text = "- " + NPCTraits.behaviourDescriptions[behavePositions[0]] + Environment.NewLine + "- " + NPCTraits.behaviourDescriptions[behavePositions[1]];
         components.appearences.text = "- " + NPCTraits.appearenceDescriptions[appearPosition];
 
+        components.border.color = soData.clipboardStats.profilePageList[stats.pageIndex].color;
     }
 }

@@ -6,11 +6,17 @@ using UnityEngine;
 public class NPCsDataSO : ScriptableObject
 {
     public NPCBrain[] npcPrefabs;
-
-    internal List<NPCBrain> npcsToPick = new List<NPCBrain>();
-    internal Queue<NPCBrain> agentPool = new Queue<NPCBrain>();
+    public Color[] agentColors;
+    internal int activeColorIndex;
+    [Serializable] public struct AgentData
+    {
+        public NPCBrain agent;
+        public Color color;
+    }
+    internal List<Color> colorsToPick;
+    internal List<NPCBrain> npcsToPick;
+    internal Queue<AgentData> agentPool = new Queue<AgentData>();
     internal Queue<NPCBrain> boardingNPCQueue = new Queue<NPCBrain>();
-
 
     [Serializable] internal struct AnimHashData
     {
@@ -39,7 +45,7 @@ public class NPCsDataSO : ScriptableObject
     internal MaterialData materialData;
 
     private void OnValidate()
-    {        
+    {
         animHashData.sittingBlinking = Animator.StringToHash("SittingBlinking");
         animHashData.sittingBreathing = Animator.StringToHash("SittingBreathing");
         animHashData.sittingEating = Animator.StringToHash("SittingEating");

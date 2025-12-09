@@ -73,12 +73,12 @@ public class Station : MonoBehaviour
         for (int i = 0; i < soData.settings.agentSpawnAmount; i++)
         {
             if (soData.npcData.agentPool.Count == 0) { Debug.LogError($"Agent Pool is empty at {gameObject.name}"); return; }
-            NPCBrain agentNPC =  soData.npcData.agentPool.Dequeue();
-            agentNPC.gameObject.SetActive(true);
+            NPCsDataSO.AgentData agentData =  soData.npcData.agentPool.Dequeue();
+            agentData.agent.gameObject.SetActive(true);
             float randXPos = UnityEngine.Random.Range(components.platformCollider.bounds.min.x, components.platformCollider.bounds.max.x);
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y, components.platformCollider.transform.position.z);
-            agentNPC.transform.position = spawnPos;
-            agentNPC.transform.SetParent(transform, true);
+            agentData.agent.transform.position = spawnPos;
+            agentData.agent.transform.SetParent(transform, true);
         }
         for (int i = 0; i < soData.settings.bystanderSpawnAmount; i++)
         {

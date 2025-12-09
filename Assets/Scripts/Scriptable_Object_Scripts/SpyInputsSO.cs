@@ -3,10 +3,13 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SpyInputs_SO", menuName = "Midnight Line SOs / Spy Inputs SO")]
 public class SpyInputsSO : ScriptableObject
 {
-    internal bool jump;
     internal int move;
+    internal bool jump;
     internal bool run;
-    internal bool clipboard;
-    internal bool cancel;
     internal bool interact;
+    internal int clipboard;
+    internal bool selectNPC;
+    internal Vector2 mouseScreenPos;
+    internal Vector2 mouseWorldPos;
+    internal bool cancel;
 }

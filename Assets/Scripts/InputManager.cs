@@ -16,13 +16,14 @@ public class InputManager : MonoBehaviour
     [SerializeField] SOData soData;
 
     PlayerInput playerInput;
-    public InputAction moveAction { get; private set; }
-    public InputAction jumpAction { get; private set; }
-    public InputAction runAction { get; private set; }
-    public InputAction clipboardAction { get; private set; }
-    public InputAction interactAction { get; private set; }
-    public InputAction cancelAction { get; private set; }
-    public Action<string> OnDeviceChanged { get; private set; }
+    InputAction moveAction;
+    InputAction jumpAction;
+    InputAction runAction;
+    InputAction clipboardAction;
+    InputAction selectNPCAction;
+    InputAction interactAction;
+    InputAction cancelAction;
+    Action<string> OnDeviceChanged;
 
     public static InputDevice curDevice;
 
@@ -37,8 +38,9 @@ public class InputManager : MonoBehaviour
         moveAction = playerInput.actions["Player/Movement"];
         jumpAction = playerInput.actions["Player/Jump"];
         runAction = playerInput.actions["Player/Run"];
-        clipboardAction = playerInput.actions["Player/Clipboard"];
         interactAction = playerInput.actions["Player/Interact"];
+        clipboardAction = playerInput.actions["Player/Clipboard"];
+        selectNPCAction = playerInput.actions["Player/SelectNPC"];
         cancelAction = playerInput.actions["Player/Cancel"];
 
         moveAction.performed += context =>
@@ -50,20 +52,31 @@ public class InputManager : MonoBehaviour
         {
             soData.spyInputs.move = 0;
         };
-        jumpAction.performed += context => soData.spyInputs.jump = true;
-        jumpAction.canceled += context => soData.spyInputs.jump = false;
 
+        clipboardAction.performed += context =>
+        {
+            Vector2 move = context.ReadValue<Vector2>();
+            soData.spyInputs.clipboard = Mathf.RoundToInt(move.y);
+        };
 
-        runAction.performed += context => soData.spyInputs.run = true;
-        runAction.canceled += context => soData.spyInputs.run = false;
-
-        clipboardAction.started += context => soData.spyInputs.clipboard = true;
+        clipboardAction.canceled += context =>
+        {
+            soData.spyInputs.clipboard = 0;
+        };
 
         interactAction.started += context =>
         {
             soData.gameEventData.OnInteract.Raise();
             soData.spyInputs.interact = true;
         };
+
+        selectNPCAction.performed += context => soData.spyInputs.selectNPC = true;
+
+        jumpAction.performed += context => soData.spyInputs.jump = true;
+        jumpAction.canceled += context => soData.spyInputs.jump = false;
+
+        runAction.performed += context => soData.spyInputs.run = true;
+        runAction.canceled += context => soData.spyInputs.run = false;
 
         cancelAction.started += context => soData.spyInputs.cancel = true;
     }
@@ -81,24 +94,24 @@ public class InputManager : MonoBehaviour
 
     private void Update()
     {
-
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.RightShift))
         {
             resetElaspedTime += Time.deltaTime;
-
             if (resetElaspedTime > resetThresholdTime)
             {
                 resetElaspedTime = 0;
                 soData.gameEventData.OnReset.Raise();
             }
         }
+        soData.spyInputs.mouseScreenPos = Mouse.current.position.ReadValue();
+        soData.spyInputs.mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
     }
 
     private void LateUpdate()
     {
-        soData.spyInputs.clipboard = false;
         soData.spyInputs.cancel = false;
         soData.spyInputs.interact = false;
+        soData.spyInputs.selectNPC = false;
     }
     private void CheckDevice(InputControl value, InputEventPtr ptr)
     {

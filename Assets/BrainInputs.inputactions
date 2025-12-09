@@ -6,15 +6,6 @@
             "id": "dfe46dea-6076-44ea-b825-57c5f8187ea6",
             "actions": [
                 {
-                    "name": "Jump",
-                    "type": "Button",
-                    "id": "ac29e519-7e48-478f-ad63-b10ac44b06d3",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Movement",
                     "type": "Value",
                     "id": "ce64c997-ef89-45e1-aa13-bbd6b58a142a",
@@ -22,6 +13,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Jump",
+                    "type": "Button",
+                    "id": "ac29e519-7e48-478f-ad63-b10ac44b06d3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "Run",
@@ -33,18 +33,27 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Clipboard",
+                    "name": "Interact",
                     "type": "Button",
-                    "id": "29cb3758-e4c2-47f0-8d05-8a604357ab6e",
+                    "id": "0019b702-153e-4405-9d44-74cf08b254b0",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Interact",
+                    "name": "Clipboard",
+                    "type": "Value",
+                    "id": "29cb3758-e4c2-47f0-8d05-8a604357ab6e",
+                    "expectedControlType": "Vector2",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": true
+                },
+                {
+                    "name": "SelectNPC",
                     "type": "Button",
-                    "id": "0019b702-153e-4405-9d44-74cf08b254b0",
+                    "id": "1af8fd30-8fe4-4f4c-87b1-c1f605c32f84",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -67,7 +76,7 @@
                     "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard",
+                    "groups": "KeyboardAndMouse",
                     "action": "Jump",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -111,7 +120,7 @@
                     "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse;Keyboard",
+                    "groups": "Keyboard&Mouse;KeyboardAndMouse",
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -122,7 +131,7 @@
                     "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse;Keyboard",
+                    "groups": "Keyboard&Mouse;KeyboardAndMouse",
                     "action": "Movement",
                     "isComposite": false,
                     "isPartOfComposite": true
@@ -133,7 +142,7 @@
                     "path": "<Keyboard>/leftShift",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard&Mouse;Keyboard",
+                    "groups": "Keyboard&Mouse;KeyboardAndMouse",
                     "action": "Run",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -150,26 +159,70 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "03e75731-1019-4349-96eb-e17786aa3ff0",
-                    "path": "<Keyboard>/e",
+                    "name": "Right Stick",
+                    "id": "a1eb8400-7074-4206-abb1-9c44dc852646",
+                    "path": "2DVector",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse;Keyboard",
+                    "groups": "",
                     "action": "Clipboard",
-                    "isComposite": false,
+                    "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "",
-                    "id": "300a9ccd-d6ac-4ce2-8c54-f641507b7b0a",
-                    "path": "<Gamepad>/buttonWest",
+                    "name": "Up",
+                    "id": "68d06775-7ebc-4f95-ad36-7b0ef5872dbc",
+                    "path": "<Gamepad>/rightStick/up",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Gamepad",
+                    "groups": ";Keyboard&Mouse;Gamepad",
                     "action": "Clipboard",
                     "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Down",
+                    "id": "7404c0f6-d384-43fc-a4e1-fd087d6c41ab",
+                    "path": "<Gamepad>/rightStick/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse;Gamepad",
+                    "action": "Clipboard",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Mouse Scroll",
+                    "id": "b201c802-55b4-4684-82c7-b694f2d20749",
+                    "path": "2DVector",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "",
+                    "action": "Clipboard",
+                    "isComposite": true,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "Up",
+                    "id": "3c7c30f4-b33b-4901-a0e5-58c2f9f316c0",
+                    "path": "<Mouse>/scroll/up",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse;KeyboardAndMouse",
+                    "action": "Clipboard",
+                    "isComposite": false,
+                    "isPartOfComposite": true
+                },
+                {
+                    "name": "Down",
+                    "id": "7fced24a-ab03-4fde-b584-e9d0fb64a87b",
+                    "path": "<Mouse>/scroll/down",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Keyboard&Mouse;KeyboardAndMouse",
+                    "action": "Clipboard",
+                    "isComposite": false,
+                    "isPartOfComposite": true
                 },
                 {
                     "name": "",
@@ -177,7 +230,7 @@
                     "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse;Keyboard",
+                    "groups": "Keyboard&Mouse;KeyboardAndMouse",
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -199,7 +252,7 @@
                     "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
-                    "groups": ";Keyboard&Mouse;Keyboard",
+                    "groups": "Keyboard&Mouse;KeyboardAndMouse",
                     "action": "Cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -214,17 +267,33 @@
                     "action": "Cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8d283f49-b080-4462-9d9e-8d325c61b61d",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardAndMouse",
+                    "action": "SelectNPC",
+                    "isComposite": false,
+                    "isPartOfComposite": false
                 }
             ]
         }
     ],
     "controlSchemes": [
         {
-            "name": "Keyboard",
-            "bindingGroup": "Keyboard",
+            "name": "KeyboardAndMouse",
+            "bindingGroup": "KeyboardAndMouse",
             "devices": [
                 {
                     "devicePath": "<Keyboard>",
+                    "isOptional": false,
+                    "isOR": false
+                },
+                {
+                    "devicePath": "<Mouse>",
                     "isOptional": false,
                     "isOR": false
                 }

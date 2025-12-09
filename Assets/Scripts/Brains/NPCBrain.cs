@@ -37,6 +37,9 @@ public class NPCBrain : MonoBehaviour
         public TrainSettingsSO trainSettings;
         public TrainStatsSO trainStats;
         public GameEventDataSO gameEventData;
+        public SpyInputsSO spyInputs;
+        public ClipboardStatsSO clipboardStats;
+
         internal StationSO startStation;
         internal StationSO endStation;
     }
@@ -101,6 +104,15 @@ public class NPCBrain : MonoBehaviour
 
         stats.targetDist = stats.targetXPos - transform.position.x;
         inputData.move = Mathf.Abs(stats.targetDist) > 0.1f ? Mathf.Sign(stats.targetDist) : 0.0f;
+
+        if (componentData.spriteRenderer.bounds.Contains(new Vector3(soData.spyInputs.mouseWorldPos.x, soData.spyInputs.mouseWorldPos.y, transform.position.z)))
+        {
+            componentData.mpb.SetColor(soData.npcData.materialData.colorID, soData.clipboardStats.profilePageList[soData.npcData.activeColorIndex].color);
+        }
+        else
+        {
+            componentData.mpb.SetColor(soData.npcData.materialData.colorID, Color.black);
+        }
     }
     private void FixedUpdate()
     {

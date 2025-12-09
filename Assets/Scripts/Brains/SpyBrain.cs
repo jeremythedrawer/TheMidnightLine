@@ -139,8 +139,8 @@ public class SpyBrain : MonoBehaviour
         FixedUpdateStates();
         CalculateCollisionPoints();
         soData.stats.isGrounded = Physics2D.Linecast(collisionPoints.groundLeft, collisionPoints.groundRight, soData.stats.curGroundLayer);
-        soData.stats.isStepping =   Physics2D.Linecast(new Vector2(collisionPoints.groundLeft.x, transform.position.y), collisionPoints.stepLeft, soData.stats.curGroundLayer) || 
-                                    Physics2D.Linecast(new Vector2(collisionPoints.groundRight.x, transform.position.y), collisionPoints.stepRight, soData.stats.curGroundLayer);
+        soData.stats.isStepping = Physics2D.Linecast(new Vector2(collisionPoints.groundLeft.x, transform.position.y), collisionPoints.stepLeft, soData.stats.curGroundLayer) || 
+                                  Physics2D.Linecast(new Vector2(collisionPoints.groundRight.x, transform.position.y), collisionPoints.stepRight, soData.stats.curGroundLayer);
         if (soData.stats.isStepping)
         {
             componentData.rigidBody.position = new Vector2(componentData.rigidBody.position.x, componentData.rigidBody.position.y + (collisionPoints.stepRight.y - transform.position.y));
