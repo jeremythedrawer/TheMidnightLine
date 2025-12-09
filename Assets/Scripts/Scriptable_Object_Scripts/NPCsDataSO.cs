@@ -7,6 +7,7 @@ public class NPCsDataSO : ScriptableObject
 {
     public NPCBrain[] npcPrefabs;
     public Color[] agentColors;
+    [Range(0, 1)] public float hoverColorOffet = 0.25f;
     internal int activeColorIndex;
     [Serializable] public struct AgentData
     {

@@ -50,6 +50,11 @@ public class NPCBrain : MonoBehaviour
         internal State curState;
         internal Type type;
         internal NPCTraits.Behaviours behaviours;
+        internal Color selectedColor;
+
+        internal bool mouseInsideLastFrame;
+        internal bool mouseInsideThisFrame;
+
         internal bool canBoardTrain;
         internal float targetXVelocity;
         internal float curRunSpeed;
@@ -99,20 +104,14 @@ public class NPCBrain : MonoBehaviour
     {
         SelectingStates();
         UpdateStates();
+        HandleColor();
+
         componentData.mpb.SetTexture(soData.npcData.materialData.mainTexID, componentData.spriteRenderer.sprite.texture);
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
         stats.targetDist = stats.targetXPos - transform.position.x;
         inputData.move = Mathf.Abs(stats.targetDist) > 0.1f ? Mathf.Sign(stats.targetDist) : 0.0f;
 
-        if (componentData.spriteRenderer.bounds.Contains(new Vector3(soData.spyInputs.mouseWorldPos.x, soData.spyInputs.mouseWorldPos.y, transform.position.z)))
-        {
-            componentData.mpb.SetColor(soData.npcData.materialData.colorID, soData.clipboardStats.profilePageList[soData.npcData.activeColorIndex].color);
-        }
-        else
-        {
-            componentData.mpb.SetColor(soData.npcData.materialData.colorID, Color.black);
-        }
     }
     private void FixedUpdate()
     {
@@ -121,6 +120,10 @@ public class NPCBrain : MonoBehaviour
 
         stats.targetXVelocity = soData.npc.moveSpeed * stats.curRunSpeed * inputData.move;
         componentData.rigidBody.linearVelocityX = Mathf.Lerp(componentData.rigidBody.linearVelocityX, stats.targetXVelocity, soData.npc.groundAccelation * Time.fixedDeltaTime);
+    }
+    private void LateUpdate()
+    {
+        stats.mouseInsideLastFrame = stats.mouseInsideThisFrame;
     }
     private void OnApplicationQuit()
     {
@@ -215,6 +218,45 @@ public class NPCBrain : MonoBehaviour
         }
 
     }
+    private void HandleColor()
+    {
+        stats.mouseInsideThisFrame = componentData.spriteRenderer.bounds.Contains(new Vector3(soData.spyInputs.mouseWorldPos.x, soData.spyInputs.mouseWorldPos.y, transform.position.z));
+
+        if (!stats.mouseInsideLastFrame && stats.mouseInsideThisFrame) // First frame the mouse enters the bounds
+        {
+            if (stats.selectedColor != soData.clipboardStats.profilePageList[soData.npcData.activeColorIndex].color)
+            {
+                componentData.mpb.SetColor(soData.npcData.materialData.colorID, soData.clipboardStats.profilePageList[soData.npcData.activeColorIndex].color * soData.npcData.hoverColorOffet);
+            }
+            else
+            {
+                componentData.mpb.SetColor(soData.npcData.materialData.colorID, Color.black + new Color(soData.npcData.hoverColorOffet, soData.npcData.hoverColorOffet, soData.npcData.hoverColorOffet, 0f));
+            }
+            componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
+        }
+        else if (stats.mouseInsideThisFrame)
+        {
+            if (soData.spyInputs.mouseLeftDown)
+            {
+                if (stats.selectedColor != soData.clipboardStats.profilePageList[soData.npcData.activeColorIndex].color)
+                {
+                    stats.selectedColor = soData.clipboardStats.profilePageList[soData.npcData.activeColorIndex].color;
+                }
+                else
+                {
+                    stats.selectedColor = Color.black;
+                }
+                componentData.mpb.SetColor(soData.npcData.materialData.colorID, stats.selectedColor);
+                componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
+            }
+        }
+        else
+        {
+            componentData.mpb.SetColor(soData.npcData.materialData.colorID, stats.selectedColor);
+            componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
+        }
+    }
+
     private void BoardTrain()
     {
         if (!stats.canBoardTrain) return; // only board train when you can board and npc is on the station ground

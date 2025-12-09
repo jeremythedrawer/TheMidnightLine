@@ -51,7 +51,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "SelectNPC",
+                    "name": "MouseLeftDown",
                     "type": "Button",
                     "id": "1af8fd30-8fe4-4f4c-87b1-c1f605c32f84",
                     "expectedControlType": "",
@@ -275,7 +275,18 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";KeyboardAndMouse",
-                    "action": "SelectNPC",
+                    "action": "MouseLeftDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "466078c9-09c4-4656-b75d-577916c4dd6c",
+                    "path": "<Gamepad>/rightStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "MouseLeftDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

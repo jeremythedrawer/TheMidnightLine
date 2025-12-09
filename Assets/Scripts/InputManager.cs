@@ -20,7 +20,7 @@ public class InputManager : MonoBehaviour
     InputAction jumpAction;
     InputAction runAction;
     InputAction clipboardAction;
-    InputAction selectNPCAction;
+    InputAction mouseLeftDownAction;
     InputAction interactAction;
     InputAction cancelAction;
     Action<string> OnDeviceChanged;
@@ -40,7 +40,7 @@ public class InputManager : MonoBehaviour
         runAction = playerInput.actions["Player/Run"];
         interactAction = playerInput.actions["Player/Interact"];
         clipboardAction = playerInput.actions["Player/Clipboard"];
-        selectNPCAction = playerInput.actions["Player/SelectNPC"];
+        mouseLeftDownAction = playerInput.actions["Player/MouseLeftDown"];
         cancelAction = playerInput.actions["Player/Cancel"];
 
         moveAction.performed += context =>
@@ -70,7 +70,7 @@ public class InputManager : MonoBehaviour
             soData.spyInputs.interact = true;
         };
 
-        selectNPCAction.performed += context => soData.spyInputs.selectNPC = true;
+        mouseLeftDownAction.started += context => soData.spyInputs.mouseLeftDown = true;
 
         jumpAction.performed += context => soData.spyInputs.jump = true;
         jumpAction.canceled += context => soData.spyInputs.jump = false;
@@ -111,7 +111,7 @@ public class InputManager : MonoBehaviour
     {
         soData.spyInputs.cancel = false;
         soData.spyInputs.interact = false;
-        soData.spyInputs.selectNPC = false;
+        soData.spyInputs.mouseLeftDown = false;
     }
     private void CheckDevice(InputControl value, InputEventPtr ptr)
     {

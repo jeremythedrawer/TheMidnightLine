@@ -21,6 +21,7 @@ public class NPCSO : ScriptableObject
 
     [Header("Components")]
     public AnimatorOverrideController animationOverrideController;
+
     public Dictionary<int, AnimationClip> animClipDict = new Dictionary<int, AnimationClip>();
 
     private void OnValidate()
