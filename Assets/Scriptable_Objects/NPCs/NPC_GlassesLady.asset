@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 315feb52fc04b9148823f375f15cd275, type: 3}
-  m_Name: GlassesLady_Settings
+  m_Name: NPC_GlassesLady
   m_EditorClassIdentifier: 
   moveSpeed: 1
   runSpeedMultiplier: 1.5
@@ -18,4 +18,6 @@ MonoBehaviour:
   groundDecelaration: 14
   maxDistanceDetection: 30
   suspectColor: {r: 1, g: 0, b: 0, a: 1}
-  appearence: 712
+  appearence: 648
+  animationOverrideController: {fileID: 22100000, guid: 43e895ceeeecdce45b0be0f9647e1f04, type: 2}
+  npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}

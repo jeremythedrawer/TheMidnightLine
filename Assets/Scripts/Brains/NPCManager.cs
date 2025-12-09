@@ -46,7 +46,7 @@ public class NPCManager : MonoBehaviour
                 npc.stats.type = NPCBrain.Type.Agent;
 
                 NPCTraits.Behaviours profilePageBehaviours = npc.stats.behaviours;
-                NPCTraits.Appearence profilePageAppearence = NPCTraits.GetRandomAppearence(npc.soData.settings.appearence);
+                NPCTraits.Appearence profilePageAppearence = NPCTraits.GetRandomAppearence(npc.soData.npc.appearence);
                 ClipboardStatsSO.ProfilePageData profilePageData = new ClipboardStatsSO.ProfilePageData { behaviours = profilePageBehaviours, appearence = profilePageAppearence };
                 soData.clipBoardStats.profilePageData.Add(profilePageData);
 

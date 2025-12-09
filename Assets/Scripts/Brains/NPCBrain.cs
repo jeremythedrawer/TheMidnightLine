@@ -22,7 +22,6 @@ public class NPCBrain : MonoBehaviour
         public Rigidbody2D rigidBody;
         public BoxCollider2D boxCollider;
         public Animator animator;
-        public AnimatorOverrideController animController;
         public SpriteRenderer spriteRenderer;
         internal MaterialPropertyBlock mpb;
         internal SlideDoors slideDoors;
@@ -32,11 +31,11 @@ public class NPCBrain : MonoBehaviour
 
     [Serializable] public struct SOData
     {
-        public NPCSettingsSO settings;
+        public NPCSO npc;
+        public NPCsDataSO npcData;
         public LayerSettingsSO layerSettings;
         public TrainSettingsSO trainSettings;
         public TrainStatsSO trainStats;
-        public NPCsDataSO npcData;
         public GameEventDataSO gameEventData;
         internal StationSO startStation;
         internal StationSO endStation;
@@ -58,66 +57,17 @@ public class NPCBrain : MonoBehaviour
 
     [Serializable] public struct InputData
     {
-        internal bool jump;
         internal float move;
     }
     [SerializeField] InputData inputData;
 
-    [Serializable] public struct AnimHashData
-    {
-        internal int sittingBlinking;
-        internal int sittingBreathing;
-        internal int sittingEating;
-        internal int sittingSick;
-        internal int sittingSleeping;
-        internal int smoking;
-        internal int standingAboutToEat;
-        internal int standingBlinking;
-        internal int standingBreathing;
-        internal int standingEating;
-        internal int standingSick;
-        internal int standingSleeping;
-        internal int walking;
-    }
-    [SerializeField] AnimHashData animHashData;
-
-    [Serializable] public struct AnimClipData
-    {
-        public AnimationClip[] standingIdleClips;
-        public AnimationClip[] sittingIdleClips;
-
-    }
-    [SerializeField] AnimClipData animClipData;
-
-    [Serializable] public struct MaterialData
-    {
-        internal int colorID;
-        internal int zPosID;
-        internal int mainTexID;
-    }
-    [SerializeField] MaterialData materialData;
     private void Awake()
     {
         componentData.mpb = new MaterialPropertyBlock();
-
-        animHashData.sittingBlinking = Animator.StringToHash("SittingBlinking");
-        animHashData.sittingBreathing = Animator.StringToHash("SittingBreathing");
-        animHashData.sittingEating = Animator.StringToHash("SittingEating");
-        animHashData.sittingSick = Animator.StringToHash("SittingSick");
-        animHashData.sittingSleeping = Animator.StringToHash("SittingSleeping");
-        animHashData.smoking = Animator.StringToHash("Smoking");
-        animHashData.standingAboutToEat = Animator.StringToHash("StandingAboutToEat");
-        animHashData.standingBlinking = Animator.StringToHash("StandingBlinking");
-        animHashData.standingBreathing = Animator.StringToHash("StandingBreathing");
-        animHashData.standingEating = Animator.StringToHash("StandingEating");
-        animHashData.standingSick = Animator.StringToHash("StandingSick");
-        animHashData.standingSleeping = Animator.StringToHash("StandingSleeping");
-        animHashData.walking = Animator.StringToHash("Walking");
-
-
-        materialData.colorID = Shader.PropertyToID("_Color");
-        materialData.zPosID = Shader.PropertyToID("_ZPos");
-        materialData.mainTexID = Shader.PropertyToID("_MainTex");
+        if (soData.npc.animClipDict.TryGetValue(soData.npcData.animHashData.standingAboutToEat, out AnimationClip clip))
+        {
+            AnimationUtilities.SetAnimationEvent(clip, nameof(PlayStandingEatingAnimation));
+        }
     }
     private void OnEnable()
     {
@@ -137,7 +87,7 @@ public class NPCBrain : MonoBehaviour
         componentData.rigidBody.includeLayers = soData.layerSettings.stationLayers.ground;
         stats.curRunSpeed = 1.0f;
 
-        componentData.mpb.SetFloat(materialData.zPosID, soData.trainSettings.entityDepthRange.x);
+        componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, soData.trainSettings.entityDepthRange.x);
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
         stats.targetXPos = transform.position.x;
@@ -146,7 +96,7 @@ public class NPCBrain : MonoBehaviour
     {
         SelectingStates();
         UpdateStates();
-        componentData.mpb.SetTexture(materialData.mainTexID, componentData.spriteRenderer.sprite.texture);
+        componentData.mpb.SetTexture(soData.npcData.materialData.mainTexID, componentData.spriteRenderer.sprite.texture);
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
         stats.targetDist = stats.targetXPos - transform.position.x;
@@ -157,8 +107,8 @@ public class NPCBrain : MonoBehaviour
         FixedUpdateStates();
         BoardTrain();
 
-        stats.targetXVelocity = soData.settings.moveSpeed * stats.curRunSpeed * inputData.move;
-        componentData.rigidBody.linearVelocityX = Mathf.Lerp(componentData.rigidBody.linearVelocityX, stats.targetXVelocity, soData.settings.groundAccelation * Time.fixedDeltaTime);
+        stats.targetXVelocity = soData.npc.moveSpeed * stats.curRunSpeed * inputData.move;
+        componentData.rigidBody.linearVelocityX = Mathf.Lerp(componentData.rigidBody.linearVelocityX, stats.targetXVelocity, soData.npc.groundAccelation * Time.fixedDeltaTime);
     }
     private void OnApplicationQuit()
     {
@@ -222,17 +172,17 @@ public class NPCBrain : MonoBehaviour
             {
                 if (componentData.carriageChairs != null)
                 {
-                    componentData.animator.Play(animHashData.sittingBreathing);
+                    componentData.animator.Play(soData.npcData.animHashData.sittingBreathing);
                 }
                 else
                 {
-                    componentData.animator.Play(animHashData.standingBreathing);
+                    componentData.animator.Play(soData.npcData.animHashData.standingBreathing);
                 }
             }
             break;
             case State.Walk:
             {
-                componentData.animator.Play(animHashData.walking);
+                componentData.animator.Play(soData.npcData.animHashData.walking);
             }
             break;
         }
@@ -261,7 +211,7 @@ public class NPCBrain : MonoBehaviour
         {
             if (componentData.slideDoors == null) // find slide door in one frame
             {
-                RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, new Vector2(soData.settings.maxDistanceDetection, componentData.boxCollider.size.y), 0.0f, transform.right, soData.settings.maxDistanceDetection, soData.layerSettings.trainLayers.slideDoors);
+                RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, new Vector2(soData.npc.maxDistanceDetection, componentData.boxCollider.size.y), 0.0f, transform.right, soData.npc.maxDistanceDetection, soData.layerSettings.trainLayers.slideDoors);
 
                 if (slideDoorHit.collider == null) { Debug.LogError($"{name} did not find a slide door to go to"); return; }
 
@@ -280,7 +230,7 @@ public class NPCBrain : MonoBehaviour
                 {
                     float zPos = UnityEngine.Random.Range(soData.trainSettings.entityDepthRange.x, soData.trainSettings.entityDepthRange.y);
 
-                    componentData.mpb.SetFloat(materialData.zPosID, zPos);
+                    componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, zPos);
                     componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
                     componentData.rigidBody.includeLayers = soData.layerSettings.trainMask;                   
 
@@ -302,9 +252,9 @@ public class NPCBrain : MonoBehaviour
     }
     public void FindCarriageChair()
     {
-        Vector2 boxCastSize = new Vector2(soData.settings.maxDistanceDetection * 2, componentData.boxCollider.bounds.size.y);
-        RaycastHit2D insideBoundHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.size, 0.0f, transform.right, soData.settings.maxDistanceDetection, soData.layerSettings.trainLayers.insideCarriageBounds);
-        RaycastHit2D carriageChairsHit = Physics2D.BoxCast(insideBoundHit.collider.bounds.center, insideBoundHit.collider.bounds.size, 0.0f, transform.right, soData.settings.maxDistanceDetection, soData.layerSettings.trainLayers.carriageChairs);
+        Vector2 boxCastSize = new Vector2(soData.npc.maxDistanceDetection * 2, componentData.boxCollider.bounds.size.y);
+        RaycastHit2D insideBoundHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.size, 0.0f, transform.right, soData.npc.maxDistanceDetection, soData.layerSettings.trainLayers.insideCarriageBounds);
+        RaycastHit2D carriageChairsHit = Physics2D.BoxCast(insideBoundHit.collider.bounds.center, insideBoundHit.collider.bounds.size, 0.0f, transform.right, soData.npc.maxDistanceDetection, soData.layerSettings.trainLayers.carriageChairs);
 
         CarriageChairs selectedChairs = carriageChairsHit.collider.GetComponent<CarriageChairs>();
 
@@ -317,7 +267,7 @@ public class NPCBrain : MonoBehaviour
 
                 float zPos = selectedChairs.transform.position.z - 1;
                 transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
-                componentData.mpb.SetFloat(materialData.zPosID, zPos);
+                componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, zPos);
                 componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
                 break;
@@ -325,9 +275,13 @@ public class NPCBrain : MonoBehaviour
         }
         componentData.carriageChairs = selectedChairs;
     }
+    private void PlayStandingEatingAnimation()
+    {
+        componentData.animator.Play(soData.npcData.animHashData.standingEating);
+    }
     private void ResetData()
     {
-        componentData.mpb.SetFloat(materialData.zPosID, 0f);
+        componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, 0f);
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
     }
     private void OnDrawGizmos()
@@ -350,7 +304,7 @@ public class NPCBrain : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(componentData.boxCollider.bounds.center, new Vector2(soData.settings.maxDistanceDetection, componentData.boxCollider.bounds.extents.y));
+        Gizmos.DrawWireCube(componentData.boxCollider.bounds.center, new Vector2(soData.npc.maxDistanceDetection, componentData.boxCollider.bounds.extents.y));
     }
 
 }

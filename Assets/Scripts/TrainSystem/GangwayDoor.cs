@@ -27,7 +27,7 @@ public class GangwayDoor : MonoBehaviour
         animClipData.openHash = Animator.StringToHash("Open");
         animClipData.closeHash = Animator.StringToHash("Close");
 
-        Utils.SetAnimationEvent(animClipData.openClip, nameof(EnableCloseDoor));
+        AnimationUtilities.SetAnimationEvent(animClipData.openClip, nameof(EnableCloseDoor));
     }
 
     private void FixedUpdate()

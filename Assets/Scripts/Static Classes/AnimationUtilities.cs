@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public static class Utils
+public static class AnimationUtilities
 {
     public static void SetAnimationEvent(AnimationClip clip, string inputFunction, float? inputTime = null)
     {

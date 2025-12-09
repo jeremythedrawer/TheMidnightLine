@@ -96,8 +96,8 @@ public class SpyBrain : MonoBehaviour
         animClipData.hangHash = Animator.StringToHash("Hang");
         animClipData.climbHash  = Animator.StringToHash("Climb");
 
-        Utils.SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));
-        Utils.SetAnimationEvent(animClipData.climbClip, nameof(ExitClimbClip));
+        AnimationUtilities.SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));
+        AnimationUtilities.SetAnimationEvent(animClipData.climbClip, nameof(ExitClimbClip));
     }
     private void OnEnable()
     {
