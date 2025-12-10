@@ -26,7 +26,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4102224675141482309}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -34,8 +34,8 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 369}
-  m_SizeDelta: {x: 296, y: 140}
+  m_AnchoredPosition: {x: 0, y: 285}
+  m_SizeDelta: {x: 232, y: 109}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &5682150084371961764
 CanvasRenderer:
@@ -106,12 +106,13 @@ RectTransform:
   - {fileID: 1414371166042203327}
   - {fileID: 4209583502536185213}
   - {fileID: 4603566110128804073}
+  - {fileID: 683970197948188960}
   m_Father: {fileID: 8181006336162262081}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 369.9, y: 560.1}
+  m_SizeDelta: {x: 350, y: 450}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5154116152342192840
 GameObject:
@@ -123,7 +124,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4209583502536185213}
   m_Layer: 5
-  m_Name: ProfilePages
+  m_Name: ProfilePages_notFlipped
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -137,7 +138,7 @@ RectTransform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5154116152342192840}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -146,7 +147,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 500, y: 687}
+  m_SizeDelta: {x: 361.9, y: 495.4}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!1 &5369470828813154974
 GameObject:
@@ -200,7 +201,9 @@ MonoBehaviour:
   components:
     rectTransform: {fileID: 8181006336162262081}
     imagesRectTransform: {fileID: 7324562680423162580}
-    profilePagesTransform: {fileID: 4209583502536185213}
+    profilePagesNotFlippedRectTransform: {fileID: 4209583502536185213}
+    profilePagesFlippedRectTransform: {fileID: 683970197948188960}
+    clipRectTransform: {fileID: 4603566110128804073}
   soData:
     settings: {fileID: 11400000, guid: 2c1e808440566bb4eb0595424f1769b8, type: 2}
     stats: {fileID: 11400000, guid: 65736770e7c10174c96fa2657616eb71, type: 2}
@@ -240,7 +243,7 @@ RectTransform:
   m_AnchorMin: {x: 0.5, y: 0.5}
   m_AnchorMax: {x: 0.5, y: 0.5}
   m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 546, y: 746}
+  m_SizeDelta: {x: 429, y: 587}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!222 &2698278444585825907
 CanvasRenderer:
@@ -280,3 +283,38 @@ MonoBehaviour:
   m_FillOrigin: 0
   m_UseSpriteMesh: 1
   m_PixelsPerUnitMultiplier: 1
+--- !u!1 &8356313616579768093
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 683970197948188960}
+  m_Layer: 5
+  m_Name: ProfilePages_flipped
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &683970197948188960
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8356313616579768093}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7324562680423162580}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 21.46}
+  m_SizeDelta: {x: 361.9, y: 495.4}
+  m_Pivot: {x: 0.5, y: 0.5}

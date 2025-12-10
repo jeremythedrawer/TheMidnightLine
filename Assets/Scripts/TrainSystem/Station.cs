@@ -43,10 +43,7 @@ public class Station : MonoBehaviour
 
         stats.moveThreshold = soData.settings.metersPosition - components.platformCollider.bounds.extents.x;
     }
-    private void Start()
-    {
 
-    }
     private void Update()
     {
         if (soData.spyStats.onTrain && soData.trainStats.metersTravelled > stats.moveThreshold)

@@ -7,7 +7,7 @@ public class SpyInputsSO : ScriptableObject
     internal bool jump;
     internal bool run;
     internal bool interact;
-    internal int clipboard;
+    internal int mouseScroll;
 
     internal Vector2 mouseScreenPos;
     internal Vector2 mouseWorldPos;

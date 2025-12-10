@@ -113,7 +113,7 @@ public class TrainController : MonoBehaviour
         {
             if (character is BystanderBrain) character.transform.SetParent(trainData.bystandersParent);
             else if (character is AgentBrain) character.transform.SetParent(trainData.agentsParent);
-            else if (character is SpyBrain) character.transform.SetParent(trainData.playerParent);
+            //else if (character is SpyBrain) character.transform.SetParent(trainData.playerParent);
         }
         await Task.Yield();
     }

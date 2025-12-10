@@ -52,9 +52,6 @@ public class NPCBrain : MonoBehaviour
         internal NPCTraits.Behaviours behaviours;
         internal Color selectedColor;
 
-        internal bool mouseInsideLastFrame;
-        internal bool mouseInsideThisFrame;
-
         internal bool canBoardTrain;
         internal float targetXVelocity;
         internal float curRunSpeed;
@@ -104,7 +101,6 @@ public class NPCBrain : MonoBehaviour
     {
         SelectingStates();
         UpdateStates();
-        HandleColor();
 
         componentData.mpb.SetTexture(soData.npcData.materialData.mainTexID, componentData.spriteRenderer.sprite.texture);
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
@@ -120,10 +116,6 @@ public class NPCBrain : MonoBehaviour
 
         stats.targetXVelocity = soData.npc.moveSpeed * stats.curRunSpeed * inputData.move;
         componentData.rigidBody.linearVelocityX = Mathf.Lerp(componentData.rigidBody.linearVelocityX, stats.targetXVelocity, soData.npc.groundAccelation * Time.fixedDeltaTime);
-    }
-    private void LateUpdate()
-    {
-        stats.mouseInsideLastFrame = stats.mouseInsideThisFrame;
     }
     private void OnApplicationQuit()
     {
@@ -218,45 +210,41 @@ public class NPCBrain : MonoBehaviour
         }
 
     }
-    private void HandleColor()
+    public void HoverColor()
     {
-        stats.mouseInsideThisFrame = componentData.spriteRenderer.bounds.Contains(new Vector3(soData.spyInputs.mouseWorldPos.x, soData.spyInputs.mouseWorldPos.y, transform.position.z));
+        if (componentData.rigidBody.includeLayers != soData.layerSettings.trainMask) return;
 
-        if (!stats.mouseInsideLastFrame && stats.mouseInsideThisFrame) // First frame the mouse enters the bounds
+        if (!soData.clipboardStats.active || soData.clipboardStats.activePageIndex >= soData.clipboardStats.profilePageArray.Length)
         {
-            if (stats.selectedColor != soData.clipboardStats.profilePageList[soData.npcData.activeColorIndex].color)
-            {
-                componentData.mpb.SetColor(soData.npcData.materialData.colorID, soData.clipboardStats.profilePageList[soData.npcData.activeColorIndex].color * soData.npcData.hoverColorOffet);
-            }
-            else
-            {
-                componentData.mpb.SetColor(soData.npcData.materialData.colorID, Color.black + new Color(soData.npcData.hoverColorOffet, soData.npcData.hoverColorOffet, soData.npcData.hoverColorOffet, 0f));
-            }
-            componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
+            componentData.mpb.SetColor(soData.npcData.materialData.colorID, Color.black + new Color(soData.npcData.hoverColorOffet, soData.npcData.hoverColorOffet, soData.npcData.hoverColorOffet, 0f));
         }
-        else if (stats.mouseInsideThisFrame)
+        else if (stats.selectedColor != soData.clipboardStats.profilePageArray[soData.clipboardStats.activePageIndex].color)
         {
-            if (soData.spyInputs.mouseLeftDown)
-            {
-                if (stats.selectedColor != soData.clipboardStats.profilePageList[soData.npcData.activeColorIndex].color)
-                {
-                    stats.selectedColor = soData.clipboardStats.profilePageList[soData.npcData.activeColorIndex].color;
-                }
-                else
-                {
-                    stats.selectedColor = Color.black;
-                }
-                componentData.mpb.SetColor(soData.npcData.materialData.colorID, stats.selectedColor);
-                componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
-            }
+            componentData.mpb.SetColor(soData.npcData.materialData.colorID, soData.clipboardStats.profilePageArray[soData.clipboardStats.activePageIndex].color * soData.npcData.hoverColorOffet);
         }
-        else
-        {
-            componentData.mpb.SetColor(soData.npcData.materialData.colorID, stats.selectedColor);
-            componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
-        }
+        componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
     }
+    public void SelectColor()
+    {
+        if (componentData.rigidBody.includeLayers != soData.layerSettings.trainMask) return;
 
+        if (!soData.clipboardStats.active || soData.clipboardStats.activePageIndex >= soData.clipboardStats.profilePageArray.Length)
+        {
+            stats.selectedColor = Color.black;
+        }
+        else if (stats.selectedColor != soData.clipboardStats.profilePageArray[soData.clipboardStats.activePageIndex].color)
+        {
+            stats.selectedColor = soData.clipboardStats.profilePageArray[soData.clipboardStats.activePageIndex].color;
+        }
+        componentData.mpb.SetColor(soData.npcData.materialData.colorID, stats.selectedColor);
+        componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
+    }
+    public void ExitColor()
+    {
+        if (componentData.rigidBody.includeLayers != soData.layerSettings.trainMask) return;
+        componentData.mpb.SetColor(soData.npcData.materialData.colorID, stats.selectedColor);
+        componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
+    }
     private void BoardTrain()
     {
         if (!stats.canBoardTrain) return; // only board train when you can board and npc is on the station ground

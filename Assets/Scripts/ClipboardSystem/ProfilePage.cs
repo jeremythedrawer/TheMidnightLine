@@ -7,11 +7,13 @@ public class ProfilePage : MonoBehaviour
 {
     [Serializable] public struct ComponentData
     {
-        public TMP_Text behaviours;
-        public TMP_Text appearences;
-        public Image border;
+        public TMP_Text behavioursText;
+        public TMP_Text appearenceText;
+        public Image borderImage;
+        public Image pageImage;
+        public RectTransform rectTransform;
     }
-    [SerializeField] ComponentData components;
+    public ComponentData components;
 
     [Serializable] public struct SOData
     {
@@ -21,15 +23,20 @@ public class ProfilePage : MonoBehaviour
 
     [Serializable] public struct Stats
     {
-        internal int pageIndex;
         internal Color borderColor;
+        internal int pageIndex;
     }
-    public Stats stats;
+    [SerializeField] Stats stats;
 
     private void OnEnable()
     {
-        NPCTraits.Behaviours rawBehave = soData.clipboardStats.profilePageList[stats.pageIndex].behaviours;
-        NPCTraits.Appearence rawAppear = soData.clipboardStats.profilePageList[stats.pageIndex].appearence;
+        components.pageImage.material = Instantiate(components.pageImage.material);
+    }
+    public void SetPageParams(int pageIndex)
+    {
+        stats.pageIndex = pageIndex;
+        NPCTraits.Behaviours rawBehave = soData.clipboardStats.profilePageArray[pageIndex].behaviours;
+        NPCTraits.Appearence rawAppear = soData.clipboardStats.profilePageArray[pageIndex].appearence;
 
         int[] behavePositions = new int[2];
         int appearPosition = 0;
@@ -48,7 +55,7 @@ public class ProfilePage : MonoBehaviour
             flagIndex++;
         }
         flagIndex = 0;
-        foreach(NPCTraits.Appearence flag in Enum.GetValues(typeof (NPCTraits.Appearence)))
+        foreach (NPCTraits.Appearence flag in Enum.GetValues(typeof(NPCTraits.Appearence)))
         {
             if (flag == NPCTraits.Appearence.Nothing) continue;
 
@@ -60,9 +67,17 @@ public class ProfilePage : MonoBehaviour
             flagIndex++;
         }
 
-        components.behaviours.text = "- " + NPCTraits.behaviourDescriptions[behavePositions[0]] + Environment.NewLine + "- " + NPCTraits.behaviourDescriptions[behavePositions[1]];
-        components.appearences.text = "- " + NPCTraits.appearenceDescriptions[appearPosition];
+        components.behavioursText.text = "- " + NPCTraits.behaviourDescriptions[behavePositions[0]] + Environment.NewLine + "- " + NPCTraits.behaviourDescriptions[behavePositions[1]];
+        components.appearenceText.text = "- " + NPCTraits.appearenceDescriptions[appearPosition];
 
-        components.border.color = soData.clipboardStats.profilePageList[stats.pageIndex].color;
+        components.borderImage.color = soData.clipboardStats.profilePageArray[pageIndex].color;
+
+        components.rectTransform.localPosition = new Vector3(components.rectTransform.localPosition.x, components.rectTransform.localPosition.y, -(soData.clipboardStats.profilePageArray.Length - 1 - pageIndex));
+    }
+    public void Flipped(bool flippedDown)
+    {
+        components.borderImage.enabled = flippedDown;
+        components.behavioursText.enabled = flippedDown;
+        components.appearenceText.enabled = flippedDown;
     }
 }

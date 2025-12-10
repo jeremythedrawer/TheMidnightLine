@@ -56,12 +56,12 @@ public class InputManager : MonoBehaviour
         clipboardAction.performed += context =>
         {
             Vector2 move = context.ReadValue<Vector2>();
-            soData.spyInputs.clipboard = Mathf.RoundToInt(move.y);
+            soData.spyInputs.mouseScroll = Mathf.RoundToInt(move.y);
         };
 
         clipboardAction.canceled += context =>
         {
-            soData.spyInputs.clipboard = 0;
+            soData.spyInputs.mouseScroll = 0;
         };
 
         interactAction.started += context =>

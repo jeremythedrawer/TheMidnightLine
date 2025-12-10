@@ -6,6 +6,8 @@ public class ClipboardSettingsSO : ScriptableObject
 {
     public float onScreenYPos = 300;
     public float moveTime = 1;
+    public float flipPageTime = 0.5f;
+    public int randomPixelOffsetForPage = 10;
     public ProfilePage profilePagePrefab;
 
 }

@@ -8,12 +8,13 @@ public class NPCsDataSO : ScriptableObject
     public NPCBrain[] npcPrefabs;
     public Color[] agentColors;
     [Range(0, 1)] public float hoverColorOffet = 0.25f;
-    internal int activeColorIndex;
+
     [Serializable] public struct AgentData
     {
         public NPCBrain agent;
         public Color color;
     }
+    internal int totalAgentCount;
     internal List<Color> colorsToPick;
     internal List<NPCBrain> npcsToPick;
     internal Queue<AgentData> agentPool = new Queue<AgentData>();
