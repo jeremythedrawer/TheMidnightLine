@@ -63,9 +63,7 @@ Shader "Unlit/s_character"
 
                 v.positionOS = UnityFlipSprite( v.positionOS, unity_SpriteProps.xy);
                 o.positionCS = TransformObjectToHClip(v.positionOS);
-
                 o.uv = v.uv;
-
                 o.color = v.color * unity_SpriteColor;
                 return o;
             }
@@ -74,12 +72,8 @@ Shader "Unlit/s_character"
             half4 frag (Varyings i) : SV_Target
             {
                 half4 sampledMainTex =  i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
-
-                float greyScale = ((_ZPos - _EntityDepthRange.x) / (_EntityDepthRange.y - _EntityDepthRange.x)) * _DepthGreyScale;
-
-                half3 col = sampledMainTex.rgb + _Color + greyScale;
-
-
+                float greyScale = ((_ZPos - _EntityDepthRange.x) / (_EntityDepthRange.y)) * _DepthGreyScale;
+                half3 col = sampledMainTex.b + _Color + greyScale;
                 return half4(col, sampledMainTex.a);
             }
             ENDHLSL

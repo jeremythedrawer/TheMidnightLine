@@ -49,7 +49,8 @@ public class TrainBrain : MonoBehaviour
         soData.stats.accellation2 = 2 * soData.settings.accelerationSpeed;
         soData.stats.brakeDist = GetBrakeDistance();
 
-        Shader.SetGlobalVector(shaderData.entityDepthRangeID, (Vector2)soData.settings.entityDepthRange);
+        Vector2 entityDepthData = new Vector2(soData.settings.entityDepthRange.x, soData.settings.entityDepthRange.y - soData.settings.entityDepthRange.x);
+        Shader.SetGlobalVector(shaderData.entityDepthRangeID, entityDepthData);
 
         MoveTrainToStartPosition().Forget();
     }

@@ -32,13 +32,13 @@ public class MeleeState : State
 
     public void DealDamage(int attackIndex)
     {
-        if (core is SpyBrain)
-        {
-            foreach (Collider2D agentCollider in meleeColliderData.agentColliders)
-            {
-                agentCollider.GetComponentInParent<HealthSystem>().TakeDamage(core.characterStats.meleeStrength);
-            }  
-        }
+        //if (core is SpyBrain)
+        //{
+        //    foreach (Collider2D agentCollider in meleeColliderData.agentColliders)
+        //    {
+        //        agentCollider.GetComponentInParent<HealthSystem>().TakeDamage(core.characterStats.meleeStrength);
+        //    }  
+        //}
         if (core is AgentBrain)
         {
             if (meleeColliderData.hitPlayerCollider)
@@ -51,22 +51,22 @@ public class MeleeState : State
 
     private void MeleeAnimationController()
     {
-        if (core is SpyBrain)
-        {
-            if (!playingAnimation)
-            {
-                PlayAnimation(animStates.meleeAnimState);
-                movementInputs.canMove = false;
-            }
-            if (core.currentAnimStateInfo.normalizedTime >= 1f)
-            {
-                Exit();
-            }
-        }
-        else if (core is AgentBrain)
-        {
-            PlayComboAnimation();
-        }
+        //if (core is SpyBrain)
+        //{
+        //    if (!playingAnimation)
+        //    {
+        //        PlayAnimation(animStates.meleeAnimState);
+        //        movementInputs.canMove = false;
+        //    }
+        //    if (core.currentAnimStateInfo.normalizedTime >= 1f)
+        //    {
+        //        Exit();
+        //    }
+        //}
+        //else if (core is AgentBrain)
+        //{
+        //    PlayComboAnimation();
+        //}
     }
 
     private void PlayComboAnimation()

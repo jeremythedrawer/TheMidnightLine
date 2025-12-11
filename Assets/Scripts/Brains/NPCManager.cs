@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static NPCsDataSO;
 
 public class NPCManager : MonoBehaviour
 {
@@ -26,6 +27,24 @@ public class NPCManager : MonoBehaviour
                 soData.npcData.totalAgentCount++;
             }
         }
+
+        soData.npcData.animHashData.sittingBlinking = Animator.StringToHash("SittingBlinking");
+        soData.npcData.animHashData.sittingBreathing = Animator.StringToHash("SittingBreathing");
+        soData.npcData.animHashData.sittingEating = Animator.StringToHash("SittingEating");
+        soData.npcData.animHashData.sittingSick = Animator.StringToHash("SittingSick");
+        soData.npcData.animHashData.sittingSleeping = Animator.StringToHash("SittingSleeping");
+        soData.npcData.animHashData.smoking = Animator.StringToHash("Smoking");
+        soData.npcData.animHashData.standingAboutToEat = Animator.StringToHash("StandingAboutToEat");
+        soData.npcData.animHashData.standingBlinking = Animator.StringToHash("StandingBlinking");
+        soData.npcData.animHashData.standingBreathing = Animator.StringToHash("StandingBreathing");
+        soData.npcData.animHashData.standingEating = Animator.StringToHash("StandingEating");
+        soData.npcData.animHashData.standingSick = Animator.StringToHash("StandingSick");
+        soData.npcData.animHashData.standingSleeping = Animator.StringToHash("StandingSleeping");
+        soData.npcData.animHashData.walking = Animator.StringToHash("Walking");
+
+        soData.npcData.materialData.colorID = Shader.PropertyToID("_Color");
+        soData.npcData.materialData.zPosID = Shader.PropertyToID("_ZPos");
+        soData.npcData.materialData.mainTexID = Shader.PropertyToID("_MainTex");
     }
 
     private void Start()

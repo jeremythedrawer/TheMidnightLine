@@ -1,6 +1,9 @@
 using System.Collections.Generic;
-using UnityEditor.Animations;
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor.Animations;
+#endif
 
 [CreateAssetMenu(fileName = "NPCSO", menuName = "Midnight Line SOs / NPC SO")]
 public class NPCSO : ScriptableObject
@@ -20,23 +23,51 @@ public class NPCSO : ScriptableObject
     public NPCTraits.Appearence appearence;
 
     [Header("Components")]
-    public AnimatorOverrideController animationOverrideController;
+    public AnimatorOverrideController overrideAnimationController;
 
     public Dictionary<int, AnimationClip> animClipDict = new Dictionary<int, AnimationClip>();
-
-    private void OnValidate()
+    private void SetAnimationEventDictionary()
     {
-        AnimatorController editAnimController = animationOverrideController.runtimeAnimatorController as AnimatorController;
+        List<KeyValuePair<AnimationClip, AnimationClip>> overrideClipPairs = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+        overrideAnimationController.GetOverrides(overrideClipPairs);
 
-        foreach (ChildAnimatorState childState in editAnimController.layers[0].stateMachine.states)
+        animClipDict.Clear();
+
+        AnimatorController baseAnimController = overrideAnimationController.runtimeAnimatorController as AnimatorController;
+
+        foreach (ChildAnimatorState childState in baseAnimController.layers[0].stateMachine.states)
         {
+            AnimationClip baseClip = (AnimationClip)childState.state.motion;
+            if (baseClip == null) continue;
+
+            AnimationClip overrideClip = baseClip;
+
+            foreach (KeyValuePair<AnimationClip, AnimationClip> overrideClipPair in overrideClipPairs)
+            {
+                if (overrideClipPair.Key == baseClip)
+                {
+                    overrideClip = overrideClipPair.Value;
+                    break;
+                }
+            }
+
             int stateHash = childState.state.nameHash;
-            AnimationClip clip = (AnimationClip)childState.state.motion;
 
             if (!animClipDict.ContainsKey(stateHash))
             {
-                animClipDict.Add(stateHash, clip);
+                animClipDict.Add(stateHash, overrideClip);
             }
+        }
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void InitAllNPCSO()
+    {
+        // Find all NPCSO assets in Resources and update their dictionaries
+        NPCSO[] allSO = Resources.FindObjectsOfTypeAll<NPCSO>();
+        foreach (var so in allSO)
+        {
+            so.SetAnimationEventDictionary();
         }
     }
 }

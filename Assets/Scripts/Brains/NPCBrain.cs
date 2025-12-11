@@ -1,8 +1,7 @@
-using Cysharp.Threading.Tasks;
-using Proselyte.Sigils;
 using System;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.VFX;
 
 public class NPCBrain : MonoBehaviour
 {
@@ -23,9 +22,11 @@ public class NPCBrain : MonoBehaviour
         public BoxCollider2D boxCollider;
         public Animator animator;
         public SpriteRenderer spriteRenderer;
+
         internal MaterialPropertyBlock mpb;
         internal SlideDoors slideDoors;
         internal CarriageChairs carriageChairs;
+        internal VisualEffect sleepingZs;
     }
     [SerializeField] ComponentData componentData;
 
@@ -68,26 +69,24 @@ public class NPCBrain : MonoBehaviour
 
     private void Awake()
     {
+        SetAnimationEvents();
         componentData.mpb = new MaterialPropertyBlock();
-        if (soData.npc.animClipDict.TryGetValue(soData.npcData.animHashData.standingAboutToEat, out AnimationClip clip))
-        {
-            AnimationUtilities.SetAnimationEvent(clip, nameof(PlayStandingEatingAnimation));
-        }
     }
     private void OnEnable()
     {
         soData.gameEventData.OnUnlockSlideDoors.RegisterListener(() => stats.canBoardTrain = true);
+
         if (stats.behaviours == 0)
         {
             stats.behaviours = NPCTraits.GetBehaviours();
         }
-    }
-    private void OnDisable()
-    {
-        soData.gameEventData.OnUnlockSlideDoors.UnregisterListener(() => stats.canBoardTrain = true);
-    }
-    private void Start()
-    {
+        stats.behaviours |= NPCTraits.Behaviours.Takes_naps;
+        if (((stats.behaviours & NPCTraits.Behaviours.Takes_naps) != 0) && componentData.sleepingZs == null)
+        {
+            componentData.sleepingZs = Instantiate(soData.npcData.sleepingZs, transform);
+            componentData.sleepingZs.Stop();
+        }
+
         stats.curState = State.Idle;
         componentData.rigidBody.includeLayers = soData.layerSettings.stationLayers.ground;
         stats.curRunSpeed = 1.0f;
@@ -96,6 +95,10 @@ public class NPCBrain : MonoBehaviour
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
         stats.targetXPos = transform.position.x;
+    }
+    private void OnDisable()
+    {
+        soData.gameEventData.OnUnlockSlideDoors.UnregisterListener(() => stats.canBoardTrain = true);
     }
     private void Update()
     {
@@ -317,9 +320,40 @@ public class NPCBrain : MonoBehaviour
         }
         componentData.carriageChairs = selectedChairs;
     }
+    private void SetAnimationEvents()
+    {
+        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingAboutToEat],nameof(PlayStandingEatingAnimation));
+        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingBreathing],nameof(PlayRandomStandingIdleAnimations));
+        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingBlinking], nameof(PlayRandomStandingIdleAnimations));
+        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingBreathing], nameof(PlayRandomSittingIdleAnimations));
+        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingBlinking], nameof(PlayRandomSittingIdleAnimations));
+    }
     private void PlayStandingEatingAnimation()
     {
         componentData.animator.Play(soData.npcData.animHashData.standingEating);
+    }
+    private void PlayRandomStandingIdleAnimations()
+    {
+        if(UnityEngine.Random.Range(0, 2) == 0)
+        {
+            componentData.animator.Play(soData.npcData.animHashData.standingBlinking);
+        }
+        else
+        {
+            componentData.animator.Play(soData.npcData.animHashData.standingBreathing);
+        }
+    }
+
+    private void PlayRandomSittingIdleAnimations()
+    {
+        if (UnityEngine.Random.Range(0, 2) == 0)
+        {
+            componentData.animator.Play(soData.npcData.animHashData.sittingBlinking);
+        }
+        else
+        {
+            componentData.animator.Play(soData.npcData.animHashData.sittingBreathing);
+        }
     }
     private void ResetData()
     {
@@ -332,15 +366,22 @@ public class NPCBrain : MonoBehaviour
         Gizmos.color = Color.magenta;
         Gizmos.DrawLine(componentData.boxCollider.bounds.center, new Vector2(stats.targetXPos, componentData.boxCollider.bounds.center.y));
 
-        Vector3 labelPos = componentData.spriteRenderer.bounds.max + Vector3.up * 0.2f;
+        Vector3 typeLabel = componentData.spriteRenderer.bounds.max + Vector3.up * 0.2f;
+        Vector3 stateLabel = typeLabel + Vector3.up;
 
-        GUIStyle style = new GUIStyle();
-        style.normal.textColor = stats.type == Type.Agent ? Color.red : Color.green;
-        style.alignment = TextAnchor.UpperCenter;
-        style.fontSize = 12;
+        GUIStyle typeStyle = new GUIStyle();
+        typeStyle.normal.textColor = stats.type == Type.Agent ? Color.red : Color.green;
+        typeStyle.alignment = TextAnchor.UpperCenter;
+        typeStyle.fontSize = 10;
+
+        GUIStyle stateStyle = new GUIStyle();
+        stateStyle.normal.textColor = stats.type == Type.Agent ? Color.red : Color.green;
+        stateStyle.alignment = TextAnchor.UpperCenter;
+        stateStyle.fontSize = 10;
 
         // Draw the label in Scene view
-        Handles.Label(labelPos, stats.type.ToString(), style);
+        Handles.Label(typeLabel, stats.type.ToString(), typeStyle);
+        Handles.Label(stateLabel, componentData.animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.ToString(), stateStyle);
 
     }
     private void OnDrawGizmosSelected()

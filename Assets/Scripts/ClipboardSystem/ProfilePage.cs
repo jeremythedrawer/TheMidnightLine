@@ -38,7 +38,8 @@ public class ProfilePage : MonoBehaviour
         NPCTraits.Behaviours rawBehave = soData.clipboardStats.profilePageArray[pageIndex].behaviours;
         NPCTraits.Appearence rawAppear = soData.clipboardStats.profilePageArray[pageIndex].appearence;
 
-        int[] behavePositions = new int[2];
+        int behaveCount = Bitwise.GetSetBitCount((long)rawBehave);
+        int[] behavePositions = new int[behaveCount];
         int appearPosition = 0;
 
         int posIndex = 0;
@@ -47,7 +48,7 @@ public class ProfilePage : MonoBehaviour
         {
             if (flag == NPCTraits.Behaviours.Nothing) continue;
 
-            if (rawBehave.HasFlag(flag))
+            if ((rawBehave & flag) != 0)
             {
                 behavePositions[posIndex] = flagIndex;
                 posIndex++;
@@ -59,7 +60,7 @@ public class ProfilePage : MonoBehaviour
         {
             if (flag == NPCTraits.Appearence.Nothing) continue;
 
-            if (rawAppear.HasFlag(flag))
+            if ((rawAppear & flag) != 0)
             {
                 appearPosition = flagIndex;
                 break;
@@ -67,7 +68,14 @@ public class ProfilePage : MonoBehaviour
             flagIndex++;
         }
 
-        components.behavioursText.text = "- " + NPCTraits.behaviourDescriptions[behavePositions[0]] + Environment.NewLine + "- " + NPCTraits.behaviourDescriptions[behavePositions[1]];
+        string behaveText = "";
+        for (int i = 0; i < behavePositions.Length; i++)
+        {
+            behaveText += "- " + NPCTraits.behaviourDescriptions[behavePositions[i]];
+            if (i < behavePositions.Length - 1) behaveText += "\n";
+        }
+
+        components.behavioursText.text = behaveText;
         components.appearenceText.text = "- " + NPCTraits.appearenceDescriptions[appearPosition];
 
         components.borderImage.color = soData.clipboardStats.profilePageArray[pageIndex].color;
