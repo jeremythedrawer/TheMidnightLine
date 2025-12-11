@@ -8,13 +8,12 @@ using UnityEditor.Animations;
 [CreateAssetMenu(fileName = "NPCSO", menuName = "Midnight Line SOs / NPC SO")]
 public class NPCSO : ScriptableObject
 {
-    //Settings
+    [Header("Components")]
+    public AnimatorOverrideController overrideAnimationController;
 
     [Header("Movement")]
     public float moveSpeed = 5f;
-    public float runSpeedMultiplier = 1.5f;
     public float groundAccelation = 12f;
-    public float groundDecelaration = 14f;
 
     [Header("Station")]
     public float maxDistanceDetection = 6.0f;
@@ -22,8 +21,8 @@ public class NPCSO : ScriptableObject
     [Header("Appearence")]
     public NPCTraits.Appearence appearence;
 
-    [Header("Components")]
-    public AnimatorOverrideController overrideAnimationController;
+    [Header("Difficulty")]
+    public Vector2 pickBehaviourDurationRange = new Vector2(10, 30);
 
     public Dictionary<int, AnimationClip> animClipDict = new Dictionary<int, AnimationClip>();
     private void SetAnimationEventDictionary()

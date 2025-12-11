@@ -26,15 +26,8 @@ public static class NPCTraits
     {
         Nothing = 0,
         Frequent_smoker = 1 << 0,
-        Keeps_to_themselves = 1 << 1, // Replace
-        Always_checks_the_time = 1 << 2,
-        Takes_naps = 1 << 3,
-        Prefers_to_stand = 1 << 4, // Replace
-        Gets_motion_sick = 1 << 5,
-        Always_hungry = 1 << 6,
-        Listens_to_heavy_metal = 1 << 7,
-        Addicted_to_phone = 1 << 8,
-        Reads_books = 1 << 9,
+        Takes_naps = 1 << 2,
+        Always_hungry = 1 << 3,
     }
 
     public static string[] appearenceDescriptions;
@@ -42,14 +35,14 @@ public static class NPCTraits
 
     public static Behaviours GetBehaviours()
     {
-        int numBehaviours = Enum.GetValues(typeof(Behaviours)).Length - 1;
+        int numBehaviours = Enum.GetValues(typeof(Behaviours)).Length;
 
-        int firstBehave = 1 << UnityEngine.Random.Range(0, numBehaviours);
+        int firstBehave = 1 << UnityEngine.Random.Range(1, numBehaviours);
 
         int secondBehave;
         do
         {
-            secondBehave = 1 << (UnityEngine.Random.Range(0, numBehaviours));
+            secondBehave = 1 << (UnityEngine.Random.Range(1, numBehaviours));
         }
         while (secondBehave == firstBehave);
 
