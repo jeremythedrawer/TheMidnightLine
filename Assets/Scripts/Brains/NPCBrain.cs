@@ -159,7 +159,7 @@ public class NPCBrain : MonoBehaviour
         {
             SetState(State.Idling);
         }
-        else if ((stats.curBehaviour & NPCTraits.Behaviours.Frequent_smoker) != 0 && inputData.move == 0)
+        else if ((stats.curBehaviour & NPCTraits.Behaviours.Frequent_smoker) != 0 && inputData.move == 0 && componentData.smokerRoom != null && transform.position.x > componentData.smokerRoom.bounds.min.x && transform.position.x < componentData.smokerRoom.bounds.max.x)
         {
             SetState(State.Smoking);
         }
@@ -462,11 +462,17 @@ public class NPCBrain : MonoBehaviour
     #region Animation Events
     private void SetAnimationEvents()
     {
+        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingAboutToEat], nameof(PlaySittingEating));
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingAboutToEat],nameof(PlayStandingEatingAnimation));
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingBreathing],nameof(PlayRandomStandingIdleAnimations));
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingBlinking], nameof(PlayRandomStandingIdleAnimations));
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingBreathing], nameof(PlayRandomSittingIdleAnimations));
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingBlinking], nameof(PlayRandomSittingIdleAnimations));
+    }
+
+    private void PlaySittingEating()
+    {
+        componentData.animator.Play(soData.npcData.animHashData.sittingEating);
     }
     private void PlayStandingEatingAnimation()
     {

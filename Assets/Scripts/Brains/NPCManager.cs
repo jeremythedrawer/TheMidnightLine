@@ -28,6 +28,7 @@ public class NPCManager : MonoBehaviour
             }
         }
 
+        soData.npcData.animHashData.sittingAboutToEat = Animator.StringToHash("SittingAboutToEat");
         soData.npcData.animHashData.sittingBlinking = Animator.StringToHash("SittingBlinking");
         soData.npcData.animHashData.sittingBreathing = Animator.StringToHash("SittingBreathing");
         soData.npcData.animHashData.sittingEating = Animator.StringToHash("SittingEating");

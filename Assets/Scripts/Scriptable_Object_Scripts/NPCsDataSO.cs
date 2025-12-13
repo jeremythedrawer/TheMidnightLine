@@ -24,6 +24,7 @@ public class NPCsDataSO : ScriptableObject
 
     [Serializable] internal struct AnimHashData
     {
+        internal int sittingAboutToEat;
         internal int sittingBlinking;
         internal int sittingBreathing;
         internal int sittingEating;
