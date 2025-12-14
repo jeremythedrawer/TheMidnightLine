@@ -33,11 +33,15 @@ public class Carriage : MonoBehaviour
 
     private void Update()
     {
-        float wheelRotation = (soData.trainStats.metersTravelled / Mathf.Max(soData.trainStats.wheelCircumference, float.Epsilon)) * 360.0f;
+        if (soData.trainStats.wheelCircumference <= 0f) return;
+
+        float wheelRotation = (soData.trainStats.metersTravelled / soData.trainStats.wheelCircumference) * 360f;
+
+        wheelRotation %= 360f;
 
         foreach (Transform wheel in componentData.wheelTransforms)
         {
-            wheel.transform.localEulerAngles = new Vector3(0, 0, -wheelRotation);
+            wheel.localRotation = Quaternion.Euler(0f, 0f, -wheelRotation);
         }
     }
     private void ResetStats()

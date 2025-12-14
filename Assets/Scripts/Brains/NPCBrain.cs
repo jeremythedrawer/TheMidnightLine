@@ -2,7 +2,6 @@ using System;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.VFX;
-using static NPCTraits;
 
 public class NPCBrain : MonoBehaviour
 {
@@ -33,6 +32,7 @@ public class NPCBrain : MonoBehaviour
         internal Collider2D carriageSizeCollider;
         internal Collider2D smokerRoom;
         internal VisualEffect sleepingZs;
+        internal GameObject smoke;
     }
     [SerializeField] ComponentData componentData;
 
@@ -94,6 +94,11 @@ public class NPCBrain : MonoBehaviour
         {
             componentData.sleepingZs = Instantiate(soData.npcData.sleepingZs, transform);
             componentData.sleepingZs.Stop();
+        }
+        if (((stats.behaviours & NPCTraits.Behaviours.Frequent_smoker) != 0) && componentData.smoke == null)
+        {
+            componentData.smoke = Instantiate(soData.npcData.smoke, transform);
+            componentData.smoke.SetActive(false);
         }
 
     }
@@ -312,6 +317,11 @@ public class NPCBrain : MonoBehaviour
             break;
             case State.Walking:
             {
+            }
+            break;
+            case State.Sleeping:
+            {
+                componentData.sleepingZs.Stop();
             }
             break;
         }
