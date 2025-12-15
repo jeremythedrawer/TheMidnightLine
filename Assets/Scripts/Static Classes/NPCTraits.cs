@@ -35,32 +35,18 @@ public static class NPCTraits
 
     public static Behaviours GetBehaviours()
     {
-        Behaviours[] numBehaviours = (Behaviours[])Enum.GetValues(typeof(Behaviours));
+        Behaviours[] behaveArray = (Behaviours[])Enum.GetValues(typeof(Behaviours));
 
-        int behaveCount = 0;
-        for (int i = 0; i < numBehaviours.Length; i ++)
-        {
-            int v = (int)numBehaviours[i];
-            if (v != 0 && (v & (v - 1)) == 0) behaveCount++;
-        }
-
-        Behaviours[] flags = new Behaviours[behaveCount];
-        int index = 0;
-        for (int i = 0; i < numBehaviours.Length; i++)
-        {
-            int v = (int)numBehaviours[i];
-            if (v != 0 && (v & (v - 1)) == 0) flags[index++] = numBehaviours[i];
-        }
-
-        Behaviours firstBehave = flags[UnityEngine.Random.Range(0, behaveCount)];
+        Behaviours firstBehave = behaveArray[UnityEngine.Random.Range(1, behaveArray.Length)];
         Behaviours secondBehave;
         do
         {
-            secondBehave = flags[UnityEngine.Random.Range(0, behaveCount)];
+            secondBehave = behaveArray[UnityEngine.Random.Range(1, behaveArray.Length)];
         }
         while (secondBehave == firstBehave);
 
         Behaviours behaviours = firstBehave | secondBehave;
+        Debug.Log(behaviours);
         return behaviours;
     }
 

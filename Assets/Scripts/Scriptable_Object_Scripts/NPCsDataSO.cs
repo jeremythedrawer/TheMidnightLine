@@ -11,6 +11,7 @@ public class NPCsDataSO : ScriptableObject
     public VisualEffect sleepingZs;
     public GameObject smoke;
     [Range(0, 1)] public float hoverColorOffet = 0.25f;
+    [Range(0, 1)] public float fadeTime = 0.5f;
 
     [Serializable] public struct AgentData
     {
@@ -46,6 +47,7 @@ public class NPCsDataSO : ScriptableObject
     {
         internal int colorID;
         internal int zPosID;
+        internal int alphaID;
         internal int mainTexID;
     }
     internal MaterialData materialData;

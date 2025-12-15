@@ -22,7 +22,7 @@ public class GangwayDoor : MonoBehaviour
     }
     [SerializeField] StatData statData;
 
-    private void Awake()
+    private void Start()
     {
         animClipData.openHash = Animator.StringToHash("Open");
         animClipData.closeHash = Animator.StringToHash("Close");

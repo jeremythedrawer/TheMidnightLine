@@ -45,6 +45,7 @@ public class NPCManager : MonoBehaviour
 
         soData.npcData.materialData.colorID = Shader.PropertyToID("_Color");
         soData.npcData.materialData.zPosID = Shader.PropertyToID("_ZPos");
+        soData.npcData.materialData.alphaID = Shader.PropertyToID("_Alpha");
         soData.npcData.materialData.mainTexID = Shader.PropertyToID("_MainTex");
     }
 

@@ -6,6 +6,7 @@ Shader "Unlit/s_character"
 
         _Color ("Color", Color) = (1,1,1,1)
         _DepthGreyScale ("Depth Grey Scale", Range(0, 1)) = 0.5
+        _Alpha ("Alpha", Range(0,1)) = 1
     }
     SubShader
     {
@@ -51,6 +52,7 @@ Shader "Unlit/s_character"
                 half4 _Color;
                 float _DepthGreyScale;
                 float _ZPos;
+                float _Alpha;
             CBUFFER_END
 
             float2 _EntityDepthRange;
@@ -74,7 +76,7 @@ Shader "Unlit/s_character"
                 half4 sampledMainTex =  i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 float greyScale = ((_ZPos - _EntityDepthRange.x) / (_EntityDepthRange.y)) * _DepthGreyScale;
                 half3 col = sampledMainTex.b + _Color + greyScale;
-                return half4(col, sampledMainTex.a);
+                return half4(col, sampledMainTex.a * _Alpha);
             }
             ENDHLSL
         }
