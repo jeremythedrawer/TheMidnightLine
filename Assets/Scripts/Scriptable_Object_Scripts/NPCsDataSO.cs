@@ -22,7 +22,6 @@ public class NPCsDataSO : ScriptableObject
     internal List<Color> colorsToPick;
     internal List<NPCBrain> npcsToPick;
     internal Queue<AgentData> agentPool = new Queue<AgentData>();
-    internal Queue<NPCBrain> boardingNPCQueue = new Queue<NPCBrain>();
 
     [Serializable] internal struct AnimHashData
     {

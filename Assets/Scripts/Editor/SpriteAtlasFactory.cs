@@ -1,57 +1,119 @@
 using UnityEngine;
 using UnityEditor;
 using UnityEditor.U2D.Sprites;
+using System.Collections.Generic;
+using UnityEngine.U2D;
+using System;
 
 [CreateAssetMenu(fileName = "SpriteAtlasFactory", menuName = "Editor SOs / Sprite Atlas Factory")]
 public class SpriteAtlasFactory : ScriptableObject
 {
-    [SerializeField] Texture2D spriteAtlas;
-    public void SetOriginPoints()
+    [Serializable] public struct ProcessedComponents
+    {     
+        public Texture2D spriteAtlas;
+        public AnimationClip smokingClip;
+        public NPCSO npc;
+    }
+    [SerializeField] ProcessedComponents[] processedNPCComponents;
+    public void SetSpritePositionData()
     {
-        TextureImporter atlasImporter = (TextureImporter)TextureImporter.GetAtPath(AssetDatabase.GetAssetPath(spriteAtlas));
-        atlasImporter.isReadable = true;
-        atlasImporter.spriteImportMode = SpriteImportMode.Multiple;
-
-        SpriteDataProviderFactories factory = new SpriteDataProviderFactories();
-        factory.Init();
-        ISpriteEditorDataProvider dataProvider = factory.GetSpriteEditorDataProviderFromObject(spriteAtlas);
-        dataProvider.InitSpriteEditorDataProvider();
-        SpriteRect[] spriteRects = dataProvider.GetSpriteRects();
-
-        for (int i = 0; i < spriteRects.Length; i++) // Looping through each sprite in atlas
+        foreach (ProcessedComponents npcComponent in processedNPCComponents)
         {
-            
-            int startX = Mathf.RoundToInt(spriteRects[i].rect.x);
-            int startY = Mathf.RoundToInt(spriteRects[i].rect.y);
-            int width = Mathf.RoundToInt(spriteRects[i].rect.width);
-            int height = Mathf.RoundToInt(spriteRects[i].rect.height);
-            bool foundRed = false;
+            TextureImporter atlasImporter = (TextureImporter)TextureImporter.GetAtPath(AssetDatabase.GetAssetPath(npcComponent.spriteAtlas));
+            atlasImporter.isReadable = true;
+            atlasImporter.spriteImportMode = SpriteImportMode.Multiple;
+            SpriteDataProviderFactories factory = new SpriteDataProviderFactories();
+            factory.Init();
+            ISpriteEditorDataProvider dataProvider = factory.GetSpriteEditorDataProviderFromObject(npcComponent.spriteAtlas);
+            dataProvider.InitSpriteEditorDataProvider();
+            SpriteRect[] spriteRects = dataProvider.GetSpriteRects();
 
-            for (int x = startX; x < startX + width && !foundRed; x++)
+            List<float> smokeKeyframeTimes = new List<float>();
+            for (int i = 0; i < spriteRects.Length; i++) // Looping through each sprite in atlas
             {
-                for (int y = startY; y < startY + height; y++)
+            
+                int startX = Mathf.RoundToInt(spriteRects[i].rect.x);
+                int startY = Mathf.RoundToInt(spriteRects[i].rect.y);
+                int width = Mathf.RoundToInt(spriteRects[i].rect.width);
+                int height = Mathf.RoundToInt(spriteRects[i].rect.height);
+                bool foundRed = false;
+
+                for (int x = startX; x < startX + width; x++)
                 {
-                    Color color = spriteAtlas.GetPixel(x, y);
-
-                    if (color == Color.red)
+                    for (int y = startY; y < startY + height; y++)
                     {
-                        float xPiv = (x - startX) / (float)width;
-                        float yPiv = (y - startY) / (float)height;
+                        Color color = npcComponent.spriteAtlas.GetPixel(x, y);
 
-                        spriteRects[i].pivot = new Vector2(xPiv, yPiv);
-                        spriteRects[i].alignment = SpriteAlignment.Custom;
+                        if (color == Color.red)
+                        {
+                            float xPiv = (x - startX) / (float)width;
+                            float yPiv = (y - startY) / (float)height;
 
-                        foundRed = true;
-                        break;
+                            spriteRects[i].pivot = new Vector2(xPiv, yPiv);
+                            spriteRects[i].alignment = SpriteAlignment.Custom;
+
+                            foundRed = true;
+                        }
+                    }
+                }
+
+                if (!foundRed) Debug.LogWarning($"never found red pixel origin point of: {spriteRects[i].name}");
+            }
+            List<Vector2> smokePos = new List<Vector2>();
+            for (int i = 0; i < spriteRects.Length; i++) // Looping through each sprite in atlas
+            {
+                int startX = Mathf.RoundToInt(spriteRects[i].rect.x);
+                int startY = Mathf.RoundToInt(spriteRects[i].rect.y);
+                int width = Mathf.RoundToInt(spriteRects[i].rect.width);
+                int height = Mathf.RoundToInt(spriteRects[i].rect.height);
+
+                float pivotPixelX = startX + spriteRects[i].pivot.x * width;
+                float pivotPixelY = startY + spriteRects[i].pivot.y * height;
+
+                for (int x = startX; x < startX + width; x++)
+                {
+                    for (int y = startY; y < startY + height; y++)
+                    {
+                        Color color = npcComponent.spriteAtlas.GetPixel(x, y);
+
+                        if (color == Color.green)
+                        {
+                            float localPixelX = x - pivotPixelX;
+                            float localPixelY = y - pivotPixelY;
+
+                            float metersXPos = localPixelX / atlasImporter.spritePixelsPerUnit;
+                            float metersYPos = localPixelY / atlasImporter.spritePixelsPerUnit;
+
+                            smokePos.Add(new Vector2(metersXPos, metersYPos));
+                        }
                     }
                 }
             }
 
-            if (!foundRed) Debug.LogWarning($"never found red pixel origin point of: {spriteRects[i].name}");
-        }
+            dataProvider.SetSpriteRects(spriteRects);
+            dataProvider.Apply();
 
-        dataProvider.SetSpriteRects(spriteRects);
-        dataProvider.Apply();
+
+            EditorCurveBinding[] bindings = AnimationUtility.GetObjectReferenceCurveBindings(npcComponent.smokingClip);
+            foreach (EditorCurveBinding binding in bindings)
+            {
+                if (binding.type != typeof(SpriteRenderer) || binding.propertyName != "m_Sprite") continue;
+
+                ObjectReferenceKeyframe[] keyframes = AnimationUtility.GetObjectReferenceCurve(npcComponent.smokingClip, binding);
+
+                foreach (ObjectReferenceKeyframe keyframe in keyframes)
+                {
+                    smokeKeyframeTimes.Add(keyframe.time);
+                }
+            }
+
+            npcComponent.npc.smokeAnimPosData = new NPCSO.AnimEventPosData[smokePos.Count];
+            for (int i = 0; i < npcComponent.npc.smokeAnimPosData.Length; i++)
+            {
+                npcComponent.npc.smokeAnimPosData[i].position = smokePos[i];
+                npcComponent.npc.smokeAnimPosData[i].time = smokeKeyframeTimes[i];
+            }
+        }
     }
 }
 
@@ -66,7 +128,7 @@ public class SpriteAtlasFactorEditor : Editor
 
         if (GUILayout.Button("Set Origin Points"))
         {
-            factory.SetOriginPoints();
+            factory.SetSpritePositionData();
         }
     }
 }

@@ -1,5 +1,7 @@
 using System.Collections.Generic;
 using UnityEngine;
+using System;
+
 
 #if UNITY_EDITOR
 using UnityEditor.Animations;
@@ -24,7 +26,24 @@ public class NPCSO : ScriptableObject
     [Header("Difficulty")]
     public Vector2 pickBehaviourDurationRange = new Vector2(10, 30);
 
+    [Serializable] public struct AnimEventPosData
+    {
+        public Vector2 position;
+        public float time;
+    }
+    public AnimEventPosData[] smokeAnimPosData;
+
     public Dictionary<int, AnimationClip> animClipDict = new Dictionary<int, AnimationClip>();
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void InitAllNPCSO()
+    {
+        // Find all NPCSO assets in Resources and update their dictionaries
+        NPCSO[] allSO = Resources.FindObjectsOfTypeAll<NPCSO>();
+        foreach (var so in allSO)
+        {
+            so.SetAnimationEventDictionary();
+        }
+    }
     private void SetAnimationEventDictionary()
     {
         List<KeyValuePair<AnimationClip, AnimationClip>> overrideClipPairs = new List<KeyValuePair<AnimationClip, AnimationClip>>();
@@ -56,17 +75,6 @@ public class NPCSO : ScriptableObject
             {
                 animClipDict.Add(stateHash, overrideClip);
             }
-        }
-    }
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void InitAllNPCSO()
-    {
-        // Find all NPCSO assets in Resources and update their dictionaries
-        NPCSO[] allSO = Resources.FindObjectsOfTypeAll<NPCSO>();
-        foreach (var so in allSO)
-        {
-            so.SetAnimationEventDictionary();
         }
     }
 }

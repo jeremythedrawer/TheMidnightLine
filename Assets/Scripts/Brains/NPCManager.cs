@@ -1,8 +1,8 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
-using static NPCsDataSO;
 
 public class NPCManager : MonoBehaviour
 {
@@ -16,6 +16,8 @@ public class NPCManager : MonoBehaviour
 
     [SerializeField] float waitingForSeatTickRate = 0.3f;
     bool npcFindingChair;
+
+    internal static List<NPCBrain> boardingNPCList = new List<NPCBrain>();
 
     private void Awake()
     {
@@ -57,7 +59,7 @@ public class NPCManager : MonoBehaviour
     }
     private void Update()
     {
-        if (soData.npcData.boardingNPCQueue.Count > 0 && npcFindingChair == false)
+        if (boardingNPCList.Count > 0 && npcFindingChair == false)
         {
             SeatingBoardingNPCs().Forget();
         }
@@ -95,10 +97,30 @@ public class NPCManager : MonoBehaviour
     private async UniTask SeatingBoardingNPCs()
     {
         npcFindingChair = true;
-        NPCBrain curNPC = soData.npcData.boardingNPCQueue.Dequeue();
+        NPCBrain curNPC = boardingNPCList[0];
+        boardingNPCList.RemoveAt(0);
         curNPC.FindCarriageChair();
         await UniTask.WaitForSeconds(waitingForSeatTickRate);
         npcFindingChair = false;
     }
 
 }
+
+#if UNITY_EDITOR
+
+[CustomEditor(typeof(NPCManager))]
+public class MyManagerEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        EditorGUILayout.LabelField("Static List");
+
+        foreach (NPCBrain item in NPCManager.boardingNPCList)
+        {
+            EditorGUILayout.LabelField(item.ToString());
+        }
+    }
+}
+#endif

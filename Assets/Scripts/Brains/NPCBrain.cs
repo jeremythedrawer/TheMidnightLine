@@ -85,7 +85,6 @@ public class NPCBrain : MonoBehaviour
     [SerializeField] InputData inputData;
     private void Awake()
     {
-        SetAnimationEvents();
         componentData.mpb = new MaterialPropertyBlock();
         componentData.ctsFade = new CancellationTokenSource();
     }
@@ -116,6 +115,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void Start()
     {
+        SetAnimationEvents();
         stats.curState = State.Idling;
         componentData.rigidBody.includeLayers = soData.layerSettings.stationLayers.ground;
         stats.curRunSpeed = 1.0f;
@@ -130,7 +130,7 @@ public class NPCBrain : MonoBehaviour
         SelectingStates();
         UpdateStates();
         QueueForChair();
-        Fade();
+        //Fade();
         componentData.mpb.SetTexture(soData.npcData.materialData.mainTexID, componentData.spriteRenderer.sprite.texture);
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
@@ -141,16 +141,17 @@ public class NPCBrain : MonoBehaviour
         {
             stats.stateTimer += Time.deltaTime;
         }
-    }
-    private void FixedUpdate()
-    {
-        FixedUpdateStates();
-        BoardTrain();
 
         if ((stats.curBehaviour & NPCTraits.Behaviours.Frequent_smoker) != 0 && componentData.smokerRoom == null)
         {
             FindSmokersRoom();
         }
+
+    }
+    private void FixedUpdate()
+    {
+        FixedUpdateStates();
+        BoardTrain();
 
         stats.targetXVelocity = soData.npc.moveSpeed * stats.curRunSpeed * inputData.move;
         componentData.rigidBody.linearVelocityX = Mathf.Lerp(componentData.rigidBody.linearVelocityX, stats.targetXVelocity, soData.npc.groundAccelation * Time.fixedDeltaTime);
@@ -159,7 +160,6 @@ public class NPCBrain : MonoBehaviour
     {
         ResetData();
     }
-    #region State Methods
     private void SelectingStates()
     {
         if (inputData.move != 0)
@@ -170,7 +170,7 @@ public class NPCBrain : MonoBehaviour
         {
             SetState(State.Idling);
         }
-        else if ((stats.curBehaviour & NPCTraits.Behaviours.Frequent_smoker) != 0 && inputData.move == 0 && componentData.smokerRoom != null && transform.position.x > componentData.smokerRoom.bounds.min.x && transform.position.x < componentData.smokerRoom.bounds.max.x)
+        else if ((stats.curBehaviour & NPCTraits.Behaviours.Frequent_smoker) != 0)
         {
             SetState(State.Smoking);
         }
@@ -272,13 +272,13 @@ public class NPCBrain : MonoBehaviour
             case State.Walking:
             {
                 componentData.animator.Play(soData.npcData.animHashData.walking);
-                componentData.carriageChairs = null;
             }
             break;
             case State.Smoking:
             {
                 stats.stateDuration = UnityEngine.Random.Range(soData.npc.pickBehaviourDurationRange.x, soData.npc.pickBehaviourDurationRange.y);
                 componentData.animator.Play(soData.npcData.animHashData.smoking);
+                componentData.smoke.SetActive(true);
             }
             break;
             case State.Sleeping:
@@ -291,7 +291,7 @@ public class NPCBrain : MonoBehaviour
                 }
                 else
                 {
-                    componentData.animator.Play(soData.npcData.animHashData.standingBreathing);
+                    componentData.animator.Play(soData.npcData.animHashData.standingSleeping);
                 }
             }
             break;
@@ -327,6 +327,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case State.Smoking:
             {
+                componentData.smoke.SetActive(false);
                 QueueForChair();
             }
             break;
@@ -338,8 +339,6 @@ public class NPCBrain : MonoBehaviour
         }
 
     }
-    #endregion
-    #region Material Methods
     public void HoverColor()
     {
         if (componentData.rigidBody.includeLayers != soData.layerSettings.trainMask) return;
@@ -375,7 +374,6 @@ public class NPCBrain : MonoBehaviour
         componentData.mpb.SetColor(soData.npcData.materialData.colorID, stats.selectedColor);
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
     }
-
     private void Fade()
     {
         if (!stats.startFade)
@@ -385,7 +383,6 @@ public class NPCBrain : MonoBehaviour
                 componentData.ctsFade?.Cancel();
                 componentData.ctsFade?.Dispose();
                 componentData.ctsFade = new CancellationTokenSource();
-                Debug.Log("fading");
                 Fading(fadeIn: false, componentData.ctsFade.Token).Forget();
             }
             else if (stats.alpha != 1)
@@ -425,8 +422,6 @@ public class NPCBrain : MonoBehaviour
             stats.startFade = false;
         }
     }
-    #endregion
-
     private void BoardTrain()
     {
         if (!stats.canBoardTrain || componentData.rigidBody.includeLayers == soData.layerSettings.trainMask) return; // only board train when you can board and npc is on the station ground
@@ -474,9 +469,9 @@ public class NPCBrain : MonoBehaviour
     {
         if (componentData.rigidBody.includeLayers == soData.layerSettings.trainMask) // now on train
         {
-            if (!soData.npcData.boardingNPCQueue.Contains(this) && componentData.carriageChairs == null)
+            if (!NPCManager.boardingNPCList.Contains(this) && componentData.carriageChairs == null)
             {
-                soData.npcData.boardingNPCQueue.Enqueue(this);
+                NPCManager.boardingNPCList.Add(this);
             }
         }
     }
@@ -509,8 +504,9 @@ public class NPCBrain : MonoBehaviour
         componentData.carriageChairs = null;
         componentData.smokerRoom = smokersRoomHit.collider;
         stats.targetXPos = UnityEngine.Random.Range(componentData.smokerRoom.bounds.min.x, componentData.smokerRoom.bounds.max.x);
+
+        if (NPCManager.boardingNPCList.Contains(this)) NPCManager.boardingNPCList.Remove(this);
     }
-    #region Animation Events
     private void SetAnimationEvents()
     {
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingAboutToEat], nameof(PlaySittingEating));
@@ -519,6 +515,12 @@ public class NPCBrain : MonoBehaviour
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingBlinking], nameof(PlayRandomStandingIdleAnimations));
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingBreathing], nameof(PlayRandomSittingIdleAnimations));
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingBlinking], nameof(PlayRandomSittingIdleAnimations));
+
+        for (int i = 0; i < soData.npc.smokeAnimPosData.Length; i++)
+        {
+            Debug.Log("setting smoke particle events");
+            Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.smoking], nameof(SetSmokePosition), soData.npc.smokeAnimPosData[i].time, intParam: i);
+        }
     }
     private void PlaySittingEating()
     {
@@ -550,7 +552,11 @@ public class NPCBrain : MonoBehaviour
             componentData.animator.Play(soData.npcData.animHashData.sittingBreathing);
         }
     }
-    #endregion
+    private void SetSmokePosition(int index)
+    {
+        float xPos = componentData.spriteRenderer.flipX ? -soData.npc.smokeAnimPosData[index].position.x : soData.npc.smokeAnimPosData[index].position.x;
+        componentData.smoke.transform.localPosition = new Vector3(xPos, soData.npc.smokeAnimPosData[index].position.y, 0);
+    }
     private NPCTraits.Behaviours PickBehaviour()
     {
         int behaviourValue = (int)stats.behaviours;
@@ -570,7 +576,6 @@ public class NPCBrain : MonoBehaviour
 
         return (NPCTraits.Behaviours)chosenFlag;
     }
-
     private void ResetData()
     {
         componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, 0f);

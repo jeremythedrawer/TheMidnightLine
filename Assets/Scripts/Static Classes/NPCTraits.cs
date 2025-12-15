@@ -46,7 +46,6 @@ public static class NPCTraits
         while (secondBehave == firstBehave);
 
         Behaviours behaviours = firstBehave | secondBehave;
-        Debug.Log(behaviours);
         return behaviours;
     }
 
