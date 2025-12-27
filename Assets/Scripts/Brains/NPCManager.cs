@@ -17,7 +17,7 @@ public class NPCManager : MonoBehaviour
     [SerializeField] float waitingForSeatTickRate = 0.3f;
     bool npcFindingChair;
 
-    internal static List<NPCBrain> boardingNPCList = new List<NPCBrain>();
+    internal static List<NPCBrain> npcChairList = new List<NPCBrain>();
 
     private void Awake()
     {
@@ -59,7 +59,7 @@ public class NPCManager : MonoBehaviour
     }
     private void Update()
     {
-        if (boardingNPCList.Count > 0 && npcFindingChair == false)
+        if (npcChairList.Count > 0 && npcFindingChair == false)
         {
             SeatingBoardingNPCs().Forget();
         }
@@ -97,8 +97,8 @@ public class NPCManager : MonoBehaviour
     private async UniTask SeatingBoardingNPCs()
     {
         npcFindingChair = true;
-        NPCBrain curNPC = boardingNPCList[0];
-        boardingNPCList.RemoveAt(0);
+        NPCBrain curNPC = npcChairList[0];
+        npcChairList.RemoveAt(0);
         curNPC.FindCarriageChair();
         await UniTask.WaitForSeconds(waitingForSeatTickRate);
         npcFindingChair = false;
@@ -117,7 +117,7 @@ public class MyManagerEditor : Editor
 
         EditorGUILayout.LabelField("Static List");
 
-        foreach (NPCBrain item in NPCManager.boardingNPCList)
+        foreach (NPCBrain item in NPCManager.npcChairList)
         {
             EditorGUILayout.LabelField(item.ToString());
         }

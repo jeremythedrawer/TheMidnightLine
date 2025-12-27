@@ -11,4 +11,5 @@ public class GameEventDataSO : ScriptableObject
     public GameEvent OnCloseSlideDoors;
     public GameEvent OnStationArrival;
     public GameEvent OnStationLeave;
+    public GameEvent OnTrainArrivedAtStartPosition;
 }

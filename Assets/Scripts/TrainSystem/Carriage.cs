@@ -1,5 +1,6 @@
 using Proselyte.Sigils;
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public class Carriage : MonoBehaviour
@@ -9,25 +10,37 @@ public class Carriage : MonoBehaviour
         public TrainStatsSO trainStats;
         public TrainSettingsSO trainSettings;
         public GameEventDataSO gameEventData;
+        public LayerSettingsSO layerSettings;
     }
     [SerializeField] SOData soData;
 
     [Serializable] public struct ComponentData
     {
         public Transform[] wheelTransforms;
+        public BoxCollider2D exteriorWallsCollider;
     }
     [SerializeField] ComponentData componentData;
+    [Serializable] public struct ChairData
+    {
+        internal float xPos;
+        internal bool filled;
+    }
+    internal ChairData[] chairData;
+
+    internal float chairZPos;
 
     private void OnEnable()
     {
         ResetStats();
         soData.gameEventData.OnReset.RegisterListener(ResetStats);
+        soData.gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(GetData);
 
     }
 
     private void OnDisable()
     {
         soData.gameEventData.OnReset.UnregisterListener(ResetStats);
+        soData.gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(GetData);
 
     }
 
@@ -43,6 +56,27 @@ public class Carriage : MonoBehaviour
         {
             wheel.localRotation = Quaternion.Euler(0f, 0f, -wheelRotation);
         }
+    }
+    private void GetData()
+    {
+        Bounds checkBounds = componentData.exteriorWallsCollider.bounds;
+        RaycastHit2D[] chairsHits = Physics2D.BoxCastAll(checkBounds.center, checkBounds.size, 0, transform.right, checkBounds.size.x, soData.layerSettings.trainLayers.carriageChairs);
+
+        List<ChairData> chairDataList = new List<ChairData>();
+
+        for (int i = 0; i < chairsHits.Length; i++)
+        {
+            SpriteRenderer chairRenderer = chairsHits[i].collider.GetComponent<SpriteRenderer>();
+            float chairLength = chairRenderer.sprite.border.x;
+            int chairAmount = Mathf.RoundToInt(chairRenderer.sprite.bounds.size.x / chairLength);
+            float firstChairPos = chairsHits[i].transform.position.x + (chairLength * 0.5f);
+            for (int j = 0; j < chairAmount; j++)
+            {
+                chairDataList.Add(new ChairData { xPos = firstChairPos + (chairLength * i), filled = false } );
+            }
+        }
+        chairData = chairDataList.ToArray();
+        chairZPos = chairsHits[0].transform.position.z - 1;
     }
     private void ResetStats()
     {

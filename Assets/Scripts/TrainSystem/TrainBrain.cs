@@ -120,6 +120,7 @@ public class TrainBrain : MonoBehaviour
             transform.position = new Vector3(soData.stats.metersTravelled - soData.stats.trainLength, transform.position.y, transform.position.z);
             await UniTask.Yield();
         }
+        soData.gameEventData.OnTrainArrivedAtStartPosition.Raise();
     }
     private void ResetStats()
     { 

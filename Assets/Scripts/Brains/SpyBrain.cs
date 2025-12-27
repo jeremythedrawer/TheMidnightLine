@@ -127,7 +127,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void Update()
     {
-        SelectingStates();
+        ChooseState();
         UpdateStates();
 
         soData.stats.spriteFlip = componentData.spriteRenderer.flipX;
@@ -193,7 +193,7 @@ public class SpyBrain : MonoBehaviour
             soData.stats.curLocationLayer = 0;
         }
     }
-    private void SelectingStates()
+    private void ChooseState()
     {
         //TODO do heavy land logic
         if ((soData.stats.isGrounded && soData.stats.willJump) || componentData.rigidBody.linearVelocityY > 0.01f || soData.stats.coyoteJump)

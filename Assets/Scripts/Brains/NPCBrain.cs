@@ -31,7 +31,9 @@ public class NPCBrain : MonoBehaviour
         internal MaterialPropertyBlock mpb;
         internal CancellationTokenSource ctsFade;
         internal SlideDoors slideDoors;
-        internal CarriageChairs carriageChairs;
+        
+        internal Carriage curCarriage;
+        internal Carriage.ChairData chairData;
         internal Collider2D carriageSizeCollider;
         internal Collider2D smokerRoom;
         internal VisualEffect sleepingZs;
@@ -92,7 +94,6 @@ public class NPCBrain : MonoBehaviour
     {
         soData.gameEventData.OnUnlockSlideDoors.RegisterListener(() => stats.canBoardTrain = true);
 
-
         if (stats.behaviours == 0)
         {
             stats.behaviours = NPCTraits.GetBehaviours();
@@ -129,7 +130,6 @@ public class NPCBrain : MonoBehaviour
     {
         SelectingStates();
         UpdateStates();
-        QueueForChair();
         //Fade();
         componentData.mpb.SetTexture(soData.npcData.materialData.mainTexID, componentData.spriteRenderer.sprite.texture);
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
@@ -259,6 +259,7 @@ public class NPCBrain : MonoBehaviour
             case State.Idling:
             {
                 stats.stateDuration = UnityEngine.Random.Range(soData.npc.pickBehaviourDurationRange.x, soData.npc.pickBehaviourDurationRange.y);
+
                 if (componentData.carriageChairs != null)
                 {
                     componentData.animator.Play(soData.npcData.animHashData.sittingBreathing);
@@ -451,6 +452,7 @@ public class NPCBrain : MonoBehaviour
 
                 if (carriageSizeHit.collider == null) { Debug.LogError($"{name} did not get the carriage size collider"); return; }
 
+                componentData.curCarriage = carriageSizeHit.collider.GetComponent<Carriage>();
                 componentData.carriageSizeCollider = carriageSizeHit.collider;
 
                 componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, zPos);
@@ -467,58 +469,50 @@ public class NPCBrain : MonoBehaviour
     }
     private void QueueForChair()
     {
-        if (componentData.rigidBody.includeLayers == soData.layerSettings.trainMask) // now on train
+        if (!NPCManager.npcChairList.Contains(this))
         {
-            if (!NPCManager.boardingNPCList.Contains(this) && componentData.carriageChairs == null)
-            {
-                NPCManager.boardingNPCList.Add(this);
-            }
+            NPCManager.npcChairList.Add(this);
         }
     }
     public void FindCarriageChair()
     {
-        RaycastHit2D carriageChairsHit = Physics2D.BoxCast(componentData.carriageSizeCollider.bounds.center, componentData.carriageSizeCollider.bounds.size, 0.0f, transform.right, componentData.carriageSizeCollider.bounds.size.x, soData.layerSettings.trainLayers.carriageChairs);
-
-        CarriageChairs selectedChairs = carriageChairsHit.collider.GetComponent<CarriageChairs>();
-
-        for (int i = 0; i < selectedChairs.chairData.Length; i++)
+        for (int i = 0; i < componentData.curCarriage.chairData.Length; i++)
         {
-            if(!selectedChairs.chairData[i].filled)
+            if(!componentData.curCarriage.chairData[i].filled)
             {
-                stats.targetXPos = selectedChairs.chairData[i].chairXPos;
-                selectedChairs.chairData[i].filled = true;
+                componentData.chairData = componentData.curCarriage.chairData[i];
+                stats.targetXPos = componentData.curCarriage.chairData[i].xPos;
+                componentData.curCarriage.chairData[i].filled = true;
 
-                float zPos = selectedChairs.transform.position.z - 1;
-                transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
-                componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, zPos);
+
+
+                transform.position = new Vector3(transform.position.x, transform.position.y, componentData.curCarriage.chairZPos);
+                componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, componentData.curCarriage.chairZPos);
                 componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
-
-                componentData.carriageChairs = selectedChairs;
                 break;
             }
         }
     }
     private void FindSmokersRoom()
     {
+        if (NPCManager.npcChairList.Contains(this)) NPCManager.npcChairList.Remove(this);
+
         RaycastHit2D smokersRoomHit = Physics2D.BoxCast(componentData.carriageSizeCollider.bounds.center, componentData.carriageSizeCollider.bounds.size, 0.0f, transform.right, componentData.carriageSizeCollider.bounds.size.x, soData.layerSettings.trainLayers.smokingRoom);
-        componentData.carriageChairs = null;
         componentData.smokerRoom = smokersRoomHit.collider;
         stats.targetXPos = UnityEngine.Random.Range(componentData.smokerRoom.bounds.min.x, componentData.smokerRoom.bounds.max.x);
 
-        if (NPCManager.boardingNPCList.Contains(this)) NPCManager.boardingNPCList.Remove(this);
     }
     private void SetAnimationEvents()
     {
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingAboutToEat], nameof(PlaySittingEating));
-        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingAboutToEat],nameof(PlayStandingEatingAnimation));
-        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingBreathing],nameof(PlayRandomStandingIdleAnimations));
+        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingAboutToEat], nameof(PlayStandingEatingAnimation));
+        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingBreathing], nameof(PlayRandomStandingIdleAnimations));
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingBlinking], nameof(PlayRandomStandingIdleAnimations));
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingBreathing], nameof(PlayRandomSittingIdleAnimations));
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingBlinking], nameof(PlayRandomSittingIdleAnimations));
 
         for (int i = 0; i < soData.npc.smokeAnimPosData.Length; i++)
         {
-            Debug.Log("setting smoke particle events");
             Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.smoking], nameof(SetSmokePosition), soData.npc.smokeAnimPosData[i].time, intParam: i);
         }
     }

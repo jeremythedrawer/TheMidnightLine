@@ -2,7 +2,6 @@ using UnityEngine;
 using UnityEditor;
 using UnityEditor.U2D.Sprites;
 using System.Collections.Generic;
-using UnityEngine.U2D;
 using System;
 
 [CreateAssetMenu(fileName = "SpriteAtlasFactory", menuName = "Editor SOs / Sprite Atlas Factory")]
@@ -59,6 +58,10 @@ public class SpriteAtlasFactory : ScriptableObject
 
                 if (!foundRed) Debug.LogWarning($"never found red pixel origin point of: {spriteRects[i].name}");
             }
+
+            dataProvider.SetSpriteRects(spriteRects);
+            dataProvider.Apply();
+
             List<Vector2> smokePos = new List<Vector2>();
             for (int i = 0; i < spriteRects.Length; i++) // Looping through each sprite in atlas
             {
@@ -89,10 +92,6 @@ public class SpriteAtlasFactory : ScriptableObject
                     }
                 }
             }
-
-            dataProvider.SetSpriteRects(spriteRects);
-            dataProvider.Apply();
-
 
             EditorCurveBinding[] bindings = AnimationUtility.GetObjectReferenceCurveBindings(npcComponent.smokingClip);
             foreach (EditorCurveBinding binding in bindings)

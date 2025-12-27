@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 8818809066458373299}
   - component: {fileID: 6621097369789174722}
-  - component: {fileID: 813361315605476118}
   - component: {fileID: 6091497307301845188}
   m_Layer: 12
   m_Name: CarriageSeat_Two
@@ -78,35 +77,17 @@ SpriteRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
-  m_Sprite: {fileID: 1742403218, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
+  m_Sprite: {fileID: 745986434845706193, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
   m_Color: {r: 1, g: 1, b: 1, a: 1}
   m_FlipX: 0
   m_FlipY: 0
-  m_DrawMode: 0
+  m_DrawMode: 2
   m_Size: {x: 1.88, y: 1.66}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
   m_MaskInteraction: 0
   m_SpriteSortPoint: 0
---- !u!114 &813361315605476118
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4012469874647406101}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 01ed582691155d24482c7c34e406de1a, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  componentData:
-    spriteRenderer: {fileID: 6621097369789174722}
-  settingsData:
-    chairAmount: 2
-  gameEventData:
-    OnUnlockSlideDoors: {fileID: 11400000, guid: 66ebc69e00594fa428a1c7a6b986b1d9, type: 2}
 --- !u!61 &6091497307301845188
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -143,12 +124,12 @@ BoxCollider2D:
   m_CompositeOrder: 0
   m_Offset: {x: 0.94, y: 0.83}
   m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
+    border: {x: 0.93, y: 0, z: 0.94, w: 0}
     pivot: {x: 0, y: 0}
-    oldSize: {x: 1.88, y: 1.66}
+    oldSize: {x: 2.8, y: 1.66}
     newSize: {x: 1.88, y: 1.66}
     adaptiveTilingThreshold: 0.5
-    drawMode: 0
+    drawMode: 2
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 1.88, y: 1.66}
