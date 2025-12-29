@@ -86,20 +86,22 @@ public class Carriage : MonoBehaviour
     private void GetChairData(Bounds checkBounds)
     {
         RaycastHit2D[] chairsHits = Physics2D.BoxCastAll(checkBounds.center, checkBounds.size, 0, transform.right, checkBounds.size.x, layerSettings.trainLayers.carriageChairs);
+        float tileWidth = trainSettings.chairSprite.bounds.size.x * 0.333333f;
 
         List<ChairData> chairDataList = new List<ChairData>();
-
         for (int i = 0; i < chairsHits.Length; i++)
         {
             SpriteRenderer chairRenderer = chairsHits[i].collider.GetComponent<SpriteRenderer>();
-            float chairLength = chairRenderer.sprite.border.x;
-            int chairAmount = Mathf.RoundToInt(chairRenderer.sprite.bounds.size.x / chairLength);
-            float firstChairPos = chairsHits[i].transform.position.x + (chairLength * 0.5f);
+            float totalWidth = chairRenderer.size.x;
+
+            int chairAmount = Mathf.RoundToInt(totalWidth / tileWidth);
+            float firstChairPos = chairsHits[i].transform.position.x + (tileWidth * 0.5f);
             for (int j = 0; j < chairAmount; j++)
             {
-                chairDataList.Add(new ChairData { xPos = firstChairPos + (chairLength * i), filled = false });
+                chairDataList.Add(new ChairData { xPos = firstChairPos + (tileWidth * i), filled = false });
             }
         }
+            Debug.Log((chairDataList.Count));
         chairData = chairDataList.ToArray();
         chairZPos = chairsHits[0].transform.position.z - 1;
     }

@@ -121,8 +121,6 @@ public class TrainBrain : MonoBehaviour
     private void ResetStats()
     { 
         stats.nextStationIndex = 0;
-        stats.curKMPerHour = settings.startKMPerHour;
-        stats.targetKMPerHour = settings.startKMPerHour;
         stats.metersTravelled = 0.0f;
         stats.distToNextStation = Mathf.Infinity;    
         stats.brakeDist = 0.0f;
