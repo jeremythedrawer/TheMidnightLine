@@ -7,8 +7,7 @@ using UnityEngine;
 public class CarriageExteriorWall : MonoBehaviour
 {
     [SerializeField] SpriteRenderer[] spriteRenderers;
-    [SerializeField] LayerSettingsSO layerSettings;
-    [SerializeField] SpyStatsSO spyStats;
+
     [Serializable] public struct MaterialIDs
     {
         internal int alphaID;
@@ -31,22 +30,8 @@ public class CarriageExteriorWall : MonoBehaviour
         ctsFade = new CancellationTokenSource();
         alpha = 1;
     }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if ((layerSettings.spy.value & (1 << collision.gameObject.layer)) != 0 && spyStats.onTrain)
-        {
-            StartFade(fadeIn: false);
-        }
-    }
 
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if ((layerSettings.spy.value & (1 << collision.gameObject.layer)) != 0 && spyStats.onTrain)
-        {
-            StartFade(fadeIn: true);
-        }
-    }
-    private void StartFade(bool fadeIn)
+    public void StartFade(bool fadeIn)
     {
         ctsFade?.Cancel();
         ctsFade?.Dispose();

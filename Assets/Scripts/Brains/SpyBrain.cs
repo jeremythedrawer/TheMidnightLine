@@ -25,6 +25,7 @@ public class SpyBrain : MonoBehaviour
         internal SlideDoors slideDoors;
         internal GangwayDoor gangwayDoor;
         internal Collider2D curClimbCollider;
+        internal Carriage curCarriage;
     }
     [SerializeField] ComponentData componentData;
 
@@ -101,14 +102,14 @@ public class SpyBrain : MonoBehaviour
     }
     private void OnEnable()
     {
-        soData.gameEventData.OnUnlockSlideDoors.RegisterListener(() => soData.stats.canBoardTrain = true);
+        soData.gameEventData.OnStationArrival.RegisterListener(() => soData.stats.canBoardTrain = true);
         soData.gameEventData.OnInteract.RegisterListener(OpenSlideDoor);
         soData.gameEventData.OnInteract.RegisterListener(EnterTrain);
         soData.gameEventData.OnInteract.RegisterListener(OpenGangwayDoor);
     }
     private void OnDisable()
     {
-        soData.gameEventData.OnUnlockSlideDoors.UnregisterListener(() => soData.stats.canBoardTrain = true);
+        soData.gameEventData.OnStationArrival.UnregisterListener(() => soData.stats.canBoardTrain = true);
         soData.gameEventData.OnInteract.UnregisterListener(OpenSlideDoor);
         soData.gameEventData.OnInteract.UnregisterListener(EnterTrain);
         soData.gameEventData.OnInteract.UnregisterListener(OpenGangwayDoor);
@@ -179,6 +180,12 @@ public class SpyBrain : MonoBehaviour
         {
             SetLocationData(collision.bounds, soData.layerSettings.trainLayers.roofBounds);
         }
+
+        if ((soData.layerSettings.trainLayers.carriage.value & (1 << collision.gameObject.layer)) != 0)
+        {
+            componentData.curCarriage = collision.GetComponent<Carriage>();
+            componentData.curCarriage.StartFade(fadeIn: false);
+        }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
@@ -191,6 +198,12 @@ public class SpyBrain : MonoBehaviour
         else if ((soData.layerSettings.trainLayers.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
             soData.stats.curLocationLayer = 0;
+        }
+
+        if ((soData.layerSettings.trainLayers.carriage.value & (1 << collision.gameObject.layer)) != 0)
+        {
+            componentData.curCarriage.StartFade(fadeIn: true);
+            componentData.curCarriage = null;
         }
     }
     private void ChooseState()
@@ -500,7 +513,7 @@ public class SpyBrain : MonoBehaviour
                     componentData.rigidBody.includeLayers = soData.layerSettings.trainMask;
 
                     soData.stats.onTrain = true;
-                    transform.position = new Vector3(transform.position.x, transform.position.y, soData.trainSettings.entityDepthRange.x + soData.settings.depthPositionInTrain);
+                    transform.position = new Vector3(transform.position.x, transform.position.y, soData.trainSettings.maxMinWorldZPos.max + soData.settings.depthPositionInTrain);
                     soData.trainStats.curPassengerCount ++;
                     soData.gameEventData.OnBoardingSpy.Raise();
                 }

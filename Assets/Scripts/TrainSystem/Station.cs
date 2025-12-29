@@ -9,6 +9,7 @@ public class Station : MonoBehaviour
     {
         public StationSO settings;
         public TrainStatsSO trainStats;
+        public TrainSettingsSO trainSettings;
         public StationsDataSO stationsData;
         public NPCsDataSO npcData;
         public CameraStatsSO camStats;
@@ -25,8 +26,8 @@ public class Station : MonoBehaviour
 
     [Serializable] public struct Stats
     { 
-        internal float moveThreshold;
         internal Parallax.ParallaxData parallaxData;
+        internal float moveThreshold;
         internal bool initialParallaxData;
     }
     [SerializeField] Stats stats;
@@ -42,6 +43,7 @@ public class Station : MonoBehaviour
         }
 
         stats.moveThreshold = soData.settings.metersPosition - components.platformCollider.bounds.extents.x;
+        soData.settings.isFrontOfTrain = components.platformCollider.transform.position.z < soData.trainSettings.maxMinWorldZPos.min;
     }
 
     private void Update()
@@ -75,6 +77,7 @@ public class Station : MonoBehaviour
             float randXPos = UnityEngine.Random.Range(components.platformCollider.bounds.min.x, components.platformCollider.bounds.max.x);
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y, components.platformCollider.transform.position.z);
             agentData.agent.transform.position = spawnPos;
+            agentData.agent.soData.startStation = soData.settings;
             agentData.agent.transform.SetParent(transform, true);
         }
         for (int i = 0; i < soData.settings.bystanderSpawnAmount; i++)
@@ -84,6 +87,7 @@ public class Station : MonoBehaviour
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y, components.platformCollider.transform.position.z);
             NPCBrain bystanderNPC = Instantiate(soData.npcData.npcPrefabs[randNPCIndex], spawnPos, Quaternion.identity, null); // spawn at random point on station
             bystanderNPC.stats.type = NPCBrain.Type.Bystander;
+            bystanderNPC.soData.startStation = soData.settings;
             bystanderNPC.transform.SetParent(transform, true);
         }
     }

@@ -6,14 +6,10 @@ using UnityEngine;
 
 public class TrainBrain : MonoBehaviour
 {
-    [Serializable] public struct SOData
-    {
-        public TrainSettingsSO settings;
-        public TrainStatsSO stats;
-        public StationsDataSO stationsData;
-        public GameEventDataSO gameEventData;
-    }
-    [SerializeField] SOData soData;
+    [SerializeField] TrainSettingsSO settings;
+    [SerializeField] TrainStatsSO stats;
+    [SerializeField] StationsDataSO stationsData;
+    [SerializeField] GameEventDataSO gameEventData;
 
     [Serializable] public struct ComponentData
     {
@@ -33,54 +29,53 @@ public class TrainBrain : MonoBehaviour
     }
     private void OnEnable()
     {
-        soData.gameEventData.OnReset.RegisterListener(ResetStats);
+        gameEventData.OnReset.RegisterListener(ResetStats);
     }
     private void OnDisable()
     {
-        soData.gameEventData.OnReset.UnregisterListener(ResetStats);     
+        gameEventData.OnReset.UnregisterListener(ResetStats);     
     }
     private void Start()
     {
-        soData.stats.trainLength = (componentData.frontCarriageSpriteRenderer.bounds.max.x - transform.position.x);
-        soData.stats.trainHalfLength = soData.stats.trainLength * 0.5f;
-        soData.stats.startXPos = transform.position.x;
-        soData.stats.trainMaxHeight = componentData.frontCarriageSpriteRenderer.bounds.max.y;
-        soData.stats.targetPassengerCount = soData.stationsData.stations[0].bystanderSpawnAmount + soData.stationsData.stations[0].agentSpawnAmount + 1; // +1 for spy himself
-        soData.stats.accellation2 = 2 * soData.settings.accelerationSpeed;
-        soData.stats.brakeDist = GetBrakeDistance();
+        stats.trainLength = (componentData.frontCarriageSpriteRenderer.bounds.max.x - transform.position.x);
+        stats.trainHalfLength = stats.trainLength * 0.5f;
+        stats.startXPos = transform.position.x;
+        stats.trainMaxHeight = componentData.frontCarriageSpriteRenderer.bounds.max.y;
+        stats.targetPassengerCount = stationsData.stations[0].bystanderSpawnAmount + stationsData.stations[0].agentSpawnAmount + 1; // +1 for spy himself
+        stats.accellation2 = 2 * settings.accelerationSpeed;
+        stats.brakeDist = GetBrakeDistance();
+        stats.curStation = stationsData.stations[0];
 
-        Vector2 entityDepthData = new Vector2(soData.settings.entityDepthRange.x, soData.settings.entityDepthRange.y - soData.settings.entityDepthRange.x);
+        Vector2 entityDepthData = new Vector2(settings.maxMinWorldZPos.min, settings.maxMinWorldZPos.max - settings.maxMinWorldZPos.min);
         Shader.SetGlobalVector(shaderData.entityDepthRangeID, entityDepthData);
 
         MoveTrainToStartPosition().Forget();
     }
     private void Update()
     {
-        soData.stats.metersTravelled += soData.stats.GetMetersPerSecond(soData.stats.curKMPerHour) * Time.deltaTime;
-        soData.stats.distToNextStation = (soData.stationsData.stations[soData.stats.nextStationIndex].metersPosition + soData.stats.trainHalfLength) - soData.stats.metersTravelled;
+        stats.metersTravelled += stats.GetMetersPerSecond(stats.curKMPerHour) * Time.deltaTime;
+        stats.distToNextStation = (stationsData.stations[stats.nextStationIndex].metersPosition + stats.trainHalfLength) - stats.metersTravelled;
 
-        if (soData.stats.distToNextStation <= soData.stats.brakeDist)
+        if (stats.distToNextStation <= stats.brakeDist)
         {
-            soData.stats.targetKMPerHour = 0;
+            stats.targetKMPerHour = 0;
         }
         else
         {
-            soData.stats.targetKMPerHour = soData.stationsData.stations[soData.stats.nextStationIndex].targetTrainSpeed;
+            stats.targetKMPerHour = stationsData.stations[stats.nextStationIndex].targetTrainSpeed;
         }
 
-        if (soData.stats.distToNextStation < 0.05f && soData.stats.curKMPerHour != 0)
+        if (stats.distToNextStation < 0.05f && stats.curKMPerHour != 0)
         {
-            soData.stats.curKMPerHour = 0;
-            soData.stats.slideDoorsToUnlock = soData.stationsData.stations[soData.stats.nextStationIndex].slideDoorsType;
-            soData.gameEventData.OnUnlockSlideDoors.Raise();
-            soData.gameEventData.OnStationArrival.Raise();
+            stats.curKMPerHour = 0;
+            gameEventData.OnStationArrival.Raise();
         }
-        else if (soData.stats.distToNextStation > 0.05f)
+        else if (stats.distToNextStation > 0.05f)
         {
-            soData.stats.curKMPerHour = Mathf.Lerp(soData.stats.curKMPerHour, soData.stats.targetKMPerHour, soData.settings.accelerationSpeed * Time.deltaTime);
+            stats.curKMPerHour = Mathf.Lerp(stats.curKMPerHour, stats.targetKMPerHour, settings.accelerationSpeed * Time.deltaTime);
         }
 
-        if (soData.stats.curPassengerCount == soData.stats.targetPassengerCount && !soData.stats.closingDoors)
+        if (stats.curPassengerCount == stats.targetPassengerCount && !stats.closingDoors)
         {
             LeavingStation().Forget();
         }
@@ -91,23 +86,24 @@ public class TrainBrain : MonoBehaviour
     }
     private async UniTask LeavingStation()
     {
-        soData.gameEventData.OnCloseSlideDoors.Raise();
-        soData.stats.closingDoors = true;
-        await UniTask.WaitForSeconds(soData.settings.doorMoveTime); // wait for doors to close
+        gameEventData.OnCloseSlideDoors.Raise();
+        stats.closingDoors = true;
+        await UniTask.WaitForSeconds(settings.doorMoveTime); // wait for doors to close
 
-        soData.stats.nextStationIndex++;
-        soData.stats.brakeDist = GetBrakeDistance();
-        soData.gameEventData.OnStationLeave.Raise();
+        stats.nextStationIndex++;
+        stats.curStation = stationsData.stations[stats.nextStationIndex];
+        stats.brakeDist = GetBrakeDistance();
+        gameEventData.OnStationLeave.Raise();
     }
 
     private float GetBrakeDistance()
     {
-        float kmph = soData.stationsData.stations[soData.stats.nextStationIndex].targetTrainSpeed;
+        float kmph = stationsData.stations[stats.nextStationIndex].targetTrainSpeed;
         float meters = 0;
         for (int i = 0; i < 1000; i++)
         {
-            kmph = Mathf.Lerp(kmph, 0, soData.settings.accelerationSpeed * Time.fixedDeltaTime);
-            float mps = soData.stats.GetMetersPerSecond(kmph);
+            kmph = Mathf.Lerp(kmph, 0, settings.accelerationSpeed * Time.fixedDeltaTime);
+            float mps = stats.GetMetersPerSecond(kmph);
             meters += mps * Time.fixedDeltaTime;
             if (kmph <= 0.01f) break;
         }
@@ -115,36 +111,36 @@ public class TrainBrain : MonoBehaviour
     }
     private async UniTask MoveTrainToStartPosition()
     {
-        while (soData.stats.distToNextStation > 0.05f)
+        while (stats.distToNextStation > 0.05f)
         {
-            transform.position = new Vector3(soData.stats.metersTravelled - soData.stats.trainLength, transform.position.y, transform.position.z);
+            transform.position = new Vector3(stats.metersTravelled - stats.trainLength, transform.position.y, transform.position.z);
             await UniTask.Yield();
         }
-        soData.gameEventData.OnTrainArrivedAtStartPosition.Raise();
+        gameEventData.OnTrainArrivedAtStartPosition.Raise();
     }
     private void ResetStats()
     { 
-        soData.stats.nextStationIndex = 0;
-        soData.stats.curKMPerHour = soData.settings.startKMPerHour;
-        soData.stats.targetKMPerHour = soData.settings.startKMPerHour;
-        soData.stats.metersTravelled = 0.0f;
-        soData.stats.distToNextStation = Mathf.Infinity;    
-        soData.stats.brakeDist = 0.0f;
-        soData.stats.wheelCircumference = (soData.settings.wheelSprite.rect.size.x / soData.settings.wheelSprite.pixelsPerUnit) * Mathf.PI;
-        soData.stats.curPassengerCount = 0;
-        soData.stats.targetPassengerCount = 0;
-        soData.stats.closingDoors = false;
+        stats.nextStationIndex = 0;
+        stats.curKMPerHour = settings.startKMPerHour;
+        stats.targetKMPerHour = settings.startKMPerHour;
+        stats.metersTravelled = 0.0f;
+        stats.distToNextStation = Mathf.Infinity;    
+        stats.brakeDist = 0.0f;
+        stats.wheelCircumference = (settings.wheelSprite.rect.size.x / settings.wheelSprite.pixelsPerUnit) * Mathf.PI;
+        stats.curPassengerCount = 0;
+        stats.targetPassengerCount = 0;
+        stats.closingDoors = false;
     }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
-        Gizmos.DrawLine(new Vector2(soData.stats.brakeDist, 0), new Vector2(soData.stats.brakeDist, 5));
+        Gizmos.DrawLine(new Vector2(stats.brakeDist, 0), new Vector2(stats.brakeDist, 5));
     }
 
 #if UNITY_EDITOR
     private void OnGUI()
     {
-        string kmphString = soData.stats.curKMPerHour.ToString("F2") + "  KM/PH";
+        string kmphString = stats.curKMPerHour.ToString("F2") + "  KM/PH";
         GUIStyle style = new GUIStyle(GUI.skin.label);
         style.alignment = TextAnchor.UpperCenter;
         style.normal.textColor = Color.white;

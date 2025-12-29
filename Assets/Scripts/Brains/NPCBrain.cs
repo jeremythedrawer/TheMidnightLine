@@ -28,13 +28,12 @@ public class NPCBrain : MonoBehaviour
         public Animator animator;
         public SpriteRenderer spriteRenderer;
 
+        internal SlideDoors curSlideDoors;
         internal MaterialPropertyBlock mpb;
         internal CancellationTokenSource ctsFade;
-        internal SlideDoors slideDoors;
         
         internal Carriage curCarriage;
         internal Carriage.ChairData chairData;
-        internal Collider2D carriageSizeCollider;
         internal Collider2D smokerRoom;
         internal VisualEffect sleepingZs;
         internal GameObject smoke;
@@ -92,7 +91,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void OnEnable()
     {
-        soData.gameEventData.OnUnlockSlideDoors.RegisterListener(() => stats.canBoardTrain = true);
+        soData.gameEventData.OnStationArrival.RegisterListener(() => stats.canBoardTrain = true);
 
         if (stats.behaviours == 0)
         {
@@ -112,7 +111,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void OnDisable()
     {
-        soData.gameEventData.OnUnlockSlideDoors.UnregisterListener(() => stats.canBoardTrain = true);
+        soData.gameEventData.OnStationArrival.UnregisterListener(() => stats.canBoardTrain = true);
     }
     private void Start()
     {
@@ -121,10 +120,11 @@ public class NPCBrain : MonoBehaviour
         componentData.rigidBody.includeLayers = soData.layerSettings.stationLayers.ground;
         stats.curRunSpeed = 1.0f;
 
-        componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, soData.trainSettings.entityDepthRange.x);
+        componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, soData.trainSettings.maxMinWorldZPos.min);
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
-        stats.targetXPos = transform.position.x;        
+        stats.targetXPos = transform.position.x;
+        componentData.chairData = new Carriage.ChairData();
     }
     private void Update()
     {
@@ -260,7 +260,7 @@ public class NPCBrain : MonoBehaviour
             {
                 stats.stateDuration = UnityEngine.Random.Range(soData.npc.pickBehaviourDurationRange.x, soData.npc.pickBehaviourDurationRange.y);
 
-                if (componentData.carriageChairs != null)
+                if (componentData.chairData.filled)
                 {
                     componentData.animator.Play(soData.npcData.animHashData.sittingBreathing);
                 }
@@ -286,7 +286,7 @@ public class NPCBrain : MonoBehaviour
             {
                 stats.stateDuration = UnityEngine.Random.Range(soData.npc.pickBehaviourDurationRange.x, soData.npc.pickBehaviourDurationRange.y);
                 componentData.sleepingZs.Play();
-                if (componentData.carriageChairs != null)
+                if (componentData.chairData.filled)
                 {
                     componentData.animator.Play(soData.npcData.animHashData.sittingSleeping);
                 }
@@ -299,7 +299,7 @@ public class NPCBrain : MonoBehaviour
             case State.Eating:
             {
                 stats.stateDuration = UnityEngine.Random.Range(soData.npc.pickBehaviourDurationRange.x, soData.npc.pickBehaviourDurationRange.y);
-                if (componentData.carriageChairs != null)
+                if (componentData.chairData.filled)
                 {
                     componentData.animator.Play(soData.npcData.animHashData.sittingEating);
                 }
@@ -377,23 +377,23 @@ public class NPCBrain : MonoBehaviour
     }
     private void Fade()
     {
-        if (!stats.startFade)
-        {
-            if (soData.trainStats.slideDoorsToUnlock == SlideDoors.Type.Exterior && componentData.rigidBody.includeLayers == soData.layerSettings.stationMask) // while on station, bystanders do not recognise train bounds, but they need to to fade out
-            {
-                componentData.ctsFade?.Cancel();
-                componentData.ctsFade?.Dispose();
-                componentData.ctsFade = new CancellationTokenSource();
-                Fading(fadeIn: false, componentData.ctsFade.Token).Forget();
-            }
-            else if (stats.alpha != 1)
-            {
-                componentData.ctsFade?.Cancel();
-                componentData.ctsFade?.Dispose();
-                componentData.ctsFade = new CancellationTokenSource();
-                Fading(fadeIn: true, componentData.ctsFade.Token).Forget();
-            }
-        }
+        //if (!stats.startFade)
+        //{
+        //    if (soData.trainStats.slideDoorsToUnlock == SlideDoors.Type.Exterior && componentData.rigidBody.includeLayers == soData.layerSettings.stationMask) // while on station, bystanders do not recognise train bounds, but they need to to fade out
+        //    {
+        //        componentData.ctsFade?.Cancel();
+        //        componentData.ctsFade?.Dispose();
+        //        componentData.ctsFade = new CancellationTokenSource();
+        //        Fading(fadeIn: false, componentData.ctsFade.Token).Forget();
+        //    }
+        //    else if (stats.alpha != 1)
+        //    {
+        //        componentData.ctsFade?.Cancel();
+        //        componentData.ctsFade?.Dispose();
+        //        componentData.ctsFade = new CancellationTokenSource();
+        //        Fading(fadeIn: true, componentData.ctsFade.Token).Forget();
+        //    }
+        //}
     }
     private async UniTask Fading(bool fadeIn, CancellationToken token)
     {
@@ -427,33 +427,63 @@ public class NPCBrain : MonoBehaviour
     {
         if (!stats.canBoardTrain || componentData.rigidBody.includeLayers == soData.layerSettings.trainMask) return; // only board train when you can board and npc is on the station ground
 
-        if (componentData.slideDoors == null) // find slide door in one frame
+        if (componentData.curCarriage == null) // find slide door in one frame
         {
-            RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, new Vector2(soData.npc.maxDistanceDetection, componentData.boxCollider.size.y), 0.0f, transform.right, soData.npc.maxDistanceDetection, soData.layerSettings.trainLayers.slideDoors);
+            RaycastHit2D carriageHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, new Vector2(soData.npc.maxDistanceDetection, componentData.boxCollider.size.y), 0.0f, transform.right, soData.npc.maxDistanceDetection, soData.layerSettings.trainLayers.carriage);
 
-            if (slideDoorHit.collider == null) { Debug.LogError($"{name} did not find a slide door to go to"); return; }
+            if (carriageHit.collider == null) { Debug.LogError($"{name} did not find a carriage to go to"); return; }
 
-            SlideDoors selectedDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-            stats.targetXPos = selectedDoors.transform.position.x;
-            componentData.slideDoors = selectedDoors;
+            componentData.curCarriage = carriageHit.collider.GetComponent<Carriage>();
+        }
+        else if (componentData.curSlideDoors == null)
+        {
+            float closestSlideDoorXPos = float.MaxValue;
+            if (soData.startStation.isFrontOfTrain)
+            {
+                for (int i = 0; i < componentData.curCarriage.exteriorSlideDoors.Length; i++)
+                {
+                    float curSlideDoorXPos = componentData.curCarriage.exteriorSlideDoors[i].transform.position.x;
+                    float dist = Mathf.Abs(curSlideDoorXPos - transform.position.x);
+                    if (dist < closestSlideDoorXPos)
+                    {
+                        closestSlideDoorXPos = curSlideDoorXPos;
+                        componentData.curSlideDoors = componentData.curCarriage.exteriorSlideDoors[i];
+                    }
+                }
 
+            }
+            else
+            {
+                for (int i = 0; i < componentData.curCarriage.interiorSlideDoors.Length; i++)
+                {
+                    float curSlideDoorXPos = componentData.curCarriage.interiorSlideDoors[i].transform.position.x;
+                    float dist = Mathf.Abs(curSlideDoorXPos - transform.position.x);
+                    if (dist < closestSlideDoorXPos)
+                    {
+                        closestSlideDoorXPos = curSlideDoorXPos;
+                        componentData.curSlideDoors = componentData.curCarriage.interiorSlideDoors[i];
+                    }
+                }
+            }
+
+            if (componentData.curSlideDoors == null)
+            {
+                Debug.LogError("No slide door found");
+                return;
+            }
+
+            stats.targetXPos = closestSlideDoorXPos;
         }
         else if (inputData.move == 0.0f)
         {
-            if (componentData.slideDoors.stats.curState == SlideDoors.State.Unlocked)
+
+            if (componentData.curSlideDoors.stats.curState == SlideDoors.State.Unlocked)
             {
-                componentData.slideDoors.OpenDoors();
+                componentData.curSlideDoors.OpenDoors();
             }
-            else if (componentData.slideDoors.stats.curState == SlideDoors.State.Opened) // enter train when slide door is opened
+            else if (componentData.curSlideDoors.stats.curState == SlideDoors.State.Opened) // enter train when slide door is opened
             {
-                float zPos = UnityEngine.Random.Range(soData.trainSettings.entityDepthRange.x, soData.trainSettings.entityDepthRange.y);
-
-                RaycastHit2D carriageSizeHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.size, 0.0f, transform.right, soData.npc.maxDistanceDetection, soData.layerSettings.trainLayers.carriagExteriorWalls);
-
-                if (carriageSizeHit.collider == null) { Debug.LogError($"{name} did not get the carriage size collider"); return; }
-
-                componentData.curCarriage = carriageSizeHit.collider.GetComponent<Carriage>();
-                componentData.carriageSizeCollider = carriageSizeHit.collider;
+                float zPos = UnityEngine.Random.Range(soData.trainSettings.maxMinWorldZPos.min, soData.trainSettings.maxMinWorldZPos.max);
 
                 componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, zPos);
                 componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
@@ -495,11 +525,21 @@ public class NPCBrain : MonoBehaviour
     }
     private void FindSmokersRoom()
     {
-        if (NPCManager.npcChairList.Contains(this)) NPCManager.npcChairList.Remove(this);
+        if (NPCManager.npcChairList.Contains(this)) NPCManager.npcChairList.Remove(this); // To prevent them from going back to the chair if they are queued
 
-        RaycastHit2D smokersRoomHit = Physics2D.BoxCast(componentData.carriageSizeCollider.bounds.center, componentData.carriageSizeCollider.bounds.size, 0.0f, transform.right, componentData.carriageSizeCollider.bounds.size.x, soData.layerSettings.trainLayers.smokingRoom);
-        componentData.smokerRoom = smokersRoomHit.collider;
-        stats.targetXPos = UnityEngine.Random.Range(componentData.smokerRoom.bounds.min.x, componentData.smokerRoom.bounds.max.x);
+        Carriage.SmokersRoomData curSmokersRoom;
+        if (componentData.curCarriage.smokersRoomData[0].npcCount > componentData.curCarriage.smokersRoomData[1].npcCount) // selected smoker room is based on which room has less npcs
+        {
+            curSmokersRoom = componentData.curCarriage.smokersRoomData[1];
+            componentData.curCarriage.smokersRoomData[1].npcCount++;
+        }
+        else
+        {
+            curSmokersRoom = componentData.curCarriage.smokersRoomData[0];
+            componentData.curCarriage.smokersRoomData[0].npcCount++;
+        }
+
+        stats.targetXPos = UnityEngine.Random.Range(curSmokersRoom.minXPos, curSmokersRoom.maxXPos);
 
     }
     private void SetAnimationEvents()

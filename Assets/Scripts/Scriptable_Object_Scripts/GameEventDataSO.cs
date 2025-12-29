@@ -5,7 +5,6 @@ using UnityEngine;
 public class GameEventDataSO : ScriptableObject
 {
     public GameEvent OnReset;
-    public GameEvent OnUnlockSlideDoors;
     public GameEvent OnInteract;
     public GameEvent OnBoardingSpy;
     public GameEvent OnCloseSlideDoors;

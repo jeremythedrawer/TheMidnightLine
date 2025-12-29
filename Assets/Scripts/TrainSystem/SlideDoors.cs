@@ -5,12 +5,6 @@ using UnityEngine;
 
 public class SlideDoors : MonoBehaviour
 {
-    public enum Type
-    { 
-        Interior,
-        Exterior
-    }
-
     public enum State
     { 
         Locked,
@@ -19,11 +13,6 @@ public class SlideDoors : MonoBehaviour
         Opened,
         Closing,
     }
-    [Serializable] public struct Settings
-    { 
-        public Type type;
-    }
-    [SerializeField] Settings settings;
     [Serializable] public struct Stats
     {
         internal State curState;
@@ -35,13 +24,6 @@ public class SlideDoors : MonoBehaviour
         public TrainSettingsSO trainSettings;
     }
     [SerializeField] SOData soData;
-    [Serializable] public struct GameEventData
-    {
-        public GameEvent OnReset;
-        public GameEvent OnUnlockSlideDoors;
-        public GameEvent OnCloseSlideDoors;
-    }
-    [SerializeField] GameEventData gameEventData;
 
     [Serializable] public struct ComponentData
     {
@@ -55,28 +37,13 @@ public class SlideDoors : MonoBehaviour
     {
         ResetDoors();
     }
-    private void OnEnable()
-    {
-        gameEventData.OnUnlockSlideDoors.RegisterListener(UnlockDoors);
-        gameEventData.OnCloseSlideDoors.RegisterListener(CloseDoors);
-        gameEventData.OnReset.RegisterListener(ResetDoors);
-    }
-
-    private void OnDisable()
-    {
-        gameEventData.OnUnlockSlideDoors.UnregisterListener(UnlockDoors);
-        gameEventData.OnCloseSlideDoors.UnregisterListener(CloseDoors);
-        gameEventData.OnReset.UnregisterListener(ResetDoors);
-    }
-
     private void Start()
     {
         stats.curState = State.Locked;
         componentData.collider.enabled = false;
     }
-    private void UnlockDoors()
+    public void UnlockDoors()
     {
-        if (soData.trainStats.slideDoorsToUnlock != settings.type) return;
         componentData.collider.enabled = true;
         MoveDoors(moveAmount: soData.trainSettings.slideDoorSprite.bounds.size.x * 0.01f, moveTime: 0.3f, State.Unlocked).Forget();
     }
@@ -87,7 +54,7 @@ public class SlideDoors : MonoBehaviour
         MoveDoors(moveAmount: soData.trainSettings.slideDoorSprite.bounds.size.x * 0.99f, moveTime: soData.trainSettings.doorMoveTime, State.Opened).Forget();
     }
 
-    private void CloseDoors()
+    public void CloseDoors()
     {
         if (stats.curState == State.Locked) return;
         stats.curState = State.Closing;
@@ -118,8 +85,7 @@ public class SlideDoors : MonoBehaviour
 
         stats.curState = newState;
     }
-
-    private void ResetDoors()
+    public void ResetDoors()
     {
         stats.curState = State.Locked;
         for (int i = 0; i < componentData.sliderDoors.Length; i++)

@@ -1,66 +1,91 @@
+using Cysharp.Threading.Tasks;
 using Proselyte.Sigils;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 
 public class Carriage : MonoBehaviour
 {
-    [Serializable] public struct SOData
-    {
-        public TrainStatsSO trainStats;
-        public TrainSettingsSO trainSettings;
-        public GameEventDataSO gameEventData;
-        public LayerSettingsSO layerSettings;
-    }
-    [SerializeField] SOData soData;
+    [SerializeField] TrainStatsSO trainStats;
+    [SerializeField] TrainSettingsSO trainSettings;
+    [SerializeField] GameEventDataSO gameEventData;
+    [SerializeField] LayerSettingsSO layerSettings;
+    [SerializeField] Transform[] wheelTransforms;
+    [SerializeField] BoxCollider2D carriageCollider;
+    [SerializeField] SpriteRenderer[] exteriorSprites;
+    public SlideDoors[] exteriorSlideDoors;
+    public SlideDoors[] interiorSlideDoors;
 
-    [Serializable] public struct ComponentData
+
+    [Serializable] public struct MaterialProps
     {
-        public Transform[] wheelTransforms;
-        public BoxCollider2D exteriorWallsCollider;
+        internal int alphaID;
+        internal float alpha;
     }
-    [SerializeField] ComponentData componentData;
+    [SerializeField] MaterialProps materialProps;
+
     [Serializable] public struct ChairData
     {
         internal float xPos;
         internal bool filled;
     }
     internal ChairData[] chairData;
-
     internal float chairZPos;
+
+    [Serializable] public struct SmokersRoomData
+    {
+        internal float minXPos;
+        internal float maxXPos;
+        internal int npcCount;
+    }
+    MaterialPropertyBlock mpb;
+    CancellationTokenSource ctsFade;
+
+    internal SmokersRoomData[] smokersRoomData;
+    private void Awake()
+    {
+        materialProps.alphaID = Shader.PropertyToID("_Alpha");
+        mpb = new MaterialPropertyBlock();
+        ctsFade = new CancellationTokenSource();
+        materialProps.alpha = 1;
+    }
 
     private void OnEnable()
     {
-        ResetStats();
-        soData.gameEventData.OnReset.RegisterListener(ResetStats);
-        soData.gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(GetData);
+        gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(GetData);
+        gameEventData.OnStationArrival.RegisterListener(UnlockDoors);
 
     }
 
     private void OnDisable()
     {
-        soData.gameEventData.OnReset.UnregisterListener(ResetStats);
-        soData.gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(GetData);
-
+        gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(GetData);
+        gameEventData.OnStationArrival.UnregisterListener(UnlockDoors);
+        ResetDoors();
     }
 
     private void Update()
     {
-        if (soData.trainStats.wheelCircumference <= 0f) return;
+        if (trainStats.wheelCircumference <= 0f) return;
 
-        float wheelRotation = (soData.trainStats.metersTravelled / soData.trainStats.wheelCircumference) * 360f;
+        float wheelRotation = (trainStats.metersTravelled / trainStats.wheelCircumference) * 360f;
 
         wheelRotation %= 360f;
 
-        foreach (Transform wheel in componentData.wheelTransforms)
+        foreach (Transform wheel in wheelTransforms)
         {
             wheel.localRotation = Quaternion.Euler(0f, 0f, -wheelRotation);
         }
     }
     private void GetData()
     {
-        Bounds checkBounds = componentData.exteriorWallsCollider.bounds;
-        RaycastHit2D[] chairsHits = Physics2D.BoxCastAll(checkBounds.center, checkBounds.size, 0, transform.right, checkBounds.size.x, soData.layerSettings.trainLayers.carriageChairs);
+        GetChairData(carriageCollider.bounds);
+        GetSmokersRoomData(carriageCollider.bounds);
+    }
+    private void GetChairData(Bounds checkBounds)
+    {
+        RaycastHit2D[] chairsHits = Physics2D.BoxCastAll(checkBounds.center, checkBounds.size, 0, transform.right, checkBounds.size.x, layerSettings.trainLayers.carriageChairs);
 
         List<ChairData> chairDataList = new List<ChairData>();
 
@@ -72,24 +97,93 @@ public class Carriage : MonoBehaviour
             float firstChairPos = chairsHits[i].transform.position.x + (chairLength * 0.5f);
             for (int j = 0; j < chairAmount; j++)
             {
-                chairDataList.Add(new ChairData { xPos = firstChairPos + (chairLength * i), filled = false } );
+                chairDataList.Add(new ChairData { xPos = firstChairPos + (chairLength * i), filled = false });
             }
         }
         chairData = chairDataList.ToArray();
         chairZPos = chairsHits[0].transform.position.z - 1;
     }
-    private void ResetStats()
+    private void GetSmokersRoomData(Bounds checkBounds)
     {
+        RaycastHit2D[] smokersRoomHits = Physics2D.BoxCastAll(checkBounds.center, checkBounds.size, 0, transform.right, checkBounds.size.x, layerSettings.trainLayers.smokingRoom);
+
+        List<SmokersRoomData> smokersRoomDataList = new List<SmokersRoomData>();
+
+        for (int i = 0; i < smokersRoomHits.Length; i++)
+        {
+            Collider2D col = smokersRoomHits[i].collider;
+            smokersRoomDataList.Add(new SmokersRoomData { minXPos = col.bounds.min.x, maxXPos = col.bounds.max.x });
+        }
+        smokersRoomData = smokersRoomDataList.ToArray();
     }
-    private void OnApplicationQuit()
+    private void UnlockDoors()
     {
-        ResetStats();
+        if (trainStats.curStation.isFrontOfTrain)
+        {
+            for (int i = 0; i < exteriorSlideDoors.Length; i++)
+            {
+                exteriorSlideDoors[i].UnlockDoors();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < interiorSlideDoors.Length; i++)
+            {
+                interiorSlideDoors[i].UnlockDoors();
+            }
+        }
+    }
+    public void StartFade(bool fadeIn)
+    {
+        ctsFade?.Cancel();
+        ctsFade?.Dispose();
+
+        ctsFade = new CancellationTokenSource();
+
+        Fade(fadeIn, ctsFade.Token).Forget();
+
+    }
+    private async UniTask Fade(bool fadeIn, CancellationToken token)
+    {
+        float elaspedTime = materialProps.alpha * trainSettings.exteriorWallFadeTime;
+        try
+        {
+            while (fadeIn ? elaspedTime < trainSettings.exteriorWallFadeTime : elaspedTime > 0f)
+            {
+                token.ThrowIfCancellationRequested();
+
+                elaspedTime += (fadeIn ? Time.deltaTime : -Time.deltaTime);
+
+                materialProps.alpha = elaspedTime / trainSettings.exteriorWallFadeTime;
+                mpb.SetFloat(materialProps.alphaID, materialProps.alpha);
+                for (int i = 0; i < exteriorSprites.Length; i++)
+                {
+                    exteriorSprites[i].SetPropertyBlock(mpb);
+                }
+
+                await UniTask.Yield(PlayerLoopTiming.Update, token);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+        }
     }
 
+#if UNITY_EDITOR
+
+    [ContextMenu("Reset Doors")]
+    private void ResetDoors()
+    {
+        foreach(SlideDoors slideDoor in  exteriorSlideDoors)
+        {
+            slideDoor.ResetDoors();
+        }
+    }
     private void OnDrawGizmos()
     {
-        if (soData.trainSettings == null) return;
+        if (trainSettings == null) return;
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(new Vector3(transform.position.x, transform.position.y + 2, soData.trainSettings.entityDepthRange.x), new Vector3(transform.position.x, transform.position.y + 2, soData.trainSettings.entityDepthRange.y));
+        Gizmos.DrawLine(new Vector3(transform.position.x, transform.position.y + 2, trainSettings.maxMinWorldZPos.min), new Vector3(transform.position.x, transform.position.y + 2, trainSettings.maxMinWorldZPos.max));
     }
+#endif
 }

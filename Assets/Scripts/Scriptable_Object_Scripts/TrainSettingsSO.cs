@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "TrainSettings_SO", menuName = "Midnight Line SOs / Train Settings SO")]
@@ -8,5 +9,11 @@ public class TrainSettingsSO : ScriptableObject
     public float accelerationSpeed = 10f;
     public float startKMPerHour = 100;
     public float doorMoveTime = 2.0f;
-    public Vector2Int entityDepthRange = new Vector2Int(1, 5);
+    public float exteriorWallFadeTime = 1f;
+    [Serializable] public struct WorldZPosRange
+    {
+        public int max;
+        public int min;
+    }
+    public WorldZPosRange maxMinWorldZPos;
 }

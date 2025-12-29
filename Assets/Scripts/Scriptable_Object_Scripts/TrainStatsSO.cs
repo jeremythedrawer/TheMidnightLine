@@ -25,7 +25,7 @@ public class TrainStatsSO : ScriptableObject
     internal int targetPassengerCount;
 
     internal List<Vector2> slideDoorPositions = new List<Vector2>();
-    internal SlideDoors.Type slideDoorsToUnlock;
+    internal StationSO curStation;
     public float GetMetersPerSecond(float kmph)
     {
         return kmph * KM_TO_MPS;
