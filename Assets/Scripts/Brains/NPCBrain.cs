@@ -72,7 +72,8 @@ public class NPCBrain : MonoBehaviour
         internal float targetDist;
         internal float stateTimer;
         internal float stateDuration;
-        internal float alpha;
+        internal float curAlpha;
+        internal float targetAlpha;
 
         internal NPCTraits.Behaviours curBehaviour;
         internal NPCTraits.Behaviours behaviours;
@@ -104,7 +105,7 @@ public class NPCBrain : MonoBehaviour
 
         if (stats.behaviours == 0)
         {
-            stats.behaviours = NPCTraits.GetBehaviours();
+            stats.behaviours = NPCTraits.GetBehaviours(soData.npc.behaviours);
         }
         if (((stats.behaviours & NPCTraits.Behaviours.Takes_naps) != 0) && componentData.sleepingZs == null)
         {
@@ -134,7 +135,7 @@ public class NPCBrain : MonoBehaviour
 
         stats.chairPosIndex = -1;
         stats.targetXPos = transform.position.x;
-        stats.alpha = 1;
+        stats.curAlpha = 1;
     }
     private void Update()
     {
@@ -397,17 +398,17 @@ public class NPCBrain : MonoBehaviour
 
         float targetAlpha = shouldFadeOut ? 0f : 1f;
 
-        if (Mathf.Approximately(stats.alpha, targetAlpha)) return;
-
+        if (stats.targetAlpha == targetAlpha) return;
+        stats.targetAlpha = targetAlpha;;
         componentData.ctsFade?.Cancel();
         componentData.ctsFade?.Dispose();
 
         componentData.ctsFade = new CancellationTokenSource();
-        FadeTo(targetAlpha, componentData.ctsFade.Token).Forget();
+        FadeTo(componentData.ctsFade.Token).Forget();
     }
-    private async UniTask FadeTo(float targetAlpha, CancellationToken token)
+    private async UniTask FadeTo(CancellationToken token)
     {
-        float startAlpha = stats.alpha;
+        float startAlpha = stats.curAlpha;
         float elapsed = 0f;
         try
         {
@@ -418,14 +419,14 @@ public class NPCBrain : MonoBehaviour
                 elapsed += Time.deltaTime;
                 float t = elapsed / soData.npcData.fadeTime;
 
-                stats.alpha = Mathf.Lerp(startAlpha, targetAlpha, t);
-                componentData.mpb.SetFloat( soData.npcData.materialData.alphaID, stats.alpha);
+                stats.curAlpha = Mathf.Lerp(startAlpha, stats.targetAlpha, t);
+                componentData.mpb.SetFloat( soData.npcData.materialData.alphaID, stats.curAlpha);
 
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
 
-            stats.alpha = targetAlpha;
-            componentData.mpb.SetFloat(soData.npcData.materialData.alphaID, stats.alpha);
+            stats.curAlpha = stats.targetAlpha;
+            componentData.mpb.SetFloat(soData.npcData.materialData.alphaID, stats.curAlpha);
         }
         catch (OperationCanceledException)
         {

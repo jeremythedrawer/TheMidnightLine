@@ -185,8 +185,8 @@ public class SpyBrain : MonoBehaviour
         {
             componentData.curCarriage = collision.GetComponent<Carriage>();
             componentData.curCarriage.StartFade(fadeIn: false);
-            soData.stats.curCarriageMinXPos = componentData.curCarriage.insideBoundsCollider.bounds.min.x;
-            soData.stats.curCarriageMaxXPos = componentData.curCarriage.insideBoundsCollider.bounds.max.x;
+            soData.stats.curCarriageMinXPos = componentData.curCarriage.carriageCollider.bounds.min.x;
+            soData.stats.curCarriageMaxXPos = componentData.curCarriage.carriageCollider.bounds.max.x;
         }
     }
     private void OnTriggerExit2D(Collider2D collision)

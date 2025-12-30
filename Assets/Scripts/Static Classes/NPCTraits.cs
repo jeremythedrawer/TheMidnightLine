@@ -1,4 +1,5 @@
 using System;
+using System.Collections.Generic;
 using UnityEngine;
 
 public static class NPCTraits
@@ -33,15 +34,30 @@ public static class NPCTraits
     public static string[] appearenceDescriptions;
     public static string[] behaviourDescriptions;
 
-    public static Behaviours GetBehaviours()
+    public static Behaviours GetBehaviours(Behaviours npcBehaviours)
     {
-        Behaviours[] behaveArray = (Behaviours[])Enum.GetValues(typeof(Behaviours));
+        Behaviours[] allBehaviours = (Behaviours[])Enum.GetValues(typeof(Behaviours));
 
-        Behaviours firstBehave = behaveArray[UnityEngine.Random.Range(1, behaveArray.Length)];
+        List<Behaviours> allowedBehaviours = new List<Behaviours>();
+        for (int i = 0; i < allBehaviours.Length; i++)
+        {
+            Behaviours b = allBehaviours[i];
+            if (b != 0 && npcBehaviours.HasFlag(b))
+            {
+                allowedBehaviours.Add(b);
+            }
+        }
+
+        Behaviours firstBehave = allowedBehaviours[UnityEngine.Random.Range(0, allowedBehaviours.Count)];
+        if (allowedBehaviours.Count == 1)
+        {
+            return firstBehave;
+        }
+
         Behaviours secondBehave;
         do
         {
-            secondBehave = behaveArray[UnityEngine.Random.Range(1, behaveArray.Length)];
+            secondBehave = allowedBehaviours[UnityEngine.Random.Range(0, allowedBehaviours.Count)];
         }
         while (secondBehave == firstBehave);
 

@@ -2,7 +2,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using System;
 
-
 #if UNITY_EDITOR
 using UnityEditor.Animations;
 #endif
@@ -20,8 +19,8 @@ public class NPCSO : ScriptableObject
     [Header("Station")]
     public float maxDistanceDetection = 6.0f;
 
-    [Header("Appearence")]
     public NPCTraits.Appearence appearence;
+    public NPCTraits.Behaviours behaviours;
 
     [Header("Difficulty")]
     public Vector2 pickBehaviourDurationRange = new Vector2(10, 30);
@@ -34,6 +33,8 @@ public class NPCSO : ScriptableObject
     public AnimEventPosData[] smokeAnimPosData;
 
     public Dictionary<int, AnimationClip> animClipDict = new Dictionary<int, AnimationClip>();
+
+#if UNITY_EDITOR
     [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
     private static void InitAllNPCSO()
     {
@@ -77,4 +78,5 @@ public class NPCSO : ScriptableObject
             }
         }
     }
+#endif
 }

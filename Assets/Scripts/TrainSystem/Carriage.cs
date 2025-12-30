@@ -12,8 +12,8 @@ public class Carriage : MonoBehaviour
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] Transform[] wheelTransforms;
-    [SerializeField] BoxCollider2D carriageCollider;
     [SerializeField] SpriteRenderer[] exteriorSprites;
+    public BoxCollider2D carriageCollider;
     public BoxCollider2D insideBoundsCollider;
     public SlideDoors[] exteriorSlideDoors;
     public SlideDoors[] interiorSlideDoors;
