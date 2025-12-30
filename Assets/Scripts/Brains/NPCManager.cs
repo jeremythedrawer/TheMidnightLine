@@ -99,9 +99,36 @@ public class NPCManager : MonoBehaviour
         npcFindingChair = true;
         NPCBrain curNPC = npcChairList[0];
         npcChairList.RemoveAt(0);
-        curNPC.FindCarriageChair();
+        TryAssignClosestChair(curNPC);
         await UniTask.WaitForSeconds(waitingForSeatTickRate);
         npcFindingChair = false;
+    }
+
+    public void TryAssignClosestChair(NPCBrain npc)
+    {
+        float npcX = npc.transform.position.x;
+        float closestDist = float.PositiveInfinity;
+        int bestIndex = -1;
+
+        Carriage.ChairData[] chairs = npc.componentData.curCarriage.chairData;
+
+        for (int i = 0; i < chairs.Length; i++)
+        {
+            if (chairs[i].filled) continue;
+
+            float dist = Mathf.Abs(npcX - chairs[i].xPos);
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                bestIndex = i;
+            }
+        }
+
+        if (bestIndex == -1) return;
+
+
+        chairs[bestIndex].filled = true;
+        npc.AssignChair(chairs[bestIndex]);
     }
 
 }

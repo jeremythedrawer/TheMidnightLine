@@ -38,7 +38,7 @@ public class NPCBrain : MonoBehaviour
         internal VisualEffect sleepingZs;
         internal GameObject smoke;
     }
-    [SerializeField] ComponentData componentData;
+    public ComponentData componentData;
 
     [Serializable] public struct SOData
     {
@@ -504,24 +504,34 @@ public class NPCBrain : MonoBehaviour
             NPCManager.npcChairList.Add(this);
         }
     }
-    public void FindCarriageChair()
+    public void AssignChair(Carriage.ChairData chair)
     {
+        float closestChairDist = float.MaxValue;
+        int closestChairIndex = -1;
+        float curXPos = transform.position.x;
+
         for (int i = 0; i < componentData.curCarriage.chairData.Length; i++)
         {
-            if(!componentData.curCarriage.chairData[i].filled)
+            Carriage.ChairData curChair = componentData.curCarriage.chairData[i];
+            if (curChair.filled) continue;
+
+            float curDist = Mathf.Abs(curXPos - curChair.xPos);
+
+            if(curDist < closestChairDist)
             {
-                componentData.chairData = componentData.curCarriage.chairData[i];
-                stats.targetXPos = componentData.curCarriage.chairData[i].xPos;
-                componentData.curCarriage.chairData[i].filled = true;
-
-
-
-                transform.position = new Vector3(transform.position.x, transform.position.y, componentData.curCarriage.chairZPos);
-                componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, componentData.curCarriage.chairZPos);
-                componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
-                break;
+                closestChairDist = curDist;
+                closestChairIndex = i;
             }
         }
+
+        if (closestChairIndex == -1) return; // did not find chair
+
+        componentData.chairData = chair;
+        stats.targetXPos = chair.xPos;
+
+        transform.position = new Vector3(transform.position.x, transform.position.y, componentData.curCarriage.chairZPos);
+        componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, componentData.curCarriage.chairZPos);
+        componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
     }
     private void FindSmokersRoom()
     {

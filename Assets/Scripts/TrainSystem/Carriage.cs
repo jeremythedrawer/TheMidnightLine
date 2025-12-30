@@ -98,10 +98,9 @@ public class Carriage : MonoBehaviour
             float firstChairPos = chairsHits[i].transform.position.x + (tileWidth * 0.5f);
             for (int j = 0; j < chairAmount; j++)
             {
-                chairDataList.Add(new ChairData { xPos = firstChairPos + (tileWidth * i), filled = false });
+                chairDataList.Add(new ChairData { xPos = firstChairPos + (tileWidth * j), filled = false });
             }
         }
-            Debug.Log((chairDataList.Count));
         chairData = chairDataList.ToArray();
         chairZPos = chairsHits[0].transform.position.z - 1;
     }

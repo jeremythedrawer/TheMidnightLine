@@ -45,7 +45,8 @@ public class TrainBrain : MonoBehaviour
         stats.accellation2 = 2 * settings.accelerationSpeed;
         stats.brakeDist = GetBrakeDistance();
         stats.curStation = stationsData.stations[0];
-
+        stats.curKMPerHour = stationsData.stations[0].targetTrainSpeed;
+        stats.targetKMPerHour = stationsData.stations[0].targetTrainSpeed;
         Vector2 entityDepthData = new Vector2(settings.maxMinWorldZPos.min, settings.maxMinWorldZPos.max - settings.maxMinWorldZPos.min);
         Shader.SetGlobalVector(shaderData.entityDepthRangeID, entityDepthData);
 

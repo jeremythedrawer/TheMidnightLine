@@ -24,7 +24,6 @@ public class TrainStatsSO : ScriptableObject
     internal int curPassengerCount;
     internal int targetPassengerCount;
 
-    internal List<Vector2> slideDoorPositions = new List<Vector2>();
     internal StationSO curStation;
     public float GetMetersPerSecond(float kmph)
     {
