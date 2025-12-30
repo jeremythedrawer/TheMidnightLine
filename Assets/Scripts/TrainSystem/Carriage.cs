@@ -89,7 +89,7 @@ public class Carriage : MonoBehaviour
     }
     private void GetChairData(Bounds checkBounds)
     {
-        Collider2D[] chairsHits = Physics2D.OverlapBoxAll(checkBounds.center, checkBounds.size, 0f, layerSettings.trainLayers.carriageChairs);
+        Collider2D[] chairsHits = Physics2D.OverlapBoxAll(checkBounds.center, checkBounds.size, 0f, layerSettings.trainLayerStruct.carriageChairs);
         float tileWidth = trainSettings.chairSprite.bounds.size.x * 0.333333f;
 
         List<ChairData> chairDataList = new List<ChairData>();
@@ -110,7 +110,7 @@ public class Carriage : MonoBehaviour
     }
     private void GetSmokersRoomData(Bounds checkBounds)
     {
-        Collider2D[] smokersRoomHits = Physics2D.OverlapBoxAll(checkBounds.center, checkBounds.size, 0, layerSettings.trainLayers.smokingRoom);
+        Collider2D[] smokersRoomHits = Physics2D.OverlapBoxAll(checkBounds.center, checkBounds.size, 0, layerSettings.trainLayerStruct.smokingRoom);
 
         List<SmokersRoomData> smokersRoomDataList = new List<SmokersRoomData>();
 

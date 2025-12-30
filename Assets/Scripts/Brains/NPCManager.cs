@@ -129,7 +129,6 @@ public class NPCManager : MonoBehaviour
         }
         else
         {
-            npc.componentData.curCarriage.chairData[bestIndex].filled = true;
             npc.AssignChair(bestIndex);
         }
     }

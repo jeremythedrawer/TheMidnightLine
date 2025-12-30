@@ -126,7 +126,7 @@ public class NPCBrain : MonoBehaviour
     {
         SetAnimationEvents();
         stats.curState = State.Idling;
-        componentData.rigidBody.includeLayers = soData.layerSettings.stationLayers.ground;
+        componentData.rigidBody.includeLayers = soData.layerSettings.stationLayersStruct.ground;
         stats.curRunSpeed = 1.0f;
 
         componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, soData.trainSettings.maxMinWorldZPos.min);
@@ -134,12 +134,13 @@ public class NPCBrain : MonoBehaviour
 
         stats.chairPosIndex = -1;
         stats.targetXPos = transform.position.x;
+        stats.alpha = 1;
     }
     private void Update()
     {
         SelectingStates();
         UpdateStates();
-        //Fade();
+        Fade();
         componentData.mpb.SetTexture(soData.npcData.materialData.mainTexID, componentData.spriteRenderer.sprite.texture);
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
@@ -387,50 +388,47 @@ public class NPCBrain : MonoBehaviour
     }
     private void Fade()
     {
-        //if (!stats.startFade)
-        //{
-        //    if (soData.trainStats.slideDoorsToUnlock == SlideDoors.Type.Exterior && componentData.rigidBody.includeLayers == soData.layerSettings.stationMask) // while on station, bystanders do not recognise train bounds, but they need to to fade out
-        //    {
-        //        componentData.ctsFade?.Cancel();
-        //        componentData.ctsFade?.Dispose();
-        //        componentData.ctsFade = new CancellationTokenSource();
-        //        Fading(fadeIn: false, componentData.ctsFade.Token).Forget();
-        //    }
-        //    else if (stats.alpha != 1)
-        //    {
-        //        componentData.ctsFade?.Cancel();
-        //        componentData.ctsFade?.Dispose();
-        //        componentData.ctsFade = new CancellationTokenSource();
-        //        Fading(fadeIn: true, componentData.ctsFade.Token).Forget();
-        //    }
-        //}
+        bool shouldFadeOut =
+            componentData.rigidBody.includeLayers == soData.layerSettings.stationMask &&
+            soData.spyStats.curGroundLayer == soData.layerSettings.trainLayerStruct.ground &&
+            soData.spyStats.curWorldPos.z > transform.position.z &&
+            transform.position.x > soData.spyStats.curCarriageMinXPos &&
+            transform.position.x < soData.spyStats.curCarriageMaxXPos;
+
+        float targetAlpha = shouldFadeOut ? 0f : 1f;
+
+        if (Mathf.Approximately(stats.alpha, targetAlpha)) return;
+
+        componentData.ctsFade?.Cancel();
+        componentData.ctsFade?.Dispose();
+
+        componentData.ctsFade = new CancellationTokenSource();
+        FadeTo(targetAlpha, componentData.ctsFade.Token).Forget();
     }
-    private async UniTask Fading(bool fadeIn, CancellationToken token)
+    private async UniTask FadeTo(float targetAlpha, CancellationToken token)
     {
-        stats.startFade = true;
+        float startAlpha = stats.alpha;
+        float elapsed = 0f;
         try
         {
-            float elaspedTime = stats.alpha * soData.npcData.fadeTime;
-            while (fadeIn ? elaspedTime < soData.npcData.fadeTime : elaspedTime > 0f)
+            while (elapsed < soData.npcData.fadeTime)
             {
                 token.ThrowIfCancellationRequested();
 
-                elaspedTime += (fadeIn ? Time.deltaTime : -Time.deltaTime);
+                elapsed += Time.deltaTime;
+                float t = elapsed / soData.npcData.fadeTime;
 
-                stats.alpha = elaspedTime / soData.npcData.fadeTime;
-                componentData.mpb.SetFloat(soData.npcData.materialData.alphaID, stats.alpha);
+                stats.alpha = Mathf.Lerp(startAlpha, targetAlpha, t);
+                componentData.mpb.SetFloat( soData.npcData.materialData.alphaID, stats.alpha);
 
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
 
-            stats.alpha = fadeIn ? 1 : 0;
+            stats.alpha = targetAlpha;
+            componentData.mpb.SetFloat(soData.npcData.materialData.alphaID, stats.alpha);
         }
         catch (OperationCanceledException)
         {
-        }
-        finally
-        {
-            stats.startFade = false;
         }
     }
     private void BoardTrain()
@@ -439,7 +437,7 @@ public class NPCBrain : MonoBehaviour
 
         if (componentData.curCarriage == null) // find slide door in one frame
         {
-            RaycastHit2D carriageHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, new Vector2(soData.npc.maxDistanceDetection, componentData.boxCollider.size.y), 0.0f, transform.right, soData.npc.maxDistanceDetection, soData.layerSettings.trainLayers.carriage);
+            RaycastHit2D carriageHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, new Vector2(soData.npc.maxDistanceDetection, componentData.boxCollider.size.y), 0.0f, transform.right, soData.npc.maxDistanceDetection, soData.layerSettings.trainLayerStruct.carriage);
 
             if (carriageHit.collider == null) { Debug.LogError($"{name} did not find a carriage to go to"); return; }
 

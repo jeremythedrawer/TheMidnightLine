@@ -64,15 +64,15 @@ public class CameraController : MonoBehaviour
         {
             SetState(CameraStatsSO.State.Station);
         }
-        else if (soData.spyStats.curLocationLayer == soData.layerSettings.trainLayers.insideCarriageBounds)
+        else if (soData.spyStats.curLocationLayer == soData.layerSettings.trainLayerStruct.insideCarriageBounds)
         {
             SetState(CameraStatsSO.State.Carriage);
         }
-        else if (soData.spyStats.curLocationLayer == soData.layerSettings.trainLayers.roofBounds)
+        else if (soData.spyStats.curLocationLayer == soData.layerSettings.trainLayerStruct.roofBounds)
         {
             SetState(CameraStatsSO.State.Roof);
         }
-        else if (soData.spyStats.curLocationLayer == soData.layerSettings.trainLayers.gangwayBounds)
+        else if (soData.spyStats.curLocationLayer == soData.layerSettings.trainLayerStruct.gangwayBounds)
         {
             SetState(CameraStatsSO.State.Gangway);
         }

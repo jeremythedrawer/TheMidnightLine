@@ -10,14 +10,13 @@ Shader "Unlit/s_character"
     }
     SubShader
     {
-        Tags {"Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
-
+        Tags {"Queue"="Transparent" "RenderType"="Transparent" "RenderPipeline"="UniversalPipeline"}
         Cull Off
+        ZWrite Off
+        Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
         {
-            AlphaToMask On
-            AlphaTest Greater 0.5
             Tags { "LightMode" = "Universal2D" }
 
             HLSLPROGRAM

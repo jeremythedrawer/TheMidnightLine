@@ -120,7 +120,7 @@ public class SpyBrain : MonoBehaviour
         componentData.rigidBody.gravityScale = soData.settings.gravityScale;
         soData.stats.gravityScale = componentData.rigidBody.gravityScale;
         soData.stats.startPos = componentData.rigidBody.position;
-        soData.stats.curGroundLayer = soData.layerSettings.stationLayers.ground;
+        soData.stats.curGroundLayer = soData.layerSettings.stationLayersStruct.ground;
         componentData.rigidBody.includeLayers = soData.layerSettings.stationMask;
         soData.stats.curRunSpeed = 1.0f;
         soData.stats.curJumpHorizontalForce = 0.0f;
@@ -133,7 +133,7 @@ public class SpyBrain : MonoBehaviour
 
         soData.stats.spriteFlip = componentData.spriteRenderer.flipX;
         soData.stats.curWorldPos = transform.position;
-        soData.stats.willJump = Time.time - soData.stats.lastJumpTime <= soData.settings.jumpBufferTime && stateData.curStateType != State.Jump;     
+        soData.stats.willJump = Time.time - soData.stats.lastJumpTime <= soData.settings.jumpBufferTime && stateData.curStateType != State.Jump;   
     }
     private void FixedUpdate()
     {
@@ -161,49 +161,53 @@ public class SpyBrain : MonoBehaviour
         }
         else
         {
-            componentData.curClimbCollider = Physics2D.OverlapBox(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.size, angle: 0, soData.layerSettings.trainLayers.climbingBounds);
+            componentData.curClimbCollider = Physics2D.OverlapBox(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.size, angle: 0, soData.layerSettings.trainLayerStruct.climbingBounds);
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!soData.stats.onTrain) return;
 
-        if ((soData.layerSettings.trainLayers.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
+        if ((soData.layerSettings.trainLayerStruct.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            SetLocationData(collision.bounds, soData.layerSettings.trainLayers.insideCarriageBounds);
+            SetLocationData(collision.bounds, soData.layerSettings.trainLayerStruct.insideCarriageBounds);
         }
-        else if ((soData.layerSettings.trainLayers.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
+        else if ((soData.layerSettings.trainLayerStruct.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            SetLocationData(collision.bounds, soData.layerSettings.trainLayers.gangwayBounds);
+            SetLocationData(collision.bounds, soData.layerSettings.trainLayerStruct.gangwayBounds);
         }
-        else if ((soData.layerSettings.trainLayers.roofBounds.value & (1 << collision.gameObject.layer)) != 0)
+        else if ((soData.layerSettings.trainLayerStruct.roofBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            SetLocationData(collision.bounds, soData.layerSettings.trainLayers.roofBounds);
+            SetLocationData(collision.bounds, soData.layerSettings.trainLayerStruct.roofBounds);
         }
 
-        if ((soData.layerSettings.trainLayers.carriage.value & (1 << collision.gameObject.layer)) != 0)
+        if ((soData.layerSettings.trainLayerStruct.carriage.value & (1 << collision.gameObject.layer)) != 0)
         {
             componentData.curCarriage = collision.GetComponent<Carriage>();
             componentData.curCarriage.StartFade(fadeIn: false);
+            soData.stats.curCarriageMinXPos = componentData.curCarriage.insideBoundsCollider.bounds.min.x;
+            soData.stats.curCarriageMaxXPos = componentData.curCarriage.insideBoundsCollider.bounds.max.x;
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
         if (!soData.stats.onTrain) return;
 
-        if ((soData.layerSettings.trainLayers.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
+        if ((soData.layerSettings.trainLayerStruct.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
             soData.stats.curLocationLayer = 0;
         }
-        else if ((soData.layerSettings.trainLayers.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
+        else if ((soData.layerSettings.trainLayerStruct.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
             soData.stats.curLocationLayer = 0;
         }
 
-        if ((soData.layerSettings.trainLayers.carriage.value & (1 << collision.gameObject.layer)) != 0)
+        if ((soData.layerSettings.trainLayerStruct.carriage.value & (1 << collision.gameObject.layer)) != 0)
         {
             componentData.curCarriage.StartFade(fadeIn: true);
             componentData.curCarriage = null;
+            soData.stats.curCarriageMinXPos = 0;
+            soData.stats.curCarriageMaxXPos = 0;
         }
     }
     private void ChooseState()
@@ -477,9 +481,9 @@ public class SpyBrain : MonoBehaviour
     }
     private void OpenSlideDoor()
     {
-        if (componentData.rigidBody.includeLayers == soData.layerSettings.stationLayers.ground && soData.stats.canBoardTrain)
+        if (componentData.rigidBody.includeLayers == soData.layerSettings.stationLayersStruct.ground && soData.stats.canBoardTrain)
         {
-            RaycastHit2D[] slideDoorHit = Physics2D.BoxCastAll(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.trainLayers.slideDoors);
+            RaycastHit2D[] slideDoorHit = Physics2D.BoxCastAll(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.trainLayerStruct.slideDoors);
 
             for (int i = 0; i < slideDoorHit.Length; i++)
             {
@@ -496,20 +500,20 @@ public class SpyBrain : MonoBehaviour
     {
         if (!soData.stats.onTrain && soData.stats.canBoardTrain)
         {
-            RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.trainLayers.slideDoors);
+            RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.trainLayerStruct.slideDoors);
 
             if (slideDoorHit.collider != null)
             {
                 componentData.slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
                 if (componentData.slideDoors.stats.curState == SlideDoors.State.Opened)
                 {
-                    RaycastHit2D insideCarriageHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, soData.layerSettings.trainLayers.insideCarriageBounds);
+                    RaycastHit2D insideCarriageHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, soData.layerSettings.trainLayerStruct.insideCarriageBounds);
 
                     if (insideCarriageHit.collider != null)
                     {
-                        SetLocationData(insideCarriageHit.collider.bounds, soData.layerSettings.trainLayers.insideCarriageBounds);
+                        SetLocationData(insideCarriageHit.collider.bounds, soData.layerSettings.trainLayerStruct.insideCarriageBounds);
                     }
-                    soData.stats.curGroundLayer = soData.layerSettings.trainLayers.ground;
+                    soData.stats.curGroundLayer = soData.layerSettings.trainLayerStruct.ground;
                     componentData.rigidBody.includeLayers = soData.layerSettings.trainMask;
 
                     soData.stats.onTrain = true;
@@ -523,7 +527,7 @@ public class SpyBrain : MonoBehaviour
     private void OpenGangwayDoor()
     {
         if (!soData.stats.onTrain || !soData.stats.isGrounded) return;
-        RaycastHit2D gangwayDoorHit = Physics2D.Linecast(componentData.boxCollider.bounds.center, new Vector2(componentData.boxCollider.bounds.center.x + (componentData.spriteRenderer.flipX ? -1 : 1), componentData.boxCollider.bounds.center.y), soData.layerSettings.trainLayers.gangwayDoor);
+        RaycastHit2D gangwayDoorHit = Physics2D.Linecast(componentData.boxCollider.bounds.center, new Vector2(componentData.boxCollider.bounds.center.x + (componentData.spriteRenderer.flipX ? -1 : 1), componentData.boxCollider.bounds.center.y), soData.layerSettings.trainLayerStruct.gangwayDoor);
 
         if (gangwayDoorHit.collider != null)
         {

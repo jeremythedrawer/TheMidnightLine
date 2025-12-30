@@ -9,7 +9,7 @@ public class LayerSettingsSO : ScriptableObject
     {
         public LayerMask ground;
     }
-    public StationLayers stationLayers;
+    public StationLayers stationLayersStruct;
 
     [Serializable] public struct TrainLayers
     {
@@ -24,7 +24,7 @@ public class LayerSettingsSO : ScriptableObject
         public LayerMask smokingRoom;
         public LayerMask carriage;
     }
-    public TrainLayers trainLayers;
+    public TrainLayers trainLayerStruct;
 
     public LayerMask spy;
     public LayerMask npc;
@@ -32,8 +32,8 @@ public class LayerSettingsSO : ScriptableObject
     internal LayerMask trainMask;
     private void OnValidate()
     {
-        stationMask = CombineLayerMasks(stationLayers);
-        trainMask = CombineLayerMasks(trainLayers);
+        stationMask = CombineLayerMasks(stationLayersStruct);
+        trainMask = CombineLayerMasks(trainLayerStruct);
     }
 
     private LayerMask CombineLayerMasks(object layers)
