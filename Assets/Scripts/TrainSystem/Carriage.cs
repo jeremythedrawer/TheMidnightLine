@@ -14,6 +14,7 @@ public class Carriage : MonoBehaviour
     [SerializeField] Transform[] wheelTransforms;
     [SerializeField] BoxCollider2D carriageCollider;
     [SerializeField] SpriteRenderer[] exteriorSprites;
+    public BoxCollider2D insideBoundsCollider;
     public SlideDoors[] exteriorSlideDoors;
     public SlideDoors[] interiorSlideDoors;
 
@@ -80,6 +81,7 @@ public class Carriage : MonoBehaviour
             wheel.localRotation = Quaternion.Euler(0f, 0f, -wheelRotation);
         }
     }
+    [ContextMenu("Get Chair Data")]
     private void GetData()
     {
         GetChairData(carriageCollider.bounds);
@@ -87,13 +89,13 @@ public class Carriage : MonoBehaviour
     }
     private void GetChairData(Bounds checkBounds)
     {
-        RaycastHit2D[] chairsHits = Physics2D.BoxCastAll(checkBounds.center, checkBounds.size, 0, transform.right, checkBounds.size.x, layerSettings.trainLayers.carriageChairs);
+        Collider2D[] chairsHits = Physics2D.OverlapBoxAll(checkBounds.center, checkBounds.size, 0f, layerSettings.trainLayers.carriageChairs);
         float tileWidth = trainSettings.chairSprite.bounds.size.x * 0.333333f;
 
         List<ChairData> chairDataList = new List<ChairData>();
         for (int i = 0; i < chairsHits.Length; i++)
         {
-            SpriteRenderer chairRenderer = chairsHits[i].collider.GetComponent<SpriteRenderer>();
+            SpriteRenderer chairRenderer = chairsHits[i].GetComponent<SpriteRenderer>();
             float totalWidth = chairRenderer.size.x;
 
             int chairAmount = Mathf.RoundToInt(totalWidth / tileWidth);
@@ -108,13 +110,13 @@ public class Carriage : MonoBehaviour
     }
     private void GetSmokersRoomData(Bounds checkBounds)
     {
-        RaycastHit2D[] smokersRoomHits = Physics2D.BoxCastAll(checkBounds.center, checkBounds.size, 0, transform.right, checkBounds.size.x, layerSettings.trainLayers.smokingRoom);
+        Collider2D[] smokersRoomHits = Physics2D.OverlapBoxAll(checkBounds.center, checkBounds.size, 0, layerSettings.trainLayers.smokingRoom);
 
         List<SmokersRoomData> smokersRoomDataList = new List<SmokersRoomData>();
 
         for (int i = 0; i < smokersRoomHits.Length; i++)
         {
-            Collider2D col = smokersRoomHits[i].collider;
+            Collider2D col = smokersRoomHits[i];
             smokersRoomDataList.Add(new SmokersRoomData { minXPos = col.bounds.min.x, maxXPos = col.bounds.max.x });
         }
         smokersRoomData = smokersRoomDataList.ToArray();

@@ -99,24 +99,23 @@ public class NPCManager : MonoBehaviour
         npcFindingChair = true;
         NPCBrain curNPC = npcChairList[0];
         npcChairList.RemoveAt(0);
-        TryAssignClosestChair(curNPC);
+        AssignNextNPCPosition(curNPC);
         await UniTask.WaitForSeconds(waitingForSeatTickRate);
         npcFindingChair = false;
     }
 
-    public void TryAssignClosestChair(NPCBrain npc)
+    public void AssignNextNPCPosition(NPCBrain npc)
     {
+
         float npcX = npc.transform.position.x;
         float closestDist = float.PositiveInfinity;
         int bestIndex = -1;
 
-        Carriage.ChairData[] chairs = npc.componentData.curCarriage.chairData;
-
-        for (int i = 0; i < chairs.Length; i++)
+        for (int i = 0; i < npc.componentData.curCarriage.chairData.Length; i++)
         {
-            if (chairs[i].filled) continue;
+            if (npc.componentData.curCarriage.chairData[i].filled) continue;
 
-            float dist = Mathf.Abs(npcX - chairs[i].xPos);
+            float dist = Mathf.Abs(npcX - npc.componentData.curCarriage.chairData[i].xPos);
             if (dist < closestDist)
             {
                 closestDist = dist;
@@ -124,11 +123,15 @@ public class NPCManager : MonoBehaviour
             }
         }
 
-        if (bestIndex == -1) return;
-
-
-        chairs[bestIndex].filled = true;
-        npc.AssignChair(chairs[bestIndex]);
+        if (bestIndex == -1)
+        {
+            npc.FindStandingPosition();
+        }
+        else
+        {
+            npc.componentData.curCarriage.chairData[bestIndex].filled = true;
+            npc.AssignChair(bestIndex);
+        }
     }
 
 }

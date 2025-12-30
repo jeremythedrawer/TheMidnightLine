@@ -13,13 +13,20 @@ public class NPCBrain : MonoBehaviour
         Walking,
         Smoking,
         Sleeping,
-        Eating
+        Eating,
     }
     
     public enum Type
     {
         Agent,
         Bystander
+    }
+
+    public enum Path
+    {
+        ToSmokerRoom,
+        ToChair,
+        ToSlideDoor,
     }
     [Serializable] public struct ComponentData
     {
@@ -33,8 +40,6 @@ public class NPCBrain : MonoBehaviour
         internal CancellationTokenSource ctsFade;
         
         internal Carriage curCarriage;
-        internal Carriage.ChairData chairData;
-        internal Collider2D smokerRoom;
         internal VisualEffect sleepingZs;
         internal GameObject smoke;
     }
@@ -59,22 +64,26 @@ public class NPCBrain : MonoBehaviour
 
     [Serializable] public struct StatData
     {
-        internal State curState;
-        internal Type type;
-        internal NPCTraits.Behaviours behaviours;
-        internal NPCTraits.Behaviours curBehaviour;
         internal Color selectedColor;
 
-        internal bool canBoardTrain;
         internal float targetXVelocity;
         internal float curRunSpeed;
         internal float targetXPos;
         internal float targetDist;
-
         internal float stateTimer;
         internal float stateDuration;
-
         internal float alpha;
+
+        internal NPCTraits.Behaviours curBehaviour;
+        internal NPCTraits.Behaviours behaviours;
+        
+        internal State curState;
+        internal Path curPath;
+        internal Type type;
+
+        internal int smokerRoomIndex;
+        internal int chairPosIndex;
+        internal bool canBoardTrain;
         internal bool startFade;
     }
     [SerializeField] public StatData stats;
@@ -123,8 +132,8 @@ public class NPCBrain : MonoBehaviour
         componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, soData.trainSettings.maxMinWorldZPos.min);
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
 
+        stats.chairPosIndex = -1;
         stats.targetXPos = transform.position.x;
-        componentData.chairData = new Carriage.ChairData();
     }
     private void Update()
     {
@@ -142,7 +151,7 @@ public class NPCBrain : MonoBehaviour
             stats.stateTimer += Time.deltaTime;
         }
 
-        if ((stats.curBehaviour & NPCTraits.Behaviours.Frequent_smoker) != 0 && componentData.smokerRoom == null)
+        if ((stats.curBehaviour & NPCTraits.Behaviours.Frequent_smoker) != 0 && stats.curPath != Path.ToSmokerRoom)
         {
             FindSmokersRoom();
         }
@@ -260,7 +269,7 @@ public class NPCBrain : MonoBehaviour
             {
                 stats.stateDuration = UnityEngine.Random.Range(soData.npc.pickBehaviourDurationRange.x, soData.npc.pickBehaviourDurationRange.y);
 
-                if (componentData.chairData.filled)
+                if (stats.chairPosIndex != -1)
                 {
                     componentData.animator.Play(soData.npcData.animHashData.sittingBreathing);
                 }
@@ -286,7 +295,7 @@ public class NPCBrain : MonoBehaviour
             {
                 stats.stateDuration = UnityEngine.Random.Range(soData.npc.pickBehaviourDurationRange.x, soData.npc.pickBehaviourDurationRange.y);
                 componentData.sleepingZs.Play();
-                if (componentData.chairData.filled)
+                if (stats.chairPosIndex != -1)
                 {
                     componentData.animator.Play(soData.npcData.animHashData.sittingSleeping);
                 }
@@ -299,7 +308,7 @@ public class NPCBrain : MonoBehaviour
             case State.Eating:
             {
                 stats.stateDuration = UnityEngine.Random.Range(soData.npc.pickBehaviourDurationRange.x, soData.npc.pickBehaviourDurationRange.y);
-                if (componentData.chairData.filled)
+                if (stats.chairPosIndex != -1)
                 {
                     componentData.animator.Play(soData.npcData.animHashData.sittingEating);
                 }
@@ -329,6 +338,7 @@ public class NPCBrain : MonoBehaviour
             case State.Smoking:
             {
                 componentData.smoke.SetActive(false);
+                componentData.curCarriage.smokersRoomData[stats.smokerRoomIndex].npcCount--;
                 QueueForChair();
             }
             break;
@@ -479,6 +489,7 @@ public class NPCBrain : MonoBehaviour
                 return;
             }
 
+            stats.curPath = Path.ToSlideDoor;
             stats.targetXPos = componentData.curSlideDoors.transform.position.x;
         }
         else if (inputData.move == 0.0f)
@@ -511,52 +522,41 @@ public class NPCBrain : MonoBehaviour
             NPCManager.npcChairList.Add(this);
         }
     }
-    public void AssignChair(Carriage.ChairData chair)
+    public void AssignChair(int chairIndex)
     {
-        float closestChairDist = float.MaxValue;
-        int closestChairIndex = -1;
-        float curXPos = transform.position.x;
-
-        for (int i = 0; i < componentData.curCarriage.chairData.Length; i++)
-        {
-            Carriage.ChairData curChair = componentData.curCarriage.chairData[i];
-            if (curChair.filled) continue;
-
-            float curDist = Mathf.Abs(curXPos - curChair.xPos);
-
-            if(curDist < closestChairDist)
-            {
-                closestChairDist = curDist;
-                closestChairIndex = i;
-            }
-        }
-
-        if (closestChairIndex == -1) return; // did not find chair
-
-        componentData.chairData = chair;
-        stats.targetXPos = chair.xPos;
+        stats.chairPosIndex = chairIndex;
+        componentData.curCarriage.chairData[stats.chairPosIndex].filled = true;
+        stats.curPath = Path.ToChair;
+        stats.targetXPos = componentData.curCarriage.chairData[stats.chairPosIndex].xPos;
 
         transform.position = new Vector3(transform.position.x, transform.position.y, componentData.curCarriage.chairZPos);
         componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, componentData.curCarriage.chairZPos);
         componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
     }
+    public void FindStandingPosition()
+    {
+        stats.targetXPos = UnityEngine.Random.Range(componentData.curCarriage.insideBoundsCollider.bounds.min.x, componentData.curCarriage.insideBoundsCollider.bounds.max.x);
+    }
     private void FindSmokersRoom()
     {
+        if (componentData.curCarriage.chairData[stats.chairPosIndex].filled)
+        {
+            componentData.curCarriage.chairData[stats.chairPosIndex].filled = false;
+            stats.chairPosIndex = -1;
+        }
         if (NPCManager.npcChairList.Contains(this)) NPCManager.npcChairList.Remove(this); // To prevent them from going back to the chair if they are queued
 
-        Carriage.SmokersRoomData curSmokersRoom;
-        if (componentData.curCarriage.smokersRoomData[0].npcCount > componentData.curCarriage.smokersRoomData[1].npcCount) // selected smoker room is based on which room has less npcs
+        if (componentData.curCarriage.smokersRoomData.Length > 1 && componentData.curCarriage.smokersRoomData[1].npcCount < componentData.curCarriage.smokersRoomData[0].npcCount) // selected smoker room is based on which room has less npcs
         {
-            curSmokersRoom = componentData.curCarriage.smokersRoomData[1];
-            componentData.curCarriage.smokersRoomData[1].npcCount++;
+            stats.smokerRoomIndex = 1;
         }
         else
         {
-            curSmokersRoom = componentData.curCarriage.smokersRoomData[0];
-            componentData.curCarriage.smokersRoomData[0].npcCount++;
+            stats.smokerRoomIndex = 0;
         }
-
-        stats.targetXPos = UnityEngine.Random.Range(curSmokersRoom.minXPos, curSmokersRoom.maxXPos);
+        componentData.curCarriage.smokersRoomData[stats.smokerRoomIndex].npcCount++;
+        stats.curPath = Path.ToSmokerRoom;
+        stats.targetXPos = UnityEngine.Random.Range(componentData.curCarriage.smokersRoomData[stats.smokerRoomIndex].minXPos, componentData.curCarriage.smokersRoomData[stats.smokerRoomIndex].maxXPos);
 
     }
     private void SetAnimationEvents()
