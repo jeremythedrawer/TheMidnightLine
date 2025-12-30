@@ -437,32 +437,39 @@ public class NPCBrain : MonoBehaviour
         }
         else if (componentData.curSlideDoors == null)
         {
-            float closestSlideDoorXPos = float.MaxValue;
+            float clostestSlideDoorDists = float.MaxValue;
+            float npcXPos = transform.position.x;
+            int bestIndex = -1;
             if (soData.startStation.isFrontOfTrain)
             {
                 for (int i = 0; i < componentData.curCarriage.exteriorSlideDoors.Length; i++)
                 {
-                    float curSlideDoorXPos = componentData.curCarriage.exteriorSlideDoors[i].transform.position.x;
-                    float dist = Mathf.Abs(curSlideDoorXPos - transform.position.x);
-                    if (dist < closestSlideDoorXPos)
+                    float dist = Mathf.Abs(npcXPos - componentData.curCarriage.exteriorSlideDoors[i].transform.position.x);
+                    if (dist < clostestSlideDoorDists)
                     {
-                        closestSlideDoorXPos = curSlideDoorXPos;
-                        componentData.curSlideDoors = componentData.curCarriage.exteriorSlideDoors[i];
+                        clostestSlideDoorDists = dist;
+                        bestIndex = i;
                     }
                 }
-
+                if (bestIndex !=  -1)
+                {
+                    componentData.curSlideDoors = componentData.curCarriage.exteriorSlideDoors[bestIndex];
+                }
             }
             else
             {
                 for (int i = 0; i < componentData.curCarriage.interiorSlideDoors.Length; i++)
                 {
-                    float curSlideDoorXPos = componentData.curCarriage.interiorSlideDoors[i].transform.position.x;
-                    float dist = Mathf.Abs(curSlideDoorXPos - transform.position.x);
-                    if (dist < closestSlideDoorXPos)
+                    float dist = Mathf.Abs(npcXPos - componentData.curCarriage.interiorSlideDoors[i].transform.position.x);
+                    if (dist < clostestSlideDoorDists)
                     {
-                        closestSlideDoorXPos = curSlideDoorXPos;
-                        componentData.curSlideDoors = componentData.curCarriage.interiorSlideDoors[i];
+                        clostestSlideDoorDists = dist;
+                        bestIndex = i;
                     }
+                }
+                if (bestIndex != -1)
+                {
+                    componentData.curSlideDoors = componentData.curCarriage.interiorSlideDoors[bestIndex];
                 }
             }
 
@@ -472,7 +479,7 @@ public class NPCBrain : MonoBehaviour
                 return;
             }
 
-            stats.targetXPos = closestSlideDoorXPos;
+            stats.targetXPos = componentData.curSlideDoors.transform.position.x;
         }
         else if (inputData.move == 0.0f)
         {

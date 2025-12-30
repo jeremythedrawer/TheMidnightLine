@@ -55,6 +55,7 @@ public class Carriage : MonoBehaviour
     {
         gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(GetData);
         gameEventData.OnStationArrival.RegisterListener(UnlockDoors);
+        gameEventData.OnStationLeave.RegisterListener(CloseDoors);
 
     }
 
@@ -62,6 +63,7 @@ public class Carriage : MonoBehaviour
     {
         gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(GetData);
         gameEventData.OnStationArrival.UnregisterListener(UnlockDoors);
+        gameEventData.OnCloseSlideDoors.UnregisterListener(CloseDoors);
         ResetDoors();
     }
 
@@ -132,6 +134,19 @@ public class Carriage : MonoBehaviour
             {
                 interiorSlideDoors[i].UnlockDoors();
             }
+        }
+    }
+
+    private void CloseDoors()
+    {
+        for(int i = 0; i < exteriorSlideDoors.Length; i++)
+        {
+            exteriorSlideDoors[i].CloseDoors();
+        }
+
+        for (int i = 0;i < interiorSlideDoors.Length; i++)
+        {
+            interiorSlideDoors[i].CloseDoors();
         }
     }
     public void StartFade(bool fadeIn)
