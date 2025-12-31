@@ -11,6 +11,7 @@ public class SpyStatsSO : ScriptableObject
     internal Vector2 startPos;
     internal Vector2 checkpointPos;
     internal Vector2 moveVelocity;
+    public Vector2 phonePosition;
 
     internal float targetXVelocity;
     internal float curRunSpeed;

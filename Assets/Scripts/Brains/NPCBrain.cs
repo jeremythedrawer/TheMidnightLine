@@ -274,6 +274,8 @@ public class NPCBrain : MonoBehaviour
                 if (stats.chairPosIndex != -1)
                 {
                     componentData.animator.Play(soData.npcData.animHashData.sittingBreathing);
+                    transform.position = new Vector3(transform.position.x, transform.position.y, componentData.curCarriage.chairZPos);
+                    componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, componentData.curCarriage.chairZPos);
                 }
                 else
                 {
@@ -300,6 +302,8 @@ public class NPCBrain : MonoBehaviour
                 if (stats.chairPosIndex != -1)
                 {
                     componentData.animator.Play(soData.npcData.animHashData.sittingSleeping);
+                    transform.position = new Vector3(transform.position.x, transform.position.y, componentData.curCarriage.chairZPos);
+                    componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, componentData.curCarriage.chairZPos);
                 }
                 else
                 {
@@ -313,6 +317,8 @@ public class NPCBrain : MonoBehaviour
                 if (stats.chairPosIndex != -1)
                 {
                     componentData.animator.Play(soData.npcData.animHashData.sittingEating);
+                    transform.position = new Vector3(transform.position.x, transform.position.y, componentData.curCarriage.chairZPos);
+                    componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, componentData.curCarriage.chairZPos);
                 }
                 else
                 {
@@ -500,13 +506,7 @@ public class NPCBrain : MonoBehaviour
             }
             else if (componentData.curSlideDoors.stats.curState == SlideDoors.State.Opened) // enter train when slide door is opened
             {
-                float zPos = UnityEngine.Random.Range(soData.trainSettings.maxMinWorldZPos.min, soData.trainSettings.maxMinWorldZPos.max);
-
-                componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, zPos);
-                componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
-
-
-                transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
+                SetStandingDepthAndPosition();
                 transform.SetParent(null, true);
                 soData.trainStats.curPassengerCount++;
                 QueueForChair();
@@ -528,9 +528,7 @@ public class NPCBrain : MonoBehaviour
         stats.curPath = Path.ToChair;
         stats.targetXPos = componentData.curCarriage.chairData[stats.chairPosIndex].xPos;
 
-        transform.position = new Vector3(transform.position.x, transform.position.y, componentData.curCarriage.chairZPos);
-        componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, componentData.curCarriage.chairZPos);
-        componentData.spriteRenderer.SetPropertyBlock(componentData.mpb);
+
     }
     public void FindStandingPosition()
     {
@@ -542,6 +540,7 @@ public class NPCBrain : MonoBehaviour
         {
             componentData.curCarriage.chairData[stats.chairPosIndex].filled = false;
             stats.chairPosIndex = -1;
+
         }
         if (NPCManager.npcChairList.Contains(this)) NPCManager.npcChairList.Remove(this); // To prevent them from going back to the chair if they are queued
 
@@ -554,10 +553,22 @@ public class NPCBrain : MonoBehaviour
             stats.smokerRoomIndex = 0;
         }
         componentData.curCarriage.smokersRoomData[stats.smokerRoomIndex].npcCount++;
+        SetStandingDepthAndPosition();
         stats.curPath = Path.ToSmokerRoom;
         stats.targetXPos = UnityEngine.Random.Range(componentData.curCarriage.smokersRoomData[stats.smokerRoomIndex].minXPos, componentData.curCarriage.smokersRoomData[stats.smokerRoomIndex].maxXPos);
 
     }
+    private void SetStandingDepthAndPosition()
+    {
+        float zPos = UnityEngine.Random.Range(soData.trainSettings.maxMinWorldZPos.min, soData.trainSettings.maxMinWorldZPos.max);
+        componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, zPos);
+        transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
+    }
+
+    //public void SetStationDepth()
+    //{
+    //    componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, transform.position.z); //TODO Lighten NPC when they are on a station that is behind the train
+    //}
     private void SetAnimationEvents()
     {
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingAboutToEat], nameof(PlaySittingEating));

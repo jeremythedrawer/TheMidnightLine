@@ -79,6 +79,7 @@ public class Station : MonoBehaviour
             agentData.agent.transform.position = spawnPos;
             agentData.agent.soData.startStation = soData.settings;
             agentData.agent.transform.SetParent(transform, true);
+            //agentData.agent.SetStationDepth();
         }
         for (int i = 0; i < soData.settings.bystanderSpawnAmount; i++)
         {
@@ -89,6 +90,7 @@ public class Station : MonoBehaviour
             bystanderNPC.stats.type = NPCBrain.Type.Bystander;
             bystanderNPC.soData.startStation = soData.settings;
             bystanderNPC.transform.SetParent(transform, true);
+            //bystanderNPC.SetStationDepth();
         }
     }
 }

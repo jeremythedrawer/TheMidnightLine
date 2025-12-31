@@ -25,5 +25,5 @@ public class SpySettingsSO : ScriptableObject
     [Range(0f, 0.5f)] public float stepBuffer = 0.25f;
 
     [Header("Train")]
-    public int depthPositionInTrain = 1;
+    [Range(0f, 1f)] public int depthPositionInTrain = 1;
 }

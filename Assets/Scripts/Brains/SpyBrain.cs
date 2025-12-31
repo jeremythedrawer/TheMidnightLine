@@ -53,6 +53,7 @@ public class SpyBrain : MonoBehaviour
         internal int grabLedgeHash;
         internal int hangHash;
         internal int climbHash;
+        internal int callHash;
     }
     [SerializeField] AnimClipData animClipData;
     [Serializable] public struct CollisionPoints
@@ -81,6 +82,7 @@ public class SpyBrain : MonoBehaviour
         animClipData.grabLedgeHash = Animator.StringToHash("GrabLedge");
         animClipData.hangHash = Animator.StringToHash("Hang");
         animClipData.climbHash  = Animator.StringToHash("Climb");
+        animClipData.callHash = Animator.StringToHash("Call");
 
         Animations.SetAnimationEvent(startRunClip, nameof(PlayRunningClip));
         Animations.SetAnimationEvent(climbClip, nameof(ExitClimbClip));
@@ -494,7 +496,8 @@ public class SpyBrain : MonoBehaviour
                     rigidBody.includeLayers = layerSettings.trainMask;
 
                     stats.onTrain = true;
-                    transform.position = new Vector3(transform.position.x, transform.position.y, trainSettings.maxMinWorldZPos.max + settings.depthPositionInTrain);
+                    float zPos = Mathf.Lerp(trainSettings.maxMinWorldZPos.min, trainSettings.maxMinWorldZPos.max, settings.depthPositionInTrain);
+                    transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
                     trainStats.curPassengerCount ++;
                     gameEventData.OnBoardingSpy.Raise();
                 }

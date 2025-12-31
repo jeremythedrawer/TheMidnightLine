@@ -11,10 +11,18 @@ public class SpriteAtlasFactory : ScriptableObject
     {     
         public Texture2D spriteAtlas;
         public AnimationClip smokingClip;
+        public AnimationClip callClip;
         public NPCSO npc;
     }
     [SerializeField] ProcessedComponents[] processedNPCComponents;
-    public void SetSpritePositionData()
+
+    [Serializable] public struct SpyComponent
+    {
+        public Texture2D spriteAtlas;
+        public SpyStatsSO stats;
+    }
+    [SerializeField] SpyComponent spyComponent;
+    public void SetNPCSpritePositionData()
     {
         foreach (ProcessedComponents npcComponent in processedNPCComponents)
         {
@@ -114,6 +122,83 @@ public class SpriteAtlasFactory : ScriptableObject
             }
         }
     }
+
+    public void SetSpySpritePositionData()
+    {
+            TextureImporter atlasImporter = (TextureImporter)TextureImporter.GetAtPath(AssetDatabase.GetAssetPath(spyComponent.spriteAtlas));
+            atlasImporter.isReadable = true;
+            atlasImporter.spriteImportMode = SpriteImportMode.Multiple;
+            SpriteDataProviderFactories factory = new SpriteDataProviderFactories();
+            factory.Init();
+            ISpriteEditorDataProvider dataProvider = factory.GetSpriteEditorDataProviderFromObject(spyComponent.spriteAtlas);
+            dataProvider.InitSpriteEditorDataProvider();
+            SpriteRect[] spriteRects = dataProvider.GetSpriteRects();
+
+            //for (int i = 0; i < spriteRects.Length; i++) // Looping through each sprite in atlas
+            //{
+
+            //    int startX = Mathf.RoundToInt(spriteRects[i].rect.x);
+            //    int startY = Mathf.RoundToInt(spriteRects[i].rect.y);
+            //    int width = Mathf.RoundToInt(spriteRects[i].rect.width);
+            //    int height = Mathf.RoundToInt(spriteRects[i].rect.height);
+            //    bool foundRed = false;
+
+            //    for (int x = startX; x < startX + width; x++)
+            //    {
+            //        for (int y = startY; y < startY + height; y++)
+            //        {
+            //            Color color = npcComponent.spriteAtlas.GetPixel(x, y);
+
+            //            if (color == Color.red)
+            //            {
+            //                float xPiv = (x - startX) / (float)width;
+            //                float yPiv = (y - startY) / (float)height;
+
+            //                spriteRects[i].pivot = new Vector2(xPiv, yPiv);
+            //                spriteRects[i].alignment = SpriteAlignment.Custom;
+
+            //                foundRed = true;
+            //            }
+            //        }
+            //    }
+
+            //    if (!foundRed) Debug.LogWarning($"never found red pixel origin point of: {spriteRects[i].name}");
+            //}
+
+            //dataProvider.SetSpriteRects(spriteRects);
+            //dataProvider.Apply();
+
+        for (int i = 0; i < spriteRects.Length; i++) // Looping through each sprite in atlas
+        {
+            int startX = Mathf.RoundToInt(spriteRects[i].rect.x);
+            int startY = Mathf.RoundToInt(spriteRects[i].rect.y);
+            int width = Mathf.RoundToInt(spriteRects[i].rect.width);
+            int height = Mathf.RoundToInt(spriteRects[i].rect.height);
+
+            float pivotPixelX = startX + spriteRects[i].pivot.x * width;
+            float pivotPixelY = startY + spriteRects[i].pivot.y * height;
+
+            for (int x = startX; x < startX + width; x++)
+            {
+                for (int y = startY; y < startY + height; y++)
+                {
+                    Color color = spyComponent.spriteAtlas.GetPixel(x, y);
+
+                    if (color == Color.blue)
+                    {
+                        float localPixelX = x - pivotPixelX;
+                        float localPixelY = y - pivotPixelY;
+
+                        float metersXPos = localPixelX / atlasImporter.spritePixelsPerUnit;
+                        float metersYPos = localPixelY / atlasImporter.spritePixelsPerUnit;
+
+                        spyComponent.stats.phonePosition = new Vector2(metersXPos, metersYPos);
+                        break;
+                    }
+                }
+            }
+        }
+    }
 }
 
 [CustomEditor(typeof(SpriteAtlasFactory))]
@@ -125,9 +210,14 @@ public class SpriteAtlasFactorEditor : Editor
 
         SpriteAtlasFactory factory = (SpriteAtlasFactory)target;
 
-        if (GUILayout.Button("Set Origin Points"))
+        if (GUILayout.Button("Set NPC Position Data"))
         {
-            factory.SetSpritePositionData();
+            factory.SetNPCSpritePositionData();
+        }
+
+        if (GUILayout.Button("Set Spy Position Data"))
+        {
+            factory.SetSpySpritePositionData();
         }
     }
 }
