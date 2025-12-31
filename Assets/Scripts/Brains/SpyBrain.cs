@@ -10,43 +10,43 @@ public class SpyBrain : MonoBehaviour
         Idle,
         Walk,
         Run,
-        Melee,
         Jump,
         Fall,
         Hang,
-        Climb
+        Climb,
+        Phone,
     }
-    [Serializable] public struct ComponentData
-    {
-        public Rigidbody2D rigidBody;
-        public BoxCollider2D boxCollider;
-        public Animator animator;
-        public SpriteRenderer spriteRenderer;
-        internal SlideDoors slideDoors;
-        internal GangwayDoor gangwayDoor;
-        internal Collider2D curClimbCollider;
-        internal Carriage curCarriage;
-    }
-    [SerializeField] ComponentData componentData;
 
-    [Serializable]
-    public struct StateData
-    {
-        internal State curStateType;
-    }
-    [SerializeField] StateData stateData;
+    [Header("Components")]
+    [SerializeField] Rigidbody2D rigidBody;
+    [SerializeField] BoxCollider2D boxCollider;
+    [SerializeField] Animator animator;
+    [SerializeField] SpriteRenderer spriteRenderer;
 
+    [Header("Scriptable Objects")]
+    [SerializeField] SpySettingsSO settings;
+    [SerializeField] SpyStatsSO stats;
+    [SerializeField] SpyInputsSO inputs;
+    [SerializeField] TrainStatsSO trainStats;
+    [SerializeField] TrainSettingsSO trainSettings;
+    [SerializeField] LayerSettingsSO layerSettings;
+    [SerializeField] GameEventDataSO gameEventData;
+
+    [SerializeField] AnimationClip startRunClip;
+    [SerializeField] AnimationClip climbClip;
+
+    SlideDoors slideDoors;
+    GangwayDoor gangwayDoor;
+    Collider2D curClimbCollider;
+    Carriage curCarriage;
+    State curState;
     [Serializable] public struct AnimClipData
     {
-        public AnimationClip startRunClip;
-        public AnimationClip climbClip;
-
         internal int idleBreathingHash;
         internal int idleLookAroundHash;
         internal int walkHash;
         internal int startRunHash;
         internal int runHash;
-        internal int meleeHash;
         internal int jumpHash;
         internal int fallHash;
         internal int heavyLandingHash;
@@ -55,24 +55,10 @@ public class SpyBrain : MonoBehaviour
         internal int climbHash;
     }
     [SerializeField] AnimClipData animClipData;
-
-    [Serializable] public struct SOData
-    {
-        public SpySettingsSO settings;
-        public SpyStatsSO stats;
-        public SpyInputsSO inputs;
-        public TrainStatsSO trainStats;
-        public TrainSettingsSO trainSettings;
-        public LayerSettingsSO layerSettings;
-        public GameEventDataSO gameEventData;
-    }
-    [SerializeField] SOData soData;
-
     [Serializable] public struct CollisionPoints
     {
         internal Vector2 groundLeft;
         internal Vector2 groundRight;
-
         internal Vector2 stepLeft;
         internal Vector2 stepRight;
     }
@@ -89,7 +75,6 @@ public class SpyBrain : MonoBehaviour
         animClipData.walkHash = Animator.StringToHash("Walk");
         animClipData.startRunHash = Animator.StringToHash("StartRun");
         animClipData.runHash = Animator.StringToHash("Run");
-        animClipData.meleeHash = Animator.StringToHash("Melee");
         animClipData.jumpHash = Animator.StringToHash("Jump");
         animClipData.fallHash = Animator.StringToHash("Fall");
         animClipData.heavyLandingHash = Animator.StringToHash("HeavyLanding");
@@ -97,143 +82,143 @@ public class SpyBrain : MonoBehaviour
         animClipData.hangHash = Animator.StringToHash("Hang");
         animClipData.climbHash  = Animator.StringToHash("Climb");
 
-        Animations.SetAnimationEvent(animClipData.startRunClip, nameof(PlayRunningClip));
-        Animations.SetAnimationEvent(animClipData.climbClip, nameof(ExitClimbClip));
+        Animations.SetAnimationEvent(startRunClip, nameof(PlayRunningClip));
+        Animations.SetAnimationEvent(climbClip, nameof(ExitClimbClip));
     }
     private void OnEnable()
     {
-        soData.gameEventData.OnStationArrival.RegisterListener(() => soData.stats.canBoardTrain = true);
-        soData.gameEventData.OnInteract.RegisterListener(OpenSlideDoor);
-        soData.gameEventData.OnInteract.RegisterListener(EnterTrain);
-        soData.gameEventData.OnInteract.RegisterListener(OpenGangwayDoor);
+        gameEventData.OnStationArrival.RegisterListener(() => stats.canBoardTrain = true);
+        gameEventData.OnInteract.RegisterListener(OpenSlideDoor);
+        gameEventData.OnInteract.RegisterListener(EnterTrain);
+        gameEventData.OnInteract.RegisterListener(OpenGangwayDoor);
     }
     private void OnDisable()
     {
-        soData.gameEventData.OnStationArrival.UnregisterListener(() => soData.stats.canBoardTrain = true);
-        soData.gameEventData.OnInteract.UnregisterListener(OpenSlideDoor);
-        soData.gameEventData.OnInteract.UnregisterListener(EnterTrain);
-        soData.gameEventData.OnInteract.UnregisterListener(OpenGangwayDoor);
+        gameEventData.OnStationArrival.UnregisterListener(() => stats.canBoardTrain = true);
+        gameEventData.OnInteract.UnregisterListener(OpenSlideDoor);
+        gameEventData.OnInteract.UnregisterListener(EnterTrain);
+        gameEventData.OnInteract.UnregisterListener(OpenGangwayDoor);
     }
     private void Start()
     {
-        stateData.curStateType = State.Idle;
-        componentData.rigidBody.gravityScale = soData.settings.gravityScale;
-        soData.stats.gravityScale = componentData.rigidBody.gravityScale;
-        soData.stats.startPos = componentData.rigidBody.position;
-        soData.stats.curGroundLayer = soData.layerSettings.stationLayersStruct.ground;
-        componentData.rigidBody.includeLayers = soData.layerSettings.stationMask;
-        soData.stats.curRunSpeed = 1.0f;
-        soData.stats.curJumpHorizontalForce = 0.0f;
-        soData.stats.firstFixedFrameClimb = true;
+        curState = State.Idle;
+        rigidBody.gravityScale = settings.gravityScale;
+        stats.gravityScale = rigidBody.gravityScale;
+        stats.startPos = rigidBody.position;
+        stats.curGroundLayer = layerSettings.stationLayersStruct.ground;
+        rigidBody.includeLayers = layerSettings.stationMask;
+        stats.curRunSpeed = 1.0f;
+        stats.curJumpHorizontalForce = 0.0f;
+        stats.firstFixedFrameClimb = true;
     }
     private void Update()
     {
         ChooseState();
         UpdateStates();
 
-        soData.stats.spriteFlip = componentData.spriteRenderer.flipX;
-        soData.stats.curWorldPos = transform.position;
-        soData.stats.willJump = Time.time - soData.stats.lastJumpTime <= soData.settings.jumpBufferTime && stateData.curStateType != State.Jump;   
+        stats.spriteFlip = spriteRenderer.flipX;
+        stats.curWorldPos = transform.position;
+        stats.willJump = Time.time - stats.lastJumpTime <= settings.jumpBufferTime && curState != State.Jump;   
     }
     private void FixedUpdate()
     {
         FixedUpdateStates();
         CalculateCollisionPoints();
-        soData.stats.isGrounded = Physics2D.Linecast(collisionPoints.groundLeft, collisionPoints.groundRight, soData.stats.curGroundLayer);
-        soData.stats.isStepping = Physics2D.Linecast(new Vector2(collisionPoints.groundLeft.x, transform.position.y), collisionPoints.stepLeft, soData.stats.curGroundLayer) || 
-                                  Physics2D.Linecast(new Vector2(collisionPoints.groundRight.x, transform.position.y), collisionPoints.stepRight, soData.stats.curGroundLayer);
-        if (soData.stats.isStepping)
+        stats.isGrounded = Physics2D.Linecast(collisionPoints.groundLeft, collisionPoints.groundRight, stats.curGroundLayer);
+        stats.isStepping = Physics2D.Linecast(new Vector2(collisionPoints.groundLeft.x, transform.position.y), collisionPoints.stepLeft, stats.curGroundLayer) || 
+                                  Physics2D.Linecast(new Vector2(collisionPoints.groundRight.x, transform.position.y), collisionPoints.stepRight, stats.curGroundLayer);
+        if (stats.isStepping)
         {
-            componentData.rigidBody.position = new Vector2(componentData.rigidBody.position.x, componentData.rigidBody.position.y + (collisionPoints.stepRight.y - transform.position.y));
+            rigidBody.position = new Vector2(rigidBody.position.x, rigidBody.position.y + (collisionPoints.stepRight.y - transform.position.y));
         }
 
-        if (stateData.curStateType != State.Hang && stateData.curStateType != State.Climb)
+        if (curState != State.Hang && curState != State.Climb)
         {
-            soData.stats.targetXVelocity = (soData.settings.moveSpeed * soData.stats.curRunSpeed * soData.inputs.move) + (soData.stats.curJumpHorizontalForce * soData.inputs.move);
-            componentData.rigidBody.linearVelocityX = Mathf.Lerp(soData.stats.moveVelocity.x, soData.stats.targetXVelocity, soData.settings.groundAccelation * Time.fixedDeltaTime);
+            stats.targetXVelocity = (settings.moveSpeed * stats.curRunSpeed * inputs.move) + (stats.curJumpHorizontalForce * inputs.move);
+            rigidBody.linearVelocityX = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.fixedDeltaTime);
         }
 
-        soData.stats.moveVelocity = componentData.rigidBody.linearVelocity;
+        stats.moveVelocity = rigidBody.linearVelocity;
 
-        if (soData.stats.isGrounded)
+        if (stats.isGrounded)
         {
-            soData.stats.canHang = true;
+            stats.canHang = true;
         }
         else
         {
-            componentData.curClimbCollider = Physics2D.OverlapBox(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.size, angle: 0, soData.layerSettings.trainLayerStruct.climbingBounds);
+            curClimbCollider = Physics2D.OverlapBox(boxCollider.bounds.center, boxCollider.bounds.size, angle: 0, layerSettings.trainLayerStruct.climbingBounds);
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!soData.stats.onTrain) return;
+        if (!stats.onTrain) return;
 
-        if ((soData.layerSettings.trainLayerStruct.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
+        if ((layerSettings.trainLayerStruct.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            SetLocationData(collision.bounds, soData.layerSettings.trainLayerStruct.insideCarriageBounds);
+            SetLocationData(collision.bounds, layerSettings.trainLayerStruct.insideCarriageBounds);
         }
-        else if ((soData.layerSettings.trainLayerStruct.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
+        else if ((layerSettings.trainLayerStruct.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            SetLocationData(collision.bounds, soData.layerSettings.trainLayerStruct.gangwayBounds);
+            SetLocationData(collision.bounds, layerSettings.trainLayerStruct.gangwayBounds);
         }
-        else if ((soData.layerSettings.trainLayerStruct.roofBounds.value & (1 << collision.gameObject.layer)) != 0)
+        else if ((layerSettings.trainLayerStruct.roofBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            SetLocationData(collision.bounds, soData.layerSettings.trainLayerStruct.roofBounds);
+            SetLocationData(collision.bounds, layerSettings.trainLayerStruct.roofBounds);
         }
 
-        if ((soData.layerSettings.trainLayerStruct.carriage.value & (1 << collision.gameObject.layer)) != 0)
+        if ((layerSettings.trainLayerStruct.carriage.value & (1 << collision.gameObject.layer)) != 0)
         {
-            componentData.curCarriage = collision.GetComponent<Carriage>();
-            componentData.curCarriage.StartFade(fadeIn: false);
-            soData.stats.curCarriageMinXPos = componentData.curCarriage.carriageCollider.bounds.min.x;
-            soData.stats.curCarriageMaxXPos = componentData.curCarriage.carriageCollider.bounds.max.x;
+            curCarriage = collision.GetComponent<Carriage>();
+            curCarriage.StartFade(fadeIn: false);
+            stats.curCarriageMinXPos = curCarriage.carriageCollider.bounds.min.x;
+            stats.curCarriageMaxXPos = curCarriage.carriageCollider.bounds.max.x;
         }
     }
     private void OnTriggerExit2D(Collider2D collision)
     {
-        if (!soData.stats.onTrain) return;
+        if (!stats.onTrain) return;
 
-        if ((soData.layerSettings.trainLayerStruct.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
+        if ((layerSettings.trainLayerStruct.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            soData.stats.curLocationLayer = 0;
+            stats.curLocationLayer = 0;
         }
-        else if ((soData.layerSettings.trainLayerStruct.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
+        else if ((layerSettings.trainLayerStruct.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            soData.stats.curLocationLayer = 0;
+            stats.curLocationLayer = 0;
         }
 
-        if ((soData.layerSettings.trainLayerStruct.carriage.value & (1 << collision.gameObject.layer)) != 0)
+        if ((layerSettings.trainLayerStruct.carriage.value & (1 << collision.gameObject.layer)) != 0)
         {
-            componentData.curCarriage.StartFade(fadeIn: true);
-            componentData.curCarriage = null;
-            soData.stats.curCarriageMinXPos = 0;
-            soData.stats.curCarriageMaxXPos = 0;
+            curCarriage.StartFade(fadeIn: true);
+            curCarriage = null;
+            stats.curCarriageMinXPos = 0;
+            stats.curCarriageMaxXPos = 0;
         }
     }
     private void ChooseState()
     {
         //TODO do heavy land logic
-        if ((soData.stats.isGrounded && soData.stats.willJump) || componentData.rigidBody.linearVelocityY > 0.01f || soData.stats.coyoteJump)
+        if ((stats.isGrounded && stats.willJump) || rigidBody.linearVelocityY > 0.01f || stats.coyoteJump)
         {
             SetState(State.Jump);
         }
-        else if (soData.stats.isClimbing)
+        else if (stats.isClimbing)
         {
             SetState(State.Climb);
         }
-        else if (soData.stats.canHang && componentData.curClimbCollider != null && componentData.boxCollider.bounds.max.y < componentData.curClimbCollider.bounds.max.y && soData.stats.onTrain)
+        else if (stats.canHang && curClimbCollider != null && boxCollider.bounds.max.y < curClimbCollider.bounds.max.y && stats.onTrain)
         {
             SetState(State.Hang);
         }
-        else if (componentData.rigidBody.linearVelocityY < 0 && !soData.stats.isGrounded)
+        else if (rigidBody.linearVelocityY < 0 && !stats.isGrounded)
         {
             SetState(State.Fall);
         }
-        else if (soData.stats.isGrounded && soData.inputs.move != 0 && !soData.inputs.run)
+        else if (stats.isGrounded && inputs.move != 0 && !inputs.run)
         {
             SetState(State.Walk);
         }
-        else if (soData.stats.isGrounded && soData.inputs.move != 0 && soData.inputs.run) //TODO: not in carriage
+        else if (stats.isGrounded && inputs.move != 0 && inputs.run) //TODO: not in carriage
         {
             SetState(State.Run);
         }
@@ -244,55 +229,55 @@ public class SpyBrain : MonoBehaviour
     }
     private void UpdateStates()
     {
-        switch (stateData.curStateType)
+        switch (curState)
         {
             case State.Idle:
             {
-                if (soData.inputs.jump) { soData.stats.lastJumpTime = Time.time; }
+                if (inputs.jump) { stats.lastJumpTime = Time.time; }
             }
             break;
             case State.Walk:
             {
-                if (soData.inputs.jump) { soData.stats.lastJumpTime = Time.time; }
-                componentData.spriteRenderer.flipX = soData.inputs.move < 0;
+                if (inputs.jump) { stats.lastJumpTime = Time.time; }
+                spriteRenderer.flipX = inputs.move < 0;
             }
             break;
             case State.Run:
             {
-                if (soData.inputs.jump) { soData.stats.lastJumpTime = Time.time; }
-                componentData.spriteRenderer.flipX = soData.inputs.move < 0;
+                if (inputs.jump) { stats.lastJumpTime = Time.time; }
+                spriteRenderer.flipX = inputs.move < 0;
             }
             break;
             case State.Jump:
             {
-                componentData.spriteRenderer.flipX = soData.inputs.move < 0;
+                spriteRenderer.flipX = inputs.move < 0;
 
-                soData.stats.curJumpHorizontalForce = Mathf.Max(soData.stats.curJumpHorizontalForce - Time.deltaTime, 0);
+                stats.curJumpHorizontalForce = Mathf.Max(stats.curJumpHorizontalForce - Time.deltaTime, 0);
             }
             break;
             case State.Fall:
             {
-                soData.stats.coyoteTimeElapsed += Time.deltaTime;
-                soData.stats.coyoteJump = soData.stats.coyoteTimeElapsed < soData.settings.coyoteTime && soData.inputs.jump;
+                stats.coyoteTimeElapsed += Time.deltaTime;
+                stats.coyoteJump = stats.coyoteTimeElapsed < settings.coyoteTime && inputs.jump;
 
-                if (soData.inputs.jump)
+                if (inputs.jump)
                 { 
-                    soData.stats.lastJumpTime = Time.time; 
-                    soData.inputs.jump = false;
+                    stats.lastJumpTime = Time.time; 
+                    inputs.jump = false;
                 }
-                componentData.spriteRenderer.flipX = soData.inputs.move < 0;
+                spriteRenderer.flipX = inputs.move < 0;
             }
             break;
             case State.Hang:
             {
-                if (soData.inputs.cancel)
+                if (inputs.cancel)
                 {
-                    componentData.rigidBody.gravityScale = soData.settings.gravityScale;
-                    soData.stats.canHang = false;
+                    rigidBody.gravityScale = settings.gravityScale;
+                    stats.canHang = false;
                 }
-                else if (soData.inputs.interact)
+                else if (inputs.interact)
                 {
-                    soData.stats.isClimbing = true;
+                    stats.isClimbing = true;
                 }
             }
             break;
@@ -300,7 +285,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void FixedUpdateStates()
     {
-        switch (stateData.curStateType)
+        switch (curState)
         {
             case State.Idle:
             {
@@ -314,34 +299,34 @@ public class SpyBrain : MonoBehaviour
             case State.Jump:
             {
 
-                //if (!soData.inputs.jump) // enable early fall //NOTE: If i want early fall, this will need to be fixed because the velocity is being set to both jump force and 0 at the same time
+                //if (!inputs.jump) // enable early fall //NOTE: If i want early fall, this will need to be fixed because the velocity is being set to both jump force and 0 at the same time
                 //{
-                //    componentData.rigidBody.linearVelocityY = 0;
+                //    rigidBody.linearVelocityY = 0;
                 //}
 
-                if (componentData.rigidBody.linearVelocityY < soData.settings.antiGravApexThreshold)
+                if (rigidBody.linearVelocityY < settings.antiGravApexThreshold)
                 {
-                    componentData.rigidBody.gravityScale = soData.stats.gravityScale * soData.settings.antiGravMultiplier;
+                    rigidBody.gravityScale = stats.gravityScale * settings.antiGravMultiplier;
                 }
             }
             break;
             case State.Fall:
             {
-                componentData.rigidBody.linearVelocityY = Mathf.Max(componentData.rigidBody.linearVelocityY, -soData.settings.maxFallSpeed);
-                if (componentData.rigidBody.linearVelocityY < -soData.settings.antiGravApexThreshold)
+                rigidBody.linearVelocityY = Mathf.Max(rigidBody.linearVelocityY, -settings.maxFallSpeed);
+                if (rigidBody.linearVelocityY < -settings.antiGravApexThreshold)
                 {
-                    componentData.rigidBody.gravityScale = soData.stats.gravityScale;
+                    rigidBody.gravityScale = stats.gravityScale;
                 }
             }
             break;
             case State.Climb:
             {
-                if (soData.stats.firstFixedFrameClimb)
+                if (stats.firstFixedFrameClimb)
                 {
-                    float climbXPos = soData.stats.isLeftClimbBound ? componentData.curClimbCollider.bounds.min.x : componentData.curClimbCollider.bounds.max.x;
-                    componentData.rigidBody.position = new Vector2(climbXPos, componentData.curClimbCollider.bounds.max.y);
-                    componentData.animator.Play(animClipData.climbHash, 0, 0f);
-                    soData.stats.firstFixedFrameClimb = false;
+                    float climbXPos = stats.isLeftClimbBound ? curClimbCollider.bounds.min.x : curClimbCollider.bounds.max.x;
+                    rigidBody.position = new Vector2(climbXPos, curClimbCollider.bounds.max.y);
+                    animator.Play(animClipData.climbHash, 0, 0f);
+                    stats.firstFixedFrameClimb = false;
                 }
             }
             break;
@@ -349,79 +334,74 @@ public class SpyBrain : MonoBehaviour
     }
     private void SetState(State newState)
     {
-        if (stateData.curStateType == newState) return;
+        if (curState == newState) return;
         ExitState();
-        stateData.curStateType = newState;
+        curState = newState;
         EnterState();
     }
     private void EnterState()
     {
-        switch (stateData.curStateType)
+        switch (curState)
         {
             case State.Idle:
             {
-                componentData.animator.Play(animClipData.idleBreathingHash);
-                componentData.rigidBody.gravityScale = soData.stats.gravityScale;
+                animator.Play(animClipData.idleBreathingHash);
+                rigidBody.gravityScale = stats.gravityScale;
             }
             break;
             case State.Walk:
             {
-                componentData.animator.Play(animClipData.walkHash);
+                animator.Play(animClipData.walkHash);
             }
             break;
             case State.Run:
             {
-                componentData.animator.Play(animClipData.startRunHash);
-                soData.stats.curRunSpeed = soData.settings.runSpeedMultiplier;
-            }
-            break;
-            case State.Melee:
-            {
-                componentData.animator.Play(animClipData.meleeHash);
+                animator.Play(animClipData.startRunHash);
+                stats.curRunSpeed = settings.runSpeedMultiplier;
             }
             break;
             case State.Jump:
             {
-                componentData.animator.Play(animClipData.jumpHash);
-                componentData.rigidBody.linearVelocityY = soData.settings.jumpVerticalForce;
-                soData.stats.coyoteTimeElapsed = Mathf.Infinity;
+                animator.Play(animClipData.jumpHash);
+                rigidBody.linearVelocityY = settings.jumpVerticalForce;
+                stats.coyoteTimeElapsed = Mathf.Infinity;
 
-                if (soData.inputs.run)
+                if (inputs.run)
                 {
-                    soData.stats.curJumpHorizontalForce = soData.settings.jumpHorizontalForce;
+                    stats.curJumpHorizontalForce = settings.jumpHorizontalForce;
                 }
             }
             break;
             case State.Fall:
             {
-                componentData.animator.Play(animClipData.fallHash);
+                animator.Play(animClipData.fallHash);
             }
             break;
             case State.Hang:
             {
-                soData.stats.isLeftClimbBound = componentData.rigidBody.position.x > componentData.curClimbCollider.bounds.center.x;
+                stats.isLeftClimbBound = rigidBody.position.x > curClimbCollider.bounds.center.x;
 
-                componentData.animator.Play(animClipData.grabLedgeHash);
-                componentData.rigidBody.gravityScale = 0;
-                componentData.rigidBody.linearVelocity = Vector2.zero;
+                animator.Play(animClipData.grabLedgeHash);
+                rigidBody.gravityScale = 0;
+                rigidBody.linearVelocity = Vector2.zero;
 
-                float hangXPos = soData.stats.isLeftClimbBound ? componentData.curClimbCollider.bounds.max.x : componentData.curClimbCollider.bounds.min.x;
-                float hangYPos = componentData.curClimbCollider.bounds.center.y - componentData.boxCollider.bounds.size.y;
-                componentData.rigidBody.position = new Vector2(hangXPos, hangYPos);
-                componentData.spriteRenderer.flipX = soData.stats.isLeftClimbBound; 
+                float hangXPos = stats.isLeftClimbBound ? curClimbCollider.bounds.max.x : curClimbCollider.bounds.min.x;
+                float hangYPos = curClimbCollider.bounds.center.y - boxCollider.bounds.size.y;
+                rigidBody.position = new Vector2(hangXPos, hangYPos);
+                spriteRenderer.flipX = stats.isLeftClimbBound; 
             }
             break;
             case State.Climb:
             {
-                componentData.rigidBody.gravityScale = 0;
-                componentData.rigidBody.linearVelocity = Vector2.zero;
+                rigidBody.gravityScale = 0;
+                rigidBody.linearVelocity = Vector2.zero;
             }
             break;
         }
     }
     private void ExitState()
     {
-        switch (stateData.curStateType)
+        switch (curState)
         {
             case State.Idle:
             {
@@ -435,62 +415,59 @@ public class SpyBrain : MonoBehaviour
             break;
             case State.Run:
             {
-                soData.stats.curRunSpeed = 1.0f;
-            }
-            break;
-            case State.Melee:
-            {
+                stats.curRunSpeed = 1.0f;
             }
             break;
             case State.Jump:
             {
-                soData.stats.curJumpHorizontalForce = 0.0f;
+                stats.curJumpHorizontalForce = 0.0f;
             }
             break;
 
             case State.Fall:
             {
-                soData.stats.coyoteTimeElapsed = 0.0f;
-                soData.stats.coyoteJump = false;
+                stats.coyoteTimeElapsed = 0.0f;
+                stats.coyoteJump = false;
             }
             break;
 
             case State.Climb:
             {
-                componentData.rigidBody.gravityScale = soData.settings.gravityScale;
-                soData.stats.firstFixedFrameClimb = true;
+                rigidBody.gravityScale = settings.gravityScale;
+                stats.firstFixedFrameClimb = true;
             }
             break;
         }
     }
     private void PlayRunningClip()
     {
-        componentData.animator.Play(animClipData.runHash);
+        animator.Play(animClipData.runHash);
     }
     private void ExitClimbClip()
     {
-        soData.stats.isClimbing = false;
+        stats.isClimbing = false;
     }
     private void CalculateCollisionPoints()
     {
-        collisionPoints.groundLeft = new Vector2(transform.position.x - soData.settings.groundBufferHorizontal, transform.position.y - soData.settings.groundBufferVertical);
-        collisionPoints.groundRight = new Vector2(transform.position.x + soData.settings.groundBufferHorizontal, transform.position.y - soData.settings.groundBufferVertical);
+        if (settings == null) return;
+        collisionPoints.groundLeft = new Vector2(transform.position.x - settings.groundBufferHorizontal, transform.position.y - settings.groundBufferVertical);
+        collisionPoints.groundRight = new Vector2(transform.position.x + settings.groundBufferHorizontal, transform.position.y - settings.groundBufferVertical);
 
-        collisionPoints.stepLeft = new Vector2(transform.position.x - soData.settings.groundBufferHorizontal, transform.position.y + soData.settings.stepBuffer);
-        collisionPoints.stepRight = new Vector2(transform.position.x + soData.settings.groundBufferHorizontal, transform.position.y + soData.settings.stepBuffer);
+        collisionPoints.stepLeft = new Vector2(transform.position.x - settings.groundBufferHorizontal, transform.position.y + settings.stepBuffer);
+        collisionPoints.stepRight = new Vector2(transform.position.x + settings.groundBufferHorizontal, transform.position.y + settings.stepBuffer);
     }
     private void OpenSlideDoor()
     {
-        if (componentData.rigidBody.includeLayers == soData.layerSettings.stationLayersStruct.ground && soData.stats.canBoardTrain)
+        if (rigidBody.includeLayers == layerSettings.stationLayersStruct.ground && stats.canBoardTrain)
         {
-            RaycastHit2D[] slideDoorHit = Physics2D.BoxCastAll(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.trainLayerStruct.slideDoors);
+            RaycastHit2D[] slideDoorHit = Physics2D.BoxCastAll(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayerStruct.slideDoors);
 
             for (int i = 0; i < slideDoorHit.Length; i++)
             {
-                componentData.slideDoors = slideDoorHit[i].collider.GetComponent<SlideDoors>();
-                if (componentData.slideDoors.stats.curState == SlideDoors.State.Unlocked) 
+                slideDoors = slideDoorHit[i].collider.GetComponent<SlideDoors>();
+                if (slideDoors.stats.curState == SlideDoors.State.Unlocked) 
                 {
-                    componentData.slideDoors.OpenDoors();
+                    slideDoors.OpenDoors();
                     break;
                 }
             }
@@ -498,74 +475,74 @@ public class SpyBrain : MonoBehaviour
     }
     private void EnterTrain()
     {
-        if (!soData.stats.onTrain && soData.stats.canBoardTrain)
+        if (!stats.onTrain && stats.canBoardTrain)
         {
-            RaycastHit2D slideDoorHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, soData.layerSettings.trainLayerStruct.slideDoors);
+            RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayerStruct.slideDoors);
 
             if (slideDoorHit.collider != null)
             {
-                componentData.slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-                if (componentData.slideDoors.stats.curState == SlideDoors.State.Opened)
+                slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
+                if (slideDoors.stats.curState == SlideDoors.State.Opened)
                 {
-                    RaycastHit2D insideCarriageHit = Physics2D.BoxCast(componentData.boxCollider.bounds.center, componentData.boxCollider.bounds.extents, 0.0f, Vector2.zero, soData.layerSettings.trainLayerStruct.insideCarriageBounds);
+                    RaycastHit2D insideCarriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, layerSettings.trainLayerStruct.insideCarriageBounds);
 
                     if (insideCarriageHit.collider != null)
                     {
-                        SetLocationData(insideCarriageHit.collider.bounds, soData.layerSettings.trainLayerStruct.insideCarriageBounds);
+                        SetLocationData(insideCarriageHit.collider.bounds, layerSettings.trainLayerStruct.insideCarriageBounds);
                     }
-                    soData.stats.curGroundLayer = soData.layerSettings.trainLayerStruct.ground;
-                    componentData.rigidBody.includeLayers = soData.layerSettings.trainMask;
+                    stats.curGroundLayer = layerSettings.trainLayerStruct.ground;
+                    rigidBody.includeLayers = layerSettings.trainMask;
 
-                    soData.stats.onTrain = true;
-                    transform.position = new Vector3(transform.position.x, transform.position.y, soData.trainSettings.maxMinWorldZPos.max + soData.settings.depthPositionInTrain);
-                    soData.trainStats.curPassengerCount ++;
-                    soData.gameEventData.OnBoardingSpy.Raise();
+                    stats.onTrain = true;
+                    transform.position = new Vector3(transform.position.x, transform.position.y, trainSettings.maxMinWorldZPos.max + settings.depthPositionInTrain);
+                    trainStats.curPassengerCount ++;
+                    gameEventData.OnBoardingSpy.Raise();
                 }
             }
         }
     }
     private void OpenGangwayDoor()
     {
-        if (!soData.stats.onTrain || !soData.stats.isGrounded) return;
-        RaycastHit2D gangwayDoorHit = Physics2D.Linecast(componentData.boxCollider.bounds.center, new Vector2(componentData.boxCollider.bounds.center.x + (componentData.spriteRenderer.flipX ? -1 : 1), componentData.boxCollider.bounds.center.y), soData.layerSettings.trainLayerStruct.gangwayDoor);
+        if (!stats.onTrain || !stats.isGrounded) return;
+        RaycastHit2D gangwayDoorHit = Physics2D.Linecast(boxCollider.bounds.center, new Vector2(boxCollider.bounds.center.x + (spriteRenderer.flipX ? -1 : 1), boxCollider.bounds.center.y), layerSettings.trainLayerStruct.gangwayDoor);
 
         if (gangwayDoorHit.collider != null)
         {
-            componentData.gangwayDoor = gangwayDoorHit.collider.GetComponent<GangwayDoor>();
-            componentData.gangwayDoor.OpenDoor();
+            gangwayDoor = gangwayDoorHit.collider.GetComponent<GangwayDoor>();
+            gangwayDoor.OpenDoor();
         }
     }
     private void SetLocationData(Bounds bounds, LayerMask layerMask)
     {
-        soData.stats.curLocationBounds = bounds;
-        soData.stats.curLocationLayer = layerMask;
+        stats.curLocationBounds = bounds;
+        stats.curLocationLayer = layerMask;
     }
     private void OnApplicationQuit()
     {
-        soData.stats.ResetStats();
+        stats.ResetStats();
     }
     private void OnDrawGizmos()
     {
         CalculateCollisionPoints();
-        Gizmos.color = soData.stats.isGrounded ? Color.green : Color.red;
+        Gizmos.color = stats.isGrounded ? Color.green : Color.red;
         Gizmos.DrawLine(collisionPoints.groundLeft, collisionPoints.groundRight);
-        Gizmos.color = soData.stats.isStepping ? Color.green : Color.red;
+        Gizmos.color = stats.isStepping ? Color.green : Color.red;
         Gizmos.DrawLine(collisionPoints.stepLeft, collisionPoints.stepRight);
         Gizmos.DrawLine(collisionPoints.groundRight, collisionPoints.stepRight);
         Gizmos.DrawLine(collisionPoints.stepLeft, collisionPoints.groundLeft);
 
-        Gizmos.color = componentData.gangwayDoor != null ? Color.green : Color.red;
-        Gizmos.DrawLine(componentData.boxCollider.bounds.center, new Vector2(componentData.boxCollider.bounds.center.x + (componentData.spriteRenderer.flipX ? -1 : 1), componentData.boxCollider.bounds.center.y));
+        Gizmos.color = gangwayDoor != null ? Color.green : Color.red;
+        Gizmos.DrawLine(boxCollider.bounds.center, new Vector2(boxCollider.bounds.center.x + (spriteRenderer.flipX ? -1 : 1), boxCollider.bounds.center.y));
     }
 
 #if UNITY_EDITOR
     private void OnGUI()
     {
-        string groundedText = soData.stats.isGrounded ? "Is Grounded" : "Is Not Grounded";
+        string groundedText = stats.isGrounded ? "Is Grounded" : "Is Not Grounded";
 
         GUIStyle style = new GUIStyle(GUI.skin.label);
         style.alignment = TextAnchor.UpperRight;
-        style.normal.textColor = soData.stats.isGrounded ? Color.green : Color.red;
+        style.normal.textColor = stats.isGrounded ? Color.green : Color.red;
 
         Rect rect = new Rect(0, 20f, Screen.width - 20f, 25f); // full-width area, 20px margin
         GUI.Label(rect, groundedText, style);

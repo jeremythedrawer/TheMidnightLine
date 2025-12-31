@@ -12,7 +12,7 @@ Shader "Unlit/s_character"
     {
         Tags {"Queue"="Transparent" "RenderType"="Transparent" "RenderPipeline"="UniversalPipeline"}
         Cull Off
-        ZWrite Off
+        ZWrite On
         Blend SrcAlpha OneMinusSrcAlpha
 
         Pass
@@ -74,7 +74,7 @@ Shader "Unlit/s_character"
             {
                 half4 sampledMainTex =  i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
                 float greyScale = ((_ZPos - _EntityDepthRange.x) / (_EntityDepthRange.y)) * _DepthGreyScale;
-                half3 col = sampledMainTex.b + _Color + greyScale;
+                half3 col = sampledMainTex.rgb + _Color + greyScale;
                 return half4(col, sampledMainTex.a * _Alpha);
             }
             ENDHLSL
