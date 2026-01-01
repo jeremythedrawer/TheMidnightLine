@@ -53,7 +53,7 @@ public class NPCBrain : MonoBehaviour
         public TrainSettingsSO trainSettings;
         public TrainStatsSO trainStats;
         public GameEventDataSO gameEventData;
-        public SpyInputsSO spyInputs;
+        public PlayerInputsSO spyInputs;
         public SpyStatsSO spyStats;
         public ClipboardStatsSO clipboardStats;
 

@@ -53,10 +53,12 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Edge: 0.015
+    - _Edge: 0.01
     - _EnableExternalAlpha: 0
-    - _Float: 0
-    - _Length: -2.6
+    - _Flipped: 1
+    - _Float: -0.62
+    - _Length: -2.54
+    - _Samples: 8
     - _Smooth: 0.005
     - _Thickness: 0.94
     - _ZWrite: 0
@@ -67,7 +69,9 @@ Material:
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
     - _StartPosition: {r: 0.1, g: -0.11, b: 0, a: 0}
     - _Vector2: {r: 0.5, g: -2.42, b: 0, a: 0}
+    - _end: {r: -1.81, g: 1, b: 0, a: 0}
     - _m: {r: 3.96, g: 1, b: 0, a: 0}
+    - _start: {r: 0, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
 --- !u!114 &4638993330797209122

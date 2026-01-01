@@ -9,7 +9,7 @@ public class InputManager : MonoBehaviour
 {
     [Serializable] public struct SOData
     {
-        public SpyInputsSO spyInputs;
+        public PlayerInputsSO spyInputs;
         public SpyStatsSO spyStats;
         public GameEventDataSO gameEventData;
     }

@@ -19,7 +19,7 @@ public class Clipboard : MonoBehaviour
     { 
         public ClipboardSettingsSO settings;
         public ClipboardStatsSO stats;
-        public SpyInputsSO inputs;
+        public PlayerInputsSO inputs;
     }
     [SerializeField] SOData soData;
 

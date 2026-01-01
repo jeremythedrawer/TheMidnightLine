@@ -28,6 +28,7 @@ public class LayerSettingsSO : ScriptableObject
 
     public LayerMask spy;
     public LayerMask npc;
+    public LayerMask phone;
     internal LayerMask stationMask;
     internal LayerMask trainMask;
     private void OnValidate()

@@ -26,7 +26,7 @@ public class SpyBrain : MonoBehaviour
     [Header("Scriptable Objects")]
     [SerializeField] SpySettingsSO settings;
     [SerializeField] SpyStatsSO stats;
-    [SerializeField] SpyInputsSO inputs;
+    [SerializeField] PlayerInputsSO inputs;
     [SerializeField] TrainStatsSO trainStats;
     [SerializeField] TrainSettingsSO trainSettings;
     [SerializeField] LayerSettingsSO layerSettings;

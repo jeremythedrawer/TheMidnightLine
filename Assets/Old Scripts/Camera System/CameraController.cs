@@ -13,7 +13,7 @@ public class CameraController : MonoBehaviour
         public CameraStatsSO stats;
         public SpyStatsSO spyStats;
         public SpySettingsSO spySettings;
-        public SpyInputsSO spyInputs;
+        public PlayerInputsSO spyInputs;
         public LayerSettingsSO layerSettings;
         public GameEventDataSO gameEventData;
     }

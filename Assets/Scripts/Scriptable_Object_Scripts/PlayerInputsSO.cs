@@ -1,7 +1,7 @@
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SpyInputs_SO", menuName = "Midnight Line SOs / Spy Inputs SO")]
-public class SpyInputsSO : ScriptableObject
+public class PlayerInputsSO : ScriptableObject
 {
     internal int move;
     internal bool jump;
