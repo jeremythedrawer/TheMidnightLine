@@ -5,10 +5,12 @@ using UnityEngine;
 public class PhoneSO : ScriptableObject
 {
     public float interactDistance = 1f;
+    public float minTutorialPartTime = 1f;
     [Serializable] public struct MaterialIDs
     {
         internal int hoveredID;
         internal int selectedID;
     }
     internal MaterialIDs materialIDs;
+    internal bool spyOnPhone;
 }

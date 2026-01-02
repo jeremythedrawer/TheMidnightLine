@@ -1,5 +1,4 @@
 using UnityEngine;
-using UnityEngine.UI;
 
 public class GameCursor : MonoBehaviour
 {
@@ -8,6 +7,7 @@ public class GameCursor : MonoBehaviour
     [SerializeField] ClipboardStatsSO clipboardStats;
     [SerializeField] Texture2D cursorTexture;
     [SerializeField] LayerSettingsSO layerSettings;
+    [SerializeField] GameEventDataSO gameEventData;
     NPCBrain curNPC; 
     NPCBrain prevNPC;
     Phone curPhone;

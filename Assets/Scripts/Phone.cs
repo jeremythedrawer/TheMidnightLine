@@ -7,12 +7,12 @@ public class Phone : MonoBehaviour
     [SerializeField] SpyStatsSO spyStats;
     [SerializeField] PlayerInputsSO playerInputs;
     [SerializeField] PhoneSO phone;
-
+    [SerializeField] GameEventDataSO gameEventData;
     MaterialPropertyBlock phoneMPB;
     
     float curDistFromSpy;
     internal bool canHover;
-    bool selected;
+    static bool playedTutorial;
     private void Awake()
     {
         phoneMPB = new MaterialPropertyBlock();
@@ -28,13 +28,14 @@ public class Phone : MonoBehaviour
 
     public void HoverColor()
     {
+        if (phone.spyOnPhone) return;
         phoneMPB.SetFloat(phone.materialIDs.hoveredID, 1);
         phoneRenderer.SetPropertyBlock(phoneMPB);
     }
 
     public void ExitColor()
     {
-        if (selected) return;
+        if (phone.spyOnPhone) return;
         phoneMPB.SetFloat(phone.materialIDs.hoveredID, 0);
         phoneMPB.SetFloat(phone.materialIDs.selectedID, 0);
         phoneRenderer.SetPropertyBlock(phoneMPB);
@@ -44,6 +45,11 @@ public class Phone : MonoBehaviour
     {
         phoneMPB.SetFloat(phone.materialIDs.selectedID, 1);
         phoneRenderer.SetPropertyBlock(phoneMPB);
-        selected = true;
+        phone.spyOnPhone = true;
+        if (!playedTutorial)
+        {
+            gameEventData.OnStartTutorial.Raise();
+            playedTutorial = true;
+        }
     }
 }

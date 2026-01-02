@@ -26,30 +26,23 @@ public class TrainBrain : MonoBehaviour
     private void Awake()
     {
         shaderData.entityDepthRangeID = Shader.PropertyToID("_EntityDepthRange");
-    }
-    private void OnEnable()
-    {
-        gameEventData.OnReset.RegisterListener(ResetStats);
-    }
-    private void OnDisable()
-    {
-        gameEventData.OnReset.UnregisterListener(ResetStats);     
-    }
-    private void Start()
-    {
         stats.trainLength = (componentData.frontCarriageSpriteRenderer.bounds.max.x - transform.position.x);
         stats.trainHalfLength = stats.trainLength * 0.5f;
         stats.startXPos = transform.position.x;
         stats.trainMaxHeight = componentData.frontCarriageSpriteRenderer.bounds.max.y;
         stats.targetPassengerCount = stationsData.stations[0].bystanderSpawnAmount + stationsData.stations[0].agentSpawnAmount + 1; // +1 for spy himself
-        stats.accellation2 = 2 * settings.accelerationSpeed;
+
         stats.brakeDist = GetBrakeDistance();
         stats.curStation = stationsData.stations[0];
         stats.curKMPerHour = stationsData.stations[0].targetTrainSpeed;
         stats.targetKMPerHour = stationsData.stations[0].targetTrainSpeed;
+
+        stats.wheelCircumference = (settings.wheelSprite.rect.size.x / settings.wheelSprite.pixelsPerUnit) * Mathf.PI;
+    }
+    private void Start()
+    {
         Vector2 entityDepthData = new Vector2(settings.maxMinWorldZPos.min, settings.maxMinWorldZPos.max - settings.maxMinWorldZPos.min);
         Shader.SetGlobalVector(shaderData.entityDepthRangeID, entityDepthData);
-
         MoveTrainToStartPosition().Forget();
     }
     private void Update()
@@ -81,10 +74,7 @@ public class TrainBrain : MonoBehaviour
             LeavingStation().Forget();
         }
     }
-    private void OnApplicationQuit()
-    {
-        ResetStats();
-    }
+
     private async UniTask LeavingStation()
     {
         gameEventData.OnCloseSlideDoors.Raise();
@@ -112,6 +102,7 @@ public class TrainBrain : MonoBehaviour
     }
     private async UniTask MoveTrainToStartPosition()
     {
+        stats.distToNextStation = (stationsData.stations[stats.nextStationIndex].metersPosition + stats.trainHalfLength) - stats.metersTravelled;
         while (stats.distToNextStation > 0.05f)
         {
             transform.position = new Vector3(stats.metersTravelled - stats.trainLength, transform.position.y, transform.position.z);
@@ -119,17 +110,7 @@ public class TrainBrain : MonoBehaviour
         }
         gameEventData.OnTrainArrivedAtStartPosition.Raise();
     }
-    private void ResetStats()
-    { 
-        stats.nextStationIndex = 0;
-        stats.metersTravelled = 0.0f;
-        stats.distToNextStation = Mathf.Infinity;    
-        stats.brakeDist = 0.0f;
-        stats.wheelCircumference = (settings.wheelSprite.rect.size.x / settings.wheelSprite.pixelsPerUnit) * Mathf.PI;
-        stats.curPassengerCount = 0;
-        stats.targetPassengerCount = 0;
-        stats.closingDoors = false;
-    }
+
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;

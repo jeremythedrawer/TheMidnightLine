@@ -74,8 +74,8 @@ public class Station : MonoBehaviour
             if (soData.npcData.agentPool.Count == 0) { Debug.LogError($"Agent Pool is empty at {gameObject.name}"); return; }
             NPCsDataSO.AgentData agentData =  soData.npcData.agentPool.Dequeue();
             agentData.agent.gameObject.SetActive(true);
-            float randXPos = UnityEngine.Random.Range(components.platformCollider.bounds.min.x, components.platformCollider.bounds.max.x);
-            Vector3 spawnPos = new Vector3(randXPos, transform.position.y, components.platformCollider.transform.position.z);
+            float randXPos = UnityEngine.Random.Range(components.platformCollider.bounds.min.x + 1f, components.platformCollider.bounds.max.x - 1f);
+            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, components.platformCollider.transform.position.z);
             agentData.agent.transform.position = spawnPos;
             agentData.agent.soData.startStation = soData.settings;
             agentData.agent.transform.SetParent(transform, true);
@@ -85,7 +85,7 @@ public class Station : MonoBehaviour
         {
             int randNPCIndex = UnityEngine.Random.Range(0, soData.npcData.npcPrefabs.Length);
             float randXPos = UnityEngine.Random.Range(components.platformCollider.bounds.min.x, components.platformCollider.bounds.max.x);
-            Vector3 spawnPos = new Vector3(randXPos, transform.position.y, components.platformCollider.transform.position.z);
+            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, components.platformCollider.transform.position.z);
             NPCBrain bystanderNPC = Instantiate(soData.npcData.npcPrefabs[randNPCIndex], spawnPos, Quaternion.identity, null); // spawn at random point on station
             bystanderNPC.stats.type = NPCBrain.Type.Bystander;
             bystanderNPC.soData.startStation = soData.settings;

@@ -10,7 +10,6 @@ public class TrainStatsSO : ScriptableObject
     internal float curKMPerHour;
     internal float targetKMPerHour;
     internal float metersTravelled;
-    internal float accellation2;
     internal float distToNextStation;
     internal float brakeDist;
     internal float startXPos;

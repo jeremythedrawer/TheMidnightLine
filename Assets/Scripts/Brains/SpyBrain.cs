@@ -31,7 +31,7 @@ public class SpyBrain : MonoBehaviour
     [SerializeField] TrainSettingsSO trainSettings;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] GameEventDataSO gameEventData;
-
+    [SerializeField] PhoneSO phone;
     [SerializeField] AnimationClip startRunClip;
     [SerializeField] AnimationClip climbClip;
 
@@ -103,6 +103,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void Start()
     {
+
         curState = State.Idle;
         rigidBody.gravityScale = settings.gravityScale;
         stats.gravityScale = rigidBody.gravityScale;
@@ -134,7 +135,7 @@ public class SpyBrain : MonoBehaviour
             rigidBody.position = new Vector2(rigidBody.position.x, rigidBody.position.y + (collisionPoints.stepRight.y - transform.position.y));
         }
 
-        if (curState != State.Hang && curState != State.Climb)
+        if (curState != State.Hang && curState != State.Climb && curState != State.Phone)
         {
             stats.targetXVelocity = (settings.moveSpeed * stats.curRunSpeed * inputs.move) + (stats.curJumpHorizontalForce * inputs.move);
             rigidBody.linearVelocityX = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.fixedDeltaTime);
@@ -215,6 +216,10 @@ public class SpyBrain : MonoBehaviour
         else if (rigidBody.linearVelocityY < 0 && !stats.isGrounded)
         {
             SetState(State.Fall);
+        }
+        else if (phone.spyOnPhone)
+        {
+            SetState(State.Phone);
         }
         else if (stats.isGrounded && inputs.move != 0 && !inputs.run)
         {
@@ -399,6 +404,13 @@ public class SpyBrain : MonoBehaviour
                 rigidBody.linearVelocity = Vector2.zero;
             }
             break;
+            case State.Phone:
+            {
+                animator.Play(animClipData.callHash);
+                rigidBody.linearVelocity = Vector2.zero;
+
+            }
+            break;
         }
     }
     private void ExitState()
@@ -514,6 +526,10 @@ public class SpyBrain : MonoBehaviour
             gangwayDoor = gangwayDoorHit.collider.GetComponent<GangwayDoor>();
             gangwayDoor.OpenDoor();
         }
+    }
+    private void StopMovement()
+    {
+
     }
     private void SetLocationData(Bounds bounds, LayerMask layerMask)
     {

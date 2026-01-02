@@ -19,6 +19,11 @@ public class Smog : MonoBehaviour
         shaderValues.densityID = Shader.PropertyToID("_Density");
         shaderValues.scrollTimeID = Shader.PropertyToID("_ScrollTime");
         mpb = new MaterialPropertyBlock();
+
+        // Init runtime-only values
+        shaderValues.curDensity = 1f; // start fully visible
+        shaderValues.targetDensity = 1f;
+
     }
     private void Update()
     {

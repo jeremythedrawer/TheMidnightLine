@@ -65,7 +65,6 @@ public class Carriage : MonoBehaviour
         gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(GetData);
         gameEventData.OnStationArrival.UnregisterListener(UnlockDoors);
         gameEventData.OnCloseSlideDoors.UnregisterListener(CloseDoors);
-        ResetDoors();
     }
 
     private void Update()

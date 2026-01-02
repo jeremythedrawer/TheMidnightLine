@@ -1,6 +1,5 @@
 using Cysharp.Threading.Tasks;
 using System;
-using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -31,7 +30,7 @@ public class Clipboard : MonoBehaviour
     private void Start()
     {
         soData.stats.startYPos = components.imagesRectTransform.localPosition.y;
-        soData.stats.hoverYPos = soData.stats.startYPos + ((soData.settings.onScreenYPos - soData.stats.startYPos) * 0.5f);
+        soData.stats.hoverYPos = soData.stats.startYPos + ((soData.settings.onScreenYPos - soData.stats.startYPos) * 0.25f);
         soData.stats.active = false;
         soData.stats.flippingPage = false;
         soData.stats.activePageIndex = 0;

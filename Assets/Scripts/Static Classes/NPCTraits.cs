@@ -16,6 +16,7 @@ public static class NPCTraits
         Near_sighted = 1 << 3,
         Suit_and_tie = 1 << 4,
         Is_bald = 1 << 5,
+        Big_boned = 1 << 6,
         Wearing_a_dress = 1 << 7,
         Wears_shorts = 1 << 8,
         Carries_a_bag = 1 << 9,

@@ -21,15 +21,6 @@ public class NPCManager : MonoBehaviour
 
     private void Awake()
     {
-        soData.npcData.totalAgentCount = 0;
-        for (int i = 0; i < soData.stationsData.stations.Length; i++)
-        {
-            for (int j = 0; j < soData.stationsData.stations[i].agentSpawnAmount; j++)
-            {
-                soData.npcData.totalAgentCount++;
-            }
-        }
-
         soData.npcData.animHashData.sittingAboutToEat = Animator.StringToHash("SittingAboutToEat");
         soData.npcData.animHashData.sittingBlinking = Animator.StringToHash("SittingBlinking");
         soData.npcData.animHashData.sittingBreathing = Animator.StringToHash("SittingBreathing");
@@ -49,12 +40,9 @@ public class NPCManager : MonoBehaviour
         soData.npcData.materialData.zPosID = Shader.PropertyToID("_ZPos");
         soData.npcData.materialData.alphaID = Shader.PropertyToID("_Alpha");
         soData.npcData.materialData.mainTexID = Shader.PropertyToID("_MainTex");
-    }
-
-    private void Start()
-    {
         soData.npcData.npcsToPick = new List<NPCBrain>(soData.npcData.npcPrefabs);
         soData.npcData.colorsToPick = new List<Color>(soData.npcData.agentColors);
+
         CreateNPCAgents();
     }
     private void Update()
@@ -67,6 +55,14 @@ public class NPCManager : MonoBehaviour
 
     private void CreateNPCAgents()
     {
+        soData.npcData.totalAgentCount = 0;
+        for (int i = 0; i < soData.stationsData.stations.Length; i++)
+        {
+            for (int j = 0; j < soData.stationsData.stations[i].agentSpawnAmount; j++)
+            {
+                soData.npcData.totalAgentCount++;
+            }
+        }
         soData.clipBoardStats.profilePageArray = new ClipboardStatsSO.ProfilePageData[soData.npcData.totalAgentCount];
         int profilePageIndex = 0;
         for (int i = 0; i < soData.stationsData.stations.Length; i++)
@@ -111,11 +107,11 @@ public class NPCManager : MonoBehaviour
         float closestDist = float.PositiveInfinity;
         int bestIndex = -1;
 
-        for (int i = 0; i < npc.componentData.curCarriage.chairData.Length; i++)
+        for (int i = 0; i < npc.curCarriage.chairData.Length; i++)
         {
-            if (npc.componentData.curCarriage.chairData[i].filled) continue;
+            if (npc.curCarriage.chairData[i].filled) continue;
 
-            float dist = Mathf.Abs(npcX - npc.componentData.curCarriage.chairData[i].xPos);
+            float dist = Mathf.Abs(npcX - npc.curCarriage.chairData[i].xPos);
             if (dist < closestDist)
             {
                 closestDist = dist;

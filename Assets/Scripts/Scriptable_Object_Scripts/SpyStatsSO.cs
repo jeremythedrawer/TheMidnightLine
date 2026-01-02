@@ -36,7 +36,6 @@ public class SpyStatsSO : ScriptableObject
     internal bool firstFixedFrameClimb;
     internal bool canBoardTrain;
     internal bool onTrain;
-
     public void ResetStats()
     {
         curWorldPos = Vector2.zero;

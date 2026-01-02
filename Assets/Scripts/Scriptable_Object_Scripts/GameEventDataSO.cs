@@ -11,4 +11,9 @@ public class GameEventDataSO : ScriptableObject
     public GameEvent OnStationArrival;
     public GameEvent OnStationLeave;
     public GameEvent OnTrainArrivedAtStartPosition;
+    public GameEvent OnStartTutorial;
+    public GameEvent OnGameFadeOut;
+    public GameEvent OnGameFadeIn;
+    public GameEvent OnStopSpyMovement;
+    public GameEvent OnStartSpyMovement;
 }

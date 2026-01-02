@@ -9,6 +9,7 @@ public class ClipboardStatsSO : ScriptableObject
         internal NPCTraits.Behaviours behaviours;
         internal NPCTraits.Appearence appearence;
         internal Color color;
+        internal bool spySelected;
     }
     internal ProfilePageData[] profilePageArray;
 
