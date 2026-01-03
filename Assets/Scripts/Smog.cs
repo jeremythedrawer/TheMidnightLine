@@ -20,8 +20,8 @@ public class Smog : MonoBehaviour
         shaderValues.scrollTimeID = Shader.PropertyToID("_ScrollTime");
         mpb = new MaterialPropertyBlock();
 
-        // Init runtime-only values
-        shaderValues.curDensity = 1f; // start fully visible
+
+        shaderValues.curDensity = 1f;
         shaderValues.targetDensity = 1f;
 
     }
@@ -41,7 +41,7 @@ public class Smog : MonoBehaviour
     private void Fade()
     {
         bool shouldFadeOut = spyStats.curGroundLayer == layerSettings.trainLayerStruct.ground && spyStats.curCarriageMinXPos != 0;
-        float targetDensity = shouldFadeOut ? 0f : 1f;
+        float targetDensity = shouldFadeOut ? 0f : shaderValues.maxDensity;
 
         if (shaderValues.targetDensity == targetDensity) return;
         shaderValues.targetDensity = targetDensity;

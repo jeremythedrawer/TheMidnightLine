@@ -14,7 +14,7 @@ public class NPCManager : MonoBehaviour
     }
     [SerializeField] SOData soData;
 
-    [SerializeField] float waitingForSeatTickRate = 0.3f;
+    float waitingForSeatTickRate = 0.3f;
     bool npcFindingChair;
 
     internal static List<NPCBrain> npcChairList = new List<NPCBrain>();
@@ -44,6 +44,7 @@ public class NPCManager : MonoBehaviour
         soData.npcData.colorsToPick = new List<Color>(soData.npcData.agentColors);
 
         CreateNPCAgents();
+        NPCTraits.InitializeDescriptions();
     }
     private void Update()
     {

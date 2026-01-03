@@ -1,6 +1,8 @@
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using UnityEditor;
+
 
 #if UNITY_EDITOR
 using UnityEditor.Animations;
@@ -32,50 +34,92 @@ public class NPCSO : ScriptableObject
     }
     public AnimEventPosData[] smokeAnimPosData;
 
-    public Dictionary<int, AnimationClip> animClipDict = new Dictionary<int, AnimationClip>();
-
-#if UNITY_EDITOR
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void InitAllNPCSO()
+    [Serializable] public struct AnimStateClipPair
     {
-        // Find all NPCSO assets in Resources and update their dictionaries
-        NPCSO[] allSO = Resources.FindObjectsOfTypeAll<NPCSO>();
-        foreach (var so in allSO)
+        public int stateHash;
+        public AnimationClip clip;
+    }
+    [Header("Baked Animation Data")]
+    [SerializeField]
+    private AnimStateClipPair[] animClips;
+
+    public Dictionary<int, AnimationClip> animClipDict;
+
+    private void OnEnable()
+    {
+        BuildRuntimeDictionary();
+    }
+    private void BuildRuntimeDictionary()
+    {
+        animClipDict = new Dictionary<int, AnimationClip>();
+
+        if (animClips == null) return;
+
+        foreach (AnimStateClipPair pair in animClips)
         {
-            so.SetAnimationEventDictionary();
+            if (pair.clip == null) continue;
+
+            if (!animClipDict.ContainsKey(pair.stateHash)) animClipDict.Add(pair.stateHash, pair.clip);
         }
     }
-    private void SetAnimationEventDictionary()
+#if UNITY_EDITOR
+    public void BakeAnimationData()
     {
-        List<KeyValuePair<AnimationClip, AnimationClip>> overrideClipPairs = new List<KeyValuePair<AnimationClip, AnimationClip>>();
-        overrideAnimationController.GetOverrides(overrideClipPairs);
-
-        animClipDict.Clear();
-
-        AnimatorController baseAnimController = overrideAnimationController.runtimeAnimatorController as AnimatorController;
-
-        foreach (ChildAnimatorState childState in baseAnimController.layers[0].stateMachine.states)
+        if (overrideAnimationController == null)
         {
-            AnimationClip baseClip = (AnimationClip)childState.state.motion;
-            if (baseClip == null) continue;
+            Debug.LogWarning($"{name}: No AnimatorOverrideController assigned.");
+            return;
+        }
 
-            AnimationClip overrideClip = baseClip;
+        var overridePairs = new List<KeyValuePair<AnimationClip, AnimationClip>>();
+        overrideAnimationController.GetOverrides(overridePairs);
 
-            foreach (KeyValuePair<AnimationClip, AnimationClip> overrideClipPair in overrideClipPairs)
+        var baseController =
+            overrideAnimationController.runtimeAnimatorController as AnimatorController;
+
+        if (baseController == null)
+        {
+            Debug.LogError($"{name}: Runtime controller is not an AnimatorController.");
+            return;
+        }
+
+        var bakedList = new List<AnimStateClipPair>();
+
+        foreach (var childState in baseController.layers[0].stateMachine.states)
+        {
+            var baseClip = childState.state.motion as AnimationClip;
+            if (baseClip == null)
+                continue;
+
+            AnimationClip finalClip = baseClip;
+
+            foreach (var pair in overridePairs)
             {
-                if (overrideClipPair.Key == baseClip)
+                if (pair.Key == baseClip && pair.Value != null)
                 {
-                    overrideClip = overrideClipPair.Value;
+                    finalClip = pair.Value;
                     break;
                 }
             }
 
-            int stateHash = childState.state.nameHash;
-
-            if (!animClipDict.ContainsKey(stateHash))
+            bakedList.Add(new AnimStateClipPair
             {
-                animClipDict.Add(stateHash, overrideClip);
-            }
+                stateHash = childState.state.nameHash,
+                clip = finalClip
+            });
+        }
+
+        animClips = bakedList.ToArray();
+        EditorUtility.SetDirty(this);
+    }
+
+    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
+    private static void AutoBakeAllNPCSOs()
+    {
+        NPCSO[] all = Resources.FindObjectsOfTypeAll<NPCSO>();
+        foreach (NPCSO so in all)
+        {
+            so.BakeAnimationData();
         }
     }
 #endif

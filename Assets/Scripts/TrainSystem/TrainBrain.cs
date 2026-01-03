@@ -31,13 +31,15 @@ public class TrainBrain : MonoBehaviour
         stats.startXPos = transform.position.x;
         stats.trainMaxHeight = componentData.frontCarriageSpriteRenderer.bounds.max.y;
         stats.targetPassengerCount = stationsData.stations[0].bystanderSpawnAmount + stationsData.stations[0].agentSpawnAmount + 1; // +1 for spy himself
-
         stats.brakeDist = GetBrakeDistance();
         stats.curStation = stationsData.stations[0];
         stats.curKMPerHour = stationsData.stations[0].targetTrainSpeed;
         stats.targetKMPerHour = stationsData.stations[0].targetTrainSpeed;
-
+        stats.nextStationIndex = 0;
         stats.wheelCircumference = (settings.wheelSprite.rect.size.x / settings.wheelSprite.pixelsPerUnit) * Mathf.PI;
+        stats.metersTravelled = 0;
+        stats.curPassengerCount = 0;
+        stats.closingDoors = false;
     }
     private void Start()
     {
@@ -63,6 +65,7 @@ public class TrainBrain : MonoBehaviour
         {
             stats.curKMPerHour = 0;
             gameEventData.OnStationArrival.Raise();
+            Debug.Log("train arrived");
         }
         else if (stats.distToNextStation > 0.05f)
         {

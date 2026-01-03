@@ -291,12 +291,24 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
     "m_Value": 0.0,
     "m_FloatType": 0,
     "m_RangeValues": {
         "x": 0.0,
         "y": 1.0
-    }
+    },
+    "m_SliderType": 0,
+    "m_SliderPower": 3.0,
+    "m_EnumType": 0,
+    "m_CSharpEnumString": "",
+    "m_EnumNames": [
+        "Default"
+    ],
+    "m_EnumValues": [
+        0
+    ]
 }
 
 {
@@ -413,12 +425,24 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
     "m_Value": 2.0,
     "m_FloatType": 1,
     "m_RangeValues": {
         "x": 0.0,
         "y": 2.0
-    }
+    },
+    "m_SliderType": 0,
+    "m_SliderPower": 3.0,
+    "m_EnumType": 0,
+    "m_CSharpEnumString": "",
+    "m_EnumNames": [
+        "Default"
+    ],
+    "m_EnumValues": [
+        0
+    ]
 }
 
 {
@@ -428,7 +452,7 @@
     "m_Group": {
         "m_Id": ""
     },
-    "m_Name": "BayerMatrixDither",
+    "m_Name": "Bayer Matrix Dither",
     "m_DrawState": {
         "m_Expanded": true,
         "m_Position": {
@@ -447,6 +471,9 @@
             "m_Id": "954957b4f8d84e8ba4e38a4e156369e3"
         },
         {
+            "m_Id": "f0c1cd21a7ee46538d6fbff1d25d63a6"
+        },
+        {
             "m_Id": "eb96e35114c74d50b7e3cf05aeca3c26"
         }
     ],
@@ -461,11 +488,13 @@
     "m_SerializedSubGraph": "{\n    \"subGraph\": {\n        \"fileID\": -5475051401550479605,\n        \"guid\": \"15b9595b9fa63fe429d71e6bd2f2132c\",\n        \"type\": 3\n    }\n}",
     "m_PropertyGuids": [
         "72f32fe1-0c8b-406f-ad7b-eb511196e957",
-        "7da2bf73-e193-49c7-8631-30360d2b87ef"
+        "7da2bf73-e193-49c7-8631-30360d2b87ef",
+        "48e1b926-7ecd-4cc9-821a-bd9cfb0bfeeb"
     ],
     "m_PropertyIds": [
         882822870,
-        -304987029
+        -304987029,
+        1936447122
     ],
     "m_Dropdowns": [],
     "m_DropdownSelectedEntries": []
@@ -483,9 +512,9 @@
         "m_Expanded": true,
         "m_Position": {
             "serializedVersion": "2",
-            "x": -233.7529754638672,
-            "y": 150.24703979492188,
-            "width": 208.0,
+            "x": -184.00003051757813,
+            "y": 43.999996185302737,
+            "width": 208.00001525878907,
             "height": 302.0
         }
     },
@@ -721,6 +750,8 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
     "m_Value": {
         "r": 0.0,
         "g": 0.0,
@@ -736,10 +767,10 @@
     "m_Type": "UnityEditor.ShaderGraph.Vector1MaterialSlot",
     "m_ObjectId": "954957b4f8d84e8ba4e38a4e156369e3",
     "m_Id": -304987029,
-    "m_DisplayName": "BayerIndex",
+    "m_DisplayName": "Scale",
     "m_SlotType": 0,
     "m_Hidden": false,
-    "m_ShaderOutputName": "_BayerIndex",
+    "m_ShaderOutputName": "_Scale",
     "m_StageCapability": 3,
     "m_Value": 0.0,
     "m_DefaultValue": 0.0,
@@ -1106,12 +1137,24 @@
     "overrideHLSLDeclaration": false,
     "hlslDeclarationOverride": 0,
     "m_Hidden": false,
+    "m_PerRendererData": false,
+    "m_customAttributes": [],
     "m_Value": 0.0,
     "m_FloatType": 1,
     "m_RangeValues": {
         "x": 0.0,
         "y": 1.0
-    }
+    },
+    "m_SliderType": 0,
+    "m_SliderPower": 3.0,
+    "m_EnumType": 0,
+    "m_CSharpEnumString": "",
+    "m_EnumNames": [
+        "Default"
+    ],
+    "m_EnumValues": [
+        0
+    ]
 }
 
 {
@@ -1217,6 +1260,27 @@
         "e32": 0.0,
         "e33": 1.0
     }
+}
+
+{
+    "m_SGVersion": 0,
+    "m_Type": "UnityEditor.ShaderGraph.Vector2MaterialSlot",
+    "m_ObjectId": "f0c1cd21a7ee46538d6fbff1d25d63a6",
+    "m_Id": 1936447122,
+    "m_DisplayName": "PixelPosition",
+    "m_SlotType": 0,
+    "m_Hidden": false,
+    "m_ShaderOutputName": "_PixelPosition",
+    "m_StageCapability": 3,
+    "m_Value": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_DefaultValue": {
+        "x": 0.0,
+        "y": 0.0
+    },
+    "m_Labels": []
 }
 
 {

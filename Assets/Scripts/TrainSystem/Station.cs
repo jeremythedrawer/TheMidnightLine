@@ -74,9 +74,10 @@ public class Station : MonoBehaviour
             if (soData.npcData.agentPool.Count == 0) { Debug.LogError($"Agent Pool is empty at {gameObject.name}"); return; }
             NPCsDataSO.AgentData agentData =  soData.npcData.agentPool.Dequeue();
             agentData.agent.gameObject.SetActive(true);
-            float randXPos = UnityEngine.Random.Range(components.platformCollider.bounds.min.x + 1f, components.platformCollider.bounds.max.x - 1f);
+            float randXPos = UnityEngine.Random.Range(components.platformCollider.bounds.min.x + 5f, components.platformCollider.bounds.max.x - 5f);
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, components.platformCollider.transform.position.z);
             agentData.agent.transform.position = spawnPos;
+            agentData.agent.stats.targetXPos = spawnPos.x;
             agentData.agent.soData.startStation = soData.settings;
             agentData.agent.transform.SetParent(transform, true);
             //agentData.agent.SetStationDepth();
@@ -84,11 +85,12 @@ public class Station : MonoBehaviour
         for (int i = 0; i < soData.settings.bystanderSpawnAmount; i++)
         {
             int randNPCIndex = UnityEngine.Random.Range(0, soData.npcData.npcPrefabs.Length);
-            float randXPos = UnityEngine.Random.Range(components.platformCollider.bounds.min.x, components.platformCollider.bounds.max.x);
+            float randXPos = UnityEngine.Random.Range(components.platformCollider.bounds.min.x + 5f, components.platformCollider.bounds.max.x - 5f);
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, components.platformCollider.transform.position.z);
             NPCBrain bystanderNPC = Instantiate(soData.npcData.npcPrefabs[randNPCIndex], spawnPos, Quaternion.identity, null); // spawn at random point on station
             bystanderNPC.stats.type = NPCBrain.Type.Bystander;
             bystanderNPC.soData.startStation = soData.settings;
+            bystanderNPC.stats.targetXPos = spawnPos.x;
             bystanderNPC.transform.SetParent(transform, true);
             //bystanderNPC.SetStationDepth();
         }
