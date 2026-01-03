@@ -104,11 +104,22 @@ public class NPCBrain : MonoBehaviour
         stats.curAlpha = 1;
         stats.selectedProfileIndex = -1;
         stats.targetXPos = transform.position.x;
+
         SetLayer().Forget();
         if (stats.behaviours == 0)
         {
             stats.behaviours = NPCTraits.GetBehaviours(soData.npc.behaviours);
         }
+    }
+    private void OnEnable()
+    {
+        soData.gameEventData.OnStationArrival.RegisterListener(() => stats.canBoardTrain = true);
+
+        SetAnimationEvents();
+    }
+
+    private void Start()
+    {
         if (((stats.behaviours & NPCTraits.Behaviours.Takes_naps) != 0) && sleepingZs == null)
         {
             sleepingZs = Instantiate(soData.npcData.sleepingZs, transform);
@@ -119,15 +130,7 @@ public class NPCBrain : MonoBehaviour
             smoke = Instantiate(soData.npcData.smoke, transform);
             smoke.SetActive(false);
         }
-
     }
-    private void OnEnable()
-    {
-        soData.gameEventData.OnStationArrival.RegisterListener(() => stats.canBoardTrain = true);
-
-        SetAnimationEvents();
-    }
-
     private async UniTask SetLayer()
     {
         rigidBody.gravityScale = 0;

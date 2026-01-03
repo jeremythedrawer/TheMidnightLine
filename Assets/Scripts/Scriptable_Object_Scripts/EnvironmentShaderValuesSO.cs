@@ -9,6 +9,7 @@ public class EnvironmentShaderValuesSO : ScriptableObject
 
     public float fadeDensityTime = 1.0f;
     public float minScrollSpeed = 0.01f;
+    public float maxDensity = 2;
     internal float curScrollSpeed;
     internal float curScrollTime;
     internal float curDensity;

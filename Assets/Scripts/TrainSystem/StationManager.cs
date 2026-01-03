@@ -27,7 +27,7 @@ public class StationManager : MonoBehaviour
     {
         Station nextStationPrefab = soData.stationsData.stations[soData.trainStats.nextStationIndex].stationPrefab;
         Station nextStation = Instantiate(nextStationPrefab, transform);
-        float stationXPos = soData.maxBounds.max.x + nextStation.components.platformCollider.bounds.extents.x;
+        float stationXPos = soData.maxBounds.max.x + (nextStation.transform.position.x - nextStation.components.platformCollider.bounds.min.x);
         nextStation.transform.position = new Vector3(stationXPos, 0, 0);
     }
 }
