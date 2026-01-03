@@ -114,8 +114,8 @@ public class NPCBrain : MonoBehaviour
     private void OnEnable()
     {
         soData.gameEventData.OnStationArrival.RegisterListener(() => stats.canBoardTrain = true);
-        SetAnimationEvents().Forget();
 
+        SetAnimationEvents();
     }
 
     private void Start()
@@ -123,7 +123,6 @@ public class NPCBrain : MonoBehaviour
         if (((stats.behaviours & NPCTraits.Behaviours.Takes_naps) != 0) && sleepingZs == null)
         {
             sleepingZs = Instantiate(soData.npcData.sleepingZs, transform);
-            sleepingZs.Reinit();
             sleepingZs.Stop();
         }
         if (((stats.behaviours & NPCTraits.Behaviours.Frequent_smoker) != 0) && smoke == null)
@@ -228,7 +227,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case State.Sleeping:
             {
-
+                sleepingZs.transform.position = new Vector3(spriteRenderer.bounds.center.x, spriteRenderer.bounds.max.y, transform.position.z);
                 if (stats.stateTimer > stats.stateDuration)
                 {
                     stats.curBehaviour = PickBehaviour();
@@ -305,9 +304,6 @@ public class NPCBrain : MonoBehaviour
             case State.Sleeping:
             {
                 stats.stateDuration = UnityEngine.Random.Range(soData.npc.pickBehaviourDurationRange.x, soData.npc.pickBehaviourDurationRange.y);
-                sleepingZs.transform.position = new Vector3(spriteRenderer.bounds.center.x, spriteRenderer.bounds.max.y, transform.position.z - 0.05f);
-
-                sleepingZs.Reinit();
                 sleepingZs.Play();
                 if (stats.chairPosIndex != -1)
                 {
@@ -553,7 +549,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void FindSmokersRoom()
     {
-        if (stats.chairPosIndex != -1 && curCarriage.chairData[stats.chairPosIndex].filled)
+        if (curCarriage.chairData[stats.chairPosIndex].filled)
         {
             curCarriage.chairData[stats.chairPosIndex].filled = false;
             stats.chairPosIndex = -1;
@@ -586,10 +582,8 @@ public class NPCBrain : MonoBehaviour
     //{
     //    componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, transform.position.z); //TODO Lighten NPC when they are on a station that is behind the train
     //}
-    private async UniTask SetAnimationEvents()
+    private void SetAnimationEvents()
     {
-        while (soData.npc.animClipDict.Count == 0) await UniTask.Yield();
-
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingAboutToEat], nameof(PlaySittingEating));
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingAboutToEat], nameof(PlayStandingEatingAnimation));
         Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingBreathing], nameof(PlayRandomStandingIdleAnimations));
@@ -639,7 +633,6 @@ public class NPCBrain : MonoBehaviour
     }
     private NPCTraits.Behaviours PickBehaviour()
     {
-        if(rigidBody.includeLayers != soData.layerSettings.trainMask) return (NPCTraits.Behaviours)0;
         int behaviourValue = (int)stats.behaviours;
         int[] flags = new int[32];
         int flagCount = 1;

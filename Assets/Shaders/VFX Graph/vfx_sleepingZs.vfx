@@ -34,9 +34,9 @@ MonoBehaviour:
   categories: []
   uiBounds:
     serializedVersion: 2
-    x: -16
+    x: 39
     y: -963
-    width: 1355
+    width: 1300
     height: 1478
 --- !u!114 &114350483966674976
 MonoBehaviour:
@@ -912,19 +912,17 @@ MonoBehaviour:
           - _AlphaClip
           - _AlphaToMask
           - _DstBlend
-          - _DstBlendAlpha
           - _SrcBlend
           - _Surface
           - _ZWrite
           m_PropertyValues:
           - 0
           - 0
-          - 1
-          - 1
-          - 5
+          - 0
           - 1
           - 0
-          renderQueue: 3000
+          - 1
+          renderQueue: 2000
 --- !u!114 &8926484042661614855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2572,7 +2570,8 @@ MonoBehaviour:
       m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
   m_Direction: 1
-  m_LinkedSlots: []
+  m_LinkedSlots:
+  - {fileID: 8926484042661615108}
 --- !u!114 &8926484042661615065
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2588,7 +2587,7 @@ MonoBehaviour:
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: -16, y: 74}
+  m_UIPosition: {x: 39, y: 76}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
@@ -3090,4 +3089,5 @@ MonoBehaviour:
       m_SerializableType: System.Single, mscorlib, Version=4.0.0.0, Culture=neutral,
         PublicKeyToken=b77a5c561934e089
   m_Direction: 0
-  m_LinkedSlots: []
+  m_LinkedSlots:
+  - {fileID: 8926484042661615052}

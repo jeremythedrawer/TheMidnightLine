@@ -4,26 +4,30 @@ using UnityEngine;
 
 public class StationManager : MonoBehaviour
 {
-    public StationsDataSO stationsData;
-    public TrainStatsSO trainStats;
-    public MaxBoundsSO maxBounds;
-    public GameEventDataSO gameEventData;
+    [Serializable] public struct SOData
+    {
+        public StationsDataSO stationsData;
+        public TrainStatsSO trainStats;
+        public MaxBoundsStatsSO maxBounds;
+        public GameEventDataSO gameEventData;
+    }
+    [SerializeField] SOData soData;
 
     private void OnEnable()
     {
-        gameEventData.OnStationLeave.RegisterListener(InstaniateStation);
+        soData.gameEventData.OnStationLeave.RegisterListener(InstaniateStation);
     }
 
     private void OnDisable()
     {
-        gameEventData.OnStationLeave.UnregisterListener(InstaniateStation);
+        soData.gameEventData.OnStationLeave.UnregisterListener(InstaniateStation);
     }
 
     private void InstaniateStation()
     {
-        Station nextStationPrefab = stationsData.stations[trainStats.nextStationIndex].stationPrefab;
+        Station nextStationPrefab = soData.stationsData.stations[soData.trainStats.nextStationIndex].stationPrefab;
         Station nextStation = Instantiate(nextStationPrefab, transform);
-        float stationXPos = maxBounds.max.x + (nextStation.transform.position.x - nextStation.components.platformCollider.bounds.min.x);
+        float stationXPos = soData.maxBounds.max.x + (nextStation.transform.position.x - nextStation.components.platformCollider.bounds.min.x);
         nextStation.transform.position = new Vector3(stationXPos, 0, 0);
     }
 }
