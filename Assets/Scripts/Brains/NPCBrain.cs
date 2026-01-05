@@ -114,7 +114,6 @@ public class NPCBrain : MonoBehaviour
     private void OnEnable()
     {
         soData.gameEventData.OnStationArrival.RegisterListener(() => stats.canBoardTrain = true);
-
         SetAnimationEvents();
     }
 
@@ -227,7 +226,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case State.Sleeping:
             {
-                sleepingZs.transform.position = new Vector3(spriteRenderer.bounds.center.x, spriteRenderer.bounds.max.y, transform.position.z);
+                
                 if (stats.stateTimer > stats.stateDuration)
                 {
                     stats.curBehaviour = PickBehaviour();
@@ -304,6 +303,8 @@ public class NPCBrain : MonoBehaviour
             case State.Sleeping:
             {
                 stats.stateDuration = UnityEngine.Random.Range(soData.npc.pickBehaviourDurationRange.x, soData.npc.pickBehaviourDurationRange.y);
+                sleepingZs.transform.position = new Vector3(spriteRenderer.bounds.center.x, spriteRenderer.bounds.max.y, transform.position.z - 0.5f);
+                sleepingZs.Reinit();
                 sleepingZs.Play();
                 if (stats.chairPosIndex != -1)
                 {

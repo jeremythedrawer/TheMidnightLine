@@ -26,6 +26,7 @@ public class TrainBrain : MonoBehaviour
     private void Awake()
     {
         shaderData.entityDepthRangeID = Shader.PropertyToID("_EntityDepthRange");
+
         stats.trainLength = (componentData.frontCarriageSpriteRenderer.bounds.max.x - transform.position.x);
         stats.trainHalfLength = stats.trainLength * 0.5f;
         stats.startXPos = transform.position.x;
@@ -121,14 +122,14 @@ public class TrainBrain : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    private void OnGUI()
-    {
-        string kmphString = stats.curKMPerHour.ToString("F2") + "  KM/PH";
-        GUIStyle style = new GUIStyle(GUI.skin.label);
-        style.alignment = TextAnchor.UpperCenter;
-        style.normal.textColor = Color.white;
-        Rect rect = new Rect(0, 20f, Screen.width - 20f, 25f); // full-width area, 20px margin
-        GUI.Label(rect, kmphString, style);
-    }
+    //private void OnGUI()
+    //{
+    //    string kmphString = stats.curKMPerHour.ToString("F2") + "  KM/PH";
+    //    GUIStyle style = new GUIStyle(GUI.skin.label);
+    //    style.alignment = TextAnchor.UpperCenter;
+    //    style.normal.textColor = Color.white;
+    //    Rect rect = new Rect(0, 20f, Screen.width - 20f, 25f); // full-width area, 20px margin
+    //    GUI.Label(rect, kmphString, style);
+    //}
 #endif
 }

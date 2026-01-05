@@ -15,8 +15,7 @@ public class TutorialManager : MonoBehaviour
         public Sprite[] sprites;
     }
 
-    [SerializeField]
-    private BehaviourNPCSprites[] npcExampleSprites;
+    [SerializeField] private BehaviourNPCSprites[] npcExampleSprites;
 
     int curIndex = -1;
     int prevIndex = -1;

@@ -8,7 +8,7 @@ public class StationManager : MonoBehaviour
     {
         public StationsDataSO stationsData;
         public TrainStatsSO trainStats;
-        public MaxBoundsStatsSO maxBounds;
+        public MaxBoundsSO maxBounds;
         public GameEventDataSO gameEventData;
     }
     [SerializeField] SOData soData;

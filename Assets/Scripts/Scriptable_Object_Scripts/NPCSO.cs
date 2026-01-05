@@ -40,8 +40,7 @@ public class NPCSO : ScriptableObject
         public AnimationClip clip;
     }
     [Header("Baked Animation Data")]
-    [SerializeField]
-    private AnimStateClipPair[] animClips;
+    [SerializeField] private AnimStateClipPair[] animClips;
 
     public Dictionary<int, AnimationClip> animClipDict;
 
@@ -49,7 +48,7 @@ public class NPCSO : ScriptableObject
     {
         BuildRuntimeDictionary();
     }
-    private void BuildRuntimeDictionary()
+    public void BuildRuntimeDictionary()
     {
         animClipDict = new Dictionary<int, AnimationClip>();
 

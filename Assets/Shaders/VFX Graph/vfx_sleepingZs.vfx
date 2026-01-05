@@ -215,7 +215,7 @@ VisualEffectResource:
     m_PreWarmDeltaTime: 0.05
     m_PreWarmStepCount: 0
     m_InitialEventName: OnPlay
-    m_InstancingMode: 0
+    m_InstancingMode: -1
     m_InstancingCapacity: 64
 --- !u!114 &8926484042661614608
 MonoBehaviour:
@@ -912,17 +912,19 @@ MonoBehaviour:
           - _AlphaClip
           - _AlphaToMask
           - _DstBlend
+          - _DstBlendAlpha
           - _SrcBlend
           - _Surface
           - _ZWrite
           m_PropertyValues:
           - 0
           - 0
-          - 0
+          - 1
+          - 1
+          - 5
           - 1
           - 0
-          - 1
-          renderQueue: 2000
+          renderQueue: 3000
 --- !u!114 &8926484042661614855
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1631,7 +1633,7 @@ MonoBehaviour:
     linkedSlots:
     - outputSlot: {fileID: 8926484042661614894}
       inputSlot: {fileID: 8926484042661614864}
-    position: {x: 60, y: -253}
+    position: {x: 75, y: -253}
     expandedSlots: []
     expanded: 1
     supecollapsed: 0

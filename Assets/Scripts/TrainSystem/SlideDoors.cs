@@ -56,7 +56,7 @@ public class SlideDoors : MonoBehaviour
 
     public void CloseDoors()
     {
-        if (stats.curState == State.Locked) return;
+        if (stats.curState == State.Unlocked) return;
         stats.curState = State.Closing;
         MoveDoors(moveAmount: -soData.trainSettings.slideDoorSprite.bounds.size.x, moveTime: soData.trainSettings.doorMoveTime, State.Locked).Forget();
     }
