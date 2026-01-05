@@ -160,7 +160,7 @@ public class TutorialManager : MonoBehaviour
             {
                 parts[prevIndex].gameObject.SetActive(false);
                 gameEventData.OnGameFadeOut.Raise();
-                phone.spyOnPhone = false;
+               // phone.spyOnPhone = false;
 
             }
             break;

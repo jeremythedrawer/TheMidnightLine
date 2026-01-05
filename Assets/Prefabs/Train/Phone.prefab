@@ -205,13 +205,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5551898477772844373}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: 0.0023416965, w: 0.99999726}
-  m_LocalPosition: {x: 0.4017, y: 0.167, z: -5}
-  m_LocalScale: {x: -0.32183605, y: 0.8245528, z: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.544, y: 0.564, z: -4}
+  m_LocalScale: {x: 5, y: 5, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4374809139781745453}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0.268}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!212 &2082386759236443509
 SpriteRenderer:
   m_ObjectHideFlags: 0
@@ -520,6 +520,10 @@ MonoBehaviour:
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   phone: {fileID: 11400000, guid: b67f56cb6cf796b48b746b0b6bff5dae, type: 2}
   gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
+  ringRenderer: {fileID: 8450953933970449729}
+  cordRenderer: {fileID: 2082386759236443509}
+  boxCollider: {fileID: 168264061541949703}
+  layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
 --- !u!1 &8135423981808375922
 GameObject:
   m_ObjectHideFlags: 0

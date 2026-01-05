@@ -1,5 +1,6 @@
 using Proselyte.Sigils;
 using System;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
 using UnityEngine;
 using static SpyBrain;
 
@@ -113,6 +114,7 @@ public class SpyBrain : MonoBehaviour
         stats.curRunSpeed = 1.0f;
         stats.curJumpHorizontalForce = 0.0f;
         stats.firstFixedFrameClimb = true;
+        stats.onPhone = false;
     }
     private void Update()
     {
@@ -217,7 +219,7 @@ public class SpyBrain : MonoBehaviour
         {
             SetState(State.Fall);
         }
-        else if (phone.spyOnPhone)
+        else if (stats.onPhone)
         {
             SetState(State.Phone);
         }
