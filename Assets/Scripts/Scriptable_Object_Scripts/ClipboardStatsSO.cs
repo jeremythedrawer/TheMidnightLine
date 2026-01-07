@@ -28,6 +28,7 @@ public class ClipboardStatsSO : ScriptableObject
         internal int curPageIndex;
         internal bool active;
         internal bool flippingPage;
+        internal bool canClickID;
     }
     internal TempStats tempStats;
 }

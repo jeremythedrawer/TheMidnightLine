@@ -25,6 +25,11 @@ public class ProfilePage : MonoBehaviour
     {
         flipPageImage.material = Instantiate(flipPageImage.material);
         flipPageImage.enabled = false;
+        behavioursText.fontMaterial = Instantiate(behavioursText.fontMaterial);
+        appearenceText.fontMaterial = Instantiate(appearenceText.fontMaterial);
+        behavioursText.fontMaterial.SetColor("_FaceColor", Color.black);
+        appearenceText.fontMaterial.SetColor("_FaceColor", Color.black);
+
     }
     public void SetPageParams(int pageIndex)
     {

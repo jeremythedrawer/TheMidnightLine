@@ -1,45 +1,71 @@
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using TMPro;
+using Unity.VisualScripting.Antlr3.Runtime.Misc;
+using UnityEditor.ShortcutManagement;
 using UnityEngine;
+using static UnityEditor.Rendering.ShadowCascadeGUI;
 
 public class TutorialManager : MonoBehaviour
 {
     [SerializeField] PlayerInputsSO playerInputs;
     [SerializeField] PhoneSO phone;
     [SerializeField] ClipboardStatsSO clipboardStats;
-    [SerializeField] TextAsset conversation;
+    [SerializeField] TutorialSO tutorial;
+
     [SerializeField] RectTransform speechBox;
     [SerializeField] TMP_Text speech;
 
     CancellationTokenSource typingCTS;
-    string[] lines;
+
+    //TODO: Put in dialogue so
     private int characterDelayMS = 30;
     private float speechBoxGrowTime = 0.25f;
     private float paddingX = 20f;
     private float paddingY = 20f;
-    private int convIndex;
     private void Awake()
     {
-        lines = conversation.text.Split('\n');
-        typingCTS = new CancellationTokenSource();
+        tutorial.lines = tutorial.conversation.text.Split('\n');
+        speech.fontMaterial = Instantiate(speech.fontMaterial);
+        speech.fontMaterial.SetColor("_FaceColor", Color.aquamarine);
+        tutorial.curConvoIndex = 0;
+        tutorial.prevConvoIndex = -1;
     }
-
-    private void Start()
+    private void OnDisable()
     {
-        TypeLine(typingCTS.Token).Forget();
+        typingCTS?.Cancel();
+        typingCTS?.Dispose();
+        typingCTS = null;
+    }
+    private void Update()
+    {
+        if (playerInputs.mouseLeftDown)
+        {
+            typingCTS?.Cancel();
+        }
+
+        if (tutorial.curConvoIndex != tutorial.prevConvoIndex)
+        {
+            if (typingCTS == null || typingCTS.IsCancellationRequested)
+            {
+                typingCTS?.Dispose();
+                typingCTS = new CancellationTokenSource();
+            }
+            TypeLine(typingCTS.Token).Forget();
+            tutorial.prevConvoIndex = tutorial.curConvoIndex;
+        }
+        UpdateCurrentLine();
     }
     private async UniTask TypeLine(CancellationToken token)
     {
-        string line = lines[convIndex];
+        string line = tutorial.lines[tutorial.curConvoIndex];
         speech.text = line;
         speech.ForceMeshUpdate();
 
         int lineCount = speech.textInfo.lineCount;
-        Debug.Log(lineCount);
         TMP_LineInfo speechLineInfo = speech.textInfo.lineInfo[0];
         float totalHeight = lineCount * speechLineInfo.lineHeight;
-        float totalWidth = speech.preferredWidth;
+        float totalWidth = speech.renderedWidth;
         speechBox.anchoredPosition = speech.rectTransform.anchoredPosition + new Vector2(-paddingX, paddingY);
         speech.text = "";
 
@@ -67,7 +93,90 @@ public class TutorialManager : MonoBehaviour
         {
             speech.text = line;
             speechBox.sizeDelta = targetSize;
-            convIndex++;
+            EnterCurrentLine();
+        }
+    }
+
+    private void EnterCurrentLine()
+    {
+        switch (tutorial.curConvoIndex)
+        {
+            case 0:
+            {
+                clipboardStats.tempStats.canClickID = true;
+            }
+            break;
+            case 1:
+            {
+
+            }
+            break;
+            case 2:
+            {
+
+            }
+            break;
+            case 3:
+            {
+
+            }
+            break;
+            case 4:
+            {
+
+            }
+            break;
+            case 5:
+            {
+
+            }
+            break;
+            case 6:
+            {
+
+            }
+            break;
+        }
+    }
+    private void UpdateCurrentLine()
+    {
+        switch (tutorial.curConvoIndex)
+        {
+            case 0:
+            {
+
+            }
+            break;
+            case 1:
+            {
+
+            }
+            break;
+            case 2:
+            {
+
+            }
+            break;
+            case 3:
+            {
+
+            }
+            break;
+            case 4:
+            {
+
+            }
+            break;
+            case 5:
+            {
+
+            }
+            break;
+            case 6:
+            {
+
+            }
+            break;
         }
     }
 }

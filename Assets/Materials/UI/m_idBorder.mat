@@ -7,8 +7,8 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: m_gameFade
-  m_Shader: {fileID: -6465566751694194690, guid: fefc0d03b955ec3448afb80dd5fb3ff5, type: 3}
+  m_Name: m_idBorder
+  m_Shader: {fileID: -6465566751694194690, guid: f263cc69914fa214394c52edc48a50ff, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
@@ -28,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 0}
+        m_Texture: {fileID: 2800000, guid: 1654a6541f5ba724baf5660aafcc80ba, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
@@ -53,8 +53,6 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Alpha: 0.65
-    - _BayerIndex: 2
     - _ColorMask: 15
     - _EnableExternalAlpha: 0
     - _Stencil: 0
@@ -64,7 +62,6 @@ Material:
     - _StencilWriteMask: 255
     - _UIMaskSoftnessX: 1
     - _UIMaskSoftnessY: 1
-    - _Value: 1
     - _ZWrite: 0
     m_Colors:
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}

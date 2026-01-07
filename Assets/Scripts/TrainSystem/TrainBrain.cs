@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using Proselyte.Sigils;
 using System;
+using System.Threading;
 using UnityEngine;
 
 
@@ -11,6 +12,7 @@ public class TrainBrain : MonoBehaviour
     [SerializeField] StationsDataSO stationsData;
     [SerializeField] GameEventDataSO gameEventData;
 
+    CancellationTokenSource trainCTS;
     [Serializable] public struct ComponentData
     {
         public SpriteRenderer frontCarriageSpriteRenderer;
@@ -26,7 +28,6 @@ public class TrainBrain : MonoBehaviour
     private void Awake()
     {
         shaderData.entityDepthRangeID = Shader.PropertyToID("_EntityDepthRange");
-
         stats.trainLength = (componentData.frontCarriageSpriteRenderer.bounds.max.x - transform.position.x);
         stats.trainHalfLength = stats.trainLength * 0.5f;
         stats.startXPos = transform.position.x;
@@ -41,6 +42,13 @@ public class TrainBrain : MonoBehaviour
         stats.metersTravelled = 0;
         stats.curPassengerCount = 0;
         stats.closingDoors = false;
+        trainCTS = new CancellationTokenSource();
+    }
+    private void OnDisable()
+    {
+        trainCTS?.Cancel();
+        trainCTS?.Dispose();
+        trainCTS = null;
     }
     private void Start()
     {
@@ -78,19 +86,27 @@ public class TrainBrain : MonoBehaviour
             LeavingStation().Forget();
         }
     }
-
     private async UniTask LeavingStation()
     {
         gameEventData.OnCloseSlideDoors.Raise();
         stats.closingDoors = true;
-        await UniTask.WaitForSeconds(settings.doorMoveTime); // wait for doors to close
+        await UniTask.WaitForSeconds(settings.doorMoveTime, cancellationToken: trainCTS.Token); // wait for doors to close
 
         stats.nextStationIndex++;
         stats.curStation = stationsData.stations[stats.nextStationIndex];
         stats.brakeDist = GetBrakeDistance();
         gameEventData.OnStationLeave.Raise();
     }
-
+    private async UniTask MoveTrainToStartPosition()
+    {
+        stats.distToNextStation = (stationsData.stations[stats.nextStationIndex].metersPosition + stats.trainHalfLength) - stats.metersTravelled;
+        while (stats.distToNextStation > 0.05f)
+        {
+            transform.position = new Vector3(stats.metersTravelled - stats.trainLength, transform.position.y, transform.position.z);
+            await UniTask.Yield(cancellationToken: trainCTS.Token);
+        }
+        gameEventData.OnTrainArrivedAtStartPosition.Raise();
+    }
     private float GetBrakeDistance()
     {
         float kmph = stationsData.stations[stats.nextStationIndex].targetTrainSpeed;
@@ -103,16 +119,6 @@ public class TrainBrain : MonoBehaviour
             if (kmph <= 0.01f) break;
         }
         return meters;
-    }
-    private async UniTask MoveTrainToStartPosition()
-    {
-        stats.distToNextStation = (stationsData.stations[stats.nextStationIndex].metersPosition + stats.trainHalfLength) - stats.metersTravelled;
-        while (stats.distToNextStation > 0.05f)
-        {
-            transform.position = new Vector3(stats.metersTravelled - stats.trainLength, transform.position.y, transform.position.z);
-            await UniTask.Yield();
-        }
-        gameEventData.OnTrainArrivedAtStartPosition.Raise();
     }
 
     private void OnDrawGizmos()

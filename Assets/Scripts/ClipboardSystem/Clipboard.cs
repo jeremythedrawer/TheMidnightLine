@@ -1,8 +1,6 @@
 using Cysharp.Threading.Tasks;
-using System;
 using UnityEngine;
-using UnityEngine.UI;
-using static ClipboardStatsSO;
+
 
 public class Clipboard : MonoBehaviour
 {
@@ -14,8 +12,7 @@ public class Clipboard : MonoBehaviour
     [SerializeField] RectTransform clipboardTab;
     [SerializeField] ClipboardSettingsSO settings;
     [SerializeField] ClipboardStatsSO stats;
-    [SerializeField] PlayerInputsSO inputs;
-
+    [SerializeField] PlayerInputsSO playerInputs;
 
     ProfilePage[] profilePages;
     FrontPage frontPage;
@@ -42,32 +39,29 @@ public class Clipboard : MonoBehaviour
     }
     private void HandleInputs()
     {
-        bool hovered = RectTransformUtility.RectangleContainsScreenPoint(clipboardTab,inputs.mouseScreenPos,Camera.main);
-        bool clicked = hovered && inputs.mouseLeftDown;
+        bool hovered = RectTransformUtility.RectangleContainsScreenPoint(clipboardTab,playerInputs.mouseScreenPos,Camera.main);
+        bool clicked = hovered && playerInputs.mouseLeftDown;
 
         if (clicked)
         {
             stats.tempStats.active = !stats.tempStats.active;
 
-            stats.tempStats.imagesTargetYPos = stats.tempStats.active
-                ? settings.imagesOnScreenYPos
-                : stats.tempStats.imagesStartYPos;
+            stats.tempStats.imagesTargetYPos = stats.tempStats.active ? settings.imagesOnScreenYPos : stats.tempStats.imagesStartYPos;
 
             stats.tempStats.tabTargetYPos = stats.tempStats.tabStartYPos;
         }
         else if (hovered)
         {
-            stats.tempStats.tabTargetYPos =
-                stats.tempStats.tabStartYPos + settings.tabHoverYPos;
+            stats.tempStats.tabTargetYPos = stats.tempStats.tabStartYPos + settings.tabHoverYPos;
         }
         else
         {
             stats.tempStats.tabTargetYPos = stats.tempStats.tabStartYPos;
         }
 
-        if (!stats.tempStats.active || stats.tempStats.flippingPage || inputs.mouseScroll == 0)return;
+        if (!stats.tempStats.active || stats.tempStats.flippingPage || playerInputs.mouseScroll == 0)return;
 
-        if (inputs.mouseScroll > 0)
+        if (playerInputs.mouseScroll > 0)
         {
             if (stats.tempStats.curPageIndex == -1)
             {
@@ -80,7 +74,7 @@ public class Clipboard : MonoBehaviour
 
             stats.tempStats.flippingPage = true;
         }
-        else if (inputs.mouseScroll < 0 && stats.tempStats.curPageIndex > -1)
+        else if (playerInputs.mouseScroll < 0 && stats.tempStats.curPageIndex > -1)
         {
             if (stats.tempStats.curPageIndex == 0)
             {

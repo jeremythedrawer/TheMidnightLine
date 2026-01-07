@@ -369,7 +369,7 @@ public class NPCBrain : MonoBehaviour
     {
         if (rigidBody.includeLayers != soData.layerSettings.trainMask) return;
 
-        if (!soData.clipboardStats.tempStats.active || soData.clipboardStats.tempStats.curPageIndex >= soData.clipboardStats.profilePageArray.Length)
+        if (!soData.clipboardStats.tempStats.active || soData.clipboardStats.tempStats.curPageIndex >= soData.clipboardStats.profilePageArray.Length || soData.clipboardStats.tempStats.curPageIndex == -1)
         {
             mpb.SetColor(soData.npcData.materialData.colorID, Color.black + new Color(soData.npcData.hoverColorOffet, soData.npcData.hoverColorOffet, soData.npcData.hoverColorOffet, 0f));
         }
@@ -383,7 +383,7 @@ public class NPCBrain : MonoBehaviour
     {
         if (rigidBody.includeLayers != soData.layerSettings.trainMask) return;
 
-        if (!soData.clipboardStats.tempStats.active || soData.clipboardStats.tempStats.curPageIndex >= soData.clipboardStats.profilePageArray.Length)
+        if (!soData.clipboardStats.tempStats.active || soData.clipboardStats.tempStats.curPageIndex >= soData.clipboardStats.profilePageArray.Length || soData.clipboardStats.tempStats.curPageIndex == -1)
         {
             stats.selectedColor = Color.black;
 
@@ -419,6 +419,7 @@ public class NPCBrain : MonoBehaviour
         float targetAlpha = shouldFadeOut ? 0f : 1f;
 
         if (stats.targetAlpha == targetAlpha) return;
+        
         stats.targetAlpha = targetAlpha;;
         ctsFade?.Cancel();
         ctsFade?.Dispose();
