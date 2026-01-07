@@ -15,6 +15,8 @@ public class GameFader : MonoBehaviour
     private void Awake()
     {
         data.valueID = Shader.PropertyToID("_Value");
+        data.value = 0;
+        image.material.SetFloat(data.valueID, data.value);
     }
     private void OnEnable()
     {
@@ -48,22 +50,18 @@ public class GameFader : MonoBehaviour
     private async UniTask Fade(bool fadeIn, CancellationToken token)
     {
         float elaspedTime = data.value * data.fadeTime;
-        try
+        while (fadeIn ? elaspedTime < data.fadeTime : elaspedTime > 0f)
         {
-            while (fadeIn ? elaspedTime < data.fadeTime : elaspedTime > 0f)
-            {
-                token.ThrowIfCancellationRequested();
+            token.ThrowIfCancellationRequested();
 
-                elaspedTime += (fadeIn ? Time.deltaTime : -Time.deltaTime);
+            elaspedTime += (fadeIn ? Time.deltaTime : -Time.deltaTime);
 
-                data.value = elaspedTime / data.fadeTime;
-                image.material.SetFloat(data.valueID, data.value);
+            data.value = elaspedTime / data.fadeTime;
+            image.material.SetFloat(data.valueID, data.value);
 
-                await UniTask.Yield(PlayerLoopTiming.Update, token);
-            }
+            await UniTask.Yield(PlayerLoopTiming.Update, token);
         }
-        catch (OperationCanceledException)
-        {
-        }
+        data.value = fadeIn ? 1f : 0f;
+        image.material.SetFloat(data.valueID, data.value);
     }
 }

@@ -55,16 +55,18 @@ public class Phone : MonoBehaviour
         phoneMPB.SetFloat(phone.materialIDs.selectedID, 0);
         phoneRenderer.SetPropertyBlock(phoneMPB);
     }
-    public void SelectColor()
+    public void UsePhone()
     {
         spyStats.onPhone = true;
         phoneRenderer.gameObject.SetActive(false);
+        ringRenderer.gameObject.SetActive(false);
         cordRenderer.gameObject.SetActive(true);
         Vector2 targetCordPosition = spyStats.curWorldPos;
         targetCordPosition.x += spyStats.spriteFlip ? -spyStats.phonePosition.x : spyStats.phonePosition.x;
         targetCordPosition.y += spyStats.phonePosition.y;
         cordMPB.SetVector(phone.materialIDs.targetPositionID, targetCordPosition);
         cordRenderer.SetPropertyBlock(cordMPB);
+        gameEventData.OnStartTutorial.Raise();
     }
 
     private void RingPhone()

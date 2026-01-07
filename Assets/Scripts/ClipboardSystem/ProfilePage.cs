@@ -5,21 +5,14 @@ using UnityEngine.UI;
 
 public class ProfilePage : MonoBehaviour
 {
-    [Serializable] public struct ComponentData
-    {
-        public TMP_Text behavioursText;
-        public TMP_Text appearenceText;
-        public Image borderImage;
-        public Image pageImage;
-        public RectTransform rectTransform;
-    }
-    public ComponentData components;
+    [SerializeField] TMP_Text behavioursText;
+    [SerializeField] TMP_Text appearenceText;
+    [SerializeField] Image borderImage;
+    [SerializeField] Image pageImage;
+    public RectTransform rectTransform;
+    public Image flipPageImage;
 
-    [Serializable] public struct SOData
-    {
-        public ClipboardStatsSO clipboardStats;
-    }
-    [SerializeField] SOData soData;
+    [SerializeField] ClipboardStatsSO clipboardStats;
 
     [Serializable] public struct Stats
     {
@@ -28,15 +21,16 @@ public class ProfilePage : MonoBehaviour
     }
     [SerializeField] Stats stats;
 
-    private void OnEnable()
+    private void Awake()
     {
-        components.pageImage.material = Instantiate(components.pageImage.material);
+        flipPageImage.material = Instantiate(flipPageImage.material);
+        flipPageImage.enabled = false;
     }
     public void SetPageParams(int pageIndex)
     {
         stats.pageIndex = pageIndex;
-        NPCTraits.Behaviours rawBehave = soData.clipboardStats.profilePageArray[pageIndex].behaviours;
-        NPCTraits.Appearence rawAppear = soData.clipboardStats.profilePageArray[pageIndex].appearence;
+        NPCTraits.Behaviours rawBehave = clipboardStats.profilePageArray[pageIndex].behaviours;
+        NPCTraits.Appearence rawAppear = clipboardStats.profilePageArray[pageIndex].appearence;
 
         int behaveCount = Bitwise.GetSetBitCount((long)rawBehave);
         int[] behavePositions = new int[behaveCount];
@@ -75,17 +69,19 @@ public class ProfilePage : MonoBehaviour
             if (i < behavePositions.Length - 1) behaveText += "\n";
         }
 
-        components.behavioursText.text = behaveText;
-        components.appearenceText.text = "- " + NPCTraits.appearenceDescriptions[appearPosition];
+        behavioursText.text = behaveText;
+        appearenceText.text = "- " + NPCTraits.appearenceDescriptions[appearPosition];
 
-        components.borderImage.color = soData.clipboardStats.profilePageArray[pageIndex].color;
+        borderImage.color = clipboardStats.profilePageArray[pageIndex].color;
 
-        components.rectTransform.localPosition = new Vector3(components.rectTransform.localPosition.x, components.rectTransform.localPosition.y, -(soData.clipboardStats.profilePageArray.Length - 1 - pageIndex));
+        rectTransform.localPosition = new Vector3(rectTransform.localPosition.x, rectTransform.localPosition.y, -(clipboardStats.profilePageArray.Length - 1 - pageIndex));
     }
     public void Flipped(bool flippedDown)
     {
-        components.borderImage.enabled = flippedDown;
-        components.behavioursText.enabled = flippedDown;
-        components.appearenceText.enabled = flippedDown;
+        flipPageImage.enabled = !flippedDown;
+        borderImage.enabled = flippedDown;
+        behavioursText.enabled = flippedDown;
+        appearenceText.enabled = flippedDown;
+        pageImage.enabled = flippedDown;
     }
 }

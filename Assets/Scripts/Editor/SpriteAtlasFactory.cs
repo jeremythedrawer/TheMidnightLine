@@ -11,7 +11,6 @@ public class SpriteAtlasFactory : ScriptableObject
     {     
         public Texture2D spriteAtlas;
         public AnimationClip smokingClip;
-        public AnimationClip callClip;
         public NPCSO npc;
     }
     [SerializeField] ProcessedComponents[] processedNPCComponents;
@@ -69,6 +68,7 @@ public class SpriteAtlasFactory : ScriptableObject
 
             dataProvider.SetSpriteRects(spriteRects);
             dataProvider.Apply();
+            EditorUtility.SetDirty(npcComponent.spriteAtlas);
 
             List<Vector2> smokePos = new List<Vector2>();
             for (int i = 0; i < spriteRects.Length; i++) // Looping through each sprite in atlas
@@ -120,7 +120,9 @@ public class SpriteAtlasFactory : ScriptableObject
                 npcComponent.npc.smokeAnimPosData[i].position = smokePos[i];
                 npcComponent.npc.smokeAnimPosData[i].time = smokeKeyframeTimes[i];
             }
+            EditorUtility.SetDirty(npcComponent.npc);
         }
+        AssetDatabase.SaveAssets();
     }
 
     public void SetSpySpritePositionData()
@@ -193,6 +195,8 @@ public class SpriteAtlasFactory : ScriptableObject
                         float metersYPos = localPixelY / atlasImporter.spritePixelsPerUnit;
 
                         spyComponent.stats.phonePosition = new Vector2(metersXPos, metersYPos);
+                        EditorUtility.SetDirty(spyComponent.stats);
+                        AssetDatabase.SaveAssets();
                         break;
                     }
                 }

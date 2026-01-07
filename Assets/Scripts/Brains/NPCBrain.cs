@@ -369,13 +369,13 @@ public class NPCBrain : MonoBehaviour
     {
         if (rigidBody.includeLayers != soData.layerSettings.trainMask) return;
 
-        if (!soData.clipboardStats.active || soData.clipboardStats.activePageIndex >= soData.clipboardStats.profilePageArray.Length)
+        if (!soData.clipboardStats.tempStats.active || soData.clipboardStats.tempStats.curPageIndex >= soData.clipboardStats.profilePageArray.Length)
         {
             mpb.SetColor(soData.npcData.materialData.colorID, Color.black + new Color(soData.npcData.hoverColorOffet, soData.npcData.hoverColorOffet, soData.npcData.hoverColorOffet, 0f));
         }
-        else if (stats.selectedColor != soData.clipboardStats.profilePageArray[soData.clipboardStats.activePageIndex].color)
+        else if (stats.selectedColor != soData.clipboardStats.profilePageArray[soData.clipboardStats.tempStats.curPageIndex].color)
         {
-            mpb.SetColor(soData.npcData.materialData.colorID, soData.clipboardStats.profilePageArray[soData.clipboardStats.activePageIndex].color * soData.npcData.hoverColorOffet);
+            mpb.SetColor(soData.npcData.materialData.colorID, soData.clipboardStats.profilePageArray[soData.clipboardStats.tempStats.curPageIndex].color * soData.npcData.hoverColorOffet);
         }
         spriteRenderer.SetPropertyBlock(mpb);
     }
@@ -383,7 +383,7 @@ public class NPCBrain : MonoBehaviour
     {
         if (rigidBody.includeLayers != soData.layerSettings.trainMask) return;
 
-        if (!soData.clipboardStats.active || soData.clipboardStats.activePageIndex >= soData.clipboardStats.profilePageArray.Length)
+        if (!soData.clipboardStats.tempStats.active || soData.clipboardStats.tempStats.curPageIndex >= soData.clipboardStats.profilePageArray.Length)
         {
             stats.selectedColor = Color.black;
 
@@ -391,9 +391,9 @@ public class NPCBrain : MonoBehaviour
             soData.clipboardStats.profilePageArray[stats.selectedProfileIndex].spySelected = false;
             stats.selectedProfileIndex = -1;
         }
-        else if (stats.selectedColor != soData.clipboardStats.profilePageArray[soData.clipboardStats.activePageIndex].color)
+        else if (stats.selectedColor != soData.clipboardStats.profilePageArray[soData.clipboardStats.tempStats.curPageIndex].color)
         {
-            stats.selectedProfileIndex = soData.clipboardStats.activePageIndex;
+            stats.selectedProfileIndex = soData.clipboardStats.tempStats.curPageIndex;
 
             stats.selectedColor = soData.clipboardStats.profilePageArray[stats.selectedProfileIndex].color;
             soData.clipboardStats.profilePageArray[stats.selectedProfileIndex].spySelected = true;

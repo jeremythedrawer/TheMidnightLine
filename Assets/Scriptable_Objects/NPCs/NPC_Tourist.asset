@@ -19,7 +19,19 @@ MonoBehaviour:
   appearence: 1536
   behaviours: -1
   pickBehaviourDurationRange: {x: 10, y: 30}
-  smokeAnimPosData: []
+  smokeAnimPosData:
+  - position: {x: 0.13, y: 2.58}
+    time: 0
+  - position: {x: 0.13, y: 2.59}
+    time: 2.5
+  - position: {x: 0.13, y: 2.6}
+    time: 5
+  - position: {x: 0.34, y: 2.45}
+    time: 7.5
+  - position: {x: 0.34, y: 2.46}
+    time: 10
+  - position: {x: 0.34, y: 2.47}
+    time: 12.5
   animClips:
   - stateHash: -1261997915
     clip: {fileID: 7400000, guid: 7381a89761e88a64781b11f8bcdb3b2e, type: 2}

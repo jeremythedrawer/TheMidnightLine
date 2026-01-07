@@ -4,6 +4,8 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SpyStats_SO", menuName = "Midnight Line SOs / Spy Stats SO")]
 public class SpyStatsSO : ScriptableObject
 {
+    internal string spyID;
+
     internal Bounds curLocationBounds;
 
     internal Vector3 curWorldPos;
@@ -24,6 +26,7 @@ public class SpyStatsSO : ScriptableObject
 
     internal LayerMask curLocationLayer;
     internal LayerMask curGroundLayer;
+
 
     internal bool spriteFlip;
     internal bool coyoteJump;

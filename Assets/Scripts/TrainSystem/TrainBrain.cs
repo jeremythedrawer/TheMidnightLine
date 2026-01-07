@@ -122,14 +122,14 @@ public class TrainBrain : MonoBehaviour
     }
 
 #if UNITY_EDITOR
-    //private void OnGUI()
-    //{
-    //    string kmphString = stats.curKMPerHour.ToString("F2") + "  KM/PH";
-    //    GUIStyle style = new GUIStyle(GUI.skin.label);
-    //    style.alignment = TextAnchor.UpperCenter;
-    //    style.normal.textColor = Color.white;
-    //    Rect rect = new Rect(0, 20f, Screen.width - 20f, 25f); // full-width area, 20px margin
-    //    GUI.Label(rect, kmphString, style);
-    //}
+    private void OnGUI()
+    {
+        string kmphString = stats.curKMPerHour.ToString("F2") + "  KM/PH";
+        GUIStyle style = new GUIStyle(GUI.skin.label);
+        style.alignment = TextAnchor.UpperCenter;
+        style.normal.textColor = Color.white;
+        Rect rect = new Rect(0, 20f, Screen.width - 20f, 25f); // full-width area, 20px margin
+        GUI.Label(rect, kmphString, style);
+    }
 #endif
 }

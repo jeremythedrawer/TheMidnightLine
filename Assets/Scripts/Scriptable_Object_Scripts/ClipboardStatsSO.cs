@@ -19,11 +19,15 @@ public class ClipboardStatsSO : ScriptableObject
     }
     internal MaterialIDs materialIDs;
 
-    internal int activePageIndex;
-    internal bool flippingPage;
-
-    internal float startYPos;
-    internal float hoverYPos;
-    internal float targetYPos;
-    internal bool active;
+    [Serializable] public struct TempStats
+    {
+        internal float imagesStartYPos;
+        internal float tabStartYPos;
+        internal float imagesTargetYPos;
+        internal float tabTargetYPos;
+        internal int curPageIndex;
+        internal bool active;
+        internal bool flippingPage;
+    }
+    internal TempStats tempStats;
 }

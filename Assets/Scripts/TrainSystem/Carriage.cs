@@ -167,7 +167,6 @@ public class Carriage : MonoBehaviour
         {
             while (fadeIn ? elaspedTime < trainSettings.exteriorWallFadeTime : elaspedTime > 0f)
             {
-                token.ThrowIfCancellationRequested();
 
                 elaspedTime += (fadeIn ? Time.deltaTime : -Time.deltaTime);
 

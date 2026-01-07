@@ -115,6 +115,7 @@ public class SpyBrain : MonoBehaviour
         stats.curJumpHorizontalForce = 0.0f;
         stats.firstFixedFrameClimb = true;
         stats.onPhone = false;
+        stats.spyID = UnityEngine.Random.Range(0, 10000).ToString("D4");
     }
     private void Update()
     {

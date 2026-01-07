@@ -28,8 +28,8 @@ public class GameCursor : MonoBehaviour
     private void LateUpdate()
     {
         prevNPC = curNPC;
-        prevPageIndex = clipboardStats.activePageIndex;
-        prevClipboardActive = clipboardStats.active;
+        prevPageIndex = clipboardStats.tempStats.curPageIndex;
+        prevClipboardActive = clipboardStats.tempStats.active;
     }
 
     private void UpdateNPCColor()
@@ -55,7 +55,7 @@ public class GameCursor : MonoBehaviour
             prevNPC.ExitColor();
         }
 
-        if ((curNPC != null && curNPC != prevNPC) || clipboardStats.activePageIndex != prevPageIndex || clipboardStats.active != prevClipboardActive)
+        if ((curNPC != null && curNPC != prevNPC) || clipboardStats.tempStats.curPageIndex != prevPageIndex || clipboardStats.tempStats.active != prevClipboardActive)
         {
             curNPC?.HoverColor();
         }
@@ -79,7 +79,7 @@ public class GameCursor : MonoBehaviour
         {
             if (spyInputs.mouseLeftDown)
             {
-                curPhone.SelectColor();
+                curPhone.UsePhone();
             }
             else
             {
