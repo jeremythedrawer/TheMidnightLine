@@ -1,10 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using TMPro;
-using Unity.VisualScripting.Antlr3.Runtime.Misc;
-using UnityEditor.ShortcutManagement;
 using UnityEngine;
-using static UnityEditor.Rendering.ShadowCascadeGUI;
 
 public class TutorialManager : MonoBehaviour
 {
@@ -17,7 +14,7 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] TMP_Text speech;
 
     CancellationTokenSource typingCTS;
-
+    bool isTyping;
     //TODO: Put in dialogue so
     private int characterDelayMS = 30;
     private float speechBoxGrowTime = 0.25f;
@@ -39,7 +36,7 @@ public class TutorialManager : MonoBehaviour
     }
     private void Update()
     {
-        if (playerInputs.mouseLeftDown)
+        if (playerInputs.mouseLeftDown && isTyping)
         {
             typingCTS?.Cancel();
         }
@@ -58,6 +55,7 @@ public class TutorialManager : MonoBehaviour
     }
     private async UniTask TypeLine(CancellationToken token)
     {
+        isTyping = true;
         string line = tutorial.lines[tutorial.curConvoIndex];
         speech.text = line;
         speech.ForceMeshUpdate();
@@ -82,7 +80,6 @@ public class TutorialManager : MonoBehaviour
                 speechBox.sizeDelta = new Vector2(targetSize.x * t, targetSize.y);
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
-
             foreach (char c in line)
             {
                 speech.text += c;
@@ -93,6 +90,7 @@ public class TutorialManager : MonoBehaviour
         {
             speech.text = line;
             speechBox.sizeDelta = targetSize;
+            isTyping = false;
             EnterCurrentLine();
         }
     }
@@ -149,7 +147,10 @@ public class TutorialManager : MonoBehaviour
             break;
             case 1:
             {
-
+                if (playerInputs.mouseLeftDown && !isTyping)
+                {
+                    tutorial.curConvoIndex++;
+                }
             }
             break;
             case 2:

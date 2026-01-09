@@ -19,6 +19,8 @@ public class Clipboard : MonoBehaviour
     private void Awake()
     {
         stats.materialIDs.normAnimTime = Shader.PropertyToID("_NormAnimTime");
+        stats.materialIDs.ditherValue = Shader.PropertyToID("_DitherValue");
+        stats.materialIDs.fontColor = Shader.PropertyToID("_FaceColor");
     }
     private void Start()
     {

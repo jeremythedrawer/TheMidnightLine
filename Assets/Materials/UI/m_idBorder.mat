@@ -28,7 +28,7 @@ Material:
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MainTex:
-        m_Texture: {fileID: 2800000, guid: 1654a6541f5ba724baf5660aafcc80ba, type: 3}
+        m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - _MaskTex:
@@ -37,6 +37,14 @@ Material:
         m_Offset: {x: 0, y: 0}
     - _NormalMap:
         m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_174f690e9a7f498591357b2655b92afc_Texture_1_Texture2D:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _SampleTexture2D_c673f1036c4c405384057e15686c116f_Texture_1_Texture2D:
+        m_Texture: {fileID: 2800000, guid: 504b6db19d849e4478e5c189c0f45cfa, type: 3}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
     - unity_Lightmaps:
@@ -54,7 +62,14 @@ Material:
     m_Ints: []
     m_Floats:
     - _ColorMask: 15
+    - _DitherValue: 0.013
     - _EnableExternalAlpha: 0
+    - _Float: 0.27
+    - _Offset: 0.81
+    - _Samples: 7.79
+    - _Scale: 1.86
+    - _Size: 0
+    - _Spread: 6.79
     - _Stencil: 0
     - _StencilComp: 8
     - _StencilOp: 0
@@ -62,10 +77,16 @@ Material:
     - _StencilWriteMask: 255
     - _UIMaskSoftnessX: 1
     - _UIMaskSoftnessY: 1
+    - _Value: 0.47
     - _ZWrite: 0
     m_Colors:
     - _ClipRect: {r: 0, g: 0, b: 0, a: 0}
     - _Color: {r: 0, g: 0, b: 0, a: 1}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
+    - _UVPosition: {r: 1611, g: 1597, b: 0, a: 0}
+    - _UVSize: {r: 167, g: 74, b: 0, a: 0}
+    - _UVTransform: {r: 4, g: 1, b: 0, a: 0}
+    - _Vector2: {r: 0, g: 0, b: 0, a: 0}
+    - _Vector2_1: {r: 0.87, g: 1, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1

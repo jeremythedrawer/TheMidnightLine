@@ -16,6 +16,8 @@ public class ClipboardStatsSO : ScriptableObject
     [Serializable] public struct MaterialIDs
     {
         public int normAnimTime;
+        public int fontColor;
+        public int ditherValue;
     }
     internal MaterialIDs materialIDs;
 
@@ -25,6 +27,7 @@ public class ClipboardStatsSO : ScriptableObject
         internal float tabStartYPos;
         internal float imagesTargetYPos;
         internal float tabTargetYPos;
+        internal float ditherTransitionValue;
         internal int curPageIndex;
         internal bool active;
         internal bool flippingPage;
