@@ -41,13 +41,4 @@ public class NPCsDataSO : ScriptableObject
         internal int walking;
     }
     internal AnimHashData animHashData;
-
-    [Serializable] internal struct MaterialData
-    {
-        internal int colorID;
-        internal int zPosID;
-        internal int alphaID;
-        internal int mainTexID;
-    }
-    internal MaterialData materialData;
 }

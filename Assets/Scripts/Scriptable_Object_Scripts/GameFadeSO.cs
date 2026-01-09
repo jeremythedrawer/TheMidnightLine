@@ -4,6 +4,5 @@ using UnityEngine;
 public class GameFadeSO : ScriptableObject
 {
     public float fadeTime = 1;
-    internal int valueID;
-    internal float value;
+    internal float brightness;
 }

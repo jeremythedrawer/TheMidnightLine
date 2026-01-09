@@ -9,7 +9,7 @@ public class InputManager : MonoBehaviour
 {
     [Serializable] public struct SOData
     {
-        public PlayerInputsSO spyInputs;
+        public PlayerInputsSO playerInputs;
         public SpyStatsSO spyStats;
         public GameEventDataSO gameEventData;
     }
@@ -21,6 +21,7 @@ public class InputManager : MonoBehaviour
     InputAction runAction;
     InputAction clipboardAction;
     InputAction mouseLeftDownAction;
+    InputAction mouseLeftPressAction;
     InputAction interactAction;
     InputAction cancelAction;
     Action<string> OnDeviceChanged;
@@ -41,44 +42,53 @@ public class InputManager : MonoBehaviour
         interactAction = playerInput.actions["Player/Interact"];
         clipboardAction = playerInput.actions["Player/Clipboard"];
         mouseLeftDownAction = playerInput.actions["Player/MouseLeftDown"];
+        mouseLeftPressAction = playerInput.actions["Player/MouseLeftPress"];
+
         cancelAction = playerInput.actions["Player/Cancel"];
 
         moveAction.performed += context =>
         {
             Vector2 move = context.ReadValue<Vector2>();
-            soData.spyInputs.move = Mathf.RoundToInt(move.x);
+            soData.playerInputs.move = Mathf.RoundToInt(move.x);
         };
         moveAction.canceled += context =>
         {
-            soData.spyInputs.move = 0;
+            soData.playerInputs.move = 0;
         };
 
         clipboardAction.performed += context =>
         {
             Vector2 move = context.ReadValue<Vector2>();
-            soData.spyInputs.mouseScroll = Mathf.RoundToInt(move.y);
+            soData.playerInputs.mouseScroll = Mathf.RoundToInt(move.y);
         };
 
         clipboardAction.canceled += context =>
         {
-            soData.spyInputs.mouseScroll = 0;
+            soData.playerInputs.mouseScroll = 0;
         };
 
         interactAction.started += context =>
         {
             soData.gameEventData.OnInteract.Raise();
-            soData.spyInputs.interact = true;
+            soData.playerInputs.interact = true;
         };
 
-        mouseLeftDownAction.started += context => soData.spyInputs.mouseLeftDown = true;
+        mouseLeftDownAction.started += context => soData.playerInputs.mouseLeftDown = true;
 
-        jumpAction.performed += context => soData.spyInputs.jump = true;
-        jumpAction.canceled += context => soData.spyInputs.jump = false;
+        mouseLeftPressAction.performed += context => soData.playerInputs.mouseLeftPress = true;
+        mouseLeftPressAction.canceled += context =>
+        {
+            soData.playerInputs.mouseLeftUp = true;
+            soData.playerInputs.mouseLeftPress = false;
+        };
 
-        runAction.performed += context => soData.spyInputs.run = true;
-        runAction.canceled += context => soData.spyInputs.run = false;
+            jumpAction.performed += context => soData.playerInputs.jump = true;
+        jumpAction.canceled += context => soData.playerInputs.jump = false;
 
-        cancelAction.started += context => soData.spyInputs.cancel = true;
+        runAction.performed += context => soData.playerInputs.run = true;
+        runAction.canceled += context => soData.playerInputs.run = false;
+
+        cancelAction.started += context => soData.playerInputs.cancel = true;
     }
 
     private void OnEnable()
@@ -103,15 +113,25 @@ public class InputManager : MonoBehaviour
                 soData.gameEventData.OnReset.Raise();
             }
         }
-        soData.spyInputs.mouseScreenPos = Mouse.current.position.ReadValue();
-        soData.spyInputs.mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        soData.playerInputs.mouseScreenPos = Mouse.current.position.ReadValue();
+        soData.playerInputs.mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+
+        if (soData.playerInputs.mouseLeftDown)
+        {
+            soData.playerInputs.startDragMouseScreenPos = soData.playerInputs.mouseScreenPos;
+        }
+        if (soData.playerInputs.mouseLeftUp)
+        {
+            soData.playerInputs.endDragMouseScreenPos = soData.playerInputs.mouseScreenPos;
+        }
     }
 
     private void LateUpdate()
     {
-        soData.spyInputs.cancel = false;
-        soData.spyInputs.interact = false;
-        soData.spyInputs.mouseLeftDown = false;
+        soData.playerInputs.cancel = false;
+        soData.playerInputs.interact = false;
+        soData.playerInputs.mouseLeftDown = false;
+        soData.playerInputs.mouseLeftUp = false;
     }
     private void CheckDevice(InputControl value, InputEventPtr ptr)
     {
@@ -121,12 +141,18 @@ public class InputManager : MonoBehaviour
 
     private void ResetData()
     {
-        soData.spyInputs.jump = false;
+        soData.playerInputs.jump = false;
     }
 
     private void OnApplicationQuit()
     {
         soData.gameEventData.OnReset.Raise();
         ResetData();
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.white;
+        Gizmos.DrawLine(Camera.main.ScreenToWorldPoint(soData.playerInputs.startDragMouseScreenPos), Camera.main.ScreenToWorldPoint(soData.playerInputs.mouseScreenPos));
     }
 }

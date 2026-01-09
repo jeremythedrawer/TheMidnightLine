@@ -1,4 +1,5 @@
 {
+    "version": 1,
     "name": "BrainInputs",
     "maps": [
         {
@@ -54,6 +55,15 @@
                     "name": "MouseLeftDown",
                     "type": "Button",
                     "id": "1af8fd30-8fe4-4f4c-87b1-c1f605c32f84",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "MouseLeftPress",
+                    "type": "Button",
+                    "id": "ff3a6989-e3be-4b6d-89f9-ccdf399cf291",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -287,6 +297,28 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "MouseLeftDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "84e21741-fc51-4e22-ae95-a2a8c07b2fa3",
+                    "path": "<Mouse>/leftButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardAndMouse",
+                    "action": "MouseLeftPress",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7b317af2-7ada-4581-a4b2-9b53bbd417b9",
+                    "path": "<Gamepad>/rightStickPress",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "MouseLeftPress",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

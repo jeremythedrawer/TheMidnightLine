@@ -179,19 +179,17 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcfc7245b1ede504e9a7727cee02f3ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soData:
-    trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-    trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
-  componentData:
-    wheelTransforms:
-    - {fileID: 5934270509415842597}
-    - {fileID: 7187864671185131902}
-    - {fileID: 2219185916412550547}
-    - {fileID: 1125275667458475751}
-    - {fileID: 3590707035115452218}
-    - {fileID: 6375586876588150125}
-  gameEventData:
-    OnReset: {fileID: 11400000, guid: 6bcc998af9e241446b0072c494ea7625, type: 2}
+  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+  trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
+  gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
+  layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
+  materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
+  wheelTransforms: []
+  exteriorSprites: []
+  carriageCollider: {fileID: 0}
+  insideBoundsCollider: {fileID: 0}
+  exteriorSlideDoors: []
+  interiorSlideDoors: []
 --- !u!1 &3706737592130066548
 GameObject:
   m_ObjectHideFlags: 0

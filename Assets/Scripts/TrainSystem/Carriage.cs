@@ -11,6 +11,7 @@ public class Carriage : MonoBehaviour
     [SerializeField] TrainSettingsSO trainSettings;
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] LayerSettingsSO layerSettings;
+    [SerializeField] MaterialIDSO materialIDs;
     [SerializeField] Transform[] wheelTransforms;
     [SerializeField] SpriteRenderer[] exteriorSprites;
     public BoxCollider2D carriageCollider;
@@ -21,7 +22,6 @@ public class Carriage : MonoBehaviour
 
     [Serializable] public struct MaterialProps
     {
-        internal int alphaID;
         internal float alpha;
     }
     [SerializeField] MaterialProps materialProps;
@@ -46,7 +46,6 @@ public class Carriage : MonoBehaviour
     internal SmokersRoomData[] smokersRoomData;
     private void Awake()
     {
-        materialProps.alphaID = Shader.PropertyToID("_Alpha");
         mpb = new MaterialPropertyBlock();
         ctsFade = new CancellationTokenSource();
         materialProps.alpha = 1;
@@ -171,7 +170,7 @@ public class Carriage : MonoBehaviour
                 elaspedTime += (fadeIn ? Time.deltaTime : -Time.deltaTime);
 
                 materialProps.alpha = elaspedTime / trainSettings.exteriorWallFadeTime;
-                mpb.SetFloat(materialProps.alphaID, materialProps.alpha);
+                mpb.SetFloat(materialIDs.ids.alpha, materialProps.alpha);
                 for (int i = 0; i < exteriorSprites.Length; i++)
                 {
                     exteriorSprites[i].SetPropertyBlock(mpb);

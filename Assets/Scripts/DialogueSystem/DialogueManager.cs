@@ -26,7 +26,7 @@ public class DialogueManager : MonoBehaviour
 
     private async UniTask WaitForFade()
     {
-        while (gameFadeSO.value != 1) await UniTask.Yield();
+        while (gameFadeSO.brightness != 1) await UniTask.Yield();
         Instantiate(tutorialManager, transform);
     }
 

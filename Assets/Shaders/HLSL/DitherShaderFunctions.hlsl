@@ -1,4 +1,4 @@
-static const int bayer2[2 * 2] =
+static const int bayer2[4] =
 {
     0, 2,
     3, 1
@@ -26,16 +26,16 @@ static const int bayer8[64] =
 
 float GetBayer2(uint x, uint y)
 {
-    return float(bayer2[(x % 2) + (y % 2) * 2]) * (1.0 / 4.0) - 0.5;
+    return float(bayer2[(x % 2) + (y % 2) * 2]) * (0.25) - 0.5;
 }
 
 float GetBayer4(uint x, uint y)
 {
-    return float(bayer4[(x % 4) + (y % 4) * 4]) * (1.0 / 16.0) - 0.5;
+    return float(bayer4[(x % 4) + (y % 4) * 4]) * (0.0625) - 0.5;
 }
 float GetBayer8(uint x, uint y)
 {
-    return float(bayer8[(x % 8) + (y % 8) * 8]) * (1.0 / 64.0) - 0.5;
+    return float(bayer8[(x % 8) + (y % 8) * 8]) * (0.015625) - 0.5;
 }
 
 float HalftoneDot(float value, float2 pixelCoord, float scale)

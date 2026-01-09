@@ -9,14 +9,13 @@ public class GameFader : MonoBehaviour
     [SerializeField] GameFadeSO data;
     [SerializeField] Image image;
     [SerializeField] GameEventDataSO gameEventData;
-
+    [SerializeField] MaterialIDSO materialIDs;
     CancellationTokenSource ctsFade;
 
     private void Awake()
     {
-        data.valueID = Shader.PropertyToID("_Value");
-        data.value = 0;
-        image.material.SetFloat(data.valueID, data.value);
+        data.brightness = 0;
+        image.material.SetFloat(materialIDs.ids.brightness, data.brightness);
     }
     private void OnEnable()
     {
@@ -49,19 +48,17 @@ public class GameFader : MonoBehaviour
     }
     private async UniTask Fade(bool fadeIn, CancellationToken token)
     {
-        float elaspedTime = data.value * data.fadeTime;
+        float elaspedTime = data.brightness * data.fadeTime;
         while (fadeIn ? elaspedTime < data.fadeTime : elaspedTime > 0f)
         {
-            token.ThrowIfCancellationRequested();
-
             elaspedTime += (fadeIn ? Time.deltaTime : -Time.deltaTime);
 
-            data.value = elaspedTime / data.fadeTime;
-            image.material.SetFloat(data.valueID, data.value);
+            data.brightness = elaspedTime / data.fadeTime;
+            image.material.SetFloat(materialIDs.ids.brightness, data.brightness);
 
             await UniTask.Yield(PlayerLoopTiming.Update, token);
         }
-        data.value = fadeIn ? 1f : 0f;
-        image.material.SetFloat(data.valueID, data.value);
+        data.brightness = fadeIn ? 1f : 0f;
+        image.material.SetFloat(materialIDs.ids.brightness, data.brightness);
     }
 }

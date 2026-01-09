@@ -78,7 +78,7 @@ public class Station : MonoBehaviour
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, components.platformCollider.transform.position.z);
             agentData.agent.transform.position = spawnPos;
             agentData.agent.stats.targetXPos = spawnPos.x;
-            agentData.agent.soData.startStation = soData.settings;
+            agentData.agent.startStation = soData.settings;
             agentData.agent.transform.SetParent(transform, true);
             //agentData.agent.SetStationDepth();
         }
@@ -89,7 +89,7 @@ public class Station : MonoBehaviour
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, components.platformCollider.transform.position.z);
             NPCBrain bystanderNPC = Instantiate(soData.npcData.npcPrefabs[randNPCIndex], spawnPos, Quaternion.identity, null); // spawn at random point on station
             bystanderNPC.stats.type = NPCBrain.Type.Bystander;
-            bystanderNPC.soData.startStation = soData.settings;
+            bystanderNPC.startStation = soData.settings;
             bystanderNPC.stats.targetXPos = spawnPos.x;
             bystanderNPC.transform.SetParent(transform, true);
             //bystanderNPC.SetStationDepth();

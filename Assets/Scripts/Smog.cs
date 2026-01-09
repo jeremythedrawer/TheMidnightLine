@@ -10,14 +10,12 @@ public class Smog : MonoBehaviour
     [SerializeField] SpyStatsSO spyStats;
     [SerializeField] TrainStatsSO trainStats;
     [SerializeField] LayerSettingsSO layerSettings;
-
+    [SerializeField] MaterialIDSO materialIDs;
     CancellationTokenSource ctsFade;
     MaterialPropertyBlock mpb;
 
     private void Awake()
     {
-        shaderValues.densityID = Shader.PropertyToID("_Density");
-        shaderValues.scrollTimeID = Shader.PropertyToID("_ScrollTime");
         mpb = new MaterialPropertyBlock();
 
 
@@ -36,7 +34,7 @@ public class Smog : MonoBehaviour
         shaderValues.curScrollSpeed = spyStats.curGroundLayer == layerSettings.trainLayerStruct.ground ? trainStats.curKMPerHour * 0.01f : shaderValues.minScrollSpeed;
         shaderValues.curScrollSpeed = Mathf.Max(shaderValues.curScrollSpeed, shaderValues.minScrollSpeed);
         shaderValues.curScrollTime += Time.deltaTime * shaderValues.curScrollSpeed;
-        mpb.SetFloat(shaderValues.scrollTimeID, shaderValues.curScrollTime);
+        mpb.SetFloat(materialIDs.ids.scrollTime, shaderValues.curScrollTime);
     }
     private void Fade()
     {
@@ -65,15 +63,14 @@ public class Smog : MonoBehaviour
                 float t = elapsed / shaderValues.fadeDensityTime;
 
                 shaderValues.curDensity = Mathf.Lerp(startDensity, shaderValues.targetDensity, t);
-                mpb.SetFloat(shaderValues.densityID, shaderValues.curDensity);
+                mpb.SetFloat(materialIDs.ids.density, shaderValues.curDensity);
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
-
-            shaderValues.curDensity = shaderValues.targetDensity;
-            mpb.SetFloat(shaderValues.densityID, shaderValues.curDensity);
         }
-        catch (OperationCanceledException)
+        finally
         {
+            shaderValues.curDensity = shaderValues.targetDensity;
+            mpb.SetFloat(materialIDs.ids.density, shaderValues.curDensity);
         }
     }
 }

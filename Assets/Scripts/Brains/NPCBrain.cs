@@ -43,22 +43,19 @@ public class NPCBrain : MonoBehaviour
     internal VisualEffect sleepingZs;
     internal GameObject smoke;
 
-    [Serializable] public struct SOData
-    {
-        public NPCSO npc;
-        public NPCsDataSO npcData;
-        public LayerSettingsSO layerSettings;
-        public TrainSettingsSO trainSettings;
-        public TrainStatsSO trainStats;
-        public GameEventDataSO gameEventData;
-        public PlayerInputsSO spyInputs;
-        public SpyStatsSO spyStats;
-        public ClipboardStatsSO clipboardStats;
+    public NPCSO npc;
+    [SerializeField] NPCsDataSO npcData;
+    [SerializeField] LayerSettingsSO layerSettings;
+    [SerializeField] TrainSettingsSO trainSettings;
+    [SerializeField] TrainStatsSO trainStats;
+    [SerializeField] GameEventDataSO gameEventData;
+    [SerializeField] PlayerInputsSO spyInputs;
+    [SerializeField] SpyStatsSO spyStats;
+    [SerializeField] ClipboardStatsSO clipboardStats;
+    [SerializeField] MaterialIDSO materialIDs;
 
-        internal StationSO startStation;
-        internal StationSO endStation;
-    }
-    [SerializeField] public SOData soData;
+    internal StationSO startStation;
+    internal StationSO endStation;
 
     [Serializable] public struct StatData
     {
@@ -98,7 +95,7 @@ public class NPCBrain : MonoBehaviour
         mpb = new MaterialPropertyBlock();
         ctsFade = new CancellationTokenSource();
 
-        mpb.SetFloat(soData.npcData.materialData.zPosID, soData.trainSettings.maxMinWorldZPos.min);
+        mpb.SetFloat(materialIDs.ids.zPos, trainSettings.maxMinWorldZPos.min);
         stats.curState = State.Idling;
         stats.chairPosIndex = -1;
         stats.curAlpha = 1;
@@ -108,12 +105,12 @@ public class NPCBrain : MonoBehaviour
         SetLayer().Forget();
         if (stats.behaviours == 0)
         {
-            stats.behaviours = NPCTraits.GetBehaviours(soData.npc.behaviours);
+            stats.behaviours = NPCTraits.GetBehaviours(npc.behaviours);
         }
     }
     private void OnEnable()
     {
-        soData.gameEventData.OnStationArrival.RegisterListener(() => stats.canBoardTrain = true);
+        gameEventData.OnStationArrival.RegisterListener(() => stats.canBoardTrain = true);
         SetAnimationEvents();
     }
 
@@ -121,38 +118,38 @@ public class NPCBrain : MonoBehaviour
     {
         if (((stats.behaviours & NPCTraits.Behaviours.Takes_naps) != 0) && sleepingZs == null)
         {
-            sleepingZs = Instantiate(soData.npcData.sleepingZs, transform);
+            sleepingZs = Instantiate(npcData.sleepingZs, transform);
             sleepingZs.Stop();
         }
         if (((stats.behaviours & NPCTraits.Behaviours.Frequent_smoker) != 0) && smoke == null)
         {
-            smoke = Instantiate(soData.npcData.smoke, transform);
+            smoke = Instantiate(npcData.smoke, transform);
             smoke.SetActive(false);
         }
     }
     private async UniTask SetLayer()
     {
         rigidBody.gravityScale = 0;
-        while (soData.layerSettings.stationMask == 0) await UniTask.Yield();
-        rigidBody.includeLayers = soData.layerSettings.stationMask;
+        while (layerSettings.stationMask == 0) await UniTask.Yield();
+        rigidBody.includeLayers = layerSettings.stationMask;
         rigidBody.gravityScale = 1;
 
     }
     private void OnDisable()
     {
-        soData.gameEventData.OnStationArrival.UnregisterListener(() => stats.canBoardTrain = true);
+        gameEventData.OnStationArrival.UnregisterListener(() => stats.canBoardTrain = true);
     }
     private void Update()
     {
         SelectingStates();
         UpdateStates();
         Fade();
-        mpb.SetTexture(soData.npcData.materialData.mainTexID, spriteRenderer.sprite.texture);
+        mpb.SetTexture(materialIDs.ids.mainTex, spriteRenderer.sprite.texture);
         spriteRenderer.SetPropertyBlock(mpb);
 
 
 
-        if (rigidBody.includeLayers == soData.layerSettings.trainMask)
+        if (rigidBody.includeLayers == layerSettings.trainMask)
         {
             stats.stateTimer += Time.deltaTime;
         }
@@ -169,12 +166,8 @@ public class NPCBrain : MonoBehaviour
         BoardTrain();
         stats.targetDist = stats.targetXPos - transform.position.x;
         inputData.move = Mathf.Abs(stats.targetDist) > 0.1f ? Mathf.Sign(stats.targetDist) : 0;
-        stats.targetXVelocity = soData.npc.moveSpeed  * inputData.move;
-        rigidBody.linearVelocityX = soData.npc.moveSpeed  * inputData.move;
-    }
-    private void OnApplicationQuit()
-    {
-        ResetData();
+        stats.targetXVelocity = npc.moveSpeed  * inputData.move;
+        rigidBody.linearVelocityX = npc.moveSpeed  * inputData.move;
     }
     private void SelectingStates()
     {
@@ -274,62 +267,62 @@ public class NPCBrain : MonoBehaviour
         {
             case State.Idling:
             {
-                stats.stateDuration = UnityEngine.Random.Range(soData.npc.pickBehaviourDurationRange.x, soData.npc.pickBehaviourDurationRange.y);
+                stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
 
                 if (stats.chairPosIndex != -1)
                 {
-                    animator.Play(soData.npcData.animHashData.sittingBreathing);
+                    animator.Play(npcData.animHashData.sittingBreathing);
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
-                    mpb.SetFloat(soData.npcData.materialData.zPosID, curCarriage.chairZPos);
+                    mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
                 }
                 else
                 {
-                    animator.Play(soData.npcData.animHashData.standingBreathing);
+                    animator.Play(npcData.animHashData.standingBreathing);
                 }
             }
             break;
             case State.Walking:
             {
-                animator.Play(soData.npcData.animHashData.walking);
+                animator.Play(npcData.animHashData.walking);
             }
             break;
             case State.Smoking:
             {
-                stats.stateDuration = UnityEngine.Random.Range(soData.npc.pickBehaviourDurationRange.x, soData.npc.pickBehaviourDurationRange.y);
-                animator.Play(soData.npcData.animHashData.smoking);
+                stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
+                animator.Play(npcData.animHashData.smoking);
                 smoke.SetActive(true);
             }
             break;
             case State.Sleeping:
             {
-                stats.stateDuration = UnityEngine.Random.Range(soData.npc.pickBehaviourDurationRange.x, soData.npc.pickBehaviourDurationRange.y);
+                stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
                 sleepingZs.transform.position = new Vector3(spriteRenderer.bounds.center.x, spriteRenderer.bounds.max.y, transform.position.z - 0.5f);
                 sleepingZs.Reinit();
                 sleepingZs.Play();
                 if (stats.chairPosIndex != -1)
                 {
-                    animator.Play(soData.npcData.animHashData.sittingSleeping);
+                    animator.Play(npcData.animHashData.sittingSleeping);
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
-                    mpb.SetFloat(soData.npcData.materialData.zPosID, curCarriage.chairZPos);
+                    mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
                 }
                 else
                 {
-                    animator.Play(soData.npcData.animHashData.standingSleeping);
+                    animator.Play(npcData.animHashData.standingSleeping);
                 }
             }
             break;
             case State.Eating:
             {
-                stats.stateDuration = UnityEngine.Random.Range(soData.npc.pickBehaviourDurationRange.x, soData.npc.pickBehaviourDurationRange.y);
+                stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
                 if (stats.chairPosIndex != -1)
                 {
-                    animator.Play(soData.npcData.animHashData.sittingEating);
+                    animator.Play(npcData.animHashData.sittingEating);
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
-                    mpb.SetFloat(soData.npcData.materialData.zPosID, curCarriage.chairZPos);
+                    mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
                 }
                 else
                 {
-                    animator.Play(soData.npcData.animHashData.standingEating);
+                    animator.Play(npcData.animHashData.standingEating);
                 }
             }
             break;
@@ -367,54 +360,54 @@ public class NPCBrain : MonoBehaviour
     }
     public void HoverColor()
     {
-        if (rigidBody.includeLayers != soData.layerSettings.trainMask) return;
+        if (rigidBody.includeLayers != layerSettings.trainMask) return;
 
-        if (!soData.clipboardStats.tempStats.active || soData.clipboardStats.tempStats.curPageIndex >= soData.clipboardStats.profilePageArray.Length || soData.clipboardStats.tempStats.curPageIndex == -1)
+        if (!clipboardStats.tempStats.active || clipboardStats.tempStats.curPageIndex >= clipboardStats.profilePageArray.Length || clipboardStats.tempStats.curPageIndex == -1)
         {
-            mpb.SetColor(soData.npcData.materialData.colorID, Color.black + new Color(soData.npcData.hoverColorOffet, soData.npcData.hoverColorOffet, soData.npcData.hoverColorOffet, 0f));
+            mpb.SetColor(materialIDs.ids.color, Color.black + new Color(npcData.hoverColorOffet, npcData.hoverColorOffet, npcData.hoverColorOffet, 0f));
         }
-        else if (stats.selectedColor != soData.clipboardStats.profilePageArray[soData.clipboardStats.tempStats.curPageIndex].color)
+        else if (stats.selectedColor != clipboardStats.profilePageArray[clipboardStats.tempStats.curPageIndex].color)
         {
-            mpb.SetColor(soData.npcData.materialData.colorID, soData.clipboardStats.profilePageArray[soData.clipboardStats.tempStats.curPageIndex].color * soData.npcData.hoverColorOffet);
+            mpb.SetColor(materialIDs.ids.color, clipboardStats.profilePageArray[clipboardStats.tempStats.curPageIndex].color * npcData.hoverColorOffet);
         }
         spriteRenderer.SetPropertyBlock(mpb);
     }
     public void SelectColor()
     {
-        if (rigidBody.includeLayers != soData.layerSettings.trainMask) return;
+        if (rigidBody.includeLayers != layerSettings.trainMask) return;
 
-        if (!soData.clipboardStats.tempStats.active || soData.clipboardStats.tempStats.curPageIndex >= soData.clipboardStats.profilePageArray.Length || soData.clipboardStats.tempStats.curPageIndex == -1)
+        if (!clipboardStats.tempStats.active || clipboardStats.tempStats.curPageIndex >= clipboardStats.profilePageArray.Length || clipboardStats.tempStats.curPageIndex == -1)
         {
             stats.selectedColor = Color.black;
 
             if (stats.selectedProfileIndex == -1) return;
-            soData.clipboardStats.profilePageArray[stats.selectedProfileIndex].spySelected = false;
+            clipboardStats.profilePageArray[stats.selectedProfileIndex].spySelected = false;
             stats.selectedProfileIndex = -1;
         }
-        else if (stats.selectedColor != soData.clipboardStats.profilePageArray[soData.clipboardStats.tempStats.curPageIndex].color)
+        else if (stats.selectedColor != clipboardStats.profilePageArray[clipboardStats.tempStats.curPageIndex].color)
         {
-            stats.selectedProfileIndex = soData.clipboardStats.tempStats.curPageIndex;
+            stats.selectedProfileIndex = clipboardStats.tempStats.curPageIndex;
 
-            stats.selectedColor = soData.clipboardStats.profilePageArray[stats.selectedProfileIndex].color;
-            soData.clipboardStats.profilePageArray[stats.selectedProfileIndex].spySelected = true;
+            stats.selectedColor = clipboardStats.profilePageArray[stats.selectedProfileIndex].color;
+            clipboardStats.profilePageArray[stats.selectedProfileIndex].spySelected = true;
         }
-        mpb.SetColor(soData.npcData.materialData.colorID, stats.selectedColor);
+        mpb.SetColor(materialIDs.ids.color, stats.selectedColor);
         spriteRenderer.SetPropertyBlock(mpb);
     }
     public void ExitColor()
     {
-        if (rigidBody.includeLayers != soData.layerSettings.trainMask) return;
-        mpb.SetColor(soData.npcData.materialData.colorID, stats.selectedColor);
+        if (rigidBody.includeLayers != layerSettings.trainMask) return;
+        mpb.SetColor(materialIDs.ids.color, stats.selectedColor);
         spriteRenderer.SetPropertyBlock(mpb);
     }
     private void Fade()
     {
         bool shouldFadeOut =
-            rigidBody.includeLayers == soData.layerSettings.stationMask &&
-            soData.spyStats.curGroundLayer == soData.layerSettings.trainLayerStruct.ground &&
-            soData.spyStats.curWorldPos.z > transform.position.z &&
-            transform.position.x > soData.spyStats.curCarriageMinXPos &&
-            transform.position.x < soData.spyStats.curCarriageMaxXPos;
+            rigidBody.includeLayers == layerSettings.stationMask &&
+            spyStats.curGroundLayer == layerSettings.trainLayerStruct.ground &&
+            spyStats.curWorldPos.z > transform.position.z &&
+            transform.position.x > spyStats.curCarriageMinXPos &&
+            transform.position.x < spyStats.curCarriageMaxXPos;
 
         float targetAlpha = shouldFadeOut ? 0f : 1f;
 
@@ -433,21 +426,19 @@ public class NPCBrain : MonoBehaviour
         float elapsed = 0f;
         try
         {
-            while (elapsed < soData.npcData.fadeTime)
+            while (elapsed < npcData.fadeTime)
             {
-                token.ThrowIfCancellationRequested();
-
                 elapsed += Time.deltaTime;
-                float t = elapsed / soData.npcData.fadeTime;
+                float t = elapsed / npcData.fadeTime;
 
                 stats.curAlpha = Mathf.Lerp(startAlpha, stats.targetAlpha, t);
-                mpb.SetFloat( soData.npcData.materialData.alphaID, stats.curAlpha);
+                mpb.SetFloat(materialIDs.ids.alpha, stats.curAlpha);
 
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
 
             stats.curAlpha = stats.targetAlpha;
-            mpb.SetFloat(soData.npcData.materialData.alphaID, stats.curAlpha);
+            mpb.SetFloat(materialIDs.ids.alpha, stats.curAlpha);
         }
         catch (OperationCanceledException)
         {
@@ -455,11 +446,11 @@ public class NPCBrain : MonoBehaviour
     }
     private void BoardTrain()
     {
-        if (!stats.canBoardTrain || rigidBody.includeLayers == soData.layerSettings.trainMask) return; // only board train when you can board and npc is on the station ground
+        if (!stats.canBoardTrain || rigidBody.includeLayers == layerSettings.trainMask) return; // only board train when you can board and npc is on the station ground
 
         if (curCarriage == null) // find slide door in one frame
         {
-            RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, new Vector2(soData.npc.maxDistanceDetection, boxCollider.size.y), 0.0f, transform.right, soData.npc.maxDistanceDetection, soData.layerSettings.trainLayerStruct.carriage);
+            RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, new Vector2(npc.maxDistanceDetection, boxCollider.size.y), 0.0f, transform.right, npc.maxDistanceDetection, layerSettings.trainLayerStruct.carriage);
 
             if (carriageHit.collider == null) { Debug.LogError($"{name} did not find a carriage to go to"); return; }
 
@@ -470,7 +461,7 @@ public class NPCBrain : MonoBehaviour
             float clostestSlideDoorDists = float.MaxValue;
             float npcXPos = transform.position.x;
             int bestIndex = -1;
-            if (soData.startStation.isFrontOfTrain)
+            if (startStation.isFrontOfTrain)
             {
                 for (int i = 0; i < curCarriage.exteriorSlideDoors.Length; i++)
                 {
@@ -523,9 +514,9 @@ public class NPCBrain : MonoBehaviour
             {
                 SetStandingDepthAndPosition();
                 transform.SetParent(null, true);
-                soData.trainStats.curPassengerCount++;
+                trainStats.curPassengerCount++;
                 QueueForChair();
-                rigidBody.includeLayers = soData.layerSettings.trainMask;
+                rigidBody.includeLayers = layerSettings.trainMask;
             }
         }
     }
@@ -575,63 +566,59 @@ public class NPCBrain : MonoBehaviour
     }
     private void SetStandingDepthAndPosition()
     {
-        float zPos = UnityEngine.Random.Range(soData.trainSettings.maxMinWorldZPos.min, soData.trainSettings.maxMinWorldZPos.max);
-        mpb.SetFloat(soData.npcData.materialData.zPosID, zPos);
+        float zPos = UnityEngine.Random.Range(trainSettings.maxMinWorldZPos.min, trainSettings.maxMinWorldZPos.max);
+        mpb.SetFloat(materialIDs.ids.zPos, zPos);
         transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
     }
 
-    //public void SetStationDepth()
-    //{
-    //    componentData.mpb.SetFloat(soData.npcData.materialData.zPosID, transform.position.z); //TODO Lighten NPC when they are on a station that is behind the train
-    //}
     private void SetAnimationEvents()
     {
-        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingAboutToEat], nameof(PlaySittingEating));
-        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingAboutToEat], nameof(PlayStandingEatingAnimation));
-        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingBreathing], nameof(PlayRandomStandingIdleAnimations));
-        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.standingBlinking], nameof(PlayRandomStandingIdleAnimations));
-        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingBreathing], nameof(PlayRandomSittingIdleAnimations));
-        Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.sittingBlinking], nameof(PlayRandomSittingIdleAnimations));
+        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.sittingAboutToEat], nameof(PlaySittingEating));
+        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.standingAboutToEat], nameof(PlayStandingEatingAnimation));
+        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.standingBreathing], nameof(PlayRandomStandingIdleAnimations));
+        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.standingBlinking], nameof(PlayRandomStandingIdleAnimations));
+        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.sittingBreathing], nameof(PlayRandomSittingIdleAnimations));
+        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.sittingBlinking], nameof(PlayRandomSittingIdleAnimations));
 
-        for (int i = 0; i < soData.npc.smokeAnimPosData.Length; i++)
+        for (int i = 0; i < npc.smokeAnimPosData.Length; i++)
         {
-            Animations.SetAnimationEvent(soData.npc.animClipDict[soData.npcData.animHashData.smoking], nameof(SetSmokePosition), soData.npc.smokeAnimPosData[i].time, intParam: i);
+            Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.smoking], nameof(SetSmokePosition), npc.smokeAnimPosData[i].time, intParam: i);
         }
     }
     private void PlaySittingEating()
     {
-        animator.Play(soData.npcData.animHashData.sittingEating);
+        animator.Play(npcData.animHashData.sittingEating);
     }
     private void PlayStandingEatingAnimation()
     {
-        animator.Play(soData.npcData.animHashData.standingEating);
+        animator.Play(npcData.animHashData.standingEating);
     }
     private void PlayRandomStandingIdleAnimations()
     {
         if(UnityEngine.Random.Range(0, 2) == 0)
         {
-            animator.Play(soData.npcData.animHashData.standingBlinking);
+            animator.Play(npcData.animHashData.standingBlinking);
         }
         else
         {
-            animator.Play(soData.npcData.animHashData.standingBreathing);
+            animator.Play(npcData.animHashData.standingBreathing);
         }
     }
     private void PlayRandomSittingIdleAnimations()
     {
         if (UnityEngine.Random.Range(0, 2) == 0)
         {
-            animator.Play(soData.npcData.animHashData.sittingBlinking);
+            animator.Play(npcData.animHashData.sittingBlinking);
         }
         else
         {
-            animator.Play(soData.npcData.animHashData.sittingBreathing);
+            animator.Play(npcData.animHashData.sittingBreathing);
         }
     }
     private void SetSmokePosition(int index)
     {
-        float xPos = spriteRenderer.flipX ? -soData.npc.smokeAnimPosData[index].position.x : soData.npc.smokeAnimPosData[index].position.x;
-        smoke.transform.localPosition = new Vector3(xPos, soData.npc.smokeAnimPosData[index].position.y, 0);
+        float xPos = spriteRenderer.flipX ? -npc.smokeAnimPosData[index].position.x : npc.smokeAnimPosData[index].position.x;
+        smoke.transform.localPosition = new Vector3(xPos, npc.smokeAnimPosData[index].position.y, 0);
     }
     private NPCTraits.Behaviours PickBehaviour()
     {
@@ -651,11 +638,6 @@ public class NPCBrain : MonoBehaviour
         int chosenFlag = flags[UnityEngine.Random.Range(0, flagCount)];
 
         return (NPCTraits.Behaviours)chosenFlag;
-    }
-    private void ResetData()
-    {
-        mpb.SetFloat(soData.npcData.materialData.zPosID, 0f);
-        spriteRenderer.SetPropertyBlock(mpb);
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
@@ -685,7 +667,7 @@ public class NPCBrain : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.yellow;
-        Gizmos.DrawWireCube(boxCollider.bounds.center, new Vector2(soData.npc.maxDistanceDetection, boxCollider.bounds.extents.y));
+        Gizmos.DrawWireCube(boxCollider.bounds.center, new Vector2(npc.maxDistanceDetection, boxCollider.bounds.extents.y));
     }
 #endif
 

@@ -13,6 +13,7 @@ public class Phone : MonoBehaviour
     [SerializeField] SpriteRenderer cordRenderer;
     [SerializeField] BoxCollider2D boxCollider;
     [SerializeField] LayerSettingsSO layerSettings;
+    [SerializeField] MaterialIDSO materialIDs;
     MaterialPropertyBlock phoneMPB;
     MaterialPropertyBlock cordMPB;
     float curDistFromSpy;
@@ -22,9 +23,6 @@ public class Phone : MonoBehaviour
     {
         phoneMPB = new MaterialPropertyBlock();
         cordMPB = new MaterialPropertyBlock();
-        phone.materialIDs.hoveredID = Shader.PropertyToID("_Hovered");
-        phone.materialIDs.selectedID = Shader.PropertyToID("_Selected");
-        phone.materialIDs.targetPositionID = Shader.PropertyToID("_TargetPosition");
     }
     private void Start()
     {
@@ -45,14 +43,14 @@ public class Phone : MonoBehaviour
     public void HoverColor()
     {
         if (spyStats.onPhone) return;
-        phoneMPB.SetFloat(phone.materialIDs.hoveredID, 1);
+        phoneMPB.SetFloat(materialIDs.ids.hovered, 1);
         phoneRenderer.SetPropertyBlock(phoneMPB);
     }
     public void ExitColor()
     {
         if (spyStats.onPhone) return;
-        phoneMPB.SetFloat(phone.materialIDs.hoveredID, 0);
-        phoneMPB.SetFloat(phone.materialIDs.selectedID, 0);
+        phoneMPB.SetFloat(materialIDs.ids.hovered, 0);
+        phoneMPB.SetFloat(materialIDs.ids.selected, 0);
         phoneRenderer.SetPropertyBlock(phoneMPB);
     }
     public void UsePhone()
@@ -64,7 +62,7 @@ public class Phone : MonoBehaviour
         Vector2 targetCordPosition = spyStats.curWorldPos;
         targetCordPosition.x += spyStats.spriteFlip ? -spyStats.phonePosition.x : spyStats.phonePosition.x;
         targetCordPosition.y += spyStats.phonePosition.y;
-        cordMPB.SetVector(phone.materialIDs.targetPositionID, targetCordPosition);
+        cordMPB.SetVector(materialIDs.ids.targetPosition, targetCordPosition);
         cordRenderer.SetPropertyBlock(cordMPB);
         gameEventData.OnStartTutorial.Raise();
     }

@@ -36,10 +36,6 @@ public class NPCManager : MonoBehaviour
         soData.npcData.animHashData.standingSleeping = Animator.StringToHash("StandingSleeping");
         soData.npcData.animHashData.walking = Animator.StringToHash("Walking");
 
-        soData.npcData.materialData.colorID = Shader.PropertyToID("_Color");
-        soData.npcData.materialData.zPosID = Shader.PropertyToID("_ZPos");
-        soData.npcData.materialData.alphaID = Shader.PropertyToID("_Alpha");
-        soData.npcData.materialData.mainTexID = Shader.PropertyToID("_MainTex");
         soData.npcData.npcsToPick = new List<NPCBrain>(soData.npcData.npcPrefabs);
         soData.npcData.colorsToPick = new List<Color>(soData.npcData.agentColors);
 
@@ -79,7 +75,7 @@ public class NPCManager : MonoBehaviour
                 npc.stats.type = NPCBrain.Type.Agent;
 
                 NPCTraits.Behaviours profilePageBehaviours = npc.stats.behaviours;
-                NPCTraits.Appearence profilePageAppearence = NPCTraits.GetRandomAppearence(npc.soData.npc.appearence);
+                NPCTraits.Appearence profilePageAppearence = NPCTraits.GetRandomAppearence(npc.npc.appearence);
                 ClipboardStatsSO.ProfilePageData profilePageData = new ClipboardStatsSO.ProfilePageData { behaviours = profilePageBehaviours, appearence = profilePageAppearence, color = agentColor };
                 soData.clipBoardStats.profilePageArray[profilePageIndex] = (profilePageData);
 

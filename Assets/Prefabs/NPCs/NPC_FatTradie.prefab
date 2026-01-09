@@ -57,6 +57,8 @@ SpriteRenderer:
   m_RayTracingAccelStructBuildFlagsOverride: 0
   m_RayTracingAccelStructBuildFlags: 1
   m_SmallMeshCulling: 1
+  m_ForceMeshLod: -1
+  m_MeshLodSelectionBias: 0
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
@@ -78,6 +80,7 @@ SpriteRenderer:
   m_AutoUVMaxDistance: 0.5
   m_AutoUVMaxAngle: 89
   m_LightmapParameters: {fileID: 0}
+  m_GlobalIlluminationMeshLod: 0
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
@@ -275,7 +278,7 @@ BoxCollider2D:
   m_Offset: {x: 0, y: 1.615}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.42247635, y: 0.0000003875248}
+    pivot: {x: 0.41860464, y: 0}
     oldSize: {x: 0.86, y: 3.15}
     newSize: {x: 1.25, y: 3.23}
     adaptiveTilingThreshold: 0.5
@@ -300,13 +303,13 @@ MonoBehaviour:
   boxCollider: {fileID: 7958201747531856237}
   animator: {fileID: 2253084835064915273}
   spriteRenderer: {fileID: 7411105796806815275}
-  soData:
-    npc: {fileID: 11400000, guid: fceb5d5663efb334594da568dbdda9ee, type: 2}
-    npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
-    layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
-    trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
-    trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-    gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
-    spyInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
-    spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-    clipboardStats: {fileID: 11400000, guid: 65736770e7c10174c96fa2657616eb71, type: 2}
+  npc: {fileID: 11400000, guid: fceb5d5663efb334594da568dbdda9ee, type: 2}
+  npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
+  layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
+  trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
+  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+  gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
+  spyInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  clipboardStats: {fileID: 11400000, guid: 65736770e7c10174c96fa2657616eb71, type: 2}
+  materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}

@@ -9,9 +9,7 @@ public class PhoneSO : ScriptableObject
     public float minTutorialPartTime = 1f;
     [Serializable] public struct MaterialIDs
     {
-        internal int hoveredID;
-        internal int selectedID;
-        internal int targetPositionID;
+
 
     }
     internal MaterialIDs materialIDs;

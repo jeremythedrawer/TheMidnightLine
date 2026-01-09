@@ -11,27 +11,23 @@ public class ClipboardStatsSO : ScriptableObject
         internal Color color;
         internal bool spySelected;
     }
-    internal ProfilePageData[] profilePageArray;
-
-    [Serializable] public struct MaterialIDs
-    {
-        public int normAnimTime;
-        public int fontColor;
-        public int ditherValue;
-    }
-    internal MaterialIDs materialIDs;
+    public ProfilePageData[] profilePageArray;
 
     [Serializable] public struct TempStats
     {
-        internal float imagesStartYPos;
-        internal float tabStartYPos;
-        internal float imagesTargetYPos;
-        internal float tabTargetYPos;
-        internal float ditherTransitionValue;
-        internal int curPageIndex;
-        internal bool active;
-        internal bool flippingPage;
-        internal bool canClickID;
+        public float flipPageAtlasUnitSize;
+        public float imagesStartYPos;
+        public float tabStartYPos;
+        public float imagesTargetYPos;
+        public float tabTargetYPos;
+        public float ditherTransitionValue;
+        public float curDragMouseT;
+        public float prevCurDragMouseT;
+        public float pageMaxScreenPosY;
+        public int curPageIndex;
+        public bool active;
+        public bool canClickID;
+        public bool flipUp;
     }
-    internal TempStats tempStats;
+    public TempStats tempStats;
 }

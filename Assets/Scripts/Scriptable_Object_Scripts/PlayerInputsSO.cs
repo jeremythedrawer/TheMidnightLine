@@ -11,6 +11,10 @@ public class PlayerInputsSO : ScriptableObject
 
     internal Vector2 mouseScreenPos;
     internal Vector2 mouseWorldPos;
+    internal Vector2 startDragMouseScreenPos;
+    internal Vector2 endDragMouseScreenPos;
     internal bool mouseLeftDown;
+    internal bool mouseLeftPress;
+    internal bool mouseLeftUp;
     internal bool cancel;
 }
