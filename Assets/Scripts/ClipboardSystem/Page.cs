@@ -1,10 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
-using System.Threading.Tasks;
-using System.Xml.Linq;
 using TMPro;
-using Unity.VisualScripting.Antlr3.Runtime;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -17,8 +14,9 @@ public class Page : MonoBehaviour
     }
     [Serializable] public struct Stats
     {
-        internal Color borderColor;
-        internal int pageIndex;
+        public Color borderColor;
+        public int pageIndex;
+        public float curNormAnimTime;
     }
 
     [SerializeField] Type type;
@@ -40,16 +38,18 @@ public class Page : MonoBehaviour
     [SerializeField] TMP_Text behavioursText;
     [SerializeField] TMP_Text appearenceText;
     [SerializeField] Image borderImage;
-    [SerializeField] Stats stats;
 
     [Header("Front Page")]
     [SerializeField] TMP_Text idText;
     [SerializeField] Image idBorderImage;
+
+    CancellationTokenSource flipCTS;
     CancellationTokenSource ditherValueCTS;
-    CancellationTokenSource releasePageCTS;
     
     Image flipPageImage;
     bool prevHovered = true;
+    public Stats stats;
+    public bool flipped;
     private void Awake()
     {
         flipPageImage = Instantiate(clipboardSettings.flippedPagePrefab, flippedPageSpawnTransform);
@@ -90,9 +90,10 @@ public class Page : MonoBehaviour
 
     private void OnDisable()
     {
-        releasePageCTS?.Cancel();
-        releasePageCTS?.Dispose();
-        releasePageCTS = null;
+        flipCTS?.Cancel();
+        flipCTS?.Dispose();
+        flipCTS = null;
+
         ditherValueCTS?.Cancel();
         ditherValueCTS?.Dispose();
         ditherValueCTS = null;
@@ -133,7 +134,7 @@ public class Page : MonoBehaviour
                 if (hovered && clicked)
                 {
                     tutorial.curConvoIndex++;
-                    HoveringID(false, 1, ditherValueCTS.Token).Forget();
+                    HoveringFrontPageID(false, 1, ditherValueCTS.Token).Forget();
 
                     clipboardStats.tempStats.canClickID = false;
                 }
@@ -145,14 +146,14 @@ public class Page : MonoBehaviour
                         ditherValueCTS?.Dispose();
                         ditherValueCTS = new CancellationTokenSource();
                     }
-                    HoveringID(hovered, 0.9f, ditherValueCTS.Token).Forget();
+                    HoveringFrontPageID(hovered, 0.9f, ditherValueCTS.Token).Forget();
                     prevHovered = hovered;
                 }
             }
             break;
         }
     }
-    public void SetPageParams(int pageIndex)
+    public void SetProfilePageParams(int pageIndex)
     {
         stats.pageIndex = pageIndex;
         NPCTraits.Behaviours rawBehave = clipboardStats.profilePageArray[pageIndex].behaviours;
@@ -255,19 +256,32 @@ public class Page : MonoBehaviour
         flipPageImage.enabled = false;
         pageImage.enabled = true;
     }
-    public void Unflip()
+
+    public void AutoFlip()
     {
-        if (releasePageCTS == null || releasePageCTS.IsCancellationRequested)
+        if (flipCTS == null || flipCTS.IsCancellationRequested)
         {
-            releasePageCTS?.Dispose();
-            releasePageCTS = new CancellationTokenSource();
+            flipCTS?.Dispose();
+            flipCTS = new CancellationTokenSource();
         }
-        ReleasingPage().Forget();
+        AutoFlipTask().Forget();
     }
-    private async UniTask ReleasingPage()
+    private async UniTask AutoFlipTask()
     {
+        /*
+         * I cache the flip state, the anim time
+         * I calculate the remaining elapsed time, the target anim time and the start anim time.
+         * start anim time is one minused if the page is flipping down because the animation is reversed
+         * The page will update its animation using its material shader's atlas.
+         * If cancelled the task will return early so no events are raised
+         *  If not cancelled, depending on whether the page is flipping up or down will determine the corelating events to be raised.
+         */
+        bool initialFlipUp = clipboardStats.tempStats.flipUp;
         float startNormTime = flipPageImage.material.GetFloat(materialIDs.ids.normAnimTime);
-        float elapsedTime = 0f;
+        if (clipboardStats.tempStats.flipUp) startNormTime = 1 - startNormTime;
+        float elapsedTime = startNormTime * page.releasePageTime;
+        float targetFlip = clipboardStats.tempStats.flipUp ? 1 : 0;
+        float startFlip = 1 - targetFlip;
 
         try
         {
@@ -275,21 +289,32 @@ public class Page : MonoBehaviour
             {
                 elapsedTime += Time.deltaTime;
                 float t = elapsedTime / page.releasePageTime;
-                float curNormTime = Mathf.Lerp(startNormTime, 0, t);
+                float curNormTime = Mathf.Lerp(startFlip, targetFlip, t);
                 flipPageImage.material.SetFloat(materialIDs.ids.normAnimTime, curNormTime);
-                await UniTask.Yield(PlayerLoopTiming.Update, releasePageCTS.Token);
+                await UniTask.Yield(cancellationToken: flipCTS.Token);
             }
-
-            FlipDown();
         }
-        catch (OperationCanceledException)
+        catch(OperationCanceledException)
         {
+            return;
         }
 
+        if (clipboardStats.tempStats.flipUp)
+        {
+            gameEventData.OnFlipUpPage.Raise();
+        }
+        else
+        {
+            FlipDown();
+            gameEventData.OnFlipDownPage.Raise();
+        }
+
+        flipPageImage.material.SetFloat(materialIDs.ids.normAnimTime, targetFlip);
+        flipped = targetFlip == 1;
     }
-    private async UniTask HoveringID(bool hovering, float maxValue, CancellationToken token)
+    private async UniTask HoveringFrontPageID(bool hovering, float maxValue, CancellationToken token)
     {
-        float elaspedTime = clipboardStats.tempStats.ditherTransitionValue * clipboardSettings.ditherTransitionTime;
+        float elaspedTime = clipboardStats.cacheStats.ditherTransitionValue * clipboardSettings.ditherTransitionTime;
         try
         {
             while (hovering ? elaspedTime > 0f : elaspedTime < clipboardSettings.ditherTransitionTime)
@@ -298,8 +323,8 @@ public class Page : MonoBehaviour
 
                 float t = elaspedTime / clipboardSettings.ditherTransitionTime;
                 t *= t;
-                clipboardStats.tempStats.ditherTransitionValue = t * maxValue;
-                idBorderImage.material.SetFloat(materialIDs.ids.ditherValue, clipboardStats.tempStats.ditherTransitionValue);
+                clipboardStats.cacheStats.ditherTransitionValue = t * maxValue;
+                idBorderImage.material.SetFloat(materialIDs.ids.ditherValue, clipboardStats.cacheStats.ditherTransitionValue);
                 await UniTask.Yield(PlayerLoopTiming.Update, token);
             }
         }

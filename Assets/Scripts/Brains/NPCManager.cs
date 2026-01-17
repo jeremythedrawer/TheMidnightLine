@@ -102,9 +102,9 @@ public class NPCManager : MonoBehaviour
 
         float npcX = npc.transform.position.x;
         float closestDist = float.PositiveInfinity;
-        int bestIndex = -1;
+        uint bestIndex = int.MaxValue;
 
-        for (int i = 0; i < npc.curCarriage.chairData.Length; i++)
+        for (uint i = 0; i < npc.curCarriage.chairData.Length; i++)
         {
             if (npc.curCarriage.chairData[i].filled) continue;
 
@@ -116,7 +116,7 @@ public class NPCManager : MonoBehaviour
             }
         }
 
-        if (bestIndex == -1)
+        if (bestIndex == int.MaxValue)
         {
             npc.FindStandingPosition();
         }

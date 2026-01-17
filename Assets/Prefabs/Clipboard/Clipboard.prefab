@@ -200,7 +200,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4209583502536185213}
   m_Layer: 5
-  m_Name: ProfilePages_notFlipped
+  m_Name: pages_flippedDown
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -276,14 +276,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rectTransform: {fileID: 8181006336162262081}
   imagesRectTransform: {fileID: 7324562680423162580}
-  profilePagesNotFlippedRectTransform: {fileID: 4209583502536185213}
-  profilePagesFlippedRectTransform: {fileID: 683970197948188960}
+  pagesFlippedDownRectTransform: {fileID: 4209583502536185213}
+  pagesFlippedUpRectTransform: {fileID: 683970197948188960}
   clipRectTransform: {fileID: 4603566110128804073}
   clipboardTab: {fileID: 5045881482590286368}
   settings: {fileID: 11400000, guid: 2c1e808440566bb4eb0595424f1769b8, type: 2}
   stats: {fileID: 11400000, guid: 65736770e7c10174c96fa2657616eb71, type: 2}
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
+  gameEvents: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
 --- !u!1 &5818699582190291917
 GameObject:
   m_ObjectHideFlags: 0
@@ -369,7 +370,7 @@ GameObject:
   m_Component:
   - component: {fileID: 683970197948188960}
   m_Layer: 5
-  m_Name: ProfilePages_flipped
+  m_Name: pages_flippedUp
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

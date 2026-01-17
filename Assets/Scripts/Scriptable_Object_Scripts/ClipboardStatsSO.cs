@@ -4,30 +4,45 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "ClipboardSO", menuName = "Midnight Line SOs / Clipboard SO")]
 public class ClipboardStatsSO : ScriptableObject
 {
+    public enum ButtonTypeClicked
+    {
+        None,
+        Tab,
+        Page,
+    }
+
     [Serializable] public struct ProfilePageData
     {
-        internal NPCTraits.Behaviours behaviours;
-        internal NPCTraits.Appearence appearence;
-        internal Color color;
-        internal bool spySelected;
+        public NPCTraits.Behaviours behaviours;
+        public NPCTraits.Appearence appearence;
+        public Color color;
+        public bool spySelected;
     }
     public ProfilePageData[] profilePageArray;
 
     [Serializable] public struct TempStats
     {
-        public float flipPageAtlasUnitSize;
+        public float curDragMouseT;
+        public float startDragMouseT;
+        public float pageMaxScreenPosY;
+        public float flipDist;
+        public float rawHeight;
+        public int curPageIndex;
+        public ButtonTypeClicked buttonTypeClicked;
+        public bool active;
+        public bool canClickID;
+        public bool flipUp;
+        public bool hoverTab;
+    }
+    public TempStats tempStats;
+
+    [Serializable] public struct CacheStats
+    {
         public float imagesStartYPos;
         public float tabStartYPos;
         public float imagesTargetYPos;
         public float tabTargetYPos;
         public float ditherTransitionValue;
-        public float curDragMouseT;
-        public float prevCurDragMouseT;
-        public float pageMaxScreenPosY;
-        public int curPageIndex;
-        public bool active;
-        public bool canClickID;
-        public bool flipUp;
     }
-    public TempStats tempStats;
+    public CacheStats cacheStats;
 }

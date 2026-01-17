@@ -14,8 +14,7 @@ public class GameFader : MonoBehaviour
 
     private void Awake()
     {
-        data.brightness = 0;
-        image.material.SetFloat(materialIDs.ids.brightness, data.brightness);
+
     }
     private void OnEnable()
     {
@@ -27,6 +26,12 @@ public class GameFader : MonoBehaviour
         gameEventData.OnGameFadeIn.UnregisterListener(FadeIn);
         gameEventData.OnGameFadeOut.UnregisterListener(FadeOut);
         
+    }
+
+    private void Start()
+    {
+        data.brightness = 0;
+        image.material.SetFloat(materialIDs.ids.brightness, data.brightness);
     }
     private void FadeIn()
     {

@@ -16,4 +16,6 @@ public class GameEventDataSO : ScriptableObject
     public GameEvent OnGameFadeIn;
     public GameEvent OnStopSpyMovement;
     public GameEvent OnStartSpyMovement;
+    public GameEvent OnFlipDownPage;
+    public GameEvent OnFlipUpPage;
 }

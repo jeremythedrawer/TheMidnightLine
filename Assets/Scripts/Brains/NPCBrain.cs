@@ -26,6 +26,7 @@ public class NPCBrain : MonoBehaviour
 
     public enum Path
     {
+        Nothing,
         ToSmokerRoom,
         ToChair,
         ToSlideDoor,
@@ -76,8 +77,8 @@ public class NPCBrain : MonoBehaviour
         internal Path curPath;
         internal Type type;
 
-        internal int smokerRoomIndex;
-        internal int chairPosIndex;
+        internal uint smokerRoomIndex;
+        internal uint chairPosIndex;
         internal int selectedProfileIndex;
 
         internal bool canBoardTrain;
@@ -95,12 +96,12 @@ public class NPCBrain : MonoBehaviour
         mpb = new MaterialPropertyBlock();
         ctsFade = new CancellationTokenSource();
 
-        mpb.SetFloat(materialIDs.ids.zPos, trainSettings.maxMinWorldZPos.min);
+
         stats.curState = State.Idling;
-        stats.chairPosIndex = -1;
+        stats.curPath = Path.Nothing;
+        stats.chairPosIndex = int.MaxValue;
         stats.curAlpha = 1;
-        stats.selectedProfileIndex = -1;
-        stats.targetXPos = transform.position.x;
+        stats.selectedProfileIndex = int.MaxValue;
 
         SetLayer().Forget();
         if (stats.behaviours == 0)
@@ -116,6 +117,7 @@ public class NPCBrain : MonoBehaviour
 
     private void Start()
     {
+        mpb.SetFloat(materialIDs.ids.zPos, trainSettings.maxMinWorldZPos.min);
         if (((stats.behaviours & NPCTraits.Behaviours.Takes_naps) != 0) && sleepingZs == null)
         {
             sleepingZs = Instantiate(npcData.sleepingZs, transform);
@@ -164,7 +166,7 @@ public class NPCBrain : MonoBehaviour
     {
         FixedUpdateStates();
         BoardTrain();
-        stats.targetDist = stats.targetXPos - transform.position.x;
+        stats.targetDist = stats.curPath != Path.Nothing ? stats.targetXPos - transform.position.x : 0;
         inputData.move = Mathf.Abs(stats.targetDist) > 0.1f ? Mathf.Sign(stats.targetDist) : 0;
         stats.targetXVelocity = npc.moveSpeed  * inputData.move;
         rigidBody.linearVelocityX = npc.moveSpeed  * inputData.move;
@@ -269,7 +271,7 @@ public class NPCBrain : MonoBehaviour
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
 
-                if (stats.chairPosIndex != -1)
+                if (stats.chairPosIndex != int.MaxValue)
                 {
                     animator.Play(npcData.animHashData.sittingBreathing);
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
@@ -299,7 +301,7 @@ public class NPCBrain : MonoBehaviour
                 sleepingZs.transform.position = new Vector3(spriteRenderer.bounds.center.x, spriteRenderer.bounds.max.y, transform.position.z - 0.5f);
                 sleepingZs.Reinit();
                 sleepingZs.Play();
-                if (stats.chairPosIndex != -1)
+                if (stats.chairPosIndex != int.MaxValue)
                 {
                     animator.Play(npcData.animHashData.sittingSleeping);
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
@@ -314,7 +316,7 @@ public class NPCBrain : MonoBehaviour
             case State.Eating:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
-                if (stats.chairPosIndex != -1)
+                if (stats.chairPosIndex != int.MaxValue)
                 {
                     animator.Play(npcData.animHashData.sittingEating);
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
@@ -362,7 +364,7 @@ public class NPCBrain : MonoBehaviour
     {
         if (rigidBody.includeLayers != layerSettings.trainMask) return;
 
-        if (!clipboardStats.tempStats.active || clipboardStats.tempStats.curPageIndex >= clipboardStats.profilePageArray.Length || clipboardStats.tempStats.curPageIndex == -1)
+        if (!clipboardStats.tempStats.active || clipboardStats.tempStats.curPageIndex >= clipboardStats.profilePageArray.Length || clipboardStats.tempStats.curPageIndex == int.MaxValue)
         {
             mpb.SetColor(materialIDs.ids.color, Color.black + new Color(npcData.hoverColorOffet, npcData.hoverColorOffet, npcData.hoverColorOffet, 0f));
         }
@@ -376,13 +378,13 @@ public class NPCBrain : MonoBehaviour
     {
         if (rigidBody.includeLayers != layerSettings.trainMask) return;
 
-        if (!clipboardStats.tempStats.active || clipboardStats.tempStats.curPageIndex >= clipboardStats.profilePageArray.Length || clipboardStats.tempStats.curPageIndex == -1)
+        if (!clipboardStats.tempStats.active || clipboardStats.tempStats.curPageIndex >= clipboardStats.profilePageArray.Length || clipboardStats.tempStats.curPageIndex == int.MaxValue)
         {
             stats.selectedColor = Color.black;
 
-            if (stats.selectedProfileIndex == -1) return;
+            if (stats.selectedProfileIndex == int.MaxValue) return;
             clipboardStats.profilePageArray[stats.selectedProfileIndex].spySelected = false;
-            stats.selectedProfileIndex = -1;
+            stats.selectedProfileIndex = int.MaxValue;
         }
         else if (stats.selectedColor != clipboardStats.profilePageArray[clipboardStats.tempStats.curPageIndex].color)
         {
@@ -527,7 +529,7 @@ public class NPCBrain : MonoBehaviour
             NPCManager.npcChairList.Add(this);
         }
     }
-    public void AssignChair(int chairIndex)
+    public void AssignChair(uint chairIndex)
     {
         stats.chairPosIndex = chairIndex;
         curCarriage.chairData[stats.chairPosIndex].filled = true;
@@ -542,10 +544,10 @@ public class NPCBrain : MonoBehaviour
     }
     private void FindSmokersRoom()
     {
-        if (curCarriage.chairData[stats.chairPosIndex].filled)
+        if (stats.chairPosIndex > 0 && curCarriage.chairData[stats.chairPosIndex].filled)
         {
             curCarriage.chairData[stats.chairPosIndex].filled = false;
-            stats.chairPosIndex = -1;
+            stats.chairPosIndex = int.MaxValue;
 
         }
         if (NPCManager.npcChairList.Contains(this)) NPCManager.npcChairList.Remove(this); // To prevent them from going back to the chair if they are queued
