@@ -6,5 +6,4 @@ public class PageSO : ScriptableObject
 {
     public Sprite unfoldedPageSprite;
     public Sprite foldedPageSprite;
-    public float releasePageTime = 0.5f;
 }

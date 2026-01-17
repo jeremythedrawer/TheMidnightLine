@@ -16,12 +16,13 @@ public class ClipboardStatsSO : ScriptableObject
         public NPCTraits.Behaviours behaviours;
         public NPCTraits.Appearence appearence;
         public Color color;
-        public bool spySelected;
+        public bool spyHasSelected;
     }
     public ProfilePageData[] profilePageArray;
 
     [Serializable] public struct TempStats
     {
+        public Vector2 startDragPos;
         public float curDragMouseT;
         public float startDragMouseT;
         public float pageMaxScreenPosY;

@@ -11,6 +11,7 @@ public class ClipboardSettingsSO : ScriptableObject
     public float ditherTransitionTime = 1;
     [Range(0,1)]public float minDitherValue = 0.5f;
     [Range(0, 1)] public float dragToFlipPageThreshold = 0.125f;
+    public float releasePageTime = 0.5f;
     public int randomPixelOffsetForPage = 10;
     public Page profilePagePrefab;
     public Page frontPagePrefab;

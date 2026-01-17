@@ -363,35 +363,36 @@ public class NPCBrain : MonoBehaviour
     public void HoverColor()
     {
         if (rigidBody.includeLayers != layerSettings.trainMask) return;
+        int curProfilePageIndex = clipboardStats.tempStats.curPageIndex - 1;
 
-        if (!clipboardStats.tempStats.active || clipboardStats.tempStats.curPageIndex >= clipboardStats.profilePageArray.Length || clipboardStats.tempStats.curPageIndex == int.MaxValue)
+        if (!clipboardStats.tempStats.active || curProfilePageIndex >= clipboardStats.profilePageArray.Length || clipboardStats.tempStats.curPageIndex == 0)
         {
             mpb.SetColor(materialIDs.ids.color, Color.black + new Color(npcData.hoverColorOffet, npcData.hoverColorOffet, npcData.hoverColorOffet, 0f));
         }
-        else if (stats.selectedColor != clipboardStats.profilePageArray[clipboardStats.tempStats.curPageIndex].color)
+        else if (stats.selectedColor != clipboardStats.profilePageArray[curProfilePageIndex].color)
         {
-            mpb.SetColor(materialIDs.ids.color, clipboardStats.profilePageArray[clipboardStats.tempStats.curPageIndex].color * npcData.hoverColorOffet);
+            mpb.SetColor(materialIDs.ids.color, clipboardStats.profilePageArray[curProfilePageIndex].color * npcData.hoverColorOffet);
         }
         spriteRenderer.SetPropertyBlock(mpb);
     }
     public void SelectColor()
     {
         if (rigidBody.includeLayers != layerSettings.trainMask) return;
-
-        if (!clipboardStats.tempStats.active || clipboardStats.tempStats.curPageIndex >= clipboardStats.profilePageArray.Length || clipboardStats.tempStats.curPageIndex == int.MaxValue)
+        int curProfilePageIndex = clipboardStats.tempStats.curPageIndex - 1;
+        if (!clipboardStats.tempStats.active || curProfilePageIndex >= clipboardStats.profilePageArray.Length || clipboardStats.tempStats.curPageIndex == 0)
         {
             stats.selectedColor = Color.black;
 
             if (stats.selectedProfileIndex == int.MaxValue) return;
-            clipboardStats.profilePageArray[stats.selectedProfileIndex].spySelected = false;
+            clipboardStats.profilePageArray[stats.selectedProfileIndex].spyHasSelected = false;
             stats.selectedProfileIndex = int.MaxValue;
         }
-        else if (stats.selectedColor != clipboardStats.profilePageArray[clipboardStats.tempStats.curPageIndex].color)
+        else if (stats.selectedColor != clipboardStats.profilePageArray[curProfilePageIndex].color)
         {
-            stats.selectedProfileIndex = clipboardStats.tempStats.curPageIndex;
+            stats.selectedProfileIndex = curProfilePageIndex;
 
-            stats.selectedColor = clipboardStats.profilePageArray[stats.selectedProfileIndex].color;
-            clipboardStats.profilePageArray[stats.selectedProfileIndex].spySelected = true;
+            stats.selectedColor = clipboardStats.profilePageArray[curProfilePageIndex].color;
+            clipboardStats.profilePageArray[stats.selectedProfileIndex].spyHasSelected = true;
         }
         mpb.SetColor(materialIDs.ids.color, stats.selectedColor);
         spriteRenderer.SetPropertyBlock(mpb);
@@ -572,7 +573,6 @@ public class NPCBrain : MonoBehaviour
         mpb.SetFloat(materialIDs.ids.zPos, zPos);
         transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
     }
-
     private void SetAnimationEvents()
     {
         Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.sittingAboutToEat], nameof(PlaySittingEating));

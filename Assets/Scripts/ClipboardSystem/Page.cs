@@ -87,7 +87,6 @@ public class Page : MonoBehaviour
         flipPageImage.material = Instantiate(flipPageImage.material);
         flipPageImage.enabled = false;
     }
-
     private void OnDisable()
     {
         flipCTS?.Cancel();
@@ -203,14 +202,19 @@ public class Page : MonoBehaviour
 
         rectTransform.localPosition = new Vector3(rectTransform.localPosition.x, rectTransform.localPosition.y, -(clipboardStats.profilePageArray.Length - 1 - pageIndex));
     }
-    public void ClickedPage(bool clicked)
-    {
-        pageImage.sprite = clicked ? page.foldedPageSprite : page.unfoldedPageSprite;
-        foldImage.enabled = clicked;
-    }
     public void UpdateFlip()
     {
         flipPageImage.material.SetFloat(materialIDs.ids.normAnimTime, clipboardStats.tempStats.curDragMouseT);
+    }
+    public void ClickPage()
+    {
+        foldImage.enabled = true;
+        pageImage.sprite = page.foldedPageSprite;
+    }
+    public void UnclickPage()
+    {
+        foldImage.enabled = false;
+        pageImage.sprite = page.unfoldedPageSprite;
     }
     public void FlipUp()
     {
@@ -232,6 +236,8 @@ public class Page : MonoBehaviour
         }
 
         flipPageImage.enabled = true;
+        foldImage.enabled = false;
+        pageImage.sprite = page.unfoldedPageSprite;
         pageImage.enabled = false;
     }
     public void FlipDown()
@@ -255,8 +261,9 @@ public class Page : MonoBehaviour
 
         flipPageImage.enabled = false;
         pageImage.enabled = true;
+        foldImage.enabled = false;
+        pageImage.sprite = page.unfoldedPageSprite;
     }
-
     public void AutoFlip()
     {
         if (flipCTS == null || flipCTS.IsCancellationRequested)
@@ -276,19 +283,18 @@ public class Page : MonoBehaviour
          * If cancelled the task will return early so no events are raised
          *  If not cancelled, depending on whether the page is flipping up or down will determine the corelating events to be raised.
          */
-        bool initialFlipUp = clipboardStats.tempStats.flipUp;
         float startNormTime = flipPageImage.material.GetFloat(materialIDs.ids.normAnimTime);
-        if (clipboardStats.tempStats.flipUp) startNormTime = 1 - startNormTime;
-        float elapsedTime = startNormTime * page.releasePageTime;
+        if (!clipboardStats.tempStats.flipUp) startNormTime = 1 - startNormTime;
+        float elapsedTime = startNormTime * clipboardSettings.releasePageTime;
         float targetFlip = clipboardStats.tempStats.flipUp ? 1 : 0;
         float startFlip = 1 - targetFlip;
 
         try
         {
-            while (elapsedTime < page.releasePageTime)
+            while (elapsedTime < clipboardSettings.releasePageTime)
             {
                 elapsedTime += Time.deltaTime;
-                float t = elapsedTime / page.releasePageTime;
+                float t = elapsedTime / clipboardSettings.releasePageTime;
                 float curNormTime = Mathf.Lerp(startFlip, targetFlip, t);
                 flipPageImage.material.SetFloat(materialIDs.ids.normAnimTime, curNormTime);
                 await UniTask.Yield(cancellationToken: flipCTS.Token);

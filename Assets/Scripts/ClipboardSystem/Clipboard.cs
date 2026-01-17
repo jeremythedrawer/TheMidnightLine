@@ -65,23 +65,38 @@ public class Clipboard : MonoBehaviour
          * When flipping up the page needs to update its rendering order immediately. Flippind down is the opposite where the rendering order updates on the last frame
          * Calling UpdateFlip manually sets the material of the current page for the flipping animation
          */
-        if (!stats.tempStats.active || playerInputs.mouseLeftDown) return;
+        if (!stats.tempStats.active) return;
 
-        if (playerInputs.mouseLeftUp && stats.tempStats.buttonTypeClicked == ClipboardStatsSO.ButtonTypeClicked.Page)
+        if (playerInputs.mouseLeftUp)
         {
-            curPage.AutoFlip();
-            stats.tempStats.startDragMouseT = 0;
-            stats.tempStats.buttonTypeClicked = ClipboardStatsSO.ButtonTypeClicked.None;
-            stats.tempStats.rawHeight = 0;
+            curPage.UnclickPage();
+            if (stats.tempStats.buttonTypeClicked == ClipboardStatsSO.ButtonTypeClicked.Page)
+            {
+                curPage.AutoFlip();
+                stats.tempStats.startDragMouseT = 0;
+                stats.tempStats.buttonTypeClicked = ClipboardStatsSO.ButtonTypeClicked.None;
+                stats.tempStats.rawHeight = 0;
+            }
         }
 
         if (!playerInputs.mouseLeftPress || stats.tempStats.hoverTab) return;
 
-        RectTransformUtility.ScreenPointToLocalPointInRectangle(imagesRectTransform, playerInputs.startDragMouseScreenPos, Camera.main, out Vector2 startDragMousePosInPageRect);
+        if(playerInputs.mouseLeftDown)
+        {
+            stats.tempStats.startDragPos = playerInputs.mouseScreenPos;
+        }
+
+        RectTransformUtility.ScreenPointToLocalPointInRectangle(imagesRectTransform, stats.tempStats.startDragPos, Camera.main, out Vector2 startDragMousePosInPageRect);
         
         if (startDragMousePosInPageRect.x < imagesRectTransform.rect.xMin || startDragMousePosInPageRect.x > imagesRectTransform.rect.xMax) return;
 
-        stats.tempStats.rawHeight = playerInputs.mouseScreenPos.y - playerInputs.startDragMouseScreenPos.y;
+        if (playerInputs.mouseLeftDown) 
+        {
+            if (stats.tempStats.curPageIndex < pages.Length || !curPage.flipped) curPage.ClickPage(); 
+            return; 
+        }
+
+        stats.tempStats.rawHeight = playerInputs.mouseScreenPos.y - stats.tempStats.startDragPos.y;
 
         if (Mathf.Abs(stats.tempStats.rawHeight) < Screen.height * settings.dragToFlipPageThreshold) return;
 
@@ -91,18 +106,19 @@ public class Clipboard : MonoBehaviour
         {
             if (stats.tempStats.flipUp)
             {
-                stats.tempStats.flipDist = Screen.height - playerInputs.startDragMouseScreenPos.y;
+                stats.tempStats.flipDist = Screen.height - stats.tempStats.startDragPos.y;
             }
             else
             {
-                if (stats.tempStats.curPageIndex != stats.profilePageArray.Length || !curPage.flipped)
+                if (stats.tempStats.curPageIndex <= pages.Length || !curPage.flipped)
                 {
+                    curPage.UnclickPage();
                     stats.tempStats.curPageIndex--;
                     stats.tempStats.curPageIndex = Mathf.Clamp(stats.tempStats.curPageIndex, 0, stats.profilePageArray.Length);
                     curPage = pages[stats.tempStats.curPageIndex];
                 }
                 stats.tempStats.startDragMouseT = 1;
-                stats.tempStats.flipDist = playerInputs.startDragMouseScreenPos.y;
+                stats.tempStats.flipDist = stats.tempStats.startDragPos.y;
             }
             stats.tempStats.buttonTypeClicked = ClipboardStatsSO.ButtonTypeClicked.Page;
         }
@@ -183,9 +199,11 @@ public class Clipboard : MonoBehaviour
     }
     private void FlippedUpPage()
     {
-        if (stats.tempStats.curPageIndex == pages.Length - 1) return;
+        if (stats.tempStats.curPageIndex == pages.Length) return;
         stats.tempStats.curPageIndex++;
-        curPage = pages[stats.tempStats.curPageIndex];
+        if (stats.tempStats.curPageIndex >= pages.Length) return;
+        Page newPage = pages[stats.tempStats.curPageIndex];
+        curPage = newPage;
     }
 
 #if UNITY_EDITOR
