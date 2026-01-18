@@ -101,24 +101,27 @@ public class SpriteAtlasFactory : ScriptableObject
                 }
             }
 
-            EditorCurveBinding[] bindings = AnimationUtility.GetObjectReferenceCurveBindings(npcComponent.smokingClip);
-            foreach (EditorCurveBinding binding in bindings)
+            if ((npcComponent.npc.behaviours & NPCTraits.Behaviours.Frequent_smoker) != 0)
             {
-                if (binding.type != typeof(SpriteRenderer) || binding.propertyName != "m_Sprite") continue;
-
-                ObjectReferenceKeyframe[] keyframes = AnimationUtility.GetObjectReferenceCurve(npcComponent.smokingClip, binding);
-
-                foreach (ObjectReferenceKeyframe keyframe in keyframes)
+                EditorCurveBinding[] bindings = AnimationUtility.GetObjectReferenceCurveBindings(npcComponent.smokingClip);
+                foreach (EditorCurveBinding binding in bindings)
                 {
-                    smokeKeyframeTimes.Add(keyframe.time);
-                }
-            }
+                    if (binding.type != typeof(SpriteRenderer) || binding.propertyName != "m_Sprite") continue;
 
-            npcComponent.npc.smokeAnimPosData = new NPCSO.AnimEventPosData[smokePos.Count];
-            for (int i = 0; i < npcComponent.npc.smokeAnimPosData.Length; i++)
-            {
-                npcComponent.npc.smokeAnimPosData[i].position = smokePos[i];
-                npcComponent.npc.smokeAnimPosData[i].time = smokeKeyframeTimes[i];
+                    ObjectReferenceKeyframe[] keyframes = AnimationUtility.GetObjectReferenceCurve(npcComponent.smokingClip, binding);
+
+                    foreach (ObjectReferenceKeyframe keyframe in keyframes)
+                    {
+                        smokeKeyframeTimes.Add(keyframe.time);
+                    }
+                }
+
+                npcComponent.npc.smokeAnimPosData = new NPCSO.AnimEventPosData[smokePos.Count];
+                for (int i = 0; i < npcComponent.npc.smokeAnimPosData.Length; i++)
+                {
+                    npcComponent.npc.smokeAnimPosData[i].position = smokePos[i];
+                    npcComponent.npc.smokeAnimPosData[i].time = smokeKeyframeTimes[i];
+                }
             }
             EditorUtility.SetDirty(npcComponent.npc);
         }

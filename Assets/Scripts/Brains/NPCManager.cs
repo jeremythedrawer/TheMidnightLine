@@ -22,16 +22,23 @@ public class NPCManager : MonoBehaviour
     private void Awake()
     {
         soData.npcData.animHashData.sittingAboutToEat = Animator.StringToHash("SittingAboutToEat");
+        soData.npcData.animHashData.sittingAboutToRead = Animator.StringToHash("SittingAboutToRead");
         soData.npcData.animHashData.sittingBlinking = Animator.StringToHash("SittingBlinking");
         soData.npcData.animHashData.sittingBreathing = Animator.StringToHash("SittingBreathing");
+        soData.npcData.animHashData.sittingCalling = Animator.StringToHash("SittingCalling");
         soData.npcData.animHashData.sittingEating = Animator.StringToHash("SittingEating");
+        soData.npcData.animHashData.sittingMusic = Animator.StringToHash("SittingMusic");
+        soData.npcData.animHashData.sittingReading = Animator.StringToHash("SittingReading");
         soData.npcData.animHashData.sittingSick = Animator.StringToHash("SittingSick");
         soData.npcData.animHashData.sittingSleeping = Animator.StringToHash("SittingSleeping");
         soData.npcData.animHashData.smoking = Animator.StringToHash("Smoking");
         soData.npcData.animHashData.standingAboutToEat = Animator.StringToHash("StandingAboutToEat");
         soData.npcData.animHashData.standingBlinking = Animator.StringToHash("StandingBlinking");
         soData.npcData.animHashData.standingBreathing = Animator.StringToHash("StandingBreathing");
+        soData.npcData.animHashData.standingCalling = Animator.StringToHash("StandingCalling");
         soData.npcData.animHashData.standingEating = Animator.StringToHash("StandingEating");
+        soData.npcData.animHashData.standingMusic = Animator.StringToHash("StandingMusic");
+        soData.npcData.animHashData.standingReading = Animator.StringToHash("StandingReading");
         soData.npcData.animHashData.standingSick = Animator.StringToHash("StandingSick");
         soData.npcData.animHashData.standingSleeping = Animator.StringToHash("StandingSleeping");
         soData.npcData.animHashData.walking = Animator.StringToHash("Walking");

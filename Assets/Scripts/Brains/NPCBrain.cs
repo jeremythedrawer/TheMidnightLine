@@ -16,6 +16,9 @@ public class NPCBrain : MonoBehaviour
         Smoking,
         Sleeping,
         Eating,
+        Music,
+        Calling,
+        Reading
     }
     
     public enum Type
@@ -42,8 +45,10 @@ public class NPCBrain : MonoBehaviour
         
     internal Carriage curCarriage;
     internal VisualEffect sleepingZs;
-    internal GameObject smoke;
+    internal VisualEffect musicNotes;
+    internal VisualEffect talkingLines;
 
+    internal GameObject smoke;
     public NPCSO npc;
     [SerializeField] NPCsDataSO npcData;
     [SerializeField] LayerSettingsSO layerSettings;
@@ -127,6 +132,17 @@ public class NPCBrain : MonoBehaviour
         {
             smoke = Instantiate(npcData.smoke, transform);
             smoke.SetActive(false);
+            //TODO: Make smoke a visual effect
+        }
+        if (((stats.behaviours & NPCTraits.Behaviours.Listens_to_music) != 0) && musicNotes == null)
+        {
+            musicNotes = Instantiate(npcData.musicNotes, transform);
+            musicNotes.Stop();
+        }
+        if (((stats.behaviours & NPCTraits.Behaviours.Lots_of_phone_calls) != 0) && talkingLines == null)
+        {
+            talkingLines = Instantiate(npcData.talkingLines, transform);
+            talkingLines.Stop();
         }
     }
     private async UniTask SetLayer()
@@ -193,6 +209,18 @@ public class NPCBrain : MonoBehaviour
         {
             SetState(State.Eating);
         }
+        else if ((stats.curBehaviour & NPCTraits.Behaviours.Listens_to_music) != 0)
+        {
+            SetState(State.Music);
+        }
+        else if ((stats.curBehaviour & NPCTraits.Behaviours.Lots_of_phone_calls) != 0)
+        {
+            SetState(State.Calling);
+        }
+        else if ((stats.curBehaviour & NPCTraits.Behaviours.Enjoys_reading) != 0)
+        {
+            SetState(State.Reading);
+        }
     }
     private void UpdateStates()
     {
@@ -229,6 +257,30 @@ public class NPCBrain : MonoBehaviour
             }
             break;
             case State.Eating:
+            {
+                if (stats.stateTimer > stats.stateDuration)
+                {
+                    stats.curBehaviour = PickBehaviour();
+                }
+            }
+            break;
+            case State.Music:
+            {
+                if (stats.stateTimer > stats.stateDuration)
+                {
+                    stats.curBehaviour = PickBehaviour();
+                }
+            }
+            break;
+            case State.Calling:
+            {
+                if (stats.stateTimer > stats.stateDuration)
+                {
+                    stats.curBehaviour = PickBehaviour();
+                }
+            }
+            break;
+            case State.Reading:
             {
                 if (stats.stateTimer > stats.stateDuration)
                 {
@@ -285,6 +337,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case State.Walking:
             {
+                animator.speed = npc.moveSpeed;
                 animator.Play(npcData.animHashData.walking);
             }
             break;
@@ -318,13 +371,64 @@ public class NPCBrain : MonoBehaviour
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    animator.Play(npcData.animHashData.sittingEating);
+                    animator.Play(npcData.animHashData.sittingAboutToEat);
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
                     mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
                 }
                 else
                 {
-                    animator.Play(npcData.animHashData.standingEating);
+                    animator.Play(npcData.animHashData.standingAboutToEat);
+                }
+            }
+            break;
+            case State.Music:
+            {
+                stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
+                musicNotes.transform.position = new Vector3(spriteRenderer.bounds.center.x, spriteRenderer.bounds.max.y, transform.position.z - 0.5f);
+                musicNotes.Reinit();
+                musicNotes.Play();
+                if (stats.chairPosIndex != int.MaxValue)
+                {
+                    animator.Play(npcData.animHashData.sittingMusic);
+                    transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
+                    mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
+                }
+                else
+                {
+                    animator.Play(npcData.animHashData.standingMusic);
+                }
+            }
+            break;
+            case State.Calling:
+            {
+                stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
+                talkingLines.transform.position = new Vector3(spriteRenderer.bounds.center.x, spriteRenderer.bounds.max.y, transform.position.z - 0.5f);
+                talkingLines.Reinit();
+                talkingLines.Play();
+                if (stats.chairPosIndex != int.MaxValue)
+                {
+                    animator.Play(npcData.animHashData.sittingCalling);
+                    transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
+                    mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
+                }
+                else
+                {
+                    animator.Play(npcData.animHashData.standingCalling);
+                }
+            }
+            break;
+            case State.Reading:
+            {
+                stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
+                if (stats.chairPosIndex != int.MaxValue)
+                {
+                    animator.Play(npcData.animHashData.sittingAboutToRead);
+                    transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
+                    mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
+                }
+                else
+                {
+                    animator.Play(npcData.animHashData.standingReading);
                 }
             }
             break;
@@ -343,6 +447,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case State.Walking:
             {
+                animator.speed = 1;
             }
             break;
             case State.Smoking:
@@ -355,6 +460,16 @@ public class NPCBrain : MonoBehaviour
             case State.Sleeping:
             {
                 sleepingZs.Stop();
+            }
+            break;
+            case State.Music:
+            {
+                musicNotes.Stop();
+            }
+            break;
+            case State.Calling:
+            {
+                talkingLines.Stop();
             }
             break;
         }
@@ -575,25 +690,29 @@ public class NPCBrain : MonoBehaviour
     }
     private void SetAnimationEvents()
     {
-        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.sittingAboutToEat], nameof(PlaySittingEating));
+        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.sittingAboutToEat], nameof(PlaySittingEatingAnimation));
         Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.standingAboutToEat], nameof(PlayStandingEatingAnimation));
         Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.standingBreathing], nameof(PlayRandomStandingIdleAnimations));
         Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.standingBlinking], nameof(PlayRandomStandingIdleAnimations));
         Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.sittingBreathing], nameof(PlayRandomSittingIdleAnimations));
         Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.sittingBlinking], nameof(PlayRandomSittingIdleAnimations));
-
+        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.sittingAboutToRead], nameof(PlaySittingReadingAnimation));
         for (int i = 0; i < npc.smokeAnimPosData.Length; i++)
         {
             Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.smoking], nameof(SetSmokePosition), npc.smokeAnimPosData[i].time, intParam: i);
         }
     }
-    private void PlaySittingEating()
+    private void PlaySittingEatingAnimation()
     {
         animator.Play(npcData.animHashData.sittingEating);
     }
     private void PlayStandingEatingAnimation()
     {
         animator.Play(npcData.animHashData.standingEating);
+    }
+    private void PlaySittingReadingAnimation()
+    {
+        animator.Play(npcData.animHashData.sittingReading);
     }
     private void PlayRandomStandingIdleAnimations()
     {

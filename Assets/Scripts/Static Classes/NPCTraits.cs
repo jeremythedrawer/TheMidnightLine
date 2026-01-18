@@ -20,7 +20,7 @@ public static class NPCTraits
         Wearing_a_dress = 1 << 7,
         Wears_shorts = 1 << 8,
         Carries_a_bag = 1 << 9,
-        Wears_a_hat = 1 << 10,
+        Wears_a_hat = 1 << 10,  
     }
 
     [Flags]
@@ -30,6 +30,9 @@ public static class NPCTraits
         Frequent_smoker = 1 << 0,
         Takes_naps = 1 << 2,
         Always_hungry = 1 << 3,
+        Listens_to_music = 1 << 4,
+        Lots_of_phone_calls = 1 << 5,
+        Enjoys_reading = 1 << 6,
     }
 
     public static string[] appearenceDescriptions;
