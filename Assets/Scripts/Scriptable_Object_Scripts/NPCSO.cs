@@ -26,7 +26,7 @@ public class NPCSO : ScriptableObject
 
     [Header("Difficulty")]
     public Vector2 pickBehaviourDurationRange = new Vector2(10, 30);
-
+   
     [Serializable] public struct AnimEventPosData
     {
         public Vector2 position;

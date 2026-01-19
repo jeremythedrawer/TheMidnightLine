@@ -141,7 +141,7 @@ public class NPCBrain : MonoBehaviour
         }
         if (((stats.behaviours & NPCTraits.Behaviours.Lots_of_phone_calls) != 0) && talkingLines == null)
         {
-            talkingLines = Instantiate(npcData.talkingLines, transform);
+            talkingLines = Instantiate(npcData.speechBubble, transform);
             talkingLines.Stop();
         }
     }

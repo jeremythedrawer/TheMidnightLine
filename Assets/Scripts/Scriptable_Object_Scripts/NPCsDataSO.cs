@@ -41,7 +41,7 @@ public class NPCsDataSO : ScriptableObject
     public Color[] agentColors;
     public VisualEffect sleepingZs;
     public VisualEffect musicNotes;
-    public VisualEffect talkingLines;
+    public VisualEffect speechBubble;
     public GameObject smoke;
     [Range(0, 1)] public float hoverColorOffet = 0.25f;
     [Range(0, 1)] public float fadeTime = 0.5f;
