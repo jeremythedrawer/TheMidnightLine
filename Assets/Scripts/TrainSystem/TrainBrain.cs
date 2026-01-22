@@ -11,7 +11,7 @@ public class TrainBrain : MonoBehaviour
     [SerializeField] TrainStatsSO stats;
     [SerializeField] StationsDataSO stationsData;
     [SerializeField] GameEventDataSO gameEventData;
-
+    [SerializeField] MaterialIDSO materialIDs;
     CancellationTokenSource trainCTS;
     [Serializable] public struct ComponentData
     {
@@ -19,15 +19,8 @@ public class TrainBrain : MonoBehaviour
     }
     [SerializeField] ComponentData componentData;
 
-    [Serializable] public struct ShaderData
-    {
-        internal int entityDepthRangeID;
-    }
-    [SerializeField] ShaderData shaderData;
-
     private void Awake()
     {
-        shaderData.entityDepthRangeID = Shader.PropertyToID("_EntityDepthRange");
         stats.trainLength = (componentData.frontCarriageSpriteRenderer.bounds.max.x - transform.position.x);
         stats.trainHalfLength = stats.trainLength * 0.5f;
         stats.startXPos = transform.position.x;
@@ -43,6 +36,7 @@ public class TrainBrain : MonoBehaviour
         stats.curPassengerCount = 0;
         stats.closingDoors = false;
         trainCTS = new CancellationTokenSource();
+
     }
     private void OnDisable()
     {
@@ -52,13 +46,14 @@ public class TrainBrain : MonoBehaviour
     }
     private void Start()
     {
-        Vector2 entityDepthData = new Vector2(settings.maxMinWorldZPos.min, settings.maxMinWorldZPos.max - settings.maxMinWorldZPos.min);
-        Shader.SetGlobalVector(shaderData.entityDepthRangeID, entityDepthData);
         MoveTrainToStartPosition().Forget();
+        Vector2 entityDepthData = new Vector2(settings.maxMinWorldZPos.min, settings.maxMinWorldZPos.max - settings.maxMinWorldZPos.min);
+        Shader.SetGlobalVector(materialIDs.ids.entityDepthRange, entityDepthData);
     }
     private void Update()
     {
-        stats.metersTravelled += stats.GetMetersPerSecond(stats.curKMPerHour) * Time.deltaTime;
+        stats.curVelocity = stats.GetMetersPerSecond(stats.curKMPerHour) * Time.deltaTime;
+        stats.metersTravelled += stats.curVelocity;
         stats.distToNextStation = (stationsData.stations[stats.nextStationIndex].metersPosition + stats.trainHalfLength) - stats.metersTravelled;
 
         if (stats.distToNextStation <= stats.brakeDist)

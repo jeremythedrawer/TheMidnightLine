@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-public class OneShotSpawner : Spawner
+public class OneShotSpawner : OldSpawner
 {
 
 }

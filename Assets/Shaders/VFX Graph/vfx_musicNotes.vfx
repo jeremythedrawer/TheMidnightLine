@@ -143,7 +143,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"r":0.0,"g":0.0,"b":0.0,"a":0.0}'
+      m_SerializableObject: '{"r":1.0,"g":1.0,"b":1.0,"a":0.0}'
     min: -Infinity
     max: Infinity
     enumValues: []
@@ -1064,7 +1064,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614902}
   m_ExposedName: Size
   m_Exposed: 1
-  m_Order: 3
+  m_Order: 0
   m_Category: 
   m_Min:
     m_Type:
@@ -1147,7 +1147,7 @@ MonoBehaviour:
   - {fileID: 8926484042661614904}
   m_ExposedName: Lifetime
   m_Exposed: 1
-  m_Order: 4
+  m_Order: 1
   m_Category: 
   m_Min:
     m_Type:
@@ -1360,7 +1360,7 @@ MonoBehaviour:
   - {fileID: 8926484042661615025}
   m_ExposedName: Rate
   m_Exposed: 1
-  m_Order: 5
+  m_Order: 2
   m_Category: 
   m_Min:
     m_Type:
@@ -1605,14 +1605,14 @@ MonoBehaviour:
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
+  m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
   m_OutputSlots:
   - {fileID: 8926484042661615086}
   m_ExposedName: Color
   m_Exposed: 1
-  m_Order: 6
+  m_Order: 3
   m_Category: 
   m_Min:
     m_Type:
@@ -1632,7 +1632,8 @@ MonoBehaviour:
     - outputSlot: {fileID: 8926484042661615086}
       inputSlot: {fileID: 8926484042661615080}
     position: {x: 488, y: -171}
-    expandedSlots: []
+    expandedSlots:
+    - {fileID: 8926484042661615086}
     expanded: 0
     supecollapsed: 0
 --- !u!114 &8926484042661615086
@@ -1664,7 +1665,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Color, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: 
+      m_SerializableObject: '{"r":1.0,"g":1.0,"b":1.0,"a":0.0}'
     m_Space: -1
   m_Property:
     name: o
@@ -3192,8 +3193,8 @@ MonoBehaviour:
         PublicKeyToken=b77a5c561934e089
   m_Direction: 1
   m_LinkedSlots:
-  - {fileID: 8926484042661615182}
   - {fileID: 8926484042661615108}
+  - {fileID: 8926484042661615182}
 --- !u!114 &8926484042661615173
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -3810,7 +3811,7 @@ MonoBehaviour:
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: 143, y: -60}
+  m_UIPosition: {x: 271, y: -85}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:
@@ -3911,7 +3912,7 @@ MonoBehaviour:
   m_UIIgnoredErrors: []
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
-  m_UIPosition: {x: -80, y: -243}
+  m_UIPosition: {x: -169, y: -300}
   m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots:

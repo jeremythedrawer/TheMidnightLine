@@ -36,7 +36,9 @@ public class CameraController : MonoBehaviour
     {
         soData.stats.targetSize = cam.orthographicSize;
         soData.stats.initialSize = cam.orthographicSize;
-        soData.stats.farClipPlane = cam.farClipPlane;
+        soData.stats.localFarClipPlane = cam.farClipPlane;
+        soData.stats.curWorldPos = transform.position;
+        soData.stats.worldFarClipPlane = soData.stats.curWorldPos.z + soData.stats.localFarClipPlane;
         soData.stats.aspect = cam.aspect;
     }
     private void Update()
@@ -125,7 +127,7 @@ public class CameraController : MonoBehaviour
         {
             case CameraStatsSO.State.Station:
             {
-                soData.stats.targetWorldPos.y = soData.spyStats.curWorldPos.y;
+                soData.stats.targetWorldPos.y = soData.spyStats.curWorldPos.y + soData.settings.verticalOffset;
                 soData.stats.targetSize = soData.stats.initialSize;
 
             }
@@ -133,21 +135,21 @@ public class CameraController : MonoBehaviour
 
             case CameraStatsSO.State.Carriage:
             {
-                soData.stats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y;
+                soData.stats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y + soData.settings.verticalOffset;
                 soData.stats.targetSize = soData.stats.initialSize;
             }
             break;
 
             case CameraStatsSO.State.Roof:
             {
-                soData.stats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y;
+                soData.stats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y + soData.settings.verticalOffset;
                 soData.stats.targetSize = soData.settings.maxProjectionSize;
             }
             break;
 
             case CameraStatsSO.State.Gangway:
             {
-                soData.stats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y;
+                soData.stats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y + soData.settings.verticalOffset;
                 soData.stats.targetSize = soData.stats.initialSize;
             }
             break;

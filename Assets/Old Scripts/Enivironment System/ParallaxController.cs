@@ -10,7 +10,7 @@ public class ParallaxController : MonoBehaviour
     private Camera cam => GlobalReferenceManager.Instance.mainCam;
     private TrainData trainData => GlobalReferenceManager.Instance.trainData;
     private CanvasBounds canvasBounds => GlobalReferenceManager.Instance.canvasBounds;
-    private Spawner parentSpawner;
+    private OldSpawner parentSpawner;
     private Vector2 startPos;
     private float startZ;
 
@@ -28,7 +28,7 @@ public class ParallaxController : MonoBehaviour
 
     private void Awake()
     {
-        parentSpawner = GetComponentInParent<Spawner>();
+        parentSpawner = GetComponentInParent<OldSpawner>();
         isOneShot = parentSpawner is OneShotSpawner;
 
         List<Renderer> allRenderers = new List<Renderer>(GetComponents<Renderer>());

@@ -40,9 +40,9 @@ TextureImporter:
     filterMode: 0
     aniso: 1
     mipBias: 0
-    wrapU: 1
-    wrapV: 1
-    wrapW: 1
+    wrapU: 2
+    wrapV: 2
+    wrapW: 2
   nPOTScale: 0
   lightmap: 0
   compressionQuality: 50
@@ -113,12 +113,12 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: sp_bg_stationPlatform_atlas_0
+      name: tex_atlas_platforms_0
       rect:
         serializedVersion: 2
         x: 0
         y: 1920
-        width: 1025
+        width: 1024
         height: 128
       alignment: 6
       pivot: {x: 0, y: 0}
@@ -126,21 +126,43 @@ TextureImporter:
       customData: 
       outline: []
       physicsShape: []
-      tessellationDetail: -1
+      tessellationDetail: 0
       bones: []
-      spriteID: 4a94bbb5f9a485a80800000000000000
-      internalID: -8477944250225702492
+      spriteID: c39da8f75b500f94d95740aa3e8cefb0
+      internalID: 2128297723
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sp_bg_stationPlatform_atlas_1
+      name: tex_atlas_platforms_1
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1920
+        width: 1024
+        height: 128
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 2a3f4fdeb73f11848b07491b243a8be5
+      internalID: 511967539
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_platforms_2
       rect:
         serializedVersion: 2
         x: 0
         y: 1792
-        width: 1025
+        width: 1024
         height: 128
       alignment: 6
       pivot: {x: 0, y: 0}
@@ -150,19 +172,19 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 6d78e1ac30ac7e3409f6ec628eb05bff
-      internalID: 1510167421
+      spriteID: ca9ba105ffe89944ba401c1ff020b158
+      internalID: 1657604051
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: sp_bg_stationPlatform_atlas_2
+      name: tex_atlas_platforms_3
       rect:
         serializedVersion: 2
         x: 0
         y: 1664
-        width: 1025
+        width: 1024
         height: 128
       alignment: 6
       pivot: {x: 0, y: 0}
@@ -172,8 +194,30 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: 0
       bones: []
-      spriteID: 1964e136be19e4b4d99364c158df09b9
-      internalID: -1416276798
+      spriteID: ed75cfaababe4db4692e62174807404d
+      internalID: 954446231
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_platforms_4
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 1792
+        width: 1024
+        height: 128
+      alignment: 6
+      pivot: {x: 0, y: 0}
+      border: {x: 64, y: 0, z: 64, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: 0
+      bones: []
+      spriteID: 8a06c98ca71950446a5f4b710bdf7764
+      internalID: 1241750348
       vertices: []
       indices: 
       edges: []
@@ -190,11 +234,15 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries: []
+      entries:
+      - key: SpriteEditor.SliceSettings
+        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":1024.0,"y":128.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":1,"spriteAlignment":6,"pivotUnitMode":0,"slicingType":1,"keepEmptyRects":false,"isAlternate":false}'
     nameFileIdTable:
-      sp_bg_stationPlatform_atlas_0: -8477944250225702492
-      sp_bg_stationPlatform_atlas_1: 1510167421
-      sp_bg_stationPlatform_atlas_2: -1416276798
+      tex_atlas_platforms_0: 2128297723
+      tex_atlas_platforms_1: 511967539
+      tex_atlas_platforms_2: 1657604051
+      tex_atlas_platforms_3: 954446231
+      tex_atlas_platforms_4: 1241750348
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

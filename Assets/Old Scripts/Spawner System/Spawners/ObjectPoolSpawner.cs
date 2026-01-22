@@ -2,7 +2,7 @@ using System.Collections;
 using UnityEngine;
 using UnityEngine.Pool;
 
-public class ObjectPoolSpawner : Spawner
+public class ObjectPoolSpawner : OldSpawner
 {
 
     [Header("Parameters")]

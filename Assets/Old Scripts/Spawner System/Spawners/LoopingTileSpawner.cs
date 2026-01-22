@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class LoopingTileSpawner : Spawner
+public class LoopingTileSpawner : OldSpawner
 {
     private List<LoopingTiles> loopingTiles = new List<LoopingTiles>();
 

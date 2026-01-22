@@ -6,8 +6,7 @@ public static class NPCTraits
 {
     static NPCTraits() { InitializeDescriptions(); }
 
-    [Flags]
-    public enum Appearence
+    [Flags] public enum Appearence
     {
         Nothing = 0,
         White_hair = 1 << 0,
@@ -23,8 +22,7 @@ public static class NPCTraits
         Wears_a_hat = 1 << 10,  
     }
 
-    [Flags]
-    public enum Behaviours
+    [Flags] public enum Behaviours
     {
         Nothing = 0,
         Frequent_smoker = 1 << 0,

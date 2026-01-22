@@ -101,7 +101,6 @@ public class NPCBrain : MonoBehaviour
         mpb = new MaterialPropertyBlock();
         ctsFade = new CancellationTokenSource();
 
-
         stats.curState = State.Idling;
         stats.curPath = Path.Nothing;
         stats.chairPosIndex = int.MaxValue;
@@ -159,6 +158,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void Update()
     {
+        mpb.SetFloat(materialIDs.ids.zPos, trainSettings.maxMinWorldZPos.min);
         SelectingStates();
         UpdateStates();
         Fade();
@@ -313,7 +313,6 @@ public class NPCBrain : MonoBehaviour
         stats.curState = newState;
         stats.stateTimer = 0;
         EnterState();
-
     }
     private void EnterState()
     {
@@ -536,9 +535,9 @@ public class NPCBrain : MonoBehaviour
         ctsFade?.Dispose();
 
         ctsFade = new CancellationTokenSource();
-        FadeTo(ctsFade.Token).Forget();
+        FadeTo().Forget();
     }
-    private async UniTask FadeTo(CancellationToken token)
+    private async UniTask FadeTo()
     {
         float startAlpha = stats.curAlpha;
         float elapsed = 0f;
@@ -552,7 +551,7 @@ public class NPCBrain : MonoBehaviour
                 stats.curAlpha = Mathf.Lerp(startAlpha, stats.targetAlpha, t);
                 mpb.SetFloat(materialIDs.ids.alpha, stats.curAlpha);
 
-                await UniTask.Yield(PlayerLoopTiming.Update, token);
+                await UniTask.Yield(PlayerLoopTiming.Update, ctsFade.Token);
             }
 
             stats.curAlpha = stats.targetAlpha;
@@ -660,7 +659,8 @@ public class NPCBrain : MonoBehaviour
     }
     private void FindSmokersRoom()
     {
-        if (stats.chairPosIndex > 0 && curCarriage.chairData[stats.chairPosIndex].filled)
+        Debug.Log(gameObject.name + " | " + transform.position);
+        if (stats.chairPosIndex != int.MaxValue && curCarriage.chairData[stats.chairPosIndex].filled)
         {
             curCarriage.chairData[stats.chairPosIndex].filled = false;
             stats.chairPosIndex = int.MaxValue;

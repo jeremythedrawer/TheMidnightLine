@@ -138,12 +138,10 @@ public class InputManager : MonoBehaviour
         curDevice = value.device;
         OnDeviceChanged?.Invoke(value.device.displayName);
     }
-
     private void ResetData()
     {
         soData.playerInputs.jump = false;
     }
-
     private void OnApplicationQuit()
     {
         soData.gameEventData.OnReset.Raise();

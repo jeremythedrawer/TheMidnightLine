@@ -37,7 +37,6 @@ public class SpriteAtlasFactory : ScriptableObject
             List<float> smokeKeyframeTimes = new List<float>();
             for (int i = 0; i < spriteRects.Length; i++) // Looping through each sprite in atlas
             {
-            
                 int startX = Mathf.RoundToInt(spriteRects[i].rect.x);
                 int startY = Mathf.RoundToInt(spriteRects[i].rect.y);
                 int width = Mathf.RoundToInt(spriteRects[i].rect.width);
@@ -126,6 +125,11 @@ public class SpriteAtlasFactory : ScriptableObject
             EditorUtility.SetDirty(npcComponent.npc);
         }
         AssetDatabase.SaveAssets();
+
+        uint a = 0b_0000_0010;
+        uint b = 0b_1001_0011;
+
+        Debug.Log(Convert.ToString(a ^= b, toBase: 2));
     }
 
     public void SetSpySpritePositionData()

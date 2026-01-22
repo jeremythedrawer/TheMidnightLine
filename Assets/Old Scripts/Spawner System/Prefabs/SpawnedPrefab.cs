@@ -5,7 +5,7 @@ public class SpawnedPrefab : MonoBehaviour
 {
     public SpriteRenderer spriteRenderer {  get; private set; }
     public ParallaxController parallaxController { get; private set; }
-    public Spawner spawner {  get; private set; }
+    public OldSpawner spawner {  get; private set; }
 
     private void Start()
     {
@@ -40,6 +40,6 @@ public class SpawnedPrefab : MonoBehaviour
     {
        if (spriteRenderer  == null) spriteRenderer = GetComponent<SpriteRenderer>();
        if (parallaxController  == null) parallaxController = GetComponent<ParallaxController>();
-       if (spawner == null) spawner = gameObject.GetComponentInParent<Spawner>();
+       if (spawner == null) spawner = gameObject.GetComponentInParent<OldSpawner>();
     }
 }

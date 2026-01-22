@@ -18,4 +18,5 @@ public class GameEventDataSO : ScriptableObject
     public GameEvent OnStartSpyMovement;
     public GameEvent OnFlipDownPage;
     public GameEvent OnFlipUpPage;
+    public GameEvent OnBackgroundChange;
 }

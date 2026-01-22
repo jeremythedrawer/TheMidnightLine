@@ -22,7 +22,7 @@ public class Carriage : MonoBehaviour
 
     [Serializable] public struct MaterialProps
     {
-        internal float alpha;
+        public float alpha;
     }
     [SerializeField] MaterialProps materialProps;
 
@@ -156,10 +156,10 @@ public class Carriage : MonoBehaviour
 
         ctsFade = new CancellationTokenSource();
 
-        Fade(fadeIn, ctsFade.Token).Forget();
+        Fade(fadeIn).Forget();
 
     }
-    private async UniTask Fade(bool fadeIn, CancellationToken token)
+    private async UniTask Fade(bool fadeIn)
     {
         float elaspedTime = materialProps.alpha * trainSettings.exteriorWallFadeTime;
         try
@@ -176,7 +176,7 @@ public class Carriage : MonoBehaviour
                     exteriorSprites[i].SetPropertyBlock(mpb);
                 }
 
-                await UniTask.Yield(PlayerLoopTiming.Update, token);
+                await UniTask.Yield(PlayerLoopTiming.Update, ctsFade.Token);
             }
         }
         catch (OperationCanceledException)

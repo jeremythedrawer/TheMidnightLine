@@ -9,17 +9,13 @@ public class TutorialManager : MonoBehaviour
     [SerializeField] PhoneSO phone;
     [SerializeField] ClipboardStatsSO clipboardStats;
     [SerializeField] TutorialSO tutorial;
-
+    [SerializeField] DialogueSettingsSO dialogueSettings;
     [SerializeField] RectTransform speechBox;
     [SerializeField] TMP_Text speech;
 
     CancellationTokenSource typingCTS;
     bool isTyping;
     //TODO: Put in dialogue so
-    private int characterDelayMS = 30;
-    private float speechBoxGrowTime = 0.25f;
-    private float paddingX = 20f;
-    private float paddingY = 20f;
     private void Awake()
     {
         tutorial.lines = tutorial.conversation.text.Split('\n');
@@ -48,12 +44,12 @@ public class TutorialManager : MonoBehaviour
                 typingCTS?.Dispose();
                 typingCTS = new CancellationTokenSource();
             }
-            TypeLine(typingCTS.Token).Forget();
+            TypeLine().Forget();
             tutorial.prevConvoIndex = tutorial.curConvoIndex;
         }
         UpdateCurrentLine();
     }
-    private async UniTask TypeLine(CancellationToken token)
+    private async UniTask TypeLine()
     {
         isTyping = true;
         string line = tutorial.lines[tutorial.curConvoIndex];
@@ -64,26 +60,26 @@ public class TutorialManager : MonoBehaviour
         TMP_LineInfo speechLineInfo = speech.textInfo.lineInfo[0];
         float totalHeight = lineCount * speechLineInfo.lineHeight;
         float totalWidth = speech.renderedWidth;
-        speechBox.anchoredPosition = speech.rectTransform.anchoredPosition + new Vector2(-paddingX, paddingY);
+        speechBox.anchoredPosition = speech.rectTransform.anchoredPosition + new Vector2(-dialogueSettings.paddingX, dialogueSettings.paddingY);
         speech.text = "";
 
-        Vector2 targetSize = new Vector2(totalWidth + (paddingX * 2), totalHeight + (paddingY * 2));
+        Vector2 targetSize = new Vector2(totalWidth + (dialogueSettings.paddingX * 2), totalHeight + (dialogueSettings.paddingY * 2));
 
         try
         {
             float curGrowTime = 0;
-            while(curGrowTime < speechBoxGrowTime)
+            while(curGrowTime < dialogueSettings.speechBoxGrowTime)
             {
                 curGrowTime += Time.deltaTime;
-                float t = curGrowTime / speechBoxGrowTime;
+                float t = curGrowTime / dialogueSettings.speechBoxGrowTime;
                 t = 1 - Mathf.Pow(1 - t, 3);
                 speechBox.sizeDelta = new Vector2(targetSize.x * t, targetSize.y);
-                await UniTask.Yield(PlayerLoopTiming.Update, token);
+                await UniTask.Yield(PlayerLoopTiming.Update, typingCTS.Token);
             }
             foreach (char c in line)
             {
                 speech.text += c;
-                await UniTask.Delay(characterDelayMS, cancellationToken: token);
+                await UniTask.Delay(dialogueSettings.characterDelayMS, cancellationToken: typingCTS.Token);
             }
         }
         finally
@@ -94,7 +90,6 @@ public class TutorialManager : MonoBehaviour
             EnterCurrentLine();
         }
     }
-
     private void EnterCurrentLine()
     {
         switch (tutorial.curConvoIndex)

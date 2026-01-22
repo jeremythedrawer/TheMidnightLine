@@ -7,25 +7,37 @@ public class MaterialIDSO : ScriptableObject
 {
     [Serializable] public struct IDs
     {
-        internal int normAnimTime;
-        internal int fontColor;
-        internal int ditherValue;
-        internal int color;
-        internal int zPos;
-        internal int alpha;
-        internal int mainTex;
-        internal int hovered;
-        internal int selected;
-        internal int targetPosition;
-        internal int density;
-        internal int scrollTime;
-        internal int brightness;
-        internal int atlasSize;
+        public int normAnimTime;
+        public int fontColor;
+        public int ditherValue;
+        public int color;
+        public int zPos;
+        public int alpha;
+        public int mainTex;
+        public int hovered;
+        public int selected;
+        public int targetPosition;
+        public int density;
+        public int scrollTime;
+        public int brightness;
+        public int atlasSize;
+        public int entityDepthRange;
+        public int trainVelocity;
+        public int parallaxFactor;
+        public int worldFarClipPlane;
+        public int spawnerPosition;
+        public int spawnDepth;
+        public int particleCount;
+        public int minBoundsWorldXPos;
+        public int bgParticles;
+        public int atlas;
+        public int uvPositions;
+        public int uvSizes;
+        public int spriteCount;
     }
-    internal IDs ids;
+    [SerializeField] public IDs ids;
 
-#if UNITY_EDITOR
-    private void SetMaterialPropertyIDs()
+    public void SetMaterialPropertyIDs()
     {
         ids.normAnimTime = Shader.PropertyToID("_NormAnimTime");
         ids.fontColor = Shader.PropertyToID("_FaceColor");
@@ -41,17 +53,18 @@ public class MaterialIDSO : ScriptableObject
         ids.scrollTime = Shader.PropertyToID("_ScrollTime");
         ids.brightness = Shader.PropertyToID("_Brightness");
         ids.atlasSize = Shader.PropertyToID("_AtlasSize");
-
-        EditorUtility.SetDirty(this);
+        ids.entityDepthRange = Shader.PropertyToID("_EntityDepthRange");
+        ids.trainVelocity = Shader.PropertyToID("_TrainVelocity");
+        ids.parallaxFactor = Shader.PropertyToID("_ParallaxFactor");
+        ids.worldFarClipPlane = Shader.PropertyToID("_WorldFarClipPlane");
+        ids.spawnerPosition = Shader.PropertyToID("_SpawnerPosition");
+        ids.spawnDepth = Shader.PropertyToID("_SpawnDepth");
+        ids.particleCount = Shader.PropertyToID("_ParticleCount");
+        ids.bgParticles = Shader.PropertyToID("_BGParticles");
+        ids.minBoundsWorldXPos = Shader.PropertyToID("_MinBoundsWorldXPos");
+        ids.atlas = Shader.PropertyToID("_Atlas");
+        ids.uvPositions = Shader.PropertyToID("_UVPositions");
+        ids.uvSizes = Shader.PropertyToID("_UVSizes");
+        ids.spriteCount = Shader.PropertyToID("_SpriteCount");
     }
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void SetAllMaterialPropertyIDs()
-    {
-        MaterialIDSO[] all = Resources.FindObjectsOfTypeAll<MaterialIDSO>();
-        foreach (MaterialIDSO so in all)
-        {
-            so.SetMaterialPropertyIDs();
-        }
-    }
-#endif
 }

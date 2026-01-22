@@ -11,13 +11,13 @@ public class Smog : MonoBehaviour
     [SerializeField] TrainStatsSO trainStats;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] MaterialIDSO materialIDs;
+    [SerializeField] SpawnerSettingsSO maxBounds;
     CancellationTokenSource ctsFade;
     MaterialPropertyBlock mpb;
 
     private void Awake()
     {
         mpb = new MaterialPropertyBlock();
-
 
         shaderValues.curDensity = 1f;
         shaderValues.targetDensity = 1f;
