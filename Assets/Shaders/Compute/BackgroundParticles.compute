@@ -3,15 +3,17 @@
 #define THREADS_PER_GROUP 64
 
 #include "Assets/Shaders/HLSL/BackgroundParticles.hlsl"
+#include "Assets/Shaders/HLSL/Random.hlsl"
 
 RWStructuredBuffer<BackgroundAttributes> _BGParticles;
-
+StructuredBuffer<int>_BackgroundMasks;
+int _BackgroundMaskCount;
 float _WorldFarClipPlane;
 float _TrainVelocity;
 float _MinBoundsWorldXPos;
 float3 _SpawnerPosition;
 float _SpawnDepth;
-float _LODThreshold1, _LODThreshold2;
+float _LODThreshold0, _LODThreshold1;
 
 uint _ParticleCount;
 
@@ -36,14 +38,31 @@ void CSMain(uint id : SV_DispatchThreadID)
     }
     else
     {        
-        float zPos = _SpawnerPosition.z + (id * 10); //TODO: Generate random z pos based on lod and bounds
-    
+        uint randID = HashIntToInt(id);
+        float rand01 = HashIntTo01Float(randID);
+        float zPos = _SpawnerPosition.z + (_SpawnDepth * rand01); 
         float randXOffset = 0; //_SpawnDepth; //TODO: Generate random position from bound positions from the cpu
         float xPos = _SpawnerPosition.x + randXOffset;
         p.position = float3(xPos, _SpawnerPosition.y, zPos);
         p.parallaxFactor = (abs(zPos - _WorldFarClipPlane) / _WorldFarClipPlane);
         p.alive = 1;
         
+        randID = randID % _BackgroundMaskCount;
+        p.backgroundMask = _BackgroundMasks[randID];
+        
+        if (zPos < _LODThreshold0)
+        {
+            p.lodLevel = 0;
+
+        }
+        else if (zPos < _LODThreshold1)
+        {
+            p.lodLevel = 1;
+        }
+        else
+        {
+            p.lodLevel = 2;
+        }
     }
     
     _BGParticles[id] = p;

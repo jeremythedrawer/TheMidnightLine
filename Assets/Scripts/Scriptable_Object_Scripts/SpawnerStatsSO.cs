@@ -9,15 +9,18 @@ public class SpawnerStatsSO : ScriptableObject
     public Vector3 bottomLeftFront;
     public Vector3 topRightBack;
     public Vector3 bottomLeftBack;
-    public Vector3[] lodPositions;
+    public float lodPosition0;
+    public float lodPosition1;
 
     public int kernel;
     public int computeGroups;
 
-    public ComputeBuffer backgroundComputeBuffer;
+    public ComputeBuffer particleComputeBuffer;
+    public ComputeBuffer backgroundMaskBuffer;
     public Bounds renderParamsBounds;
     public Spawn.BackgroundType curBackgroundTypes;
 
-    public int spawnerMask;
+    public int backgroundMaskCount;
+    public int[] backgroundMasksArray;
 
 }

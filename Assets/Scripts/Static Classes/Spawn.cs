@@ -20,9 +20,10 @@ public static class Spawn
         public Sprite[] atlasSprites;
         public Vector2[] uvPositions;
         public Vector2[] uvSizes;
+        public bool active;
     }
 
-    [Serializable] public struct SpawnTimeline
+    [Serializable] public struct TimeStamp
     {
         public float metersPosition;
         public BackgroundType backgroundType;

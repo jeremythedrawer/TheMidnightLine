@@ -1,5 +1,7 @@
+using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
+using static Spawn;
 
 public class Spawner : MonoBehaviour
 {
@@ -11,25 +13,26 @@ public class Spawner : MonoBehaviour
     [SerializeField] SpawnerSettingsSO settings;
     [SerializeField] SpawnerStatsSO stats;
     [SerializeField] GameEventDataSO gameData;
+    [SerializeField] SpyStatsSO spyStats;
     float spawnTimer;
     int spawnCount;
     GraphicsBuffer indexBuffer;
-    public Spawn.SpawnerData[] spawnerData;
+    public Spawn.SpawnerData[] spawnerDataArray;
     private void Awake()
     {
+        stats.backgroundMasksArray = new int[32];
         InitializeBoundParameters();
     }
     private void OnDisable()
     {
-        indexBuffer?.Release();
+        ReleaseBuffers();
     }
     private void Start()
     {
         InitializeIndexBuffer();
         InitializeCompute();
         InitializeSpawnMaterialData();
-        stats.curBackgroundTypes = Spawn.BackgroundType.Trees;
-        stats.spawnerMask = 0;
+        stats.curBackgroundTypes = settings.timeStamp[0].backgroundType;
         UpdateSpawners();
     }
     private void Update()
@@ -43,11 +46,11 @@ public class Spawner : MonoBehaviour
         }
 
         UpdateCompute();
-        for (int i = 0; i < spawnerData.Length; i++)
+        for (int i = 0; i < spawnerDataArray.Length; i++)
         {
-            if (spawnerData[i].active)
+            if (spawnerDataArray[i].active)
             {
-                Graphics.RenderPrimitivesIndexed(spawnerData[i].renderParams, MeshTopology.Quads, indexBuffer, settings.maxParticleCount * 4);
+                Graphics.RenderPrimitivesIndexed(spawnerDataArray[i].renderParams, MeshTopology.Quads, indexBuffer, settings.maxParticleCount * 4);
             }
         }
     }
@@ -63,13 +66,8 @@ public class Spawner : MonoBehaviour
         stats.bottomLeftFront -= bufferOffet;
         stats.topRightBack = stats.topRightFront + new Vector3(0, 0, settings.spawnDepth);
         stats.bottomLeftBack = stats.bottomLeftFront + new Vector3(0, 0, settings.spawnDepth);
-        stats.lodPositions = new Vector3[settings.LODThresholdAmount - 1];
-
-        float lodIncrementSize = settings.spawnDepth / settings.LODThresholdAmount;
-        for (int i = 0; i < stats.lodPositions.Length; i++)
-        {
-            stats.lodPositions[i] = new Vector3(stats.topRightFront.x, settings.spawnHeight, lodIncrementSize * (i + 1));
-        }
+        stats.lodPosition0 = settings.spawnDepth / 3;
+        stats.lodPosition1 = stats.lodPosition0 * 2;
 
         transform.position = new Vector3(stats.topRightFront.x, settings.spawnHeight, stats.topRightFront.z);
     }
@@ -83,16 +81,19 @@ public class Spawner : MonoBehaviour
         settings.backgroundParticleCompute.SetFloat(materialIDs.ids.spawnDepth, settings.spawnDepth);
         settings.backgroundParticleCompute.SetInt(materialIDs.ids.particleCount, spawnCount);
         settings.backgroundParticleCompute.SetFloat(materialIDs.ids.minBoundsWorldXPos, stats.bottomLeftFront.x);
-
+        settings.backgroundParticleCompute.SetFloat(materialIDs.ids.trainVelocity, 0);
+        settings.backgroundParticleCompute.SetFloat(materialIDs.ids.lodLevelThreshold0, stats.lodPosition0);
+        settings.backgroundParticleCompute.SetFloat(materialIDs.ids.lodLevelThreshold1, stats.lodPosition1);
+        settings.backgroundParticleCompute.SetInt(materialIDs.ids.particleCount, settings.maxParticleCount);
         int floatSize = sizeof(float);
         int float3Size = floatSize * 3;
         int intSize = sizeof(int);
         int bgAttributeStride = float3Size + floatSize + intSize;
 
-        stats.backgroundComputeBuffer = new ComputeBuffer(settings.maxParticleCount, bgAttributeStride);
-        
-        settings.backgroundParticleCompute.SetBuffer(stats.kernel, materialIDs.ids.bgParticles, stats.backgroundComputeBuffer);
-
+        stats.particleComputeBuffer = new ComputeBuffer(settings.maxParticleCount, bgAttributeStride);
+        stats.backgroundMaskBuffer = new ComputeBuffer(stats.backgroundMasksArray.Length, sizeof(int));
+        settings.backgroundParticleCompute.SetBuffer(stats.kernel, materialIDs.ids.bgParticles, stats.particleComputeBuffer);
+        settings.backgroundParticleCompute.SetBuffer(stats.kernel, materialIDs.ids.backgroundMasks, stats.backgroundMaskBuffer);
         settings.backgroundParticleCompute.Dispatch(stats.kernel, stats.computeGroups, 1, 1);
     }
     private void InitializeIndexBuffer()
@@ -121,14 +122,14 @@ public class Spawner : MonoBehaviour
     private void InitializeSpawnMaterialData()
     {
         stats.renderParamsBounds = new Bounds(transform.position, new Vector3(1000, 1000, 1000)); //TODO: write proper bounds sizes
-        spawnerData = new Spawn.SpawnerData[32];
-        for (int i = 0; i < spawnerData.Length; i++)
+        spawnerDataArray = new Spawn.SpawnerData[32];
+        for (int i = 0; i < spawnerDataArray.Length; i++)
         {
-            Spawn.SpawnerData m_spawnerData = spawnerData[i];
+            Spawn.SpawnerData m_spawnerData = spawnerDataArray[i];
             m_spawnerData.material = Instantiate(settings.backgroundMaterial);
             m_spawnerData.renderParams = new RenderParams(m_spawnerData.material) { worldBounds = stats.renderParamsBounds };
-            m_spawnerData.material.SetBuffer(materialIDs.ids.bgParticles, stats.backgroundComputeBuffer);
-            spawnerData[i] = m_spawnerData;
+            m_spawnerData.material.SetBuffer(materialIDs.ids.bgParticles, stats.particleComputeBuffer);
+            spawnerDataArray[i] = m_spawnerData;
         }
 
         for (int i = 0; i < settings.particleData.Length; i++)
@@ -152,69 +153,79 @@ public class Spawner : MonoBehaviour
     private void UpdateSpawners()
     {
         int curBGMask = (int)stats.curBackgroundTypes;
-        for (int i = 0; i < 32; i++)
+        stats.backgroundMaskCount = 0;
+        for(int i = 0; i < 32; i++)
         {
-            if ((stats.spawnerMask & (1 << i)) == 0) // Finding an unused spawner
+            if ((curBGMask & (1 << i)) == 0) continue; // Find an active background type flag
+
+            int activeBGMask = 1 << i;
+            stats.backgroundMasksArray[stats.backgroundMaskCount] = activeBGMask;
+            stats.backgroundMaskCount++;
+
+            for (int j = 0; j < settings.particleData.Length; j++)
             {
-                Spawn.SpawnerData m_spawnerData = spawnerData[i];
+                Spawn.ParticleData particleData = settings.particleData[j];
+                int particleBGMask = (int)particleData.backgroundType;
+                
+                if ((particleBGMask & activeBGMask) == 0) continue; // Match particleData to the curBGMask
 
-                int treeMask = (int)Spawn.BackgroundType.Trees;
-                if ((curBGMask & treeMask) != 0) // Am I about to render trees?
+                for (int k = 0; k < spawnerDataArray.Length; k++)
                 {
-                    for (int j = 0; j < settings.particleData.Length; j++)
-                    {
-                        Spawn.ParticleData particleData = settings.particleData[j];
-                        if ((particleData.backgroundType & Spawn.BackgroundType.Trees) != 0) // Which settings has the tree mask
-                        {
-                            m_spawnerData.material.SetTexture(materialIDs.ids.atlas, particleData.atlas);
+                    Spawn.SpawnerData spawnerData = spawnerDataArray[k];
+                    
+                    if (spawnerData.active) continue; // Find an unused spawner
 
-                            m_spawnerData.uvPositionsBuffer?.Dispose();
-                            m_spawnerData.uvPositionsBuffer?.Release();
-                            m_spawnerData.uvPositionsBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, particleData.uvPositions.Length, sizeof(float) * 2);
-                            m_spawnerData.uvPositionsBuffer.SetData(particleData.uvPositions);
-                            m_spawnerData.material.SetBuffer(materialIDs.ids.uvPositions, m_spawnerData.uvPositionsBuffer);
-
-                            m_spawnerData.uvSizesBuffer?.Dispose();
-                            m_spawnerData.uvSizesBuffer?.Release();
-                            m_spawnerData.uvSizesBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, particleData.uvSizes.Length, sizeof(float) * 2);
-                            m_spawnerData.uvSizesBuffer.SetData(particleData.uvSizes);
-                            m_spawnerData.material.SetBuffer(materialIDs.ids.uvSizes, m_spawnerData.uvSizesBuffer);
-                            m_spawnerData.material.SetInt(materialIDs.ids.spriteCount, particleData.uvSizes.Length);
-                            m_spawnerData.active = true;
-                        }
-                    }
-                    curBGMask ^= treeMask;
+                    spawnerDataArray[k] = SetSpawnData(spawnerData, particleData);
+                    break;
                 }
-
-                int houseMask = (int)Spawn.BackgroundType.Houses;
-                if ((curBGMask &  houseMask) != 0)
-                {
-                    for (int j = 0; j < settings.particleData.Length; j++)
-                    {
-                        if ((settings.particleData[j].backgroundType & Spawn.BackgroundType.Houses) != 0) // Which settings has the tree mask
-                        {
-                            m_spawnerData.material.SetTexture(materialIDs.ids.atlas, settings.particleData[j].atlas);
-                        }
-                    }
-                    curBGMask ^= houseMask;
-                }
-
-                int buildingMask = (int)Spawn.BackgroundType.Buildings;
-                if ((curBGMask & buildingMask) != 0)
-                {
-
-                }
-
-                spawnerData[i] = m_spawnerData;
-                stats.spawnerMask |= 1 << i;
             }
-        }   
+
+        }
+        settings.backgroundParticleCompute.SetInt(materialIDs.ids.backgroundMaskCount, stats.backgroundMaskCount);
+
+        stats.backgroundMaskBuffer.SetData(stats.backgroundMasksArray);
+
+    }
+    private Spawn.SpawnerData SetSpawnData(Spawn.SpawnerData spawnData, Spawn.ParticleData particleData)
+    {
+        spawnData.uvPositionsBuffer?.Dispose();
+        spawnData.uvPositionsBuffer?.Release();
+        spawnData.uvPositionsBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, particleData.uvPositions.Length, sizeof(float) * 2);
+        spawnData.uvPositionsBuffer.SetData(particleData.uvPositions);
+
+        spawnData.uvSizesBuffer?.Dispose();
+        spawnData.uvSizesBuffer?.Release();
+        spawnData.uvSizesBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, particleData.uvSizes.Length, sizeof(float) * 2);
+        spawnData.uvSizesBuffer.SetData(particleData.uvSizes);
+
+        spawnData.material.SetTexture(materialIDs.ids.atlas, particleData.atlas);
+        spawnData.material.SetBuffer(materialIDs.ids.uvPositions, spawnData.uvPositionsBuffer);
+        spawnData.material.SetBuffer(materialIDs.ids.uvSizes, spawnData.uvSizesBuffer);
+        spawnData.material.SetInt(materialIDs.ids.spriteCount, particleData.uvSizes.Length);
+        spawnData.material.SetInt(materialIDs.ids.backgroundMask, (int)particleData.backgroundType);
+        spawnData.material.SetInt(materialIDs.ids.lodLevel, particleData.LODLevel);
+
+        spawnData.active = true;
+        return spawnData;
     }
     private void UpdateCompute()
     {
-        settings.backgroundParticleCompute.SetInt(materialIDs.ids.particleCount, spawnCount);
-        settings.backgroundParticleCompute.SetFloat(materialIDs.ids.trainVelocity, trainStats.curVelocity);
-        settings.backgroundParticleCompute.Dispatch(stats.kernel, stats.computeGroups, 1, 1);
+        if (spyStats.onTrain)
+        {
+            settings.backgroundParticleCompute.SetFloat(materialIDs.ids.trainVelocity, trainStats.curVelocity);
+            settings.backgroundParticleCompute.Dispatch(stats.kernel, stats.computeGroups, 1, 1);
+        }
+    }
+    private void ReleaseBuffers()
+    {
+        indexBuffer?.Release();
+        stats.particleComputeBuffer?.Release();
+        stats.backgroundMaskBuffer?.Release();
+        for(int i = 0; i < spawnerDataArray.Length; i++)
+        {
+            spawnerDataArray[i].uvPositionsBuffer?.Release();
+            spawnerDataArray[i].uvSizesBuffer?.Release();
+        }
     }
     private void OnDrawGizmosSelected()
     {
@@ -251,9 +262,7 @@ public class Spawner : MonoBehaviour
         Gizmos.DrawLine(spawnLB, spawnLF);
         Gizmos.DrawLine(spawnRB, spawnRF);
 
-        for (int i = 0; i < stats.lodPositions.Length; i++)
-        {
-            Gizmos.DrawLine(stats.lodPositions[i], new Vector3(stats.bottomLeftFront.x, stats.lodPositions[i].y, stats.lodPositions[i].z));
-        }
+        Gizmos.DrawLine(new Vector3(stats.topRightFront.x, settings.spawnHeight, stats.lodPosition0), new Vector3(stats.bottomLeftFront.x, settings.spawnHeight, stats.lodPosition0));
+        Gizmos.DrawLine(new Vector3(stats.topRightFront.x, settings.spawnHeight, stats.lodPosition1), new Vector3(stats.bottomLeftFront.x, settings.spawnHeight, stats.lodPosition1));
     }
 }

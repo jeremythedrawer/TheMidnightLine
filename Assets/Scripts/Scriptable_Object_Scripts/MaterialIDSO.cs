@@ -34,6 +34,12 @@ public class MaterialIDSO : ScriptableObject
         public int uvPositions;
         public int uvSizes;
         public int spriteCount;
+        public int backgroundMasks;
+        public int backgroundMask;
+        public int backgroundMaskCount;
+        public int lodLevel;
+        public int lodLevelThreshold0;
+        public int lodLevelThreshold1;
     }
     [SerializeField] public IDs ids;
 
@@ -66,5 +72,11 @@ public class MaterialIDSO : ScriptableObject
         ids.uvPositions = Shader.PropertyToID("_UVPositions");
         ids.uvSizes = Shader.PropertyToID("_UVSizes");
         ids.spriteCount = Shader.PropertyToID("_SpriteCount");
+        ids.backgroundMasks = Shader.PropertyToID("_BackgroundMasks");
+        ids.backgroundMask = Shader.PropertyToID("_BackgroundMask");
+        ids.backgroundMaskCount = Shader.PropertyToID("_BackgroundMaskCount");
+        ids.lodLevel = Shader.PropertyToID("_LODLevel");
+        ids.lodLevelThreshold0 = Shader.PropertyToID("_LODThreshold0");
+        ids.lodLevelThreshold1 = Shader.PropertyToID("_LODThreshold1");
     }
 }

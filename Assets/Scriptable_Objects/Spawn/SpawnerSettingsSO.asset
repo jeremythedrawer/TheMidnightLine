@@ -15,7 +15,6 @@ MonoBehaviour:
   bufferAmount: 16
   spawnDepth: 269
   spawnHeight: 0
-  LODThresholdAmount: 3
   maxParticleCount: 1024
   backgroundParticleCompute: {fileID: 7200000, guid: d984c22b7e444484fb6f6f24b8c38e63, type: 3}
   backgroundMaterial: {fileID: 2100000, guid: 5a41293c67f317d4ebbd5977cece7124, type: 2}
@@ -29,216 +28,196 @@ MonoBehaviour:
     - {fileID: -1149247315, guid: 204044b0304388f49aa58a12e321c10f, type: 3}
     - {fileID: 1253569651, guid: 204044b0304388f49aa58a12e321c10f, type: 3}
     - {fileID: 1232998559, guid: 204044b0304388f49aa58a12e321c10f, type: 3}
-    - {fileID: -1599411488, guid: 204044b0304388f49aa58a12e321c10f, type: 3}
-    - {fileID: -2068409195, guid: 204044b0304388f49aa58a12e321c10f, type: 3}
-    - {fileID: -832595526, guid: 204044b0304388f49aa58a12e321c10f, type: 3}
-    - {fileID: 1599559116, guid: 204044b0304388f49aa58a12e321c10f, type: 3}
-    - {fileID: -1412214085, guid: 204044b0304388f49aa58a12e321c10f, type: 3}
     uvPositions:
-    - {x: 0, y: 0.7788086}
-    - {x: 0.26098633, y: 0.8352051}
-    - {x: 0.4650879, y: 0.8054199}
-    - {x: 0.64819336, y: 0.8430176}
-    - {x: 0.78808594, y: 0.7680664}
-    - {x: 0, y: 0.59643555}
-    - {x: 0.21850586, y: 0.6105957}
-    - {x: 0.4650879, y: 0.5488281}
-    - {x: 0.7832031, y: 0.5859375}
-    - {x: 0.0390625, y: 0.43286133}
+    - {x: 0, y: 0.77905273}
+    - {x: 0.26733398, y: 0.79907227}
+    - {x: 0.51464844, y: 0.7680664}
+    - {x: 0.75683594, y: 0.8063965}
+    - {x: 0, y: 0.4873047}
     uvSizes:
-    - {x: 0.2590332, y: 0.2211914}
-    - {x: 0.19335938, y: 0.16479492}
-    - {x: 0.16625977, y: 0.19042969}
-    - {x: 0.13598633, y: 0.15478516}
-    - {x: 0.21191406, y: 0.2319336}
-    - {x: 0.16113281, y: 0.17626953}
+    - {x: 0.25854492, y: 0.22094727}
     - {x: 0.23583984, y: 0.19897461}
+    - {x: 0.21191406, y: 0.2319336}
+    - {x: 0.16625977, y: 0.19042969}
     - {x: 0.2927246, y: 0.25048828}
-    - {x: 0.20605469, y: 0.17651367}
-    - {x: 0.18041992, y: 0.15209961}
-  - backgroundType: 0
+    active: 0
+  - backgroundType: 1
+    LODLevel: 1
+    atlas: {fileID: 2800000, guid: f8f8c2aa1994cc94684f5f37f57fd629, type: 3}
+    atlasSprites:
+    - {fileID: -2751328844571418994, guid: f8f8c2aa1994cc94684f5f37f57fd629, type: 3}
+    - {fileID: 6011790598028670311, guid: f8f8c2aa1994cc94684f5f37f57fd629, type: 3}
+    - {fileID: 7917579798057203150, guid: f8f8c2aa1994cc94684f5f37f57fd629, type: 3}
+    - {fileID: -3768897461719499294, guid: f8f8c2aa1994cc94684f5f37f57fd629, type: 3}
+    - {fileID: -8208766724982938440, guid: f8f8c2aa1994cc94684f5f37f57fd629, type: 3}
+    uvPositions:
+    - {x: 0.0031738281, y: 0.8425293}
+    - {x: 0.18334961, y: 0.82666016}
+    - {x: 0.0021972656, y: 0.6550293}
+    - {x: 0.18481445, y: 0.6394043}
+    - {x: 0.0056152344, y: 0.4934082}
+    uvSizes:
+    - {x: 0.13769531, y: 0.15673828}
+    - {x: 0.19482422, y: 0.16601562}
+    - {x: 0.16308594, y: 0.17773438}
+    - {x: 0.20800781, y: 0.17822266}
+    - {x: 0.18164062, y: 0.1538086}
+    active: 0
+  - backgroundType: 2
     LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
+    atlas: {fileID: 2800000, guid: 098a917c406fdd644899d5d0ee78e85b, type: 3}
+    atlasSprites:
+    - {fileID: -2934962607639489763, guid: 098a917c406fdd644899d5d0ee78e85b, type: 3}
+    - {fileID: 6710837969976237560, guid: 098a917c406fdd644899d5d0ee78e85b, type: 3}
+    - {fileID: -8706473751725212852, guid: 098a917c406fdd644899d5d0ee78e85b, type: 3}
+    - {fileID: 2360502559801071580, guid: 098a917c406fdd644899d5d0ee78e85b, type: 3}
+    - {fileID: -9115087549298454937, guid: 098a917c406fdd644899d5d0ee78e85b, type: 3}
+    - {fileID: 2492138814006901379, guid: 098a917c406fdd644899d5d0ee78e85b, type: 3}
+    - {fileID: 6714388001201129845, guid: 098a917c406fdd644899d5d0ee78e85b, type: 3}
+    - {fileID: 6851853379545180995, guid: 098a917c406fdd644899d5d0ee78e85b, type: 3}
+    uvPositions:
+    - {x: 0, y: 0.7890625}
+    - {x: 0.22705078, y: 0.7158203}
+    - {x: 0.43847656, y: 0.76123047}
+    - {x: 0.7109375, y: 0.71875}
+    - {x: 0.17675781, y: 0.44873047}
+    - {x: 0.4404297, y: 0.44384766}
+    - {x: 0.71777344, y: 0.43408203}
+    - {x: 0.69970703, y: 0.14111328}
+    uvSizes:
+    - {x: 0.22216797, y: 0.2109375}
+    - {x: 0.203125, y: 0.28320312}
+    - {x: 0.265625, y: 0.2368164}
+    - {x: 0.2626953, y: 0.28027344}
+    - {x: 0.2578125, y: 0.2211914}
+    - {x: 0.26660156, y: 0.3071289}
+    - {x: 0.26757812, y: 0.26416016}
+    - {x: 0.29492188, y: 0.28076172}
+    active: 0
+  - backgroundType: 2
+    LODLevel: 1
+    atlas: {fileID: 2800000, guid: 34e53a7ea486c0e4fac6ae02be57b96d, type: 3}
+    atlasSprites:
+    - {fileID: -2557363458886963519, guid: 34e53a7ea486c0e4fac6ae02be57b96d, type: 3}
+    - {fileID: -9107898778758578196, guid: 34e53a7ea486c0e4fac6ae02be57b96d, type: 3}
+    - {fileID: -910514191676576192, guid: 34e53a7ea486c0e4fac6ae02be57b96d, type: 3}
+    - {fileID: -6413339633818189567, guid: 34e53a7ea486c0e4fac6ae02be57b96d, type: 3}
+    - {fileID: -3972165461030065232, guid: 34e53a7ea486c0e4fac6ae02be57b96d, type: 3}
+    - {fileID: 2544953379450677892, guid: 34e53a7ea486c0e4fac6ae02be57b96d, type: 3}
+    - {fileID: 5196602413146913445, guid: 34e53a7ea486c0e4fac6ae02be57b96d, type: 3}
+    - {fileID: -4471689652038436479, guid: 34e53a7ea486c0e4fac6ae02be57b96d, type: 3}
+    uvPositions:
+    - {x: 0.0053710938, y: 0.8203125}
+    - {x: 0.21533203, y: 0.7919922}
+    - {x: 0.37597656, y: 0.8144531}
+    - {x: 0.5908203, y: 0.78125}
+    - {x: 0.79833984, y: 0.82470703}
+    - {x: 0.0126953125, y: 0.5605469}
+    - {x: 0.234375, y: 0.56591797}
+    - {x: 0.45166016, y: 0.55810547}
+    uvSizes:
+    - {x: 0.18798828, y: 0.17822266}
+    - {x: 0.14746094, y: 0.2055664}
+    - {x: 0.2055664, y: 0.18310547}
+    - {x: 0.203125, y: 0.21679688}
+    - {x: 0.20019531, y: 0.17089844}
+    - {x: 0.20654297, y: 0.23779297}
+    - {x: 0.20703125, y: 0.20458984}
+    - {x: 0.22802734, y: 0.21728516}
+    active: 0
+  - backgroundType: 4
     LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
-  - backgroundType: 0
-    LODLevel: 0
-    atlas: {fileID: 0}
-    atlasSprites: []
-    uvPositions: []
-    uvSizes: []
+    atlas: {fileID: 2800000, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
+    atlasSprites:
+    - {fileID: 3128783876705166001, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
+    - {fileID: -6238954336935196980, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
+    - {fileID: -2301554491242585670, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
+    - {fileID: -3235081678612150324, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
+    - {fileID: -9041362654812502741, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
+    - {fileID: 7959841228964340519, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
+    - {fileID: -7461174207928226224, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
+    - {fileID: 4725956044116118477, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
+    uvPositions:
+    - {x: 0.38085938, y: 0.49853516}
+    - {x: 0.5292969, y: 0.49853516}
+    - {x: 0.6640625, y: 0.52246094}
+    - {x: 0.8442383, y: 0.49853516}
+    - {x: 0.52734375, y: 0.025390625}
+    - {x: 0.69091797, y: 0.040039062}
+    - {x: 0.79785156, y: 0.12548828}
+    - {x: 0.90283203, y: 0.1459961}
+    uvSizes:
+    - {x: 0.14111328, y: 0.48779297}
+    - {x: 0.122558594, y: 0.49951172}
+    - {x: 0.17138672, y: 0.47558594}
+    - {x: 0.15576172, y: 0.49902344}
+    - {x: 0.15527344, y: 0.4580078}
+    - {x: 0.10058594, y: 0.44970703}
+    - {x: 0.08691406, y: 0.32421875}
+    - {x: 0.08642578, y: 0.34423828}
+    active: 0
+  - backgroundType: 4
+    LODLevel: 1
+    atlas: {fileID: 2800000, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
+    atlasSprites:
+    - {fileID: 8054342405281125043, guid: 60244b9d3788c9c458d43b52475be44e, type: 3}
+    - {fileID: -6298960128136850872, guid: 60244b9d3788c9c458d43b52475be44e, type: 3}
+    - {fileID: 5396075276439424220, guid: 60244b9d3788c9c458d43b52475be44e, type: 3}
+    - {fileID: 5265437316155355167, guid: 60244b9d3788c9c458d43b52475be44e, type: 3}
+    - {fileID: 6973428433775209308, guid: 60244b9d3788c9c458d43b52475be44e, type: 3}
+    - {fileID: 6166020388204966893, guid: 60244b9d3788c9c458d43b52475be44e, type: 3}
+    - {fileID: 282398896916622792, guid: 60244b9d3788c9c458d43b52475be44e, type: 3}
+    - {fileID: -5945770014363307286, guid: 60244b9d3788c9c458d43b52475be44e, type: 3}
+    uvPositions:
+    - {x: 0.0053710938, y: 0.74902344}
+    - {x: 0.07128906, y: 0.74853516}
+    - {x: 0.1459961, y: 0.75146484}
+    - {x: 0.22607422, y: 0.7363281}
+    - {x: 0.30664062, y: 0.74365234}
+    - {x: 0.40625, y: 0.8095703}
+    - {x: 0.4560547, y: 0.83251953}
+    - {x: 0.50683594, y: 0.7675781}
+    uvSizes:
+    - {x: 0.061523438, y: 0.24804688}
+    - {x: 0.071777344, y: 0.24853516}
+    - {x: 0.07763672, y: 0.22607422}
+    - {x: 0.07714844, y: 0.25}
+    - {x: 0.09082031, y: 0.25}
+    - {x: 0.043945312, y: 0.18359375}
+    - {x: 0.04345703, y: 0.16259766}
+    - {x: 0.05078125, y: 0.22509766}
+    active: 0
+  - backgroundType: 4
+    LODLevel: 2
+    atlas: {fileID: 2800000, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
+    atlasSprites:
+    - {fileID: 6169743970495483475, guid: aba497d2843facc4cb4c9da4d899eb9c, type: 3}
+    - {fileID: 4625081649421831366, guid: aba497d2843facc4cb4c9da4d899eb9c, type: 3}
+    - {fileID: 1961164753023692827, guid: aba497d2843facc4cb4c9da4d899eb9c, type: 3}
+    - {fileID: -114071574931367672, guid: aba497d2843facc4cb4c9da4d899eb9c, type: 3}
+    - {fileID: 6740252591010137248, guid: aba497d2843facc4cb4c9da4d899eb9c, type: 3}
+    - {fileID: -6450138345477751107, guid: aba497d2843facc4cb4c9da4d899eb9c, type: 3}
+    - {fileID: 4086436208382507553, guid: aba497d2843facc4cb4c9da4d899eb9c, type: 3}
+    - {fileID: 7909493141930004641, guid: aba497d2843facc4cb4c9da4d899eb9c, type: 3}
+    uvPositions:
+    - {x: 0.0078125, y: 0.5}
+    - {x: 0.14013672, y: 0.49658203}
+    - {x: 0.30908203, y: 0.5083008}
+    - {x: 0.5019531, y: 0.54003906}
+    - {x: 0.61621094, y: 0.53759766}
+    - {x: 0.7866211, y: 0.4975586}
+    - {x: 0.019042969, y: 0.1303711}
+    - {x: 0.12207031, y: 0.15966797}
+    uvSizes:
+    - {x: 0.12207031, y: 0.49609375}
+    - {x: 0.15234375, y: 0.4970703}
+    - {x: 0.17578125, y: 0.48486328}
+    - {x: 0.100097656, y: 0.44970703}
+    - {x: 0.1538086, y: 0.44921875}
+    - {x: 0.14160156, y: 0.49169922}
+    - {x: 0.08544922, y: 0.36132812}
+    - {x: 0.08544922, y: 0.32421875}
+    active: 0
+  timeStamp:
+  - metersPosition: 0
+    backgroundType: 1
