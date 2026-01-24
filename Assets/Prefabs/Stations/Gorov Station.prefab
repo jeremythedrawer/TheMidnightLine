@@ -264,7 +264,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 136.5, y: 4.09}
+  m_Size: {x: 165.5, y: 4.09}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -448,7 +448,7 @@ SpriteRenderer:
   m_FlipX: 0
   m_FlipY: 0
   m_DrawMode: 2
-  m_Size: {x: 191, y: 3.4594595}
+  m_Size: {x: 220.5, y: 3.4594595}
   m_AdaptiveModeThreshold: 0.5
   m_SpriteTileMode: 0
   m_WasSpriteAssigned: 1
@@ -488,17 +488,17 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 95.5, y: 1.7297298}
+  m_Offset: {x: 110.25, y: 1.7297298}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
     oldSize: {x: 27.675676, y: 3.4594595}
-    newSize: {x: 191, y: 3.4594595}
+    newSize: {x: 220.5, y: 3.4594595}
     adaptiveTilingThreshold: 0.5
     drawMode: 2
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 191, y: 3.3594596}
+  m_Size: {x: 220.5, y: 3.3594596}
   m_EdgeRadius: 0
 --- !u!114 &9218744101723759632
 MonoBehaviour:
@@ -1079,14 +1079,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: d5f47f6ac6eb0e64ab5f23f4833ea114, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  soData:
-    settings: {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
-    trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-    trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
-    stationsData: {fileID: 11400000, guid: 73167d88c81ac4d4e98878bf248a72fe, type: 2}
-    npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
-    camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-    spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-    gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
-  components:
-    platformCollider: {fileID: 6674433707631677740}
+  station: {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
+  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+  trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
+  stationsData: {fileID: 11400000, guid: 73167d88c81ac4d4e98878bf248a72fe, type: 2}
+  npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
+  platformCollider: {fileID: 6674433707631677740}

@@ -9,5 +9,8 @@ public class StationSO : ScriptableObject
     public int bystanderSpawnAmount = 10;
     public int agentSpawnAmount = 2;
 
-    internal bool isFrontOfTrain;
+    public bool isFrontOfTrain;
+    public float parallaxFactor;
+    public Vector3 curWorldPos;
+    public bool isSpawned;
 }

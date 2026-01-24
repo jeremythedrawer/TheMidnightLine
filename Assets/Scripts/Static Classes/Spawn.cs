@@ -17,7 +17,10 @@ public static class Spawn
         public BackgroundType backgroundType;
         public int LODLevel;
         public Texture2D atlas;
+        public float spawnHeightPosition;
+        public float spawnHeightRange;
         public Sprite[] atlasSprites;
+
         public Vector2[] uvPositions;
         public Vector2[] uvSizes;
         public bool active;
@@ -38,4 +41,10 @@ public static class Spawn
         public bool active;
     }
 
+    [Serializable] public struct BackgroundParticleInputs
+    {
+        public int bgMask;
+        public float heightRange;
+        public float heightPos;
+    }
 }

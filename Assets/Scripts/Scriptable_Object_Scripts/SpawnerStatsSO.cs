@@ -5,22 +5,25 @@ using UnityEngine;
 public class SpawnerStatsSO : ScriptableObject
 {    
     public int curBackgroundDataIndex;
-    public Vector3 topRightFront;
-    public Vector3 bottomLeftFront;
-    public Vector3 topRightBack;
-    public Vector3 bottomLeftBack;
-    public float lodPosition0;
-    public float lodPosition1;
+    
+    public Vector3 spawnMaxPos;
+    public Vector3 spawnMinPos;
+    public Vector3 spawnCenter;
+    public Vector3 spawnSize;
 
-    public int kernel;
+    public float lodZPosition0;
+    public float lodZPosition1;
+
+    public int updateKernelID;
+    public int initKernelID;
     public int computeGroups;
 
     public ComputeBuffer particleComputeBuffer;
-    public ComputeBuffer backgroundMaskBuffer;
+    public ComputeBuffer backgroundParticleInputBuffer;
     public Bounds renderParamsBounds;
     public Spawn.BackgroundType curBackgroundTypes;
 
     public int backgroundMaskCount;
-    public int[] backgroundMasksArray;
+    public Spawn.BackgroundParticleInputs[] backgroundInputsArray;
 
 }

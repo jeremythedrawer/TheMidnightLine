@@ -23,23 +23,24 @@ public class MaterialIDSO : ScriptableObject
         public int atlasSize;
         public int entityDepthRange;
         public int trainVelocity;
-        public int parallaxFactor;
-        public int worldFarClipPlane;
-        public int spawnerPosition;
-        public int spawnDepth;
+
+
+        public int bgParticleOutputs;
+        public int bgParticleInputs;
+        public int backgroundMaskCount;
+        public int spawnerMinPos;
+        public int spawnerMaxPos;
+        public int spawnerSize;
+        public int lodLevelThreshold0;
+        public int lodLevelThreshold1;
         public int particleCount;
-        public int minBoundsWorldXPos;
-        public int bgParticles;
+
         public int atlas;
         public int uvPositions;
         public int uvSizes;
         public int spriteCount;
-        public int backgroundMasks;
         public int backgroundMask;
-        public int backgroundMaskCount;
         public int lodLevel;
-        public int lodLevelThreshold0;
-        public int lodLevelThreshold1;
     }
     [SerializeField] public IDs ids;
 
@@ -61,18 +62,17 @@ public class MaterialIDSO : ScriptableObject
         ids.atlasSize = Shader.PropertyToID("_AtlasSize");
         ids.entityDepthRange = Shader.PropertyToID("_EntityDepthRange");
         ids.trainVelocity = Shader.PropertyToID("_TrainVelocity");
-        ids.parallaxFactor = Shader.PropertyToID("_ParallaxFactor");
-        ids.worldFarClipPlane = Shader.PropertyToID("_WorldFarClipPlane");
-        ids.spawnerPosition = Shader.PropertyToID("_SpawnerPosition");
-        ids.spawnDepth = Shader.PropertyToID("_SpawnDepth");
+        ids.spawnerMinPos = Shader.PropertyToID("_SpawnerMinPos");
+        ids.spawnerMaxPos = Shader.PropertyToID("_SpawnerMaxPos");
+        ids.spawnerSize = Shader.PropertyToID("_SpawnerSize");
+
         ids.particleCount = Shader.PropertyToID("_ParticleCount");
-        ids.bgParticles = Shader.PropertyToID("_BGParticles");
-        ids.minBoundsWorldXPos = Shader.PropertyToID("_MinBoundsWorldXPos");
+        ids.bgParticleOutputs = Shader.PropertyToID("_BGParticleOutputs");
         ids.atlas = Shader.PropertyToID("_Atlas");
         ids.uvPositions = Shader.PropertyToID("_UVPositions");
         ids.uvSizes = Shader.PropertyToID("_UVSizes");
         ids.spriteCount = Shader.PropertyToID("_SpriteCount");
-        ids.backgroundMasks = Shader.PropertyToID("_BackgroundMasks");
+        ids.bgParticleInputs = Shader.PropertyToID("_BGParticleInputs");
         ids.backgroundMask = Shader.PropertyToID("_BackgroundMask");
         ids.backgroundMaskCount = Shader.PropertyToID("_BackgroundMaskCount");
         ids.lodLevel = Shader.PropertyToID("_LODLevel");

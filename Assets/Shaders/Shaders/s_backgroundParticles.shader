@@ -22,7 +22,7 @@ Shader "Custom/s_backgroundParticles"
             #include "Assets/Shaders/HLSL/BackgroundParticles.hlsl"
             #include "Assets/Shaders/HLSL/Random.hlsl"
 
-            StructuredBuffer<BackgroundAttributes> _BGParticles;
+            StructuredBuffer<BackgroundParticleOutput> _BGParticleOutputs;
 
 
             CBUFFER_START(UnityPerMaterial)
@@ -48,7 +48,7 @@ Shader "Custom/s_backgroundParticles"
                 Varyings OUT;
 
                 uint particleID = vertexID / 4;
-                BackgroundAttributes p = _BGParticles[particleID];
+                BackgroundParticleOutput p = _BGParticleOutputs[particleID];
 
                 if ((p.backgroundMask & _BackgroundMask) == 0 || p.lodLevel != _LODLevel)
                 {

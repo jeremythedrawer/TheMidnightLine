@@ -9,21 +9,28 @@ public class StationManager : MonoBehaviour
     public SpawnerStatsSO spawnerStats;
     public GameEventDataSO gameEventData;
 
+    private void Awake()
+    {
+        for (int i = 1; i < stationsData.stations.Length; i++)
+        {
+            stationsData.stations[i].isSpawned = false;
+        }
+    }
     private void OnEnable()
     {
-        gameEventData.OnStationLeave.RegisterListener(InstaniateStation);
+        gameEventData.OnSpawnStation.RegisterListener(SpawnStation);
     }
 
     private void OnDisable()
     {
-        gameEventData.OnStationLeave.UnregisterListener(InstaniateStation);
+        gameEventData.OnSpawnStation.UnregisterListener(SpawnStation);
     }
 
-    private void InstaniateStation()
+    private void SpawnStation()
     {
         Station nextStationPrefab = stationsData.stations[trainStats.nextStationIndex].stationPrefab;
         Station nextStation = Instantiate(nextStationPrefab, transform);
-        float stationXPos = spawnerStats.bottomLeftFront.x + (nextStation.transform.position.x - nextStation.components.platformCollider.bounds.min.x);
+        float stationXPos = spawnerStats.spawnMaxPos.x + (nextStation.transform.position.x - nextStation.platformCollider.bounds.min.x);
         nextStation.transform.position = new Vector3(stationXPos, 0, 0);
     }
 }

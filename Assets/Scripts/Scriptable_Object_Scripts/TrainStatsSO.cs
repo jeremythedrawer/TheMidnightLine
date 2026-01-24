@@ -6,25 +6,26 @@ public class TrainStatsSO : ScriptableObject
 {
     const float KM_TO_MPS = 0.27777777778f;
     
-    internal int nextStationIndex;
-    internal float curKMPerHour;
-    internal float targetKMPerHour;
-    internal float metersTravelled;
-    internal float curVelocity;
-    internal float distToNextStation;
-    internal float brakeDist;
-    internal float startXPos;
-    internal float trainLength;
-    internal float trainMaxHeight;
-    internal float trainHalfLength;
+    public int nextStationIndex;
+    public float curKMPerHour;
+    public float targetKMPerHour;
+    public float metersTravelled;
+    public float curVelocity;
+    public float distToNextStation;
+    public float distToSpawnTrain;
+    public float brakeDist;
+    public float startXPos;
+    public float trainLength;
+    public float trainMaxHeight;
+    public float trainHalfLength;
 
-    internal bool closingDoors;
-    internal float wheelCircumference;
+    public bool closingDoors;
+    public float wheelCircumference;
 
-    internal int curPassengerCount;
-    internal int targetPassengerCount;
+    public int curPassengerCount;
+    public int targetPassengerCount;
 
-    internal StationSO curStation;
+    public StationSO curStation;
     public float GetMetersPerSecond(float kmph)
     {
         return kmph * KM_TO_MPS;

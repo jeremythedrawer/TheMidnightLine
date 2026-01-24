@@ -659,7 +659,6 @@ public class NPCBrain : MonoBehaviour
     }
     private void FindSmokersRoom()
     {
-        Debug.Log(gameObject.name + " | " + transform.position);
         if (stats.chairPosIndex != int.MaxValue && curCarriage.chairData[stats.chairPosIndex].filled)
         {
             curCarriage.chairData[stats.chairPosIndex].filled = false;
