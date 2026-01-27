@@ -9,11 +9,13 @@ public class SpriteFactory : EditorWindow
 {
     AtlasSO atlas;
     Vector2 scroll;
-    int selectedIndex = -1;
 
-    
     float cellSize = 256f;
     float markerSize = 4f;
+
+    int selectedIndex = -1;
+    AnimationType selectedAnimType;
+    int selectedFrameValue;
     const float padding = 50f;
     const float GUIWidthValue = 300f;
     [MenuItem("Tools/Sprite Factory")]
@@ -290,11 +292,10 @@ public class SpriteFactory : EditorWindow
         float clipDataRectYPos = spriteRect.yMax + 2;
 
         Rect animTypeRect = new Rect(spriteRect.center.x - clipDataRectWidth, clipDataRectYPos, clipDataRectWidth, clipDataRectHeight);
-        Rect keyframeRect = new Rect(spriteRect.center.x, clipDataRectYPos, clipDataRectWidth, clipDataRectHeight);
-
-        if (GUI.Button(spriteRect, GUIContent.none, GUIStyle.none)) selectedIndex = index;
+        Rect frameRect = new Rect(spriteRect.center.x, clipDataRectYPos, clipDataRectWidth, clipDataRectHeight);
 
         AnimationType animType = AnimationType.None;
+        int frameValue = -1;
         int existingClipIndex = -1;
         for (int i = 0; i < atlas.clips.Length; i++)
         {
@@ -306,12 +307,24 @@ public class SpriteFactory : EditorWindow
                 if (keyframe.spriteIndex == atlasSprite.index)
                 {
                     existingClipIndex = i;
+                    frameValue = keyframe.frame;
                 }
             }
         }
         animType = existingClipIndex == -1 ? AnimationType.None : atlas.clips[existingClipIndex].type;
 
+        if (GUI.Button(spriteRect, GUIContent.none, GUIStyle.none))
+        {
+            if (selectedIndex != index)
+            {
+                selectedIndex = index;
+                selectedAnimType = animType;
+                selectedFrameValue = frameValue;
+            }
+        }
 
+
+        bool changedSelectedIndex = selectedIndex != index;
         if (selectedIndex == index)
         {
             Handles.BeginGUI();
@@ -321,10 +334,14 @@ public class SpriteFactory : EditorWindow
             EditorGUI.BeginChangeCheck();
 
             AnimationType prevAnimType = animType;
-            AnimationType selectedAnimType = (AnimationType)EditorGUI.EnumPopup(animTypeRect, animType);
+
+
+
+            selectedAnimType = (AnimationType)EditorGUI.EnumPopup(animTypeRect, selectedAnimType);
+            selectedFrameValue = EditorGUI.IntField(frameRect, selectedFrameValue);
             if (EditorGUI.EndChangeCheck())
             {
-                Debug.Log(prevAnimType + " | " + selectedAnimType);
+                Debug.Log(selectedFrameValue);
                 bool foundKeyframe = false;
 
                 int selectedClipIndex = -1;
@@ -342,10 +359,15 @@ public class SpriteFactory : EditorWindow
                             if (keyframe.spriteIndex == selectedIndex)
                             {
                                 foundKeyframe = true;
+                                if (selectedFrameValue > -1)
+                                {
+                                    atlas.clips[i].keyFrames[j].frame = selectedFrameValue;
+                                }
                                 break;
                                 //TODO: have this keyframe frame be the keyFrameValue below
                             }
                         }
+
                         selectedClipIndex = i;
                     }
                     else if (clip.type == prevAnimType)
@@ -358,21 +380,25 @@ public class SpriteFactory : EditorWindow
 
                 if (selectedClipIndex == -1)
                 {
-                    List<Atlas.Clip> clipsList = atlas.clips.ToList();
-                    Atlas.Clip newClip = new Atlas.Clip();
-                    newClip.type = selectedAnimType;
-                    newClip.keyFrames = new Atlas.AtlasKeyframe[1];
-                    newClip.keyFrames[0].spriteIndex = selectedIndex;
-                    //newClip.keyFrames[0].frame = TODO: set the keyframe value below
-                    clipsList.Add(newClip);
-                    atlas.clips = clipsList.ToArray();
+                    if (selectedAnimType != AnimationType.None && selectedFrameValue > -1)
+                    {
+                        List<Atlas.Clip> clipsList = atlas.clips.ToList();
+                        Atlas.Clip newClip = new Atlas.Clip();
+                        newClip.type = selectedAnimType;
+                        newClip.keyFrames = new Atlas.AtlasKeyframe[1];
+                        newClip.keyFrames[0].spriteIndex = selectedIndex;
+                        newClip.keyFrames[0].frame = selectedFrameValue;
+                        //newClip.keyFrames[0].frame = TODO: set the keyframe value below
+                        clipsList.Add(newClip);
+                        atlas.clips = clipsList.ToArray();
+                    }
                 }
-                else if (!foundKeyframe)
+                else if (!foundKeyframe && selectedFrameValue > -1)
                 {
                     List<AtlasKeyframe> selectedClipKeyframesList = atlas.clips[selectedClipIndex].keyFrames.ToList();
                     AtlasKeyframe newKeyframe = new Atlas.AtlasKeyframe();
                     newKeyframe.spriteIndex = selectedIndex;
-                    //newKeyframe.frame = TODO: set the keyframe value below
+                    newKeyframe.frame = selectedFrameValue;
                     selectedClipKeyframesList.Add(newKeyframe);
                     atlas.clips[selectedClipIndex].keyFrames = selectedClipKeyframesList.ToArray();
                 }
@@ -395,14 +421,11 @@ public class SpriteFactory : EditorWindow
         else if (animType != AnimationType.None)
         {
             animType = (AnimationType)EditorGUI.EnumPopup(animTypeRect, animType);
+            if (frameValue > -1)
+            {
+                frameValue = EditorGUI.IntField(frameRect, frameValue);
+            }
         }
-
-            //Keyframe Selection
-
-            int keyFrameValue = 0;
-        
-        keyFrameValue = EditorGUI.IntField(keyframeRect, keyFrameValue);
-
     }
     private void AddSpriteToClip(Atlas.AtlasSprite sprite)
     {
