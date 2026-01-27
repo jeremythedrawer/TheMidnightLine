@@ -30,6 +30,7 @@ public class LayerSettingsSO : ScriptableObject
     public LayerMask spy;
     public LayerMask npc;
     public LayerMask phone;
+    public LayerMask death;
     internal LayerMask stationMask;
     internal LayerMask trainMask;
 

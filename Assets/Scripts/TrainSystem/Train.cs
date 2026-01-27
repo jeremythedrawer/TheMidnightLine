@@ -56,6 +56,7 @@ public class Train : MonoBehaviour
     {
         stats.curVelocity = stats.GetMetersPerSecond(stats.curKMPerHour) * Time.deltaTime;
         stats.metersTravelled += stats.curVelocity;
+        Shader.SetGlobalFloat(materialIDs.ids.trainMetersTravelled, stats.metersTravelled);
         stats.distToNextStation = (stats.curStation.metersPosition + stats.trainHalfLength) - stats.metersTravelled;
         stats.distToSpawnTrain = (stats.curStation.metersPosition - stats.trainHalfLength) - stats.metersTravelled;
         if (stats.distToSpawnTrain <= 0 && !stats.curStation.isSpawned)
@@ -126,7 +127,7 @@ public class Train : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(new Vector2(stats.brakeDist, 0), new Vector2(stats.brakeDist, 5));
-        Gizmos.DrawSphere(transform.position + new Vector3(stats.trainHalfLength, 0, 0), 2);
+        Gizmos.DrawSphere(transform.position + new Vector3(stats.trainHalfLength, 0, 0), 1);
     }
 
 #if UNITY_EDITOR

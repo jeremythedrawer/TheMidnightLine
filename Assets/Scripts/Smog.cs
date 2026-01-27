@@ -11,10 +11,14 @@ public class Smog : MonoBehaviour
     [SerializeField] TrainStatsSO trainStats;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] MaterialIDSO materialIDs;
-    [SerializeField] SpawnerSettingsSO maxBounds;
+    [SerializeField] SpawnerStatsSO spawnStats;
     CancellationTokenSource ctsFade;
     MaterialPropertyBlock mpb;
 
+    private void OnValidate()
+    {
+        SetSize();
+    }
     private void Awake()
     {
         mpb = new MaterialPropertyBlock();
@@ -26,15 +30,12 @@ public class Smog : MonoBehaviour
     private void Update()
     {
         Fade();
-        Scroll();
         spriteRenderer.SetPropertyBlock(mpb);
     }
-    private void Scroll()
+    private void SetSize()
     {
-        shaderValues.curScrollSpeed = spyStats.curGroundLayer == layerSettings.trainLayerStruct.ground ? trainStats.curKMPerHour * 0.01f : shaderValues.minScrollSpeed;
-        shaderValues.curScrollSpeed = Mathf.Max(shaderValues.curScrollSpeed, shaderValues.minScrollSpeed);
-        shaderValues.curScrollTime += Time.deltaTime * shaderValues.curScrollSpeed;
-        mpb.SetFloat(materialIDs.ids.scrollTime, shaderValues.curScrollTime);
+        transform.localScale = spawnStats.spawnSize;
+        transform.position = new Vector3(spawnStats.spawnCenter.x, spawnStats.spawnCenter.y, transform.position.z);
     }
     private void Fade()
     {

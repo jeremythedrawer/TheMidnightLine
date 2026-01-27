@@ -23,7 +23,7 @@ public class MaterialIDSO : ScriptableObject
         public int atlasSize;
         public int entityDepthRange;
         public int trainVelocity;
-
+        public int trainMetersTravelled;
 
         public int bgParticleOutputs;
         public int bgParticleInputs;
@@ -62,6 +62,7 @@ public class MaterialIDSO : ScriptableObject
         ids.atlasSize = Shader.PropertyToID("_AtlasSize");
         ids.entityDepthRange = Shader.PropertyToID("_EntityDepthRange");
         ids.trainVelocity = Shader.PropertyToID("_TrainVelocity");
+        ids.trainMetersTravelled = Shader.PropertyToID("_MetersTravelled");
         ids.spawnerMinPos = Shader.PropertyToID("_SpawnerMinPos");
         ids.spawnerMaxPos = Shader.PropertyToID("_SpawnerMaxPos");
         ids.spawnerSize = Shader.PropertyToID("_SpawnerSize");
@@ -69,8 +70,10 @@ public class MaterialIDSO : ScriptableObject
         ids.particleCount = Shader.PropertyToID("_ParticleCount");
         ids.bgParticleOutputs = Shader.PropertyToID("_BGParticleOutputs");
         ids.atlas = Shader.PropertyToID("_Atlas");
+
         ids.uvPositions = Shader.PropertyToID("_UVPositions");
         ids.uvSizes = Shader.PropertyToID("_UVSizes");
+
         ids.spriteCount = Shader.PropertyToID("_SpriteCount");
         ids.bgParticleInputs = Shader.PropertyToID("_BGParticleInputs");
         ids.backgroundMask = Shader.PropertyToID("_BackgroundMask");

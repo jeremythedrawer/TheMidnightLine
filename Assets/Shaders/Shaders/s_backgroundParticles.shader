@@ -66,13 +66,12 @@ Shader "Custom/s_backgroundParticles"
                     float2(1, 0)
                 };
 
-                float particleSize = 10.0;
+                float particleSize = 10 * p.parallaxFactor;
                 float3 offset = float3(quadOffsets[cornerID] * particleSize, 0);
 
-                uint randID = HashIntToInt(particleID);
-                randID = randID % _SpriteCount;
-                float2 uvPos = _UVPositions[randID];
-                float2 uvSize = _UVSizes[randID];
+                int randMod = p.randID % _SpriteCount;
+                float2 uvPos = _UVPositions[randMod];
+                float2 uvSize = _UVSizes[randMod];
 
                 OUT.positionHCS = TransformWorldToHClip(p.position + offset);
                 OUT.uv = quadOffsets[cornerID] * uvSize + uvPos;

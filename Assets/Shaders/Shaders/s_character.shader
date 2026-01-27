@@ -5,11 +5,13 @@ Shader "Unlit/s_character"
         [HideInInspector][NoScaleOffset] _MainTex ("Sprite Texture", 2D) = "white" {}
 
         _Color ("Color", Color) = (1,1,1,1)
+        _AtlasIndex("Atlas Index", Float) = 0
         _DepthGreyScale ("Depth Grey Scale", Range(0, 1)) = 0.5
         _Alpha ("Alpha", Range(0,1)) = 1
     }
     SubShader
     {
+
         Tags {"Queue"="Transparent" "RenderType"="Transparent" "RenderPipeline"="UniversalPipeline"}
         Cull Off
         ZWrite On
@@ -22,6 +24,7 @@ Shader "Unlit/s_character"
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/Core2D.hlsl"
+            #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
 
             #pragma vertex vert
             #pragma fragment frag
@@ -44,14 +47,17 @@ Shader "Unlit/s_character"
             };
 
 
-            TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex);
 
             CBUFFER_START(UnityPerMaterial)
+                StructuredBuffer<AtlasSprite> _AtlasSprites;
+                uint _AtlasIndex;
+                TEXTURE2D(_MainTex);
+                SAMPLER(sampler_MainTex);
                 half4 _Color;
                 float _DepthGreyScale;
                 float _ZPos;
                 float _Alpha;
+                float _Flip;
             CBUFFER_END
 
             float2 _EntityDepthRange;

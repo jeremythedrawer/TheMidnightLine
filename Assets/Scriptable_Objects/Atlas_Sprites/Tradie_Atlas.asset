@@ -1,0 +1,969 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: bd7cde245aac6f24e8afbb1d8a16e943, type: 3}
+  m_Name: Tradie_Atlas
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
+  texture: {fileID: 2800000, guid: cc98a5ce93c118c4481c75a80e8c861e, type: 3}
+  pixelsPerUnit: 100
+  customPivotColor:
+    serializedVersion: 2
+    rgba: 4278190335
+  markers:
+  - type: 1
+    color:
+      serializedVersion: 2
+      rgba: 65280
+  framesPerSecond: 30
+  sprites:
+  - index: 0
+    uvPos: {x: 0, y: 0}
+    uvSize: {x: 0.055664062, y: 0.10644531}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 1
+    uvPos: {x: 0.06689453, y: 0}
+    uvSize: {x: 0.055664062, y: 0.10644531}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 2
+    uvPos: {x: 0.13085938, y: 0}
+    uvSize: {x: 0.055664062, y: 0.10449219}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 3
+    uvPos: {x: 0.19384766, y: 0}
+    uvSize: {x: 0.055664062, y: 0.10644531}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 4
+    uvPos: {x: 0.2578125, y: 0}
+    uvSize: {x: 0.055664062, y: 0.10449219}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 5
+    uvPos: {x: 0.3251953, y: 0}
+    uvSize: {x: 0.055664062, y: 0.10644531}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 6
+    uvPos: {x: 0.3959961, y: 0}
+    uvSize: {x: 0.055664062, y: 0.10449219}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 7
+    uvPos: {x: 0.4663086, y: 0}
+    uvSize: {x: 0.055664062, y: 0.10644531}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 8
+    uvPos: {x: 0.5332031, y: 0}
+    uvSize: {x: 0.055664062, y: 0.10449219}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 9
+    uvPos: {x: 0.6040039, y: 0}
+    uvSize: {x: 0.055664062, y: 0.10644531}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 10
+    uvPos: {x: 0.6694336, y: 0}
+    uvSize: {x: 0.055664062, y: 0.10644531}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 11
+    uvPos: {x: 0.73291016, y: 0}
+    uvSize: {x: 0.055664062, y: 0.106933594}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 12
+    uvPos: {x: 0.8017578, y: 0}
+    uvSize: {x: 0.055664062, y: 0.107421875}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 13
+    uvPos: {x: 0.86865234, y: 0}
+    uvSize: {x: 0.055664062, y: 0.107910156}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 14
+    uvPos: {x: 0, y: 0.122558594}
+    uvSize: {x: 0.055664062, y: 0.106933594}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 15
+    uvPos: {x: 0.068847656, y: 0.122558594}
+    uvSize: {x: 0.055664062, y: 0.107421875}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 16
+    uvPos: {x: 0.13574219, y: 0.122558594}
+    uvSize: {x: 0.055664062, y: 0.107910156}
+    normPivot: {x: 0.5964912, y: 0}
+    markers: []
+  - index: 17
+    uvPos: {x: 0.017578125, y: 0.5102539}
+    uvSize: {x: 0.044433594, y: 0.15625}
+    normPivot: {x: 0.41758242, y: 0}
+    markers: []
+  - index: 18
+    uvPos: {x: 0.07128906, y: 0.51220703}
+    uvSize: {x: 0.04736328, y: 0.1538086}
+    normPivot: {x: 0.45360824, y: 0}
+    markers: []
+  - index: 19
+    uvPos: {x: 0.12841797, y: 0.51220703}
+    uvSize: {x: 0.04736328, y: 0.15429688}
+    normPivot: {x: 0.45360824, y: 0}
+    markers: []
+  - index: 20
+    uvPos: {x: 0.18798828, y: 0.51220703}
+    uvSize: {x: 0.04736328, y: 0.15478516}
+    normPivot: {x: 0.45360824, y: 0}
+    markers: []
+  - index: 21
+    uvPos: {x: 0.6928711, y: 0.6767578}
+    uvSize: {x: 0.044433594, y: 0.1586914}
+    normPivot: {x: 0.41758242, y: 0}
+    markers: []
+  - index: 22
+    uvPos: {x: 0.75341797, y: 0.6767578}
+    uvSize: {x: 0.044433594, y: 0.15820312}
+    normPivot: {x: 0.41758242, y: 0}
+    markers: []
+  - index: 23
+    uvPos: {x: 0.81640625, y: 0.6767578}
+    uvSize: {x: 0.044433594, y: 0.15820312}
+    normPivot: {x: 0.41758242, y: 0}
+    markers: []
+  - index: 24
+    uvPos: {x: 0.87646484, y: 0.6767578}
+    uvSize: {x: 0.044433594, y: 0.1586914}
+    normPivot: {x: 0.41758242, y: 0}
+    markers: []
+  - index: 25
+    uvPos: {x: 0.9375, y: 0.6767578}
+    uvSize: {x: 0.044433594, y: 0.15820312}
+    normPivot: {x: 0.41758242, y: 0}
+    markers: []
+  - index: 26
+    uvPos: {x: 0.19677734, y: 0.68115234}
+    uvSize: {x: 0.049316406, y: 0.15820312}
+    normPivot: {x: 0.6930693, y: 0.99382716}
+    markers: []
+  - index: 27
+    uvPos: {x: 0.25048828, y: 0.68115234}
+    uvSize: {x: 0.044433594, y: 0.15820312}
+    normPivot: {x: 0.7912088, y: 0.99382716}
+    markers: []
+  - index: 28
+    uvPos: {x: 0.30322266, y: 0.68115234}
+    uvSize: {x: 0.044433594, y: 0.15625}
+    normPivot: {x: 0.41758242, y: 0}
+    markers: []
+  - index: 29
+    uvPos: {x: 0.35498047, y: 0.68115234}
+    uvSize: {x: 0.044433594, y: 0.15820312}
+    normPivot: {x: 0.41758242, y: 0}
+    markers: []
+  - index: 30
+    uvPos: {x: 0.40820312, y: 0.68115234}
+    uvSize: {x: 0.044433594, y: 0.15820312}
+    normPivot: {x: 0.41758242, y: 0}
+    markers: []
+  - index: 31
+    uvPos: {x: 0.45996094, y: 0.68115234}
+    uvSize: {x: 0.044433594, y: 0.15820312}
+    normPivot: {x: 0.41758242, y: 0}
+    markers: []
+  - index: 32
+    uvPos: {x: 0.52001953, y: 0.68115234}
+    uvSize: {x: 0.044433594, y: 0.15820312}
+    normPivot: {x: 0.62637365, y: 0.99382716}
+    markers: []
+  - index: 33
+    uvPos: {x: 0.57714844, y: 0.68115234}
+    uvSize: {x: 0.044433594, y: 0.15820312}
+    normPivot: {x: 0.62637365, y: 0.99382716}
+    markers: []
+  - index: 34
+    uvPos: {x: 0.63378906, y: 0.68115234}
+    uvSize: {x: 0.044433594, y: 0.15625}
+    normPivot: {x: 0.6923077, y: 0.99375}
+    markers: []
+  - index: 35
+    uvPos: {x: 0.015136719, y: 0.6821289}
+    uvSize: {x: 0.057617188, y: 0.1586914}
+    normPivot: {x: 0.37288135, y: 0}
+    markers: []
+  - index: 36
+    uvPos: {x: 0.078125, y: 0.68310547}
+    uvSize: {x: 0.04736328, y: 0.15820312}
+    normPivot: {x: 0.45360824, y: 0}
+    markers: []
+  - index: 37
+    uvPos: {x: 0.13574219, y: 0.68310547}
+    uvSize: {x: 0.04736328, y: 0.15820312}
+    normPivot: {x: 0.68041235, y: 0.99382716}
+    markers: []
+  - index: 38
+    uvPos: {x: 0.6972656, y: 0.8388672}
+    uvSize: {x: 0.047851562, y: 0.15917969}
+    normPivot: {x: 0.4489796, y: 0.0030674846}
+    markers:
+    - type: 1
+      objectPos: {x: 0.78, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.81}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.81, y: 2.81}
+    - type: 1
+      objectPos: {x: 0.81, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.81, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.81, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.81, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.81, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.83, y: 2.81}
+    - type: 1
+      objectPos: {x: 0.83, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.83, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.83, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.83, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.83, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.81}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.81}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.89, y: 2.81}
+    - type: 1
+      objectPos: {x: 0.89, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.89, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.89, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.89, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.89, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.91, y: 2.81}
+    - type: 1
+      objectPos: {x: 0.91, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.91, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.91, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.91, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.91, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.81}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.81}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.83}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.91}
+  - index: 39
+    uvPos: {x: 0.75683594, y: 0.8388672}
+    uvSize: {x: 0.047851562, y: 0.16015625}
+    normPivot: {x: 0.4489796, y: 0.0030487804}
+    markers:
+    - type: 1
+      objectPos: {x: 0.78, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.81, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.81, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.81, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.81, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.83, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.83, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.83, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.83, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.89, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.89, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.89, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.89, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.91, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.91, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.91, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.91, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.89}
+  - index: 40
+    uvPos: {x: 0.81640625, y: 0.83935547}
+    uvSize: {x: 0.047851562, y: 0.16015625}
+    normPivot: {x: 0.4489796, y: 0}
+    markers:
+    - type: 1
+      objectPos: {x: 0.78, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.78, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.79, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.8, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.81, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.81, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.81, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.81, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.82, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.83, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.83, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.83, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.83, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.84, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.85, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.86, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.87, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.88, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.89, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.89, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.89, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.89, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.9, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.91, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.91, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.91, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.91, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.92, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.93, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.89}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.94, y: 2.91}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.82}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.86}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.95, y: 2.9}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.84}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.85}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.87}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.88}
+    - type: 1
+      objectPos: {x: 0.96, y: 2.89}
+  - index: 41
+    uvPos: {x: 0.8745117, y: 0.83935547}
+    uvSize: {x: 0.057617188, y: 0.16015625}
+    normPivot: {x: 0.37288135, y: 0}
+    markers: []
+  - index: 42
+    uvPos: {x: 0.5263672, y: 0.83984375}
+    uvSize: {x: 0.04736328, y: 0.1586914}
+    normPivot: {x: 0.45360824, y: 0}
+    markers: []
+  - index: 43
+    uvPos: {x: 0.5834961, y: 0.83984375}
+    uvSize: {x: 0.04736328, y: 0.15966797}
+    normPivot: {x: 0.45360824, y: 0}
+    markers: []
+  - index: 44
+    uvPos: {x: 0.6430664, y: 0.83984375}
+    uvSize: {x: 0.04736328, y: 0.16015625}
+    normPivot: {x: 0.45360824, y: 0}
+    markers: []
+  - index: 45
+    uvPos: {x: 0.93896484, y: 0.83984375}
+    uvSize: {x: 0.057617188, y: 0.15966797}
+    normPivot: {x: 0.37288135, y: 0}
+    markers: []
+  - index: 46
+    uvPos: {x: 0.0029296875, y: 0.84277344}
+    uvSize: {x: 0.041992188, y: 0.1538086}
+    normPivot: {x: 0.41860464, y: 0}
+    markers: []
+  - index: 47
+    uvPos: {x: 0.060058594, y: 0.84277344}
+    uvSize: {x: 0.061523438, y: 0.1538086}
+    normPivot: {x: 0.54761904, y: 0.00952381}
+    markers: []
+  - index: 48
+    uvPos: {x: 0.13183594, y: 0.84277344}
+    uvSize: {x: 0.06591797, y: 0.15234375}
+    normPivot: {x: 0.5703704, y: 0}
+    markers: []
+  - index: 49
+    uvPos: {x: 0.20605469, y: 0.84277344}
+    uvSize: {x: 0.045898438, y: 0.15136719}
+    normPivot: {x: 0.5425532, y: 0}
+    markers: []
+  - index: 50
+    uvPos: {x: 0.26416016, y: 0.84277344}
+    uvSize: {x: 0.03955078, y: 0.15234375}
+    normPivot: {x: 0.54320985, y: 0}
+    markers: []
+  - index: 51
+    uvPos: {x: 0.32226562, y: 0.84277344}
+    uvSize: {x: 0.05078125, y: 0.15332031}
+    normPivot: {x: 0.53846157, y: 0}
+    markers: []
+  - index: 52
+    uvPos: {x: 0.38623047, y: 0.84277344}
+    uvSize: {x: 0.06640625, y: 0.15185547}
+    normPivot: {x: 0.52205884, y: 0}
+    markers: []
+  - index: 53
+    uvPos: {x: 0.4609375, y: 0.84277344}
+    uvSize: {x: 0.047851562, y: 0.15185547}
+    normPivot: {x: 0.56122446, y: 0}
+    markers: []
+  clips:
+  - type: 0
+    keyFrames:
+    - sprite:
+        index: 0
+        uvPos: {x: 0, y: 0}
+        uvSize: {x: 0, y: 0}
+        normPivot: {x: 0, y: 0}
+        markers: []
+      frame: 0
+  - type: 1
+    keyFrames:
+    - sprite:
+        index: 0
+        uvPos: {x: 0, y: 0}
+        uvSize: {x: 0, y: 0}
+        normPivot: {x: 0, y: 0}
+        markers: []
+      frame: 0

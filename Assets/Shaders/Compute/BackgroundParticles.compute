@@ -17,7 +17,22 @@ float3 _SpawnerSize;
 float _LODThreshold0, _LODThreshold1;
 
 uint _ParticleCount;
-float _TrainVelocity;
+uniform float _TrainVelocity;
+
+void ReinitOutput(inout BackgroundParticleOutput output, uint id)
+{
+    output.randID = HashIntToInt(id + output.randID);
+    output.rand01 = HashIntTo01Float(output.randID);
+    
+    uint randMod = output.randID % _BackgroundMaskCount;
+    
+    BackgroundParticleInput input = _BGParticleInputs[randMod];
+    
+    output.position.y = input.heightPos + lerp(-input.heightRange, input.heightRange, output.rand01);
+    output.backgroundMask = input.bgMask;
+    output.alive = 1;
+}
+
 
 [numthreads(THREADS_PER_GROUP, 1, 1)]
 void CSInit(uint id : SV_DispatchThreadID)
@@ -29,20 +44,8 @@ void CSInit(uint id : SV_DispatchThreadID)
     
     BackgroundParticleOutput output = _BGParticleOutputs[id];
     
-    uint randID = HashIntToInt(id);
-    uint randMod = randID % _BackgroundMaskCount;
-    float rand01 = HashIntTo01Float(randID);
-    
-    BackgroundParticleInput input = _BGParticleInputs[randMod];
-    
-    output.position.x = _SpawnerMinPos.x + (_SpawnerSize.x * rand01);
-    output.position.y = input.heightPos + lerp(-input.heightRange, input.heightRange, rand01);
     output.position.z = _SpawnerMinPos.z + (((float) id / (float) _ParticleCount) * _SpawnerSize.z);
-    
-    output.parallaxFactor = abs(output.position.z - _SpawnerMaxPos.z) / _SpawnerMaxPos.z;
-    output.alive = 1;
-    output.backgroundMask = input.bgMask;
-    
+    output.parallaxFactor = abs(output.position.z - _SpawnerMaxPos.z) / _SpawnerMaxPos.z; // TODO: Calculate between camera and furthest pos, not just the furthest pos
     if (output.position.z < _LODThreshold0)
     {
         output.lodLevel = 0;
@@ -56,9 +59,10 @@ void CSInit(uint id : SV_DispatchThreadID)
     {
         output.lodLevel = 2;
     }
-    output.randID = randID;
     
-    output.rand01 = rand01;
+    ReinitOutput(output, id);
+    
+    output.position.x = _SpawnerMinPos.x + (_SpawnerSize.x * output.rand01);
     
     _BGParticleOutputs[id] = output;
 }
@@ -83,35 +87,10 @@ void CSUpdate(uint id : SV_DispatchThreadID)
         }
     }
     else
-    {        
-        uint randID = HashIntToInt(output.randID);
-        uint randMod = randID % _BackgroundMaskCount;
-        float rand01 = HashIntTo01Float(randID);
-        
-        BackgroundParticleInput input = _BGParticleInputs[randMod];
-        
+    {
+        BackgroundParticleOutput output = _BGParticleOutputs[id];
+        ReinitOutput(output, id);
         output.position.x = _SpawnerMaxPos.x;
-        output.position.y = input.heightPos + lerp(-input.heightRange, input.heightRange, rand01);
-        output.position.z = _SpawnerMinPos.z + (_SpawnerSize.z * rand01);
-
-        output.parallaxFactor = abs(output.position.z - _SpawnerMaxPos.z) / _SpawnerMaxPos.z;
-        output.alive = 1;
-        
-        output.backgroundMask = input.bgMask;
-        
-        if (output.position.z < _LODThreshold0)
-        {
-            output.lodLevel = 0;
-
-        }
-        else if (output.position.z < _LODThreshold1)
-        {
-            output.lodLevel = 1;
-        }
-        else
-        {
-            output.lodLevel = 2;
-        }
     }
     
     _BGParticleOutputs[id] = output;

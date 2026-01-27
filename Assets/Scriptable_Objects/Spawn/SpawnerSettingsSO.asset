@@ -13,7 +13,8 @@ MonoBehaviour:
   m_Name: SpawnerSettingsSO
   m_EditorClassIdentifier: Assembly-CSharp::SpawnerSettingsSO
   bufferAmount: 16
-  spawnDepth: 269
+  maxSpawnDepth: 392.9
+  minSpawnDepth: 15.93
   spawnHeight: 0
   maxParticleCount: 1024
   backgroundParticleCompute: {fileID: 7200000, guid: d984c22b7e444484fb6f6f24b8c38e63, type: 3}
@@ -22,6 +23,8 @@ MonoBehaviour:
   - backgroundType: 1
     LODLevel: 0
     atlas: {fileID: 2800000, guid: 204044b0304388f49aa58a12e321c10f, type: 3}
+    spawnHeightPosition: 0
+    spawnHeightRange: 0.2
     atlasSprites:
     - {fileID: 1756735754, guid: 204044b0304388f49aa58a12e321c10f, type: 3}
     - {fileID: 1066699164, guid: 204044b0304388f49aa58a12e321c10f, type: 3}
@@ -44,6 +47,8 @@ MonoBehaviour:
   - backgroundType: 1
     LODLevel: 1
     atlas: {fileID: 2800000, guid: f8f8c2aa1994cc94684f5f37f57fd629, type: 3}
+    spawnHeightPosition: 0
+    spawnHeightRange: 0
     atlasSprites:
     - {fileID: -2751328844571418994, guid: f8f8c2aa1994cc94684f5f37f57fd629, type: 3}
     - {fileID: 6011790598028670311, guid: f8f8c2aa1994cc94684f5f37f57fd629, type: 3}
@@ -66,6 +71,8 @@ MonoBehaviour:
   - backgroundType: 2
     LODLevel: 0
     atlas: {fileID: 2800000, guid: 098a917c406fdd644899d5d0ee78e85b, type: 3}
+    spawnHeightPosition: 0
+    spawnHeightRange: 0.2
     atlasSprites:
     - {fileID: -2934962607639489763, guid: 098a917c406fdd644899d5d0ee78e85b, type: 3}
     - {fileID: 6710837969976237560, guid: 098a917c406fdd644899d5d0ee78e85b, type: 3}
@@ -97,6 +104,8 @@ MonoBehaviour:
   - backgroundType: 2
     LODLevel: 1
     atlas: {fileID: 2800000, guid: 34e53a7ea486c0e4fac6ae02be57b96d, type: 3}
+    spawnHeightPosition: 0
+    spawnHeightRange: 0
     atlasSprites:
     - {fileID: -2557363458886963519, guid: 34e53a7ea486c0e4fac6ae02be57b96d, type: 3}
     - {fileID: -9107898778758578196, guid: 34e53a7ea486c0e4fac6ae02be57b96d, type: 3}
@@ -128,6 +137,8 @@ MonoBehaviour:
   - backgroundType: 4
     LODLevel: 0
     atlas: {fileID: 2800000, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
+    spawnHeightPosition: 0
+    spawnHeightRange: 0
     atlasSprites:
     - {fileID: 3128783876705166001, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
     - {fileID: -6238954336935196980, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
@@ -159,6 +170,8 @@ MonoBehaviour:
   - backgroundType: 4
     LODLevel: 1
     atlas: {fileID: 2800000, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
+    spawnHeightPosition: 0
+    spawnHeightRange: 0
     atlasSprites:
     - {fileID: 8054342405281125043, guid: 60244b9d3788c9c458d43b52475be44e, type: 3}
     - {fileID: -6298960128136850872, guid: 60244b9d3788c9c458d43b52475be44e, type: 3}
@@ -190,6 +203,8 @@ MonoBehaviour:
   - backgroundType: 4
     LODLevel: 2
     atlas: {fileID: 2800000, guid: fbf009e7640137a4f8b1263fb14739d5, type: 3}
+    spawnHeightPosition: 0
+    spawnHeightRange: 0
     atlasSprites:
     - {fileID: 6169743970495483475, guid: aba497d2843facc4cb4c9da4d899eb9c, type: 3}
     - {fileID: 4625081649421831366, guid: aba497d2843facc4cb4c9da4d899eb9c, type: 3}

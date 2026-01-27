@@ -63,16 +63,16 @@ public class Spawner : MonoBehaviour
 
         stats.spawnMaxPos.x = firstStationPos + trainStats.trainHalfLength + camMeterWidth + settings.bufferAmount;
         stats.spawnMaxPos.y = trainStats.trainMaxHeight + camSettings.maxProjectionSize + settings.bufferAmount;
-        stats.spawnMaxPos.z = settings.spawnDepth;
+        stats.spawnMaxPos.z = settings.maxSpawnDepth;
 
         stats.spawnMinPos.x = firstStationPos - trainStats.trainHalfLength - camMeterWidth - settings.bufferAmount;
         stats.spawnMinPos.y = -camSettings.maxProjectionSize - settings.bufferAmount;
-        stats.spawnMinPos.z = 0;
+        stats.spawnMinPos.z = settings.minSpawnDepth;
 
         stats.spawnCenter = (stats.spawnMinPos + stats.spawnMaxPos) * 0.5f;
         stats.spawnSize = stats.spawnMaxPos - stats.spawnMinPos;
 
-        stats.lodZPosition0 = settings.spawnDepth / 3;
+        stats.lodZPosition0 = stats.spawnSize.z / 3;
         stats.lodZPosition1 = stats.lodZPosition0 * 2;
 
         transform.position = stats.spawnMinPos;
@@ -170,8 +170,6 @@ public class Spawner : MonoBehaviour
                 int particleBGMask = (int)particleData.backgroundType;
                 
                 if ((particleBGMask & activeBGMask) == 0) continue; // Match particleData to the curBGMask
-
-                Debug.Log(stats.backgroundInputsArray[0].heightRange);
 
                 for (int k = 0; k < spawnerDataArray.Length; k++)
                 {
