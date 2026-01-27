@@ -17,7 +17,7 @@ public class Smog : MonoBehaviour
 
     private void OnValidate()
     {
-        SetSize();
+        //SetSize();
     }
     private void Awake()
     {

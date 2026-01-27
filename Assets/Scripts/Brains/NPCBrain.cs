@@ -66,7 +66,6 @@ public class NPCBrain : MonoBehaviour
     [Serializable] public struct StatData
     {
         internal Color selectedColor;
-
         internal float targetXVelocity;
         internal float targetXPos;
         internal float targetDist;
@@ -164,8 +163,6 @@ public class NPCBrain : MonoBehaviour
         Fade();
         mpb.SetTexture(materialIDs.ids.mainTex, spriteRenderer.sprite.texture);
         spriteRenderer.SetPropertyBlock(mpb);
-
-
 
         if (rigidBody.includeLayers == layerSettings.trainMask)
         {

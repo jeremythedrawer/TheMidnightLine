@@ -9,6 +9,12 @@ public static class Atlas
         Smoke = 1 << 0,
         Phone = 1 << 1,
     }
+    public enum AnimationType
+    {
+        None,
+        Walking,
+        SittingBreathing,
+    }
 
     [Serializable] public struct AtlasMarker
     {
@@ -22,7 +28,7 @@ public static class Atlas
         public Vector2 objectPos;
     }
 
-    [Serializable] public struct Sprite
+    [Serializable] public struct AtlasSprite
     {
         public int index;
         public Vector2 uvPos;
@@ -31,25 +37,15 @@ public static class Atlas
         public SpriteMarker[] markers;
     }
 
-    public enum AnimationType
-    {
-        Walking,
-        SittingBreathing,
-    }
 
-    [Serializable] public struct AnimationSelection
+    [Serializable] public struct AtlasKeyframe
     {
-        public AnimationType type;
-        public Color32 color;
-    }
-    [Serializable] public struct Keyframe
-    {
-        public Sprite sprite;
-        public float frame;
+        public int spriteIndex;
+        public int frame;
     }
     [Serializable] public struct Clip
     {
         public AnimationType type;
-        public Keyframe[] keyFrames;
+        public AtlasKeyframe[] keyFrames;
     }
 }

@@ -8,6 +8,7 @@ Shader "Unlit/s_character"
         _AtlasIndex("Atlas Index", Float) = 0
         _DepthGreyScale ("Depth Grey Scale", Range(0, 1)) = 0.5
         _Alpha ("Alpha", Range(0,1)) = 1
+        _ZPos ("ZPos", Float) = 0
     }
     SubShader
     {
@@ -47,12 +48,9 @@ Shader "Unlit/s_character"
             };
 
 
-
             CBUFFER_START(UnityPerMaterial)
                 StructuredBuffer<AtlasSprite> _AtlasSprites;
                 uint _AtlasIndex;
-                TEXTURE2D(_MainTex);
-                SAMPLER(sampler_MainTex);
                 half4 _Color;
                 float _DepthGreyScale;
                 float _ZPos;
@@ -60,7 +58,11 @@ Shader "Unlit/s_character"
                 float _Flip;
             CBUFFER_END
 
+            TEXTURE2D(_MainTex);
+            SAMPLER(sampler_MainTex);
+
             float2 _EntityDepthRange;
+
 
             Varyings vert(Attributes v)
             {

@@ -24,10 +24,10 @@ Shader "Custom/s_backgroundParticles"
 
             StructuredBuffer<BackgroundParticleOutput> _BGParticleOutputs;
 
+            TEXTURE2D(_Atlas);
+            SAMPLER(sampler_Atlas);
 
             CBUFFER_START(UnityPerMaterial)
-                TEXTURE2D(_Atlas);
-                SAMPLER(sampler_Atlas);
                 StructuredBuffer<float2> _UVPositions;
                 StructuredBuffer<float2> _UVSizes;
                 int _BackgroundMask;

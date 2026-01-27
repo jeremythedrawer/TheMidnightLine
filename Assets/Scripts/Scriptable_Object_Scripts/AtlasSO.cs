@@ -11,6 +11,6 @@ public class AtlasSO : ScriptableObject
     public int framesPerSecond = 30;
 
 
-    public Atlas.Sprite[] sprites;
+    public Atlas.AtlasSprite[] sprites;
     public Atlas.Clip[] clips;
 }

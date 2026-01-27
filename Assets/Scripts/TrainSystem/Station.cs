@@ -16,7 +16,6 @@ public class Station : MonoBehaviour
 
     public BoxCollider2D platformCollider;
 
-
     private void OnEnable()
     {
         if (station == stationsData.stations[0])
