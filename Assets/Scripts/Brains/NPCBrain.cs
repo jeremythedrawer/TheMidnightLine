@@ -1,11 +1,12 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
+using UnityEngine;
+using UnityEngine.VFX;
+using static Atlas;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
-using UnityEngine;
-using UnityEngine.VFX;
 
 public class NPCBrain : MonoBehaviour
 {
@@ -34,22 +35,7 @@ public class NPCBrain : MonoBehaviour
         ToChair,
         ToSlideDoor,
     }
-    public Rigidbody2D rigidBody;
-    public BoxCollider2D boxCollider;
-    public Animator animator;
-    public SpriteRenderer spriteRenderer;
-
-    internal SlideDoors curSlideDoors;
-    internal MaterialPropertyBlock mpb;
-    internal CancellationTokenSource ctsFade;
-        
-    internal Carriage curCarriage;
-    internal VisualEffect sleepingZs;
-    internal VisualEffect musicNotes;
-    internal VisualEffect talkingLines;
-
-    internal GameObject smoke;
-    public NPCSO npc;
+    [SerializeField] AtlasSO atlas;
     [SerializeField] NPCsDataSO npcData;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] TrainSettingsSO trainSettings;
@@ -59,34 +45,53 @@ public class NPCBrain : MonoBehaviour
     [SerializeField] SpyStatsSO spyStats;
     [SerializeField] ClipboardStatsSO clipboardStats;
     [SerializeField] MaterialIDSO materialIDs;
+    public Rigidbody2D rigidBody;
+    public BoxCollider2D boxCollider;
+    public Animator animator;
+    public SpriteRenderer spriteRenderer;
 
-    internal StationSO startStation;
-    internal StationSO endStation;
+    public SlideDoors curSlideDoors;
+    public MaterialPropertyBlock mpb;
+    public CancellationTokenSource ctsFade;
+        
+    public Carriage curCarriage;
+    public VisualEffect sleepingZs;
+    public VisualEffect musicNotes;
+    public VisualEffect talkingLines;
+
+    public GameObject smoke;
+    public NPCSO npc;
+
+    public StationSO startStation;
+    public StationSO endStation;
 
     [Serializable] public struct StatData
     {
-        internal Color selectedColor;
-        internal float targetXVelocity;
-        internal float targetXPos;
-        internal float targetDist;
-        internal float stateTimer;
-        internal float stateDuration;
-        internal float curAlpha;
-        internal float targetAlpha;
+        public Color selectedColor;
+        public float targetXVelocity;
+        public float targetXPos;
+        public float targetDist;
+        public float stateTimer;
+        public float stateDuration;
+        public float curAlpha;
+        public float targetAlpha;
 
-        internal NPCTraits.Behaviours curBehaviour;
-        internal NPCTraits.Behaviours behaviours;
+        public NPCTraits.Behaviours curBehaviour;
+        public NPCTraits.Behaviours behaviours;
         
-        internal State curState;
-        internal Path curPath;
-        internal Type type;
+        public State curState;
+        public Path curPath;
+        public Type type;
 
-        internal uint smokerRoomIndex;
-        internal uint chairPosIndex;
-        internal int selectedProfileIndex;
+        public uint smokerRoomIndex;
+        public uint chairPosIndex;
+        public int selectedProfileIndex;
 
-        internal bool canBoardTrain;
-        internal bool startFade;
+        public bool canBoardTrain;
+        public bool startFade;
+
+        public int curAtlasIndex;
+        public Atlas.AtlasClip curClip;
     }
     [SerializeField] public StatData stats;
 
@@ -115,7 +120,6 @@ public class NPCBrain : MonoBehaviour
     private void OnEnable()
     {
         gameEventData.OnStationArrival.RegisterListener(() => stats.canBoardTrain = true);
-        SetAnimationEvents();
     }
 
     private void Start()
@@ -234,6 +238,7 @@ public class NPCBrain : MonoBehaviour
             case State.Walking:
             {
                 spriteRenderer.flipX = inputData.move < 0;
+                stats.curAtlasIndex = GetCurrentSpriteIndex(atlas.clipDict[NPCMotion.Walking], ClipType.Loop, atlas.framesPerSecond);
             }
             break;
             case State.Smoking:
@@ -683,20 +688,6 @@ public class NPCBrain : MonoBehaviour
         float zPos = UnityEngine.Random.Range(trainSettings.maxMinWorldZPos.min, trainSettings.maxMinWorldZPos.max);
         mpb.SetFloat(materialIDs.ids.zPos, zPos);
         transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
-    }
-    private void SetAnimationEvents()
-    {
-        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.sittingAboutToEat], nameof(PlaySittingEatingAnimation));
-        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.standingAboutToEat], nameof(PlayStandingEatingAnimation));
-        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.standingBreathing], nameof(PlayRandomStandingIdleAnimations));
-        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.standingBlinking], nameof(PlayRandomStandingIdleAnimations));
-        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.sittingBreathing], nameof(PlayRandomSittingIdleAnimations));
-        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.sittingBlinking], nameof(PlayRandomSittingIdleAnimations));
-        Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.sittingAboutToRead], nameof(PlaySittingReadingAnimation));
-        for (int i = 0; i < npc.smokeAnimPosData.Length; i++)
-        {
-            Animations.SetAnimationEvent(npc.animClipDict[npcData.animHashData.smoking], nameof(SetSmokePosition), npc.smokeAnimPosData[i].time, intParam: i);
-        }
     }
     private void PlaySittingEatingAnimation()
     {

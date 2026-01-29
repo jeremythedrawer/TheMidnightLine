@@ -35,7 +35,6 @@ public static class NPCTraits
 
     public static string[] appearenceDescriptions;
     public static string[] behaviourDescriptions;
-
     public static Behaviours GetBehaviours(Behaviours npcBehaviours)
     {
         Behaviours[] allBehaviours = (Behaviours[])Enum.GetValues(typeof(Behaviours));
@@ -66,7 +65,6 @@ public static class NPCTraits
         Behaviours behaviours = firstBehave | secondBehave;
         return behaviours;
     }
-
     public static Appearence GetRandomAppearence(Appearence appearence)
     {
         int appearValue = (int)appearence;
@@ -87,7 +85,6 @@ public static class NPCTraits
         int chosenFlag = flags[UnityEngine.Random.Range(0, flagCount)];
         return (Appearence)chosenFlag;
     }
-
     public static void InitializeDescriptions()
     {
         Array appearArray = Enum.GetValues(typeof(Appearence));

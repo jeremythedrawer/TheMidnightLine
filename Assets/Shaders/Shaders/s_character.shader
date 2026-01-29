@@ -2,13 +2,14 @@ Shader "Unlit/s_character"
 {
     Properties
     {
-        [HideInInspector][NoScaleOffset] _MainTex ("Sprite Texture", 2D) = "white" {}
+         [NoScaleOffset]_AtlasTexture ("Atlas Texture", 2D) = "white" {}
 
         _Color ("Color", Color) = (1,1,1,1)
         _AtlasIndex("Atlas Index", Float) = 0
         _DepthGreyScale ("Depth Grey Scale", Range(0, 1)) = 0.5
         _Alpha ("Alpha", Range(0,1)) = 1
         _ZPos ("ZPos", Float) = 0
+        _Flip ("Flip", Float) = 0
     }
     SubShader
     {
@@ -24,7 +25,6 @@ Shader "Unlit/s_character"
 
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Packages/com.unity.render-pipelines.universal/Shaders/2D/Include/Core2D.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
 
             #pragma vertex vert
@@ -33,7 +33,6 @@ Shader "Unlit/s_character"
             struct Attributes
             {
                 float3 positionOS   : POSITION;
-                float4 color        : COLOR;
                 float2 uv           : TEXCOORD0;
                 UNITY_VERTEX_INPUT_INSTANCE_ID
             };
@@ -41,15 +40,20 @@ Shader "Unlit/s_character"
             struct Varyings
             {
                 float4  positionCS      : SV_POSITION;
-                float4  color           : COLOR;
                 float2  uv              : TEXCOORD0;
                 float3  positionWS      : TEXCOORD2;
                 UNITY_VERTEX_OUTPUT_STEREO
             };
 
 
+            StructuredBuffer<AtlasSprite> _AtlasSprites;
+
+            TEXTURE2D(_AtlasTexture);
+            SAMPLER(sampler_AtlasTexture);
+
+            float2 _EntityDepthRange;
+
             CBUFFER_START(UnityPerMaterial)
-                StructuredBuffer<AtlasSprite> _AtlasSprites;
                 uint _AtlasIndex;
                 half4 _Color;
                 float _DepthGreyScale;
@@ -58,32 +62,31 @@ Shader "Unlit/s_character"
                 float _Flip;
             CBUFFER_END
 
-            TEXTURE2D(_MainTex);
-            SAMPLER(sampler_MainTex);
-
-            float2 _EntityDepthRange;
-
 
             Varyings vert(Attributes v)
             {
                 Varyings o = (Varyings)0;
-                UNITY_SETUP_INSTANCE_ID(v);
-                UNITY_INITIALIZE_VERTEX_OUTPUT_STEREO(o);
-
-                v.positionOS = UnityFlipSprite( v.positionOS, unity_SpriteProps.xy);
+                AtlasSprite atlasSprite = _AtlasSprites[_AtlasIndex];
                 o.positionCS = TransformObjectToHClip(v.positionOS);
-                o.uv = v.uv;
-                o.color = v.color * unity_SpriteColor;
+                float2 centeredUV = v.uv - float2(0.5, 0);
+                float2 aspect = float2(atlasSprite.uvSize.x / atlasSprite.uvSize.y, 1);
+                centeredUV /= aspect;
+                centeredUV.x = _Flip > 0.5 ? centeredUV.x : -centeredUV.x;
+                o.uv = centeredUV * atlasSprite.uvSize + atlasSprite.uvPosition + atlasSprite.pivot * atlasSprite.uvSize;
+
                 return o;
             }
 
 
             half4 frag (Varyings i) : SV_Target
             {
-                half4 sampledMainTex =  i.color * SAMPLE_TEXTURE2D(_MainTex, sampler_MainTex, i.uv);
+                AtlasSprite atlasSprite = _AtlasSprites[_AtlasIndex];
+                float2 maxUVPos = atlasSprite.uvPosition + atlasSprite.uvSize;
+                float spriteBound = i.uv.x > atlasSprite.uvPosition.x && i.uv.y > atlasSprite.uvPosition.y & i.uv.x < maxUVPos.x & i.uv.y < maxUVPos.y;
+                half4 sampledMainTex =  SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
                 float greyScale = ((_ZPos - _EntityDepthRange.x) / (_EntityDepthRange.y)) * _DepthGreyScale;
                 half3 col = sampledMainTex.rgb + _Color + greyScale;
-                return half4(col, sampledMainTex.a * _Alpha);
+                return half4(col, (sampledMainTex.a * spriteBound) * _Alpha);
             }
             ENDHLSL
         }

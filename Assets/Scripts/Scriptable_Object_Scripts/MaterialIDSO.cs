@@ -41,9 +41,18 @@ public class MaterialIDSO : ScriptableObject
         public int spriteCount;
         public int backgroundMask;
         public int lodLevel;
+
+        public int atlasIndex;
+        public int atlasSprites;
+
+        public int flip;
     }
     [SerializeField] public IDs ids;
 
+    private void OnEnable()
+    {
+        SetMaterialPropertyIDs();
+    }
     public void SetMaterialPropertyIDs()
     {
         ids.normAnimTime = Shader.PropertyToID("_NormAnimTime");
@@ -63,12 +72,12 @@ public class MaterialIDSO : ScriptableObject
         ids.entityDepthRange = Shader.PropertyToID("_EntityDepthRange");
         ids.trainVelocity = Shader.PropertyToID("_TrainVelocity");
         ids.trainMetersTravelled = Shader.PropertyToID("_MetersTravelled");
+        ids.bgParticleOutputs = Shader.PropertyToID("_BGParticleOutputs");
         ids.spawnerMinPos = Shader.PropertyToID("_SpawnerMinPos");
         ids.spawnerMaxPos = Shader.PropertyToID("_SpawnerMaxPos");
         ids.spawnerSize = Shader.PropertyToID("_SpawnerSize");
 
         ids.particleCount = Shader.PropertyToID("_ParticleCount");
-        ids.bgParticleOutputs = Shader.PropertyToID("_BGParticleOutputs");
         ids.atlas = Shader.PropertyToID("_Atlas");
 
         ids.uvPositions = Shader.PropertyToID("_UVPositions");
@@ -81,5 +90,8 @@ public class MaterialIDSO : ScriptableObject
         ids.lodLevel = Shader.PropertyToID("_LODLevel");
         ids.lodLevelThreshold0 = Shader.PropertyToID("_LODThreshold0");
         ids.lodLevelThreshold1 = Shader.PropertyToID("_LODThreshold1");
+        ids.atlasIndex = Shader.PropertyToID("_AtlasIndex");
+        ids.atlasSprites = Shader.PropertyToID("_AtlasSprites");
+        ids.flip = Shader.PropertyToID("_Flip");
     }
 }

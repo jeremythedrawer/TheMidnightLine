@@ -5,7 +5,7 @@ using UnityEditor;
 using UnityEngine;
 using static Atlas;
 
-public class SpriteFactory : EditorWindow
+public class AtlasFactory : EditorWindow
 {
     AtlasSO atlas;
     Vector2 scroll;
@@ -14,14 +14,14 @@ public class SpriteFactory : EditorWindow
     float markerSize = 4f;
 
     int selectedIndex = -1;
-    AnimationType selectedAnimType;
+    Atlas.NPCMotion selectedAnimType;
     int selectedFrameValue;
     const float padding = 50f;
     const float GUIWidthValue = 300f;
-    [MenuItem("Tools/Sprite Factory")]
+    [MenuItem("Tools/Atlas Factory")]
     private static void Open()
     {
-        GetWindow<SpriteFactory>("Sprite Factory");
+        GetWindow<AtlasFactory>("Sprite Factory");
     }
     private void OnGUI()
     {
@@ -33,9 +33,10 @@ public class SpriteFactory : EditorWindow
         EditorGUILayout.LabelField("Inputs", EditorStyles.boldLabel);
         atlas = (AtlasSO)EditorGUILayout.ObjectField("Atlas", atlas, typeof(AtlasSO), false, GUIWidth);
 
-        if (atlas == null || atlas.texture == null || atlas.sprites == null) return;
 
-        if (GUILayout.Button("Generate Sprites", GUIWidth))
+        bool hasValidAtlas = atlas != null && atlas.texture != null && atlas.sprites != null;
+
+        if (hasValidAtlas && GUILayout.Button("Generate Sprites", GUIWidth))
         {
             MakeTextureReadable();
             GenerateSprites();
@@ -44,9 +45,16 @@ public class SpriteFactory : EditorWindow
 
 
         EditorGUILayout.BeginVertical(GUIWidth);
-            EditorGUILayout.LabelField("View", EditorStyles.boldLabel);
-            cellSize = EditorGUILayout.FloatField("Cell Size", cellSize, GUIWidth);
-            markerSize = EditorGUILayout.FloatField("Marker Size", markerSize, GUIWidth);
+        EditorGUILayout.LabelField("View", EditorStyles.boldLabel);
+        cellSize = EditorGUILayout.FloatField("Cell Size", cellSize, GUIWidth);
+        markerSize = EditorGUILayout.FloatField("Marker Size", markerSize, GUIWidth);
+        EditorGUILayout.EndVertical();
+
+        EditorGUILayout.BeginVertical(GUIWidth);
+        EditorGUILayout.LabelField("Debug", EditorStyles.boldLabel);
+        selectedIndex = EditorGUILayout.IntField("Selected Index", selectedIndex, GUIWidth);
+        selectedAnimType = (NPCMotion)EditorGUILayout.EnumPopup("Selected Anim Type", selectedAnimType,GUIWidth);
+        selectedFrameValue = EditorGUILayout.IntField("Selected Frame Value", selectedFrameValue, GUIWidth);
         EditorGUILayout.EndVertical();
 
         EditorGUILayout.BeginVertical(GUIWidth);
@@ -54,6 +62,7 @@ public class SpriteFactory : EditorWindow
 
         EditorGUILayout.EndHorizontal();
 
+        if (!hasValidAtlas) return;
         EditorGUILayout.Space(10);
 
         scroll = EditorGUILayout.BeginScrollView(scroll);
@@ -290,16 +299,15 @@ public class SpriteFactory : EditorWindow
         float clipDataRectWidth = cellSize * 0.5f;
         float clipDataRectHeight = 16;
         float clipDataRectYPos = spriteRect.yMax + 2;
-
-        Rect animTypeRect = new Rect(spriteRect.center.x - clipDataRectWidth, clipDataRectYPos, clipDataRectWidth, clipDataRectHeight);
+        float minRectX = spriteRect.center.x - clipDataRectWidth;
+        Rect animTypeRect = new Rect(minRectX, clipDataRectYPos, clipDataRectWidth, clipDataRectHeight);
         Rect frameRect = new Rect(spriteRect.center.x, clipDataRectYPos, clipDataRectWidth, clipDataRectHeight);
-
-        AnimationType animType = AnimationType.None;
+        NPCMotion animType = NPCMotion.None;
         int frameValue = -1;
         int existingClipIndex = -1;
         for (int i = 0; i < atlas.clips.Length; i++)
         {
-            Atlas.Clip clip = atlas.clips[i];
+            Atlas.AtlasClip clip = atlas.clips[i];
             for (int j = 0; j < clip.keyFrames.Length; j++)
             {
                 Atlas.AtlasKeyframe keyframe = clip.keyFrames[j];
@@ -307,13 +315,13 @@ public class SpriteFactory : EditorWindow
                 if (keyframe.spriteIndex == atlasSprite.index)
                 {
                     existingClipIndex = i;
-                    frameValue = keyframe.frame;
+                    frameValue = keyframe.framePosition;
                 }
             }
         }
-        animType = existingClipIndex == -1 ? AnimationType.None : atlas.clips[existingClipIndex].type;
+        animType = existingClipIndex == -1 ? Atlas.NPCMotion.None : atlas.clips[existingClipIndex].motion;
 
-        if (GUI.Button(spriteRect, GUIContent.none, GUIStyle.none))
+        if (GUI.Button(rect, GUIContent.none, GUIStyle.none))
         {
             if (selectedIndex != index)
             {
@@ -323,72 +331,62 @@ public class SpriteFactory : EditorWindow
             }
         }
 
-
-        bool changedSelectedIndex = selectedIndex != index;
         if (selectedIndex == index)
         {
             Handles.BeginGUI();
-            Handles.DrawSolidRectangleWithOutline(spriteRect, Color.clear, Color.limeGreen);
+            Handles.DrawSolidRectangleWithOutline(rect, Color.clear, Color.limeGreen);
             Handles.EndGUI();
 
             EditorGUI.BeginChangeCheck();
 
-            AnimationType prevAnimType = animType;
+            NPCMotion prevAnimType = animType;
 
-
-
-            selectedAnimType = (AnimationType)EditorGUI.EnumPopup(animTypeRect, selectedAnimType);
+            selectedAnimType = (NPCMotion)EditorGUI.EnumPopup(animTypeRect, selectedAnimType);
             selectedFrameValue = EditorGUI.IntField(frameRect, selectedFrameValue);
             if (EditorGUI.EndChangeCheck())
             {
-                Debug.Log(selectedFrameValue);
                 bool foundKeyframe = false;
-
                 int selectedClipIndex = -1;
                 int prevClipIndex = -1;
 
                 for (int i = 0; i < atlas.clips.Length; i++)
                 {
-                    Atlas.Clip clip = atlas.clips[i];
+                    Atlas.AtlasClip clip = atlas.clips[i];
 
-                    if (clip.type == selectedAnimType)
+                    if (clip.motion == selectedAnimType)
                     {
                         for (int j = 0; j < clip.keyFrames.Length; j++)
                         {
-                            Atlas.AtlasKeyframe keyframe = clip.keyFrames[j];
+                            AtlasKeyframe keyframe = clip.keyFrames[j];
                             if (keyframe.spriteIndex == selectedIndex)
                             {
                                 foundKeyframe = true;
                                 if (selectedFrameValue > -1)
                                 {
-                                    atlas.clips[i].keyFrames[j].frame = selectedFrameValue;
+                                    atlas.clips[i].keyFrames[j].framePosition = selectedFrameValue;
                                 }
                                 break;
-                                //TODO: have this keyframe frame be the keyFrameValue below
                             }
                         }
-
                         selectedClipIndex = i;
                     }
-                    else if (clip.type == prevAnimType)
+                    else if (clip.motion == prevAnimType)
                     {
                         prevClipIndex = i;
                     }
-
                     if (prevClipIndex != -1 && selectedClipIndex != -1) break;
                 }
 
                 if (selectedClipIndex == -1)
                 {
-                    if (selectedAnimType != AnimationType.None && selectedFrameValue > -1)
+                    if (selectedAnimType != Atlas.NPCMotion.None && selectedFrameValue > -1)
                     {
-                        List<Atlas.Clip> clipsList = atlas.clips.ToList();
-                        Atlas.Clip newClip = new Atlas.Clip();
-                        newClip.type = selectedAnimType;
+                        List<AtlasClip> clipsList = atlas.clips.ToList();
+                        Atlas.AtlasClip newClip = new Atlas.AtlasClip();
+                        newClip.motion = selectedAnimType;
                         newClip.keyFrames = new Atlas.AtlasKeyframe[1];
                         newClip.keyFrames[0].spriteIndex = selectedIndex;
-                        newClip.keyFrames[0].frame = selectedFrameValue;
-                        //newClip.keyFrames[0].frame = TODO: set the keyframe value below
+                        newClip.keyFrames[0].framePosition = selectedFrameValue;
                         clipsList.Add(newClip);
                         atlas.clips = clipsList.ToArray();
                     }
@@ -398,7 +396,7 @@ public class SpriteFactory : EditorWindow
                     List<AtlasKeyframe> selectedClipKeyframesList = atlas.clips[selectedClipIndex].keyFrames.ToList();
                     AtlasKeyframe newKeyframe = new Atlas.AtlasKeyframe();
                     newKeyframe.spriteIndex = selectedIndex;
-                    newKeyframe.frame = selectedFrameValue;
+                    newKeyframe.framePosition = selectedFrameValue;
                     selectedClipKeyframesList.Add(newKeyframe);
                     atlas.clips[selectedClipIndex].keyFrames = selectedClipKeyframesList.ToArray();
                 }
@@ -416,19 +414,18 @@ public class SpriteFactory : EditorWindow
                     }
                     atlas.clips[prevClipIndex].keyFrames = prevClipKeyframesList.ToArray();
                 }
+
+                EditorUtility.SetDirty(atlas);
+                AssetDatabase.SaveAssets();
             }
         }
-        else if (animType != AnimationType.None)
+        else if (animType != NPCMotion.None)
         {
-            animType = (AnimationType)EditorGUI.EnumPopup(animTypeRect, animType);
+            animType = (NPCMotion)EditorGUI.EnumPopup(animTypeRect, animType);
             if (frameValue > -1)
             {
                 frameValue = EditorGUI.IntField(frameRect, frameValue);
             }
         }
-    }
-    private void AddSpriteToClip(Atlas.AtlasSprite sprite)
-    {
-
     }
 }

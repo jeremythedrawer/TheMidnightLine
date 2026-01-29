@@ -12,8 +12,9 @@ using UnityEditor.Animations;
 public class NPCSO : ScriptableObject
 {
     [Header("Components")]
-    public AnimatorOverrideController overrideAnimationController;
-
+    public Material material;
+    public MaterialIDSO materialIDs;
+    public AtlasSO atlas;
     [Header("Movement")]
     public float moveSpeed = 5f;
     public float groundAccelation = 12f;
@@ -26,7 +27,9 @@ public class NPCSO : ScriptableObject
 
     [Header("Difficulty")]
     public Vector2 pickBehaviourDurationRange = new Vector2(10, 30);
-   
+
+    GraphicsBuffer atlasBuffer;
+
     [Serializable] public struct AnimEventPosData
     {
         public Vector2 position;
@@ -34,92 +37,25 @@ public class NPCSO : ScriptableObject
     }
     public AnimEventPosData[] smokeAnimPosData;
 
-    [Serializable] public struct AnimStateClipPair
-    {
-        public int stateHash;
-        public AnimationClip clip;
-    }
-    [Header("Baked Animation Data")]
-    [SerializeField] private AnimStateClipPair[] animClips;
-
-    public Dictionary<int, AnimationClip> animClipDict;
-
     private void OnEnable()
     {
-        BuildRuntimeDictionary();
+        SetAtlasSpriteBuffer();
     }
-    public void BuildRuntimeDictionary()
+
+    private void OnDisable()
     {
-        animClipDict = new Dictionary<int, AnimationClip>();
-
-        if (animClips == null) return;
-
-        foreach (AnimStateClipPair pair in animClips)
-        {
-            if (pair.clip == null) continue;
-
-            if (!animClipDict.ContainsKey(pair.stateHash)) animClipDict.Add(pair.stateHash, pair.clip);
-        }
+        
     }
-#if UNITY_EDITOR
-    public void BakeAnimationData()
+
+    public void SetAtlasSpriteBuffer()
     {
-        if (overrideAnimationController == null)
+        if (!material || !atlas)
         {
-            Debug.LogWarning($"{name}: No AnimatorOverrideController assigned.");
+            Debug.LogWarning($"Material or Atlas not set on {name}", this);
             return;
         }
+        atlasBuffer = Atlas.GetAtlasSpriteBuffer(atlas);
 
-        var overridePairs = new List<KeyValuePair<AnimationClip, AnimationClip>>();
-        overrideAnimationController.GetOverrides(overridePairs);
-
-        var baseController =
-            overrideAnimationController.runtimeAnimatorController as AnimatorController;
-
-        if (baseController == null)
-        {
-            Debug.LogError($"{name}: Runtime controller is not an AnimatorController.");
-            return;
-        }
-
-        var bakedList = new List<AnimStateClipPair>();
-
-        foreach (var childState in baseController.layers[0].stateMachine.states)
-        {
-            var baseClip = childState.state.motion as AnimationClip;
-            if (baseClip == null)
-                continue;
-
-            AnimationClip finalClip = baseClip;
-
-            foreach (var pair in overridePairs)
-            {
-                if (pair.Key == baseClip && pair.Value != null)
-                {
-                    finalClip = pair.Value;
-                    break;
-                }
-            }
-
-            bakedList.Add(new AnimStateClipPair
-            {
-                stateHash = childState.state.nameHash,
-                clip = finalClip
-            });
-        }
-
-        animClips = bakedList.ToArray();
-        EditorUtility.SetDirty(this);
+        material.SetBuffer(materialIDs.ids.atlasSprites, atlasBuffer);
     }
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    private static void AutoBakeAllNPCSOs()
-    {
-        NPCSO[] all = Resources.FindObjectsOfTypeAll<NPCSO>();
-        foreach (NPCSO so in all)
-        {
-            so.BakeAnimationData();
-        }
-    }
-#endif
 }

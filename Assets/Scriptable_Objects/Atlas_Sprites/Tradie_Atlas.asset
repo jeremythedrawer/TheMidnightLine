@@ -13,15 +13,11 @@ MonoBehaviour:
   m_Name: Tradie_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
   texture: {fileID: 2800000, guid: cc98a5ce93c118c4481c75a80e8c861e, type: 3}
-  pixelsPerUnit: 175
+  pixelsPerUnit: 32
   customPivotColor:
     serializedVersion: 2
     rgba: 4278190335
-  markers:
-  - type: 1
-    color:
-      serializedVersion: 2
-      rgba: 4278255360
+  markers: []
   framesPerSecond: 30
   sprites:
   - index: 0
@@ -203,9 +199,7 @@ MonoBehaviour:
     uvPos: {x: 0.015136719, y: 0.6821289}
     uvSize: {x: 0.057617188, y: 0.1586914}
     normPivot: {x: 0.37288135, y: 0}
-    markers:
-    - type: 1
-      objectPos: {x: 0.6685714, y: 1.3885714}
+    markers: []
   - index: 36
     uvPos: {x: 0.078125, y: 0.68310547}
     uvSize: {x: 0.04736328, y: 0.15820312}
@@ -220,30 +214,22 @@ MonoBehaviour:
     uvPos: {x: 0.6972656, y: 0.8388672}
     uvSize: {x: 0.047851562, y: 0.15917969}
     normPivot: {x: 0.4489796, y: 0.0030674846}
-    markers:
-    - type: 1
-      objectPos: {x: 0.4457143, y: 1.6171429}
+    markers: []
   - index: 39
     uvPos: {x: 0.75683594, y: 0.8388672}
     uvSize: {x: 0.047851562, y: 0.16015625}
     normPivot: {x: 0.4489796, y: 0.0030487804}
-    markers:
-    - type: 1
-      objectPos: {x: 0.4457143, y: 1.6228571}
+    markers: []
   - index: 40
     uvPos: {x: 0.81640625, y: 0.83935547}
     uvSize: {x: 0.047851562, y: 0.16015625}
     normPivot: {x: 0.4489796, y: 0}
-    markers:
-    - type: 1
-      objectPos: {x: 0.4457143, y: 1.6228571}
+    markers: []
   - index: 41
     uvPos: {x: 0.8745117, y: 0.83935547}
     uvSize: {x: 0.057617188, y: 0.16015625}
     normPivot: {x: 0.37288135, y: 0}
-    markers:
-    - type: 1
-      objectPos: {x: 0.6685714, y: 1.4}
+    markers: []
   - index: 42
     uvPos: {x: 0.5263672, y: 0.83984375}
     uvSize: {x: 0.04736328, y: 0.1586914}
@@ -263,9 +249,7 @@ MonoBehaviour:
     uvPos: {x: 0.93896484, y: 0.83984375}
     uvSize: {x: 0.057617188, y: 0.15966797}
     normPivot: {x: 0.37288135, y: 0}
-    markers:
-    - type: 1
-      objectPos: {x: 0.6685714, y: 1.3942857}
+    markers: []
   - index: 46
     uvPos: {x: 0.0029296875, y: 0.84277344}
     uvSize: {x: 0.041992188, y: 0.1538086}
@@ -307,7 +291,20 @@ MonoBehaviour:
     normPivot: {x: 0.56122446, y: 0}
     markers: []
   clips:
-  - type: 1
+  - motion: 1
+    keyFrames: []
+    totalPlayTime: 0
+    curFrameIndex: 0
+  - motion: 21
     keyFrames:
-    - spriteIndex: 1
-      frame: 0
+    - spriteIndex: 46
+      framePosition: 0
+    - spriteIndex: 47
+      framePosition: 3
+    - spriteIndex: 48
+      framePosition: 3
+    totalPlayTime: 0
+    curFrameIndex: 0
+  clipKeys:
+    walking: 0
+    sittingBreathing: 0
