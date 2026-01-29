@@ -12,8 +12,6 @@ using UnityEditor.Animations;
 public class NPCSO : ScriptableObject
 {
     [Header("Components")]
-    public Material material;
-    public MaterialIDSO materialIDs;
     public AtlasSO atlas;
     [Header("Movement")]
     public float moveSpeed = 5f;
@@ -27,35 +25,4 @@ public class NPCSO : ScriptableObject
 
     [Header("Difficulty")]
     public Vector2 pickBehaviourDurationRange = new Vector2(10, 30);
-
-    GraphicsBuffer atlasBuffer;
-
-    [Serializable] public struct AnimEventPosData
-    {
-        public Vector2 position;
-        public float time;
-    }
-    public AnimEventPosData[] smokeAnimPosData;
-
-    private void OnEnable()
-    {
-        SetAtlasSpriteBuffer();
-    }
-
-    private void OnDisable()
-    {
-        
-    }
-
-    public void SetAtlasSpriteBuffer()
-    {
-        if (!material || !atlas)
-        {
-            Debug.LogWarning($"Material or Atlas not set on {name}", this);
-            return;
-        }
-        atlasBuffer = Atlas.GetAtlasSpriteBuffer(atlas);
-
-        material.SetBuffer(materialIDs.ids.atlasSprites, atlasBuffer);
-    }
 }

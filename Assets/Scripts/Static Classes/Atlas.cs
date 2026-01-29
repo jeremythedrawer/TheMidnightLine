@@ -202,9 +202,10 @@ static class AtlasMaterialRebinder
 
     static void RebindAll()
     {
-        foreach (NPCSO npc in Resources.FindObjectsOfTypeAll<NPCSO>())
+        Atlas.ReleaseAll();
+        foreach (AtlasSO atlas in Resources.FindObjectsOfTypeAll<AtlasSO>())
         {
-            npc.SetAtlasSpriteBuffer();
+            atlas.SetAtlasSpriteBuffer();
         }
     }
 }

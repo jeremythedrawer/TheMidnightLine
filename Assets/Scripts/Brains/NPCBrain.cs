@@ -723,11 +723,11 @@ public class NPCBrain : MonoBehaviour
             animator.Play(npcData.animHashData.sittingBreathing);
         }
     }
-    private void SetSmokePosition(int index)
-    {
-        float xPos = spriteRenderer.flipX ? -npc.smokeAnimPosData[index].position.x : npc.smokeAnimPosData[index].position.x;
-        smoke.transform.localPosition = new Vector3(xPos, npc.smokeAnimPosData[index].position.y, 0);
-    }
+    //private void SetSmokePosition(int index)
+    //{
+    //    float xPos = spriteRenderer.flipX ? -npc.smokeAnimPosData[index].position.x : npc.smokeAnimPosData[index].position.x;
+    //    smoke.transform.localPosition = new Vector3(xPos, npc.smokeAnimPosData[index].position.y, 0);
+    //}
     private NPCTraits.Behaviours PickBehaviour()
     {
         int behaviourValue = (int)stats.behaviours;

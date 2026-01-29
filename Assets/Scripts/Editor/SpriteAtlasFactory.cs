@@ -115,12 +115,12 @@ public class SpriteAtlasFactory : ScriptableObject
                     }
                 }
 
-                npcComponent.npc.smokeAnimPosData = new NPCSO.AnimEventPosData[smokePos.Count];
-                for (int i = 0; i < npcComponent.npc.smokeAnimPosData.Length; i++)
-                {
-                    npcComponent.npc.smokeAnimPosData[i].position = smokePos[i];
-                    npcComponent.npc.smokeAnimPosData[i].time = smokeKeyframeTimes[i];
-                }
+                //npcComponent.npc.smokeAnimPosData = new NPCSO.AnimEventPosData[smokePos.Count];
+                //for (int i = 0; i < npcComponent.npc.smokeAnimPosData.Length; i++)
+                //{
+                //    npcComponent.npc.smokeAnimPosData[i].position = smokePos[i];
+                //    npcComponent.npc.smokeAnimPosData[i].time = smokeKeyframeTimes[i];
+                //}
             }
             EditorUtility.SetDirty(npcComponent.npc);
         }

@@ -40,6 +40,13 @@ public class AtlasFactory : EditorWindow
         {
             MakeTextureReadable();
             GenerateSprites();
+
+            Array.Sort(atlas.sprites, (a, b) =>
+            {
+                int yCompare = b.uvPos.y.CompareTo(a.uvPos.y);
+                if (yCompare != 0) return yCompare;
+                return a.uvPos.x.CompareTo(b.uvPos.x);
+            });
         }
         EditorGUILayout.EndVertical();
 
@@ -93,7 +100,7 @@ public class AtlasFactory : EditorWindow
 
         List<Atlas.AtlasSprite> atlasSprites = new List<Atlas.AtlasSprite>();
 
-        for (int y  = 0; y < height; y++)
+        for (int y = height - 1; y >= 0; y--)
         {
             for (int x = 0; x < width; x++)
             {

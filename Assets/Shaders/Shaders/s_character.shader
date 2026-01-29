@@ -9,7 +9,8 @@ Shader "Unlit/s_character"
         _DepthGreyScale ("Depth Grey Scale", Range(0, 1)) = 0.5
         _Alpha ("Alpha", Range(0,1)) = 1
         _ZPos ("ZPos", Float) = 0
-        _Flip ("Flip", Float) = 0
+        _Flip ("Flip", Range(0,1)) = 0
+        _PPU ("Pixels Per Unit", Float) = 32
     }
     SubShader
     {
@@ -34,7 +35,6 @@ Shader "Unlit/s_character"
             {
                 float3 positionOS   : POSITION;
                 float2 uv           : TEXCOORD0;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
             };
 
             struct Varyings
@@ -42,7 +42,6 @@ Shader "Unlit/s_character"
                 float4  positionCS      : SV_POSITION;
                 float2  uv              : TEXCOORD0;
                 float3  positionWS      : TEXCOORD2;
-                UNITY_VERTEX_OUTPUT_STEREO
             };
 
 
@@ -50,7 +49,7 @@ Shader "Unlit/s_character"
 
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
-
+            float4 _AtlasTexture_TexelSize;
             float2 _EntityDepthRange;
 
             CBUFFER_START(UnityPerMaterial)
@@ -60,6 +59,7 @@ Shader "Unlit/s_character"
                 float _ZPos;
                 float _Alpha;
                 float _Flip;
+                float _PPU;
             CBUFFER_END
 
 
@@ -68,12 +68,14 @@ Shader "Unlit/s_character"
                 Varyings o = (Varyings)0;
                 AtlasSprite atlasSprite = _AtlasSprites[_AtlasIndex];
                 o.positionCS = TransformObjectToHClip(v.positionOS);
-                float2 centeredUV = v.uv - float2(0.5, 0);
-                float2 aspect = float2(atlasSprite.uvSize.x / atlasSprite.uvSize.y, 1);
-                centeredUV /= aspect;
-                centeredUV.x = _Flip > 0.5 ? centeredUV.x : -centeredUV.x;
-                o.uv = centeredUV * atlasSprite.uvSize + atlasSprite.uvPosition + atlasSprite.pivot * atlasSprite.uvSize;
+                o.positionWS = TransformObjectToWorld(v.positionOS);
+                float2 centeredUV = o.positionWS - unity_ObjectToWorld._m03_m13_m23;
 
+                float aspect = atlasSprite.uvSize.x / atlasSprite.uvSize.y;
+                centeredUV.x /= aspect;
+                centeredUV.x = _Flip > 0.5 ? centeredUV.x : -centeredUV.x;
+                centeredUV *= _PPU / (atlasSprite.uvSize.y * _AtlasTexture_TexelSize.w);
+                o.uv = centeredUV * atlasSprite.uvSize + atlasSprite.uvPosition + atlasSprite.pivot * atlasSprite.uvSize;
                 return o;
             }
 
