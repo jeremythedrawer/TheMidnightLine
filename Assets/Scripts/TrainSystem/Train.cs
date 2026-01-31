@@ -49,7 +49,7 @@ public class Train : MonoBehaviour
     private void Start()
     {
         MoveTrainToStartPosition().Forget();
-        Vector2 entityDepthData = new Vector2(settings.maxMinWorldZPos.min, settings.maxMinWorldZPos.max - settings.maxMinWorldZPos.min);
+        Vector2 entityDepthData = new Vector2(settings.maxMinWorldZPos.postion, settings.maxMinWorldZPos.size);
         Shader.SetGlobalVector(materialIDs.ids.entityDepthRange, entityDepthData);
     }
     private void Update()

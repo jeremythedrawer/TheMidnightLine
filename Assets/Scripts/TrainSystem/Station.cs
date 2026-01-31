@@ -27,7 +27,7 @@ public class Station : MonoBehaviour
             SpawnNPCs();
         }
         station.curWorldPos = transform.position;
-        station.isFrontOfTrain = platformCollider.transform.position.z < trainSettings.maxMinWorldZPos.min;
+        station.isFrontOfTrain = platformCollider.transform.position.z < trainSettings.maxMinWorldZPos.postion;
         station.parallaxFactor = Parallax.GetParallaxFactor(camStats, trainStats, station.curWorldPos.z);
     }
 

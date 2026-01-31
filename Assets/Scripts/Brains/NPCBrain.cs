@@ -124,7 +124,7 @@ public class NPCBrain : MonoBehaviour
 
     private void Start()
     {
-        mpb.SetFloat(materialIDs.ids.zPos, trainSettings.maxMinWorldZPos.min);
+        mpb.SetFloat(materialIDs.ids.zPos, trainSettings.maxMinWorldZPos.postion);
         if (((stats.behaviours & NPCTraits.Behaviours.Takes_naps) != 0) && sleepingZs == null)
         {
             sleepingZs = Instantiate(npcData.sleepingZs, transform);
@@ -161,7 +161,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void Update()
     {
-        mpb.SetFloat(materialIDs.ids.zPos, trainSettings.maxMinWorldZPos.min);
+        mpb.SetFloat(materialIDs.ids.zPos, trainSettings.maxMinWorldZPos.postion);
         SelectingStates();
         UpdateStates();
         Fade();
@@ -238,7 +238,7 @@ public class NPCBrain : MonoBehaviour
             case State.Walking:
             {
                 spriteRenderer.flipX = inputData.move < 0;
-                stats.curAtlasIndex = GetCurrentSpriteIndex(atlas.clipDict[NPCMotion.Walking], ClipType.Loop, atlas.framesPerSecond);
+                //stats.curAtlasIndex = GetCurrentSpriteIndex(atlas.clipDict[NPCMotion.Walking], ClipType.Loop, atlas.framesPerSecond);
             }
             break;
             case State.Smoking:
@@ -685,7 +685,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void SetStandingDepthAndPosition()
     {
-        float zPos = UnityEngine.Random.Range(trainSettings.maxMinWorldZPos.min, trainSettings.maxMinWorldZPos.max);
+        float zPos = UnityEngine.Random.Range(trainSettings.maxMinWorldZPos.postion, trainSettings.maxMinWorldZPos.size);
         mpb.SetFloat(materialIDs.ids.zPos, zPos);
         transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
     }

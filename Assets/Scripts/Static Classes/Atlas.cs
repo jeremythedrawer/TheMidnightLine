@@ -76,14 +76,13 @@ public static class Atlas
     [Serializable] public struct AtlasKeyframe
     {
         public int spriteIndex;
-        public int framePosition;
+        public int holdTime;
     }
     [Serializable] public struct AtlasClip
     {
         public NPCMotion motion;
+        public ClipType clipType;
         public AtlasKeyframe[] keyFrames;
-        public float totalPlayTime;
-        public int curFrameIndex;
     }
 
     struct MaterialAtlasSprite
@@ -93,59 +92,62 @@ public static class Atlas
         public Vector2 pivot;
     }
 
-    public static int GetCurrentSpriteIndex(AtlasClip clip, ClipType clipType, int fps)
+    public static int GetCurrentFrameIndex(AtlasClip clip, ClipType clipType, int fps, float clock, int curFrameIndex, int prevFrameIndex)
     {
-        clip.totalPlayTime = Mathf.Floor((clip.totalPlayTime + Time.deltaTime) * fps);
-        float cycleTime = clip.totalPlayTime;
+        clock *= fps;
+        AtlasKeyframe curKeyFrame = clip.keyFrames[curFrameIndex];
 
         switch (clipType)
         {
             case ClipType.Loop:
             {
-                cycleTime %= clip.keyFrames[^1].framePosition;
-                clip.curFrameIndex %= clip.keyFrames.Length;
+                if (clock >= curKeyFrame.holdTime)
+                {
+                    curFrameIndex++;
+                }
+                curFrameIndex %= clip.keyFrames.Length;
             }
             break;
             case ClipType.PingPong:
             {
-                int maxFramePos = clip.keyFrames[^1].framePosition;
-                int pingPongCycle = maxFramePos * 2;
-                float pingPongTime = clip.totalPlayTime % pingPongCycle;
-
-                if (pingPongTime > maxFramePos)
+                if (curFrameIndex < clip.keyFrames.Length - 1 && (curFrameIndex > prevFrameIndex || curFrameIndex == 0))
                 {
-                    cycleTime = pingPongCycle - pingPongTime;
-                    int prevIndex = clip.curFrameIndex--;
-                    AtlasKeyframe prevKeyFrame = clip.keyFrames[prevIndex];
-                    if (cycleTime < prevKeyFrame.framePosition)
+                    if (clock >= curKeyFrame.holdTime)
                     {
-                        clip.curFrameIndex = prevIndex;
+                        curFrameIndex++;
+                    }
+                }
+                else
+                {
+                    if (clock >= curKeyFrame.holdTime)
+                    {
+                        curFrameIndex--;
                     }
                 }
             }
             break;
             case ClipType.OneShot:
             {
-                cycleTime = Mathf.Min(clip.totalPlayTime, clip.keyFrames[^1].framePosition);
-                clip.curFrameIndex = Mathf.Min(clip.curFrameIndex, clip.keyFrames.Length);
+                if (clock >= curKeyFrame.holdTime)
+                {
+                    curFrameIndex++;
+                }
+                curFrameIndex = Mathf.Min(curFrameIndex, clip.keyFrames.Length - 1);
             }
             break;
+
         }
 
-        AtlasKeyframe curKeyFrame = clip.keyFrames[clip.curFrameIndex];
-        if (cycleTime > curKeyFrame.framePosition)
-        {
-            clip.curFrameIndex++;
-        }
-        return curKeyFrame.spriteIndex;
+        return curFrameIndex;
     }
+    
     public static Dictionary<NPCMotion, AtlasClip> BuildClipKeys(Atlas.AtlasClip[] clips)
     {
-        Dictionary<Atlas.NPCMotion, Atlas.AtlasClip> clipDict = new Dictionary<Atlas.NPCMotion, Atlas.AtlasClip>();
+        Dictionary<NPCMotion, AtlasClip> clipDict = new Dictionary<NPCMotion, AtlasClip>();
 
         for (int i = 0; i < clips.Length; i++)
         {
-            Atlas.AtlasClip clip = clips[i];
+            AtlasClip clip = clips[i];
             clipDict[clip.motion] = clip;
         }
 
@@ -154,12 +156,9 @@ public static class Atlas
 
     public static GraphicsBuffer GetAtlasSpriteBuffer(AtlasSO atlas)
     {
-
         int floatSize = sizeof(float);
         int float2Size = floatSize * 2;
-
         int atlasStride = float2Size * 3;
-
 
         GraphicsBuffer buffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, atlas.sprites.Length, atlasStride);
 
@@ -205,8 +204,19 @@ static class AtlasMaterialRebinder
         Atlas.ReleaseAll();
         foreach (AtlasSO atlas in Resources.FindObjectsOfTypeAll<AtlasSO>())
         {
-            atlas.SetAtlasSpriteBuffer();
+            atlas.UpdateAtlas();
         }
     }
 }
 #endif
+
+
+/*
+ *         
+            case ClipType.OneShot:
+            {
+                cycleTime = Mathf.Min(clip.totalPlayTime, clip.keyFrames[^1].framePosition);
+                clip.curFrameIndex = Mathf.Min(clip.curFrameIndex, clip.keyFrames.Length);
+            }
+            break;
+ */

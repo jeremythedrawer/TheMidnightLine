@@ -12,8 +12,8 @@ public class TrainSettingsSO : ScriptableObject
     public float exteriorWallFadeTime = 1f;
     [Serializable] public struct WorldZPosRange
     {
-        public int max;
-        public int min;
+        public int postion;
+        public int size;
     }
     public WorldZPosRange maxMinWorldZPos;
 }

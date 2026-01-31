@@ -509,7 +509,7 @@ public class SpyBrain : MonoBehaviour
                     rigidBody.includeLayers = layerSettings.trainMask;
 
                     stats.onTrain = true;
-                    float zPos = Mathf.Lerp(trainSettings.maxMinWorldZPos.min, trainSettings.maxMinWorldZPos.max, settings.depthPositionInTrain);
+                    float zPos = Mathf.Lerp(trainSettings.maxMinWorldZPos.postion, trainSettings.maxMinWorldZPos.size, settings.depthPositionInTrain);
                     transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
                     trainStats.curPassengerCount ++;
                     gameEventData.OnBoardingSpy.Raise();

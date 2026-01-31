@@ -87,7 +87,7 @@ Shader "Unlit/s_character"
                 float spriteBound = i.uv.x > atlasSprite.uvPosition.x && i.uv.y > atlasSprite.uvPosition.y & i.uv.x < maxUVPos.x & i.uv.y < maxUVPos.y;
                 half4 sampledMainTex =  SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
                 float greyScale = ((_ZPos - _EntityDepthRange.x) / (_EntityDepthRange.y)) * _DepthGreyScale;
-                half3 col = sampledMainTex.rgb + _Color + greyScale;
+                half3 col = sampledMainTex.rgb + _Color;
                 return half4(col, (sampledMainTex.a * spriteBound) * _Alpha);
             }
             ENDHLSL

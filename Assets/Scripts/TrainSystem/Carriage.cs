@@ -198,7 +198,7 @@ public class Carriage : MonoBehaviour
     {
         if (trainSettings == null) return;
         Gizmos.color = Color.blue;
-        Gizmos.DrawLine(new Vector3(transform.position.x, transform.position.y + 2, trainSettings.maxMinWorldZPos.min), new Vector3(transform.position.x, transform.position.y + 2, trainSettings.maxMinWorldZPos.max));
+        Gizmos.DrawLine(new Vector3(transform.position.x, transform.position.y + 2, trainSettings.maxMinWorldZPos.postion), new Vector3(transform.position.x, transform.position.y + 2, trainSettings.maxMinWorldZPos.postion + trainSettings.maxMinWorldZPos.size));
     }
 #endif
 }

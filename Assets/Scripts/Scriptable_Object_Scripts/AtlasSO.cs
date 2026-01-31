@@ -21,21 +21,25 @@ public class AtlasSO : ScriptableObject
 
     private void OnEnable()
     {
-
-        clipDict = Atlas.BuildClipKeys(clips);
-        SetAtlasSpriteBuffer();
+        UpdateAtlas();
     }
 
-    public void SetAtlasSpriteBuffer()
+    public void UpdateAtlas()
     {
         if (!material)
         {
             Debug.LogWarning($"Material not set on {name}", this);
             return;
         }
+        if (atlasBuffer != null)
+        {
+            atlasBuffer.Release();
+            atlasBuffer = null;
+        }
         atlasBuffer = Atlas.GetAtlasSpriteBuffer(this);
 
         material.SetBuffer(materialIDs.ids.atlasSprites, atlasBuffer);
+        clipDict = Atlas.BuildClipKeys(clips);
     }
 }
 
