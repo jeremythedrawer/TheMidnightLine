@@ -1,12 +1,12 @@
 using System;
 using System.Collections.Generic;
 using UnityEditor;
-using UnityEditorInternal;
 using UnityEngine;
 
 public static class Atlas
 {
     static Dictionary<AtlasSO, GraphicsBuffer> buffers = new Dictionary<AtlasSO, GraphicsBuffer>();
+    static float clock;
     public enum NPCMotion
     {
         None,
@@ -31,15 +31,14 @@ public static class Atlas
         StandingSick,
         StandingSleeping,
         Walking,
+        NPCMotionCount,
     }
-
     public enum SpyMotion
     { 
         None,
         Walking,
         Running,
     }
-
     public enum ClipType
     {
         Loop,
@@ -51,28 +50,27 @@ public static class Atlas
         None = 0,
         Smoke = 1 << 0,
         Phone = 1 << 1,
+        SleepingZs = 1 << 2,
+        Music = 1 << 3,
     }
     [Serializable] public struct AtlasMarker
     {
         public MarkerType type;
         public Color32 color;
     }
-
     [Serializable] public struct SpriteMarker
     {
         public MarkerType type;
         public Vector2 objectPos;
     }
-
     [Serializable] public struct AtlasSprite
     {
         public int index;
         public Vector2 uvPos;
         public Vector2 uvSize;
-        public Vector2 normPivot; 
+        public Vector2 uvPivot; 
         public SpriteMarker[] markers;
     }
-
     [Serializable] public struct AtlasKeyframe
     {
         public int spriteIndex;
@@ -84,42 +82,39 @@ public static class Atlas
         public ClipType clipType;
         public AtlasKeyframe[] keyFrames;
     }
-
     struct MaterialAtlasSprite
     {
         public Vector2 uvPos;
         public Vector2 uvSize;
         public Vector2 pivot;
     }
-
-    public static int GetCurrentFrameIndex(AtlasClip clip, ClipType clipType, int fps, float clock, int curFrameIndex, int prevFrameIndex)
+    public static int NextFrameIndex(AtlasClip clip, int fps, float keyframeClock, int curFrameIndex, int prevFrameIndex = 0)
     {
-        clock *= fps;
+        keyframeClock *= fps;
         AtlasKeyframe curKeyFrame = clip.keyFrames[curFrameIndex];
 
-        switch (clipType)
+        switch (clip.clipType)
         {
             case ClipType.Loop:
             {
-                if (clock >= curKeyFrame.holdTime)
+                if (keyframeClock >= curKeyFrame.holdTime)
                 {
                     curFrameIndex++;
+                    curFrameIndex %= clip.keyFrames.Length; 
                 }
-                curFrameIndex %= clip.keyFrames.Length;
             }
             break;
             case ClipType.PingPong:
-            {
-                if (curFrameIndex < clip.keyFrames.Length - 1 && (curFrameIndex > prevFrameIndex || curFrameIndex == 0))
+            {   
+                
+                if (keyframeClock >= curKeyFrame.holdTime)
                 {
-                    if (clock >= curKeyFrame.holdTime)
+                    if (curFrameIndex < clip.keyFrames.Length - 1 && (curFrameIndex > prevFrameIndex || curFrameIndex == 0))
                     {
+
                         curFrameIndex++;
                     }
-                }
-                else
-                {
-                    if (clock >= curKeyFrame.holdTime)
+                    else
                     {
                         curFrameIndex--;
                     }
@@ -128,20 +123,18 @@ public static class Atlas
             break;
             case ClipType.OneShot:
             {
-                if (clock >= curKeyFrame.holdTime)
+                if (keyframeClock >= curKeyFrame.holdTime)
                 {
                     curFrameIndex++;
+                    curFrameIndex = Mathf.Min(curFrameIndex, clip.keyFrames.Length - 1);
                 }
-                curFrameIndex = Mathf.Min(curFrameIndex, clip.keyFrames.Length - 1);
             }
             break;
-
         }
 
         return curFrameIndex;
     }
-    
-    public static Dictionary<NPCMotion, AtlasClip> BuildClipKeys(Atlas.AtlasClip[] clips)
+    public static Dictionary<NPCMotion, AtlasClip> BuildClipKeys(AtlasClip[] clips)
     {
         Dictionary<NPCMotion, AtlasClip> clipDict = new Dictionary<NPCMotion, AtlasClip>();
 
@@ -153,7 +146,6 @@ public static class Atlas
 
         return clipDict;
     }
-
     public static GraphicsBuffer GetAtlasSpriteBuffer(AtlasSO atlas)
     {
         int floatSize = sizeof(float);
@@ -170,7 +162,7 @@ public static class Atlas
 
             matAtlasSprites[i].uvPos = sprite.uvPos;
             matAtlasSprites[i].uvSize = sprite.uvSize;
-            matAtlasSprites[i].pivot = sprite.normPivot;
+            matAtlasSprites[i].pivot = sprite.uvPivot;
         }
 
         buffer.SetData(matAtlasSprites);
@@ -178,7 +170,6 @@ public static class Atlas
 
         return buffer;
     }
-
     public static void ReleaseAll()
     {
         foreach (GraphicsBuffer buffer in buffers.Values)
@@ -202,21 +193,10 @@ static class AtlasMaterialRebinder
     static void RebindAll()
     {
         Atlas.ReleaseAll();
-        foreach (AtlasSO atlas in Resources.FindObjectsOfTypeAll<AtlasSO>())
+        foreach (AtlasSO atlas in Resources.FindObjectsOfTypeAll<AtlasSO>()) // TODO: Replace and use the one AtlasSOs
         {
             atlas.UpdateAtlas();
         }
     }
 }
 #endif
-
-
-/*
- *         
-            case ClipType.OneShot:
-            {
-                cycleTime = Mathf.Min(clip.totalPlayTime, clip.keyFrames[^1].framePosition);
-                clip.curFrameIndex = Mathf.Min(clip.curFrameIndex, clip.keyFrames.Length);
-            }
-            break;
- */

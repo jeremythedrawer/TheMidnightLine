@@ -47,8 +47,7 @@ public class NPCBrain : MonoBehaviour
     [SerializeField] MaterialIDSO materialIDs;
     public Rigidbody2D rigidBody;
     public BoxCollider2D boxCollider;
-    public Animator animator;
-    public SpriteRenderer spriteRenderer;
+    public MeshRenderer meshRenderer;
 
     public SlideDoors curSlideDoors;
     public MaterialPropertyBlock mpb;
@@ -67,14 +66,16 @@ public class NPCBrain : MonoBehaviour
 
     [Serializable] public struct StatData
     {
+        public Vector2 curSpriteMarkerObjPos;
         public Color selectedColor;
         public float targetXVelocity;
         public float targetXPos;
         public float targetDist;
-        public float stateTimer;
+        public float stateClock;
         public float stateDuration;
         public float curAlpha;
         public float targetAlpha;
+        public float atlasIndexClock;
 
         public NPCTraits.Behaviours curBehaviour;
         public NPCTraits.Behaviours behaviours;
@@ -82,16 +83,18 @@ public class NPCBrain : MonoBehaviour
         public State curState;
         public Path curPath;
         public Type type;
+        public NPCMotion curMotion;
 
         public uint smokerRoomIndex;
         public uint chairPosIndex;
         public int selectedProfileIndex;
 
+        public int curAtlasIndex;
+        public int prevAtlasIndex;
+
         public bool canBoardTrain;
         public bool startFade;
-
-        public int curAtlasIndex;
-        public Atlas.AtlasClip curClip;
+        public bool faceLeft;
     }
     [SerializeField] public StatData stats;
 
@@ -161,23 +164,21 @@ public class NPCBrain : MonoBehaviour
     }
     private void Update()
     {
-        mpb.SetFloat(materialIDs.ids.zPos, trainSettings.maxMinWorldZPos.postion);
         SelectingStates();
         UpdateStates();
         Fade();
-        mpb.SetTexture(materialIDs.ids.mainTex, spriteRenderer.sprite.texture);
-        spriteRenderer.SetPropertyBlock(mpb);
+        PlayMotion();
 
         if (rigidBody.includeLayers == layerSettings.trainMask)
         {
-            stats.stateTimer += Time.deltaTime;
+            stats.stateClock += Time.deltaTime;
         }
 
         if ((stats.curBehaviour & NPCTraits.Behaviours.Frequent_smoker) != 0 && stats.curPath != Path.ToSmokerRoom)
         {
             FindSmokersRoom();
         }
-
+        meshRenderer.SetPropertyBlock(mpb);
     }
     private void FixedUpdate()
     {
@@ -229,7 +230,7 @@ public class NPCBrain : MonoBehaviour
         {
             case State.Idling:
             {
-                if (stats.stateTimer > stats.stateDuration)
+                if (stats.stateClock > stats.stateDuration)
                 {
                     stats.curBehaviour = PickBehaviour();
                 }
@@ -237,22 +238,30 @@ public class NPCBrain : MonoBehaviour
             break;
             case State.Walking:
             {
-                spriteRenderer.flipX = inputData.move < 0;
-                //stats.curAtlasIndex = GetCurrentSpriteIndex(atlas.clipDict[NPCMotion.Walking], ClipType.Loop, atlas.framesPerSecond);
+                if (stats.faceLeft != inputData.move < 0)
+                {
+                    stats.faceLeft = inputData.move < 0;
+                    mpb.SetInt(materialIDs.ids.flip, stats.faceLeft ? 0 : 1);
+                }
             }
             break;
             case State.Smoking:
             {
-                if (stats.stateTimer > stats.stateDuration)
+                smoke.transform.localPosition = new Vector3(stats.curSpriteMarkerObjPos.x, stats.curSpriteMarkerObjPos.y, -0.5f);
+
+                if (stats.stateClock > stats.stateDuration)
                 {
                     stats.curBehaviour = PickBehaviour();
                 }
+
             }
             break;
             case State.Sleeping:
             {
                 
-                if (stats.stateTimer > stats.stateDuration)
+                sleepingZs.transform.localPosition = new Vector3(stats.curSpriteMarkerObjPos.x, stats.curSpriteMarkerObjPos.y, -0.5f);
+                
+                if (stats.stateClock > stats.stateDuration)
                 {
                     stats.curBehaviour = PickBehaviour();
                 }
@@ -260,7 +269,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case State.Eating:
             {
-                if (stats.stateTimer > stats.stateDuration)
+                if (stats.stateClock > stats.stateDuration)
                 {
                     stats.curBehaviour = PickBehaviour();
                 }
@@ -268,7 +277,10 @@ public class NPCBrain : MonoBehaviour
             break;
             case State.Music:
             {
-                if (stats.stateTimer > stats.stateDuration)
+
+                musicNotes.transform.localPosition = new Vector3(stats.curSpriteMarkerObjPos.x, stats.curSpriteMarkerObjPos.y, -0.5f);
+                
+                if (stats.stateClock > stats.stateDuration)
                 {
                     stats.curBehaviour = PickBehaviour();
                 }
@@ -276,7 +288,9 @@ public class NPCBrain : MonoBehaviour
             break;
             case State.Calling:
             {
-                if (stats.stateTimer > stats.stateDuration)
+                talkingLines.transform.localPosition = new Vector3(stats.curSpriteMarkerObjPos.x, stats.curSpriteMarkerObjPos.y, transform.position.z - 0.5f);
+
+                if (stats.stateClock > stats.stateDuration)
                 {
                     stats.curBehaviour = PickBehaviour();
                 }
@@ -284,13 +298,12 @@ public class NPCBrain : MonoBehaviour
             break;
             case State.Reading:
             {
-                if (stats.stateTimer > stats.stateDuration)
+                if (stats.stateClock > stats.stateDuration)
                 {
                     stats.curBehaviour = PickBehaviour();
                 }
             }
             break;
-
         }
     }
     private void FixedUpdateStates()
@@ -313,7 +326,7 @@ public class NPCBrain : MonoBehaviour
         if (stats.curState == newState) return;
         ExitState();
         stats.curState = newState;
-        stats.stateTimer = 0;
+        stats.stateClock = 0;
         EnterState();
     }
     private void EnterState()
@@ -326,95 +339,96 @@ public class NPCBrain : MonoBehaviour
 
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    animator.Play(npcData.animHashData.sittingBreathing);
-                    transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
+                    stats.curMotion = RandomSittingIdleMotion();
                     mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
+                    transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
                 }
                 else
                 {
-                    animator.Play(npcData.animHashData.standingBreathing);
+                    stats.curMotion = RandomStandingIdleMotion();
                 }
             }
             break;
             case State.Walking:
             {
-                animator.speed = npc.moveSpeed;
-                animator.Play(npcData.animHashData.walking);
+                stats.curMotion = NPCMotion.Walking;
             }
             break;
             case State.Smoking:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
-                animator.Play(npcData.animHashData.smoking);
+                stats.curMotion = NPCMotion.Smoking;
                 smoke.SetActive(true);
             }
             break;
             case State.Sleeping:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
-                sleepingZs.transform.position = new Vector3(spriteRenderer.bounds.center.x, spriteRenderer.bounds.max.y, transform.position.z - 0.5f);
+
+                sleepingZs.transform.position = new Vector3(meshRenderer.bounds.center.x, meshRenderer.bounds.max.y, transform.position.z - 0.5f);
                 sleepingZs.Reinit();
                 sleepingZs.Play();
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    animator.Play(npcData.animHashData.sittingSleeping);
+                    stats.curMotion = NPCMotion.SittingSleeping;
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
                     mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
                 }
                 else
                 {
-                    animator.Play(npcData.animHashData.standingSleeping);
+                    stats.curMotion = NPCMotion.StandingSleeping;
                 }
             }
             break;
             case State.Eating:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
+
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    animator.Play(npcData.animHashData.sittingAboutToEat);
+                    stats.curMotion = NPCMotion.SittingAboutToEat;
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
                     mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
                 }
                 else
                 {
-                    animator.Play(npcData.animHashData.standingAboutToEat);
+                    stats.curMotion = NPCMotion.StandingAboutToEat;
                 }
             }
             break;
             case State.Music:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
-                musicNotes.transform.position = new Vector3(spriteRenderer.bounds.center.x, spriteRenderer.bounds.max.y, transform.position.z - 0.5f);
+
+
                 musicNotes.Reinit();
                 musicNotes.Play();
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    animator.Play(npcData.animHashData.sittingMusic);
+                    stats.curMotion = NPCMotion.SittingMusic;
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
                     mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
                 }
                 else
                 {
-                    animator.Play(npcData.animHashData.standingMusic);
+                    stats.curMotion = NPCMotion.StandingMusic;
                 }
             }
             break;
             case State.Calling:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
-                talkingLines.transform.position = new Vector3(spriteRenderer.bounds.center.x, spriteRenderer.bounds.max.y, transform.position.z - 0.5f);
                 talkingLines.Reinit();
                 talkingLines.Play();
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    animator.Play(npcData.animHashData.sittingCalling);
+                    stats.curMotion = NPCMotion.SittingCalling;
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
                     mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
                 }
                 else
                 {
-                    animator.Play(npcData.animHashData.standingCalling);
+                    stats.curMotion = NPCMotion.StandingCalling;
                 }
             }
             break;
@@ -423,18 +437,16 @@ public class NPCBrain : MonoBehaviour
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    animator.Play(npcData.animHashData.sittingAboutToRead);
+                    stats.curMotion = NPCMotion.SittingAboutToRead;
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
                     mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
                 }
                 else
                 {
-                    animator.Play(npcData.animHashData.standingReading);
+                    stats.curMotion = NPCMotion.StandingReading;
                 }
             }
             break;
-
-
         }
     }
     private void ExitState()
@@ -448,7 +460,6 @@ public class NPCBrain : MonoBehaviour
             break;
             case State.Walking:
             {
-                animator.speed = 1;
             }
             break;
             case State.Smoking:
@@ -489,7 +500,6 @@ public class NPCBrain : MonoBehaviour
         {
             mpb.SetColor(materialIDs.ids.color, clipboardStats.profilePageArray[curProfilePageIndex].color * npcData.hoverColorOffet);
         }
-        spriteRenderer.SetPropertyBlock(mpb);
     }
     public void SelectColor()
     {
@@ -511,13 +521,11 @@ public class NPCBrain : MonoBehaviour
             clipboardStats.profilePageArray[stats.selectedProfileIndex].spyHasSelected = true;
         }
         mpb.SetColor(materialIDs.ids.color, stats.selectedColor);
-        spriteRenderer.SetPropertyBlock(mpb);
     }
     public void ExitColor()
     {
         if (rigidBody.includeLayers != layerSettings.trainMask) return;
         mpb.SetColor(materialIDs.ids.color, stats.selectedColor);
-        spriteRenderer.SetPropertyBlock(mpb);
     }
     private void Fade()
     {
@@ -689,38 +697,42 @@ public class NPCBrain : MonoBehaviour
         mpb.SetFloat(materialIDs.ids.zPos, zPos);
         transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
     }
-    private void PlaySittingEatingAnimation()
+    private void PlayMotion()
     {
-        animator.Play(npcData.animHashData.sittingEating);
-    }
-    private void PlayStandingEatingAnimation()
-    {
-        animator.Play(npcData.animHashData.standingEating);
-    }
-    private void PlaySittingReadingAnimation()
-    {
-        animator.Play(npcData.animHashData.sittingReading);
-    }
-    private void PlayRandomStandingIdleAnimations()
-    {
-        if(UnityEngine.Random.Range(0, 2) == 0)
+        stats.atlasIndexClock += Time.deltaTime;
+
+        int newAtlasIndex = NextFrameIndex(atlas.clipDict[stats.curMotion], atlas.framesPerSecond, stats.atlasIndexClock, stats.curAtlasIndex, stats.prevAtlasIndex);
+
+        if (newAtlasIndex != stats.curAtlasIndex)
         {
-            animator.Play(npcData.animHashData.standingBlinking);
-        }
-        else
-        {
-            animator.Play(npcData.animHashData.standingBreathing);
+            stats.prevAtlasIndex = stats.curAtlasIndex;
+            stats.curAtlasIndex = newAtlasIndex;
+            atlas.material.SetInt(atlas.materialIDs.ids.atlasIndex, stats.curAtlasIndex);
+
+            stats.curSpriteMarkerObjPos = atlas.sprites[stats.curAtlasIndex].markers[0].objectPos;
+            stats.atlasIndexClock = 0;
         }
     }
-    private void PlayRandomSittingIdleAnimations()
+    private NPCMotion RandomStandingIdleMotion()
     {
         if (UnityEngine.Random.Range(0, 2) == 0)
         {
-            animator.Play(npcData.animHashData.sittingBlinking);
+            return NPCMotion.StandingBreathing;
         }
         else
         {
-            animator.Play(npcData.animHashData.sittingBreathing);
+            return NPCMotion.StandingBlinking;
+        }
+    }
+    private NPCMotion RandomSittingIdleMotion()
+    {
+        if (UnityEngine.Random.Range(0, 2) == 0)
+        {
+            return NPCMotion.SittingBreathing;
+        }
+        else
+        {
+            return NPCMotion.SittingBlinking;
         }
     }
     //private void SetSmokePosition(int index)
@@ -754,7 +766,7 @@ public class NPCBrain : MonoBehaviour
         Gizmos.color = Color.magenta;
         Gizmos.DrawLine(boxCollider.bounds.center, new Vector2(stats.targetXPos, boxCollider.bounds.center.y));
 
-        Vector3 typeLabel = spriteRenderer.bounds.max + Vector3.up * 0.2f;
+        Vector3 typeLabel = meshRenderer.bounds.max + Vector3.up * 0.2f;
         Vector3 stateLabel = typeLabel + Vector3.up;
 
         GUIStyle typeStyle = new GUIStyle();
@@ -769,7 +781,7 @@ public class NPCBrain : MonoBehaviour
 
         // Draw the label in Scene view
         Handles.Label(typeLabel, stats.type.ToString(), typeStyle);
-        Handles.Label(stateLabel, animator.GetCurrentAnimatorClipInfo(0)[0].clip.name.ToString(), stateStyle);
+        Handles.Label(stateLabel, stats.curMotion.ToString(), stateStyle);
 
     }
     private void OnDrawGizmosSelected()

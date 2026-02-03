@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.VFX;
 using static Spawn;
@@ -16,7 +17,11 @@ public class Spawner : MonoBehaviour
     [SerializeField] SpyStatsSO spyStats;
 
     GraphicsBuffer indexBuffer;
-    public Spawn.SpawnerData[] spawnerDataArray;
+    public SpawnerData[] spawnerDataArray;
+    private void OnValidate()
+    {
+        InitializeBoundParameters();
+    }
     private void OnDisable()
     {
         ReleaseBuffers();
@@ -77,6 +82,8 @@ public class Spawner : MonoBehaviour
 
         transform.position = stats.spawnMinPos;
         stats.renderParamsBounds = new Bounds(stats.spawnCenter, stats.spawnSize);
+
+
     }
     private void InitializeCompute()
     {
@@ -193,7 +200,7 @@ public class Spawner : MonoBehaviour
         settings.backgroundParticleCompute.SetBuffer(stats.initKernelID, materialIDs.ids.bgParticleInputs, stats.backgroundParticleInputBuffer);
 
     }
-    private Spawn.SpawnerData SetSpawnData(Spawn.SpawnerData spawnData, Spawn.ParticleData particleData)
+    private Spawn.SpawnerData SetSpawnData(SpawnerData spawnData, Spawn.ParticleData particleData)
     {
         spawnData.uvPositionsBuffer?.Dispose();
         spawnData.uvPositionsBuffer?.Release();

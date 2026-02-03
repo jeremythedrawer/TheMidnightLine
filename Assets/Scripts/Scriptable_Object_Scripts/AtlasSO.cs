@@ -1,6 +1,6 @@
-using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static Atlas;
 
 [CreateAssetMenu(fileName = "AtlasTexture", menuName = " 2D Pipeline / Atlas Texture")]
 public class AtlasSO : ScriptableObject
@@ -10,13 +10,14 @@ public class AtlasSO : ScriptableObject
     public MaterialIDSO materialIDs;
     public int pixelsPerUnit = 32;
     public Color32 customPivotColor = Color.red;
-    public Atlas.AtlasMarker[] markers;
+    public AtlasMarker[] markers;
+    public AtlasClip[] clips;
     public int framesPerSecond = 30;
 
-    public Atlas.AtlasSprite[] sprites;
-    public Atlas.AtlasClip[] clips;
+    public AtlasSprite[] sprites;
 
-    public Dictionary<Atlas.NPCMotion, Atlas.AtlasClip> clipDict;
+    public Dictionary<NPCMotion, AtlasClip> clipDict;
+
     GraphicsBuffer atlasBuffer;
 
     private void OnEnable()
@@ -36,10 +37,10 @@ public class AtlasSO : ScriptableObject
             atlasBuffer.Release();
             atlasBuffer = null;
         }
-        atlasBuffer = Atlas.GetAtlasSpriteBuffer(this);
+        atlasBuffer = GetAtlasSpriteBuffer(this);
 
         material.SetBuffer(materialIDs.ids.atlasSprites, atlasBuffer);
-        clipDict = Atlas.BuildClipKeys(clips);
+        clipDict = BuildClipKeys(clips);
     }
 }
 

@@ -101,6 +101,7 @@ public class AtlasFactory : EditorWindow
         }
         selectedClipType = (ClipType)EditorGUILayout.EnumPopup("Clip Type", selectedClipType, GUIWidth);
 
+        //if (atlas.clips.Length == 0) {
 
         for (int i = 0; i < atlas.clips.Length;  i++)
         {
@@ -328,13 +329,13 @@ public class AtlasFactory : EditorWindow
 
         if (foundPivot)
         {
-            newAtlasSprite.normPivot.x = (pivot.x - minX) / spriteWidth;
-            newAtlasSprite.normPivot.y = (pivot.y - minY) / spriteHeight;
+            newAtlasSprite.uvPivot.x = (pivot.x - minX) / spriteWidth;
+            newAtlasSprite.uvPivot.y = (pivot.y - minY) / spriteHeight;
         }
         else
         {
-            newAtlasSprite.normPivot.x = 0;
-            newAtlasSprite.normPivot.y = 0;
+            newAtlasSprite.uvPivot.x = 0;
+            newAtlasSprite.uvPivot.y = 0;
         }
 
             newAtlasSprite.markers = spriteMarkers.ToArray();
@@ -365,7 +366,7 @@ public class AtlasFactory : EditorWindow
 
         GUI.DrawTextureWithTexCoords(spriteRect, atlas.texture, uvRect, alphaBlend: true);
 
-        Vector2 pivotPos = new Vector2(Mathf.Lerp(spriteRect.xMin, spriteRect.xMax, atlasSprite.normPivot.x),Mathf.Lerp(spriteRect.yMax, spriteRect.yMin, atlasSprite.normPivot.y));
+        Vector2 pivotPos = new Vector2(Mathf.Lerp(spriteRect.xMin, spriteRect.xMax, atlasSprite.uvPivot.x),Mathf.Lerp(spriteRect.yMax, spriteRect.yMin, atlasSprite.uvPivot.y));
         Rect pivotRect = new Rect(pivotPos - Vector2.one * markerSize, Vector2.one * (markerSize * 2));
 
         Handles.BeginGUI();
@@ -573,12 +574,11 @@ public class AtlasFactory : EditorWindow
         double now = EditorApplication.timeSinceStartup;
         float delta = (float)(now - lastEditorTime);
         lastEditorTime = now;
-        delta = Mathf.Clamp01(delta);
         previewTime += delta;
         if (startAnim)
         {
             if (!atlas.clipDict.TryGetValue(selectedMotion, out AtlasClip clip)) return;
-            int newFrameIndex = GetCurrentFrameIndex(clip, selectedClipType, atlas.framesPerSecond, previewTime, previewFrameIndex, prevPreviewFrameIndex);
+            int newFrameIndex = NextFrameIndex(clip, atlas.framesPerSecond, previewTime, previewFrameIndex, prevPreviewFrameIndex);
 
             if (newFrameIndex != previewFrameIndex)
             {
@@ -593,7 +593,6 @@ public class AtlasFactory : EditorWindow
     private Mesh GetBottomCenterQuad()
     {
         if (previewQuad != null) return previewQuad;
-        Debug.Log("generating new quad");
         previewQuad = new Mesh();
         previewQuad.name = "BottomCenterQuad";
 

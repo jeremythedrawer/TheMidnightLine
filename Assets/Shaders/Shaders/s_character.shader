@@ -11,6 +11,7 @@ Shader "Unlit/s_character"
         _ZPos ("ZPos", Float) = 0
         _Flip ("Flip", Range(0,1)) = 0
         _PPU ("Pixels Per Unit", Float) = 32
+
     }
     SubShader
     {
@@ -40,8 +41,8 @@ Shader "Unlit/s_character"
             struct Varyings
             {
                 float4  positionCS      : SV_POSITION;
-                float2  uv              : TEXCOORD0;
-                float3  positionWS      : TEXCOORD2;
+                float3  positionWS      : TEXCOORD0;
+                float2  uv              : TEXCOORD1;
             };
 
 
@@ -49,16 +50,16 @@ Shader "Unlit/s_character"
 
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
-            float4 _AtlasTexture_TexelSize;
             float2 _EntityDepthRange;
+            float4 _AtlasTexture_TexelSize;
 
             CBUFFER_START(UnityPerMaterial)
-                uint _AtlasIndex;
                 half4 _Color;
+                uint _AtlasIndex;
                 float _DepthGreyScale;
                 float _ZPos;
                 float _Alpha;
-                float _Flip;
+                int _Flip;
                 float _PPU;
             CBUFFER_END
 
@@ -69,7 +70,7 @@ Shader "Unlit/s_character"
                 AtlasSprite atlasSprite = _AtlasSprites[_AtlasIndex];
                 o.positionCS = TransformObjectToHClip(v.positionOS);
                 o.positionWS = TransformObjectToWorld(v.positionOS);
-                float2 centeredUV = o.positionWS - unity_ObjectToWorld._m03_m13_m23;
+                float2 centeredUV = v.positionOS;
 
                 float aspect = atlasSprite.uvSize.x / atlasSprite.uvSize.y;
                 centeredUV.x /= aspect;
