@@ -9,12 +9,12 @@ public class AtlasSO : ScriptableObject
     public Texture2D texture;
     public Material material;
     public MaterialIDSO materialIDs;
-    public int pixelsPerUnit = 32;
     public Color32 customPivotColor = Color.red;
     public AtlasMarker[] markers;
     public AtlasClip[] clips;
     public int framesPerSecond = 30;
     public AtlasSprite[] sprites;
+    public Mesh generatedQuadMesh;
 
     public Dictionary<int, AtlasClip> clipDict;
 

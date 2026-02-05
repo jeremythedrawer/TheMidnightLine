@@ -34,8 +34,9 @@ public class AtlasFactory : EditorWindow
     private double lastEditorTime;
     private bool startAnim;
     private int cachedFrame = -1;
+    private float pixelsPerUnit;
+    private Vector2 maxSpritePixelSize;
 
-    private static Mesh previewQuad;
     private RenderTexture previewRT;
 
     [MenuItem("Tools/Atlas Factory")]
@@ -66,10 +67,10 @@ public class AtlasFactory : EditorWindow
         {
             MakeTextureReadable();
             GenerateSprites();
+            atlas.generatedQuadMesh = GetAtlasMesh(maxSpritePixelSize);
             SortSprites();
             atlas.UpdateAtlas();
             previewRT = null;
-            previewQuad = null;
         }
         EditorGUILayout.EndVertical();
         #endregion
@@ -217,7 +218,7 @@ public class AtlasFactory : EditorWindow
         Color32[] pixels = atlas.texture.GetPixels32();
         int width = atlas.texture.width;
         int height = atlas.texture.height;
-
+        pixelsPerUnit = atlas.material.GetFloat(atlas.materialIDs.ids.pixelsPerUnit);
         bool[] visited = new bool[pixels.Length];
 
         int spriteIndex = 0;
@@ -349,8 +350,8 @@ public class AtlasFactory : EditorWindow
                     if (atlasMarker.color.r != pixelColor.r || atlasMarker.color.g != pixelColor.g || atlasMarker.color.b != pixelColor.b) continue;
                     SpriteMarker newSpriteMarker = new SpriteMarker();
                     newSpriteMarker.type = atlasMarker.type;
-                    newSpriteMarker.objectPos.x = (x - minX) / atlas.pixelsPerUnit;
-                    newSpriteMarker.objectPos.y = (y - minY) / atlas.pixelsPerUnit;
+                    newSpriteMarker.objectPos.x = (x - minX) / pixelsPerUnit;
+                    newSpriteMarker.objectPos.y = (y - minY) / pixelsPerUnit;
                     spriteMarkers.Add(newSpriteMarker);
                 }
             }
@@ -365,6 +366,16 @@ public class AtlasFactory : EditorWindow
         newAtlasSprite.uvSize.x = spriteWidth / texWidth;
         newAtlasSprite.uvSize.y = spriteHeight / texHeight;
 
+        if (spriteWidth + (pivot.x - minX) > maxSpritePixelSize.x)
+        {
+            maxSpritePixelSize.x = spriteWidth + (pivot.x - minX);
+        }
+
+        if (spriteHeight > maxSpritePixelSize.y)
+        {
+            maxSpritePixelSize.y = spriteHeight;
+        }
+
         if (foundPivot)
         {
             newAtlasSprite.uvPivot.x = (pivot.x - minX) / spriteWidth;
@@ -376,7 +387,7 @@ public class AtlasFactory : EditorWindow
             newAtlasSprite.uvPivot.y = 0;
         }
 
-            newAtlasSprite.markers = spriteMarkers.ToArray();
+        newAtlasSprite.markers = spriteMarkers.ToArray();
         return newAtlasSprite;
     }
     private void MakeTextureReadable()
@@ -422,7 +433,7 @@ public class AtlasFactory : EditorWindow
                     AtlasMarker atlasMarker = atlas.markers[j];
                     if ((marker.type & atlasMarker.type) != 0)
                     {
-                        Vector2 markerPixelInSprite = marker.objectPos * atlas.pixelsPerUnit;
+                        Vector2 markerPixelInSprite = marker.objectPos * pixelsPerUnit;
                         Vector2 markerNormalized = new Vector2(markerPixelInSprite.x / spritePixelWidth, markerPixelInSprite.y / spritePixelHeight);
                         Vector2 markerPixel = new Vector2(Mathf.Lerp(spriteRect.xMin, spriteRect.xMax, markerNormalized.x), Mathf.Lerp(spriteRect.yMax, spriteRect.yMin, markerNormalized.y));
                         Rect markerRect = new Rect(markerPixel - Vector2.one * markerSize, Vector2.one * (markerSize * 2));
@@ -675,7 +686,7 @@ public class AtlasFactory : EditorWindow
 
             GL.PushMatrix();
             GL.LoadProjectionMatrix(Matrix4x4.Ortho(-1, 1, 0, 2, -1, 1));
-            Graphics.DrawMeshNow(GetBottomCenterQuad(), Matrix4x4.identity);
+            Graphics.DrawMeshNow(atlas.generatedQuadMesh, Matrix4x4.identity);
             GL.PopMatrix();
         }
 
@@ -702,21 +713,29 @@ public class AtlasFactory : EditorWindow
             }
         }
     }
-    private Mesh GetBottomCenterQuad()
+    private Mesh GetAtlasMesh(Vector2 spritePixelSize)
     {
-        if (previewQuad != null) return previewQuad;
-        previewQuad = new Mesh();
-        previewQuad.name = "BottomCenterQuad";
+        string path = $"Assets/FBXs/mesh_{atlas.name}.asset";
+        Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(path);
 
-        previewQuad.vertices = new[]
+        Vector2 quadSize = spritePixelSize / pixelsPerUnit;
+        if (mesh == null)
         {
-            new Vector3(-1f, 0f, 0f), // bottom left
-            new Vector3(1f, 0f, 0f), // bottom right
-            new Vector3(1f, 2f, 0f), // top right
-            new Vector3(-1f, 2f, 0f), // top left
+            mesh = new Mesh();
+            mesh.name = $"mesh_{atlas.name}";
+            AssetDatabase.CreateAsset(mesh, path);
+        }
+
+        float halfWidth = quadSize.x * 0.5f;
+        mesh.vertices = new Vector3[]
+        {
+            new Vector3(-halfWidth, 0f, 0f), // bottom left
+            new Vector3(halfWidth, 0f, 0f), // bottom right
+            new Vector3(halfWidth, quadSize.y, 0f), // top right
+            new Vector3(-halfWidth, quadSize.y, 0f), // top left
         };
 
-        previewQuad.uv = new[]
+        mesh.uv = new Vector2[]
         {
             new Vector2(0, 0),
             new Vector2(1, 0),
@@ -724,15 +743,18 @@ public class AtlasFactory : EditorWindow
             new Vector2(0, 1),
         };
 
-        previewQuad.triangles = new[]
+        mesh.triangles = new int[]
         {
             0, 2, 1,
             0, 3, 2
         };
 
-        previewQuad.RecalculateNormals();
-        previewQuad.RecalculateBounds();
+        mesh.RecalculateNormals();
+        mesh.RecalculateBounds();
 
-        return previewQuad;
+        EditorUtility.SetDirty(mesh);
+        AssetDatabase.SaveAssets();
+        AssetDatabase.Refresh();
+        return mesh;
     }
 }

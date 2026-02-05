@@ -200,7 +200,7 @@ public class Spawner : MonoBehaviour
         settings.backgroundParticleCompute.SetBuffer(stats.initKernelID, materialIDs.ids.bgParticleInputs, stats.backgroundParticleInputBuffer);
 
     }
-    private Spawn.SpawnerData SetSpawnData(SpawnerData spawnData, Spawn.ParticleData particleData)
+    private SpawnerData SetSpawnData(SpawnerData spawnData, ParticleData particleData)
     {
         spawnData.uvPositionsBuffer?.Dispose();
         spawnData.uvPositionsBuffer?.Release();
