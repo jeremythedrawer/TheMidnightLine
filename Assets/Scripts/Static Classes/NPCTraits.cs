@@ -19,7 +19,8 @@ public static class NPCTraits
         Wearing_a_dress = 1 << 7,
         Wears_shorts = 1 << 8,
         Carries_a_bag = 1 << 9,
-        Wears_a_hat = 1 << 10,  
+        Wears_a_hat = 1 << 10,
+        Wears_a_necklace = 1 << 11,
     }
 
     [Flags] public enum Behaviours

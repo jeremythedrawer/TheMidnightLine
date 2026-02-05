@@ -13,6 +13,8 @@ MonoBehaviour:
   m_Name: Tourist_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
   texture: {fileID: 2800000, guid: e3d5f3c84d2b5c147ac52e23844c4b52, type: 3}
+  material: {fileID: 2100000, guid: 7810651266494d94da558574d22a0628, type: 2}
+  materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   pixelsPerUnit: 100
   customPivotColor:
     serializedVersion: 2
@@ -21,442 +23,422 @@ MonoBehaviour:
   - type: 1
     color:
       serializedVersion: 2
-      rgba: 65280
+      rgba: 4278255360
+  - type: 4
+    color:
+      serializedVersion: 2
+      rgba: 4294902015
+  clips:
+  - motion: 16
+    clipType: 0
+    keyFrames:
+    - spriteIndex: 2
+      holdTime: 20
+    - spriteIndex: 3
+      holdTime: 20
+    - spriteIndex: 4
+      holdTime: 20
+    - spriteIndex: 5
+      holdTime: 20
+    - spriteIndex: 6
+      holdTime: 20
+    - spriteIndex: 7
+      holdTime: 20
+  - motion: 12
+    clipType: 0
+    keyFrames:
+    - spriteIndex: 0
+      holdTime: 20
+    - spriteIndex: 1
+      holdTime: 20
+  - motion: 1
+    clipType: 0
+    keyFrames:
+    - spriteIndex: 30
+      holdTime: 20
+    - spriteIndex: 31
+      holdTime: 20
+  - motion: 21
+    clipType: 0
+    keyFrames:
+    - spriteIndex: 8
+      holdTime: 3
+    - spriteIndex: 9
+      holdTime: 3
+    - spriteIndex: 10
+      holdTime: 3
+    - spriteIndex: 11
+      holdTime: 3
+    - spriteIndex: 12
+      holdTime: 3
+    - spriteIndex: 13
+      holdTime: 3
+    - spriteIndex: 14
+      holdTime: 3
+    - spriteIndex: 15
+      holdTime: 3
+  - motion: 11
+    clipType: 0
+    keyFrames:
+    - spriteIndex: 16
+      holdTime: 100
+    - spriteIndex: 17
+      holdTime: 10
+    - spriteIndex: 18
+      holdTime: 100
+    - spriteIndex: 21
+      holdTime: 100
+    - spriteIndex: 20
+      holdTime: 10
+    - spriteIndex: 19
+      holdTime: 100
+  - motion: 13
+    clipType: 0
+    keyFrames:
+    - spriteIndex: 22
+      holdTime: 5
+    - spriteIndex: 23
+      holdTime: 100
+  - motion: 14
+    clipType: 1
+    keyFrames:
+    - spriteIndex: 24
+      holdTime: 100
+    - spriteIndex: 25
+      holdTime: 10
+    - spriteIndex: 26
+      holdTime: 100
+  - motion: 20
+    clipType: 1
+    keyFrames:
+    - spriteIndex: 27
+      holdTime: 110
+    - spriteIndex: 28
+      holdTime: 20
+    - spriteIndex: 29
+      holdTime: 110
+  - motion: 6
+    clipType: 0
+    keyFrames:
+    - spriteIndex: 32
+      holdTime: 20
+    - spriteIndex: 33
+      holdTime: 20
+    - spriteIndex: 34
+      holdTime: 20
+    - spriteIndex: 35
+      holdTime: 60
+    - spriteIndex: 36
+      holdTime: 20
+    - spriteIndex: 37
+      holdTime: 60
+    - spriteIndex: 38
+      holdTime: 20
+    - spriteIndex: 39
+      holdTime: 60
+    - spriteIndex: 40
+      holdTime: 20
+    - spriteIndex: 41
+      holdTime: 60
+  - motion: 3
+    clipType: 0
+    keyFrames:
+    - spriteIndex: 42
+      holdTime: 110
+    - spriteIndex: 43
+      holdTime: 10
+  - motion: 4
+    clipType: 0
+    keyFrames:
+    - spriteIndex: 44
+      holdTime: 100
+    - spriteIndex: 45
+      holdTime: 10
+    - spriteIndex: 46
+      holdTime: 100
+  - motion: 10
+    clipType: 0
+    keyFrames:
+    - spriteIndex: 47
+      holdTime: 150
+    - spriteIndex: 48
+      holdTime: 20
+    - spriteIndex: 49
+      holdTime: 150
+  framesPerSecond: 30
   sprites:
   - index: 0
-    uvPos: {x: 0, y: 0}
-    uvSize: {x: 0.055664062, y: 0.10644531}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0, y: 0.85302734}
+    uvSize: {x: 0.057128906, y: 0.14697266}
+    uvPivot: {x: 0.41025642, y: 0}
     markers: []
   - index: 1
-    uvPos: {x: 0.02734375, y: 0}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.06689453, y: 0.85302734}
+    uvSize: {x: 0.057617188, y: 0.14697266}
+    uvPivot: {x: 0.41525424, y: 0}
     markers: []
   - index: 2
-    uvPos: {x: 0.06689453, y: 0}
-    uvSize: {x: 0.055664062, y: 0.10644531}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.13720703, y: 0.85302734}
+    uvSize: {x: 0.056152344, y: 0.14697266}
+    uvPivot: {x: 0.4, y: 0}
     markers: []
   - index: 3
-    uvPos: {x: 0.09423828, y: 0}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.20605469, y: 0.85302734}
+    uvSize: {x: 0.057128906, y: 0.14697266}
+    uvPivot: {x: 0.41025642, y: 0}
     markers: []
   - index: 4
-    uvPos: {x: 0.13085938, y: 0}
-    uvSize: {x: 0.055664062, y: 0.10449219}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.27441406, y: 0.85302734}
+    uvSize: {x: 0.057128906, y: 0.14697266}
+    uvPivot: {x: 0.41025642, y: 0}
     markers: []
   - index: 5
-    uvPos: {x: 0.15820312, y: 0}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.34326172, y: 0.85302734}
+    uvSize: {x: 0.057128906, y: 0.14697266}
+    uvPivot: {x: 0.41025642, y: 0}
     markers: []
   - index: 6
-    uvPos: {x: 0.19384766, y: 0}
-    uvSize: {x: 0.055664062, y: 0.10644531}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.40771484, y: 0.85302734}
+    uvSize: {x: 0.057128906, y: 0.14697266}
+    uvPivot: {x: 0.41025642, y: 0}
     markers: []
   - index: 7
-    uvPos: {x: 0.2211914, y: 0}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.47509766, y: 0.85302734}
+    uvSize: {x: 0.057128906, y: 0.14697266}
+    uvPivot: {x: 0.41025642, y: 0}
     markers: []
   - index: 8
-    uvPos: {x: 0.2578125, y: 0}
-    uvSize: {x: 0.055664062, y: 0.10449219}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.54052734, y: 0.85498047}
+    uvSize: {x: 0.05908203, y: 0.14501953}
+    uvPivot: {x: 0.42975205, y: 0}
     markers: []
   - index: 9
-    uvPos: {x: 0.28515625, y: 0}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.6098633, y: 0.85595703}
+    uvSize: {x: 0.068847656, y: 0.14404297}
+    uvPivot: {x: 0.5106383, y: 0}
     markers: []
   - index: 10
-    uvPos: {x: 0.3251953, y: 0}
-    uvSize: {x: 0.055664062, y: 0.10644531}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.6904297, y: 0.8564453}
+    uvSize: {x: 0.071777344, y: 0.14355469}
+    uvPivot: {x: 0.53061223, y: 0}
     markers: []
   - index: 11
-    uvPos: {x: 0.35253906, y: 0}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.7739258, y: 0.8574219}
+    uvSize: {x: 0.06542969, y: 0.14257812}
+    uvPivot: {x: 0.48507464, y: 0}
     markers: []
   - index: 12
-    uvPos: {x: 0.3959961, y: 0}
-    uvSize: {x: 0.055664062, y: 0.10449219}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.8535156, y: 0.8564453}
+    uvSize: {x: 0.06298828, y: 0.14355469}
+    uvPivot: {x: 0.4651163, y: 0}
     markers: []
   - index: 13
-    uvPos: {x: 0.42333984, y: 0}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.93310547, y: 0.8540039}
+    uvSize: {x: 0.06689453, y: 0.1459961}
+    uvPivot: {x: 0.49635038, y: 0.0100334445}
     markers: []
   - index: 14
-    uvPos: {x: 0.4663086, y: 0}
-    uvSize: {x: 0.055664062, y: 0.10644531}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0, y: 0.69677734}
+    uvSize: {x: 0.071777344, y: 0.14355469}
+    uvPivot: {x: 0.53061223, y: 0}
     markers: []
   - index: 15
-    uvPos: {x: 0.49365234, y: 0}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.08984375, y: 0.6953125}
+    uvSize: {x: 0.06689453, y: 0.14404297}
+    uvPivot: {x: 0.49635038, y: 0}
     markers: []
   - index: 16
-    uvPos: {x: 0.5605469, y: 0}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
-    markers: []
+    uvPos: {x: 0.171875, y: 0.6928711}
+    uvSize: {x: 0.05908203, y: 0.14697266}
+    uvPivot: {x: 0.42975205, y: 0}
+    markers:
+    - type: 1
+      objectPos: {x: 0.65, y: 2.57}
   - index: 17
-    uvPos: {x: 0.63134766, y: 0}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
-    markers: []
+    uvPos: {x: 0.2421875, y: 0.6923828}
+    uvSize: {x: 0.05908203, y: 0.14794922}
+    uvPivot: {x: 0.42975205, y: 0}
+    markers:
+    - type: 1
+      objectPos: {x: 0.65, y: 2.59}
   - index: 18
-    uvPos: {x: 0.69677734, y: 0}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
-    markers: []
+    uvPos: {x: 0.3149414, y: 0.6928711}
+    uvSize: {x: 0.05908203, y: 0.1484375}
+    uvPivot: {x: 0.42975205, y: 0}
+    markers:
+    - type: 1
+      objectPos: {x: 0.65, y: 2.6}
   - index: 19
-    uvPos: {x: 0.73291016, y: 0}
-    uvSize: {x: 0.055664062, y: 0.106933594}
-    normPivot: {x: 0, y: 0}
-    markers: []
+    uvPos: {x: 0.38671875, y: 0.6928711}
+    uvSize: {x: 0.05908203, y: 0.14697266}
+    uvPivot: {x: 0.42975205, y: 0}
+    markers:
+    - type: 1
+      objectPos: {x: 0.86, y: 2.44}
   - index: 20
-    uvPos: {x: 0.7602539, y: 0}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
-    markers: []
+    uvPos: {x: 0.47021484, y: 0.69384766}
+    uvSize: {x: 0.05908203, y: 0.14746094}
+    uvPivot: {x: 0.42975205, y: 0}
+    markers:
+    - type: 1
+      objectPos: {x: 0.86, y: 2.45}
   - index: 21
-    uvPos: {x: 0.8017578, y: 0}
-    uvSize: {x: 0.055664062, y: 0.107421875}
-    normPivot: {x: 0, y: 0}
-    markers: []
+    uvPos: {x: 0.54052734, y: 0.69140625}
+    uvSize: {x: 0.05908203, y: 0.14794922}
+    uvPivot: {x: 0.42975205, y: 0}
+    markers:
+    - type: 1
+      objectPos: {x: 0.86, y: 2.46}
   - index: 22
-    uvPos: {x: 0.82910156, y: 0}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.6176758, y: 0.69189453}
+    uvSize: {x: 0.05908203, y: 0.14697266}
+    uvPivot: {x: 0.42975205, y: 0}
     markers: []
   - index: 23
-    uvPos: {x: 0.86865234, y: 0}
-    uvSize: {x: 0.055664062, y: 0.107910156}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.6923828, y: 0.69140625}
+    uvSize: {x: 0.05908203, y: 0.14697266}
+    uvPivot: {x: 0.42975205, y: 0}
     markers: []
   - index: 24
-    uvPos: {x: 0.8959961, y: 0}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.7607422, y: 0.69091797}
+    uvSize: {x: 0.05908203, y: 0.14794922}
+    uvPivot: {x: 0.42975205, y: 0}
     markers: []
   - index: 25
-    uvPos: {x: 0.5332031, y: 0.00048828125}
-    uvSize: {x: 0.055664062, y: 0.10449219}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.82958984, y: 0.69091797}
+    uvSize: {x: 0.05908203, y: 0.14746094}
+    uvPivot: {x: 0.42975205, y: 0}
     markers: []
   - index: 26
-    uvPos: {x: 0.6040039, y: 0.00048828125}
-    uvSize: {x: 0.055664062, y: 0.10644531}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.8979492, y: 0.69140625}
+    uvSize: {x: 0.05908203, y: 0.14697266}
+    uvPivot: {x: 0.42975205, y: 0}
     markers: []
   - index: 27
-    uvPos: {x: 0.6694336, y: 0.00048828125}
-    uvSize: {x: 0.055664062, y: 0.10644531}
-    normPivot: {x: 0, y: 0}
-    markers: []
+    uvPos: {x: 0, y: 0.5283203}
+    uvSize: {x: 0.05908203, y: 0.14501953}
+    uvPivot: {x: 0.42975205, y: 0}
+    markers:
+    - type: 4
+      objectPos: {x: 0.5, y: 2.61}
   - index: 28
-    uvPos: {x: 0.11230469, y: 0.057128906}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
-    markers: []
+    uvPos: {x: 0.068847656, y: 0.5283203}
+    uvSize: {x: 0.05908203, y: 0.14648438}
+    uvPivot: {x: 0.42975205, y: 0}
+    markers:
+    - type: 4
+      objectPos: {x: 0.49, y: 2.64}
   - index: 29
-    uvPos: {x: 0.17626953, y: 0.057128906}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
-    markers: []
+    uvPos: {x: 0.13720703, y: 0.5288086}
+    uvSize: {x: 0.05908203, y: 0.14697266}
+    uvPivot: {x: 0.42975205, y: 0}
+    markers:
+    - type: 4
+      objectPos: {x: 0.52, y: 2.65}
   - index: 30
-    uvPos: {x: 0.23925781, y: 0.057128906}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0, y: 0.12402344}
+    uvSize: {x: 0.06689453, y: 0.11425781}
+    uvPivot: {x: 0.620438, y: 0.0042735045}
     markers: []
   - index: 31
-    uvPos: {x: 0.30322266, y: 0.057128906}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.079589844, y: 0.12402344}
+    uvSize: {x: 0.06689453, y: 0.11425781}
+    uvPivot: {x: 0.620438, y: 0}
     markers: []
   - index: 32
-    uvPos: {x: 0.37060547, y: 0.057128906}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.1640625, y: 0.12402344}
+    uvSize: {x: 0.06689453, y: 0.11328125}
+    uvPivot: {x: 0.620438, y: 0}
     markers: []
   - index: 33
-    uvPos: {x: 0.44140625, y: 0.057128906}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.24853516, y: 0.12402344}
+    uvSize: {x: 0.06689453, y: 0.11425781}
+    uvPivot: {x: 0.620438, y: 0}
     markers: []
   - index: 34
-    uvPos: {x: 0.51171875, y: 0.057128906}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.3305664, y: 0.12402344}
+    uvSize: {x: 0.06689453, y: 0.11328125}
+    uvPivot: {x: 0.620438, y: 0}
     markers: []
   - index: 35
-    uvPos: {x: 0.5786133, y: 0.057617188}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.41015625, y: 0.12402344}
+    uvSize: {x: 0.06689453, y: 0.11425781}
+    uvPivot: {x: 0.620438, y: 0}
     markers: []
   - index: 36
-    uvPos: {x: 0.02734375, y: 0.12207031}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.49365234, y: 0.12402344}
+    uvSize: {x: 0.06689453, y: 0.11328125}
+    uvPivot: {x: 0.620438, y: 0}
     markers: []
   - index: 37
-    uvPos: {x: 0.096191406, y: 0.12207031}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.5732422, y: 0.12402344}
+    uvSize: {x: 0.06689453, y: 0.11425781}
+    uvPivot: {x: 0.620438, y: 0}
     markers: []
   - index: 38
-    uvPos: {x: 0.16308594, y: 0.12207031}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.65185547, y: 0.12402344}
+    uvSize: {x: 0.06689453, y: 0.11328125}
+    uvPivot: {x: 0.620438, y: 0}
     markers: []
   - index: 39
-    uvPos: {x: 0, y: 0.122558594}
-    uvSize: {x: 0.055664062, y: 0.106933594}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.73046875, y: 0.12402344}
+    uvSize: {x: 0.06689453, y: 0.11425781}
+    uvPivot: {x: 0.620438, y: 0}
     markers: []
   - index: 40
-    uvPos: {x: 0.068847656, y: 0.122558594}
-    uvSize: {x: 0.055664062, y: 0.107421875}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.8144531, y: 0.12402344}
+    uvSize: {x: 0.06689453, y: 0.11279297}
+    uvPivot: {x: 0.620438, y: 0}
     markers: []
   - index: 41
-    uvPos: {x: 0.13574219, y: 0.122558594}
-    uvSize: {x: 0.055664062, y: 0.107910156}
-    normPivot: {x: 0, y: 0}
+    uvPos: {x: 0.88671875, y: 0.12402344}
+    uvSize: {x: 0.06689453, y: 0.11425781}
+    uvPivot: {x: 0.620438, y: 0}
     markers: []
   - index: 42
-    uvPos: {x: 0.017578125, y: 0.5102539}
-    uvSize: {x: 0.044433594, y: 0.15625}
-    normPivot: {x: 0.41758242, y: 0}
+    uvPos: {x: 0, y: 0}
+    uvSize: {x: 0.06738281, y: 0.11425781}
+    uvPivot: {x: 0.615942, y: 0}
     markers: []
   - index: 43
-    uvPos: {x: 0.07128906, y: 0.51220703}
-    uvSize: {x: 0.04736328, y: 0.1538086}
-    normPivot: {x: 0.45360824, y: 0}
+    uvPos: {x: 0.07861328, y: 0}
+    uvSize: {x: 0.06738281, y: 0.11425781}
+    uvPivot: {x: 0.615942, y: 0}
     markers: []
   - index: 44
-    uvPos: {x: 0.12841797, y: 0.51220703}
-    uvSize: {x: 0.04736328, y: 0.15429688}
-    normPivot: {x: 0.45360824, y: 0}
+    uvPos: {x: 0.16015625, y: 0}
+    uvSize: {x: 0.06738281, y: 0.11425781}
+    uvPivot: {x: 0.6231884, y: 0}
     markers: []
   - index: 45
-    uvPos: {x: 0.18798828, y: 0.51220703}
-    uvSize: {x: 0.04736328, y: 0.15478516}
-    normPivot: {x: 0.45360824, y: 0}
+    uvPos: {x: 0.2421875, y: 0}
+    uvSize: {x: 0.06738281, y: 0.114746094}
+    uvPivot: {x: 0.615942, y: 0}
     markers: []
   - index: 46
-    uvPos: {x: 0.6928711, y: 0.6767578}
-    uvSize: {x: 0.044433594, y: 0.1586914}
-    normPivot: {x: 0.41758242, y: 0}
+    uvPos: {x: 0.32373047, y: 0}
+    uvSize: {x: 0.06738281, y: 0.115234375}
+    uvPivot: {x: 0.615942, y: 0}
     markers: []
   - index: 47
-    uvPos: {x: 0.75341797, y: 0.6767578}
-    uvSize: {x: 0.044433594, y: 0.15820312}
-    normPivot: {x: 0.41758242, y: 0}
-    markers: []
+    uvPos: {x: 0.40429688, y: 0}
+    uvSize: {x: 0.067871094, y: 0.11425781}
+    uvPivot: {x: 0.61870503, y: 0}
+    markers:
+    - type: 4
+      objectPos: {x: 0.8, y: 2.17}
   - index: 48
-    uvPos: {x: 0.81640625, y: 0.6767578}
-    uvSize: {x: 0.044433594, y: 0.15820312}
-    normPivot: {x: 0.41758242, y: 0}
-    markers: []
+    uvPos: {x: 0.48632812, y: 0}
+    uvSize: {x: 0.06738281, y: 0.114746094}
+    uvPivot: {x: 0.615942, y: 0}
+    markers:
+    - type: 4
+      objectPos: {x: 0.79, y: 2.17}
   - index: 49
-    uvPos: {x: 0.87646484, y: 0.6767578}
-    uvSize: {x: 0.044433594, y: 0.1586914}
-    normPivot: {x: 0.41758242, y: 0}
-    markers: []
-  - index: 50
-    uvPos: {x: 0.9375, y: 0.6767578}
-    uvSize: {x: 0.044433594, y: 0.15820312}
-    normPivot: {x: 0.41758242, y: 0}
-    markers: []
-  - index: 51
-    uvPos: {x: 0.19677734, y: 0.68115234}
-    uvSize: {x: 0.049316406, y: 0.15820312}
-    normPivot: {x: 0.37623763, y: 0}
-    markers: []
-  - index: 52
-    uvPos: {x: 0.25048828, y: 0.68115234}
-    uvSize: {x: 0.044433594, y: 0.15820312}
-    normPivot: {x: 0.41758242, y: 0}
-    markers: []
-  - index: 53
-    uvPos: {x: 0.30322266, y: 0.68115234}
-    uvSize: {x: 0.044433594, y: 0.15625}
-    normPivot: {x: 0.41758242, y: 0}
-    markers: []
-  - index: 54
-    uvPos: {x: 0.35498047, y: 0.68115234}
-    uvSize: {x: 0.044433594, y: 0.15820312}
-    normPivot: {x: 0.41758242, y: 0}
-    markers: []
-  - index: 55
-    uvPos: {x: 0.40820312, y: 0.68115234}
-    uvSize: {x: 0.044433594, y: 0.15820312}
-    normPivot: {x: 0.41758242, y: 0}
-    markers: []
-  - index: 56
-    uvPos: {x: 0.45996094, y: 0.68115234}
-    uvSize: {x: 0.044433594, y: 0.15820312}
-    normPivot: {x: 0.41758242, y: 0}
-    markers: []
-  - index: 57
-    uvPos: {x: 0.52001953, y: 0.68115234}
-    uvSize: {x: 0.044433594, y: 0.15820312}
-    normPivot: {x: 0.41758242, y: 0}
-    markers: []
-  - index: 58
-    uvPos: {x: 0.57714844, y: 0.68115234}
-    uvSize: {x: 0.044433594, y: 0.15820312}
-    normPivot: {x: 0.41758242, y: 0}
-    markers: []
-  - index: 59
-    uvPos: {x: 0.63378906, y: 0.68115234}
-    uvSize: {x: 0.044433594, y: 0.15625}
-    normPivot: {x: 0.41758242, y: 0}
-    markers: []
-  - index: 60
-    uvPos: {x: 0.015136719, y: 0.6821289}
-    uvSize: {x: 0.057617188, y: 0.1586914}
-    normPivot: {x: 0.37288135, y: 0}
+    uvPos: {x: 0.5673828, y: 0}
+    uvSize: {x: 0.067871094, y: 0.115234375}
+    uvPivot: {x: 0.61870503, y: 0}
     markers:
-    - type: 1
-      objectPos: {x: 1.48, y: 16.4}
-  - index: 61
-    uvPos: {x: 0.078125, y: 0.68310547}
-    uvSize: {x: 0.04736328, y: 0.15820312}
-    normPivot: {x: 0.45360824, y: 0}
-    markers: []
-  - index: 62
-    uvPos: {x: 0.13574219, y: 0.68310547}
-    uvSize: {x: 0.04736328, y: 0.15820312}
-    normPivot: {x: 0.45360824, y: 0}
-    markers: []
-  - index: 63
-    uvPos: {x: 0.7158203, y: 0.83496094}
-    uvSize: {x: 0.0009765625, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
-    markers: []
-  - index: 64
-    uvPos: {x: 0.6972656, y: 0.8388672}
-    uvSize: {x: 0.047851562, y: 0.15917969}
-    normPivot: {x: 0.4489796, y: 0.0030674846}
-    markers:
-    - type: 1
-      objectPos: {x: 15.06, y: 20.01}
-  - index: 65
-    uvPos: {x: 0.75683594, y: 0.8388672}
-    uvSize: {x: 0.047851562, y: 0.16015625}
-    normPivot: {x: 0.4489796, y: 0.0030487804}
-    markers:
-    - type: 1
-      objectPos: {x: 16.28, y: 20.02}
-  - index: 66
-    uvPos: {x: 0.81640625, y: 0.8388672}
-    uvSize: {x: 0.047851562, y: 0.16064453}
-    normPivot: {x: 0.4489796, y: 0.0030395137}
-    markers:
-    - type: 1
-      objectPos: {x: 17.5, y: 20.03}
-  - index: 67
-    uvPos: {x: 0.8745117, y: 0.8388672}
-    uvSize: {x: 0.057617188, y: 0.16064453}
-    normPivot: {x: 0.37288135, y: 0.0030395137}
-    markers:
-    - type: 1
-      objectPos: {x: 19.08, y: 19.64}
-  - index: 68
-    uvPos: {x: 0.5263672, y: 0.83984375}
-    uvSize: {x: 0.04736328, y: 0.1586914}
-    normPivot: {x: 0.45360824, y: 0}
-    markers: []
-  - index: 69
-    uvPos: {x: 0.5834961, y: 0.83984375}
-    uvSize: {x: 0.04736328, y: 0.15966797}
-    normPivot: {x: 0.45360824, y: 0}
-    markers: []
-  - index: 70
-    uvPos: {x: 0.6430664, y: 0.83984375}
-    uvSize: {x: 0.04736328, y: 0.16015625}
-    normPivot: {x: 0.45360824, y: 0}
-    markers: []
-  - index: 71
-    uvPos: {x: 0.93896484, y: 0.83984375}
-    uvSize: {x: 0.057617188, y: 0.15966797}
-    normPivot: {x: 0.37288135, y: 0}
-    markers:
-    - type: 1
-      objectPos: {x: 20.4, y: 19.64}
-  - index: 72
-    uvPos: {x: 0.0029296875, y: 0.84277344}
-    uvSize: {x: 0.041992188, y: 0.1538086}
-    normPivot: {x: 0.41860464, y: 0}
-    markers: []
-  - index: 73
-    uvPos: {x: 0.060058594, y: 0.84277344}
-    uvSize: {x: 0.061523438, y: 0.1538086}
-    normPivot: {x: 0, y: 0}
-    markers: []
-  - index: 74
-    uvPos: {x: 0.087890625, y: 0.84277344}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
-    markers: []
-  - index: 75
-    uvPos: {x: 0.13183594, y: 0.84277344}
-    uvSize: {x: 0.06591797, y: 0.15234375}
-    normPivot: {x: 0, y: 0}
-    markers: []
-  - index: 76
-    uvPos: {x: 0.16699219, y: 0.84277344}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
-    markers: []
-  - index: 77
-    uvPos: {x: 0.20605469, y: 0.84277344}
-    uvSize: {x: 0.045898438, y: 0.15136719}
-    normPivot: {x: 0.5425532, y: 0}
-    markers: []
-  - index: 78
-    uvPos: {x: 0.26416016, y: 0.84277344}
-    uvSize: {x: 0.03955078, y: 0.15234375}
-    normPivot: {x: 0.54320985, y: 0}
-    markers: []
-  - index: 79
-    uvPos: {x: 0.32226562, y: 0.84277344}
-    uvSize: {x: 0.05078125, y: 0.15332031}
-    normPivot: {x: 0.53846157, y: 0}
-    markers: []
-  - index: 80
-    uvPos: {x: 0.38623047, y: 0.84277344}
-    uvSize: {x: 0.06640625, y: 0.15185547}
-    normPivot: {x: 0, y: 0}
-    markers: []
-  - index: 81
-    uvPos: {x: 0.41552734, y: 0.84277344}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
-    markers: []
-  - index: 82
-    uvPos: {x: 0.4609375, y: 0.84277344}
-    uvSize: {x: 0.047851562, y: 0.15185547}
-    normPivot: {x: 0.56122446, y: 0}
-    markers: []
-  - index: 83
-    uvPos: {x: 0.111816406, y: 0.8901367}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
-    markers: []
-  - index: 84
-    uvPos: {x: 0.14892578, y: 0.93896484}
-    uvSize: {x: 0.00048828125, y: 0.00048828125}
-    normPivot: {x: 0, y: 0}
-    markers: []
+    - type: 4
+      objectPos: {x: 0.8, y: 2.19}
+  entityType: 1

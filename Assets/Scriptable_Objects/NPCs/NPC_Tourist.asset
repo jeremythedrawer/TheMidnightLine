@@ -12,62 +12,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 315feb52fc04b9148823f375f15cd275, type: 3}
   m_Name: NPC_Tourist
   m_EditorClassIdentifier: 
-  overrideAnimationController: {fileID: 22100000, guid: ee48bd705fd15c94091ba5f972334994, type: 2}
+  atlas: {fileID: 11400000, guid: 08b0df7d5da3e864e9d4c4b81402b4fe, type: 2}
   moveSpeed: 0.8
   groundAccelation: 12
   maxDistanceDetection: 30
   appearence: 1536
   behaviours: 13
   pickBehaviourDurationRange: {x: 10, y: 30}
-  smokeAnimPosData:
-  - position: {x: 0.13, y: 2.58}
-    time: 0
-  - position: {x: 0.13, y: 2.59}
-    time: 2.5
-  - position: {x: 0.13, y: 2.6}
-    time: 5
-  - position: {x: 0.34, y: 2.45}
-    time: 7.5
-  - position: {x: 0.34, y: 2.46}
-    time: 10
-  - position: {x: 0.34, y: 2.47}
-    time: 12.5
-  animClips:
-  - stateHash: -1261997915
-    clip: {fileID: 7400000, guid: 7381a89761e88a64781b11f8bcdb3b2e, type: 2}
-  - stateHash: 1056067865
-    clip: {fileID: 7400000, guid: ff8e5ce1a3c106248857b33f3fc504a3, type: 2}
-  - stateHash: -1378655518
-    clip: {fileID: 7400000, guid: 6053d3ff46d9f214486ff5e02e300cf2, type: 2}
-  - stateHash: 1744665739
-    clip: {fileID: 7400000, guid: 92625f6865621e54da8da7a853f3867a, type: 2}
-  - stateHash: 1188456335
-    clip: {fileID: 7400000, guid: f4ebe10d1b1e37747a50966cadb6a376, type: 2}
-  - stateHash: -1546591693
-    clip: {fileID: 7400000, guid: 078a6681eb19e0442b3e1d6148821f01, type: 2}
-  - stateHash: -1841168567
-    clip: {fileID: 7400000, guid: 432faacde03bb754bbe581e3cfbcd1bb, type: 2}
-  - stateHash: -1273886530
-    clip: {fileID: 7400000, guid: 478d47ff6c67ad048af442a31bdd2548, type: 2}
-  - stateHash: 166281560
-    clip: {fileID: 7400000, guid: ff49da1b5afe480468a3bcc62a39dc76, type: 2}
-  - stateHash: 1909290958
-    clip: {fileID: 7400000, guid: 34927411c24a2eb489e2ad994a8f2656, type: 2}
-  - stateHash: 1161597700
-    clip: {fileID: 7400000, guid: 57e57788c8d24834aac0379cfe993615, type: 2}
-  - stateHash: -1382198491
-    clip: {fileID: 7400000, guid: df61345dd72e2b344b7e0017d8123d37, type: 2}
-  - stateHash: -2111235956
-    clip: {fileID: 7400000, guid: 4226bc345a6f5594eb115cb1d8a98fd1, type: 2}
-  - stateHash: 149832636
-    clip: {fileID: 7400000, guid: ec6a2d0b72190974787db7feaf76f7ab, type: 2}
-  - stateHash: -39181454
-    clip: {fileID: 7400000, guid: ce1902e9b8d01b947a5e20365941bd85, type: 2}
-  - stateHash: -564848838
-    clip: {fileID: 7400000, guid: b21d4f0f95584194c9f65677de1a57dc, type: 2}
-  - stateHash: -1699341760
-    clip: {fileID: 7400000, guid: fffe126c715b1344d84cc3a288ee19ee, type: 2}
-  - stateHash: 772153910
-    clip: {fileID: 7400000, guid: 99fa60490aabe0945a219f336dcddf49, type: 2}
-  - stateHash: -1186386424
-    clip: {fileID: 7400000, guid: 6ee165cdc1313e249abe21a26a57c6e9, type: 2}

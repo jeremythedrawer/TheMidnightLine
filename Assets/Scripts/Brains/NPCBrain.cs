@@ -35,6 +35,7 @@ public class NPCBrain : MonoBehaviour
         ToChair,
         ToSlideDoor,
     }
+    public NPCSO npc;
     [SerializeField] AtlasSO atlas;
     [SerializeField] NPCsDataSO npcData;
     [SerializeField] LayerSettingsSO layerSettings;
@@ -59,7 +60,6 @@ public class NPCBrain : MonoBehaviour
     public VisualEffect talkingLines;
 
     public GameObject smoke;
-    public NPCSO npc;
 
     public StationSO startStation;
     public StationSO endStation;
@@ -701,7 +701,7 @@ public class NPCBrain : MonoBehaviour
     {
         stats.atlasIndexClock += Time.deltaTime;
 
-        int newAtlasIndex = NextFrameIndex(atlas.clipDict[stats.curMotion], atlas.framesPerSecond, stats.atlasIndexClock, stats.curAtlasIndex, stats.prevAtlasIndex);
+        int newAtlasIndex = NextFrameIndex(atlas.clipDict[(int)stats.curMotion], atlas.framesPerSecond, stats.atlasIndexClock, stats.curAtlasIndex, stats.prevAtlasIndex);
 
         if (newAtlasIndex != stats.curAtlasIndex)
         {

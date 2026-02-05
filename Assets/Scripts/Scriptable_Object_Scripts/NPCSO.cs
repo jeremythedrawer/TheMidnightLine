@@ -1,18 +1,8 @@
-using System.Collections.Generic;
 using UnityEngine;
-using System;
-using UnityEditor;
-
-
-#if UNITY_EDITOR
-using UnityEditor.Animations;
-#endif
-
+using static NPCTraits;
 [CreateAssetMenu(fileName = "NPCSO", menuName = "Midnight Line SOs / NPC SO")]
 public class NPCSO : ScriptableObject
 {
-    [Header("Components")]
-    public AtlasSO atlas;
     [Header("Movement")]
     public float moveSpeed = 5f;
     public float groundAccelation = 12f;
@@ -20,8 +10,8 @@ public class NPCSO : ScriptableObject
     [Header("Station")]
     public float maxDistanceDetection = 6.0f;
 
-    public NPCTraits.Appearence appearence;
-    public NPCTraits.Behaviours behaviours;
+    public Appearence appearence;
+    public Behaviours behaviours;
 
     [Header("Difficulty")]
     public Vector2 pickBehaviourDurationRange = new Vector2(10, 30);

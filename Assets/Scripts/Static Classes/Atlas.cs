@@ -2,11 +2,9 @@ using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
-
 public static class Atlas
 {
     static Dictionary<AtlasSO, GraphicsBuffer> buffers = new Dictionary<AtlasSO, GraphicsBuffer>();
-    static float clock;
     public enum NPCMotion
     {
         None,
@@ -33,11 +31,26 @@ public static class Atlas
         Walking,
         NPCMotionCount,
     }
+
     public enum SpyMotion
     { 
         None,
         Walking,
         Running,
+        StandingBreathing,
+        Climbing,
+        Hanging,
+        StandingCalling,
+        Clipboard,
+        Jump,
+        Fall,
+        Death,
+    }
+
+    public enum EntityType
+    {
+        NPC,
+        Spy
     }
     public enum ClipType
     {
@@ -49,7 +62,7 @@ public static class Atlas
     {
         None = 0,
         Smoke = 1 << 0,
-        Phone = 1 << 1,
+        Talking = 1 << 1,
         SleepingZs = 1 << 2,
         Music = 1 << 3,
     }
@@ -78,9 +91,21 @@ public static class Atlas
     }
     [Serializable] public struct AtlasClip
     {
-        public NPCMotion motion;
         public ClipType clipType;
+        public int motionIndex;
+        public string clipName;
         public AtlasKeyframe[] keyFrames;
+    }
+
+    [Serializable] public struct SpyClip
+    {
+        public SpyMotion motion;
+        public AtlasClip clip;
+    }
+    [Serializable] public struct NPCClip
+    {
+        public NPCMotion motion;
+        public AtlasClip clip;
     }
     struct MaterialAtlasSprite
     {
@@ -134,14 +159,14 @@ public static class Atlas
 
         return curFrameIndex;
     }
-    public static Dictionary<NPCMotion, AtlasClip> BuildClipKeys(AtlasClip[] clips)
+    public static Dictionary<int, AtlasClip> BuildClipKeys(AtlasClip[] clips)
     {
-        Dictionary<NPCMotion, AtlasClip> clipDict = new Dictionary<NPCMotion, AtlasClip>();
+        Dictionary<int, AtlasClip> clipDict = new Dictionary<int, AtlasClip>();
 
         for (int i = 0; i < clips.Length; i++)
         {
             AtlasClip clip = clips[i];
-            clipDict[clip.motion] = clip;
+            clipDict[clip.motionIndex] = clip;
         }
 
         return clipDict;
@@ -151,6 +176,12 @@ public static class Atlas
         int floatSize = sizeof(float);
         int float2Size = floatSize * 2;
         int atlasStride = float2Size * 3;
+
+        if (atlas.sprites.Length == 0) 
+        { 
+            Debug.LogWarning($" {atlas.name} Does not have sprites generated yet"); 
+            return null; 
+        }
 
         GraphicsBuffer buffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, atlas.sprites.Length, atlasStride);
 

@@ -13,11 +13,9 @@ Shader "Custom/s_atlasTiling"
 
     SubShader
     {
-        Tags {"Queue"="Transparent" "RenderType"="Transparent" "RenderPipeline"="UniversalPipeline"}
-        Cull Off
+        Tags {"Queue"="AlphaTest" "RenderType"="TransparentCutout" "RenderPipeline"="UniversalPipeline"}
         ZWrite On
-        Blend SrcAlpha OneMinusSrcAlpha
-
+        Cull Off
         Pass
         {
             HLSLPROGRAM
@@ -86,7 +84,6 @@ Shader "Custom/s_atlasTiling"
                 float2 outerUV = float2(i.uvWidth - leftInnerUVSize.x, 0);
                 outerUV *= rightUVMask;
                 outerUV = spritePos - outerUV;
-
                 float2 repeatingInnerUV =  (i.uv - _UVSlice) % innerUVSize;
 
                 float2 innerUV = repeatingInnerUV + _UVPosition + _UVSlice;
@@ -103,8 +100,8 @@ Shader "Custom/s_atlasTiling"
                                     spritePos.x < spriteTopRight.x && 
                                     spritePos.y < spriteTopRight.y;
                 finalAlpha *= color.a;
-                //return half4(outerUV.x, outerUV.y, 0, color.a);
-                return half4 (color.xyz, finalAlpha);
+                clip((finalAlpha * color.a) - 0.5);
+                return half4 (color.xyz, 1);
             }
             ENDHLSL
         }

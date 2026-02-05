@@ -5,6 +5,7 @@ using static Atlas;
 [CreateAssetMenu(fileName = "AtlasTexture", menuName = " 2D Pipeline / Atlas Texture")]
 public class AtlasSO : ScriptableObject
 {
+    public EntityType entityType;
     public Texture2D texture;
     public Material material;
     public MaterialIDSO materialIDs;
@@ -13,10 +14,9 @@ public class AtlasSO : ScriptableObject
     public AtlasMarker[] markers;
     public AtlasClip[] clips;
     public int framesPerSecond = 30;
-
     public AtlasSprite[] sprites;
 
-    public Dictionary<NPCMotion, AtlasClip> clipDict;
+    public Dictionary<int, AtlasClip> clipDict;
 
     GraphicsBuffer atlasBuffer;
 
@@ -30,6 +30,11 @@ public class AtlasSO : ScriptableObject
         if (!material)
         {
             Debug.LogWarning($"Material not set on {name}", this);
+            return;
+        }
+        if (!materialIDs)
+        {
+            Debug.LogWarning($"Material IDS SO not set on {name}", this);
             return;
         }
         if (atlasBuffer != null)
