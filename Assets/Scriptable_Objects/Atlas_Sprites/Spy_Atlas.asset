@@ -12,23 +12,439 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bd7cde245aac6f24e8afbb1d8a16e943, type: 3}
   m_Name: Spy_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
-  texture: {fileID: 2800000, guid: cc98a5ce93c118c4481c75a80e8c861e, type: 3}
-  material: {fileID: 2100000, guid: 1a2a014aeca99c445945e91a21ecb1c0, type: 2}
+  entityType: 1
+  texture: {fileID: 2800000, guid: e67057ee85abdac409fcfda2715bd2db, type: 3}
+  material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   pixelsPerUnit: 58
   customPivotColor:
     serializedVersion: 2
     rgba: 4278190335
   markers:
-  - type: 1
+  - type: 16
     color:
       serializedVersion: 2
-      rgba: 4278255360
-  - type: 4
+      rgba: 4294901760
+  - type: 32
     color:
       serializedVersion: 2
-      rgba: 4294902015
-  clips: []
+      rgba: 4294967040
+  clips:
+  - clipType: 0
+    motionIndex: 2
+    clipName: Running
+    keyFrames:
+    - spriteIndex: 0
+      holdTime: 2
+    - spriteIndex: 1
+      holdTime: 2
+    - spriteIndex: 2
+      holdTime: 2
+    - spriteIndex: 3
+      holdTime: 2
+    - spriteIndex: 4
+      holdTime: 2
+    - spriteIndex: 5
+      holdTime: 2
+    - spriteIndex: 6
+      holdTime: 2
+    - spriteIndex: 7
+      holdTime: 2
+    - spriteIndex: 8
+      holdTime: 2
+    - spriteIndex: 9
+      holdTime: 2
+    - spriteIndex: 10
+      holdTime: 2
+    - spriteIndex: 11
+      holdTime: 2
+  - clipType: 2
+    motionIndex: 4
+    clipName: Climbing
+    keyFrames:
+    - spriteIndex: 15
+      holdTime: 2
+    - spriteIndex: 16
+      holdTime: 10
+    - spriteIndex: 17
+      holdTime: 5
+    - spriteIndex: 18
+      holdTime: 5
+    - spriteIndex: 19
+      holdTime: 5
+  - clipType: 2
+    motionIndex: 6
+    clipName: GrabLedge
+    keyFrames:
+    - spriteIndex: 44
+      holdTime: 5
+    - spriteIndex: 45
+      holdTime: 7
+    - spriteIndex: 46
+      holdTime: 9
+  - clipType: 0
+    motionIndex: 5
+    clipName: Hanging
+    keyFrames:
+    - spriteIndex: 47
+      holdTime: 100
+    - spriteIndex: 48
+      holdTime: 10
+    - spriteIndex: 49
+      holdTime: 100
+  - clipType: 2
+    motionIndex: 7
+    clipName: StandingCalling
+    keyFrames:
+    - spriteIndex: 24
+      holdTime: 3
+    - spriteIndex: 25
+      holdTime: 3
+  - clipType: 0
+    motionIndex: 12
+    clipName: HeavyLand
+    keyFrames:
+    - spriteIndex: 12
+      holdTime: 10
+    - spriteIndex: 13
+      holdTime: 5
+    - spriteIndex: 14
+      holdTime: 2
+  - clipType: 3
+    motionIndex: 11
+    clipName: Fall
+    keyFrames:
+    - spriteIndex: 20
+      holdTime: 0
+    - spriteIndex: 21
+      holdTime: 0
+    - spriteIndex: 22
+      holdTime: 0
+    - spriteIndex: 23
+      holdTime: 0
+  - clipType: 1
+    motionIndex: 3
+    clipName: StandingBreathing
+    keyFrames:
+    - spriteIndex: 26
+      holdTime: 100
+    - spriteIndex: 27
+      holdTime: 10
+    - spriteIndex: 28
+      holdTime: 100
+  - clipType: 0
+    motionIndex: 1
+    clipName: Walking
+    keyFrames:
+    - spriteIndex: 29
+      holdTime: 3
+    - spriteIndex: 30
+      holdTime: 3
+    - spriteIndex: 31
+      holdTime: 3
+    - spriteIndex: 32
+      holdTime: 3
+    - spriteIndex: 33
+      holdTime: 3
+    - spriteIndex: 34
+      holdTime: 3
+    - spriteIndex: 35
+      holdTime: 3
+    - spriteIndex: 36
+      holdTime: 3
+  - clipType: 3
+    motionIndex: 10
+    clipName: Jump
+    keyFrames:
+    - spriteIndex: 37
+      holdTime: 3
+    - spriteIndex: 38
+      holdTime: 0
+    - spriteIndex: 39
+      holdTime: 0
+    - spriteIndex: 40
+      holdTime: 0
+    - spriteIndex: 41
+      holdTime: 0
+    - spriteIndex: 42
+      holdTime: 0
+  - clipType: 0
+    motionIndex: 8
+    clipName: StandingCalling
+    keyFrames:
+    - spriteIndex: 43
+      holdTime: 5
   framesPerSecond: 30
-  sprites: []
-  entityType: 0
+  sprites:
+  - index: 0
+    uvPos: {x: 0.00048828125, y: 0.87646484}
+    uvSize: {x: 0.13183594, y: 0.119628906}
+    uvPivot: {x: 0.42962962, y: 0}
+    markers: []
+  - index: 1
+    uvPos: {x: 0.13427734, y: 0.87646484}
+    uvSize: {x: 0.1303711, y: 0.12158203}
+    uvPivot: {x: 0.3857678, y: 0}
+    markers: []
+  - index: 2
+    uvPos: {x: 0.2680664, y: 0.87646484}
+    uvSize: {x: 0.1381836, y: 0.119628906}
+    uvPivot: {x: 0.43462896, y: 0}
+    markers: []
+  - index: 3
+    uvPos: {x: 0.4086914, y: 0.87646484}
+    uvSize: {x: 0.118652344, y: 0.11767578}
+    uvPivot: {x: 0.5020576, y: 0}
+    markers: []
+  - index: 4
+    uvPos: {x: 0.5292969, y: 0.87646484}
+    uvSize: {x: 0.10107422, y: 0.11669922}
+    uvPivot: {x: 0.28502417, y: 0}
+    markers: []
+  - index: 5
+    uvPos: {x: 0.6323242, y: 0.87646484}
+    uvSize: {x: 0.103515625, y: 0.118652344}
+    uvPivot: {x: 0.2971698, y: 0}
+    markers: []
+  - index: 6
+    uvPos: {x: 0.7373047, y: 0.8769531}
+    uvSize: {x: 0.12060547, y: 0.119628906}
+    uvPivot: {x: 0.37651822, y: 0}
+    markers: []
+  - index: 7
+    uvPos: {x: 0.86035156, y: 0.87646484}
+    uvSize: {x: 0.125, y: 0.12207031}
+    uvPivot: {x: 0.42578125, y: 0}
+    markers: []
+  - index: 8
+    uvPos: {x: 0.0087890625, y: 0.75097656}
+    uvSize: {x: 0.12597656, y: 0.12011719}
+    uvPivot: {x: 0.43410853, y: 0}
+    markers: []
+  - index: 9
+    uvPos: {x: 0.14648438, y: 0.7529297}
+    uvSize: {x: 0.08984375, y: 0.118652344}
+    uvPivot: {x: 0.26086956, y: 0}
+    markers: []
+  - index: 10
+    uvPos: {x: 0.24072266, y: 0.7558594}
+    uvSize: {x: 0.08496094, y: 0.1171875}
+    uvPivot: {x: 0.3045977, y: 0}
+    markers: []
+  - index: 11
+    uvPos: {x: 0.33007812, y: 0.7529297}
+    uvSize: {x: 0.10449219, y: 0.119140625}
+    uvPivot: {x: 0.43457943, y: 0}
+    markers: []
+  - index: 12
+    uvPos: {x: 0.4560547, y: 0.75927734}
+    uvSize: {x: 0.05859375, y: 0.099609375}
+    uvPivot: {x: 0.5, y: 0}
+    markers: []
+  - index: 13
+    uvPos: {x: 0.56103516, y: 0.7319336}
+    uvSize: {x: 0.055664062, y: 0.1303711}
+    uvPivot: {x: 0.48245615, y: 0}
+    markers: []
+  - index: 14
+    uvPos: {x: 0.63378906, y: 0.72265625}
+    uvSize: {x: 0.056152344, y: 0.13964844}
+    uvPivot: {x: 0.4869565, y: 0}
+    markers: []
+  - index: 15
+    uvPos: {x: 0.7001953, y: 0.72558594}
+    uvSize: {x: 0.053222656, y: 0.13671875}
+    uvPivot: {x: 0.35779816, y: 0}
+    markers:
+    - type: 16
+      objectPos: {x: 1.8103448, y: 3.9655173}
+  - index: 16
+    uvPos: {x: 0.75927734, y: 0.7216797}
+    uvSize: {x: 0.060546875, y: 0.14013672}
+    uvPivot: {x: 0.37096775, y: 0}
+    markers:
+    - type: 16
+      objectPos: {x: 1.4482758, y: 3.7931035}
+  - index: 17
+    uvPos: {x: 0.82421875, y: 0.75097656}
+    uvSize: {x: 0.06933594, y: 0.10595703}
+    uvPivot: {x: 0.49295774, y: 0}
+    markers:
+    - type: 16
+      objectPos: {x: 1.7758621, y: 1.9827586}
+  - index: 18
+    uvPos: {x: 0.9008789, y: 0.7583008}
+    uvSize: {x: 0.06738281, y: 0.076660156}
+    uvPivot: {x: 0.49275362, y: 0}
+    markers:
+    - type: 16
+      objectPos: {x: 1.7068965, y: 0.94827586}
+  - index: 19
+    uvPos: {x: 0.0078125, y: 0.62841797}
+    uvSize: {x: 0.051757812, y: 0.11279297}
+    uvPivot: {x: 0.4528302, y: 0}
+    markers: []
+  - index: 20
+    uvPos: {x: 0.072753906, y: 0.6323242}
+    uvSize: {x: 0.08935547, y: 0.10595703}
+    uvPivot: {x: 0.49726775, y: 0}
+    markers: []
+  - index: 21
+    uvPos: {x: 0.1694336, y: 0.61035156}
+    uvSize: {x: 0.08105469, y: 0.12792969}
+    uvPivot: {x: 0.5903614, y: 0}
+    markers: []
+  - index: 22
+    uvPos: {x: 0.26953125, y: 0.58984375}
+    uvSize: {x: 0.072753906, y: 0.14892578}
+    uvPivot: {x: 0.6979866, y: 0}
+    markers: []
+  - index: 23
+    uvPos: {x: 0.3623047, y: 0.59375}
+    uvSize: {x: 0.063964844, y: 0.14892578}
+    uvPivot: {x: 0.55725193, y: 0}
+    markers: []
+  - index: 24
+    uvPos: {x: 0.44140625, y: 0.58740234}
+    uvSize: {x: 0.07470703, y: 0.14794922}
+    uvPivot: {x: 0.74509805, y: 0}
+    markers: []
+  - index: 25
+    uvPos: {x: 0.52685547, y: 0.58740234}
+    uvSize: {x: 0.092285156, y: 0.14111328}
+    uvPivot: {x: 0.5873016, y: 0}
+    markers: []
+  - index: 26
+    uvPos: {x: 0.63378906, y: 0.5600586}
+    uvSize: {x: 0.057617188, y: 0.15625}
+    uvPivot: {x: 0.5, y: 0}
+    markers: []
+  - index: 27
+    uvPos: {x: 0.7006836, y: 0.5600586}
+    uvSize: {x: 0.057617188, y: 0.15673828}
+    uvPivot: {x: 0.5, y: 0}
+    markers: []
+  - index: 28
+    uvPos: {x: 0.76464844, y: 0.5600586}
+    uvSize: {x: 0.057617188, y: 0.15722656}
+    uvPivot: {x: 0.5, y: 0}
+    markers: []
+  - index: 29
+    uvPos: {x: 0.8359375, y: 0.5600586}
+    uvSize: {x: 0.041015625, y: 0.15625}
+    uvPivot: {x: 0.52380955, y: 0}
+    markers: []
+  - index: 30
+    uvPos: {x: 0.90234375, y: 0.5600586}
+    uvSize: {x: 0.033203125, y: 0.15527344}
+    uvPivot: {x: 0.3382353, y: 0}
+    markers: []
+  - index: 31
+    uvPos: {x: 0.0048828125, y: 0.453125}
+    uvSize: {x: 0.06298828, y: 0.15429688}
+    uvPivot: {x: 0.503876, y: 0}
+    markers: []
+  - index: 32
+    uvPos: {x: 0.07080078, y: 0.453125}
+    uvSize: {x: 0.059570312, y: 0.15527344}
+    uvPivot: {x: 0.5, y: 0}
+    markers: []
+  - index: 33
+    uvPos: {x: 0.13232422, y: 0.4482422}
+    uvSize: {x: 0.041015625, y: 0.15625}
+    uvPivot: {x: 0.52380955, y: 0}
+    markers: []
+  - index: 34
+    uvPos: {x: 0.17871094, y: 0.4482422}
+    uvSize: {x: 0.03515625, y: 0.15527344}
+    uvPivot: {x: 0.5, y: 0}
+    markers: []
+  - index: 35
+    uvPos: {x: 0.21972656, y: 0.4272461}
+    uvSize: {x: 0.057617188, y: 0.15429688}
+    uvPivot: {x: 0.3644068, y: 0}
+    markers: []
+  - index: 36
+    uvPos: {x: 0.28125, y: 0.4272461}
+    uvSize: {x: 0.06689453, y: 0.15527344}
+    uvPivot: {x: 0.47445256, y: 0}
+    markers: []
+  - index: 37
+    uvPos: {x: 0.3540039, y: 0.42382812}
+    uvSize: {x: 0.0703125, y: 0.1508789}
+    uvPivot: {x: 0.375, y: 0}
+    markers: []
+  - index: 38
+    uvPos: {x: 0.43164062, y: 0.42382812}
+    uvSize: {x: 0.08105469, y: 0.15332031}
+    uvPivot: {x: 0.42168674, y: 0}
+    markers: []
+  - index: 39
+    uvPos: {x: 0.5185547, y: 0.4189453}
+    uvSize: {x: 0.08251953, y: 0.13574219}
+    uvPivot: {x: 0.49704143, y: 0}
+    markers: []
+  - index: 40
+    uvPos: {x: 0.6044922, y: 0.421875}
+    uvSize: {x: 0.08496094, y: 0.11816406}
+    uvPivot: {x: 0.5, y: 0}
+    markers: []
+  - index: 41
+    uvPos: {x: 0.69677734, y: 0.43798828}
+    uvSize: {x: 0.09277344, y: 0.103515625}
+    uvPivot: {x: 0.49473685, y: 0}
+    markers: []
+  - index: 42
+    uvPos: {x: 0.79833984, y: 0.45117188}
+    uvSize: {x: 0.103027344, y: 0.087890625}
+    uvPivot: {x: 0.49763033, y: 0}
+    markers: []
+  - index: 43
+    uvPos: {x: 0.9091797, y: 0.38964844}
+    uvSize: {x: 0.057617188, y: 0.15673828}
+    uvPivot: {x: 0.5, y: 0}
+    markers:
+    - type: 32
+      objectPos: {x: 1.3793104, y: 4.586207}
+  - index: 44
+    uvPos: {x: 0.0068359375, y: 0.0068359375}
+    uvSize: {x: 0.071777344, y: 0.18798828}
+    uvPivot: {x: 0.4489796, y: 0}
+    markers:
+    - type: 16
+      objectPos: {x: 2.4310346, y: 6.362069}
+  - index: 45
+    uvPos: {x: 0.083984375, y: 0.0068359375}
+    uvSize: {x: 0.05908203, y: 0.18798828}
+    uvPivot: {x: 0.3305785, y: 0}
+    markers:
+    - type: 16
+      objectPos: {x: 1.9827586, y: 6.362069}
+  - index: 46
+    uvPos: {x: 0.14550781, y: 0.0068359375}
+    uvSize: {x: 0.05029297, y: 0.18798828}
+    uvPivot: {x: 0.21359223, y: 0}
+    markers:
+    - type: 16
+      objectPos: {x: 1.6724138, y: 6.362069}
+  - index: 47
+    uvPos: {x: 0.19921875, y: 0.0068359375}
+    uvSize: {x: 0.051757812, y: 0.18798828}
+    uvPivot: {x: 0.23584905, y: 0}
+    markers:
+    - type: 16
+      objectPos: {x: 1.7241379, y: 6.362069}
+  - index: 48
+    uvPos: {x: 0.25390625, y: 0.0068359375}
+    uvSize: {x: 0.051757812, y: 0.18798828}
+    uvPivot: {x: 0.23584905, y: 0}
+    markers:
+    - type: 16
+      objectPos: {x: 1.7241379, y: 6.362069}
+  - index: 49
+    uvPos: {x: 0.30859375, y: 0.0068359375}
+    uvSize: {x: 0.051757812, y: 0.18798828}
+    uvPivot: {x: 0.23584905, y: 0}
+    markers:
+    - type: 16
+      objectPos: {x: 1.7241379, y: 6.362069}

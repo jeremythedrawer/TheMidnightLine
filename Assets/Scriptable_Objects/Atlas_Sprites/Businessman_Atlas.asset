@@ -72,7 +72,7 @@ MonoBehaviour:
       holdTime: 100
     - spriteIndex: 12
       holdTime: 10
-  - clipType: 0
+  - clipType: 1
     motionIndex: 20
     clipName: StandingSleeping
     keyFrames:
@@ -86,6 +86,98 @@ MonoBehaviour:
     motionIndex: 22
     clipName: NPCMotionCount
     keyFrames: []
+  - clipType: 2
+    motionIndex: 15
+    clipName: StandingCalling
+    keyFrames:
+    - spriteIndex: 16
+      holdTime: 50
+    - spriteIndex: 17
+      holdTime: 50
+    - spriteIndex: 18
+      holdTime: 50
+  - clipType: 2
+    motionIndex: 17
+    clipName: StandingMusic
+    keyFrames:
+    - spriteIndex: 19
+      holdTime: 10
+    - spriteIndex: 20
+      holdTime: 10
+    - spriteIndex: 21
+      holdTime: 10
+    - spriteIndex: 22
+      holdTime: 10
+    - spriteIndex: 24
+      holdTime: 50
+    - spriteIndex: 25
+      holdTime: 20
+    - spriteIndex: 26
+      holdTime: 50
+    - spriteIndex: 27
+      holdTime: 100
+    - spriteIndex: 23
+      holdTime: 10
+  - clipType: 2
+    motionIndex: 7
+    clipName: SittingMusic
+    keyFrames:
+    - spriteIndex: 28
+      holdTime: 10
+    - spriteIndex: 29
+      holdTime: 10
+    - spriteIndex: 30
+      holdTime: 10
+    - spriteIndex: 31
+      holdTime: 50
+    - spriteIndex: 32
+      holdTime: 20
+    - spriteIndex: 33
+      holdTime: 20
+    - spriteIndex: 34
+      holdTime: 40
+    - spriteIndex: 35
+      holdTime: 20
+    - spriteIndex: 36
+      holdTime: 100
+  - clipType: 1
+    motionIndex: 4
+    clipName: SittingBreathing
+    keyFrames:
+    - spriteIndex: 39
+      holdTime: 100
+    - spriteIndex: 40
+      holdTime: 10
+    - spriteIndex: 41
+      holdTime: 100
+  - clipType: 0
+    motionIndex: 3
+    clipName: SittingBlinking
+    keyFrames:
+    - spriteIndex: 37
+      holdTime: 100
+    - spriteIndex: 38
+      holdTime: 10
+  - clipType: 0
+    motionIndex: 10
+    clipName: SittingSleeping
+    keyFrames:
+    - spriteIndex: 42
+      holdTime: 150
+    - spriteIndex: 43
+      holdTime: 20
+    - spriteIndex: 44
+      holdTime: 150
+  - clipType: 2
+    motionIndex: 5
+    clipName: SittingCalling
+    keyFrames:
+    - spriteIndex: 45
+      holdTime: 20
+    - spriteIndex: 46
+      holdTime: 50
+    - spriteIndex: 47
+      holdTime: 100
   framesPerSecond: 30
   sprites:
   - index: 0

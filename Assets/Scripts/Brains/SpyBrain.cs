@@ -1,6 +1,7 @@
 using Proselyte.Sigils;
 using System;
 using UnityEngine;
+using static Atlas;
 
 public class SpyBrain : MonoBehaviour
 {
@@ -19,11 +20,11 @@ public class SpyBrain : MonoBehaviour
     [Header("Components")]
     [SerializeField] Rigidbody2D rigidBody;
     [SerializeField] BoxCollider2D boxCollider;
-    [SerializeField] Animator animator;
-    [SerializeField] SpriteRenderer spriteRenderer;
-
+    [SerializeField] MeshRenderer meshRenderer;
     [Header("Scriptable Objects")]
+    [SerializeField] AtlasSO atlas;
     [SerializeField] SpySettingsSO settings;
+    [SerializeField] MaterialIDSO materialIDs;
     [SerializeField] SpyStatsSO stats;
     [SerializeField] PlayerInputsSO inputs;
     [SerializeField] TrainStatsSO trainStats;
@@ -31,60 +32,25 @@ public class SpyBrain : MonoBehaviour
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] PhoneSO phone;
-    [SerializeField] AnimationClip startRunClip;
-    [SerializeField] AnimationClip climbClip;
 
     SlideDoors slideDoors;
     GangwayDoor gangwayDoor;
     Collider2D curClimbCollider;
     Carriage curCarriage;
     State curState;
-    [Serializable] public struct AnimClipData
-    {
-        internal int idleBreathingHash;
-        internal int idleLookAroundHash;
-        internal int walkHash;
-        internal int startRunHash;
-        internal int runHash;
-        internal int jumpHash;
-        internal int fallHash;
-        internal int heavyLandingHash;
-        internal int grabLedgeHash;
-        internal int hangHash;
-        internal int climbHash;
-        internal int callHash;
-    }
-    [SerializeField] AnimClipData animClipData;
+    AtlasClip curClip;
     [Serializable] public struct CollisionPoints
     {
-        internal Vector2 groundLeft;
-        internal Vector2 groundRight;
-        internal Vector2 stepLeft;
-        internal Vector2 stepRight;
+        public Vector2 groundLeft;
+        public Vector2 groundRight;
+        public Vector2 stepLeft;
+        public Vector2 stepRight;
     }
     [SerializeField] CollisionPoints collisionPoints;
 
     private void OnValidate()
     {
         CalculateCollisionPoints();
-    }
-    private void Awake()
-    {
-        animClipData.idleBreathingHash = Animator.StringToHash("IdleBreathing");
-        animClipData.idleLookAroundHash = Animator.StringToHash("IdleLookAround");
-        animClipData.walkHash = Animator.StringToHash("Walk");
-        animClipData.startRunHash = Animator.StringToHash("StartRun");
-        animClipData.runHash = Animator.StringToHash("Run");
-        animClipData.jumpHash = Animator.StringToHash("Jump");
-        animClipData.fallHash = Animator.StringToHash("Fall");
-        animClipData.heavyLandingHash = Animator.StringToHash("HeavyLanding");
-        animClipData.grabLedgeHash = Animator.StringToHash("GrabLedge");
-        animClipData.hangHash = Animator.StringToHash("Hang");
-        animClipData.climbHash  = Animator.StringToHash("Climb");
-        animClipData.callHash = Animator.StringToHash("Call");
-
-        Animations.SetAnimationEvent(startRunClip, nameof(PlayRunningClip));
-        Animations.SetAnimationEvent(climbClip, nameof(ExitClimbClip));
     }
     private void OnEnable()
     {
@@ -120,7 +86,6 @@ public class SpyBrain : MonoBehaviour
         ChooseState();
         UpdateStates();
 
-        stats.spriteFlip = spriteRenderer.flipX;
         stats.curWorldPos = transform.position;
         stats.willJump = Time.time - stats.lastJumpTime <= settings.jumpBufferTime && curState != State.Jump;   
     }
@@ -247,19 +212,19 @@ public class SpyBrain : MonoBehaviour
             case State.Walk:
             {
                 if (inputs.jump) { stats.lastJumpTime = Time.time; }
-                spriteRenderer.flipX = inputs.move < 0;
+                Flip(inputs.move < 0);
+                
             }
             break;
             case State.Run:
             {
                 if (inputs.jump) { stats.lastJumpTime = Time.time; }
-                spriteRenderer.flipX = inputs.move < 0;
+                Flip(inputs.move < 0);
             }
             break;
             case State.Jump:
             {
-                spriteRenderer.flipX = inputs.move < 0;
-
+                Flip(inputs.move < 0);
                 stats.curJumpHorizontalForce = Mathf.Max(stats.curJumpHorizontalForce - Time.deltaTime, 0);
             }
             break;
@@ -273,7 +238,7 @@ public class SpyBrain : MonoBehaviour
                     stats.lastJumpTime = Time.time; 
                     inputs.jump = false;
                 }
-                spriteRenderer.flipX = inputs.move < 0;
+                Flip(inputs.move < 0);
             }
             break;
             case State.Hang:
@@ -333,7 +298,7 @@ public class SpyBrain : MonoBehaviour
                 {
                     float climbXPos = stats.isLeftClimbBound ? curClimbCollider.bounds.min.x : curClimbCollider.bounds.max.x;
                     rigidBody.position = new Vector2(climbXPos, curClimbCollider.bounds.max.y);
-                    animator.Play(animClipData.climbHash, 0, 0f);
+                    //animator.Play(animClipData.climbHash, 0, 0f);
                     stats.firstFixedFrameClimb = false;
                 }
             }
@@ -353,24 +318,24 @@ public class SpyBrain : MonoBehaviour
         {
             case State.Idle:
             {
-                animator.Play(animClipData.idleBreathingHash);
+                curClip = atlas.clipDict[(int)SpyMotion.StandingBreathing];
                 rigidBody.gravityScale = stats.gravityScale;
             }
             break;
             case State.Walk:
             {
-                animator.Play(animClipData.walkHash);
+                curClip = atlas.clipDict[(int)SpyMotion.Walking];
             }
             break;
             case State.Run:
             {
-                animator.Play(animClipData.startRunHash);
+                curClip = atlas.clipDict[(int)SpyMotion.Running];
                 stats.curRunSpeed = settings.runSpeedMultiplier;
             }
             break;
             case State.Jump:
             {
-                animator.Play(animClipData.jumpHash);
+                curClip = atlas.clipDict[(int)SpyMotion.Jump];
                 rigidBody.linearVelocityY = settings.jumpVerticalForce;
                 stats.coyoteTimeElapsed = Mathf.Infinity;
 
@@ -382,32 +347,33 @@ public class SpyBrain : MonoBehaviour
             break;
             case State.Fall:
             {
-                animator.Play(animClipData.fallHash);
+                curClip = atlas.clipDict[(int)SpyMotion.Fall];
             }
             break;
             case State.Hang:
             {
                 stats.isLeftClimbBound = rigidBody.position.x > curClimbCollider.bounds.center.x;
 
-                animator.Play(animClipData.grabLedgeHash);
+                curClip = atlas.clipDict[(int)SpyMotion.GrabLedge];
                 rigidBody.gravityScale = 0;
                 rigidBody.linearVelocity = Vector2.zero;
 
                 float hangXPos = stats.isLeftClimbBound ? curClimbCollider.bounds.max.x : curClimbCollider.bounds.min.x;
                 float hangYPos = curClimbCollider.bounds.center.y - boxCollider.bounds.size.y;
                 rigidBody.position = new Vector2(hangXPos, hangYPos);
-                spriteRenderer.flipX = stats.isLeftClimbBound; 
+                Flip(stats.isLeftClimbBound); 
             }
             break;
             case State.Climb:
             {
+                curClip = atlas.clipDict[(int)SpyMotion.Climbing];
                 rigidBody.gravityScale = 0;
                 rigidBody.linearVelocity = Vector2.zero;
             }
             break;
             case State.Phone:
             {
-                animator.Play(animClipData.callHash);
+                curClip = atlas.clipDict[(int)SpyMotion.StandingCalling];
                 rigidBody.linearVelocity = Vector2.zero;
 
             }
@@ -453,14 +419,6 @@ public class SpyBrain : MonoBehaviour
             }
             break;
         }
-    }
-    private void PlayRunningClip()
-    {
-        animator.Play(animClipData.runHash);
-    }
-    private void ExitClimbClip()
-    {
-        stats.isClimbing = false;
     }
     private void CalculateCollisionPoints()
     {
@@ -520,7 +478,7 @@ public class SpyBrain : MonoBehaviour
     private void OpenGangwayDoor()
     {
         if (!stats.onTrain || !stats.isGrounded) return;
-        RaycastHit2D gangwayDoorHit = Physics2D.Linecast(boxCollider.bounds.center, new Vector2(boxCollider.bounds.center.x + (spriteRenderer.flipX ? -1 : 1), boxCollider.bounds.center.y), layerSettings.trainLayerStruct.gangwayDoor);
+        RaycastHit2D gangwayDoorHit = Physics2D.Linecast(boxCollider.bounds.center, new Vector2(boxCollider.bounds.center.x + (stats.spriteFlip ? -1 : 1), boxCollider.bounds.center.y), layerSettings.trainLayerStruct.gangwayDoor);
 
         if (gangwayDoorHit.collider != null)
         {
@@ -537,6 +495,11 @@ public class SpyBrain : MonoBehaviour
         stats.curLocationBounds = bounds;
         stats.curLocationLayer = layerMask;
     }
+    private void Flip(bool flip)
+    {
+        stats.spriteFlip = flip;
+        meshRenderer.material.SetFloat(materialIDs.ids.flip, stats.spriteFlip ? 1 : 0);
+    }
     private void OnApplicationQuit()
     {
         stats.ResetStats();
@@ -552,7 +515,7 @@ public class SpyBrain : MonoBehaviour
         Gizmos.DrawLine(collisionPoints.stepLeft, collisionPoints.groundLeft);
 
         Gizmos.color = gangwayDoor != null ? Color.green : Color.red;
-        Gizmos.DrawLine(boxCollider.bounds.center, new Vector2(boxCollider.bounds.center.x + (spriteRenderer.flipX ? -1 : 1), boxCollider.bounds.center.y));
+        Gizmos.DrawLine(boxCollider.bounds.center, new Vector2(boxCollider.bounds.center.x + (stats.spriteFlip ? -1 : 1), boxCollider.bounds.center.y));
     }
 
 #if UNITY_EDITOR

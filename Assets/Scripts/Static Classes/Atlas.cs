@@ -40,10 +40,13 @@ public static class Atlas
         StandingBreathing,
         Climbing,
         Hanging,
+        GrabLedge,
+        StartRun,
         StandingCalling,
         Clipboard,
         Jump,
         Fall,
+        HeavyLand,
         Death,
     }
 
@@ -57,6 +60,7 @@ public static class Atlas
         Loop,
         PingPong,
         OneShot,
+        Manual,
     }
     [Flags] public enum MarkerType
     {
@@ -65,6 +69,8 @@ public static class Atlas
         Talking = 1 << 1,
         SleepingZs = 1 << 2,
         Music = 1 << 3,
+        Climb = 1 << 4,
+        TrainPhone = 1 << 5,
     }
     [Serializable] public struct AtlasMarker
     {
@@ -93,7 +99,9 @@ public static class Atlas
     {
         public ClipType clipType;
         public int motionIndex;
+#if UNITY_EDITOR
         public string clipName;
+#endif
         public AtlasKeyframe[] keyFrames;
     }
 
@@ -113,51 +121,77 @@ public static class Atlas
         public Vector2 uvSize;
         public Vector2 pivot;
     }
-    public static int NextFrameIndex(AtlasClip clip, int fps, float keyframeClock, int curFrameIndex, int prevFrameIndex = 0)
+    public static void SetNextFrameIndex(AtlasClip clip, int fps, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {
-        keyframeClock *= fps;
+        float frameTime =  keyframeClock * fps;
         AtlasKeyframe curKeyFrame = clip.keyFrames[curFrameIndex];
 
         switch (clip.clipType)
         {
             case ClipType.Loop:
             {
-                if (keyframeClock >= curKeyFrame.holdTime)
+                if (frameTime >= curKeyFrame.holdTime)
                 {
+                    prevFrameIndex = curFrameIndex;
                     curFrameIndex++;
-                    curFrameIndex %= clip.keyFrames.Length; 
+
+                    if (curFrameIndex >= clip.keyFrames.Length)
+                    {
+                        curFrameIndex = 0;
+                    }
+
+                    keyframeClock = 0;
                 }
             }
             break;
             case ClipType.PingPong:
-            {   
-                
-                if (keyframeClock >= curKeyFrame.holdTime)
+            {
+                if (frameTime >= curKeyFrame.holdTime)
                 {
                     if (curFrameIndex < clip.keyFrames.Length - 1 && (curFrameIndex > prevFrameIndex || curFrameIndex == 0))
                     {
-
+                        prevFrameIndex = curFrameIndex;
                         curFrameIndex++;
                     }
                     else
                     {
+                        prevFrameIndex = curFrameIndex;
                         curFrameIndex--;
                     }
+                    keyframeClock = 0;
                 }
             }
             break;
             case ClipType.OneShot:
             {
-                if (keyframeClock >= curKeyFrame.holdTime)
+                if (frameTime >= curKeyFrame.holdTime)
                 {
-                    curFrameIndex++;
-                    curFrameIndex = Mathf.Min(curFrameIndex, clip.keyFrames.Length - 1);
+                    prevFrameIndex = curFrameIndex;
+                    if (curFrameIndex < clip.keyFrames.Length - 1)
+                    {
+                        curFrameIndex++;
+                    }
+                    keyframeClock = 0;
                 }
             }
             break;
         }
+    }
+    public static void NextFrameIndexManual(AtlasClip clip, float holdTime, ref float currentValue, ref int curFrameIndex)
+    {
+        if (currentValue > holdTime)
+        {
+            if (curFrameIndex < clip.keyFrames.Length - 1)
+            {
+                curFrameIndex++;
+            }
+            currentValue = 0;
+        }
+    }
 
-        return curFrameIndex;
+    public static float GetManualKeyframeHoldTime(AtlasClip clip, float targetValue, float startValue)
+    {
+        return (targetValue - startValue) / (clip.keyFrames.Length - 1);
     }
     public static Dictionary<int, AtlasClip> BuildClipKeys(AtlasClip[] clips)
     {

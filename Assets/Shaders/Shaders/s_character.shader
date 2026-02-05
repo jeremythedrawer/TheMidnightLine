@@ -41,8 +41,7 @@ Shader "Unlit/s_character"
             struct Varyings
             {
                 float4  positionCS      : SV_POSITION;
-                float3  positionWS      : TEXCOORD0;
-                float2  uv              : TEXCOORD1;
+                float2  uv              : TEXCOORD0;
             };
 
 
@@ -69,7 +68,6 @@ Shader "Unlit/s_character"
                 Varyings o = (Varyings)0;
                 AtlasSprite atlasSprite = _AtlasSprites[_AtlasIndex];
                 o.positionCS = TransformObjectToHClip(v.positionOS);
-                o.positionWS = TransformObjectToWorld(v.positionOS);
                 float2 centeredUV = v.positionOS;
 
                 float aspect = atlasSprite.uvSize.x / atlasSprite.uvSize.y;
