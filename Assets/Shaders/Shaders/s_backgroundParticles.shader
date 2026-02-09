@@ -15,17 +15,23 @@ Shader "Custom/s_backgroundParticles"
         {
             HLSLPROGRAM
 
-            #pragma vertex vert
-            #pragma fragment frag
-
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/BackgroundParticles.hlsl"
             #include "Assets/Shaders/HLSL/Random.hlsl"
+
+            #pragma vertex vert
+            #pragma fragment frag
+
+            #pragma multi_compile_instancing
 
             StructuredBuffer<BackgroundParticleOutput> _BGParticleOutputs;
 
             TEXTURE2D(_Atlas);
             SAMPLER(sampler_Atlas);
+
+            
+            UNITY_INSTANCING_BUFFER_START(Props)
+            UNITY_INSTANCING_BUFFER_END(Props)
 
             CBUFFER_START(UnityPerMaterial)
                 StructuredBuffer<float2> _UVPositions;

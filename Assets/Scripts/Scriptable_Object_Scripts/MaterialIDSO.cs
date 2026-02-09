@@ -38,6 +38,8 @@ public class MaterialIDSO : ScriptableObject
         public int atlas;
         public int uvPositions;
         public int uvSizes;
+        public int uvSizeAndPos;
+
         public int spriteCount;
         public int backgroundMask;
         public int lodLevel;
@@ -83,6 +85,7 @@ public class MaterialIDSO : ScriptableObject
 
         ids.uvPositions = Shader.PropertyToID("_UVPositions");
         ids.uvSizes = Shader.PropertyToID("_UVSizes");
+        ids.uvSizeAndPos = Shader.PropertyToID("_UVSizeAndPos");
 
         ids.spriteCount = Shader.PropertyToID("_SpriteCount");
         ids.bgParticleInputs = Shader.PropertyToID("_BGParticleInputs");

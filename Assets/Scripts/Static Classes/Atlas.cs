@@ -4,7 +4,6 @@ using UnityEditor;
 using UnityEngine;
 public static class Atlas
 {
-    static Dictionary<AtlasSO, GraphicsBuffer> buffers = new Dictionary<AtlasSO, GraphicsBuffer>();
     public enum NPCMotion
     {
         None,
@@ -33,7 +32,7 @@ public static class Atlas
     }
 
     public enum SpyMotion
-    { 
+    {
         None,
         Walking,
         Running,
@@ -62,7 +61,8 @@ public static class Atlas
         OneShot,
         Manual,
     }
-    [Flags] public enum MarkerType
+    [Flags]
+    public enum MarkerType
     {
         None = 0,
         Smoke = 1 << 0,
@@ -72,30 +72,35 @@ public static class Atlas
         Climb = 1 << 4,
         TrainPhone = 1 << 5,
     }
-    [Serializable] public struct AtlasMarker
+    [Serializable]
+    public struct AtlasMarker
     {
         public MarkerType type;
         public Color32 color;
     }
-    [Serializable] public struct SpriteMarker
+    [Serializable]
+    public struct SpriteMarker
     {
         public MarkerType type;
         public Vector2 objectPos;
     }
-    [Serializable] public struct AtlasSprite
+    [Serializable]
+    public struct AtlasSprite
     {
         public int index;
-        public Vector2 uvPos;
         public Vector2 uvSize;
-        public Vector2 uvPivot; 
+        public Vector2 uvPos;
+        public Vector2 uvPivot;
         public SpriteMarker[] markers;
     }
-    [Serializable] public struct AtlasKeyframe
+    [Serializable]
+    public struct AtlasKeyframe
     {
         public int spriteIndex;
         public int holdTime;
     }
-    [Serializable] public struct AtlasClip
+    [Serializable]
+    public struct AtlasClip
     {
         public ClipType clipType;
         public int motionIndex;
@@ -105,12 +110,14 @@ public static class Atlas
         public AtlasKeyframe[] keyFrames;
     }
 
-    [Serializable] public struct SpyClip
+    [Serializable]
+    public struct SpyClip
     {
         public SpyMotion motion;
         public AtlasClip clip;
     }
-    [Serializable] public struct NPCClip
+    [Serializable]
+    public struct NPCClip
     {
         public NPCMotion motion;
         public AtlasClip clip;
@@ -121,9 +128,12 @@ public static class Atlas
         public Vector2 uvSize;
         public Vector2 pivot;
     }
+    static Dictionary<AtlasMotionSO, GraphicsBuffer> buffers = new Dictionary<AtlasMotionSO, GraphicsBuffer>();
+    public const int PIXELS_PER_UNIT = 180;
+
     public static void SetNextFrameIndex(AtlasClip clip, int fps, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {
-        float frameTime =  keyframeClock * fps;
+        float frameTime = keyframeClock * fps;
         AtlasKeyframe curKeyFrame = clip.keyFrames[curFrameIndex];
 
         switch (clip.clipType)
@@ -205,44 +215,6 @@ public static class Atlas
 
         return clipDict;
     }
-    public static GraphicsBuffer GetAtlasSpriteBuffer(AtlasSO atlas)
-    {
-        int floatSize = sizeof(float);
-        int float2Size = floatSize * 2;
-        int atlasStride = float2Size * 3;
-
-        if (atlas.sprites.Length == 0) 
-        { 
-            Debug.LogWarning($" {atlas.name} Does not have sprites generated yet"); 
-            return null; 
-        }
-
-        GraphicsBuffer buffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, atlas.sprites.Length, atlasStride);
-
-        MaterialAtlasSprite[] matAtlasSprites = new MaterialAtlasSprite[atlas.sprites.Length];
-
-        for (int i = 0; i < atlas.sprites.Length; i++)
-        {
-            AtlasSprite sprite = atlas.sprites[i];
-
-            matAtlasSprites[i].uvPos = sprite.uvPos;
-            matAtlasSprites[i].uvSize = sprite.uvSize;
-            matAtlasSprites[i].pivot = sprite.uvPivot;
-        }
-
-        buffer.SetData(matAtlasSprites);
-        buffers[atlas] = buffer;
-
-        return buffer;
-    }
-    public static void ReleaseAll()
-    {
-        foreach (GraphicsBuffer buffer in buffers.Values)
-        {
-            buffer?.Release();
-        }
-        buffers.Clear();
-    }
 }
 #if UNITY_EDITOR
 [InitializeOnLoad]
@@ -257,10 +229,9 @@ static class AtlasMaterialRebinder
 
     static void RebindAll()
     {
-        Atlas.ReleaseAll();
-        foreach (AtlasSO atlas in Resources.FindObjectsOfTypeAll<AtlasSO>()) // TODO: Replace and use the one AtlasSOs
+        foreach (AtlasMotionSO atlas in Resources.FindObjectsOfTypeAll<AtlasMotionSO>()) // TODO: Replace and use the one AtlasSOs
         {
-            atlas.UpdateAtlas();
+            atlas.UpdateClipDictionary();
         }
     }
 }

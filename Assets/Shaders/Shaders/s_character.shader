@@ -26,31 +26,35 @@ Shader "Unlit/s_character"
             Tags { "LightMode" = "Universal2D" }
 
             HLSLPROGRAM
+
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
 
             #pragma vertex vert
             #pragma fragment frag
 
+            #pragma multi_compile_instancing
+
             struct Attributes
             {
-                float3 positionOS   : POSITION;
-                float2 uv           : TEXCOORD0;
+                float3 positionOS : POSITION;
+                float2 uv : TEXCOORD0;
             };
 
             struct Varyings
             {
-                float4  positionCS      : SV_POSITION;
-                float2  uv              : TEXCOORD0;
+                float4 positionCS : SV_POSITION;
+                float2 uv : TEXCOORD0;
             };
-
-
-            StructuredBuffer<AtlasSprite> _AtlasSprites;
 
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
             float2 _EntityDepthRange;
             float4 _AtlasTexture_TexelSize;
+
+            
+            UNITY_INSTANCING_BUFFER_START(Props)
+            UNITY_INSTANCING_BUFFER_END(Props)
 
             CBUFFER_START(UnityPerMaterial)
                 half4 _Color;
@@ -66,28 +70,21 @@ Shader "Unlit/s_character"
             Varyings vert(Attributes v)
             {
                 Varyings o = (Varyings)0;
-                AtlasSprite atlasSprite = _AtlasSprites[_AtlasIndex];
                 o.positionCS = TransformObjectToHClip(v.positionOS);
-                float2 centeredUV = v.positionOS;
-
-                float aspect = atlasSprite.uvSize.x / atlasSprite.uvSize.y;
-                centeredUV.x /= aspect;
-                centeredUV.x = _Flip > 0.5 ? centeredUV.x : -centeredUV.x;
-                centeredUV *= _PPU / (atlasSprite.uvSize.y * _AtlasTexture_TexelSize.w);
-                o.uv = centeredUV * atlasSprite.uvSize + atlasSprite.uvPosition + atlasSprite.pivot * atlasSprite.uvSize;
+                o.uv = v.positionOS;
+                o.uv.x *= _Flip;
+               // o.uv *= float2(1 / atlasSprite.aspect, 1) * (_PPU / (atlasSprite.uvSize.y * _AtlasTexture_TexelSize.w)) * atlasSprite.uvSize;
+                //o.uv += (atlasSprite.pivot * atlasSprite.uvSize + atlasSprite.uvPosition);
                 return o;
             }
 
 
             half4 frag (Varyings i) : SV_Target
             {
-                AtlasSprite atlasSprite = _AtlasSprites[_AtlasIndex];
-                float2 maxUVPos = atlasSprite.uvPosition + atlasSprite.uvSize;
-                float spriteBound = i.uv.x > atlasSprite.uvPosition.x && i.uv.y > atlasSprite.uvPosition.y & i.uv.x < maxUVPos.x & i.uv.y < maxUVPos.y;
-                half4 sampledMainTex =  SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
                 float greyScale = ((_ZPos - _EntityDepthRange.x) / (_EntityDepthRange.y)) * _DepthGreyScale;
+                half4 sampledMainTex =  SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
                 half3 col = sampledMainTex.rgb + _Color;
-                return half4(col, (sampledMainTex.a * spriteBound) * _Alpha);
+                return half4(col, (sampledMainTex.a) * _Alpha);
             }
             ENDHLSL
         }

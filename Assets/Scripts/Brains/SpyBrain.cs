@@ -20,9 +20,9 @@ public class SpyBrain : MonoBehaviour
     [Header("Components")]
     [SerializeField] Rigidbody2D rigidBody;
     [SerializeField] BoxCollider2D boxCollider;
-    [SerializeField] MeshRenderer meshRenderer;
+    [SerializeField] AtlasRenderer atlasRenderer;
     [Header("Scriptable Objects")]
-    [SerializeField] AtlasSO atlas;
+    [SerializeField] AtlasMotionSO atlas;
     [SerializeField] SpySettingsSO settings;
     [SerializeField] MaterialIDSO materialIDs;
     [SerializeField] SpyStatsSO stats;
@@ -498,7 +498,7 @@ public class SpyBrain : MonoBehaviour
     private void Flip(bool flip)
     {
         stats.spriteFlip = flip;
-        meshRenderer.material.SetFloat(materialIDs.ids.flip, stats.spriteFlip ? 1 : 0);
+        atlasRenderer.Flip(flip);
     }
     private void OnApplicationQuit()
     {

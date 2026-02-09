@@ -36,7 +36,7 @@ public class NPCBrain : MonoBehaviour
         ToSlideDoor,
     }
     public NPCSO npc;
-    [SerializeField] AtlasSO atlas;
+    [SerializeField] AtlasMotionSO atlas;
     [SerializeField] NPCsDataSO npcData;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] TrainSettingsSO trainSettings;
@@ -94,7 +94,7 @@ public class NPCBrain : MonoBehaviour
 
         public bool canBoardTrain;
         public bool startFade;
-        public bool faceLeft;
+        public bool spriteFlip;
     }
     [SerializeField] public StatData stats;
 
@@ -238,11 +238,8 @@ public class NPCBrain : MonoBehaviour
             break;
             case State.Walking:
             {
-                if (stats.faceLeft != inputData.move < 0)
-                {
-                    stats.faceLeft = inputData.move < 0;
-                    mpb.SetInt(materialIDs.ids.flip, stats.faceLeft ? 0 : 1);
-                }
+                stats.spriteFlip = inputData.move > 0;
+                mpb.SetInt(materialIDs.ids.flip, stats.spriteFlip ? 1 : 0);
             }
             break;
             case State.Smoking:
@@ -331,6 +328,9 @@ public class NPCBrain : MonoBehaviour
     }
     private void EnterState()
     {
+
+        stats.atlasIndexClock = 0;
+        stats.curFrameIndex = 0;
         switch (stats.curState)
         {
             case State.Idling:
@@ -448,10 +448,7 @@ public class NPCBrain : MonoBehaviour
                 }
             }
             break;
-
         }
-
-        stats.atlasIndexClock = 0;
     }
     private void ExitState()
     {
@@ -703,13 +700,18 @@ public class NPCBrain : MonoBehaviour
     }
     private void PlayMotion()
     {
+        if (stats.curClip.motionIndex == 0) return;
         stats.atlasIndexClock += Time.deltaTime;
         SetNextFrameIndex(stats.curClip, atlas.framesPerSecond, ref stats.atlasIndexClock, ref stats.curFrameIndex, ref stats.prevAtlasIndex);
 
         if (stats.curFrameIndex != stats.prevAtlasIndex)
         {
-            atlas.material.SetInt(atlas.materialIDs.ids.atlasIndex, stats.curClip.keyFrames[stats.curFrameIndex].spriteIndex);
-            stats.curSpriteMarkerObjPos = atlas.sprites[stats.curFrameIndex].markers[0].objectPos;
+            atlas.material.SetInt(materialIDs.ids.atlasIndex, stats.curClip.keyFrames[stats.curFrameIndex].spriteIndex);
+            SpriteMarker[] curSpriteMarkers = atlas.sprites[stats.curFrameIndex].markers;
+            if (curSpriteMarkers.Length > 0)
+            {
+                stats.curSpriteMarkerObjPos = curSpriteMarkers[0].objectPos;
+            }
         }
     }
     private AtlasClip RandomStandingIdleMotion()

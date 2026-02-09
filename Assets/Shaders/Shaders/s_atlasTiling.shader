@@ -20,10 +20,11 @@ Shader "Custom/s_atlasTiling"
         {
             HLSLPROGRAM
 
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+
             #pragma vertex vert
             #pragma fragment frag
 
-            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 
             struct Attributes
             {
@@ -43,6 +44,11 @@ Shader "Custom/s_atlasTiling"
             SAMPLER(sampler_AtlasTexture);
             float4 _AtlasTexture_TexelSize;
             float4 _AtlasTexture_ST;
+
+            
+            UNITY_INSTANCING_BUFFER_START(Props)
+            UNITY_INSTANCING_BUFFER_END(Props)
+
             CBUFFER_START(UnityPerMaterial)
                 float2 _UVPosition;
                 float2 _UVSize;
