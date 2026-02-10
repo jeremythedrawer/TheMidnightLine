@@ -79,6 +79,20 @@ MonoBehaviour:
     uvPivot: {x: 0.5, y: 0}
     markers: []
   - index: 0
+    uvSize: {x: 0.06933594, y: 0.10595703}
+    uvPos: {x: 0.82421875, y: 0.75097656}
+    uvPivot: {x: 0.49295774, y: 0}
+    markers:
+    - type: 16
+      objectPos: {x: 0.57222223, y: 0.6388889}
+  - index: 0
+    uvSize: {x: 0.06738281, y: 0.076660156}
+    uvPos: {x: 0.9008789, y: 0.7583008}
+    uvPivot: {x: 0.49275362, y: 0}
+    markers:
+    - type: 16
+      objectPos: {x: 0.55, y: 0.30555555}
+  - index: 0
     uvSize: {x: 0.055664062, y: 0.1303711}
     uvPos: {x: 0.56103516, y: 0.7319336}
     uvPivot: {x: 0.48245615, y: 0}
@@ -95,20 +109,6 @@ MonoBehaviour:
     markers:
     - type: 16
       objectPos: {x: 0.5833333, y: 1.2777778}
-  - index: 0
-    uvSize: {x: 0.06933594, y: 0.10595703}
-    uvPos: {x: 0.82421875, y: 0.75097656}
-    uvPivot: {x: 0.49295774, y: 0}
-    markers:
-    - type: 16
-      objectPos: {x: 0.57222223, y: 0.6388889}
-  - index: 0
-    uvSize: {x: 0.06738281, y: 0.076660156}
-    uvPos: {x: 0.9008789, y: 0.7583008}
-    uvPivot: {x: 0.49275362, y: 0}
-    markers:
-    - type: 16
-      objectPos: {x: 0.55, y: 0.30555555}
   - index: 0
     uvSize: {x: 0.060546875, y: 0.14013672}
     uvPos: {x: 0.75927734, y: 0.7216797}
@@ -197,6 +197,16 @@ MonoBehaviour:
     uvPivot: {x: 0.5, y: 0}
     markers: []
   - index: 0
+    uvSize: {x: 0.103027344, y: 0.087890625}
+    uvPos: {x: 0.79833984, y: 0.45117188}
+    uvPivot: {x: 0.49763033, y: 0}
+    markers: []
+  - index: 0
+    uvSize: {x: 0.09277344, y: 0.103515625}
+    uvPos: {x: 0.69677734, y: 0.43798828}
+    uvPivot: {x: 0.49473685, y: 0}
+    markers: []
+  - index: 0
     uvSize: {x: 0.057617188, y: 0.15429688}
     uvPos: {x: 0.21972656, y: 0.4272461}
     uvPivot: {x: 0.3644068, y: 0}
@@ -205,11 +215,6 @@ MonoBehaviour:
     uvSize: {x: 0.06689453, y: 0.15527344}
     uvPos: {x: 0.28125, y: 0.4272461}
     uvPivot: {x: 0.47445256, y: 0}
-    markers: []
-  - index: 0
-    uvSize: {x: 0.103027344, y: 0.087890625}
-    uvPos: {x: 0.79833984, y: 0.45117188}
-    uvPivot: {x: 0.49763033, y: 0}
     markers: []
   - index: 0
     uvSize: {x: 0.0703125, y: 0.1508789}
@@ -230,11 +235,6 @@ MonoBehaviour:
     uvSize: {x: 0.08496094, y: 0.11816406}
     uvPos: {x: 0.6044922, y: 0.421875}
     uvPivot: {x: 0.5, y: 0}
-    markers: []
-  - index: 0
-    uvSize: {x: 0.09277344, y: 0.103515625}
-    uvPos: {x: 0.69677734, y: 0.43798828}
-    uvPivot: {x: 0.49473685, y: 0}
     markers: []
   - index: 0
     uvSize: {x: 0.057617188, y: 0.15673828}
@@ -311,6 +311,8 @@ MonoBehaviour:
       holdTime: 3
     - spriteIndex: 2
       holdTime: 3
+    - spriteIndex: 3
+      holdTime: 3
     - spriteIndex: 4
       holdTime: 3
     - spriteIndex: 5
@@ -319,14 +321,10 @@ MonoBehaviour:
       holdTime: 3
     - spriteIndex: 7
       holdTime: 3
-  - clipType: 0
-    motionIndex: 11
-    clipName: Fall
-    keyFrames:
-    - spriteIndex: 21
+    - spriteIndex: 8
       holdTime: 3
-    - spriteIndex: 22
-      holdTime: 4
-    - spriteIndex: 23
-      holdTime: 5
+    - spriteIndex: 9
+      holdTime: 3
+    - spriteIndex: 11
+      holdTime: 3
   framesPerSecond: 30

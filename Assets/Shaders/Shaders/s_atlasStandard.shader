@@ -49,11 +49,15 @@ Shader "Custom/s_atlasStandard"
             {
                 UNITY_SETUP_INSTANCE_ID(v);
                 Varyings o;
+
                 o.positionHCS = TransformObjectToHClip(v.positionOS.xyz);
-                o.uv = v.positionOS;
+
                 float4 uvSizeAndPos = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _UVSizeAndPos);
+
+                o.uv = v.uv - 0.5;
                 o.uv *= uvSizeAndPos.xy;
                 o.uv += uvSizeAndPos.zw;
+
                 return o;
             }
 

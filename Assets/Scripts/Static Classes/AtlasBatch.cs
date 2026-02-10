@@ -54,7 +54,7 @@ public static class AtlasBatch
 
         batch.renderers.Remove(atlasRenderer);
     }
-    static Mesh GetQuad()
+    public static Mesh GetQuad()
     {
         if (quad != null) return quad;
 
@@ -80,11 +80,5 @@ public static class AtlasBatch
         quad.triangles = new int[] { 0, 2, 1, 2, 3, 1 };
         quad.RecalculateBounds();
         return quad;
-    }
-
-    static Material GetMaterial(Material src)
-    {
-        if (!src.enableInstancing) src.enableInstancing = true;
-        return src;
     }
 }

@@ -17,24 +17,26 @@ public class AtlasFactory : EditorWindow
     private float markerSize = 4f;
 
     private ClipType selectedClipType;
+    private int selectedMotionIndex;
+    private float previewSize;
+    private Vector2 previewPosition;
+    private int flip;
+
     private int[] motionSelections;
     private int[] holdTimeValues;
-    private int selectedMotionIndex;
 
     const float padding = 50f;
-    const float GUIHeaderColoumns = 300;
+    const float GUIHeaderColoumnWidth = 300;
 
-    private float previewTime;
+    private float editorDelta;
     private int curFrameIndex;
     private int prevFrameIndex;
     private double lastEditorTime;
     private bool startAnim;
-    private int cachedFrame = -1;
-    private Vector2 maxSpritePixelSize;
 
     private RenderTexture previewRT;
-    private Mesh previewMesh;
-
+    private Rect previewRect;
+    private AtlasSprite previewSprite;
     [MenuItem("Tools/Atlas Factory")]
     private static void Open()
     {
@@ -62,7 +64,7 @@ public class AtlasFactory : EditorWindow
     {
         float halfWindowWidth = position.width * 0.5f;
 
-        GUILayoutOption GUIWidth = GUILayout.Width(GUIHeaderColoumns);
+        GUILayoutOption GUIWidth = GUILayout.Width(GUIHeaderColoumnWidth);
         GUILayoutOption GUIHalfWindowWidth = GUILayout.Width(halfWindowWidth);
 
         EditorGUILayout.BeginHorizontal();
@@ -82,9 +84,9 @@ public class AtlasFactory : EditorWindow
             {
                 if (generateSprites)
                 {
-                    previewMesh = GetAtlasMesh(maxSpritePixelSize);
                     motion.UpdateClipDictionary();
                     atlas.sprites = GenerateSprites();
+                    previewRect = new Rect(halfWindowWidth + 50, 200, halfWindowWidth * 0.75f, halfWindowWidth * 0.75f);
                     GetMotionData(motion);
                 }
             }
@@ -118,33 +120,33 @@ public class AtlasFactory : EditorWindow
         #endregion
 
         #region View Fields
-        EditorGUILayout.BeginVertical(GUIWidth);
+        EditorGUILayout.BeginVertical(GUILayout.Width(halfWindowWidth - GUIHeaderColoumnWidth));
         EditorGUILayout.LabelField("View", EditorStyles.boldLabel);
         cellSize = EditorGUILayout.FloatField("Cell Size", cellSize, GUIWidth);
         markerSize = EditorGUILayout.FloatField("Marker Size", markerSize, GUIWidth);
         EditorGUILayout.EndVertical();
         #endregion
 
-        #region Animation Fields
+        #region Motion Fields
         EditorGUILayout.BeginVertical(GUIWidth);
-        EditorGUILayout.LabelField("Motion", EditorStyles.boldLabel);
-
-        EditorGUI.BeginChangeCheck();
 
         switch (atlas)
         {
             case AtlasMotionSO motion:
             {
+                EditorGUILayout.LabelField("Motion", EditorStyles.boldLabel);
+                EditorGUI.BeginChangeCheck();
+
                 switch (motion.entityType)
                 {
                     case EntityType.NPC:
                     {
-                        EditorGUILayout.LabelField($"Current Motion: {(NPCMotion)selectedMotionIndex} ", GUIWidth);
+                        EditorGUILayout.LabelField($"Preview Motion: {(NPCMotion)selectedMotionIndex} ", GUIWidth);
                     }
                     break;
                     case EntityType.Spy:
                     {
-                        EditorGUILayout.LabelField($"Motion: {(SpyMotion)selectedMotionIndex} ", GUIWidth);
+                        EditorGUILayout.LabelField($"Preview Motion: {(SpyMotion)selectedMotionIndex} ", GUIWidth);
                     }
                     break;
                 }
@@ -158,7 +160,7 @@ public class AtlasFactory : EditorWindow
 
                 if (EditorGUI.EndChangeCheck())
                 {
-                    previewTime = 0;
+                    editorDelta = 0;
                     prevFrameIndex = 0;
                     curFrameIndex = 0;
 
@@ -176,7 +178,7 @@ public class AtlasFactory : EditorWindow
                 if (GUILayout.Button("Play", GUIWidth))
                 {
                     startAnim = true;
-                    previewTime = 0;
+                    editorDelta = 0;
                     curFrameIndex = 0;
                     int startSpriteIndex = motion.clipDict[selectedMotionIndex].keyFrames[curFrameIndex].spriteIndex;
                     AtlasSprite sprite = motion.sprites[startSpriteIndex];
@@ -187,17 +189,21 @@ public class AtlasFactory : EditorWindow
                 {
                     startAnim = false;
                 }
+                EditorGUILayout.EndVertical();
+                EditorGUILayout.BeginVertical(GUIHalfWindowWidth);
+                if (GUILayout.Button("Flip", GUIWidth))
+                {
+                    flip = flip == 1 ? -1 : 1;
+                }
+                previewSize = EditorGUILayout.FloatField("Preview Size", previewSize, GUIWidth);
+                previewPosition = EditorGUILayout.Vector2Field("Preview Position", previewPosition, GUIWidth);
+
                 if (motion.clips == null)
                 {
                     EditorGUILayout.EndVertical();
                     EditorGUILayout.EndHorizontal();
                     return;
                 }
-            }
-            break;
-
-            case AtlasSimpleSO simple:
-            {
             }
             break;
         }
@@ -237,23 +243,7 @@ public class AtlasFactory : EditorWindow
                 EditorGUILayout.LabelField("Preview Motion", EditorStyles.boldLabel);
                 EditorGUILayout.Space(5);
                 EditorGUILayout.LabelField($"Preview Frame Index: {curFrameIndex.ToString()}", GUIWidth);
-                if (previewRT == null)
-                {
-                    previewRT = new RenderTexture((int)(halfWindowWidth), (int)(halfWindowWidth), 16, RenderTextureFormat.ARGB32);
-                    previewRT.Create();
-                }
-                if (atlas != null && motion.sprites != null)
-                {
-                    Rect quadRect = new Rect(halfWindowWidth + 50, 200, halfWindowWidth * 0.75f, halfWindowWidth * 0.75f);
-
-                    if (motion.material != null)
-                    {
-                        DrawPreview(motion);
-                    }
-                    GUI.DrawTexture(quadRect, previewRT, ScaleMode.ScaleToFit, alphaBlend: true);
-                    Handles.BeginGUI();
-                    Handles.DrawSolidRectangleWithOutline(quadRect, Color.clear, Color.grey);
-                }
+                DrawPreview();
                 EditorGUILayout.EndVertical();
             }
             break;
@@ -278,7 +268,6 @@ public class AtlasFactory : EditorWindow
 
         List<AtlasSprite> atlasSpritesList = new List<AtlasSprite>();
 
-        maxSpritePixelSize = Vector2.zero;
         for (int y = atlas.texture.height - 1; y >= 0; y--)
         {
             for (int x = 0; x < atlas.texture.width; x++)
@@ -414,16 +403,6 @@ public class AtlasFactory : EditorWindow
         newAtlasSprite.uvSize.x = spriteWidth / texWidth;
         newAtlasSprite.uvSize.y = spriteHeight / texHeight;
 
-        if (spriteWidth + (pivot.x - minX) > maxSpritePixelSize.x)
-        {
-            maxSpritePixelSize.x = spriteWidth + (pivot.x - minX);
-        }
-
-        if (spriteHeight > maxSpritePixelSize.y)
-        {
-            maxSpritePixelSize.y = spriteHeight;
-        }
-
         if (foundPivot)
         {
             newAtlasSprite.uvPivot.x = (pivot.x - minX) / spriteWidth;
@@ -464,7 +443,7 @@ public class AtlasFactory : EditorWindow
 
                     if (keyframe.spriteIndex == i)
                     {
-                        motionSelections[i] = (int)clip.clipType;
+                        motionSelections[i] = clip.motionIndex;
                         holdTimeValues[i] = keyframe.holdTime;
                         break;
                     }
@@ -671,7 +650,7 @@ public class AtlasFactory : EditorWindow
                         }
                     }
 
-                    previewTime = 0;
+                    editorDelta = 0;
                     prevFrameIndex = 0;
                     curFrameIndex = 0;
                     motion.UpdateClipDictionary();
@@ -686,87 +665,77 @@ public class AtlasFactory : EditorWindow
             break;
         }
     }
-    private void DrawPreview(AtlasMotionSO motion)
+    private void DrawPreview()
     {
-        if (curFrameIndex == cachedFrame) return;
+        if (previewRT == null)
+        {
+            previewRT = new RenderTexture((int)previewRect.width, (int)previewRect.height, 16, RenderTextureFormat.ARGB32);
+            previewRT.Create();
+        }
 
-        cachedFrame = curFrameIndex;
-
-        RenderTexture activeRT = RenderTexture.active;
         RenderTexture.active = previewRT;
         GL.Clear(true, true, Color.clear);
-        atlas.material.SetPass(0);
 
-        GL.PushMatrix();
-        GL.LoadProjectionMatrix(Matrix4x4.Ortho(-1, 1, 0, 2, -1, 1));
-        Graphics.DrawMeshNow(previewMesh, Matrix4x4.identity);
-        GL.PopMatrix();
+        float spritePixelWidth = previewSprite.uvSize.x * atlas.texture.width;
+        float spritePixelHeight = previewSprite.uvSize.y * atlas.texture.height;
 
-        RenderTexture.active = activeRT;
+        
+        float scaledWidth = spritePixelWidth * previewSize * 2 * flip;
+        float scaledHeight = spritePixelHeight * previewSize;
+
+        float pivotX = previewSprite.uvPivot.x * scaledWidth;
+
+        float targetPivotX = previewRT.width;
+
+
+        float offsetX = targetPivotX - pivotX;
+        float offsetY = previewRT.height - scaledHeight;
+
+
+        Rect destRect = new Rect(offsetX + previewPosition.x, offsetY + previewPosition.y, scaledWidth, scaledHeight);
+        Rect uvRect = new Rect(previewSprite.uvPos.x, previewSprite.uvPos.y, previewSprite.uvSize.x, previewSprite.uvSize.y);
+
+        Graphics.DrawTexture(destRect, atlas.texture, uvRect, 0, 0, 0, 0);
+
+        RenderTexture.active = null;
+
+        GUI.DrawTexture(previewRect, previewRT, ScaleMode.ScaleToFit, true);
+
+
+        Handles.BeginGUI();
+        Handles.DrawSolidRectangleWithOutline(previewRect, Color.clear, Color.grey);
+        Handles.EndGUI();
     }
+
     private void UpdatePreview(AtlasMotionSO motion)
     {
         if (atlas == null || motion.sprites == null || motion.clipDict == null) return;
         double now = EditorApplication.timeSinceStartup;
         float delta = (float)(now - lastEditorTime);
         lastEditorTime = now;
-        previewTime += delta;
+        editorDelta += delta;
 
         if (startAnim)
         {
             if (!motion.clipDict.TryGetValue(selectedMotionIndex, out AtlasClip clip)) return;
 
-            SetNextFrameIndex(clip, motion.framesPerSecond, ref previewTime, ref curFrameIndex, ref prevFrameIndex);
+            SetNextFrameIndex(clip, motion.framesPerSecond, ref editorDelta, ref curFrameIndex, ref prevFrameIndex);
 
             if (curFrameIndex != prevFrameIndex)
             {
-                atlas.material.SetInt(materialIDs.ids.atlasIndex, motion.clipDict[selectedMotionIndex].keyFrames[curFrameIndex].spriteIndex);
+                SetPreviewSprite(clip.keyFrames[curFrameIndex].spriteIndex);
                 Repaint();
             }
         }
     }
-    private Mesh GetAtlasMesh(Vector2 spritePixelSize)
+
+    public void SetPreviewSprite(int spriteIndex)
     {
-        string path = $"Assets/FBXs/mesh_{atlas.name}.asset";
-        Mesh mesh = AssetDatabase.LoadAssetAtPath<Mesh>(path);
+        previewSprite = atlas.sprites[spriteIndex];
 
-        Vector2 quadSize = spritePixelSize / PIXELS_PER_UNIT;
-        if (mesh == null)
-        {
-            mesh = new Mesh();
-            mesh.name = $"mesh_{atlas.name}";
-            AssetDatabase.CreateAsset(mesh, path);
-        }
+        float spritePixelWidth = previewSprite.uvSize.x * atlas.texture.width;
+        float spritePixelHeight = previewSprite.uvSize.y * atlas.texture.height;
 
-        float halfWidth = quadSize.x * 0.5f;
-        mesh.vertices = new Vector3[]
-        {
-            new Vector3(-halfWidth, 0f, 0f), // bottom left
-            new Vector3(halfWidth, 0f, 0f), // bottom right
-            new Vector3(halfWidth, quadSize.y, 0f), // top right
-            new Vector3(-halfWidth, quadSize.y, 0f), // top left
-        };
-
-        mesh.uv = new Vector2[]
-        {
-            new Vector2(0, 0),
-            new Vector2(1, 0),
-            new Vector2(1, 1),
-            new Vector2(0, 1),
-        };
-
-        mesh.triangles = new int[]
-        {
-            0, 2, 1,
-            0, 3, 2
-        };
-
-        mesh.RecalculateNormals();
-        mesh.RecalculateBounds();
-
-        EditorUtility.SetDirty(mesh);
-        AssetDatabase.SaveAssets();
-        AssetDatabase.Refresh();
-        return mesh;
+        Vector2 offset = previewSprite.uvPos + (previewSprite.uvSize * 0.5f);
     }
 }

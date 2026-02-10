@@ -1,6 +1,5 @@
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 public static class Atlas
 {
@@ -128,7 +127,6 @@ public static class Atlas
         public Vector2 uvSize;
         public Vector2 pivot;
     }
-    static Dictionary<AtlasMotionSO, GraphicsBuffer> buffers = new Dictionary<AtlasMotionSO, GraphicsBuffer>();
     public const int PIXELS_PER_UNIT = 180;
 
     public static void SetNextFrameIndex(AtlasClip clip, int fps, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
@@ -198,7 +196,6 @@ public static class Atlas
             currentValue = 0;
         }
     }
-
     public static float GetManualKeyframeHoldTime(AtlasClip clip, float targetValue, float startValue)
     {
         return (targetValue - startValue) / (clip.keyFrames.Length - 1);
@@ -216,23 +213,3 @@ public static class Atlas
         return clipDict;
     }
 }
-#if UNITY_EDITOR
-[InitializeOnLoad]
-static class AtlasMaterialRebinder
-{
-    static AtlasMaterialRebinder()
-    {
-        EditorApplication.projectChanged += RebindAll;
-        EditorApplication.hierarchyChanged += RebindAll;
-        EditorApplication.playModeStateChanged += _ => RebindAll();
-    }
-
-    static void RebindAll()
-    {
-        foreach (AtlasMotionSO atlas in Resources.FindObjectsOfTypeAll<AtlasMotionSO>()) // TODO: Replace and use the one AtlasSOs
-        {
-            atlas.UpdateClipDictionary();
-        }
-    }
-}
-#endif
