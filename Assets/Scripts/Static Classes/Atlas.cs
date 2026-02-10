@@ -71,6 +71,7 @@ public static class Atlas
         Climb = 1 << 4,
         TrainPhone = 1 << 5,
     }
+
     [Serializable]
     public struct AtlasMarker
     {

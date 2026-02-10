@@ -19,7 +19,7 @@ public class AtlasRenderer : MonoBehaviour
     public Matrix4x4 spriteMatrix;
     float worldWidth;
     float worldHeight;
-    public int flip;
+    public bool flip;
 
     private void OnValidate()
     {
@@ -46,6 +46,7 @@ public class AtlasRenderer : MonoBehaviour
 
     public void SetSprite(int spriteIndex)
     {
+        if (atlas == null || atlas.sprites.Length == 0) return;
         sprite = atlas.sprites[spriteIndex];
 
         float spritePixelWidth = sprite.uvSize.x * atlas.texture.width;
@@ -56,12 +57,13 @@ public class AtlasRenderer : MonoBehaviour
 
         Vector2 offset = sprite.uvPos + (sprite.uvSize * 0.5f);
         
-        uvSizeAndPos = new Vector4(sprite.uvSize.x * flip, sprite.uvSize.y, offset.x, offset.y);
+        int flipSprite = flip ? -1 : 1;
+        uvSizeAndPos = new Vector4(sprite.uvSize.x * flipSprite, sprite.uvSize.y, offset.x, offset.y);
     }
 
     public void Flip(bool flipLeft)
     {
-        flip = flipLeft ? -1 : 1;
+        flip = flipLeft;
     }
 
 #if UNITY_EDITOR
