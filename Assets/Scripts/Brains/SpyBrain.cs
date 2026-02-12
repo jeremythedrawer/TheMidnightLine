@@ -22,7 +22,7 @@ public class SpyBrain : MonoBehaviour
     [SerializeField] BoxCollider2D boxCollider;
     [SerializeField] AtlasRenderer atlasRenderer;
     [Header("Scriptable Objects")]
-    [SerializeField] AtlasMotionSO atlas;
+    [SerializeField] AtlasSO atlas;
     [SerializeField] SpySettingsSO settings;
     [SerializeField] MaterialIDSO materialIDs;
     [SerializeField] SpyStatsSO stats;

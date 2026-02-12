@@ -7,14 +7,14 @@ using static AtlasBatch;
 [ExecuteAlways]
 public class AtlasRenderer : MonoBehaviour
 {
-    public AtlasBaseSO atlas;
+    public AtlasSO atlas;
     public int spriteIndex;
+    public SpriteType spriteType;
 
     [Header("Generated")]
     public BatchKey batchKey;
     
-    public AtlasSprite sprite;
-
+    public SimpleSprite sprite;
     public Vector4 uvSizeAndPos;
     public Matrix4x4 spriteMatrix;
     float worldWidth;
@@ -46,8 +46,28 @@ public class AtlasRenderer : MonoBehaviour
 
     public void SetSprite(int spriteIndex)
     {
-        if (atlas == null || atlas.sprites.Length == 0) return;
-        sprite = atlas.sprites[spriteIndex];
+        if (atlas == null || (atlas.motionSprites.Length == 0 && atlas.slicedSprites.Length == 0 && atlas.simpleSprites.Length == 0)) return;
+
+        switch(spriteType)
+        {
+            case SpriteType.Simple:
+            {
+                sprite = atlas.simpleSprites[spriteIndex];
+            }
+            break;
+
+            case SpriteType.Motion:
+            {
+                sprite = atlas.motionSprites[spriteIndex].sprite;
+            }
+            break;
+
+            case SpriteType.Slice:
+            {
+                sprite = atlas.slicedSprites[spriteIndex].sprite;
+            }
+            break;
+        }
 
         float spritePixelWidth = sprite.uvSize.x * atlas.texture.width;
         float spritePixelHeight = sprite.uvSize.y * atlas.texture.height;
@@ -92,10 +112,34 @@ public class AtlasRendererEditor : Editor
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.PropertyField(serializedObject.FindProperty("atlas"));
         SerializedProperty spriteIndexProp = serializedObject.FindProperty("spriteIndex");
+        SerializedProperty spriteTypeProp = serializedObject.FindProperty("spriteType");
 
-        if (renderer.atlas != null && renderer.atlas.sprites != null)
+        if (renderer.atlas != null)
         {
-            spriteIndexProp.intValue = EditorGUILayout.IntSlider("Sprite Index", spriteIndexProp.intValue, leftValue: 0, renderer.atlas.sprites.Length - 1);
+            SpriteType spriteType = (SpriteType)spriteIndexProp.intValue;
+
+            int spriteArrayLength = 1;
+            switch(spriteType)
+            {
+                case SpriteType.Simple:
+                {
+                    spriteArrayLength = renderer.atlas.simpleSprites.Length - 1;
+                }
+                break;
+
+                case SpriteType.Motion:
+                {
+                    spriteArrayLength = renderer.atlas.motionSprites.Length - 1;
+                }
+                break;
+                case SpriteType.Slice:
+                {
+                    spriteArrayLength = renderer.atlas.slicedSprites.Length - 1;
+                }
+                break;
+            }
+
+            spriteIndexProp.intValue = EditorGUILayout.IntSlider("Sprite Index", spriteIndexProp.intValue, leftValue: 0, spriteArrayLength);
         }
         else
         {

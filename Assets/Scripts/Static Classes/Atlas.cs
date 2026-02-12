@@ -29,7 +29,6 @@ public static class Atlas
         Walking,
         NPCMotionCount,
     }
-
     public enum SpyMotion
     {
         None,
@@ -47,11 +46,11 @@ public static class Atlas
         HeavyLand,
         Death,
     }
-
-    public enum EntityType
+    public enum EntityMotionType
     {
         NPC,
-        Spy
+        Spy,
+        Clipboard,
     }
     public enum ClipType
     {
@@ -60,8 +59,7 @@ public static class Atlas
         OneShot,
         Manual,
     }
-    [Flags]
-    public enum MarkerType
+    [Flags] public enum MarkerType
     {
         None = 0,
         Smoke = 1 << 0,
@@ -71,68 +69,70 @@ public static class Atlas
         Climb = 1 << 4,
         TrainPhone = 1 << 5,
     }
-
-    [Serializable]
-    public struct AtlasMarker
+    public enum SpriteType
     {
-        public MarkerType type;
+        Simple,
+        Motion,
+        Slice,
+    }
+    [Serializable] public struct MarkerKey
+    {
         public Color32 color;
-    }
-    [Serializable]
-    public struct SpriteMarker
-    {
         public MarkerType type;
-        public Vector2 objectPos;
     }
-    [Serializable]
-    public struct AtlasSprite
+    [Serializable] public struct MarkerPosition
     {
-        public int index;
+        public Vector2 objectPos;
+        public MarkerType type;
+    }
+    [Serializable] public struct SimpleSprite
+    {
         public Vector2 uvSize;
         public Vector2 uvPos;
         public Vector2 uvPivot;
-        public SpriteMarker[] markers;
+        public int index;
     }
-    [Serializable]
-    public struct AtlasKeyframe
+    [Serializable] public struct MotionSprite
+    {
+        public SimpleSprite sprite;
+        public MarkerPosition[] markers;
+    }
+    [Serializable] public struct SliceSprite
+    {
+        public SimpleSprite sprite;
+        public Vector2[] slices;
+    }
+    [Serializable] public struct AtlasKeyframe
     {
         public int spriteIndex;
         public int holdTime;
     }
-    [Serializable]
-    public struct AtlasClip
+    [Serializable] public struct AtlasClip
     {
-        public ClipType clipType;
-        public int motionIndex;
 #if UNITY_EDITOR
         public string clipName;
 #endif
         public AtlasKeyframe[] keyFrames;
+        public ClipType clipType;
+        public int motionIndex;
     }
-
-    [Serializable]
-    public struct SpyClip
+    [Serializable] public struct SpyClip
     {
+        public AtlasClip clip;
         public SpyMotion motion;
-        public AtlasClip clip;
     }
-    [Serializable]
-    public struct NPCClip
+    [Serializable] public struct NPCClip
     {
+        public AtlasClip clip;
         public NPCMotion motion;
-        public AtlasClip clip;
     }
-    struct MaterialAtlasSprite
-    {
-        public Vector2 uvPos;
-        public Vector2 uvSize;
-        public Vector2 pivot;
-    }
-    public const int PIXELS_PER_UNIT = 180;
 
-    public static void SetNextFrameIndex(AtlasClip clip, int fps, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
+    public const int PIXELS_PER_UNIT = 180;
+    public const int FRAMES_PER_SEC = 30;
+
+    public static void SetNextFrameIndex(AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {
-        float frameTime = keyframeClock * fps;
+        float frameTime = keyframeClock * FRAMES_PER_SEC;
         AtlasKeyframe curKeyFrame = clip.keyFrames[curFrameIndex];
 
         switch (clip.clipType)

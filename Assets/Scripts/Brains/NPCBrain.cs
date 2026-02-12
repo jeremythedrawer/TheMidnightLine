@@ -36,7 +36,7 @@ public class NPCBrain : MonoBehaviour
         ToSlideDoor,
     }
     public NPCSO npc;
-    [SerializeField] AtlasMotionSO atlas;
+    [SerializeField] AtlasSO atlas;
     [SerializeField] NPCsDataSO npcData;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] TrainSettingsSO trainSettings;
@@ -702,12 +702,12 @@ public class NPCBrain : MonoBehaviour
     {
         if (stats.curClip.motionIndex == 0) return;
         stats.atlasIndexClock += Time.deltaTime;
-        SetNextFrameIndex(stats.curClip, atlas.framesPerSecond, ref stats.atlasIndexClock, ref stats.curFrameIndex, ref stats.prevAtlasIndex);
+        SetNextFrameIndex(stats.curClip, ref stats.atlasIndexClock, ref stats.curFrameIndex, ref stats.prevAtlasIndex);
 
         if (stats.curFrameIndex != stats.prevAtlasIndex)
         {
             atlas.material.SetInt(materialIDs.ids.atlasIndex, stats.curClip.keyFrames[stats.curFrameIndex].spriteIndex);
-            SpriteMarker[] curSpriteMarkers = atlas.sprites[stats.curFrameIndex].markers;
+            MarkerPosition[] curSpriteMarkers = atlas.motionSprites[stats.curFrameIndex].markers;
             if (curSpriteMarkers.Length > 0)
             {
                 stats.curSpriteMarkerObjPos = curSpriteMarkers[0].objectPos;
