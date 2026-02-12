@@ -29,8 +29,8 @@ public static class AtlasBatch
     }
     public static void RegisterRenderer(AtlasRenderer atlasRenderer)
     {
+        if (atlasRenderer.atlas.material == null) return;
         Material mat = atlasRenderer.atlas.material;
-
         if (!mat.enableInstancing) mat.enableInstancing = true;
 
         BatchKey key = new BatchKey
@@ -43,16 +43,18 @@ public static class AtlasBatch
         {
             batch = new BatchData();
             batchDict.Add(key, batch);
+
+            batch.renderers.Add(atlasRenderer);
+            atlasRenderer.batchKey = key;
         }
 
-        batch.renderers.Add(atlasRenderer);
-        atlasRenderer.batchKey = key;
     }
     public static void UnregisterRenderer(AtlasRenderer atlasRenderer)
     {
         if (!batchDict.TryGetValue(atlasRenderer.batchKey, out BatchData batch)) return;
 
         batch.renderers.Remove(atlasRenderer);
+        batchDict.Remove(atlasRenderer.batchKey);
     }
     public static Mesh GetQuad()
     {

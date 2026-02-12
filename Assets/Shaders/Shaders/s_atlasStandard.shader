@@ -49,6 +49,7 @@ Shader "Custom/s_atlasStandard"
             {
                 UNITY_SETUP_INSTANCE_ID(v);
                 Varyings o;
+                UNITY_TRANSFER_INSTANCE_ID(v, o);
 
                 o.positionHCS = TransformObjectToHClip(v.positionOS.xyz);
 

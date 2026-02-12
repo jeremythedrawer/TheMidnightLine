@@ -24,6 +24,7 @@ public class AtlasRenderer : MonoBehaviour
     private void OnValidate()
     {
         SetSprite(spriteIndex);
+        RegisterRenderer(this);
     }
     private void OnEnable()
     {
@@ -52,18 +53,22 @@ public class AtlasRenderer : MonoBehaviour
         {
             case SpriteType.Simple:
             {
+                if (atlas.simpleSprites.Length == 0) return;
                 sprite = atlas.simpleSprites[spriteIndex];
             }
             break;
 
             case SpriteType.Motion:
             {
+                if (atlas.motionSprites.Length == 0) return;
                 sprite = atlas.motionSprites[spriteIndex].sprite;
             }
             break;
 
             case SpriteType.Slice:
             {
+                if (atlas.slicedSprites.Length == 0) return;
+
                 sprite = atlas.slicedSprites[spriteIndex].sprite;
             }
             break;
@@ -104,47 +109,51 @@ public class AtlasRendererEditor : Editor
 {
     public override void OnInspectorGUI()
     {
-
         serializedObject.Update();
 
         AtlasRenderer renderer = (AtlasRenderer)target;
 
         EditorGUI.BeginChangeCheck();
+
         EditorGUILayout.PropertyField(serializedObject.FindProperty("atlas"));
         SerializedProperty spriteIndexProp = serializedObject.FindProperty("spriteIndex");
         SerializedProperty spriteTypeProp = serializedObject.FindProperty("spriteType");
 
         if (renderer.atlas != null)
         {
-            SpriteType spriteType = (SpriteType)spriteIndexProp.intValue;
+            SpriteType spriteType = (SpriteType)spriteTypeProp.intValue;
 
-            int spriteArrayLength = 1;
-            switch(spriteType)
+            int maxIndex = 0;
+            switch (spriteType)
             {
                 case SpriteType.Simple:
                 {
-                    spriteArrayLength = renderer.atlas.simpleSprites.Length - 1;
+                    if (renderer.atlas.simpleSprites.Length > 0) maxIndex = renderer.atlas.simpleSprites.Length - 1;
                 }
                 break;
 
                 case SpriteType.Motion:
                 {
-                    spriteArrayLength = renderer.atlas.motionSprites.Length - 1;
+                    if (renderer.atlas.motionSprites.Length > 0) maxIndex = renderer.atlas.motionSprites.Length - 1;
                 }
                 break;
+
                 case SpriteType.Slice:
                 {
-                    spriteArrayLength = renderer.atlas.slicedSprites.Length - 1;
+                    if (renderer.atlas.slicedSprites.Length > 0) maxIndex = renderer.atlas.slicedSprites.Length - 1;
                 }
                 break;
             }
 
-            spriteIndexProp.intValue = EditorGUILayout.IntSlider("Sprite Index", spriteIndexProp.intValue, leftValue: 0, spriteArrayLength);
+            spriteIndexProp.intValue = Mathf.Clamp(spriteIndexProp.intValue, 0, maxIndex);
+
+            spriteIndexProp.intValue = EditorGUILayout.IntSlider("Sprite Index", spriteIndexProp.intValue, 0, maxIndex );
         }
         else
         {
             EditorGUILayout.PropertyField(spriteIndexProp);
         }
+
         DrawPropertiesExcluding(serializedObject, "atlas", "spriteIndex");
 
         if (EditorGUI.EndChangeCheck())
