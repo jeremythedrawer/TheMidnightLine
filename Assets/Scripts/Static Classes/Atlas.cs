@@ -69,7 +69,7 @@ public static class Atlas
         Climb = 1 << 4,
         TrainPhone = 1 << 5,
     }
-    public enum SpriteType
+    public enum SpriteMode
     {
         Simple,
         Motion,
@@ -103,6 +103,7 @@ public static class Atlas
         public SimpleSprite sprite;
         public Vector4 slice;
         public Vector4[] uvSizeAndPos;
+        public Vector4 worldSlices;
     }
     [Serializable] public struct AtlasKeyframe
     {

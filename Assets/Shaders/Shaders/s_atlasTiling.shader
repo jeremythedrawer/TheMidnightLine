@@ -44,7 +44,6 @@ Shader "Custom/s_atlasTiling"
             
             UNITY_INSTANCING_BUFFER_START(AtlasProps)
                 UNITY_DEFINE_INSTANCED_PROP(float4, _UVSizeAndPos)
-                UNITY_DEFINE_INSTANCED_PROP(float4, _Slice)
                 UNITY_DEFINE_INSTANCED_PROP(float2, _WidthHeight)
                 UNITY_DEFINE_INSTANCED_PROP(float2, _Flip)
                 UNITY_DEFINE_INSTANCED_PROP(float, _Aspect)
@@ -59,12 +58,9 @@ Shader "Custom/s_atlasTiling"
                 o.positionHCS = TransformObjectToHClip(v.positionOS.xyz);
 
                 float4 uvSizeAndPos = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _UVSizeAndPos);
-                float4 slice = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _Slice);
                 float2 widthHeight = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _WidthHeight);
-                float aspect = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _Aspect);
 
                 float2 scrollUV = v.positionOS.xy + float2(_MetersTravelled, 0);
-                scrollUV.x /= aspect;
 
                 o.uv = scrollUV;
                 o.uv *= uvSizeAndPos.xy;

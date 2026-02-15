@@ -9,7 +9,7 @@ public class AtlasRenderer : MonoBehaviour
     public AtlasSO atlas;
     public Material material;
     public int spriteIndex;
-    public SpriteType spriteType;
+    public SpriteMode spriteMode;
     public float width = 1f;
     public float height = 1f;
     public bool flipX;
@@ -19,29 +19,24 @@ public class AtlasRenderer : MonoBehaviour
     public BatchKey batchKey;
     public SimpleSprite sprite;
     public MotionSprite motionSprite;
-    public SliceSprite sliceSprite;
+    public SliceSprite slicedSprite;
 
     public Matrix4x4[] spriteMatrices;
     public Vector4[] widthAndHeight;
     public Vector2 flip;
+
+    public Vector2 centerSliceWorldSize;
+    public Vector2 centerSliceUVSize;
     private void OnValidate()
     {
-        if (spriteType == SpriteType.Slice)
-        {
-            spriteMatrices = new Matrix4x4[9];
-        }
-        else
-        {
-            spriteMatrices = new Matrix4x4[1];
-            widthAndHeight = new Vector4[1];
-        }
+        InitSpriteMode();
+        SetCenterSliceSize();
         SetSprite(spriteIndex);
     }
     private void OnEnable()
     {
         RegisterRenderer(this);
     }
-
     private void OnDisable()
     {
         UnregisterRenderer(this);
@@ -57,69 +52,57 @@ public class AtlasRenderer : MonoBehaviour
 
         return spriteMatrices[0];
     }
-
     public Matrix4x4[] Get9SliceMatrices()
     {
-        //TODO: Cache these variables
-        float worldLeftSlice = (sliceSprite.slice.x * atlas.texture.width) / PIXELS_PER_UNIT;
-        float worldRightSlice = ((1 - sliceSprite.slice.y) * atlas.texture.width) / PIXELS_PER_UNIT;
-        float worldBottomSlice = (sliceSprite.slice.z * atlas.texture.height) / PIXELS_PER_UNIT;
-        float worldTopSlice = ((1 - sliceSprite.slice.w) * atlas.texture.height) / PIXELS_PER_UNIT;
-
-        float widthSlice = sprite.worldSize.x * width;
-        float heightSlice = sprite.worldSize.y * height;
-
-        float centerWidth = Mathf.Max(0, widthSlice - worldLeftSlice - worldRightSlice);
-        float centerHeight = Mathf.Max(0, heightSlice - worldBottomSlice - worldTopSlice);
-
         Vector2[] sizes =
         {
-            new Vector2 (worldLeftSlice,  worldBottomSlice),
-            new Vector2 (centerWidth, worldBottomSlice),
-            new Vector2 (worldRightSlice, worldBottomSlice),
+            new Vector2 (slicedSprite.worldSlices.x,  slicedSprite.worldSlices.z),
+            new Vector2 (centerSliceWorldSize.x, slicedSprite.worldSlices.z),
+            new Vector2 (slicedSprite.worldSlices.y, slicedSprite.worldSlices.z),
 
-            new Vector2 (worldLeftSlice,  centerHeight),
-            new Vector2 (centerWidth, centerHeight),
-            new Vector2 (worldRightSlice, centerHeight),
+            new Vector2 (slicedSprite.worldSlices.x,  centerSliceWorldSize.y),
+            new Vector2 (centerSliceWorldSize.x, centerSliceWorldSize.y),
+            new Vector2 (slicedSprite.worldSlices.y, centerSliceWorldSize.y),
 
-            new Vector2 (worldLeftSlice,  worldTopSlice),
-            new Vector2 (centerWidth, worldTopSlice),
-            new Vector2 (worldRightSlice, worldTopSlice),
+            new Vector2 (slicedSprite.worldSlices.x,  slicedSprite.worldSlices.w),
+            new Vector2 (centerSliceWorldSize.x, slicedSprite.worldSlices.w),
+            new Vector2 (slicedSprite.worldSlices.y, slicedSprite.worldSlices.w),
         };
-
 
         Vector2[] offsets =
         {
             new Vector2 (0, 0),
-            new Vector2 (worldLeftSlice, 0),
-            new Vector2 (worldLeftSlice + centerWidth, 0),
+            new Vector2 (slicedSprite.worldSlices.x, 0),
+            new Vector2 (slicedSprite.worldSlices.x + centerSliceWorldSize.x, 0),
 
-            new Vector2 (0, worldBottomSlice),
-            new Vector2 (worldLeftSlice, worldBottomSlice),
-            new Vector2 (worldLeftSlice + centerWidth, worldBottomSlice),
+            new Vector2 (0, slicedSprite.worldSlices.z),
+            new Vector2 (slicedSprite.worldSlices.x, slicedSprite.worldSlices.z),
+            new Vector2 (slicedSprite.worldSlices.x + centerSliceWorldSize.x, slicedSprite.worldSlices.z),
 
-            new Vector2 (0, worldBottomSlice + centerHeight),
-            new Vector2 (worldLeftSlice, worldBottomSlice + centerHeight),
-            new Vector2 (worldLeftSlice + centerWidth, worldBottomSlice + centerHeight),
+            new Vector2 (0, slicedSprite.worldSlices.z + centerSliceWorldSize.y),
+            new Vector2 (slicedSprite.worldSlices.x, slicedSprite.worldSlices.z + centerSliceWorldSize.y),
+            new Vector2 (slicedSprite.worldSlices.x + centerSliceWorldSize.x, slicedSprite.worldSlices.z + centerSliceWorldSize.y),
         };
 
         for (int i = 0; i < 9; i++)
         {
-            Vector3 localPos = new Vector3(offsets[i].x, offsets[i].y, 0f);
+            float z = i * 0.0001f;
+            Vector3 localPos = new Vector3(offsets[i].x, offsets[i].y, z);
 
-            spriteMatrices[i] = Matrix4x4.TRS(transform.position + transform.rotation * localPos, transform.rotation, new Vector3(sizes[i].x, sizes[i].y, 1f));
+            spriteMatrices[i] = Matrix4x4.TRS(transform.position + transform.rotation * localPos,
+                                              transform.rotation, 
+                                              new Vector3(sizes[i].x, sizes[i].y, 1f));
         }
 
         return spriteMatrices;
     }
-
     public void SetSprite(int spriteIndex)
     {
         if (atlas == null || (atlas.motionSprites.Length == 0 && atlas.slicedSprites.Length == 0 && atlas.simpleSprites.Length == 0)) return;
 
-        switch (spriteType)
+        switch (spriteMode)
         {
-            case SpriteType.Simple:
+            case SpriteMode.Simple:
             {
                 if (atlas.simpleSprites.Length == 0) return;
                 sprite = atlas.simpleSprites[spriteIndex];
@@ -131,7 +114,7 @@ public class AtlasRenderer : MonoBehaviour
             }
             break;
 
-            case SpriteType.Motion:
+            case SpriteMode.Motion:
             {
                 if (atlas.motionSprites.Length == 0) return;
                 motionSprite = atlas.motionSprites[spriteIndex];
@@ -144,22 +127,23 @@ public class AtlasRenderer : MonoBehaviour
             }
             break;
 
-            case SpriteType.Slice:
+            case SpriteMode.Slice:
             {
                 if (atlas.slicedSprites.Length == 0) return;
-                sliceSprite = atlas.slicedSprites[spriteIndex];
-                sprite = sliceSprite.sprite;
+                slicedSprite = atlas.slicedSprites[spriteIndex];
+                sprite = slicedSprite.sprite;
+
 
                 widthAndHeight = new Vector4[]
                 {
                     new Vector4(1, 1, 0, 0),
-                    new Vector4(width, 1, 0, 0),
+                    new Vector4(centerSliceUVSize.x, 1, 0, 0),
                     new Vector4(1, 1, 0, 0),
-                    new Vector4(1, height, 0 , 0),
-                    new Vector4(width, height, 0, 0),
-                    new Vector4(1, height, 0 , 0),
+                    new Vector4(1, centerSliceUVSize.y, 0 , 0),
+                    new Vector4(centerSliceUVSize.x, centerSliceUVSize.y, 0, 0),
+                    new Vector4(1, centerSliceUVSize.y, 0 , 0),
                     new Vector4(1, 1, 0, 0),
-                    new Vector4(width, 1, 0, 0),
+                    new Vector4(centerSliceUVSize.x, 1, 0, 0),
                     new Vector4(1, 1, 0, 0),
                 };
             }
@@ -169,10 +153,27 @@ public class AtlasRenderer : MonoBehaviour
 
         flip = new Vector2(flipX ? 1 : -1, flipY ? 1 : -1);
     }
-
     public void Flip(bool flipLeft)
     {
         flipX = flipLeft;
+    }
+    public void InitSpriteMode()
+    {
+        if (spriteMode == SpriteMode.Slice)
+        {
+            spriteMatrices = new Matrix4x4[9];
+        }
+        else
+        {
+            spriteMatrices = new Matrix4x4[1];
+        }
+    }
+    public void SetCenterSliceSize()
+    {
+        float totalWidthSize = sprite.worldSize.x * width;
+        float totalHeightSlice = sprite.worldSize.y * height;
+        centerSliceWorldSize = new Vector2(Mathf.Max(0, totalWidthSize - slicedSprite.worldSlices.x - slicedSprite.worldSlices.y), Mathf.Max(0, totalHeightSlice - slicedSprite.worldSlices.z - slicedSprite.worldSlices.w));
+        centerSliceUVSize = new Vector2( Mathf.Max(0f, width - slicedSprite.slice.x - (1 - slicedSprite.slice.y)),Mathf.Max(0f, height - slicedSprite.slice.z - (1 - slicedSprite.slice.w)));
     }
 
 #if UNITY_EDITOR
@@ -200,28 +201,28 @@ public class AtlasRendererEditor : Editor
 
         EditorGUILayout.PropertyField(serializedObject.FindProperty("atlas"));
         SerializedProperty spriteIndexProp = serializedObject.FindProperty("spriteIndex");
-        SerializedProperty spriteTypeProp = serializedObject.FindProperty("spriteType");
+        SerializedProperty spriteModeProp = serializedObject.FindProperty("spriteMode");
 
         if (renderer.atlas != null)
         {
-            SpriteType spriteType = (SpriteType)spriteTypeProp.intValue;
+            SpriteMode spriteType = (SpriteMode)spriteModeProp.intValue;
 
             int maxIndex = 0;
             switch (spriteType)
             {
-                case SpriteType.Simple:
+                case SpriteMode.Simple:
                 {
                     if (renderer.atlas.simpleSprites.Length > 0) maxIndex = renderer.atlas.simpleSprites.Length - 1;
                 }
                 break;
 
-                case SpriteType.Motion:
+                case SpriteMode.Motion:
                 {
                     if (renderer.atlas.motionSprites.Length > 0) maxIndex = renderer.atlas.motionSprites.Length - 1;
                 }
                 break;
 
-                case SpriteType.Slice:
+                case SpriteMode.Slice:
                 {
                     if (renderer.atlas.slicedSprites.Length > 0) maxIndex = renderer.atlas.slicedSprites.Length - 1;
                 }
@@ -238,12 +239,6 @@ public class AtlasRendererEditor : Editor
         }
 
         DrawPropertiesExcluding(serializedObject, "atlas", "spriteIndex");
-
-        if (EditorGUI.EndChangeCheck())
-        {
-
-            renderer.SetSprite(spriteIndexProp.intValue);
-        }
 
         serializedObject.ApplyModifiedProperties();
     }

@@ -408,8 +408,8 @@ public class AtlasFactory : EditorWindow
         SimpleSprite newSimpleSprite = new SimpleSprite();
 
 
-        float spriteWidth = maxX - minX + 1;
-        float spriteHeight = maxY - minY + 1;
+        float spriteWidth = maxX - minX;
+        float spriteHeight = maxY - minY;
 
         newSimpleSprite.uvSizeAndPos.x = spriteWidth / texWidth;
         newSimpleSprite.uvSizeAndPos.y = spriteHeight / texHeight;
@@ -475,6 +475,15 @@ public class AtlasFactory : EditorWindow
                 new Vector4(sizeX2, sizeY2, posX2, posY2),
             };
 
+            float worldLeftSlice = (slicedSprite.slice.x * newSimpleSprite.uvSizeAndPos.x * atlas.texture.width) / PIXELS_PER_UNIT;
+            float worldRightSlice = ((1 - slicedSprite.slice.y) * newSimpleSprite.uvSizeAndPos.x * atlas.texture.width) / PIXELS_PER_UNIT;
+            float worldBottomSlice = (slicedSprite.slice.z * newSimpleSprite.uvSizeAndPos.y * atlas.texture.height) / PIXELS_PER_UNIT;
+            float worldTopSlice = ((1 - slicedSprite.slice.w) * newSimpleSprite.uvSizeAndPos.y * atlas.texture.height) / PIXELS_PER_UNIT;
+
+            slicedSprite.worldSlices.x = worldLeftSlice;
+            slicedSprite.worldSlices.y = worldRightSlice;
+            slicedSprite.worldSlices.z = worldBottomSlice;
+            slicedSprite.worldSlices.w = worldTopSlice;
 
             slicedSpritesList.Add(slicedSprite);
         }

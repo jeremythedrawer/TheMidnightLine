@@ -51,8 +51,6 @@ Shader "Custom/s_atlasStandard"
                 UNITY_TRANSFER_INSTANCE_ID(v, o);
 
                 o.positionHCS = TransformObjectToHClip(v.positionOS.xyz);
-
-
                 o.uv = v.uv;
                 return o;
             }
