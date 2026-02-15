@@ -60,14 +60,37 @@ public class AtlasBatchRendererFeature : ScriptableRendererFeature
                     AtlasRenderer atlasRenderer = batch.data.renderers[i];
                     if (atlasRenderer == null || !atlasRenderer.enabled) continue;
 
-                    batch.data.matrices[count] = atlasRenderer.GetMatrix();
-                    batch.data.uvSizeAndPosData[count] = atlasRenderer.uvSizeAndPos;
-                    count++;
+
+                    if (atlasRenderer.spriteType == Atlas.SpriteType.Slice)
+                    {
+                        Matrix4x4[] sliceMatrices = atlasRenderer.Get9SliceMatrices();
+
+                        for (int j = 0; j < 9; j++)
+                        {
+                            Matrix4x4 sliceMatrix = sliceMatrices[j];
+
+                            batch.data.matrices[count] = sliceMatrix;
+                            batch.data.uvSizeAndPosData[count] = atlasRenderer.sliceSprite.uvSizeAndPos[j];
+                            batch.data.widthHeightArray[count] = atlasRenderer.widthAndHeight[j];
+
+                            count++;
+
+                        }
+                    }
+                    else
+                    {
+                        batch.data.matrices[count] = atlasRenderer.GetMatrix();
+                        batch.data.uvSizeAndPosData[count] = atlasRenderer.sprite.uvSizeAndPos;
+                        batch.data.widthHeightArray[count] = atlasRenderer.widthAndHeight[0];
+                        count++;
+                    }
+
                 }
 
                 if (count == 0) continue;
 
                 batch.data.mpb.SetVectorArray(materialIDs.ids.uvSizeAndPos, batch.data.uvSizeAndPosData);
+                batch.data.mpb.SetVectorArray(materialIDs.ids.widthAndHeight, batch.data.widthHeightArray);
                 cmd.DrawMeshInstanced(batch.key.mesh, submeshIndex: 0, batch.key.material, shaderPass: 0, batch.data.matrices, count, batch.data.mpb);
             }
         }

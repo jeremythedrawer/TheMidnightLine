@@ -706,7 +706,7 @@ public class NPCBrain : MonoBehaviour
 
         if (stats.curFrameIndex != stats.prevAtlasIndex)
         {
-            atlas.material.SetInt(materialIDs.ids.atlasIndex, stats.curClip.keyFrames[stats.curFrameIndex].spriteIndex);
+            //atlasRe material.SetInt(materialIDs.ids.atlasIndex, stats.curClip.keyFrames[stats.curFrameIndex].spriteIndex);
             MarkerPosition[] curSpriteMarkers = atlas.motionSprites[stats.curFrameIndex].markers;
             if (curSpriteMarkers.Length > 0)
             {

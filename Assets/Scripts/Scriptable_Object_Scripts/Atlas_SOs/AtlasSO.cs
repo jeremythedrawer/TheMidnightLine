@@ -6,7 +6,6 @@ using static Atlas;
 public class AtlasSO : ScriptableObject
 {
     public Texture2D texture;
-    public Material material;
 
     [Header("Motion Settings")]
     public EntityMotionType entityMotionType;

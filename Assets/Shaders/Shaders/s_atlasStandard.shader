@@ -2,7 +2,7 @@ Shader "Custom/s_atlasStandard"
 {
     Properties
     {
-        _AtlasTexture("Texture Atlas", 2D) = "white"
+        [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
     }
 
     SubShader
@@ -40,10 +40,9 @@ Shader "Custom/s_atlasStandard"
 
             UNITY_INSTANCING_BUFFER_START(AtlasProps)
                 UNITY_DEFINE_INSTANCED_PROP(float4, _UVSizeAndPos)
+                UNITY_DEFINE_INSTANCED_PROP(float2, _WidthHeight)
+                UNITY_DEFINE_INSTANCED_PROP(float2, _Flip)
             UNITY_INSTANCING_BUFFER_END(AtlasProps)
-
-            CBUFFER_START(UnityPerMaterial)
-            CBUFFER_END
 
             Varyings vert(Attributes v)
             {
@@ -53,17 +52,24 @@ Shader "Custom/s_atlasStandard"
 
                 o.positionHCS = TransformObjectToHClip(v.positionOS.xyz);
 
-                float4 uvSizeAndPos = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _UVSizeAndPos);
 
-                o.uv = v.uv - 0.5;
-                o.uv *= uvSizeAndPos.xy;
-                o.uv += uvSizeAndPos.zw;
-
+                o.uv = v.uv;
                 return o;
             }
 
             half4 frag(Varyings i) : SV_Target
             {
+                UNITY_SETUP_INSTANCE_ID(i);
+
+                float4 uvSizeAndPos = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _UVSizeAndPos);
+                float2 widthHeight  = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _WidthHeight);
+                float2 flip         = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _Flip);
+
+                i.uv *= widthHeight;
+                i.uv = frac(i.uv);
+
+                i.uv *= uvSizeAndPos.xy;
+                i.uv += uvSizeAndPos.zw;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
                 return color;
             }

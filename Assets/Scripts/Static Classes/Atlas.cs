@@ -87,9 +87,10 @@ public static class Atlas
     }
     [Serializable] public struct SimpleSprite
     {
-        public Vector2 uvSize;
-        public Vector2 uvPos;
+        public Vector4 uvSizeAndPos;
         public Vector2 uvPivot;
+        public Vector3 worldSize;
+
         public int index;
     }
     [Serializable] public struct MotionSprite
@@ -100,7 +101,8 @@ public static class Atlas
     [Serializable] public struct SliceSprite
     {
         public SimpleSprite sprite;
-        public Vector2[] slices;
+        public Vector4 slice;
+        public Vector4[] uvSizeAndPos;
     }
     [Serializable] public struct AtlasKeyframe
     {

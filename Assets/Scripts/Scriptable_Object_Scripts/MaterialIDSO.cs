@@ -49,6 +49,8 @@ public class MaterialIDSO : ScriptableObject
 
         public int flip;
         public int pixelsPerUnit;
+
+        public int widthAndHeight;
     }
     [SerializeField] public IDs ids;
 
@@ -98,5 +100,6 @@ public class MaterialIDSO : ScriptableObject
         ids.atlasSprites = Shader.PropertyToID("_AtlasSprites");
         ids.flip = Shader.PropertyToID("_Flip");
         ids.pixelsPerUnit = Shader.PropertyToID("_PPU");
+        ids.widthAndHeight = Shader.PropertyToID("_WidthHeight");
     }
 }
