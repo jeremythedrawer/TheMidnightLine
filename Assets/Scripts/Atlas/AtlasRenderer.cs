@@ -254,7 +254,6 @@ public class AtlasRendererEditor : Editor
         serializedObject.ApplyModifiedProperties();
         if (EditorGUI.EndChangeCheck())
         {
-            Debug.Log("Change hapeened");
             UnregisterRenderer(renderer);
             RegisterRenderer(renderer);
         }

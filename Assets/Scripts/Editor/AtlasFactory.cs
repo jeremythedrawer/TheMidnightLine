@@ -105,6 +105,7 @@ public class AtlasFactory : EditorWindow
             GetMotionData();
             previewRT = null;
             flip = 1;
+            EditorUtility.SetDirty(atlas);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }

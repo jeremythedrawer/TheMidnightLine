@@ -63,6 +63,8 @@ public class AtlasBatchRendererFeature : ScriptableRendererFeature
 
                     if (atlasRenderer.spriteMode == Atlas.SpriteMode.Slice)
                     {
+                        if (atlasRenderer.slicedSprite.uvSizeAndPos == null || atlasRenderer.slicedSprite.uvSizeAndPos.Length == 0) continue;
+
                         Matrix4x4[] sliceMatrices = atlasRenderer.Get9SliceMatrices();
 
                         for (int j = 0; j < 9; j++)
