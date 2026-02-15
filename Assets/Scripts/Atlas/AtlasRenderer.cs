@@ -14,6 +14,7 @@ public class AtlasRenderer : MonoBehaviour
     public float height = 1f;
     public bool flipX;
     public bool flipY;
+    public int depthOrder;
 
     [Header("Generated")]
     public BatchKey batchKey;
@@ -32,6 +33,15 @@ public class AtlasRenderer : MonoBehaviour
         InitSpriteMode();
         SetCenterSliceSize();
         SetSprite(spriteIndex);
+        transform.position = new Vector3(transform.position.x, transform.position.y, depthOrder);
+    }
+
+    private void Update()
+    {
+#if UNITY_EDITOR
+        transform.position = new Vector3(transform.position.x, transform.position.y, depthOrder);
+#endif
+
     }
     private void OnEnable()
     {
@@ -44,7 +54,7 @@ public class AtlasRenderer : MonoBehaviour
     public Matrix4x4 GetMatrix()
     {
         Vector2 pivotFromCenter = sprite.uvPivot;
-        Vector3 pivotOffset = new Vector3(pivotFromCenter.x * sprite.worldSize.x, pivotFromCenter.y * sprite.worldSize.y, 0f);
+        Vector3 pivotOffset = new Vector3(pivotFromCenter.x * sprite.worldSize.x, pivotFromCenter.y * sprite.worldSize.y, 1f);
         Vector3 matrixPos = transform.position + transform.rotation * -pivotOffset;
         Vector3 matrixScale = new Vector3(sprite.worldSize.x * width, sprite.worldSize.y * height, 1f);
 
@@ -52,6 +62,7 @@ public class AtlasRenderer : MonoBehaviour
 
         return spriteMatrices[0];
     }
+
     public Matrix4x4[] Get9SliceMatrices()
     {
         Vector2[] sizes =
@@ -86,8 +97,7 @@ public class AtlasRenderer : MonoBehaviour
 
         for (int i = 0; i < 9; i++)
         {
-            float z = i * 0.0001f;
-            Vector3 localPos = new Vector3(offsets[i].x, offsets[i].y, z);
+            Vector3 localPos = new Vector3(offsets[i].x, offsets[i].y, 0);
 
             spriteMatrices[i] = Matrix4x4.TRS(transform.position + transform.rotation * localPos,
                                               transform.rotation, 
@@ -240,7 +250,14 @@ public class AtlasRendererEditor : Editor
 
         DrawPropertiesExcluding(serializedObject, "atlas", "spriteIndex");
 
+        
         serializedObject.ApplyModifiedProperties();
+        if (EditorGUI.EndChangeCheck())
+        {
+            Debug.Log("Change hapeened");
+            UnregisterRenderer(renderer);
+            RegisterRenderer(renderer);
+        }
     }
 }
 

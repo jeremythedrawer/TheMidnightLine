@@ -166,8 +166,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 671526198499636761}
-  - component: {fileID: 5939122199044154566}
-  - component: {fileID: 8988255018445603044}
+  - component: {fileID: 6658800491029497935}
   m_Layer: 15
   m_Name: Platform
   m_TagString: Untagged
@@ -184,59 +183,13 @@ Transform:
   m_GameObject: {fileID: 1600158969009688442}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -109.31, y: -4.35, z: -12}
+  m_LocalPosition: {x: -105.12, y: -1.71, z: -12}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 610871725384999470}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &5939122199044154566
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1600158969009688442}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 106.4, y: 2}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 32, y: 4}
-    newSize: {x: 212.8, y: 4}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 2
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 212.8, y: 3.9}
-  m_EdgeRadius: 0
---- !u!114 &8988255018445603044
+--- !u!114 &6658800491029497935
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -250,20 +203,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
   material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-  spriteIndex: 3
-  spriteType: 0
-  width: 3.17
+  spriteIndex: 0
+  spriteMode: 0
+  width: 4.02
   height: 1
   flipX: 0
   flipY: 0
   batchKey:
-    material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+    material: {fileID: 0}
     mesh: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0, w: 0.81152344}
+    uvSizeAndPos: {x: 0.49926758, y: 0.06225586, z: 0, w: 0.9375}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 5.6833334, y: 0.7111111, z: 0}
-    index: 3
+    worldSize: {x: 11.361111, y: 1.4166666, z: 1}
+    index: 0
   motionSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -271,7 +224,7 @@ MonoBehaviour:
       worldSize: {x: 0, y: 0, z: 0}
       index: 0
     markers: []
-  sliceSprite:
+  slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
       uvPivot: {x: 0, y: 0}
@@ -279,6 +232,7 @@ MonoBehaviour:
       index: 0
     slice: {x: 0, y: 0, z: 0, w: 0}
     uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -297,8 +251,10 @@ MonoBehaviour:
     e32: 0
     e33: 0
   widthAndHeight:
-  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 4.02, y: 1, z: 0, w: 0}
   flip: {x: -1, y: -1}
+  centerSliceWorldSize: {x: 45.671665, y: 1.4166666}
+  centerSliceUVSize: {x: 3.02, y: 0}
 --- !u!1 &2007327773314685102
 GameObject:
   m_ObjectHideFlags: 0
@@ -488,7 +444,7 @@ Transform:
   m_GameObject: {fileID: 5115538364447988645}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -17.839996, y: -0.05, z: 1}
+  m_LocalPosition: {x: -10.84, y: -0.05, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -506,10 +462,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: f5426ce55351b9e40a3b4042824f72f9, type: 2}
-  material: {fileID: 0}
+  atlas: {fileID: 11400000, guid: 02c9993b5b1bf6f4daa262e7f4f6313b, type: 2}
+  material: {fileID: 2100000, guid: fbc8706b3d542f146834f58bb06c2240, type: 2}
   spriteIndex: 1
-  spriteType: 0
+  spriteMode: 0
   width: 1
   height: 1
   flipX: 0
@@ -518,10 +474,10 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: fbc8706b3d542f146834f58bb06c2240, type: 2}
     mesh: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0, y: 0, z: 0}
-    index: 0
+    uvSizeAndPos: {x: 0.4790039, y: 0.29248047, z: 0, w: 0}
+    uvPivot: {x: 0.5, y: 0}
+    worldSize: {x: 10.9, y: 6.6555557, z: 1}
+    index: 1
   motionSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -529,7 +485,7 @@ MonoBehaviour:
       worldSize: {x: 0, y: 0, z: 0}
       index: 0
     markers: []
-  sliceSprite:
+  slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
       uvPivot: {x: 0, y: 0}
@@ -537,6 +493,7 @@ MonoBehaviour:
       index: 0
     slice: {x: 0, y: 0, z: 0, w: 0}
     uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -555,8 +512,10 @@ MonoBehaviour:
     e32: 0
     e33: 0
   widthAndHeight:
-  - {x: 0, y: 0, z: 0, w: 0}
-  flip: {x: 0, y: 0}
+  - {x: 1, y: 1, z: 0, w: 0}
+  flip: {x: -1, y: -1}
+  centerSliceWorldSize: {x: 10.9, y: 6.6555557}
+  centerSliceUVSize: {x: 0, y: 0}
 --- !u!1 &7371209478334343851
 GameObject:
   m_ObjectHideFlags: 0
@@ -706,7 +665,7 @@ MonoBehaviour:
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
-  platformCollider: {fileID: 5939122199044154566}
+  platformCollider: {fileID: 0}
 --- !u!1 &8757817511839388079
 GameObject:
   m_ObjectHideFlags: 0

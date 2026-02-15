@@ -28,7 +28,7 @@ public class AtlasBatchRendererFeature : ScriptableRendererFeature
         private static MaterialIDSO materialIDs;
         public AtlasBatchRenderPass(MaterialIDSO materialID)
         {
-            renderPassEvent = RenderPassEvent.AfterRenderingTransparents;
+            renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
             materialIDs = materialID;
         }
 

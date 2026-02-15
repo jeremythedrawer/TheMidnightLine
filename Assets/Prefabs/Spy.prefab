@@ -9,8 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4787624463287863098}
-  - component: {fileID: 5232294531731585567}
-  - component: {fileID: 5981015622049049634}
+  - component: {fileID: 158645871948708161}
   - component: {fileID: 8121811400885595123}
   - component: {fileID: 2814450545205291383}
   - component: {fileID: 4281581721833017353}
@@ -37,62 +36,72 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &5232294531731585567
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8772790425813503437}
-  m_Mesh: {fileID: 1342304887910232464, guid: 9645610bd8d51b44f9bf2d72e36be8b9, type: 3}
---- !u!23 &5981015622049049634
-MeshRenderer:
+--- !u!114 &158645871948708161
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 8772790425813503437}
   m_Enabled: 1
-  m_CastShadows: 1
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 5085181b26ea31b4b9430dc5ce3bcdf5, type: 2}
+  material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
+  spriteIndex: 0
+  spriteMode: 1
+  width: 1
+  height: 1
+  flipX: 0
+  flipY: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
+    mesh: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.13134766, y: 0.119140625, z: 0.00048828125, w: 0.87646484}
+    uvPivot: {x: 0.43122676, y: 0}
+    worldSize: {x: 1.4944445, y: 1.3555555, z: 1}
+    index: 0
+  motionSprite:
+    sprite:
+      uvSizeAndPos: {x: 0.13134766, y: 0.119140625, z: 0.00048828125, w: 0.87646484}
+      uvPivot: {x: 0.43122676, y: 0}
+      worldSize: {x: 1.4944445, y: 1.3555555, z: 1}
+      index: 0
+    markers: []
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthAndHeight:
+  - {x: 1, y: 1, z: 0, w: 0}
+  flip: {x: -1, y: -1}
+  centerSliceWorldSize: {x: 1.4944445, y: 1.3555555}
+  centerSliceUVSize: {x: 0, y: 0}
 --- !u!82 &8121811400885595123
 AudioSource:
   m_ObjectHideFlags: 0
@@ -277,9 +286,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidBody: {fileID: 2814450545205291383}
   boxCollider: {fileID: 4281581721833017353}
-  animator: {fileID: 0}
-  spriteRenderer: {fileID: 0}
+  atlasRenderer: {fileID: 0}
+  atlas: {fileID: 0}
   settings: {fileID: 11400000, guid: ff622072eaf75a443bdc1bbda3340ef0, type: 2}
+  materialIDs: {fileID: 0}
   stats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   inputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
@@ -287,5 +297,8 @@ MonoBehaviour:
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
   phone: {fileID: 11400000, guid: b67f56cb6cf796b48b746b0b6bff5dae, type: 2}
-  startRunClip: {fileID: 7400000, guid: 3fba1aace4e082249b173aeccbd132aa, type: 2}
-  climbClip: {fileID: 7400000, guid: e54fb739fef0d054c8c38b8e71ce5ca3, type: 2}
+  collisionPoints:
+    groundLeft: {x: 278.41998, y: 29.561}
+    groundRight: {x: 279.76, y: 29.561}
+    stepLeft: {x: 278.41998, y: 29.731}
+    stepRight: {x: 279.76, y: 29.731}

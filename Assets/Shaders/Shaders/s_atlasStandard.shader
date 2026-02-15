@@ -7,9 +7,10 @@ Shader "Custom/s_atlasStandard"
 
     SubShader
     {
-        Tags { "Queue" = "Transparent" "RenderType" = "Transparent" "RenderPipeline" = "UniversalPipeline" }
+        Tags { "Queue" = "Geometry" }
+        ZWrite On
+        ZTest LEqual
         Blend SrcAlpha OneMinusSrcAlpha
-        ZWrite Off
         Pass
         {
             HLSLPROGRAM
@@ -69,6 +70,7 @@ Shader "Custom/s_atlasStandard"
                 i.uv *= uvSizeAndPos.xy;
                 i.uv += uvSizeAndPos.zw;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+                clip(color.a - 0.001);
                 return color;
             }
             ENDHLSL
