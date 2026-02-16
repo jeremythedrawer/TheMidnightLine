@@ -62,7 +62,7 @@ public class AtlasBatchRendererFeature : ScriptableRendererFeature
 
                     if (atlasRenderer == null || !atlasRenderer.enabled) continue;
 
-                    if (atlasRenderer.spriteMode == Atlas.SpriteMode.Slice)
+                    if (atlasRenderer.spriteMode == SpriteMode.Slice)
                     {
                         ref SliceSprite slicedSprite = ref atlasRenderer.atlas.slicedSprites[atlasRenderer.spriteIndex];
 
@@ -74,7 +74,7 @@ public class AtlasBatchRendererFeature : ScriptableRendererFeature
 
                             batch.data.matrices[count] = sliceMatrix;
                             batch.data.uvSizeAndPosData[count] = slicedSprite.uvSizeAndPos[j];
-                            batch.data.widthHeightArray[count] = atlasRenderer.widthAndHeight[j];
+                            batch.data.widthHeightFlip[count] = atlasRenderer.widthHeightFlip[j];
                             count++;
                         }
                     }
@@ -82,7 +82,7 @@ public class AtlasBatchRendererFeature : ScriptableRendererFeature
                     {
                         batch.data.matrices[count] = atlasRenderer.GetMatrix();
                         batch.data.uvSizeAndPosData[count] = atlasRenderer.sprite.uvSizeAndPos;
-                        batch.data.widthHeightArray[count] = atlasRenderer.widthAndHeight[0];
+                        batch.data.widthHeightFlip[count] = atlasRenderer.widthHeightFlip[0];
                         count++;
                     }
 
@@ -91,7 +91,7 @@ public class AtlasBatchRendererFeature : ScriptableRendererFeature
                 if (count == 0) continue;
 
                 batch.data.mpb.SetVectorArray(materialIDs.ids.uvSizeAndPos, batch.data.uvSizeAndPosData);
-                batch.data.mpb.SetVectorArray(materialIDs.ids.widthAndHeight, batch.data.widthHeightArray);
+                batch.data.mpb.SetVectorArray(materialIDs.ids.widthHeightFlip, batch.data.widthHeightFlip);
                 cmd.DrawMeshInstanced(batch.key.mesh, 
                                       submeshIndex: 0, 
                                       batch.key.material, 

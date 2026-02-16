@@ -47,10 +47,9 @@ public class MaterialIDSO : ScriptableObject
         public int atlasIndex;
         public int atlasSprites;
 
-        public int flip;
         public int pixelsPerUnit;
 
-        public int widthAndHeight;
+        public int widthHeightFlip;
     }
     [SerializeField] public IDs ids;
 
@@ -98,8 +97,7 @@ public class MaterialIDSO : ScriptableObject
         ids.lodLevelThreshold1 = Shader.PropertyToID("_LODThreshold1");
         ids.atlasIndex = Shader.PropertyToID("_AtlasIndex");
         ids.atlasSprites = Shader.PropertyToID("_AtlasSprites");
-        ids.flip = Shader.PropertyToID("_Flip");
         ids.pixelsPerUnit = Shader.PropertyToID("_PPU");
-        ids.widthAndHeight = Shader.PropertyToID("_WidthHeight");
+        ids.widthHeightFlip = Shader.PropertyToID("_WidthHeightFlip");
     }
 }

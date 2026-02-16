@@ -19,7 +19,7 @@ public static class AtlasBatch
         public readonly List<AtlasRenderer> renderers = new List<AtlasRenderer>();
         public readonly Matrix4x4[] matrices = new Matrix4x4[MAX];
         public readonly Vector4[] uvSizeAndPosData = new Vector4[MAX];
-        public readonly Vector4[] widthHeightArray = new Vector4[MAX];
+        public readonly Vector4[] widthHeightFlip = new Vector4[MAX];
         public readonly MaterialPropertyBlock mpb = new MaterialPropertyBlock();
     }
 

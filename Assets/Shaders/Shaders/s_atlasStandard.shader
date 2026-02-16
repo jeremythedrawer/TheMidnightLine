@@ -41,8 +41,7 @@ Shader "Custom/s_atlasStandard"
 
             UNITY_INSTANCING_BUFFER_START(AtlasProps)
                 UNITY_DEFINE_INSTANCED_PROP(float4, _UVSizeAndPos)
-                UNITY_DEFINE_INSTANCED_PROP(float2, _WidthHeight)
-                UNITY_DEFINE_INSTANCED_PROP(float2, _Flip)
+                UNITY_DEFINE_INSTANCED_PROP(float4, _WidthHeightFlip)
             UNITY_INSTANCING_BUFFER_END(AtlasProps)
 
             Varyings vert(Attributes v)
@@ -61,12 +60,11 @@ Shader "Custom/s_atlasStandard"
                 UNITY_SETUP_INSTANCE_ID(i);
 
                 float4 uvSizeAndPos = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _UVSizeAndPos);
-                float2 widthHeight  = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _WidthHeight);
-                float2 flip         = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _Flip);
+                float4 widthHeightFlip  = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _WidthHeightFlip);
 
-                i.uv *= widthHeight;
+                i.uv *= widthHeightFlip.xy;
                 i.uv = frac(i.uv);
-
+                i.uv = (i.uv - 0.5) * widthHeightFlip.zw + 0.5;
                 i.uv *= uvSizeAndPos.xy;
                 i.uv += uvSizeAndPos.zw;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);

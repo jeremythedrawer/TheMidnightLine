@@ -22,8 +22,7 @@ public class AtlasRenderer : MonoBehaviour
     public SimpleSprite sprite;
 
     public Matrix4x4[] spriteMatrices;
-    public Vector4[] widthAndHeight;
-    public Vector2 flip;
+    public Vector4[] widthHeightFlip;
 
     public Vector2 centerSliceWorldSize;
     public Vector2 centerSliceUVSize;
@@ -65,9 +64,9 @@ public class AtlasRenderer : MonoBehaviour
                 if (atlas.simpleSprites.Length == 0) return;
                 sprite = atlas.simpleSprites[spriteIndex];
 
-                widthAndHeight = new Vector4[]
+                widthHeightFlip = new Vector4[]
                 {
-                    new Vector4(width, height, 0, 0)
+                    new Vector4(width, height, flipX ? -1 : 1, flipY ? -1 : 1)
                 };
             }
             break;
@@ -80,9 +79,9 @@ public class AtlasRenderer : MonoBehaviour
 
                 sprite = motionSprite.sprite;
 
-                widthAndHeight = new Vector4[]
+                widthHeightFlip = new Vector4[]
                 {
-                    new Vector4(width, height, 0, 0)
+                    new Vector4(width, height, flipX ? -1 : 1, flipY ? -1 : 1)
                 };
             }
             break;
@@ -94,25 +93,22 @@ public class AtlasRenderer : MonoBehaviour
                 ref SliceSprite slicedSprite = ref atlas.slicedSprites[spriteIndex];
                 sprite = slicedSprite.sprite;
 
-
-                widthAndHeight = new Vector4[]
+                Vector2 flip = new Vector2(flipX ? -1 : 1, flipY ? -1 : 1);
+                widthHeightFlip = new Vector4[]
                 {
-                    new Vector4(1, 1, 0, 0),
-                    new Vector4(centerSliceUVSize.x, 1, 0, 0),
-                    new Vector4(1, 1, 0, 0),
-                    new Vector4(1, centerSliceUVSize.y, 0 , 0),
-                    new Vector4(centerSliceUVSize.x, centerSliceUVSize.y, 0, 0),
-                    new Vector4(1, centerSliceUVSize.y, 0 , 0),
-                    new Vector4(1, 1, 0, 0),
-                    new Vector4(centerSliceUVSize.x, 1, 0, 0),
-                    new Vector4(1, 1, 0, 0),
+                    new Vector4(1, 1, flip.x, flip.y),
+                    new Vector4(centerSliceUVSize.x, 1, flip.x, flip.y),
+                    new Vector4(1, 1, flip.x, flip.y),
+                    new Vector4(1, centerSliceUVSize.y, flip.x, flip.y),
+                    new Vector4(centerSliceUVSize.x, centerSliceUVSize.y,flip.x, flip.y),
+                    new Vector4(1, centerSliceUVSize.y, flip.x, flip.y),
+                    new Vector4(1, 1, flip.x, flip.y),
+                    new Vector4(centerSliceUVSize.x, 1,flip.x, flip.y),
+                    new Vector4(1, 1, flip.x, flip.y),
                 };
             }
             break;
         }
-
-
-        flip = new Vector2(flipX ? 1 : -1, flipY ? 1 : -1);
     }
     private void InitSpriteMode()
     {

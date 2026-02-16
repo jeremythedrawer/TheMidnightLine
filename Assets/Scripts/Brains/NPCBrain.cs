@@ -239,7 +239,7 @@ public class NPCBrain : MonoBehaviour
             case State.Walking:
             {
                 stats.spriteFlip = inputData.move > 0;
-                mpb.SetInt(materialIDs.ids.flip, stats.spriteFlip ? 1 : 0);
+               // mpb.SetInt(materialIDs.ids.flip, stats.spriteFlip ? 1 : 0);
             }
             break;
             case State.Smoking:
