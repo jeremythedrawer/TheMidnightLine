@@ -50,36 +50,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   atlas: {fileID: 11400000, guid: 5085181b26ea31b4b9430dc5ce3bcdf5, type: 2}
   material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
-  spriteIndex: 0
+  boxCollider: {fileID: 0}
+  spriteIndex: 8
   spriteMode: 1
   width: 1
   height: 1
-  flipX: 0
+  flipX: 1
   flipY: 0
+  depthOrder: 2
   batchKey:
     material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
     mesh: {fileID: 0}
+    depthOrder: 2
   sprite:
-    uvSizeAndPos: {x: 0.13134766, y: 0.119140625, z: 0.00048828125, w: 0.87646484}
-    uvPivot: {x: 0.43122676, y: 0}
-    worldSize: {x: 1.4944445, y: 1.3555555, z: 1}
-    index: 0
-  motionSprite:
-    sprite:
-      uvSizeAndPos: {x: 0.13134766, y: 0.119140625, z: 0.00048828125, w: 0.87646484}
-      uvPivot: {x: 0.43122676, y: 0}
-      worldSize: {x: 1.4944445, y: 1.3555555, z: 1}
-      index: 0
-    markers: []
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: {x: 0.12548828, y: 0.119628906, z: 0.0087890625, w: 0.75097656}
+    uvPivot: {x: 0.43579766, y: 0}
+    worldSize: {x: 1.4277778, y: 1.3611112, z: 1}
+    index: 8
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -97,9 +84,8 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 0
-  widthAndHeight:
-  - {x: 1, y: 1, z: 0, w: 0}
-  flip: {x: -1, y: -1}
+  widthHeightFlip:
+  - {x: 1, y: 1, z: -1, w: 1}
   centerSliceWorldSize: {x: 1.4944445, y: 1.3555555}
   centerSliceUVSize: {x: 0, y: 0}
 --- !u!82 &8121811400885595123
@@ -260,7 +246,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 1.615}
+  m_Offset: {x: 0, y: 0.8584776}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -270,7 +256,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.24, y: 3.23}
+  m_Size: {x: 0.28289795, y: 1.7169552}
   m_EdgeRadius: 0
 --- !u!114 &8541590373058370183
 MonoBehaviour:
@@ -286,10 +272,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidBody: {fileID: 2814450545205291383}
   boxCollider: {fileID: 4281581721833017353}
-  atlasRenderer: {fileID: 0}
-  atlas: {fileID: 0}
+  atlasRenderer: {fileID: 158645871948708161}
   settings: {fileID: 11400000, guid: ff622072eaf75a443bdc1bbda3340ef0, type: 2}
-  materialIDs: {fileID: 0}
+  materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   stats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   inputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
@@ -297,8 +282,22 @@ MonoBehaviour:
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
   phone: {fileID: 11400000, guid: b67f56cb6cf796b48b746b0b6bff5dae, type: 2}
+  atlas: {fileID: 0}
+  slideDoors: {fileID: 0}
+  gangwayDoor: {fileID: 0}
+  curClimbCollider: {fileID: 0}
+  curCarriage: {fileID: 0}
+  curState: 0
+  curClip:
+    clipName: 
+    keyFrames: []
+    clipType: 0
+    motionIndex: 0
+  clipTime: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
   collisionPoints:
-    groundLeft: {x: 278.41998, y: 29.561}
-    groundRight: {x: 279.76, y: 29.561}
-    stepLeft: {x: 278.41998, y: 29.731}
-    stepRight: {x: 279.76, y: 29.731}
+    groundLeft: {x: 288.12997, y: 1.295}
+    groundRight: {x: 289.47, y: 1.295}
+    stepLeft: {x: 288.12997, y: 1.4649999}
+    stepRight: {x: 289.47, y: 1.4649999}

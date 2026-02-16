@@ -11,6 +11,6 @@ public class SpawnerSettingsSO : ScriptableObject
     public int maxParticleCount = 1024;
     public ComputeShader backgroundParticleCompute;
     public Material backgroundMaterial;
-    public Spawn.ParticleData[] particleData;
-    public Spawn.TimeStamp[] timeStamp;
+    public AtlasSpawn.ParticleData[] particleData;
+    public AtlasSpawn.TimeStamp[] timeStamp;
 }

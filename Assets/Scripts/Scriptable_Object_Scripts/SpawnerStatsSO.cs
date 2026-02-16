@@ -22,10 +22,10 @@ public class SpawnerStatsSO : ScriptableObject
     public ComputeBuffer particleComputeBuffer;
     public ComputeBuffer backgroundParticleInputBuffer;
     public Bounds renderParamsBounds;
-    public Spawn.BackgroundType curBackgroundTypes;
+    public AtlasSpawn.BackgroundType curBackgroundTypes;
 
     public int backgroundMaskCount;
-    public Spawn.BackgroundParticleInputs[] backgroundInputsArray;
+    public AtlasSpawn.BackgroundParticleInputs[] backgroundInputsArray;
 
     public void CreateBoundWideMesh()
     {

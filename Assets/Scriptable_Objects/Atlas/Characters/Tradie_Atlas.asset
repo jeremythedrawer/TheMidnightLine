@@ -9,18 +9,531 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0e5f269e70e249b4aa97c9e137ae9b4b, type: 3}
+  m_Script: {fileID: 11500000, guid: 33fd095fffb8f844e9fa149db1599080, type: 3}
   m_Name: Tradie_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
-  entityType: 0
-  texture: {fileID: 0}
-  material: {fileID: 0}
-  materialIDs: {fileID: 0}
-  customPivotColor:
+  texture: {fileID: 2800000, guid: cc98a5ce93c118c4481c75a80e8c861e, type: 3}
+  entityMotionType: 0
+  pivotColor:
     serializedVersion: 2
     rgba: 4278190335
-  markers: []
-  clips: []
-  framesPerSecond: 30
-  sprites: []
-  generatedQuadMesh: {fileID: 0}
+  sliceColor:
+    serializedVersion: 2
+    rgba: 4294901760
+  motionSprites:
+  - sprite:
+      uvSizeAndPos: {x: 0.041503906, y: 0.15771484, z: 0.017089844, w: 0.8417969}
+      uvPivot: {x: 0.42352942, y: 0}
+      worldSize: {x: 0.4722222, y: 1.7944444, z: 1}
+      index: 0
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.060058594, y: 0.15673828, z: 0.06591797, w: 0.8417969}
+      uvPivot: {x: 0.46341464, y: 0}
+      worldSize: {x: 0.68333334, y: 1.7833333, z: 1}
+      index: 1
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.064941406, y: 0.15576172, z: 0.12646484, w: 0.8417969}
+      uvPivot: {x: 0.5338346, y: 0}
+      worldSize: {x: 0.73888886, y: 1.7722223, z: 1}
+      index: 2
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.045410156, y: 0.15673828, z: 0.19628906, w: 0.8417969}
+      uvPivot: {x: 0.5483871, y: 0}
+      worldSize: {x: 0.51666665, y: 1.7833333, z: 1}
+      index: 3
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.03955078, y: 0.15771484, z: 0.25, w: 0.8417969}
+      uvPivot: {x: 0.54320985, y: 0}
+      worldSize: {x: 0.45, y: 1.7944444, z: 1}
+      index: 4
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.05029297, y: 0.15673828, z: 0.2919922, w: 0.84228516}
+      uvPivot: {x: 0.5436893, y: 0}
+      worldSize: {x: 0.57222223, y: 1.7833333, z: 1}
+      index: 5
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.06591797, y: 0.15576172, z: 0.34277344, w: 0.84277344}
+      uvPivot: {x: 0.44444445, y: 0}
+      worldSize: {x: 0.75, y: 1.7722223, z: 1}
+      index: 6
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.04736328, y: 0.15673828, z: 0.4091797, w: 0.84228516}
+      uvPivot: {x: 0.5670103, y: 0}
+      worldSize: {x: 0.5388889, y: 1.7833333, z: 1}
+      index: 7
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.046875, y: 0.15820312, z: 0.5263672, w: 0.83984375}
+      uvPivot: {x: 0.45833334, y: 0}
+      worldSize: {x: 0.53333336, y: 1.8, z: 1}
+      index: 8
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.046875, y: 0.15917969, z: 0.5834961, w: 0.83984375}
+      uvPivot: {x: 0.45833334, y: 0}
+      worldSize: {x: 0.53333336, y: 1.8111111, z: 1}
+      index: 9
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.046875, y: 0.15966797, z: 0.6430664, w: 0.83984375}
+      uvPivot: {x: 0.45833334, y: 0}
+      worldSize: {x: 0.53333336, y: 1.8166667, z: 1}
+      index: 10
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.04736328, y: 0.1586914, z: 0.6972656, w: 0.8388672}
+      uvPivot: {x: 0.45360824, y: 0.003076923}
+      worldSize: {x: 0.5388889, y: 1.8055556, z: 1}
+      index: 11
+    markers:
+    - objectPos: {x: 0.43333334, y: 1.5722222}
+      type: 1
+  - sprite:
+      uvSizeAndPos: {x: 0.04736328, y: 0.15966797, z: 0.75683594, w: 0.8388672}
+      uvPivot: {x: 0.45360824, y: 0.003058104}
+      worldSize: {x: 0.5388889, y: 1.8166667, z: 1}
+      index: 12
+    markers:
+    - objectPos: {x: 0.43333334, y: 1.5777777}
+      type: 1
+  - sprite:
+      uvSizeAndPos: {x: 0.04736328, y: 0.15966797, z: 0.81640625, w: 0.83935547}
+      uvPivot: {x: 0.45360824, y: 0}
+      worldSize: {x: 0.5388889, y: 1.8166667, z: 1}
+      index: 13
+    markers:
+    - objectPos: {x: 0.43333334, y: 1.5777777}
+      type: 1
+  - sprite:
+      uvSizeAndPos: {x: 0.057128906, y: 0.15966797, z: 0.8745117, w: 0.83935547}
+      uvPivot: {x: 0.37606838, y: 0}
+      worldSize: {x: 0.65, y: 1.8166667, z: 1}
+      index: 14
+    markers:
+    - objectPos: {x: 0.65, y: 1.3611112}
+      type: 1
+  - sprite:
+      uvSizeAndPos: {x: 0.057128906, y: 0.15917969, z: 0.93896484, w: 0.83984375}
+      uvPivot: {x: 0.37606838, y: 0}
+      worldSize: {x: 0.65, y: 1.8111111, z: 1}
+      index: 15
+    markers:
+    - objectPos: {x: 0.65, y: 1.3555555}
+      type: 1
+  - sprite:
+      uvSizeAndPos: {x: 0.057128906, y: 0.15820312, z: 0.015136719, w: 0.6821289}
+      uvPivot: {x: 0.37606838, y: 0}
+      worldSize: {x: 0.65, y: 1.8, z: 1}
+      index: 16
+    markers:
+    - objectPos: {x: 0.65, y: 1.35}
+      type: 1
+  - sprite:
+      uvSizeAndPos: {x: 0.046875, y: 0.15771484, z: 0.078125, w: 0.68310547}
+      uvPivot: {x: 0.45833334, y: 0}
+      worldSize: {x: 0.53333336, y: 1.7944444, z: 1}
+      index: 17
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.046875, y: 0.15771484, z: 0.13574219, w: 0.68310547}
+      uvPivot: {x: 0.45833334, y: 0}
+      worldSize: {x: 0.53333336, y: 1.7944444, z: 1}
+      index: 18
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.048828125, y: 0.15771484, z: 0.19677734, w: 0.68115234}
+      uvPivot: {x: 0.38, y: 0}
+      worldSize: {x: 0.5555556, y: 1.7944444, z: 1}
+      index: 19
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15771484, z: 0.25048828, w: 0.68115234}
+      uvPivot: {x: 0.42222223, y: 0}
+      worldSize: {x: 0.5, y: 1.7944444, z: 1}
+      index: 20
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15576172, z: 0.30322266, w: 0.68115234}
+      uvPivot: {x: 0.42222223, y: 0}
+      worldSize: {x: 0.5, y: 1.7722223, z: 1}
+      index: 21
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15771484, z: 0.35498047, w: 0.68115234}
+      uvPivot: {x: 0.42222223, y: 0}
+      worldSize: {x: 0.5, y: 1.7944444, z: 1}
+      index: 22
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15771484, z: 0.40820312, w: 0.68115234}
+      uvPivot: {x: 0.42222223, y: 0}
+      worldSize: {x: 0.5, y: 1.7944444, z: 1}
+      index: 23
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15771484, z: 0.45996094, w: 0.68115234}
+      uvPivot: {x: 0.42222223, y: 0}
+      worldSize: {x: 0.5, y: 1.7944444, z: 1}
+      index: 24
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15771484, z: 0.52001953, w: 0.68115234}
+      uvPivot: {x: 0.42222223, y: 0}
+      worldSize: {x: 0.5, y: 1.7944444, z: 1}
+      index: 25
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15771484, z: 0.57714844, w: 0.68115234}
+      uvPivot: {x: 0.42222223, y: 0}
+      worldSize: {x: 0.5, y: 1.7944444, z: 1}
+      index: 26
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15576172, z: 0.63378906, w: 0.68115234}
+      uvPivot: {x: 0.42222223, y: 0}
+      worldSize: {x: 0.5, y: 1.7722223, z: 1}
+      index: 27
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15820312, z: 0.6928711, w: 0.6767578}
+      uvPivot: {x: 0.42222223, y: 0}
+      worldSize: {x: 0.5, y: 1.8, z: 1}
+      index: 28
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15771484, z: 0.75341797, w: 0.6767578}
+      uvPivot: {x: 0.42222223, y: 0}
+      worldSize: {x: 0.5, y: 1.7944444, z: 1}
+      index: 29
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15771484, z: 0.81640625, w: 0.6767578}
+      uvPivot: {x: 0.42222223, y: 0}
+      worldSize: {x: 0.5, y: 1.7944444, z: 1}
+      index: 30
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15820312, z: 0.87646484, w: 0.6767578}
+      uvPivot: {x: 0.42222223, y: 0}
+      worldSize: {x: 0.5, y: 1.8, z: 1}
+      index: 31
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15771484, z: 0.9375, w: 0.6767578}
+      uvPivot: {x: 0.42222223, y: 0}
+      worldSize: {x: 0.5, y: 1.7944444, z: 1}
+      index: 32
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15576172, z: 0.017578125, w: 0.5102539}
+      uvPivot: {x: 0.42222223, y: 0}
+      worldSize: {x: 0.5, y: 1.7722223, z: 1}
+      index: 33
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.046875, y: 0.15332031, z: 0.07128906, w: 0.51220703}
+      uvPivot: {x: 0.45833334, y: 0}
+      worldSize: {x: 0.53333336, y: 1.7444445, z: 1}
+      index: 34
+    markers:
+    - objectPos: {x: 0.37222221, y: 1.5277778}
+      type: 4
+  - sprite:
+      uvSizeAndPos: {x: 0.046875, y: 0.1538086, z: 0.12841797, w: 0.51220703}
+      uvPivot: {x: 0.45833334, y: 0}
+      worldSize: {x: 0.53333336, y: 1.75, z: 1}
+      index: 35
+    markers:
+    - objectPos: {x: 0.35555556, y: 1.5333333}
+      type: 4
+  - sprite:
+      uvSizeAndPos: {x: 0.046875, y: 0.15429688, z: 0.18798828, w: 0.51220703}
+      uvPivot: {x: 0.45833334, y: 0}
+      worldSize: {x: 0.53333336, y: 1.7555555, z: 1}
+      index: 36
+    markers:
+    - objectPos: {x: 0.35555556, y: 1.5388889}
+      type: 4
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.10644531, z: 0, w: 0.122558594}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.2111111, z: 1}
+      index: 37
+    markers:
+    - objectPos: {x: 0.3, y: 1.0277778}
+      type: 4
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.106933594, z: 0.068847656, w: 0.122558594}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.2166667, z: 1}
+      index: 38
+    markers:
+    - objectPos: {x: 0.3, y: 1.0333333}
+      type: 4
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.107421875, z: 0.13574219, w: 0.122558594}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.2222222, z: 1}
+      index: 39
+    markers:
+    - objectPos: {x: 0.3, y: 1.0388889}
+      type: 4
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.10595703, z: 0, w: 0}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.2055556, z: 1}
+      index: 40
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.10595703, z: 0.06689453, w: 0}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.2055556, z: 1}
+      index: 41
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.104003906, z: 0.13085938, w: 0}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.1833333, z: 1}
+      index: 42
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.10595703, z: 0.19384766, w: 0}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.2055556, z: 1}
+      index: 43
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.104003906, z: 0.2578125, w: 0}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.1833333, z: 1}
+      index: 44
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.10595703, z: 0.3251953, w: 0}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.2055556, z: 1}
+      index: 45
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.104003906, z: 0.3959961, w: 0}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.1833333, z: 1}
+      index: 46
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.10595703, z: 0.4663086, w: 0}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.2055556, z: 1}
+      index: 47
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.104003906, z: 0.5332031, w: 0}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.1833333, z: 1}
+      index: 48
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.10595703, z: 0.6040039, w: 0}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.2055556, z: 1}
+      index: 49
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.10595703, z: 0.6694336, w: 0}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.2055556, z: 1}
+      index: 50
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.10644531, z: 0.73291016, w: 0}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.2111111, z: 1}
+      index: 51
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.106933594, z: 0.8017578, w: 0}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.2166667, z: 1}
+      index: 52
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.05517578, y: 0.107421875, z: 0.86865234, w: 0}
+      uvPivot: {x: 0.49557522, y: 0}
+      worldSize: {x: 0.62777776, y: 1.2222222, z: 1}
+      index: 53
+    markers: []
+  simpleSprites: []
+  slicedSprites: []
+  clips:
+  - clipName: Walking
+    keyFrames:
+    - spriteIndex: 0
+      holdTime: 3
+    - spriteIndex: 1
+      holdTime: 3
+    - spriteIndex: 2
+      holdTime: 3
+    - spriteIndex: 3
+      holdTime: 3
+    - spriteIndex: 4
+      holdTime: 3
+    - spriteIndex: 5
+      holdTime: 3
+    - spriteIndex: 6
+      holdTime: 3
+    - spriteIndex: 7
+      holdTime: 3
+    clipType: 0
+    motionIndex: 21
+  - clipName: StandingBreathing
+    keyFrames:
+    - spriteIndex: 9
+      holdTime: 3
+    - spriteIndex: 10
+      holdTime: 30
+    - spriteIndex: 8
+      holdTime: 30
+    clipType: 1
+    motionIndex: 14
+  - clipName: Smoking
+    keyFrames:
+    - spriteIndex: 11
+      holdTime: 30
+    - spriteIndex: 12
+      holdTime: 3
+    - spriteIndex: 13
+      holdTime: 30
+    - spriteIndex: 14
+      holdTime: 30
+    - spriteIndex: 15
+      holdTime: 3
+    - spriteIndex: 16
+      holdTime: 30
+    clipType: 0
+    motionIndex: 11
+  - clipName: StandingBlinking
+    keyFrames:
+    - spriteIndex: 17
+      holdTime: 50
+    - spriteIndex: 18
+      holdTime: 5
+    clipType: 0
+    motionIndex: 13
+  - clipName: StandingEating
+    keyFrames:
+    - spriteIndex: 19
+      holdTime: 10
+    - spriteIndex: 20
+      holdTime: 10
+    - spriteIndex: 21
+      holdTime: 15
+    - spriteIndex: 22
+      holdTime: 10
+    - spriteIndex: 23
+      holdTime: 10
+    - spriteIndex: 24
+      holdTime: 10
+    - spriteIndex: 25
+      holdTime: 10
+    - spriteIndex: 26
+      holdTime: 10
+    - spriteIndex: 27
+      holdTime: 15
+    - spriteIndex: 28
+      holdTime: 10
+    - spriteIndex: 29
+      holdTime: 10
+    - spriteIndex: 30
+      holdTime: 10
+    - spriteIndex: 31
+      holdTime: 10
+    - spriteIndex: 32
+      holdTime: 10
+    - spriteIndex: 33
+      holdTime: 15
+    clipType: 2
+    motionIndex: 16
+  - clipName: StandingSleeping
+    keyFrames:
+    - spriteIndex: 34
+      holdTime: 30
+    - spriteIndex: 35
+      holdTime: 10
+    - spriteIndex: 36
+      holdTime: 30
+    clipType: 1
+    motionIndex: 20
+  - clipName: NPCMotionCount
+    keyFrames:
+    - spriteIndex: 35
+      holdTime: 0
+    - spriteIndex: 36
+      holdTime: 0
+    clipType: 0
+    motionIndex: 22
+  - clipName: SittingSleeping
+    keyFrames:
+    - spriteIndex: 37
+      holdTime: 30
+    - spriteIndex: 38
+      holdTime: 10
+    - spriteIndex: 39
+      holdTime: 30
+    clipType: 1
+    motionIndex: 10
+  - clipName: SittingEating
+    keyFrames:
+    - spriteIndex: 40
+      holdTime: 10
+    - spriteIndex: 41
+      holdTime: 10
+    - spriteIndex: 42
+      holdTime: 10
+    - spriteIndex: 43
+      holdTime: 10
+    - spriteIndex: 44
+      holdTime: 10
+    - spriteIndex: 45
+      holdTime: 10
+    - spriteIndex: 46
+      holdTime: 10
+    - spriteIndex: 47
+      holdTime: 10
+    - spriteIndex: 48
+      holdTime: 10
+    clipType: 2
+    motionIndex: 6
+  - clipName: SittingBlinking
+    keyFrames:
+    - spriteIndex: 50
+      holdTime: 10
+    - spriteIndex: 49
+      holdTime: 50
+    clipType: 0
+    motionIndex: 3
+  - clipName: SittingBreathing
+    keyFrames:
+    - spriteIndex: 51
+      holdTime: 30
+    - spriteIndex: 52
+      holdTime: 10
+    - spriteIndex: 53
+      holdTime: 30
+    clipType: 0
+    motionIndex: 4
+  markers:
+  - color:
+      serializedVersion: 2
+      rgba: 65280
+    type: 1
+  - color:
+      serializedVersion: 2
+      rgba: 16711935
+    type: 4

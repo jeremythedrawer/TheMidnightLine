@@ -37,7 +37,6 @@ public static class AtlasBatch
 
             batchList.Add((key, batch));
         }
-        batchList.Sort((a, b) => b.key.depthOrder.CompareTo(a.key.depthOrder));
     }
     public static void RegisterRenderer(AtlasRenderer atlasRenderer)
     {

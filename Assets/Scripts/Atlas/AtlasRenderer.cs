@@ -21,6 +21,7 @@ public class AtlasRenderer : MonoBehaviour
     public BatchKey batchKey;
     public SimpleSprite sprite;
 
+    public Matrix4x4 worldMatrix;
     public Matrix4x4[] spriteMatrices;
     public Vector4[] widthHeightFlip;
 
@@ -32,7 +33,7 @@ public class AtlasRenderer : MonoBehaviour
         SetSprite(spriteIndex);
         SetCollider();
         transform.position = new Vector3(transform.position.x, transform.position.y, depthOrder);
-
+        worldMatrix = transform.localToWorldMatrix;
         if (spriteMode == SpriteMode.Slice)
         {
             SetCenterSliceSize();
@@ -53,7 +54,7 @@ public class AtlasRenderer : MonoBehaviour
 #endif
 
     }
-    private void SetSprite(int spriteIndex)
+    public void SetSprite(int spriteIndex)
     {
         if (atlas == null || (atlas.motionSprites.Length == 0 && atlas.slicedSprites.Length == 0 && atlas.simpleSprites.Length == 0)) return;
 
@@ -188,7 +189,8 @@ public class AtlasRenderer : MonoBehaviour
     }
     public Matrix4x4 GetMatrix()
     {
-        Vector3 pivotOffset = new Vector3(sprite.uvPivot.x * sprite.worldSize.x, sprite.uvPivot.y * sprite.worldSize.y, 1f);
+        Vector2 pivotWithFlip = new Vector2(flipX ? 1 - sprite.uvPivot.x : sprite.uvPivot.x, flipY ? 1 - sprite.uvPivot.y : sprite.uvPivot.y);
+        Vector3 pivotOffset = new Vector3(pivotWithFlip.x * sprite.worldSize.x, pivotWithFlip.y * sprite.worldSize.y, 0f);
         Vector3 matrixPos = transform.position + transform.rotation * -pivotOffset;
         Vector3 matrixScale = new Vector3(sprite.worldSize.x * width, sprite.worldSize.y * height, 1f);
 

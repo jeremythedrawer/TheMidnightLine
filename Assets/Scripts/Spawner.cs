@@ -2,7 +2,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using UnityEngine.VFX;
-using static Spawn;
+using static AtlasSpawn;
 
 public class Spawner : MonoBehaviour
 {
@@ -56,7 +56,7 @@ public class Spawner : MonoBehaviour
         int bgParticleOutputsStride = float3Size + (floatSize * 2) + (intSize * 4);
         int bgParticleInputsStride = intSize + (floatSize * 2);
 
-        stats.backgroundInputsArray = new Spawn.BackgroundParticleInputs[32];
+        stats.backgroundInputsArray = new AtlasSpawn.BackgroundParticleInputs[32];
         
         stats.particleComputeBuffer = new ComputeBuffer(settings.maxParticleCount, bgParticleOutputsStride);
         stats.backgroundParticleInputBuffer = new ComputeBuffer(stats.backgroundInputsArray.Length, bgParticleInputsStride);
@@ -132,10 +132,10 @@ public class Spawner : MonoBehaviour
     private void InitializeSpawnMaterialData()
     {
 
-        spawnerDataArray = new Spawn.SpawnerData[32];
+        spawnerDataArray = new AtlasSpawn.SpawnerData[32];
         for (int i = 0; i < spawnerDataArray.Length; i++)
         {
-            Spawn.SpawnerData m_spawnerData = spawnerDataArray[i];
+            AtlasSpawn.SpawnerData m_spawnerData = spawnerDataArray[i];
             m_spawnerData.material = Instantiate(settings.backgroundMaterial);
             m_spawnerData.renderParams = new RenderParams(m_spawnerData.material) { worldBounds = stats.renderParamsBounds };
             m_spawnerData.material.SetBuffer(materialIDs.ids.bgParticleOutputs, stats.particleComputeBuffer);
@@ -144,7 +144,7 @@ public class Spawner : MonoBehaviour
 
         for (int i = 0; i < settings.particleData.Length; i++)
         {
-            Spawn.ParticleData particleData = settings.particleData[i];
+            AtlasSpawn.ParticleData particleData = settings.particleData[i];
             particleData.uvPositions = new Vector2[particleData.atlasSprites.Length];
             particleData.uvSizes = new Vector2[particleData.atlasSprites.Length];
             for(int j = 0; j < particleData.atlasSprites.Length; j++)
@@ -168,19 +168,19 @@ public class Spawner : MonoBehaviour
         {
             if ((curBGMask & (1 << i)) == 0) continue; // Find an active background type flag
             int activeBGMask = 1 << i;
-            Spawn.BackgroundParticleInputs bgParticleInputs = stats.backgroundInputsArray[stats.backgroundMaskCount];
+            AtlasSpawn.BackgroundParticleInputs bgParticleInputs = stats.backgroundInputsArray[stats.backgroundMaskCount];
             bgParticleInputs.bgMask = activeBGMask;
 
             for (int j = 0; j < settings.particleData.Length; j++)
             {
-                Spawn.ParticleData particleData = settings.particleData[j];
+                AtlasSpawn.ParticleData particleData = settings.particleData[j];
                 int particleBGMask = (int)particleData.backgroundType;
                 
                 if ((particleBGMask & activeBGMask) == 0) continue; // Match particleData to the curBGMask
 
                 for (int k = 0; k < spawnerDataArray.Length; k++)
                 {
-                    Spawn.SpawnerData spawnerData = spawnerDataArray[k];
+                    AtlasSpawn.SpawnerData spawnerData = spawnerDataArray[k];
                     
                     if (spawnerData.active) continue; // Find an unused spawner
 

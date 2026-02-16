@@ -1,6 +1,7 @@
 using Proselyte.Sigils;
 using System;
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
 using static Atlas;
 
 public class SpyBrain : MonoBehaviour
@@ -22,7 +23,6 @@ public class SpyBrain : MonoBehaviour
     [SerializeField] BoxCollider2D boxCollider;
     [SerializeField] AtlasRenderer atlasRenderer;
     [Header("Scriptable Objects")]
-    [SerializeField] AtlasSO atlas;
     [SerializeField] SpySettingsSO settings;
     [SerializeField] MaterialIDSO materialIDs;
     [SerializeField] SpyStatsSO stats;
@@ -33,12 +33,17 @@ public class SpyBrain : MonoBehaviour
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] PhoneSO phone;
 
-    SlideDoors slideDoors;
-    GangwayDoor gangwayDoor;
-    Collider2D curClimbCollider;
-    Carriage curCarriage;
-    State curState;
-    AtlasClip curClip;
+    [Header("Generated")]
+    public AtlasSO atlas;
+    public SlideDoors slideDoors;
+    public GangwayDoor gangwayDoor;
+    public Collider2D curClimbCollider;
+    public Carriage curCarriage;
+    public State curState;
+    public AtlasClip curClip;
+    public float clipTime;
+    public int curFrameIndex;
+    public int prevFrameIndex;
     [Serializable] public struct CollisionPoints
     {
         public Vector2 groundLeft;
@@ -68,7 +73,8 @@ public class SpyBrain : MonoBehaviour
     }
     private void Start()
     {
-
+        atlas = atlasRenderer.atlas;
+        atlas.UpdateClipDictionary();
         curState = State.Idle;
         rigidBody.gravityScale = settings.gravityScale;
         stats.gravityScale = rigidBody.gravityScale;
@@ -85,7 +91,7 @@ public class SpyBrain : MonoBehaviour
     {
         ChooseState();
         UpdateStates();
-
+        PlayClip();
         stats.curWorldPos = transform.position;
         stats.willJump = Time.time - stats.lastJumpTime <= settings.jumpBufferTime && curState != State.Jump;   
     }
@@ -499,6 +505,16 @@ public class SpyBrain : MonoBehaviour
     {
         stats.spriteFlip = flip;
         atlasRenderer.Flip(flip);
+    }
+    private void PlayClip()
+    {
+        clipTime += Time.deltaTime;
+        SetNextFrameIndex(curClip, ref clipTime, ref curFrameIndex, ref prevFrameIndex);
+
+        if (curFrameIndex != prevFrameIndex)
+        {
+            atlasRenderer.SetSprite(curClip.keyFrames[curFrameIndex].spriteIndex);
+        }
     }
     private void OnApplicationQuit()
     {

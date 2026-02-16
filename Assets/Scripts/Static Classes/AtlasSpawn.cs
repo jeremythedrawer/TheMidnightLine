@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-public static class Spawn
+public static class AtlasSpawn
 {
     [Flags] public enum BackgroundType
     {

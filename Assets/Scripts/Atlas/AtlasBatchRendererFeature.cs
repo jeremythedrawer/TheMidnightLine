@@ -41,7 +41,7 @@ public class AtlasBatchRendererFeature : ScriptableRendererFeature
             using var builder = renderGraph.AddRasterRenderPass<PassData> ("Atlas Batch Pass", out PassData passData);
             passData.camera = cameraData.camera;
             builder.SetRenderAttachment(resources.activeColorTexture, 0);
-            builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.Read);
+            builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
             builder.AllowPassCulling(false);
 
 
