@@ -2,6 +2,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.Universal;
+using static Atlas;
 using static AtlasBatch;
 
 public class AtlasBatchRendererFeature : ScriptableRendererFeature
@@ -58,12 +59,12 @@ public class AtlasBatchRendererFeature : ScriptableRendererFeature
                 for (int i = 0; i < batch.data.renderers.Count && count < MAX; i++)
                 {
                     AtlasRenderer atlasRenderer = batch.data.renderers[i];
-                    if (atlasRenderer == null || !atlasRenderer.enabled) continue;
 
+                    if (atlasRenderer == null || !atlasRenderer.enabled) continue;
 
                     if (atlasRenderer.spriteMode == Atlas.SpriteMode.Slice)
                     {
-                        if (atlasRenderer.slicedSprite.uvSizeAndPos == null || atlasRenderer.slicedSprite.uvSizeAndPos.Length == 0) continue;
+                        ref SliceSprite slicedSprite = ref atlasRenderer.atlas.slicedSprites[atlasRenderer.spriteIndex];
 
                         Matrix4x4[] sliceMatrices = atlasRenderer.Get9SliceMatrices();
 
@@ -72,7 +73,7 @@ public class AtlasBatchRendererFeature : ScriptableRendererFeature
                             Matrix4x4 sliceMatrix = sliceMatrices[j];
 
                             batch.data.matrices[count] = sliceMatrix;
-                            batch.data.uvSizeAndPosData[count] = atlasRenderer.slicedSprite.uvSizeAndPos[j];
+                            batch.data.uvSizeAndPosData[count] = slicedSprite.uvSizeAndPos[j];
                             batch.data.widthHeightArray[count] = atlasRenderer.widthAndHeight[j];
                             count++;
                         }

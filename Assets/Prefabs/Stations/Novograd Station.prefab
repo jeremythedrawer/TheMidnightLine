@@ -183,7 +183,7 @@ Transform:
   m_GameObject: {fileID: 1600158969009688442}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -105.12, y: -1.71, z: -12}
+  m_LocalPosition: {x: -105.119995, y: -1.71, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -209,30 +209,16 @@ MonoBehaviour:
   height: 1
   flipX: 0
   flipY: 0
+  depthOrder: 0
   batchKey:
     material: {fileID: 0}
     mesh: {fileID: 0}
+    depthOrder: 0
   sprite:
     uvSizeAndPos: {x: 0.49926758, y: 0.06225586, z: 0, w: 0.9375}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 11.361111, y: 1.4166666, z: 1}
     index: 0
-  motionSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    markers: []
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -253,8 +239,8 @@ MonoBehaviour:
   widthAndHeight:
   - {x: 4.02, y: 1, z: 0, w: 0}
   flip: {x: -1, y: -1}
-  centerSliceWorldSize: {x: 45.671665, y: 1.4166666}
-  centerSliceUVSize: {x: 3.02, y: 0}
+  centerSliceWorldSize: {x: 44.971664, y: 1.4166666}
+  centerSliceUVSize: {x: 3.8967123, y: 1}
 --- !u!1 &2007327773314685102
 GameObject:
   m_ObjectHideFlags: 0
@@ -444,7 +430,7 @@ Transform:
   m_GameObject: {fileID: 5115538364447988645}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -10.84, y: -0.05, z: 1}
+  m_LocalPosition: {x: -10.839996, y: -0.049999952, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -470,30 +456,16 @@ MonoBehaviour:
   height: 1
   flipX: 0
   flipY: 0
+  depthOrder: 0
   batchKey:
     material: {fileID: 2100000, guid: fbc8706b3d542f146834f58bb06c2240, type: 2}
     mesh: {fileID: 0}
+    depthOrder: 0
   sprite:
     uvSizeAndPos: {x: 0.4790039, y: 0.29248047, z: 0, w: 0}
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 10.9, y: 6.6555557, z: 1}
     index: 1
-  motionSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    markers: []
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   spriteMatrices:
   - e00: 0
     e01: 0

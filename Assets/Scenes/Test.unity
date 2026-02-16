@@ -119,6 +119,184 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!43 &12023431
+Mesh:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_Name: AtlasBatchQuad
+  serializedVersion: 12
+  m_SubMeshes:
+  - serializedVersion: 2
+    firstByte: 0
+    indexCount: 6
+    topology: 0
+    baseVertex: 0
+    firstVertex: 0
+    vertexCount: 4
+    localAABB:
+      m_Center: {x: 0.5, y: 0.5, z: 0}
+      m_Extent: {x: 0.5, y: 0.5, z: 0}
+  m_Shapes:
+    vertices: []
+    shapes: []
+    channels: []
+    fullWeights: []
+  m_BindPose: []
+  m_BoneNameHashes: 
+  m_RootBoneNameHash: 0
+  m_BonesAABB: []
+  m_VariableBoneCountWeights:
+    m_Data: 
+  m_MeshCompression: 0
+  m_IsReadable: 1
+  m_KeepVertices: 1
+  m_KeepIndices: 1
+  m_IndexFormat: 0
+  m_IndexBuffer: 000002000100020003000100
+  m_VertexData:
+    serializedVersion: 3
+    m_VertexCount: 4
+    m_Channels:
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 3
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 12
+      format: 0
+      dimension: 2
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    - stream: 0
+      offset: 0
+      format: 0
+      dimension: 0
+    m_DataSize: 80
+    _typelessdata: 00000000000000000000000000000000000000000000803f00000000000000000000803f00000000000000000000803f00000000000000000000803f0000803f0000803f000000000000803f0000803f
+  m_CompressedMesh:
+    m_Vertices:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UV:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Normals:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Tangents:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Weights:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_NormalSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_TangentSigns:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_FloatColors:
+      m_NumItems: 0
+      m_Range: 0
+      m_Start: 0
+      m_Data: 
+      m_BitSize: 0
+    m_BoneIndices:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_Triangles:
+      m_NumItems: 0
+      m_Data: 
+      m_BitSize: 0
+    m_UVInfo: 0
+  m_LocalAABB:
+    m_Center: {x: 0.5, y: 0.5, z: 0}
+    m_Extent: {x: 0.5, y: 0.5, z: 0}
+  m_MeshUsageFlags: 0
+  m_CookingOptions: 30
+  m_BakedConvexCollisionMesh: 
+  m_BakedTriangleCollisionMesh: 
+  'm_MeshMetrics[0]': 1
+  'm_MeshMetrics[1]': 1
+  m_MeshOptimizationFlags: 1
+  m_StreamData:
+    serializedVersion: 2
+    offset: 0
+    size: 0
+    path: 
+  m_MeshLodInfo:
+    serializedVersion: 2
+    m_LodSelectionCurve:
+      serializedVersion: 1
+      m_LodSlope: 0
+      m_LodBias: 0
+    m_NumLevels: 1
+    m_SubMeshes:
+    - serializedVersion: 2
+      m_Levels:
+      - serializedVersion: 1
+        m_IndexStart: 0
+        m_IndexCount: 0
 --- !u!1 &101955226
 GameObject:
   m_ObjectHideFlags: 0
@@ -150,6 +328,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
   material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+  boxCollider: {fileID: 0}
   spriteIndex: 0
   spriteMode: 2
   width: 38.7
@@ -159,38 +338,13 @@ MonoBehaviour:
   depthOrder: 1
   batchKey:
     material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-    mesh: {fileID: 1020530984}
+    mesh: {fileID: 1267976884}
     depthOrder: 1
   sprite:
     uvSizeAndPos: {x: 0.24951172, y: 0.030761719, z: 0.5004883, w: 0.9055176}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 5.677778, y: 0.7, z: 1}
     index: 0
-  motionSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    markers: []
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0.24951172, y: 0.030761719, z: 0.5004883, w: 0.9055176}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 5.677778, y: 0.7, z: 1}
-      index: 0
-    slice: {x: 0.061643835, y: 0.93835616, z: 0, w: 1}
-    uvSizeAndPos:
-    - {x: 0.015380859, y: 0, z: 0.5004883, w: 0.9055176}
-    - {x: 0.21875, y: 0, z: 0.51586914, w: 0.9055176}
-    - {x: 0.01538086, y: 0, z: 0.73461914, w: 0.9055176}
-    - {x: 0.015380859, y: 0.030761719, z: 0.5004883, w: 0.9055176}
-    - {x: 0.21875, y: 0.030761719, z: 0.51586914, w: 0.9055176}
-    - {x: 0.01538086, y: 0.030761719, z: 0.73461914, w: 0.9055176}
-    - {x: 0.015380859, y: 0, z: 0.5004883, w: 0.9362793}
-    - {x: 0.21875, y: 0, z: 0.51586914, w: 0.9362793}
-    - {x: 0.01538086, y: 0, z: 0.73461914, w: 0.9362793}
-    worldSlices: {x: 0.35, y: 0.35000002, z: 0, w: 0}
   spriteMatrices:
   - e00: 219.73001
     e01: 0
@@ -208,7 +362,7 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 1
-  - e00: 219.945
+  - e00: 219.03001
     e01: 0
     e02: 0
     e03: 190.35
@@ -227,7 +381,7 @@ MonoBehaviour:
   - e00: 0.35000002
     e01: 0
     e02: 0
-    e03: 410.295
+    e03: 409.38
     e10: 0
     e11: 0
     e12: 0
@@ -245,7 +399,7 @@ MonoBehaviour:
     e02: 0
     e03: 190
     e10: 0
-    e11: 0.70555556
+    e11: 0.7
     e12: 0
     e13: 17.52
     e20: 0
@@ -256,12 +410,12 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 1
-  - e00: 219.945
+  - e00: 219.03001
     e01: 0
     e02: 0
     e03: 190.35
     e10: 0
-    e11: 0.70555556
+    e11: 0.7
     e12: 0
     e13: 17.52
     e20: 0
@@ -275,9 +429,9 @@ MonoBehaviour:
   - e00: 0.35000002
     e01: 0
     e02: 0
-    e03: 410.295
+    e03: 409.38
     e10: 0
-    e11: 0.70555556
+    e11: 0.7
     e12: 0
     e13: 17.52
     e20: 0
@@ -295,7 +449,7 @@ MonoBehaviour:
     e10: 0
     e11: 0
     e12: 0
-    e13: 18.225555
+    e13: 18.220001
     e20: 0
     e21: 0
     e22: 1
@@ -304,14 +458,14 @@ MonoBehaviour:
     e31: 0
     e32: 0
     e33: 1
-  - e00: 219.945
+  - e00: 219.03001
     e01: 0
     e02: 0
     e03: 190.35
     e10: 0
     e11: 0
     e12: 0
-    e13: 18.225555
+    e13: 18.220001
     e20: 0
     e21: 0
     e22: 1
@@ -323,11 +477,11 @@ MonoBehaviour:
   - e00: 0.35000002
     e01: 0
     e02: 0
-    e03: 410.295
+    e03: 409.38
     e10: 0
     e11: 0
     e12: 0
-    e13: 18.225555
+    e13: 18.220001
     e20: 0
     e21: 0
     e22: 1
@@ -338,17 +492,17 @@ MonoBehaviour:
     e33: 1
   widthAndHeight:
   - {x: 1, y: 1, z: 0, w: 0}
-  - {x: 38.575855, y: 1, z: 0, w: 0}
+  - {x: 38.576714, y: 1, z: 0, w: 0}
   - {x: 1, y: 1, z: 0, w: 0}
-  - {x: 1, y: 0.992126, z: 0, w: 0}
-  - {x: 38.575855, y: 0.992126, z: 0, w: 0}
-  - {x: 1, y: 0.992126, z: 0, w: 0}
   - {x: 1, y: 1, z: 0, w: 0}
-  - {x: 38.575855, y: 1, z: 0, w: 0}
+  - {x: 38.576714, y: 1, z: 0, w: 0}
+  - {x: 1, y: 1, z: 0, w: 0}
+  - {x: 1, y: 1, z: 0, w: 0}
+  - {x: 38.576714, y: 1, z: 0, w: 0}
   - {x: 1, y: 1, z: 0, w: 0}
   flip: {x: 1, y: 1}
-  centerSliceWorldSize: {x: 219.945, y: 0.70555556}
-  centerSliceUVSize: {x: 38.575855, y: 0.992126}
+  centerSliceWorldSize: {x: 219.03001, y: 0.7}
+  centerSliceUVSize: {x: 38.576714, y: 1}
 --- !u!4 &101955228
 Transform:
   m_ObjectHideFlags: 0
@@ -607,6 +761,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
   material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+  boxCollider: {fileID: 0}
   spriteIndex: 7
   spriteMode: 0
   width: 45.035
@@ -616,29 +771,13 @@ MonoBehaviour:
   depthOrder: 11
   batchKey:
     material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-    mesh: {fileID: 1020530984}
+    mesh: {fileID: 1267976884}
     depthOrder: 11
   sprite:
     uvSizeAndPos: {x: 0.107666016, y: 0.08886719, z: 0, w: 0.59033203}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 2.45, y: 2.0222223, z: 1}
     index: 7
-  motionSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    markers: []
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   spriteMatrices:
   - e00: 110.335754
     e01: 0
@@ -659,7 +798,7 @@ MonoBehaviour:
   widthAndHeight:
   - {x: 45.035, y: 1, z: 0, w: 0}
   flip: {x: -1, y: -1}
-  centerSliceWorldSize: {x: 1024.5463, y: 2.838889}
+  centerSliceWorldSize: {x: 110.335754, y: 2.0222223}
   centerSliceUVSize: {x: 44.035, y: 0}
 --- !u!1 &741182703
 GameObject:
@@ -716,36 +855,68 @@ PrefabInstance:
     m_TransformParent: {fileID: 0}
     m_Modifications:
     - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
+      propertyPath: flipX
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
+      propertyPath: flip.x
+      value: -1
+      objectReference: {fileID: 0}
+    - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
       propertyPath: depthOrder
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
       propertyPath: spriteIndex
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
       propertyPath: sprite.index
-      value: 0
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
       propertyPath: batchKey.mesh
       value: 
-      objectReference: {fileID: 1717771332}
+      objectReference: {fileID: 12023431}
     - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
       propertyPath: sprite.uvPivot.x
-      value: 0.42962962
+      value: 0.28640777
+      objectReference: {fileID: 0}
+    - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
+      propertyPath: sprite.worldSize.x
+      value: 1.1444445
+      objectReference: {fileID: 0}
+    - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
+      propertyPath: sprite.worldSize.y
+      value: 1.3222222
       objectReference: {fileID: 0}
     - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
       propertyPath: batchKey.depthOrder
       value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
+      propertyPath: sprite.uvSizeAndPos.w
+      value: 0.87646484
+      objectReference: {fileID: 0}
+    - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
+      propertyPath: sprite.uvSizeAndPos.x
+      value: 0.10058594
+      objectReference: {fileID: 0}
+    - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
+      propertyPath: sprite.uvSizeAndPos.y
+      value: 0.11621094
+      objectReference: {fileID: 0}
+    - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
+      propertyPath: sprite.uvSizeAndPos.z
+      value: 0.5292969
+      objectReference: {fileID: 0}
+    - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
       propertyPath: centerSliceWorldSize.x
-      value: 0
+      value: 1.4944445
       objectReference: {fileID: 0}
     - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
       propertyPath: centerSliceWorldSize.y
-      value: 0
+      value: 1.3555555
       objectReference: {fileID: 0}
     - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
       propertyPath: motionSprite.sprite.index
@@ -753,7 +924,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
       propertyPath: motionSprite.sprite.uvPivot.x
-      value: 0.42962962
+      value: 0.43122676
       objectReference: {fileID: 0}
     - target: {fileID: 158645871948708161, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
       propertyPath: motionSprite.markers.Array.size
@@ -880,184 +1051,6 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
---- !u!43 &1020530984
-Mesh:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_Name: AtlasBatchQuad
-  serializedVersion: 12
-  m_SubMeshes:
-  - serializedVersion: 2
-    firstByte: 0
-    indexCount: 6
-    topology: 0
-    baseVertex: 0
-    firstVertex: 0
-    vertexCount: 4
-    localAABB:
-      m_Center: {x: 0.5, y: 0.5, z: 0}
-      m_Extent: {x: 0.5, y: 0.5, z: 0}
-  m_Shapes:
-    vertices: []
-    shapes: []
-    channels: []
-    fullWeights: []
-  m_BindPose: []
-  m_BoneNameHashes: 
-  m_RootBoneNameHash: 0
-  m_BonesAABB: []
-  m_VariableBoneCountWeights:
-    m_Data: 
-  m_MeshCompression: 0
-  m_IsReadable: 1
-  m_KeepVertices: 1
-  m_KeepIndices: 1
-  m_IndexFormat: 0
-  m_IndexBuffer: 000002000100020003000100
-  m_VertexData:
-    serializedVersion: 3
-    m_VertexCount: 4
-    m_Channels:
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 3
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 12
-      format: 0
-      dimension: 2
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    - stream: 0
-      offset: 0
-      format: 0
-      dimension: 0
-    m_DataSize: 80
-    _typelessdata: 00000000000000000000000000000000000000000000803f00000000000000000000803f00000000000000000000803f00000000000000000000803f0000803f0000803f000000000000803f0000803f
-  m_CompressedMesh:
-    m_Vertices:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UV:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Normals:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Tangents:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Weights:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_NormalSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_TangentSigns:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_FloatColors:
-      m_NumItems: 0
-      m_Range: 0
-      m_Start: 0
-      m_Data: 
-      m_BitSize: 0
-    m_BoneIndices:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_Triangles:
-      m_NumItems: 0
-      m_Data: 
-      m_BitSize: 0
-    m_UVInfo: 0
-  m_LocalAABB:
-    m_Center: {x: 0.5, y: 0.5, z: 0}
-    m_Extent: {x: 0.5, y: 0.5, z: 0}
-  m_MeshUsageFlags: 0
-  m_CookingOptions: 30
-  m_BakedConvexCollisionMesh: 
-  m_BakedTriangleCollisionMesh: 
-  'm_MeshMetrics[0]': 1
-  'm_MeshMetrics[1]': 1
-  m_MeshOptimizationFlags: 1
-  m_StreamData:
-    serializedVersion: 2
-    offset: 0
-    size: 0
-    path: 
-  m_MeshLodInfo:
-    serializedVersion: 2
-    m_LodSelectionCurve:
-      serializedVersion: 1
-      m_LodSlope: 0
-      m_LodBias: 0
-    m_NumLevels: 1
-    m_SubMeshes:
-    - serializedVersion: 2
-      m_Levels:
-      - serializedVersion: 1
-        m_IndexStart: 0
-        m_IndexCount: 0
 --- !u!224 &1071452447 stripped
 RectTransform:
   m_CorrespondingSourceObject: {fileID: 6776794221725032700, guid: a5264cad99118e34e8682732ba42e159, type: 3}
@@ -1109,6 +1102,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   atlas: {fileID: 11400000, guid: 02c9993b5b1bf6f4daa262e7f4f6313b, type: 2}
   material: {fileID: 0}
+  boxCollider: {fileID: 0}
   spriteIndex: 0
   spriteMode: 0
   width: 1
@@ -1121,33 +1115,17 @@ MonoBehaviour:
     mesh: {fileID: 1736469122}
     depthOrder: 0
   sprite:
-    uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: {x: 0.83935547, y: 0.529541, z: 0, w: 0.2956543}
     uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 0, y: 0, z: 0}
+    worldSize: {x: 19.1, y: 12.05, z: 1}
     index: 0
-  motionSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    markers: []
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   spriteMatrices:
-  - e00: 0
+  - e00: 19.1
     e01: 0
     e02: 0
-    e03: 274.88
+    e03: 265.33002
     e10: 0
-    e11: 0
+    e11: 12.05
     e12: 0
     e13: 11.6
     e20: 0
@@ -1161,60 +1139,9 @@ MonoBehaviour:
   widthAndHeight:
   - {x: 1, y: 1, z: 0, w: 0}
   flip: {x: -1, y: -1}
-  centerSliceWorldSize: {x: 0, y: 0}
+  centerSliceWorldSize: {x: 19.1, y: 12.05}
   centerSliceUVSize: {x: 0, y: 0}
---- !u!1 &1331096303
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1331096304}
-  - component: {fileID: 1331096305}
-  m_Layer: 5
-  m_Name: Dialogue
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!224 &1331096304
-RectTransform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1331096303}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 149462077}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
-  m_AnchorMin: {x: 0.5, y: 0.5}
-  m_AnchorMax: {x: 0.5, y: 0.5}
-  m_AnchoredPosition: {x: 0, y: 0}
-  m_SizeDelta: {x: 100, y: 100}
-  m_Pivot: {x: 0.5, y: 0.5}
---- !u!114 &1331096305
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1331096303}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b0a19390abd5c0541bfbb2ab6c7e28bb, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
-  gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
-  gameFadeSO: {fileID: 11400000, guid: 010656029f6428c4d855b6fa1f8c9ba1, type: 2}
-  tutorialManager: {fileID: 4987666714993127795, guid: a5264cad99118e34e8682732ba42e159, type: 3}
---- !u!43 &1717771332
+--- !u!43 &1267976884
 Mesh:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1392,6 +1319,57 @@ Mesh:
       - serializedVersion: 1
         m_IndexStart: 0
         m_IndexCount: 0
+--- !u!1 &1331096303
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1331096304}
+  - component: {fileID: 1331096305}
+  m_Layer: 5
+  m_Name: Dialogue
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!224 &1331096304
+RectTransform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1331096303}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 149462077}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  m_AnchorMin: {x: 0.5, y: 0.5}
+  m_AnchorMax: {x: 0.5, y: 0.5}
+  m_AnchoredPosition: {x: 0, y: 0}
+  m_SizeDelta: {x: 100, y: 100}
+  m_Pivot: {x: 0.5, y: 0.5}
+--- !u!114 &1331096305
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1331096303}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b0a19390abd5c0541bfbb2ab6c7e28bb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::DialogueManager
+  gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
+  gameFadeSO: {fileID: 11400000, guid: 010656029f6428c4d855b6fa1f8c9ba1, type: 2}
+  tutorialManager: {fileID: 4987666714993127795, guid: a5264cad99118e34e8682732ba42e159, type: 3}
 --- !u!43 &1736469122
 Mesh:
   m_ObjectHideFlags: 0
@@ -1932,6 +1910,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3934314286352294485}
   - component: {fileID: 7178755118709808131}
+  - component: {fileID: 7178755118709808132}
   m_Layer: 15
   m_Name: Platform
   m_TagString: Untagged
@@ -2298,7 +2277,7 @@ Transform:
   m_GameObject: {fileID: 3025337442834045750}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -108.76001, y: -0.5, z: 2}
+  m_LocalPosition: {x: -109, y: -0.3899994, z: 2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -2486,6 +2465,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
   material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+  boxCollider: {fileID: 0}
   spriteIndex: 7
   spriteMode: 0
   width: 36.03
@@ -2495,29 +2475,13 @@ MonoBehaviour:
   depthOrder: 11
   batchKey:
     material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-    mesh: {fileID: 1020530984}
+    mesh: {fileID: 1267976884}
     depthOrder: 11
   sprite:
     uvSizeAndPos: {x: 0.107666016, y: 0.08886719, z: 0, w: 0.59033203}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 2.45, y: 2.0222223, z: 1}
     index: 7
-  motionSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    markers: []
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   spriteMatrices:
   - e00: 88.2735
     e01: 0
@@ -2771,47 +2735,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
   material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+  boxCollider: {fileID: 7178755118709808132}
   spriteIndex: 1
   spriteMode: 0
-  width: 18.91
+  width: 18.8
   height: 1
   flipX: 0
   flipY: 0
   depthOrder: 2
   batchKey:
     material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-    mesh: {fileID: 1020530984}
+    mesh: {fileID: 1267976884}
     depthOrder: 2
   sprite:
     uvSizeAndPos: {x: 0.49926758, y: 0.06225586, z: 0.5004883, w: 0.9375}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 11.361111, y: 1.4166666, z: 1}
     index: 1
-  motionSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    markers: []
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   spriteMatrices:
-  - e00: 214.83861
+  - e00: 213.58887
     e01: 0
     e02: 0
-    e03: 191.23999
+    e03: 191
     e10: 0
     e11: 1.4166666
     e12: 0
-    e13: 17.6
+    e13: 17.710001
     e20: 0
     e21: 0
     e22: 1
@@ -2821,10 +2770,56 @@ MonoBehaviour:
     e32: 0
     e33: 1
   widthAndHeight:
-  - {x: 18.91, y: 1, z: 0, w: 0}
+  - {x: 18.8, y: 1, z: 0, w: 0}
   flip: {x: -1, y: -1}
   centerSliceWorldSize: {x: 214.83861, y: 1.4166666}
   centerSliceUVSize: {x: 17.91, y: 0}
+--- !u!61 &7178755118709808132
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3025337442834045750}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 106.79443, y: 0.7083333}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 213.58887, y: 1.4166666}
+  m_EdgeRadius: 0
 --- !u!114 &7744901050068505678
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2839,6 +2834,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   atlas: {fileID: 11400000, guid: 02c9993b5b1bf6f4daa262e7f4f6313b, type: 2}
   material: {fileID: 2100000, guid: fbc8706b3d542f146834f58bb06c2240, type: 2}
+  boxCollider: {fileID: 0}
   spriteIndex: 1
   spriteMode: 0
   width: 1
@@ -2848,29 +2844,13 @@ MonoBehaviour:
   depthOrder: 10
   batchKey:
     material: {fileID: 2100000, guid: fbc8706b3d542f146834f58bb06c2240, type: 2}
-    mesh: {fileID: 1020530984}
+    mesh: {fileID: 1267976884}
     depthOrder: 10
   sprite:
     uvSizeAndPos: {x: 0.4790039, y: 0.29248047, z: 0, w: 0}
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 10.9, y: 6.6555557, z: 1}
     index: 1
-  motionSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    markers: []
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   spriteMatrices:
   - e00: 10.9
     e01: 0
@@ -2891,7 +2871,7 @@ MonoBehaviour:
   widthAndHeight:
   - {x: 1, y: 1, z: 0, w: 0}
   flip: {x: -1, y: -1}
-  centerSliceWorldSize: {x: 19.1, y: 12.05}
+  centerSliceWorldSize: {x: 10.9, y: 6.6555557}
   centerSliceUVSize: {x: 0, y: 0}
 --- !u!1 &8734392211946049513
 GameObject:
