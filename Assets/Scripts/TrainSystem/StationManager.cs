@@ -6,7 +6,7 @@ public class StationManager : MonoBehaviour
 {
     public StationsDataSO stationsData;
     public TrainStatsSO trainStats;
-    public SpawnerStatsSO spawnerStats;
+    public AtlasSpawnerStatsSO spawnerStats;
     public GameEventDataSO gameEventData;
 
     private void Awake()

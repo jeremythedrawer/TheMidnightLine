@@ -31,13 +31,9 @@ public class MaterialIDSO : ScriptableObject
         public int spawnerMinPos;
         public int spawnerMaxPos;
         public int spawnerSize;
-        public int lodLevelThreshold0;
-        public int lodLevelThreshold1;
         public int particleCount;
 
         public int atlas;
-        public int uvPositions;
-        public int uvSizes;
         public int uvSizeAndPos;
 
         public int spriteCount;
@@ -85,8 +81,6 @@ public class MaterialIDSO : ScriptableObject
         ids.particleCount = Shader.PropertyToID("_ParticleCount");
         ids.atlas = Shader.PropertyToID("_Atlas");
 
-        ids.uvPositions = Shader.PropertyToID("_UVPositions");
-        ids.uvSizes = Shader.PropertyToID("_UVSizes");
         ids.uvSizeAndPos = Shader.PropertyToID("_UVSizeAndPos");
 
         ids.spriteCount = Shader.PropertyToID("_SpriteCount");
@@ -94,8 +88,6 @@ public class MaterialIDSO : ScriptableObject
         ids.backgroundMask = Shader.PropertyToID("_BackgroundMask");
         ids.backgroundMaskCount = Shader.PropertyToID("_BackgroundMaskCount");
         ids.lodLevel = Shader.PropertyToID("_LODLevel");
-        ids.lodLevelThreshold0 = Shader.PropertyToID("_LODThreshold0");
-        ids.lodLevelThreshold1 = Shader.PropertyToID("_LODThreshold1");
         ids.atlasIndex = Shader.PropertyToID("_AtlasIndex");
         ids.atlasSprites = Shader.PropertyToID("_AtlasSprites");
         ids.pixelsPerUnit = Shader.PropertyToID("_PPU");

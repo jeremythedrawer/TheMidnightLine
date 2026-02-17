@@ -25,19 +25,13 @@ Shader "Custom/s_backgroundParticles"
             #pragma multi_compile_instancing
 
             StructuredBuffer<BackgroundParticleOutput> _BGParticleOutputs;
+            StructuredBuffer<float4> _UVSizeAndPos;
 
             TEXTURE2D(_Atlas);
             SAMPLER(sampler_Atlas);
 
-            
-            UNITY_INSTANCING_BUFFER_START(Props)
-            UNITY_INSTANCING_BUFFER_END(Props)
-
             CBUFFER_START(UnityPerMaterial)
-                StructuredBuffer<float2> _UVPositions;
-                StructuredBuffer<float2> _UVSizes;
                 int _BackgroundMask;
-                int _LODLevel;
                 int _SpriteCount;
             CBUFFER_END
 
@@ -51,18 +45,18 @@ Shader "Custom/s_backgroundParticles"
 
             Varyings vert(uint vertexID : SV_VertexID)
             {
-                Varyings OUT;
+                Varyings o;
 
-                uint particleID = vertexID / 4;
+                uint particleID = vertexID * 0.25;
                 BackgroundParticleOutput p = _BGParticleOutputs[particleID];
 
-                if ((p.backgroundMask & _BackgroundMask) == 0 || p.lodLevel != _LODLevel)
-                {
-                    OUT.positionHCS = float4(0, 0, 0, 1);
-                    OUT.uv = 0;
-                    OUT.visible = 0;
-                    return OUT;
-                }
+                // if ((p.backgroundMask & _BackgroundMask) == 0)
+                // {
+                //     o.positionHCS = float4(0, 0, 0, 1);
+                //     o.uv = 0;
+                //     o.visible = 0;
+                //     return o;
+                // }
                 uint cornerID = vertexID % 4;
                 float2 quadOffsets[4] = 
                 {
@@ -76,17 +70,18 @@ Shader "Custom/s_backgroundParticles"
                 float3 offset = float3(quadOffsets[cornerID] * particleSize, 0);
 
                 int randMod = p.randID % _SpriteCount;
-                float2 uvPos = _UVPositions[randMod];
-                float2 uvSize = _UVSizes[randMod];
 
-                OUT.positionHCS = TransformWorldToHClip(p.position + offset);
-                OUT.uv = quadOffsets[cornerID] * uvSize + uvPos;
-                OUT.visible = 1;
-                return OUT;
+                float4 uvSizeAndPos = _UVSizeAndPos[randMod];
+
+                o.positionHCS = TransformWorldToHClip(p.position + offset);
+                o.uv = quadOffsets[cornerID] * uvSizeAndPos.xy + uvSizeAndPos.zw;
+                o.visible = 1;
+                return o;
             }
 
             half4 frag(Varyings IN) : SV_Target
             {
+                //return half4(0,0,0,1);
                 if (IN.visible == 0) discard;
 
                 half4 color = SAMPLE_TEXTURE2D(_Atlas, sampler_Atlas, IN.uv);

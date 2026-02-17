@@ -105,6 +105,12 @@ public static class Atlas
         public Vector4[] uvSizeAndPos;
         public Vector4 worldSlices;
     }
+
+    [Serializable] public struct ParticleSprite
+    {
+        public SimpleSprite sprite;
+        public int LOD;
+    }
     [Serializable] public struct AtlasKeyframe
     {
         public int spriteIndex;

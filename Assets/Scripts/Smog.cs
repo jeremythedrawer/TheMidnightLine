@@ -11,7 +11,7 @@ public class Smog : MonoBehaviour
     [SerializeField] TrainStatsSO trainStats;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] MaterialIDSO materialIDs;
-    [SerializeField] SpawnerStatsSO spawnStats;
+    [SerializeField] AtlasSpawnerStatsSO spawnStats;
     CancellationTokenSource ctsFade;
     MaterialPropertyBlock mpb;
 

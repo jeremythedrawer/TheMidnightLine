@@ -1,0 +1,125 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33fd095fffb8f844e9fa149db1599080, type: 3}
+  m_Name: Houses_Atlas
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
+  texture: {fileID: 2800000, guid: f89b32f02200c774a9bec3688aa9e186, type: 3}
+  isParticleAtlas: 1
+  entityMotionType: 0
+  pivotColor:
+    serializedVersion: 2
+    rgba: 4278190335
+  sliceColor:
+    serializedVersion: 2
+    rgba: 4294901760
+  motionSprites: []
+  simpleSprites: []
+  slicedSprites: []
+  particleSprites:
+  - sprite:
+      uvSizeAndPos: {x: 0.09326172, y: 0.088378906, z: 0.5, w: 0.91137695}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.1222222, y: 2.011111, z: 1}
+      index: 0
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.10205078, y: 0.09106445, z: 0.68530273, w: 0.9082031}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.3222222, y: 2.0722222, z: 1}
+      index: 1
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.099365234, y: 0.0847168, z: 0.8964844, w: 0.9135742}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.261111, y: 1.9277778, z: 1}
+      index: 2
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.1105957, y: 0.10498047, z: 0, w: 0.8947754}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.5166667, y: 2.3888888, z: 1}
+      index: 3
+    LOD: 1
+  - sprite:
+      uvSizeAndPos: {x: 0.07299805, y: 0.10205078, z: 0.60498047, w: 0.89697266}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 1.6611111, y: 2.3222222, z: 1}
+      index: 4
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.10083008, y: 0.107666016, z: 0.7927246, w: 0.8918457}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.2944446, y: 2.45, z: 1}
+      index: 5
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.13208008, y: 0.11791992, z: 0.21948242, w: 0.8808594}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 3.0055556, y: 2.6833334, z: 1}
+      index: 6
+    LOD: 1
+  - sprite:
+      uvSizeAndPos: {x: 0.10083008, y: 0.14111328, z: 0.11376953, w: 0.85791016}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.2944446, y: 3.211111, z: 1}
+      index: 7
+    LOD: 1
+  - sprite:
+      uvSizeAndPos: {x: 0.13085938, y: 0.1394043, z: 0.35546875, w: 0.85961914}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.9777777, y: 3.1722221, z: 1}
+      index: 8
+    LOD: 1
+  - sprite:
+      uvSizeAndPos: {x: 0.1027832, y: 0.1184082, z: 0.50341797, w: 0.78149414}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.338889, y: 2.6944444, z: 1}
+      index: 9
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.103027344, y: 0.1015625, z: 0.6142578, w: 0.7841797}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.3444445, y: 2.3111112, z: 1}
+      index: 10
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.11328125, y: 0.1081543, z: 0.7229004, w: 0.78027344}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.5777779, y: 2.461111, z: 1}
+      index: 11
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.12841797, y: 0.10986328, z: 0.088378906, w: 0.7246094}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.9222221, y: 2.5, z: 1}
+      index: 12
+    LOD: 1
+  - sprite:
+      uvSizeAndPos: {x: 0.1328125, y: 0.15307617, z: 0.22021484, w: 0.72216797}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 3.0222223, y: 3.4833333, z: 1}
+      index: 13
+    LOD: 1
+  - sprite:
+      uvSizeAndPos: {x: 0.13305664, y: 0.13134766, z: 0.35913086, w: 0.71728516}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 3.0277777, y: 2.988889, z: 1}
+      index: 14
+    LOD: 1
+  - sprite:
+      uvSizeAndPos: {x: 0.14697266, y: 0.13989258, z: 0.34985352, w: 0.5708008}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 3.3444445, y: 3.1833334, z: 1}
+      index: 15
+    LOD: 1
+  clips: []
+  markers: []

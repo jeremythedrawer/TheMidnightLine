@@ -14,8 +14,6 @@ float3 _SpawnerMinPos;
 float3 _SpawnerMaxPos;
 float3 _SpawnerSize;
 
-float _LODThreshold0, _LODThreshold1;
-
 uint _ParticleCount;
 uniform float _TrainVelocity;
 
@@ -46,25 +44,12 @@ void CSInit(uint id : SV_DispatchThreadID)
     
     output.position.z = _SpawnerMinPos.z + (((float) id / (float) _ParticleCount) * _SpawnerSize.z);
     output.parallaxFactor = abs(output.position.z - _SpawnerMaxPos.z) / _SpawnerMaxPos.z; // TODO: Calculate between camera and furthest pos, not just the furthest pos
-    if (output.position.z < _LODThreshold0)
-    {
-        output.lodLevel = 0;
-
-    }
-    else if (output.position.z < _LODThreshold1)
-    {
-        output.lodLevel = 1;
-    }
-    else
-    {
-        output.lodLevel = 2;
-    }
     
     ReinitOutput(output, id);
-    
     output.position.x = _SpawnerMinPos.x + (_SpawnerSize.x * output.rand01);
     
-    _BGParticleOutputs[id] = output;
+    
+     _BGParticleOutputs[id] = output;
 }
 
 [numthreads(THREADS_PER_GROUP, 1, 1)]

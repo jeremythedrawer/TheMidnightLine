@@ -703,7 +703,6 @@ public class NPCBrain : MonoBehaviour
         if (stats.curClip.motionIndex == 0) return;
         stats.atlasIndexClock += Time.deltaTime;
         SetNextFrameIndex(stats.curClip, ref stats.atlasIndexClock, ref stats.curFrameIndex, ref stats.prevAtlasIndex);
-
         if (stats.curFrameIndex != stats.prevAtlasIndex)
         {
             //atlasRe material.SetInt(materialIDs.ids.atlasIndex, stats.curClip.keyFrames[stats.curFrameIndex].spriteIndex);

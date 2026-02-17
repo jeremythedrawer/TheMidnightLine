@@ -6,7 +6,6 @@ struct BackgroundParticleOutput
     
     uint alive;
     uint backgroundMask;
-    uint lodLevel;
     uint randID;
 };
 

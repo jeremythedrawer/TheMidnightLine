@@ -12,7 +12,7 @@ public class Train : MonoBehaviour
     [SerializeField] StationsDataSO stationsData;
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] MaterialIDSO materialIDs;
-    [SerializeField] SpawnerStatsSO spawnerStats;
+    [SerializeField] AtlasSpawnerStatsSO spawnerStats;
     CancellationTokenSource trainCTS;
     [Serializable] public struct ComponentData
     {
