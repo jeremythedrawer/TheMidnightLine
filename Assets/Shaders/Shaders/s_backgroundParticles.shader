@@ -24,7 +24,7 @@ Shader "Custom/s_backgroundParticles"
 
             #pragma multi_compile_instancing
 
-            StructuredBuffer<BackgroundParticleOutput> _BGParticleOutputs;
+            StructuredBuffer<BackgroundParticleOutput> _LODParticles;
             StructuredBuffer<float4> _UVSizeAndPos;
 
             TEXTURE2D(_Atlas);
@@ -48,7 +48,7 @@ Shader "Custom/s_backgroundParticles"
                 Varyings o;
 
                 uint particleID = vertexID * 0.25;
-                BackgroundParticleOutput p = _BGParticleOutputs[particleID];
+                BackgroundParticleOutput p = _LODParticles[particleID];
 
                 // if ((p.backgroundMask & _BackgroundMask) == 0)
                 // {
@@ -75,14 +75,13 @@ Shader "Custom/s_backgroundParticles"
 
                 o.positionHCS = TransformWorldToHClip(p.position + offset);
                 o.uv = quadOffsets[cornerID] * uvSizeAndPos.xy + uvSizeAndPos.zw;
-                o.visible = 1;
                 return o;
             }
 
             half4 frag(Varyings IN) : SV_Target
             {
                 //return half4(0,0,0,1);
-                if (IN.visible == 0) discard;
+                // if (IN.visible == 0) discard;
 
                 half4 color = SAMPLE_TEXTURE2D(_Atlas, sampler_Atlas, IN.uv);
                 if (color.a <= 0.5) discard;

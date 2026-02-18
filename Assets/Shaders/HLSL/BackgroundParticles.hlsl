@@ -3,7 +3,7 @@ struct BackgroundParticleOutput
     float3 position;
     float parallaxFactor;
     float rand01;
-    
+    uint lod;
     uint alive;
     uint backgroundMask;
     uint randID;

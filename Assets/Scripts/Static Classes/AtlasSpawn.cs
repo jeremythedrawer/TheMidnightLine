@@ -14,10 +14,13 @@ public static class AtlasSpawn
 
     public const int SPAWNER_COUNT = 32;
     public const int MAX_PARTICLE_COUNT = 1024;
-    public const int MAX_LOD_COUNT = 4; // NOTE: If changing this number, this will need to be changed on the compute shader as well
+    public const int MAX_LOD_COUNT = 4;
 
     public static int MAX_VERTEX_COUNT = MAX_PARTICLE_COUNT * 6;
-    public static int PARTICLE_OUTPUT_STRIDE = float3Size + (floatSize * 2) + (intSize * 3);
+
+    public static int MAX_LOD_PARTICLE_COUNT = MAX_PARTICLE_COUNT / MAX_LOD_COUNT;
+
+    public static int PARTICLE_OUTPUT_STRIDE = float3Size + (floatSize * 2) + (intSize * 4);
     public static int PARTICLE_INPUT_STRIDE = intSize + (floatSize * 2);
 
     public static int updateKernelID;
@@ -68,7 +71,7 @@ public static class AtlasSpawn
         public float heightPos;
     }
 
-    public static SpawnerData[] InitializeSpawnDataArray(ComputeBuffer outputComputeBuffer, MaterialIDSO materialIDs)
+    public static SpawnerData[] InitializeSpawnDataArray(ComputeBuffer[] lodBuffers, MaterialIDSO materialIDs)
     {
         SpawnerData[] spawnerDataArray = new SpawnerData[SPAWNER_COUNT];
 
@@ -78,11 +81,9 @@ public static class AtlasSpawn
             SpawnerData spawnerData = new SpawnerData();
             spawnerData.mpb = new MaterialPropertyBlock();
             spawnerData.active = false;
-            spawnerData.lod = i % 3;
+            spawnerData.lod = i % MAX_LOD_COUNT;
 
-
-
-            spawnerData.mpb.SetBuffer(materialIDs.ids.bgParticleOutputs, outputComputeBuffer);
+            spawnerData.mpb.SetBuffer(materialIDs.ids.lodParticles, lodBuffers[spawnerData.lod]);
 
             spawnerDataArray[i] = spawnerData;
         }
@@ -151,20 +152,19 @@ public static class AtlasSpawn
 
             int particleBGMask = (int)particleData.backgroundType;
 
-            int activeSpawnersForParticle = 0;
-
+            int lodIndex = 0;
             for (int j = 0; j < stats.spawnerDataArray.Length; j++)
             {
                 SpawnerData spawnerData = stats.spawnerDataArray[j];
 
-                if (spawnerData.active) continue; // Find an unused spawner
+                if (spawnerData.active || spawnerData.lod != lodIndex) continue; // Find an unused spawner
 
                 SpawnerData curSpawnData = stats.spawnerDataArray[j];
 
                 curSpawnData.uvSizeAndPositionBuffer?.Dispose();
                 curSpawnData.uvSizeAndPositionBuffer?.Release();
 
-                int lodIndex = j % particleData.uvSizeAndPositionsLODS.Length;
+                lodIndex = j % particleData.uvSizeAndPositionsLODS.Length;
 
                 curSpawnData.uvSizeAndPositionBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, particleData.uvSizeAndPositionsLODS[lodIndex].uvSizeAndPositionsArray.Length, float4Size);
                 curSpawnData.uvSizeAndPositionBuffer.SetData(particleData.uvSizeAndPositionsLODS[lodIndex].uvSizeAndPositionsArray);
@@ -184,11 +184,12 @@ public static class AtlasSpawn
 
                 stats.backgroundMaskCount++;
 
-                activeSpawnersForParticle++;
+                lodIndex++;
 
-                if (activeSpawnersForParticle == particleData.uvSizeAndPositionsLODS.Length) break;
+                if (lodIndex == particleData.uvSizeAndPositionsLODS.Length) break;
             }
         }
+
         settings.backgroundParticleCompute.SetInt(materialIDs.ids.backgroundMaskCount, stats.backgroundMaskCount);
         stats.inputComputeBuffer.SetData(stats.backgroundInputsArray);
         settings.backgroundParticleCompute.SetBuffer(stats.updateKernelID, materialIDs.ids.bgParticleInputs, stats.inputComputeBuffer);
@@ -202,10 +203,25 @@ public static class AtlasSpawn
 
         computeShader.SetVector(materialIDs.ids.spawnerMinPos, stats.spawnMinPos);
         computeShader.SetVector(materialIDs.ids.spawnerMaxPos, stats.spawnMaxPos);
-        computeShader.SetVector(materialIDs.ids.spawnerSize, stats.spawnSize);
+        computeShader.SetVector(materialIDs.ids.spawnerSize, stats.spawnBoundsSize);
         computeShader.SetInt(materialIDs.ids.particleCount, MAX_PARTICLE_COUNT);
         computeShader.SetFloat(materialIDs.ids.trainVelocity, 0);
+
+        stats.lodThresholdBuffer.SetData(stats.lodThresholds);
+        computeShader.SetBuffer(initKernelID, "_LODThresholds", stats.lodThresholdBuffer);
+
+        computeShader.SetBuffer(initKernelID, materialIDs.ids.bgParticleInputs, stats.inputComputeBuffer);
         computeShader.SetBuffer(initKernelID, materialIDs.ids.bgParticleOutputs, stats.outputComputeBuffer);
+
+
+        stats.lodWriteOffsetsBuffer.SetData(stats.lodWriteOffsets);
+        computeShader.SetBuffer(initKernelID, "_LODWriteOffsets", stats.lodWriteOffsetsBuffer);
+        computeShader.SetBuffer(initKernelID, "_LODParticleOutputs0", stats.lodBuffers[0]);
+        computeShader.SetBuffer(initKernelID, "_LODParticleOutputs1", stats.lodBuffers[1]);
+        computeShader.SetBuffer(initKernelID, "_LODParticleOutputs2", stats.lodBuffers[2]);
+        computeShader.SetBuffer(initKernelID, "_LODParticleOutputs3", stats.lodBuffers[3]);
+
+
 
         computeShader.Dispatch(initKernelID, computeGroups, 1, 1);
     }

@@ -12,9 +12,10 @@ public class AtlasSpawnerStatsSO : ScriptableObject
     public Vector3 spawnMaxPos;
     public Vector3 spawnMinPos;
     public Vector3 spawnCenter;
-    public Vector3 spawnSize;
+    public Vector3 spawnBoundsSize;
 
-    public float[] lodPositions;
+    public float[] lodThresholds;
+    public int[] lodWriteOffsets;
 
     public int updateKernelID;
     public int initKernelID;
@@ -22,6 +23,10 @@ public class AtlasSpawnerStatsSO : ScriptableObject
 
     public ComputeBuffer outputComputeBuffer;
     public ComputeBuffer inputComputeBuffer;
+    public ComputeBuffer lodWriteOffsetsBuffer;
+    public ComputeBuffer lodThresholdBuffer;
+    public ComputeBuffer[] lodBuffers; 
+
     public Bounds renderParamsBounds;
     public BackgroundType curBackgroundTypes;
 

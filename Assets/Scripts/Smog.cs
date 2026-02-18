@@ -34,7 +34,7 @@ public class Smog : MonoBehaviour
     }
     private void SetSize()
     {
-        transform.localScale = spawnStats.spawnSize;
+        transform.localScale = spawnStats.spawnBoundsSize;
         transform.position = new Vector3(spawnStats.spawnCenter.x, spawnStats.spawnCenter.y, transform.position.z);
     }
     private void Fade()

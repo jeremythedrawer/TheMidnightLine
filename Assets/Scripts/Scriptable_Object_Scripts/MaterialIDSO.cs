@@ -27,6 +27,7 @@ public class MaterialIDSO : ScriptableObject
 
         public int bgParticleOutputs;
         public int bgParticleInputs;
+        public int lodParticles;
         public int backgroundMaskCount;
         public int spawnerMinPos;
         public int spawnerMaxPos;
@@ -74,6 +75,7 @@ public class MaterialIDSO : ScriptableObject
         ids.trainVelocity = Shader.PropertyToID("_TrainVelocity");
         ids.trainMetersTravelled = Shader.PropertyToID("_MetersTravelled");
         ids.bgParticleOutputs = Shader.PropertyToID("_BGParticleOutputs");
+        ids.lodParticles = Shader.PropertyToID("_LODParticles");
         ids.spawnerMinPos = Shader.PropertyToID("_SpawnerMinPos");
         ids.spawnerMaxPos = Shader.PropertyToID("_SpawnerMaxPos");
         ids.spawnerSize = Shader.PropertyToID("_SpawnerSize");

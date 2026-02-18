@@ -21,12 +21,24 @@ public class AtlasSpawner : MonoBehaviour
         spawnerStats.backgroundInputsArray = new BackgroundParticleInputs[SPAWNER_COUNT];
         spawnerStats.outputComputeBuffer = new ComputeBuffer(MAX_PARTICLE_COUNT, PARTICLE_OUTPUT_STRIDE);
         spawnerStats.inputComputeBuffer = new ComputeBuffer(SPAWNER_COUNT, PARTICLE_INPUT_STRIDE);
+        
+        spawnerStats.lodWriteOffsets = new int[MAX_LOD_COUNT];
+        spawnerStats.lodWriteOffsetsBuffer = new ComputeBuffer(MAX_LOD_COUNT, sizeof(int), ComputeBufferType.Structured);
+
+        spawnerStats.lodThresholdBuffer = new ComputeBuffer(MAX_LOD_COUNT - 1, sizeof(int), ComputeBufferType.Structured);
+
+        spawnerStats.lodBuffers = new ComputeBuffer[MAX_LOD_COUNT];
+
+        for (int i = 0; i < MAX_LOD_COUNT; i++)
+        {
+            spawnerStats.lodBuffers[i] = new ComputeBuffer(MAX_LOD_PARTICLE_COUNT, PARTICLE_INPUT_STRIDE);
+        }
 
         InitializeParticleDataArray(spawnerSettings);
         spawnerStats.particleDataDict = SetParticleDataDictionary(spawnerSettings.particleData);
-        
+
         InitializeCompute(spawnerSettings.backgroundParticleCompute, materialIDs, spawnerStats);
-        spawnerStats.spawnerDataArray = InitializeSpawnDataArray(spawnerStats.outputComputeBuffer, materialIDs);
+        spawnerStats.spawnerDataArray = InitializeSpawnDataArray(spawnerStats.lodBuffers, materialIDs);
 
         ChangeBiome(spawnerStats, spawnerSettings, materialIDs);
     }
@@ -57,17 +69,17 @@ public class AtlasSpawner : MonoBehaviour
         spawnerStats.spawnMinPos.z = spawnerSettings.minSpawnDepth;
 
         spawnerStats.spawnCenter = (spawnerStats.spawnMinPos + spawnerStats.spawnMaxPos) * 0.5f;
-        spawnerStats.spawnSize = spawnerStats.spawnMaxPos - spawnerStats.spawnMinPos;
+        spawnerStats.spawnBoundsSize = spawnerStats.spawnMaxPos - spawnerStats.spawnMinPos;
 
-        spawnerStats.lodPositions = new float[MAX_LOD_COUNT - 1];
-        for (int i = 0; i < spawnerStats.lodPositions.Length; i++)
+        spawnerStats.lodThresholds = new float[MAX_LOD_COUNT - 1];
+        for (int i = 0; i < spawnerStats.lodThresholds.Length; i++)
         {
-            spawnerStats.lodPositions[i] = spawnerStats.spawnSize.z * ((i + 1) / (float)MAX_LOD_COUNT);
+            spawnerStats.lodThresholds[i] = spawnerStats.spawnBoundsSize.z * ((i + 1) / (float)MAX_LOD_COUNT);
         }
 
 
         transform.position = spawnerStats.spawnMinPos;
-        spawnerStats.renderParamsBounds = new Bounds(spawnerStats.spawnCenter, spawnerStats.spawnSize);
+        spawnerStats.renderParamsBounds = new Bounds(spawnerStats.spawnCenter, spawnerStats.spawnBoundsSize);
 
 
     }
@@ -84,13 +96,13 @@ public class AtlasSpawner : MonoBehaviour
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.crimson;
-        Gizmos.DrawWireCube(spawnerStats.spawnCenter, spawnerStats.spawnSize);
+        Gizmos.DrawWireCube(spawnerStats.spawnCenter, spawnerStats.spawnBoundsSize);
 
 
-        for (int i = 0; i < spawnerStats.lodPositions.Length; i++)
+        for (int i = 0; i < spawnerStats.lodThresholds.Length; i++)
         {
-            Vector3 right = new Vector3(spawnerStats.spawnMinPos.x, spawnerSettings.spawnHeight, spawnerStats.lodPositions[i]);
-            Vector3 left = new Vector3(spawnerStats.spawnMaxPos.x, spawnerSettings.spawnHeight, spawnerStats.lodPositions[i]);
+            Vector3 right = new Vector3(spawnerStats.spawnMinPos.x, spawnerSettings.spawnHeight, spawnerStats.lodThresholds[i]);
+            Vector3 left = new Vector3(spawnerStats.spawnMaxPos.x, spawnerSettings.spawnHeight, spawnerStats.lodThresholds[i]);
             Gizmos.DrawLine(left, right);
         }
     }

@@ -2,12 +2,22 @@
 #pragma kernel CSUpdate
 
 #define THREADS_PER_GROUP 64
-
+#define MAX_LOD_COUNT 4
 #include "Assets/Shaders/HLSL/BackgroundParticles.hlsl"
 #include "Assets/Shaders/HLSL/Random.hlsl"
 
 RWStructuredBuffer<BackgroundParticleOutput> _BGParticleOutputs;
 StructuredBuffer<BackgroundParticleInput> _BGParticleInputs;
+
+RWStructuredBuffer<BackgroundParticleOutput> _LODParticleOutputs0;
+RWStructuredBuffer<BackgroundParticleOutput> _LODParticleOutputs1;
+RWStructuredBuffer<BackgroundParticleOutput> _LODParticleOutputs2;
+RWStructuredBuffer<BackgroundParticleOutput> _LODParticleOutputs3;
+
+RWStructuredBuffer<uint> _LODWriteOffsets;
+
+StructuredBuffer<float> _LODThresholds;
+
 uint _BackgroundMaskCount;
 
 float3 _SpawnerMinPos;
@@ -48,6 +58,35 @@ void CSInit(uint id : SV_DispatchThreadID)
     ReinitOutput(output, id);
     output.position.x = _SpawnerMinPos.x + (_SpawnerSize.x * output.rand01);
     
+    output.lod = MAX_LOD_COUNT - 1;
+    for (int i = 0; i < MAX_LOD_COUNT - 1; i++)
+    {
+        if (output.position.z < _LODThresholds[i])
+        {
+            output.lod = i;
+            break;
+        }
+    }
+    
+    uint lodIndex = 0;
+    
+    InterlockedAdd(_LODWriteOffsets[output.lod], 1, lodIndex);
+    if (output.lod == 0)
+    {
+        _LODParticleOutputs0[lodIndex] = output;
+    }
+    else if (output.lod == 1)
+    {
+        _LODParticleOutputs1[lodIndex] = output;
+    }
+    else if (output.lod == 2)
+    {
+        _LODParticleOutputs2[lodIndex] = output;
+    }
+    else if (output.lod == 3)
+    {
+        _LODParticleOutputs3[lodIndex] = output;
+    }
     
      _BGParticleOutputs[id] = output;
 }
