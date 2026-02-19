@@ -7,244 +7,193 @@ using static Atlas;
 using static AtlasSpawn;
 public static class AtlasSpawn
 {
-    static int floatSize = sizeof(float);
-    static int float3Size = floatSize * 3;
-    static int float4Size = floatSize * 4;
-    static int intSize = sizeof(uint);
+    public static int FLOAT_SIZE = sizeof(float);
+    public static int FLOAT3_SIZE = FLOAT_SIZE * 3;
+    public static int FLOAT4_SIZE = FLOAT_SIZE * 4;
+    public static int INT_SIZE = sizeof(uint);
 
-    public const int SPAWNER_COUNT = 32;
-    public const int MAX_PARTICLE_COUNT = 1024;
+    public const int SPAWNER_COUNT = 8;
+
+    public const int THREADS_PER_GROUP = 64;
+    public const int FORE_PARTICLE_COUNT = 64;
+    public const int MID_PARTICLE_COUNT = 256;
+    public const int BACK_PARTICLE_COUNT = 128;
+
     public const int MAX_LOD_COUNT = 4;
 
-    public static int MAX_VERTEX_COUNT = MAX_PARTICLE_COUNT * 6;
+    public static readonly int MAX_VERTEX_COUNT = (FORE_PARTICLE_COUNT + MID_PARTICLE_COUNT + BACK_PARTICLE_COUNT) * 6;
+    public static readonly int PARTICLE_OUTPUT_STRIDE = FLOAT3_SIZE + (FLOAT_SIZE * 2) + (INT_SIZE * 2);
+    public static readonly int PARTICLE_INPUT_STRIDE = INT_SIZE + (FLOAT_SIZE * 2);
 
-    public static int MAX_LOD_PARTICLE_COUNT = MAX_PARTICLE_COUNT / MAX_LOD_COUNT;
+    //TODO Need to set buffer strings to ids if this buffer idea works
+    public static string[] BUFFER_STRINGS = { "_Foreground0 ", "_Middleground0", "_Middleground1", "_Middleground2", "_Middleground3", "_Background0", "_Background1", "_Background2" };
+    public static readonly string[] KERNEL_STRINGS = { "CSForeground0_Init", "CSMiddleground0_Init", "CSMiddleground1_Init", "CSMiddleground2_Init", "CSMiddleground3_Init", "CSBackground0_Init", "CSBackground1_Init", "CSBackground2_Init" };
 
-    public static int PARTICLE_OUTPUT_STRIDE = float3Size + (floatSize * 2) + (intSize * 4);
-    public static int PARTICLE_INPUT_STRIDE = intSize + (floatSize * 2);
+    public static readonly int[] PARTICLE_COUNTS = { FORE_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, BACK_PARTICLE_COUNT, BACK_PARTICLE_COUNT, BACK_PARTICLE_COUNT };
 
-    public static int updateKernelID;
-    public static int initKernelID;
-    [Flags] public enum BackgroundType
+    public enum ParticleType
     {
-        None = 0,
-        Trees = 1 << 0,
-        Houses = 1 << 1,
-        Buildings = 1 << 2,
-        Powerlines = 1 << 3,
+        TreesLOD0,
+        TreesLOD1,
+        HousesLOD0,
+        HousesLOD1,
     }
 
-    [Serializable] public struct ParticleData
+    public enum Spawner
     {
-        public BackgroundType backgroundType;
-        public AtlasSO particleAtlas;
-        public float spawnHeightPosition;
-        public float spawnHeightRange;
+        Foreground0,
+        Middleground0,
+        Middleground1,
+        Middleground2,
+        Middleground3,
+        Background0,
+        Background1,
+        Background2,
 
-        public LODArray[] uvSizeAndPositionsLODS;
-
-        public bool active;
     }
 
-    [Serializable] public struct LODArray
+    [Serializable] public struct Zone
     {
-        public Vector4[] uvSizeAndPositionsArray;
-    }
-    [Serializable] public struct Biomes
-    {
-        public float metersPosition;
-        public BackgroundType backgroundType;
+        public AtlasSO atlasParticles;
+        public int metersStart;
+        public int metersLength;
+        public Spawner spawner;
     }
 
     [Serializable] public struct SpawnerData
     {
+        public Spawner spawner;
         public MaterialPropertyBlock mpb;
         public GraphicsBuffer uvSizeAndPositionBuffer;
-        public int lod;
+        public ComputeBuffer particleBuffer;
+        public int computeGroup;
+        public int kernelID;
         public bool active;
     }
 
-    [Serializable] public struct BackgroundParticleInputs
-    {
-        public int bgMask;
-        public float heightRange;
-        public float heightPos;
-    }
-
-    public static SpawnerData[] InitializeSpawnDataArray(ComputeBuffer[] lodBuffers, MaterialIDSO materialIDs)
+    public static SpawnerData[] InitializeSpawnDataArray(ComputeShader computeShader, MaterialIDSO materialIDs, AtlasSpawnerStatsSO stats)
     {
         SpawnerData[] spawnerDataArray = new SpawnerData[SPAWNER_COUNT];
 
+        computeShader.SetVector(materialIDs.ids.spawnerMinPos, stats.spawnMinPos);
+        computeShader.SetVector(materialIDs.ids.spawnerMaxPos, stats.spawnMaxPos);
+        computeShader.SetVector(materialIDs.ids.spawnerSize, stats.spawnBoundsSize);
+        computeShader.SetInt("_ForegroundParticleCount", FORE_PARTICLE_COUNT);
+        computeShader.SetInt("_MiddlegroundParticleCount", MID_PARTICLE_COUNT);
+        computeShader.SetInt("_BackgroundParticleCount", BACK_PARTICLE_COUNT);
+        computeShader.SetFloat(materialIDs.ids.trainVelocity, 0);
 
         for (int i = 0; i < SPAWNER_COUNT; i++)
         {
             SpawnerData spawnerData = new SpawnerData();
-            spawnerData.mpb = new MaterialPropertyBlock();
-            spawnerData.active = false;
-            spawnerData.lod = i % MAX_LOD_COUNT;
 
-            spawnerData.mpb.SetBuffer(materialIDs.ids.lodParticles, lodBuffers[spawnerData.lod]);
+            spawnerData.mpb = new MaterialPropertyBlock();
+            spawnerData.particleBuffer = new ComputeBuffer(PARTICLE_COUNTS[i], PARTICLE_OUTPUT_STRIDE);
+            spawnerData.kernelID = computeShader.FindKernel(KERNEL_STRINGS[i]);
+            spawnerData.computeGroup = Mathf.CeilToInt(PARTICLE_COUNTS[i] / THREADS_PER_GROUP);
+
+            computeShader.SetBuffer(spawnerData.kernelID, BUFFER_STRINGS[i], spawnerData.particleBuffer);
+            spawnerData.mpb.SetBuffer(materialIDs.ids.particles, spawnerData.particleBuffer);
 
             spawnerDataArray[i] = spawnerData;
         }
 
         return spawnerDataArray;
     }
-
-    public static void InitializeParticleDataArray(AtlasSpawnerSettingsSO settings)
+    public static void ChangeSpawner(AtlasSO activeParticleAtlas, SpawnerData activeSpawner, MaterialIDSO materialIDs)
     {
+        activeSpawner.uvSizeAndPositionBuffer?.Dispose();
+        activeSpawner.uvSizeAndPositionBuffer?.Release();
 
-        for (int i = 0; i < settings.particleData.Length; i++)
-        {
+        activeSpawner.uvSizeAndPositionBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, activeParticleAtlas.particleSprites.Length, FLOAT4_SIZE);
+        activeSpawner.uvSizeAndPositionBuffer.SetData(activeParticleAtlas.particleUVSizeAndPosArray);
 
-            ParticleData particleData = settings.particleData[i];
-
-            List<LODArray> lodList = new List<LODArray>();
-
-            HashSet<int> lodHash = new HashSet<int>();
-            for (int j = 0; j < particleData.particleAtlas.particleSprites.Length; j++)
-            {
-                ParticleSprite curParticleSprite = particleData.particleAtlas.particleSprites[j];
-                if (!lodHash.Contains(curParticleSprite.LOD))
-                {
-                    lodHash.Add(curParticleSprite.LOD);
-                    lodList.Add(new LODArray());
-                }
-            }
-
-            particleData.uvSizeAndPositionsLODS = lodList.ToArray();
-
-            for (int j = 0; j < particleData.uvSizeAndPositionsLODS.Length; j++)
-            {
-                List<Vector4> uvSizeAndPosList = new List<Vector4>();
-
-                for (int k = 0; k < particleData.particleAtlas.particleSprites.Length; k++)
-                {
-                    ParticleSprite curParticleSprite = particleData.particleAtlas.particleSprites[k];
-
-                    if (curParticleSprite.LOD == j)
-                    {
-                        uvSizeAndPosList.Add(curParticleSprite.sprite.uvSizeAndPos);
-                    }
-                }
-                particleData.uvSizeAndPositionsLODS[j].uvSizeAndPositionsArray = uvSizeAndPosList.ToArray();
-            }
-
-            settings.particleData[i] = particleData;
-        }
+        activeSpawner.mpb.SetBuffer(materialIDs.ids.uvSizeAndPos, activeSpawner.uvSizeAndPositionBuffer);
+        activeSpawner.mpb.SetTexture(materialIDs.ids.atlasTexture, activeParticleAtlas.texture);
     }
-    public static void ChangeBiome(AtlasSpawnerStatsSO stats, AtlasSpawnerSettingsSO settings, MaterialIDSO materialIDs)
-    {
-        int curBGMask = (int)stats.curBackgroundTypes;
-        stats.backgroundMaskCount = 0;
+    //public static void ChangeBiome(AtlasSpawnerStatsSO stats, AtlasSpawnerSettingsSO settings, MaterialIDSO materialIDs)
+    //{
+    //    int curBGMask = (int)stats.curBackgroundTypes;
+    //    stats.backgroundMaskCount = 0;
 
-        for (int i = 0; i < SPAWNER_COUNT; i++)
-        {
-            if ((curBGMask & (1 << i)) == 0) continue; // Find an active background type flag
+    //    for (int i = 0; i < SPAWNER_COUNT; i++)
+    //    {
+    //        if ((curBGMask & (1 << i)) == 0) continue; // Find an active background type flag
 
-            int activeBGMask = 1 << i;
+    //        int activeBGMask = 1 << i;
 
-            BackgroundParticleInputs bgParticleInputs = stats.backgroundInputsArray[stats.backgroundMaskCount];
+    //        BackgroundParticleInputs bgParticleInputs = stats.backgroundInputsArray[stats.backgroundMaskCount];
 
-            bgParticleInputs.bgMask = activeBGMask;
+    //        bgParticleInputs.bgMask = activeBGMask;
 
-            ParticleData particleData = stats.particleDataDict[(BackgroundType)activeBGMask];
+    //        ParticleData particleData = stats.particleDataDict[(BackgroundType)activeBGMask];
 
-            int particleBGMask = (int)particleData.backgroundType;
+    //        int particleBGMask = (int)particleData.backgroundType;
 
-            int lodIndex = 0;
-            for (int j = 0; j < stats.spawnerDataArray.Length; j++)
-            {
-                SpawnerData spawnerData = stats.spawnerDataArray[j];
+    //        int lodIndex = 0;
+    //        for (int j = 0; j < stats.spawnerDataArray.Length; j++)
+    //        {
+    //            SpawnerData spawnerData = stats.spawnerDataArray[j];
 
-                if (spawnerData.active || spawnerData.lod != lodIndex) continue; // Find an unused spawner
+    //            if (spawnerData.active) continue; // Find an unused spawner
 
-                SpawnerData curSpawnData = stats.spawnerDataArray[j];
+    //            SpawnerData curSpawnData = stats.spawnerDataArray[j];
 
-                curSpawnData.uvSizeAndPositionBuffer?.Dispose();
-                curSpawnData.uvSizeAndPositionBuffer?.Release();
+    //            curSpawnData.uvSizeAndPositionBuffer?.Dispose();
+    //            curSpawnData.uvSizeAndPositionBuffer?.Release();
 
-                lodIndex = j % particleData.uvSizeAndPositionsLODS.Length;
+    //            lodIndex = j % particleData.uvSizeAndPositionsLODS.Length;
 
-                curSpawnData.uvSizeAndPositionBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, particleData.uvSizeAndPositionsLODS[lodIndex].uvSizeAndPositionsArray.Length, float4Size);
-                curSpawnData.uvSizeAndPositionBuffer.SetData(particleData.uvSizeAndPositionsLODS[lodIndex].uvSizeAndPositionsArray);
+    //            curSpawnData.uvSizeAndPositionBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, particleData.uvSizeAndPositionsLODS[lodIndex].uvSizeAndPositionsArray.Length, FLOAT4_SIZE);
+    //            curSpawnData.uvSizeAndPositionBuffer.SetData(particleData.uvSizeAndPositionsLODS[lodIndex].uvSizeAndPositionsArray);
 
-                curSpawnData.mpb.SetInt(materialIDs.ids.spriteCount, particleData.uvSizeAndPositionsLODS[lodIndex].uvSizeAndPositionsArray.Length);
-                curSpawnData.mpb.SetTexture(materialIDs.ids.atlas, particleData.particleAtlas.texture);
-                curSpawnData.mpb.SetBuffer(materialIDs.ids.uvSizeAndPos, curSpawnData.uvSizeAndPositionBuffer);
-                curSpawnData.mpb.SetInt(materialIDs.ids.backgroundMask, (int)particleData.backgroundType);
+    //            curSpawnData.mpb.SetInt(materialIDs.ids.spriteCount, particleData.uvSizeAndPositionsLODS[lodIndex].uvSizeAndPositionsArray.Length);
+    //            curSpawnData.mpb.SetTexture(materialIDs.ids.atlasTexture, particleData.particleAtlas.texture);
+    //            curSpawnData.mpb.SetBuffer(materialIDs.ids.uvSizeAndPos, curSpawnData.uvSizeAndPositionBuffer);
+    //            curSpawnData.mpb.SetInt(materialIDs.ids.backgroundMask, particleBGMask);
+    //            curSpawnData.active = true;
 
-                curSpawnData.active = true;
+    //            stats.spawnerDataArray[j] = curSpawnData;
 
-                stats.spawnerDataArray[j] = curSpawnData;
+    //            bgParticleInputs.heightPos = particleData.spawnHeightPosition;
+    //            bgParticleInputs.heightRange = particleData.spawnHeightRange;
+    //            stats.backgroundInputsArray[stats.backgroundMaskCount] = bgParticleInputs;
 
-                bgParticleInputs.heightPos = particleData.spawnHeightPosition;
-                bgParticleInputs.heightRange = particleData.spawnHeightRange;
-                stats.backgroundInputsArray[stats.backgroundMaskCount] = bgParticleInputs;
+    //            stats.backgroundMaskCount++;
 
-                stats.backgroundMaskCount++;
+    //            lodIndex++;
+    //            settings.atlasCompute.SetBuffer(curSpawnData.kernelID, materialIDs.ids.particleInputs, )
+    //            settings.atlasCompute.Dispatch(curSpawnData.kernelID, curSpawnData.computeGroup, 1, 1);
+    //                //TODO: Dispatch appropiate compute shaders
+    //            if (lodIndex == particleData.uvSizeAndPositionsLODS.Length) break;
+    //        }
+    //    }
 
-                lodIndex++;
+    //    settings.atlasCompute.SetInt(materialIDs.ids.backgroundMaskCount, stats.backgroundMaskCount);
+    //    stats.inputComputeBuffer.SetData(stats.backgroundInputsArray);
+    //    settings.atlasCompute.SetBuffer(stats.updateKernelID, materialIDs.ids.particleInputs, stats.inputComputeBuffer);
+    //    settings.atlasCompute.SetBuffer(stats.initKernelID, materialIDs.ids.particleInputs, stats.inputComputeBuffer);
 
-                if (lodIndex == particleData.uvSizeAndPositionsLODS.Length) break;
-            }
-        }
+    //}
+    //public static Dictionary<BackgroundType, AtlasParticleSO> SetParticleDataDictionary(ParticleData[] particleDataArray)
+    //{
+    //    Dictionary<BackgroundType, ParticleData> dict = new Dictionary<BackgroundType, ParticleData>();
 
-        settings.backgroundParticleCompute.SetInt(materialIDs.ids.backgroundMaskCount, stats.backgroundMaskCount);
-        stats.inputComputeBuffer.SetData(stats.backgroundInputsArray);
-        settings.backgroundParticleCompute.SetBuffer(stats.updateKernelID, materialIDs.ids.bgParticleInputs, stats.inputComputeBuffer);
-        settings.backgroundParticleCompute.SetBuffer(stats.initKernelID, materialIDs.ids.bgParticleInputs, stats.inputComputeBuffer);
-    }
-    public static void InitializeCompute(ComputeShader computeShader, MaterialIDSO materialIDs, AtlasSpawnerStatsSO stats)
-    {
-        updateKernelID = computeShader.FindKernel("CSUpdate");
-        initKernelID = computeShader.FindKernel("CSInit");
-        int computeGroups = Mathf.CeilToInt(MAX_PARTICLE_COUNT / 64);
+    //    BackgroundType[] backgroundTypes = (BackgroundType[])Enum.GetValues(typeof(BackgroundType));
 
-        computeShader.SetVector(materialIDs.ids.spawnerMinPos, stats.spawnMinPos);
-        computeShader.SetVector(materialIDs.ids.spawnerMaxPos, stats.spawnMaxPos);
-        computeShader.SetVector(materialIDs.ids.spawnerSize, stats.spawnBoundsSize);
-        computeShader.SetInt(materialIDs.ids.particleCount, MAX_PARTICLE_COUNT);
-        computeShader.SetFloat(materialIDs.ids.trainVelocity, 0);
+    //    for (int i = 0; i < backgroundTypes.Length; i++)
+    //    {
+    //        BackgroundType backgroundType = backgroundTypes[i];
 
-        stats.lodThresholdBuffer.SetData(stats.lodThresholds);
-        computeShader.SetBuffer(initKernelID, "_LODThresholds", stats.lodThresholdBuffer);
+    //        for (int j = 0; j < particleDataArray.Length; j++)
+    //        {
+    //            if (backgroundType == particleDataArray[j].backgroundType)
+    //            {
+    //                dict.Add(backgroundType, particleDataArray[j]);
+    //            }
+    //        }
+    //    }
 
-        computeShader.SetBuffer(initKernelID, materialIDs.ids.bgParticleInputs, stats.inputComputeBuffer);
-        computeShader.SetBuffer(initKernelID, materialIDs.ids.bgParticleOutputs, stats.outputComputeBuffer);
-
-
-        stats.lodWriteOffsetsBuffer.SetData(stats.lodWriteOffsets);
-        computeShader.SetBuffer(initKernelID, "_LODWriteOffsets", stats.lodWriteOffsetsBuffer);
-        computeShader.SetBuffer(initKernelID, "_LODParticleOutputs0", stats.lodBuffers[0]);
-        computeShader.SetBuffer(initKernelID, "_LODParticleOutputs1", stats.lodBuffers[1]);
-        computeShader.SetBuffer(initKernelID, "_LODParticleOutputs2", stats.lodBuffers[2]);
-        computeShader.SetBuffer(initKernelID, "_LODParticleOutputs3", stats.lodBuffers[3]);
-
-
-
-        computeShader.Dispatch(initKernelID, computeGroups, 1, 1);
-    }
-
-    public static Dictionary<BackgroundType, ParticleData> SetParticleDataDictionary(ParticleData[] particleDataArray)
-    {
-        Dictionary<BackgroundType, ParticleData> dict = new Dictionary<BackgroundType, ParticleData>();
-
-        BackgroundType[] backgroundTypes = (BackgroundType[])Enum.GetValues(typeof(BackgroundType));
-
-        for (int i = 0; i < backgroundTypes.Length; i++)
-        {
-            BackgroundType backgroundType = backgroundTypes[i];
-
-            for (int j = 0; j < particleDataArray.Length; j++)
-            {
-                if (backgroundType == particleDataArray[j].backgroundType)
-                {
-                    dict.Add(backgroundType, particleDataArray[j]);
-                }
-            }
-        }
-
-        return dict;
-    }
+    //    return dict;
+    //}
 }

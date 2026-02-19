@@ -1,22 +1,37 @@
-#pragma kernel CSInit
-#pragma kernel CSUpdate
-
-#define THREADS_PER_GROUP 64
-#define MAX_LOD_COUNT 4
 #include "Assets/Shaders/HLSL/BackgroundParticles.hlsl"
 #include "Assets/Shaders/HLSL/Random.hlsl"
 
-RWStructuredBuffer<BackgroundParticleOutput> _BGParticleOutputs;
-StructuredBuffer<BackgroundParticleInput> _BGParticleInputs;
+#define THREADS_PER_GROUP 64
 
-RWStructuredBuffer<BackgroundParticleOutput> _LODParticleOutputs0;
-RWStructuredBuffer<BackgroundParticleOutput> _LODParticleOutputs1;
-RWStructuredBuffer<BackgroundParticleOutput> _LODParticleOutputs2;
-RWStructuredBuffer<BackgroundParticleOutput> _LODParticleOutputs3;
+#pragma kernel CSForeground0_Init
+#pragma kernel CSMiddleground0_Init
+#pragma kernel CSMiddleground1_Init
+#pragma kernel CSMiddleground2_Init
+#pragma kernel CSMiddleground3_Init
+#pragma kernel CSBackground0_Init
+#pragma kernel CSBackground1_Init
+#pragma kernel CSBackground2_Init
 
-RWStructuredBuffer<uint> _LODWriteOffsets;
+//#pragma kernel CSUpdate
 
-StructuredBuffer<float> _LODThresholds;
+
+static const float FORE_MIN = 1.0;
+static const float FORE_SIZE = 1.0;
+
+static const float MID_MIN = 24.0;
+static const float MID_SIZE = 4.0;
+
+static const float BACK_MIN = 29.0;
+static const float BACK_SIZE = 3.0;
+
+RWStructuredBuffer<ParticleOutput> _Foreground0;
+RWStructuredBuffer<ParticleOutput> _Middleground0;
+RWStructuredBuffer<ParticleOutput> _Middleground1;
+RWStructuredBuffer<ParticleOutput> _Middleground2;
+RWStructuredBuffer<ParticleOutput> _Middleground3;
+RWStructuredBuffer<ParticleOutput> _Background0;
+RWStructuredBuffer<ParticleOutput> _Background1;
+RWStructuredBuffer<ParticleOutput> _Background2;
 
 uint _BackgroundMaskCount;
 
@@ -24,73 +39,84 @@ float3 _SpawnerMinPos;
 float3 _SpawnerMaxPos;
 float3 _SpawnerSize;
 
-uint _ParticleCount;
+uint _ForegroundParticleCount;
+uint _MiddlegroundParticleCount;
+uint _BackgroundParticleCount;
+
 uniform float _TrainVelocity;
 
-void ReinitOutput(inout BackgroundParticleOutput output, uint id)
+void ReinitOutput(inout ParticleOutput output, uint id)
 {
     output.randID = HashIntToInt(id + output.randID);
     output.rand01 = HashIntTo01Float(output.randID);
-    
-    uint randMod = output.randID % _BackgroundMaskCount;
-    
-    BackgroundParticleInput input = _BGParticleInputs[randMod];
-    
-    output.position.y = input.heightPos + lerp(-input.heightRange, input.heightRange, output.rand01);
-    output.backgroundMask = input.bgMask;
     output.alive = 1;
 }
 
-
-[numthreads(THREADS_PER_GROUP, 1, 1)]
-void CSInit(uint id : SV_DispatchThreadID)
+void InitOutput(int id, RWStructuredBuffer<ParticleOutput> buffer, int particleCount, float minRange, float sizeRange)
 {
-    if (id >= _ParticleCount)
-    {
-        return;
-    }
+    if (id >= particleCount) return;
     
-    BackgroundParticleOutput output = _BGParticleOutputs[id];
+    ParticleOutput output = buffer[id];
     
-    output.position.z = _SpawnerMinPos.z + (((float) id / (float) _ParticleCount) * _SpawnerSize.z);
-    output.parallaxFactor = abs(output.position.z - _SpawnerMaxPos.z) / _SpawnerMaxPos.z; // TODO: Calculate between camera and furthest pos, not just the furthest pos
+    float normID = (float) id / (float) particleCount;
+    
+    output.position.z = minRange + (normID * sizeRange);
+    output.parallaxFactor = abs(output.position.z - _SpawnerMaxPos.z) / _SpawnerMaxPos.z;
     
     ReinitOutput(output, id);
     output.position.x = _SpawnerMinPos.x + (_SpawnerSize.x * output.rand01);
     
-    output.lod = MAX_LOD_COUNT - 1;
-    for (int i = 0; i < MAX_LOD_COUNT - 1; i++)
-    {
-        if (output.position.z < _LODThresholds[i])
-        {
-            output.lod = i;
-            break;
-        }
-    }
-    
-    uint lodIndex = 0;
-    
-    InterlockedAdd(_LODWriteOffsets[output.lod], 1, lodIndex);
-    if (output.lod == 0)
-    {
-        _LODParticleOutputs0[lodIndex] = output;
-    }
-    else if (output.lod == 1)
-    {
-        _LODParticleOutputs1[lodIndex] = output;
-    }
-    else if (output.lod == 2)
-    {
-        _LODParticleOutputs2[lodIndex] = output;
-    }
-    else if (output.lod == 3)
-    {
-        _LODParticleOutputs3[lodIndex] = output;
-    }
-    
-     _BGParticleOutputs[id] = output;
+    buffer[id] = output;
 }
 
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSForeground0_Init(uint id : SV_DispatchThreadID)
+{
+    InitOutput(id, _Foreground0, _ForegroundParticleCount, FORE_MIN, FORE_SIZE);
+}
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSMiddleground0_Init(uint id : SV_DispatchThreadID)
+{
+    InitOutput(id, _Middleground0, _MiddlegroundParticleCount, MID_MIN, MID_SIZE);
+}
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSMiddleground1_Init(uint id : SV_DispatchThreadID)
+{
+    InitOutput(id, _Middleground1, _MiddlegroundParticleCount, MID_MIN, MID_SIZE);
+}
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSMiddleground2_Init(uint id : SV_DispatchThreadID)
+{
+    InitOutput(id, _Middleground2, _MiddlegroundParticleCount, MID_MIN, MID_SIZE);
+}
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSMiddleground3_Init(uint id : SV_DispatchThreadID)
+{
+    InitOutput(id, _Middleground3, _MiddlegroundParticleCount, MID_MIN, MID_SIZE);
+}
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSBackground0_Init(uint id : SV_DispatchThreadID)
+{
+    InitOutput(id, _Background0, _BackgroundParticleCount, BACK_MIN, BACK_SIZE);
+}
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSBackground1_Init(uint id : SV_DispatchThreadID)
+{
+    InitOutput(id, _Background1, _BackgroundParticleCount, BACK_MIN, BACK_SIZE);
+}
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSBackground2_Init(uint id : SV_DispatchThreadID)
+{
+    InitOutput(id, _Background2, _BackgroundParticleCount, BACK_MIN, BACK_SIZE);
+}
+/*
 [numthreads(THREADS_PER_GROUP, 1, 1)]
 void CSUpdate(uint id : SV_DispatchThreadID)
 {
@@ -119,3 +145,4 @@ void CSUpdate(uint id : SV_DispatchThreadID)
     
     _BGParticleOutputs[id] = output;
 }
+*/

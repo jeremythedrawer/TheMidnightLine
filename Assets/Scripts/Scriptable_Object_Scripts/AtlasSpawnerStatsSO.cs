@@ -14,28 +14,8 @@ public class AtlasSpawnerStatsSO : ScriptableObject
     public Vector3 spawnCenter;
     public Vector3 spawnBoundsSize;
 
-    public float[] lodThresholds;
-    public int[] lodWriteOffsets;
-
-    public int updateKernelID;
-    public int initKernelID;
     public int computeGroups;
-
-    public ComputeBuffer outputComputeBuffer;
-    public ComputeBuffer inputComputeBuffer;
-    public ComputeBuffer lodWriteOffsetsBuffer;
-    public ComputeBuffer lodThresholdBuffer;
-    public ComputeBuffer[] lodBuffers; 
-
-    public Bounds renderParamsBounds;
-    public BackgroundType curBackgroundTypes;
-
-    //public GraphicsBuffer indexBuffer;
-    
-    public int backgroundMaskCount;
-    public BackgroundParticleInputs[] backgroundInputsArray;
-
     public SpawnerData[] spawnerDataArray = new SpawnerData[SPAWNER_COUNT];
 
-    public Dictionary<BackgroundType, ParticleData> particleDataDict;
+   // public Dictionary<BackgroundType, ParticleData> particleDataDict;
 }

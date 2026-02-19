@@ -25,16 +25,14 @@ public class MaterialIDSO : ScriptableObject
         public int trainVelocity;
         public int trainMetersTravelled;
 
-        public int bgParticleOutputs;
-        public int bgParticleInputs;
-        public int lodParticles;
+        public int particleInputs;
+        public int particles;
         public int backgroundMaskCount;
         public int spawnerMinPos;
         public int spawnerMaxPos;
         public int spawnerSize;
-        public int particleCount;
 
-        public int atlas;
+        public int atlasTexture;
         public int uvSizeAndPos;
 
         public int spriteCount;
@@ -74,19 +72,17 @@ public class MaterialIDSO : ScriptableObject
         ids.entityDepthRange = Shader.PropertyToID("_EntityDepthRange");
         ids.trainVelocity = Shader.PropertyToID("_TrainVelocity");
         ids.trainMetersTravelled = Shader.PropertyToID("_MetersTravelled");
-        ids.bgParticleOutputs = Shader.PropertyToID("_BGParticleOutputs");
-        ids.lodParticles = Shader.PropertyToID("_LODParticles");
+        ids.particles = Shader.PropertyToID("_Particles");
         ids.spawnerMinPos = Shader.PropertyToID("_SpawnerMinPos");
         ids.spawnerMaxPos = Shader.PropertyToID("_SpawnerMaxPos");
         ids.spawnerSize = Shader.PropertyToID("_SpawnerSize");
 
-        ids.particleCount = Shader.PropertyToID("_ParticleCount");
-        ids.atlas = Shader.PropertyToID("_Atlas");
+        ids.atlasTexture = Shader.PropertyToID("_Atlas");
 
         ids.uvSizeAndPos = Shader.PropertyToID("_UVSizeAndPos");
 
         ids.spriteCount = Shader.PropertyToID("_SpriteCount");
-        ids.bgParticleInputs = Shader.PropertyToID("_BGParticleInputs");
+        ids.particleInputs = Shader.PropertyToID("_ParticleInputs");
         ids.backgroundMask = Shader.PropertyToID("_BackgroundMask");
         ids.backgroundMaskCount = Shader.PropertyToID("_BackgroundMaskCount");
         ids.lodLevel = Shader.PropertyToID("_LODLevel");

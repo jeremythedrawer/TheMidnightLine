@@ -110,7 +110,7 @@ public class AtlasFactory : EditorWindow
 
             if (atlas.isParticleAtlas)
             {
-                GetLODData();
+                GetParticleUVSizeAndPosData();
             }
             previewRT = null;
             flip = 1;
@@ -263,7 +263,7 @@ public class AtlasFactory : EditorWindow
         {
             if (i % columns == 0) EditorGUILayout.BeginHorizontal();
 
-            DrawAtlasSprite(atlas.particleSprites[i].sprite, gridIndex, particleSpriteNullable: atlas.particleSprites[i]);
+            DrawAtlasSprite(atlas.particleSprites[i].sprite, gridIndex);
             gridIndex++;
 
             if (i % columns == columns - 1 || i == atlas.particleSprites.Length - 1) EditorGUILayout.EndHorizontal();
@@ -660,7 +660,6 @@ public class AtlasFactory : EditorWindow
             }
         }
     }
-
     private void GetLODData()
     {
         lodValues = new int[atlas.particleSprites.Length];
@@ -670,7 +669,16 @@ public class AtlasFactory : EditorWindow
             lodValues[i] = atlas.particleSprites[i].LOD;
         }
     }
-    private void DrawAtlasSprite(SimpleSprite atlasSprite, int gridIndex, MotionSprite? motionSpriteNullable = null, SliceSprite? slicedSpriteNullable = null, ParticleSprite? particleSpriteNullable = null)
+    private void GetParticleUVSizeAndPosData()
+    {
+        atlas.particleUVSizeAndPosArray = new Vector4[atlas.particleSprites.Length];
+
+        for (int i = 0; i < atlas.particleSprites.Length; i++)
+        {
+            atlas.particleUVSizeAndPosArray[i] = atlas.particleSprites[i].sprite.uvSizeAndPos;
+        }
+    }
+    private void DrawAtlasSprite(SimpleSprite atlasSprite, int gridIndex, MotionSprite? motionSpriteNullable = null, SliceSprite? slicedSpriteNullable = null)
     {
         Rect gridRect = GUILayoutUtility.GetRect(cellSize + padding, cellSize + padding, GUILayout.ExpandWidth(false));
         gridRect = new Rect(gridRect.x + padding * 0.5f, gridRect.y + padding * 0.5f, cellSize, cellSize);
@@ -917,31 +925,6 @@ public class AtlasFactory : EditorWindow
                     }
                 }
             }
-            
-            if (particleSpriteNullable.HasValue)
-            {
-                EditorGUI.BeginChangeCheck();
-                ParticleSprite particlesprite = particleSpriteNullable.Value;
-
-                float spriteDataRectHeight = 16;
-                float clipDataRectYPos = gridRect.yMax + 2;
-                float minRectX = spriteRect.center.x - (cellSize * 0.5f);
-                Rect lodRect = new Rect(minRectX, clipDataRectYPos, cellSize, spriteDataRectHeight);
-
-                int prevLodValue = lodValues[particlesprite.sprite.index];
-                int selectedLodValue = EditorGUI.IntField(lodRect, prevLodValue);
-                lodValues[particlesprite.sprite.index] = selectedLodValue;
-
-                if (EditorGUI.EndChangeCheck())
-                {
-                    if (prevLodValue == selectedLodValue) return;
-                    selectedIndex = gridIndex;
-
-                    atlas.particleSprites[selectedIndex].LOD = selectedLodValue;
-                }
-            }
-
-
         }
             Handles.EndGUI();
 

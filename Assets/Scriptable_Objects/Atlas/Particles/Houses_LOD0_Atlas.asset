@@ -1,0 +1,87 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33fd095fffb8f844e9fa149db1599080, type: 3}
+  m_Name: Houses_LOD0_Atlas
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
+  texture: {fileID: 2800000, guid: 098a917c406fdd644899d5d0ee78e85b, type: 3}
+  isParticleAtlas: 1
+  entityMotionType: 0
+  pivotColor:
+    serializedVersion: 2
+    rgba: 4278190335
+  sliceColor:
+    serializedVersion: 2
+    rgba: 4294901760
+  particleType: 0
+  motionSprites: []
+  simpleSprites: []
+  slicedSprites: []
+  particleSprites:
+  - sprite:
+      uvSizeAndPos: {x: 0.2211914, y: 0.20996094, z: 0, w: 0.7895508}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.5166667, y: 2.3888888, z: 1}
+      index: 0
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.26416016, y: 0.23583984, z: 0.43896484, w: 0.76171875}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 3.0055556, y: 2.6833334, z: 1}
+      index: 1
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.20166016, y: 0.28222656, z: 0.22753906, w: 0.7158203}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.2944446, y: 3.211111, z: 1}
+      index: 2
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.26171875, y: 0.2788086, z: 0.7109375, w: 0.7192383}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.9777777, y: 3.1722221, z: 1}
+      index: 3
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.25634766, y: 0.21972656, z: 0, w: 0.49267578}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.9166667, y: 2.5, z: 1}
+      index: 4
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.26611328, y: 0.2626953, z: 0.5698242, w: 0.4345703}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 3.0277777, y: 2.988889, z: 1}
+      index: 5
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.265625, y: 0.30615234, z: 0.28173828, w: 0.40625}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 3.0222223, y: 3.4833333, z: 1}
+      index: 6
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.2939453, y: 0.27978516, z: 0, w: 0.14160156}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 3.3444445, y: 3.1833334, z: 1}
+      index: 7
+    LOD: 0
+  particleUVSizeAndPosArray:
+  - {x: 0.2211914, y: 0.20996094, z: 0, w: 0.7895508}
+  - {x: 0.26416016, y: 0.23583984, z: 0.43896484, w: 0.76171875}
+  - {x: 0.20166016, y: 0.28222656, z: 0.22753906, w: 0.7158203}
+  - {x: 0.26171875, y: 0.2788086, z: 0.7109375, w: 0.7192383}
+  - {x: 0.25634766, y: 0.21972656, z: 0, w: 0.49267578}
+  - {x: 0.26611328, y: 0.2626953, z: 0.5698242, w: 0.4345703}
+  - {x: 0.265625, y: 0.30615234, z: 0.28173828, w: 0.40625}
+  - {x: 0.2939453, y: 0.27978516, z: 0, w: 0.14160156}
+  clips: []
+  markers: []

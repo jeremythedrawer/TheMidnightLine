@@ -1,0 +1,66 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33fd095fffb8f844e9fa149db1599080, type: 3}
+  m_Name: Trees_LOD1_Atlas
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
+  texture: {fileID: 2800000, guid: f8f8c2aa1994cc94684f5f37f57fd629, type: 3}
+  isParticleAtlas: 1
+  entityMotionType: 0
+  pivotColor:
+    serializedVersion: 2
+    rgba: 4278190335
+  sliceColor:
+    serializedVersion: 2
+    rgba: 4294901760
+  particleType: 0
+  motionSprites: []
+  simpleSprites: []
+  slicedSprites: []
+  particleSprites:
+  - sprite:
+      uvSizeAndPos: {x: 0.13330078, y: 0.1538086, z: 0.21484375, w: 0.8457031}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 1.5166667, y: 1.75, z: 1}
+      index: 0
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.1796875, y: 0.15185547, z: 0.52490234, w: 0.84765625}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.0444446, y: 1.7277777, z: 1}
+      index: 1
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.19238281, y: 0.1640625, z: 0, w: 0.8354492}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.1888888, y: 1.8666667, z: 1}
+      index: 2
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.16064453, y: 0.17578125, z: 0.3515625, w: 0.82373047}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 1.8277777, y: 2, z: 1}
+      index: 3
+    LOD: 0
+  - sprite:
+      uvSizeAndPos: {x: 0.2055664, y: 0.17578125, z: 0.72021484, w: 0.82373047}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 2.338889, y: 2, z: 1}
+      index: 4
+    LOD: 0
+  particleUVSizeAndPosArray:
+  - {x: 0.13330078, y: 0.1538086, z: 0.21484375, w: 0.8457031}
+  - {x: 0.1796875, y: 0.15185547, z: 0.52490234, w: 0.84765625}
+  - {x: 0.19238281, y: 0.1640625, z: 0, w: 0.8354492}
+  - {x: 0.16064453, y: 0.17578125, z: 0.3515625, w: 0.82373047}
+  - {x: 0.2055664, y: 0.17578125, z: 0.72021484, w: 0.82373047}
+  clips: []
+  markers: []

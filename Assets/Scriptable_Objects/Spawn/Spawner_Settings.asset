@@ -10,13 +10,13 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9d498eeb9d57f1b4ebd25da4e37fd14f, type: 3}
-  m_Name: SpawnerSettingsSO
+  m_Name: Spawner_Settings
   m_EditorClassIdentifier: Assembly-CSharp::SpawnerSettingsSO
   boundBufferAmount: 16
   maxSpawnDepth: 392.9
   minSpawnDepth: 15.93
   spawnHeight: 0
-  backgroundParticleCompute: {fileID: 7200000, guid: d984c22b7e444484fb6f6f24b8c38e63, type: 3}
+  atlasCompute: {fileID: 7200000, guid: d984c22b7e444484fb6f6f24b8c38e63, type: 3}
   backgroundMaterial: {fileID: 2100000, guid: 5a41293c67f317d4ebbd5977cece7124, type: 2}
   particleData:
   - backgroundType: 1
@@ -61,4 +61,6 @@ MonoBehaviour:
       - {x: 0.13305664, y: 0.13134766, z: 0.35913086, w: 0.71728516}
       - {x: 0.14697266, y: 0.13989258, z: 0.34985352, w: 0.5708008}
     active: 0
-  biomes: []
+  biomes:
+  - metersPosition: 0
+    backgroundType: 3

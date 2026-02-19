@@ -1,8 +1,9 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static Atlas;
+using static AtlasSpawn;
 
-[CreateAssetMenu(fileName = "AtlasSO", menuName = " Atlas / Atlas Sprites SO")]
+[CreateAssetMenu(fileName = "AtlasSprite_SO", menuName = "Atlas / Atlas Sprites")]
 public class AtlasSO : ScriptableObject
 {
     public Texture2D texture;
@@ -15,12 +16,15 @@ public class AtlasSO : ScriptableObject
     [Header("Sliced Settings")]
     public Color32 sliceColor = Color.blue;
 
+    [Header("Particle Settings")]
+    public ParticleType particleType;
+
     [Header("Generated")]
     public MotionSprite[] motionSprites;
     public SimpleSprite[] simpleSprites;
     public SliceSprite[] slicedSprites;
     public ParticleSprite[] particleSprites;
-
+    public Vector4[] particleUVSizeAndPosArray;
     public AtlasClip[] clips;
     public MarkerKey[] markers;
     
