@@ -12,5 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: fddbeef0d64ccf64e964534b06a31700, type: 3}
   m_Name: Trip
   m_EditorClassIdentifier: Assembly-CSharp::TripSO
-  zones: []
-  tripMeters: 0
+  zones:
+  - atlas: {fileID: 11400000, guid: b7293c5d7b7f8814a972cc266c414cf8, type: 2}
+    metersStart: 0
+    metersLength: 2000
+    spawner: 1
+  - atlas: {fileID: 11400000, guid: 8fe34cef64df39f47ad5ef739cc24f29, type: 2}
+    metersStart: 0
+    metersLength: 2000
+    spawner: 2
+  - atlas: {fileID: 11400000, guid: 38ab149c8421c91498ac2d3a9830655e, type: 2}
+    metersStart: 0
+    metersLength: 2000
+    spawner: 5
+  - atlas: {fileID: 11400000, guid: 2a27930e178f4c240b192205a2491b59, type: 2}
+    metersStart: 0
+    metersLength: 2000
+    spawner: 6
+  tripMeters: 20000

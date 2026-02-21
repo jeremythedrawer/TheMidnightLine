@@ -1,3 +1,4 @@
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using static Atlas;
@@ -30,7 +31,28 @@ public class AtlasRenderer : MonoBehaviour
     private void OnValidate()
     {
         InitSpriteMode();
-        SetSprite(spriteIndex);
+        
+        switch(spriteMode)
+        {
+            case SpriteMode.Simple:
+            {
+                sprite = atlas.simpleSprites[spriteIndex];
+            }
+            break;
+
+            case SpriteMode.Motion:
+            {
+                sprite = atlas.motionSprites[spriteIndex].sprite;
+            }
+            break;
+
+            case SpriteMode.Slice:
+            {
+                sprite = atlas.slicedSprites[spriteIndex].sprite;
+            }
+            break;
+        }
+        SetSprite(sprite);
         SetCollider();
         transform.position = new Vector3(transform.position.x, transform.position.y, depthOrder);
         worldMatrix = transform.localToWorldMatrix;
@@ -54,7 +76,7 @@ public class AtlasRenderer : MonoBehaviour
 #endif
 
     }
-    public void SetSprite(int spriteIndex)
+    private void SetSprite(SimpleSprite sprite)
     {
         if (atlas == null || (atlas.motionSprites.Length == 0 && atlas.slicedSprites.Length == 0 && atlas.simpleSprites.Length == 0)) return;
 
@@ -63,7 +85,7 @@ public class AtlasRenderer : MonoBehaviour
             case SpriteMode.Simple:
             {
                 if (atlas.simpleSprites.Length == 0) return;
-                sprite = atlas.simpleSprites[spriteIndex];
+                this.sprite = sprite;
 
                 widthHeightFlip = new Vector4[]
                 {
@@ -75,10 +97,8 @@ public class AtlasRenderer : MonoBehaviour
             case SpriteMode.Motion:
             {
                 if (atlas.motionSprites.Length == 0) return;
-                
-                ref MotionSprite motionSprite = ref atlas.motionSprites[spriteIndex];
 
-                sprite = motionSprite.sprite;
+                this.sprite = sprite;
 
                 widthHeightFlip = new Vector4[]
                 {
@@ -91,8 +111,7 @@ public class AtlasRenderer : MonoBehaviour
             {
                 if (atlas.slicedSprites.Length == 0) return;
 
-                ref SliceSprite slicedSprite = ref atlas.slicedSprites[spriteIndex];
-                sprite = slicedSprite.sprite;
+                this.sprite = sprite;
 
                 Vector2 flip = new Vector2(flipX ? -1 : 1, flipY ? -1 : 1);
                 widthHeightFlip = new Vector4[]
@@ -129,13 +148,13 @@ public class AtlasRenderer : MonoBehaviour
         float totalWidthSize = sprite.worldSize.x * width;
         float totalHeightSlice = sprite.worldSize.y * height;
         centerSliceWorldSize = new Vector2(Mathf.Max(0, totalWidthSize - slicedSprite.worldSlices.x - slicedSprite.worldSlices.y), Mathf.Max(0, totalHeightSlice - slicedSprite.worldSlices.z - slicedSprite.worldSlices.w));
-        centerSliceUVSize = new Vector2( Mathf.Max(0f, width - slicedSprite.slice.x - (1 - slicedSprite.slice.y)),Mathf.Max(0f, height - slicedSprite.slice.z - (1 - slicedSprite.slice.w)));
+        centerSliceUVSize = new Vector2(centerSliceWorldSize.x / (sprite.worldSize.x * (slicedSprite.slice.y - slicedSprite.slice.x)), centerSliceWorldSize.y / (sprite.worldSize.y * (slicedSprite.slice.w - slicedSprite.slice.z)));
     }
     private void SetCollider()
     {
         if (boxCollider == null) return;
         boxCollider.size = new Vector2(sprite.worldSize.x * width, sprite.worldSize.y * height);
-        boxCollider.offset = boxCollider.size * 0.5f;
+        boxCollider.offset = (boxCollider.size * 0.5f) - (sprite.worldSize * new Vector2(flipX ? 1 - sprite.uvPivot.x : sprite.uvPivot.x, flipY ? 1 - sprite.uvPivot.y : sprite.uvPivot.y));
     }
 
     public void Flip(bool flipLeft)

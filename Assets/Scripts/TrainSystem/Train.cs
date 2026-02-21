@@ -13,19 +13,15 @@ public class Train : MonoBehaviour
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] MaterialIDSO materialIDs;
     [SerializeField] AtlasSpawnerStatsSO spawnerStats;
-    CancellationTokenSource trainCTS;
-    [Serializable] public struct ComponentData
-    {
-        public SpriteRenderer frontCarriageSpriteRenderer;
-    }
-    [SerializeField] ComponentData componentData;
+    [SerializeField] AtlasRenderer atlasRenderer;
 
+    CancellationTokenSource trainCTS;
     private void Awake()
     {
-        stats.trainLength = (componentData.frontCarriageSpriteRenderer.bounds.max.x - transform.position.x);
+        //stats.trainLength = (componentData.frontCarriageSpriteRenderer.bounds.max.x - transform.position.x);
         stats.trainHalfLength = stats.trainLength * 0.5f;
         stats.startXPos = transform.position.x;
-        stats.trainMaxHeight = componentData.frontCarriageSpriteRenderer.bounds.max.y;
+        //stats.trainMaxHeight = componentData.frontCarriageSpriteRenderer.bounds.max.y;
         stats.curStation = stationsData.stations[0];
         stats.curStation.isSpawned = true;
         stats.targetPassengerCount = stats.curStation.bystanderSpawnAmount + stationsData.stations[0].agentSpawnAmount + 1; // +1 for spy himself

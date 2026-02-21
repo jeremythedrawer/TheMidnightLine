@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Tradie_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
   texture: {fileID: 2800000, guid: cc98a5ce93c118c4481c75a80e8c861e, type: 3}
+  isParticleAtlas: 0
   entityMotionType: 0
   pivotColor:
     serializedVersion: 2
@@ -20,6 +21,7 @@ MonoBehaviour:
   sliceColor:
     serializedVersion: 2
     rgba: 4294901760
+  particleType: 0
   motionSprites:
   - sprite:
       uvSizeAndPos: {x: 0.041503906, y: 0.15771484, z: 0.017089844, w: 0.8417969}
@@ -371,163 +373,512 @@ MonoBehaviour:
     markers: []
   simpleSprites: []
   slicedSprites: []
+  particleSprites: []
+  particleUVSizeAndPosArray: []
   clips:
   - clipName: Walking
     keyFrames:
-    - spriteIndex: 0
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 3
-    - spriteIndex: 1
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 3
-    - spriteIndex: 2
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 3
-    - spriteIndex: 3
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 3
-    - spriteIndex: 4
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 3
-    - spriteIndex: 5
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 3
-    - spriteIndex: 6
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 3
-    - spriteIndex: 7
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 3
     clipType: 0
     motionIndex: 21
+    time: 0
   - clipName: StandingBreathing
     keyFrames:
-    - spriteIndex: 9
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 3
-    - spriteIndex: 10
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 30
-    - spriteIndex: 8
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 30
     clipType: 1
     motionIndex: 14
+    time: 0
   - clipName: Smoking
     keyFrames:
-    - spriteIndex: 11
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 30
-    - spriteIndex: 12
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 3
-    - spriteIndex: 13
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 30
-    - spriteIndex: 14
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 30
-    - spriteIndex: 15
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 3
-    - spriteIndex: 16
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 30
     clipType: 0
     motionIndex: 11
+    time: 0
   - clipName: StandingBlinking
     keyFrames:
-    - spriteIndex: 17
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 50
-    - spriteIndex: 18
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 5
     clipType: 0
     motionIndex: 13
+    time: 0
   - clipName: StandingEating
     keyFrames:
-    - spriteIndex: 19
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 20
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 21
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 15
-    - spriteIndex: 22
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 23
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 24
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 25
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 26
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 27
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 15
-    - spriteIndex: 28
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 29
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 30
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 31
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 32
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 33
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 15
     clipType: 2
     motionIndex: 16
+    time: 0
   - clipName: StandingSleeping
     keyFrames:
-    - spriteIndex: 34
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 30
-    - spriteIndex: 35
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 36
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 30
     clipType: 1
     motionIndex: 20
+    time: 0
   - clipName: NPCMotionCount
     keyFrames:
-    - spriteIndex: 35
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 0
-    - spriteIndex: 36
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 0
     clipType: 0
     motionIndex: 22
+    time: 0
   - clipName: SittingSleeping
     keyFrames:
-    - spriteIndex: 37
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 30
-    - spriteIndex: 38
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 39
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 30
     clipType: 1
     motionIndex: 10
+    time: 0
   - clipName: SittingEating
     keyFrames:
-    - spriteIndex: 40
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 41
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 42
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 43
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 44
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 45
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 46
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 47
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 48
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
     clipType: 2
     motionIndex: 6
+    time: 0
   - clipName: SittingBlinking
     keyFrames:
-    - spriteIndex: 50
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 49
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 50
     clipType: 0
     motionIndex: 3
+    time: 0
   - clipName: SittingBreathing
     keyFrames:
-    - spriteIndex: 51
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 30
-    - spriteIndex: 52
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 10
-    - spriteIndex: 53
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+          uvPivot: {x: 0, y: 0}
+          worldSize: {x: 0, y: 0, z: 0}
+          index: 0
+        markers: []
       holdTime: 30
     clipType: 0
     motionIndex: 4
+    time: 0
   markers:
   - color:
       serializedVersion: 2

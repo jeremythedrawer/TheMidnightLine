@@ -1,0 +1,165 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33fd095fffb8f844e9fa149db1599080, type: 3}
+  m_Name: Train_Atlas
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
+  texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
+  isParticleAtlas: 0
+  entityMotionType: 3
+  pivotColor:
+    serializedVersion: 2
+    rgba: 4278190335
+  sliceColor:
+    serializedVersion: 2
+    rgba: 4294901760
+  particleType: 0
+  motionSprites:
+  - sprite:
+      uvSizeAndPos: {x: 0.008300781, y: 0.09716797, z: 0.560791, w: 0.60961914}
+      uvPivot: {x: 0.9705882, y: 0.5}
+      worldSize: {x: 0.18888889, y: 2.211111, z: 1}
+      index: 0
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.019042969, y: 0.09716797, z: 0.6035156, w: 0.60961914}
+      uvPivot: {x: 0.98717946, y: 0.5}
+      worldSize: {x: 0.43333334, y: 2.211111, z: 1}
+      index: 1
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.028564453, y: 0.09692383, z: 0.64624023, w: 0.6098633}
+      uvPivot: {x: 1, y: 0.49874055}
+      worldSize: {x: 0.65, y: 2.2055554, z: 1}
+      index: 2
+    markers: []
+  - sprite:
+      uvSizeAndPos: {x: 0.042236328, y: 0.09692383, z: 0.68896484, w: 0.6098633}
+      uvPivot: {x: 1, y: 0.49874055}
+      worldSize: {x: 0.9611111, y: 2.2055554, z: 1}
+      index: 3
+    markers: []
+  simpleSprites:
+  - uvSizeAndPos: {x: 0.8564453, y: 0.14477539, z: 0.008056641, w: 0.85498047}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 19.48889, y: 3.2944446, z: 1}
+    index: 0
+  - uvSizeAndPos: {x: 0.029296875, y: 0.15673828, z: 0.91259766, w: 0.8430176}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.6666667, y: 3.5666666, z: 1}
+    index: 1
+  - uvSizeAndPos: {x: 0.8383789, y: 0.107910156, z: 0.0073242188, w: 0.7285156}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 19.077778, y: 2.4555554, z: 1}
+    index: 2
+  - uvSizeAndPos: {x: 0.13598633, y: 0.1472168, z: 0.8601074, w: 0.6845703}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 3.0944445, y: 3.35, z: 1}
+    index: 3
+  - uvSizeAndPos: {x: 0.22387695, y: 0.09667969, z: 0.00048828125, w: 0.5998535}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 5.0944443, y: 2.2, z: 1}
+    index: 4
+  - uvSizeAndPos: {x: 0.123291016, y: 0.107421875, z: 0.23486328, w: 0.6062012}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 2.8055556, y: 2.4444444, z: 1}
+    index: 5
+  - uvSizeAndPos: {x: 0.041259766, y: 0.09375, z: 0.48388672, w: 0.61279297}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.9388889, y: 2.1333334, z: 1}
+    index: 6
+  - uvSizeAndPos: {x: 0.0078125, y: 0.032714844, z: 0.7519531, w: 0.6176758}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.17777778, y: 0.74444443, z: 1}
+    index: 7
+  - uvSizeAndPos: {x: 0.04296875, y: 0.04296875, z: 0.7734375, w: 0.61083984}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.9777778, y: 0.9777778, z: 1}
+    index: 8
+  - uvSizeAndPos: {x: 0.0053710938, y: 0.018798828, z: 0.8203125, w: 0.61083984}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.12222222, y: 0.42777777, z: 1}
+    index: 9
+  - uvSizeAndPos: {x: 0.8847656, y: 0.20458984, z: 0.00048828125, w: 0.39648438}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 20.133333, y: 4.6555557, z: 1}
+    index: 10
+  - uvSizeAndPos: {x: 0.0107421875, y: 0, z: 0.63183594, w: 0.43164062}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.24444444, y: 0, z: 1}
+    index: 11
+  - uvSizeAndPos: {x: 0.08862305, y: 0.09741211, z: 0.9020996, w: 0.40234375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 2.0166667, y: 2.2166667, z: 1}
+    index: 12
+  - uvSizeAndPos: {x: 0.041259766, y: 0.09375, z: 0.01586914, w: 0.28759766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.9388889, y: 2.1333334, z: 1}
+    index: 13
+  slicedSprites:
+  - sprite:
+      uvSizeAndPos: {x: 0.068115234, y: 0.045410156, z: 0.38208008, w: 0.61157227}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 1.55, y: 1.0333333, z: 1}
+      index: 0
+    slice: {x: 0.3297491, y: 0.6702509, z: 0, w: 1}
+    uvSizeAndPos:
+    - {x: 0.022460938, y: 0, z: 0.38208008, w: 0.61157227}
+    - {x: 0.02319336, y: 0, z: 0.40454102, w: 0.61157227}
+    - {x: 0.022460938, y: 0, z: 0.42773438, w: 0.61157227}
+    - {x: 0.022460938, y: 0.045410156, z: 0.38208008, w: 0.61157227}
+    - {x: 0.02319336, y: 0.045410156, z: 0.40454102, w: 0.61157227}
+    - {x: 0.022460938, y: 0.045410156, z: 0.42773438, w: 0.61157227}
+    - {x: 0.022460938, y: 0, z: 0.38208008, w: 0.6569824}
+    - {x: 0.02319336, y: 0, z: 0.40454102, w: 0.6569824}
+    - {x: 0.022460938, y: 0, z: 0.42773438, w: 0.6569824}
+    worldSlices: {x: 0.51111114, y: 0.51111114, z: 0, w: 0}
+  particleSprites: []
+  particleUVSizeAndPosArray: []
+  clips:
+  - clipName: TrainDoor
+    keyFrames:
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.008300781, y: 0.09716797, z: 0.560791, w: 0.60961914}
+          uvPivot: {x: 0.9705882, y: 0.5}
+          worldSize: {x: 0.18888889, y: 2.211111, z: 1}
+          index: 0
+        markers: []
+      holdTime: 3
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.019042969, y: 0.09716797, z: 0.6035156, w: 0.60961914}
+          uvPivot: {x: 0.98717946, y: 0.5}
+          worldSize: {x: 0.43333334, y: 2.211111, z: 1}
+          index: 1
+        markers: []
+      holdTime: 3
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.028564453, y: 0.09692383, z: 0.64624023, w: 0.6098633}
+          uvPivot: {x: 1, y: 0.49874055}
+          worldSize: {x: 0.65, y: 2.2055554, z: 1}
+          index: 2
+        markers: []
+      holdTime: 3
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.042236328, y: 0.09692383, z: 0.68896484, w: 0.6098633}
+          uvPivot: {x: 1, y: 0.49874055}
+          worldSize: {x: 0.9611111, y: 2.2055554, z: 1}
+          index: 3
+        markers: []
+      holdTime: 3
+    clipType: 0
+    motionIndex: 1
+    time: 0
+  markers: []

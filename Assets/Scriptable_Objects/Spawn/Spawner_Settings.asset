@@ -12,55 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9d498eeb9d57f1b4ebd25da4e37fd14f, type: 3}
   m_Name: Spawner_Settings
   m_EditorClassIdentifier: Assembly-CSharp::SpawnerSettingsSO
+  currentTrip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   boundBufferAmount: 16
-  maxSpawnDepth: 392.9
-  minSpawnDepth: 15.93
   spawnHeight: 0
   atlasCompute: {fileID: 7200000, guid: d984c22b7e444484fb6f6f24b8c38e63, type: 3}
   backgroundMaterial: {fileID: 2100000, guid: 5a41293c67f317d4ebbd5977cece7124, type: 2}
-  particleData:
-  - backgroundType: 1
-    particleAtlas: {fileID: 11400000, guid: 8fe34cef64df39f47ad5ef739cc24f29, type: 2}
-    spawnHeightPosition: 0
-    spawnHeightRange: 0.2
-    uvSizeAndPositionsLODS:
-    - uvSizeAndPositionsArray:
-      - {x: 0.11767578, y: 0.099121094, z: 0.13354492, w: 0.8996582}
-      - {x: 0.08178711, y: 0.0949707, z: 0.37841797, w: 0.9033203}
-      - {x: 0.12890625, y: 0.11010742, z: 0, w: 0.88964844}
-      - {x: 0.10571289, y: 0.115722656, z: 0.25732422, w: 0.8840332}
-      - {x: 0.1459961, y: 0.125, z: 0.47045898, w: 0.8696289}
-    - uvSizeAndPositionsArray:
-      - {x: 0.06665039, y: 0.07714844, z: 0.61938477, w: 0.9211426}
-      - {x: 0.08984375, y: 0.075927734, z: 0.77978516, w: 0.9211426}
-      - {x: 0.080322266, y: 0.087890625, z: 0.69311523, w: 0.9104004}
-      - {x: 0.1027832, y: 0.087890625, z: 0.8762207, w: 0.9091797}
-      - {x: 0.096191406, y: 0.08203125, z: 0.016113281, w: 0.796875}
-    active: 0
-  - backgroundType: 2
-    particleAtlas: {fileID: 11400000, guid: b7293c5d7b7f8814a972cc266c414cf8, type: 2}
-    spawnHeightPosition: 0
-    spawnHeightRange: 0.2
-    uvSizeAndPositionsLODS:
-    - uvSizeAndPositionsArray:
-      - {x: 0.09326172, y: 0.088378906, z: 0.5, w: 0.91137695}
-      - {x: 0.10205078, y: 0.09106445, z: 0.68530273, w: 0.9082031}
-      - {x: 0.099365234, y: 0.0847168, z: 0.8964844, w: 0.9135742}
-      - {x: 0.07299805, y: 0.10205078, z: 0.60498047, w: 0.89697266}
-      - {x: 0.10083008, y: 0.107666016, z: 0.7927246, w: 0.8918457}
-      - {x: 0.1027832, y: 0.1184082, z: 0.50341797, w: 0.78149414}
-      - {x: 0.103027344, y: 0.1015625, z: 0.6142578, w: 0.7841797}
-      - {x: 0.11328125, y: 0.1081543, z: 0.7229004, w: 0.78027344}
-    - uvSizeAndPositionsArray:
-      - {x: 0.1105957, y: 0.10498047, z: 0, w: 0.8947754}
-      - {x: 0.13208008, y: 0.11791992, z: 0.21948242, w: 0.8808594}
-      - {x: 0.10083008, y: 0.14111328, z: 0.11376953, w: 0.85791016}
-      - {x: 0.13085938, y: 0.1394043, z: 0.35546875, w: 0.85961914}
-      - {x: 0.12841797, y: 0.10986328, z: 0.088378906, w: 0.7246094}
-      - {x: 0.1328125, y: 0.15307617, z: 0.22021484, w: 0.72216797}
-      - {x: 0.13305664, y: 0.13134766, z: 0.35913086, w: 0.71728516}
-      - {x: 0.14697266, y: 0.13989258, z: 0.34985352, w: 0.5708008}
-    active: 0
-  biomes:
-  - metersPosition: 0
-    backgroundType: 3

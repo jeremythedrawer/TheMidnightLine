@@ -1,0 +1,305 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1841039876456958186
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4298671525251318360}
+  - component: {fileID: 7548495205679168783}
+  m_Layer: 0
+  m_Name: Left Slide Door
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4298671525251318360
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841039876456958186}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.000012397766, z: 6}
+  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9148143527789672719}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7548495205679168783
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1841039876456958186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 13
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 1
+  flipY: 0
+  depthOrder: 5
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 5
+  sprite:
+    uvSizeAndPos: {x: 0.041259766, y: 0.09375, z: 0.01586914, w: 0.28759766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.9388889, y: 2.1333334, z: 1}
+    index: 13
+  worldMatrix:
+    e00: -1
+    e01: 0
+    e02: 0
+    e03: 4.4100037
+    e10: -0
+    e11: 1
+    e12: 0
+    e13: 0.7600117
+    e20: -0
+    e21: 0
+    e22: 1
+    e23: 5
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: -1, w: 1}
+  centerSliceWorldSize: {x: 0, y: 0}
+  centerSliceUVSize: {x: 0, y: 0}
+--- !u!1 &5840205793320442929
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9148143527789672719}
+  - component: {fileID: 7325617631601733756}
+  - component: {fileID: 592955796763587438}
+  m_Layer: 16
+  m_Name: ExteriorSlideDoors
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9148143527789672719
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5840205793320442929}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 6.542, y: 4.799999, z: 15}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6355935853720996048}
+  - {fileID: 4298671525251318360}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7325617631601733756
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5840205793320442929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874bf1172ab6e7047bd479128420855f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+  trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
+  boxCollider: {fileID: 592955796763587438}
+  rightSlideDoorRenderer: {fileID: 9157275910696144408}
+  leftSlideDoorRenderer: {fileID: 7548495205679168783}
+  curState: 0
+  rightSlideDoor_transform: {fileID: 0}
+  leftSlideDoor_transform: {fileID: 0}
+--- !u!61 &592955796763587438
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5840205793320442929}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 1
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0, y: 1.925}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.81, y: 3.81}
+  m_EdgeRadius: 0
+--- !u!1 &8794300283607025902
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6355935853720996048}
+  - component: {fileID: 9157275910696144408}
+  m_Layer: 0
+  m_Name: Right Slide Door
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6355935853720996048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8794300283607025902}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: 0.000012397766, z: 6}
+  m_LocalScale: {x: -1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 9148143527789672719}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &9157275910696144408
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8794300283607025902}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 13
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 0
+  flipY: 0
+  depthOrder: 5
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 5
+  sprite:
+    uvSizeAndPos: {x: 0.041259766, y: 0.09375, z: 0.01586914, w: 0.28759766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.9388889, y: 2.1333334, z: 1}
+    index: 13
+  worldMatrix:
+    e00: -1
+    e01: 0
+    e02: 0
+    e03: 4.4100037
+    e10: -0
+    e11: 1
+    e12: 0
+    e13: 0.7600117
+    e20: -0
+    e21: 0
+    e22: 1
+    e23: 5
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: 1, w: 1}
+  centerSliceWorldSize: {x: 0, y: 0}
+  centerSliceUVSize: {x: 0, y: 0}

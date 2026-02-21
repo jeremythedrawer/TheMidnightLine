@@ -634,11 +634,11 @@ public class NPCBrain : MonoBehaviour
         else if (inputData.move == 0.0f)
         {
 
-            if (curSlideDoors.stats.curState == SlideDoors.State.Unlocked)
+            if (curSlideDoors.curState == SlideDoors.State.Unlocked)
             {
                 curSlideDoors.OpenDoors();
             }
-            else if (curSlideDoors.stats.curState == SlideDoors.State.Opened) // enter train when slide door is opened
+            else if (curSlideDoors.curState == SlideDoors.State.Opened) // enter train when slide door is opened
             {
                 SetStandingDepthAndPosition();
                 transform.SetParent(null, true);
@@ -702,10 +702,9 @@ public class NPCBrain : MonoBehaviour
     {
         if (stats.curClip.motionIndex == 0) return;
         stats.atlasIndexClock += Time.deltaTime;
-        SetNextFrameIndex(stats.curClip, ref stats.atlasIndexClock, ref stats.curFrameIndex, ref stats.prevAtlasIndex);
+        stats.curClip.GetNextSprite(ref stats.atlasIndexClock, ref stats.curFrameIndex, ref stats.prevAtlasIndex);
         if (stats.curFrameIndex != stats.prevAtlasIndex)
         {
-            //atlasRe material.SetInt(materialIDs.ids.atlasIndex, stats.curClip.keyFrames[stats.curFrameIndex].spriteIndex);
             MarkerPosition[] curSpriteMarkers = atlas.motionSprites[stats.curFrameIndex].markers;
             if (curSpriteMarkers.Length > 0)
             {

@@ -46,11 +46,17 @@ public static class Atlas
         HeavyLand,
         Death,
     }
+    public enum TrainMotion
+    {
+        None,
+        TrainDoor,
+    }
     public enum EntityMotionType
     {
         NPC,
         Spy,
         Clipboard,
+        Train,
     }
     public enum ClipType
     {
@@ -113,10 +119,10 @@ public static class Atlas
     }
     [Serializable] public struct AtlasKeyframe
     {
-        public int spriteIndex;
+        public MotionSprite motionSprite;
         public int holdTime;
     }
-    [Serializable] public struct AtlasClip
+    [Serializable] public class AtlasClip
     {
 #if UNITY_EDITOR
         public string clipName;
@@ -124,77 +130,83 @@ public static class Atlas
         public AtlasKeyframe[] keyFrames;
         public ClipType clipType;
         public int motionIndex;
+        public float time;
+
+        public SimpleSprite GetNextSprite(ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
+        {
+
+            float frameTime = keyframeClock * FRAMES_PER_SEC;
+            if (curFrameIndex >= keyFrames.Length) curFrameIndex = 0;
+            AtlasKeyframe curKeyFrame = keyFrames[curFrameIndex];
+
+            switch (clipType)
+            {
+                case ClipType.Loop:
+                {
+                    if (frameTime >= curKeyFrame.holdTime)
+                    {
+                        prevFrameIndex = curFrameIndex;
+                        curFrameIndex++;
+
+                        if (curFrameIndex >= keyFrames.Length)
+                        {
+                            curFrameIndex = 0;
+                        }
+
+                        keyframeClock = 0;
+                    }
+                }
+                break;
+                case ClipType.PingPong:
+                {
+                    if (frameTime >= curKeyFrame.holdTime)
+                    {
+                        if (curFrameIndex < keyFrames.Length - 1 && (curFrameIndex > prevFrameIndex || curFrameIndex == 0))
+                        {
+                            prevFrameIndex = curFrameIndex;
+                            curFrameIndex++;
+                        }
+                        else
+                        {
+                            prevFrameIndex = curFrameIndex;
+                            curFrameIndex--;
+                        }
+                        keyframeClock = 0;
+                    }
+                }
+                break;
+                case ClipType.OneShot:
+                {
+                    if (frameTime >= curKeyFrame.holdTime)
+                    {
+                        prevFrameIndex = curFrameIndex;
+                        if (curFrameIndex < keyFrames.Length - 1)
+                        {
+                            curFrameIndex++;
+                        }
+                        keyframeClock = 0;
+                    }
+                }
+                break;
+            }
+
+            return keyFrames[curFrameIndex].motionSprite.sprite;
+        }
     }
-    [Serializable] public struct SpyClip
+
+
+    public static readonly Dictionary<EntityMotionType, Type> MotionEnumDictionary =
+    new Dictionary<EntityMotionType, Type>
     {
-        public AtlasClip clip;
-        public SpyMotion motion;
-    }
-    [Serializable] public struct NPCClip
-    {
-        public AtlasClip clip;
-        public NPCMotion motion;
-    }
+        { EntityMotionType.NPC, typeof(NPCMotion) },
+        { EntityMotionType.Spy, typeof(SpyMotion) },
+        { EntityMotionType.Train, typeof(TrainMotion) },
+    };
 
     public const int PIXELS_PER_UNIT = 180;
     public const int FRAMES_PER_SEC = 30;
 
-    public static void SetNextFrameIndex(AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
-    {
-        float frameTime = keyframeClock * FRAMES_PER_SEC;
-        AtlasKeyframe curKeyFrame = clip.keyFrames[curFrameIndex];
 
-        switch (clip.clipType)
-        {
-            case ClipType.Loop:
-            {
-                if (frameTime >= curKeyFrame.holdTime)
-                {
-                    prevFrameIndex = curFrameIndex;
-                    curFrameIndex++;
-
-                    if (curFrameIndex >= clip.keyFrames.Length)
-                    {
-                        curFrameIndex = 0;
-                    }
-
-                    keyframeClock = 0;
-                }
-            }
-            break;
-            case ClipType.PingPong:
-            {
-                if (frameTime >= curKeyFrame.holdTime)
-                {
-                    if (curFrameIndex < clip.keyFrames.Length - 1 && (curFrameIndex > prevFrameIndex || curFrameIndex == 0))
-                    {
-                        prevFrameIndex = curFrameIndex;
-                        curFrameIndex++;
-                    }
-                    else
-                    {
-                        prevFrameIndex = curFrameIndex;
-                        curFrameIndex--;
-                    }
-                    keyframeClock = 0;
-                }
-            }
-            break;
-            case ClipType.OneShot:
-            {
-                if (frameTime >= curKeyFrame.holdTime)
-                {
-                    prevFrameIndex = curFrameIndex;
-                    if (curFrameIndex < clip.keyFrames.Length - 1)
-                    {
-                        curFrameIndex++;
-                    }
-                    keyframeClock = 0;
-                }
-            }
-            break;
-        }
-    }
     public static void NextFrameIndexManual(AtlasClip clip, float holdTime, ref float currentValue, ref int curFrameIndex)
     {
         if (currentValue > holdTime)

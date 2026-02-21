@@ -1,57 +1,52 @@
+
 using Cysharp.Threading.Tasks;
-using Proselyte.Sigils;
 using System;
 using UnityEngine;
+using static Atlas;
 
 public class GangwayDoor : MonoBehaviour
 {
     [SerializeField] BoxCollider2D boxCollider;
-    [SerializeField] Animator animator;
     [SerializeField] LayerSettingsSO layerSettings;
-    [Serializable] public struct AnimClipData
-    {
-        internal int openHash;
-        internal int closeHash;
-        public AnimationClip openClip;
-    }
-    [SerializeField] internal AnimClipData animClipData;
+    [SerializeField] AtlasRenderer atlasRenderer;
 
-    [Serializable] public struct StatData
-    {
-        internal bool canClose;
-    }
-    [SerializeField] StatData statData;
+    [Header("Generated")]
+    public bool isOpen;
+    public AtlasClip doorClip;
+
+    private const float DOOR_MOVE_TIME = 1;
 
     private void Start()
     {
-        animClipData.openHash = Animator.StringToHash("Open");
-        animClipData.closeHash = Animator.StringToHash("Close");
-
-        Animations.SetAnimationEvent(animClipData.openClip, nameof(EnableCloseDoor));
+        doorClip = atlasRenderer.atlas.clipDict[(int)TrainMotion.TrainDoor];
     }
 
-    private void FixedUpdate()
-    {     
-        if (statData.canClose)
-        {
-            Collider2D spyHit = Physics2D.OverlapBox(boxCollider.bounds.center, boxCollider.bounds.size, 0, layerSettings.spy);
+    private void OnCollisionEnter2D(Collision2D collision)
+    {
+        if ((layerSettings.spy & (1 << collision.gameObject.layer)) == 0) return;
 
-            if (spyHit == null)
-            {
-                animator.Play(animClipData.closeHash);
-                boxCollider.isTrigger = false;
-                statData.canClose = false;
-            }
+        if (isOpen)
+        {
+
+        }
+        else
+        {
         }
     }
-    public void OpenDoor()
-    {
-        boxCollider.isTrigger = true;
-        animator.Play(animClipData.openHash);
-    }
 
-    private void EnableCloseDoor()
+    private async UniTask OpeningDoor()
     {
-        statData.canClose = true;
+        float elapsedTime = 0;
+
+        while (elapsedTime < DOOR_MOVE_TIME)
+        {
+            elapsedTime += Time.deltaTime;
+
+            float t = (elapsedTime / DOOR_MOVE_TIME) * doorClip.time;
+
+            //atlasRenderer.sprite = doorClip.GetNextSprite(ref t, )
+
+            await UniTask.Yield();
+        }
     }
 }

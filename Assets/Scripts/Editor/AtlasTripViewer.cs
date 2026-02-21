@@ -77,7 +77,7 @@ public class AtlasTripViewer : EditorWindow
 
 
             Rect zoneLabelRect = new Rect(zoneRect.xMin, zoneRect.yMin, 200, 20);
-            GUI.Label(zoneLabelRect, zone.atlasParticles.particleType.ToString(), zoneLabelStyle);
+            GUI.Label(zoneLabelRect, zone.atlas.particleType.ToString(), zoneLabelStyle);
             
         }
 

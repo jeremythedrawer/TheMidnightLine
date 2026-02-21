@@ -142,7 +142,6 @@ public class AtlasBatchRendererFeature : ScriptableRendererFeature
                 SpawnerData spawnerData = spawnerStats.spawnerDataArray[i];
 
                 if (!spawnerData.active) continue;
-
                 cmd.DrawProcedural(Matrix4x4.identity, spawnerSettings.backgroundMaterial, shaderPass: 0, MeshTopology.Quads, MAX_VERTEX_COUNT, 1, spawnerData.mpb);
             }
         }

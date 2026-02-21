@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using static AtlasSpawn;
 
@@ -5,5 +6,6 @@ using static AtlasSpawn;
 public class TripSO : ScriptableObject
 {
     public Zone[] zones;
+    public Queue<Zone> zoneQueue;
     public int tripMeters;
 }

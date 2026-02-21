@@ -17,10 +17,17 @@ public class AtlasSpawner : MonoBehaviour
     private void OnValidate()
     {
         InitializeBoundParameters();
-
-        spawnerStats.spawnerDataArray = InitializeSpawnDataArray(spawnerSettings.atlasCompute, materialIDs, spawnerStats);
-
-        //ChangeSpawner()
+        InitializeAtlasCompute(spawnerSettings.atlasCompute, materialIDs, spawnerStats);
+        spawnerStats.spawnerDataArray = InitializeSpawnData(spawnerSettings.atlasCompute, materialIDs);
+        spawnerSettings.currentTrip.zoneQueue = SetZoneQueue(spawnerSettings.currentTrip);
+        Zone nextZone = spawnerSettings.currentTrip.zoneQueue.Dequeue();
+        for (int i = 0; i < spawnerSettings.currentTrip.zones.Length; i++)
+        {
+            if (spawnerSettings.currentTrip.zones[i].metersStart <= trainStats.metersTravelled)
+            {
+                ChangeSpawner(spawnerSettings.currentTrip.zones[i], materialIDs, spawnerStats, spawnerSettings);
+            }
+        }
     }
 
     private void InitializeBoundParameters()

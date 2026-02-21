@@ -15,65 +15,41 @@ MonoBehaviour:
   settings: {fileID: 11400000, guid: f37b2d6c4b24fc54488d7d37482b2d18, type: 2}
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   curBackgroundDataIndex: 0
-  spawnMaxPos: {x: 442.30725, y: 52.59, z: 32}
-  spawnMinPos: {x: 157.69275, y: -26, z: 0}
+  spawnMaxPos: {x: 412.30725, y: 52.59, z: 32}
+  spawnMinPos: {x: 187.69275, y: -26, z: 0}
   spawnCenter: {x: 300, y: 13.295, z: 16}
-  spawnBoundsSize: {x: 284.6145, y: 78.59, z: 32}
-  updateKernelID: 1
-  initKernelID: 0
+  spawnBoundsSize: {x: 224.6145, y: 78.59, z: 32}
   computeGroups: 16
-  renderParamsBounds:
-    m_Center: {x: 300, y: 13.295, z: 16}
-    m_Extent: {x: 142.30725, y: 39.295, z: 16}
-  curBackgroundTypes: 3
-  backgroundMaskCount: 4
-  backgroundInputsArray:
-  - bgMask: 1
-    heightRange: 0.2
-    heightPos: 0
-  - bgMask: 1
-    heightRange: 0.2
-    heightPos: 0
-  - bgMask: 2
-    heightRange: 0.2
-    heightPos: 0
-  - bgMask: 2
-    heightRange: 0.2
-    heightPos: 0
-  - bgMask: 0
-    heightRange: 0
-    heightPos: 0
-  - bgMask: 0
-    heightRange: 0
-    heightPos: 0
-  - bgMask: 0
-    heightRange: 0
-    heightPos: 0
-  - bgMask: 0
-    heightRange: 0
-    heightPos: 0
   spawnerDataArray:
-  - computeGroup: 1
+  - spawner: 0
+    computeGroupSize: 1
     kernelID: 0
-    active: 1
-  - computeGroup: 4
+    active: 0
+  - spawner: 1
+    computeGroupSize: 4
     kernelID: 1
     active: 1
-  - computeGroup: 4
+  - spawner: 2
+    computeGroupSize: 4
     kernelID: 2
     active: 1
-  - computeGroup: 4
+  - spawner: 3
+    computeGroupSize: 4
     kernelID: 3
-    active: 1
-  - computeGroup: 4
+    active: 0
+  - spawner: 4
+    computeGroupSize: 4
     kernelID: 4
     active: 0
-  - computeGroup: 2
+  - spawner: 5
+    computeGroupSize: 2
     kernelID: 5
-    active: 0
-  - computeGroup: 2
+    active: 1
+  - spawner: 6
+    computeGroupSize: 2
     kernelID: 6
-    active: 0
-  - computeGroup: 2
+    active: 1
+  - spawner: 7
+    computeGroupSize: 2
     kernelID: 7
     active: 0

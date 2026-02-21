@@ -444,7 +444,7 @@ public class SpyBrain : MonoBehaviour
             for (int i = 0; i < slideDoorHit.Length; i++)
             {
                 slideDoors = slideDoorHit[i].collider.GetComponent<SlideDoors>();
-                if (slideDoors.stats.curState == SlideDoors.State.Unlocked) 
+                if (slideDoors.curState == SlideDoors.State.Unlocked) 
                 {
                     slideDoors.OpenDoors();
                     break;
@@ -461,7 +461,7 @@ public class SpyBrain : MonoBehaviour
             if (slideDoorHit.collider != null)
             {
                 slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-                if (slideDoors.stats.curState == SlideDoors.State.Opened)
+                if (slideDoors.curState == SlideDoors.State.Opened)
                 {
                     RaycastHit2D insideCarriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, layerSettings.trainLayerStruct.insideCarriageBounds);
 
@@ -489,7 +489,7 @@ public class SpyBrain : MonoBehaviour
         if (gangwayDoorHit.collider != null)
         {
             gangwayDoor = gangwayDoorHit.collider.GetComponent<GangwayDoor>();
-            gangwayDoor.OpenDoor();
+            //gangwayDoor.OpenDoor();
         }
     }
     private void StopMovement()
@@ -509,11 +509,11 @@ public class SpyBrain : MonoBehaviour
     private void PlayClip()
     {
         clipTime += Time.deltaTime;
-        SetNextFrameIndex(curClip, ref clipTime, ref curFrameIndex, ref prevFrameIndex);
+        curClip.GetNextSprite(ref clipTime, ref curFrameIndex, ref prevFrameIndex);
 
         if (curFrameIndex != prevFrameIndex)
         {
-            atlasRenderer.SetSprite(curClip.keyFrames[curFrameIndex].spriteIndex);
+            //atlasRenderer.SetSprite(curClip.keyFrames[curFrameIndex].spriteIndex);
         }
     }
     private void OnApplicationQuit()

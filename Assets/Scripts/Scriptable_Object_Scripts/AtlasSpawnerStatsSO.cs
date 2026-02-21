@@ -15,7 +15,7 @@ public class AtlasSpawnerStatsSO : ScriptableObject
     public Vector3 spawnBoundsSize;
 
     public int computeGroups;
-    public SpawnerData[] spawnerDataArray = new SpawnerData[SPAWNER_COUNT];
 
-   // public Dictionary<BackgroundType, ParticleData> particleDataDict;
+    //public Dictionary<Spawner, SpawnerData> spawnerDataDict;
+    public SpawnerData[] spawnerDataArray;
 }

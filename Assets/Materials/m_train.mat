@@ -7,23 +7,32 @@ Material:
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_Name: m_phoneCord
-  m_Shader: {fileID: -6465566751694194690, guid: 55eb28b41f4ab044a80dc40921c8b733, type: 3}
+  m_Name: m_train
+  m_Shader: {fileID: 4800000, guid: cef843ed23abd7c4aa98e755829cf3a3, type: 3}
   m_Parent: {fileID: 0}
   m_ModifiedSerializedProperties: 0
   m_ValidKeywords: []
   m_InvalidKeywords: []
   m_LightmapFlags: 4
-  m_EnableInstancingVariants: 0
+  m_EnableInstancingVariants: 1
   m_DoubleSidedGI: 0
   m_CustomRenderQueue: -1
   stringTagMap: {}
-  disabledShaderPasses: []
+  disabledShaderPasses:
+  - MOTIONVECTORS
   m_LockedProperties: 
   m_SavedProperties:
     serializedVersion: 3
     m_TexEnvs:
     - _AlphaTex:
+        m_Texture: {fileID: 0}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _AtlasTexture:
+        m_Texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
+        m_Scale: {x: 1, y: 1}
+        m_Offset: {x: 0, y: 0}
+    - _BaseMap:
         m_Texture: {fileID: 0}
         m_Scale: {x: 1, y: 1}
         m_Offset: {x: 0, y: 0}
@@ -53,30 +62,26 @@ Material:
         m_Offset: {x: 0, y: 0}
     m_Ints: []
     m_Floats:
-    - _Edge: 0.01
     - _EnableExternalAlpha: 0
-    - _Flipped: 1
-    - _Float: 0
-    - _Length: 0.75
-    - _Samples: 7
-    - _Smooth: 0.005
-    - _Thickness: 0.94
+    - _Float: 0.5
+    - _MetersTravelled: 0
+    - _PPU: 32
+    - _QueueControl: 0
+    - _QueueOffset: 0
+    - _Width: 116.6
     - _ZWrite: 0
     m_Colors:
-    - _AnchorPosition: {r: 0, g: 0, b: 0, a: 0}
+    - _BaseColor: {r: 1, g: 1, b: 1, a: 1}
     - _Color: {r: 1, g: 1, b: 1, a: 1}
-    - _EndPosition: {r: -0.1, g: 0.9, b: 0, a: 0}
-    - _MiddlePosition: {r: 0.5, g: 0.94, b: 0, a: 0}
     - _RendererColor: {r: 1, g: 1, b: 1, a: 1}
-    - _StartPosition: {r: 0.1, g: -0.11, b: 0, a: 0}
-    - _TargetPosition: {r: 152.1, g: 23.9, b: 0, a: 0}
-    - _Vector2: {r: 0.5, g: -2.42, b: 0, a: 0}
-    - _end: {r: -1.81, g: 1, b: 0, a: 0}
-    - _m: {r: 3.96, g: 1, b: 0, a: 0}
-    - _start: {r: 0, g: 0, b: 0, a: 0}
+    - _UVPosiiton: {r: 0.5, g: 0.875, b: 0, a: 0}
+    - _UVPosition: {r: 0.5, g: 0.875, b: 0, a: 0}
+    - _UVSize: {r: 0.5, g: 0.06125, b: 0, a: 0}
+    - _UVSlice: {r: 0.030625, g: 0, b: 0, a: 0}
+    - _Vector2: {r: 3.24, g: 0, b: 0, a: 0}
   m_BuildTextureStacks: []
   m_AllowLocking: 1
---- !u!114 &4638993330797209122
+--- !u!114 &7281386625079268004
 MonoBehaviour:
   m_ObjectHideFlags: 11
   m_CorrespondingSourceObject: {fileID: 0}
@@ -87,5 +92,5 @@ MonoBehaviour:
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: d0353a89b1f911e48b9e16bdc9f2e058, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
+  m_EditorClassIdentifier: Unity.RenderPipelines.Universal.Editor::UnityEditor.Rendering.Universal.AssetVersion
   version: 10
