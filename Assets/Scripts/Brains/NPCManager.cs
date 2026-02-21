@@ -6,13 +6,9 @@ using UnityEngine;
 
 public class NPCManager : MonoBehaviour
 {
-    [Serializable] public struct SOData
-    {
-        public NPCsDataSO npcData;
-        public StationsDataSO stationsData;
-        public ClipboardStatsSO clipBoardStats;
-    }
-    [SerializeField] SOData soData;
+    public NPCsDataSO npcData;
+    public StationsDataSO stationsData;
+    public ClipboardStatsSO clipBoardStats;
 
     float waitingForSeatTickRate = 0.3f;
     bool npcFindingChair;
@@ -21,30 +17,8 @@ public class NPCManager : MonoBehaviour
 
     private void Awake()
     {
-        soData.npcData.animHashData.sittingAboutToEat = Animator.StringToHash("SittingAboutToEat");
-        soData.npcData.animHashData.sittingAboutToRead = Animator.StringToHash("SittingAboutToRead");
-        soData.npcData.animHashData.sittingBlinking = Animator.StringToHash("SittingBlinking");
-        soData.npcData.animHashData.sittingBreathing = Animator.StringToHash("SittingBreathing");
-        soData.npcData.animHashData.sittingCalling = Animator.StringToHash("SittingCalling");
-        soData.npcData.animHashData.sittingEating = Animator.StringToHash("SittingEating");
-        soData.npcData.animHashData.sittingMusic = Animator.StringToHash("SittingMusic");
-        soData.npcData.animHashData.sittingReading = Animator.StringToHash("SittingReading");
-        soData.npcData.animHashData.sittingSick = Animator.StringToHash("SittingSick");
-        soData.npcData.animHashData.sittingSleeping = Animator.StringToHash("SittingSleeping");
-        soData.npcData.animHashData.smoking = Animator.StringToHash("Smoking");
-        soData.npcData.animHashData.standingAboutToEat = Animator.StringToHash("StandingAboutToEat");
-        soData.npcData.animHashData.standingBlinking = Animator.StringToHash("StandingBlinking");
-        soData.npcData.animHashData.standingBreathing = Animator.StringToHash("StandingBreathing");
-        soData.npcData.animHashData.standingCalling = Animator.StringToHash("StandingCalling");
-        soData.npcData.animHashData.standingEating = Animator.StringToHash("StandingEating");
-        soData.npcData.animHashData.standingMusic = Animator.StringToHash("StandingMusic");
-        soData.npcData.animHashData.standingReading = Animator.StringToHash("StandingReading");
-        soData.npcData.animHashData.standingSick = Animator.StringToHash("StandingSick");
-        soData.npcData.animHashData.standingSleeping = Animator.StringToHash("StandingSleeping");
-        soData.npcData.animHashData.walking = Animator.StringToHash("Walking");
-
-        soData.npcData.npcsToPick = new List<NPCBrain>(soData.npcData.npcPrefabs);
-        soData.npcData.colorsToPick = new List<Color>(soData.npcData.agentColors);
+        npcData.npcsToPick = new List<NPCBrain>(npcData.npcPrefabs);
+        npcData.colorsToPick = new List<Color>(npcData.agentColors);
 
         CreateNPCAgents();
         NPCTraits.InitializeDescriptions();
@@ -59,35 +33,35 @@ public class NPCManager : MonoBehaviour
 
     private void CreateNPCAgents()
     {
-        soData.npcData.totalAgentCount = 0;
-        for (int i = 0; i < soData.stationsData.stations.Length; i++)
+        npcData.totalAgentCount = 0;
+        for (int i = 0; i < stationsData.stations.Length; i++)
         {
-            for (int j = 0; j < soData.stationsData.stations[i].agentSpawnAmount; j++)
+            for (int j = 0; j < stationsData.stations[i].agentSpawnAmount; j++)
             {
-                soData.npcData.totalAgentCount++;
+                npcData.totalAgentCount++;
             }
         }
-        soData.clipBoardStats.profilePageArray = new ClipboardStatsSO.ProfilePageData[soData.npcData.totalAgentCount];
+        clipBoardStats.profilePageArray = new ClipboardStatsSO.ProfilePageData[npcData.totalAgentCount];
         int profilePageIndex = 0;
-        for (int i = 0; i < soData.stationsData.stations.Length; i++)
+        for (int i = 0; i < stationsData.stations.Length; i++)
         {
-            for (int j = 0; j < soData.stationsData.stations[i].agentSpawnAmount; j++)
+            for (int j = 0; j < stationsData.stations[i].agentSpawnAmount; j++)
             {
-                int randNPCIndex = UnityEngine.Random.Range(0, soData.npcData.npcsToPick.Count); // pick from list
+                int randNPCIndex = UnityEngine.Random.Range(0, npcData.npcsToPick.Count); // pick from list
 
-                NPCBrain npc = Instantiate(soData.npcData.npcsToPick[randNPCIndex], transform.position, Quaternion.identity, transform);
-                Color agentColor = soData.npcData.colorsToPick[randNPCIndex];
-                soData.npcData.npcsToPick.RemoveAt(randNPCIndex);
-                soData.npcData.colorsToPick.RemoveAt(randNPCIndex);
+                NPCBrain npc = Instantiate(npcData.npcsToPick[randNPCIndex], transform.position, Quaternion.identity, transform);
+                Color agentColor = npcData.colorsToPick[randNPCIndex];
+                npcData.npcsToPick.RemoveAt(randNPCIndex);
+                npcData.colorsToPick.RemoveAt(randNPCIndex);
                 npc.stats.type = NPCBrain.Type.Agent;
 
                 NPCTraits.Behaviours profilePageBehaviours = npc.stats.behaviours;
                 NPCTraits.Appearence profilePageAppearence = NPCTraits.GetRandomAppearence(npc.npc.appearence);
                 ClipboardStatsSO.ProfilePageData profilePageData = new ClipboardStatsSO.ProfilePageData { behaviours = profilePageBehaviours, appearence = profilePageAppearence, color = agentColor };
-                soData.clipBoardStats.profilePageArray[profilePageIndex] = (profilePageData);
+                clipBoardStats.profilePageArray[profilePageIndex] = (profilePageData);
 
                 NPCsDataSO.AgentData agentData = new NPCsDataSO.AgentData { agent = npc, color = agentColor };
-                soData.npcData.agentPool.Enqueue(agentData);
+                npcData.agentPool.Enqueue(agentData);
                 npc.gameObject.SetActive(false);
 
                 profilePageIndex++;

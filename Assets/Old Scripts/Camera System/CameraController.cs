@@ -5,159 +5,151 @@ using UnityEngine;
 
 public class CameraController : MonoBehaviour
 {
-    Camera cam;
+    public CameraSettingsSO settings;
+    public CameraStatsSO stats;
+    public SpyStatsSO spyStats;
+    public SpySettingsSO spySettings;
+    public PlayerInputsSO spyInputs;
+    public LayerSettingsSO layerSettings;
+    public GameEventDataSO gameEventData;
 
-    [Serializable] public struct SOData
-    {
-        public CameraSettingsSO settings;
-        public CameraStatsSO stats;
-        public SpyStatsSO spyStats;
-        public SpySettingsSO spySettings;
-        public PlayerInputsSO spyInputs;
-        public LayerSettingsSO layerSettings;
-        public GameEventDataSO gameEventData;
-    }
-    [SerializeField] SOData soData;
-
+    [Header("Generated")]
+    public Camera cam;
     private void Awake()
     {
         cam = Camera.main;
     }
     private void OnEnable()
     {
-        soData.gameEventData.OnReset.RegisterListener(ResetCamera);
+        gameEventData.OnReset.RegisterListener(ResetCamera);
     }
     private void OnDisable()
     {
-        soData.gameEventData.OnReset.UnregisterListener(ResetCamera);
+        gameEventData.OnReset.UnregisterListener(ResetCamera);
+        ResetCamera();
 
     }
     private void Start()
     {
-        soData.stats.targetSize = cam.orthographicSize;
-        soData.stats.initialSize = cam.orthographicSize;
-        soData.stats.localFarClipPlane = cam.farClipPlane;
-        soData.stats.curWorldPos = transform.position;
-        soData.stats.worldFarClipPlane = soData.stats.curWorldPos.z + soData.stats.localFarClipPlane;
-        soData.stats.aspect = cam.aspect;
+        stats.targetSize = cam.orthographicSize;
+        stats.initialSize = cam.orthographicSize;
+        stats.localFarClipPlane = cam.farClipPlane;
+        stats.curWorldPos = transform.position;
+        stats.worldFarClipPlane = stats.curWorldPos.z + stats.localFarClipPlane;
+        stats.aspect = cam.aspect;
     }
     private void Update()
     {
         SelectStates();
         UpdateStates();
-        if (soData.spyStats.moveVelocity.x > 0)
+        if (spyStats.moveVelocity.x > 0)
         {
-            soData.stats.curHorOffset = soData.spyStats.spriteFlip ? -soData.settings.horizontalOffset : soData.settings.horizontalOffset; // camera offsets when player is moving
+            stats.curHorOffset = spyStats.spriteFlip ? -settings.horizontalOffset : settings.horizontalOffset; // camera offsets when player is moving
         }
 
         //Set size and position
-        Vector2 camWorldPos = Vector2.Lerp(transform.position, soData.stats.targetWorldPos, Time.unscaledDeltaTime * soData.settings.damping);
-        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, soData.stats.targetSize, Time.deltaTime * soData.settings.damping);
-        transform.position = new Vector3(camWorldPos.x, camWorldPos.y, transform.position.z);
-        soData.stats.curWorldPos = transform.position;
-    }
-    private void OnApplicationQuit()
-    {
-        ResetCamera();
+        stats.curWorldPos = Vector2.Lerp(stats.curWorldPos, stats.targetWorldPos, Time.deltaTime * settings.damping);
+        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, stats.targetSize, Time.deltaTime * settings.damping);
+        transform.position = stats.curWorldPos;
     }
     private void SelectStates()
     {
-        if (!soData.spyStats.onTrain)
+        if (!spyStats.onTrain)
         {
             SetState(CameraStatsSO.State.Station);
         }
-        else if (soData.spyStats.curLocationLayer == soData.layerSettings.trainLayerStruct.insideCarriageBounds)
+        else if (spyStats.curLocationLayer == layerSettings.trainLayerStruct.insideCarriageBounds)
         {
             SetState(CameraStatsSO.State.Carriage);
         }
-        else if (soData.spyStats.curLocationLayer == soData.layerSettings.trainLayerStruct.roofBounds)
+        else if (spyStats.curLocationLayer == layerSettings.trainLayerStruct.roofBounds)
         {
             SetState(CameraStatsSO.State.Roof);
         }
-        else if (soData.spyStats.curLocationLayer == soData.layerSettings.trainLayerStruct.gangwayBounds)
+        else if (spyStats.curLocationLayer == layerSettings.trainLayerStruct.gangwayBounds)
         {
             SetState(CameraStatsSO.State.Gangway);
         }
     }
     private void UpdateStates()
     {
-        switch (soData.stats.curState)
+        switch (stats.curState)
         {
             case CameraStatsSO.State.Station:
             {
-                soData.stats.targetWorldPos.x = soData.spyStats.curWorldPos.x + soData.stats.curHorOffset;
+                stats.targetWorldPos.x = spyStats.curWorldPos.x + stats.curHorOffset;
             }
             break;
 
             case CameraStatsSO.State.Carriage:
             {
-                float halfSize = soData.spyStats.curLocationBounds.extents.x;
-                float distFromCenter = soData.spyStats.curWorldPos.x - soData.spyStats.curLocationBounds.center.x;
+                float halfSize = spyStats.curLocationBounds.extents.x;
+                float distFromCenter = spyStats.curWorldPos.x - spyStats.curLocationBounds.center.x;
 
                 float t = (1.0f - Mathf.Pow(2.71828f, -(distFromCenter * distFromCenter / halfSize)));
                 t *= t * 0.5f;
 
-                soData.stats.targetWorldPos.x = Mathf.Lerp(soData.spyStats.curLocationBounds.center.x, soData.spyStats.curWorldPos.x + soData.stats.curHorOffset, t);
+                stats.targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.curWorldPos.x + stats.curHorOffset, t);
             }
             break;
 
             case CameraStatsSO.State.Roof:
             {
-                soData.stats.targetWorldPos.x = soData.spyStats.curWorldPos.x + soData.stats.curHorOffset;
+                stats.targetWorldPos.x = spyStats.curWorldPos.x + stats.curHorOffset;
             }
             break;
 
             case CameraStatsSO.State.Gangway:
             {
-                soData.stats.targetWorldPos.x = soData.spyStats.curWorldPos.x + soData.stats.curHorOffset;
+                stats.targetWorldPos.x = spyStats.curWorldPos.x + stats.curHorOffset;
             }
             break;
         }
     }
     private void SetState(CameraStatsSO.State newState)
     {
-        if (soData.stats.curState == newState) return;
+        if (stats.curState == newState) return;
         ExitState();
-        soData.stats.curState = newState;
+        stats.curState = newState;
         EnterState();
     }
     private void EnterState()
     {
-        switch (soData.stats.curState)
+        switch (stats.curState)
         {
             case CameraStatsSO.State.Station:
             {
-                soData.stats.targetWorldPos.y = soData.spyStats.curWorldPos.y + soData.settings.verticalOffset;
-                soData.stats.targetSize = soData.stats.initialSize;
+                stats.targetWorldPos.y = spyStats.curWorldPos.y + settings.verticalOffset;
+                stats.targetSize = stats.initialSize;
 
             }
             break;
 
             case CameraStatsSO.State.Carriage:
             {
-                soData.stats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y + soData.settings.verticalOffset;
-                soData.stats.targetSize = soData.stats.initialSize;
+                stats.targetWorldPos.y = spyStats.curLocationBounds.center.y + settings.verticalOffset;
+                stats.targetSize = stats.initialSize;
             }
             break;
 
             case CameraStatsSO.State.Roof:
             {
-                soData.stats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y + soData.settings.verticalOffset;
-                soData.stats.targetSize = soData.settings.maxProjectionSize;
+                stats.targetWorldPos.y = spyStats.curLocationBounds.center.y + settings.verticalOffset;
+                stats.targetSize = settings.maxProjectionSize;
             }
             break;
 
             case CameraStatsSO.State.Gangway:
             {
-                soData.stats.targetWorldPos.y = soData.spyStats.curLocationBounds.center.y + soData.settings.verticalOffset;
-                soData.stats.targetSize = soData.stats.initialSize;
+                stats.targetWorldPos.y = spyStats.curLocationBounds.center.y + settings.verticalOffset;
+                stats.targetSize = stats.initialSize;
             }
             break;
         }
     }
     private void ExitState()
     {
-        switch (soData.stats.curState)
+        switch (stats.curState)
         {
             case CameraStatsSO.State.Station:
             {
@@ -184,19 +176,19 @@ public class CameraController : MonoBehaviour
     }
     private void ResetCamera()
     {
-        soData.stats.curState = CameraStatsSO.State.None;
-        soData.stats.initialSize = cam.orthographicSize;
-        soData.stats.curHorOffset = 0.0f;
-        soData.stats.targetSize = cam.orthographicSize;
+        stats.curState = CameraStatsSO.State.None;
+        stats.initialSize = cam.orthographicSize;
+        stats.curHorOffset = 0.0f;
+        stats.targetSize = cam.orthographicSize;
     }
     private async UniTaskVoid ShakingCamera()
     {
         float elaspedTime = 0;
-        while (elaspedTime < soData.settings.shakeTime)
+        while (elaspedTime < settings.shakeTime)
         {
             elaspedTime += Time.deltaTime;
-            float t = elaspedTime / soData.settings.shakeTime;
-            Vector2 randomOffset = Vector2.Lerp(UnityEngine.Random.insideUnitCircle * soData.settings.shakeIntensity, Vector2.zero, t);
+            float t = elaspedTime / settings.shakeTime;
+            Vector2 randomOffset = Vector2.Lerp(UnityEngine.Random.insideUnitCircle * settings.shakeIntensity, Vector2.zero, t);
             transform.position = transform.position + (Vector3)randomOffset;
             await UniTask.Yield();
         }

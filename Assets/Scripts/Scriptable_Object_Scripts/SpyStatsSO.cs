@@ -4,42 +4,35 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SpyStats_SO", menuName = "Midnight Line SOs / Spy Stats SO")]
 public class SpyStatsSO : ScriptableObject
 {
-    internal string spyID;
-
-    internal Bounds curLocationBounds;
-
-    internal Vector3 curWorldPos;
-
-    internal Vector2 startPos;
-    internal Vector2 checkpointPos;
-    internal Vector2 moveVelocity;
+    public string spyID;
+    public Bounds curLocationBounds;
+    public Vector3 curWorldPos;
+    public Vector2 startPos;
+    public Vector2 checkpointPos;
+    public Vector2 moveVelocity;
     public Vector3 phonePosition;
-
-    internal float targetXVelocity;
-    internal float curRunSpeed;
-    internal float gravityScale;
-    internal float curJumpHorizontalForce;
-    internal float lastJumpTime;
-    internal float coyoteTimeElapsed;
-    internal float curCarriageMinXPos;
-    internal float curCarriageMaxXPos;
-
-    internal LayerMask curLocationLayer;
-    internal LayerMask curGroundLayer;
-
-
-    internal bool spriteFlip;
-    internal bool coyoteJump;
-    internal bool willJump;
-    internal bool isGrounded;
-    internal bool isStepping;
-    internal bool canHang;
-    internal bool isClimbing;
-    internal bool isLeftClimbBound;
-    internal bool firstFixedFrameClimb;
-    internal bool canBoardTrain;
-    internal bool onTrain;
-    internal bool onPhone;
+    public float targetXVelocity;
+    public float curRunSpeed;
+    public float gravityScale;
+    public float curJumpHorizontalForce;
+    public float lastJumpTime;
+    public float coyoteTimeElapsed;
+    public float curCarriageMinXPos;
+    public float curCarriageMaxXPos;
+    public LayerMask curLocationLayer;
+    public LayerMask curGroundLayer;
+    public bool spriteFlip;
+    public bool coyoteJump;
+    public bool willJump;
+    public bool isGrounded;
+    public bool isStepping;
+    public bool canHang;
+    public bool isClimbing;
+    public bool isLeftClimbBound;
+    public bool firstFixedFrameClimb;
+    public bool canBoardTrain;
+    public bool onTrain;
+    public bool onPhone;
     public void ResetStats()
     {
         curWorldPos = Vector2.zero;

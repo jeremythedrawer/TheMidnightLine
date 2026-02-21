@@ -11,30 +11,6 @@ public class NPCsDataSO : ScriptableObject
         public NPCBrain agent;
         public Color color;
     }
-    [Serializable] public struct AnimHashData
-    {
-        public int sittingAboutToEat;
-        public int sittingAboutToRead;
-        public int sittingBlinking;
-        public int sittingBreathing;
-        public int sittingCalling;
-        public int sittingEating;
-        public int sittingMusic;
-        public int sittingReading;
-        public int sittingSick;
-        public int sittingSleeping;
-        public int smoking;
-        public int standingAboutToEat;
-        public int standingBlinking;
-        public int standingBreathing;
-        public int standingCalling;
-        public int standingEating;
-        public int standingMusic;
-        public int standingReading;
-        public int standingSick;
-        public int standingSleeping;
-        public int walking;
-    }
 
     [Header("To Set")]
     public NPCBrain[] npcPrefabs;
@@ -52,6 +28,4 @@ public class NPCsDataSO : ScriptableObject
     public List<Color> colorsToPick;
     public List<NPCBrain> npcsToPick;
     public Queue<AgentData> agentPool = new Queue<AgentData>();
-
-    public AnimHashData animHashData;
 }

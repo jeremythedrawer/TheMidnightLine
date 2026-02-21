@@ -25,11 +25,16 @@ public class AtlasSpawner : MonoBehaviour
         {
             if (spawnerSettings.currentTrip.zones[i].metersStart <= trainStats.metersTravelled)
             {
-                ChangeSpawner(spawnerSettings.currentTrip.zones[i], materialIDs, spawnerStats, spawnerSettings);
+                ChangeSpawner(spawnerSettings.currentTrip.zones[i], materialIDs, spawnerStats, spawnerSettings.atlasCompute);
             }
         }
     }
 
+
+    private void Update()
+    {
+        UpdateParticles(spawnerStats, spawnerSettings.atlasCompute, spyStats);
+    }
     private void InitializeBoundParameters()
     {
         float camMeterWidth = camSettings.maxProjectionSize * camStats.aspect;

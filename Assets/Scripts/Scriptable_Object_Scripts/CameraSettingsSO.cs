@@ -14,5 +14,4 @@ public class CameraSettingsSO : ScriptableObject
     public float fallingOffset = 0.3f;
     public int fallThreshold;
     public float maxProjectionSize = 10.0f;
-    public bool turnOnGUI;
 }

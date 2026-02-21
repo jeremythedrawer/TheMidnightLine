@@ -1,6 +1,5 @@
 using System;
 using System.Reflection;
-using UnityEditor;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LayerSettings_SO", menuName = "Midnight Line SOs / Layer Settings SO")]
@@ -31,9 +30,15 @@ public class LayerSettingsSO : ScriptableObject
     public LayerMask npc;
     public LayerMask phone;
     public LayerMask death;
-    internal LayerMask stationMask;
-    internal LayerMask trainMask;
 
+    [Header("Generated")]
+    public LayerMask stationMask;
+    public LayerMask trainMask;
+
+    private void OnEnable()
+    {
+        CombineAllLayerMasks();
+    }
     public void CombineAllLayerMasks()
     {
         stationMask = CombineLayerMasks(stationLayersStruct);

@@ -74,7 +74,6 @@ public class AtlasRenderer : MonoBehaviour
 #if UNITY_EDITOR
         transform.position = new Vector3(transform.position.x, transform.position.y, depthOrder);
 #endif
-
     }
     private void SetSprite(SimpleSprite sprite)
     {
@@ -160,6 +159,7 @@ public class AtlasRenderer : MonoBehaviour
     public void Flip(bool flipLeft)
     {
         flipX = flipLeft;
+        widthHeightFlip[0].z = flipLeft ? -1 : 1;
     }
     public Matrix4x4[] Get9SliceMatrices()
     {

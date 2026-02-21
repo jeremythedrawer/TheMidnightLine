@@ -27,7 +27,8 @@ public static class AtlasSpawn
 
     //TODO Need to set buffer strings to ids if this buffer idea works
     public static string[] BUFFER_STRINGS = { "_Foreground0", "_Middleground0", "_Middleground1", "_Middleground2", "_Middleground3", "_Background0", "_Background1", "_Background2" };
-    public static readonly string[] KERNEL_STRINGS = { "CSForeground0_Init", "CSMiddleground0_Init", "CSMiddleground1_Init", "CSMiddleground2_Init", "CSMiddleground3_Init", "CSBackground0_Init", "CSBackground1_Init", "CSBackground2_Init" };
+    public static readonly string[] INIT_KERNEL_STRINGS = { "CSForeground0_Init", "CSMiddleground0_Init", "CSMiddleground1_Init", "CSMiddleground2_Init", "CSMiddleground3_Init", "CSBackground0_Init", "CSBackground1_Init", "CSBackground2_Init" };
+    public static readonly string[] UPDATE_KERNEL_STRINGS = { "CSForeground0_Update", "CSMiddleground0_Update", "CSMiddleground1_Update", "CSMiddleground2_Update", "CSMiddleground3_Update", "CSBackground0_Update", "CSBackground1_Update", "CSBackground2_Update" };
 
     public static readonly int[] PARTICLE_COUNTS = { FORE_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, BACK_PARTICLE_COUNT, BACK_PARTICLE_COUNT, BACK_PARTICLE_COUNT };
 
@@ -67,7 +68,8 @@ public static class AtlasSpawn
         public GraphicsBuffer uvSizeAndPositionBuffer;
         public ComputeBuffer particleBuffer;
         public int computeGroupSize;
-        public int kernelID;
+        public int kernelID_init;
+        public int kernelID_update;
         public bool active;
     }
 
@@ -91,10 +93,12 @@ public static class AtlasSpawn
 
             spawnerData.mpb = new MaterialPropertyBlock();
             spawnerData.particleBuffer = new ComputeBuffer(PARTICLE_COUNTS[i], PARTICLE_OUTPUT_STRIDE);
-            spawnerData.kernelID = computeShader.FindKernel(KERNEL_STRINGS[i]);
+            spawnerData.kernelID_init = computeShader.FindKernel(INIT_KERNEL_STRINGS[i]);
+            spawnerData.kernelID_update = computeShader.FindKernel(UPDATE_KERNEL_STRINGS[i]);
             spawnerData.computeGroupSize = Mathf.CeilToInt(PARTICLE_COUNTS[i] / (float)THREADS_PER_GROUP);
             spawnerData.spawner = (Spawner)i;
-            computeShader.SetBuffer(spawnerData.kernelID, BUFFER_STRINGS[i], spawnerData.particleBuffer);
+            computeShader.SetBuffer(spawnerData.kernelID_init, BUFFER_STRINGS[i], spawnerData.particleBuffer);
+            computeShader.SetBuffer(spawnerData.kernelID_update, BUFFER_STRINGS[i], spawnerData.particleBuffer);
             spawnerData.mpb.SetBuffer(materialIDs.ids.particles, spawnerData.particleBuffer);
 
             spawnerDataArray[i] = spawnerData;
@@ -103,7 +107,7 @@ public static class AtlasSpawn
         return spawnerDataArray;
     }
 
-    public static void ChangeSpawner(Zone zone, MaterialIDSO materialIDs, AtlasSpawnerStatsSO stats, AtlasSpawnerSettingsSO settings)
+    public static void ChangeSpawner(Zone zone, MaterialIDSO materialIDs, AtlasSpawnerStatsSO stats, ComputeShader computeShader)
     {
         for (int i = 0; i < stats.spawnerDataArray.Length; i++)
         {
@@ -123,10 +127,23 @@ public static class AtlasSpawn
             activeSpawner.mpb.SetBuffer(materialIDs.ids.uvSizeAndPos, activeSpawner.uvSizeAndPositionBuffer);
             activeSpawner.mpb.SetTexture(materialIDs.ids.atlasTexture, zone.atlas.texture);
 
-            settings.atlasCompute.Dispatch(activeSpawner.kernelID, activeSpawner.computeGroupSize, 1, 1);
+            computeShader.Dispatch(activeSpawner.kernelID_init, activeSpawner.computeGroupSize, 1, 1);
             break;
         }
 
+    }
+
+    public static void UpdateParticles(AtlasSpawnerStatsSO stats, ComputeShader computeShader, SpyStatsSO spyStats)
+    {
+        computeShader.SetFloat("_Velocity", spyStats.moveVelocity.x * Time.deltaTime);
+        for (int i = 0; i < stats.spawnerDataArray.Length; i++)
+        {
+            ref SpawnerData activeSpawner = ref stats.spawnerDataArray[i];
+
+            if (!activeSpawner.active) continue;
+
+            computeShader.Dispatch(activeSpawner.kernelID_update, activeSpawner.computeGroupSize, 1, 1);
+        }
     }
 
     public static Queue<Zone> SetZoneQueue(TripSO trip)

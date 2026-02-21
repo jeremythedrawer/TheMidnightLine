@@ -12,8 +12,14 @@
 #pragma kernel CSBackground1_Init
 #pragma kernel CSBackground2_Init
 
-//#pragma kernel CSUpdate
-
+#pragma kernel CSForeground0_Update
+#pragma kernel CSMiddleground0_Update
+#pragma kernel CSMiddleground1_Update
+#pragma kernel CSMiddleground2_Update
+#pragma kernel CSMiddleground3_Update
+#pragma kernel CSBackground0_Update
+#pragma kernel CSBackground1_Update
+#pragma kernel CSBackground2_Update
 
 static const float FORE_MIN = 1.0;
 static const float FORE_SIZE = 1.0;
@@ -52,7 +58,7 @@ uint _ForegroundParticleCount;
 uint _MiddlegroundParticleCount;
 uint _BackgroundParticleCount;
 
-uniform float _TrainVelocity;
+uniform float _Velocity;
 
 
 void InitOutput(int id, int particleCount, float minPos, float sizeRange, float offset, inout ParticleOutput output)
@@ -60,7 +66,7 @@ void InitOutput(int id, int particleCount, float minPos, float sizeRange, float 
     float normID = (float) id / (float) particleCount;
     
     output.position.z = minPos + (normID * sizeRange);
-    output.parallaxFactor = abs(output.position.z - _SpawnerMaxPos.z) / _SpawnerMaxPos.z;
+    output.parallaxFactor = (_SpawnerMaxPos.z - output.position.z) / _SpawnerMaxPos.z;
     
     uint seed = id ^ asuint(offset * 123.456);
     
@@ -71,6 +77,25 @@ void InitOutput(int id, int particleCount, float minPos, float sizeRange, float 
     output.position.x = _SpawnerMinPos.x + (_SpawnerSize.x * output.rand01);
 }
 
+void UpdateOutput(inout ParticleOutput output)
+{
+    if (output.alive == 1)
+    {
+        output.position.x += _Velocity * (output.parallaxFactor);
+    
+        if (output.position.x < _SpawnerMinPos.x)
+        {
+            output.alive = 0;
+        }
+    }
+    else
+    {
+        output.position.x = _SpawnerMaxPos.x;
+        output.alive = 1;
+    }
+}
+
+//Init
 [numthreads(THREADS_PER_GROUP, 1, 1)]
 void CSForeground0_Init(uint id : SV_DispatchThreadID)
 {
@@ -153,33 +178,98 @@ void CSBackground2_Init(uint id : SV_DispatchThreadID)
     InitOutput(id, _BackgroundParticleCount, BACK_MIN, BACK_SIZE, B2_OFFSET, output);
     _Background2[id] = output;
 }
-/*
+
+
+
+
+
+//Update
 [numthreads(THREADS_PER_GROUP, 1, 1)]
-void CSUpdate(uint id : SV_DispatchThreadID)
+void CSForeground0_Update(uint id : SV_DispatchThreadID)
 {
-    if (id >= _ParticleCount)
-    {
+    if (id >= _ForegroundParticleCount)
         return;
-    }
     
-    BackgroundParticleOutput output = _BGParticleOutputs[id];
-    
-    if (output.alive == 1)
-    {
-        output.position.x -= _TrainVelocity * output.parallaxFactor;
-    
-        if (output.position.x < _SpawnerMinPos.x)
-        {
-            output.alive = 0;
-        }
-    }
-    else
-    {
-        BackgroundParticleOutput output = _BGParticleOutputs[id];
-        ReinitOutput(output, id);
-        output.position.x = _SpawnerMaxPos.x;
-    }
-    
-    _BGParticleOutputs[id] = output;
+    ParticleOutput output = _Foreground0[id];
+    UpdateOutput(output);
+    _Foreground0[id] = output;
+
 }
-*/
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSMiddleground0_Update(uint id : SV_DispatchThreadID)
+{
+    if (id >= _MiddlegroundParticleCount)
+        return;
+    
+    ParticleOutput output = _Middleground0[id];
+    UpdateOutput(output);
+    
+    _Middleground0[id] = output;
+}
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSMiddleground1_Update(uint id : SV_DispatchThreadID)
+{
+    if (id >= _MiddlegroundParticleCount)
+        return;
+    
+    ParticleOutput output = _Middleground1[id];
+    UpdateOutput(output);
+    _Middleground1[id] = output;
+}
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSMiddleground2_Update(uint id : SV_DispatchThreadID)
+{
+    if (id >= _MiddlegroundParticleCount)
+        return;
+    
+    ParticleOutput output = _Middleground2[id];
+    UpdateOutput(output);
+    _Middleground2[id] = output;
+}
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSMiddleground3_Update(uint id : SV_DispatchThreadID)
+{
+    if (id >= _MiddlegroundParticleCount)
+        return;
+    
+    ParticleOutput output = _Middleground3[id];
+    UpdateOutput(output);
+    _Middleground3[id] = output;
+}
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSBackground0_Update(uint id : SV_DispatchThreadID)
+{
+    if (id >= _BackgroundParticleCount)
+        return;
+    
+    ParticleOutput output = _Background0[id];
+    UpdateOutput(output);
+    _Background0[id] = output;
+}
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSBackground1_Update(uint id : SV_DispatchThreadID)
+{
+    if (id >= _BackgroundParticleCount)
+        return;
+    
+    ParticleOutput output = _Background1[id];
+    UpdateOutput(output);
+    _Background1[id] = output;
+}
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void CSBackground2_Update(uint id : SV_DispatchThreadID)
+{
+    if (id >= _BackgroundParticleCount)
+        return;
+    
+    ParticleOutput output = _Background2[id];
+    UpdateOutput(output);
+    _Background2[id] = output;
+}

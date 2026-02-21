@@ -13,15 +13,16 @@ public class Train : MonoBehaviour
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] MaterialIDSO materialIDs;
     [SerializeField] AtlasSpawnerStatsSO spawnerStats;
-    [SerializeField] AtlasRenderer atlasRenderer;
+    [SerializeField] BoxCollider backCollider;
+    [SerializeField] BoxCollider frontCollider;
 
     CancellationTokenSource trainCTS;
     private void Awake()
     {
-        //stats.trainLength = (componentData.frontCarriageSpriteRenderer.bounds.max.x - transform.position.x);
+        stats.trainLength = (frontCollider.bounds.max.x - backCollider.bounds.min.x);
         stats.trainHalfLength = stats.trainLength * 0.5f;
         stats.startXPos = transform.position.x;
-        //stats.trainMaxHeight = componentData.frontCarriageSpriteRenderer.bounds.max.y;
+        stats.trainMaxHeight = frontCollider.bounds.max.y;
         stats.curStation = stationsData.stations[0];
         stats.curStation.isSpawned = true;
         stats.targetPassengerCount = stats.curStation.bystanderSpawnAmount + stationsData.stations[0].agentSpawnAmount + 1; // +1 for spy himself
@@ -123,7 +124,6 @@ public class Train : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawLine(new Vector2(stats.brakeDist, 0), new Vector2(stats.brakeDist, 5));
-        Gizmos.DrawSphere(transform.position + new Vector3(stats.trainHalfLength, 0, 0), 1);
     }
 
 #if UNITY_EDITOR

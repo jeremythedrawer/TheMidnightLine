@@ -509,12 +509,7 @@ public class SpyBrain : MonoBehaviour
     private void PlayClip()
     {
         clipTime += Time.deltaTime;
-        curClip.GetNextSprite(ref clipTime, ref curFrameIndex, ref prevFrameIndex);
-
-        if (curFrameIndex != prevFrameIndex)
-        {
-            //atlasRenderer.SetSprite(curClip.keyFrames[curFrameIndex].spriteIndex);
-        }
+        atlasRenderer.sprite = curClip.GetNextSprite(ref clipTime, ref curFrameIndex, ref prevFrameIndex);
     }
     private void OnApplicationQuit()
     {
