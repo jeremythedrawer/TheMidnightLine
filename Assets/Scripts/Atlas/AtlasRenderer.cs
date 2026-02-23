@@ -228,7 +228,7 @@ public class AtlasRenderer : MonoBehaviour
     }
 #endif
 }
-
+#if UNITY_EDITOR
 [CustomEditor(typeof(AtlasRenderer))]
 [CanEditMultipleObjects]
 public class AtlasRendererEditor : Editor
@@ -290,4 +290,4 @@ public class AtlasRendererEditor : Editor
         }
     }
 }
-
+#endif

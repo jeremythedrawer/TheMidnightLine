@@ -13,6 +13,7 @@ MonoBehaviour:
   m_Name: Novograd-Gorov_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
   texture: {fileID: 2800000, guid: 4a9bdb32b0f04fc40ae0c04a7a31065a, type: 3}
+  isParticleAtlas: 0
   entityMotionType: 0
   pivotColor:
     serializedVersion: 2
@@ -20,16 +21,19 @@ MonoBehaviour:
   sliceColor:
     serializedVersion: 2
     rgba: 4294901760
+  particleType: 0
   motionSprites: []
   simpleSprites:
-  - uvSizeAndPos: {x: 0.83935547, y: 0.529541, z: 0, w: 0.2956543}
+  - uvSizeAndPos: {x: 0.8395996, y: 0.52905273, z: 0, w: 0.29589844}
     uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 19.1, y: 12.05, z: 1}
+    worldSize: {x: 19.105556, y: 12.038889, z: 1}
     index: 0
-  - uvSizeAndPos: {x: 0.4790039, y: 0.29248047, z: 0, w: 0}
+  - uvSizeAndPos: {x: 0.55249023, y: 0.29174805, z: 0.0009765625, w: 0}
     uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 10.9, y: 6.6555557, z: 1}
+    worldSize: {x: 12.572222, y: 6.638889, z: 1}
     index: 1
   slicedSprites: []
+  particleSprites: []
+  particleUVSizeAndPosArray: []
   clips: []
   markers: []

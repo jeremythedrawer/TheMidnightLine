@@ -16,6 +16,10 @@ MonoBehaviour:
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   spawnerSettings: {fileID: 11400000, guid: f37b2d6c4b24fc54488d7d37482b2d18, type: 2}
   spawnerStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  matrixMaterial: {fileID: 2100000, guid: 12c2dbd000184ef46b9f4c55426baf8d, type: 2}
+  lightness: 0.41
+  greenToRed: 0.79
+  blueToYellow: 1.61
 --- !u!114 &-3863731181393701793
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -32,6 +36,10 @@ MonoBehaviour:
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   spawnerSettings: {fileID: 11400000, guid: f37b2d6c4b24fc54488d7d37482b2d18, type: 2}
   spawnerStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  matrixMaterial: {fileID: 0}
+  lightness: 0
+  greenToRed: 0
+  blueToYellow: 0
 --- !u!114 &11400000
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -86,6 +94,6 @@ MonoBehaviour:
   m_CameraSortingLayerDownsamplingMethod: 0
   m_MaxLightRenderTextureCount: 16
   m_MaxShadowRenderTextureCount: 1
-  m_PostProcessData: {fileID: 0}
+  m_PostProcessData: {fileID: 11400000, guid: 41439944d30ece34e96484bdb6645b55, type: 2}
   m_DefaultMaterialType: 1
   m_DefaultCustomMaterial: {fileID: 2100000, guid: a97c105638bdf8b4a8650670310a4cd3, type: 2}

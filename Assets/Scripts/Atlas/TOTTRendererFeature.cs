@@ -1,0 +1,335 @@
+using UnityEngine;
+using UnityEngine.Rendering;
+using UnityEngine.Rendering.RenderGraphModule;
+using UnityEngine.Rendering.Universal;
+using static Atlas;
+using static AtlasBatch;
+using static AtlasSpawn;
+
+public class TOTTRendererFeature : ScriptableRendererFeature
+{
+    public MaterialIDSO materialIDs;
+    public AtlasSpawnerSettingsSO spawnerSettings;
+    public AtlasSpawnerStatsSO spawnerStats;
+
+    public Material matrixMaterial;
+    public Material bloomMaterial;
+
+    [Header("Bloom Settings")]
+    public int bloomMipLevel;
+    public float bloomIntensity;
+    public float bloomSpread;
+
+
+    [Header("OKLAB Settings")]
+    public float lightness;
+    public float greenToRed;
+    public float blueToYellow;
+    
+    private AtlasBatchPass batchPass;
+    private AtlasParticlePass particlePass;
+    private MatrixPass matrixPass;
+    private BloomPass bloomPass;
+
+    private class AtlasPassData
+    {
+        public Camera camera;
+    }
+
+    public override void Create()
+    {
+        batchPass = new AtlasBatchPass(materialIDs);
+        particlePass = new AtlasParticlePass(spawnerSettings, spawnerStats, materialIDs);
+        matrixPass = new MatrixPass(this);
+        bloomPass = new BloomPass(this);
+    }
+
+    public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
+    {
+        PrepareFrame();
+        renderer.EnqueuePass(batchPass);
+        renderer.EnqueuePass(particlePass);
+        renderer.EnqueuePass(matrixPass);
+        renderer.EnqueuePass(bloomPass);
+    }
+    private class AtlasBatchPass : ScriptableRenderPass
+    {
+        private static MaterialIDSO materialIDs;
+        public AtlasBatchPass(MaterialIDSO materialID)
+        {
+            renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
+            materialIDs = materialID;
+        }
+
+        public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
+        {
+            UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
+            UniversalResourceData resources = frameData.Get<UniversalResourceData>();
+
+            using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<AtlasPassData>("Atlas Batch Pass", out AtlasPassData passData);
+            passData.camera = cameraData.camera;
+            builder.SetRenderAttachment(resources.activeColorTexture, 0);
+            builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
+            builder.AllowPassCulling(false);
+
+
+            builder.SetRenderFunc((AtlasPassData data, RasterGraphContext ctx) =>
+            {
+                ExecuteBatch(ctx.cmd, data.camera);
+            });
+        }
+
+        private static void ExecuteBatch(RasterCommandBuffer cmd, Camera camera)
+        {
+            foreach ((BatchKey key, BatchData data) batch in batchList)
+            {
+                int count = 0;
+                for (int i = 0; i < batch.data.renderers.Count && count < MAX; i++)
+                {
+                    AtlasRenderer atlasRenderer = batch.data.renderers[i];
+
+                    if (atlasRenderer == null || !atlasRenderer.enabled) continue;
+
+                    if (atlasRenderer.spriteMode == SpriteMode.Slice)
+                    {
+                        ref SliceSprite slicedSprite = ref atlasRenderer.atlas.slicedSprites[atlasRenderer.spriteIndex];
+
+                        Matrix4x4[] sliceMatrices = atlasRenderer.Get9SliceMatrices();
+
+                        for (int j = 0; j < 9; j++)
+                        {
+                            Matrix4x4 sliceMatrix = sliceMatrices[j];
+
+                            batch.data.matrices[count] = sliceMatrix;
+                            batch.data.uvSizeAndPosData[count] = slicedSprite.uvSizeAndPos[j];
+                            batch.data.widthHeightFlip[count] = atlasRenderer.widthHeightFlip[j];
+                            count++;
+                        }
+                    }
+                    else
+                    {
+                        batch.data.matrices[count] = atlasRenderer.GetMatrix();
+                        batch.data.uvSizeAndPosData[count] = atlasRenderer.sprite.uvSizeAndPos;
+                        batch.data.widthHeightFlip[count] = atlasRenderer.widthHeightFlip[0];
+                        count++;
+                    }
+
+                }
+
+                if (count == 0) continue;
+
+                batch.data.mpb.SetVectorArray(materialIDs.ids.uvSizeAndPos, batch.data.uvSizeAndPosData);
+                batch.data.mpb.SetVectorArray(materialIDs.ids.widthHeightFlip, batch.data.widthHeightFlip);
+                cmd.DrawMeshInstanced(batch.key.mesh, submeshIndex: 0, batch.key.material, shaderPass: 0, batch.data.matrices, count, batch.data.mpb);
+            }
+        }
+    }
+    private class AtlasParticlePass : ScriptableRenderPass
+    {
+        private static AtlasSpawnerSettingsSO spawnerSettings;
+        private static AtlasSpawnerStatsSO spawnerStats;
+        private static MaterialIDSO materialIDs;
+        public AtlasParticlePass(AtlasSpawnerSettingsSO settings, AtlasSpawnerStatsSO stats, MaterialIDSO matIDs)
+        {
+            renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
+            spawnerSettings = settings;
+            spawnerStats = stats;
+            materialIDs = matIDs;
+        }
+
+        public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
+        {
+            UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
+            UniversalResourceData resources = frameData.Get<UniversalResourceData>();
+
+            using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<AtlasPassData>("Atlas Particle Pass", out AtlasPassData passData);
+            passData.camera = cameraData.camera;
+            builder.SetRenderAttachment(resources.activeColorTexture, 0);
+            builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
+            builder.AllowPassCulling(false);
+
+            builder.SetRenderFunc((AtlasPassData data, RasterGraphContext ctx) =>
+            {
+                ExecuteParticles(ctx.cmd, data.camera);
+            });
+        }
+
+        private static void ExecuteParticles(RasterCommandBuffer cmd, Camera camera)
+        {
+            for (int i = 0; i < spawnerStats.spawnerDataArray.Length; i++)
+            {
+                SpawnerData spawnerData = spawnerStats.spawnerDataArray[i];
+
+                if (!spawnerData.active) continue;
+                cmd.DrawProcedural(Matrix4x4.identity, spawnerSettings.backgroundMaterial, shaderPass: 0, MeshTopology.Quads, MAX_VERTEX_COUNT, 1, spawnerData.mpb);
+            }
+        }
+    }
+
+    private class BloomPass : ScriptableRenderPass
+    {
+        private static TOTTRendererFeature rendererFeature;
+
+        public BloomPass(TOTTRendererFeature srf)
+        {
+            rendererFeature = srf;
+        }
+
+        private class BloomPassData
+        {
+            public TextureHandle curSourceColor;
+            public TextureHandle targetColor;
+            public TextureHandle originalCameraColor;
+            public Material material;
+            public int bloomMipLevel;
+            public float bloomIntensity;
+            public float bloomSpread;
+        }
+
+        public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
+        {
+            UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
+            UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
+
+            TextureDesc camColorTexDesc = resourceData.cameraColor.GetDescriptor(renderGraph);
+            camColorTexDesc.name = "BloomTexture";
+            camColorTexDesc.useMipMap = true;
+            camColorTexDesc.autoGenerateMips = true;
+
+            TextureHandle bloomPreTexHandle = renderGraph.CreateTexture(camColorTexDesc);
+            TextureHandle bloomHTexHandle = renderGraph.CreateTexture(camColorTexDesc);
+            TextureHandle bloomVTexHandle = renderGraph.CreateTexture(camColorTexDesc);
+
+            BloomPassData passData;
+            using (IRasterRenderGraphBuilder preBuilder = renderGraph.AddRasterRenderPass<BloomPassData>("Bloom Pre Pass", out passData))
+            {
+                passData.curSourceColor = resourceData.cameraColor;
+                passData.targetColor = bloomPreTexHandle;
+                passData.material = rendererFeature.bloomMaterial;
+                passData.bloomMipLevel = rendererFeature.bloomMipLevel;
+                passData.bloomIntensity = rendererFeature.bloomIntensity;
+                passData.bloomSpread = rendererFeature.bloomSpread;
+
+
+                preBuilder.UseTexture(passData.curSourceColor);
+                preBuilder.SetRenderAttachment(passData.targetColor, index: 0, AccessFlags.WriteAll);
+
+                preBuilder.SetRenderFunc((BloomPassData data, RasterGraphContext ctx) =>
+                {
+                    ExecutePreBloomPass(data, ctx);
+                });
+            }
+
+            using (IRasterRenderGraphBuilder preBuilder = renderGraph.AddRasterRenderPass<BloomPassData>("Bloom Horizontal Pass", out passData))
+            {
+                passData.curSourceColor = bloomPreTexHandle;
+                passData.targetColor = bloomHTexHandle;
+                passData.material = rendererFeature.bloomMaterial;
+
+                preBuilder.UseTexture(passData.curSourceColor);
+                preBuilder.SetRenderAttachment(passData.targetColor, index: 0, AccessFlags.WriteAll);
+
+                preBuilder.SetRenderFunc((BloomPassData data, RasterGraphContext ctx) =>
+                {
+                    ExecuteHBloomPass(data, ctx);
+                });
+            }
+
+            using (IRasterRenderGraphBuilder preBuilder = renderGraph.AddRasterRenderPass<BloomPassData>("Bloom Vertical Pass", out passData))
+            {
+                passData.curSourceColor = bloomHTexHandle;
+                passData.targetColor = bloomVTexHandle;
+                passData.material = rendererFeature.bloomMaterial;
+                passData.originalCameraColor = resourceData.cameraColor;
+
+                preBuilder.UseTexture(passData.curSourceColor);
+                preBuilder.UseTexture(passData.originalCameraColor);
+                preBuilder.SetRenderAttachment(passData.targetColor, index: 0, AccessFlags.WriteAll);
+
+                preBuilder.SetRenderFunc((BloomPassData data, RasterGraphContext ctx) =>
+                {
+                    ExecuteVBloomPass(data, ctx);
+                });
+            }
+
+            resourceData.cameraColor = passData.targetColor;
+        }
+
+        private static void ExecutePreBloomPass(BloomPassData passData, RasterGraphContext ctx)
+        {
+            passData.material.SetFloat("_MipLevel", passData.bloomMipLevel);
+            passData.material.SetFloat("_BloomIntensity", passData.bloomIntensity);
+            passData.material.SetFloat("_BloomSpread", passData.bloomSpread);
+            Blitter.BlitTexture(ctx.cmd, passData.curSourceColor, Vector2.one, passData.material, pass: 0);
+        }
+        private static void ExecuteHBloomPass(BloomPassData passData, RasterGraphContext ctx)
+        {
+            Blitter.BlitTexture(ctx.cmd, passData.curSourceColor, Vector2.one, passData.material, pass: 1);
+        }
+
+        private static void ExecuteVBloomPass(BloomPassData passData, RasterGraphContext ctx)
+        {
+            passData.material.SetTexture("_SourceTex", passData.originalCameraColor);
+            Blitter.BlitTexture(ctx.cmd, passData.curSourceColor, Vector2.one, passData.material, pass: 2);
+        }
+    }
+
+    private class MatrixPass : ScriptableRenderPass
+    {
+        private static TOTTRendererFeature rendererFeature;
+
+        public MatrixPass(TOTTRendererFeature srf)
+        {
+            rendererFeature = srf;
+        }
+
+        private class MatrixPassData
+        {
+            public TextureHandle sourceColor;
+            public TextureHandle targetColor;
+            public TextureHandle depthTexture;
+            public Material material;
+        }
+        public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
+        {
+            UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
+            UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
+
+            if (resourceData.cameraColor.IsValid())
+            {
+                TextureDesc camColorTexDesc = resourceData.cameraColor.GetDescriptor(renderGraph);
+
+                camColorTexDesc.name = "MatrixTexture";
+
+                TextureHandle matrixTexHandle = renderGraph.CreateTexture(camColorTexDesc);
+
+                using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<MatrixPassData>("Matrix Pass", out MatrixPassData passData);
+                passData.sourceColor = resourceData.cameraColor;
+                passData.targetColor = matrixTexHandle;
+                passData.material = rendererFeature.matrixMaterial;
+                passData.depthTexture = resourceData.activeDepthTexture;
+
+                builder.UseTexture(passData.sourceColor);
+                builder.UseTexture(passData.depthTexture, AccessFlags.Read);
+                builder.SetRenderAttachment(passData.targetColor, index: 0, AccessFlags.WriteAll);
+
+                builder.SetRenderFunc((MatrixPassData maxtrixPassData, RasterGraphContext ctx) =>
+                {
+                    ExecuteMatrixPass(maxtrixPassData, ctx);
+                });
+
+                resourceData.cameraColor = passData.targetColor;
+            }
+        }
+        private static void ExecuteMatrixPass(MatrixPassData passData, RasterGraphContext ctx)
+        {
+            passData.material.SetTexture("_SourceTex", passData.sourceColor);
+            passData.material.SetTexture("_CameraDepthTexture", passData.depthTexture);
+            passData.material.SetFloat("_Lightness", rendererFeature.lightness);
+            passData.material.SetFloat("_GreenToRed", rendererFeature.greenToRed);
+            passData.material.SetFloat("_BlueToYellow", rendererFeature.blueToYellow);
+            Blitter.BlitTexture(ctx.cmd, passData.sourceColor, Vector2.one, passData.material, 0);
+        }
+    }
+}
+

@@ -81,16 +81,16 @@ void UpdateOutput(inout ParticleOutput output)
 {
     if (output.alive == 1)
     {
-        output.position.x += _Velocity * (output.parallaxFactor);
+        output.position.x += _Velocity * (1 - output.parallaxFactor) * 0.5;
     
-        if (output.position.x < _SpawnerMinPos.x)
+        if (output.position.x > _SpawnerMaxPos.x)
         {
             output.alive = 0;
         }
     }
     else
     {
-        output.position.x = _SpawnerMaxPos.x;
+        output.position.x = _SpawnerMinPos.x;
         output.alive = 1;
     }
 }
@@ -178,10 +178,6 @@ void CSBackground2_Init(uint id : SV_DispatchThreadID)
     InitOutput(id, _BackgroundParticleCount, BACK_MIN, BACK_SIZE, B2_OFFSET, output);
     _Background2[id] = output;
 }
-
-
-
-
 
 //Update
 [numthreads(THREADS_PER_GROUP, 1, 1)]

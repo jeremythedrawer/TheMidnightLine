@@ -3,6 +3,7 @@ Shader "Custom/s_atlasStandard"
     Properties
     {
         [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
+        [NoScaleOffset] _EmissionTexture("Emission Atlas", 2D) = "black"
     }
 
     SubShader
@@ -36,7 +37,9 @@ Shader "Custom/s_atlasStandard"
             };
 
             TEXTURE2D(_AtlasTexture);
+            TEXTURE2D(_EmissionTexture);
             SAMPLER(sampler_AtlasTexture);
+            SAMPLER(sampler_EmissionTexture);
             float4 _AtlasTexture_ST;
 
             UNITY_INSTANCING_BUFFER_START(AtlasProps)
@@ -68,8 +71,15 @@ Shader "Custom/s_atlasStandard"
                 i.uv *= uvSizeAndPos.xy;
                 i.uv += uvSizeAndPos.zw;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+
+                half emission = SAMPLE_TEXTURE2D(_EmissionTexture, sampler_EmissionTexture, i.uv).r;
+                emission *= 2;
+
+                half3 finalColor = color.rgb * emission;
+                finalColor = max(color.rgb, finalColor);
+
                 clip(color.a - 0.001);
-                return color;
+                return half4 (finalColor, 1);
             }
             ENDHLSL
         }

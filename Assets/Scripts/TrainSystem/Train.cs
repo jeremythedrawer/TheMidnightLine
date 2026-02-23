@@ -13,8 +13,8 @@ public class Train : MonoBehaviour
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] MaterialIDSO materialIDs;
     [SerializeField] AtlasSpawnerStatsSO spawnerStats;
-    [SerializeField] BoxCollider backCollider;
-    [SerializeField] BoxCollider frontCollider;
+    [SerializeField] BoxCollider2D backCollider;
+    [SerializeField] BoxCollider2D frontCollider;
 
     CancellationTokenSource trainCTS;
     private void Awake()
