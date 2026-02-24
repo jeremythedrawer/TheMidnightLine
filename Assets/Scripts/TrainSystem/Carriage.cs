@@ -63,6 +63,10 @@ public class Carriage : MonoBehaviour
         gameEventData.OnCloseSlideDoors.UnregisterListener(CloseDoors);
     }
 
+    private void Start()
+    {
+        alpha = 1;
+    }
     private void Update()
     {
         if (trainStats.wheelCircumference <= 0f) return;
@@ -159,22 +163,4 @@ public class Carriage : MonoBehaviour
         {
         }
     }
-
-#if UNITY_EDITOR
-
-    [ContextMenu("Reset Doors")]
-    private void ResetDoors()
-    {
-        foreach(SlideDoors slideDoor in  exteriorSlideDoors)
-        {
-            slideDoor.ResetDoors();
-        }
-    }
-    private void OnDrawGizmos()
-    {
-        if (trainSettings == null) return;
-        Gizmos.color = Color.blue;
-        Gizmos.DrawLine(new Vector3(transform.position.x, transform.position.y + 2, trainSettings.maxMinWorldZPos.postion), new Vector3(transform.position.x, transform.position.y + 2, trainSettings.maxMinWorldZPos.postion + trainSettings.maxMinWorldZPos.size));
-    }
-#endif
 }

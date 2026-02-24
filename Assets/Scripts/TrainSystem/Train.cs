@@ -1,6 +1,8 @@
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using System.Collections.Generic;
 using UnityEngine;
+
 
 
 public class Train : MonoBehaviour
@@ -14,6 +16,8 @@ public class Train : MonoBehaviour
     [SerializeField] BoxCollider2D backCollider;
     [SerializeField] BoxCollider2D frontCollider;
 
+    [Header("Generated")]
+    [SerializeField] Carriage[] carriages;
     CancellationTokenSource trainCTS;
     private void Awake()
     {
@@ -30,6 +34,8 @@ public class Train : MonoBehaviour
         stats.closingDoors = false;
         stats.brakeDist = GetBrakeDistance();
         trainCTS = new CancellationTokenSource();
+
+        SetCarriageDictionary();
 
     }
     private void OnDisable()
@@ -73,6 +79,19 @@ public class Train : MonoBehaviour
         if (stats.curPassengerCount == stats.targetPassengerCount && !stats.closingDoors)
         {
             LeavingStation().Forget();
+        }
+    }
+    private void SetCarriageDictionary()
+    {
+        carriages = GetComponentsInChildren<Carriage>();
+
+        stats.carriageDict = new Dictionary<Collider2D, Carriage>();
+
+        for (int i = 0; i < carriages.Length; i++)
+        {
+            Carriage curCarriage = carriages[i];
+
+            stats.carriageDict.Add(curCarriage.insideBoundsCollider, curCarriage);
         }
     }
     private async UniTask LeavingStation()

@@ -131,6 +131,10 @@ public class SpyBrain : MonoBehaviour
         if ((layerSettings.trainLayerStruct.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
             SetLocationData(collision.bounds, layerSettings.trainLayerStruct.insideCarriageBounds);
+            curCarriage = trainStats.carriageDict[collision];
+            curCarriage.StartFade(fadeIn: false);
+            //stats.curCarriageMinXPos = curCarriage.carriageCollider.bounds.min.x;
+            //stats.curCarriageMaxXPos = curCarriage.carriageCollider.bounds.max.x;
         }
         else if ((layerSettings.trainLayerStruct.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
@@ -141,12 +145,8 @@ public class SpyBrain : MonoBehaviour
             SetLocationData(collision.bounds, layerSettings.trainLayerStruct.roofBounds);
         }
 
-        if ((layerSettings.trainLayerStruct.carriage.value & (1 << collision.gameObject.layer)) != 0)
+        if ((layerSettings.trainLayerStruct.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            curCarriage = collision.GetComponent<Carriage>();
-            curCarriage.StartFade(fadeIn: false);
-            stats.curCarriageMinXPos = curCarriage.carriageCollider.bounds.min.x;
-            stats.curCarriageMaxXPos = curCarriage.carriageCollider.bounds.max.x;
         }
     }
     private void OnTriggerExit2D(Collider2D collision)

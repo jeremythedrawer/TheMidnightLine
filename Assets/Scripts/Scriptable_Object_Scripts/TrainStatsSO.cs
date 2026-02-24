@@ -26,6 +26,8 @@ public class TrainStatsSO : ScriptableObject
     public int maxDepth;
 
     public StationSO curStation;
+
+    public Dictionary<Collider2D, Carriage> carriageDict;
     public float GetMetersPerSecond(float kmph)
     {
         return kmph * KM_TO_MPS;

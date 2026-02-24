@@ -11,7 +11,7 @@ Shader "Custom/s_exteriorWalls"
 
     SubShader
     {
-        Tags { "Queue" = "Transparent" }
+        Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
         ZWrite On
         ZTest LEqual
         Blend SrcAlpha OneMinusSrcAlpha
@@ -73,8 +73,9 @@ Shader "Custom/s_exteriorWalls"
 
                 half3 finalColor = color.rgb * emission;
                 finalColor = max(color.rgb, finalColor);
-                clip(color.a - 0.001);
-                return half4 (finalColor, _Alpha * color.a);
+                float finalAlpha = _Alpha * color.a;
+                clip(finalAlpha - 0.001);
+                return half4 (finalColor, finalAlpha);
             }
             ENDHLSL
         }

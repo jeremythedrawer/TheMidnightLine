@@ -8,7 +8,7 @@ Shader "Custom/s_atlasStandard"
 
     SubShader
     {
-        Tags { "Queue" = "Transparent" }
+        Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
         ZWrite On
         ZTest LEqual
         Blend SrcAlpha OneMinusSrcAlpha
