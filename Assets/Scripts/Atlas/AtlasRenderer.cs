@@ -17,7 +17,7 @@ public class AtlasRenderer : MonoBehaviour
     public bool flipX;
     public bool flipY;
     public int depthOrder;
-
+    public bool useCustomMaterial;
     [Header("Generated")]
     public BatchKey batchKey;
     public SimpleSprite sprite;
@@ -28,6 +28,8 @@ public class AtlasRenderer : MonoBehaviour
 
     public Vector2 centerSliceWorldSize;
     public Vector2 centerSliceUVSize;
+
+    public MaterialPropertyBlock mpb;
     private void OnValidate()
     {
         InitSpriteMode();
@@ -60,10 +62,14 @@ public class AtlasRenderer : MonoBehaviour
         {
             SetCenterSliceSize();
         }
+
+        HandleCustomMaterial();
     }
     private void OnEnable()
     {
         RegisterRenderer(this);
+        HandleCustomMaterial();
+
     }
     private void OnDisable()
     {
@@ -74,6 +80,11 @@ public class AtlasRenderer : MonoBehaviour
 #if UNITY_EDITOR
         transform.position = new Vector3(transform.position.x, transform.position.y, depthOrder);
 #endif
+    }
+    public void Flip(bool flipLeft)
+    {
+        flipX = flipLeft;
+        widthHeightFlip[0].z = flipLeft ? -1 : 1;
     }
     private void SetSprite(SimpleSprite sprite)
     {
@@ -155,11 +166,18 @@ public class AtlasRenderer : MonoBehaviour
         boxCollider.size = new Vector2(sprite.worldSize.x * width, sprite.worldSize.y * height);
         boxCollider.offset = (boxCollider.size * 0.5f) - (sprite.worldSize * new Vector2(flipX ? 1 - sprite.uvPivot.x : sprite.uvPivot.x, flipY ? 1 - sprite.uvPivot.y : sprite.uvPivot.y));
     }
-
-    public void Flip(bool flipLeft)
+    private void HandleCustomMaterial()
     {
-        flipX = flipLeft;
-        widthHeightFlip[0].z = flipLeft ? -1 : 1;
+        if (useCustomMaterial)
+        {
+            if (mpb == null)
+            {
+                mpb = new MaterialPropertyBlock();
+
+            }
+            mpb.SetVector("_UVSizeAndPos", sprite.uvSizeAndPos);
+            mpb.SetVector("_WidthHeightFlip", widthHeightFlip[0]);
+        }
     }
     public Matrix4x4[] Get9SliceMatrices()
     {
@@ -218,6 +236,7 @@ public class AtlasRenderer : MonoBehaviour
         return spriteMatrices[0];
     }
 
+
 #if UNITY_EDITOR
     [ExecuteAlways]
     void OnDrawGizmos()
@@ -228,66 +247,3 @@ public class AtlasRenderer : MonoBehaviour
     }
 #endif
 }
-#if UNITY_EDITOR
-[CustomEditor(typeof(AtlasRenderer))]
-[CanEditMultipleObjects]
-public class AtlasRendererEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        serializedObject.Update();
-
-        AtlasRenderer renderer = (AtlasRenderer)target;
-
-        EditorGUI.BeginChangeCheck();
-
-        SerializedProperty spriteIndexProp = serializedObject.FindProperty("spriteIndex");
-        SerializedProperty spriteModeProp = serializedObject.FindProperty("spriteMode");
-
-        if (renderer.atlas != null)
-        {
-            SpriteMode spriteType = (SpriteMode)spriteModeProp.intValue;
-
-            int maxIndex = 0;
-            switch (spriteType)
-            {
-                case SpriteMode.Simple:
-                {
-                    if (renderer.atlas.simpleSprites.Length > 0) maxIndex = renderer.atlas.simpleSprites.Length - 1;
-                }
-                break;
-
-                case SpriteMode.Motion:
-                {
-                    if (renderer.atlas.motionSprites.Length > 0) maxIndex = renderer.atlas.motionSprites.Length - 1;
-                }
-                break;
-
-                case SpriteMode.Slice:
-                {
-                    if (renderer.atlas.slicedSprites.Length > 0) maxIndex = renderer.atlas.slicedSprites.Length - 1;
-                }
-                break;
-            }
-
-            spriteIndexProp.intValue = Mathf.Clamp(spriteIndexProp.intValue, 0, maxIndex);
-
-            spriteIndexProp.intValue = EditorGUILayout.IntSlider("Sprite Index", spriteIndexProp.intValue, 0, maxIndex);
-        }
-        else
-        {
-            EditorGUILayout.PropertyField(spriteIndexProp);
-        }
-
-        DrawPropertiesExcluding(serializedObject, "spriteIndex");
-
-        
-        serializedObject.ApplyModifiedProperties();
-        if (EditorGUI.EndChangeCheck())
-        {
-            UnregisterRenderer(renderer);
-            RegisterRenderer(renderer);
-        }
-    }
-}
-#endif

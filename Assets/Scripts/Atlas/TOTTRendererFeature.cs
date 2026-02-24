@@ -90,6 +90,12 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
                     if (atlasRenderer == null || !atlasRenderer.enabled) continue;
 
+                    if (atlasRenderer.mpb != null)
+                    {
+                        cmd.DrawMesh(atlasRenderer.batchKey.mesh, atlasRenderer.GetMatrix(), atlasRenderer.batchKey.material, submeshIndex: 0, shaderPass: 0, atlasRenderer.mpb);
+                        continue;
+                    }
+
                     if (atlasRenderer.spriteMode == SpriteMode.Slice)
                     {
                         ref SliceSprite slicedSprite = ref atlasRenderer.atlas.slicedSprites[atlasRenderer.spriteIndex];
@@ -192,6 +198,9 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
             UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
 
+            if (cameraData.cameraType != CameraType.Game) return;
+            if (!resourceData.cameraColor.IsValid()) return;
+
             TextureDesc camColorTexDesc = resourceData.cameraColor.GetDescriptor(renderGraph);
             camColorTexDesc.name = "BloomTexture";
             camColorTexDesc.useMipMap = true;
@@ -258,6 +267,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
         private static void ExecutePreBloomPass(BloomPassData passData, RasterGraphContext ctx)
         {
+            if (passData.material == null) return;
             passData.material.SetFloat("_MipLevel", passData.bloomMipLevel);
             passData.material.SetFloat("_BloomIntensity", passData.bloomIntensity);
             passData.material.SetFloat("_BloomSpread", passData.bloomSpread);
@@ -296,7 +306,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         {
             UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
             UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
-
+            if (cameraData.cameraType != CameraType.Game) return;
             if (resourceData.cameraColor.IsValid())
             {
                 TextureDesc camColorTexDesc = resourceData.cameraColor.GetDescriptor(renderGraph);

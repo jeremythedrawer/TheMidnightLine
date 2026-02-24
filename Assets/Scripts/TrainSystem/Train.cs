@@ -1,6 +1,4 @@
 using Cysharp.Threading.Tasks;
-using Proselyte.Sigils;
-using System;
 using System.Threading;
 using UnityEngine;
 
@@ -19,17 +17,14 @@ public class Train : MonoBehaviour
     CancellationTokenSource trainCTS;
     private void Awake()
     {
-        stats.trainLength = (frontCollider.bounds.max.x - backCollider.bounds.min.x);
-        stats.trainHalfLength = stats.trainLength * 0.5f;
         stats.startXPos = transform.position.x;
         stats.trainMaxHeight = frontCollider.bounds.max.y;
         stats.curStation = stationsData.stations[0];
-        stats.curStation.isSpawned = true;
         stats.targetPassengerCount = stats.curStation.bystanderSpawnAmount + stationsData.stations[0].agentSpawnAmount + 1; // +1 for spy himself
         stats.curKMPerHour = stats.curStation.targetTrainSpeed;
         stats.targetKMPerHour = stats.curStation.targetTrainSpeed;
         stats.nextStationIndex = 0;
-        stats.wheelCircumference = (settings.wheelSprite.rect.size.x / settings.wheelSprite.pixelsPerUnit) * Mathf.PI;
+        //stats.wheelCircumference = (settings.wheelSprite.rect.size.x / settings.wheelSprite.pixelsPerUnit) * Mathf.PI;
         stats.metersTravelled = 0;
         stats.curPassengerCount = 0;
         stats.closingDoors = false;
@@ -53,14 +48,9 @@ public class Train : MonoBehaviour
     {
         stats.curVelocity = stats.GetMetersPerSecond(stats.curKMPerHour) * Time.deltaTime;
         stats.metersTravelled += stats.curVelocity;
-        Shader.SetGlobalFloat(materialIDs.ids.trainMetersTravelled, stats.metersTravelled);
-        stats.distToNextStation = (stats.curStation.metersPosition + stats.trainHalfLength) - stats.metersTravelled;
-        stats.distToSpawnTrain = (stats.curStation.metersPosition - stats.trainHalfLength) - stats.metersTravelled;
-        if (stats.distToSpawnTrain <= 0 && !stats.curStation.isSpawned)
-        {
-            gameEventData.OnSpawnStation.Raise();
-            stats.curStation.isSpawned = true;
-        }
+
+        stats.distToNextStation = stats.curStation.metersPosition - stats.metersTravelled;
+
         if (stats.distToNextStation <= stats.brakeDist)
         {
             stats.targetKMPerHour = 0;
@@ -98,10 +88,10 @@ public class Train : MonoBehaviour
     }
     private async UniTask MoveTrainToStartPosition()
     {
-        stats.distToNextStation = (stationsData.stations[stats.nextStationIndex].metersPosition + stats.trainHalfLength) - stats.metersTravelled;
+        stats.distToNextStation = (stationsData.stations[stats.nextStationIndex].metersPosition) - stats.metersTravelled;
         while (stats.distToNextStation > 0.05f)
         {
-            transform.position = new Vector3(stats.metersTravelled - stats.trainLength, transform.position.y, transform.position.z);
+            transform.position = new Vector3(stats.metersTravelled, transform.position.y, transform.position.z);
             await UniTask.Yield(cancellationToken: trainCTS.Token);
         }
         gameEventData.OnTrainArrivedAtStartPosition.Raise();

@@ -6,7 +6,7 @@ using static Atlas;
 
 public class GangwayDoor : MonoBehaviour
 {
-    [SerializeField] BoxCollider2D boxCollider;
+    [SerializeField] BoxCollider2D wallCollider;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] AtlasRenderer atlasRenderer;
 
@@ -21,19 +21,19 @@ public class GangwayDoor : MonoBehaviour
         doorClip = atlasRenderer.atlas.clipDict[(int)TrainMotion.TrainDoor];
     }
 
-    private void OnCollisionEnter2D(Collision2D collision)
+    private void OnTriggerEnter2D(Collider2D collision)
     {
-        if ((layerSettings.spy & (1 << collision.gameObject.layer)) == 0) return;
+        if ((layerSettings.spy & (1 << collision.gameObject.layer)) == 0 || isOpen) return;
 
-        if (isOpen)
-        {
-
-        }
-        else
-        {
-        }
+        OpeningDoor().Forget();
     }
 
+    private void OnTriggerExit2D(Collider2D collision)
+    {
+        if ((layerSettings.spy & (1 << collision.gameObject.layer)) == 0 || !isOpen) return;
+
+        ClosingDoor().Forget();
+    }
     private async UniTask OpeningDoor()
     {
         float elapsedTime = 0;
@@ -42,11 +42,31 @@ public class GangwayDoor : MonoBehaviour
         {
             elapsedTime += Time.deltaTime;
 
-            float t = (elapsedTime / DOOR_MOVE_TIME) * doorClip.time;
+            float t = Mathf.Pow((elapsedTime / DOOR_MOVE_TIME), 2);
 
-            //atlasRenderer.sprite = doorClip.GetNextSprite(ref t, )
+            atlasRenderer.sprite = doorClip.GetNextSpriteManual(t);
 
             await UniTask.Yield();
         }
+        atlasRenderer.sprite = doorClip.GetNextSpriteManual(1);
+        isOpen = true;
+    }
+
+    private async UniTask ClosingDoor()
+    {
+        float elapsedTime = DOOR_MOVE_TIME;
+
+        while (elapsedTime > 0)
+        {
+            elapsedTime -= Time.deltaTime;
+
+            float t = Mathf.Pow((elapsedTime / DOOR_MOVE_TIME), 2);
+
+            atlasRenderer.sprite = doorClip.GetNextSpriteManual(t);
+
+            await UniTask.Yield();
+        }
+        atlasRenderer.sprite = doorClip.GetNextSpriteManual(0);
+        isOpen = false;
     }
 }

@@ -1,12 +1,11 @@
-using System.Collections.Generic;
+
 using UnityEngine;
 using static AtlasSpawn;
 
 [CreateAssetMenu(fileName = "SpawnerStats", menuName = "Atlas / Spawner Stats")]
 public class AtlasSpawnerStatsSO : ScriptableObject
 {
-    public AtlasSpawnerSettingsSO settings;
-    public MaterialIDSO materialIDs;
+    [Header("Generated")]
     public int curBackgroundDataIndex;
     
     public Vector3 spawnMaxPos;
@@ -15,7 +14,7 @@ public class AtlasSpawnerStatsSO : ScriptableObject
     public Vector3 spawnBoundsSize;
 
     public int computeGroups;
+    public float trainToMaxBoundDist;
 
-    //public Dictionary<Spawner, SpawnerData> spawnerDataDict;
     public SpawnerData[] spawnerDataArray;
 }

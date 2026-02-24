@@ -1,8 +1,5 @@
 using Cysharp.Threading.Tasks;
-using Proselyte.Sigils;
-using System;
 using UnityEngine;
-using static Atlas;
 
 public class SlideDoors : MonoBehaviour
 {
@@ -57,8 +54,8 @@ public class SlideDoors : MonoBehaviour
     private async UniTaskVoid MovingDoors(float moveAmount, float moveTime, State newState)
     {
         float elapsedTime = 0;
-        Vector3 rightSlideDoorPos = rightSlideDoor_transform.position;
-        Vector3 leftSlideDoorPos = leftSlideDoor_transform.position;
+        Vector3 rightSlideDoorPos = rightSlideDoor_transform.localPosition;
+        Vector3 leftSlideDoorPos = leftSlideDoor_transform.localPosition;
         
         float moveSign = newState == State.Opened ? 1 : -1;
 

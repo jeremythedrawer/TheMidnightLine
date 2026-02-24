@@ -13,9 +13,8 @@ public class Station : MonoBehaviour
     public CameraStatsSO camStats;
     public SpyStatsSO spyStats;
     public GameEventDataSO gameEventData;
-
     public BoxCollider2D platformCollider;
-
+    public AtlasRenderer platformRenderer;
     private void OnEnable()
     {
         if (station == stationsData.stations[0])

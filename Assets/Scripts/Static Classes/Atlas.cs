@@ -194,6 +194,12 @@ public static class Atlas
 
             return keyFrames[curFrameIndex].motionSprite.sprite;
         }
+        public SimpleSprite GetNextSpriteManual(float currentTime)
+        {
+            int curFrameIndex = Mathf.FloorToInt(keyFrames.Length * currentTime);
+
+            return keyFrames[curFrameIndex].motionSprite.sprite;
+        }
     }
 
 
@@ -205,24 +211,6 @@ public static class Atlas
         { EntityMotionType.Train, typeof(TrainMotion) },
     };
 
-
-
-
-    public static void NextFrameIndexManual(AtlasClip clip, float holdTime, ref float currentValue, ref int curFrameIndex)
-    {
-        if (currentValue > holdTime)
-        {
-            if (curFrameIndex < clip.keyFrames.Length - 1)
-            {
-                curFrameIndex++;
-            }
-            currentValue = 0;
-        }
-    }
-    public static float GetManualKeyframeHoldTime(AtlasClip clip, float targetValue, float startValue)
-    {
-        return (targetValue - startValue) / (clip.keyFrames.Length - 1);
-    }
     public static Dictionary<int, AtlasClip> BuildClipKeys(AtlasClip[] clips)
     {
         Dictionary<int, AtlasClip> clipDict = new Dictionary<int, AtlasClip>();

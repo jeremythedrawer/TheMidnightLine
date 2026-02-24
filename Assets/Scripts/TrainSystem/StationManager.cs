@@ -9,27 +9,26 @@ public class StationManager : MonoBehaviour
     public AtlasSpawnerStatsSO spawnerStats;
     public GameEventDataSO gameEventData;
 
-    private void Awake()
+    StationSO curStation;
+    float spawnThreshold;
+    private void Start()
     {
-        for (int i = 1; i < stationsData.stations.Length; i++)
-        {
-            stationsData.stations[i].isSpawned = false;
-        }
+        curStation = stationsData.stations[0];
+        spawnThreshold = curStation.metersPosition - spawnerStats.trainToMaxBoundDist;
+        spawnerStats.trainToMaxBoundDist = spawnerStats.spawnMaxPos.x - curStation.metersPosition; // Note: Using the first stations position as the train will arrive there anyways
     }
-    private void OnEnable()
+    private void Update()
     {
-        gameEventData.OnSpawnStation.RegisterListener(SpawnStation);
+        //if (spawnThreshold > trainStats.metersTravelled)
+        //{
+        //    SpawnStation();
+        //}
     }
-
-    private void OnDisable()
-    {
-        gameEventData.OnSpawnStation.UnregisterListener(SpawnStation);
-    }
-
     private void SpawnStation()
     {
-        Station nextStationPrefab = stationsData.stations[trainStats.nextStationIndex].stationPrefab;
-        Station nextStation = Instantiate(nextStationPrefab, transform);
+        curStation = stationsData.stations[trainStats.nextStationIndex];
+        spawnThreshold = curStation.metersPosition - spawnerStats.trainToMaxBoundDist;
+        Station nextStation = Instantiate(curStation.stationPrefab, transform);
         float stationXPos = spawnerStats.spawnMaxPos.x + (nextStation.transform.position.x - nextStation.platformCollider.bounds.min.x);
         nextStation.transform.position = new Vector3(stationXPos, 0, 0);
     }

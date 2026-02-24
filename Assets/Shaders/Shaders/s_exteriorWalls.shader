@@ -1,9 +1,12 @@
-Shader "Custom/s_atlasStandard"
+Shader "Custom/s_exteriorWalls"
 {
     Properties
     {
         [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
         [NoScaleOffset] _EmissionTexture("Emission Atlas", 2D) = "black"
+        _UVSizeAndPos ("UV Size And Pos", Vector) = (0,0,0,0)
+        _WidthHeightFlip ("Width Height And Flip", Vector) = (0,0,0,0)
+        _Alpha("Alpha", float) = 0.0
     }
 
     SubShader
@@ -16,7 +19,6 @@ Shader "Custom/s_atlasStandard"
         {
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
             #pragma vertex vert
             #pragma fragment frag
 
@@ -42,16 +44,15 @@ Shader "Custom/s_atlasStandard"
             SAMPLER(sampler_EmissionTexture);
             float4 _AtlasTexture_ST;
 
-            UNITY_INSTANCING_BUFFER_START(AtlasProps)
-                UNITY_DEFINE_INSTANCED_PROP(float4, _UVSizeAndPos)
-                UNITY_DEFINE_INSTANCED_PROP(float4, _WidthHeightFlip)
-            UNITY_INSTANCING_BUFFER_END(AtlasProps)
+            CBUFFER_START(UnityPerMaterial)
+                float4 _UVSizeAndPos;
+                float4 _WidthHeightFlip;
+                float  _Alpha;
+            CBUFFER_END
 
             Varyings vert(Attributes v)
             {
-                UNITY_SETUP_INSTANCE_ID(v);
                 Varyings o;
-                UNITY_TRANSFER_INSTANCE_ID(v, o);
 
                 o.positionHCS = TransformObjectToHClip(v.positionOS.xyz);
                 o.uv = v.uv;
@@ -60,16 +61,11 @@ Shader "Custom/s_atlasStandard"
 
             half4 frag(Varyings i) : SV_Target
             {
-                UNITY_SETUP_INSTANCE_ID(i);
-
-                float4 uvSizeAndPos = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _UVSizeAndPos);
-                float4 widthHeightFlip  = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _WidthHeightFlip);
-
-                i.uv *= widthHeightFlip.xy;
+                i.uv *= _WidthHeightFlip.xy;
                 i.uv = frac(i.uv);
-                i.uv = (i.uv - 0.5) * widthHeightFlip.zw + 0.5;
-                i.uv *= uvSizeAndPos.xy;
-                i.uv += uvSizeAndPos.zw;
+                i.uv = (i.uv - 0.5) * _WidthHeightFlip.zw + 0.5;
+                i.uv *= _UVSizeAndPos.xy;
+                i.uv += _UVSizeAndPos.zw;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
                 half emission = SAMPLE_TEXTURE2D(_EmissionTexture, sampler_EmissionTexture, i.uv).r;
@@ -77,9 +73,8 @@ Shader "Custom/s_atlasStandard"
 
                 half3 finalColor = color.rgb * emission;
                 finalColor = max(color.rgb, finalColor);
-
                 clip(color.a - 0.001);
-                return half4 (finalColor, 1);
+                return half4 (finalColor, _Alpha * color.a);
             }
             ENDHLSL
         }

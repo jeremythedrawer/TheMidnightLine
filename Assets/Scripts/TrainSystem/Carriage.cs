@@ -1,5 +1,4 @@
 using Cysharp.Threading.Tasks;
-using Proselyte.Sigils;
 using System;
 using System.Collections.Generic;
 using System.Threading;
@@ -7,53 +6,51 @@ using UnityEngine;
 
 public class Carriage : MonoBehaviour
 {
-    [SerializeField] TrainStatsSO trainStats;
-    [SerializeField] TrainSettingsSO trainSettings;
-    [SerializeField] GameEventDataSO gameEventData;
-    [SerializeField] LayerSettingsSO layerSettings;
-    [SerializeField] MaterialIDSO materialIDs;
-    [SerializeField] Transform[] wheelTransforms;
-    [SerializeField] SpriteRenderer[] exteriorSprites;
-    public BoxCollider2D carriageCollider;
-    public BoxCollider2D insideBoundsCollider;
-    public SlideDoors[] exteriorSlideDoors;
-    public SlideDoors[] interiorSlideDoors;
-
-
-    [Serializable] public struct MaterialProps
-    {
-        public float alpha;
-    }
-    [SerializeField] MaterialProps materialProps;
-
     [Serializable] public struct ChairData
     {
-        internal float xPos;
-        internal bool filled;
+        public float xPos;
+        public bool filled;
     }
-    internal ChairData[] chairData;
-    internal float chairZPos;
-
     [Serializable] public struct SmokersRoomData
     {
         internal float minXPos;
         internal float maxXPos;
         internal int npcCount;
     }
-    MaterialPropertyBlock mpb;
-    CancellationTokenSource ctsFade;
 
-    internal SmokersRoomData[] smokersRoomData;
+    [SerializeField] TrainStatsSO trainStats;
+    [SerializeField] TrainSettingsSO trainSettings;
+    [SerializeField] GameEventDataSO gameEventData;
+    [SerializeField] LayerSettingsSO layerSettings;
+    [SerializeField] MaterialIDSO materialIDs;
+    [SerializeField] Transform[] wheelTransforms;
+    [SerializeField] AtlasRenderer[] exteriorRenderers;
+    public BoxCollider2D carriageCollider;
+    public BoxCollider2D insideBoundsCollider;
+
+    public BoxCollider2D rightSmokingRoomCollider;
+    public BoxCollider2D leftSmokingRoomCollider;
+
+    public SlideDoors[] exteriorSlideDoors;
+    public SlideDoors[] interiorSlideDoors;
+
+    public float alpha;
+
+
+    [Header("Generated")]
+    public ChairData[] chairData;
+    public SmokersRoomData[] smokersRoomData;
+    public float chairZPos;
+
+    private CancellationTokenSource ctsFade;
     private void Awake()
     {
-        mpb = new MaterialPropertyBlock();
         ctsFade = new CancellationTokenSource();
-        materialProps.alpha = 1;
     }
 
     private void OnEnable()
     {
-        gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(GetData);
+        //gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(GetChairData);
         gameEventData.OnStationArrival.RegisterListener(UnlockDoors);
         gameEventData.OnStationLeave.RegisterListener(CloseDoors);
 
@@ -61,7 +58,7 @@ public class Carriage : MonoBehaviour
 
     private void OnDisable()
     {
-        gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(GetData);
+        //gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(GetChairData);
         gameEventData.OnStationArrival.UnregisterListener(UnlockDoors);
         gameEventData.OnCloseSlideDoors.UnregisterListener(CloseDoors);
     }
@@ -72,56 +69,36 @@ public class Carriage : MonoBehaviour
 
         float wheelRotation = (trainStats.metersTravelled / trainStats.wheelCircumference) * 360f;
 
-        wheelRotation %= 360f;
-
         foreach (Transform wheel in wheelTransforms)
         {
             wheel.localRotation = Quaternion.Euler(0f, 0f, -wheelRotation);
         }
     }
-    [ContextMenu("Get Chair Data")]
-    private void GetData()
-    {
-        GetChairData(carriageCollider.bounds);
-        GetSmokersRoomData(carriageCollider.bounds);
-    }
-    private void GetChairData(Bounds checkBounds)
-    {
-        Collider2D[] chairsHits = Physics2D.OverlapBoxAll(checkBounds.center, checkBounds.size, 0f, layerSettings.trainLayerStruct.carriageChairs);
-        float tileWidth = trainSettings.chairSprite.bounds.size.x * 0.333333f;
 
-        List<ChairData> chairDataList = new List<ChairData>();
-        for (int i = 0; i < chairsHits.Length; i++)
-        {
-            SpriteRenderer chairRenderer = chairsHits[i].GetComponent<SpriteRenderer>();
-            float totalWidth = chairRenderer.size.x;
+    //private void GetChairData()
+    //{
+    //    Collider2D[] chairsHits = Physics2D.OverlapBoxAll(insideBoundsCollider.bounds.center, insideBoundsCollider.bounds.size, 0f, layerSettings.trainLayerStruct.carriageChairs);
+    //   //float tileWidth = trainSettings.chairSprite.bounds.size.x * 0.333333f;
 
-            int chairAmount = Mathf.RoundToInt(totalWidth / tileWidth);
-            float firstChairPos = chairsHits[i].transform.position.x + (tileWidth * 0.5f);
-            for (int j = 0; j < chairAmount; j++)
-            {
-                chairDataList.Add(new ChairData { xPos = firstChairPos + (tileWidth * j), filled = false });
-            }
-        }
-        chairData = chairDataList.ToArray();
-        chairZPos = chairsHits[0].transform.position.z - 1;
-    }
-    private void GetSmokersRoomData(Bounds checkBounds)
-    {
-        Collider2D[] smokersRoomHits = Physics2D.OverlapBoxAll(checkBounds.center, checkBounds.size, 0, layerSettings.trainLayerStruct.smokingRoom);
+    //    List<ChairData> chairDataList = new List<ChairData>();
+    //    for (int i = 0; i < chairsHits.Length; i++)
+    //    {
+    //        SpriteRenderer chairRenderer = chairsHits[i].GetComponent<SpriteRenderer>();
+    //        float totalWidth = chairRenderer.size.x;
 
-        List<SmokersRoomData> smokersRoomDataList = new List<SmokersRoomData>();
-
-        for (int i = 0; i < smokersRoomHits.Length; i++)
-        {
-            Collider2D col = smokersRoomHits[i];
-            smokersRoomDataList.Add(new SmokersRoomData { minXPos = col.bounds.min.x, maxXPos = col.bounds.max.x });
-        }
-        smokersRoomData = smokersRoomDataList.ToArray();
-    }
+    //        //int chairAmount = Mathf.RoundToInt(totalWidth / tileWidth);
+    //        //float firstChairPos = chairsHits[i].transform.position.x + (tileWidth * 0.5f);
+    //        //for (int j = 0; j < chairAmount; j++)
+    //        //{
+    //           // chairDataList.Add(new ChairData { xPos = firstChairPos + (tileWidth * j), filled = false });
+    //        //}
+    //    }
+    //    chairData = chairDataList.ToArray();
+    //    chairZPos = chairsHits[0].transform.position.z - 1;
+    //}
     private void UnlockDoors()
     {
-        if (trainStats.curStation.isFrontOfTrain)
+        if (trainStats.curStation.stationPrefab.platformRenderer.depthOrder < exteriorRenderers[0].depthOrder)
         {
             for (int i = 0; i < exteriorSlideDoors.Length; i++)
             {
@@ -161,7 +138,7 @@ public class Carriage : MonoBehaviour
     }
     private async UniTask Fade(bool fadeIn)
     {
-        float elaspedTime = materialProps.alpha * trainSettings.exteriorWallFadeTime;
+        float elaspedTime = alpha * trainSettings.exteriorWallFadeTime;
         try
         {
             while (fadeIn ? elaspedTime < trainSettings.exteriorWallFadeTime : elaspedTime > 0f)
@@ -169,11 +146,10 @@ public class Carriage : MonoBehaviour
 
                 elaspedTime += (fadeIn ? Time.deltaTime : -Time.deltaTime);
 
-                materialProps.alpha = elaspedTime / trainSettings.exteriorWallFadeTime;
-                mpb.SetFloat(materialIDs.ids.alpha, materialProps.alpha);
-                for (int i = 0; i < exteriorSprites.Length; i++)
+                alpha = elaspedTime / trainSettings.exteriorWallFadeTime;
+                for (int i = 0; i < exteriorRenderers.Length; i++)
                 {
-                    exteriorSprites[i].SetPropertyBlock(mpb);
+                    exteriorRenderers[i].mpb.SetFloat(materialIDs.ids.alpha, alpha);
                 }
 
                 await UniTask.Yield(PlayerLoopTiming.Update, ctsFade.Token);

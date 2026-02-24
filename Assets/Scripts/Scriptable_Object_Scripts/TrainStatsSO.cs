@@ -12,18 +12,18 @@ public class TrainStatsSO : ScriptableObject
     public float metersTravelled;
     public float curVelocity;
     public float distToNextStation;
-    public float distToSpawnTrain;
     public float brakeDist;
     public float startXPos;
-    public float trainLength;
     public float trainMaxHeight;
-    public float trainHalfLength;
 
     public bool closingDoors;
     public float wheelCircumference;
 
     public int curPassengerCount;
     public int targetPassengerCount;
+
+    public int minDepth;
+    public int maxDepth;
 
     public StationSO curStation;
     public float GetMetersPerSecond(float kmph)

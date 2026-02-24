@@ -51,6 +51,8 @@ public class CameraController : MonoBehaviour
         stats.curWorldPos = Vector2.Lerp(stats.curWorldPos, stats.targetWorldPos, Time.deltaTime * settings.damping);
         cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, stats.targetSize, Time.deltaTime * settings.damping);
         transform.position = stats.curWorldPos;
+
+        //TODO: Set MetersTravelled to Shaders Globally here
     }
     private void SelectStates()
     {

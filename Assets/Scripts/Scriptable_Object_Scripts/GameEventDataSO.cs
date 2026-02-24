@@ -19,5 +19,4 @@ public class GameEventDataSO : ScriptableObject
     public GameEvent OnFlipDownPage;
     public GameEvent OnFlipUpPage;
     public GameEvent OnBackgroundChange;
-    public GameEvent OnSpawnStation;
 }
