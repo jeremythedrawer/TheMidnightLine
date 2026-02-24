@@ -172,6 +172,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
         public BloomPass(TOTTRendererFeature srf)
         {
+            renderPassEvent = RenderPassEvent.AfterRenderingTransparents;
             rendererFeature = srf;
         }
 
@@ -280,6 +281,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
         public MatrixPass(TOTTRendererFeature srf)
         {
+            renderPassEvent = RenderPassEvent.AfterRenderingTransparents + 1;
             rendererFeature = srf;
         }
 

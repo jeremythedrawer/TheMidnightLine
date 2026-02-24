@@ -17,7 +17,11 @@ MonoBehaviour:
   spawnerSettings: {fileID: 11400000, guid: f37b2d6c4b24fc54488d7d37482b2d18, type: 2}
   spawnerStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
   matrixMaterial: {fileID: 2100000, guid: 12c2dbd000184ef46b9f4c55426baf8d, type: 2}
-  lightness: 0.41
+  bloomMaterial: {fileID: 2100000, guid: 915e04b295eb1e54d9730812f5c94e51, type: 2}
+  bloomMipLevel: 3
+  bloomIntensity: 0
+  bloomSpread: 8.5
+  lightness: 0.79
   greenToRed: 0.79
   blueToYellow: 1.61
 --- !u!114 &-3863731181393701793
@@ -37,6 +41,10 @@ MonoBehaviour:
   spawnerSettings: {fileID: 11400000, guid: f37b2d6c4b24fc54488d7d37482b2d18, type: 2}
   spawnerStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
   matrixMaterial: {fileID: 0}
+  bloomMaterial: {fileID: 0}
+  bloomMipLevel: 0
+  bloomIntensity: 0
+  bloomSpread: 0
   lightness: 0
   greenToRed: 0
   blueToYellow: 0

@@ -3,7 +3,7 @@ using UnityEngine;
 public class AtlasSpawnerSettingsSO : ScriptableObject
 {
     public TripSO currentTrip;
-    public float boundBufferAmount = 16f;
+    public Vector3 spawnerSize = new Vector2(32,32);
     public float spawnHeight = 0;
     public ComputeShader atlasCompute;
     public Material backgroundMaterial;

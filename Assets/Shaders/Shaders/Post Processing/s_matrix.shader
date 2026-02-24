@@ -22,11 +22,11 @@ Shader "Custom/s_matrix"
 			float depth = SAMPLE_TEXTURE2D_X(_CameraDepthTexture, sampler_CameraDepthTexture, input.texcoord).r;
 			float3 worldPos = ComputeWorldSpacePosition(input.texcoord, depth, UNITY_MATRIX_I_VP);
 			
-			float linearDepth = pow(worldPos.z/32, 1); // 32 is the far plane
-			float3 colLinearDepth = linearDepth * half3(0.1,0.2,0.3) * 0.2;
+			float linearDepth = pow(saturate((worldPos.z - 1) /(32 - 4)), 2); // 1 is the depth of the player
 
 
-			return half4(blit.rgb + colLinearDepth, 1); // TODO: Make some cool matrix shader
+
+			return half4(blit.rgb + linearDepth, 1); // TODO: Make some cool matrix shader
 		}
 	ENDHLSL
 

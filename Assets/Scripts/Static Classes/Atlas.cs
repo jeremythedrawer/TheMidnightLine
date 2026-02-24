@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 public static class Atlas
 {
+    public const int PIXELS_PER_UNIT = 180;
+    public const int FRAMES_PER_SEC = 30;
     public enum NPCMotion
     {
         None,
@@ -203,8 +205,7 @@ public static class Atlas
         { EntityMotionType.Train, typeof(TrainMotion) },
     };
 
-    public const int PIXELS_PER_UNIT = 180;
-    public const int FRAMES_PER_SEC = 30;
+
 
 
     public static void NextFrameIndexManual(AtlasClip clip, float holdTime, ref float currentValue, ref int curFrameIndex)

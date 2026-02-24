@@ -40,12 +40,12 @@ public class AtlasSpawner : MonoBehaviour
         float camMeterWidth = camSettings.maxProjectionSize * camStats.aspect;
         float firstStationPos = stationsData.stations[0].metersPosition;
 
-        spawnerStats.spawnMaxPos.x = firstStationPos + trainStats.trainHalfLength + camMeterWidth + spawnerSettings.boundBufferAmount;
-        spawnerStats.spawnMaxPos.y = trainStats.trainMaxHeight + camSettings.maxProjectionSize + spawnerSettings.boundBufferAmount;
+        spawnerStats.spawnMaxPos.x = firstStationPos + spawnerSettings.spawnerSize.x;
+        spawnerStats.spawnMaxPos.y = trainStats.trainMaxHeight + camSettings.maxProjectionSize + spawnerSettings.spawnerSize.y;
         spawnerStats.spawnMaxPos.z = 32; //NOTE: Furthest postion. If changed this needs to be changed on the compute shader as well
 
-        spawnerStats.spawnMinPos.x = firstStationPos - trainStats.trainHalfLength - camMeterWidth - spawnerSettings.boundBufferAmount;
-        spawnerStats.spawnMinPos.y = -camSettings.maxProjectionSize - spawnerSettings.boundBufferAmount;
+        spawnerStats.spawnMinPos.x = firstStationPos  - spawnerSettings.spawnerSize.x;
+        spawnerStats.spawnMinPos.y = -camSettings.maxProjectionSize - spawnerSettings.spawnerSize.y;
         spawnerStats.spawnMinPos.z = Camera.main.transform.position.z;
 
         spawnerStats.spawnCenter = (spawnerStats.spawnMinPos + spawnerStats.spawnMaxPos) * 0.5f;
