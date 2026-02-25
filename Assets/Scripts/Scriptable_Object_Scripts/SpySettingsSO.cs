@@ -23,7 +23,9 @@ public class SpySettingsSO : ScriptableObject
     [Range(0f, 0.5f)] public float groundBufferVertical = 0.02f;
     [Range(0f, 1f)] public float groundBufferHorizontal = 0.5f;
     [Range(0f, 0.5f)] public float stepBuffer = 0.25f;
-
+    public float wallBuffer = 0.5f;
+    public float headBuffer = 1f;
+    public float wasteBuffer = 0.5f;
     [Header("Train")]
     [Range(0f, 1f)] public int depthPositionInTrain = 1;
 }

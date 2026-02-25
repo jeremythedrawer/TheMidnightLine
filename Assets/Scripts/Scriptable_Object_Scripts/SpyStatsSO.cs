@@ -21,11 +21,12 @@ public class SpyStatsSO : ScriptableObject
     public float curCarriageMaxXPos;
     public LayerMask curLocationLayer;
     public LayerMask curGroundLayer;
+    public LayerMask curWallLayer;
     public bool spriteFlip;
     public bool coyoteJump;
     public bool willJump;
     public bool isGrounded;
-    public bool isStepping;
+    public bool walkingIntoWall;
     public bool canHang;
     public bool isClimbing;
     public bool isLeftClimbBound;
@@ -52,7 +53,6 @@ public class SpyStatsSO : ScriptableObject
         coyoteTimeElapsed = 0.0f;
 
         isGrounded = false;
-        isStepping = false;
         canHang = false;
         isClimbing = false;
         firstFixedFrameClimb = true;

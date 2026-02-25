@@ -41,7 +41,7 @@ public static class AtlasBatch
     public static void RegisterRenderer(AtlasRenderer atlasRenderer)
     {
         if (atlasRenderer.atlas == null || atlasRenderer.material == null) return;
-
+        UnregisterRenderer(atlasRenderer);
         Material mat = atlasRenderer.material;
         
         if (!mat.enableInstancing) mat.enableInstancing = true;
@@ -58,6 +58,8 @@ public static class AtlasBatch
             batch = new BatchData();
             batchDict.Add(key, batch);
         }
+
+
         batch.renderers.Add(atlasRenderer);
         atlasRenderer.batchKey = key;
 

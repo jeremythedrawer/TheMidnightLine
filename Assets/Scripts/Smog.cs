@@ -39,7 +39,7 @@ public class Smog : MonoBehaviour
     }
     private void Fade()
     {
-        bool shouldFadeOut = spyStats.curGroundLayer == layerSettings.trainLayerStruct.ground && spyStats.curCarriageMinXPos != 0;
+        bool shouldFadeOut = spyStats.curGroundLayer == layerSettings.trainLayers.ground && spyStats.curCarriageMinXPos != 0;
         float targetDensity = shouldFadeOut ? 0f : shaderValues.maxDensity;
 
         if (shaderValues.targetDensity == targetDensity) return;

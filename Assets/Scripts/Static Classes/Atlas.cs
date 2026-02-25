@@ -5,6 +5,7 @@ public static class Atlas
 {
     public const int PIXELS_PER_UNIT = 180;
     public const int FRAMES_PER_SEC = 30;
+    public const int CHARACTER_ON_TRAIN_DEPTH = 8;
     public enum NPCMotion
     {
         None,
@@ -196,7 +197,7 @@ public static class Atlas
         }
         public SimpleSprite GetNextSpriteManual(float currentTime)
         {
-            int curFrameIndex = Mathf.FloorToInt(keyFrames.Length * currentTime);
+            int curFrameIndex = Mathf.FloorToInt((keyFrames.Length - 1) * currentTime);
 
             return keyFrames[curFrameIndex].motionSprite.sprite;
         }

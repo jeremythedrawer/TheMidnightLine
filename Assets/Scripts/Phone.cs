@@ -69,7 +69,7 @@ public class Phone : MonoBehaviour
 
     private void RingPhone()
     {
-        if (spyStats.curGroundLayer == layerSettings.trainLayerStruct.ground && curDistFromSpy < phone.ringDistance && !ringRenderer.gameObject.activeInHierarchy)
+        if (spyStats.curGroundLayer == layerSettings.trainLayers.ground && curDistFromSpy < phone.ringDistance && !ringRenderer.gameObject.activeInHierarchy)
         {
             ringRenderer.gameObject.SetActive(true);
         }

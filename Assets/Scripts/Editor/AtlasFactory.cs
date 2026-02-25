@@ -564,7 +564,7 @@ public class AtlasFactory : EditorWindow
                 
                 if (particleSpritesFound < particleSpritesList.Count)
                 {
-                    particleSpritesList[particleSpritesFound] = atlas.particleSprites[index];
+                    particleSpritesList[particleSpritesFound] = atlas.particleSprites[particleSpritesFound];
                 }
                 else
                 {
@@ -577,7 +577,7 @@ public class AtlasFactory : EditorWindow
             {
                 if (simpleSpritesFound < simpleSpritesList.Count)
                 {
-                    newSimpleSprite.uvPivot = simpleSpritesList[index].uvPivot;
+                    newSimpleSprite.uvPivot = simpleSpritesList[simpleSpritesFound].uvPivot;
                     simpleSpritesList[simpleSpritesFound] = newSimpleSprite;
                 }
                 else
@@ -913,6 +913,8 @@ public class AtlasFactory : EditorWindow
                     if (GUI.Button(buttonPos, GUIContent.none))
                     {
                         atlas.simpleSprites[selectedIndex].uvPivot = curPivot;
+                        EditorUtility.SetDirty(atlas);
+                        AssetDatabase.SaveAssets();
                     }
                 }
             }

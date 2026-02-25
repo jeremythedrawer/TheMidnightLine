@@ -48,8 +48,11 @@ public class SpyBrain : MonoBehaviour
     {
         public Vector2 groundLeft;
         public Vector2 groundRight;
-        public Vector2 stepLeft;
-        public Vector2 stepRight;
+
+        public Vector2 wallTopLeft;
+        public Vector2 wallTopRight;
+        public Vector2 wallBottomLeft;
+        public Vector2 wallBottomRight;
     }
     [SerializeField] CollisionPoints collisionPoints;
 
@@ -62,14 +65,13 @@ public class SpyBrain : MonoBehaviour
         gameEventData.OnStationArrival.RegisterListener(() => stats.canBoardTrain = true);
         gameEventData.OnInteract.RegisterListener(OpenSlideDoor);
         gameEventData.OnInteract.RegisterListener(EnterTrain);
-        gameEventData.OnInteract.RegisterListener(OpenGangwayDoor);
     }
     private void OnDisable()
     {
         gameEventData.OnStationArrival.UnregisterListener(() => stats.canBoardTrain = true);
         gameEventData.OnInteract.UnregisterListener(OpenSlideDoor);
         gameEventData.OnInteract.UnregisterListener(EnterTrain);
-        gameEventData.OnInteract.UnregisterListener(OpenGangwayDoor);
+
     }
     private void Start()
     {
@@ -79,7 +81,8 @@ public class SpyBrain : MonoBehaviour
         rigidBody.gravityScale = settings.gravityScale;
         stats.gravityScale = rigidBody.gravityScale;
         stats.startPos = rigidBody.position;
-        stats.curGroundLayer = layerSettings.stationLayersStruct.ground;
+        stats.curGroundLayer = layerSettings.stationLayers.ground;
+        stats.curWallLayer = layerSettings.stationWallLayers;
         rigidBody.includeLayers = layerSettings.stationMask;
         stats.curRunSpeed = 1.0f;
         stats.curJumpHorizontalForce = 0.0f;
@@ -100,20 +103,23 @@ public class SpyBrain : MonoBehaviour
         FixedUpdateStates();
         CalculateCollisionPoints();
         stats.isGrounded = Physics2D.Linecast(collisionPoints.groundLeft, collisionPoints.groundRight, stats.curGroundLayer);
-        stats.isStepping = Physics2D.Linecast(new Vector2(collisionPoints.groundLeft.x, transform.position.y), collisionPoints.stepLeft, stats.curGroundLayer) || 
-                                  Physics2D.Linecast(new Vector2(collisionPoints.groundRight.x, transform.position.y), collisionPoints.stepRight, stats.curGroundLayer);
-        if (stats.isStepping)
-        {
-            rigidBody.position = new Vector2(rigidBody.position.x, rigidBody.position.y + (collisionPoints.stepRight.y - transform.position.y));
-        }
 
-        if (curState != State.Hang && curState != State.Climb && curState != State.Phone)
+        bool leftWallTouch = Physics2D.Linecast(collisionPoints.wallBottomLeft, collisionPoints.wallTopLeft, stats.curWallLayer);
+        bool rightWallTouch = Physics2D.Linecast(collisionPoints.wallBottomRight, collisionPoints.wallTopRight, stats.curWallLayer);
+
+        stats.walkingIntoWall = (leftWallTouch && inputs.move == -1) || (rightWallTouch && inputs.move == 1);
+
+        if (curState != State.Hang && curState != State.Climb && curState != State.Phone && !stats.walkingIntoWall)
         {
             stats.targetXVelocity = (settings.moveSpeed * stats.curRunSpeed * inputs.move) + (stats.curJumpHorizontalForce * inputs.move);
-            rigidBody.linearVelocityX = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.fixedDeltaTime);
+            stats.moveVelocity.x = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.fixedDeltaTime);
+        }
+        else
+        {
+            stats.moveVelocity.x = 0;
         }
 
-        stats.moveVelocity = rigidBody.linearVelocity;
+        rigidBody.linearVelocity = stats.moveVelocity;
 
         if (stats.isGrounded)
         {
@@ -121,31 +127,31 @@ public class SpyBrain : MonoBehaviour
         }
         else
         {
-            curClimbCollider = Physics2D.OverlapBox(boxCollider.bounds.center, boxCollider.bounds.size, angle: 0, layerSettings.trainLayerStruct.climbingBounds);
+            curClimbCollider = Physics2D.OverlapBox(boxCollider.bounds.center, boxCollider.bounds.size, angle: 0, layerSettings.trainLayers.climbingBounds);
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if (!stats.onTrain) return;
 
-        if ((layerSettings.trainLayerStruct.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
+        if ((layerSettings.trainLayers.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            SetLocationData(collision.bounds, layerSettings.trainLayerStruct.insideCarriageBounds);
+            SetLocationData(collision.bounds, layerSettings.trainLayers.insideCarriageBounds);
             curCarriage = trainStats.carriageDict[collision];
             curCarriage.StartFade(fadeIn: false);
             //stats.curCarriageMinXPos = curCarriage.carriageCollider.bounds.min.x;
             //stats.curCarriageMaxXPos = curCarriage.carriageCollider.bounds.max.x;
         }
-        else if ((layerSettings.trainLayerStruct.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
+        else if ((layerSettings.trainLayers.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            SetLocationData(collision.bounds, layerSettings.trainLayerStruct.gangwayBounds);
+            SetLocationData(collision.bounds, layerSettings.trainLayers.gangwayBounds);
         }
-        else if ((layerSettings.trainLayerStruct.roofBounds.value & (1 << collision.gameObject.layer)) != 0)
+        else if ((layerSettings.trainLayers.roofBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            SetLocationData(collision.bounds, layerSettings.trainLayerStruct.roofBounds);
+            SetLocationData(collision.bounds, layerSettings.trainLayers.roofBounds);
         }
 
-        if ((layerSettings.trainLayerStruct.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
+        if ((layerSettings.trainLayers.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
         }
     }
@@ -153,16 +159,16 @@ public class SpyBrain : MonoBehaviour
     {
         if (!stats.onTrain) return;
 
-        if ((layerSettings.trainLayerStruct.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
+        if ((layerSettings.trainLayers.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
             stats.curLocationLayer = 0;
         }
-        else if ((layerSettings.trainLayerStruct.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
+        else if ((layerSettings.trainLayers.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
             stats.curLocationLayer = 0;
         }
 
-        if ((layerSettings.trainLayerStruct.carriage.value & (1 << collision.gameObject.layer)) != 0)
+        if ((layerSettings.trainLayers.carriage.value & (1 << collision.gameObject.layer)) != 0)
         {
             curCarriage.StartFade(fadeIn: true);
             curCarriage = null;
@@ -193,11 +199,11 @@ public class SpyBrain : MonoBehaviour
         {
             SetState(State.Phone);
         }
-        else if (stats.isGrounded && inputs.move != 0 && !inputs.run)
+        else if (stats.isGrounded && inputs.move != 0 && !inputs.run && !stats.walkingIntoWall)
         {
             SetState(State.Walk);
         }
-        else if (stats.isGrounded && inputs.move != 0 && inputs.run) //TODO: not in carriage
+        else if (stats.isGrounded && inputs.move != 0 && inputs.run && !stats.walkingIntoWall) //TODO: not in carriage
         {
             SetState(State.Run);
         }
@@ -429,17 +435,30 @@ public class SpyBrain : MonoBehaviour
     private void CalculateCollisionPoints()
     {
         if (settings == null) return;
-        collisionPoints.groundLeft = new Vector2(transform.position.x - settings.groundBufferHorizontal, transform.position.y - settings.groundBufferVertical);
-        collisionPoints.groundRight = new Vector2(transform.position.x + settings.groundBufferHorizontal, transform.position.y - settings.groundBufferVertical);
 
-        collisionPoints.stepLeft = new Vector2(transform.position.x - settings.groundBufferHorizontal, transform.position.y + settings.stepBuffer);
-        collisionPoints.stepRight = new Vector2(transform.position.x + settings.groundBufferHorizontal, transform.position.y + settings.stepBuffer);
+        float groundLeft = transform.position.x - settings.groundBufferHorizontal;
+        float groundRight = transform.position.x + settings.groundBufferHorizontal;
+        float groundBottom = transform.position.y - settings.groundBufferVertical;
+        float step = transform.position.y + settings.stepBuffer;
+        float waste = transform.position.y + settings.wasteBuffer;
+        float wallLeft = transform.position.x - settings.wallBuffer;
+        float wallRight = transform.position.x + settings.wallBuffer;
+        float head = transform.position.y + settings.headBuffer;
+        collisionPoints.groundLeft = new Vector2(groundLeft, groundBottom);
+        collisionPoints.groundRight = new Vector2(groundRight, groundBottom);
+
+        collisionPoints.wallTopLeft = new Vector2(wallLeft, head);
+        collisionPoints.wallTopRight = new Vector2(wallRight, head);
+
+        collisionPoints.wallBottomLeft = new Vector2(wallLeft, waste);
+        collisionPoints.wallBottomRight = new Vector2(wallRight, waste);
+
     }
     private void OpenSlideDoor()
     {
-        if (rigidBody.includeLayers == layerSettings.stationLayersStruct.ground && stats.canBoardTrain)
+        if (rigidBody.includeLayers == layerSettings.stationLayers.ground && stats.canBoardTrain)
         {
-            RaycastHit2D[] slideDoorHit = Physics2D.BoxCastAll(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayerStruct.slideDoors);
+            RaycastHit2D[] slideDoorHit = Physics2D.BoxCastAll(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.slideDoors);
 
             for (int i = 0; i < slideDoorHit.Length; i++)
             {
@@ -456,45 +475,30 @@ public class SpyBrain : MonoBehaviour
     {
         if (!stats.onTrain && stats.canBoardTrain)
         {
-            RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayerStruct.slideDoors);
+            RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.slideDoors);
 
             if (slideDoorHit.collider != null)
             {
                 slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
                 if (slideDoors.curState == SlideDoors.State.Opened)
                 {
-                    RaycastHit2D insideCarriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, layerSettings.trainLayerStruct.insideCarriageBounds);
+                    RaycastHit2D insideCarriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, layerSettings.trainLayers.insideCarriageBounds);
 
                     if (insideCarriageHit.collider != null)
                     {
-                        SetLocationData(insideCarriageHit.collider.bounds, layerSettings.trainLayerStruct.insideCarriageBounds);
+                        SetLocationData(insideCarriageHit.collider.bounds, layerSettings.trainLayers.insideCarriageBounds);
                     }
-                    stats.curGroundLayer = layerSettings.trainLayerStruct.ground;
+                    stats.curGroundLayer = layerSettings.trainLayers.ground;
+                    stats.curWallLayer = layerSettings.trainWallLayers;
                     rigidBody.includeLayers = layerSettings.trainMask;
 
                     stats.onTrain = true;
-                    float zPos = Mathf.Lerp(trainSettings.maxMinWorldZPos.postion, trainSettings.maxMinWorldZPos.size, settings.depthPositionInTrain);
-                    transform.position = new Vector3(transform.position.x, transform.position.y, zPos);
+                    atlasRenderer.depthOrder = CHARACTER_ON_TRAIN_DEPTH;
                     trainStats.curPassengerCount ++;
                     gameEventData.OnBoardingSpy.Raise();
                 }
             }
         }
-    }
-    private void OpenGangwayDoor()
-    {
-        if (!stats.onTrain || !stats.isGrounded) return;
-        RaycastHit2D gangwayDoorHit = Physics2D.Linecast(boxCollider.bounds.center, new Vector2(boxCollider.bounds.center.x + (stats.spriteFlip ? -1 : 1), boxCollider.bounds.center.y), layerSettings.trainLayerStruct.gangwayDoor);
-
-        if (gangwayDoorHit.collider != null)
-        {
-            gangwayDoor = gangwayDoorHit.collider.GetComponent<GangwayDoor>();
-            //gangwayDoor.OpenDoor();
-        }
-    }
-    private void StopMovement()
-    {
-
     }
     private void SetLocationData(Bounds bounds, LayerMask layerMask)
     {
@@ -518,15 +522,13 @@ public class SpyBrain : MonoBehaviour
     private void OnDrawGizmos()
     {
         CalculateCollisionPoints();
-        Gizmos.color = stats.isGrounded ? Color.green : Color.red;
+        Gizmos.color = stats.isGrounded ? Color.limeGreen : Color.orange;
         Gizmos.DrawLine(collisionPoints.groundLeft, collisionPoints.groundRight);
-        Gizmos.color = stats.isStepping ? Color.green : Color.red;
-        Gizmos.DrawLine(collisionPoints.stepLeft, collisionPoints.stepRight);
-        Gizmos.DrawLine(collisionPoints.groundRight, collisionPoints.stepRight);
-        Gizmos.DrawLine(collisionPoints.stepLeft, collisionPoints.groundLeft);
 
-        Gizmos.color = gangwayDoor != null ? Color.green : Color.red;
-        Gizmos.DrawLine(boxCollider.bounds.center, new Vector2(boxCollider.bounds.center.x + (stats.spriteFlip ? -1 : 1), boxCollider.bounds.center.y));
+        Gizmos.color = stats.walkingIntoWall ? Color.forestGreen : Color.red;
+        Gizmos.DrawLine(collisionPoints.wallTopLeft, collisionPoints.wallBottomLeft);
+        Gizmos.DrawLine(collisionPoints.wallTopRight, collisionPoints.wallBottomRight);
+
     }
 
 #if UNITY_EDITOR

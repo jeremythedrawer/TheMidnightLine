@@ -58,13 +58,14 @@ MonoBehaviour:
   flipX: 0
   flipY: 0
   depthOrder: 7
+  useCustomMaterial: 0
   batchKey:
     material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
     mesh: {fileID: 0}
     depthOrder: 7
   sprite:
     uvSizeAndPos: {x: 0.08862305, y: 0.09741211, z: 0.9020996, w: 0.40234375}
-    uvPivot: {x: 0, y: 0}
+    uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 2.0166667, y: 2.2166667, z: 1}
     index: 12
   worldMatrix:
@@ -133,7 +134,7 @@ Transform:
   m_GameObject: {fileID: 1781817866820638028}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.01, y: 0.96, z: -7}
+  m_LocalPosition: {x: 0, y: 1.139, z: -7}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -173,7 +174,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.04006958, y: 0.1483984}
+  m_Offset: {x: 0, y: 0}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -283,7 +284,7 @@ Transform:
   m_GameObject: {fileID: 2922745050166258220}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.85, y: 3.68, z: 0}
+  m_LocalPosition: {x: -0.21, y: 3.68, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -361,7 +362,7 @@ Transform:
   m_GameObject: {fileID: 7156874288547134252}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 2.322, y: 3.674, z: 0}
+  m_LocalPosition: {x: 1.2, y: 3.674, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -439,7 +440,7 @@ Transform:
   m_GameObject: {fileID: 8086748415358253051}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.22, y: 3.674, z: 0}
+  m_LocalPosition: {x: -0.90200925, y: 3.674, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []

@@ -1,7 +1,9 @@
+using UnityEditor.SceneManagement;
 using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.Universal;
+using UnityEngine.SceneManagement;
 using static Atlas;
 using static AtlasBatch;
 using static AtlasSpawn;
@@ -63,6 +65,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
         {
+
             UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
             UniversalResourceData resources = frameData.Get<UniversalResourceData>();
 
@@ -81,6 +84,12 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
         private static void ExecuteBatch(RasterCommandBuffer cmd, Camera camera)
         {
+#if UNITY_EDITOR
+            PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+            Scene prefabScene = default;
+
+            if (prefabStage != null) prefabScene = prefabStage.scene;
+#endif
             foreach ((BatchKey key, BatchData data) batch in batchList)
             {
                 int count = 0;
@@ -89,6 +98,13 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     AtlasRenderer atlasRenderer = batch.data.renderers[i];
 
                     if (atlasRenderer == null || !atlasRenderer.enabled) continue;
+
+#if UNITY_EDITOR
+                    if (prefabStage != null)
+                    {
+                        if (atlasRenderer.gameObject.scene != prefabScene) continue;
+                    }
+#endif
 
                     if (atlasRenderer.mpb != null)
                     {
@@ -200,7 +216,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
             if (cameraData.cameraType != CameraType.Game) return;
             if (!resourceData.cameraColor.IsValid()) return;
-
+            if (rendererFeature.bloomMaterial == null) return;
             TextureDesc camColorTexDesc = resourceData.cameraColor.GetDescriptor(renderGraph);
             camColorTexDesc.name = "BloomTexture";
             camColorTexDesc.useMipMap = true;

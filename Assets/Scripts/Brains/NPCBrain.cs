@@ -532,7 +532,7 @@ public class NPCBrain : MonoBehaviour
     {
         bool shouldFadeOut =
             rigidBody.includeLayers == layerSettings.stationMask &&
-            spyStats.curGroundLayer == layerSettings.trainLayerStruct.ground &&
+            spyStats.curGroundLayer == layerSettings.trainLayers.ground &&
             spyStats.curWorldPos.z > transform.position.z &&
             transform.position.x > spyStats.curCarriageMinXPos &&
             transform.position.x < spyStats.curCarriageMaxXPos;
@@ -578,7 +578,7 @@ public class NPCBrain : MonoBehaviour
 
         if (curCarriage == null) // find slide door in one frame
         {
-            RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, new Vector2(npc.maxDistanceDetection, boxCollider.size.y), 0.0f, transform.right, npc.maxDistanceDetection, layerSettings.trainLayerStruct.carriage);
+            RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, new Vector2(npc.maxDistanceDetection, boxCollider.size.y), 0.0f, transform.right, npc.maxDistanceDetection, layerSettings.trainLayers.carriage);
 
             if (carriageHit.collider == null) { Debug.LogError($"{name} did not find a carriage to go to"); return; }
 

@@ -14,7 +14,7 @@ public class GangwayDoor : MonoBehaviour
     public bool isOpen;
     public AtlasClip doorClip;
 
-    private const float DOOR_MOVE_TIME = 1;
+    private const float DOOR_MOVE_TIME = 0.3f;
 
     private void Start()
     {
@@ -50,6 +50,7 @@ public class GangwayDoor : MonoBehaviour
         }
         atlasRenderer.sprite = doorClip.GetNextSpriteManual(1);
         isOpen = true;
+        wallCollider.enabled = false;
     }
 
     private async UniTask ClosingDoor()
@@ -68,5 +69,6 @@ public class GangwayDoor : MonoBehaviour
         }
         atlasRenderer.sprite = doorClip.GetNextSpriteManual(0);
         isOpen = false;
+        wallCollider.enabled = true;
     }
 }

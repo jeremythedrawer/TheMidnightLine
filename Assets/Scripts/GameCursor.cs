@@ -34,7 +34,7 @@ public class GameCursor : MonoBehaviour
 
     private void UpdateNPCColor()
     {
-        if (spyStats.curGroundLayer != layerSettings.trainLayerStruct.ground) return;
+        if (spyStats.curGroundLayer != layerSettings.trainLayers.ground) return;
         RaycastHit2D npcHit = Physics2D.Raycast(spyInputs.mouseWorldPos, Vector2.zero, Mathf.Infinity, layerSettings.npc);
 
         if (npcHit.collider != null)
@@ -63,7 +63,7 @@ public class GameCursor : MonoBehaviour
 
     private void UpdatePhoneColor()
     {
-        if (spyStats.curGroundLayer != layerSettings.trainLayerStruct.ground) return;
+        if (spyStats.curGroundLayer != layerSettings.trainLayers.ground) return;
         RaycastHit2D phoneHit = Physics2D.Raycast(spyInputs.mouseWorldPos, Vector2.zero, Mathf.Infinity, layerSettings.phone);
         if (phoneHit.collider != null)
         {

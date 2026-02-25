@@ -238,7 +238,6 @@ public class AtlasRenderer : MonoBehaviour
 
 
 #if UNITY_EDITOR
-    [ExecuteAlways]
     void OnDrawGizmos()
     {
         Gizmos.matrix = GetMatrix();
