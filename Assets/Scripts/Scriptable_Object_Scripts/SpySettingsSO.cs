@@ -22,7 +22,8 @@ public class SpySettingsSO : ScriptableObject
     [Header("Collisions")]
     [Range(0f, 0.5f)] public float groundBufferVertical = 0.02f;
     [Range(0f, 1f)] public float groundBufferHorizontal = 0.5f;
-    [Range(0f, 0.5f)] public float stepBuffer = 0.25f;
+    [Range(0f, 0.5f)] public float topStepBuffer = 0.25f;
+    [Range(0f, 0.5f)] public float bottomStepBuffer = 0.1f;
     public float wallBuffer = 0.5f;
     public float headBuffer = 1f;
     public float wasteBuffer = 0.5f;

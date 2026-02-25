@@ -26,6 +26,7 @@ public class SpyStatsSO : ScriptableObject
     public bool coyoteJump;
     public bool willJump;
     public bool isGrounded;
+    public bool isStepping;
     public bool walkingIntoWall;
     public bool canHang;
     public bool isClimbing;

@@ -322,6 +322,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         {
             UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
             UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
+            if (rendererFeature.matrixMaterial == null) return;
             if (cameraData.cameraType != CameraType.Game) return;
             if (resourceData.cameraColor.IsValid())
             {

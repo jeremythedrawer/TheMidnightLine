@@ -3,6 +3,7 @@ using System;
 using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using static Atlas;
+using static SpyBrain;
 
 public class SpyBrain : MonoBehaviour
 {
@@ -44,17 +45,27 @@ public class SpyBrain : MonoBehaviour
     public float clipTime;
     public int curFrameIndex;
     public int prevFrameIndex;
-    [Serializable] public struct CollisionPoints
+    [Serializable] public struct CollisionData
     {
         public Vector2 groundLeft;
         public Vector2 groundRight;
+
+        public Vector2 stepTopLeft;
+        public Vector2 stepTopRight;
+
+        public Vector2 stepBottomLeft;
+        public Vector2 stepBottomRight;
 
         public Vector2 wallTopLeft;
         public Vector2 wallTopRight;
         public Vector2 wallBottomLeft;
         public Vector2 wallBottomRight;
+
+        public RaycastHit2D[] leftStepResults;
+        public RaycastHit2D[] rightStepResults;
+        public ContactFilter2D stepFilter;
     }
-    [SerializeField] CollisionPoints collisionPoints;
+    [SerializeField] CollisionData collisionData;
 
     private void OnValidate()
     {
@@ -89,6 +100,11 @@ public class SpyBrain : MonoBehaviour
         stats.firstFixedFrameClimb = true;
         stats.onPhone = false;
         stats.spyID = UnityEngine.Random.Range(0, 10000).ToString("D4");
+
+        collisionData.leftStepResults = new RaycastHit2D[1];
+        collisionData.rightStepResults = new RaycastHit2D[1];
+
+        collisionData.stepFilter = new ContactFilter2D() { useLayerMask = true, layerMask = layerSettings.stationLayers.ground };
     }
     private void Update()
     {
@@ -102,10 +118,36 @@ public class SpyBrain : MonoBehaviour
     {
         FixedUpdateStates();
         CalculateCollisionPoints();
-        stats.isGrounded = Physics2D.Linecast(collisionPoints.groundLeft, collisionPoints.groundRight, stats.curGroundLayer);
+        stats.isGrounded = Physics2D.Linecast(collisionData.groundLeft, collisionData.groundRight, stats.curGroundLayer);
 
-        bool leftWallTouch = Physics2D.Linecast(collisionPoints.wallBottomLeft, collisionPoints.wallTopLeft, stats.curWallLayer);
-        bool rightWallTouch = Physics2D.Linecast(collisionPoints.wallBottomRight, collisionPoints.wallTopRight, stats.curWallLayer);
+        Physics2D.Linecast(collisionData.stepBottomLeft, collisionData.stepTopLeft, collisionData.stepFilter, collisionData.leftStepResults);
+        Physics2D.Linecast(collisionData.stepBottomRight, collisionData.stepTopRight, collisionData.stepFilter, collisionData.rightStepResults);
+
+        if (collisionData.leftStepResults[0].collider != default)
+        {
+            Bounds hitColliderHeight = collisionData.leftStepResults[0].collider.bounds;
+            if (hitColliderHeight.max.y < collisionData.stepTopLeft.y)
+            {
+                rigidBody.gravityScale = 0;
+                rigidBody.position = new Vector2(rigidBody.position.x - 0.1f, hitColliderHeight.max.y);
+                rigidBody.gravityScale = stats.gravityScale;
+            }
+            collisionData.leftStepResults[0] = default;
+        }
+        else if (collisionData.rightStepResults[0] != default)
+        {
+            Bounds hitColliderHeight = collisionData.rightStepResults[0].collider.bounds;
+            if (hitColliderHeight.max.y < collisionData.stepTopRight.y)
+            {
+                rigidBody.gravityScale = 0;
+                rigidBody.position = new Vector2(rigidBody.position.x + 0.1f, hitColliderHeight.max.y);
+                rigidBody.gravityScale = stats.gravityScale;
+            }
+            collisionData.rightStepResults[0] = default;
+        }
+
+        bool leftWallTouch = Physics2D.Linecast(collisionData.wallBottomLeft, collisionData.wallTopLeft, stats.curWallLayer);
+        bool rightWallTouch = Physics2D.Linecast(collisionData.wallBottomRight, collisionData.wallTopRight, stats.curWallLayer);
 
         stats.walkingIntoWall = (leftWallTouch && inputs.move == -1) || (rightWallTouch && inputs.move == 1);
 
@@ -439,19 +481,26 @@ public class SpyBrain : MonoBehaviour
         float groundLeft = transform.position.x - settings.groundBufferHorizontal;
         float groundRight = transform.position.x + settings.groundBufferHorizontal;
         float groundBottom = transform.position.y - settings.groundBufferVertical;
-        float step = transform.position.y + settings.stepBuffer;
+        float stepTop = transform.position.y + settings.topStepBuffer;
+        float stepBottom = transform.position.y + settings.bottomStepBuffer;
         float waste = transform.position.y + settings.wasteBuffer;
         float wallLeft = transform.position.x - settings.wallBuffer;
         float wallRight = transform.position.x + settings.wallBuffer;
         float head = transform.position.y + settings.headBuffer;
-        collisionPoints.groundLeft = new Vector2(groundLeft, groundBottom);
-        collisionPoints.groundRight = new Vector2(groundRight, groundBottom);
+        collisionData.groundLeft = new Vector2(groundLeft, groundBottom);
+        collisionData.groundRight = new Vector2(groundRight, groundBottom);
 
-        collisionPoints.wallTopLeft = new Vector2(wallLeft, head);
-        collisionPoints.wallTopRight = new Vector2(wallRight, head);
+        collisionData.stepTopLeft = new Vector2(groundLeft, stepTop);
+        collisionData.stepTopRight = new Vector2(groundRight, stepTop);
 
-        collisionPoints.wallBottomLeft = new Vector2(wallLeft, waste);
-        collisionPoints.wallBottomRight = new Vector2(wallRight, waste);
+        collisionData.stepBottomLeft = new Vector2(groundLeft, stepBottom);
+        collisionData.stepBottomRight = new Vector2(groundRight, stepBottom);
+
+        collisionData.wallTopLeft = new Vector2(wallLeft, head);
+        collisionData.wallTopRight = new Vector2(wallRight, head);
+
+        collisionData.wallBottomLeft = new Vector2(wallLeft, waste);
+        collisionData.wallBottomRight = new Vector2(wallRight, waste);
 
     }
     private void OpenSlideDoor()
@@ -491,7 +540,7 @@ public class SpyBrain : MonoBehaviour
                     stats.curGroundLayer = layerSettings.trainLayers.ground;
                     stats.curWallLayer = layerSettings.trainWallLayers;
                     rigidBody.includeLayers = layerSettings.trainMask;
-
+                    collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
                     stats.onTrain = true;
                     atlasRenderer.depthOrder = CHARACTER_ON_TRAIN_DEPTH;
                     trainStats.curPassengerCount ++;
@@ -523,11 +572,15 @@ public class SpyBrain : MonoBehaviour
     {
         CalculateCollisionPoints();
         Gizmos.color = stats.isGrounded ? Color.limeGreen : Color.orange;
-        Gizmos.DrawLine(collisionPoints.groundLeft, collisionPoints.groundRight);
+        Gizmos.DrawLine(collisionData.groundLeft, collisionData.groundRight);
+
+        Gizmos.color = stats.isStepping ? Color.springGreen : Color.indianRed;
+        Gizmos.DrawLine(collisionData.stepBottomLeft, collisionData.stepTopLeft);
+        Gizmos.DrawLine(collisionData.stepBottomRight, collisionData.stepTopRight);
 
         Gizmos.color = stats.walkingIntoWall ? Color.forestGreen : Color.red;
-        Gizmos.DrawLine(collisionPoints.wallTopLeft, collisionPoints.wallBottomLeft);
-        Gizmos.DrawLine(collisionPoints.wallTopRight, collisionPoints.wallBottomRight);
+        Gizmos.DrawLine(collisionData.wallTopLeft, collisionData.wallBottomLeft);
+        Gizmos.DrawLine(collisionData.wallTopRight, collisionData.wallBottomRight);
 
     }
 
