@@ -30,7 +30,7 @@ Transform:
   m_GameObject: {fileID: 8772790425813503437}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 86.15256, y: 1.691, z: 0}
+  m_LocalPosition: {x: 86.15256, y: 1.691, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -51,22 +51,40 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: 5085181b26ea31b4b9430dc5ce3bcdf5, type: 2}
   material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 8
+  spriteIndex: 26
   spriteMode: 1
   width: 1
   height: 1
   flipX: 1
   flipY: 0
-  depthOrder: 2
+  depthOrder: 1
+  useCustomMaterial: 0
   batchKey:
     material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
     mesh: {fileID: 0}
-    depthOrder: 2
+    depthOrder: 1
   sprite:
-    uvSizeAndPos: {x: 0.12548828, y: 0.119628906, z: 0.0087890625, w: 0.75097656}
-    uvPivot: {x: 0.43579766, y: 0}
-    worldSize: {x: 1.4277778, y: 1.3611112, z: 1}
-    index: 8
+    uvSizeAndPos: {x: 0.057128906, y: 0.15576172, z: 0.63378906, w: 0.5600586}
+    uvPivot: {x: 0.50427353, y: 0}
+    worldSize: {x: 0.65, y: 1.7722223, z: 1}
+    index: 26
+  worldMatrix:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 290.11
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 1.041
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: 1
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -246,7 +264,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.8584776}
+  m_Offset: {x: 0, y: 0.8440052}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -256,7 +274,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.28289795, y: 1.7169552}
+  m_Size: {x: 0.24868774, y: 1.6880105}
   m_EdgeRadius: 0
 --- !u!114 &8541590373058370183
 MonoBehaviour:
@@ -293,11 +311,32 @@ MonoBehaviour:
     keyFrames: []
     clipType: 0
     motionIndex: 0
+    time: 0
   clipTime: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  collisionPoints:
-    groundLeft: {x: 288.12997, y: 1.295}
-    groundRight: {x: 289.47, y: 1.295}
-    stepLeft: {x: 288.12997, y: 1.4649999}
-    stepRight: {x: 289.47, y: 1.4649999}
+  collisionData:
+    groundLeft: {x: 289.96997, y: 0.95}
+    groundRight: {x: 290.25, y: 0.95}
+    stepTopLeft: {x: 289.96997, y: 1.112}
+    stepTopRight: {x: 290.25, y: 1.112}
+    stepBottomLeft: {x: 289.96997, y: 1.041}
+    stepBottomRight: {x: 290.25, y: 1.041}
+    wallTopLeft: {x: 289.93997, y: 2.701}
+    wallTopRight: {x: 290.28, y: 2.701}
+    wallBottomLeft: {x: 289.93997, y: 1.801}
+    wallBottomRight: {x: 290.28, y: 1.801}
+    stepFilter:
+      useTriggers: 0
+      useLayerMask: 0
+      useDepth: 0
+      useOutsideDepth: 0
+      useNormalAngle: 0
+      useOutsideNormalAngle: 0
+      layerMask:
+        serializedVersion: 2
+        m_Bits: 0
+      minDepth: 0
+      maxDepth: 0
+      minNormalAngle: 0
+      maxNormalAngle: 0

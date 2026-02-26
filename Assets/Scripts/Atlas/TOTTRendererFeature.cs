@@ -213,10 +213,10 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         {
             UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
             UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
-
             if (cameraData.cameraType != CameraType.Game) return;
             if (!resourceData.cameraColor.IsValid()) return;
             if (rendererFeature.bloomMaterial == null) return;
+
             TextureDesc camColorTexDesc = resourceData.cameraColor.GetDescriptor(renderGraph);
             camColorTexDesc.name = "BloomTexture";
             camColorTexDesc.useMipMap = true;

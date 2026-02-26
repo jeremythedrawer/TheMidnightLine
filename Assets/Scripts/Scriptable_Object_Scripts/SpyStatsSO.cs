@@ -13,12 +13,13 @@ public class SpyStatsSO : ScriptableObject
     public Vector3 phonePosition;
     public float targetXVelocity;
     public float curRunSpeed;
-    public float gravityScale;
-    public float curJumpHorizontalForce;
+    public float curGravityScale;
     public float lastJumpTime;
     public float coyoteTimeElapsed;
     public float curCarriageMinXPos;
     public float curCarriageMaxXPos;
+    public float maxJumpHeight;
+    public float lastGroundHeight;
     public LayerMask curLocationLayer;
     public LayerMask curGroundLayer;
     public LayerMask curWallLayer;
@@ -45,9 +46,8 @@ public class SpyStatsSO : ScriptableObject
         moveVelocity = Vector2.zero;
         targetXVelocity = 0.0f;
         curRunSpeed = 1.0f;
-        gravityScale = 1;
+        curGravityScale = 1;
 
-        curJumpHorizontalForce = 0.0f;
         willJump = false;
         lastJumpTime = float.MinValue;
         coyoteJump = false;
@@ -61,5 +61,4 @@ public class SpyStatsSO : ScriptableObject
         canBoardTrain = false;
         onTrain = false;
     }
-
 }

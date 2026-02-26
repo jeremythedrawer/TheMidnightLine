@@ -16,18 +16,19 @@ MonoBehaviour:
   runSpeedMultiplier: 2
   groundAccelation: 12
   groundDecelaration: 0.5
-  jumpVerticalForce: 15
+  jumpVerticalForce: 10
   jumpHorizontalForce: 5
   jumpBufferTime: 0.2
   maxFallSpeed: 20
   coyoteTime: 0.125
   antiGravApexThreshold: 5
-  gravityScale: 6
+  gravityScale: 25
   antiGravMultiplier: 0.5
-  groundBufferVertical: 0.091
-  groundBufferHorizontal: 0.438
-  stepBuffer: 0
-  wallBuffer: 0.17
+  groundBufferVertical: 0.11
+  groundBufferHorizontal: 0.14
+  topStepBuffer: 0.071
+  bottomStepBuffer: 0
+  wallBuffer: 0.29
   headBuffer: 1.66
   wasteBuffer: 0.76
   depthPositionInTrain: 0

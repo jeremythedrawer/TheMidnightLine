@@ -1,31 +1,24 @@
-
 using Cysharp.Threading.Tasks;
-using System;
 using UnityEngine;
 using static Atlas;
 
 public class GangwayDoor : MonoBehaviour
 {
+    private static float DOOR_MOVE_TIME = 0.3f;
+
     [SerializeField] BoxCollider2D wallCollider;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] AtlasRenderer atlasRenderer;
+    [SerializeField] GameEventDataSO gameEventData;
 
     [Header("Generated")]
     public bool isOpen;
     public AtlasClip doorClip;
 
-    private const float DOOR_MOVE_TIME = 0.3f;
 
     private void Start()
     {
         doorClip = atlasRenderer.atlas.clipDict[(int)TrainMotion.TrainDoor];
-    }
-
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if ((layerSettings.spy & (1 << collision.gameObject.layer)) == 0 || isOpen) return;
-
-        OpeningDoor().Forget();
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -33,6 +26,13 @@ public class GangwayDoor : MonoBehaviour
         if ((layerSettings.spy & (1 << collision.gameObject.layer)) == 0 || !isOpen) return;
 
         ClosingDoor().Forget();
+    }
+
+    public void OpenDoor()
+    {
+        if (isOpen) return;
+
+        OpeningDoor().Forget();
     }
     private async UniTask OpeningDoor()
     {

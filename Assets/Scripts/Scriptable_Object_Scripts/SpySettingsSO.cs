@@ -27,6 +27,7 @@ public class SpySettingsSO : ScriptableObject
     public float wallBuffer = 0.5f;
     public float headBuffer = 1f;
     public float wasteBuffer = 0.5f;
+
     [Header("Train")]
     [Range(0f, 1f)] public int depthPositionInTrain = 1;
 }

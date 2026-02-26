@@ -1,9 +1,6 @@
-using Proselyte.Sigils;
 using System;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
 using static Atlas;
-using static SpyBrain;
 
 public class SpyBrain : MonoBehaviour
 {
@@ -67,6 +64,7 @@ public class SpyBrain : MonoBehaviour
     }
     [SerializeField] CollisionData collisionData;
 
+    public float lastGroundYPos;
     private void OnValidate()
     {
         CalculateCollisionPoints();
@@ -74,13 +72,13 @@ public class SpyBrain : MonoBehaviour
     private void OnEnable()
     {
         gameEventData.OnStationArrival.RegisterListener(() => stats.canBoardTrain = true);
-        gameEventData.OnInteract.RegisterListener(OpenSlideDoor);
+        gameEventData.OnInteract.RegisterListener(OpenSlideDoors);
         gameEventData.OnInteract.RegisterListener(EnterTrain);
     }
     private void OnDisable()
     {
         gameEventData.OnStationArrival.UnregisterListener(() => stats.canBoardTrain = true);
-        gameEventData.OnInteract.UnregisterListener(OpenSlideDoor);
+        gameEventData.OnInteract.UnregisterListener(OpenSlideDoors);
         gameEventData.OnInteract.UnregisterListener(EnterTrain);
 
     }
@@ -90,13 +88,12 @@ public class SpyBrain : MonoBehaviour
         atlas.UpdateClipDictionary();
         curState = State.Idle;
         rigidBody.gravityScale = settings.gravityScale;
-        stats.gravityScale = rigidBody.gravityScale;
+        stats.curGravityScale = rigidBody.gravityScale;
         stats.startPos = rigidBody.position;
         stats.curGroundLayer = layerSettings.stationLayers.ground;
         stats.curWallLayer = layerSettings.stationWallLayers;
         rigidBody.includeLayers = layerSettings.stationMask;
         stats.curRunSpeed = 1.0f;
-        stats.curJumpHorizontalForce = 0.0f;
         stats.firstFixedFrameClimb = true;
         stats.onPhone = false;
         stats.spyID = UnityEngine.Random.Range(0, 10000).ToString("D4");
@@ -105,12 +102,14 @@ public class SpyBrain : MonoBehaviour
         collisionData.rightStepResults = new RaycastHit2D[1];
 
         collisionData.stepFilter = new ContactFilter2D() { useLayerMask = true, layerMask = layerSettings.stationLayers.ground };
+
+        stats.maxJumpHeight = (settings.jumpVerticalForce * settings.jumpVerticalForce) / (2 * settings.gravityScale);
     }
     private void Update()
     {
         ChooseState();
         UpdateStates();
-        PlayClip();
+
         stats.curWorldPos = transform.position;
         stats.willJump = Time.time - stats.lastJumpTime <= settings.jumpBufferTime && curState != State.Jump;   
     }
@@ -130,7 +129,7 @@ public class SpyBrain : MonoBehaviour
             {
                 rigidBody.gravityScale = 0;
                 rigidBody.position = new Vector2(rigidBody.position.x - 0.1f, hitColliderHeight.max.y);
-                rigidBody.gravityScale = stats.gravityScale;
+                rigidBody.gravityScale = stats.curGravityScale;
             }
             collisionData.leftStepResults[0] = default;
         }
@@ -141,7 +140,7 @@ public class SpyBrain : MonoBehaviour
             {
                 rigidBody.gravityScale = 0;
                 rigidBody.position = new Vector2(rigidBody.position.x + 0.1f, hitColliderHeight.max.y);
-                rigidBody.gravityScale = stats.gravityScale;
+                rigidBody.gravityScale = stats.curGravityScale;
             }
             collisionData.rightStepResults[0] = default;
         }
@@ -153,7 +152,7 @@ public class SpyBrain : MonoBehaviour
 
         if (curState != State.Hang && curState != State.Climb && curState != State.Phone && !stats.walkingIntoWall)
         {
-            stats.targetXVelocity = (settings.moveSpeed * stats.curRunSpeed * inputs.move) + (stats.curJumpHorizontalForce * inputs.move);
+            stats.targetXVelocity = (settings.moveSpeed * stats.curRunSpeed * inputs.move);
             stats.moveVelocity.x = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.fixedDeltaTime);
         }
         else
@@ -170,6 +169,9 @@ public class SpyBrain : MonoBehaviour
         else
         {
             curClimbCollider = Physics2D.OverlapBox(boxCollider.bounds.center, boxCollider.bounds.size, angle: 0, layerSettings.trainLayers.climbingBounds);
+
+
+            stats.moveVelocity.y -= stats.curGravityScale * Time.fixedDeltaTime;
         }
     }
     private void OnTriggerEnter2D(Collider2D collision)
@@ -179,8 +181,10 @@ public class SpyBrain : MonoBehaviour
         if ((layerSettings.trainLayers.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
             SetLocationData(collision.bounds, layerSettings.trainLayers.insideCarriageBounds);
-            curCarriage = trainStats.carriageDict[collision];
-            curCarriage.StartFade(fadeIn: false);
+            if (trainStats.carriageDict.TryGetValue(collision, out curCarriage))
+            {
+                curCarriage.StartFade(fadeIn: false);
+            }
             //stats.curCarriageMinXPos = curCarriage.carriageCollider.bounds.min.x;
             //stats.curCarriageMaxXPos = curCarriage.carriageCollider.bounds.max.x;
         }
@@ -221,7 +225,7 @@ public class SpyBrain : MonoBehaviour
     private void ChooseState()
     {
         //TODO do heavy land logic
-        if ((stats.isGrounded && stats.willJump) || rigidBody.linearVelocityY > 0.01f || stats.coyoteJump)
+        if ((stats.isGrounded && stats.willJump) || stats.moveVelocity.y > 0 || stats.coyoteJump)
         {
             SetState(State.Jump);
         }
@@ -229,11 +233,11 @@ public class SpyBrain : MonoBehaviour
         {
             SetState(State.Climb);
         }
-        else if (stats.canHang && curClimbCollider != null && boxCollider.bounds.max.y < curClimbCollider.bounds.max.y && stats.onTrain)
+        else if (stats.canHang && curClimbCollider != null && boxCollider.bounds.max.y < curClimbCollider.bounds.max.y && (stats.curLocationLayer & layerSettings.trainLayers.gangwayBounds) != 0)
         {
             SetState(State.Hang);
         }
-        else if (rigidBody.linearVelocityY < 0 && !stats.isGrounded)
+        else if (stats.moveVelocity.y <= 0 && !stats.isGrounded)
         {
             SetState(State.Fall);
         }
@@ -261,25 +265,29 @@ public class SpyBrain : MonoBehaviour
             case State.Idle:
             {
                 if (inputs.jump) { stats.lastJumpTime = Time.time; }
+                PlayClip();
             }
             break;
             case State.Walk:
             {
                 if (inputs.jump) { stats.lastJumpTime = Time.time; }
                 Flip(inputs.move < 0);
-                
+                PlayClip();
             }
             break;
             case State.Run:
             {
                 if (inputs.jump) { stats.lastJumpTime = Time.time; }
                 Flip(inputs.move < 0);
+                PlayClip();
             }
             break;
             case State.Jump:
             {
                 Flip(inputs.move < 0);
-                stats.curJumpHorizontalForce = Mathf.Max(stats.curJumpHorizontalForce - Time.deltaTime, 0);
+
+                float normHeight = (transform.position.y - stats.lastGroundHeight) / (stats.maxJumpHeight - stats.lastGroundHeight);
+                PlayManualClip(normHeight);
             }
             break;
             case State.Fall:
@@ -293,6 +301,9 @@ public class SpyBrain : MonoBehaviour
                     inputs.jump = false;
                 }
                 Flip(inputs.move < 0);
+
+                float normHeight = (transform.position.y - stats.lastGroundHeight) / (stats.maxJumpHeight - stats.lastGroundHeight);
+                PlayManualClip(1 - normHeight);
             }
             break;
             case State.Hang:
@@ -305,6 +316,17 @@ public class SpyBrain : MonoBehaviour
                 else if (inputs.interact)
                 {
                     stats.isClimbing = true;
+                }
+
+                PlayClip();
+            }
+            break;
+            case State.Climb:
+            {
+                PlayClip();
+                if (curFrameIndex == curClip.keyFrames.Length - 1)
+                {
+                    stats.isClimbing = false;
                 }
             }
             break;
@@ -326,23 +348,22 @@ public class SpyBrain : MonoBehaviour
             case State.Jump:
             {
 
-                //if (!inputs.jump) // enable early fall //NOTE: If i want early fall, this will need to be fixed because the velocity is being set to both jump force and 0 at the same time
-                //{
-                //    rigidBody.linearVelocityY = 0;
-                //}
+                if (!inputs.jump)
+                {
+                    stats.moveVelocity.y = 0;
+                }
 
                 if (rigidBody.linearVelocityY < settings.antiGravApexThreshold)
                 {
-                    rigidBody.gravityScale = stats.gravityScale * settings.antiGravMultiplier;
+                    rigidBody.gravityScale = stats.curGravityScale * settings.antiGravMultiplier;
                 }
             }
             break;
             case State.Fall:
             {
-                rigidBody.linearVelocityY = Mathf.Max(rigidBody.linearVelocityY, -settings.maxFallSpeed);
-                if (rigidBody.linearVelocityY < -settings.antiGravApexThreshold)
+                if (stats.moveVelocity.y < -settings.antiGravApexThreshold)
                 {
-                    rigidBody.gravityScale = stats.gravityScale;
+                    rigidBody.gravityScale = stats.curGravityScale;
                 }
             }
             break;
@@ -373,7 +394,7 @@ public class SpyBrain : MonoBehaviour
             case State.Idle:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.StandingBreathing];
-                rigidBody.gravityScale = stats.gravityScale;
+                rigidBody.gravityScale = stats.curGravityScale;
             }
             break;
             case State.Walk:
@@ -390,13 +411,10 @@ public class SpyBrain : MonoBehaviour
             case State.Jump:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.Jump];
-                rigidBody.linearVelocityY = settings.jumpVerticalForce;
+                stats.moveVelocity.y = settings.jumpVerticalForce;
                 stats.coyoteTimeElapsed = Mathf.Infinity;
 
-                if (inputs.run)
-                {
-                    stats.curJumpHorizontalForce = settings.jumpHorizontalForce;
-                }
+                stats.lastGroundHeight = transform.position.y;
             }
             break;
             case State.Fall:
@@ -455,7 +473,6 @@ public class SpyBrain : MonoBehaviour
             break;
             case State.Jump:
             {
-                stats.curJumpHorizontalForce = 0.0f;
             }
             break;
 
@@ -463,6 +480,7 @@ public class SpyBrain : MonoBehaviour
             {
                 stats.coyoteTimeElapsed = 0.0f;
                 stats.coyoteJump = false;
+                stats.moveVelocity.y = 0;
             }
             break;
 
@@ -503,21 +521,37 @@ public class SpyBrain : MonoBehaviour
         collisionData.wallBottomRight = new Vector2(wallRight, waste);
 
     }
-    private void OpenSlideDoor()
+    private void OpenSlideDoors()
     {
-        if (rigidBody.includeLayers == layerSettings.stationLayers.ground && stats.canBoardTrain)
+        if (!stats.onTrain && stats.canBoardTrain)
         {
-            RaycastHit2D[] slideDoorHit = Physics2D.BoxCastAll(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.slideDoors);
+            RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.slideDoors);
 
-            for (int i = 0; i < slideDoorHit.Length; i++)
+            if (slideDoorHit.collider != null)
             {
-                slideDoors = slideDoorHit[i].collider.GetComponent<SlideDoors>();
+                slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>(); //TODO: Put into dictionary
                 if (slideDoors.curState == SlideDoors.State.Unlocked) 
                 {
                     slideDoors.OpenDoors();
-                    break;
                 }
             }
+        }
+        else if (stats.onTrain)
+        {
+            RaycastHit2D left = Physics2D.Linecast(collisionData.wallBottomLeft, collisionData.wallTopLeft, layerSettings.trainLayers.gangwayDoor);
+            RaycastHit2D right = Physics2D.Linecast(collisionData.wallBottomRight, collisionData.wallTopRight, layerSettings.trainLayers.gangwayDoor);
+
+            if (left.collider != null)
+            {
+                gangwayDoor = left.collider.GetComponent<GangwayDoor>();
+                gangwayDoor.OpenDoor();
+            }
+            else if (right.collider != null)
+            {
+                gangwayDoor = right.collider.GetComponent<GangwayDoor>();
+                gangwayDoor.OpenDoor();
+            }
+
         }
     }
     private void EnterTrain()
@@ -543,7 +577,7 @@ public class SpyBrain : MonoBehaviour
                     collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
                     stats.onTrain = true;
                     atlasRenderer.depthOrder = CHARACTER_ON_TRAIN_DEPTH;
-                    trainStats.curPassengerCount ++;
+                    trainStats.curPassengerCount++;
                     gameEventData.OnBoardingSpy.Raise();
                 }
             }
@@ -564,6 +598,12 @@ public class SpyBrain : MonoBehaviour
         clipTime += Time.deltaTime;
         atlasRenderer.sprite = curClip.GetNextSprite(ref clipTime, ref curFrameIndex, ref prevFrameIndex);
     }
+
+    private void PlayManualClip(float t)
+    {
+        atlasRenderer.sprite = curClip.GetNextSpriteManual(t);
+    }
+
     private void OnApplicationQuit()
     {
         stats.ResetStats();

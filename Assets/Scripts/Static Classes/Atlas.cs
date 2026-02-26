@@ -134,12 +134,10 @@ public static class Atlas
         public ClipType clipType;
         public int motionIndex;
         public float time;
-
         public SimpleSprite GetNextSprite(ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
         {
-
             float frameTime = keyframeClock * FRAMES_PER_SEC;
-            if (curFrameIndex >= keyFrames.Length) curFrameIndex = 0;
+            if (curFrameIndex >= keyFrames.Length || curFrameIndex < 0) curFrameIndex = 0;
             AtlasKeyframe curKeyFrame = keyFrames[curFrameIndex];
 
             switch (clipType)
@@ -197,8 +195,8 @@ public static class Atlas
         }
         public SimpleSprite GetNextSpriteManual(float currentTime)
         {
-            int curFrameIndex = Mathf.FloorToInt((keyFrames.Length - 1) * currentTime);
-
+            int maxIndex = keyFrames.Length - 1;
+            int curFrameIndex = Mathf.Clamp(Mathf.FloorToInt((keyFrames.Length - 1) * currentTime), 0, maxIndex);
             return keyFrames[curFrameIndex].motionSprite.sprite;
         }
     }
