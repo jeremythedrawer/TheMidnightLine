@@ -13,8 +13,8 @@ public class ClipboardStatsSO : ScriptableObject
 
     [Serializable] public struct ProfilePageData
     {
-        public NPCTraits.Behaviours behaviours;
-        public NPCTraits.Appearence appearence;
+        public NPC.Behaviours behaviours;
+        public NPC.Appearence appearence;
         public Color color;
         public bool spyHasSelected;
     }

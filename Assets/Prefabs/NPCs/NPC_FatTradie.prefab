@@ -9,8 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 15911325801640563}
-  - component: {fileID: 3862178116953225951}
-  - component: {fileID: 8934918918480793476}
+  - component: {fileID: 7270981210488578452}
   - component: {fileID: 8099043674557259294}
   - component: {fileID: 118950378541814445}
   - component: {fileID: 7958201747531856237}
@@ -31,68 +30,82 @@ Transform:
   m_GameObject: {fileID: 1439452552751748441}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 307.0707, y: 1.01, z: 0}
+  m_LocalPosition: {x: 307.0707, y: 3.327, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!33 &3862178116953225951
-MeshFilter:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439452552751748441}
-  m_Mesh: {fileID: 4300000, guid: 47d569b186fa3e44d9ac1cf4009409db, type: 2}
---- !u!23 &8934918918480793476
-MeshRenderer:
+--- !u!114 &7270981210488578452
+MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1439452552751748441}
   m_Enabled: 1
-  m_CastShadows: 0
-  m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
-  m_StaticShadowCaster: 0
-  m_MotionVectors: 1
-  m_LightProbeUsage: 1
-  m_ReflectionProbeUsage: 1
-  m_RayTracingMode: 2
-  m_RayTraceProcedural: 0
-  m_RayTracingAccelStructBuildFlagsOverride: 0
-  m_RayTracingAccelStructBuildFlags: 1
-  m_SmallMeshCulling: 1
-  m_ForceMeshLod: -1
-  m_MeshLodSelectionBias: 0
-  m_RenderingLayerMask: 1
-  m_RendererPriority: 0
-  m_Materials:
-  - {fileID: 2100000, guid: 1a2a014aeca99c445945e91a21ecb1c0, type: 2}
-  m_StaticBatchInfo:
-    firstSubMesh: 0
-    subMeshCount: 0
-  m_StaticBatchRoot: {fileID: 0}
-  m_ProbeAnchor: {fileID: 0}
-  m_LightProbeVolumeOverride: {fileID: 0}
-  m_ScaleInLightmap: 1
-  m_ReceiveGI: 1
-  m_PreserveUVs: 0
-  m_IgnoreNormalsForChartDetection: 0
-  m_ImportantGI: 0
-  m_StitchLightmapSeams: 1
-  m_SelectedEditorRenderState: 3
-  m_MinimumChartSize: 4
-  m_AutoUVMaxDistance: 0.5
-  m_AutoUVMaxAngle: 89
-  m_LightmapParameters: {fileID: 0}
-  m_GlobalIlluminationMeshLod: 0
-  m_SortingLayerID: 0
-  m_SortingLayer: 0
-  m_SortingOrder: 0
-  m_AdditionalVertexStreams: {fileID: 0}
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: e68e06b96a72d5a42b74c2a8b5c21e30, type: 2}
+  material: {fileID: 2100000, guid: 1a2a014aeca99c445945e91a21ecb1c0, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  spriteMode: 1
+  width: 1
+  height: 1
+  flipX: 0
+  flipY: 0
+  depthOrder: 0
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 1a2a014aeca99c445945e91a21ecb1c0, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 0
+  sprite:
+    uvSizeAndPos: {x: 0.041503906, y: 0.15771484, z: 0.017089844, w: 0.8417969}
+    uvPivot: {x: 0.42352942, y: 0}
+    worldSize: {x: 0.4722222, y: 1.7944444, z: 1}
+    index: 0
+  worldMatrix:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 307.0707
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 3.327
+    e20: 0
+    e21: 0
+    e22: 1
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: 1, w: 1}
+  centerSliceWorldSize: {x: 0, y: 0}
+  centerSliceUVSize: {x: 0, y: 0}
 --- !u!82 &8099043674557259294
 AudioSource:
   m_ObjectHideFlags: 0
@@ -288,7 +301,7 @@ MonoBehaviour:
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   rigidBody: {fileID: 118950378541814445}
   boxCollider: {fileID: 7958201747531856237}
-  meshRenderer: {fileID: 8934918918480793476}
+  meshRenderer: {fileID: 0}
   curSlideDoors: {fileID: 0}
   curCarriage: {fileID: 0}
   sleepingZs: {fileID: 0}
@@ -314,10 +327,11 @@ MonoBehaviour:
     curPath: 0
     type: 0
     curClip:
-      clipType: 0
-      motionIndex: 0
       clipName: 
       keyFrames: []
+      clipType: 0
+      motionIndex: 0
+      time: 0
     smokerRoomIndex: 0
     chairPosIndex: 0
     selectedProfileIndex: 0
@@ -325,4 +339,4 @@ MonoBehaviour:
     prevAtlasIndex: 0
     canBoardTrain: 0
     startFade: 0
-    faceLeft: 0
+    spriteFlip: 0

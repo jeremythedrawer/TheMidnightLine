@@ -16,7 +16,7 @@ Shader "Custom/s_backgroundParticles"
             HLSLPROGRAM
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Assets/Shaders/HLSL/BackgroundParticles.hlsl"
+            #include "Assets/Shaders/HLSL/AtlasParticles.hlsl"
             #include "Assets/Shaders/HLSL/Random.hlsl"
 
             #pragma vertex vert
@@ -24,7 +24,7 @@ Shader "Custom/s_backgroundParticles"
 
             #pragma multi_compile_instancing
 
-            StructuredBuffer<ParticleOutput> _Particles;
+            StructuredBuffer<ZoneOutput> _Particles;
             StructuredBuffer<float4> _UVSizeAndPos;
 
             TEXTURE2D(_Atlas);
@@ -46,7 +46,7 @@ Shader "Custom/s_backgroundParticles"
                 Varyings o;
 
                 uint particleID = vertexID / 4;
-                ParticleOutput p = _Particles[particleID];
+                ZoneOutput p = _Particles[particleID];
 
                 uint cornerID = vertexID % 4;
                 float2 quadOffsets[4] = 

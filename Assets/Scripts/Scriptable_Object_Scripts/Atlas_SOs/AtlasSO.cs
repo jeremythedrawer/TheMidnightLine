@@ -17,7 +17,7 @@ public class AtlasSO : ScriptableObject
     public Color32 sliceColor = Color.blue;
 
     [Header("Particle Settings")]
-    public ParticleType particleType;
+    public ZoneParticleType particleType;
 
     [Header("Generated")]
     public MotionSprite[] motionSprites;

@@ -1,8 +1,8 @@
 using Cysharp.Threading.Tasks;
-using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using static NPC;
 
 public class NPCManager : MonoBehaviour
 {
@@ -21,7 +21,7 @@ public class NPCManager : MonoBehaviour
         npcData.colorsToPick = new List<Color>(npcData.agentColors);
 
         CreateNPCAgents();
-        NPCTraits.InitializeDescriptions();
+        NPC.InitializeDescriptions();
     }
     private void Update()
     {
@@ -47,16 +47,16 @@ public class NPCManager : MonoBehaviour
         {
             for (int j = 0; j < stationsData.stations[i].agentSpawnAmount; j++)
             {
-                int randNPCIndex = UnityEngine.Random.Range(0, npcData.npcsToPick.Count); // pick from list
+                int randNPCIndex = Random.Range(0, npcData.npcsToPick.Count); // pick from list
 
                 NPCBrain npc = Instantiate(npcData.npcsToPick[randNPCIndex], transform.position, Quaternion.identity, transform);
                 Color agentColor = npcData.colorsToPick[randNPCIndex];
                 npcData.npcsToPick.RemoveAt(randNPCIndex);
                 npcData.colorsToPick.RemoveAt(randNPCIndex);
-                npc.stats.type = NPCBrain.Type.Agent;
+                npc.stats.role = Role.Traitor;
 
-                NPCTraits.Behaviours profilePageBehaviours = npc.stats.behaviours;
-                NPCTraits.Appearence profilePageAppearence = NPCTraits.GetRandomAppearence(npc.npc.appearence);
+                NPC.Behaviours profilePageBehaviours = npc.stats.behaviours;
+                NPC.Appearence profilePageAppearence = GetRandomAppearence(npc.npc.appearence);
                 ClipboardStatsSO.ProfilePageData profilePageData = new ClipboardStatsSO.ProfilePageData { behaviours = profilePageBehaviours, appearence = profilePageAppearence, color = agentColor };
                 clipBoardStats.profilePageArray[profilePageIndex] = (profilePageData);
 

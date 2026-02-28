@@ -661,6 +661,8 @@ public class AtlasFactory : EditorWindow
         holdTimeValues = new int[atlas.motionSprites.Length];
         for (int i = 0; i < atlas.motionSprites.Length; i++)
         {
+            holdTimeValues[i] = 10;
+
             for (int j = 0; j < atlas.clips.Length; j++)
             {
                 AtlasClip clip = atlas.clips[j];

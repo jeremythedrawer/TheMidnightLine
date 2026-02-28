@@ -15,10 +15,10 @@ public class NPCsDataSO : ScriptableObject
     [Header("To Set")]
     public NPCBrain[] npcPrefabs;
     public Color[] agentColors;
-    public VisualEffect sleepingZs;
-    public VisualEffect musicNotes;
-    public VisualEffect speechBubble;
-    public GameObject smoke;
+    public AtlasSpawner sleepingZs;
+    public AtlasSpawner musicNotes;
+    public AtlasSpawner speechBubble;
+    public AtlasSpawner smoke;
     [Range(0, 1)] public float hoverColorOffet = 0.25f;
     [Range(0, 1)] public float fadeTime = 0.5f;
 

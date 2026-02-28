@@ -54,11 +54,7 @@ public class MaterialIDSO : ScriptableObject
     }
     public void SetMaterialPropertyIDs()
     {
-        ids.normAnimTime = Shader.PropertyToID("_NormAnimTime");
-        ids.fontColor = Shader.PropertyToID("_FaceColor");
-        ids.ditherValue = Shader.PropertyToID("_DitherValue");
         ids.color = Shader.PropertyToID("_Color");
-        ids.zPos = Shader.PropertyToID("_ZPos");
         ids.alpha = Shader.PropertyToID("_Alpha");
         ids.mainTex = Shader.PropertyToID("_MainTex");
         ids.hovered = Shader.PropertyToID("_Hovered");

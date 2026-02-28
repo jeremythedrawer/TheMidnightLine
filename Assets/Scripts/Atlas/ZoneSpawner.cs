@@ -1,7 +1,8 @@
 using UnityEngine;
 using static AtlasSpawn;
 
-public class AtlasSpawner : MonoBehaviour
+[ExecuteAlways]
+public class ZoneSpawner : MonoBehaviour
 {
     [SerializeField] TrainStatsSO trainStats;
     [SerializeField] StationsDataSO stationsData;
@@ -13,14 +14,13 @@ public class AtlasSpawner : MonoBehaviour
     [SerializeField] GameEventDataSO gameData;
     [SerializeField] SpyStatsSO spyStats;
 
-
-    private void OnValidate()
+    private void OnEnable()
     {
         InitializeBoundParameters();
         InitializeAtlasCompute(spawnerSettings.atlasCompute, materialIDs, spawnerStats);
         spawnerStats.spawnerDataArray = InitializeSpawnData(spawnerSettings.atlasCompute, materialIDs);
-        spawnerSettings.currentTrip.zoneQueue = SetZoneQueue(spawnerSettings.currentTrip);
-        Zone nextZone = spawnerSettings.currentTrip.zoneQueue.Dequeue();
+        //spawnerSettings.currentTrip.zoneQueue = SetZoneQueue(spawnerSettings.currentTrip);
+        //Zone nextZone = spawnerSettings.currentTrip.zoneQueue.Dequeue(); // TODO: This is just to show what the pattern should be at runtime
         for (int i = 0; i < spawnerSettings.currentTrip.zones.Length; i++)
         {
             if (spawnerSettings.currentTrip.zones[i].metersStart <= trainStats.metersTravelled)
@@ -28,8 +28,19 @@ public class AtlasSpawner : MonoBehaviour
                 ChangeSpawner(spawnerSettings.currentTrip.zones[i], materialIDs, spawnerStats, spawnerSettings.atlasCompute);
             }
         }
-    }
 
+    }
+    private void OnDisable()
+    {
+        for (int i = 0; i < spawnerStats.spawnerDataArray.Length; i++)
+        {
+            if (spawnerStats.spawnerDataArray[i].spawnerData.particleBuffer != null)
+            {
+                spawnerStats.spawnerDataArray[i].spawnerData.particleBuffer.Release();
+                spawnerStats.spawnerDataArray[i].spawnerData.particleBuffer = null;
+            }
+        }
+    }
 
     private void Update()
     {

@@ -58,7 +58,7 @@ public class AtlasTripViewer : EditorWindow
             float curX = graphRect.xMin - (padding * 0.5f);
             float curY = (graphRect.yMin + t * graphRect.height) + yOffset;
             Rect spawnerLabelRect = new Rect(curX, curY, 20, 200);
-            GUI.Label(spawnerLabelRect, ((Spawner)i).ToString()[0].ToString(), spawnerLabelStyle);
+            GUI.Label(spawnerLabelRect, ((AtlasSpawn.ZoneSpawner)i).ToString()[0].ToString(), spawnerLabelStyle);
         }
 
         GUIStyle zoneLabelStyle = new GUIStyle(EditorStyles.boldLabel){ alignment = TextAnchor.UpperLeft, normal = { textColor = Color.black } };
@@ -70,7 +70,7 @@ public class AtlasTripViewer : EditorWindow
             float zoneHeight = (graphRect.height / (float)SPAWNER_COUNT) - (zonePadding * 2);
 
             float zoneX = graphRect.xMin + ((float)zone.metersStart / (float)trip.tripMeters) * graphRect.width;
-            float zoneY = (graphRect.yMin + ((float)zone.spawner / SPAWNER_COUNT) * graphRect.height) + zonePadding;
+            float zoneY = (graphRect.yMin + ((float)zone.spawnerArea / SPAWNER_COUNT) * graphRect.height) + zonePadding;
 
             Rect zoneRect = new Rect(zoneX, zoneY, zoneWidth, zoneHeight);
             Handles.DrawSolidRectangleWithOutline(zoneRect, Color.green, Color.black);

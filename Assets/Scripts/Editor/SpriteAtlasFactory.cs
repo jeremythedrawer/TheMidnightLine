@@ -100,7 +100,7 @@ public class SpriteAtlasFactory : ScriptableObject
                 }
             }
 
-            if ((npcComponent.npc.behaviours & NPCTraits.Behaviours.Frequent_smoker) != 0)
+            if ((npcComponent.npc.behaviours & NPC.Behaviours.Frequent_smoker) != 0)
             {
                 EditorCurveBinding[] bindings = AnimationUtility.GetObjectReferenceCurveBindings(npcComponent.smokingClip);
                 foreach (EditorCurveBinding binding in bindings)

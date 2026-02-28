@@ -1,5 +1,5 @@
 using UnityEngine;
-using static NPCTraits;
+using static NPC;
 [CreateAssetMenu(fileName = "NPCSO", menuName = "Midnight Line SOs / NPC SO")]
 public class NPCSO : ScriptableObject
 {

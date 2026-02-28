@@ -63,7 +63,7 @@ public class Station : MonoBehaviour
             float randXPos = UnityEngine.Random.Range(platformCollider.bounds.min.x + 5f, platformCollider.bounds.max.x - 5f);
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, platformCollider.transform.position.z);
             NPCBrain bystanderNPC = Instantiate(npcData.npcPrefabs[randNPCIndex], spawnPos, Quaternion.identity, null); // spawn at random point on station
-            bystanderNPC.stats.type = NPCBrain.Type.Bystander;
+            bystanderNPC.stats.role = NPC.Role.Bystander;
             bystanderNPC.startStation = station;
             bystanderNPC.transform.SetParent(transform, true);
             //bystanderNPC.SetStationDepth();

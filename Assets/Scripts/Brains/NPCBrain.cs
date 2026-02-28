@@ -2,41 +2,16 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.VFX;
 using static Atlas;
+using static NPC;
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
 public class NPCBrain : MonoBehaviour
 {
-    public enum State
-    {
-        Idling,
-        Walking,
-        Smoking,
-        Sleeping,
-        Eating,
-        Music,
-        Calling,
-        Reading
-    }
-    
-    public enum Type
-    {
-        Agent,
-        Bystander
-    }
-
-    public enum Path
-    {
-        Nothing,
-        ToSmokerRoom,
-        ToChair,
-        ToSlideDoor,
-    }
     public NPCSO npc;
-    [SerializeField] AtlasSO atlas;
+    [SerializeField] AtlasRenderer atlasRenderer;
     [SerializeField] NPCsDataSO npcData;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] TrainSettingsSO trainSettings;
@@ -46,23 +21,19 @@ public class NPCBrain : MonoBehaviour
     [SerializeField] SpyStatsSO spyStats;
     [SerializeField] ClipboardStatsSO clipboardStats;
     [SerializeField] MaterialIDSO materialIDs;
+
     public Rigidbody2D rigidBody;
     public BoxCollider2D boxCollider;
-    public MeshRenderer meshRenderer;
 
     public SlideDoors curSlideDoors;
     public MaterialPropertyBlock mpb;
     public CancellationTokenSource ctsFade;
         
     public Carriage curCarriage;
-    public VisualEffect sleepingZs;
-    public VisualEffect musicNotes;
-    public VisualEffect talkingLines;
-
-    public GameObject smoke;
 
     public StationSO startStation;
     public StationSO endStation;
+
 
     [Serializable] public struct StatData
     {
@@ -77,12 +48,12 @@ public class NPCBrain : MonoBehaviour
         public float targetAlpha;
         public float atlasIndexClock;
 
-        public NPCTraits.Behaviours curBehaviour;
-        public NPCTraits.Behaviours behaviours;
+        public Behaviours curBehaviour;
+        public Behaviours behaviours;
         
-        public State curState;
+        public NPCState curState;
         public Path curPath;
-        public Type type;
+        public Role role;
         public AtlasClip curClip;
 
         public uint smokerRoomIndex;
@@ -97,27 +68,32 @@ public class NPCBrain : MonoBehaviour
         public bool spriteFlip;
     }
     [SerializeField] public StatData stats;
-
     [Serializable] public struct InputData
     {
         internal float move;
     }
     [SerializeField] InputData inputData;
+
+
+    private AtlasSpawner sleepingZs;
+    private AtlasSpawner smoke;
+    private AtlasSpawner speechBubble;
+    private AtlasSpawner musicNotes;
     private void Awake()
     {
         mpb = new MaterialPropertyBlock();
         ctsFade = new CancellationTokenSource();
 
-        stats.curState = State.Idling;
-        stats.curPath = Path.Nothing;
+        stats.curState = NPCState.Idling;
+        stats.curPath = Path.None;
         stats.chairPosIndex = int.MaxValue;
         stats.curAlpha = 1;
         stats.selectedProfileIndex = int.MaxValue;
 
-        SetLayer().Forget();
+        SetLayer();
         if (stats.behaviours == 0)
         {
-            stats.behaviours = NPCTraits.GetBehaviours(npc.behaviours);
+            stats.behaviours = GetBehaviours(npc.behaviours);
         }
     }
     private void OnEnable()
@@ -128,35 +104,27 @@ public class NPCBrain : MonoBehaviour
     private void Start()
     {
         mpb.SetFloat(materialIDs.ids.zPos, trainSettings.maxMinWorldZPos.postion);
-        if (((stats.behaviours & NPCTraits.Behaviours.Takes_naps) != 0) && sleepingZs == null)
+        if (((stats.behaviours & Behaviours.Takes_naps) != 0) && sleepingZs == null)
         {
             sleepingZs = Instantiate(npcData.sleepingZs, transform);
-            sleepingZs.Stop();
         }
-        if (((stats.behaviours & NPCTraits.Behaviours.Frequent_smoker) != 0) && smoke == null)
+        if (((stats.behaviours & Behaviours.Frequent_smoker) != 0) && smoke == null)
         {
             smoke = Instantiate(npcData.smoke, transform);
-            smoke.SetActive(false);
-            //TODO: Make smoke a visual effect
         }
-        if (((stats.behaviours & NPCTraits.Behaviours.Listens_to_music) != 0) && musicNotes == null)
+        if (((stats.behaviours & Behaviours.Listens_to_music) != 0) && musicNotes == null)
         {
             musicNotes = Instantiate(npcData.musicNotes, transform);
             musicNotes.Stop();
         }
-        if (((stats.behaviours & NPCTraits.Behaviours.Lots_of_phone_calls) != 0) && talkingLines == null)
+        if (((stats.behaviours & Behaviours.Lots_of_phone_calls) != 0) && speechBubble == null)
         {
-            talkingLines = Instantiate(npcData.speechBubble, transform);
-            talkingLines.Stop();
+            speechBubble = Instantiate(npcData.speechBubble, transform);
         }
     }
-    private async UniTask SetLayer()
+    private void SetLayer()
     {
-        rigidBody.gravityScale = 0;
-        while (layerSettings.stationMask == 0) await UniTask.Yield();
         rigidBody.includeLayers = layerSettings.stationMask;
-        rigidBody.gravityScale = 1;
-
     }
     private void OnDisable()
     {
@@ -174,17 +142,16 @@ public class NPCBrain : MonoBehaviour
             stats.stateClock += Time.deltaTime;
         }
 
-        if ((stats.curBehaviour & NPCTraits.Behaviours.Frequent_smoker) != 0 && stats.curPath != Path.ToSmokerRoom)
+        if ((stats.curBehaviour & NPC.Behaviours.Frequent_smoker) != 0 && stats.curPath != Path.ToSmokerRoom)
         {
             FindSmokersRoom();
         }
-        meshRenderer.SetPropertyBlock(mpb);
     }
     private void FixedUpdate()
     {
         FixedUpdateStates();
         BoardTrain();
-        stats.targetDist = stats.curPath != Path.Nothing ? stats.targetXPos - transform.position.x : 0;
+        stats.targetDist = stats.curPath != Path.None ? stats.targetXPos - transform.position.x : 0;
         inputData.move = Mathf.Abs(stats.targetDist) > 0.1f ? Mathf.Sign(stats.targetDist) : 0;
         stats.targetXVelocity = npc.moveSpeed  * inputData.move;
         rigidBody.linearVelocityX = npc.moveSpeed  * inputData.move;
@@ -193,42 +160,42 @@ public class NPCBrain : MonoBehaviour
     {
         if (inputData.move != 0)
         {
-            SetState(State.Walking);
+            SetState(NPCState.Walking);
         }
         else if (stats.curBehaviour == 0)
         {
-            SetState(State.Idling);
+            SetState(NPCState.Idling);
         }
-        else if ((stats.curBehaviour & NPCTraits.Behaviours.Frequent_smoker) != 0)
+        else if ((stats.curBehaviour & NPC.Behaviours.Frequent_smoker) != 0)
         {
-            SetState(State.Smoking);
+            SetState(NPCState.Smoking);
         }
-        else if ((stats.curBehaviour & NPCTraits.Behaviours.Takes_naps) != 0)
+        else if ((stats.curBehaviour & NPC.Behaviours.Takes_naps) != 0)
         {
-            SetState(State.Sleeping);
+            SetState(NPCState.Sleeping);
         }
-        else if ((stats.curBehaviour & NPCTraits.Behaviours.Always_hungry) != 0)
+        else if ((stats.curBehaviour & NPC.Behaviours.Always_hungry) != 0)
         {
-            SetState(State.Eating);
+            SetState(NPCState.Eating);
         }
-        else if ((stats.curBehaviour & NPCTraits.Behaviours.Listens_to_music) != 0)
+        else if ((stats.curBehaviour & NPC.Behaviours.Listens_to_music) != 0)
         {
-            SetState(State.Music);
+            SetState(NPCState.Music);
         }
-        else if ((stats.curBehaviour & NPCTraits.Behaviours.Lots_of_phone_calls) != 0)
+        else if ((stats.curBehaviour & NPC.Behaviours.Lots_of_phone_calls) != 0)
         {
-            SetState(State.Calling);
+            SetState(NPCState.Calling);
         }
-        else if ((stats.curBehaviour & NPCTraits.Behaviours.Enjoys_reading) != 0)
+        else if ((stats.curBehaviour & NPC.Behaviours.Enjoys_reading) != 0)
         {
-            SetState(State.Reading);
+            SetState(NPCState.Reading);
         }
     }
     private void UpdateStates()
     {
         switch (stats.curState)
         {
-            case State.Idling:
+            case NPCState.Idling:
             {
                 if (stats.stateClock > stats.stateDuration)
                 {
@@ -236,13 +203,13 @@ public class NPCBrain : MonoBehaviour
                 }
             }
             break;
-            case State.Walking:
+            case NPCState.Walking:
             {
                 stats.spriteFlip = inputData.move > 0;
                // mpb.SetInt(materialIDs.ids.flip, stats.spriteFlip ? 1 : 0);
             }
             break;
-            case State.Smoking:
+            case NPCState.Smoking:
             {
                 smoke.transform.localPosition = new Vector3(stats.curSpriteMarkerObjPos.x, stats.curSpriteMarkerObjPos.y, -0.5f);
 
@@ -253,7 +220,7 @@ public class NPCBrain : MonoBehaviour
 
             }
             break;
-            case State.Sleeping:
+            case NPCState.Sleeping:
             {
                 
                 sleepingZs.transform.localPosition = new Vector3(stats.curSpriteMarkerObjPos.x, stats.curSpriteMarkerObjPos.y, -0.5f);
@@ -264,7 +231,7 @@ public class NPCBrain : MonoBehaviour
                 }
             }
             break;
-            case State.Eating:
+            case NPCState.Eating:
             {
                 if (stats.stateClock > stats.stateDuration)
                 {
@@ -272,7 +239,7 @@ public class NPCBrain : MonoBehaviour
                 }
             }
             break;
-            case State.Music:
+            case NPCState.Music:
             {
 
                 musicNotes.transform.localPosition = new Vector3(stats.curSpriteMarkerObjPos.x, stats.curSpriteMarkerObjPos.y, -0.5f);
@@ -283,9 +250,9 @@ public class NPCBrain : MonoBehaviour
                 }
             }
             break;
-            case State.Calling:
+            case NPCState.Calling:
             {
-                talkingLines.transform.localPosition = new Vector3(stats.curSpriteMarkerObjPos.x, stats.curSpriteMarkerObjPos.y, transform.position.z - 0.5f);
+                speechBubble.transform.localPosition = new Vector3(stats.curSpriteMarkerObjPos.x, stats.curSpriteMarkerObjPos.y, transform.position.z - 0.5f);
 
                 if (stats.stateClock > stats.stateDuration)
                 {
@@ -293,7 +260,7 @@ public class NPCBrain : MonoBehaviour
                 }
             }
             break;
-            case State.Reading:
+            case NPCState.Reading:
             {
                 if (stats.stateClock > stats.stateDuration)
                 {
@@ -307,18 +274,18 @@ public class NPCBrain : MonoBehaviour
     {
         switch (stats.curState)
         {
-            case State.Idling:
+            case NPCState.Idling:
             {
 
             }
             break;
-            case State.Walking:
+            case NPCState.Walking:
             {
             }
             break;
         }
     }
-    private void SetState(State newState)
+    private void SetState(NPCState newState)
     {
         if (stats.curState == newState) return;
         ExitState();
@@ -333,7 +300,7 @@ public class NPCBrain : MonoBehaviour
         stats.curFrameIndex = 0;
         switch (stats.curState)
         {
-            case State.Idling:
+            case NPCState.Idling:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
 
@@ -349,102 +316,98 @@ public class NPCBrain : MonoBehaviour
                 }
             }
             break;
-            case State.Walking:
+            case NPCState.Walking:
             {
-                stats.curClip = atlas.clipDict[(int)NPCMotion.Walking];
+                stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.Walking];
             }
             break;
-            case State.Smoking:
+            case NPCState.Smoking:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
-                stats.curClip = atlas.clipDict[(int)NPCMotion.Smoking];
-                smoke.SetActive(true);
+                stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.Smoking];
+                smoke.Start();
             }
             break;
-            case State.Sleeping:
+            case NPCState.Sleeping:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
 
-                sleepingZs.transform.position = new Vector3(meshRenderer.bounds.center.x, meshRenderer.bounds.max.y, transform.position.z - 0.5f);
-                sleepingZs.Reinit();
-                sleepingZs.Play();
+                //sleepingZs.transform.position = new Vector3(meshRenderer.bounds.center.x, meshRenderer.bounds.max.y, transform.position.z - 0.5f);
+                sleepingZs.Start();
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    stats.curClip = atlas.clipDict[(int)NPCMotion.SittingSleeping];
+                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingSleeping];
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
                     mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
                 }
                 else
                 {
-                    stats.curClip = atlas.clipDict[(int)NPCMotion.StandingSleeping];
+                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingSleeping];
                 }
             }
             break;
-            case State.Eating:
+            case NPCState.Eating:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
 
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    stats.curClip = atlas.clipDict[(int)NPCMotion.SittingAboutToEat];
+                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingAboutToEat];
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
                     mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
                 }
                 else
                 {
-                    stats.curClip = atlas.clipDict[(int)NPCMotion.StandingAboutToEat];
+                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingAboutToEat];
                 }
             }
             break;
-            case State.Music:
+            case NPCState.Music:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
 
-
-                musicNotes.Reinit();
-                musicNotes.Play();
+                musicNotes.Start();
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    stats.curClip = atlas.clipDict[(int)NPCMotion.SittingMusic];
+                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingMusic];
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
                     mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
                 }
                 else
                 {
-                    stats.curClip = atlas.clipDict[(int)NPCMotion.StandingMusic];
+                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingMusic];
                 }
             }
             break;
-            case State.Calling:
+            case NPCState.Calling:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
-                talkingLines.Reinit();
-                talkingLines.Play();
+                speechBubble.Start();
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    stats.curClip = atlas.clipDict[(int)NPCMotion.SittingCalling];
+                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingCalling];
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
                     mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
                 }
                 else
                 {
-                    stats.curClip = atlas.clipDict[(int)NPCMotion.StandingCalling];
+                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingCalling];
                 }
             }
             break;
-            case State.Reading:
+            case NPCState.Reading:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    stats.curClip = atlas.clipDict[(int)NPCMotion.SittingAboutToRead];
+                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingAboutToRead];
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.chairZPos);
                     mpb.SetFloat(materialIDs.ids.zPos, curCarriage.chairZPos);
                 }
                 else
                 {
 
-                    stats.curClip = atlas.clipDict[(int)NPCMotion.StandingReading];
+                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingReading];
                 }
             }
             break;
@@ -454,35 +417,35 @@ public class NPCBrain : MonoBehaviour
     {
         switch (stats.curState)
         {
-            case State.Idling:
+            case NPCState.Idling:
             {
 
             }
             break;
-            case State.Walking:
+            case NPCState.Walking:
             {
             }
             break;
-            case State.Smoking:
+            case NPCState.Smoking:
             {
-                smoke.SetActive(false);
+                smoke.Stop();
                 curCarriage.smokersRoomData[stats.smokerRoomIndex].npcCount--;
                 QueueForChair();
             }
             break;
-            case State.Sleeping:
+            case NPCState.Sleeping:
             {
                 sleepingZs.Stop();
             }
             break;
-            case State.Music:
+            case NPCState.Music:
             {
                 musicNotes.Stop();
             }
             break;
-            case State.Calling:
+            case NPCState.Calling:
             {
-                talkingLines.Stop();
+                speechBubble.Stop();
             }
             break;
         }
@@ -705,7 +668,7 @@ public class NPCBrain : MonoBehaviour
         stats.curClip.GetNextSprite(ref stats.atlasIndexClock, ref stats.curFrameIndex, ref stats.prevAtlasIndex);
         if (stats.curFrameIndex != stats.prevAtlasIndex)
         {
-            MarkerPosition[] curSpriteMarkers = atlas.motionSprites[stats.curFrameIndex].markers;
+            MarkerPosition[] curSpriteMarkers = atlasRenderer.atlas.motionSprites[stats.curFrameIndex].markers;
             if (curSpriteMarkers.Length > 0)
             {
                 stats.curSpriteMarkerObjPos = curSpriteMarkers[0].objectPos;
@@ -716,11 +679,11 @@ public class NPCBrain : MonoBehaviour
     {
         if (UnityEngine.Random.Range(0, 2) == 0)
         {
-            return atlas.clipDict[(int)NPCMotion.StandingBreathing];
+            return  atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingBreathing];
         }
         else
         {
-            return atlas.clipDict[(int)NPCMotion.StandingBlinking];
+            return atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingBlinking];
 
         }
     }
@@ -728,14 +691,14 @@ public class NPCBrain : MonoBehaviour
     {
         if (UnityEngine.Random.Range(0, 2) == 0)
         {
-            return atlas.clipDict[(int)NPCMotion.SittingBreathing];
+            return atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingBreathing];
         }
         else
         {
-            return atlas.clipDict[(int)NPCMotion.SittingBlinking];
+            return atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingBlinking];
         }
     }
-    private NPCTraits.Behaviours PickBehaviour()
+    private NPC.Behaviours PickBehaviour()
     {
         int behaviourValue = (int)stats.behaviours;
         int[] flags = new int[32];
@@ -752,7 +715,7 @@ public class NPCBrain : MonoBehaviour
         }
         int chosenFlag = flags[UnityEngine.Random.Range(0, flagCount)];
 
-        return (NPCTraits.Behaviours)chosenFlag;
+        return (NPC.Behaviours)chosenFlag;
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
@@ -761,21 +724,21 @@ public class NPCBrain : MonoBehaviour
         Gizmos.color = Color.magenta;
         Gizmos.DrawLine(boxCollider.bounds.center, new Vector2(stats.targetXPos, boxCollider.bounds.center.y));
 
-        Vector3 typeLabel = meshRenderer.bounds.max + Vector3.up * 0.2f;
+        Vector3 typeLabel = transform.position + atlasRenderer.sprite.worldSize + Vector3.up * 0.2f;
         Vector3 stateLabel = typeLabel + Vector3.up;
 
         GUIStyle typeStyle = new GUIStyle();
-        typeStyle.normal.textColor = stats.type == Type.Agent ? Color.red : Color.green;
+        typeStyle.normal.textColor = stats.role == Role.Traitor ? Color.red : Color.green;
         typeStyle.alignment = TextAnchor.UpperCenter;
         typeStyle.fontSize = 10;
 
         GUIStyle stateStyle = new GUIStyle();
-        stateStyle.normal.textColor = stats.type == Type.Agent ? Color.red : Color.green;
+        stateStyle.normal.textColor = stats.role == Role.Traitor ? Color.red : Color.green;
         stateStyle.alignment = TextAnchor.UpperCenter;
         stateStyle.fontSize = 10;
 
         // Draw the label in Scene view
-        Handles.Label(typeLabel, stats.type.ToString(), typeStyle);
+        Handles.Label(typeLabel, stats.role.ToString(), typeStyle);
         Handles.Label(stateLabel, stats.curClip.ToString(), stateStyle);
 
     }

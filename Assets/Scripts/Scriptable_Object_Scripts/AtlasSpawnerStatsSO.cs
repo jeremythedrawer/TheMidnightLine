@@ -16,5 +16,5 @@ public class AtlasSpawnerStatsSO : ScriptableObject
     public int computeGroups;
     public float trainToMaxBoundDist;
 
-    public SpawnerData[] spawnerDataArray;
+    public ZoneSpawnerData[] spawnerDataArray;
 }

@@ -155,8 +155,8 @@ public class Page : MonoBehaviour
     public void SetProfilePageParams(int pageIndex)
     {
         stats.pageIndex = pageIndex;
-        NPCTraits.Behaviours rawBehave = clipboardStats.profilePageArray[pageIndex].behaviours;
-        NPCTraits.Appearence rawAppear = clipboardStats.profilePageArray[pageIndex].appearence;
+        NPC.Behaviours rawBehave = clipboardStats.profilePageArray[pageIndex].behaviours;
+        NPC.Appearence rawAppear = clipboardStats.profilePageArray[pageIndex].appearence;
 
         int behaveCount = Bitwise.GetSetBitCount((long)rawBehave);
         int[] behavePositions = new int[behaveCount];
@@ -164,9 +164,9 @@ public class Page : MonoBehaviour
 
         int posIndex = 0;
         int flagIndex = 0;
-        foreach (NPCTraits.Behaviours flag in Enum.GetValues(typeof(NPCTraits.Behaviours)))
+        foreach (NPC.Behaviours flag in Enum.GetValues(typeof(NPC.Behaviours)))
         {
-            if (flag == NPCTraits.Behaviours.Nothing) continue;
+            if (flag == NPC.Behaviours.Nothing) continue;
 
             if ((rawBehave & flag) != 0)
             {
@@ -176,9 +176,9 @@ public class Page : MonoBehaviour
             flagIndex++;
         }
         flagIndex = 0;
-        foreach (NPCTraits.Appearence flag in Enum.GetValues(typeof(NPCTraits.Appearence)))
+        foreach (NPC.Appearence flag in Enum.GetValues(typeof(NPC.Appearence)))
         {
-            if (flag == NPCTraits.Appearence.Nothing) continue;
+            if (flag == NPC.Appearence.Nothing) continue;
 
             if ((rawAppear & flag) != 0)
             {
@@ -191,12 +191,12 @@ public class Page : MonoBehaviour
         string behaveText = "";
         for (int i = 0; i < behavePositions.Length; i++)
         {
-            behaveText += "- " + NPCTraits.behaviourDescriptions[behavePositions[i]];
+            behaveText += "- " + NPC.behaviourDescriptions[behavePositions[i]];
             if (i < behavePositions.Length - 1) behaveText += "\n";
         }
 
         behavioursText.text = behaveText;
-        appearenceText.text = "- " + NPCTraits.appearenceDescriptions[appearPosition];
+        appearenceText.text = "- " + NPC.appearenceDescriptions[appearPosition];
 
         borderImage.color = clipboardStats.profilePageArray[pageIndex].color;
 

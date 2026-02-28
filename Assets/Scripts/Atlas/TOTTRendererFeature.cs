@@ -148,15 +148,14 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     }
     private class AtlasParticlePass : ScriptableRenderPass
     {
-        private static AtlasSpawnerSettingsSO spawnerSettings;
-        private static AtlasSpawnerStatsSO spawnerStats;
-        private static MaterialIDSO materialIDs;
+        private AtlasSpawnerSettingsSO spawnerSettings;
+        private AtlasSpawnerStatsSO spawnerStats;
         public AtlasParticlePass(AtlasSpawnerSettingsSO settings, AtlasSpawnerStatsSO stats, MaterialIDSO matIDs)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
             spawnerSettings = settings;
             spawnerStats = stats;
-            materialIDs = matIDs;
+
         }
 
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
@@ -168,7 +167,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             passData.camera = cameraData.camera;
             builder.SetRenderAttachment(resources.activeColorTexture, 0);
             builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
-            builder.AllowPassCulling(false);
 
             builder.SetRenderFunc((AtlasPassData data, RasterGraphContext ctx) =>
             {
@@ -176,14 +174,15 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             });
         }
 
-        private static void ExecuteParticles(RasterCommandBuffer cmd, Camera camera)
+        private void ExecuteParticles(RasterCommandBuffer cmd, Camera camera)
         {
             for (int i = 0; i < spawnerStats.spawnerDataArray.Length; i++)
             {
-                SpawnerData spawnerData = spawnerStats.spawnerDataArray[i];
+                ZoneSpawnerData zoneSpawnerData = spawnerStats.spawnerDataArray[i];
 
-                if (!spawnerData.active) continue;
-                cmd.DrawProcedural(Matrix4x4.identity, spawnerSettings.backgroundMaterial, shaderPass: 0, MeshTopology.Quads, MAX_VERTEX_COUNT, 1, spawnerData.mpb);
+                if (!zoneSpawnerData.spawnerData.active || zoneSpawnerData.spawnerData.particleBuffer == null) continue;
+
+                cmd.DrawProcedural(Matrix4x4.identity, spawnerSettings.backgroundMaterial, shaderPass: 0, MeshTopology.Quads, MAX_VERTEX_COUNT, 1, zoneSpawnerData.spawnerData.mpb);
             }
         }
     }

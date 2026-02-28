@@ -2,9 +2,36 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 
-public static class NPCTraits
+public static class NPC
 {
-    static NPCTraits() { InitializeDescriptions(); }
+    static NPC() { InitializeDescriptions(); }
+
+    public enum NPCState
+    {
+        Idling,
+        Walking,
+        Smoking,
+        Sleeping,
+        Eating,
+        Music,
+        Calling,
+        Reading
+    }
+
+    public enum Role
+    {
+        Traitor,
+        Bystander
+    }
+
+    public enum Path
+    {
+        None,
+        ToSmokerRoom,
+        ToChair,
+        ToSlideDoor,
+    }
+
 
     [Flags] public enum Appearence
     {

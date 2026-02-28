@@ -1,5 +1,6 @@
-#include "Assets/Shaders/HLSL/BackgroundParticles.hlsl"
+#include "Assets/Shaders/HLSL/AtlasParticles.hlsl"
 #include "Assets/Shaders/HLSL/Random.hlsl"
+
 
 #define THREADS_PER_GROUP 64
 
@@ -39,14 +40,14 @@ static const float B0_OFFSET = 6.0;
 static const float B1_OFFSET = 7.0;
 static const float B2_OFFSET = 8.0;
 
-RWStructuredBuffer<ParticleOutput> _Foreground0;
-RWStructuredBuffer<ParticleOutput> _Middleground0;
-RWStructuredBuffer<ParticleOutput> _Middleground1;
-RWStructuredBuffer<ParticleOutput> _Middleground2;
-RWStructuredBuffer<ParticleOutput> _Middleground3;
-RWStructuredBuffer<ParticleOutput> _Background0;
-RWStructuredBuffer<ParticleOutput> _Background1;
-RWStructuredBuffer<ParticleOutput> _Background2;
+RWStructuredBuffer<ZoneOutput> _Foreground0;
+RWStructuredBuffer<ZoneOutput> _Middleground0;
+RWStructuredBuffer<ZoneOutput> _Middleground1;
+RWStructuredBuffer<ZoneOutput> _Middleground2;
+RWStructuredBuffer<ZoneOutput> _Middleground3;
+RWStructuredBuffer<ZoneOutput> _Background0;
+RWStructuredBuffer<ZoneOutput> _Background1;
+RWStructuredBuffer<ZoneOutput> _Background2;
 
 uint _BackgroundMaskCount;
 
@@ -61,11 +62,12 @@ uint _BackgroundParticleCount;
 uniform float _Velocity;
 
 
-void InitOutput(int id, int particleCount, float minPos, float sizeRange, float offset, inout ParticleOutput output)
+void InitOutput(int id, int particleCount, float minPos, float sizeRange, float offset, inout ZoneOutput output)
 {
     float normID = (float) id / (float) particleCount;
     
     output.position.z = minPos + (normID * sizeRange);
+    output.position.y = 0;
     output.parallaxFactor = (_SpawnerMaxPos.z - output.position.z) / _SpawnerMaxPos.z;
     
     uint seed = id ^ asuint(offset * 123.456);
@@ -77,7 +79,7 @@ void InitOutput(int id, int particleCount, float minPos, float sizeRange, float 
     output.position.x = _SpawnerMinPos.x + (_SpawnerSize.x * output.rand01);
 }
 
-void UpdateOutput(inout ParticleOutput output)
+void UpdateOutput(inout ZoneOutput output)
 {
     if (output.alive == 1)
     {
@@ -99,9 +101,10 @@ void UpdateOutput(inout ParticleOutput output)
 [numthreads(THREADS_PER_GROUP, 1, 1)]
 void CSForeground0_Init(uint id : SV_DispatchThreadID)
 {
-    if (id >= _ForegroundParticleCount) return;
+    if (id >= _ForegroundParticleCount)
+        return;
     
-    ParticleOutput output = _Foreground0[id];
+    ZoneOutput output = _Foreground0[id];
     InitOutput(id, _ForegroundParticleCount, FORE_MIN, FORE_SIZE, F0_OFFSET, output);
     
     _Foreground0[id] = output;
@@ -111,9 +114,10 @@ void CSForeground0_Init(uint id : SV_DispatchThreadID)
 [numthreads(THREADS_PER_GROUP, 1, 1)]
 void CSMiddleground0_Init(uint id : SV_DispatchThreadID)
 {
-    if (id >= _MiddlegroundParticleCount) return;
+    if (id >= _MiddlegroundParticleCount)
+        return;
     
-    ParticleOutput output = _Middleground0[id];
+    ZoneOutput output = _Middleground0[id];
     InitOutput(id, _MiddlegroundParticleCount, MID_MIN, MID_SIZE, M0_OFFSET, output);
     
     _Middleground0[id] = output;
@@ -122,9 +126,10 @@ void CSMiddleground0_Init(uint id : SV_DispatchThreadID)
 [numthreads(THREADS_PER_GROUP, 1, 1)]
 void CSMiddleground1_Init(uint id : SV_DispatchThreadID)
 {
-    if (id >= _MiddlegroundParticleCount) return;
+    if (id >= _MiddlegroundParticleCount)
+        return;
     
-    ParticleOutput output = _Middleground1[id];
+    ZoneOutput output = _Middleground1[id];
     InitOutput(id, _MiddlegroundParticleCount, MID_MIN, MID_SIZE, M1_OFFSET, output);
     _Middleground1[id] = output;
 }
@@ -132,9 +137,10 @@ void CSMiddleground1_Init(uint id : SV_DispatchThreadID)
 [numthreads(THREADS_PER_GROUP, 1, 1)]
 void CSMiddleground2_Init(uint id : SV_DispatchThreadID)
 {
-    if (id >= _MiddlegroundParticleCount) return;
+    if (id >= _MiddlegroundParticleCount)
+        return;
     
-    ParticleOutput output = _Middleground2[id];
+    ZoneOutput output = _Middleground2[id];
     InitOutput(id, _MiddlegroundParticleCount, MID_MIN, MID_SIZE, M2_OFFSET, output);
     _Middleground2[id] = output;
 }
@@ -142,9 +148,10 @@ void CSMiddleground2_Init(uint id : SV_DispatchThreadID)
 [numthreads(THREADS_PER_GROUP, 1, 1)]
 void CSMiddleground3_Init(uint id : SV_DispatchThreadID)
 {
-    if (id >= _MiddlegroundParticleCount) return;
+    if (id >= _MiddlegroundParticleCount)
+        return;
     
-    ParticleOutput output = _Middleground3[id];
+    ZoneOutput output = _Middleground3[id];
     InitOutput(id, _MiddlegroundParticleCount, MID_MIN, MID_SIZE, M3_OFFSET, output);
     _Middleground3[id] = output;
 }
@@ -152,9 +159,10 @@ void CSMiddleground3_Init(uint id : SV_DispatchThreadID)
 [numthreads(THREADS_PER_GROUP, 1, 1)]
 void CSBackground0_Init(uint id : SV_DispatchThreadID)
 {
-    if (id >= _BackgroundParticleCount) return;
+    if (id >= _BackgroundParticleCount)
+        return;
     
-    ParticleOutput output = _Background0[id];
+    ZoneOutput output = _Background0[id];
     InitOutput(id, _BackgroundParticleCount, BACK_MIN, BACK_SIZE, B0_OFFSET, output);
     _Background0[id] = output;
 }
@@ -162,9 +170,10 @@ void CSBackground0_Init(uint id : SV_DispatchThreadID)
 [numthreads(THREADS_PER_GROUP, 1, 1)]
 void CSBackground1_Init(uint id : SV_DispatchThreadID)
 {
-    if (id >= _BackgroundParticleCount) return;
+    if (id >= _BackgroundParticleCount)
+        return;
     
-    ParticleOutput output = _Background1[id];
+    ZoneOutput output = _Background1[id];
     InitOutput(id, _BackgroundParticleCount, BACK_MIN, BACK_SIZE, B1_OFFSET, output);
     _Background1[id] = output;
 }
@@ -172,9 +181,10 @@ void CSBackground1_Init(uint id : SV_DispatchThreadID)
 [numthreads(THREADS_PER_GROUP, 1, 1)]
 void CSBackground2_Init(uint id : SV_DispatchThreadID)
 {
-    if (id >= _BackgroundParticleCount) return;
+    if (id >= _BackgroundParticleCount)
+        return;
     
-    ParticleOutput output = _Background2[id];
+    ZoneOutput output = _Background2[id];
     InitOutput(id, _BackgroundParticleCount, BACK_MIN, BACK_SIZE, B2_OFFSET, output);
     _Background2[id] = output;
 }
@@ -186,7 +196,7 @@ void CSForeground0_Update(uint id : SV_DispatchThreadID)
     if (id >= _ForegroundParticleCount)
         return;
     
-    ParticleOutput output = _Foreground0[id];
+    ZoneOutput output = _Foreground0[id];
     UpdateOutput(output);
     _Foreground0[id] = output;
 
@@ -198,7 +208,7 @@ void CSMiddleground0_Update(uint id : SV_DispatchThreadID)
     if (id >= _MiddlegroundParticleCount)
         return;
     
-    ParticleOutput output = _Middleground0[id];
+    ZoneOutput output = _Middleground0[id];
     UpdateOutput(output);
     
     _Middleground0[id] = output;
@@ -210,7 +220,7 @@ void CSMiddleground1_Update(uint id : SV_DispatchThreadID)
     if (id >= _MiddlegroundParticleCount)
         return;
     
-    ParticleOutput output = _Middleground1[id];
+    ZoneOutput output = _Middleground1[id];
     UpdateOutput(output);
     _Middleground1[id] = output;
 }
@@ -221,7 +231,7 @@ void CSMiddleground2_Update(uint id : SV_DispatchThreadID)
     if (id >= _MiddlegroundParticleCount)
         return;
     
-    ParticleOutput output = _Middleground2[id];
+    ZoneOutput output = _Middleground2[id];
     UpdateOutput(output);
     _Middleground2[id] = output;
 }
@@ -232,7 +242,7 @@ void CSMiddleground3_Update(uint id : SV_DispatchThreadID)
     if (id >= _MiddlegroundParticleCount)
         return;
     
-    ParticleOutput output = _Middleground3[id];
+    ZoneOutput output = _Middleground3[id];
     UpdateOutput(output);
     _Middleground3[id] = output;
 }
@@ -243,7 +253,7 @@ void CSBackground0_Update(uint id : SV_DispatchThreadID)
     if (id >= _BackgroundParticleCount)
         return;
     
-    ParticleOutput output = _Background0[id];
+    ZoneOutput output = _Background0[id];
     UpdateOutput(output);
     _Background0[id] = output;
 }
@@ -254,7 +264,7 @@ void CSBackground1_Update(uint id : SV_DispatchThreadID)
     if (id >= _BackgroundParticleCount)
         return;
     
-    ParticleOutput output = _Background1[id];
+    ZoneOutput output = _Background1[id];
     UpdateOutput(output);
     _Background1[id] = output;
 }
@@ -265,7 +275,7 @@ void CSBackground2_Update(uint id : SV_DispatchThreadID)
     if (id >= _BackgroundParticleCount)
         return;
     
-    ParticleOutput output = _Background2[id];
+    ZoneOutput output = _Background2[id];
     UpdateOutput(output);
     _Background2[id] = output;
 }
