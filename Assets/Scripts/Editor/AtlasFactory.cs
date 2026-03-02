@@ -8,6 +8,7 @@ using static Atlas;
 public class AtlasFactory : EditorWindow
 {
     private AtlasSO atlas;
+    private Texture2D markerTexture;
     private float spriteOrderTolerance;
     
     private Vector2 scroll;
@@ -85,6 +86,7 @@ public class AtlasFactory : EditorWindow
 
         EditorGUI.BeginChangeCheck();
         atlas = (AtlasSO)EditorGUILayout.ObjectField("Atlas", atlas, typeof(AtlasSO), allowSceneObjects: false, GUIWidth);
+        markerTexture = (Texture2D)EditorGUILayout.ObjectField("Marker Texture", markerTexture, typeof(Texture2D), allowSceneObjects: false, GUIWidth);
         if (EditorGUI.EndChangeCheck())
         {
             changeSprites = false;
@@ -113,6 +115,7 @@ public class AtlasFactory : EditorWindow
             selectedIndex = 0;
             changeSprites = true;
             MakeTextureReadable(atlas.texture);
+            MakeTextureReadable(markerTexture);
             GenerateSprites();
             atlas.UpdateClipDictionary();
             GetMotionData();
@@ -291,8 +294,9 @@ public class AtlasFactory : EditorWindow
     }
     private void GenerateSprites()
     {
-        Color32[] pixels = atlas.texture.GetPixels32();
-        bool[] visited = new bool[pixels.Length];
+        Color32[] atlasPixels = atlas.texture.GetPixels32();
+
+        bool[] visited = new bool[atlasPixels.Length];
 
         if (atlas.simpleSprites.Length > 0)
         {
@@ -342,13 +346,13 @@ public class AtlasFactory : EditorWindow
 
                 if (visited[index]) continue;
 
-                if (pixels[index].a == 0) continue;
+                if (atlasPixels[index].a == 0) continue;
 
-                List<Vector2Int> pixelPositions = FloodFill(x, y, atlas.texture.width, atlas.texture.height, ref visited, pixels);
+                List<Vector2Int> pixelPositions = FloodFill(x, y, atlas.texture.width, atlas.texture.height, ref visited, atlasPixels);
 
                 if (pixelPositions.Count < 30) continue;
                 
-                CreateAtlasSprite(pixelPositions, atlas.texture.width, atlas.texture.height, pixels, curSpriteIndex);
+                CreateAtlasSprite(pixelPositions, atlas.texture.width, atlas.texture.height, atlasPixels, curSpriteIndex);
                 curSpriteIndex++;
             }
         }
@@ -421,41 +425,46 @@ public class AtlasFactory : EditorWindow
         bool foundPivot = false;
         int slicesFound = 0;
 
-        for (int x = (int)minX; x <= maxX; x++)
+        if (markerTexture != null)
         {
-            for (int y = (int)minY; y <= maxY; y++)
+            Color32[] markerPixels = markerTexture.GetPixels32();
+
+            for (int x = (int)minX; x <= maxX; x++)
             {
-                int pixelIndex = x + y * (int)texWidth;
-                Color32 pixelColor = pixelColors[pixelIndex];
-
-                if (pixelColor.a == 0) continue; 
-
-                if (!foundPivot && pixelColor.r == atlas.pivotColor.r && pixelColor.g == atlas.pivotColor.g && pixelColor.b == atlas.pivotColor.b)
+                for (int y = (int)minY; y <= maxY; y++)
                 {
-                    pivot.x = x;
-                    pivot.y = y;
-                    foundPivot = true;
-                }
-                if (slicesFound < slices.Length && pixelColor.r == atlas.sliceColor.r && pixelColor.g == atlas.sliceColor.g && pixelColor.b == atlas.sliceColor.b)
-                {
-                    slices[slicesFound].x = x;
-                    slices[slicesFound].y = y;
-                    slicesFound++;
-                }
+                    int pixelIndex = x + y * (int)texWidth;
+                    Color32 pixelColor = markerPixels[pixelIndex];
+                    if (pixelColor.a == 0) continue;
 
-                for (int j = 0; j < atlas.markers.Length; j++)
-                {
-                    MarkerKey atlasMarker = atlas.markers[j];
+                    if (!foundPivot && pixelColor.r == atlas.pivotColor.r && pixelColor.g == atlas.pivotColor.g && pixelColor.b == atlas.pivotColor.b)
+                    {
+                        pivot.x = x;
+                        pivot.y = y;
+                        foundPivot = true;
+                    }
+                    if (slicesFound < slices.Length && pixelColor.r == atlas.sliceColor.r && pixelColor.g == atlas.sliceColor.g && pixelColor.b == atlas.sliceColor.b)
+                    {
+                        slices[slicesFound].x = x;
+                        slices[slicesFound].y = y;
+                        slicesFound++;
+                    }
 
-                    if (atlasMarker.color.r != pixelColor.r || atlasMarker.color.g != pixelColor.g || atlasMarker.color.b != pixelColor.b) continue;
-                    MarkerPosition newSpriteMarker = new MarkerPosition();
-                    newSpriteMarker.type = atlasMarker.type;
-                    newSpriteMarker.objectPos.x = (x - minX) / PIXELS_PER_UNIT;
-                    newSpriteMarker.objectPos.y = (y - minY) / PIXELS_PER_UNIT;
-                    spriteMarkers.Add(newSpriteMarker);
+                    for (int j = 0; j < atlas.markers.Length; j++)
+                    {
+                        MarkerKey atlasMarker = atlas.markers[j];
+
+                        if (atlasMarker.color.r != pixelColor.r || atlasMarker.color.g != pixelColor.g || atlasMarker.color.b != pixelColor.b) continue;
+                        MarkerPosition newSpriteMarker = new MarkerPosition();
+                        newSpriteMarker.type = atlasMarker.type;
+                        newSpriteMarker.objectPos.x = (x - minX) / PIXELS_PER_UNIT;
+                        newSpriteMarker.objectPos.y = (y - minY) / PIXELS_PER_UNIT;
+                        spriteMarkers.Add(newSpriteMarker);
+                    }
                 }
             }
         }
+
 
         SimpleSprite newSimpleSprite = new SimpleSprite();
 

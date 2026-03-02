@@ -24,13 +24,13 @@ MonoBehaviour:
   particleType: 0
   motionSprites: []
   simpleSprites:
-  - uvSizeAndPos: {x: 0.10546875, y: 0.29296875, z: 0.55078125, w: 0.0703125}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0.15, y: 0.41666666, z: 1}
-    index: 0
   - uvSizeAndPos: {x: 0.2109375, y: 0.29296875, z: 0.28125, w: 0.05859375}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 0.3, y: 0.41666666, z: 1}
+    index: 0
+  - uvSizeAndPos: {x: 0.10546875, y: 0.29296875, z: 0.55078125, w: 0.0703125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.15, y: 0.41666666, z: 1}
     index: 1
   - uvSizeAndPos: {x: 0.23828125, y: 0.30078125, z: 0.00390625, w: 0.03125}
     uvPivot: {x: 0, y: 0}
@@ -40,6 +40,10 @@ MonoBehaviour:
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 0.2611111, y: 0.5, z: 1}
     index: 3
+  - uvSizeAndPos: {x: 0.18359375, y: 0.3515625, z: 0.78125, w: 0.0078125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.2611111, y: 0.5, z: 1}
+    index: 4
   slicedSprites:
   - sprite:
       uvSizeAndPos: {x: 0.31640625, y: 0.29296875, z: 0.01171875, w: 0.40234375}

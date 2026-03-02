@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using UnityEngine;
 using UnityEngine.U2D;
 using UnityEngine.VFX;
@@ -6,7 +7,12 @@ using static AtlasBatch;
 public class GlyphSetter : MonoBehaviour
 {
     public int spriteIndex;
+    public float widthMax;
+    public float widthMin;
     public float width;
+
+    public float heightMax;
+    public float heightMin;
     public float height;
 
     public AtlasSO glyphAtlas;
@@ -14,8 +20,39 @@ public class GlyphSetter : MonoBehaviour
     public GraphicsBuffer uvSizeAndPosBuffer;
     public GraphicsBuffer worldSizeAndPosBuffer;
     public GraphicsBuffer widthHeightBuffer;
+
+    public float lifetime;
+    public float deltaTime;
     private void OnValidate()
     {
+        UpdateVFX();
+    }
+
+    private void Start()
+    {
+        deltaTime += 0.1f;
+        GetLifetime();
+    }
+    private void Update()
+    {
+        deltaTime += Time.deltaTime;
+
+        if (deltaTime > lifetime * 2)
+        {
+            width = Random.Range(widthMin, widthMax);
+            height = Random.Range(heightMin, heightMax);
+            UpdateVFX();
+            deltaTime = 0;
+        }
+    }
+
+    private void GetLifetime()
+    {
+        lifetime = vfx.GetFloat("Lifetime");
+    }
+    private void UpdateVFX()
+    {
+
         uvSizeAndPosBuffer?.Release();
         worldSizeAndPosBuffer?.Release();
         widthHeightBuffer?.Release();
@@ -28,7 +65,7 @@ public class GlyphSetter : MonoBehaviour
         widthHeightBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, 9, sizeof(float) * 2);
 
         Vector4[] uvSizeAndPosArray = new Vector4[9];
-        
+
         SliceSprite sliceSprite = glyphAtlas.slicedSprites[spriteIndex];
         for (int i = 0; i < 9; i++)
         {
@@ -48,7 +85,7 @@ public class GlyphSetter : MonoBehaviour
             new Vector4(sliceSprite.worldSlices.x,  sliceSprite.worldSlices.z,  0,                          0),
             new Vector4(centerWidth,                sliceSprite.worldSlices.z,  sliceSprite.worldSlices.x,  0),
             new Vector4(sliceSprite.worldSlices.y,  sliceSprite.worldSlices.z,  rightPos,  0),
-            
+
             new Vector4(sliceSprite.worldSlices.x,  centerHeight,               0,                          sliceSprite.worldSlices.z),
             new Vector4(centerWidth,                centerHeight,               sliceSprite.worldSlices.x,  sliceSprite.worldSlices.z),
             new Vector4(sliceSprite.worldSlices.y,  centerHeight,               rightPos,                   sliceSprite.worldSlices.z),
@@ -64,7 +101,7 @@ public class GlyphSetter : MonoBehaviour
         float uvCenterWidth = centerWidth / originalCenterWidth;
         float uvCenterHeight = centerHeight / originalCenterHeight;
 
-        Vector2[] widthHeight = new Vector2[]
+        Vector2[] widthHeightArray = new Vector2[]
         {
             new Vector2(1, 1),
             new Vector2(uvCenterWidth, 1),
@@ -80,11 +117,28 @@ public class GlyphSetter : MonoBehaviour
 
         uvSizeAndPosBuffer.SetData(uvSizeAndPosArray);
         worldSizeAndPosBuffer.SetData(worldSizeAndPosArray);
-        widthHeightBuffer.SetData(widthHeight);
+        widthHeightBuffer.SetData(widthHeightArray);
+
+
+        float lineHeight = vfx.GetFloat("LineHeight");
+        float lineSpace = vfx.GetFloat("LineSpace");
+
+        float lineSegment = lineHeight + (lineSpace * ( 1- (lineHeight / lineSpace)));
+
+        int lineCount = Mathf.CeilToInt(centerHeight / lineSegment);
+
+        Vector2 linePosition = new Vector2(sliceSprite.worldSlices.x, topPos - lineHeight);
 
         vfx.SetGraphicsBuffer("_UVSizeAndPos", uvSizeAndPosBuffer);
         vfx.SetGraphicsBuffer("_WorldSizeAndPos", worldSizeAndPosBuffer);
         vfx.SetGraphicsBuffer("_WidthHeight", widthHeightBuffer);
+        vfx.SetFloat("_LineWidth", centerWidth);
+        vfx.SetInt("_LineCount", lineCount);
+        vfx.SetVector2("_LinePosition", linePosition);
+
+        lifetime = (width + lineCount) * 0.2f;
+        vfx.SetFloat("Lifetime", lifetime);
+
         vfx.SetMesh("_Quad", GetQuad());
     }
 }

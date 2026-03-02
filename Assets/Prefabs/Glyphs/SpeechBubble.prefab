@@ -11,6 +11,7 @@ GameObject:
   - component: {fileID: 6825961106666852431}
   - component: {fileID: 3187548682956341316}
   - component: {fileID: 912628534549915619}
+  - component: {fileID: 4763482190767397074}
   m_Layer: 0
   m_Name: SpeechBubble
   m_TagString: Untagged
@@ -50,17 +51,53 @@ VisualEffect:
   m_ResourceVersion: 1
   m_PropertySheet:
     m_Float:
-      m_Array: []
+      m_Array:
+      - m_Value: 1
+        m_Name: Size
+        m_Overridden: 1
+      - m_Value: 1
+        m_Name: Scale
+        m_Overridden: 1
+      - m_Value: 1.3653333
+        m_Name: _LineWidth
+        m_Overridden: 1
+      - m_Value: 0.03
+        m_Name: LineHeight
+        m_Overridden: 1
+      - m_Value: 0.06
+        m_Name: LineSpace
+        m_Overridden: 1
+      - m_Value: 5
+        m_Name: Lifetime
+        m_Overridden: 1
     m_Vector2f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 1.1, y: 0.07222223}
+        m_Name: WorldScale
+        m_Overridden: 1
+      - m_Value: {x: 0.22, y: 0.02}
+        m_Name: _LineSize
+        m_Overridden: 1
+      - m_Value: {x: 0.22777778, y: 0.82694453}
+        m_Name: _LinePosition
+        m_Overridden: 1
     m_Vector3f:
       m_Array: []
     m_Vector4f:
-      m_Array: []
+      m_Array:
+      - m_Value: {x: 0.2111111, y: 0.18888888, z: 0.2777778, w: 0.2}
+        m_Name: _WorldSlices
+        m_Overridden: 1
     m_Uint:
       m_Array: []
     m_Int:
-      m_Array: []
+      m_Array:
+      - m_Value: 6
+        m_Name: _LineParticleCount
+        m_Overridden: 1
+      - m_Value: 11
+        m_Name: _LineCount
+        m_Overridden: 1
     m_Matrix4x4f:
       m_Array: []
     m_AnimationCurve:
@@ -68,7 +105,10 @@ VisualEffect:
     m_Gradient:
       m_Array: []
     m_NamedObject:
-      m_Array: []
+      m_Array:
+      - m_Value: {fileID: 0}
+        m_Name: _Quad
+        m_Overridden: 1
     m_Bool:
       m_Array: []
 --- !u!73398921 &912628534549915619
@@ -117,3 +157,20 @@ VFXRenderer:
   m_SortingLayerID: 0
   m_SortingLayer: 0
   m_SortingOrder: 0
+--- !u!114 &4763482190767397074
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6376601369502056672}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fcd4c09bf12018040a50631ef9f8c0be, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GlyphSetter
+  spriteIndex: 0
+  width: 3.96
+  height: 2.39
+  glyphAtlas: {fileID: 11400000, guid: 623abaf5c183a2a43b3a15fb40564867, type: 2}
+  vfx: {fileID: 3187548682956341316}
