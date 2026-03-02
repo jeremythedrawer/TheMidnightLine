@@ -17,34 +17,34 @@ public class ZoneSpawner : MonoBehaviour
     private void OnEnable()
     {
         InitializeBoundParameters();
-        InitializeAtlasCompute(spawnerSettings.atlasCompute, materialIDs, spawnerStats);
-        spawnerStats.spawnerDataArray = InitializeSpawnData(spawnerSettings.atlasCompute, materialIDs);
+        InitializeZoneCompute(spawnerSettings.atlasCompute, materialIDs, spawnerStats);
+        spawnerStats.zoneSpawnerDataArray = InitializeZoneSpawnData(spawnerSettings.atlasCompute, materialIDs);
         //spawnerSettings.currentTrip.zoneQueue = SetZoneQueue(spawnerSettings.currentTrip);
         //Zone nextZone = spawnerSettings.currentTrip.zoneQueue.Dequeue(); // TODO: This is just to show what the pattern should be at runtime
         for (int i = 0; i < spawnerSettings.currentTrip.zones.Length; i++)
         {
             if (spawnerSettings.currentTrip.zones[i].metersStart <= trainStats.metersTravelled)
             {
-                ChangeSpawner(spawnerSettings.currentTrip.zones[i], materialIDs, spawnerStats, spawnerSettings.atlasCompute);
+                ChangeZoneSpawner(spawnerSettings.currentTrip.zones[i], materialIDs, spawnerStats, spawnerSettings.atlasCompute);
             }
         }
 
     }
     private void OnDisable()
     {
-        for (int i = 0; i < spawnerStats.spawnerDataArray.Length; i++)
+        for (int i = 0; i < spawnerStats.zoneSpawnerDataArray.Length; i++)
         {
-            if (spawnerStats.spawnerDataArray[i].spawnerData.particleBuffer != null)
+            if (spawnerStats.zoneSpawnerDataArray[i].zoneSpawnerData.particleBuffer != null)
             {
-                spawnerStats.spawnerDataArray[i].spawnerData.particleBuffer.Release();
-                spawnerStats.spawnerDataArray[i].spawnerData.particleBuffer = null;
+                spawnerStats.zoneSpawnerDataArray[i].zoneSpawnerData.particleBuffer.Release();
+                spawnerStats.zoneSpawnerDataArray[i].zoneSpawnerData.particleBuffer = null;
             }
         }
     }
 
     private void Update()
     {
-        UpdateParticles(spawnerStats, spawnerSettings.atlasCompute, spyStats);
+        UpdateZoneParticles(spawnerStats, spawnerSettings.atlasCompute, spyStats);
     }
     private void InitializeBoundParameters()
     {

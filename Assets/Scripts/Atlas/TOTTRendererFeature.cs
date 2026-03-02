@@ -33,7 +33,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     private MatrixPass matrixPass;
     private BloomPass bloomPass;
 
-    private class AtlasPassData
+    private class ZonePassData
     {
         public Camera camera;
     }
@@ -69,14 +69,14 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
             UniversalResourceData resources = frameData.Get<UniversalResourceData>();
 
-            using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<AtlasPassData>("Atlas Batch Pass", out AtlasPassData passData);
+            using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<ZonePassData>("Atlas Batch Pass", out ZonePassData passData);
             passData.camera = cameraData.camera;
             builder.SetRenderAttachment(resources.activeColorTexture, 0);
             builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
             builder.AllowPassCulling(false);
 
 
-            builder.SetRenderFunc((AtlasPassData data, RasterGraphContext ctx) =>
+            builder.SetRenderFunc((ZonePassData data, RasterGraphContext ctx) =>
             {
                 ExecuteBatch(ctx.cmd, data.camera);
             });
@@ -148,14 +148,13 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     }
     private class AtlasParticlePass : ScriptableRenderPass
     {
-        private AtlasSpawnerSettingsSO spawnerSettings;
-        private AtlasSpawnerStatsSO spawnerStats;
+        private AtlasSpawnerSettingsSO zoneSpawnerSettings;
+        private AtlasSpawnerStatsSO zoneSpawnerStats;
         public AtlasParticlePass(AtlasSpawnerSettingsSO settings, AtlasSpawnerStatsSO stats, MaterialIDSO matIDs)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
-            spawnerSettings = settings;
-            spawnerStats = stats;
-
+            zoneSpawnerSettings = settings;
+            zoneSpawnerStats = stats;
         }
 
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
@@ -163,26 +162,27 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
             UniversalResourceData resources = frameData.Get<UniversalResourceData>();
 
-            using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<AtlasPassData>("Atlas Particle Pass", out AtlasPassData passData);
+            using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<ZonePassData>("Zone Particle Pass", out ZonePassData passData);
             passData.camera = cameraData.camera;
             builder.SetRenderAttachment(resources.activeColorTexture, 0);
             builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
 
-            builder.SetRenderFunc((AtlasPassData data, RasterGraphContext ctx) =>
+            builder.SetRenderFunc((ZonePassData data, RasterGraphContext ctx) =>
             {
-                ExecuteParticles(ctx.cmd, data.camera);
+                ExecuteZoneParticles(ctx.cmd);
             });
         }
 
-        private void ExecuteParticles(RasterCommandBuffer cmd, Camera camera)
+        private void ExecuteZoneParticles(RasterCommandBuffer cmd)
         {
-            for (int i = 0; i < spawnerStats.spawnerDataArray.Length; i++)
+
+            for (int i = 0; i < zoneSpawnerStats.zoneSpawnerDataArray.Length; i++)
             {
-                ZoneSpawnerData zoneSpawnerData = spawnerStats.spawnerDataArray[i];
+                ZoneSpawnerData zoneSpawnerData = zoneSpawnerStats.zoneSpawnerDataArray[i];
 
-                if (!zoneSpawnerData.spawnerData.active || zoneSpawnerData.spawnerData.particleBuffer == null) continue;
+                if (!zoneSpawnerData.zoneSpawnerData.active || zoneSpawnerData.zoneSpawnerData.particleBuffer == null) continue;
 
-                cmd.DrawProcedural(Matrix4x4.identity, spawnerSettings.backgroundMaterial, shaderPass: 0, MeshTopology.Quads, MAX_VERTEX_COUNT, 1, zoneSpawnerData.spawnerData.mpb);
+                cmd.DrawProcedural(Matrix4x4.identity, zoneSpawnerSettings.material, shaderPass: 0, MeshTopology.Quads, MAX_VERTEX_COUNT, 1, zoneSpawnerData.zoneSpawnerData.mpb);
             }
         }
     }

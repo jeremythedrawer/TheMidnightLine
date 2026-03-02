@@ -24,7 +24,7 @@ public static class AtlasBatch
     }
 
     public static readonly Dictionary<BatchKey, BatchData> batchDict = new Dictionary<BatchKey, BatchData>();
-    public static readonly List<(BatchKey key, BatchData data)> batchList = new List<(BatchKey key, BatchData data)>();
+    public static readonly List<(BatchKey key, BatchData)> batchList = new List<(BatchKey key, BatchData data)>();
     static Mesh quad;
     public static void PrepareFrame()
     {

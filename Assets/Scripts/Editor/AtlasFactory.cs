@@ -103,6 +103,7 @@ public class AtlasFactory : EditorWindow
 
         if (generateSprites)
         {
+            if (atlas.texture == null) return;
             simpleSpritesFound = 0;
             motionSpritesFound = 0;
             sliceSpritesFound = 0;
@@ -459,8 +460,8 @@ public class AtlasFactory : EditorWindow
         SimpleSprite newSimpleSprite = new SimpleSprite();
 
 
-        float spriteWidth = maxX - minX;
-        float spriteHeight = maxY - minY;
+        float spriteWidth = maxX - minX + 1;
+        float spriteHeight = maxY - minY + 1;
 
         newSimpleSprite.uvSizeAndPos.x = spriteWidth / texWidth;
         newSimpleSprite.uvSizeAndPos.y = spriteHeight / texHeight;
@@ -888,8 +889,8 @@ public class AtlasFactory : EditorWindow
                 Handles.color = Color.coral;
                 float leftPos = (slicedSprite.slice.x * spriteRect.width) + spriteRect.xMin;
                 float rightPos = (slicedSprite.slice.y * spriteRect.width) + spriteRect.xMin;
-                float bottomPos = (slicedSprite.slice.z * spriteRect.height) + spriteRect.yMin;
-                float topPos = (slicedSprite.slice.w * spriteRect.height) + spriteRect.yMin;
+                float bottomPos = spriteRect.yMax - (slicedSprite.slice.z * spriteRect.height);
+                float topPos = spriteRect.yMax - (slicedSprite.slice.w * spriteRect.height);
 
                 Handles.DrawLine(new Vector3(leftPos, spriteRect.yMin), new Vector3(leftPos, spriteRect.yMax));
                 Handles.DrawLine(new Vector3(rightPos, spriteRect.yMin), new Vector3(rightPos, spriteRect.yMax));

@@ -26,7 +26,7 @@ Shader "Custom/s_matrix"
 
 
 
-			return half4(blit.rgb + linearDepth, 1); // TODO: Make some cool matrix shader
+			return half4(blit.rgb, 1); // TODO: Make some cool matrix shader
 		}
 	ENDHLSL
 

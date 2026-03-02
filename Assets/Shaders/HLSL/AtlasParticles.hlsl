@@ -9,7 +9,7 @@ struct ZoneOutput
     uint randID;
 };
 
-struct NPCOutput
+struct GlyphOutput
 {
     float3 spawnPosition;
     float3 position;

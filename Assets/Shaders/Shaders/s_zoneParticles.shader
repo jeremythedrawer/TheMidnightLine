@@ -1,10 +1,8 @@
-Shader "Custom/s_backgroundParticles"
+Shader "Custom/s_zoneParticles"
 {
     Properties
     {
         _Atlas("Texture Atlas", 2D) = "white"
-        _BackgroundMask("Background Mask", int) = 0
-        _LODLevel("LOD Level", int) = 0
         _SpriteCount("Sprite Count", int) = 0
     }
 

@@ -60,7 +60,11 @@ public static class NPC
         Lots_of_phone_calls = 1 << 5,
         Enjoys_reading = 1 << 6,
     }
-
+    [Serializable] public struct AgentData
+    {
+        public NPCBrain agent;
+        public Color color;
+    }
     public static string[] appearenceDescriptions;
     public static string[] behaviourDescriptions;
     public static Behaviours GetBehaviours(Behaviours npcBehaviours)

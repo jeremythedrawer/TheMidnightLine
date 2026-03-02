@@ -2,7 +2,7 @@
 using UnityEngine;
 using static AtlasSpawn;
 
-[CreateAssetMenu(fileName = "SpawnerStats", menuName = "Atlas / Spawner Stats")]
+[CreateAssetMenu(fileName = "ZoneSpawnerStats", menuName = "Atlas / Zone Spawner Stats")]
 public class AtlasSpawnerStatsSO : ScriptableObject
 {
     [Header("Generated")]
@@ -16,5 +16,5 @@ public class AtlasSpawnerStatsSO : ScriptableObject
     public int computeGroups;
     public float trainToMaxBoundDist;
 
-    public ZoneSpawnerData[] spawnerDataArray;
+    public ZoneSpawnerData[] zoneSpawnerDataArray;
 }

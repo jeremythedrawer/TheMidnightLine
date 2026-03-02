@@ -6,7 +6,7 @@ Shader "Custom/s_bloom"
 		#include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
 
 		#define E 2.71828
-		#define THRESHOLD 1.5
+		#define THRESHOLD 2
 		#define SAMPLES 3
 
         float _BloomSpread;

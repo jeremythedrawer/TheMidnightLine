@@ -17,7 +17,7 @@ public class NPCManager : MonoBehaviour
 
     private void Awake()
     {
-        npcData.npcsToPick = new List<NPCBrain>(npcData.npcPrefabs);
+        npcData.npcsToPick = new List<NPCBrain>(npcData.npc_prefab);
         npcData.colorsToPick = new List<Color>(npcData.agentColors);
 
         CreateNPCAgents();
@@ -55,12 +55,12 @@ public class NPCManager : MonoBehaviour
                 npcData.colorsToPick.RemoveAt(randNPCIndex);
                 npc.stats.role = Role.Traitor;
 
-                NPC.Behaviours profilePageBehaviours = npc.stats.behaviours;
-                NPC.Appearence profilePageAppearence = GetRandomAppearence(npc.npc.appearence);
+                Behaviours profilePageBehaviours = npc.stats.behaviours;
+                Appearence profilePageAppearence = GetRandomAppearence(npc.npc.appearence);
                 ClipboardStatsSO.ProfilePageData profilePageData = new ClipboardStatsSO.ProfilePageData { behaviours = profilePageBehaviours, appearence = profilePageAppearence, color = agentColor };
                 clipBoardStats.profilePageArray[profilePageIndex] = (profilePageData);
 
-                NPCsDataSO.AgentData agentData = new NPCsDataSO.AgentData { agent = npc, color = agentColor };
+                AgentData agentData = new AgentData { agent = npc, color = agentColor };
                 npcData.agentPool.Enqueue(agentData);
                 npc.gameObject.SetActive(false);
 

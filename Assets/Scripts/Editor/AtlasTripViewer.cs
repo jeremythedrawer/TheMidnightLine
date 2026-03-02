@@ -40,9 +40,9 @@ public class AtlasTripViewer : EditorWindow
         Handles.BeginGUI();
         Handles.DrawSolidRectangleWithOutline(graphRect, Color.clear, Color.white);
 
-        for (int i = 0; i < SPAWNER_COUNT - 1; i++)
+        for (int i = 0; i < ZONE_SPAWNER_COUNT - 1; i++)
         {
-            float t = (i + 1) / (float)SPAWNER_COUNT;
+            float t = (i + 1) / (float)ZONE_SPAWNER_COUNT;
             float curHeight = graphRect.yMin + t * graphRect.height;
 
             Vector2 p1 = new Vector2(graphRect.xMin, curHeight);
@@ -51,10 +51,10 @@ public class AtlasTripViewer : EditorWindow
         }
 
         GUIStyle spawnerLabelStyle = new GUIStyle(EditorStyles.boldLabel){ alignment = TextAnchor.UpperLeft, normal = { textColor = Color.white } };
-        for (int i = 0; i < SPAWNER_COUNT; i++)
+        for (int i = 0; i < ZONE_SPAWNER_COUNT; i++)
         {
-            float yOffset = (1 / (float)SPAWNER_COUNT) * graphRect.height * 0.5f;
-            float t = i / (float)SPAWNER_COUNT;
+            float yOffset = (1 / (float)ZONE_SPAWNER_COUNT) * graphRect.height * 0.5f;
+            float t = i / (float)ZONE_SPAWNER_COUNT;
             float curX = graphRect.xMin - (padding * 0.5f);
             float curY = (graphRect.yMin + t * graphRect.height) + yOffset;
             Rect spawnerLabelRect = new Rect(curX, curY, 20, 200);
@@ -67,10 +67,10 @@ public class AtlasTripViewer : EditorWindow
             Zone zone = trip.zones[i];
 
             float zoneWidth = ((float)zone.metersLength / (float)trip.tripMeters) * graphRect.width;
-            float zoneHeight = (graphRect.height / (float)SPAWNER_COUNT) - (zonePadding * 2);
+            float zoneHeight = (graphRect.height / (float)ZONE_SPAWNER_COUNT) - (zonePadding * 2);
 
             float zoneX = graphRect.xMin + ((float)zone.metersStart / (float)trip.tripMeters) * graphRect.width;
-            float zoneY = (graphRect.yMin + ((float)zone.spawnerArea / SPAWNER_COUNT) * graphRect.height) + zonePadding;
+            float zoneY = (graphRect.yMin + ((float)zone.spawnerArea / ZONE_SPAWNER_COUNT) * graphRect.height) + zonePadding;
 
             Rect zoneRect = new Rect(zoneX, zoneY, zoneWidth, zoneHeight);
             Handles.DrawSolidRectangleWithOutline(zoneRect, Color.green, Color.black);

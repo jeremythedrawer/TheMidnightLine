@@ -4,6 +4,8 @@ using System.Threading;
 using UnityEngine;
 using static Atlas;
 using static NPC;
+using UnityEngine.VFX;
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -75,10 +77,10 @@ public class NPCBrain : MonoBehaviour
     [SerializeField] InputData inputData;
 
 
-    private AtlasSpawner sleepingZs;
-    private AtlasSpawner smoke;
-    private AtlasSpawner speechBubble;
-    private AtlasSpawner musicNotes;
+    private VisualEffect sleepingZs;
+    private VisualEffect smoke;
+    private VisualEffect speechBubble;
+    private VisualEffect musicNotes;
     private void Awake()
     {
         mpb = new MaterialPropertyBlock();
@@ -106,20 +108,23 @@ public class NPCBrain : MonoBehaviour
         mpb.SetFloat(materialIDs.ids.zPos, trainSettings.maxMinWorldZPos.postion);
         if (((stats.behaviours & Behaviours.Takes_naps) != 0) && sleepingZs == null)
         {
-            sleepingZs = Instantiate(npcData.sleepingZs, transform);
+            sleepingZs = Instantiate(npcData.sleepingZs_prefab, transform);
+            sleepingZs.Stop();
         }
         if (((stats.behaviours & Behaviours.Frequent_smoker) != 0) && smoke == null)
         {
-            smoke = Instantiate(npcData.smoke, transform);
+            smoke = Instantiate(npcData.smoke_prefab, transform);
+            smoke.Stop();
         }
         if (((stats.behaviours & Behaviours.Listens_to_music) != 0) && musicNotes == null)
         {
-            musicNotes = Instantiate(npcData.musicNotes, transform);
+            musicNotes = Instantiate(npcData.musicNotes_prefab, transform);
             musicNotes.Stop();
         }
         if (((stats.behaviours & Behaviours.Lots_of_phone_calls) != 0) && speechBubble == null)
         {
-            speechBubble = Instantiate(npcData.speechBubble, transform);
+            speechBubble = Instantiate(npcData.speechBubble_prefab, transform);
+            speechBubble.Stop();
         }
     }
     private void SetLayer()
@@ -142,7 +147,7 @@ public class NPCBrain : MonoBehaviour
             stats.stateClock += Time.deltaTime;
         }
 
-        if ((stats.curBehaviour & NPC.Behaviours.Frequent_smoker) != 0 && stats.curPath != Path.ToSmokerRoom)
+        if ((stats.curBehaviour & Behaviours.Frequent_smoker) != 0 && stats.curPath != Path.ToSmokerRoom)
         {
             FindSmokersRoom();
         }
@@ -166,27 +171,27 @@ public class NPCBrain : MonoBehaviour
         {
             SetState(NPCState.Idling);
         }
-        else if ((stats.curBehaviour & NPC.Behaviours.Frequent_smoker) != 0)
+        else if ((stats.curBehaviour & Behaviours.Frequent_smoker) != 0)
         {
             SetState(NPCState.Smoking);
         }
-        else if ((stats.curBehaviour & NPC.Behaviours.Takes_naps) != 0)
+        else if ((stats.curBehaviour & Behaviours.Takes_naps) != 0)
         {
             SetState(NPCState.Sleeping);
         }
-        else if ((stats.curBehaviour & NPC.Behaviours.Always_hungry) != 0)
+        else if ((stats.curBehaviour & Behaviours.Always_hungry) != 0)
         {
             SetState(NPCState.Eating);
         }
-        else if ((stats.curBehaviour & NPC.Behaviours.Listens_to_music) != 0)
+        else if ((stats.curBehaviour & Behaviours.Listens_to_music) != 0)
         {
             SetState(NPCState.Music);
         }
-        else if ((stats.curBehaviour & NPC.Behaviours.Lots_of_phone_calls) != 0)
+        else if ((stats.curBehaviour & Behaviours.Lots_of_phone_calls) != 0)
         {
             SetState(NPCState.Calling);
         }
-        else if ((stats.curBehaviour & NPC.Behaviours.Enjoys_reading) != 0)
+        else if ((stats.curBehaviour & Behaviours.Enjoys_reading) != 0)
         {
             SetState(NPCState.Reading);
         }
@@ -325,7 +330,7 @@ public class NPCBrain : MonoBehaviour
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
                 stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.Smoking];
-                smoke.Start();
+                smoke.Play();
             }
             break;
             case NPCState.Sleeping:
@@ -333,7 +338,7 @@ public class NPCBrain : MonoBehaviour
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
 
                 //sleepingZs.transform.position = new Vector3(meshRenderer.bounds.center.x, meshRenderer.bounds.max.y, transform.position.z - 0.5f);
-                sleepingZs.Start();
+                sleepingZs.Play();
                 if (stats.chairPosIndex != int.MaxValue)
                 {
                     stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingSleeping];
@@ -366,7 +371,7 @@ public class NPCBrain : MonoBehaviour
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
 
-                musicNotes.Start();
+                musicNotes.Play();
                 if (stats.chairPosIndex != int.MaxValue)
                 {
                     stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingMusic];
@@ -382,7 +387,7 @@ public class NPCBrain : MonoBehaviour
             case NPCState.Calling:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
-                speechBubble.Start();
+                speechBubble.Play();
                 if (stats.chairPosIndex != int.MaxValue)
                 {
                     stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingCalling];
