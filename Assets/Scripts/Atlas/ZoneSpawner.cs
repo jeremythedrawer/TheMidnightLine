@@ -10,7 +10,7 @@ public class ZoneSpawner : MonoBehaviour
     [SerializeField] CameraStatsSO camStats;
     [SerializeField] MaterialIDSO materialIDs;
     [SerializeField] AtlasSpawnerSettingsSO spawnerSettings;
-    [SerializeField] AtlasSpawnerStatsSO spawnerStats;
+    [SerializeField] ZoneSpawnerStatsSO spawnerStats;
     [SerializeField] GameEventDataSO gameData;
     [SerializeField] SpyStatsSO spyStats;
 
@@ -53,7 +53,7 @@ public class ZoneSpawner : MonoBehaviour
 
         spawnerStats.spawnMaxPos.x = firstStationPos + spawnerSettings.spawnerSize.x;
         spawnerStats.spawnMaxPos.y = trainStats.trainMaxHeight + camSettings.maxProjectionSize + spawnerSettings.spawnerSize.y;
-        spawnerStats.spawnMaxPos.z = 32; //NOTE: Furthest postion. If changed this needs to be changed on the compute shader as well
+        spawnerStats.spawnMaxPos.z = 64; //NOTE: Furthest postion. If changed this needs to be changed on the compute shader as well
 
         spawnerStats.spawnMinPos.x = firstStationPos  - spawnerSettings.spawnerSize.x;
         spawnerStats.spawnMinPos.y = -camSettings.maxProjectionSize - spawnerSettings.spawnerSize.y;

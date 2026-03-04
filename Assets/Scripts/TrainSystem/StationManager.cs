@@ -6,7 +6,7 @@ public class StationManager : MonoBehaviour
 {
     public StationsDataSO stationsData;
     public TrainStatsSO trainStats;
-    public AtlasSpawnerStatsSO spawnerStats;
+    public ZoneSpawnerStatsSO spawnerStats;
     public GameEventDataSO gameEventData;
 
     StationSO curStation;
@@ -28,7 +28,7 @@ public class StationManager : MonoBehaviour
     {
         curStation = stationsData.stations[trainStats.nextStationIndex];
         spawnThreshold = curStation.metersPosition - spawnerStats.trainToMaxBoundDist;
-        Station nextStation = Instantiate(curStation.stationPrefab, transform);
+        Station nextStation = Instantiate(curStation.station_prefab, transform);
         float stationXPos = spawnerStats.spawnMaxPos.x + (nextStation.transform.position.x - nextStation.platformCollider.bounds.min.x);
         nextStation.transform.position = new Vector3(stationXPos, 0, 0);
     }

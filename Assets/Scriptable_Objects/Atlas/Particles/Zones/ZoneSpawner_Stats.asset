@@ -9,47 +9,62 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b853907a2e48e754f8d29c0616ffe021, type: 3}
+  m_Script: {fileID: 11500000, guid: 6ec44679260ff2949ad4b3d7f670de4b, type: 3}
   m_Name: ZoneSpawner_Stats
   m_EditorClassIdentifier: Assembly-CSharp::SpawnerStatsSO
-  settings: {fileID: 11400000, guid: f37b2d6c4b24fc54488d7d37482b2d18, type: 2}
-  materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   curBackgroundDataIndex: 0
-  spawnMaxPos: {x: 412.30725, y: 52.59, z: 32}
-  spawnMinPos: {x: 187.69275, y: -26, z: 0}
-  spawnCenter: {x: 300, y: 13.295, z: 16}
-  spawnBoundsSize: {x: 224.6145, y: 78.59, z: 32}
-  computeGroups: 16
-  spawnerDataArray:
-  - spawner: 0
-    computeGroupSize: 1
-    kernelID: 0
-    active: 0
-  - spawner: 1
-    computeGroupSize: 4
-    kernelID: 1
-    active: 1
-  - spawner: 2
-    computeGroupSize: 4
-    kernelID: 2
-    active: 1
-  - spawner: 3
-    computeGroupSize: 4
-    kernelID: 3
-    active: 0
-  - spawner: 4
-    computeGroupSize: 4
-    kernelID: 4
-    active: 0
-  - spawner: 5
-    computeGroupSize: 2
-    kernelID: 5
-    active: 1
-  - spawner: 6
-    computeGroupSize: 2
-    kernelID: 6
-    active: 1
-  - spawner: 7
-    computeGroupSize: 2
-    kernelID: 7
-    active: 0
+  spawnMaxPos: {x: 444.6, y: 15.082003, z: 32}
+  spawnMinPos: {x: 155.4, y: -11.49, z: 0}
+  spawnCenter: {x: 300, y: 1.7960014, z: 16}
+  spawnBoundsSize: {x: 289.2, y: 26.572002, z: 32}
+  computeGroups: 0
+  trainToMaxBoundDist: 144.6
+  zoneSpawnerDataArray:
+  - zoneSpawner: 0
+    zoneSpawnerData:
+      computeGroupSize: 1
+      kernelID_init: 0
+      kernelID_update: 8
+      active: 0
+  - zoneSpawner: 1
+    zoneSpawnerData:
+      computeGroupSize: 4
+      kernelID_init: 1
+      kernelID_update: 9
+      active: 1
+  - zoneSpawner: 2
+    zoneSpawnerData:
+      computeGroupSize: 4
+      kernelID_init: 2
+      kernelID_update: 10
+      active: 1
+  - zoneSpawner: 3
+    zoneSpawnerData:
+      computeGroupSize: 4
+      kernelID_init: 3
+      kernelID_update: 11
+      active: 0
+  - zoneSpawner: 4
+    zoneSpawnerData:
+      computeGroupSize: 4
+      kernelID_init: 4
+      kernelID_update: 12
+      active: 0
+  - zoneSpawner: 5
+    zoneSpawnerData:
+      computeGroupSize: 2
+      kernelID_init: 5
+      kernelID_update: 13
+      active: 1
+  - zoneSpawner: 6
+    zoneSpawnerData:
+      computeGroupSize: 2
+      kernelID_init: 6
+      kernelID_update: 14
+      active: 1
+  - zoneSpawner: 7
+    zoneSpawnerData:
+      computeGroupSize: 2
+      kernelID_init: 7
+      kernelID_update: 15
+      active: 0

@@ -115,7 +115,10 @@ public class AtlasFactory : EditorWindow
             selectedIndex = 0;
             changeSprites = true;
             MakeTextureReadable(atlas.texture);
-            MakeTextureReadable(markerTexture);
+            if (markerTexture != null)
+            {
+                MakeTextureReadable(markerTexture);
+            }
             GenerateSprites();
             atlas.UpdateClipDictionary();
             GetMotionData();
@@ -694,10 +697,11 @@ public class AtlasFactory : EditorWindow
     private void GetParticleUVSizeAndPosData()
     {
         atlas.particleUVSizeAndPosArray = new Vector4[atlas.particleSprites.Length];
-
+        atlas.worldSizesArray = new Vector2[atlas.particleSprites.Length];
         for (int i = 0; i < atlas.particleSprites.Length; i++)
         {
             atlas.particleUVSizeAndPosArray[i] = atlas.particleSprites[i].sprite.uvSizeAndPos;
+            atlas.worldSizesArray[i] = atlas.particleSprites[i].sprite.worldSize;
         }
     }
     private void DrawAtlasSprite(SimpleSprite atlasSprite, int gridIndex, MotionSprite? motionSpriteNullable = null, SliceSprite? slicedSpriteNullable = null)

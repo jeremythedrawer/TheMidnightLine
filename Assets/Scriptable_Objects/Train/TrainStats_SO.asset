@@ -12,20 +12,37 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c10404039fafce499ae801caf0d85e7, type: 3}
   m_Name: TrainStats_SO
   m_EditorClassIdentifier: 
-  nextStationIndex: 0
-  curKMPerHour: 100
+  nextStationIndex: 1
+  curKMPerHour: 97.5928
   targetKMPerHour: 100
-  metersTravelled: 0
-  curVelocity: 0.30404168
-  distToNextStation: 77.75352
-  distToSpawnTrain: -114.861
+  metersTravelled: 408.9303
+  curVelocity: 0.20227554
+  distToNextStation: 591.0697
   brakeDist: 39.12312
-  startXPos: -6.8
-  trainLength: 192.61452
-  trainMaxHeight: 26.59
-  trainHalfLength: 96.30726
-  closingDoors: 0
+  startXPos: 192.3
+  trainMaxHeight: 3.5920029
+  closingDoors: 1
   wheelCircumference: 5.4977875
-  curPassengerCount: 0
-  targetPassengerCount: 5
-  curStation: {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
+  curPassengerCount: 12
+  targetPassengerCount: 12
+  minDepth: 6
+  maxDepth: 16
+  depthSection_front_min: 8
+  depthSection_front_max: 9
+  depthSection_back_min: 11
+  depthSection_back_max: 12
+  depthSection_carriageSeat: 0
+  curStation: {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
+  slideDoorPositions:
+  - 337.915
+  - 332.478
+  - 327.03003
+  - 316.10098
+  - 310.66397
+  - 305.216
+  - 294.25092
+  - 288.8139
+  - 283.36594
+  - 272.42334
+  - 266.98633
+  - 261.53836

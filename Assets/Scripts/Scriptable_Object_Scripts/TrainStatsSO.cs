@@ -1,3 +1,4 @@
+using System;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -25,7 +26,15 @@ public class TrainStatsSO : ScriptableObject
     public int minDepth;
     public int maxDepth;
 
+    public int depthSection_front_min;
+    public int depthSection_front_max;
+    public int depthSection_back_min;
+    public int depthSection_back_max;
+    public int depthSection_carriageSeat;
+
     public StationSO curStation;
+
+    public float[] slideDoorPositions;
 
     public Dictionary<Collider2D, Carriage> carriageDict;
     public float GetMetersPerSecond(float kmph)

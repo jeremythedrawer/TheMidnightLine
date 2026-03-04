@@ -1,6 +1,4 @@
-using Cysharp.Threading.Tasks;
 using UnityEngine;
-using UnityEngine.U2D;
 using UnityEngine.VFX;
 using static Atlas;
 using static AtlasBatch;
@@ -82,17 +80,17 @@ public class GlyphSetter : MonoBehaviour
 
         Vector4[] worldSizeAndPosArray = new Vector4[]
         {
-            new Vector4(sliceSprite.worldSlices.x,  sliceSprite.worldSlices.z,  0,                          0),
-            new Vector4(centerWidth,                sliceSprite.worldSlices.z,  sliceSprite.worldSlices.x,  0),
-            new Vector4(sliceSprite.worldSlices.y,  sliceSprite.worldSlices.z,  rightPos,  0),
+            new Vector4(sliceSprite.worldSlices.x,  sliceSprite.worldSlices.z, 0, 0),
+            new Vector4(centerWidth, sliceSprite.worldSlices.z, sliceSprite.worldSlices.x, 0),
+            new Vector4(sliceSprite.worldSlices.y, sliceSprite.worldSlices.z, rightPos, 0),
 
-            new Vector4(sliceSprite.worldSlices.x,  centerHeight,               0,                          sliceSprite.worldSlices.z),
-            new Vector4(centerWidth,                centerHeight,               sliceSprite.worldSlices.x,  sliceSprite.worldSlices.z),
-            new Vector4(sliceSprite.worldSlices.y,  centerHeight,               rightPos,                   sliceSprite.worldSlices.z),
+            new Vector4(sliceSprite.worldSlices.x, centerHeight, 0, sliceSprite.worldSlices.z),
+            new Vector4(centerWidth, centerHeight, sliceSprite.worldSlices.x, sliceSprite.worldSlices.z),
+            new Vector4(sliceSprite.worldSlices.y, centerHeight, rightPos, sliceSprite.worldSlices.z),
 
-            new Vector4(sliceSprite.worldSlices.x,  sliceSprite.worldSlices.w,  0,                          topPos),
-            new Vector4(centerWidth,                sliceSprite.worldSlices.w,  sliceSprite.worldSlices.x,  topPos),
-            new Vector4(sliceSprite.worldSlices.y,  sliceSprite.worldSlices.w,  rightPos,                   topPos),
+            new Vector4(sliceSprite.worldSlices.x, sliceSprite.worldSlices.w, 0, topPos),
+            new Vector4(centerWidth, sliceSprite.worldSlices.w, sliceSprite.worldSlices.x, topPos),
+            new Vector4(sliceSprite.worldSlices.y, sliceSprite.worldSlices.w, rightPos, topPos),
         };
 
         float originalCenterWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
@@ -136,7 +134,7 @@ public class GlyphSetter : MonoBehaviour
         vfx.SetInt("_LineCount", lineCount);
         vfx.SetVector2("_LinePosition", linePosition);
 
-        lifetime = (width + lineCount) * 0.2f;
+        lifetime = (width + lineCount) * 0.4f;
         vfx.SetFloat("Lifetime", lifetime);
 
         vfx.SetMesh("_Quad", GetQuad());

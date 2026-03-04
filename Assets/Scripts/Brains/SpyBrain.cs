@@ -72,13 +72,13 @@ public class SpyBrain : MonoBehaviour
     private void OnEnable()
     {
         gameEventData.OnStationArrival.RegisterListener(() => stats.canBoardTrain = true);
-        gameEventData.OnInteract.RegisterListener(OpenSlideDoors);
+        gameEventData.OnInteract.RegisterListener(OpenTrainDoors);
         gameEventData.OnInteract.RegisterListener(EnterTrain);
     }
     private void OnDisable()
     {
         gameEventData.OnStationArrival.UnregisterListener(() => stats.canBoardTrain = true);
-        gameEventData.OnInteract.UnregisterListener(OpenSlideDoors);
+        gameEventData.OnInteract.UnregisterListener(OpenTrainDoors);
         gameEventData.OnInteract.UnregisterListener(EnterTrain);
 
     }
@@ -181,10 +181,6 @@ public class SpyBrain : MonoBehaviour
         if ((layerSettings.trainLayers.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
             SetLocationData(collision.bounds, layerSettings.trainLayers.insideCarriageBounds);
-            if (trainStats.carriageDict.TryGetValue(collision, out curCarriage))
-            {
-                curCarriage.StartFade(fadeIn: false);
-            }
             //stats.curCarriageMinXPos = curCarriage.carriageCollider.bounds.min.x;
             //stats.curCarriageMaxXPos = curCarriage.carriageCollider.bounds.max.x;
         }
@@ -216,7 +212,6 @@ public class SpyBrain : MonoBehaviour
 
         if ((layerSettings.trainLayers.carriage.value & (1 << collision.gameObject.layer)) != 0)
         {
-            curCarriage.StartFade(fadeIn: true);
             curCarriage = null;
             stats.curCarriageMinXPos = 0;
             stats.curCarriageMaxXPos = 0;
@@ -521,7 +516,7 @@ public class SpyBrain : MonoBehaviour
         collisionData.wallBottomRight = new Vector2(wallRight, waste);
 
     }
-    private void OpenSlideDoors()
+    private void OpenTrainDoors()
     {
         if (!stats.onTrain && stats.canBoardTrain)
         {
@@ -565,18 +560,21 @@ public class SpyBrain : MonoBehaviour
                 slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
                 if (slideDoors.curState == SlideDoors.State.Opened)
                 {
-                    RaycastHit2D insideCarriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, layerSettings.trainLayers.insideCarriageBounds);
+                    RaycastHit2D insideCarriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
 
                     if (insideCarriageHit.collider != null)
                     {
                         SetLocationData(insideCarriageHit.collider.bounds, layerSettings.trainLayers.insideCarriageBounds);
+                        Debug.Log(insideCarriageHit.collider.gameObject.name);
+                        curCarriage = trainStats.carriageDict[insideCarriageHit.collider];
+                        curCarriage.FadeOut();
                     }
                     stats.curGroundLayer = layerSettings.trainLayers.ground;
                     stats.curWallLayer = layerSettings.trainWallLayers;
                     rigidBody.includeLayers = layerSettings.trainMask;
                     collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
                     stats.onTrain = true;
-                    atlasRenderer.depthOrder = CHARACTER_ON_TRAIN_DEPTH;
+                    atlasRenderer.depthOrder = trainStats.depthSection_front_min;
                     trainStats.curPassengerCount++;
                     gameEventData.OnBoardingSpy.Raise();
                 }

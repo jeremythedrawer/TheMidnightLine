@@ -24,12 +24,13 @@ public class Carriage : MonoBehaviour
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] MaterialIDSO materialIDs;
     [SerializeField] Transform[] wheelTransforms;
-    [SerializeField] AtlasRenderer[] exteriorRenderers;
-    public BoxCollider2D carriageCollider;
+    public AtlasRenderer[] exteriorRenderers;
+    public AtlasRenderer[] chairRenderers;
+    public AtlasRenderer[] grapPoleRenderers;
     public BoxCollider2D insideBoundsCollider;
 
-    public BoxCollider2D rightSmokingRoomCollider;
-    public BoxCollider2D leftSmokingRoomCollider;
+    public BoxCollider2D smokingRoomCollider_right;
+    public BoxCollider2D smokingRoomCollider_left;
 
     public SlideDoors[] exteriorSlideDoors;
     public SlideDoors[] interiorSlideDoors;
@@ -40,7 +41,8 @@ public class Carriage : MonoBehaviour
     [Header("Generated")]
     public ChairData[] chairData;
     public SmokersRoomData[] smokersRoomData;
-    public float chairZPos;
+    public int sittingDepth;
+    public int standingDepth;
 
     private CancellationTokenSource ctsFade;
     private void Awake()
@@ -50,7 +52,7 @@ public class Carriage : MonoBehaviour
 
     private void OnEnable()
     {
-        //gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(GetChairData);
+        gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(GetSeatData);
         gameEventData.OnStationArrival.RegisterListener(UnlockDoors);
         gameEventData.OnStationLeave.RegisterListener(CloseDoors);
 
@@ -58,7 +60,7 @@ public class Carriage : MonoBehaviour
 
     private void OnDisable()
     {
-        //gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(GetChairData);
+        gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(GetSeatData);
         gameEventData.OnStationArrival.UnregisterListener(UnlockDoors);
         gameEventData.OnCloseSlideDoors.UnregisterListener(CloseDoors);
     }
@@ -79,30 +81,33 @@ public class Carriage : MonoBehaviour
         }
     }
 
-    //private void GetChairData()
-    //{
-    //    Collider2D[] chairsHits = Physics2D.OverlapBoxAll(insideBoundsCollider.bounds.center, insideBoundsCollider.bounds.size, 0f, layerSettings.trainLayerStruct.carriageChairs);
-    //   //float tileWidth = trainSettings.chairSprite.bounds.size.x * 0.333333f;
+    private void GetSeatData()
+    {
+        AtlasRenderer seatRenderer = chairRenderers[0];
+        float tileWidth = seatRenderer.atlas.slicedSprites[seatRenderer.spriteIndex].worldSlices.x;
 
-    //    List<ChairData> chairDataList = new List<ChairData>();
-    //    for (int i = 0; i < chairsHits.Length; i++)
-    //    {
-    //        SpriteRenderer chairRenderer = chairsHits[i].GetComponent<SpriteRenderer>();
-    //        float totalWidth = chairRenderer.size.x;
+        List<ChairData> seatDataList = new List<ChairData>();
+        for (int i = 0; i < chairRenderers.Length; i++)
+        {
+            AtlasRenderer seat = chairRenderers[i];
 
-    //        //int chairAmount = Mathf.RoundToInt(totalWidth / tileWidth);
-    //        //float firstChairPos = chairsHits[i].transform.position.x + (tileWidth * 0.5f);
-    //        //for (int j = 0; j < chairAmount; j++)
-    //        //{
-    //           // chairDataList.Add(new ChairData { xPos = firstChairPos + (tileWidth * j), filled = false });
-    //        //}
-    //    }
-    //    chairData = chairDataList.ToArray();
-    //    chairZPos = chairsHits[0].transform.position.z - 1;
-    //}
+            float totalWidth = seat.worldWidth;
+            int chairAmount = Mathf.RoundToInt(totalWidth / tileWidth);
+            float firstChairPos = seat.transform.position.x + (tileWidth * 0.5f);
+
+            for (int j = 0; j < chairAmount; j++)
+            {
+                ChairData chairData = new ChairData { xPos = firstChairPos + (tileWidth * j), filled = false };
+                seatDataList.Add(chairData);
+            }
+        }
+        chairData = seatDataList.ToArray();
+        sittingDepth = seatRenderer.depthOrder - 1;
+        standingDepth = sittingDepth - 1;
+    }
     private void UnlockDoors()
     {
-        if (trainStats.curStation.stationPrefab.platformRenderer.depthOrder < exteriorRenderers[0].depthOrder)
+        if (trainStats.curStation.isFrontOfTrain)
         {
             for (int i = 0; i < exteriorSlideDoors.Length; i++)
             {
@@ -130,25 +135,59 @@ public class Carriage : MonoBehaviour
             interiorSlideDoors[i].CloseDoors();
         }
     }
-    public void StartFade(bool fadeIn)
+    public void FadeIn()
     {
         ctsFade?.Cancel();
         ctsFade?.Dispose();
 
         ctsFade = new CancellationTokenSource();
 
-        Fade(fadeIn).Forget();
+        FadingIn().Forget();
 
     }
-    private async UniTask Fade(bool fadeIn)
+
+    public void FadeOut()
+    {
+        ctsFade?.Cancel();
+        ctsFade?.Dispose();
+
+        ctsFade = new CancellationTokenSource();
+
+        FadingOut().Forget();
+    }
+    private async UniTask FadingIn()
     {
         float elaspedTime = alpha * trainSettings.exteriorWallFadeTime;
         try
         {
-            while (fadeIn ? elaspedTime < trainSettings.exteriorWallFadeTime : elaspedTime > 0f)
+            while (elaspedTime < trainSettings.exteriorWallFadeTime)
             {
 
-                elaspedTime += (fadeIn ? Time.deltaTime : -Time.deltaTime);
+                elaspedTime += Time.deltaTime;
+
+                alpha = elaspedTime / trainSettings.exteriorWallFadeTime;
+                for (int i = 0; i < exteriorRenderers.Length; i++)
+                {
+                    exteriorRenderers[i].mpb.SetFloat(materialIDs.ids.alpha, alpha);
+                }
+
+                await UniTask.Yield(PlayerLoopTiming.Update, ctsFade.Token);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
+
+    private async UniTask FadingOut()
+    {
+        float elaspedTime = alpha * trainSettings.exteriorWallFadeTime;
+        try
+        {
+            while (elaspedTime > 0)
+            {
+
+                elaspedTime -= Time.deltaTime;
 
                 alpha = elaspedTime / trainSettings.exteriorWallFadeTime;
                 for (int i = 0; i < exteriorRenderers.Length; i++)

@@ -24,6 +24,7 @@ Shader "Custom/s_zoneParticles"
 
             StructuredBuffer<ZoneOutput> _Particles;
             StructuredBuffer<float4> _UVSizeAndPos;
+            StructuredBuffer<float2> _WorldSize;
 
             TEXTURE2D(_Atlas);
             SAMPLER(sampler_Atlas);
@@ -55,12 +56,13 @@ Shader "Custom/s_zoneParticles"
                     float2(1, 0)
                 };
 
-                float particleSize = 10 * p.parallaxFactor;
-                float3 offset = float3(quadOffsets[cornerID] * particleSize, 0);
 
                 int randMod = p.randID % _SpriteCount;
 
                 float4 uvSizeAndPos = _UVSizeAndPos[randMod];
+
+                float particleSize = p.parallaxFactor * _WorldSize[randMod];
+                float3 offset = float3(quadOffsets[cornerID] * particleSize, 0);
 
                 o.positionHCS = TransformWorldToHClip(p.position + offset);
                 o.uv = quadOffsets[cornerID] * uvSizeAndPos.xy + uvSizeAndPos.zw;

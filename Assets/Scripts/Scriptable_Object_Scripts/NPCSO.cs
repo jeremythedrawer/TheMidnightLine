@@ -7,9 +7,6 @@ public class NPCSO : ScriptableObject
     public float moveSpeed = 5f;
     public float groundAccelation = 12f;
 
-    [Header("Station")]
-    public float maxDistanceDetection = 6.0f;
-
     public Appearence appearence;
     public Behaviours behaviours;
 

@@ -22,53 +22,21 @@ public class AtlasRenderer : MonoBehaviour
     public BatchKey batchKey;
     public SimpleSprite sprite;
 
-    public Matrix4x4 worldMatrix;
     public Matrix4x4[] spriteMatrices;
     public Vector4[] widthHeightFlip;
 
-    public Vector2 centerSliceWorldSize;
-    public Vector2 centerSliceUVSize;
-
+    public float worldWidth;
+    public float worldHeight;
     public MaterialPropertyBlock mpb;
     private void OnValidate()
     {
-        InitSpriteMode();
-        
-        switch(spriteMode)
-        {
-            case SpriteMode.Simple:
-            {
-                sprite = atlas.simpleSprites[spriteIndex];
-            }
-            break;
-
-            case SpriteMode.Motion:
-            {
-                sprite = atlas.motionSprites[spriteIndex].sprite;
-            }
-            break;
-
-            case SpriteMode.Slice:
-            {
-                sprite = atlas.slicedSprites[spriteIndex].sprite;
-            }
-            break;
-        }
-        SetSprite(sprite);
-        SetCollider();
-        transform.position = new Vector3(transform.position.x, transform.position.y, depthOrder);
-        worldMatrix = transform.localToWorldMatrix;
-        if (spriteMode == SpriteMode.Slice)
-        {
-            SetCenterSliceSize();
-        }
-
-        HandleCustomMaterial();
+        InitRenderer();
     }
     private void OnEnable()
     {
         RegisterRenderer(this);
         HandleCustomMaterial();
+        InitRenderer();
 
     }
     private void OnDisable()
@@ -86,16 +54,19 @@ public class AtlasRenderer : MonoBehaviour
         flipX = flipLeft;
         widthHeightFlip[0].z = flipLeft ? -1 : 1;
     }
-    private void SetSprite(SimpleSprite sprite)
+    private void InitRenderer()
     {
-        if (atlas == null || (atlas.motionSprites.Length == 0 && atlas.slicedSprites.Length == 0 && atlas.simpleSprites.Length == 0)) return;
-
+        worldWidth = sprite.worldSize.x * width;
+        worldHeight = sprite.worldSize.y * height;
         switch (spriteMode)
         {
             case SpriteMode.Simple:
             {
                 if (atlas.simpleSprites.Length == 0) return;
-                this.sprite = sprite;
+
+                spriteMatrices = new Matrix4x4[1];
+
+                sprite = atlas.simpleSprites[spriteIndex];
 
                 widthHeightFlip = new Vector4[]
                 {
@@ -108,7 +79,9 @@ public class AtlasRenderer : MonoBehaviour
             {
                 if (atlas.motionSprites.Length == 0) return;
 
-                this.sprite = sprite;
+                spriteMatrices = new Matrix4x4[1];
+
+                sprite = atlas.motionSprites[spriteIndex].sprite;
 
                 widthHeightFlip = new Vector4[]
                 {
@@ -121,7 +94,14 @@ public class AtlasRenderer : MonoBehaviour
             {
                 if (atlas.slicedSprites.Length == 0) return;
 
-                this.sprite = sprite;
+                spriteMatrices = new Matrix4x4[9];
+
+                SliceSprite slicedSprite = atlas.slicedSprites[spriteIndex];
+
+                sprite = slicedSprite.sprite;
+
+                Vector2 centerSliceWorldSize = GetCenterSliceWorldSize(slicedSprite);
+                Vector2 centerSliceUVSize = new Vector2(centerSliceWorldSize.x / (sprite.worldSize.x * (slicedSprite.slice.y - slicedSprite.slice.x)), centerSliceWorldSize.y / (sprite.worldSize.y * (slicedSprite.slice.w - slicedSprite.slice.z)));
 
                 Vector2 flip = new Vector2(flipX ? -1 : 1, flipY ? -1 : 1);
                 widthHeightFlip = new Vector4[]
@@ -139,26 +119,10 @@ public class AtlasRenderer : MonoBehaviour
             }
             break;
         }
-    }
-    private void InitSpriteMode()
-    {
-        if (spriteMode == SpriteMode.Slice)
-        {
-            spriteMatrices = new Matrix4x4[9];
-        }
-        else
-        {
-            spriteMatrices = new Matrix4x4[1];
-        }
-    }
-    private void SetCenterSliceSize()
-    {
-        ref SliceSprite slicedSprite = ref atlas.slicedSprites[spriteIndex];
 
-        float totalWidthSize = sprite.worldSize.x * width;
-        float totalHeightSlice = sprite.worldSize.y * height;
-        centerSliceWorldSize = new Vector2(Mathf.Max(0, totalWidthSize - slicedSprite.worldSlices.x - slicedSprite.worldSlices.y), Mathf.Max(0, totalHeightSlice - slicedSprite.worldSlices.z - slicedSprite.worldSlices.w));
-        centerSliceUVSize = new Vector2(centerSliceWorldSize.x / (sprite.worldSize.x * (slicedSprite.slice.y - slicedSprite.slice.x)), centerSliceWorldSize.y / (sprite.worldSize.y * (slicedSprite.slice.w - slicedSprite.slice.z)));
+        SetCollider();
+        HandleCustomMaterial();
+        transform.position = new Vector3(transform.position.x, transform.position.y, depthOrder);
     }
     private void SetCollider()
     {
@@ -181,8 +145,10 @@ public class AtlasRenderer : MonoBehaviour
     }
     public Matrix4x4[] Get9SliceMatrices()
     {
-        ref SliceSprite slicedSprite = ref atlas.slicedSprites[spriteIndex];
+        SliceSprite slicedSprite = atlas.slicedSprites[spriteIndex];
 
+        Vector2 centerSliceWorldSize = GetCenterSliceWorldSize(slicedSprite);
+        
         Vector2[] sizes =
         {
             new Vector2 (slicedSprite.worldSlices.x,  slicedSprite.worldSlices.z),
@@ -235,8 +201,10 @@ public class AtlasRenderer : MonoBehaviour
 
         return spriteMatrices[0];
     }
-
-
+    private Vector2 GetCenterSliceWorldSize(SliceSprite slicedSprite)
+    {
+        return new Vector2(Mathf.Max(0, worldWidth - slicedSprite.worldSlices.x - slicedSprite.worldSlices.y), Mathf.Max(0, worldHeight - slicedSprite.worldSlices.z - slicedSprite.worldSlices.w));
+    }
 #if UNITY_EDITOR
     void OnDrawGizmos()
     {

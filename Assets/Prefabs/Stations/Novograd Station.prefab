@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 564784607166531398}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0.83, z: 13}
+  m_LocalPosition: {x: 0, y: 0.83, z: 18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -53,34 +53,17 @@ MonoBehaviour:
   height: 1
   flipX: 0
   flipY: 0
-  depthOrder: 13
+  depthOrder: 18
   useCustomMaterial: 0
   batchKey:
     material: {fileID: 2100000, guid: fbc8706b3d542f146834f58bb06c2240, type: 2}
     mesh: {fileID: 0}
-    depthOrder: 13
+    depthOrder: 17
   sprite:
     uvSizeAndPos: {x: 0.64501953, y: 0.2919922, z: 0.09008789, w: 0}
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 14.677778, y: 6.6444445, z: 1}
     index: 1
-  worldMatrix:
-    e00: 1
-    e01: 0
-    e02: 0
-    e03: 300
-    e10: 0
-    e11: 1
-    e12: 0
-    e13: 0.83
-    e20: 0
-    e21: 0
-    e22: 1
-    e23: 13
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -100,8 +83,8 @@ MonoBehaviour:
     e33: 0
   widthHeightFlip:
   - {x: 1, y: 1, z: 1, w: 1}
-  centerSliceWorldSize: {x: 10.9, y: 6.6555557}
-  centerSliceUVSize: {x: 0, y: 0}
+  worldWidth: 14.677778
+  worldHeight: 6.6444445
 --- !u!1 &1342467197157022166
 GameObject:
   m_ObjectHideFlags: 0
@@ -128,7 +111,7 @@ Transform:
   m_GameObject: {fileID: 1342467197157022166}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.8599854, y: 0.83, z: 11}
+  m_LocalPosition: {x: 5.8599854, y: 0.83, z: 17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -155,34 +138,17 @@ MonoBehaviour:
   height: 1
   flipX: 0
   flipY: 0
-  depthOrder: 11
+  depthOrder: 17
   useCustomMaterial: 0
   batchKey:
     material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
     mesh: {fileID: 0}
-    depthOrder: 11
+    depthOrder: 12
   sprite:
     uvSizeAndPos: {x: 0.107666016, y: 0.08886719, z: 0, w: 0.59033203}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 2.45, y: 2.0222223, z: 1}
     index: 7
-  worldMatrix:
-    e00: 1
-    e01: 0
-    e02: 0
-    e03: 305.86
-    e10: 0
-    e11: 1
-    e12: 0
-    e13: 0.83
-    e20: 0
-    e21: 0
-    e22: 1
-    e23: 11
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -202,8 +168,8 @@ MonoBehaviour:
     e33: 0
   widthHeightFlip:
   - {x: 16.04, y: 1, z: 1, w: 1}
-  centerSliceWorldSize: {x: 110.335754, y: 2.0222223}
-  centerSliceUVSize: {x: 44.035, y: 0}
+  worldWidth: 39.298004
+  worldHeight: 2.0222223
 --- !u!1 &2693832824672017060
 GameObject:
   m_ObjectHideFlags: 0
@@ -269,23 +235,6 @@ MonoBehaviour:
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 11.361111, y: 1.4166666, z: 1}
     index: 1
-  worldMatrix:
-    e00: 1
-    e01: 0
-    e02: 0
-    e03: 252.91
-    e10: 0
-    e11: 1
-    e12: 0
-    e13: -0.58
-    e20: 0
-    e21: 0
-    e22: 1
-    e23: 2
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -305,8 +254,8 @@ MonoBehaviour:
     e33: 0
   widthHeightFlip:
   - {x: 8.1, y: 1, z: 1, w: 1}
-  centerSliceWorldSize: {x: 214.83861, y: 1.4166666}
-  centerSliceUVSize: {x: 17.91, y: 0}
+  worldWidth: 92.025
+  worldHeight: 1.4166666
 --- !u!61 &5364706768966122321
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -417,23 +366,6 @@ MonoBehaviour:
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 5.677778, y: 0.7, z: 1}
     index: 0
-  worldMatrix:
-    e00: 1
-    e01: 0
-    e02: 0
-    e03: 252.48
-    e10: 0
-    e11: 1
-    e12: 0
-    e13: -0.85
-    e20: 0
-    e21: 0
-    e22: 1
-    e23: 1
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -589,8 +521,8 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 19.364063, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
-  centerSliceWorldSize: {x: 96.39001, y: 0.7}
-  centerSliceUVSize: {x: 19.364063, y: 1}
+  worldWidth: 97.090004
+  worldHeight: 0.7
 --- !u!1 &7425759775376924710
 GameObject:
   m_ObjectHideFlags: 0
@@ -616,7 +548,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7425759775376924710}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 300, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -676,7 +608,7 @@ Transform:
   m_GameObject: {fileID: 8483931072574100276}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -46.690002, y: 0.83, z: 13}
+  m_LocalPosition: {x: -46.690002, y: 0.83, z: 17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -703,34 +635,17 @@ MonoBehaviour:
   height: 1
   flipX: 0
   flipY: 0
-  depthOrder: 13
+  depthOrder: 17
   useCustomMaterial: 0
   batchKey:
     material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
     mesh: {fileID: 0}
-    depthOrder: 13
+    depthOrder: 16
   sprite:
     uvSizeAndPos: {x: 0.107666016, y: 0.08886719, z: 0, w: 0.59033203}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 2.45, y: 2.0222223, z: 1}
     index: 7
-  worldMatrix:
-    e00: 1
-    e01: 0
-    e02: 0
-    e03: 253.31
-    e10: 0
-    e11: 1
-    e12: 0
-    e13: 0.83
-    e20: 0
-    e21: 0
-    e22: 1
-    e23: 13
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -750,5 +665,5 @@ MonoBehaviour:
     e33: 0
   widthHeightFlip:
   - {x: 15.04, y: 1, z: 1, w: 1}
-  centerSliceWorldSize: {x: 88.2735, y: 2.0222223}
-  centerSliceUVSize: {x: 35.03, y: 0}
+  worldWidth: 36.848
+  worldHeight: 2.0222223

@@ -3,6 +3,9 @@ using UnityEngine;
 
 public class SlideDoors : MonoBehaviour
 {
+    const float UNLOCK_MOVE_AMOUNT_PERCENT = 0.01f;
+    const float OPEN_MOVE_AMOUNT_PERCENT = 0.99f;
+    const float UNLOCK_MOVE_TIME = 0.3f;
     public enum State
     { 
         Locked,
@@ -10,6 +13,7 @@ public class SlideDoors : MonoBehaviour
         Opening,
         Opened,
         Closing,
+        Closed,
     }
 
     public TrainStatsSO trainStats;
@@ -22,34 +26,50 @@ public class SlideDoors : MonoBehaviour
     public State curState;
     public Transform rightSlideDoor_transform;
     public Transform leftSlideDoor_transform;
+
+    private float openMoveAmount;
+    private float unlockMoveAmount;
     private void Start()
     {
+        ResetDoors();
         curState = State.Locked;
         boxCollider.enabled = false;
         rightSlideDoor_transform = rightSlideDoorRenderer.transform;
         leftSlideDoor_transform = leftSlideDoorRenderer.transform;
+        openMoveAmount = rightSlideDoorRenderer.sprite.worldSize.x * OPEN_MOVE_AMOUNT_PERCENT;
+        unlockMoveAmount = rightSlideDoorRenderer.sprite.worldSize.x * UNLOCK_MOVE_AMOUNT_PERCENT;
     }
 
     private void OnDisable()
     {
         ResetDoors();
     }
+    private void OnApplicationQuit()
+    {
+        ResetDoors();
+    }
     public void UnlockDoors()
     {
         boxCollider.enabled = true;
-        MovingDoors(moveAmount: rightSlideDoorRenderer.sprite.worldSize.x * 0.01f, moveTime: 0.3f, State.Unlocked).Forget();
+        MovingDoors(unlockMoveAmount, UNLOCK_MOVE_TIME, State.Unlocked).Forget();
     }
 
     public void OpenDoors()
     {
         curState = State.Opening;
-        MovingDoors(moveAmount: rightSlideDoorRenderer.sprite.worldSize.x * 0.99f, moveTime: trainSettings.doorMoveTime, State.Opened).Forget();
+        MovingDoors(openMoveAmount, trainSettings.doorMoveTime, State.Opened).Forget();
     }
 
     public void CloseDoors()
     {
         curState = State.Closing;
-        MovingDoors(moveAmount: rightSlideDoorRenderer.sprite.worldSize.x, moveTime: trainSettings.doorMoveTime, State.Locked).Forget();
+        MovingDoors(openMoveAmount, trainSettings.doorMoveTime, State.Closed).Forget();
+    }
+
+    public void LockDoors()
+    {
+        boxCollider.enabled = false;
+        MovingDoors(unlockMoveAmount, UNLOCK_MOVE_TIME, State.Locked).Forget();
     }
     private async UniTaskVoid MovingDoors(float moveAmount, float moveTime, State newState)
     {

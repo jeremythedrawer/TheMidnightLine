@@ -7,10 +7,4 @@ public class TrainSettingsSO : ScriptableObject
     public float accelerationSpeed = 10f;
     public float doorMoveTime = 2.0f;
     public float exteriorWallFadeTime = 1f;
-    [Serializable] public struct WorldZPosRange
-    {
-        public int postion;
-        public int size;
-    }
-    public WorldZPosRange maxMinWorldZPos;
 }

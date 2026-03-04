@@ -26,7 +26,7 @@ public class Station : MonoBehaviour
             SpawnNPCs();
         }
         station.curWorldPos = transform.position;
-        station.isFrontOfTrain = platformCollider.transform.position.z < trainSettings.maxMinWorldZPos.postion;
+        station.isFrontOfTrain = platformRenderer.depthOrder < trainStats.minDepth;
         station.parallaxFactor = Parallax.GetParallaxFactor(camStats, trainStats, station.curWorldPos.z);
     }
 
@@ -60,9 +60,10 @@ public class Station : MonoBehaviour
         for (int i = 0; i < station.bystanderSpawnAmount; i++)
         {
             int randNPCIndex = UnityEngine.Random.Range(0, npcData.npc_prefab.Length);
-            float randXPos = UnityEngine.Random.Range(platformCollider.bounds.min.x + 5f, platformCollider.bounds.max.x - 5f);
+            float randXPos = UnityEngine.Random.Range(platformCollider.bounds.min.x + 5, platformCollider.bounds.max.x - 5f);
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, platformCollider.transform.position.z);
             NPCBrain bystanderNPC = Instantiate(npcData.npc_prefab[randNPCIndex], spawnPos, Quaternion.identity, null); // spawn at random point on station
+            bystanderNPC.atlasRenderer.depthOrder = (int)platformCollider.transform.position.z;
             bystanderNPC.stats.role = NPC.Role.Bystander;
             bystanderNPC.startStation = station;
             bystanderNPC.transform.SetParent(transform, true);

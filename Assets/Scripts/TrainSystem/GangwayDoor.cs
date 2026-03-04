@@ -9,7 +9,8 @@ public class GangwayDoor : MonoBehaviour
     [SerializeField] BoxCollider2D wallCollider;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] AtlasRenderer atlasRenderer;
-    [SerializeField] GameEventDataSO gameEventData;
+    [SerializeField] Carriage carriage;
+    [SerializeField] SpyStatsSO spyStats;
 
     [Header("Generated")]
     public bool isOpen;
@@ -26,6 +27,11 @@ public class GangwayDoor : MonoBehaviour
         if ((layerSettings.spy & (1 << collision.gameObject.layer)) == 0 || !isOpen) return;
 
         ClosingDoor().Forget();
+
+        if ((atlasRenderer.flipX && spyStats.curWorldPos.x < transform.position.x) || (!atlasRenderer.flipX && spyStats.curWorldPos.x > transform.position.x))
+        {
+            carriage.FadeIn();
+        }
     }
 
     public void OpenDoor()
@@ -33,6 +39,7 @@ public class GangwayDoor : MonoBehaviour
         if (isOpen) return;
 
         OpeningDoor().Forget();
+        carriage.FadeOut();
     }
     private async UniTask OpeningDoor()
     {

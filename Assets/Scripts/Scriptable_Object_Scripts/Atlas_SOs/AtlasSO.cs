@@ -25,6 +25,7 @@ public class AtlasSO : ScriptableObject
     public SliceSprite[] slicedSprites;
     public ParticleSprite[] particleSprites;
     public Vector4[] particleUVSizeAndPosArray;
+    public Vector2[] worldSizesArray;
     public AtlasClip[] clips;
     public MarkerKey[] markers;
     

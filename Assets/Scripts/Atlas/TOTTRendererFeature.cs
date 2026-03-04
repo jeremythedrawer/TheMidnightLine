@@ -12,7 +12,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 {
     public MaterialIDSO materialIDs;
     public AtlasSpawnerSettingsSO spawnerSettings;
-    public AtlasSpawnerStatsSO spawnerStats;
+    public ZoneSpawnerStatsSO spawnerStats;
 
     public Material matrixMaterial;
     public Material bloomMaterial;
@@ -149,8 +149,8 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     private class AtlasParticlePass : ScriptableRenderPass
     {
         private AtlasSpawnerSettingsSO zoneSpawnerSettings;
-        private AtlasSpawnerStatsSO zoneSpawnerStats;
-        public AtlasParticlePass(AtlasSpawnerSettingsSO settings, AtlasSpawnerStatsSO stats, MaterialIDSO matIDs)
+        private ZoneSpawnerStatsSO zoneSpawnerStats;
+        public AtlasParticlePass(AtlasSpawnerSettingsSO settings, ZoneSpawnerStatsSO stats, MaterialIDSO matIDs)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
             zoneSpawnerSettings = settings;

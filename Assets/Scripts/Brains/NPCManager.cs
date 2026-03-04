@@ -20,7 +20,7 @@ public class NPCManager : MonoBehaviour
         npcData.npcsToPick = new List<NPCBrain>(npcData.npc_prefab);
         npcData.colorsToPick = new List<Color>(npcData.agentColors);
 
-        CreateNPCAgents();
+        CreateNPCTraitors();
         NPC.InitializeDescriptions();
     }
     private void Update()
@@ -31,7 +31,7 @@ public class NPCManager : MonoBehaviour
         }
     }
 
-    private void CreateNPCAgents()
+    private void CreateNPCTraitors()
     {
         npcData.totalAgentCount = 0;
         for (int i = 0; i < stationsData.stations.Length; i++)
@@ -80,7 +80,6 @@ public class NPCManager : MonoBehaviour
 
     public void AssignNextNPCPosition(NPCBrain npc)
     {
-
         float npcX = npc.transform.position.x;
         float closestDist = float.PositiveInfinity;
         uint bestIndex = int.MaxValue;

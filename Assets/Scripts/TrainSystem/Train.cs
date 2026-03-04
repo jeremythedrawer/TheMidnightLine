@@ -3,8 +3,6 @@ using System.Threading;
 using System.Collections.Generic;
 using UnityEngine;
 
-
-
 public class Train : MonoBehaviour
 {
     [SerializeField] TrainSettingsSO settings;
@@ -12,13 +10,19 @@ public class Train : MonoBehaviour
     [SerializeField] StationsDataSO stationsData;
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] MaterialIDSO materialIDs;
-    [SerializeField] AtlasSpawnerStatsSO spawnerStats;
+    [SerializeField] ZoneSpawnerStatsSO spawnerStats;
     [SerializeField] BoxCollider2D backCollider;
     [SerializeField] BoxCollider2D frontCollider;
+    [SerializeField] Carriage frontCarriage;
 
     [Header("Generated")]
     [SerializeField] Carriage[] carriages;
     CancellationTokenSource trainCTS;
+
+    private void OnValidate()
+    {
+        SetCarriageDictionary();
+    }
     private void Awake()
     {
         stats.startXPos = transform.position.x;
@@ -35,7 +39,13 @@ public class Train : MonoBehaviour
         stats.brakeDist = GetBrakeDistance();
         trainCTS = new CancellationTokenSource();
 
-        SetCarriageDictionary();
+        stats.minDepth = frontCarriage.exteriorRenderers[0].depthOrder;
+        stats.maxDepth = frontCarriage.interiorSlideDoors[0].rightSlideDoorRenderer.depthOrder;
+        stats.depthSection_front_min = frontCarriage.grapPoleRenderers[0].depthOrder - 2;
+        stats.depthSection_front_max = frontCarriage.grapPoleRenderers[0].depthOrder - 1;
+        stats.depthSection_back_min = frontCarriage.grapPoleRenderers[0].depthOrder + 1;
+        stats.depthSection_back_max = frontCarriage.grapPoleRenderers[0].depthOrder + 2;
+
 
     }
     private void OnDisable()
@@ -46,9 +56,8 @@ public class Train : MonoBehaviour
     }
     private void Start()
     {
+        SetCarriageDictionary();
         MoveTrainToStartPosition().Forget();
-        Vector2 entityDepthData = new Vector2(settings.maxMinWorldZPos.postion, settings.maxMinWorldZPos.size);
-        Shader.SetGlobalVector(materialIDs.ids.entityDepthRange, entityDepthData);
     }
     private void Update()
     {
@@ -81,19 +90,6 @@ public class Train : MonoBehaviour
             LeavingStation().Forget();
         }
     }
-    private void SetCarriageDictionary()
-    {
-        carriages = GetComponentsInChildren<Carriage>();
-
-        stats.carriageDict = new Dictionary<Collider2D, Carriage>();
-
-        for (int i = 0; i < carriages.Length; i++)
-        {
-            Carriage curCarriage = carriages[i];
-
-            stats.carriageDict.Add(curCarriage.insideBoundsCollider, curCarriage);
-        }
-    }
     private async UniTask LeavingStation()
     {
         gameEventData.OnCloseSlideDoors.Raise();
@@ -113,7 +109,38 @@ public class Train : MonoBehaviour
             transform.position = new Vector3(stats.metersTravelled, transform.position.y, transform.position.z);
             await UniTask.Yield(cancellationToken: trainCTS.Token);
         }
+
         gameEventData.OnTrainArrivedAtStartPosition.Raise();
+
+        SetSlideDoorPositions();
+    }
+    private void SetCarriageDictionary()
+    {
+        carriages = GetComponentsInChildren<Carriage>();
+
+        stats.carriageDict = new Dictionary<Collider2D, Carriage>();
+
+        for (int i = 0; i < carriages.Length; i++)
+        {
+            Carriage curCarriage = carriages[i];
+            stats.carriageDict.Add(curCarriage.insideBoundsCollider, curCarriage);
+        }
+    }
+    private void SetSlideDoorPositions()
+    {
+        List<float> slideDoorPosList = new List<float>();
+
+        for (int i = 0; i < carriages.Length; i++)
+        {
+            Carriage carriage = carriages[i];
+
+            for (int j = 0; j < carriage.exteriorSlideDoors.Length; j++)
+            {
+                slideDoorPosList.Add(carriage.exteriorSlideDoors[j].transform.position.x);
+            }
+        }
+
+        stats.slideDoorPositions = slideDoorPosList.ToArray();
     }
     private float GetBrakeDistance()
     {
