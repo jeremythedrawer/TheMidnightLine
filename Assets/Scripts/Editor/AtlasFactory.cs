@@ -422,7 +422,7 @@ public class AtlasFactory : EditorWindow
             maxY = Mathf.Max(maxY, p.y);
         }
         
-        List<MarkerPosition> spriteMarkers = new List<MarkerPosition>();
+        List<MarkerPosition> spriteMarkersList = new List<MarkerPosition>();
         Vector2 pivot = new Vector2(minX, minY);
         Vector2[] slices = new Vector2[2];
         bool foundPivot = false;
@@ -462,7 +462,7 @@ public class AtlasFactory : EditorWindow
                         newSpriteMarker.type = atlasMarker.type;
                         newSpriteMarker.objectPos.x = (x - minX) / PIXELS_PER_UNIT;
                         newSpriteMarker.objectPos.y = (y - minY) / PIXELS_PER_UNIT;
-                        spriteMarkers.Add(newSpriteMarker);
+                        spriteMarkersList.Add(newSpriteMarker);
                     }
                 }
             }
@@ -487,9 +487,14 @@ public class AtlasFactory : EditorWindow
         if (foundPivot)
         {
             MotionSprite newMotionSprite = new MotionSprite();
-            newMotionSprite.markers = spriteMarkers.ToArray();
+
             newSimpleSprite.uvPivot.x = (pivot.x - minX) / spriteWidth;
             newSimpleSprite.uvPivot.y = (pivot.y - minY) / spriteHeight;
+            newMotionSprite.markers = spriteMarkersList.ToArray();
+            for (int i = 0; i < newMotionSprite.markers.Length; i++)
+            {
+                newMotionSprite.markers[i].objectPos.x -= (newSimpleSprite.uvPivot.x * newSimpleSprite.worldSize.x);
+            }
 
             newMotionSprite.sprite = newSimpleSprite;
 
@@ -757,10 +762,12 @@ public class AtlasFactory : EditorWindow
                     MarkerKey atlasMarker = atlas.markers[j];
                     if ((marker.type & atlasMarker.type) != 0)
                     {
-                        Vector2 markerPixelInSprite = marker.objectPos * PIXELS_PER_UNIT;
-                        Vector2 markerNormalized = new Vector2(markerPixelInSprite.x / spritePixelWidth, markerPixelInSprite.y / spritePixelHeight);
-                        Vector2 markerPixel = new Vector2(Mathf.Lerp(spriteRect.xMin, spriteRect.xMax, markerNormalized.x), Mathf.Lerp(spriteRect.yMax, spriteRect.yMin, markerNormalized.y));
-                        Rect markerRect = new Rect(markerPixel - Vector2.one * markerSize, Vector2.one * (markerSize * 2));
+                        Vector2 markerPixelPos = marker.objectPos * PIXELS_PER_UNIT;
+                        Vector2 markerNormalized = new Vector2(markerPixelPos.x / spritePixelWidth, markerPixelPos.y / spritePixelHeight);
+                        markerNormalized.x += atlasSprite.uvPivot.x;
+                        markerNormalized.y += atlasSprite.uvPivot.y;
+                        Vector2 markerRectPos =  new Vector2(Mathf.Lerp(spriteRect.xMin, spriteRect.xMax, markerNormalized.x), Mathf.Lerp(spriteRect.yMax, spriteRect.yMin, markerNormalized.y));
+                        Rect markerRect = new Rect(markerRectPos - Vector2.one * markerSize, Vector2.one * (markerSize * 2));
                         Handles.DrawSolidRectangleWithOutline(markerRect, Color.clear, atlasMarker.color);
                         break;
                     }

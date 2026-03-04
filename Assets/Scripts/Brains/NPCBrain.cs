@@ -663,7 +663,7 @@ public class NPCBrain : MonoBehaviour
         MarkerPosition[] curSpriteMarkers = stats.curClip.keyFrames[stats.curFrameIndex].motionSprite.markers;
         if (curSpriteMarkers.Length > 0)
         {
-            stats.curSpriteMarkerLocalPosition = curSpriteMarkers[0].objectPos - (atlasRenderer.sprite.uvPivot * atlasRenderer.sprite.worldSize); //TODO: cache postiion in atlas factory...have fun
+            stats.curSpriteMarkerLocalPosition = curSpriteMarkers[0].objectPos; //TODO: cache postiion in atlas factory...have fun
         }
     }
     private AtlasClip RandomStandingIdleMotion()
