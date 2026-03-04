@@ -41,7 +41,7 @@ public class NPCBrain : MonoBehaviour
 
     [Serializable] public struct StatData
     {
-        public Vector2 curSpriteMarkerObjPos;
+        public Vector2 curSpriteMarkerLocalPosition;
         public Color selectedColor;
         public float targetXVelocity;
         public float targetXPos;
@@ -111,8 +111,8 @@ public class NPCBrain : MonoBehaviour
         }
         if (((stats.behaviours & Behaviours.Frequent_smoker) != 0) && smoke == null)
         {
-            //smoke = Instantiate(npcData.smoke_prefab, transform);
-            //smoke.Stop();
+            smoke = Instantiate(npcData.smoke_prefab, transform.position, transform.rotation, transform);
+            smoke.Stop();
         }
         if (((stats.behaviours & Behaviours.Listens_to_music) != 0) && musicNotes == null)
         {
@@ -214,7 +214,8 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Smoking:
             {
-                smoke.transform.localPosition = new Vector3(stats.curSpriteMarkerObjPos.x, stats.curSpriteMarkerObjPos.y, -0.5f);
+                SetMarkerPosition();
+                smoke.transform.localPosition = stats.curSpriteMarkerLocalPosition;
 
                 if (stats.stateClock > stats.stateDuration)
                 {
@@ -226,7 +227,8 @@ public class NPCBrain : MonoBehaviour
             case NPCState.Sleeping:
             {
                 
-                sleepingZs.transform.localPosition = new Vector3(stats.curSpriteMarkerObjPos.x, stats.curSpriteMarkerObjPos.y, -0.5f);
+                SetMarkerPosition();
+                sleepingZs.transform.localPosition = stats.curSpriteMarkerLocalPosition;
                 
                 if (stats.stateClock > stats.stateDuration)
                 {
@@ -245,7 +247,8 @@ public class NPCBrain : MonoBehaviour
             case NPCState.Music:
             {
 
-                musicNotes.transform.localPosition = new Vector3(stats.curSpriteMarkerObjPos.x, stats.curSpriteMarkerObjPos.y, -0.5f);
+                SetMarkerPosition();
+                musicNotes.transform.localPosition = stats.curSpriteMarkerLocalPosition;
                 
                 if (stats.stateClock > stats.stateDuration)
                 {
@@ -255,7 +258,8 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Calling:
             {
-                speechBubble.transform.localPosition = new Vector3(stats.curSpriteMarkerObjPos.x, stats.curSpriteMarkerObjPos.y, transform.position.z - 0.5f);
+                SetMarkerPosition();
+                speechBubble.transform.localPosition = stats.curSpriteMarkerLocalPosition;
 
                 if (stats.stateClock > stats.stateDuration)
                 {
@@ -360,11 +364,11 @@ public class NPCBrain : MonoBehaviour
 
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingAboutToEat];
+                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingEating];
                 }
                 else
                 {
-                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingAboutToEat];
+                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingEating];
                 }
             }
             break;
@@ -403,7 +407,7 @@ public class NPCBrain : MonoBehaviour
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingAboutToRead];
+                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingReading];
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.sittingDepth);
                 }
                 else
@@ -644,7 +648,7 @@ public class NPCBrain : MonoBehaviour
             MarkerPosition[] curSpriteMarkers = atlasRenderer.atlas.motionSprites[stats.curFrameIndex].markers;
             if (curSpriteMarkers.Length > 0)
             {
-                stats.curSpriteMarkerObjPos = curSpriteMarkers[0].objectPos;
+                stats.curSpriteMarkerLocalPosition = curSpriteMarkers[0].objectPos;
             }
         }
     }
@@ -652,6 +656,15 @@ public class NPCBrain : MonoBehaviour
     {
         stats.atlasIndexClock += Time.deltaTime;
         atlasRenderer.sprite = stats.curClip.GetNextSprite(ref stats.atlasIndexClock, ref stats.curFrameIndex, ref stats.prevAtlasIndex);
+    }
+
+    private void SetMarkerPosition()
+    {
+        MarkerPosition[] curSpriteMarkers = stats.curClip.keyFrames[stats.curFrameIndex].motionSprite.markers;
+        if (curSpriteMarkers.Length > 0)
+        {
+            stats.curSpriteMarkerLocalPosition = curSpriteMarkers[0].objectPos - (atlasRenderer.sprite.uvPivot * atlasRenderer.sprite.worldSize); //TODO: cache postiion in atlas factory...have fun
+        }
     }
     private AtlasClip RandomStandingIdleMotion()
     {
