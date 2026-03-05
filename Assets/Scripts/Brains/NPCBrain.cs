@@ -638,20 +638,6 @@ public class NPCBrain : MonoBehaviour
         int depth = UnityEngine.Random.Range(trainStats.depthSection_front_min, trainStats.depthSection_back_max);
         atlasRenderer.depthOrder = depth;
     }
-    private void PlayMotion()
-    {
-        if (stats.curClip.motionIndex == 0) return;
-        stats.atlasIndexClock += Time.deltaTime;
-        stats.curClip.GetNextSprite(ref stats.atlasIndexClock, ref stats.curFrameIndex, ref stats.prevAtlasIndex);
-        if (stats.curFrameIndex != stats.prevAtlasIndex)
-        {
-            MarkerPosition[] curSpriteMarkers = atlasRenderer.atlas.motionSprites[stats.curFrameIndex].markers;
-            if (curSpriteMarkers.Length > 0)
-            {
-                stats.curSpriteMarkerLocalPosition = curSpriteMarkers[0].objectPos;
-            }
-        }
-    }
     private void PlayClip()
     {
         stats.atlasIndexClock += Time.deltaTime;
@@ -663,7 +649,8 @@ public class NPCBrain : MonoBehaviour
         MarkerPosition[] curSpriteMarkers = stats.curClip.keyFrames[stats.curFrameIndex].motionSprite.markers;
         if (curSpriteMarkers.Length > 0)
         {
-            stats.curSpriteMarkerLocalPosition = curSpriteMarkers[0].objectPos; //TODO: cache postiion in atlas factory...have fun
+            stats.curSpriteMarkerLocalPosition.x = atlasRenderer.flipX ? -curSpriteMarkers[0].objectPos.x : curSpriteMarkers[0].objectPos.x;
+            stats.curSpriteMarkerLocalPosition.y = curSpriteMarkers[0].objectPos.y;
         }
     }
     private AtlasClip RandomStandingIdleMotion()

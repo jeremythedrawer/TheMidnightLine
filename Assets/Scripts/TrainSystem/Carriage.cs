@@ -13,9 +13,9 @@ public class Carriage : MonoBehaviour
     }
     [Serializable] public struct SmokersRoomData
     {
-        internal float minXPos;
-        internal float maxXPos;
-        internal int npcCount;
+        public float minXPos;
+        public float maxXPos;
+        public int npcCount;
     }
 
     [SerializeField] TrainStatsSO trainStats;
@@ -52,7 +52,8 @@ public class Carriage : MonoBehaviour
 
     private void OnEnable()
     {
-        gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(GetSeatData);
+        gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(SetSeatData);
+        gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(SetSmokerRoomData);
         gameEventData.OnStationArrival.RegisterListener(UnlockDoors);
         gameEventData.OnStationLeave.RegisterListener(CloseDoors);
 
@@ -60,7 +61,8 @@ public class Carriage : MonoBehaviour
 
     private void OnDisable()
     {
-        gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(GetSeatData);
+        gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(SetSeatData);
+        gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(SetSmokerRoomData);
         gameEventData.OnStationArrival.UnregisterListener(UnlockDoors);
         gameEventData.OnCloseSlideDoors.UnregisterListener(CloseDoors);
     }
@@ -81,7 +83,19 @@ public class Carriage : MonoBehaviour
         }
     }
 
-    private void GetSeatData()
+    private void SetSmokerRoomData()
+    {
+        smokersRoomData = new SmokersRoomData[2];
+
+        smokersRoomData[0].minXPos = smokingRoomCollider_left.bounds.min.x;
+        smokersRoomData[0].maxXPos = smokingRoomCollider_left.bounds.max.x;
+        smokersRoomData[1].minXPos = smokingRoomCollider_right.bounds.min.x;
+        smokersRoomData[1].maxXPos = smokingRoomCollider_right.bounds.max.x;
+
+
+    }
+
+    private void SetSeatData()
     {
         AtlasRenderer seatRenderer = chairRenderers[0];
         float tileWidth = seatRenderer.atlas.slicedSprites[seatRenderer.spriteIndex].worldSlices.x;

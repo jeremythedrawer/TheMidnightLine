@@ -495,7 +495,6 @@ public class AtlasFactory : EditorWindow
             {
                 newMotionSprite.markers[i].objectPos.x -= (newSimpleSprite.uvPivot.x * newSimpleSprite.worldSize.x);
             }
-
             newMotionSprite.sprite = newSimpleSprite;
 
             if (motionSpritesFound < motionSpritesList.Count)
@@ -633,6 +632,17 @@ public class AtlasFactory : EditorWindow
             for (int i = 0; i < atlas.motionSprites.Length; i++)
             {
                 atlas.motionSprites[i].sprite.index = i;
+
+                for (int j = 0; j < atlas.clips.Length; j++)
+                {
+                    for (int k = 0; k < atlas.clips[j].keyFrames.Length; k++)
+                    {
+                        if (atlas.clips[j].keyFrames[k].motionSprite.sprite.index == i)
+                        {
+                            atlas.clips[j].keyFrames[k].motionSprite = atlas.motionSprites[i];
+                        }
+                    }
+                }
             }
         }
         if (atlas.slicedSprites.Length > 1)
