@@ -5,6 +5,7 @@ public static class Atlas
 {
     public const int PIXELS_PER_UNIT = 180;
     public const int FRAMES_PER_SEC = 30;
+    public readonly static float UNITS_PER_PIXEL = 1 / (float)PIXELS_PER_UNIT;
     public enum NPCMotion
     {
         None,

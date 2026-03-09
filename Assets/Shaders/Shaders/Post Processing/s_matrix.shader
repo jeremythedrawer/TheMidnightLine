@@ -22,7 +22,7 @@ Shader "Custom/s_matrix"
 			float depth = SAMPLE_TEXTURE2D_X(_CameraDepthTexture, sampler_CameraDepthTexture, input.texcoord).r;
 			float3 worldPos = ComputeWorldSpacePosition(input.texcoord, depth, UNITY_MATRIX_I_VP);
 			
-			float linearDepth = pow(saturate((worldPos.z - 1) /(32 - 4)), 2); // 1 is the depth of the player
+			float linearDepth = pow(saturate((worldPos.z - 1) /(32 - 4)), 8); // 1 is the depth of the player
 
 
 

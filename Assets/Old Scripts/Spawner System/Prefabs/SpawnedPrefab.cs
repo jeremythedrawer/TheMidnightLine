@@ -28,7 +28,7 @@ public class SpawnedPrefab : MonoBehaviour
     public virtual void Initialize()
     {
         SetComponents();
-        parallaxController.Initialize();
+        //parallaxController.Initialize();
     }
 
     public virtual IEnumerator SetLifeTime()

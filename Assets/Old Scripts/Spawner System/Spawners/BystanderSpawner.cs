@@ -42,10 +42,10 @@ public class BystanderSpawner : NPCSpawner
 
     private void Update()
     {
-        if ((trainData.metersTravelled > station.parallaxController.spawnPosition || station == GlobalReferenceManager.Instance.stations[0]) && bystanders.Count != bystandersToGet && pool.bystanders.Count > 0)
-        {
-            ActivateBystanders();
-        }
+        //if ((trainData.metersTravelled > station.parallaxController.spawnPosition || station == GlobalReferenceManager.Instance.stations[0]) && bystanders.Count != bystandersToGet && pool.bystanders.Count > 0)
+        //{
+        //    ActivateBystanders();
+        //}
     }
 
     private void ActivateBystanders()

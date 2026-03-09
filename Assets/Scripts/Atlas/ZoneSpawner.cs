@@ -44,7 +44,7 @@ public class ZoneSpawner : MonoBehaviour
 
     private void Update()
     {
-        UpdateZoneParticles(spawnerStats, spawnerSettings.atlasCompute, spyStats);
+        UpdateZoneParticles(spawnerStats, spawnerSettings.atlasCompute, camStats, spyStats, trainStats);
     }
     private void InitializeBoundParameters()
     {

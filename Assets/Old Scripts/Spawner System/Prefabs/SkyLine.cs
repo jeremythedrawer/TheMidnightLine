@@ -18,10 +18,10 @@ public class SkyLine : MonoBehaviour
     public void ApplyTileAndOffset()
     {
         endAddOn = isLastSkyLine? canvasBounds.width : 0;
-        spriteRenderer.size = new Vector2(lengthInMeters * parallaxController.parallaxFactor + endAddOn, spriteRenderer.size.y);
+        //spriteRenderer.size = new Vector2(lengthInMeters * parallaxController.parallaxFactor + endAddOn, spriteRenderer.size.y);
         transform.localScale = Vector2.one;
 
-        transform.localPosition = new Vector3(positionFromStart * parallaxController.parallaxFactor, transform.position.y, transform.position.z);
+        //transform.localPosition = new Vector3(positionFromStart * parallaxController.parallaxFactor, transform.position.y, transform.position.z);
     }
 #endif
 }

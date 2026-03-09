@@ -59,7 +59,8 @@ uint _ForegroundParticleCount;
 uint _MiddlegroundParticleCount;
 uint _BackgroundParticleCount;
 
-uniform float _Velocity;
+uniform float _CamVelocity;
+uniform float _TrainVelocity;
 
 
 void InitOutput(int id, int particleCount, float minPos, float sizeRange, float offset, inout ZoneOutput output)
@@ -68,7 +69,7 @@ void InitOutput(int id, int particleCount, float minPos, float sizeRange, float 
     
     output.position.z = minPos + (normID * sizeRange);
     output.position.y = 0;
-    output.parallaxFactor = (_SpawnerMaxPos.z - output.position.z) / _SpawnerMaxPos.z;
+    output.parallaxFactor = ((_SpawnerMaxPos.z - output.position.z) / _SpawnerMaxPos.z);
     
     uint seed = id ^ asuint(offset * 123.456);
     
@@ -83,16 +84,16 @@ void UpdateOutput(inout ZoneOutput output)
 {
     if (output.alive == 1)
     {
-        output.position.x += _Velocity * (1 - output.parallaxFactor) * 0.5;
-    
-        if (output.position.x > _SpawnerMaxPos.x)
+        float velocity = (_CamVelocity * (1 - output.parallaxFactor)) + (_TrainVelocity * output.parallaxFactor);
+        output.position.x -= velocity;
+        if (output.position.x < _SpawnerMinPos.x)
         {
             output.alive = 0;
         }
     }
     else
     {
-        output.position.x = _SpawnerMinPos.x;
+        output.position.x = _SpawnerMaxPos.x;
         output.alive = 1;
     }
 }

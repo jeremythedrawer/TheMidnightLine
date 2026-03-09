@@ -61,8 +61,8 @@ public class Train : MonoBehaviour
     }
     private void Update()
     {
-        stats.curVelocity = stats.GetMetersPerSecond(stats.curKMPerHour) * Time.deltaTime;
-        stats.metersTravelled += stats.curVelocity;
+        stats.curVelocity = stats.GetMetersPerSecond(stats.curKMPerHour);
+        stats.metersTravelled += stats.curVelocity * Time.deltaTime;
 
         stats.distToNextStation = stats.curStation.metersPosition - stats.metersTravelled;
 

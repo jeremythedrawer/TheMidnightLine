@@ -10,7 +10,6 @@ public class GameCursor : MonoBehaviour
     [SerializeField] GameEventDataSO gameEventData;
     NPCBrain curNPC; 
     NPCBrain prevNPC;
-    Phone curPhone;
 
     int prevPageIndex;
     bool prevClipboardActive;
@@ -22,7 +21,6 @@ public class GameCursor : MonoBehaviour
     private void Update()
     {
         UpdateNPCColor();
-        UpdatePhoneColor();
     }
 
     private void LateUpdate()
@@ -58,33 +56,6 @@ public class GameCursor : MonoBehaviour
         if ((curNPC != null && curNPC != prevNPC) || clipboardStats.tempStats.curPageIndex != prevPageIndex || clipboardStats.tempStats.active != prevClipboardActive)
         {
             curNPC?.HoverColor();
-        }
-    }
-
-    private void UpdatePhoneColor()
-    {
-        if (spyStats.curGroundLayer != layerSettings.trainLayers.ground) return;
-        RaycastHit2D phoneHit = Physics2D.Raycast(spyInputs.mouseWorldPos, Vector2.zero, Mathf.Infinity, layerSettings.phone);
-        if (phoneHit.collider != null)
-        {
-            curPhone = phoneHit.collider.GetComponent<Phone>();
-        }
-        else
-        {
-            curPhone?.ExitColor();
-            curPhone = null;
-        }
-
-        if (curPhone != null && curPhone.canHover)
-        {
-            if (spyInputs.mouseLeftDown)
-            {
-                curPhone.UsePhone();
-            }
-            else
-            {
-                curPhone.HoverColor();
-            }
         }
     }
 }

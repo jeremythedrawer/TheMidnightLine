@@ -1,15 +1,24 @@
 using System;
 using UnityEngine;
+using static Page;
 
 public static class Parallax
 {
-    public static float GetParallaxFactor(CameraStatsSO camStats, TrainStatsSO trainStats, float zPos)
+    const float FAR_CLIP = 64;
+    public static float GetParallaxFactor(float zPos)
     {
-        return Mathf.Abs(zPos - camStats.worldFarClipPlane) / camStats.worldFarClipPlane;
+        return (FAR_CLIP - zPos) / FAR_CLIP;
     }
 
-    public static float UpdateParallaxPosition(TrainStatsSO trainStats, float parallaxFactor)
+    public static float UpdateParallaxPosition(CameraStatsSO camStats, SpyStatsSO spyStats, TrainStatsSO trainStats, float parallaxFactor)
     {
-        return trainStats.curVelocity * parallaxFactor;
+        float xPos = camStats.curVelocity.x * (1 - parallaxFactor) * Time.deltaTime;
+
+        if (spyStats.onTrain)
+        {
+            xPos += trainStats.curVelocity * parallaxFactor * Time.deltaTime;
+        }
+
+        return xPos;
     }
 }

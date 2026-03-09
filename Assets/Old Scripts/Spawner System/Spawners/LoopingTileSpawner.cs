@@ -39,7 +39,7 @@ public class LoopingTileSpawner : OldSpawner
             int indexToCheck = index == 0 ? lastIndex : prevIndex;
             yield return new WaitUntil(() => tile.spriteBoundsMaxX < canvasBounds.left);
             tile.transform.position = new Vector3(loopingTiles[indexToCheck].spriteBoundsMaxX, transform.position.y, transform.position.z);
-            tile.parallaxController.Initialize();
+            //tile.parallaxController.Initialize();
         }
 
     }

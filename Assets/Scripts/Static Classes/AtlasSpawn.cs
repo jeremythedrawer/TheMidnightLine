@@ -145,9 +145,15 @@ public static class AtlasSpawn
         }
 
     }
-    public static void UpdateZoneParticles(ZoneSpawnerStatsSO stats, ComputeShader computeShader, SpyStatsSO spyStats)
+    public static void UpdateZoneParticles(ZoneSpawnerStatsSO stats, ComputeShader computeShader, CameraStatsSO camStats, SpyStatsSO spyStats, TrainStatsSO trainStats)
     {
-        computeShader.SetFloat("_Velocity", spyStats.moveVelocity.x * Time.deltaTime);
+        computeShader.SetFloat("_CamVelocity", (camStats.curVelocity.x * Time.deltaTime));
+
+        if (spyStats.onTrain)
+        {
+            computeShader.SetFloat("_TrainVelocity", (trainStats.curVelocity * Time.deltaTime));
+        }
+
         for (int i = 0; i < stats.zoneSpawnerDataArray.Length; i++)
         {
             ref ZoneSpawnerData activeSpawner = ref stats.zoneSpawnerDataArray[i];

@@ -596,12 +596,10 @@ public class SpyBrain : MonoBehaviour
         clipTime += Time.deltaTime;
         atlasRenderer.sprite = curClip.GetNextSprite(ref clipTime, ref curFrameIndex, ref prevFrameIndex);
     }
-
     private void PlayManualClip(float t)
     {
         atlasRenderer.sprite = curClip.GetNextSpriteManual(t);
     }
-
     private void OnApplicationQuit()
     {
         stats.ResetStats();

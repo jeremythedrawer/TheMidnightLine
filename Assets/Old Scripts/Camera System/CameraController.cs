@@ -2,12 +2,13 @@ using Cysharp.Threading.Tasks;
 using Proselyte.Sigils;
 using System;
 using UnityEngine;
-
+using static Atlas;
 public class CameraController : MonoBehaviour
 {
     public CameraSettingsSO settings;
     public CameraStatsSO stats;
     public SpyStatsSO spyStats;
+    public TrainStatsSO trainStats;
     public SpySettingsSO spySettings;
     public PlayerInputsSO spyInputs;
     public LayerSettingsSO layerSettings;
@@ -33,9 +34,7 @@ public class CameraController : MonoBehaviour
     {
         stats.targetSize = cam.orthographicSize;
         stats.initialSize = cam.orthographicSize;
-        stats.localFarClipPlane = cam.farClipPlane;
         stats.curWorldPos = transform.position;
-        stats.worldFarClipPlane = stats.curWorldPos.z + stats.localFarClipPlane;
         stats.aspect = cam.aspect;
     }
     private void Update()
@@ -48,11 +47,17 @@ public class CameraController : MonoBehaviour
         }
 
         //Set size and position
-        stats.curWorldPos = Vector2.Lerp(stats.curWorldPos, stats.targetWorldPos, Time.deltaTime * settings.damping);
-        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, stats.targetSize, Time.deltaTime * settings.damping);
-        transform.position = stats.curWorldPos;
 
-        //TODO: Set MetersTravelled to Shaders Globally here
+        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, stats.targetSize, Time.deltaTime * settings.damping);
+
+        stats.prevWorldPos = stats.curWorldPos;
+        stats.curWorldPos = Vector2.Lerp(stats.curWorldPos, stats.targetWorldPos, Time.deltaTime * settings.damping);
+        transform.position = stats.curWorldPos;
+        stats.curVelocity = -((stats.curWorldPos - stats.prevWorldPos) / Time.deltaTime);
+    }
+
+    private void FixedUpdate()
+    {        
     }
     private void SelectStates()
     {

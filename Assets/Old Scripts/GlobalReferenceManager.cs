@@ -66,7 +66,7 @@ public class GlobalReferenceManager : MonoBehaviour
     {
         StationData[] stationsArray = FindObjectsByType<StationData>(FindObjectsSortMode.None);
         stations.AddRange(stationsArray);
-        stations = stationsArray.OrderBy(station => station.GetComponent<ParallaxController>().spawnPosition).ToList();
+       // stations = stationsArray.OrderBy(station => station.GetComponent<ParallaxController>().spawnPosition).ToList();
     }
 
     private void CountNpcs()

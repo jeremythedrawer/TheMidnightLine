@@ -12,14 +12,15 @@ public class CameraStatsSO : ScriptableObject
         Gangway,
     }
 
-    internal State curState;
+    public State curState;
 
     public float initialSize;
     public float curHorOffset;
     public float targetSize;
     public Vector3 curWorldPos;
-    public float localFarClipPlane;
-    public float worldFarClipPlane;
+    public Vector3 prevWorldPos;
     public float aspect;
     public Vector2 targetWorldPos;
+
+    public Vector3 curVelocity;
 }

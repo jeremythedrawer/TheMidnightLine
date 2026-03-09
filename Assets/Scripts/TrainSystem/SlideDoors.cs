@@ -77,7 +77,7 @@ public class SlideDoors : MonoBehaviour
         Vector3 rightSlideDoorPos = rightSlideDoor_transform.localPosition;
         Vector3 leftSlideDoorPos = leftSlideDoor_transform.localPosition;
         
-        float moveSign = newState == State.Opened ? 1 : -1;
+        float moveSign = newState == State.Opened ? -1 : 1;
 
         while (elapsedTime < moveTime)
         {

@@ -11,5 +11,4 @@ public class StationSO : ScriptableObject
 
     public bool isFrontOfTrain;
     public float parallaxFactor;
-    public Vector3 curWorldPos;
 }

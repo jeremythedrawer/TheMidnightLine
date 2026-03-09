@@ -25,18 +25,7 @@ public class Station : MonoBehaviour
         {
             SpawnNPCs();
         }
-        station.curWorldPos = transform.position;
         station.isFrontOfTrain = platformRenderer.depthOrder < trainStats.minDepth;
-        station.parallaxFactor = Parallax.GetParallaxFactor(camStats, trainStats, station.curWorldPos.z);
-    }
-
-    private void Update()
-    {
-        if (spyStats.onTrain)
-        {
-            station.curWorldPos.x -= Parallax.UpdateParallaxPosition(trainStats, station.parallaxFactor);
-            transform.position = station.curWorldPos;
-        }
     }
     private async UniTask InitialiseFirstStation()
     {
