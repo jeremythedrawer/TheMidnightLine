@@ -13,7 +13,6 @@ public class SlideDoors : MonoBehaviour
         Opening,
         Opened,
         Closing,
-        Closed,
     }
 
     public TrainStatsSO trainStats;
@@ -51,45 +50,78 @@ public class SlideDoors : MonoBehaviour
     public void UnlockDoors()
     {
         boxCollider.enabled = true;
-        MovingDoors(unlockMoveAmount, UNLOCK_MOVE_TIME, State.Unlocked).Forget();
+        OpeningDoors(unlockMoveAmount, UNLOCK_MOVE_TIME, State.Unlocked).Forget();
     }
 
     public void OpenDoors()
     {
         curState = State.Opening;
-        MovingDoors(openMoveAmount, trainSettings.doorMoveTime, State.Opened).Forget();
+        OpeningDoors(openMoveAmount, trainSettings.doorMoveTime, State.Opened).Forget();
     }
 
     public void CloseDoors()
     {
+        boxCollider.enabled = false;
+        if (curState == State.Opened)
+        {
+            ClosingDoors(rightSlideDoorRenderer.sprite.worldSize.x, trainSettings.doorMoveTime, State.Locked).Forget();
+        }
+        else
+        {
+            ClosingDoors(unlockMoveAmount, trainSettings.doorMoveTime, State.Locked).Forget();
+        }
         curState = State.Closing;
-        MovingDoors(openMoveAmount, trainSettings.doorMoveTime, State.Closed).Forget();
     }
 
-    public void LockDoors()
-    {
-        boxCollider.enabled = false;
-        MovingDoors(unlockMoveAmount, UNLOCK_MOVE_TIME, State.Locked).Forget();
-    }
-    private async UniTaskVoid MovingDoors(float moveAmount, float moveTime, State newState)
+    private async UniTaskVoid OpeningDoors(float moveAmount, float moveTime, State newState)
     {
         float elapsedTime = 0;
         Vector3 rightSlideDoorPos = rightSlideDoor_transform.localPosition;
         Vector3 leftSlideDoorPos = leftSlideDoor_transform.localPosition;
-        
-        float moveSign = newState == State.Opened ? -1 : 1;
 
         while (elapsedTime < moveTime)
         {
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / moveTime;
 
-            rightSlideDoorPos.x = moveAmount * t * moveSign;
-            leftSlideDoorPos.x = -moveAmount * t * moveSign;
+            rightSlideDoorPos.x = moveAmount * t;
+            leftSlideDoorPos.x = moveAmount * -t;
             rightSlideDoor_transform.localPosition = rightSlideDoorPos;
             leftSlideDoor_transform.localPosition = leftSlideDoorPos;
             await UniTask.Yield();
         }
+
+        rightSlideDoorPos.x = moveAmount;
+        leftSlideDoorPos.x = -moveAmount;
+        rightSlideDoor_transform.localPosition = rightSlideDoorPos;
+        leftSlideDoor_transform.localPosition = leftSlideDoorPos;
+
+        curState = newState;
+    }
+
+
+    private async UniTaskVoid ClosingDoors(float moveAmount, float moveTime, State newState)
+    {
+        float elapsedTime = 0;
+        Vector3 rightSlideDoorPos = rightSlideDoor_transform.localPosition;
+        Vector3 leftSlideDoorPos = leftSlideDoor_transform.localPosition;
+
+        while (elapsedTime < moveTime)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = 1 - (elapsedTime / moveTime);
+
+            rightSlideDoorPos.x = moveAmount * t;
+            leftSlideDoorPos.x = moveAmount * -t;
+            rightSlideDoor_transform.localPosition = rightSlideDoorPos;
+            leftSlideDoor_transform.localPosition = leftSlideDoorPos;
+            await UniTask.Yield();
+        }
+
+        rightSlideDoorPos.x = 0;
+        leftSlideDoorPos.x = 0;
+        rightSlideDoor_transform.localPosition = rightSlideDoorPos;
+        leftSlideDoor_transform.localPosition = leftSlideDoorPos;
 
         curState = newState;
     }

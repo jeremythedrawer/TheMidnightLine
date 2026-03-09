@@ -69,14 +69,14 @@ public class CameraController : MonoBehaviour
         {
             SetState(CameraStatsSO.State.Carriage);
         }
-        else if (spyStats.curLocationLayer == layerSettings.trainLayers.roofBounds)
-        {
-            SetState(CameraStatsSO.State.Roof);
-        }
         else if (spyStats.curLocationLayer == layerSettings.trainLayers.gangwayBounds)
         {
             SetState(CameraStatsSO.State.Gangway);
         }
+        //else if (spyStats.curLocationLayer == layerSettings.trainLayers.roofBounds)
+        //{
+        //    SetState(CameraStatsSO.State.Roof);
+        //}
     }
     private void UpdateStates()
     {

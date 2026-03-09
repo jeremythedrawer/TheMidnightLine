@@ -55,7 +55,7 @@ public class Carriage : MonoBehaviour
         gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(SetSeatData);
         gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(SetSmokerRoomData);
         gameEventData.OnStationArrival.RegisterListener(UnlockDoors);
-        gameEventData.OnStationLeave.RegisterListener(CloseDoors);
+        gameEventData.OnCloseSlideDoors.RegisterListener(CloseDoors);
 
     }
 
@@ -139,15 +139,21 @@ public class Carriage : MonoBehaviour
 
     private void CloseDoors()
     {
-        for(int i = 0; i < exteriorSlideDoors.Length; i++)
+        if (trainStats.curStation.isFrontOfTrain)
         {
-            exteriorSlideDoors[i].CloseDoors();
+            for(int i = 0; i < exteriorSlideDoors.Length; i++)
+            {
+                exteriorSlideDoors[i].CloseDoors();
+            }
+        }
+        else
+        {
+            for (int i = 0; i < interiorSlideDoors.Length; i++)
+            {
+                interiorSlideDoors[i].CloseDoors();
+            }
         }
 
-        for (int i = 0;i < interiorSlideDoors.Length; i++)
-        {
-            interiorSlideDoors[i].CloseDoors();
-        }
     }
     public void FadeIn()
     {

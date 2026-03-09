@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 8051509625788138592}
   - component: {fileID: 8516356413194211895}
   m_Layer: 0
-  m_Name: Right Slide Door
+  m_Name: Left Slide Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,11 +58,11 @@ MonoBehaviour:
   batchKey:
     material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
     mesh: {fileID: 0}
-    depthOrder: 15
+    depthOrder: 16
   sprite:
-    uvSizeAndPos: {x: 0.041992188, y: 0.09448242, z: 0.4555664, w: 0.6125488}
+    uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
     uvPivot: {x: 1, y: 0}
-    worldSize: {x: 0.95555556, y: 2.15, z: 1}
+    worldSize: {x: 0.9611111, y: 2.1555555, z: 1}
     index: 6
   spriteMatrices:
   - e00: 0
@@ -83,8 +83,8 @@ MonoBehaviour:
     e33: 0
   widthHeightFlip:
   - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 0.95555556
-  worldHeight: 2.15
+  worldWidth: 0.9611111
+  worldHeight: 2.1555555
 --- !u!1 &5698172535878707901
 GameObject:
   m_ObjectHideFlags: 0
@@ -96,7 +96,7 @@ GameObject:
   - component: {fileID: 6503429227044896057}
   - component: {fileID: 3740695647750266909}
   m_Layer: 0
-  m_Name: Left Slide Door
+  m_Name: Right Slide Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -143,11 +143,11 @@ MonoBehaviour:
   batchKey:
     material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
     mesh: {fileID: 0}
-    depthOrder: 15
+    depthOrder: 16
   sprite:
-    uvSizeAndPos: {x: 0.041992188, y: 0.09448242, z: 0.4555664, w: 0.6125488}
+    uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
     uvPivot: {x: 1, y: 0}
-    worldSize: {x: 0.95555556, y: 2.15, z: 1}
+    worldSize: {x: 0.9611111, y: 2.1555555, z: 1}
     index: 6
   spriteMatrices:
   - e00: 0
@@ -168,8 +168,8 @@ MonoBehaviour:
     e33: 0
   widthHeightFlip:
   - {x: 1, y: 1, z: -1, w: 1}
-  worldWidth: 0.95555556
-  worldHeight: 2.15
+  worldWidth: 0.9611111
+  worldHeight: 2.1555555
 --- !u!1 &6869162986490981686
 GameObject:
   m_ObjectHideFlags: 0
@@ -220,8 +220,8 @@ MonoBehaviour:
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
   boxCollider: {fileID: 8116342203108054147}
-  rightSlideDoorRenderer: {fileID: 8516356413194211895}
-  leftSlideDoorRenderer: {fileID: 3740695647750266909}
+  rightSlideDoorRenderer: {fileID: 3740695647750266909}
+  leftSlideDoorRenderer: {fileID: 8516356413194211895}
   curState: 0
   rightSlideDoor_transform: {fileID: 8051509625788138592}
   leftSlideDoor_transform: {fileID: 6503429227044896057}

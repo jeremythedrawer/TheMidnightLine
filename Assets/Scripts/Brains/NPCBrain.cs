@@ -51,6 +51,7 @@ public class NPCBrain : MonoBehaviour
         public float curAlpha;
         public float targetAlpha;
         public float atlasIndexClock;
+        public float move;
 
         public Behaviours curBehaviour;
         public Behaviours behaviours;
@@ -70,11 +71,6 @@ public class NPCBrain : MonoBehaviour
         public bool startFade;
     }
     [SerializeField] public StatData stats;
-    [Serializable] public struct InputData
-    {
-        internal float move;
-    }
-    [SerializeField] InputData inputData;
 
 
     private VisualEffect sleepingZs;
@@ -152,17 +148,17 @@ public class NPCBrain : MonoBehaviour
             FindSmokersRoom();
         }
         stats.targetDist = stats.curPath != Path.None ? stats.targetXPos - transform.position.x : 0;
-        inputData.move = Mathf.Abs(stats.targetDist) > 0.1f ? Mathf.Sign(stats.targetDist) : 0;
+        stats.move = Mathf.Abs(stats.targetDist) > 0.1f ? Mathf.Sign(stats.targetDist) : 0;
     }
     private void FixedUpdate()
     {
         FixedUpdateStates();
-        stats.targetXVelocity = npc.moveSpeed  * inputData.move;
+        stats.targetXVelocity = npc.moveSpeed  * stats.move;
         rigidBody.linearVelocityX = stats.targetXVelocity;
     }
     private void SelectingStates()
     {
-        if (inputData.move != 0)
+        if (stats.move != 0)
         {
             SetState(NPCState.Walking);
         }
@@ -209,7 +205,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Walking:
             {
-                atlasRenderer.Flip(inputData.move < 0);
+                atlasRenderer.Flip(stats.move < 0);
             }
             break;
             case NPCState.Smoking:
@@ -551,7 +547,7 @@ public class NPCBrain : MonoBehaviour
         FindSlideDoor();
         await UniTask.WaitForEndOfFrame();
 
-        await UniTask.WaitUntil(() => inputData.move == 0);
+        await UniTask.WaitUntil(() => stats.move == 0);
 
         RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.slideDoors);
         RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
@@ -561,7 +557,7 @@ public class NPCBrain : MonoBehaviour
         if (carriageHit.collider == null) { Debug.LogError($"{name} did not find a slide door to go to"); return; }
 #endif
         curSlideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-        curCarriage = trainStats.carriageDict[carriageHit.collider];
+        await UniTask.WaitUntil(() => curSlideDoors.curState != SlideDoors.State.Locked);
         if (curSlideDoors.curState == SlideDoors.State.Unlocked)
         {
             curSlideDoors.OpenDoors();
@@ -572,6 +568,8 @@ public class NPCBrain : MonoBehaviour
         transform.SetParent(null, true);
         trainStats.curPassengerCount++;
         QueueForChair();
+
+        curCarriage = trainStats.carriageDict[carriageHit.collider];
         rigidBody.includeLayers = layerSettings.trainMask;
     }
     private void FindSlideDoor()
@@ -693,7 +691,7 @@ public class NPCBrain : MonoBehaviour
         }
         int chosenFlag = flags[UnityEngine.Random.Range(0, flagCount)];
 
-        return (NPC.Behaviours)chosenFlag;
+        return (Behaviours)chosenFlag;
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()

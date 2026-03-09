@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 4298671525251318360}
   - component: {fileID: 7548495205679168783}
   m_Layer: 0
-  m_Name: Left Slide Door
+  m_Name: Right Slide Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -135,8 +135,8 @@ MonoBehaviour:
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
   boxCollider: {fileID: 592955796763587438}
-  rightSlideDoorRenderer: {fileID: 9157275910696144408}
-  leftSlideDoorRenderer: {fileID: 7548495205679168783}
+  rightSlideDoorRenderer: {fileID: 7548495205679168783}
+  leftSlideDoorRenderer: {fileID: 9157275910696144408}
   curState: 0
   rightSlideDoor_transform: {fileID: 6355935853720996048}
   leftSlideDoor_transform: {fileID: 4298671525251318360}
@@ -197,7 +197,7 @@ GameObject:
   - component: {fileID: 6355935853720996048}
   - component: {fileID: 9157275910696144408}
   m_Layer: 0
-  m_Name: Right Slide Door
+  m_Name: Left Slide Door
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
