@@ -11,4 +11,7 @@ public class StationSO : ScriptableObject
 
     public bool isFrontOfTrain;
     public float parallaxFactor;
+
+    [Header("Generated")]
+    public bool hadSpawned;
 }

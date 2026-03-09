@@ -14,7 +14,5 @@ public class ZoneSpawnerStatsSO : ScriptableObject
     public Vector3 spawnBoundsSize;
 
     public int computeGroups;
-    public float trainToMaxBoundDist;
-
     public ZoneSpawnerData[] zoneSpawnerDataArray;
 }

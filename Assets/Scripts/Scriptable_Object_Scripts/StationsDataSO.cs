@@ -4,5 +4,8 @@ using UnityEngine;
 public class StationsDataSO : ScriptableObject
 {
     public StationSO[] stations;
+    [Header("Generated")]
+    public int curStationIndex;
+    public StationSO curStation;
 
 }

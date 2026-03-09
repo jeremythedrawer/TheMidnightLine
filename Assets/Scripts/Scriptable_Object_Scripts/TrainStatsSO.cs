@@ -6,8 +6,7 @@ using UnityEngine;
 public class TrainStatsSO : ScriptableObject
 {
     const float KM_TO_MPS = 0.27777777778f;
-    
-    public int nextStationIndex;
+
     public float curKMPerHour;
     public float targetKMPerHour;
     public float metersTravelled;
@@ -18,7 +17,6 @@ public class TrainStatsSO : ScriptableObject
     public float trainMaxHeight;
 
     public bool closingDoors;
-    public float wheelCircumference;
 
     public int curPassengerCount;
     public int targetPassengerCount;
@@ -31,8 +29,6 @@ public class TrainStatsSO : ScriptableObject
     public int depthSection_back_min;
     public int depthSection_back_max;
     public int depthSection_carriageSeat;
-
-    public StationSO curStation;
 
     public float[] slideDoorPositions;
 

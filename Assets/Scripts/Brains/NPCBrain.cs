@@ -545,9 +545,9 @@ public class NPCBrain : MonoBehaviour
     private async UniTask BoardingTrain()
     {
         FindSlideDoor();
-        await UniTask.WaitForEndOfFrame();
-
-        await UniTask.WaitUntil(() => stats.move == 0);
+        float randomStartMoveTime = UnityEngine.Random.Range(0.3f, 1f);
+        await UniTask.WaitForSeconds(randomStartMoveTime);
+        await UniTask.WaitUntil(() => stats.curState != NPCState.Walking);
 
         RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.slideDoors);
         RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
@@ -697,8 +697,12 @@ public class NPCBrain : MonoBehaviour
     private void OnDrawGizmos()
     {
         if (!Application.isPlaying) return;
-        Gizmos.color = Color.magenta;
-        Gizmos.DrawLine(boxCollider.bounds.center, new Vector2(stats.targetXPos, boxCollider.bounds.center.y));
+
+        if (stats.curState == NPCState.Walking)
+        {
+            Gizmos.color = Color.magenta;
+            Gizmos.DrawLine(boxCollider.bounds.center, new Vector2(stats.targetXPos, boxCollider.bounds.center.y));
+        }
 
         Vector3 typeLabel = transform.position + atlasRenderer.sprite.worldSize + Vector3.up * 0.2f;
         Vector3 stateLabel = typeLabel + Vector3.up;

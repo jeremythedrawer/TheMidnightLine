@@ -20,10 +20,11 @@ public class Carriage : MonoBehaviour
 
     [SerializeField] TrainStatsSO trainStats;
     [SerializeField] TrainSettingsSO trainSettings;
+    [SerializeField] StationsDataSO stationData;
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] MaterialIDSO materialIDs;
-    [SerializeField] Transform[] wheelTransforms;
+    [SerializeField] AtlasRenderer[] wheelRenderers;
     public AtlasRenderer[] exteriorRenderers;
     public AtlasRenderer[] chairRenderers;
     public AtlasRenderer[] grapPoleRenderers;
@@ -36,14 +37,14 @@ public class Carriage : MonoBehaviour
     public SlideDoors[] interiorSlideDoors;
 
     public float alpha;
-
+    public float wheelCircumference;
 
     [Header("Generated")]
     public ChairData[] chairData;
     public SmokersRoomData[] smokersRoomData;
     public int sittingDepth;
     public int standingDepth;
-
+    public Transform[] wheelTransforms;
     private CancellationTokenSource ctsFade;
     private void Awake()
     {
@@ -70,12 +71,17 @@ public class Carriage : MonoBehaviour
     private void Start()
     {
         alpha = 1;
+        wheelCircumference = wheelRenderers[0].sprite.worldSize.x * Mathf.PI;
+
+        wheelTransforms = new Transform[wheelTransforms.Length];
+        for (int i = 0; i < wheelRenderers.Length; i++)
+        {
+            wheelTransforms[i] = wheelRenderers[i].transform;
+        }
     }
     private void Update()
     {
-        if (trainStats.wheelCircumference <= 0f) return;
-
-        float wheelRotation = (trainStats.metersTravelled / trainStats.wheelCircumference) * 360f;
+        float wheelRotation = (trainStats.metersTravelled / wheelCircumference) * 360f;
 
         foreach (Transform wheel in wheelTransforms)
         {
@@ -121,7 +127,7 @@ public class Carriage : MonoBehaviour
     }
     private void UnlockDoors()
     {
-        if (trainStats.curStation.isFrontOfTrain)
+        if (stationData.curStation.isFrontOfTrain)
         {
             for (int i = 0; i < exteriorSlideDoors.Length; i++)
             {
@@ -139,7 +145,7 @@ public class Carriage : MonoBehaviour
 
     private void CloseDoors()
     {
-        if (trainStats.curStation.isFrontOfTrain)
+        if (stationData.curStation.isFrontOfTrain)
         {
             for(int i = 0; i < exteriorSlideDoors.Length; i++)
             {

@@ -23,30 +23,25 @@ public class Train : MonoBehaviour
     {
         SetCarriageDictionary();
     }
-    private void Awake()
+    private void Awake() 
     {
         stats.startXPos = transform.position.x;
         stats.trainMaxHeight = frontCollider.bounds.max.y;
-        stats.curStation = stationsData.stations[0];
-        stats.targetPassengerCount = stats.curStation.bystanderSpawnAmount + stationsData.stations[0].agentSpawnAmount + 1; // +1 for spy himself
-        stats.curKMPerHour = stats.curStation.targetTrainSpeed;
-        stats.targetKMPerHour = stats.curStation.targetTrainSpeed;
-        stats.nextStationIndex = 0;
-        //stats.wheelCircumference = (settings.wheelSprite.rect.size.x / settings.wheelSprite.pixelsPerUnit) * Mathf.PI;
+        stats.targetPassengerCount = stationsData.stations[0].bystanderSpawnAmount + stationsData.stations[0].agentSpawnAmount + 1; // +1 for spy himself
+        stats.curKMPerHour = stationsData.stations[0].targetTrainSpeed;
+        stats.targetKMPerHour = stationsData.stations[0].targetTrainSpeed;
         stats.metersTravelled = 0;
         stats.curPassengerCount = 0;
         stats.closingDoors = false;
-        stats.brakeDist = GetBrakeDistance();
+        stats.brakeDist = GetBrakeDistance(stationsData.stations[0].targetTrainSpeed);
         trainCTS = new CancellationTokenSource();
-
         stats.minDepth = frontCarriage.exteriorRenderers[0].depthOrder;
         stats.maxDepth = frontCarriage.interiorSlideDoors[0].rightSlideDoorRenderer.depthOrder;
         stats.depthSection_front_min = frontCarriage.grapPoleRenderers[0].depthOrder - 2;
         stats.depthSection_front_max = frontCarriage.grapPoleRenderers[0].depthOrder - 1;
         stats.depthSection_back_min = frontCarriage.grapPoleRenderers[0].depthOrder + 1;
         stats.depthSection_back_max = frontCarriage.grapPoleRenderers[0].depthOrder + 2;
-
-
+        stats.distToNextStation = float.MaxValue;
     }
     private void OnDisable()
     {
@@ -64,7 +59,7 @@ public class Train : MonoBehaviour
         stats.curVelocity = stats.GetMetersPerSecond(stats.curKMPerHour);
         stats.metersTravelled += stats.curVelocity * Time.deltaTime;
 
-        stats.distToNextStation = stats.curStation.metersPosition - stats.metersTravelled;
+        stats.distToNextStation = stationsData.curStation.metersPosition - stats.metersTravelled;
 
         if (stats.distToNextStation <= stats.brakeDist)
         {
@@ -72,7 +67,7 @@ public class Train : MonoBehaviour
         }
         else
         {
-            stats.targetKMPerHour = stats.curStation.targetTrainSpeed;
+            stats.targetKMPerHour = stationsData.curStation.targetTrainSpeed;
         }
 
         if (stats.distToNextStation < 0.05f && stats.curKMPerHour != 0)
@@ -96,14 +91,11 @@ public class Train : MonoBehaviour
         stats.closingDoors = true;
         await UniTask.WaitForSeconds(settings.doorMoveTime, cancellationToken: trainCTS.Token); // wait for doors to close
 
-        stats.nextStationIndex++;
-        stats.curStation = stationsData.stations[stats.nextStationIndex];
-        stats.brakeDist = GetBrakeDistance();
+        stats.brakeDist = GetBrakeDistance(stationsData.curStation.targetTrainSpeed);
         gameEventData.OnStationLeave.Raise();
     }
     private async UniTask MoveTrainToStartPosition()
     {
-        stats.distToNextStation = (stationsData.stations[stats.nextStationIndex].metersPosition) - stats.metersTravelled;
         while (stats.distToNextStation > 0.05f)
         {
             transform.position = new Vector3(stats.metersTravelled, transform.position.y, transform.position.z);
@@ -111,7 +103,6 @@ public class Train : MonoBehaviour
         }
 
         gameEventData.OnTrainArrivedAtStartPosition.Raise();
-
         SetSlideDoorPositions();
     }
     private void SetCarriageDictionary()
@@ -142,9 +133,9 @@ public class Train : MonoBehaviour
 
         stats.slideDoorPositions = slideDoorPosList.ToArray();
     }
-    private float GetBrakeDistance()
+    private float GetBrakeDistance(float targetSpeed)
     {
-        float kmph = stats.curStation.targetTrainSpeed;
+        float kmph = targetSpeed;
         float meters = 0;
         for (int i = 0; i < 1000; i++)
         {

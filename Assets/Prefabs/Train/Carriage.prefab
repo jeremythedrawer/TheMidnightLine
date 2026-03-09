@@ -577,16 +577,17 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
+  stationData: {fileID: 11400000, guid: 73167d88c81ac4d4e98878bf248a72fe, type: 2}
   gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
-  wheelTransforms:
-  - {fileID: 8067662884716964620}
-  - {fileID: 8615908251815646399}
-  - {fileID: 8962344830599312217}
-  - {fileID: 3820570403346329793}
-  - {fileID: 5532670627397845320}
-  - {fileID: 3248802059132394449}
+  wheelRenderers:
+  - {fileID: 3382576767372737574}
+  - {fileID: 5254240733238717699}
+  - {fileID: 8660113409446341759}
+  - {fileID: 5427943494419257830}
+  - {fileID: 3041843574180944232}
+  - {fileID: 6903315072515421490}
   exteriorRenderers:
   - {fileID: 2367026196223483575}
   - {fileID: 1410418758429501309}
@@ -615,10 +616,18 @@ MonoBehaviour:
   - {fileID: 2765643466292647024}
   - {fileID: 806426836450882125}
   alpha: 0
+  wheelCircumference: 0
   chairData: []
   smokersRoomData: []
   sittingDepth: 0
   standingDepth: 0
+  wheelTransforms:
+  - {fileID: 8067662884716964620}
+  - {fileID: 8615908251815646399}
+  - {fileID: 8962344830599312217}
+  - {fileID: 3820570403346329793}
+  - {fileID: 5532670627397845320}
+  - {fileID: 3248802059132394449}
 --- !u!1 &2017503644377605478
 GameObject:
   m_ObjectHideFlags: 0

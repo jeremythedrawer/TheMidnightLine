@@ -565,7 +565,6 @@ public class SpyBrain : MonoBehaviour
                     if (insideCarriageHit.collider != null)
                     {
                         SetLocationData(insideCarriageHit.collider.bounds, layerSettings.trainLayers.insideCarriageBounds);
-                        Debug.Log(insideCarriageHit.collider.gameObject.name);
                         curCarriage = trainStats.carriageDict[insideCarriageHit.collider];
                         curCarriage.FadeOut();
                     }
