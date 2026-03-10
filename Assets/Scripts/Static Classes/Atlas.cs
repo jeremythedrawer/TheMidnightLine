@@ -127,9 +127,7 @@ public static class Atlas
     }
     [Serializable] public class AtlasClip
     {
-#if UNITY_EDITOR
-        public string clipName;
-#endif
+        public string clipName; // HACK: Take out for production build. Cant use #if UNITY_EDITOR because it'll crash the build. :(
         public AtlasKeyframe[] keyFrames;
         public ClipType clipType;
         public int motionIndex;

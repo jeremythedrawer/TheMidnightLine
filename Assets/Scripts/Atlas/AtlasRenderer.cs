@@ -45,9 +45,7 @@ public class AtlasRenderer : MonoBehaviour
     }
     private void Update()
     {
-#if UNITY_EDITOR
         transform.position = new Vector3(transform.position.x, transform.position.y, depthOrder);
-#endif
     }
     public void Flip(bool flipLeft)
     {
