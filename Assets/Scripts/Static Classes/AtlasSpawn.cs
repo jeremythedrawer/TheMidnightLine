@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using static Atlas;
 using static AtlasSpawn;
+using static Page;
 public static class AtlasSpawn
 {
     public static int FLOAT_SIZE = sizeof(float);
@@ -122,13 +123,11 @@ public static class AtlasSpawn
             ref ZoneSpawnerData activeSpawner = ref stats.zoneSpawnerDataArray[i];
 
             activeSpawner.zoneSpawnerData.active = true;
-            activeSpawner.zoneSpawnerData.uvSizeAndPositionBuffer?.Dispose();
             activeSpawner.zoneSpawnerData.uvSizeAndPositionBuffer?.Release();
             activeSpawner.zoneSpawnerData.uvSizeAndPositionBuffer = null;
             activeSpawner.zoneSpawnerData.uvSizeAndPositionBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, zone.atlas.particleSprites.Length, FLOAT4_SIZE);
             activeSpawner.zoneSpawnerData.uvSizeAndPositionBuffer.SetData(zone.atlas.particleUVSizeAndPosArray);
 
-            activeSpawner.zoneSpawnerData.worldSizeBuffer?.Dispose();
             activeSpawner.zoneSpawnerData.worldSizeBuffer?.Release();
             activeSpawner.zoneSpawnerData.worldSizeBuffer = null;
             activeSpawner.zoneSpawnerData.worldSizeBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, zone.atlas.particleSprites.Length, FLOAT2_SIZE);
@@ -143,8 +142,25 @@ public static class AtlasSpawn
             computeShader.Dispatch(activeSpawner.zoneSpawnerData.kernelID_init, activeSpawner.zoneSpawnerData.computeGroupSize, 1, 1);
             break;
         }
-
     }
+
+
+    public static void ReleaseBuffers(ZoneSpawnerStatsSO stats)
+    {
+        for (int i = 0; i < stats.zoneSpawnerDataArray.Length; i++)
+        {
+            ref ZoneSpawnerData zoneSpawner = ref stats.zoneSpawnerDataArray[i];
+
+            zoneSpawner.zoneSpawnerData.uvSizeAndPositionBuffer?.Release();
+            zoneSpawner.zoneSpawnerData.worldSizeBuffer?.Release();
+            zoneSpawner.zoneSpawnerData.particleBuffer?.Release();
+
+            zoneSpawner.zoneSpawnerData.uvSizeAndPositionBuffer = null;
+            zoneSpawner.zoneSpawnerData.worldSizeBuffer = null;
+            zoneSpawner.zoneSpawnerData.particleBuffer = null;
+        }
+    }
+
     public static void UpdateZoneParticles(ZoneSpawnerStatsSO stats, ComputeShader computeShader, CameraStatsSO camStats, SpyStatsSO spyStats, TrainStatsSO trainStats)
     {
         computeShader.SetFloat("_CamVelocity", (camStats.curVelocity.x * Time.deltaTime));

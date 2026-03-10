@@ -32,14 +32,12 @@ public class ZoneSpawner : MonoBehaviour
     }
     private void OnDisable()
     {
-        for (int i = 0; i < spawnerStats.zoneSpawnerDataArray.Length; i++)
-        {
-            if (spawnerStats.zoneSpawnerDataArray[i].zoneSpawnerData.particleBuffer != null)
-            {
-                spawnerStats.zoneSpawnerDataArray[i].zoneSpawnerData.particleBuffer.Release();
-                spawnerStats.zoneSpawnerDataArray[i].zoneSpawnerData.particleBuffer = null;
-            }
-        }
+        ReleaseBuffers(spawnerStats);
+    }
+
+    private void OnDestroy()
+    {
+        ReleaseBuffers(spawnerStats);
     }
 
     private void Update()

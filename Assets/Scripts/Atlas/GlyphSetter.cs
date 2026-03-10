@@ -23,13 +23,24 @@ public class GlyphSetter : MonoBehaviour
     public float deltaTime;
     private void OnValidate()
     {
+        if (uvSizeAndPosBuffer == null || worldSizeAndPosBuffer == null || widthHeightBuffer == null) return;
         UpdateVFX();
     }
 
     private void Start()
     {
         deltaTime += 0.1f;
+        CreateBuffers();
         GetLifetime();
+    }
+
+    private void OnDisable()
+    {
+        ReleaseBuffers();
+    }
+    private void OnDestroy()
+    {
+        ReleaseBuffers();
     }
     private void Update()
     {
@@ -43,25 +54,18 @@ public class GlyphSetter : MonoBehaviour
             deltaTime = 0;
         }
     }
-
+    private void CreateBuffers()
+    {
+        uvSizeAndPosBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, 9, sizeof(float) * 4);
+        worldSizeAndPosBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, 9, sizeof(float) * 4);
+        widthHeightBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, 9, sizeof(float) * 2);
+    }
     private void GetLifetime()
     {
         lifetime = vfx.GetFloat("Lifetime");
     }
     private void UpdateVFX()
     {
-
-        uvSizeAndPosBuffer?.Release();
-        worldSizeAndPosBuffer?.Release();
-        widthHeightBuffer?.Release();
-        uvSizeAndPosBuffer = null;
-        worldSizeAndPosBuffer = null;
-        widthHeightBuffer = null;
-
-        uvSizeAndPosBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, 9, sizeof(float) * 4);
-        worldSizeAndPosBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, 9, sizeof(float) * 4);
-        widthHeightBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, 9, sizeof(float) * 2);
-
         Vector4[] uvSizeAndPosArray = new Vector4[9];
 
         SliceSprite sliceSprite = glyphAtlas.slicedSprites[spriteIndex];
@@ -138,5 +142,15 @@ public class GlyphSetter : MonoBehaviour
         vfx.SetFloat("Lifetime", lifetime);
 
         vfx.SetMesh("_Quad", GetQuad());
+    }
+
+    private void ReleaseBuffers()
+    {
+        uvSizeAndPosBuffer?.Release();
+        worldSizeAndPosBuffer?.Release();
+        widthHeightBuffer?.Release();
+        uvSizeAndPosBuffer = null;
+        worldSizeAndPosBuffer = null;
+        widthHeightBuffer = null;
     }
 }
