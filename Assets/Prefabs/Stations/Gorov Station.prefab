@@ -298,7 +298,7 @@ Transform:
   m_GameObject: {fileID: 3872012436576265919}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -38.899994, y: -1.2800007, z: 0}
+  m_LocalPosition: {x: -52.700012, y: -1.2800007, z: 17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -321,16 +321,16 @@ MonoBehaviour:
   boxCollider: {fileID: 6674433707631677740}
   spriteIndex: 2
   spriteMode: 0
-  width: 8.4
+  width: 10.85
   height: 1
   flipX: 0
   flipY: 0
-  depthOrder: 0
+  depthOrder: 17
   useCustomMaterial: 0
   batchKey:
     material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
     mesh: {fileID: 0}
-    depthOrder: 0
+    depthOrder: 17
   sprite:
     uvSizeAndPos: {x: 0.49926758, y: 0.06225586, z: 0, w: 0.8745117}
     uvPivot: {x: 0, y: 0}
@@ -354,8 +354,8 @@ MonoBehaviour:
     e32: 0
     e33: 0
   widthHeightFlip:
-  - {x: 8.4, y: 1, z: 1, w: 1}
-  worldWidth: 95.43333
+  - {x: 10.85, y: 1, z: 1, w: 1}
+  worldWidth: 123.26806
   worldHeight: 1.4166666
 --- !u!61 &6674433707631677740
 BoxCollider2D:
@@ -391,7 +391,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 47.716663, y: 0.7083333}
+  m_Offset: {x: 61.63403, y: 0.7083333}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -401,7 +401,7 @@ BoxCollider2D:
     drawMode: 2
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 95.43333, y: 1.4166666}
+  m_Size: {x: 123.26806, y: 1.4166666}
   m_EdgeRadius: 0
 --- !u!114 &7782010653169016748
 MonoBehaviour:
@@ -418,6 +418,7 @@ MonoBehaviour:
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  ignoreParallax: 1
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
 --- !u!1 &4383712028427561626
@@ -717,7 +718,7 @@ Transform:
   m_GameObject: {fileID: 6951541954276182966}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 18}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -744,12 +745,12 @@ MonoBehaviour:
   height: 1
   flipX: 0
   flipY: 0
-  depthOrder: 0
+  depthOrder: 18
   useCustomMaterial: 0
   batchKey:
     material: {fileID: 2100000, guid: fbc8706b3d542f146834f58bb06c2240, type: 2}
     mesh: {fileID: 0}
-    depthOrder: 0
+    depthOrder: 18
   sprite:
     uvSizeAndPos: {x: 0.8808594, y: 0.53027344, z: 0.00048828125, w: 0.29638672}
     uvPivot: {x: 0.5, y: 0}
@@ -791,6 +792,7 @@ MonoBehaviour:
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  ignoreParallax: 1
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
 --- !u!1 &7818414305050200138

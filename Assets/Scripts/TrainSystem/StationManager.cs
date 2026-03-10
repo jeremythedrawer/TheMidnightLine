@@ -10,8 +10,7 @@ public class StationManager : MonoBehaviour
     public GameEventDataSO gameEventData;
 
     public float curMetersSpawnThreshold = float.MaxValue;
-    public float trainToMaxBoundDist;
-
+    public float trainToMaxSpawnDist;
     private void Awake()
     {
         InitStationManager();
@@ -19,11 +18,13 @@ public class StationManager : MonoBehaviour
     private void OnEnable()
     {
         gameEventData.OnStationLeave.RegisterListener(SetStation);
+        gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(InitOnTrainArrivedAtStartPosition);
     }
 
     private void OnDisable()
     {
         gameEventData.OnStationLeave.UnregisterListener(SetStation);
+        gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(InitOnTrainArrivedAtStartPosition);
     }
 
     private void OnApplicationQuit()
@@ -52,17 +53,21 @@ public class StationManager : MonoBehaviour
     {
         stationsData.curStationIndex = 0;
         stationsData.curStation = stationsData.stations[0];
-        trainToMaxBoundDist = spawnerStats.spawnMaxPos.x - stationsData.curStation.metersPosition;
 
         for (int i = 0; i < stationsData.stations.Length; i++)
         {
             stationsData.stations[i].hadSpawned = false;
         }
     }
+
+    private void InitOnTrainArrivedAtStartPosition()
+    {
+        trainToMaxSpawnDist = spawnerStats.spawnMaxPos.x - stationsData.stations[0].metersPosition;
+    }
     private void SetStation()
     {
         stationsData.curStationIndex++;
         stationsData.curStation = stationsData.stations[stationsData.curStationIndex];
-        curMetersSpawnThreshold = stationsData.curStation.metersPosition  - trainToMaxBoundDist + stationsData.curStation.station_prefab.platformCollider.transform.localPosition.x;
+        curMetersSpawnThreshold = stationsData.curStation.metersPosition - Mathf.Abs(stationsData.curStation.station_prefab.platformRenderer.transform.localPosition.x) - trainToMaxSpawnDist ;
     }
 }

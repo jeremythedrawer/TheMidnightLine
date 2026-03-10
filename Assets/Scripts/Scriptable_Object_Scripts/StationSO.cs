@@ -11,7 +11,7 @@ public class StationSO : ScriptableObject
 
     public bool isFrontOfTrain;
     public float parallaxFactor;
-
+    public float plaformSpawnOffset;
     [Header("Generated")]
     public bool hadSpawned;
 }

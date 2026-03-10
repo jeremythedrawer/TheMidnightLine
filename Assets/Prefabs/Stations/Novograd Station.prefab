@@ -61,9 +61,9 @@ MonoBehaviour:
     mesh: {fileID: 0}
     depthOrder: 18
   sprite:
-    uvSizeAndPos: {x: 0.6452637, y: 0.29223633, z: 0.09008789, w: 0}
+    uvSizeAndPos: {x: 0.6062012, y: 0.27441406, z: 0.0029296875, w: 0.0021972656}
     uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 14.683333, y: 6.65, z: 1}
+    worldSize: {x: 13.794444, y: 6.2444444, z: 1}
     index: 1
   spriteMatrices:
   - e00: 0
@@ -84,8 +84,8 @@ MonoBehaviour:
     e33: 0
   widthHeightFlip:
   - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 14.683333
-  worldHeight: 6.65
+  worldWidth: 13.794444
+  worldHeight: 6.2444444
 --- !u!114 &3422329590742618627
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -101,6 +101,7 @@ MonoBehaviour:
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  ignoreParallax: 1
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
 --- !u!1 &1342467197157022166
@@ -204,6 +205,7 @@ MonoBehaviour:
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  ignoreParallax: 1
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
 --- !u!1 &2693832824672017060
@@ -354,6 +356,7 @@ MonoBehaviour:
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  ignoreParallax: 1
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
 --- !u!1 &5068393425464305075
@@ -593,6 +596,7 @@ MonoBehaviour:
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  ignoreParallax: 0
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
 --- !u!1 &7425759775376924710
@@ -755,5 +759,6 @@ MonoBehaviour:
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  ignoreParallax: 1
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}

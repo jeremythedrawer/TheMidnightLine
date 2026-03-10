@@ -60,7 +60,7 @@ public class NPCManager : MonoBehaviour
                 ClipboardStatsSO.ProfilePageData profilePageData = new ClipboardStatsSO.ProfilePageData { behaviours = profilePageBehaviours, appearence = profilePageAppearence, color = agentColor };
                 clipBoardStats.profilePageArray[profilePageIndex] = (profilePageData);
 
-                AgentData agentData = new AgentData { agent = npc, color = agentColor };
+                TraitorData agentData = new TraitorData { traitor_prefab = npc, color = agentColor };
                 npcData.agentPool.Enqueue(agentData);
                 npc.gameObject.SetActive(false);
 

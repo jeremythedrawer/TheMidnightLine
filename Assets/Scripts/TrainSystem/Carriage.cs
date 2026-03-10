@@ -72,7 +72,6 @@ public class Carriage : MonoBehaviour
     {
         alpha = 1;
         wheelCircumference = wheelRenderers[0].sprite.worldSize.x * Mathf.PI;
-
         wheelTransforms = new Transform[wheelTransforms.Length];
         for (int i = 0; i < wheelRenderers.Length; i++)
         {

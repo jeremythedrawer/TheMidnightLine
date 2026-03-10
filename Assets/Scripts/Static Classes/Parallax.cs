@@ -21,4 +21,9 @@ public static class Parallax
 
         return xPos;
     }
+
+    public static float UpdatePositionNoParallax(TrainStatsSO trainStats)
+    {
+        return trainStats.curVelocity * Time.deltaTime;
+    }
 }

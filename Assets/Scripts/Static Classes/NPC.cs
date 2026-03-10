@@ -60,9 +60,9 @@ public static class NPC
         Lots_of_phone_calls = 1 << 5,
         Enjoys_reading = 1 << 6,
     }
-    [Serializable] public struct AgentData
+    [Serializable] public struct TraitorData
     {
-        public NPCBrain agent;
+        public NPCBrain traitor_prefab;
         public Color color;
     }
     public static string[] appearenceDescriptions;

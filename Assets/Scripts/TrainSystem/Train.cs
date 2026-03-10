@@ -14,7 +14,6 @@ public class Train : MonoBehaviour
     [SerializeField] BoxCollider2D backCollider;
     [SerializeField] BoxCollider2D frontCollider;
     [SerializeField] Carriage frontCarriage;
-
     [Header("Generated")]
     [SerializeField] Carriage[] carriages;
     CancellationTokenSource trainCTS;
@@ -42,6 +41,8 @@ public class Train : MonoBehaviour
         stats.depthSection_back_min = frontCarriage.grapPoleRenderers[0].depthOrder + 1;
         stats.depthSection_back_max = frontCarriage.grapPoleRenderers[0].depthOrder + 2;
         stats.distToNextStation = float.MaxValue;
+
+        stats.trainWorldWidth = frontCollider.bounds.max.x - backCollider.bounds.min.x;
     }
     private void OnDisable()
     {
@@ -101,9 +102,9 @@ public class Train : MonoBehaviour
             transform.position = new Vector3(stats.metersTravelled, transform.position.y, transform.position.z);
             await UniTask.Yield(cancellationToken: trainCTS.Token);
         }
-
-        gameEventData.OnTrainArrivedAtStartPosition.Raise();
+        stats.trainBackXPos = backCollider.bounds.min.x;
         SetSlideDoorPositions();
+        gameEventData.OnTrainArrivedAtStartPosition.Raise();
     }
     private void SetCarriageDictionary()
     {

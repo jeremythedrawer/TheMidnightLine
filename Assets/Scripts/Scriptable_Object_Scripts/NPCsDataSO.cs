@@ -22,7 +22,7 @@ public class NPCsDataSO : ScriptableObject
     public int totalAgentCount;
     public List<Color> colorsToPick;
     public List<NPCBrain> npcsToPick;
-    public Queue<AgentData> agentPool = new Queue<AgentData>();
+    public Queue<TraitorData> agentPool = new Queue<TraitorData>();
 
 
 }

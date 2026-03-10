@@ -15,7 +15,8 @@ public class TrainStatsSO : ScriptableObject
     public float brakeDist;
     public float startXPos;
     public float trainMaxHeight;
-
+    public float trainWorldWidth;
+    public float trainBackXPos;
     public bool closingDoors;
 
     public int curPassengerCount;
