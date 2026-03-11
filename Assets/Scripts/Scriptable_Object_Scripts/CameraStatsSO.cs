@@ -15,8 +15,14 @@ public class CameraStatsSO : ScriptableObject
     public State curState;
 
     public float initialSize;
-    public float curHorOffset;
     public float targetSize;
+    public float camHeight;
+    public float camWidth;
+    public float curHorOffset;
+    public float camLeft;
+    public float camRight;
+    public float camBottom;
+    public float camTop;
     public Vector3 curWorldPos;
     public Vector3 prevWorldPos;
     public float aspect;

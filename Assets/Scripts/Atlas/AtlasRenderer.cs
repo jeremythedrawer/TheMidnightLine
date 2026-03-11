@@ -1,5 +1,3 @@
-using System.Linq;
-using UnityEditor;
 using UnityEngine;
 using static Atlas;
 using static AtlasBatch;
@@ -21,41 +19,63 @@ public class AtlasRenderer : MonoBehaviour
     [Header("Generated")]
     public BatchKey batchKey;
     public SimpleSprite sprite;
-
+    public Bounds bounds;
     public Matrix4x4[] spriteMatrices;
     public Vector4[] widthHeightFlip;
 
     public float worldWidth;
     public float worldHeight;
+    Vector2 worldPivotOffset;
     public MaterialPropertyBlock mpb;
     private void OnValidate()
     {
         InitRenderer();
+        UpdateDepth(depthOrder);
     }
     private void OnEnable()
     {
         RegisterRenderer(this);
         HandleCustomMaterial();
         InitRenderer();
-
+        UpdateDepth(depthOrder);
     }
     private void OnDisable()
     {
         UnregisterRenderer(this);
     }
+    private void Start()
+    {
+        UpdateDepth(depthOrder);
+    }
     private void Update()
     {
+        bounds.center = transform.position + (Vector3)worldPivotOffset;
+        if (transform.position.z != depthOrder)
+        {
+            Debug.Log(gameObject.name + " : " + transform.position.z + " | " + depthOrder);
+        }
+    }
+    public void UpdateDepth(int newDepth)
+    {
+        depthOrder = newDepth;
         transform.position = new Vector3(transform.position.x, transform.position.y, depthOrder);
     }
     public void Flip(bool flipLeft)
     {
         flipX = flipLeft;
         widthHeightFlip[0].z = flipLeft ? -1 : 1;
+
+        float flipPivot = flipX ? 1 - sprite.uvPivot.x : sprite.uvPivot.x;
+        worldPivotOffset = new Vector2((0.5f - flipPivot) * worldWidth, (0.5f - flipPivot) * worldHeight);
     }
     private void InitRenderer()
     {
         worldWidth = sprite.worldSize.x * width;
         worldHeight = sprite.worldSize.y * height;
+
+        bounds = new Bounds();
+        bounds.size = new Vector3(worldWidth, worldHeight, 0.2f);
+        bounds.center = transform.position + (Vector3)worldPivotOffset;
         switch (spriteMode)
         {
             case SpriteMode.Simple:
@@ -66,11 +86,11 @@ public class AtlasRenderer : MonoBehaviour
                 spriteMatrices = new Matrix4x4[1];
 
                 sprite = atlas.simpleSprites[spriteIndex];
-
                 widthHeightFlip = new Vector4[]
                 {
                     new Vector4(width, height, flipX ? -1 : 1, flipY ? -1 : 1)
                 };
+
             }
             break;
 
@@ -118,7 +138,8 @@ public class AtlasRenderer : MonoBehaviour
             }
             break;
         }
-
+        float flipPivotX = flipX ? 1 - sprite.uvPivot.x : sprite.uvPivot.x;
+        worldPivotOffset = new Vector2((0.5f - flipPivotX) * worldWidth, (0.5f - sprite.uvPivot.y) * worldHeight);
         SetCollider();
         HandleCustomMaterial();
         transform.position = new Vector3(transform.position.x, transform.position.y, depthOrder);
@@ -205,11 +226,15 @@ public class AtlasRenderer : MonoBehaviour
         return new Vector2(Mathf.Max(0, worldWidth - slicedSprite.worldSlices.x - slicedSprite.worldSlices.y), Mathf.Max(0, worldHeight - slicedSprite.worldSlices.z - slicedSprite.worldSlices.w));
     }
 #if UNITY_EDITOR
-    void OnDrawGizmos()
+    private void OnDrawGizmos()
     {
-        Gizmos.matrix = GetMatrix();
         Gizmos.color = Color.clear;
-        Gizmos.DrawCube(Vector3.zero, Vector3.one);
+        Gizmos.DrawCube(bounds.center, bounds.size);
+    }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.lawnGreen;
+        Gizmos.DrawWireCube(bounds.center, bounds.size);
     }
 #endif
 }

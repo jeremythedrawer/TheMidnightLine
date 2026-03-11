@@ -15,6 +15,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     public MaterialIDSO materialIDs;
     public AtlasSpawnerSettingsSO spawnerSettings;
     public ZoneSpawnerStatsSO spawnerStats;
+    public CameraStatsSO cameraStats;
 
     public Material matrixMaterial;
     public Material bloomMaterial;
@@ -37,12 +38,12 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
     private class ZonePassData
     {
-        public Camera camera;
+        public CameraStatsSO cameraStats;
     }
 
     public override void Create()
     {
-        batchPass = new AtlasBatchPass(materialIDs);
+        batchPass = new AtlasBatchPass(materialIDs, cameraStats);
         particlePass = new AtlasParticlePass(spawnerSettings, spawnerStats, materialIDs);
         matrixPass = new MatrixPass(this);
         bloomPass = new BloomPass(this);
@@ -59,10 +60,12 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     private class AtlasBatchPass : ScriptableRenderPass
     {
         private static MaterialIDSO materialIDs;
-        public AtlasBatchPass(MaterialIDSO materialID)
+        private static CameraStatsSO cameraStats;
+        public AtlasBatchPass(MaterialIDSO materialID, CameraStatsSO camStats)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
             materialIDs = materialID;
+            cameraStats = camStats;
         }
 
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
@@ -72,7 +75,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             UniversalResourceData resources = frameData.Get<UniversalResourceData>();
 
             using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<ZonePassData>("Atlas Batch Pass", out ZonePassData passData);
-            passData.camera = cameraData.camera;
+            passData.cameraStats = cameraStats;
             builder.SetRenderAttachment(resources.activeColorTexture, 0);
             builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
             builder.AllowPassCulling(false);
@@ -80,11 +83,11 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
             builder.SetRenderFunc((ZonePassData data, RasterGraphContext ctx) =>
             {
-                ExecuteBatch(ctx.cmd, data.camera);
+                ExecuteBatch(ctx.cmd, data.cameraStats);
             });
         }
 
-        private static void ExecuteBatch(RasterCommandBuffer cmd, Camera camera)
+        private static void ExecuteBatch(RasterCommandBuffer cmd, CameraStatsSO camStats)
         {
 #if UNITY_EDITOR
             PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
@@ -100,13 +103,17 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     AtlasRenderer atlasRenderer = batch.data.renderers[i];
 
                     if (atlasRenderer == null || !atlasRenderer.enabled) continue;
-
 #if UNITY_EDITOR
+
                     if (prefabStage != null)
                     {
                         if (atlasRenderer.gameObject.scene != prefabScene) continue;
                     }
 #endif
+                    if (Application.isPlaying)
+                    {
+                        if (atlasRenderer.bounds.max.x < cameraStats.camLeft || atlasRenderer.bounds.min.x > cameraStats.camRight || atlasRenderer.bounds.max.y < cameraStats.camBottom || atlasRenderer.bounds.min.y > cameraStats.camTop) continue;
+                    }
 
                     if (atlasRenderer.mpb != null)
                     {
@@ -165,7 +172,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             UniversalResourceData resources = frameData.Get<UniversalResourceData>();
 
             using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<ZonePassData>("Zone Particle Pass", out ZonePassData passData);
-            passData.camera = cameraData.camera;
             builder.SetRenderAttachment(resources.activeColorTexture, 0);
             builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
 

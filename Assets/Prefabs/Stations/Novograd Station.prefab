@@ -1,5 +1,254 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
+--- !u!1 &206833691113327471
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7257733673281139355}
+  - component: {fileID: 7668386130821006687}
+  - component: {fileID: 123265392254571391}
+  m_Layer: 15
+  m_Name: Grass (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7257733673281139355
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206833691113327471}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -51.64, y: -1.39, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7355965477580141084}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7668386130821006687
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206833691113327471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+  material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  spriteMode: 2
+  width: 18.5
+  height: 1
+  flipX: 0
+  flipY: 0
+  depthOrder: 1
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 1
+  sprite:
+    uvSizeAndPos: {x: 0.24975586, y: 0.03100586, z: 0.5004883, w: 0.9055176}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 5.6833334, y: 0.70555556, z: 1}
+    index: 0
+  bounds:
+    m_Center: {x: 248.36, y: -1.39, z: 1}
+    m_Extent: {x: 52.570835, y: 0.35277778, z: 0.5}
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 20.980469, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 20.980469, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 20.980469, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  worldWidth: 105.14167
+  worldHeight: 0.70555556
+--- !u!114 &123265392254571391
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 206833691113327471}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
+  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  atlasRenderer: {fileID: 7668386130821006687}
+  repeatType: 0
+  ignoreParallax: 1
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  rightRenderer: {fileID: 0}
+  parallaxFactor: 0
+  worldPos: {x: 0, y: 0, z: 0}
+  pivotToMaxWorldDist: 0
+  minWorldToPivotDist: 0
 --- !u!1 &564784607166531398
 GameObject:
   m_ObjectHideFlags: 0
@@ -65,6 +314,9 @@ MonoBehaviour:
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 13.794444, y: 6.2444444, z: 1}
     index: 1
+  bounds:
+    m_Center: {x: 300, y: 0.83, z: 18}
+    m_Extent: {x: 6.897222, y: 3.1222222, z: 0.5}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -98,13 +350,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   atlasRenderer: {fileID: 8476627600581120289}
-  ignoreParallax: 1
   repeatType: 0
+  ignoreParallax: 1
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  rightRenderer: {fileID: 0}
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
   pivotToMaxWorldDist: 0
@@ -136,7 +389,7 @@ Transform:
   m_GameObject: {fileID: 1342467197157022166}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5.8599854, y: 0.83, z: 17}
+  m_LocalPosition: {x: 5.1099854, y: 0.83, z: 17}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -157,7 +410,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
   material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 7
+  spriteIndex: 6
   spriteMode: 0
   width: 16.04
   height: 1
@@ -170,10 +423,13 @@ MonoBehaviour:
     mesh: {fileID: 0}
     depthOrder: 17
   sprite:
-    uvSizeAndPos: {x: 0.107666016, y: 0.08886719, z: 0, w: 0.59033203}
+    uvSizeAndPos: {x: 0.107910156, y: 0.08911133, z: 0, w: 0.59033203}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 2.45, y: 2.0222223, z: 1}
-    index: 7
+    worldSize: {x: 2.4555554, y: 2.0277777, z: 1}
+    index: 6
+  bounds:
+    m_Center: {x: 305.11, y: 0.83, z: 17}
+    m_Extent: {x: 19.693556, y: 1.0138888, z: 0.5}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -193,8 +449,8 @@ MonoBehaviour:
     e33: 0
   widthHeightFlip:
   - {x: 16.04, y: 1, z: 1, w: 1}
-  worldWidth: 39.298004
-  worldHeight: 2.0222223
+  worldWidth: 39.38711
+  worldHeight: 2.0277777
 --- !u!114 &2018045739509713180
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -207,13 +463,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   atlasRenderer: {fileID: 4868486823001428341}
-  ignoreParallax: 0
   repeatType: 0
+  ignoreParallax: 1
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  rightRenderer: {fileID: 0}
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
   pivotToMaxWorldDist: 0
@@ -284,6 +541,9 @@ MonoBehaviour:
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 11.366667, y: 1.4277778, z: 1}
     index: 1
+  bounds:
+    m_Center: {x: 252.91, y: -0.58, z: 2}
+    m_Extent: {x: 46.035004, y: 0.7138889, z: 0.5}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -363,13 +623,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   atlasRenderer: {fileID: 3083551894033079323}
-  ignoreParallax: 1
   repeatType: 0
+  ignoreParallax: 1
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  rightRenderer: {fileID: 0}
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
   pivotToMaxWorldDist: 0
@@ -401,7 +662,7 @@ Transform:
   m_GameObject: {fileID: 5068393425464305075}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -47.520004, y: -0.85, z: 1}
+  m_LocalPosition: {x: -47.520004, y: -0.91, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -439,6 +700,9 @@ MonoBehaviour:
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 5.6833334, y: 0.70555556, z: 1}
     index: 0
+  bounds:
+    m_Center: {x: 252.48, y: -0.91, z: 1}
+    m_Extent: {x: 48.592503, y: 0.35277778, z: 0.5}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -608,13 +872,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   atlasRenderer: {fileID: 7102859362464549161}
-  ignoreParallax: 0
   repeatType: 0
+  ignoreParallax: 1
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  rightRenderer: {fileID: 0}
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
   pivotToMaxWorldDist: 0
@@ -650,6 +915,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3806329923578194732}
+  - {fileID: 2623235295533687402}
+  - {fileID: 7257733673281139355}
   - {fileID: 7908644130255970815}
   - {fileID: 1994373065870132273}
   - {fileID: 553272016925060896}
@@ -726,7 +993,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
   material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 7
+  spriteIndex: 6
   spriteMode: 0
   width: 15.04
   height: 1
@@ -739,10 +1006,13 @@ MonoBehaviour:
     mesh: {fileID: 0}
     depthOrder: 17
   sprite:
-    uvSizeAndPos: {x: 0.107666016, y: 0.08886719, z: 0, w: 0.59033203}
+    uvSizeAndPos: {x: 0.107910156, y: 0.08911133, z: 0, w: 0.59033203}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 2.45, y: 2.0222223, z: 1}
-    index: 7
+    worldSize: {x: 2.4555554, y: 2.0277777, z: 1}
+    index: 6
+  bounds:
+    m_Center: {x: 253.31, y: 0.83, z: 17}
+    m_Extent: {x: 18.465776, y: 1.0138888, z: 0.5}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -762,8 +1032,8 @@ MonoBehaviour:
     e33: 0
   widthHeightFlip:
   - {x: 15.04, y: 1, z: 1, w: 1}
-  worldWidth: 36.848
-  worldHeight: 2.0222223
+  worldWidth: 36.931553
+  worldHeight: 2.0277777
 --- !u!114 &7835310342559316064
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -776,13 +1046,263 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   atlasRenderer: {fileID: 4793801951748300334}
-  ignoreParallax: 0
   repeatType: 0
+  ignoreParallax: 1
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  rightRenderer: {fileID: 0}
+  parallaxFactor: 0
+  worldPos: {x: 0, y: 0, z: 0}
+  pivotToMaxWorldDist: 0
+  minWorldToPivotDist: 0
+--- !u!1 &8666024050932964070
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2623235295533687402}
+  - component: {fileID: 4007731704267321407}
+  - component: {fileID: 6000836026063578786}
+  m_Layer: 15
+  m_Name: Grass (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2623235295533687402
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8666024050932964070}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -49.5, y: -1.14, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7355965477580141084}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4007731704267321407
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8666024050932964070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+  material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  spriteMode: 2
+  width: 17.1
+  height: 1
+  flipX: 0
+  flipY: 0
+  depthOrder: 1
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 1
+  sprite:
+    uvSizeAndPos: {x: 0.24975586, y: 0.03100586, z: 0.5004883, w: 0.9055176}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 5.6833334, y: 0.70555556, z: 1}
+    index: 0
+  bounds:
+    m_Center: {x: 250.5, y: -1.14, z: 1}
+    m_Extent: {x: 48.592503, y: 0.35277778, z: 0.5}
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 19.382032, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 19.382032, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 19.382032, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  worldWidth: 97.185005
+  worldHeight: 0.70555556
+--- !u!114 &6000836026063578786
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8666024050932964070}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
+  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  atlasRenderer: {fileID: 4007731704267321407}
+  repeatType: 0
+  ignoreParallax: 1
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  rightRenderer: {fileID: 0}
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
   pivotToMaxWorldDist: 0

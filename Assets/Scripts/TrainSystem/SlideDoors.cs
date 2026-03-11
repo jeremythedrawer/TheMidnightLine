@@ -43,10 +43,6 @@ public class SlideDoors : MonoBehaviour
     {
         ResetDoors();
     }
-    private void OnApplicationQuit()
-    {
-        ResetDoors();
-    }
     public void UnlockDoors()
     {
         boxCollider.enabled = true;
@@ -128,7 +124,7 @@ public class SlideDoors : MonoBehaviour
     public void ResetDoors()
     {
         curState = State.Locked;
-        rightSlideDoor_transform.localPosition = Vector3.zero;
-        leftSlideDoor_transform.localPosition = Vector3.zero;
+        rightSlideDoor_transform.localPosition = new Vector3(0, 0, rightSlideDoor_transform.localPosition.z);
+        leftSlideDoor_transform.localPosition = new Vector3(0, 0, leftSlideDoor_transform.localPosition.z);
     }
 }

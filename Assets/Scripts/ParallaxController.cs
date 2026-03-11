@@ -3,13 +3,21 @@ using static Parallax;
 using static Atlas;
 public class ParallaxController : MonoBehaviour
 {
-    public CameraStatsSO camStats;
     public TrainStatsSO trainStats;
-    public SpyStatsSO spyStats;
     public ZoneSpawnerStatsSO zoneStats;
+    public SpyStatsSO spyStats;
     public AtlasRenderer atlasRenderer;
-    public bool ignoreParallax;
+
     public Parallax.RepeatType repeatType;
+    
+    public bool ignoreParallax;
+    
+    [Header("Using Parallax")]
+    public CameraStatsSO camStats;
+
+    [Header("Multiple Sprites")]
+    public AtlasRenderer rightRenderer;
+    
     [Header("Generated")]
     public float parallaxFactor;
     public Vector3 worldPos;
@@ -22,9 +30,14 @@ public class ParallaxController : MonoBehaviour
         {
             parallaxFactor = GetParallaxFactor(transform.position.z);
         }
+        float totalWidth = atlasRenderer.worldWidth;
+        if (rightRenderer != null)
+        {
+            totalWidth = rightRenderer.bounds.max.x - atlasRenderer.bounds.min.x;
+        }
         float worldPivot = (atlasRenderer.sprite.uvPivot.x * atlasRenderer.atlas.texture.width) / PIXELS_PER_UNIT;
-        pivotToMaxWorldDist = atlasRenderer.worldWidth - worldPivot;
-        minWorldToPivotDist = atlasRenderer.worldWidth - pivotToMaxWorldDist;
+        pivotToMaxWorldDist = totalWidth - worldPivot;
+        minWorldToPivotDist = totalWidth - pivotToMaxWorldDist;
     }
 
     private void Update()

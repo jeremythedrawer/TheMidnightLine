@@ -304,11 +304,11 @@ public class NPCBrain : MonoBehaviour
 
         if (stats.chairPosIndex != int.MaxValue)
         {
-            atlasRenderer.depthOrder = curCarriage.sittingDepth;
+            atlasRenderer.UpdateDepth(curCarriage.sittingDepth);
         }
         else if (curCarriage !=  null)
         {
-            atlasRenderer.depthOrder = curCarriage.standingDepth;
+            atlasRenderer.UpdateDepth(curCarriage.standingDepth);
         }
         switch (stats.curState)
         {
@@ -634,7 +634,7 @@ public class NPCBrain : MonoBehaviour
     private void SetStandingDepth()
     {
         int depth = UnityEngine.Random.Range(trainStats.depthSection_front_min, trainStats.depthSection_back_max);
-        atlasRenderer.depthOrder = depth;
+        atlasRenderer.UpdateDepth(depth);
     }
     private void PlayClip()
     {

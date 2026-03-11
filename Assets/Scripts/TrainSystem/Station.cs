@@ -37,7 +37,7 @@ public class Station : MonoBehaviour
             float randXPos = Random.Range(platformCollider.bounds.min.x + 5, platformCollider.bounds.max.x - 5f);
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, platformCollider.transform.position.z);
             NPCBrain bystanderNPC = Instantiate(npcData.npc_prefab[randNPCIndex], spawnPos, Quaternion.identity); // spawn at random point on station
-            bystanderNPC.atlasRenderer.depthOrder = (int)platformCollider.transform.position.z;
+            bystanderNPC.atlasRenderer.UpdateDepth((int)platformCollider.transform.position.z);
             bystanderNPC.stats.role = NPC.Role.Bystander;
             bystanderNPC.startStation = station;
             bystanderNPC.transform.SetParent(platformCollider.transform, true);

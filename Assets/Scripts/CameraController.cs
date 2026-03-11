@@ -49,6 +49,12 @@ public class CameraController : MonoBehaviour
         //Set size and position
 
         cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, stats.targetSize, Time.deltaTime * settings.damping);
+        stats.camHeight = cam.orthographicSize * 2;
+        stats.camWidth = stats.camHeight * cam.aspect;
+        stats.camLeft = stats.curWorldPos.x - stats.camWidth * 0.5f;
+        stats.camRight = stats.curWorldPos.x + stats.camWidth * 0.5f;
+        stats.camBottom = stats.curWorldPos.y - stats.camHeight * 0.5f;
+        stats.camTop = stats.curWorldPos.y + stats.camHeight * 0.5f;
 
         stats.prevWorldPos = stats.curWorldPos;
         stats.curWorldPos = Vector2.Lerp(stats.curWorldPos, stats.targetWorldPos, Time.deltaTime * settings.damping);

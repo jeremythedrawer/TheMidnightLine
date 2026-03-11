@@ -578,7 +578,7 @@ public class SpyBrain : MonoBehaviour
                     collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
                     stats.onTrain = true;
                     UpdateDepth(atlasRenderer.depthOrder).Forget();
-                    atlasRenderer.depthOrder = trainStats.depthSection_front_min;
+                    atlasRenderer.UpdateDepth(trainStats.depthSection_front_min);
                     trainStats.curPassengerCount++;
                     
                     gameEventData.OnBoardingSpy.Raise();

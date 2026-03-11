@@ -22,6 +22,7 @@ Shader "Custom/s_matrix"
 			
 			float linearDepth = pow(saturate((worldPos.z - _PlayerDepth) / 64), 1); // 1 is the depth of the player
 			return half4(blit.rgb + linearDepth, 1); // TODO: Make some cool matrix shader
+
 		}
 	ENDHLSL
 
