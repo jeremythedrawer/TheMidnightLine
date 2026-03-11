@@ -63,9 +63,10 @@ public class ZoneSpawner : MonoBehaviour
         transform.position = spawnerStats.spawnMinPos;
     }
 
-    private void OnDrawGizmosSelected()
+    private void OnDrawGizmos()
     {
         InitializeBoundParameters();
+
         Gizmos.color = Color.crimson;
         Gizmos.DrawWireCube(spawnerStats.spawnCenter, spawnerStats.spawnBoundsSize);
     }

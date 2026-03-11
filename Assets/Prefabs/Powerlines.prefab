@@ -1,0 +1,1457 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &313316010321301186
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9176025214273844097}
+  - component: {fileID: 2179273298902469215}
+  m_Layer: 0
+  m_Name: PowerlineLight (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9176025214273844097
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313316010321301186}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 186.5401, y: 2.7299995, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4901742439003421860}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2179273298902469215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 313316010321301186}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 0
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 0.104003906, y: 0.06933594, z: 0.0146484375, w: 0.56884766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.1833333, y: 0.7888889, z: 1}
+    index: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: 1, w: 1}
+  worldWidth: 1.1833333
+  worldHeight: 0.7888889
+--- !u!1 &1119264314338110903
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1586052769591776217}
+  - component: {fileID: 8802819984204903813}
+  m_Layer: 0
+  m_Name: PowerlineLight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1586052769591776217
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1119264314338110903}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.5200195, y: 2.7299976, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 922670792040149337}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8802819984204903813
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1119264314338110903}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 0
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 0.104003906, y: 0.06933594, z: 0.0146484375, w: 0.56884766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.1833333, y: 0.7888889, z: 1}
+    index: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: 1, w: 1}
+  worldWidth: 1.1833333
+  worldHeight: 0.7888889
+--- !u!1 &1213947121559874788
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6534452317612301699}
+  - component: {fileID: 6881484683014713051}
+  m_Layer: 0
+  m_Name: PowerlineLight
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6534452317612301699
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213947121559874788}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 4.519928, y: 2.7299995, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4901742439003421860}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6881484683014713051
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1213947121559874788}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 0
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 0.104003906, y: 0.06933594, z: 0.0146484375, w: 0.56884766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.1833333, y: 0.7888889, z: 1}
+    index: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: 1, w: 1}
+  worldWidth: 1.1833333
+  worldHeight: 0.7888889
+--- !u!1 &1241097247257731732
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 8252707856845406294}
+  - component: {fileID: 7575079795873287874}
+  m_Layer: 0
+  m_Name: PowerlineLight (5)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &8252707856845406294
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241097247257731732}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 257.14038, y: 2.7299995, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4901742439003421860}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7575079795873287874
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1241097247257731732}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 1
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 0.104003906, y: 0.06933594, z: 0.0146484375, w: 0.56884766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.1833333, y: 0.7888889, z: 1}
+    index: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: -1, w: 1}
+  worldWidth: 1.1833333
+  worldHeight: 0.7888889
+--- !u!1 &1370667896300791677
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3348244689835777758}
+  - component: {fileID: 125100433069235435}
+  m_Layer: 0
+  m_Name: PowerlineLight (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3348244689835777758
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1370667896300791677}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 40.9899, y: 2.7299995, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4901742439003421860}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &125100433069235435
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1370667896300791677}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 1
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 0.104003906, y: 0.06933594, z: 0.0146484375, w: 0.56884766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.1833333, y: 0.7888889, z: 1}
+    index: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: -1, w: 1}
+  worldWidth: 1.1833333
+  worldHeight: 0.7888889
+--- !u!1 &1549454560454514230
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3103026618669071753}
+  - component: {fileID: 8498064349968054701}
+  m_Layer: 0
+  m_Name: PowerlineLight (5)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3103026618669071753
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1549454560454514230}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 257.1355, y: 2.7299976, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 922670792040149337}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8498064349968054701
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1549454560454514230}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 1
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 0.104003906, y: 0.06933594, z: 0.0146484375, w: 0.56884766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.1833333, y: 0.7888889, z: 1}
+    index: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: -1, w: 1}
+  worldWidth: 1.1833333
+  worldHeight: 0.7888889
+--- !u!1 &1790412518319434171
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1051558508202712550}
+  - component: {fileID: 1433644010123672087}
+  m_Layer: 0
+  m_Name: PowerlineLight (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1051558508202712550
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790412518319434171}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 86.55823, y: 2.7299976, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 922670792040149337}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1433644010123672087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1790412518319434171}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 1
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 0.104003906, y: 0.06933594, z: 0.0146484375, w: 0.56884766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.1833333, y: 0.7888889, z: 1}
+    index: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: -1, w: 1}
+  worldWidth: 1.1833333
+  worldHeight: 0.7888889
+--- !u!1 &3186409948144364704
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4901742439003421860}
+  - component: {fileID: 8512276794648708013}
+  - component: {fileID: 8737518689533235492}
+  m_Layer: 0
+  m_Name: Powerline
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4901742439003421860
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3186409948144364704}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 29}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6534452317612301699}
+  - {fileID: 3348244689835777758}
+  - {fileID: 6101763267704375387}
+  - {fileID: 1023356842182310592}
+  - {fileID: 9176025214273844097}
+  - {fileID: 8252707856845406294}
+  - {fileID: 5307148636033461323}
+  m_Father: {fileID: 5780359728744733425}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8512276794648708013
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3186409948144364704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  spriteMode: 0
+  width: 26
+  height: 1
+  flipX: 0
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 1, y: 0.32666016, z: 0, w: 0.67333984}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 11.377778, y: 3.7166667, z: 1}
+    index: 0
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 26, y: 1, z: 1, w: 1}
+  worldWidth: 295.82224
+  worldHeight: 3.7166667
+--- !u!114 &8737518689533235492
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3186409948144364704}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  atlasRenderer: {fileID: 8512276794648708013}
+  ignoreParallax: 0
+  repeatType: 1
+  parallaxFactor: 0
+  worldPos: {x: 0, y: 0, z: 0}
+  pivotToMaxWorldDist: 0
+  minWorldToPivotDist: 0
+--- !u!1 &3544861770301995329
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6015451278141681}
+  - component: {fileID: 6525938533947657447}
+  m_Layer: 0
+  m_Name: PowerlineLight (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6015451278141681
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3544861770301995329}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 40.98877, y: 2.7299976, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 922670792040149337}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6525938533947657447
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3544861770301995329}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 1
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 0.104003906, y: 0.06933594, z: 0.0146484375, w: 0.56884766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.1833333, y: 0.7888889, z: 1}
+    index: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: -1, w: 1}
+  worldWidth: 1.1833333
+  worldHeight: 0.7888889
+--- !u!1 &5426817070191335658
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5307148636033461323}
+  - component: {fileID: 5793881599739658993}
+  m_Layer: 0
+  m_Name: PowerlineLight (6)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5307148636033461323
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5426817070191335658}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 279.9303, y: 2.7299995, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4901742439003421860}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5793881599739658993
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5426817070191335658}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 1
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 0.104003906, y: 0.06933594, z: 0.0146484375, w: 0.56884766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.1833333, y: 0.7888889, z: 1}
+    index: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: -1, w: 1}
+  worldWidth: 1.1833333
+  worldHeight: 0.7888889
+--- !u!1 &5935643176263918939
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7629539956959231984}
+  - component: {fileID: 6441505087355302069}
+  m_Layer: 0
+  m_Name: PowerlineLight (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7629539956959231984
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5935643176263918939}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 129.65869, y: 2.7299976, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 922670792040149337}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6441505087355302069
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5935643176263918939}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 0
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 0.104003906, y: 0.06933594, z: 0.0146484375, w: 0.56884766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.1833333, y: 0.7888889, z: 1}
+    index: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: 1, w: 1}
+  worldWidth: 1.1833333
+  worldHeight: 0.7888889
+--- !u!1 &6604587820024438009
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1402013855992053512}
+  - component: {fileID: 1876830641377053290}
+  m_Layer: 0
+  m_Name: PowerlineLight (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1402013855992053512
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6604587820024438009}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 186.53857, y: 2.7299976, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 922670792040149337}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1876830641377053290
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6604587820024438009}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 0
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 0.104003906, y: 0.06933594, z: 0.0146484375, w: 0.56884766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.1833333, y: 0.7888889, z: 1}
+    index: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: 1, w: 1}
+  worldWidth: 1.1833333
+  worldHeight: 0.7888889
+--- !u!1 &6629839357671413934
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1023356842182310592}
+  - component: {fileID: 1419028438184862184}
+  m_Layer: 0
+  m_Name: PowerlineLight (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1023356842182310592
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6629839357671413934}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 129.65973, y: 2.7299995, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4901742439003421860}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1419028438184862184
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6629839357671413934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 0
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 0.104003906, y: 0.06933594, z: 0.0146484375, w: 0.56884766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.1833333, y: 0.7888889, z: 1}
+    index: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: 1, w: 1}
+  worldWidth: 1.1833333
+  worldHeight: 0.7888889
+--- !u!1 &6739683185033677679
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 922670792040149337}
+  - component: {fileID: 8677212707760179946}
+  - component: {fileID: 4450208878888573757}
+  m_Layer: 0
+  m_Name: Powerline (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &922670792040149337
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6739683185033677679}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 295.79993, y: 0, z: 29}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 1586052769591776217}
+  - {fileID: 6015451278141681}
+  - {fileID: 1051558508202712550}
+  - {fileID: 7629539956959231984}
+  - {fileID: 1402013855992053512}
+  - {fileID: 3103026618669071753}
+  - {fileID: 1007147818326814547}
+  m_Father: {fileID: 5780359728744733425}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8677212707760179946
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6739683185033677679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  spriteMode: 0
+  width: 26
+  height: 1
+  flipX: 0
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 1, y: 0.32666016, z: 0, w: 0.67333984}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 11.377778, y: 3.7166667, z: 1}
+    index: 0
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 26, y: 1, z: 1, w: 1}
+  worldWidth: 295.82224
+  worldHeight: 3.7166667
+--- !u!114 &4450208878888573757
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6739683185033677679}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  atlasRenderer: {fileID: 8677212707760179946}
+  ignoreParallax: 0
+  repeatType: 1
+  parallaxFactor: 0
+  worldPos: {x: 0, y: 0, z: 0}
+  pivotToMaxWorldDist: 0
+  minWorldToPivotDist: 0
+--- !u!1 &7337104949760357330
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1007147818326814547}
+  - component: {fileID: 4296212153464387058}
+  m_Layer: 0
+  m_Name: PowerlineLight (6)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1007147818326814547
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7337104949760357330}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 279.92517, y: 2.7299976, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 922670792040149337}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4296212153464387058
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7337104949760357330}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 1
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 0.104003906, y: 0.06933594, z: 0.0146484375, w: 0.56884766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.1833333, y: 0.7888889, z: 1}
+    index: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: -1, w: 1}
+  worldWidth: 1.1833333
+  worldHeight: 0.7888889
+--- !u!1 &7828677307672310899
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6101763267704375387}
+  - component: {fileID: 5732595233646230224}
+  m_Layer: 0
+  m_Name: PowerlineLight (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6101763267704375387
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7828677307672310899}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 86.559845, y: 2.7299995, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4901742439003421860}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5732595233646230224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7828677307672310899}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+  material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  spriteMode: 0
+  width: 1
+  height: 1
+  flipX: 1
+  flipY: 0
+  depthOrder: 29
+  useCustomMaterial: 0
+  batchKey:
+    material: {fileID: 2100000, guid: b2fc77f84530d5e41994a760488bc4ea, type: 2}
+    mesh: {fileID: 0}
+    depthOrder: 29
+  sprite:
+    uvSizeAndPos: {x: 0.104003906, y: 0.06933594, z: 0.0146484375, w: 0.56884766}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.1833333, y: 0.7888889, z: 1}
+    index: 1
+  spriteMatrices:
+  - e00: 0
+    e01: 0
+    e02: 0
+    e03: 0
+    e10: 0
+    e11: 0
+    e12: 0
+    e13: 0
+    e20: 0
+    e21: 0
+    e22: 0
+    e23: 0
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 0
+  widthHeightFlip:
+  - {x: 1, y: 1, z: -1, w: 1}
+  worldWidth: 1.1833333
+  worldHeight: 0.7888889
+--- !u!1 &8268040114198911642
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5780359728744733425}
+  m_Layer: 0
+  m_Name: Powerlines
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5780359728744733425
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8268040114198911642}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 392.09082, y: 12.24871, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 4901742439003421860}
+  - {fileID: 922670792040149337}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}

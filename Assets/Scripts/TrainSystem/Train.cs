@@ -11,6 +11,7 @@ public class Train : MonoBehaviour
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] MaterialIDSO materialIDs;
     [SerializeField] ZoneSpawnerStatsSO spawnerStats;
+    [SerializeField] SpyStatsSO spyStats;
     [SerializeField] BoxCollider2D backCollider;
     [SerializeField] BoxCollider2D frontCollider;
     [SerializeField] Carriage frontCarriage;
@@ -26,7 +27,7 @@ public class Train : MonoBehaviour
     {
         stats.startXPos = transform.position.x;
         stats.trainMaxHeight = frontCollider.bounds.max.y;
-        stats.targetPassengerCount = stationsData.stations[0].bystanderSpawnAmount + stationsData.stations[0].agentSpawnAmount + 1; // +1 for spy himself
+        stats.targetPassengerCount = stationsData.stations[0].bystanderSpawnAmount + stationsData.stations[0].traitorSpawnAmount + 1; // +1 for spy himself
         stats.curKMPerHour = stationsData.stations[0].targetTrainSpeed;
         stats.targetKMPerHour = stationsData.stations[0].targetTrainSpeed;
         stats.metersTravelled = 0;
@@ -59,7 +60,10 @@ public class Train : MonoBehaviour
     {
         stats.curVelocity = stats.GetMetersPerSecond(stats.curKMPerHour);
         stats.metersTravelled += stats.curVelocity * Time.deltaTime;
-
+        if (spyStats.onTrain)
+        {
+            Shader.SetGlobalFloat("_MetersTravelled", stats.metersTravelled);
+        }
         stats.distToNextStation = stationsData.curStation.metersPosition - stats.metersTravelled;
 
         if (stats.distToNextStation <= stats.brakeDist)

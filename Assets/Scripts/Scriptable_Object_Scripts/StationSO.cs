@@ -7,7 +7,7 @@ public class StationSO : ScriptableObject
     public int targetTrainSpeed = 100;
     public int metersPosition = 0;
     public int bystanderSpawnAmount = 10;
-    public int agentSpawnAmount = 2;
+    public int traitorSpawnAmount = 2;
 
     public bool isFrontOfTrain;
     public float parallaxFactor;

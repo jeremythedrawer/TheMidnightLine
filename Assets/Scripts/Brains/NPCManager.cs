@@ -6,14 +6,15 @@ using static NPC;
 
 public class NPCManager : MonoBehaviour
 {
+    const float WAITING_FOR_SEAT_TICK_RATE = 0.3f;
+
     public NPCsDataSO npcData;
     public StationsDataSO stationsData;
     public ClipboardStatsSO clipBoardStats;
 
-    float waitingForSeatTickRate = 0.3f;
-    bool npcFindingChair;
-
-    internal static List<NPCBrain> npcChairList = new List<NPCBrain>();
+    [Header("Generated")]
+    public bool npcFindingChair;
+    public static List<NPCBrain> npcChairList = new List<NPCBrain>();
 
     private void Awake()
     {
@@ -36,7 +37,7 @@ public class NPCManager : MonoBehaviour
         npcData.totalAgentCount = 0;
         for (int i = 0; i < stationsData.stations.Length; i++)
         {
-            for (int j = 0; j < stationsData.stations[i].agentSpawnAmount; j++)
+            for (int j = 0; j < stationsData.stations[i].traitorSpawnAmount; j++)
             {
                 npcData.totalAgentCount++;
             }
@@ -45,7 +46,7 @@ public class NPCManager : MonoBehaviour
         int profilePageIndex = 0;
         for (int i = 0; i < stationsData.stations.Length; i++)
         {
-            for (int j = 0; j < stationsData.stations[i].agentSpawnAmount; j++)
+            for (int j = 0; j < stationsData.stations[i].traitorSpawnAmount; j++)
             {
                 int randNPCIndex = Random.Range(0, npcData.npcsToPick.Count); // pick from list
 
@@ -74,7 +75,7 @@ public class NPCManager : MonoBehaviour
         NPCBrain curNPC = npcChairList[0];
         npcChairList.RemoveAt(0);
         AssignNextNPCPosition(curNPC);
-        await UniTask.WaitForSeconds(waitingForSeatTickRate);
+        await UniTask.WaitForSeconds(WAITING_FOR_SEAT_TICK_RATE);
         npcFindingChair = false;
     }
 

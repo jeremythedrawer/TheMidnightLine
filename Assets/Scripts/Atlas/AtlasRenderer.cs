@@ -62,6 +62,7 @@ public class AtlasRenderer : MonoBehaviour
             {
                 if (atlas.simpleSprites.Length == 0) return;
 
+                spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.simpleSprites.Length - 1);
                 spriteMatrices = new Matrix4x4[1];
 
                 sprite = atlas.simpleSprites[spriteIndex];
@@ -78,7 +79,7 @@ public class AtlasRenderer : MonoBehaviour
                 if (atlas.motionSprites.Length == 0) return;
 
                 spriteMatrices = new Matrix4x4[1];
-
+                spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.motionSprites.Length - 1);
                 sprite = atlas.motionSprites[spriteIndex].sprite;
 
                 widthHeightFlip = new Vector4[]
@@ -93,7 +94,7 @@ public class AtlasRenderer : MonoBehaviour
                 if (atlas.slicedSprites.Length == 0) return;
 
                 spriteMatrices = new Matrix4x4[9];
-
+                spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.slicedSprites.Length - 1);
                 SliceSprite slicedSprite = atlas.slicedSprites[spriteIndex];
 
                 sprite = slicedSprite.sprite;

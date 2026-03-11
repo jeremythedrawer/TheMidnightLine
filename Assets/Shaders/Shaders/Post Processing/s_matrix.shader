@@ -11,10 +11,8 @@ Shader "Custom/s_matrix"
 		
 		TEXTURE2D(_CameraDepthTexture);
 		SAMPLER(sampler_CameraDepthTexture);
-		
-		float _Lightness;
-		float _GreenToRed;
-		float _BlueToYellow;
+
+		float _PlayerDepth;
 
 		half4 frag(Varyings input) : SV_TARGET
 		{
@@ -22,10 +20,7 @@ Shader "Custom/s_matrix"
 			float depth = SAMPLE_TEXTURE2D_X(_CameraDepthTexture, sampler_CameraDepthTexture, input.texcoord).r;
 			float3 worldPos = ComputeWorldSpacePosition(input.texcoord, depth, UNITY_MATRIX_I_VP);
 			
-			float linearDepth = pow(saturate((worldPos.z - 1) /(32 - 4)), 2); // 1 is the depth of the player
-
-
-
+			float linearDepth = pow(saturate((worldPos.z - _PlayerDepth) / 64), 1); // 1 is the depth of the player
 			return half4(blit.rgb + linearDepth, 1); // TODO: Make some cool matrix shader
 		}
 	ENDHLSL

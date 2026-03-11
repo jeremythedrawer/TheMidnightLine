@@ -1,9 +1,11 @@
+using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 using static Atlas;
 
 public class SpyBrain : MonoBehaviour
 {
+    const float DEPTH_CHANGE_TIME = 0.5f;
     public enum State
     { 
         Idle,
@@ -30,7 +32,7 @@ public class SpyBrain : MonoBehaviour
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] PhoneSO phone;
-
+    [SerializeField] Material matrixMaterial;
     [Header("Generated")]
     public AtlasSO atlas;
     public SlideDoors slideDoors;
@@ -104,6 +106,8 @@ public class SpyBrain : MonoBehaviour
         collisionData.stepFilter = new ContactFilter2D() { useLayerMask = true, layerMask = layerSettings.stationLayers.ground };
 
         stats.maxJumpHeight = (settings.jumpVerticalForce * settings.jumpVerticalForce) / (2 * settings.gravityScale);
+
+        matrixMaterial.SetFloat("_PlayerDepth", atlasRenderer.depthOrder);
     }
     private void Update()
     {
@@ -573,12 +577,31 @@ public class SpyBrain : MonoBehaviour
                     rigidBody.includeLayers = layerSettings.trainMask;
                     collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
                     stats.onTrain = true;
+                    UpdateDepth(atlasRenderer.depthOrder).Forget();
                     atlasRenderer.depthOrder = trainStats.depthSection_front_min;
                     trainStats.curPassengerCount++;
+                    
                     gameEventData.OnBoardingSpy.Raise();
+                    
                 }
             }
         }
+    }
+
+    private async UniTask UpdateDepth(float oldDepth)
+    {
+        float elaspedTime = 0;
+
+        while(elaspedTime < DEPTH_CHANGE_TIME)
+        {
+            elaspedTime += Time.deltaTime;
+            float t = elaspedTime / DEPTH_CHANGE_TIME;
+            t *= t;
+            float depth = Mathf.Lerp(oldDepth, atlasRenderer.depthOrder, t);
+            matrixMaterial.SetFloat("_PlayerDepth", depth);
+            await UniTask.Yield();
+        }
+        matrixMaterial.SetFloat("_PlayerDepth", atlasRenderer.depthOrder);
     }
     private void SetLocationData(Bounds bounds, LayerMask layerMask)
     {

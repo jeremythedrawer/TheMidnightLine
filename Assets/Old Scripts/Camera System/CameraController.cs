@@ -56,9 +56,6 @@ public class CameraController : MonoBehaviour
         stats.curVelocity = -((stats.curWorldPos - stats.prevWorldPos) / Time.deltaTime);
     }
 
-    private void FixedUpdate()
-    {        
-    }
     private void SelectStates()
     {
         if (!spyStats.onTrain)

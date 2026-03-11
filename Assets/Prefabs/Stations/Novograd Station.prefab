@@ -101,9 +101,14 @@ MonoBehaviour:
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  atlasRenderer: {fileID: 8476627600581120289}
   ignoreParallax: 1
+  repeatType: 0
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
+  pivotToMaxWorldDist: 0
+  minWorldToPivotDist: 0
 --- !u!1 &1342467197157022166
 GameObject:
   m_ObjectHideFlags: 0
@@ -205,9 +210,14 @@ MonoBehaviour:
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  ignoreParallax: 1
+  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  atlasRenderer: {fileID: 4868486823001428341}
+  ignoreParallax: 0
+  repeatType: 0
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
+  pivotToMaxWorldDist: 0
+  minWorldToPivotDist: 0
 --- !u!1 &2693832824672017060
 GameObject:
   m_ObjectHideFlags: 0
@@ -270,9 +280,9 @@ MonoBehaviour:
     mesh: {fileID: 0}
     depthOrder: 2
   sprite:
-    uvSizeAndPos: {x: 0.49926758, y: 0.06225586, z: 0.5004883, w: 0.9375}
+    uvSizeAndPos: {x: 0.49951172, y: 0.06274414, z: 0.5004883, w: 0.93725586}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 11.361111, y: 1.4166666, z: 1}
+    worldSize: {x: 11.366667, y: 1.4277778, z: 1}
     index: 1
   spriteMatrices:
   - e00: 0
@@ -293,8 +303,8 @@ MonoBehaviour:
     e33: 0
   widthHeightFlip:
   - {x: 8.1, y: 1, z: 1, w: 1}
-  worldWidth: 92.025
-  worldHeight: 1.4166666
+  worldWidth: 92.07001
+  worldHeight: 1.4277778
 --- !u!61 &5364706768966122321
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -329,7 +339,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 46.0125, y: 0.7083333}
+  m_Offset: {x: 46.035004, y: 0.7138889}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -339,7 +349,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 92.025, y: 1.4166666}
+  m_Size: {x: 92.07001, y: 1.4277778}
   m_EdgeRadius: 0
 --- !u!114 &2441422150157369673
 MonoBehaviour:
@@ -356,9 +366,14 @@ MonoBehaviour:
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  atlasRenderer: {fileID: 3083551894033079323}
   ignoreParallax: 1
+  repeatType: 0
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
+  pivotToMaxWorldDist: 0
+  minWorldToPivotDist: 0
 --- !u!1 &5068393425464305075
 GameObject:
   m_ObjectHideFlags: 0
@@ -420,9 +435,9 @@ MonoBehaviour:
     mesh: {fileID: 0}
     depthOrder: 1
   sprite:
-    uvSizeAndPos: {x: 0.24951172, y: 0.030761719, z: 0.5004883, w: 0.9055176}
+    uvSizeAndPos: {x: 0.24975586, y: 0.03100586, z: 0.5004883, w: 0.9055176}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 5.677778, y: 0.7, z: 1}
+    worldSize: {x: 5.6833334, y: 0.70555556, z: 1}
     index: 0
   spriteMatrices:
   - e00: 0
@@ -571,16 +586,16 @@ MonoBehaviour:
     e33: 0
   widthHeightFlip:
   - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 19.364063, y: 1, z: 1, w: 1}
+  - {x: 19.382032, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 19.364063, y: 1, z: 1, w: 1}
+  - {x: 19.382032, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 19.364063, y: 1, z: 1, w: 1}
+  - {x: 19.382032, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 97.090004
-  worldHeight: 0.7
+  worldWidth: 97.185005
+  worldHeight: 0.70555556
 --- !u!114 &8553008785412549320
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -596,9 +611,14 @@ MonoBehaviour:
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  atlasRenderer: {fileID: 7102859362464549161}
   ignoreParallax: 0
+  repeatType: 0
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
+  pivotToMaxWorldDist: 0
+  minWorldToPivotDist: 0
 --- !u!1 &7425759775376924710
 GameObject:
   m_ObjectHideFlags: 0
@@ -759,6 +779,11 @@ MonoBehaviour:
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  ignoreParallax: 1
+  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
+  atlasRenderer: {fileID: 4793801951748300334}
+  ignoreParallax: 0
+  repeatType: 0
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
+  pivotToMaxWorldDist: 0
+  minWorldToPivotDist: 0

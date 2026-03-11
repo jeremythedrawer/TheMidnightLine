@@ -1,10 +1,14 @@
 using System;
 using UnityEngine;
-using static Page;
-
 public static class Parallax
 {
     const float FAR_CLIP = 64;
+
+    public enum RepeatType
+    {
+        OneShot,
+        Repeat,
+    }
     public static float GetParallaxFactor(float zPos)
     {
         return (FAR_CLIP - zPos) / FAR_CLIP;

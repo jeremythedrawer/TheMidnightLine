@@ -188,7 +188,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             }
         }
     }
-
     private class BloomPass : ScriptableRenderPass
     {
         private static TOTTRendererFeature rendererFeature;
@@ -355,9 +354,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         {
             passData.material.SetTexture("_SourceTex", passData.sourceColor);
             passData.material.SetTexture("_CameraDepthTexture", passData.depthTexture);
-            passData.material.SetFloat("_Lightness", rendererFeature.lightness);
-            passData.material.SetFloat("_GreenToRed", rendererFeature.greenToRed);
-            passData.material.SetFloat("_BlueToYellow", rendererFeature.blueToYellow);
             Blitter.BlitTexture(ctx.cmd, passData.sourceColor, Vector2.one, passData.material, 0);
         }
     }

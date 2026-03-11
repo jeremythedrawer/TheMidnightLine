@@ -45,7 +45,8 @@ public class Carriage : MonoBehaviour
     public int sittingDepth;
     public int standingDepth;
     public Transform[] wheelTransforms;
-    private CancellationTokenSource ctsFade;
+    public CancellationTokenSource ctsFade;
+    public float prevMeters;
     private void Awake()
     {
         ctsFade = new CancellationTokenSource();
@@ -81,10 +82,11 @@ public class Carriage : MonoBehaviour
     private void Update()
     {
         float wheelRotation = (trainStats.metersTravelled / wheelCircumference) * 360f;
-
+        wheelRotation %= 360;
+        wheelRotation = -wheelRotation;
         foreach (Transform wheel in wheelTransforms)
         {
-            wheel.localRotation = Quaternion.Euler(0f, 0f, -wheelRotation);
+            wheel.localRotation = Quaternion.Euler(0f, 0f, wheelRotation);
         }
     }
 
@@ -96,8 +98,6 @@ public class Carriage : MonoBehaviour
         smokersRoomData[0].maxXPos = smokingRoomCollider_left.bounds.max.x;
         smokersRoomData[1].minXPos = smokingRoomCollider_right.bounds.min.x;
         smokersRoomData[1].maxXPos = smokingRoomCollider_right.bounds.max.x;
-
-
     }
 
     private void SetSeatData()

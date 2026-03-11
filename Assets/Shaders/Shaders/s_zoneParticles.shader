@@ -61,7 +61,7 @@ Shader "Custom/s_zoneParticles"
 
                 float4 uvSizeAndPos = _UVSizeAndPos[randMod];
 
-                float particleSize = _WorldSize[randMod];
+                float2 particleSize = _WorldSize[randMod];
                 float3 offset = float3(quadOffsets[cornerID] * particleSize, 0);
 
                 o.positionHCS = TransformWorldToHClip(p.position + offset);

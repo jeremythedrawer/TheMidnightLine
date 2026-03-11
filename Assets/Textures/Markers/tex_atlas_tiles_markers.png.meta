@@ -1,19 +1,10 @@
 fileFormatVersion: 2
-guid: 9dba5343d04372a4eb8e369c282d0b83
+guid: 09fc30c581a92464faa868ad41483f89
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -1376293570174280732
-    second: tex_atlas_powerLines_0
-  - first:
-      213: -7555262295458613458
-    second: tex_atlas_powerLines_1
-  - first:
-      213: 1691436533235094539
-    second: tex_atlas_powerLines_2
-  - first:
-      213: 1514989813169579323
-    second: tex_atlas_powerLines_3
+      213: 7861017509969588205
+    second: tex_atlas_tiles_markers_0
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -33,7 +24,7 @@ TextureImporter:
     heightScale: 0.25
     normalMapFilter: 0
     flipGreenChannel: 0
-  isReadable: 0
+  isReadable: 1
   streamingMipmaps: 0
   streamingMipmapsPriority: 0
   vTOnly: 0
@@ -64,9 +55,9 @@ TextureImporter:
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
   spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
-  alphaIsTransparency: 1
+  alphaIsTransparency: 0
   spriteTessellationDetail: -1
-  textureType: 8
+  textureType: 0
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -81,7 +72,7 @@ TextureImporter:
   platformSettings:
   - serializedVersion: 4
     buildTarget: DefaultTexturePlatform
-    maxTextureSize: 2048
+    maxTextureSize: 4096
     resizeAlgorithm: 0
     textureFormat: -1
     textureCompression: 0
@@ -122,14 +113,14 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: tex_atlas_powerLines_0
+      name: tex_atlas_tiles_markers_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 2756
+        y: 0
         width: 4096
-        height: 1340
-      alignment: 6
+        height: 4096
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -137,74 +128,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4eb9b133a4c66ece0800000000000000
-      internalID: -1376293570174280732
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: tex_atlas_powerLines_1
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 1378
-        width: 4096
-        height: 1340
-      alignment: 6
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: e277946c8f0562790800000000000000
-      internalID: -7555262295458613458
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: tex_atlas_powerLines_2
-      rect:
-        serializedVersion: 2
-        x: 0
-        y: 664
-        width: 2042
-        height: 670
-      alignment: 6
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b04989bb090397710800000000000000
-      internalID: 1691436533235094539
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: tex_atlas_powerLines_3
-      rect:
-        serializedVersion: 2
-        x: 2044
-        y: 664
-        width: 2052
-        height: 608
-      alignment: 6
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: b35ee445533560510800000000000000
-      internalID: 1514989813169579323
+      spriteID: defecde96c1f71d60800000000000000
+      internalID: 7861017509969588205
       vertices: []
       indices: 
       edges: []
@@ -213,7 +138,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 978d7102bc82fd64db8133ec4e5eab99
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -221,14 +146,9 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":6,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      tex_atlas_powerLines_0: -1376293570174280732
-      tex_atlas_powerLines_1: -7555262295458613458
-      tex_atlas_powerLines_2: 1691436533235094539
-      tex_atlas_powerLines_3: 1514989813169579323
+      tex_atlas_tiles_markers_0: 7861017509969588205
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
