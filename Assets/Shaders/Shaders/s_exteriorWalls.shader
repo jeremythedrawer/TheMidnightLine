@@ -57,7 +57,7 @@ Shader "Custom/s_exteriorWalls"
                 UNITY_SETUP_INSTANCE_ID(v);
                 UNITY_TRANSFER_INSTANCE_ID(v, o);
                 float3 worldPos = TransformObjectToWorld(v.positionOS.xyz);
-                worldPos.y -= (1 - pow(_Alpha, 3)) * 4; // NOTE: 4 here is the world size of the exterior wall
+                worldPos.y -= (1 - _Alpha) * 3.3; // NOTE: 3.3 here is the world size of the exterior wall
                 o.worldPos = worldPos;
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;

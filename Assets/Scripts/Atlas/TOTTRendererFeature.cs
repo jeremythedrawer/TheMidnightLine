@@ -112,7 +112,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 #endif
                     if (Application.isPlaying)
                     {
-                        if (atlasRenderer.bounds.max.x < cameraStats.camLeft || atlasRenderer.bounds.min.x > cameraStats.camRight || atlasRenderer.bounds.max.y < cameraStats.camBottom || atlasRenderer.bounds.min.y > cameraStats.camTop) continue;
+                        //if (atlasRenderer.bounds.max.x < cameraStats.camLeft || atlasRenderer.bounds.min.x > cameraStats.camRight || atlasRenderer.bounds.max.y < cameraStats.camBottom || atlasRenderer.bounds.min.y > cameraStats.camTop) continue;
                     }
 
                     if (atlasRenderer.mpb != null)

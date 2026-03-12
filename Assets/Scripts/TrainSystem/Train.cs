@@ -7,7 +7,7 @@ public class Train : MonoBehaviour
 {
     [SerializeField] TrainSettingsSO settings;
     [SerializeField] TrainStatsSO stats;
-    [SerializeField] StationsDataSO stationsData;
+    [SerializeField] TripSO trip;
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] MaterialIDSO materialIDs;
     [SerializeField] ZoneSpawnerStatsSO spawnerStats;
@@ -27,13 +27,13 @@ public class Train : MonoBehaviour
     {
         stats.startXPos = transform.position.x;
         stats.trainMaxHeight = frontCollider.bounds.max.y;
-        stats.targetPassengerCount = stationsData.stations[0].bystanderSpawnAmount + stationsData.stations[0].traitorSpawnAmount + 1; // +1 for spy himself
-        stats.curKMPerHour = stationsData.stations[0].targetTrainSpeed;
-        stats.targetKMPerHour = stationsData.stations[0].targetTrainSpeed;
+        stats.targetPassengerCount = trip.stations[0].bystanderSpawnAmount + trip.stations[0].traitorSpawnAmount + 1; // +1 for spy himself
+        stats.curKMPerHour = trip.stations[0].targetTrainSpeed;
+        stats.targetKMPerHour = trip.stations[0].targetTrainSpeed;
         stats.metersTravelled = 0;
         stats.curPassengerCount = 0;
         stats.closingDoors = false;
-        stats.brakeDist = GetBrakeDistance(stationsData.stations[0].targetTrainSpeed);
+        stats.brakeDist = GetBrakeDistance(trip.stations[0].targetTrainSpeed);
         trainCTS = new CancellationTokenSource();
         stats.minDepth = frontCarriage.exteriorRenderers[0].depthOrder;
         stats.maxDepth = frontCarriage.interiorSlideDoors[0].rightSlideDoorRenderer.depthOrder;
@@ -64,7 +64,7 @@ public class Train : MonoBehaviour
         {
             Shader.SetGlobalFloat("_MetersTravelled", stats.metersTravelled);
         }
-        stats.distToNextStation = stationsData.curStation.metersPosition - stats.metersTravelled;
+        stats.distToNextStation = trip.curStation.metersPosition - stats.metersTravelled;
 
         if (stats.distToNextStation <= stats.brakeDist)
         {
@@ -72,7 +72,7 @@ public class Train : MonoBehaviour
         }
         else
         {
-            stats.targetKMPerHour = stationsData.curStation.targetTrainSpeed;
+            stats.targetKMPerHour = trip.curStation.targetTrainSpeed;
         }
 
         if (stats.distToNextStation < 0.05f && stats.curKMPerHour != 0)
@@ -96,7 +96,7 @@ public class Train : MonoBehaviour
         stats.closingDoors = true;
         await UniTask.WaitForSeconds(settings.doorMoveTime, cancellationToken: trainCTS.Token); // wait for doors to close
 
-        stats.brakeDist = GetBrakeDistance(stationsData.curStation.targetTrainSpeed);
+        stats.brakeDist = GetBrakeDistance(trip.curStation.targetTrainSpeed);
         gameEventData.OnStationLeave.Raise();
     }
     private async UniTask MoveTrainToStartPosition()

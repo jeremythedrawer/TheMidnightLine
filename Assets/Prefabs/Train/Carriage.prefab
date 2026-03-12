@@ -67,6 +67,9 @@ MonoBehaviour:
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 19.494444, y: 3.3, z: 1}
     index: 0
+  bounds:
+    m_Center: {x: 111.117386, y: -58.8, z: 6}
+    m_Extent: {x: 9.747222, y: 1.65, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -351,6 +354,9 @@ MonoBehaviour:
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 1.5666667, y: 1.0388889, z: 1}
     index: 0
+  bounds:
+    m_Center: {x: 112.476395, y: -57.975998, z: 14}
+    m_Extent: {x: 1.3238335, y: 0.51944447, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -577,7 +583,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
-  stationData: {fileID: 11400000, guid: 73167d88c81ac4d4e98878bf248a72fe, type: 2}
+  trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
@@ -628,6 +634,7 @@ MonoBehaviour:
   - {fileID: 3820570403346329793}
   - {fileID: 5532670627397845320}
   - {fileID: 3248802059132394449}
+  prevMeters: 0
 --- !u!1 &2017503644377605478
 GameObject:
   m_ObjectHideFlags: 0
@@ -692,6 +699,9 @@ MonoBehaviour:
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
     index: 8
+  bounds:
+    m_Center: {x: 105.98631, y: -59.3, z: 10}
+    m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -777,6 +787,9 @@ MonoBehaviour:
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
     index: 8
+  bounds:
+    m_Center: {x: 117.12642, y: -59.3, z: 10}
+    m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -862,6 +875,9 @@ MonoBehaviour:
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
     index: 8
+  bounds:
+    m_Center: {x: 114.74635, y: -59.3, z: 10}
+    m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -947,6 +963,9 @@ MonoBehaviour:
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 20.13889, y: 4.661111, z: 1}
     index: 10
+  bounds:
+    m_Center: {x: 111.03627, y: -59.58, z: 7}
+    m_Extent: {x: 10.069445, y: 2.3305554, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -1032,6 +1051,9 @@ MonoBehaviour:
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 5.1, y: 2.2055554, z: 1}
     index: 4
+  bounds:
+    m_Center: {x: 106.03636, y: -55.020004, z: 10}
+    m_Extent: {x: 2.55, y: 1.1027777, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -1117,6 +1139,9 @@ MonoBehaviour:
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
     index: 8
+  bounds:
+    m_Center: {x: 103.3665, y: -59.3, z: 10}
+    m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -1354,6 +1379,9 @@ MonoBehaviour:
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
     index: 8
+  bounds:
+    m_Center: {x: 119.06642, y: -59.3, z: 10}
+    m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -1595,6 +1623,9 @@ MonoBehaviour:
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
     index: 8
+  bounds:
+    m_Center: {x: 108.386215, y: -59.3, z: 10}
+    m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -1805,6 +1836,9 @@ MonoBehaviour:
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 1.5666667, y: 1.0388889, z: 1}
     index: 0
+  bounds:
+    m_Center: {x: 117.601395, y: -57.975998, z: 14}
+    m_Extent: {x: 0.5248334, y: 0.51944447, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -2108,6 +2142,9 @@ MonoBehaviour:
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 1.5666667, y: 1.0388889, z: 1}
     index: 0
+  bounds:
+    m_Center: {x: 103.48439, y: -57.975998, z: 14}
+    m_Extent: {x: 0.5248334, y: 0.51944447, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -2376,6 +2413,9 @@ MonoBehaviour:
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 1.5666667, y: 1.0388889, z: 1}
     index: 0
+  bounds:
+    m_Center: {x: 106.86638, y: -57.975998, z: 14}
+    m_Extent: {x: 1.3395001, y: 0.51944447, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -2597,6 +2637,9 @@ MonoBehaviour:
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 19.255556, y: 2.4777777, z: 1}
     index: 2
+  bounds:
+    m_Center: {x: 111.13637, y: -57.979, z: 15}
+    m_Extent: {x: 9.627778, y: 1.2388889, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -2750,6 +2793,14 @@ PrefabInstance:
       value: 0.43333334
       objectReference: {fileID: 0}
     - target: {fileID: 126280943923907853, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 116.528336
+      objectReference: {fileID: 0}
+    - target: {fileID: 126280943923907853, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -55.9251
+      objectReference: {fileID: 0}
+    - target: {fileID: 126280943923907853, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: sprite.worldSize.x
       value: 0.12777779
       objectReference: {fileID: 0}
@@ -2792,6 +2843,14 @@ PrefabInstance:
     - target: {fileID: 621046263629925940, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: worldHeight
       value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 621046263629925940, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 115.40431
+      objectReference: {fileID: 0}
+    - target: {fileID: 621046263629925940, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -55.9251
       objectReference: {fileID: 0}
     - target: {fileID: 621046263629925940, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: sprite.worldSize.x
@@ -2866,6 +2925,14 @@ PrefabInstance:
       value: 0.43333334
       objectReference: {fileID: 0}
     - target: {fileID: 1016791228323711511, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 114.55638
+      objectReference: {fileID: 0}
+    - target: {fileID: 1016791228323711511, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -55.9251
+      objectReference: {fileID: 0}
+    - target: {fileID: 1016791228323711511, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: sprite.worldSize.x
       value: 0.12777779
       objectReference: {fileID: 0}
@@ -2898,6 +2965,14 @@ PrefabInstance:
       value: 0.43333334
       objectReference: {fileID: 0}
     - target: {fileID: 1260180755915391713, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 116.79439
+      objectReference: {fileID: 0}
+    - target: {fileID: 1260180755915391713, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -55.9251
+      objectReference: {fileID: 0}
+    - target: {fileID: 1260180755915391713, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: sprite.worldSize.x
       value: 0.12777779
       objectReference: {fileID: 0}
@@ -2928,6 +3003,14 @@ PrefabInstance:
     - target: {fileID: 1355989653789464880, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: worldHeight
       value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 1355989653789464880, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 116.06532
+      objectReference: {fileID: 0}
+    - target: {fileID: 1355989653789464880, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -55.9251
       objectReference: {fileID: 0}
     - target: {fileID: 1355989653789464880, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: sprite.worldSize.x
@@ -2978,6 +3061,14 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2624611637972907194, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 115.64638
+      objectReference: {fileID: 0}
+    - target: {fileID: 2624611637972907194, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -57.981
+      objectReference: {fileID: 0}
+    - target: {fileID: 2624611637972907194, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: sprite.worldSize.x
       value: 2.8222222
       objectReference: {fileID: 0}
@@ -3000,6 +3091,14 @@ PrefabInstance:
     - target: {fileID: 3192030132573424320, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: worldHeight
       value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 3192030132573424320, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 114.90129
+      objectReference: {fileID: 0}
+    - target: {fileID: 3192030132573424320, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -55.9251
       objectReference: {fileID: 0}
     - target: {fileID: 3192030132573424320, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: sprite.worldSize.x
@@ -3115,6 +3214,14 @@ PrefabInstance:
       value: 0.43333334
       objectReference: {fileID: 0}
     - target: {fileID: 126280943923907853, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 106.92833
+      objectReference: {fileID: 0}
+    - target: {fileID: 126280943923907853, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -55.9251
+      objectReference: {fileID: 0}
+    - target: {fileID: 126280943923907853, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: sprite.worldSize.x
       value: 0.12777779
       objectReference: {fileID: 0}
@@ -3157,6 +3264,14 @@ PrefabInstance:
     - target: {fileID: 621046263629925940, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: worldHeight
       value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 621046263629925940, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 105.804306
+      objectReference: {fileID: 0}
+    - target: {fileID: 621046263629925940, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -55.9251
       objectReference: {fileID: 0}
     - target: {fileID: 621046263629925940, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: sprite.worldSize.x
@@ -3231,6 +3346,14 @@ PrefabInstance:
       value: 0.43333334
       objectReference: {fileID: 0}
     - target: {fileID: 1016791228323711511, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 104.956375
+      objectReference: {fileID: 0}
+    - target: {fileID: 1016791228323711511, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -55.9251
+      objectReference: {fileID: 0}
+    - target: {fileID: 1016791228323711511, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: sprite.worldSize.x
       value: 0.12777779
       objectReference: {fileID: 0}
@@ -3263,6 +3386,14 @@ PrefabInstance:
       value: 0.43333334
       objectReference: {fileID: 0}
     - target: {fileID: 1260180755915391713, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 107.19438
+      objectReference: {fileID: 0}
+    - target: {fileID: 1260180755915391713, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -55.9251
+      objectReference: {fileID: 0}
+    - target: {fileID: 1260180755915391713, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: sprite.worldSize.x
       value: 0.12777779
       objectReference: {fileID: 0}
@@ -3293,6 +3424,14 @@ PrefabInstance:
     - target: {fileID: 1355989653789464880, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: worldHeight
       value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 1355989653789464880, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 106.46532
+      objectReference: {fileID: 0}
+    - target: {fileID: 1355989653789464880, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -55.9251
       objectReference: {fileID: 0}
     - target: {fileID: 1355989653789464880, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: sprite.worldSize.x
@@ -3343,6 +3482,14 @@ PrefabInstance:
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2624611637972907194, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 106.04637
+      objectReference: {fileID: 0}
+    - target: {fileID: 2624611637972907194, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -57.981
+      objectReference: {fileID: 0}
+    - target: {fileID: 2624611637972907194, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: sprite.worldSize.x
       value: 2.8222222
       objectReference: {fileID: 0}
@@ -3365,6 +3512,14 @@ PrefabInstance:
     - target: {fileID: 3192030132573424320, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: worldHeight
       value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 3192030132573424320, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 105.301285
+      objectReference: {fileID: 0}
+    - target: {fileID: 3192030132573424320, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -55.9251
       objectReference: {fileID: 0}
     - target: {fileID: 3192030132573424320, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: sprite.worldSize.x
@@ -3512,6 +3667,14 @@ PrefabInstance:
       value: 0.81533885
       objectReference: {fileID: 0}
     - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 116.607346
+      objectReference: {fileID: 0}
+    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -58.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: sprite.worldSize.x
       value: 0.9722222
       objectReference: {fileID: 0}
@@ -3612,6 +3775,14 @@ PrefabInstance:
       value: 0.81533885
       objectReference: {fileID: 0}
     - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 116.607346
+      objectReference: {fileID: 0}
+    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -58.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: spriteMatrices.Array.data[0].e00
       value: 0
       objectReference: {fileID: 0}
@@ -3697,6 +3868,14 @@ PrefabInstance:
     - target: {fileID: 3740695647750266909, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
       propertyPath: worldHeight
       value: 2.1555555
+      objectReference: {fileID: 0}
+    - target: {fileID: 3740695647750266909, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 111.1582
+      objectReference: {fileID: 0}
+    - target: {fileID: 3740695647750266909, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -58.099987
       objectReference: {fileID: 0}
     - target: {fileID: 3740695647750266909, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
       propertyPath: sprite.worldSize.x
@@ -3795,6 +3974,14 @@ PrefabInstance:
       value: 2.1555555
       objectReference: {fileID: 0}
     - target: {fileID: 8516356413194211895, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 111.1582
+      objectReference: {fileID: 0}
+    - target: {fileID: 8516356413194211895, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -58.099987
+      objectReference: {fileID: 0}
+    - target: {fileID: 8516356413194211895, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
       propertyPath: sprite.worldSize.x
       value: 0.9611111
       objectReference: {fileID: 0}
@@ -3850,6 +4037,14 @@ PrefabInstance:
     - target: {fileID: 3740695647750266909, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
       propertyPath: worldHeight
       value: 2.1555555
+      objectReference: {fileID: 0}
+    - target: {fileID: 3740695647750266909, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 105.715195
+      objectReference: {fileID: 0}
+    - target: {fileID: 3740695647750266909, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -58.099987
       objectReference: {fileID: 0}
     - target: {fileID: 3740695647750266909, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
       propertyPath: sprite.worldSize.x
@@ -3940,6 +4135,14 @@ PrefabInstance:
       value: 2.1555555
       objectReference: {fileID: 0}
     - target: {fileID: 8516356413194211895, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 105.715195
+      objectReference: {fileID: 0}
+    - target: {fileID: 8516356413194211895, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -58.099987
+      objectReference: {fileID: 0}
+    - target: {fileID: 8516356413194211895, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
       propertyPath: sprite.worldSize.x
       value: 0.9611111
       objectReference: {fileID: 0}
@@ -4011,6 +4214,14 @@ PrefabInstance:
     - target: {fileID: 1926284448935532745, guid: 9124a39d298bd04458bf77fc5f893d66, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0.49874687
+      objectReference: {fileID: 0}
+    - target: {fileID: 1926284448935532745, guid: 9124a39d298bd04458bf77fc5f893d66, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 101.49638
+      objectReference: {fileID: 0}
+    - target: {fileID: 1926284448935532745, guid: 9124a39d298bd04458bf77fc5f893d66, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -56.864
       objectReference: {fileID: 0}
     - target: {fileID: 1926284448935532745, guid: 9124a39d298bd04458bf77fc5f893d66, type: 3}
       propertyPath: sprite.worldSize.x
@@ -4139,6 +4350,14 @@ PrefabInstance:
       value: 2.1555555
       objectReference: {fileID: 0}
     - target: {fileID: 3740695647750266909, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 116.598206
+      objectReference: {fileID: 0}
+    - target: {fileID: 3740695647750266909, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -58.099987
+      objectReference: {fileID: 0}
+    - target: {fileID: 3740695647750266909, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
       propertyPath: sprite.worldSize.x
       value: 0.9611111
       objectReference: {fileID: 0}
@@ -4235,6 +4454,14 @@ PrefabInstance:
       value: 2.1555555
       objectReference: {fileID: 0}
     - target: {fileID: 8516356413194211895, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 116.598206
+      objectReference: {fileID: 0}
+    - target: {fileID: 8516356413194211895, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -58.099987
+      objectReference: {fileID: 0}
+    - target: {fileID: 8516356413194211895, guid: 4f9e59c5739751d41866bf2b4495453c, type: 3}
       propertyPath: sprite.worldSize.x
       value: 0.9611111
       objectReference: {fileID: 0}
@@ -4326,6 +4553,14 @@ PrefabInstance:
     - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: worldMatrix.e13
       value: 0.81533885
+      objectReference: {fileID: 0}
+    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 105.72243
+      objectReference: {fileID: 0}
+    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -58.1
       objectReference: {fileID: 0}
     - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: sprite.worldSize.x
@@ -4428,6 +4663,14 @@ PrefabInstance:
       value: 0.81533885
       objectReference: {fileID: 0}
     - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 105.72243
+      objectReference: {fileID: 0}
+    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -58.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: spriteMatrices.Array.data[0].e00
       value: 0
       objectReference: {fileID: 0}
@@ -4525,6 +4768,14 @@ PrefabInstance:
     - target: {fileID: 1926284448935532745, guid: 9124a39d298bd04458bf77fc5f893d66, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0.49874687
+      objectReference: {fileID: 0}
+    - target: {fileID: 1926284448935532745, guid: 9124a39d298bd04458bf77fc5f893d66, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 120.75539
+      objectReference: {fileID: 0}
+    - target: {fileID: 1926284448935532745, guid: 9124a39d298bd04458bf77fc5f893d66, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -56.875
       objectReference: {fileID: 0}
     - target: {fileID: 1926284448935532745, guid: 9124a39d298bd04458bf77fc5f893d66, type: 3}
       propertyPath: sprite.worldSize.x
@@ -4677,6 +4928,14 @@ PrefabInstance:
       value: 0.81533885
       objectReference: {fileID: 0}
     - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 111.170364
+      objectReference: {fileID: 0}
+    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -58.1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: sprite.worldSize.x
       value: 0.9722222
       objectReference: {fileID: 0}
@@ -4775,6 +5034,14 @@ PrefabInstance:
     - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: worldMatrix.e13
       value: 0.81533885
+      objectReference: {fileID: 0}
+    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 111.170364
+      objectReference: {fileID: 0}
+    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -58.1
       objectReference: {fileID: 0}
     - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: spriteMatrices.Array.data[0].e00

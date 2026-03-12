@@ -10,8 +10,6 @@ public class StationSO : ScriptableObject
     public int traitorSpawnAmount = 2;
 
     public bool isFrontOfTrain;
-    public float parallaxFactor;
-    public float plaformSpawnOffset;
     [Header("Generated")]
     public bool hadSpawned;
 }

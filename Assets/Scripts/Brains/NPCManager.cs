@@ -9,7 +9,7 @@ public class NPCManager : MonoBehaviour
     const float WAITING_FOR_SEAT_TICK_RATE = 0.3f;
 
     public NPCsDataSO npcData;
-    public StationsDataSO stationsData;
+    public TripSO trip;
     public ClipboardStatsSO clipBoardStats;
 
     [Header("Generated")]
@@ -35,18 +35,18 @@ public class NPCManager : MonoBehaviour
     private void CreateNPCTraitors()
     {
         npcData.totalAgentCount = 0;
-        for (int i = 0; i < stationsData.stations.Length; i++)
+        for (int i = 0; i < trip.stations.Length; i++)
         {
-            for (int j = 0; j < stationsData.stations[i].traitorSpawnAmount; j++)
+            for (int j = 0; j < trip.stations[i].traitorSpawnAmount; j++)
             {
                 npcData.totalAgentCount++;
             }
         }
         clipBoardStats.profilePageArray = new ClipboardStatsSO.ProfilePageData[npcData.totalAgentCount];
         int profilePageIndex = 0;
-        for (int i = 0; i < stationsData.stations.Length; i++)
+        for (int i = 0; i < trip.stations.Length; i++)
         {
-            for (int j = 0; j < stationsData.stations[i].traitorSpawnAmount; j++)
+            for (int j = 0; j < trip.stations[i].traitorSpawnAmount; j++)
             {
                 int randNPCIndex = Random.Range(0, npcData.npcsToPick.Count); // pick from list
 

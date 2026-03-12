@@ -47,7 +47,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
   material: {fileID: 2100000, guid: 0e218c0765f01fb40a0930b56607d422, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 5
+  spriteIndex: 4
   spriteMode: 0
   width: 26.2
   height: 1
@@ -60,10 +60,13 @@ MonoBehaviour:
     mesh: {fileID: 0}
     depthOrder: 10
   sprite:
-    uvSizeAndPos: {x: 0.49926758, y: 0.06225586, z: 0.5004883, w: 0.81152344}
+    uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0.5004883, w: 0.81152344}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 11.361111, y: 1.4166666, z: 1}
-    index: 5
+    worldSize: {x: 11.366667, y: 1.4222223, z: 1}
+    index: 4
+  bounds:
+    m_Center: {x: 153.9, y: -2.25, z: 10}
+    m_Extent: {x: 148.90334, y: 0.7111111, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -83,5 +86,5 @@ MonoBehaviour:
     e33: 0
   widthHeightFlip:
   - {x: 26.2, y: 1, z: 1, w: 1}
-  worldWidth: 297.6611
-  worldHeight: 1.4166666
+  worldWidth: 297.80667
+  worldHeight: 1.4222223

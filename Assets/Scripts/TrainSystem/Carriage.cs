@@ -20,7 +20,7 @@ public class Carriage : MonoBehaviour
 
     [SerializeField] TrainStatsSO trainStats;
     [SerializeField] TrainSettingsSO trainSettings;
-    [SerializeField] StationsDataSO stationData;
+    [SerializeField] TripSO trip;
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] MaterialIDSO materialIDs;
@@ -126,7 +126,7 @@ public class Carriage : MonoBehaviour
     }
     private void UnlockDoors()
     {
-        if (stationData.curStation.isFrontOfTrain)
+        if (trip.curStation.isFrontOfTrain)
         {
             for (int i = 0; i < exteriorSlideDoors.Length; i++)
             {
@@ -144,7 +144,7 @@ public class Carriage : MonoBehaviour
 
     private void CloseDoors()
     {
-        if (stationData.curStation.isFrontOfTrain)
+        if (trip.curStation.isFrontOfTrain)
         {
             for(int i = 0; i < exteriorSlideDoors.Length; i++)
             {
@@ -170,7 +170,6 @@ public class Carriage : MonoBehaviour
         FadingIn().Forget();
 
     }
-
     public void FadeOut()
     {
         ctsFade?.Cancel();
@@ -187,16 +186,16 @@ public class Carriage : MonoBehaviour
         {
             while (elaspedTime < trainSettings.exteriorWallFadeTime)
             {
-
                 elaspedTime += Time.deltaTime;
 
                 alpha = elaspedTime / trainSettings.exteriorWallFadeTime;
+                alpha = alpha < 0.5 ? 16 * alpha * alpha * alpha * alpha * alpha : 1 - Mathf.Pow(-2 * alpha + 2, 5) * 0.5f; 
                 for (int i = 0; i < exteriorRenderers.Length; i++)
                 {
                     exteriorRenderers[i].mpb.SetFloat(materialIDs.ids.alpha, alpha);
                 }
 
-                await UniTask.Yield(PlayerLoopTiming.Update, ctsFade.Token);
+                await UniTask.Yield(cancellationToken: ctsFade.Token);
             }
         }
         catch (OperationCanceledException)
@@ -211,10 +210,10 @@ public class Carriage : MonoBehaviour
         {
             while (elaspedTime > 0)
             {
-
                 elaspedTime -= Time.deltaTime;
 
                 alpha = elaspedTime / trainSettings.exteriorWallFadeTime;
+                alpha = alpha < 0.5 ? 16 * alpha * alpha * alpha * alpha * alpha : 1 - Mathf.Pow(-2 * alpha + 2, 5) * 0.5f;
                 for (int i = 0; i < exteriorRenderers.Length; i++)
                 {
                     exteriorRenderers[i].mpb.SetFloat(materialIDs.ids.alpha, alpha);
