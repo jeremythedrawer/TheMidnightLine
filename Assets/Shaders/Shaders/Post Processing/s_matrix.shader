@@ -22,11 +22,11 @@ Shader "Custom/s_matrix"
 
 		half4 frag(Varyings input) : SV_TARGET
 		{
-			float rotSpeed = 0.04;
-			float rayAmount = 60;
+			float rotSpeed = 0.02;
+			float rayAmount = 50;
 			float time = _Time.y * rotSpeed;
-			float sunSize = lerp(0.05, 0.2, sin(time * 10) * 0.5 + 0.5);
-			float noiseIntensity = 1;
+			float sunSize = lerp(0.05, 0.02, sin(time * 10) * 0.5 + 0.5);
+			float noiseIntensity = 6;
 
 			half4 blit = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_PointClamp, input.texcoord);
 			float depth = SAMPLE_TEXTURE2D_X(_CameraDepthTexture, sampler_CameraDepthTexture, input.texcoord).r;
@@ -43,23 +43,24 @@ Shader "Custom/s_matrix"
 			float2x2 rotMat =	{ -rotSin, rotCos,
 									rotCos, rotSin,
 								};
-			centerUV = mul(centerUV, rotMat);
-			half4 noiseTex = SAMPLE_TEXTURE2D_X(_NoiseTexture, sampler_NoiseTexture, (centerUV * 0.5) - (_Time.y * 0.01));
-			float sun = (1 - length(centerUV) * 4) + sunSize;
-			float noise = (noiseTex.b * 2 - 1) * noiseIntensity * (1 - saturate(sun));
+			float2 rotUV = mul(centerUV, rotMat);
+			float sun = (1 - length(centerUV) * 6);
+			float angle = atan2(rotUV.x, rotUV.y);
 
-			float angle = atan2(centerUV.x, centerUV.y);
+			half4 noiseTex = SAMPLE_TEXTURE2D_X(_NoiseTexture, sampler_NoiseTexture, centerUV + angle - (_Time.y * 0.02));
+			float noise = noiseTex.b * noiseIntensity * pow(1 - saturate(sun),4);
+
 			float t = angle * rayAmount;
-			float rays = asin(sin(t * 0.25) * sin(t * 2)) + noise;
+			float sinT = sin(t);
+			float rays = asin(sinT * pow((sinT * 0.5 + 0.5), 5)) + max(asin(sinT * sinT),0);
 
-			float sunRays = round(saturate(rays + sun) + pow(saturate(sun), 5));// * skyMask;
+			float sunRays = round(saturate(rays - noise + sun + saturate(sun)));// * skyMask;
 			//return half4(sunRays.xxx, 1);
 			float skyMask = 1 - step(worldPos.z, 64);
 			sunRays *= skyMask;
-
+			
 
 			float grey = (blit.r * (1 - skyMask)) + sunRays + (linearDepth * 0.05);
-
 			float3 finalColor = lerp(_Color1, _Color2, grey);
 			return half4(finalColor, 1);
 		}
