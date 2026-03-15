@@ -9,10 +9,4 @@ struct ZoneOutput
     uint randID;
 };
 
-struct GlyphOutput
-{
-    float3 spawnPosition;
-    float3 position;
-    uint alive;
-};
 //NOTE: Adjust the stride in the particle buffer in Spawner if the struct has changed

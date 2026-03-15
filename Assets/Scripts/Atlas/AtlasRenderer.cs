@@ -50,10 +50,6 @@ public class AtlasRenderer : MonoBehaviour
     private void Update()
     {
         bounds.center = transform.position + (Vector3)worldPivotOffset;
-        if (transform.position.z != depthOrder)
-        {
-            Debug.Log(gameObject.name + " : " + transform.position.z + " | " + depthOrder);
-        }
     }
     public void UpdateDepth(int newDepth)
     {
@@ -70,6 +66,7 @@ public class AtlasRenderer : MonoBehaviour
     }
     private void InitRenderer()
     {
+        if (atlas == null) return;
         worldWidth = sprite.worldSize.x * width;
         worldHeight = sprite.worldSize.y * height;
 

@@ -15,18 +15,24 @@ MonoBehaviour:
   zones:
   - atlas: {fileID: 11400000, guid: b7293c5d7b7f8814a972cc266c414cf8, type: 2}
     metersStart: 0
-    metersLength: 2000
+    metersLength: 1157
     spawnerArea: 1
   - atlas: {fileID: 11400000, guid: 8fe34cef64df39f47ad5ef739cc24f29, type: 2}
     metersStart: 0
-    metersLength: 2000
+    metersLength: 1141
     spawnerArea: 2
   - atlas: {fileID: 11400000, guid: 38ab149c8421c91498ac2d3a9830655e, type: 2}
     metersStart: 0
-    metersLength: 2000
+    metersLength: 1361
     spawnerArea: 6
   - atlas: {fileID: 11400000, guid: 2a27930e178f4c240b192205a2491b59, type: 2}
     metersStart: 0
-    metersLength: 2000
+    metersLength: 1351
     spawnerArea: 5
+  stations:
+  - {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
+  - {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
+  - {fileID: 11400000, guid: 134e92c40424a324c80e62fb7525f100, type: 2}
+  curStationIndex: 0
+  curStation: {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
   tripMeters: 20000

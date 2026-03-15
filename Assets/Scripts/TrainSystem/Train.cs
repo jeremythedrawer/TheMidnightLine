@@ -78,6 +78,7 @@ public class Train : MonoBehaviour
         if (stats.distToNextStation < 0.05f && stats.curKMPerHour != 0)
         {
             stats.curKMPerHour = 0;
+            stats.closingDoors = false;
             gameEventData.OnStationArrival.Raise();
         }
         else if (stats.distToNextStation > 0.05f)

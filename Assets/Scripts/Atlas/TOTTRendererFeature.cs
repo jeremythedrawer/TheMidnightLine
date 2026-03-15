@@ -26,11 +26,11 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     public float bloomSpread;
 
 
-    [Header("OKLAB Settings")]
-    public float lightness;
-    public float greenToRed;
-    public float blueToYellow;
-    
+    [Header("Matrix Settings")]
+    public Color color1;
+    public Color color2;
+    public Texture2D noiseTexture;
+
     private AtlasBatchPass batchPass;
     private AtlasParticlePass particlePass;
     private MatrixPass matrixPass;
@@ -48,7 +48,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         matrixPass = new MatrixPass(this);
         bloomPass = new BloomPass(this);
     }
-
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
         PrepareFrame();
@@ -129,9 +128,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
                         for (int j = 0; j < 9; j++)
                         {
-                            Matrix4x4 sliceMatrix = sliceMatrices[j];
-
-                            batch.data.matrices[count] = sliceMatrix;
+                            batch.data.matrices[count] = sliceMatrices[j];
                             batch.data.uvSizeAndPosData[count] = slicedSprite.uvSizeAndPos[j];
                             batch.data.widthHeightFlip[count] = atlasRenderer.widthHeightFlip[j];
                             count++;
@@ -197,13 +194,11 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     private class BloomPass : ScriptableRenderPass
     {
         private static TOTTRendererFeature rendererFeature;
-
         public BloomPass(TOTTRendererFeature srf)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingTransparents;
             rendererFeature = srf;
         }
-
         private class BloomPassData
         {
             public TextureHandle curSourceColor;
@@ -214,7 +209,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             public float bloomIntensity;
             public float bloomSpread;
         }
-
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
         {
             UniversalResourceData resourceData = frameData.Get<UniversalResourceData>();
@@ -286,7 +280,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
             resourceData.cameraColor = passData.targetColor;
         }
-
         private static void ExecutePreBloomPass(BloomPassData passData, RasterGraphContext ctx)
         {
             if (passData.material == null) return;
@@ -299,30 +292,28 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         {
             Blitter.BlitTexture(ctx.cmd, passData.curSourceColor, Vector2.one, passData.material, pass: 1);
         }
-
         private static void ExecuteVBloomPass(BloomPassData passData, RasterGraphContext ctx)
         {
             passData.material.SetTexture("_SourceTex", passData.originalCameraColor);
             Blitter.BlitTexture(ctx.cmd, passData.curSourceColor, Vector2.one, passData.material, pass: 2);
         }
     }
-
     private class MatrixPass : ScriptableRenderPass
     {
         private static TOTTRendererFeature rendererFeature;
-
         public MatrixPass(TOTTRendererFeature srf)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingTransparents + 1;
             rendererFeature = srf;
         }
-
         private class MatrixPassData
         {
             public TextureHandle sourceColor;
             public TextureHandle targetColor;
             public TextureHandle depthTexture;
             public Material material;
+            public Color color1;
+            public Color color2;
         }
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
         {
@@ -343,6 +334,8 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                 passData.targetColor = matrixTexHandle;
                 passData.material = rendererFeature.matrixMaterial;
                 passData.depthTexture = resourceData.activeDepthTexture;
+                passData.color1 = rendererFeature.color1;
+                passData.color2 = rendererFeature.color2;
 
                 builder.UseTexture(passData.sourceColor);
                 builder.UseTexture(passData.depthTexture, AccessFlags.Read);
@@ -360,6 +353,9 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         {
             passData.material.SetTexture("_SourceTex", passData.sourceColor);
             passData.material.SetTexture("_CameraDepthTexture", passData.depthTexture);
+            passData.material.SetColor("_Color1", passData.color1);
+            passData.material.SetColor("_Color2", passData.color2);
+            passData.material.SetTexture("_NoiseTexture", rendererFeature.noiseTexture);
             Blitter.BlitTexture(ctx.cmd, passData.sourceColor, Vector2.one, passData.material, 0);
         }
     }

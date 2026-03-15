@@ -3,9 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
 using UnityEngine.Rendering;
-using static Atlas;
-using static AtlasSpawn;
-using static Page;
 public static class AtlasSpawn
 {
     public static int FLOAT_SIZE = sizeof(float);
@@ -31,8 +28,6 @@ public static class AtlasSpawn
     public static readonly string[] UPDATE_KERNEL_STRINGS = { "CSForeground0_Update", "CSMiddleground0_Update", "CSMiddleground1_Update", "CSMiddleground2_Update", "CSMiddleground3_Update", "CSBackground0_Update", "CSBackground1_Update", "CSBackground2_Update" };
 
     public static readonly int[] PARTICLE_COUNTS = { FORE_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, BACK_PARTICLE_COUNT, BACK_PARTICLE_COUNT, BACK_PARTICLE_COUNT };
-
-
 
     public enum ZoneParticleType
     {
@@ -75,11 +70,6 @@ public static class AtlasSpawn
     {
         public ZoneSpawner zoneSpawner;
         public SpawnerData zoneSpawnerData;
-    }
-    [Serializable] public struct GlyphSpawnerData
-    {
-        public SpawnerData spawnerData;
-        public Vector3 spawnerPosition;
     }
     public static void InitializeZoneCompute(ComputeShader computeShader, MaterialIDSO materialIDs, ZoneSpawnerStatsSO stats)
     {

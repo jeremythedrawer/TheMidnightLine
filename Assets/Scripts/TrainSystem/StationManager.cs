@@ -68,6 +68,8 @@ public class StationManager : MonoBehaviour
     {
         trip.curStationIndex++;
         trip.curStation = trip.stations[trip.curStationIndex];
-        curMetersSpawnThreshold = trip.curStation.metersPosition - Mathf.Abs(trip.curStation.station_prefab.platformRenderer.transform.localPosition.x) - trainToMaxSpawnDist;
+        trainStats.curPassengerCount = 0;
+        trainStats.targetPassengerCount = trip.curStation.traitorSpawnAmount + trip.curStation.bystanderSpawnAmount;
+        curMetersSpawnThreshold = trip.curStation.metersPosition - Mathf.Abs(trip.curStation.station_prefab.platformRenderer.transform.localPosition.x) - trainToMaxSpawnDist - (trainStats.trainWorldWidth / 2);
     }
 }

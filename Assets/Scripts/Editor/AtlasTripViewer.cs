@@ -127,28 +127,51 @@ public class AtlasTripViewer : EditorWindow
 
         for (int i = 0; i < trip.stations.Length; i++)
         {
-            StationSO station = trip.stations[i];
+            StationSO selectedStation = trip.stations[i];
             float rectSize = 20;
-            float posX = graphRect.xMin + ((float)station.metersPosition / (float)trip.tripMeters) * graphRect.width;
+            float posX = graphRect.xMin + ((float)selectedStation.metersPosition / (float)trip.tripMeters) * graphRect.width;
             float posY = graphRect.yMin - 20;
             Rect stationRect = new Rect(posX, posY, rectSize, rectSize);
             Color zoneColor = (selectedStationIndex == i) ? Color.orangeRed : Color.lawnGreen;
             Handles.DrawSolidRectangleWithOutline(stationRect, zoneColor, Color.black);
 
             Rect stationLabelRect = new Rect(stationRect.xMin, stationRect.yMin, 200, 20);
-            GUI.Label(stationLabelRect, station.station_prefab.name, zoneLabelStyle);
+            GUI.Label(stationLabelRect, selectedStation.station_prefab.name, zoneLabelStyle);
             if (e.type == EventType.MouseDown && stationRect.Contains(e.mousePosition))
             {
                 selectedZoneIndex = -1;
                 selectedStationIndex = i;
                 int mouseMeters = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.tripMeters);
-                dragOffsetStation = mouseMeters - station.metersPosition;
+                dragOffsetStation = mouseMeters - selectedStation.metersPosition;
             }
             if (selectedStationIndex == i && e.type == EventType.MouseDrag)
             {
                 int mouseMeters = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.tripMeters);
-                station.metersPosition = mouseMeters - dragOffsetStation;
-                station.metersPosition = Mathf.Clamp(station.metersPosition, 0, trip.tripMeters);
+                selectedStation.metersPosition = mouseMeters - dragOffsetStation;
+                selectedStation.metersPosition = Mathf.Clamp(selectedStation.metersPosition, 0, trip.tripMeters);
+
+                int stationAheadIndex = selectedStationIndex + 1;
+                int stationBehindIndex = selectedStationIndex - 1;
+                if (stationAheadIndex < trip.stations.Length)
+                {
+                    StationSO stationAhead = trip.stations[stationAheadIndex];
+                    if (selectedStation.metersPosition > stationAhead.metersPosition)
+                    {
+                        trip.stations[stationAheadIndex] = selectedStation;
+                        trip.stations[selectedStationIndex] = stationAhead;
+                        selectedStationIndex = stationAheadIndex;
+                    }
+                }
+                if (stationBehindIndex >= 0)
+                {
+                    StationSO stationBehind = trip.stations[stationBehindIndex];
+                    if (selectedStation.metersPosition < stationBehind.metersPosition)
+                    {
+                        trip.stations[stationBehindIndex] = selectedStation;
+                        trip.stations[selectedStationIndex] = stationBehind;
+                        selectedStationIndex = stationBehindIndex;
+                    }
+                }
 
                 EditorUtility.SetDirty(trip);
                 Repaint();
