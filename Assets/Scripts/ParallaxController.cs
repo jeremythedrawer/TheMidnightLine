@@ -4,7 +4,7 @@ using static Atlas;
 public class ParallaxController : MonoBehaviour
 {
     public TrainStatsSO trainStats;
-    public ZoneSpawnerStatsSO zoneStats;
+    public ZoneSpawnerSO zoneStats;
     public SpyStatsSO spyStats;
     public AtlasRenderer atlasRenderer;
 

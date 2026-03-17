@@ -4,6 +4,7 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using static Atlas;
+using static AtlasSpawn;
 
 public class AtlasFactory : EditorWindow
 {
@@ -32,7 +33,6 @@ public class AtlasFactory : EditorWindow
     List<SimpleSprite> simpleSpritesList;
     List<MotionSprite> motionSpritesList;
     List<SliceSprite> slicedSpritesList;
-    List<ParticleSprite> particleSpritesList;
 
     //Simple
     private Vector2[] simplePivots = new Vector2[]
@@ -55,7 +55,6 @@ public class AtlasFactory : EditorWindow
     private int simpleSpritesFound;
     private int motionSpritesFound;
     private int sliceSpritesFound;
-    private int particleSpritesFound;
 
 
     const float padding = 50f;
@@ -109,7 +108,6 @@ public class AtlasFactory : EditorWindow
             simpleSpritesFound = 0;
             motionSpritesFound = 0;
             sliceSpritesFound = 0;
-            particleSpritesFound = 0;
 
             previewClip = default;
             selectedIndex = 0;
@@ -123,10 +121,6 @@ public class AtlasFactory : EditorWindow
             atlas.UpdateClipDictionary();
             GetMotionData();
 
-            if (atlas.isParticleAtlas)
-            {
-                GetParticleUVSizeAndPosData();
-            }
             previewRT = null;
             flip = 1;
             EditorUtility.SetDirty(atlas);
@@ -267,17 +261,6 @@ public class AtlasFactory : EditorWindow
             if (i % columns == columns - 1 || i == atlas.slicedSprites.Length - 1) EditorGUILayout.EndHorizontal();
         }
 
-        for (int i = 0; i < atlas.particleSprites.Length; i++)
-        {
-            if (i % columns == 0) EditorGUILayout.BeginHorizontal();
-
-            DrawAtlasSprite(atlas.particleSprites[i].sprite, gridIndex);
-            gridIndex++;
-
-            if (i % columns == columns - 1 || i == atlas.particleSprites.Length - 1) EditorGUILayout.EndHorizontal();
-        }
-
-
         EditorGUILayout.EndScrollView();
         EditorGUILayout.EndVertical();
         #endregion
@@ -328,17 +311,6 @@ public class AtlasFactory : EditorWindow
             slicedSpritesList = new List<SliceSprite>();
 
         }
-        
-        if (atlas.particleSprites.Length > 0)
-        {
-            particleSpritesList = atlas.particleSprites.ToList();
-        }
-        else
-        {
-
-            particleSpritesList = new List<ParticleSprite>();
-        }
-
 
         int curSpriteIndex = 0;
         for (int y = atlas.texture.height - 1; y >= 0; y--)
@@ -363,7 +335,6 @@ public class AtlasFactory : EditorWindow
         atlas.simpleSprites = simpleSpritesList.ToArray();
         atlas.motionSprites = motionSpritesList.ToArray();
         atlas.slicedSprites = slicedSpritesList.ToArray();
-        atlas.particleSprites = particleSpritesList.ToArray();
         SortAtlasSprites();
     }
     private List<Vector2Int> FloodFill(int startX, int startY, int width, int height, ref bool[] visited, Color32[] pixels)
@@ -574,35 +545,16 @@ public class AtlasFactory : EditorWindow
         }
         else
         {
-            if (atlas.isParticleAtlas)
+            if (simpleSpritesFound < simpleSpritesList.Count)
             {
-                ParticleSprite particleSprite = new ParticleSprite();
-                particleSprite.sprite = newSimpleSprite;
-                
-                if (particleSpritesFound < particleSpritesList.Count)
-                {
-                    particleSpritesList[particleSpritesFound] = atlas.particleSprites[particleSpritesFound];
-                }
-                else
-                {
-                    particleSpritesList.Add(particleSprite);
-                }
-                particleSpritesFound++;
-
+                newSimpleSprite.uvPivot = simpleSpritesList[simpleSpritesFound].uvPivot;
+                simpleSpritesList[simpleSpritesFound] = newSimpleSprite;
             }
             else
             {
-                if (simpleSpritesFound < simpleSpritesList.Count)
-                {
-                    newSimpleSprite.uvPivot = simpleSpritesList[simpleSpritesFound].uvPivot;
-                    simpleSpritesList[simpleSpritesFound] = newSimpleSprite;
-                }
-                else
-                {
-                    simpleSpritesList.Add(newSimpleSprite);
-                }
-                simpleSpritesFound++;
+                simpleSpritesList.Add(newSimpleSprite);
             }
+            simpleSpritesFound++;
         }
     }
     private void SortAtlasSprites()
@@ -658,20 +610,6 @@ public class AtlasFactory : EditorWindow
                 atlas.slicedSprites[i].sprite.index = i;
             }
         }
-
-        if (atlas.particleSprites.Length > 1)
-        {
-            Array.Sort(atlas.particleSprites, (a, b) =>
-            {
-                if (Mathf.Abs(b.sprite.uvSizeAndPos.w - a.sprite.uvSizeAndPos.w) > spriteOrderTolerance) return b.sprite.uvSizeAndPos.w.CompareTo(a.sprite.uvSizeAndPos.w);
-
-                return a.sprite.uvSizeAndPos.z.CompareTo(b.sprite.uvSizeAndPos.z);
-            });
-            for (int i = 0; i < atlas.particleSprites.Length; i++)
-            {
-                atlas.particleSprites[i].sprite.index = i;
-            }
-        }
     }
     private void MakeTextureReadable(Texture texture)
     {
@@ -707,16 +645,6 @@ public class AtlasFactory : EditorWindow
                     }
                 }
             }
-        }
-    }
-    private void GetParticleUVSizeAndPosData()
-    {
-        atlas.particleUVSizeAndPosArray = new Vector4[atlas.particleSprites.Length];
-        atlas.worldSizesArray = new Vector2[atlas.particleSprites.Length];
-        for (int i = 0; i < atlas.particleSprites.Length; i++)
-        {
-            atlas.particleUVSizeAndPosArray[i] = atlas.particleSprites[i].sprite.uvSizeAndPos;
-            atlas.worldSizesArray[i] = atlas.particleSprites[i].sprite.worldSize;
         }
     }
     private void DrawAtlasSprite(SimpleSprite atlasSprite, int gridIndex, MotionSprite? motionSpriteNullable = null, SliceSprite? slicedSpriteNullable = null)

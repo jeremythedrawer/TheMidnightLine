@@ -10,7 +10,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7257733673281139355}
   - component: {fileID: 7668386130821006687}
-  - component: {fileID: 123265392254571391}
   m_Layer: 15
   m_Name: Grass (2)
   m_TagString: Untagged
@@ -67,7 +66,7 @@ MonoBehaviour:
     index: 0
   bounds:
     m_Center: {x: 248.36, y: -1.39, z: 1}
-    m_Extent: {x: 52.570835, y: 0.35277778, z: 0.5}
+    m_Extent: {x: 52.570835, y: 0.35277778, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -225,30 +224,6 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 1, w: 1}
   worldWidth: 105.14167
   worldHeight: 0.70555556
---- !u!114 &123265392254571391
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 206833691113327471}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
-  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
-  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  atlasRenderer: {fileID: 7668386130821006687}
-  repeatType: 0
-  ignoreParallax: 1
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  rightRenderer: {fileID: 0}
-  parallaxFactor: 0
-  worldPos: {x: 0, y: 0, z: 0}
-  pivotToMaxWorldDist: 0
-  minWorldToPivotDist: 0
 --- !u!1 &564784607166531398
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,7 +234,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7908644130255970815}
   - component: {fileID: 8476627600581120289}
-  - component: {fileID: 3422329590742618627}
   m_Layer: 0
   m_Name: Building
   m_TagString: Untagged
@@ -316,7 +290,7 @@ MonoBehaviour:
     index: 1
   bounds:
     m_Center: {x: 300, y: 0.83, z: 18}
-    m_Extent: {x: 6.897222, y: 3.1222222, z: 0.5}
+    m_Extent: {x: 6.897222, y: 3.1222222, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -338,30 +312,6 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 1, w: 1}
   worldWidth: 13.794444
   worldHeight: 6.2444444
---- !u!114 &3422329590742618627
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 564784607166531398}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
-  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
-  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  atlasRenderer: {fileID: 8476627600581120289}
-  repeatType: 0
-  ignoreParallax: 1
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  rightRenderer: {fileID: 0}
-  parallaxFactor: 0
-  worldPos: {x: 0, y: 0, z: 0}
-  pivotToMaxWorldDist: 0
-  minWorldToPivotDist: 0
 --- !u!1 &1342467197157022166
 GameObject:
   m_ObjectHideFlags: 0
@@ -372,7 +322,6 @@ GameObject:
   m_Component:
   - component: {fileID: 7160388347903267944}
   - component: {fileID: 4868486823001428341}
-  - component: {fileID: 2018045739509713180}
   m_Layer: 0
   m_Name: Wire Fence (1)
   m_TagString: Untagged
@@ -410,7 +359,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
   material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 6
+  spriteIndex: 5
   spriteMode: 0
   width: 16.04
   height: 1
@@ -426,10 +375,10 @@ MonoBehaviour:
     uvSizeAndPos: {x: 0.107910156, y: 0.08911133, z: 0, w: 0.59033203}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 2.4555554, y: 2.0277777, z: 1}
-    index: 6
+    index: 5
   bounds:
     m_Center: {x: 305.11, y: 0.83, z: 17}
-    m_Extent: {x: 19.693556, y: 1.0138888, z: 0.5}
+    m_Extent: {x: 19.693556, y: 1.0138888, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -451,30 +400,6 @@ MonoBehaviour:
   - {x: 16.04, y: 1, z: 1, w: 1}
   worldWidth: 39.38711
   worldHeight: 2.0277777
---- !u!114 &2018045739509713180
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1342467197157022166}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
-  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
-  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  atlasRenderer: {fileID: 4868486823001428341}
-  repeatType: 0
-  ignoreParallax: 1
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  rightRenderer: {fileID: 0}
-  parallaxFactor: 0
-  worldPos: {x: 0, y: 0, z: 0}
-  pivotToMaxWorldDist: 0
-  minWorldToPivotDist: 0
 --- !u!1 &2693832824672017060
 GameObject:
   m_ObjectHideFlags: 0
@@ -486,7 +411,6 @@ GameObject:
   - component: {fileID: 1994373065870132273}
   - component: {fileID: 3083551894033079323}
   - component: {fileID: 5364706768966122321}
-  - component: {fileID: 2441422150157369673}
   m_Layer: 15
   m_Name: Platform
   m_TagString: Untagged
@@ -543,7 +467,7 @@ MonoBehaviour:
     index: 1
   bounds:
     m_Center: {x: 252.91, y: -0.58, z: 2}
-    m_Extent: {x: 46.035004, y: 0.7138889, z: 0.5}
+    m_Extent: {x: 46.035004, y: 0.7138889, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -611,30 +535,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 92.07001, y: 1.4277778}
   m_EdgeRadius: 0
---- !u!114 &2441422150157369673
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2693832824672017060}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
-  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
-  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  atlasRenderer: {fileID: 3083551894033079323}
-  repeatType: 0
-  ignoreParallax: 1
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  rightRenderer: {fileID: 0}
-  parallaxFactor: 0
-  worldPos: {x: 0, y: 0, z: 0}
-  pivotToMaxWorldDist: 0
-  minWorldToPivotDist: 0
 --- !u!1 &5068393425464305075
 GameObject:
   m_ObjectHideFlags: 0
@@ -645,7 +545,6 @@ GameObject:
   m_Component:
   - component: {fileID: 3806329923578194732}
   - component: {fileID: 7102859362464549161}
-  - component: {fileID: 8553008785412549320}
   m_Layer: 15
   m_Name: Grass
   m_TagString: Untagged
@@ -702,7 +601,7 @@ MonoBehaviour:
     index: 0
   bounds:
     m_Center: {x: 252.48, y: -0.91, z: 1}
-    m_Extent: {x: 48.592503, y: 0.35277778, z: 0.5}
+    m_Extent: {x: 48.592503, y: 0.35277778, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -860,30 +759,6 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 1, w: 1}
   worldWidth: 97.185005
   worldHeight: 0.70555556
---- !u!114 &8553008785412549320
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5068393425464305075}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
-  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
-  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  atlasRenderer: {fileID: 7102859362464549161}
-  repeatType: 0
-  ignoreParallax: 1
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  rightRenderer: {fileID: 0}
-  parallaxFactor: 0
-  worldPos: {x: 0, y: 0, z: 0}
-  pivotToMaxWorldDist: 0
-  minWorldToPivotDist: 0
 --- !u!1 &7425759775376924710
 GameObject:
   m_ObjectHideFlags: 0
@@ -894,6 +769,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7355965477580141084}
   - component: {fileID: 6700324006200157766}
+  - component: {fileID: 9077731152028950730}
   m_Layer: 0
   m_Name: Novograd Station
   m_TagString: Untagged
@@ -937,14 +813,32 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   station: {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
-  stationsData: {fileID: 11400000, guid: 73167d88c81ac4d4e98878bf248a72fe, type: 2}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
-  platformCollider: {fileID: 5364706768966122321}
   platformRenderer: {fileID: 3083551894033079323}
+--- !u!114 &9077731152028950730
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7425759775376924710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
+  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+  zoneStats: {fileID: 11400000, guid: fa0e41c06b686dc46aecf54c90ff03e4, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  atlasRenderer: {fileID: 3083551894033079323}
+  repeatType: 0
+  ignoreParallax: 1
+  camStats: {fileID: 0}
+  rightRenderer: {fileID: 0}
+  parallaxFactor: 0
+  worldPos: {x: 0, y: 0, z: 0}
+  pivotToMaxWorldDist: 0
+  minWorldToPivotDist: 0
 --- !u!1 &8483931072574100276
 GameObject:
   m_ObjectHideFlags: 0
@@ -955,7 +849,6 @@ GameObject:
   m_Component:
   - component: {fileID: 553272016925060896}
   - component: {fileID: 4793801951748300334}
-  - component: {fileID: 7835310342559316064}
   m_Layer: 0
   m_Name: Wire Fence
   m_TagString: Untagged
@@ -993,7 +886,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
   material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 6
+  spriteIndex: 5
   spriteMode: 0
   width: 15.04
   height: 1
@@ -1009,10 +902,10 @@ MonoBehaviour:
     uvSizeAndPos: {x: 0.107910156, y: 0.08911133, z: 0, w: 0.59033203}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 2.4555554, y: 2.0277777, z: 1}
-    index: 6
+    index: 5
   bounds:
     m_Center: {x: 253.31, y: 0.83, z: 17}
-    m_Extent: {x: 18.465776, y: 1.0138888, z: 0.5}
+    m_Extent: {x: 18.465776, y: 1.0138888, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -1034,30 +927,6 @@ MonoBehaviour:
   - {x: 15.04, y: 1, z: 1, w: 1}
   worldWidth: 36.931553
   worldHeight: 2.0277777
---- !u!114 &7835310342559316064
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8483931072574100276}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
-  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
-  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  atlasRenderer: {fileID: 4793801951748300334}
-  repeatType: 0
-  ignoreParallax: 1
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  rightRenderer: {fileID: 0}
-  parallaxFactor: 0
-  worldPos: {x: 0, y: 0, z: 0}
-  pivotToMaxWorldDist: 0
-  minWorldToPivotDist: 0
 --- !u!1 &8666024050932964070
 GameObject:
   m_ObjectHideFlags: 0
@@ -1068,7 +937,6 @@ GameObject:
   m_Component:
   - component: {fileID: 2623235295533687402}
   - component: {fileID: 4007731704267321407}
-  - component: {fileID: 6000836026063578786}
   m_Layer: 15
   m_Name: Grass (1)
   m_TagString: Untagged
@@ -1125,7 +993,7 @@ MonoBehaviour:
     index: 0
   bounds:
     m_Center: {x: 250.5, y: -1.14, z: 1}
-    m_Extent: {x: 48.592503, y: 0.35277778, z: 0.5}
+    m_Extent: {x: 48.592503, y: 0.35277778, z: 0.1}
   spriteMatrices:
   - e00: 0
     e01: 0
@@ -1283,27 +1151,3 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 1, w: 1}
   worldWidth: 97.185005
   worldHeight: 0.70555556
---- !u!114 &6000836026063578786
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8666024050932964070}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
-  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  zoneStats: {fileID: 11400000, guid: ef062d6666fe7764286fe019c7f7e27f, type: 2}
-  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  atlasRenderer: {fileID: 4007731704267321407}
-  repeatType: 0
-  ignoreParallax: 1
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  rightRenderer: {fileID: 0}
-  parallaxFactor: 0
-  worldPos: {x: 0, y: 0, z: 0}
-  pivotToMaxWorldDist: 0
-  minWorldToPivotDist: 0

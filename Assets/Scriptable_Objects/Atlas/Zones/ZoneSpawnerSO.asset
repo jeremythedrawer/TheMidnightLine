@@ -9,11 +9,15 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9d498eeb9d57f1b4ebd25da4e37fd14f, type: 3}
-  m_Name: ZoneSpawner_Settings
-  m_EditorClassIdentifier: Assembly-CSharp::SpawnerSettingsSO
-  currentTrip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
-  spawnerSize: {x: 144.6, y: 0.7, z: 0}
+  m_Script: {fileID: 11500000, guid: 2675ee69f5baca44e8e4b1624645e1c4, type: 3}
+  m_Name: ZoneSpawnerSO
+  m_EditorClassIdentifier: Assembly-CSharp::ZoneSpawnerSO
+  spawnerSize: {x: 177.4, y: 32, z: 0}
   spawnHeight: 0
   atlasCompute: {fileID: 7200000, guid: 5e20a7c0a199f8849b58bde36470bd9d, type: 3}
   material: {fileID: 2100000, guid: 5a41293c67f317d4ebbd5977cece7124, type: 2}
+  curBackgroundDataIndex: 0
+  spawnMaxPos: {x: 477.4, y: 46.477665, z: 64}
+  spawnMinPos: {x: 122.600006, y: -42.79, z: 0}
+  spawnCenter: {x: 300, y: 1.843832, z: 32}
+  spawnBoundsSize: {x: 354.8, y: 89.26767, z: 64}

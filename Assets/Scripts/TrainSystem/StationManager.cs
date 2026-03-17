@@ -6,7 +6,7 @@ public class StationManager : MonoBehaviour
 {
     public TripSO trip;
     public TrainStatsSO trainStats;
-    public ZoneSpawnerStatsSO spawnerStats;
+    public ZoneSpawnerSO spawner;
     public GameEventDataSO gameEventData;
 
     public float curMetersSpawnThreshold = float.MaxValue;
@@ -44,7 +44,7 @@ public class StationManager : MonoBehaviour
     private void SpawnStation()
     {
         Station nextStation = Instantiate(trip.curStation.station_prefab, null);
-        float stationXPos = spawnerStats.spawnMaxPos.x + (nextStation.transform.position.x - nextStation.platformRenderer.bounds.min.x);
+        float stationXPos = spawner.spawnMaxPos.x + (nextStation.transform.position.x - nextStation.platformRenderer.bounds.min.x);
         nextStation.transform.position = new Vector3(stationXPos, 0, 0);
         trip.curStation.hadSpawned = true;
     }
@@ -62,7 +62,7 @@ public class StationManager : MonoBehaviour
 
     private void InitOnTrainArrivedAtStartPosition()
     {
-        trainToMaxSpawnDist = spawnerStats.spawnMaxPos.x - trip.stations[0].metersPosition;
+        trainToMaxSpawnDist = spawner.spawnMaxPos.x - trip.stations[0].metersPosition;
     }
     private void SetStation()
     {

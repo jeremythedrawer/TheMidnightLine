@@ -7,7 +7,6 @@ using static AtlasSpawn;
 public class AtlasSO : ScriptableObject
 {
     public Texture2D texture;
-    public bool isParticleAtlas;
 
     [Header("Motion Settings")]
     public EntityMotionType entityMotionType;
@@ -17,15 +16,12 @@ public class AtlasSO : ScriptableObject
     public Color32 sliceColor = Color.blue;
 
     [Header("Particle Settings")]
-    public ZoneParticleType particleType;
+    public ZoneParticleType zoneType;
 
     [Header("Generated")]
     public MotionSprite[] motionSprites;
     public SimpleSprite[] simpleSprites;
     public SliceSprite[] slicedSprites;
-    public ParticleSprite[] particleSprites;
-    public Vector4[] particleUVSizeAndPosArray;
-    public Vector2[] worldSizesArray;
     public AtlasClip[] clips;
     public MarkerKey[] markers;
     

@@ -13,8 +13,8 @@ using static AtlasSpawn;
 public class TOTTRendererFeature : ScriptableRendererFeature
 {
     public MaterialIDSO materialIDs;
-    public AtlasSpawnerSettingsSO spawnerSettings;
-    public ZoneSpawnerStatsSO spawnerStats;
+    public TripSO trip;
+    public ZoneSpawnerSO zoneSpawner;
     public CameraStatsSO cameraStats;
 
     public Material matrixMaterial;
@@ -44,7 +44,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     public override void Create()
     {
         batchPass = new AtlasBatchPass(materialIDs, cameraStats);
-        particlePass = new AtlasParticlePass(spawnerSettings, spawnerStats, materialIDs);
+        particlePass = new AtlasParticlePass(trip, zoneSpawner, materialIDs);
         matrixPass = new MatrixPass(this);
         bloomPass = new BloomPass(this);
     }
@@ -154,13 +154,13 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     }
     private class AtlasParticlePass : ScriptableRenderPass
     {
-        private AtlasSpawnerSettingsSO zoneSpawnerSettings;
-        private ZoneSpawnerStatsSO zoneSpawnerStats;
-        public AtlasParticlePass(AtlasSpawnerSettingsSO settings, ZoneSpawnerStatsSO stats, MaterialIDSO matIDs)
+        private TripSO trip;
+        private ZoneSpawnerSO zoneSpawner;
+        public AtlasParticlePass(TripSO curTrip, ZoneSpawnerSO spawner, MaterialIDSO matIDs)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
-            zoneSpawnerSettings = settings;
-            zoneSpawnerStats = stats;
+            trip = curTrip;
+            zoneSpawner = spawner;
         }
 
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
@@ -180,14 +180,12 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
         private void ExecuteZoneParticles(RasterCommandBuffer cmd)
         {
-
-            for (int i = 0; i < zoneSpawnerStats.zoneSpawnerDataArray.Length; i++)
+            for (int i = 0; i < trip.zoneSpawnerData.Length; i++)
             {
-                ZoneSpawnerData zoneSpawnerData = zoneSpawnerStats.zoneSpawnerDataArray[i];
+                ZoneSpawnerData zoneSpawnerData = trip.zoneSpawnerData[i];
 
-                if (!zoneSpawnerData.zoneSpawnerData.active || zoneSpawnerData.zoneSpawnerData.particleBuffer == null) continue;
-
-                cmd.DrawProcedural(Matrix4x4.identity, zoneSpawnerSettings.material, shaderPass: 0, MeshTopology.Quads, MAX_VERTEX_COUNT, 1, zoneSpawnerData.zoneSpawnerData.mpb);
+                if (!zoneSpawnerData.active) continue;
+                cmd.DrawProcedural(Matrix4x4.identity, zoneSpawner.material, shaderPass: 0, MeshTopology.Quads, zoneSpawnerData.particleCount * 4, 1, zoneSpawnerData.mpb);
             }
         }
     }

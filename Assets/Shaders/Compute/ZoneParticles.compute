@@ -31,14 +31,14 @@ static const float MID_SIZE = 9.0;
 static const float BACK_MIN = 58.0;
 static const float BACK_SIZE = 6.0;
 
-static const float F0_OFFSET = 1.0;
-static const float M0_OFFSET = 2.0;
-static const float M1_OFFSET = 3.0;
-static const float M2_OFFSET = 4.0;
-static const float M3_OFFSET = 5.0;
-static const float B0_OFFSET = 6.0;
-static const float B1_OFFSET = 7.0;
-static const float B2_OFFSET = 8.0;
+static const float F0_ID = 1.0;
+static const float M0_ID = 2.0;
+static const float M1_ID = 3.0;
+static const float M2_ID = 4.0;
+static const float M3_ID = 5.0;
+static const float B0_ID = 6.0;
+static const float B1_ID = 7.0;
+static const float B2_ID = 8.0;
 
 RWStructuredBuffer<ZoneOutput> _Foreground0;
 RWStructuredBuffer<ZoneOutput> _Middleground0;
@@ -48,6 +48,24 @@ RWStructuredBuffer<ZoneOutput> _Middleground3;
 RWStructuredBuffer<ZoneOutput> _Background0;
 RWStructuredBuffer<ZoneOutput> _Background1;
 RWStructuredBuffer<ZoneOutput> _Background2;
+
+uint _F0Active;
+uint _M0Active;
+uint _M1Active;
+uint _M2Active;
+uint _M3Active;
+uint _B0Active;
+uint _B1Active;
+uint _B2Active;
+
+RWStructuredBuffer<uint> _F0DeadCount;
+RWStructuredBuffer<uint> _M0DeadCount;
+RWStructuredBuffer<uint> _M1DeadCount;
+RWStructuredBuffer<uint> _M2DeadCount;
+RWStructuredBuffer<uint> _M3DeadCount;
+RWStructuredBuffer<uint> _B0DeadCount;
+RWStructuredBuffer<uint> _B1DeadCount;
+RWStructuredBuffer<uint> _B2DeadCount;
 
 uint _BackgroundMaskCount;
 
@@ -62,11 +80,12 @@ uint _BackgroundParticleCount;
 uniform float _CamVelocity;
 uniform float _TrainVelocity;
 
+uint _Awake;
 
 void InitOutput(int id, int particleCount, float minPos, float sizeRange, float offset, inout ZoneOutput output)
 {
     float normID = (float) id / (float) particleCount;
-    
+    output = (ZoneOutput) 0;
     output.position.z = minPos + (normID * sizeRange);
     output.position.y = 0;
     output.parallaxFactor = ((_SpawnerMaxPos.z - output.position.z) / _SpawnerMaxPos.z);
@@ -77,10 +96,18 @@ void InitOutput(int id, int particleCount, float minPos, float sizeRange, float 
     output.rand01 = HashIntTo01Float(output.randID);
     output.alive = 1;
     
-    output.position.x = _SpawnerMinPos.x + (_SpawnerSize.x * output.rand01);
+    output.position.x = _SpawnerSize.x * output.rand01;
+    if (_Awake == 1)
+    {
+        output.position.x += _SpawnerMaxPos.x;
+    }
+    else
+    {
+        output.position.x += _SpawnerMinPos.x;
+    }
 }
 
-void UpdateOutput(inout ZoneOutput output)
+void UpdateOutput(inout ZoneOutput output, int spawnerActive, RWStructuredBuffer<uint> deadCount)
 {
     if (output.alive == 1)
     {
@@ -88,10 +115,14 @@ void UpdateOutput(inout ZoneOutput output)
         output.position.x -= velocity;
         if (output.position.x < _SpawnerMinPos.x)
         {
+            if (spawnerActive == 0)
+            {
+                InterlockedAdd(deadCount[0], 1);
+            }
             output.alive = 0;
         }
     }
-    else
+    else if (spawnerActive == 1)
     {
         output.position.x = _SpawnerMaxPos.x;
         output.alive = 1;
@@ -106,8 +137,7 @@ void CSForeground0_Init(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Foreground0[id];
-    InitOutput(id, _ForegroundParticleCount, FORE_MIN, FORE_SIZE, F0_OFFSET, output);
-    
+    InitOutput(id, _ForegroundParticleCount, FORE_MIN, FORE_SIZE, F0_ID, output);
     _Foreground0[id] = output;
 
 }
@@ -119,8 +149,7 @@ void CSMiddleground0_Init(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Middleground0[id];
-    InitOutput(id, _MiddlegroundParticleCount, MID_MIN, MID_SIZE, M0_OFFSET, output);
-    
+    InitOutput(id, _MiddlegroundParticleCount, MID_MIN, MID_SIZE, M0_ID, output);
     _Middleground0[id] = output;
 }
 
@@ -131,7 +160,7 @@ void CSMiddleground1_Init(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Middleground1[id];
-    InitOutput(id, _MiddlegroundParticleCount, MID_MIN, MID_SIZE, M1_OFFSET, output);
+    InitOutput(id, _MiddlegroundParticleCount, MID_MIN, MID_SIZE, M1_ID, output);
     _Middleground1[id] = output;
 }
 
@@ -142,7 +171,7 @@ void CSMiddleground2_Init(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Middleground2[id];
-    InitOutput(id, _MiddlegroundParticleCount, MID_MIN, MID_SIZE, M2_OFFSET, output);
+    InitOutput(id, _MiddlegroundParticleCount, MID_MIN, MID_SIZE, M2_ID, output);
     _Middleground2[id] = output;
 }
 
@@ -153,7 +182,7 @@ void CSMiddleground3_Init(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Middleground3[id];
-    InitOutput(id, _MiddlegroundParticleCount, MID_MIN, MID_SIZE, M3_OFFSET, output);
+    InitOutput(id, _MiddlegroundParticleCount, MID_MIN, MID_SIZE, M3_ID, output);
     _Middleground3[id] = output;
 }
 
@@ -164,7 +193,7 @@ void CSBackground0_Init(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Background0[id];
-    InitOutput(id, _BackgroundParticleCount, BACK_MIN, BACK_SIZE, B0_OFFSET, output);
+    InitOutput(id, _BackgroundParticleCount, BACK_MIN, BACK_SIZE, B0_ID, output);
     _Background0[id] = output;
 }
 
@@ -175,7 +204,7 @@ void CSBackground1_Init(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Background1[id];
-    InitOutput(id, _BackgroundParticleCount, BACK_MIN, BACK_SIZE, B1_OFFSET, output);
+    InitOutput(id, _BackgroundParticleCount, BACK_MIN, BACK_SIZE, B1_ID, output);
     _Background1[id] = output;
 }
 
@@ -186,7 +215,7 @@ void CSBackground2_Init(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Background2[id];
-    InitOutput(id, _BackgroundParticleCount, BACK_MIN, BACK_SIZE, B2_OFFSET, output);
+    InitOutput(id, _BackgroundParticleCount, BACK_MIN, BACK_SIZE, B2_ID, output);
     _Background2[id] = output;
 }
 
@@ -198,7 +227,7 @@ void CSForeground0_Update(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Foreground0[id];
-    UpdateOutput(output);
+    UpdateOutput(output, _F0Active, _F0DeadCount);
     _Foreground0[id] = output;
 
 }
@@ -210,7 +239,7 @@ void CSMiddleground0_Update(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Middleground0[id];
-    UpdateOutput(output);
+    UpdateOutput(output, _M0Active, _M0DeadCount);
     
     _Middleground0[id] = output;
 }
@@ -222,7 +251,7 @@ void CSMiddleground1_Update(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Middleground1[id];
-    UpdateOutput(output);
+    UpdateOutput(output, _M1Active, _M1DeadCount);
     _Middleground1[id] = output;
 }
 
@@ -233,7 +262,7 @@ void CSMiddleground2_Update(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Middleground2[id];
-    UpdateOutput(output);
+    UpdateOutput(output, _M2Active, _M2DeadCount);
     _Middleground2[id] = output;
 }
 
@@ -244,7 +273,7 @@ void CSMiddleground3_Update(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Middleground3[id];
-    UpdateOutput(output);
+    UpdateOutput(output, _M3Active, _M3DeadCount);
     _Middleground3[id] = output;
 }
 
@@ -255,7 +284,7 @@ void CSBackground0_Update(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Background0[id];
-    UpdateOutput(output);
+    UpdateOutput(output, _B0Active, _B0DeadCount);
     _Background0[id] = output;
 }
 
@@ -266,7 +295,7 @@ void CSBackground1_Update(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Background1[id];
-    UpdateOutput(output);
+    UpdateOutput(output, _B1Active, _B1DeadCount);
     _Background1[id] = output;
 }
 
@@ -277,6 +306,6 @@ void CSBackground2_Update(uint id : SV_DispatchThreadID)
         return;
     
     ZoneOutput output = _Background2[id];
-    UpdateOutput(output);
+    UpdateOutput(output, _B2Active, _B2DeadCount);
     _Background2[id] = output;
 }

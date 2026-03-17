@@ -1,37 +1,40 @@
 fileFormatVersion: 2
-guid: 7491fecf88ffa984fb4ae1ed56e2acea
+guid: 6327fa5903065b94f9711e3706d83765
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: 7921789032781881406
-    second: tex_atlas_trees_0
+      213: 7025895033478152566
+    second: tex_atlas_apartments_LOD0_0
   - first:
-      213: -5507296331469552970
-    second: tex_atlas_trees_1
+      213: 1434213547419224766
+    second: tex_atlas_apartments_LOD0_1
   - first:
-      213: 7615263587527868803
-    second: tex_atlas_trees_2
+      213: 6868459222819584542
+    second: tex_atlas_apartments_LOD0_2
   - first:
-      213: -5717700372390577091
-    second: tex_atlas_trees_3
+      213: 6188469974288626849
+    second: tex_atlas_apartments_LOD0_3
   - first:
-      213: 8088166236023710356
-    second: tex_atlas_trees_4
+      213: 3091198186968614690
+    second: tex_atlas_apartments_LOD0_4
   - first:
-      213: 4263332956076137653
-    second: tex_atlas_trees_5
+      213: 3866659986807842843
+    second: tex_atlas_apartments_LOD0_5
   - first:
-      213: 2299169682147552885
-    second: tex_atlas_trees_6
+      213: 7998722254329099012
+    second: tex_atlas_apartments_LOD0_6
   - first:
-      213: 6698389203891583207
-    second: tex_atlas_trees_7
+      213: -663913075105185438
+    second: tex_atlas_apartments_LOD0_7
   - first:
-      213: 6306468429477895750
-    second: tex_atlas_trees_8
+      213: -2805868303289195498
+    second: tex_atlas_apartments_LOD0_8
   - first:
-      213: 8583313520081560935
-    second: tex_atlas_trees_9
+      213: 5836011357254119587
+    second: tex_atlas_apartments_LOD0_9
+  - first:
+      213: 8693915044521318278
+    second: tex_atlas_apartments_LOD0_10
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -80,11 +83,11 @@ TextureImporter:
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 1
+  spriteGenerateFallbackPhysicsShape: 0
   alphaUsage: 1
-  alphaIsTransparency: 1
+  alphaIsTransparency: 0
   spriteTessellationDetail: -1
-  textureType: 8
+  textureType: 0
   textureShape: 1
   singleChannelComponent: 0
   flipbookRows: 1
@@ -140,13 +143,101 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: tex_atlas_trees_0
+      name: tex_atlas_apartments_LOD0_0
+      rect:
+        serializedVersion: 2
+        x: 7
+        y: 2819
+        width: 566
+        height: 1277
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 67185a3ee4ef08160800000000000000
+      internalID: 7025895033478152566
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_apartments_LOD0_1
+      rect:
+        serializedVersion: 2
+        x: 592
+        y: 2816
+        width: 691
+        height: 1163
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ebac9f16f9957e310800000000000000
+      internalID: 1434213547419224766
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_apartments_LOD0_2
+      rect:
+        serializedVersion: 2
+        x: 1329
+        y: 2810
+        width: 1290
+        height: 1199
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e1aba62c54ba15f50800000000000000
+      internalID: 6868459222819584542
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_apartments_LOD0_3
+      rect:
+        serializedVersion: 2
+        x: 2879
+        y: 2721
+        width: 905
+        height: 1357
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 1a4f4a857acd1e550800000000000000
+      internalID: 6188469974288626849
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_apartments_LOD0_4
       rect:
         serializedVersion: 2
         x: 0
-        y: 3643
-        width: 530
-        height: 453
+        y: 1502
+        width: 1263
+        height: 1165
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -155,20 +246,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e30ac846729dfed60800000000000000
-      internalID: 7921789032781881406
+      spriteID: 22788988f5426ea20800000000000000
+      internalID: 3091198186968614690
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tex_atlas_trees_1
+      name: tex_atlas_apartments_LOD0_5
       rect:
         serializedVersion: 2
-        x: 546
-        y: 3684
-        width: 485
-        height: 409
+        x: 1413
+        y: 1522
+        width: 1042
+        height: 1132
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -177,20 +268,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 6b202f95a272293b0800000000000000
-      internalID: -5507296331469552970
+      spriteID: b18e5e485c229a530800000000000000
+      internalID: 3866659986807842843
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tex_atlas_trees_2
+      name: tex_atlas_apartments_LOD0_6
       rect:
         serializedVersion: 2
-        x: 1053
-        y: 3620
-        width: 436
-        height: 476
+        x: 2554
+        y: 1522
+        width: 523
+        height: 1136
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -199,20 +290,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 381c09da2e9dea960800000000000000
-      internalID: 7615263587527868803
+      spriteID: 4033c42e28b210f60800000000000000
+      internalID: 7998722254329099012
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tex_atlas_trees_3
+      name: tex_atlas_apartments_LOD0_7
       rect:
         serializedVersion: 2
-        x: 1549
-        y: 3699
-        width: 342
-        height: 392
+        x: 3238
+        y: 1522
+        width: 800
+        height: 1124
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -221,20 +312,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: d3c7a831ec5a6a0b0800000000000000
-      internalID: -5717700372390577091
+      spriteID: 2614e94639e49c6f0800000000000000
+      internalID: -663913075105185438
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tex_atlas_trees_4
+      name: tex_atlas_apartments_LOD0_8
       rect:
         serializedVersion: 2
-        x: 1926
-        y: 3561
-        width: 601
-        height: 515
+        x: 56
+        y: 177
+        width: 1354
+        height: 1248
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -243,20 +334,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 4926086b650fe3070800000000000000
-      internalID: 8088166236023710356
+      spriteID: 6146befe4ad8f09d0800000000000000
+      internalID: -2805868303289195498
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tex_atlas_trees_5
+      name: tex_atlas_apartments_LOD0_9
       rect:
         serializedVersion: 2
-        x: 2532
-        y: 3772
-        width: 280
-        height: 319
+        x: 1423
+        y: 154
+        width: 1442
+        height: 1318
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -265,20 +356,20 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 5bc52264cb66a2b30800000000000000
-      internalID: 4263332956076137653
+      spriteID: 3a0f64ea86dadf050800000000000000
+      internalID: 5836011357254119587
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tex_atlas_trees_6
+      name: tex_atlas_apartments_LOD0_10
       rect:
         serializedVersion: 2
-        x: 2838
-        y: 3728
-        width: 332
-        height: 363
+        x: 3070
+        y: 170
+        width: 1012
+        height: 1341
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -287,74 +378,8 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 57ea0c6f4aa48ef10800000000000000
-      internalID: 2299169682147552885
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: tex_atlas_trees_7
-      rect:
-        serializedVersion: 2
-        x: 3193
-        y: 3772
-        width: 371
-        height: 314
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 7e8f449cd7575fc50800000000000000
-      internalID: 6698389203891583207
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: tex_atlas_trees_8
-      rect:
-        serializedVersion: 2
-        x: 3588
-        y: 3723
-        width: 424
-        height: 363
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 64ede3e9f93158750800000000000000
-      internalID: 6306468429477895750
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: tex_atlas_trees_9
-      rect:
-        serializedVersion: 2
-        x: 65
-        y: 3263
-        width: 397
-        height: 339
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 765e4409b2e0e1770800000000000000
-      internalID: 8583313520081560935
+      spriteID: 6871e10bbadf6a870800000000000000
+      internalID: 8693915044521318278
       vertices: []
       indices: 
       edges: []
@@ -373,16 +398,17 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      tex_atlas_trees_0: 7921789032781881406
-      tex_atlas_trees_1: -5507296331469552970
-      tex_atlas_trees_2: 7615263587527868803
-      tex_atlas_trees_3: -5717700372390577091
-      tex_atlas_trees_4: 8088166236023710356
-      tex_atlas_trees_5: 4263332956076137653
-      tex_atlas_trees_6: 2299169682147552885
-      tex_atlas_trees_7: 6698389203891583207
-      tex_atlas_trees_8: 6306468429477895750
-      tex_atlas_trees_9: 8583313520081560935
+      tex_atlas_apartments_LOD0_0: 7025895033478152566
+      tex_atlas_apartments_LOD0_1: 1434213547419224766
+      tex_atlas_apartments_LOD0_10: 8693915044521318278
+      tex_atlas_apartments_LOD0_2: 6868459222819584542
+      tex_atlas_apartments_LOD0_3: 6188469974288626849
+      tex_atlas_apartments_LOD0_4: 3091198186968614690
+      tex_atlas_apartments_LOD0_5: 3866659986807842843
+      tex_atlas_apartments_LOD0_6: 7998722254329099012
+      tex_atlas_apartments_LOD0_7: -663913075105185438
+      tex_atlas_apartments_LOD0_8: -2805868303289195498
+      tex_atlas_apartments_LOD0_9: 5836011357254119587
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

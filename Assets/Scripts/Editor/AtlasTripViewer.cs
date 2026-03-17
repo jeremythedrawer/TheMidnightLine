@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using static AtlasSpawn;
@@ -10,12 +13,15 @@ public class AtlasTripViewer : EditorWindow
     const float padding = 100;
     const float zonePadding = 10;
 
-    private int selectedZoneIndex;
+    private int selectedIndex_zone;
+    private int selectedIndex_zoneSpawner;
     private int dragOffsetZoneMetersLength;
     private int dragOffsetZoneMetersStart;
 
-    private int selectedStationIndex;
+    private int selectedIndex_station;
     private int dragOffsetStation;
+
+    private bool isAdjustingMetersStart;
     [MenuItem("Tools/Atlas Trip Viewer")]
     private static void Open()
     {
@@ -40,7 +46,6 @@ public class AtlasTripViewer : EditorWindow
         EditorGUILayout.BeginHorizontal();
         DrawGraph();
         EditorGUILayout.EndHorizontal();
-
     }
     private void DrawGraph()
     {
@@ -68,61 +73,80 @@ public class AtlasTripViewer : EditorWindow
             float curX = graphRect.xMin - (padding * 0.5f);
             float curY = (graphRect.yMin + t * graphRect.height) + yOffset;
             Rect spawnerLabelRect = new Rect(curX, curY, 20, 200);
-            GUI.Label(spawnerLabelRect, ((AtlasSpawn.ZoneSpawner)i).ToString()[0].ToString(), spawnerLabelStyle);
+            GUI.Label(spawnerLabelRect, ((AtlasSpawn.ZoneArea)i).ToString()[0].ToString(), spawnerLabelStyle);
         }
 
         GUIStyle zoneLabelStyle = new GUIStyle(EditorStyles.boldLabel) { alignment = TextAnchor.UpperLeft, normal = { textColor = Color.black } };
         Event e = Event.current;
-        for (int i = 0; i < trip.zones.Length; i++)
+        for (int i = 0; i < trip.zoneSpawnerData.Length; i++)
         {
-            Zone zone = trip.zones[i];
-
-            float zoneWidth = ((float)zone.metersLength / (float)trip.tripMeters) * graphRect.width;
-            float zoneHeight = (graphRect.height / (float)ZONE_SPAWNER_COUNT) - (zonePadding * 2);
-
-            float zoneX = graphRect.xMin + ((float)zone.metersStart / (float)trip.tripMeters) * graphRect.width;
-            float zoneY = (graphRect.yMin + ((float)zone.spawnerArea / ZONE_SPAWNER_COUNT) * graphRect.height) + zonePadding;
-
-            Rect zoneRect = new Rect(zoneX, zoneY, zoneWidth, zoneHeight);
-
-            Color zoneColor = (selectedZoneIndex == i) ? Color.hotPink : Color.lightSeaGreen;
-            Handles.DrawSolidRectangleWithOutline(zoneRect, zoneColor, Color.black);
-            Rect zoneLabelRect = new Rect(zoneRect.xMin, zoneRect.yMin, 200, 20);
-            GUI.Label(zoneLabelRect, zone.atlas.particleType.ToString(), zoneLabelStyle);
-
-            if (e.type == EventType.MouseDown && zoneRect.Contains(e.mousePosition))
+            ZoneSpawnerData zoneSpawnerData = trip.zoneSpawnerData[i];
+            for (int j = 0; j < zoneSpawnerData.zones.Length; j++)
             {
-                selectedStationIndex = -1;
-                selectedZoneIndex = i;
-                int mouseMeters = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.tripMeters);
-                dragOffsetZoneMetersStart = mouseMeters - zone.metersStart;
-                dragOffsetZoneMetersLength = mouseMeters - zone.metersLength;
+                ref Zone zone = ref zoneSpawnerData.zones[j];
 
-            }
-            if (selectedZoneIndex == i && e.type == EventType.MouseDrag)
-            {
-                int mouseMeters = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.tripMeters);
-                if (e.mousePosition.x < zoneRect.center.x)
+                if (zone.atlas == null) continue;
+                float zoneMetersLength = (float)(zone.metersEnd - zone.metersStart);
+                float zoneWidth = (zoneMetersLength / (float)trip.tripMeters) * graphRect.width;
+                float zoneHeight = (graphRect.height / (float)ZONE_SPAWNER_COUNT) - (zonePadding * 2);
+
+                float zoneX = graphRect.xMin + ((float)zone.metersStart / (float)trip.tripMeters) * graphRect.width;
+                float zoneY = (graphRect.yMin + ((float)zoneSpawnerData.area / ZONE_SPAWNER_COUNT) * graphRect.height) + zonePadding;
+
+                Rect zoneRect = new Rect(zoneX, zoneY, zoneWidth, zoneHeight);
+
+                Color zoneColor = (selectedIndex_zoneSpawner == i && selectedIndex_zone == j) ? Color.hotPink : Color.lightSeaGreen;
+                Handles.DrawSolidRectangleWithOutline(zoneRect, zoneColor, Color.black);
+                Rect zoneLabelRect = new Rect(zoneRect.xMin, zoneRect.yMin, 200, 20);
+                GUI.Label(zoneLabelRect, zone.atlas.zoneType.ToString(), zoneLabelStyle);
+
+
+                if (e.type == EventType.MouseDown && zoneRect.Contains(e.mousePosition))
                 {
-                    zone.metersStart = mouseMeters - dragOffsetZoneMetersStart;
-                    zone.metersStart = Mathf.Clamp(zone.metersStart, 0, trip.tripMeters - zone.metersLength);
+                    selectedIndex_station = -1;
+                    selectedIndex_zoneSpawner = i;
+                    selectedIndex_zone = j;
+                    int mouseMeters = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.tripMeters);
+                    dragOffsetZoneMetersStart = mouseMeters - zone.metersStart;
+                    dragOffsetZoneMetersLength = mouseMeters - (int)zoneMetersLength;
+                    isAdjustingMetersStart = e.mousePosition.x < zoneRect.center.x;
                 }
-                else
+                if (selectedIndex_zoneSpawner == i && selectedIndex_zone == j && e.type == EventType.MouseDrag)
                 {
-                    zone.metersLength = mouseMeters - dragOffsetZoneMetersLength;
-                    zone.metersLength = Mathf.Clamp(zone.metersLength, 0, trip.tripMeters - zone.metersStart);
+                    int mouseMeters = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.tripMeters);
+                    if (isAdjustingMetersStart)
+                    {
+                        zone.metersStart = mouseMeters - dragOffsetZoneMetersStart;
+                        zone.metersStart = Mathf.Clamp(zone.metersStart, 0, zone.metersEnd);
+                    }
+                    else
+                    {
+                        zone.metersEnd = zone.metersStart + (mouseMeters - dragOffsetZoneMetersLength);
+                        zone.metersEnd = Mathf.Clamp(zone.metersEnd, zone.metersStart, trip.tripMeters);
+                    }
+
+                    EditorUtility.SetDirty(trip);
+                    Repaint();
                 }
 
-                trip.zones[i] = zone;
-                EditorUtility.SetDirty(trip);
-                Repaint();
+                if (e.type == EventType.MouseUp)
+                {
+                    zone.zoneUVSizeAndPosArray = new Vector4[zone.atlas.simpleSprites.Length];
+                    zone.zoneWorldSizesArray = new Vector2[zone.atlas.simpleSprites.Length];
+                    for (int k = 0; k < zone.atlas.simpleSprites.Length; k++)
+                    {
+                        zone.zoneUVSizeAndPosArray[k] = zone.atlas.simpleSprites[k].uvSizeAndPos;
+                        zone.zoneWorldSizesArray[k] = zone.atlas.simpleSprites[k].worldSize;
+                    }
+
+                    if (selectedIndex_zone == i)
+                    {
+                        selectedIndex_zone = -1;
+                        e.Use();
+                    }
+                }
             }
 
-            if (e.type == EventType.MouseUp && selectedZoneIndex == i)
-            {
-                selectedZoneIndex = -1;
-                e.Use();
-            }
         }
 
         for (int i = 0; i < trip.stations.Length; i++)
@@ -132,54 +156,32 @@ public class AtlasTripViewer : EditorWindow
             float posX = graphRect.xMin + ((float)selectedStation.metersPosition / (float)trip.tripMeters) * graphRect.width;
             float posY = graphRect.yMin - 20;
             Rect stationRect = new Rect(posX, posY, rectSize, rectSize);
-            Color zoneColor = (selectedStationIndex == i) ? Color.orangeRed : Color.lawnGreen;
+            Color zoneColor = (selectedIndex_station == i) ? Color.orangeRed : Color.lawnGreen;
             Handles.DrawSolidRectangleWithOutline(stationRect, zoneColor, Color.black);
 
             Rect stationLabelRect = new Rect(stationRect.xMin, stationRect.yMin, 200, 20);
             GUI.Label(stationLabelRect, selectedStation.station_prefab.name, zoneLabelStyle);
             if (e.type == EventType.MouseDown && stationRect.Contains(e.mousePosition))
             {
-                selectedZoneIndex = -1;
-                selectedStationIndex = i;
+                selectedIndex_zone = -1;
+                selectedIndex_station = i;
                 int mouseMeters = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.tripMeters);
                 dragOffsetStation = mouseMeters - selectedStation.metersPosition;
             }
-            if (selectedStationIndex == i && e.type == EventType.MouseDrag)
+            if (selectedIndex_station == i && e.type == EventType.MouseDrag)
             {
                 int mouseMeters = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.tripMeters);
                 selectedStation.metersPosition = mouseMeters - dragOffsetStation;
                 selectedStation.metersPosition = Mathf.Clamp(selectedStation.metersPosition, 0, trip.tripMeters);
 
-                int stationAheadIndex = selectedStationIndex + 1;
-                int stationBehindIndex = selectedStationIndex - 1;
-                if (stationAheadIndex < trip.stations.Length)
-                {
-                    StationSO stationAhead = trip.stations[stationAheadIndex];
-                    if (selectedStation.metersPosition > stationAhead.metersPosition)
-                    {
-                        trip.stations[stationAheadIndex] = selectedStation;
-                        trip.stations[selectedStationIndex] = stationAhead;
-                        selectedStationIndex = stationAheadIndex;
-                    }
-                }
-                if (stationBehindIndex >= 0)
-                {
-                    StationSO stationBehind = trip.stations[stationBehindIndex];
-                    if (selectedStation.metersPosition < stationBehind.metersPosition)
-                    {
-                        trip.stations[stationBehindIndex] = selectedStation;
-                        trip.stations[selectedStationIndex] = stationBehind;
-                        selectedStationIndex = stationBehindIndex;
-                    }
-                }
-
                 EditorUtility.SetDirty(trip);
                 Repaint();
             }
 
-            if (e.type == EventType.MouseUp && selectedStationIndex == i)
+            if (e.type == EventType.MouseUp && selectedIndex_station == i)
             {
-                selectedStationIndex = -1;
+                trip.stations =  trip.stations.OrderBy(station => station.metersPosition).ToArray();
+                selectedIndex_station = -1;
                 e.Use();
             }
         }

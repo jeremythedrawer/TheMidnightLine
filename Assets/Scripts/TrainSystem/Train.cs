@@ -50,6 +50,8 @@ public class Train : MonoBehaviour
         trainCTS?.Cancel();
         trainCTS?.Dispose();
         trainCTS = null;
+
+        stats.metersTravelled = 0;
     }
     private void Start()
     {

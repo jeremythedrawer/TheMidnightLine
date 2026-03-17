@@ -46,7 +46,6 @@ Shader "Custom/s_zoneParticles"
 
                 uint particleID = vertexID / 4;
                 ZoneOutput p = _Particles[particleID];
-
                 uint cornerID = vertexID % 4;
                 float2 quadOffsets[4] = 
                 {

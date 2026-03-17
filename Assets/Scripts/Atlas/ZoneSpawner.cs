@@ -4,70 +4,108 @@ using static AtlasSpawn;
 [ExecuteAlways]
 public class ZoneSpawner : MonoBehaviour
 {
-    [SerializeField] TrainStatsSO trainStats;
-    [SerializeField] CameraSettingsSO camSettings;
-    [SerializeField] CameraStatsSO camStats;
-    [SerializeField] MaterialIDSO materialIDs;
-    [SerializeField] AtlasSpawnerSettingsSO spawnerSettings;
-    [SerializeField] ZoneSpawnerStatsSO spawnerStats;
-    [SerializeField] TripSO trip;
-    [SerializeField] GameEventDataSO gameData;
-    [SerializeField] SpyStatsSO spyStats;
+    public ZoneArea area;
 
-    private void OnEnable()
+    public MaterialIDSO materialIDs;
+    public ZoneSpawnerSO spawner;
+    public TripSO trip;
+    public TrainStatsSO trainStats;
+
+    [Header("Generated")]
+    public ZoneSpawnerData zoneSpawnerData;
+    public Zone curZone;
+    public int curZoneIndex;
+    public uint[] deadCounter;
+    public GraphicsBuffer uvSizeAndPositionBuffer;
+    public GraphicsBuffer worldSizeBuffer;
+    public ComputeBuffer deadCountBuffer;
+    public ComputeBuffer particleBuffer;
+
+    private void OnDisable()
     {
-        InitializeBoundParameters();
-        InitializeZoneCompute(spawnerSettings.atlasCompute, materialIDs, spawnerStats);
-        spawnerStats.zoneSpawnerDataArray = InitializeZoneSpawnData(spawnerSettings.atlasCompute, materialIDs);
-        //spawnerSettings.currentTrip.zoneQueue = SetZoneQueue(spawnerSettings.currentTrip);
-        //Zone nextZone = spawnerSettings.currentTrip.zoneQueue.Dequeue(); // TODO: This is just to show what the pattern should be at runtime
-        for (int i = 0; i < trip.zones.Length; i++)
+        Dispose();
+    }
+    private void Update()
+    {
+#if UNITY_EDITOR
+        if (!Application.isPlaying) return;
+#endif
+        if (zoneSpawnerData.zones.Length == 0) return;
+        ChangeZone();
+
+
+        if (trainStats.metersTravelled >= curZone.metersEnd && zoneSpawnerData.active)
         {
-            if (trip.zones[i].metersStart <= trainStats.metersTravelled)
+            spawner.atlasCompute.SetInt(ACTIVE_STRINGS[(int)area], 0);
+            deadCountBuffer.GetData(deadCounter);
+            if (deadCounter[0] == zoneSpawnerData.particleCount)
             {
-                ChangeZoneSpawner(trip.zones[i], materialIDs, spawnerStats, spawnerSettings.atlasCompute);
+
+                curZoneIndex++;
+                zoneSpawnerData.active = false;
+                if (curZoneIndex < zoneSpawnerData.zones.Length)
+                {
+                    curZone = zoneSpawnerData.zones[curZoneIndex];
+                }
+                else
+                {
+                    gameObject.SetActive(false);
+                }
             }
         }
 
+        spawner.atlasCompute.Dispatch(zoneSpawnerData.kernelID_update, zoneSpawnerData.computeGroupSize, 1, 1);
     }
-    private void OnDisable()
+    public void InitializeZoneSpawnData()
     {
-        ReleaseBuffers(spawnerStats);
+        zoneSpawnerData = trip.zoneSpawnerData[(int)area];
+        if (zoneSpawnerData.zones.Length == 0) return;
+        curZone = zoneSpawnerData.zones[curZoneIndex];
+
+        zoneSpawnerData.mpb = new MaterialPropertyBlock();
+        particleBuffer = new ComputeBuffer(PARTICLE_COUNTS[(int)area], ZONE_STRIDE);
+        deadCountBuffer = new ComputeBuffer(1, INT_SIZE);
+
+        zoneSpawnerData.kernelID_init = spawner.atlasCompute.FindKernel(INIT_KERNEL_STRINGS[(int)area]);
+        zoneSpawnerData.kernelID_update = spawner.atlasCompute.FindKernel(UPDATE_KERNEL_STRINGS[(int)area]);
+        zoneSpawnerData.computeGroupSize = Mathf.CeilToInt(PARTICLE_COUNTS[(int)area] / (float)THREADS_PER_GROUP);
+        zoneSpawnerData.particleCount = PARTICLE_COUNTS[(int)area];
+
+        spawner.atlasCompute.SetBuffer(zoneSpawnerData.kernelID_init, BUFFER_STRINGS[(int)area], particleBuffer);
+        spawner.atlasCompute.SetBuffer(zoneSpawnerData.kernelID_update, BUFFER_STRINGS[(int)area], particleBuffer);
+        spawner.atlasCompute.SetBuffer(zoneSpawnerData.kernelID_update, DEAD_COUNT_STRINGS[(int)area], deadCountBuffer);
+        zoneSpawnerData.mpb.SetBuffer(materialIDs.ids.particles, particleBuffer);
+        ChangeZone();
     }
-
-    private void OnDestroy()
+    private void ChangeZone()
     {
-        ReleaseBuffers(spawnerStats);
+        if (trainStats.metersTravelled < curZone.metersStart || zoneSpawnerData.active) return;
+
+        uvSizeAndPositionBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, curZone.atlas.simpleSprites.Length, FLOAT4_SIZE);
+        uvSizeAndPositionBuffer.SetData(curZone.zoneUVSizeAndPosArray);
+
+        worldSizeBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, curZone.atlas.simpleSprites.Length, FLOAT2_SIZE);
+        worldSizeBuffer.SetData(curZone.zoneWorldSizesArray);
+
+        zoneSpawnerData.mpb.SetInt(materialIDs.ids.spriteCount, curZone.atlas.simpleSprites.Length);
+        zoneSpawnerData.mpb.SetBuffer(materialIDs.ids.uvSizeAndPos, uvSizeAndPositionBuffer);
+        zoneSpawnerData.mpb.SetBuffer("_WorldSize", worldSizeBuffer);
+        zoneSpawnerData.mpb.SetTexture(materialIDs.ids.atlasTexture, curZone.atlas.texture);
+        deadCounter = new uint[1];
+        zoneSpawnerData.active = true;
+
+        deadCountBuffer.SetData(deadCounter);
+
+        spawner.atlasCompute.SetInt(ACTIVE_STRINGS[(int)area], 1);
+        spawner.atlasCompute.SetBuffer(zoneSpawnerData.kernelID_update, DEAD_COUNT_STRINGS[(int)area], deadCountBuffer);
+        spawner.atlasCompute.Dispatch(zoneSpawnerData.kernelID_init, zoneSpawnerData.computeGroupSize, 1, 1);
     }
-
-    private void Update()
+    public void Dispose()
     {
-        UpdateZoneParticles(spawnerStats, spawnerSettings.atlasCompute, camStats, spyStats, trainStats);
-    }
-    private void InitializeBoundParameters()
-    {
-        float camMeterWidth = camSettings.maxProjectionSize * camStats.aspect;
-        float firstStationPos = trip.stations[0].metersPosition;
-
-        spawnerStats.spawnMaxPos.x = firstStationPos + spawnerSettings.spawnerSize.x;
-        spawnerStats.spawnMaxPos.y = trainStats.trainMaxHeight + camSettings.maxProjectionSize + spawnerSettings.spawnerSize.y;
-        spawnerStats.spawnMaxPos.z = 64; //NOTE: Furthest postion. If changed this needs to be changed on the compute shader as well
-
-        spawnerStats.spawnMinPos.x = firstStationPos  - spawnerSettings.spawnerSize.x;
-        spawnerStats.spawnMinPos.y = -camSettings.maxProjectionSize - spawnerSettings.spawnerSize.y;
-        spawnerStats.spawnMinPos.z = Camera.main.transform.position.z;
-
-        spawnerStats.spawnCenter = (spawnerStats.spawnMinPos + spawnerStats.spawnMaxPos) * 0.5f;
-        spawnerStats.spawnBoundsSize = spawnerStats.spawnMaxPos - spawnerStats.spawnMinPos;
-
-        transform.position = spawnerStats.spawnMinPos;
-    }
-
-    private void OnDrawGizmos()
-    {
-        InitializeBoundParameters();
-
-        Gizmos.color = Color.crimson;
-        Gizmos.DrawWireCube(spawnerStats.spawnCenter, spawnerStats.spawnBoundsSize);
+        uvSizeAndPositionBuffer?.Release();
+        worldSizeBuffer?.Release();
+        particleBuffer?.Release();
+        deadCountBuffer?.Release();
+        zoneSpawnerData.active = false;
     }
 }
