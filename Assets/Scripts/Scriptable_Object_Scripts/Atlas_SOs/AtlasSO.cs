@@ -7,13 +7,15 @@ using static AtlasSpawn;
 public class AtlasSO : ScriptableObject
 {
     public Texture2D texture;
+    public Color32 spriteConnectColor = Color.clear;
+
 
     [Header("Motion Settings")]
     public EntityMotionType entityMotionType;
-    public Color32 pivotColor = Color.red;
+    public Color32 pivotColor = Color.clear;
     
     [Header("Sliced Settings")]
-    public Color32 sliceColor = Color.blue;
+    public Color32 sliceColor = Color.clear;
 
     [Header("Particle Settings")]
     public ZoneParticleType zoneType;

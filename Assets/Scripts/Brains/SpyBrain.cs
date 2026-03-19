@@ -264,21 +264,21 @@ public class SpyBrain : MonoBehaviour
             case State.Idle:
             {
                 if (inputs.jump) { stats.lastJumpTime = Time.time; }
-                PlayClip();
+                atlasRenderer.PlayClip(curClip);
             }
             break;
             case State.Walk:
             {
                 if (inputs.jump) { stats.lastJumpTime = Time.time; }
                 Flip(inputs.move < 0);
-                PlayClip();
+                atlasRenderer.PlayClip(curClip);
             }
             break;
             case State.Run:
             {
                 if (inputs.jump) { stats.lastJumpTime = Time.time; }
                 Flip(inputs.move < 0);
-                PlayClip();
+                atlasRenderer.PlayClip(curClip);
             }
             break;
             case State.Jump:
@@ -286,7 +286,7 @@ public class SpyBrain : MonoBehaviour
                 Flip(inputs.move < 0);
 
                 float normHeight = (transform.position.y - stats.lastGroundHeight) / (stats.maxJumpHeight - stats.lastGroundHeight);
-                PlayManualClip(normHeight);
+                atlasRenderer.PlayManualClip(curClip, normHeight);
             }
             break;
             case State.Fall:
@@ -302,7 +302,7 @@ public class SpyBrain : MonoBehaviour
                 Flip(inputs.move < 0);
 
                 float normHeight = (transform.position.y - stats.lastGroundHeight) / (stats.maxJumpHeight - stats.lastGroundHeight);
-                PlayManualClip(1 - normHeight);
+                atlasRenderer.PlayManualClip(curClip, 1 - normHeight);
             }
             break;
             case State.Hang:
@@ -317,12 +317,12 @@ public class SpyBrain : MonoBehaviour
                     stats.isClimbing = true;
                 }
 
-                PlayClip();
+                atlasRenderer.PlayClip(curClip);
             }
             break;
             case State.Climb:
             {
-                PlayClip();
+                atlasRenderer.PlayClip(curClip);
                 if (curFrameIndex == curClip.keyFrames.Length - 1)
                 {
                     stats.isClimbing = false;
@@ -612,15 +612,6 @@ public class SpyBrain : MonoBehaviour
     {
         stats.spriteFlip = flip;
         atlasRenderer.Flip(flip);
-    }
-    private void PlayClip()
-    {
-        clipTime += Time.deltaTime;
-        atlasRenderer.sprite = curClip.GetNextSprite(ref clipTime, ref curFrameIndex, ref prevFrameIndex);
-    }
-    private void PlayManualClip(float t)
-    {
-        atlasRenderer.sprite = curClip.GetNextSpriteManual(t);
     }
     private void OnApplicationQuit()
     {

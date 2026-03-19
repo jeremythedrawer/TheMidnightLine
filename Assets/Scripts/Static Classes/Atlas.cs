@@ -114,6 +114,7 @@ public static class Atlas
         public Vector4[] uvSizeAndPos;
         public Vector4 worldSlices;
     }
+
     [Serializable] public struct AtlasKeyframe
     {
         public MotionSprite motionSprite;
@@ -126,71 +127,6 @@ public static class Atlas
         public ClipType clipType;
         public int motionIndex;
         public float time;
-        public SimpleSprite GetNextSprite(ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
-        {
-            float frameTime = keyframeClock * FRAMES_PER_SEC;
-            if (curFrameIndex >= keyFrames.Length || curFrameIndex < 0) curFrameIndex = 0;
-            AtlasKeyframe curKeyFrame = keyFrames[curFrameIndex];
-
-            switch (clipType)
-            {
-                case ClipType.Loop:
-                {
-                    if (frameTime >= curKeyFrame.holdTime)
-                    {
-                        prevFrameIndex = curFrameIndex;
-                        curFrameIndex++;
-
-                        if (curFrameIndex >= keyFrames.Length)
-                        {
-                            curFrameIndex = 0;
-                        }
-
-                        keyframeClock = 0;
-                    }
-                }
-                break;
-                case ClipType.PingPong:
-                {
-                    if (frameTime >= curKeyFrame.holdTime)
-                    {
-                        if (curFrameIndex < keyFrames.Length - 1 && (curFrameIndex > prevFrameIndex || curFrameIndex == 0))
-                        {
-                            prevFrameIndex = curFrameIndex;
-                            curFrameIndex++;
-                        }
-                        else
-                        {
-                            prevFrameIndex = curFrameIndex;
-                            curFrameIndex--;
-                        }
-                        keyframeClock = 0;
-                    }
-                }
-                break;
-                case ClipType.OneShot:
-                {
-                    if (frameTime >= curKeyFrame.holdTime)
-                    {
-                        prevFrameIndex = curFrameIndex;
-                        if (curFrameIndex < keyFrames.Length - 1)
-                        {
-                            curFrameIndex++;
-                        }
-                        keyframeClock = 0;
-                    }
-                }
-                break;
-            }
-
-            return keyFrames[curFrameIndex].motionSprite.sprite;
-        }
-        public SimpleSprite GetNextSpriteManual(float currentTime)
-        {
-            int maxIndex = keyFrames.Length - 1;
-            int curFrameIndex = Mathf.Clamp(Mathf.FloorToInt((keyFrames.Length - 1) * currentTime), 0, maxIndex);
-            return keyFrames[curFrameIndex].motionSprite.sprite;
-        }
     }
 
 

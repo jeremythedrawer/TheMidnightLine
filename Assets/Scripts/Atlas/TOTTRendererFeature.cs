@@ -35,8 +35,9 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     private AtlasParticlePass particlePass;
     private MatrixPass matrixPass;
     private BloomPass bloomPass;
+    private AtlasPostUIPass uiPass;
 
-    private class ZonePassData
+    private class AtlasPassData
     {
         public CameraStatsSO cameraStats;
     }
@@ -47,6 +48,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         particlePass = new AtlasParticlePass(trip, zoneSpawner, materialIDs);
         matrixPass = new MatrixPass(this);
         bloomPass = new BloomPass(this);
+        uiPass = new AtlasPostUIPass(materialIDs);
     }
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
@@ -54,7 +56,8 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         renderer.EnqueuePass(batchPass);
         renderer.EnqueuePass(particlePass);
         renderer.EnqueuePass(matrixPass);
-        renderer.EnqueuePass(bloomPass);
+        renderer.EnqueuePass(uiPass);
+        //renderer.EnqueuePass(bloomPass);
     }
     private class AtlasBatchPass : ScriptableRenderPass
     {
@@ -69,18 +72,16 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
         {
-
-            UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
             UniversalResourceData resources = frameData.Get<UniversalResourceData>();
 
-            using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<ZonePassData>("Atlas Batch Pass", out ZonePassData passData);
+            using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<AtlasPassData>("Atlas Batch Pass", out AtlasPassData passData);
             passData.cameraStats = cameraStats;
             builder.SetRenderAttachment(resources.activeColorTexture, 0);
             builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
             builder.AllowPassCulling(false);
 
 
-            builder.SetRenderFunc((ZonePassData data, RasterGraphContext ctx) =>
+            builder.SetRenderFunc((AtlasPassData data, RasterGraphContext ctx) =>
             {
                 ExecuteBatch(ctx.cmd, data.cameraStats);
             });
@@ -109,14 +110,11 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                         if (atlasRenderer.gameObject.scene != prefabScene) continue;
                     }
 #endif
-                    if (Application.isPlaying)
-                    {
-                        //if (atlasRenderer.bounds.max.x < cameraStats.camLeft || atlasRenderer.bounds.min.x > cameraStats.camRight || atlasRenderer.bounds.max.y < cameraStats.camBottom || atlasRenderer.bounds.min.y > cameraStats.camTop) continue;
-                    }
+                    //if (atlasRenderer.bounds.max.x < cameraStats.camLeft || atlasRenderer.bounds.min.x > cameraStats.camRight || atlasRenderer.bounds.max.y < cameraStats.camBottom || atlasRenderer.bounds.min.y > cameraStats.camTop) continue;
 
                     if (atlasRenderer.mpb != null)
                     {
-                        cmd.DrawMesh(atlasRenderer.batchKey.mesh, atlasRenderer.GetMatrix(), atlasRenderer.batchKey.material, submeshIndex: 0, shaderPass: 0, atlasRenderer.mpb);
+                        cmd.DrawMesh(atlasRenderer.batchKey.mesh, atlasRenderer.spriteMatrices[0], atlasRenderer.batchKey.material, submeshIndex: 0, shaderPass: 0, atlasRenderer.mpb);
                         continue;
                     }
 
@@ -124,7 +122,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     {
                         ref SliceSprite slicedSprite = ref atlasRenderer.atlas.slicedSprites[atlasRenderer.spriteIndex];
 
-                        Matrix4x4[] sliceMatrices = atlasRenderer.Get9SliceMatrices();
+                        Matrix4x4[] sliceMatrices = atlasRenderer.spriteMatrices;
 
                         for (int j = 0; j < 9; j++)
                         {
@@ -136,7 +134,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     }
                     else
                     {
-                        batch.data.matrices[count] = atlasRenderer.GetMatrix();
+                        batch.data.matrices[count] = atlasRenderer.spriteMatrices[0];
                         batch.data.uvSizeAndPosData[count] = atlasRenderer.sprite.uvSizeAndPos;
                         batch.data.widthHeightFlip[count] = atlasRenderer.widthHeightFlip[0];
                         count++;
@@ -168,11 +166,11 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
             UniversalResourceData resources = frameData.Get<UniversalResourceData>();
 
-            using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<ZonePassData>("Zone Particle Pass", out ZonePassData passData);
+            using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<AtlasPassData>("Zone Particle Pass", out AtlasPassData passData);
             builder.SetRenderAttachment(resources.activeColorTexture, 0);
             builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
 
-            builder.SetRenderFunc((ZonePassData data, RasterGraphContext ctx) =>
+            builder.SetRenderFunc((AtlasPassData data, RasterGraphContext ctx) =>
             {
                 ExecuteZoneParticles(ctx.cmd);
             });
@@ -355,6 +353,67 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             passData.material.SetColor("_Color2", passData.color2);
             passData.material.SetTexture("_NoiseTexture", rendererFeature.noiseTexture);
             Blitter.BlitTexture(ctx.cmd, passData.sourceColor, Vector2.one, passData.material, 0);
+        }
+    }
+    private class AtlasPostUIPass : ScriptableRenderPass
+    {
+        private static MaterialIDSO materialIDs;
+        public AtlasPostUIPass(MaterialIDSO materialID)
+        {
+            renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
+            materialIDs = materialID;
+        }
+        public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
+        {
+            UniversalResourceData resources = frameData.Get<UniversalResourceData>();
+
+            using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<AtlasPassData>("Atlas Batch Pass", out AtlasPassData passData);
+            builder.SetRenderAttachment(resources.activeColorTexture, 0);
+            builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
+            builder.AllowPassCulling(false);
+
+
+            builder.SetRenderFunc((AtlasPassData data, RasterGraphContext ctx) =>
+            {
+                ExecuteUI(ctx.cmd);
+            });
+        }
+
+        private static void ExecuteUI(RasterCommandBuffer cmd)
+        {
+#if UNITY_EDITOR
+            PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+            Scene prefabScene = default;
+
+            if (prefabStage != null) prefabScene = prefabStage.scene;
+#endif
+            foreach ((BatchKey key, TextBatchData data) batch in textBatchList)
+            {
+                int count = 0;
+                for (int i = 0; i < batch.data.textRenderers.Count && count < MAX; i++)
+                {
+                    AtlasTextRenderer atlasTextRenderer = batch.data.textRenderers[i];
+
+                    if (atlasTextRenderer == null || !atlasTextRenderer.enabled) continue;
+#if UNITY_EDITOR
+                    if (prefabStage != null)
+                    {
+                        if (atlasTextRenderer.gameObject.scene != prefabScene) continue;
+                    }
+#endif
+                    for (int j = 0; j < atlasTextRenderer.sprites.Length; j++)
+                    {
+                        batch.data.matrices[count] = atlasTextRenderer.spriteMatrices[j];
+                        batch.data.uvSizeAndPosData[count] = atlasTextRenderer.sprites[j].uvSizeAndPos;
+                        count++;
+                    }
+                }
+
+                if (count == 0) continue;
+
+                batch.data.mpb.SetVectorArray(materialIDs.ids.uvSizeAndPos, batch.data.uvSizeAndPosData);
+                cmd.DrawMeshInstanced(batch.key.mesh, submeshIndex: 0, batch.key.material, shaderPass: 0, batch.data.matrices, count, batch.data.mpb);
+            }
         }
     }
 }

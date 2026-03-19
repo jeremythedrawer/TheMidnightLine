@@ -10,10 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 33fd095fffb8f844e9fa149db1599080, type: 3}
-  m_Name: Tourist_Atlas
+  m_Name: Character_Tourist_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
   texture: {fileID: 2800000, guid: e3d5f3c84d2b5c147ac52e23844c4b52, type: 3}
-  isParticleAtlas: 0
   entityMotionType: 0
   pivotColor:
     serializedVersion: 2
@@ -21,7 +20,7 @@ MonoBehaviour:
   sliceColor:
     serializedVersion: 2
     rgba: 4294901760
-  particleType: 0
+  zoneType: 0
   motionSprites:
   - sprite:
       uvSizeAndPos: {x: 0.057128906, y: 0.14697266, z: 0, w: 0.85302734}
@@ -349,9 +348,6 @@ MonoBehaviour:
       type: 4
   simpleSprites: []
   slicedSprites: []
-  particleSprites: []
-  particleUVSizeAndPosArray: []
-  worldSizesArray: []
   clips:
   - clipName: Walking
     keyFrames:

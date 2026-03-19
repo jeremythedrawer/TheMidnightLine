@@ -51,11 +51,11 @@ public class GangwayDoor : MonoBehaviour
 
             float t = Mathf.Pow((elapsedTime / DOOR_MOVE_TIME), 2);
 
-            atlasRenderer.sprite = doorClip.GetNextSpriteManual(t);
+            atlasRenderer.PlayManualClip(doorClip, t);
 
             await UniTask.Yield();
         }
-        atlasRenderer.sprite = doorClip.GetNextSpriteManual(1);
+        atlasRenderer.PlayManualClip(doorClip, 1);
         isOpen = true;
         wallCollider.enabled = false;
     }
@@ -70,11 +70,11 @@ public class GangwayDoor : MonoBehaviour
 
             float t = Mathf.Pow((elapsedTime / DOOR_MOVE_TIME), 2);
 
-            atlasRenderer.sprite = doorClip.GetNextSpriteManual(t);
+            atlasRenderer.PlayManualClip(doorClip, t);
 
             await UniTask.Yield();
         }
-        atlasRenderer.sprite = doorClip.GetNextSpriteManual(0);
+        atlasRenderer.PlayManualClip(doorClip, 0);
         isOpen = false;
         wallCollider.enabled = true;
     }

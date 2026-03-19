@@ -1,4 +1,6 @@
 using UnityEngine;
+using UnityEngine.Rendering.Universal;
+using UnityEngine.U2D;
 using static Atlas;
 using static AtlasBatch;
 
@@ -17,27 +19,31 @@ public class AtlasRenderer : MonoBehaviour
     public int depthOrder;
     public bool useCustomMaterial;
     [Header("Generated")]
+    public MaterialPropertyBlock mpb;
     public BatchKey batchKey;
     public SimpleSprite sprite;
     public Bounds bounds;
     public Matrix4x4[] spriteMatrices;
     public Vector4[] widthHeightFlip;
-
+    Vector2 worldPivotOffset;
+    Vector2[] offsets9Slice;
+    public Vector3 matrixPivotOffset;
     public float worldWidth;
     public float worldHeight;
-    Vector2 worldPivotOffset;
-    public MaterialPropertyBlock mpb;
+
+    public float keyframeClock;
+    public int curFrameIndex;
+    public int prevFrameIndex;
+
     private void OnValidate()
     {
         InitRenderer();
-        UpdateDepth(depthOrder);
     }
     private void OnEnable()
     {
         RegisterRenderer(this);
         HandleCustomMaterial();
         InitRenderer();
-        UpdateDepth(depthOrder);
     }
     private void OnDisable()
     {
@@ -49,7 +55,22 @@ public class AtlasRenderer : MonoBehaviour
     }
     private void Update()
     {
+#if UNITY_EDITOR
+        if(!Application.isPlaying)
+        {
+            UpdateDepth((int)transform.position.z);
+        }
+#endif
         bounds.center = transform.position + (Vector3)worldPivotOffset;
+
+        if (spriteMode == SpriteMode.Slice)
+        {
+            Set9SliceMatrixPos();
+        }
+        else
+        {
+            SetMatrixPos();
+        }
     }
     public void UpdateDepth(int newDepth)
     {
@@ -63,6 +84,7 @@ public class AtlasRenderer : MonoBehaviour
 
         float flipPivot = flipX ? 1 - sprite.uvPivot.x : sprite.uvPivot.x;
         worldPivotOffset = new Vector2((0.5f - flipPivot) * worldWidth, (0.5f - flipPivot) * worldHeight);
+        SetMatrix();
     }
     private void InitRenderer()
     {
@@ -87,6 +109,7 @@ public class AtlasRenderer : MonoBehaviour
                 {
                     new Vector4(width, height, flipX ? -1 : 1, flipY ? -1 : 1)
                 };
+                SetMatrix();
 
             }
             break;
@@ -103,6 +126,7 @@ public class AtlasRenderer : MonoBehaviour
                 {
                     new Vector4(width, height, flipX ? -1 : 1, flipY ? -1 : 1)
                 };
+                SetMatrix();
             }
             break;
 
@@ -132,6 +156,8 @@ public class AtlasRenderer : MonoBehaviour
                     new Vector4(centerSliceUVSize.x, 1,flip.x, flip.y),
                     new Vector4(1, 1, flip.x, flip.y),
                 };
+
+                Set9SliceMatrices();
             }
             break;
         }
@@ -160,7 +186,76 @@ public class AtlasRenderer : MonoBehaviour
             mpb.SetVector("_WidthHeightFlip", widthHeightFlip[0]);
         }
     }
-    public Matrix4x4[] Get9SliceMatrices()
+    public void PlayClip(AtlasClip clip)
+    {
+        keyframeClock += Time.deltaTime;
+
+        float frameTime = keyframeClock * FRAMES_PER_SEC;
+        if (curFrameIndex >= clip.keyFrames.Length || curFrameIndex < 0) curFrameIndex = 0;
+        AtlasKeyframe curKeyFrame = clip.keyFrames[curFrameIndex];
+
+        switch (clip.clipType)
+        {
+            case Atlas.ClipType.Loop:
+            {
+                if (frameTime >= curKeyFrame.holdTime)
+                {
+                    prevFrameIndex = curFrameIndex;
+                    curFrameIndex++;
+
+                    if (curFrameIndex >= clip.keyFrames.Length)
+                    {
+                        curFrameIndex = 0;
+                    }
+
+                    keyframeClock = 0;
+                }
+            }
+            break;
+            case Atlas.ClipType.PingPong:
+            {
+                if (frameTime >= curKeyFrame.holdTime)
+                {
+                    if (curFrameIndex < clip.keyFrames.Length - 1 && (curFrameIndex > prevFrameIndex || curFrameIndex == 0))
+                    {
+                        prevFrameIndex = curFrameIndex;
+                        curFrameIndex++;
+                    }
+                    else
+                    {
+                        prevFrameIndex = curFrameIndex;
+                        curFrameIndex--;
+                    }
+                    keyframeClock = 0;
+                }
+            }
+            break;
+            case Atlas.ClipType.OneShot:
+            {
+                if (frameTime >= curKeyFrame.holdTime)
+                {
+                    prevFrameIndex = curFrameIndex;
+                    if (curFrameIndex < clip.keyFrames.Length - 1)
+                    {
+                        curFrameIndex++;
+                    }
+                    keyframeClock = 0;
+                }
+            }
+            break;
+        }
+
+        sprite = clip.keyFrames[curFrameIndex].motionSprite.sprite;
+        SetMatrix();
+    }
+    public void PlayManualClip(AtlasClip clip, float currentTime)
+    {
+        int maxIndex = clip.keyFrames.Length - 1;
+        int curFrameIndex = Mathf.Clamp(Mathf.FloorToInt((clip.keyFrames.Length - 1) * currentTime), 0, maxIndex);
+        sprite = clip.keyFrames[curFrameIndex].motionSprite.sprite;
+        SetMatrix();
+    }
+    private void Set9SliceMatrices()
     {
         SliceSprite slicedSprite = atlas.slicedSprites[spriteIndex];
 
@@ -181,7 +276,7 @@ public class AtlasRenderer : MonoBehaviour
             new Vector2 (slicedSprite.worldSlices.y, slicedSprite.worldSlices.w),
         };
 
-        Vector2[] offsets =
+        offsets9Slice = new Vector2[]
         {
             new Vector2 (0, 0),
             new Vector2 (slicedSprite.worldSlices.x, 0),
@@ -198,25 +293,35 @@ public class AtlasRenderer : MonoBehaviour
 
         for (int i = 0; i < 9; i++)
         {
-            Vector3 localPos = new Vector3(offsets[i].x, offsets[i].y, 0);
+            Vector3 localPos = new Vector3(offsets9Slice[i].x, offsets9Slice[i].y, 0);
 
             spriteMatrices[i] = Matrix4x4.TRS(transform.position + transform.rotation * localPos,
                                               transform.rotation, 
                                               new Vector3(sizes[i].x, sizes[i].y, 1f));
         }
-
-        return spriteMatrices;
     }
-    public Matrix4x4 GetMatrix()
+    private void SetMatrix()
     {
         Vector2 pivotWithFlip = new Vector2(flipX ? 1 - sprite.uvPivot.x : sprite.uvPivot.x, flipY ? 1 - sprite.uvPivot.y : sprite.uvPivot.y);
-        Vector3 pivotOffset = new Vector3(pivotWithFlip.x * sprite.worldSize.x, pivotWithFlip.y * sprite.worldSize.y, 0f);
-        Vector3 matrixPos = transform.position + transform.rotation * -pivotOffset;
+        matrixPivotOffset = new Vector3(pivotWithFlip.x * sprite.worldSize.x, pivotWithFlip.y * sprite.worldSize.y, 0f);
+        Vector3 matrixPos = transform.position + transform.rotation * -matrixPivotOffset;
         Vector3 matrixScale = new Vector3(sprite.worldSize.x * width, sprite.worldSize.y * height, 1f);
 
         spriteMatrices[0] = Matrix4x4.TRS(matrixPos, transform.rotation, matrixScale);
-
-        return spriteMatrices[0];
+    }
+    private void SetMatrixPos()
+    {
+        Vector3 matrixPos = transform.position + transform.rotation * -matrixPivotOffset;
+        spriteMatrices[0].SetTRS(matrixPos, transform.rotation, spriteMatrices[0].lossyScale);
+    }
+    private void Set9SliceMatrixPos()
+    {
+        for (int i = 0; i < 9; i++)
+        {
+            Vector3 localPos = new Vector3(offsets9Slice[i].x, offsets9Slice[i].y, 0);
+            Vector3 pos = transform.position + transform.rotation * localPos;
+            spriteMatrices[i].SetTRS(pos, transform.rotation, spriteMatrices[i].lossyScale);
+        }
     }
     private Vector2 GetCenterSliceWorldSize(SliceSprite slicedSprite)
     {

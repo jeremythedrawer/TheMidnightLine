@@ -136,7 +136,7 @@ public class NPCBrain : MonoBehaviour
         SelectingStates();
         UpdateStates();
         Fade();
-        PlayClip();
+        atlasRenderer.PlayClip(stats.curClip);
 
         if (rigidBody.includeLayers == layerSettings.trainMask)
         {
@@ -635,11 +635,6 @@ public class NPCBrain : MonoBehaviour
     {
         int depth = UnityEngine.Random.Range(trainStats.depthSection_front_min, trainStats.depthSection_back_max);
         atlasRenderer.UpdateDepth(depth);
-    }
-    private void PlayClip()
-    {
-        stats.atlasIndexClock += Time.deltaTime;
-        atlasRenderer.sprite = stats.curClip.GetNextSprite(ref stats.atlasIndexClock, ref stats.curFrameIndex, ref stats.prevAtlasIndex);
     }
 
     private void SetMarkerPosition()

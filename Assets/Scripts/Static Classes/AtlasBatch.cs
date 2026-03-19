@@ -23,19 +23,37 @@ public static class AtlasBatch
         public readonly MaterialPropertyBlock mpb = new MaterialPropertyBlock();
     }
 
+    public class TextBatchData
+    {
+        public readonly List<AtlasTextRenderer> textRenderers = new List<AtlasTextRenderer>();
+        public readonly Matrix4x4[] matrices = new Matrix4x4[MAX];
+        public readonly Vector4[] uvSizeAndPosData = new Vector4[MAX];
+        public readonly MaterialPropertyBlock mpb = new MaterialPropertyBlock();
+    }
+
     public static readonly Dictionary<BatchKey, BatchData> batchDict = new Dictionary<BatchKey, BatchData>();
     public static readonly List<(BatchKey key, BatchData)> batchList = new List<(BatchKey key, BatchData data)>();
+
+    public static readonly Dictionary<BatchKey, TextBatchData> textBatchDict = new Dictionary<BatchKey, TextBatchData>();
+    public static readonly List<(BatchKey key, TextBatchData)> textBatchList = new List<(BatchKey key, TextBatchData)>();
     static Mesh quad;
     public static void PrepareFrame()
     {
         batchList.Clear();
+        textBatchList.Clear();
 
         foreach (var kv in batchDict)
         {
             BatchKey key = kv.Key;
             BatchData batch = kv.Value;
-
             batchList.Add((key, batch));
+        }
+
+        foreach (var kv in textBatchDict)
+        {
+            BatchKey key = kv.Key;
+            TextBatchData batch = kv.Value;
+            textBatchList.Add((key, batch));
         }
     }
     public static void RegisterRenderer(AtlasRenderer atlasRenderer)
@@ -71,6 +89,39 @@ public static class AtlasBatch
         batch.renderers.Remove(atlasRenderer);
 
         if (batch.renderers.Count == 0) batchDict.Remove(atlasRenderer.batchKey);
+    }
+    public static void RegisterTextRenderer(AtlasTextRenderer atlasTextRenderer)
+    {
+        if (atlasTextRenderer.atlas == null || atlasTextRenderer.material == null) return;
+        UnregisterTextRenderer(atlasTextRenderer);
+        Material mat = atlasTextRenderer.material;
+
+        if (!mat.enableInstancing) mat.enableInstancing = true;
+
+        BatchKey key = new BatchKey
+        {
+            material = mat,
+            mesh = GetQuad(),
+            depthOrder = atlasTextRenderer.depthOrder,
+        };
+
+        if (!textBatchDict.TryGetValue(key, out TextBatchData batch))
+        {
+            batch = new TextBatchData();
+            textBatchDict.Add(key, batch);
+        }
+
+
+        batch.textRenderers.Add(atlasTextRenderer);
+        atlasTextRenderer.batchKey = key;
+    }
+    public static void UnregisterTextRenderer(AtlasTextRenderer atlasTextRenderer)
+    {
+        if (!textBatchDict.TryGetValue(atlasTextRenderer.batchKey, out TextBatchData batch)) return;
+
+        batch.textRenderers.Remove(atlasTextRenderer);
+
+        if (batch.textRenderers.Count == 0) batchDict.Remove(atlasTextRenderer.batchKey);
     }
     public static Mesh GetQuad()
     {

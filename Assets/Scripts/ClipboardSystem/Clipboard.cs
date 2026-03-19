@@ -1,5 +1,6 @@
 using System.Security.Cryptography;
 using UnityEngine;
+using UnityEngine.UI;
 
 public class Clipboard : MonoBehaviour
 {
@@ -136,7 +137,6 @@ public class Clipboard : MonoBehaviour
                 curPage.transform.SetParent(pagesFlippedUpRectTransform, worldPositionStays: false);
             }
         }
-
         curPage.UpdateFlip();
     }
     private void ActivateClipboard()

@@ -21,6 +21,7 @@ public class ZoneMaster : MonoBehaviour
         InitZoneSpawners();
         spawner.atlasCompute.SetInt("_Awake", 1);
 
+
     }
 
     private void OnDisable()

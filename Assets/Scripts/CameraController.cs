@@ -34,6 +34,7 @@ public class CameraController : MonoBehaviour
     {
         stats.targetSize = cam.orthographicSize;
         stats.initialSize = cam.orthographicSize;
+        stats.targetWorldPos.z = transform.position.z;
         stats.curWorldPos = transform.position;
         stats.aspect = cam.aspect;
     }
@@ -57,7 +58,7 @@ public class CameraController : MonoBehaviour
         stats.camTop = stats.curWorldPos.y + stats.camHeight * 0.5f;
 
         stats.prevWorldPos = stats.curWorldPos;
-        stats.curWorldPos = Vector2.Lerp(stats.curWorldPos, stats.targetWorldPos, Time.deltaTime * settings.damping);
+        stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, stats.targetWorldPos, Time.deltaTime * settings.damping);
         transform.position = stats.curWorldPos;
         stats.curVelocity = -((stats.curWorldPos - stats.prevWorldPos) / Time.deltaTime);
     }

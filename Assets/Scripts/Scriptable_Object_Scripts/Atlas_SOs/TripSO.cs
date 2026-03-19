@@ -14,7 +14,7 @@ public class TripSO : ScriptableObject
     public Zone[][] zonesByArea;
     public int tripMeters;
 }
-
+#if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(ZoneSpawnerData))]
 public class ZoneSpawnerDataDrawer : PropertyDrawer
 {
@@ -35,3 +35,4 @@ public class ZoneSpawnerDataDrawer : PropertyDrawer
         return EditorGUI.GetPropertyHeight(property, label, true);
     }
 }
+#endif

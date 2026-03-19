@@ -281,7 +281,11 @@ public class AtlasFactory : EditorWindow
     private void GenerateSprites()
     {
         Color32[] atlasPixels = atlas.texture.GetPixels32();
-
+        Color32[] markerPixels = new Color32[0];
+        if (markerTexture != null)
+        {
+            markerPixels = markerTexture.GetPixels32();
+        }
         bool[] visited = new bool[atlasPixels.Length];
 
         if (atlas.simpleSprites.Length > 0)
@@ -318,13 +322,20 @@ public class AtlasFactory : EditorWindow
             for (int x = 0; x < atlas.texture.width; x++)
             {
                 int index = x + y * atlas.texture.width;
+                List<Vector2Int> pixelPositions = new List<Vector2Int>();
 
                 if (visited[index]) continue;
 
-                if (atlasPixels[index].a == 0) continue;
-
-                List<Vector2Int> pixelPositions = FloodFill(x, y, atlas.texture.width, atlas.texture.height, ref visited, atlasPixels);
-
+                if (markerTexture == null)
+                {
+                    if (atlasPixels[index].a == 0) continue;
+                    pixelPositions = FloodFill(x, y, atlas.texture.width, atlas.texture.height, ref visited, atlasPixels);
+                }
+                else
+                {
+                    if (atlasPixels[index].a == 0 && markerPixels[index].a == 0) continue;
+                    pixelPositions = FloodFill(x, y, atlas.texture.width, atlas.texture.height, ref visited, atlasPixels, markerPixels);
+                }
                 if (pixelPositions.Count < 30) continue;
                 
                 CreateAtlasSprite(pixelPositions, atlas.texture.width, atlas.texture.height, atlasPixels, curSpriteIndex);
@@ -337,7 +348,7 @@ public class AtlasFactory : EditorWindow
         atlas.slicedSprites = slicedSpritesList.ToArray();
         SortAtlasSprites();
     }
-    private List<Vector2Int> FloodFill(int startX, int startY, int width, int height, ref bool[] visited, Color32[] pixels)
+    private List<Vector2Int> FloodFill(int startX, int startY, int width, int height, ref bool[] visited, Color32[] atlasPixels, Color32[] markerPixels = null)
     {
         List<Vector2Int> result = new List<Vector2Int>();
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
@@ -350,8 +361,22 @@ public class AtlasFactory : EditorWindow
             if (p.x < 0 || p.x >= width || p.y < 0 || p.y >= height) continue; // skip if the current pixel isnt within the texture bounds
             int index = p.x + p.y * width; // Convert to 1D array
             if (visited[index]) continue; // skip if the pixel is already apart of another sprite
+
+            bool isSolid = atlasPixels[index].a > 0;
+
+            bool isMarker = false;
+            if (markerPixels != null)
+            {
+                Color32 m = markerPixels[index];
+                isMarker =
+                    m.r == atlas.spriteConnectColor.r &&
+                    m.g == atlas.spriteConnectColor.g &&
+                    m.b == atlas.spriteConnectColor.b &&
+                    m.a == 255;
+            }
+
+            if (!isSolid && !isMarker) continue;
             visited[index] = true;
-            if (pixels[index].a == 0) continue; // skip if the alpha is 0
 
             result.Add(p);
 
@@ -961,7 +986,7 @@ public class AtlasFactory : EditorWindow
         {
             if (!atlas.clipDict.TryGetValue(selectedMotionIndex, out AtlasClip clip)) return;
             previewClip = clip; 
-            previewSprite = previewClip.GetNextSprite(ref editorTimeDelta, ref curFrameIndex, ref prevFrameIndex);
+            //previewSprite = previewClip.GetNextSprite(ref editorTimeDelta, ref curFrameIndex, ref prevFrameIndex); TODO // Make an editor animation function
             if (curFrameIndex != prevFrameIndex)
             {
                 Repaint();

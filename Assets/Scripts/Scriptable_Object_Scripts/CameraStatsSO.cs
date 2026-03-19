@@ -26,7 +26,7 @@ public class CameraStatsSO : ScriptableObject
     public Vector3 curWorldPos;
     public Vector3 prevWorldPos;
     public float aspect;
-    public Vector2 targetWorldPos;
+    public Vector3 targetWorldPos;
 
     public Vector3 curVelocity;
 }
