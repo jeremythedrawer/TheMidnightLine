@@ -3,6 +3,7 @@ using Proselyte.Sigils;
 using System;
 using UnityEngine;
 using static Atlas;
+[ExecuteAlways]
 public class CameraController : MonoBehaviour
 {
     public CameraSettingsSO settings;
@@ -18,10 +19,10 @@ public class CameraController : MonoBehaviour
     public Camera cam;
     private void Awake()
     {
-        cam = Camera.main;
     }
     private void OnEnable()
     {
+        cam = Camera.main;
         gameEventData.OnReset.RegisterListener(ResetCamera);
     }
     private void OnDisable()
@@ -48,8 +49,6 @@ public class CameraController : MonoBehaviour
         }
 
         //Set size and position
-
-        cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, stats.targetSize, Time.deltaTime * settings.damping);
         stats.camHeight = cam.orthographicSize * 2;
         stats.camWidth = stats.camHeight * cam.aspect;
         stats.camLeft = stats.curWorldPos.x - stats.camWidth * 0.5f;
@@ -57,10 +56,14 @@ public class CameraController : MonoBehaviour
         stats.camBottom = stats.curWorldPos.y - stats.camHeight * 0.5f;
         stats.camTop = stats.curWorldPos.y + stats.camHeight * 0.5f;
 
-        stats.prevWorldPos = stats.curWorldPos;
-        stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, stats.targetWorldPos, Time.deltaTime * settings.damping);
-        transform.position = stats.curWorldPos;
-        stats.curVelocity = -((stats.curWorldPos - stats.prevWorldPos) / Time.deltaTime);
+        if (Application.isPlaying)
+        {
+            cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, stats.targetSize, Time.deltaTime * settings.damping);
+            stats.prevWorldPos = stats.curWorldPos;
+            stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, stats.targetWorldPos, Time.deltaTime * settings.damping);
+            transform.position = stats.curWorldPos;
+            stats.curVelocity = -((stats.curWorldPos - stats.prevWorldPos) / Time.deltaTime);
+        }
     }
 
     private void SelectStates()

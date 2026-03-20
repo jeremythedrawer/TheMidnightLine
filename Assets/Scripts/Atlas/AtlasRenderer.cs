@@ -311,6 +311,7 @@ public class AtlasRenderer : MonoBehaviour
     }
     private void SetMatrixPos()
     {
+        if (spriteMatrices.Length == 0) return;
         Vector3 matrixPos = transform.position + transform.rotation * -matrixPivotOffset;
         spriteMatrices[0].SetTRS(matrixPos, transform.rotation, spriteMatrices[0].lossyScale);
     }

@@ -1,5 +1,5 @@
+using UnityEditor;
 using UnityEngine;
-using UnityEngine.U2D;
 using static Atlas;
 using static AtlasBatch;
 
@@ -8,9 +8,11 @@ public class AtlasTextRenderer : MonoBehaviour
 {
     public AtlasSO atlas;
     public Material material;
+    public CameraStatsSO camStats;
+    public Camera cam;
     public SimpleSprite[] sprites;
     public int depthOrder;
-
+    public Vector3 screenPosition;
     [TextArea(3, 10)]
     public string text;
     public float kerning;
@@ -21,7 +23,11 @@ public class AtlasTextRenderer : MonoBehaviour
     public MaterialPropertyBlock mpb;
     public Matrix4x4[] spriteMatrices;
     public float cursorX;
-    public int printableCharacter;
+    public float worldUnitsPerPixel;
+
+#if UNITY_EDITOR
+    public Vector3 lastPos;
+#endif
     private void OnValidate()
     {
         SetSprites();
@@ -29,18 +35,37 @@ public class AtlasTextRenderer : MonoBehaviour
     private void OnEnable()
     {
         RegisterTextRenderer(this);
-    }
-
-    private void Update()
-    {
 #if UNITY_EDITOR
-        if (!Application.isPlaying)
-        {
-            UpdateDepth((int)transform.position.z);
-            SetSprites();
-        }
+        Selection.selectionChanged += UpdatePosition;
 #endif
     }
+
+#if UNITY_EDITOR
+    private void Update()
+    {
+        if (!Application.isPlaying)
+        {
+            if (transform.position != lastPos)
+            {
+                screenPosition.x = transform.localPosition.x / worldUnitsPerPixel;
+                screenPosition.y = transform.localPosition.y / worldUnitsPerPixel;
+                lastPos = transform.position;
+            }
+            UpdateDepth((int)screenPosition.z);
+            SetSprites();
+        }
+    }
+
+    public void UpdatePosition()
+    {
+        if (Selection.activeGameObject == this.gameObject)
+        {
+            SetSprites();
+            transform.localPosition = screenPosition * worldUnitsPerPixel;
+        }
+    }
+#endif
+
     public void UpdateDepth(int newDepth)
     {
         depthOrder = newDepth;
@@ -53,6 +78,9 @@ public class AtlasTextRenderer : MonoBehaviour
         sprites = new SimpleSprite[text.Length];
         spriteMatrices = new Matrix4x4[sprites.Length];
         cursorX = 0;
+
+        worldUnitsPerPixel = camStats.camHeight / Screen.height;
+
         for (int i = 0; i < text.Length; i++)
         {
             char c = text[i];
@@ -67,15 +95,20 @@ public class AtlasTextRenderer : MonoBehaviour
             else
             {
                 SimpleSprite sprite = atlas.simpleSprites[asciiIndex - 33];
-                Vector3 matrixPos = transform.position;
-                matrixPos.x += cursorX * kerning;
-                matrixPos.y -= sprite.uvPivot.y * sprite.worldSize.y;
-                Vector3 matrixScale = new Vector3(sprite.worldSize.x, sprite.worldSize.y, 1f);
+
+                Vector2 spritePixelSize = sprite.worldSize * PIXELS_PER_UNIT;
+
+                float worldOffsetX = cursorX * kerning;
+                Vector3 matrixPos = cam.transform.position + ((screenPosition + Vector3.right * worldOffsetX) * worldUnitsPerPixel);
+                matrixPos.z = depthOrder;
+                Vector3 matrixScale = new Vector3( spritePixelSize.x * worldUnitsPerPixel, spritePixelSize.y * worldUnitsPerPixel, 1f);
 
                 spriteMatrices[i] = Matrix4x4.TRS(matrixPos, transform.rotation, matrixScale);
                 sprites[i] = sprite;
+
                 printableCharCount++;
-                cursorX += sprite.worldSize.x;
+
+                cursorX += spritePixelSize.x;
             }
         }
     }

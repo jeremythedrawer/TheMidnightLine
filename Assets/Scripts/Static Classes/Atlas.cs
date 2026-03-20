@@ -99,7 +99,6 @@ public static class Atlas
         public Vector4 uvSizeAndPos;
         public Vector2 uvPivot;
         public Vector3 worldSize;
-
         public int index;
     }
     [Serializable] public struct MotionSprite
