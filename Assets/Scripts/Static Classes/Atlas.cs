@@ -6,6 +6,11 @@ public static class Atlas
     public const int PIXELS_PER_UNIT = 180;
     public const int FRAMES_PER_SEC = 30;
     public readonly static float UNITS_PER_PIXEL = 1 / (float)PIXELS_PER_UNIT;
+    public static int FLOAT_SIZE = sizeof(float);
+    public static int FLOAT2_SIZE = FLOAT_SIZE * 2;
+    public static int FLOAT3_SIZE = FLOAT_SIZE * 3;
+    public static int FLOAT4_SIZE = FLOAT_SIZE * 4;
+    public static int INT_SIZE = sizeof(uint);
     public enum NPCMotion
     {
         None,

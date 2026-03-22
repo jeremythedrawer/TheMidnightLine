@@ -35,7 +35,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     private AtlasParticlePass particlePass;
     private MatrixPass matrixPass;
     private BloomPass bloomPass;
-    private AtlasPostUIPass uiPass;
+    //private AtlasPostUIPass postUIPass;
 
     private class AtlasPassData
     {
@@ -48,7 +48,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         particlePass = new AtlasParticlePass(trip, zoneSpawner, materialIDs);
         matrixPass = new MatrixPass(this);
         bloomPass = new BloomPass(this);
-        uiPass = new AtlasPostUIPass(materialIDs);
+       // postUIPass = new AtlasPostUIPass(materialIDs);
     }
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
@@ -56,7 +56,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         renderer.EnqueuePass(batchPass);
         renderer.EnqueuePass(particlePass);
         renderer.EnqueuePass(matrixPass);
-        renderer.EnqueuePass(uiPass);
+        //renderer.EnqueuePass(postUIPass);
         //renderer.EnqueuePass(bloomPass);
     }
     private class AtlasBatchPass : ScriptableRenderPass
@@ -98,45 +98,49 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             foreach ((BatchKey key, BatchData data) batch in batchList)
             {
                 int count = 0;
-                for (int i = 0; i < batch.data.renderers.Count && count < MAX; i++)
+                for (int i = 0; i < batch.data.renderInputs.Count && count < MAX; i++)
                 {
-                    AtlasRenderer atlasRenderer = batch.data.renderers[i];
+                    RenderInput renderInput = batch.data.renderInputs[i];
 
-                    if (atlasRenderer == null || !atlasRenderer.enabled) continue;
+                    if (renderInput == null || !renderInput.gameObject.activeInHierarchy) continue;
 #if UNITY_EDITOR
 
                     if (prefabStage != null)
                     {
-                        if (atlasRenderer.gameObject.scene != prefabScene) continue;
+                        if (renderInput.gameObject.scene != prefabScene) continue;
                     }
 #endif
                     //if (atlasRenderer.bounds.max.x < cameraStats.camLeft || atlasRenderer.bounds.min.x > cameraStats.camRight || atlasRenderer.bounds.max.y < cameraStats.camBottom || atlasRenderer.bounds.min.y > cameraStats.camTop) continue;
 
-                    if (atlasRenderer.mpb != null)
+                    //if (atlasRenderer.customMPB != null)
+                    //{
+                    //    cmd.DrawMesh(AtlasBatch.quad, atlasRenderer.spriteMatrices[0], atlasRenderer.batchKey.material, submeshIndex: 0, shaderPass: 0, atlasRenderer.customMPB);
+                    //    continue;
+                    //}
+
+                    if (renderInput.spriteMode == SpriteMode.Slice)
                     {
-                        cmd.DrawMesh(atlasRenderer.batchKey.mesh, atlasRenderer.spriteMatrices[0], atlasRenderer.batchKey.material, submeshIndex: 0, shaderPass: 0, atlasRenderer.mpb);
-                        continue;
-                    }
-
-                    if (atlasRenderer.spriteMode == SpriteMode.Slice)
-                    {
-                        ref SliceSprite slicedSprite = ref atlasRenderer.atlas.slicedSprites[atlasRenderer.spriteIndex];
-
-                        Matrix4x4[] sliceMatrices = atlasRenderer.spriteMatrices;
-
                         for (int j = 0; j < 9; j++)
                         {
-                            batch.data.matrices[count] = sliceMatrices[j];
-                            batch.data.uvSizeAndPosData[count] = slicedSprite.uvSizeAndPos[j];
-                            batch.data.widthHeightFlip[count] = atlasRenderer.widthHeightFlip[j];
+                            batch.data.spriteData[count] = new SpriteData
+                            {
+                                position = renderInput.position[j],
+                                pivot = renderInput.pivot[j],
+                                uvSizeAndPos = renderInput.uvSizeAndPos[j],
+                                widthHeightFlip = renderInput.widthHeightFlip[j],
+                            };
                             count++;
                         }
                     }
                     else
                     {
-                        batch.data.matrices[count] = atlasRenderer.spriteMatrices[0];
-                        batch.data.uvSizeAndPosData[count] = atlasRenderer.sprite.uvSizeAndPos;
-                        batch.data.widthHeightFlip[count] = atlasRenderer.widthHeightFlip[0];
+                        batch.data.spriteData[count] = new SpriteData
+                        {
+                            position = renderInput.position[0],
+                            pivot = renderInput.pivot[0],
+                            uvSizeAndPos = renderInput.uvSizeAndPos[0],
+                            widthHeightFlip = renderInput.widthHeightFlip[0],
+                        };
                         count++;
                     }
 
@@ -144,9 +148,12 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
                 if (count == 0) continue;
 
-                batch.data.mpb.SetVectorArray(materialIDs.ids.uvSizeAndPos, batch.data.uvSizeAndPosData);
-                batch.data.mpb.SetVectorArray(materialIDs.ids.widthHeightFlip, batch.data.widthHeightFlip);
-                cmd.DrawMeshInstanced(batch.key.mesh, submeshIndex: 0, batch.key.material, shaderPass: 0, batch.data.matrices, count, batch.data.mpb);
+                batch.data.spriteDataBuffer.SetData(batch.data.spriteData, 0, 0, count);
+                AtlasBatch.args[1] = (uint)count;
+                batch.data.argsBuffer.SetData(AtlasBatch.args);
+                batch.data.mpb.SetBuffer("_SpriteData", batch.data.spriteDataBuffer);
+
+                cmd.DrawMeshInstancedIndirect(AtlasBatch.quad, 0, batch.key.material, 0, batch.data.argsBuffer, 0, batch.data.mpb);
             }
         }
     }
@@ -355,66 +362,66 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             Blitter.BlitTexture(ctx.cmd, passData.sourceColor, Vector2.one, passData.material, 0);
         }
     }
-    private class AtlasPostUIPass : ScriptableRenderPass
-    {
-        private static MaterialIDSO materialIDs;
-        public AtlasPostUIPass(MaterialIDSO materialID)
-        {
-            renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
-            materialIDs = materialID;
-        }
-        public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
-        {
-            UniversalResourceData resources = frameData.Get<UniversalResourceData>();
+//    private class AtlasPostUIPass : ScriptableRenderPass
+//    {
+//        private static MaterialIDSO materialIDs;
+//        public AtlasPostUIPass(MaterialIDSO materialID)
+//        {
+//            renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
+//            materialIDs = materialID;
+//        }
+//        public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
+//        {
+//            UniversalResourceData resources = frameData.Get<UniversalResourceData>();
 
-            using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<AtlasPassData>("Atlas Batch Pass", out AtlasPassData passData);
-            builder.SetRenderAttachment(resources.activeColorTexture, 0);
-            builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
-            builder.AllowPassCulling(false);
+//            using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<AtlasPassData>("Atlas Batch Pass", out AtlasPassData passData);
+//            builder.SetRenderAttachment(resources.activeColorTexture, 0);
+//            builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
+//            builder.AllowPassCulling(false);
 
 
-            builder.SetRenderFunc((AtlasPassData data, RasterGraphContext ctx) =>
-            {
-                ExecuteUI(ctx.cmd);
-            });
-        }
+//            builder.SetRenderFunc((AtlasPassData data, RasterGraphContext ctx) =>
+//            {
+//                ExecuteUI(ctx.cmd);
+//            });
+//        }
 
-        private static void ExecuteUI(RasterCommandBuffer cmd)
-        {
-#if UNITY_EDITOR
-            PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
-            Scene prefabScene = default;
+//        private static void ExecuteUI(RasterCommandBuffer cmd)
+//        {
+//#if UNITY_EDITOR
+//            PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
+//            Scene prefabScene = default;
 
-            if (prefabStage != null) prefabScene = prefabStage.scene;
-#endif
-            foreach ((BatchKey key, TextBatchData data) batch in textBatchList)
-            {
-                int count = 0;
-                for (int i = 0; i < batch.data.textRenderers.Count && count < MAX; i++)
-                {
-                    AtlasTextRenderer atlasTextRenderer = batch.data.textRenderers[i];
+//            if (prefabStage != null) prefabScene = prefabStage.scene;
+//#endif
+//            foreach ((BatchKey key, UIBatchData data) batch in uiBatchList)
+//            {
+//                int count = 0;
+//                for (int i = 0; i < batch.data.uiData.Count && count < MAX; i++)
+//                {
+//                    RenderInput renderInput = batch.data.uiData[i];
+//#if UNITY_EDITOR
+//                    if (prefabStage != null)
+//                    {
+//                        if (renderInput.gameObject.scene != prefabScene) continue;
+//                    }
+//#endif
+//                    for (int j = 0; j < renderInput.position.Length; j++)
+//                    {
+//                        batch.data.matrices[count] = renderInput.matrices[j];
+//                        batch.data.uvSizeAndPosData[count] = renderInput.sprites[j].uvSizeAndPos;
+//                        batch.data.widthHeightFlip[count] = renderInput.widthHeightFlip[j];
+//                        count++;
+//                    }
+//                }
 
-                    if (atlasTextRenderer == null || !atlasTextRenderer.enabled) continue;
-#if UNITY_EDITOR
-                    if (prefabStage != null)
-                    {
-                        if (atlasTextRenderer.gameObject.scene != prefabScene) continue;
-                    }
-#endif
-                    for (int j = 0; j < atlasTextRenderer.sprites.Length; j++)
-                    {
-                        batch.data.matrices[count] = atlasTextRenderer.spriteMatrices[j];
-                        batch.data.uvSizeAndPosData[count] = atlasTextRenderer.sprites[j].uvSizeAndPos;
-                        count++;
-                    }
-                }
+//                if (count == 0) continue;
 
-                if (count == 0) continue;
-
-                batch.data.mpb.SetVectorArray(materialIDs.ids.uvSizeAndPos, batch.data.uvSizeAndPosData);
-                cmd.DrawMeshInstanced(batch.key.mesh, submeshIndex: 0, batch.key.material, shaderPass: 0, batch.data.matrices, count, batch.data.mpb);
-            }
-        }
-    }
+//                batch.data.mpb.SetVectorArray(materialIDs.ids.uvSizeAndPos, batch.data.uvSizeAndPosData);
+//                batch.data.mpb.SetVectorArray(materialIDs.ids.widthHeightFlip, batch.data.widthHeightFlip);
+//                cmd.DrawMeshInstanced(AtlasBatch.quad, submeshIndex: 0, batch.key.material, shaderPass: 0, batch.data.matrices, count, batch.data.mpb);
+//            }
+//        }
+//    }
 }
 

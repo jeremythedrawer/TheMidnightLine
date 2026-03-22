@@ -6,7 +6,7 @@ public class ParallaxController : MonoBehaviour
     public TrainStatsSO trainStats;
     public ZoneSpawnerSO zoneStats;
     public SpyStatsSO spyStats;
-    public AtlasRenderer atlasRenderer;
+    public AtlasSimpleRenderer atlasRenderer;
 
     public Parallax.RepeatType repeatType;
     
@@ -16,7 +16,7 @@ public class ParallaxController : MonoBehaviour
     public CameraStatsSO camStats;
 
     [Header("Multiple Sprites")]
-    public AtlasRenderer rightRenderer;
+    public AtlasSimpleRenderer rightRenderer;
     
     [Header("Generated")]
     public float parallaxFactor;
@@ -30,7 +30,7 @@ public class ParallaxController : MonoBehaviour
         {
             parallaxFactor = GetParallaxFactor(transform.position.z);
         }
-        float totalWidth = atlasRenderer.worldWidth;
+        float totalWidth = atlasRenderer.renderInput.widthHeightFlip[0].x;
         if (rightRenderer != null)
         {
             totalWidth = rightRenderer.bounds.max.x - atlasRenderer.bounds.min.x;

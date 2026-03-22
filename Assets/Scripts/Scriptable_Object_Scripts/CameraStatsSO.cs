@@ -23,6 +23,7 @@ public class CameraStatsSO : ScriptableObject
     public float camRight;
     public float camBottom;
     public float camTop;
+    public float worldUnitsPerPixel;
     public Vector3 curWorldPos;
     public Vector3 prevWorldPos;
     public float aspect;

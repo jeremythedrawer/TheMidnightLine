@@ -1,6 +1,6 @@
 using UnityEngine;
 using static AtlasSpawn;
-
+using static Atlas;
 [ExecuteAlways]
 public class ZoneSpawner : MonoBehaviour
 {

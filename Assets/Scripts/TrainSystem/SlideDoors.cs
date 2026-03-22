@@ -19,8 +19,8 @@ public class SlideDoors : MonoBehaviour
     public TrainSettingsSO trainSettings;
     public BoxCollider2D boxCollider;
 
-    public AtlasRenderer rightSlideDoorRenderer;
-    public AtlasRenderer leftSlideDoorRenderer;
+    public AtlasSimpleRenderer rightSlideDoorRenderer;
+    public AtlasSimpleRenderer leftSlideDoorRenderer;
     [Header("Generated")]
     public State curState;
     public Transform rightSlideDoor_transform;

@@ -21,7 +21,7 @@ public class SpyBrain : MonoBehaviour
     [Header("Components")]
     [SerializeField] Rigidbody2D rigidBody;
     [SerializeField] BoxCollider2D boxCollider;
-    [SerializeField] AtlasRenderer atlasRenderer;
+    [SerializeField] AtlasSimpleRenderer atlasRenderer;
     [Header("Scriptable Objects")]
     [SerializeField] SpySettingsSO settings;
     [SerializeField] MaterialIDSO materialIDs;
@@ -107,7 +107,7 @@ public class SpyBrain : MonoBehaviour
 
         stats.maxJumpHeight = (settings.jumpVerticalForce * settings.jumpVerticalForce) / (2 * settings.gravityScale);
 
-        matrixMaterial.SetFloat("_PlayerDepth", atlasRenderer.depthOrder);
+        matrixMaterial.SetFloat("_PlayerDepth", atlasRenderer.renderInput.batchKey.depthOrder);
     }
     private void Update()
     {
@@ -577,7 +577,7 @@ public class SpyBrain : MonoBehaviour
                     rigidBody.includeLayers = layerSettings.trainMask;
                     collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
                     stats.onTrain = true;
-                    UpdateDepth(atlasRenderer.depthOrder).Forget();
+                    UpdateDepth(atlasRenderer.renderInput.batchKey.depthOrder).Forget();
                     atlasRenderer.UpdateDepth(trainStats.depthSection_front_min);
                     trainStats.curPassengerCount++;
                     
@@ -597,11 +597,11 @@ public class SpyBrain : MonoBehaviour
             elaspedTime += Time.deltaTime;
             float t = elaspedTime / DEPTH_CHANGE_TIME;
             t *= t;
-            float depth = Mathf.Lerp(oldDepth, atlasRenderer.depthOrder, t);
+            float depth = Mathf.Lerp(oldDepth, atlasRenderer.renderInput.batchKey.depthOrder, t);
             matrixMaterial.SetFloat("_PlayerDepth", depth);
             await UniTask.Yield();
         }
-        matrixMaterial.SetFloat("_PlayerDepth", atlasRenderer.depthOrder);
+        matrixMaterial.SetFloat("_PlayerDepth", atlasRenderer.renderInput.batchKey.depthOrder);
     }
     private void SetLocationData(Bounds bounds, LayerMask layerMask)
     {

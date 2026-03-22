@@ -15,7 +15,7 @@ using UnityEditor;
 public class NPCBrain : MonoBehaviour
 {
     public NPCSO npc;
-    public AtlasRenderer atlasRenderer;
+    public AtlasSimpleRenderer atlasRenderer;
     [SerializeField] NPCsDataSO npcData;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] TrainSettingsSO trainSettings;

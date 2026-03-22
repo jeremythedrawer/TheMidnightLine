@@ -2,7 +2,7 @@ using UnityEngine;
 
 public class DriversPit : MonoBehaviour
 {
-    public AtlasRenderer atlasRenderer;
+    public AtlasSimpleRenderer atlasRenderer;
     public BoxCollider2D boxCollider;
     //TODO: Controller speakers
 }

@@ -8,7 +8,7 @@ public class GangwayDoor : MonoBehaviour
 
     [SerializeField] BoxCollider2D wallCollider;
     [SerializeField] LayerSettingsSO layerSettings;
-    [SerializeField] AtlasRenderer atlasRenderer;
+    [SerializeField] AtlasSimpleRenderer atlasRenderer;
     [SerializeField] Carriage carriage;
     [SerializeField] SpyStatsSO spyStats;
 

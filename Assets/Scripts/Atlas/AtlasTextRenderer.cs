@@ -1,115 +1,113 @@
-using UnityEditor;
 using UnityEngine;
 using static Atlas;
 using static AtlasBatch;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 
 [ExecuteAlways]
 public class AtlasTextRenderer : MonoBehaviour
 {
     public AtlasSO atlas;
-    public Material material;
     public CameraStatsSO camStats;
+    public RenderInput uiRenderInstance;
+
     public Camera cam;
-    public SimpleSprite[] sprites;
     public int depthOrder;
-    public Vector3 screenPosition;
+
     [TextArea(3, 10)]
     public string text;
     public float kerning;
     public float spacing;
 
     [Header("Generated")]
-    public BatchKey batchKey;
-    public MaterialPropertyBlock mpb;
-    public Matrix4x4[] spriteMatrices;
+    public Vector3 screenPosition;
     public float cursorX;
-    public float worldUnitsPerPixel;
 
 #if UNITY_EDITOR
+    [Header("Editor")]
     public Vector3 lastPos;
 #endif
-    private void OnValidate()
-    {
-        SetSprites();
-    }
     private void OnEnable()
     {
-        RegisterTextRenderer(this);
+        RegisterUIRenderer(uiRenderInstance);
 #if UNITY_EDITOR
-        Selection.selectionChanged += UpdatePosition;
+        Selection.selectionChanged += UpdateEditorPosition;
 #endif
     }
 
-#if UNITY_EDITOR
+    private void OnDisable()
+    {
+        UnregisterUIRenderer(uiRenderInstance);
+    }
+
+
     private void Update()
     {
+#if UNITY_EDITOR
         if (!Application.isPlaying)
         {
             if (transform.position != lastPos)
             {
-                screenPosition.x = transform.localPosition.x / worldUnitsPerPixel;
-                screenPosition.y = transform.localPosition.y / worldUnitsPerPixel;
+                screenPosition.x = transform.localPosition.x / camStats.worldUnitsPerPixel;
+                screenPosition.y = transform.localPosition.y / camStats.worldUnitsPerPixel;
                 lastPos = transform.position;
             }
-            UpdateDepth((int)screenPosition.z);
-            SetSprites();
+            UpdateDepth((int)transform.position.z);
+            //SetSprites();
         }
-    }
-
-    public void UpdatePosition()
-    {
-        if (Selection.activeGameObject == this.gameObject)
-        {
-            SetSprites();
-            transform.localPosition = screenPosition * worldUnitsPerPixel;
-        }
-    }
 #endif
-
+    }
     public void UpdateDepth(int newDepth)
     {
         depthOrder = newDepth;
         transform.position = new Vector3(transform.position.x, transform.position.y, depthOrder);
     }
+    //private void SetSprites()
+    //{
+    //    uiRenderInstance.sprites = new SimpleSprite[text.Length];
+    //    uiRenderInstance.matrices = new Matrix4x4[uiRenderInstance.sprites.Length];
+    //    uiRenderInstance.widthHeightFlip = new Vector4[uiRenderInstance.sprites.Length];
+    //    cursorX = 0;
 
-    private void SetSprites()
+    //    for (int i = 0; i < text.Length; i++)
+    //    {
+    //        char c = text[i];
+    //        int asciiIndex = (int)c;
+    //        if (asciiIndex < 33)
+    //        {
+    //            if (asciiIndex == 32)
+    //            {
+    //                cursorX += spacing;
+    //            }
+    //        }
+    //        else
+    //        {
+    //            SimpleSprite sprite = atlas.simpleSprites[asciiIndex - 33];
+
+    //            Vector2 spritePixelSize = sprite.worldSize * PIXELS_PER_UNIT;
+
+    //            Vector3 worldOffset = new Vector3(cursorX * kerning, 0, 0);
+    //            Vector3 matrixPos = transform.parent.position + ((screenPosition + worldOffset) * camStats.worldUnitsPerPixel);
+    //            matrixPos.z = depthOrder;
+    //            Vector3 matrixScale = new Vector3( spritePixelSize.x * camStats.worldUnitsPerPixel, spritePixelSize.y * camStats.worldUnitsPerPixel, 1f);
+
+    //            uiRenderInstance.matrices[i] = Matrix4x4.TRS(matrixPos, transform.rotation, matrixScale);
+    //            uiRenderInstance.sprites[i] = sprite;
+    //            uiRenderInstance.widthHeightFlip[i] = Vector4.one;
+    //            cursorX += spritePixelSize.x;
+    //        }
+    //    }
+    //}
+
+#if UNITY_EDITOR
+    public void UpdateEditorPosition()
     {
-        int printableCharCount = 0;
-        sprites = new SimpleSprite[text.Length];
-        spriteMatrices = new Matrix4x4[sprites.Length];
-        cursorX = 0;
-
-        worldUnitsPerPixel = camStats.camHeight / Screen.height;
-
-        for (int i = 0; i < text.Length; i++)
+        if (Selection.activeGameObject == this.gameObject)
         {
-            char c = text[i];
-            int asciiIndex = (int)c;
-            if (asciiIndex < 33)
-            {
-                if (asciiIndex == 32)
-                {
-                    cursorX += spacing;
-                }
-            }
-            else
-            {
-                SimpleSprite sprite = atlas.simpleSprites[asciiIndex - 33];
-
-                Vector2 spritePixelSize = sprite.worldSize * PIXELS_PER_UNIT;
-
-                float worldOffsetX = cursorX * kerning;
-                Vector3 matrixPos = cam.transform.position + ((screenPosition + Vector3.right * worldOffsetX) * worldUnitsPerPixel);
-                matrixPos.z = depthOrder;
-                Vector3 matrixScale = new Vector3( spritePixelSize.x * worldUnitsPerPixel, spritePixelSize.y * worldUnitsPerPixel, 1f);
-
-                spriteMatrices[i] = Matrix4x4.TRS(matrixPos, transform.rotation, matrixScale);
-                sprites[i] = sprite;
-
-                printableCharCount++;
-
-                cursorX += spritePixelSize.x;
-            }
+            Vector3 editorPos = new Vector3(screenPosition.x * camStats.worldUnitsPerPixel, screenPosition.y * camStats.worldUnitsPerPixel, transform.localPosition.z);
+            transform.localPosition = editorPos;
         }
     }
+#endif
 }

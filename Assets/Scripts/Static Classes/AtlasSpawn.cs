@@ -1,13 +1,8 @@
 using System;
 using UnityEngine;
+using static Atlas;
 public static class AtlasSpawn
 {
-    public static int FLOAT_SIZE = sizeof(float);
-    public static int FLOAT2_SIZE = FLOAT_SIZE * 2;
-    public static int FLOAT3_SIZE = FLOAT_SIZE * 3;
-    public static int FLOAT4_SIZE = FLOAT_SIZE * 4;
-    public static int INT_SIZE = sizeof(uint);
-
     public const int ZONE_SPAWNER_COUNT = 8;
 
     public const int THREADS_PER_GROUP = 64;

@@ -1,5 +1,7 @@
 struct AtlasSprite
 {
-    float2 uvSize;
-    float2 uvPosition;
+    float4 position;
+    float4 pivot;
+    float4 uvSizeAndPos;
+    float4 widthHeightFlip;
 };

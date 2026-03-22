@@ -35,12 +35,12 @@ public class Train : MonoBehaviour
         stats.closingDoors = false;
         stats.brakeDist = GetBrakeDistance(trip.stations[0].targetTrainSpeed);
         trainCTS = new CancellationTokenSource();
-        stats.minDepth = frontCarriage.exteriorRenderers[0].depthOrder;
-        stats.maxDepth = frontCarriage.interiorSlideDoors[0].rightSlideDoorRenderer.depthOrder;
-        stats.depthSection_front_min = frontCarriage.grapPoleRenderers[0].depthOrder - 2;
-        stats.depthSection_front_max = frontCarriage.grapPoleRenderers[0].depthOrder - 1;
-        stats.depthSection_back_min = frontCarriage.grapPoleRenderers[0].depthOrder + 1;
-        stats.depthSection_back_max = frontCarriage.grapPoleRenderers[0].depthOrder + 2;
+        stats.minDepth = frontCarriage.exteriorRenderers[0].renderInput.batchKey.depthOrder;
+        stats.maxDepth = frontCarriage.interiorSlideDoors[0].rightSlideDoorRenderer.renderInput.batchKey.depthOrder;
+        stats.depthSection_front_min = frontCarriage.grapPoleRenderers[0].renderInput.batchKey.depthOrder - 2;
+        stats.depthSection_front_max = frontCarriage.grapPoleRenderers[0].renderInput.batchKey.depthOrder - 1;
+        stats.depthSection_back_min = frontCarriage.grapPoleRenderers[0].renderInput.batchKey.depthOrder + 1;
+        stats.depthSection_back_max = frontCarriage.grapPoleRenderers[0].renderInput.batchKey.depthOrder + 2;
         stats.distToNextStation = float.MaxValue;
 
         stats.trainWorldWidth = frontCollider.bounds.max.x - backCollider.bounds.min.x;

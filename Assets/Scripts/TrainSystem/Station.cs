@@ -5,11 +5,11 @@ public class Station : MonoBehaviour
     public StationSO station;
     public TrainStatsSO trainStats;
     public NPCsDataSO npcData;
-    public AtlasRenderer platformRenderer;
+    public AtlasSimpleRenderer platformRenderer;
     private void OnEnable()
     {
         SpawnNPCs();
-        station.isFrontOfTrain = platformRenderer.depthOrder < trainStats.minDepth;
+        station.isFrontOfTrain = platformRenderer.renderInput.batchKey.depthOrder < trainStats.minDepth;
     }
 
     private void SpawnNPCs()

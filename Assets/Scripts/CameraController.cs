@@ -55,7 +55,7 @@ public class CameraController : MonoBehaviour
         stats.camRight = stats.curWorldPos.x + stats.camWidth * 0.5f;
         stats.camBottom = stats.curWorldPos.y - stats.camHeight * 0.5f;
         stats.camTop = stats.curWorldPos.y + stats.camHeight * 0.5f;
-
+        stats.worldUnitsPerPixel = stats.camHeight / Screen.height;
         if (Application.isPlaying)
         {
             cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, stats.targetSize, Time.deltaTime * settings.damping);
@@ -63,6 +63,10 @@ public class CameraController : MonoBehaviour
             stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, stats.targetWorldPos, Time.deltaTime * settings.damping);
             transform.position = stats.curWorldPos;
             stats.curVelocity = -((stats.curWorldPos - stats.prevWorldPos) / Time.deltaTime);
+        }
+        else
+        {
+            stats.curWorldPos = transform.position;
         }
     }
 
