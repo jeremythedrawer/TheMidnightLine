@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &327847357916344279
+--- !u!1 &1080804349650620193
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,720 +8,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7246298954143171020}
-  - component: {fileID: 8677207619293946710}
-  m_Layer: 0
-  m_Name: TrainLinePole (4)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &7246298954143171020
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 327847357916344279}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 223.39, y: -8.28, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4834316544710417420}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8677207619293946710
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 327847357916344279}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
-  material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 5
-  spriteMode: 0
-  width: 1
-  height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 1
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 1
-  sprite:
-    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
-    uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 1.6388888, y: 12.338889, z: 1}
-    index: 5
-  bounds:
-    m_Center: {x: 379.03, y: -3.5967398, z: 1}
-    m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 1.6388888
-  worldHeight: 12.338889
---- !u!1 &558825511551670366
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 8302840605603658753}
-  - component: {fileID: 6249606776735450785}
-  m_Layer: 0
-  m_Name: TrainLines (2)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8302840605603658753
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 558825511551670366}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 89.149994, y: 0, z: 10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4834316544710417420}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6249606776735450785
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 558825511551670366}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
-  material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 2
-  spriteMode: 2
-  width: 1.96
-  height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 10
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 10
-  sprite:
-    uvSizeAndPos: {x: 1, y: 0.09716797, z: 0, w: 0.685791}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 22.755556, y: 2.211111, z: 1}
-    index: 2
-  bounds:
-    m_Center: {x: 244.79, y: 4.68326, z: 10}
-    m_Extent: {x: 22.300446, y: 1.1055555, z: 0.1}
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 6.120001, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 0.99999994, z: 1, w: 1}
-  - {x: 6.120001, y: 0.99999994, z: 1, w: 1}
-  - {x: 1, y: 0.99999994, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 6.120001, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 44.60089
-  worldHeight: 2.211111
---- !u!1 &732620258198898829
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 440522219554558632}
-  - component: {fileID: 3499312488031739797}
-  m_Layer: 0
-  m_Name: TrainLinePole (6)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &440522219554558632
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 732620258198898829}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 312.47998, y: -8.28, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4834316544710417420}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3499312488031739797
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 732620258198898829}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
-  material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 5
-  spriteMode: 0
-  width: 1
-  height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 1
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 1
-  sprite:
-    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
-    uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 1.6388888, y: 12.338889, z: 1}
-    index: 5
-  bounds:
-    m_Center: {x: 468.12, y: -3.5967398, z: 1}
-    m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 1.6388888
-  worldHeight: 12.338889
---- !u!1 &1079750639726928137
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6567825557928104299}
-  - component: {fileID: 7043660729868557765}
-  m_Layer: 0
-  m_Name: TrainLines (6)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6567825557928104299
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1079750639726928137}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 267.37, y: 0, z: 10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4834316544710417420}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7043660729868557765
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1079750639726928137}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
-  material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 2
-  spriteMode: 2
-  width: 1.96
-  height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 10
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 10
-  sprite:
-    uvSizeAndPos: {x: 1, y: 0.09716797, z: 0, w: 0.685791}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 22.755556, y: 2.211111, z: 1}
-    index: 2
-  bounds:
-    m_Center: {x: 423.01, y: 4.68326, z: 10}
-    m_Extent: {x: 22.300446, y: 1.1055555, z: 0.1}
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 6.120001, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 0.99999994, z: 1, w: 1}
-  - {x: 6.120001, y: 0.99999994, z: 1, w: 1}
-  - {x: 1, y: 0.99999994, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 6.120001, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 44.60089
-  worldHeight: 2.211111
---- !u!1 &1229099116341234348
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6819311858004239642}
-  - component: {fileID: 5224180056928974531}
-  m_Layer: 0
-  m_Name: TrainLinePole (1)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &6819311858004239642
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1229099116341234348}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 89.79001, y: -8.28, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4834316544710417420}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5224180056928974531
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1229099116341234348}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
-  material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 5
-  spriteMode: 0
-  width: 1
-  height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 1
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 1
-  sprite:
-    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
-    uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 1.6388888, y: 12.338889, z: 1}
-    index: 5
-  bounds:
-    m_Center: {x: 245.43001, y: -3.5967398, z: 1}
-    m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 1.6388888
-  worldHeight: 12.338889
---- !u!1 &1624656172300076353
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3338271734371402721}
-  - component: {fileID: 6029433773051703467}
+  - component: {fileID: 7243768770717881283}
+  - component: {fileID: 3311483592114992144}
   m_Layer: 0
   m_Name: TrainLines (5)
   m_TagString: Untagged
@@ -729,213 +17,271 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3338271734371402721
+--- !u!4 &7243768770717881283
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1624656172300076353}
+  m_GameObject: {fileID: 1080804349650620193}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 222.77003, y: 0, z: 10}
+  m_LocalPosition: {x: 278.66492, y: -0.8200002, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4834316544710417420}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6029433773051703467
+--- !u!114 &3311483592114992144
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1624656172300076353}
+  m_GameObject: {fileID: 1080804349650620193}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Script: {fileID: 11500000, guid: 065474de7e082734984a15c3949e3dfc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
-  material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-  boxCollider: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSliceRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+      depthOrder: 5
+    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+    boxCollider: {fileID: 0}
+    gameObject: {fileID: 1080804349650620193}
+    bounds:
+      m_Center: {x: 440.3427, y: 6.3555555, z: 5}
+      m_Extent: {x: 28.977781, y: 1.1055555, z: 0.1}
+    worldPivotAndSize:
+    - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
+    - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
+    - {x: -48.80556, y: 0, z: 9.15, w: 0.022222223}
+    - {x: 0, y: -0.022222223, z: 9.338889, w: 1.5333333}
+    - {x: -9.338889, y: -0.022222223, z: 4.2666674, w: 1.5333333}
+    - {x: -48.80556, y: -0.022222223, z: 9.15, w: 1.5333333}
+    - {x: 0, y: -1.5555556, z: 9.338889, w: 0.6555555}
+    - {x: -9.338889, y: -1.5555556, z: 4.2666674, w: 0.6555555}
+    - {x: -48.80556, y: -1.5555556, z: 9.15, w: 0.6555555}
+    uvSizeAndPos:
+    - {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.685791}
+    - {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.685791}
+    - {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.685791}
+    - {x: 0.4104004, y: 0.06738282, z: 0, w: 0.6867676}
+    - {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.6867676}
+    - {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.6867676}
+    - {x: 0.4104004, y: 0.028808592, z: 0, w: 0.7541504}
+    - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
+    - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
+    scaleAndFlip:
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 28.977781, y: 1.1055555}
   spriteIndex: 2
-  spriteMode: 2
-  width: 1.96
+  width: 9.25
   height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 10
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 10
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 1, y: 0.09716797, z: 0, w: 0.685791}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 22.755556, y: 2.211111, z: 1}
+      index: 2
+    slice: {x: 0.4104004, y: 0.5979004, z: 0.010050251, w: 0.7035176}
+    uvSizeAndPos:
+    - {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.685791}
+    - {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.685791}
+    - {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.685791}
+    - {x: 0.4104004, y: 0.06738282, z: 0, w: 0.6867676}
+    - {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.6867676}
+    - {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.6867676}
+    - {x: 0.4104004, y: 0.028808592, z: 0, w: 0.7541504}
+    - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
+    - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
+    worldSlices: {x: 9.338889, y: 9.15, z: 0.022222223, w: 0.6555555}
+  quadCount: 0
+--- !u!1 &1319570969986533978
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9165270766088074704}
+  - component: {fileID: 2938592427580297382}
+  m_Layer: 0
+  m_Name: TrainLinePole (5)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9165270766088074704
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1319570969986533978}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 337.08997, y: -9.13, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4834316544710417420}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2938592427580297382
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1319570969986533978}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
+      depthOrder: 0
+    atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
+    boxCollider: {fileID: 0}
+    flipX: 0
+    flipY: 0
+    gameObject: {fileID: 1319570969986533978}
+    bounds:
+      m_Center: {x: 469.78998, y: 3.1094446, z: 0}
+      m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
+    pivotAndSize: {x: 0.8194444, y: 0, z: 1.6388888, w: 12.338889}
+    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 0, y: 6.1694446}
+  width: 1
+  height: 1
+  spriteIndex: 5
   sprite:
-    uvSizeAndPos: {x: 1, y: 0.09716797, z: 0, w: 0.685791}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 22.755556, y: 2.211111, z: 1}
-    index: 2
-  bounds:
-    m_Center: {x: 378.41003, y: 4.68326, z: 10}
-    m_Extent: {x: 22.300446, y: 1.1055555, z: 0.1}
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 6.120001, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 0.99999994, z: 1, w: 1}
-  - {x: 6.120001, y: 0.99999994, z: 1, w: 1}
-  - {x: 1, y: 0.99999994, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 6.120001, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 44.60089
-  worldHeight: 2.211111
+    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
+    uvPivot: {x: 0.5, y: 0}
+    worldSize: {x: 1.6388888, y: 12.338889, z: 1}
+    index: 5
+--- !u!1 &1563792027966052144
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6147047711184791959}
+  - component: {fileID: 2455323138704716935}
+  m_Layer: 0
+  m_Name: TrainLines (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6147047711184791959
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563792027966052144}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 220.74, y: -0.8200002, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4834316544710417420}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2455323138704716935
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1563792027966052144}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065474de7e082734984a15c3949e3dfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSliceRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+      depthOrder: 5
+    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+    boxCollider: {fileID: 0}
+    gameObject: {fileID: 1563792027966052144}
+    bounds:
+      m_Center: {x: 382.4178, y: 6.3555555, z: 5}
+      m_Extent: {x: 28.977781, y: 1.1055555, z: 0.1}
+    worldPivotAndSize:
+    - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
+    - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
+    - {x: -48.80556, y: 0, z: 9.15, w: 0.022222223}
+    - {x: 0, y: -0.022222223, z: 9.338889, w: 1.5333333}
+    - {x: -9.338889, y: -0.022222223, z: 4.2666674, w: 1.5333333}
+    - {x: -48.80556, y: -0.022222223, z: 9.15, w: 1.5333333}
+    - {x: 0, y: -1.5555556, z: 9.338889, w: 0.6555555}
+    - {x: -9.338889, y: -1.5555556, z: 4.2666674, w: 0.6555555}
+    - {x: -48.80556, y: -1.5555556, z: 9.15, w: 0.6555555}
+    uvSizeAndPos:
+    - {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.685791}
+    - {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.685791}
+    - {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.685791}
+    - {x: 0.4104004, y: 0.06738282, z: 0, w: 0.6867676}
+    - {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.6867676}
+    - {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.6867676}
+    - {x: 0.4104004, y: 0.028808592, z: 0, w: 0.7541504}
+    - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
+    - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
+    scaleAndFlip:
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 28.977781, y: 1.1055555}
+  spriteIndex: 2
+  width: 9.25
+  height: 1
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 1, y: 0.09716797, z: 0, w: 0.685791}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 22.755556, y: 2.211111, z: 1}
+      index: 2
+    slice: {x: 0.4104004, y: 0.5979004, z: 0.010050251, w: 0.7035176}
+    uvSizeAndPos:
+    - {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.685791}
+    - {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.685791}
+    - {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.685791}
+    - {x: 0.4104004, y: 0.06738282, z: 0, w: 0.6867676}
+    - {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.6867676}
+    - {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.6867676}
+    - {x: 0.4104004, y: 0.028808592, z: 0, w: 0.7541504}
+    - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
+    - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
+    worldSlices: {x: 9.338889, y: 9.15, z: 0.022222223, w: 0.6555555}
+  quadCount: 0
 --- !u!1 &2101241448160461617
 GameObject:
   m_ObjectHideFlags: 0
@@ -945,7 +291,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4156625392955600640}
-  - component: {fileID: 9106251177024296131}
+  - component: {fileID: 511578970377521798}
   m_Layer: 0
   m_Name: TrainLinePole
   m_TagString: Untagged
@@ -962,13 +308,13 @@ Transform:
   m_GameObject: {fileID: 2101241448160461617}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 45.190002, y: -8.28, z: 1}
+  m_LocalPosition: {x: 47.58, y: -9.13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4834316544710417420}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &9106251177024296131
+--- !u!114 &511578970377521798
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -977,53 +323,101 @@ MonoBehaviour:
   m_GameObject: {fileID: 2101241448160461617}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
-  material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 5
-  spriteMode: 0
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
+      depthOrder: 0
+    atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
+    boxCollider: {fileID: 0}
+    flipX: 0
+    flipY: 0
+    gameObject: {fileID: 2101241448160461617}
+    bounds:
+      m_Center: {x: 180.28, y: 3.1094446, z: 0}
+      m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
+    pivotAndSize: {x: 0.8194444, y: 0, z: 1.6388888, w: 12.338889}
+    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 0, y: 6.1694446}
   width: 1
   height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 1
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 1
+  spriteIndex: 5
   sprite:
     uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 1.6388888, y: 12.338889, z: 1}
     index: 5
-  bounds:
-    m_Center: {x: 200.83, y: -3.5967398, z: 1}
-    m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 1.6388888
-  worldHeight: 12.338889
+--- !u!1 &2320763599818031180
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3426468904877804212}
+  - component: {fileID: 2091199309931499709}
+  m_Layer: 0
+  m_Name: TrainLinePole (4)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3426468904877804212
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2320763599818031180}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 279.14996, y: -9.13, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4834316544710417420}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2091199309931499709
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2320763599818031180}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
+      depthOrder: 0
+    atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
+    boxCollider: {fileID: 0}
+    flipX: 0
+    flipY: 0
+    gameObject: {fileID: 2320763599818031180}
+    bounds:
+      m_Center: {x: 411.84998, y: 3.1094446, z: 0}
+      m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
+    pivotAndSize: {x: 0.8194444, y: 0, z: 1.6388888, w: 12.338889}
+    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 0, y: 6.1694446}
+  width: 1
+  height: 1
+  spriteIndex: 5
+  sprite:
+    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
+    uvPivot: {x: 0.5, y: 0}
+    worldSize: {x: 1.6388888, y: 12.338889, z: 1}
+    index: 5
 --- !u!1 &2833992705658717427
 GameObject:
   m_ObjectHideFlags: 0
@@ -1055,19 +449,18 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 7103928648877609895}
-  - {fileID: 182504283053730698}
-  - {fileID: 8302840605603658753}
-  - {fileID: 930070245429907207}
-  - {fileID: 8121405370732262675}
-  - {fileID: 3338271734371402721}
-  - {fileID: 6567825557928104299}
+  - {fileID: 7279741404995201017}
+  - {fileID: 6147047711184791959}
+  - {fileID: 1326165624809786587}
+  - {fileID: 3708543745753855399}
+  - {fileID: 7243768770717881283}
+  - {fileID: 1277459382447548505}
   - {fileID: 4156625392955600640}
-  - {fileID: 6819311858004239642}
-  - {fileID: 615304145755555936}
-  - {fileID: 969456830820805275}
-  - {fileID: 7246298954143171020}
-  - {fileID: 3371531112692833715}
-  - {fileID: 440522219554558632}
+  - {fileID: 6185945502339229999}
+  - {fileID: 4667818270014951102}
+  - {fileID: 3817765960744200706}
+  - {fileID: 3426468904877804212}
+  - {fileID: 9165270766088074704}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4537694008876227096
@@ -1085,15 +478,122 @@ MonoBehaviour:
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   zoneStats: {fileID: 11400000, guid: fa0e41c06b686dc46aecf54c90ff03e4, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  atlasRenderer: {fileID: 6336130734481444323}
+  atlasRenderer: {fileID: 0}
   repeatType: 1
-  ignoreParallax: 1
-  camStats: {fileID: 0}
-  rightRenderer: {fileID: 3499312488031739797}
+  ignoreParallax: 0
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  rightRenderer: {fileID: 0}
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
   pivotToMaxWorldDist: 0
   minWorldToPivotDist: 0
+--- !u!1 &4378685160388922467
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3708543745753855399}
+  - component: {fileID: 5352908800857208207}
+  m_Layer: 0
+  m_Name: TrainLines (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3708543745753855399
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4378685160388922467}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 162.83498, y: -0.8200002, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4834316544710417420}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5352908800857208207
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4378685160388922467}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065474de7e082734984a15c3949e3dfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSliceRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+      depthOrder: 5
+    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+    boxCollider: {fileID: 0}
+    gameObject: {fileID: 4378685160388922467}
+    bounds:
+      m_Center: {x: 324.51276, y: 6.3555555, z: 5}
+      m_Extent: {x: 28.977781, y: 1.1055555, z: 0.1}
+    worldPivotAndSize:
+    - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
+    - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
+    - {x: -48.80556, y: 0, z: 9.15, w: 0.022222223}
+    - {x: 0, y: -0.022222223, z: 9.338889, w: 1.5333333}
+    - {x: -9.338889, y: -0.022222223, z: 4.2666674, w: 1.5333333}
+    - {x: -48.80556, y: -0.022222223, z: 9.15, w: 1.5333333}
+    - {x: 0, y: -1.5555556, z: 9.338889, w: 0.6555555}
+    - {x: -9.338889, y: -1.5555556, z: 4.2666674, w: 0.6555555}
+    - {x: -48.80556, y: -1.5555556, z: 9.15, w: 0.6555555}
+    uvSizeAndPos:
+    - {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.685791}
+    - {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.685791}
+    - {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.685791}
+    - {x: 0.4104004, y: 0.06738282, z: 0, w: 0.6867676}
+    - {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.6867676}
+    - {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.6867676}
+    - {x: 0.4104004, y: 0.028808592, z: 0, w: 0.7541504}
+    - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
+    - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
+    scaleAndFlip:
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 28.977781, y: 1.1055555}
+  spriteIndex: 2
+  width: 9.25
+  height: 1
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 1, y: 0.09716797, z: 0, w: 0.685791}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 22.755556, y: 2.211111, z: 1}
+      index: 2
+    slice: {x: 0.4104004, y: 0.5979004, z: 0.010050251, w: 0.7035176}
+    uvSizeAndPos:
+    - {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.685791}
+    - {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.685791}
+    - {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.685791}
+    - {x: 0.4104004, y: 0.06738282, z: 0, w: 0.6867676}
+    - {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.6867676}
+    - {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.6867676}
+    - {x: 0.4104004, y: 0.028808592, z: 0, w: 0.7541504}
+    - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
+    - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
+    worldSlices: {x: 9.338889, y: 9.15, z: 0.022222223, w: 0.6555555}
+  quadCount: 0
 --- !u!1 &4473322025990862620
 GameObject:
   m_ObjectHideFlags: 0
@@ -1103,7 +603,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7103928648877609895}
-  - component: {fileID: 6336130734481444323}
+  - component: {fileID: 4403535189799662319}
   m_Layer: 0
   m_Name: TrainLines
   m_TagString: Untagged
@@ -1120,13 +620,13 @@ Transform:
   m_GameObject: {fileID: 4473322025990862620}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 10}
+  m_LocalPosition: {x: -10.949997, y: -0.8200002, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4834316544710417420}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6336130734481444323
+--- !u!114 &4403535189799662319
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1135,190 +635,73 @@ MonoBehaviour:
   m_GameObject: {fileID: 4473322025990862620}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Script: {fileID: 11500000, guid: 065474de7e082734984a15c3949e3dfc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
-  material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-  boxCollider: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSliceRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+      depthOrder: 5
+    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+    boxCollider: {fileID: 0}
+    gameObject: {fileID: 4473322025990862620}
+    bounds:
+      m_Center: {x: 150.72778, y: 6.3555555, z: 5}
+      m_Extent: {x: 28.977781, y: 1.1055555, z: 0.1}
+    worldPivotAndSize:
+    - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
+    - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
+    - {x: -48.80556, y: 0, z: 9.15, w: 0.022222223}
+    - {x: 0, y: -0.022222223, z: 9.338889, w: 1.5333333}
+    - {x: -9.338889, y: -0.022222223, z: 4.2666674, w: 1.5333333}
+    - {x: -48.80556, y: -0.022222223, z: 9.15, w: 1.5333333}
+    - {x: 0, y: -1.5555556, z: 9.338889, w: 0.6555555}
+    - {x: -9.338889, y: -1.5555556, z: 4.2666674, w: 0.6555555}
+    - {x: -48.80556, y: -1.5555556, z: 9.15, w: 0.6555555}
+    uvSizeAndPos:
+    - {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.685791}
+    - {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.685791}
+    - {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.685791}
+    - {x: 0.4104004, y: 0.06738282, z: 0, w: 0.6867676}
+    - {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.6867676}
+    - {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.6867676}
+    - {x: 0.4104004, y: 0.028808592, z: 0, w: 0.7541504}
+    - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
+    - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
+    scaleAndFlip:
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 28.977781, y: 1.1055555}
   spriteIndex: 2
-  spriteMode: 2
-  width: 1.96
+  width: 9.25
   height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 10
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 10
-  sprite:
-    uvSizeAndPos: {x: 1, y: 0.09716797, z: 0, w: 0.685791}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 22.755556, y: 2.211111, z: 1}
-    index: 2
-  bounds:
-    m_Center: {x: 155.64, y: 4.68326, z: 10}
-    m_Extent: {x: 22.300446, y: 1.1055555, z: 0.1}
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 6.120001, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 0.99999994, z: 1, w: 1}
-  - {x: 6.120001, y: 0.99999994, z: 1, w: 1}
-  - {x: 1, y: 0.99999994, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 6.120001, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 44.60089
-  worldHeight: 2.211111
---- !u!1 &6092971957530350231
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 1, y: 0.09716797, z: 0, w: 0.685791}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 22.755556, y: 2.211111, z: 1}
+      index: 2
+    slice: {x: 0.4104004, y: 0.5979004, z: 0.010050251, w: 0.7035176}
+    uvSizeAndPos:
+    - {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.685791}
+    - {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.685791}
+    - {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.685791}
+    - {x: 0.4104004, y: 0.06738282, z: 0, w: 0.6867676}
+    - {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.6867676}
+    - {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.6867676}
+    - {x: 0.4104004, y: 0.028808592, z: 0, w: 0.7541504}
+    - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
+    - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
+    worldSlices: {x: 9.338889, y: 9.15, z: 0.022222223, w: 0.6555555}
+  quadCount: 0
+--- !u!1 &6793196170696482458
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1326,544 +709,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8121405370732262675}
-  - component: {fileID: 8606705916619737853}
-  m_Layer: 0
-  m_Name: TrainLines (4)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &8121405370732262675
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6092971957530350231}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 178.23, y: 0, z: 10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4834316544710417420}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8606705916619737853
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6092971957530350231}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
-  material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 2
-  spriteMode: 2
-  width: 1.96
-  height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 10
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 10
-  sprite:
-    uvSizeAndPos: {x: 1, y: 0.09716797, z: 0, w: 0.685791}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 22.755556, y: 2.211111, z: 1}
-    index: 2
-  bounds:
-    m_Center: {x: 333.87, y: 4.68326, z: 10}
-    m_Extent: {x: 22.300446, y: 1.1055555, z: 0.1}
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 6.120001, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 0.99999994, z: 1, w: 1}
-  - {x: 6.120001, y: 0.99999994, z: 1, w: 1}
-  - {x: 1, y: 0.99999994, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 6.120001, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 44.60089
-  worldHeight: 2.211111
---- !u!1 &6258547455959203054
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 930070245429907207}
-  - component: {fileID: 7189438751843007726}
-  m_Layer: 0
-  m_Name: TrainLines (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &930070245429907207
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6258547455959203054}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 133.70003, y: 0, z: 10}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4834316544710417420}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7189438751843007726
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6258547455959203054}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
-  material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 2
-  spriteMode: 2
-  width: 1.96
-  height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 10
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 10
-  sprite:
-    uvSizeAndPos: {x: 1, y: 0.09716797, z: 0, w: 0.685791}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 22.755556, y: 2.211111, z: 1}
-    index: 2
-  bounds:
-    m_Center: {x: 289.34003, y: 4.68326, z: 10}
-    m_Extent: {x: 22.300446, y: 1.1055555, z: 0.1}
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 6.120001, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 0.99999994, z: 1, w: 1}
-  - {x: 6.120001, y: 0.99999994, z: 1, w: 1}
-  - {x: 1, y: 0.99999994, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 6.120001, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 44.60089
-  worldHeight: 2.211111
---- !u!1 &8046112022256782108
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 969456830820805275}
-  - component: {fileID: 5291197530204977988}
-  m_Layer: 0
-  m_Name: TrainLinePole (3)
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &969456830820805275
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8046112022256782108}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 178.93004, y: -8.28, z: 1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4834316544710417420}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5291197530204977988
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8046112022256782108}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
-  material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 5
-  spriteMode: 0
-  width: 1
-  height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 1
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 1
-  sprite:
-    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
-    uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 1.6388888, y: 12.338889, z: 1}
-    index: 5
-  bounds:
-    m_Center: {x: 334.57004, y: -3.5967398, z: 1}
-    m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 1.6388888
-  worldHeight: 12.338889
---- !u!1 &8145686982985644905
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 615304145755555936}
-  - component: {fileID: 7452578489789183377}
+  - component: {fileID: 4667818270014951102}
+  - component: {fileID: 2937641078095421427}
   m_Layer: 0
   m_Name: TrainLinePole (2)
   m_TagString: Untagged
@@ -1871,78 +718,58 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &615304145755555936
+--- !u!4 &4667818270014951102
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8145686982985644905}
+  m_GameObject: {fileID: 6793196170696482458}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 134.37999, y: -8.28, z: 1}
+  m_LocalPosition: {x: 163.44002, y: -9.13, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4834316544710417420}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7452578489789183377
+--- !u!114 &2937641078095421427
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8145686982985644905}
+  m_GameObject: {fileID: 6793196170696482458}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
-  material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 5
-  spriteMode: 0
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
+      depthOrder: 0
+    atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
+    boxCollider: {fileID: 0}
+    flipX: 0
+    flipY: 0
+    gameObject: {fileID: 6793196170696482458}
+    bounds:
+      m_Center: {x: 296.14, y: 3.1094446, z: 0}
+      m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
+    pivotAndSize: {x: 0.8194444, y: 0, z: 1.6388888, w: 12.338889}
+    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 0, y: 6.1694446}
   width: 1
   height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 1
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 1
+  spriteIndex: 5
   sprite:
     uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 1.6388888, y: 12.338889, z: 1}
     index: 5
-  bounds:
-    m_Center: {x: 290.02, y: -3.5967398, z: 1}
-    m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 1.6388888
-  worldHeight: 12.338889
---- !u!1 &8796807788712298492
+--- !u!1 &7135488199316155816
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1950,87 +777,106 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 3371531112692833715}
-  - component: {fileID: 5701989878228831850}
+  - component: {fileID: 7279741404995201017}
+  - component: {fileID: 2621959241259756864}
   m_Layer: 0
-  m_Name: TrainLinePole (5)
+  m_Name: TrainLines (2)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &3371531112692833715
+--- !u!4 &7279741404995201017
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8796807788712298492}
+  m_GameObject: {fileID: 7135488199316155816}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 268.17993, y: -8.28, z: 1}
+  m_LocalPosition: {x: 104.91, y: -0.8200002, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4834316544710417420}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5701989878228831850
+--- !u!114 &2621959241259756864
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8796807788712298492}
+  m_GameObject: {fileID: 7135488199316155816}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Script: {fileID: 11500000, guid: 065474de7e082734984a15c3949e3dfc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
-  material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 5
-  spriteMode: 0
-  width: 1
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSliceRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+      depthOrder: 5
+    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+    boxCollider: {fileID: 0}
+    gameObject: {fileID: 7135488199316155816}
+    bounds:
+      m_Center: {x: 266.58777, y: 6.3555555, z: 5}
+      m_Extent: {x: 28.977781, y: 1.1055555, z: 0.1}
+    worldPivotAndSize:
+    - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
+    - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
+    - {x: -48.80556, y: 0, z: 9.15, w: 0.022222223}
+    - {x: 0, y: -0.022222223, z: 9.338889, w: 1.5333333}
+    - {x: -9.338889, y: -0.022222223, z: 4.2666674, w: 1.5333333}
+    - {x: -48.80556, y: -0.022222223, z: 9.15, w: 1.5333333}
+    - {x: 0, y: -1.5555556, z: 9.338889, w: 0.6555555}
+    - {x: -9.338889, y: -1.5555556, z: 4.2666674, w: 0.6555555}
+    - {x: -48.80556, y: -1.5555556, z: 9.15, w: 0.6555555}
+    uvSizeAndPos:
+    - {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.685791}
+    - {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.685791}
+    - {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.685791}
+    - {x: 0.4104004, y: 0.06738282, z: 0, w: 0.6867676}
+    - {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.6867676}
+    - {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.6867676}
+    - {x: 0.4104004, y: 0.028808592, z: 0, w: 0.7541504}
+    - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
+    - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
+    scaleAndFlip:
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 28.977781, y: 1.1055555}
+  spriteIndex: 2
+  width: 9.25
   height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 1
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 1
-  sprite:
-    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
-    uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 1.6388888, y: 12.338889, z: 1}
-    index: 5
-  bounds:
-    m_Center: {x: 423.81995, y: -3.5967398, z: 1}
-    m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 1.6388888
-  worldHeight: 12.338889
---- !u!1 &8952405037589004280
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 1, y: 0.09716797, z: 0, w: 0.685791}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 22.755556, y: 2.211111, z: 1}
+      index: 2
+    slice: {x: 0.4104004, y: 0.5979004, z: 0.010050251, w: 0.7035176}
+    uvSizeAndPos:
+    - {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.685791}
+    - {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.685791}
+    - {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.685791}
+    - {x: 0.4104004, y: 0.06738282, z: 0, w: 0.6867676}
+    - {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.6867676}
+    - {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.6867676}
+    - {x: 0.4104004, y: 0.028808592, z: 0, w: 0.7541504}
+    - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
+    - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
+    worldSlices: {x: 9.338889, y: 9.15, z: 0.022222223, w: 0.6555555}
+  quadCount: 0
+--- !u!1 &7187273961862143719
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2038,8 +884,8 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 182504283053730698}
-  - component: {fileID: 2840623033526110131}
+  - component: {fileID: 1326165624809786587}
+  - component: {fileID: 1525819967296908105}
   m_Layer: 0
   m_Name: TrainLines (1)
   m_TagString: Untagged
@@ -2047,210 +893,336 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &182504283053730698
+--- !u!4 &1326165624809786587
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8952405037589004280}
+  m_GameObject: {fileID: 7187273961862143719}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 44.559998, y: 0, z: 10}
+  m_LocalPosition: {x: 46.97499, y: -0.8200002, z: 5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4834316544710417420}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2840623033526110131
+--- !u!114 &1525819967296908105
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8952405037589004280}
+  m_GameObject: {fileID: 7187273961862143719}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Script: {fileID: 11500000, guid: 065474de7e082734984a15c3949e3dfc, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
-  material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-  boxCollider: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSliceRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+      depthOrder: 5
+    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+    boxCollider: {fileID: 0}
+    gameObject: {fileID: 7187273961862143719}
+    bounds:
+      m_Center: {x: 208.65277, y: 6.3555555, z: 5}
+      m_Extent: {x: 28.977781, y: 1.1055555, z: 0.1}
+    worldPivotAndSize:
+    - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
+    - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
+    - {x: -48.80556, y: 0, z: 9.15, w: 0.022222223}
+    - {x: 0, y: -0.022222223, z: 9.338889, w: 1.5333333}
+    - {x: -9.338889, y: -0.022222223, z: 4.2666674, w: 1.5333333}
+    - {x: -48.80556, y: -0.022222223, z: 9.15, w: 1.5333333}
+    - {x: 0, y: -1.5555556, z: 9.338889, w: 0.6555555}
+    - {x: -9.338889, y: -1.5555556, z: 4.2666674, w: 0.6555555}
+    - {x: -48.80556, y: -1.5555556, z: 9.15, w: 0.6555555}
+    uvSizeAndPos:
+    - {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.685791}
+    - {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.685791}
+    - {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.685791}
+    - {x: 0.4104004, y: 0.06738282, z: 0, w: 0.6867676}
+    - {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.6867676}
+    - {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.6867676}
+    - {x: 0.4104004, y: 0.028808592, z: 0, w: 0.7541504}
+    - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
+    - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
+    scaleAndFlip:
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 28.977781, y: 1.1055555}
   spriteIndex: 2
-  spriteMode: 2
-  width: 1.96
+  width: 9.25
   height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 10
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 10
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 1, y: 0.09716797, z: 0, w: 0.685791}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 22.755556, y: 2.211111, z: 1}
+      index: 2
+    slice: {x: 0.4104004, y: 0.5979004, z: 0.010050251, w: 0.7035176}
+    uvSizeAndPos:
+    - {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.685791}
+    - {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.685791}
+    - {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.685791}
+    - {x: 0.4104004, y: 0.06738282, z: 0, w: 0.6867676}
+    - {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.6867676}
+    - {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.6867676}
+    - {x: 0.4104004, y: 0.028808592, z: 0, w: 0.7541504}
+    - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
+    - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
+    worldSlices: {x: 9.338889, y: 9.15, z: 0.022222223, w: 0.6555555}
+  quadCount: 0
+--- !u!1 &8042653439924306826
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1277459382447548505}
+  - component: {fileID: 5163515950505753162}
+  m_Layer: 0
+  m_Name: TrainLines (6)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1277459382447548505
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8042653439924306826}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 336.61, y: -0.8200002, z: 5}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4834316544710417420}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5163515950505753162
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8042653439924306826}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065474de7e082734984a15c3949e3dfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSliceRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+      depthOrder: 5
+    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+    boxCollider: {fileID: 0}
+    gameObject: {fileID: 8042653439924306826}
+    bounds:
+      m_Center: {x: 498.28778, y: 6.3555555, z: 5}
+      m_Extent: {x: 28.977781, y: 1.1055555, z: 0.1}
+    worldPivotAndSize:
+    - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
+    - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
+    - {x: -48.80556, y: 0, z: 9.15, w: 0.022222223}
+    - {x: 0, y: -0.022222223, z: 9.338889, w: 1.5333333}
+    - {x: -9.338889, y: -0.022222223, z: 4.2666674, w: 1.5333333}
+    - {x: -48.80556, y: -0.022222223, z: 9.15, w: 1.5333333}
+    - {x: 0, y: -1.5555556, z: 9.338889, w: 0.6555555}
+    - {x: -9.338889, y: -1.5555556, z: 4.2666674, w: 0.6555555}
+    - {x: -48.80556, y: -1.5555556, z: 9.15, w: 0.6555555}
+    uvSizeAndPos:
+    - {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.685791}
+    - {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.685791}
+    - {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.685791}
+    - {x: 0.4104004, y: 0.06738282, z: 0, w: 0.6867676}
+    - {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.6867676}
+    - {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.6867676}
+    - {x: 0.4104004, y: 0.028808592, z: 0, w: 0.7541504}
+    - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
+    - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
+    scaleAndFlip:
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 9.25, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 28.977781, y: 1.1055555}
+  spriteIndex: 2
+  width: 9.25
+  height: 1
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 1, y: 0.09716797, z: 0, w: 0.685791}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 22.755556, y: 2.211111, z: 1}
+      index: 2
+    slice: {x: 0.4104004, y: 0.5979004, z: 0.010050251, w: 0.7035176}
+    uvSizeAndPos:
+    - {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.685791}
+    - {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.685791}
+    - {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.685791}
+    - {x: 0.4104004, y: 0.06738282, z: 0, w: 0.6867676}
+    - {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.6867676}
+    - {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.6867676}
+    - {x: 0.4104004, y: 0.028808592, z: 0, w: 0.7541504}
+    - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
+    - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
+    worldSlices: {x: 9.338889, y: 9.15, z: 0.022222223, w: 0.6555555}
+  quadCount: 0
+--- !u!1 &8257927897922410872
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3817765960744200706}
+  - component: {fileID: 6334829969814764055}
+  m_Layer: 0
+  m_Name: TrainLinePole (3)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3817765960744200706
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8257927897922410872}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 221.19002, y: -9.13, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4834316544710417420}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6334829969814764055
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8257927897922410872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
+      depthOrder: 0
+    atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
+    boxCollider: {fileID: 0}
+    flipX: 0
+    flipY: 0
+    gameObject: {fileID: 8257927897922410872}
+    bounds:
+      m_Center: {x: 353.89, y: 3.1094446, z: 0}
+      m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
+    pivotAndSize: {x: 0.8194444, y: 0, z: 1.6388888, w: 12.338889}
+    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 0, y: 6.1694446}
+  width: 1
+  height: 1
+  spriteIndex: 5
   sprite:
-    uvSizeAndPos: {x: 1, y: 0.09716797, z: 0, w: 0.685791}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 22.755556, y: 2.211111, z: 1}
-    index: 2
-  bounds:
-    m_Center: {x: 200.2, y: 4.68326, z: 10}
-    m_Extent: {x: 22.300446, y: 1.1055555, z: 0.1}
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 6.120001, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 0.99999994, z: 1, w: 1}
-  - {x: 6.120001, y: 0.99999994, z: 1, w: 1}
-  - {x: 1, y: 0.99999994, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 6.120001, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  worldWidth: 44.60089
-  worldHeight: 2.211111
+    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
+    uvPivot: {x: 0.5, y: 0}
+    worldSize: {x: 1.6388888, y: 12.338889, z: 1}
+    index: 5
+--- !u!1 &8626224879940637253
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6185945502339229999}
+  - component: {fileID: 2963744305596405605}
+  m_Layer: 0
+  m_Name: TrainLinePole (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6185945502339229999
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8626224879940637253}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 105.47, y: -9.13, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4834316544710417420}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2963744305596405605
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8626224879940637253}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
+      depthOrder: 0
+    atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
+    boxCollider: {fileID: 0}
+    flipX: 0
+    flipY: 0
+    gameObject: {fileID: 8626224879940637253}
+    bounds:
+      m_Center: {x: 238.17, y: 3.1094446, z: 0}
+      m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
+    pivotAndSize: {x: 0.8194444, y: 0, z: 1.6388888, w: 12.338889}
+    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 0, y: 6.1694446}
+  width: 1
+  height: 1
+  spriteIndex: 5
+  sprite:
+    uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
+    uvPivot: {x: 0.5, y: 0}
+    worldSize: {x: 1.6388888, y: 12.338889, z: 1}
+    index: 5

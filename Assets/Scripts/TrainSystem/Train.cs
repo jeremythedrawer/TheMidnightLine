@@ -10,7 +10,7 @@ public class Train : MonoBehaviour
     [SerializeField] TripSO trip;
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] MaterialIDSO materialIDs;
-    [SerializeField] ZoneSpawnerStatsSO spawnerStats;
+    [SerializeField] ZoneSpawnerSO spawnerStats;
     [SerializeField] SpyStatsSO spyStats;
     [SerializeField] BoxCollider2D backCollider;
     [SerializeField] BoxCollider2D frontCollider;

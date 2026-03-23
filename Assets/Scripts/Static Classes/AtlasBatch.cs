@@ -117,8 +117,8 @@ public static class AtlasBatch
         public Vector4[] worldPivotAndSize;
         public Vector4[] uvSizeAndPos;
         public Vector4[] scaleAndFlip;
+        
         public Vector2 boundsOffset;
-
         public void UpdateSlicedSprite(SliceSprite slicedSprite, float width, float height)
         {
             uvSizeAndPos = slicedSprite.uvSizeAndPos;

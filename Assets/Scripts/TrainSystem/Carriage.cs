@@ -26,7 +26,7 @@ public class Carriage : MonoBehaviour
     [SerializeField] MaterialIDSO materialIDs;
     [SerializeField] AtlasSimpleRenderer[] wheelRenderers;
     public AtlasSimpleRenderer[] exteriorRenderers;
-    public AtlasSimpleRenderer[] chairRenderers;
+    public AtlasSliceRenderer[] seatRenderers;
     public AtlasSimpleRenderer[] grapPoleRenderers;
     public BoxCollider2D insideBoundsCollider;
 
@@ -102,15 +102,15 @@ public class Carriage : MonoBehaviour
 
     private void SetSeatData()
     {
-        AtlasSimpleRenderer seatRenderer = chairRenderers[0];
+        AtlasSliceRenderer seatRenderer = seatRenderers[0];
         float tileWidth = seatRenderer.renderInput.atlas.slicedSprites[seatRenderer.spriteIndex].worldSlices.x;
 
         List<ChairData> seatDataList = new List<ChairData>();
-        for (int i = 0; i < chairRenderers.Length; i++)
+        for (int i = 0; i < seatRenderers.Length; i++)
         {
-            AtlasSimpleRenderer seat = chairRenderers[i];
+            AtlasSliceRenderer seat = seatRenderers[i];
 
-            float totalWidth = seat.renderInput.scaleAndFlip.x;
+            float totalWidth = seat.renderInput.bounds.size.x;
             int chairAmount = Mathf.RoundToInt(totalWidth / tileWidth);
             float firstChairPos = seat.transform.position.x + (tileWidth * 0.5f);
 

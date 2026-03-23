@@ -254,7 +254,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 301.9624, y: -56.82922}
+  m_Offset: {x: 305.25244, y: -57.49022}
   m_SpriteTilingProperty:
     border: {x: 0.93, y: 0, z: 0.93, w: 0}
     pivot: {x: 0, y: 0}
@@ -286,7 +286,7 @@ MonoBehaviour:
     boxCollider: {fileID: 4891696231406916039}
     gameObject: {fileID: 982750004008766840}
     bounds:
-      m_Center: {x: 195.47604, y: 1.3027818, z: 14}
+      m_Center: {x: 198.76605, y: 0.6417818, z: 14}
       m_Extent: {x: 1.3216668, y: 0.51944447, z: 0.1}
     worldPivotAndSize:
     - {x: 0, y: 0, z: 0.51666665, w: 0}
@@ -429,8 +429,14 @@ MonoBehaviour:
   - {fileID: 6918299556047711684}
   - {fileID: 8947863862202285630}
   - {fileID: 2691835036088689343}
-  chairRenderers: []
-  grapPoleRenderers: []
+  seatRenderers:
+  - {fileID: 6604185700111300111}
+  - {fileID: 8826843392645589092}
+  - {fileID: 8537347935343719246}
+  - {fileID: 5685946456301062496}
+  grapPoleRenderers:
+  - {fileID: 8437714948916562873}
+  - {fileID: 6378411832077489705}
   insideBoundsCollider: {fileID: 4967624362453220076}
   smokingRoomCollider_right: {fileID: 3759561684428170471}
   smokingRoomCollider_left: {fileID: 8152975921336346681}
@@ -931,7 +937,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 314.2224, y: -56.82922}
+  m_Offset: {x: 317.51245, y: -57.49022}
   m_SpriteTilingProperty:
     border: {x: 0.93, y: 0, z: 0.93, w: 0}
     pivot: {x: 0, y: 0}
@@ -963,7 +969,7 @@ MonoBehaviour:
     boxCollider: {fileID: 1637902812150187307}
     gameObject: {fileID: 4033721656781863208}
     bounds:
-      m_Center: {x: 201.60605, y: 1.3027818, z: 14}
+      m_Center: {x: 204.89606, y: 0.6417818, z: 14}
       m_Extent: {x: 1.3216668, y: 0.51944447, z: 0.1}
     worldPivotAndSize:
     - {x: 0, y: 0, z: 0.51666665, w: 0}
@@ -1905,7 +1911,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 323.15417, y: -56.82922}
+  m_Offset: {x: 326.44418, y: -57.49022}
   m_SpriteTilingProperty:
     border: {x: 0.93, y: 0, z: 0.93, w: 0}
     pivot: {x: 0, y: 0}
@@ -1937,7 +1943,7 @@ MonoBehaviour:
     boxCollider: {fileID: 8636551100963537581}
     gameObject: {fileID: 6515046231488049241}
     bounds:
-      m_Center: {x: 205.6708, y: 1.3027818, z: 14}
+      m_Center: {x: 208.96082, y: 0.6417818, z: 14}
       m_Extent: {x: 0.5194444, y: 0.51944447, z: 0.1}
     worldPivotAndSize:
     - {x: 0, y: 0, z: 0.51666665, w: 0}
@@ -2304,7 +2310,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 295.56018, y: -56.82922}
+  m_Offset: {x: 298.8502, y: -57.49022}
   m_SpriteTilingProperty:
     border: {x: 0.93, y: 0, z: 0.93, w: 0}
     pivot: {x: 0, y: 0}
@@ -2336,7 +2342,7 @@ MonoBehaviour:
     boxCollider: {fileID: 3811853775080011815}
     gameObject: {fileID: 7982095584196173811}
     bounds:
-      m_Center: {x: 191.87381, y: 1.3027818, z: 14}
+      m_Center: {x: 195.16382, y: 0.6417818, z: 14}
       m_Extent: {x: 0.5194444, y: 0.51944447, z: 0.1}
     worldPivotAndSize:
     - {x: 0, y: 0, z: 0.51666665, w: 0}
@@ -3017,6 +3023,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
   m_PrefabInstance: {fileID: 4841459570356829251}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &6378411832077489705 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1996495514335980138, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 4841459570356829251}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
 --- !u!1001 &6732419531741485957
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3503,6 +3520,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
   m_PrefabInstance: {fileID: 7974805240375730643}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &8437714948916562873 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1996495514335980138, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7974805240375730643}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
 --- !u!1001 &8530610935890523333
 PrefabInstance:
   m_ObjectHideFlags: 0

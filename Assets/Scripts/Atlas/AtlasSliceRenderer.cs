@@ -47,6 +47,7 @@ public class AtlasSliceRenderer : MonoBehaviour
 #if UNITY_EDITOR
         if (!Application.isPlaying)
         {
+            if (renderInput == null || renderInput.atlas == null) return;
             renderInput.UpdateDepth((int)transform.position.z);
         }
 #endif
