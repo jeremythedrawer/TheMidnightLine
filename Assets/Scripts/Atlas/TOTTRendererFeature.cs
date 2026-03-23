@@ -16,6 +16,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     public TripSO trip;
     public ZoneSpawnerSO zoneSpawner;
     public CameraStatsSO cameraStats;
+    public Mesh quad;
 
     public Material matrixMaterial;
     public Material bloomMaterial;
@@ -44,7 +45,8 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
     public override void Create()
     {
-        batchPass = new AtlasBatchPass(materialIDs, cameraStats);
+        if (quad == null) quad = AtlasBatch.SetQuad();
+        batchPass = new AtlasBatchPass(materialIDs, cameraStats, quad);
         particlePass = new AtlasParticlePass(trip, zoneSpawner, materialIDs);
         matrixPass = new MatrixPass(this);
         bloomPass = new BloomPass(this);
@@ -63,11 +65,15 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     {
         private static MaterialIDSO materialIDs;
         private static CameraStatsSO cameraStats;
-        public AtlasBatchPass(MaterialIDSO materialID, CameraStatsSO camStats)
+        private static Mesh quad;
+        private uint[] args;
+
+        public AtlasBatchPass(MaterialIDSO materialID, CameraStatsSO camStats, Mesh quadToUse)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
             materialIDs = materialID;
             cameraStats = camStats;
+            quad = quadToUse;
         }
 
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
@@ -80,14 +86,22 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
             builder.AllowPassCulling(false);
 
+            args = new uint[5]
+            {
+                quad.GetIndexCount(0),
+                0,
+                quad.GetIndexStart(0),
+                quad.GetBaseVertex(0),
+                0
+            };
 
             builder.SetRenderFunc((AtlasPassData data, RasterGraphContext ctx) =>
             {
-                ExecuteBatch(ctx.cmd, data.cameraStats);
+                ExecuteBatch(ctx.cmd, data.cameraStats, quad, ref args);
             });
         }
 
-        private static void ExecuteBatch(RasterCommandBuffer cmd, CameraStatsSO camStats)
+        private static void ExecuteBatch(RasterCommandBuffer cmd, CameraStatsSO camStats, Mesh quad, ref uint[] args)
         {
 #if UNITY_EDITOR
             PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
@@ -102,7 +116,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                 {
                     SingularRenderInput renderInput = batch.data.singularRenderInputs[i];
 
-                    if (renderInput == null || !renderInput.gameObject.activeInHierarchy) continue;
+                    if (renderInput == null || renderInput.gameObject == null || !renderInput.gameObject.activeInHierarchy) continue;
 #if UNITY_EDITOR
 
                     if (prefabStage != null)
@@ -111,12 +125,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     }
 #endif
                     //if (atlasRenderer.bounds.max.x < cameraStats.camLeft || atlasRenderer.bounds.min.x > cameraStats.camRight || atlasRenderer.bounds.max.y < cameraStats.camBottom || atlasRenderer.bounds.min.y > cameraStats.camTop) continue;
-
-                    //if (atlasRenderer.customMPB != null)
-                    //{
-                    //    cmd.DrawMesh(AtlasBatch.quad, atlasRenderer.spriteMatrices[0], atlasRenderer.batchKey.material, submeshIndex: 0, shaderPass: 0, atlasRenderer.customMPB);
-                    //    continue;
-                    //}
 
                     batch.data.spriteData[count] = new SpriteData
                     {
@@ -132,7 +140,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                 {
                     MultipleRenderInput renderInput = batch.data.multipleRenderInputs[i];
 
-                    if (renderInput == null || !renderInput.gameObject.activeInHierarchy) continue;
+                    if (renderInput == null || renderInput.gameObject == null ||  !renderInput.gameObject.activeInHierarchy) continue;
 #if UNITY_EDITOR
 
                     if (prefabStage != null)
@@ -157,11 +165,11 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                 if (count == 0) continue;
 
                 batch.data.spriteDataBuffer.SetData(batch.data.spriteData, 0, 0, count);
-                AtlasBatch.args[1] = (uint)count;
-                batch.data.argsBuffer.SetData(AtlasBatch.args);
+                args[1] = (uint)count;
+                batch.data.argsBuffer.SetData(args);
                 batch.data.mpb.SetBuffer("_SpriteData", batch.data.spriteDataBuffer);
 
-                cmd.DrawMeshInstancedIndirect(AtlasBatch.Quad, 0, batch.key.material, 0, batch.data.argsBuffer, 0, batch.data.mpb);
+                cmd.DrawMeshInstancedIndirect(quad, 0, batch.key.material, 0, batch.data.argsBuffer, 0, batch.data.mpb);
             }
         }
     }

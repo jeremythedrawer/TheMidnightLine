@@ -1,12 +1,14 @@
 using System;
 using System.Collections.Generic;
+using System.Linq;
 using System.Runtime.InteropServices;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Atlas;
+using static UnityEngine.RuleTile.TilingRuleOutput;
 public static class AtlasBatch
 {
-    static AtlasBatch() { SetQuad(); }
 
     public const int MAX = 1024;
     public static int SHADER_DATA_STRIDE = Marshal.SizeOf<SpriteData>();
@@ -33,10 +35,10 @@ public static class AtlasBatch
         public Vector4 pivotAndSize;
         public Vector4 uvSizeAndPos;
         public Vector4 scaleAndFlip;
+
         public Vector2 boundsOffset;
 
-
-        public void UpdateRenderInputsScreen(float width, float height, SimpleSprite newSprite, CameraStatsSO camStats, Transform transform)
+        public void UpdateRenderInputsScreen(float width, float height, SimpleSprite newSprite, CameraStatsSO camStats)
         {
             if (atlas == null) return;
             Vector2 spritePixelSize = newSprite.worldSize * PIXELS_PER_UNIT;
@@ -45,7 +47,8 @@ public static class AtlasBatch
             pivotAndSize.w = spritePixelSize.y * camStats.worldUnitsPerPixel;
             scaleAndFlip.x = width;
             scaleAndFlip.y = height;
-
+            FlipH(flipX, newSprite);
+            FlipV(flipY, newSprite);
         }
         public void UpdateRenderInputsWorld(float width, float height, SimpleSprite newSprite)
         {
@@ -92,7 +95,6 @@ public static class AtlasBatch
         {
             gameObject = obj;
         }
-
         public void UpdateBounds()
         {
             if (gameObject.transform.hasChanged)
@@ -105,6 +107,8 @@ public static class AtlasBatch
     [Serializable] public class MultipleRenderInput
     {
         public BatchKey batchKey;
+        public AtlasSO atlas;
+        public BoxCollider2D boxCollider;
 
         [Header("Generated")]
         public GameObject gameObject;
@@ -113,6 +117,73 @@ public static class AtlasBatch
         public Vector4[] worldPivotAndSize;
         public Vector4[] uvSizeAndPos;
         public Vector4[] scaleAndFlip;
+        public Vector2 boundsOffset;
+
+        public void UpdateSlicedSprite(SliceSprite slicedSprite, float width, float height)
+        {
+            uvSizeAndPos = slicedSprite.uvSizeAndPos;
+
+            float centerWorldSliceWidth = slicedSprite.sprite.worldSize.x - slicedSprite.worldSlices.x - slicedSprite.worldSlices.y;
+            float centerWorldSliceHeight = slicedSprite.sprite.worldSize.y - slicedSprite.worldSlices.z - slicedSprite.worldSlices.w;
+
+            float rightColPos = slicedSprite.worldSlices.x + (centerWorldSliceWidth * width);
+            float topRowPos = slicedSprite.worldSlices.z + (centerWorldSliceHeight * height);
+            worldPivotAndSize = new Vector4[]
+            {
+                new Vector4(0, 0, slicedSprite.worldSlices.x, slicedSprite.worldSlices.z),
+                new Vector4(-slicedSprite.worldSlices.x, 0, centerWorldSliceWidth, slicedSprite.worldSlices.z),
+                new Vector4(-rightColPos, 0, slicedSprite.worldSlices.y, slicedSprite.worldSlices.z),
+
+                new Vector4(0, -slicedSprite.worldSlices.z, slicedSprite.worldSlices.x, centerWorldSliceHeight),
+                new Vector4(-slicedSprite.worldSlices.x, -slicedSprite.worldSlices.z, centerWorldSliceWidth, centerWorldSliceHeight),
+                new Vector4(-rightColPos, -slicedSprite.worldSlices.z, slicedSprite.worldSlices.y, centerWorldSliceHeight),
+
+                new Vector4(0, -topRowPos, slicedSprite.worldSlices.x, slicedSprite.worldSlices.w),
+                new Vector4(-slicedSprite.worldSlices.x, -topRowPos, centerWorldSliceWidth, slicedSprite.worldSlices.w),
+                new Vector4(-rightColPos, -topRowPos, slicedSprite.worldSlices.y, slicedSprite.worldSlices.w),
+            };
+
+            Vector4 scaleFlipCQuad = Vector4.one;
+            Vector4 scaleFlipHQuad = new Vector4(width, 1, 1, 1);
+            Vector4 scaleFlipVQuad = new Vector4(1, height, 1, 1);
+            Vector4 scaleFlipMQuad = new Vector4(width, height, 1, 1);
+            scaleAndFlip = new Vector4[]
+            {
+                scaleFlipCQuad,
+                scaleFlipHQuad,
+                scaleFlipCQuad,
+
+                scaleFlipVQuad,
+                scaleFlipMQuad,
+                scaleFlipVQuad,
+
+                scaleFlipCQuad,
+                scaleFlipHQuad,
+                scaleFlipCQuad
+            };
+            bounds.size = new Vector3(slicedSprite.worldSlices.x + (centerWorldSliceWidth * width) + slicedSprite.worldSlices.y, slicedSprite.worldSlices.z + (centerWorldSliceHeight * height) + slicedSprite.worldSlices.w, 0.2f);
+            boundsOffset = bounds.size * 0.5f;
+
+            if (boxCollider == null) return;
+            boxCollider.size = bounds.size;
+            boxCollider.offset = bounds.center + gameObject.transform.position;
+        }
+        public void UpdateDepth(int newDepth)
+        {
+            batchKey.depthOrder = newDepth;
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, batchKey.depthOrder);
+        }
+        public void InitRenderer(GameObject obj)
+        {
+            gameObject = obj;
+        }
+        public void UpdateBounds()
+        {
+            if (gameObject.transform.hasChanged)
+            {
+                bounds.center = new Vector3(gameObject.transform.position.x + boundsOffset.x, gameObject.transform.position.y + boundsOffset.y, gameObject.transform.position.z);
+            }
+        }
     }
 
     [Serializable] public struct SpriteData
@@ -149,15 +220,6 @@ public static class AtlasBatch
 
     public static readonly Dictionary<BatchKey, UIBatchData> textBatchDict = new Dictionary<BatchKey, UIBatchData>();
     public static readonly List<(BatchKey key, UIBatchData)> uiBatchList = new List<(BatchKey key, UIBatchData)>();
-    public static Mesh Quad;
-    public static uint[] args;
-
-
-    [RuntimeInitializeOnLoadMethod(RuntimeInitializeLoadType.BeforeSceneLoad)]
-    static void Init()
-    {
-        SetQuad();
-    }
 
     public static void PrepareFrame()
     {
@@ -180,6 +242,7 @@ public static class AtlasBatch
     }
     public static void RegisterSingleRenderInput(SingularRenderInput renderInput)
     {
+        CleanupInvalidBatches();
         if (renderInput.batchKey.material == null) return;
         renderInput.batchKey.material.enableInstancing = true;
         UnregisterSingleRenderInput(renderInput);
@@ -202,7 +265,6 @@ public static class AtlasBatch
 
         if (batch.singularRenderInputs.Count == 0 && batch.multipleRenderInputs.Count == 0) batchDict.Remove(renderInput.batchKey);
     }
-
 
     public static void RegisterMultipleRenderInput(MultipleRenderInput renderInput)
     {
@@ -230,12 +292,36 @@ public static class AtlasBatch
         if (batch.singularRenderInputs.Count == 0 && batch.multipleRenderInputs.Count == 0) batchDict.Remove(renderInput.batchKey);
     }
 
-    public static void SetQuad()
+    public static void CleanupInvalidBatches()
     {
-        Quad = new Mesh();
-        Quad.name = "AtlasBatchQuad";
+        var keysToRemove = new List<BatchKey>();
 
-        Quad.vertices = new Vector3[]
+        foreach (var kvp in batchDict)
+        {
+            var batch = kvp.Value;
+
+            // remove dead/null inputs
+            batch.singularRenderInputs.RemoveAll(x => x == null);
+            batch.multipleRenderInputs.RemoveAll(x => x == null);
+
+            if (batch.singularRenderInputs.Count == 0 && batch.multipleRenderInputs.Count == 0)
+            {
+                keysToRemove.Add(kvp.Key);
+            }
+        }
+
+        foreach (var key in keysToRemove)
+        {
+            batchDict.Remove(key);
+        }
+    }
+
+    public static Mesh SetQuad()
+    {
+        Mesh quad = new Mesh();
+        quad.name = "AtlasBatchQuad";
+
+        quad.vertices = new Vector3[]
         {
             new Vector3(0f, 0f),
             new Vector3(1f, 0f),
@@ -243,7 +329,7 @@ public static class AtlasBatch
             new Vector3(1f,  1f),
         };
 
-        Quad.uv = new Vector2[]
+        quad.uv = new Vector2[]
         {
             new Vector2(0, 0),
             new Vector2(1, 0),
@@ -251,16 +337,9 @@ public static class AtlasBatch
             new Vector2(1, 1),
         };
 
-        Quad.triangles = new int[] { 0, 2, 1, 2, 3, 1 };
-        Quad.RecalculateBounds();
+        quad.triangles = new int[] { 0, 2, 1, 2, 3, 1 };
+        quad.RecalculateBounds();
 
-        args = new uint[5]
-        {
-            AtlasBatch.Quad.GetIndexCount(0),
-            0,
-            AtlasBatch.Quad.GetIndexStart(0),
-            AtlasBatch.Quad.GetBaseVertex(0),
-            0
-        };
+        return quad;
     }
 }

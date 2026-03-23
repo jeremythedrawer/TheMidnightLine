@@ -19,63 +19,73 @@ Shader "Custom/s_atlasScroll"
             #pragma vertex vert
             #pragma fragment frag
 
-            #pragma multi_compile_instancing
-
-            #define PIXELS_PER_UNIT 180
-
             struct Attributes
             {
                 float4 positionOS : POSITION;
                 float2 uv : TEXCOORD0;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
+                uint instanceID : SV_InstanceID;
             };
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
+                uint instanceID : TEXCOORD1;
             };
+
+            StructuredBuffer<AtlasSprite> _SpriteData;
 
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
-            float4 _AtlasTexture_ST;
-            float4 _AtlasTexture_TexelSize;
 
             float _MetersTravelled;
 
-            UNITY_INSTANCING_BUFFER_START(AtlasProps)
-                UNITY_DEFINE_INSTANCED_PROP(float4, _UVSizeAndPos)
-                UNITY_DEFINE_INSTANCED_PROP(float4, _WidthHeightFlip)
-            UNITY_INSTANCING_BUFFER_END(AtlasProps)
-
-
             Varyings vert(Attributes v)
             {
-                UNITY_SETUP_INSTANCE_ID(v);
                 Varyings o;
-                UNITY_TRANSFER_INSTANCE_ID(v, o);
 
-                o.positionHCS = TransformObjectToHClip(v.positionOS.xyz);
+                AtlasSprite spriteData = _SpriteData[v.instanceID];
+
+
+                float3 position = spriteData.position;
+                
+                float2 pivot = spriteData.pivotAndSize.xy;
+                float2 size = spriteData.pivotAndSize.zw;
+                
+                float2 scale = spriteData.scaleAndFlip.xy;
+                float2 objPos = v.positionOS.xy;
+
+                objPos *= size * scale;
+                objPos -= pivot;
+
+                float3 worldPos = float3(position.xy + objPos, position.z);
+
+                o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
+                o.instanceID = v.instanceID;
+
                 return o;
             }
 
             half4 frag(Varyings i) : SV_Target
             {
-                UNITY_SETUP_INSTANCE_ID(i);
+                uint id = i.instanceID;
+                AtlasSprite spriteData = _SpriteData[id];
 
-                float4 uvSizeAndPos = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _UVSizeAndPos);
-                float4 widthHeightFlip  = UNITY_ACCESS_INSTANCED_PROP(AtlasProps, _WidthHeightFlip);
+                float2 uvSize = spriteData.uvSizeAndPos.xy;
+                float2 uvPos = spriteData.uvSizeAndPos.zw;
 
-                i.uv *= widthHeightFlip.xy;
-                float spritePixelSize = _AtlasTexture_TexelSize.z * uvSizeAndPos.x;
+                float size = spriteData.pivotAndSize.z;
+                
+                float2 scale = spriteData.scaleAndFlip.xy;
+                float2 flip = spriteData.scaleAndFlip.zw;
 
-                i.uv.x += _MetersTravelled / (spritePixelSize / PIXELS_PER_UNIT);
+                i.uv *= scale.xy;
+                i.uv.x += _MetersTravelled / size;
                 i.uv = frac(i.uv);
-                i.uv = (i.uv - 0.5) * widthHeightFlip.zw + 0.5;
-                i.uv *= uvSizeAndPos.xy;
-                i.uv += uvSizeAndPos.zw;
+                i.uv = (i.uv - 0.5) * flip + 0.5;
+                i.uv *= uvSize;
+                i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
                 half3 finalColor = color.rgb;

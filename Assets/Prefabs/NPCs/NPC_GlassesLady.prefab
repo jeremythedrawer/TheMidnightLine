@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6931312496982284968}
-  - component: {fileID: 6827722532644242855}
+  - component: {fileID: 8785782021427390878}
   - component: {fileID: 6420348308866692437}
   - component: {fileID: 8824921806515184331}
   - component: {fileID: 8296881156365639583}
@@ -36,7 +36,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6827722532644242855
+--- !u!114 &8785782021427390878
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -45,67 +45,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 7733667973093463101}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
+  m_Script: {fileID: 11500000, guid: 7ad303b9518a28f48a3f27f561a6d346, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: fbd7996a0270fc4408dbda4ef884f608, type: 2}
-  material: {fileID: 2100000, guid: fdfe567cfbdfda4438fa6f6918bb2ecb, type: 2}
-  boxCollider: {fileID: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasMotionRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: fdfe567cfbdfda4438fa6f6918bb2ecb, type: 2}
+      depthOrder: 0
+    atlas: {fileID: 11400000, guid: fbd7996a0270fc4408dbda4ef884f608, type: 2}
+    boxCollider: {fileID: 0}
+    flipX: 0
+    flipY: 0
+    gameObject: {fileID: 7733667973093463101}
+    bounds:
+      m_Center: {x: 294.11118, y: 0.8638889, z: 0}
+      m_Extent: {x: 0.21666667, y: 0.8138889, z: 0.1}
+    pivotAndSize: {x: 0.22222224, y: 0, z: 0.43333334, w: 1.6277778}
+    uvSizeAndPos: {x: 0.038085938, y: 0.1430664, z: 0.00048828125, w: 0.85546875}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: -0.00555557, y: 0.8138889}
   spriteIndex: 0
-  spriteMode: 1
-  width: 1
-  height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 0
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: fdfe567cfbdfda4438fa6f6918bb2ecb, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 0
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
   sprite:
-    uvSizeAndPos: {x: 0.037597656, y: 0.14257812, z: 0.00048828125, w: 0.85546875}
-    uvPivot: {x: 0.5194805, y: 0}
-    worldSize: {x: 0.42777777, y: 1.6222222, z: 1}
+    uvSizeAndPos: {x: 0.038085938, y: 0.1430664, z: 0.00048828125, w: 0.85546875}
+    uvPivot: {x: 0.51282054, y: 0}
+    worldSize: {x: 0.43333334, y: 1.6277778, z: 1}
     index: 0
-  worldMatrix:
-    e00: 1
-    e01: 0
-    e02: 0
-    e03: 286.2079
-    e10: 0
-    e11: 1
-    e12: 0
-    e13: 4.5918946
-    e20: 0
-    e21: 0
-    e22: 1
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  centerSliceWorldSize: {x: 0, y: 0}
-  centerSliceUVSize: {x: 0, y: 0}
 --- !u!82 &6420348308866692437
 AudioSource:
   m_ObjectHideFlags: 0
@@ -289,7 +256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npc: {fileID: 11400000, guid: 1d1f8d46e230b6140be513acdbfef0f0, type: 2}
-  atlasRenderer: {fileID: 6827722532644242855}
+  atlasRenderer: {fileID: 8785782021427390878}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
@@ -301,12 +268,13 @@ MonoBehaviour:
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   rigidBody: {fileID: 8824921806515184331}
   boxCollider: {fileID: 8296881156365639583}
+  atlas: {fileID: 0}
   curSlideDoors: {fileID: 0}
   curCarriage: {fileID: 0}
   startStation: {fileID: 0}
   endStation: {fileID: 0}
   stats:
-    curSpriteMarkerObjPos: {x: 0, y: 0}
+    curSpriteMarkerLocalPosition: {x: 0, y: 0}
     selectedColor: {r: 0, g: 0, b: 0, a: 0}
     targetXVelocity: 0
     targetXPos: 0
@@ -316,6 +284,7 @@ MonoBehaviour:
     curAlpha: 0
     targetAlpha: 0
     atlasIndexClock: 0
+    move: 0
     curBehaviour: 0
     behaviours: 0
     curState: 0
@@ -332,6 +301,4 @@ MonoBehaviour:
     selectedProfileIndex: 0
     curFrameIndex: 0
     prevAtlasIndex: 0
-    canBoardTrain: 0
     startFade: 0
-    spriteFlip: 0

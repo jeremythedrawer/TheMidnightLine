@@ -9,10 +9,10 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 15911325801640563}
-  - component: {fileID: 6146438307063014959}
   - component: {fileID: 8099043674557259294}
   - component: {fileID: 118950378541814445}
   - component: {fileID: 7958201747531856237}
+  - component: {fileID: 3464491179523243672}
   - component: {fileID: 94976023300698573}
   m_Layer: 14
   m_Name: NPC_Businessman
@@ -36,76 +36,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6146438307063014959
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439452552751748441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 419abde2ca0cf214da172502fe2de600, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  atlas: {fileID: 11400000, guid: ff7aac1304a148e42a703514d188d9c9, type: 2}
-  material: {fileID: 2100000, guid: 4d3ef4c6e7b77024497c16cb18102799, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 0
-  spriteMode: 1
-  width: 1
-  height: 1
-  flipX: 0
-  flipY: 0
-  depthOrder: 0
-  useCustomMaterial: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 4d3ef4c6e7b77024497c16cb18102799, type: 2}
-    mesh: {fileID: 0}
-    depthOrder: 0
-  sprite:
-    uvSizeAndPos: {x: 0.045410156, y: 0.15527344, z: 0.0063476562, w: 0.8432617}
-    uvPivot: {x: 0.43010753, y: 0}
-    worldSize: {x: 0.51666665, y: 1.7666667, z: 1}
-    index: 0
-  worldMatrix:
-    e00: 1
-    e01: 0
-    e02: 0
-    e03: 284.932
-    e10: 0
-    e11: 1
-    e12: 0
-    e13: 4.5918946
-    e20: 0
-    e21: 0
-    e22: 1
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 1
-  spriteMatrices:
-  - e00: 0
-    e01: 0
-    e02: 0
-    e03: 0
-    e10: 0
-    e11: 0
-    e12: 0
-    e13: 0
-    e20: 0
-    e21: 0
-    e22: 0
-    e23: 0
-    e30: 0
-    e31: 0
-    e32: 0
-    e33: 0
-  widthHeightFlip:
-  - {x: 1, y: 1, z: 1, w: 1}
-  centerSliceWorldSize: {x: 0, y: 0}
-  centerSliceUVSize: {x: 0, y: 0}
 --- !u!82 &8099043674557259294
 AudioSource:
   m_ObjectHideFlags: 0
@@ -264,7 +194,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.033615112, y: 0.8965982}
+  m_Offset: {x: 0.038879395, y: 0.88611126}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.42708334, y: 0.0031055901}
@@ -274,8 +204,45 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.24850464, y: 1.7931964}
+  m_Size: {x: 0.5222222, y: 1.7722223}
   m_EdgeRadius: 0
+--- !u!114 &3464491179523243672
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439452552751748441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7ad303b9518a28f48a3f27f561a6d346, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasMotionRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 4d3ef4c6e7b77024497c16cb18102799, type: 2}
+      depthOrder: 0
+    atlas: {fileID: 11400000, guid: ff7aac1304a148e42a703514d188d9c9, type: 2}
+    boxCollider: {fileID: 0}
+    flipX: 0
+    flipY: 0
+    gameObject: {fileID: 1439452552751748441}
+    bounds:
+      m_Center: {x: 307.03888, y: 2.5771112, z: 0}
+      m_Extent: {x: 0.2611111, y: 0.88611114, z: 0.1}
+    pivotAndSize: {x: 0.22222222, y: 0, z: 0.5222222, w: 1.7722223}
+    uvSizeAndPos: {x: 0.045898438, y: 0.15576172, z: 0.0063476562, w: 0.8432617}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 0.038888887, y: 0.88611114}
+  spriteIndex: 0
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  sprite:
+    uvSizeAndPos: {x: 0.045898438, y: 0.15576172, z: 0.0063476562, w: 0.8432617}
+    uvPivot: {x: 0.42553192, y: 0}
+    worldSize: {x: 0.5222222, y: 1.7722223, z: 1}
+    index: 0
 --- !u!114 &94976023300698573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,7 +256,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   npc: {fileID: 11400000, guid: 8b2f9c6da9033cd4a8c6c5677fbb3e2c, type: 2}
-  atlasRenderer: {fileID: 6146438307063014959}
+  atlasRenderer: {fileID: 3464491179523243672}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
@@ -301,12 +268,13 @@ MonoBehaviour:
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   rigidBody: {fileID: 118950378541814445}
   boxCollider: {fileID: 7958201747531856237}
+  atlas: {fileID: 0}
   curSlideDoors: {fileID: 0}
   curCarriage: {fileID: 0}
   startStation: {fileID: 0}
   endStation: {fileID: 0}
   stats:
-    curSpriteMarkerObjPos: {x: 0, y: 0}
+    curSpriteMarkerLocalPosition: {x: 0, y: 0}
     selectedColor: {r: 0, g: 0, b: 0, a: 0}
     targetXVelocity: 0
     targetXPos: 0
@@ -316,6 +284,7 @@ MonoBehaviour:
     curAlpha: 0
     targetAlpha: 0
     atlasIndexClock: 0
+    move: 0
     curBehaviour: 0
     behaviours: 0
     curState: 0
@@ -332,6 +301,4 @@ MonoBehaviour:
     selectedProfileIndex: 0
     curFrameIndex: 0
     prevAtlasIndex: 0
-    canBoardTrain: 0
     startFade: 0
-    spriteFlip: 0

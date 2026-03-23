@@ -13,6 +13,8 @@ public class GlyphSetter : MonoBehaviour
     public float heightMin;
     public float height;
 
+    public Mesh quad;
+
     public AtlasSO glyphAtlas;
     public VisualEffect vfx;
     public GraphicsBuffer uvSizeAndPosBuffer;
@@ -141,7 +143,7 @@ public class GlyphSetter : MonoBehaviour
         lifetime = (width + lineCount) * 0.4f;
         vfx.SetFloat("Lifetime", lifetime);
 
-        vfx.SetMesh("_Quad", AtlasBatch.Quad);
+        vfx.SetMesh("_Quad", quad);
     }
 
     private void ReleaseBuffers()

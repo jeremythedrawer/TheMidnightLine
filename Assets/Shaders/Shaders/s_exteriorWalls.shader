@@ -11,70 +11,98 @@ Shader "Custom/s_exteriorWalls"
 
     SubShader
     {
+        Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
+        ZWrite On
+        ZTest LEqual
+        Blend SrcAlpha OneMinusSrcAlpha
         Pass
         {
-            Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
-            ZWrite On
-            ZTest LEqual
-            Blend SrcAlpha OneMinusSrcAlpha
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
             #pragma vertex vert
             #pragma fragment frag
-
-            #pragma multi_compile_instancing
 
             struct Attributes
             {
                 float4 positionOS : POSITION;
                 float2 uv : TEXCOORD0;
                 float3 worldPos : TEXCOORD1;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
+                uint instanceID : SV_InstanceID;
             };
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                float3 worldPos : TEXCOORD1;
-                UNITY_VERTEX_INPUT_INSTANCE_ID
+                uint instanceID : TEXCOORD1;
+                float3 worldPos : TEXCOORD2;
             };
 
-            TEXTURE2D(_AtlasTexture);
-            SAMPLER(sampler_AtlasTexture);
-            float4 _AtlasTexture_ST;
-
             CBUFFER_START(UnityPerMaterial)
-                float4 _UVSizeAndPos;
-                float4 _WidthHeightFlip;
                 float  _Alpha;
                 float _WorldClip;
             CBUFFER_END
 
+            StructuredBuffer<AtlasSprite> _SpriteData;
+
+            TEXTURE2D(_AtlasTexture);
+            SAMPLER(sampler_AtlasTexture);
+
             Varyings vert(Attributes v)
             {
                 Varyings o;
-                UNITY_SETUP_INSTANCE_ID(v);
-                UNITY_TRANSFER_INSTANCE_ID(v, o);
-                float3 worldPos = TransformObjectToWorld(v.positionOS.xyz);
-                worldPos.y -= (1 - _Alpha) * 3.3; // NOTE: 3.3 here is the world size of the exterior wall
-                o.worldPos = worldPos;
-                o.positionHCS = TransformWorldToHClip(worldPos);
+
+                AtlasSprite spriteData = _SpriteData[v.instanceID];
+
+
+                float3 position = spriteData.position;
+                
+                float2 pivot = spriteData.pivotAndSize.xy;
+                float2 size = spriteData.pivotAndSize.zw;
+                
+                float2 scale = spriteData.scaleAndFlip.xy;
+                float2 objPos = v.positionOS.xy;
+
+                objPos *= size * scale;
+                objPos -= pivot;
+
+                o.worldPos = float3(position.xy + objPos, position.z);
+
+                o.worldPos.y -= (1 - _Alpha) * 3.3;
+
+                o.positionHCS = TransformWorldToHClip(o.worldPos);
                 o.uv = v.uv;
+                o.instanceID = v.instanceID;
 
                 return o;
             }
 
+
             half4 frag(Varyings i) : SV_Target
             {
-                i.uv *= _WidthHeightFlip.xy;
-                i.uv *= _UVSizeAndPos.xy;
-                i.uv += _UVSizeAndPos.zw;
+                uint id = i.instanceID;
+                AtlasSprite spriteData = _SpriteData[id];
+
+                float2 uvSize = spriteData.uvSizeAndPos.xy;
+                float2 uvPos = spriteData.uvSizeAndPos.zw;
+                
+                float2 scale = spriteData.scaleAndFlip.xy;
+                float2 flip = spriteData.scaleAndFlip.zw;
+
+                i.uv *= scale.xy;
+                i.uv = frac(i.uv);
+                i.uv = (i.uv - 0.5) * flip + 0.5;
+                i.uv *= uvSize;
+                i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+
+                half3 finalColor = color.rgb;
+
                 half worldClip = step(_WorldClip, i.worldPos.y);
                 float alpha = color.a * worldClip;
                 clip(alpha - 0.001);
-                return half4 (color.rgb,  alpha);
+                return half4 (finalColor, 1);
             }
             ENDHLSL
         }

@@ -16,16 +16,19 @@ public class AtlasMotionRenderer : MonoBehaviour
     public SimpleSprite sprite;
     private void Awake()
     {
+        if (renderInput == null) return;
         renderInput.InitRenderer(gameObject);
     }
     private void OnValidate()
     {
+        if (renderInput == null || renderInput.atlas == null) return;
         spriteIndex = Mathf.Clamp(spriteIndex, 0, renderInput.atlas.motionSprites.Length - 1);
         sprite = renderInput.atlas.motionSprites[spriteIndex].sprite;
         renderInput.UpdateRenderInputsWorld(1, 1, sprite);
     }
     private void OnEnable()
     {
+        if (renderInput == null) return;
         renderInput.InitRenderer(gameObject);
         RegisterSingleRenderInput(renderInput);
     }
@@ -39,6 +42,7 @@ public class AtlasMotionRenderer : MonoBehaviour
     }
     private void Start()
     {
+
         renderInput.UpdateDepth(renderInput.batchKey.depthOrder);
     }
     private void Update()
@@ -46,6 +50,7 @@ public class AtlasMotionRenderer : MonoBehaviour
 #if UNITY_EDITOR
         if (!Application.isPlaying)
         {
+            if (renderInput == null || renderInput.gameObject == null) return;
             renderInput.UpdateDepth((int)transform.position.z);
         }
 #endif

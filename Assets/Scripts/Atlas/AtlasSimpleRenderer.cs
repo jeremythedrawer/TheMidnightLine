@@ -11,26 +11,26 @@ public class AtlasSimpleRenderer : MonoBehaviour
     public SingularRenderInput renderInput;
 
     [Header("Simple (User)")]
-    public float width;
-    public float height;
+    public float width = 1;
+    public float height = 1;
     public int spriteIndex;
     [Header("Simple (Generated)")]
     public SimpleSprite sprite;
 
-    private void Awake()
-    {
-        renderInput.InitRenderer(gameObject);
-    }
     private void OnValidate()
     {
+
+        if (renderInput == null || renderInput.atlas == null) return;
         spriteIndex = Mathf.Clamp(spriteIndex, 0, renderInput.atlas.simpleSprites.Length - 1);
         sprite = renderInput.atlas.simpleSprites[spriteIndex];
         renderInput.UpdateRenderInputsWorld(width, height, sprite);
     }
     private void OnEnable()
     {
+        if (renderInput == null || renderInput.atlas == null) return;
         renderInput.InitRenderer(gameObject);
         RegisterSingleRenderInput(renderInput);
+
     }
     private void OnDisable()
     {
@@ -42,6 +42,7 @@ public class AtlasSimpleRenderer : MonoBehaviour
     }
     private void Start()
     {
+        renderInput.InitRenderer(gameObject);
         renderInput.UpdateDepth(renderInput.batchKey.depthOrder);
     }
     private void Update()
