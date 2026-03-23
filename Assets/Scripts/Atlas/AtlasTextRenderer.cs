@@ -10,7 +10,7 @@ public class AtlasTextRenderer : MonoBehaviour
 {
     public AtlasSO atlas;
     public CameraStatsSO camStats;
-    public RenderInput uiRenderInstance;
+    public MultipleRenderInput renderInput;
 
     public Camera cam;
     public int depthOrder;
@@ -30,7 +30,7 @@ public class AtlasTextRenderer : MonoBehaviour
 #endif
     private void OnEnable()
     {
-        RegisterUIRenderer(uiRenderInstance);
+        RegisterMultipleRenderInput(renderInput);
 #if UNITY_EDITOR
         Selection.selectionChanged += UpdateEditorPosition;
 #endif
@@ -38,10 +38,13 @@ public class AtlasTextRenderer : MonoBehaviour
 
     private void OnDisable()
     {
-        UnregisterUIRenderer(uiRenderInstance);
+        UnregisterMultipleRenderInput(renderInput);
     }
 
-
+    private void OnDestroy()
+    {
+        UnregisterMultipleRenderInput(renderInput);
+    }
     private void Update()
     {
 #if UNITY_EDITOR

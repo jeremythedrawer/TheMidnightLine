@@ -15,7 +15,7 @@ using UnityEditor;
 public class NPCBrain : MonoBehaviour
 {
     public NPCSO npc;
-    public AtlasSimpleRenderer atlasRenderer;
+    public AtlasMotionRenderer atlasRenderer;
     [SerializeField] NPCsDataSO npcData;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] TrainSettingsSO trainSettings;
@@ -29,6 +29,8 @@ public class NPCBrain : MonoBehaviour
     public Rigidbody2D rigidBody;
     public BoxCollider2D boxCollider;
 
+    [Header("Generated")]
+    public AtlasSO atlas;
     public SlideDoors curSlideDoors;
     public MaterialPropertyBlock mpb;
     public CancellationTokenSource ctsFade;
@@ -37,7 +39,6 @@ public class NPCBrain : MonoBehaviour
 
     public StationSO startStation;
     public StationSO endStation;
-
 
     [Serializable] public struct StatData
     {
@@ -87,7 +88,7 @@ public class NPCBrain : MonoBehaviour
         stats.chairPosIndex = int.MaxValue;
         stats.curAlpha = 1;
         stats.selectedProfileIndex = int.MaxValue;
-
+        atlas = atlasRenderer.renderInput.atlas;
         SetLayer();
         if (stats.behaviours == 0)
         {
@@ -121,7 +122,7 @@ public class NPCBrain : MonoBehaviour
             speechBubble.Stop();
         }
 
-        stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingBreathing];
+        stats.curClip = atlasRenderer.renderInput.atlas.clipDict[(int)NPCMotion.StandingBreathing];
     }
     private void SetLayer()
     {
@@ -205,7 +206,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Walking:
             {
-                atlasRenderer.Flip(stats.move < 0);
+                atlasRenderer.renderInput.FlipH(stats.move < 0, atlasRenderer.sprite);
             }
             break;
             case NPCState.Smoking:
@@ -304,11 +305,11 @@ public class NPCBrain : MonoBehaviour
 
         if (stats.chairPosIndex != int.MaxValue)
         {
-            atlasRenderer.UpdateDepth(curCarriage.sittingDepth);
+            atlasRenderer.renderInput.UpdateDepth(curCarriage.sittingDepth);
         }
         else if (curCarriage !=  null)
         {
-            atlasRenderer.UpdateDepth(curCarriage.standingDepth);
+            atlasRenderer.renderInput.UpdateDepth(curCarriage.standingDepth);
         }
         switch (stats.curState)
         {
@@ -328,13 +329,13 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Walking:
             {
-                stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.Walking];
+                stats.curClip = atlasRenderer.renderInput.atlas.clipDict[(int)NPCMotion.Walking];
             }
             break;
             case NPCState.Smoking:
             {
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
-                stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.Smoking];
+                stats.curClip = atlasRenderer.renderInput.atlas.clipDict[(int)NPCMotion.Smoking];
                 smoke.Play();
             }
             break;
@@ -346,11 +347,11 @@ public class NPCBrain : MonoBehaviour
                 sleepingZs.Play();
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingSleeping];
+                    stats.curClip = atlas.clipDict[(int)NPCMotion.SittingSleeping];
                 }
                 else
                 {
-                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingSleeping];
+                    stats.curClip = atlas.clipDict[(int)NPCMotion.StandingSleeping];
                 }
             }
             break;
@@ -360,11 +361,11 @@ public class NPCBrain : MonoBehaviour
 
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingEating];
+                    stats.curClip = atlas.clipDict[(int)NPCMotion.SittingEating];
                 }
                 else
                 {
-                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingEating];
+                    stats.curClip = atlas.clipDict[(int)NPCMotion.StandingEating];
                 }
             }
             break;
@@ -375,11 +376,11 @@ public class NPCBrain : MonoBehaviour
                 musicNotes.Play();
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingMusic];
+                    stats.curClip = atlas.clipDict[(int)NPCMotion.SittingMusic];
                 }
                 else
                 {
-                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingMusic];
+                    stats.curClip = atlas.clipDict[(int)NPCMotion.StandingMusic];
                 }
             }
             break;
@@ -389,12 +390,12 @@ public class NPCBrain : MonoBehaviour
                 speechBubble.Play();
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingCalling];
+                    stats.curClip = atlas.clipDict[(int)NPCMotion.SittingCalling];
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.sittingDepth);
                 }
                 else
                 {
-                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingCalling];
+                    stats.curClip = atlas.clipDict[(int)NPCMotion.StandingCalling];
                 }
             }
             break;
@@ -403,13 +404,13 @@ public class NPCBrain : MonoBehaviour
                 stats.stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
                 if (stats.chairPosIndex != int.MaxValue)
                 {
-                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingReading];
+                    stats.curClip = atlas.clipDict[(int)NPCMotion.SittingReading];
                     transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.sittingDepth);
                 }
                 else
                 {
 
-                    stats.curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingReading];
+                    stats.curClip = atlas.clipDict[(int)NPCMotion.StandingReading];
                 }
             }
             break;
@@ -634,7 +635,7 @@ public class NPCBrain : MonoBehaviour
     private void SetStandingDepth()
     {
         int depth = UnityEngine.Random.Range(trainStats.depthSection_front_min, trainStats.depthSection_back_max);
-        atlasRenderer.UpdateDepth(depth);
+        atlasRenderer.renderInput.UpdateDepth(depth);
     }
 
     private void SetMarkerPosition()
@@ -642,7 +643,7 @@ public class NPCBrain : MonoBehaviour
         MarkerPosition[] curSpriteMarkers = stats.curClip.keyFrames[stats.curFrameIndex].motionSprite.markers;
         if (curSpriteMarkers.Length > 0)
         {
-            stats.curSpriteMarkerLocalPosition.x = atlasRenderer.flipX ? -curSpriteMarkers[0].objectPos.x : curSpriteMarkers[0].objectPos.x;
+            stats.curSpriteMarkerLocalPosition.x = atlasRenderer.renderInput.flipX ? -curSpriteMarkers[0].objectPos.x : curSpriteMarkers[0].objectPos.x;
             stats.curSpriteMarkerLocalPosition.y = curSpriteMarkers[0].objectPos.y;
         }
     }
@@ -650,11 +651,11 @@ public class NPCBrain : MonoBehaviour
     {
         if (UnityEngine.Random.Range(0, 2) == 0)
         {
-            return  atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingBreathing];
+            return  atlas.clipDict[(int)NPCMotion.StandingBreathing];
         }
         else
         {
-            return atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingBlinking];
+            return atlas.clipDict[(int)NPCMotion.StandingBlinking];
 
         }
     }
@@ -662,11 +663,11 @@ public class NPCBrain : MonoBehaviour
     {
         if (UnityEngine.Random.Range(0, 2) == 0)
         {
-            return atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingBreathing];
+            return atlas.clipDict[(int)NPCMotion.SittingBreathing];
         }
         else
         {
-            return atlasRenderer.atlas.clipDict[(int)NPCMotion.SittingBlinking];
+            return atlas.clipDict[(int)NPCMotion.SittingBlinking];
         }
     }
     private Behaviours PickBehaviour()

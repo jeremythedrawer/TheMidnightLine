@@ -1,70 +1,80 @@
-using System.Linq;
 using UnityEngine;
-using UnityEngine.Rendering.Universal;
-using UnityEngine.U2D;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using static Atlas;
 using static AtlasBatch;
-
 [ExecuteAlways]
-public class AtlasSimpleRenderer : MonoBehaviour
+public class AtlasUISimpleRenderer : MonoBehaviour
 {
     public SingularRenderInput renderInput;
+    public CameraStatsSO camStats;
 
-    [Header("Simple (User)")]
+    [Header("UI Simple (User)")]
     public float width;
     public float height;
     public int spriteIndex;
     [Header("Simple (Generated)")]
     public SimpleSprite sprite;
 
+    [Header("Generated")]
+    public Vector2 boundOffset;
+    public Vector3 screenPosition;
+
+#if UNITY_EDITOR
+    [Header("Editor")]
+    public Vector3 lastPos;
+#endif
+
     private void Awake()
     {
         renderInput.InitRenderer(gameObject);
     }
+
     private void OnValidate()
     {
         spriteIndex = Mathf.Clamp(spriteIndex, 0, renderInput.atlas.simpleSprites.Length - 1);
         sprite = renderInput.atlas.simpleSprites[spriteIndex];
-        renderInput.UpdateRenderInputsWorld(width, height, sprite);
+        renderInput.UpdateRenderInputsScreen(width, height, sprite, camStats, transform);
     }
     private void OnEnable()
     {
         renderInput.InitRenderer(gameObject);
         RegisterSingleRenderInput(renderInput);
+
+#if UNITY_EDITOR
+        Selection.selectionChanged += UpdateEditorPosition;
+#endif
     }
+
     private void OnDisable()
     {
         UnregisterSingleRenderInput(renderInput);
     }
+
     private void OnDestroy()
     {
         UnregisterSingleRenderInput(renderInput);
     }
-    private void Start()
-    {
-        renderInput.UpdateDepth(renderInput.batchKey.depthOrder);
-    }
     private void Update()
     {
 #if UNITY_EDITOR
-        if(!Application.isPlaying)
+        if (!Application.isPlaying)
         {
             renderInput.UpdateDepth((int)transform.position.z);
+            //SetSprite();
         }
 #endif
-        renderInput.UpdateBounds();
     }
 
 #if UNITY_EDITOR
-    private void OnDrawGizmos()
+    public void UpdateEditorPosition()
     {
-        Gizmos.color = Color.clear;
-        Gizmos.DrawCube(renderInput.bounds.center, renderInput.bounds.size);
-    }
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.indigo;
-        Gizmos.DrawWireCube(renderInput.bounds.center, renderInput.bounds.size);
+        if (Selection.activeGameObject == this.gameObject)
+        {
+            Vector3 editorPos = new Vector3(screenPosition.x * camStats.worldUnitsPerPixel, screenPosition.y * camStats.worldUnitsPerPixel, transform.localPosition.z);
+            transform.localPosition = editorPos;
+        }
     }
 #endif
 }

@@ -21,7 +21,7 @@ public class SpyBrain : MonoBehaviour
     [Header("Components")]
     [SerializeField] Rigidbody2D rigidBody;
     [SerializeField] BoxCollider2D boxCollider;
-    [SerializeField] AtlasSimpleRenderer atlasRenderer;
+    [SerializeField] AtlasMotionRenderer atlasRenderer;
     [Header("Scriptable Objects")]
     [SerializeField] SpySettingsSO settings;
     [SerializeField] MaterialIDSO materialIDs;
@@ -86,7 +86,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void Start()
     {
-        atlas = atlasRenderer.atlas;
+        atlas = atlasRenderer.renderInput.atlas;
         atlas.UpdateClipDictionary();
         curState = State.Idle;
         rigidBody.gravityScale = settings.gravityScale;
@@ -578,7 +578,7 @@ public class SpyBrain : MonoBehaviour
                     collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
                     stats.onTrain = true;
                     UpdateDepth(atlasRenderer.renderInput.batchKey.depthOrder).Forget();
-                    atlasRenderer.UpdateDepth(trainStats.depthSection_front_min);
+                    atlasRenderer.renderInput.UpdateDepth(trainStats.depthSection_front_min);
                     trainStats.curPassengerCount++;
                     
                     gameEventData.OnBoardingSpy.Raise();
@@ -611,7 +611,7 @@ public class SpyBrain : MonoBehaviour
     private void Flip(bool flip)
     {
         stats.spriteFlip = flip;
-        atlasRenderer.Flip(flip);
+        atlasRenderer.renderInput.FlipH(flip, atlasRenderer.sprite);
     }
     private void OnApplicationQuit()
     {

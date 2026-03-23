@@ -103,14 +103,14 @@ public class Carriage : MonoBehaviour
     private void SetSeatData()
     {
         AtlasSimpleRenderer seatRenderer = chairRenderers[0];
-        float tileWidth = seatRenderer.atlas.slicedSprites[seatRenderer.spriteIndex].worldSlices.x;
+        float tileWidth = seatRenderer.renderInput.atlas.slicedSprites[seatRenderer.spriteIndex].worldSlices.x;
 
         List<ChairData> seatDataList = new List<ChairData>();
         for (int i = 0; i < chairRenderers.Length; i++)
         {
             AtlasSimpleRenderer seat = chairRenderers[i];
 
-            float totalWidth = seat.renderInput.widthHeightFlip[0].x;
+            float totalWidth = seat.renderInput.scaleAndFlip.x;
             int chairAmount = Mathf.RoundToInt(totalWidth / tileWidth);
             float firstChairPos = seat.transform.position.x + (tileWidth * 0.5f);
 
@@ -192,7 +192,7 @@ public class Carriage : MonoBehaviour
                 alpha = alpha < 0.5 ? 16 * alpha * alpha * alpha * alpha * alpha : 1 - Mathf.Pow(-2 * alpha + 2, 5) * 0.5f; 
                 for (int i = 0; i < exteriorRenderers.Length; i++)
                 {
-                    exteriorRenderers[i].customMPB.SetFloat(materialIDs.ids.alpha, alpha);
+                    exteriorRenderers[i].renderInput.customMPB.SetFloat(materialIDs.ids.alpha, alpha);
                 }
 
                 await UniTask.Yield(cancellationToken: ctsFade.Token);
@@ -216,7 +216,7 @@ public class Carriage : MonoBehaviour
                 alpha = alpha < 0.5 ? 16 * alpha * alpha * alpha * alpha * alpha : 1 - Mathf.Pow(-2 * alpha + 2, 5) * 0.5f;
                 for (int i = 0; i < exteriorRenderers.Length; i++)
                 {
-                    exteriorRenderers[i].customMPB.SetFloat(materialIDs.ids.alpha, alpha);
+                    exteriorRenderers[i].renderInput.customMPB.SetFloat(materialIDs.ids.alpha, alpha);
                 }
 
                 await UniTask.Yield(PlayerLoopTiming.Update, ctsFade.Token);

@@ -19,7 +19,7 @@ public class Station : MonoBehaviour
             if (npcData.agentPool.Count == 0) { Debug.LogError($"Traitor Pool is empty at {gameObject.name}"); return; }
             NPC.TraitorData traitorData =  npcData.agentPool.Dequeue();
             traitorData.traitor_prefab.gameObject.SetActive(true);
-            float randXPos = Random.Range(platformRenderer.bounds.min.x + 5f, platformRenderer.bounds.max.x - 5f);
+            float randXPos = Random.Range(platformRenderer.renderInput.bounds.min.x + 5f, platformRenderer.renderInput.bounds.max.x - 5f);
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, platformRenderer.transform.position.z);
             traitorData.traitor_prefab.transform.position = spawnPos;
             traitorData.traitor_prefab.startStation = station;
@@ -28,10 +28,10 @@ public class Station : MonoBehaviour
         for (int i = 0; i < station.bystanderSpawnAmount; i++)
         {
             int randNPCIndex = Random.Range(0, npcData.npc_prefab.Length);
-            float randXPos = Random.Range(platformRenderer.bounds.min.x + 5, platformRenderer.bounds.max.x - 5f);
+            float randXPos = Random.Range(platformRenderer.renderInput.bounds.min.x + 5, platformRenderer.renderInput.bounds.max.x - 5f);
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, platformRenderer.transform.position.z);
             NPCBrain bystanderNPC = Instantiate(npcData.npc_prefab[randNPCIndex], spawnPos, Quaternion.identity); // spawn at random point on station
-            bystanderNPC.atlasRenderer.UpdateDepth((int)platformRenderer.transform.position.z);
+            bystanderNPC.atlasRenderer.renderInput.UpdateDepth((int)platformRenderer.transform.position.z);
             bystanderNPC.stats.role = NPC.Role.Bystander;
             bystanderNPC.startStation = station;
             bystanderNPC.transform.SetParent(platformRenderer.transform, true);

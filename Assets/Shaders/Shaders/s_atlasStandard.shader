@@ -44,14 +44,19 @@ Shader "Custom/s_atlasStandard"
 
                 AtlasSprite spriteData = _SpriteData[v.instanceID];
 
+
                 float3 position = spriteData.position;
-                float2 pivot = spriteData.pivot;
-                float2 scale = spriteData.widthHeightFlip.xy;
+                
+                float2 pivot = spriteData.pivotAndSize.xy;
+                float2 size = spriteData.pivotAndSize.zw;
+                
+                float2 scale = spriteData.scaleAndFlip.xy;
+                float2 objPos = v.positionOS.xy;
 
-                float2 localPos = v.positionOS.xy - pivot;
-                localPos *= scale;
+                objPos *= size * scale;
+                objPos -= pivot;
 
-                float3 worldPos = float3(position.xy + localPos, position.z);
+                float3 worldPos = float3(position.xy + objPos, position.z);
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
@@ -65,14 +70,17 @@ Shader "Custom/s_atlasStandard"
                 uint id = i.instanceID;
                 AtlasSprite spriteData = _SpriteData[id];
 
-                float4 uvSizeAndPos = spriteData.uvSizeAndPos;
-                float4 widthHeightFlip = spriteData.widthHeightFlip;
+                float2 uvSize = spriteData.uvSizeAndPos.xy;
+                float2 uvPos = spriteData.uvSizeAndPos.zw;
+                
+                float2 scale = spriteData.scaleAndFlip.xy;
+                float2 flip = spriteData.scaleAndFlip.zw;
 
-                //i.uv *= widthHeightFlip.xy;
-                //i.uv = frac(i.uv);
-                //i.uv = (i.uv - 0.5) * widthHeightFlip.zw + 0.5;
-                i.uv *= uvSizeAndPos.xy;
-                i.uv += uvSizeAndPos.zw;
+                i.uv *= scale.xy;
+                i.uv = frac(i.uv);
+                i.uv = (i.uv - 0.5) * flip + 0.5;
+                i.uv *= uvSize;
+                i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
                 half3 finalColor = color.rgb;

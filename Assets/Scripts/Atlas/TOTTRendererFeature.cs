@@ -98,9 +98,9 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             foreach ((BatchKey key, BatchData data) batch in batchList)
             {
                 int count = 0;
-                for (int i = 0; i < batch.data.renderInputs.Count && count < MAX; i++)
+                for (int i = 0; i < batch.data.singularRenderInputs.Count && count < MAX; i++)
                 {
-                    RenderInput renderInput = batch.data.renderInputs[i];
+                    SingularRenderInput renderInput = batch.data.singularRenderInputs[i];
 
                     if (renderInput == null || !renderInput.gameObject.activeInHierarchy) continue;
 #if UNITY_EDITOR
@@ -118,32 +118,40 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     //    continue;
                     //}
 
-                    if (renderInput.spriteMode == SpriteMode.Slice)
+                    batch.data.spriteData[count] = new SpriteData
                     {
-                        for (int j = 0; j < 9; j++)
-                        {
-                            batch.data.spriteData[count] = new SpriteData
-                            {
-                                position = renderInput.position[j],
-                                pivot = renderInput.pivot[j],
-                                uvSizeAndPos = renderInput.uvSizeAndPos[j],
-                                widthHeightFlip = renderInput.widthHeightFlip[j],
-                            };
-                            count++;
-                        }
+                        worldPosition = renderInput.gameObject.transform.position,
+                        worldPivotAndScale = renderInput.pivotAndSize,
+                        uvSizeAndPos = renderInput.uvSizeAndPos,
+                        scaleAndFlip = renderInput.scaleAndFlip,
+                    };
+                    count++;
+                }
+
+                for (int i = 0; i < batch.data.multipleRenderInputs.Count && count < MAX; i++)
+                {
+                    MultipleRenderInput renderInput = batch.data.multipleRenderInputs[i];
+
+                    if (renderInput == null || !renderInput.gameObject.activeInHierarchy) continue;
+#if UNITY_EDITOR
+
+                    if (prefabStage != null)
+                    {
+                        if (renderInput.gameObject.scene != prefabScene) continue;
                     }
-                    else
+#endif
+                    //if (renderInput.bounds.max.x < cameraStats.camLeft || renderInput.bounds.min.x > cameraStats.camRight || renderInput.bounds.max.y < cameraStats.camBottom || renderInput.bounds.min.y > cameraStats.camTop) continue;
+                    for (int j = 0; j < renderInput.worldPivotAndSize.Length; j++)
                     {
                         batch.data.spriteData[count] = new SpriteData
                         {
-                            position = renderInput.position[0],
-                            pivot = renderInput.pivot[0],
-                            uvSizeAndPos = renderInput.uvSizeAndPos[0],
-                            widthHeightFlip = renderInput.widthHeightFlip[0],
+                            worldPosition = renderInput.gameObject.transform.position, // TODO: Make an offset set hear
+                            worldPivotAndScale = renderInput.worldPivotAndSize[j],
+                            uvSizeAndPos = renderInput.uvSizeAndPos[j],
+                            scaleAndFlip = renderInput.scaleAndFlip[j],
                         };
                         count++;
                     }
-
                 }
 
                 if (count == 0) continue;
@@ -153,7 +161,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                 batch.data.argsBuffer.SetData(AtlasBatch.args);
                 batch.data.mpb.SetBuffer("_SpriteData", batch.data.spriteDataBuffer);
 
-                cmd.DrawMeshInstancedIndirect(AtlasBatch.quad, 0, batch.key.material, 0, batch.data.argsBuffer, 0, batch.data.mpb);
+                cmd.DrawMeshInstancedIndirect(AtlasBatch.Quad, 0, batch.key.material, 0, batch.data.argsBuffer, 0, batch.data.mpb);
             }
         }
     }

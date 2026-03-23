@@ -44,7 +44,7 @@ public class StationManager : MonoBehaviour
     private void SpawnStation()
     {
         Station nextStation = Instantiate(trip.curStation.station_prefab, null);
-        float stationXPos = spawner.spawnMaxPos.x + (nextStation.transform.position.x - nextStation.platformRenderer.bounds.min.x);
+        float stationXPos = spawner.spawnMaxPos.x + (nextStation.transform.position.x - nextStation.platformRenderer.renderInput.bounds.min.x);
         nextStation.transform.position = new Vector3(stationXPos, 0, 0);
         trip.curStation.hadSpawned = true;
     }

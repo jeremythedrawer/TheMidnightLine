@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using UnityEngine.UIElements;
 using static Atlas;
 public static class AtlasBatch
 {
@@ -16,29 +17,115 @@ public static class AtlasBatch
         public int depthOrder;
     }
 
-    [Serializable] public class RenderInput
+    [Serializable] public class SingularRenderInput
+    {
+        public BatchKey batchKey;
+        public AtlasSO atlas;
+        public BoxCollider2D boxCollider;
+
+        public bool flipX;
+        public bool flipY;
+        [Header("Generated")]
+        public GameObject gameObject;
+        public MaterialPropertyBlock customMPB;
+        public Bounds bounds = new Bounds();
+
+        public Vector4 pivotAndSize;
+        public Vector4 uvSizeAndPos;
+        public Vector4 scaleAndFlip;
+        public Vector2 boundsOffset;
+
+
+        public void UpdateRenderInputsScreen(float width, float height, SimpleSprite newSprite, CameraStatsSO camStats, Transform transform)
+        {
+            if (atlas == null) return;
+            Vector2 spritePixelSize = newSprite.worldSize * PIXELS_PER_UNIT;
+            uvSizeAndPos = newSprite.uvSizeAndPos;
+            pivotAndSize.z = spritePixelSize.x * camStats.worldUnitsPerPixel;
+            pivotAndSize.w = spritePixelSize.y * camStats.worldUnitsPerPixel;
+            scaleAndFlip.x = width;
+            scaleAndFlip.y = height;
+
+        }
+        public void UpdateRenderInputsWorld(float width, float height, SimpleSprite newSprite)
+        {
+            if (atlas == null) return;
+
+            uvSizeAndPos = newSprite.uvSizeAndPos;
+            pivotAndSize.z = newSprite.worldSize.x;
+            pivotAndSize.w = newSprite.worldSize.y;
+            scaleAndFlip.x = width;
+            scaleAndFlip.y = height;
+            bounds.size = new Vector3(scaleAndFlip.x * pivotAndSize.z, scaleAndFlip.y * pivotAndSize.w, 0.2f);
+
+            FlipH(flipX, newSprite);
+            FlipV(flipY, newSprite);
+
+            bounds.center = new Vector3(gameObject.transform.position.x + boundsOffset.x, gameObject.transform.position.y + boundsOffset.y, gameObject.transform.position.z);
+
+            if (boxCollider == null) return;
+            boxCollider.size = bounds.size;
+            boxCollider.offset = bounds.center - gameObject.transform.position;
+        }
+        public void UpdateDepth(int newDepth)
+        {
+            batchKey.depthOrder = newDepth;
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, batchKey.depthOrder);
+        }
+        public void FlipH(bool flipLeft, SimpleSprite sprite)
+        {
+            flipX = flipLeft;
+            scaleAndFlip.z = flipLeft ? -1 : 1;
+            float flipPivot = flipLeft ? 1 - sprite.uvPivot.x : sprite.uvPivot.x;
+            pivotAndSize.x = flipPivot * scaleAndFlip.x * pivotAndSize.z;
+            boundsOffset.x = (bounds.size.x * 0.5f) - pivotAndSize.x;
+        }
+        public void FlipV(bool flipDown, SimpleSprite sprite)
+        {
+            flipY = flipDown;
+            scaleAndFlip.w = flipDown ? -1 : 1;
+            float flipPivot = flipDown ? 1 - sprite.uvPivot.y : sprite.uvPivot.y;
+            pivotAndSize.y = flipPivot * scaleAndFlip.y * pivotAndSize.w;
+            boundsOffset.y = (bounds.size.y * 0.5f) - pivotAndSize.y;
+        }
+        public void InitRenderer(GameObject obj)
+        {
+            gameObject = obj;
+        }
+
+        public void UpdateBounds()
+        {
+            if (gameObject.transform.hasChanged)
+            {
+                bounds.center = new Vector3(gameObject.transform.position.x + boundsOffset.x, gameObject.transform.position.y + boundsOffset.y, gameObject.transform.position.z);
+            }
+        }
+    }
+
+    [Serializable] public class MultipleRenderInput
     {
         public BatchKey batchKey;
 
         [Header("Generated")]
         public GameObject gameObject;
-        public Vector3[] position = new Vector3[1];
-        public Vector2[] pivot = new Vector2[1];
-        public Vector4[] uvSizeAndPos = new Vector4[1];
-        public Vector4[] widthHeightFlip = new Vector4[1];
-        public SpriteMode spriteMode;
+        public Bounds bounds = new Bounds();
+
+        public Vector4[] worldPivotAndSize;
+        public Vector4[] uvSizeAndPos;
+        public Vector4[] scaleAndFlip;
     }
 
     [Serializable] public struct SpriteData
     {
-        public Vector4 position;
-        public Vector4 pivot;
+        public Vector4 worldPosition;
+        public Vector4 worldPivotAndScale;
         public Vector4 uvSizeAndPos;
-        public Vector4 widthHeightFlip;
+        public Vector4 scaleAndFlip;
     }
     public class BatchData
     {
-        public List<RenderInput> renderInputs = new List<RenderInput>();
+        public List<SingularRenderInput> singularRenderInputs = new List<SingularRenderInput>();
+        public List<MultipleRenderInput> multipleRenderInputs = new List<MultipleRenderInput>();
         public readonly SpriteData[] spriteData = new SpriteData[MAX];
         
         public GraphicsBuffer spriteDataBuffer;
@@ -49,7 +136,7 @@ public static class AtlasBatch
 
     public class UIBatchData
     {
-        public readonly List<RenderInput> uiData = new List<RenderInput>();
+        public readonly List<SingularRenderInput> uiData = new List<SingularRenderInput>();
         public readonly Matrix4x4[] matrices = new Matrix4x4[MAX];
         public readonly Vector4[] uvSizeAndPosData = new Vector4[MAX];
         public readonly Vector4[] widthHeightFlip = new Vector4[MAX];
@@ -62,7 +149,7 @@ public static class AtlasBatch
 
     public static readonly Dictionary<BatchKey, UIBatchData> textBatchDict = new Dictionary<BatchKey, UIBatchData>();
     public static readonly List<(BatchKey key, UIBatchData)> uiBatchList = new List<(BatchKey key, UIBatchData)>();
-    public static Mesh quad;
+    public static Mesh Quad;
     public static uint[] args;
 
 
@@ -91,11 +178,11 @@ public static class AtlasBatch
             uiBatchList.Add((key, batch));
         }
     }
-    public static void RegisterRenderer(RenderInput renderInput)
+    public static void RegisterSingleRenderInput(SingularRenderInput renderInput)
     {
         if (renderInput.batchKey.material == null) return;
         renderInput.batchKey.material.enableInstancing = true;
-        UnregisterRenderer(renderInput);
+        UnregisterSingleRenderInput(renderInput);
 
         if (!batchDict.TryGetValue(renderInput.batchKey, out BatchData batch))
         {
@@ -105,46 +192,50 @@ public static class AtlasBatch
             batchDict.Add(renderInput.batchKey, batch);
         }
 
-        batch.renderInputs.Add(renderInput);
-
+        batch.singularRenderInputs.Add(renderInput);
     }
-    public static void UnregisterRenderer(RenderInput renderInput)
+    public static void UnregisterSingleRenderInput(SingularRenderInput renderInput)
     {
         if (!batchDict.TryGetValue(renderInput.batchKey, out BatchData batch)) return;
 
-        batch.renderInputs.Remove(renderInput);
+        batch.singularRenderInputs.Remove(renderInput);
 
-        if (batch.renderInputs.Count == 0) batchDict.Remove(renderInput.batchKey);
+        if (batch.singularRenderInputs.Count == 0 && batch.multipleRenderInputs.Count == 0) batchDict.Remove(renderInput.batchKey);
     }
-    public static void RegisterUIRenderer(RenderInput uiRenderInstance)
+
+
+    public static void RegisterMultipleRenderInput(MultipleRenderInput renderInput)
     {
-        if (uiRenderInstance.batchKey.material == null) return;
-        UnregisterUIRenderer(uiRenderInstance);
+        if (renderInput.batchKey.material == null) return;
+        renderInput.batchKey.material.enableInstancing = true;
+        UnregisterMultipleRenderInput(renderInput);
 
-        if (!uiRenderInstance.batchKey.material.enableInstancing) uiRenderInstance.batchKey.material.enableInstancing = true;
-
-        if (!textBatchDict.TryGetValue(uiRenderInstance.batchKey , out UIBatchData batch))
+        if (!batchDict.TryGetValue(renderInput.batchKey, out BatchData batch))
         {
-            batch = new UIBatchData();
-            textBatchDict.Add(uiRenderInstance.batchKey, batch);
+            batch = new BatchData();
+            batch.spriteDataBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, MAX, SHADER_DATA_STRIDE);
+            batch.argsBuffer = new GraphicsBuffer(GraphicsBuffer.Target.IndirectArguments, 1, ARGS_STRIDE);
+            batchDict.Add(renderInput.batchKey, batch);
         }
 
-        batch.uiData.Add(uiRenderInstance);
+        batch.multipleRenderInputs.Add(renderInput);
+
     }
-    public static void UnregisterUIRenderer(RenderInput uiRenderInstance)
+    public static void UnregisterMultipleRenderInput(MultipleRenderInput renderInput)
     {
-        if (!textBatchDict.TryGetValue(uiRenderInstance.batchKey, out UIBatchData batch)) return;
+        if (!batchDict.TryGetValue(renderInput.batchKey, out BatchData batch)) return;
 
-        batch.uiData.Remove(uiRenderInstance);
+        batch.multipleRenderInputs.Remove(renderInput);
 
-        if (batch.uiData.Count == 0) textBatchDict.Remove(uiRenderInstance.batchKey);
+        if (batch.singularRenderInputs.Count == 0 && batch.multipleRenderInputs.Count == 0) batchDict.Remove(renderInput.batchKey);
     }
+
     public static void SetQuad()
     {
-        quad = new Mesh();
-        quad.name = "AtlasBatchQuad";
+        Quad = new Mesh();
+        Quad.name = "AtlasBatchQuad";
 
-        quad.vertices = new Vector3[]
+        Quad.vertices = new Vector3[]
         {
             new Vector3(0f, 0f),
             new Vector3(1f, 0f),
@@ -152,7 +243,7 @@ public static class AtlasBatch
             new Vector3(1f,  1f),
         };
 
-        quad.uv = new Vector2[]
+        Quad.uv = new Vector2[]
         {
             new Vector2(0, 0),
             new Vector2(1, 0),
@@ -160,15 +251,15 @@ public static class AtlasBatch
             new Vector2(1, 1),
         };
 
-        quad.triangles = new int[] { 0, 2, 1, 2, 3, 1 };
-        quad.RecalculateBounds();
+        Quad.triangles = new int[] { 0, 2, 1, 2, 3, 1 };
+        Quad.RecalculateBounds();
 
         args = new uint[5]
         {
-            AtlasBatch.quad.GetIndexCount(0),
+            AtlasBatch.Quad.GetIndexCount(0),
             0,
-            AtlasBatch.quad.GetIndexStart(0),
-            AtlasBatch.quad.GetBaseVertex(0),
+            AtlasBatch.Quad.GetIndexStart(0),
+            AtlasBatch.Quad.GetBaseVertex(0),
             0
         };
     }

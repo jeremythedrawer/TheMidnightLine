@@ -141,7 +141,7 @@ public class GlyphSetter : MonoBehaviour
         lifetime = (width + lineCount) * 0.4f;
         vfx.SetFloat("Lifetime", lifetime);
 
-        vfx.SetMesh("_Quad", AtlasBatch.quad);
+        vfx.SetMesh("_Quad", AtlasBatch.Quad);
     }
 
     private void ReleaseBuffers()

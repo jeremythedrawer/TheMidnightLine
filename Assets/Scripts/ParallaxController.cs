@@ -30,12 +30,12 @@ public class ParallaxController : MonoBehaviour
         {
             parallaxFactor = GetParallaxFactor(transform.position.z);
         }
-        float totalWidth = atlasRenderer.renderInput.widthHeightFlip[0].x;
+        float totalWidth = atlasRenderer.renderInput.scaleAndFlip.x;
         if (rightRenderer != null)
         {
-            totalWidth = rightRenderer.bounds.max.x - atlasRenderer.bounds.min.x;
+            totalWidth = rightRenderer.renderInput.bounds.max.x - atlasRenderer.renderInput.bounds.min.x;
         }
-        float worldPivot = (atlasRenderer.sprite.uvPivot.x * atlasRenderer.atlas.texture.width) / PIXELS_PER_UNIT;
+        float worldPivot = (atlasRenderer.sprite.uvPivot.x * atlasRenderer.renderInput.atlas.texture.width) / PIXELS_PER_UNIT;
         pivotToMaxWorldDist = totalWidth - worldPivot;
         minWorldToPivotDist = totalWidth - pivotToMaxWorldDist;
     }

@@ -88,6 +88,10 @@ public static class Atlas
         Simple,
         Motion,
         Slice,
+        UISimple,
+        UIMotion,
+        UISlice,
+        UIText,
     }
     [Serializable] public struct MarkerKey
     {
