@@ -51,7 +51,6 @@ public class Carriage : MonoBehaviour
     {
         ctsFade = new CancellationTokenSource();
     }
-
     private void OnEnable()
     {
         gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(SetSeatData);
@@ -60,7 +59,6 @@ public class Carriage : MonoBehaviour
         gameEventData.OnCloseSlideDoors.RegisterListener(CloseDoors);
 
     }
-
     private void OnDisable()
     {
         gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(SetSeatData);
@@ -68,10 +66,9 @@ public class Carriage : MonoBehaviour
         gameEventData.OnStationArrival.UnregisterListener(UnlockDoors);
         gameEventData.OnCloseSlideDoors.UnregisterListener(CloseDoors);
     }
-
     private void Start()
     {
-        alpha = 1;
+        alpha = 0;
         wheelCircumference = wheelRenderers[0].sprite.worldSize.x * Mathf.PI;
         wheelTransforms = new Transform[wheelTransforms.Length];
         for (int i = 0; i < wheelRenderers.Length; i++)
@@ -89,7 +86,6 @@ public class Carriage : MonoBehaviour
             wheel.localRotation = Quaternion.Euler(0f, 0f, wheelRotation);
         }
     }
-
     private void SetSmokerRoomData()
     {
         smokersRoomData = new SmokersRoomData[2];
@@ -99,7 +95,6 @@ public class Carriage : MonoBehaviour
         smokersRoomData[1].minXPos = smokingRoomCollider_right.bounds.min.x;
         smokersRoomData[1].maxXPos = smokingRoomCollider_right.bounds.max.x;
     }
-
     private void SetSeatData()
     {
         AtlasSliceRenderer seatRenderer = seatRenderers[0];
@@ -141,7 +136,6 @@ public class Carriage : MonoBehaviour
             }
         }
     }
-
     private void CloseDoors()
     {
         if (trip.curStation.isFrontOfTrain)
@@ -160,26 +154,26 @@ public class Carriage : MonoBehaviour
         }
 
     }
-    public void FadeIn()
+    public void MoveUp()
     {
         ctsFade?.Cancel();
         ctsFade?.Dispose();
 
         ctsFade = new CancellationTokenSource();
 
-        FadingIn().Forget();
+        MovingUp().Forget();
 
     }
-    public void FadeOut()
+    public void MoveDown()
     {
         ctsFade?.Cancel();
         ctsFade?.Dispose();
 
         ctsFade = new CancellationTokenSource();
 
-        FadingOut().Forget();
+        MovingDown().Forget();
     }
-    private async UniTask FadingIn()
+    private async UniTask MovingDown()
     {
         float elaspedTime = alpha * trainSettings.exteriorWallFadeTime;
         try
@@ -192,7 +186,7 @@ public class Carriage : MonoBehaviour
                 alpha = alpha < 0.5 ? 16 * alpha * alpha * alpha * alpha * alpha : 1 - Mathf.Pow(-2 * alpha + 2, 5) * 0.5f; 
                 for (int i = 0; i < exteriorRenderers.Length; i++)
                 {
-                    exteriorRenderers[i].renderInput.customMPB.SetFloat(materialIDs.ids.alpha, alpha);
+                    exteriorRenderers[i].renderInput.custom.x = alpha;
                 }
 
                 await UniTask.Yield(cancellationToken: ctsFade.Token);
@@ -202,8 +196,7 @@ public class Carriage : MonoBehaviour
         {
         }
     }
-
-    private async UniTask FadingOut()
+    private async UniTask MovingUp()
     {
         float elaspedTime = alpha * trainSettings.exteriorWallFadeTime;
         try
@@ -216,7 +209,7 @@ public class Carriage : MonoBehaviour
                 alpha = alpha < 0.5 ? 16 * alpha * alpha * alpha * alpha * alpha : 1 - Mathf.Pow(-2 * alpha + 2, 5) * 0.5f;
                 for (int i = 0; i < exteriorRenderers.Length; i++)
                 {
-                    exteriorRenderers[i].renderInput.customMPB.SetFloat(materialIDs.ids.alpha, alpha);
+                    exteriorRenderers[i].renderInput.custom.x = alpha;
                 }
 
                 await UniTask.Yield(PlayerLoopTiming.Update, ctsFade.Token);

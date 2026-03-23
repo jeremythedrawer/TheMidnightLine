@@ -30,7 +30,7 @@ public class GangwayDoor : MonoBehaviour
 
         if ((atlasRenderer.renderInput.flipX && spyStats.curWorldPos.x < transform.position.x) || (!atlasRenderer.renderInput.flipX && spyStats.curWorldPos.x > transform.position.x))
         {
-            carriage.FadeIn();
+            carriage.MoveUp();
         }
     }
 
@@ -39,7 +39,7 @@ public class GangwayDoor : MonoBehaviour
         if (isOpen) return;
 
         OpeningDoor().Forget();
-        carriage.FadeOut();
+        carriage.MoveDown();
     }
     private async UniTask OpeningDoor()
     {

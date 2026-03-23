@@ -132,6 +132,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                         worldPivotAndScale = renderInput.pivotAndSize,
                         uvSizeAndPos = renderInput.uvSizeAndPos,
                         scaleAndFlip = renderInput.scaleAndFlip,
+                        custom = renderInput.custom,
                     };
                     count++;
                 }
@@ -157,6 +158,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                             worldPivotAndScale = renderInput.worldPivotAndSize[j],
                             uvSizeAndPos = renderInput.uvSizeAndPos[j],
                             scaleAndFlip = renderInput.scaleAndFlip[j],
+                            custom = Vector4.zero,
                         };
                         count++;
                     }

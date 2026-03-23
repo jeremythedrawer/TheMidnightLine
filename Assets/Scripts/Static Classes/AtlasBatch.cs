@@ -27,14 +27,16 @@ public static class AtlasBatch
 
         public bool flipX;
         public bool flipY;
+        
         [Header("Generated")]
         public GameObject gameObject;
-        public MaterialPropertyBlock customMPB;
+
         public Bounds bounds = new Bounds();
 
         public Vector4 pivotAndSize;
         public Vector4 uvSizeAndPos;
         public Vector4 scaleAndFlip;
+        public Vector4 custom;
 
         public Vector2 boundsOffset;
 
@@ -166,7 +168,7 @@ public static class AtlasBatch
 
             if (boxCollider == null) return;
             boxCollider.size = bounds.size;
-            boxCollider.offset = bounds.center + gameObject.transform.position;
+            boxCollider.offset = boundsOffset;
         }
         public void UpdateDepth(int newDepth)
         {
@@ -192,6 +194,7 @@ public static class AtlasBatch
         public Vector4 worldPivotAndScale;
         public Vector4 uvSizeAndPos;
         public Vector4 scaleAndFlip;
+        public Vector4 custom;
     }
     public class BatchData
     {

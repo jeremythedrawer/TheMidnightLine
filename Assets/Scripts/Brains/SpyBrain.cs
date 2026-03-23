@@ -570,7 +570,7 @@ public class SpyBrain : MonoBehaviour
                     {
                         SetLocationData(insideCarriageHit.collider.bounds, layerSettings.trainLayers.insideCarriageBounds);
                         curCarriage = trainStats.carriageDict[insideCarriageHit.collider];
-                        curCarriage.FadeOut();
+                        curCarriage.MoveDown();
                     }
                     stats.curGroundLayer = layerSettings.trainLayers.ground;
                     stats.curWallLayer = layerSettings.trainWallLayers;

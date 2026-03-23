@@ -12,7 +12,6 @@ public class AtlasSliceRenderer : MonoBehaviour
     [Header("Generated")]
     public SliceSprite slicedSprite;
     public int quadCount;
-
     private void Awake()
     {
         if(renderInput == null) return;

@@ -4,4 +4,5 @@ struct AtlasSprite
     float4 pivotAndSize;
     float4 uvSizeAndPos;
     float4 scaleAndFlip;
+    float4 custom;
 };

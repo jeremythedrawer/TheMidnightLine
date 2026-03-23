@@ -5,7 +5,6 @@ Shader "Custom/s_exteriorWalls"
         [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
         _UVSizeAndPos ("UV Size And Pos", Vector) = (0,0,0,0)
         _WidthHeightFlip ("Width Height And Flip", Vector) = (0,0,0,0)
-        _Alpha("Alpha", Float) = 0
         _WorldClip("World Clip", Float) = 0
     }
 
@@ -40,7 +39,6 @@ Shader "Custom/s_exteriorWalls"
             };
 
             CBUFFER_START(UnityPerMaterial)
-                float  _Alpha;
                 float _WorldClip;
             CBUFFER_END
 
@@ -69,7 +67,7 @@ Shader "Custom/s_exteriorWalls"
 
                 o.worldPos = float3(position.xy + objPos, position.z);
 
-                o.worldPos.y -= (1 - _Alpha) * 3.3;
+                o.worldPos.y -= spriteData.custom.x * 3.3; //Moving Wall
 
                 o.positionHCS = TransformWorldToHClip(o.worldPos);
                 o.uv = v.uv;

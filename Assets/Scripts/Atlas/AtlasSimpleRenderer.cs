@@ -16,10 +16,8 @@ public class AtlasSimpleRenderer : MonoBehaviour
     public int spriteIndex;
     [Header("Simple (Generated)")]
     public SimpleSprite sprite;
-
     private void OnValidate()
     {
-
         if (renderInput == null || renderInput.atlas == null) return;
         spriteIndex = Mathf.Clamp(spriteIndex, 0, renderInput.atlas.simpleSprites.Length - 1);
         sprite = renderInput.atlas.simpleSprites[spriteIndex];
