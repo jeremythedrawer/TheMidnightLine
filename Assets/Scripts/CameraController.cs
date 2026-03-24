@@ -51,10 +51,10 @@ public class CameraController : MonoBehaviour
         //Set size and position
         stats.camHeight = cam.orthographicSize * 2;
         stats.camWidth = stats.camHeight * cam.aspect;
-        stats.camLeft = stats.curWorldPos.x - stats.camWidth * 0.5f;
-        stats.camRight = stats.curWorldPos.x + stats.camWidth * 0.5f;
-        stats.camBottom = stats.curWorldPos.y - stats.camHeight * 0.5f;
-        stats.camTop = stats.curWorldPos.y + stats.camHeight * 0.5f;
+        stats.camWorldLeft = stats.curWorldPos.x - stats.camWidth * 0.5f;
+        stats.camWorldRight = stats.curWorldPos.x + stats.camWidth * 0.5f;
+        stats.camWorldBottom = stats.curWorldPos.y - stats.camHeight * 0.5f;
+        stats.camWorldTop = stats.curWorldPos.y + stats.camHeight * 0.5f;
         stats.worldUnitsPerPixel = stats.camHeight / Screen.height;
         if (Application.isPlaying)
         {

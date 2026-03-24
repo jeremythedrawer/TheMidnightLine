@@ -51,4 +51,17 @@ public class AtlasUISimpleRenderer : AtlasRenderer
         }
 #endif
     }
+
+#if UNITY_EDITOR
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.clear;
+        Gizmos.DrawCube(renderInput.bounds.center, renderInput.bounds.size);
+    }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.indigo;
+        Gizmos.DrawWireCube(renderInput.bounds.center, renderInput.bounds.size);
+    }
+#endif
 }

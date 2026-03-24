@@ -19,10 +19,10 @@ public class CameraStatsSO : ScriptableObject
     public float camHeight;
     public float camWidth;
     public float curHorOffset;
-    public float camLeft;
-    public float camRight;
-    public float camBottom;
-    public float camTop;
+    public float camWorldLeft;
+    public float camWorldRight;
+    public float camWorldBottom;
+    public float camWorldTop;
     public float worldUnitsPerPixel;
     public Vector3 curWorldPos;
     public Vector3 prevWorldPos;

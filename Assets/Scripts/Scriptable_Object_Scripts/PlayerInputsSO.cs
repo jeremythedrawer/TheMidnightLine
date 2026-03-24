@@ -3,18 +3,17 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SpyInputs_SO", menuName = "Midnight Line SOs / Spy Inputs SO")]
 public class PlayerInputsSO : ScriptableObject
 {
-    internal int move;
-    internal bool jump;
-    internal bool run;
-    internal bool interact;
-    internal int mouseScroll;
-
-    internal Vector2 mouseScreenPos;
-    internal Vector2 mouseWorldPos;
-    internal Vector2 startDragMouseScreenPos;
-    internal Vector2 endDragMouseScreenPos;
-    internal bool mouseLeftDown;
-    internal bool mouseLeftPress;
-    internal bool mouseLeftUp;
-    internal bool cancel;
+    public int move;
+    public bool jump;
+    public bool run;
+    public bool interact;
+    public Vector2 notepad;
+    public Vector2 mouseScreenPos;
+    public Vector2 mouseWorldPos;
+    public Vector2 startDragMouseScreenPos;
+    public Vector2 endDragMouseScreenPos;
+    public bool mouseLeftDown;
+    public bool mouseLeftPress;
+    public bool mouseLeftUp;
+    public bool cancel;
 }

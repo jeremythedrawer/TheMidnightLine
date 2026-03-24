@@ -67,8 +67,12 @@ public static class AtlasRendering
             pivotAndSize.w = spritePixelSize.y * camStats.worldUnitsPerPixel;
             scaleAndFlip.x = width;
             scaleAndFlip.y = height;
+
+            bounds.size = new Vector3(scaleAndFlip.x * pivotAndSize.z, scaleAndFlip.y * pivotAndSize.w, 0.2f);
             FlipH(flipX, newSprite);
             FlipV(flipY, newSprite);
+
+            bounds.center = new Vector3(gameObject.transform.position.x + boundsOffset.x, gameObject.transform.position.y + boundsOffset.y, gameObject.transform.position.z);
         }
         public void UpdateRenderInputsWorld(float width, float height, SimpleSprite newSprite)
         {
