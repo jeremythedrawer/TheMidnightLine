@@ -7,7 +7,7 @@ using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using static Atlas;
-using static AtlasBatch;
+using static AtlasRendering;
 using static AtlasSpawn;
 
 public class TOTTRendererFeature : ScriptableRendererFeature
@@ -45,7 +45,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
     public override void Create()
     {
-        if (quad == null) quad = AtlasBatch.SetQuad();
+        if (quad == null) quad = AtlasRendering.SetQuad();
         batchPass = new AtlasBatchPass(materialIDs, cameraStats, quad);
         particlePass = new AtlasParticlePass(trip, zoneSpawner, materialIDs);
         matrixPass = new MatrixPass(this);
@@ -150,12 +150,12 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     }
 #endif
                     //if (renderInput.bounds.max.x < cameraStats.camLeft || renderInput.bounds.min.x > cameraStats.camRight || renderInput.bounds.max.y < cameraStats.camBottom || renderInput.bounds.min.y > cameraStats.camTop) continue;
-                    for (int j = 0; j < renderInput.worldPivotAndSize.Length; j++)
+                    for (int j = 0; j < renderInput.pivotAndSize.Length; j++)
                     {
                         batch.data.spriteData[count] = new SpriteData
                         {
                             worldPosition = renderInput.gameObject.transform.position, // TODO: Make an offset set hear
-                            worldPivotAndScale = renderInput.worldPivotAndSize[j],
+                            worldPivotAndScale = renderInput.pivotAndSize[j],
                             uvSizeAndPos = renderInput.uvSizeAndPos[j],
                             scaleAndFlip = renderInput.scaleAndFlip[j],
                             custom = Vector4.zero,

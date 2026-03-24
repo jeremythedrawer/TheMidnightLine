@@ -3,10 +3,10 @@ using UnityEngine;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.U2D;
 using static Atlas;
-using static AtlasBatch;
+using static AtlasRendering;
 
 [ExecuteAlways]
-public class AtlasSimpleRenderer : MonoBehaviour
+public class AtlasSimpleRenderer : AtlasRenderer
 {
     public SingularRenderInput renderInput;
 
@@ -16,6 +16,7 @@ public class AtlasSimpleRenderer : MonoBehaviour
     public int spriteIndex;
     [Header("Simple (Generated)")]
     public SimpleSprite sprite;
+
     private void OnValidate()
     {
         if (renderInput == null || renderInput.atlas == null) return;

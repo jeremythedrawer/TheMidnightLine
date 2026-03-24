@@ -59,6 +59,7 @@ MonoBehaviour:
     pivotAndSize: {x: 6.897222, y: 0, z: 13.794444, w: 6.2444444}
     uvSizeAndPos: {x: 0.6062012, y: 0.27441406, z: 0.0029296875, w: 0.0021972656}
     scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    custom: {x: 0, y: 0, z: 0, w: 0}
     boundsOffset: {x: 0, y: 3.1222222}
   width: 1
   height: 1
@@ -117,15 +118,16 @@ MonoBehaviour:
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   zoneStats: {fileID: 11400000, guid: fa0e41c06b686dc46aecf54c90ff03e4, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  atlasRenderer: {fileID: 3735235545740367740}
+  leftRenderer: {fileID: 8631341933424470126}
   repeatType: 0
   ignoreParallax: 0
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   rightRenderer: {fileID: 0}
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
-  pivotToMaxWorldDist: 0
-  minWorldToPivotDist: 0
+  bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
 --- !u!1 &1760855985880669352
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,6 +187,7 @@ MonoBehaviour:
     pivotAndSize: {x: 0, y: 0, z: 2.4555554, w: 2.0277777}
     uvSizeAndPos: {x: 0.107910156, y: 0.08911133, z: 0, w: 0.59033203}
     scaleAndFlip: {x: 13.04, y: 1, z: 1, w: 1}
+    custom: {x: 0, y: 0, z: 0, w: 0}
     boundsOffset: {x: 16.010221, y: 1.0138888}
   width: 13.04
   height: 1
@@ -254,6 +257,7 @@ MonoBehaviour:
     pivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4277778}
     uvSizeAndPos: {x: 0.49951172, y: 0.06274414, z: 0.5004883, w: 0.93725586}
     scaleAndFlip: {x: 7.91, y: 1, z: 1, w: 1}
+    custom: {x: 0, y: 0, z: 0, w: 0}
     boundsOffset: {x: 44.955166, y: 0.7138889}
   width: 7.91
   height: 1
@@ -360,15 +364,16 @@ MonoBehaviour:
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   zoneStats: {fileID: 11400000, guid: fa0e41c06b686dc46aecf54c90ff03e4, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  atlasRenderer: {fileID: 6196128119389717966}
+  leftRenderer: {fileID: 6196128119389717966}
   repeatType: 0
   ignoreParallax: 0
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  rightRenderer: {fileID: 0}
+  rightRenderer: {fileID: 3452785068360572047}
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
-  pivotToMaxWorldDist: 0
-  minWorldToPivotDist: 0
+  bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
 --- !u!1 &4464945837297462622
 GameObject:
   m_ObjectHideFlags: 0
@@ -429,6 +434,7 @@ MonoBehaviour:
     pivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4222223}
     uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0, w: 0.9375}
     scaleAndFlip: {x: 7.91, y: 1, z: 1, w: 1}
+    custom: {x: 0, y: 0, z: 0, w: 0}
     boundsOffset: {x: 44.955166, y: 0.7111111}
   width: 7.91
   height: 1
@@ -538,7 +544,7 @@ MonoBehaviour:
     bounds:
       m_Center: {x: 295.13373, y: -1.0372221, z: 1}
       m_Extent: {x: 47.14389, y: 0.35277778, z: 0.1}
-    worldPivotAndSize:
+    pivotAndSize:
     - {x: 0, y: 0, z: 0.35, w: 0}
     - {x: -0.35, y: 0, z: 4.977778, w: 0}
     - {x: -93.93222, y: 0, z: 0.35555556, w: 0}
@@ -700,6 +706,7 @@ MonoBehaviour:
     pivotAndSize: {x: 0, y: 0, z: 2.4555554, w: 2.0277777}
     uvSizeAndPos: {x: 0.107910156, y: 0.08911133, z: 0, w: 0.59033203}
     scaleAndFlip: {x: 17.03, y: 1, z: 1, w: 1}
+    custom: {x: 0, y: 0, z: 0, w: 0}
     boundsOffset: {x: 20.909056, y: 1.0138888}
   width: 17.03
   height: 1

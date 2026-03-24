@@ -1,9 +1,9 @@
 using UnityEngine;
 using static Atlas;
-using static AtlasBatch;
+using static AtlasRendering;
 
 [ExecuteAlways]
-public class AtlasSliceRenderer : MonoBehaviour
+public class AtlasSliceRenderer : AtlasRenderer
 {
     public MultipleRenderInput renderInput;
     public int spriteIndex;

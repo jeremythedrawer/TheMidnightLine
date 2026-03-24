@@ -1,8 +1,8 @@
 using UnityEngine;
 using static Atlas;
-using static AtlasBatch;
+using static AtlasRendering;
 [ExecuteAlways]
-public class AtlasUISimpleRenderer : MonoBehaviour
+public class AtlasUISimpleRenderer : AtlasRenderer
 {
     public SingularRenderInput renderInput;
     public CameraStatsSO camStats;

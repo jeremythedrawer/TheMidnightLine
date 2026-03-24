@@ -6,19 +6,37 @@ using UnityEditor;
 using UnityEngine;
 using UnityEngine.UIElements;
 using static Atlas;
-using static UnityEngine.RuleTile.TilingRuleOutput;
-public static class AtlasBatch
+public static class AtlasRendering
 {
-
     public const int MAX = 1024;
     public static int SHADER_DATA_STRIDE = Marshal.SizeOf<SpriteData>();
     public static int ARGS_STRIDE = INT_SIZE * 5;
+
+    public static readonly Dictionary<BatchKey, BatchData> batchDict = new Dictionary<BatchKey, BatchData>();
+    public static readonly List<(BatchKey key, BatchData)> batchList = new List<(BatchKey key, BatchData data)>();
+
+    public static Type[] Renderers = new Type[]
+    {
+        typeof(AtlasSimpleRenderer),
+        typeof(AtlasMotionRenderer),
+        typeof(AtlasSliceRenderer),
+        typeof(AtlasUISimpleRenderer),
+        typeof(AtlasTextRenderer),
+    };
+
     [Serializable] public struct BatchKey
     {
         public Material material;
         public int depthOrder;
     }
-
+    [Serializable] public struct SpriteData
+    {
+        public Vector4 worldPosition;
+        public Vector4 worldPivotAndScale;
+        public Vector4 uvSizeAndPos;
+        public Vector4 scaleAndFlip;
+        public Vector4 custom;
+    }
     [Serializable] public class SingularRenderInput
     {
         public BatchKey batchKey;
@@ -105,7 +123,6 @@ public static class AtlasBatch
             }
         }
     }
-
     [Serializable] public class MultipleRenderInput
     {
         public BatchKey batchKey;
@@ -116,7 +133,7 @@ public static class AtlasBatch
         public GameObject gameObject;
         public Bounds bounds = new Bounds();
 
-        public Vector4[] worldPivotAndSize;
+        public Vector4[] pivotAndSize;
         public Vector4[] uvSizeAndPos;
         public Vector4[] scaleAndFlip;
         
@@ -130,7 +147,7 @@ public static class AtlasBatch
 
             float rightColPos = slicedSprite.worldSlices.x + (centerWorldSliceWidth * width);
             float topRowPos = slicedSprite.worldSlices.z + (centerWorldSliceHeight * height);
-            worldPivotAndSize = new Vector4[]
+            pivotAndSize = new Vector4[]
             {
                 new Vector4(0, 0, slicedSprite.worldSlices.x, slicedSprite.worldSlices.z),
                 new Vector4(-slicedSprite.worldSlices.x, 0, centerWorldSliceWidth, slicedSprite.worldSlices.z),
@@ -187,15 +204,6 @@ public static class AtlasBatch
             }
         }
     }
-
-    [Serializable] public struct SpriteData
-    {
-        public Vector4 worldPosition;
-        public Vector4 worldPivotAndScale;
-        public Vector4 uvSizeAndPos;
-        public Vector4 scaleAndFlip;
-        public Vector4 custom;
-    }
     public class BatchData
     {
         public List<SingularRenderInput> singularRenderInputs = new List<SingularRenderInput>();
@@ -207,7 +215,6 @@ public static class AtlasBatch
 
         public readonly MaterialPropertyBlock mpb = new MaterialPropertyBlock();
     }
-
     public class UIBatchData
     {
         public readonly List<SingularRenderInput> uiData = new List<SingularRenderInput>();
@@ -217,17 +224,9 @@ public static class AtlasBatch
         public readonly MaterialPropertyBlock mpb = new MaterialPropertyBlock();
     }
 
-
-    public static readonly Dictionary<BatchKey, BatchData> batchDict = new Dictionary<BatchKey, BatchData>();
-    public static readonly List<(BatchKey key, BatchData)> batchList = new List<(BatchKey key, BatchData data)>();
-
-    public static readonly Dictionary<BatchKey, UIBatchData> textBatchDict = new Dictionary<BatchKey, UIBatchData>();
-    public static readonly List<(BatchKey key, UIBatchData)> uiBatchList = new List<(BatchKey key, UIBatchData)>();
-
     public static void PrepareFrame()
     {
         batchList.Clear();
-        uiBatchList.Clear();
 
         foreach (var kv in batchDict)
         {
@@ -235,17 +234,9 @@ public static class AtlasBatch
             BatchData batch = kv.Value;
             batchList.Add((key, batch));
         }
-
-        foreach (var kv in textBatchDict)
-        {
-            BatchKey key = kv.Key;
-            UIBatchData batch = kv.Value;
-            uiBatchList.Add((key, batch));
-        }
     }
     public static void RegisterSingleRenderInput(SingularRenderInput renderInput)
     {
-        CleanupInvalidBatches();
         if (renderInput.batchKey.material == null) return;
         renderInput.batchKey.material.enableInstancing = true;
         UnregisterSingleRenderInput(renderInput);
@@ -268,7 +259,6 @@ public static class AtlasBatch
 
         if (batch.singularRenderInputs.Count == 0 && batch.multipleRenderInputs.Count == 0) batchDict.Remove(renderInput.batchKey);
     }
-
     public static void RegisterMultipleRenderInput(MultipleRenderInput renderInput)
     {
         if (renderInput.batchKey.material == null) return;
@@ -294,31 +284,6 @@ public static class AtlasBatch
 
         if (batch.singularRenderInputs.Count == 0 && batch.multipleRenderInputs.Count == 0) batchDict.Remove(renderInput.batchKey);
     }
-
-    public static void CleanupInvalidBatches()
-    {
-        var keysToRemove = new List<BatchKey>();
-
-        foreach (var kvp in batchDict)
-        {
-            var batch = kvp.Value;
-
-            // remove dead/null inputs
-            batch.singularRenderInputs.RemoveAll(x => x == null);
-            batch.multipleRenderInputs.RemoveAll(x => x == null);
-
-            if (batch.singularRenderInputs.Count == 0 && batch.multipleRenderInputs.Count == 0)
-            {
-                keysToRemove.Add(kvp.Key);
-            }
-        }
-
-        foreach (var key in keysToRemove)
-        {
-            batchDict.Remove(key);
-        }
-    }
-
     public static Mesh SetQuad()
     {
         Mesh quad = new Mesh();
@@ -346,3 +311,5 @@ public static class AtlasBatch
         return quad;
     }
 }
+
+public abstract class AtlasRenderer : MonoBehaviour { }

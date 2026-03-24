@@ -1,12 +1,14 @@
 using UnityEngine;
 using static Parallax;
 using static Atlas;
+using System;
+using TMPro;
 public class ParallaxController : MonoBehaviour
 {
     public TrainStatsSO trainStats;
     public ZoneSpawnerSO zoneStats;
     public SpyStatsSO spyStats;
-    public AtlasSimpleRenderer atlasRenderer;
+    public AtlasRenderer leftRenderer;
 
     public Parallax.RepeatType repeatType;
     
@@ -16,35 +18,81 @@ public class ParallaxController : MonoBehaviour
     public CameraStatsSO camStats;
 
     [Header("Multiple Sprites")]
-    public AtlasSimpleRenderer rightRenderer;
-    
+    public AtlasRenderer rightRenderer;
+
     [Header("Generated")]
     public float parallaxFactor;
     public Vector3 worldPos;
-    public float pivotToMaxWorldDist;
-    public float minWorldToPivotDist;
+    public Bounds bounds;
+    public Vector3 boundsOffset;
     private void Start()
     {
         worldPos = transform.position;
+        
+        switch(leftRenderer)
+        {
+            case AtlasSimpleRenderer simpleRenderer:
+            {
+                bounds = simpleRenderer.renderInput.bounds;
+            }
+            break;
+
+            case AtlasMotionRenderer motionRenderer:
+            {
+                bounds = motionRenderer.renderInput.bounds;
+            }
+            break;
+
+            case AtlasSliceRenderer sliceRenderer:
+            {
+                bounds = sliceRenderer.renderInput.bounds;
+            }
+            break;
+        }
+
+        if (rightRenderer)
+        {
+            Bounds rightBounds = new Bounds();
+
+            switch (rightRenderer)
+            {
+
+                case AtlasSimpleRenderer simpleRenderer:
+                {
+                    rightBounds = simpleRenderer.renderInput.bounds;
+                }
+                break;
+
+                case AtlasMotionRenderer motionRenderer:
+                {
+                    rightBounds = motionRenderer.renderInput.bounds;
+                }
+                break;
+
+                case AtlasSliceRenderer sliceRenderer:
+                {
+                    rightBounds = sliceRenderer.renderInput.bounds;
+                }
+                break;
+            }
+
+            bounds.Encapsulate(rightBounds);
+        }
+
+        boundsOffset = bounds.center - worldPos;
         if (!ignoreParallax)
         {
             parallaxFactor = GetParallaxFactor(transform.position.z);
         }
-        float totalWidth = atlasRenderer.renderInput.scaleAndFlip.x;
-        if (rightRenderer != null)
-        {
-            totalWidth = rightRenderer.renderInput.bounds.max.x - atlasRenderer.renderInput.bounds.min.x;
-        }
-        float worldPivot = (atlasRenderer.sprite.uvPivot.x * atlasRenderer.renderInput.atlas.texture.width) / PIXELS_PER_UNIT;
-        pivotToMaxWorldDist = totalWidth - worldPivot;
-        minWorldToPivotDist = totalWidth - pivotToMaxWorldDist;
     }
 
     private void Update()
     {
         if (!ignoreParallax)
         {
-            worldPos.x -= UpdateParallaxPosition(camStats, spyStats, trainStats, parallaxFactor);
+            float parallaxIncrement = UpdateParallaxPosition(camStats, spyStats, trainStats, parallaxFactor);
+            worldPos.x -= parallaxIncrement;
+            bounds.center = worldPos + boundsOffset;
         }
         else if (spyStats.onTrain)
         {
@@ -53,18 +101,18 @@ public class ParallaxController : MonoBehaviour
         worldPos.x = Mathf.Round(worldPos.x * PIXELS_PER_UNIT) * UNITS_PER_PIXEL;
         transform.position = worldPos;
 
-        if (worldPos.x + pivotToMaxWorldDist < zoneStats.spawnMinPos.x)
+        if (bounds.max.x < zoneStats.spawnMinPos.x)
         {
             switch (repeatType)
             {
                 case RepeatType.OneShot:
                 {
-                    Destroy(this.gameObject);
+                    Destroy(gameObject);
                 }
                 break;
                 case RepeatType.Repeat:
                 {
-                    worldPos.x = zoneStats.spawnMaxPos.x + minWorldToPivotDist;
+                    worldPos.x += zoneStats.spawnMaxPos.x - bounds.min.x;
                 }
                 break;
             }

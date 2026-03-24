@@ -1,10 +1,10 @@
 using UnityEngine;
 using UnityEngine.U2D;
 using static Atlas;
-using static AtlasBatch;
+using static AtlasRendering;
 
 [ExecuteAlways]
-public class AtlasMotionRenderer : MonoBehaviour
+public class AtlasMotionRenderer : AtlasRenderer
 {
     public SingularRenderInput renderInput;
     public int spriteIndex;

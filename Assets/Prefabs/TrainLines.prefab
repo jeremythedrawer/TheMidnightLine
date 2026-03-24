@@ -54,7 +54,7 @@ MonoBehaviour:
     bounds:
       m_Center: {x: 440.3427, y: 6.3555555, z: 5}
       m_Extent: {x: 28.977781, y: 1.1055555, z: 0.1}
-    worldPivotAndSize:
+    pivotAndSize:
     - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
     - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
     - {x: -48.80556, y: 0, z: 9.15, w: 0.022222223}
@@ -161,11 +161,12 @@ MonoBehaviour:
     flipY: 0
     gameObject: {fileID: 1319570969986533978}
     bounds:
-      m_Center: {x: 469.78998, y: 3.1094446, z: 0}
+      m_Center: {x: 492.72998, y: 1.7227044, z: 0}
       m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
     pivotAndSize: {x: 0.8194444, y: 0, z: 1.6388888, w: 12.338889}
     uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
     scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    custom: {x: 0, y: 0, z: 0, w: 0}
     boundsOffset: {x: 0, y: 6.1694446}
   width: 1
   height: 1
@@ -229,7 +230,7 @@ MonoBehaviour:
     bounds:
       m_Center: {x: 382.4178, y: 6.3555555, z: 5}
       m_Extent: {x: 28.977781, y: 1.1055555, z: 0.1}
-    worldPivotAndSize:
+    pivotAndSize:
     - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
     - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
     - {x: -48.80556, y: 0, z: 9.15, w: 0.022222223}
@@ -336,11 +337,12 @@ MonoBehaviour:
     flipY: 0
     gameObject: {fileID: 2101241448160461617}
     bounds:
-      m_Center: {x: 180.28, y: 3.1094446, z: 0}
+      m_Center: {x: 203.22, y: 1.7227044, z: 0}
       m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
     pivotAndSize: {x: 0.8194444, y: 0, z: 1.6388888, w: 12.338889}
     uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
     scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    custom: {x: 0, y: 0, z: 0, w: 0}
     boundsOffset: {x: 0, y: 6.1694446}
   width: 1
   height: 1
@@ -404,11 +406,12 @@ MonoBehaviour:
     flipY: 0
     gameObject: {fileID: 2320763599818031180}
     bounds:
-      m_Center: {x: 411.84998, y: 3.1094446, z: 0}
+      m_Center: {x: 434.78998, y: 1.7227044, z: 0}
       m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
     pivotAndSize: {x: 0.8194444, y: 0, z: 1.6388888, w: 12.338889}
     uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
     scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    custom: {x: 0, y: 0, z: 0, w: 0}
     boundsOffset: {x: 0, y: 6.1694446}
   width: 1
   height: 1
@@ -478,15 +481,16 @@ MonoBehaviour:
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   zoneStats: {fileID: 11400000, guid: fa0e41c06b686dc46aecf54c90ff03e4, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  atlasRenderer: {fileID: 0}
+  leftRenderer: {fileID: 4403535189799662319}
   repeatType: 1
   ignoreParallax: 0
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  rightRenderer: {fileID: 0}
+  rightRenderer: {fileID: 5163515950505753162}
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
-  pivotToMaxWorldDist: 0
-  minWorldToPivotDist: 0
+  bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
 --- !u!1 &4378685160388922467
 GameObject:
   m_ObjectHideFlags: 0
@@ -541,7 +545,7 @@ MonoBehaviour:
     bounds:
       m_Center: {x: 324.51276, y: 6.3555555, z: 5}
       m_Extent: {x: 28.977781, y: 1.1055555, z: 0.1}
-    worldPivotAndSize:
+    pivotAndSize:
     - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
     - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
     - {x: -48.80556, y: 0, z: 9.15, w: 0.022222223}
@@ -648,7 +652,7 @@ MonoBehaviour:
     bounds:
       m_Center: {x: 150.72778, y: 6.3555555, z: 5}
       m_Extent: {x: 28.977781, y: 1.1055555, z: 0.1}
-    worldPivotAndSize:
+    pivotAndSize:
     - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
     - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
     - {x: -48.80556, y: 0, z: 9.15, w: 0.022222223}
@@ -755,11 +759,12 @@ MonoBehaviour:
     flipY: 0
     gameObject: {fileID: 6793196170696482458}
     bounds:
-      m_Center: {x: 296.14, y: 3.1094446, z: 0}
+      m_Center: {x: 319.08002, y: 1.7227044, z: 0}
       m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
     pivotAndSize: {x: 0.8194444, y: 0, z: 1.6388888, w: 12.338889}
     uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
     scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    custom: {x: 0, y: 0, z: 0, w: 0}
     boundsOffset: {x: 0, y: 6.1694446}
   width: 1
   height: 1
@@ -823,7 +828,7 @@ MonoBehaviour:
     bounds:
       m_Center: {x: 266.58777, y: 6.3555555, z: 5}
       m_Extent: {x: 28.977781, y: 1.1055555, z: 0.1}
-    worldPivotAndSize:
+    pivotAndSize:
     - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
     - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
     - {x: -48.80556, y: 0, z: 9.15, w: 0.022222223}
@@ -930,7 +935,7 @@ MonoBehaviour:
     bounds:
       m_Center: {x: 208.65277, y: 6.3555555, z: 5}
       m_Extent: {x: 28.977781, y: 1.1055555, z: 0.1}
-    worldPivotAndSize:
+    pivotAndSize:
     - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
     - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
     - {x: -48.80556, y: 0, z: 9.15, w: 0.022222223}
@@ -1037,7 +1042,7 @@ MonoBehaviour:
     bounds:
       m_Center: {x: 498.28778, y: 6.3555555, z: 5}
       m_Extent: {x: 28.977781, y: 1.1055555, z: 0.1}
-    worldPivotAndSize:
+    pivotAndSize:
     - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
     - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
     - {x: -48.80556, y: 0, z: 9.15, w: 0.022222223}
@@ -1144,11 +1149,12 @@ MonoBehaviour:
     flipY: 0
     gameObject: {fileID: 8257927897922410872}
     bounds:
-      m_Center: {x: 353.89, y: 3.1094446, z: 0}
+      m_Center: {x: 376.83002, y: 1.7227044, z: 0}
       m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
     pivotAndSize: {x: 0.8194444, y: 0, z: 1.6388888, w: 12.338889}
     uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
     scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    custom: {x: 0, y: 0, z: 0, w: 0}
     boundsOffset: {x: 0, y: 6.1694446}
   width: 1
   height: 1
@@ -1212,11 +1218,12 @@ MonoBehaviour:
     flipY: 0
     gameObject: {fileID: 8626224879940637253}
     bounds:
-      m_Center: {x: 238.17, y: 3.1094446, z: 0}
+      m_Center: {x: 261.11, y: 1.7227044, z: 0}
       m_Extent: {x: 0.8194444, y: 6.1694446, z: 0.1}
     pivotAndSize: {x: 0.8194444, y: 0, z: 1.6388888, w: 12.338889}
     uvSizeAndPos: {x: 0.072021484, y: 0.5422363, z: 0, w: 0.45776367}
     scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    custom: {x: 0, y: 0, z: 0, w: 0}
     boundsOffset: {x: 0, y: 6.1694446}
   width: 1
   height: 1

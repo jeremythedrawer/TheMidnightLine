@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.VFX;
 using static Atlas;
-using static AtlasBatch;
+using static AtlasRendering;
 public class GlyphSetter : MonoBehaviour
 {
     public int spriteIndex;

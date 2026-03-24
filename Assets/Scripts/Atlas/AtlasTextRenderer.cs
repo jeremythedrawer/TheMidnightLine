@@ -1,6 +1,6 @@
 using UnityEngine;
 using static Atlas;
-using static AtlasBatch;
+using static AtlasRendering;
 using UnityEngine.U2D;
 
 #if UNITY_EDITOR
@@ -8,7 +8,7 @@ using UnityEditor;
 #endif
 
 [ExecuteAlways]
-public class AtlasTextRenderer : MonoBehaviour
+public class AtlasTextRenderer : AtlasRenderer
 {
     public MultipleRenderInput renderInput;
     public CameraStatsSO camStats;
@@ -75,7 +75,7 @@ public class AtlasTextRenderer : MonoBehaviour
         }
 
         sprites = new SimpleSprite[printableChars];
-        renderInput.worldPivotAndSize = new Vector4[printableChars];
+        renderInput.pivotAndSize = new Vector4[printableChars];
         renderInput.uvSizeAndPos = new Vector4[printableChars];
         renderInput.scaleAndFlip = new Vector4[printableChars];
 
@@ -98,7 +98,7 @@ public class AtlasTextRenderer : MonoBehaviour
 
                 Vector3 worldOffset = new Vector3(cursorX * kerning, 0, 0);
                 Vector2 matrixPos = worldOffset * camStats.worldUnitsPerPixel;
-                ref Vector4 worldPivotAndSize = ref renderInput.worldPivotAndSize[spriteIndex];
+                ref Vector4 worldPivotAndSize = ref renderInput.pivotAndSize[spriteIndex];
                 worldPivotAndSize.x = -matrixPos.x;
                 worldPivotAndSize.y = -matrixPos.y;
                 worldPivotAndSize.z = spritePixelSize.x * camStats.worldUnitsPerPixel;
