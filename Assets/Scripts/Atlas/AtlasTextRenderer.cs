@@ -55,9 +55,13 @@ public class AtlasTextRenderer : AtlasRenderer
 #if UNITY_EDITOR
         if (!Application.isPlaying)
         {
-            renderInput.UpdateDepth((int)transform.position.z);
+            renderInput.UpdateDepthEditor(transform);
         }
 #endif
+        if (transform.hasChanged)
+        {
+            renderInput.bounds.center = new Vector3(transform.position.x + renderInput.boundsOffset.x, transform.position.y + renderInput.boundsOffset.y, transform.position.z);
+        }
     }
     private void SetText()
     {

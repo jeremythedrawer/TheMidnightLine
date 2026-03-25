@@ -16,8 +16,8 @@ public class Clipboard : MonoBehaviour
     [SerializeField] PlayerInputsSO playerInputs;
     [SerializeField] MaterialIDSO materialIDs;
     [SerializeField] GameEventDataSO gameEvents;
-    Page[] pages;
-    Page curPage;
+    PageOld[] pages;
+    PageOld curPage;
     private void Start()
     {
         stats.cacheStats.imagesStartYPos = imagesRectTransform.localPosition.y;
@@ -176,7 +176,7 @@ public class Clipboard : MonoBehaviour
          * In the for loop, each page is set to be the first sibling so the rendering order is correct.
          * This is due to how the render order of Image types are dealt with by Unity.
          */
-        pages = new Page[stats.profilePageArray.Length + 1];
+        pages = new PageOld[stats.profilePageArray.Length + 1];
         pages[0] = Instantiate(settings.frontPagePrefab, pagesFlippedDownRectTransform);
         curPage = pages[0];
         curPage.transform.SetAsFirstSibling();
@@ -202,7 +202,7 @@ public class Clipboard : MonoBehaviour
         if (stats.tempStats.curPageIndex == pages.Length) return;
         stats.tempStats.curPageIndex++;
         if (stats.tempStats.curPageIndex >= pages.Length) return;
-        Page newPage = pages[stats.tempStats.curPageIndex];
+        PageOld newPage = pages[stats.tempStats.curPageIndex];
         curPage = newPage;
     }
 

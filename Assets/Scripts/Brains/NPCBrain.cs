@@ -98,6 +98,7 @@ public class NPCBrain : MonoBehaviour
     private void OnEnable()
     {
         gameEventData.OnStationArrival.RegisterListener(BoardTrain);
+        atlasRenderer.renderInput.UpdateDepthRealtime((int)transform.position.z);
     }
     private void Start()
     {
@@ -305,11 +306,11 @@ public class NPCBrain : MonoBehaviour
 
         if (stats.chairPosIndex != int.MaxValue)
         {
-            atlasRenderer.renderInput.UpdateDepth(curCarriage.sittingDepth);
+            atlasRenderer.renderInput.UpdateDepthRealtime(curCarriage.sittingDepth);
         }
         else if (curCarriage !=  null)
         {
-            atlasRenderer.renderInput.UpdateDepth(curCarriage.standingDepth);
+            atlasRenderer.renderInput.UpdateDepthRealtime(curCarriage.standingDepth);
         }
         switch (stats.curState)
         {
@@ -635,7 +636,7 @@ public class NPCBrain : MonoBehaviour
     private void SetStandingDepth()
     {
         int depth = UnityEngine.Random.Range(trainStats.depthSection_front_min, trainStats.depthSection_back_max);
-        atlasRenderer.renderInput.UpdateDepth(depth);
+        atlasRenderer.renderInput.UpdateDepthRealtime(depth);
     }
 
     private void SetMarkerPosition()

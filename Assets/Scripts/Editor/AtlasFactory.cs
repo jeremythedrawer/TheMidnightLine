@@ -22,6 +22,7 @@ public class AtlasFactory : EditorWindow
 
     //Preview
     private float previewScale =  0.2f;
+    private Vector2 previewPosition = Vector2.zero;
     private int selectedMotionIndex;
 
     private Rect previewRect;
@@ -208,6 +209,7 @@ public class AtlasFactory : EditorWindow
             flip = flip == 1 ? -1 : 1;
         }
         previewScale = EditorGUILayout.FloatField("Preview Scale", previewScale, GUIWidth);
+        previewPosition = EditorGUILayout.Vector2Field("Preview Position", previewPosition, GUIWidth);
         previewBGColor = EditorGUILayout.ColorField("Background Color", previewBGColor, GUIWidth);
         if (atlas.clips == null)
         {
@@ -964,7 +966,8 @@ public class AtlasFactory : EditorWindow
             posX += pivotWithFlip * scaledSpriteWidth;
         }
             float posY = (previewRT.height - scaledHeight) + pivotOffsetY;
-
+        posX += previewPosition.x;
+        posY += previewPosition.y;
         Rect destRect = new Rect(posX, posY, scaledSpriteWidth * flip, scaledHeight);
         Rect uvRect = new Rect(previewSprite.uvSizeAndPos.z, previewSprite.uvSizeAndPos.w, previewSprite.uvSizeAndPos.x, previewSprite.uvSizeAndPos.y);
 
@@ -985,7 +988,9 @@ public class AtlasFactory : EditorWindow
         if (startMotion)
         {
             if (!atlas.clipDict.TryGetValue(selectedMotionIndex, out AtlasClip clip)) return;
-            previewClip = clip; 
+            previewClip = clip;
+
+            previewSprite = AtlasRendering.GetNextKeyframeSpriteEditor(previewClip, ref editorTimeDelta, ref curFrameIndex, ref prevFrameIndex);
             //previewSprite = previewClip.GetNextSprite(ref editorTimeDelta, ref curFrameIndex, ref prevFrameIndex); TODO // Make an editor animation function
             if (curFrameIndex != prevFrameIndex)
             {

@@ -5,7 +5,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class Page : MonoBehaviour
+public class PageOld : MonoBehaviour
 {
     public enum Type
     { 

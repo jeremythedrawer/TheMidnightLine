@@ -24,6 +24,7 @@ public class AtlasUISimpleRenderer : AtlasRenderer
         renderInput.InitRenderer(gameObject);
         spriteIndex = Mathf.Clamp(spriteIndex, 0, renderInput.atlas.simpleSprites.Length - 1);
         sprite = renderInput.atlas.simpleSprites[spriteIndex];
+
         renderInput.UpdateRenderInputsScreen(width, height, sprite, camStats);
     }
     private void OnEnable()
@@ -46,10 +47,15 @@ public class AtlasUISimpleRenderer : AtlasRenderer
 #if UNITY_EDITOR
         if (!Application.isPlaying)
         {
-            renderInput.UpdateDepth((int)transform.position.z);
+            renderInput.UpdateDepthEditor(transform);
             renderInput.UpdateRenderInputsScreen(width, height, sprite, camStats);
         }
 #endif
+
+        if (transform.hasChanged)
+        {
+            renderInput.bounds.center = new Vector3(transform.position.x + renderInput.boundsOffset.x, transform.position.y + renderInput.boundsOffset.y, transform.position.z);
+        }
     }
 
 #if UNITY_EDITOR

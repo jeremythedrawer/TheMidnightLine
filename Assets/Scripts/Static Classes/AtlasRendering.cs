@@ -4,8 +4,11 @@ using System.Linq;
 using System.Runtime.InteropServices;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.U2D;
 using UnityEngine.UIElements;
 using static Atlas;
+using static AtlasRendering;
+using static UnityEditor.Experimental.GraphView.GraphView;
 public static class AtlasRendering
 {
     public const int MAX = 1024;
@@ -94,10 +97,14 @@ public static class AtlasRendering
             boxCollider.size = bounds.size;
             boxCollider.offset = bounds.center - gameObject.transform.position;
         }
-        public void UpdateDepth(int newDepth)
+        public void UpdateDepthEditor(Transform transform)
+        {
+            AtlasRendering.UpdateDepthEditor(transform, ref batchKey);
+        }
+        public void UpdateDepthRealtime(int newDepth)
         {
             batchKey.depthOrder = newDepth;
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, batchKey.depthOrder);
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, newDepth);
         }
         public void FlipH(bool flipLeft, SimpleSprite sprite)
         {
@@ -191,10 +198,14 @@ public static class AtlasRendering
             boxCollider.size = bounds.size;
             boxCollider.offset = boundsOffset;
         }
-        public void UpdateDepth(int newDepth)
+        public void UpdateDepthEditor(Transform transform)
+        {
+            AtlasRendering.UpdateDepthEditor(transform, ref batchKey);
+        }
+        public void UpdateDepthRealtime(int newDepth)
         {
             batchKey.depthOrder = newDepth;
-            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, batchKey.depthOrder);
+            gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, newDepth);
         }
         public void InitRenderer(GameObject obj)
         {
@@ -228,6 +239,10 @@ public static class AtlasRendering
         public readonly MaterialPropertyBlock mpb = new MaterialPropertyBlock();
     }
 
+    public static void UpdateDepthEditor(Transform transform, ref BatchKey batchKey)
+    {
+        batchKey.depthOrder = Mathf.FloorToInt(transform.position.z);
+    }
     public static void PrepareFrame()
     {
         batchList.Clear();
@@ -287,6 +302,152 @@ public static class AtlasRendering
         batch.multipleRenderInputs.Remove(renderInput);
 
         if (batch.singularRenderInputs.Count == 0 && batch.multipleRenderInputs.Count == 0) batchDict.Remove(renderInput.batchKey);
+    }
+    public static ref SimpleSprite GetNextKeyframeSprite(AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
+    {
+        keyframeClock += Time.deltaTime;
+
+        float frameTime = keyframeClock * FRAMES_PER_SEC;
+        if (curFrameIndex >= clip.keyFrames.Length || curFrameIndex < 0) curFrameIndex = 0;
+        AtlasKeyframe curKeyFrame = clip.keyFrames[curFrameIndex];
+
+        switch (clip.clipType)
+        {
+            case ClipType.Loop:
+            {
+                if (frameTime >= curKeyFrame.holdTime)
+                {
+                    prevFrameIndex = curFrameIndex;
+                    curFrameIndex++;
+
+                    if (curFrameIndex >= clip.keyFrames.Length)
+                    {
+                        curFrameIndex = 0;
+                    }
+
+                    keyframeClock = 0;
+                }
+            }
+            break;
+            case ClipType.PingPong:
+            {
+                if (frameTime >= curKeyFrame.holdTime)
+                {
+                    if (curFrameIndex < clip.keyFrames.Length - 1 && (curFrameIndex > prevFrameIndex || curFrameIndex == 0))
+                    {
+                        prevFrameIndex = curFrameIndex;
+                        curFrameIndex++;
+                    }
+                    else
+                    {
+                        prevFrameIndex = curFrameIndex;
+                        curFrameIndex--;
+                    }
+                    keyframeClock = 0;
+                }
+            }
+            break;
+            case ClipType.OneShot:
+            {
+                if (frameTime >= curKeyFrame.holdTime)
+                {
+                    prevFrameIndex = curFrameIndex;
+                    if (curFrameIndex < clip.keyFrames.Length - 1)
+                    {
+                        curFrameIndex++;
+                    }
+                    keyframeClock = 0;
+                }
+            }
+            break;
+        }
+
+        return ref clip.keyFrames[curFrameIndex].motionSprite.sprite;
+    }
+    public static ref SimpleSprite GetNextKeyframeSpriteReverse(AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
+    {
+        keyframeClock += Time.deltaTime;
+
+        float frameTime = keyframeClock * FRAMES_PER_SEC;
+        if (curFrameIndex >= clip.keyFrames.Length || curFrameIndex < 0) curFrameIndex = 0;
+        AtlasKeyframe curKeyFrame = clip.keyFrames[curFrameIndex];
+
+        if (frameTime >= curKeyFrame.holdTime)
+        {
+            prevFrameIndex = curFrameIndex;
+            if (curFrameIndex > 0)
+            {
+                curFrameIndex--;
+            }
+            keyframeClock = 0;
+        }
+
+        return ref clip.keyFrames[curFrameIndex].motionSprite.sprite;
+    }
+    public static ref SimpleSprite GetNextKeyframeSpriteManual(AtlasClip clip, float currentTime)
+    {
+        int maxIndex = clip.keyFrames.Length - 1;
+        int curFrameIndex = Mathf.Clamp(Mathf.FloorToInt((clip.keyFrames.Length - 1) * currentTime), 0, maxIndex);
+        return ref clip.keyFrames[curFrameIndex].motionSprite.sprite;
+    }
+    public static ref SimpleSprite GetNextKeyframeSpriteEditor(AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
+    {
+        float frameTime = keyframeClock * FRAMES_PER_SEC;
+        if (curFrameIndex >= clip.keyFrames.Length || curFrameIndex < 0) curFrameIndex = 0;
+        AtlasKeyframe curKeyFrame = clip.keyFrames[curFrameIndex];
+
+        switch (clip.clipType)
+        {
+            case ClipType.Loop:
+            {
+                if (frameTime >= curKeyFrame.holdTime)
+                {
+                    prevFrameIndex = curFrameIndex;
+                    curFrameIndex++;
+
+                    if (curFrameIndex >= clip.keyFrames.Length)
+                    {
+                        curFrameIndex = 0;
+                    }
+
+                    keyframeClock = 0;
+                }
+            }
+            break;
+            case ClipType.PingPong:
+            {
+                if (frameTime >= curKeyFrame.holdTime)
+                {
+                    if (curFrameIndex < clip.keyFrames.Length - 1 && (curFrameIndex > prevFrameIndex || curFrameIndex == 0))
+                    {
+                        prevFrameIndex = curFrameIndex;
+                        curFrameIndex++;
+                    }
+                    else
+                    {
+                        prevFrameIndex = curFrameIndex;
+                        curFrameIndex--;
+                    }
+                    keyframeClock = 0;
+                }
+            }
+            break;
+            case ClipType.OneShot:
+            {
+                if (frameTime >= curKeyFrame.holdTime)
+                {
+                    prevFrameIndex = curFrameIndex;
+                    if (curFrameIndex < clip.keyFrames.Length - 1)
+                    {
+                        curFrameIndex++;
+                    }
+                    keyframeClock = 0;
+                }
+            }
+            break;
+        }
+
+        return ref clip.keyFrames[curFrameIndex].motionSprite.sprite;
     }
     public static Mesh SetQuad()
     {

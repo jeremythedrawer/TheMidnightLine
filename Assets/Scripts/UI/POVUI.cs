@@ -1,6 +1,6 @@
 using UnityEngine;
 
-public class POVUserInterface : MonoBehaviour
+public class POVUI : MonoBehaviour
 {
     public PlayerInputsSO playerInputs;
     public CameraStatsSO cameraStats;
@@ -9,13 +9,14 @@ public class POVUserInterface : MonoBehaviour
     public float backgroundMoveDamp = 5;
     public float notepadMoveDamp = 4;
 
-
+    [Header("Generated")]
     public Vector3 backgroundActivePos;
     public Vector3 backgroundInactivePos;
 
     public Vector3 notepadActivePos;
     public Vector3 notepadInactivePos;
     public bool notpadActive;
+
     private void Start()
     {
         background.gameObject.SetActive(true);
@@ -25,7 +26,7 @@ public class POVUserInterface : MonoBehaviour
         notepadActivePos = notepad.transform.localPosition;
 
         backgroundInactivePos = new Vector3(cameraStats.camWidth * 0.5f, background.localPosition.y, background.localPosition.z);
-        notepadInactivePos = new Vector3(cameraStats.camWidth * 0.5f, notepad.transform.localPosition.y, notepad.transform.localPosition.z);
+        notepadInactivePos = new Vector3(cameraStats.camWidth * 0.5f, notepad.transform.localPosition.y - cameraStats.camWorldBottom - notepad.totalBounds.size.y, notepad.transform.localPosition.z);
         
         background.localPosition = backgroundInactivePos;
         notepad.transform.localPosition = notepadInactivePos;

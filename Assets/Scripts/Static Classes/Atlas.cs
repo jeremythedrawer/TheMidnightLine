@@ -59,11 +59,19 @@ public static class Atlas
         None,
         TrainDoor,
     }
+
+    public enum NotepadMotion
+    { 
+        None,
+        LeftHand,
+        Page,
+    }
+
     public enum EntityMotionType
     {
         NPC,
         Spy,
-        Clipboard,
+        Notepad,
         Train,
     }
     public enum ClipType
@@ -144,6 +152,7 @@ public static class Atlas
         { EntityMotionType.NPC, typeof(NPCMotion) },
         { EntityMotionType.Spy, typeof(SpyMotion) },
         { EntityMotionType.Train, typeof(TrainMotion) },
+        { EntityMotionType.Notepad, typeof(NotepadMotion) },
     };
 
     public static Dictionary<int, AtlasClip> BuildClipKeys(AtlasClip[] clips)

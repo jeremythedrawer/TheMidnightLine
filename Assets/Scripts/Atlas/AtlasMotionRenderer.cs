@@ -43,7 +43,7 @@ public class AtlasMotionRenderer : AtlasRenderer
     private void Start()
     {
 
-        renderInput.UpdateDepth(renderInput.batchKey.depthOrder);
+        renderInput.UpdateDepthEditor(transform);
     }
     private void Update()
     {
@@ -51,79 +51,25 @@ public class AtlasMotionRenderer : AtlasRenderer
         if (!Application.isPlaying)
         {
             if (renderInput == null || renderInput.gameObject == null) return;
-            renderInput.UpdateDepth((int)transform.position.z);
+            renderInput.UpdateDepthEditor(transform);
         }
 #endif
         renderInput.UpdateBounds();
     }
     public void PlayClip(AtlasClip clip)
     {
-        keyframeClock += Time.deltaTime;
-
-        float frameTime = keyframeClock * FRAMES_PER_SEC;
-        if (curFrameIndex >= clip.keyFrames.Length || curFrameIndex < 0) curFrameIndex = 0;
-        AtlasKeyframe curKeyFrame = clip.keyFrames[curFrameIndex];
-
-        switch (clip.clipType)
-        {
-            case ClipType.Loop:
-            {
-                if (frameTime >= curKeyFrame.holdTime)
-                {
-                    prevFrameIndex = curFrameIndex;
-                    curFrameIndex++;
-
-                    if (curFrameIndex >= clip.keyFrames.Length)
-                    {
-                        curFrameIndex = 0;
-                    }
-
-                    keyframeClock = 0;
-                }
-            }
-            break;
-            case ClipType.PingPong:
-            {
-                if (frameTime >= curKeyFrame.holdTime)
-                {
-                    if (curFrameIndex < clip.keyFrames.Length - 1 && (curFrameIndex > prevFrameIndex || curFrameIndex == 0))
-                    {
-                        prevFrameIndex = curFrameIndex;
-                        curFrameIndex++;
-                    }
-                    else
-                    {
-                        prevFrameIndex = curFrameIndex;
-                        curFrameIndex--;
-                    }
-                    keyframeClock = 0;
-                }
-            }
-            break;
-            case ClipType.OneShot:
-            {
-                if (frameTime >= curKeyFrame.holdTime)
-                {
-                    prevFrameIndex = curFrameIndex;
-                    if (curFrameIndex < clip.keyFrames.Length - 1)
-                    {
-                        curFrameIndex++;
-                    }
-                    keyframeClock = 0;
-                }
-            }
-            break;
-        }
-
-        sprite = clip.keyFrames[curFrameIndex].motionSprite.sprite;
+        sprite = AtlasRendering.GetNextKeyframeSprite(clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
         renderInput.UpdateRenderInputsWorld(1, 1, sprite);
+    }
 
+    public void PlayClipReverse(AtlasClip clip)
+    {
+        sprite = AtlasRendering.GetNextKeyframeSpriteReverse(clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
+        renderInput.UpdateRenderInputsWorld(1, 1, sprite);
     }
     public void PlayManualClip(AtlasClip clip, float currentTime)
     {
-        int maxIndex = clip.keyFrames.Length - 1;
-        int curFrameIndex = Mathf.Clamp(Mathf.FloorToInt((clip.keyFrames.Length - 1) * currentTime), 0, maxIndex);
-        sprite = clip.keyFrames[curFrameIndex].motionSprite.sprite;
+        sprite = AtlasRendering.GetNextKeyframeSpriteManual(clip, currentTime);
         renderInput.UpdateRenderInputsWorld(1, 1, sprite);
     }
 

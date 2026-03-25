@@ -47,7 +47,7 @@ public class AtlasSliceRenderer : AtlasRenderer
         if (!Application.isPlaying)
         {
             if (renderInput == null || renderInput.atlas == null) return;
-            renderInput.UpdateDepth((int)transform.position.z);
+            renderInput.UpdateDepthEditor(transform);
         }
 #endif
 

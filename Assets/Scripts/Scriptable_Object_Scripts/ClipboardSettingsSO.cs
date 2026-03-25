@@ -13,8 +13,8 @@ public class ClipboardSettingsSO : ScriptableObject
     [Range(0, 1)] public float dragToFlipPageThreshold = 0.125f;
     public float releasePageTime = 0.5f;
     public int randomPixelOffsetForPage = 10;
-    public Page profilePagePrefab;
-    public Page frontPagePrefab;
+    public PageOld profilePagePrefab;
+    public PageOld frontPagePrefab;
     public Image flippedPagePrefab;
 
 }

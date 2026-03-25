@@ -42,14 +42,14 @@ public class AtlasSimpleRenderer : AtlasRenderer
     private void Start()
     {
         renderInput.InitRenderer(gameObject);
-        renderInput.UpdateDepth(renderInput.batchKey.depthOrder);
+        renderInput.UpdateDepthEditor(transform);
     }
     private void Update()
     {
 #if UNITY_EDITOR
         if(!Application.isPlaying)
         {
-            renderInput.UpdateDepth((int)transform.position.z);
+            renderInput.UpdateDepthEditor(transform);
         }
 #endif
         renderInput.UpdateBounds();
