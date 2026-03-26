@@ -99,11 +99,12 @@ public static class AtlasRendering
         }
         public void UpdateDepthEditor(Transform transform)
         {
-            AtlasRendering.UpdateDepthEditor(transform, ref batchKey);
+            AtlasRendering.UpdateDepthEditor(transform, ref batchKey, singRenderInput: this);
         }
         public void UpdateDepthRealtime(int newDepth)
         {
             batchKey.depthOrder = newDepth;
+            RegisterSingleRenderInput(this);
             gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, newDepth);
         }
         public void FlipH(bool flipLeft, SimpleSprite sprite)
@@ -200,7 +201,7 @@ public static class AtlasRendering
         }
         public void UpdateDepthEditor(Transform transform)
         {
-            AtlasRendering.UpdateDepthEditor(transform, ref batchKey);
+            AtlasRendering.UpdateDepthEditor(transform, ref batchKey, multRenderInput: this);
         }
         public void UpdateDepthRealtime(int newDepth)
         {
@@ -239,9 +240,22 @@ public static class AtlasRendering
         public readonly MaterialPropertyBlock mpb = new MaterialPropertyBlock();
     }
 
-    public static void UpdateDepthEditor(Transform transform, ref BatchKey batchKey)
+    public static void UpdateDepthEditor(Transform transform, ref BatchKey batchKey, SingularRenderInput singRenderInput = null, MultipleRenderInput multRenderInput = null)
     {
-        batchKey.depthOrder = Mathf.FloorToInt(transform.position.z);
+        int newDepth = Mathf.FloorToInt(transform.position.z);
+        batchKey.depthOrder = newDepth;
+
+        if (newDepth != batchKey.depthOrder)
+        {
+            if (singRenderInput != null)
+            {
+                RegisterSingleRenderInput(singRenderInput);
+            }
+            else
+            {
+                RegisterMultipleRenderInput(multRenderInput);
+            }
+        }
     }
     public static void PrepareFrame()
     {

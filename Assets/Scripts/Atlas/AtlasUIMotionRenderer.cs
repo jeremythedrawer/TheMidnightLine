@@ -72,8 +72,8 @@ public class AtlasUIMotionRenderer : AtlasRenderer
         ctsOneShot?.Cancel();
         ctsOneShot = null;
         ctsOneShot = new CancellationTokenSource();
-        PlayingClipOneShot(clip).Forget();
 
+        PlayingClipOneShot(clip).Forget();
     }
     public void PlayClipReverse(AtlasClip clip)
     {
@@ -119,12 +119,7 @@ public class AtlasUIMotionRenderer : AtlasRenderer
         {
             while (curFrameIndex >= 0)
             {
-                sprite = AtlasRendering.GetNextKeyframeSpriteReverse(
-                    clip,
-                    ref keyframeClock,
-                    ref curFrameIndex,
-                    ref prevFrameIndex
-                );
+                sprite = AtlasRendering.GetNextKeyframeSpriteReverse(clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
 
                 renderInput.UpdateRenderInputsScreen(1, 1, sprite, camStats);
 

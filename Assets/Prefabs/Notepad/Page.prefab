@@ -47,12 +47,12 @@ MonoBehaviour:
   renderInput:
     batchKey:
       material: {fileID: 2100000, guid: 44af1dd25b51fc84d857d93273268c21, type: 2}
-      depthOrder: -8
+      depthOrder: -16
     atlas: {fileID: 11400000, guid: 87bd20d859e420d408fdef20fd10809c, type: 2}
     boxCollider: {fileID: 0}
     gameObject: {fileID: 425019369779035680}
     bounds:
-      m_Center: {x: 308.83002, y: 1.589958, z: -8}
+      m_Center: {x: 308.83002, y: 1.589958, z: -15.99}
       m_Extent: {x: 0, y: 0, z: 0}
     pivotAndSize:
     - {x: -0, y: -0, z: 0.1875, w: 0.25}
@@ -191,12 +191,12 @@ MonoBehaviour:
   renderInput:
     batchKey:
       material: {fileID: 2100000, guid: 44af1dd25b51fc84d857d93273268c21, type: 2}
-      depthOrder: -8
+      depthOrder: -16
     atlas: {fileID: 11400000, guid: 87bd20d859e420d408fdef20fd10809c, type: 2}
     boxCollider: {fileID: 0}
     gameObject: {fileID: 543666705203732659}
     bounds:
-      m_Center: {x: 309.76398, y: 2.9099653, z: -8}
+      m_Center: {x: 309.76398, y: 2.9099653, z: -15.99}
       m_Extent: {x: 0, y: 0, z: 0}
     pivotAndSize:
     - {x: -0, y: -0, z: 0.275, w: 0.26250002}
@@ -342,12 +342,12 @@ MonoBehaviour:
   renderInput:
     batchKey:
       material: {fileID: 2100000, guid: 44af1dd25b51fc84d857d93273268c21, type: 2}
-      depthOrder: -8
+      depthOrder: -16
     atlas: {fileID: 11400000, guid: 87bd20d859e420d408fdef20fd10809c, type: 2}
     boxCollider: {fileID: 0}
     gameObject: {fileID: 1682686048196973683}
     bounds:
-      m_Center: {x: 308.8141, y: 2.9099653, z: -8}
+      m_Center: {x: 308.8141, y: 2.9099653, z: -15.99}
       m_Extent: {x: 0, y: 0, z: 0}
     pivotAndSize:
     - {x: -0, y: -0, z: 0.16250001, w: 0.25}
@@ -444,7 +444,7 @@ MonoBehaviour:
   renderInput:
     batchKey:
       material: {fileID: 2100000, guid: c30f9b5dfdb7915458408b63fcc55b9b, type: 2}
-      depthOrder: -8
+      depthOrder: -16
     atlas: {fileID: 11400000, guid: d3627110c6f36b84b93e607b7dc6d005, type: 2}
     boxCollider: {fileID: 0}
     flipX: 0
@@ -514,12 +514,12 @@ MonoBehaviour:
   renderInput:
     batchKey:
       material: {fileID: 2100000, guid: 44af1dd25b51fc84d857d93273268c21, type: 2}
-      depthOrder: -8
+      depthOrder: -16
     atlas: {fileID: 11400000, guid: 87bd20d859e420d408fdef20fd10809c, type: 2}
     boxCollider: {fileID: 0}
     gameObject: {fileID: 2324259208984234979}
     bounds:
-      m_Center: {x: 309.104, y: 0.8799608, z: -8}
+      m_Center: {x: 309.104, y: 0.8799608, z: -15.99}
       m_Extent: {x: 0, y: 0, z: 0}
     pivotAndSize:
     - {x: -0, y: -0, z: 0.17500001, w: 0.25}
@@ -693,12 +693,12 @@ MonoBehaviour:
   renderInput:
     batchKey:
       material: {fileID: 2100000, guid: 44af1dd25b51fc84d857d93273268c21, type: 2}
-      depthOrder: -8
+      depthOrder: -16
     atlas: {fileID: 11400000, guid: 87bd20d859e420d408fdef20fd10809c, type: 2}
     boxCollider: {fileID: 0}
     gameObject: {fileID: 2488520917910274587}
     bounds:
-      m_Center: {x: 309.08405, y: 2.299956, z: -8}
+      m_Center: {x: 309.08405, y: 2.299956, z: -15.99}
       m_Extent: {x: 0, y: 0, z: 0}
     pivotAndSize:
     - {x: -0, y: -0, z: 0.16250001, w: 0.25}
@@ -824,7 +824,6 @@ Transform:
   - {fileID: 1917585177641865970}
   - {fileID: 6905171277351112}
   - {fileID: 5967655690559425254}
-  - {fileID: 5331366567448204069}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3293984349451637370
@@ -839,7 +838,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6721a802313c2b44ba9fe3622ae03d13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Page
-  leftHandRenderer: {fileID: 6787656065940696494}
+  leftHandRenderer: {fileID: 0}
   paperRenderer: {fileID: 3278984628707512455}
   behavioursRenderer: {fileID: 2619288794151952283}
   behaviourClue1Renderer: {fileID: 3744597190977758540}
@@ -863,77 +862,8 @@ MonoBehaviour:
     clipType: 0
     motionIndex: 0
     time: 0
---- !u!1 &3962317366868050900
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5331366567448204069}
-  - component: {fileID: 6787656065940696494}
-  m_Layer: 0
-  m_Name: LefHand
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5331366567448204069
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3962317366868050900}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.75, y: 5.21, z: -2}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7380519998003774169}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6787656065940696494
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3962317366868050900}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3feaaf5c9fb27994f8d865000abe7d9c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasUIMotionRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 3711f04c48a027245b0d1267d0e739b8, type: 2}
-      depthOrder: -10
-    atlas: {fileID: 11400000, guid: eba6eb7239ccca949b91a3ab6672a7da, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 3962317366868050900}
-    bounds:
-      m_Center: {x: -2.6562505, y: 1.0787497, z: 14.92}
-      m_Extent: {x: 4.4187503, y: 4.14375, z: 0.1}
-    pivotAndSize: {x: 8.825001, y: 8.275001, z: 8.837501, w: 8.2875}
-    uvSizeAndPos: {x: 0.17260742, y: 0.16186523, z: 0.66552734, w: 0.81274414}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    custom: {x: 0, y: 0, z: 0, w: 0}
-    boundsOffset: {x: -4.4062505, y: -4.1312504}
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  spriteIndex: 0
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  sprite:
-    uvSizeAndPos: {x: 0.17260742, y: 0.16186523, z: 0.66552734, w: 0.81274414}
-    uvPivot: {x: 0.9985856, y: 0.9984917}
-    worldSize: {x: 3.9277778, y: 3.6833334, z: 1}
-    index: 0
+  curState: 0
+  curKeyframeState: 0
 --- !u!1 &4820664414409474806
 GameObject:
   m_ObjectHideFlags: 0
@@ -981,12 +911,12 @@ MonoBehaviour:
   renderInput:
     batchKey:
       material: {fileID: 2100000, guid: 44af1dd25b51fc84d857d93273268c21, type: 2}
-      depthOrder: -8
+      depthOrder: -16
     atlas: {fileID: 11400000, guid: 87bd20d859e420d408fdef20fd10809c, type: 2}
     boxCollider: {fileID: 0}
     gameObject: {fileID: 4820664414409474806}
     bounds:
-      m_Center: {x: 309.14398, y: 1.3429592, z: -8}
+      m_Center: {x: 309.14398, y: 1.3429592, z: -15.99}
       m_Extent: {x: 0, y: 0, z: 0}
     pivotAndSize:
     - {x: -0, y: -0, z: 0.275, w: 0.26250002}
@@ -1111,12 +1041,12 @@ MonoBehaviour:
   renderInput:
     batchKey:
       material: {fileID: 2100000, guid: 44af1dd25b51fc84d857d93273268c21, type: 2}
-      depthOrder: -8
+      depthOrder: -16
     atlas: {fileID: 11400000, guid: 87bd20d859e420d408fdef20fd10809c, type: 2}
     boxCollider: {fileID: 0}
     gameObject: {fileID: 6692531169113885166}
     bounds:
-      m_Center: {x: 309.50397, y: 0.5499618, z: -8}
+      m_Center: {x: 309.50397, y: 0.5499618, z: -15.99}
       m_Extent: {x: 0, y: 0, z: 0}
     pivotAndSize:
     - {x: -0, y: -0, z: 0.1875, w: 0.25}
@@ -1213,12 +1143,12 @@ MonoBehaviour:
   renderInput:
     batchKey:
       material: {fileID: 2100000, guid: 44af1dd25b51fc84d857d93273268c21, type: 2}
-      depthOrder: -8
+      depthOrder: -16
     atlas: {fileID: 11400000, guid: 87bd20d859e420d408fdef20fd10809c, type: 2}
     boxCollider: {fileID: 0}
     gameObject: {fileID: 7317866532997580981}
     bounds:
-      m_Center: {x: 309.08405, y: 2.0299566, z: -8}
+      m_Center: {x: 309.08405, y: 2.0299566, z: -15.99}
       m_Extent: {x: 0, y: 0, z: 0}
     pivotAndSize:
     - {x: -0, y: -0, z: 0.16250001, w: 0.25}
@@ -1357,7 +1287,7 @@ MonoBehaviour:
   renderInput:
     batchKey:
       material: {fileID: 2100000, guid: 3711f04c48a027245b0d1267d0e739b8, type: 2}
-      depthOrder: -7
+      depthOrder: -15
     atlas: {fileID: 11400000, guid: eba6eb7239ccca949b91a3ab6672a7da, type: 2}
     boxCollider: {fileID: 0}
     flipX: 0
@@ -1428,12 +1358,12 @@ MonoBehaviour:
   renderInput:
     batchKey:
       material: {fileID: 2100000, guid: 44af1dd25b51fc84d857d93273268c21, type: 2}
-      depthOrder: -8
+      depthOrder: -16
     atlas: {fileID: 11400000, guid: 87bd20d859e420d408fdef20fd10809c, type: 2}
     boxCollider: {fileID: 0}
     gameObject: {fileID: 9103538276353645574}
     bounds:
-      m_Center: {x: 308.83008, y: 2.669954, z: -8}
+      m_Center: {x: 308.83008, y: 2.669954, z: -15.99}
       m_Extent: {x: 0, y: 0, z: 0}
     pivotAndSize:
     - {x: -0, y: -0, z: 0.15000002, w: 0.25}
