@@ -23,7 +23,6 @@ public class NPCBrain : MonoBehaviour
     [SerializeField] GameEventDataSO gameEventData;
     [SerializeField] PlayerInputsSO spyInputs;
     [SerializeField] SpyStatsSO spyStats;
-    [SerializeField] ClipboardStatsSO clipboardStats;
     [SerializeField] MaterialIDSO materialIDs;
 
     public Rigidbody2D rigidBody;
@@ -42,6 +41,7 @@ public class NPCBrain : MonoBehaviour
 
     [Serializable] public struct StatData
     {
+        public string name;
         public Vector2 curSpriteMarkerLocalPosition;
         public Color selectedColor;
         public float targetXVelocity;
@@ -99,6 +99,8 @@ public class NPCBrain : MonoBehaviour
     {
         gameEventData.OnStationArrival.RegisterListener(BoardTrain);
         atlasRenderer.renderInput.UpdateDepthRealtime((int)transform.position.z);
+        name = NPCManager.GenerateName(npc.gender, npc.ethnicity);
+
     }
     private void Start()
     {
@@ -454,46 +456,6 @@ public class NPCBrain : MonoBehaviour
             break;
         }
 
-    }
-    public void HoverColor()
-    {
-        if (rigidBody.includeLayers != layerSettings.trainMask) return;
-        int curProfilePageIndex = clipboardStats.tempStats.curPageIndex - 1;
-
-        if (!clipboardStats.tempStats.active || curProfilePageIndex >= clipboardStats.profilePageArray.Length || clipboardStats.tempStats.curPageIndex == 0)
-        {
-            mpb.SetColor(materialIDs.ids.color, Color.black + new Color(npcData.hoverColorOffet, npcData.hoverColorOffet, npcData.hoverColorOffet, 0f));
-        }
-        else if (stats.selectedColor != clipboardStats.profilePageArray[curProfilePageIndex].color)
-        {
-            mpb.SetColor(materialIDs.ids.color, clipboardStats.profilePageArray[curProfilePageIndex].color * npcData.hoverColorOffet);
-        }
-    }
-    public void SelectColor()
-    {
-        if (rigidBody.includeLayers != layerSettings.trainMask) return;
-        int curProfilePageIndex = clipboardStats.tempStats.curPageIndex - 1;
-        if (!clipboardStats.tempStats.active || curProfilePageIndex >= clipboardStats.profilePageArray.Length || clipboardStats.tempStats.curPageIndex == 0)
-        {
-            stats.selectedColor = Color.black;
-
-            if (stats.selectedProfileIndex == int.MaxValue) return;
-            clipboardStats.profilePageArray[stats.selectedProfileIndex].spyHasSelected = false;
-            stats.selectedProfileIndex = int.MaxValue;
-        }
-        else if (stats.selectedColor != clipboardStats.profilePageArray[curProfilePageIndex].color)
-        {
-            stats.selectedProfileIndex = curProfilePageIndex;
-
-            stats.selectedColor = clipboardStats.profilePageArray[curProfilePageIndex].color;
-            clipboardStats.profilePageArray[stats.selectedProfileIndex].spyHasSelected = true;
-        }
-        mpb.SetColor(materialIDs.ids.color, stats.selectedColor);
-    }
-    public void ExitColor()
-    {
-        if (rigidBody.includeLayers != layerSettings.trainMask) return;
-        mpb.SetColor(materialIDs.ids.color, stats.selectedColor);
     }
     private void Fade()
     {

@@ -21,6 +21,7 @@ public class AtlasUIMotionRenderer : AtlasRenderer
     private void Awake()
     {
         if (renderInput == null) return;
+        renderInput.atlas.clipDict = BuildClipKeys(renderInput.atlas.clips);
         renderInput.InitRenderer(gameObject);
     }
     private void OnValidate()

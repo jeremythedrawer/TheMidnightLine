@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
@@ -8,19 +9,22 @@ public class NPCManager : MonoBehaviour
 {
     const float WAITING_FOR_SEAT_TICK_RATE = 0.3f;
 
+    public static List<NPCBrain> npcChairList = new List<NPCBrain>();
+    public static NameData nameData;
+    
     public NPCsDataSO npcData;
     public TripSO trip;
-    public ClipboardStatsSO clipBoardStats;
+
+    public TextAsset namesJSON;
 
     [Header("Generated")]
     public bool npcFindingChair;
-    public static List<NPCBrain> npcChairList = new List<NPCBrain>();
 
     private void Awake()
     {
         npcData.npcsToPick = new List<NPCBrain>(npcData.npc_prefab);
-        npcData.colorsToPick = new List<Color>(npcData.agentColors);
-
+        nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
+        
         CreateNPCTraitors();
         NPC.InitializeDescriptions();
     }
@@ -42,27 +46,20 @@ public class NPCManager : MonoBehaviour
                 npcData.totalAgentCount++;
             }
         }
-        clipBoardStats.profilePageArray = new ClipboardStatsSO.ProfilePageData[npcData.totalAgentCount];
         int profilePageIndex = 0;
         for (int i = 0; i < trip.stations.Length; i++)
         {
             for (int j = 0; j < trip.stations[i].traitorSpawnAmount; j++)
             {
-                int randNPCIndex = Random.Range(0, npcData.npcsToPick.Count); // pick from list
+                int randNPCIndex = UnityEngine.Random.Range(0, npcData.npcsToPick.Count); // pick from list
 
                 NPCBrain npc = Instantiate(npcData.npcsToPick[randNPCIndex], transform.position, Quaternion.identity, transform);
-                Color agentColor = npcData.colorsToPick[randNPCIndex];
                 npcData.npcsToPick.RemoveAt(randNPCIndex);
-                npcData.colorsToPick.RemoveAt(randNPCIndex);
                 npc.stats.role = Role.Traitor;
 
                 Behaviours profilePageBehaviours = npc.stats.behaviours;
                 Appearence profilePageAppearence = GetRandomAppearence(npc.npc.appearence);
-                ClipboardStatsSO.ProfilePageData profilePageData = new ClipboardStatsSO.ProfilePageData { behaviours = profilePageBehaviours, appearence = profilePageAppearence, color = agentColor };
-                clipBoardStats.profilePageArray[profilePageIndex] = (profilePageData);
 
-                TraitorData agentData = new TraitorData { traitor_prefab = npc, color = agentColor };
-                npcData.agentPool.Enqueue(agentData);
                 npc.gameObject.SetActive(false);
 
                 profilePageIndex++;
@@ -78,7 +75,6 @@ public class NPCManager : MonoBehaviour
         await UniTask.WaitForSeconds(WAITING_FOR_SEAT_TICK_RATE);
         npcFindingChair = false;
     }
-
     public void AssignNextNPCPosition(NPCBrain npc)
     {
         float npcX = npc.transform.position.x;
@@ -106,23 +102,79 @@ public class NPCManager : MonoBehaviour
             npc.AssignChair(bestIndex);
         }
     }
+    public static string GenerateName(Gender gender, Ethnicity ethnicity)
+    {
+        string genderString = gender.ToString();
+        string ethnicityString = ethnicity.ToString();
+        List<FirstName> firstNamesList = new List<FirstName>();
+
+        for(int i = 0; i < nameData.firstNames.Length; i++)
+        {
+            FirstName fn = nameData.firstNames[i];
+            if (fn.gender.Equals(genderString, StringComparison.OrdinalIgnoreCase) && fn.ethnicity.Equals(ethnicityString, StringComparison.OrdinalIgnoreCase))
+            {
+                firstNamesList.Add(fn);
+            }
+        }
+
+        if (firstNamesList.Count == 0) return "NoFirstName";
+
+        int firstNameIndex = UnityEngine.Random.Range(0, firstNamesList.Count);
+        string firstName = firstNamesList[firstNameIndex].name;
+        
+        List<LastName> lastNameList = new List<LastName>();
+        for(int i = 0; i < nameData.lastNames.Length; i++)
+        {
+            LastName ln = nameData.lastNames[i];
+            if (ln.ethnicity.Equals(ethnicityString, StringComparison.OrdinalIgnoreCase))
+            {
+                lastNameList.Add(ln);
+            }
+        }
+        if (lastNameList.Count == 0) return firstName;
+
+        int lastNameIndex = UnityEngine.Random.Range(0, lastNameList.Count);
+        string lastName = lastNameList[lastNameIndex].name;
+
+        return firstName + " " + lastName;
+    }
 
 }
 
 #if UNITY_EDITOR
 
 [CustomEditor(typeof(NPCManager))]
-public class MyManagerEditor : Editor
+public class NPCManagerEditor : Editor
 {
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
 
-        EditorGUILayout.LabelField("Static List");
+        EditorGUILayout.LabelField("Chair List");
 
         foreach (NPCBrain item in NPCManager.npcChairList)
         {
             EditorGUILayout.LabelField(item.ToString());
+        }
+
+        if (NPCManager.nameData == null)
+        {
+            EditorGUILayout.HelpBox("No JSON data loaded. Assign a JSON file or enter Play mode.", MessageType.Warning);
+            return;
+        }
+        EditorGUILayout.LabelField("Name List");
+
+        EditorGUILayout.LabelField("First Names");
+
+        foreach (FirstName firstName in NPCManager.nameData.firstNames)
+        {
+            EditorGUILayout.LabelField(firstName.name + " " + firstName.gender + " " + firstName.ethnicity);
+        }
+
+        EditorGUILayout.LabelField("Last Names");
+        foreach (LastName lastName in NPCManager.nameData.lastNames)
+        {
+            EditorGUILayout.LabelField(lastName.name + " " + lastName.ethnicity);
         }
     }
 }

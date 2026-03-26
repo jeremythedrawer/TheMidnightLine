@@ -2,7 +2,6 @@ using UnityEditor;
 using UnityEngine;
 using static Atlas;
 
-[ExecuteAlways]
 public class Notepad : MonoBehaviour
 {
     public enum State
@@ -20,10 +19,6 @@ public class Notepad : MonoBehaviour
         TogglePageContentsTopHalf,
         ChangeDepth,
     }
-    const int KEYFRAMEINDEX_PLAY_PAPER_CLIP = 2;
-    const int KEYFRAMEINDEX_TOGGLE_PAGE_CONTENTS_1 = 3;
-    const int KEYFRAMEINDEX_TOGGLE_PAGE_CONTENTS_2 = 4;
-    const int KEYFRAMEINDEX_CHANGE_DEPTH = 6;
 
     public PlayerInputsSO playerInputs;
     public AtlasUISimpleRenderer rightHandRenderer;

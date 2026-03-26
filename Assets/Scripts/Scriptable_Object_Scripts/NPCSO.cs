@@ -9,6 +9,8 @@ public class NPCSO : ScriptableObject
 
     public Appearence appearence;
     public Behaviours behaviours;
+    public Gender gender;
+    public Ethnicity ethnicity;
 
     [Header("Difficulty")]
     public Vector2 pickBehaviourDurationRange = new Vector2(10, 30);

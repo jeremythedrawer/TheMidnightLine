@@ -148,107 +148,6 @@ MonoBehaviour:
     index: 5
   slicedSprites: []
   clips:
-  - clipName: LeftHand
-    keyFrames:
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.17260742, y: 0.16186523, z: 0.66552734, w: 0.81274414}
-          uvPivot: {x: 0.9985856, y: 0.9984917}
-          worldSize: {x: 3.9277778, y: 3.6833334, z: 1}
-          index: 0
-        markers: []
-      holdTime: 2
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.15649414, y: 0.16796875, z: 0.84277344, w: 0.8120117}
-          uvPivot: {x: 0.9984399, y: 0.99854654}
-          worldSize: {x: 3.5611112, y: 3.8222222, z: 1}
-          index: 1
-        markers: []
-      holdTime: 2
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.15576172, y: 0.17285156, z: 0, w: 0.579834}
-          uvPivot: {x: 0.9655172, y: 0.99858755}
-          worldSize: {x: 3.5444446, y: 3.9333334, z: 1}
-          index: 2
-        markers: []
-      holdTime: 4
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.2626953, y: 0.21191406, z: 0.16015625, w: 0.5793457}
-          uvPivot: {x: 0.82713753, y: 0.9988479}
-          worldSize: {x: 5.977778, y: 4.822222, z: 1}
-          index: 3
-        markers: []
-      holdTime: 2
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.27124023, y: 0.19750977, z: 0.42773438, w: 0.579834}
-          uvPivot: {x: 0.83258325, y: 0.88504326}
-          worldSize: {x: 6.172222, y: 4.4944444, z: 1}
-          index: 4
-        markers: []
-      holdTime: 2
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.27124023, y: 0.19750977, z: 0.7036133, w: 0.5788574}
-          uvPivot: {x: 0.83258325, y: 0.72064275}
-          worldSize: {x: 6.172222, y: 4.4944444, z: 1}
-          index: 5
-        markers: []
-      holdTime: 2
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.27294922, y: 0.20141602, z: 0, w: 0.33764648}
-          uvPivot: {x: 0.8613596, y: 0.8218182}
-          worldSize: {x: 6.211111, y: 4.5833335, z: 1}
-          index: 6
-        markers: []
-      holdTime: 4
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.26293945, y: 0.21264648, z: 0.29711914, w: 0.33691406}
-          uvPivot: {x: 0.8588672, y: 0.82204366}
-          worldSize: {x: 5.983333, y: 4.838889, z: 1}
-          index: 7
-        markers: []
-      holdTime: 2
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.26293945, y: 0.21264648, z: 0.59033203, w: 0.33911133}
-          uvPivot: {x: 0.8588672, y: 0.8932262}
-          worldSize: {x: 5.983333, y: 4.838889, z: 1}
-          index: 8
-        markers: []
-      holdTime: 2
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.20458984, y: 0.1706543, z: 0.0107421875, w: 0.11425781}
-          uvPivot: {x: 0.99880666, y: 0.99856937}
-          worldSize: {x: 4.6555557, y: 3.8833334, z: 1}
-          index: 9
-        markers: []
-      holdTime: 2
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.15649414, y: 0.16796875, z: 0.23510742, w: 0.114746094}
-          uvPivot: {x: 0.9984399, y: 0.99854654}
-          worldSize: {x: 3.5611112, y: 3.8222222, z: 1}
-          index: 10
-        markers: []
-      holdTime: 2
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.15429688, y: 0.1694336, z: 0.42260742, w: 0.11376953}
-          uvPivot: {x: 0.99841774, y: 0.99855906}
-          worldSize: {x: 3.511111, y: 3.8555555, z: 1}
-          index: 11
-        markers: []
-      holdTime: 2
-    clipType: 2
-    motionIndex: 1
-    time: 0
   - clipName: Page
     keyFrames:
     - motionSprite:
@@ -274,7 +173,7 @@ MonoBehaviour:
           worldSize: {x: 1.6333333, y: 1.6444445, z: 1}
           index: 14
         markers: []
-      holdTime: 2
+      holdTime: 1
     - motionSprite:
         sprite:
           uvSizeAndPos: {x: 0.049804688, y: 0.015625, z: 0.8930664, w: 0.114746094}
@@ -282,8 +181,109 @@ MonoBehaviour:
           worldSize: {x: 1.1333333, y: 0.35555556, z: 1}
           index: 15
         markers: []
-      holdTime: 2
-    clipType: 0
+      holdTime: 1
+    clipType: 2
     motionIndex: 2
+    time: 0
+  - clipName: LeftHand
+    keyFrames:
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.17260742, y: 0.16186523, z: 0.66552734, w: 0.81274414}
+          uvPivot: {x: 0.9985856, y: 0.9984917}
+          worldSize: {x: 3.9277778, y: 3.6833334, z: 1}
+          index: 0
+        markers: []
+      holdTime: 1
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.15649414, y: 0.16796875, z: 0.84277344, w: 0.8120117}
+          uvPivot: {x: 0.9984399, y: 0.99854654}
+          worldSize: {x: 3.5611112, y: 3.8222222, z: 1}
+          index: 1
+        markers: []
+      holdTime: 1
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.15576172, y: 0.17285156, z: 0, w: 0.579834}
+          uvPivot: {x: 0.9655172, y: 0.99858755}
+          worldSize: {x: 3.5444446, y: 3.9333334, z: 1}
+          index: 2
+        markers: []
+      holdTime: 4
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.2626953, y: 0.21191406, z: 0.16015625, w: 0.5793457}
+          uvPivot: {x: 0.82713753, y: 0.9988479}
+          worldSize: {x: 5.977778, y: 4.822222, z: 1}
+          index: 3
+        markers: []
+      holdTime: 1
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.27124023, y: 0.19750977, z: 0.42773438, w: 0.579834}
+          uvPivot: {x: 0.83258325, y: 0.88504326}
+          worldSize: {x: 6.172222, y: 4.4944444, z: 1}
+          index: 4
+        markers: []
+      holdTime: 1
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.27124023, y: 0.19750977, z: 0.7036133, w: 0.5788574}
+          uvPivot: {x: 0.83258325, y: 0.72064275}
+          worldSize: {x: 6.172222, y: 4.4944444, z: 1}
+          index: 5
+        markers: []
+      holdTime: 2
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.27294922, y: 0.20141602, z: 0, w: 0.33764648}
+          uvPivot: {x: 0.8613596, y: 0.8218182}
+          worldSize: {x: 6.211111, y: 4.5833335, z: 1}
+          index: 6
+        markers: []
+      holdTime: 3
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.26293945, y: 0.21264648, z: 0.29711914, w: 0.33691406}
+          uvPivot: {x: 0.8588672, y: 0.82204366}
+          worldSize: {x: 5.983333, y: 4.838889, z: 1}
+          index: 7
+        markers: []
+      holdTime: 2
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.26293945, y: 0.21264648, z: 0.59033203, w: 0.33911133}
+          uvPivot: {x: 0.8588672, y: 0.8932262}
+          worldSize: {x: 5.983333, y: 4.838889, z: 1}
+          index: 8
+        markers: []
+      holdTime: 2
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.20458984, y: 0.1706543, z: 0.0107421875, w: 0.11425781}
+          uvPivot: {x: 0.99880666, y: 0.99856937}
+          worldSize: {x: 4.6555557, y: 3.8833334, z: 1}
+          index: 9
+        markers: []
+      holdTime: 1
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.15649414, y: 0.16796875, z: 0.23510742, w: 0.114746094}
+          uvPivot: {x: 0.9984399, y: 0.99854654}
+          worldSize: {x: 3.5611112, y: 3.8222222, z: 1}
+          index: 10
+        markers: []
+      holdTime: 1
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.15429688, y: 0.1694336, z: 0.42260742, w: 0.11376953}
+          uvPivot: {x: 0.99841774, y: 0.99855906}
+          worldSize: {x: 3.511111, y: 3.8555555, z: 1}
+          index: 11
+        markers: []
+      holdTime: 1
+    clipType: 2
+    motionIndex: 1
     time: 0
   markers: []

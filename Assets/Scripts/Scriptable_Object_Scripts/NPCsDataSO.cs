@@ -9,7 +9,6 @@ public class NPCsDataSO : ScriptableObject
 {
     [Header("To Set")]
     public NPCBrain[] npc_prefab;
-    public Color[] agentColors;
     public VisualEffect sleepingZs_prefab;
     public VisualEffect musicNotes_prefab;
     public VisualEffect speechBubble_prefab;
@@ -20,9 +19,7 @@ public class NPCsDataSO : ScriptableObject
 
     [Header("Generated")]
     public int totalAgentCount;
-    public List<Color> colorsToPick;
     public List<NPCBrain> npcsToPick;
-    public Queue<TraitorData> agentPool = new Queue<TraitorData>();
 
 
 }

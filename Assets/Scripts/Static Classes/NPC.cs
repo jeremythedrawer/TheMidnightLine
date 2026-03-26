@@ -4,8 +4,6 @@ using UnityEngine;
 
 public static class NPC
 {
-    static NPC() { InitializeDescriptions(); }
-
     public enum NPCState
     {
         Idling,
@@ -31,8 +29,6 @@ public static class NPC
         ToChair,
         ToSlideDoor,
     }
-
-
     [Flags] public enum Appearence
     {
         Nothing = 0,
@@ -50,6 +46,7 @@ public static class NPC
         Wears_a_necklace = 1 << 11,
     }
 
+
     [Flags] public enum Behaviours
     {
         Nothing = 0,
@@ -60,11 +57,45 @@ public static class NPC
         Lots_of_phone_calls = 1 << 5,
         Enjoys_reading = 1 << 6,
     }
-    [Serializable] public struct TraitorData
-    {
-        public NPCBrain traitor_prefab;
-        public Color color;
+
+    public enum Gender
+    { 
+        Male,
+        Female,
     }
+
+    public enum Ethnicity
+    {
+        European,
+        Western,
+    }
+
+    [Serializable] public struct ProfilePageData
+    {
+        public int firstNameIndex;
+        public int lastNameIndex;
+        public Behaviours behaviours;
+        public Appearence appearence;
+        public int stationIndex;
+    }
+
+    [Serializable] public class NameData
+    {
+        public FirstName[] firstNames;
+        public LastName[] lastNames;
+    }
+    [Serializable] public struct FirstName
+    {
+        public string gender;
+        public string ethnicity;
+        public string name;
+    }
+    [Serializable] public struct LastName
+    {
+        public string ethnicity;
+        public string name;
+    }
+
     public static string[] appearenceDescriptions;
     public static string[] behaviourDescriptions;
     public static Behaviours GetBehaviours(Behaviours npcBehaviours)
