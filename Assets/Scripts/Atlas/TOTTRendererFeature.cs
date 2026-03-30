@@ -67,7 +67,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         private static CameraStatsSO cameraStats;
         private static Mesh quad;
         private uint[] args;
-
+        
         public AtlasBatchPass(MaterialIDSO materialID, CameraStatsSO camStats, Mesh quadToUse)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
@@ -150,12 +150,12 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     }
 #endif
                     //if (renderInput.bounds.max.x < cameraStats.camLeft || renderInput.bounds.min.x > cameraStats.camRight || renderInput.bounds.max.y < cameraStats.camBottom || renderInput.bounds.min.y > cameraStats.camTop) continue;
-                    for (int j = 0; j < renderInput.pivotAndSize.Length; j++)
+                    for (int j = 0; j < renderInput.worldPivotAndSize.Length; j++)
                     {
                         batch.data.spriteData[count] = new SpriteData
                         {
                             worldPosition = renderInput.gameObject.transform.position, // TODO: Make an offset set hear
-                            worldPivotAndScale = renderInput.pivotAndSize[j],
+                            worldPivotAndScale = renderInput.worldPivotAndSize[j],
                             uvSizeAndPos = renderInput.uvSizeAndPos[j],
                             scaleAndFlip = renderInput.scaleAndFlip[j],
                             custom = Vector4.zero,

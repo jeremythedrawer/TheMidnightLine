@@ -1,7 +1,6 @@
 using UnityEngine;
 using static Atlas;
 using static AtlasRendering;
-using UnityEngine.U2D;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -32,13 +31,13 @@ public class AtlasTextRenderer : AtlasRenderer
 
     private void OnValidate()
     {
-        SetText();
+        SetText(text);
+
     }
     private void OnEnable()
     {
         renderInput.InitRenderer(gameObject);
         RegisterMultipleRenderInput(renderInput);
-        SetText();
     }
 
     private void OnDisable()
@@ -63,15 +62,15 @@ public class AtlasTextRenderer : AtlasRenderer
             renderInput.bounds.center = new Vector3(transform.position.x + renderInput.boundsOffset.x, transform.position.y + renderInput.boundsOffset.y, transform.position.z);
         }
     }
-    private void SetText()
+    public void SetText(string inputText)
     {
-
+        text = inputText;
         cursorX = 0;
         int printableChars = 0;
 
-        for (int i = 0; i < text.Length; i++)
+        for (int i = 0; i < inputText.Length; i++)
         {
-            int asciiIndex = (int)text[i];
+            int asciiIndex = (int)inputText[i];
             if (asciiIndex >= 33)
             {
                 printableChars++;
@@ -79,7 +78,7 @@ public class AtlasTextRenderer : AtlasRenderer
         }
 
         sprites = new SimpleSprite[printableChars];
-        renderInput.pivotAndSize = new Vector4[printableChars];
+        renderInput.worldPivotAndSize = new Vector4[printableChars];
         renderInput.uvSizeAndPos = new Vector4[printableChars];
         renderInput.scaleAndFlip = new Vector4[printableChars];
 
@@ -99,10 +98,10 @@ public class AtlasTextRenderer : AtlasRenderer
             {
                 SimpleSprite sprite = renderInput.atlas.simpleSprites[asciiIndex - 33];
                 Vector2 spritePixelSize = sprite.worldSize * PIXELS_PER_UNIT;
-
                 Vector3 worldOffset = new Vector3(cursorX * kerning, 0, 0);
                 Vector2 matrixPos = worldOffset * camStats.worldUnitsPerPixel;
-                ref Vector4 worldPivotAndSize = ref renderInput.pivotAndSize[spriteIndex];
+
+                ref Vector4 worldPivotAndSize = ref renderInput.worldPivotAndSize[spriteIndex];
                 worldPivotAndSize.x = -matrixPos.x;
                 worldPivotAndSize.y = -matrixPos.y;
                 worldPivotAndSize.z = spritePixelSize.x * camStats.worldUnitsPerPixel;

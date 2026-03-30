@@ -29,9 +29,9 @@ public static class NPC
         ToChair,
         ToSlideDoor,
     }
-    [Flags] public enum Appearence
+    [Flags] public enum Appearance
     {
-        Nothing = 0,
+        None = 0,
         White_hair = 1 << 0,
         Blue_collar_worker = 1 << 1,
         Has_a_cain = 1 << 2,
@@ -49,7 +49,7 @@ public static class NPC
 
     [Flags] public enum Behaviours
     {
-        Nothing = 0,
+        None = 0,
         Frequent_smoker = 1 << 0,
         Takes_naps = 1 << 2,
         Always_hungry = 1 << 3,
@@ -70,13 +70,17 @@ public static class NPC
         Western,
     }
 
-    [Serializable] public struct ProfilePageData
+    [Serializable] public struct NPCProfile
     {
-        public int firstNameIndex;
-        public int lastNameIndex;
+        public string fullName;
+
+        public int startStationIndex;
+        public int departureStationIndex;
+
+        public int npcPrefabIndex;
+
         public Behaviours behaviours;
-        public Appearence appearence;
-        public int stationIndex;
+        public Appearance appearence;
     }
 
     [Serializable] public class NameData
@@ -94,81 +98,6 @@ public static class NPC
     {
         public string ethnicity;
         public string name;
-    }
-
-    public static string[] appearenceDescriptions;
-    public static string[] behaviourDescriptions;
-    public static Behaviours GetBehaviours(Behaviours npcBehaviours)
-    {
-        Behaviours[] allBehaviours = (Behaviours[])Enum.GetValues(typeof(Behaviours));
-
-        List<Behaviours> allowedBehaviours = new List<Behaviours>();
-        for (int i = 0; i < allBehaviours.Length; i++)
-        {
-            Behaviours b = allBehaviours[i];
-            if (b != 0 && npcBehaviours.HasFlag(b))
-            {
-                allowedBehaviours.Add(b);
-            }
-        }
-
-        Behaviours firstBehave = allowedBehaviours[UnityEngine.Random.Range(0, allowedBehaviours.Count)];
-        if (allowedBehaviours.Count == 1)
-        {
-            return firstBehave;
-        }
-
-        Behaviours secondBehave;
-        do
-        {
-            secondBehave = allowedBehaviours[UnityEngine.Random.Range(0, allowedBehaviours.Count)];
-        }
-        while (secondBehave == firstBehave);
-
-        Behaviours behaviours = firstBehave | secondBehave;
-        return behaviours;
-    }
-    public static Appearence GetRandomAppearence(Appearence appearence)
-    {
-        int appearValue = (int)appearence;
-
-        int[] flags = new int[32];
-        int flagCount = 0;
-
-        for (int i = 0; i < flags.Length; i++)
-        {
-            int flag = 1 << i;
-            if ((appearValue & flag) != 0)
-            {
-                flags[flagCount] = flag;
-                flagCount++;
-            }
-        }
-
-        int chosenFlag = flags[UnityEngine.Random.Range(0, flagCount)];
-        return (Appearence)chosenFlag;
-    }
-    public static void InitializeDescriptions()
-    {
-        Array appearArray = Enum.GetValues(typeof(Appearence));
-        appearenceDescriptions = new string[appearArray.Length - 1];
-        int i = 0;
-        foreach (Appearence flag in appearArray)
-        {
-            if (flag == Appearence.Nothing) continue;
-            appearenceDescriptions[i] = flag.ToString().Replace("_", " ");
-            i++;
-        }
-
-        Array behaveArray = Enum.GetValues(typeof(Behaviours));
-        behaviourDescriptions = new string[behaveArray.Length - 1];
-        i = 0;
-        foreach (Behaviours flag in behaveArray)
-        {
-            if (flag == Behaviours.Nothing) continue;
-            behaviourDescriptions[i] = flag.ToString().Replace("_", " ");
-            i++;
-        }
     }
 }
 

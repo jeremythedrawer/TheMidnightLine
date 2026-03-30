@@ -22,7 +22,6 @@ public class CameraController : MonoBehaviour
     }
     private void OnEnable()
     {
-        cam = Camera.main;
         gameEventData.OnReset.RegisterListener(ResetCamera);
     }
     private void OnDisable()
@@ -33,8 +32,13 @@ public class CameraController : MonoBehaviour
     }
     private void Start()
     {
-        stats.targetSize = cam.orthographicSize;
-        stats.initialSize = cam.orthographicSize;
+        cam = Camera.main;
+        float orthoSize = (640 / (float)PIXELS_PER_UNIT);
+
+        stats.targetSize = orthoSize;
+        stats.initialSize = orthoSize;
+        cam.orthographicSize = orthoSize;
+
         stats.targetWorldPos.z = transform.position.z;
         stats.curWorldPos = transform.position;
         stats.aspect = cam.aspect;
@@ -59,9 +63,13 @@ public class CameraController : MonoBehaviour
         if (Application.isPlaying)
         {
             cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, stats.targetSize, Time.deltaTime * settings.damping);
+            cam.orthographicSize = GetSnappedOrthoSize(stats.targetSize);
+
             stats.prevWorldPos = stats.curWorldPos;
             stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, stats.targetWorldPos, Time.deltaTime * settings.damping);
+            stats.curWorldPos = GetSnappedPosition(stats.curWorldPos);
             transform.position = stats.curWorldPos;
+            
             stats.curVelocity = -((stats.curWorldPos - stats.prevWorldPos) / Time.deltaTime);
         }
         else
@@ -198,6 +206,17 @@ public class CameraController : MonoBehaviour
         stats.initialSize = cam.orthographicSize;
         stats.curHorOffset = 0.0f;
         stats.targetSize = cam.orthographicSize;
+    }
+    private Vector3 GetSnappedPosition(Vector3 pos)
+    {
+        pos.x = Mathf.Round(pos.x / UNITS_PER_PIXEL) * UNITS_PER_PIXEL;
+        pos.y = Mathf.Round(pos.y / UNITS_PER_PIXEL) * UNITS_PER_PIXEL;
+
+        return pos;
+    }
+    private float GetSnappedOrthoSize(float targetSize)
+    {
+        return Mathf.Round(targetSize / UNITS_PER_PIXEL) * UNITS_PER_PIXEL;
     }
     private async UniTaskVoid ShakingCamera()
     {

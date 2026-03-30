@@ -128,6 +128,7 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
+  boundsOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &1760855985880669352
 GameObject:
   m_ObjectHideFlags: 0
@@ -374,6 +375,7 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
+  boundsOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &4464945837297462622
 GameObject:
   m_ObjectHideFlags: 0
@@ -544,7 +546,7 @@ MonoBehaviour:
     bounds:
       m_Center: {x: 295.13373, y: -1.0372221, z: 1}
       m_Extent: {x: 47.14389, y: 0.35277778, z: 0.1}
-    pivotAndSize:
+    worldPivotAndSize:
     - {x: 0, y: 0, z: 0.35, w: 0}
     - {x: -0.35, y: 0, z: 4.977778, w: 0}
     - {x: -93.93222, y: 0, z: 0.35555556, w: 0}
@@ -645,7 +647,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   station: {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
+  trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   platformRenderer: {fileID: 3735235545740367740}
 --- !u!1 &8483931072574100276
 GameObject:

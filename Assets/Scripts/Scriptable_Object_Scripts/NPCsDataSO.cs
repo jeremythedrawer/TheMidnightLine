@@ -8,7 +8,6 @@ using static NPC;
 public class NPCsDataSO : ScriptableObject
 {
     [Header("To Set")]
-    public NPCBrain[] npc_prefab;
     public VisualEffect sleepingZs_prefab;
     public VisualEffect musicNotes_prefab;
     public VisualEffect speechBubble_prefab;
@@ -16,10 +15,8 @@ public class NPCsDataSO : ScriptableObject
     [Range(0, 1)] public float hoverColorOffet = 0.25f;
     [Range(0, 1)] public float fadeTime = 0.5f;
 
-
     [Header("Generated")]
-    public int totalAgentCount;
-    public List<NPCBrain> npcsToPick;
-
-
+    public Dictionary<Appearance, string> appearanceDescDict;
+    public Dictionary<Behaviours, string> behaviourDescDict;
+    public NPCProfile[] profilePageDatas;
 }

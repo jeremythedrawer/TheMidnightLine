@@ -58,6 +58,11 @@ public class AtlasUISimpleRenderer : AtlasRenderer
         }
     }
 
+    public void SetSprite(SimpleSprite sprite)
+    {
+        renderInput.UpdateRenderInputsScreen(width, height, sprite, camStats);
+    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using static AtlasSpawn;
@@ -6,8 +7,13 @@ using static AtlasSpawn;
 public class TripSO : ScriptableObject
 {
     public ZoneSpawnerData[] zoneSpawnerData;
-    public StationSO[] stations;
+    public StationSO[] stationsDataArray;
+    public NPCBrain[] npc_prefabsArray;
 
+
+    [Header("Settings")]
+    public int minStationsTraitorsTravel = 2;
+    public int maxStationsTraitorsTravel = 4;
     [Header("Generated")]
     public int curStationIndex;
     public StationSO curStation;

@@ -23,7 +23,7 @@ MonoBehaviour:
   - zones:
     - atlas: {fileID: 11400000, guid: b7293c5d7b7f8814a972cc266c414cf8, type: 2}
       metersStart: 0
-      metersEnd: 1511
+      metersEnd: 1243
       zoneUVSizeAndPosArray:
       - {x: 0.22265625, y: 0.20166016, z: 0.001953125, w: 0.79589844}
       - {x: 0.30908203, y: 0.28222656, z: 0.22607422, w: 0.7163086}
@@ -72,8 +72,8 @@ MonoBehaviour:
     active: 1
   - zones:
     - atlas: {fileID: 11400000, guid: f86ccfc280901114c9e722a148ac3810, type: 2}
-      metersStart: 4100
-      metersEnd: 8879
+      metersStart: 3577
+      metersEnd: 6239
       zoneUVSizeAndPosArray:
       - {x: 0.13769531, y: 0.3112793, z: 0.001953125, w: 0.68847656}
       - {x: 0.16821289, y: 0.28344727, z: 0.14477539, w: 0.68774414}
@@ -132,10 +132,18 @@ MonoBehaviour:
     kernelID_init: 0
     kernelID_update: 0
     active: 0
-  stations:
+  stationsDataArray:
   - {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
   - {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
   - {fileID: 11400000, guid: 134e92c40424a324c80e62fb7525f100, type: 2}
+  npc_prefabsArray:
+  - {fileID: 94976023300698573, guid: 236df137b9dfc13469fc4820124f097b, type: 3}
+  - {fileID: 94976023300698573, guid: d02c48e5c3c73f148b26393aa574b573, type: 3}
+  - {fileID: 94976023300698573, guid: 288cc03b48f52e64b936d625dd6f5828, type: 3}
+  - {fileID: 5571533063624656214, guid: fcd4e40095113cf459e44e2bfa112041, type: 3}
+  - {fileID: 94976023300698573, guid: 897c100f6665dfb409630e778458925c, type: 3}
+  minStationsTraitorsTravel: 2
+  maxStationsTraitorsTravel: 4
   curStationIndex: 0
   curStation: {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
   tripMeters: 20000

@@ -27,13 +27,13 @@ public class Train : MonoBehaviour
     {
         stats.startXPos = transform.position.x;
         stats.trainMaxHeight = frontCollider.bounds.max.y;
-        stats.targetPassengerCount = trip.stations[0].bystanderSpawnAmount + trip.stations[0].traitorSpawnAmount + 1; // +1 for spy himself
-        stats.curKMPerHour = trip.stations[0].targetTrainSpeed;
-        stats.targetKMPerHour = trip.stations[0].targetTrainSpeed;
+        stats.targetPassengerCount = trip.stationsDataArray[0].bystanderProfiles.Count + trip.stationsDataArray[0].traitorProfiles.Count + 1; // +1 for spy himself
+        stats.curKMPerHour = trip.stationsDataArray[0].targetTrainSpeed;
+        stats.targetKMPerHour = trip.stationsDataArray[0].targetTrainSpeed;
         stats.metersTravelled = 0;
         stats.curPassengerCount = 0;
         stats.closingDoors = false;
-        stats.brakeDist = GetBrakeDistance(trip.stations[0].targetTrainSpeed);
+        stats.brakeDist = GetBrakeDistance(trip.stationsDataArray[0].targetTrainSpeed);
         trainCTS = new CancellationTokenSource();
         stats.minDepth = frontCarriage.exteriorRenderers[0].renderInput.batchKey.depthOrder;
         stats.maxDepth = frontCarriage.interiorSlideDoors[0].rightSlideDoorRenderer.renderInput.batchKey.depthOrder;
@@ -127,7 +127,10 @@ public class Train : MonoBehaviour
     }
     private void SetSlideDoorPositions()
     {
-        List<float> slideDoorPosList = new List<float>();
+        int slideDoorsPerCarriage = carriages[0].exteriorRenderers.Length;
+        int totalSlideDoors = carriages.Length * slideDoorsPerCarriage;
+
+        stats.slideDoorPositions = new float[totalSlideDoors];
 
         for (int i = 0; i < carriages.Length; i++)
         {
@@ -135,11 +138,10 @@ public class Train : MonoBehaviour
 
             for (int j = 0; j < carriage.exteriorSlideDoors.Length; j++)
             {
-                slideDoorPosList.Add(carriage.exteriorSlideDoors[j].transform.position.x);
+                int curIndex = i * slideDoorsPerCarriage + j;
+                stats.slideDoorPositions[curIndex] = carriage.exteriorSlideDoors[j].transform.position.x;
             }
         }
-
-        stats.slideDoorPositions = slideDoorPosList.ToArray();
     }
     private float GetBrakeDistance(float targetSpeed)
     {

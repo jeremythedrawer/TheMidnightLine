@@ -1,28 +1,42 @@
 using System;
 using UnityEngine;
 using static Atlas;
-
+using static NPC;
 public class Page : MonoBehaviour
 {
+    public NPCsDataSO npcData;
     public AtlasUIMotionRenderer paperRenderer;
 
-    public AtlasTextRenderer behavioursRenderer;
-    public AtlasTextRenderer behaviourClue1Renderer;
-    public AtlasTextRenderer behaviourClue2Renderer;
+    public AtlasTextRenderer behavioursRenderer0;
+    public AtlasTextRenderer behaviourRenderer1;
     public AtlasTextRenderer nameRenderer;
-    public AtlasTextRenderer nameAnswerRenderer;
     public AtlasTextRenderer appearenceRenderer;
-    public AtlasTextRenderer appearenceClueRenderer;
     public AtlasTextRenderer departureStationRenderer;
-    public AtlasTextRenderer stationAnswerRenderer;
     
     public AtlasUISimpleRenderer mugshotRenderer;
 
     [Header("Generated")]
     public AtlasClip paperClip;
-    private void Start()
+    public Behaviours behaviours0;
+    public Behaviours behaviours1;
+    public Appearance appearance;
+    public int departureStationIndex;
+
+    public void Init(NPCProfile traitorProfile)
     {
         paperClip = paperRenderer.renderInput.atlas.clipDict[(int)NotepadMotion.Page];
+
+        behaviours0 = GetBehaviourAtIndex(traitorProfile.behaviours, 0);
+        behaviours1 = GetBehaviourAtIndex(traitorProfile.behaviours, 1);
+        int appearencesCount = GetFlagAmount((int)traitorProfile.appearence);
+        int randAppearenceIndex = UnityEngine.Random.Range(0, appearencesCount);
+        appearance = GetAppearanceAtIndex(traitorProfile.appearence, randAppearenceIndex);
+
+        nameRenderer.SetText(traitorProfile.fullName);
+        behavioursRenderer0.SetText(npcData.behaviourDescDict[behaviours0]);
+        behaviourRenderer1.SetText(npcData.behaviourDescDict[behaviours1]);
+        appearenceRenderer.SetText(npcData.appearanceDescDict[appearance]);
+        mugshotRenderer.SetSprite(mugshotRenderer.renderInput.atlas.simpleSprites[traitorProfile.npcPrefabIndex]);
     }
     public void PlayPaperClip()
     {
@@ -35,19 +49,61 @@ public class Page : MonoBehaviour
     }
     public void TogglePageContentBottomHalf(bool toggle)
     {
-        behavioursRenderer.enabled = toggle;
-        behaviourClue1Renderer.enabled = toggle;
-        behaviourClue2Renderer.enabled = toggle;
+        behavioursRenderer0.enabled = toggle;
+        behaviourRenderer1.enabled = toggle;
         appearenceRenderer.enabled = toggle;
-        appearenceClueRenderer.enabled = toggle;
+        appearenceRenderer.enabled = toggle;
         departureStationRenderer.enabled = toggle;
-        stationAnswerRenderer.enabled = toggle;
     }
 
     public void TogglePageContentTopHalf(bool toggle)
     {
         nameRenderer.enabled = toggle;
-        nameAnswerRenderer.enabled = toggle;
+        nameRenderer.enabled = toggle;
         mugshotRenderer.enabled = toggle;
+    }
+
+    private Behaviours GetBehaviourAtIndex(Behaviours behaviours, int index)
+    {
+        int count = 0;
+        foreach(Behaviours flag in Enum.GetValues(typeof(Behaviours)))
+        {
+            if (flag == Behaviours.None) continue;
+
+            if ((behaviours & flag) != 0)
+            {
+                if (count == index) return flag;
+                count++;
+            }
+        }
+        return Behaviours.None;
+    }
+
+    private Appearance GetAppearanceAtIndex(Appearance appearance, int index)
+    {
+        int count = 0;
+        foreach (Appearance flag in Enum.GetValues(typeof(Appearance)))
+        {
+            if (flag == Appearance.None) continue;
+
+            if ((appearance & flag) != 0)
+            {
+                if (count == index) return flag;
+                count++;
+            }
+        }
+        return Appearance.None;
+    }
+
+    private int GetFlagAmount(int value)
+    {
+        int count = 0;
+
+        while (value != 0)
+        {
+            count += value & 1;
+            value >>= 1;
+        }
+        return count;
     }
 }

@@ -60,7 +60,7 @@ Shader "Custom/s_matrix"
 			sunRays *= skyMask;
 			
 
-			float grey = (blit.r * (1 - skyMask)) + sunRays + (linearDepth * 0.05);
+			float grey = (blit.r * (1 - skyMask)) + sunRays + (linearDepth * 0.15);
 			float3 finalColor = lerp(_Color1, _Color2, grey);
 			return half4(finalColor, 1);
 		}

@@ -41,7 +41,7 @@ public class ZoneMaster : MonoBehaviour
     private void InitBoundParameters()
     {
         float camMeterWidth = camSettings.maxProjectionSize * camStats.aspect;
-        float firstStationPos = trip.stations[0].metersPosition;
+        float firstStationPos = trip.stationsDataArray[0].metersPosition;
 
         spawner.spawnMaxPos.x = firstStationPos + spawner.spawnerSize.x;
         spawner.spawnMaxPos.y = trainStats.trainMaxHeight + camSettings.maxProjectionSize + spawner.spawnerSize.y;
@@ -87,7 +87,7 @@ public class ZoneMaster : MonoBehaviour
 
     private void OnDrawGizmos()
     {
-        InitBoundParameters();
+        //InitBoundParameters();
 
         Gizmos.color = Color.crimson;
         Gizmos.DrawWireCube(spawner.spawnCenter, spawner.spawnBoundsSize);

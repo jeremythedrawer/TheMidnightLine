@@ -1,12 +1,18 @@
+using System.Xml.Linq;
 using UnityEngine;
-
+using static NPC;
 public class Station : MonoBehaviour
 {
+    const float SPAWN_BUFFER = 5f;
     public StationSO station;
     public TrainStatsSO trainStats;
-    public NPCsDataSO npcData;
+    public TripSO trip;
     public AtlasSimpleRenderer platformRenderer;
-    private void Start()
+
+    private void Awake()
+    {
+    }
+    private void OnEnable()
     {
         SpawnNPCs();
         station.isFrontOfTrain = platformRenderer.renderInput.batchKey.depthOrder < trainStats.minDepth;
@@ -14,26 +20,47 @@ public class Station : MonoBehaviour
 
     private void SpawnNPCs()
     {
-        for (int i = 0; i < station.traitorSpawnAmount; i++)
+        for (int i = 0; i < station.bystanderProfiles.Count; i++)
         {
-            //if (npcData.traitorPool.Count == 0) { Debug.LogError($"Traitor Pool is empty at {gameObject.name}"); return; }
-            //NPC.TraitorData traitorData =  npcData.traitorPool.Dequeue();
-            //traitorData.traitor_prefab.gameObject.SetActive(true);
-            float randXPos = Random.Range(platformRenderer.renderInput.bounds.min.x + 5f, platformRenderer.renderInput.bounds.max.x - 5f);
-            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, platformRenderer.transform.position.z);
-            //traitorData.traitor_prefab.transform.position = spawnPos;
-            //traitorData.traitor_prefab.startStation = station;
-            //traitorData.traitor_prefab.transform.SetParent(platformRenderer.transform, true);
+            NPCProfile bystanderProfile = station.bystanderProfiles[i];
+            
+            float randXPos = Random.Range(
+            platformRenderer.renderInput.bounds.min.x + SPAWN_BUFFER, 
+            platformRenderer.renderInput.bounds.max.x - SPAWN_BUFFER);
+            
+            Vector3 spawnPos = new Vector3(
+            randXPos, 
+            transform.position.y + 0.1f, 
+            platformRenderer.transform.position.z);
+
+            NPCBrain bystander = Instantiate(
+            trip.npc_prefabsArray[bystanderProfile.npcPrefabIndex], 
+            spawnPos, 
+            Quaternion.identity, 
+            platformRenderer.transform);
+            
+            bystander.profile = bystanderProfile;
+            bystander.role = Role.Bystander;
         }
-        for (int i = 0; i < station.bystanderSpawnAmount; i++)
+
+        for (int i = 0; i < station.traitorProfiles.Count; i++)
         {
-            int randNPCIndex = Random.Range(0, npcData.npc_prefab.Length);
-            float randXPos = Random.Range(platformRenderer.renderInput.bounds.min.x + 5, platformRenderer.renderInput.bounds.max.x - 5f);
-            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, platformRenderer.transform.position.z);
-            NPCBrain bystanderNPC = Instantiate(npcData.npc_prefab[randNPCIndex], spawnPos, Quaternion.identity); // spawn at random point on station
-            bystanderNPC.stats.role = NPC.Role.Bystander;
-            bystanderNPC.startStation = station;
-            bystanderNPC.transform.SetParent(platformRenderer.transform, true);
+            NPCProfile traitorProfile = station.traitorProfiles[i];
+            float randXPos = Random.Range(
+            platformRenderer.renderInput.bounds.min.x + SPAWN_BUFFER,
+            platformRenderer.renderInput.bounds.max.x - SPAWN_BUFFER);
+            
+            Vector3 spawnPos = new Vector3(randXPos, 
+            transform.position.y + 0.1f, 
+            platformRenderer.transform.position.z);
+
+            NPCBrain traitor = Instantiate(
+            trip.npc_prefabsArray[traitorProfile.npcPrefabIndex], 
+            spawnPos, 
+            Quaternion.identity, 
+            platformRenderer.transform);
+            traitor.profile = traitorProfile;
+            traitor.role = Role.Traitor;
         }
     }
 }

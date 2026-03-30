@@ -1,6 +1,9 @@
+using System;
+using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using static Atlas;
+using static NPC;
 
 public class Notepad : MonoBehaviour
 {
@@ -21,13 +24,28 @@ public class Notepad : MonoBehaviour
     }
 
     public PlayerInputsSO playerInputs;
-    public AtlasUISimpleRenderer rightHandRenderer;
-    public AtlasUISimpleRenderer frontFingers;
-    public AtlasUISimpleRenderer bindingRings;
-    public AtlasUIMotionRenderer leftHandRenderer;
+    public TripSO trip;
+    public NPCsDataSO npcData;
+    public TextAsset namesJSON;
 
+    public AtlasUISimpleRenderer rightHand_renderer;
+    public AtlasUISimpleRenderer frontFingers_renderer;
+    public AtlasUISimpleRenderer bindingRings_renderer;
+    
+    public AtlasUIMotionRenderer leftHand_renderer;
+
+    public Transform page_parent;
+    public Page page_prefab;
+    
     public Page activePage;
+
+
     [Header("Generated")]
+    public List<NPCProfile> totalNPCProfiles;
+    public List<NPCProfile> duplicateBehaviourProfiles;
+   
+
+    public static NameData nameData;
     public Bounds totalBounds;
     public AtlasClip leftHandClip;
     public State curState;
@@ -44,20 +62,27 @@ public class Notepad : MonoBehaviour
         EditorUtility.SetDirty(this);
 #endif
     }
+    private void Awake()
+    {
+        nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
+        npcData.appearanceDescDict = InitializeAppearanceDict();
+        npcData.behaviourDescDict = InitializeBehaviourDict();
+        CreateNPCProfiles();
+
+    }
     private void Start()
     {
-        leftHandClip = leftHandRenderer.renderInput.atlas.clipDict[(int)NotepadMotion.LeftHand];
+        leftHandClip = leftHand_renderer.renderInput.atlas.clipDict[(int)NotepadMotion.LeftHand];
         lastLeftHandKeyframeIndex = leftHandClip.keyFrames.Length - 1;
 
-        nextDepthFront = rightHandRenderer.renderInput.batchKey.depthOrder - 1;
-        nextDepthBack = rightHandRenderer.renderInput.batchKey.depthOrder + 1;
+        nextDepthFront = rightHand_renderer.renderInput.batchKey.depthOrder - 1;
+        nextDepthBack = rightHand_renderer.renderInput.batchKey.depthOrder + 1;
 
         leftHandDepthFront =  nextDepthFront - 1;
         leftHandDepthBack = nextDepthBack + 1;
 
 
     }
-
     private void Update()
     {
         if (playerInputs.notepad.y == 1)
@@ -73,12 +98,12 @@ public class Notepad : MonoBehaviour
         {
             case State.FlippingUp:
             {
-                switch (leftHandRenderer.curFrameIndex)
+                switch (leftHand_renderer.curFrameIndex)
                 {
                     case 0:
                     {
                         if (curKeyframeState == KeyframeState.Start) return;
-                        leftHandRenderer.PlayClipOneShot(leftHandClip);
+                        leftHand_renderer.PlayClipOneShot(leftHandClip);
                         curKeyframeState = KeyframeState.Start;
                     }
                     break;
@@ -110,13 +135,13 @@ public class Notepad : MonoBehaviour
                     case 7:
                     {
                         if (curKeyframeState == KeyframeState.ChangeDepth) return;
-                        leftHandRenderer.renderInput.UpdateDepthRealtime(leftHandDepthBack);
+                        leftHand_renderer.renderInput.UpdateDepthRealtime(leftHandDepthBack);
                         curKeyframeState = KeyframeState.ChangeDepth;
                     }
                     break;
                 }
 
-                if (leftHandRenderer.curFrameIndex == lastLeftHandKeyframeIndex)
+                if (leftHand_renderer.curFrameIndex == lastLeftHandKeyframeIndex)
                 {
                     if (curKeyframeState == KeyframeState.None) return;
                     curState = State.None;
@@ -127,7 +152,7 @@ public class Notepad : MonoBehaviour
 
             case State.FlippingDown:
             {
-                switch (leftHandRenderer.curFrameIndex)
+                switch (leftHand_renderer.curFrameIndex)
                 {
                     case 0:
                     {
@@ -161,31 +186,203 @@ public class Notepad : MonoBehaviour
                     case 6:
                     {
                         if (curKeyframeState == KeyframeState.ChangeDepth) return;
-                        leftHandRenderer.renderInput.UpdateDepthRealtime(leftHandDepthFront);
+                        leftHand_renderer.renderInput.UpdateDepthRealtime(leftHandDepthFront);
                         curKeyframeState = KeyframeState.ChangeDepth;
                     }
                     break;
                 }
 
-                if (leftHandRenderer.curFrameIndex == lastLeftHandKeyframeIndex)
+                if (leftHand_renderer.curFrameIndex == lastLeftHandKeyframeIndex)
                 {
                     if (curKeyframeState == KeyframeState.Start) return;
-                    leftHandRenderer.PlayClipOneShotReverse(leftHandClip);
+                    leftHand_renderer.PlayClipOneShotReverse(leftHandClip);
                     curKeyframeState = KeyframeState.Start;
                 }
             }
             break;
         }
     }
+    private void CreateNPCProfiles()
+    {
+        totalNPCProfiles = new List<NPCProfile>();
+        for (int i = 0; i < trip.stationsDataArray.Length; i++)
+        {
+            StationSO station = trip.stationsDataArray[i];
+            station.bystanderProfiles.Clear();
+            station.traitorProfiles.Clear();
+        }
+
+        for (int i = 0; i < trip.npc_prefabsArray.Length; i++)
+        {
+            NPCBrain npcPrefab = trip.npc_prefabsArray[i];
+
+            int behaviourValue = (int)npcPrefab.npc.behaviours;
+
+            int[] validFlags = new int[32];
+            int flagCount = 0;
+
+            for (int j = 0; j < 32; j++)
+            {
+                int flag = 1 << j;
+
+                if ((behaviourValue & flag) != 0)
+                {
+                    validFlags[flagCount] = flag;
+                    flagCount++;
+                }
+            }
+
+            for (int j = 0; j < flagCount; j++)
+            {
+                Behaviours firstBehaviour = (Behaviours)validFlags[j];
+
+                for (int k = j; k < flagCount; k++)
+                {
+                    Behaviours secondBehaviour = (Behaviours)validFlags[k];
+                    Behaviours twoBehaviours = firstBehaviour | secondBehaviour;
+                    Appearance appearence = npcPrefab.npc.appearence;
+                    string name = GenerateName(npcPrefab.npc.gender, npcPrefab.npc.ethnicity);
+                    NPCProfile npcProfile = new NPCProfile
+                    {
+                        fullName = name,
+                        behaviours = twoBehaviours,
+                        appearence = appearence,
+                        npcPrefabIndex = npcPrefab.npc.mugshotIndex,
+                    };
+
+                    if (k == j)
+                    {
+                        duplicateBehaviourProfiles.Add(npcProfile);
+                    }
+                    else
+                    {
+                        totalNPCProfiles.Add(npcProfile);
+                    }
+                }
+            }
+        }
+
+        for (int i = 0; i < trip.stationsDataArray.Length; i++)
+        {
+            StationSO station = trip.stationsDataArray[i];
+
+            for (int j = 0; j < trip.stationsDataArray[i].traitorSpawnAmount; j++)
+            {
+                int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
+
+                NPCProfile traitorProfile = totalNPCProfiles[randProfileIndex];
+                traitorProfile.startStationIndex = i;
+                traitorProfile.departureStationIndex = GetExitStationIndex(i, trip.minStationsTraitorsTravel, trip.maxStationsTraitorsTravel);
+                totalNPCProfiles.RemoveAt(randProfileIndex);
+                station.traitorProfiles.Add(traitorProfile);
+
+                Page page = Instantiate(page_prefab, bindingRings_renderer.transform.position, Quaternion.identity, transform);
+                page.Init(traitorProfile);
+            }
+        }
+
+        totalNPCProfiles.AddRange(duplicateBehaviourProfiles);
+
+        for (int i = 0; i < trip.stationsDataArray.Length; i++)
+        {
+            StationSO station = trip.stationsDataArray[i];
+            int bystandersToSpawnAtStation = (int)(station.busynessFactor * (float)totalNPCProfiles.Count);
+
+            for (int j = 0; j < bystandersToSpawnAtStation; j++)
+            {
+                if (totalNPCProfiles.Count == 0) { Debug.LogWarning("the total of the station busynessFactor exceeds 1. Total should be between 0 - 1"); return; }
+                int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
+
+                NPCProfile bystanderProfile = totalNPCProfiles[randProfileIndex];
+
+                bystanderProfile.startStationIndex = i;
+                bystanderProfile.departureStationIndex = GetExitStationIndex(i, 0, int.MaxValue);
+
+                totalNPCProfiles.RemoveAt(randProfileIndex);
+                station.bystanderProfiles.Add(bystanderProfile);
+            }
+        }
+    }
     private void SetTotalBounds()
     {
-        if (rightHandRenderer == null || frontFingers == null || bindingRings == null) return;
-        totalBounds = rightHandRenderer.renderInput.bounds;
-        totalBounds.Encapsulate(frontFingers.renderInput.bounds);
-        totalBounds.Encapsulate(bindingRings.renderInput.bounds);
-        totalBounds.Encapsulate(leftHandRenderer.renderInput.bounds);
+        if (rightHand_renderer == null || frontFingers_renderer == null || bindingRings_renderer == null) return;
+        totalBounds = rightHand_renderer.renderInput.bounds;
+        totalBounds.Encapsulate(frontFingers_renderer.renderInput.bounds);
+        totalBounds.Encapsulate(bindingRings_renderer.renderInput.bounds);
+        totalBounds.Encapsulate(leftHand_renderer.renderInput.bounds);
     }
+    public string GenerateName(Gender gender, Ethnicity ethnicity)
+    {
+        string genderString = gender.ToString();
+        string ethnicityString = ethnicity.ToString();
+        List<FirstName> firstNamesList = new List<FirstName>();
 
+        for (int i = 0; i < nameData.firstNames.Length; i++)
+        {
+            FirstName fn = nameData.firstNames[i];
+            if (fn.gender.Equals(genderString, StringComparison.OrdinalIgnoreCase) &&
+                fn.ethnicity.Equals(ethnicityString, StringComparison.OrdinalIgnoreCase))
+            {
+                firstNamesList.Add(fn);
+            }
+        }
+
+        if (firstNamesList.Count == 0) return "NoFirstName";
+
+        int firstNameIndex = UnityEngine.Random.Range(0, firstNamesList.Count);
+        string firstName = firstNamesList[firstNameIndex].name;
+
+        List<LastName> lastNameList = new List<LastName>();
+        for (int i = 0; i < nameData.lastNames.Length; i++)
+        {
+            LastName ln = nameData.lastNames[i];
+            if (ln.ethnicity.Equals(ethnicityString, StringComparison.OrdinalIgnoreCase))
+            {
+                lastNameList.Add(ln);
+            }
+        }
+        if (lastNameList.Count == 0) return firstName;
+
+        int lastNameIndex = UnityEngine.Random.Range(0, lastNameList.Count);
+        string lastName = lastNameList[lastNameIndex].name;
+
+        return firstName + " " + lastName;
+    }
+    public int GetExitStationIndex(int startStationIndex, int minStationIndexOffset, int maxStationIndexOffset)
+    {
+        int maxPossibleIndex = trip.stationsDataArray.Length - 1;
+        int max = Mathf.Min(startStationIndex + maxStationIndexOffset, maxPossibleIndex);
+        int min = Mathf.Min(startStationIndex + minStationIndexOffset, maxPossibleIndex);
+        return UnityEngine.Random.Range(min, max);
+    }
+    public Dictionary<Behaviours, string> InitializeBehaviourDict()
+    {
+        var dict = new Dictionary<Behaviours, string>();
+
+        Array values = Enum.GetValues(typeof(Behaviours));
+
+        foreach (Behaviours value in values)
+        {
+            if (value == Behaviours.None) continue;
+
+            dict[value] = value.ToString().Replace("_", " ");
+        }
+        return dict;
+    }
+    public Dictionary<Appearance, string> InitializeAppearanceDict()
+    {
+        var dict = new Dictionary<Appearance, string>();
+
+        Array values = Enum.GetValues(typeof(Appearance));
+
+        foreach (Appearance value in values)
+        {
+            if (value == Appearance.None) continue;
+
+            dict[value] = value.ToString().Replace("_", " ");
+        }
+        return dict;
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.indigo;

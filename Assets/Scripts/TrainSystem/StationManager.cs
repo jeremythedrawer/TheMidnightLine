@@ -9,8 +9,11 @@ public class StationManager : MonoBehaviour
     public ZoneSpawnerSO spawner;
     public GameEventDataSO gameEventData;
 
+    public Station[] stations;
+
     public float curMetersSpawnThreshold = float.MaxValue;
     public float trainToMaxSpawnDist;
+    public int nextStationIndex;
     private void Awake()
     {
         InitStationManager();
@@ -25,10 +28,6 @@ public class StationManager : MonoBehaviour
     {
         gameEventData.OnStationLeave.UnregisterListener(SetStation);
         gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(InitOnTrainArrivedAtStartPosition);
-    }
-
-    private void OnApplicationQuit()
-    {
         InitStationManager();
     }
     private void Start()
@@ -43,33 +42,44 @@ public class StationManager : MonoBehaviour
     }
     private void SpawnStation()
     {
-        Station nextStation = Instantiate(trip.curStation.station_prefab, null);
+        Station nextStation = stations[nextStationIndex];
         float stationXPos = spawner.spawnMaxPos.x + (nextStation.transform.position.x - nextStation.platformRenderer.renderInput.bounds.min.x);
         nextStation.transform.position = new Vector3(stationXPos, 0, 0);
         trip.curStation.hadSpawned = true;
+        nextStationIndex++;
     }
 
     private void InitStationManager()
     {
         trip.curStationIndex = 0;
-        trip.curStation = trip.stations[0];
+        trip.curStation = trip.stationsDataArray[0];
 
-        for (int i = 0; i < trip.stations.Length; i++)
+        stations = new Station[trip.stationsDataArray.Length];
+
+        for (int i = 1; i < trip.stationsDataArray.Length; i++)
         {
-            trip.stations[i].hadSpawned = false;
+            StationSO stationData = trip.stationsDataArray[i];
+            stationData.hadSpawned = false;
+            
+            stationData.bystanderProfiles.Clear();
+            stationData.traitorProfiles.Clear();
+
+            Station station = Instantiate(stationData.station_prefab, transform);
+            stations[i] = station;
+            station.gameObject.SetActive(false);
         }
     }
 
     private void InitOnTrainArrivedAtStartPosition()
     {
-        trainToMaxSpawnDist = spawner.spawnMaxPos.x - trip.stations[0].metersPosition;
+        trainToMaxSpawnDist = spawner.spawnMaxPos.x - trip.stationsDataArray[0].metersPosition;
     }
     private void SetStation()
     {
         trip.curStationIndex++;
-        trip.curStation = trip.stations[trip.curStationIndex];
+        trip.curStation = trip.stationsDataArray[trip.curStationIndex];
         trainStats.curPassengerCount = 0;
-        trainStats.targetPassengerCount = trip.curStation.traitorSpawnAmount + trip.curStation.bystanderSpawnAmount;
+        trainStats.targetPassengerCount = trip.curStation.traitorSpawnAmount + trip.curStation.bystanderProfiles.Count + trip.curStation.traitorProfiles.Count;
         curMetersSpawnThreshold = trip.curStation.metersPosition - Mathf.Abs(trip.curStation.station_prefab.transform.localPosition.x) - trainToMaxSpawnDist - (trainStats.trainWorldWidth / 2);
     }
 }

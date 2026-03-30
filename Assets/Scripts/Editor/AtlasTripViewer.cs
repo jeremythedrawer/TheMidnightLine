@@ -78,6 +78,7 @@ public class AtlasTripViewer : EditorWindow
 
         GUIStyle zoneLabelStyle = new GUIStyle(EditorStyles.boldLabel) { alignment = TextAnchor.UpperLeft, normal = { textColor = Color.black } };
         Event e = Event.current;
+       
         for (int i = 0; i < trip.zoneSpawnerData.Length; i++)
         {
             ZoneSpawnerData zoneSpawnerData = trip.zoneSpawnerData[i];
@@ -149,9 +150,9 @@ public class AtlasTripViewer : EditorWindow
 
         }
 
-        for (int i = 0; i < trip.stations.Length; i++)
+        for (int i = 0; i < trip.stationsDataArray.Length; i++)
         {
-            StationSO selectedStation = trip.stations[i];
+            StationSO selectedStation = trip.stationsDataArray[i];
             float rectSize = 20;
             float posX = graphRect.xMin + ((float)selectedStation.metersPosition / (float)trip.tripMeters) * graphRect.width;
             float posY = graphRect.yMin - 20;
@@ -180,7 +181,7 @@ public class AtlasTripViewer : EditorWindow
 
             if (e.type == EventType.MouseUp && selectedIndex_station == i)
             {
-                trip.stations =  trip.stations.OrderBy(station => station.metersPosition).ToArray();
+                trip.stationsDataArray =  trip.stationsDataArray.OrderBy(station => station.metersPosition).ToArray();
                 selectedIndex_station = -1;
                 e.Use();
             }

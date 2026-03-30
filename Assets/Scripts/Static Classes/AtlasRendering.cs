@@ -1,14 +1,8 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
 using System.Runtime.InteropServices;
-using UnityEditor;
 using UnityEngine;
-using UnityEngine.U2D;
-using UnityEngine.UIElements;
 using static Atlas;
-using static AtlasRendering;
-using static UnityEditor.Experimental.GraphView.GraphView;
 public static class AtlasRendering
 {
     public const int MAX = 1024;
@@ -145,7 +139,7 @@ public static class AtlasRendering
         public GameObject gameObject;
         public Bounds bounds = new Bounds();
 
-        public Vector4[] pivotAndSize;
+        public Vector4[] worldPivotAndSize;
         public Vector4[] uvSizeAndPos;
         public Vector4[] scaleAndFlip;
         
@@ -159,7 +153,7 @@ public static class AtlasRendering
 
             float rightColPos = slicedSprite.worldSlices.x + (centerWorldSliceWidth * width);
             float topRowPos = slicedSprite.worldSlices.z + (centerWorldSliceHeight * height);
-            pivotAndSize = new Vector4[]
+            worldPivotAndSize = new Vector4[]
             {
                 new Vector4(0, 0, slicedSprite.worldSlices.x, slicedSprite.worldSlices.z),
                 new Vector4(-slicedSprite.worldSlices.x, 0, centerWorldSliceWidth, slicedSprite.worldSlices.z),
