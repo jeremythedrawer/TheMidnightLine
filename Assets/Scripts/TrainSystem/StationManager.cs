@@ -60,7 +60,7 @@ public class StationManager : MonoBehaviour
         {
             StationSO stationData = trip.stationsDataArray[i];
             stationData.hadSpawned = false;
-            
+            stationData.stationName = stationData.station_prefab.name;
             stationData.bystanderProfiles.Clear();
             stationData.traitorProfiles.Clear();
 

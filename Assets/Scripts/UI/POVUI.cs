@@ -18,9 +18,11 @@ public class POVUI : MonoBehaviour
 
     public PlayerInputsSO playerInputs;
     public CameraStatsSO cameraStats;
+    public SpyStatsSO spyStats;
     public Notepad notepad;
     public Ticket ticket;
     public Transform background;
+
     public float backgroundMoveDamp = 5;
     public float moveDamp = 4;
 
@@ -41,8 +43,10 @@ public class POVUI : MonoBehaviour
     public Vector3 naturalMovePos;
 
     public bool canExitTicket;
+
     public CancellationTokenSource ctsBackground;
     public CancellationTokenSource ctsUIObject;
+    
     private void Start()
     {
         background.gameObject.SetActive(true);
@@ -73,17 +77,15 @@ public class POVUI : MonoBehaviour
     }
     private void SelectState()
     {
-        if (curState != State.None) return;
-
-        if (playerInputs.notepad.x == -1)
+        if (spyStats.curState == SpyBrain.State.Notepad)
         {
             SetState(State.Notepad);
         }
-        else if (playerInputs.ticket)
+        else if (spyStats.curState == SpyBrain.State.Ticket)
         {
             SetState(State.Ticket);
         }
-        else if (playerInputs.map)
+        else if (spyStats.curState == SpyBrain.State.Map)
         {
             SetState(State.Map);
         }
@@ -91,7 +93,6 @@ public class POVUI : MonoBehaviour
         {
             SetState(State.None);
         }
-
     }
     private void SetState(State newState)
     {
@@ -131,6 +132,7 @@ public class POVUI : MonoBehaviour
 
                 InitNaturalPos(ticketActivePos);
 
+                ticket.SetText(spyStats.ticketName, spyStats.departureStationName, spyStats.arrivalStationName);
             }
             break;
             case State.Map:
@@ -225,12 +227,10 @@ public class POVUI : MonoBehaviour
             naturalMoveClock = 0;
         }
     }
-
     private void InitNaturalPos(Vector3 activePos)
     {
         naturalMovePos = activePos;
     }
-
     private void MoveBackground(Vector3 nextPos)
     {
         ctsBackground?.Cancel();

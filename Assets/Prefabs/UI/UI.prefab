@@ -49,8 +49,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::POVUI
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   cameraStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   notepad: {fileID: 700749529847056266}
-  ticket: {fileID: 1516231461973105152}
+  ticket: {fileID: 7063401080417137769}
   background: {fileID: 6010304324546953136}
   backgroundMoveDamp: 5
   moveDamp: 4
@@ -61,9 +62,10 @@ MonoBehaviour:
   ticketActivePos: {x: 0, y: 0, z: 0}
   ticketInactivePos: {x: 0, y: 0, z: 0}
   curState: 0
-  moveDuration: 0
-  naturalMoveTimer: 0
+  transitionTime: 0
+  naturalMoveClock: 0
   naturalMovePos: {x: 0, y: 0, z: 0}
+  canExitTicket: 0
 --- !u!1 &8786907910041632012
 GameObject:
   m_ObjectHideFlags: 0
@@ -214,51 +216,39 @@ PrefabInstance:
       propertyPath: renderInput.batchKey.depthOrder
       value: -21
       objectReference: {fileID: 0}
+    - target: {fileID: 8887810985537258041, guid: 97ee08ce1da45014eafc5f5ff1730072, type: 3}
+      propertyPath: totalBounds.m_Center.x
+      value: 308.05664
+      objectReference: {fileID: 0}
+    - target: {fileID: 8887810985537258041, guid: 97ee08ce1da45014eafc5f5ff1730072, type: 3}
+      propertyPath: totalBounds.m_Center.y
+      value: -0.24444413
+      objectReference: {fileID: 0}
+    - target: {fileID: 8887810985537258041, guid: 97ee08ce1da45014eafc5f5ff1730072, type: 3}
+      propertyPath: totalBounds.m_Center.z
+      value: -21.41
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5359825768233355405, guid: 97ee08ce1da45014eafc5f5ff1730072, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1516231461973105152}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 97ee08ce1da45014eafc5f5ff1730072, type: 3}
---- !u!114 &4956750713264795048 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 6744156215788641272, guid: 97ee08ce1da45014eafc5f5ff1730072, type: 3}
-  m_PrefabInstance: {fileID: 1824490955988596304}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 34900e9c81907b3478fca074efe6d26e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasUIRenderer
---- !u!1 &5994302068579647197 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5359825768233355405, guid: 97ee08ce1da45014eafc5f5ff1730072, type: 3}
-  m_PrefabInstance: {fileID: 1824490955988596304}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1516231461973105152
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5994302068579647197}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 0c77f1ef6ac4c494ea27b6d29ffe8948, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Ticket
-  ticket_renderer: {fileID: 4956750713264795048}
-  totalBounds:
-    m_Center: {x: 5.286662, y: -2.0044444, z: 18.59}
-    m_Extent: {x: 5.666667, y: 3.9555557, z: 0.1}
 --- !u!4 &6227278811360202824 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 5708974220083324440, guid: 97ee08ce1da45014eafc5f5ff1730072, type: 3}
   m_PrefabInstance: {fileID: 1824490955988596304}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7063401080417137769 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8887810985537258041, guid: 97ee08ce1da45014eafc5f5ff1730072, type: 3}
+  m_PrefabInstance: {fileID: 1824490955988596304}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c77f1ef6ac4c494ea27b6d29ffe8948, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Ticket
 --- !u!1001 &3312738639772388220
 PrefabInstance:
   m_ObjectHideFlags: 0

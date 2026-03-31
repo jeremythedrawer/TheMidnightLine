@@ -8,6 +8,7 @@ public static class NPC
     {
         Idling,
         Walking,
+        TicketCheck,
         Smoking,
         Sleeping,
         Eating,
@@ -74,8 +75,8 @@ public static class NPC
     {
         public string fullName;
 
-        public int startStationIndex;
         public int departureStationIndex;
+        public int arrivalStationIndex;
 
         public int npcPrefabIndex;
 

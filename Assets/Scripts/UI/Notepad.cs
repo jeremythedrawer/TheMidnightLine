@@ -285,8 +285,8 @@ public class Notepad : MonoBehaviour
                 int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
 
                 NPCProfile traitorProfile = totalNPCProfiles[randProfileIndex];
-                traitorProfile.startStationIndex = i;
-                traitorProfile.departureStationIndex = GetExitStationIndex(i, trip.minStationsTraitorsTravel, trip.maxStationsTraitorsTravel);
+                traitorProfile.departureStationIndex = i;
+                traitorProfile.arrivalStationIndex = GetExitStationIndex(i, trip.minStationsTraitorsTravel, trip.maxStationsTraitorsTravel);
                 totalNPCProfiles.RemoveAt(randProfileIndex);
                 station.traitorProfiles.Add(traitorProfile);
 
@@ -321,8 +321,8 @@ public class Notepad : MonoBehaviour
 
                 NPCProfile bystanderProfile = totalNPCProfiles[randProfileIndex];
 
-                bystanderProfile.startStationIndex = i;
-                bystanderProfile.departureStationIndex = GetExitStationIndex(i, 0, int.MaxValue);
+                bystanderProfile.departureStationIndex = i;
+                bystanderProfile.arrivalStationIndex = GetExitStationIndex(i, 0, int.MaxValue);
 
                 totalNPCProfiles.RemoveAt(randProfileIndex);
                 station.bystanderProfiles.Add(bystanderProfile);

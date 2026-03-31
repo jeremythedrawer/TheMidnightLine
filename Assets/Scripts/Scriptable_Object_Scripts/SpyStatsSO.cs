@@ -4,13 +4,9 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "SpyStats_SO", menuName = "Midnight Line SOs / Spy Stats SO")]
 public class SpyStatsSO : ScriptableObject
 {
-    public string spyID;
     public Bounds curLocationBounds;
     public Vector3 curWorldPos;
-    public Vector2 startPos;
-    public Vector2 checkpointPos;
     public Vector2 moveVelocity;
-    public Vector3 phonePosition;
     public float targetXVelocity;
     public float curRunSpeed;
     public float curGravityScale;
@@ -18,6 +14,7 @@ public class SpyStatsSO : ScriptableObject
     public float coyoteTimeElapsed;
     public float maxJumpHeight;
     public float lastGroundHeight;
+    public SpyBrain.State curState;
     public LayerMask curLocationLayer;
     public LayerMask curGroundLayer;
     public LayerMask curWallLayer;
@@ -33,13 +30,18 @@ public class SpyStatsSO : ScriptableObject
     public bool firstFixedFrameClimb;
     public bool canBoardTrain;
     public bool onTrain;
-    public bool onPhone;
+
+    public bool checkingNotepad;
+
+
+
+    public string ticketName;
+    public string departureStationName;
+    public string arrivalStationName;
     public void ResetStats()
     {
         curWorldPos = Vector2.zero;
         spriteFlip = false;
-        startPos = Vector2.zero;
-        checkpointPos = Vector2.zero;
 
         moveVelocity = Vector2.zero;
         targetXVelocity = 0.0f;

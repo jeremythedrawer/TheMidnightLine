@@ -17,13 +17,8 @@ public class NPCManager : MonoBehaviour
     public bool npcFindingChair;
     public int totalAgentCount;
 
-
     public static List<NPCBrain> npcChairList = new List<NPCBrain>();
 
-
-    private void Awake()
-    {
-    }
     private void Update()
     {
         if (npcChairList.Count > 0 && npcFindingChair == false)

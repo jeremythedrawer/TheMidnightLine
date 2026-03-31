@@ -363,6 +363,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5708974220083324440}
+  - component: {fileID: 8887810985537258041}
   m_Layer: 0
   m_Name: Ticket
   m_TagString: Untagged
@@ -378,7 +379,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5359825768233355405}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 25.59}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -386,6 +387,25 @@ Transform:
   - {fileID: 4998040907708058174}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8887810985537258041
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5359825768233355405}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 0c77f1ef6ac4c494ea27b6d29ffe8948, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Ticket
+  ticket_renderer: {fileID: 6744156215788641272}
+  name_renderer: {fileID: 4222672430474449024}
+  departureStation_renderer: {fileID: 6218226800079075093}
+  arrivalStation_renderer: {fileID: 1747144741835068963}
+  totalBounds:
+    m_Center: {x: 5.286662, y: -2.0044444, z: 18.59}
+    m_Extent: {x: 5.666667, y: 3.9555557, z: 0.1}
 --- !u!1 &8799826701686789120
 GameObject:
   m_ObjectHideFlags: 0

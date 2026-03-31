@@ -23,7 +23,7 @@ public class NPCBrain : MonoBehaviour
     [SerializeField] TrainSettingsSO trainSettings;
     [SerializeField] TrainStatsSO trainStats;
     [SerializeField] GameEventDataSO gameEventData;
-    [SerializeField] PlayerInputsSO spyInputs;
+    [SerializeField] PlayerInputsSO playerInputs;
     [SerializeField] SpyStatsSO spyStats;
     [SerializeField] MaterialIDSO materialIDs;
 
@@ -66,6 +66,7 @@ public class NPCBrain : MonoBehaviour
     public int prevAtlasIndex;
 
     public bool startFade;
+    public bool ticketIsBeingChecked;
 
     public AtlasClip curClip;
 
@@ -145,7 +146,11 @@ public class NPCBrain : MonoBehaviour
     }
     private void SelectingStates()
     {
-        if (move != 0)
+        if (ticketIsBeingChecked)
+        {
+            SetState(NPCState.TicketCheck);
+        }
+        else if (move != 0)
         {
             SetState(NPCState.Walking);
         }
@@ -193,6 +198,14 @@ public class NPCBrain : MonoBehaviour
             case NPCState.Walking:
             {
                 atlasRenderer.renderInput.FlipH(move < 0, atlasRenderer.sprite);
+            }
+            break;
+            case NPCState.TicketCheck:
+            {
+                if (!ticketIsBeingChecked)
+                {
+                    curBehaviour = PickBehaviour();
+                }
             }
             break;
             case NPCState.Smoking:
@@ -297,6 +310,8 @@ public class NPCBrain : MonoBehaviour
         {
             atlasRenderer.renderInput.UpdateDepthRealtime(curCarriage.standingDepth);
         }
+
+
         switch (curState)
         {
             case NPCState.Idling:
@@ -311,11 +326,25 @@ public class NPCBrain : MonoBehaviour
                 {
                     curClip = RandomStandingIdleMotion();
                 }
+
             }
             break;
             case NPCState.Walking:
             {
                 curClip = atlasRenderer.renderInput.atlas.clipDict[(int)NPCMotion.Walking];
+            }
+            break;
+            case NPCState.TicketCheck:
+            {
+                if (chairPosIndex != int.MaxValue)
+                {
+                    curClip = RandomSittingIdleMotion();
+                }
+                else
+                {
+                    curClip = RandomStandingIdleMotion();
+                }
+                atlasRenderer.renderInput.custom.y = 1;
             }
             break;
             case NPCState.Smoking:

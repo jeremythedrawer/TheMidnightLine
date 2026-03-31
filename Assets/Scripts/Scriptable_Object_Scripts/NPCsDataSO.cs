@@ -18,5 +18,4 @@ public class NPCsDataSO : ScriptableObject
     [Header("Generated")]
     public Dictionary<Appearance, string> appearanceDescDict;
     public Dictionary<Behaviours, string> behaviourDescDict;
-    public NPCProfile[] profilePageDatas;
 }
