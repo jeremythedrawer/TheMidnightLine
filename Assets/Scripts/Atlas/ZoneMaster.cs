@@ -45,7 +45,7 @@ public class ZoneMaster : MonoBehaviour
 
         spawner.spawnMaxPos.x = firstStationPos + spawner.spawnerSize.x;
         spawner.spawnMaxPos.y = trainStats.trainMaxHeight + camSettings.maxProjectionSize + spawner.spawnerSize.y;
-        spawner.spawnMaxPos.z = 64; //NOTE: Furthest postion. If changed this needs to be changed on the compute shader as well
+        spawner.spawnMaxPos.z = Parallax.FAR_CLIP;
 
         spawner.spawnMinPos.x = firstStationPos - spawner.spawnerSize.x;
         spawner.spawnMinPos.y = -camSettings.maxProjectionSize - spawner.spawnerSize.y;

@@ -33,7 +33,7 @@ Shader "Custom/s_matrix"
 
 			float3 worldPos = ComputeWorldSpacePosition(input.texcoord, depth, UNITY_MATRIX_I_VP);
 			
-			float linearDepth = pow(saturate((worldPos.z - _PlayerDepth) / 64), 1); // 1 is the depth of the player
+			float linearDepth = pow(saturate((worldPos.z - _PlayerDepth) / 128), 1); // 1 is the depth of the player
 			float2 aspect = float2(_ScreenParams.x / _ScreenParams.y, 1);
 
 			float2 centerUV = input.texcoord * aspect - 0.5 * aspect;
@@ -60,8 +60,8 @@ Shader "Custom/s_matrix"
 			sunRays *= skyMask;
 			
 
-			float grey = (blit.r * (1 - skyMask)) + sunRays + (linearDepth * 0.15);
-			float3 finalColor = lerp(_Color1, _Color2, grey);
+			float3 finalColor = (blit.rgb * (1 - skyMask)) + sunRays + (linearDepth * 0.1);
+			finalColor = lerp(_Color1, _Color2, finalColor);
 			return half4(finalColor, 1);
 		}
 	ENDHLSL

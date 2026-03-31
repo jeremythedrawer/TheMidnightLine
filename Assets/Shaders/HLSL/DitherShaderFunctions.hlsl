@@ -59,27 +59,11 @@ float2 Rotate(float2 p, float angle)
     return float2(c * p.x - s * p.y, s * p.x + c * p.y);
 }
 
-void BayerMatrix_float(float value, float bayerIndex, float2 pixelCoord, out float output)
-{
-
-    float bayerValues[3] = { 0, 0, 0 };
-    bayerValues[0] = GetBayer2(pixelCoord.x, pixelCoord.y);
-    bayerValues[1] = GetBayer4(pixelCoord.x, pixelCoord.y);
-    bayerValues[2] = GetBayer8(pixelCoord.x, pixelCoord.y);
-    
-    output = round(value + bayerValues[bayerIndex]);
-}
-
-
 float BayerMatrix(float value, float bayerIndex, float2 pixelCoord)
 {
 
-    float bayerValues[3] = { 0, 0, 0 };
-    bayerValues[0] = GetBayer2(pixelCoord.x, pixelCoord.y);
-    bayerValues[1] = GetBayer4(pixelCoord.x, pixelCoord.y);
-    bayerValues[2] = GetBayer8(pixelCoord.x, pixelCoord.y);
+    float bayerValues = GetBayer4(pixelCoord.x, pixelCoord.y);
     
-    value = round(value + bayerValues[bayerIndex]);
-    
-    return value;
+    return round(value + bayerValues + 0.01);
 }
+

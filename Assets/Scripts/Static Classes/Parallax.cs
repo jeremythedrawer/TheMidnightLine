@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 public static class Parallax
 {
-    const float FAR_CLIP = 64;
+    public const float FAR_CLIP = 128;
 
     public enum RepeatType
     {

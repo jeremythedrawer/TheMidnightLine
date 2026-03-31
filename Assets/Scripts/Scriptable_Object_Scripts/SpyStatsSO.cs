@@ -16,8 +16,6 @@ public class SpyStatsSO : ScriptableObject
     public float curGravityScale;
     public float lastJumpTime;
     public float coyoteTimeElapsed;
-    public float curCarriageMinXPos;
-    public float curCarriageMaxXPos;
     public float maxJumpHeight;
     public float lastGroundHeight;
     public LayerMask curLocationLayer;

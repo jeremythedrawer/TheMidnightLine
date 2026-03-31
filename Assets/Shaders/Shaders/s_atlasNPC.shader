@@ -1,4 +1,4 @@
-Shader "Custom/s_atlasStandard"
+Shader "Custom/s_atlasNPC"
 {
     Properties
     {
@@ -7,17 +7,20 @@ Shader "Custom/s_atlasStandard"
 
     SubShader
     {
-        Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
+        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
         ZWrite On
         ZTest LEqual
         Blend SrcAlpha OneMinusSrcAlpha
+
         Pass
         {
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
+            #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
             #pragma vertex vert
             #pragma fragment frag
+
 
             struct Attributes
             {
@@ -34,7 +37,7 @@ Shader "Custom/s_atlasStandard"
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
-
+            
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
@@ -83,8 +86,8 @@ Shader "Custom/s_atlasStandard"
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 finalColor = color.rgb;
-
+                half3 finalColor = color.rgb + (float3(0.1, 0, 0) * spriteData.custom.y);
+                color.a = BayerMatrix(color.a * spriteData.custom.x, 1, i.positionHCS.xy);
                 clip(color.a - 0.001);
                 return half4 (finalColor, 1);
             }

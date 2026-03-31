@@ -124,7 +124,9 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                         if (renderInput.gameObject.scene != prefabScene) continue;
                     }
 #endif
-                    //if (atlasRenderer.bounds.max.x < cameraStats.camLeft || atlasRenderer.bounds.min.x > cameraStats.camRight || atlasRenderer.bounds.max.y < cameraStats.camBottom || atlasRenderer.bounds.min.y > cameraStats.camTop) continue;
+#if !UNITY_EDITOR
+                    if (renderInput.bounds.max.x < cameraStats.camWorldLeft || renderInput.bounds.min.x > cameraStats.camWorldRight || renderInput.bounds.max.y < cameraStats.camWorldBottom || renderInput.bounds.min.y > cameraStats.camWorldTop) continue;
+#endif
 
                     batch.data.spriteData[count] = new SpriteData
                     {
@@ -149,7 +151,9 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                         if (renderInput.gameObject.scene != prefabScene) continue;
                     }
 #endif
-                    //if (renderInput.bounds.max.x < cameraStats.camLeft || renderInput.bounds.min.x > cameraStats.camRight || renderInput.bounds.max.y < cameraStats.camBottom || renderInput.bounds.min.y > cameraStats.camTop) continue;
+#if !UNITY_EDITOR
+                    if (renderInput.bounds.max.x < cameraStats.camWorldLeft || renderInput.bounds.min.x > cameraStats.camWorldRight || renderInput.bounds.max.y < cameraStats.camWorldBottom || renderInput.bounds.min.y > cameraStats.camWorldTop) continue;
+#endif
                     for (int j = 0; j < renderInput.worldPivotAndSize.Length; j++)
                     {
                         batch.data.spriteData[count] = new SpriteData

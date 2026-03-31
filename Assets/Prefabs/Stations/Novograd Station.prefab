@@ -100,6 +100,8 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 3806329923578194732}
+  - {fileID: 6550810569019902742}
+  - {fileID: 6110243401410499048}
   - {fileID: 1994373065870132273}
   m_Father: {fileID: 7355965477580141084}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -518,7 +520,7 @@ Transform:
   m_GameObject: {fileID: 5068393425464305075}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -52.010147, y: -1.39, z: -1}
+  m_LocalPosition: {x: -52.010147, y: -1.318, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -544,7 +546,7 @@ MonoBehaviour:
     boxCollider: {fileID: 0}
     gameObject: {fileID: 5068393425464305075}
     bounds:
-      m_Center: {x: 295.13373, y: -1.0372221, z: 1}
+      m_Center: {x: 295.13373, y: -0.9652222, z: 1}
       m_Extent: {x: 47.14389, y: 0.35277778, z: 0.1}
     worldPivotAndSize:
     - {x: 0, y: 0, z: 0.35, w: 0}
@@ -649,6 +651,220 @@ MonoBehaviour:
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   platformRenderer: {fileID: 3735235545740367740}
+--- !u!1 &8314057618691228891
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6110243401410499048}
+  - component: {fileID: 8078380289706586262}
+  m_Layer: 15
+  m_Name: Grass (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6110243401410499048
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8314057618691228891}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -52.240005, y: -1.94, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4696413425584186154}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &8078380289706586262
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8314057618691228891}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065474de7e082734984a15c3949e3dfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSliceRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+      depthOrder: 1
+    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+    boxCollider: {fileID: 0}
+    gameObject: {fileID: 8314057618691228891}
+    bounds:
+      m_Center: {x: 294.90387, y: -1.5872223, z: 1}
+      m_Extent: {x: 47.14389, y: 0.35277778, z: 0.1}
+    worldPivotAndSize:
+    - {x: 0, y: 0, z: 0.35, w: 0}
+    - {x: -0.35, y: 0, z: 4.977778, w: 0}
+    - {x: -93.93222, y: 0, z: 0.35555556, w: 0}
+    - {x: 0, y: -0, z: 0.35, w: 0.7}
+    - {x: -0.35, y: -0, z: 4.977778, w: 0.7}
+    - {x: -93.93222, y: -0, z: 0.35555556, w: 0.7}
+    - {x: 0, y: -0.7, z: 0.35, w: 0.005555553}
+    - {x: -0.35, y: -0.7, z: 4.977778, w: 0.005555553}
+    - {x: -93.93222, y: -0.7, z: 0.35555556, w: 0.005555553}
+    uvSizeAndPos:
+    - {x: 0.015380859, y: 0, z: 0.5004883, w: 0.9055176}
+    - {x: 0.21875, y: 0, z: 0.51586914, w: 0.9055176}
+    - {x: 0.015625, y: 0, z: 0.73461914, w: 0.9055176}
+    - {x: 0.015380859, y: 0.030761719, z: 0.5004883, w: 0.9055176}
+    - {x: 0.21875, y: 0.030761719, z: 0.51586914, w: 0.9055176}
+    - {x: 0.015625, y: 0.030761719, z: 0.73461914, w: 0.9055176}
+    - {x: 0.015380859, y: 0.00024414051, z: 0.5004883, w: 0.9362793}
+    - {x: 0.21875, y: 0.00024414051, z: 0.51586914, w: 0.9362793}
+    - {x: 0.015625, y: 0.00024414051, z: 0.73461914, w: 0.9362793}
+    scaleAndFlip:
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 18.8, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 18.8, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 18.8, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 47.14389, y: 0.35277778}
+  spriteIndex: 0
+  width: 18.8
+  height: 1
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0.24975586, y: 0.03100586, z: 0.5004883, w: 0.9055176}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 5.6833334, y: 0.70555556, z: 1}
+      index: 0
+    slice: {x: 0.06158358, y: 0.9374389, z: 0, w: 0.992126}
+    uvSizeAndPos:
+    - {x: 0.015380859, y: 0, z: 0.5004883, w: 0.9055176}
+    - {x: 0.21875, y: 0, z: 0.51586914, w: 0.9055176}
+    - {x: 0.015625, y: 0, z: 0.73461914, w: 0.9055176}
+    - {x: 0.015380859, y: 0.030761719, z: 0.5004883, w: 0.9055176}
+    - {x: 0.21875, y: 0.030761719, z: 0.51586914, w: 0.9055176}
+    - {x: 0.015625, y: 0.030761719, z: 0.73461914, w: 0.9055176}
+    - {x: 0.015380859, y: 0.00024414051, z: 0.5004883, w: 0.9362793}
+    - {x: 0.21875, y: 0.00024414051, z: 0.51586914, w: 0.9362793}
+    - {x: 0.015625, y: 0.00024414051, z: 0.73461914, w: 0.9362793}
+    worldSlices: {x: 0.35, y: 0.35555556, z: 0, w: 0.005555553}
+  quadCount: 0
+--- !u!1 &8469798913210928976
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6550810569019902742}
+  - component: {fileID: 2219934484422693344}
+  m_Layer: 15
+  m_Name: Grass (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6550810569019902742
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8469798913210928976}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -52.759995, y: -1.658, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4696413425584186154}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2219934484422693344
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8469798913210928976}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 065474de7e082734984a15c3949e3dfc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSliceRenderer
+  renderInput:
+    batchKey:
+      material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+      depthOrder: 1
+    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+    boxCollider: {fileID: 0}
+    gameObject: {fileID: 8469798913210928976}
+    bounds:
+      m_Center: {x: 294.3839, y: -1.3052223, z: 1}
+      m_Extent: {x: 47.14389, y: 0.35277778, z: 0.1}
+    worldPivotAndSize:
+    - {x: 0, y: 0, z: 0.35, w: 0}
+    - {x: -0.35, y: 0, z: 4.977778, w: 0}
+    - {x: -93.93222, y: 0, z: 0.35555556, w: 0}
+    - {x: 0, y: -0, z: 0.35, w: 0.7}
+    - {x: -0.35, y: -0, z: 4.977778, w: 0.7}
+    - {x: -93.93222, y: -0, z: 0.35555556, w: 0.7}
+    - {x: 0, y: -0.7, z: 0.35, w: 0.005555553}
+    - {x: -0.35, y: -0.7, z: 4.977778, w: 0.005555553}
+    - {x: -93.93222, y: -0.7, z: 0.35555556, w: 0.005555553}
+    uvSizeAndPos:
+    - {x: 0.015380859, y: 0, z: 0.5004883, w: 0.9055176}
+    - {x: 0.21875, y: 0, z: 0.51586914, w: 0.9055176}
+    - {x: 0.015625, y: 0, z: 0.73461914, w: 0.9055176}
+    - {x: 0.015380859, y: 0.030761719, z: 0.5004883, w: 0.9055176}
+    - {x: 0.21875, y: 0.030761719, z: 0.51586914, w: 0.9055176}
+    - {x: 0.015625, y: 0.030761719, z: 0.73461914, w: 0.9055176}
+    - {x: 0.015380859, y: 0.00024414051, z: 0.5004883, w: 0.9362793}
+    - {x: 0.21875, y: 0.00024414051, z: 0.51586914, w: 0.9362793}
+    - {x: 0.015625, y: 0.00024414051, z: 0.73461914, w: 0.9362793}
+    scaleAndFlip:
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 18.8, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 18.8, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    - {x: 18.8, y: 1, z: 1, w: 1}
+    - {x: 1, y: 1, z: 1, w: 1}
+    boundsOffset: {x: 47.14389, y: 0.35277778}
+  spriteIndex: 0
+  width: 18.8
+  height: 1
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0.24975586, y: 0.03100586, z: 0.5004883, w: 0.9055176}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 5.6833334, y: 0.70555556, z: 1}
+      index: 0
+    slice: {x: 0.06158358, y: 0.9374389, z: 0, w: 0.992126}
+    uvSizeAndPos:
+    - {x: 0.015380859, y: 0, z: 0.5004883, w: 0.9055176}
+    - {x: 0.21875, y: 0, z: 0.51586914, w: 0.9055176}
+    - {x: 0.015625, y: 0, z: 0.73461914, w: 0.9055176}
+    - {x: 0.015380859, y: 0.030761719, z: 0.5004883, w: 0.9055176}
+    - {x: 0.21875, y: 0.030761719, z: 0.51586914, w: 0.9055176}
+    - {x: 0.015625, y: 0.030761719, z: 0.73461914, w: 0.9055176}
+    - {x: 0.015380859, y: 0.00024414051, z: 0.5004883, w: 0.9362793}
+    - {x: 0.21875, y: 0.00024414051, z: 0.51586914, w: 0.9362793}
+    - {x: 0.015625, y: 0.00024414051, z: 0.73461914, w: 0.9362793}
+    worldSlices: {x: 0.35, y: 0.35555556, z: 0, w: 0.005555553}
+  quadCount: 0
 --- !u!1 &8483931072574100276
 GameObject:
   m_ObjectHideFlags: 0

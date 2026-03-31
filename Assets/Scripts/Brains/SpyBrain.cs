@@ -185,8 +185,6 @@ public class SpyBrain : MonoBehaviour
         if ((layerSettings.trainLayers.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
             SetLocationData(collision.bounds, layerSettings.trainLayers.insideCarriageBounds);
-            //stats.curCarriageMinXPos = curCarriage.carriageCollider.bounds.min.x;
-            //stats.curCarriageMaxXPos = curCarriage.carriageCollider.bounds.max.x;
         }
         else if ((layerSettings.trainLayers.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
@@ -217,8 +215,6 @@ public class SpyBrain : MonoBehaviour
         if ((layerSettings.trainLayers.carriage.value & (1 << collision.gameObject.layer)) != 0)
         {
             curCarriage = null;
-            stats.curCarriageMinXPos = 0;
-            stats.curCarriageMaxXPos = 0;
         }
     }
     private void ChooseState()

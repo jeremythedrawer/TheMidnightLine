@@ -4,7 +4,6 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.Users;
-
 public class InputManager : MonoBehaviour
 {
     public PlayerInputsSO playerInputs;
@@ -22,7 +21,7 @@ public class InputManager : MonoBehaviour
     InputAction mouseLeftPressAction;
     InputAction interactAction;
     InputAction cancelAction;
-
+    InputAction ticketAction;
     Action<string> OnDeviceChanged;
 
     public static InputDevice curDevice;
@@ -45,6 +44,7 @@ public class InputManager : MonoBehaviour
         mouseLeftPressAction = playerInput.actions["Player/MouseLeftPress"];
 
         cancelAction = playerInput.actions["Player/Cancel"];
+        ticketAction = playerInput.actions["Player/Ticket"];
 
         moveAction.performed += context =>
         {
@@ -90,6 +90,7 @@ public class InputManager : MonoBehaviour
         runAction.canceled += context => playerInputs.run = false;
 
         cancelAction.started += context => playerInputs.cancel = true;
+        ticketAction.started += context => playerInputs.ticket = true;
     }
 
     private void OnEnable()
@@ -131,6 +132,7 @@ public class InputManager : MonoBehaviour
     {
         playerInputs.cancel = false;
         playerInputs.interact = false;
+        playerInputs.ticket = false;
         playerInputs.mouseLeftDown = false;
         playerInputs.mouseLeftUp = false;
         playerInputs.notepad.x = 0;

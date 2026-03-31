@@ -47,7 +47,6 @@ public class NPCBrain : MonoBehaviour
     public float targetDist;
     public float behaviourClock;
     public float stateDuration;
-    public float curAlpha;
     public float targetAlpha;
     public float atlasIndexClock;
     public float move;
@@ -80,14 +79,13 @@ public class NPCBrain : MonoBehaviour
         curState = NPCState.Idling;
         curPath = Path.None;
         chairPosIndex = int.MaxValue;
-        curAlpha = 1;
         selectedProfileIndex = int.MaxValue;
         atlas = atlasRenderer.renderInput.atlas;
         rigidBody.includeLayers = layerSettings.stationMask;
     }
     private void OnEnable()
     {
-        gameEventData.OnStationArrival.RegisterListener(BoardTrain);
+       gameEventData.OnStationArrival.RegisterListener(BoardTrain);
     }
     private void Start()
     {
@@ -118,7 +116,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void OnDisable()
     {
-        gameEventData.OnStationArrival.UnregisterListener(BoardTrain);
+       gameEventData.OnStationArrival.UnregisterListener(BoardTrain);
     }
     private void Update()
     {
@@ -450,8 +448,8 @@ public class NPCBrain : MonoBehaviour
             rigidBody.includeLayers == layerSettings.stationMask &&
             spyStats.curGroundLayer == layerSettings.trainLayers.ground &&
             spyStats.curWorldPos.z > transform.position.z &&
-            transform.position.x > spyStats.curCarriageMinXPos &&
-            transform.position.x < spyStats.curCarriageMaxXPos;
+            transform.position.x > spyStats.curLocationBounds.min.x &&
+            transform.position.x < spyStats.curLocationBounds.max.x;
 
         float targAlpha = shouldFadeOut ? 0f : 1f;
 
@@ -466,7 +464,7 @@ public class NPCBrain : MonoBehaviour
     }
     private async UniTask FadeTo()
     {
-        float startAlpha = curAlpha;
+        float startAlpha = atlasRenderer.renderInput.custom.x;
         float elapsed = 0f;
         try
         {
@@ -475,14 +473,12 @@ public class NPCBrain : MonoBehaviour
                 elapsed += Time.deltaTime;
                 float t = elapsed / npcData.fadeTime;
 
-                curAlpha = Mathf.Lerp(startAlpha, targetAlpha, t);
-                atlasRenderer.renderInput.custom.x = curAlpha;
+                atlasRenderer.renderInput.custom.x = Mathf.Lerp(startAlpha, targetAlpha, t);
 
                 await UniTask.Yield(PlayerLoopTiming.Update, ctsFade.Token);
             }
 
-            curAlpha = targetAlpha;
-            atlasRenderer.renderInput.custom.x = curAlpha;
+            atlasRenderer.renderInput.custom.x = targetAlpha;
         }
         catch (OperationCanceledException)
         {

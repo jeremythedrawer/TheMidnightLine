@@ -91,6 +91,7 @@ public class ParallaxController : MonoBehaviour
         if (!ignoreParallax)
         {
             float parallaxIncrement = UpdateParallaxPosition(camStats, spyStats, trainStats, parallaxFactor);
+
             worldPos.x -= parallaxIncrement;
             bounds.center = worldPos + boundsOffset;
         }

@@ -292,6 +292,7 @@ public class Notepad : MonoBehaviour
 
                 Vector3 pagePos = bindingRings_renderer.transform.position + Vector3.forward;
                 if (frontPages != 0) pagePos.z += 2;
+                pagePos.y += UnityEngine.Random.Range(-0.1f, 0.1f);
                 Page page = Instantiate(page_prefab, pagePos, Quaternion.identity, transform);
                 page.Init(traitorProfile);
                 page.gameObject.name = "Page_" + frontPages;
