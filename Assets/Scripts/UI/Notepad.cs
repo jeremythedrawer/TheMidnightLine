@@ -34,27 +34,28 @@ public class Notepad : MonoBehaviour
     
     public AtlasUIMotionRenderer leftHand_renderer;
 
-    public Transform page_parent;
     public Page page_prefab;
     
-    public Page activePage;
-
-
     [Header("Generated")]
-    public List<NPCProfile> totalNPCProfiles;
-    public List<NPCProfile> duplicateBehaviourProfiles;
-   
 
-    public static NameData nameData;
+    public Page activePage;
+    public Page[] pages;
+    public int activePageIndex;
+    public int lastPageIndex;
     public Bounds totalBounds;
+    
     public AtlasClip leftHandClip;
+    
     public State curState;
     public KeyframeState curKeyframeState;
+    
     public int lastLeftHandKeyframeIndex;
-    public int nextDepthFront;
-    public int nextDepthBack;
     public int leftHandDepthFront;
     public int leftHandDepthBack;
+    public int frontPages;
+    public int backPages;
+    
+    public static NameData nameData;
     private void OnValidate()
     {
         SetTotalBounds();
@@ -75,23 +76,39 @@ public class Notepad : MonoBehaviour
         leftHandClip = leftHand_renderer.renderInput.atlas.clipDict[(int)NotepadMotion.LeftHand];
         lastLeftHandKeyframeIndex = leftHandClip.keyFrames.Length - 1;
 
-        nextDepthFront = rightHand_renderer.renderInput.batchKey.depthOrder - 1;
-        nextDepthBack = rightHand_renderer.renderInput.batchKey.depthOrder + 1;
-
-        leftHandDepthFront =  nextDepthFront - 1;
-        leftHandDepthBack = nextDepthBack + 1;
+        leftHandDepthFront =  (int)(bindingRings_renderer.transform.position.z - 1);
+        leftHandDepthBack = (int)(rightHand_renderer.transform.position.z + 1);
 
 
     }
     private void Update()
     {
-        if (playerInputs.notepad.y == 1)
+        if (activePageIndex < lastPageIndex && playerInputs.notepad.y == 1 && curState != State.FlippingUp)
         {
             curState = State.FlippingUp;
+            if (curKeyframeState == KeyframeState.Start) return;
+            
+            pages[activePageIndex + 1].gameObject.SetActive(true);
+
+            leftHand_renderer.renderInput.UpdateDepthRealtime(leftHandDepthFront);
+            leftHand_renderer.PlayClipOneShot(leftHandClip);
+            
+            curKeyframeState = KeyframeState.Start;
         }
-        if (playerInputs.notepad.y == -1)
+        else if (activePageIndex > 0 && playerInputs.notepad.y == -1 && curState != State.FlippingDown)
         {
             curState = State.FlippingDown;
+            if (curKeyframeState == KeyframeState.Start) return;
+
+            leftHand_renderer.renderInput.UpdateDepthRealtime(leftHandDepthBack);
+
+            activePage.UpdatePageDepth((int)(rightHand_renderer.transform.position.z - 1));
+            activePageIndex--;
+            activePage = pages[activePageIndex];
+            activePage.gameObject.SetActive(true);
+            leftHand_renderer.PlayClipOneShotReverse(leftHandClip);
+            
+            curKeyframeState = KeyframeState.Start;
         }
 
         switch (curState)
@@ -100,14 +117,6 @@ public class Notepad : MonoBehaviour
             {
                 switch (leftHand_renderer.curFrameIndex)
                 {
-                    case 0:
-                    {
-                        if (curKeyframeState == KeyframeState.Start) return;
-                        leftHand_renderer.PlayClipOneShot(leftHandClip);
-                        curKeyframeState = KeyframeState.Start;
-                    }
-                    break;
-
                     case 2:
                     {
                         if (curKeyframeState == KeyframeState.PaperClip) return;
@@ -136,6 +145,7 @@ public class Notepad : MonoBehaviour
                     {
                         if (curKeyframeState == KeyframeState.ChangeDepth) return;
                         leftHand_renderer.renderInput.UpdateDepthRealtime(leftHandDepthBack);
+                        activePage.UpdatePageDepth(leftHandDepthBack + 1);
                         curKeyframeState = KeyframeState.ChangeDepth;
                     }
                     break;
@@ -145,6 +155,10 @@ public class Notepad : MonoBehaviour
                 {
                     if (curKeyframeState == KeyframeState.None) return;
                     curState = State.None;
+                    activePage.gameObject.SetActive(false);
+                    activePageIndex++;
+                    activePage = pages[activePageIndex];
+                    activePage.UpdatePageDepth(leftHandDepthFront + 2);
                     curKeyframeState = KeyframeState.None;
                 }
             }
@@ -157,6 +171,7 @@ public class Notepad : MonoBehaviour
                     case 0:
                     {
                         if (curKeyframeState == KeyframeState.None) return;
+                        pages[activePageIndex + 1].gameObject.SetActive(false);
                         curState = State.None;
                         curKeyframeState = KeyframeState.None;
                     }
@@ -187,16 +202,10 @@ public class Notepad : MonoBehaviour
                     {
                         if (curKeyframeState == KeyframeState.ChangeDepth) return;
                         leftHand_renderer.renderInput.UpdateDepthRealtime(leftHandDepthFront);
+                        activePage.UpdatePageDepth(leftHandDepthFront + 2);
                         curKeyframeState = KeyframeState.ChangeDepth;
                     }
                     break;
-                }
-
-                if (leftHand_renderer.curFrameIndex == lastLeftHandKeyframeIndex)
-                {
-                    if (curKeyframeState == KeyframeState.Start) return;
-                    leftHand_renderer.PlayClipOneShotReverse(leftHandClip);
-                    curKeyframeState = KeyframeState.Start;
                 }
             }
             break;
@@ -204,7 +213,9 @@ public class Notepad : MonoBehaviour
     }
     private void CreateNPCProfiles()
     {
-        totalNPCProfiles = new List<NPCProfile>();
+        List<NPCProfile> totalNPCProfiles = new List<NPCProfile>();
+        List<NPCProfile> duplicateBehaviourProfiles = new List<NPCProfile>();
+        
         for (int i = 0; i < trip.stationsDataArray.Length; i++)
         {
             StationSO station = trip.stationsDataArray[i];
@@ -262,6 +273,9 @@ public class Notepad : MonoBehaviour
             }
         }
 
+
+        List<Page> pageList = new List<Page>();
+
         for (int i = 0; i < trip.stationsDataArray.Length; i++)
         {
             StationSO station = trip.stationsDataArray[i];
@@ -276,10 +290,21 @@ public class Notepad : MonoBehaviour
                 totalNPCProfiles.RemoveAt(randProfileIndex);
                 station.traitorProfiles.Add(traitorProfile);
 
-                Page page = Instantiate(page_prefab, bindingRings_renderer.transform.position, Quaternion.identity, transform);
+                Vector3 pagePos = bindingRings_renderer.transform.position + Vector3.forward;
+                if (frontPages != 0) pagePos.z += 2;
+                Page page = Instantiate(page_prefab, pagePos, Quaternion.identity, transform);
                 page.Init(traitorProfile);
+                page.gameObject.name = "Page_" + frontPages;
+                pageList.Add(page);
+                if (frontPages != 0) page.gameObject.SetActive(false);
+                frontPages++;
             }
         }
+
+        pages = pageList.ToArray();
+        activePageIndex = 0;
+        activePage = pages[activePageIndex];
+        lastPageIndex = pages.Length - 1;
 
         totalNPCProfiles.AddRange(duplicateBehaviourProfiles);
 

@@ -32,7 +32,6 @@ public class CameraController : MonoBehaviour
     }
     private void Start()
     {
-        cam = Camera.main;
         float orthoSize = (640 / (float)PIXELS_PER_UNIT);
 
         stats.targetSize = orthoSize;

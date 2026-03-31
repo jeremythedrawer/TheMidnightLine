@@ -42,7 +42,6 @@ public class Page : MonoBehaviour
     {
         paperRenderer.PlayClipOneShot(paperClip);
     }
-
     public void PlayPaperClipReverse()
     {
         paperRenderer.PlayClipOneShotReverse(paperClip);
@@ -52,17 +51,28 @@ public class Page : MonoBehaviour
         behavioursRenderer0.enabled = toggle;
         behaviourRenderer1.enabled = toggle;
         appearenceRenderer.enabled = toggle;
-        appearenceRenderer.enabled = toggle;
         departureStationRenderer.enabled = toggle;
     }
-
     public void TogglePageContentTopHalf(bool toggle)
     {
         nameRenderer.enabled = toggle;
-        nameRenderer.enabled = toggle;
         mugshotRenderer.enabled = toggle;
     }
-
+    public void UpdatePageDepth(int depth)
+    {
+        paperRenderer.renderInput.UpdateDepthRealtime(depth);
+        int contentDepth = depth - 1;
+        behavioursRenderer0.renderInput.UpdateDepthRealtime(contentDepth);
+        behaviourRenderer1.renderInput.UpdateDepthRealtime(contentDepth);
+        appearenceRenderer.renderInput.UpdateDepthRealtime(contentDepth);
+        departureStationRenderer.renderInput.UpdateDepthRealtime(contentDepth);
+        nameRenderer.renderInput.UpdateDepthRealtime(contentDepth);
+        mugshotRenderer.renderInput .UpdateDepthRealtime(contentDepth);
+    }
+    public void TogglePageRenderer(bool toggle)
+    {
+        paperRenderer.enabled = toggle;
+    }
     private Behaviours GetBehaviourAtIndex(Behaviours behaviours, int index)
     {
         int count = 0;
@@ -78,7 +88,6 @@ public class Page : MonoBehaviour
         }
         return Behaviours.None;
     }
-
     private Appearance GetAppearanceAtIndex(Appearance appearance, int index)
     {
         int count = 0;
@@ -94,7 +103,6 @@ public class Page : MonoBehaviour
         }
         return Appearance.None;
     }
-
     private int GetFlagAmount(int value)
     {
         int count = 0;

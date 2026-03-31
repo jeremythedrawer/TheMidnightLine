@@ -29,6 +29,7 @@ public class AtlasSliceRenderer : AtlasRenderer
     {
         if(renderInput == null) return;
         renderInput.InitRenderer(gameObject);
+        renderInput.UpdateDepthRealtime((int)transform.position.z);
         RegisterMultipleRenderInput(renderInput);
     }
     private void OnDisable()

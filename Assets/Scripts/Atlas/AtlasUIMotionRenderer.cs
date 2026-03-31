@@ -99,9 +99,11 @@ public class AtlasUIMotionRenderer : AtlasRenderer
     private async UniTask PlayingClipOneShot(AtlasClip clip)
     {
         keyframeClock = 0;
+        int lastIndex = clip.keyFrames.Length - 1;
         try
         {
-            while (curFrameIndex < clip.keyFrames.Length)
+            curFrameIndex = 0;
+            while (curFrameIndex < lastIndex)
             {
                 sprite = AtlasRendering.GetNextKeyframeSprite(clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
                 renderInput.UpdateRenderInputsScreen(1, 1, sprite, camStats);
@@ -115,7 +117,7 @@ public class AtlasUIMotionRenderer : AtlasRenderer
     private async UniTask PlayingClipOneShotReverse(AtlasClip clip)
     {
         keyframeClock = 0;
-
+        curFrameIndex = clip.keyFrames.Length - 1;
         try
         {
             while (curFrameIndex >= 0)
@@ -126,6 +128,7 @@ public class AtlasUIMotionRenderer : AtlasRenderer
 
                 await UniTask.Yield(ctsOneShot.Token);
             }
+
         }
         catch (OperationCanceledException)
         { }

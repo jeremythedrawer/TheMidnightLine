@@ -60,6 +60,8 @@ public class AtlasUISimpleRenderer : AtlasRenderer
 
     public void SetSprite(SimpleSprite sprite)
     {
+        spriteIndex = sprite.index;
+       
         renderInput.UpdateRenderInputsScreen(width, height, sprite, camStats);
     }
 
