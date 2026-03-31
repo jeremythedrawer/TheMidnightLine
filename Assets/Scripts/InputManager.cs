@@ -132,11 +132,11 @@ public class InputManager : MonoBehaviour
     {
         playerInputs.cancel = false;
         playerInputs.interact = false;
-        playerInputs.ticket = false;
         playerInputs.mouseLeftDown = false;
         playerInputs.mouseLeftUp = false;
         playerInputs.notepad.x = 0;
         playerInputs.notepad.y = 0;
+        playerInputs.ticket = false;
     }
     private void CheckDevice(InputControl value, InputEventPtr ptr)
     {

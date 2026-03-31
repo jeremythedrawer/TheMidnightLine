@@ -8,6 +8,7 @@ public class PlayerInputsSO : ScriptableObject
     public bool run;
     public bool interact;
     public bool ticket;
+    public bool map;
     public Vector2 notepad;
     public Vector2 mouseScreenPos;
     public Vector2 mouseWorldPos;

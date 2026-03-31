@@ -24,10 +24,6 @@ public class AtlasTextRenderer : AtlasRenderer
     public Vector3 screenPosition;
     public float cursorX;
     public SimpleSprite[] sprites;
-    private void Awake()
-    {
-        renderInput.InitRenderer(gameObject);
-    }
 
     private void OnValidate()
     {
@@ -38,6 +34,7 @@ public class AtlasTextRenderer : AtlasRenderer
     {
         renderInput.InitRenderer(gameObject);
         RegisterMultipleRenderInput(renderInput);
+        cam = Camera.main;
     }
 
     private void OnDisable()

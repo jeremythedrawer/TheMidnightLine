@@ -199,7 +199,6 @@ public static class AtlasRendering
         public void UpdateDepthRealtime(int newDepth)
         {
             gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, newDepth);
-            //AtlasRendering.UpdateDepth(gameObject.transform, ref batchKey, multRenderInput: this);
         }
         public void InitRenderer(GameObject obj)
         {
