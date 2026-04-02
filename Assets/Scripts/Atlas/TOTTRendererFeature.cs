@@ -124,6 +124,8 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                         if (renderInput.gameObject.scene != prefabScene) continue;
                     }
 #endif
+
+                    renderInput.UpdateBounds();
 #if !UNITY_EDITOR
                     if (renderInput.bounds.max.x < cameraStats.camWorldLeft || renderInput.bounds.min.x > cameraStats.camWorldRight || renderInput.bounds.max.y < cameraStats.camWorldBottom || renderInput.bounds.min.y > cameraStats.camWorldTop) continue;
 #endif
@@ -151,6 +153,9 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                         if (renderInput.gameObject.scene != prefabScene) continue;
                     }
 #endif
+
+                    renderInput.UpdateBounds();
+
 #if !UNITY_EDITOR
                     if (renderInput.bounds.max.x < cameraStats.camWorldLeft || renderInput.bounds.min.x > cameraStats.camWorldRight || renderInput.bounds.max.y < cameraStats.camWorldBottom || renderInput.bounds.min.y > cameraStats.camWorldTop) continue;
 #endif

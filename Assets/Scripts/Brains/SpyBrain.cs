@@ -52,6 +52,7 @@ public class SpyBrain : MonoBehaviour
 
     public bool canExitCheckTicket;
     public bool checkingTicket;
+    public bool checkingNotepad;
     [Serializable] public struct CollisionData
     {
         public Vector2 groundLeft;
@@ -80,14 +81,14 @@ public class SpyBrain : MonoBehaviour
         CalculateCollisionPoints();
     }
     private void OnEnable()
-    {
-        gameEventData.OnStationArrival.RegisterListener(() => stats.canBoardTrain = true);
+    {     
+        gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(SpyCanBoardTrain);
         gameEventData.OnInteract.RegisterListener(OpenTrainDoors);
         gameEventData.OnInteract.RegisterListener(EnterTrain);
     }
     private void OnDisable()
     {
-        gameEventData.OnStationArrival.UnregisterListener(() => stats.canBoardTrain = true);
+        gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(SpyCanBoardTrain);
         gameEventData.OnInteract.UnregisterListener(OpenTrainDoors);
         gameEventData.OnInteract.UnregisterListener(EnterTrain);
 
@@ -224,10 +225,13 @@ public class SpyBrain : MonoBehaviour
     }
     private void ChooseState()
     {
-        //TODO do heavy land logic
         if ((playerInputs.ticket && stats.onTrain) || checkingTicket)
         {
             SetState(State.Ticket);
+        }
+        else if (playerInputs.notepad.x == -1 || checkingNotepad)
+        {
+            SetState(State.Notepad);
         }
         else if ((stats.isGrounded && stats.willJump) || stats.moveVelocity.y > 0 || stats.coyoteJump)
         {
@@ -255,7 +259,6 @@ public class SpyBrain : MonoBehaviour
         }
         else
         {
-            Debug.Log(checkingTicket);
             SetState(State.Idle);
         }
     }
@@ -266,21 +269,21 @@ public class SpyBrain : MonoBehaviour
             case State.Idle:
             {
                 if (playerInputs.jump) { stats.lastJumpTime = Time.time; }
-                atlasRenderer.PlayClip(curClip);
+                atlasRenderer.PlayClip(ref curClip);
             }
             break;
             case State.Walk:
             {
                 if (playerInputs.jump) { stats.lastJumpTime = Time.time; }
                 Flip(playerInputs.move < 0);
-                atlasRenderer.PlayClip(curClip);
+                atlasRenderer.PlayClip(ref curClip);
             }
             break;
             case State.Run:
             {
                 if (playerInputs.jump) { stats.lastJumpTime = Time.time; }
                 Flip(playerInputs.move < 0);
-                atlasRenderer.PlayClip(curClip);
+                atlasRenderer.PlayClip(ref curClip);
             }
             break;
             case State.Jump:
@@ -288,7 +291,7 @@ public class SpyBrain : MonoBehaviour
                 Flip(playerInputs.move < 0);
 
                 float normHeight = (transform.position.y - stats.lastGroundHeight) / (stats.maxJumpHeight - stats.lastGroundHeight);
-                atlasRenderer.PlayManualClip(curClip, normHeight);
+                atlasRenderer.PlayManualClip(ref curClip, normHeight);
             }
             break;
             case State.Fall:
@@ -304,7 +307,7 @@ public class SpyBrain : MonoBehaviour
                 Flip(playerInputs.move < 0);
 
                 float normHeight = (transform.position.y - stats.lastGroundHeight) / (stats.maxJumpHeight - stats.lastGroundHeight);
-                atlasRenderer.PlayManualClip(curClip, 1 - normHeight);
+                atlasRenderer.PlayManualClip(ref curClip, 1 - normHeight);
             }
             break;
             case State.Hang:
@@ -319,12 +322,12 @@ public class SpyBrain : MonoBehaviour
                     stats.isClimbing = true;
                 }
 
-                atlasRenderer.PlayClip(curClip);
+                atlasRenderer.PlayClip(ref curClip);
             }
             break;
             case State.Climb:
             {
-                atlasRenderer.PlayClip(curClip);
+                atlasRenderer.PlayClip(ref curClip);
                 if (curFrameIndex == curClip.keyFrames.Length - 1)
                 {
                     stats.isClimbing = false;
@@ -336,8 +339,15 @@ public class SpyBrain : MonoBehaviour
                 if (!playerInputs.ticket) canExitCheckTicket = true;
                 if(playerInputs.ticket && canExitCheckTicket)
                 {
-                    Debug.Log("exiting ticket state");
                     checkingTicket = false;
+                }
+            }
+            break;
+            case State.Notepad:
+            {
+                if (playerInputs.notepad.x == 1)
+                {
+                    checkingNotepad = false;
                 }
             }
             break;
@@ -471,7 +481,11 @@ public class SpyBrain : MonoBehaviour
                     canExitCheckTicket = false;
                     checkingTicket = true;
                 }
-
+            }
+            break;
+            case State.Notepad:
+            {
+                checkingNotepad = true;
             }
             break;
         }
@@ -605,11 +619,15 @@ public class SpyBrain : MonoBehaviour
                     }
                     stats.curGroundLayer = layerSettings.trainLayers.ground;
                     stats.curWallLayer = layerSettings.trainWallLayers;
-                    rigidBody.includeLayers = layerSettings.trainMask;
-                    collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
                     stats.onTrain = true;
+
+                    rigidBody.includeLayers = layerSettings.trainMask;
+
+                    collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
+
                     UpdateDepth(atlasRenderer.renderInput.batchKey.depthOrder).Forget();
                     atlasRenderer.renderInput.UpdateDepthRealtime(trainStats.depthSection_front_min);
+
                     trainStats.curPassengerCount++;
                     
                     gameEventData.OnBoardingSpy.Raise();
@@ -617,6 +635,12 @@ public class SpyBrain : MonoBehaviour
                 }
             }
         }
+    }
+
+    private void SpyCanBoardTrain()
+    {
+        stats.canBoardTrain = true;
+        Debug.Log("spy can enter train");
     }
     private async UniTask UpdateDepth(float oldDepth)
     {

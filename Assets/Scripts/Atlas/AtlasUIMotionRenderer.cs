@@ -65,7 +65,7 @@ public class AtlasUIMotionRenderer : AtlasRenderer
     }
     public void PlayClip(AtlasClip clip)
     {
-        sprite = AtlasRendering.GetNextKeyframeSprite(clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
+        sprite = AtlasRendering.GetNextKeyframeSprite(ref clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
         renderInput.UpdateRenderInputsScreen(1, 1, sprite, camStats);
     }
     public void PlayClipOneShot(AtlasClip clip)
@@ -78,7 +78,7 @@ public class AtlasUIMotionRenderer : AtlasRenderer
     }
     public void PlayClipReverse(AtlasClip clip)
     {
-        sprite = AtlasRendering.GetNextKeyframeSpriteReverse(clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
+        sprite = AtlasRendering.GetNextKeyframeSpriteReverse(ref clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
         renderInput.UpdateRenderInputsScreen(1, 1, sprite, camStats);
     }
 
@@ -92,7 +92,7 @@ public class AtlasUIMotionRenderer : AtlasRenderer
     }
     public void PlayManualClip(AtlasClip clip, float currentTime)
     {
-        sprite = AtlasRendering.GetNextKeyframeSpriteManual(clip, currentTime);
+        sprite = AtlasRendering.GetNextKeyframeSpriteManual(ref clip, currentTime);
         renderInput.UpdateRenderInputsScreen(1, 1, sprite, camStats);
     }
 
@@ -105,7 +105,7 @@ public class AtlasUIMotionRenderer : AtlasRenderer
             curFrameIndex = 0;
             while (curFrameIndex < lastIndex)
             {
-                sprite = AtlasRendering.GetNextKeyframeSprite(clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
+                sprite = AtlasRendering.GetNextKeyframeSprite(ref clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
                 renderInput.UpdateRenderInputsScreen(1, 1, sprite, camStats);
                 await UniTask.Yield(ctsOneShot.Token);
             }
@@ -122,7 +122,7 @@ public class AtlasUIMotionRenderer : AtlasRenderer
         {
             while (curFrameIndex >= 0)
             {
-                sprite = AtlasRendering.GetNextKeyframeSpriteReverse(clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
+                sprite = AtlasRendering.GetNextKeyframeSpriteReverse(ref clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
 
                 renderInput.UpdateRenderInputsScreen(1, 1, sprite, camStats);
 

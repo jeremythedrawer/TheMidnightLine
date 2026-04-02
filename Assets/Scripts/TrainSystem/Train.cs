@@ -112,6 +112,7 @@ public class Train : MonoBehaviour
         stats.trainBackXPos = backCollider.bounds.min.x;
         SetSlideDoorPositions();
         gameEventData.OnTrainArrivedAtStartPosition.Raise();
+        Debug.Log("train at start pos");
     }
     private void SetCarriageDictionary()
     {

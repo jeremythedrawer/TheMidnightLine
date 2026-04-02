@@ -1,51 +1,119 @@
 using Cysharp.Threading.Tasks;
-using System;
-using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using static NPC;
 
 public class NPCManager : MonoBehaviour
 {
-    const float WAITING_FOR_SEAT_TICK_RATE = 0.3f;
+    const float QUEUE_TICK_RATE = 0.3f;
+    const int MAX_QUEUE_SIZE = 128;
 
     public TripSO trip;
-
+    public GameEventDataSO gameEventData;
     public NPCsDataSO npcsData;
 
     [Header("Generated")]
     public bool npcFindingChair;
     public int totalAgentCount;
 
-    public static List<NPCBrain> npcChairList = new List<NPCBrain>();
+    public static NPCQueue seatQueue;
+    public static NPCQueue enterTrainQueue;
+    public static NPCQueue exitTrainQueue;
 
+    public NPCQueue seatQ;
+    public NPCQueue enterTrainQ;
+    public NPCQueue exitTrainQ;
+    private void Awake()
+    {
+        seatQueue = new NPCQueue();
+        enterTrainQueue = new NPCQueue();
+        exitTrainQueue = new NPCQueue();
+
+        seatQueue.npcs = new NPCBrain[MAX_QUEUE_SIZE];
+        enterTrainQueue.npcs = new NPCBrain[MAX_QUEUE_SIZE];
+        exitTrainQueue.npcs = new NPCBrain[MAX_QUEUE_SIZE];
+    }
+    private void OnEnable()
+    {
+        gameEventData.OnStationArrival.RegisterListener(ProcessEnterTrainQueue);
+    }
+
+    private void OnDisable()
+    {
+        gameEventData.OnStationArrival.UnregisterListener(ProcessEnterTrainQueue);
+    }
     private void Update()
     {
-        if (npcChairList.Count > 0 && npcFindingChair == false)
+        ProcessSeatQueue();
+        seatQ = seatQueue;
+        enterTrainQ = enterTrainQueue;
+        exitTrainQ = exitTrainQueue;
+    }
+
+    private void ProcessSeatQueue()
+    {
+        if (seatQueue.npcsCount == 0) return;
+
+        seatQueue.timer -= Time.deltaTime;
+        if (seatQueue.timer > 0f) return;
+
+        seatQueue.timer = QUEUE_TICK_RATE;
+
+        NPCBrain npc = seatQueue.npcs[seatQueue.npcsCount - 1];
+        seatQueue.npcsCount--;
+        AssignNextNPCPosition(npc);
+    }
+
+    public static void AddToSeatQueue(NPCBrain npc)
+    {
+        npc.seatQueueIndex = seatQueue.npcsCount;
+        seatQueue.npcs[seatQueue.npcsCount] = npc;
+        seatQueue.npcsCount++;
+    }
+
+    public static void RemoveFromSeatQueue(NPCBrain npc)
+    {
+        int lastIndex = seatQueue.npcsCount - 1;
+
+        seatQueue.npcs[npc.seatQueueIndex] = seatQueue.npcs[lastIndex];
+        seatQueue.npcs[lastIndex] = npc;
+        seatQueue.npcsCount--;
+    }
+    private void ProcessEnterTrainQueue()
+    {
+        ProcessingEnterTrainQueue().Forget();
+    }
+    private async UniTask ProcessingEnterTrainQueue()
+    {
+        await UniTask.Yield();
+        while(enterTrainQueue.npcsCount > 0)
         {
-            SeatingBoardingNPCs().Forget();
+
+            NPCBrain npc = enterTrainQueue.npcs[enterTrainQueue.npcsCount - 1];
+            enterTrainQueue.npcsCount--;
+            npc.BoardTrain();
+            await UniTask.Yield();
+            await UniTask.Delay((int)QUEUE_TICK_RATE * 1000);
         }
     }
-    private async UniTask SeatingBoardingNPCs()
+    public static void AddToEnterTrainQueue(NPCBrain npc)
     {
-        npcFindingChair = true;
-        NPCBrain curNPC = npcChairList[0];
-        npcChairList.RemoveAt(0);
-        AssignNextNPCPosition(curNPC);
-        await UniTask.WaitForSeconds(WAITING_FOR_SEAT_TICK_RATE);
-        npcFindingChair = false;
+        npc.enterTrainIndex = enterTrainQueue.npcsCount;
+        enterTrainQueue.npcs[enterTrainQueue.npcsCount] = npc;
+        enterTrainQueue.npcsCount++;
     }
-    public void AssignNextNPCPosition(NPCBrain npc)
+
+    private void AssignNextNPCPosition(NPCBrain npc)
     {
         float npcX = npc.transform.position.x;
         float closestDist = float.PositiveInfinity;
         int bestIndex = int.MaxValue;
 
-        for (int i = 0; i < npc.curCarriage.chairData.Length; i++)
+        for (int i = 0; i < npc.curCarriage.seatAmount; i++)
         {
-            if (npc.curCarriage.chairData[i].filled) continue;
+            if (npc.curCarriage.seatData.filled[i]) continue;
 
-            float dist = Mathf.Abs(npcX - npc.curCarriage.chairData[i].xPos);
+            float dist = Mathf.Abs(npcX - npc.curCarriage.seatData.xPos[i]);
             if (dist < closestDist)
             {
                 closestDist = dist;
@@ -59,26 +127,8 @@ public class NPCManager : MonoBehaviour
         }
         else
         {
-            npc.AssignChair(bestIndex);
+            npc.AssignSeat(bestIndex);
         }
     }
 }
 
-#if UNITY_EDITOR
-
-[CustomEditor(typeof(NPCManager))]
-public class NPCManagerEditor : Editor
-{
-    public override void OnInspectorGUI()
-    {
-        base.OnInspectorGUI();
-
-        EditorGUILayout.LabelField("Chair List");
-
-        foreach (NPCBrain item in NPCManager.npcChairList)
-        {
-            EditorGUILayout.LabelField(item.ToString());
-        }
-    }
-}
-#endif

@@ -55,22 +55,21 @@ public class AtlasMotionRenderer : AtlasRenderer
             renderInput.UpdateDepthEditor(transform);
         }
 #endif
-        renderInput.UpdateBounds();
     }
-    public void PlayClip(AtlasClip clip)
+    public void PlayClip(ref AtlasClip clip)
     {
-        sprite = AtlasRendering.GetNextKeyframeSprite(clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
+        sprite = AtlasRendering.GetNextKeyframeSprite(ref clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
         renderInput.UpdateRenderInputsWorld(1, 1, sprite);
     }
 
-    public void PlayClipReverse(AtlasClip clip)
+    public void PlayClipReverse(ref AtlasClip clip)
     {
-        sprite = AtlasRendering.GetNextKeyframeSpriteReverse(clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
+        sprite = AtlasRendering.GetNextKeyframeSpriteReverse(ref clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
         renderInput.UpdateRenderInputsWorld(1, 1, sprite);
     }
-    public void PlayManualClip(AtlasClip clip, float currentTime)
+    public void PlayManualClip(ref AtlasClip clip, float currentTime)
     {
-        sprite = AtlasRendering.GetNextKeyframeSpriteManual(clip, currentTime);
+        sprite = AtlasRendering.GetNextKeyframeSpriteManual(ref clip, currentTime);
         renderInput.UpdateRenderInputsWorld(1, 1, sprite);
     }
 

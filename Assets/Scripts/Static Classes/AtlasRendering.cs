@@ -12,15 +12,6 @@ public static class AtlasRendering
     public static readonly Dictionary<BatchKey, BatchData> batchDict = new Dictionary<BatchKey, BatchData>();
     public static readonly List<(BatchKey key, BatchData)> batchList = new List<(BatchKey key, BatchData data)>();
 
-    public static Type[] Renderers = new Type[]
-    {
-        typeof(AtlasSimpleRenderer),
-        typeof(AtlasMotionRenderer),
-        typeof(AtlasSliceRenderer),
-        typeof(AtlasUISimpleRenderer),
-        typeof(AtlasTextRenderer),
-    };
-
     [Serializable] public struct BatchKey
     {
         public Material material;
@@ -53,7 +44,7 @@ public static class AtlasRendering
         public Vector4 scaleAndFlip;
         public Vector4 custom;
 
-        public Vector2 boundsOffset;
+        public Vector3 boundsOffset;
 
         public void UpdateRenderInputsScreen(float width, float height, SimpleSprite newSprite, CameraStatsSO camStats)
         {
@@ -122,10 +113,7 @@ public static class AtlasRendering
         }
         public void UpdateBounds()
         {
-            if (gameObject.transform.hasChanged)
-            {
-                bounds.center = new Vector3(gameObject.transform.position.x + boundsOffset.x, gameObject.transform.position.y + boundsOffset.y, gameObject.transform.position.z);
-            }
+            bounds.center = gameObject.transform.position + boundsOffset;
         }
     }
     [Serializable] public class MultipleRenderInput
@@ -142,7 +130,9 @@ public static class AtlasRendering
         public Vector4[] uvSizeAndPos;
         public Vector4[] scaleAndFlip;
         
-        public Vector2 boundsOffset;
+        public Vector3 boundsOffset;
+
+
         public void UpdateSlicedSprite(SliceSprite slicedSprite, float width, float height)
         {
             uvSizeAndPos = slicedSprite.uvSizeAndPos;
@@ -206,10 +196,7 @@ public static class AtlasRendering
         }
         public void UpdateBounds()
         {
-            if (gameObject.transform.hasChanged)
-            {
-                bounds.center = new Vector3(gameObject.transform.position.x + boundsOffset.x, gameObject.transform.position.y + boundsOffset.y, gameObject.transform.position.z);
-            }
+            bounds.center = gameObject.transform.position + boundsOffset;
         }
     }
     public class BatchData
@@ -231,7 +218,6 @@ public static class AtlasRendering
         public readonly Vector4[] widthHeightFlip = new Vector4[MAX];
         public readonly MaterialPropertyBlock mpb = new MaterialPropertyBlock();
     }
-
     public static void UpdateDepth(Transform transform, ref BatchKey batchKey, SingularRenderInput singRenderInput = null, MultipleRenderInput multRenderInput = null)
     {
         if ((int)transform.position.z != batchKey.depthOrder)
@@ -311,7 +297,7 @@ public static class AtlasRendering
 
         if (batch.singularRenderInputs.Count == 0 && batch.multipleRenderInputs.Count == 0) batchDict.Remove(renderInput.batchKey);
     }
-    public static ref SimpleSprite GetNextKeyframeSprite(AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
+    public static ref SimpleSprite GetNextKeyframeSprite(ref AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {
         keyframeClock += Time.deltaTime;
 
@@ -372,7 +358,7 @@ public static class AtlasRendering
 
         return ref clip.keyFrames[curFrameIndex].motionSprite.sprite;
     }
-    public static ref SimpleSprite GetNextKeyframeSpriteReverse(AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
+    public static ref SimpleSprite GetNextKeyframeSpriteReverse(ref AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {
         keyframeClock += Time.deltaTime;
 
@@ -392,13 +378,13 @@ public static class AtlasRendering
 
         return ref clip.keyFrames[curFrameIndex].motionSprite.sprite;
     }
-    public static ref SimpleSprite GetNextKeyframeSpriteManual(AtlasClip clip, float currentTime)
+    public static ref SimpleSprite GetNextKeyframeSpriteManual(ref AtlasClip clip, float currentTime)
     {
         int maxIndex = clip.keyFrames.Length - 1;
         int curFrameIndex = Mathf.Clamp(Mathf.FloorToInt((clip.keyFrames.Length - 1) * currentTime), 0, maxIndex);
         return ref clip.keyFrames[curFrameIndex].motionSprite.sprite;
     }
-    public static ref SimpleSprite GetNextKeyframeSpriteEditor(AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
+    public static ref SimpleSprite GetNextKeyframeSpriteEditor(ref AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {
         float frameTime = keyframeClock * FRAMES_PER_SEC;
         if (curFrameIndex >= clip.keyFrames.Length || curFrameIndex < 0) curFrameIndex = 0;

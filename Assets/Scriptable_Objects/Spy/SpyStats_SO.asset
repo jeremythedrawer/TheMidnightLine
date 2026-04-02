@@ -12,4 +12,41 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f7e7a2f9d0ad0254fbc14127144ab481, type: 3}
   m_Name: SpyStats_SO
   m_EditorClassIdentifier: 
-  phonePosition: {x: 0.21, y: 2.66, z: 0}
+  curLocationBounds:
+    m_Center: {x: 332.46353, y: 1.3597555, z: 7}
+    m_Extent: {x: 7.7062073, y: 1.2354345, z: 0}
+  curWorldPos: {x: 0, y: 0, z: 0}
+  moveVelocity: {x: 0, y: 0}
+  targetXVelocity: 0
+  curRunSpeed: 1
+  curGravityScale: 1
+  lastJumpTime: -3.4028235e+38
+  coyoteTimeElapsed: 0
+  maxJumpHeight: 2
+  lastGroundHeight: 0.08277762
+  curState: 0
+  curLocationLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  curGroundLayer:
+    serializedVersion: 2
+    m_Bits: 32768
+  curWallLayer:
+    serializedVersion: 2
+    m_Bits: 0
+  spriteFlip: 0
+  coyoteJump: 0
+  willJump: 0
+  isGrounded: 0
+  isStepping: 0
+  walkingIntoWall: 0
+  canHang: 0
+  isClimbing: 0
+  isLeftClimbBound: 0
+  firstFixedFrameClimb: 1
+  canBoardTrain: 0
+  onTrain: 0
+  checkingNotepad: 0
+  ticketName: Johnathan Richardson
+  departureStationName: MirogradskaStation
+  arrivalStationName: NovogradStation

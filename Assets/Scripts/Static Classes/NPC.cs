@@ -30,33 +30,36 @@ public static class NPC
         ToChair,
         ToSlideDoor,
     }
-    [Flags] public enum Appearance
+    [Flags] public enum Appearance 
     {
         None = 0,
         White_hair = 1 << 0,
         Blue_collar_worker = 1 << 1,
-        Has_a_cain = 1 << 2,
-        Near_sighted = 1 << 3,
+        Poor_posture = 1 << 2,
+        Poor_eyesight = 1 << 3,
         Suit_and_tie = 1 << 4,
         Is_bald = 1 << 5,
-        Big_boned = 1 << 6,
+        Rotund = 1 << 6,
         Wearing_a_dress = 1 << 7,
-        Wears_shorts = 1 << 8,
-        Carries_a_bag = 1 << 9,
-        Wears_a_hat = 1 << 10,
-        Wears_a_necklace = 1 << 11,
+        Carries_a_bag = 1 << 8,
+        Wears_a_hat = 1 << 9,
+        Wears_a_necklace = 1 << 10,
+        Afro_hair = 1 << 11,
+        Baggy_clothes = 1 << 12,
     }
 
 
     [Flags] public enum Behaviours
     {
         None = 0,
-        Frequent_smoker = 1 << 0,
+        smoke_Addict = 1 << 0,
         Takes_naps = 1 << 2,
         Always_hungry = 1 << 3,
         Listens_to_music = 1 << 4,
-        Lots_of_phone_calls = 1 << 5,
+        Always_on_call = 1 << 5,
         Enjoys_reading = 1 << 6,
+        Gets_nauseous = 1 << 7,
+        Known_vandal = 1 << 8,
     }
 
     public enum Gender
@@ -99,6 +102,13 @@ public static class NPC
     {
         public string ethnicity;
         public string name;
+    }
+
+    [Serializable] public struct NPCQueue
+    {
+        public NPCBrain[] npcs;
+        public int npcsCount;
+        public float timer;
     }
 }
 

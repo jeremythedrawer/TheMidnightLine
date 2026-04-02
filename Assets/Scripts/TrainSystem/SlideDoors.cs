@@ -28,6 +28,9 @@ public class SlideDoors : MonoBehaviour
 
     private float openMoveAmount;
     private float unlockMoveAmount;
+
+    private UniTaskCompletionSource tcsOpen;
+    private UniTaskCompletionSource tcsUnlock;
     private void Start()
     {
         ResetDoors();
@@ -46,15 +49,15 @@ public class SlideDoors : MonoBehaviour
     public void UnlockDoors()
     {
         boxCollider.enabled = true;
-        OpeningDoors(unlockMoveAmount, UNLOCK_MOVE_TIME, State.Unlocked).Forget();
+        curState = State.Unlocked;
+        tcsUnlock?.TrySetResult();
+        tcsUnlock = null;
     }
-
     public void OpenDoors()
     {
         curState = State.Opening;
         OpeningDoors(openMoveAmount, trainSettings.doorMoveTime, State.Opened).Forget();
     }
-
     public void CloseDoors()
     {
         boxCollider.enabled = false;
@@ -62,13 +65,9 @@ public class SlideDoors : MonoBehaviour
         {
             ClosingDoors(rightSlideDoorRenderer.sprite.worldSize.x, trainSettings.doorMoveTime, State.Locked).Forget();
         }
-        else
-        {
-            ClosingDoors(unlockMoveAmount, trainSettings.doorMoveTime, State.Locked).Forget();
-        }
+
         curState = State.Closing;
     }
-
     private async UniTaskVoid OpeningDoors(float moveAmount, float moveTime, State newState)
     {
         float elapsedTime = 0;
@@ -93,9 +92,9 @@ public class SlideDoors : MonoBehaviour
         leftSlideDoor_transform.localPosition = leftSlideDoorPos;
 
         curState = newState;
+        tcsOpen?.TrySetResult();
+        tcsOpen = null;
     }
-
-
     private async UniTaskVoid ClosingDoors(float moveAmount, float moveTime, State newState)
     {
         float elapsedTime = 0;
@@ -120,6 +119,23 @@ public class SlideDoors : MonoBehaviour
         leftSlideDoor_transform.localPosition = leftSlideDoorPos;
 
         curState = newState;
+    }
+    public UniTask WaitUntilOpened()
+    {
+        if (curState == State.Opened) return UniTask.CompletedTask;
+
+        if (tcsOpen == null) tcsOpen = new UniTaskCompletionSource();
+
+        return tcsOpen.Task;
+    }
+
+    public UniTask WaitUntilUnlocked()
+    {
+        if (curState != State.Locked) return UniTask.CompletedTask;
+
+        if (tcsUnlock == null) tcsUnlock = new UniTaskCompletionSource();
+
+        return tcsUnlock.Task;
     }
     public void ResetDoors()
     {

@@ -47,12 +47,11 @@ public class AtlasSimpleRenderer : AtlasRenderer
     private void Update()
     {
 #if UNITY_EDITOR
-        if(!Application.isPlaying)
+        if (!Application.isPlaying)
         {
             renderInput.UpdateDepthEditor(transform);
         }
 #endif
-        renderInput.UpdateBounds();
     }
 
 #if UNITY_EDITOR

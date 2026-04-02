@@ -5,10 +5,7 @@ using UnityEngine;
 using static Atlas;
 using static NPC;
 using UnityEngine.VFX;
-using UnityEngine.Rendering.Universal;
 using System.Collections.Generic;
-
-
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -33,8 +30,11 @@ public class NPCBrain : MonoBehaviour
     [Header("Generated")]
     public AtlasSO atlas;
     public SlideDoors curSlideDoors;
+
     public CancellationTokenSource ctsFade;
-        
+    public CancellationTokenSource ctsBoardTrain;
+    public UniTaskCompletionSource tcsGetToSlideDoor;
+    
     public Carriage curCarriage;
 
     public StationSO startStation;
@@ -68,12 +68,19 @@ public class NPCBrain : MonoBehaviour
     public bool startFade;
     public bool ticketIsBeingChecked;
 
+    public bool queuedForSeat;
+
+    public int seatQueueIndex;
+    public int enterTrainIndex;
+    public int exitTrainIndex;
+
     public AtlasClip curClip;
 
     private VisualEffect sleepingZs;
     private VisualEffect smoke;
     private VisualEffect speechBubble;
     private VisualEffect musicNotes;
+
     private void Awake()
     {
         ctsFade = new CancellationTokenSource();
@@ -84,10 +91,6 @@ public class NPCBrain : MonoBehaviour
         atlas = atlasRenderer.renderInput.atlas;
         rigidBody.includeLayers = layerSettings.stationMask;
     }
-    private void OnEnable()
-    {
-       gameEventData.OnStationArrival.RegisterListener(BoardTrain);
-    }
     private void Start()
     {
         if (((profile.behaviours & Behaviours.Takes_naps) != 0) && sleepingZs == null)
@@ -95,7 +98,7 @@ public class NPCBrain : MonoBehaviour
             sleepingZs = Instantiate(npcData.sleepingZs_prefab, transform.position, transform.rotation, transform);
             sleepingZs.Stop();
         }
-        if (((profile.behaviours & Behaviours.Frequent_smoker) != 0) && smoke == null)
+        if (((profile.behaviours & Behaviours.smoke_Addict) != 0) && smoke == null)
         {
             smoke = Instantiate(npcData.smoke_prefab, transform.position, transform.rotation, transform);
             smoke.Stop();
@@ -105,7 +108,7 @@ public class NPCBrain : MonoBehaviour
             musicNotes = Instantiate(npcData.musicNotes_prefab, transform.position, transform.rotation, transform);
             musicNotes.Stop();
         }
-        if (((profile.behaviours & Behaviours.Lots_of_phone_calls) != 0) && speechBubble == null)
+        if (((profile.behaviours & Behaviours.Always_on_call) != 0) && speechBubble == null)
         {
             speechBubble = Instantiate(npcData.speechBubble_prefab, transform.position, transform.rotation, transform);
             speechBubble.Stop();
@@ -114,24 +117,21 @@ public class NPCBrain : MonoBehaviour
         curClip = atlasRenderer.renderInput.atlas.clipDict[(int)NPCMotion.StandingBreathing];
 
         atlasRenderer.renderInput.UpdateDepthRealtime((int)transform.position.z);
-    }
-    private void OnDisable()
-    {
-       gameEventData.OnStationArrival.UnregisterListener(BoardTrain);
+        QueueToEnterTrain();
     }
     private void Update()
     {
         SelectingStates();
         UpdateStates();
         Fade();
-        atlasRenderer.PlayClip(curClip);
+        atlasRenderer.PlayClip(ref curClip);
 
         if (rigidBody.includeLayers == layerSettings.trainMask)
         {
             behaviourClock += Time.deltaTime;
         }
 
-        if ((curBehaviour & Behaviours.Frequent_smoker) != 0 && curPath != Path.ToSmokerRoom)
+        if ((curBehaviour & Behaviours.smoke_Addict) != 0 && curPath != Path.ToSmokerRoom)
         {
             FindSmokersRoom();
         }
@@ -158,7 +158,7 @@ public class NPCBrain : MonoBehaviour
         {
             SetState(NPCState.Idling);
         }
-        else if ((curBehaviour & Behaviours.Frequent_smoker) != 0)
+        else if ((curBehaviour & Behaviours.smoke_Addict) != 0)
         {
             SetState(NPCState.Smoking);
         }
@@ -174,7 +174,7 @@ public class NPCBrain : MonoBehaviour
         {
             SetState(NPCState.Music);
         }
-        else if ((curBehaviour & Behaviours.Lots_of_phone_calls) != 0)
+        else if ((curBehaviour & Behaviours.Always_on_call) != 0)
         {
             SetState(NPCState.Calling);
         }
@@ -444,6 +444,8 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Walking:
             {
+                tcsGetToSlideDoor?.TrySetResult();
+                tcsGetToSlideDoor = null;
             }
             break;
             case NPCState.Smoking:
@@ -513,9 +515,13 @@ public class NPCBrain : MonoBehaviour
         {
         }
     }
-    private void BoardTrain()
+    public void QueueToEnterTrain()
     {
-        if (rigidBody.includeLayers == layerSettings.trainMask) return;
+        NPCManager.AddToEnterTrainQueue(this);
+    }
+    public void BoardTrain()
+    {
+        ctsBoardTrain = new CancellationTokenSource();
         BoardingTrain().Forget();
     }
     private async UniTask BoardingTrain()
@@ -523,7 +529,8 @@ public class NPCBrain : MonoBehaviour
         FindSlideDoor();
         float randomStartMoveTime = UnityEngine.Random.Range(0.3f, 1f);
         await UniTask.WaitForSeconds(randomStartMoveTime);
-        await UniTask.WaitUntil(() => curState != NPCState.Walking);
+
+        await WaitUntilCloseToSlideDoor();
 
         RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.slideDoors);
         RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
@@ -533,13 +540,13 @@ public class NPCBrain : MonoBehaviour
         if (carriageHit.collider == null) { Debug.LogError($"{fullName} did not find a slide door to go to"); return; }
 #endif
         curSlideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-        await UniTask.WaitUntil(() => curSlideDoors.curState != SlideDoors.State.Locked);
-        if (curSlideDoors.curState == SlideDoors.State.Unlocked)
-        {
-            curSlideDoors.OpenDoors();
-        }
 
-        await UniTask.WaitUntil(() => curSlideDoors.curState == SlideDoors.State.Opened);
+        await curSlideDoors.WaitUntilUnlocked();
+        
+        if (curSlideDoors.curState == SlideDoors.State.Unlocked) curSlideDoors.OpenDoors();
+
+        await curSlideDoors.WaitUntilOpened();
+
         SetStandingDepth();
         transform.SetParent(null, true);
         trainStats.curPassengerCount++;
@@ -547,6 +554,14 @@ public class NPCBrain : MonoBehaviour
 
         curCarriage = trainStats.carriageDict[carriageHit.collider];
         rigidBody.includeLayers = layerSettings.trainMask;
+    }
+    private UniTask WaitUntilCloseToSlideDoor()
+    {
+        if (curState != NPCState.Walking) return UniTask.CompletedTask;
+
+        if (tcsGetToSlideDoor == null) tcsGetToSlideDoor = new UniTaskCompletionSource();
+
+        return tcsGetToSlideDoor.Task;
     }
     private void FindSlideDoor()
     {
@@ -567,17 +582,16 @@ public class NPCBrain : MonoBehaviour
     }
     private void QueueForChair()
     {
-        if (!NPCManager.npcChairList.Contains(this))
-        {
-            NPCManager.npcChairList.Add(this);
-        }
+        NPCManager.AddToSeatQueue(this);
+        queuedForSeat = true;
     }
-    public void AssignChair(int chairIndex)
+    public void AssignSeat(int chairIndex)
     {
+        queuedForSeat = false;
         chairPosIndex = chairIndex;
-        curCarriage.chairData[chairPosIndex].filled = true;
+        curCarriage.seatData.filled[chairPosIndex] = true;
         curPath = Path.ToChair;
-        targetXPos = curCarriage.chairData[chairPosIndex].xPos;
+        targetXPos = curCarriage.seatData.xPos[chairPosIndex];
     }
     public void FindStandingPosition()
     {
@@ -585,13 +599,13 @@ public class NPCBrain : MonoBehaviour
     }
     private void FindSmokersRoom()
     {
-        if (chairPosIndex != int.MaxValue && curCarriage.chairData[chairPosIndex].filled)
+        if (chairPosIndex != int.MaxValue && curCarriage.seatData.filled[chairPosIndex])
         {
-            curCarriage.chairData[chairPosIndex].filled = false;
+            curCarriage.seatData.filled[chairPosIndex] = false;
             chairPosIndex = int.MaxValue;
 
         }
-        if (NPCManager.npcChairList.Contains(this)) NPCManager.npcChairList.Remove(this); // To prevent them from going back to the chair if they are queued
+        if (queuedForSeat) NPCManager.RemoveFromSeatQueue(this); // To prevent them from going back to the chair if they are queued
 
         if (curCarriage.smokersRoomData.Length > 1 && curCarriage.smokersRoomData[1].npcCount < curCarriage.smokersRoomData[0].npcCount) // selected smoker room is based on which room has less npcs
         {

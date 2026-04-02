@@ -6,10 +6,10 @@ using UnityEngine;
 
 public class Carriage : MonoBehaviour
 {
-    [Serializable] public struct ChairData
+    [Serializable] public struct SeatData
     {
-        public float xPos;
-        public bool filled;
+        public float[] xPos;
+        public bool[] filled;
     }
     [Serializable] public struct SmokersRoomData
     {
@@ -40,13 +40,14 @@ public class Carriage : MonoBehaviour
     public float wheelCircumference;
 
     [Header("Generated")]
-    public ChairData[] chairData;
+    public SeatData seatData;
     public SmokersRoomData[] smokersRoomData;
     public int sittingDepth;
     public int standingDepth;
     public Transform[] wheelTransforms;
     public CancellationTokenSource ctsFade;
     public float prevMeters;
+    public int seatAmount;
     private void Awake()
     {
         ctsFade = new CancellationTokenSource();
@@ -100,22 +101,32 @@ public class Carriage : MonoBehaviour
         AtlasSliceRenderer seatRenderer = seatRenderers[0];
         float tileWidth = seatRenderer.renderInput.atlas.slicedSprites[seatRenderer.spriteIndex].worldSlices.x;
 
-        List<ChairData> seatDataList = new List<ChairData>();
+        seatAmount = 0;
+        int[] seatsPerRenderer = new int[seatRenderers.Length];
         for (int i = 0; i < seatRenderers.Length; i++)
         {
             AtlasSliceRenderer seat = seatRenderers[i];
 
             float totalWidth = seat.renderInput.bounds.size.x;
-            int chairAmount = Mathf.RoundToInt(totalWidth / tileWidth);
-            float firstChairPos = seat.transform.position.x + (tileWidth * 0.5f);
+            int seats = Mathf.RoundToInt(totalWidth / tileWidth);
+            seatAmount += seats;
+            seatsPerRenderer[i] = seats;
+        }
+        seatData.xPos = new float[seatAmount];
+        seatData.filled = new bool[seatAmount];
 
-            for (int j = 0; j < chairAmount; j++)
+        int seatIndex = 0;
+        for (int i = 0; i < seatRenderers.Length; i++)
+        {
+            AtlasSliceRenderer seat = seatRenderers[i];
+            float firstSeatPos = seat.transform.position.x + (tileWidth * 0.5f);
+
+            for (int j = 0; j < seatsPerRenderer[i]; j++)
             {
-                ChairData chairData = new ChairData { xPos = firstChairPos + (tileWidth * j), filled = false };
-                seatDataList.Add(chairData);
+                seatData.xPos[seatIndex] = firstSeatPos + (tileWidth * j);
+                seatIndex++;
             }
         }
-        chairData = seatDataList.ToArray();
         sittingDepth = seatRenderer.renderInput.batchKey.depthOrder - 1;
         standingDepth = sittingDepth - 1;
     }

@@ -111,11 +111,7 @@ public class POVUI : MonoBehaviour
                 
                 notepad.gameObject.SetActive(true);
                 notepad.enabled = true;
-
                 ctsUIObject?.Cancel();
-                ctsUIObject?.Dispose();
-                ctsUIObject = null;
-
                 InitNaturalPos(notepadActivePos);
             }
             break;
@@ -125,11 +121,7 @@ public class POVUI : MonoBehaviour
                 
                 ticket.gameObject.SetActive(true);
                 canExitTicket = false;
-
                 ctsUIObject?.Cancel();
-                ctsUIObject?.Dispose();
-                ctsUIObject = null;
-
                 InitNaturalPos(ticketActivePos);
 
                 ticket.SetText(spyStats.ticketName, spyStats.departureStationName, spyStats.arrivalStationName);
@@ -142,6 +134,7 @@ public class POVUI : MonoBehaviour
             break;
             case State.None:
             {
+                
                 MoveBackground(backgroundInactivePos);
             }
             break;
@@ -193,6 +186,7 @@ public class POVUI : MonoBehaviour
         {
             case State.Notepad:
             {
+
                 MoveCurrentUIObject(notepad.transform, notepadInactivePos);
                 notepad.enabled = false;
             }
@@ -234,17 +228,13 @@ public class POVUI : MonoBehaviour
     private void MoveBackground(Vector3 nextPos)
     {
         ctsBackground?.Cancel();
-        ctsBackground?.Dispose();
-        ctsBackground = null;
         ctsBackground = new CancellationTokenSource();
 
         Moving(background.transform, ctsBackground, nextPos, backgroundMoveDamp).Forget();
     }
     private void MoveCurrentUIObject(Transform uiObjectTransform, Vector3 nextPos)
     {
-        ctsUIObject?.Cancel();
-        ctsUIObject?.Dispose();
-        ctsUIObject = null;
+
         ctsUIObject = new CancellationTokenSource();
 
         Moving(uiObjectTransform, ctsUIObject, nextPos, moveDamp).Forget();
@@ -267,8 +257,6 @@ public class POVUI : MonoBehaviour
         }
         catch(OperationCanceledException)
         {
-            transform.localPosition = nextPos;
-            if (objState != State.None && curState != objState) transform.gameObject.SetActive(false);
         }
     }
 }

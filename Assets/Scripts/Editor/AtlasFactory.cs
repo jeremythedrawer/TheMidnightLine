@@ -943,7 +943,7 @@ public class AtlasFactory : EditorWindow
 
         float posX = pivotOffsetX * -flip;
 
-        if (previewClip != null && !previewClip.Equals(default(AtlasClip)))
+        if (!previewClip.Equals(default(AtlasClip)))
         {
             float maxClipOffset = float.MinValue;
             for (int i = 0; i < previewClip.keyFrames.Length; i++)
@@ -990,7 +990,7 @@ public class AtlasFactory : EditorWindow
             if (!atlas.clipDict.TryGetValue(selectedMotionIndex, out AtlasClip clip)) return;
             previewClip = clip;
 
-            previewSprite = AtlasRendering.GetNextKeyframeSpriteEditor(previewClip, ref editorTimeDelta, ref curFrameIndex, ref prevFrameIndex);
+            previewSprite = AtlasRendering.GetNextKeyframeSpriteEditor(ref previewClip, ref editorTimeDelta, ref curFrameIndex, ref prevFrameIndex);
             //previewSprite = previewClip.GetNextSprite(ref editorTimeDelta, ref curFrameIndex, ref prevFrameIndex); TODO // Make an editor animation function
             if (curFrameIndex != prevFrameIndex)
             {

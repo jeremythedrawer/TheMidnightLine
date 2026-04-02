@@ -130,13 +130,12 @@ public static class Atlas
         public Vector4[] uvSizeAndPos;
         public Vector4 worldSlices;
     }
-
     [Serializable] public struct AtlasKeyframe
     {
         public MotionSprite motionSprite;
         public int holdTime;
     }
-    [Serializable] public class AtlasClip
+    [Serializable] public struct AtlasClip
     {
         public string clipName; // HACK: Take out for production build. Cant use #if UNITY_EDITOR because it'll crash the build. :(
         public AtlasKeyframe[] keyFrames;
@@ -144,7 +143,6 @@ public static class Atlas
         public int motionIndex;
         public float time;
     }
-
 
     public static readonly Dictionary<EntityMotionType, Type> MotionEnumDictionary =
     new Dictionary<EntityMotionType, Type>
