@@ -27,7 +27,7 @@ public class Train : MonoBehaviour
     {
         stats.startXPos = transform.position.x;
         stats.trainMaxHeight = frontCollider.bounds.max.y;
-        stats.targetPassengerCount = trip.stationsDataArray[0].bystanderProfiles.Count + trip.stationsDataArray[0].traitorProfiles.Count + 1; // +1 for spy himself
+        stats.targetPassengerCount = trip.stationsDataArray[0].bystanderProfiles.Length + trip.stationsDataArray[0].traitorProfiles.Length + 1; // +1 for spy himself
         stats.curKMPerHour = trip.stationsDataArray[0].targetTrainSpeed;
         stats.targetKMPerHour = trip.stationsDataArray[0].targetTrainSpeed;
         stats.metersTravelled = 0;
@@ -35,12 +35,12 @@ public class Train : MonoBehaviour
         stats.closingDoors = false;
         stats.brakeDist = GetBrakeDistance(trip.stationsDataArray[0].targetTrainSpeed);
         trainCTS = new CancellationTokenSource();
-        stats.minDepth = frontCarriage.exteriorRenderers[0].renderInput.batchKey.depthOrder;
-        stats.maxDepth = frontCarriage.interiorSlideDoors[0].rightSlideDoorRenderer.renderInput.batchKey.depthOrder;
-        stats.depthSection_front_min = frontCarriage.grapPoleRenderers[0].renderInput.batchKey.depthOrder - 2;
-        stats.depthSection_front_max = frontCarriage.grapPoleRenderers[0].renderInput.batchKey.depthOrder - 1;
-        stats.depthSection_back_min = frontCarriage.grapPoleRenderers[0].renderInput.batchKey.depthOrder + 1;
-        stats.depthSection_back_max = frontCarriage.grapPoleRenderers[0].renderInput.batchKey.depthOrder + 2;
+        stats.minDepth = frontCarriage.exteriorRenderers[0].batchKey.depthOrder;
+        stats.maxDepth = frontCarriage.interiorSlideDoors[0].rightSlideDoorRenderer.batchKey.depthOrder;
+        stats.depthSection_front_min = frontCarriage.grapPoleRenderers[0].batchKey.depthOrder - 2;
+        stats.depthSection_front_max = frontCarriage.grapPoleRenderers[0].batchKey.depthOrder - 1;
+        stats.depthSection_back_min = frontCarriage.grapPoleRenderers[0].batchKey.depthOrder + 1;
+        stats.depthSection_back_max = frontCarriage.grapPoleRenderers[0].batchKey.depthOrder + 2;
         stats.distToNextStation = float.MaxValue;
 
         stats.trainWorldWidth = frontCollider.bounds.max.x - backCollider.bounds.min.x;

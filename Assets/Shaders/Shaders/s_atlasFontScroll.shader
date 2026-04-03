@@ -1,4 +1,4 @@
-Shader "Custom/s_atlasScroll"
+Shader "Custom/s_atlasFontScroll"
 {
     Properties
     {
@@ -30,7 +30,8 @@ Shader "Custom/s_atlasScroll"
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                uint instanceID : TEXCOORD1;
+                float2 objPos : TEXCOORD1;
+                uint instanceID : TEXCOORD2;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -38,13 +39,12 @@ Shader "Custom/s_atlasScroll"
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
-            float _MetersTravelled;
-
             Varyings vert(Attributes v)
             {
                 Varyings o;
 
                 AtlasSprite spriteData = _SpriteData[v.instanceID];
+
 
                 float3 position = spriteData.position;
                 
@@ -56,9 +56,11 @@ Shader "Custom/s_atlasScroll"
 
                 objPos *= size * scale;
                 objPos -= pivot;
+                objPos.x -= frac(_Time.y * 0.1) * ((spriteData.custom.x * 2) - spriteData.custom.y)  - spriteData.custom.y;
 
                 float3 worldPos = float3(position.xy + objPos, position.z);
 
+                o.objPos = objPos;
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
                 o.instanceID = v.instanceID;
@@ -73,23 +75,23 @@ Shader "Custom/s_atlasScroll"
 
                 float2 uvSize = spriteData.uvSizeAndPos.xy;
                 float2 uvPos = spriteData.uvSizeAndPos.zw;
-
-                float size = spriteData.pivotAndSize.z;
                 
                 float2 scale = spriteData.scaleAndFlip.xy;
                 float2 flip = spriteData.scaleAndFlip.zw;
 
-                i.uv *= scale.xy;
-                i.uv.x += _MetersTravelled / size;
+                i.uv *= scale;
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 finalColor = color.rgb;
+                half3 finalColor = color.rgb + 1;
 
-                clip(color.a - 0.001);
+                half rightMask = step(i.objPos.x, spriteData.custom.y);
+                half leftMask = step(0,i.objPos.x);
+                half alpha = color.a * rightMask * leftMask;
+                clip(alpha - 0.001);
                 return half4 (finalColor, 1);
             }
             ENDHLSL

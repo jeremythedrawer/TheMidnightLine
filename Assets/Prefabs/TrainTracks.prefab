@@ -9,8 +9,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7635051684049217403}
-  - component: {fileID: 5239239957063357082}
   - component: {fileID: 1131643060746118446}
+  - component: {fileID: 7842844317880843427}
   m_Layer: 0
   m_Name: TrainTracks
   m_TagString: Untagged
@@ -33,42 +33,6 @@ Transform:
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5239239957063357082
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5725286194119627584}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 0e218c0765f01fb40a0930b56607d422, type: 2}
-      depthOrder: 6
-    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
-    boxCollider: {fileID: 1131643060746118446}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 5725286194119627584}
-    bounds:
-      m_Center: {x: 300.18835, y: -2.278889, z: 6}
-      m_Extent: {x: 177.88834, y: 0.7111111, z: 0.1}
-    pivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4222223}
-    uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0.5004883, w: 0.81152344}
-    scaleAndFlip: {x: 31.3, y: 1, z: 1, w: 1}
-    boundsOffset: {x: 177.88834, y: 0.7111111}
-  width: 31.3
-  height: 1
-  spriteIndex: 4
-  sprite:
-    uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0.5004883, w: 0.81152344}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 11.366667, y: 1.4222223, z: 1}
-    index: 4
 --- !u!61 &1131643060746118446
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -103,7 +67,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 177.88835, y: 0.71111107}
+  m_Offset: {x: 107.98334, y: 0.71111107}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -113,5 +77,63 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 355.77667, y: 1.4222223}
+  m_Size: {x: 215.96667, y: 1.4222223}
   m_EdgeRadius: 0
+--- !u!114 &7842844317880843427
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5725286194119627584}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
+    depthOrder: 6
+  atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 1131643060746118446}
+  spriteIndex: 4
+  flipX: 0
+  flipY: 0
+  width: 19
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0.5004883, w: 0.81152344}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 11.366667, y: 1.4222223, z: 1}
+    index: 4
+  bounds:
+    m_Center: {x: 261.88333, y: -1.5388889, z: 10}
+    m_Extent: {x: 107.98334, y: 0.7111111, z: 0.1}
+  worldPivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4222223}
+  uvSizeAndPosition: {x: 0.49951172, y: 0.0625, z: 0.5004883, w: 0.81152344}
+  scaleAndFlip: {x: 19, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 107.98334, y: 0.7111111, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0

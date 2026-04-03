@@ -3,10 +3,9 @@ using UnityEngine;
 
 public class Ticket : MonoBehaviour
 {
-    public AtlasUISimpleRenderer ticket_renderer;
-    public AtlasTextRenderer name_renderer;
-    public AtlasTextRenderer departureStation_renderer;
-    public AtlasTextRenderer arrivalStation_renderer;
+    public AtlasRenderer ticket_renderer;
+    public AtlasRenderer departureStation_renderer;
+    public AtlasRenderer arrivalStation_renderer;
 
 
     public Bounds totalBounds;
@@ -20,12 +19,11 @@ public class Ticket : MonoBehaviour
     private void SetTotalBounds()
     {
         if (ticket_renderer == null) return;
-        totalBounds = ticket_renderer.renderInput.bounds;
+        totalBounds = ticket_renderer.bounds;
     }
 
-    public void SetText(string name, string depStation, string arrStation)
+    public void SetText(string depStation, string arrStation)
     {
-        name_renderer.SetText(name);
         departureStation_renderer.SetText(depStation);
         arrivalStation_renderer.SetText(arrStation);
     }

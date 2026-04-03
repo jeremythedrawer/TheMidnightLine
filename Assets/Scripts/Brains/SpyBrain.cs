@@ -24,7 +24,7 @@ public class SpyBrain : MonoBehaviour
     [Header("Components")]
     [SerializeField] Rigidbody2D rigidBody;
     [SerializeField] BoxCollider2D boxCollider;
-    [SerializeField] AtlasMotionRenderer atlasRenderer;
+    [SerializeField] AtlasRenderer atlasRenderer;
     [Header("Scriptable Objects")]
     [SerializeField] SpySettingsSO settings;
     [SerializeField] MaterialIDSO materialIDs;
@@ -95,7 +95,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void Start()
     {
-        atlas = atlasRenderer.renderInput.atlas;
+        atlas = atlasRenderer.atlas;
         atlas.UpdateClipDictionary();
         stats.curState = State.Idle;
         rigidBody.gravityScale = settings.gravityScale;
@@ -113,7 +113,7 @@ public class SpyBrain : MonoBehaviour
 
         stats.maxJumpHeight = (settings.jumpVerticalForce * settings.jumpVerticalForce) / (2 * settings.gravityScale);
 
-        matrixMaterial.SetFloat("_PlayerDepth", atlasRenderer.renderInput.batchKey.depthOrder);
+        matrixMaterial.SetFloat("_PlayerDepth", atlasRenderer.batchKey.depthOrder);
     }
     private void Update()
     {
@@ -625,8 +625,8 @@ public class SpyBrain : MonoBehaviour
 
                     collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
 
-                    UpdateDepth(atlasRenderer.renderInput.batchKey.depthOrder).Forget();
-                    atlasRenderer.renderInput.UpdateDepthRealtime(trainStats.depthSection_front_min);
+                    UpdateDepth(atlasRenderer.batchKey.depthOrder).Forget();
+                    atlasRenderer.UpdateDepthRealtime(trainStats.depthSection_front_min);
 
                     trainStats.curPassengerCount++;
                     
@@ -651,11 +651,11 @@ public class SpyBrain : MonoBehaviour
             elaspedTime += Time.deltaTime;
             float t = elaspedTime / DEPTH_CHANGE_TIME;
             t *= t;
-            float depth = Mathf.Lerp(oldDepth, atlasRenderer.renderInput.batchKey.depthOrder, t);
+            float depth = Mathf.Lerp(oldDepth, atlasRenderer.batchKey.depthOrder, t);
             matrixMaterial.SetFloat("_PlayerDepth", depth);
             await UniTask.Yield();
         }
-        matrixMaterial.SetFloat("_PlayerDepth", atlasRenderer.renderInput.batchKey.depthOrder);
+        matrixMaterial.SetFloat("_PlayerDepth", atlasRenderer.batchKey.depthOrder);
     }
     private void SetLocationData(Bounds bounds, LayerMask layerMask)
     {
@@ -665,7 +665,7 @@ public class SpyBrain : MonoBehaviour
     private void Flip(bool flip)
     {
         stats.spriteFlip = flip;
-        atlasRenderer.renderInput.FlipH(flip, atlasRenderer.sprite);
+        atlasRenderer.FlipH(flip, atlasRenderer.sprite);
     }
     private void OnApplicationQuit()
     {

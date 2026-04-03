@@ -14,7 +14,6 @@ public class StationSO : ScriptableObject
     public bool isFrontOfTrain;
     [Header("Generated")]
     public string stationName;
-    public bool hadSpawned;
-    public  List<NPCProfile> bystanderProfiles;
-    public  List<NPCProfile> traitorProfiles;
+    public  NPCProfile[] bystanderProfiles;
+    public  NPCProfile[] traitorProfiles;
 }

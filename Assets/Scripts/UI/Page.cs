@@ -5,15 +5,15 @@ using static NPC;
 public class Page : MonoBehaviour
 {
     public NPCsDataSO npcData;
-    public AtlasUIMotionRenderer paperRenderer;
+    public AtlasRenderer paperRenderer;
 
-    public AtlasTextRenderer behavioursRenderer0;
-    public AtlasTextRenderer behaviourRenderer1;
-    public AtlasTextRenderer nameRenderer;
-    public AtlasTextRenderer appearenceRenderer;
-    public AtlasTextRenderer departureStationRenderer;
+    public AtlasRenderer behavioursRenderer0;
+    public AtlasRenderer behaviourRenderer1;
+    public AtlasRenderer nameRenderer;
+    public AtlasRenderer appearenceRenderer;
+    public AtlasRenderer departureStationRenderer;
     
-    public AtlasUISimpleRenderer mugshotRenderer;
+    public AtlasRenderer mugshotRenderer;
 
     [Header("Generated")]
     public AtlasClip paperClip;
@@ -24,7 +24,7 @@ public class Page : MonoBehaviour
 
     public void Init(NPCProfile traitorProfile)
     {
-        paperClip = paperRenderer.renderInput.atlas.clipDict[(int)NotepadMotion.Page];
+        paperClip = paperRenderer.atlas.clipDict[(int)NotepadMotion.Page];
 
         behaviours0 = GetBehaviourAtIndex(traitorProfile.behaviours, 0);
         behaviours1 = GetBehaviourAtIndex(traitorProfile.behaviours, 1);
@@ -36,7 +36,7 @@ public class Page : MonoBehaviour
         behavioursRenderer0.SetText(npcData.behaviourDescDict[behaviours0]);
         behaviourRenderer1.SetText(npcData.behaviourDescDict[behaviours1]);
         appearenceRenderer.SetText(npcData.appearanceDescDict[appearance]);
-        mugshotRenderer.SetSprite(mugshotRenderer.renderInput.atlas.simpleSprites[traitorProfile.npcPrefabIndex]);
+        mugshotRenderer.UpdateSpriteInputs(ref mugshotRenderer.atlas.simpleSprites[traitorProfile.npcPrefabIndex]);
     }
     public void PlayPaperClip()
     {
@@ -60,14 +60,14 @@ public class Page : MonoBehaviour
     }
     public void UpdatePageDepth(int depth)
     {
-        paperRenderer.renderInput.UpdateDepthRealtime(depth);
+        paperRenderer.UpdateDepthRealtime(depth);
         int contentDepth = depth - 1;
-        behavioursRenderer0.renderInput.UpdateDepthRealtime(contentDepth);
-        behaviourRenderer1.renderInput.UpdateDepthRealtime(contentDepth);
-        appearenceRenderer.renderInput.UpdateDepthRealtime(contentDepth);
-        departureStationRenderer.renderInput.UpdateDepthRealtime(contentDepth);
-        nameRenderer.renderInput.UpdateDepthRealtime(contentDepth);
-        mugshotRenderer.renderInput .UpdateDepthRealtime(contentDepth);
+        behavioursRenderer0.UpdateDepthRealtime(contentDepth);
+        behaviourRenderer1.UpdateDepthRealtime(contentDepth);
+        appearenceRenderer.UpdateDepthRealtime(contentDepth);
+        departureStationRenderer.UpdateDepthRealtime(contentDepth);
+        nameRenderer.UpdateDepthRealtime(contentDepth);
+        mugshotRenderer.UpdateDepthRealtime(contentDepth);
     }
     public void TogglePageRenderer(bool toggle)
     {

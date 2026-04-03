@@ -124,7 +124,7 @@ public class POVUI : MonoBehaviour
                 ctsUIObject?.Cancel();
                 InitNaturalPos(ticketActivePos);
 
-                ticket.SetText(spyStats.ticketName, spyStats.departureStationName, spyStats.arrivalStationName);
+                ticket.SetText(spyStats.departureStationName, spyStats.arrivalStationName);
             }
             break;
             case State.Map:

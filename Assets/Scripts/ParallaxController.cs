@@ -28,54 +28,11 @@ public class ParallaxController : MonoBehaviour
     private void Start()
     {
         worldPos = transform.position;
-        
-        switch(leftRenderer)
-        {
-            case AtlasSimpleRenderer simpleRenderer:
-            {
-                bounds = simpleRenderer.renderInput.bounds;
-            }
-            break;
-
-            case AtlasMotionRenderer motionRenderer:
-            {
-                bounds = motionRenderer.renderInput.bounds;
-            }
-            break;
-
-            case AtlasSliceRenderer sliceRenderer:
-            {
-                bounds = sliceRenderer.renderInput.bounds;
-            }
-            break;
-        }
+        bounds = leftRenderer.bounds;
 
         if (rightRenderer)
         {
-            Bounds rightBounds = new Bounds();
-
-            switch (rightRenderer)
-            {
-
-                case AtlasSimpleRenderer simpleRenderer:
-                {
-                    rightBounds = simpleRenderer.renderInput.bounds;
-                }
-                break;
-
-                case AtlasMotionRenderer motionRenderer:
-                {
-                    rightBounds = motionRenderer.renderInput.bounds;
-                }
-                break;
-
-                case AtlasSliceRenderer sliceRenderer:
-                {
-                    rightBounds = sliceRenderer.renderInput.bounds;
-                }
-                break;
-            }
-
+            Bounds rightBounds = rightRenderer.bounds;
             bounds.Encapsulate(rightBounds);
         }
 

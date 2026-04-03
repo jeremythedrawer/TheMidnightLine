@@ -17,7 +17,6 @@ public class TripSO : ScriptableObject
     [Header("Generated")]
     public int curStationIndex;
     public StationSO curStation;
-    public Zone[][] zonesByArea;
     public int tripMeters;
 }
 #if UNITY_EDITOR

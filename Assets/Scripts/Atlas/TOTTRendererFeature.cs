@@ -109,67 +109,64 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
             if (prefabStage != null) prefabScene = prefabStage.scene;
 #endif
-            foreach ((BatchKey key, BatchData data) batch in batchList)
+            foreach ((BatchKey key, SpriteBatch data) batch in spriteBatchList)
             {
                 int count = 0;
-                for (int i = 0; i < batch.data.singularRenderInputs.Count && count < MAX; i++)
+                for (int i = 0; i < batch.data.rendererList.Count && count < MAX; i++)
                 {
-                    SingularRenderInput renderInput = batch.data.singularRenderInputs[i];
+                    AtlasRenderer renderer = batch.data.rendererList[i];
 
-                    if (renderInput == null || renderInput.gameObject == null || !renderInput.gameObject.activeInHierarchy) continue;
+                    if (renderer == null || renderer.gameObject == null || !renderer.gameObject.activeInHierarchy) continue;
 #if UNITY_EDITOR
 
                     if (prefabStage != null)
                     {
-                        if (renderInput.gameObject.scene != prefabScene) continue;
+                        if (renderer.gameObject.scene != prefabScene) continue;
                     }
 #endif
 
-                    renderInput.UpdateBounds();
+                    renderer.UpdateBounds();
 #if !UNITY_EDITOR
                     if (renderInput.bounds.max.x < cameraStats.camWorldLeft || renderInput.bounds.min.x > cameraStats.camWorldRight || renderInput.bounds.max.y < cameraStats.camWorldBottom || renderInput.bounds.min.y > cameraStats.camWorldTop) continue;
 #endif
-
-                    batch.data.spriteData[count] = new SpriteData
-                    {
-                        worldPosition = renderInput.gameObject.transform.position,
-                        worldPivotAndScale = renderInput.pivotAndSize,
-                        uvSizeAndPos = renderInput.uvSizeAndPos,
-                        scaleAndFlip = renderInput.scaleAndFlip,
-                        custom = renderInput.custom,
-                    };
-                    count++;
-                }
-
-                for (int i = 0; i < batch.data.multipleRenderInputs.Count && count < MAX; i++)
-                {
-                    MultipleRenderInput renderInput = batch.data.multipleRenderInputs[i];
-
-                    if (renderInput == null || renderInput.gameObject == null ||  !renderInput.gameObject.activeInHierarchy) continue;
-#if UNITY_EDITOR
-
-                    if (prefabStage != null)
-                    {
-                        if (renderInput.gameObject.scene != prefabScene) continue;
-                    }
-#endif
-
-                    renderInput.UpdateBounds();
-
-#if !UNITY_EDITOR
-                    if (renderInput.bounds.max.x < cameraStats.camWorldLeft || renderInput.bounds.min.x > cameraStats.camWorldRight || renderInput.bounds.max.y < cameraStats.camWorldBottom || renderInput.bounds.min.y > cameraStats.camWorldTop) continue;
-#endif
-                    for (int j = 0; j < renderInput.worldPivotAndSize.Length; j++)
-                    {
-                        batch.data.spriteData[count] = new SpriteData
+                    switch (renderer.rendererType)
+                    { 
+                        case AtlasRendererType.SimpleWorld:
+                        case AtlasRendererType.MotionWorld:
+                        case AtlasRendererType.SimpleScreen:
+                        case AtlasRendererType.MotionScreen:
                         {
-                            worldPosition = renderInput.gameObject.transform.position, // TODO: Make an offset set hear
-                            worldPivotAndScale = renderInput.worldPivotAndSize[j],
-                            uvSizeAndPos = renderInput.uvSizeAndPos[j],
-                            scaleAndFlip = renderInput.scaleAndFlip[j],
-                            custom = Vector4.zero,
-                        };
-                        count++;
+                            batch.data.spriteData[count] = new SpriteData
+                            {
+                                worldPosition = renderer.gameObject.transform.position,
+                                worldPivotAndScale = renderer.worldPivotAndSize,
+                                uvSizeAndPos = renderer.uvSizeAndPosition,
+                                scaleAndFlip = renderer.scaleAndFlip,
+                                custom = renderer.custom,
+                            };
+                            count++;
+                        }
+                        break;
+
+                        case AtlasRendererType.SliceWorld:
+                        case AtlasRendererType.TextWorld:
+                        case AtlasRendererType.SliceScreen:
+                        case AtlasRendererType.TextScreen:
+                        {
+                            for (int j = 0; j < renderer.worldPivotsAndSizes.Length; j++)
+                            {
+                                batch.data.spriteData[count] = new SpriteData
+                                {
+                                    worldPosition = renderer.transform.position,
+                                    worldPivotAndScale = renderer.worldPivotsAndSizes[j],
+                                    uvSizeAndPos = renderer.uvSizesAndPositions[j],
+                                    scaleAndFlip = renderer.scalesAndFlips[j],
+                                    custom = renderer.customs[j],
+                                };
+                                count++;
+                            }
+                        }
+                        break;
                     }
                 }
 

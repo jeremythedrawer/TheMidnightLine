@@ -1,4 +1,3 @@
-using System.Xml.Linq;
 using UnityEngine;
 using static NPC;
 public class Station : MonoBehaviour
@@ -7,26 +6,21 @@ public class Station : MonoBehaviour
     public StationSO station;
     public TrainStatsSO trainStats;
     public TripSO trip;
-    public AtlasSimpleRenderer platformRenderer;
+    public AtlasRenderer platformRenderer;
 
-    private void Awake()
-    {
-    }
     private void OnEnable()
     {
-        SpawnNPCs();
-        station.isFrontOfTrain = platformRenderer.renderInput.batchKey.depthOrder < trainStats.minDepth;
+        station.isFrontOfTrain = platformRenderer.batchKey.depthOrder < trainStats.minDepth;
     }
-
-    private void SpawnNPCs()
+    public void SpawnNPCs()
     {
-        for (int i = 0; i < station.bystanderProfiles.Count; i++)
+        for (int i = 0; i < station.bystanderProfiles.Length; i++)
         {
             NPCProfile bystanderProfile = station.bystanderProfiles[i];
             
             float randXPos = Random.Range(
-            platformRenderer.renderInput.bounds.min.x + SPAWN_BUFFER, 
-            platformRenderer.renderInput.bounds.max.x - SPAWN_BUFFER);
+            platformRenderer.bounds.min.x + SPAWN_BUFFER, 
+            platformRenderer.bounds.max.x - SPAWN_BUFFER);
             
             Vector3 spawnPos = new Vector3(
             randXPos, 
@@ -43,12 +37,12 @@ public class Station : MonoBehaviour
             bystander.role = Role.Bystander;
         }
 
-        for (int i = 0; i < station.traitorProfiles.Count; i++)
+        for (int i = 0; i < station.traitorProfiles.Length; i++)
         {
             NPCProfile traitorProfile = station.traitorProfiles[i];
             float randXPos = Random.Range(
-            platformRenderer.renderInput.bounds.min.x + SPAWN_BUFFER,
-            platformRenderer.renderInput.bounds.max.x - SPAWN_BUFFER);
+            platformRenderer.bounds.min.x + SPAWN_BUFFER,
+            platformRenderer.bounds.max.x - SPAWN_BUFFER);
             
             Vector3 spawnPos = new Vector3(randXPos, 
             transform.position.y + 0.1f, 

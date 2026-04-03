@@ -8,7 +8,7 @@ public class GangwayDoor : MonoBehaviour
 
     [SerializeField] BoxCollider2D wallCollider;
     [SerializeField] LayerSettingsSO layerSettings;
-    [SerializeField] AtlasMotionRenderer atlasRenderer;
+    [SerializeField] AtlasRenderer atlasRenderer;
     [SerializeField] Carriage carriage;
     [SerializeField] SpyStatsSO spyStats;
 
@@ -19,7 +19,7 @@ public class GangwayDoor : MonoBehaviour
 
     private void Start()
     {
-        doorClip = atlasRenderer.renderInput.atlas.clipDict[(int)TrainMotion.TrainDoor];
+        doorClip = atlasRenderer.atlas.clipDict[(int)TrainMotion.TrainDoor];
     }
 
     private void OnTriggerExit2D(Collider2D collision)
@@ -28,7 +28,7 @@ public class GangwayDoor : MonoBehaviour
 
         ClosingDoor().Forget();
 
-        if ((atlasRenderer.renderInput.flipX && spyStats.curWorldPos.x < transform.position.x) || (!atlasRenderer.renderInput.flipX && spyStats.curWorldPos.x > transform.position.x))
+        if ((atlasRenderer.flipX && spyStats.curWorldPos.x < transform.position.x) || (!atlasRenderer.flipX && spyStats.curWorldPos.x > transform.position.x))
         {
             carriage.MoveUp();
         }

@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5664027592249379307}
-  - component: {fileID: 1201000164746778459}
+  - component: {fileID: 4242328913838918447}
   m_Layer: 0
   m_Name: SlideDoor_right
   m_TagString: Untagged
@@ -26,13 +26,13 @@ Transform:
   m_GameObject: {fileID: 4182164497885253679}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.00012207031, y: 0, z: -2}
+  m_LocalPosition: {x: 0.00012207031, y: 0, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9148143527789672719}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1201000164746778459
+--- !u!114 &4242328913838918447
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -41,33 +41,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 4182164497885253679}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: a213ed5795b0de441aee91076eac9fdf, type: 2}
-      depthOrder: 3
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 4182164497885253679}
-    bounds:
-      m_Center: {x: 5.717236, y: -2.0756664, z: 3}
-      m_Extent: {x: 0.4861111, y: 1.0833334, z: 0.1}
-    pivotAndSize: {x: 0, y: 0, z: 0.9722222, w: 2.1666667}
-    uvSizeAndPos: {x: 0.04272461, y: 0.095214844, z: 0.05126953, w: 0.2878418}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    boundsOffset: {x: 0.4861111, y: 1.0833334}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: a213ed5795b0de441aee91076eac9fdf, type: 2}
+    depthOrder: 3
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 13
+  flipX: 0
+  flipY: 0
   width: 1
   height: 1
-  spriteIndex: 13
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.04272461, y: 0.095214844, z: 0.05126953, w: 0.2878418}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 0.9722222, y: 2.1666667, z: 1}
     index: 13
+  bounds:
+    m_Center: {x: 7.028233, y: 5.8833327, z: 15}
+    m_Extent: {x: 0.4861111, y: 1.0833334, z: 0.1}
+  worldPivotAndSize: {x: 0, y: 0, z: 0.9722222, w: 2.1666667}
+  uvSizeAndPosition: {x: 0.04272461, y: 0.095214844, z: 0.05126953, w: 0.2878418}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.4861111, y: 1.0833334, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!1 &5840205793320442929
 GameObject:
   m_ObjectHideFlags: 0
@@ -118,8 +140,8 @@ MonoBehaviour:
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
   boxCollider: {fileID: 592955796763587438}
-  rightSlideDoorRenderer: {fileID: 1201000164746778459}
-  leftSlideDoorRenderer: {fileID: 902199067650720929}
+  rightSlideDoorRenderer: {fileID: 4242328913838918447}
+  leftSlideDoorRenderer: {fileID: 5192504948783074246}
   curState: 0
   rightSlideDoor_transform: {fileID: 5664027592249379307}
   leftSlideDoor_transform: {fileID: 6355935853720996048}
@@ -178,7 +200,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 6355935853720996048}
-  - component: {fileID: 902199067650720929}
+  - component: {fileID: 5192504948783074246}
   m_Layer: 0
   m_Name: SlideDoor_left
   m_TagString: Untagged
@@ -195,13 +217,13 @@ Transform:
   m_GameObject: {fileID: 8794300283607025902}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0.00012207031, y: 0.00000047683716, z: -2}
+  m_LocalPosition: {x: 0.00012207031, y: 0.00000047683716, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 9148143527789672719}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &902199067650720929
+--- !u!114 &5192504948783074246
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -210,30 +232,52 @@ MonoBehaviour:
   m_GameObject: {fileID: 8794300283607025902}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: a213ed5795b0de441aee91076eac9fdf, type: 2}
-      depthOrder: 3
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 8794300283607025902}
-    bounds:
-      m_Center: {x: 4.7450137, y: -2.075666, z: 3}
-      m_Extent: {x: 0.4861111, y: 1.0833334, z: 0.1}
-    pivotAndSize: {x: 0.9722222, y: 0, z: 0.9722222, w: 2.1666667}
-    uvSizeAndPos: {x: 0.04272461, y: 0.095214844, z: 0.0036621094, w: 0.2878418}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    boundsOffset: {x: -0.4861111, y: 1.0833334}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: a213ed5795b0de441aee91076eac9fdf, type: 2}
+    depthOrder: 3
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 12
+  flipX: 0
+  flipY: 0
   width: 1
   height: 1
-  spriteIndex: 12
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.04272461, y: 0.095214844, z: 0.0036621094, w: 0.2878418}
     uvPivot: {x: 1, y: 0}
     worldSize: {x: 0.9722222, y: 2.1666667, z: 1}
     index: 12
+  bounds:
+    m_Center: {x: 6.0560107, y: 5.883333, z: 15}
+    m_Extent: {x: 0.4861111, y: 1.0833334, z: 0.1}
+  worldPivotAndSize: {x: 0.9722222, y: 0, z: 0.9722222, w: 2.1666667}
+  uvSizeAndPosition: {x: 0.04272461, y: 0.095214844, z: 0.0036621094, w: 0.2878418}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: -0.4861111, y: 1.0833334, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0

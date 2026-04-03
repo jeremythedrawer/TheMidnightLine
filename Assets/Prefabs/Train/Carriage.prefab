@@ -15,7 +15,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &6283648621410223278
 Transform:
   m_ObjectHideFlags: 0
@@ -187,7 +187,7 @@ CompositeCollider2D:
   m_OffsetDistance: 0.00005
   m_UseDelaunayMesh: 0
   m_CompositeGameObject: {fileID: 121469110381124332}
---- !u!1 &982750004008766840
+--- !u!1 &1316184244618254929
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -195,38 +195,38 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 8679008319613450423}
-  - component: {fileID: 4891696231406916039}
-  - component: {fileID: 8537347935343719246}
+  - component: {fileID: 8391651105371076622}
+  - component: {fileID: 2083631184012535579}
+  - component: {fileID: 7550275423125424672}
   m_Layer: 12
-  m_Name: CarriageSeat_five
+  m_Name: CarriageSeat_two_left
   m_TagString: Chair Bounds
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &8679008319613450423
+--- !u!4 &8391651105371076622
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 982750004008766840}
+  m_GameObject: {fileID: 1316184244618254929}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.889923, y: -3.132, z: 14}
+  m_LocalPosition: {x: -7.797, y: -3.138, z: 14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &4891696231406916039
+--- !u!61 &2083631184012535579
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 982750004008766840}
+  m_GameObject: {fileID: 1316184244618254929}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -254,7 +254,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 1.3216668, y: 0.51944447}
+  m_Offset: {x: 0.5194444, y: 0.51944447}
   m_SpriteTilingProperty:
     border: {x: 0.93, y: 0, z: 0.93, w: 0}
     pivot: {x: 0, y: 0}
@@ -264,64 +264,92 @@ BoxCollider2D:
     drawMode: 2
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 2.6433337, y: 1.0388889}
+  m_Size: {x: 1.0388888, y: 1.0388889}
   m_EdgeRadius: 0
---- !u!114 &8537347935343719246
+--- !u!114 &7550275423125424672
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 982750004008766840}
+  m_GameObject: {fileID: 1316184244618254929}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 065474de7e082734984a15c3949e3dfc, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSliceRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 14
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 4891696231406916039}
-    gameObject: {fileID: 982750004008766840}
-    bounds:
-      m_Center: {x: 207.16612, y: 0.49178183, z: 14}
-      m_Extent: {x: 1.3216668, y: 0.51944447, z: 0.1}
-    worldPivotAndSize:
-    - {x: 0, y: 0, z: 0.51666665, w: 0}
-    - {x: -0.51666665, y: 0, z: 0.5277779, w: 0}
-    - {x: -2.1211114, y: 0, z: 0.52222216, w: 0}
-    - {x: 0, y: -0, z: 0.51666665, w: 1.0333333}
-    - {x: -0.51666665, y: -0, z: 0.5277779, w: 1.0333333}
-    - {x: -2.1211114, y: -0, z: 0.52222216, w: 1.0333333}
-    - {x: 0, y: -1.0333333, z: 0.51666665, w: 0.005555572}
-    - {x: -0.51666665, y: -1.0333333, z: 0.5277779, w: 0.005555572}
-    - {x: -2.1211114, y: -1.0333333, z: 0.52222216, w: 0.005555572}
-    uvSizeAndPos:
-    - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-    - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-    - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
-    scaleAndFlip:
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 3.04, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 3.04, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 3.04, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    boundsOffset: {x: 1.3216668, y: 0.51944447}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 2
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 14
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
   spriteIndex: 0
-  width: 3.04
+  flipX: 0
+  flipY: 0
+  width: 0
   height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
+    uvPivot: {x: 0.5, y: 0}
+    worldSize: {x: 5.1, y: 2.2055554, z: 1}
+    index: 4
+  bounds:
+    m_Center: {x: 203.45682, y: 0.4857818, z: 14.1}
+    m_Extent: {x: 0.5194444, y: 0.51944447, z: 0.1}
+  worldPivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
+  uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.5194444, y: 0.51944447, z: 0.1}
+  worldPivotsAndSizes:
+  - {x: 0, y: 0, z: 0.51666665, w: 0}
+  - {x: -0.51666665, y: 0, z: 0.5277779, w: 0}
+  - {x: -0.51666665, y: 0, z: 0.52222216, w: 0}
+  - {x: 0, y: -0, z: 0.51666665, w: 1.0333333}
+  - {x: -0.51666665, y: -0, z: 0.5277779, w: 1.0333333}
+  - {x: -0.51666665, y: -0, z: 0.52222216, w: 1.0333333}
+  - {x: 0, y: -1.0333333, z: 0.51666665, w: 0.005555572}
+  - {x: -0.51666665, y: -1.0333333, z: 0.5277779, w: 0.005555572}
+  - {x: -0.51666665, y: -1.0333333, z: 0.52222216, w: 0.005555572}
+  uvSizesAndPositions:
+  - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
+  - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
+  - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
+  - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
+  - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
+  - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
+  - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
+  - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
+  - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
+  scalesAndFlips:
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 0, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 0, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 0, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  customs:
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
@@ -385,11 +413,11 @@ Transform:
   - {fileID: 3248802059132394449}
   - {fileID: 3296950107188590088}
   - {fileID: 3095266738411378484}
-  - {fileID: 533951966864984740}
+  - {fileID: 2469725449711952807}
   - {fileID: 438427871392543983}
-  - {fileID: 9101330149939561220}
-  - {fileID: 8679008319613450423}
-  - {fileID: 835245689324775544}
+  - {fileID: 8391651105371076622}
+  - {fileID: 6779542465285559771}
+  - {fileID: 1198870224811505877}
   - {fileID: 3063617264005690026}
   - {fileID: 7695189108477490223}
   - {fileID: 7053136837799052714}
@@ -415,28 +443,28 @@ MonoBehaviour:
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   wheelRenderers:
-  - {fileID: 4590901183648556013}
-  - {fileID: 1265253664055477414}
-  - {fileID: 8265072004633968386}
-  - {fileID: 5076010261822807276}
-  - {fileID: 2093232253659109544}
-  - {fileID: 2694642637379824527}
+  - {fileID: 2196143683175361986}
+  - {fileID: 4543875105424071501}
+  - {fileID: 3932938843677928615}
+  - {fileID: 3114277436377056333}
+  - {fileID: 1556630721882284644}
+  - {fileID: 181361394174892427}
   exteriorRenderers:
-  - {fileID: 3020936029059496893}
-  - {fileID: 3873952597852121159}
-  - {fileID: 8856205759601684580}
-  - {fileID: 7406202828449637278}
-  - {fileID: 6918299556047711684}
-  - {fileID: 8947863862202285630}
-  - {fileID: 2691835036088689343}
+  - {fileID: 7883198929589499098}
+  - {fileID: 2285017976270451763}
+  - {fileID: 4498439411272089347}
+  - {fileID: 5529601040614031338}
+  - {fileID: 2632501533003588259}
+  - {fileID: 6221786814295384650}
+  - {fileID: 5233752221908729529}
   seatRenderers:
-  - {fileID: 6604185700111300111}
-  - {fileID: 8826843392645589092}
-  - {fileID: 8537347935343719246}
-  - {fileID: 5685946456301062496}
+  - {fileID: 4189230969529228219}
+  - {fileID: 7550275423125424672}
+  - {fileID: 7385323923086403791}
+  - {fileID: 3705765459553740809}
   grapPoleRenderers:
-  - {fileID: 8437714948916562873}
-  - {fileID: 6378411832077489705}
+  - {fileID: 3135751210078090790}
+  - {fileID: 7754061865138205258}
   insideBoundsCollider: {fileID: 4967624362453220076}
   smokingRoomCollider_right: {fileID: 3759561684428170471}
   smokingRoomCollider_left: {fileID: 8152975921336346681}
@@ -450,7 +478,9 @@ MonoBehaviour:
   - {fileID: 3167449020684325253}
   alpha: 0
   wheelCircumference: 0
-  chairData: []
+  seatData:
+    xPos: []
+    filled: 
   smokersRoomData: []
   sittingDepth: 0
   standingDepth: 0
@@ -462,6 +492,7 @@ MonoBehaviour:
   - {fileID: 5532670627397845320}
   - {fileID: 3248802059132394449}
   prevMeters: 0
+  seatAmount: 0
 --- !u!1 &2017503644377605478
 GameObject:
   m_ObjectHideFlags: 0
@@ -471,7 +502,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5532670627397845320}
-  - component: {fileID: 2093232253659109544}
+  - component: {fileID: 1556630721882284644}
   m_Layer: 0
   m_Name: Wheel (4)
   m_TagString: Untagged
@@ -494,7 +525,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2093232253659109544
+--- !u!114 &1556630721882284644
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -503,34 +534,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 2017503644377605478}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 6
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 2017503644377605478}
-    bounds:
-      m_Center: {x: 105.98633, y: -59.3, z: 6}
-      m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
-    pivotAndSize: {x: 0.49166667, y: 0.49166667, z: 0.98333335, w: 0.98333335}
-    uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    custom: {x: 0, y: 0, z: 0, w: 0}
-    boundsOffset: {x: 0, y: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 6
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 8
+  flipX: 1
+  flipY: 0
   width: 1
   height: 1
-  spriteIndex: 8
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
     index: 8
+  bounds:
+    m_Center: {x: 105.98633, y: -59.3, z: 6}
+    m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
+  worldPivotAndSize: {x: 0.49166667, y: 0.49166667, z: 0.98333335, w: 0.98333335}
+  uvSizeAndPosition: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: -1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: 0, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!1 &3121479698376935250
 GameObject:
   m_ObjectHideFlags: 0
@@ -540,7 +592,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8615908251815646399}
-  - component: {fileID: 1265253664055477414}
+  - component: {fileID: 4543875105424071501}
   m_Layer: 0
   m_Name: Wheel (1)
   m_TagString: Untagged
@@ -563,7 +615,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1265253664055477414
+--- !u!114 &4543875105424071501
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -572,34 +624,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 3121479698376935250}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 6
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 3121479698376935250}
-    bounds:
-      m_Center: {x: 117.1266, y: -59.3, z: 6}
-      m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
-    pivotAndSize: {x: 0.49166667, y: 0.49166667, z: 0.98333335, w: 0.98333335}
-    uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    custom: {x: 0, y: 0, z: 0, w: 0}
-    boundsOffset: {x: 0, y: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 6
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 8
+  flipX: 1
+  flipY: 0
   width: 1
   height: 1
-  spriteIndex: 8
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
     index: 8
+  bounds:
+    m_Center: {x: 117.1266, y: -59.3, z: 6}
+    m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
+  worldPivotAndSize: {x: 0.49166667, y: 0.49166667, z: 0.98333335, w: 0.98333335}
+  uvSizeAndPosition: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: -1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: 0, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!1 &3182729529300147058
 GameObject:
   m_ObjectHideFlags: 0
@@ -609,7 +682,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8962344830599312217}
-  - component: {fileID: 8265072004633968386}
+  - component: {fileID: 3932938843677928615}
   m_Layer: 0
   m_Name: Wheel (2)
   m_TagString: Untagged
@@ -632,7 +705,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8265072004633968386
+--- !u!114 &3932938843677928615
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -641,34 +714,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 3182729529300147058}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 6
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 3182729529300147058}
-    bounds:
-      m_Center: {x: 114.74652, y: -59.3, z: 6}
-      m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
-    pivotAndSize: {x: 0.49166667, y: 0.49166667, z: 0.98333335, w: 0.98333335}
-    uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    custom: {x: 0, y: 0, z: 0, w: 0}
-    boundsOffset: {x: 0, y: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 6
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 8
+  flipX: 1
+  flipY: 0
   width: 1
   height: 1
-  spriteIndex: 8
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
     index: 8
+  bounds:
+    m_Center: {x: 114.74652, y: -59.3, z: 6}
+    m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
+  worldPivotAndSize: {x: 0.49166667, y: 0.49166667, z: 0.98333335, w: 0.98333335}
+  uvSizeAndPosition: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: -1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: 0, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!1 &3383214570271346198
 GameObject:
   m_ObjectHideFlags: 0
@@ -678,7 +772,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8907475940289529530}
-  - component: {fileID: 2022991816553184838}
+  - component: {fileID: 3389602565251253534}
   m_Layer: 0
   m_Name: CarriageSprite
   m_TagString: Untagged
@@ -701,7 +795,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2022991816553184838
+--- !u!114 &3389602565251253534
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -710,34 +804,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 3383214570271346198}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 5
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 3383214570271346198}
-    bounds:
-      m_Center: {x: 111.03639, y: -57.409443, z: 5}
-      m_Extent: {x: 10.069445, y: 2.3305554, z: 0.1}
-    pivotAndSize: {x: 10.069445, y: 0, z: 20.13889, w: 4.661111}
-    uvSizeAndPos: {x: 0.88500977, y: 0.20483398, z: 0.00048828125, w: 0.38842773}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    custom: {x: 0, y: 0, z: 0, w: 0}
-    boundsOffset: {x: 0, y: 2.3305554}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 5
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 10
+  flipX: 0
+  flipY: 0
   width: 1
   height: 1
-  spriteIndex: 10
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.88500977, y: 0.20483398, z: 0.00048828125, w: 0.38842773}
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 20.13889, y: 4.661111, z: 1}
     index: 10
+  bounds:
+    m_Center: {x: 111.03639, y: -57.409443, z: 5}
+    m_Extent: {x: 10.069445, y: 2.3305554, z: 0.1}
+  worldPivotAndSize: {x: 10.069445, y: 0, z: 20.13889, w: 4.661111}
+  uvSizeAndPosition: {x: 0.88500977, y: 0.20483398, z: 0.00048828125, w: 0.38842773}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: 2.3305554, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!1 &3524124761858546515
 GameObject:
   m_ObjectHideFlags: 0
@@ -747,7 +862,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3296950107188590088}
-  - component: {fileID: 6155514797524066949}
+  - component: {fileID: 7207307466969309906}
   m_Layer: 0
   m_Name: CarriagePantograph
   m_TagString: Untagged
@@ -770,7 +885,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6155514797524066949
+--- !u!114 &7207307466969309906
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -779,34 +894,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 3524124761858546515}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 5
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 3524124761858546515}
-    bounds:
-      m_Center: {x: 106.356445, y: -54.07622, z: 5}
-      m_Extent: {x: 2.55, y: 1.1027777, z: 0.1}
-    pivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
-    uvSizeAndPos: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    custom: {x: 0, y: 0, z: 0, w: 0}
-    boundsOffset: {x: 0, y: 1.1027777}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 5
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 4
+  flipX: 0
+  flipY: 0
   width: 1
   height: 1
-  spriteIndex: 4
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 5.1, y: 2.2055554, z: 1}
     index: 4
+  bounds:
+    m_Center: {x: 106.356445, y: -54.07622, z: 5}
+    m_Extent: {x: 2.55, y: 1.1027777, z: 0.1}
+  worldPivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
+  uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: 1.1027777, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!1 &3935060146364379328
 GameObject:
   m_ObjectHideFlags: 0
@@ -816,7 +952,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3248802059132394449}
-  - component: {fileID: 2694642637379824527}
+  - component: {fileID: 181361394174892427}
   m_Layer: 0
   m_Name: Wheel (5)
   m_TagString: Untagged
@@ -839,7 +975,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2694642637379824527
+--- !u!114 &181361394174892427
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -848,187 +984,54 @@ MonoBehaviour:
   m_GameObject: {fileID: 3935060146364379328}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 6
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 3935060146364379328}
-    bounds:
-      m_Center: {x: 103.3665, y: -59.3, z: 6}
-      m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
-    pivotAndSize: {x: 0.49166667, y: 0.49166667, z: 0.98333335, w: 0.98333335}
-    uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    custom: {x: 0, y: 0, z: 0, w: 0}
-    boundsOffset: {x: 0, y: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 6
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 8
+  flipX: 1
+  flipY: 0
   width: 1
   height: 1
-  spriteIndex: 8
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
     index: 8
---- !u!1 &4033721656781863208
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 835245689324775544}
-  - component: {fileID: 1637902812150187307}
-  - component: {fileID: 5685946456301062496}
-  m_Layer: 12
-  m_Name: CarriageSeat_five (1)
-  m_TagString: Chair Bounds
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &835245689324775544
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4033721656781863208}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.2401428, y: -3.132, z: 14}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4431371205824164946}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &1637902812150187307
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4033721656781863208}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 1.3216668, y: 0.51944447}
-  m_SpriteTilingProperty:
-    border: {x: 0.93, y: 0, z: 0.93, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 2.8, y: 1.87}
-    newSize: {x: 1.88, y: 1.87}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 2
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 2.6433337, y: 1.0388889}
-  m_EdgeRadius: 0
---- !u!114 &5685946456301062496
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4033721656781863208}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 065474de7e082734984a15c3949e3dfc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSliceRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 14
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 1637902812150187307}
-    gameObject: {fileID: 4033721656781863208}
-    bounds:
-      m_Center: {x: 213.29619, y: 0.49178183, z: 14}
-      m_Extent: {x: 1.3216668, y: 0.51944447, z: 0.1}
-    worldPivotAndSize:
-    - {x: 0, y: 0, z: 0.51666665, w: 0}
-    - {x: -0.51666665, y: 0, z: 0.5277779, w: 0}
-    - {x: -2.1211114, y: 0, z: 0.52222216, w: 0}
-    - {x: 0, y: -0, z: 0.51666665, w: 1.0333333}
-    - {x: -0.51666665, y: -0, z: 0.5277779, w: 1.0333333}
-    - {x: -2.1211114, y: -0, z: 0.52222216, w: 1.0333333}
-    - {x: 0, y: -1.0333333, z: 0.51666665, w: 0.005555572}
-    - {x: -0.51666665, y: -1.0333333, z: 0.5277779, w: 0.005555572}
-    - {x: -2.1211114, y: -1.0333333, z: 0.52222216, w: 0.005555572}
-    uvSizeAndPos:
-    - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-    - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-    - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
-    scaleAndFlip:
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 3.04, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 3.04, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 3.04, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    boundsOffset: {x: 1.3216668, y: 0.51944447}
-  spriteIndex: 0
-  width: 3.04
-  height: 1
+  bounds:
+    m_Center: {x: 103.3665, y: -59.3, z: 6}
+    m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
+  worldPivotAndSize: {x: 0.49166667, y: 0.49166667, z: 0.98333335, w: 0.98333335}
+  uvSizeAndPosition: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: -1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: 0, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
   slicedSprite:
     sprite:
-      uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
       uvPivot: {x: 0, y: 0}
-      worldSize: {x: 1.5666667, y: 1.0388889, z: 1}
+      worldSize: {x: 0, y: 0, z: 0}
       index: 0
-    slice: {x: 0.32978722, y: 0.6666667, z: 0, w: 0.9946524}
-    uvSizeAndPos:
-    - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-    - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-    - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
-    worldSlices: {x: 0.51666665, y: 0.52222216, z: 0, w: 0.005555572}
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
 --- !u!1 &4276711033754027159
 GameObject:
@@ -1191,7 +1194,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8067662884716964620}
-  - component: {fileID: 4590901183648556013}
+  - component: {fileID: 2196143683175361986}
   m_Layer: 0
   m_Name: Wheel
   m_TagString: Untagged
@@ -1214,7 +1217,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4590901183648556013
+--- !u!114 &2196143683175361986
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1223,34 +1226,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 4437465374685361185}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 6
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 4437465374685361185}
-    bounds:
-      m_Center: {x: 119.06653, y: -59.3, z: 6}
-      m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
-    pivotAndSize: {x: 0.49166667, y: 0.49166667, z: 0.98333335, w: 0.98333335}
-    uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    custom: {x: 0, y: 0, z: 0, w: 0}
-    boundsOffset: {x: 0, y: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 6
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 8
+  flipX: 1
+  flipY: 0
   width: 1
   height: 1
-  spriteIndex: 8
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
     index: 8
+  bounds:
+    m_Center: {x: 119.06653, y: -59.3, z: 6}
+    m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
+  worldPivotAndSize: {x: 0.49166667, y: 0.49166667, z: 0.98333335, w: 0.98333335}
+  uvSizeAndPosition: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: -1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: 0, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!1 &4578726807934764700
 GameObject:
   m_ObjectHideFlags: 0
@@ -1339,8 +1363,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3309241852089399100}
   - component: {fileID: 3113676838955747818}
+  - component: {fileID: 7521873210029609715}
   - component: {fileID: 1925747024052807237}
-  - component: {fileID: 707717829115773039}
   m_Layer: 13
   m_Name: GangwayDoor_right
   m_TagString: Untagged
@@ -1410,6 +1434,64 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5033722, y: 2.211111}
   m_EdgeRadius: 0
+--- !u!114 &7521873210029609715
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4664487488882389983}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 1
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 5
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.012207031, y: 0.09741211, z: 0.5571289, w: 0.60961914}
+    uvPivot: {x: 0.96, y: 0.49874687}
+    worldSize: {x: 0.2777778, y: 2.2166667, z: 1}
+    index: 0
+  bounds:
+    m_Center: {x: 120.60066, y: -57.025223, z: 5}
+    m_Extent: {x: 0.1388889, y: 1.1083333, z: 0.1}
+  worldPivotAndSize: {x: 0.26666668, y: 1.1055555, z: 0.2777778, w: 2.2166667}
+  uvSizeAndPosition: {x: 0.012207031, y: 0.09741211, z: 0.5571289, w: 0.60961914}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: -0.12777779, y: 0.0027778149, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!114 &1925747024052807237
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1424,7 +1506,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wallCollider: {fileID: 5797225388193278307}
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
-  atlasRenderer: {fileID: 707717829115773039}
+  atlasRenderer: {fileID: 7521873210029609715}
   carriage: {fileID: 4741126622765172946}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   isOpen: 0
@@ -1434,44 +1516,6 @@ MonoBehaviour:
     clipType: 0
     motionIndex: 0
     time: 0
---- !u!114 &707717829115773039
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4664487488882389983}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ad303b9518a28f48a3f27f561a6d346, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasMotionRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 5
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 4664487488882389983}
-    bounds:
-      m_Center: {x: 120.60066, y: -57.025223, z: 5}
-      m_Extent: {x: 0.1388889, y: 1.1083333, z: 0.1}
-    pivotAndSize: {x: 0.26666668, y: 1.1055555, z: 0.2777778, w: 2.2166667}
-    uvSizeAndPos: {x: 0.012207031, y: 0.09741211, z: 0.5571289, w: 0.60961914}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    custom: {x: 0, y: 0, z: 0, w: 0}
-    boundsOffset: {x: -0.12777779, y: 0.0027778149}
-  spriteIndex: 0
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  sprite:
-    uvSizeAndPos: {x: 0.012207031, y: 0.09741211, z: 0.5571289, w: 0.60961914}
-    uvPivot: {x: 0.96, y: 0.49874687}
-    worldSize: {x: 0.2777778, y: 2.2166667, z: 1}
-    index: 0
 --- !u!1 &4870614369846389462
 GameObject:
   m_ObjectHideFlags: 0
@@ -1559,7 +1603,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3820570403346329793}
-  - component: {fileID: 5076010261822807276}
+  - component: {fileID: 3114277436377056333}
   m_Layer: 0
   m_Name: Wheel (3)
   m_TagString: Untagged
@@ -1582,7 +1626,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5076010261822807276
+--- !u!114 &3114277436377056333
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1591,34 +1635,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 4978060288963020917}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 6
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 4978060288963020917}
-    bounds:
-      m_Center: {x: 108.38629, y: -59.3, z: 6}
-      m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
-    pivotAndSize: {x: 0.49166667, y: 0.49166667, z: 0.98333335, w: 0.98333335}
-    uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    custom: {x: 0, y: 0, z: 0, w: 0}
-    boundsOffset: {x: 0, y: 0}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 6
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 8
+  flipX: 1
+  flipY: 0
   width: 1
   height: 1
-  spriteIndex: 8
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
     index: 8
+  bounds:
+    m_Center: {x: 108.38629, y: -59.3, z: 6}
+    m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
+  worldPivotAndSize: {x: 0.49166667, y: 0.49166667, z: 0.98333335, w: 0.98333335}
+  uvSizeAndPosition: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: -1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: 0, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!1 &5189362098739068744
 GameObject:
   m_ObjectHideFlags: 0
@@ -1697,6 +1762,141 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.1758728, y: 2.2012274}
   m_EdgeRadius: 0
+--- !u!1 &5710230069691985853
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6779542465285559771}
+  - component: {fileID: 7385323923086403791}
+  m_Layer: 12
+  m_Name: CarriageSeat_five_left
+  m_TagString: Chair Bounds
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6779542465285559771
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5710230069691985853}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.4, y: -3.138, z: 14}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4431371205824164946}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7385323923086403791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5710230069691985853}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 2
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 14
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  flipX: 0
+  flipY: 0
+  width: 3
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
+    uvPivot: {x: 0.5, y: 0}
+    worldSize: {x: 5.1, y: 2.2055554, z: 1}
+    index: 4
+  bounds:
+    m_Center: {x: 207.6455, y: 0.4857818, z: 14.1}
+    m_Extent: {x: 1.3111112, y: 0.51944447, z: 0.1}
+  worldPivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
+  uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 1.3111112, y: 0.51944447, z: 0.1}
+  worldPivotsAndSizes:
+  - {x: 0, y: 0, z: 0.51666665, w: 0}
+  - {x: -0.51666665, y: 0, z: 0.5277779, w: 0}
+  - {x: -2.1000004, y: 0, z: 0.52222216, w: 0}
+  - {x: 0, y: -0, z: 0.51666665, w: 1.0333333}
+  - {x: -0.51666665, y: -0, z: 0.5277779, w: 1.0333333}
+  - {x: -2.1000004, y: -0, z: 0.52222216, w: 1.0333333}
+  - {x: 0, y: -1.0333333, z: 0.51666665, w: 0.005555572}
+  - {x: -0.51666665, y: -1.0333333, z: 0.5277779, w: 0.005555572}
+  - {x: -2.1000004, y: -1.0333333, z: 0.52222216, w: 0.005555572}
+  uvSizesAndPositions:
+  - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
+  - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
+  - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
+  - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
+  - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
+  - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
+  - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
+  - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
+  - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
+  scalesAndFlips:
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 3, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 3, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 3, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  customs:
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 1.5666667, y: 1.0388889, z: 1}
+      index: 0
+    slice: {x: 0.32978722, y: 0.6666667, z: 0, w: 0.9946524}
+    uvSizeAndPos:
+    - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
+    - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
+    - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
+    - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
+    - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
+    - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
+    - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
+    - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
+    - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
+    worldSlices: {x: 0.51666665, y: 0.52222216, z: 0, w: 0.005555572}
+  quadCount: 0
 --- !u!1 &6073715766497742621
 GameObject:
   m_ObjectHideFlags: 0
@@ -1863,9 +2063,9 @@ GameObject:
   m_Component:
   - component: {fileID: 438427871392543983}
   - component: {fileID: 8636551100963537581}
-  - component: {fileID: 6604185700111300111}
+  - component: {fileID: 4189230969529228219}
   m_Layer: 12
-  m_Name: CarriageSeat_two
+  m_Name: CarriageSeat_two_right
   m_TagString: Chair Bounds
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1880,7 +2080,7 @@ Transform:
   m_GameObject: {fileID: 6515046231488049241}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 6.1071625, y: -3.132, z: 14}
+  m_LocalPosition: {x: 6.294, y: -3.138, z: 14}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1932,7 +2132,7 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 1.0388888, y: 1.0388889}
   m_EdgeRadius: 0
---- !u!114 &6604185700111300111
+--- !u!114 &4189230969529228219
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1941,53 +2141,81 @@ MonoBehaviour:
   m_GameObject: {fileID: 6515046231488049241}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 065474de7e082734984a15c3949e3dfc, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSliceRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 14
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 8636551100963537581}
-    gameObject: {fileID: 6515046231488049241}
-    bounds:
-      m_Center: {x: 217.36098, y: 0.49178183, z: 14}
-      m_Extent: {x: 0.5194444, y: 0.51944447, z: 0.1}
-    worldPivotAndSize:
-    - {x: 0, y: 0, z: 0.51666665, w: 0}
-    - {x: -0.51666665, y: 0, z: 0.5277779, w: 0}
-    - {x: -0.51666665, y: 0, z: 0.52222216, w: 0}
-    - {x: 0, y: -0, z: 0.51666665, w: 1.0333333}
-    - {x: -0.51666665, y: -0, z: 0.5277779, w: 1.0333333}
-    - {x: -0.51666665, y: -0, z: 0.52222216, w: 1.0333333}
-    - {x: 0, y: -1.0333333, z: 0.51666665, w: 0.005555572}
-    - {x: -0.51666665, y: -1.0333333, z: 0.5277779, w: 0.005555572}
-    - {x: -0.51666665, y: -1.0333333, z: 0.52222216, w: 0.005555572}
-    uvSizeAndPos:
-    - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-    - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-    - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
-    scaleAndFlip:
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 0, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 0, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 0, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    boundsOffset: {x: 0.5194444, y: 0.51944447}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 2
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 14
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
   spriteIndex: 0
+  flipX: 0
+  flipY: 0
   width: 0
   height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
+    uvPivot: {x: 0.5, y: 0}
+    worldSize: {x: 5.1, y: 2.2055554, z: 1}
+    index: 4
+  bounds:
+    m_Center: {x: 217.54782, y: 0.4857818, z: 14.1}
+    m_Extent: {x: 0.5194444, y: 0.51944447, z: 0.1}
+  worldPivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
+  uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.5194444, y: 0.51944447, z: 0.1}
+  worldPivotsAndSizes:
+  - {x: 0, y: 0, z: 0.51666665, w: 0}
+  - {x: -0.51666665, y: 0, z: 0.5277779, w: 0}
+  - {x: -0.51666665, y: 0, z: 0.52222216, w: 0}
+  - {x: 0, y: -0, z: 0.51666665, w: 1.0333333}
+  - {x: -0.51666665, y: -0, z: 0.5277779, w: 1.0333333}
+  - {x: -0.51666665, y: -0, z: 0.52222216, w: 1.0333333}
+  - {x: 0, y: -1.0333333, z: 0.51666665, w: 0.005555572}
+  - {x: -0.51666665, y: -1.0333333, z: 0.5277779, w: 0.005555572}
+  - {x: -0.51666665, y: -1.0333333, z: 0.52222216, w: 0.005555572}
+  uvSizesAndPositions:
+  - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
+  - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
+  - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
+  - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
+  - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
+  - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
+  - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
+  - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
+  - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
+  scalesAndFlips:
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 0, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 0, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 0, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  customs:
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
@@ -2017,8 +2245,8 @@ GameObject:
   m_Component:
   - component: {fileID: 3687824902394481221}
   - component: {fileID: 3888577135377740947}
+  - component: {fileID: 2835018508408492596}
   - component: {fileID: 322183762418473788}
-  - component: {fileID: 4505149004839329235}
   m_Layer: 13
   m_Name: GangwayDoor_left
   m_TagString: Untagged
@@ -2088,6 +2316,64 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5033722, y: 2.211111}
   m_EdgeRadius: 0
+--- !u!114 &2835018508408492596
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6807919209581006502}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 1
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 5
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  flipX: 1
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.012207031, y: 0.09741211, z: 0.5571289, w: 0.60961914}
+    uvPivot: {x: 0.96, y: 0.49874687}
+    worldSize: {x: 0.2777778, y: 2.2166667, z: 1}
+    index: 0
+  bounds:
+    m_Center: {x: 101.62416, y: -57.025223, z: 5}
+    m_Extent: {x: 0.1388889, y: 1.1083333, z: 0.1}
+  worldPivotAndSize: {x: 0.011111118, y: 1.1055555, z: 0.2777778, w: 2.2166667}
+  uvSizeAndPosition: {x: 0.012207031, y: 0.09741211, z: 0.5571289, w: 0.60961914}
+  scaleAndFlip: {x: 1, y: 1, z: -1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.12777779, y: 0.0027778149, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!114 &322183762418473788
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -2102,7 +2388,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   wallCollider: {fileID: 5670842396868744218}
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
-  atlasRenderer: {fileID: 4505149004839329235}
+  atlasRenderer: {fileID: 2835018508408492596}
   carriage: {fileID: 4741126622765172946}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   isOpen: 0
@@ -2112,44 +2398,6 @@ MonoBehaviour:
     clipType: 0
     motionIndex: 0
     time: 0
---- !u!114 &4505149004839329235
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 6807919209581006502}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ad303b9518a28f48a3f27f561a6d346, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasMotionRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 5
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 1
-    flipY: 0
-    gameObject: {fileID: 6807919209581006502}
-    bounds:
-      m_Center: {x: 101.62416, y: -57.025223, z: 5}
-      m_Extent: {x: 0.1388889, y: 1.1083333, z: 0.1}
-    pivotAndSize: {x: 0.011111118, y: 1.1055555, z: 0.2777778, w: 2.2166667}
-    uvSizeAndPos: {x: 0.012207031, y: 0.09741211, z: 0.5571289, w: 0.60961914}
-    scaleAndFlip: {x: 1, y: 1, z: -1, w: 1}
-    custom: {x: 0, y: 0, z: 0, w: 0}
-    boundsOffset: {x: 0.12777779, y: 0.0027778149}
-  spriteIndex: 0
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  sprite:
-    uvSizeAndPos: {x: 0.012207031, y: 0.09741211, z: 0.5571289, w: 0.60961914}
-    uvPivot: {x: 0.96, y: 0.49874687}
-    worldSize: {x: 0.2777778, y: 2.2166667, z: 1}
-    index: 0
 --- !u!1 &7135455701023251364
 GameObject:
   m_ObjectHideFlags: 0
@@ -2185,6 +2433,141 @@ Transform:
   - {fileID: 274532562723422656}
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &7640387801544980462
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1198870224811505877}
+  - component: {fileID: 3705765459553740809}
+  m_Layer: 12
+  m_Name: CarriageSeat_five_right
+  m_TagString: Chair Bounds
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1198870224811505877
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7640387801544980462}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 1.240143, y: -3.138, z: 14}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 4431371205824164946}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3705765459553740809
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7640387801544980462}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 2
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 14
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  flipX: 0
+  flipY: 0
+  width: 3
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
+    uvPivot: {x: 0.5, y: 0}
+    worldSize: {x: 5.1, y: 2.2055554, z: 1}
+    index: 4
+  bounds:
+    m_Center: {x: 213.28563, y: 0.4857818, z: 14.1}
+    m_Extent: {x: 1.3111112, y: 0.51944447, z: 0.1}
+  worldPivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
+  uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 1.3111112, y: 0.51944447, z: 0.1}
+  worldPivotsAndSizes:
+  - {x: 0, y: 0, z: 0.51666665, w: 0}
+  - {x: -0.51666665, y: 0, z: 0.5277779, w: 0}
+  - {x: -2.1000004, y: 0, z: 0.52222216, w: 0}
+  - {x: 0, y: -0, z: 0.51666665, w: 1.0333333}
+  - {x: -0.51666665, y: -0, z: 0.5277779, w: 1.0333333}
+  - {x: -2.1000004, y: -0, z: 0.52222216, w: 1.0333333}
+  - {x: 0, y: -1.0333333, z: 0.51666665, w: 0.005555572}
+  - {x: -0.51666665, y: -1.0333333, z: 0.5277779, w: 0.005555572}
+  - {x: -2.1000004, y: -1.0333333, z: 0.52222216, w: 0.005555572}
+  uvSizesAndPositions:
+  - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
+  - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
+  - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
+  - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
+  - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
+  - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
+  - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
+  - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
+  - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
+  scalesAndFlips:
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 3, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 3, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 3, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  customs:
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 1.5666667, y: 1.0388889, z: 1}
+      index: 0
+    slice: {x: 0.32978722, y: 0.6666667, z: 0, w: 0.9946524}
+    uvSizeAndPos:
+    - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
+    - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
+    - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
+    - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
+    - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
+    - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
+    - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
+    - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
+    - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
+    worldSlices: {x: 0.51666665, y: 0.52222216, z: 0, w: 0.005555572}
+  quadCount: 0
 --- !u!1 &7844801019564369261
 GameObject:
   m_ObjectHideFlags: 0
@@ -2194,7 +2577,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3794027110737955793}
-  - component: {fileID: 2691835036088689343}
+  - component: {fileID: 5233752221908729529}
   m_Layer: 0
   m_Name: ExteriorWall
   m_TagString: Untagged
@@ -2217,7 +2600,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 6283648621410223278}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2691835036088689343
+--- !u!114 &5233752221908729529
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2226,187 +2609,54 @@ MonoBehaviour:
   m_GameObject: {fileID: 7844801019564369261}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: a213ed5795b0de441aee91076eac9fdf, type: 2}
-      depthOrder: 4
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 7844801019564369261}
-    bounds:
-      m_Center: {x: 111.13643, y: -57.17, z: 4}
-      m_Extent: {x: 9.747222, y: 1.65, z: 0.1}
-    pivotAndSize: {x: 9.747222, y: 0, z: 19.494444, w: 3.3}
-    uvSizeAndPos: {x: 0.85668945, y: 0.14501953, z: 0, w: 0.85498047}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    custom: {x: 0, y: 0, z: 0, w: 0}
-    boundsOffset: {x: 0, y: 1.65}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: a213ed5795b0de441aee91076eac9fdf, type: 2}
+    depthOrder: 4
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  flipX: 0
+  flipY: 0
   width: 1
   height: 1
-  spriteIndex: 0
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.85668945, y: 0.14501953, z: 0, w: 0.85498047}
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 19.494444, y: 3.3, z: 1}
     index: 0
---- !u!1 &7982095584196173811
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 9101330149939561220}
-  - component: {fileID: 3811853775080011815}
-  - component: {fileID: 8826843392645589092}
-  m_Layer: 12
-  m_Name: CarriageSeat_two (1)
-  m_TagString: Chair Bounds
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &9101330149939561220
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7982095584196173811}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -7.689987, y: -3.132, z: 14}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 4431371205824164946}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!61 &3811853775080011815
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7982095584196173811}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 1
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: 0.5194444, y: 0.51944447}
-  m_SpriteTilingProperty:
-    border: {x: 0.93, y: 0, z: 0.93, w: 0}
-    pivot: {x: 0, y: 0}
-    oldSize: {x: 2.8, y: 1.87}
-    newSize: {x: 1.88, y: 1.87}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 2
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 1.0388888, y: 1.0388889}
-  m_EdgeRadius: 0
---- !u!114 &8826843392645589092
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7982095584196173811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 065474de7e082734984a15c3949e3dfc, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSliceRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 14
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 3811853775080011815}
-    gameObject: {fileID: 7982095584196173811}
-    bounds:
-      m_Center: {x: 203.56383, y: 0.49178183, z: 14}
-      m_Extent: {x: 0.5194444, y: 0.51944447, z: 0.1}
-    worldPivotAndSize:
-    - {x: 0, y: 0, z: 0.51666665, w: 0}
-    - {x: -0.51666665, y: 0, z: 0.5277779, w: 0}
-    - {x: -0.51666665, y: 0, z: 0.52222216, w: 0}
-    - {x: 0, y: -0, z: 0.51666665, w: 1.0333333}
-    - {x: -0.51666665, y: -0, z: 0.5277779, w: 1.0333333}
-    - {x: -0.51666665, y: -0, z: 0.52222216, w: 1.0333333}
-    - {x: 0, y: -1.0333333, z: 0.51666665, w: 0.005555572}
-    - {x: -0.51666665, y: -1.0333333, z: 0.5277779, w: 0.005555572}
-    - {x: -0.51666665, y: -1.0333333, z: 0.52222216, w: 0.005555572}
-    uvSizeAndPos:
-    - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-    - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-    - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
-    scaleAndFlip:
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 0, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 0, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    - {x: 0, y: 1, z: 1, w: 1}
-    - {x: 1, y: 1, z: 1, w: 1}
-    boundsOffset: {x: 0.5194444, y: 0.51944447}
-  spriteIndex: 0
-  width: 0
-  height: 1
+  bounds:
+    m_Center: {x: 111.13643, y: -57.17, z: 4}
+    m_Extent: {x: 9.747222, y: 1.65, z: 0.1}
+  worldPivotAndSize: {x: 9.747222, y: 0, z: 19.494444, w: 3.3}
+  uvSizeAndPosition: {x: 0.85668945, y: 0.14501953, z: 0, w: 0.85498047}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: 1.65, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
   slicedSprite:
     sprite:
-      uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
       uvPivot: {x: 0, y: 0}
-      worldSize: {x: 1.5666667, y: 1.0388889, z: 1}
+      worldSize: {x: 0, y: 0, z: 0}
       index: 0
-    slice: {x: 0.32978722, y: 0.6666667, z: 0, w: 0.9946524}
-    uvSizeAndPos:
-    - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-    - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-    - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
-    worldSlices: {x: 0.51666665, y: 0.52222216, z: 0, w: 0.005555572}
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
 --- !u!1 &8920817511674990011
 GameObject:
@@ -2417,7 +2667,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3063617264005690026}
-  - component: {fileID: 8229094033846002716}
+  - component: {fileID: 2613900237663771687}
   m_Layer: 0
   m_Name: InteriorWalls
   m_TagString: Untagged
@@ -2440,7 +2690,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8229094033846002716
+--- !u!114 &2613900237663771687
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -2449,34 +2699,55 @@ MonoBehaviour:
   m_GameObject: {fileID: 8920817511674990011}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-      depthOrder: 15
-    atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 8920817511674990011}
-    bounds:
-      m_Center: {x: 111.13643, y: -56.897114, z: 15}
-      m_Extent: {x: 9.627778, y: 1.2388889, z: 0.1}
-    pivotAndSize: {x: 9.627778, y: 0, z: 19.255556, w: 2.4777777}
-    uvSizeAndPos: {x: 0.8461914, y: 0.10888672, z: 0, w: 0.7451172}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    custom: {x: 0, y: 0, z: 0, w: 0}
-    boundsOffset: {x: 0, y: 1.2388889}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 15
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 2
+  flipX: 0
+  flipY: 0
   width: 1
   height: 1
-  spriteIndex: 2
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.8461914, y: 0.10888672, z: 0, w: 0.7451172}
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 19.255556, y: 2.4777777, z: 1}
     index: 2
+  bounds:
+    m_Center: {x: 111.13643, y: -56.897114, z: 15}
+    m_Extent: {x: 9.627778, y: 1.2388889, z: 0.1}
+  worldPivotAndSize: {x: 9.627778, y: 0, z: 19.255556, w: 2.4777777}
+  uvSizeAndPosition: {x: 0.8461914, y: 0.10888672, z: 0, w: 0.7451172}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: 1.2388889, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!1 &9073954623229924933
 GameObject:
   m_ObjectHideFlags: 0
@@ -2596,33 +2867,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4431371205824164946}
     m_Modifications:
-    - target: {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 117.08805
-      objectReference: {fileID: 0}
-    - target: {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
-      value: -57.081223
-      objectReference: {fileID: 0}
-    - target: {fileID: 2285509565218897629, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
+    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.x
       value: 116.126945
       objectReference: {fileID: 0}
-    - target: {fileID: 2285509565218897629, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
+    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.y
       value: -57.081223
+      objectReference: {fileID: 0}
+    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 4773278680072365645, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: m_Name
       value: SlideDoors_interior_right
       objectReference: {fileID: 0}
-    - target: {fileID: 5406099015200027308, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.00012207031
+    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 117.08805
       objectReference: {fileID: 0}
-    - target: {fileID: 6748688604042277783, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.00012207031
+    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -57.081223
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2634,7 +2913,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2693,6 +2972,22 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4431371205824164946}
     m_Modifications:
+    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 110.68981
+      objectReference: {fileID: 0}
+    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -57.081223
+      objectReference: {fileID: 0}
+    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
       value: 111.65092
@@ -2713,6 +3008,22 @@ PrefabInstance:
       propertyPath: m_Name
       value: SlideDoors_interior_middle
       objectReference: {fileID: 0}
+    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 111.65092
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -57.081223
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 16
+      objectReference: {fileID: 0}
     - target: {fileID: 5406099015200027308, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: m_LocalPosition.x
       value: -0.000015214086
@@ -2731,7 +3042,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: 16
       objectReference: {fileID: 0}
     - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2761,16 +3072,150 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 2285509565218897629, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+    - {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7582128904083616402, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7752087058430021}
+    - targetCorrespondingSourceObject: {fileID: 2970277754564569683, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 17552717172943595}
   m_SourcePrefab: {fileID: 100100000, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+--- !u!1 &2674983111040593034 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2970277754564569683, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+  m_PrefabInstance: {fileID: 875942529402308313}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &17552717172943595
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2674983111040593034}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 16
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 7
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.50097656, w: 0.6125488}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.9611111, y: 2.1555555, z: 1}
+    index: 7
+  bounds:
+    m_Center: {x: 111.65092, y: -57.081223, z: 16}
+    m_Extent: {x: 0.48055556, y: 1.0777777, z: 0.1}
+  worldPivotAndSize: {x: 0, y: 0, z: 0.9611111, w: 2.1555555}
+  uvSizeAndPosition: {x: 0.042236328, y: 0.09472656, z: 0.50097656, w: 0.6125488}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.48055556, y: 1.0777777, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!4 &7053136837799052714 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
   m_PrefabInstance: {fileID: 875942529402308313}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &7286502074228847691 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7582128904083616402, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+  m_PrefabInstance: {fileID: 875942529402308313}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &7752087058430021
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7286502074228847691}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 16
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 6
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
+    uvPivot: {x: 1, y: 0}
+    worldSize: {x: 0.9611111, y: 2.1555555, z: 1}
+    index: 6
+  bounds:
+    m_Center: {x: 110.68981, y: -57.081223, z: 16}
+    m_Extent: {x: 0.48055556, y: 1.0777777, z: 0.1}
+  worldPivotAndSize: {x: 0.9611111, y: 0, z: 0.9611111, w: 2.1555555}
+  uvSizeAndPosition: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: -0.48055556, y: 1.0777777, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!114 &8844129483624058073 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8546514872825154048, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
@@ -2790,28 +3235,36 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6283648621410223278}
     m_Modifications:
-    - target: {fileID: 902199067650720929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 116.12138
-      objectReference: {fileID: 0}
-    - target: {fileID: 902199067650720929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
-      value: -57.07567
-      objectReference: {fileID: 0}
-    - target: {fileID: 902199067650720929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.z
-      value: 3
-      objectReference: {fileID: 0}
-    - target: {fileID: 1201000164746778459, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
+    - target: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.x
       value: 117.09361
       objectReference: {fileID: 0}
-    - target: {fileID: 1201000164746778459, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
+    - target: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.y
       value: -57.07567
       objectReference: {fileID: 0}
-    - target: {fileID: 1201000164746778459, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.z
+    - target: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 116.12138
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -57.07567
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: batchKey.depthOrder
       value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5840205793320442929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
@@ -2828,7 +3281,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9148143527789672719, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9148143527789672719, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: m_LocalRotation.w
@@ -2863,28 +3316,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
---- !u!114 &3020936029059496893 stripped
+--- !u!114 &2285017976270451763 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 902199067650720929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
   m_PrefabInstance: {fileID: 2695901449472687900}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
---- !u!114 &3873952597852121159 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1201000164746778459, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-  m_PrefabInstance: {fileID: 2695901449472687900}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
 --- !u!114 &4665753926773116768 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 7325617631601733756, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
@@ -2901,7 +3343,18 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9148143527789672719, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
   m_PrefabInstance: {fileID: 2695901449472687900}
   m_PrefabAsset: {fileID: 0}
---- !u!1001 &4841459570356829251
+--- !u!114 &7883198929589499098 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+  m_PrefabInstance: {fileID: 2695901449472687900}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+--- !u!1001 &6732419531741485957
 PrefabInstance:
   m_ObjectHideFlags: 0
   serializedVersion: 2
@@ -2909,57 +3362,308 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 4431371205824164946}
     m_Modifications:
-    - target: {fileID: 745047209271108861, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.24206543
+    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 105.24186
       objectReference: {fileID: 0}
-    - target: {fileID: 1844857865127248622, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.881897
+    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -57.081223
       objectReference: {fileID: 0}
+    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: renderInput.bounds.m_Center.x
+      value: 106.202965
+      objectReference: {fileID: 0}
+    - target: {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: renderInput.bounds.m_Center.y
+      value: -57.081223
+      objectReference: {fileID: 0}
+    - target: {fileID: 2285509565218897629, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: renderInput.bounds.m_Center.x
+      value: 105.24186
+      objectReference: {fileID: 0}
+    - target: {fileID: 2285509565218897629, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: renderInput.bounds.m_Center.y
+      value: -57.081223
+      objectReference: {fileID: 0}
+    - target: {fileID: 4773278680072365645, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: m_Name
+      value: SlideDoors_interior_left
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 106.202965
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -57.081223
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 5406099015200027308, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.000014781952
+      objectReference: {fileID: 0}
+    - target: {fileID: 6748688604042277783, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.000014781952
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -5.653976
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -3.159
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents:
+    - {fileID: 2285509565218897629, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+    - {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 7582128904083616402, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3745795594663594901}
+    - targetCorrespondingSourceObject: {fileID: 2970277754564569683, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4578419912634244431}
+  m_SourcePrefab: {fileID: 100100000, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+--- !u!114 &3167449020684325253 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8546514872825154048, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+  m_PrefabInstance: {fileID: 6732419531741485957}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874bf1172ab6e7047bd479128420855f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+--- !u!4 &3506162706569287926 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+  m_PrefabInstance: {fileID: 6732419531741485957}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &3771617310104250647 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 7582128904083616402, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+  m_PrefabInstance: {fileID: 6732419531741485957}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3745795594663594901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3771617310104250647}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 16
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 6
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
+    uvPivot: {x: 1, y: 0}
+    worldSize: {x: 0.9611111, y: 2.1555555, z: 1}
+    index: 6
+  bounds:
+    m_Center: {x: 105.24186, y: -57.081223, z: 16}
+    m_Extent: {x: 0.48055556, y: 1.0777777, z: 0.1}
+  worldPivotAndSize: {x: 0.9611111, y: 0, z: 0.9611111, w: 2.1555555}
+  uvSizeAndPosition: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: -0.48055556, y: 1.0777777, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+--- !u!1 &8383116478459326934 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2970277754564569683, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+  m_PrefabInstance: {fileID: 6732419531741485957}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4578419912634244431
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8383116478459326934}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 16
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 7
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.50097656, w: 0.6125488}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.9611111, y: 2.1555555, z: 1}
+    index: 7
+  bounds:
+    m_Center: {x: 106.202965, y: -57.081223, z: 16}
+    m_Extent: {x: 0.48055556, y: 1.0777777, z: 0.1}
+  worldPivotAndSize: {x: 0, y: 0, z: 0.9611111, w: 2.1555555}
+  uvSizeAndPosition: {x: 0.042236328, y: 0.09472656, z: 0.50097656, w: 0.6125488}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.48055556, y: 1.0777777, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+--- !u!1001 &7358478930828973376
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 4431371205824164946}
+    m_Modifications:
     - target: {fileID: 1996495514335980138, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
-      value: 114.82648
+      value: 108.28638
       objectReference: {fileID: 0}
     - target: {fileID: 1996495514335980138, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.y
-      value: -56.884666
+      value: -56.911667
       objectReference: {fileID: 0}
     - target: {fileID: 2444700062460947297, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
-      value: 115.9745
+      value: 109.43439
       objectReference: {fileID: 0}
     - target: {fileID: 2444700062460947297, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.y
-      value: -56.278767
-      objectReference: {fileID: 0}
-    - target: {fileID: 3766255932640246214, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -1.0899658
+      value: -56.305767
       objectReference: {fileID: 0}
     - target: {fileID: 4028227041091308390, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
-      value: 115.24542
+      value: 108.7054
       objectReference: {fileID: 0}
     - target: {fileID: 4028227041091308390, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.y
-      value: -56.278767
+      value: -56.305767
       objectReference: {fileID: 0}
     - target: {fileID: 4619968968883284231, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
-      value: 115.708374
+      value: 109.16841
       objectReference: {fileID: 0}
     - target: {fileID: 4619968968883284231, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.y
-      value: -56.278767
+      value: -56.305767
       objectReference: {fileID: 0}
     - target: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 3.4501038
+      value: 3.68
       objectReference: {fileID: 0}
     - target: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.118
+      value: -3.145
       objectReference: {fileID: 0}
     - target: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -2993,164 +3697,513 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5214367306793731038, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.74505615
-      objectReference: {fileID: 0}
     - target: {fileID: 5384351385669397371, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
-      value: 114.58441
+      value: 108.04431
       objectReference: {fileID: 0}
     - target: {fileID: 5384351385669397371, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.y
-      value: -56.278767
+      value: -56.305767
       objectReference: {fileID: 0}
     - target: {fileID: 5600004835303776041, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: m_Name
       value: CarriageGrabPole_right
       objectReference: {fileID: 0}
-    - target: {fileID: 6054469494367897733, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 1.1480255
-      objectReference: {fileID: 0}
-    - target: {fileID: 8408201530601208241, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.4189453
-      objectReference: {fileID: 0}
     - target: {fileID: 8449119822475477518, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
-      value: 114.08142
+      value: 107.5414
       objectReference: {fileID: 0}
     - target: {fileID: 8449119822475477518, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.y
-      value: -56.278767
+      value: -56.305767
       objectReference: {fileID: 0}
     - target: {fileID: 8693111701380887248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
-      value: 113.73651
+      value: 107.19638
       objectReference: {fileID: 0}
     - target: {fileID: 8693111701380887248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.y
-      value: -56.278767
+      value: -56.305767
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1996495514335980138, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+    - {fileID: 2444700062460947297, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+    - {fileID: 4619968968883284231, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+    - {fileID: 4028227041091308390, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+    - {fileID: 5384351385669397371, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+    - {fileID: 8449119822475477518, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+    - {fileID: 8693111701380887248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5600004835303776041, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 7754061865138205258}
+    - targetCorrespondingSourceObject: {fileID: 2862701673191317230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 5584031675676394428}
+    - targetCorrespondingSourceObject: {fileID: 1535647642363425843, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1127633234503876271}
+    - targetCorrespondingSourceObject: {fileID: 5882755592766324067, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8466309185538361129}
+    - targetCorrespondingSourceObject: {fileID: 6148456199161969020, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3818863085725118920}
+    - targetCorrespondingSourceObject: {fileID: 5687412082349823755, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 4754792719917494416}
+    - targetCorrespondingSourceObject: {fileID: 1993832973438283806, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 2695260223251921073}
   m_SourcePrefab: {fileID: 100100000, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
---- !u!4 &533951966864984740 stripped
+--- !u!4 &2469725449711952807 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-  m_PrefabInstance: {fileID: 4841459570356829251}
+  m_PrefabInstance: {fileID: 7358478930828973376}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6378411832077489705 stripped
+--- !u!1 &2950753574922486347 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5687412082349823755, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7358478930828973376}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &4754792719917494416
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1996495514335980138, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-  m_PrefabInstance: {fileID: 4841459570356829251}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
---- !u!1001 &6732419531741485957
-PrefabInstance:
   m_ObjectHideFlags: 0
-  serializedVersion: 2
-  m_Modification:
-    serializedVersion: 3
-    m_TransformParent: {fileID: 4431371205824164946}
-    m_Modifications:
-    - target: {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 106.202965
-      objectReference: {fileID: 0}
-    - target: {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
-      value: -57.081223
-      objectReference: {fileID: 0}
-    - target: {fileID: 2285509565218897629, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 105.24186
-      objectReference: {fileID: 0}
-    - target: {fileID: 2285509565218897629, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
-      value: -57.081223
-      objectReference: {fileID: 0}
-    - target: {fileID: 4773278680072365645, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_Name
-      value: SlideDoors_interior_left
-      objectReference: {fileID: 0}
-    - target: {fileID: 5406099015200027308, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.000014781952
-      objectReference: {fileID: 0}
-    - target: {fileID: 6748688604042277783, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.000014781952
-      objectReference: {fileID: 0}
-    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -5.653976
-      objectReference: {fileID: 0}
-    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: -3.159
-      objectReference: {fileID: 0}
-    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalRotation.w
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalRotation.x
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalRotation.y
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalRotation.z
-      value: -0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalEulerAnglesHint.z
-      value: 0
-      objectReference: {fileID: 0}
-    m_RemovedComponents: []
-    m_RemovedGameObjects: []
-    m_AddedGameObjects: []
-    m_AddedComponents: []
-  m_SourcePrefab: {fileID: 100100000, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
---- !u!114 &3167449020684325253 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 8546514872825154048, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-  m_PrefabInstance: {fileID: 6732419531741485957}
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+  m_GameObject: {fileID: 2950753574922486347}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 874bf1172ab6e7047bd479128420855f, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: 
---- !u!4 &3506162706569287926 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-  m_PrefabInstance: {fileID: 6732419531741485957}
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 8
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 9
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+    uvPivot: {x: 0.5, y: 1}
+    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
+    index: 9
+  bounds:
+    m_Center: {x: 115.93841, y: -56.305767, z: 8}
+    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
+  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
+  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: -0.21666667, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+--- !u!1 &3146229585667000937 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5600004835303776041, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7358478930828973376}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7754061865138205258
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3146229585667000937}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 8
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 5
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.12402344, y: 0.10839844, z: 0.23461914, w: 0.6062012}
+    uvPivot: {x: 0.5, y: 0}
+    worldSize: {x: 2.8222222, y: 2.4666667, z: 1}
+    index: 5
+  bounds:
+    m_Center: {x: 115.05637, y: -56.911667, z: 8}
+    m_Extent: {x: 1.4111111, y: 1.2333333, z: 0.1}
+  worldPivotAndSize: {x: 1.4111111, y: 0, z: 2.8222222, w: 2.4666667}
+  uvSizeAndPosition: {x: 0.12402344, y: 0.10839844, z: 0.23461914, w: 0.6062012}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: 1.2333333, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+--- !u!1 &3696652442601598012 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6148456199161969020, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7358478930828973376}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3818863085725118920
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3696652442601598012}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 8
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 9
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+    uvPivot: {x: 0.5, y: 1}
+    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
+    index: 9
+  bounds:
+    m_Center: {x: 115.475395, y: -56.305767, z: 8}
+    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
+  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
+  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: -0.21666667, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+--- !u!1 &4016417650908768291 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5882755592766324067, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7358478930828973376}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8466309185538361129
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4016417650908768291}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 8
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 9
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+    uvPivot: {x: 0.5, y: 1}
+    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
+    index: 9
+  bounds:
+    m_Center: {x: 114.81431, y: -56.305767, z: 8}
+    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
+  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
+  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: -0.21666667, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+--- !u!1 &4730131565378390958 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2862701673191317230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7358478930828973376}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &5584031675676394428
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4730131565378390958}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 8
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 9
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+    uvPivot: {x: 0.5, y: 1}
+    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
+    index: 9
+  bounds:
+    m_Center: {x: 113.96638, y: -56.305767, z: 8}
+    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
+  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
+  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: -0.21666667, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+--- !u!1 &8309465656491581811 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1535647642363425843, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7358478930828973376}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1127633234503876271
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8309465656491581811}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 8
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 9
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+    uvPivot: {x: 0.5, y: 1}
+    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
+    index: 9
+  bounds:
+    m_Center: {x: 114.31139, y: -56.305767, z: 8}
+    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
+  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
+  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: -0.21666667, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+--- !u!1 &9058169449697125726 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1993832973438283806, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7358478930828973376}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &2695260223251921073
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9058169449697125726}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 8
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 9
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+    uvPivot: {x: 0.5, y: 1}
+    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
+    index: 9
+  bounds:
+    m_Center: {x: 116.204384, y: -56.305767, z: 8}
+    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
+  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
+  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: -0.21666667, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!1001 &7820498069647386981
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3159,141 +4212,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6283648621410223278}
     m_Modifications:
-    - target: {fileID: 902199067650720929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 105.23636
+    - target: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 106.20863
       objectReference: {fileID: 0}
-    - target: {fileID: 902199067650720929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
+    - target: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.y
       value: -57.07567
       objectReference: {fileID: 0}
-    - target: {fileID: 902199067650720929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.z
+    - target: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.z
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 1201000164746778459, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 106.20853
+    - target: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 1201000164746778459, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
+    - target: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 105.236404
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.y
       value: -57.07567
       objectReference: {fileID: 0}
-    - target: {fileID: 1201000164746778459, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.z
+    - target: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.z
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 4298671525251318360, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.000041484833
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298671525251318360, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.0000007748604
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298671525251318360, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5664027592249379307, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.000015258789
-      objectReference: {fileID: 0}
-    - target: {fileID: 5664027592249379307, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0
+    - target: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5840205793320442929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: m_Name
       value: SlideDoors_exterior_left
-      objectReference: {fileID: 0}
-    - target: {fileID: 6355935853720996048, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.000076293945
-      objectReference: {fileID: 0}
-    - target: {fileID: 6355935853720996048, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.00000071525574
-      objectReference: {fileID: 0}
-    - target: {fileID: 6355935853720996048, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: worldWidth
-      value: 0.9722222
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: worldHeight
-      value: 2.1666667
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: worldMatrix.e03
-      value: 197.56606
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: worldMatrix.e13
-      value: 0.81533885
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 105.722435
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -58.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: sprite.worldSize.x
-      value: 0.9722222
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: sprite.worldSize.y
-      value: 2.1666667
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: sprite.uvSizeAndPos.w
-      value: 0.2878418
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: sprite.uvSizeAndPos.x
-      value: 0.04272461
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: sprite.uvSizeAndPos.y
-      value: 0.095214844
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: sprite.uvSizeAndPos.z
-      value: 0.05126953
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e00
-      value: 0.9722222
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e03
-      value: 105.722435
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e11
-      value: 2.1666667
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e13
-      value: -58.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e22
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e23
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e33
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9148143527789672719, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3305,7 +4258,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9148143527789672719, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9148143527789672719, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3334,50 +4287,6 @@ PrefabInstance:
     - target: {fileID: 9148143527789672719, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: worldMatrix.e03
-      value: 197.56606
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: worldMatrix.e13
-      value: 0.81533885
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 105.722435
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -58.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e00
-      value: 0.9722222
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e03
-      value: 104.75021
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e11
-      value: 2.1666667
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e13
-      value: -58.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e22
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e23
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e33
-      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3400,28 +4309,28 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 9148143527789672719, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
   m_PrefabInstance: {fileID: 7820498069647386981}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &6918299556047711684 stripped
+--- !u!114 &2632501533003588259 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 902199067650720929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
   m_PrefabInstance: {fileID: 7820498069647386981}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
---- !u!114 &8947863862202285630 stripped
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+--- !u!114 &6221786814295384650 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1201000164746778459, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
   m_PrefabInstance: {fileID: 7820498069647386981}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
 --- !u!1001 &7974805240375730643
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3432,43 +4341,43 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1996495514335980138, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
-      value: 106.04639
+      value: 108.28638
       objectReference: {fileID: 0}
     - target: {fileID: 1996495514335980138, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.y
-      value: -56.884666
+      value: -56.911667
       objectReference: {fileID: 0}
     - target: {fileID: 2444700062460947297, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
-      value: 107.1944
+      value: 109.43439
       objectReference: {fileID: 0}
     - target: {fileID: 2444700062460947297, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.y
-      value: -56.278767
+      value: -56.305767
       objectReference: {fileID: 0}
     - target: {fileID: 4028227041091308390, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
-      value: 106.46541
+      value: 108.7054
       objectReference: {fileID: 0}
     - target: {fileID: 4028227041091308390, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.y
-      value: -56.278767
+      value: -56.305767
       objectReference: {fileID: 0}
     - target: {fileID: 4619968968883284231, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
-      value: 106.92842
+      value: 109.16841
       objectReference: {fileID: 0}
     - target: {fileID: 4619968968883284231, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.y
-      value: -56.278767
+      value: -56.305767
       objectReference: {fileID: 0}
     - target: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.3299866
+      value: -3.09
       objectReference: {fileID: 0}
     - target: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -3.118
+      value: -3.145
       objectReference: {fileID: 0}
     - target: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3504,11 +4413,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5384351385669397371, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
-      value: 105.80432
+      value: 108.04431
       objectReference: {fileID: 0}
     - target: {fileID: 5384351385669397371, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.y
-      value: -56.278767
+      value: -56.305767
       objectReference: {fileID: 0}
     - target: {fileID: 5600004835303776041, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: m_Name
@@ -3516,41 +4425,499 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8449119822475477518, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
-      value: 105.30141
+      value: 107.5414
       objectReference: {fileID: 0}
     - target: {fileID: 8449119822475477518, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.y
-      value: -56.278767
+      value: -56.305767
       objectReference: {fileID: 0}
     - target: {fileID: 8693111701380887248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
-      value: 104.95639
+      value: 107.19638
       objectReference: {fileID: 0}
     - target: {fileID: 8693111701380887248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: renderInput.bounds.m_Center.y
-      value: -56.278767
+      value: -56.305767
       objectReference: {fileID: 0}
-    m_RemovedComponents: []
+    m_RemovedComponents:
+    - {fileID: 1996495514335980138, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+    - {fileID: 2444700062460947297, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+    - {fileID: 4619968968883284231, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+    - {fileID: 4028227041091308390, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+    - {fileID: 5384351385669397371, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+    - {fileID: 8449119822475477518, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+    - {fileID: 8693111701380887248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents: []
+    m_AddedComponents:
+    - targetCorrespondingSourceObject: {fileID: 5600004835303776041, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3135751210078090790}
+    - targetCorrespondingSourceObject: {fileID: 2862701673191317230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6557665037830997851}
+    - targetCorrespondingSourceObject: {fileID: 1535647642363425843, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1697352620554499174}
+    - targetCorrespondingSourceObject: {fileID: 5882755592766324067, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 8169780907637323163}
+    - targetCorrespondingSourceObject: {fileID: 6148456199161969020, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6502099100468940299}
+    - targetCorrespondingSourceObject: {fileID: 5687412082349823755, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 6873518044881294116}
+    - targetCorrespondingSourceObject: {fileID: 1993832973438283806, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 3756163915702855031}
   m_SourcePrefab: {fileID: 100100000, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+--- !u!1 &2324293067634194136 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5687412082349823755, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7974805240375730643}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6873518044881294116
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2324293067634194136}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 8
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 9
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+    uvPivot: {x: 0.5, y: 1}
+    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
+    index: 9
+  bounds:
+    m_Center: {x: 109.16841, y: -56.305767, z: 8}
+    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
+  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
+  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: -0.21666667, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+--- !u!1 &2529621832215346938 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5600004835303776041, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7974805240375730643}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3135751210078090790
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2529621832215346938}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 8
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 5
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.12402344, y: 0.10839844, z: 0.23461914, w: 0.6062012}
+    uvPivot: {x: 0.5, y: 0}
+    worldSize: {x: 2.8222222, y: 2.4666667, z: 1}
+    index: 5
+  bounds:
+    m_Center: {x: 108.28638, y: -56.911667, z: 8}
+    m_Extent: {x: 1.4111111, y: 1.2333333, z: 0.1}
+  worldPivotAndSize: {x: 1.4111111, y: 0, z: 2.8222222, w: 2.4666667}
+  uvSizeAndPosition: {x: 0.12402344, y: 0.10839844, z: 0.23461914, w: 0.6062012}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: 1.2333333, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!4 &3095266738411378484 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
   m_PrefabInstance: {fileID: 7974805240375730643}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &8437714948916562873 stripped
-MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1996495514335980138, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+--- !u!1 &4323322925464426671 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6148456199161969020, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
   m_PrefabInstance: {fileID: 7974805240375730643}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 0}
+--- !u!114 &6502099100468940299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4323322925464426671}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 8
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 9
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+    uvPivot: {x: 0.5, y: 1}
+    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
+    index: 9
+  bounds:
+    m_Center: {x: 108.7054, y: -56.305767, z: 8}
+    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
+  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
+  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: -0.21666667, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+--- !u!1 &4544004576210295984 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 5882755592766324067, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7974805240375730643}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8169780907637323163
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4544004576210295984}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 8
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 9
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+    uvPivot: {x: 0.5, y: 1}
+    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
+    index: 9
+  bounds:
+    m_Center: {x: 108.04431, y: -56.305767, z: 8}
+    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
+  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
+  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: -0.21666667, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+--- !u!1 &5266518980473454397 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 2862701673191317230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7974805240375730643}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &6557665037830997851
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5266518980473454397}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 8
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 9
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+    uvPivot: {x: 0.5, y: 1}
+    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
+    index: 9
+  bounds:
+    m_Center: {x: 107.19638, y: -56.305767, z: 8}
+    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
+  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
+  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: -0.21666667, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+--- !u!1 &8432910706486743501 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1993832973438283806, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7974805240375730643}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3756163915702855031
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8432910706486743501}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 8
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 9
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+    uvPivot: {x: 0.5, y: 1}
+    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
+    index: 9
+  bounds:
+    m_Center: {x: 109.43439, y: -56.305767, z: 8}
+    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
+  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
+  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: -0.21666667, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+--- !u!1 &8927124545340970464 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 1535647642363425843, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7974805240375730643}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1697352620554499174
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8927124545340970464}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    depthOrder: 8
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 9
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+    uvPivot: {x: 0.5, y: 1}
+    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
+    index: 9
+  bounds:
+    m_Center: {x: 107.5414, y: -56.305767, z: 8}
+    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
+  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
+  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: -0.21666667, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!1001 &8530610935890523333
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3559,137 +4926,41 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6283648621410223278}
     m_Modifications:
-    - target: {fileID: 902199067650720929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 110.68437
+    - target: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 111.65662
       objectReference: {fileID: 0}
-    - target: {fileID: 902199067650720929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
+    - target: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.y
       value: -57.07567
       objectReference: {fileID: 0}
-    - target: {fileID: 902199067650720929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.z
+    - target: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.z
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 1201000164746778459, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 111.65654
+    - target: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 1201000164746778459, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
+    - target: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 110.68439
+      objectReference: {fileID: 0}
+    - target: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.y
       value: -57.07567
       objectReference: {fileID: 0}
-    - target: {fileID: 1201000164746778459, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: renderInput.bounds.m_Center.z
+    - target: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: bounds.m_Center.z
       value: 3
       objectReference: {fileID: 0}
-    - target: {fileID: 4298671525251318360, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.000006712973
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298671525251318360, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.00000047683716
-      objectReference: {fileID: 0}
-    - target: {fileID: 4298671525251318360, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5664027592249379307, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.000045776367
+    - target: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 5840205793320442929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: m_Name
       value: SlideDoors_exterior_middle
-      objectReference: {fileID: 0}
-    - target: {fileID: 6355935853720996048, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.00010681152
-      objectReference: {fileID: 0}
-    - target: {fileID: 6355935853720996048, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.y
-      value: 0.00000047683716
-      objectReference: {fileID: 0}
-    - target: {fileID: 6355935853720996048, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: m_LocalPosition.z
-      value: -2
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: worldWidth
-      value: 0.9722222
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: worldHeight
-      value: 2.1666667
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: worldMatrix.e03
-      value: 203.01399
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: worldMatrix.e13
-      value: 0.81533885
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 111.17037
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -58.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: sprite.worldSize.x
-      value: 0.9722222
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: sprite.worldSize.y
-      value: 2.1666667
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: sprite.uvSizeAndPos.w
-      value: 0.2878418
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: sprite.uvSizeAndPos.x
-      value: 0.04272461
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: sprite.uvSizeAndPos.y
-      value: 0.095214844
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: sprite.uvSizeAndPos.z
-      value: 0.05126953
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e00
-      value: 0.9722222
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e03
-      value: 111.17037
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e11
-      value: 2.1666667
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e13
-      value: -58.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e22
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e23
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 7548495205679168783, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e33
-      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 9148143527789672719, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3701,7 +4972,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9148143527789672719, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 5
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 9148143527789672719, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
       propertyPath: m_LocalRotation.w
@@ -3731,50 +5002,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: worldMatrix.e03
-      value: 203.01399
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: worldMatrix.e13
-      value: 0.81533885
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 111.17037
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -58.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e00
-      value: 0.9722222
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e03
-      value: 110.19815
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e11
-      value: 2.1666667
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e13
-      value: -58.1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e22
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e23
-      value: 5
-      objectReference: {fileID: 0}
-    - target: {fileID: 9157275910696144408, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
-      propertyPath: spriteMatrices.Array.data[0].e33
-      value: 1
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3796,25 +5023,25 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 874bf1172ab6e7047bd479128420855f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!114 &7406202828449637278 stripped
+--- !u!114 &4498439411272089347 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 1201000164746778459, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+  m_CorrespondingSourceObject: {fileID: 5192504948783074246, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
   m_PrefabInstance: {fileID: 8530610935890523333}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
---- !u!114 &8856205759601684580 stripped
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+--- !u!114 &5529601040614031338 stripped
 MonoBehaviour:
-  m_CorrespondingSourceObject: {fileID: 902199067650720929, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
+  m_CorrespondingSourceObject: {fileID: 4242328913838918447, guid: 77ceede117425dd4eb3e7d28031d0d80, type: 3}
   m_PrefabInstance: {fileID: 8530610935890523333}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7469e2c98855c274e93481839f465508, type: 3}
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasSimpleRenderer
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer

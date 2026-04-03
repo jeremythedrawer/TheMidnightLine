@@ -14,7 +14,7 @@ using UnityEditor;
 public class NPCBrain : MonoBehaviour
 {
     public NPCSO npc;
-    public AtlasMotionRenderer atlasRenderer;
+    public AtlasRenderer atlasRenderer;
     [SerializeField] NPCsDataSO npcData;
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] TrainSettingsSO trainSettings;
@@ -88,7 +88,7 @@ public class NPCBrain : MonoBehaviour
         curPath = Path.None;
         chairPosIndex = int.MaxValue;
         selectedProfileIndex = int.MaxValue;
-        atlas = atlasRenderer.renderInput.atlas;
+        atlas = atlasRenderer.atlas;
         rigidBody.includeLayers = layerSettings.stationMask;
     }
     private void Start()
@@ -114,9 +114,9 @@ public class NPCBrain : MonoBehaviour
             speechBubble.Stop();
         }
 
-        curClip = atlasRenderer.renderInput.atlas.clipDict[(int)NPCMotion.StandingBreathing];
+        curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingBreathing];
 
-        atlasRenderer.renderInput.UpdateDepthRealtime((int)transform.position.z);
+        atlasRenderer.UpdateDepthRealtime((int)transform.position.z);
         QueueToEnterTrain();
     }
     private void Update()
@@ -197,7 +197,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Walking:
             {
-                atlasRenderer.renderInput.FlipH(move < 0, atlasRenderer.sprite);
+                atlasRenderer.FlipH(move < 0, atlasRenderer.sprite);
             }
             break;
             case NPCState.TicketCheck:
@@ -304,11 +304,11 @@ public class NPCBrain : MonoBehaviour
 
         if (chairPosIndex != int.MaxValue)
         {
-            atlasRenderer.renderInput.UpdateDepthRealtime(curCarriage.sittingDepth);
+            atlasRenderer.UpdateDepthRealtime(curCarriage.sittingDepth);
         }
         else if (curCarriage !=  null)
         {
-            atlasRenderer.renderInput.UpdateDepthRealtime(curCarriage.standingDepth);
+            atlasRenderer.UpdateDepthRealtime(curCarriage.standingDepth);
         }
 
 
@@ -331,7 +331,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Walking:
             {
-                curClip = atlasRenderer.renderInput.atlas.clipDict[(int)NPCMotion.Walking];
+                curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.Walking];
             }
             break;
             case NPCState.TicketCheck:
@@ -344,13 +344,13 @@ public class NPCBrain : MonoBehaviour
                 {
                     curClip = RandomStandingIdleMotion();
                 }
-                atlasRenderer.renderInput.custom.y = 1;
+                atlasRenderer.custom.y = 1;
             }
             break;
             case NPCState.Smoking:
             {
                 stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
-                curClip = atlasRenderer.renderInput.atlas.clipDict[(int)NPCMotion.Smoking];
+                curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.Smoking];
                 smoke.Play();
             }
             break;
@@ -495,7 +495,7 @@ public class NPCBrain : MonoBehaviour
     }
     private async UniTask FadeTo()
     {
-        float startAlpha = atlasRenderer.renderInput.custom.x;
+        float startAlpha = atlasRenderer.custom.x;
         float elapsed = 0f;
         try
         {
@@ -504,12 +504,12 @@ public class NPCBrain : MonoBehaviour
                 elapsed += Time.deltaTime;
                 float t = elapsed / npcData.fadeTime;
 
-                atlasRenderer.renderInput.custom.x = Mathf.Lerp(startAlpha, targetAlpha, t);
+                atlasRenderer.custom.x = Mathf.Lerp(startAlpha, targetAlpha, t);
 
                 await UniTask.Yield(PlayerLoopTiming.Update, ctsFade.Token);
             }
 
-            atlasRenderer.renderInput.custom.x = targetAlpha;
+            atlasRenderer.custom.x = targetAlpha;
         }
         catch (OperationCanceledException)
         {
@@ -623,14 +623,14 @@ public class NPCBrain : MonoBehaviour
     private void SetStandingDepth()
     {
         int depth = UnityEngine.Random.Range(trainStats.depthSection_front_min, trainStats.depthSection_back_max);
-        atlasRenderer.renderInput.UpdateDepthRealtime(depth);
+        atlasRenderer.UpdateDepthRealtime(depth);
     }
     private void SetMarkerPosition()
     {
         MarkerPosition[] curSpriteMarkers = curClip.keyFrames[curFrameIndex].motionSprite.markers;
         if (curSpriteMarkers.Length > 0)
         {
-            curSpriteMarkerLocalPosition.x = atlasRenderer.renderInput.flipX ? -curSpriteMarkers[0].objectPos.x : curSpriteMarkers[0].objectPos.x;
+            curSpriteMarkerLocalPosition.x = atlasRenderer.flipX ? -curSpriteMarkers[0].objectPos.x : curSpriteMarkers[0].objectPos.x;
             curSpriteMarkerLocalPosition.y = curSpriteMarkers[0].objectPos.y;
         }
     }

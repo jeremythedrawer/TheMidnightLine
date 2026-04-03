@@ -7,6 +7,7 @@ using static NPC;
 
 public class Notepad : MonoBehaviour
 {
+    const float PAGE_SPAWN_POS_Y_OFFSET = 0.2f;
     public enum State
     {
         None,
@@ -28,11 +29,11 @@ public class Notepad : MonoBehaviour
     public NPCsDataSO npcData;
     public TextAsset namesJSON;
 
-    public AtlasUISimpleRenderer rightHand_renderer;
-    public AtlasUISimpleRenderer frontFingers_renderer;
-    public AtlasUISimpleRenderer bindingRings_renderer;
+    public AtlasRenderer rightHand_renderer;
+    public AtlasRenderer frontFingers_renderer;
+    public AtlasRenderer bindingRings_renderer;
     
-    public AtlasUIMotionRenderer leftHand_renderer;
+    public AtlasRenderer leftHand_renderer;
 
     public Page page_prefab;
     
@@ -52,7 +53,7 @@ public class Notepad : MonoBehaviour
     public int lastLeftHandKeyframeIndex;
     public int leftHandDepthFront;
     public int leftHandDepthBack;
-    public int frontPages;
+    public int pageIndex;
     public int backPages;
     
     public static NameData nameData;
@@ -73,7 +74,7 @@ public class Notepad : MonoBehaviour
     }
     private void Start()
     {
-        leftHandClip = leftHand_renderer.renderInput.atlas.clipDict[(int)NotepadMotion.LeftHand];
+        leftHandClip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.LeftHand];
         lastLeftHandKeyframeIndex = leftHandClip.keyFrames.Length - 1;
 
         leftHandDepthFront =  (int)(bindingRings_renderer.transform.position.z - 1);
@@ -90,7 +91,7 @@ public class Notepad : MonoBehaviour
             
             pages[activePageIndex + 1].gameObject.SetActive(true);
 
-            leftHand_renderer.renderInput.UpdateDepthRealtime(leftHandDepthFront);
+            leftHand_renderer.UpdateDepthRealtime(leftHandDepthFront);
             leftHand_renderer.PlayClipOneShot(leftHandClip);
             
             curKeyframeState = KeyframeState.Start;
@@ -100,7 +101,7 @@ public class Notepad : MonoBehaviour
             curState = State.FlippingDown;
             if (curKeyframeState == KeyframeState.Start) return;
 
-            leftHand_renderer.renderInput.UpdateDepthRealtime(leftHandDepthBack);
+            leftHand_renderer.UpdateDepthRealtime(leftHandDepthBack);
 
             activePage.UpdatePageDepth((int)(rightHand_renderer.transform.position.z - 1));
             activePageIndex--;
@@ -144,7 +145,7 @@ public class Notepad : MonoBehaviour
                     case 7:
                     {
                         if (curKeyframeState == KeyframeState.ChangeDepth) return;
-                        leftHand_renderer.renderInput.UpdateDepthRealtime(leftHandDepthBack);
+                        leftHand_renderer.UpdateDepthRealtime(leftHandDepthBack);
                         activePage.UpdatePageDepth(leftHandDepthBack + 1);
                         curKeyframeState = KeyframeState.ChangeDepth;
                     }
@@ -201,7 +202,7 @@ public class Notepad : MonoBehaviour
                     case 6:
                     {
                         if (curKeyframeState == KeyframeState.ChangeDepth) return;
-                        leftHand_renderer.renderInput.UpdateDepthRealtime(leftHandDepthFront);
+                        leftHand_renderer.UpdateDepthRealtime(leftHandDepthFront);
                         activePage.UpdatePageDepth(leftHandDepthFront + 2);
                         curKeyframeState = KeyframeState.ChangeDepth;
                     }
@@ -215,13 +216,6 @@ public class Notepad : MonoBehaviour
     {
         List<NPCProfile> totalNPCProfiles = new List<NPCProfile>();
         List<NPCProfile> duplicateBehaviourProfiles = new List<NPCProfile>();
-        
-        for (int i = 0; i < trip.stationsDataArray.Length; i++)
-        {
-            StationSO station = trip.stationsDataArray[i];
-            station.bystanderProfiles.Clear();
-            station.traitorProfiles.Clear();
-        }
 
         for (int i = 0; i < trip.npc_prefabsArray.Length; i++)
         {
@@ -273,14 +267,15 @@ public class Notepad : MonoBehaviour
             }
         }
 
-
         List<Page> pageList = new List<Page>();
 
         for (int i = 0; i < trip.stationsDataArray.Length; i++)
         {
             StationSO station = trip.stationsDataArray[i];
 
-            for (int j = 0; j < trip.stationsDataArray[i].traitorSpawnAmount; j++)
+            station.traitorProfiles = new NPCProfile[station.traitorSpawnAmount];
+
+            for (int j = 0; j < station.traitorSpawnAmount; j++)
             {
                 int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
 
@@ -288,17 +283,17 @@ public class Notepad : MonoBehaviour
                 traitorProfile.departureStationIndex = i;
                 traitorProfile.arrivalStationIndex = GetExitStationIndex(i, trip.minStationsTraitorsTravel, trip.maxStationsTraitorsTravel);
                 totalNPCProfiles.RemoveAt(randProfileIndex);
-                station.traitorProfiles.Add(traitorProfile);
+                station.traitorProfiles[j] = traitorProfile;
 
                 Vector3 pagePos = bindingRings_renderer.transform.position + Vector3.forward;
-                if (frontPages != 0) pagePos.z += 2;
-                pagePos.y += UnityEngine.Random.Range(-0.1f, 0.1f);
+                if (pageIndex != 0) pagePos.z += 2;
+                pagePos.y += PAGE_SPAWN_POS_Y_OFFSET;
                 Page page = Instantiate(page_prefab, pagePos, Quaternion.identity, transform);
                 page.Init(traitorProfile);
-                page.gameObject.name = "Page_" + frontPages;
+                page.gameObject.name = "Page_" + pageIndex;
                 pageList.Add(page);
-                if (frontPages != 0) page.gameObject.SetActive(false);
-                frontPages++;
+                if (pageIndex != 0) page.gameObject.SetActive(false);
+                pageIndex++;
             }
         }
 
@@ -313,6 +308,7 @@ public class Notepad : MonoBehaviour
         {
             StationSO station = trip.stationsDataArray[i];
             int bystandersToSpawnAtStation = (int)(station.busynessFactor * (float)totalNPCProfiles.Count);
+            station.bystanderProfiles = new NPCProfile[bystandersToSpawnAtStation];
 
             for (int j = 0; j < bystandersToSpawnAtStation; j++)
             {
@@ -322,20 +318,20 @@ public class Notepad : MonoBehaviour
                 NPCProfile bystanderProfile = totalNPCProfiles[randProfileIndex];
 
                 bystanderProfile.departureStationIndex = i;
-                bystanderProfile.arrivalStationIndex = GetExitStationIndex(i, 0, int.MaxValue);
+                bystanderProfile.arrivalStationIndex = GetExitStationIndex(i, 1, int.MaxValue);
 
                 totalNPCProfiles.RemoveAt(randProfileIndex);
-                station.bystanderProfiles.Add(bystanderProfile);
+                station.bystanderProfiles[j] = bystanderProfile;
             }
         }
     }
     private void SetTotalBounds()
     {
         if (rightHand_renderer == null || frontFingers_renderer == null || bindingRings_renderer == null) return;
-        totalBounds = rightHand_renderer.renderInput.bounds;
-        totalBounds.Encapsulate(frontFingers_renderer.renderInput.bounds);
-        totalBounds.Encapsulate(bindingRings_renderer.renderInput.bounds);
-        totalBounds.Encapsulate(leftHand_renderer.renderInput.bounds);
+        totalBounds = rightHand_renderer.bounds;
+        totalBounds.Encapsulate(frontFingers_renderer.bounds);
+        totalBounds.Encapsulate(bindingRings_renderer.bounds);
+        totalBounds.Encapsulate(leftHand_renderer.bounds);
     }
     public string GenerateName(Gender gender, Ethnicity ethnicity)
     {

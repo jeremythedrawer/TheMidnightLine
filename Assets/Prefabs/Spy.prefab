@@ -10,8 +10,8 @@ GameObject:
   m_Component:
   - component: {fileID: 4787624463287863098}
   - component: {fileID: 8121811400885595123}
-  - component: {fileID: 5836047425175094725}
   - component: {fileID: 2814450545205291383}
+  - component: {fileID: 5735628127011101087}
   - component: {fileID: 4281581721833017353}
   - component: {fileID: 8541590373058370183}
   m_Layer: 6
@@ -133,43 +133,6 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!114 &5836047425175094725
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8772790425813503437}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 7ad303b9518a28f48a3f27f561a6d346, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasMotionRenderer
-  renderInput:
-    batchKey:
-      material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
-      depthOrder: -1
-    atlas: {fileID: 11400000, guid: 5085181b26ea31b4b9430dc5ce3bcdf5, type: 2}
-    boxCollider: {fileID: 0}
-    flipX: 0
-    flipY: 0
-    gameObject: {fileID: 8772790425813503437}
-    bounds:
-      m_Center: {x: 303.14, y: 1.83, z: -1}
-      m_Extent: {x: 0.50555557, y: 0.6, z: 0.1}
-    pivotAndSize: {x: 0.50555557, y: 0, z: 1.0111111, w: 1.2}
-    uvSizeAndPos: {x: 0.08886719, y: 0.10546875, z: 0.072753906, w: 0.6323242}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-    boundsOffset: {x: 0, y: 0.6}
-  spriteIndex: 20
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  sprite:
-    uvSizeAndPos: {x: 0.08886719, y: 0.10546875, z: 0.072753906, w: 0.6323242}
-    uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 1.0111111, y: 1.2, z: 1}
-    index: 20
 --- !u!50 &2814450545205291383
 Rigidbody2D:
   serializedVersion: 5
@@ -197,6 +160,64 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!114 &5735628127011101087
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8772790425813503437}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 1
+  batchKey:
+    material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
+    depthOrder: 2
+  atlas: {fileID: 11400000, guid: 5085181b26ea31b4b9430dc5ce3bcdf5, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.13134766, y: 0.119140625, z: 0.00048828125, w: 0.87646484}
+    uvPivot: {x: 0.43122676, y: 0}
+    worldSize: {x: 1.4944445, y: 1.3555555, z: 1}
+    index: 0
+  bounds:
+    m_Center: {x: 86.25533, y: 2.3687778, z: 1}
+    m_Extent: {x: 0.74722224, y: 0.67777777, z: 0.1}
+  worldPivotAndSize: {x: 0.64444447, y: 0, z: 1.4944445, w: 1.3555555}
+  uvSizeAndPosition: {x: 0.13134766, y: 0.119140625, z: 0.00048828125, w: 0.87646484}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.10277778, y: 0.67777777, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
 --- !u!61 &4281581721833017353
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -257,23 +278,23 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   rigidBody: {fileID: 2814450545205291383}
   boxCollider: {fileID: 4281581721833017353}
-  atlasRenderer: {fileID: 5836047425175094725}
+  atlasRenderer: {fileID: 5735628127011101087}
   settings: {fileID: 11400000, guid: ff622072eaf75a443bdc1bbda3340ef0, type: 2}
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   stats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  inputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
+  playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
-  phone: {fileID: 11400000, guid: b67f56cb6cf796b48b746b0b6bff5dae, type: 2}
+  trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   matrixMaterial: {fileID: 2100000, guid: 12c2dbd000184ef46b9f4c55426baf8d, type: 2}
   atlas: {fileID: 0}
   slideDoors: {fileID: 0}
   gangwayDoor: {fileID: 0}
   curClimbCollider: {fileID: 0}
   curCarriage: {fileID: 0}
-  curState: 0
+  npcTicketCheck: {fileID: 0}
   curClip:
     clipName: 
     keyFrames: []
@@ -283,17 +304,20 @@ MonoBehaviour:
   clipTime: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  canExitCheckTicket: 0
+  checkingTicket: 0
+  checkingNotepad: 0
   collisionData:
-    groundLeft: {x: 302.91803, y: 1.081}
-    groundRight: {x: 303.362, y: 1.081}
-    stepTopLeft: {x: 302.91803, y: 1.301}
-    stepTopRight: {x: 303.362, y: 1.301}
-    stepBottomLeft: {x: 302.91803, y: 1.23}
-    stepBottomRight: {x: 303.362, y: 1.23}
-    wallTopLeft: {x: 302.85, y: 2.8899999}
-    wallTopRight: {x: 303.43002, y: 2.8899999}
-    wallBottomLeft: {x: 302.85, y: 1.99}
-    wallBottomRight: {x: 303.43002, y: 1.99}
+    groundLeft: {x: 85.93056, y: 1.5419999}
+    groundRight: {x: 86.37456, y: 1.5419999}
+    stepTopLeft: {x: 85.93056, y: 1.762}
+    stepTopRight: {x: 86.37456, y: 1.762}
+    stepBottomLeft: {x: 85.93056, y: 1.691}
+    stepBottomRight: {x: 86.37456, y: 1.691}
+    wallTopLeft: {x: 85.86256, y: 3.3509998}
+    wallTopRight: {x: 86.44256, y: 3.3509998}
+    wallBottomLeft: {x: 85.86256, y: 2.451}
+    wallBottomRight: {x: 86.44256, y: 2.451}
     stepFilter:
       useTriggers: 0
       useLayerMask: 0
