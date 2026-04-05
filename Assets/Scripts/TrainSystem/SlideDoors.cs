@@ -31,6 +31,7 @@ public class SlideDoors : MonoBehaviour
 
     private UniTaskCompletionSource tcsOpen;
     private UniTaskCompletionSource tcsUnlock;
+
     private void Start()
     {
         ResetDoors();
@@ -56,6 +57,7 @@ public class SlideDoors : MonoBehaviour
     public void OpenDoors()
     {
         curState = State.Opening;
+        trainStats.slideDoorsAmountOpened++;
         OpeningDoors(openMoveAmount, trainSettings.doorMoveTime, State.Opened).Forget();
     }
     public void CloseDoors()
@@ -119,6 +121,7 @@ public class SlideDoors : MonoBehaviour
         leftSlideDoor_transform.localPosition = leftSlideDoorPos;
 
         curState = newState;
+        trainStats.slideDoorsAmountOpened--;
     }
     public UniTask WaitUntilOpened()
     {

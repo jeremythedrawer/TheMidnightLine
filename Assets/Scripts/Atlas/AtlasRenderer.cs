@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using static Atlas;
@@ -217,8 +218,8 @@ public class AtlasRenderer : MonoBehaviour
         boundsOffset.y = (bounds.size.y * 0.5f) - worldPivotAndSize.y;
     }
     public void UpdateBounds()
-    {
-        bounds.center = gameObject.transform.position + boundsOffset;
+    {        
+        bounds.center = transform.position + boundsOffset;
     }
     public void UpdateSlicedSpriteInputs()
     {
@@ -324,23 +325,28 @@ public class AtlasRenderer : MonoBehaviour
 
         int spriteIndex = 0;
         float maxLetterHeight = 0;
-        for (int i = 0; i < text.Length; i++)
-        {
-            char c = text[i];
-            int asciiIndex = (int)c;
-            if (asciiIndex < 33)
-            {
-                if (asciiIndex == 32)
-                {
-                    cursorX += spacing;
-                }
-            }
-            else
-            {
-                SimpleSprite sprite = atlas.simpleSprites[asciiIndex - 33];
+        
+        float minX = float.MaxValue;
+        float maxX = float.MinValue;
+        float maxY = float.MinValue;
 
-                if (rendererType == AtlasRendererType.TextScreen)
+
+        if (rendererType == AtlasRendererType.TextScreen)
+        {
+            for (int i = 0; i < text.Length; i++)
+            {
+                char c = text[i];
+                int asciiIndex = (int)c;
+                if (asciiIndex < 33)
                 {
+                    if (asciiIndex == 32)
+                    {
+                        cursorX += spacing;
+                    }
+                }
+                else
+                {
+                    SimpleSprite sprite = atlas.simpleSprites[asciiIndex - 33];
                     float letterPos = cursorX * kerning * camStats.worldUnitsPerPixel;
                     Vector4 worldPivotAndSize = worldPivotsAndSizes[spriteIndex];
                     worldPivotAndSize.x = -letterPos;
@@ -349,44 +355,79 @@ public class AtlasRenderer : MonoBehaviour
                     worldPivotAndSize.z = spritePixelSize.x * camStats.worldUnitsPerPixel;
                     worldPivotAndSize.w = spritePixelSize.y * camStats.worldUnitsPerPixel;
                     worldPivotsAndSizes[spriteIndex] = worldPivotAndSize;
-                    
+
                     cursorX += spritePixelSize.x;
-                    
-                    if(worldPivotAndSize.w > maxLetterHeight) maxLetterHeight = worldPivotAndSize.w;
+
+                    if (worldPivotAndSize.w > maxLetterHeight) maxLetterHeight = worldPivotAndSize.w;
+
+                    uvSizesAndPositions[spriteIndex] = sprite.uvSizeAndPos;
+                    scalesAndFlips[spriteIndex] = Vector4.one;
+                    spriteIndex++;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < text.Length; i++)
+            {
+                char c = text[i];
+
+                int asciiIndex = (int)c;
+                if (asciiIndex < 33)
+                {
+                    if (asciiIndex == 32)
+                    {
+                        cursorX += spacing;
+                    }
                 }
                 else
                 {
-                    float letterPos = cursorX * kerning;
+                    SimpleSprite sprite = atlas.simpleSprites[asciiIndex - 33];
+
+                    float letterAdvance = 0.122f;
+                    float letterPos = (cursorX) * kerning;
                     Vector4 worldPivotAndSize = worldPivotsAndSizes[spriteIndex];
-                    worldPivotAndSize.x = -letterPos;
+                    worldPivotAndSize.x = letterPos;
                     worldPivotAndSize.z = sprite.worldSize.x;
                     worldPivotAndSize.w = sprite.worldSize.y;
+
+                    float left = worldPivotAndSize.x;
+                    float right = worldPivotAndSize.x + worldPivotAndSize.z;
+                    float top = worldPivotAndSize.w;
+
+                    if (left < minX) minX = left;
+                    if (right > maxX) maxX = right;
+                    if (top > maxY) maxY = top;
+
+
+
                     worldPivotsAndSizes[spriteIndex] = worldPivotAndSize;
 
-                    cursorX += sprite.worldSize.x;
+                    float widthRatio = sprite.worldSize.x / letterAdvance;
+                    float advanceScale = widthRatio * 0.5f + 0.5f;
+                    cursorX += letterAdvance * advanceScale;
 
-                    if(sprite.worldSize.y > maxLetterHeight) maxLetterHeight = sprite.worldSize.y;
+                    if (sprite.worldSize.y > maxLetterHeight) maxLetterHeight = sprite.worldSize.y;
+
+                    uvSizesAndPositions[spriteIndex] = sprite.uvSizeAndPos;
+                    scalesAndFlips[spriteIndex] = Vector4.one;
+                    spriteIndex++;
                 }
-
-
-                uvSizesAndPositions[spriteIndex] = sprite.uvSizeAndPos;
-                scalesAndFlips[spriteIndex] = Vector4.one;
-                spriteIndex++;
             }
         }
 
-        float totalTextWidth = rendererType == AtlasRendererType.TextScreen ? cursorX * kerning * camStats.worldUnitsPerPixel : cursorX * kerning;
+        float width = maxX - minX;
+        float height = maxY;
 
-        for(int i = 0; i < printableChars; i++)
+        bounds.size = new Vector3(width, height, 0.2f);
+        boundsOffset = new Vector3(width * 0.5f, height * 0.5f, 0f);
+        bounds.center = transform.position + boundsOffset;
+
+        for (int i = 0; i < printableChars; i++) //TODO(Jeremy): Set outside of renderer in a scrolling class if I need to use the custom vector else where
         {
-            customs[i].x = totalTextWidth;
+            customs[i].x = width;
             customs[i].y = 1.8f;
         }
-
-        bounds.size = new Vector3(totalTextWidth,  maxLetterHeight, 0.2f);
-        boundsOffset = bounds.size * 0.5f;
-        
-        bounds.center = new Vector3(transform.position.x + boundsOffset.x, transform.position.y + boundsOffset.y, transform.position.z);
     }
     private async UniTask PlayingClipOneShot(AtlasClip clip)
     {

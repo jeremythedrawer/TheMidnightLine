@@ -68,15 +68,19 @@ public class CameraController : MonoBehaviour
             stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, stats.targetWorldPos, Time.deltaTime * settings.damping);
             stats.curWorldPos = GetSnappedPosition(stats.curWorldPos);
             transform.position = stats.curWorldPos;
-            
-            stats.curVelocity = -((stats.curWorldPos - stats.prevWorldPos) / Time.deltaTime);
         }
         else
         {
             stats.curWorldPos = transform.position;
         }
     }
-
+    private void FixedUpdate()
+    {
+        if (Application.isPlaying)
+        {
+            stats.curVelocity = -((stats.curWorldPos - stats.prevWorldPos) / Time.fixedDeltaTime);
+        }
+    }
     private void SelectStates()
     {
         if (!spyStats.onTrain)

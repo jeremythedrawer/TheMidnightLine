@@ -3,6 +3,8 @@ Shader "Custom/s_atlasFontScroll"
     Properties
     {
         [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
+        _ScrollSpeed("Scroll Speed", Float) = 0.2
+        _Spacing("Spacing", Float) = 0.2
     }
 
     SubShader
@@ -39,6 +41,11 @@ Shader "Custom/s_atlasFontScroll"
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
+            CBUFFER_START(UnityPerMaterial)
+                float _ScrollSpeed;
+                float _Spacing;
+            CBUFFER_END
+
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -50,13 +57,12 @@ Shader "Custom/s_atlasFontScroll"
                 
                 float2 pivot = spriteData.pivotAndSize.xy;
                 float2 size = spriteData.pivotAndSize.zw;
-                
-                float2 scale = spriteData.scaleAndFlip.xy;
+
                 float2 objPos = v.positionOS.xy;
 
-                objPos *= size * scale;
-                objPos -= pivot;
-                objPos.x -= frac(_Time.y * 0.1) * ((spriteData.custom.x * 2) - spriteData.custom.y)  - spriteData.custom.y;
+                objPos *= size;
+                float time = _Time.y * _ScrollSpeed;
+                objPos.x -= fmod(time - pivot.x, spriteData.custom.x + _Spacing) * spriteData.custom.x - spriteData.custom.x;
 
                 float3 worldPos = float3(position.xy + objPos, position.z);
 
@@ -75,13 +81,8 @@ Shader "Custom/s_atlasFontScroll"
 
                 float2 uvSize = spriteData.uvSizeAndPos.xy;
                 float2 uvPos = spriteData.uvSizeAndPos.zw;
-                
-                float2 scale = spriteData.scaleAndFlip.xy;
-                float2 flip = spriteData.scaleAndFlip.zw;
 
-                i.uv *= scale;
                 i.uv = frac(i.uv);
-                i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);

@@ -5,7 +5,7 @@ using static NPC;
 public class StationSO : ScriptableObject
 {
     public Station station_prefab;
-    public int targetTrainSpeed = 100;
+    public int targetKMPH = 100;
     public int metersPosition = 0;
 
     [Range(0, 1)]public float busynessFactor = 0.2f;

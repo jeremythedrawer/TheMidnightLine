@@ -1,22 +1,12 @@
 using Cysharp.Threading.Tasks;
 using System;
-using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using static Train;
 
 public class Carriage : MonoBehaviour
 {
-    [Serializable] public struct SeatData
-    {
-        public float[] xPos;
-        public bool[] filled;
-    }
-    [Serializable] public struct SmokersRoomData
-    {
-        public float minXPos;
-        public float maxXPos;
-        public int npcCount;
-    }
+
 
     [SerializeField] TrainStatsSO trainStats;
     [SerializeField] TrainSettingsSO trainSettings;
@@ -42,8 +32,6 @@ public class Carriage : MonoBehaviour
     [Header("Generated")]
     public SeatData seatData;
     public SmokersRoomData[] smokersRoomData;
-    public int sittingDepth;
-    public int standingDepth;
     public Transform[] wheelTransforms;
     public CancellationTokenSource ctsFade;
     public float prevMeters;
@@ -57,7 +45,6 @@ public class Carriage : MonoBehaviour
         gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(SetSeatData);
         gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(SetSmokerRoomData);
         gameEventData.OnStationArrival.RegisterListener(UnlockDoors);
-        gameEventData.OnCloseSlideDoors.RegisterListener(CloseDoors);
 
     }
     private void OnDisable()
@@ -65,7 +52,6 @@ public class Carriage : MonoBehaviour
         gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(SetSeatData);
         gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(SetSmokerRoomData);
         gameEventData.OnStationArrival.UnregisterListener(UnlockDoors);
-        gameEventData.OnCloseSlideDoors.UnregisterListener(CloseDoors);
     }
     private void Start()
     {
@@ -127,8 +113,6 @@ public class Carriage : MonoBehaviour
                 seatIndex++;
             }
         }
-        sittingDepth = seatRenderer.batchKey.depthOrder - 1;
-        standingDepth = sittingDepth - 1;
     }
     private void UnlockDoors()
     {
@@ -147,23 +131,21 @@ public class Carriage : MonoBehaviour
             }
         }
     }
-    private void CloseDoors()
-    {
-        if (trip.curStation.isFrontOfTrain)
-        {
-            for(int i = 0; i < exteriorSlideDoors.Length; i++)
-            {
-                exteriorSlideDoors[i].CloseDoors();
-            }
-        }
-        else
-        {
-            for (int i = 0; i < interiorSlideDoors.Length; i++)
-            {
-                interiorSlideDoors[i].CloseDoors();
-            }
-        }
 
+    public void CloseInteriorSlideDoors()
+    {
+        for (int i = 0; i < interiorSlideDoors.Length; i++)
+        {
+            interiorSlideDoors[i].CloseDoors();
+        }
+    }
+
+    public void CloseExteriorSlideDoors()
+    {
+        for (int i = 0; i < exteriorSlideDoors.Length; i++)
+        {
+            exteriorSlideDoors[i].CloseDoors();
+        }
     }
     public void MoveUp()
     {

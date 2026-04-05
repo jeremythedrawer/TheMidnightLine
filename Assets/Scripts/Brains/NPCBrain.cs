@@ -141,7 +141,7 @@ public class NPCBrain : MonoBehaviour
     private void FixedUpdate()
     {
         FixedUpdateStates();
-        targetXVelocity = npc.moveSpeed  * move;
+        targetXVelocity = npc.moveSpeed * move;
         rigidBody.linearVelocityX = targetXVelocity;
     }
     private void SelectingStates()
@@ -284,7 +284,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Walking:
             {
-                //TODO: move depth if collided with another npc
+
             }
             break;
         }
@@ -304,11 +304,11 @@ public class NPCBrain : MonoBehaviour
 
         if (chairPosIndex != int.MaxValue)
         {
-            atlasRenderer.UpdateDepthRealtime(curCarriage.sittingDepth);
+            atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.carriageSeat);
         }
         else if (curCarriage !=  null)
         {
-            atlasRenderer.UpdateDepthRealtime(curCarriage.standingDepth);
+            SetStandingDepth();
         }
 
 
@@ -408,7 +408,7 @@ public class NPCBrain : MonoBehaviour
                 if (chairPosIndex != int.MaxValue)
                 {
                     curClip = atlas.clipDict[(int)NPCMotion.SittingCalling];
-                    transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.sittingDepth);
+                    atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.carriageSeat);
                 }
                 else
                 {
@@ -422,7 +422,7 @@ public class NPCBrain : MonoBehaviour
                 if (chairPosIndex != int.MaxValue)
                 {
                     curClip = atlas.clipDict[(int)NPCMotion.SittingReading];
-                    transform.position = new Vector3(transform.position.x, transform.position.y, curCarriage.sittingDepth);
+                    atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.carriageSeat);
                 }
                 else
                 {
@@ -549,7 +549,7 @@ public class NPCBrain : MonoBehaviour
 
         SetStandingDepth();
         transform.SetParent(null, true);
-        trainStats.curPassengerCount++;
+        trainStats.curPassengersBoarded++;
         QueueForChair();
 
         curCarriage = trainStats.carriageDict[carriageHit.collider];
@@ -622,7 +622,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void SetStandingDepth()
     {
-        int depth = UnityEngine.Random.Range(trainStats.depthSection_front_min, trainStats.depthSection_back_max);
+        int depth = UnityEngine.Random.Range(trainStats.depthSections.frontMin, trainStats.depthSections.backMax);
         atlasRenderer.UpdateDepthRealtime(depth);
     }
     private void SetMarkerPosition()

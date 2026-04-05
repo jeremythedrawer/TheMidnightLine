@@ -127,7 +127,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
                     renderer.UpdateBounds();
 #if !UNITY_EDITOR
-                    if (renderInput.bounds.max.x < cameraStats.camWorldLeft || renderInput.bounds.min.x > cameraStats.camWorldRight || renderInput.bounds.max.y < cameraStats.camWorldBottom || renderInput.bounds.min.y > cameraStats.camWorldTop) continue;
+                    //if (renderer.bounds.max.x < cameraStats.camWorldLeft || renderer.bounds.min.x > cameraStats.camWorldRight || renderer.bounds.max.y < cameraStats.camWorldBottom || renderer.bounds.min.y > cameraStats.camWorldTop) continue;
 #endif
                     switch (renderer.rendererType)
                     { 

@@ -10,7 +10,7 @@ public class Station : MonoBehaviour
 
     private void OnEnable()
     {
-        station.isFrontOfTrain = platformRenderer.batchKey.depthOrder < trainStats.minDepth;
+        station.isFrontOfTrain = platformRenderer.batchKey.depthOrder < trainStats.depthSections.min;
     }
     public void SpawnNPCs()
     {

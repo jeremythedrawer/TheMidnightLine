@@ -14,14 +14,12 @@ public class ZoneMaster : MonoBehaviour
     public SpyStatsSO spyStats;
 
     public ZoneSpawner[] zoneSpawners;
-    private void OnEnable()
+    private void Start()
     {
         InitBoundParameters();
         InitZoneCompute();
         InitZoneSpawners();
         spawner.atlasCompute.SetInt("_Awake", 1);
-
-
     }
 
     private void OnDisable()
@@ -35,7 +33,6 @@ public class ZoneMaster : MonoBehaviour
         if (spyStats.onTrain)
         {
             spawner.atlasCompute.SetFloat("_TrainVelocity", (trainStats.curVelocity * Time.deltaTime));
-
         }
     }
     private void InitBoundParameters()
@@ -44,7 +41,7 @@ public class ZoneMaster : MonoBehaviour
         float firstStationPos = trip.stationsDataArray[0].metersPosition;
 
         spawner.spawnMaxPos.x = firstStationPos + spawner.spawnerSize.x;
-        spawner.spawnMaxPos.y = trainStats.trainMaxHeight + camSettings.maxProjectionSize + spawner.spawnerSize.y;
+        spawner.spawnMaxPos.y = trainStats.totalBounds.max.y + camSettings.maxProjectionSize + spawner.spawnerSize.y;
         spawner.spawnMaxPos.z = Parallax.FAR_CLIP;
 
         spawner.spawnMinPos.x = firstStationPos - spawner.spawnerSize.x;

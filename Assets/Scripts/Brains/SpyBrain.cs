@@ -404,7 +404,6 @@ public class SpyBrain : MonoBehaviour
     {
         if (stats.curState == newState) return;
         ExitState();
-        if (newState == State.Ticket) Debug.Log(stats.curState);
         stats.curState = newState;
         EnterState();
     }
@@ -626,9 +625,9 @@ public class SpyBrain : MonoBehaviour
                     collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
 
                     UpdateDepth(atlasRenderer.batchKey.depthOrder).Forget();
-                    atlasRenderer.UpdateDepthRealtime(trainStats.depthSection_front_min);
+                    atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.frontMin);
 
-                    trainStats.curPassengerCount++;
+                    trainStats.curPassengersBoarded++;
                     
                     gameEventData.OnBoardingSpy.Raise();
                     
@@ -640,7 +639,6 @@ public class SpyBrain : MonoBehaviour
     private void SpyCanBoardTrain()
     {
         stats.canBoardTrain = true;
-        Debug.Log("spy can enter train");
     }
     private async UniTask UpdateDepth(float oldDepth)
     {

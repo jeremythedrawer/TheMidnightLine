@@ -43,7 +43,7 @@ public class ParallaxController : MonoBehaviour
         }
     }
 
-    private void Update()
+    private void FixedUpdate()
     {
         if (!ignoreParallax)
         {

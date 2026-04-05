@@ -16,11 +16,11 @@ public static class Parallax
 
     public static float UpdateParallaxPosition(CameraStatsSO camStats, SpyStatsSO spyStats, TrainStatsSO trainStats, float parallaxFactor)
     {
-        float xPos = camStats.curVelocity.x * (1 - parallaxFactor) * Time.deltaTime;
+        float xPos = camStats.curVelocity.x * (1 - parallaxFactor) * Time.fixedDeltaTime;
 
         if (spyStats.onTrain)
         {
-            xPos += trainStats.curVelocity * parallaxFactor * Time.deltaTime;
+            xPos += trainStats.curVelocity * parallaxFactor * Time.fixedDeltaTime;
         }
 
         return xPos;
@@ -28,6 +28,6 @@ public static class Parallax
 
     public static float UpdatePositionNoParallax(TrainStatsSO trainStats)
     {
-        return trainStats.curVelocity * Time.deltaTime;
+        return trainStats.curVelocity * Time.fixedDeltaTime;
     }
 }
