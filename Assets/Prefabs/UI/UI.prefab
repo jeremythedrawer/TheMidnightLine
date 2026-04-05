@@ -146,6 +146,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  prevSpriteIndexFlipH: 3
+  prevSpriteIndexFlipV: 3
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -306,12 +308,16 @@ PrefabInstance:
       value: 14.549999
       objectReference: {fileID: 0}
     - target: {fileID: 2612292025983585526, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: boundsOffset.y
+      value: 7.825556
+      objectReference: {fileID: 0}
+    - target: {fileID: 2612292025983585526, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: totalBounds.m_Center.x
       value: 5.2888894
       objectReference: {fileID: 0}
     - target: {fileID: 2612292025983585526, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: totalBounds.m_Center.y
-      value: -0.24222207
+      value: -0.57333326
       objectReference: {fileID: 0}
     - target: {fileID: 2612292025983585526, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: totalBounds.m_Center.z
@@ -323,7 +329,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2612292025983585526, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: totalBounds.m_Extent.y
-      value: 3.6833334
+      value: 3.8222222
       objectReference: {fileID: 0}
     - target: {fileID: 2612292025983585526, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: totalBounds.m_Extent.z
@@ -371,7 +377,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4411935793220314665, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.24222207
+      value: -0.7122221
       objectReference: {fileID: 0}
     - target: {fileID: 4411935793220314665, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: bounds.m_Center.z

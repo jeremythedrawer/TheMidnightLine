@@ -53,6 +53,7 @@ public class TrainController : MonoBehaviour
 
         stats.slideDoorsAmountOpened = 0;
 
+        
         trainCTS = new CancellationTokenSource();
     }
     private void OnDisable()
@@ -67,6 +68,7 @@ public class TrainController : MonoBehaviour
     {
         SetCarriageDictionary();
         MoveTrainToStartPosition().Forget();
+        SetState(TrainStates.Accelerating);
     }
     private void Update()
     {
@@ -109,6 +111,10 @@ public class TrainController : MonoBehaviour
         { 
             case TrainStates.Accelerating:
             {
+                for (int i = 0; i < carriages.Length; i++)
+                {
+                    carriages[i].SetSignToNextStation(trip.curStation.stationName);
+                }
             }
             break;
 
@@ -127,6 +133,22 @@ public class TrainController : MonoBehaviour
             case TrainStates.Stopped:
             {
                 stats.curVelocity = 0;
+                if (trip.curStation.isFrontOfTrain)
+                {
+                    for (int i = 0; i < carriages.Length; i++)
+                    {
+                        carriages[i].UnlockExteriorSlideDoors();
+                        carriages[i].SetSignToCurrentStation(trip.curStation.stationName);
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < carriages.Length; i++)
+                    {
+                        carriages[i].UnlockInteriorDoors();
+                        carriages[i].SetSignToCurrentStation(trip.curStation.stationName);
+                    }
+                }
                 gameEventData.OnStationArrival.Raise();
             }
             break;

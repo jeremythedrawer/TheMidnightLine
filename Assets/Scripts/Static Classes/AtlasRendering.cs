@@ -90,7 +90,7 @@ public static class AtlasRendering
         batch.rendererList.Remove(renderer);
         if (batch.rendererList.Count == 0) spriteBatchDict.Remove(renderer.batchKey);
     }
-    public static ref SimpleSprite GetNextKeyframeSprite(ref AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
+    public static ref MotionSprite GetNextKeyframeSprite(ref AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {
         keyframeClock += Time.deltaTime;
 
@@ -149,9 +149,9 @@ public static class AtlasRendering
             break;
         }
 
-        return ref clip.keyFrames[curFrameIndex].motionSprite.sprite;
+        return ref clip.keyFrames[curFrameIndex].motionSprite;
     }
-    public static ref SimpleSprite GetNextKeyframeSpriteReverse(ref AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
+    public static ref MotionSprite GetNextKeyframeSpriteReverse(ref AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {
         keyframeClock += Time.deltaTime;
 
@@ -169,13 +169,13 @@ public static class AtlasRendering
             keyframeClock = 0;
         }
 
-        return ref clip.keyFrames[curFrameIndex].motionSprite.sprite;
+        return ref clip.keyFrames[curFrameIndex].motionSprite;
     }
-    public static ref SimpleSprite GetNextKeyframeSpriteManual(ref AtlasClip clip, float currentTime)
+    public static ref MotionSprite GetNextKeyframeSpriteManual(ref AtlasClip clip, float currentTime)
     {
         int maxIndex = clip.keyFrames.Length - 1;
         int curFrameIndex = Mathf.Clamp(Mathf.FloorToInt((clip.keyFrames.Length - 1) * currentTime), 0, maxIndex);
-        return ref clip.keyFrames[curFrameIndex].motionSprite.sprite;
+        return ref clip.keyFrames[curFrameIndex].motionSprite;
     }
     public static ref SimpleSprite GetNextKeyframeSpriteEditor(ref AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {

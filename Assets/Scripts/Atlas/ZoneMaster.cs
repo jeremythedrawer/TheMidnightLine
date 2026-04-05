@@ -14,7 +14,7 @@ public class ZoneMaster : MonoBehaviour
     public SpyStatsSO spyStats;
 
     public ZoneSpawner[] zoneSpawners;
-    private void Start()
+    private void OnEnable()
     {
         InitBoundParameters();
         InitZoneCompute();

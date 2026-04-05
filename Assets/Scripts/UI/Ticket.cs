@@ -4,8 +4,8 @@ using UnityEngine;
 public class Ticket : MonoBehaviour
 {
     public AtlasRenderer ticket_renderer;
-    public AtlasRenderer departureStation_renderer;
-    public AtlasRenderer arrivalStation_renderer;
+    public AtlasRenderer boardingStation_renderer;
+    public AtlasRenderer disembarkingStation_renderer;
 
 
     public Bounds totalBounds;
@@ -22,9 +22,9 @@ public class Ticket : MonoBehaviour
         totalBounds = ticket_renderer.bounds;
     }
 
-    public void SetText(string depStation, string arrStation)
+    public void SetText(string boardingStation, string disembarkingStation)
     {
-        departureStation_renderer.SetText(depStation);
-        arrivalStation_renderer.SetText(arrStation);
+        boardingStation_renderer.SetText(boardingStation);
+        disembarkingStation_renderer.SetText(disembarkingStation);
     }
 }

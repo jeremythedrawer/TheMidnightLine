@@ -36,8 +36,8 @@ public class SpyStatsSO : ScriptableObject
 
 
     public string ticketName;
-    public string departureStationName;
-    public string arrivalStationName;
+    public string boardingStationName;
+    public string disembarkingStationName;
     public void ResetStats()
     {
         curWorldPos = Vector2.zero;

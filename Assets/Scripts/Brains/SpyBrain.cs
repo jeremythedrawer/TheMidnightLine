@@ -337,9 +337,14 @@ public class SpyBrain : MonoBehaviour
             case State.Ticket:
             {
                 if (!playerInputs.ticket) canExitCheckTicket = true;
-                if(playerInputs.ticket && canExitCheckTicket)
+                if((playerInputs.ticket && canExitCheckTicket))
                 {
                     checkingTicket = false;
+                }
+                if (playerInputs.notepad.x == -1)
+                {
+                    checkingTicket = false;
+                    checkingNotepad = true;
                 }
             }
             break;
@@ -475,8 +480,8 @@ public class SpyBrain : MonoBehaviour
                     npcTicketCheck = npcHit.transform.gameObject.GetComponent<NPCBrain>();
                     npcTicketCheck.ticketIsBeingChecked = true;
                     stats.ticketName = npcTicketCheck.profile.fullName;
-                    stats.departureStationName = trip.stationsDataArray[npcTicketCheck.profile.arrivalStationIndex].name;
-                    stats.arrivalStationName = trip.stationsDataArray[npcTicketCheck.profile.departureStationIndex].name;
+                    stats.boardingStationName = trip.stationsDataArray[npcTicketCheck.profile.boardingStationIndex].name;
+                    stats.disembarkingStationName = trip.stationsDataArray[npcTicketCheck.profile.disembarkingStationIndex].name;
                     canExitCheckTicket = false;
                     checkingTicket = true;
                 }
@@ -531,6 +536,12 @@ public class SpyBrain : MonoBehaviour
             case State.Ticket:
             {
                 npcTicketCheck.ticketIsBeingChecked = false;
+            }
+            break;
+
+            case State.Notepad:
+            {
+                checkingNotepad = false;
             }
             break;
         }

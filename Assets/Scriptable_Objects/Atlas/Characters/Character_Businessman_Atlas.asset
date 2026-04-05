@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Character_Businessman_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
   texture: {fileID: 2800000, guid: 1602fa2914d12994d8cfd5021338c0b7, type: 3}
-  isParticleAtlas: 0
+  spriteConnectColor:
+    serializedVersion: 2
+    rgba: 0
   entityMotionType: 0
   pivotColor:
     serializedVersion: 2
@@ -21,7 +23,7 @@ MonoBehaviour:
   sliceColor:
     serializedVersion: 2
     rgba: 4294901760
-  particleType: 0
+  zoneType: 0
   motionSprites:
   - sprite:
       uvSizeAndPos: {x: 0.045898438, y: 0.15576172, z: 0.0063476562, w: 0.8432617}
@@ -333,9 +335,6 @@ MonoBehaviour:
       type: 2
   simpleSprites: []
   slicedSprites: []
-  particleSprites: []
-  particleUVSizeAndPosArray: []
-  worldSizesArray: []
   clips:
   - clipName: Walking
     keyFrames:

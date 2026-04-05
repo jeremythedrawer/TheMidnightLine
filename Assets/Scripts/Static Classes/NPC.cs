@@ -78,8 +78,8 @@ public static class NPC
     {
         public string fullName;
 
-        public int departureStationIndex;
-        public int arrivalStationIndex;
+        public int disembarkingStationIndex;
+        public int boardingStationIndex;
 
         public int npcPrefabIndex;
 

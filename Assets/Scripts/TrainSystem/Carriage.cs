@@ -6,30 +6,30 @@ using static Train;
 
 public class Carriage : MonoBehaviour
 {
+    public TrainStatsSO trainStats;
+    public TrainSettingsSO trainSettings;
+    public TripSO trip;
+    public GameEventDataSO gameEventData;
+    public LayerSettingsSO layerSettings;
+    public MaterialIDSO materialIDs;
 
+    public AtlasRenderer nextStationSignRenderer;
 
-    [SerializeField] TrainStatsSO trainStats;
-    [SerializeField] TrainSettingsSO trainSettings;
-    [SerializeField] TripSO trip;
-    [SerializeField] GameEventDataSO gameEventData;
-    [SerializeField] LayerSettingsSO layerSettings;
-    [SerializeField] MaterialIDSO materialIDs;
-    [SerializeField] AtlasRenderer[] wheelRenderers;
+    public AtlasRenderer[] wheelRenderers;
     public AtlasRenderer[] exteriorRenderers;
     public AtlasRenderer[] seatRenderers;
     public AtlasRenderer[] grapPoleRenderers;
-    public BoxCollider2D insideBoundsCollider;
 
+    public BoxCollider2D insideBoundsCollider;
     public BoxCollider2D smokingRoomCollider_right;
     public BoxCollider2D smokingRoomCollider_left;
 
     public SlideDoors[] exteriorSlideDoors;
     public SlideDoors[] interiorSlideDoors;
 
-    public float alpha;
-    public float wheelCircumference;
-
     [Header("Generated")]
+    public float wheelCircumference;
+    public float alpha;
     public SeatData seatData;
     public SmokersRoomData[] smokersRoomData;
     public Transform[] wheelTransforms;
@@ -44,14 +44,12 @@ public class Carriage : MonoBehaviour
     {
         gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(SetSeatData);
         gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(SetSmokerRoomData);
-        gameEventData.OnStationArrival.RegisterListener(UnlockDoors);
 
     }
     private void OnDisable()
     {
         gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(SetSeatData);
         gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(SetSmokerRoomData);
-        gameEventData.OnStationArrival.UnregisterListener(UnlockDoors);
     }
     private void Start()
     {
@@ -72,6 +70,62 @@ public class Carriage : MonoBehaviour
         {
             wheel.localRotation = Quaternion.Euler(0f, 0f, wheelRotation);
         }
+    }
+    public void UnlockInteriorDoors()
+    {
+        for (int i = 0; i < interiorSlideDoors.Length; i++)
+        {
+            interiorSlideDoors[i].UnlockDoors();
+        }
+    }
+    public void UnlockExteriorSlideDoors()
+    {
+        for (int i = 0; i < exteriorSlideDoors.Length; i++)
+        {
+            exteriorSlideDoors[i].UnlockDoors();
+        }
+    }
+    public void CloseInteriorSlideDoors()
+    {
+        for (int i = 0; i < interiorSlideDoors.Length; i++)
+        {
+            interiorSlideDoors[i].CloseDoors();
+        }
+    }
+    public void CloseExteriorSlideDoors()
+    {
+        for (int i = 0; i < exteriorSlideDoors.Length; i++)
+        {
+            exteriorSlideDoors[i].CloseDoors();
+        }
+    }
+    public void SetSignToNextStation(string stationName)
+    {
+        string text = "Next Station is " + stationName;
+        nextStationSignRenderer.SetText(text);
+    }
+    public void SetSignToCurrentStation(string stationName)
+    {
+        nextStationSignRenderer.SetText(stationName);
+    }
+    public void MoveUp()
+    {
+        ctsFade?.Cancel();
+        ctsFade?.Dispose();
+
+        ctsFade = new CancellationTokenSource();
+
+        MovingUp().Forget();
+
+    }
+    public void MoveDown()
+    {
+        ctsFade?.Cancel();
+        ctsFade?.Dispose();
+
+        ctsFade = new CancellationTokenSource();
+
+        MovingDown().Forget();
     }
     private void SetSmokerRoomData()
     {
@@ -113,58 +167,6 @@ public class Carriage : MonoBehaviour
                 seatIndex++;
             }
         }
-    }
-    private void UnlockDoors()
-    {
-        if (trip.curStation.isFrontOfTrain)
-        {
-            for (int i = 0; i < exteriorSlideDoors.Length; i++)
-            {
-                exteriorSlideDoors[i].UnlockDoors();
-            }
-        }
-        else
-        {
-            for (int i = 0; i < interiorSlideDoors.Length; i++)
-            {
-                interiorSlideDoors[i].UnlockDoors();
-            }
-        }
-    }
-
-    public void CloseInteriorSlideDoors()
-    {
-        for (int i = 0; i < interiorSlideDoors.Length; i++)
-        {
-            interiorSlideDoors[i].CloseDoors();
-        }
-    }
-
-    public void CloseExteriorSlideDoors()
-    {
-        for (int i = 0; i < exteriorSlideDoors.Length; i++)
-        {
-            exteriorSlideDoors[i].CloseDoors();
-        }
-    }
-    public void MoveUp()
-    {
-        ctsFade?.Cancel();
-        ctsFade?.Dispose();
-
-        ctsFade = new CancellationTokenSource();
-
-        MovingUp().Forget();
-
-    }
-    public void MoveDown()
-    {
-        ctsFade?.Cancel();
-        ctsFade?.Dispose();
-
-        ctsFade = new CancellationTokenSource();
-
-        MovingDown().Forget();
     }
     private async UniTask MovingDown()
     {

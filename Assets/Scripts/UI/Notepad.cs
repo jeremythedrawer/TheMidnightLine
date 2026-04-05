@@ -57,6 +57,8 @@ public class Notepad : MonoBehaviour
     public int backPages;
     
     public static NameData nameData;
+
+    public Vector2 boundsOffset;
     private void OnValidate()
     {
         SetTotalBounds();
@@ -66,6 +68,7 @@ public class Notepad : MonoBehaviour
     }
     private void Awake()
     {
+        SetTotalBounds();
         nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
         npcData.appearanceDescDict = InitializeAppearanceDict();
         npcData.behaviourDescDict = InitializeBehaviourDict();
@@ -76,7 +79,6 @@ public class Notepad : MonoBehaviour
     {
         leftHandClip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.LeftHand];
         lastLeftHandKeyframeIndex = leftHandClip.keyFrames.Length - 1;
-
         leftHandDepthFront =  (int)(bindingRings_renderer.transform.position.z - 1);
         leftHandDepthBack = (int)(rightHand_renderer.transform.position.z + 1);
 
@@ -111,7 +113,6 @@ public class Notepad : MonoBehaviour
             
             curKeyframeState = KeyframeState.Start;
         }
-
         switch (curState)
         {
             case State.FlippingUp:
@@ -280,8 +281,8 @@ public class Notepad : MonoBehaviour
                 int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
 
                 NPCProfile traitorProfile = totalNPCProfiles[randProfileIndex];
-                traitorProfile.departureStationIndex = i;
-                traitorProfile.arrivalStationIndex = GetExitStationIndex(i, trip.minStationsTraitorsTravel, trip.maxStationsTraitorsTravel);
+                traitorProfile.boardingStationIndex = i;
+                traitorProfile.disembarkingStationIndex = GetExitStationIndex(i, trip.minStationsTraitorsTravel, trip.maxStationsTraitorsTravel);
                 totalNPCProfiles.RemoveAt(randProfileIndex);
                 station.traitorProfiles[j] = traitorProfile;
 
@@ -317,8 +318,8 @@ public class Notepad : MonoBehaviour
 
                 NPCProfile bystanderProfile = totalNPCProfiles[randProfileIndex];
 
-                bystanderProfile.departureStationIndex = i;
-                bystanderProfile.arrivalStationIndex = GetExitStationIndex(i, 1, int.MaxValue);
+                bystanderProfile.boardingStationIndex = i;
+                bystanderProfile.disembarkingStationIndex = GetExitStationIndex(i, 1, int.MaxValue);
 
                 totalNPCProfiles.RemoveAt(randProfileIndex);
                 station.bystanderProfiles[j] = bystanderProfile;
@@ -332,6 +333,8 @@ public class Notepad : MonoBehaviour
         totalBounds.Encapsulate(frontFingers_renderer.bounds);
         totalBounds.Encapsulate(bindingRings_renderer.bounds);
         totalBounds.Encapsulate(leftHand_renderer.bounds);
+
+        boundsOffset = transform.position - totalBounds.min;
     }
     public string GenerateName(Gender gender, Ethnicity ethnicity)
     {
@@ -407,7 +410,7 @@ public class Notepad : MonoBehaviour
     }
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.indigo;
+        Gizmos.color = Color.blue;
         Gizmos.DrawWireCube(totalBounds.center, totalBounds.size);
     }
 }

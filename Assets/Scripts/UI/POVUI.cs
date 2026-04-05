@@ -61,7 +61,7 @@ public class POVUI : MonoBehaviour
         background.localPosition = backgroundInactivePos;
         
         notepadActivePos = notepad.transform.localPosition;
-        notepadInactivePos = new Vector3(halfCamWidth, notepad.transform.localPosition.y - cameraStats.camWorldBottom - notepad.totalBounds.size.y, notepad.transform.localPosition.z);
+        notepadInactivePos = new Vector3(halfCamWidth + notepad.boundsOffset.x, notepad.transform.localPosition.y - cameraStats.camWorldBottom - notepad.boundsOffset.y, notepad.transform.localPosition.z);
         notepad.transform.localPosition = notepadInactivePos;
 
         ticketActivePos = ticket.transform.localPosition;
@@ -124,7 +124,7 @@ public class POVUI : MonoBehaviour
                 ctsUIObject?.Cancel();
                 InitNaturalPos(ticketActivePos);
 
-                ticket.SetText(spyStats.departureStationName, spyStats.arrivalStationName);
+                ticket.SetText(spyStats.boardingStationName, spyStats.disembarkingStationName);
             }
             break;
             case State.Map:
@@ -237,9 +237,9 @@ public class POVUI : MonoBehaviour
 
         ctsUIObject = new CancellationTokenSource();
 
-        Moving(uiObjectTransform, ctsUIObject, nextPos, moveDamp).Forget();
+        Moving(uiObjectTransform, ctsUIObject, nextPos, moveDamp, resetPos: true).Forget();
     }
-    private async UniTask Moving(Transform transform, CancellationTokenSource cts, Vector3 nextPos, float damp, State objState = State.None)
+    private async UniTask Moving(Transform transform, CancellationTokenSource cts, Vector3 nextPos, float damp, bool resetPos = false)
     {
         float elapsedTime = 0f;
 
@@ -257,6 +257,11 @@ public class POVUI : MonoBehaviour
         }
         catch(OperationCanceledException)
         {
+            if (resetPos)
+            {
+                transform.localPosition = nextPos;
+                if (curState == State.None) transform.gameObject.SetActive(false);
+            }
         }
     }
 }

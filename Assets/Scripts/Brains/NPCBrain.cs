@@ -93,24 +93,25 @@ public class NPCBrain : MonoBehaviour
     }
     private void Start()
     {
+        Vector3 markerPosition = new Vector3(transform.position.x, transform.position.y, transform.position.z - 0.5f);
         if (((profile.behaviours & Behaviours.Takes_naps) != 0) && sleepingZs == null)
         {
-            sleepingZs = Instantiate(npcData.sleepingZs_prefab, transform.position, transform.rotation, transform);
+            sleepingZs = Instantiate(npcData.sleepingZs_prefab, markerPosition, transform.rotation, transform);
             sleepingZs.Stop();
         }
         if (((profile.behaviours & Behaviours.smoke_Addict) != 0) && smoke == null)
         {
-            smoke = Instantiate(npcData.smoke_prefab, transform.position, transform.rotation, transform);
+            smoke = Instantiate(npcData.smoke_prefab, markerPosition, transform.rotation, transform);
             smoke.Stop();
         }
         if (((profile.behaviours & Behaviours.Listens_to_music) != 0) && musicNotes == null)
         {
-            musicNotes = Instantiate(npcData.musicNotes_prefab, transform.position, transform.rotation, transform);
+            musicNotes = Instantiate(npcData.musicNotes_prefab, markerPosition, transform.rotation, transform);
             musicNotes.Stop();
         }
         if (((profile.behaviours & Behaviours.Always_on_call) != 0) && speechBubble == null)
         {
-            speechBubble = Instantiate(npcData.speechBubble_prefab, transform.position, transform.rotation, transform);
+            speechBubble = Instantiate(npcData.speechBubble_prefab, markerPosition, transform.rotation, transform);
             speechBubble.Stop();
         }
 
@@ -124,7 +125,7 @@ public class NPCBrain : MonoBehaviour
         SelectingStates();
         UpdateStates();
         Fade();
-        atlasRenderer.PlayClip(ref curClip);
+
 
         if (rigidBody.includeLayers == layerSettings.trainMask)
         {
@@ -189,6 +190,7 @@ public class NPCBrain : MonoBehaviour
         {
             case NPCState.Idling:
             {
+                atlasRenderer.PlayClip(ref curClip);
                 if (behaviourClock > stateDuration)
                 {
                     curBehaviour = PickBehaviour();
@@ -197,11 +199,13 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Walking:
             {
+                atlasRenderer.PlayClip(ref curClip);
                 atlasRenderer.FlipH(move < 0, atlasRenderer.sprite);
             }
             break;
             case NPCState.TicketCheck:
             {
+                atlasRenderer.PlayClip(ref curClip);
                 if (!ticketIsBeingChecked)
                 {
                     curBehaviour = PickBehaviour();
@@ -210,9 +214,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Smoking:
             {
-                SetMarkerPosition();
-                smoke.transform.localPosition = curSpriteMarkerLocalPosition;
-
+                atlasRenderer.PlayClip(ref curClip, smoke.transform);
                 if (behaviourClock > stateDuration)
                 {
                     curBehaviour = PickBehaviour();
@@ -222,10 +224,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Sleeping:
             {
-                
-                SetMarkerPosition();
-                sleepingZs.transform.localPosition = curSpriteMarkerLocalPosition;
-                
+                atlasRenderer.PlayClip(ref curClip, sleepingZs.transform);
                 if (behaviourClock > stateDuration)
                 {
                     curBehaviour = PickBehaviour();
@@ -234,6 +233,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Eating:
             {
+                atlasRenderer.PlayClip(ref curClip);
                 if (behaviourClock  > stateDuration)
                 {
                     curBehaviour = PickBehaviour();
@@ -242,10 +242,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Music:
             {
-
-                SetMarkerPosition();
-                musicNotes.transform.localPosition = curSpriteMarkerLocalPosition;
-                
+                atlasRenderer.PlayClip(ref curClip, musicNotes.transform);
                 if (behaviourClock > stateDuration)
                 {
                     curBehaviour = PickBehaviour();
@@ -254,9 +251,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Calling:
             {
-                SetMarkerPosition();
-                speechBubble.transform.localPosition = curSpriteMarkerLocalPosition;
-
+                atlasRenderer.PlayClip(ref curClip, speechBubble.transform);
                 if (behaviourClock > stateDuration)
                 {
                     curBehaviour = PickBehaviour();
@@ -265,6 +260,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Reading:
             {
+                atlasRenderer.PlayClip(ref curClip);
                 if (behaviourClock > stateDuration)
                 {
                     curBehaviour = PickBehaviour();
@@ -351,6 +347,7 @@ public class NPCBrain : MonoBehaviour
             {
                 stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
                 curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.Smoking];
+                smoke.SetFloat("_Lifetime", stateDuration);
                 smoke.Play();
             }
             break;
