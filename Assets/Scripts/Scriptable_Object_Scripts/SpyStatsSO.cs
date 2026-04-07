@@ -8,7 +8,6 @@ public class SpyStatsSO : ScriptableObject
     public Vector3 curWorldPos;
     public Vector2 moveVelocity;
     public float targetXVelocity;
-    public float curRunSpeed;
     public float curGravityScale;
     public float lastJumpTime;
     public float coyoteTimeElapsed;
@@ -45,7 +44,6 @@ public class SpyStatsSO : ScriptableObject
 
         moveVelocity = Vector2.zero;
         targetXVelocity = 0.0f;
-        curRunSpeed = 1.0f;
         curGravityScale = 1;
 
         willJump = false;

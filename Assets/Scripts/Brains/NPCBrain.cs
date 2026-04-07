@@ -40,7 +40,6 @@ public class NPCBrain : MonoBehaviour
     public StationSO startStation;
     public StationSO endStation;
 
-    public string fullName;
     public Vector2 curSpriteMarkerLocalPosition;
     public float targetXVelocity;
     public float targetXPos;
@@ -59,7 +58,7 @@ public class NPCBrain : MonoBehaviour
     public Path curPath;
     public Role role;
     public int smokerRoomIndex;
-    public int chairPosIndex;
+    public int seatPosIndex;
     public int selectedProfileIndex;
 
     public int curFrameIndex;
@@ -84,9 +83,7 @@ public class NPCBrain : MonoBehaviour
     private void Awake()
     {
         ctsFade = new CancellationTokenSource();
-        curState = NPCState.Idling;
-        curPath = Path.None;
-        chairPosIndex = int.MaxValue;
+        seatPosIndex = int.MaxValue;
         selectedProfileIndex = int.MaxValue;
         atlas = atlasRenderer.atlas;
         rigidBody.includeLayers = layerSettings.stationMask;
@@ -115,15 +112,16 @@ public class NPCBrain : MonoBehaviour
             speechBubble.Stop();
         }
 
-        curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.StandingBreathing];
-
         atlasRenderer.UpdateDepthRealtime((int)transform.position.z);
         QueueToEnterTrain();
     }
     private void Update()
     {
-        SelectingStates();
+        ChooseStates();
         UpdateStates();
+
+        UpdatePath();
+
         Fade();
 
 
@@ -132,26 +130,19 @@ public class NPCBrain : MonoBehaviour
             behaviourClock += Time.deltaTime;
         }
 
-        if ((curBehaviour & Behaviours.smoke_Addict) != 0 && curPath != Path.ToSmokerRoom)
-        {
-            FindSmokersRoom();
-        }
-        targetDist = curPath != Path.None ? targetXPos - transform.position.x : 0;
-        move = Mathf.Abs(targetDist) > 0.1f ? Mathf.Sign(targetDist) : 0;
+        move = Mathf.Sign(targetDist);
     }
     private void FixedUpdate()
     {
         FixedUpdateStates();
-        targetXVelocity = npc.moveSpeed * move;
-        rigidBody.linearVelocityX = targetXVelocity;
     }
-    private void SelectingStates()
+    private void ChooseStates()
     {
         if (ticketIsBeingChecked)
         {
             SetState(NPCState.TicketCheck);
         }
-        else if (move != 0)
+        else if (Mathf.Abs(targetDist) > CLOSE_TO_TARGET_BUFFER)
         {
             SetState(NPCState.Walking);
         }
@@ -280,7 +271,8 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Walking:
             {
-
+                targetXVelocity = npc.moveSpeed * move;
+                rigidBody.linearVelocityX = targetXVelocity;
             }
             break;
         }
@@ -298,31 +290,15 @@ public class NPCBrain : MonoBehaviour
         atlasIndexClock = 0;
         curFrameIndex = 0;
 
-        if (chairPosIndex != int.MaxValue)
-        {
-            atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.carriageSeat);
-        }
-        else if (curCarriage !=  null)
-        {
-            SetStandingDepth();
-        }
-
-
         switch (curState)
         {
             case NPCState.Idling:
             {
                 stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
 
-                if (chairPosIndex != int.MaxValue)
-                {
-                    curClip = RandomSittingIdleMotion();
-                }
-                else
-                {
-                    curClip = RandomStandingIdleMotion();
-                }
-
+                NPCMotion sittingMotion = RandomIdleMotion(NPCMotion.SittingBlinking, NPCMotion.SittingBreathing);
+                NPCMotion standingMotion = RandomIdleMotion(NPCMotion.StandingBlinking, NPCMotion.StandingBreathing);
+                SetPathMotion(sittingMotion, standingMotion);
             }
             break;
             case NPCState.Walking:
@@ -332,14 +308,10 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.TicketCheck:
             {
-                if (chairPosIndex != int.MaxValue)
-                {
-                    curClip = RandomSittingIdleMotion();
-                }
-                else
-                {
-                    curClip = RandomStandingIdleMotion();
-                }
+                NPCMotion sittingMotion = RandomIdleMotion(NPCMotion.SittingBlinking, NPCMotion.SittingBreathing);
+                NPCMotion standingMotion = RandomIdleMotion(NPCMotion.StandingBlinking, NPCMotion.StandingBreathing);
+                SetPathMotion(sittingMotion, standingMotion);
+
                 atlasRenderer.custom.y = 1;
             }
             break;
@@ -349,22 +321,15 @@ public class NPCBrain : MonoBehaviour
                 curClip = atlasRenderer.atlas.clipDict[(int)NPCMotion.Smoking];
                 smoke.SetFloat("_Lifetime", stateDuration);
                 smoke.Play();
+
+                SetStandingDepthInTrain();
             }
             break;
             case NPCState.Sleeping:
             {
                 stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
-
-                //sleepingZs.transform.position = new Vector3(meshRenderer.bounds.center.x, meshRenderer.bounds.max.y, transform.position.z - 0.5f);
                 sleepingZs.Play();
-                if (chairPosIndex != int.MaxValue)
-                {
-                    curClip = atlas.clipDict[(int)NPCMotion.SittingSleeping];
-                }
-                else
-                {
-                    curClip = atlas.clipDict[(int)NPCMotion.StandingSleeping];
-                }
+                SetPathMotion(NPCMotion.SittingSleeping, NPCMotion.StandingSleeping);
             }
             break;
             case NPCState.Eating:
@@ -372,60 +337,27 @@ public class NPCBrain : MonoBehaviour
                 stateDuration = UnityEngine.Random.Range(
                 npc.pickBehaviourDurationRange.x, 
                 npc.pickBehaviourDurationRange.y);
-
-                if (chairPosIndex != int.MaxValue)
-                {
-                    curClip = atlas.clipDict[(int)NPCMotion.SittingEating];
-                }
-                else
-                {
-                    curClip = atlas.clipDict[(int)NPCMotion.StandingEating];
-                }
+                SetPathMotion(NPCMotion.SittingEating, NPCMotion.StandingEating);
             }
             break;
             case NPCState.Music:
             {
                 stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
-
                 musicNotes.Play();
-                if (chairPosIndex != int.MaxValue)
-                {
-                    curClip = atlas.clipDict[(int)NPCMotion.SittingMusic];
-                }
-                else
-                {
-                    curClip = atlas.clipDict[(int)NPCMotion.StandingMusic];
-                }
+                SetPathMotion(NPCMotion.SittingMusic, NPCMotion.StandingMusic);
             }
             break;
             case NPCState.Calling:
             {
                 stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
                 speechBubble.Play();
-                if (chairPosIndex != int.MaxValue)
-                {
-                    curClip = atlas.clipDict[(int)NPCMotion.SittingCalling];
-                    atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.carriageSeat);
-                }
-                else
-                {
-                    curClip = atlas.clipDict[(int)NPCMotion.StandingCalling];
-                }
+                SetPathMotion(NPCMotion.SittingCalling, NPCMotion.StandingCalling);
             }
             break;
             case NPCState.Reading:
             {
                 stateDuration = UnityEngine.Random.Range(npc.pickBehaviourDurationRange.x, npc.pickBehaviourDurationRange.y);
-                if (chairPosIndex != int.MaxValue)
-                {
-                    curClip = atlas.clipDict[(int)NPCMotion.SittingReading];
-                    atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.carriageSeat);
-                }
-                else
-                {
-
-                    curClip = atlas.clipDict[(int)NPCMotion.StandingReading];
-                }
+                SetPathMotion(NPCMotion.SittingReading, NPCMotion.StandingReading);
             }
             break;
         }
@@ -443,6 +375,8 @@ public class NPCBrain : MonoBehaviour
             {
                 tcsGetToSlideDoor?.TrySetResult();
                 tcsGetToSlideDoor = null;
+                targetXVelocity = 0;
+                rigidBody.linearVelocityX = 0;
             }
             break;
             case NPCState.Smoking:
@@ -469,6 +403,151 @@ public class NPCBrain : MonoBehaviour
             break;
         }
 
+    }
+    private void SetPath(Path newPath)
+    {
+        if (curPath == newPath) return;
+        ExitPath();
+        curPath = newPath;
+        EnterPath();
+    }
+    private void UpdatePath()
+    {
+        switch (curPath)
+        {
+            case Path.Sitting:
+            {
+
+            }
+            break;
+
+            case Path.Standing:
+            {
+
+            }
+            break;
+
+            case Path.ToSeat:
+            {
+                targetDist = targetXPos - transform.position.x;
+            }
+            break;
+
+            case Path.ToSlideDoor:
+            {
+                targetDist = targetXPos - transform.position.x;
+            }
+            break;
+
+            case Path.ToSmokerRoom:
+            {
+                targetDist = targetXPos - transform.position.x;
+            }
+            break;  
+
+        }
+
+    }
+    private void EnterPath()
+    {
+        switch (curPath)
+        {
+            case Path.Sitting:
+            {
+                targetDist = 0;
+            }
+            break;
+
+            case Path.Standing:
+            {
+                targetDist = 0;
+            }
+            break;
+
+            case Path.ToSeat:
+            {
+            }
+            break;
+
+            case Path.ToSlideDoor:
+            {
+                float shortestDist = float.MaxValue;
+                float selectedSlideDoorPos = float.MaxValue;
+                for (int i = 0; i < trainStats.slideDoorPositions.Length; i++)
+                {
+                    float dist = Mathf.Abs(trainStats.slideDoorPositions[i] - transform.position.x);
+
+                    if (dist < shortestDist)
+                    {
+                        shortestDist = dist;
+                        selectedSlideDoorPos = trainStats.slideDoorPositions[i];
+                    }
+                }
+                targetXPos = selectedSlideDoorPos;
+                targetDist = targetXPos - transform.position.x;
+            }
+            break;
+
+            case Path.ToSmokerRoom:
+            {
+            }
+            break;
+        }
+    }
+    private void ExitPath()
+    {
+        switch (curPath)
+        {
+            case Path.Sitting:
+            {
+
+            }
+            break;
+
+            case Path.Standing:
+            {
+
+            }
+            break;
+
+            case Path.ToSeat:
+            {
+            }
+            break;
+
+            case Path.ToSlideDoor:
+            {
+            }
+            break;
+
+            case Path.ToSmokerRoom:
+            {
+            }
+            break;
+
+        }
+    }
+    private void SetPathMotion(NPCMotion sittingMotion, NPCMotion standingMotion)
+    {
+        switch (curPath)
+        {
+            case Path.Sitting:
+            case Path.ToSeat:
+            {
+                curClip = atlas.clipDict[(int)sittingMotion];
+                atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.carriageSeat);
+            }
+            break;
+
+            case Path.ToStand:
+            case Path.Standing:
+            {
+                curClip = atlas.clipDict[(int)standingMotion];
+                SetStandingDepthInTrain();
+            }
+            break;
+
+        }
     }
     private void Fade()
     {
@@ -523,18 +602,22 @@ public class NPCBrain : MonoBehaviour
     }
     private async UniTask BoardingTrain()
     {
-        FindSlideDoor();
         float randomStartMoveTime = UnityEngine.Random.Range(0.3f, 1f);
         await UniTask.WaitForSeconds(randomStartMoveTime);
 
+        SetPath(Path.ToSlideDoor);
+        
+        await UniTask.Yield();
+        
         await WaitUntilCloseToSlideDoor();
+        SetPath(Path.Standing);
 
         RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.slideDoors);
         RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
 
 #if UNITY_EDITOR
-        if (slideDoorHit.collider == null) { Debug.LogError($"{fullName} did not find a slide door to go to"); return; }
-        if (carriageHit.collider == null) { Debug.LogError($"{fullName} did not find a slide door to go to"); return; }
+        if (slideDoorHit.collider == null) { Debug.LogError($"{profile.fullName} did not find a slide door to go to"); return; }
+        if (carriageHit.collider == null) { Debug.LogError($"{profile.fullName} did not find a slide door to go to"); return; }
 #endif
         curSlideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
 
@@ -544,17 +627,17 @@ public class NPCBrain : MonoBehaviour
 
         await curSlideDoors.WaitUntilOpened();
 
-        SetStandingDepth();
         transform.SetParent(null, true);
         trainStats.curPassengersBoarded++;
         QueueForChair();
 
         curCarriage = trainStats.carriageDict[carriageHit.collider];
         rigidBody.includeLayers = layerSettings.trainMask;
+        SetStandingDepthInTrain();
     }
     private UniTask WaitUntilCloseToSlideDoor()
     {
-        if (curState != NPCState.Walking) return UniTask.CompletedTask;
+        if (curState != NPCState.Walking && curPath == Path.ToSlideDoor) return UniTask.CompletedTask;
 
         if (tcsGetToSlideDoor == null) tcsGetToSlideDoor = new UniTaskCompletionSource();
 
@@ -562,20 +645,8 @@ public class NPCBrain : MonoBehaviour
     }
     private void FindSlideDoor()
     {
-        float shortestDist = float.MaxValue;
-        float selectedSlideDoorPos = float.MaxValue;
-        for (int i = 0; i < trainStats.slideDoorPositions.Length; i++)
-        {
-            float dist = Mathf.Abs(trainStats.slideDoorPositions[i] - transform.position.x);
 
-            if (dist < shortestDist)
-            {
-                shortestDist = dist;
-                selectedSlideDoorPos = trainStats.slideDoorPositions[i];
-            }
-        }
-        targetXPos = selectedSlideDoorPos;
-        curPath = Path.ToSlideDoor;
+
     }
     private void QueueForChair()
     {
@@ -585,22 +656,22 @@ public class NPCBrain : MonoBehaviour
     public void AssignSeat(int chairIndex)
     {
         queuedForSeat = false;
-        chairPosIndex = chairIndex;
-        curCarriage.seatData.filled[chairPosIndex] = true;
-        curPath = Path.ToChair;
-        targetXPos = curCarriage.seatData.xPos[chairPosIndex];
+        seatPosIndex = chairIndex;
+        curCarriage.seatData.filled[seatPosIndex] = true;
+        SetPath(Path.ToSeat);
+        targetXPos = curCarriage.seatData.xPos[seatPosIndex];
     }
     public void FindStandingPosition()
     {
         targetXPos = UnityEngine.Random.Range(curCarriage.insideBoundsCollider.bounds.min.x, curCarriage.insideBoundsCollider.bounds.max.x);
+        SetPath(Path.ToStand);
     }
     private void FindSmokersRoom()
     {
-        if (chairPosIndex != int.MaxValue && curCarriage.seatData.filled[chairPosIndex])
+        if (seatPosIndex != int.MaxValue && curCarriage.seatData.filled[seatPosIndex])
         {
-            curCarriage.seatData.filled[chairPosIndex] = false;
-            chairPosIndex = int.MaxValue;
-
+            curCarriage.seatData.filled[seatPosIndex] = false;
+            seatPosIndex = int.MaxValue;
         }
         if (queuedForSeat) NPCManager.RemoveFromSeatQueue(this); // To prevent them from going back to the chair if they are queued
 
@@ -613,46 +684,19 @@ public class NPCBrain : MonoBehaviour
             smokerRoomIndex = 0;
         }
         curCarriage.smokersRoomData[smokerRoomIndex].npcCount++;
-        SetStandingDepth();
-        curPath = Path.ToSmokerRoom;
+        SetStandingDepthInTrain();
         targetXPos = UnityEngine.Random.Range(curCarriage.smokersRoomData[smokerRoomIndex].minXPos, curCarriage.smokersRoomData[smokerRoomIndex].maxXPos);
+        SetPath(Path.ToSmokerRoom);
     }
-    private void SetStandingDepth()
+    private void SetStandingDepthInTrain()
     {
+        if (rigidBody.includeLayers != layerSettings.trainMask) return;
         int depth = UnityEngine.Random.Range(trainStats.depthSections.frontMin, trainStats.depthSections.backMax);
         atlasRenderer.UpdateDepthRealtime(depth);
     }
-    private void SetMarkerPosition()
+    private NPCMotion RandomIdleMotion(NPCMotion motion1, NPCMotion motion2)
     {
-        MarkerPosition[] curSpriteMarkers = curClip.keyFrames[curFrameIndex].motionSprite.markers;
-        if (curSpriteMarkers.Length > 0)
-        {
-            curSpriteMarkerLocalPosition.x = atlasRenderer.flipX ? -curSpriteMarkers[0].objectPos.x : curSpriteMarkers[0].objectPos.x;
-            curSpriteMarkerLocalPosition.y = curSpriteMarkers[0].objectPos.y;
-        }
-    }
-    private AtlasClip RandomStandingIdleMotion()
-    {
-        if (UnityEngine.Random.Range(0, 2) == 0)
-        {
-            return  atlas.clipDict[(int)NPCMotion.StandingBreathing];
-        }
-        else
-        {
-            return atlas.clipDict[(int)NPCMotion.StandingBlinking];
-
-        }
-    }
-    private AtlasClip RandomSittingIdleMotion()
-    {
-        if (UnityEngine.Random.Range(0, 2) == 0)
-        {
-            return atlas.clipDict[(int)NPCMotion.SittingBreathing];
-        }
-        else
-        {
-            return atlas.clipDict[(int)NPCMotion.SittingBlinking];
-        }
+        return UnityEngine.Random.Range(0, 2) == 0 ? motion1 : motion2;
     }
     private Behaviours PickBehaviour()
     {
@@ -670,6 +714,13 @@ public class NPCBrain : MonoBehaviour
             }
         }
         int chosenFlag = flags[UnityEngine.Random.Range(0, flagCount)];
+
+        Behaviours chosenBehaviour = (Behaviours)chosenFlag;
+
+        if ((chosenBehaviour & Behaviours.smoke_Addict) != 0)
+        {
+            FindSmokersRoom();
+        }
 
         return (Behaviours)chosenFlag;
     }
@@ -733,5 +784,4 @@ public class NPCBrain : MonoBehaviour
 
     }
 #endif
-
 }

@@ -4,8 +4,10 @@ using UnityEngine;
 
 public static class NPC
 {
+    public const float CLOSE_TO_TARGET_BUFFER = 0.1f;
     public enum NPCState
     {
+        None,
         Idling,
         Walking,
         TicketCheck,
@@ -25,9 +27,11 @@ public static class NPC
 
     public enum Path
     {
-        None,
+        Standing,
+        Sitting,
         ToSmokerRoom,
-        ToChair,
+        ToSeat,
+        ToStand,
         ToSlideDoor,
     }
     [Flags] public enum Appearance 
@@ -46,6 +50,8 @@ public static class NPC
         Wears_a_necklace = 1 << 10,
         Afro_hair = 1 << 11,
         Baggy_clothes = 1 << 12,
+        Slim = 1 << 13,
+        Wears_headband = 1 << 14,
     }
 
 
@@ -72,6 +78,7 @@ public static class NPC
     {
         European,
         Western,
+        Arabic,
     }
 
     [Serializable] public struct NPCProfile

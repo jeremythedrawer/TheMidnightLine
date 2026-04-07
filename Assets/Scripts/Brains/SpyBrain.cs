@@ -103,7 +103,6 @@ public class SpyBrain : MonoBehaviour
         stats.curGroundLayer = layerSettings.stationLayers.ground;
         stats.curWallLayer = layerSettings.stationWallLayers;
         rigidBody.includeLayers = layerSettings.stationMask;
-        stats.curRunSpeed = 1.0f;
         stats.firstFixedFrameClimb = true;
 
         collisionData.leftStepResults = new RaycastHit2D[1];
@@ -159,16 +158,6 @@ public class SpyBrain : MonoBehaviour
         bool rightWallTouch = Physics2D.Linecast(collisionData.wallBottomRight, collisionData.wallTopRight, stats.curWallLayer);
 
         stats.walkingIntoWall = (leftWallTouch && playerInputs.move == -1) || (rightWallTouch && playerInputs.move == 1);
-
-        if (stats.curState != State.Hang && stats.curState != State.Climb && !stats.walkingIntoWall)
-        {
-            stats.targetXVelocity = (settings.moveSpeed * stats.curRunSpeed * playerInputs.move);
-            stats.moveVelocity.x = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.fixedDeltaTime);
-        }
-        else
-        {
-            stats.moveVelocity.x = 0;
-        }
 
         rigidBody.linearVelocity = stats.moveVelocity;
 
@@ -337,7 +326,7 @@ public class SpyBrain : MonoBehaviour
             case State.Ticket:
             {
                 if (!playerInputs.ticket) canExitCheckTicket = true;
-                if((playerInputs.ticket && canExitCheckTicket))
+                if((playerInputs.ticket && canExitCheckTicket) || playerInputs.notepad.x == 1)
                 {
                     checkingTicket = false;
                 }
@@ -369,6 +358,14 @@ public class SpyBrain : MonoBehaviour
             break;
             case State.Walk:
             {
+                stats.targetXVelocity = (settings.moveSpeed * playerInputs.move);
+                stats.moveVelocity.x = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.fixedDeltaTime);
+            }
+            break;
+            case State.Run:
+            {
+                stats.targetXVelocity = settings.moveSpeed * playerInputs.move * settings.runSpeedMultiplier;
+                stats.moveVelocity.x = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.fixedDeltaTime);
             }
             break;
             case State.Jump:
@@ -430,7 +427,6 @@ public class SpyBrain : MonoBehaviour
             case State.Run:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.Running];
-                stats.curRunSpeed = settings.runSpeedMultiplier;
             }
             break;
             case State.Jump:
@@ -505,12 +501,12 @@ public class SpyBrain : MonoBehaviour
             break;
             case State.Walk:
             {
-
+                stats.moveVelocity.x = 0;
             }
             break;
             case State.Run:
             {
-                stats.curRunSpeed = 1.0f;
+                stats.moveVelocity.x = 0;
             }
             break;
             case State.Jump:

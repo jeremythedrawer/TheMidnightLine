@@ -47,14 +47,22 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
-  namesJSON: {fileID: 4900000, guid: 6bd6d02c0c61ca448b58bec44c991b58, type: 3}
+  gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
   npcsData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
-  traitor_parent: {fileID: 4482031764684283934}
-  bystander_parent: {fileID: 902998745381724108}
   npcFindingChair: 0
   totalAgentCount: 0
-  bystanderPool: []
-  traitorPool: []
+  seatQ:
+    npcs: []
+    npcsCount: 0
+    timer: 0
+  enterTrainQ:
+    npcs: []
+    npcsCount: 0
+    timer: 0
+  exitTrainQ:
+    npcs: []
+    npcsCount: 0
+    timer: 0
 --- !u!1 &3521187264541327332
 GameObject:
   m_ObjectHideFlags: 0

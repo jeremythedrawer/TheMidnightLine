@@ -2,10 +2,12 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEditor;
 using UnityEngine;
 using static Atlas;
 using static AtlasRendering;
 using static NPC;
+using static UnityEngine.GraphicsBuffer;
 
 [ExecuteAlways]
 public class AtlasRenderer : MonoBehaviour
@@ -539,3 +541,52 @@ public class AtlasRenderer : MonoBehaviour
     }
 #endif
 }
+
+#if UNITY_EDITOR
+
+[CustomEditor(typeof(AtlasRenderer))]
+public class AtlasRendererEditor : Editor
+{
+    private bool showClipDict = true;
+
+    public override void OnInspectorGUI()
+    {
+        // Draw normal inspector
+        DrawDefaultInspector();
+
+        AtlasRenderer renderer = (AtlasRenderer)target;
+
+        if (renderer.atlas == null)
+            return;
+
+        if (renderer.atlas.clipDict == null)
+        {
+            EditorGUILayout.HelpBox("clipDict is null. Make sure it's built.", MessageType.Warning);
+            return;
+        }
+
+        EditorGUILayout.Space();
+        showClipDict = EditorGUILayout.Foldout(showClipDict, "Clip Dictionary", true);
+
+        if (showClipDict)
+        {
+            EditorGUI.indentLevel++;
+
+            foreach (KeyValuePair<int, AtlasClip> kvp in renderer.atlas.clipDict)
+            {
+                EditorGUILayout.BeginHorizontal();
+
+                // Key
+                EditorGUILayout.LabelField(kvp.Key.ToString(), GUILayout.MaxWidth(150));
+
+                // Value (AtlasClip reference)
+                EditorGUILayout.LabelField(kvp.Value.clipName, GUILayout.MaxWidth(150));
+
+                EditorGUILayout.EndHorizontal();
+            }
+
+            EditorGUI.indentLevel--;
+        }
+    }
+}
+#endif

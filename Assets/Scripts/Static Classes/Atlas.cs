@@ -11,7 +11,7 @@ public static class Atlas
     public static int FLOAT3_SIZE = FLOAT_SIZE * 3;
     public static int FLOAT4_SIZE = FLOAT_SIZE * 4;
     public static int INT_SIZE = sizeof(uint);
-    public enum NPCMotion
+    public enum NPCMotion // NOTE(Jeremy): If adding a new motion put it at the bottom or it will mess with the clip indexes for the clip dictionary.
     {
         None,
         SittingAboutToEat,
@@ -35,6 +35,7 @@ public static class Atlas
         StandingSick,
         StandingSleeping,
         Walking,
+        Vandalising,
         NPCMotionCount,
     }
     public enum SpyMotion
