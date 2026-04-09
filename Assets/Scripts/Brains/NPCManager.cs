@@ -73,6 +73,7 @@ public class NPCManager : MonoBehaviour
 
     public static void RemoveFromSeatQueue(NPCBrain npc)
     {
+        if (seatQueue.npcsCount == 0) return;
         int lastIndex = seatQueue.npcsCount - 1;
 
         seatQueue.npcs[npc.seatQueueIndex] = seatQueue.npcs[lastIndex];

@@ -190,7 +190,7 @@ public class AtlasTripEditor : EditorWindow
             }
 
         }
-        float ticketsCheckedGraphPosX = graphRect.xMin + ((trainStats.totalTicketsChecked / trip.totalTicketsToCheck) * graphRect.width);
+        float ticketsCheckedGraphPosX = graphRect.xMin + ((trip.ticketsCheckedSinceStart / trip.totalTicketsToCheck) * graphRect.width);
         Vector2 ticketsCheckedTop = new Vector2(ticketsCheckedGraphPosX, graphRect.yMin);
         Vector2 ticketsCheckedBottom = new Vector2(ticketsCheckedGraphPosX, graphRect.yMax);
         Handles.color = Color.yellow;

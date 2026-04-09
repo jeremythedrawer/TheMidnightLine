@@ -84,6 +84,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  prevSpriteIndexFlipH: 0
+  prevSpriteIndexFlipV: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -285,7 +287,7 @@ MonoBehaviour:
   gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
+  trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   rigidBody: {fileID: 8824921806515184331}
   boxCollider: {fileID: 8296881156365639583}
   atlas: {fileID: 0}
@@ -293,7 +295,6 @@ MonoBehaviour:
   curCarriage: {fileID: 0}
   startStation: {fileID: 0}
   endStation: {fileID: 0}
-  fullName: 
   curSpriteMarkerLocalPosition: {x: 0, y: 0}
   targetXVelocity: 0
   targetXPos: 0
@@ -306,8 +307,8 @@ MonoBehaviour:
   curBehaviour: 0
   profile:
     fullName: 
-    departureStationIndex: 0
-    arrivalStationIndex: 0
+    disembarkingStationIndex: 0
+    boardingStationIndex: 0
     npcPrefabIndex: 0
     behaviours: 0
     appearence: 0
@@ -315,13 +316,14 @@ MonoBehaviour:
   curPath: 0
   role: 0
   smokerRoomIndex: 0
-  chairPosIndex: 0
+  seatPosIndex: 0
   selectedProfileIndex: 0
   curFrameIndex: 0
   prevAtlasIndex: 0
   startFade: 0
   ticketIsBeingChecked: 0
   queuedForSeat: 0
+  ticketChecked: 0
   seatQueueIndex: 0
   enterTrainIndex: 0
   exitTrainIndex: 0

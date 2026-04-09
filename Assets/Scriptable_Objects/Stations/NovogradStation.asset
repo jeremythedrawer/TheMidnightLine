@@ -15,225 +15,123 @@ MonoBehaviour:
   station_prefab: {fileID: 6700324006200157766, guid: a6bd14f8ce78f87409d71c0d0d7cbdca, type: 3}
   targetKMPH: 100
   ticketsToCheckBeforeSpawn: 0
-  busynessFactor: 1
+  busynessFactor: 0.5
   traitorSpawnAmount: 3
   isFrontOfTrain: 1
   stationName: Novograd Station
   bystanderProfiles:
-  - fullName: Yasir Dermas
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 5
-    behaviours: 272
-    appearence: 14337
-  - fullName: Penelope Gerald
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 0
-    behaviours: 65
-    appearence: 2049
   - fullName: Johnathan Richardson
     disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 1
-    behaviours: 16
-    appearence: 17
-  - fullName: Natalie Richardson
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 0
-    behaviours: 5
-    appearence: 2049
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 4
-    behaviours: 1
-    appearence: 1536
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 2
-    behaviours: 5
-    appearence: 66
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 4
-    behaviours: 8
-    appearence: 1536
-  - fullName: Aelewhat Dermas
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 5
-    behaviours: 256
-    appearence: 14337
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 4
-    behaviours: 5
-    appearence: 1536
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 4
-    behaviours: 9
-    appearence: 1536
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 2
-    behaviours: 8
-    appearence: 66
-  - fullName: Veronica Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 3
-    behaviours: 8
-    appearence: 648
-  - fullName: Penelope Gerald
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 0
-    behaviours: 68
-    appearence: 2049
-  - fullName: Ahmed Eltayeb
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 5
-    behaviours: 16
-    appearence: 14337
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 2
-    behaviours: 1
-    appearence: 66
-  - fullName: Yasir Hassan
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 5
-    behaviours: 260
-    appearence: 14337
-  - fullName: Martin Richardson
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 1
-    behaviours: 20
-    appearence: 17
-  - fullName: Anya Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 3
-    behaviours: 4
-    appearence: 648
-  - fullName: Anya Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 3
-    behaviours: 1
-    appearence: 648
-  - fullName: Johnathan Gerald
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 1
-    behaviours: 48
-    appearence: 17
-  - fullName: Natalie Gerald
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 0
-    behaviours: 64
-    appearence: 2049
-  - fullName: Anya Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 3
-    behaviours: 5
-    appearence: 648
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 2
-    behaviours: 4
-    appearence: 66
-  - fullName: Penelope Richardson
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 0
-    behaviours: 1
-    appearence: 2049
-  - fullName: Aelewhat Hassan
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 5
-    behaviours: 20
-    appearence: 14337
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 4
-    behaviours: 4
-    appearence: 1536
-  - fullName: Anya Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 3
-    behaviours: 12
-    appearence: 648
-  - fullName: Aelewhat Eltayeb
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 5
-    behaviours: 4
-    appearence: 14337
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 2
-    behaviours: 12
-    appearence: 66
-  - fullName: Johnathan Gerald
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 1
-    behaviours: 4
-    appearence: 17
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 4
-    behaviours: 12
-    appearence: 1536
-  - fullName: Martin Richardson
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 1
-    behaviours: 32
-    appearence: 17
-  - fullName: Penelope Richardson
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 0
-    behaviours: 4
-    appearence: 2049
-  traitorProfiles:
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 2
-    boardingStationIndex: 0
-    npcPrefabIndex: 2
-    behaviours: 9
-    appearence: 66
-  - fullName: Johnathan Richardson
-    disembarkingStationIndex: 2
     boardingStationIndex: 0
     npcPrefabIndex: 1
     behaviours: 36
     appearence: 17
   - fullName: Veronica Petrov
-    disembarkingStationIndex: 2
+    disembarkingStationIndex: 1
+    boardingStationIndex: 0
+    npcPrefabIndex: 3
+    behaviours: 4
+    appearence: 648
+  - fullName: Penelope Gerald
+    disembarkingStationIndex: 1
+    boardingStationIndex: 0
+    npcPrefabIndex: 0
+    behaviours: 1
+    appearence: 2049
+  - fullName: Anya Petrov
+    disembarkingStationIndex: 1
+    boardingStationIndex: 0
+    npcPrefabIndex: 3
+    behaviours: 8
+    appearence: 648
+  - fullName: Natalie Richardson
+    disembarkingStationIndex: 1
+    boardingStationIndex: 0
+    npcPrefabIndex: 0
+    behaviours: 4
+    appearence: 2049
+  - fullName: Penelope Richardson
+    disembarkingStationIndex: 1
+    boardingStationIndex: 0
+    npcPrefabIndex: 0
+    behaviours: 68
+    appearence: 2049
+  - fullName: Ivan Petrov
+    disembarkingStationIndex: 1
+    boardingStationIndex: 0
+    npcPrefabIndex: 2
+    behaviours: 4
+    appearence: 66
+  - fullName: Anya Petrov
+    disembarkingStationIndex: 1
+    boardingStationIndex: 0
+    npcPrefabIndex: 3
+    behaviours: 5
+    appearence: 648
+  - fullName: Johnathan Richardson
+    disembarkingStationIndex: 1
+    boardingStationIndex: 0
+    npcPrefabIndex: 1
+    behaviours: 48
+    appearence: 17
+  - fullName: Ivan Petrov
+    disembarkingStationIndex: 1
+    boardingStationIndex: 0
+    npcPrefabIndex: 4
+    behaviours: 1
+    appearence: 1536
+  - fullName: Ivan Petrov
+    disembarkingStationIndex: 1
+    boardingStationIndex: 0
+    npcPrefabIndex: 2
+    behaviours: 12
+    appearence: 66
+  - fullName: Natalie Gerald
+    disembarkingStationIndex: 1
+    boardingStationIndex: 0
+    npcPrefabIndex: 0
+    behaviours: 65
+    appearence: 2049
+  - fullName: Ivan Petrov
+    disembarkingStationIndex: 1
+    boardingStationIndex: 0
+    npcPrefabIndex: 2
+    behaviours: 1
+    appearence: 66
+  - fullName: Veronica Petrov
+    disembarkingStationIndex: 1
     boardingStationIndex: 0
     npcPrefabIndex: 3
     behaviours: 9
     appearence: 648
+  - fullName: Johnathan Gerald
+    disembarkingStationIndex: 1
+    boardingStationIndex: 0
+    npcPrefabIndex: 1
+    behaviours: 16
+    appearence: 17
+  - fullName: Ahad Dermas
+    disembarkingStationIndex: 1
+    boardingStationIndex: 0
+    npcPrefabIndex: 5
+    behaviours: 20
+    appearence: 14337
+  traitorProfiles:
+  - fullName: Martin Gerald
+    disembarkingStationIndex: 2
+    boardingStationIndex: 0
+    npcPrefabIndex: 1
+    behaviours: 20
+    appearence: 17
+  - fullName: Yasir Hassan
+    disembarkingStationIndex: 2
+    boardingStationIndex: 0
+    npcPrefabIndex: 5
+    behaviours: 272
+    appearence: 14337
+  - fullName: Ivan Petrov
+    disembarkingStationIndex: 2
+    boardingStationIndex: 0
+    npcPrefabIndex: 2
+    behaviours: 9
+    appearence: 66

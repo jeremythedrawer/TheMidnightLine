@@ -436,7 +436,7 @@ MonoBehaviour:
           index: 7
         markers: []
       holdTime: 3
-    clipType: 1
+    clipType: 0
     motionIndex: 21
     time: 0
   - clipName: StandingBlinking
@@ -472,6 +472,62 @@ MonoBehaviour:
     keyFrames:
     - motionSprite:
         sprite:
+          uvSizeAndPos: {x: 0.06542969, y: 0.1171875, z: 0.00048828125, w: 0.13134766}
+          uvPivot: {x: 0.5, y: 0}
+          worldSize: {x: 0.74444443, y: 1.3333334, z: 1}
+          index: 37
+        markers: []
+      holdTime: 10
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.06542969, y: 0.1171875, z: 0.06933594, w: 0.13134766}
+          uvPivot: {x: 0.5, y: 0}
+          worldSize: {x: 0.74444443, y: 1.3333334, z: 1}
+          index: 38
+        markers: []
+      holdTime: 10
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.06542969, y: 0.1171875, z: 0.1381836, w: 0.13134766}
+          uvPivot: {x: 0.5, y: 0}
+          worldSize: {x: 0.74444443, y: 1.3333334, z: 1}
+          index: 39
+        markers: []
+      holdTime: 10
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.06542969, y: 0.12207031, z: 0.20458984, w: 0.13134766}
+          uvPivot: {x: 0.5, y: 0}
+          worldSize: {x: 0.74444443, y: 1.3888888, z: 1}
+          index: 40
+        markers: []
+      holdTime: 2
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.06542969, y: 0.12207031, z: 0.27148438, w: 0.13134766}
+          uvPivot: {x: 0.5, y: 0}
+          worldSize: {x: 0.74444443, y: 1.3888888, z: 1}
+          index: 41
+        markers: []
+      holdTime: 2
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.06542969, y: 0.12207031, z: 0.33935547, w: 0.13134766}
+          uvPivot: {x: 0.5, y: 0}
+          worldSize: {x: 0.74444443, y: 1.3888888, z: 1}
+          index: 42
+        markers: []
+      holdTime: 2
+    - motionSprite:
+        sprite:
+          uvSizeAndPos: {x: 0.06542969, y: 0.12207031, z: 0.4091797, w: 0.13134766}
+          uvPivot: {x: 0.5, y: 0}
+          worldSize: {x: 0.74444443, y: 1.3888888, z: 1}
+          index: 43
+        markers: []
+      holdTime: 5
+    - motionSprite:
+        sprite:
           uvSizeAndPos: {x: 0.06542969, y: 0.12060547, z: 0.47705078, w: 0.13134766}
           uvPivot: {x: 0.5, y: 0}
           worldSize: {x: 0.74444443, y: 1.3722222, z: 1}
@@ -495,14 +551,6 @@ MonoBehaviour:
         markers:
         - objectPos: {x: -0.01666665, y: 1.1611111}
           type: 8
-      holdTime: 5
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.06542969, y: 0.12207031, z: 0.4091797, w: 0.13134766}
-          uvPivot: {x: 0.5, y: 0}
-          worldSize: {x: 0.74444443, y: 1.3888888, z: 1}
-          index: 43
-        markers: []
       holdTime: 5
     clipType: 2
     motionIndex: 7
@@ -823,59 +871,6 @@ MonoBehaviour:
       holdTime: 50
     clipType: 0
     motionIndex: 20
-    time: 0
-  - clipName: SittingEating
-    keyFrames:
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.06542969, y: 0.1171875, z: 0.00048828125, w: 0.13134766}
-          uvPivot: {x: 0.5, y: 0}
-          worldSize: {x: 0.74444443, y: 1.3333334, z: 1}
-          index: 37
-        markers: []
-      holdTime: 10
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.06542969, y: 0.1171875, z: 0.06933594, w: 0.13134766}
-          uvPivot: {x: 0.5, y: 0}
-          worldSize: {x: 0.74444443, y: 1.3333334, z: 1}
-          index: 38
-        markers: []
-      holdTime: 10
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.06542969, y: 0.1171875, z: 0.1381836, w: 0.13134766}
-          uvPivot: {x: 0.5, y: 0}
-          worldSize: {x: 0.74444443, y: 1.3333334, z: 1}
-          index: 39
-        markers: []
-      holdTime: 10
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.06542969, y: 0.12207031, z: 0.20458984, w: 0.13134766}
-          uvPivot: {x: 0.5, y: 0}
-          worldSize: {x: 0.74444443, y: 1.3888888, z: 1}
-          index: 40
-        markers: []
-      holdTime: 2
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.06542969, y: 0.12207031, z: 0.27148438, w: 0.13134766}
-          uvPivot: {x: 0.5, y: 0}
-          worldSize: {x: 0.74444443, y: 1.3888888, z: 1}
-          index: 41
-        markers: []
-      holdTime: 2
-    - motionSprite:
-        sprite:
-          uvSizeAndPos: {x: 0.06542969, y: 0.12207031, z: 0.33935547, w: 0.13134766}
-          uvPivot: {x: 0.5, y: 0}
-          worldSize: {x: 0.74444443, y: 1.3888888, z: 1}
-          index: 42
-        markers: []
-      holdTime: 2
-    clipType: 0
-    motionIndex: 6
     time: 0
   markers:
   - color:

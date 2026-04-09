@@ -39,7 +39,7 @@ public class ZoneMaster : MonoBehaviour
     }
     private void InitBoundParameters()
     {
-        spawner.bounds.center = new Vector3(FIRST_STATION_WORLD_POS, 0, FAR_CLIP * 0.5f);
+        spawner.bounds.center = new Vector3(TRAIN_WORLD_POS, 0, FAR_CLIP * 0.5f);
         spawner.bounds.size = new Vector3(trainStats.totalBounds.size.x + camStats.worldWidth, trainStats.totalBounds.size.y + camStats.worldHeight, FAR_CLIP);
 
         transform.position = spawner.bounds.min;

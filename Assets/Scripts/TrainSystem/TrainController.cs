@@ -5,21 +5,21 @@ using UnityEngine;
 using static Train;
 public class TrainController : MonoBehaviour
 {
-    [SerializeField] TrainSettingsSO settings;
-    [SerializeField] TrainStatsSO stats;
-    [SerializeField] TripSO trip;
-    [SerializeField] ZoneSpawnerSO spawner;
-    [SerializeField] GameEventDataSO gameEventData;
-    [SerializeField] AtlasRenderer backSprite;
-    [SerializeField] AtlasRenderer driversPit;
+    public TrainSettingsSO settings;
+    public TrainStatsSO stats;
+    public TripSO trip;
+    public ZoneSpawnerSO spawner;
+    public GameEventDataSO gameEventData;
+    public AtlasRenderer backSprite;
+    public AtlasRenderer driversPit;
     [Header("Generated")]
-    [SerializeField] Carriage[] carriages;
+    public Carriage[] carriages;
     CancellationTokenSource trainCTS;
     public Station[] stations;
-    public int stationSpawnFlag;
+    public Station nextStation;
     public TrainStates curState;
-    public int slideDoorsCountBase2;
     public bool closingSlideDoors;
+    public int curStationIndex;
     private void OnValidate()
     {
         SetCarriageDictionary();
@@ -38,7 +38,7 @@ public class TrainController : MonoBehaviour
         stats.targetPassengersBoarding = stationData.bystanderProfiles.Length + stationData.traitorProfiles.Length + 1; // +1 for spy himself
         stats.curVelocity = KMPHToVelocity(stationData.targetKMPH);
         stats.targetVelocity = KMPHToVelocity(stationData.targetKMPH);
-        stats.totalTicketsChecked = 0;
+        trip.ticketsCheckedSinceStart = 0;
         
         stats.curPassengersBoarded = 0;
 
@@ -60,15 +60,18 @@ public class TrainController : MonoBehaviour
         trainCTS?.Dispose();
         trainCTS = null;
 
-        stats.totalTicketsChecked = 0;
+        trip.ticketsCheckedSinceStart = 0;
     }
     private void Start()
     {
         SetBounds();
         InitStations();
         SpawnFirstStation();
-
         SetCarriageDictionary();
+
+        stats.targetVelocity = 0;
+        stats.curVelocity = KMPHToVelocity(trip.stationsDataArray[0].targetKMPH);
+        stats.targetStopPosition = transform.position.x;
         MoveTrainToStartPosition().Forget();
     }
     private void Update()
@@ -82,7 +85,7 @@ public class TrainController : MonoBehaviour
     }
     private void ChooseState()
     {
-        if (stats.curVelocity == 0)
+        if (stats.curVelocity < CLOSE_TO_STOP_VELOCITY && stats.targetVelocity == 0)
         {
             SetState(TrainStates.Stopped);
         }
@@ -121,7 +124,7 @@ public class TrainController : MonoBehaviour
 
             case TrainStates.Decelerating:
             {
-                stats.targetVelocity = 0;
+                stats.prevPeakVelocity = stats.curVelocity;
             }
             break;
 
@@ -133,6 +136,7 @@ public class TrainController : MonoBehaviour
 
             case TrainStates.Stopped:
             {
+                stats.curVelocity = 0;
                 if (trip.curStation.isFrontOfTrain)
                 {
                     for (int i = 0; i < carriages.Length; i++)
@@ -149,7 +153,7 @@ public class TrainController : MonoBehaviour
                         carriages[i].SetSignToCurrentStation(trip.curStation.stationName);
                     }
                 }
-                stats.ticketsCheckedSinceLastStation = 0;
+                trip.ticketsCheckedSinceLastStation = 0;
                 gameEventData.OnStationArrival.Raise();
             }
             break;
@@ -161,17 +165,15 @@ public class TrainController : MonoBehaviour
         {
             case TrainStates.AtMaxSpeed:
             {
-                if (stats.ticketsCheckedSinceLastStation >= trip.curStation.ticketsToCheckBeforeSpawn)
+                if (trip.ticketsCheckedSinceLastStation >= trip.curStation.ticketsToCheckBeforeSpawn)
                 {
-                    if((stationSpawnFlag & 1 << trip.curStationIndex) == 0)
-                    {
-                        SpawnStation();    
-                        stats.distToBreak = GetBrakeDistance(stats.curVelocity, settings.deceleration);
-                    }
-                    else if(stats.distanceToNextStation < stats.distToBreak)
-                    {
-                        stats.targetVelocity = 0;
-                    }
+                    nextStation = stations[curStationIndex];
+                    float stationXPos = GetBrakeDistance(stats.curVelocity, settings.deceleration) + TRAIN_WORLD_POS;
+                    nextStation.transform.position = new Vector3(stationXPos, 0, 0);
+                    nextStation.gameObject.SetActive(true);
+                    nextStation.SpawnNPCs();
+
+                    stats.targetVelocity = 0;
                 }
             }
             break;
@@ -187,11 +189,10 @@ public class TrainController : MonoBehaviour
 
                     if (stats.slideDoorsAmountOpened == 0)
                     {
-                        trip.curStationIndex++;
-                        trip.curStation = trip.stationsDataArray[trip.curStationIndex];
+                        curStationIndex++;
+                        trip.curStation = trip.stationsDataArray[curStationIndex];
 
                         stats.targetVelocity = KMPHToVelocity(trip.curStation.targetKMPH);
-                        stats.distToBreak = GetBrakeDistance(stats.targetVelocity, settings.deceleration);
                  
                         stats.curPassengersBoarded = 0;
                         stats.targetPassengersBoarding = trip.curStation.bystanderProfiles.Length + trip.curStation.traitorProfiles.Length;
@@ -209,13 +210,17 @@ public class TrainController : MonoBehaviour
         {
             case TrainStates.Accelerating:
             {
-                stats.curVelocity = UpdateVelocity(stats.curVelocity, stats.targetVelocity, settings.acceleration);
+                stats.curVelocity = IncreaseVelocity(stats.curVelocity, stats.targetVelocity, settings.acceleration);
             }
             break;
 
             case TrainStates.Decelerating:
             {
-                stats.curVelocity = UpdateVelocity(stats.curVelocity, stats.targetVelocity, settings.deceleration);
+                if (nextStation != null)
+                {
+                    stats.targetStopPosition = nextStation.transform.position.x;
+                }
+                stats.curVelocity = DecreaseVelocity(stats.curVelocity, stats.targetVelocity, stats.prevPeakVelocity, settings.deceleration, stats.targetStopPosition);
             }
             break;
 
@@ -271,44 +276,6 @@ public class TrainController : MonoBehaviour
             }
         }
     }
-    private async UniTask MoveTrainToStartPosition()
-    {
-        float initTargetVelocity = KMPHToVelocity(trip.stationsDataArray[0].targetKMPH);
-        stats.targetVelocity = initTargetVelocity;
-        float nextTargetVelocity = initTargetVelocity; 
-        stats.curVelocity = stats.targetVelocity;
-
-        float xPos = transform.position.x;
-        
-        while (true)
-        {
-            float distanceToFirstStation = FIRST_STATION_WORLD_POS - xPos;
-            float brakeDistance = GetBrakeDistance(stats.curVelocity, settings.deceleration);
-
-            if (distanceToFirstStation < brakeDistance)
-            {
-                stats.targetVelocity = 0;
-                nextTargetVelocity = 0;
-            }
-            else
-            {
-                nextTargetVelocity = initTargetVelocity;
-            }
-            stats.curVelocity = UpdateVelocity(stats.curVelocity, nextTargetVelocity, settings.deceleration);
-
-            xPos += stats.curVelocity * Time.fixedDeltaTime;
-            transform.position = new Vector3(xPos, transform.position.y, transform.position.z);
-
-            if (distanceToFirstStation <= 0.05f) break;
-
-            await UniTask.Yield(PlayerLoopTiming.FixedUpdate, trainCTS.Token);
-        }
-
-        stats.totalBounds.center = transform.position;
-        SetSlideDoorPositions();
-        stats.trainToMaxSpawnDist = spawner.bounds.max.x - stats.totalBounds.center.x;
-        gameEventData.OnTrainArrivedAtStartPosition.Raise();
-    }
     private void SetCarriageDictionary()
     {
         carriages = GetComponentsInChildren<Carriage>();
@@ -341,30 +308,15 @@ public class TrainController : MonoBehaviour
     }
     private void SpawnFirstStation()
     {
-        Station firstStation = stations[trip.curStationIndex];
+        Station firstStation = stations[curStationIndex];
         float stationXPos = 300;
         firstStation.transform.position = new Vector3(stationXPos, 0, 0);
-
-        stationSpawnFlag |= 1 << trip.curStationIndex;
 
         firstStation.gameObject.SetActive(true);
         firstStation.SpawnNPCs();
     }
-    private void SpawnStation()
-    {
-        Station nextStation = stations[trip.curStationIndex];
-        float stationXPos = spawner.bounds.max.x - nextStation.platformRenderer.transform.localPosition.x;
-        nextStation.transform.position = new Vector3(stationXPos, 0, 0);
-
-        stats.distanceToNextStation = stationXPos - transform.position.x;
-        stationSpawnFlag |= 1 << trip.curStationIndex;
-
-        nextStation.gameObject.SetActive(true);
-        nextStation.SpawnNPCs();
-    }
     private void InitStations()
     {
-        trip.curStationIndex = 0;
         trip.curStation = trip.stationsDataArray[0];
 
         stations = new Station[trip.stationsDataArray.Length];
@@ -383,6 +335,21 @@ public class TrainController : MonoBehaviour
     {
         stats.totalBounds = driversPit.bounds;
         stats.totalBounds.Encapsulate(backSprite.bounds);
+    }
+    private async UniTask MoveTrainToStartPosition()
+    {        
+        while (stats.curVelocity != 0)
+        {
+            stats.targetStopPosition += stats.curVelocity * Time.fixedDeltaTime;
+            transform.position = new Vector3(stats.targetStopPosition, transform.position.y, transform.position.z);
+
+            await UniTask.Yield(PlayerLoopTiming.FixedUpdate, trainCTS.Token);
+        }
+        transform.position = new Vector3(TRAIN_WORLD_POS, transform.position.y, transform.position.z);
+        stats.totalBounds.center = transform.position;
+        SetSlideDoorPositions();
+        stats.trainToMaxSpawnDist = spawner.bounds.max.x - stats.totalBounds.center.x;
+        gameEventData.OnTrainArrivedAtStartPosition.Raise();
     }
     private void OnDrawGizmos()
     {

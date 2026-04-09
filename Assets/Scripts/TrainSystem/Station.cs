@@ -8,7 +8,7 @@ public class Station : MonoBehaviour
     public TripSO trip;
     public AtlasRenderer platformRenderer;
 
-    private void OnEnable()
+    private void Awake()
     {
         station.isFrontOfTrain = platformRenderer.batchKey.depthOrder < trainStats.depthSections.min;
     }
@@ -17,15 +17,12 @@ public class Station : MonoBehaviour
         for (int i = 0; i < station.bystanderProfiles.Length; i++)
         {
             NPCProfile bystanderProfile = station.bystanderProfiles[i];
-            
+            platformRenderer.UpdateBounds();
             float randXPos = Random.Range(
             platformRenderer.bounds.min.x + SPAWN_BUFFER, 
             platformRenderer.bounds.max.x - SPAWN_BUFFER);
             
-            Vector3 spawnPos = new Vector3(
-            randXPos, 
-            transform.position.y + 0.1f, 
-            platformRenderer.transform.position.z);
+            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, platformRenderer.transform.position.z);
 
             NPCBrain bystander = Instantiate(trip.npc_prefabsArray[bystanderProfile.npcPrefabIndex], spawnPos, Quaternion.identity, platformRenderer.transform);
             

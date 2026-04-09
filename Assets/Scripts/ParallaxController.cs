@@ -65,7 +65,7 @@ public class ParallaxController : MonoBehaviour
             {
                 case RepeatType.OneShot:
                 {
-                    Destroy(gameObject);
+                   // Destroy(gameObject);
                 }
                 break;
                 case RepeatType.Repeat:

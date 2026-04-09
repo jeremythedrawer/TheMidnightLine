@@ -474,6 +474,7 @@ public class SpyBrain : MonoBehaviour
                 if (npcHit.collider != null)
                 {
                     npcTicketCheck = npcHit.transform.gameObject.GetComponent<NPCBrain>();
+                    if (!npcTicketCheck.IsOnTrain()) return;
                     npcTicketCheck.ticketIsBeingChecked = true;
                     stats.ticketName = npcTicketCheck.profile.fullName;
                     stats.boardingStationName = trip.stationsDataArray[npcTicketCheck.profile.boardingStationIndex].name;
@@ -531,7 +532,7 @@ public class SpyBrain : MonoBehaviour
 
             case State.Ticket:
             {
-                npcTicketCheck.ticketIsBeingChecked = false;
+                if (npcTicketCheck != null) npcTicketCheck.ticketIsBeingChecked = false;
             }
             break;
 

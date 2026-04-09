@@ -15,14 +15,14 @@ public class NPCBrain : MonoBehaviour
 {
     public NPCSO npc;
     public AtlasRenderer atlasRenderer;
-    [SerializeField] NPCsDataSO npcData;
-    [SerializeField] LayerSettingsSO layerSettings;
-    [SerializeField] TrainSettingsSO trainSettings;
-    [SerializeField] TrainStatsSO trainStats;
-    [SerializeField] GameEventDataSO gameEventData;
-    [SerializeField] PlayerInputsSO playerInputs;
-    [SerializeField] SpyStatsSO spyStats;
-    [SerializeField] MaterialIDSO materialIDs;
+    public NPCsDataSO npcData;
+    public LayerSettingsSO layerSettings;
+    public TrainSettingsSO trainSettings;
+    public TrainStatsSO trainStats;
+    public GameEventDataSO gameEventData;
+    public PlayerInputsSO playerInputs;
+    public SpyStatsSO spyStats;
+    public TripSO trip;
 
     public Rigidbody2D rigidBody;
     public BoxCollider2D boxCollider;
@@ -319,8 +319,8 @@ public class NPCBrain : MonoBehaviour
                 if (!ticketChecked)
                 {
                     ticketChecked = true;
-                    trainStats.totalTicketsChecked++;
-                    trainStats.ticketsCheckedSinceLastStation++;
+                    trip.ticketsCheckedSinceStart++;
+                    trip.ticketsCheckedSinceLastStation++;
                 }
             }
             break;
@@ -632,7 +632,6 @@ public class NPCBrain : MonoBehaviour
         await UniTask.WaitForSeconds(randomStartMoveTime);
 
         SetPath(Path.ToSlideDoor);
-        
         while(curPath != Path.ToSlideDoor) await UniTask.Yield();
 
         await WaitUntilCloseToSlideDoor();
@@ -662,7 +661,7 @@ public class NPCBrain : MonoBehaviour
     }
     private UniTask WaitUntilCloseToSlideDoor()
     {
-        if (curPath == Path.Standing)
+        if (curPath == Path.Standing || Mathf.Abs(targetDist) <= CLOSE_TO_TARGET_BUFFER)
         {
             return UniTask.CompletedTask;
         }
@@ -781,6 +780,10 @@ public class NPCBrain : MonoBehaviour
 
         Behaviours behaviours = firstBehave | secondBehave;
         return behaviours;
+    }
+    public bool IsOnTrain()
+    {
+        return rigidBody.includeLayers == layerSettings.trainMask;
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()

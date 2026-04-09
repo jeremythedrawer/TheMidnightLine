@@ -15,9 +15,12 @@ public class TripSO : ScriptableObject
     public int minStationsTraitorsTravel = 2;
     public int maxStationsTraitorsTravel = 4;
     [Header("Generated")]
-    public int curStationIndex;
     public StationSO curStation;
+    
     public int totalTicketsToCheck;
+
+    public int ticketsCheckedSinceStart;
+    public int ticketsCheckedSinceLastStation;
 }
 #if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(ZoneSpawnerData))]

@@ -7,15 +7,12 @@ using static UnityEngine.GraphicsBuffer;
 [CreateAssetMenu(fileName = "TrainStats_SO", menuName = "Midnight Line SOs / Train Stats SO")]
 public class TrainStatsSO : ScriptableObject
 {
-    public int totalTicketsChecked;
-    public int ticketsCheckedSinceLastStation;
-
     public float curVelocity;
     public float targetVelocity;
-    
+    public float prevPeakVelocity;
+    public float targetStopPosition;
+
     public float distToSpawnNextStation;
-    public float distToBreak;
-    public float distanceToNextStation;
 
     public float trainToMaxSpawnDist;
 
