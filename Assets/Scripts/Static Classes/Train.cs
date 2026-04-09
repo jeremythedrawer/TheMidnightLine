@@ -4,7 +4,8 @@ using UnityEngine;
 public static class Train
 {
     public const float KM_TO_MPS = 0.27777777778f;
-    public const float CLOSE_TO_STATION_DISTANCE = 0.05f;
+    public const float CLOSE_TO_STOP_VELOCITY = 0.05f;
+    public const float FIRST_STATION_WORLD_POS = 300;
     public enum TrainStates
     { 
         Accelerating,
@@ -36,8 +37,19 @@ public static class Train
         public int carriageSeat;
     }
 
-    public static float GetVelocity(float kmph)
+    public static float KMPHToVelocity(float kmph)
     {
         return kmph * KM_TO_MPS;
+    }
+
+    public static float GetBrakeDistance(float velocity, float decelSpeed)
+    {
+        return (velocity * velocity) / (2f * decelSpeed);
+    }
+
+    public static float UpdateVelocity(float curVelocity, float targetVelocity, float accelSpeed)
+    {
+        float maxDelta = accelSpeed * Time.fixedDeltaTime;
+        return Mathf.MoveTowards(curVelocity, targetVelocity, maxDelta);
     }
 }

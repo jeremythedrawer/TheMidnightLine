@@ -88,7 +88,17 @@ public static class AtlasRendering
         if (!spriteBatchDict.TryGetValue(renderer.batchKey, out SpriteBatch batch)) return;
 
         batch.rendererList.Remove(renderer);
-        if (batch.rendererList.Count == 0) spriteBatchDict.Remove(renderer.batchKey);
+        if (batch.rendererList.Count == 0)
+        {
+            batch.spriteDataBuffer?.Release();
+            batch.spriteDataBuffer = null;
+
+            batch.argsBuffer?.Release();
+            batch.argsBuffer = null;
+
+            spriteBatchDict.Remove(renderer.batchKey);
+
+        }
     }
     public static ref MotionSprite GetNextKeyframeSprite(ref AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {

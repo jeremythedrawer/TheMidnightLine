@@ -1,5 +1,7 @@
 using UnityEngine;
 using static AtlasSpawn;
+using static Train;
+using static Parallax;
 
 [ExecuteAlways]
 public class ZoneMaster : MonoBehaviour
@@ -37,27 +39,16 @@ public class ZoneMaster : MonoBehaviour
     }
     private void InitBoundParameters()
     {
-        float camMeterWidth = camSettings.maxProjectionSize * camStats.aspect;
-        float firstStationPos = trip.stationsDataArray[0].metersPosition;
+        spawner.bounds.center = new Vector3(FIRST_STATION_WORLD_POS, 0, FAR_CLIP * 0.5f);
+        spawner.bounds.size = new Vector3(trainStats.totalBounds.size.x + camStats.worldWidth, trainStats.totalBounds.size.y + camStats.worldHeight, FAR_CLIP);
 
-        spawner.spawnMaxPos.x = firstStationPos + spawner.spawnerSize.x;
-        spawner.spawnMaxPos.y = trainStats.totalBounds.max.y + camSettings.maxProjectionSize + spawner.spawnerSize.y;
-        spawner.spawnMaxPos.z = Parallax.FAR_CLIP;
-
-        spawner.spawnMinPos.x = firstStationPos - spawner.spawnerSize.x;
-        spawner.spawnMinPos.y = -camSettings.maxProjectionSize - spawner.spawnerSize.y;
-        spawner.spawnMinPos.z = Camera.main.transform.position.z;
-
-        spawner.spawnCenter = (spawner.spawnMinPos + spawner.spawnMaxPos) * 0.5f;
-        spawner.spawnBoundsSize = spawner.spawnMaxPos - spawner.spawnMinPos;
-
-        transform.position = spawner.spawnMinPos;
+        transform.position = spawner.bounds.min;
     }
     private void InitZoneCompute()
     {
-        spawner.atlasCompute.SetVector("_SpawnerMinPos", spawner.spawnMinPos);
-        spawner.atlasCompute.SetVector("_SpawnerMaxPos", spawner.spawnMaxPos);
-        spawner.atlasCompute.SetVector("_SpawnerSize", spawner.spawnBoundsSize);
+        spawner.atlasCompute.SetVector("_SpawnerMinPos", spawner.bounds.min);
+        spawner.atlasCompute.SetVector("_SpawnerMaxPos", spawner.bounds.max);
+        spawner.atlasCompute.SetVector("_SpawnerSize", spawner.bounds.size);
         spawner.atlasCompute.SetInt("_ForegroundParticleCount", FORE_PARTICLE_COUNT);
         spawner.atlasCompute.SetInt("_MiddlegroundParticleCount", MID_PARTICLE_COUNT);
         spawner.atlasCompute.SetInt("_BackgroundParticleCount", BACK_PARTICLE_COUNT);
@@ -87,6 +78,6 @@ public class ZoneMaster : MonoBehaviour
         //InitBoundParameters();
 
         Gizmos.color = Color.crimson;
-        Gizmos.DrawWireCube(spawner.spawnCenter, spawner.spawnBoundsSize);
+        Gizmos.DrawWireCube(spawner.bounds.center, spawner.bounds.size);
     }
 }

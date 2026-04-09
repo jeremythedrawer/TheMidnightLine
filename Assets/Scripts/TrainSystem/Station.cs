@@ -27,14 +27,11 @@ public class Station : MonoBehaviour
             transform.position.y + 0.1f, 
             platformRenderer.transform.position.z);
 
-            NPCBrain bystander = Instantiate(
-            trip.npc_prefabsArray[bystanderProfile.npcPrefabIndex], 
-            spawnPos, 
-            Quaternion.identity, 
-            platformRenderer.transform);
+            NPCBrain bystander = Instantiate(trip.npc_prefabsArray[bystanderProfile.npcPrefabIndex], spawnPos, Quaternion.identity, platformRenderer.transform);
             
             bystander.profile = bystanderProfile;
             bystander.role = Role.Bystander;
+            bystander.gameObject.name = bystanderProfile.fullName;
         }
 
         for (int i = 0; i < station.traitorProfiles.Length; i++)
@@ -48,13 +45,10 @@ public class Station : MonoBehaviour
             transform.position.y + 0.1f, 
             platformRenderer.transform.position.z);
 
-            NPCBrain traitor = Instantiate(
-            trip.npc_prefabsArray[traitorProfile.npcPrefabIndex], 
-            spawnPos, 
-            Quaternion.identity, 
-            platformRenderer.transform);
+            NPCBrain traitor = Instantiate(trip.npc_prefabsArray[traitorProfile.npcPrefabIndex], spawnPos, Quaternion.identity, platformRenderer.transform);
             traitor.profile = traitorProfile;
             traitor.role = Role.Traitor;
+            traitor.gameObject.name = traitorProfile.fullName;
         }
     }
 }

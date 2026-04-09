@@ -63,13 +63,13 @@ public class Carriage : MonoBehaviour
     }
     private void Update()
     {
-        float wheelRotation = (trainStats.metersTravelled / wheelCircumference) * 360f;
-        wheelRotation %= 360;
-        wheelRotation = -wheelRotation;
-        foreach (Transform wheel in wheelTransforms)
-        {
-            wheel.localRotation = Quaternion.Euler(0f, 0f, wheelRotation);
-        }
+        //float wheelRotation = (trainStats.totalTicketsChecked / wheelCircumference) * 360f;
+        //wheelRotation %= 360;
+        //wheelRotation = -wheelRotation;
+        //foreach (Transform wheel in wheelTransforms)
+        //{
+        //    wheel.localRotation = Quaternion.Euler(0f, 0f, wheelRotation);
+        //}
     }
     public void UnlockInteriorDoors()
     {

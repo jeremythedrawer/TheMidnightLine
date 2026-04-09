@@ -16,8 +16,8 @@ public class CameraStatsSO : ScriptableObject
 
     public float initialSize;
     public float targetSize;
-    public float camHeight;
-    public float camWidth;
+    public float worldHeight;
+    public float worldWidth;
     public float curHorOffset;
     public float camWorldLeft;
     public float camWorldRight;

@@ -34,7 +34,7 @@ public class ZoneSpawner : MonoBehaviour
         ChangeZone();
 
 
-        if (trainStats.metersTravelled >= curZone.metersEnd && zoneSpawnerData.active)
+        if (trainStats.totalTicketsChecked >= curZone.ticketCheckEnd && zoneSpawnerData.active)
         {
             spawner.atlasCompute.SetInt(ACTIVE_STRINGS[(int)area], 0);
             deadCountBuffer.GetData(deadCounter);
@@ -79,7 +79,7 @@ public class ZoneSpawner : MonoBehaviour
     }
     private void ChangeZone()
     {
-        if (trainStats.metersTravelled < curZone.metersStart || zoneSpawnerData.active) return;
+        if (trainStats.totalTicketsChecked < curZone.ticketCheckStart || zoneSpawnerData.active) return;
 
         uvSizeAndPositionBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, curZone.atlas.simpleSprites.Length, FLOAT4_SIZE);
         uvSizeAndPositionBuffer.SetData(curZone.zoneUVSizeAndPosArray);

@@ -69,6 +69,8 @@ public class NPCBrain : MonoBehaviour
 
     public bool queuedForSeat;
 
+    public bool ticketChecked;
+
     public int seatQueueIndex;
     public int enterTrainIndex;
     public int exitTrainIndex;
@@ -313,6 +315,13 @@ public class NPCBrain : MonoBehaviour
                 SetPathMotion(sittingMotion, standingMotion);
 
                 atlasRenderer.custom.y = 1;
+
+                if (!ticketChecked)
+                {
+                    ticketChecked = true;
+                    trainStats.totalTicketsChecked++;
+                    trainStats.ticketsCheckedSinceLastStation++;
+                }
             }
             break;
             case NPCState.Smoking:
@@ -373,10 +382,25 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCState.Walking:
             {
-                tcsGetToSlideDoor?.TrySetResult();
-                tcsGetToSlideDoor = null;
                 targetXVelocity = 0;
                 rigidBody.linearVelocityX = 0;
+
+                switch (curPath)
+                {
+                    case Path.ToSlideDoor:
+                    case Path.ToSmokerRoom:
+                    {
+                        SetPath(Path.Standing);
+                    }
+                    break;
+
+                    case Path.ToSeat:
+                    {
+                        SetPath(Path.Sitting);
+                    }
+                    break;
+                }
+
             }
             break;
             case NPCState.Smoking:
@@ -517,6 +541,8 @@ public class NPCBrain : MonoBehaviour
 
             case Path.ToSlideDoor:
             {
+                tcsGetToSlideDoor?.TrySetResult();
+                tcsGetToSlideDoor = null;
             }
             break;
 
@@ -607,10 +633,9 @@ public class NPCBrain : MonoBehaviour
 
         SetPath(Path.ToSlideDoor);
         
-        await UniTask.Yield();
-        
+        while(curPath != Path.ToSlideDoor) await UniTask.Yield();
+
         await WaitUntilCloseToSlideDoor();
-        SetPath(Path.Standing);
 
         RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.slideDoors);
         RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
@@ -637,7 +662,10 @@ public class NPCBrain : MonoBehaviour
     }
     private UniTask WaitUntilCloseToSlideDoor()
     {
-        if (curState != NPCState.Walking && curPath == Path.ToSlideDoor) return UniTask.CompletedTask;
+        if (curPath == Path.Standing)
+        {
+            return UniTask.CompletedTask;
+        }
 
         if (tcsGetToSlideDoor == null) tcsGetToSlideDoor = new UniTaskCompletionSource();
 

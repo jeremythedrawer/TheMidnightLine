@@ -46,8 +46,8 @@ public static class AtlasSpawn
     [Serializable] public struct Zone
     {
         public AtlasSO atlas;
-        public int metersStart;
-        public int metersEnd;
+        public int ticketCheckStart;
+        public int ticketCheckEnd;
 
         public Vector4[] zoneUVSizeAndPosArray;
         public Vector2[] zoneWorldSizesArray;

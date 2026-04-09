@@ -59,7 +59,7 @@ public class ParallaxController : MonoBehaviour
         worldPos.x = Mathf.Round(worldPos.x * PIXELS_PER_UNIT) * UNITS_PER_PIXEL;
         transform.position = worldPos;
 
-        if (bounds.max.x < zoneStats.spawnMinPos.x)
+        if (bounds.max.x < zoneStats.bounds.min.x)
         {
             switch (repeatType)
             {
@@ -70,7 +70,7 @@ public class ParallaxController : MonoBehaviour
                 break;
                 case RepeatType.Repeat:
                 {
-                    worldPos.x += zoneStats.spawnMaxPos.x - bounds.min.x;
+                    worldPos.x += zoneStats.bounds.max.x - bounds.min.x;
                 }
                 break;
             }

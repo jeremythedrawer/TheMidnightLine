@@ -53,7 +53,7 @@ public class POVUI : MonoBehaviour
         notepad.gameObject.SetActive(true);
 
 
-        float halfCamWidth = cameraStats.camWidth * 0.5f;
+        float halfCamWidth = cameraStats.worldWidth * 0.5f;
 
 
         backgroundActivePos = background.localPosition;

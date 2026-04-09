@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
-using System.Threading;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using static Train;
 public class TrainController : MonoBehaviour
@@ -15,14 +15,15 @@ public class TrainController : MonoBehaviour
     [Header("Generated")]
     [SerializeField] Carriage[] carriages;
     CancellationTokenSource trainCTS;
+    public Station[] stations;
+    public int stationSpawnFlag;
     public TrainStates curState;
     public int slideDoorsCountBase2;
     public bool closingSlideDoors;
     private void OnValidate()
     {
         SetCarriageDictionary();
-        stats.totalBounds = driversPit.bounds;
-        stats.totalBounds.Encapsulate(backSprite.bounds);
+        SetBounds();
 
     }
     private void Awake() 
@@ -35,11 +36,9 @@ public class TrainController : MonoBehaviour
         StationSO stationData = trip.stationsDataArray[0];
 
         stats.targetPassengersBoarding = stationData.bystanderProfiles.Length + stationData.traitorProfiles.Length + 1; // +1 for spy himself
-        stats.curVelocity = GetVelocity(stationData.targetKMPH);
-        stats.targetVelocity = GetVelocity(stationData.targetKMPH);
-        stats.metersTravelled = 0;
-        stats.distToNextStation = trip.curStation.metersPosition - stats.metersTravelled;
-        stats.brakePos = GetBrakeDistance(stats.targetVelocity, stats.distToNextStation);
+        stats.curVelocity = KMPHToVelocity(stationData.targetKMPH);
+        stats.targetVelocity = KMPHToVelocity(stationData.targetKMPH);
+        stats.totalTicketsChecked = 0;
         
         stats.curPassengersBoarded = 0;
 
@@ -53,7 +52,6 @@ public class TrainController : MonoBehaviour
 
         stats.slideDoorsAmountOpened = 0;
 
-        
         trainCTS = new CancellationTokenSource();
     }
     private void OnDisable()
@@ -62,30 +60,33 @@ public class TrainController : MonoBehaviour
         trainCTS?.Dispose();
         trainCTS = null;
 
-        stats.metersTravelled = 0;
+        stats.totalTicketsChecked = 0;
     }
     private void Start()
     {
+        SetBounds();
+        InitStations();
+        SpawnFirstStation();
+
         SetCarriageDictionary();
         MoveTrainToStartPosition().Forget();
-        SetState(TrainStates.Accelerating);
     }
     private void Update()
     {
-        SelectState();
+        ChooseState();
         UpdateState();
     }
     private void FixedUpdate()
     {
         FixedUpdateState();
     }
-    private void SelectState()
+    private void ChooseState()
     {
-        if (stats.distToNextStation < CLOSE_TO_STATION_DISTANCE)
+        if (stats.curVelocity == 0)
         {
             SetState(TrainStates.Stopped);
         }
-        else if (stats.metersTravelled > stats.brakePos)
+        else if (stats.targetVelocity == 0)
         {
             SetState(TrainStates.Decelerating);
         }
@@ -132,7 +133,6 @@ public class TrainController : MonoBehaviour
 
             case TrainStates.Stopped:
             {
-                stats.curVelocity = 0;
                 if (trip.curStation.isFrontOfTrain)
                 {
                     for (int i = 0; i < carriages.Length; i++)
@@ -149,6 +149,7 @@ public class TrainController : MonoBehaviour
                         carriages[i].SetSignToCurrentStation(trip.curStation.stationName);
                     }
                 }
+                stats.ticketsCheckedSinceLastStation = 0;
                 gameEventData.OnStationArrival.Raise();
             }
             break;
@@ -158,6 +159,22 @@ public class TrainController : MonoBehaviour
     {
         switch (curState)
         {
+            case TrainStates.AtMaxSpeed:
+            {
+                if (stats.ticketsCheckedSinceLastStation >= trip.curStation.ticketsToCheckBeforeSpawn)
+                {
+                    if((stationSpawnFlag & 1 << trip.curStationIndex) == 0)
+                    {
+                        SpawnStation();    
+                        stats.distToBreak = GetBrakeDistance(stats.curVelocity, settings.deceleration);
+                    }
+                    else if(stats.distanceToNextStation < stats.distToBreak)
+                    {
+                        stats.targetVelocity = 0;
+                    }
+                }
+            }
+            break;
             case TrainStates.Stopped:
             {
                 if (stats.curPassengersBoarded == stats.targetPassengersBoarding)
@@ -172,9 +189,9 @@ public class TrainController : MonoBehaviour
                     {
                         trip.curStationIndex++;
                         trip.curStation = trip.stationsDataArray[trip.curStationIndex];
-                        stats.distToNextStation = trip.curStation.metersPosition - stats.metersTravelled;
-                        stats.targetVelocity = GetVelocity(trip.curStation.targetKMPH);
-                        stats.brakePos = GetBrakeDistance(stats.targetVelocity, trip.curStation.metersPosition);
+
+                        stats.targetVelocity = KMPHToVelocity(trip.curStation.targetKMPH);
+                        stats.distToBreak = GetBrakeDistance(stats.targetVelocity, settings.deceleration);
                  
                         stats.curPassengersBoarded = 0;
                         stats.targetPassengersBoarding = trip.curStation.bystanderProfiles.Length + trip.curStation.traitorProfiles.Length;
@@ -192,24 +209,18 @@ public class TrainController : MonoBehaviour
         {
             case TrainStates.Accelerating:
             {
-                stats.curVelocity = Mathf.Lerp(stats.curVelocity, stats.targetVelocity, settings.accelerationSpeed * Time.fixedDeltaTime);
-                stats.metersTravelled += stats.curVelocity * Time.fixedDeltaTime;
-                stats.distToNextStation = trip.curStation.metersPosition - stats.metersTravelled;
+                stats.curVelocity = UpdateVelocity(stats.curVelocity, stats.targetVelocity, settings.acceleration);
             }
             break;
 
             case TrainStates.Decelerating:
             {
-                stats.curVelocity = Mathf.Lerp(stats.curVelocity, stats.targetVelocity, settings.accelerationSpeed * Time.fixedDeltaTime);
-                stats.metersTravelled += stats.curVelocity * Time.fixedDeltaTime;
-                stats.distToNextStation = trip.curStation.metersPosition - stats.metersTravelled;
+                stats.curVelocity = UpdateVelocity(stats.curVelocity, stats.targetVelocity, settings.deceleration);
             }
             break;
 
             case TrainStates.AtMaxSpeed:
             {
-                stats.metersTravelled += stats.curVelocity * Time.fixedDeltaTime;
-                stats.distToNextStation = trip.curStation.metersPosition - stats.metersTravelled;
             }
             break;
         }
@@ -262,14 +273,40 @@ public class TrainController : MonoBehaviour
     }
     private async UniTask MoveTrainToStartPosition()
     {
-        while (stats.distToNextStation > CLOSE_TO_STATION_DISTANCE)
+        float initTargetVelocity = KMPHToVelocity(trip.stationsDataArray[0].targetKMPH);
+        stats.targetVelocity = initTargetVelocity;
+        float nextTargetVelocity = initTargetVelocity; 
+        stats.curVelocity = stats.targetVelocity;
+
+        float xPos = transform.position.x;
+        
+        while (true)
         {
-            transform.position = new Vector3(stats.metersTravelled, transform.position.y, transform.position.z);
-            await UniTask.Yield(cancellationToken: trainCTS.Token);
+            float distanceToFirstStation = FIRST_STATION_WORLD_POS - xPos;
+            float brakeDistance = GetBrakeDistance(stats.curVelocity, settings.deceleration);
+
+            if (distanceToFirstStation < brakeDistance)
+            {
+                stats.targetVelocity = 0;
+                nextTargetVelocity = 0;
+            }
+            else
+            {
+                nextTargetVelocity = initTargetVelocity;
+            }
+            stats.curVelocity = UpdateVelocity(stats.curVelocity, nextTargetVelocity, settings.deceleration);
+
+            xPos += stats.curVelocity * Time.fixedDeltaTime;
+            transform.position = new Vector3(xPos, transform.position.y, transform.position.z);
+
+            if (distanceToFirstStation <= 0.05f) break;
+
+            await UniTask.Yield(PlayerLoopTiming.FixedUpdate, trainCTS.Token);
         }
+
         stats.totalBounds.center = transform.position;
         SetSlideDoorPositions();
-        stats.trainToMaxSpawnDist = spawner.spawnMaxPos.x - stats.totalBounds.center.x;
+        stats.trainToMaxSpawnDist = spawner.bounds.max.x - stats.totalBounds.center.x;
         gameEventData.OnTrainArrivedAtStartPosition.Raise();
     }
     private void SetCarriageDictionary()
@@ -286,7 +323,7 @@ public class TrainController : MonoBehaviour
     }
     private void SetSlideDoorPositions()
     {
-        int slideDoorsPerCarriage = carriages[0].exteriorRenderers.Length;
+        int slideDoorsPerCarriage = carriages[0].exteriorSlideDoors.Length;
         int totalSlideDoors = carriages.Length * slideDoorsPerCarriage;
 
         stats.slideDoorPositions = new float[totalSlideDoors];
@@ -302,24 +339,57 @@ public class TrainController : MonoBehaviour
             }
         }
     }
-    private float GetBrakeDistance(float targetVelocity, float nextStationDist)
+    private void SpawnFirstStation()
     {
-        float meters = nextStationDist;
+        Station firstStation = stations[trip.curStationIndex];
+        float stationXPos = 300;
+        firstStation.transform.position = new Vector3(stationXPos, 0, 0);
 
-        for (int i = 0; i < 1000; i++)
+        stationSpawnFlag |= 1 << trip.curStationIndex;
+
+        firstStation.gameObject.SetActive(true);
+        firstStation.SpawnNPCs();
+    }
+    private void SpawnStation()
+    {
+        Station nextStation = stations[trip.curStationIndex];
+        float stationXPos = spawner.bounds.max.x - nextStation.platformRenderer.transform.localPosition.x;
+        nextStation.transform.position = new Vector3(stationXPos, 0, 0);
+
+        stats.distanceToNextStation = stationXPos - transform.position.x;
+        stationSpawnFlag |= 1 << trip.curStationIndex;
+
+        nextStation.gameObject.SetActive(true);
+        nextStation.SpawnNPCs();
+    }
+    private void InitStations()
+    {
+        trip.curStationIndex = 0;
+        trip.curStation = trip.stationsDataArray[0];
+
+        stations = new Station[trip.stationsDataArray.Length];
+
+        for (int i = 0; i < trip.stationsDataArray.Length; i++)
         {
-            targetVelocity = Mathf.Lerp(targetVelocity, 0, settings.accelerationSpeed * Time.fixedDeltaTime);
-            meters -= targetVelocity * Time.fixedDeltaTime;
-            if (targetVelocity <= CLOSE_TO_STATION_DISTANCE) break;
+            StationSO stationData = trip.stationsDataArray[i];
+            stationData.stationName = stationData.station_prefab.name;
+
+            Station station = Instantiate(stationData.station_prefab, null);
+            stations[i] = station;
+            station.gameObject.SetActive(false);
         }
-        return meters;
+    }
+    private void SetBounds()
+    {
+        stats.totalBounds = driversPit.bounds;
+        stats.totalBounds.Encapsulate(backSprite.bounds);
     }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(stats.totalBounds.center, stats.totalBounds.size);
-        Gizmos.DrawLine(new Vector2(stats.totalBounds.min.x, stats.totalBounds.center.y) , new Vector2(stats.totalBounds.max.x, stats.totalBounds.center.y));
-        Gizmos.DrawLine(new Vector2(stats.totalBounds.center.x, stats.totalBounds.min.y), new Vector2(stats.totalBounds.center.x, stats.totalBounds.max.y));
+        Gizmos.DrawLine(new Vector3(stats.totalBounds.min.x, stats.totalBounds.center.y, stats.totalBounds.min.z) , new Vector3(stats.totalBounds.max.x, stats.totalBounds.center.y, stats.totalBounds.min.z));
+        Gizmos.DrawLine(new Vector3(stats.totalBounds.center.x, stats.totalBounds.min.y, stats.totalBounds.min.z), new Vector3(stats.totalBounds.center.x, stats.totalBounds.max.y, stats.totalBounds.min.z));
     }
 #if UNITY_EDITOR
     private void OnGUI()

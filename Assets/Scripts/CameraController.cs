@@ -52,13 +52,13 @@ public class CameraController : MonoBehaviour
         }
 
         //Set size and position
-        stats.camHeight = cam.orthographicSize * 2;
-        stats.camWidth = stats.camHeight * cam.aspect;
-        stats.camWorldLeft = stats.curWorldPos.x - stats.camWidth * 0.5f;
-        stats.camWorldRight = stats.curWorldPos.x + stats.camWidth * 0.5f;
-        stats.camWorldBottom = stats.curWorldPos.y - stats.camHeight * 0.5f;
-        stats.camWorldTop = stats.curWorldPos.y + stats.camHeight * 0.5f;
-        stats.worldUnitsPerPixel = stats.camHeight / Screen.height;
+        stats.worldHeight = cam.orthographicSize * 2;
+        stats.worldWidth = stats.worldHeight * cam.aspect;
+        stats.camWorldLeft = stats.curWorldPos.x - stats.worldWidth * 0.5f;
+        stats.camWorldRight = stats.curWorldPos.x + stats.worldWidth * 0.5f;
+        stats.camWorldBottom = stats.curWorldPos.y - stats.worldHeight * 0.5f;
+        stats.camWorldTop = stats.curWorldPos.y + stats.worldHeight * 0.5f;
+        stats.worldUnitsPerPixel = stats.worldHeight / Screen.height;
         if (Application.isPlaying)
         {
             cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, stats.targetSize, Time.deltaTime * settings.damping);

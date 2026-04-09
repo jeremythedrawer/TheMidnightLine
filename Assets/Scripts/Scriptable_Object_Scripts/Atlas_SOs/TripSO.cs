@@ -17,7 +17,7 @@ public class TripSO : ScriptableObject
     [Header("Generated")]
     public int curStationIndex;
     public StationSO curStation;
-    public int tripMeters;
+    public int totalTicketsToCheck;
 }
 #if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(ZoneSpawnerData))]
