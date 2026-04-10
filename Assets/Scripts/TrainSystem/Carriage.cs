@@ -15,7 +15,6 @@ public class Carriage : MonoBehaviour
 
     public AtlasRenderer nextStationSignRenderer;
 
-    public AtlasRenderer[] wheelRenderers;
     public AtlasRenderer[] exteriorRenderers;
     public AtlasRenderer[] seatRenderers;
     public AtlasRenderer[] grapPoleRenderers;
@@ -54,22 +53,6 @@ public class Carriage : MonoBehaviour
     private void Start()
     {
         alpha = 0;
-        wheelCircumference = wheelRenderers[0].sprite.worldSize.x * Mathf.PI;
-        wheelTransforms = new Transform[wheelTransforms.Length];
-        for (int i = 0; i < wheelRenderers.Length; i++)
-        {
-            wheelTransforms[i] = wheelRenderers[i].transform;
-        }
-    }
-    private void Update()
-    {
-        //float wheelRotation = (trainStats.totalTicketsChecked / wheelCircumference) * 360f;
-        //wheelRotation %= 360;
-        //wheelRotation = -wheelRotation;
-        //foreach (Transform wheel in wheelTransforms)
-        //{
-        //    wheel.localRotation = Quaternion.Euler(0f, 0f, wheelRotation);
-        //}
     }
     public void UnlockInteriorDoors()
     {

@@ -1,4 +1,4 @@
-Shader "Custom/s_atlasScroll"
+Shader "Custom/s_atlasRotate"
 {
     Properties
     {
@@ -14,6 +14,8 @@ Shader "Custom/s_atlasScroll"
         Pass
         {
             HLSLPROGRAM
+            #define PI 3.14159265359
+            #define TWO_PI 6.28318530718
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
             #pragma vertex vert
@@ -57,6 +59,18 @@ Shader "Custom/s_atlasScroll"
                 objPos *= size * scale;
                 objPos -= pivot;
 
+                float c = size * PI;
+                float t = fmod(_MetersTravelled / c, 1.0) * (2 * PI);
+
+			    float rotSin = sin(-t);
+			    float rotCos = cos(-t);
+
+                float2x2 rotMat = float2x2(
+                    rotCos, -rotSin,
+                    rotSin,  rotCos
+                );
+
+                objPos = mul(rotMat, objPos);
                 float3 worldPos = float3(position.xy + objPos, position.z);
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
@@ -80,7 +94,6 @@ Shader "Custom/s_atlasScroll"
                 float2 flip = spriteData.scaleAndFlip.zw;
 
                 i.uv *= scale.xy;
-                i.uv.x += _MetersTravelled / width;
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;

@@ -12,13 +12,16 @@ using static UnityEngine.GraphicsBuffer;
 [ExecuteAlways]
 public class AtlasRenderer : MonoBehaviour
 {
-    [Header("Inputs")]
+    [Header("Required Inputs")]
     public AtlasRendererType rendererType;
     public BatchKey batchKey;
     public AtlasSO atlas;
-    public CameraStatsSO camStats;
-    public BoxCollider2D boxCollider;
 
+    [Header("Screen Inputs")]
+    public CameraStatsSO camStats;
+
+    [Header("Collisions")]
+    public BoxCollider2D boxCollider;
 
     [Header("Settings")]
     public int spriteIndex;
@@ -34,6 +37,7 @@ public class AtlasRenderer : MonoBehaviour
     public string text;
     public float kerning = 1.1f;
     public float spacing = 1;
+
 
     [Header("Generated")]
     public Camera cam;

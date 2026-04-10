@@ -188,7 +188,6 @@ public class AtlasTripEditor : EditorWindow
                 zone.ticketCheckStart = Mathf.Clamp(zone.ticketCheckStart, 0, zone.ticketCheckEnd - 1);
                 zone.ticketCheckEnd = Mathf.Clamp(zone.ticketCheckEnd, zone.ticketCheckStart + 1, trip.totalTicketsToCheck);
             }
-
         }
         float ticketsCheckedGraphPosX = graphRect.xMin + ((trip.ticketsCheckedSinceStart / trip.totalTicketsToCheck) * graphRect.width);
         Vector2 ticketsCheckedTop = new Vector2(ticketsCheckedGraphPosX, graphRect.yMin);

@@ -300,7 +300,7 @@ MonoBehaviour:
     worldSize: {x: 5.1, y: 2.2055554, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 104.66622, y: 0.58026683, z: 15.1}
+    m_Center: {x: -224.03378, y: 0.58026683, z: 15.1}
     m_Extent: {x: 0.5194444, y: 0.51944447, z: 0.1}
   worldPivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
@@ -446,13 +446,6 @@ MonoBehaviour:
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   nextStationSignRenderer: {fileID: 674512618818928536}
-  wheelRenderers:
-  - {fileID: 2196143683175361986}
-  - {fileID: 4543875105424071501}
-  - {fileID: 3932938843677928615}
-  - {fileID: 3114277436377056333}
-  - {fileID: 1556630721882284644}
-  - {fileID: 181361394174892427}
   exteriorRenderers:
   - {fileID: 7883198929589499098}
   - {fileID: 2285017976270451763}
@@ -504,7 +497,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5532670627397845320}
-  - component: {fileID: 1556630721882284644}
+  - component: {fileID: 3928911738451644920}
   m_Layer: 0
   m_Name: Wheel (4)
   m_TagString: Untagged
@@ -527,7 +520,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1556630721882284644
+--- !u!114 &3928911738451644920
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -541,7 +534,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    material: {fileID: 2100000, guid: 54c752fefc93d054f8247ed49e38b383, type: 2}
     depthOrder: 6
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
@@ -596,7 +589,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8615908251815646399}
-  - component: {fileID: 4543875105424071501}
+  - component: {fileID: 4073060342557794204}
   m_Layer: 0
   m_Name: Wheel (1)
   m_TagString: Untagged
@@ -619,7 +612,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4543875105424071501
+--- !u!114 &4073060342557794204
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -633,7 +626,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    material: {fileID: 2100000, guid: 54c752fefc93d054f8247ed49e38b383, type: 2}
     depthOrder: 6
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
@@ -688,7 +681,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8962344830599312217}
-  - component: {fileID: 3932938843677928615}
+  - component: {fileID: 6524936833096192706}
   m_Layer: 0
   m_Name: Wheel (2)
   m_TagString: Untagged
@@ -711,7 +704,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3932938843677928615
+--- !u!114 &6524936833096192706
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -725,7 +718,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    material: {fileID: 2100000, guid: 54c752fefc93d054f8247ed49e38b383, type: 2}
     depthOrder: 6
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
@@ -964,7 +957,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3248802059132394449}
-  - component: {fileID: 181361394174892427}
+  - component: {fileID: 7185645043188479603}
   m_Layer: 0
   m_Name: Wheel (5)
   m_TagString: Untagged
@@ -987,7 +980,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &181361394174892427
+--- !u!114 &7185645043188479603
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1001,7 +994,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    material: {fileID: 2100000, guid: 54c752fefc93d054f8247ed49e38b383, type: 2}
     depthOrder: 6
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
@@ -1208,7 +1201,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 8067662884716964620}
-  - component: {fileID: 2196143683175361986}
+  - component: {fileID: 5198302266055975973}
   m_Layer: 0
   m_Name: Wheel
   m_TagString: Untagged
@@ -1231,7 +1224,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &2196143683175361986
+--- !u!114 &5198302266055975973
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1245,7 +1238,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    material: {fileID: 2100000, guid: 54c752fefc93d054f8247ed49e38b383, type: 2}
     depthOrder: 6
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
@@ -1813,7 +1806,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3820570403346329793}
-  - component: {fileID: 3114277436377056333}
+  - component: {fileID: 3266328935857906005}
   m_Layer: 0
   m_Name: Wheel (3)
   m_TagString: Untagged
@@ -1836,7 +1829,7 @@ Transform:
   m_Children: []
   m_Father: {fileID: 4431371205824164946}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3114277436377056333
+--- !u!114 &3266328935857906005
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1850,7 +1843,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    material: {fileID: 2100000, guid: 54c752fefc93d054f8247ed49e38b383, type: 2}
     depthOrder: 6
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
@@ -2040,7 +2033,7 @@ MonoBehaviour:
     worldSize: {x: 5.1, y: 2.2055554, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 108.85488, y: 0.58026683, z: 15.1}
+    m_Center: {x: -219.84511, y: 0.58026683, z: 15.1}
     m_Extent: {x: 1.3111112, y: 0.51944447, z: 0.1}
   worldPivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
@@ -2380,7 +2373,7 @@ MonoBehaviour:
     worldSize: {x: 5.1, y: 2.2055554, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 118.75722, y: 0.58026683, z: 15.1}
+    m_Center: {x: -209.94278, y: 0.58026683, z: 15.1}
     m_Extent: {x: 0.5194444, y: 0.51944447, z: 0.1}
   worldPivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
@@ -2717,7 +2710,7 @@ MonoBehaviour:
     worldSize: {x: 5.1, y: 2.2055554, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 114.495026, y: 0.58026683, z: 15.1}
+    m_Center: {x: -214.20497, y: 0.58026683, z: 15.1}
     m_Extent: {x: 1.3111112, y: 0.51944447, z: 0.1}
   worldPivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
