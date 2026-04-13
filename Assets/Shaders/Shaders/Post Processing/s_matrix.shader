@@ -19,6 +19,7 @@ Shader "Custom/s_matrix"
 		float3 _Color1;
 		float3 _Color2;
 
+		float _MetersTravelled;
 
 		half4 frag(Varyings input) : SV_TARGET
 		{
@@ -33,7 +34,6 @@ Shader "Custom/s_matrix"
 
 			float3 worldPos = ComputeWorldSpacePosition(input.texcoord, depth, UNITY_MATRIX_I_VP);
 			
-			float linearDepth = pow(saturate((worldPos.z - _PlayerDepth) / 128), 1); // 1 is the depth of the player
 			float2 aspect = float2(_ScreenParams.x / _ScreenParams.y, 1);
 
 			float2 centerUV = input.texcoord * aspect - 0.5 * aspect;
@@ -56,11 +56,21 @@ Shader "Custom/s_matrix"
 
 			float sunRays = round(saturate(rays - noise + sun + saturate(sun)));// * skyMask;
 			//return half4(sunRays.xxx, 1);
-			float skyMask = 1 - step(worldPos.z, 64);
+			float skyMask = 1 - step(worldPos.z, 128);
 			sunRays *= skyMask;
 			
+			
+			half4 fogNoiseTex = SAMPLE_TEXTURE2D_X(_NoiseTexture, sampler_NoiseTexture, centerUV + (_MetersTravelled * 0.002) + (_Time.y * 0.002) );
+			float fogNoise = fogNoiseTex.z * 2 - 1;
+			float linearDepth = worldPos.z / 128;
 
-			float3 finalColor = (blit.rgb * (1 - skyMask)) + sunRays + (linearDepth * 0.1);
+
+			float skyDepth = pow((input.texcoord.y) + (fogNoise * 0.1), 2);
+			float totalDepth = linearDepth * skyDepth;
+			totalDepth = worldPos.z < 48 ? 0 : totalDepth;
+			totalDepth = BayerMatrix(totalDepth, 0, input.texcoord * _ScreenParams.xy);
+			//return totalDepth.xxxx;
+			float3 finalColor = (blit.rgb) + sunRays + totalDepth;
 			finalColor = lerp(_Color1, _Color2, finalColor);
 			return half4(finalColor, 1);
 		}

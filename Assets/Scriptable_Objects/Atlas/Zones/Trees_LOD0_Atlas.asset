@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Trees_LOD0_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
   texture: {fileID: 2800000, guid: 204044b0304388f49aa58a12e321c10f, type: 3}
+  spriteConnectColor:
+    serializedVersion: 2
+    rgba: 0
   entityMotionType: 0
   pivotColor:
     serializedVersion: 2
@@ -20,7 +23,7 @@ MonoBehaviour:
   sliceColor:
     serializedVersion: 2
     rgba: 4294901760
-  zoneType: 1
+  zoneType: 0
   motionSprites: []
   simpleSprites:
   - uvSizeAndPos: {x: 0.25976562, y: 0.2211914, z: 0, w: 0.7783203}
@@ -44,17 +47,5 @@ MonoBehaviour:
     worldSize: {x: 3.4222221, y: 2.8944445, z: 1}
     index: 4
   slicedSprites: []
-  zoneUVSizeAndPosArray:
-  - {x: 0.25976562, y: 0.2211914, z: 0, w: 0.7783203}
-  - {x: 0.23876953, y: 0.20019531, z: 0.26513672, w: 0.79785156}
-  - {x: 0.2163086, y: 0.23242188, z: 0.5136719, w: 0.7675781}
-  - {x: 0.16699219, y: 0.18603516, z: 0.7558594, w: 0.80566406}
-  - {x: 0.30078125, y: 0.25439453, z: 0, w: 0.49951172}
-  zoneWorldSizesArray:
-  - {x: 2.9555554, y: 2.5166667}
-  - {x: 2.7166667, y: 2.2777777}
-  - {x: 2.461111, y: 2.6444445}
-  - {x: 1.9, y: 2.1166666}
-  - {x: 3.4222221, y: 2.8944445}
   clips: []
   markers: []

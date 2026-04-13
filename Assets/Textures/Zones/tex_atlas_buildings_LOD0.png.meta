@@ -1,22 +1,31 @@
 fileFormatVersion: 2
-guid: f8f8c2aa1994cc94684f5f37f57fd629
+guid: 313de085264ddc848953f5be439b2d09
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -2751328844571418994
-    second: tex_atlas_trees_LOD1_0
+      213: 2491553515046042355
+    second: tex_atlas_buildings_LOD0_0
   - first:
-      213: 6011790598028670311
-    second: tex_atlas_trees_LOD1_1
+      213: 1909296316264890868
+    second: tex_atlas_buildings_LOD0_1
   - first:
-      213: 7917579798057203150
-    second: tex_atlas_trees_LOD1_2
+      213: -5251262046700097254
+    second: tex_atlas_buildings_LOD0_2
   - first:
-      213: -3768897461719499294
-    second: tex_atlas_trees_LOD1_3
+      213: -1766816161983541037
+    second: tex_atlas_buildings_LOD0_3
   - first:
-      213: -8208766724982938440
-    second: tex_atlas_trees_LOD1_4
+      213: -1361306380541275532
+    second: tex_atlas_buildings_LOD0_4
+  - first:
+      213: -8652571274050543228
+    second: tex_atlas_buildings_LOD0_5
+  - first:
+      213: 4736828071819089212
+    second: tex_atlas_buildings_LOD0_6
+  - first:
+      213: 3743438052977513878
+    second: tex_atlas_buildings_LOD0_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -65,7 +74,7 @@ TextureImporter:
   spritePivot: {x: 0.5, y: 0.5}
   spritePixelsToUnits: 100
   spriteBorder: {x: 0, y: 0, z: 0, w: 0}
-  spriteGenerateFallbackPhysicsShape: 0
+  spriteGenerateFallbackPhysicsShape: 1
   alphaUsage: 1
   alphaIsTransparency: 1
   spriteTessellationDetail: -1
@@ -125,14 +134,14 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: tex_atlas_trees_LOD1_0
+      name: tex_atlas_buildings_LOD0_0
       rect:
         serializedVersion: 2
-        x: 13
-        y: 3451
-        width: 562
-        height: 640
-      alignment: 6
+        x: 0
+        y: 3610
+        width: 578
+        height: 425
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -140,21 +149,21 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: e8ed8073ef051d9d0800000000000000
-      internalID: -2751328844571418994
+      spriteID: 3faf13b98b6c39220800000000000000
+      internalID: 2491553515046042355
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tex_atlas_trees_LOD1_1
+      name: tex_atlas_buildings_LOD0_1
       rect:
         serializedVersion: 2
-        x: 751
-        y: 3386
-        width: 796
-        height: 679
-      alignment: 6
+        x: 591
+        y: 3614
+        width: 501
+        height: 273
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -162,21 +171,21 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 765388372bb2e6350800000000000000
-      internalID: 6011790598028670311
+      spriteID: 4f14eed32ee2f7a10800000000000000
+      internalID: 1909296316264890868
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tex_atlas_trees_LOD1_2
+      name: tex_atlas_buildings_LOD0_2
       rect:
         serializedVersion: 2
-        x: 9
-        y: 2683
-        width: 666
-        height: 726
-      alignment: 6
+        x: 1136
+        y: 3619
+        width: 701
+        height: 477
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -184,21 +193,21 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: ec5320090e4e0ed60800000000000000
-      internalID: 7917579798057203150
+      spriteID: a1133fbadf4cf17b0800000000000000
+      internalID: -5251262046700097254
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tex_atlas_trees_LOD1_3
+      name: tex_atlas_buildings_LOD0_3
       rect:
         serializedVersion: 2
-        x: 757
-        y: 2619
-        width: 850
-        height: 728
-      alignment: 6
+        x: 1856
+        y: 3619
+        width: 698
+        height: 120
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -206,21 +215,21 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 2ed765f1abf22bbc0800000000000000
-      internalID: -3768897461719499294
+      spriteID: 3d05d89cf020b77e0800000000000000
+      internalID: -1766816161983541037
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tex_atlas_trees_LOD1_4
+      name: tex_atlas_buildings_LOD0_4
       rect:
         serializedVersion: 2
-        x: 23
-        y: 2021
-        width: 742
-        height: 628
-      alignment: 6
+        x: 2573
+        y: 3619
+        width: 710
+        height: 295
+      alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
       customData: 
@@ -228,8 +237,74 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 8b46851d72a941e80800000000000000
-      internalID: -8208766724982938440
+      spriteID: 4725d553f0bab1de0800000000000000
+      internalID: -1361306380541275532
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_buildings_LOD0_5
+      rect:
+        serializedVersion: 2
+        x: 3303
+        y: 3618
+        width: 382
+        height: 392
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 481e7700544ebe780800000000000000
+      internalID: -8652571274050543228
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_buildings_LOD0_6
+      rect:
+        serializedVersion: 2
+        x: 3701
+        y: 3623
+        width: 351
+        height: 223
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: c3510e6d8089cb140800000000000000
+      internalID: 4736828071819089212
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_buildings_LOD0_7
+      rect:
+        serializedVersion: 2
+        x: 8
+        y: 3225
+        width: 357
+        height: 378
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 695976a531d53f330800000000000000
+      internalID: 3743438052977513878
       vertices: []
       indices: 
       edges: []
@@ -238,7 +313,7 @@ TextureImporter:
     customData: 
     physicsShape: []
     bones: []
-    spriteID: 02faea753d37fd04aa949633778a93f2
+    spriteID: 
     internalID: 0
     vertices: []
     indices: 
@@ -246,15 +321,16 @@ TextureImporter:
     weights: []
     secondaryTextures: []
     spriteCustomMetadata:
-      entries:
-      - key: SpriteEditor.SliceSettings
-        value: '{"sliceOnImport":false,"gridCellCount":{"x":1.0,"y":1.0},"gridSpriteSize":{"x":64.0,"y":64.0},"gridSpriteOffset":{"x":0.0,"y":0.0},"gridSpritePadding":{"x":0.0,"y":0.0},"pivot":{"x":0.0,"y":0.0},"pivotPixels":{"x":0.0,"y":0.0},"autoSlicingMethod":0,"spriteAlignment":6,"pivotUnitMode":0,"slicingType":0,"keepEmptyRects":false,"isAlternate":false}'
+      entries: []
     nameFileIdTable:
-      tex_atlas_trees_LOD1_0: -2751328844571418994
-      tex_atlas_trees_LOD1_1: 6011790598028670311
-      tex_atlas_trees_LOD1_2: 7917579798057203150
-      tex_atlas_trees_LOD1_3: -3768897461719499294
-      tex_atlas_trees_LOD1_4: -8208766724982938440
+      tex_atlas_buildings_LOD0_0: 2491553515046042355
+      tex_atlas_buildings_LOD0_1: 1909296316264890868
+      tex_atlas_buildings_LOD0_2: -5251262046700097254
+      tex_atlas_buildings_LOD0_3: -1766816161983541037
+      tex_atlas_buildings_LOD0_4: -1361306380541275532
+      tex_atlas_buildings_LOD0_5: -8652571274050543228
+      tex_atlas_buildings_LOD0_6: 4736828071819089212
+      tex_atlas_buildings_LOD0_7: 3743438052977513878
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

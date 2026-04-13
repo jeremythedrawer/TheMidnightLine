@@ -13,6 +13,9 @@ MonoBehaviour:
   m_Name: Houses_LOD0_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
   texture: {fileID: 2800000, guid: 098a917c406fdd644899d5d0ee78e85b, type: 3}
+  spriteConnectColor:
+    serializedVersion: 2
+    rgba: 0
   entityMotionType: 0
   pivotColor:
     serializedVersion: 2
@@ -20,7 +23,7 @@ MonoBehaviour:
   sliceColor:
     serializedVersion: 2
     rgba: 4294901760
-  zoneType: 3
+  zoneType: 0
   motionSprites: []
   simpleSprites:
   - uvSizeAndPos: {x: 0.22265625, y: 0.20166016, z: 0.001953125, w: 0.79589844}
@@ -56,23 +59,5 @@ MonoBehaviour:
     worldSize: {x: 3.2, y: 2.511111, z: 1}
     index: 7
   slicedSprites: []
-  zoneUVSizeAndPosArray:
-  - {x: 0.22265625, y: 0.20166016, z: 0.001953125, w: 0.79589844}
-  - {x: 0.30908203, y: 0.28222656, z: 0.22607422, w: 0.7163086}
-  - {x: 0.34179688, y: 0.23486328, z: 0.5419922, w: 0.76123047}
-  - {x: 0.40966797, y: 0.28076172, z: 0.0034179688, w: 0.43310547}
-  - {x: 0.27001953, y: 0.2680664, z: 0.41357422, w: 0.43164062}
-  - {x: 0.30078125, y: 0.32714844, z: 0.6923828, w: 0.42822266}
-  - {x: 0.43408203, y: 0.28271484, z: 0.020019531, w: 0.14550781}
-  - {x: 0.28125, y: 0.22070312, z: 0.46777344, w: 0.14501953}
-  zoneWorldSizesArray:
-  - {x: 2.5333333, y: 2.2944446}
-  - {x: 3.5166667, y: 3.211111}
-  - {x: 3.8888888, y: 2.6722221}
-  - {x: 4.661111, y: 3.1944444}
-  - {x: 3.0722222, y: 3.05}
-  - {x: 3.4222221, y: 3.7222223}
-  - {x: 4.938889, y: 3.2166667}
-  - {x: 3.2, y: 2.511111}
   clips: []
   markers: []

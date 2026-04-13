@@ -30,7 +30,7 @@ public class ZoneMaster : MonoBehaviour
     }
     private void Update()
     {
-        spawner.atlasCompute.SetFloat("_CamVelocity", (camStats.curVelocity.x * Time.deltaTime));
+        spawner.atlasCompute.SetFloat("_CamVelocity", (camStats.curVelocity.x));
 
         if (spyStats.onTrain)
         {

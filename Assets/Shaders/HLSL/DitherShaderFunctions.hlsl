@@ -62,7 +62,7 @@ float2 Rotate(float2 p, float angle)
 float BayerMatrix(float value, float bayerIndex, float2 pixelCoord)
 {
 
-    float bayerValues = GetBayer4(pixelCoord.x, pixelCoord.y);
+    float bayerValues = GetBayer8(pixelCoord.x, pixelCoord.y);
     
     return round(value + bayerValues + 0.01);
 }

@@ -23,20 +23,15 @@ Shader "Custom/s_zoneParticles"
             #pragma multi_compile_instancing
 
             StructuredBuffer<ZoneOutput> _Particles;
-            StructuredBuffer<float4> _UVSizeAndPos;
-            StructuredBuffer<float2> _WorldSize;
 
             TEXTURE2D(_Atlas);
             SAMPLER(sampler_Atlas);
-
-            CBUFFER_START(UnityPerMaterial)
-                int _SpriteCount;
-            CBUFFER_END
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
+                int particleID : TEXCOORD1;
             };
 
 
@@ -46,6 +41,12 @@ Shader "Custom/s_zoneParticles"
 
                 uint particleID = vertexID / 4;
                 ZoneOutput p = _Particles[particleID];
+
+
+                float2 pivot = p.worldPivotAndSize.xy;
+                float2 size = p.worldPivotAndSize.zw;
+                float2 scale = p.scale.xy;
+
                 uint cornerID = vertexID % 4;
                 float2 quadOffsets[4] = 
                 {
@@ -55,22 +56,35 @@ Shader "Custom/s_zoneParticles"
                     float2(1, 0)
                 };
 
+                float2 objPos = quadOffsets[cornerID];
 
-                int randMod = p.randID % _SpriteCount;
 
-                float4 uvSizeAndPos = _UVSizeAndPos[randMod];
+                objPos *= size * scale;
+                objPos += pivot;
 
-                float2 particleSize = _WorldSize[randMod];
-                float3 offset = float3(quadOffsets[cornerID] * particleSize, 0);
+                float3 worldPos = float3(p.position.xy + objPos, p.position.z);
 
-                o.positionHCS = TransformWorldToHClip(p.position + offset);
-                o.uv = quadOffsets[cornerID] * uvSizeAndPos.xy + uvSizeAndPos.zw;
+                o.positionHCS = TransformWorldToHClip(worldPos);
+                o.uv = quadOffsets[cornerID];
+                o.particleID = particleID;
                 return o;
             }
 
-            half4 frag(Varyings IN) : SV_Target
+            half4 frag(Varyings i) : SV_Target
             {
-                half4 color = SAMPLE_TEXTURE2D(_Atlas, sampler_Atlas, IN.uv);
+                ZoneOutput p = _Particles[i.particleID];
+
+                float2 scale  = p.scale.xy;
+                float2 uvSize = p.uvSizeAndPos.xy;
+                float2 uvPos = p.uvSizeAndPos.zw;
+
+                i.uv *= scale;
+                i.uv = frac(i.uv);
+                i.uv *= uvSize;
+                i.uv += uvPos;
+                
+                //return half4(i.uv, 0, 1);
+                half4 color = SAMPLE_TEXTURE2D(_Atlas, sampler_Atlas, i.uv);
                 if (color.a <= 0.5) discard;
                 return color;
             }

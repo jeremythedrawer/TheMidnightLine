@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using static Atlas;
 using static AtlasSpawn;
 public class AtlasTripEditor : EditorWindow
 {
@@ -139,7 +140,7 @@ public class AtlasTripEditor : EditorWindow
                 Color zoneColor = (selectedIndex_zoneSpawner == i && selectedIndex_zone == j) ? Color.hotPink : Color.lightSeaGreen;
                 Handles.DrawSolidRectangleWithOutline(zoneRect, zoneColor, Color.black);
                 Rect zoneLabelRect = new Rect(zoneRect.xMin, zoneRect.yMin, 200, 20);
-                GUI.Label(zoneLabelRect, zone.atlas.zoneType.ToString(), stationLabelStyle);
+                GUI.Label(zoneLabelRect, zone.atlas.ToString(), stationLabelStyle);
 
 
                 if (e.type == EventType.MouseDown && zoneRect.Contains(e.mousePosition))
@@ -171,12 +172,82 @@ public class AtlasTripEditor : EditorWindow
 
                 if (e.type == EventType.MouseUp)
                 {
-                    zone.zoneUVSizeAndPosArray = new Vector4[zone.atlas.simpleSprites.Length];
-                    zone.zoneWorldSizesArray = new Vector2[zone.atlas.simpleSprites.Length];
-                    for (int k = 0; k < zone.atlas.simpleSprites.Length; k++)
+
+                    
+                    switch(zone.atlas.zoneType)
                     {
-                        zone.zoneUVSizeAndPosArray[k] = zone.atlas.simpleSprites[k].uvSizeAndPos;
-                        zone.zoneWorldSizesArray[k] = zone.atlas.simpleSprites[k].worldSize;
+                        case ZoneSpriteType.Simple:
+                        {
+                            zone.zoneUVSizeAndPosArray = new Vector4[zone.atlas.simpleSprites.Length];
+                            zone.zoneWorldPivotsAndSizesArray = new Vector4[zone.atlas.simpleSprites.Length];
+                            for (int k = 0; k < zone.atlas.simpleSprites.Length; k++)
+                            {
+                                SimpleSprite sprite = zone.atlas.simpleSprites[k];
+                                zone.zoneUVSizeAndPosArray[k] = sprite.uvSizeAndPos;
+
+                                Vector4 pivotAndSize = new Vector4(0, 0, sprite.worldSize.x, sprite.worldSize.y);
+                                zone.zoneWorldPivotsAndSizesArray[k] = pivotAndSize;
+                            }
+                        }
+                        break;
+
+                        case ZoneSpriteType.Sliced:
+                        {
+                            int sliceArraySize = zone.atlas.slicedSprites.Length * 9;
+                            zone.zoneUVSizeAndPosArray = new Vector4[sliceArraySize];
+                            zone.zoneWorldPivotsAndSizesArray = new Vector4[sliceArraySize];
+                            zone.zoneSliceOffsetsAndSizes = new Vector4[sliceArraySize];
+                            int index = 0;
+                            for (int k = 0; k < zone.atlas.slicedSprites.Length; k++)
+                            {
+                                SliceSprite slicedSprite = zone.atlas.slicedSprites[k];
+
+                                float centerWorldSliceWidth = slicedSprite.sprite.worldSize.x - slicedSprite.worldSlices.x - slicedSprite.worldSlices.y;
+                                float centerWorldSliceHeight = slicedSprite.sprite.worldSize.y - slicedSprite.worldSlices.z - slicedSprite.worldSlices.w;
+
+                                float rightColPos = slicedSprite.worldSlices.x + centerWorldSliceWidth;
+                                float topRowPos = slicedSprite.worldSlices.z + centerWorldSliceHeight;
+
+                                Vector4[] worldPivotsAndSizes = new Vector4[]
+                                {
+                                    new Vector4(0, 0, slicedSprite.worldSlices.x, slicedSprite.worldSlices.z),
+                                    new Vector4(-slicedSprite.worldSlices.x, 0, centerWorldSliceWidth, slicedSprite.worldSlices.z),
+                                    new Vector4(-slicedSprite.worldSlices.x, 0, slicedSprite.worldSlices.y, slicedSprite.worldSlices.z),
+
+                                    new Vector4(0, -slicedSprite.worldSlices.z, slicedSprite.worldSlices.x, centerWorldSliceHeight),
+                                    new Vector4(-slicedSprite.worldSlices.x, -slicedSprite.worldSlices.z, centerWorldSliceWidth, centerWorldSliceHeight),
+                                    new Vector4(-slicedSprite.worldSlices.x, -slicedSprite.worldSlices.z, slicedSprite.worldSlices.y, centerWorldSliceHeight),
+
+                                    new Vector4(0, -slicedSprite.worldSlices.z, slicedSprite.worldSlices.x, slicedSprite.worldSlices.w),
+                                    new Vector4(-slicedSprite.worldSlices.x, -slicedSprite.worldSlices.z, centerWorldSliceWidth, slicedSprite.worldSlices.w),
+                                    new Vector4(-slicedSprite.worldSlices.x, -slicedSprite.worldSlices.z, slicedSprite.worldSlices.y, slicedSprite.worldSlices.w),
+                                };
+                                Vector4[] sliceOffsetsAndSizes = new Vector4[]
+                                {
+                                    new Vector4(0, 0, 0, 0),
+                                    new Vector4(0, 0, centerWorldSliceWidth, 0),
+                                    new Vector4(centerWorldSliceWidth, 0, 0, 0),
+                                    
+                                    new Vector4(0, 0, 0, centerWorldSliceHeight),
+                                    new Vector4(0, 0, centerWorldSliceWidth, centerWorldSliceHeight),
+                                    new Vector4(centerWorldSliceWidth, 0, 0, centerWorldSliceHeight),
+
+                                    new Vector4(0, centerWorldSliceHeight, 0, 0),
+                                    new Vector4(0, centerWorldSliceHeight, centerWorldSliceWidth, 0),
+                                    new Vector4(centerWorldSliceWidth, centerWorldSliceHeight, 0, 0)
+
+                                };
+
+                                for (int l = 0; l < 9; l++)
+                                {
+                                    zone.zoneUVSizeAndPosArray[index] = zone.atlas.slicedSprites[k].uvSizeAndPos[l];
+                                    zone.zoneWorldPivotsAndSizesArray[index] = worldPivotsAndSizes[l];
+                                    zone.zoneSliceOffsetsAndSizes[index] = sliceOffsetsAndSizes[l];
+                                    index++;
+                                }
+                            }
+                        }
+                        break;
                     }
 
                     if (selectedIndex_zone == i)

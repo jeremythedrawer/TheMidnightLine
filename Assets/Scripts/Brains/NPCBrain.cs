@@ -670,11 +670,6 @@ public class NPCBrain : MonoBehaviour
 
         return tcsGetToSlideDoor.Task;
     }
-    private void FindSlideDoor()
-    {
-
-
-    }
     private void QueueForChair()
     {
         NPCManager.AddToSeatQueue(this);

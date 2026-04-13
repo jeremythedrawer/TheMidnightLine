@@ -1,6 +1,6 @@
 using System;
+using System.Runtime.InteropServices;
 using UnityEngine;
-using static Atlas;
 public static class AtlasSpawn
 {
     public const int ZONE_SPAWNER_COUNT = 8;
@@ -11,26 +11,25 @@ public static class AtlasSpawn
     public const int BACK_PARTICLE_COUNT = 128;
 
     public static readonly int MAX_VERTEX_COUNT = (FORE_PARTICLE_COUNT + MID_PARTICLE_COUNT + BACK_PARTICLE_COUNT) * 4;
-    public static readonly int ZONE_STRIDE = FLOAT3_SIZE + (FLOAT_SIZE * 2) + (INT_SIZE * 2);
+    public static readonly int ZONE_OUTPUT_STRIDE = Marshal.SizeOf(typeof(ZoneOutput));
+    public static readonly int ZONE_INPUT_STRIDE = Marshal.SizeOf(typeof(ZoneInput));
 
     //TODO Need to set buffer strings to ids if this buffer idea works
-    public static string[] BUFFER_STRINGS = { "_Foreground0", "_Middleground0", "_Middleground1", "_Middleground2", "_Middleground3", "_Background0", "_Background1", "_Background2" };
-    public static readonly string[] INIT_KERNEL_STRINGS = { "CSForeground0_Init", "CSMiddleground0_Init", "CSMiddleground1_Init", "CSMiddleground2_Init", "CSMiddleground3_Init", "CSBackground0_Init", "CSBackground1_Init", "CSBackground2_Init" };
-    public static readonly string[] UPDATE_KERNEL_STRINGS = { "CSForeground0_Update", "CSMiddleground0_Update", "CSMiddleground1_Update", "CSMiddleground2_Update", "CSMiddleground3_Update", "CSBackground0_Update", "CSBackground1_Update", "CSBackground2_Update" };
-    public static readonly string[] ACTIVE_STRINGS = { "_F0Active", "_M0Active", "_M1Active", "_M2Active", "_M3Active", "_B0Active", "_B1Active", "_B2Active" };
-    public static readonly string[] DEAD_COUNT_STRINGS = { "_F0DeadCount", "_M0DeadCount", "_M1DeadCount", "_M2DeadCount", "_M3DeadCount", "_B0DeadCount", "_B1DeadCount", "_B2DeadCount" };
-   
+    public static string[] ZONE_STRINGS = { "_F0", "_M0", "_M1", "_M2", "_M3", "_B0", "_B1", "_B2" };
+    public static readonly string ACTIVE_STRING = "Active";
+    public static readonly string DEAD_COUNT_STRING = "DeadCount";
+    public static readonly string OUTPUT_STRING = "Output";
+    public static readonly string INPUT_STRING = "Input";
+    public static readonly string SPRITE_COUNT_STRING = "SpriteCount";
+    public static readonly string INIT_STRING = "Init";
+    public static readonly string INIT_SLICE_STRING = "InitSlice";
+    public static readonly string UPDATE_STRING = "Update";
     public static readonly int[] PARTICLE_COUNTS = { FORE_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, BACK_PARTICLE_COUNT, BACK_PARTICLE_COUNT, BACK_PARTICLE_COUNT };
 
-    public enum ZoneParticleType
+    public enum ZoneSpriteType
     {
-        None,
-        TreesLOD0,
-        TreesLOD1,
-        HousesLOD0,
-        HousesLOD1,
-        ApartmentLOD0,
-        ApartmentLOD1,
+        Simple,
+        Sliced,
     }
     public enum ZoneArea
     {
@@ -43,6 +42,26 @@ public static class AtlasSpawn
         Background1,
         Background2,
     }
+
+    struct ZoneOutput
+    {
+        Vector4 uvSizeAndPos;
+        Vector4 position;
+        Vector4 scale;
+        Vector4 worldPivotAndSize;
+        float parallaxFactor;
+        float rand01;
+        uint alive;
+        uint randID;
+    };
+
+    [Serializable] public struct ZoneInput
+    {
+        public Vector4 uvSizeAndPos;
+        public Vector4 worldSizeAndPivot;
+        public Vector4 sliceOffsetAndSize;
+    };
+
     [Serializable] public struct Zone
     {
         public AtlasSO atlas;
@@ -50,8 +69,9 @@ public static class AtlasSpawn
         public int ticketCheckEnd;
 
         public Vector4[] zoneUVSizeAndPosArray;
-        public Vector2[] zoneWorldSizesArray;
-}
+        public Vector4[] zoneWorldPivotsAndSizesArray;
+        public Vector4[] zoneSliceOffsetsAndSizes;
+    }
     [Serializable] public class ZoneSpawnerData
     {
         public Zone[] zones;
@@ -62,6 +82,7 @@ public static class AtlasSpawn
         public int particleCount;
         public int computeGroupSize;
         public int kernelID_init;
+        public int kernelID_initSlice;
         public int kernelID_update;
         public bool active;
     }

@@ -2,11 +2,19 @@
 
 struct ZoneOutput
 {
-    float3 position;
+    float4 uvSizeAndPos;
+    float4 position;
+    float4 scale;
+    float4 worldPivotAndSize;
     float parallaxFactor;
     float rand01;
     uint alive;
     uint randID;
 };
 
-//NOTE: Adjust the stride in the particle buffer in Spawner if the struct has changed
+struct ZoneInput
+{
+    float4 uvSizeAndPos;
+    float4 worldPivotAndSize;
+    float4 sliceOffsetAndSize;
+};

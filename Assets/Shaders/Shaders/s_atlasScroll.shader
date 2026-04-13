@@ -47,7 +47,7 @@ Shader "Custom/s_atlasScroll"
                 AtlasSprite spriteData = _SpriteData[v.instanceID];
 
                 float3 position = spriteData.position;
-                
+                 
                 float2 pivot = spriteData.pivotAndSize.xy;
                 float2 size = spriteData.pivotAndSize.zw;
                 
