@@ -62,7 +62,13 @@ MonoBehaviour:
   totalBounds:
     m_Center: {x: 3.4188895, y: -10.733334, z: -2.5}
     m_Extent: {x: 6.2333336, y: 3.8222218, z: 2.6}
-  leftHandClip:
+  handFlipPage_clip:
+    clipName: 
+    keyFrames: []
+    clipType: 0
+    motionIndex: 0
+    time: 0
+  rotatePencil_clip:
     clipName: 
     keyFrames: []
     clipType: 0
@@ -75,6 +81,8 @@ MonoBehaviour:
   leftHandDepthBack: 0
   pageIndex: 0
   backPages: 0
+  flipToggle: 0
+  writeToggle: 0
   boundsOffset: {x: 7.8444443, y: 7.8255553}
 --- !u!1 &2467022903358664946
 GameObject:
@@ -161,6 +169,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 2
   prevSpriteIndexFlipV: 2
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -253,6 +262,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -345,6 +355,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -437,6 +448,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 1
   prevSpriteIndexFlipV: 1
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -525,7 +537,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2670676497328436670, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: uvSizeAndPosition.w
-      value: 0.11352539
+      value: 0.18383789
       objectReference: {fileID: 0}
     - target: {fileID: 2670676497328436670, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: uvSizeAndPosition.x
@@ -565,7 +577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2670676497328436670, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: sprite.uvSizeAndPos.w
-      value: 0.11352539
+      value: 0.18383789
       objectReference: {fileID: 0}
     - target: {fileID: 2670676497328436670, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: sprite.uvSizeAndPos.x
@@ -697,11 +709,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7459302900703187996, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 5.058889
+      value: 5.0533333
       objectReference: {fileID: 0}
     - target: {fileID: 7459302900703187996, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -8.071111
+      value: -8.065556
       objectReference: {fileID: 0}
     - target: {fileID: 7459302900703187996, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.z

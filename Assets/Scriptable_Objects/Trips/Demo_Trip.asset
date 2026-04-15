@@ -23,7 +23,7 @@ MonoBehaviour:
     active: 0
   - zones:
     - atlas: {fileID: 11400000, guid: b7293c5d7b7f8814a972cc266c414cf8, type: 2}
-      ticketCheckStart: 1
+      ticketCheckStart: 0
       ticketCheckEnd: 10
       zoneUVSizeAndPosArray:
       - {x: 0.22265625, y: 0.20166016, z: 0.001953125, w: 0.79589844}
@@ -45,15 +45,15 @@ MonoBehaviour:
       - {x: 0, y: 0, z: 3.2, w: 2.511111}
       zoneSliceOffsetsAndSizes: []
     area: 1
-    particleCount: 256
-    computeGroupSize: 4
+    particleCount: 128
+    computeGroupSize: 2
     kernelID_init: 1
     kernelID_initSlice: 9
     kernelID_update: 17
-    active: 0
+    active: 1
   - zones:
     - atlas: {fileID: 11400000, guid: 8fe34cef64df39f47ad5ef739cc24f29, type: 2}
-      ticketCheckStart: 1
+      ticketCheckStart: 0
       ticketCheckEnd: 13
       zoneUVSizeAndPosArray:
       - {x: 0.25976562, y: 0.2211914, z: 0, w: 0.7783203}
@@ -69,15 +69,15 @@ MonoBehaviour:
       - {x: 0, y: 0, z: 3.4222221, w: 2.8944445}
       zoneSliceOffsetsAndSizes: []
     area: 2
-    particleCount: 256
-    computeGroupSize: 4
+    particleCount: 128
+    computeGroupSize: 2
     kernelID_init: 2
     kernelID_initSlice: 10
     kernelID_update: 18
-    active: 0
+    active: 1
   - zones:
     - atlas: {fileID: 11400000, guid: f86ccfc280901114c9e722a148ac3810, type: 2}
-      ticketCheckStart: 8
+      ticketCheckStart: 1
       ticketCheckEnd: 14
       zoneUVSizeAndPosArray:
       - {x: 0.13769531, y: 0.3112793, z: 0.001953125, w: 0.68847656}
@@ -105,8 +105,8 @@ MonoBehaviour:
       - {x: 0, y: 0, z: 5.611111, w: 7.438889}
       zoneSliceOffsetsAndSizes: []
     area: 3
-    particleCount: 256
-    computeGroupSize: 4
+    particleCount: 128
+    computeGroupSize: 2
     kernelID_init: 3
     kernelID_initSlice: 11
     kernelID_update: 19
@@ -343,8 +343,8 @@ MonoBehaviour:
       - {x: 0, y: 0.9, z: 0.9, w: 0}
       - {x: 0.9, y: 0.9, z: 0, w: 0}
     area: 5
-    particleCount: 128
-    computeGroupSize: 2
+    particleCount: 256
+    computeGroupSize: 4
     kernelID_init: 5
     kernelID_initSlice: 13
     kernelID_update: 21
@@ -573,8 +573,8 @@ MonoBehaviour:
       - {x: 0, y: 0.9, z: 0.9, w: 0}
       - {x: 0.9, y: 0.9, z: 0, w: 0}
     area: 6
-    particleCount: 128
-    computeGroupSize: 2
+    particleCount: 256
+    computeGroupSize: 4
     kernelID_init: 6
     kernelID_initSlice: 14
     kernelID_update: 22
@@ -600,7 +600,7 @@ MonoBehaviour:
   - {fileID: 94976023300698573, guid: ff0a87f408df46b46bc2b001c88fee02, type: 3}
   minStationsTraitorsTravel: 2
   maxStationsTraitorsTravel: 4
-  curStation: {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
+  curStation: {fileID: 11400000, guid: 134e92c40424a324c80e62fb7525f100, type: 2}
   totalTicketsToCheck: 14
   ticketsCheckedSinceStart: 0
   ticketsCheckedSinceLastStation: 0

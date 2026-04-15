@@ -42,10 +42,9 @@ public class POVUI : MonoBehaviour
     public float naturalMoveClock;
     public Vector3 naturalMovePos;
 
-    public bool canExitTicket;
-
     public CancellationTokenSource ctsBackground;
-    public CancellationTokenSource ctsUIObject;
+    public CancellationTokenSource ctsNotepad;
+    public CancellationTokenSource ctsTicket;
     
     private void Start()
     {
@@ -108,11 +107,10 @@ public class POVUI : MonoBehaviour
             case State.Notepad:
             {
                 MoveBackground(backgroundActivePos);
-                
                 notepad.gameObject.SetActive(true);
                 notepad.enabled = true;
-                ctsUIObject?.Cancel();
                 InitNaturalPos(notepadActivePos);
+                ctsNotepad?.Cancel();
             }
             break;
             case State.Ticket:
@@ -120,11 +118,9 @@ public class POVUI : MonoBehaviour
                 MoveBackground(backgroundActivePos);
                 
                 ticket.gameObject.SetActive(true);
-                canExitTicket = false;
-                ctsUIObject?.Cancel();
                 InitNaturalPos(ticketActivePos);
-
                 ticket.SetText(spyStats.boardingStationName, spyStats.disembarkingStationName);
+                ctsTicket?.Cancel();
             }
             break;
             case State.Map:
@@ -134,7 +130,6 @@ public class POVUI : MonoBehaviour
             break;
             case State.None:
             {
-                
                 MoveBackground(backgroundInactivePos);
             }
             break;
@@ -148,24 +143,12 @@ public class POVUI : MonoBehaviour
             {
                 NaturalActiveMove(notepadActivePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * moveDamp);
-
-                if (playerInputs.notepad.x == 1)
-                {
-                    SetState(State.None);
-                }
             }
             break;
             case State.Ticket:
             {
                 NaturalActiveMove(ticketActivePos);
                 ticket.transform.localPosition = Vector3.Lerp(ticket.transform.localPosition, naturalMovePos, Time.deltaTime * moveDamp);
-
-                if (!playerInputs.ticket) canExitTicket = true;
-
-                if (playerInputs.ticket && canExitTicket)
-                {
-                    SetState(State.None);
-                }
             }
             break;
             case State.Map:
@@ -186,14 +169,13 @@ public class POVUI : MonoBehaviour
         {
             case State.Notepad:
             {
-
-                MoveCurrentUIObject(notepad.transform, notepadInactivePos);
+                MoveNotepad(notepadInactivePos);
                 notepad.enabled = false;
             }
             break;
             case State.Ticket:
             {
-                MoveCurrentUIObject(ticket.transform, ticketInactivePos);
+                MoveTicket(ticketInactivePos);
             }
             break;
             case State.Map:
@@ -230,38 +212,38 @@ public class POVUI : MonoBehaviour
         ctsBackground?.Cancel();
         ctsBackground = new CancellationTokenSource();
 
-        Moving(background.transform, ctsBackground, nextPos, backgroundMoveDamp).Forget();
+        Moving(background.transform, ctsBackground.Token, nextPos, backgroundMoveDamp).Forget();
     }
-    private void MoveCurrentUIObject(Transform uiObjectTransform, Vector3 nextPos)
+    private void MoveNotepad(Vector3 nextPos)
     {
-
-        ctsUIObject = new CancellationTokenSource();
-
-        Moving(uiObjectTransform, ctsUIObject, nextPos, moveDamp, resetPos: true).Forget();
+        ctsNotepad?.Cancel();
+        ctsNotepad = new CancellationTokenSource();
+        Moving(notepad.transform, ctsNotepad.Token, nextPos, moveDamp).Forget();
     }
-    private async UniTask Moving(Transform transform, CancellationTokenSource cts, Vector3 nextPos, float damp, bool resetPos = false)
+
+    private void MoveTicket(Vector3 nextPos)
+    {
+        ctsTicket?.Cancel();
+        ctsTicket = new CancellationTokenSource();
+        Moving(ticket.transform, ctsTicket.Token, nextPos, moveDamp).Forget();
+    }
+    private async UniTask Moving(Transform transform, CancellationToken token, Vector3 nextPos, float damp)
     {
         float elapsedTime = 0f;
-
+        transform.gameObject.SetActive(true);
         try
         {
-            transform.gameObject.SetActive(true);
             while (elapsedTime < transitionTime)
             {
                 transform.localPosition = Vector3.Lerp(transform.localPosition, nextPos, Time.deltaTime * damp);
                 elapsedTime += Time.deltaTime;
-                await UniTask.Yield(cts.Token);
+                await UniTask.Yield(token);
             }
             transform.localPosition = nextPos;
             if (curState == State.None) transform.gameObject.SetActive(false);
         }
         catch(OperationCanceledException)
         {
-            if (resetPos)
-            {
-                transform.localPosition = nextPos;
-                if (curState == State.None) transform.gameObject.SetActive(false);
-            }
         }
     }
 }

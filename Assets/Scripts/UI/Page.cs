@@ -1,77 +1,95 @@
+using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 using static Atlas;
 using static NPC;
 public class Page : MonoBehaviour
 {
+    const float WRITE_LETTER_TIME = 0.2f;
+    public TripSO trip;
     public NPCsDataSO npcData;
-    public AtlasRenderer paperRenderer;
+    public AtlasRenderer paper_renderer;
 
-    public AtlasRenderer behavioursRenderer0;
-    public AtlasRenderer behaviourRenderer1;
-    public AtlasRenderer nameRenderer;
-    public AtlasRenderer appearenceRenderer;
-    public AtlasRenderer departureStationRenderer;
+    public AtlasRenderer behaviour0_renderer;
+    public AtlasRenderer behaviour1_renderer;
+    public AtlasRenderer name_renderer;
+    public AtlasRenderer disembarkingStation_renderer;
     
-    public AtlasRenderer mugshotRenderer;
+    public AtlasRenderer mugshot_renderer;
 
     [Header("Generated")]
     public AtlasClip paperClip;
     public Behaviours behaviours0;
     public Behaviours behaviours1;
-    public Appearance appearance;
-    public int departureStationIndex;
+    public int disembarkingStationIndex;
 
     public void Init(NPCProfile traitorProfile)
     {
-        paperClip = paperRenderer.atlas.clipDict[(int)NotepadMotion.Page];
+        paperClip = paper_renderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
 
         behaviours0 = GetBehaviourAtIndex(traitorProfile.behaviours, 0);
         behaviours1 = GetBehaviourAtIndex(traitorProfile.behaviours, 1);
-        int appearencesCount = GetFlagAmount((int)traitorProfile.appearence);
-        int randAppearenceIndex = UnityEngine.Random.Range(0, appearencesCount);
-        appearance = GetAppearanceAtIndex(traitorProfile.appearence, randAppearenceIndex);
 
-        nameRenderer.SetText(traitorProfile.fullName);
-        behavioursRenderer0.SetText(npcData.behaviourDescDict[behaviours0]);
-        behaviourRenderer1.SetText(npcData.behaviourDescDict[behaviours1]);
-        appearenceRenderer.SetText(npcData.appearanceDescDict[appearance]);
-        mugshotRenderer.UpdateSpriteInputs(ref mugshotRenderer.atlas.simpleSprites[traitorProfile.npcPrefabIndex]);
+        name_renderer.SetText(traitorProfile.fullName);
+        behaviour0_renderer.SetText(npcData.behaviourDescDict[behaviours0]);
+        behaviour1_renderer.SetText(npcData.behaviourDescDict[behaviours1]);
+
+        mugshot_renderer.UpdateSpriteInputs(ref mugshot_renderer.atlas.simpleSprites[traitorProfile.coveredMugshotIndex]);
     }
     public void PlayPaperClip()
     {
-        paperRenderer.PlayClipOneShot(paperClip);
+        paper_renderer.PlayClipOneShot(paperClip);
     }
     public void PlayPaperClipReverse()
     {
-        paperRenderer.PlayClipOneShotReverse(paperClip);
+        paper_renderer.PlayClipOneShotReverse(paperClip);
     }
     public void TogglePageContentBottomHalf(bool toggle)
     {
-        behavioursRenderer0.enabled = toggle;
-        behaviourRenderer1.enabled = toggle;
-        appearenceRenderer.enabled = toggle;
-        departureStationRenderer.enabled = toggle;
+        behaviour0_renderer.enabled = toggle;
+        behaviour1_renderer.enabled = toggle;
+        disembarkingStation_renderer.enabled = toggle;
     }
     public void TogglePageContentTopHalf(bool toggle)
     {
-        nameRenderer.enabled = toggle;
-        mugshotRenderer.enabled = toggle;
+        name_renderer.enabled = toggle;
+        mugshot_renderer.enabled = toggle;
     }
     public void UpdatePageDepth(int depth)
     {
-        paperRenderer.UpdateDepthRealtime(depth);
+        paper_renderer.UpdateDepthRealtime(depth);
         int contentDepth = depth - 1;
-        behavioursRenderer0.UpdateDepthRealtime(contentDepth);
-        behaviourRenderer1.UpdateDepthRealtime(contentDepth);
-        appearenceRenderer.UpdateDepthRealtime(contentDepth);
-        departureStationRenderer.UpdateDepthRealtime(contentDepth);
-        nameRenderer.UpdateDepthRealtime(contentDepth);
-        mugshotRenderer.UpdateDepthRealtime(contentDepth);
+        behaviour0_renderer.UpdateDepthRealtime(contentDepth);
+        behaviour1_renderer.UpdateDepthRealtime(contentDepth);
+        disembarkingStation_renderer.UpdateDepthRealtime(contentDepth);
+        name_renderer.UpdateDepthRealtime(contentDepth);
+        mugshot_renderer.UpdateDepthRealtime(contentDepth);
     }
     public void TogglePageRenderer(bool toggle)
     {
-        paperRenderer.enabled = toggle;
+        paper_renderer.enabled = toggle;
+    }
+    public void SetDisembarkingStationText(int chosenStationIndex)
+    {
+        disembarkingStationIndex = chosenStationIndex;
+        string disembarkingStationName = trip.stationsDataArray[disembarkingStationIndex].stationName;
+        WriteStationName(disembarkingStationName).Forget();
+    }
+
+    private async UniTask WriteStationName(string stationName)
+    {
+        int stationNameLetterCount = stationName.Length;
+        int curLetterIndex = 0;
+
+        string curStationString = "";
+
+        while( curLetterIndex < stationNameLetterCount )
+        {
+            await UniTask.WaitForSeconds(WRITE_LETTER_TIME);
+            curStationString += stationName[curLetterIndex];
+            disembarkingStation_renderer.SetText(curStationString);
+            curLetterIndex++;
+        }
     }
     private Behaviours GetBehaviourAtIndex(Behaviours behaviours, int index)
     {
@@ -88,21 +106,6 @@ public class Page : MonoBehaviour
         }
         return Behaviours.None;
     }
-    private Appearance GetAppearanceAtIndex(Appearance appearance, int index)
-    {
-        int count = 0;
-        foreach (Appearance flag in Enum.GetValues(typeof(Appearance)))
-        {
-            if (flag == Appearance.None) continue;
-
-            if ((appearance & flag) != 0)
-            {
-                if (count == index) return flag;
-                count++;
-            }
-        }
-        return Appearance.None;
-    }
     private int GetFlagAmount(int value)
     {
         int count = 0;
@@ -114,4 +117,5 @@ public class Page : MonoBehaviour
         }
         return count;
     }
+
 }

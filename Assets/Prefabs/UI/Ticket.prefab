@@ -53,7 +53,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: eba6eb7239ccca949b91a3ab6672a7da, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 5
+  spriteIndex: 4
   flipX: 0
   flipY: 0
   width: 1
@@ -66,7 +66,7 @@ MonoBehaviour:
     uvSizeAndPos: {x: 0.24902344, y: 0.17382812, z: 0.4140625, w: 0.8117676}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 5.6666665, y: 3.9555554, z: 1}
-    index: 5
+    index: 4
   bounds:
     m_Center: {x: 5.666667, y: 3.9555557, z: 25.59}
     m_Extent: {x: 5.666667, y: 3.9555557, z: 0.1}
@@ -82,8 +82,9 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 5
-  prevSpriteIndexFlipV: 5
+  prevSpriteIndexFlipH: 4
+  prevSpriteIndexFlipV: 4
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -236,6 +237,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -455,6 +457,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}

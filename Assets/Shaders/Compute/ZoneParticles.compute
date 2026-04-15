@@ -145,8 +145,10 @@ void InitOutput(int id, int particleCount, int spriteCount, float minPos, float 
 void InitSliceOutput(uint id, int particleCount, int spriteCount, float minPos, float sizeRange, float offset, RWStructuredBuffer<ZoneInput> input, inout ZoneOutput output)
 {
     output = (ZoneOutput) 0;
-    int sliceID = floor((float)id / 9);
-    float normID = sliceID / floor((float) particleCount / 9);
+    int sliceID = floor((float)id / 9.0);
+    
+    float sliceParticleCount = floor((float) particleCount / 9.0);
+    float normID = sliceID / sliceParticleCount;
     
     output.position.z = minPos + (normID * sizeRange);
     output.parallaxFactor = ((_SpawnerMaxPos.z - output.position.z) / _SpawnerMaxPos.z);
@@ -162,10 +164,9 @@ void InitSliceOutput(uint id, int particleCount, int spriteCount, float minPos, 
     
     ZoneInput i = input[randMod];
     
-    float2 scale = float2(1, 20 * output.rand01);
+    float2 scale = float2(5 * output.rand01, 20 * output.rand01);
     
     output.uvSizeAndPos = i.uvSizeAndPos;
-    
     
     output.worldPivotAndSize.xy = -i.worldPivotAndSize.xy + (i.sliceOffsetAndSize.xy * scale);
     output.worldPivotAndSize.zw = i.worldPivotAndSize.zw;

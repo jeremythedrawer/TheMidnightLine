@@ -9,7 +9,6 @@ public class SpyStatsSO : ScriptableObject
     public Vector2 moveVelocity;
     public float targetXVelocity;
     public float curGravityScale;
-    public float lastJumpTime;
     public float coyoteTimeElapsed;
     public float maxJumpHeight;
     public float lastGroundHeight;
@@ -18,15 +17,9 @@ public class SpyStatsSO : ScriptableObject
     public LayerMask curGroundLayer;
     public LayerMask curWallLayer;
     public bool spriteFlip;
-    public bool coyoteJump;
-    public bool willJump;
     public bool isGrounded;
     public bool isStepping;
     public bool walkingIntoWall;
-    public bool canHang;
-    public bool isClimbing;
-    public bool isLeftClimbBound;
-    public bool firstFixedFrameClimb;
     public bool canBoardTrain;
     public bool onTrain;
 
@@ -46,15 +39,7 @@ public class SpyStatsSO : ScriptableObject
         targetXVelocity = 0.0f;
         curGravityScale = 1;
 
-        willJump = false;
-        lastJumpTime = float.MinValue;
-        coyoteJump = false;
-        coyoteTimeElapsed = 0.0f;
-
         isGrounded = false;
-        canHang = false;
-        isClimbing = false;
-        firstFixedFrameClimb = true;
 
         canBoardTrain = false;
         onTrain = false;

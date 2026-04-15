@@ -6,9 +6,9 @@ public static class AtlasSpawn
     public const int ZONE_SPAWNER_COUNT = 8;
 
     public const int THREADS_PER_GROUP = 64;
-    public const int FORE_PARTICLE_COUNT = 64;
-    public const int MID_PARTICLE_COUNT = 256;
-    public const int BACK_PARTICLE_COUNT = 128;
+    public const int FORE_PARTICLE_COUNT = 16;
+    public const int MID_PARTICLE_COUNT = 128;
+    public const int BACK_PARTICLE_COUNT = 256;
 
     public static readonly int MAX_VERTEX_COUNT = (FORE_PARTICLE_COUNT + MID_PARTICLE_COUNT + BACK_PARTICLE_COUNT) * 4;
     public static readonly int ZONE_OUTPUT_STRIDE = Marshal.SizeOf(typeof(ZoneOutput));

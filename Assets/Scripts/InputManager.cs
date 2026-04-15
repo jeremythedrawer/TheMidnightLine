@@ -12,16 +12,15 @@ public class InputManager : MonoBehaviour
 
     PlayerInput playerInput;
 
-    InputAction moveAction;
-    InputAction jumpAction;
-    InputAction runAction;
-    InputAction notepadActiveAction;
-    InputAction notepadFlipPageAction;
-    InputAction mouseLeftDownAction;
-    InputAction mouseLeftPressAction;
-    InputAction interactAction;
-    InputAction cancelAction;
-    InputAction ticketAction;
+    InputAction move_action;
+    InputAction run_action;
+    InputAction notepadActive_action;
+    InputAction notepadChooseStation_action;
+    InputAction notepadFlipPage_action;
+    InputAction ticket_action;
+    InputAction interact_action;
+    InputAction mouseLeftDown_action;
+    InputAction mouseLeftPress_action;
     Action<string> OnDeviceChanged;
 
     public static InputDevice curDevice;
@@ -34,63 +33,65 @@ public class InputManager : MonoBehaviour
     {
         playerInput = GetComponent<PlayerInput>();
 
-        moveAction = playerInput.actions["Player/Movement"];
-        jumpAction = playerInput.actions["Player/Jump"];
-        runAction = playerInput.actions["Player/Run"];
-        interactAction = playerInput.actions["Player/Interact"];
-        notepadActiveAction = playerInput.actions["Player/NotepadActive"];
-        notepadFlipPageAction = playerInput.actions["Player/NotepadFlipPage"];
-        mouseLeftDownAction = playerInput.actions["Player/MouseLeftDown"];
-        mouseLeftPressAction = playerInput.actions["Player/MouseLeftPress"];
+        move_action = playerInput.actions["Player/Movement"];
+        run_action = playerInput.actions["Player/Run"];
 
-        cancelAction = playerInput.actions["Player/Cancel"];
-        ticketAction = playerInput.actions["Player/Ticket"];
+        notepadActive_action = playerInput.actions["Player/NotepadActive"];
+        notepadChooseStation_action = playerInput.actions["Player/NotepadChooseStation"];
+        notepadFlipPage_action = playerInput.actions["Player/NotepadFlipPage"];
 
-        moveAction.performed += context =>
+        ticket_action = playerInput.actions["Player/Ticket"];
+
+        interact_action = playerInput.actions["Player/Interact"];
+
+        mouseLeftDown_action = playerInput.actions["Player/MouseLeftDown"];
+        mouseLeftPress_action = playerInput.actions["Player/MouseLeftPress"];
+
+
+        move_action.performed += context =>
         {
             Vector2 move = context.ReadValue<Vector2>();
             playerInputs.move = Mathf.RoundToInt(move.x);
         };
-        moveAction.canceled += context =>
+        move_action.canceled += context =>
         {
             playerInputs.move = 0;
         };
 
-        notepadActiveAction.started += context =>
+        run_action.performed += context => playerInputs.run = true;
+        run_action.canceled += context => playerInputs.run = false;
+
+        notepadActive_action.started += context => playerInputs.notepadPressed = true;
+
+        notepadChooseStation_action.started += context =>
         {
             Vector2 move = context.ReadValue<Vector2>();
-            playerInputs.notepad.x = Mathf.RoundToInt(move.x);
+            playerInputs.notepadChooseStationAndFlip.x = Mathf.RoundToInt(move.x);
         };
 
-        notepadFlipPageAction.started += context =>
+        notepadFlipPage_action.started += context =>
         {
             Vector2 move = context.ReadValue<Vector2>();
-            playerInputs.notepad.y = Mathf.RoundToInt(move.y);
+            playerInputs.notepadChooseStationAndFlip.y = Mathf.RoundToInt(move.y);
         };
 
-        interactAction.started += context =>
+        ticket_action.started += context => playerInputs.ticketPressed = true;
+
+        interact_action.started += context =>
         {
             gameEventData.OnInteract.Raise();
             playerInputs.interact = true;
         };
 
-        mouseLeftDownAction.started += context => playerInputs.mouseLeftDown = true;
+        mouseLeftDown_action.started += context => playerInputs.mouseLeftDown = true;
 
-        mouseLeftPressAction.performed += context => playerInputs.mouseLeftPress = true;
-        mouseLeftPressAction.canceled += context =>
+        mouseLeftPress_action.performed += context => playerInputs.mouseLeftPress = true;
+        mouseLeftPress_action.canceled += context =>
         {
             playerInputs.mouseLeftUp = true;
             playerInputs.mouseLeftPress = false;
         };
 
-        jumpAction.performed += context => playerInputs.jump = true;
-        jumpAction.canceled += context => playerInputs.jump = false;
-
-        runAction.performed += context => playerInputs.run = true;
-        runAction.canceled += context => playerInputs.run = false;
-
-        cancelAction.started += context => playerInputs.cancel = true;
-        ticketAction.started += context => playerInputs.ticket = true;
     }
 
     private void OnEnable()
@@ -130,27 +131,22 @@ public class InputManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        playerInputs.cancel = false;
+        playerInputs.notepadPressed = false;
+        playerInputs.ticketPressed = false;
         playerInputs.interact = false;
         playerInputs.mouseLeftDown = false;
         playerInputs.mouseLeftUp = false;
-        playerInputs.notepad.x = 0;
-        playerInputs.notepad.y = 0;
-        playerInputs.ticket = false;
+        playerInputs.notepadChooseStationAndFlip.x = 0;
+        playerInputs.notepadChooseStationAndFlip.y = 0;
     }
     private void CheckDevice(InputControl value, InputEventPtr ptr)
     {
         curDevice = value.device;
         OnDeviceChanged?.Invoke(value.device.displayName);
     }
-    private void ResetData()
-    {
-        playerInputs.jump = false;
-    }
     private void OnApplicationQuit()
     {
         gameEventData.OnReset.Raise();
-        ResetData();
     }
 
     private void OnDrawGizmosSelected()

@@ -34,25 +34,6 @@ public static class NPC
         ToStand,
         ToSlideDoor,
     }
-    [Flags] public enum Appearance 
-    {
-        None = 0,
-        White_hair = 1 << 0,
-        Blue_collar_worker = 1 << 1,
-        Poor_posture = 1 << 2,
-        Poor_eyesight = 1 << 3,
-        Suit_and_tie = 1 << 4,
-        Is_bald = 1 << 5,
-        Rotund = 1 << 6,
-        Wearing_a_dress = 1 << 7,
-        Carries_a_bag = 1 << 8,
-        Wears_a_hat = 1 << 9,
-        Wears_a_necklace = 1 << 10,
-        Afro_hair = 1 << 11,
-        Baggy_clothes = 1 << 12,
-        Slim = 1 << 13,
-        Wears_headband = 1 << 14,
-    }
 
 
     [Flags] public enum Behaviours
@@ -89,9 +70,10 @@ public static class NPC
         public int boardingStationIndex;
 
         public int npcPrefabIndex;
+        public int coveredMugshotIndex;
+        public int uncoveredMugshotIndex;
 
         public Behaviours behaviours;
-        public Appearance appearence;
     }
 
     [Serializable] public class NameData

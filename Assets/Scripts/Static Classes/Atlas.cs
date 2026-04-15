@@ -64,8 +64,9 @@ public static class Atlas
     public enum NotepadMotion
     { 
         None,
-        LeftHand,
-        Page,
+        FlipHand,
+        FlipPage,
+        RotatingPencil,
     }
 
     public enum EntityMotionType

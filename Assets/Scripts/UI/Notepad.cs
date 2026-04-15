@@ -8,9 +8,11 @@ using static NPC;
 public class Notepad : MonoBehaviour
 {
     const float PAGE_SPAWN_POS_Y_OFFSET = 0.2f;
+    const float WRITE_LETTER_TIME = 0.2f;
     public enum State
     {
-        None,
+        Stationary,
+        Writing,
         FlippingUp,
         FlippingDown,
     }
@@ -45,7 +47,8 @@ public class Notepad : MonoBehaviour
     public int lastPageIndex;
     public Bounds totalBounds;
     
-    public AtlasClip leftHandClip;
+    public AtlasClip handFlipPage_clip;
+    public AtlasClip rotatePencil_clip;
     
     public State curState;
     public KeyframeState curKeyframeState;
@@ -55,10 +58,13 @@ public class Notepad : MonoBehaviour
     public int leftHandDepthBack;
     public int pageIndex;
     public int backPages;
-    
+
+    public int flipToggle;
+    public bool writeToggle;
     public static NameData nameData;
 
     public Vector2 boundsOffset;
+
     private void OnValidate()
     {
         SetTotalBounds();
@@ -70,15 +76,16 @@ public class Notepad : MonoBehaviour
     {
         SetTotalBounds();
         nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
-        npcData.appearanceDescDict = InitializeAppearanceDict();
         npcData.behaviourDescDict = InitializeBehaviourDict();
         CreateNPCProfiles();
 
     }
     private void Start()
     {
-        leftHandClip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.LeftHand];
-        lastLeftHandKeyframeIndex = leftHandClip.keyFrames.Length - 1;
+        handFlipPage_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.FlipHand];
+        rotatePencil_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.RotatingPencil];
+
+        lastLeftHandKeyframeIndex = handFlipPage_clip.keyFrames.Length - 1;
         leftHandDepthFront =  (int)(bindingRings_renderer.transform.position.z - 1);
         leftHandDepthBack = (int)(rightHand_renderer.transform.position.z + 1);
 
@@ -86,33 +93,95 @@ public class Notepad : MonoBehaviour
     }
     private void Update()
     {
-        if (activePageIndex < lastPageIndex && playerInputs.notepad.y == 1 && curState != State.FlippingUp)
+        ChooseState();
+        UpdateState();
+    }
+    private void ChooseState()
+    {
+        if ((activePageIndex < lastPageIndex && playerInputs.notepadChooseStationAndFlip.y == 1) || flipToggle == 1)
         {
-            curState = State.FlippingUp;
-            if (curKeyframeState == KeyframeState.Start) return;
-            
-            pages[activePageIndex + 1].gameObject.SetActive(true);
-
-            leftHand_renderer.UpdateDepthRealtime(leftHandDepthFront);
-            leftHand_renderer.PlayClipOneShot(leftHandClip);
-            
-            curKeyframeState = KeyframeState.Start;
+            SetState(State.FlippingUp);
         }
-        else if (activePageIndex > 0 && playerInputs.notepad.y == -1 && curState != State.FlippingDown)
+        else if ((activePageIndex > 0 && playerInputs.notepadChooseStationAndFlip.y == -1) || flipToggle == -1)
         {
-            curState = State.FlippingDown;
-            if (curKeyframeState == KeyframeState.Start) return;
-
-            leftHand_renderer.UpdateDepthRealtime(leftHandDepthBack);
-
-            activePage.UpdatePageDepth((int)(rightHand_renderer.transform.position.z - 1));
-            activePageIndex--;
-            activePage = pages[activePageIndex];
-            activePage.gameObject.SetActive(true);
-            leftHand_renderer.PlayClipOneShotReverse(leftHandClip);
-            
-            curKeyframeState = KeyframeState.Start;
+            SetState(State.FlippingDown);
         }
+        else if ((playerInputs.notepadChooseStationAndFlip.x != 0) || writeToggle)
+        {
+            SetState(State.Writing);
+        }
+        else
+        {
+            SetState(State.Stationary);
+        }
+    }
+    private void SetState(State newState)
+    {
+        if (curState == newState) return;
+        ExitState();
+        curState = newState;
+        EnterState();
+    }
+    private void EnterState()
+    {
+        switch(curState)
+        {
+            case State.FlippingUp:
+            {
+                pages[activePageIndex + 1].gameObject.SetActive(true);
+
+                leftHand_renderer.UpdateDepthRealtime(leftHandDepthFront);
+                leftHand_renderer.PlayClipOneShot(handFlipPage_clip);
+
+                curKeyframeState = KeyframeState.Start;
+                flipToggle = 1;
+            }
+            break;
+            case State.FlippingDown:
+            {
+                leftHand_renderer.UpdateDepthRealtime(leftHandDepthBack);
+
+                activePage.UpdatePageDepth((int)(rightHand_renderer.transform.position.z - 1));
+                activePageIndex--;
+                activePage = pages[activePageIndex];
+                activePage.gameObject.SetActive(true);
+                leftHand_renderer.PlayClipOneShotReverse(handFlipPage_clip);
+
+                curKeyframeState = KeyframeState.Start;
+                flipToggle = -1;
+            }
+            break;
+            case State.Writing:
+            {
+                writeToggle = true;
+
+                if (activePage)
+                leftHand_renderer.PlayClipOneShot(rotatePencil_clip);
+                activePage.SetDisembarkingStationText(0); // TODO actual chosen station index
+            }
+            break;
+        }
+    }
+    private void ExitState()
+    {
+        switch (curState)
+        {
+            case State.FlippingUp:
+            {
+                
+            }
+            break;
+
+            case State.FlippingDown:
+            {
+                flipToggle = 0;
+            }
+            break;   
+        }
+
+    }
+    private void UpdateState()
+    {
         switch (curState)
         {
             case State.FlippingUp:
@@ -129,7 +198,7 @@ public class Notepad : MonoBehaviour
 
                     case 3:
                     {
-                        if(curKeyframeState == KeyframeState.TogglePageContentsBottomHalf) return;
+                        if (curKeyframeState == KeyframeState.TogglePageContentsBottomHalf) return;
                         activePage.TogglePageContentBottomHalf(false);
                         curKeyframeState = KeyframeState.TogglePageContentsBottomHalf;
                     }
@@ -149,6 +218,7 @@ public class Notepad : MonoBehaviour
                         leftHand_renderer.UpdateDepthRealtime(leftHandDepthBack);
                         activePage.UpdatePageDepth(leftHandDepthBack + 1);
                         curKeyframeState = KeyframeState.ChangeDepth;
+
                     }
                     break;
                 }
@@ -156,12 +226,13 @@ public class Notepad : MonoBehaviour
                 if (leftHand_renderer.curFrameIndex == lastLeftHandKeyframeIndex)
                 {
                     if (curKeyframeState == KeyframeState.None) return;
-                    curState = State.None;
                     activePage.gameObject.SetActive(false);
                     activePageIndex++;
                     activePage = pages[activePageIndex];
                     activePage.UpdatePageDepth(leftHandDepthFront + 2);
                     curKeyframeState = KeyframeState.None;
+
+                    flipToggle = 0;
                 }
             }
             break;
@@ -174,8 +245,8 @@ public class Notepad : MonoBehaviour
                     {
                         if (curKeyframeState == KeyframeState.None) return;
                         pages[activePageIndex + 1].gameObject.SetActive(false);
-                        curState = State.None;
                         curKeyframeState = KeyframeState.None;
+                        flipToggle = 0;
                     }
                     break;
                     case 2:
@@ -190,7 +261,7 @@ public class Notepad : MonoBehaviour
                     {
                         if (curKeyframeState == KeyframeState.TogglePageContentsTopHalf) return;
                         activePage.TogglePageContentTopHalf(true);
-                        curKeyframeState= KeyframeState.TogglePageContentsTopHalf;
+                        curKeyframeState = KeyframeState.TogglePageContentsTopHalf;
                     }
                     break;
                     case 4:
@@ -246,14 +317,15 @@ public class Notepad : MonoBehaviour
                 {
                     Behaviours secondBehaviour = (Behaviours)validFlags[k];
                     Behaviours twoBehaviours = firstBehaviour | secondBehaviour;
-                    Appearance appearence = npcPrefab.npc.appearence;
                     string name = GenerateName(npcPrefab.npc.gender, npcPrefab.npc.ethnicity);
+
                     NPCProfile npcProfile = new NPCProfile
                     {
                         fullName = name,
                         behaviours = twoBehaviours,
-                        appearence = appearence,
-                        npcPrefabIndex = npcPrefab.npc.mugshotIndex,
+                        npcPrefabIndex = i,
+                        coveredMugshotIndex = npcPrefab.npc.coveredMugshotIndex,
+                        uncoveredMugshotIndex = npcPrefab.npc.uncoveredMugshotIndex,
                     };
 
                     if (k == j)
@@ -389,20 +461,6 @@ public class Notepad : MonoBehaviour
         foreach (Behaviours value in values)
         {
             if (value == Behaviours.None) continue;
-
-            dict[value] = value.ToString().Replace("_", " ");
-        }
-        return dict;
-    }
-    public Dictionary<Appearance, string> InitializeAppearanceDict()
-    {
-        var dict = new Dictionary<Appearance, string>();
-
-        Array values = Enum.GetValues(typeof(Appearance));
-
-        foreach (Appearance value in values)
-        {
-            if (value == Appearance.None) continue;
 
             dict[value] = value.ToString().Replace("_", " ");
         }

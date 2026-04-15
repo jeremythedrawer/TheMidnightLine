@@ -62,6 +62,7 @@ public class AtlasRenderer : MonoBehaviour
     public int prevFrameIndex;
     public int prevSpriteIndexFlipH;
     public int prevSpriteIndexFlipV;
+    public bool isAnimating;
     public CancellationTokenSource ctsOneShot;
 
     [Header("Sliced Generated")]
@@ -299,6 +300,7 @@ public class AtlasRenderer : MonoBehaviour
         }
         sprite = motionSprite.sprite;
         UpdateSpriteInputs(ref sprite);
+        isAnimating = true;
         
     }
     public void PlayClipOneShot(AtlasClip clip, Transform markerTransform = null)
@@ -354,6 +356,7 @@ public class AtlasRenderer : MonoBehaviour
         try
         {
             curFrameIndex = 0;
+            isAnimating = true;
             while (curFrameIndex < lastIndex)
             {
                 MotionSprite motionSprite = GetNextKeyframeSprite(ref clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
@@ -371,9 +374,12 @@ public class AtlasRenderer : MonoBehaviour
                 }
                 await UniTask.Yield(ctsOneShot.Token);
             }
+            isAnimating = false;
         }
         catch (OperationCanceledException)
-        { }
+        { 
+            isAnimating = false;
+        }
     }
     private async UniTask PlayingClipOneShotReverse(AtlasClip clip, Transform markerTransform = null)
     {
@@ -381,6 +387,7 @@ public class AtlasRenderer : MonoBehaviour
         curFrameIndex = clip.keyFrames.Length - 1;
         try
         {
+            isAnimating = true;
             while (curFrameIndex >= 0)
             {
                 MotionSprite motionSprite = AtlasRendering.GetNextKeyframeSpriteReverse(ref clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
@@ -400,10 +407,13 @@ public class AtlasRenderer : MonoBehaviour
 
                 await UniTask.Yield(ctsOneShot.Token);
             }
+            isAnimating = false;
 
         }
         catch (OperationCanceledException)
-        { }
+        {
+            isAnimating = false;
+        }
     }
     public void SetText(string inputText)
     {

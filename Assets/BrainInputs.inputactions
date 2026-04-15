@@ -16,15 +16,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Jump",
-                    "type": "Button",
-                    "id": "ac29e519-7e48-478f-ad63-b10ac44b06d3",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Run",
                     "type": "Button",
                     "id": "e6ef1aa9-a460-439f-a776-5e467b27b659",
@@ -34,16 +25,16 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Interact",
+                    "name": "NotepadActive",
                     "type": "Button",
-                    "id": "0019b702-153e-4405-9d44-74cf08b254b0",
+                    "id": "ac29e519-7e48-478f-ad63-b10ac44b06d3",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
                 },
                 {
-                    "name": "NotepadActive",
+                    "name": "NotepadChooseStation",
                     "type": "Button",
                     "id": "29cb3758-e4c2-47f0-8d05-8a604357ab6e",
                     "expectedControlType": "",
@@ -59,6 +50,24 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
+                },
+                {
+                    "name": "Ticket",
+                    "type": "Button",
+                    "id": "7257163c-c77d-4fdc-ac70-2c491b6abde3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Interact",
+                    "type": "Button",
+                    "id": "0019b702-153e-4405-9d44-74cf08b254b0",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 },
                 {
                     "name": "MouseLeftDown",
@@ -77,24 +86,6 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
-                },
-                {
-                    "name": "Cancel",
-                    "type": "Button",
-                    "id": "84a850cd-cefb-485c-9fb5-ce108956bd20",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Ticket",
-                    "type": "Button",
-                    "id": "7257163c-c77d-4fdc-ac70-2c491b6abde3",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -105,7 +96,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardAndMouse",
-                    "action": "Jump",
+                    "action": "NotepadActive",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -116,7 +107,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Jump",
+                    "action": "NotepadActive",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -193,29 +184,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "NotepadActive",
+                    "action": "NotepadChooseStation",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "Right",
                     "id": "68d06775-7ebc-4f95-ad36-7b0ef5872dbc",
-                    "path": "<Gamepad>/rightStick/right",
+                    "path": "<Gamepad>/leftStick/right",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Gamepad",
-                    "action": "NotepadActive",
+                    "action": "NotepadChooseStation",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "Left",
                     "id": "7404c0f6-d384-43fc-a4e1-fd087d6c41ab",
-                    "path": "<Gamepad>/rightStick/left",
+                    "path": "<Gamepad>/leftStick/left",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Gamepad",
-                    "action": "NotepadActive",
+                    "action": "NotepadChooseStation",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -226,29 +217,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "NotepadActive",
+                    "action": "NotepadChooseStation",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
                     "name": "Right",
                     "id": "3c7c30f4-b33b-4901-a0e5-58c2f9f316c0",
-                    "path": "<Keyboard>/rightArrow",
+                    "path": "<Keyboard>/a",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;KeyboardAndMouse",
-                    "action": "NotepadActive",
+                    "action": "NotepadChooseStation",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "Left",
                     "id": "7fced24a-ab03-4fde-b584-e9d0fb64a87b",
-                    "path": "<Keyboard>/leftArrow",
+                    "path": "<Keyboard>/d",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;KeyboardAndMouse",
-                    "action": "NotepadActive",
+                    "action": "NotepadChooseStation",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -266,7 +257,7 @@
                 {
                     "name": "Up",
                     "id": "906df972-6e73-4d56-a2d5-431ad7176978",
-                    "path": "<Gamepad>/rightStick/up",
+                    "path": "<Gamepad>/leftStick/up",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Gamepad",
@@ -277,7 +268,7 @@
                 {
                     "name": "Down",
                     "id": "1c23329d-b04e-41e5-a3c8-eaef446ec79d",
-                    "path": "<Gamepad>/rightStick/down",
+                    "path": "<Gamepad>/leftStick/down",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Gamepad",
@@ -299,7 +290,7 @@
                 {
                     "name": "Up",
                     "id": "8d5cb7e1-a641-4c73-8ca5-f713909e81cc",
-                    "path": "<Keyboard>/upArrow",
+                    "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;KeyboardAndMouse",
@@ -310,7 +301,7 @@
                 {
                     "name": "Down",
                     "id": "69632192-5c51-41ec-bb94-9eb4b0f34aec",
-                    "path": "<Keyboard>/downArrow",
+                    "path": "<Keyboard>/s",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;KeyboardAndMouse",
@@ -337,28 +328,6 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "2cd91578-f504-4130-9fb5-99fb476e4bda",
-                    "path": "<Keyboard>/s",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse;KeyboardAndMouse",
-                    "action": "Cancel",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "cf3d1beb-9665-4721-a67c-a2487cdbf6c0",
-                    "path": "<Gamepad>/rightShoulder",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Cancel",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

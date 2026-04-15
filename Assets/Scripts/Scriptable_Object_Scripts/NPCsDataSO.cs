@@ -16,6 +16,5 @@ public class NPCsDataSO : ScriptableObject
     [Range(0, 1)] public float fadeTime = 0.5f;
 
     [Header("Generated")]
-    public Dictionary<Appearance, string> appearanceDescDict;
     public Dictionary<Behaviours, string> behaviourDescDict;
 }

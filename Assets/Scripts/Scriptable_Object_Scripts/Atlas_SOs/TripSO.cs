@@ -22,6 +22,7 @@ public class TripSO : ScriptableObject
     public int ticketsCheckedSinceStart;
     public int ticketsCheckedSinceLastStation;
 }
+
 #if UNITY_EDITOR
 [CustomPropertyDrawer(typeof(ZoneSpawnerData))]
 public class ZoneSpawnerDataDrawer : PropertyDrawer
