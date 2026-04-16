@@ -6,6 +6,7 @@ Shader "Custom/s_matrix"
 
 		#include "Assets/Shaders/HLSL/ColorSpace.hlsl"
 		#include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
+		#include "Assets/Shaders/HLSL/AtlasParticles.hlsl"
 		TEXTURE2D(_SourceTex);
 		SAMPLER(sampler_SourceTex);
 		
@@ -54,24 +55,35 @@ Shader "Custom/s_matrix"
 			float sinT = sin(t);
 			float rays = asin(sinT * pow((sinT * 0.5 + 0.5), 5)) + max(asin(sinT * sinT),0);
 
-			float sunRays = round(saturate(rays - noise + sun + saturate(sun)));// * skyMask;
-			//return half4(sunRays.xxx, 1);
-			float skyMask = 1 - step(worldPos.z, 128);
-			sunRays *= skyMask;
-			
+			float sunRays = round(saturate(rays - noise + sun + saturate(sun)));
+			float maxPos = BACK_MIN + BACK_SIZE;
+			float skyMask = step(worldPos.z, maxPos);
+			sunRays *= 1 - skyMask;
 			
 			half4 fogNoiseTex = SAMPLE_TEXTURE2D_X(_NoiseTexture, sampler_NoiseTexture, centerUV + (_MetersTravelled * 0.002) + (_Time.y * 0.002) );
 			float fogNoise = fogNoiseTex.z * 2 - 1;
-			float linearDepth = worldPos.z / 128;
 
+
+			float totalLinearDepth = worldPos.z / maxPos;
+			float zoneLinearDepth = (worldPos.z - MID_MIN) / maxPos;
+
+			float zoneMask = ceil(zoneLinearDepth);
 
 			float skyDepth = pow((input.texcoord.y) + (fogNoise * 0.1), 2);
-			float totalDepth = linearDepth * skyDepth;
-			totalDepth = worldPos.z < 48 ? 0 : totalDepth;
-			totalDepth = BayerMatrix(totalDepth, 0, input.texcoord * _ScreenParams.xy);
-			//return totalDepth.xxxx;
-			float3 finalColor = (blit.rgb) + sunRays + totalDepth;
-			finalColor = lerp(_Color1, _Color2, finalColor);
+			
+			zoneLinearDepth *= skyMask;
+			zoneLinearDepth += (skyDepth - (totalLinearDepth * 0.3)) * 0.5;
+			zoneLinearDepth += blit.r * 0.5;
+			zoneLinearDepth = BayerMatrix(zoneLinearDepth, 0, input.texcoord * _ScreenParams.xy);
+			zoneLinearDepth *= zoneMask;
+
+			float foregroundMask = 1 - zoneMask;
+			float foreground = (blit.r + (totalLinearDepth * 0.5)) * foregroundMask;
+			float totalGreyscale = foreground + zoneLinearDepth + sunRays;
+			totalGreyscale = saturate(totalGreyscale);
+			//return totalGreyscale.xxxx;
+
+			float3 finalColor = lerp(_Color1, _Color2, totalGreyscale);
 			return half4(finalColor, 1);
 		}
 	ENDHLSL

@@ -52,6 +52,7 @@ public class Carriage : MonoBehaviour
     }
     private void Start()
     {
+        nextStationSignRenderer.SetScrollingText();
         alpha = 0;
     }
     public void UnlockInteriorDoors()

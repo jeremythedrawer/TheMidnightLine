@@ -68,6 +68,9 @@ public class POVUI : MonoBehaviour
         ticket.transform.localPosition = ticketInactivePos;
 
         transitionTime = -Mathf.Log(TARGET_MARGIN) / moveDamp;
+
+        ticket.gameObject.SetActive(false);
+        notepad.gameObject.SetActive(false);
     }
     private void Update()
     {

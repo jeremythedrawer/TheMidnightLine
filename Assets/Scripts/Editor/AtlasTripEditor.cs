@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static Atlas;
 using static AtlasSpawn;
 public class AtlasTripEditor : EditorWindow

@@ -14,7 +14,9 @@ public class InputManager : MonoBehaviour
 
     InputAction move_action;
     InputAction run_action;
-    InputAction notepadActive_action;
+
+    InputAction notepadToggle_action;
+    InputAction notepadConfirmStation_action;
     InputAction notepadChooseStation_action;
     InputAction notepadFlipPage_action;
     InputAction ticket_action;
@@ -36,7 +38,8 @@ public class InputManager : MonoBehaviour
         move_action = playerInput.actions["Player/Movement"];
         run_action = playerInput.actions["Player/Run"];
 
-        notepadActive_action = playerInput.actions["Player/NotepadActive"];
+        notepadToggle_action = playerInput.actions["Player/NotepadToggle"];
+        notepadConfirmStation_action = playerInput.actions["Player/NotepadConfirmStation"];
         notepadChooseStation_action = playerInput.actions["Player/NotepadChooseStation"];
         notepadFlipPage_action = playerInput.actions["Player/NotepadFlipPage"];
 
@@ -61,7 +64,8 @@ public class InputManager : MonoBehaviour
         run_action.performed += context => playerInputs.run = true;
         run_action.canceled += context => playerInputs.run = false;
 
-        notepadActive_action.started += context => playerInputs.notepadPressed = true;
+        notepadToggle_action.started += context => playerInputs.notepadToggle = true;
+        notepadConfirmStation_action.started += context => playerInputs.notepadConfirmStation = true;
 
         notepadChooseStation_action.started += context =>
         {
@@ -131,7 +135,8 @@ public class InputManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        playerInputs.notepadPressed = false;
+        playerInputs.notepadToggle = false;
+        playerInputs.notepadConfirmStation = false;
         playerInputs.ticketPressed = false;
         playerInputs.interact = false;
         playerInputs.mouseLeftDown = false;

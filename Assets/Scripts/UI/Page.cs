@@ -12,7 +12,7 @@ public class Page : MonoBehaviour
     public AtlasRenderer behaviour0_renderer;
     public AtlasRenderer behaviour1_renderer;
     public AtlasRenderer name_renderer;
-    public AtlasRenderer disembarkingStation_renderer;
+    public AtlasRenderer chosenStation_renderer;
     
     public AtlasRenderer mugshot_renderer;
 
@@ -20,9 +20,9 @@ public class Page : MonoBehaviour
     public AtlasClip paperClip;
     public Behaviours behaviours0;
     public Behaviours behaviours1;
-    public int disembarkingStationIndex;
+    public int chosenStationIndex;
     public Bounds stationNameBounds;
-    public string stationName;
+    public string chosenStationName;
     public void Init(NPCProfile traitorProfile)
     {
         paperClip = paper_renderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
@@ -36,7 +36,8 @@ public class Page : MonoBehaviour
 
         mugshot_renderer.UpdateSpriteInputs(ref mugshot_renderer.atlas.simpleSprites[traitorProfile.coveredMugshotIndex]);
 
-        disembarkingStationIndex = -1;
+        chosenStationIndex = -1;
+        chosenStation_renderer.SetText("");
     }
     public void PlayPaperClip()
     {
@@ -50,7 +51,7 @@ public class Page : MonoBehaviour
     {
         behaviour0_renderer.enabled = toggle;
         behaviour1_renderer.enabled = toggle;
-        disembarkingStation_renderer.enabled = toggle;
+        chosenStation_renderer.enabled = toggle;
     }
     public void TogglePageContentTopHalf(bool toggle)
     {
@@ -63,7 +64,7 @@ public class Page : MonoBehaviour
         int contentDepth = depth - 1;
         behaviour0_renderer.UpdateDepthRealtime(contentDepth);
         behaviour1_renderer.UpdateDepthRealtime(contentDepth);
-        disembarkingStation_renderer.UpdateDepthRealtime(contentDepth);
+        chosenStation_renderer.UpdateDepthRealtime(contentDepth);
         name_renderer.UpdateDepthRealtime(contentDepth);
         mugshot_renderer.UpdateDepthRealtime(contentDepth);
     }
@@ -71,25 +72,46 @@ public class Page : MonoBehaviour
     {
         paper_renderer.enabled = toggle;
     }
-    public void SetDisembarkingStationText(int chosenStationIndex)
+    public void SetChosenStationText(int stationIndex)
     {
-        disembarkingStationIndex = chosenStationIndex;
-        stationName = trip.stationsDataArray[disembarkingStationIndex].stationName;
-        stationNameBounds = disembarkingStation_renderer.GetTextBounds(stationName);
-        WriteStationName(stationName).Forget();
+        chosenStationIndex = stationIndex;
+        chosenStationName = trip.stationsDataArray[chosenStationIndex].stationName;
+        stationNameBounds = chosenStation_renderer.GetTextBounds(chosenStationName);
+        chosenStation_renderer.AppearConfirmText();
+        WritingStationName(chosenStationName).Forget();
     }
-    private async UniTask WriteStationName(string stationName)
+    public void EraseChosenStationText()
+    {
+        ErasingStationName().Forget();
+    }
+    public void SetPreviewStationText(int stationIndex)
+    {
+        chosenStation_renderer.SetText(trip.stationsDataArray[stationIndex].stationName);
+        chosenStation_renderer.AppearPreviewText();
+        stationNameBounds = chosenStation_renderer.bounds;
+    }
+    private async UniTask ErasingStationName()
+    {
+        string curStationString = chosenStationName;
+        while(curStationString.Length > 0)
+        {
+            await UniTask.WaitForSeconds(Notepad.WRITE_LETTER_TIME);
+            curStationString = curStationString[..^1];
+            chosenStation_renderer.SetText(curStationString);
+        }
+    }
+    private async UniTask WritingStationName(string stationName)
     {
         int stationNameLetterCount = stationName.Length;
         int curLetterIndex = 0;
 
         string curStationString = "";
-
-        while( curLetterIndex < stationNameLetterCount )
+        chosenStation_renderer.SetText(curStationString);
+        while ( curLetterIndex < stationNameLetterCount )
         {
-            await UniTask.WaitForSeconds(Notepad.WRITE_LETTER_TIME);
             curStationString += stationName[curLetterIndex];
-            disembarkingStation_renderer.SetText(curStationString);
+            await UniTask.WaitForSeconds(Notepad.WRITE_LETTER_TIME);
+            chosenStation_renderer.SetText(curStationString);
             curLetterIndex++;
         }
     }

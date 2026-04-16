@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5373812233296960608}
   - component: {fileID: 4243298849842064577}
   m_Layer: 0
-  m_Name: Name_Answer
+  m_Name: Name
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -104,15 +104,15 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   customs:
-  - {x: 1.3441511, y: 1.8, z: 0, w: 0}
-  - {x: 1.3441511, y: 1.8, z: 0, w: 0}
-  - {x: 1.3441511, y: 1.8, z: 0, w: 0}
-  - {x: 1.3441511, y: 1.8, z: 0, w: 0}
-  - {x: 1.3441511, y: 1.8, z: 0, w: 0}
-  - {x: 1.3441511, y: 1.8, z: 0, w: 0}
-  - {x: 1.3441511, y: 1.8, z: 0, w: 0}
-  - {x: 1.3441511, y: 1.8, z: 0, w: 0}
-  - {x: 1.3441511, y: 1.8, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
@@ -341,20 +341,20 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   customs:
-  - {x: 1.9271623, y: 1.8, z: 0, w: 0}
-  - {x: 1.9271623, y: 1.8, z: 0, w: 0}
-  - {x: 1.9271623, y: 1.8, z: 0, w: 0}
-  - {x: 1.9271623, y: 1.8, z: 0, w: 0}
-  - {x: 1.9271623, y: 1.8, z: 0, w: 0}
-  - {x: 1.9271623, y: 1.8, z: 0, w: 0}
-  - {x: 1.9271623, y: 1.8, z: 0, w: 0}
-  - {x: 1.9271623, y: 1.8, z: 0, w: 0}
-  - {x: 1.9271623, y: 1.8, z: 0, w: 0}
-  - {x: 1.9271623, y: 1.8, z: 0, w: 0}
-  - {x: 1.9271623, y: 1.8, z: 0, w: 0}
-  - {x: 1.9271623, y: 1.8, z: 0, w: 0}
-  - {x: 1.9271623, y: 1.8, z: 0, w: 0}
-  - {x: 1.9271623, y: 1.8, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
@@ -401,12 +401,12 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5373812233296960608}
   - {fileID: 3401857208857989724}
   - {fileID: 7456237863597015280}
   - {fileID: 1917585177641865970}
   - {fileID: 6905171277351112}
   - {fileID: 5967655690559425254}
+  - {fileID: 5373812233296960608}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3293984349451637370
@@ -427,7 +427,7 @@ MonoBehaviour:
   behaviour0_renderer: {fileID: 3925012540275241528}
   behaviour1_renderer: {fileID: 3465815437186109155}
   name_renderer: {fileID: 4243298849842064577}
-  disembarkingStation_renderer: {fileID: 8572872064146997650}
+  chosenStation_renderer: {fileID: 8572872064146997650}
   mugshot_renderer: {fileID: 7459302900703187996}
   paperClip:
     clipName: 
@@ -437,11 +437,11 @@ MonoBehaviour:
     time: 0
   behaviours0: 0
   behaviours1: 0
-  disembarkingStationIndex: 0
-  disembarkingStationNameRenderBounds:
+  chosenStationIndex: 0
+  stationNameBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  disembarkingStationName: 
+  chosenStationName: 
 --- !u!1 &4143792154808190999
 GameObject:
   m_ObjectHideFlags: 0
@@ -564,21 +564,21 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   customs:
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
-  - {x: 2.1364312, y: 1.8, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
@@ -606,7 +606,7 @@ GameObject:
   - component: {fileID: 1917585177641865970}
   - component: {fileID: 8572872064146997650}
   m_Layer: 0
-  m_Name: StationAnswer
+  m_Name: ChosenStation
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -641,7 +641,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 7
   batchKey:
-    material: {fileID: 2100000, guid: 44af1dd25b51fc84d857d93273268c21, type: 2}
+    material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
     depthOrder: -25
   atlas: {fileID: 11400000, guid: 87bd20d859e420d408fdef20fd10809c, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
@@ -705,17 +705,17 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   customs:
-  - {x: 1.9082445, y: 1.8, z: 0, w: 0}
-  - {x: 1.9082445, y: 1.8, z: 0, w: 0}
-  - {x: 1.9082445, y: 1.8, z: 0, w: 0}
-  - {x: 1.9082445, y: 1.8, z: 0, w: 0}
-  - {x: 1.9082445, y: 1.8, z: 0, w: 0}
-  - {x: 1.9082445, y: 1.8, z: 0, w: 0}
-  - {x: 1.9082445, y: 1.8, z: 0, w: 0}
-  - {x: 1.9082445, y: 1.8, z: 0, w: 0}
-  - {x: 1.9082445, y: 1.8, z: 0, w: 0}
-  - {x: 1.9082445, y: 1.8, z: 0, w: 0}
-  - {x: 1.9082445, y: 1.8, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0

@@ -74,6 +74,12 @@ public class TrainController : MonoBehaviour
         stats.curVelocity = KMPHToVelocity(trip.stationsDataArray[0].targetKMPH);
         stats.targetStopPosition = transform.position.x;
         MoveTrainToStartPosition().Forget();
+
+        for (int i = 0; i < carriages.Length; i++)
+        {
+            carriages[i].SetSignToNextStation(trip.curStation.stationName);
+        }
+
     }
     private void Update()
     {

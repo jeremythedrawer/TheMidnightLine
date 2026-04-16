@@ -793,6 +793,7 @@ public class AtlasFactory : EditorWindow
                         selectedClipIndex = i;
                     }
                     
+
                     if (clip.motionIndex == prevMotion)
                     {
                         prevClipIndex = i;

@@ -6,8 +6,6 @@ using UnityEditor;
 using UnityEngine;
 using static Atlas;
 using static AtlasRendering;
-using static NPC;
-using static UnityEngine.GraphicsBuffer;
 
 [ExecuteAlways]
 public class AtlasRenderer : MonoBehaviour
@@ -216,7 +214,7 @@ public class AtlasRenderer : MonoBehaviour
         float flipPivot = flipLeft ? 1 - curSprite.uvPivot.x : curSprite.uvPivot.x;
         worldPivotAndSize.x = flipPivot * scaleAndFlip.x * worldPivotAndSize.z;
         boundsOffset.x = (bounds.size.x * 0.5f) - worldPivotAndSize.x;
-        prevSpriteIndexFlipH = sprite.index;
+        prevSpriteIndexFlipH = curSprite.index;
     }
     public void FlipV(bool flipDown, SimpleSprite curSprite)
     {
@@ -227,7 +225,7 @@ public class AtlasRenderer : MonoBehaviour
         float flipPivot = flipDown ? 1 - curSprite.uvPivot.y : curSprite.uvPivot.y;
         worldPivotAndSize.y = flipPivot * scaleAndFlip.y * worldPivotAndSize.w;
         boundsOffset.y = (bounds.size.y * 0.5f) - worldPivotAndSize.y;
-        prevSpriteIndexFlipV = sprite.index;
+        prevSpriteIndexFlipV = curSprite.index;
     }
     public void UpdateBounds()
     {        
@@ -432,7 +430,6 @@ public class AtlasRenderer : MonoBehaviour
         uvSizesAndPositions = new Vector4[printableChars];
         scalesAndFlips = new Vector4[printableChars];
         customs = new Vector4[printableChars];
-
         int spriteIndex = 0;
         
         float minX = float.MaxValue;
@@ -519,12 +516,6 @@ public class AtlasRenderer : MonoBehaviour
         bounds.size = new Vector3(maxX, maxY, 0f);
         boundsOffset = new Vector3(maxX * 0.5f, maxY * 0.5f, 0f);
         bounds.center = transform.position + boundsOffset;
-
-        for (int i = 0; i < printableChars; i++) //TODO(Jeremy): Set outside of renderer in a scrolling class if I need to use the custom vector else where
-        {
-            customs[i].x = maxX;
-            customs[i].y = 1.8f;
-        }
     }
     public Bounds GetTextBounds(string inputText)
     {
@@ -612,6 +603,43 @@ public class AtlasRenderer : MonoBehaviour
         b.center = transform.position + bOffset;
 
         return b;
+    }
+    public void AppearPreviewText()
+    {
+        Debug.Log("Appearing text");
+        AppearingText().Forget();
+    }
+    public void AppearConfirmText()
+    {
+        for (int i = 0; i < customs.Length; i++)
+        {
+            customs[i].x = 0;
+        }
+    }
+    private async UniTask AppearingText()
+    {
+        float elapsedTime = 0;
+        while (elapsedTime < APPEAR_TEXT_TIME)
+        {
+            elapsedTime += Time.deltaTime;
+            float t = elapsedTime / APPEAR_TEXT_TIME;
+            t *= 0.5f;
+            t = 1 - t;
+            for (int i = 0; i < customs.Length; i++)
+            {
+                customs[i].x = t;
+            }
+            await UniTask.Yield();
+        }
+    }
+    public void SetScrollingText()
+    {
+        customs = new Vector4[worldPivotsAndSizes.Length];
+        for (int i = 0; i < customs.Length; i++)
+        {
+            customs[i].x = bounds.size.x;
+            customs[i].y = 1.8f;
+        }
     }
 
 #if UNITY_EDITOR

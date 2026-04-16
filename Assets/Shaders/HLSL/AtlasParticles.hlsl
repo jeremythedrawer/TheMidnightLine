@@ -1,5 +1,13 @@
 #define THREADS_PER_GROUP 64
 
+static const float FORE_MIN = 1.0;
+static const float FORE_SIZE = 1.0;
+
+static const float MID_MIN = 48.0;
+static const float MID_SIZE = 16.0;
+
+static const float BACK_MIN = 65.0;
+static const float BACK_SIZE = 63.0;
 struct ZoneOutput
 {
     float4 uvSizeAndPos;

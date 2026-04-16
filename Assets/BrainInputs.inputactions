@@ -25,9 +25,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "NotepadActive",
+                    "name": "NotepadToggle",
                     "type": "Button",
                     "id": "ac29e519-7e48-478f-ad63-b10ac44b06d3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "NotepadConfirmStation",
+                    "type": "Button",
+                    "id": "72e47197-bc13-40fa-93ac-3437fee94115",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -92,11 +101,11 @@
                 {
                     "name": "",
                     "id": "6aca1f18-d5d7-4695-9384-53419fcb33c9",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardAndMouse",
-                    "action": "NotepadActive",
+                    "action": "NotepadToggle",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -107,7 +116,29 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "NotepadActive",
+                    "action": "NotepadToggle",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "7f782792-99b6-4af6-af1f-948a97fc1e5e",
+                    "path": "<Keyboard>/space",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardAndMouse",
+                    "action": "NotepadConfirmStation",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "652db379-7914-40fe-b47e-0e76476eb37a",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "NotepadConfirmStation",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

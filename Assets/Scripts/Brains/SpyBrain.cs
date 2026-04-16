@@ -202,7 +202,7 @@ public class SpyBrain : MonoBehaviour
         {
             SetState(State.Ticket);
         }
-        else if (playerInputs.notepadPressed || checkingNotepad)
+        else if (playerInputs.notepadToggle || checkingNotepad)
         {
             SetState(State.Notepad);
         }
@@ -256,9 +256,9 @@ public class SpyBrain : MonoBehaviour
             break;
             case State.Notepad:
             {
-                if(!playerInputs.notepadPressed) canExitNotepad = true;
+                if(!playerInputs.notepadToggle) canExitNotepad = true;
 
-                if (playerInputs.notepadPressed && canExitNotepad)
+                if (playerInputs.notepadToggle && canExitNotepad)
                 {
                     checkingNotepad = false;
                 }
