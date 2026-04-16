@@ -8,7 +8,8 @@ using static NPC;
 public class Notepad : MonoBehaviour
 {
     const float PAGE_SPAWN_POS_Y_OFFSET = 0.2f;
-    const float WRITE_LETTER_TIME = 0.2f;
+    public const float WRITE_LETTER_TIME = 0.1f;
+    const float WRITE_DAMPING = 3f;
     public enum State
     {
         Stationary,
@@ -40,31 +41,31 @@ public class Notepad : MonoBehaviour
     public Page page_prefab;
     
     [Header("Generated")]
-
+    public State curState;
+    
+    public NameData nameData;
     public Page activePage;
     public Page[] pages;
     public int activePageIndex;
     public int lastPageIndex;
+
     public Bounds totalBounds;
+    public Vector2 boundsOffset;
     
     public AtlasClip handFlipPage_clip;
     public AtlasClip rotatePencil_clip;
-    
-    public State curState;
-    public KeyframeState curKeyframeState;
-    
     public int lastLeftHandKeyframeIndex;
+    public KeyframeState curKeyframeState;
     public int leftHandDepthFront;
     public int leftHandDepthBack;
-    public int pageIndex;
-    public int backPages;
+    
+    public int createPageIndex;
 
     public int flipToggle;
     public bool writeToggle;
-    public static NameData nameData;
 
-    public Vector2 boundsOffset;
-
+    public float curWritingTime;
+    public float totalWritingTime;
     private void OnValidate()
     {
         SetTotalBounds();
@@ -154,10 +155,18 @@ public class Notepad : MonoBehaviour
             case State.Writing:
             {
                 writeToggle = true;
-
-                if (activePage)
-                leftHand_renderer.PlayClipOneShot(rotatePencil_clip);
-                activePage.SetDisembarkingStationText(0); // TODO actual chosen station index
+                curWritingTime = 0;
+                if (activePage.disembarkingStationIndex == -1)
+                {
+                    leftHand_renderer.UpdateSpriteInputs(ref rotatePencil_clip.keyFrames[0].motionSprite.sprite);
+                    activePage.SetDisembarkingStationText(0); // TODO actual chosen station index
+                    leftHand_renderer.transform.position = new Vector3(activePage.stationNameBounds.min.x, activePage.stationNameBounds.min.y, leftHand_renderer.transform.position.z);
+                    totalWritingTime = activePage.stationName.Length * WRITE_LETTER_TIME;
+                }
+                else
+                {
+                    //leftHand_renderer.PlayClipOneShot(rotatePencil_clip);
+                }
             }
             break;
         }
@@ -282,6 +291,18 @@ public class Notepad : MonoBehaviour
                 }
             }
             break;
+            case State.Writing:
+            {
+                curWritingTime += Time.deltaTime;
+                float t = curWritingTime / totalWritingTime;
+                float curPosX = Mathf.Lerp(activePage.stationNameBounds.min.x, activePage.stationNameBounds.max.x, t);
+                float randOffset = Mathf.PerlinNoise(curWritingTime * 7, curWritingTime * 7) * 2 - 1;
+                float curPosY = activePage.stationNameBounds.center.y + (randOffset * 0.16f);
+                leftHand_renderer.transform.position = new Vector3(curPosX, curPosY, leftHand_renderer.transform.position.z);
+
+                if (t > 1f) writeToggle = false;
+            }
+            break;
         }
     }
     private void CreateNPCProfiles()
@@ -359,14 +380,14 @@ public class Notepad : MonoBehaviour
                 station.traitorProfiles[j] = traitorProfile;
 
                 Vector3 pagePos = bindingRings_renderer.transform.position + Vector3.forward;
-                if (pageIndex != 0) pagePos.z += 2;
+                if (createPageIndex != 0) pagePos.z += 2;
                 pagePos.y += PAGE_SPAWN_POS_Y_OFFSET;
                 Page page = Instantiate(page_prefab, pagePos, Quaternion.identity, transform);
                 page.Init(traitorProfile);
-                page.gameObject.name = "Page_" + pageIndex;
+                page.gameObject.name = "Page_" + createPageIndex;
                 pageList.Add(page);
-                if (pageIndex != 0) page.gameObject.SetActive(false);
-                pageIndex++;
+                if (createPageIndex != 0) page.gameObject.SetActive(false);
+                createPageIndex++;
             }
         }
 

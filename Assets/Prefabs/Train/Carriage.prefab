@@ -352,6 +352,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
@@ -570,6 +571,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 8
   prevSpriteIndexFlipV: 8
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -662,6 +664,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 8
   prevSpriteIndexFlipV: 8
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -754,6 +757,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 8
   prevSpriteIndexFlipV: 8
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -846,6 +850,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 10
   prevSpriteIndexFlipV: 10
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -938,6 +943,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 4
   prevSpriteIndexFlipV: 4
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -1030,6 +1036,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 8
   prevSpriteIndexFlipV: 8
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -1274,6 +1281,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 8
   prevSpriteIndexFlipV: 8
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -1493,6 +1501,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -1661,8 +1670,8 @@ MonoBehaviour:
   flipY: 0
   width: 1
   height: 1
-  text: 'NEXT STATION IS GOROV STATION '
-  kerning: 0.7
+  text: NEXT STATION IS NOVOGRAD
+  kerning: 0.69
   spacing: 0.06
   cam: {fileID: 0}
   sprite:
@@ -1671,39 +1680,35 @@ MonoBehaviour:
     worldSize: {x: 0, y: 0, z: 0}
     index: 0
   bounds:
-    m_Center: {x: 111.24029, y: -55.903893, z: 4.5}
-    m_Extent: {x: 1.0252888, y: 0.119444445, z: 0.1}
+    m_Center: {x: 111.06626, y: -55.903893, z: 4.5}
+    m_Extent: {x: 0.8512639, y: 0.119444445, z: 0}
   worldPivotAndSize: {x: 0, y: 0, z: 0, w: 0}
   uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
   scaleAndFlip: {x: 0, y: 0, z: 0, w: 0}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 1.0252888, y: 0.119444445, z: 0}
+  boundsOffset: {x: 0.8512639, y: 0.119444445, z: 0}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.11111111, w: 0.23888889}
-  - {x: 0.08158889, y: 0, z: 0.07777778, w: 0.23888889}
-  - {x: 0.15151112, y: 0, z: 0.12222222, w: 0.23888889}
-  - {x: 0.2369889, y: 0, z: 0.07777778, w: 0.23888889}
-  - {x: 0.34891114, y: 0, z: 0.094444446, w: 0.23888889}
-  - {x: 0.42466667, y: 0, z: 0.07777778, w: 0.23888889}
-  - {x: 0.4945889, y: 0, z: 0.10555556, w: 0.23888889}
-  - {x: 0.57423335, y: 0, z: 0.07777778, w: 0.23888889}
-  - {x: 0.64415556, y: 0, z: 0.022222223, w: 0.23888889}
-  - {x: 0.69463336, y: 0, z: 0.11111111, w: 0.23888889}
-  - {x: 0.7762223, y: 0, z: 0.11111111, w: 0.23888889}
-  - {x: 0.89981115, y: 0, z: 0.022222223, w: 0.23888889}
-  - {x: 0.95028895, y: 0, z: 0.094444446, w: 0.23888889}
-  - {x: 1.0680444, y: 0, z: 0.094444446, w: 0.23888889}
-  - {x: 1.1438, y: 0, z: 0.11111111, w: 0.23888889}
-  - {x: 1.2253889, y: 0, z: 0.11666667, w: 0.23888889}
-  - {x: 1.3089223, y: 0, z: 0.11111111, w: 0.23888889}
-  - {x: 1.3905112, y: 0, z: 0.10555556, w: 0.23888889}
-  - {x: 1.5121555, y: 0, z: 0.094444446, w: 0.23888889}
-  - {x: 1.5879111, y: 0, z: 0.07777778, w: 0.23888889}
-  - {x: 1.6578333, y: 0, z: 0.10555556, w: 0.23888889}
-  - {x: 1.7374778, y: 0, z: 0.07777778, w: 0.23888889}
-  - {x: 1.8074, y: 0, z: 0.022222223, w: 0.23888889}
-  - {x: 1.8578777, y: 0, z: 0.11111111, w: 0.23888889}
-  - {x: 1.9394666, y: 0, z: 0.11111111, w: 0.23888889}
+  - {x: 0.08042333, y: 0, z: 0.07777778, w: 0.23888889}
+  - {x: 0.14934666, y: 0, z: 0.12222222, w: 0.23888889}
+  - {x: 0.23360334, y: 0, z: 0.07777778, w: 0.23888889}
+  - {x: 0.34392667, y: 0, z: 0.094444446, w: 0.23888889}
+  - {x: 0.41860002, y: 0, z: 0.07777778, w: 0.23888889}
+  - {x: 0.48752338, y: 0, z: 0.10555556, w: 0.23888889}
+  - {x: 0.56603, y: 0, z: 0.07777778, w: 0.23888889}
+  - {x: 0.6349534, y: 0, z: 0.022222223, w: 0.23888889}
+  - {x: 0.68471, y: 0, z: 0.11111111, w: 0.23888889}
+  - {x: 0.7651334, y: 0, z: 0.11111111, w: 0.23888889}
+  - {x: 0.8869567, y: 0, z: 0.022222223, w: 0.23888889}
+  - {x: 0.9367134, y: 0, z: 0.094444446, w: 0.23888889}
+  - {x: 1.0527867, y: 0, z: 0.11111111, w: 0.23888889}
+  - {x: 1.1332101, y: 0, z: 0.11111111, w: 0.23888889}
+  - {x: 1.2136334, y: 0, z: 0.10555556, w: 0.23888889}
+  - {x: 1.29214, y: 0, z: 0.11111111, w: 0.23888889}
+  - {x: 1.3725634, y: 0, z: 0.094444446, w: 0.23888889}
+  - {x: 1.4472368, y: 0, z: 0.11666667, w: 0.23888889}
+  - {x: 1.5295767, y: 0, z: 0.10555556, w: 0.23888889}
+  - {x: 1.6080834, y: 0, z: 0.094444446, w: 0.23888889}
   uvSizesAndPositions:
   - {x: 0.0390625, y: 0.083984375, z: 0, w: 0.6582031}
   - {x: 0.02734375, y: 0.083984375, z: 0.20507812, w: 0.7441406}
@@ -1718,18 +1723,14 @@ MonoBehaviour:
   - {x: 0.0390625, y: 0.083984375, z: 0, w: 0.6582031}
   - {x: 0.0078125, y: 0.083984375, z: 0.3359375, w: 0.7441406}
   - {x: 0.033203125, y: 0.083984375, z: 0.21289062, w: 0.6582031}
-  - {x: 0.033203125, y: 0.083984375, z: 0.26171875, w: 0.7441406}
-  - {x: 0.0390625, y: 0.083984375, z: 0.041015625, w: 0.6582031}
-  - {x: 0.041015625, y: 0.083984375, z: 0.16992188, w: 0.6582031}
+  - {x: 0.0390625, y: 0.083984375, z: 0, w: 0.6582031}
   - {x: 0.0390625, y: 0.083984375, z: 0.041015625, w: 0.6582031}
   - {x: 0.037109375, y: 0.083984375, z: 0.31640625, w: 0.6582031}
-  - {x: 0.033203125, y: 0.083984375, z: 0.21289062, w: 0.6582031}
-  - {x: 0.02734375, y: 0.083984375, z: 0.24804688, w: 0.6582031}
-  - {x: 0.037109375, y: 0.083984375, z: 0.0625, w: 0.7441406}
-  - {x: 0.02734375, y: 0.083984375, z: 0.24804688, w: 0.6582031}
-  - {x: 0.0078125, y: 0.083984375, z: 0.3359375, w: 0.7441406}
   - {x: 0.0390625, y: 0.083984375, z: 0.041015625, w: 0.6582031}
-  - {x: 0.0390625, y: 0.083984375, z: 0, w: 0.6582031}
+  - {x: 0.033203125, y: 0.083984375, z: 0.26171875, w: 0.7441406}
+  - {x: 0.041015625, y: 0.083984375, z: 0.16992188, w: 0.6582031}
+  - {x: 0.037109375, y: 0.083984375, z: 0.0625, w: 0.7441406}
+  - {x: 0.033203125, y: 0.083984375, z: 0.16992188, w: 0.7441406}
   scalesAndFlips:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
@@ -1752,41 +1753,34 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
   customs:
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
-  - {x: 2.0505776, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -1879,6 +1873,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 8
   prevSpriteIndexFlipV: 8
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -2085,6 +2080,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
@@ -2425,6 +2421,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
@@ -2575,6 +2572,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -2762,6 +2760,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
@@ -2863,6 +2862,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -2955,6 +2955,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 2
   prevSpriteIndexFlipV: 2
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -3357,6 +3358,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 7
   prevSpriteIndexFlipV: 7
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -3427,6 +3429,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 6
   prevSpriteIndexFlipV: 6
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -3767,6 +3770,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 6
   prevSpriteIndexFlipV: 6
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -3832,6 +3836,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 7
   prevSpriteIndexFlipV: 7
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -4099,6 +4104,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 9
   prevSpriteIndexFlipV: 9
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -4164,6 +4170,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 5
   prevSpriteIndexFlipV: 5
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -4229,6 +4236,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 9
   prevSpriteIndexFlipV: 9
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -4294,6 +4302,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 9
   prevSpriteIndexFlipV: 9
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -4359,6 +4368,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 9
   prevSpriteIndexFlipV: 9
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -4424,6 +4434,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 9
   prevSpriteIndexFlipV: 9
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -4489,6 +4500,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 9
   prevSpriteIndexFlipV: 9
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}

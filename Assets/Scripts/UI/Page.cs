@@ -5,7 +5,6 @@ using static Atlas;
 using static NPC;
 public class Page : MonoBehaviour
 {
-    const float WRITE_LETTER_TIME = 0.2f;
     public TripSO trip;
     public NPCsDataSO npcData;
     public AtlasRenderer paper_renderer;
@@ -22,7 +21,8 @@ public class Page : MonoBehaviour
     public Behaviours behaviours0;
     public Behaviours behaviours1;
     public int disembarkingStationIndex;
-
+    public Bounds stationNameBounds;
+    public string stationName;
     public void Init(NPCProfile traitorProfile)
     {
         paperClip = paper_renderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
@@ -35,6 +35,8 @@ public class Page : MonoBehaviour
         behaviour1_renderer.SetText(npcData.behaviourDescDict[behaviours1]);
 
         mugshot_renderer.UpdateSpriteInputs(ref mugshot_renderer.atlas.simpleSprites[traitorProfile.coveredMugshotIndex]);
+
+        disembarkingStationIndex = -1;
     }
     public void PlayPaperClip()
     {
@@ -72,10 +74,10 @@ public class Page : MonoBehaviour
     public void SetDisembarkingStationText(int chosenStationIndex)
     {
         disembarkingStationIndex = chosenStationIndex;
-        string disembarkingStationName = trip.stationsDataArray[disembarkingStationIndex].stationName;
-        WriteStationName(disembarkingStationName).Forget();
+        stationName = trip.stationsDataArray[disembarkingStationIndex].stationName;
+        stationNameBounds = disembarkingStation_renderer.GetTextBounds(stationName);
+        WriteStationName(stationName).Forget();
     }
-
     private async UniTask WriteStationName(string stationName)
     {
         int stationNameLetterCount = stationName.Length;
@@ -85,7 +87,7 @@ public class Page : MonoBehaviour
 
         while( curLetterIndex < stationNameLetterCount )
         {
-            await UniTask.WaitForSeconds(WRITE_LETTER_TIME);
+            await UniTask.WaitForSeconds(Notepad.WRITE_LETTER_TIME);
             curStationString += stationName[curLetterIndex];
             disembarkingStation_renderer.SetText(curStationString);
             curLetterIndex++;

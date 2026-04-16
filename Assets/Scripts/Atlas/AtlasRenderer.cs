@@ -168,8 +168,6 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void UpdateSpriteInputs(ref SimpleSprite newSprite)
     {
-        if (atlas == null) return;
-
         if (rendererType > AtlasRendererType.TextWorld)
         {
             Vector2 spritePixelSize = newSprite.worldSize * PIXELS_PER_UNIT;
@@ -226,7 +224,7 @@ public class AtlasRenderer : MonoBehaviour
 
         flipY = flipDown;
         scaleAndFlip.w = flipDown ? -1 : 1;
-        float flipPivot = flipDown ? 1 - sprite.uvPivot.y : sprite.uvPivot.y;
+        float flipPivot = flipDown ? 1 - curSprite.uvPivot.y : curSprite.uvPivot.y;
         worldPivotAndSize.y = flipPivot * scaleAndFlip.y * worldPivotAndSize.w;
         boundsOffset.y = (bounds.size.y * 0.5f) - worldPivotAndSize.y;
         prevSpriteIndexFlipV = sprite.index;
@@ -436,110 +434,184 @@ public class AtlasRenderer : MonoBehaviour
         customs = new Vector4[printableChars];
 
         int spriteIndex = 0;
-        float maxLetterHeight = 0;
         
         float minX = float.MaxValue;
         float maxX = float.MinValue;
         float maxY = float.MinValue;
 
-
-        if (rendererType == AtlasRendererType.TextScreen)
+        switch(rendererType)
         {
-            for (int i = 0; i < text.Length; i++)
+            case AtlasRendererType.TextScreen:
             {
-                char c = text[i];
-                int asciiIndex = (int)c;
-                if (asciiIndex < 33)
+                for (int i = 0; i < text.Length; i++)
                 {
+                    int asciiIndex = (int)text[i];
+                    int letterIndex = asciiIndex - 33;
                     if (asciiIndex == 32)
                     {
                         cursorX += spacing;
                     }
-                }
-                else
-                {
-                    SimpleSprite sprite = atlas.simpleSprites[asciiIndex - 33];
-                    float letterPos = cursorX * kerning * camStats.worldUnitsPerPixel;
-                    Vector4 worldPivotAndSize = worldPivotsAndSizes[spriteIndex];
-                    worldPivotAndSize.x = -letterPos;
+                    else if (letterIndex >= 0)
+                    {
+                        SimpleSprite sprite = atlas.simpleSprites[letterIndex];
+                        float letterPos = cursorX * kerning * camStats.worldUnitsPerPixel;
+                        Vector2 spritePixelSize = sprite.worldSize * PIXELS_PER_UNIT;
+                        Vector4 worldPivotAndSize = new Vector4(-letterPos, 0, spritePixelSize.x * camStats.worldUnitsPerPixel, spritePixelSize.y * camStats.worldUnitsPerPixel);
+                        worldPivotsAndSizes[spriteIndex] = worldPivotAndSize;
 
-                    Vector2 spritePixelSize = sprite.worldSize * PIXELS_PER_UNIT;
-                    worldPivotAndSize.z = spritePixelSize.x * camStats.worldUnitsPerPixel;
-                    worldPivotAndSize.w = spritePixelSize.y * camStats.worldUnitsPerPixel;
-                    worldPivotsAndSizes[spriteIndex] = worldPivotAndSize;
+                        float right = letterPos + worldPivotAndSize.z;
 
-                    cursorX += spritePixelSize.x;
+                        if (letterPos < minX) minX = letterPos;
+                        if (right > maxX) maxX = right;
+                        if (worldPivotAndSize.w > maxY) maxY = worldPivotAndSize.w;
 
-                    if (worldPivotAndSize.w > maxLetterHeight) maxLetterHeight = worldPivotAndSize.w;
 
-                    uvSizesAndPositions[spriteIndex] = sprite.uvSizeAndPos;
-                    scalesAndFlips[spriteIndex] = Vector4.one;
-                    spriteIndex++;
+                        float widthRatio = spritePixelSize.x / LETTER_ADVANCE;
+                        float advanceScale = widthRatio * 0.5f + 0.5f;
+                        cursorX += LETTER_ADVANCE * advanceScale;
+
+                        uvSizesAndPositions[spriteIndex] = sprite.uvSizeAndPos;
+                        scalesAndFlips[spriteIndex] = Vector4.one;
+                        spriteIndex++;
+                    }
                 }
             }
-        }
-        else
-        {
-            for (int i = 0; i < text.Length; i++)
-            {
-                char c = text[i];
+            break;
 
-                int asciiIndex = (int)c;
-                if (asciiIndex < 33)
+            case AtlasRendererType.TextWorld:
+            {
+                for (int i = 0; i < text.Length; i++)
                 {
+                    int asciiIndex = (int)text[i];
+                    int letterIndex = asciiIndex - 33;
                     if (asciiIndex == 32)
                     {
                         cursorX += spacing;
                     }
-                }
-                else
-                {
-                    SimpleSprite sprite = atlas.simpleSprites[asciiIndex - 33];
+                    else if (letterIndex >= 0)
+                    {
+                        SimpleSprite sprite = atlas.simpleSprites[letterIndex];
 
-                    float letterAdvance = 0.122f;
-                    float letterPos = (cursorX) * kerning;
-                    Vector4 worldPivotAndSize = worldPivotsAndSizes[spriteIndex];
-                    worldPivotAndSize.x = letterPos;
-                    worldPivotAndSize.z = sprite.worldSize.x;
-                    worldPivotAndSize.w = sprite.worldSize.y;
+                        float letterPos = cursorX * kerning;
+                        Vector4 worldPivotAndSize = new Vector4(letterPos, 0, sprite.worldSize.x, sprite.worldSize.y);
+                        worldPivotsAndSizes[spriteIndex] = worldPivotAndSize;
 
-                    float left = worldPivotAndSize.x;
-                    float right = worldPivotAndSize.x + worldPivotAndSize.z;
-                    float top = worldPivotAndSize.w;
+                        float right = worldPivotAndSize.x + worldPivotAndSize.z;
 
-                    if (left < minX) minX = left;
-                    if (right > maxX) maxX = right;
-                    if (top > maxY) maxY = top;
+                        if (worldPivotAndSize.x < minX) minX = worldPivotAndSize.x;
+                        if (right > maxX) maxX = right;
+                        if (worldPivotAndSize.w > maxY) maxY = worldPivotAndSize.w;
 
 
+                        float widthRatio = sprite.worldSize.x / LETTER_ADVANCE;
+                        float advanceScale = widthRatio * 0.5f + 0.5f;
+                        cursorX += LETTER_ADVANCE * advanceScale;
 
-                    worldPivotsAndSizes[spriteIndex] = worldPivotAndSize;
-
-                    float widthRatio = sprite.worldSize.x / letterAdvance;
-                    float advanceScale = widthRatio * 0.5f + 0.5f;
-                    cursorX += letterAdvance * advanceScale;
-
-                    if (sprite.worldSize.y > maxLetterHeight) maxLetterHeight = sprite.worldSize.y;
-
-                    uvSizesAndPositions[spriteIndex] = sprite.uvSizeAndPos;
-                    scalesAndFlips[spriteIndex] = Vector4.one;
-                    spriteIndex++;
+                        uvSizesAndPositions[spriteIndex] = sprite.uvSizeAndPos;
+                        scalesAndFlips[spriteIndex] = Vector4.one;
+                        spriteIndex++;
+                    }
                 }
             }
+            break;
         }
 
-        float width = maxX - minX;
-        float height = maxY;
-
-        bounds.size = new Vector3(width, height, 0.2f);
-        boundsOffset = new Vector3(width * 0.5f, height * 0.5f, 0f);
+        bounds.size = new Vector3(maxX, maxY, 0f);
+        boundsOffset = new Vector3(maxX * 0.5f, maxY * 0.5f, 0f);
         bounds.center = transform.position + boundsOffset;
 
         for (int i = 0; i < printableChars; i++) //TODO(Jeremy): Set outside of renderer in a scrolling class if I need to use the custom vector else where
         {
-            customs[i].x = width;
+            customs[i].x = maxX;
             customs[i].y = 1.8f;
         }
+    }
+    public Bounds GetTextBounds(string inputText)
+    {
+        float cursorX = 0;
+        Bounds b = new Bounds();
+
+        int spriteIndex = 0;
+
+        float minX = float.MaxValue;
+        float maxX = float.MinValue;
+        float maxY = float.MinValue;
+
+        switch (rendererType)
+        {
+            case AtlasRendererType.TextScreen:
+            {
+                for (int i = 0; i < inputText.Length; i++)
+                {
+                    int asciiIndex = (int)inputText[i];
+                    int letterIndex = asciiIndex - 33;
+                    if (asciiIndex == 32)
+                    {
+                        cursorX += spacing;
+                    }
+                    else if (letterIndex >= 0)
+                    {
+                        SimpleSprite sprite = atlas.simpleSprites[letterIndex];
+                        float letterPos = cursorX * kerning * camStats.worldUnitsPerPixel;
+                        Vector2 spritePixelSize = sprite.worldSize * PIXELS_PER_UNIT;
+                        Vector4 worldPivotAndSize = new Vector4(-letterPos, 0, spritePixelSize.x * camStats.worldUnitsPerPixel, spritePixelSize.y * camStats.worldUnitsPerPixel);
+
+                        float right = letterPos + worldPivotAndSize.z;
+
+                        if (letterPos < minX) minX = letterPos;
+                        if (right > maxX) maxX = right;
+                        if (worldPivotAndSize.w > maxY) maxY = worldPivotAndSize.w;
+
+                        float widthRatio = spritePixelSize.x / LETTER_ADVANCE;
+                        float advanceScale = widthRatio * 0.5f + 0.5f;
+                        cursorX += LETTER_ADVANCE * advanceScale;
+
+                        spriteIndex++;
+                    }
+                }
+            }
+            break;
+
+            case AtlasRendererType.TextWorld:
+            {
+                for (int i = 0; i < inputText.Length; i++)
+                {
+                    int asciiIndex = (int)inputText[i];
+                    int letterIndex = asciiIndex - 33;
+                    if (asciiIndex == 32)
+                    {
+                        cursorX += spacing;
+                    }
+                    else if (letterIndex >= 0)
+                    {
+                        SimpleSprite sprite = atlas.simpleSprites[letterIndex];
+
+                        float letterPos = cursorX * kerning;
+                        Vector4 worldPivotAndSize = new Vector4(letterPos, 0, sprite.worldSize.x, sprite.worldSize.y);
+
+                        float right = worldPivotAndSize.x + worldPivotAndSize.z;
+
+                        if (worldPivotAndSize.x < minX) minX = worldPivotAndSize.x;
+                        if (right > maxX) maxX = right;
+                        if (worldPivotAndSize.w > maxY) maxY = worldPivotAndSize.w;
+
+
+                        float widthRatio = sprite.worldSize.x / LETTER_ADVANCE;
+                        float advanceScale = widthRatio * 0.5f + 0.5f;
+                        cursorX += LETTER_ADVANCE * advanceScale;
+
+                        spriteIndex++;
+                    }
+                }
+            }
+            break;
+        }
+
+        b.size = new Vector3(maxX, maxY, 0f);
+        Vector3 bOffset = new Vector3(maxX * 0.5f, maxY * 0.5f, 0f);
+        b.center = transform.position + bOffset;
+
+        return b;
     }
 
 #if UNITY_EDITOR

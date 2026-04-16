@@ -6,6 +6,7 @@ using static Atlas;
 public static class AtlasRendering
 {
     public const int MAX = 1024;
+    public const float LETTER_ADVANCE = 0.122f;
     public static int SHADER_DATA_STRIDE = Marshal.SizeOf<SpriteData>();
     public static int ARGS_STRIDE = INT_SIZE * 5;
 
