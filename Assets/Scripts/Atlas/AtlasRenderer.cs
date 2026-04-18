@@ -203,7 +203,7 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void UpdateDepthRealtime(int newDepth)
     {
-        gameObject.transform.position = new Vector3(gameObject.transform.position.x, gameObject.transform.position.y, newDepth);
+        transform.position = new Vector3(transform.position.x, transform.position.y, newDepth);
     }
     public void FlipH(bool flipLeft, SimpleSprite curSprite)
     {
@@ -606,7 +606,6 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void AppearPreviewText()
     {
-        Debug.Log("Appearing text");
         AppearingText().Forget();
     }
     public void AppearConfirmText()

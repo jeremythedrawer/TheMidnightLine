@@ -303,7 +303,6 @@ public class SpyBrain : MonoBehaviour
             case State.Idle:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.StandingBreathing];
-                Debug.Log(curClip.clipName);
                 rigidBody.gravityScale = stats.curGravityScale;
             }
             break;

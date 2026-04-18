@@ -86,9 +86,14 @@ public class Page : MonoBehaviour
     }
     public void SetPreviewStationText(int stationIndex)
     {
-        chosenStation_renderer.SetText(trip.stationsDataArray[stationIndex].stationName);
-        chosenStation_renderer.AppearPreviewText();
+        string previewStationText = trip.stationsDataArray[stationIndex].stationName;
+        chosenStation_renderer.SetText(previewStationText);
         stationNameBounds = chosenStation_renderer.bounds;
+        chosenStation_renderer.AppearPreviewText();
+    }
+    public Bounds GetStationNameBounds()
+    {
+        return chosenStation_renderer.bounds;
     }
     private async UniTask ErasingStationName()
     {

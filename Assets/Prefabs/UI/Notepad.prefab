@@ -49,6 +49,7 @@ MonoBehaviour:
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   namesJSON: {fileID: 4900000, guid: 6bd6d02c0c61ca448b58bec44c991b58, type: 3}
   rightHand_renderer: {fileID: 8131932147061306431}
   frontFingers_renderer: {fileID: 3270573653072393315}
@@ -64,9 +65,9 @@ MonoBehaviour:
   activePageIndex: 0
   lastPageIndex: 0
   totalBounds:
-    m_Center: {x: 305.3139, y: 0.6466665, z: -23.95}
-    m_Extent: {x: 6.208313, y: 3.832222, z: 2.6000004}
-  boundsOffset: {x: -294.0756, y: -3.5444446}
+    m_Center: {x: 2.60889, y: -11.862779, z: -2.5}
+    m_Extent: {x: 7.043334, y: 4.951667, z: 2.6}
+  boundsOffset: {x: 9.464444, y: 10.084446}
   handFlipPage_clip:
     clipName: 
     keyFrames: []
@@ -88,8 +89,15 @@ MonoBehaviour:
   writeToggle: 0
   eraseToggle: 0
   previewStationIndex: 0
-  curWritingTime: 0
+  curPencilTime: 0
   totalWritingTime: 0
+  atStartWritePos: 0
+  holdingPencil: 0
+  leftHandFlipPos: {x: 0, y: 0, z: 0}
+  leftHandPencilPos: {x: 0, y: 0, z: 0}
+  leftHandPencilInactivePos: {x: 0, y: 0, z: 0}
+  leftHandTargetPos: {x: 0, y: 0, z: 0}
+  leftHandOffScreenPos: {x: 0, y: 0, z: 0}
 --- !u!1 &2467022903358664946
 GameObject:
   m_ObjectHideFlags: 0
@@ -305,7 +313,7 @@ Transform:
   m_GameObject: {fileID: 6878149229419650586}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.05, y: -0.49, z: -5}
+  m_LocalPosition: {x: -1.42, y: -5.54, z: -5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -330,7 +338,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: eba6eb7239ccca949b91a3ab6672a7da, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 0
+  spriteIndex: 16
   flipX: 0
   flipY: 0
   width: 1
@@ -340,18 +348,18 @@ MonoBehaviour:
   spacing: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.17260742, y: 0.16186523, z: 0.66552734, w: 0.81274414}
-    uvPivot: {x: 0.9985856, y: 0.9984917}
-    worldSize: {x: 3.9277778, y: 3.6833334, z: 1}
-    index: 0
+    uvSizeAndPos: {x: 0.17700195, y: 0.14135742, z: 0.015625, w: 0}
+    uvPivot: {x: 0.9986207, y: 0.7063903}
+    worldSize: {x: 4.0277777, y: 3.2166667, z: 1}
+    index: 16
   bounds:
-    m_Center: {x: 1.1633339, y: -10.892222, z: -5}
-    m_Extent: {x: 3.9277778, y: 3.6833334, z: 0.1}
-  worldPivotAndSize: {x: 7.8444443, y: 7.3555555, z: 7.8555555, w: 7.366667}
-  uvSizeAndPosition: {x: 0.17260742, y: 0.16186523, z: 0.66552734, w: 0.81274414}
+    m_Center: {x: -0.40666628, y: -13.597778, z: -5}
+    m_Extent: {x: 4.0277777, y: 3.2166667, z: 0.1}
+  worldPivotAndSize: {x: 8.044444, y: 4.5444446, z: 8.055555, w: 6.4333334}
+  uvSizeAndPosition: {x: 0.17700195, y: 0.14135742, z: 0.015625, w: 0}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: -3.9166665, y: -3.6722221, z: 0}
+  boundsOffset: {x: -4.0166664, y: -1.3277779, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -359,8 +367,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
+  prevSpriteIndexFlipH: 16
+  prevSpriteIndexFlipV: 16
   isAnimating: 0
   slicedSprite:
     sprite:
