@@ -79,7 +79,7 @@ public class POVUI : MonoBehaviour
     }
     private void SelectState()
     {
-        if (spyStats.curState == SpyBrain.State.Notepad)
+        if (spyStats.curState == SpyBrain.State.Notepad || notepad.curState != Notepad.State.Stationary)
         {
             SetState(State.Notepad);
         }

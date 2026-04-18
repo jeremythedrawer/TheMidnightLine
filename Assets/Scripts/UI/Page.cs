@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Threading;
 using UnityEngine;
 using static Atlas;
 using static NPC;
@@ -23,6 +24,13 @@ public class Page : MonoBehaviour
     public int chosenStationIndex;
     public Bounds stationNameBounds;
     public string chosenStationName;
+    public CancellationTokenSource ctsWrite;
+
+    private void OnDisable()
+    {
+        ctsWrite?.Cancel();
+        ctsWrite = null;
+    }
     public void Init(NPCProfile traitorProfile)
     {
         paperClip = paper_renderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
@@ -78,10 +86,15 @@ public class Page : MonoBehaviour
         chosenStationName = trip.stationsDataArray[chosenStationIndex].stationName;
         stationNameBounds = chosenStation_renderer.GetTextBounds(chosenStationName);
         chosenStation_renderer.AppearConfirmText();
+
+        ctsWrite?.Cancel();
+        ctsWrite = new CancellationTokenSource();
         WritingStationName(chosenStationName).Forget();
     }
     public void EraseChosenStationText()
     {
+        ctsWrite?.Cancel();
+        ctsWrite = new CancellationTokenSource();
         ErasingStationName().Forget();
     }
     public void SetPreviewStationText(int stationIndex)
@@ -97,13 +110,17 @@ public class Page : MonoBehaviour
     }
     private async UniTask ErasingStationName()
     {
-        string curStationString = chosenStationName;
-        while(curStationString.Length > 0)
+        string curStationString = chosenStation_renderer.text;
+        try
         {
-            await UniTask.WaitForSeconds(Notepad.WRITE_LETTER_TIME);
-            curStationString = curStationString[..^1];
-            chosenStation_renderer.SetText(curStationString);
+            while (curStationString.Length > 0)
+            {
+                await UniTask.WaitForSeconds(Notepad.WRITE_LETTER_TIME, cancellationToken: ctsWrite.Token);
+                curStationString = curStationString[..^1];
+                chosenStation_renderer.SetText(curStationString);
+            }
         }
+        catch (OperationCanceledException) { }
     }
     private async UniTask WritingStationName(string stationName)
     {
@@ -112,13 +129,18 @@ public class Page : MonoBehaviour
 
         string curStationString = "";
         chosenStation_renderer.SetText(curStationString);
-        while ( curLetterIndex < stationNameLetterCount )
+
+        try
         {
-            curStationString += stationName[curLetterIndex];
-            await UniTask.WaitForSeconds(Notepad.WRITE_LETTER_TIME);
-            chosenStation_renderer.SetText(curStationString);
-            curLetterIndex++;
+            while ( curLetterIndex < stationNameLetterCount )
+            {
+                curStationString += stationName[curLetterIndex];
+                await UniTask.WaitForSeconds(Notepad.WRITE_LETTER_TIME, cancellationToken: ctsWrite.Token);
+                chosenStation_renderer.SetText(curStationString);
+                curLetterIndex++;
+            }
         }
+        catch (OperationCanceledException) { }
     }
     private Behaviours GetBehaviourAtIndex(Behaviours behaviours, int index)
     {

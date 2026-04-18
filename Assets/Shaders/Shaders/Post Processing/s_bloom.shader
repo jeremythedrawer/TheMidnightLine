@@ -26,7 +26,7 @@ Shader "Custom/s_bloom"
 
 		half4 bloomPre(Varyings input) : SV_TARGET
 		{
-			half3 col = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, input.texcoord);
+			half3 col = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, input.texcoord).rgb;
 
 			half brightness = max(col.r, max(col.g, col.b));
 			half softness = clamp(brightness - THRESHOLD + 1, 0.0, 2.0);

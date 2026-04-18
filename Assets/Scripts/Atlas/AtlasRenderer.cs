@@ -513,9 +513,18 @@ public class AtlasRenderer : MonoBehaviour
             break;
         }
 
-        bounds.size = new Vector3(maxX, maxY, 0f);
-        boundsOffset = new Vector3(maxX * 0.5f, maxY * 0.5f, 0f);
-        bounds.center = transform.position + boundsOffset;
+        if (printableChars == 0)
+        {
+            bounds.size = Vector3.zero;
+            bounds.center = transform.position;
+            boundsOffset = Vector3.zero;
+        }
+        else
+        {
+            bounds.size = new Vector3(maxX, maxY, 0f);
+            boundsOffset = new Vector3(maxX * 0.5f, maxY * 0.5f, 0f);
+            bounds.center = transform.position + boundsOffset;
+        }
     }
     public Bounds GetTextBounds(string inputText)
     {

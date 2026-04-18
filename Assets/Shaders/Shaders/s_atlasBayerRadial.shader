@@ -1,8 +1,9 @@
-Shader "Custom/s_atlasUISelection"
+Shader "Custom/s_atlasBayerRadial"
 {
     Properties
     {
         [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
+        [NoScaleOffset] _NoiseTexture("Noise Texture", 2D) = "white"
     }
 
     SubShader
@@ -39,6 +40,8 @@ Shader "Custom/s_atlasUISelection"
 
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
+            TEXTURE2D(_NoiseTexture);
+            SAMPLER(sampler_NoiseTexture);
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -62,7 +65,6 @@ Shader "Custom/s_atlasUISelection"
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
                 o.instanceID = v.instanceID;
-
                 return o;
             }
 
@@ -77,15 +79,23 @@ Shader "Custom/s_atlasUISelection"
                 float2 scale = spriteData.scaleAndFlip.xy;
                 float2 flip = spriteData.scaleAndFlip.zw;
 
+                float2 normUV = i.uv;
                 i.uv *= scale;
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+
+                half4 noiseTex = SAMPLE_TEXTURE2D(_NoiseTexture, sampler_NoiseTexture, normUV);
+                float2 centerUV = normUV * 2 - 1;
+                float radial = length(centerUV);
                 
-                half alpha = color.a - spriteData.custom.x;
-                alpha= BayerMatrix(alpha, 1, i.positionHCS.xy);
+                float noise = noiseTex.r * 2 - 1;
+                half alpha = color.a + ((radial) - spriteData.custom.x);
+                //return alpha.xxxx;
+                alpha = saturate(alpha); 
+                alpha = BayerMatrix(alpha, 1, i.positionHCS.xy);
                 clip(alpha - 0.001);
 
                 return half4 (color.rgb, 1);

@@ -14,8 +14,6 @@ Shader "Custom/s_atlasRotate"
         Pass
         {
             HLSLPROGRAM
-            #define PI 3.14159265359
-            #define TWO_PI 6.28318530718
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
             #pragma vertex vert

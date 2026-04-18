@@ -1,4 +1,4 @@
-Shader "Custom/s_atlasNPC"
+Shader "Custom/s_atlasBayer"
 {
     Properties
     {
@@ -7,20 +7,19 @@ Shader "Custom/s_atlasNPC"
 
     SubShader
     {
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+        Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
         ZWrite On
         ZTest LEqual
         Blend SrcAlpha OneMinusSrcAlpha
-
         Pass
         {
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
             #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
+
             #pragma vertex vert
             #pragma fragment frag
-
 
             struct Attributes
             {
@@ -37,10 +36,9 @@ Shader "Custom/s_atlasNPC"
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
-            
+
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
-
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -48,7 +46,7 @@ Shader "Custom/s_atlasNPC"
                 AtlasSprite spriteData = _SpriteData[v.instanceID];
 
 
-                float3 position = spriteData.position.xyz;
+                float3 position = spriteData.position;
                 
                 float2 pivot = spriteData.pivotAndSize.xy;
                 float2 size = spriteData.pivotAndSize.zw;
@@ -85,11 +83,12 @@ Shader "Custom/s_atlasNPC"
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+                
+                half alpha = color.a - spriteData.custom.x;
+                alpha= BayerMatrix(alpha, 1, i.positionHCS.xy);
+                clip(alpha - 0.001);
 
-                half3 finalColor = color.rgb + (float3(0.1, 0, 0) * spriteData.custom.y);
-                color.a = BayerMatrix(color.a * spriteData.custom.x, 1, i.positionHCS.xy);
-                clip(color.a - 0.001);
-                return half4 (finalColor, 1);
+                return half4 (color.rgb, 1);
             }
             ENDHLSL
         }
