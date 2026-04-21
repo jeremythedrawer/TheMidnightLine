@@ -103,7 +103,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -2.7544022, y: 0.1483984}
+  m_Offset: {x: -2.7544022, y: 0.13271734}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0.5}
@@ -113,7 +113,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 19.857834, y: 0.7032032}
+  m_Size: {x: 19.857834, y: 0.6718411}
   m_EdgeRadius: 0
 --- !u!50 &7525060618133038375
 Rigidbody2D:
@@ -300,33 +300,33 @@ MonoBehaviour:
     worldSize: {x: 5.1, y: 2.2055554, z: 1}
     index: 4
   bounds:
-    m_Center: {x: -224.03378, y: 0.58026683, z: 15.1}
-    m_Extent: {x: 0.5194444, y: 0.51944447, z: 0.1}
+    m_Center: {x: -267.69815, y: 0.5441557, z: 15.1}
+    m_Extent: {x: 0.51944447, y: 0.48333332, z: 0.1}
   worldPivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.5194444, y: 0.51944447, z: 0.1}
+  boundsOffset: {x: 0.51944447, y: 0.48333332, z: 0.1}
   worldPivotsAndSizes:
-  - {x: 0, y: 0, z: 0.51666665, w: 0}
-  - {x: -0.51666665, y: 0, z: 0.5277779, w: 0}
-  - {x: -0.51666665, y: 0, z: 0.52222216, w: 0}
-  - {x: 0, y: -0, z: 0.51666665, w: 1.0333333}
-  - {x: -0.51666665, y: -0, z: 0.5277779, w: 1.0333333}
-  - {x: -0.51666665, y: -0, z: 0.52222216, w: 1.0333333}
-  - {x: 0, y: -1.0333333, z: 0.51666665, w: 0.005555572}
-  - {x: -0.51666665, y: -1.0333333, z: 0.5277779, w: 0.005555572}
-  - {x: -0.51666665, y: -1.0333333, z: 0.52222216, w: 0.005555572}
+  - {x: 0, y: 0, z: 0.51111114, w: 0.0055555557}
+  - {x: -0.51111114, y: 0, z: 0.5277778, w: 0.0055555557}
+  - {x: -0.51111114, y: 0, z: 0.5277778, w: 0.0055555557}
+  - {x: 0, y: -0.0055555557, z: 0.51111114, w: 0.9555555}
+  - {x: -0.51111114, y: -0.0055555557, z: 0.5277778, w: 0.9555555}
+  - {x: -0.51111114, y: -0.0055555557, z: 0.5277778, w: 0.9555555}
+  - {x: 0, y: -0.96111107, z: 0.51111114, w: 0.0055555683}
+  - {x: -0.51111114, y: -0.96111107, z: 0.5277778, w: 0.0055555683}
+  - {x: -0.51111114, y: -0.96111107, z: 0.5277778, w: 0.0055555683}
   uvSizesAndPositions:
-  - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-  - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-  - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-  - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-  - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-  - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-  - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-  - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-  - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
+  - {x: 0.022460938, y: 0.00024414062, z: 0.38208008, w: 0.6113281}
+  - {x: 0.02319336, y: 0.00024414062, z: 0.40454102, w: 0.6113281}
+  - {x: 0.02319336, y: 0.00024414062, z: 0.42773438, w: 0.6113281}
+  - {x: 0.022460938, y: 0.041992188, z: 0.38208008, w: 0.61157227}
+  - {x: 0.02319336, y: 0.041992188, z: 0.40454102, w: 0.61157227}
+  - {x: 0.02319336, y: 0.041992188, z: 0.42773438, w: 0.61157227}
+  - {x: 0.022460938, y: 0.00024414118, z: 0.38208008, w: 0.65356445}
+  - {x: 0.02319336, y: 0.00024414118, z: 0.40454102, w: 0.65356445}
+  - {x: 0.02319336, y: 0.00024414118, z: 0.42773438, w: 0.65356445}
   scalesAndFlips:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 0, y: 1, z: 1, w: 1}
@@ -355,22 +355,22 @@ MonoBehaviour:
   isAnimating: 0
   slicedSprite:
     sprite:
-      uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
+      uvSizeAndPos: {x: 0.068847656, y: 0.04248047, z: 0.38208008, w: 0.6113281}
       uvPivot: {x: 0, y: 0}
-      worldSize: {x: 1.5666667, y: 1.0388889, z: 1}
+      worldSize: {x: 1.5666667, y: 0.96666664, z: 1}
       index: 0
-    slice: {x: 0.32978722, y: 0.6666667, z: 0, w: 0.9946524}
+    slice: {x: 0.32624114, y: 0.66312057, z: 0.0057471264, w: 0.99425286}
     uvSizeAndPos:
-    - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-    - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-    - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
-    worldSlices: {x: 0.51666665, y: 0.52222216, z: 0, w: 0.005555572}
+    - {x: 0.022460938, y: 0.00024414062, z: 0.38208008, w: 0.6113281}
+    - {x: 0.02319336, y: 0.00024414062, z: 0.40454102, w: 0.6113281}
+    - {x: 0.02319336, y: 0.00024414062, z: 0.42773438, w: 0.6113281}
+    - {x: 0.022460938, y: 0.041992188, z: 0.38208008, w: 0.61157227}
+    - {x: 0.02319336, y: 0.041992188, z: 0.40454102, w: 0.61157227}
+    - {x: 0.02319336, y: 0.041992188, z: 0.42773438, w: 0.61157227}
+    - {x: 0.022460938, y: 0.00024414118, z: 0.38208008, w: 0.65356445}
+    - {x: 0.02319336, y: 0.00024414118, z: 0.40454102, w: 0.65356445}
+    - {x: 0.02319336, y: 0.00024414118, z: 0.42773438, w: 0.65356445}
+    worldSlices: {x: 0.51111114, y: 0.5277778, z: 0.0055555557, w: 0.0055555683}
   quadCount: 0
 --- !u!1 &1925452446521450062
 GameObject:
@@ -462,7 +462,7 @@ MonoBehaviour:
   - {fileID: 3705765459553740809}
   grapPoleRenderers:
   - {fileID: 7412466534817934392}
-  - {fileID: 7754061865138205258}
+  - {fileID: 0}
   insideBoundsCollider: {fileID: 4967624362453220076}
   smokingRoomCollider_right: {fileID: 3759561684428170471}
   smokingRoomCollider_left: {fileID: 8152975921336346681}
@@ -540,7 +540,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 8
+  spriteIndex: 7
   flipX: 1
   flipY: 0
   width: 1
@@ -553,7 +553,7 @@ MonoBehaviour:
     uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
-    index: 8
+    index: 7
   bounds:
     m_Center: {x: 105.98633, y: -59.3, z: 6}
     m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
@@ -569,8 +569,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 8
-  prevSpriteIndexFlipV: 8
+  prevSpriteIndexFlipH: 7
+  prevSpriteIndexFlipV: 7
   isAnimating: 0
   slicedSprite:
     sprite:
@@ -633,7 +633,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 8
+  spriteIndex: 7
   flipX: 1
   flipY: 0
   width: 1
@@ -646,7 +646,7 @@ MonoBehaviour:
     uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
-    index: 8
+    index: 7
   bounds:
     m_Center: {x: 117.1266, y: -59.3, z: 6}
     m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
@@ -662,8 +662,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 8
-  prevSpriteIndexFlipV: 8
+  prevSpriteIndexFlipH: 7
+  prevSpriteIndexFlipV: 7
   isAnimating: 0
   slicedSprite:
     sprite:
@@ -726,7 +726,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 8
+  spriteIndex: 7
   flipX: 1
   flipY: 0
   width: 1
@@ -739,7 +739,7 @@ MonoBehaviour:
     uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
-    index: 8
+    index: 7
   bounds:
     m_Center: {x: 114.74652, y: -59.3, z: 6}
     m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
@@ -755,8 +755,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 8
-  prevSpriteIndexFlipV: 8
+  prevSpriteIndexFlipH: 7
+  prevSpriteIndexFlipV: 7
   isAnimating: 0
   slicedSprite:
     sprite:
@@ -819,7 +819,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 10
+  spriteIndex: 11
   flipX: 0
   flipY: 0
   width: 1
@@ -832,7 +832,7 @@ MonoBehaviour:
     uvSizeAndPos: {x: 0.88500977, y: 0.20483398, z: 0.00048828125, w: 0.38842773}
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 20.13889, y: 4.661111, z: 1}
-    index: 10
+    index: 11
   bounds:
     m_Center: {x: 111.03639, y: -57.409443, z: 5}
     m_Extent: {x: 10.069445, y: 2.3305554, z: 0.1}
@@ -848,8 +848,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 10
-  prevSpriteIndexFlipV: 10
+  prevSpriteIndexFlipH: 11
+  prevSpriteIndexFlipV: 11
   isAnimating: 0
   slicedSprite:
     sprite:
@@ -912,7 +912,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 4
+  spriteIndex: 9
   flipX: 0
   flipY: 0
   width: 1
@@ -923,17 +923,17 @@ MonoBehaviour:
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
-    uvPivot: {x: 0.5, y: 0}
+    uvPivot: {x: 0, y: 0}
     worldSize: {x: 5.1, y: 2.2055554, z: 1}
-    index: 4
+    index: 9
   bounds:
-    m_Center: {x: 106.356445, y: -54.07622, z: 5}
+    m_Center: {x: 108.90645, y: -54.07622, z: 5}
     m_Extent: {x: 2.55, y: 1.1027777, z: 0.1}
-  worldPivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
+  worldPivotAndSize: {x: 0, y: 0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0, y: 1.1027777, z: 0}
+  boundsOffset: {x: 2.55, y: 1.1027777, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -941,8 +941,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 4
-  prevSpriteIndexFlipV: 4
+  prevSpriteIndexFlipH: 9
+  prevSpriteIndexFlipV: 9
   isAnimating: 0
   slicedSprite:
     sprite:
@@ -1005,7 +1005,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 8
+  spriteIndex: 7
   flipX: 1
   flipY: 0
   width: 1
@@ -1018,7 +1018,7 @@ MonoBehaviour:
     uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
-    index: 8
+    index: 7
   bounds:
     m_Center: {x: 103.3665, y: -59.3, z: 6}
     m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
@@ -1034,8 +1034,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 8
-  prevSpriteIndexFlipV: 8
+  prevSpriteIndexFlipH: 7
+  prevSpriteIndexFlipV: 7
   isAnimating: 0
   slicedSprite:
     sprite:
@@ -1250,7 +1250,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 8
+  spriteIndex: 7
   flipX: 1
   flipY: 0
   width: 1
@@ -1263,7 +1263,7 @@ MonoBehaviour:
     uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
-    index: 8
+    index: 7
   bounds:
     m_Center: {x: 119.06653, y: -59.3, z: 6}
     m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
@@ -1279,8 +1279,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 8
-  prevSpriteIndexFlipV: 8
+  prevSpriteIndexFlipH: 7
+  prevSpriteIndexFlipV: 7
   isAnimating: 0
   slicedSprite:
     sprite:
@@ -1754,27 +1754,27 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   customs:
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
-  - {x: 1.7025278, y: 1.8, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
@@ -1842,7 +1842,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 8
+  spriteIndex: 7
   flipX: 1
   flipY: 0
   width: 1
@@ -1855,7 +1855,7 @@ MonoBehaviour:
     uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
-    index: 8
+    index: 7
   bounds:
     m_Center: {x: 108.38629, y: -59.3, z: 6}
     m_Extent: {x: 0.49166667, y: 0.49166667, z: 0.1}
@@ -1871,8 +1871,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 8
-  prevSpriteIndexFlipV: 8
+  prevSpriteIndexFlipH: 7
+  prevSpriteIndexFlipV: 7
   isAnimating: 0
   slicedSprite:
     sprite:
@@ -2028,33 +2028,33 @@ MonoBehaviour:
     worldSize: {x: 5.1, y: 2.2055554, z: 1}
     index: 4
   bounds:
-    m_Center: {x: -219.84511, y: 0.58026683, z: 15.1}
-    m_Extent: {x: 1.3111112, y: 0.51944447, z: 0.1}
+    m_Center: {x: -263.5095, y: 0.5441557, z: 15.1}
+    m_Extent: {x: 1.3111112, y: 0.48333332, z: 0.1}
   worldPivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 1.3111112, y: 0.51944447, z: 0.1}
+  boundsOffset: {x: 1.3111112, y: 0.48333332, z: 0.1}
   worldPivotsAndSizes:
-  - {x: 0, y: 0, z: 0.51666665, w: 0}
-  - {x: -0.51666665, y: 0, z: 0.5277779, w: 0}
-  - {x: -2.1000004, y: 0, z: 0.52222216, w: 0}
-  - {x: 0, y: -0, z: 0.51666665, w: 1.0333333}
-  - {x: -0.51666665, y: -0, z: 0.5277779, w: 1.0333333}
-  - {x: -2.1000004, y: -0, z: 0.52222216, w: 1.0333333}
-  - {x: 0, y: -1.0333333, z: 0.51666665, w: 0.005555572}
-  - {x: -0.51666665, y: -1.0333333, z: 0.5277779, w: 0.005555572}
-  - {x: -2.1000004, y: -1.0333333, z: 0.52222216, w: 0.005555572}
+  - {x: 0, y: 0, z: 0.51111114, w: 0.0055555557}
+  - {x: -0.51111114, y: 0, z: 0.5277778, w: 0.0055555557}
+  - {x: -2.0944445, y: 0, z: 0.5277778, w: 0.0055555557}
+  - {x: 0, y: -0.0055555557, z: 0.51111114, w: 0.9555555}
+  - {x: -0.51111114, y: -0.0055555557, z: 0.5277778, w: 0.9555555}
+  - {x: -2.0944445, y: -0.0055555557, z: 0.5277778, w: 0.9555555}
+  - {x: 0, y: -0.96111107, z: 0.51111114, w: 0.0055555683}
+  - {x: -0.51111114, y: -0.96111107, z: 0.5277778, w: 0.0055555683}
+  - {x: -2.0944445, y: -0.96111107, z: 0.5277778, w: 0.0055555683}
   uvSizesAndPositions:
-  - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-  - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-  - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-  - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-  - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-  - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-  - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-  - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-  - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
+  - {x: 0.022460938, y: 0.00024414062, z: 0.38208008, w: 0.6113281}
+  - {x: 0.02319336, y: 0.00024414062, z: 0.40454102, w: 0.6113281}
+  - {x: 0.02319336, y: 0.00024414062, z: 0.42773438, w: 0.6113281}
+  - {x: 0.022460938, y: 0.041992188, z: 0.38208008, w: 0.61157227}
+  - {x: 0.02319336, y: 0.041992188, z: 0.40454102, w: 0.61157227}
+  - {x: 0.02319336, y: 0.041992188, z: 0.42773438, w: 0.61157227}
+  - {x: 0.022460938, y: 0.00024414118, z: 0.38208008, w: 0.65356445}
+  - {x: 0.02319336, y: 0.00024414118, z: 0.40454102, w: 0.65356445}
+  - {x: 0.02319336, y: 0.00024414118, z: 0.42773438, w: 0.65356445}
   scalesAndFlips:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 3, y: 1, z: 1, w: 1}
@@ -2083,22 +2083,22 @@ MonoBehaviour:
   isAnimating: 0
   slicedSprite:
     sprite:
-      uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
+      uvSizeAndPos: {x: 0.068847656, y: 0.04248047, z: 0.38208008, w: 0.6113281}
       uvPivot: {x: 0, y: 0}
-      worldSize: {x: 1.5666667, y: 1.0388889, z: 1}
+      worldSize: {x: 1.5666667, y: 0.96666664, z: 1}
       index: 0
-    slice: {x: 0.32978722, y: 0.6666667, z: 0, w: 0.9946524}
+    slice: {x: 0.32624114, y: 0.66312057, z: 0.0057471264, w: 0.99425286}
     uvSizeAndPos:
-    - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-    - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-    - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
-    worldSlices: {x: 0.51666665, y: 0.52222216, z: 0, w: 0.005555572}
+    - {x: 0.022460938, y: 0.00024414062, z: 0.38208008, w: 0.6113281}
+    - {x: 0.02319336, y: 0.00024414062, z: 0.40454102, w: 0.6113281}
+    - {x: 0.02319336, y: 0.00024414062, z: 0.42773438, w: 0.6113281}
+    - {x: 0.022460938, y: 0.041992188, z: 0.38208008, w: 0.61157227}
+    - {x: 0.02319336, y: 0.041992188, z: 0.40454102, w: 0.61157227}
+    - {x: 0.02319336, y: 0.041992188, z: 0.42773438, w: 0.61157227}
+    - {x: 0.022460938, y: 0.00024414118, z: 0.38208008, w: 0.65356445}
+    - {x: 0.02319336, y: 0.00024414118, z: 0.40454102, w: 0.65356445}
+    - {x: 0.02319336, y: 0.00024414118, z: 0.42773438, w: 0.65356445}
+    worldSlices: {x: 0.51111114, y: 0.5277778, z: 0.0055555557, w: 0.0055555683}
   quadCount: 0
 --- !u!1 &6073715766497742621
 GameObject:
@@ -2369,33 +2369,33 @@ MonoBehaviour:
     worldSize: {x: 5.1, y: 2.2055554, z: 1}
     index: 4
   bounds:
-    m_Center: {x: -209.94278, y: 0.58026683, z: 15.1}
-    m_Extent: {x: 0.5194444, y: 0.51944447, z: 0.1}
+    m_Center: {x: -253.60716, y: 0.5441557, z: 15.1}
+    m_Extent: {x: 0.51944447, y: 0.48333332, z: 0.1}
   worldPivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.5194444, y: 0.51944447, z: 0.1}
+  boundsOffset: {x: 0.51944447, y: 0.48333332, z: 0.1}
   worldPivotsAndSizes:
-  - {x: 0, y: 0, z: 0.51666665, w: 0}
-  - {x: -0.51666665, y: 0, z: 0.5277779, w: 0}
-  - {x: -0.51666665, y: 0, z: 0.52222216, w: 0}
-  - {x: 0, y: -0, z: 0.51666665, w: 1.0333333}
-  - {x: -0.51666665, y: -0, z: 0.5277779, w: 1.0333333}
-  - {x: -0.51666665, y: -0, z: 0.52222216, w: 1.0333333}
-  - {x: 0, y: -1.0333333, z: 0.51666665, w: 0.005555572}
-  - {x: -0.51666665, y: -1.0333333, z: 0.5277779, w: 0.005555572}
-  - {x: -0.51666665, y: -1.0333333, z: 0.52222216, w: 0.005555572}
+  - {x: 0, y: 0, z: 0.51111114, w: 0.0055555557}
+  - {x: -0.51111114, y: 0, z: 0.5277778, w: 0.0055555557}
+  - {x: -0.51111114, y: 0, z: 0.5277778, w: 0.0055555557}
+  - {x: 0, y: -0.0055555557, z: 0.51111114, w: 0.9555555}
+  - {x: -0.51111114, y: -0.0055555557, z: 0.5277778, w: 0.9555555}
+  - {x: -0.51111114, y: -0.0055555557, z: 0.5277778, w: 0.9555555}
+  - {x: 0, y: -0.96111107, z: 0.51111114, w: 0.0055555683}
+  - {x: -0.51111114, y: -0.96111107, z: 0.5277778, w: 0.0055555683}
+  - {x: -0.51111114, y: -0.96111107, z: 0.5277778, w: 0.0055555683}
   uvSizesAndPositions:
-  - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-  - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-  - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-  - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-  - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-  - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-  - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-  - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-  - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
+  - {x: 0.022460938, y: 0.00024414062, z: 0.38208008, w: 0.6113281}
+  - {x: 0.02319336, y: 0.00024414062, z: 0.40454102, w: 0.6113281}
+  - {x: 0.02319336, y: 0.00024414062, z: 0.42773438, w: 0.6113281}
+  - {x: 0.022460938, y: 0.041992188, z: 0.38208008, w: 0.61157227}
+  - {x: 0.02319336, y: 0.041992188, z: 0.40454102, w: 0.61157227}
+  - {x: 0.02319336, y: 0.041992188, z: 0.42773438, w: 0.61157227}
+  - {x: 0.022460938, y: 0.00024414118, z: 0.38208008, w: 0.65356445}
+  - {x: 0.02319336, y: 0.00024414118, z: 0.40454102, w: 0.65356445}
+  - {x: 0.02319336, y: 0.00024414118, z: 0.42773438, w: 0.65356445}
   scalesAndFlips:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 0, y: 1, z: 1, w: 1}
@@ -2424,22 +2424,22 @@ MonoBehaviour:
   isAnimating: 0
   slicedSprite:
     sprite:
-      uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
+      uvSizeAndPos: {x: 0.068847656, y: 0.04248047, z: 0.38208008, w: 0.6113281}
       uvPivot: {x: 0, y: 0}
-      worldSize: {x: 1.5666667, y: 1.0388889, z: 1}
+      worldSize: {x: 1.5666667, y: 0.96666664, z: 1}
       index: 0
-    slice: {x: 0.32978722, y: 0.6666667, z: 0, w: 0.9946524}
+    slice: {x: 0.32624114, y: 0.66312057, z: 0.0057471264, w: 0.99425286}
     uvSizeAndPos:
-    - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-    - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-    - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
-    worldSlices: {x: 0.51666665, y: 0.52222216, z: 0, w: 0.005555572}
+    - {x: 0.022460938, y: 0.00024414062, z: 0.38208008, w: 0.6113281}
+    - {x: 0.02319336, y: 0.00024414062, z: 0.40454102, w: 0.6113281}
+    - {x: 0.02319336, y: 0.00024414062, z: 0.42773438, w: 0.6113281}
+    - {x: 0.022460938, y: 0.041992188, z: 0.38208008, w: 0.61157227}
+    - {x: 0.02319336, y: 0.041992188, z: 0.40454102, w: 0.61157227}
+    - {x: 0.02319336, y: 0.041992188, z: 0.42773438, w: 0.61157227}
+    - {x: 0.022460938, y: 0.00024414118, z: 0.38208008, w: 0.65356445}
+    - {x: 0.02319336, y: 0.00024414118, z: 0.40454102, w: 0.65356445}
+    - {x: 0.02319336, y: 0.00024414118, z: 0.42773438, w: 0.65356445}
+    worldSlices: {x: 0.51111114, y: 0.5277778, z: 0.0055555557, w: 0.0055555683}
   quadCount: 0
 --- !u!1 &6807919209581006502
 GameObject:
@@ -2708,33 +2708,33 @@ MonoBehaviour:
     worldSize: {x: 5.1, y: 2.2055554, z: 1}
     index: 4
   bounds:
-    m_Center: {x: -214.20497, y: 0.58026683, z: 15.1}
-    m_Extent: {x: 1.3111112, y: 0.51944447, z: 0.1}
+    m_Center: {x: -257.86935, y: 0.5441557, z: 15.1}
+    m_Extent: {x: 1.3111112, y: 0.48333332, z: 0.1}
   worldPivotAndSize: {x: 2.55, y: 0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 1.3111112, y: 0.51944447, z: 0.1}
+  boundsOffset: {x: 1.3111112, y: 0.48333332, z: 0.1}
   worldPivotsAndSizes:
-  - {x: 0, y: 0, z: 0.51666665, w: 0}
-  - {x: -0.51666665, y: 0, z: 0.5277779, w: 0}
-  - {x: -2.1000004, y: 0, z: 0.52222216, w: 0}
-  - {x: 0, y: -0, z: 0.51666665, w: 1.0333333}
-  - {x: -0.51666665, y: -0, z: 0.5277779, w: 1.0333333}
-  - {x: -2.1000004, y: -0, z: 0.52222216, w: 1.0333333}
-  - {x: 0, y: -1.0333333, z: 0.51666665, w: 0.005555572}
-  - {x: -0.51666665, y: -1.0333333, z: 0.5277779, w: 0.005555572}
-  - {x: -2.1000004, y: -1.0333333, z: 0.52222216, w: 0.005555572}
+  - {x: 0, y: 0, z: 0.51111114, w: 0.0055555557}
+  - {x: -0.51111114, y: 0, z: 0.5277778, w: 0.0055555557}
+  - {x: -2.0944445, y: 0, z: 0.5277778, w: 0.0055555557}
+  - {x: 0, y: -0.0055555557, z: 0.51111114, w: 0.9555555}
+  - {x: -0.51111114, y: -0.0055555557, z: 0.5277778, w: 0.9555555}
+  - {x: -2.0944445, y: -0.0055555557, z: 0.5277778, w: 0.9555555}
+  - {x: 0, y: -0.96111107, z: 0.51111114, w: 0.0055555683}
+  - {x: -0.51111114, y: -0.96111107, z: 0.5277778, w: 0.0055555683}
+  - {x: -2.0944445, y: -0.96111107, z: 0.5277778, w: 0.0055555683}
   uvSizesAndPositions:
-  - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-  - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-  - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-  - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-  - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-  - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-  - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-  - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-  - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
+  - {x: 0.022460938, y: 0.00024414062, z: 0.38208008, w: 0.6113281}
+  - {x: 0.02319336, y: 0.00024414062, z: 0.40454102, w: 0.6113281}
+  - {x: 0.02319336, y: 0.00024414062, z: 0.42773438, w: 0.6113281}
+  - {x: 0.022460938, y: 0.041992188, z: 0.38208008, w: 0.61157227}
+  - {x: 0.02319336, y: 0.041992188, z: 0.40454102, w: 0.61157227}
+  - {x: 0.02319336, y: 0.041992188, z: 0.42773438, w: 0.61157227}
+  - {x: 0.022460938, y: 0.00024414118, z: 0.38208008, w: 0.65356445}
+  - {x: 0.02319336, y: 0.00024414118, z: 0.40454102, w: 0.65356445}
+  - {x: 0.02319336, y: 0.00024414118, z: 0.42773438, w: 0.65356445}
   scalesAndFlips:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 3, y: 1, z: 1, w: 1}
@@ -2763,22 +2763,22 @@ MonoBehaviour:
   isAnimating: 0
   slicedSprite:
     sprite:
-      uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
+      uvSizeAndPos: {x: 0.068847656, y: 0.04248047, z: 0.38208008, w: 0.6113281}
       uvPivot: {x: 0, y: 0}
-      worldSize: {x: 1.5666667, y: 1.0388889, z: 1}
+      worldSize: {x: 1.5666667, y: 0.96666664, z: 1}
       index: 0
-    slice: {x: 0.32978722, y: 0.6666667, z: 0, w: 0.9946524}
+    slice: {x: 0.32624114, y: 0.66312057, z: 0.0057471264, w: 0.99425286}
     uvSizeAndPos:
-    - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-    - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-    - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
-    worldSlices: {x: 0.51666665, y: 0.52222216, z: 0, w: 0.005555572}
+    - {x: 0.022460938, y: 0.00024414062, z: 0.38208008, w: 0.6113281}
+    - {x: 0.02319336, y: 0.00024414062, z: 0.40454102, w: 0.6113281}
+    - {x: 0.02319336, y: 0.00024414062, z: 0.42773438, w: 0.6113281}
+    - {x: 0.022460938, y: 0.041992188, z: 0.38208008, w: 0.61157227}
+    - {x: 0.02319336, y: 0.041992188, z: 0.40454102, w: 0.61157227}
+    - {x: 0.02319336, y: 0.041992188, z: 0.42773438, w: 0.61157227}
+    - {x: 0.022460938, y: 0.00024414118, z: 0.38208008, w: 0.65356445}
+    - {x: 0.02319336, y: 0.00024414118, z: 0.40454102, w: 0.65356445}
+    - {x: 0.02319336, y: 0.00024414118, z: 0.42773438, w: 0.65356445}
+    worldSlices: {x: 0.51111114, y: 0.5277778, z: 0.0055555557, w: 0.0055555683}
   quadCount: 0
 --- !u!1 &7844801019564369261
 GameObject:
@@ -2934,15 +2934,15 @@ MonoBehaviour:
   spacing: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.8461914, y: 0.10888672, z: 0, w: 0.7451172}
+    uvSizeAndPos: {x: 0.8461914, y: 0.10839844, z: 0, w: 0.7451172}
     uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 19.255556, y: 2.4777777, z: 1}
+    worldSize: {x: 19.255556, y: 2.4666667, z: 1}
     index: 2
   bounds:
     m_Center: {x: 111.13643, y: -56.897114, z: 16}
-    m_Extent: {x: 9.627778, y: 1.2388889, z: 0.1}
-  worldPivotAndSize: {x: 9.627778, y: 0, z: 19.255556, w: 2.4777777}
-  uvSizeAndPosition: {x: 0.8461914, y: 0.10888672, z: 0, w: 0.7451172}
+    m_Extent: {x: 9.627778, y: 1.2333333, z: 0.1}
+  worldPivotAndSize: {x: 9.627778, y: 0, z: 19.255556, w: 2.4666667}
+  uvSizeAndPosition: {x: 0.8461914, y: 0.10839844, z: 0, w: 0.7451172}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
   boundsOffset: {x: 0, y: 1.2388889, z: 0}
@@ -3087,7 +3087,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 116.126945
+      value: 117.08805
       objectReference: {fileID: 0}
     - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.y
@@ -3095,10 +3095,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.z
-      value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: batchKey.depthOrder
       value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 4773278680072365645, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
@@ -3107,7 +3103,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 117.08805
+      value: 116.126945
       objectReference: {fileID: 0}
     - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.y
@@ -3115,10 +3111,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.z
-      value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: batchKey.depthOrder
       value: 17
       objectReference: {fileID: 0}
     - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
@@ -3192,7 +3184,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 110.68981
+      value: 111.651054
       objectReference: {fileID: 0}
     - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.y
@@ -3201,26 +3193,6 @@ PrefabInstance:
     - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.z
       value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: batchKey.depthOrder
-      value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 111.65092
-      objectReference: {fileID: 0}
-    - target: {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
-      value: -57.081223
-      objectReference: {fileID: 0}
-    - target: {fileID: 2285509565218897629, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 110.68981
-      objectReference: {fileID: 0}
-    - target: {fileID: 2285509565218897629, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
-      value: -57.081223
       objectReference: {fileID: 0}
     - target: {fileID: 4773278680072365645, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: m_Name
@@ -3228,7 +3200,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 111.65092
+      value: 110.68995
       objectReference: {fileID: 0}
     - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.y
@@ -3237,18 +3209,6 @@ PrefabInstance:
     - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.z
       value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: batchKey.depthOrder
-      value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 5406099015200027308, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.000015214086
-      objectReference: {fileID: 0}
-    - target: {fileID: 6748688604042277783, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: -0.000015214086
       objectReference: {fileID: 0}
     - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3290,156 +3250,16 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2285509565218897629, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-    - {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7582128904083616402, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7752087058430021}
-    - targetCorrespondingSourceObject: {fileID: 2970277754564569683, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 17552717172943595}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
---- !u!1 &2674983111040593034 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2970277754564569683, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-  m_PrefabInstance: {fileID: 875942529402308313}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &17552717172943595
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2674983111040593034}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-    depthOrder: 17
-  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-  camStats: {fileID: 0}
-  boxCollider: {fileID: 0}
-  spriteIndex: 7
-  flipX: 0
-  flipY: 0
-  width: 1
-  height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.50097656, w: 0.6125488}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0.9611111, y: 2.1555555, z: 1}
-    index: 7
-  bounds:
-    m_Center: {x: 111.65092, y: -57.081223, z: 17}
-    m_Extent: {x: 0.48055556, y: 1.0777777, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 0.9611111, w: 2.1555555}
-  uvSizeAndPosition: {x: 0.042236328, y: 0.09472656, z: 0.50097656, w: 0.6125488}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.48055556, y: 1.0777777, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  prevSpriteIndexFlipH: 7
-  prevSpriteIndexFlipV: 7
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
 --- !u!4 &7053136837799052714 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
   m_PrefabInstance: {fileID: 875942529402308313}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &7286502074228847691 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7582128904083616402, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-  m_PrefabInstance: {fileID: 875942529402308313}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7752087058430021
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7286502074228847691}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-    depthOrder: 17
-  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-  camStats: {fileID: 0}
-  boxCollider: {fileID: 0}
-  spriteIndex: 6
-  flipX: 0
-  flipY: 0
-  width: 1
-  height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
-    uvPivot: {x: 1, y: 0}
-    worldSize: {x: 0.9611111, y: 2.1555555, z: 1}
-    index: 6
-  bounds:
-    m_Center: {x: 110.68981, y: -57.081223, z: 17}
-    m_Extent: {x: 0.48055556, y: 1.0777777, z: 0.1}
-  worldPivotAndSize: {x: 0.9611111, y: 0, z: 0.9611111, w: 2.1555555}
-  uvSizeAndPosition: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: -0.48055556, y: 1.0777777, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  prevSpriteIndexFlipH: 6
-  prevSpriteIndexFlipV: 6
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
 --- !u!114 &8844129483624058073 stripped
 MonoBehaviour:
   m_CorrespondingSourceObject: {fileID: 8546514872825154048, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
@@ -3588,7 +3408,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 105.24186
+      value: 106.20307
       objectReference: {fileID: 0}
     - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.y
@@ -3597,26 +3417,6 @@ PrefabInstance:
     - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.z
       value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: batchKey.depthOrder
-      value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 106.202965
-      objectReference: {fileID: 0}
-    - target: {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
-      value: -57.081223
-      objectReference: {fileID: 0}
-    - target: {fileID: 2285509565218897629, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 105.24186
-      objectReference: {fileID: 0}
-    - target: {fileID: 2285509565218897629, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
-      value: -57.081223
       objectReference: {fileID: 0}
     - target: {fileID: 4773278680072365645, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: m_Name
@@ -3624,7 +3424,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 106.202965
+      value: 105.24197
       objectReference: {fileID: 0}
     - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.y
@@ -3633,18 +3433,6 @@ PrefabInstance:
     - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.z
       value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: batchKey.depthOrder
-      value: 17
-      objectReference: {fileID: 0}
-    - target: {fileID: 5406099015200027308, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.000014781952
-      objectReference: {fileID: 0}
-    - target: {fileID: 6748688604042277783, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      propertyPath: m_LocalPosition.x
-      value: 0.000014781952
       objectReference: {fileID: 0}
     - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3686,18 +3474,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 2285509565218897629, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-    - {fileID: 259041485935701287, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 7582128904083616402, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3745795594663594901}
-    - targetCorrespondingSourceObject: {fileID: 2970277754564569683, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4578419912634244431}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
 --- !u!114 &3167449020684325253 stripped
 MonoBehaviour:
@@ -3715,138 +3495,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
   m_PrefabInstance: {fileID: 6732419531741485957}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &3771617310104250647 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 7582128904083616402, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-  m_PrefabInstance: {fileID: 6732419531741485957}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3745795594663594901
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3771617310104250647}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-    depthOrder: 17
-  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-  camStats: {fileID: 0}
-  boxCollider: {fileID: 0}
-  spriteIndex: 6
-  flipX: 0
-  flipY: 0
-  width: 1
-  height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
-    uvPivot: {x: 1, y: 0}
-    worldSize: {x: 0.9611111, y: 2.1555555, z: 1}
-    index: 6
-  bounds:
-    m_Center: {x: 105.24186, y: -57.081223, z: 17}
-    m_Extent: {x: 0.48055556, y: 1.0777777, z: 0.1}
-  worldPivotAndSize: {x: 0.9611111, y: 0, z: 0.9611111, w: 2.1555555}
-  uvSizeAndPosition: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: -0.48055556, y: 1.0777777, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  prevSpriteIndexFlipH: 6
-  prevSpriteIndexFlipV: 6
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
---- !u!1 &8383116478459326934 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2970277754564569683, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
-  m_PrefabInstance: {fileID: 6732419531741485957}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4578419912634244431
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8383116478459326934}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-    depthOrder: 17
-  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-  camStats: {fileID: 0}
-  boxCollider: {fileID: 0}
-  spriteIndex: 7
-  flipX: 0
-  flipY: 0
-  width: 1
-  height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.50097656, w: 0.6125488}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0.9611111, y: 2.1555555, z: 1}
-    index: 7
-  bounds:
-    m_Center: {x: 106.202965, y: -57.081223, z: 17}
-    m_Extent: {x: 0.48055556, y: 1.0777777, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 0.9611111, w: 2.1555555}
-  uvSizeAndPosition: {x: 0.042236328, y: 0.09472656, z: 0.50097656, w: 0.6125488}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.48055556, y: 1.0777777, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  prevSpriteIndexFlipH: 7
-  prevSpriteIndexFlipV: 7
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
 --- !u!1001 &7358478930828973376
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3861,7 +3509,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -56.911667
+      value: -56.900555
       objectReference: {fileID: 0}
     - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3869,22 +3517,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -56.305767
-      objectReference: {fileID: 0}
-    - target: {fileID: 1996495514335980138, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 108.28638
-      objectReference: {fileID: 0}
-    - target: {fileID: 1996495514335980138, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
-      value: -56.911667
-      objectReference: {fileID: 0}
-    - target: {fileID: 2444700062460947297, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 109.43439
-      objectReference: {fileID: 0}
-    - target: {fileID: 2444700062460947297, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
       value: -56.305767
       objectReference: {fileID: 0}
     - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
@@ -3901,22 +3533,6 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -56.305767
-      objectReference: {fileID: 0}
-    - target: {fileID: 4028227041091308390, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 108.7054
-      objectReference: {fileID: 0}
-    - target: {fileID: 4028227041091308390, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
-      value: -56.305767
-      objectReference: {fileID: 0}
-    - target: {fileID: 4619968968883284231, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 109.16841
-      objectReference: {fileID: 0}
-    - target: {fileID: 4619968968883284231, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
       value: -56.305767
       objectReference: {fileID: 0}
     - target: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
@@ -3959,14 +3575,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 5384351385669397371, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 108.04431
-      objectReference: {fileID: 0}
-    - target: {fileID: 5384351385669397371, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
-      value: -56.305767
-      objectReference: {fileID: 0}
     - target: {fileID: 5600004835303776041, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: m_Name
       value: CarriageGrabPole_right
@@ -3987,22 +3595,6 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: -56.305767
       objectReference: {fileID: 0}
-    - target: {fileID: 8449119822475477518, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 107.5414
-      objectReference: {fileID: 0}
-    - target: {fileID: 8449119822475477518, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
-      value: -56.305767
-      objectReference: {fileID: 0}
-    - target: {fileID: 8693111701380887248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: renderInput.bounds.m_Center.x
-      value: 107.19638
-      objectReference: {fileID: 0}
-    - target: {fileID: 8693111701380887248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      propertyPath: renderInput.bounds.m_Center.y
-      value: -56.305767
-      objectReference: {fileID: 0}
     - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.x
       value: 113.96638
@@ -4011,506 +3603,16 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: -56.305767
       objectReference: {fileID: 0}
-    m_RemovedComponents:
-    - {fileID: 1996495514335980138, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-    - {fileID: 2444700062460947297, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-    - {fileID: 4619968968883284231, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-    - {fileID: 4028227041091308390, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-    - {fileID: 5384351385669397371, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-    - {fileID: 8449119822475477518, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-    - {fileID: 8693111701380887248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+    m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
-    m_AddedComponents:
-    - targetCorrespondingSourceObject: {fileID: 5600004835303776041, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 7754061865138205258}
-    - targetCorrespondingSourceObject: {fileID: 2862701673191317230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 5584031675676394428}
-    - targetCorrespondingSourceObject: {fileID: 1535647642363425843, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 1127633234503876271}
-    - targetCorrespondingSourceObject: {fileID: 5882755592766324067, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 8466309185538361129}
-    - targetCorrespondingSourceObject: {fileID: 6148456199161969020, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 3818863085725118920}
-    - targetCorrespondingSourceObject: {fileID: 5687412082349823755, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 4754792719917494416}
-    - targetCorrespondingSourceObject: {fileID: 1993832973438283806, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-      insertIndex: -1
-      addedObject: {fileID: 2695260223251921073}
+    m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
 --- !u!4 &2469725449711952807 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
   m_PrefabInstance: {fileID: 7358478930828973376}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &2950753574922486347 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5687412082349823755, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-  m_PrefabInstance: {fileID: 7358478930828973376}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &4754792719917494416
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2950753574922486347}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-    depthOrder: 8
-  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-  camStats: {fileID: 0}
-  boxCollider: {fileID: 0}
-  spriteIndex: 9
-  flipX: 0
-  flipY: 0
-  width: 1
-  height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-    uvPivot: {x: 0.5, y: 1}
-    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
-    index: 9
-  bounds:
-    m_Center: {x: 115.93841, y: -56.305767, z: 8}
-    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
-  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
-  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0, y: -0.21666667, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  prevSpriteIndexFlipH: 9
-  prevSpriteIndexFlipV: 9
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
---- !u!1 &3146229585667000937 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5600004835303776041, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-  m_PrefabInstance: {fileID: 7358478930828973376}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &7754061865138205258
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3146229585667000937}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-    depthOrder: 8
-  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-  camStats: {fileID: 0}
-  boxCollider: {fileID: 0}
-  spriteIndex: 5
-  flipX: 0
-  flipY: 0
-  width: 1
-  height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.12402344, y: 0.10839844, z: 0.23461914, w: 0.6062012}
-    uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 2.8222222, y: 2.4666667, z: 1}
-    index: 5
-  bounds:
-    m_Center: {x: 115.05637, y: -56.911667, z: 8}
-    m_Extent: {x: 1.4111111, y: 1.2333333, z: 0.1}
-  worldPivotAndSize: {x: 1.4111111, y: 0, z: 2.8222222, w: 2.4666667}
-  uvSizeAndPosition: {x: 0.12402344, y: 0.10839844, z: 0.23461914, w: 0.6062012}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0, y: 1.2333333, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  prevSpriteIndexFlipH: 5
-  prevSpriteIndexFlipV: 5
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
---- !u!1 &3696652442601598012 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 6148456199161969020, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-  m_PrefabInstance: {fileID: 7358478930828973376}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &3818863085725118920
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 3696652442601598012}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-    depthOrder: 8
-  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-  camStats: {fileID: 0}
-  boxCollider: {fileID: 0}
-  spriteIndex: 9
-  flipX: 0
-  flipY: 0
-  width: 1
-  height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-    uvPivot: {x: 0.5, y: 1}
-    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
-    index: 9
-  bounds:
-    m_Center: {x: 115.475395, y: -56.305767, z: 8}
-    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
-  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
-  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0, y: -0.21666667, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  prevSpriteIndexFlipH: 9
-  prevSpriteIndexFlipV: 9
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
---- !u!1 &4016417650908768291 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5882755592766324067, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-  m_PrefabInstance: {fileID: 7358478930828973376}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &8466309185538361129
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4016417650908768291}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-    depthOrder: 8
-  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-  camStats: {fileID: 0}
-  boxCollider: {fileID: 0}
-  spriteIndex: 9
-  flipX: 0
-  flipY: 0
-  width: 1
-  height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-    uvPivot: {x: 0.5, y: 1}
-    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
-    index: 9
-  bounds:
-    m_Center: {x: 114.81431, y: -56.305767, z: 8}
-    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
-  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
-  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0, y: -0.21666667, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  prevSpriteIndexFlipH: 9
-  prevSpriteIndexFlipV: 9
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
---- !u!1 &4730131565378390958 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 2862701673191317230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-  m_PrefabInstance: {fileID: 7358478930828973376}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &5584031675676394428
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4730131565378390958}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-    depthOrder: 8
-  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-  camStats: {fileID: 0}
-  boxCollider: {fileID: 0}
-  spriteIndex: 9
-  flipX: 0
-  flipY: 0
-  width: 1
-  height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-    uvPivot: {x: 0.5, y: 1}
-    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
-    index: 9
-  bounds:
-    m_Center: {x: 113.96638, y: -56.305767, z: 8}
-    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
-  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
-  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0, y: -0.21666667, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  prevSpriteIndexFlipH: 9
-  prevSpriteIndexFlipV: 9
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
---- !u!1 &8309465656491581811 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1535647642363425843, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-  m_PrefabInstance: {fileID: 7358478930828973376}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &1127633234503876271
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8309465656491581811}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-    depthOrder: 8
-  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-  camStats: {fileID: 0}
-  boxCollider: {fileID: 0}
-  spriteIndex: 9
-  flipX: 0
-  flipY: 0
-  width: 1
-  height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-    uvPivot: {x: 0.5, y: 1}
-    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
-    index: 9
-  bounds:
-    m_Center: {x: 114.31139, y: -56.305767, z: 8}
-    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
-  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
-  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0, y: -0.21666667, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  prevSpriteIndexFlipH: 9
-  prevSpriteIndexFlipV: 9
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
---- !u!1 &9058169449697125726 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 1993832973438283806, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
-  m_PrefabInstance: {fileID: 7358478930828973376}
-  m_PrefabAsset: {fileID: 0}
---- !u!114 &2695260223251921073
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9058169449697125726}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 0
-  batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-    depthOrder: 8
-  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-  camStats: {fileID: 0}
-  boxCollider: {fileID: 0}
-  spriteIndex: 9
-  flipX: 0
-  flipY: 0
-  width: 1
-  height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-    uvPivot: {x: 0.5, y: 1}
-    worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
-    index: 9
-  bounds:
-    m_Center: {x: 116.204384, y: -56.305767, z: 8}
-    m_Extent: {x: 0.06388889, y: 0.21666667, z: 0.1}
-  worldPivotAndSize: {x: 0.06388889, y: 0.43333334, z: 0.12777779, w: 0.43333334}
-  uvSizeAndPosition: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0, y: -0.21666667, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  prevSpriteIndexFlipH: 9
-  prevSpriteIndexFlipV: 9
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
 --- !u!1001 &7820498069647386981
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -4652,7 +3754,71 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -56.911667
+      value: -56.900555
+      objectReference: {fileID: 0}
+    - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Extent.x
+      value: 1.4111111
+      objectReference: {fileID: 0}
+    - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Extent.y
+      value: 1.2444445
+      objectReference: {fileID: 0}
+    - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.worldSize.x
+      value: 2.8222222
+      objectReference: {fileID: 0}
+    - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.worldSize.y
+      value: 2.488889
+      objectReference: {fileID: 0}
+    - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.w
+      value: 0.6062012
+      objectReference: {fileID: 0}
+    - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.x
+      value: 0.12402344
+      objectReference: {fileID: 0}
+    - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.y
+      value: 0.109375
+      objectReference: {fileID: 0}
+    - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.z
+      value: 0.23461914
+      objectReference: {fileID: 0}
+    - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: worldPivotAndSize.w
+      value: 2.488889
+      objectReference: {fileID: 0}
+    - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: worldPivotAndSize.z
+      value: 2.8222222
+      objectReference: {fileID: 0}
+    - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.w
+      value: 0.6062012
+      objectReference: {fileID: 0}
+    - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.x
+      value: 0.12402344
+      objectReference: {fileID: 0}
+    - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.y
+      value: 0.109375
+      objectReference: {fileID: 0}
+    - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.z
+      value: 0.23461914
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvPivot.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.x
@@ -4662,6 +3828,70 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: -56.305767
       objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Extent.x
+      value: 0.06388889
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Extent.y
+      value: 0.21666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.worldSize.x
+      value: 0.12777779
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.worldSize.y
+      value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.w
+      value: 0.61083984
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.x
+      value: 0.0056152344
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.y
+      value: 0.019042969
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.z
+      value: 0.8203125
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: worldPivotAndSize.w
+      value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: worldPivotAndSize.z
+      value: 0.12777779
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.w
+      value: 0.61083984
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.x
+      value: 0.0056152344
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.y
+      value: 0.019042969
+      objectReference: {fileID: 0}
+    - target: {fileID: 1500499671154202198, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.z
+      value: 0.8203125
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvPivot.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.x
       value: 107.5414
@@ -4670,6 +3900,70 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: -56.305767
       objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Extent.x
+      value: 0.06388889
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Extent.y
+      value: 0.21666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.worldSize.x
+      value: 0.12777779
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.worldSize.y
+      value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.w
+      value: 0.61083984
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.x
+      value: 0.0056152344
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.y
+      value: 0.019042969
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.z
+      value: 0.8203125
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: worldPivotAndSize.w
+      value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: worldPivotAndSize.z
+      value: 0.12777779
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.w
+      value: 0.61083984
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.x
+      value: 0.0056152344
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.y
+      value: 0.019042969
+      objectReference: {fileID: 0}
+    - target: {fileID: 3480005168062874932, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.z
+      value: 0.8203125
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvPivot.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.x
       value: 108.04431
@@ -4677,6 +3971,62 @@ PrefabInstance:
     - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.y
       value: -56.305767
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Extent.x
+      value: 0.06388889
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Extent.y
+      value: 0.21666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.worldSize.x
+      value: 0.12777779
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.worldSize.y
+      value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.w
+      value: 0.61083984
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.x
+      value: 0.0056152344
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.y
+      value: 0.019042969
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.z
+      value: 0.8203125
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: worldPivotAndSize.w
+      value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: worldPivotAndSize.z
+      value: 0.12777779
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.w
+      value: 0.61083984
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.x
+      value: 0.0056152344
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.y
+      value: 0.019042969
+      objectReference: {fileID: 0}
+    - target: {fileID: 3983210341144476230, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.z
+      value: 0.8203125
       objectReference: {fileID: 0}
     - target: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4723,12 +4073,84 @@ PrefabInstance:
       value: CarriageGrabPole_left
       objectReference: {fileID: 0}
     - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvPivot.y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.x
       value: 108.7054
       objectReference: {fileID: 0}
     - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.y
       value: -56.305767
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Extent.x
+      value: 0.06388889
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Extent.y
+      value: 0.21666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.worldSize.x
+      value: 0.12777779
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.worldSize.y
+      value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.w
+      value: 0.61083984
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.x
+      value: 0.0056152344
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.y
+      value: 0.019042969
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.z
+      value: 0.8203125
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: worldPivotAndSize.w
+      value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: worldPivotAndSize.z
+      value: 0.12777779
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.w
+      value: 0.61083984
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.x
+      value: 0.0056152344
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.y
+      value: 0.019042969
+      objectReference: {fileID: 0}
+    - target: {fileID: 7063540158611490248, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.z
+      value: 0.8203125
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvPivot.y
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.x
@@ -4738,6 +4160,70 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: -56.305767
       objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Extent.x
+      value: 0.06388889
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Extent.y
+      value: 0.21666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.worldSize.x
+      value: 0.12777779
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.worldSize.y
+      value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.w
+      value: 0.61083984
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.x
+      value: 0.0056152344
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.y
+      value: 0.019042969
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.z
+      value: 0.8203125
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: worldPivotAndSize.w
+      value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: worldPivotAndSize.z
+      value: 0.12777779
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.w
+      value: 0.61083984
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.x
+      value: 0.0056152344
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.y
+      value: 0.019042969
+      objectReference: {fileID: 0}
+    - target: {fileID: 7750415599090616720, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.z
+      value: 0.8203125
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvPivot.y
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.x
       value: 107.19638
@@ -4745,6 +4231,62 @@ PrefabInstance:
     - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.y
       value: -56.305767
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Extent.x
+      value: 0.06388889
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: bounds.m_Extent.y
+      value: 0.21666667
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.worldSize.x
+      value: 0.12777779
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.worldSize.y
+      value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.w
+      value: 0.61083984
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.x
+      value: 0.0056152344
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.y
+      value: 0.019042969
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: uvSizeAndPosition.z
+      value: 0.8203125
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: worldPivotAndSize.w
+      value: 0.43333334
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: worldPivotAndSize.z
+      value: 0.12777779
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.w
+      value: 0.61083984
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.x
+      value: 0.0056152344
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.y
+      value: 0.019042969
+      objectReference: {fileID: 0}
+    - target: {fileID: 9101612695446271464, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+      propertyPath: sprite.uvSizeAndPos.z
+      value: 0.8203125
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

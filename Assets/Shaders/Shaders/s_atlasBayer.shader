@@ -88,7 +88,7 @@ Shader "Custom/s_atlasBayer"
                 alpha= BayerMatrix(alpha, 1, i.positionHCS.xy);
                 clip(alpha - 0.001);
 
-                return half4 (color.rgb, 1);
+                return half4 (color.rgb * 0, 1);
             }
             ENDHLSL
         }

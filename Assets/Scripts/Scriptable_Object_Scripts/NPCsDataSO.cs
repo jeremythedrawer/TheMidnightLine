@@ -7,14 +7,8 @@ using static NPC;
 [CreateAssetMenu(fileName = "NPCs_Data_SO", menuName = "Midnight Line SOs / NPCs Data SO")]
 public class NPCsDataSO : ScriptableObject
 {
-    [Header("To Set")]
-    public VisualEffect sleepingZs_prefab;
-    public VisualEffect musicNotes_prefab;
-    public VisualEffect speechBubble_prefab;
-    public VisualEffect smoke_prefab;
-    [Range(0, 1)] public float hoverColorOffet = 0.25f;
-    [Range(0, 1)] public float fadeTime = 0.5f;
-
+    public NPCBehaviourContextSO[] behaviourContexts;
     [Header("Generated")]
     public Dictionary<Behaviours, string> behaviourDescDict;
+    public Dictionary<Behaviours, NPCBehaviourContextSO> behaviourContextDict;
 }

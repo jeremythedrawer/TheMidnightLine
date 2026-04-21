@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Train_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
   texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
-  isParticleAtlas: 0
+  spriteConnectColor:
+    serializedVersion: 2
+    rgba: 0
   entityMotionType: 3
   pivotColor:
     serializedVersion: 2
@@ -21,7 +23,7 @@ MonoBehaviour:
   sliceColor:
     serializedVersion: 2
     rgba: 4294901760
-  particleType: 0
+  zoneType: 0
   motionSprites:
   - sprite:
       uvSizeAndPos: {x: 0.012207031, y: 0.09741211, z: 0.5571289, w: 0.60961914}
@@ -56,45 +58,45 @@ MonoBehaviour:
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 0.6722222, y: 3.5722222, z: 1}
     index: 1
-  - uvSizeAndPos: {x: 0.8461914, y: 0.10888672, z: 0, w: 0.7451172}
+  - uvSizeAndPos: {x: 0.8461914, y: 0.10839844, z: 0, w: 0.7451172}
     uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 19.255556, y: 2.4777777, z: 1}
+    worldSize: {x: 19.255556, y: 2.4666667, z: 1}
     index: 2
   - uvSizeAndPos: {x: 0.15209961, y: 0.15673828, z: 0.8479004, w: 0.67163086}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 3.461111, y: 3.5666666, z: 1}
     index: 3
-  - uvSizeAndPos: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
+  - uvSizeAndPos: {x: 0.12402344, y: 0.109375, z: 0.23461914, w: 0.6062012}
     uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 5.1, y: 2.2055554, z: 1}
+    worldSize: {x: 2.8222222, y: 2.488889, z: 1}
     index: 4
-  - uvSizeAndPos: {x: 0.12402344, y: 0.10839844, z: 0.23461914, w: 0.6062012}
-    uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 2.8222222, y: 2.4666667, z: 1}
-    index: 5
   - uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
     uvPivot: {x: 1, y: 0}
     worldSize: {x: 0.9611111, y: 2.1555555, z: 1}
-    index: 6
+    index: 5
   - uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.50097656, w: 0.6125488}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 0.9611111, y: 2.1555555, z: 1}
-    index: 7
+    index: 6
   - uvSizeAndPos: {x: 0.04321289, y: 0.04321289, z: 0.7734375, w: 0.61083984}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.98333335, y: 0.98333335, z: 1}
-    index: 8
+    index: 7
   - uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
     uvPivot: {x: 0.5, y: 1}
     worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
+    index: 8
+  - uvSizeAndPos: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 5.1, y: 2.2055554, z: 1}
     index: 9
-  - uvSizeAndPos: {x: 0.88500977, y: 0.20483398, z: 0.00048828125, w: 0.38842773}
-    uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 20.13889, y: 4.661111, z: 1}
-    index: 10
   - uvSizeAndPos: {x: 0.08886719, y: 0.09765625, z: 0.9020996, w: 0.40234375}
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 2.0222223, y: 2.2222223, z: 1}
+    index: 10
+  - uvSizeAndPos: {x: 0.88500977, y: 0.20483398, z: 0.00048828125, w: 0.38842773}
+    uvPivot: {x: 0.5, y: 0}
+    worldSize: {x: 20.13889, y: 4.661111, z: 1}
     index: 11
   - uvSizeAndPos: {x: 0.04272461, y: 0.095214844, z: 0.0036621094, w: 0.2878418}
     uvPivot: {x: 1, y: 0}
@@ -106,25 +108,22 @@ MonoBehaviour:
     index: 13
   slicedSprites:
   - sprite:
-      uvSizeAndPos: {x: 0.068847656, y: 0.045654297, z: 0.38183594, w: 0.61157227}
+      uvSizeAndPos: {x: 0.068847656, y: 0.04248047, z: 0.38208008, w: 0.6113281}
       uvPivot: {x: 0, y: 0}
-      worldSize: {x: 1.5666667, y: 1.0388889, z: 1}
+      worldSize: {x: 1.5666667, y: 0.96666664, z: 1}
       index: 0
-    slice: {x: 0.32978722, y: 0.6666667, z: 0, w: 0.9946524}
+    slice: {x: 0.32624114, y: 0.66312057, z: 0.0057471264, w: 0.99425286}
     uvSizeAndPos:
-    - {x: 0.022705078, y: 0, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.045410156, z: 0.38183594, w: 0.61157227}
-    - {x: 0.023193361, y: 0.045410156, z: 0.40454102, w: 0.61157227}
-    - {x: 0.022949217, y: 0.045410156, z: 0.42773438, w: 0.61157227}
-    - {x: 0.022705078, y: 0.00024414135, z: 0.38183594, w: 0.6569824}
-    - {x: 0.023193361, y: 0.00024414135, z: 0.40454102, w: 0.6569824}
-    - {x: 0.022949217, y: 0.00024414135, z: 0.42773438, w: 0.6569824}
-    worldSlices: {x: 0.51666665, y: 0.52222216, z: 0, w: 0.005555572}
-  particleSprites: []
-  particleUVSizeAndPosArray: []
-  worldSizesArray: []
+    - {x: 0.022460938, y: 0.00024414062, z: 0.38208008, w: 0.6113281}
+    - {x: 0.02319336, y: 0.00024414062, z: 0.40454102, w: 0.6113281}
+    - {x: 0.02319336, y: 0.00024414062, z: 0.42773438, w: 0.6113281}
+    - {x: 0.022460938, y: 0.041992188, z: 0.38208008, w: 0.61157227}
+    - {x: 0.02319336, y: 0.041992188, z: 0.40454102, w: 0.61157227}
+    - {x: 0.02319336, y: 0.041992188, z: 0.42773438, w: 0.61157227}
+    - {x: 0.022460938, y: 0.00024414118, z: 0.38208008, w: 0.65356445}
+    - {x: 0.02319336, y: 0.00024414118, z: 0.40454102, w: 0.65356445}
+    - {x: 0.02319336, y: 0.00024414118, z: 0.42773438, w: 0.65356445}
+    worldSlices: {x: 0.51111114, y: 0.5277778, z: 0.0055555557, w: 0.0055555683}
   clips:
   - clipName: TrainDoor
     keyFrames:

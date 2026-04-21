@@ -47,11 +47,11 @@ MonoBehaviour:
   rendererType: 0
   batchKey:
     material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-    depthOrder: 16
+    depthOrder: 17
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 7
+  spriteIndex: 5
   flipX: 0
   flipY: 0
   width: 1
@@ -61,18 +61,18 @@ MonoBehaviour:
   spacing: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.50097656, w: 0.6125488}
-    uvPivot: {x: 0, y: 0}
+    uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
+    uvPivot: {x: 1, y: 0}
     worldSize: {x: 0.9611111, y: 2.1555555, z: 1}
-    index: 7
+    index: 5
   bounds:
-    m_Center: {x: 5.7116804, y: -2.081222, z: 5}
+    m_Center: {x: 4.7505693, y: -2.081222, z: 5}
     m_Extent: {x: 0.48055556, y: 1.0777777, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 0.9611111, w: 2.1555555}
-  uvSizeAndPosition: {x: 0.042236328, y: 0.09472656, z: 0.50097656, w: 0.6125488}
+  worldPivotAndSize: {x: 0.9611111, y: 0, z: 0.9611111, w: 2.1555555}
+  uvSizeAndPosition: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.48055556, y: 1.0777777, z: 0}
+  boundsOffset: {x: -0.48055556, y: 1.0777777, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -80,6 +80,9 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  prevSpriteIndexFlipH: 5
+  prevSpriteIndexFlipV: 5
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -238,7 +241,7 @@ MonoBehaviour:
   rendererType: 0
   batchKey:
     material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
-    depthOrder: 16
+    depthOrder: 17
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -252,18 +255,18 @@ MonoBehaviour:
   spacing: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
-    uvPivot: {x: 1, y: 0}
+    uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.50097656, w: 0.6125488}
+    uvPivot: {x: 0, y: 0}
     worldSize: {x: 0.9611111, y: 2.1555555, z: 1}
     index: 6
   bounds:
-    m_Center: {x: 4.7505693, y: -2.0812216, z: 5}
+    m_Center: {x: 5.7116804, y: -2.0812216, z: 5}
     m_Extent: {x: 0.48055556, y: 1.0777777, z: 0.1}
-  worldPivotAndSize: {x: 0.9611111, y: 0, z: 0.9611111, w: 2.1555555}
-  uvSizeAndPosition: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
+  worldPivotAndSize: {x: 0, y: 0, z: 0.9611111, w: 2.1555555}
+  uvSizeAndPosition: {x: 0.042236328, y: 0.09472656, z: 0.50097656, w: 0.6125488}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: -0.48055556, y: 1.0777777, z: 0}
+  boundsOffset: {x: 0.48055556, y: 1.0777777, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -271,6 +274,9 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  prevSpriteIndexFlipH: 6
+  prevSpriteIndexFlipV: 6
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}

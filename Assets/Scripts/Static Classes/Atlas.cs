@@ -91,6 +91,7 @@ public static class Atlas
         SleepingZs = 1 << 2,
         Music = 1 << 3,
         Climb = 1 << 4,
+        Coughing = 1 << 5,
     }
     public enum SpriteMode
     {

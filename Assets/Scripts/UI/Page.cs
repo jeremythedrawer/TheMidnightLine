@@ -59,7 +59,14 @@ public class Page : MonoBehaviour
     {
         behaviour0_renderer.enabled = toggle;
         behaviour1_renderer.enabled = toggle;
-        chosenStation_renderer.enabled = toggle;
+        if (chosenStationIndex == -1)
+        {
+            chosenStation_renderer.enabled = false;
+        }
+        else
+        {
+            chosenStation_renderer.enabled = toggle;
+        }
     }
     public void TogglePageContentTopHalf(bool toggle)
     {
@@ -80,7 +87,7 @@ public class Page : MonoBehaviour
     {
         paper_renderer.enabled = toggle;
     }
-    public void SetChosenStationText(int stationIndex)
+    public void WriteChosenStationText(int stationIndex)
     {
         chosenStationIndex = stationIndex;
         chosenStationName = trip.stationsDataArray[chosenStationIndex].stationName;
@@ -102,6 +109,7 @@ public class Page : MonoBehaviour
         string previewStationText = trip.stationsDataArray[stationIndex].stationName;
         chosenStation_renderer.SetText(previewStationText);
         stationNameBounds = chosenStation_renderer.bounds;
+        chosenStation_renderer.enabled = true;
         chosenStation_renderer.AppearPreviewText();
     }
     public Bounds GetStationNameBounds()

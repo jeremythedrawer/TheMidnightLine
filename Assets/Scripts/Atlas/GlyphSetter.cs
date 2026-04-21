@@ -29,13 +29,12 @@ public class GlyphSetter : MonoBehaviour
         UpdateVFX();
     }
 
-    private void Start()
+    private void OnEnable()
     {
         deltaTime += 0.1f;
-        CreateBuffers();
         GetLifetime();
+        CreateBuffers();
     }
-
     private void OnDisable()
     {
         ReleaseBuffers();

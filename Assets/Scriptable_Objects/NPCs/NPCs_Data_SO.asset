@@ -12,18 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a56b7a5c359bab64e8cafde3601edf96, type: 3}
   m_Name: NPCs_Data_SO
   m_EditorClassIdentifier: 
-  sleepingZs_prefab: {fileID: 8140541614597190951, guid: 0a5aaaf8a9dc6f14e9efe7ecc0a8e25e, type: 3}
-  musicNotes_prefab: {fileID: 8898805483392028272, guid: 6d2feea3f9febc34e9aaf6a57dbbc27a, type: 3}
-  speechBubble_prefab: {fileID: 3187548682956341316, guid: 879424f1e5ae60941b573cb002c58843, type: 3}
-  smoke_prefab: {fileID: 1765156573695068435, guid: 4d403f45f5df66c48a22a9326cdce122, type: 3}
-  hoverColorOffet: 0.25
-  fadeTime: 1
-  appearenceDescriptions: []
-  behaviourDescriptions: []
-  profilePageDatas:
-  - fullName: 
-    startStationIndex: 0
-    exitStationIndex: 0
-    npcPrefabIndex: 0
-    behaviours: 0
-    appearence: 0
+  behaviourContexts:
+  - {fileID: 11400000, guid: cc90071a080c5294a827aed7b0ca7148, type: 2}
+  - {fileID: 11400000, guid: 7c0a97ae0f1073041b6d7d08fc1f3f3d, type: 2}
+  - {fileID: 11400000, guid: 7bc965e5029c2eb4ca45a29e3e697eb2, type: 2}
+  - {fileID: 11400000, guid: 233d9115c3c09b847b763e62ed749dfc, type: 2}
+  - {fileID: 11400000, guid: ee43792b53cabca44a49034e15a1f113, type: 2}
+  - {fileID: 11400000, guid: c058bdb358befaa448cccc5d49ed5225, type: 2}
+  - {fileID: 11400000, guid: 80193a96eda6ecb4bb93e57d2209d790, type: 2}

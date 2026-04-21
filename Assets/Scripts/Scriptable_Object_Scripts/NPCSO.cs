@@ -13,5 +13,5 @@ public class NPCSO : ScriptableObject
     public int uncoveredMugshotIndex;
     public int coveredMugshotIndex;
     [Header("Difficulty")]
-    public Vector2 pickBehaviourDurationRange = new Vector2(10, 30);
+    public Vector2 idleDurationRange = new Vector2(10, 30);
 }

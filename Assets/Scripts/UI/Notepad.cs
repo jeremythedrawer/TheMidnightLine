@@ -7,11 +7,12 @@ using static NPC;
 
 public class Notepad : MonoBehaviour
 {
+    public const float WRITE_LETTER_TIME = 0.1f;
     const float PAGE_SPAWN_POS_Y_OFFSET = 0.2f;
     const float LEFTHAND_DAMPING = 10f;
-    const float LEFTHAND_DIST_BUFFER = 0.1f;
-
-    public const float WRITE_LETTER_TIME = 0.1f;
+    const float PENCIL_DISTANCE_THRESHOLD = 0.1f;
+    const float PENCIL_VERTICAL_FREQUENCY = 7f;
+    const float PENCIL_VERTICAL_MAGNITUDE = 0.16f;
     public enum State
     {
         None,
@@ -36,55 +37,62 @@ public class Notepad : MonoBehaviour
     public NPCsDataSO npcData;
     public CameraStatsSO camStats;
 
-    public TextAsset namesJSON;
 
     public AtlasRenderer rightHand_renderer;
     public AtlasRenderer frontFingers_renderer;
     public AtlasRenderer bindingRings_renderer;
-    
     public AtlasRenderer leftHand_renderer;
+
+    public TextAsset namesJSON;
 
     public Page page_prefab;
     
     [Header("Generated")]
     public State curState;
+    public KeyframeState curKeyframeState;
     
-    public NameData nameData;
     public Page activePage;
     public Page[] pages;
-    public int activePageIndex;
-    public int lastPageIndex;
+    
+    public NameData nameData;
 
     public Bounds totalBounds;
     public Vector2 boundsOffset;
     
+    public int activePageIndex;
+    public int lastPageIndex;
+
+    
     public AtlasClip handFlipPage_clip;
     public AtlasClip rotatePencil_clip;
-    public int lastLeftHandKeyframeIndex;
-    public KeyframeState curKeyframeState;
-    public int leftHandDepthFront;
-    public int leftHandDepthBack;
-    
-    public int createPageIndex;
-
-    public int flipToggle;
-    public bool writeToggle;
-    public bool eraseToggle;
-    public bool willFlipUp;
-    public bool willFlipDown;
-    public int previewStationIndex;
-    public float curPencilTime;
-    public float totalWritingTime;
-    public bool atStartWritePos;
-    public bool holdingPencil;
 
     public Vector3 leftHandFlipPos;
     public Vector3 leftHandPencilPos;
     public Vector3 leftHandPencilInactivePos;
     public Vector3 leftHandTargetPos;
     public Vector3 leftHandOffScreenPos;
-
+    
     public Bounds curStationNameBounds;
+    
+    public int lastLeftHandKeyframeIndex;
+    public int leftHandDepthFront;
+    public int leftHandDepthBack;
+    
+    public int createPageIndex;
+
+    public int previewStationIndex;
+
+    public int flipToggle;
+    public bool writeToggle;
+    public bool eraseToggle;
+    public bool willFlipUp;
+    public bool willFlipDown;
+    public bool atStartPencilPos;
+    public bool holdingPencil;
+    public float totalPencilTime;
+    public float curPencilTime;
+
+
     private void OnValidate()
     {
         SetTotalBounds();
@@ -158,7 +166,12 @@ public class Notepad : MonoBehaviour
         {
             case State.FlippingUp:
             {
-                pages[activePageIndex + 1].gameObject.SetActive(true);
+                Page pageAhead = pages[activePageIndex + 1];
+                pageAhead.gameObject.SetActive(true);
+                if (pageAhead.chosenStationIndex == -1)
+                {
+                    pageAhead.chosenStation_renderer.enabled = false;
+                }
 
                 leftHand_renderer.UpdateDepthRealtime(leftHandDepthFront);
                 leftHand_renderer.PlayClipOneShot(handFlipPage_clip);
@@ -166,39 +179,44 @@ public class Notepad : MonoBehaviour
                 curKeyframeState = KeyframeState.Start;
                 flipToggle = 1;
 
-                holdingPencil = false;
                 leftHand_renderer.transform.localPosition = leftHandFlipPos;
+                
+                holdingPencil = false;
                 willFlipUp = false;
             }
             break;
             case State.FlippingDown:
             {
-
                 activePage.UpdatePageDepth((int)(rightHand_renderer.transform.position.z - 1));
                 activePageIndex--;
                 activePage = pages[activePageIndex];
                 activePage.gameObject.SetActive(true);
+                if (activePage.chosenStationIndex == -1)
+                {
+                    activePage.chosenStation_renderer.enabled = false;
+                }
+
                 leftHand_renderer.PlayClipOneShotReverse(handFlipPage_clip);
 
                 curKeyframeState = KeyframeState.Start;
+                
                 flipToggle = -1;
-
-                holdingPencil = false;
 
                 leftHand_renderer.transform.localPosition = leftHandFlipPos;
                 leftHand_renderer.UpdateDepthRealtime(leftHandDepthBack);
+                
+                holdingPencil = false;
                 willFlipDown = false;
             }
             break;
             case State.Writing:
             {
-                writeToggle = true;
-                curPencilTime = 0;
                 leftHand_renderer.UpdateSpriteInputs(ref rotatePencil_clip.keyFrames[0].motionSprite.sprite);
+                
                 curStationNameBounds = activePage.GetStationNameBounds();
+
                 Vector3 startWriteWorldPos = new Vector3(curStationNameBounds.min.x, curStationNameBounds.center.y, leftHand_renderer.transform.position.z);
                 leftHandPencilPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
-
 
                 if (holdingPencil)
                 {
@@ -209,17 +227,18 @@ public class Notepad : MonoBehaviour
                     leftHand_renderer.transform.localPosition = leftHandOffScreenPos;
                     holdingPencil = true;
                 }
+                
+                curPencilTime = 0;
+                writeToggle = true;
             }
             break;
             case State.Erasing:
             {
-                eraseToggle = true;
-
-                curPencilTime = 0;
                 leftHand_renderer.PlayClipOneShot(rotatePencil_clip);
+                
                 curStationNameBounds = activePage.GetStationNameBounds();
+
                 Vector3 startEraseWorldPos = new Vector3(curStationNameBounds.max.x, curStationNameBounds.center.y, leftHand_renderer.transform.position.z);
-                Debug.Log(curStationNameBounds.size.x);
                 leftHandPencilPos = leftHand_renderer.transform.parent.InverseTransformPoint(startEraseWorldPos);
 
                 if (holdingPencil)
@@ -231,13 +250,15 @@ public class Notepad : MonoBehaviour
                     leftHand_renderer.transform.localPosition = leftHandOffScreenPos;
                     holdingPencil = true;
                 }
+                
+                curPencilTime = 0;
+                eraseToggle = true;
             }
             break;
             case State.Stationary:
             {
                 if (activePage.chosenStationIndex == -1)
                 {
-                    previewStationIndex = 0;
                     activePage.SetPreviewStationText(previewStationIndex);
                 }
             }
@@ -262,18 +283,26 @@ public class Notepad : MonoBehaviour
 
             case State.Writing:
             {
-                atStartWritePos = false;
-                writeToggle = false;
                 leftHandTargetPos = leftHandPencilInactivePos;
+                
+                if (playerInputs.notepadChooseStationAndFlip.x != 0)
+                {
+                    previewStationIndex += (int)playerInputs.notepadChooseStationAndFlip.x;
+                    previewStationIndex = (previewStationIndex + trip.stationsDataArray.Length) % trip.stationsDataArray.Length;
+                }
+
+                atStartPencilPos = false;
+                writeToggle = false;
             }
             break;
             case State.Erasing:
             {
-                activePage.chosenStationIndex = -1;
-                atStartWritePos = false;
-                eraseToggle = false;
-                leftHand_renderer.PlayClipOneShotReverse(rotatePencil_clip);
                 leftHandTargetPos = leftHandPencilInactivePos;
+
+                activePage.chosenStationIndex = -1;
+                leftHand_renderer.PlayClipOneShotReverse(rotatePencil_clip);
+                atStartPencilPos = false;
+                eraseToggle = false;
             }
             break;
         }
@@ -299,6 +328,7 @@ public class Notepad : MonoBehaviour
                     case 3:
                     {
                         if (curKeyframeState == KeyframeState.TogglePageContentsBottomHalf) return;
+
                         activePage.TogglePageContentBottomHalf(false);
                         curKeyframeState = KeyframeState.TogglePageContentsBottomHalf;
                     }
@@ -307,6 +337,7 @@ public class Notepad : MonoBehaviour
                     case 4:
                     {
                         if (curKeyframeState == KeyframeState.TogglePageContentsTopHalf) return;
+
                         activePage.TogglePageContentTopHalf(false);
                         curKeyframeState = KeyframeState.TogglePageContentsTopHalf;
                     }
@@ -315,6 +346,7 @@ public class Notepad : MonoBehaviour
                     case 7:
                     {
                         if (curKeyframeState == KeyframeState.ChangeDepth) return;
+
                         leftHand_renderer.UpdateDepthRealtime(leftHandDepthBack);
                         activePage.UpdatePageDepth(leftHandDepthBack + 1);
                         curKeyframeState = KeyframeState.ChangeDepth;
@@ -326,13 +358,15 @@ public class Notepad : MonoBehaviour
                 if (leftHand_renderer.curFrameIndex == lastLeftHandKeyframeIndex)
                 {
                     if (curKeyframeState == KeyframeState.None) return;
+
                     activePage.gameObject.SetActive(false);
                     activePageIndex++;
                     activePage = pages[activePageIndex];
                     activePage.UpdatePageDepth(leftHandDepthFront + 2);
+                    flipToggle = 0;
+
                     curKeyframeState = KeyframeState.None;
 
-                    flipToggle = 0;
                 }
             }
             break;
@@ -343,15 +377,19 @@ public class Notepad : MonoBehaviour
                     case 0:
                     {
                         if (curKeyframeState == KeyframeState.None) return;
+
                         pages[activePageIndex + 1].gameObject.SetActive(false);
-                        curKeyframeState = KeyframeState.None;
                         flipToggle = 0;
+
+                        curKeyframeState = KeyframeState.None;
                     }
                     break;
                     case 2:
                     {
                         if (curKeyframeState == KeyframeState.TogglePageContentsBottomHalf) return;
+
                         activePage.TogglePageContentBottomHalf(true);
+
                         curKeyframeState = KeyframeState.TogglePageContentsBottomHalf;
                     }
                     break;
@@ -359,22 +397,28 @@ public class Notepad : MonoBehaviour
                     case 3:
                     {
                         if (curKeyframeState == KeyframeState.TogglePageContentsTopHalf) return;
+
                         activePage.TogglePageContentTopHalf(true);
+
                         curKeyframeState = KeyframeState.TogglePageContentsTopHalf;
                     }
                     break;
                     case 4:
                     {
                         if (curKeyframeState == KeyframeState.PaperClip) return;
+
                         activePage.PlayPaperClipReverse();
+
                         curKeyframeState = KeyframeState.PaperClip;
                     }
                     break;
                     case 6:
                     {
                         if (curKeyframeState == KeyframeState.ChangeDepth) return;
+
                         leftHand_renderer.UpdateDepthRealtime(leftHandDepthFront);
                         activePage.UpdatePageDepth(leftHandDepthFront + 2);
+
                         curKeyframeState = KeyframeState.ChangeDepth;
                     }
                     break;
@@ -383,62 +427,76 @@ public class Notepad : MonoBehaviour
             break;
             case State.Writing:
             {
-                if (!atStartWritePos)
+                if (!atStartPencilPos)
                 {
-                    float dist = Vector2.Distance(leftHand_renderer.transform.localPosition, leftHandPencilPos);
                     leftHand_renderer.transform.localPosition = Vector3.Lerp(leftHand_renderer.transform.localPosition, leftHandPencilPos, Time.deltaTime * LEFTHAND_DAMPING);
-                    if (dist < LEFTHAND_DIST_BUFFER)
+
+                    float dist = (leftHand_renderer.transform.localPosition - leftHandPencilPos).sqrMagnitude;
+                    if (dist < PENCIL_DISTANCE_THRESHOLD * PENCIL_DISTANCE_THRESHOLD)
                     {
-                        activePage.SetChosenStationText(previewStationIndex);
-                        totalWritingTime = activePage.chosenStationName.Length * WRITE_LETTER_TIME;
-                        atStartWritePos = true;
+                        activePage.WriteChosenStationText(previewStationIndex);
+                        totalPencilTime = activePage.chosenStationName.Length * WRITE_LETTER_TIME;
+
+                        atStartPencilPos = true;
                     }
                 }
                 else
                 {
                     curPencilTime += Time.deltaTime;
-                    float t = curPencilTime / totalWritingTime;
+                    float t = curPencilTime / totalPencilTime;
                     float curPosX = Mathf.Lerp(curStationNameBounds.min.x, curStationNameBounds.max.x, t);
-                    float randOffset = Mathf.PerlinNoise(curPencilTime * 7, curPencilTime * 7) * 2 - 1;
-                    float curPosY = activePage.stationNameBounds.center.y + (randOffset * 0.16f);
+                    float randOffset = Mathf.PerlinNoise(curPencilTime * PENCIL_VERTICAL_FREQUENCY, curPencilTime * PENCIL_VERTICAL_FREQUENCY) * 2 - 1;
+                    float curPosY = activePage.stationNameBounds.center.y + (randOffset * PENCIL_VERTICAL_MAGNITUDE);
                     leftHand_renderer.transform.position = new Vector3(curPosX, curPosY, leftHand_renderer.transform.position.z);
-                    if (t > 1f)
-                    {
-                        writeToggle = false;
-                    }
+
+                    if (t > 1f) writeToggle = false;
                 }
 
-                if (activePageIndex < lastPageIndex && playerInputs.notepadChooseStationAndFlip.y == 1) willFlipUp = true;
-                if (activePageIndex > 0 && playerInputs.notepadChooseStationAndFlip.y == -1) willFlipDown = true;
+                if (activePageIndex < lastPageIndex && playerInputs.notepadChooseStationAndFlip.y == 1)
+                {
+                    willFlipUp = true;
+                }
+                else if (activePageIndex > 0 && playerInputs.notepadChooseStationAndFlip.y == -1)
+                {
+                    willFlipDown = true;
+                }
             }
             break;
             case State.Erasing:
             {
-                if(!atStartWritePos)
+                if(!atStartPencilPos)
                 {
-                    float dist = Vector2.Distance(leftHand_renderer.transform.localPosition, leftHandPencilPos);
                     leftHand_renderer.transform.localPosition = Vector3.Lerp(leftHand_renderer.transform.localPosition, leftHandPencilPos, Time.deltaTime * LEFTHAND_DAMPING);
-                    if (dist < LEFTHAND_DIST_BUFFER)
+
+                    float dist = (leftHand_renderer.transform.localPosition - leftHandPencilPos).sqrMagnitude;
+                    if (dist < PENCIL_DISTANCE_THRESHOLD * PENCIL_DISTANCE_THRESHOLD)
                     {
                         activePage.EraseChosenStationText();
-                        totalWritingTime = activePage.chosenStationName.Length * WRITE_LETTER_TIME;
-                        atStartWritePos = true; 
+                        totalPencilTime = activePage.chosenStationName.Length * WRITE_LETTER_TIME;
+
+                        atStartPencilPos = true; 
                     }
                 }
                 else
                 {
                     curPencilTime += Time.deltaTime;
-                    float t = curPencilTime / totalWritingTime;
+                    float t = curPencilTime / totalPencilTime;
                     float curPosX = Mathf.Lerp(curStationNameBounds.max.x, curStationNameBounds.min.x, t);
-                    float randOffset = Mathf.PerlinNoise(curPencilTime * 7, curPencilTime * 7) * 2 - 1;
-                    float curPosY = activePage.stationNameBounds.center.y + (randOffset * 0.16f);
+                    float randOffset = Mathf.PerlinNoise(curPencilTime * PENCIL_VERTICAL_FREQUENCY, curPencilTime * PENCIL_VERTICAL_FREQUENCY) * 2 - 1;
+                    float curPosY = activePage.stationNameBounds.center.y + (randOffset * PENCIL_VERTICAL_MAGNITUDE);
                     leftHand_renderer.transform.position = new Vector3(curPosX, curPosY, leftHand_renderer.transform.position.z);
 
                     if (activePage.chosenStation_renderer.text.Length == 0) eraseToggle = false;
                 }
 
-                if (activePageIndex < lastPageIndex && playerInputs.notepadChooseStationAndFlip.y == 1) willFlipUp = true;
-                if (activePageIndex > 0 && playerInputs.notepadChooseStationAndFlip.y == -1) willFlipDown = true;
+                if (activePageIndex < lastPageIndex && playerInputs.notepadChooseStationAndFlip.y == 1)
+                {
+                    willFlipUp = true;
+                }
+                else if (activePageIndex > 0 && playerInputs.notepadChooseStationAndFlip.y == -1)
+                {
+                    willFlipDown = true;
+                }
             }
             break;
             case State.Stationary:
@@ -447,6 +505,7 @@ public class Notepad : MonoBehaviour
                 {
                     previewStationIndex += (int)playerInputs.notepadChooseStationAndFlip.x;
                     previewStationIndex = (previewStationIndex + trip.stationsDataArray.Length) % trip.stationsDataArray.Length;
+
                     activePage.SetPreviewStationText(previewStationIndex);
                 }
 
@@ -579,7 +638,7 @@ public class Notepad : MonoBehaviour
 
         boundsOffset = transform.position - totalBounds.min;
     }
-    public string GenerateName(Gender gender, Ethnicity ethnicity)
+    private string GenerateName(Gender gender, Ethnicity ethnicity)
     {
         string genderString = gender.ToString();
         string ethnicityString = ethnicity.ToString();

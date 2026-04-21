@@ -640,7 +640,7 @@ public class AtlasRenderer : MonoBehaviour
             await UniTask.Yield();
         }
     }
-    public void SetScrollingText()
+    [ContextMenu("Set Scrolling Text")]public void SetScrollingText()
     {
         customs = new Vector4[worldPivotsAndSizes.Length];
         for (int i = 0; i < customs.Length; i++)
@@ -649,7 +649,6 @@ public class AtlasRenderer : MonoBehaviour
             customs[i].y = 1.8f;
         }
     }
-
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {

@@ -211,7 +211,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 11
+  spriteIndex: 10
   flipX: 0
   flipY: 0
   width: 1
@@ -224,7 +224,7 @@ MonoBehaviour:
     uvSizeAndPos: {x: 0.08886719, y: 0.09765625, z: 0.9020996, w: 0.40234375}
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 2.0222223, y: 2.2222223, z: 1}
-    index: 11
+    index: 10
   bounds:
     m_Center: {x: 21.556976, y: 0.91944844, z: 0}
     m_Extent: {x: 1.0111111, y: 1.1111112, z: 0.1}
@@ -240,6 +240,9 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  prevSpriteIndexFlipH: 10
+  prevSpriteIndexFlipV: 10
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}

@@ -73,13 +73,13 @@ Shader "Custom/s_matrix"
 			
 			zoneLinearDepth *= skyMask;
 			zoneLinearDepth += (skyDepth - (totalLinearDepth * 0.3)) * 0.5;
-			zoneLinearDepth += blit.r * 0.5;
+			zoneLinearDepth += max(blit.r, 0.15);
 			zoneLinearDepth = BayerMatrix(zoneLinearDepth, 0, input.texcoord * _ScreenParams.xy);
 			zoneLinearDepth *= zoneMask;
 
 			float foregroundMask = 1 - zoneMask;
-			float foreground = (blit.r + (totalLinearDepth * 0.5)) * foregroundMask;
-			float totalGreyscale = foreground + zoneLinearDepth + sunRays;
+			float3 foreground = (blit.rgb + (totalLinearDepth * 0.5)) * foregroundMask;
+			float3 totalGreyscale = foreground + zoneLinearDepth + sunRays;
 			totalGreyscale = saturate(totalGreyscale);
 			//return totalGreyscale.xxxx;
 

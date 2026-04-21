@@ -29,6 +29,11 @@ public class Station : MonoBehaviour
             bystander.profile = bystanderProfile;
             bystander.role = Role.Bystander;
             bystander.gameObject.name = bystanderProfile.fullName;
+
+            if (i % 2 == 0)
+            {
+                bystander.atlasRenderer.FlipH(true, bystander.atlasRenderer.sprite);
+            }
         }
 
         for (int i = 0; i < station.traitorProfiles.Length; i++)
@@ -46,6 +51,10 @@ public class Station : MonoBehaviour
             traitor.profile = traitorProfile;
             traitor.role = Role.Traitor;
             traitor.gameObject.name = traitorProfile.fullName;
+            if (i % 2 == 0)
+            {
+                traitor.atlasRenderer.FlipH(true, traitor.atlasRenderer.sprite);
+            }
         }
     }
 }

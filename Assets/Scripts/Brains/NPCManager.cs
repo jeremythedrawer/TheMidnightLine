@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
-using UnityEditor;
+using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.VFX;
 using static NPC;
 
 public class NPCManager : MonoBehaviour
@@ -20,9 +21,7 @@ public class NPCManager : MonoBehaviour
     public static NPCQueue enterTrainQueue;
     public static NPCQueue exitTrainQueue;
 
-    public NPCQueue seatQ;
-    public NPCQueue enterTrainQ;
-    public NPCQueue exitTrainQ;
+    public static Dictionary<VisualEffect, Queue<VisualEffect>> glyphPool;
     private void Awake()
     {
         seatQueue = new NPCQueue();
@@ -32,12 +31,19 @@ public class NPCManager : MonoBehaviour
         seatQueue.npcs = new NPCBrain[MAX_QUEUE_SIZE];
         enterTrainQueue.npcs = new NPCBrain[MAX_QUEUE_SIZE];
         exitTrainQueue.npcs = new NPCBrain[MAX_QUEUE_SIZE];
+
+        glyphPool = new Dictionary<VisualEffect, Queue<VisualEffect>>();
+
+    }
+
+    private void Start()
+    {
+        npcsData.behaviourContextDict = SetBehaviourContextDictionary();
     }
     private void OnEnable()
     {
         gameEventData.OnStationArrival.RegisterListener(ProcessEnterTrainQueue);
     }
-
     private void OnDisable()
     {
         gameEventData.OnStationArrival.UnregisterListener(ProcessEnterTrainQueue);
@@ -45,11 +51,7 @@ public class NPCManager : MonoBehaviour
     private void Update()
     {
         ProcessSeatQueue();
-        seatQ = seatQueue;
-        enterTrainQ = enterTrainQueue;
-        exitTrainQ = exitTrainQueue;
     }
-
     private void ProcessSeatQueue()
     {
         if (seatQueue.npcsCount == 0) return;
@@ -63,14 +65,12 @@ public class NPCManager : MonoBehaviour
         seatQueue.npcsCount--;
         AssignNextNPCPosition(npc);
     }
-
     public static void AddToSeatQueue(NPCBrain npc)
     {
         npc.seatQueueIndex = seatQueue.npcsCount;
         seatQueue.npcs[seatQueue.npcsCount] = npc;
         seatQueue.npcsCount++;
     }
-
     public static void RemoveFromSeatQueue(NPCBrain npc)
     {
         if (seatQueue.npcsCount == 0) return;
@@ -79,6 +79,44 @@ public class NPCManager : MonoBehaviour
         seatQueue.npcs[npc.seatQueueIndex] = seatQueue.npcs[lastIndex];
         seatQueue.npcs[lastIndex] = npc;
         seatQueue.npcsCount--;
+    }
+    public static void AddToEnterTrainQueue(NPCBrain npc)
+    {
+        npc.enterTrainIndex = enterTrainQueue.npcsCount;
+        enterTrainQueue.npcs[enterTrainQueue.npcsCount] = npc;
+        enterTrainQueue.npcsCount++;
+    }
+    public static VisualEffect GetGlyph(VisualEffect glyphPrefab, Transform parent)
+    {
+        if (!glyphPool.TryGetValue(glyphPrefab, out Queue<VisualEffect> queue))
+        {
+            queue = new Queue<VisualEffect>();
+            glyphPool[glyphPrefab] = queue;
+        }
+
+        if (queue.Count > 0)
+        {
+            VisualEffect gylphInstance = queue.Dequeue();
+            gylphInstance.gameObject.SetActive(true);
+            gylphInstance.Reinit();
+            gylphInstance.gameObject.transform.position = parent.position;
+            gylphInstance.gameObject.transform.parent = parent;
+            return gylphInstance;
+        }
+
+        return Instantiate(glyphPrefab, parent.transform.position, parent.transform.rotation, parent);
+    }
+    public static void ReturnGlyph(VisualEffect glyphPrefab, VisualEffect glyphInstance)
+    {
+        glyphInstance.Stop();
+        glyphInstance.gameObject.transform.parent = null;
+        if(!glyphPool.TryGetValue(glyphPrefab, out Queue<VisualEffect> queue))
+        {
+            queue = new Queue<VisualEffect>();
+            glyphPool[glyphPrefab] = queue;
+        }
+
+        queue.Enqueue(glyphInstance);
     }
     private void ProcessEnterTrainQueue()
     {
@@ -97,13 +135,6 @@ public class NPCManager : MonoBehaviour
             await UniTask.Delay((int)QUEUE_TICK_RATE * 1000);
         }
     }
-    public static void AddToEnterTrainQueue(NPCBrain npc)
-    {
-        npc.enterTrainIndex = enterTrainQueue.npcsCount;
-        enterTrainQueue.npcs[enterTrainQueue.npcsCount] = npc;
-        enterTrainQueue.npcsCount++;
-    }
-
     private void AssignNextNPCPosition(NPCBrain npc)
     {
         float npcX = npc.transform.position.x;
@@ -130,6 +161,17 @@ public class NPCManager : MonoBehaviour
         {
             npc.AssignSeat(bestIndex);
         }
+    }
+    private Dictionary<Behaviours, NPCBehaviourContextSO> SetBehaviourContextDictionary()
+    {
+        Dictionary<Behaviours, NPCBehaviourContextSO> dict = new Dictionary<Behaviours, NPCBehaviourContextSO>();
+
+        foreach (NPCBehaviourContextSO context in npcsData.behaviourContexts)
+        {
+            dict[context.behaviour] = context;
+        }
+
+        return dict;
     }
 }
 
