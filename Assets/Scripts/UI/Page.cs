@@ -14,6 +14,7 @@ public class Page : MonoBehaviour
     public AtlasRenderer behaviour1_renderer;
     public AtlasRenderer name_renderer;
     public AtlasRenderer chosenStation_renderer;
+    public AtlasRenderer pageNumber_renderer;
     
     public AtlasRenderer mugshot_renderer;
 
@@ -59,6 +60,7 @@ public class Page : MonoBehaviour
     {
         behaviour0_renderer.enabled = toggle;
         behaviour1_renderer.enabled = toggle;
+        pageNumber_renderer.enabled = toggle;
         if (chosenStationIndex == -1)
         {
             chosenStation_renderer.enabled = false;
@@ -82,10 +84,7 @@ public class Page : MonoBehaviour
         chosenStation_renderer.UpdateDepthRealtime(contentDepth);
         name_renderer.UpdateDepthRealtime(contentDepth);
         mugshot_renderer.UpdateDepthRealtime(contentDepth);
-    }
-    public void TogglePageRenderer(bool toggle)
-    {
-        paper_renderer.enabled = toggle;
+        pageNumber_renderer.UpdateDepthRealtime(contentDepth);
     }
     public void WriteChosenStationText(int stationIndex)
     {
@@ -164,17 +163,6 @@ public class Page : MonoBehaviour
             }
         }
         return Behaviours.None;
-    }
-    private int GetFlagAmount(int value)
-    {
-        int count = 0;
-
-        while (value != 0)
-        {
-            count += value & 1;
-            value >>= 1;
-        }
-        return count;
     }
 
 }

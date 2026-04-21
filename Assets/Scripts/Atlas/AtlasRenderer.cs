@@ -35,8 +35,7 @@ public class AtlasRenderer : MonoBehaviour
     public string text;
     public float kerning = 1.1f;
     public float spacing = 1;
-
-
+    public float scrollSize;
     [Header("Generated")]
     public Camera cam;
     public SimpleSprite sprite;
@@ -646,7 +645,7 @@ public class AtlasRenderer : MonoBehaviour
         for (int i = 0; i < customs.Length; i++)
         {
             customs[i].x = bounds.size.x;
-            customs[i].y = 1.8f;
+            customs[i].y = scrollSize;
         }
     }
 #if UNITY_EDITOR

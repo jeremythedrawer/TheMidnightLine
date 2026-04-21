@@ -62,8 +62,9 @@ Shader "Custom/s_atlasFontScroll"
 
                 objPos *= size;
                 float time = _Time.y * _ScrollSpeed;
-                objPos.x -= fmod(time - pivot.x, spriteData.custom.x + _Spacing) * spriteData.custom.x - spriteData.custom.x; //custom.x is the total bounds of the text
-                
+                //objPos += pivot;
+
+                objPos.x += fmod(-time + pivot, spriteData.custom.x + _Spacing) * (spriteData.custom.y) + (spriteData.custom.y); //custom.x is the total bounds of the text
                 float3 worldPos = float3(position.xy + objPos, position.z);
 
                 o.objPos = objPos;
@@ -89,7 +90,8 @@ Shader "Custom/s_atlasFontScroll"
 
                 half3 finalColor = color.rgb + 1;
 
-                half rightMask = step(i.objPos.x, spriteData.custom.y); //custom.y is the mask bounds
+                float mask = 10; //TODO: Set on custom.y
+                half rightMask = step(i.objPos.x, spriteData.custom.y);
                 half leftMask = step(0,i.objPos.x);
                 half alpha = color.a * rightMask * leftMask;
                 clip(alpha - 0.001);

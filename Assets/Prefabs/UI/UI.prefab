@@ -124,6 +124,7 @@ MonoBehaviour:
   text: 
   kerning: 0
   spacing: 0
+  scrollSize: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.10864258, y: 0.15600586, z: 0.29638672, w: 0.8129883}
@@ -902,6 +903,18 @@ PrefabInstance:
     - target: {fileID: 4752926907134218488, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6859713082886229436, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 7.950316
+      objectReference: {fileID: 0}
+    - target: {fileID: 6859713082886229436, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -1.3566667
+      objectReference: {fileID: 0}
+    - target: {fileID: 6859713082886229436, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 14.549999
       objectReference: {fileID: 0}
     - target: {fileID: 6930608622283392048, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: bounds.m_Center.x

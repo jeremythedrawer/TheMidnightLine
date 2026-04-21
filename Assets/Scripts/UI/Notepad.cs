@@ -594,6 +594,7 @@ public class Notepad : MonoBehaviour
                 Page page = Instantiate(page_prefab, pagePos, Quaternion.identity, transform);
                 page.Init(traitorProfile);
                 page.gameObject.name = "Page_" + createPageIndex;
+                page.pageNumber_renderer.SetText("Page " + (createPageIndex + 1));
                 pageList.Add(page);
                 if (createPageIndex != 0) page.gameObject.SetActive(false);
                 createPageIndex++;

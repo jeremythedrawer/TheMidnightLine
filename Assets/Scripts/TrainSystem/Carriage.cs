@@ -52,7 +52,6 @@ public class Carriage : MonoBehaviour
     }
     private void Start()
     {
-        nextStationSignRenderer.SetScrollingText();
         alpha = 0;
     }
     public void UnlockInteriorDoors()
@@ -87,6 +86,8 @@ public class Carriage : MonoBehaviour
     {
         string text = "Next Station is " + stationName;
         nextStationSignRenderer.SetText(text);
+        nextStationSignRenderer.SetScrollingText();
+        Debug.Log(text);
     }
     public void SetSignToCurrentStation(string stationName)
     {
