@@ -161,6 +161,7 @@ public class NPCBrain : MonoBehaviour
                     atlasRenderer.PlayClip(ref curClip, curGlyph.transform);
                     if (!playingGlyph && curClip.keyFrames[atlasRenderer.curFrameIndex].motionSprite.markers.Length > 0)
                     {
+                        curGlyph.gameObject.SetActive(true);
                         curGlyph.Play();
                         playingGlyph = true;
                         if ((curBehaviour & Behaviours.Smoke_addict) != 0)
@@ -319,12 +320,17 @@ public class NPCBrain : MonoBehaviour
                 if ((curBehaviour & Behaviours.Smoke_addict) != 0)
                 {
                     curGlyph.Reinit();
+                    curGlyph.gameObject.SetActive(false);
                     if (newState != NPCState.TicketCheck)
                     {
                         curCarriage.smokersRoomData[smokerRoomIndex].npcCount--;
                         smokerRoomIndex = -1;
                         QueueForSeat();
                     }
+                }
+                else if ((curBehaviour & Behaviours.Always_on_call) != 0)
+                {
+                    curGlyph.gameObject.SetActive(false);
                 }
 
                 if (newState != NPCState.TicketCheck)

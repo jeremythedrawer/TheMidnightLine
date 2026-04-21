@@ -1,7 +1,6 @@
 using UnityEngine;
 using UnityEngine.VFX;
 using static Atlas;
-using static AtlasRendering;
 public class GlyphSetter : MonoBehaviour
 {
     public int spriteIndex;
@@ -23,6 +22,11 @@ public class GlyphSetter : MonoBehaviour
 
     public float lifetime;
     public float deltaTime;
+
+    public Vector4[] uvSizeAndPosArray = new Vector4[9];
+    public Vector4[] worldSizeAndPosArray = new Vector4[9];
+    public Vector2[] widthHeightArray = new Vector2[9];
+    public SliceSprite sliceSprite;
     private void OnValidate()
     {
         if (uvSizeAndPosBuffer == null || worldSizeAndPosBuffer == null || widthHeightBuffer == null) return;
@@ -31,13 +35,11 @@ public class GlyphSetter : MonoBehaviour
 
     private void OnEnable()
     {
-        deltaTime += 0.1f;
+        deltaTime = 0.1f;
         GetLifetime();
         CreateBuffers();
-    }
-    private void OnDisable()
-    {
-        ReleaseBuffers();
+        SetSliceSpriteAndUVSizePosArray();
+        SetMesh();
     }
     private void OnDestroy()
     {
@@ -55,11 +57,24 @@ public class GlyphSetter : MonoBehaviour
             deltaTime = 0;
         }
     }
+    private void SetSliceSpriteAndUVSizePosArray()
+    {
+        sliceSprite = glyphAtlas.slicedSprites[spriteIndex];
+        for (int i = 0; i < 9; i++)
+        {
+            uvSizeAndPosArray[i] = sliceSprite.uvSizeAndPos[i];
+        }
+    }
+    private void SetMesh()
+    {
+        vfx.SetMesh("_Quad", quad);
+    }
     private void CreateBuffers()
     {
         uvSizeAndPosBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, 9, sizeof(float) * 4);
         worldSizeAndPosBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, 9, sizeof(float) * 4);
         widthHeightBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, 9, sizeof(float) * 2);
+
     }
     private void GetLifetime()
     {
@@ -67,55 +82,38 @@ public class GlyphSetter : MonoBehaviour
     }
     private void UpdateVFX()
     {
-        Vector4[] uvSizeAndPosArray = new Vector4[9];
-
-        SliceSprite sliceSprite = glyphAtlas.slicedSprites[spriteIndex];
-        for (int i = 0; i < 9; i++)
-        {
-            uvSizeAndPosArray[i] = sliceSprite.uvSizeAndPos[i];
-        }
-
         float worldWidthSize = sliceSprite.sprite.worldSize.x * width;
         float worldHeightSize = sliceSprite.sprite.worldSize.y * height;
-
         float rightPos = worldWidthSize - sliceSprite.worldSlices.y;
         float topPos = worldHeightSize - sliceSprite.worldSlices.w;
         float centerWidth = rightPos - sliceSprite.worldSlices.x;
         float centerHeight = topPos - sliceSprite.worldSlices.z;
 
-        Vector4[] worldSizeAndPosArray = new Vector4[]
-        {
-            new Vector4(sliceSprite.worldSlices.x,  sliceSprite.worldSlices.z, 0, 0),
-            new Vector4(centerWidth, sliceSprite.worldSlices.z, sliceSprite.worldSlices.x, 0),
-            new Vector4(sliceSprite.worldSlices.y, sliceSprite.worldSlices.z, rightPos, 0),
-
-            new Vector4(sliceSprite.worldSlices.x, centerHeight, 0, sliceSprite.worldSlices.z),
-            new Vector4(centerWidth, centerHeight, sliceSprite.worldSlices.x, sliceSprite.worldSlices.z),
-            new Vector4(sliceSprite.worldSlices.y, centerHeight, rightPos, sliceSprite.worldSlices.z),
-
-            new Vector4(sliceSprite.worldSlices.x, sliceSprite.worldSlices.w, 0, topPos),
-            new Vector4(centerWidth, sliceSprite.worldSlices.w, sliceSprite.worldSlices.x, topPos),
-            new Vector4(sliceSprite.worldSlices.y, sliceSprite.worldSlices.w, rightPos, topPos),
-        };
-
+        worldSizeAndPosArray[0] = new Vector4(sliceSprite.worldSlices.x, sliceSprite.worldSlices.z, 0, 0);
+        worldSizeAndPosArray[1] = new Vector4(centerWidth, sliceSprite.worldSlices.z, sliceSprite.worldSlices.x, 0);
+        worldSizeAndPosArray[2] = new Vector4(sliceSprite.worldSlices.y, sliceSprite.worldSlices.z, rightPos, 0);
+        worldSizeAndPosArray[3] = new Vector4(sliceSprite.worldSlices.x, centerHeight, 0, sliceSprite.worldSlices.z);
+        worldSizeAndPosArray[4] = new Vector4(centerWidth, centerHeight, sliceSprite.worldSlices.x, sliceSprite.worldSlices.z);
+        worldSizeAndPosArray[5] = new Vector4(sliceSprite.worldSlices.y, centerHeight, rightPos, sliceSprite.worldSlices.z);
+        worldSizeAndPosArray[6] = new Vector4(sliceSprite.worldSlices.x, sliceSprite.worldSlices.w, 0, topPos);
+        worldSizeAndPosArray[7] = new Vector4(centerWidth, sliceSprite.worldSlices.w, sliceSprite.worldSlices.x, topPos);
+        worldSizeAndPosArray[8] = new Vector4(sliceSprite.worldSlices.y, sliceSprite.worldSlices.w, rightPos, topPos);
+ 
         float originalCenterWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
 
         float originalCenterHeight = sliceSprite.sprite.worldSize.y - sliceSprite.worldSlices.z - sliceSprite.worldSlices.w;
         float uvCenterWidth = centerWidth / originalCenterWidth;
         float uvCenterHeight = centerHeight / originalCenterHeight;
 
-        Vector2[] widthHeightArray = new Vector2[]
-        {
-            new Vector2(1, 1),
-            new Vector2(uvCenterWidth, 1),
-            new Vector2(1, 1),
-            new Vector2(1, uvCenterHeight),
-            new Vector2(uvCenterWidth, uvCenterHeight),
-            new Vector2(1, uvCenterHeight),
-            new Vector2(1, 1),
-            new Vector2(uvCenterWidth, 1),
-            new Vector2(1, 1),
-        };
+        widthHeightArray[0] = new Vector2(1, 1);
+        widthHeightArray[1] = new Vector2(uvCenterWidth, 1);
+        widthHeightArray[2] = new Vector2(1, 1);
+        widthHeightArray[3] = new Vector2(1, uvCenterHeight);
+        widthHeightArray[4] = new Vector2(uvCenterWidth, uvCenterHeight);
+        widthHeightArray[5] = new Vector2(1, uvCenterHeight);
+        widthHeightArray[6] = new Vector2(1, 1);
+        widthHeightArray[7] = new Vector2(uvCenterWidth, 1);
+        widthHeightArray[8] = new Vector2(1, 1);
 
 
         uvSizeAndPosBuffer.SetData(uvSizeAndPosArray);
@@ -126,9 +124,7 @@ public class GlyphSetter : MonoBehaviour
         float lineHeight = vfx.GetFloat("LineHeight");
         float lineSpace = vfx.GetFloat("LineSpace");
 
-        float lineSegment = lineHeight + (lineSpace * ( 1- (lineHeight / lineSpace)));
-
-        int lineCount = Mathf.CeilToInt(centerHeight / lineSegment);
+        int lineCount = Mathf.CeilToInt(centerHeight / lineSpace);
 
         Vector2 linePosition = new Vector2(sliceSprite.worldSlices.x, topPos - lineHeight);
 
@@ -141,8 +137,6 @@ public class GlyphSetter : MonoBehaviour
 
         lifetime = (width + lineCount) * 0.4f;
         vfx.SetFloat("Lifetime", lifetime);
-
-        vfx.SetMesh("_Quad", quad);
     }
 
     private void ReleaseBuffers()
