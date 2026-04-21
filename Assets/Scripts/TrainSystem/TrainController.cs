@@ -16,7 +16,7 @@ public class TrainController : MonoBehaviour
     public Carriage[] carriages;
     CancellationTokenSource trainCTS;
     public Station[] stations;
-    public Station nextStation;
+    public static Station nextStation;
     public TrainStates curState;
     public bool closingSlideDoors;
     public int curStationIndex;
@@ -77,7 +77,7 @@ public class TrainController : MonoBehaviour
 
         for (int i = 0; i < carriages.Length; i++)
         {
-            carriages[i].SetSignToNextStation(trip.curStation.stationName);
+            carriages[i].SetSignToNextStation(trip.nextStation.stationName);
         }
 
     }
@@ -124,7 +124,7 @@ public class TrainController : MonoBehaviour
             {
                 for (int i = 0; i < carriages.Length; i++)
                 {
-                    carriages[i].SetSignToNextStation(trip.curStation.stationName);
+                    carriages[i].SetSignToNextStation(trip.nextStation.stationName);
                 }
             }
             break;
@@ -132,6 +132,7 @@ public class TrainController : MonoBehaviour
             case TrainStates.Decelerating:
             {
                 stats.prevPeakVelocity = stats.curVelocity;
+                gameEventData.OnTrainDeceleration.Raise();
             }
             break;
 
@@ -144,12 +145,12 @@ public class TrainController : MonoBehaviour
             case TrainStates.Stopped:
             {
                 stats.curVelocity = 0;
-                if (trip.curStation.isFrontOfTrain)
+                if (trip.nextStation.isFrontOfTrain)
                 {
                     for (int i = 0; i < carriages.Length; i++)
                     {
                         carriages[i].UnlockExteriorSlideDoors();
-                        carriages[i].SetSignToCurrentStation(trip.curStation.stationName);
+                        carriages[i].SetSignToCurrentStation(trip.nextStation.stationName);
                     }
                 }
                 else
@@ -157,7 +158,7 @@ public class TrainController : MonoBehaviour
                     for (int i = 0; i < carriages.Length; i++)
                     {
                         carriages[i].UnlockInteriorDoors();
-                        carriages[i].SetSignToCurrentStation(trip.curStation.stationName);
+                        carriages[i].SetSignToCurrentStation(trip.nextStation.stationName);
                     }
                 }
                 trip.ticketsCheckedSinceLastStation = 0;
@@ -172,7 +173,7 @@ public class TrainController : MonoBehaviour
         {
             case TrainStates.AtMaxSpeed:
             {
-                if (trip.ticketsCheckedSinceLastStation >= trip.curStation.ticketsToCheckBeforeSpawn)
+                if (trip.ticketsCheckedSinceLastStation >= trip.nextStation.ticketsToCheckBeforeSpawn)
                 {
                     nextStation = stations[curStationIndex];
                     float stationXPos = GetBrakeDistance(stats.curVelocity, settings.deceleration) + TRAIN_WORLD_POS;
@@ -197,13 +198,13 @@ public class TrainController : MonoBehaviour
                     if (stats.slideDoorsAmountOpened == 0)
                     {
                         curStationIndex++;
-                        trip.curStation = trip.stationsDataArray[curStationIndex];
+                        trip.nextStation = trip.stationsDataArray[curStationIndex];
 
-                        stats.targetVelocity = KMPHToVelocity(trip.curStation.targetKMPH);
+                        stats.targetVelocity = KMPHToVelocity(trip.nextStation.targetKMPH);
                  
                         stats.curPassengersBoarded = 0;
-                        stats.targetPassengersBoarding = trip.curStation.bystanderProfiles.Length + trip.curStation.traitorProfiles.Length;
-                        stats.distToSpawnNextStation = stats.trainToMaxSpawnDist - trip.curStation.station_prefab.platformRenderer.transform.localPosition.x;
+                        stats.targetPassengersBoarding = trip.nextStation.bystanderProfiles.Length + trip.nextStation.traitorProfiles.Length;
+                        stats.distToSpawnNextStation = stats.trainToMaxSpawnDist - trip.nextStation.station_prefab.frontPlatformRenderer.transform.localPosition.x;
                         closingSlideDoors = false;
                     }
                 }
@@ -275,7 +276,7 @@ public class TrainController : MonoBehaviour
     }
     private void CloseAllSlideDoors()
     {
-        if (trip.curStation.isFrontOfTrain)
+        if (trip.nextStation.isFrontOfTrain)
         {
             for (int i = 0; i < carriages.Length; i++)
             {
@@ -331,7 +332,7 @@ public class TrainController : MonoBehaviour
     }
     private void InitStations()
     {
-        trip.curStation = trip.stationsDataArray[0];
+        trip.nextStation = trip.stationsDataArray[0];
 
         stations = new Station[trip.stationsDataArray.Length];
 
@@ -339,7 +340,7 @@ public class TrainController : MonoBehaviour
         {
             StationSO stationData = trip.stationsDataArray[i];
             stationData.stationName = stationData.station_prefab.name;
-
+            stationData.stationIndex = i;
             Station station = Instantiate(stationData.station_prefab, null);
             stations[i] = station;
             station.gameObject.SetActive(false);

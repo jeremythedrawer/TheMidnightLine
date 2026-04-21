@@ -33,12 +33,10 @@ public class NPCBrain : MonoBehaviour
 
     public CancellationTokenSource ctsFade;
     public CancellationTokenSource ctsBoardTrain;
+    public CancellationTokenSource ctsDisembarkTrain;
     public UniTaskCompletionSource tcsGetToSlideDoor;
     
     public Carriage curCarriage;
-
-    public StationSO startStation;
-    public StationSO endStation;
 
     public Vector2 curSpriteMarkerLocalPosition;
     public float targetXVelocity;
@@ -71,8 +69,8 @@ public class NPCBrain : MonoBehaviour
     public bool behaving;
 
     public int seatQueueIndex;
-    public int enterTrainIndex;
-    public int exitTrainIndex;
+    public int boardTrainIndex;
+    public int disembarkTrainIndex;
 
     public Behaviours[] behaviourFlags;
     public int behaviourFlagCount;
@@ -88,10 +86,18 @@ public class NPCBrain : MonoBehaviour
         atlas = atlasRenderer.atlas;
         rigidBody.includeLayers = layerSettings.stationMask;
     }
+    private void OnEnable()
+    {
+        gameEventData.OnTrainDeceleration.RegisterListener(QueueToDisembarkTrain);   
+    }
+    private void OnDisable()
+    {
+        gameEventData.OnTrainDeceleration.UnregisterListener(QueueToDisembarkTrain);
+    }
     private void Start()
     {
         atlasRenderer.UpdateDepthRealtime((int)transform.position.z);
-        QueueToEnterTrain();
+        QueueToBoardTrain();
         SetBehaviourFlags();
         curPath = NPCPath.StandingInTrain;
         smokerRoomIndex = -1; //NOTE: -1 is used as a condition to find a smokers room in the smoker state
@@ -161,7 +167,6 @@ public class NPCBrain : MonoBehaviour
                     atlasRenderer.PlayClip(ref curClip, curGlyph.transform);
                     if (!playingGlyph && curClip.keyFrames[atlasRenderer.curFrameIndex].motionSprite.markers.Length > 0)
                     {
-                        curGlyph.gameObject.SetActive(true);
                         curGlyph.Play();
                         playingGlyph = true;
                         if ((curBehaviour & Behaviours.Smoke_addict) != 0)
@@ -524,47 +529,76 @@ public class NPCBrain : MonoBehaviour
         {
         }
     }
-    public void QueueToEnterTrain()
+    private void QueueToBoardTrain()
     {
-        NPCManager.AddToEnterTrainQueue(this);
+        NPCManager.AddToBoardTrainQueue(this);
+    }
+    private void QueueToDisembarkTrain()
+    {
+        if (!IsOnTrain() || trip.nextStation.stationIndex != disembarkTrainIndex) return;
+        NPCManager.AddToDisembarkTrainQueue(this);
     }
     public void BoardTrain()
     {
         ctsBoardTrain = new CancellationTokenSource();
         BoardingTrain().Forget();
     }
+    public void DisembarkTrain()
+    {
+        ctsDisembarkTrain = new CancellationTokenSource();
+        DisembarkingTrain().Forget();
+    }
     private async UniTask BoardingTrain()
     {
-        float randomStartMoveTime = UnityEngine.Random.Range(0.3f, 1f);
+        await GoToSlideDoors();
+        await OpenSlideDoors();
+
+        transform.SetParent(null, true);
+        trainStats.curPassengersBoarded++;
+        QueueForSeat();
+
+        rigidBody.includeLayers = layerSettings.trainMask;
+        SetStandingDepthInTrain();
+    }
+    private async UniTask DisembarkingTrain()
+    {
+        await OpenSlideDoors();
+
+        Station station = TrainController.nextStation;
+        AtlasRenderer stationPlatform = station.station.isFrontOfTrain ? station.frontPlatformRenderer : station.backPlatformRenderer;
+        transform.SetParent(stationPlatform.transform, true);
+        trainStats.curPassengersBoarded--;
+        rigidBody.includeLayers = layerSettings.stationMask;
+        atlasRenderer.UpdateDepthRealtime(stationPlatform.batchKey.depthOrder);
+
+    }
+    private void PrepareToDisembarkTrain()
+    {
+        GoToSlideDoors().Forget();
+    }
+    private async UniTask GoToSlideDoors()
+    {
+        float randomStartMoveTime = UnityEngine.Random.Range(MIN_START_MOVE_TIME, MAX_START_MOVE_TIME);
         await UniTask.WaitForSeconds(randomStartMoveTime);
 
         SetPath(NPCPath.ToSlideDoor);
-        while(curPath != NPCPath.ToSlideDoor) await UniTask.Yield();
+        while (curPath != NPCPath.ToSlideDoor) await UniTask.Yield();
 
         await WaitUntilAtSlideDoor();
 
         RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.slideDoors);
         RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
 
-#if UNITY_EDITOR
-        if (slideDoorHit.collider == null) { Debug.LogError($"{profile.fullName} did not find a slide door to go to"); return; }
-        if (carriageHit.collider == null) { Debug.LogError($"{profile.fullName} did not find a slide door to go to"); return; }
-#endif
         curSlideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-
+        curCarriage = trainStats.carriageDict[carriageHit.collider];
+    }
+    private async UniTask OpenSlideDoors()
+    {
         await curSlideDoors.WaitUntilUnlocked();
-        
+
         if (curSlideDoors.curState == SlideDoors.State.Unlocked) curSlideDoors.OpenDoors();
 
         await curSlideDoors.WaitUntilOpened();
-
-        transform.SetParent(null, true);
-        trainStats.curPassengersBoarded++;
-        QueueForSeat();
-
-        curCarriage = trainStats.carriageDict[carriageHit.collider];
-        rigidBody.includeLayers = layerSettings.trainMask;
-        SetStandingDepthInTrain();
     }
     private UniTask WaitUntilAtSlideDoor()
     {
@@ -618,7 +652,6 @@ public class NPCBrain : MonoBehaviour
         }
         behaving = true;
     }
-
     private void SetBehaviourFlags()
     {
         int behaviourValue = (int)profile.behaviours;

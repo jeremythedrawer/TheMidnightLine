@@ -469,9 +469,6 @@ public class SpyBrain : MonoBehaviour
                     atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.frontMin);
 
                     trainStats.curPassengersBoarded++;
-                    
-                    gameEventData.OnBoardingSpy.Raise();
-                    
                 }
             }
         }

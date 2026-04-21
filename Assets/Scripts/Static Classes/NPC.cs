@@ -5,6 +5,8 @@ public static class NPC
 {
     public const float CLOSE_TO_TARGET_BUFFER = 0.1f;
     public const float FADE_TIME = 1f;
+    public const float MIN_START_MOVE_TIME = 0.3f;
+    public const float MAX_START_MOVE_TIME = 1f;
     public enum NPCState
     {
         None,

@@ -15,7 +15,7 @@ public class TripSO : ScriptableObject
     public int minStationsTraitorsTravel = 2;
     public int maxStationsTraitorsTravel = 4;
     [Header("Generated")]
-    public StationSO curStation;
+    public StationSO nextStation;
     
     public int totalTicketsToCheck;
 
