@@ -8,6 +8,11 @@ public class Station : MonoBehaviour
     public TripSO trip;
     public AtlasRenderer frontPlatformRenderer;
     public AtlasRenderer backPlatformRenderer;
+    public Transform exitTransform;
+    public void Start()
+    {
+        station.exitLocalPosX = exitTransform.localPosition.x;
+    }
     public void SpawnNPCs()
     {
         AtlasRenderer activePlatformRenderer = station.isFrontOfTrain ? frontPlatformRenderer : backPlatformRenderer;

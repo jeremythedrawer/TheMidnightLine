@@ -36,6 +36,7 @@ public static class NPC
         ToStandInTrain,
         ToStandAtStation,
         ToSlideDoor,
+        ToExitStation,
     }
 
 

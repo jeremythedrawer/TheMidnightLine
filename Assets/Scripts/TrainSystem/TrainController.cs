@@ -42,7 +42,7 @@ public class TrainController : MonoBehaviour
         stats.targetVelocity = KMPHToVelocity(stationData.targetKMPH);
         trip.ticketsCheckedSinceStart = 0;
         
-        stats.curPassengersBoarded = 0;
+        stats.totalPassengersBoarded = 0;
 
         stats.depthSections.min = carriage.exteriorRenderers[0].batchKey.depthOrder;
         stats.depthSections.max = carriage.interiorSlideDoors[0].rightSlideDoorRenderer.batchKey.depthOrder;
@@ -194,7 +194,7 @@ public class TrainController : MonoBehaviour
             break;
             case TrainStates.Stopped:
             {
-                if (stats.curPassengersBoarded == stats.targetPassengersBoarding)
+                if (stats.totalPassengersBoarded == stats.targetPassengersBoarding)
                 {
                     if (!closingSlideDoors)
                     {
@@ -209,7 +209,7 @@ public class TrainController : MonoBehaviour
 
                         stats.targetVelocity = KMPHToVelocity(trip.nextStation.targetKMPH);
                  
-                        stats.curPassengersBoarded = 0;
+                        stats.totalPassengersBoarded = 0;
                         stats.targetPassengersBoarding = trip.nextStation.bystanderProfiles.Length + trip.nextStation.traitorProfiles.Length;
                         stats.distToSpawnNextStation = stats.trainToMaxSpawnDist - trip.nextStation.station_prefab.frontPlatformRenderer.transform.localPosition.x;
                         closingSlideDoors = false;

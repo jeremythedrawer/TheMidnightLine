@@ -16,7 +16,7 @@ public class TrainStatsSO : ScriptableObject
 
     public float trainToMaxSpawnDist;
 
-    public int curPassengersBoarded;
+    public int totalPassengersBoarded;
     public int targetPassengersBoarding;
 
     public int slideDoorsAmountOpened;

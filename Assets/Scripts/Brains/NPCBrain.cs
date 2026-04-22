@@ -156,7 +156,16 @@ public class NPCBrain : MonoBehaviour
                 move = Mathf.Sign(targetDist);
                 atlasRenderer.PlayClip(ref curClip);
                 atlasRenderer.FlipH(move < 0, atlasRenderer.sprite);
-                targetDist = targetXPos - transform.position.x;
+
+                if (curPath == NPCPath.ToExitStation)
+                {
+                    targetDist = targetXPos - transform.localPosition.x;
+                }
+                else
+                {
+
+                    targetDist = targetXPos - transform.position.x;
+                }
             }
             break;
             case NPCState.TicketCheck:
@@ -475,6 +484,13 @@ public class NPCBrain : MonoBehaviour
                 targetDist = targetXPos - transform.position.x;
             }
             break;
+
+            case NPCPath.ToExitStation:
+            {
+                targetXPos = trip.stationsDataArray[profile.disembarkingStationIndex].exitLocalPosX;
+                targetDist = targetXPos - transform.localPosition.x;
+            }
+            break;
         }
     }
     private void ExitPath()
@@ -549,7 +565,7 @@ public class NPCBrain : MonoBehaviour
     public void BoardTrain()
     {
         transform.SetParent(null, true);
-        trainStats.curPassengersBoarded++;
+        trainStats.totalPassengersBoarded++;
         QueueForSeat();
         rigidBody.includeLayers = layerSettings.trainMask;
         SetStandingDepthInTrain();
@@ -560,9 +576,10 @@ public class NPCBrain : MonoBehaviour
         AtlasRenderer stationPlatform = station.station.isFrontOfTrain ? station.frontPlatformRenderer : station.backPlatformRenderer;
         transform.SetParent(stationPlatform.transform, true);
         atlasRenderer.UpdateDepthRealtime(stationPlatform.batchKey.depthOrder);
-        trainStats.curPassengersBoarded--;
         rigidBody.includeLayers = layerSettings.stationMask;
         atlasRenderer.UpdateDepthRealtime(stationPlatform.batchKey.depthOrder);
+
+        SetPath(NPCPath.ToExitStation);
     }
     private void PrepareToDisembarkTrain()
     {
@@ -656,7 +673,6 @@ public class NPCBrain : MonoBehaviour
 
         if (curBehaviourContext.pathToTake != NPCPath.None)
         {
-            Debug.Log(curBehaviourContext.pathToTake);
             SetPath(curBehaviourContext.pathToTake);
         }
         behaving = true;

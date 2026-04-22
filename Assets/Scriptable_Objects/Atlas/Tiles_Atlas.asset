@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Tiles_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
   texture: {fileID: 2800000, guid: 0dd4e9f513284c64a9e1960098c18ff8, type: 3}
-  isParticleAtlas: 0
+  spriteConnectColor:
+    serializedVersion: 2
+    rgba: 0
   entityMotionType: 0
   pivotColor:
     serializedVersion: 2
@@ -21,7 +23,7 @@ MonoBehaviour:
   sliceColor:
     serializedVersion: 2
     rgba: 4294901760
-  particleType: 0
+  zoneType: 0
   motionSprites: []
   simpleSprites:
   - uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0, w: 0.9375}
@@ -48,6 +50,10 @@ MonoBehaviour:
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 2.4555554, y: 2.0277777, z: 1}
     index: 5
+  - uvSizeAndPos: {x: 0.10424805, y: 0.115478516, z: 0.115234375, w: 0.56591797}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 2.3722222, y: 2.6277778, z: 1}
+    index: 6
   slicedSprites:
   - sprite:
       uvSizeAndPos: {x: 0.24975586, y: 0.03100586, z: 0.5004883, w: 0.9055176}
@@ -100,8 +106,5 @@ MonoBehaviour:
     - {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.7541504}
     - {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.7541504}
     worldSlices: {x: 9.338889, y: 9.15, z: 0.022222223, w: 0.6555555}
-  particleSprites: []
-  particleUVSizeAndPosArray: []
-  worldSizesArray: []
   clips: []
   markers: []

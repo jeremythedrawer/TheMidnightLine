@@ -440,7 +440,7 @@ public class SpyBrain : MonoBehaviour
                         UpdateDepth(atlasRenderer.batchKey.depthOrder).Forget();
                         atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.frontMin);
 
-                        trainStats.curPassengersBoarded++;
+                        trainStats.totalPassengersBoarded++;
                     }
                     break;
                 }

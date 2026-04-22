@@ -20,9 +20,12 @@ MonoBehaviour:
     ground:
       serializedVersion: 2
       m_Bits: 128
-    slideDoors:
+    interiorSlideDoors:
       serializedVersion: 2
       m_Bits: 65536
+    exteriorSlideDoors:
+      serializedVersion: 2
+      m_Bits: 4194304
     carriageChairs:
       serializedVersion: 2
       m_Bits: 4096
@@ -70,4 +73,4 @@ MonoBehaviour:
     m_Bits: 32768
   trainMask:
     serializedVersion: 2
-    m_Bits: 868224
+    m_Bits: 5062528
