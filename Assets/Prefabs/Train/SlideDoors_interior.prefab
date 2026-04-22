@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 6748688604042277783}
   - component: {fileID: 4786430230042699320}
   m_Layer: 0
-  m_Name: SlideDoor_right
+  m_Name: SlideDoor_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -59,6 +59,7 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.4555664, w: 0.6125488}
@@ -142,12 +143,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
+  rightSlideDoorRenderer: {fileID: 210511920772162634}
+  leftSlideDoorRenderer: {fileID: 4786430230042699320}
   boxCollider: {fileID: 1947835105430571282}
-  rightSlideDoorRenderer: {fileID: 4786430230042699320}
-  leftSlideDoorRenderer: {fileID: 210511920772162634}
   curState: 0
   rightSlideDoor_transform: {fileID: 6748688604042277783}
   leftSlideDoor_transform: {fileID: 5406099015200027308}
+  rightSlideDoorPos: {x: 0, y: 0, z: 0}
+  leftSlideDoorPos: {x: 0, y: 0, z: 0}
+  activeMoveAmount: 0
+  unlockMoveAmount: 0
+  moveTimer: 0
+  boardTrainQueue:
+    npcs: []
+    npcsCount: 0
+    timer: 0
+  disembarkTrainQueue:
+    npcs: []
+    npcsCount: 0
+    timer: 0
 --- !u!61 &1947835105430571282
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -205,7 +219,7 @@ GameObject:
   - component: {fileID: 5406099015200027308}
   - component: {fileID: 210511920772162634}
   m_Layer: 0
-  m_Name: SlideDoor_left
+  m_Name: SlideDoor_right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -253,6 +267,7 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.042236328, y: 0.09472656, z: 0.50097656, w: 0.6125488}

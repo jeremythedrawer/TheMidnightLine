@@ -142,7 +142,7 @@ MonoBehaviour:
   rendererType: 0
   batchKey:
     material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-    depthOrder: 2
+    depthOrder: 1
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 3947141872535517702}
@@ -162,7 +162,7 @@ MonoBehaviour:
     worldSize: {x: 11.366667, y: 1.4222223, z: 1}
     index: 2
   bounds:
-    m_Center: {x: 313.83597, y: 16.551111, z: 2}
+    m_Center: {x: 313.83597, y: 16.551111, z: 1}
     m_Extent: {x: 56.833336, y: 0.7111111, z: 0.1}
   worldPivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4222223}
   uvSizeAndPosition: {x: 0.49951172, y: 0.0625, z: 0, w: 0.8745117}
@@ -402,7 +402,7 @@ Transform:
   m_GameObject: {fileID: 3634760068150051573}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 2}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -1081,11 +1081,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3672345265788962098, guid: 71ac33a8c0a895f45903c192265811b2, type: 3}
       propertyPath: bounds.m_Center.z
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3672345265788962098, guid: 71ac33a8c0a895f45903c192265811b2, type: 3}
       propertyPath: batchKey.depthOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3773891354551900362, guid: 71ac33a8c0a895f45903c192265811b2, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
@@ -1435,11 +1435,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3672345265788962098, guid: 71ac33a8c0a895f45903c192265811b2, type: 3}
       propertyPath: bounds.m_Center.z
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3672345265788962098, guid: 71ac33a8c0a895f45903c192265811b2, type: 3}
       propertyPath: batchKey.depthOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3773891354551900362, guid: 71ac33a8c0a895f45903c192265811b2, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
@@ -1577,11 +1577,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3672345265788962098, guid: 71ac33a8c0a895f45903c192265811b2, type: 3}
       propertyPath: bounds.m_Center.z
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3672345265788962098, guid: 71ac33a8c0a895f45903c192265811b2, type: 3}
       propertyPath: batchKey.depthOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3773891354551900362, guid: 71ac33a8c0a895f45903c192265811b2, type: 3}
       propertyPath: renderInput.bounds.m_Center.x

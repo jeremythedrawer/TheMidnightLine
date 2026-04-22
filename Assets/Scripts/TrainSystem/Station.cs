@@ -8,24 +8,18 @@ public class Station : MonoBehaviour
     public TripSO trip;
     public AtlasRenderer frontPlatformRenderer;
     public AtlasRenderer backPlatformRenderer;
-
-    private void Awake()
-    {
-        station.isFrontOfTrain = frontPlatformRenderer.batchKey.depthOrder < trainStats.depthSections.min;
-    }
     public void SpawnNPCs()
     {
+        AtlasRenderer activePlatformRenderer = station.isFrontOfTrain ? frontPlatformRenderer : backPlatformRenderer;
         for (int i = 0; i < station.bystanderProfiles.Length; i++)
         {
             NPCProfile bystanderProfile = station.bystanderProfiles[i];
-            frontPlatformRenderer.UpdateBounds();
-            float randXPos = Random.Range(
-            frontPlatformRenderer.bounds.min.x + SPAWN_BUFFER, 
-            frontPlatformRenderer.bounds.max.x - SPAWN_BUFFER);
+            activePlatformRenderer.UpdateBounds();
+            float randXPos = Random.Range(activePlatformRenderer.bounds.min.x + SPAWN_BUFFER, activePlatformRenderer.bounds.max.x - SPAWN_BUFFER);
             
-            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, frontPlatformRenderer.transform.position.z);
+            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, activePlatformRenderer.transform.position.z);
 
-            NPCBrain bystander = Instantiate(trip.npc_prefabsArray[bystanderProfile.npcPrefabIndex], spawnPos, Quaternion.identity, frontPlatformRenderer.transform);
+            NPCBrain bystander = Instantiate(trip.npc_prefabsArray[bystanderProfile.npcPrefabIndex], spawnPos, Quaternion.identity, activePlatformRenderer.transform);
             
             bystander.profile = bystanderProfile;
             bystander.role = Role.Bystander;
@@ -41,14 +35,14 @@ public class Station : MonoBehaviour
         {
             NPCProfile traitorProfile = station.traitorProfiles[i];
             float randXPos = Random.Range(
-            frontPlatformRenderer.bounds.min.x + SPAWN_BUFFER,
-            frontPlatformRenderer.bounds.max.x - SPAWN_BUFFER);
+            activePlatformRenderer.bounds.min.x + SPAWN_BUFFER,
+            activePlatformRenderer.bounds.max.x - SPAWN_BUFFER);
             
             Vector3 spawnPos = new Vector3(randXPos, 
-            transform.position.y + 0.1f, 
-            frontPlatformRenderer.transform.position.z);
+            transform.position.y + 0.1f,
+            activePlatformRenderer.transform.position.z);
 
-            NPCBrain traitor = Instantiate(trip.npc_prefabsArray[traitorProfile.npcPrefabIndex], spawnPos, Quaternion.identity, frontPlatformRenderer.transform);
+            NPCBrain traitor = Instantiate(trip.npc_prefabsArray[traitorProfile.npcPrefabIndex], spawnPos, Quaternion.identity, activePlatformRenderer.transform);
             traitor.profile = traitorProfile;
             traitor.role = Role.Traitor;
             traitor.gameObject.name = traitorProfile.fullName;

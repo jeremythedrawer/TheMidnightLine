@@ -26,10 +26,15 @@ public static class NPC
     {
         None,
         SittingInTrain,
+        SittingAtStation,
         StandingInTrain,
+        StandingAtStation,
+        AtSlideDoor,
         ToSmokerRoom,
         ToSeatInTrain,
+        ToSeatAtStation,
         ToStandInTrain,
+        ToStandAtStation,
         ToSlideDoor,
     }
 
@@ -64,8 +69,8 @@ public static class NPC
     {
         public string fullName;
 
-        public int disembarkingStationIndex;
         public int boardingStationIndex;
+        public int disembarkingStationIndex;
 
         public int npcPrefabIndex;
         public int coveredMugshotIndex;

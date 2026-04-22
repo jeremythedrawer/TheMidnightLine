@@ -47,7 +47,7 @@ MonoBehaviour:
   rendererType: 0
   batchKey:
     material: {fileID: 2100000, guid: a213ed5795b0de441aee91076eac9fdf, type: 2}
-    depthOrder: 3
+    depthOrder: 15
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -59,6 +59,7 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.04272461, y: 0.095214844, z: 0.05126953, w: 0.2878418}
@@ -66,7 +67,7 @@ MonoBehaviour:
     worldSize: {x: 0.9722222, y: 2.1666667, z: 1}
     index: 13
   bounds:
-    m_Center: {x: -5.167743, y: -2.075667, z: 3}
+    m_Center: {x: 7.028233, y: 5.8833327, z: 15}
     m_Extent: {x: 0.4861111, y: 1.0833334, z: 0.1}
   worldPivotAndSize: {x: 0, y: 0, z: 0.9722222, w: 2.1666667}
   uvSizeAndPosition: {x: 0.04272461, y: 0.095214844, z: 0.05126953, w: 0.2878418}
@@ -80,6 +81,9 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  prevSpriteIndexFlipH: 13
+  prevSpriteIndexFlipV: 13
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -101,7 +105,7 @@ GameObject:
   - component: {fileID: 9148143527789672719}
   - component: {fileID: 7325617631601733756}
   - component: {fileID: 592955796763587438}
-  m_Layer: 16
+  m_Layer: 22
   m_Name: SlideDoors_exterior
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -139,12 +143,25 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
-  boxCollider: {fileID: 592955796763587438}
   rightSlideDoorRenderer: {fileID: 4242328913838918447}
   leftSlideDoorRenderer: {fileID: 5192504948783074246}
+  boxCollider: {fileID: 592955796763587438}
   curState: 0
   rightSlideDoor_transform: {fileID: 5664027592249379307}
   leftSlideDoor_transform: {fileID: 6355935853720996048}
+  rightSlideDoorPos: {x: 0, y: 0, z: 0}
+  leftSlideDoorPos: {x: 0, y: 0, z: 0}
+  activeMoveAmount: 0
+  unlockMoveAmount: 0
+  moveTimer: 0
+  boardTrainQueue:
+    npcs: []
+    npcsCount: 0
+    timer: 0
+  disembarkTrainQueue:
+    npcs: []
+    npcsCount: 0
+    timer: 0
 --- !u!61 &592955796763587438
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -238,7 +255,7 @@ MonoBehaviour:
   rendererType: 0
   batchKey:
     material: {fileID: 2100000, guid: a213ed5795b0de441aee91076eac9fdf, type: 2}
-    depthOrder: 3
+    depthOrder: 15
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -250,6 +267,7 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.04272461, y: 0.095214844, z: 0.0036621094, w: 0.2878418}
@@ -257,7 +275,7 @@ MonoBehaviour:
     worldSize: {x: 0.9722222, y: 2.1666667, z: 1}
     index: 12
   bounds:
-    m_Center: {x: -6.1399655, y: -2.0756664, z: 3}
+    m_Center: {x: 6.0560107, y: 5.883333, z: 15}
     m_Extent: {x: 0.4861111, y: 1.0833334, z: 0.1}
   worldPivotAndSize: {x: 0.9722222, y: 0, z: 0.9722222, w: 2.1666667}
   uvSizeAndPosition: {x: 0.04272461, y: 0.095214844, z: 0.0036621094, w: 0.2878418}
@@ -271,6 +289,9 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  prevSpriteIndexFlipH: 12
+  prevSpriteIndexFlipV: 12
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}

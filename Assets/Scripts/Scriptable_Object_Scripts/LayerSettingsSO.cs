@@ -14,7 +14,8 @@ public class LayerSettingsSO : ScriptableObject
     [Serializable] public struct TrainLayers
     {
         public LayerMask ground;
-        public LayerMask slideDoors;
+        public LayerMask interiorSlideDoors;
+        public LayerMask exteriorSlideDoors;
         public LayerMask carriageChairs;
         public LayerMask insideCarriageBounds;
         public LayerMask gangwayBounds;

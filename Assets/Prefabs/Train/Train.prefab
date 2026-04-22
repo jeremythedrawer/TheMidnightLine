@@ -66,7 +66,6 @@ MonoBehaviour:
   - {fileID: 5336932751171556507}
   - {fileID: 1369252309698071781}
   stations: []
-  nextStation: {fileID: 0}
   curState: 0
   closingSlideDoors: 0
   curStationIndex: 0
@@ -177,6 +176,7 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.029541016, y: 0.15698242, z: 0.91259766, w: 0.8430176}
@@ -257,59 +257,59 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: bounds.m_Extent.x
-      value: 10.069445
+      value: 1.0111111
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: bounds.m_Extent.y
-      value: 2.3305554
+      value: 1.1111112
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.worldSize.x
-      value: 20.13889
+      value: 2.0222223
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.worldSize.y
-      value: 4.661111
+      value: 2.2222223
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: uvSizeAndPosition.w
-      value: 0.38842773
+      value: 0.40234375
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: uvSizeAndPosition.x
-      value: 0.88500977
+      value: 0.08886719
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: uvSizeAndPosition.y
-      value: 0.20483398
+      value: 0.09765625
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: uvSizeAndPosition.z
-      value: 0.00048828125
+      value: 0.9020996
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: worldPivotAndSize.w
-      value: 4.661111
+      value: 2.2222223
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: worldPivotAndSize.z
-      value: 20.13889
+      value: 2.0222223
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.uvSizeAndPos.w
-      value: 0.38842773
+      value: 0.40234375
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.uvSizeAndPos.x
-      value: 0.88500977
+      value: 0.08886719
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.uvSizeAndPos.y
-      value: 0.20483398
+      value: 0.09765625
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.uvSizeAndPos.z
-      value: 0.00048828125
+      value: 0.9020996
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -415,11 +415,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 674512618818928536, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 130.84927
+      value: 130.67593
       objectReference: {fileID: 0}
     - target: {fileID: 674512618818928536, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: 0.8159295
+      value: 0.8232668
       objectReference: {fileID: 0}
     - target: {fileID: 687184722324641592, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
@@ -1512,11 +1512,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 674512618818928536, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 174.51364
+      value: 174.34032
       objectReference: {fileID: 0}
     - target: {fileID: 674512618818928536, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: 0.8159295
+      value: 0.8232668
       objectReference: {fileID: 0}
     - target: {fileID: 912699399857660955, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1536,7 +1536,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1066256266935050899, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 175.09831
+      value: 175.09845
       objectReference: {fileID: 0}
     - target: {fileID: 1066256266935050899, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
@@ -1568,7 +1568,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2234501247438208445, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 168.68924
+      value: 168.68935
       objectReference: {fileID: 0}
     - target: {fileID: 2234501247438208445, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
@@ -1702,6 +1702,14 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: -0.36139977
       objectReference: {fileID: 0}
+    - target: {fileID: 4741126622765172946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: smokingRoomCollider_right
+      value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 4741126622765172946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: smokingRoomColliders.Array.size
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4999033885614477668, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 179.57433
@@ -1736,7 +1744,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5641649110576292065, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 174.13719
+      value: 174.13733
       objectReference: {fileID: 0}
     - target: {fileID: 5641649110576292065, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
@@ -1792,7 +1800,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6883110598256000975, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 169.65036
+      value: 169.65047
       objectReference: {fileID: 0}
     - target: {fileID: 6883110598256000975, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
@@ -1863,7 +1871,8 @@ PrefabInstance:
       value: 0.41405633
       objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects: []
+    m_RemovedGameObjects:
+    - {fileID: 4870614369846389462, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
@@ -1965,59 +1974,59 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: bounds.m_Extent.x
-      value: 10.069445
+      value: 1.0111111
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: bounds.m_Extent.y
-      value: 2.3305554
+      value: 1.1111112
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.worldSize.x
-      value: 20.13889
+      value: 2.0222223
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.worldSize.y
-      value: 4.661111
+      value: 2.2222223
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: uvSizeAndPosition.w
-      value: 0.38842773
+      value: 0.40234375
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: uvSizeAndPosition.x
-      value: 0.88500977
+      value: 0.08886719
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: uvSizeAndPosition.y
-      value: 0.20483398
+      value: 0.09765625
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: uvSizeAndPosition.z
-      value: 0.00048828125
+      value: 0.9020996
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: worldPivotAndSize.w
-      value: 4.661111
+      value: 2.2222223
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: worldPivotAndSize.z
-      value: 20.13889
+      value: 2.0222223
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.uvSizeAndPos.w
-      value: 0.38842773
+      value: 0.40234375
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.uvSizeAndPos.x
-      value: 0.88500977
+      value: 0.08886719
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.uvSizeAndPos.y
-      value: 0.20483398
+      value: 0.09765625
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.uvSizeAndPos.z
-      value: 0.00048828125
+      value: 0.9020996
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2123,11 +2132,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 674512618818928536, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 109.02173
+      value: 108.84838
       objectReference: {fileID: 0}
     - target: {fileID: 674512618818928536, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: 0.8159295
+      value: 0.8232668
       objectReference: {fileID: 0}
     - target: {fileID: 687184722324641592, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
@@ -3264,11 +3273,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 674512618818928536, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 152.69926
+      value: 152.52594
       objectReference: {fileID: 0}
     - target: {fileID: 674512618818928536, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: 0.8159295
+      value: 0.8232668
       objectReference: {fileID: 0}
     - target: {fileID: 687184722324641592, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: renderInput.bounds.m_Center.x
@@ -4389,59 +4398,59 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: bounds.m_Extent.x
-      value: 10.069445
+      value: 1.0111111
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: bounds.m_Extent.y
-      value: 2.3305554
+      value: 1.1111112
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.worldSize.x
-      value: 20.13889
+      value: 2.0222223
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.worldSize.y
-      value: 4.661111
+      value: 2.2222223
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: uvSizeAndPosition.w
-      value: 0.38842773
+      value: 0.40234375
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: uvSizeAndPosition.x
-      value: 0.88500977
+      value: 0.08886719
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: uvSizeAndPosition.y
-      value: 0.20483398
+      value: 0.09765625
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: uvSizeAndPosition.z
-      value: 0.00048828125
+      value: 0.9020996
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: worldPivotAndSize.w
-      value: 4.661111
+      value: 2.2222223
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: worldPivotAndSize.z
-      value: 20.13889
+      value: 2.0222223
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.uvSizeAndPos.w
-      value: 0.38842773
+      value: 0.40234375
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.uvSizeAndPos.x
-      value: 0.88500977
+      value: 0.08886719
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.uvSizeAndPos.y
-      value: 0.20483398
+      value: 0.09765625
       objectReference: {fileID: 0}
     - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: sprite.uvSizeAndPos.z
-      value: 0.00048828125
+      value: 0.9020996
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -4471,7 +4480,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
       propertyPath: bounds.m_Center.z
-      value: 3
+      value: 2
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4119130086404529599, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
       propertyPath: m_LocalPosition.x
@@ -4483,7 +4496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4119130086404529599, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 3
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 4119130086404529599, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
       propertyPath: m_LocalRotation.w

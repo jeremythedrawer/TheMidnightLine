@@ -79,16 +79,11 @@ public class SpyBrain : MonoBehaviour
     }
     private void OnEnable()
     {     
-        gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(SpyCanBoardTrain);
         gameEventData.OnInteract.RegisterListener(OpenTrainDoors);
-        gameEventData.OnInteract.RegisterListener(EnterTrain);
     }
     private void OnDisable()
     {
-        gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(SpyCanBoardTrain);
         gameEventData.OnInteract.UnregisterListener(OpenTrainDoors);
-        gameEventData.OnInteract.UnregisterListener(EnterTrain);
-
     }
     private void Start()
     {
@@ -407,20 +402,51 @@ public class SpyBrain : MonoBehaviour
     }
     private void OpenTrainDoors()
     {
-        if (!stats.onTrain && stats.canBoardTrain)
+        if (!stats.onTrain)
         {
-            RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.slideDoors);
+
+            RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.exteriorSlideDoors);
 
             if (slideDoorHit.collider != null)
             {
                 slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>(); //TODO: Put into dictionary
-                if (slideDoors.curState == SlideDoors.State.Unlocked) 
+
+                switch(slideDoors.curState)
                 {
-                    slideDoors.OpenDoors();
+                    case SlideDoors.State.Unlocked:
+                    {
+                        slideDoors.OpenDoors();
+                    }
+                    break;
+
+                    case SlideDoors.State.Opened:
+                    {
+                        RaycastHit2D insideCarriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
+
+                        if (insideCarriageHit.collider != null)
+                        {
+                            SetLocationData(insideCarriageHit.collider.bounds, layerSettings.trainLayers.insideCarriageBounds);
+                            curCarriage = trainStats.carriageDict[insideCarriageHit.collider];
+                            curCarriage.MoveDown();
+                        }
+                        stats.curGroundLayer = layerSettings.trainLayers.ground;
+                        stats.curWallLayer = layerSettings.trainWallLayers;
+                        stats.onTrain = true;
+
+                        rigidBody.includeLayers = layerSettings.trainMask;
+
+                        collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
+
+                        UpdateDepth(atlasRenderer.batchKey.depthOrder).Forget();
+                        atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.frontMin);
+
+                        trainStats.curPassengersBoarded++;
+                    }
+                    break;
                 }
             }
         }
-        else if (stats.onTrain)
+        else
         {
             RaycastHit2D left = Physics2D.Linecast(collisionData.wallBottomLeft, collisionData.wallTopLeft, layerSettings.trainLayers.gangwayDoor);
             RaycastHit2D right = Physics2D.Linecast(collisionData.wallBottomRight, collisionData.wallTopRight, layerSettings.trainLayers.gangwayDoor);
@@ -437,46 +463,6 @@ public class SpyBrain : MonoBehaviour
             }
 
         }
-    }
-    private void EnterTrain()
-    {
-        if (!stats.onTrain && stats.canBoardTrain)
-        {
-            RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.slideDoors);
-
-            if (slideDoorHit.collider != null)
-            {
-                slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-                if (slideDoors.curState == SlideDoors.State.Opened)
-                {
-                    RaycastHit2D insideCarriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
-
-                    if (insideCarriageHit.collider != null)
-                    {
-                        SetLocationData(insideCarriageHit.collider.bounds, layerSettings.trainLayers.insideCarriageBounds);
-                        curCarriage = trainStats.carriageDict[insideCarriageHit.collider];
-                        curCarriage.MoveDown();
-                    }
-                    stats.curGroundLayer = layerSettings.trainLayers.ground;
-                    stats.curWallLayer = layerSettings.trainWallLayers;
-                    stats.onTrain = true;
-
-                    rigidBody.includeLayers = layerSettings.trainMask;
-
-                    collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
-
-                    UpdateDepth(atlasRenderer.batchKey.depthOrder).Forget();
-                    atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.frontMin);
-
-                    trainStats.curPassengersBoarded++;
-                }
-            }
-        }
-    }
-
-    private void SpyCanBoardTrain()
-    {
-        stats.canBoardTrain = true;
     }
     private async UniTask UpdateDepth(float oldDepth)
     {

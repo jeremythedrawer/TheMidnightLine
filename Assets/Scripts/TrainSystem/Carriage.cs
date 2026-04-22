@@ -2,10 +2,13 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using UnityEngine;
+using static NPC;
 using static Train;
 
 public class Carriage : MonoBehaviour
 {
+    const float QUEUE_TICK_RATE = 0.3f;
+
     public TrainStatsSO trainStats;
     public TrainSettingsSO trainSettings;
     public TripSO trip;
@@ -20,8 +23,7 @@ public class Carriage : MonoBehaviour
     public AtlasRenderer[] grapPoleRenderers;
 
     public BoxCollider2D insideBoundsCollider;
-    public BoxCollider2D smokingRoomCollider_right;
-    public BoxCollider2D smokingRoomCollider_left;
+    public BoxCollider2D[] smokingRoomColliders;
 
     public SlideDoors[] exteriorSlideDoors;
     public SlideDoors[] interiorSlideDoors;
@@ -35,24 +37,20 @@ public class Carriage : MonoBehaviour
     public CancellationTokenSource ctsFade;
     public float prevMeters;
     public int seatAmount;
+    public NPCQueue seatQueue;
     private void Awake()
     {
         ctsFade = new CancellationTokenSource();
     }
-    private void OnEnable()
-    {
-        gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(SetSeatData);
-        gameEventData.OnTrainArrivedAtStartPosition.RegisterListener(SetSmokerRoomData);
-
-    }
-    private void OnDisable()
-    {
-        gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(SetSeatData);
-        gameEventData.OnTrainArrivedAtStartPosition.UnregisterListener(SetSmokerRoomData);
-    }
     private void Start()
     {
+        seatQueue = new NPCQueue();
+
         alpha = 0;
+    }
+    private void Update()
+    {
+        ProcessSeatQueue();
     }
     public void UnlockInteriorDoors()
     {
@@ -87,7 +85,6 @@ public class Carriage : MonoBehaviour
         string text = "Next Station is " + stationName;
         nextStationSignRenderer.SetText(text);
         nextStationSignRenderer.SetScrollingText();
-        Debug.Log(text);
     }
     public void SetSignToCurrentStation(string stationName)
     {
@@ -112,16 +109,71 @@ public class Carriage : MonoBehaviour
 
         MovingDown().Forget();
     }
-    private void SetSmokerRoomData()
+    public void AddToSeatQueue(NPCBrain npc)
     {
-        smokersRoomData = new SmokersRoomData[2];
-
-        smokersRoomData[0].minXPos = smokingRoomCollider_left.bounds.min.x;
-        smokersRoomData[0].maxXPos = smokingRoomCollider_left.bounds.max.x;
-        smokersRoomData[1].minXPos = smokingRoomCollider_right.bounds.min.x;
-        smokersRoomData[1].maxXPos = smokingRoomCollider_right.bounds.max.x;
+        npc.seatQueueIndex = seatQueue.npcsCount;
+        seatQueue.npcs[seatQueue.npcsCount] = npc;
+        seatQueue.npcsCount++;
     }
-    private void SetSeatData()
+    public void RemoveFromSeatQueue(NPCBrain npc)
+    {
+        if (seatQueue.npcsCount == 0) return;
+        int lastIndex = seatQueue.npcsCount - 1;
+
+        seatQueue.npcs[npc.seatQueueIndex] = seatQueue.npcs[lastIndex];
+        seatQueue.npcs[lastIndex] = npc;
+        seatQueue.npcsCount--;
+    }
+    private void ProcessSeatQueue()
+    {
+        if (seatQueue.npcsCount == 0) return;
+
+        seatQueue.timer += Time.deltaTime;
+        if (seatQueue.timer < QUEUE_TICK_RATE) return;
+
+        NPCBrain npc = seatQueue.npcs[seatQueue.npcsCount - 1];
+
+        float npcX = npc.transform.position.x;
+        float closestDist = float.PositiveInfinity;
+        int bestIndex = int.MaxValue;
+
+        for (int i = 0; i < seatAmount; i++)
+        {
+            if (seatData.filled[i]) continue;
+
+            float dist = Mathf.Abs(npcX - seatData.xPos[i]);
+            if (dist < closestDist)
+            {
+                closestDist = dist;
+                bestIndex = i;
+            }
+        }
+
+        if (bestIndex == int.MaxValue)
+        {
+            npc.FindStandingPosition();
+        }
+        else
+        {
+            seatData.filled[bestIndex] = true;
+            npc.AssignSeat(bestIndex);
+        }
+
+        seatQueue.npcsCount--;
+        seatQueue.timer = 0;
+    }
+    public void SetSmokerRoomData(float offset)
+    {
+        smokersRoomData = new SmokersRoomData[smokingRoomColliders.Length];
+
+        for (int i = 0; i < smokersRoomData.Length; i++)
+        {
+
+            smokersRoomData[i].minXPos = smokingRoomColliders[i].bounds.min.x + offset;
+            smokersRoomData[i].maxXPos = smokingRoomColliders[i].bounds.max.x + offset;
+        }
+    }
+    public void SetSeatData(float offset)
     {
         AtlasRenderer seatRenderer = seatRenderers[0];
         float tileWidth = seatRenderer.atlas.slicedSprites[seatRenderer.spriteIndex].worldSlices.x;
@@ -139,8 +191,9 @@ public class Carriage : MonoBehaviour
         }
         seatData.xPos = new float[seatAmount];
         seatData.filled = new bool[seatAmount];
-
+        seatQueue.npcs = new NPCBrain[seatAmount];
         int seatIndex = 0;
+
         for (int i = 0; i < seatRenderers.Length; i++)
         {
             AtlasRenderer seat = seatRenderers[i];
@@ -148,7 +201,7 @@ public class Carriage : MonoBehaviour
 
             for (int j = 0; j < seatsPerRenderer[i]; j++)
             {
-                seatData.xPos[seatIndex] = firstSeatPos + (tileWidth * j);
+                seatData.xPos[seatIndex] = (firstSeatPos + (tileWidth * j)) + offset;
                 seatIndex++;
             }
         }
@@ -197,6 +250,25 @@ public class Carriage : MonoBehaviour
         }
         catch (OperationCanceledException)
         {
+        }
+    }
+
+    private void OnDrawGizmos()
+    {
+        if (seatRenderers.Length < 0 || seatData.xPos.Length < 0) return;
+        Gizmos.color = Color.red;
+
+        AtlasRenderer seatRenderer = seatRenderers[0];
+        float yPos = seatRenderer.bounds.center.y;
+        float zPos = seatRenderer.bounds.center.z;
+        float ySize = seatRenderer.bounds.size.y;
+        float tileWidth = seatRenderer.atlas.slicedSprites[seatRenderer.spriteIndex].worldSlices.x;
+        for (int i = 0; i < seatData.xPos.Length; i++)
+        {
+            float xPos = seatData.xPos[i];
+            Vector3 center = new Vector3(xPos, yPos, zPos);
+            Vector3 size = new Vector3(tileWidth, ySize, 0);
+            Gizmos.DrawWireCube(center, size);
         }
     }
 }

@@ -20,7 +20,6 @@ public class SpyStatsSO : ScriptableObject
     public bool isGrounded;
     public bool isStepping;
     public bool walkingIntoWall;
-    public bool canBoardTrain;
     public bool onTrain;
 
     public bool checkingNotepad;
@@ -40,8 +39,6 @@ public class SpyStatsSO : ScriptableObject
         curGravityScale = 1;
 
         isGrounded = false;
-
-        canBoardTrain = false;
         onTrain = false;
     }
 }

@@ -463,10 +463,11 @@ MonoBehaviour:
   - {fileID: 3705765459553740809}
   grapPoleRenderers:
   - {fileID: 7412466534817934392}
-  - {fileID: 0}
+  - {fileID: 7957013431130658987}
   insideBoundsCollider: {fileID: 4967624362453220076}
-  smokingRoomCollider_right: {fileID: 3759561684428170471}
-  smokingRoomCollider_left: {fileID: 8152975921336346681}
+  smokingRoomColliders:
+  - {fileID: 8152975921336346681}
+  - {fileID: 3759561684428170471}
   exteriorSlideDoors:
   - {fileID: 4665753926773116768}
   - {fileID: 1426237137147430073}
@@ -490,6 +491,10 @@ MonoBehaviour:
   - {fileID: 3248802059132394449}
   prevMeters: 0
   seatAmount: 0
+  seatQueue:
+    npcs: []
+    npcsCount: 0
+    timer: 0
 --- !u!1 &2017503644377605478
 GameObject:
   m_ObjectHideFlags: 0
@@ -1571,7 +1576,7 @@ Transform:
   m_GameObject: {fileID: 4870614369846389462}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 18.34, y: 1.46, z: 0}
+  m_LocalPosition: {x: 18.276, y: 1.46, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1691,12 +1696,12 @@ MonoBehaviour:
     index: 0
   bounds:
     m_Center: {x: 110.892914, y: -55.896553, z: 4.5}
-    m_Extent: {x: 0.67754716, y: 0.119444445, z: 0}
+    m_Extent: {x: 0.6775471, y: 0.119444445, z: 0}
   worldPivotAndSize: {x: 0, y: 0, z: 0, w: 0}
   uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
   scaleAndFlip: {x: 0, y: 0, z: 0, w: 0}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.67754716, y: 0.119444445, z: 0}
+  boundsOffset: {x: 0.6775471, y: 0.119444445, z: 0}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.11111111, w: 0.23888889}
   - {x: 0.11072778, y: 0, z: 0.08888889, w: 0.23888889}
@@ -1704,13 +1709,13 @@ MonoBehaviour:
   - {x: 0.3110722, y: 0, z: 0.07777778, w: 0.21111111}
   - {x: 0.46296665, y: 0, z: 0.094444446, w: 0.23888889}
   - {x: 0.5657778, y: 0, z: 0.07777778, w: 0.21111111}
-  - {x: 0.66067225, y: 0, z: 0.08888889, w: 0.23888889}
-  - {x: 0.76084447, y: 0, z: 0.07777778, w: 0.21111111}
-  - {x: 0.85573894, y: 0, z: 0.022222223, w: 0.23888889}
-  - {x: 0.92424446, y: 0, z: 0.1, w: 0.19444445}
-  - {x: 1.0296944, y: 0, z: 0.1, w: 0.19444445}
-  - {x: 1.1921443, y: 0, z: 0.022222223, w: 0.23888889}
-  - {x: 1.2606499, y: 0, z: 0.094444446, w: 0.19444445}
+  - {x: 0.6606722, y: 0, z: 0.08888889, w: 0.23888889}
+  - {x: 0.7608444, y: 0, z: 0.07777778, w: 0.21111111}
+  - {x: 0.8557388, y: 0, z: 0.022222223, w: 0.23888889}
+  - {x: 0.9242444, y: 0, z: 0.1, w: 0.19444445}
+  - {x: 1.0296943, y: 0, z: 0.1, w: 0.19444445}
+  - {x: 1.1921442, y: 0, z: 0.022222223, w: 0.23888889}
+  - {x: 1.2606498, y: 0, z: 0.094444446, w: 0.19444445}
   uvSizesAndPositions:
   - {x: 0.0390625, y: 0.083984375, z: 0, w: 0.6582031}
   - {x: 0.03125, y: 0.083984375, z: 0.34375, w: 0.5722656}
@@ -2106,7 +2111,7 @@ Transform:
   m_GameObject: {fileID: 6073715766497742621}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 1.13, y: 1.47, z: 0}
+  m_LocalPosition: {x: 1.159, y: 1.47, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -3598,6 +3603,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
   m_PrefabInstance: {fileID: 7358478930828973376}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7957013431130658987 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7358478930828973376}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
 --- !u!1001 &7820498069647386981
 PrefabInstance:
   m_ObjectHideFlags: 0
