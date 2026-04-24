@@ -22,7 +22,7 @@ public class ZoneSpawner : MonoBehaviour
 
     public ZoneInput[] zoneInput;
     public string zoneName;
-
+    public int curInitKernelID;
     private void Awake()
     {
 
@@ -114,9 +114,8 @@ public class ZoneSpawner : MonoBehaviour
                     input.worldSizeAndPivot = curZone.zoneWorldPivotsAndSizesArray[i];
                     input.uvSizeAndPos = curZone.zoneUVSizeAndPosArray[i];
                     zoneInput[i] = input;
-                    spawner.atlasCompute.SetBuffer(zoneSpawnerData.kernelID_init, zoneName + INPUT_STRING, inputBuffer);
-                    spawner.atlasCompute.Dispatch(zoneSpawnerData.kernelID_init, zoneSpawnerData.computeGroupSize, 1, 1);
                 }
+                curInitKernelID = zoneSpawnerData.kernelID_init;
             }
             break;
 
@@ -129,15 +128,17 @@ public class ZoneSpawner : MonoBehaviour
                     input.uvSizeAndPos = curZone.zoneUVSizeAndPosArray[i];
                     input.sliceOffsetAndSize = curZone.zoneSliceOffsetsAndSizes[i];
                     zoneInput[i] = input;
-                    spawner.atlasCompute.SetBuffer(zoneSpawnerData.kernelID_initSlice, zoneName + INPUT_STRING, inputBuffer);
-                    spawner.atlasCompute.Dispatch(zoneSpawnerData.kernelID_initSlice, zoneSpawnerData.computeGroupSize, 1, 1);
                 }
+                curInitKernelID = zoneSpawnerData.kernelID_initSlice;
             }
             break;
         }
 
 
         inputBuffer.SetData(zoneInput);
+        spawner.atlasCompute.SetBuffer(curInitKernelID, zoneName + INPUT_STRING, inputBuffer);
+        spawner.atlasCompute.Dispatch(curInitKernelID, zoneSpawnerData.computeGroupSize, 1, 1);
+
         zoneSpawnerData.active = true;
     }
 

@@ -64,7 +64,7 @@ Shader "Custom/s_atlasFontScroll"
                 float time = _Time.y * _ScrollSpeed;
                 //objPos += pivot;
 
-                objPos.x += fmod(-time + pivot, spriteData.custom.x + _Spacing) * (spriteData.custom.y) + (spriteData.custom.y); //custom.x is the total bounds of the text
+                objPos.x += fmod(-time + pivot.x, spriteData.custom.x + _Spacing) * (spriteData.custom.y) + (spriteData.custom.y); //custom.x is the total bounds of the text
                 float3 worldPos = float3(position.xy + objPos, position.z);
 
                 o.objPos = objPos;

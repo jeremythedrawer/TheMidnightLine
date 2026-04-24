@@ -1,4 +1,4 @@
-Shader "Custom/s_atlasNPC"
+Shader "Custom/s_atlasInvert"
 {
     Properties
     {
@@ -7,20 +7,19 @@ Shader "Custom/s_atlasNPC"
 
     SubShader
     {
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+        Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
         ZWrite On
         ZTest LEqual
         Blend SrcAlpha OneMinusSrcAlpha
-
         Pass
         {
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
             #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
+
             #pragma vertex vert
             #pragma fragment frag
-
 
             struct Attributes
             {
@@ -37,10 +36,9 @@ Shader "Custom/s_atlasNPC"
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
-            
+
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
-
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -64,7 +62,6 @@ Shader "Custom/s_atlasNPC"
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
                 o.instanceID = v.instanceID;
-
                 return o;
             }
 
@@ -79,16 +76,20 @@ Shader "Custom/s_atlasNPC"
                 float2 scale = spriteData.scaleAndFlip.xy;
                 float2 flip = spriteData.scaleAndFlip.zw;
 
+                float2 normUV = i.uv;
                 i.uv *= scale;
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-
-                half3 finalColor = color.rgb + (float3(0.2, 0, 0.02) * spriteData.custom.y);
-                half alpha = BayerX8(color.a * spriteData.custom.x, i.positionHCS.xy);
+                half3 invertColor = (1 - color.r);
+                
+                half alpha = color.a;
+                float bayerMask = BayerX8(spriteData.custom.x, i.positionHCS.xy);
+                half3 finalColor = lerp(invertColor, color.rgb, bayerMask);
                 clip(alpha - 0.001);
+
                 return half4 (finalColor, 1);
             }
             ENDHLSL

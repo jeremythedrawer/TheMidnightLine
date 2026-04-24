@@ -3,7 +3,6 @@ using static AtlasSpawn;
 using static Train;
 using static Parallax;
 
-[ExecuteAlways]
 public class ZoneMaster : MonoBehaviour
 {
     public ZoneSpawnerSO spawner;
@@ -15,14 +14,13 @@ public class ZoneMaster : MonoBehaviour
     public SpyStatsSO spyStats;
 
     public ZoneSpawner[] zoneSpawners;
-    private void OnEnable()
+    private void Start()
     {
         InitBoundParameters();
         InitZoneCompute();
         InitZoneSpawners();
         spawner.atlasCompute.SetInt("_Awake", 1);
     }
-
     private void OnDisable()
     {
         DisposeZoneSpawners();

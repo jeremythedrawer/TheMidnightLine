@@ -66,6 +66,7 @@ public class NPCBrain : MonoBehaviour
     public bool playingGlyph;
     public bool behaving;
     public bool disembarking;
+    public bool onTrain;
 
     public bool queuedForSeat;
     public bool queuedForSlideDoor;
@@ -111,7 +112,6 @@ public class NPCBrain : MonoBehaviour
         ChooseStates();
         UpdateStates();
         UpdatePath();
-        Fade();
     }
     private void FixedUpdate()
     {
@@ -360,7 +360,7 @@ public class NPCBrain : MonoBehaviour
                 {
                     if (curSlideDoors.curState == SlideDoors.State.Opened)
                     {
-                        if (!IsOnTrain())
+                        if (!onTrain)
                         {
                             curSlideDoors.AddToBoardTrainQueue(this);
                         }
@@ -371,8 +371,32 @@ public class NPCBrain : MonoBehaviour
                         queuedForSlideDoor = true;
                     }
                 }
+
+                Fade();
             }
             break;
+            case NPCPath.StandingAtStation:
+            {
+                Fade();
+
+            }
+            break;
+            case NPCPath.SittingAtStation:
+            {
+                Fade();
+            }
+            break;
+            case NPCPath.ToExitStation:
+            {
+                Fade();
+            }
+            break;
+            case NPCPath.ToStandAtStation:
+            {
+                Fade();
+            }
+            break;
+
             case NPCPath.ToSeatInTrain:
             {
 
@@ -417,7 +441,7 @@ public class NPCBrain : MonoBehaviour
 
                 curSlideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
 
-                if (!IsOnTrain())
+                if (!onTrain)
                 {
                     RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
                     curCarriage = trainStats.carriageDict[carriageHit.collider];
@@ -523,7 +547,6 @@ public class NPCBrain : MonoBehaviour
     private void Fade()
     {
         bool shouldFadeOut =
-            rigidBody.includeLayers == layerSettings.stationMask &&
             spyStats.curGroundLayer == layerSettings.trainLayers.ground &&
             spyStats.curWorldPos.z > transform.position.z &&
             transform.position.x > spyStats.curLocationBounds.min.x &&
@@ -568,6 +591,7 @@ public class NPCBrain : MonoBehaviour
         trainStats.totalPassengersBoarded++;
         QueueForSeat();
         rigidBody.includeLayers = layerSettings.trainMask;
+        onTrain = true;
         SetStandingDepthInTrain();
     }
     public void DisembarkTrain()
@@ -578,18 +602,18 @@ public class NPCBrain : MonoBehaviour
         atlasRenderer.UpdateDepthRealtime(stationPlatform.batchKey.depthOrder);
         rigidBody.includeLayers = layerSettings.stationMask;
         atlasRenderer.UpdateDepthRealtime(stationPlatform.batchKey.depthOrder);
-
+        onTrain = false;
         SetPath(NPCPath.ToExitStation);
     }
     private void PrepareToDisembarkTrain()
     {
-        if (!IsOnTrain() || trip.nextStation.stationIndex != profile.disembarkingStationIndex) return;
+        if (!onTrain || trip.nextStation.stationIndex != profile.disembarkingStationIndex) return;
         disembarking = true;
         SetPath(NPCPath.ToSlideDoor);
     }
     public void PrepareToBoardTrain()
     {
-        if (IsOnTrain() || trip.nextStation.stationIndex != profile.boardingStationIndex) return;
+        if (onTrain || trip.nextStation.stationIndex != profile.boardingStationIndex) return;
         SetPath(NPCPath.ToSlideDoor);
     }
     private void QueueForSeat()
@@ -610,7 +634,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void SetStandingDepthInTrain()
     {
-        if (!IsOnTrain()) return;
+        if (!onTrain) return;
         int depth = UnityEngine.Random.Range(trainStats.depthSections.frontMin, trainStats.depthSections.backMax);
         atlasRenderer.UpdateDepthRealtime(depth);
     }
@@ -666,7 +690,7 @@ public class NPCBrain : MonoBehaviour
     private void PickRandomBehaviour()
     {
         behaviourClock = 0;
-        if (!IsOnTrain() || disembarking) return;
+        if (!onTrain || disembarking) return;
 
         curBehaviour = behaviourFlags[UnityEngine.Random.Range(0, behaviourFlagCount)];
         curBehaviourContext = npcData.behaviourContextDict[curBehaviour];
@@ -722,10 +746,6 @@ public class NPCBrain : MonoBehaviour
 
         Behaviours behaviours = firstBehave | secondBehave;
         return behaviours;
-    }
-    public bool IsOnTrain()
-    {
-        return rigidBody.includeLayers == layerSettings.trainMask;
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()

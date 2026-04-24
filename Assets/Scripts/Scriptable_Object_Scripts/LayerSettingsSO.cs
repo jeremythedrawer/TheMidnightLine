@@ -24,6 +24,7 @@ public class LayerSettingsSO : ScriptableObject
         public LayerMask gangwayDoor;
         public LayerMask smokingRoom;
         public LayerMask carriage;
+        public LayerMask carriageMap;
     }
     public TrainLayers trainLayers;
 

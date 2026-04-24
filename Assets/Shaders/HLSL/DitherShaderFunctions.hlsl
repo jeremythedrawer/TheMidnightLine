@@ -60,10 +60,68 @@ float2 Rotate(float2 p, float angle)
 }
 
 float BayerMatrix(float value, float bayerIndex, float2 pixelCoord)
-{
+{    
+    //float bayerValues = GetBayer8(pixelCoord.x, pixelCoord.y);
+    const int N = 8;
 
-    float bayerValues = GetBayer8(pixelCoord.x, pixelCoord.y);
-    
-    return round(value + bayerValues + 0.01);
+    int y = (int) pixelCoord.y % N;
+
+    // 1D Bayer sequence (evenly distributed)
+    int pattern[8] = { 0, 4, 2, 6, 1, 5, 3, 7 };
+
+    float threshold = (pattern[y] + 0.5) / N;
+
+    return value >= threshold ? 1.0 : 0.0;
 }
 
+float1 BayerX8(float value, float2 pixelCoord)
+{
+    const int N = 8;
+    int y = (int) pixelCoord.y % N;
+    int pattern[8] = { 0, 4, 2, 6, 1, 5, 3, 7 };
+    float threshold = (pattern[y] + 0.5) / N;
+    return step(threshold, value);
+}
+
+float1 BayerX2(float value, float2 pixelCoord)
+{
+    float bayer = (pixelCoord.y % 2) - 0.5;
+    return step(bayer, value);
+}
+
+float1 BayerX4(float value, float2 pixelCoord)
+{
+    int y = (int) pixelCoord.y;
+
+    float bayer = (y % 4 == 0) ? 1.0 : 0.0;
+
+    return step(bayer, value);
+}
+float BayerX(int y, int stepSize)
+{
+    int pattern = y % stepSize;
+    return pattern == 0 ? 0.0 : 1.0;
+}
+float BayerX248(float value, float2 pixelCoord)
+{
+    int y = (int) pixelCoord.y;
+
+    float full = 1.0;
+    float x2 = BayerX(y, 2);
+    float x4 = BayerX(y, 4);
+    float x8 = BayerX(y, 8);
+    float none = 0.0;
+
+    float m1 = 1.0 - smoothstep(0, 0.20, value);
+    float m2 = smoothstep(0.15, 0.20, value) * (1.0 - smoothstep(0.35, 0.40, value));
+    float m3 = smoothstep(0.35, 0.40, value) * (1.0 - smoothstep(0.55, 0.60, value));
+    float m4 = smoothstep(0.55, 0.60, value) * (1.0 - smoothstep(0.75, 0.80, value));
+    float m5 = smoothstep(0.75, 1, value);
+
+    return
+        none * m1 +
+        x2 * m2 +
+        x4 * m3 +
+        x8 * m4 +
+        full * m5;
+}

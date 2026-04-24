@@ -1,0 +1,407 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33fd095fffb8f844e9fa149db1599080, type: 3}
+  m_Name: Font_Print_Atlas
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
+  texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
+  spriteConnectColor:
+    serializedVersion: 2
+    rgba: 4278255615
+  entityMotionType: 3
+  pivotColor:
+    serializedVersion: 2
+    rgba: 4278190335
+  sliceColor:
+    serializedVersion: 2
+    rgba: 4294901760
+  zoneType: 0
+  motionSprites: []
+  simpleSprites:
+  - uvSizeAndPos: {x: 0.015625, y: 0.12890625, z: 0, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.022222223, y: 0.18333334, z: 1}
+    index: 0
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.01953125, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 1
+  - uvSizeAndPos: {x: 0.05078125, y: 0.12890625, z: 0.08984375, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.072222225, y: 0.18333334, z: 1}
+    index: 2
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.14453125, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 3
+  - uvSizeAndPos: {x: 0.07421875, y: 0.12890625, z: 0.17578125, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.10555556, y: 0.18333334, z: 1}
+    index: 4
+  - uvSizeAndPos: {x: 0.05859375, y: 0.12890625, z: 0.25390625, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.083333336, y: 0.18333334, z: 1}
+    index: 5
+  - uvSizeAndPos: {x: 0.01171875, y: 0.12890625, z: 0.31640625, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.016666668, y: 0.18333334, z: 1}
+    index: 6
+  - uvSizeAndPos: {x: 0.015625, y: 0.12890625, z: 0.33203125, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.022222223, y: 0.18333334, z: 1}
+    index: 7
+  - uvSizeAndPos: {x: 0.015625, y: 0.12890625, z: 0.3515625, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.022222223, y: 0.18333334, z: 1}
+    index: 8
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.37109375, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 9
+  - uvSizeAndPos: {x: 0.0390625, y: 0.12890625, z: 0.40625, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.055555556, y: 0.18333334, z: 1}
+    index: 10
+  - uvSizeAndPos: {x: 0.01171875, y: 0.12890625, z: 0.44921875, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.016666668, y: 0.18333334, z: 1}
+    index: 11
+  - uvSizeAndPos: {x: 0.0390625, y: 0.12890625, z: 0.46484375, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.055555556, y: 0.18333334, z: 1}
+    index: 12
+  - uvSizeAndPos: {x: 0.01171875, y: 0.12890625, z: 0.5078125, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.016666668, y: 0.18333334, z: 1}
+    index: 13
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.5234375, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 14
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.5546875, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 15
+  - uvSizeAndPos: {x: 0.015625, y: 0.12890625, z: 0.58984375, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.022222223, y: 0.18333334, z: 1}
+    index: 16
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.609375, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 17
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.64453125, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 18
+  - uvSizeAndPos: {x: 0.0390625, y: 0.12890625, z: 0.67578125, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.055555556, y: 0.18333334, z: 1}
+    index: 19
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.71875, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 20
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.75, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 21
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.78125, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 22
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.81640625, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 23
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.8515625, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 24
+  - uvSizeAndPos: {x: 0.01171875, y: 0.12890625, z: 0.88671875, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.016666668, y: 0.18333334, z: 1}
+    index: 25
+  - uvSizeAndPos: {x: 0.01171875, y: 0.12890625, z: 0.90625, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.016666668, y: 0.18333334, z: 1}
+    index: 26
+  - uvSizeAndPos: {x: 0.05859375, y: 0.12890625, z: 0.921875, w: 0.87109375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.083333336, y: 0.18333334, z: 1}
+    index: 27
+  - uvSizeAndPos: {x: 0.0390625, y: 0.12890625, z: 0, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.055555556, y: 0.18333334, z: 1}
+    index: 28
+  - uvSizeAndPos: {x: 0.05859375, y: 0.12890625, z: 0.04296875, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.083333336, y: 0.18333334, z: 1}
+    index: 29
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.10546875, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 30
+  - uvSizeAndPos: {x: 0.06640625, y: 0.12890625, z: 0.13671875, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.094444446, y: 0.18333334, z: 1}
+    index: 31
+  - uvSizeAndPos: {x: 0.04296875, y: 0.12890625, z: 0.20703125, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.06111111, y: 0.18333334, z: 1}
+    index: 32
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.25390625, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 33
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.2890625, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 34
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.3203125, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 35
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.35546875, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 36
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.38671875, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 37
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.41796875, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 38
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.44921875, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 39
+  - uvSizeAndPos: {x: 0.0078125, y: 0.12890625, z: 0.484375, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.011111111, y: 0.18333334, z: 1}
+    index: 40
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.49609375, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 41
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.52734375, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 42
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.55859375, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 43
+  - uvSizeAndPos: {x: 0.04296875, y: 0.12890625, z: 0.58984375, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.06111111, y: 0.18333334, z: 1}
+    index: 44
+  - uvSizeAndPos: {x: 0.03515625, y: 0.12890625, z: 0.63671875, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.05, y: 0.18333334, z: 1}
+    index: 45
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.67578125, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 46
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.7109375, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 47
+  - uvSizeAndPos: {x: 0.0390625, y: 0.12890625, z: 0.74609375, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.055555556, y: 0.18333334, z: 1}
+    index: 48
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.7890625, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 49
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.82421875, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 50
+  - uvSizeAndPos: {x: 0.046875, y: 0.12890625, z: 0.85546875, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.06666667, y: 0.18333334, z: 1}
+    index: 51
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.90625, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 52
+  - uvSizeAndPos: {x: 0.04296875, y: 0.12890625, z: 0.94140625, w: 0.73828125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.06111111, y: 0.18333334, z: 1}
+    index: 53
+  - uvSizeAndPos: {x: 0.078125, y: 0.12890625, z: 0, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.11111111, y: 0.18333334, z: 1}
+    index: 54
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.08203125, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 55
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.1171875, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 56
+  - uvSizeAndPos: {x: 0.03515625, y: 0.12890625, z: 0.15234375, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.05, y: 0.18333334, z: 1}
+    index: 57
+  - uvSizeAndPos: {x: 0.015625, y: 0.12890625, z: 0.19140625, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.022222223, y: 0.18333334, z: 1}
+    index: 58
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.2109375, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 59
+  - uvSizeAndPos: {x: 0.015625, y: 0.12890625, z: 0.2421875, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.022222223, y: 0.18333334, z: 1}
+    index: 60
+  - uvSizeAndPos: {x: 0.04296875, y: 0.12890625, z: 0.26171875, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.06111111, y: 0.18333334, z: 1}
+    index: 61
+  - uvSizeAndPos: {x: 0.0625, y: 0.12890625, z: 0.30859375, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.08888889, y: 0.18333334, z: 1}
+    index: 62
+  - uvSizeAndPos: {x: 0.01171875, y: 0.12890625, z: 0.375, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.016666668, y: 0.18333334, z: 1}
+    index: 63
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.390625, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 64
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.42578125, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 65
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.4609375, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 66
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.49609375, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 67
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.53125, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 68
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.56640625, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 69
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.6015625, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 70
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.63671875, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 71
+  - uvSizeAndPos: {x: 0.0078125, y: 0.12890625, z: 0.671875, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.011111111, y: 0.18333334, z: 1}
+    index: 72
+  - uvSizeAndPos: {x: 0.015625, y: 0.12890625, z: 0.68359375, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.022222223, y: 0.18333334, z: 1}
+    index: 73
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.703125, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 74
+  - uvSizeAndPos: {x: 0.0078125, y: 0.12890625, z: 0.73828125, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.011111111, y: 0.18333334, z: 1}
+    index: 75
+  - uvSizeAndPos: {x: 0.0546875, y: 0.12890625, z: 0.75, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.07777778, y: 0.18333334, z: 1}
+    index: 76
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.80859375, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 77
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.84375, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 78
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.87890625, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 79
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.9140625, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 80
+  - uvSizeAndPos: {x: 0.015625, y: 0.12890625, z: 0.94921875, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.022222223, y: 0.18333334, z: 1}
+    index: 81
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.96875, w: 0.60546875}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 82
+  - uvSizeAndPos: {x: 0.0234375, y: 0.12890625, z: 0, w: 0.47265625}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.033333335, y: 0.18333334, z: 1}
+    index: 83
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.02734375, w: 0.47265625}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 84
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.0625, w: 0.47265625}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 85
+  - uvSizeAndPos: {x: 0.0546875, y: 0.12890625, z: 0.09375, w: 0.47265625}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.07777778, y: 0.18333334, z: 1}
+    index: 86
+  - uvSizeAndPos: {x: 0.04296875, y: 0.12890625, z: 0.15234375, w: 0.47265625}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.06111111, y: 0.18333334, z: 1}
+    index: 87
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.1953125, w: 0.47265625}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 88
+  - uvSizeAndPos: {x: 0.02734375, y: 0.12890625, z: 0.23046875, w: 0.47265625}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.03888889, y: 0.18333334, z: 1}
+    index: 89
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.26171875, w: 0.47265625}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 90
+  - uvSizeAndPos: {x: 0.0078125, y: 0.12890625, z: 0.296875, w: 0.47265625}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.011111111, y: 0.18333334, z: 1}
+    index: 91
+  - uvSizeAndPos: {x: 0.03125, y: 0.12890625, z: 0.30859375, w: 0.47265625}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.044444446, y: 0.18333334, z: 1}
+    index: 92
+  - uvSizeAndPos: {x: 0.0234375, y: 0.12890625, z: 0.34375, w: 0.47265625}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.033333335, y: 0.18333334, z: 1}
+    index: 93
+  slicedSprites: []
+  clips: []
+  markers: []

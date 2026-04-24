@@ -1,10 +1,16 @@
 fileFormatVersion: 2
-guid: 02673f012f44d554e9d6abc89bc6098e
+guid: b8e73ee5c78647c4a9e8840c5b35533f
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -8234137660345062418
-    second: tex_atlas_oldCaneLady_markers_0
+      213: 815162991065957896
+    second: tex_atlas_print_font_markers_0
+  - first:
+      213: -785302679585496247
+    second: tex_atlas_print_font_markers_1
+  - first:
+      213: -2736161323949078596
+    second: tex_atlas_print_font_markers_2
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -113,13 +119,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: tex_atlas_oldCaneLady_markers_0
+      name: tex_atlas_print_font_markers_0
       rect:
         serializedVersion: 2
-        x: 0
-        y: 0
-        width: 2048
-        height: 2048
+        x: 1
+        y: 120
+        width: 12
+        height: 136
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -128,8 +134,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: eeb677b9c677abd80800000000000000
-      internalID: -8234137660345062418
+      spriteID: 8060884eb6a005b00800000000000000
+      internalID: 815162991065957896
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_print_font_markers_1
+      rect:
+        serializedVersion: 2
+        x: 13
+        y: 120
+        width: 23
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 943e426af5b0a15f0800000000000000
+      internalID: -785302679585496247
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_print_font_markers_2
+      rect:
+        serializedVersion: 2
+        x: 39
+        y: 120
+        width: 212
+        height: 136
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: cb74addc5c3370ad0800000000000000
+      internalID: -2736161323949078596
       vertices: []
       indices: 
       edges: []
@@ -148,7 +198,9 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      tex_atlas_oldCaneLady_markers_0: -8234137660345062418
+      tex_atlas_print_font_markers_0: 815162991065957896
+      tex_atlas_print_font_markers_1: -785302679585496247
+      tex_atlas_print_font_markers_2: -2736161323949078596
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 

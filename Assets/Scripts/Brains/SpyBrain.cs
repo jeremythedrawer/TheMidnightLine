@@ -14,7 +14,7 @@ public class SpyBrain : MonoBehaviour
         Run,
         Ticket,
         Notepad,
-        Map,
+        CarriageMap,
     }
 
 
@@ -40,6 +40,7 @@ public class SpyBrain : MonoBehaviour
     public SlideDoors slideDoors;
     public GangwayDoor gangwayDoor;
     public Carriage curCarriage;
+    public CarriageMap curCarriageMap;
     public NPCBrain npcTicketCheck;
     public AtlasClip curClip;
     public float clipTime;
@@ -50,6 +51,7 @@ public class SpyBrain : MonoBehaviour
     public bool canExitNotepad;
     public bool checkingTicket;
     public bool checkingNotepad;
+    public bool checkingCarriageMap;
     [Serializable] public struct CollisionData
     {
         public Vector2 groundLeft;
@@ -80,10 +82,12 @@ public class SpyBrain : MonoBehaviour
     private void OnEnable()
     {     
         gameEventData.OnInteract.RegisterListener(OpenTrainDoors);
+        gameEventData.OnInteract.RegisterListener(LookAtCarriageMap);
     }
     private void OnDisable()
     {
         gameEventData.OnInteract.UnregisterListener(OpenTrainDoors);
+        gameEventData.OnInteract.UnregisterListener(LookAtCarriageMap);
     }
     private void Start()
     {
@@ -200,6 +204,10 @@ public class SpyBrain : MonoBehaviour
         else if (playerInputs.notepadToggle || checkingNotepad)
         {
             SetState(State.Notepad);
+        }
+        else if (checkingCarriageMap)
+        {
+            SetState(State.CarriageMap);
         }
         else if (stats.isGrounded && playerInputs.move != 0 && !playerInputs.run && !stats.walkingIntoWall)
         {
@@ -321,7 +329,7 @@ public class SpyBrain : MonoBehaviour
                 if (npcHit.collider != null)
                 {
                     npcTicketCheck = npcHit.transform.gameObject.GetComponent<NPCBrain>();
-                    if (!npcTicketCheck.IsOnTrain()) return;
+                    if (!npcTicketCheck.onTrain) return;
                     npcTicketCheck.ticketIsBeingChecked = true;
                     stats.ticketName = npcTicketCheck.profile.fullName;
                     stats.boardingStationName = trip.stationsDataArray[npcTicketCheck.profile.boardingStationIndex].name;
@@ -367,6 +375,12 @@ public class SpyBrain : MonoBehaviour
             case State.Notepad:
             {
                 checkingNotepad = false;
+            }
+            break;
+
+            case State.CarriageMap:
+            {
+                curCarriageMap.CancelEffect();
             }
             break;
         }
@@ -462,6 +476,25 @@ public class SpyBrain : MonoBehaviour
                 gangwayDoor.OpenDoor();
             }
 
+        }
+    }
+    private void LookAtCarriageMap()
+    {
+        if (!stats.onTrain) return;
+
+        if (!checkingCarriageMap)
+        {
+            RaycastHit2D carriageMapHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.carriageMap);
+            if (carriageMapHit.collider != null)
+            {
+                curCarriageMap= carriageMapHit.collider.GetComponent<CarriageMap>();
+                curCarriageMap.InteractEffect();
+                checkingCarriageMap = true;
+            }
+        }
+        else
+        {
+            checkingCarriageMap = false;
         }
     }
     private async UniTask UpdateDepth(float oldDepth)

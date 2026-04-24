@@ -7,7 +7,6 @@ public class Ticket : MonoBehaviour
     public AtlasRenderer boardingStation_renderer;
     public AtlasRenderer disembarkingStation_renderer;
 
-
     public Bounds totalBounds;
     private void OnValidate()
     {

@@ -74,7 +74,6 @@ public class TrainController : MonoBehaviour
         stats.targetVelocity = 0;
         stats.curVelocity = KMPHToVelocity(trip.stationsDataArray[0].targetKMPH);
         stats.targetStopPosition = transform.position.x;
-        MoveTrainToStartPosition().Forget();
 
 
         float offset = TRAIN_WORLD_POS - transform.position.x;
@@ -87,6 +86,8 @@ public class TrainController : MonoBehaviour
             carriage.SetSignToNextStation(trip.nextStation.stationName);
         }
         SetSlideDoorPositions(offset);
+
+        MoveTrainToStartPosition().Forget();
     }
     private void Update()
     {

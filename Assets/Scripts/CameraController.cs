@@ -61,13 +61,16 @@ public class CameraController : MonoBehaviour
         stats.worldUnitsPerPixel = stats.worldHeight / Screen.height;
         if (Application.isPlaying)
         {
-            cam.orthographicSize = Mathf.Lerp(cam.orthographicSize, stats.targetSize, Time.deltaTime * settings.damping);
-            cam.orthographicSize = GetSnappedOrthoSize(stats.targetSize);
+            float smoothSize = Mathf.Lerp(cam.orthographicSize, stats.targetSize, Time.deltaTime * settings.damping);
+            cam.orthographicSize = GetSnappedOrthoSize(smoothSize);
 
             stats.prevWorldPos = stats.curWorldPos;
+            // Smooth (unsnapped)
             stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, stats.targetWorldPos, Time.deltaTime * settings.damping);
-            stats.curWorldPos = GetSnappedPosition(stats.curWorldPos);
-            transform.position = stats.curWorldPos;
+
+            // Snap ONLY for rendering
+            Vector3 snappedPos = GetSnappedPosition(stats.curWorldPos);
+            transform.position = snappedPos;
             stats.curVelocity = -(stats.curWorldPos - stats.prevWorldPos);
         }
         else

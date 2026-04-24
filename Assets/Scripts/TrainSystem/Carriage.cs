@@ -8,7 +8,6 @@ using static Train;
 public class Carriage : MonoBehaviour
 {
     const float QUEUE_TICK_RATE = 0.3f;
-
     public TrainStatsSO trainStats;
     public TrainSettingsSO trainSettings;
     public TripSO trip;
@@ -44,7 +43,8 @@ public class Carriage : MonoBehaviour
     }
     private void Start()
     {
-        seatQueue = new NPCQueue();
+
+
 
         alpha = 0;
     }
@@ -191,7 +191,6 @@ public class Carriage : MonoBehaviour
         }
         seatData.xPos = new float[seatAmount];
         seatData.filled = new bool[seatAmount];
-        seatQueue.npcs = new NPCBrain[seatAmount];
         int seatIndex = 0;
 
         for (int i = 0; i < seatRenderers.Length; i++)
@@ -205,6 +204,8 @@ public class Carriage : MonoBehaviour
                 seatIndex++;
             }
         }
+        seatQueue = new NPCQueue();
+        seatQueue.npcs = new NPCBrain[seatAmount];
     }
     private async UniTask MovingDown()
     {

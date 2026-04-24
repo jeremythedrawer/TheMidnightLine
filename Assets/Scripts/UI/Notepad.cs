@@ -584,7 +584,7 @@ public class Notepad : MonoBehaviour
 
                 NPCProfile traitorProfile = totalNPCProfiles[randProfileIndex];
                 traitorProfile.boardingStationIndex = i;
-                traitorProfile.disembarkingStationIndex = GetExitStationIndex(i, trip.minStationsTraitorsTravel, trip.maxStationsTraitorsTravel);
+                traitorProfile.disembarkingStationIndex = UnityEngine.Random.Range(i + trip.minStationsTraitorsTravel, trip.stationsDataArray.Length - 1);
                 totalNPCProfiles.RemoveAt(randProfileIndex);
                 station.traitorProfiles[j] = traitorProfile;
 
@@ -622,7 +622,7 @@ public class Notepad : MonoBehaviour
                 NPCProfile bystanderProfile = totalNPCProfiles[randProfileIndex];
 
                 bystanderProfile.boardingStationIndex = i;
-                bystanderProfile.disembarkingStationIndex = GetExitStationIndex(i, 1, int.MaxValue);
+                bystanderProfile.disembarkingStationIndex = UnityEngine.Random.Range(i + 1, trip.stationsDataArray.Length - 1);
 
                 totalNPCProfiles.RemoveAt(randProfileIndex);
                 station.bystanderProfiles[j] = bystanderProfile;
@@ -675,13 +675,6 @@ public class Notepad : MonoBehaviour
         string lastName = lastNameList[lastNameIndex].name;
 
         return firstName + " " + lastName;
-    }
-    public int GetExitStationIndex(int startStationIndex, int minStationIndexOffset, int maxStationIndexOffset)
-    {
-        int maxPossibleIndex = trip.stationsDataArray.Length - 1;
-        int max = Mathf.Min(startStationIndex + maxStationIndexOffset, maxPossibleIndex);
-        int min = Mathf.Min(startStationIndex + minStationIndexOffset, maxPossibleIndex);
-        return UnityEngine.Random.Range(min, max);
     }
     public Dictionary<Behaviours, string> InitializeBehaviourDict()
     {

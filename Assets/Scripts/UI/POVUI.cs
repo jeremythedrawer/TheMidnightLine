@@ -13,7 +13,7 @@ public class POVUI : MonoBehaviour
         None,
         Notepad,
         Ticket,
-        Map,
+        CarriageMap,
     }
 
     public PlayerInputsSO playerInputs;
@@ -21,6 +21,7 @@ public class POVUI : MonoBehaviour
     public SpyStatsSO spyStats;
     public Notepad notepad;
     public Ticket ticket;
+    public AtlasRenderer carriageMap;
     public Transform background;
 
     public float backgroundMoveDamp = 5;
@@ -36,6 +37,9 @@ public class POVUI : MonoBehaviour
     public Vector3 ticketActivePos;
     public Vector3 ticketInactivePos;
 
+    public Vector3 carriageMapActivePos;
+    public Vector3 carriageMapInactivePos;
+
     public State curState;
     public float transitionTime;
 
@@ -45,15 +49,14 @@ public class POVUI : MonoBehaviour
     public CancellationTokenSource ctsBackground;
     public CancellationTokenSource ctsNotepad;
     public CancellationTokenSource ctsTicket;
+    public CancellationTokenSource ctsCarriageMap;
     
     private void Start()
     {
         background.gameObject.SetActive(true);
         notepad.gameObject.SetActive(true);
 
-
         float halfCamWidth = cameraStats.worldWidth * 0.5f;
-
 
         backgroundActivePos = background.localPosition;
         backgroundInactivePos = new Vector3(halfCamWidth, background.localPosition.y, background.localPosition.z);
@@ -67,10 +70,15 @@ public class POVUI : MonoBehaviour
         ticketInactivePos = new Vector3(halfCamWidth, ticket.transform.localPosition.y - cameraStats.camWorldBottom - ticket.totalBounds.size.y, ticket.transform.localPosition.z);
         ticket.transform.localPosition = ticketInactivePos;
 
+        carriageMapActivePos = carriageMap.transform.localPosition;
+        carriageMapInactivePos = new Vector3(halfCamWidth, carriageMap.transform.localPosition.y, carriageMap.transform.localPosition.z);
+        carriageMap.transform.localPosition = carriageMapInactivePos;
+
         transitionTime = -Mathf.Log(TARGET_MARGIN) / moveDamp;
 
         ticket.gameObject.SetActive(false);
         notepad.gameObject.SetActive(false);
+        carriageMap.gameObject.SetActive(false);
     }
     private void Update()
     {
@@ -87,9 +95,9 @@ public class POVUI : MonoBehaviour
         {
             SetState(State.Ticket);
         }
-        else if (spyStats.curState == SpyBrain.State.Map)
+        else if (spyStats.curState == SpyBrain.State.CarriageMap)
         {
-            SetState(State.Map);
+            SetState(State.CarriageMap);
         }
         else
         {
@@ -126,8 +134,12 @@ public class POVUI : MonoBehaviour
                 ctsTicket?.Cancel();
             }
             break;
-            case State.Map:
+            case State.CarriageMap:
             {
+                MoveBackground(backgroundActivePos);
+
+                carriageMap.gameObject.SetActive(true);
+                ctsCarriageMap?.Cancel();
 
             }
             break;
@@ -154,9 +166,9 @@ public class POVUI : MonoBehaviour
                 ticket.transform.localPosition = Vector3.Lerp(ticket.transform.localPosition, naturalMovePos, Time.deltaTime * moveDamp);
             }
             break;
-            case State.Map:
+            case State.CarriageMap:
             {
-
+                carriageMap.transform.localPosition = Vector3.Lerp(carriageMap.transform.localPosition, carriageMapActivePos, Time.deltaTime * moveDamp);
             }
             break;
             case State.None:
@@ -181,9 +193,9 @@ public class POVUI : MonoBehaviour
                 MoveTicket(ticketInactivePos);
             }
             break;
-            case State.Map:
+            case State.CarriageMap:
             {
-
+                MoveCarriageMap(carriageMapInactivePos);
             }
             break;
             case State.None:
@@ -229,6 +241,13 @@ public class POVUI : MonoBehaviour
         ctsTicket?.Cancel();
         ctsTicket = new CancellationTokenSource();
         Moving(ticket.transform, ctsTicket.Token, nextPos, moveDamp).Forget();
+    }
+
+    private void MoveCarriageMap(Vector3 nextPos)
+    {
+        ctsCarriageMap?.Cancel();
+        ctsCarriageMap = new CancellationTokenSource();
+        Moving(carriageMap.transform, ctsCarriageMap.Token, nextPos, moveDamp).Forget();
     }
     private async UniTask Moving(Transform transform, CancellationToken token, Vector3 nextPos, float damp)
     {
