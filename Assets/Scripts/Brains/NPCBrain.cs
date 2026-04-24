@@ -32,10 +32,11 @@ public class NPCBrain : MonoBehaviour
     [Header("Generated")]
     public AtlasSO atlas;
     public SlideDoors curSlideDoors;
-
     public CancellationTokenSource ctsFade;
-    
     public Carriage curCarriage;
+
+    public StationSO boardingStation;
+    public StationSO disembarkingStation;
 
     public Vector2 curSpriteMarkerLocalPosition;
     public float targetXVelocity;
@@ -62,7 +63,7 @@ public class NPCBrain : MonoBehaviour
 
     public bool startFade;
     public bool ticketIsBeingChecked;
-    public bool ticketChecked;
+    public bool ticketHasBeenChecked;
     public bool playingGlyph;
     public bool behaving;
     public bool disembarking;
@@ -106,12 +107,16 @@ public class NPCBrain : MonoBehaviour
         SetBehaviourFlags();
         smokerRoomIndex = -1; //NOTE: -1 is used as a condition to find a smokers room in the smoker state
 
+        atlasRenderer.custom.w = 1; // NOTE: Setting Alpha to 1
+        targetAlpha = 1;
+
     }
     private void Update()
     {
         ChooseStates();
         UpdateStates();
         UpdatePath();
+        AdjustAlpha();
     }
     private void FixedUpdate()
     {
@@ -119,7 +124,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void ChooseStates()
     {
-        if (ticketIsBeingChecked)
+        if (ticketIsBeingChecked && !ticketHasBeenChecked)
         {
             SetState(NPCState.TicketCheck);
         }
@@ -250,14 +255,6 @@ public class NPCBrain : MonoBehaviour
                     NPCMotion standingMotion = RandomIdleMotion(NPCMotion.StandingBlinking, NPCMotion.StandingBreathing);
                     curClip = atlas.clipDict[(int)standingMotion];
                 }
-
-                if (!ticketChecked)
-                {
-                    atlasRenderer.custom.y = 1; // NOTE: Color Set
-                    ticketChecked = true;
-                    trip.ticketsCheckedSinceStart++;
-                    trip.ticketsCheckedSinceLastStation++;
-                }
             }
             break;
             case NPCState.Behaviour:
@@ -302,6 +299,9 @@ public class NPCBrain : MonoBehaviour
             case NPCState.TicketCheck:
             {
                 targetDist = targetXPos - transform.position.x;
+                AdjustColor(NPCMark.TicketCheck);
+                ticketHasBeenChecked = true;
+
             }
             break;
 
@@ -371,29 +371,22 @@ public class NPCBrain : MonoBehaviour
                         queuedForSlideDoor = true;
                     }
                 }
-
-                Fade();
             }
             break;
             case NPCPath.StandingAtStation:
             {
-                Fade();
-
             }
             break;
             case NPCPath.SittingAtStation:
             {
-                Fade();
             }
             break;
             case NPCPath.ToExitStation:
             {
-                Fade();
             }
             break;
             case NPCPath.ToStandAtStation:
             {
-                Fade();
             }
             break;
 
@@ -544,46 +537,84 @@ public class NPCBrain : MonoBehaviour
 
         }
     }
-    private void Fade()
+    private void AdjustAlpha()
     {
-        bool shouldFadeOut =
-            spyStats.curGroundLayer == layerSettings.trainLayers.ground &&
-            spyStats.curWorldPos.z > transform.position.z &&
-            transform.position.x > spyStats.curLocationBounds.min.x &&
-            transform.position.x < spyStats.curLocationBounds.max.x;
+        if (spyStats.curGroundLayer != layerSettings.trainLayers.ground || !boardingStation.isFrontOfTrain) return;
+        bool withinLocationBounds = transform.position.z < spyStats.curWorldPos.z && transform.position.x > spyStats.curLocationBounds.min.x && transform.position.x < spyStats.curLocationBounds.max.x;
 
-        float targAlpha = shouldFadeOut ? 0f : 1f;
+        float newAlpha = withinLocationBounds ? 0f : 1f;
 
-        if (targetAlpha == targAlpha) return;
-        
-        targetAlpha = targAlpha;
+        if (targetAlpha == newAlpha) return;
+        targetAlpha = newAlpha;
         ctsFade?.Cancel();
         ctsFade?.Dispose();
 
         ctsFade = new CancellationTokenSource();
-        FadeTo().Forget();
+        AdjustingAlpha().Forget();
     }
-    private async UniTask FadeTo()
+    private void AdjustColor(NPCMark mark)
     {
-        float startAlpha = atlasRenderer.custom.x;
-        float elapsed = 0f;
+        switch(mark)
+        { 
+            case NPCMark.TicketCheck:
+            {
+                AdjustingTicketCheckColor().Forget();
+            }
+            break;
+
+            case NPCMark.Suspicion:
+            {
+                AdjustingSuspicionColor().Forget();
+            }
+            break;
+        }
+    }
+    private async UniTask AdjustingAlpha()
+    {
+        float startAlpha = atlasRenderer.custom.w;
+        float elapsed = 0;
         try
         {
-            while (elapsed < FADE_TIME)
+            while (elapsed < ADJUST_COLOR_TIME)
             {
                 elapsed += Time.deltaTime;
-                float t = elapsed / FADE_TIME;
+                float t = elapsed / ADJUST_COLOR_TIME;
 
-                atlasRenderer.custom.x = Mathf.Lerp(startAlpha, targetAlpha, t);
+                atlasRenderer.custom.w = Mathf.Lerp(startAlpha, targetAlpha, t);
 
-                await UniTask.Yield(PlayerLoopTiming.Update, ctsFade.Token);
+                await UniTask.Yield(ctsFade.Token);
             }
-
-            atlasRenderer.custom.x = targetAlpha;
+            atlasRenderer.custom.w = targetAlpha;
         }
         catch (OperationCanceledException)
         {
         }
+    }
+    private async UniTask AdjustingTicketCheckColor()
+    {
+        float elapsed = 0;
+
+        while (elapsed < ADJUST_COLOR_TIME)
+        {
+            elapsed += Time.deltaTime;
+            await UniTask.Yield();
+            atlasRenderer.custom.x = elapsed / ADJUST_COLOR_TIME;
+        }
+
+        atlasRenderer.custom.x = 1;
+    }
+    private async UniTask AdjustingSuspicionColor()
+    {
+        float elapsed = 0;
+
+        while (elapsed < ADJUST_COLOR_TIME)
+        {
+            elapsed += Time.deltaTime;
+            await UniTask.Yield();
+            atlasRenderer.custom.y = elapsed / ADJUST_COLOR_TIME;
+        }
+
+        atlasRenderer.custom.y = 1;
     }
     public void BoardTrain()
     {

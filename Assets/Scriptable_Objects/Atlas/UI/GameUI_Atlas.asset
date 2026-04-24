@@ -10,26 +10,30 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 33fd095fffb8f844e9fa149db1599080, type: 3}
-  m_Name: CarriageMaps_Atlas
+  m_Name: GameUI_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
-  texture: {fileID: 2800000, guid: 3fd7331a042973247bfee699a38527a5, type: 3}
+  texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
   spriteConnectColor:
     serializedVersion: 2
-    rgba: 0
-  entityMotionType: 3
+    rgba: 4278255615
+  entityMotionType: 2
   pivotColor:
     serializedVersion: 2
     rgba: 4278190335
   sliceColor:
     serializedVersion: 2
-    rgba: 4294901760
+    rgba: 0
   zoneType: 0
   motionSprites: []
   simpleSprites:
-  - uvSizeAndPos: {x: 0.29296875, y: 0.5527344, z: 0, w: 0.44628906}
+  - uvSizeAndPos: {x: 0.15625, y: 0.12109375, z: 0.05078125, w: 0.85546875}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 1.6666666, y: 3.1444445, z: 1}
+    worldSize: {x: 0.22222222, y: 0.17222223, z: 1}
     index: 0
+  - uvSizeAndPos: {x: 0.06640625, y: 0.1171875, z: 0.2109375, w: 0.859375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.094444446, y: 0.16666667, z: 1}
+    index: 1
   slicedSprites: []
   clips: []
   markers: []

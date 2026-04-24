@@ -169,7 +169,6 @@ public class TrainController : MonoBehaviour
                         carriages[i].SetSignToCurrentStation(trip.nextStation.stationName);
                     }
                 }
-                trip.ticketsCheckedSinceLastStation = 0;
                 gameEventData.OnStationArrival.Raise();
             }
             break;
@@ -209,11 +208,6 @@ public class TrainController : MonoBehaviour
                         trip.nextStation = trip.stationsDataArray[curStationIndex];
 
                         stats.targetVelocity = KMPHToVelocity(trip.nextStation.targetKMPH);
-                 
-                        stats.totalPassengersBoarded = 0;
-                        stats.targetPassengersBoarding = trip.nextStation.bystanderProfiles.Length + trip.nextStation.traitorProfiles.Length;
-                        stats.distToSpawnNextStation = stats.trainToMaxSpawnDist - trip.nextStation.station_prefab.frontPlatformRenderer.transform.localPosition.x;
-                        closingSlideDoors = false;
                     }
                 }
             }
@@ -276,7 +270,11 @@ public class TrainController : MonoBehaviour
 
             case TrainStates.Stopped:
             {
-
+                stats.totalPassengersBoarded = 0;
+                stats.targetPassengersBoarding = trip.nextStation.bystanderProfiles.Length + trip.nextStation.traitorProfiles.Length;
+                stats.distToSpawnNextStation = stats.trainToMaxSpawnDist - trip.nextStation.station_prefab.frontPlatformRenderer.transform.localPosition.x;
+                closingSlideDoors = false;
+                gameEventData.OnStationLeave.Raise();
             }
             break;
         }

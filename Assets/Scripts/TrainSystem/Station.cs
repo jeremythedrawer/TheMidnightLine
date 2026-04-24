@@ -29,6 +29,8 @@ public class Station : MonoBehaviour
             bystander.profile = bystanderProfile;
             bystander.role = Role.Bystander;
             bystander.gameObject.name = bystanderProfile.fullName;
+            bystander.boardingStation = station;
+            bystander.disembarkingStation = trip.stationsDataArray[bystanderProfile.disembarkingStationIndex];
 
             if (i % 2 == 0)
             {
@@ -51,6 +53,8 @@ public class Station : MonoBehaviour
             traitor.profile = traitorProfile;
             traitor.role = Role.Traitor;
             traitor.gameObject.name = traitorProfile.fullName;
+            traitor.boardingStation = station;
+            traitor.disembarkingStation = trip.stationsDataArray[traitorProfile.disembarkingStationIndex];
             if (i % 2 == 0)
             {
                 traitor.atlasRenderer.FlipH(true, traitor.atlasRenderer.sprite);

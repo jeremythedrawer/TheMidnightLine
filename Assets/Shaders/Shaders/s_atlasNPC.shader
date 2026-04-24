@@ -41,6 +41,10 @@ Shader "Custom/s_atlasNPC"
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
+            float3 _TicketCheckColor;
+            float3 _SuspicionColor;
+
+
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -86,8 +90,13 @@ Shader "Custom/s_atlasNPC"
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 finalColor = color.rgb + (float3(0.2, 0, 0.02) * spriteData.custom.y);
-                half alpha = BayerX8(color.a * spriteData.custom.x, i.positionHCS.xy);
+                half3 ticketCheckColor = BayerX8(spriteData.custom.x,i.positionHCS) * _TicketCheckColor;
+                half3 suspicionColor = BayerX8(spriteData.custom.y, i.positionHCS) * _SuspicionColor;
+
+                half3 focusColor = lerp(ticketCheckColor, suspicionColor, spriteData.custom.y);
+
+                half3 finalColor = color.rgb + focusColor;
+                half alpha = BayerX8(color.a * spriteData.custom.a, i.positionHCS.xy);
                 clip(alpha - 0.001);
                 return half4 (finalColor, 1);
             }

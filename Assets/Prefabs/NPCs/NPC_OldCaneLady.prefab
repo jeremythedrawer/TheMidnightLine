@@ -233,6 +233,7 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.036621094, y: 0.125, z: 0.0087890625, w: 0.8745117}
@@ -245,7 +246,7 @@ MonoBehaviour:
   worldPivotAndSize: {x: 0.26666665, y: 0, z: 0.41666666, w: 1.4222223}
   uvSizeAndPosition: {x: 0.036621094, y: 0.125, z: 0.0087890625, w: 0.8745117}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 1, y: 0, z: 0, w: 0}
+  custom: {x: 0, y: 0, z: 0, w: 1}
   boundsOffset: {x: 0.058333337, y: 0.8361111, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
@@ -294,8 +295,8 @@ MonoBehaviour:
   atlas: {fileID: 0}
   curSlideDoors: {fileID: 0}
   curCarriage: {fileID: 0}
-  startStation: {fileID: 0}
-  endStation: {fileID: 0}
+  boardingStation: {fileID: 0}
+  disembarkingStation: {fileID: 0}
   curSpriteMarkerLocalPosition: {x: 0, y: 0}
   targetXVelocity: 0
   targetXPos: 0
@@ -308,8 +309,8 @@ MonoBehaviour:
   curBehaviour: 0
   profile:
     fullName: 
-    disembarkingStationIndex: 0
     boardingStationIndex: 0
+    disembarkingStationIndex: 0
     npcPrefabIndex: 0
     coveredMugshotIndex: 0
     uncoveredMugshotIndex: 0
@@ -324,14 +325,23 @@ MonoBehaviour:
   prevAtlasIndex: 0
   startFade: 0
   ticketIsBeingChecked: 0
-  queuedForSeat: 0
   ticketChecked: 0
+  playingGlyph: 0
+  behaving: 0
+  disembarking: 0
+  onTrain: 0
+  queuedForSeat: 0
+  queuedForSlideDoor: 0
   seatQueueIndex: 0
-  enterTrainIndex: 0
-  exitTrainIndex: 0
+  boardTrainQueueIndex: 0
+  disembarkTrainQueueIndex: 0
+  behaviourFlags: 
+  behaviourFlagCount: 0
   curClip:
     clipName: 
     keyFrames: []
     clipType: 0
     motionIndex: 0
     time: 0
+  curBehaviourContext: {fileID: 0}
+  curGlyph: {fileID: 0}

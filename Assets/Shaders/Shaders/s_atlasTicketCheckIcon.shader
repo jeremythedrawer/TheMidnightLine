@@ -1,4 +1,4 @@
-Shader "Custom/s_atlasBayer"
+Shader "Custom/s_atlasTicketCheckIcon"
 {
     Properties
     {
@@ -7,19 +7,20 @@ Shader "Custom/s_atlasBayer"
 
     SubShader
     {
-        Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
+        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
         ZWrite On
         ZTest LEqual
         Blend SrcAlpha OneMinusSrcAlpha
+
         Pass
         {
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
             #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
-
             #pragma vertex vert
             #pragma fragment frag
+
 
             struct Attributes
             {
@@ -36,9 +37,12 @@ Shader "Custom/s_atlasBayer"
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
-
+            
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
+
+            float3 _TicketCheckColor;
+
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -56,7 +60,7 @@ Shader "Custom/s_atlasBayer"
 
                 objPos *= size * scale;
                 objPos -= pivot;
-
+                objPos.x += spriteData.custom.y * (1 - spriteData.custom.a);
                 float3 worldPos = float3(position.xy + objPos, position.z);
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
@@ -83,12 +87,13 @@ Shader "Custom/s_atlasBayer"
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-                
-                half alpha = color.a - spriteData.custom.x;
-                alpha= BayerMatrix(alpha, 1, i.positionHCS.xy);
-                clip(alpha - 0.001);
 
-                return half4 (color.rgb * 0, 1);
+                half3 checkedColor = BayerX8(spriteData.custom.x, i.positionHCS) * _TicketCheckColor;
+
+                half3 finalColor = color.rgb + checkedColor;
+                half alpha = BayerX8(color.a * spriteData.custom.a, i.positionHCS.xy);
+                clip(alpha - 0.001);
+                return half4 (finalColor, 1);
             }
             ENDHLSL
         }

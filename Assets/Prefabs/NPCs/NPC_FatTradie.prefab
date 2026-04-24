@@ -233,6 +233,7 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.041992188, y: 0.15820312, z: 0.017089844, w: 0.8417969}
@@ -245,7 +246,7 @@ MonoBehaviour:
   worldPivotAndSize: {x: 0.2, y: 0, z: 0.47777778, w: 1.8}
   uvSizeAndPosition: {x: 0.041992188, y: 0.15820312, z: 0.017089844, w: 0.8417969}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 1, y: 0, z: 0, w: 0}
+  custom: {x: 0, y: 0, z: 0, w: 1}
   boundsOffset: {x: 0.038888887, y: 0.9, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
@@ -256,6 +257,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -293,8 +295,8 @@ MonoBehaviour:
   atlas: {fileID: 0}
   curSlideDoors: {fileID: 0}
   curCarriage: {fileID: 0}
-  startStation: {fileID: 0}
-  endStation: {fileID: 0}
+  boardingStation: {fileID: 0}
+  disembarkingStation: {fileID: 0}
   curSpriteMarkerLocalPosition: {x: 0, y: 0}
   targetXVelocity: 0
   targetXPos: 0
@@ -307,11 +309,12 @@ MonoBehaviour:
   curBehaviour: 0
   profile:
     fullName: 
-    disembarkingStationIndex: 0
     boardingStationIndex: 0
+    disembarkingStationIndex: 0
     npcPrefabIndex: 0
+    coveredMugshotIndex: 0
+    uncoveredMugshotIndex: 0
     behaviours: 0
-    appearence: 0
   curState: 0
   curPath: 0
   role: 0
@@ -322,14 +325,23 @@ MonoBehaviour:
   prevAtlasIndex: 0
   startFade: 0
   ticketIsBeingChecked: 0
-  queuedForSeat: 0
   ticketChecked: 0
+  playingGlyph: 0
+  behaving: 0
+  disembarking: 0
+  onTrain: 0
+  queuedForSeat: 0
+  queuedForSlideDoor: 0
   seatQueueIndex: 0
-  enterTrainIndex: 0
-  exitTrainIndex: 0
+  boardTrainQueueIndex: 0
+  disembarkTrainQueueIndex: 0
+  behaviourFlags: 
+  behaviourFlagCount: 0
   curClip:
     clipName: 
     keyFrames: []
     clipType: 0
     motionIndex: 0
     time: 0
+  curBehaviourContext: {fileID: 0}
+  curGlyph: {fileID: 0}

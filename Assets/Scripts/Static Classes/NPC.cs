@@ -4,7 +4,7 @@ using static Atlas;
 public static class NPC
 {
     public const float CLOSE_TO_TARGET_BUFFER = 0.1f;
-    public const float FADE_TIME = 1f;
+    public const float ADJUST_COLOR_TIME = 0.5f;
     public const float MIN_START_MOVE_TIME = 0.3f;
     public const float MAX_START_MOVE_TIME = 1f;
     public enum NPCState
@@ -39,7 +39,12 @@ public static class NPC
         ToExitStation,
     }
 
-
+    public enum NPCMark
+    {
+        None,
+        TicketCheck,
+        Suspicion,
+    }
     [Flags] public enum Behaviours
     {
         None = 0,
