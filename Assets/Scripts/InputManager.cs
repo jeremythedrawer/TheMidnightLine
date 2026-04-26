@@ -27,7 +27,6 @@ public class InputManager : MonoBehaviour
 
     public static InputDevice curDevice;
 
-
     private float resetElaspedTime;
     private float resetThresholdTime = 2;
 
@@ -64,7 +63,7 @@ public class InputManager : MonoBehaviour
         run_action.performed += context => playerInputs.run = true;
         run_action.canceled += context => playerInputs.run = false;
 
-        notepadToggle_action.started += context => playerInputs.notepadToggle = true;
+        notepadToggle_action.started += context => playerInputs.notepadKeyDown = true;
         notepadConfirmStation_action.started += context => playerInputs.notepadConfirmStation = true;
 
         notepadChooseStation_action.started += context =>
@@ -79,7 +78,7 @@ public class InputManager : MonoBehaviour
             playerInputs.notepadChooseStationAndFlip.y = Mathf.RoundToInt(move.y);
         };
 
-        ticket_action.started += context => playerInputs.ticketPressed = true;
+        ticket_action.started += context => playerInputs.ticketCheckKeyDown = true;
 
         interact_action.started += context =>
         {
@@ -89,11 +88,11 @@ public class InputManager : MonoBehaviour
 
         mouseLeftDown_action.started += context => playerInputs.mouseLeftDown = true;
 
-        mouseLeftPress_action.performed += context => playerInputs.mouseLeftPress = true;
+        mouseLeftPress_action.performed += context => playerInputs.mouseLeftHold = true;
         mouseLeftPress_action.canceled += context =>
         {
             playerInputs.mouseLeftUp = true;
-            playerInputs.mouseLeftPress = false;
+            playerInputs.mouseLeftHold = false;
         };
 
     }
@@ -109,6 +108,10 @@ public class InputManager : MonoBehaviour
         InputUser.onUnpairedDeviceUsed -= CheckDevice;
     }
 
+    private void Start()
+    {
+        playerInputs.mouseScreenPos.z = 1;
+    }
     private void Update()
     {
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.RightShift))
@@ -120,8 +123,10 @@ public class InputManager : MonoBehaviour
                 gameEventData.OnReset.Raise();
             }
         }
-        playerInputs.mouseScreenPos = Mouse.current.position.ReadValue();
-        playerInputs.mouseWorldPos = Camera.main.ScreenToWorldPoint(Mouse.current.position.ReadValue());
+        Vector2 screenPos = Mouse.current.position.ReadValue();
+        playerInputs.mouseScreenPos.x = Mathf.Clamp(screenPos.x, 0f, Screen.width);
+        playerInputs.mouseScreenPos.y = Mathf.Clamp(screenPos.y, 0f, Screen.height);
+        playerInputs.mouseWorldPos = Camera.main.ScreenToWorldPoint(playerInputs.mouseScreenPos);
 
         if (playerInputs.mouseLeftDown)
         {
@@ -135,9 +140,9 @@ public class InputManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        playerInputs.notepadToggle = false;
+        playerInputs.notepadKeyDown = false;
         playerInputs.notepadConfirmStation = false;
-        playerInputs.ticketPressed = false;
+        playerInputs.ticketCheckKeyDown = false;
         playerInputs.interact = false;
         playerInputs.mouseLeftDown = false;
         playerInputs.mouseLeftUp = false;

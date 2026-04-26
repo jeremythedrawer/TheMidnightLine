@@ -37,7 +37,6 @@ public class Notepad : MonoBehaviour
     public NPCsDataSO npcData;
     public CameraStatsSO camStats;
 
-
     public AtlasRenderer rightHand_renderer;
     public AtlasRenderer frontFingers_renderer;
     public AtlasRenderer bindingRings_renderer;
@@ -55,9 +54,6 @@ public class Notepad : MonoBehaviour
     public Page[] pages;
     
     public NameData nameData;
-
-    public Bounds totalBounds;
-    public Vector2 boundsOffset;
     
     public int activePageIndex;
     public int lastPageIndex;
@@ -92,17 +88,8 @@ public class Notepad : MonoBehaviour
     public float totalPencilTime;
     public float curPencilTime;
 
-
-    private void OnValidate()
-    {
-        SetTotalBounds();
-#if UNITY_EDITOR
-        EditorUtility.SetDirty(this);
-#endif
-    }
     private void Awake()
     {
-        SetTotalBounds();
         nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
         npcData.behaviourDescDict = InitializeBehaviourDict();
         CreateNPCProfiles();
@@ -124,6 +111,9 @@ public class Notepad : MonoBehaviour
         float distLeftHandToOffScreen = camStats.camWorldBottom - (leftHand_renderer.bounds.max.y - leftHand_renderer.transform.position.y);
         Vector3 offscreenWorldPos = new Vector3(leftHand_renderer.transform.position.x, distLeftHandToOffScreen, leftHand_renderer.transform.position.z);
         leftHandOffScreenPos = leftHand_renderer.transform.parent.InverseTransformPoint(offscreenWorldPos);
+
+        pages[0].HideLeftArrowButton();
+        pages[pages.Length - 1].HideRightArrowButton();
     }
     private void Update()
     {
@@ -509,6 +499,57 @@ public class Notepad : MonoBehaviour
                     activePage.SetPreviewStationText(previewStationIndex);
                 }
 
+                if (CursorController.IsInsideBounds(activePage.exitButton_renderer.bounds))
+                {
+                    if (playerInputs.mouseLeftDown)
+                    {
+                        activePage.InvertExitButton(invert: false, pointDown: true);
+                        SpyBrain.ToggleNotepad(false);
+                    }
+                    else
+                    {
+                        activePage.InvertExitButton(invert: true, pointDown: true);
+                    }
+                }
+                else
+                {
+                    activePage.InvertExitButton(invert: false, pointDown: false);
+                }
+
+                if (activePageIndex > 0 && CursorController.IsInsideBounds(activePage.paperCornerLeft_renderer.bounds))
+                {
+                    if (playerInputs.mouseLeftDown)
+                    {
+                        activePage.InvertLeftArrowButton(false);
+                        flipToggle = -1;
+                    }
+                    else
+                    {
+                        activePage.InvertLeftArrowButton(true);
+                    }
+                }
+                else
+                {
+                    activePage.InvertLeftArrowButton(false);
+                }
+
+                if (activePageIndex < lastPageIndex && CursorController.IsInsideBounds(activePage.paperCornerRight_renderer.bounds))
+                {
+                    if (playerInputs.mouseLeftDown)
+                    {
+                        activePage.InverRightArrowButton(false);
+                        flipToggle = 1;
+                    }
+                    else
+                    {
+                        activePage.InverRightArrowButton(true);
+                    }
+                }
+                else
+                {
+                    activePage.InverRightArrowButton(false);
+                }
+
                 leftHand_renderer.transform.localPosition = Vector3.Lerp(leftHand_renderer.transform.localPosition, leftHandTargetPos, Time.deltaTime * LEFTHAND_DAMPING);
             }
             break;
@@ -629,16 +670,6 @@ public class Notepad : MonoBehaviour
             }
         }
     }
-    private void SetTotalBounds()
-    {
-        if (rightHand_renderer == null || frontFingers_renderer == null || bindingRings_renderer == null) return;
-        totalBounds = rightHand_renderer.bounds;
-        totalBounds.Encapsulate(frontFingers_renderer.bounds);
-        totalBounds.Encapsulate(bindingRings_renderer.bounds);
-        totalBounds.Encapsulate(leftHand_renderer.bounds);
-
-        boundsOffset = transform.position - totalBounds.min;
-    }
     private string GenerateName(Gender gender, Ethnicity ethnicity)
     {
         string genderString = gender.ToString();
@@ -689,10 +720,5 @@ public class Notepad : MonoBehaviour
             dict[value] = value.ToString().Replace("_", " ");
         }
         return dict;
-    }
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.blue;
-        Gizmos.DrawWireCube(totalBounds.center, totalBounds.size);
     }
 }

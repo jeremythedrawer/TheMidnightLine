@@ -57,7 +57,7 @@ Shader "Custom/s_atlasRotate"
                 objPos *= size * scale;
                 objPos -= pivot;
 
-                float c = size * PI;
+                float c = size.x * PI;
                 float t = fmod(_MetersTravelled / c, 1.0) * (2 * PI);
 
 			    float rotSin = sin(-t);

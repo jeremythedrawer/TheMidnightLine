@@ -15,8 +15,12 @@ public class Page : MonoBehaviour
     public AtlasRenderer name_renderer;
     public AtlasRenderer chosenStation_renderer;
     public AtlasRenderer pageNumber_renderer;
-    
     public AtlasRenderer mugshot_renderer;
+
+    public AtlasRenderer paperCornerLeft_renderer;
+    public AtlasRenderer paperCornerRight_renderer;
+
+    public AtlasRenderer exitButton_renderer;
 
     [Header("Generated")]
     public AtlasClip paperClip;
@@ -25,8 +29,9 @@ public class Page : MonoBehaviour
     public int chosenStationIndex;
     public Bounds stationNameBounds;
     public string chosenStationName;
+    public bool isLastPage;
+    public bool isFirstPage;
     public CancellationTokenSource ctsWrite;
-
     private void OnDisable()
     {
         ctsWrite?.Cancel();
@@ -61,6 +66,16 @@ public class Page : MonoBehaviour
         behaviour0_renderer.enabled = toggle;
         behaviour1_renderer.enabled = toggle;
         pageNumber_renderer.enabled = toggle;
+        
+        if(!isFirstPage)
+        {
+            paperCornerLeft_renderer.enabled = toggle;
+        }
+        if(!isLastPage)
+        {
+            paperCornerRight_renderer.enabled = toggle;
+        }
+
         if (chosenStationIndex == -1)
         {
             chosenStation_renderer.enabled = false;
@@ -74,6 +89,7 @@ public class Page : MonoBehaviour
     {
         name_renderer.enabled = toggle;
         mugshot_renderer.enabled = toggle;
+        exitButton_renderer.enabled = toggle;
     }
     public void UpdatePageDepth(int depth)
     {
@@ -91,7 +107,6 @@ public class Page : MonoBehaviour
         chosenStationIndex = stationIndex;
         chosenStationName = trip.stationsDataArray[chosenStationIndex].stationName;
         stationNameBounds = chosenStation_renderer.GetTextBounds(chosenStationName);
-        chosenStation_renderer.AppearConfirmText();
 
         ctsWrite?.Cancel();
         ctsWrite = new CancellationTokenSource();
@@ -111,6 +126,33 @@ public class Page : MonoBehaviour
         chosenStation_renderer.enabled = true;
         chosenStation_renderer.AppearPreviewText();
     }
+    public void InvertExitButton(bool invert, bool pointDown)
+    {
+        if (exitButton_renderer.flipY != pointDown)
+        {
+            exitButton_renderer.custom.x = invert ? 0 : 1;
+            exitButton_renderer.FlipV(pointDown, exitButton_renderer.sprite);
+        }
+
+    }
+    public void InvertLeftArrowButton(bool invert)
+    {
+        paperCornerLeft_renderer.custom.x = invert ? 0 : 1;
+    }
+    public void InverRightArrowButton(bool invert)
+    {
+        paperCornerRight_renderer.custom.x = invert ? 0 : 1;
+    }
+    public void HideRightArrowButton()
+    {
+        isLastPage = true;
+        paperCornerRight_renderer.enabled = false;
+    }
+    public void HideLeftArrowButton()
+    {
+        paperCornerLeft_renderer.enabled = false;
+        isFirstPage = true;
+    }
     public Bounds GetStationNameBounds()
     {
         return chosenStation_renderer.bounds;
@@ -125,6 +167,7 @@ public class Page : MonoBehaviour
                 await UniTask.WaitForSeconds(Notepad.WRITE_LETTER_TIME, cancellationToken: ctsWrite.Token);
                 curStationString = curStationString[..^1];
                 chosenStation_renderer.SetText(curStationString);
+                chosenStation_renderer.AppearConfirmText();
             }
         }
         catch (OperationCanceledException) { }
@@ -139,11 +182,12 @@ public class Page : MonoBehaviour
 
         try
         {
-            while ( curLetterIndex < stationNameLetterCount )
+            while (curLetterIndex < stationNameLetterCount)
             {
                 curStationString += stationName[curLetterIndex];
                 await UniTask.WaitForSeconds(Notepad.WRITE_LETTER_TIME, cancellationToken: ctsWrite.Token);
                 chosenStation_renderer.SetText(curStationString);
+                chosenStation_renderer.AppearConfirmText();
                 curLetterIndex++;
             }
         }

@@ -49,9 +49,11 @@ public class SpyBrain : MonoBehaviour
 
     public bool canExitCheckTicket;
     public bool canExitNotepad;
-    public bool checkingTicket;
-    public bool checkingNotepad;
     public bool checkingCarriageMap;
+
+    public static bool canCheckTicket;
+    public static bool checkingTicket;
+    public static bool checkingNotepad;
     [Serializable] public struct CollisionData
     {
         public Vector2 groundLeft;
@@ -197,11 +199,11 @@ public class SpyBrain : MonoBehaviour
     }
     private void ChooseState()
     {
-        if ((playerInputs.ticketPressed && stats.onTrain) || checkingTicket)
+        if ((playerInputs.ticketCheckKeyDown && canCheckTicket) || checkingTicket)
         {
             SetState(State.Ticket);
         }
-        else if (playerInputs.notepadToggle || checkingNotepad)
+        else if (playerInputs.notepadKeyDown || checkingNotepad)
         {
             SetState(State.Notepad);
         }
@@ -245,23 +247,22 @@ public class SpyBrain : MonoBehaviour
             break;
             case State.Ticket:
             {
-                if (!playerInputs.ticketPressed) canExitCheckTicket = true;
-                if((playerInputs.ticketPressed && canExitCheckTicket) || playerInputs.notepadChooseStationAndFlip.x == 1)
+                if (!playerInputs.ticketCheckKeyDown) canExitCheckTicket = true;
+                if((playerInputs.ticketCheckKeyDown && canExitCheckTicket) || playerInputs.notepadChooseStationAndFlip.x == 1)
                 {
                     checkingTicket = false;
                 }
                 if (playerInputs.notepadChooseStationAndFlip.x == -1)
                 {
                     checkingTicket = false;
-                    checkingNotepad = true;
                 }
             }
             break;
             case State.Notepad:
             {
-                if(!playerInputs.notepadToggle) canExitNotepad = true;
+                if(!playerInputs.notepadKeyDown) canExitNotepad = true;
 
-                if (playerInputs.notepadToggle && canExitNotepad)
+                if (playerInputs.notepadKeyDown && canExitNotepad)
                 {
                     checkingNotepad = false;
                 }
@@ -329,12 +330,14 @@ public class SpyBrain : MonoBehaviour
                 if (npcHit.collider != null)
                 {
                     npcTicketCheck = npcHit.transform.gameObject.GetComponent<NPCBrain>();
-                    if (!npcTicketCheck.onTrain) return;
+                    if (!npcTicketCheck.onTrain || npcTicketCheck.ticketHasBeenChecked) return;
                     npcTicketCheck.ticketIsBeingChecked = true;
                     stats.ticketName = npcTicketCheck.profile.fullName;
+                    
                     stats.boardingStationName = trip.stationsDataArray[npcTicketCheck.profile.boardingStationIndex].name;
                     stats.disembarkingStationName = trip.stationsDataArray[npcTicketCheck.profile.disembarkingStationIndex].name;
                     canExitCheckTicket = false;
+
                     checkingTicket = true;
                 }
             }
@@ -521,6 +524,14 @@ public class SpyBrain : MonoBehaviour
     {
         stats.spriteFlip = flip;
         atlasRenderer.FlipH(flip, atlasRenderer.sprite);
+    }
+    public static void ToggleTicketCheckAbility(bool toggle)
+    {
+        canCheckTicket = toggle;
+    }
+    public static void ToggleNotepad(bool toggle)
+    {
+        checkingNotepad = toggle;
     }
     private void OnApplicationQuit()
     {

@@ -40,12 +40,15 @@ public class GameplayUI : MonoBehaviour
 
     public Vector3 notepadActivePos;
     public Vector3 notepadInactivePos;
+    public Vector3 notepadHoverPos;
 
     public Vector3 ticketActivePos;
     public Vector3 ticketInactivePos;
 
     public Vector3 carriageMapActivePos;
     public Vector3 carriageMapInactivePos;
+
+    public Bounds notepadHoverBounds;
 
     public State curState;
     public float transitionTime;
@@ -78,16 +81,16 @@ public class GameplayUI : MonoBehaviour
     }
     private void Update()
     {
-        SelectState();
+        ChooseState();
         UpdateState();
     }
-    private void SelectState()
+    private void ChooseState()
     {
         if (spyStats.curState == SpyBrain.State.Notepad || notepad.curState != Notepad.State.Stationary)
         {
             SetState(State.Notepad);
         }
-        else if (spyStats.curState == SpyBrain.State.Ticket)
+        else if (SpyBrain.checkingTicket)
         {
             SetState(State.Ticket);
         }
@@ -113,7 +116,6 @@ public class GameplayUI : MonoBehaviour
         {
             case State.Notepad:
             {
-                MoveBackground(backgroundActivePos);
                 notepad.gameObject.SetActive(true);
                 notepad.enabled = true;
                 InitNaturalPos(notepadActivePos);
@@ -122,7 +124,6 @@ public class GameplayUI : MonoBehaviour
             break;
             case State.Ticket:
             {
-                MoveBackground(backgroundActivePos);
                 
                 ticket.gameObject.SetActive(true);
                 InitNaturalPos(ticketActivePos);
@@ -137,7 +138,6 @@ public class GameplayUI : MonoBehaviour
             break;
             case State.CarriageMap:
             {
-                MoveBackground(backgroundActivePos);
 
                 carriageMap.gameObject.SetActive(true);
                 ctsCarriageMap?.Cancel();
@@ -146,7 +146,6 @@ public class GameplayUI : MonoBehaviour
             break;
             case State.None:
             {
-                MoveBackground(backgroundInactivePos);
             }
             break;
         }
@@ -174,7 +173,32 @@ public class GameplayUI : MonoBehaviour
             break;
             case State.None:
             {
+                notepadHoverBounds.center = notepad.transform.position;
+                if (CursorController.IsInsideBounds(notepadHoverBounds))
+                {
+                    notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadHoverPos, Time.deltaTime * moveDamp);
+                    if (CursorController.IsInsideBounds(notepad.activePage.exitButton_renderer.bounds))
+                    {
+                        if (playerInputs.mouseLeftDown)
+                        {
+                            SpyBrain.ToggleNotepad(true);
+                            notepad.activePage.InvertExitButton(invert: false, pointDown: false);
+                        }
+                        else
+                        {
+                            notepad.activePage.InvertExitButton(invert: true, pointDown: false);
+                        }
+                    }
+                    else
+                    {
 
+                        notepad.activePage.InvertExitButton(invert: false, pointDown: true);
+                    }
+                }
+                else
+                {
+                    notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadInactivePos, Time.deltaTime * moveDamp);
+                }
             }
             break;
         }
@@ -226,30 +250,23 @@ public class GameplayUI : MonoBehaviour
     {
         naturalMovePos = activePos;
     }
-    private void MoveBackground(Vector3 nextPos)
-    {
-        ctsBackground?.Cancel();
-        ctsBackground = new CancellationTokenSource();
-
-        Moving(background.transform, ctsBackground.Token, nextPos, backgroundMoveDamp).Forget();
-    }
     private void MoveNotepad(Vector3 nextPos)
     {
         ctsNotepad?.Cancel();
         ctsNotepad = new CancellationTokenSource();
-        Moving(notepad.transform, ctsNotepad.Token, nextPos, moveDamp).Forget();
+        Moving(notepad, ctsNotepad.Token, nextPos, moveDamp).Forget();
     }
     private void MoveTicket(Vector3 nextPos)
     {
         ctsTicket?.Cancel();
         ctsTicket = new CancellationTokenSource();
-        Moving(ticket.transform, ctsTicket.Token, nextPos, moveDamp).Forget();
+        Moving(ticket, ctsTicket.Token, nextPos, moveDamp).Forget();
     }
     private void MoveCarriageMap(Vector3 nextPos)
     {
         ctsCarriageMap?.Cancel();
         ctsCarriageMap = new CancellationTokenSource();
-        Moving(carriageMap.transform, ctsCarriageMap.Token, nextPos, moveDamp).Forget();
+        Moving(carriageMap, ctsCarriageMap.Token, nextPos, moveDamp).Forget();
     }
     private void InitPOVUI()
     {
@@ -257,17 +274,24 @@ public class GameplayUI : MonoBehaviour
         notepad.gameObject.SetActive(true);
 
         float halfCamWidth = cameraStats.worldWidth * 0.5f;
+        float halfCamHeight = cameraStats.worldHeight * 0.5f;
 
         backgroundActivePos = background.localPosition;
         backgroundInactivePos = new Vector3(halfCamWidth, background.localPosition.y, background.localPosition.z);
         background.localPosition = backgroundInactivePos;
 
         notepadActivePos = notepad.transform.localPosition;
-        notepadInactivePos = new Vector3(halfCamWidth + notepad.boundsOffset.x, notepad.transform.localPosition.y - cameraStats.camWorldBottom - notepad.boundsOffset.y, notepad.transform.localPosition.z);
+        float binderBoundsOffsetX = notepad.bindingRings_renderer.bounds.max.x - notepad.transform.position.x;
+        float binderBoundsOffsetY = notepad.transform.position.y - notepad.bindingRings_renderer.bounds.min.y;
+        notepadInactivePos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + binderBoundsOffsetY, notepad.transform.localPosition.z);
+        notepadHoverPos = new Vector3(notepadInactivePos.x, notepadInactivePos.y + notepad.bindingRings_renderer.bounds.size.y, notepadInactivePos.z);
+        float ySize = notepad.page_prefab.paper_renderer.bounds.size.y;
+        Vector3 hoverSize = new Vector3(notepad.bindingRings_renderer.bounds.size.x, ySize, 0.2f);
+        notepadHoverBounds = new Bounds(notepadHoverPos, hoverSize);
         notepad.transform.localPosition = notepadInactivePos;
 
         ticketActivePos = ticket.transform.localPosition;
-        ticketInactivePos = new Vector3(halfCamWidth, ticket.transform.localPosition.y - cameraStats.camWorldBottom - ticket.totalBounds.size.y, ticket.transform.localPosition.z);
+        ticketInactivePos = new Vector3(halfCamWidth, -halfCamHeight + ticket.totalBounds.size.y, ticket.transform.localPosition.z);
         ticket.transform.localPosition = ticketInactivePos;
 
         carriageMapActivePos = carriageMap.transform.localPosition;
@@ -277,9 +301,7 @@ public class GameplayUI : MonoBehaviour
         transitionTime = -Mathf.Log(TARGET_MARGIN) / moveDamp;
 
         ticket.gameObject.SetActive(false);
-        notepad.gameObject.SetActive(false);
         carriageMap.gameObject.SetActive(false);
-
     }
     private void InitTicketIcons()
     {
@@ -298,6 +320,7 @@ public class GameplayUI : MonoBehaviour
     }
     private void SetNewTicketIcons()
     {
+        SpyBrain.ToggleTicketCheckAbility(toggle: false);
         curTicketIcon = ticketIcons[0];
         SettingNewTicketIcons().Forget();
     }
@@ -317,6 +340,8 @@ public class GameplayUI : MonoBehaviour
             curTicketIconIndex++;
             await UniTask.WaitForSeconds(TICKET_ICON_APPEARING_DURATION);
         }
+
+        SpyBrain.ToggleTicketCheckAbility(toggle: true);
     }
     private async UniTask DisappearingTicketIcons()
     {
@@ -330,23 +355,31 @@ public class GameplayUI : MonoBehaviour
             await UniTask.WaitForSeconds(TICKET_ICON_APPEARING_DURATION);
         }
     }
-    private async UniTask Moving(Transform transform, CancellationToken token, Vector3 nextPos, float damp)
+    private async UniTask Moving(Behaviour behaviour, CancellationToken token, Vector3 nextPos, float damp)
     {
         float elapsedTime = 0f;
-        transform.gameObject.SetActive(true);
+
+        behaviour.enabled = true;
         try
         {
             while (elapsedTime < transitionTime)
             {
-                transform.localPosition = Vector3.Lerp(transform.localPosition, nextPos, Time.deltaTime * damp);
+                behaviour.transform.localPosition = Vector3.Lerp(behaviour.transform.localPosition, nextPos, Time.deltaTime * damp);
                 elapsedTime += Time.deltaTime;
                 await UniTask.Yield(token);
             }
-            transform.localPosition = nextPos;
-            if (curState == State.None) transform.gameObject.SetActive(false);
+            behaviour.transform.localPosition = nextPos;
+            if (curState == State.None) behaviour.enabled = false;
         }
         catch(OperationCanceledException)
         {
         }
+    }
+
+    private void OnDrawGizmos()
+    {
+        Gizmos.color = Color.yellowNice;
+
+        Gizmos.DrawWireCube(notepadHoverBounds.center, notepadHoverBounds.size);
     }
 }

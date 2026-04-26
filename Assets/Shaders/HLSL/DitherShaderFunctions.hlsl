@@ -97,7 +97,7 @@ float1 BayerX4(float value, float2 pixelCoord)
 
     return step(bayer, value);
 }
-float BayerX(int y, int stepSize)
+float BayerX(half y, half stepSize)
 {
     int pattern = y % stepSize;
     return pattern == 0 ? 0.0 : 1.0;

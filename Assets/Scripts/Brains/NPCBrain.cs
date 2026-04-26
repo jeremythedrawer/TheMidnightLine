@@ -31,12 +31,14 @@ public class NPCBrain : MonoBehaviour
 
     [Header("Generated")]
     public AtlasSO atlas;
+    public StationSO boardingStation;
+    public StationSO disembarkingStation;
+    public NPCBehaviourContextSO curBehaviourContext;
+
     public SlideDoors curSlideDoors;
     public CancellationTokenSource ctsFade;
     public Carriage curCarriage;
-
-    public StationSO boardingStation;
-    public StationSO disembarkingStation;
+    public VisualEffect curGlyph;
 
     public Vector2 curSpriteMarkerLocalPosition;
     public float targetXVelocity;
@@ -48,12 +50,15 @@ public class NPCBrain : MonoBehaviour
     public float atlasIndexClock;
     public float move;
 
+    public Behaviours[] behaviourFlags;
     public Behaviours curBehaviour;
     public NPCProfile profile;
+    public AtlasClip curClip;
         
     public NPCState curState;
     public NPCPath curPath;
     public Role role;
+
     public int smokerRoomIndex;
     public int seatPosIndex;
     public int selectedProfileIndex;
@@ -75,13 +80,9 @@ public class NPCBrain : MonoBehaviour
     public int seatQueueIndex;
     public int boardTrainQueueIndex;
     public int disembarkTrainQueueIndex;
-
-    public Behaviours[] behaviourFlags;
     public int behaviourFlagCount;
 
-    public AtlasClip curClip;
-    public NPCBehaviourContextSO curBehaviourContext;
-    public VisualEffect curGlyph;
+    public bool isSuspected;
     private void OnEnable()
     {
         gameEventData.OnStationArrival.RegisterListener(PrepareToBoardTrain);

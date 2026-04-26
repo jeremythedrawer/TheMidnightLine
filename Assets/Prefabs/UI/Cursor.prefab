@@ -1,0 +1,114 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &7340561451085915913
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2355562423327177422}
+  - component: {fileID: 2498722044689734534}
+  - component: {fileID: 6855063242500057171}
+  m_Layer: 0
+  m_Name: Cursor
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2355562423327177422
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7340561451085915913}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 300.56, y: 3.39, z: -39}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2498722044689734534
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7340561451085915913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 4
+  batchKey:
+    material: {fileID: 2100000, guid: 6753aeb7c8b382e4db3d646b568b71cf, type: 2}
+    depthOrder: -39
+  atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 2
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  scrollSize: 0
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.08203125, y: 0.10546875, z: 0.2421875, w: 0.8828125}
+    uvPivot: {x: 0, y: 1}
+    worldSize: {x: 0.11666667, y: 0.15, z: 1}
+    index: 2
+  bounds:
+    m_Center: {x: 300.67667, y: 3.24, z: -39}
+    m_Extent: {x: 0.11666667, y: 0.15000002, z: 0.1}
+  worldPivotAndSize: {x: 0, y: 0.30000004, z: 0.23333333, w: 0.30000004}
+  uvSizeAndPosition: {x: 0.08203125, y: 0.10546875, z: 0.2421875, w: 0.8828125}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.11666667, y: -0.15000002, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  prevSpriteIndexFlipH: 2
+  prevSpriteIndexFlipV: 2
+  isAnimating: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+--- !u!114 &6855063242500057171
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7340561451085915913}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: ee7f1c6e57269304081aed2808f41e20, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CursorController
+  playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
+  cursorRenderer: {fileID: 2498722044689734534}
+  timer: 0
+  curPos: {x: 0, y: 0, z: 0}
+  active: 0

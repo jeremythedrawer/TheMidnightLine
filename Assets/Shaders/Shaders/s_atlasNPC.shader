@@ -90,8 +90,8 @@ Shader "Custom/s_atlasNPC"
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 ticketCheckColor = BayerX8(spriteData.custom.x,i.positionHCS) * _TicketCheckColor;
-                half3 suspicionColor = BayerX8(spriteData.custom.y, i.positionHCS) * _SuspicionColor;
+                half3 ticketCheckColor = BayerX8(spriteData.custom.x,i.positionHCS.xy) * _TicketCheckColor;
+                half3 suspicionColor = BayerX8(spriteData.custom.y, i.positionHCS.xy) * _SuspicionColor;
 
                 half3 focusColor = lerp(ticketCheckColor, suspicionColor, spriteData.custom.y);
 

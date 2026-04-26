@@ -36,6 +36,7 @@ public class AtlasRenderer : MonoBehaviour
     public float kerning = 1.1f;
     public float spacing = 1;
     public float scrollSize;
+
     [Header("Generated")]
     public Camera cam;
     public SimpleSprite sprite;
@@ -78,6 +79,7 @@ public class AtlasRenderer : MonoBehaviour
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.simpleSprites.Length - 1);
                 sprite = atlas.simpleSprites[spriteIndex];
                 UpdateSpriteInputs(ref sprite);
+                UpdateBounds();
             }
             break;
             
@@ -88,6 +90,7 @@ public class AtlasRenderer : MonoBehaviour
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.motionSprites.Length - 1);
                 sprite = atlas.motionSprites[spriteIndex].sprite;
                 UpdateSpriteInputs(ref sprite);
+                UpdateBounds();
             }
             break;
 
@@ -98,6 +101,7 @@ public class AtlasRenderer : MonoBehaviour
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.slicedSprites.Length - 1);
                 slicedSprite = atlas.slicedSprites[spriteIndex];
                 UpdateSlicedSpriteInputs();
+                UpdateBounds();
             }
             break;
 
@@ -614,16 +618,16 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void AppearPreviewText()
     {
-        AppearingText().Forget();
+        AppearingPreviewText().Forget();
     }
     public void AppearConfirmText()
     {
         for (int i = 0; i < customs.Length; i++)
         {
-            customs[i].x = 0;
+            customs[i].w = 1;
         }
     }
-    private async UniTask AppearingText()
+    private async UniTask AppearingPreviewText()
     {
         float elapsedTime = 0;
         while (elapsedTime < APPEAR_TEXT_TIME)
@@ -631,10 +635,9 @@ public class AtlasRenderer : MonoBehaviour
             elapsedTime += Time.deltaTime;
             float t = elapsedTime / APPEAR_TEXT_TIME;
             t *= 0.5f;
-            t = 1 - t;
             for (int i = 0; i < customs.Length; i++)
             {
-                customs[i].x = t;
+                customs[i].w = t;
             }
             await UniTask.Yield();
         }
