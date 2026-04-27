@@ -90,15 +90,24 @@ Shader "Custom/s_atlasNPC"
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 ticketCheckColor = BayerX8(spriteData.custom.x,i.positionHCS.xy) * _TicketCheckColor;
-                half3 suspicionColor = BayerX8(spriteData.custom.y, i.positionHCS.xy) * _SuspicionColor;
+                half t = saturate((spriteData.custom.x + spriteData.custom.y) * 0.5 - 0.5);
 
-                half3 focusColor = lerp(ticketCheckColor, suspicionColor, spriteData.custom.y);
+                half ticketBayerValue = 1-(spriteData.custom.x - t);
+                half suspicionBayerValue = spriteData.custom.y - t;
+
+                half ticketCheckMask = 1 - BayerX8(ticketBayerValue,i.positionHCS.xy * 0.5);
+                half3 ticketCheckColor =  ticketCheckMask * _TicketCheckColor;
+
+                half suspicionMask = BayerX8(suspicionBayerValue, i.positionHCS.xy * 0.5);
+                half3 suspicionColor = suspicionMask * _SuspicionColor;
+
+
+                half3 focusColor = ticketCheckColor + suspicionColor;
 
                 half bayerValue = color.r * (spriteData.custom.z * 0.1875) + (spriteData.custom.z * 0.125);
                 half hoverColor = (BayerX8(bayerValue, i.positionHCS.xy));
 
-                half3 finalColor = lerp((color.r + hoverColor), (color.r * (1-hoverColor)), color.r) + focusColor;
+                half3 finalColor = color.r + focusColor;
 
                 half alphaValue = (spriteData.custom.a * 0.75);
                 half alpha = BayerX8(color.a - alphaValue, i.positionHCS.xy);

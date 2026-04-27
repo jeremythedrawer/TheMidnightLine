@@ -6,6 +6,7 @@ using static NPC;
 using UnityEngine.VFX;
 using System.Collections.Generic;
 
+
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -80,7 +81,10 @@ public class NPCBrain : MonoBehaviour
     public int boardTrainQueueIndex;
     public int disembarkTrainQueueIndex;
     public int behaviourFlagCount;
+
+
     public bool isSuspected;
+    public bool isClicked;
     private void OnEnable()
     {
         gameEventData.OnStationArrival.RegisterListener(PrepareToBoardTrain);
@@ -554,36 +558,85 @@ public class NPCBrain : MonoBehaviour
     }
     private void AdjustHover()
     {
-        if (!ticketHasBeenChecked) return;
-        if (CursorController.IsInsideBounds(atlasRenderer.bounds) && !NPCManager.stationNameTag.text_renderer.hasText)
+        if (!onTrain) return;
+
+        if (CursorController.IsInsideBounds(atlasRenderer.bounds))
         {
             if (hoverClock < ADJUST_COLOR_TIME)
             {
                 hoverClock += Time.deltaTime;
                 float t = hoverClock / ADJUST_COLOR_TIME;
-                atlasRenderer.custom.z = t;
-                int charCount = Mathf.FloorToInt(t * disembarkingStation.stationName.Length);
-                charCount = Mathf.Clamp(charCount, 0, disembarkingStation.stationName.Length);
 
-                string curStationNameText = disembarkingStation.stationName.Substring(0, charCount);
+                if (ticketHasBeenChecked && !NPCManager.stationNameTag.text_renderer.hasText)
+                {
+                    int charCount = Mathf.FloorToInt(t * disembarkingStation.stationName.Length);
+                    charCount = Mathf.Clamp(charCount, 0, disembarkingStation.stationName.Length);
+                    string curStationNameText = disembarkingStation.stationName.Substring(0, charCount);
+                    NPCManager.stationNameTag.SetText(curStationNameText);
+                }
 
-                NPCManager.stationNameTag.SetText(curStationNameText);
+                float suspicionT = isSuspected ? (1 - (t * 0.5f)) : t * 0.5f;
+                atlasRenderer.custom.y = suspicionT;
             }
+
+            if (!isClicked)
+            {
+                if (playerInputs.mouseLeftDown)
+                {
+                    isClicked = true;
+
+                    if (!isSuspected)
+                    {
+                        isSuspected = true;
+                        atlasRenderer.custom.y = 1;
+                    }
+                    else
+                    {
+                        isSuspected = false;
+                        atlasRenderer.custom.y = 0;
+                    }
+                }
+            }
+
             NPCManager.stationNameTag.transform.position = new Vector3(atlasRenderer.bounds.center.x, atlasRenderer.bounds.max.y, 0);
         }
         else if (hoverClock > 0)
         {
             hoverClock -= Time.deltaTime;
             float t = hoverClock / ADJUST_COLOR_TIME;
-            atlasRenderer.custom.z = t;
 
-            int charCount = Mathf.FloorToInt(t * disembarkingStation.stationName.Length);
-            charCount = Mathf.Clamp(charCount, 0, disembarkingStation.stationName.Length);
+            if (ticketHasBeenChecked)
+            {
+                int charCount = Mathf.FloorToInt(t * disembarkingStation.stationName.Length);
+                charCount = Mathf.Clamp(charCount, 0, disembarkingStation.stationName.Length);
 
-            string curStationNameText = disembarkingStation.stationName.Substring(0, charCount);
+                string curStationNameText = disembarkingStation.stationName.Substring(0, charCount);
 
-            NPCManager.stationNameTag.SetText(curStationNameText);
-            NPCManager.stationNameTag.transform.position = new Vector3(atlasRenderer.bounds.center.x, atlasRenderer.bounds.max.y, 0);
+                NPCManager.stationNameTag.SetText(curStationNameText);
+                NPCManager.stationNameTag.transform.position = new Vector3(atlasRenderer.bounds.center.x, atlasRenderer.bounds.max.y, 0);
+            }
+
+
+            if (!isClicked)
+            {
+                float suspicionT = isSuspected ? (1 - (t * 0.5f)) : t * 0.5f;
+                atlasRenderer.custom.y = suspicionT;
+            }
+            else
+            {
+                if (!isSuspected)
+                {
+                    atlasRenderer.custom.y = 0;
+                }
+                else
+                {
+                    atlasRenderer.custom.y = 1;
+                }
+            }
+        }
+        else if (isClicked)
+        {
+            isClicked = false;
         }
     }
     private void AdjustColor(NPCMark mark)

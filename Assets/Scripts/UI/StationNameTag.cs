@@ -33,5 +33,14 @@ public class StationNameTag : MonoBehaviour
         backgroundLocalPos.x = -text_renderer.bounds.extents.x - PADDING;
         background_renderer.transform.localPosition = backgroundLocalPos;
         background_renderer.SetNineSliceWidthFromWorldSpace(text_renderer.bounds.size.x + PADDING * 2);
+
+        if (!text_renderer.hasText)
+        {
+            background_renderer.enabled = false;
+        }
+        else
+        {
+            background_renderer.enabled = true;
+        }
     }
 }
