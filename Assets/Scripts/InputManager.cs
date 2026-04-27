@@ -21,8 +21,11 @@ public class InputManager : MonoBehaviour
     InputAction notepadFlipPage_action;
     InputAction ticket_action;
     InputAction interact_action;
+
     InputAction mouseLeftDown_action;
     InputAction mouseLeftPress_action;
+    InputAction mouseRightDown_action;
+
     Action<string> OnDeviceChanged;
 
     public static InputDevice curDevice;
@@ -49,6 +52,7 @@ public class InputManager : MonoBehaviour
         mouseLeftDown_action = playerInput.actions["Player/MouseLeftDown"];
         mouseLeftPress_action = playerInput.actions["Player/MouseLeftPress"];
 
+        mouseRightDown_action = playerInput.actions["Player/MouseRightDown"];
 
         move_action.performed += context =>
         {
@@ -87,6 +91,8 @@ public class InputManager : MonoBehaviour
         };
 
         mouseLeftDown_action.started += context => playerInputs.mouseLeftDown = true;
+        mouseRightDown_action.started += context => playerInputs.mouseRightDown = true;
+
 
         mouseLeftPress_action.performed += context => playerInputs.mouseLeftHold = true;
         mouseLeftPress_action.canceled += context =>
@@ -146,6 +152,7 @@ public class InputManager : MonoBehaviour
         playerInputs.interact = false;
         playerInputs.mouseLeftDown = false;
         playerInputs.mouseLeftUp = false;
+        playerInputs.mouseRightDown = false;
         playerInputs.notepadChooseStationAndFlip.x = 0;
         playerInputs.notepadChooseStationAndFlip.y = 0;
     }

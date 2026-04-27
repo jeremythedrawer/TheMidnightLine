@@ -88,6 +88,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "MouseRightDown",
+                    "type": "Button",
+                    "id": "73571761-00bf-4c54-b882-0dbeac47e502",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "MouseLeftPress",
                     "type": "Button",
                     "id": "ff3a6989-e3be-4b6d-89f9-ccdf399cf291",
@@ -381,6 +390,17 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "MouseLeftDown",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "675c6d37-bb60-46e5-ad6e-f388667b6d0e",
+                    "path": "<Mouse>/rightButton",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardAndMouse",
+                    "action": "MouseRightDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

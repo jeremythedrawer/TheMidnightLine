@@ -560,7 +560,7 @@ public class Notepad : MonoBehaviour
     private void CreateNPCProfiles()
     {
         List<NPCProfile> totalNPCProfiles = new List<NPCProfile>();
-        List<NPCProfile> duplicateBehaviourProfiles = new List<NPCProfile>();
+        List<NPCProfile> bystanderProfiles = new List<NPCProfile>();
 
         for (int i = 0; i < trip.npc_prefabsArray.Length; i++)
         {
@@ -581,7 +581,6 @@ public class Notepad : MonoBehaviour
                     flagCount++;
                 }
             }
-
             for (int j = 0; j < flagCount; j++)
             {
                 Behaviours firstBehaviour = (Behaviours)validFlags[j];
@@ -603,7 +602,7 @@ public class Notepad : MonoBehaviour
 
                     if (k == j)
                     {
-                        duplicateBehaviourProfiles.Add(npcProfile);
+                        bystanderProfiles.Add(npcProfile);
                     }
                     else
                     {
@@ -614,7 +613,7 @@ public class Notepad : MonoBehaviour
         }
 
         List<Page> pageList = new List<Page>();
-
+        
         for (int i = 0; i < trip.stationsDataArray.Length; i++)
         {
             StationSO station = trip.stationsDataArray[i];
@@ -628,8 +627,22 @@ public class Notepad : MonoBehaviour
                 NPCProfile traitorProfile = totalNPCProfiles[randProfileIndex];
                 traitorProfile.boardingStationIndex = i;
                 traitorProfile.disembarkingStationIndex = UnityEngine.Random.Range(i + trip.minStationsTraitorsTravel, trip.stationsDataArray.Length - 1);
-                totalNPCProfiles.RemoveAt(randProfileIndex);
                 station.traitorProfiles[j] = traitorProfile;
+
+                totalNPCProfiles.Remove(traitorProfile);
+                for (int k = totalNPCProfiles.Count - 1; k >=0 ; k--)
+                {
+                    Debug.Log(k + " | " + totalNPCProfiles.Count);
+                    if (totalNPCProfiles[k].npcPrefabIndex == traitorProfile.npcPrefabIndex)
+                    {
+                        bystanderProfiles.Add(totalNPCProfiles[k]);
+                        totalNPCProfiles.Remove(totalNPCProfiles[k]);
+                    }
+                }
+
+
+
+
 
                 Vector3 pagePos = bindingRings_renderer.transform.position + Vector3.forward;
                 if (createPageIndex != 0) pagePos.z += 2;
@@ -649,12 +662,12 @@ public class Notepad : MonoBehaviour
         activePage = pages[activePageIndex];
         lastPageIndex = pages.Length - 1;
 
-        totalNPCProfiles.AddRange(duplicateBehaviourProfiles);
+        totalNPCProfiles.AddRange(bystanderProfiles);
 
         for (int i = 0; i < trip.stationsDataArray.Length; i++)
         {
             StationSO station = trip.stationsDataArray[i];
-            int bystandersToSpawnAtStation = (int)(station.busynessFactor * (float)totalNPCProfiles.Count);
+            int bystandersToSpawnAtStation = (int)(station.busynessFactor * totalNPCProfiles.Count);
             station.bystanderProfiles = new NPCProfile[bystandersToSpawnAtStation];
 
             for (int j = 0; j < bystandersToSpawnAtStation; j++)

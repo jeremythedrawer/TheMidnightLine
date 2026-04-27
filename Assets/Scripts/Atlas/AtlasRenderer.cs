@@ -551,7 +551,7 @@ public class AtlasRenderer : MonoBehaviour
             bounds.size = new Vector3(width, maxY, 0f);
             boundsOffset = new Vector3(minX + width * 0.5f, maxY * 0.5f, 0f);
             bounds.center = transform.position + boundsOffset;
-            hasText = false;
+            hasText = true;
         }
     }
     public Bounds GetTextBounds(string inputText)

@@ -4,7 +4,9 @@ using UnityEngine;
 public class ColorsSO : ScriptableObject
 {
     public Color32 mainColor;
+
     public Color32 ticketCheckColor;
     public Color32 suspicionColor;
+    public Color32 ruledOutColor;
 
 }

@@ -43,7 +43,7 @@ Shader "Custom/s_atlasNPC"
 
             float3 _TicketCheckColor;
             float3 _SuspicionColor;
-
+            float3 _RuledOutColor;
 
             Varyings vert(Attributes v)
             {
@@ -88,24 +88,28 @@ Shader "Custom/s_atlasNPC"
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;
                 i.uv += uvPos;
+                
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half t = saturate((spriteData.custom.x + spriteData.custom.y) * 0.5 - 0.5);
+                half t = saturate((spriteData.custom.x + spriteData.custom.y + spriteData.custom.z) * 0.5 - 0.5);
 
                 half ticketBayerValue = 1-(spriteData.custom.x - t);
-                half suspicionBayerValue = spriteData.custom.y - t;
 
-                half ticketCheckMask = 1 - BayerX8(ticketBayerValue,i.positionHCS.xy * 0.5);
+                half suspicionBayerValue = spriteData.custom.y - t;
+                half ruledOutBayerBalue = spriteData.custom.z - t;
+
+                int coordValue = i.positionHCS.y * 0.5;
+
+                half ticketCheckMask = 1 - BayerX8(ticketBayerValue, coordValue);
                 half3 ticketCheckColor =  ticketCheckMask * _TicketCheckColor;
 
-                half suspicionMask = BayerX8(suspicionBayerValue, i.positionHCS.xy * 0.5);
+                half suspicionMask = BayerX8(suspicionBayerValue, coordValue);
                 half3 suspicionColor = suspicionMask * _SuspicionColor;
 
+                half ruledOutMask = BayerX8(ruledOutBayerBalue, coordValue);
+                half3 ruledOutColor = ruledOutMask * _RuledOutColor;
 
-                half3 focusColor = ticketCheckColor + suspicionColor;
-
-                half bayerValue = color.r * (spriteData.custom.z * 0.1875) + (spriteData.custom.z * 0.125);
-                half hoverColor = (BayerX8(bayerValue, i.positionHCS.xy));
+                half3 focusColor = ticketCheckColor + suspicionColor + ruledOutColor;
 
                 half3 finalColor = color.r + focusColor;
 

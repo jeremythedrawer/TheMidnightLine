@@ -31,8 +31,6 @@ public class StationNameTag : MonoBehaviour
         text_renderer.SetText(text);
 
         backgroundLocalPos.x = -text_renderer.bounds.extents.x - PADDING;
-        background_renderer.transform.localPosition = backgroundLocalPos;
-        background_renderer.SetNineSliceWidthFromWorldSpace(text_renderer.bounds.size.x + PADDING * 2);
 
         if (!text_renderer.hasText)
         {
@@ -41,6 +39,8 @@ public class StationNameTag : MonoBehaviour
         else
         {
             background_renderer.enabled = true;
+            background_renderer.transform.localPosition = backgroundLocalPos;
+            background_renderer.SetNineSliceWidthFromWorldSpace(text_renderer.bounds.size.x + PADDING * 2);
         }
     }
 }

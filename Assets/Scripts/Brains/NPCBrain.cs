@@ -50,13 +50,13 @@ public class NPCBrain : MonoBehaviour
     public float alphaClock;
     public float hoverClock;
 
-    public Behaviours[] behaviourFlags;
     public Behaviours curBehaviour;
     public NPCProfile profile;
     public AtlasClip curClip;
         
     public NPCState curState;
     public NPCPath curPath;
+    public NPCMark curMark;
     public Role role;
 
     public int smokerRoomIndex;
@@ -80,10 +80,7 @@ public class NPCBrain : MonoBehaviour
     public int seatQueueIndex;
     public int boardTrainQueueIndex;
     public int disembarkTrainQueueIndex;
-    public int behaviourFlagCount;
 
-
-    public bool isSuspected;
     public bool isClicked;
     private void OnEnable()
     {
@@ -106,7 +103,6 @@ public class NPCBrain : MonoBehaviour
         curPath = NPCPath.ToStandAtStation;
 
         atlasRenderer.UpdateDepthRealtime((int)transform.position.z);
-        SetBehaviourFlags();
         smokerRoomIndex = -1; //NOTE: -1 is used as a condition to find a smokers room in the smoker state
         targetAlpha = 1;
     }
@@ -116,7 +112,7 @@ public class NPCBrain : MonoBehaviour
         UpdateStates();
         UpdatePath();
         AdjustAlpha();
-        AdjustHover();
+        AdjustFocusColors();
     }
     private void FixedUpdate()
     {
@@ -152,7 +148,7 @@ public class NPCBrain : MonoBehaviour
                 behaviourClock += Time.deltaTime;
                 if (behaviourClock > stateDuration)
                 {
-                    PickRandomBehaviour();
+                    PickNextBehaviour();
                 }
             }
             break;
@@ -198,7 +194,7 @@ public class NPCBrain : MonoBehaviour
                 {
                     atlasRenderer.PlayClip(ref curClip);
                 }
-                    behaviourClock += Time.deltaTime;
+                behaviourClock += Time.deltaTime;
 
                 if (behaviourClock > stateDuration) behaving = false;
             }
@@ -299,7 +295,7 @@ public class NPCBrain : MonoBehaviour
             case NPCState.TicketCheck:
             {
                 targetDist = targetXPos - transform.position.x;
-                AdjustColor(NPCMark.TicketCheck);
+                AdjustTicketCheckColor();
                 ticketHasBeenChecked = true;
 
             }
@@ -327,7 +323,6 @@ public class NPCBrain : MonoBehaviour
 
                 if (newState != NPCState.TicketCheck)
                 {
-                    curBehaviour = 0;
                     behaviourClock = 0;
                 }
 
@@ -556,7 +551,7 @@ public class NPCBrain : MonoBehaviour
             }
         }
     }
-    private void AdjustHover()
+    private void AdjustFocusColors()
     {
         if (!onTrain) return;
 
@@ -575,30 +570,71 @@ public class NPCBrain : MonoBehaviour
                     NPCManager.stationNameTag.SetText(curStationNameText);
                 }
 
-                float suspicionT = isSuspected ? (1 - (t * 0.5f)) : t * 0.5f;
-                atlasRenderer.custom.y = suspicionT;
-            }
-
-            if (!isClicked)
-            {
-                if (playerInputs.mouseLeftDown)
+                switch(curMark)
                 {
-                    isClicked = true;
+                    case NPCMark.Suspected:
+                    {
+                        atlasRenderer.custom.y = 1 - (t * 0.5f);
+                        atlasRenderer.custom.z = t * 0.5f;
+                    }
+                    break;
 
-                    if (!isSuspected)
+                    case NPCMark.RuledOut:
                     {
-                        isSuspected = true;
-                        atlasRenderer.custom.y = 1;
+                        atlasRenderer.custom.z = 1 - (t * 0.5f);
+                        atlasRenderer.custom.y = t * 0.5f;
                     }
-                    else
+                    break;
+
+                    case NPCMark.None:
                     {
-                        isSuspected = false;
-                        atlasRenderer.custom.y = 0;
+                        atlasRenderer.custom.y = t * 0.5f;
+                        atlasRenderer.custom.z = t * 0.5f;
+
                     }
+                    break;
                 }
             }
 
-            NPCManager.stationNameTag.transform.position = new Vector3(atlasRenderer.bounds.center.x, atlasRenderer.bounds.max.y, 0);
+            if (playerInputs.mouseLeftDown)
+            {
+                isClicked = true;
+
+                if (curMark != NPCMark.Suspected)
+                {
+                    curMark = NPCMark.Suspected;
+                    atlasRenderer.custom.y = 1;
+                    atlasRenderer.custom.z = 0;
+                }
+                else
+                {
+                    curMark = NPCMark.None;
+                    atlasRenderer.custom.y = 0;
+                    atlasRenderer.custom.z = 0;
+                }
+            }
+            else if (playerInputs.mouseRightDown)
+            {
+                isClicked = true;
+
+                if (curMark != NPCMark.RuledOut)
+                {
+                    curMark = NPCMark.RuledOut;
+                    atlasRenderer.custom.z = 1;
+                    atlasRenderer.custom.y = 0;
+                }
+                else
+                {
+                    curMark = NPCMark.None;
+                    atlasRenderer.custom.y = 0;
+                    atlasRenderer.custom.z = 0;
+                }
+            }
+
+            if (ticketHasBeenChecked)
+            {
+                NPCManager.stationNameTag.transform.position = new Vector3(atlasRenderer.bounds.center.x, atlasRenderer.bounds.max.y, 0);
+            }
         }
         else if (hoverClock > 0)
         {
@@ -616,22 +652,54 @@ public class NPCBrain : MonoBehaviour
                 NPCManager.stationNameTag.transform.position = new Vector3(atlasRenderer.bounds.center.x, atlasRenderer.bounds.max.y, 0);
             }
 
+            switch (curMark)
+            {
+                case NPCMark.Suspected:
+                {
+                    if (isClicked)
+                    {
+                        atlasRenderer.custom.y = 1;
+                        atlasRenderer.custom.z = 0;
+                    }
+                    else
+                    {
+                        atlasRenderer.custom.y = 1 - (t * 0.5f);
+                        atlasRenderer.custom.z = t * 0.5f;
+                    }
+                }
+                break;
 
-            if (!isClicked)
-            {
-                float suspicionT = isSuspected ? (1 - (t * 0.5f)) : t * 0.5f;
-                atlasRenderer.custom.y = suspicionT;
-            }
-            else
-            {
-                if (!isSuspected)
+                case NPCMark.RuledOut:
                 {
-                    atlasRenderer.custom.y = 0;
+                    if (isClicked)
+                    {
+                        atlasRenderer.custom.z = 1;
+                        atlasRenderer.custom.y = 0;
+
+                    }
+                    else
+                    {
+                        atlasRenderer.custom.z = 1 - (t * 0.5f);
+                        atlasRenderer.custom.y = t * 0.5f;
+                    }
                 }
-                else
+                break;
+
+                case NPCMark.None:
                 {
-                    atlasRenderer.custom.y = 1;
+                    if (isClicked)
+                    {
+                        atlasRenderer.custom.y = 0;
+                        atlasRenderer.custom.z = 0;
+                    }
+                    else
+                    {
+                        atlasRenderer.custom.y = t * 0.5f;
+                        atlasRenderer.custom.z = t * 0.5f;
+                    }
+
                 }
+                break;
             }
         }
         else if (isClicked)
@@ -639,22 +707,9 @@ public class NPCBrain : MonoBehaviour
             isClicked = false;
         }
     }
-    private void AdjustColor(NPCMark mark)
+    private void AdjustTicketCheckColor()
     {
-        switch(mark)
-        { 
-            case NPCMark.TicketCheck:
-            {
-                AdjustingTicketCheckColor().Forget();
-            }
-            break;
-
-            case NPCMark.Suspicion:
-            {
-                AdjustingSuspicionColor().Forget();
-            }
-            break;
-        }
+        AdjustingTicketCheckColor().Forget();
     }
     private async UniTask AdjustingTicketCheckColor()
     {
@@ -668,19 +723,6 @@ public class NPCBrain : MonoBehaviour
         }
 
         atlasRenderer.custom.x = 1;
-    }
-    private async UniTask AdjustingSuspicionColor()
-    {
-        float elapsed = 0;
-
-        while (elapsed < ADJUST_COLOR_TIME)
-        {
-            elapsed += Time.deltaTime;
-            await UniTask.Yield();
-            atlasRenderer.custom.y = elapsed / ADJUST_COLOR_TIME;
-        }
-
-        atlasRenderer.custom.y = 1;
     }
     public void BoardTrain()
     {
@@ -782,35 +824,51 @@ public class NPCBrain : MonoBehaviour
                 curClip = atlas.clipDict[(int)standingMotion];
             }
             break;
+
+            case NPCPath.SittingInTrain:
+            case NPCPath.SittingAtStation:
+            {
+                NPCMotion sittingMotion = RandomIdleMotion(NPCMotion.SittingBlinking, NPCMotion.SittingBreathing);
+                curClip = atlas.clipDict[(int)sittingMotion];
+            }
+            break;
+
+            case NPCPath.StandingInTrain:
+            case NPCPath.StandingAtStation:
+            {
+                NPCMotion standingMotion = RandomIdleMotion(NPCMotion.StandingBlinking, NPCMotion.StandingBreathing);
+                curClip = atlas.clipDict[(int)standingMotion];
+            }
+            break;
         }
     }
-    private void PickRandomBehaviour()
+    private void PickNextBehaviour()
     {
         behaviourClock = 0;
         if (!onTrain || disembarking) return;
 
-        curBehaviour = behaviourFlags[UnityEngine.Random.Range(0, behaviourFlagCount)];
-        curBehaviourContext = npcData.behaviourContextDict[curBehaviour];
+        int maxBits = 32;
 
-        if (curBehaviourContext.pathToTake != NPCPath.None)
-        {
-            SetPath(curBehaviourContext.pathToTake);
-        }
-        behaving = true;
-    }
-    private void SetBehaviourFlags()
-    {
-        int behaviourValue = (int)profile.behaviours;
-        behaviourFlags = new Behaviours[32];
-        behaviourFlagCount = 0;
+        // Note: Get current bit index
+        int currentIndex = (int)Mathf.Log((int)curBehaviour, 2);
 
-        for (int i = 0; i < behaviourFlags.Length; i++)
+        for (int i = 1; i <= maxBits; i++)
         {
-            int flag = 1 << i;
-            if ((behaviourValue & flag) != 0)
+            int nextIndex = (currentIndex + i) % maxBits;
+            int nextBit = 1 << nextIndex;
+
+            if ((profile.behaviours & (Behaviours)nextBit) != 0)
             {
-                behaviourFlags[behaviourFlagCount] = (Behaviours)flag;
-                behaviourFlagCount++;
+                curBehaviour = (Behaviours)nextBit;
+                curBehaviourContext = npcData.behaviourContextDict[curBehaviour];
+
+                if (curBehaviourContext.pathToTake != NPCPath.None)
+                {
+                    SetPath(curBehaviourContext.pathToTake);
+                }
+
+                behaving = true;
+                return;
             }
         }
     }

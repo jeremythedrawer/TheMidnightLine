@@ -43,7 +43,8 @@ public static class NPC
     {
         None,
         TicketCheck,
-        Suspicion,
+        Suspected,
+        RuledOut,
     }
     [Flags] public enum Behaviours
     {

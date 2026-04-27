@@ -8,6 +8,7 @@ public class ColorPicker : MonoBehaviour
     {
         Shader.SetGlobalColor("_TicketCheckColor", colorsSO.ticketCheckColor);
         Shader.SetGlobalColor("_SuspicionColor", colorsSO.suspicionColor);
+        Shader.SetGlobalColor("_RuledOutColor", colorsSO.ruledOutColor);
     }
 
     private void Update()
@@ -15,6 +16,7 @@ public class ColorPicker : MonoBehaviour
 #if UNITY_EDITOR
         Shader.SetGlobalColor("_TicketCheckColor", colorsSO.ticketCheckColor);
         Shader.SetGlobalColor("_SuspicionColor", colorsSO.suspicionColor);
+        Shader.SetGlobalColor("_RuledOutColor", colorsSO.ruledOutColor);
 #endif
     }
 }
