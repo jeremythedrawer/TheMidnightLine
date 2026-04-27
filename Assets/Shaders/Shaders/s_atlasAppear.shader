@@ -1,4 +1,4 @@
-Shader "Custom/s_atlasTicketCheckIcon"
+Shader "Custom/s_atlasAppear"
 {
     Properties
     {
@@ -60,7 +60,7 @@ Shader "Custom/s_atlasTicketCheckIcon"
 
                 objPos *= size * scale;
                 objPos -= pivot;
-                objPos.x += spriteData.custom.y * (1 - spriteData.custom.a);
+                objPos.x += spriteData.custom.y * (spriteData.custom.a);
                 float3 worldPos = float3(position.xy + objPos, position.z);
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
@@ -91,7 +91,7 @@ Shader "Custom/s_atlasTicketCheckIcon"
                 half3 checkedColor = BayerX8(spriteData.custom.x, i.positionHCS) * _TicketCheckColor;
 
                 half3 finalColor = color.rgb + checkedColor;
-                half alpha = BayerX8(color.a * spriteData.custom.a, i.positionHCS.xy);
+                half alpha = BayerX8(color.a - spriteData.custom.a, i.positionHCS.xy);
                 clip(alpha - 0.001);
                 return half4 (finalColor, 1);
             }

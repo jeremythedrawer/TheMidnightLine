@@ -31,8 +31,8 @@ public class TicketIcon : MonoBehaviour
     }
     public void Init()
     {
-        mainTicket.custom.w = 0;
-        stubTicket.custom.w = 0;
+        mainTicket.custom.w = 1;
+        stubTicket.custom.w = 1;
     }
     private async UniTask Checking()
     {
@@ -59,29 +59,14 @@ public class TicketIcon : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             float t = elapsed / USE_TIME;
-            float easeOutT = 1 - Mathf.Pow(t, 0.25f);
+            float easeOutT = Mathf.Pow(t, 0.25f);
             stubTicket.custom.w = easeOutT;
             await UniTask.Yield();
         }
 
-        stubTicket.custom.w = 0;
-    }
-    private async UniTask Appearing()
-    {
-        float elapsed = 0;
-
-        while (elapsed < USE_TIME)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / USE_TIME;
-            mainTicket.custom.w = t;
-            stubTicket.custom.w = t;
-            await UniTask.Yield();
-        }
-        mainTicket.custom.w = 1;
         stubTicket.custom.w = 1;
     }
-    private async UniTask Disappearing()
+    private async UniTask Appearing()
     {
         float elapsed = USE_TIME;
 
@@ -89,17 +74,32 @@ public class TicketIcon : MonoBehaviour
         {
             elapsed -= Time.deltaTime;
             float t = elapsed / USE_TIME;
+            mainTicket.custom.w = t;
+            stubTicket.custom.w = t;
+            await UniTask.Yield();
+        }
+        mainTicket.custom.w = 0;
+        stubTicket.custom.w = 0;
+    }
+    private async UniTask Disappearing()
+    {
+        float elapsed = 0;
+
+        while (elapsed < USE_TIME)
+        {
+            elapsed += Time.deltaTime;
+            float t = elapsed / USE_TIME;
             
-            mainTicket.custom.x = t;
-            mainTicket.custom.x = t;
+            mainTicket.custom.x = 1 - t;
+            mainTicket.custom.x = 1 - t;
 
             mainTicket.custom.w = t;
             stubTicket.custom.w = t;
             
             await UniTask.Yield();
         }
-        mainTicket.custom.w = 0;
-        stubTicket.custom.w = 0;
+        mainTicket.custom.w = 1;
+        stubTicket.custom.w = 1;
         
         mainTicket.custom.x = 0;
         stubTicket.custom.x = 0;

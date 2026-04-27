@@ -14,22 +14,25 @@ public class NPCManager : MonoBehaviour
     public bool npcFindingChair;
     public int totalAgentCount;
 
-    public static Dictionary<VisualEffect, Queue<VisualEffect>> glyphPool;
+    public static Dictionary<VisualEffect, Queue<VisualEffect>> glyph_poolsDict;
+    public static StationNameTag stationNameTag;
     private void Awake()
     {
-        glyphPool = new Dictionary<VisualEffect, Queue<VisualEffect>>();
-    }
 
+    }
     private void Start()
     {
+        glyph_poolsDict = new Dictionary<VisualEffect, Queue<VisualEffect>>();
         npcsData.behaviourContextDict = SetBehaviourContextDictionary();
+        stationNameTag = Instantiate(npcsData.stationNameTag_prefab);
+        stationNameTag.SetText("");
     }
     public static VisualEffect GetGlyph(VisualEffect glyphPrefab, Transform parent)
     {
-        if (!glyphPool.TryGetValue(glyphPrefab, out Queue<VisualEffect> queue))
+        if (!glyph_poolsDict.TryGetValue(glyphPrefab, out Queue<VisualEffect> queue))
         {
             queue = new Queue<VisualEffect>();
-            glyphPool[glyphPrefab] = queue;
+            glyph_poolsDict[glyphPrefab] = queue;
         }
 
         if (queue.Count > 0)
@@ -48,10 +51,10 @@ public class NPCManager : MonoBehaviour
     {
         glyphInstance.Stop();
         glyphInstance.gameObject.transform.parent = null;
-        if(!glyphPool.TryGetValue(glyphPrefab, out Queue<VisualEffect> queue))
+        if(!glyph_poolsDict.TryGetValue(glyphPrefab, out Queue<VisualEffect> queue))
         {
             queue = new Queue<VisualEffect>();
-            glyphPool[glyphPrefab] = queue;
+            glyph_poolsDict[glyphPrefab] = queue;
         }
 
         queue.Enqueue(glyphInstance);

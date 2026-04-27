@@ -1,13 +1,10 @@
 using Cysharp.Threading.Tasks;
 using System;
-using System.Threading;
 using UnityEngine;
 using static Atlas;
 using static NPC;
 using UnityEngine.VFX;
 using System.Collections.Generic;
-using UnityEngine.Rendering;
-
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -36,7 +33,6 @@ public class NPCBrain : MonoBehaviour
     public NPCBehaviourContextSO curBehaviourContext;
 
     public SlideDoors curSlideDoors;
-    public CancellationTokenSource ctsFade;
     public Carriage curCarriage;
     public VisualEffect curGlyph;
 
@@ -49,6 +45,9 @@ public class NPCBrain : MonoBehaviour
     public float targetAlpha;
     public float atlasIndexClock;
     public float move;
+
+    public float alphaClock;
+    public float hoverClock;
 
     public Behaviours[] behaviourFlags;
     public Behaviours curBehaviour;
@@ -81,7 +80,6 @@ public class NPCBrain : MonoBehaviour
     public int boardTrainQueueIndex;
     public int disembarkTrainQueueIndex;
     public int behaviourFlagCount;
-
     public bool isSuspected;
     private void OnEnable()
     {
@@ -96,7 +94,6 @@ public class NPCBrain : MonoBehaviour
     }
     private void Start()
     {
-        ctsFade = new CancellationTokenSource();
         seatPosIndex = int.MaxValue;
         selectedProfileIndex = int.MaxValue;
         atlas = atlasRenderer.atlas;
@@ -107,10 +104,7 @@ public class NPCBrain : MonoBehaviour
         atlasRenderer.UpdateDepthRealtime((int)transform.position.z);
         SetBehaviourFlags();
         smokerRoomIndex = -1; //NOTE: -1 is used as a condition to find a smokers room in the smoker state
-
-        atlasRenderer.custom.w = 1; // NOTE: Setting Alpha to 1
         targetAlpha = 1;
-
     }
     private void Update()
     {
@@ -118,6 +112,7 @@ public class NPCBrain : MonoBehaviour
         UpdateStates();
         UpdatePath();
         AdjustAlpha();
+        AdjustHover();
     }
     private void FixedUpdate()
     {
@@ -125,7 +120,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void ChooseStates()
     {
-        if (ticketIsBeingChecked && !ticketHasBeenChecked)
+        if (ticketIsBeingChecked)
         {
             SetState(NPCState.TicketCheck);
         }
@@ -390,23 +385,19 @@ public class NPCBrain : MonoBehaviour
             {
             }
             break;
-
             case NPCPath.ToSeatInTrain:
             {
 
             }
             break;
-
             case NPCPath.ToStandInTrain:
             {
             }
             break;
-
             case NPCPath.ToSlideDoor:
             {
             }
             break;
-
             case NPCPath.ToSmokerRoom:
             {
             }
@@ -540,18 +531,60 @@ public class NPCBrain : MonoBehaviour
     }
     private void AdjustAlpha()
     {
-        if (spyStats.curGroundLayer != layerSettings.trainLayers.ground || !boardingStation.isFrontOfTrain) return;
-        bool withinLocationBounds = transform.position.z < spyStats.curWorldPos.z && transform.position.x > spyStats.curLocationBounds.min.x && transform.position.x < spyStats.curLocationBounds.max.x;
+        if ((spyStats.curGroundLayer != layerSettings.trainLayers.ground || !boardingStation.isFrontOfTrain) && alphaClock >= ADJUST_COLOR_TIME) return;
+        
+        if (transform.position.z < spyStats.curWorldPos.z && transform.position.x > spyStats.curLocationBounds.min.x && transform.position.x < spyStats.curLocationBounds.max.x)
+        {
+            if (alphaClock < ADJUST_COLOR_TIME)
+            {
+                alphaClock += Time.deltaTime;
+                float t = alphaClock / ADJUST_COLOR_TIME;
+                atlasRenderer.custom.w = t;
+            }
+        }
+        else
+        {
+            if (alphaClock > 0)
+            {
+                alphaClock -= Time.deltaTime;
+                float t = alphaClock / ADJUST_COLOR_TIME;
+                atlasRenderer.custom.w = t;
+            }
+        }
+    }
+    private void AdjustHover()
+    {
+        if (!ticketHasBeenChecked) return;
+        if (CursorController.IsInsideBounds(atlasRenderer.bounds) && !NPCManager.stationNameTag.text_renderer.hasText)
+        {
+            if (hoverClock < ADJUST_COLOR_TIME)
+            {
+                hoverClock += Time.deltaTime;
+                float t = hoverClock / ADJUST_COLOR_TIME;
+                atlasRenderer.custom.z = t;
+                int charCount = Mathf.FloorToInt(t * disembarkingStation.stationName.Length);
+                charCount = Mathf.Clamp(charCount, 0, disembarkingStation.stationName.Length);
 
-        float newAlpha = withinLocationBounds ? 0f : 1f;
+                string curStationNameText = disembarkingStation.stationName.Substring(0, charCount);
 
-        if (targetAlpha == newAlpha) return;
-        targetAlpha = newAlpha;
-        ctsFade?.Cancel();
-        ctsFade?.Dispose();
+                NPCManager.stationNameTag.SetText(curStationNameText);
+            }
+            NPCManager.stationNameTag.transform.position = new Vector3(atlasRenderer.bounds.center.x, atlasRenderer.bounds.max.y, 0);
+        }
+        else if (hoverClock > 0)
+        {
+            hoverClock -= Time.deltaTime;
+            float t = hoverClock / ADJUST_COLOR_TIME;
+            atlasRenderer.custom.z = t;
 
-        ctsFade = new CancellationTokenSource();
-        AdjustingAlpha().Forget();
+            int charCount = Mathf.FloorToInt(t * disembarkingStation.stationName.Length);
+            charCount = Mathf.Clamp(charCount, 0, disembarkingStation.stationName.Length);
+
+            string curStationNameText = disembarkingStation.stationName.Substring(0, charCount);
+
+            NPCManager.stationNameTag.SetText(curStationNameText);
+            NPCManager.stationNameTag.transform.position = new Vector3(atlasRenderer.bounds.center.x, atlasRenderer.bounds.max.y, 0);
+        }
     }
     private void AdjustColor(NPCMark mark)
     {
@@ -568,27 +601,6 @@ public class NPCBrain : MonoBehaviour
                 AdjustingSuspicionColor().Forget();
             }
             break;
-        }
-    }
-    private async UniTask AdjustingAlpha()
-    {
-        float startAlpha = atlasRenderer.custom.w;
-        float elapsed = 0;
-        try
-        {
-            while (elapsed < ADJUST_COLOR_TIME)
-            {
-                elapsed += Time.deltaTime;
-                float t = elapsed / ADJUST_COLOR_TIME;
-
-                atlasRenderer.custom.w = Mathf.Lerp(startAlpha, targetAlpha, t);
-
-                await UniTask.Yield(ctsFade.Token);
-            }
-            atlasRenderer.custom.w = targetAlpha;
-        }
-        catch (OperationCanceledException)
-        {
         }
     }
     private async UniTask AdjustingTicketCheckColor()

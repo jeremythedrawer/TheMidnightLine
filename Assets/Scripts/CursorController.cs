@@ -33,7 +33,7 @@ public class CursorController : MonoBehaviour
     private void LateUpdate()
     {
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
-        if (mouseDelta.sqrMagnitude < MOVE_THRESHOLD)
+        if (mouseDelta.sqrMagnitude < MOVE_THRESHOLD && !playerInputs.mouseLeftHold)
         {
             timer += Time.deltaTime;
 

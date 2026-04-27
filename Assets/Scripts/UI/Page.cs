@@ -124,7 +124,10 @@ public class Page : MonoBehaviour
         chosenStation_renderer.SetText(previewStationText);
         stationNameBounds = chosenStation_renderer.bounds;
         chosenStation_renderer.enabled = true;
-        chosenStation_renderer.AppearPreviewText();
+    }
+    public void UpdatePreviewStationText(bool appear,  ref float clock)
+    {
+        chosenStation_renderer.AppearText(normAmount: 0.5f, appear, ref clock);
     }
     public void InvertExitButton(bool invert, bool pointDown)
     {
@@ -167,7 +170,7 @@ public class Page : MonoBehaviour
                 await UniTask.WaitForSeconds(Notepad.WRITE_LETTER_TIME, cancellationToken: ctsWrite.Token);
                 curStationString = curStationString[..^1];
                 chosenStation_renderer.SetText(curStationString);
-                chosenStation_renderer.AppearConfirmText();
+                chosenStation_renderer.SetTextAlpha(alpha: 0);
             }
         }
         catch (OperationCanceledException) { }
@@ -187,7 +190,7 @@ public class Page : MonoBehaviour
                 curStationString += stationName[curLetterIndex];
                 await UniTask.WaitForSeconds(Notepad.WRITE_LETTER_TIME, cancellationToken: ctsWrite.Token);
                 chosenStation_renderer.SetText(curStationString);
-                chosenStation_renderer.AppearConfirmText();
+                chosenStation_renderer.SetTextAlpha(alpha: 0);
                 curLetterIndex++;
             }
         }

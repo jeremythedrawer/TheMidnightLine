@@ -95,9 +95,15 @@ Shader "Custom/s_atlasNPC"
 
                 half3 focusColor = lerp(ticketCheckColor, suspicionColor, spriteData.custom.y);
 
-                half3 finalColor = color.rgb + focusColor;
-                half alpha = BayerX8(color.a * spriteData.custom.a, i.positionHCS.xy);
+                half bayerValue = color.r * (spriteData.custom.z * 0.1875) + (spriteData.custom.z * 0.125);
+                half hoverColor = (BayerX8(bayerValue, i.positionHCS.xy));
+
+                half3 finalColor = lerp((color.r + hoverColor), (color.r * (1-hoverColor)), color.r) + focusColor;
+
+                half alphaValue = (spriteData.custom.a * 0.75);
+                half alpha = BayerX8(color.a - alphaValue, i.positionHCS.xy);
                 clip(alpha - 0.001);
+
                 return half4 (finalColor, 1);
             }
             ENDHLSL

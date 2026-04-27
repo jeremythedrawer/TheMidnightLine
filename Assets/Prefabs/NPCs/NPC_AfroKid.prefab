@@ -234,6 +234,7 @@ MonoBehaviour:
   kerning: 1.1
   spacing: 1
   scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.04296875, y: 0.14648438, z: 0.0053710938, w: 0.84765625}
@@ -246,7 +247,7 @@ MonoBehaviour:
   worldPivotAndSize: {x: 0.26666665, y: 0, z: 0.4888889, w: 1.6666666}
   uvSizeAndPosition: {x: 0.04296875, y: 0.14648438, z: 0.0053710938, w: 0.84765625}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
   boundsOffset: {x: 0.058333337, y: 0.8361111, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
@@ -282,6 +283,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   npc: {fileID: 11400000, guid: 52a61a80ebb4dde4dadba09e6230cb24, type: 2}
   atlasRenderer: {fileID: 8312574823374561200}
+  stationNameTag_renderer: {fileID: 0}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
@@ -293,10 +295,12 @@ MonoBehaviour:
   rigidBody: {fileID: 118950378541814445}
   boxCollider: {fileID: 7958201747531856237}
   atlas: {fileID: 0}
-  curSlideDoors: {fileID: 0}
-  curCarriage: {fileID: 0}
   boardingStation: {fileID: 0}
   disembarkingStation: {fileID: 0}
+  curBehaviourContext: {fileID: 0}
+  curSlideDoors: {fileID: 0}
+  curCarriage: {fileID: 0}
+  curGlyph: {fileID: 0}
   curSpriteMarkerLocalPosition: {x: 0, y: 0}
   targetXVelocity: 0
   targetXPos: 0
@@ -306,6 +310,9 @@ MonoBehaviour:
   targetAlpha: 0
   atlasIndexClock: 0
   move: 0
+  alphaClock: 0
+  hoverClock: 0
+  behaviourFlags: 
   curBehaviour: 0
   profile:
     fullName: 
@@ -315,6 +322,12 @@ MonoBehaviour:
     coveredMugshotIndex: 0
     uncoveredMugshotIndex: 0
     behaviours: 0
+  curClip:
+    clipName: 
+    keyFrames: []
+    clipType: 0
+    motionIndex: 0
+    time: 0
   curState: 0
   curPath: 0
   role: 0
@@ -335,13 +348,5 @@ MonoBehaviour:
   seatQueueIndex: 0
   boardTrainQueueIndex: 0
   disembarkTrainQueueIndex: 0
-  behaviourFlags: 
   behaviourFlagCount: 0
-  curClip:
-    clipName: 
-    keyFrames: []
-    clipType: 0
-    motionIndex: 0
-    time: 0
-  curBehaviourContext: {fileID: 0}
-  curGlyph: {fileID: 0}
+  isSuspected: 0

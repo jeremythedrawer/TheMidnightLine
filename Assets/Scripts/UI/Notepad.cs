@@ -87,7 +87,7 @@ public class Notepad : MonoBehaviour
     public bool holdingPencil;
     public float totalPencilTime;
     public float curPencilTime;
-
+    public float appearTextClock;
     private void Awake()
     {
         nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
@@ -250,6 +250,7 @@ public class Notepad : MonoBehaviour
                 if (activePage.chosenStationIndex == -1)
                 {
                     activePage.SetPreviewStationText(previewStationIndex);
+                    appearTextClock = AtlasRendering.APPEAR_TEXT_TIME;
                 }
             }
             break;
@@ -497,8 +498,9 @@ public class Notepad : MonoBehaviour
                     previewStationIndex = (previewStationIndex + trip.stationsDataArray.Length) % trip.stationsDataArray.Length;
 
                     activePage.SetPreviewStationText(previewStationIndex);
+                    appearTextClock = AtlasRendering.APPEAR_TEXT_TIME;
                 }
-
+                activePage.UpdatePreviewStationText(appear: true, ref appearTextClock);
                 if (CursorController.IsInsideBounds(activePage.exitButton_renderer.bounds))
                 {
                     if (playerInputs.mouseLeftDown)

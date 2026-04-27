@@ -21,7 +21,7 @@ Shader "Custom/s_matrix"
 		float3 _Color2;
 
 		float _MetersTravelled;
-
+		float _Focus;
 		half4 frag(Varyings input) : SV_TARGET
 		{
 			float rotSpeed = 0.02;
@@ -56,9 +56,11 @@ Shader "Custom/s_matrix"
 			float rays = asin(sinT * pow((sinT * 0.5 + 0.5), 5)) + max(asin(sinT * sinT),0);
 
 			float sunRays = round(saturate(rays - noise + sun + saturate(sun)));
+			
 			float maxPos = BACK_MIN + BACK_SIZE;
 			float skyMask = step(worldPos.z, maxPos);
 			sunRays *= 1 - skyMask;
+			//return sunRays;
 			
 			half4 fogNoiseTex = SAMPLE_TEXTURE2D_X(_NoiseTexture, sampler_NoiseTexture, centerUV + (_MetersTravelled * 0.002) + (_Time.y * 0.002) );
 			float fogNoise = fogNoiseTex.z * 2 - 1;
@@ -69,23 +71,23 @@ Shader "Custom/s_matrix"
 
 			float zoneMask = ceil(zoneLinearDepth);
 
-			float skyDepth = pow((input.texcoord.y) + (fogNoise * 0.0), 2);
+			float skyDepth = pow((input.texcoord.y) + (fogNoise * 0.0), 1);
 			
 			zoneLinearDepth *= skyMask;
-			zoneLinearDepth += (skyDepth - (totalLinearDepth * 0.3)) * 0.5;
 			zoneLinearDepth += blit.r;
+			zoneLinearDepth += (skyDepth - (totalLinearDepth * 0.3)) * 0.5;
+			zoneLinearDepth = BayerX8(zoneLinearDepth, input.texcoord * _ScreenParams.xy);
+			zoneLinearDepth += (totalLinearDepth * 0.5);
 			zoneLinearDepth += sunRays;
 			//return zoneLinearDepth.xxxx;
-			zoneLinearDepth = BayerX248(zoneLinearDepth, input.texcoord * _ScreenParams.xy);
-			zoneLinearDepth += totalLinearDepth;
-			//zoneLinearDepth = 1 - zoneLinearDepth;
 			zoneLinearDepth *= zoneMask;
 
 			float foregroundMask = 1 - zoneMask;
-			float3 foreground = (blit.rgb + (totalLinearDepth * 0.5)) * foregroundMask;
-			float3 totalGreyscale = foreground + zoneLinearDepth;
+			float3 foreground = (blit.rgb + (totalLinearDepth * 0.05)) * foregroundMask;
+
+			float3 totalGreyscale = (foreground + zoneLinearDepth);
 			totalGreyscale = saturate(totalGreyscale);
-			//return totalGreyscale.xxxx;
+
 
 			float3 finalColor = lerp(_Color1, _Color2, totalGreyscale);
 			return half4(finalColor, 1);

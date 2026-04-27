@@ -246,7 +246,7 @@ MonoBehaviour:
   worldPivotAndSize: {x: 0.32222223, y: 0, z: 0.5555556, w: 1.7611111}
   uvSizeAndPosition: {x: 0.048828125, y: 0.15478516, z: 0.06640625, w: 0.8432617}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
   boundsOffset: {x: -0.04444444, y: 0.88055557, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
@@ -293,10 +293,12 @@ MonoBehaviour:
   rigidBody: {fileID: 118950378541814445}
   boxCollider: {fileID: 7958201747531856237}
   atlas: {fileID: 0}
-  curSlideDoors: {fileID: 0}
-  curCarriage: {fileID: 0}
   boardingStation: {fileID: 0}
   disembarkingStation: {fileID: 0}
+  curBehaviourContext: {fileID: 0}
+  curSlideDoors: {fileID: 0}
+  curCarriage: {fileID: 0}
+  curGlyph: {fileID: 0}
   curSpriteMarkerLocalPosition: {x: 0, y: 0}
   targetXVelocity: 0
   targetXPos: 0
@@ -306,6 +308,9 @@ MonoBehaviour:
   targetAlpha: 0
   atlasIndexClock: 0
   move: 0
+  alphaClock: 0
+  hoverClock: 0
+  behaviourFlags: 
   curBehaviour: 0
   profile:
     fullName: 
@@ -315,6 +320,12 @@ MonoBehaviour:
     coveredMugshotIndex: 0
     uncoveredMugshotIndex: 0
     behaviours: 0
+  curClip:
+    clipName: 
+    keyFrames: []
+    clipType: 0
+    motionIndex: 0
+    time: 0
   curState: 0
   curPath: 0
   role: 0
@@ -325,7 +336,7 @@ MonoBehaviour:
   prevAtlasIndex: 0
   startFade: 0
   ticketIsBeingChecked: 0
-  ticketChecked: 0
+  ticketHasBeenChecked: 0
   playingGlyph: 0
   behaving: 0
   disembarking: 0
@@ -335,13 +346,5 @@ MonoBehaviour:
   seatQueueIndex: 0
   boardTrainQueueIndex: 0
   disembarkTrainQueueIndex: 0
-  behaviourFlags: 
   behaviourFlagCount: 0
-  curClip:
-    clipName: 
-    keyFrames: []
-    clipType: 0
-    motionIndex: 0
-    time: 0
-  curBehaviourContext: {fileID: 0}
-  curGlyph: {fileID: 0}
+  isSuspected: 0

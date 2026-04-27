@@ -11,6 +11,8 @@ public class GameplayUI : MonoBehaviour
 
     const float TICKET_ICON_PADDING = 0.2f;
     const float TICKET_ICON_APPEARING_DURATION = 0.5f;
+
+    const float FOCUS_TRANISTION_DURATION = 1f;
     public enum State
     { 
         None,
@@ -23,6 +25,9 @@ public class GameplayUI : MonoBehaviour
     public SpyStatsSO spyStats;
     public GameEventDataSO gameEventData;
     public TripSO trip;
+
+    public Material matrix_material; 
+
     public Notepad notepad;
     public Ticket ticket;
     public AtlasRenderer carriageMap;
@@ -54,6 +59,9 @@ public class GameplayUI : MonoBehaviour
     public float transitionTime;
 
     public float naturalMoveClock;
+
+    public float focusTime;
+
     public Vector3 naturalMovePos;
 
     public TicketIcon[] ticketIcons;
@@ -158,6 +166,14 @@ public class GameplayUI : MonoBehaviour
             {
                 NaturalActiveMove(notepadActivePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * moveDamp);
+
+                if (focusTime < FOCUS_TRANISTION_DURATION)
+                {
+                    focusTime += Time.deltaTime;
+                    float t = focusTime / FOCUS_TRANISTION_DURATION;
+
+                    matrix_material.SetFloat("_Focus", t);
+                }
             }
             break;
             case State.Ticket:
@@ -198,6 +214,14 @@ public class GameplayUI : MonoBehaviour
                 else
                 {
                     notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadInactivePos, Time.deltaTime * moveDamp);
+                }
+
+                if (focusTime > 0)
+                {
+                    focusTime -= Time.deltaTime;
+                    float t = focusTime / FOCUS_TRANISTION_DURATION;
+
+                    matrix_material.SetFloat("_Focus", t);
                 }
             }
             break;
@@ -300,6 +324,7 @@ public class GameplayUI : MonoBehaviour
 
         transitionTime = -Mathf.Log(TARGET_MARGIN) / moveDamp;
 
+        notepad.enabled = false;
         ticket.gameObject.SetActive(false);
         carriageMap.gameObject.SetActive(false);
     }
