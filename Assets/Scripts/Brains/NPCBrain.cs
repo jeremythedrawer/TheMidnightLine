@@ -562,7 +562,7 @@ public class NPCBrain : MonoBehaviour
                 hoverClock += Time.deltaTime;
                 float t = hoverClock / ADJUST_COLOR_TIME;
 
-                if (ticketHasBeenChecked && !NPCManager.stationNameTag.text_renderer.hasText)
+                if (ticketHasBeenChecked)
                 {
                     int charCount = Mathf.FloorToInt(t * disembarkingStation.stationName.Length);
                     charCount = Mathf.Clamp(charCount, 0, disembarkingStation.stationName.Length);

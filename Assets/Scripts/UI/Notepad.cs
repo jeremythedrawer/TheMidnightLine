@@ -632,17 +632,12 @@ public class Notepad : MonoBehaviour
                 totalNPCProfiles.Remove(traitorProfile);
                 for (int k = totalNPCProfiles.Count - 1; k >=0 ; k--)
                 {
-                    Debug.Log(k + " | " + totalNPCProfiles.Count);
                     if (totalNPCProfiles[k].npcPrefabIndex == traitorProfile.npcPrefabIndex)
                     {
                         bystanderProfiles.Add(totalNPCProfiles[k]);
                         totalNPCProfiles.Remove(totalNPCProfiles[k]);
                     }
                 }
-
-
-
-
 
                 Vector3 pagePos = bindingRings_renderer.transform.position + Vector3.forward;
                 if (createPageIndex != 0) pagePos.z += 2;

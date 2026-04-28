@@ -175,7 +175,7 @@ MonoBehaviour:
   rendererType: 1
   batchKey:
     material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
-    depthOrder: 2
+    depthOrder: 1
   atlas: {fileID: 11400000, guid: 5085181b26ea31b4b9430dc5ce3bcdf5, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -187,6 +187,8 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.13134766, y: 0.119140625, z: 0.00048828125, w: 0.87646484}
@@ -194,7 +196,7 @@ MonoBehaviour:
     worldSize: {x: 1.4944445, y: 1.3555555, z: 1}
     index: 0
   bounds:
-    m_Center: {x: 86.25533, y: 2.3687778, z: 1}
+    m_Center: {x: 326.12277, y: 1.5607778, z: 1}
     m_Extent: {x: 0.74722224, y: 0.67777777, z: 0.1}
   worldPivotAndSize: {x: 0.64444447, y: 0, z: 1.4944445, w: 1.3555555}
   uvSizeAndPosition: {x: 0.13134766, y: 0.119140625, z: 0.00048828125, w: 0.87646484}
@@ -208,6 +210,9 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  prevSpriteIndexFlipH: 0
+  prevSpriteIndexFlipV: 0
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -218,6 +223,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!61 &4281581721833017353
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -292,8 +298,8 @@ MonoBehaviour:
   atlas: {fileID: 0}
   slideDoors: {fileID: 0}
   gangwayDoor: {fileID: 0}
-  curClimbCollider: {fileID: 0}
   curCarriage: {fileID: 0}
+  curCarriageMap: {fileID: 0}
   npcTicketCheck: {fileID: 0}
   curClip:
     clipName: 
@@ -305,19 +311,19 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   canExitCheckTicket: 0
-  checkingTicket: 0
-  checkingNotepad: 0
+  canExitNotepad: 0
+  checkingCarriageMap: 0
   collisionData:
-    groundLeft: {x: 85.93056, y: 1.5419999}
-    groundRight: {x: 86.37456, y: 1.5419999}
-    stepTopLeft: {x: 85.93056, y: 1.762}
-    stepTopRight: {x: 86.37456, y: 1.762}
-    stepBottomLeft: {x: 85.93056, y: 1.691}
-    stepBottomRight: {x: 86.37456, y: 1.691}
-    wallTopLeft: {x: 85.86256, y: 3.3509998}
-    wallTopRight: {x: 86.44256, y: 3.3509998}
-    wallBottomLeft: {x: 85.86256, y: 2.451}
-    wallBottomRight: {x: 86.44256, y: 2.451}
+    groundLeft: {x: 325.798, y: 0.734}
+    groundRight: {x: 326.24197, y: 0.734}
+    stepTopLeft: {x: 325.798, y: 0.954}
+    stepTopRight: {x: 326.24197, y: 0.954}
+    stepBottomLeft: {x: 325.798, y: 0.883}
+    stepBottomRight: {x: 326.24197, y: 0.883}
+    wallTopLeft: {x: 325.72998, y: 2.543}
+    wallTopRight: {x: 326.31, y: 2.543}
+    wallBottomLeft: {x: 325.72998, y: 1.643}
+    wallBottomRight: {x: 326.31, y: 1.643}
     stepFilter:
       useTriggers: 0
       useLayerMask: 0

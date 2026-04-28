@@ -5,7 +5,7 @@ public class CameraSettingsSO : ScriptableObject
 {
     public float horizontalOffset = 10f;
     public float verticalOffset = 2f;
-    public float damping = 5.0f;
+    public float damping = 10.0f;
 
     public float shakeTime = 0.5f;
     public float shakeIntensity = 0.4f;

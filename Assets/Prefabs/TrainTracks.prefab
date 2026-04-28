@@ -106,6 +106,8 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0.5004883, w: 0.81152344}
@@ -129,6 +131,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   prevSpriteIndexFlipH: 4
   prevSpriteIndexFlipV: 4
+  isAnimating: 0
   slicedSprite:
     sprite:
       uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -139,3 +142,4 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0

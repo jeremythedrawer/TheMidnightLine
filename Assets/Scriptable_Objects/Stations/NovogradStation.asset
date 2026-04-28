@@ -16,163 +16,206 @@ MonoBehaviour:
   targetKMPH: 100
   ticketsToCheckBeforeSpawn: 0
   busynessFactor: 0.5
-  traitorSpawnAmount: 3
+  traitorSpawnAmount: 7
   isFrontOfTrain: 1
   stationName: Novograd Station
   stationIndex: 0
+  exitLocalPosX: 5.89
   bystanderProfiles:
-  - fullName: Yasir Dehghani
-    disembarkingStationIndex: 1
+  - fullName: Anya Petrov
     boardingStationIndex: 0
-    npcPrefabIndex: 5
-    coveredMugshotIndex: 11
-    uncoveredMugshotIndex: 10
-    behaviours: 2
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 3
+    coveredMugshotIndex: 7
+    uncoveredMugshotIndex: 6
+    behaviours: 6
   - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
     boardingStationIndex: 0
-    npcPrefabIndex: 4
-    coveredMugshotIndex: 9
-    uncoveredMugshotIndex: 8
-    behaviours: 5
-  - fullName: Martin Gerald
     disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 1
-    coveredMugshotIndex: 3
-    uncoveredMugshotIndex: 2
-    behaviours: 10
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 4
-    coveredMugshotIndex: 9
-    uncoveredMugshotIndex: 8
+    npcPrefabIndex: 2
+    coveredMugshotIndex: 5
+    uncoveredMugshotIndex: 4
     behaviours: 4
-  - fullName: Martin Gerald
-    disembarkingStationIndex: 1
+  - fullName: Natalie Richardson
     boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 0
+    coveredMugshotIndex: 1
+    uncoveredMugshotIndex: 0
+    behaviours: 2
+  - fullName: Natalie Richardson
+    boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 0
+    coveredMugshotIndex: 1
+    uncoveredMugshotIndex: 0
+    behaviours: 32
+  - fullName: Johnathan Gerald
+    boardingStationIndex: 0
+    disembarkingStationIndex: 1
     npcPrefabIndex: 1
     coveredMugshotIndex: 3
     uncoveredMugshotIndex: 2
     behaviours: 18
   - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
     boardingStationIndex: 0
-    npcPrefabIndex: 4
-    coveredMugshotIndex: 9
-    uncoveredMugshotIndex: 8
-    behaviours: 2
-  - fullName: Ivan Petrov
     disembarkingStationIndex: 1
+    npcPrefabIndex: 2
+    coveredMugshotIndex: 5
+    uncoveredMugshotIndex: 4
+    behaviours: 3
+  - fullName: Aelewhat Dehghani
     boardingStationIndex: 0
-    npcPrefabIndex: 4
-    coveredMugshotIndex: 9
-    uncoveredMugshotIndex: 8
-    behaviours: 6
-  - fullName: Natalie Richardson
     disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 0
-    coveredMugshotIndex: 1
-    uncoveredMugshotIndex: 0
-    behaviours: 33
-  - fullName: Penelope Richardson
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 6
-    coveredMugshotIndex: 13
-    uncoveredMugshotIndex: 12
-    behaviours: 34
-  - fullName: Anya Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 3
-    coveredMugshotIndex: 7
-    uncoveredMugshotIndex: 6
-    behaviours: 4
-  - fullName: Ahad Hassan
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
     npcPrefabIndex: 5
     coveredMugshotIndex: 11
     uncoveredMugshotIndex: 10
-    behaviours: 128
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 2
-    coveredMugshotIndex: 5
-    uncoveredMugshotIndex: 4
-    behaviours: 6
-  - fullName: Penelope Richardson
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 0
-    coveredMugshotIndex: 1
-    uncoveredMugshotIndex: 0
-    behaviours: 2
-  - fullName: Natalie Gerald
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 0
-    coveredMugshotIndex: 1
-    uncoveredMugshotIndex: 0
-    behaviours: 32
-  - fullName: Martin Gerald
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 1
-    coveredMugshotIndex: 3
-    uncoveredMugshotIndex: 2
-    behaviours: 8
-  - fullName: Ivan Petrov
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 2
-    coveredMugshotIndex: 5
-    uncoveredMugshotIndex: 4
-    behaviours: 4
+    behaviours: 136
   - fullName: Natalie Richardson
+    boardingStationIndex: 0
     disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 6
-    coveredMugshotIndex: 13
-    uncoveredMugshotIndex: 12
-    behaviours: 2
-  - fullName: Natalie Richardson
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 6
-    coveredMugshotIndex: 13
-    uncoveredMugshotIndex: 12
-    behaviours: 96
-  - fullName: Natalie Gerald
-    disembarkingStationIndex: 1
-    boardingStationIndex: 0
-    npcPrefabIndex: 6
-    coveredMugshotIndex: 13
-    uncoveredMugshotIndex: 12
-    behaviours: 64
-  traitorProfiles:
-  - fullName: Penelope Gerald
-    disembarkingStationIndex: 2
-    boardingStationIndex: 0
     npcPrefabIndex: 0
     coveredMugshotIndex: 1
     uncoveredMugshotIndex: 0
     behaviours: 3
-  - fullName: Aelewhat Hassan
-    disembarkingStationIndex: 2
+  - fullName: Johnathan Gerald
     boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 1
+    coveredMugshotIndex: 3
+    uncoveredMugshotIndex: 2
+    behaviours: 16
+  - fullName: Ivan Petrov
+    boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 4
+    coveredMugshotIndex: 9
+    uncoveredMugshotIndex: 8
+    behaviours: 4
+  - fullName: Johnathan Richardson
+    boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 1
+    coveredMugshotIndex: 3
+    uncoveredMugshotIndex: 2
+    behaviours: 8
+  - fullName: Natalie Gerald
+    boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 6
+    coveredMugshotIndex: 13
+    uncoveredMugshotIndex: 12
+    behaviours: 32
+  - fullName: Yasir Dermas
+    boardingStationIndex: 0
+    disembarkingStationIndex: 1
     npcPrefabIndex: 5
     coveredMugshotIndex: 11
     uncoveredMugshotIndex: 10
-    behaviours: 10
-  - fullName: Aelewhat Dehghani
-    disembarkingStationIndex: 2
+    behaviours: 2
+  - fullName: Ivan Petrov
     boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 4
+    coveredMugshotIndex: 9
+    uncoveredMugshotIndex: 8
+    behaviours: 5
+  - fullName: Johnathan Richardson
+    boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 1
+    coveredMugshotIndex: 3
+    uncoveredMugshotIndex: 2
+    behaviours: 2
+  - fullName: Veronica Petrov
+    boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 3
+    coveredMugshotIndex: 7
+    uncoveredMugshotIndex: 6
+    behaviours: 3
+  - fullName: Penelope Richardson
+    boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 0
+    coveredMugshotIndex: 1
+    uncoveredMugshotIndex: 0
+    behaviours: 34
+  - fullName: Veronica Petrov
+    boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 3
+    coveredMugshotIndex: 7
+    uncoveredMugshotIndex: 6
+    behaviours: 2
+  - fullName: Ahad Dermas
+    boardingStationIndex: 0
+    disembarkingStationIndex: 1
     npcPrefabIndex: 5
     coveredMugshotIndex: 11
     uncoveredMugshotIndex: 10
     behaviours: 130
+  - fullName: Martin Richardson
+    boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 1
+    coveredMugshotIndex: 3
+    uncoveredMugshotIndex: 2
+    behaviours: 10
+  - fullName: Natalie Richardson
+    boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 6
+    coveredMugshotIndex: 13
+    uncoveredMugshotIndex: 12
+    behaviours: 2
+  traitorProfiles:
+  - fullName: Ivan Petrov
+    boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    npcPrefabIndex: 4
+    coveredMugshotIndex: 9
+    uncoveredMugshotIndex: 8
+    behaviours: 3
+  - fullName: Natalie Richardson
+    boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    npcPrefabIndex: 0
+    coveredMugshotIndex: 1
+    uncoveredMugshotIndex: 0
+    behaviours: 3
+  - fullName: Johnathan Gerald
+    boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    npcPrefabIndex: 1
+    coveredMugshotIndex: 3
+    uncoveredMugshotIndex: 2
+    behaviours: 18
+  - fullName: Anya Petrov
+    boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    npcPrefabIndex: 3
+    coveredMugshotIndex: 7
+    uncoveredMugshotIndex: 6
+    behaviours: 6
+  - fullName: Ivan Petrov
+    boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    npcPrefabIndex: 2
+    coveredMugshotIndex: 5
+    uncoveredMugshotIndex: 4
+    behaviours: 3
+  - fullName: Natalie Gerald
+    boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    npcPrefabIndex: 6
+    coveredMugshotIndex: 13
+    uncoveredMugshotIndex: 12
+    behaviours: 96
+  - fullName: Aelewhat Dehghani
+    boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    npcPrefabIndex: 5
+    coveredMugshotIndex: 11
+    uncoveredMugshotIndex: 10
+    behaviours: 10
