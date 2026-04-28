@@ -38,6 +38,9 @@ Shader "Custom/s_atlasStandard"
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
+            float3 _MainColor;
+            float _DayNight;
+            float _DayNightFactor;
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -83,7 +86,7 @@ Shader "Custom/s_atlasStandard"
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 finalColor = color.rgb;
+                half3 finalColor = color.r + _MainColor + ((1 - _DayNight) * _DayNightFactor);
 
                 clip(color.a - 0.001);
                 return half4 (finalColor, 1);

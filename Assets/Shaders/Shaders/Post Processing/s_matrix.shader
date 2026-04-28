@@ -17,80 +17,15 @@ Shader "Custom/s_matrix"
 		SAMPLER(sampler_NoiseTexture);
 
 		float _PlayerDepth;
-		float3 _Color1;
-		float3 _Color2;
 
 		float _MetersTravelled;
-		float _Focus;
+		float _DayNight;
+		float3 _MainColor;
 		half4 frag(Varyings input) : SV_TARGET
 		{
-			float rotSpeed = 0.02;
-			float rayAmount = 50;
-			float time = _Time.y * rotSpeed;
-			float sunSize = lerp(0.05, 0.02, sin(time * 10) * 0.5 + 0.5);
-			float noiseIntensity = 6;
-
-			half4 blit = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_PointClamp, input.texcoord);
-			float depth = SAMPLE_TEXTURE2D_X(_CameraDepthTexture, sampler_CameraDepthTexture, input.texcoord).r;
-
-			float3 worldPos = ComputeWorldSpacePosition(input.texcoord, depth, UNITY_MATRIX_I_VP);
-			
-			float2 aspect = float2(_ScreenParams.x / _ScreenParams.y, 1);
-
-			float2 centerUV = input.texcoord * aspect - 0.5 * aspect;
-			
-			float rotSin = sin(time);
-			float rotCos = cos(time);
-			float2x2 rotMat =	{ -rotSin, rotCos,
-									rotCos, rotSin,
-								};
-			float2 rotUV = mul(centerUV, rotMat);
-			float sun = (1 - length(centerUV) * 6);
-			float angle = atan2(rotUV.x, rotUV.y);
-
-			half4 noiseTex = SAMPLE_TEXTURE2D_X(_NoiseTexture, sampler_NoiseTexture, centerUV + angle - (_Time.y * 0.02));
-			float noise = noiseTex.b * noiseIntensity * pow(1 - saturate(sun),4);
-
-			float t = angle * rayAmount;
-			float sinT = sin(t);
-			float rays = asin(sinT * pow((sinT * 0.5 + 0.5), 5)) + max(asin(sinT * sinT),0);
-
-			float sunRays = round(saturate(rays - noise + sun + saturate(sun)));
-			
-			float maxPos = BACK_MIN + BACK_SIZE;
-			float skyMask = step(worldPos.z, maxPos);
-			sunRays *= 1 - skyMask;
-			//return sunRays;
-			
-			half4 fogNoiseTex = SAMPLE_TEXTURE2D_X(_NoiseTexture, sampler_NoiseTexture, centerUV + (_MetersTravelled * 0.002) + (_Time.y * 0.002) );
-			float fogNoise = fogNoiseTex.z * 2 - 1;
-
-
-			float totalLinearDepth = worldPos.z / maxPos;
-			float zoneLinearDepth = (worldPos.z - MID_MIN) / maxPos;
-
-			float zoneMask = ceil(zoneLinearDepth);
-
-			float skyDepth = pow((input.texcoord.y) + (fogNoise * 0.0), 1);
-			
-			zoneLinearDepth *= skyMask;
-			zoneLinearDepth += blit.r;
-			zoneLinearDepth += (skyDepth - (totalLinearDepth * 0.3)) * 0.5;
-			zoneLinearDepth = BayerX8(zoneLinearDepth, input.texcoord * _ScreenParams.xy);
-			zoneLinearDepth += (totalLinearDepth * 0.5);
-			zoneLinearDepth += sunRays;
-			//return zoneLinearDepth.xxxx;
-			zoneLinearDepth *= zoneMask;
-
-			float foregroundMask = 1 - zoneMask;
-			float3 foreground = (blit.rgb + (totalLinearDepth * 0.05)) * foregroundMask;
-
-			float3 totalGreyscale = (foreground + zoneLinearDepth);
-			totalGreyscale = saturate(totalGreyscale);
-
-
-			float3 finalColor = lerp(_Color1, _Color2, totalGreyscale);
-			return half4(finalColor, 1);
+			float horizon = sin((input.texcoord.y + (_DayNight * 0.5)) * PI) * 0.5 + 0.5;
+			horizon = BayerX8(horizon, input.texcoord.y * _ScreenParams.y);
+			return half4(horizon.xxx + _MainColor,0);
 		}
 	ENDHLSL
 

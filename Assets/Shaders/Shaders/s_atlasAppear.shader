@@ -42,7 +42,7 @@ Shader "Custom/s_atlasAppear"
             SAMPLER(sampler_AtlasTexture);
 
             float3 _TicketCheckColor;
-
+            float3 _MainColor;
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -90,7 +90,7 @@ Shader "Custom/s_atlasAppear"
 
                 half3 checkedColor = BayerX8(spriteData.custom.x, i.positionHCS) * _TicketCheckColor;
 
-                half3 finalColor = color.rgb + checkedColor;
+                half3 finalColor = max(color.rgb + checkedColor, _MainColor);
                 half alpha = BayerX8(color.a - spriteData.custom.a, i.positionHCS.xy);
                 clip(alpha - 0.001);
                 return half4 (finalColor, 1);

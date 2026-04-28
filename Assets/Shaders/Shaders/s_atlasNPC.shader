@@ -41,10 +41,10 @@ Shader "Custom/s_atlasNPC"
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
+            float3 _MainColor;
             float3 _TicketCheckColor;
             float3 _SuspicionColor;
             float3 _RuledOutColor;
-
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -111,7 +111,7 @@ Shader "Custom/s_atlasNPC"
 
                 half3 focusColor = ticketCheckColor + suspicionColor + ruledOutColor;
 
-                half3 finalColor = color.r + focusColor;
+                half3 finalColor = max(color.r + focusColor, _MainColor);
 
                 half alphaValue = (spriteData.custom.a * 0.75);
                 half alpha = BayerX8(color.a - alphaValue, i.positionHCS.xy);

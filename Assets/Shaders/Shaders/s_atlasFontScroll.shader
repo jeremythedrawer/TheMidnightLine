@@ -41,6 +41,8 @@ Shader "Custom/s_atlasFontScroll"
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
+            float3 _MainColor;
+
             CBUFFER_START(UnityPerMaterial)
                 float _ScrollSpeed;
                 float _Spacing;
@@ -88,7 +90,7 @@ Shader "Custom/s_atlasFontScroll"
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 finalColor = color.rgb + 1;
+                half3 finalColor = color.rgb + _MainColor;
 
                 float mask = 10; //TODO: Set on custom.y
                 half rightMask = step(i.objPos.x, spriteData.custom.y);

@@ -1,0 +1,77 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33fd095fffb8f844e9fa149db1599080, type: 3}
+  m_Name: Tunnels_Atlas
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
+  texture: {fileID: 2800000, guid: 9b2b6180ea0f7034fa35273d019dae82, type: 3}
+  spriteConnectColor:
+    serializedVersion: 2
+    rgba: 0
+  entityMotionType: 3
+  pivotColor:
+    serializedVersion: 2
+    rgba: 4278190335
+  sliceColor:
+    serializedVersion: 2
+    rgba: 4294901760
+  zoneType: 0
+  motionSprites: []
+  simpleSprites:
+  - uvSizeAndPos: {x: 0.29736328, y: 0.037841797, z: 0, w: 0.9621582}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 6.766667, y: 0.8611111, z: 1}
+    index: 0
+  - uvSizeAndPos: {x: 0.15405273, y: 0.17114258, z: 0.29736328, w: 0.8288574}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 3.5055556, y: 3.8944445, z: 1}
+    index: 1
+  - uvSizeAndPos: {x: 1, y: 0.4345703, z: 0, w: 0.14111328}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 22.755556, y: 9.888889, z: 1}
+    index: 2
+  slicedSprites:
+  - sprite:
+      uvSizeAndPos: {x: 0.99243164, y: 0.09399414, z: 0.0041503906, w: 0.6923828}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 22.583334, y: 2.1388888, z: 1}
+      index: 0
+    slice: {x: 0.066912666, y: 0.93185735, z: 0.37402597, w: 0.6857143}
+    uvSizeAndPos:
+    - {x: 0.06640625, y: 0.03515625, z: 0.0041503906, w: 0.6923828}
+    - {x: 0.8583985, y: 0.03515625, z: 0.07055664, w: 0.6923828}
+    - {x: 0.06762692, y: 0.03515625, z: 0.92895514, w: 0.6923828}
+    - {x: 0.06640625, y: 0.029296877, z: 0.0041503906, w: 0.72753906}
+    - {x: 0.8583985, y: 0.029296877, z: 0.07055664, w: 0.72753906}
+    - {x: 0.06762692, y: 0.029296877, z: 0.92895514, w: 0.72753906}
+    - {x: 0.06640625, y: 0.029541014, z: 0.0041503906, w: 0.75683594}
+    - {x: 0.8583985, y: 0.029541014, z: 0.07055664, w: 0.75683594}
+    - {x: 0.06762692, y: 0.029541014, z: 0.92895514, w: 0.75683594}
+    worldSlices: {x: 1.511111, y: 1.5388882, z: 0.8, w: 0.6722222}
+  - sprite:
+      uvSizeAndPos: {x: 0.9902344, y: 0.07397461, z: 0.0041503906, w: 0.61279297}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 22.533333, y: 1.6833333, z: 1}
+      index: 1
+    slice: {x: 0.25788954, y: 0.74063116, z: 0.37623763, w: 0.7227723}
+    uvSizeAndPos:
+    - {x: 0.2553711, y: 0.027832031, z: 0.0041503906, w: 0.61279297}
+    - {x: 0.47802734, y: 0.027832031, z: 0.25952148, w: 0.61279297}
+    - {x: 0.25683594, y: 0.027832031, z: 0.7375488, w: 0.61279297}
+    - {x: 0.2553711, y: 0.025634767, z: 0.0041503906, w: 0.640625}
+    - {x: 0.47802734, y: 0.025634767, z: 0.25952148, w: 0.640625}
+    - {x: 0.25683594, y: 0.025634767, z: 0.7375488, w: 0.640625}
+    - {x: 0.2553711, y: 0.02050781, z: 0.0041503906, w: 0.66625977}
+    - {x: 0.47802734, y: 0.02050781, z: 0.25952148, w: 0.66625977}
+    - {x: 0.25683594, y: 0.02050781, z: 0.7375488, w: 0.66625977}
+    worldSlices: {x: 5.811111, y: 5.8444443, z: 0.6333333, w: 0.46666664}
+  clips: []
+  markers: []

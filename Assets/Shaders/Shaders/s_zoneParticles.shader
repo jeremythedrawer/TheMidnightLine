@@ -14,6 +14,7 @@ Shader "Custom/s_zoneParticles"
             HLSLPROGRAM
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
             #include "Assets/Shaders/HLSL/AtlasParticles.hlsl"
             #include "Assets/Shaders/HLSL/Random.hlsl"
 
@@ -27,6 +28,8 @@ Shader "Custom/s_zoneParticles"
             TEXTURE2D(_Atlas);
             SAMPLER(sampler_Atlas);
 
+            float _DayNight;
+            float3 _MainColor;
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
@@ -84,9 +87,18 @@ Shader "Custom/s_zoneParticles"
                 i.uv += uvPos;
                 
                 //return half4(i.uv, 0, 1);
-                half4 color = SAMPLE_TEXTURE2D(_Atlas, sampler_Atlas, i.uv);
-                if (color.a <= 0.5) discard;
-                return color;
+                half4 tex = SAMPLE_TEXTURE2D(_Atlas, sampler_Atlas, i.uv);
+
+                half color = tex.r;
+
+
+                half bayerValue = (1 - p.parallaxFactor) * (_DayNight * 2 - 1);
+
+                half bayer = BayerX8((color - bayerValue), i.positionHCS.y);
+                half3 finalColor = bayer + _MainColor;
+                //finalColor -= (1 - p.parallaxFactor) * (_DayNight * 2 - 1);
+                clip(tex.a - 0.001);
+                return half4(finalColor, 1);
             }
             ENDHLSL
         }

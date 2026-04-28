@@ -9,4 +9,7 @@ public class ColorsSO : ScriptableObject
     public Color32 suspicionColor;
     public Color32 ruledOutColor;
 
+    [Range(0,1)]public float dayNight;
+    [Range(0,1)]public float dayNightFactor;
+
 }

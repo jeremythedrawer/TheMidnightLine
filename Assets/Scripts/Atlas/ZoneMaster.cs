@@ -2,7 +2,7 @@ using UnityEngine;
 using static AtlasSpawn;
 using static Train;
 using static Parallax;
-
+[ExecuteAlways]
 public class ZoneMaster : MonoBehaviour
 {
     public ZoneSpawnerSO spawner;
@@ -14,7 +14,7 @@ public class ZoneMaster : MonoBehaviour
     public SpyStatsSO spyStats;
 
     public ZoneSpawner[] zoneSpawners;
-    private void Start()
+    private void OnEnable()
     {
         InitBoundParameters();
         InitZoneCompute();

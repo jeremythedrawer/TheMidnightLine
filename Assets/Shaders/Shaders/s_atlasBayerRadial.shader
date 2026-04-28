@@ -38,6 +38,8 @@ Shader "Custom/s_atlasBayerRadial"
 
             StructuredBuffer<AtlasSprite> _SpriteData;
 
+            float3 _MainColor;
+
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
             TEXTURE2D(_NoiseTexture);
@@ -96,9 +98,11 @@ Shader "Custom/s_atlasBayerRadial"
                 //return alpha.xxxx;
                 alpha = saturate(alpha); 
                 alpha = BayerMatrix(alpha, 1, i.positionHCS.xy);
+
+                half3 finalColor = color.rgb + _MainColor;
                 clip(alpha - 0.001);
 
-                return half4 (color.rgb, 1);
+                return half4 (finalColor, 1);
             }
             ENDHLSL
         }

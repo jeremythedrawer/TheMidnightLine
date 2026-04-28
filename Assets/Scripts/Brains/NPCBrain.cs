@@ -143,7 +143,8 @@ public class NPCBrain : MonoBehaviour
         {
             case NPCState.Idling:
             {
-                SetIdlePath();
+                UpdateIdlePath();
+
                 atlasRenderer.PlayClip(ref curClip);
                 behaviourClock += Time.deltaTime;
                 if (behaviourClock > stateDuration)
@@ -231,7 +232,7 @@ public class NPCBrain : MonoBehaviour
             case NPCState.Idling:
             {
                 stateDuration = UnityEngine.Random.Range(npc.idleDurationRange.x, npc.idleDurationRange.y);
-                SetIdlePath();
+                EnterIdlePath();
             }
             break;
             case NPCState.Walking:
@@ -781,7 +782,7 @@ public class NPCBrain : MonoBehaviour
     {
         return UnityEngine.Random.Range(0, 2) == 0 ? motion1 : motion2;
     }
-    private void SetIdlePath()
+    private void UpdateIdlePath()
     {
         switch (curPath)
         {
@@ -824,7 +825,13 @@ public class NPCBrain : MonoBehaviour
                 curClip = atlas.clipDict[(int)standingMotion];
             }
             break;
+        }
+    }
 
+    private void EnterIdlePath()
+    {
+        switch (curPath)
+        {
             case NPCPath.SittingInTrain:
             case NPCPath.SittingAtStation:
             {

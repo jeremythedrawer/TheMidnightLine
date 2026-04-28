@@ -1,11 +1,8 @@
-Shader "Custom/s_exteriorWalls"
+Shader "Custom/s_atlasSpy"
 {
     Properties
     {
         [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
-        _UVSizeAndPos ("UV Size And Pos", Vector) = (0,0,0,0)
-        _WidthHeightFlip ("Width Height And Flip", Vector) = (0,0,0,0)
-        _WorldClip("World Clip", Float) = 0
     }
 
     SubShader
@@ -26,7 +23,6 @@ Shader "Custom/s_exteriorWalls"
             {
                 float4 positionOS : POSITION;
                 float2 uv : TEXCOORD0;
-                float3 worldPos : TEXCOORD1;
                 uint instanceID : SV_InstanceID;
             };
 
@@ -35,12 +31,7 @@ Shader "Custom/s_exteriorWalls"
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 uint instanceID : TEXCOORD1;
-                float3 worldPos : TEXCOORD2;
             };
-
-            CBUFFER_START(UnityPerMaterial)
-                float _WorldClip;
-            CBUFFER_END
 
             StructuredBuffer<AtlasSprite> _SpriteData;
 
@@ -48,7 +39,7 @@ Shader "Custom/s_exteriorWalls"
             SAMPLER(sampler_AtlasTexture);
 
             float3 _MainColor;
-            float3 _DayNight;
+            float _DayNight;
             float _DayNightFactor;
             Varyings vert(Attributes v)
             {
@@ -68,17 +59,14 @@ Shader "Custom/s_exteriorWalls"
                 objPos *= size * scale;
                 objPos -= pivot;
 
-                o.worldPos = float3(position.xy + objPos, position.z);
+                float3 worldPos = float3(position.xy + objPos, position.z);
 
-                o.worldPos.y -= spriteData.custom.x * 3.3; //Moving Wall
-
-                o.positionHCS = TransformWorldToHClip(o.worldPos);
+                o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
                 o.instanceID = v.instanceID;
 
                 return o;
             }
-
 
             half4 frag(Varyings i) : SV_Target
             {
@@ -91,18 +79,16 @@ Shader "Custom/s_exteriorWalls"
                 float2 scale = spriteData.scaleAndFlip.xy;
                 float2 flip = spriteData.scaleAndFlip.zw;
 
-                i.uv *= scale.xy;
+                i.uv *= scale;
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 finalColor = color.rgb + _MainColor + ((1 - _DayNight) * _DayNightFactor);;
+                half3 finalColor = color.r + _MainColor;
 
-                half worldClip = step(_WorldClip, i.worldPos.y);
-                float alpha = color.a * worldClip;
-                clip(alpha - 0.001);
+                clip(color.a - 0.001);
                 return half4 (finalColor, 1);
             }
             ENDHLSL

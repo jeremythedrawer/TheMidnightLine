@@ -6,7 +6,6 @@ using UnityEngine.Rendering;
 using UnityEngine.Rendering.RenderGraphModule;
 using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
-using static Atlas;
 using static AtlasRendering;
 using static AtlasSpawn;
 
@@ -28,8 +27,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
 
     [Header("Matrix Settings")]
-    public Color color1;
-    public Color color2;
     public Texture2D noiseTexture;
 
     private AtlasBatchPass batchPass;
@@ -330,7 +327,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         private static TOTTRendererFeature rendererFeature;
         public MatrixPass(TOTTRendererFeature srf)
         {
-            renderPassEvent = RenderPassEvent.AfterRenderingTransparents + 1;
+            renderPassEvent = RenderPassEvent.BeforeRenderingOpaques;
             rendererFeature = srf;
         }
         private class MatrixPassData
@@ -339,8 +336,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             public TextureHandle targetColor;
             public TextureHandle depthTexture;
             public Material material;
-            public Color color1;
-            public Color color2;
         }
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
         {
@@ -361,8 +356,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                 passData.targetColor = matrixTexHandle;
                 passData.material = rendererFeature.matrixMaterial;
                 passData.depthTexture = resourceData.activeDepthTexture;
-                passData.color1 = rendererFeature.color1;
-                passData.color2 = rendererFeature.color2;
 
                 builder.UseTexture(passData.sourceColor);
                 builder.UseTexture(passData.depthTexture, AccessFlags.Read);
@@ -380,72 +373,9 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         {
             passData.material.SetTexture("_SourceTex", passData.sourceColor);
             passData.material.SetTexture("_CameraDepthTexture", passData.depthTexture);
-            passData.material.SetColor("_Color1", passData.color1);
-            passData.material.SetColor("_Color2", passData.color2);
             passData.material.SetTexture("_NoiseTexture", rendererFeature.noiseTexture);
             Blitter.BlitTexture(ctx.cmd, passData.sourceColor, Vector2.one, passData.material, 0);
         }
     }
-//    private class AtlasPostUIPass : ScriptableRenderPass
-//    {
-//        private static MaterialIDSO materialIDs;
-//        public AtlasPostUIPass(MaterialIDSO materialID)
-//        {
-//            renderPassEvent = RenderPassEvent.AfterRenderingPostProcessing;
-//            materialIDs = materialID;
-//        }
-//        public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
-//        {
-//            UniversalResourceData resources = frameData.Get<UniversalResourceData>();
-
-//            using IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<AtlasPassData>("Atlas Batch Pass", out AtlasPassData passData);
-//            builder.SetRenderAttachment(resources.activeColorTexture, 0);
-//            builder.SetRenderAttachmentDepth(resources.activeDepthTexture, AccessFlags.ReadWrite);
-//            builder.AllowPassCulling(false);
-
-
-//            builder.SetRenderFunc((AtlasPassData data, RasterGraphContext ctx) =>
-//            {
-//                ExecuteUI(ctx.cmd);
-//            });
-//        }
-
-//        private static void ExecuteUI(RasterCommandBuffer cmd)
-//        {
-//#if UNITY_EDITOR
-//            PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
-//            Scene prefabScene = default;
-
-//            if (prefabStage != null) prefabScene = prefabStage.scene;
-//#endif
-//            foreach ((BatchKey key, UIBatchData data) batch in uiBatchList)
-//            {
-//                int count = 0;
-//                for (int i = 0; i < batch.data.uiData.Count && count < MAX; i++)
-//                {
-//                    RenderInput renderInput = batch.data.uiData[i];
-//#if UNITY_EDITOR
-//                    if (prefabStage != null)
-//                    {
-//                        if (renderInput.gameObject.scene != prefabScene) continue;
-//                    }
-//#endif
-//                    for (int j = 0; j < renderInput.position.Length; j++)
-//                    {
-//                        batch.data.matrices[count] = renderInput.matrices[j];
-//                        batch.data.uvSizeAndPosData[count] = renderInput.sprites[j].uvSizeAndPos;
-//                        batch.data.widthHeightFlip[count] = renderInput.widthHeightFlip[j];
-//                        count++;
-//                    }
-//                }
-
-//                if (count == 0) continue;
-
-//                batch.data.mpb.SetVectorArray(materialIDs.ids.uvSizeAndPos, batch.data.uvSizeAndPosData);
-//                batch.data.mpb.SetVectorArray(materialIDs.ids.widthHeightFlip, batch.data.widthHeightFlip);
-//                cmd.DrawMeshInstanced(AtlasBatch.quad, submeshIndex: 0, batch.key.material, shaderPass: 0, batch.data.matrices, count, batch.data.mpb);
-//            }
-//        }
-//    }
 }
 

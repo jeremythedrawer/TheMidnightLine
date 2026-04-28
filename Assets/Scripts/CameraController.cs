@@ -34,6 +34,8 @@ public class CameraController : MonoBehaviour
     {
         float orthoSize = (640 / (float)PIXELS_PER_UNIT);
 
+        cam.orthographicSize = GetSnappedOrthoSize(orthoSize);
+
         stats.targetSize = orthoSize;
         stats.initialSize = orthoSize;
         cam.orthographicSize = orthoSize;
@@ -61,14 +63,11 @@ public class CameraController : MonoBehaviour
         stats.worldUnitsPerPixel = stats.worldHeight / Screen.height;
         if (Application.isPlaying)
         {
-            float smoothSize = Mathf.Lerp(cam.orthographicSize, stats.targetSize, Time.deltaTime * settings.damping);
-            cam.orthographicSize = GetSnappedOrthoSize(smoothSize);
-
             stats.prevWorldPos = stats.curWorldPos;
-            // Smooth (unsnapped)
-            stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, stats.targetWorldPos, Time.deltaTime * settings.damping);
+            Vector3 target = stats.targetWorldPos;
+            target = GetSnappedPosition(target);
+            stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, target, Time.deltaTime * settings.damping);
 
-            // Snap ONLY for rendering
             Vector3 snappedPos = GetSnappedPosition(stats.curWorldPos);
             transform.position = snappedPos;
             stats.curVelocity = -(stats.curWorldPos - stats.prevWorldPos);
@@ -145,7 +144,7 @@ public class CameraController : MonoBehaviour
         {
             case CameraStatsSO.State.Station:
             {
-                stats.targetWorldPos.y = spyStats.curWorldPos.y + settings.verticalOffset;
+                stats.targetWorldPos.y = 1;
                 stats.targetSize = stats.initialSize;
 
             }
@@ -153,21 +152,18 @@ public class CameraController : MonoBehaviour
 
             case CameraStatsSO.State.Carriage:
             {
-                stats.targetWorldPos.y = spyStats.curLocationBounds.center.y + settings.verticalOffset;
                 stats.targetSize = stats.initialSize;
             }
             break;
 
             case CameraStatsSO.State.Roof:
             {
-                stats.targetWorldPos.y = spyStats.curLocationBounds.center.y + settings.verticalOffset;
                 stats.targetSize = settings.maxProjectionSize;
             }
             break;
 
             case CameraStatsSO.State.Gangway:
             {
-                stats.targetWorldPos.y = spyStats.curLocationBounds.center.y + settings.verticalOffset;
                 stats.targetSize = stats.initialSize;
             }
             break;
@@ -209,14 +205,21 @@ public class CameraController : MonoBehaviour
     }
     private Vector3 GetSnappedPosition(Vector3 pos)
     {
-        pos.x = Mathf.Round(pos.x / UNITS_PER_PIXEL) * UNITS_PER_PIXEL;
-        pos.y = Mathf.Round(pos.y / UNITS_PER_PIXEL) * UNITS_PER_PIXEL;
+        float unitsPerPixel = 1f / PIXELS_PER_UNIT;
+
+        pos.x = Mathf.Round(pos.x / unitsPerPixel) * unitsPerPixel;
+        pos.y = Mathf.Round(pos.y / unitsPerPixel) * unitsPerPixel;
 
         return pos;
     }
     private float GetSnappedOrthoSize(float targetSize)
     {
-        return Mathf.Round(targetSize / UNITS_PER_PIXEL) * UNITS_PER_PIXEL;
+        float targetPixelHeight = 640f;
+        float zoom = Mathf.Round(Screen.height / targetPixelHeight);
+
+        zoom = Mathf.Max(1, zoom);
+
+        return (targetPixelHeight * 0.5f) / PIXELS_PER_UNIT / zoom;
     }
     private async UniTaskVoid ShakingCamera()
     {
