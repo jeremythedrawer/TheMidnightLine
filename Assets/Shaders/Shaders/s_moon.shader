@@ -59,9 +59,12 @@ Shader "Custom/s_moon"
             {
                 float2 p = i.uv * 2 - 1;
                 float circle = 1 - length(p);
-                float fade = pow(saturate(i.uv.y),5);
-                float mask = lerp(circle * fade, ceil(circle), i.uv.y) * (_DayNight * 2);
-                mask = BayerX8(mask, i.positionHCS.y + _Time.y);
+
+                float fade = i.uv.y * 0.75 + 0.25;
+
+                float fullMoon = ceil(circle);
+                float mask = fullMoon * fade;
+                mask = BayerX8(mask, i.positionHCS.y + (_Time.y * 5));
 
                 clip(mask - 0.001);
                 return half4(mask.xxx, 1);
