@@ -23,9 +23,21 @@ Shader "Custom/s_matrix"
 		float3 _MainColor;
 		half4 frag(Varyings input) : SV_TARGET
 		{
-			float horizon = sin((input.texcoord.y + (_DayNight * 0.5)) * PI) * 0.5 + 0.5;
+			float2 aspect = float2(_ScreenParams.x / _ScreenParams.y, 1);
+			float2 centerUV = input.texcoord * aspect - 0.5 * aspect;
+			float4 noiseTex = SAMPLE_TEXTURE2D_X(_NoiseTexture, sampler_NoiseTexture, centerUV);
+
+			float gradient = input.texcoord.y; 
+
+			float horizon = sin(min(gradient + _DayNight, PI * 0.5) * PI) * 0.5 + 0.5;
+			float stars = round(saturate(noiseTex.r - 1 + _DayNight) * (1-horizon));
+
 			horizon = BayerX8(horizon, input.texcoord.y * _ScreenParams.y);
-			return half4(horizon.xxx + _MainColor,0);
+
+
+			float final = horizon + stars;
+
+			return half4(final.xxx + _MainColor,0);
 		}
 	ENDHLSL
 

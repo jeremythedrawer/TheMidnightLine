@@ -16,6 +16,7 @@ Shader "Custom/s_atlasStandard"
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
+            #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
             #pragma vertex vert
             #pragma fragment frag
 
@@ -86,7 +87,8 @@ Shader "Custom/s_atlasStandard"
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 finalColor = color.r + _MainColor + ((1 - _DayNight) * _DayNightFactor);
+                half grey = color.r + (-(_DayNight * 1.1 - 0.9) * _DayNightFactor);
+                half3 finalColor = grey + _MainColor;
 
                 clip(color.a - 0.001);
                 return half4 (finalColor, 1);

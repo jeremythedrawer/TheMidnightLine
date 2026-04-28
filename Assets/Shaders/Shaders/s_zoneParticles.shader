@@ -91,8 +91,12 @@ Shader "Custom/s_zoneParticles"
 
                 half color = tex.r;
 
+                int maxPos = BACK_MIN + BACK_SIZE;
+                int minPos = MID_MIN;
 
-                half bayerValue = (1 - p.parallaxFactor) * (_DayNight * 2 - 1);
+                half bayerFactor = (p.position.z - MID_MIN) / (maxPos - minPos);
+                bayerFactor = bayerFactor * 0.5 + 0.5;
+                half bayerValue = bayerFactor * (_DayNight * 2 - 1);
 
                 half bayer = BayerX8((color - bayerValue), i.positionHCS.y);
                 half3 finalColor = bayer + _MainColor;
