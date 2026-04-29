@@ -16,7 +16,7 @@ public class Carriage : MonoBehaviour
     public MaterialIDSO materialIDs;
 
     public AtlasRenderer nextStationSignRenderer;
-
+    public AtlasRenderer carriageWallRenderer;
     public AtlasRenderer[] exteriorRenderers;
     public AtlasRenderer[] seatRenderers;
     public AtlasRenderer[] grapPoleRenderers;
@@ -26,6 +26,8 @@ public class Carriage : MonoBehaviour
 
     public SlideDoors[] exteriorSlideDoors;
     public SlideDoors[] interiorSlideDoors;
+    
+    public CarriageMap map;
 
     [Header("Generated")]
     public float wheelCircumference;
@@ -37,17 +39,6 @@ public class Carriage : MonoBehaviour
     public float prevMeters;
     public int seatAmount;
     public NPCQueue seatQueue;
-    private void Awake()
-    {
-        ctsFade = new CancellationTokenSource();
-    }
-    private void Start()
-    {
-
-
-
-        alpha = 0;
-    }
     private void Update()
     {
         ProcessSeatQueue();
@@ -168,7 +159,6 @@ public class Carriage : MonoBehaviour
 
         for (int i = 0; i < smokersRoomData.Length; i++)
         {
-
             smokersRoomData[i].minXPos = smokingRoomColliders[i].bounds.min.x + offset;
             smokersRoomData[i].maxXPos = smokingRoomColliders[i].bounds.max.x + offset;
         }
@@ -253,7 +243,6 @@ public class Carriage : MonoBehaviour
         {
         }
     }
-
     private void OnDrawGizmos()
     {
         if (seatRenderers.Length < 0 || seatData.xPos.Length < 0) return;

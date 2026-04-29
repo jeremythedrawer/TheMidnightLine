@@ -2,38 +2,26 @@ using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 using static Atlas;
+using static Spy;
 
 public class SpyBrain : MonoBehaviour
 {
     const float DEPTH_CHANGE_TIME = 0.5f;
-    public enum State
-    {
-        None,
-        Idle,
-        Walk,
-        Run,
-        Ticket,
-        Notepad,
-        CarriageMap,
-    }
-
 
     [Header("Components")]
-    [SerializeField] Rigidbody2D rigidBody;
-    [SerializeField] BoxCollider2D boxCollider;
-    [SerializeField] AtlasRenderer atlasRenderer;
+    public Rigidbody2D rigidBody;
+    public BoxCollider2D boxCollider;
+    public AtlasRenderer atlasRenderer;
     [Header("Scriptable Objects")]
-    [SerializeField] SpySettingsSO settings;
-    [SerializeField] MaterialIDSO materialIDs;
-    [SerializeField] SpyStatsSO stats;
-    [SerializeField] PlayerInputsSO playerInputs;
-    [SerializeField] TrainStatsSO trainStats;
-    [SerializeField] TrainSettingsSO trainSettings;
-    [SerializeField] LayerSettingsSO layerSettings;
-    [SerializeField] GameEventDataSO gameEventData;
+    public SpySettingsSO settings;
+    public MaterialIDSO materialIDs;
+    public SpyStatsSO stats;
+    public PlayerInputsSO playerInputs;
+    public TrainStatsSO trainStats;
+    public TrainSettingsSO trainSettings;
+    public LayerSettingsSO layerSettings;
+    public GameEventDataSO gameEventData;
     public TripSO trip;
-
-    [SerializeField] Material matrixMaterial;
 
     [Header("Generated")]
     public AtlasSO atlas;
@@ -54,27 +42,8 @@ public class SpyBrain : MonoBehaviour
     public static bool canCheckTicket;
     public static bool checkingTicket;
     public static bool checkingNotepad;
-    [Serializable] public struct CollisionData
-    {
-        public Vector2 groundLeft;
-        public Vector2 groundRight;
 
-        public Vector2 stepTopLeft;
-        public Vector2 stepTopRight;
-
-        public Vector2 stepBottomLeft;
-        public Vector2 stepBottomRight;
-
-        public Vector2 wallTopLeft;
-        public Vector2 wallTopRight;
-        public Vector2 wallBottomLeft;
-        public Vector2 wallBottomRight;
-
-        public RaycastHit2D[] leftStepResults;
-        public RaycastHit2D[] rightStepResults;
-        public ContactFilter2D stepFilter;
-    }
-    [SerializeField] CollisionData collisionData;
+    public CollisionData collisionData;
 
     public float lastGroundYPos;
     private void OnValidate()
@@ -95,9 +64,8 @@ public class SpyBrain : MonoBehaviour
     {
         atlas = atlasRenderer.atlas;
         atlas.UpdateClipDictionary();
-        stats.curState = State.None;
+        stats.curState = SpyState.None;
         rigidBody.gravityScale = settings.gravityScale;
-        stats.curGravityScale = rigidBody.gravityScale;
         stats.curGroundLayer = layerSettings.stationLayers.ground;
         stats.curWallLayer = layerSettings.stationWallLayers;
         rigidBody.includeLayers = layerSettings.stationMask;
@@ -107,9 +75,7 @@ public class SpyBrain : MonoBehaviour
 
         collisionData.stepFilter = new ContactFilter2D() { useLayerMask = true, layerMask = layerSettings.stationLayers.ground };
 
-        stats.maxJumpHeight = (settings.jumpVerticalForce * settings.jumpVerticalForce) / (2 * settings.gravityScale);
-
-        matrixMaterial.SetFloat("_PlayerDepth", atlasRenderer.batchKey.depthOrder);
+        stats.curLocationState = LocationState.Station;
     }
     private void Update()
     {
@@ -122,7 +88,6 @@ public class SpyBrain : MonoBehaviour
     {
         FixedUpdateStates();
         CalculateCollisionPoints();
-        stats.isGrounded = Physics2D.Linecast(collisionData.groundLeft, collisionData.groundRight, stats.curGroundLayer);
 
         Physics2D.Linecast(collisionData.stepBottomLeft, collisionData.stepTopLeft, collisionData.stepFilter, collisionData.leftStepResults);
         Physics2D.Linecast(collisionData.stepBottomRight, collisionData.stepTopRight, collisionData.stepFilter, collisionData.rightStepResults);
@@ -134,7 +99,6 @@ public class SpyBrain : MonoBehaviour
             {
                 rigidBody.gravityScale = 0;
                 rigidBody.position = new Vector2(rigidBody.position.x - 0.1f, hitColliderHeight.max.y);
-                rigidBody.gravityScale = stats.curGravityScale;
             }
             collisionData.leftStepResults[0] = default;
         }
@@ -145,7 +109,6 @@ public class SpyBrain : MonoBehaviour
             {
                 rigidBody.gravityScale = 0;
                 rigidBody.position = new Vector2(rigidBody.position.x + 0.1f, hitColliderHeight.max.y);
-                rigidBody.gravityScale = stats.curGravityScale;
             }
             collisionData.rightStepResults[0] = default;
         }
@@ -156,44 +119,23 @@ public class SpyBrain : MonoBehaviour
         stats.walkingIntoWall = (leftWallTouch && playerInputs.move == -1) || (rightWallTouch && playerInputs.move == 1);
 
         rigidBody.linearVelocity = stats.moveVelocity;
-        stats.moveVelocity.y -= stats.curGravityScale * Time.fixedDeltaTime;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (!stats.onTrain) return;
+        if (stats.curLocationState == LocationState.Station) return;
 
-        if ((layerSettings.trainLayers.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
+        int collisionLayerValue = 1 << collision.gameObject.layer;
+
+        if (((layerSettings.trainLayers.insideCarriageBounds.value & collisionLayerValue) != 0) || (layerSettings.trainLayers.smokingRoom.value & collisionLayerValue) != 0)
         {
-            SetLocationData(collision.bounds, layerSettings.trainLayers.insideCarriageBounds);
+            stats.curLocationState = LocationState.Carriage;
+            curCarriage = TrainController.GetCarriage(transform.position.x);
+            stats.curLocationBounds = curCarriage.insideBoundsCollider.bounds;
         }
         else if ((layerSettings.trainLayers.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
-            SetLocationData(collision.bounds, layerSettings.trainLayers.gangwayBounds);
-        }
-        else if ((layerSettings.trainLayers.roofBounds.value & (1 << collision.gameObject.layer)) != 0)
-        {
-            SetLocationData(collision.bounds, layerSettings.trainLayers.roofBounds);
-        }
-
-        if ((layerSettings.trainLayers.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
-        {
-        }
-    }
-    private void OnTriggerExit2D(Collider2D collision)
-    {
-        if (!stats.onTrain) return;
-
-        if ((layerSettings.trainLayers.insideCarriageBounds.value & (1 << collision.gameObject.layer)) != 0)
-        {
-            stats.curLocationLayer = 0;
-        }
-        else if ((layerSettings.trainLayers.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
-        {
-            stats.curLocationLayer = 0;
-        }
-
-        if ((layerSettings.trainLayers.carriage.value & (1 << collision.gameObject.layer)) != 0)
-        {
+            stats.curLocationState = LocationState.Gangway;
+            stats.curLocationBounds = collision.bounds;
             curCarriage = null;
         }
     }
@@ -201,51 +143,41 @@ public class SpyBrain : MonoBehaviour
     {
         if ((playerInputs.ticketCheckKeyDown && canCheckTicket) || checkingTicket)
         {
-            SetState(State.Ticket);
+            SetState(SpyState.Ticket);
         }
         else if (playerInputs.notepadKeyDown || checkingNotepad)
         {
-            SetState(State.Notepad);
+            SetState(SpyState.Notepad);
         }
         else if (checkingCarriageMap)
         {
-            SetState(State.CarriageMap);
+            SetState(SpyState.CarriageMap);
         }
-        else if (stats.isGrounded && playerInputs.move != 0 && !playerInputs.run && !stats.walkingIntoWall)
+        else if (playerInputs.move != 0 && !playerInputs.run && !stats.walkingIntoWall)
         {
-            SetState(State.Walk);
-        }
-        else if (stats.isGrounded && playerInputs.move != 0 && playerInputs.run && !stats.walkingIntoWall) //TODO: not in carriage
-        {
-            SetState(State.Run);
+            SetState(SpyState.Walk);
         }
         else
         {
-            SetState(State.Idle);
+            SetState(SpyState.Idle);
         }
     }
     private void UpdateStates()
     {
         switch (stats.curState)
         {
-            case State.Idle:
+            case SpyState.Idle:
             {
                 atlasRenderer.PlayClip(ref curClip);
             }
             break;
-            case State.Walk:
-            {
-                Flip(playerInputs.move < 0);
-                atlasRenderer.PlayClip(ref curClip);
-            }
-            break;
-            case State.Run:
+            case SpyState.Walk:
             {
                 Flip(playerInputs.move < 0);
                 atlasRenderer.PlayClip(ref curClip);
             }
             break;
-            case State.Ticket:
+            case SpyState.Ticket:
             {
                 if (!playerInputs.ticketCheckKeyDown) canExitCheckTicket = true;
                 if((playerInputs.ticketCheckKeyDown && canExitCheckTicket) || playerInputs.notepadChooseStationAndFlip.x == 1)
@@ -258,7 +190,7 @@ public class SpyBrain : MonoBehaviour
                 }
             }
             break;
-            case State.Notepad:
+            case SpyState.Notepad:
             {
                 if(!playerInputs.notepadKeyDown) canExitNotepad = true;
 
@@ -274,26 +206,20 @@ public class SpyBrain : MonoBehaviour
     {
         switch (stats.curState)
         {
-            case State.Idle:
+            case SpyState.Idle:
             {
 
             }
             break;
-            case State.Walk:
+            case SpyState.Walk:
             {
                 stats.targetXVelocity = (settings.moveSpeed * playerInputs.move);
                 stats.moveVelocity.x = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.fixedDeltaTime);
             }
             break;
-            case State.Run:
-            {
-                stats.targetXVelocity = settings.moveSpeed * playerInputs.move * settings.runSpeedMultiplier;
-                stats.moveVelocity.x = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.fixedDeltaTime);
-            }
-            break;
         }
     }
-    private void SetState(State newState)
+    private void SetState(SpyState newState)
     {
         if (stats.curState == newState) return;
         ExitState();
@@ -304,26 +230,19 @@ public class SpyBrain : MonoBehaviour
     {
         switch (stats.curState)
         {
-            case State.Idle:
+            case SpyState.Idle:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.StandingBreathing];
-                rigidBody.gravityScale = stats.curGravityScale;
             }
             break;
-            case State.Walk:
+            case SpyState.Walk:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.Walking];
             }
             break;
-            case State.Run:
-            {
-                curClip = atlas.clipDict[(int)SpyMotion.Running];
-            }
-            break;
-            case State.Ticket:
+            case SpyState.Ticket:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.StandingBreathing];
-                rigidBody.gravityScale = stats.curGravityScale;
 
                 RaycastHit2D npcHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, transform.right, boxCollider.bounds.size.x, layerSettings.npc);
 
@@ -342,7 +261,7 @@ public class SpyBrain : MonoBehaviour
                 }
             }
             break;
-            case State.Notepad:
+            case SpyState.Notepad:
             {
                 checkingNotepad = true;
                 canExitNotepad = false;
@@ -354,34 +273,29 @@ public class SpyBrain : MonoBehaviour
     {
         switch (stats.curState)
         {
-            case State.Idle:
+            case SpyState.Idle:
             {
                 
             }
             break;
-            case State.Walk:
+            case SpyState.Walk:
             {
                 stats.moveVelocity.x = 0;
             }
             break;
-            case State.Run:
-            {
-                stats.moveVelocity.x = 0;
-            }
-            break;
-            case State.Ticket:
+            case SpyState.Ticket:
             {
                 if (npcTicketCheck != null) npcTicketCheck.ticketIsBeingChecked = false;
             }
             break;
 
-            case State.Notepad:
+            case SpyState.Notepad:
             {
                 checkingNotepad = false;
             }
             break;
 
-            case State.CarriageMap:
+            case SpyState.CarriageMap:
             {
                 curCarriageMap.CancelEffect();
             }
@@ -419,9 +333,8 @@ public class SpyBrain : MonoBehaviour
     }
     private void OpenTrainDoors()
     {
-        if (!stats.onTrain)
+        if (stats.curLocationState == LocationState.Station)
         {
-
             RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.exteriorSlideDoors);
 
             if (slideDoorHit.collider != null)
@@ -442,22 +355,17 @@ public class SpyBrain : MonoBehaviour
 
                         if (insideCarriageHit.collider != null)
                         {
-                            SetLocationData(insideCarriageHit.collider.bounds, layerSettings.trainLayers.insideCarriageBounds);
-                            curCarriage = trainStats.carriageDict[insideCarriageHit.collider];
+                            curCarriage = TrainController.GetCarriage(transform.position.x);
                             curCarriage.MoveDown();
                         }
                         stats.curGroundLayer = layerSettings.trainLayers.ground;
                         stats.curWallLayer = layerSettings.trainWallLayers;
-                        stats.onTrain = true;
+                        stats.curLocationState = LocationState.Carriage;
 
                         rigidBody.includeLayers = layerSettings.trainMask;
 
                         collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
-
-                        UpdateDepth(atlasRenderer.batchKey.depthOrder).Forget();
                         atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.frontMin);
-
-                        trainStats.totalPassengersBoarded++;
                     }
                     break;
                 }
@@ -483,14 +391,14 @@ public class SpyBrain : MonoBehaviour
     }
     private void LookAtCarriageMap()
     {
-        if (!stats.onTrain) return;
+        if (curCarriage == null) return;
 
         if (!checkingCarriageMap)
         {
             RaycastHit2D carriageMapHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.carriageMap);
             if (carriageMapHit.collider != null)
             {
-                curCarriageMap= carriageMapHit.collider.GetComponent<CarriageMap>();
+                curCarriageMap= curCarriage.map;
                 curCarriageMap.InteractEffect();
                 checkingCarriageMap = true;
             }
@@ -499,26 +407,6 @@ public class SpyBrain : MonoBehaviour
         {
             checkingCarriageMap = false;
         }
-    }
-    private async UniTask UpdateDepth(float oldDepth)
-    {
-        float elaspedTime = 0;
-
-        while(elaspedTime < DEPTH_CHANGE_TIME)
-        {
-            elaspedTime += Time.deltaTime;
-            float t = elaspedTime / DEPTH_CHANGE_TIME;
-            t *= t;
-            float depth = Mathf.Lerp(oldDepth, atlasRenderer.batchKey.depthOrder, t);
-            matrixMaterial.SetFloat("_PlayerDepth", depth);
-            await UniTask.Yield();
-        }
-        matrixMaterial.SetFloat("_PlayerDepth", atlasRenderer.batchKey.depthOrder);
-    }
-    private void SetLocationData(Bounds bounds, LayerMask layerMask)
-    {
-        stats.curLocationBounds = bounds;
-        stats.curLocationLayer = layerMask;
     }
     private void Flip(bool flip)
     {
@@ -533,17 +421,13 @@ public class SpyBrain : MonoBehaviour
     {
         checkingNotepad = toggle;
     }
-    private void OnApplicationQuit()
-    {
-        stats.ResetStats();
-    }
     private void OnDrawGizmos()
     {
         CalculateCollisionPoints();
-        Gizmos.color = stats.isGrounded ? Color.limeGreen : Color.orange;
+        Gizmos.color = Color.orange;
         Gizmos.DrawLine(collisionData.groundLeft, collisionData.groundRight);
 
-        Gizmos.color = stats.isStepping ? Color.springGreen : Color.indianRed;
+        Gizmos.color = Color.indianRed;
         Gizmos.DrawLine(collisionData.stepBottomLeft, collisionData.stepTopLeft);
         Gizmos.DrawLine(collisionData.stepBottomRight, collisionData.stepTopRight);
 
@@ -552,19 +436,5 @@ public class SpyBrain : MonoBehaviour
         Gizmos.DrawLine(collisionData.wallTopRight, collisionData.wallBottomRight);
 
     }
-
-#if UNITY_EDITOR
-    private void OnGUI()
-    {
-        string groundedText = stats.isGrounded ? "Is Grounded" : "Is Not Grounded";
-
-        GUIStyle style = new GUIStyle(GUI.skin.label);
-        style.alignment = TextAnchor.UpperRight;
-        style.normal.textColor = stats.isGrounded ? Color.green : Color.red;
-
-        Rect rect = new Rect(0, 20f, Screen.width - 20f, 25f); // full-width area, 20px margin
-        GUI.Label(rect, groundedText, style);
-    }
-#endif
 
 }

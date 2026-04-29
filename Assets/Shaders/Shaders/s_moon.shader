@@ -49,6 +49,7 @@ Shader "Custom/s_moon"
 
                 float3 worldPos = TransformObjectToWorld(objPos);
                 worldPos.y = lerp(worldPos.y - scale.y, worldPos.y + (worldCamTop * 0.75), _DayNight);
+                
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
                 o.worldPos = worldPos;
@@ -59,10 +60,12 @@ Shader "Custom/s_moon"
             {
                 float2 p = i.uv * 2 - 1;
                 float circle = 1 - length(p);
+                float cutCircle = length(p - float2(0.5, 0));
+
 
                 float fade = i.uv.y * 0.75 + 0.25;
 
-                float fullMoon = ceil(circle);
+                float fullMoon = ceil(circle) * floor(cutCircle);
                 float mask = fullMoon * fade;
                 mask = BayerX8(mask, i.positionHCS.y + (_Time.y * 5));
 

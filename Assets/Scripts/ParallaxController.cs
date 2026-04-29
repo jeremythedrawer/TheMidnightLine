@@ -1,8 +1,7 @@
 using UnityEngine;
 using static Parallax;
 using static Atlas;
-using System;
-using TMPro;
+using static Spy;
 public class ParallaxController : MonoBehaviour
 {
     public TrainStatsSO trainStats;
@@ -52,7 +51,7 @@ public class ParallaxController : MonoBehaviour
             worldPos.x -= parallaxIncrement;
             bounds.center = worldPos + boundsOffset;
         }
-        else if (spyStats.onTrain)
+        else if (spyStats.curLocationState != LocationState.Station)
         {
             worldPos.x -= UpdatePositionNoParallax(trainStats);
         }

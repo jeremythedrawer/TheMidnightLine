@@ -1,8 +1,8 @@
 using Cysharp.Threading.Tasks;
-using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using static Train;
+using static Spy;
 public class TrainController : MonoBehaviour
 {
     public TrainSettingsSO settings;
@@ -10,6 +10,7 @@ public class TrainController : MonoBehaviour
     public TripSO trip;
     public ZoneSpawnerSO spawner;
     public GameEventDataSO gameEventData;
+    public SpyStatsSO spyStats;
     public AtlasRenderer backSprite;
     public AtlasRenderer driversPit;
 
@@ -22,39 +23,12 @@ public class TrainController : MonoBehaviour
     public bool closingSlideDoors;
     public int curStationIndex;
     public float metersTravelled;
+
+    public static Carriage[] allCarriages;
+    
     private void OnValidate()
     {
-        SetCarriageDictionary();
         SetBounds();
-
-    }
-    private void Awake() 
-    {
-        stats.totalBounds = driversPit.bounds;
-        stats.totalBounds.Encapsulate(backSprite.bounds);
-
-        Carriage carriage = carriages[0];
-        AtlasRenderer grapPoleRenderer = carriage.grapPoleRenderers[0];
-        StationSO stationData = trip.stationsDataArray[0];
-
-        stats.targetPassengersBoarding = stationData.bystanderProfiles.Length + stationData.traitorProfiles.Length + 1; // +1 for spy himself
-        stats.curVelocity = KMPHToVelocity(stationData.targetKMPH);
-        stats.targetVelocity = KMPHToVelocity(stationData.targetKMPH);
-        trip.ticketsCheckedSinceStart = 0;
-        
-        stats.totalPassengersBoarded = 0;
-
-        stats.depthSections.min = carriage.exteriorRenderers[0].batchKey.depthOrder;
-        stats.depthSections.max = carriage.interiorSlideDoors[0].rightSlideDoorRenderer.batchKey.depthOrder;
-        stats.depthSections.frontMin = grapPoleRenderer.batchKey.depthOrder - 2;
-        stats.depthSections.frontMax = grapPoleRenderer.batchKey.depthOrder - 1;
-        stats.depthSections.backMin = grapPoleRenderer.batchKey.depthOrder + 1;
-        stats.depthSections.backMax = grapPoleRenderer.batchKey.depthOrder + 2;
-        stats.depthSections.carriageSeat = carriage.seatRenderers[0].batchKey.depthOrder - 1;
-
-        stats.slideDoorsAmountOpened = 0;
-
-        trainCTS = new CancellationTokenSource();
     }
     private void OnDisable()
     {
@@ -66,18 +40,26 @@ public class TrainController : MonoBehaviour
     }
     private void Start()
     {
+        StationSO stationData = trip.stationsDataArray[0];
+        
+        stats.curVelocity = KMPHToVelocity(stationData.targetKMPH);
+        stats.targetVelocity = 0;
+
+        stats.totalPassengersBoarded = 0;
+        stats.slideDoorsAmountOpened = 0;
+
+        trip.ticketsCheckedSinceStart = 0;
+
+        trainCTS = new CancellationTokenSource();
+
+        SetDepthSections();
         SetBounds();
         InitStations();
         SpawnFirstStation();
-        SetCarriageDictionary();
 
-        stats.targetVelocity = 0;
-        stats.curVelocity = KMPHToVelocity(trip.stationsDataArray[0].targetKMPH);
         stats.targetStopPosition = transform.position.x;
 
-
         float offset = TRAIN_WORLD_POS - transform.position.x;
-
         for (int i = 0; i < carriages.Length; i++)
         {
             Carriage carriage = carriages[i];
@@ -86,6 +68,7 @@ public class TrainController : MonoBehaviour
             carriage.SetSignToNextStation(trip.nextStation.stationName);
         }
         SetSlideDoorPositions(offset);
+        allCarriages = carriages;
 
         MoveTrainToStartPosition().Forget();
     }
@@ -152,6 +135,7 @@ public class TrainController : MonoBehaviour
 
             case TrainStates.Stopped:
             {
+                stats.targetPassengersBoarding = trip.nextStation.bystanderProfiles.Length + trip.nextStation.traitorProfiles.Length;
                 stats.curVelocity = 0;
                 if (trip.nextStation.isFrontOfTrain)
                 {
@@ -194,7 +178,7 @@ public class TrainController : MonoBehaviour
             break;
             case TrainStates.Stopped:
             {
-                if (stats.totalPassengersBoarded == stats.targetPassengersBoarding)
+                if (stats.totalPassengersBoarded == stats.targetPassengersBoarding && spyStats.curLocationState != LocationState.Station)
                 {
                     if (!closingSlideDoors)
                     {
@@ -271,7 +255,6 @@ public class TrainController : MonoBehaviour
             case TrainStates.Stopped:
             {
                 stats.totalPassengersBoarded = 0;
-                stats.targetPassengersBoarding = trip.nextStation.bystanderProfiles.Length + trip.nextStation.traitorProfiles.Length;
                 stats.distToSpawnNextStation = stats.trainToMaxSpawnDist - trip.nextStation.station_prefab.frontPlatformRenderer.transform.localPosition.x;
                 closingSlideDoors = false;
                 gameEventData.OnStationLeave.Raise();
@@ -294,18 +277,6 @@ public class TrainController : MonoBehaviour
             {
                 carriages[i].CloseInteriorSlideDoors();
             }
-        }
-    }
-    private void SetCarriageDictionary()
-    {
-        carriages = GetComponentsInChildren<Carriage>();
-
-        stats.carriageDict = new Dictionary<Collider2D, Carriage>();
-
-        for (int i = 0; i < carriages.Length; i++)
-        {
-            Carriage curCarriage = carriages[i];
-            stats.carriageDict.Add(curCarriage.insideBoundsCollider, curCarriage);
         }
     }
     private void SetSlideDoorPositions(float offset)
@@ -356,6 +327,18 @@ public class TrainController : MonoBehaviour
         stats.totalBounds = driversPit.bounds;
         stats.totalBounds.Encapsulate(backSprite.bounds);
     }
+    private void SetDepthSections()
+    {
+        Carriage sampleCarriage = carriages[0];
+        AtlasRenderer grapPoleRenderer = sampleCarriage.grapPoleRenderers[0];
+        stats.depthSections.min = sampleCarriage.exteriorRenderers[0].batchKey.depthOrder;
+        stats.depthSections.max = sampleCarriage.interiorSlideDoors[0].rightSlideDoorRenderer.batchKey.depthOrder;
+        stats.depthSections.frontMin = grapPoleRenderer.batchKey.depthOrder - 2;
+        stats.depthSections.frontMax = grapPoleRenderer.batchKey.depthOrder - 1;
+        stats.depthSections.backMin = grapPoleRenderer.batchKey.depthOrder + 1;
+        stats.depthSections.backMax = grapPoleRenderer.batchKey.depthOrder + 2;
+        stats.depthSections.carriageSeat = sampleCarriage.seatRenderers[0].batchKey.depthOrder - 1;
+    }
     private async UniTask MoveTrainToStartPosition()
     {        
         while (stats.curVelocity != 0)
@@ -369,6 +352,19 @@ public class TrainController : MonoBehaviour
         transform.position = new Vector3(TRAIN_WORLD_POS, transform.position.y, transform.position.z);
         stats.totalBounds.center = transform.position;
         stats.trainToMaxSpawnDist = spawner.bounds.max.x - stats.totalBounds.center.x;
+    }
+    public static Carriage GetCarriage(float xPos)
+    {
+        for (int i = 0; i < allCarriages.Length; i++)
+        {
+            Carriage carriage = allCarriages[i];
+
+            if (xPos > carriage.carriageWallRenderer.bounds.min.x && xPos < carriage.carriageWallRenderer.bounds.max.x)
+            {
+                return carriage;
+            }
+        }
+        return null;
     }
     private void OnDrawGizmos()
     {

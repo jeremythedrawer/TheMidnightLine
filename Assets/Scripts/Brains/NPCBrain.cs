@@ -429,7 +429,7 @@ public class NPCBrain : MonoBehaviour
                 if (!onTrain)
                 {
                     RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
-                    curCarriage = trainStats.carriageDict[carriageHit.collider];
+                    curCarriage = TrainController.GetCarriage(transform.position.x);
                 }
                 queuedForSlideDoor = false;
                 behaving = false;
@@ -749,6 +749,7 @@ public class NPCBrain : MonoBehaviour
     {
         if (!onTrain || trip.nextStation.stationIndex != profile.disembarkingStationIndex) return;
         disembarking = true;
+        if (queuedForSeat) curCarriage.RemoveFromSeatQueue(this);
         SetPath(NPCPath.ToSlideDoor);
     }
     public void PrepareToBoardTrain()
@@ -758,6 +759,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void QueueForSeat()
     {
+        if (disembarking) return;
         curCarriage.AddToSeatQueue(this);
         queuedForSeat = true;
     }
@@ -766,10 +768,12 @@ public class NPCBrain : MonoBehaviour
         queuedForSeat = false;
         seatPosIndex = seatIndex;
         targetXPos = curCarriage.seatData.xPos[seatPosIndex];
+        if (disembarking) return;
         SetPath(NPCPath.ToSeatInTrain);
     }
     public void FindStandingPosition()
     {
+        if (disembarking) return;
         SetPath(NPCPath.ToStandInTrain);
     }
     private void SetStandingDepthInTrain()
@@ -827,7 +831,6 @@ public class NPCBrain : MonoBehaviour
             break;
         }
     }
-
     private void EnterIdlePath()
     {
         switch (curPath)

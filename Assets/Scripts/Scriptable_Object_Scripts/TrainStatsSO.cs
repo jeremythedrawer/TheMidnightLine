@@ -25,7 +25,4 @@ public class TrainStatsSO : ScriptableObject
     public Bounds totalBounds;
 
     public float[] slideDoorPositions;
-
-    public Dictionary<Collider2D, Carriage> carriageDict;
-
 }

@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using UnityEngine;
+using static Spy;
 
 public class GameplayUI : MonoBehaviour
 {
@@ -31,7 +32,6 @@ public class GameplayUI : MonoBehaviour
     public Notepad notepad;
     public Ticket ticket;
     public AtlasRenderer carriageMap;
-    public Transform background;
     public Transform ticketIconTransform;
 
     public TicketIcon ticketIcon_prefab;
@@ -67,7 +67,6 @@ public class GameplayUI : MonoBehaviour
     public TicketIcon[] ticketIcons;
     public TicketIcon curTicketIcon;
     public int ticketCount;
-    public CancellationTokenSource ctsBackground;
     public CancellationTokenSource ctsNotepad;
     public CancellationTokenSource ctsTicket;
     public CancellationTokenSource ctsCarriageMap;
@@ -94,15 +93,15 @@ public class GameplayUI : MonoBehaviour
     }
     private void ChooseState()
     {
-        if (spyStats.curState == SpyBrain.State.Notepad || notepad.curState != Notepad.State.Stationary)
+        if (spyStats.curState == SpyState.Notepad || notepad.curState != Notepad.State.Stationary)
         {
             SetState(State.Notepad);
         }
-        else if (SpyBrain.checkingTicket)
+        else if (spyStats.curState == SpyState.Ticket)
         {
             SetState(State.Ticket);
         }
-        else if (spyStats.curState == SpyBrain.State.CarriageMap)
+        else if (spyStats.curState == SpyState.CarriageMap)
         {
             SetState(State.CarriageMap);
         }
@@ -294,15 +293,10 @@ public class GameplayUI : MonoBehaviour
     }
     private void InitPOVUI()
     {
-        background.gameObject.SetActive(true);
         notepad.gameObject.SetActive(true);
 
-        float halfCamWidth = cameraStats.worldWidth * 0.5f;
-        float halfCamHeight = cameraStats.worldHeight * 0.5f;
-
-        backgroundActivePos = background.localPosition;
-        backgroundInactivePos = new Vector3(halfCamWidth, background.localPosition.y, background.localPosition.z);
-        background.localPosition = backgroundInactivePos;
+        float halfCamWidth = cameraStats.camBounds.extents.x;
+        float halfCamHeight = cameraStats.camBounds.extents.y;
 
         notepadActivePos = notepad.transform.localPosition;
         float binderBoundsOffsetX = notepad.bindingRings_renderer.bounds.max.x - notepad.transform.position.x;

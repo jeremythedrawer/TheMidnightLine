@@ -30,7 +30,7 @@ Shader "Custom/s_matrix"
 			float gradient = input.texcoord.y; 
 
 			float horizon = sin(min(gradient + _DayNight, PI * 0.5) * PI) * 0.5 + 0.5;
-			float stars = round(saturate(noiseTex.r - 1 + _DayNight) * (1-horizon));
+			float stars = step(0.55,saturate(noiseTex.r - 1 + _DayNight) * (1-horizon));
 
 			horizon = BayerX8(horizon, input.texcoord.y * _ScreenParams.y);
 

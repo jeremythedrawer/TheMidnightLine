@@ -2,6 +2,7 @@ using UnityEngine;
 using static AtlasSpawn;
 using static Train;
 using static Parallax;
+using static Spy;
 [ExecuteAlways]
 public class ZoneMaster : MonoBehaviour
 {
@@ -29,7 +30,7 @@ public class ZoneMaster : MonoBehaviour
     {
         spawner.atlasCompute.SetFloat("_CamVelocity", (camStats.curVelocity.x));
 
-        if (spyStats.onTrain)
+        if (spyStats.curLocationState != LocationState.Station)
         {
             spawner.atlasCompute.SetFloat("_TrainVelocity", (trainStats.curVelocity * Time.deltaTime));
         }
@@ -37,7 +38,7 @@ public class ZoneMaster : MonoBehaviour
     private void InitBoundParameters()
     {
         spawner.bounds.center = new Vector3(TRAIN_WORLD_POS, 0, FAR_CLIP * 0.5f);
-        spawner.bounds.size = new Vector3(trip.stationsDataArray[0].station_prefab.frontPlatformRenderer.bounds.size.x + camStats.worldWidth, trainStats.totalBounds.size.y + camStats.worldHeight, FAR_CLIP);
+        spawner.bounds.size = new Vector3(trip.stationsDataArray[0].station_prefab.frontPlatformRenderer.bounds.size.x + camStats.camBounds.size.x, trainStats.totalBounds.size.y + camStats.camBounds.size.y, FAR_CLIP);
 
         transform.position = spawner.bounds.min;
     }

@@ -108,7 +108,7 @@ public class Notepad : MonoBehaviour
         leftHandFlipPos = leftHand_renderer.transform.parent.InverseTransformPoint(flipWorldPos);
         leftHandPencilInactivePos = leftHand_renderer.transform.localPosition;
         leftHandTargetPos = leftHandPencilInactivePos;
-        float distLeftHandToOffScreen = camStats.camWorldBottom - (leftHand_renderer.bounds.max.y - leftHand_renderer.transform.position.y);
+        float distLeftHandToOffScreen = camStats.camBounds.min.y - (leftHand_renderer.bounds.max.y - leftHand_renderer.transform.position.y);
         Vector3 offscreenWorldPos = new Vector3(leftHand_renderer.transform.position.x, distLeftHandToOffScreen, leftHand_renderer.transform.position.z);
         leftHandOffScreenPos = leftHand_renderer.transform.parent.InverseTransformPoint(offscreenWorldPos);
 

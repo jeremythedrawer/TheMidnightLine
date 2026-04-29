@@ -1,11 +1,15 @@
-using Cysharp.Threading.Tasks;
-using Proselyte.Sigils;
-using System;
 using UnityEngine;
+using System;
 using static Atlas;
-[ExecuteAlways]
+using static Spy;
 public class CameraController : MonoBehaviour
 {
+    const float RES_Y = 640;
+    const float RES_X = 1920;
+    const float RES_Y_HALF = 320;
+    const float GAUSSIAN_VARIANCE = 60;
+    public LocationState curState;
+
     public CameraSettingsSO settings;
     public CameraStatsSO stats;
     public SpyStatsSO spyStats;
@@ -17,220 +21,117 @@ public class CameraController : MonoBehaviour
 
     [Header("Generated")]
     public Camera cam;
-    private void Awake()
-    {
-    }
-    private void OnEnable()
-    {
-        gameEventData.OnReset.RegisterListener(ResetCamera);
-    }
-    private void OnDisable()
-    {
-        gameEventData.OnReset.UnregisterListener(ResetCamera);
-        ResetCamera();
-
-    }
+    public Vector3 targetWorldPos;
+    public Vector3 centerBounds;
+    public float curXOffset;
+    public float carriageT;
     private void Start()
     {
-        float orthoSize = (640 / (float)PIXELS_PER_UNIT);
-
-        cam.orthographicSize = GetSnappedOrthoSize(orthoSize);
-
-        stats.targetSize = orthoSize;
-        stats.initialSize = orthoSize;
-        cam.orthographicSize = orthoSize;
-
-        stats.targetWorldPos.z = transform.position.z;
+        cam.orthographicSize = GetSnappedOrthoSize();
+        targetWorldPos.z = transform.position.z;
+        targetWorldPos.y = settings.verticalOffset;
         stats.curWorldPos = transform.position;
-        stats.aspect = cam.aspect;
+        stats.camBounds = new Bounds();
+        stats.camBounds.size = new Vector3(cam.orthographicSize * 2 * cam.aspect, cam.orthographicSize * 2, cam.farClipPlane + cam.nearClipPlane);
+        stats.worldUnitsPerPixel = stats.camBounds.size.y / Screen.height;
     }
     private void Update()
     {
-        SelectStates();
+        ChooseStates();
         UpdateStates();
-        if (spyStats.moveVelocity.x > 0)
-        {
-            stats.curHorOffset = spyStats.spriteFlip ? -settings.horizontalOffset : settings.horizontalOffset; // camera offsets when player is moving
-        }
+        curXOffset = spyStats.spriteFlip ? -settings.horizontalOffset : settings.horizontalOffset; // camera offsets when player is moving
+        stats.camBounds.center = centerBounds;
 
-        //Set size and position
-        stats.worldHeight = cam.orthographicSize * 2;
-        stats.worldWidth = stats.worldHeight * cam.aspect;
-        stats.camWorldLeft = stats.curWorldPos.x - stats.worldWidth * 0.5f;
-        stats.camWorldRight = stats.curWorldPos.x + stats.worldWidth * 0.5f;
-        stats.camWorldBottom = stats.curWorldPos.y - stats.worldHeight * 0.5f;
-        stats.camWorldTop = stats.curWorldPos.y + stats.worldHeight * 0.5f;
-        stats.worldUnitsPerPixel = stats.worldHeight / Screen.height;
-        if (Application.isPlaying)
-        {
-            stats.prevWorldPos = stats.curWorldPos;
-            Vector3 target = stats.targetWorldPos;
-            target = GetSnappedPosition(target);
-            stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, target, Time.deltaTime * settings.damping);
+        stats.prevWorldPos = stats.curWorldPos;
+        stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, targetWorldPos, Time.deltaTime * settings.damping);
 
-            Vector3 snappedPos = GetSnappedPosition(stats.curWorldPos);
-            transform.position = snappedPos;
-            stats.curVelocity = -(stats.curWorldPos - stats.prevWorldPos);
-        }
-        else
-        {
-            stats.curWorldPos = transform.position;
-        }
+        transform.position = stats.curWorldPos;
+        stats.curVelocity = -(stats.curWorldPos - stats.prevWorldPos);
     }
-    private void SelectStates()
+    private void ChooseStates()
     {
-        if (!spyStats.onTrain)
-        {
-            SetState(CameraStatsSO.State.Station);
-        }
-        else if (spyStats.curLocationLayer == layerSettings.trainLayers.insideCarriageBounds)
-        {
-            SetState(CameraStatsSO.State.Carriage);
-        }
-        else if (spyStats.curLocationLayer == layerSettings.trainLayers.gangwayBounds)
-        {
-            SetState(CameraStatsSO.State.Gangway);
-        }
-        //else if (spyStats.curLocationLayer == layerSettings.trainLayers.roofBounds)
-        //{
-        //    SetState(CameraStatsSO.State.Roof);
-        //}
+        SetState(spyStats.curLocationState);
     }
     private void UpdateStates()
     {
-        switch (stats.curState)
+        switch (curState)
         {
-            case CameraStatsSO.State.Station:
+            case LocationState.Station:
             {
-                stats.targetWorldPos.x = spyStats.curWorldPos.x + stats.curHorOffset;
+                targetWorldPos.x = spyStats.curWorldPos.x + curXOffset;
             }
             break;
 
-            case CameraStatsSO.State.Carriage:
+            case LocationState.Carriage:
             {
-                float halfSize = spyStats.curLocationBounds.extents.x;
                 float distFromCenter = spyStats.curWorldPos.x - spyStats.curLocationBounds.center.x;
 
-                float t = (1.0f - Mathf.Pow(2.71828f, -(distFromCenter * distFromCenter / halfSize)));
-                t *= t * 0.5f;
+                carriageT = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
+                carriageT *= carriageT * 0.5f;
 
-                stats.targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.curWorldPos.x + stats.curHorOffset, t);
+                targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.curWorldPos.x + curXOffset, carriageT);
             }
             break;
-
-            case CameraStatsSO.State.Roof:
+            case LocationState.Gangway:
             {
-                stats.targetWorldPos.x = spyStats.curWorldPos.x + stats.curHorOffset;
-            }
-            break;
-
-            case CameraStatsSO.State.Gangway:
-            {
-                stats.targetWorldPos.x = spyStats.curWorldPos.x + stats.curHorOffset;
+                targetWorldPos.x = spyStats.curWorldPos.x + curXOffset;
             }
             break;
         }
     }
-    private void SetState(CameraStatsSO.State newState)
+    private void SetState(LocationState newState)
     {
-        if (stats.curState == newState) return;
+        if (curState == newState) return;
         ExitState();
-        stats.curState = newState;
+        curState = newState;
         EnterState();
     }
     private void EnterState()
     {
-        switch (stats.curState)
+        switch (curState)
         {
-            case CameraStatsSO.State.Station:
+            case LocationState.Station:
             {
-                stats.targetWorldPos.y = 1;
-                stats.targetSize = stats.initialSize;
 
             }
             break;
 
-            case CameraStatsSO.State.Carriage:
+            case LocationState.Carriage:
             {
-                stats.targetSize = stats.initialSize;
-            }
-            break;
-
-            case CameraStatsSO.State.Roof:
-            {
-                stats.targetSize = settings.maxProjectionSize;
-            }
-            break;
-
-            case CameraStatsSO.State.Gangway:
-            {
-                stats.targetSize = stats.initialSize;
             }
             break;
         }
     }
     private void ExitState()
     {
-        switch (stats.curState)
+        switch (curState)
         {
-            case CameraStatsSO.State.Station:
+            case LocationState.Station:
             {
             }
             break;
 
-            case CameraStatsSO.State.Carriage:
+            case LocationState.Carriage:
             {
             }
             break;
 
-            case CameraStatsSO.State.Roof:
-            {
-
-            }
-            break;
-
-            case CameraStatsSO.State.Gangway:
+            case LocationState.Gangway:
             {
 
             }
             break;
         }
-    }
-    private void ResetCamera()
-    {
-        stats.curState = CameraStatsSO.State.None;
-        stats.initialSize = cam.orthographicSize;
-        stats.curHorOffset = 0.0f;
-        stats.targetSize = cam.orthographicSize;
     }
     private Vector3 GetSnappedPosition(Vector3 pos)
     {
-        float unitsPerPixel = 1f / PIXELS_PER_UNIT;
-
-        pos.x = Mathf.Round(pos.x / unitsPerPixel) * unitsPerPixel;
-        pos.y = Mathf.Round(pos.y / unitsPerPixel) * unitsPerPixel;
+        pos.x = Mathf.Round(pos.x / stats.worldUnitsPerPixel) * stats.worldUnitsPerPixel;
+        pos.y = Mathf.Round(pos.y / stats.worldUnitsPerPixel) * stats.worldUnitsPerPixel;
 
         return pos;
     }
-    private float GetSnappedOrthoSize(float targetSize)
+    private float GetSnappedOrthoSize()
     {
-        float targetPixelHeight = 640f;
-        float zoom = Mathf.Round(Screen.height / targetPixelHeight);
-
-        zoom = Mathf.Max(1, zoom);
-
-        return (targetPixelHeight * 0.5f) / PIXELS_PER_UNIT / zoom;
-    }
-    private async UniTaskVoid ShakingCamera()
-    {
-        float elaspedTime = 0;
-        while (elaspedTime < settings.shakeTime)
-        {
-            elaspedTime += Time.deltaTime;
-            float t = elaspedTime / settings.shakeTime;
-            Vector2 randomOffset = Vector2.Lerp(UnityEngine.Random.insideUnitCircle * settings.shakeIntensity, Vector2.zero, t);
-            transform.position = transform.position + (Vector3)randomOffset;
-            await UniTask.Yield();
-        }
+        return (RES_Y_HALF / PIXELS_PER_UNIT) * 2;
     }
 }

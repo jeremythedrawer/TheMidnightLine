@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using static Spy;
 public static class Parallax
 {
     public const float FAR_CLIP = 128;
@@ -18,7 +19,7 @@ public static class Parallax
     {
         float xPos = camStats.curVelocity.x * (1 - parallaxFactor) * Time.fixedDeltaTime;
 
-        if (spyStats.onTrain)
+        if (spyStats.curLocationState != LocationState.Station)
         {
             xPos += trainStats.curVelocity * parallaxFactor * Time.fixedDeltaTime;
         }

@@ -33,7 +33,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     private AtlasParticlePass particlePass;
     private MatrixPass matrixPass;
     private BloomPass bloomPass;
-    //private AtlasPostUIPass postUIPass;
 
     private class AtlasPassData
     {
@@ -47,7 +46,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         particlePass = new AtlasParticlePass(trip, zoneSpawner, materialIDs);
         matrixPass = new MatrixPass(this);
         bloomPass = new BloomPass(this);
-       // postUIPass = new AtlasPostUIPass(materialIDs);
     }
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
@@ -55,7 +53,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         renderer.EnqueuePass(batchPass);
         renderer.EnqueuePass(particlePass);
         renderer.EnqueuePass(matrixPass);
-        //renderer.EnqueuePass(postUIPass);
         //renderer.EnqueuePass(bloomPass);
     }
     private class AtlasBatchPass : ScriptableRenderPass
