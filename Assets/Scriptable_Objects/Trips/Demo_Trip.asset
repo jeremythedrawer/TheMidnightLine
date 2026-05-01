@@ -24,25 +24,25 @@ MonoBehaviour:
   - zones:
     - atlas: {fileID: 11400000, guid: b7293c5d7b7f8814a972cc266c414cf8, type: 2}
       ticketCheckStart: 0
-      ticketCheckEnd: 5
+      ticketCheckEnd: 3
       zoneUVSizeAndPosArray:
-      - {x: 0.22265625, y: 0.20166016, z: 0.001953125, w: 0.79589844}
-      - {x: 0.30908203, y: 0.28222656, z: 0.22607422, w: 0.7163086}
-      - {x: 0.34179688, y: 0.23486328, z: 0.5419922, w: 0.76123047}
+      - {x: 0.22167969, y: 0.20117188, z: 0.001953125, w: 0.79589844}
+      - {x: 0.34179688, y: 0.23583984, z: 0.5419922, w: 0.7602539}
+      - {x: 0.3149414, y: 0.28320312, z: 0.22607422, w: 0.71533203}
       - {x: 0.40966797, y: 0.28076172, z: 0.0034179688, w: 0.43310547}
       - {x: 0.27001953, y: 0.2680664, z: 0.41357422, w: 0.43164062}
       - {x: 0.30078125, y: 0.32714844, z: 0.6923828, w: 0.42822266}
-      - {x: 0.43408203, y: 0.28271484, z: 0.020019531, w: 0.14550781}
       - {x: 0.28125, y: 0.22070312, z: 0.46777344, w: 0.14501953}
+      - {x: 0.43408203, y: 0.28271484, z: 0.020019531, w: 0.13085938}
       zoneWorldPivotsAndSizesArray:
-      - {x: 0, y: 0, z: 2.5333333, w: 2.2944446}
-      - {x: 0, y: 0, z: 3.5166667, w: 3.211111}
-      - {x: 0, y: 0, z: 3.8888888, w: 2.6722221}
+      - {x: 0, y: 0, z: 2.5222223, w: 2.288889}
+      - {x: 0, y: 0, z: 3.8888888, w: 2.6833334}
+      - {x: 0, y: 0, z: 3.5833333, w: 3.2222223}
       - {x: 0, y: 0, z: 4.661111, w: 3.1944444}
       - {x: 0, y: 0, z: 3.0722222, w: 3.05}
       - {x: 0, y: 0, z: 3.4222221, w: 3.7222223}
-      - {x: 0, y: 0, z: 4.938889, w: 3.2166667}
       - {x: 0, y: 0, z: 3.2, w: 2.511111}
+      - {x: 0, y: 0, z: 4.938889, w: 3.2166667}
       zoneSliceOffsetsAndSizes: []
     area: 1
     particleCount: 128
@@ -50,11 +50,11 @@ MonoBehaviour:
     kernelID_init: 1
     kernelID_initSlice: 9
     kernelID_update: 17
-    active: 0
+    active: 1
   - zones:
     - atlas: {fileID: 11400000, guid: 8fe34cef64df39f47ad5ef739cc24f29, type: 2}
       ticketCheckStart: 0
-      ticketCheckEnd: 6
+      ticketCheckEnd: 1
       zoneUVSizeAndPosArray:
       - {x: 0.25976562, y: 0.2211914, z: 0, w: 0.7783203}
       - {x: 0.23876953, y: 0.20019531, z: 0.26513672, w: 0.79785156}
@@ -74,10 +74,10 @@ MonoBehaviour:
     kernelID_init: 2
     kernelID_initSlice: 10
     kernelID_update: 18
-    active: 0
+    active: 1
   - zones:
     - atlas: {fileID: 11400000, guid: f86ccfc280901114c9e722a148ac3810, type: 2}
-      ticketCheckStart: 1
+      ticketCheckStart: 3
       ticketCheckEnd: 6
       zoneUVSizeAndPosArray:
       - {x: 0.13769531, y: 0.3112793, z: 0.001953125, w: 0.68847656}
@@ -348,7 +348,7 @@ MonoBehaviour:
     kernelID_init: 5
     kernelID_initSlice: 13
     kernelID_update: 21
-    active: 0
+    active: 1
   - zones:
     - atlas: {fileID: 11400000, guid: 7bd15aca28e0873468552b14aa4bd880, type: 2}
       ticketCheckStart: 0
@@ -578,7 +578,7 @@ MonoBehaviour:
     kernelID_init: 6
     kernelID_initSlice: 14
     kernelID_update: 22
-    active: 0
+    active: 1
   - zones: []
     area: 7
     particleCount: 0
@@ -599,9 +599,17 @@ MonoBehaviour:
   - {fileID: 94976023300698573, guid: 897c100f6665dfb409630e778458925c, type: 3}
   - {fileID: 94976023300698573, guid: ff0a87f408df46b46bc2b001c88fee02, type: 3}
   - {fileID: 94976023300698573, guid: 309c427b4de8219458011f9f0e3445fd, type: 3}
+  scrollSpriteArray:
+  - ticketCheckStart: 0
+    ticketCheckEnd: 0
+    rendererType: 0
+    material: {fileID: 0}
+    depth: 0
+    atlas: {fileID: 0}
+    spriteIndex: 0
+    height: 0
   minStationsTraitorsTravel: 2
   maxStationsTraitorsTravel: 4
   nextStation: {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
   totalTicketsToCheck: 6
-  ticketsCheckedSinceStart: 0
   ticketsCheckedSinceLastStation: 0

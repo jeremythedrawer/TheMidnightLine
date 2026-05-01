@@ -31,6 +31,7 @@ Shader "Custom/s_atlasScroll"
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 uint instanceID : TEXCOORD1;
+                uint scroll : TEXCOORD2;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -43,6 +44,8 @@ Shader "Custom/s_atlasScroll"
             float3 _MainColor;
             float _DayNight;
             float _DayNightFactor;
+            float2 _SpawnerSize;
+
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -60,11 +63,23 @@ Shader "Custom/s_atlasScroll"
                 objPos *= size * scale;
                 objPos -= pivot;
 
+
+                float metersTravelled = _MetersTravelled;
+                if (_MetersTravelled < spriteData.custom.x)
+                {
+                    metersTravelled += METERS_TRAVELLED_DIVISOR;
+                }
+                float distance =  (metersTravelled - spriteData.custom.x); // NOTE: custom.x is the meters travelled when it spawned.
+
+                float scroll = step(distance, _SpawnerSize);
+                //objPos -= distance * (1 - scroll);
+
                 float3 worldPos = float3(position.xy + objPos, position.z);
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
                 o.instanceID = v.instanceID;
+                o.scroll = scroll;
 
                 return o;
             }
@@ -83,7 +98,7 @@ Shader "Custom/s_atlasScroll"
                 float2 flip = spriteData.scaleAndFlip.zw;
 
                 i.uv *= scale.xy;
-                i.uv.x += _MetersTravelled / width;
+                i.uv.x += (_MetersTravelled / width) * i.scroll;
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;

@@ -1,0 +1,27 @@
+#pragma kernel CSCarriageBounds
+RWTexture2D<float4> _SDFTexture;
+
+float2 _BoundSize;
+float2 _BoundCenter;
+
+float _DeltaTime;
+
+float2 _TextureSize;
+[numthreads(8, 8, 1)]
+void CSCarriageBounds(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= _TextureSize.x || id.y >= _TextureSize.y)
+        return;
+    
+    float2 halfSize = _BoundSize * 0.5;
+    float2 minB = _BoundCenter - halfSize;
+    float2 maxB = _BoundCenter + halfSize;
+    float targetMask = step(minB.x, id.x) * step(id.x, maxB.x) * step(minB.y, id.y) * step(id.y, maxB.y);
+    float ndcTargetMask = -(targetMask * 2 - 1);
+    
+    float4 current = _SDFTexture[id.xy];
+    
+    float finalMask = current.r + (ndcTargetMask * _DeltaTime);
+    
+    _SDFTexture[id.xy] = float4(finalMask.xxx, 1);
+}

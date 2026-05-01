@@ -13,6 +13,7 @@ public class StationNameTag : MonoBehaviour
 
     private void Start()
     {
+
     }
 
     private void Update()
@@ -40,7 +41,8 @@ public class StationNameTag : MonoBehaviour
         {
             background_renderer.enabled = true;
             background_renderer.transform.localPosition = backgroundLocalPos;
-            background_renderer.SetNineSliceWidthFromWorldSpace(text_renderer.bounds.size.x + PADDING * 2);
+            float worldWidth = text_renderer.bounds.size.x + PADDING * 2;
+            background_renderer.SetNineSliceWidthFromWorldSpace(worldWidth, ref background_renderer.slicedSprite);
         }
     }
 }

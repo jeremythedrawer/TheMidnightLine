@@ -1,4 +1,4 @@
-Shader "Custom/s_atlasStandard"
+Shader "Custom/s_atlasCharacter"
 {
     Properties
     {

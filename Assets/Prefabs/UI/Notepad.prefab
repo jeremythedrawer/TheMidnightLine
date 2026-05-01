@@ -99,6 +99,7 @@ MonoBehaviour:
   holdingPencil: 0
   totalPencilTime: 0
   curPencilTime: 0
+  appearTextClock: 0
 --- !u!1 &2467022903358664946
 GameObject:
   m_ObjectHideFlags: 0
@@ -148,7 +149,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 4
   batchKey:
-    material: {fileID: 2100000, guid: 3711f04c48a027245b0d1267d0e739b8, type: 2}
+    texture: {fileID: 2800000, guid: ce00a485150a179469cda6914ad00cce, type: 3}
+    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
     depthOrder: -21
   atlas: {fileID: 11400000, guid: eba6eb7239ccca949b91a3ab6672a7da, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
@@ -162,6 +164,7 @@ MonoBehaviour:
   kerning: 0
   spacing: 0
   scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.1015625, y: 0.15063477, z: 0.12402344, w: 0.8137207}
@@ -196,6 +199,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!1 &2904836683165534344
 GameObject:
   m_ObjectHideFlags: 0
@@ -242,7 +246,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 4
   batchKey:
-    material: {fileID: 2100000, guid: 3711f04c48a027245b0d1267d0e739b8, type: 2}
+    texture: {fileID: 2800000, guid: ce00a485150a179469cda6914ad00cce, type: 3}
+    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
     depthOrder: -25
   atlas: {fileID: 11400000, guid: eba6eb7239ccca949b91a3ab6672a7da, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
@@ -256,6 +261,7 @@ MonoBehaviour:
   kerning: 0
   spacing: 0
   scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.061279297, y: 0.0107421875, z: 0.0087890625, w: 0.91796875}
@@ -290,6 +296,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!1 &6878149229419650586
 GameObject:
   m_ObjectHideFlags: 0
@@ -336,7 +343,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 5
   batchKey:
-    material: {fileID: 2100000, guid: 3711f04c48a027245b0d1267d0e739b8, type: 2}
+    texture: {fileID: 2800000, guid: ce00a485150a179469cda6914ad00cce, type: 3}
+    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
     depthOrder: -26
   atlas: {fileID: 11400000, guid: eba6eb7239ccca949b91a3ab6672a7da, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
@@ -350,6 +358,7 @@ MonoBehaviour:
   kerning: 0
   spacing: 0
   scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.17700195, y: 0.14135742, z: 0.015625, w: 0}
@@ -384,6 +393,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!1 &7998242637157151275
 GameObject:
   m_ObjectHideFlags: 0
@@ -430,7 +440,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 4
   batchKey:
-    material: {fileID: 2100000, guid: 3711f04c48a027245b0d1267d0e739b8, type: 2}
+    texture: {fileID: 2800000, guid: ce00a485150a179469cda6914ad00cce, type: 3}
+    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
     depthOrder: -25
   atlas: {fileID: 11400000, guid: eba6eb7239ccca949b91a3ab6672a7da, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
@@ -444,6 +455,7 @@ MonoBehaviour:
   kerning: 0
   spacing: 0
   scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.013183594, y: 0.068847656, z: 0.09814453, w: 0.8132324}
@@ -478,6 +490,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!1001 &5780223978874145491
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -488,11 +501,11 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 1082521566760503151, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 4.2496223
+      value: 5.1696224
       objectReference: {fileID: 0}
     - target: {fileID: 1082521566760503151, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -11.316667
+      value: -11.476666
       objectReference: {fileID: 0}
     - target: {fileID: 1082521566760503151, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.z
@@ -552,11 +565,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4580197788305518065, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 5.5633335
+      value: 5.5833335
       objectReference: {fileID: 0}
     - target: {fileID: 4580197788305518065, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -8.22
+      value: -8.325001
       objectReference: {fileID: 0}
     - target: {fileID: 4580197788305518065, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.z
@@ -564,7 +577,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4898080337301717236, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 6.463333
+      value: 6.3033333
       objectReference: {fileID: 0}
     - target: {fileID: 4898080337301717236, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.y
@@ -616,11 +629,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7459302900703187996, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 5.5568805
+      value: 5.588878
       objectReference: {fileID: 0}
     - target: {fileID: 7459302900703187996, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -8.320001
+      value: -8.325001
       objectReference: {fileID: 0}
     - target: {fileID: 7459302900703187996, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.z
@@ -628,7 +641,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7623350588780838515, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 3.7666667
+      value: 3.8366668
       objectReference: {fileID: 0}
     - target: {fileID: 7623350588780838515, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.y
@@ -652,11 +665,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8813909496853599495, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 3.8544445
+      value: 3.9300003
       objectReference: {fileID: 0}
     - target: {fileID: 8813909496853599495, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -7.6555552
+      value: -7.72
       objectReference: {fileID: 0}
     - target: {fileID: 8813909496853599495, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
       propertyPath: bounds.m_Center.z

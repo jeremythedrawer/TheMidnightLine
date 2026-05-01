@@ -1,3 +1,4 @@
+static const float METERS_TRAVELLED_DIVISOR = 1000;
 struct AtlasSprite
 {
     float4 position;

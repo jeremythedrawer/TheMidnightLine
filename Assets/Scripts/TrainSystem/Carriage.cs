@@ -39,6 +39,7 @@ public class Carriage : MonoBehaviour
     public float prevMeters;
     public int seatAmount;
     public NPCQueue seatQueue;
+    public Bounds totalBounds;
     private void Update()
     {
         ProcessSeatQueue();
@@ -196,6 +197,16 @@ public class Carriage : MonoBehaviour
         }
         seatQueue = new NPCQueue();
         seatQueue.npcs = new NPCBrain[seatAmount];
+    }
+    public void SetTotalBounds(float offset)
+    {
+        totalBounds = insideBoundsCollider.bounds;
+
+        for (int i = 0; i < smokingRoomColliders.Length; i++)
+        {
+            totalBounds.Encapsulate(smokingRoomColliders[i].bounds);
+        }
+        totalBounds.center = new Vector3(totalBounds.center.x + offset, totalBounds.center.y, totalBounds.center.z);
     }
     private async UniTask MovingDown()
     {

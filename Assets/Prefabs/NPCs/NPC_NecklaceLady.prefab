@@ -220,7 +220,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 1
   batchKey:
-    material: {fileID: 2100000, guid: 2a9e14eec5d6aaa46a7d0e093181bc5b, type: 2}
+    texture: {fileID: 2800000, guid: 8d8f53d53f4401641ba51ddc11f980b9, type: 3}
+    material: {fileID: 2100000, guid: a33a67236ad4eb248b44964a793ad770, type: 2}
     depthOrder: 0
   atlas: {fileID: 11400000, guid: cdd9a76821dbdf242a4c71f6762fc644, type: 2}
   camStats: {fileID: 0}
@@ -234,6 +235,7 @@ MonoBehaviour:
   kerning: 1.1
   spacing: 1
   scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.033691406, y: 0.14648438, z: 0.01953125, w: 0.84814453}
@@ -268,6 +270,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!114 &94976023300698573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -310,7 +313,6 @@ MonoBehaviour:
   move: 0
   alphaClock: 0
   hoverClock: 0
-  behaviourFlags: 
   curBehaviour: 0
   profile:
     fullName: 
@@ -328,6 +330,7 @@ MonoBehaviour:
     time: 0
   curState: 0
   curPath: 0
+  curMark: 0
   role: 0
   smokerRoomIndex: 0
   seatPosIndex: 0
@@ -346,5 +349,4 @@ MonoBehaviour:
   seatQueueIndex: 0
   boardTrainQueueIndex: 0
   disembarkTrainQueueIndex: 0
-  behaviourFlagCount: 0
-  isSuspected: 0
+  isClicked: 0

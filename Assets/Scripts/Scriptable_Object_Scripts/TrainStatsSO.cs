@@ -25,4 +25,6 @@ public class TrainStatsSO : ScriptableObject
     public Bounds totalBounds;
 
     public float[] slideDoorPositions;
+
+    public float metersTravelled;
 }

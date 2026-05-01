@@ -40,7 +40,7 @@ public class ZoneSpawner : MonoBehaviour
         ChangeZone();
 
 
-        if (trip.ticketsCheckedSinceStart >= curZone.ticketCheckEnd && zoneSpawnerData.active)
+        if (SpyBrain.ticketsCheckedTotal >= curZone.ticketCheckEnd && zoneSpawnerData.active)
         {
             
             spawner.atlasCompute.SetInt(zoneName + ACTIVE_STRING, 0);
@@ -91,7 +91,7 @@ public class ZoneSpawner : MonoBehaviour
     }
     private void ChangeZone()
     {
-        if (trip.ticketsCheckedSinceStart < curZone.ticketCheckStart || zoneSpawnerData.active) return;
+        if (SpyBrain.ticketsCheckedTotal < curZone.ticketCheckStart || zoneSpawnerData.active) return;
 
         spawner.atlasCompute.SetInt(zoneName + SPRITE_COUNT_STRING, zoneInput.Length);
         spawner.atlasCompute.SetInt(zoneName + ACTIVE_STRING, 1);

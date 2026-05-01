@@ -8,7 +8,6 @@ public class CameraController : MonoBehaviour
     const float RES_X = 1920;
     const float RES_Y_HALF = 320;
     const float GAUSSIAN_VARIANCE = 60;
-    public LocationState curState;
 
     public CameraSettingsSO settings;
     public CameraStatsSO stats;
@@ -19,12 +18,22 @@ public class CameraController : MonoBehaviour
     public LayerSettingsSO layerSettings;
     public GameEventDataSO gameEventData;
 
+
+    public ComputeShader carriageBoundsCompute;
+    public RenderTexture carriageBoundsRT;
+
     [Header("Generated")]
+    public LocationState curState;
     public Camera cam;
     public Vector3 targetWorldPos;
     public Vector3 centerBounds;
     public float curXOffset;
     public float carriageT;
+
+    public int carriageBoundsKernel;
+    public int threadGroupX;
+    public int threadGroupY;
+    public float renderTextureScale;
     private void Start()
     {
         cam.orthographicSize = GetSnappedOrthoSize();
@@ -34,6 +43,31 @@ public class CameraController : MonoBehaviour
         stats.camBounds = new Bounds();
         stats.camBounds.size = new Vector3(cam.orthographicSize * 2 * cam.aspect, cam.orthographicSize * 2, cam.farClipPlane + cam.nearClipPlane);
         stats.worldUnitsPerPixel = stats.camBounds.size.y / Screen.height;
+
+        renderTextureScale = 16;
+        carriageBoundsRT.Release();
+        carriageBoundsRT.width = (int)(trainStats.totalBounds.size.x * renderTextureScale);
+        carriageBoundsRT.height = (int)(trainStats.totalBounds.size.y * renderTextureScale);
+        Graphics.Blit(Texture2D.whiteTexture, carriageBoundsRT);
+        carriageBoundsRT.Create();
+
+        threadGroupX = Mathf.CeilToInt(carriageBoundsRT.width / 8);
+        threadGroupY = Mathf.CeilToInt(carriageBoundsRT.height / 8);
+
+        carriageBoundsKernel = carriageBoundsCompute.FindKernel("CSCarriageBounds");
+        carriageBoundsCompute.SetTexture(carriageBoundsKernel, "_SDFTexture", carriageBoundsRT);
+        carriageBoundsCompute.SetVector("_TextureSize", new Vector3(carriageBoundsRT.width, carriageBoundsRT.height));
+        
+        Shader.SetGlobalTexture("_CarriageBoundsTexture", carriageBoundsRT);
+
+        Shader.SetGlobalVector("_TrainBoundsSize", trainStats.totalBounds.size);
+    }
+
+    private void OnDisable()
+    {
+#if UNITY_EDITOR
+        Graphics.Blit(Texture2D.whiteTexture, carriageBoundsRT);
+#endif
     }
     private void Update()
     {
@@ -70,11 +104,22 @@ public class CameraController : MonoBehaviour
                 carriageT *= carriageT * 0.5f;
 
                 targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.curWorldPos.x + curXOffset, carriageT);
+
+                Vector2 centerTrainSpace = (spyStats.curLocationBounds.center - trainStats.totalBounds.min) * renderTextureScale;
+                Vector2 sizeTrainSpace = (spyStats.curLocationBounds.size) * renderTextureScale;
+                carriageBoundsCompute.SetVector("_BoundCenter", centerTrainSpace);
+                carriageBoundsCompute.SetVector("_BoundSize", sizeTrainSpace);
+                carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);
+                carriageBoundsCompute.Dispatch(carriageBoundsKernel, threadGroupX, threadGroupY, 1);
             }
             break;
             case LocationState.Gangway:
             {
                 targetWorldPos.x = spyStats.curWorldPos.x + curXOffset;
+                carriageBoundsCompute.SetVector("_BoundSize", Vector2.zero);
+                carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);
+                carriageBoundsCompute.Dispatch(carriageBoundsKernel, threadGroupX, threadGroupY, 1);
+
             }
             break;
         }
@@ -98,6 +143,11 @@ public class CameraController : MonoBehaviour
 
             case LocationState.Carriage:
             {
+            }
+            break;
+            case LocationState.Gangway:
+            {
+
             }
             break;
         }

@@ -46,8 +46,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 4
   batchKey:
-    material: {fileID: 2100000, guid: 80ea22a1f7101fa4e93bfe0d19245714, type: 2}
-    depthOrder: 0
+    texture: {fileID: 2800000, guid: 6b3fb6c19ab27d24da8bde0ecafb34a3, type: 3}
+    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
+    depthOrder: -2
   atlas: {fileID: 11400000, guid: 3959bb231726cad4ca19158c20742757, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -60,6 +61,7 @@ MonoBehaviour:
   kerning: 1.1
   spacing: 1
   scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.29296875, y: 0.5527344, z: 0, w: 0.44628906}
@@ -94,3 +96,4 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0

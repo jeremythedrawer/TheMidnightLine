@@ -1,4 +1,4 @@
-Shader "Custom/s_atlasStandard"
+Shader "Custom/s_atlasUI"
 {
     Properties
     {
@@ -95,21 +95,8 @@ Shader "Custom/s_atlasStandard"
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-
-                half grey = color.r + (-(_DayNight * 1.1 - 0.9) * _DayNightFactor);
-                half3 finalColor = grey + _MainColor;
-
-                float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;
-                half4 carriageSDF = SAMPLE_TEXTURE2D(_CarriageBoundsTexture, sampler_CarriageBoundsTexture, worldToTrain);
-                float bayer = BayerX8(carriageSDF + 0.5,  i.positionHCS);
-
-                float outside = max(step(worldToTrain.x, 0.0), step(1.0, worldToTrain.x));
-                outside = max(outside,max(step(worldToTrain.y, 0.0),step(1.0, worldToTrain.y)));
-                outside = max(outside, step(5, i.worldPos.z));
-
-
-                float alpha = max(bayer, outside) * color.a;
-                clip(alpha - 0.001);
+                half3 finalColor = color.r + _MainColor;
+                clip(color.a - 0.001);
                 return half4 (finalColor.xxx, 1);
             }
             ENDHLSL

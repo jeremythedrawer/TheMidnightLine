@@ -1,6 +1,7 @@
 using System;
 using System.Collections.Generic;
 using UnityEngine;
+using static AtlasRendering;
 public static class Atlas
 {
     public const int PIXELS_PER_UNIT = 180;
@@ -166,5 +167,18 @@ public static class Atlas
         }
 
         return clipDict;
+    }
+
+    [Serializable] public struct ScrollSprite
+    {
+        public int ticketCheckStart;
+        public int ticketCheckEnd;
+
+        public AtlasRendererType rendererType;
+        public Material material;
+        public int depth;
+        public AtlasSO atlas;
+        public int spriteIndex;
+        public float height;
     }
 }

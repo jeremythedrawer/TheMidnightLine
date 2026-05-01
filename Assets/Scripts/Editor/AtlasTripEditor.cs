@@ -55,11 +55,17 @@ public class AtlasTripEditor : EditorWindow
     }
     private void DrawGraph()
     {
-        Vector2 graphSize = new Vector2(position.width - PADDING * 2, position.height - PADDING * 2 - HEADER_COL_HEIGHT);
+        Vector2 graphSize = new Vector2(position.width - PADDING * 2, (position.height  - PADDING * 2 - HEADER_COL_HEIGHT));
         Vector2 graphPos = new Vector2(PADDING, PADDING + HEADER_COL_HEIGHT);
         Rect graphRect = new Rect(graphPos, graphSize);
+
+        Vector2 zoneSize = new Vector2(graphRect.width, graphRect.height * 0.5f);
+        Vector2 zonePos = new Vector2(PADDING, PADDING + HEADER_COL_HEIGHT);
+        Rect zoneSpawnRect = new Rect(zonePos, zoneSize);
+
         Handles.BeginGUI();
         Handles.DrawSolidRectangleWithOutline(graphRect, Color.clear, Color.white);
+        Handles.DrawSolidRectangleWithOutline(zoneSpawnRect, Color.clear, Color.white);
 
         GUIStyle spawnerLabelStyle = new GUIStyle(EditorStyles.boldLabel) { alignment = TextAnchor.UpperLeft, normal = { textColor = Color.white } };
         GUIStyle stationLabelStyle = new GUIStyle(EditorStyles.boldLabel) { alignment = TextAnchor.UpperLeft, normal = { textColor = Color.black } };
@@ -103,19 +109,19 @@ public class AtlasTripEditor : EditorWindow
             ticketChecks++;
         }
 
-        for (int i = 0; i < ZONE_SPAWNER_COUNT - 1; i++)
+        for (int i = 0; i < ZONE_SPAWNER_COUNT; i++)
         {
             float t = (i + 1) / (float)ZONE_SPAWNER_COUNT;
-            float curHeight = graphRect.yMin + t * graphRect.height;
+            float curHeight = zoneSpawnRect.yMin + t * zoneSpawnRect.height;
 
-            Vector2 p1 = new Vector2(graphRect.xMin, curHeight);
-            Vector2 p2 = new Vector2(graphRect.xMax, curHeight);
+            Vector2 p1 = new Vector2(zoneSpawnRect.xMin, curHeight);
+            Vector2 p2 = new Vector2(zoneSpawnRect.xMax, curHeight);
             Handles.DrawLine(p1, p2);
 
-            float yOffset = (1 / (float)ZONE_SPAWNER_COUNT) * graphRect.height * 0.5f;
+            float yOffset = (1 / (float)ZONE_SPAWNER_COUNT) * zoneSpawnRect.height * 0.5f;
             float t1 = i / (float)ZONE_SPAWNER_COUNT;
-            float curX = graphRect.xMin - (PADDING * 0.5f);
-            float curY = (graphRect.yMin + t1 * graphRect.height) + yOffset;
+            float curX = zoneSpawnRect.xMin - (PADDING * 0.5f);
+            float curY = (zoneSpawnRect.yMin + t1 * zoneSpawnRect.height) + yOffset;
             Rect spawnerLabelRect = new Rect(curX, curY, 20, 200);
             GUI.Label(spawnerLabelRect, ((ZoneArea)i).ToString()[0].ToString(), spawnerLabelStyle);
         }
@@ -130,11 +136,11 @@ public class AtlasTripEditor : EditorWindow
                 if (zone.atlas == null) continue;
 
                 float zoneTicketsToCheck = (float)(zone.ticketCheckEnd - zone.ticketCheckStart);
-                float zoneWidth = (zoneTicketsToCheck / (float)trip.totalTicketsToCheck) * graphRect.width;
-                float zoneHeight = (graphRect.height / (float)ZONE_SPAWNER_COUNT) - (ZONE_PADDING * 2);
+                float zoneWidth = (zoneTicketsToCheck / (float)trip.totalTicketsToCheck) * zoneSpawnRect.width;
+                float zoneHeight = (zoneSpawnRect.height / (float)ZONE_SPAWNER_COUNT) - (ZONE_PADDING * 2);
 
-                float zoneX = graphRect.xMin + ((float)zone.ticketCheckStart / (float)trip.totalTicketsToCheck) * graphRect.width;
-                float zoneY = (graphRect.yMin + ((float)zoneSpawnerData.area / ZONE_SPAWNER_COUNT) * graphRect.height) + ZONE_PADDING;
+                float zoneX = zoneSpawnRect.xMin + ((float)zone.ticketCheckStart / (float)trip.totalTicketsToCheck) * zoneSpawnRect.width;
+                float zoneY = (zoneSpawnRect.yMin + ((float)zoneSpawnerData.area / ZONE_SPAWNER_COUNT) * zoneSpawnRect.height) + ZONE_PADDING;
 
                 Rect zoneRect = new Rect(zoneX, zoneY, zoneWidth, zoneHeight);
 
@@ -149,14 +155,14 @@ public class AtlasTripEditor : EditorWindow
                     selectedIndex_station = -1;
                     selectedIndex_zoneSpawner = i;
                     selectedIndex_zone = j;
-                    int mouseMeters = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.totalTicketsToCheck);
+                    int mouseMeters = (int)(((e.mousePosition.x - zoneSpawnRect.xMin) / zoneSpawnRect.width) * trip.totalTicketsToCheck);
                     dragOffsetZoneMetersStart = mouseMeters - zone.ticketCheckStart;
                     dragOffsetZoneMetersLength = mouseMeters - (int)zoneTicketsToCheck;
                     isAdjustingMetersStart = e.mousePosition.x < zoneRect.center.x;
                 }
                 if (selectedIndex_zoneSpawner == i && selectedIndex_zone == j && e.type == EventType.MouseDrag)
                 {
-                    int mouseT = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.totalTicketsToCheck);
+                    int mouseT = (int)(((e.mousePosition.x - zoneSpawnRect.xMin) / zoneSpawnRect.width) * trip.totalTicketsToCheck);
                     if (isAdjustingMetersStart)
                     {
                         zone.ticketCheckStart = mouseT - dragOffsetZoneMetersStart;
@@ -261,7 +267,7 @@ public class AtlasTripEditor : EditorWindow
                 zone.ticketCheckEnd = Mathf.Clamp(zone.ticketCheckEnd, zone.ticketCheckStart + 1, trip.totalTicketsToCheck);
             }
         }
-        float ticketsCheckedGraphPosX = graphRect.xMin + ((trip.ticketsCheckedSinceStart / trip.totalTicketsToCheck) * graphRect.width);
+        float ticketsCheckedGraphPosX = graphRect.xMin + ((SpyBrain.ticketsCheckedTotal / trip.totalTicketsToCheck) * graphRect.width);
         Vector2 ticketsCheckedTop = new Vector2(ticketsCheckedGraphPosX, graphRect.yMin);
         Vector2 ticketsCheckedBottom = new Vector2(ticketsCheckedGraphPosX, graphRect.yMax);
         Handles.color = Color.yellow;

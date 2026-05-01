@@ -170,7 +170,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                 args[1] = (uint)count;
                 batch.data.argsBuffer.SetData(args);
                 batch.data.mpb.SetBuffer("_SpriteData", batch.data.spriteDataBuffer);
-
+                batch.data.mpb.SetTexture("_AtlasTexture", batch.key.texture);
                 cmd.DrawMeshInstancedIndirect(quad, 0, batch.key.material, 0, batch.data.argsBuffer, 0, batch.data.mpb);
             }
         }

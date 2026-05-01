@@ -103,7 +103,7 @@ public class AtlasRenderer : MonoBehaviour
                 if (atlas.slicedSprites.Length == 0) { Debug.LogWarning("Atlas does not have Sliced Sprites"); return; }
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.slicedSprites.Length - 1);
                 slicedSprite = atlas.slicedSprites[spriteIndex];
-                UpdateSlicedSpriteInputs();
+                UpdateSlicedSpriteInputs(ref slicedSprite);
                 UpdateBounds();
             }
             break;
@@ -115,6 +115,8 @@ public class AtlasRenderer : MonoBehaviour
             }
             break;
         }
+
+        batchKey.texture = atlas.texture;
     }
     private void Awake()
     {
@@ -237,28 +239,28 @@ public class AtlasRenderer : MonoBehaviour
     {        
         bounds.center = transform.position + boundsOffset;
     }
-    public void UpdateSlicedSpriteInputs()
+    public void UpdateSlicedSpriteInputs(ref SliceSprite sliceSprite)
     {
-        uvSizesAndPositions = slicedSprite.uvSizeAndPos;
+        uvSizesAndPositions = sliceSprite.uvSizeAndPos;
 
-        float centerWorldSliceWidth = slicedSprite.sprite.worldSize.x - slicedSprite.worldSlices.x - slicedSprite.worldSlices.y;
-        float centerWorldSliceHeight = slicedSprite.sprite.worldSize.y - slicedSprite.worldSlices.z - slicedSprite.worldSlices.w;
+        float centerWorldSliceWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
+        float centerWorldSliceHeight = sliceSprite.sprite.worldSize.y - sliceSprite.worldSlices.z - sliceSprite.worldSlices.w;
 
-        float rightColPos = slicedSprite.worldSlices.x + (centerWorldSliceWidth * width);
-        float topRowPos = slicedSprite.worldSlices.z + (centerWorldSliceHeight * height);
+        float rightColPos = sliceSprite.worldSlices.x + (centerWorldSliceWidth * width);
+        float topRowPos = sliceSprite.worldSlices.z + (centerWorldSliceHeight * height);
         worldPivotsAndSizes = new Vector4[]
         {
-            new Vector4(0, 0, slicedSprite.worldSlices.x, slicedSprite.worldSlices.z),
-            new Vector4(-slicedSprite.worldSlices.x, 0, centerWorldSliceWidth, slicedSprite.worldSlices.z),
-            new Vector4(-rightColPos, 0, slicedSprite.worldSlices.y, slicedSprite.worldSlices.z),
+            new Vector4(0, 0, sliceSprite.worldSlices.x, sliceSprite.worldSlices.z),
+            new Vector4(-sliceSprite.worldSlices.x, 0, centerWorldSliceWidth, sliceSprite.worldSlices.z),
+            new Vector4(-rightColPos, 0, sliceSprite.worldSlices.y, sliceSprite.worldSlices.z),
 
-            new Vector4(0, -slicedSprite.worldSlices.z, slicedSprite.worldSlices.x, centerWorldSliceHeight),
-            new Vector4(-slicedSprite.worldSlices.x, -slicedSprite.worldSlices.z, centerWorldSliceWidth, centerWorldSliceHeight),
-            new Vector4(-rightColPos, -slicedSprite.worldSlices.z, slicedSprite.worldSlices.y, centerWorldSliceHeight),
+            new Vector4(0, -sliceSprite.worldSlices.z, sliceSprite.worldSlices.x, centerWorldSliceHeight),
+            new Vector4(-sliceSprite.worldSlices.x, -sliceSprite.worldSlices.z, centerWorldSliceWidth, centerWorldSliceHeight),
+            new Vector4(-rightColPos, -sliceSprite.worldSlices.z, sliceSprite.worldSlices.y, centerWorldSliceHeight),
 
-            new Vector4(0, -topRowPos, slicedSprite.worldSlices.x, slicedSprite.worldSlices.w),
-            new Vector4(-slicedSprite.worldSlices.x, -topRowPos, centerWorldSliceWidth, slicedSprite.worldSlices.w),
-            new Vector4(-rightColPos, -topRowPos, slicedSprite.worldSlices.y, slicedSprite.worldSlices.w),
+            new Vector4(0, -topRowPos, sliceSprite.worldSlices.x, sliceSprite.worldSlices.w),
+            new Vector4(-sliceSprite.worldSlices.x, -topRowPos, centerWorldSliceWidth, sliceSprite.worldSlices.w),
+            new Vector4(-rightColPos, -topRowPos, sliceSprite.worldSlices.y, sliceSprite.worldSlices.w),
         };
 
         Vector4 scaleFlipCQuad = Vector4.one;
@@ -281,19 +283,26 @@ public class AtlasRenderer : MonoBehaviour
         };
 
         customs = new Vector4[9];
-        bounds.size = new Vector3(slicedSprite.worldSlices.x + (centerWorldSliceWidth * width) + slicedSprite.worldSlices.y, slicedSprite.worldSlices.z + (centerWorldSliceHeight * height) + slicedSprite.worldSlices.w, 0.2f);
+        bounds.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldSliceWidth * width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldSliceHeight * height) + sliceSprite.worldSlices.w, 0.2f);
         boundsOffset = bounds.size * 0.5f;
 
         if (boxCollider == null) return;
         boxCollider.size = bounds.size;
         boxCollider.offset = boundsOffset;
     }
-    public void SetNineSliceWidthFromWorldSpace(float worldWidth)
-    {
-        float centerWorldSliceWidth = slicedSprite.sprite.worldSize.x - slicedSprite.worldSlices.x - slicedSprite.worldSlices.y;
 
-        width = (worldWidth / centerWorldSliceWidth) - slicedSprite.worldSlices.x - slicedSprite.worldSlices.y;
-        UpdateSlicedSpriteInputs();
+    public void SetWidthFromWorldSpace(float worldWidth, ref SimpleSprite sprite)
+    {
+        width = worldWidth / sprite.worldSize.x;
+        UpdateSpriteInputs(ref sprite);
+        UpdateBounds();
+    }
+    public void SetNineSliceWidthFromWorldSpace(float worldWidth, ref SliceSprite sliceSprite)
+    {
+        float centerWorldSliceWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
+
+        width = (worldWidth / centerWorldSliceWidth) - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
+        UpdateSlicedSpriteInputs(ref sliceSprite);
         UpdateBounds();
     }
     public void PlayClip(ref AtlasClip clip, Transform markerTransform = null)
@@ -678,6 +687,7 @@ public class AtlasRenderer : MonoBehaviour
             customs[i].w = alpha;
         }
     }
+
     [ContextMenu("Set Scrolling Text")]public void SetScrollingText()
     {
         customs = new Vector4[worldPivotsAndSizes.Length];

@@ -28,6 +28,7 @@ public static class AtlasRendering
 
     [Serializable] public struct BatchKey
     {
+        public Texture2D texture;
         public Material material;
         public int depthOrder;
     }
@@ -275,5 +276,3 @@ public static class AtlasRendering
         return quad;
     }
 }
-
-public abstract class AtlasRendererBase : MonoBehaviour { }

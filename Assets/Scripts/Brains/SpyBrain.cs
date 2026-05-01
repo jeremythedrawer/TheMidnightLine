@@ -12,6 +12,7 @@ public class SpyBrain : MonoBehaviour
     public Rigidbody2D rigidBody;
     public BoxCollider2D boxCollider;
     public AtlasRenderer atlasRenderer;
+    
     [Header("Scriptable Objects")]
     public SpySettingsSO settings;
     public MaterialIDSO materialIDs;
@@ -21,6 +22,7 @@ public class SpyBrain : MonoBehaviour
     public TrainSettingsSO trainSettings;
     public LayerSettingsSO layerSettings;
     public GameEventDataSO gameEventData;
+    public CameraStatsSO camStats;
     public TripSO trip;
 
     [Header("Generated")]
@@ -42,6 +44,8 @@ public class SpyBrain : MonoBehaviour
     public static bool canCheckTicket;
     public static bool checkingTicket;
     public static bool checkingNotepad;
+
+    public static int ticketsCheckedTotal;
 
     public CollisionData collisionData;
 
@@ -82,7 +86,7 @@ public class SpyBrain : MonoBehaviour
         ChooseState();
         UpdateStates();
 
-        stats.curWorldPos = transform.position; 
+        stats.curWorldPos = transform.position;
     }
     private void FixedUpdate()
     {
@@ -130,7 +134,7 @@ public class SpyBrain : MonoBehaviour
         {
             stats.curLocationState = LocationState.Carriage;
             curCarriage = TrainController.GetCarriage(transform.position.x);
-            stats.curLocationBounds = curCarriage.insideBoundsCollider.bounds;
+            stats.curLocationBounds = curCarriage.totalBounds;
         }
         else if ((layerSettings.trainLayers.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
         {
@@ -257,6 +261,10 @@ public class SpyBrain : MonoBehaviour
                     stats.disembarkingStationName = trip.stationsDataArray[npcTicketCheck.profile.disembarkingStationIndex].name;
                     canExitCheckTicket = false;
 
+
+                    ticketsCheckedTotal++;
+                    trip.ticketsCheckedSinceLastStation++;
+                    ScrollSpawner.UpdateScrollers();
                     checkingTicket = true;
                 }
             }
@@ -436,5 +444,4 @@ public class SpyBrain : MonoBehaviour
         Gizmos.DrawLine(collisionData.wallTopRight, collisionData.wallBottomRight);
 
     }
-
 }

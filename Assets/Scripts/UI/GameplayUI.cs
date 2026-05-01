@@ -138,8 +138,6 @@ public class GameplayUI : MonoBehaviour
                 ctsTicket?.Cancel();
 
                 curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
-                trip.ticketsCheckedSinceStart++;
-                trip.ticketsCheckedSinceLastStation++;
                 curTicketIcon.CheckTicket();
             }
             break;

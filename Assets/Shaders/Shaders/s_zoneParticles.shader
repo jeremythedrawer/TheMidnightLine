@@ -100,7 +100,6 @@ Shader "Custom/s_zoneParticles"
 
                 half bayer = BayerX8((color - bayerValue), i.positionHCS.y);
                 half3 finalColor = bayer + _MainColor;
-                //finalColor -= (1 - p.parallaxFactor) * (_DayNight * 2 - 1);
                 clip(tex.a - 0.001);
                 return half4(finalColor, 1);
             }

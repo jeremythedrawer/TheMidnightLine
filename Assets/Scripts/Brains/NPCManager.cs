@@ -7,7 +7,6 @@ using static NPC;
 public class NPCManager : MonoBehaviour
 {
     public TripSO trip;
-    public GameEventDataSO gameEventData;
     public NPCsDataSO npcsData;
 
     [Header("Generated")]

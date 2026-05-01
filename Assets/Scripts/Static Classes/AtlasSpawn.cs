@@ -1,6 +1,8 @@
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
+using static Atlas;
+using static AtlasRendering;
 public static class AtlasSpawn
 {
     public const int ZONE_SPAWNER_COUNT = 8;
@@ -62,7 +64,7 @@ public static class AtlasSpawn
         public Vector4 sliceOffsetAndSize;
     };
 
-    [Serializable] public struct Zone
+    [Serializable] public struct Zone // NOTE: Turn into Scriptable Object
     {
         public AtlasSO atlas;
         public int ticketCheckStart;

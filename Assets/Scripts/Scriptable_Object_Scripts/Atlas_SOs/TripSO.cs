@@ -2,14 +2,14 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 using static AtlasSpawn;
-
+using static Atlas;
 [CreateAssetMenu(fileName = "Trip", menuName = "Atlas / Trip")]
 public class TripSO : ScriptableObject
 {
     public ZoneSpawnerData[] zoneSpawnerData;
     public StationSO[] stationsDataArray;
     public NPCBrain[] npc_prefabsArray;
-
+    public ScrollSprite[] scrollSpriteArray;
 
     [Header("Settings")]
     public int minStationsTraitorsTravel = 2;
@@ -18,8 +18,6 @@ public class TripSO : ScriptableObject
     public StationSO nextStation;
     
     public int totalTicketsToCheck;
-
-    public int ticketsCheckedSinceStart;
     public int ticketsCheckedSinceLastStation;
 }
 
