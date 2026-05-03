@@ -1,3 +1,5 @@
+using System.Collections.Generic;
+using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using static Atlas;
@@ -7,17 +9,21 @@ public class AtlasTripEditor : EditorWindow
     const float HEADER_COL_WIDTH = 300;
     const float HEADER_COL_HEIGHT = 20;
     const float PADDING = 100;
-    const float BAR_PADDING = 10;
     const float STATION_RECT_SIZE = 20;
     const float STATION_RECT_Y_OFFSET = 25;
 
     public TripSO trip;
+    public AtlasSO selectedAtlasSO;
+    public int selectedScrollSpriteIndex;
+    public ScrollSpriteType selectedScrollSpriteType;
+    
+    private int selectedZoneIndex;
+    private int selectedScrollIndex;
+    private int dragOffsetWidth;
+    private int dragOffsetStartX;
+    private int dragOffsetStartY;
 
     private int selectedIndex_zone;
-    private int selectedIndex;
-    private int dragOffsetZoneMetersLength;
-    private int dragOffsetZoneMetersStart;
-
     private int selectedIndex_station;
 
     private bool isAdjustingMetersStart;
@@ -29,7 +35,6 @@ public class AtlasTripEditor : EditorWindow
     {
         GetWindow<AtlasTripEditor>("Atlas Trip Editor");
     }
-
     private void Update()
     {
         Repaint();
@@ -39,13 +44,108 @@ public class AtlasTripEditor : EditorWindow
         GUILayoutOption[] GUIWidth = { GUILayout.Width(HEADER_COL_WIDTH), GUILayout.Height(HEADER_COL_HEIGHT) };
 
         EditorGUILayout.BeginHorizontal();
-        trip = (TripSO)EditorGUILayout.ObjectField("Trip", trip, typeof(TripSO), allowSceneObjects: false, GUIWidth);
+        {
+            EditorGUILayout.BeginVertical();
+            {
+                trip = (TripSO)EditorGUILayout.ObjectField("Trip", trip, typeof(TripSO), allowSceneObjects: false, GUIWidth);
+            }
+            EditorGUILayout.EndVertical();
+
+            if (trip != null && selectedScrollIndex != -1 && trip.scrollSprites.Length > 0)
+            {
+                if (selectedScrollIndex >= trip.scrollSprites.Length - 1) selectedScrollIndex = trip.scrollSprites.Length - 1;
+                ScrollSprite selectedScrollSprite = trip.scrollSprites[selectedScrollIndex];
+
+                EditorGUILayout.BeginVertical();
+                {
+                    EditorGUI.BeginChangeCheck();
+                    {
+                        selectedAtlasSO =  (AtlasSO)EditorGUILayout.ObjectField("Change Atlas", selectedScrollSprite.atlas, typeof(AtlasSO), allowSceneObjects: false, GUIWidth);
+
+                    }
+                    if (selectedAtlasSO != null && EditorGUI.EndChangeCheck())
+                    {
+                        if (selectedAtlasSO.simpleSprites.Length > 0)
+                        {
+                            selectedScrollSpriteType = ScrollSpriteType.Simple;
+                        }
+                        else
+                        {
+                            selectedScrollSpriteType = ScrollSpriteType.Sliced;
+                        }
+                    }
+                }
+                EditorGUILayout.EndVertical();
+
+                if (selectedAtlasSO != null)
+                {
+                    EditorGUILayout.BeginVertical();
+                    {
+                        int maxSpriteCount = selectedScrollSprite.scrollType == ScrollSpriteType.Sliced ? selectedAtlasSO.slicedSprites.Length : selectedAtlasSO.simpleSprites.Length;
+                        selectedScrollSpriteIndex = (int)EditorGUILayout.IntSlider("Scroll Sprite Index", selectedScrollSpriteIndex, 0, maxSpriteCount - 1, GUIWidth);
+                    }
+                    EditorGUILayout.EndVertical();
+
+                    EditorGUILayout.BeginVertical();
+                    {
+                        ScrollSpriteType previousType = selectedScrollSpriteType;
+                        List<ScrollSpriteType> validTypes = new List<ScrollSpriteType>();
+
+                        if (selectedAtlasSO.slicedSprites.Length > 0)
+                        {
+                            validTypes.Add(ScrollSpriteType.Sliced);
+                        }
+                        if (selectedAtlasSO.simpleSprites.Length > 0)
+                        {
+                            validTypes.Add(ScrollSpriteType.Simple);
+                        }
+                        string[] options = validTypes.Select(v => v.ToString()).ToArray();
+                        int currentIndex = validTypes.IndexOf(selectedScrollSpriteType);
+                        if (currentIndex < 0) currentIndex = 0;
+                        int newIndex = EditorGUILayout.Popup("Scroll Sprite Type", currentIndex, options);
+                        selectedScrollSpriteType = validTypes[newIndex];
+                    }
+                    EditorGUILayout.EndVertical();
+                }
+
+                EditorGUILayout.BeginVertical();
+                {
+                    bool addScrollSprite = GUILayout.Button("Add Scroll Sprite", GUIWidth);
+                    if (addScrollSprite)
+                    {
+                        List<ScrollSprite> scrollSpriteList = trip.scrollSprites.ToList();
+                        scrollSpriteList.Add(selectedScrollSprite);
+                        trip.scrollSprites = scrollSpriteList.ToArray();
+                        EditorUtility.SetDirty(trip);
+                        Repaint();
+                    }
+                }
+                EditorGUILayout.EndVertical();
+                EditorGUILayout.BeginVertical();
+                {
+                    bool removeScrollSprite = GUILayout.Button("Remove Scroll Sprite", GUIWidth);
+                    if (removeScrollSprite)
+                    {
+                        List<ScrollSprite> scrollSpriteList = trip.scrollSprites.ToList();
+                        scrollSpriteList.Remove(selectedScrollSprite);
+                        trip.scrollSprites = scrollSpriteList.ToArray();
+                        selectedScrollIndex = Mathf.Max(0, selectedScrollIndex - 1);
+                        EditorUtility.SetDirty(trip);
+                        Repaint();
+                    }
+                }
+                EditorGUILayout.EndVertical();
+            }
+        }
         EditorGUILayout.EndHorizontal();
+
 
         if (trip == null) return;
 
         EditorGUILayout.BeginHorizontal();
-        DrawGraph();
+        {
+            DrawGraph();
+        }
         EditorGUILayout.EndHorizontal();
     }
     private void DrawGraph()
@@ -105,14 +205,27 @@ public class AtlasTripEditor : EditorWindow
         float sectionHeight = graphRect.height / (FAR_CLIP + 1);
         for (int i = 0; i <= FAR_CLIP; i++)
         {
-            if (i > MAIN_MIN && i < MAIN_MAX) continue;
+            if (i > MAIN_MIN && i < MAIN_MAX && i != TRAIN_TRACKS_DEPTH && i != TRAIN_TRACKS_DEPTH + 1 && i != TRAIN_LINE_DEPTH) continue;
+
             float curYPos = graphRect.yMin + (i * sectionHeight);
             Vector2 p1 = new Vector2(graphRect.xMin, curYPos);
             Vector2 p2 = new Vector2(graphRect.xMax, curYPos);
             Handles.DrawLine(p1, p2);
 
             Vector2 depthLabelPos = new Vector2(graphRect.xMin - 50, curYPos + (sectionHeight * 0.5f));
-            Handles.Label(depthLabelPos, i.ToString());
+            if (i == TRAIN_TRACKS_DEPTH)
+            {
+                Handles.Label(depthLabelPos, "TRACKS");
+            }
+            else if (i == TRAIN_LINE_DEPTH)
+            {
+
+                Handles.Label(depthLabelPos, "LINE");
+            }
+            else
+            {
+                Handles.Label(depthLabelPos, i.ToString());
+            }
         }
 
         for (int i = 0; i < trip.zoneAreas.Length; i++)
@@ -209,28 +322,31 @@ public class AtlasTripEditor : EditorWindow
                 if (e.type == EventType.MouseDown && zoneBarRect.Contains(e.mousePosition))
                 {
                     selectedIndex_station = -1;
-                    selectedIndex = i;
+                    selectedZoneIndex = i;
+                    selectedScrollIndex = -1;
                     selectedIndex_zone = j;
                     int mouseMeters = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.totalTicketsToCheck);
-                    dragOffsetZoneMetersStart = mouseMeters - zoneAtlas.ticketCheckStart;
-                    dragOffsetZoneMetersLength = mouseMeters - (int)ticketCheckSize;
+                    dragOffsetStartX = mouseMeters - zoneAtlas.ticketCheckStart;
+                    dragOffsetWidth = mouseMeters - (int)ticketCheckSize;
                     isAdjustingMetersStart = e.mousePosition.x < zoneBarRect.center.x;
                 }
-                if (selectedIndex == i && selectedIndex_zone == j && e.type == EventType.MouseDrag)
+                if (selectedZoneIndex == i && selectedIndex_zone == j)
                 {
-                    int mouseT = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.totalTicketsToCheck);
-                    if (isAdjustingMetersStart)
+                    Handles.DrawSolidRectangleWithOutline(zoneBarRect, Color.clear, Color.blueViolet);
+                    if (e.type == EventType.MouseDrag)
                     {
-                        zoneAtlas.ticketCheckStart = mouseT - dragOffsetZoneMetersStart;
+                        int mouseT = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.totalTicketsToCheck);
+                        if (isAdjustingMetersStart)
+                        {
+                            zoneAtlas.ticketCheckStart = mouseT - dragOffsetStartX;
+                        }
+                        else
+                        {
+                            zoneAtlas.ticketCheckEnd = zoneAtlas.ticketCheckStart + (mouseT - dragOffsetWidth);
+                        }
+                        EditorUtility.SetDirty(trip);
+                        Repaint();
                     }
-                    else
-                    {
-                        zoneAtlas.ticketCheckEnd = zoneAtlas.ticketCheckStart + (mouseT - dragOffsetZoneMetersLength);
-                    }
-
-
-                    EditorUtility.SetDirty(trip);
-                    Repaint();
                 }
 
                 if (e.type == EventType.MouseUp)
@@ -313,7 +429,6 @@ public class AtlasTripEditor : EditorWindow
 
                     if (selectedIndex_zone == i)
                     {
-                        selectedIndex_zone = -1;
                         e.Use();
                     }
                 }
@@ -357,52 +472,90 @@ public class AtlasTripEditor : EditorWindow
             float scaledHeight = spritePixelHeight * scale;
 
             GUI.BeginGroup(scrollBarRect);
-
-            for (float x = 0; x < barWidth; x += scaledWidth)
             {
-                Rect r = new Rect(x, 0, scaledWidth, scaledHeight);
-                GUI.DrawTextureWithTexCoords(r, scrollSprite.atlas.texture, scrollUVRect);
+                for (float x = 0; x < barWidth; x += scaledWidth)
+                {
+                    Rect r = new Rect(x, 0, scaledWidth, scaledHeight);
+                    GUI.DrawTextureWithTexCoords(r, scrollSprite.atlas.texture, scrollUVRect);
+                }
             }
-
             GUI.EndGroup();
 
             if (e.type == EventType.MouseDown && scrollBarRect.Contains(e.mousePosition))
             {
                 selectedIndex_station = -1;
-                selectedIndex = i;
-                int mouseStart = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.totalTicketsToCheck);
-                dragOffsetZoneMetersStart = mouseStart - scrollSprite.ticketCheckStart;
-                dragOffsetZoneMetersLength = mouseStart - (int)ticketCheckSize;
+                selectedScrollIndex = i;
+                selectedZoneIndex = -1;
+                selectedIndex_zone = -1;
+                int mouseStartX = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.totalTicketsToCheck);
+                int mouseStartY = (int)(((e.mousePosition.y - graphRect.yMin) / graphRect.height) * FAR_CLIP);
+                dragOffsetStartX = mouseStartX - scrollSprite.ticketCheckStart;
+                dragOffsetWidth = mouseStartX - (int)ticketCheckSize;
+                dragOffsetStartY = mouseStartY - scrollSprite.depth;
                 isAdjustingMetersStart = e.mousePosition.x < scrollBarRect.center.x;
+
+                selectedScrollSpriteIndex = scrollSprite.spriteIndex;
+                selectedScrollSpriteType = scrollSprite.scrollType;
+                selectedAtlasSO = scrollSprite.atlas;
             }
 
-            if (selectedIndex == i && e.type == EventType.MouseDrag)
+            if (selectedScrollIndex == i)
             {
-                int mouseT = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.totalTicketsToCheck);
-                if (isAdjustingMetersStart)
-                {
-                    scrollSprite.ticketCheckStart = mouseT - dragOffsetZoneMetersStart;
-                }
-                else
-                {
-                    scrollSprite.ticketCheckEnd = scrollSprite.ticketCheckStart + (mouseT - dragOffsetZoneMetersLength);
-                }
+                Handles.DrawSolidRectangleWithOutline(scrollBarRect, Color.clear, Color.blueViolet);
 
+                EditorGUI.BeginChangeCheck();
+                {
+                    scrollSprite.spriteIndex = selectedScrollSpriteIndex;
+                    scrollSprite.scrollType = selectedScrollSpriteType;
+                    scrollSprite.atlas = selectedAtlasSO;
+                }
+                EditorGUI.EndChangeCheck();
 
-                EditorUtility.SetDirty(trip);
-                Repaint();
+                if (e.type == EventType.MouseDrag)
+                {
+                    int mouseX = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.totalTicketsToCheck);
+                    if (isAdjustingMetersStart)
+                    {
+                        scrollSprite.ticketCheckStart = mouseX - dragOffsetStartX;
+                    }
+                    else
+                    {
+                        scrollSprite.ticketCheckEnd = scrollSprite.ticketCheckStart + (mouseX - dragOffsetWidth);
+                    }
+
+                    int mouseY = (int)(((e.mousePosition.y - graphRect.yMin) / graphRect.height) * FAR_CLIP);
+
+                    scrollSprite.depth = mouseY - dragOffsetStartY;
+
+                    EditorUtility.SetDirty(trip);
+                    Repaint();
+                }
             }
+
 
             if (e.type == EventType.MouseUp)
             {
-                if (selectedIndex_zone == i)
+                var oldOrder = trip.scrollSprites;
+
+                var newOrder = trip.scrollSprites
+                    .OrderBy(s => s.ticketCheckStart)
+                    .ThenBy(s => s.depth)
+                    .ToArray();
+
+                // Check if order actually changed
+                bool changed = !oldOrder.SequenceEqual(newOrder);
+
+                if (changed)
                 {
-                    selectedIndex_zone = -1;
-                    e.Use();
+                    trip.scrollSprites = newOrder;
+                    selectedScrollIndex = -1;
                 }
+
+                e.Use();
             }
             scrollSprite.ticketCheckStart = Mathf.Clamp(scrollSprite.ticketCheckStart, 0, scrollSprite.ticketCheckEnd - 1);
             scrollSprite.ticketCheckEnd = Mathf.Clamp(scrollSprite.ticketCheckEnd, scrollSprite.ticketCheckStart + 1, trip.totalTicketsToCheck);
+            scrollSprite.depth = (int)Mathf.Clamp(scrollSprite.depth, 0, FAR_CLIP);
         }
 
         Handles.EndGUI();

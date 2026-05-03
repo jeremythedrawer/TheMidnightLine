@@ -13,18 +13,19 @@ MonoBehaviour:
   m_Name: Demo_Trip
   m_EditorClassIdentifier: Assembly-CSharp::TripSO
   zoneAreas:
-  - zoneSprites: []
-    area: 0
+  - label: 0
+    zoneSprites: []
     particleCount: 0
     computeGroupSize: 0
     kernelID_init: 0
     kernelID_initSlice: 0
     kernelID_update: 0
     active: 0
-  - zoneSprites:
+  - label: 1
+    zoneSprites:
     - atlas: {fileID: 11400000, guid: b7293c5d7b7f8814a972cc266c414cf8, type: 2}
       ticketCheckStart: 0
-      ticketCheckEnd: 2
+      ticketCheckEnd: 4
       zoneType: 0
       zoneUVSizeAndPosArray:
       - {x: 0.22167969, y: 0.20117188, z: 0.001953125, w: 0.79589844}
@@ -46,7 +47,7 @@ MonoBehaviour:
       - {x: 0, y: 0, z: 4.938889, w: 3.2166667}
       zoneSliceOffsetsAndSizes: []
     - atlas: {fileID: 11400000, guid: f86ccfc280901114c9e722a148ac3810, type: 2}
-      ticketCheckStart: 2
+      ticketCheckStart: 3
       ticketCheckEnd: 4
       zoneType: 0
       zoneUVSizeAndPosArray:
@@ -74,14 +75,14 @@ MonoBehaviour:
       - {x: 0, y: 0, z: 8, w: 7.311111}
       - {x: 0, y: 0, z: 5.611111, w: 7.438889}
       zoneSliceOffsetsAndSizes: []
-    area: 1
     particleCount: 0
     computeGroupSize: 0
     kernelID_init: 0
     kernelID_initSlice: 0
     kernelID_update: 0
     active: 0
-  - zoneSprites:
+  - label: 2
+    zoneSprites:
     - atlas: {fileID: 11400000, guid: 8fe34cef64df39f47ad5ef739cc24f29, type: 2}
       ticketCheckStart: 0
       ticketCheckEnd: 3
@@ -99,33 +100,33 @@ MonoBehaviour:
       - {x: 0, y: 0, z: 1.9, w: 2.1166666}
       - {x: 0, y: 0, z: 3.4222221, w: 2.8944445}
       zoneSliceOffsetsAndSizes: []
-    area: 2
     particleCount: 0
     computeGroupSize: 0
     kernelID_init: 0
     kernelID_initSlice: 0
     kernelID_update: 0
     active: 0
-  - zoneSprites: []
-    area: 3
+  - label: 3
+    zoneSprites: []
     particleCount: 0
     computeGroupSize: 0
     kernelID_init: 0
     kernelID_initSlice: 0
     kernelID_update: 0
     active: 0
-  - zoneSprites: []
-    area: 4
+  - label: 4
+    zoneSprites: []
     particleCount: 0
     computeGroupSize: 0
     kernelID_init: 0
     kernelID_initSlice: 0
     kernelID_update: 0
     active: 0
-  - zoneSprites:
+  - label: 5
+    zoneSprites:
     - atlas: {fileID: 11400000, guid: 7bd15aca28e0873468552b14aa4bd880, type: 2}
-      ticketCheckStart: 4
-      ticketCheckEnd: 6
+      ticketCheckStart: 0
+      ticketCheckEnd: 3
       zoneType: 1
       zoneUVSizeAndPosArray:
       - {x: 0.07763672, y: 0.00024414062, z: 0, w: 0.8815918}
@@ -346,23 +347,22 @@ MonoBehaviour:
       - {x: 0, y: 0.9, z: 0, w: 0}
       - {x: 0, y: 0.9, z: 0.9, w: 0}
       - {x: 0.9, y: 0.9, z: 0, w: 0}
-    area: 5
     particleCount: 0
     computeGroupSize: 0
     kernelID_init: 0
     kernelID_initSlice: 0
     kernelID_update: 0
     active: 0
-  - zoneSprites: []
-    area: 6
+  - label: 6
+    zoneSprites: []
     particleCount: 0
     computeGroupSize: 0
     kernelID_init: 0
     kernelID_initSlice: 0
     kernelID_update: 0
     active: 0
-  - zoneSprites: []
-    area: 7
+  - label: 7
+    zoneSprites: []
     particleCount: 0
     computeGroupSize: 0
     kernelID_init: 0
@@ -381,14 +381,14 @@ MonoBehaviour:
   - {fileID: 94976023300698573, guid: 897c100f6665dfb409630e778458925c, type: 3}
   - {fileID: 94976023300698573, guid: ff0a87f408df46b46bc2b001c88fee02, type: 3}
   - {fileID: 94976023300698573, guid: 309c427b4de8219458011f9f0e3445fd, type: 3}
-  scrollSpriteArray:
+  scrollSprites:
   - ticketCheckStart: 0
-    ticketCheckEnd: 0
-    scrollType: 0
-    depth: 0
-    atlas: {fileID: 0}
+    ticketCheckEnd: 2
+    scrollType: 1
+    depth: 51
+    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
     spriteIndex: 0
-    height: 0
+    height: 1
   minStationsTraitorsTravel: 2
   maxStationsTraitorsTravel: 4
   nextStation: {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}

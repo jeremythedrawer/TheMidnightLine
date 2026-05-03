@@ -9,10 +9,7 @@ public class AtlasFactory : EditorWindow
 {
     private AtlasSO atlas;
     private Texture2D markerTexture;
-    private float spriteOrderTolerance;
-    
     private Vector2 scroll;
-    private bool changeSprites;
 
     private float cellSize = 256f;
     private float markerSize = 4f;
@@ -30,9 +27,9 @@ public class AtlasFactory : EditorWindow
     private int flip;
     private Color32 previewBGColor;
 
-    List<SimpleSprite> simpleSpritesList;
-    List<MotionSprite> motionSpritesList;
-    List<SliceSprite> slicedSpritesList;
+    List<SimpleSprite> newSimpleSprites;
+    List<MotionSprite> newMotionSprites;
+    List<SliceSprite> newSliceSprites;
 
     //Simple
     private Vector2[] simplePivots = new Vector2[]
@@ -41,7 +38,6 @@ public class AtlasFactory : EditorWindow
         new Vector2(0.0f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(1.0f, 0.5f),
         new Vector2(0.0f, 0.0f), new Vector2(0.5f, 0.0f), new Vector2(1.0f, 0.0f),
     };
-
 
     //Motion
     private AtlasClip previewClip;
@@ -55,7 +51,6 @@ public class AtlasFactory : EditorWindow
     private int simpleSpritesFound;
     private int motionSpritesFound;
     private int sliceSpritesFound;
-
 
     const float padding = 50f;
     const float GUIHeaderColoumnWidth = 300;
@@ -86,12 +81,7 @@ public class AtlasFactory : EditorWindow
         EditorGUI.BeginChangeCheck();
         atlas = (AtlasSO)EditorGUILayout.ObjectField("Atlas", atlas, typeof(AtlasSO), allowSceneObjects: false, GUIWidth);
         markerTexture = (Texture2D)EditorGUILayout.ObjectField("Marker Texture", markerTexture, typeof(Texture2D), allowSceneObjects: false, GUIWidth);
-        if (EditorGUI.EndChangeCheck())
-        {
-            changeSprites = false;
-        }
-        
-        spriteOrderTolerance = EditorGUILayout.Slider("Sprite Order Tolerance", spriteOrderTolerance, 0.01f, 0.2f, GUIWidth);
+        EditorGUI.EndChangeCheck();
 
         if (atlas == null)
         {
@@ -111,7 +101,6 @@ public class AtlasFactory : EditorWindow
 
             previewClip = default;
             selectedIndex = 0;
-            changeSprites = true;
             MakeTextureReadable(atlas.texture);
             if (markerTexture != null)
             {
@@ -129,11 +118,6 @@ public class AtlasFactory : EditorWindow
         }
 
         EditorGUILayout.EndVertical();
-        if (!changeSprites)
-        {
-            EditorGUILayout.EndHorizontal();
-            return;
-        }
         #endregion
 
         #region View Fields
@@ -278,6 +262,8 @@ public class AtlasFactory : EditorWindow
         EditorGUILayout.EndHorizontal();
 
         GUI.enabled = atlas != null;
+
+        RearrangeIndex();
     }
     private void GenerateSprites()
     {
@@ -291,29 +277,29 @@ public class AtlasFactory : EditorWindow
 
         if (atlas.simpleSprites.Length > 0)
         {
-            simpleSpritesList = atlas.simpleSprites.ToList();
+            newSimpleSprites = atlas.simpleSprites.ToList();
         }
         else
         {
-            simpleSpritesList = new List<SimpleSprite>();
+            newSimpleSprites = new List<SimpleSprite>();
         }
 
         if (atlas.motionSprites.Length > 0)
         {
-            motionSpritesList = atlas.motionSprites.ToList();
+            newMotionSprites = atlas.motionSprites.ToList();
         }
         else
         {
-            motionSpritesList = new List<MotionSprite>();
+            newMotionSprites = new List<MotionSprite>();
         }
 
         if (atlas.slicedSprites.Length > 0)
         {
-            slicedSpritesList = atlas.slicedSprites.ToList();
+            newSliceSprites = atlas.slicedSprites.ToList();
         }
         else
         {
-            slicedSpritesList = new List<SliceSprite>();
+            newSliceSprites = new List<SliceSprite>();
 
         }
 
@@ -344,10 +330,9 @@ public class AtlasFactory : EditorWindow
             }
         }
 
-        atlas.simpleSprites = simpleSpritesList.ToArray();
-        atlas.motionSprites = motionSpritesList.ToArray();
-        atlas.slicedSprites = slicedSpritesList.ToArray();
         SortAtlasSprites();
+        SetSpriteArray();
+        SetPreviousKeyframeSprites();
     }
     private List<Vector2Int> FloodFill(int startX, int startY, int width, int height, ref bool[] visited, Color32[] atlasPixels, Color32[] markerPixels = null)
     {
@@ -403,7 +388,6 @@ public class AtlasFactory : EditorWindow
     }
     private void CreateAtlasSprite(List<Vector2Int> pixelPositions, float texWidth, float texHeight, Color32[] pixelColors, int index)
     {
-
         float minX = float.MaxValue;
         float minY = float.MaxValue;
         float maxX = float.MinValue;
@@ -468,7 +452,6 @@ public class AtlasFactory : EditorWindow
 
         SimpleSprite newSimpleSprite = new SimpleSprite();
 
-
         float spriteWidth = maxX - minX + 1;
         float spriteHeight = maxY - minY + 1;
 
@@ -494,15 +477,15 @@ public class AtlasFactory : EditorWindow
             }
             newMotionSprite.sprite = newSimpleSprite;
 
-            if (motionSpritesFound < motionSpritesList.Count)
+            if (motionSpritesFound < newMotionSprites.Count)
             {
-                motionSpritesList[motionSpritesFound] = newMotionSprite;
+                newMotionSprites[motionSpritesFound] = newMotionSprite;
+                motionSpritesFound++;
             }
             else
             {
-                motionSpritesList.Add(newMotionSprite);
+                newMotionSprites.Add(newMotionSprite);
             }
-            motionSpritesFound++;
         }
         else if (slicesFound >  0)
         {
@@ -559,81 +542,147 @@ public class AtlasFactory : EditorWindow
             slicedSprite.worldSlices.z = worldBottomSlice;
             slicedSprite.worldSlices.w = worldTopSlice;
 
-            if (sliceSpritesFound < slicedSpritesList.Count)
+            if (sliceSpritesFound < newSliceSprites.Count)
             {
-                slicedSpritesList[sliceSpritesFound] = slicedSprite;
+                newSliceSprites[sliceSpritesFound] = slicedSprite;
             }
             else
             {
-                slicedSpritesList.Add(slicedSprite);
+                newSliceSprites.Add(slicedSprite);
             }
             sliceSpritesFound++;
         }
         else
         {
-            if (simpleSpritesFound < simpleSpritesList.Count)
+            if (simpleSpritesFound < newSimpleSprites.Count)
             {
-                newSimpleSprite.uvPivot = simpleSpritesList[simpleSpritesFound].uvPivot;
-                simpleSpritesList[simpleSpritesFound] = newSimpleSprite;
+                newSimpleSprite.uvPivot = newSimpleSprites[simpleSpritesFound].uvPivot;
+                newSimpleSprites[simpleSpritesFound] = newSimpleSprite;
             }
             else
             {
-                simpleSpritesList.Add(newSimpleSprite);
+                newSimpleSprites.Add(newSimpleSprite);
             }
             simpleSpritesFound++;
         }
     }
     private void SortAtlasSprites()
     {
-        if (atlas.simpleSprites.Length > 1)
+        if (newSimpleSprites.Count > 1)
         {
-            Array.Sort(atlas.simpleSprites, (a, b) =>
-            {
-                if (Mathf.Abs(b.uvSizeAndPos.w - a.uvSizeAndPos.w) > spriteOrderTolerance) return b.uvSizeAndPos.w.CompareTo(a.uvSizeAndPos.w);
-
-                return a.uvSizeAndPos.z.CompareTo(b.uvSizeAndPos.z);
-            });
-            for (int i = 0; i < atlas.simpleSprites.Length; i++)
-            {
-                atlas.simpleSprites[i].index = i;
-            }
+            newSimpleSprites.OrderByDescending(s => s.uvSizeAndPos.w).ThenBy(s => s.uvSizeAndPos.z);
         }
-
-        if (atlas.motionSprites.Length > 1)
+        if (newMotionSprites.Count > 1)
         {
-            Array.Sort(atlas.motionSprites, (a, b) =>
-            {
-                if (Mathf.Abs(b.sprite.uvSizeAndPos.w - a.sprite.uvSizeAndPos.w) > spriteOrderTolerance) return b.sprite.uvSizeAndPos.w.CompareTo(a.sprite.uvSizeAndPos.w);
+            newMotionSprites.OrderByDescending(s => s.sprite.uvSizeAndPos.w).ThenBy(s => s.sprite.uvSizeAndPos.z);
+        }
+        if (newSliceSprites.Count > 1)
+        {
+            newSliceSprites.OrderByDescending(s => s.sprite.uvSizeAndPos.w).ThenBy(s => s.sprite.uvSizeAndPos.z);
+        }
+    }
 
-                return a.sprite.uvSizeAndPos.z.CompareTo(b.sprite.uvSizeAndPos.z);
-            });
-            for (int i = 0; i < atlas.motionSprites.Length; i++)
-            {
-                atlas.motionSprites[i].sprite.index = i;
+    private void SetSpriteArray()
+    {
+        for(int i = newSimpleSprites.Count - 1; i >= 0; i--)
+        {
+            SimpleSprite newSprite = newSimpleSprites[i];
+            Rect newRect = new Rect(newSprite.uvSizeAndPos.z, newSprite.uvSizeAndPos.w, newSprite.uvSizeAndPos.x, newSprite.uvSizeAndPos.y);
 
-                for (int j = 0; j < atlas.clips.Length; j++)
+            for (int j = 0; j < atlas.simpleSprites.Length; j++)
+            {
+                SimpleSprite oldSprite = atlas.simpleSprites[j];
+
+                Rect oldRect = new Rect(oldSprite.uvSizeAndPos.z, oldSprite.uvSizeAndPos.w, oldSprite.uvSizeAndPos.x,oldSprite.uvSizeAndPos.y);
+
+                if (oldRect.Overlaps(newRect))
                 {
-                    for (int k = 0; k < atlas.clips[j].keyFrames.Length; k++)
-                    {
-                        if (atlas.clips[j].keyFrames[k].motionSprite.sprite.index == i)
-                        {
-                            atlas.clips[j].keyFrames[k].motionSprite = atlas.motionSprites[i];
-                        }
-                    }
+                    atlas.simpleSprites[j] = newSprite;
+                    newSimpleSprites.Remove(newSimpleSprites[i]);
+                    break;
                 }
             }
         }
-        if (atlas.slicedSprites.Length > 1)
-        {
-            Array.Sort(atlas.slicedSprites, (a, b) =>
-            {
-                if (Mathf.Abs(b.sprite.uvSizeAndPos.w - a.sprite.uvSizeAndPos.w) > spriteOrderTolerance) return b.sprite.uvSizeAndPos.w.CompareTo(a.sprite.uvSizeAndPos.w);
 
-                return a.sprite.uvSizeAndPos.z.CompareTo(b.sprite.uvSizeAndPos.z);
-            });
-            for (int i = 0; i < atlas.slicedSprites.Length; i++)
+        List<SimpleSprite> simpleSpritesTemp = atlas.simpleSprites.ToList();
+        simpleSpritesTemp.AddRange(newSimpleSprites);
+
+        for (int i = 0; i < simpleSpritesTemp.Count; i++)
+        {
+            SimpleSprite sprite = simpleSpritesTemp[i];
+            sprite.index = i;
+            simpleSpritesTemp[i] = sprite;
+        }
+        atlas.simpleSprites = simpleSpritesTemp.ToArray();
+
+        for (int i = newMotionSprites.Count - 1; i >= 0; i--)
+        {
+            SimpleSprite newSprite = newMotionSprites[i].sprite;
+            Rect newRect = new Rect(newSprite.uvSizeAndPos.z, newSprite.uvSizeAndPos.w, newSprite.uvSizeAndPos.x, newSprite.uvSizeAndPos.y);
+            for (int j = 0; j < atlas.motionSprites.Length; j++)
             {
-                atlas.slicedSprites[i].sprite.index = i;
+                SimpleSprite oldSprite = atlas.motionSprites[j].sprite;
+                Rect oldRect = new Rect(oldSprite.uvSizeAndPos.z, oldSprite.uvSizeAndPos.w, oldSprite.uvSizeAndPos.x, oldSprite.uvSizeAndPos.y);
+                if (oldRect.Overlaps(newRect))
+                {
+                    atlas.motionSprites[j] = newMotionSprites[i];
+                    newMotionSprites.Remove(newMotionSprites[i]);
+                    break;
+                }
+            }
+        }
+        List<MotionSprite> motionSpritesTemp = atlas.motionSprites.ToList();
+        motionSpritesTemp.AddRange(newMotionSprites);
+
+        for (int i = 0; i < motionSpritesTemp.Count; i++)
+        {
+            MotionSprite motionSprite = motionSpritesTemp[i];
+            motionSprite.sprite.index = i;
+            motionSpritesTemp[i] = motionSprite;
+        }
+        atlas.motionSprites = motionSpritesTemp.ToArray();
+
+
+        for (int i = newSliceSprites.Count - 1; i >= 0; i--)
+        {
+            SimpleSprite newSprite = newSliceSprites[i].sprite;
+            Rect newRect = new Rect(newSprite.uvSizeAndPos.z, newSprite.uvSizeAndPos.w, newSprite.uvSizeAndPos.x, newSprite.uvSizeAndPos.y);
+            for (int j = 0; j < atlas.slicedSprites.Length; j++)
+            {
+                SimpleSprite oldSprite = atlas.slicedSprites[j].sprite;
+                Rect oldRect = new Rect(oldSprite.uvSizeAndPos.z, oldSprite.uvSizeAndPos.w, oldSprite.uvSizeAndPos.x, oldSprite.uvSizeAndPos.y);
+                if (oldRect.Overlaps(newRect))
+                {
+                    atlas.slicedSprites[j] = newSliceSprites[i];
+                    newSliceSprites.Remove(newSliceSprites[i]);
+                    break;
+                }
+            }
+        }
+        List<SliceSprite> sliceSpritesTemp = atlas.slicedSprites.ToList();
+        sliceSpritesTemp.AddRange(newSliceSprites);
+
+        for (int i = 0; i < sliceSpritesTemp.Count; i++)
+        {
+            SliceSprite sliceSprite = sliceSpritesTemp[i];
+            sliceSprite.sprite.index = i;
+            sliceSpritesTemp[i] = sliceSprite;
+        }
+        atlas.slicedSprites = sliceSpritesTemp.ToArray();
+    }
+    private void SetPreviousKeyframeSprites()
+    {
+        for (int i = 0; i < atlas.motionSprites.Length; i++)
+        {
+            for (int j = 0; j < atlas.clips.Length; j++)
+            {
+                for (int k = 0; k < atlas.clips[j].keyFrames.Length; k++)
+                {
+                    if (atlas.clips[j].keyFrames[k].motionSprite.sprite.index == i)
+                    {
+                        atlas.clips[j].keyFrames[k].motionSprite = atlas.motionSprites[i];
+                    }
+                }
             }
         }
     }
@@ -699,19 +748,24 @@ public class AtlasFactory : EditorWindow
         Handles.DrawSolidRectangleWithOutline(pivotRect, Color.clear, atlas.pivotColor);
 
         GUI.depth = 1;
-        if (selectedIndex != gridIndex && GUI.Button(spriteRect, GUIContent.none, GUIStyle.none))
-        {
-            selectedIndex = gridIndex;
-            previewSprite = atlasSprite;
-            curFrameIndex = 0;
-        }
+        Event e = Event.current;
 
+        if (spriteRect.Contains(e.mousePosition) && selectedIndex != gridIndex)
+        {
+            if (e.type == EventType.MouseDown && e.button == 0)
+            {
+                selectedIndex = gridIndex;
+                previewSprite = atlasSprite;
+                curFrameIndex = 0;
+                e.Use();
+            }
+        }
 
         if (selectedIndex == gridIndex)
         {
             Handles.DrawSolidRectangleWithOutline(spriteRect, Color.clear, Color.blueViolet);
         }
-
+        Vector2 rectSize = new Vector2(cellSize * 0.05f, cellSize * 0.05f);
         if (motionSpriteNullable.HasValue)
         {
             MotionSprite motionSprite = motionSpriteNullable.Value;
@@ -892,17 +946,16 @@ public class AtlasFactory : EditorWindow
         {
             if (selectedIndex == gridIndex)
             {
-                float rectSize = cellSize * 0.05f;
                 for (int i = 0; i < simplePivots.Length; i++)
                 {
                     Vector2 curPivot = simplePivots[i];
                     Vector2 rectOffset = spriteRect.size * new Vector2(curPivot.x, 1 - curPivot.y);
-                    Vector2 buttonOffset = new Vector2(rectSize, rectSize) * new Vector2(1 - curPivot.x, curPivot.y);
+                    Vector2 buttonOffset = rectSize * new Vector2(1 - curPivot.x, curPivot.y);
 
-                    Rect buttonPos = new Rect(spriteRect.min + rectOffset - buttonOffset, new Vector2(rectSize, rectSize));
+                    Rect buttonRect = new Rect(spriteRect.min + rectOffset - buttonOffset, rectSize);
 
                     GUI.depth = 0;
-                    if (GUI.Button(buttonPos, GUIContent.none))
+                    if (GUI.Button(buttonRect, GUIContent.none))
                     {
                         atlas.simpleSprites[selectedIndex].uvPivot = curPivot;
                         EditorUtility.SetDirty(atlas);
@@ -911,7 +964,81 @@ public class AtlasFactory : EditorWindow
                 }
             }
         }
-            Handles.EndGUI();
+
+        if (selectedIndex == gridIndex)
+        {
+            float quarterWidth = spriteRect.width * 0.25f;
+            Vector2 shiftLeftPos = new Vector2(spriteRect.center.x - quarterWidth, spriteRect.center.y);
+            Vector2 shiftRightPos = new Vector2(spriteRect.center.x + quarterWidth, spriteRect.center.y);
+            Rect shiftLeftRect = new Rect(shiftLeftPos, rectSize);
+            Rect shiftRightRect = new Rect(shiftRightPos, rectSize);
+
+            Handles.DrawSolidRectangleWithOutline(shiftLeftRect, Color.yellowNice, Color.black);
+            Handles.DrawSolidRectangleWithOutline(shiftRightRect, Color.yellowNice, Color.black);
+
+            
+            if (shiftLeftRect.Contains(e.mousePosition))
+            {
+                if (e.type == EventType.MouseDown && e.button == 0)
+                {
+                    if (selectedIndex == 0) return;
+                    if (motionSpriteNullable.HasValue)
+                    {
+                        int motionIndex = selectedIndex - atlas.simpleSprites.Length;
+                        atlas.motionSprites[motionIndex] = atlas.motionSprites[motionIndex - 1];
+                        atlas.motionSprites[motionIndex - 1] = motionSpriteNullable.Value;
+                    }
+                    else if (slicedSpriteNullable.HasValue)
+                    {
+                        int sliceIndex = selectedIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
+                        atlas.slicedSprites[sliceIndex] = atlas.slicedSprites[sliceIndex - 1];
+                        atlas.slicedSprites[sliceIndex - 1] = slicedSpriteNullable.Value;
+                    }
+                    else
+                    {
+                        atlas.simpleSprites[selectedIndex] = atlas.simpleSprites[selectedIndex - 1];
+                        atlas.simpleSprites[selectedIndex - 1] = atlasSprite;
+                    }
+                    selectedIndex--;
+                    EditorUtility.SetDirty(atlas);
+                    AssetDatabase.SaveAssets();
+                }
+            }
+
+            if (shiftRightRect.Contains(e.mousePosition))
+            {
+                if (e.type == EventType.MouseDown && e.button == 0)
+                {
+                    if (motionSpriteNullable.HasValue)
+                    {
+                        int motionIndex = selectedIndex - atlas.simpleSprites.Length;
+                        if (motionIndex == atlas.motionSprites.Length - 1) return;
+                        atlas.motionSprites[motionIndex] = atlas.motionSprites[motionIndex + 1];
+                        atlas.motionSprites[motionIndex + 1] = motionSpriteNullable.Value;
+                        selectedIndex++;
+                    }
+                    else if (slicedSpriteNullable.HasValue)
+                    {
+                        int sliceIndex = selectedIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
+                        if (sliceIndex == atlas.slicedSprites.Length - 1) return;
+                        atlas.slicedSprites[sliceIndex] = atlas.slicedSprites[sliceIndex + 1];
+                        atlas.slicedSprites[sliceIndex + 1] = slicedSpriteNullable.Value;
+                        selectedIndex++;
+                    }
+                    else
+                    {
+                        if (selectedIndex == atlas.simpleSprites.Length - 1) return;
+
+                        atlas.simpleSprites[selectedIndex] = atlas.simpleSprites[selectedIndex + 1];
+                        atlas.simpleSprites[selectedIndex + 1] = atlasSprite;
+                        selectedIndex++;
+                    }
+                    EditorUtility.SetDirty(atlas);
+                    AssetDatabase.SaveAssets();
+                }
+            }
+        }
+        Handles.EndGUI();
 
         //Sprite Index Label
         Vector2 indexPos = new Vector2(spriteRect.xMin, spriteRect.yMin);
@@ -1001,5 +1128,8 @@ public class AtlasFactory : EditorWindow
                 Repaint();
             }
         }
+    }
+    private void RearrangeIndex()
+    {
     }
 }

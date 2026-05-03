@@ -5,7 +5,8 @@ public static class AtlasSpawn
 {
     public const float MAIN_MIN = 1.0f;
     public const float MAIN_MAX = 26.0f;
-
+    public const float TRAIN_TRACKS_DEPTH = 6f;
+    public const float TRAIN_LINE_DEPTH = 5f;
     public const float FORE_MIN = 1.0f;
     public const float FORE_SIZE = 1.0f;
     public const float MID_MIN = 48.0f;
