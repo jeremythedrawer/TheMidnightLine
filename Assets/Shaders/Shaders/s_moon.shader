@@ -2,7 +2,6 @@ Shader "Custom/s_moon"
 {
     Properties
     {
-        [NoScaleOffset] _NoiseTexture("Texture Atlas", 2D) = "white"
     }
 
     SubShader
@@ -18,9 +17,6 @@ Shader "Custom/s_moon"
             #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
             #pragma vertex vert
             #pragma fragment frag
-
-            TEXTURE2D(_NoiseTexture);
-		    SAMPLER(sampler_NoiseTexture);
 
             float _DayNight;
 

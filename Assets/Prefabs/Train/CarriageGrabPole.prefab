@@ -46,7 +46,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
     depthOrder: 8
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
@@ -59,10 +60,12 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-    uvPivot: {x: 0.5, y: 1}
+    uvPivot: {x: 0, y: 0}
     worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
     index: 8
   bounds:
@@ -93,6 +96,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!1 &1993832973438283806
 GameObject:
   m_ObjectHideFlags: 0
@@ -139,7 +143,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
     depthOrder: 8
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
@@ -152,10 +157,12 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-    uvPivot: {x: 0.5, y: 1}
+    uvPivot: {x: 0, y: 0}
     worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
     index: 8
   bounds:
@@ -186,6 +193,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!1 &2862701673191317230
 GameObject:
   m_ObjectHideFlags: 0
@@ -232,7 +240,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
     depthOrder: 8
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
@@ -245,10 +254,12 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-    uvPivot: {x: 0.5, y: 1}
+    uvPivot: {x: 0, y: 0}
     worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
     index: 8
   bounds:
@@ -279,6 +290,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!1 &5600004835303776041
 GameObject:
   m_ObjectHideFlags: 0
@@ -331,7 +343,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
     depthOrder: 8
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
@@ -344,6 +357,8 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.12402344, y: 0.109375, z: 0.23461914, w: 0.6062012}
@@ -378,6 +393,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!1 &5687412082349823755
 GameObject:
   m_ObjectHideFlags: 0
@@ -424,7 +440,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
     depthOrder: 8
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
@@ -437,10 +454,12 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-    uvPivot: {x: 0.5, y: 1}
+    uvPivot: {x: 0, y: 0}
     worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
     index: 8
   bounds:
@@ -471,6 +490,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!1 &5882755592766324067
 GameObject:
   m_ObjectHideFlags: 0
@@ -517,7 +537,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
     depthOrder: 8
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
@@ -530,10 +551,12 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-    uvPivot: {x: 0.5, y: 1}
+    uvPivot: {x: 0, y: 0}
     worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
     index: 8
   bounds:
@@ -564,6 +587,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!1 &6148456199161969020
 GameObject:
   m_ObjectHideFlags: 0
@@ -610,7 +634,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 24b31737c32b64a49b79f75522729604, type: 2}
+    texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
     depthOrder: 8
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
@@ -623,10 +648,12 @@ MonoBehaviour:
   text: 
   kerning: 1.1
   spacing: 1
+  scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.0056152344, y: 0.019042969, z: 0.8203125, w: 0.61083984}
-    uvPivot: {x: 0.5, y: 1}
+    uvPivot: {x: 0, y: 0}
     worldSize: {x: 0.12777779, y: 0.43333334, z: 1}
     index: 8
   bounds:
@@ -657,3 +684,4 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0

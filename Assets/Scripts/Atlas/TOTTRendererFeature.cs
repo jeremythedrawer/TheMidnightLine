@@ -113,6 +113,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     if (renderer == null || renderer.gameObject == null || !renderer.gameObject.activeInHierarchy) continue;
 #if UNITY_EDITOR
 
+
                     if (prefabStage != null)
                     {
                         if (renderer.gameObject.scene != prefabScene) continue;
@@ -121,7 +122,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
                     renderer.UpdateBounds();
 #if !UNITY_EDITOR
-                    //if (renderer.bounds.max.x < cameraStats.camWorldLeft || renderer.bounds.min.x > cameraStats.camWorldRight || renderer.bounds.max.y < cameraStats.camWorldBottom || renderer.bounds.min.y > cameraStats.camWorldTop) continue;
+                    //if (renderer.bounds.max.x < cameraStats.camWorldLeft || renderer.bounds.min.x > cameraStats.camWorldRight || renderer.bounds.max.y < cameraStats.camWorldBottom || renderer.bounds.min.y > cameraStats.camWorldTop) continue; //TODO: use new cam bounds
 #endif
                     switch (renderer.rendererType)
                     { 
@@ -156,6 +157,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                                     uvSizeAndPos = renderer.uvSizesAndPositions[j],
                                     scaleAndFlip = renderer.scalesAndFlips[j],
                                     custom = renderer.customs[j],
+
                                 };
                                 count++;
                             }

@@ -704,6 +704,7 @@ public class AtlasFactory : EditorWindow
             curFrameIndex = 0;
         }
 
+
         if (selectedIndex == gridIndex)
         {
             Handles.DrawSolidRectangleWithOutline(spriteRect, Color.clear, Color.blueViolet);

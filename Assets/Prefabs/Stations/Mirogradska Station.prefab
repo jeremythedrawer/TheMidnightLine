@@ -46,6 +46,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
+    texture: {fileID: 2800000, guid: 0dd4e9f513284c64a9e1960098c18ff8, type: 3}
     material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
     depthOrder: 25
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
@@ -60,6 +61,7 @@ MonoBehaviour:
   kerning: 1.1
   spacing: 1
   scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.10424805, y: 0.115478516, z: 0.115234375, w: 0.56591797}
@@ -67,13 +69,13 @@ MonoBehaviour:
     worldSize: {x: 2.3722222, y: 2.6277778, z: 1}
     index: 6
   bounds:
-    m_Center: {x: 318.11743, y: 1.3138889, z: 25}
+    m_Center: {x: 340.6654, y: 1.3138889, z: 25.1}
     m_Extent: {x: 29.652777, y: 1.3138889, z: 0.1}
   worldPivotAndSize: {x: 0, y: 0, z: 2.3722222, w: 2.6277778}
   uvSizeAndPosition: {x: 0.10424805, y: 0.115478516, z: 0.115234375, w: 0.56591797}
   scaleAndFlip: {x: 25, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 7.104805, y: 1.3138889, z: 0.1}
+  boundsOffset: {x: 29.652777, y: 1.3138889, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.7, w: 0}
   - {x: -0.7, y: 0, z: 2.7, w: 0}
@@ -139,6 +141,7 @@ MonoBehaviour:
     - {x: 0.031005856, y: 0.0065917964, z: 0.96899414, w: 0.9296875}
     worldSlices: {x: 0.7, y: 0.7055555, z: 0, w: 0.14999999}
   quadCount: 0
+  hasText: 0
 --- !u!1 &2418726077144786076
 GameObject:
   m_ObjectHideFlags: 0
@@ -185,7 +188,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 902bbea19cef39047a6347cac8c9046e, type: 2}
+    texture: {fileID: 2800000, guid: ffb938ac2dae13044b1dbe7477e826f6, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
     depthOrder: 25
   atlas: {fileID: 11400000, guid: 730537e47cb6fd14d8ca22d23432c52b, type: 2}
   camStats: {fileID: 0}
@@ -199,6 +203,7 @@ MonoBehaviour:
   kerning: 1.1
   spacing: 1
   scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.8366699, y: 0.3696289, z: 0.1027832, w: 0}
@@ -233,6 +238,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!1 &2688082048154263449
 GameObject:
   m_ObjectHideFlags: 0
@@ -311,6 +317,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
+    texture: {fileID: 2800000, guid: 0dd4e9f513284c64a9e1960098c18ff8, type: 3}
     material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
     depthOrder: 1
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
@@ -325,6 +332,7 @@ MonoBehaviour:
   kerning: 1.1
   spacing: 1
   scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0, w: 0.8745117}
@@ -359,6 +367,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!61 &3947141872535517702
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -452,6 +461,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
+    texture: {fileID: 2800000, guid: 0dd4e9f513284c64a9e1960098c18ff8, type: 3}
     material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
     depthOrder: 23
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
@@ -466,6 +476,7 @@ MonoBehaviour:
   kerning: 1.1
   spacing: 1
   scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0, w: 0.8745117}
@@ -500,6 +511,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!61 &632288581041624891
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -777,7 +789,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 902bbea19cef39047a6347cac8c9046e, type: 2}
+    texture: {fileID: 2800000, guid: ffb938ac2dae13044b1dbe7477e826f6, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
     depthOrder: 25
   atlas: {fileID: 11400000, guid: 730537e47cb6fd14d8ca22d23432c52b, type: 2}
   camStats: {fileID: 0}
@@ -791,6 +804,7 @@ MonoBehaviour:
   kerning: 1.1
   spacing: 1
   scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.5649414, y: 0.13671875, z: 0, w: 0.42529297}
@@ -825,6 +839,7 @@ MonoBehaviour:
     uvSizeAndPos: []
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
+  hasText: 0
 --- !u!1 &6990825720234578706
 GameObject:
   m_ObjectHideFlags: 0
@@ -871,6 +886,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
+    texture: {fileID: 2800000, guid: 0dd4e9f513284c64a9e1960098c18ff8, type: 3}
     material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
     depthOrder: 25
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
@@ -885,6 +901,7 @@ MonoBehaviour:
   kerning: 1.1
   spacing: 1
   scrollSize: 0
+  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.10424805, y: 0.115478516, z: 0.115234375, w: 0.56591797}
@@ -892,7 +909,7 @@ MonoBehaviour:
     worldSize: {x: 2.3722222, y: 2.6277778, z: 1}
     index: 6
   bounds:
-    m_Center: {x: 264.64743, y: 1.3138889, z: 25}
+    m_Center: {x: 264.64743, y: 1.3138889, z: 25.1}
     m_Extent: {x: 7.116667, y: 1.3138889, z: 0.1}
   worldPivotAndSize: {x: 0, y: 0, z: 2.3722222, w: 2.6277778}
   uvSizeAndPosition: {x: 0.10424805, y: 0.115478516, z: 0.115234375, w: 0.56591797}
@@ -964,6 +981,7 @@ MonoBehaviour:
     - {x: 0.031005856, y: 0.0065917964, z: 0.96899414, w: 0.9296875}
     worldSlices: {x: 0.7, y: 0.7055555, z: 0, w: 0.14999999}
   quadCount: 0
+  hasText: 0
 --- !u!1001 &269043361378973895
 PrefabInstance:
   m_ObjectHideFlags: 0
