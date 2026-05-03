@@ -1,9 +1,5 @@
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using UnityEditor;
 using UnityEngine;
-using UnityEngine.Rendering;
 using static Atlas;
 using static AtlasSpawn;
 public class AtlasTripEditor : EditorWindow
@@ -11,23 +7,23 @@ public class AtlasTripEditor : EditorWindow
     const float HEADER_COL_WIDTH = 300;
     const float HEADER_COL_HEIGHT = 20;
     const float PADDING = 100;
-    const float ZONE_PADDING = 10;
+    const float BAR_PADDING = 10;
     const float STATION_RECT_SIZE = 20;
     const float STATION_RECT_Y_OFFSET = 25;
 
     public TripSO trip;
-    public TrainStatsSO trainStats;
-
 
     private int selectedIndex_zone;
-    private int selectedIndex_zoneSpawner;
+    private int selectedIndex;
     private int dragOffsetZoneMetersLength;
     private int dragOffsetZoneMetersStart;
 
     private int selectedIndex_station;
-    private int dragOffsetStation;
 
     private bool isAdjustingMetersStart;
+
+    private Vector2 scroll;
+
     [MenuItem("Tools/Atlas Trip Editor")]
     private static void Open()
     {
@@ -44,7 +40,6 @@ public class AtlasTripEditor : EditorWindow
 
         EditorGUILayout.BeginHorizontal();
         trip = (TripSO)EditorGUILayout.ObjectField("Trip", trip, typeof(TripSO), allowSceneObjects: false, GUIWidth);
-        trainStats = (TrainStatsSO)EditorGUILayout.ObjectField("Train Stats", trainStats, typeof(TrainStatsSO), allowSceneObjects: false, GUIWidth);
         EditorGUILayout.EndHorizontal();
 
         if (trip == null) return;
@@ -55,23 +50,17 @@ public class AtlasTripEditor : EditorWindow
     }
     private void DrawGraph()
     {
-        Vector2 graphSize = new Vector2(position.width - PADDING * 2, (position.height  - PADDING * 2 - HEADER_COL_HEIGHT));
-        Vector2 graphPos = new Vector2(PADDING, PADDING + HEADER_COL_HEIGHT);
-        Rect graphRect = new Rect(graphPos, graphSize);
+        EditorGUILayout.BeginVertical();
 
-        Vector2 zoneSize = new Vector2(graphRect.width, graphRect.height * 0.5f);
-        Vector2 zonePos = new Vector2(PADDING, PADDING + HEADER_COL_HEIGHT);
-        Rect zoneSpawnRect = new Rect(zonePos, zoneSize);
+        Rect contentRect = new Rect(0, 0, position.width, 4250);
+        Vector2 graphPos = new Vector2(PADDING, 50 + HEADER_COL_HEIGHT);
+        Vector2 graphSize = new Vector2(contentRect.width - PADDING * 2, contentRect.height - graphPos.y);
 
         Handles.BeginGUI();
-        Handles.DrawSolidRectangleWithOutline(graphRect, Color.clear, Color.white);
-        Handles.DrawSolidRectangleWithOutline(zoneSpawnRect, Color.clear, Color.white);
-
-        GUIStyle spawnerLabelStyle = new GUIStyle(EditorStyles.boldLabel) { alignment = TextAnchor.UpperLeft, normal = { textColor = Color.white } };
+        GUIStyle zoneAreaLabelStyle = new GUIStyle(EditorStyles.boldLabel) { alignment = TextAnchor.UpperLeft, normal = { textColor = Color.white } };
         GUIStyle stationLabelStyle = new GUIStyle(EditorStyles.boldLabel) { alignment = TextAnchor.UpperLeft, normal = { textColor = Color.black } };
         
         Event e = Event.current;
-
 
         trip.totalTicketsToCheck = 0;
         for(int i = 0; i < trip.stationsDataArray.Length; i++)
@@ -85,17 +74,17 @@ public class AtlasTripEditor : EditorWindow
         for (int i = 0; i <= trip.totalTicketsToCheck; i++)
         {
             float t = (i) / (float)trip.totalTicketsToCheck;
-            float posX = graphRect.xMin + t * graphRect.width;
+            float posX = graphPos.x + t * graphSize.x;
 
-            Vector2 p1 = new Vector2(posX, graphRect.yMin);
-            Vector2 p2 = new Vector2(posX, graphRect.yMax);
+            Vector2 p1 = new Vector2(posX, graphPos.y);
+            Vector2 p2 = new Vector2(posX, graphPos.y + graphSize.y);
             Handles.DrawLine(p1, p2);
 
             StationSO station = trip.stationsDataArray[stationIndex];
 
             if (station.ticketsToCheckBeforeSpawn == ticketChecks)
             {
-                float posY = graphRect.yMin - STATION_RECT_Y_OFFSET;
+                float posY = graphPos.y - STATION_RECT_Y_OFFSET;
                 Rect stationRect = new Rect(posX, posY, STATION_RECT_SIZE, STATION_RECT_SIZE);
                 Color zoneColor = (selectedIndex_station == i) ? Color.orangeRed : Color.lawnGreen;
                 Handles.DrawSolidRectangleWithOutline(stationRect, zoneColor, Color.black);
@@ -109,105 +98,170 @@ public class AtlasTripEditor : EditorWindow
             ticketChecks++;
         }
 
-        for (int i = 0; i < ZONE_SPAWNER_COUNT; i++)
-        {
-            float t = (i + 1) / (float)ZONE_SPAWNER_COUNT;
-            float curHeight = zoneSpawnRect.yMin + t * zoneSpawnRect.height;
+        Rect viewRect = new Rect(0, 0, position.width, position.height);
+        scroll = GUI.BeginScrollView(viewRect, scroll, contentRect);
+        Rect graphRect = new Rect(graphPos, graphSize);
 
-            Vector2 p1 = new Vector2(zoneSpawnRect.xMin, curHeight);
-            Vector2 p2 = new Vector2(zoneSpawnRect.xMax, curHeight);
+        float sectionHeight = graphRect.height / (FAR_CLIP + 1);
+        for (int i = 0; i <= FAR_CLIP; i++)
+        {
+            if (i > MAIN_MIN && i < MAIN_MAX) continue;
+            float curYPos = graphRect.yMin + (i * sectionHeight);
+            Vector2 p1 = new Vector2(graphRect.xMin, curYPos);
+            Vector2 p2 = new Vector2(graphRect.xMax, curYPos);
             Handles.DrawLine(p1, p2);
 
-            float yOffset = (1 / (float)ZONE_SPAWNER_COUNT) * zoneSpawnRect.height * 0.5f;
-            float t1 = i / (float)ZONE_SPAWNER_COUNT;
-            float curX = zoneSpawnRect.xMin - (PADDING * 0.5f);
-            float curY = (zoneSpawnRect.yMin + t1 * zoneSpawnRect.height) + yOffset;
-            Rect spawnerLabelRect = new Rect(curX, curY, 20, 200);
-            GUI.Label(spawnerLabelRect, ((ZoneArea)i).ToString()[0].ToString(), spawnerLabelStyle);
+            Vector2 depthLabelPos = new Vector2(graphRect.xMin - 50, curYPos + (sectionHeight * 0.5f));
+            Handles.Label(depthLabelPos, i.ToString());
         }
 
-        for (int i = 0; i < trip.zoneSpawnerData.Length; i++)
+        for (int i = 0; i < trip.zoneAreas.Length; i++)
         {
-            ZoneSpawnerData zoneSpawnerData = trip.zoneSpawnerData[i];
-            for (int j = 0; j < zoneSpawnerData.zones.Length; j++)
+            ZoneArea zoneSpawnerData = trip.zoneAreas[i];
+
+            for (int j = 0; j < zoneSpawnerData.zoneSprites.Length; j++)
             {
-                ref Zone zone = ref zoneSpawnerData.zones[j];
+                ref ZoneAtlas zoneAtlas = ref zoneSpawnerData.zoneSprites[j];
 
-                if (zone.atlas == null) continue;
+                if (zoneAtlas.atlas == null) continue;
 
-                float zoneTicketsToCheck = (float)(zone.ticketCheckEnd - zone.ticketCheckStart);
-                float zoneWidth = (zoneTicketsToCheck / (float)trip.totalTicketsToCheck) * zoneSpawnRect.width;
-                float zoneHeight = (zoneSpawnRect.height / (float)ZONE_SPAWNER_COUNT) - (ZONE_PADDING * 2);
+                float ticketCheckSize = (float)(zoneAtlas.ticketCheckEnd - zoneAtlas.ticketCheckStart);
+                float barWidth = (ticketCheckSize / (float)trip.totalTicketsToCheck) * graphRect.width;
+                float barX = graphRect.xMin + ((float)zoneAtlas.ticketCheckStart / (float)trip.totalTicketsToCheck) * graphRect.width;
 
-                float zoneX = zoneSpawnRect.xMin + ((float)zone.ticketCheckStart / (float)trip.totalTicketsToCheck) * zoneSpawnRect.width;
-                float zoneY = (zoneSpawnRect.yMin + ((float)zoneSpawnerData.area / ZONE_SPAWNER_COUNT) * zoneSpawnRect.height) + ZONE_PADDING;
+                float barY = 0;
+                switch (zoneSpawnerData.label)
+                {
+                    case ZoneLabel.Foreground0:
+                    {
+                        barY = graphRect.yMin + (FORE_MIN * sectionHeight);
+                    }
+                    break;
+                    case ZoneLabel.Middleground0:
+                    {
+                        barY = graphRect.yMin + (MID_MIN * sectionHeight);
+                    }
+                    break;
+                    case ZoneLabel.Middleground1:
+                    {
+                        barY = graphRect.yMin + ((MID_MIN + 1) * sectionHeight);
+                    }
+                    break;
+                    case ZoneLabel.Middleground2:
+                    {
+                        barY = graphRect.yMin + ((MID_MIN + 2) * sectionHeight);
+                    }
+                    break;
+                    case ZoneLabel.Middleground3:
+                    {
+                        barY = graphRect.yMin + ((MID_MIN + 3) * sectionHeight);
+                    }
+                    break;
+                    case ZoneLabel.Background0:
+                    {
+                        barY = graphRect.yMin + ((BACK_MIN) * sectionHeight);
+                    }
+                    break;
+                    case ZoneLabel.Background1:
+                    {
+                        barY = graphRect.yMin + ((BACK_MIN + 1) * sectionHeight);
+                    }
+                    break;
+                    case ZoneLabel.Background2:
+                    {
+                        barY = graphRect.yMin + ((BACK_MIN + 2) * sectionHeight);
+                    }
+                    break;
+                }
 
-                Rect zoneRect = new Rect(zoneX, zoneY, zoneWidth, zoneHeight);
+                Rect zoneBarRect = new Rect(barX, barY, barWidth, sectionHeight);
 
-                Color zoneColor = (selectedIndex_zoneSpawner == i && selectedIndex_zone == j) ? Color.hotPink : Color.lightSeaGreen;
-                Handles.DrawSolidRectangleWithOutline(zoneRect, zoneColor, Color.black);
-                Rect zoneLabelRect = new Rect(zoneRect.xMin, zoneRect.yMin, 200, 20);
-                GUI.Label(zoneLabelRect, zone.atlas.ToString(), stationLabelStyle);
+                SimpleSprite sampleSprite;
+                if (zoneAtlas.zoneType == ZoneSpriteType.Simple)
+                {
+                    sampleSprite = zoneAtlas.atlas.simpleSprites[0];
+                }
+                else
+                {
+                    sampleSprite = zoneAtlas.atlas.slicedSprites[0].sprite;
+                }
 
+                Vector2 zoneUVPos = new Vector2(sampleSprite.uvSizeAndPos.z, sampleSprite.uvSizeAndPos.w);
+                Vector2 zoneUVSize = new Vector2(sampleSprite.uvSizeAndPos.x, sampleSprite.uvSizeAndPos.y);
+                Rect zoneUVRect = new Rect(zoneUVPos, zoneUVSize);
 
-                if (e.type == EventType.MouseDown && zoneRect.Contains(e.mousePosition))
+                float spritePixelWidth = sampleSprite.uvSizeAndPos.x * zoneAtlas.atlas.texture.width;
+                float spritePixelHeight = sampleSprite.uvSizeAndPos.y * zoneAtlas.atlas.texture.height;
+                float scale = zoneBarRect.height / spritePixelHeight;
+                float scaledWidth = spritePixelWidth * scale;
+                float scaledHeight = spritePixelHeight * scale;
+
+                GUI.BeginGroup(zoneBarRect);
+
+                for (float x = 0; x < barWidth; x += scaledWidth)
+                {
+                    Rect r = new Rect(x, 0, scaledWidth, scaledHeight);
+                    GUI.DrawTextureWithTexCoords(r, zoneAtlas.atlas.texture, zoneUVRect);
+                }
+
+                GUI.EndGroup();
+
+                if (e.type == EventType.MouseDown && zoneBarRect.Contains(e.mousePosition))
                 {
                     selectedIndex_station = -1;
-                    selectedIndex_zoneSpawner = i;
+                    selectedIndex = i;
                     selectedIndex_zone = j;
-                    int mouseMeters = (int)(((e.mousePosition.x - zoneSpawnRect.xMin) / zoneSpawnRect.width) * trip.totalTicketsToCheck);
-                    dragOffsetZoneMetersStart = mouseMeters - zone.ticketCheckStart;
-                    dragOffsetZoneMetersLength = mouseMeters - (int)zoneTicketsToCheck;
-                    isAdjustingMetersStart = e.mousePosition.x < zoneRect.center.x;
+                    int mouseMeters = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.totalTicketsToCheck);
+                    dragOffsetZoneMetersStart = mouseMeters - zoneAtlas.ticketCheckStart;
+                    dragOffsetZoneMetersLength = mouseMeters - (int)ticketCheckSize;
+                    isAdjustingMetersStart = e.mousePosition.x < zoneBarRect.center.x;
                 }
-                if (selectedIndex_zoneSpawner == i && selectedIndex_zone == j && e.type == EventType.MouseDrag)
+                if (selectedIndex == i && selectedIndex_zone == j && e.type == EventType.MouseDrag)
                 {
-                    int mouseT = (int)(((e.mousePosition.x - zoneSpawnRect.xMin) / zoneSpawnRect.width) * trip.totalTicketsToCheck);
+                    int mouseT = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.totalTicketsToCheck);
                     if (isAdjustingMetersStart)
                     {
-                        zone.ticketCheckStart = mouseT - dragOffsetZoneMetersStart;
+                        zoneAtlas.ticketCheckStart = mouseT - dragOffsetZoneMetersStart;
                     }
                     else
                     {
-                        zone.ticketCheckEnd = zone.ticketCheckStart + (mouseT - dragOffsetZoneMetersLength);
+                        zoneAtlas.ticketCheckEnd = zoneAtlas.ticketCheckStart + (mouseT - dragOffsetZoneMetersLength);
                     }
 
-                    
+
                     EditorUtility.SetDirty(trip);
                     Repaint();
                 }
 
                 if (e.type == EventType.MouseUp)
                 {
-
-                    
-                    switch(zone.atlas.zoneType)
+                    switch (zoneAtlas.zoneType)
                     {
                         case ZoneSpriteType.Simple:
                         {
-                            zone.zoneUVSizeAndPosArray = new Vector4[zone.atlas.simpleSprites.Length];
-                            zone.zoneWorldPivotsAndSizesArray = new Vector4[zone.atlas.simpleSprites.Length];
-                            for (int k = 0; k < zone.atlas.simpleSprites.Length; k++)
+                            zoneAtlas.zoneUVSizeAndPosArray = new Vector4[zoneAtlas.atlas.simpleSprites.Length];
+                            zoneAtlas.zoneWorldPivotsAndSizesArray = new Vector4[zoneAtlas.atlas.simpleSprites.Length];
+                            for (int k = 0; k < zoneAtlas.atlas.simpleSprites.Length; k++)
                             {
-                                SimpleSprite sprite = zone.atlas.simpleSprites[k];
-                                zone.zoneUVSizeAndPosArray[k] = sprite.uvSizeAndPos;
+                                SimpleSprite sprite = zoneAtlas.atlas.simpleSprites[k];
+                                zoneAtlas.zoneUVSizeAndPosArray[k] = sprite.uvSizeAndPos;
 
                                 Vector4 pivotAndSize = new Vector4(0, 0, sprite.worldSize.x, sprite.worldSize.y);
-                                zone.zoneWorldPivotsAndSizesArray[k] = pivotAndSize;
+                                zoneAtlas.zoneWorldPivotsAndSizesArray[k] = pivotAndSize;
                             }
                         }
                         break;
 
                         case ZoneSpriteType.Sliced:
                         {
-                            int sliceArraySize = zone.atlas.slicedSprites.Length * 9;
-                            zone.zoneUVSizeAndPosArray = new Vector4[sliceArraySize];
-                            zone.zoneWorldPivotsAndSizesArray = new Vector4[sliceArraySize];
-                            zone.zoneSliceOffsetsAndSizes = new Vector4[sliceArraySize];
+                            int sliceArraySize = zoneAtlas.atlas.slicedSprites.Length * 9;
+                            zoneAtlas.zoneUVSizeAndPosArray = new Vector4[sliceArraySize];
+                            zoneAtlas.zoneWorldPivotsAndSizesArray = new Vector4[sliceArraySize];
+                            zoneAtlas.zoneSliceOffsetsAndSizes = new Vector4[sliceArraySize];
                             int index = 0;
-                            for (int k = 0; k < zone.atlas.slicedSprites.Length; k++)
+                            for (int k = 0; k < zoneAtlas.atlas.slicedSprites.Length; k++)
                             {
-                                SliceSprite slicedSprite = zone.atlas.slicedSprites[k];
+                                SliceSprite slicedSprite = zoneAtlas.atlas.slicedSprites[k];
 
                                 float centerWorldSliceWidth = slicedSprite.sprite.worldSize.x - slicedSprite.worldSlices.x - slicedSprite.worldSlices.y;
                                 float centerWorldSliceHeight = slicedSprite.sprite.worldSize.y - slicedSprite.worldSlices.z - slicedSprite.worldSlices.w;
@@ -234,7 +288,7 @@ public class AtlasTripEditor : EditorWindow
                                     new Vector4(0, 0, 0, 0),
                                     new Vector4(0, 0, centerWorldSliceWidth, 0),
                                     new Vector4(centerWorldSliceWidth, 0, 0, 0),
-                                    
+
                                     new Vector4(0, 0, 0, centerWorldSliceHeight),
                                     new Vector4(0, 0, centerWorldSliceWidth, centerWorldSliceHeight),
                                     new Vector4(centerWorldSliceWidth, 0, 0, centerWorldSliceHeight),
@@ -247,9 +301,9 @@ public class AtlasTripEditor : EditorWindow
 
                                 for (int l = 0; l < 9; l++)
                                 {
-                                    zone.zoneUVSizeAndPosArray[index] = zone.atlas.slicedSprites[k].uvSizeAndPos[l];
-                                    zone.zoneWorldPivotsAndSizesArray[index] = worldPivotsAndSizes[l];
-                                    zone.zoneSliceOffsetsAndSizes[index] = sliceOffsetsAndSizes[l];
+                                    zoneAtlas.zoneUVSizeAndPosArray[index] = zoneAtlas.atlas.slicedSprites[k].uvSizeAndPos[l];
+                                    zoneAtlas.zoneWorldPivotsAndSizesArray[index] = worldPivotsAndSizes[l];
+                                    zoneAtlas.zoneSliceOffsetsAndSizes[index] = sliceOffsetsAndSizes[l];
                                     index++;
                                 }
                             }
@@ -263,17 +317,98 @@ public class AtlasTripEditor : EditorWindow
                         e.Use();
                     }
                 }
-                zone.ticketCheckStart = Mathf.Clamp(zone.ticketCheckStart, 0, zone.ticketCheckEnd - 1);
-                zone.ticketCheckEnd = Mathf.Clamp(zone.ticketCheckEnd, zone.ticketCheckStart + 1, trip.totalTicketsToCheck);
+                zoneAtlas.ticketCheckStart = Mathf.Clamp(zoneAtlas.ticketCheckStart, 0, zoneAtlas.ticketCheckEnd - 1);
+                zoneAtlas.ticketCheckEnd = Mathf.Clamp(zoneAtlas.ticketCheckEnd, zoneAtlas.ticketCheckStart + 1, trip.totalTicketsToCheck);
             }
         }
-        float ticketsCheckedGraphPosX = graphRect.xMin + ((SpyBrain.ticketsCheckedTotal / trip.totalTicketsToCheck) * graphRect.width);
-        Vector2 ticketsCheckedTop = new Vector2(ticketsCheckedGraphPosX, graphRect.yMin);
-        Vector2 ticketsCheckedBottom = new Vector2(ticketsCheckedGraphPosX, graphRect.yMax);
-        Handles.color = Color.yellow;
-        Handles.DrawLine(ticketsCheckedTop, ticketsCheckedBottom);
+
+        for (int i = 0; i < trip.scrollSprites.Length; i++)
+        {
+            ref ScrollSprite scrollSprite = ref trip.scrollSprites[i];
+
+            if (scrollSprite.atlas == null) continue;
+
+            float ticketCheckSize = (float)(scrollSprite.ticketCheckEnd -  scrollSprite.ticketCheckStart);
+            float barWidth = (ticketCheckSize / (float)trip.totalTicketsToCheck) * graphRect.width;
+            float barX = graphRect.xMin + ((float)scrollSprite.ticketCheckStart / (float)trip.totalTicketsToCheck) * graphRect.width;
+
+            float barY = graphRect.yMin + ((float)scrollSprite.depth * sectionHeight);
+
+            Rect scrollBarRect = new Rect(barX, barY, barWidth, sectionHeight);
+
+            SimpleSprite sprite;
+            if (scrollSprite.scrollType == ScrollSpriteType.Sliced)
+            {
+                sprite = scrollSprite.atlas.slicedSprites[scrollSprite.spriteIndex].sprite;
+            }
+            else
+            {
+                sprite = scrollSprite.atlas.simpleSprites[scrollSprite.spriteIndex];
+            }
+
+            Vector2 scrollUVPos = new Vector2(sprite.uvSizeAndPos.z, sprite.uvSizeAndPos.w);
+            Vector2 scrollUVSize = new Vector2(sprite.uvSizeAndPos.x, sprite.uvSizeAndPos.y);
+            Rect scrollUVRect = new Rect(scrollUVPos, scrollUVSize);
+
+            float spritePixelWidth = sprite.uvSizeAndPos.x * scrollSprite.atlas.texture.width;
+            float spritePixelHeight = sprite.uvSizeAndPos.y * scrollSprite.atlas.texture.height;
+            float scale = scrollBarRect.height / spritePixelHeight;
+            float scaledWidth = spritePixelWidth * scale;
+            float scaledHeight = spritePixelHeight * scale;
+
+            GUI.BeginGroup(scrollBarRect);
+
+            for (float x = 0; x < barWidth; x += scaledWidth)
+            {
+                Rect r = new Rect(x, 0, scaledWidth, scaledHeight);
+                GUI.DrawTextureWithTexCoords(r, scrollSprite.atlas.texture, scrollUVRect);
+            }
+
+            GUI.EndGroup();
+
+            if (e.type == EventType.MouseDown && scrollBarRect.Contains(e.mousePosition))
+            {
+                selectedIndex_station = -1;
+                selectedIndex = i;
+                int mouseStart = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.totalTicketsToCheck);
+                dragOffsetZoneMetersStart = mouseStart - scrollSprite.ticketCheckStart;
+                dragOffsetZoneMetersLength = mouseStart - (int)ticketCheckSize;
+                isAdjustingMetersStart = e.mousePosition.x < scrollBarRect.center.x;
+            }
+
+            if (selectedIndex == i && e.type == EventType.MouseDrag)
+            {
+                int mouseT = (int)(((e.mousePosition.x - graphRect.xMin) / graphRect.width) * trip.totalTicketsToCheck);
+                if (isAdjustingMetersStart)
+                {
+                    scrollSprite.ticketCheckStart = mouseT - dragOffsetZoneMetersStart;
+                }
+                else
+                {
+                    scrollSprite.ticketCheckEnd = scrollSprite.ticketCheckStart + (mouseT - dragOffsetZoneMetersLength);
+                }
+
+
+                EditorUtility.SetDirty(trip);
+                Repaint();
+            }
+
+            if (e.type == EventType.MouseUp)
+            {
+                if (selectedIndex_zone == i)
+                {
+                    selectedIndex_zone = -1;
+                    e.Use();
+                }
+            }
+            scrollSprite.ticketCheckStart = Mathf.Clamp(scrollSprite.ticketCheckStart, 0, scrollSprite.ticketCheckEnd - 1);
+            scrollSprite.ticketCheckEnd = Mathf.Clamp(scrollSprite.ticketCheckEnd, scrollSprite.ticketCheckStart + 1, trip.totalTicketsToCheck);
+        }
 
         Handles.EndGUI();
+
+        GUI.EndScrollView();
+        EditorGUILayout.EndVertical();
     }
 }
 

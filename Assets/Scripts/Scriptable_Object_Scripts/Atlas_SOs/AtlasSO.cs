@@ -17,9 +17,6 @@ public class AtlasSO : ScriptableObject
     [Header("Sliced Settings")]
     public Color32 sliceColor = Color.clear;
 
-    [Header("Particle Settings")]
-    public ZoneSpriteType zoneType;
-
     [Header("Generated")]
     public MotionSprite[] motionSprites;
     public SimpleSprite[] simpleSprites;

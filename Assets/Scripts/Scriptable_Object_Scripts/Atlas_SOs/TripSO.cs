@@ -6,10 +6,10 @@ using static Atlas;
 [CreateAssetMenu(fileName = "Trip", menuName = "Atlas / Trip")]
 public class TripSO : ScriptableObject
 {
-    public ZoneSpawnerData[] zoneSpawnerData;
+    public ZoneArea[] zoneAreas;
     public StationSO[] stationsDataArray;
     public NPCBrain[] npc_prefabsArray;
-    public ScrollSprite[] scrollSpriteArray;
+    public ScrollSprite[] scrollSprites;
 
     [Header("Settings")]
     public int minStationsTraitorsTravel = 2;
@@ -22,7 +22,7 @@ public class TripSO : ScriptableObject
 }
 
 #if UNITY_EDITOR
-[CustomPropertyDrawer(typeof(ZoneSpawnerData))]
+[CustomPropertyDrawer(typeof(ZoneArea))]
 public class ZoneSpawnerDataDrawer : PropertyDrawer
 {
     public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)

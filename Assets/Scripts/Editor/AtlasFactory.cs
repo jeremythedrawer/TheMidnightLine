@@ -4,7 +4,6 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using static Atlas;
-using static AtlasSpawn;
 
 public class AtlasFactory : EditorWindow
 {
@@ -679,7 +678,10 @@ public class AtlasFactory : EditorWindow
         Rect gridRect = GUILayoutUtility.GetRect(cellSize + padding, cellSize + padding, GUILayout.ExpandWidth(false));
         gridRect = new Rect(gridRect.x + padding * 0.5f, gridRect.y + padding * 0.5f, cellSize, cellSize);
 
-        Rect uvRect = new Rect(new Vector2(atlasSprite.uvSizeAndPos.z, atlasSprite.uvSizeAndPos.w), new Vector2(atlasSprite.uvSizeAndPos.x, atlasSprite.uvSizeAndPos.y));
+        Vector2 uvSize = new Vector2(atlasSprite.uvSizeAndPos.x, atlasSprite.uvSizeAndPos.y);
+        Vector2 uvPos = new Vector2(atlasSprite.uvSizeAndPos.z, atlasSprite.uvSizeAndPos.w);
+        Rect uvRect = new Rect(uvPos, uvSize);
+
         float spritePixelWidth = atlasSprite.uvSizeAndPos.x * atlas.texture.width;
         float spritePixelHeight = atlasSprite.uvSizeAndPos.y * atlas.texture.height;
 

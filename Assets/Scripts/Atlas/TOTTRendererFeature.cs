@@ -205,9 +205,9 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
         private void ExecuteZoneParticles(RasterCommandBuffer cmd)
         {
-            for (int i = 0; i < trip.zoneSpawnerData.Length; i++)
+            for (int i = 0; i < trip.zoneAreas.Length; i++)
             {
-                ZoneSpawnerData zoneSpawnerData = trip.zoneSpawnerData[i];
+                ZoneArea zoneSpawnerData = trip.zoneAreas[i];
 
                 if (!zoneSpawnerData.active) continue;
                 cmd.DrawProcedural(Matrix4x4.identity, zoneSpawner.material, shaderPass: 0, MeshTopology.Quads, zoneSpawnerData.particleCount * 4, 1, zoneSpawnerData.mpb);

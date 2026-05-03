@@ -1,10 +1,9 @@
 using System;
 using UnityEngine;
 using static Spy;
+using static AtlasSpawn;
 public static class Parallax
 {
-    public const float FAR_CLIP = 128;
-
     public enum RepeatType
     {
         OneShot,

@@ -267,6 +267,7 @@ public class AtlasRenderer : MonoBehaviour
         Vector4 scaleFlipHQuad = new Vector4(width, 1, 1, 1);
         Vector4 scaleFlipVQuad = new Vector4(1, height, 1, 1);
         Vector4 scaleFlipMQuad = new Vector4(width, height, 1, 1);
+
         scalesAndFlips = new Vector4[]
         {
             scaleFlipCQuad,

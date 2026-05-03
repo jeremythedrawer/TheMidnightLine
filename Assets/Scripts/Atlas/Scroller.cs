@@ -1,5 +1,6 @@
 using UnityEngine;
 using static Atlas;
+using static AtlasSpawn;
 using static AtlasRendering;
 public class Scroller : MonoBehaviour
 {
@@ -11,8 +12,6 @@ public class Scroller : MonoBehaviour
     public void InitScroll(ref ScrollSprite scrollSpriteInput, int activeIndex)
     {
         scrollSprite = scrollSpriteInput;
-        atlasRenderer.rendererType = scrollSprite.rendererType;
-        atlasRenderer.batchKey.material = scrollSprite.material;
         atlasRenderer.batchKey.depthOrder = scrollSprite.depth;
         atlasRenderer.atlas = scrollSprite.atlas;
 
@@ -20,16 +19,25 @@ public class Scroller : MonoBehaviour
 
         transform.position = new Vector3(spawner.bounds.max.x, 0, scrollSprite.depth);
 
-        switch (scrollSprite.rendererType)
+        switch (scrollSprite.scrollType)
         {
-            case AtlasRendererType.SimpleWorld:
+            case ScrollSpriteType.Simple:
             {
+                atlasRenderer.rendererType = AtlasRendererType.SimpleWorld;
+                SimpleSprite sprite = atlasRenderer.atlas.simpleSprites[scrollSprite.spriteIndex];
+                atlasRenderer.UpdateSpriteInputs(ref sprite);
+                atlasRenderer.custom.x = trainStats.metersTravelled;
+            }
+            break;
+            case ScrollSpriteType.Tiled:
+            {
+                atlasRenderer.rendererType = AtlasRendererType.SimpleWorld;
                 SimpleSprite sprite = atlasRenderer.atlas.simpleSprites[scrollSprite.spriteIndex];
                 atlasRenderer.SetWidthFromWorldSpace(spawner.bounds.size.x, ref sprite);
                 atlasRenderer.custom.x = trainStats.metersTravelled;
             }
             break;
-            case AtlasRendererType.SliceWorld:
+            case ScrollSpriteType.Sliced:
             {
                 SliceSprite sliceSprite = atlasRenderer.atlas.slicedSprites[scrollSprite.spriteIndex];
                 atlasRenderer.SetNineSliceWidthFromWorldSpace(spawner.bounds.size.x, ref sliceSprite);
@@ -45,7 +53,7 @@ public class Scroller : MonoBehaviour
 
     public void ScrollAway()
     {
-        switch (scrollSprite.rendererType)
+        switch (atlasRenderer.rendererType)
         {
             case AtlasRendererType.SimpleWorld:
             {
@@ -65,7 +73,7 @@ public class Scroller : MonoBehaviour
 
     public void CheckToDeactivate()
     {
-        switch (scrollSprite.rendererType)
+        switch (atlasRenderer.rendererType)
         {
             case AtlasRendererType.SimpleWorld:
             {

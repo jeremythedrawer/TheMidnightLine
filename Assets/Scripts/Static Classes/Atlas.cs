@@ -168,17 +168,4 @@ public static class Atlas
 
         return clipDict;
     }
-
-    [Serializable] public struct ScrollSprite
-    {
-        public int ticketCheckStart;
-        public int ticketCheckEnd;
-
-        public AtlasRendererType rendererType;
-        public Material material;
-        public int depth;
-        public AtlasSO atlas;
-        public int spriteIndex;
-        public float height;
-    }
 }

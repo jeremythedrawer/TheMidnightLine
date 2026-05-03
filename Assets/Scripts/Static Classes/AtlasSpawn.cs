@@ -1,10 +1,20 @@
 using System;
 using System.Runtime.InteropServices;
 using UnityEngine;
-using static Atlas;
-using static AtlasRendering;
 public static class AtlasSpawn
 {
+    public const float MAIN_MIN = 1.0f;
+    public const float MAIN_MAX = 26.0f;
+
+    public const float FORE_MIN = 1.0f;
+    public const float FORE_SIZE = 1.0f;
+    public const float MID_MIN = 48.0f;
+    public const float MID_SIZE = 16.0f;
+    public const float BACK_MIN = 65.0f;
+
+    const float BACK_SIZE = 63.0f;
+    public const float FAR_CLIP = 128;
+
     public const int ZONE_SPAWNER_COUNT = 8;
 
     public const int THREADS_PER_GROUP = 64;
@@ -33,7 +43,14 @@ public static class AtlasSpawn
         Simple,
         Sliced,
     }
-    public enum ZoneArea
+    public enum ScrollSpriteType
+    { 
+        Simple,
+        Sliced,
+        Tiled,
+    }
+
+    public enum ZoneLabel
     {
         Foreground0,
         Middleground0,
@@ -64,22 +81,21 @@ public static class AtlasSpawn
         public Vector4 sliceOffsetAndSize;
     };
 
-    [Serializable] public struct Zone // NOTE: Turn into Scriptable Object
+    [Serializable] public struct ZoneAtlas
     {
         public AtlasSO atlas;
         public int ticketCheckStart;
         public int ticketCheckEnd;
+        public ZoneSpriteType zoneType;
 
         public Vector4[] zoneUVSizeAndPosArray;
         public Vector4[] zoneWorldPivotsAndSizesArray;
         public Vector4[] zoneSliceOffsetsAndSizes;
     }
-    [Serializable] public class ZoneSpawnerData
+    [Serializable] public struct ZoneArea
     {
-        public Zone[] zones;
-        public ZoneArea area;
-
-        [Header("Generated")]
+        public ZoneLabel label;
+        public ZoneAtlas[] zoneSprites;
         public MaterialPropertyBlock mpb;
         public int particleCount;
         public int computeGroupSize;
@@ -87,5 +103,17 @@ public static class AtlasSpawn
         public int kernelID_initSlice;
         public int kernelID_update;
         public bool active;
+    }
+
+    [Serializable] public struct ScrollSprite
+    {
+        public int ticketCheckStart;
+        public int ticketCheckEnd;
+
+        public ScrollSpriteType scrollType;
+        public int depth;
+        public AtlasSO atlas;
+        public int spriteIndex;
+        public float height;
     }
 }

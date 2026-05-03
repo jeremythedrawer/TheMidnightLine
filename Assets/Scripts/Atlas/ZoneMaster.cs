@@ -38,6 +38,7 @@ public class ZoneMaster : MonoBehaviour
     private void InitBoundParameters()
     {
         spawner.bounds.center = new Vector3(TRAIN_WORLD_POS, 0, FAR_CLIP * 0.5f);
+
         spawner.bounds.size = new Vector3(trip.stationsDataArray[0].station_prefab.frontPlatformRenderer.bounds.size.x + camStats.camBounds.size.x, trainStats.totalBounds.size.y + camStats.camBounds.size.y, FAR_CLIP);
 
         transform.position = spawner.bounds.min;

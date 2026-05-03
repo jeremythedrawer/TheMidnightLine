@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static Atlas;
+using static AtlasSpawn;
 public class ScrollSpawner : MonoBehaviour
 {
     const int MAX_ACTIVE_SCROLLERS = 64;
@@ -20,7 +20,7 @@ public class ScrollSpawner : MonoBehaviour
     {
         scrollRendererPool = new Queue<Scroller>();
         activeScrollers = new Scroller[MAX_ACTIVE_SCROLLERS];
-        scrollSprites = demoTrip.scrollSpriteArray;
+        scrollSprites = demoTrip.scrollSprites;
         spawnerBounds = spawner.bounds;
         scroller_staticPrefab = scroller_prefab;
     }

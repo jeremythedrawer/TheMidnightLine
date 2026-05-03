@@ -4,7 +4,7 @@ using static Atlas;
 [ExecuteAlways]
 public class ZoneSpawner : MonoBehaviour
 {
-    public ZoneArea area;
+    public ZoneLabel area;
 
     public MaterialIDSO materialIDs;
     public ZoneSpawnerSO spawner;
@@ -12,8 +12,8 @@ public class ZoneSpawner : MonoBehaviour
     public TrainStatsSO trainStats;
 
     [Header("Generated")]
-    public ZoneSpawnerData zoneSpawnerData;
-    public Zone curZone;
+    public ZoneArea zoneSpawnerData;
+    public ZoneAtlas curZone;
     public int curZoneIndex;
     public uint[] deadCounter;
     public ComputeBuffer deadCountBuffer;
@@ -36,22 +36,21 @@ public class ZoneSpawner : MonoBehaviour
 #if UNITY_EDITOR
         if (!Application.isPlaying) return;
 #endif
-        if (zoneSpawnerData.zones.Length == 0) return;
+        if (zoneSpawnerData.zoneSprites.Length == 0) return;
         ChangeZone();
 
 
         if (SpyBrain.ticketsCheckedTotal >= curZone.ticketCheckEnd && zoneSpawnerData.active)
         {
-            
             spawner.atlasCompute.SetInt(zoneName + ACTIVE_STRING, 0);
             deadCountBuffer.GetData(deadCounter);
             if (deadCounter[0] == zoneSpawnerData.particleCount)
             {
                 curZoneIndex++;
                 zoneSpawnerData.active = false;
-                if (curZoneIndex < zoneSpawnerData.zones.Length)
+                if (curZoneIndex < zoneSpawnerData.zoneSprites.Length)
                 {
-                    curZone = zoneSpawnerData.zones[curZoneIndex];
+                    curZone = zoneSpawnerData.zoneSprites[curZoneIndex];
                 }
                 else
                 {
@@ -66,9 +65,9 @@ public class ZoneSpawner : MonoBehaviour
     {
         zoneName = ZONE_STRINGS[(int)area];
 
-        zoneSpawnerData = trip.zoneSpawnerData[(int)area];
-        if (zoneSpawnerData.zones.Length == 0) return;
-        curZone = zoneSpawnerData.zones[curZoneIndex];
+        zoneSpawnerData = trip.zoneAreas[(int)area];
+        if (zoneSpawnerData.zoneSprites.Length == 0) return;
+        curZone = zoneSpawnerData.zoneSprites[curZoneIndex];
 
         zoneSpawnerData.mpb = new MaterialPropertyBlock();
         outputBuffer = new ComputeBuffer(PARTICLE_COUNTS[(int)area], ZONE_OUTPUT_STRIDE);
@@ -104,7 +103,7 @@ public class ZoneSpawner : MonoBehaviour
 
         zoneInput = new ZoneInput[curZone.zoneUVSizeAndPosArray.Length];
         inputBuffer = new ComputeBuffer(zoneInput.Length, ZONE_INPUT_STRIDE);
-        switch (curZone.atlas.zoneType)
+        switch (curZone.zoneType)
         {
             case ZoneSpriteType.Simple:
             {
