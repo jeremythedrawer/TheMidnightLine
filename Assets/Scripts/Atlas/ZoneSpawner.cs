@@ -1,120 +1,168 @@
 using UnityEngine;
 using static AtlasSpawn;
 using static Atlas;
+
 [ExecuteAlways]
 public class ZoneSpawner : MonoBehaviour
 {
     public ZoneLabel area;
 
-    public MaterialIDSO materialIDs;
-    public ZoneSpawnerSO spawner;
+    public SpawnSO spawner;
     public TripSO trip;
     public TrainStatsSO trainStats;
+    public SpyStatsSO spyStats;
 
     [Header("Generated")]
-    public ZoneArea zoneSpawnerData;
-    public ZoneAtlas curZone;
+    public ZoneAreaSO zoneArea;
+    public ZoneAtlas curZoneAtlas;
     public int curZoneIndex;
     public uint[] deadCounter;
-    public ComputeBuffer deadCountBuffer;
+
     public ComputeBuffer outputBuffer;
     public ComputeBuffer inputBuffer;
+    public ComputeBuffer deadCountBuffer;
 
     public ZoneInput[] zoneInput;
     public string zoneName;
     public int curInitKernelID;
-    private void Awake()
-    {
-
-    }
     private void OnDisable()
     {
         Dispose();
     }
     private void Update()
     {
-#if UNITY_EDITOR
-        if (!Application.isPlaying) return;
-#endif
-        if (zoneSpawnerData.zoneSprites.Length == 0) return;
-        ChangeZone();
-
-
-        if (SpyBrain.ticketsCheckedTotal >= curZone.ticketCheckEnd && zoneSpawnerData.active)
+        ChooseState();
+        UpdateState();
+    }
+    public void ChooseState()
+    {
+        if (spyStats.ticketsCheckedTotal >= curZoneAtlas.ticketCheckEnd)
         {
-            spawner.atlasCompute.SetInt(zoneName + ACTIVE_STRING, 0);
-            deadCountBuffer.GetData(deadCounter);
-            if (deadCounter[0] == zoneSpawnerData.particleCount)
+            if (curZoneAtlas.ticketCheckEnd == 0 || deadCounter[0] == zoneArea.particleCount)
             {
-                curZoneIndex++;
-                zoneSpawnerData.active = false;
-                if (curZoneIndex < zoneSpawnerData.zoneSprites.Length)
+                SetState(ZoneState.Dead);
+            }
+            else
+            {
+                SetState(ZoneState.Dying);
+            }
+        }
+        else if (spyStats.ticketsCheckedTotal >= curZoneAtlas.ticketCheckStart)
+        {
+            SetState(ZoneState.Alive);
+        }
+    }
+    public void SetState(ZoneState newState)
+    {
+        if (newState == zoneArea.state) return;
+        ExitState();
+        zoneArea.state = newState;
+        EnterState();
+
+    }
+    public void UpdateState()
+    {
+        switch(zoneArea.state)
+        {
+            case ZoneState.Alive:
+            {
+                spawner.zoneCompute.Dispatch(zoneArea.kernelID_update, zoneArea.computeGroupSize, 1, 1);
+            }
+            break;
+            case ZoneState.Dying:
+            {
+                deadCountBuffer.GetData(deadCounter);
+                spawner.zoneCompute.Dispatch(zoneArea.kernelID_update, zoneArea.computeGroupSize, 1, 1);
+            }
+            break;
+        }
+    }
+    public void EnterState()
+    {
+        switch(zoneArea.state)
+        {
+            case ZoneState.Alive:
+            {
+                
+            }
+            break;
+            case ZoneState.Dying:
+            {
+                spawner.zoneCompute.SetInt(zoneName + ACTIVE_STRING, 0);
+            }
+            break;
+            case ZoneState.Dead:
+            {
+                if (curZoneIndex + 1 < zoneArea.zoneAtlases.Length)
                 {
-                    curZone = zoneSpawnerData.zoneSprites[curZoneIndex];
+                    ChangeZone();
                 }
                 else
                 {
                     gameObject.SetActive(false);
                 }
             }
+            break;
         }
+    }
+    public void ExitState()
+    {
 
-        spawner.atlasCompute.Dispatch(zoneSpawnerData.kernelID_update, zoneSpawnerData.computeGroupSize, 1, 1);
     }
     public void InitializeZoneSpawnData()
     {
         zoneName = ZONE_STRINGS[(int)area];
+        zoneArea = trip.zoneAreas[(int)area];
+        if (zoneArea.zoneAtlases.Length == 0) return;
 
-        zoneSpawnerData = trip.zoneAreas[(int)area];
-        if (zoneSpawnerData.zoneSprites.Length == 0) return;
-        curZone = zoneSpawnerData.zoneSprites[curZoneIndex];
-
-        zoneSpawnerData.mpb = new MaterialPropertyBlock();
+        zoneArea.mpb = new MaterialPropertyBlock();
         outputBuffer = new ComputeBuffer(PARTICLE_COUNTS[(int)area], ZONE_OUTPUT_STRIDE);
         deadCountBuffer = new ComputeBuffer(1, INT_SIZE);
 
-        zoneSpawnerData.kernelID_init = spawner.atlasCompute.FindKernel(zoneName + INIT_STRING);
-        zoneSpawnerData.kernelID_update = spawner.atlasCompute.FindKernel(zoneName + UPDATE_STRING);
-        zoneSpawnerData.kernelID_initSlice = spawner.atlasCompute.FindKernel(zoneName + INIT_SLICE_STRING);
-        zoneSpawnerData.computeGroupSize = Mathf.CeilToInt(PARTICLE_COUNTS[(int)area] / (float)THREADS_PER_GROUP);
-        zoneSpawnerData.particleCount = PARTICLE_COUNTS[(int)area];
+        zoneArea.kernelID_init = spawner.zoneCompute.FindKernel(zoneName + INIT_STRING);
+        zoneArea.kernelID_update = spawner.zoneCompute.FindKernel(zoneName + UPDATE_STRING);
+        zoneArea.kernelID_initSlice = spawner.zoneCompute.FindKernel(zoneName + INIT_SLICE_STRING);
+        zoneArea.computeGroupSize = Mathf.CeilToInt(PARTICLE_COUNTS[(int)area] / (float)THREADS_PER_GROUP);
+        zoneArea.particleCount = PARTICLE_COUNTS[(int)area];
 
-        spawner.atlasCompute.SetBuffer(zoneSpawnerData.kernelID_init, zoneName + OUTPUT_STRING, outputBuffer);
-        spawner.atlasCompute.SetBuffer(zoneSpawnerData.kernelID_initSlice, zoneName + OUTPUT_STRING, outputBuffer);
-        spawner.atlasCompute.SetBuffer(zoneSpawnerData.kernelID_update, zoneName + OUTPUT_STRING, outputBuffer);
-        spawner.atlasCompute.SetBuffer(zoneSpawnerData.kernelID_update, zoneName + DEAD_COUNT_STRING, deadCountBuffer);
+        spawner.zoneCompute.SetBuffer(zoneArea.kernelID_init, zoneName + OUTPUT_STRING, outputBuffer);
+        spawner.zoneCompute.SetBuffer(zoneArea.kernelID_initSlice, zoneName + OUTPUT_STRING, outputBuffer);
+        spawner.zoneCompute.SetBuffer(zoneArea.kernelID_update, zoneName + OUTPUT_STRING, outputBuffer);
+        spawner.zoneCompute.SetBuffer(zoneArea.kernelID_update, zoneName + DEAD_COUNT_STRING, deadCountBuffer);
 
-        zoneSpawnerData.mpb.SetBuffer(materialIDs.ids.particles, outputBuffer);
-        
-        ChangeZone();
+        zoneArea.mpb.SetBuffer("_Particles", outputBuffer);
+
+        curZoneIndex = -1;
+        SetState(ZoneState.Dead);
     }
-    private void ChangeZone()
+    public void ChangeZone()
     {
-        if (SpyBrain.ticketsCheckedTotal < curZone.ticketCheckStart || zoneSpawnerData.active) return;
+        curZoneIndex++;
+        curZoneAtlas = zoneArea.zoneAtlases[curZoneIndex];
+        spawner.zoneCompute.SetInt(zoneName + SPRITE_COUNT_STRING, zoneInput.Length);
+        spawner.zoneCompute.SetInt(zoneName + ACTIVE_STRING, 1);
 
-        spawner.atlasCompute.SetInt(zoneName + SPRITE_COUNT_STRING, zoneInput.Length);
-        spawner.atlasCompute.SetInt(zoneName + ACTIVE_STRING, 1);
+        deadCounter[0] = 0;
 
-        deadCounter = new uint[1];
         deadCountBuffer.SetData(deadCounter);
-        spawner.atlasCompute.SetBuffer(zoneSpawnerData.kernelID_update, zoneName + DEAD_COUNT_STRING, deadCountBuffer);
+        spawner.zoneCompute.SetBuffer(zoneArea.kernelID_update, zoneName + DEAD_COUNT_STRING, deadCountBuffer);
         
-        zoneSpawnerData.mpb.SetTexture(materialIDs.ids.atlasTexture, curZone.atlas.texture);
+        zoneArea.mpb.SetTexture("_AtlasTexture", curZoneAtlas.atlas.texture);
 
-        zoneInput = new ZoneInput[curZone.zoneUVSizeAndPosArray.Length];
+        zoneInput = new ZoneInput[curZoneAtlas.uvSizeAndPosArray.Length];
         inputBuffer = new ComputeBuffer(zoneInput.Length, ZONE_INPUT_STRIDE);
-        switch (curZone.zoneType)
+        switch (curZoneAtlas.zoneType)
         {
             case ZoneSpriteType.Simple:
             {
                 for (int i = 0; i < zoneInput.Length; i++)
                 {
                     ZoneInput input = new ZoneInput();
-                    input.worldSizeAndPivot = curZone.zoneWorldPivotsAndSizesArray[i];
-                    input.uvSizeAndPos = curZone.zoneUVSizeAndPosArray[i];
+                    input.worldPivotAndSize = curZoneAtlas.worldPivotAndSizeArray[i];
+                    input.uvSizeAndPos = curZoneAtlas.uvSizeAndPosArray[i];
                     zoneInput[i] = input;
                 }
-                curInitKernelID = zoneSpawnerData.kernelID_init;
+                curInitKernelID = zoneArea.kernelID_init;
             }
             break;
 
@@ -123,29 +171,25 @@ public class ZoneSpawner : MonoBehaviour
                 for (int i = 0; i < zoneInput.Length; i++)
                 {
                     ZoneInput input = new ZoneInput();
-                    input.worldSizeAndPivot = curZone.zoneWorldPivotsAndSizesArray[i];
-                    input.uvSizeAndPos = curZone.zoneUVSizeAndPosArray[i];
-                    input.sliceOffsetAndSize = curZone.zoneSliceOffsetsAndSizes[i];
+                    input.worldPivotAndSize = curZoneAtlas.worldPivotAndSizeArray[i];
+                    input.uvSizeAndPos = curZoneAtlas.uvSizeAndPosArray[i];
+                    input.sliceOffsetAndSize = curZoneAtlas.sliceOffsetsAndSizes[i];
                     zoneInput[i] = input;
                 }
-                curInitKernelID = zoneSpawnerData.kernelID_initSlice;
+                curInitKernelID = zoneArea.kernelID_initSlice;
             }
             break;
         }
 
 
         inputBuffer.SetData(zoneInput);
-        spawner.atlasCompute.SetBuffer(curInitKernelID, zoneName + INPUT_STRING, inputBuffer);
-        spawner.atlasCompute.Dispatch(curInitKernelID, zoneSpawnerData.computeGroupSize, 1, 1);
-
-        zoneSpawnerData.active = true;
+        spawner.zoneCompute.SetBuffer(curInitKernelID, zoneName + INPUT_STRING, inputBuffer);
+        spawner.zoneCompute.Dispatch(curInitKernelID, zoneArea.computeGroupSize, 1, 1);
     }
-
     public void Dispose()
     {
         inputBuffer?.Release();
         outputBuffer?.Release();
         deadCountBuffer?.Release();
-        zoneSpawnerData.active = false;
     }
 }

@@ -6,8 +6,6 @@ using static Spy;
 
 public class SpyBrain : MonoBehaviour
 {
-    const float DEPTH_CHANGE_TIME = 0.5f;
-
     [Header("Components")]
     public Rigidbody2D rigidBody;
     public BoxCollider2D boxCollider;
@@ -44,8 +42,6 @@ public class SpyBrain : MonoBehaviour
     public static bool canCheckTicket;
     public static bool checkingTicket;
     public static bool checkingNotepad;
-
-    public static int ticketsCheckedTotal;
 
     public CollisionData collisionData;
 
@@ -262,10 +258,11 @@ public class SpyBrain : MonoBehaviour
                     canExitCheckTicket = false;
 
 
-                    ticketsCheckedTotal++;
+                    stats.ticketsCheckedTotal++;
                     trip.ticketsCheckedSinceLastStation++;
-                    ScrollSpawner.UpdateScrollers();
                     checkingTicket = true;
+
+                    gameEventData.OnTicketInspect.Raise();
                 }
             }
             break;

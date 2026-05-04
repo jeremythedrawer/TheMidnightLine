@@ -62,7 +62,20 @@ public static class AtlasSpawn
         Background1,
         Background2,
     }
-
+    public enum ZoneState
+    { 
+        None,
+        Alive,
+        Dying,
+        Dead,
+    }
+    public enum ScrollState
+    { 
+        None,
+        MovingIn,
+        MovingOut,
+        Dead,
+    }
     struct ZoneOutput
     {
         Vector4 uvSizeAndPos;
@@ -78,32 +91,22 @@ public static class AtlasSpawn
     [Serializable] public struct ZoneInput
     {
         public Vector4 uvSizeAndPos;
-        public Vector4 worldSizeAndPivot;
+        public Vector4 worldPivotAndSize;
         public Vector4 sliceOffsetAndSize;
     };
 
     [Serializable] public struct ZoneAtlas
     {
-        public AtlasSO atlas;
         public int ticketCheckStart;
         public int ticketCheckEnd;
+
+        public AtlasSO atlas;
+        
         public ZoneSpriteType zoneType;
 
-        public Vector4[] zoneUVSizeAndPosArray;
-        public Vector4[] zoneWorldPivotsAndSizesArray;
-        public Vector4[] zoneSliceOffsetsAndSizes;
-    }
-    [Serializable] public struct ZoneArea
-    {
-        public ZoneLabel label;
-        public ZoneAtlas[] zoneSprites;
-        public MaterialPropertyBlock mpb;
-        public int particleCount;
-        public int computeGroupSize;
-        public int kernelID_init;
-        public int kernelID_initSlice;
-        public int kernelID_update;
-        public bool active;
+        public Vector4[] uvSizeAndPosArray;
+        public Vector4[] worldPivotAndSizeArray;
+        public Vector4[] sliceOffsetsAndSizes;
     }
 
     [Serializable] public struct ScrollSprite
@@ -111,9 +114,11 @@ public static class AtlasSpawn
         public int ticketCheckStart;
         public int ticketCheckEnd;
 
-        public ScrollSpriteType scrollType;
-        public int depth;
         public AtlasSO atlas;
+        
+        public ScrollSpriteType scrollType;
+        
+        public int depth;
         public int spriteIndex;
         public float height;
     }

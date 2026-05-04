@@ -6,7 +6,7 @@ using static Atlas;
 [CreateAssetMenu(fileName = "Trip", menuName = "Atlas / Trip")]
 public class TripSO : ScriptableObject
 {
-    public ZoneArea[] zoneAreas;
+    public ZoneAreaSO[] zoneAreas;
     public StationSO[] stationsDataArray;
     public NPCBrain[] npc_prefabsArray;
     public ScrollSprite[] scrollSprites;
@@ -20,26 +20,3 @@ public class TripSO : ScriptableObject
     public int totalTicketsToCheck;
     public int ticketsCheckedSinceLastStation;
 }
-
-#if UNITY_EDITOR
-[CustomPropertyDrawer(typeof(ZoneArea))]
-public class ZoneSpawnerDataDrawer : PropertyDrawer
-{
-    public override void OnGUI(Rect position, SerializedProperty property, GUIContent label)
-    {
-        SerializedProperty areaProp = property.FindPropertyRelative("area");
-
-        if (areaProp != null)
-        {
-            label.text = areaProp.enumDisplayNames[areaProp.enumValueIndex];
-        }
-
-        EditorGUI.PropertyField(position, property, label, true);
-    }
-
-    public override float GetPropertyHeight(SerializedProperty property, GUIContent label)
-    {
-        return EditorGUI.GetPropertyHeight(property, label, true);
-    }
-}
-#endif

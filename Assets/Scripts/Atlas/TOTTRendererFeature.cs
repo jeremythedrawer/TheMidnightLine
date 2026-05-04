@@ -13,7 +13,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 {
     public MaterialIDSO materialIDs;
     public TripSO trip;
-    public ZoneSpawnerSO zoneSpawner;
+    public SpawnSO zoneSpawner;
     public CameraStatsSO cameraStats;
     public Mesh quad;
 
@@ -180,8 +180,8 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     private class AtlasParticlePass : ScriptableRenderPass
     {
         private TripSO trip;
-        private ZoneSpawnerSO zoneSpawner;
-        public AtlasParticlePass(TripSO curTrip, ZoneSpawnerSO spawner, MaterialIDSO matIDs)
+        private SpawnSO zoneSpawner;
+        public AtlasParticlePass(TripSO curTrip, SpawnSO spawner, MaterialIDSO matIDs)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
             trip = curTrip;
@@ -207,10 +207,10 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         {
             for (int i = 0; i < trip.zoneAreas.Length; i++)
             {
-                ZoneArea zoneSpawnerData = trip.zoneAreas[i];
+                ZoneAreaSO zoneSpawnerData = trip.zoneAreas[i];
 
-                if (!zoneSpawnerData.active) continue;
-                cmd.DrawProcedural(Matrix4x4.identity, zoneSpawner.material, shaderPass: 0, MeshTopology.Quads, zoneSpawnerData.particleCount * 4, 1, zoneSpawnerData.mpb);
+                if (zoneSpawnerData.state == ZoneState.Dead) continue;
+                cmd.DrawProcedural(Matrix4x4.identity, zoneSpawner.zoneMaterial, shaderPass: 0, MeshTopology.Quads, zoneSpawnerData.particleCount * 4, 1, zoneSpawnerData.mpb);
             }
         }
     }

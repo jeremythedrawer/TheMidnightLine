@@ -8,7 +8,7 @@ public class TrainController : MonoBehaviour
     public TrainSettingsSO settings;
     public TrainStatsSO stats;
     public TripSO trip;
-    public ZoneSpawnerSO spawner;
+    public SpawnSO spawner;
     public GameEventDataSO gameEventData;
     public SpyStatsSO spyStats;
     public AtlasRenderer backSprite;

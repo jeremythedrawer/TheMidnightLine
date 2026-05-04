@@ -230,11 +230,11 @@ public class AtlasTripEditor : EditorWindow
 
         for (int i = 0; i < trip.zoneAreas.Length; i++)
         {
-            ZoneArea zoneSpawnerData = trip.zoneAreas[i];
+            ZoneAreaSO zoneSpawnerData = trip.zoneAreas[i];
 
-            for (int j = 0; j < zoneSpawnerData.zoneSprites.Length; j++)
+            for (int j = 0; j < zoneSpawnerData.zoneAtlases.Length; j++)
             {
-                ref ZoneAtlas zoneAtlas = ref zoneSpawnerData.zoneSprites[j];
+                ref ZoneAtlas zoneAtlas = ref zoneSpawnerData.zoneAtlases[j];
 
                 if (zoneAtlas.atlas == null) continue;
 
@@ -355,15 +355,15 @@ public class AtlasTripEditor : EditorWindow
                     {
                         case ZoneSpriteType.Simple:
                         {
-                            zoneAtlas.zoneUVSizeAndPosArray = new Vector4[zoneAtlas.atlas.simpleSprites.Length];
-                            zoneAtlas.zoneWorldPivotsAndSizesArray = new Vector4[zoneAtlas.atlas.simpleSprites.Length];
+                            zoneAtlas.uvSizeAndPosArray = new Vector4[zoneAtlas.atlas.simpleSprites.Length];
+                            zoneAtlas.worldPivotAndSizeArray = new Vector4[zoneAtlas.atlas.simpleSprites.Length];
                             for (int k = 0; k < zoneAtlas.atlas.simpleSprites.Length; k++)
                             {
                                 SimpleSprite sprite = zoneAtlas.atlas.simpleSprites[k];
-                                zoneAtlas.zoneUVSizeAndPosArray[k] = sprite.uvSizeAndPos;
+                                zoneAtlas.uvSizeAndPosArray[k] = sprite.uvSizeAndPos;
 
                                 Vector4 pivotAndSize = new Vector4(0, 0, sprite.worldSize.x, sprite.worldSize.y);
-                                zoneAtlas.zoneWorldPivotsAndSizesArray[k] = pivotAndSize;
+                                zoneAtlas.worldPivotAndSizeArray[k] = pivotAndSize;
                             }
                         }
                         break;
@@ -371,9 +371,9 @@ public class AtlasTripEditor : EditorWindow
                         case ZoneSpriteType.Sliced:
                         {
                             int sliceArraySize = zoneAtlas.atlas.slicedSprites.Length * 9;
-                            zoneAtlas.zoneUVSizeAndPosArray = new Vector4[sliceArraySize];
-                            zoneAtlas.zoneWorldPivotsAndSizesArray = new Vector4[sliceArraySize];
-                            zoneAtlas.zoneSliceOffsetsAndSizes = new Vector4[sliceArraySize];
+                            zoneAtlas.uvSizeAndPosArray = new Vector4[sliceArraySize];
+                            zoneAtlas.worldPivotAndSizeArray = new Vector4[sliceArraySize];
+                            zoneAtlas.sliceOffsetsAndSizes = new Vector4[sliceArraySize];
                             int index = 0;
                             for (int k = 0; k < zoneAtlas.atlas.slicedSprites.Length; k++)
                             {
@@ -417,9 +417,9 @@ public class AtlasTripEditor : EditorWindow
 
                                 for (int l = 0; l < 9; l++)
                                 {
-                                    zoneAtlas.zoneUVSizeAndPosArray[index] = zoneAtlas.atlas.slicedSprites[k].uvSizeAndPos[l];
-                                    zoneAtlas.zoneWorldPivotsAndSizesArray[index] = worldPivotsAndSizes[l];
-                                    zoneAtlas.zoneSliceOffsetsAndSizes[index] = sliceOffsetsAndSizes[l];
+                                    zoneAtlas.uvSizeAndPosArray[index] = zoneAtlas.atlas.slicedSprites[k].uvSizeAndPos[l];
+                                    zoneAtlas.worldPivotAndSizeArray[index] = worldPivotsAndSizes[l];
+                                    zoneAtlas.sliceOffsetsAndSizes[index] = sliceOffsetsAndSizes[l];
                                     index++;
                                 }
                             }
@@ -471,6 +471,7 @@ public class AtlasTripEditor : EditorWindow
             float scaledWidth = spritePixelWidth * scale;
             float scaledHeight = spritePixelHeight * scale;
 
+            EditorGUI.DrawRect(scrollBarRect, Color.white);
             GUI.BeginGroup(scrollBarRect);
             {
                 for (float x = 0; x < barWidth; x += scaledWidth)
@@ -526,8 +527,6 @@ public class AtlasTripEditor : EditorWindow
                     int mouseY = (int)(((e.mousePosition.y - graphRect.yMin) / graphRect.height) * FAR_CLIP);
 
                     scrollSprite.depth = mouseY - dragOffsetStartY;
-
-                    EditorUtility.SetDirty(trip);
                     Repaint();
                 }
             }
@@ -552,14 +551,17 @@ public class AtlasTripEditor : EditorWindow
                 }
 
                 e.Use();
+                EditorUtility.SetDirty(trip);
+                AssetDatabase.SaveAssets();
+                AssetDatabase.Refresh();
             }
             scrollSprite.ticketCheckStart = Mathf.Clamp(scrollSprite.ticketCheckStart, 0, scrollSprite.ticketCheckEnd - 1);
             scrollSprite.ticketCheckEnd = Mathf.Clamp(scrollSprite.ticketCheckEnd, scrollSprite.ticketCheckStart + 1, trip.totalTicketsToCheck);
             scrollSprite.depth = (int)Mathf.Clamp(scrollSprite.depth, 0, FAR_CLIP);
+
         }
 
         Handles.EndGUI();
-
         GUI.EndScrollView();
         EditorGUILayout.EndVertical();
     }

@@ -5,7 +5,7 @@ using static Spy;
 public class ParallaxController : MonoBehaviour
 {
     public TrainStatsSO trainStats;
-    public ZoneSpawnerSO zoneStats;
+    public SpawnSO zoneStats;
     public SpyStatsSO spyStats;
     public AtlasRenderer leftRenderer;
 

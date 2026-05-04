@@ -2,7 +2,7 @@ Shader "Custom/s_zoneParticles"
 {
     Properties
     {
-        _Atlas("Texture Atlas", 2D) = "white"
+        _AtlasTexture("Texture Atlas", 2D) = "white"
         _SpriteCount("Sprite Count", int) = 0
     }
 
@@ -25,8 +25,8 @@ Shader "Custom/s_zoneParticles"
 
             StructuredBuffer<ZoneOutput> _Particles;
 
-            TEXTURE2D(_Atlas);
-            SAMPLER(sampler_Atlas);
+            TEXTURE2D(_AtlasTexture);
+            SAMPLER(sampler_AtlasTexture);
 
             float _DayNight;
             float3 _MainColor;
@@ -87,7 +87,7 @@ Shader "Custom/s_zoneParticles"
                 i.uv += uvPos;
                 
                 //return half4(i.uv, 0, 1);
-                half4 tex = SAMPLE_TEXTURE2D(_Atlas, sampler_Atlas, i.uv);
+                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
                 half color = tex.r;
 

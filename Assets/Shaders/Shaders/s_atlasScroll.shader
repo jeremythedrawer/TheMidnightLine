@@ -40,11 +40,11 @@ Shader "Custom/s_atlasScroll"
             SAMPLER(sampler_AtlasTexture);
 
             float _MetersTravelled;
+            float2 _SpawnerSize;
 
             float3 _MainColor;
             float _DayNight;
             float _DayNightFactor;
-            float2 _SpawnerSize;
 
             Varyings vert(Attributes v)
             {
@@ -63,16 +63,11 @@ Shader "Custom/s_atlasScroll"
                 objPos *= size * scale;
                 objPos -= pivot;
 
-
-                float metersTravelled = _MetersTravelled;
-                if (_MetersTravelled < spriteData.custom.x)
-                {
-                    metersTravelled += METERS_TRAVELLED_DIVISOR;
-                }
-                float distance =  (metersTravelled - spriteData.custom.x); // NOTE: custom.x is the meters travelled when it spawned.
-
-                float scroll = step(distance, _SpawnerSize);
-                //objPos -= distance * (1 - scroll);
+                float metersTravelled = _MetersTravelled + (step(spriteData.custom.x, _MetersTravelled) * METERS_TRAVELLED_DIVISOR);
+                float distance = metersTravelled - spriteData.custom.x; // NOTE: custom.x is the meters travelled when it spawned.
+                float maxMoveDist = _SpawnerSize * spriteData.custom.y;
+                float scroll = step(distance, maxMoveDist);
+                objPos.x -= min(distance, maxMoveDist); //NOTE: custom.y is either 1 when moving in, 2 when moving out
 
                 float3 worldPos = float3(position.xy + objPos, position.z);
 

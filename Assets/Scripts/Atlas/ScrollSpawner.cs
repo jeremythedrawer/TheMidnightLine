@@ -5,17 +5,29 @@ public class ScrollSpawner : MonoBehaviour
 {
     const int MAX_ACTIVE_SCROLLERS = 64;
 
-    public ZoneSpawnerSO spawner;
+    public SpawnSO spawner;
     public TripSO demoTrip;
+    public SpyStatsSO spyStats;
+    public GameEventDataSO gameEventData;
+
+
     public Scroller scroller_prefab;
 
-    public static Queue<Scroller> scrollRendererPool;
-    public static Scroller[] activeScrollers;
-    public static ScrollSprite[] scrollSprites;
-    public static int nextSpawnIndex;
-    public static int activeSpawnerCount;
-    public static Bounds spawnerBounds;
-    public static Scroller scroller_staticPrefab;
+    public Queue<Scroller> scrollRendererPool;
+    public Scroller[] activeScrollers;
+    public ScrollSprite[] scrollSprites;
+    public int nextSpawnIndex;
+    public int activeSpawnerCount;
+    public Bounds spawnerBounds;
+    public Scroller scroller_staticPrefab;
+    private void OnEnable()
+    {
+        gameEventData.OnTicketInspect.RegisterListener(SetScrollers);
+    }
+    private void OnDisable()
+    {
+        gameEventData.OnTicketInspect.UnregisterListener(SetScrollers);
+    }
     private void Start()
     {
         scrollRendererPool = new Queue<Scroller>();
@@ -24,27 +36,23 @@ public class ScrollSpawner : MonoBehaviour
         spawnerBounds = spawner.bounds;
         scroller_staticPrefab = scroller_prefab;
     }
-    public static void UpdateScrollers()
+    public void SetScrollers()
     {
-        for(int i = 0; i < activeSpawnerCount; i++)
+        for (int i = 0; i < activeSpawnerCount; i++)
         {
             Scroller scroller = activeScrollers[i];
 
-            if (scroller.scrollSprite.ticketCheckEnd == SpyBrain.ticketsCheckedTotal)
+            if (scroller.state == ScrollState.Dead)
             {
-                scroller.ScrollAway();
-            }
-            else if (scroller.scrollSprite.ticketCheckEnd < SpyBrain.ticketsCheckedTotal)
-            {
-                scroller.CheckToDeactivate();
+                ReturnScroller(scroller);
             }
         }
 
-        for(int i = nextSpawnIndex; i < scrollSprites.Length; i++)
+        for (int i = nextSpawnIndex; i < scrollSprites.Length; i++)
         {
             ScrollSprite nextScrollSprite = scrollSprites[i];
 
-            if (nextScrollSprite.ticketCheckStart == SpyBrain.ticketsCheckedTotal)
+            if (nextScrollSprite.ticketCheckStart == spyStats.ticketsCheckedTotal)
             {
                 GetScroller(ref nextScrollSprite);
             }
@@ -55,26 +63,26 @@ public class ScrollSpawner : MonoBehaviour
             }
         }
     }
-    private static void GetScroller(ref ScrollSprite scrollSprite)
+    private void GetScroller(ref ScrollSprite scrollSprite)
     {
         if (scrollRendererPool.Count > 0)
         {
             Scroller scroller = scrollRendererPool.Dequeue();
             scroller.gameObject.SetActive(true);
-            scroller.InitScroll(ref scrollSprite, activeSpawnerCount);
+            scroller.InitScroll(scrollSprite, activeSpawnerCount);
 
             activeScrollers[activeSpawnerCount] = scroller;
         }
         else
         {
             Scroller scroller = Instantiate(scroller_staticPrefab);
-            scroller.InitScroll(ref scrollSprite, activeSpawnerCount);
+            scroller.InitScroll(scrollSprite, activeSpawnerCount);
 
             activeScrollers[activeSpawnerCount] = scroller;
         }
         activeSpawnerCount++;
     }
-    public static void ReturnScroller(Scroller scroller)
+    public void ReturnScroller(Scroller scroller)
     {
         Scroller lastScroller = activeScrollers[activeSpawnerCount];
         activeScrollers[scroller.activeScrollerIndex] = lastScroller;

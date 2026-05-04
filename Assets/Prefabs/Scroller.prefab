@@ -47,7 +47,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 0e218c0765f01fb40a0930b56607d422, type: 2}
+    texture: {fileID: 2800000, guid: 0dd4e9f513284c64a9e1960098c18ff8, type: 3}
+    material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
     depthOrder: 6
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
   camStats: {fileID: 0}
@@ -65,11 +66,11 @@ MonoBehaviour:
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0.5004883, w: 0.81152344}
-    uvPivot: {x: 0, y: 0}
+    uvPivot: {x: 0, y: 1}
     worldSize: {x: 11.366667, y: 1.4222223, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 299.054, y: -7.7288885, z: 6}
+    m_Center: {x: 220.05399, y: -1.5388889, z: 10}
     m_Extent: {x: 66.154, y: 0.7111111, z: 0.1}
   worldPivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4222223}
   uvSizeAndPosition: {x: 0.49951172, y: 0.0625, z: 0.5004883, w: 0.81152344}
@@ -115,8 +116,7 @@ MonoBehaviour:
   scrollSprite:
     ticketCheckStart: 0
     ticketCheckEnd: 0
-    rendererType: 0
-    material: {fileID: 0}
+    scrollType: 0
     depth: 0
     atlas: {fileID: 0}
     spriteIndex: 0

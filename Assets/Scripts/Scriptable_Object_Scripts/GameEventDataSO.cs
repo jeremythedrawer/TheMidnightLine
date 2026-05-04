@@ -9,5 +9,6 @@ public class GameEventDataSO : ScriptableObject
     public GameEvent OnStationArrival;
     public GameEvent OnStationLeave;
     public GameEvent OnTrainDeceleration;
+    public GameEvent OnTicketInspect;
 
 }

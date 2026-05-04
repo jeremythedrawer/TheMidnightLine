@@ -45,23 +45,29 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   area: 0
-  materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   spawner: {fileID: 11400000, guid: fa0e41c06b686dc46aecf54c90ff03e4, type: 2}
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  zoneSpawnerData:
-    zones: []
-    area: 0
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  zoneArea:
+    label: 0
+    zoneSprites: []
     particleCount: 0
     computeGroupSize: 0
     kernelID_init: 0
+    kernelID_initSlice: 0
     kernelID_update: 0
-    active: 0
+    state: 0
   curZone:
+    ticketCheckStart: 0
+    ticketCheckEnd: 0
     atlas: {fileID: 0}
-    metersStart: 0
-    metersEnd: 0
+    zoneType: 0
     zoneUVSizeAndPosArray: []
-    zoneWorldSizesArray: []
+    zoneWorldPivotsAndSizesArray: []
+    zoneSliceOffsetsAndSizes: []
   curZoneIndex: 0
   deadCounter: 
+  zoneInput: []
+  zoneName: 
+  curInitKernelID: 0
