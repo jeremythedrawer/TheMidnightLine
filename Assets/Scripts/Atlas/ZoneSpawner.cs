@@ -111,6 +111,7 @@ public class ZoneSpawner : MonoBehaviour
     }
     public void InitializeZoneSpawnData()
     {
+        SetState(ZoneState.None);
         zoneName = ZONE_STRINGS[(int)area];
         zoneArea = trip.zoneAreas[(int)area];
         if (zoneArea.zoneAtlases.Length == 0) return;

@@ -8,6 +8,7 @@ static const float MID_SIZE = 16.0;
 
 static const float BACK_MIN = 65.0;
 static const float BACK_SIZE = 63.0;
+
 struct ZoneOutput
 {
     float4 uvSizeAndPos;

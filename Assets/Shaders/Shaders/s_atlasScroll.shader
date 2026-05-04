@@ -16,6 +16,8 @@ Shader "Custom/s_atlasScroll"
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
+            #include "Assets/Shaders/HLSL/AtlasParticles.hlsl"
+
             #pragma vertex vert
             #pragma fragment frag
 
@@ -31,10 +33,11 @@ Shader "Custom/s_atlasScroll"
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 uint instanceID : TEXCOORD1;
-                uint scroll : TEXCOORD2;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
+            StructuredBuffer<float4> _ScrollOutput;
+
 
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
@@ -53,6 +56,9 @@ Shader "Custom/s_atlasScroll"
                 AtlasSprite spriteData = _SpriteData[v.instanceID];
 
                 float3 position = spriteData.position.xyz;
+
+                uint particleID = spriteData.custom.x;
+                float4 scrollOutput = _ScrollOutput[particleID];
                  
                 float2 pivot = spriteData.pivotAndSize.xy;
                 float2 size = spriteData.pivotAndSize.zw;
@@ -62,19 +68,13 @@ Shader "Custom/s_atlasScroll"
 
                 objPos *= size * scale;
                 objPos -= pivot;
+                objPos.x -= scrollOutput.x;
 
-                float metersTravelled = _MetersTravelled + (step(spriteData.custom.x, _MetersTravelled) * METERS_TRAVELLED_DIVISOR);
-                float distance = metersTravelled - spriteData.custom.x; // NOTE: custom.x is the meters travelled when it spawned.
-                float maxMoveDist = _SpawnerSize * spriteData.custom.y;
-                float scroll = step(distance, maxMoveDist);
-                objPos.x -= min(distance, maxMoveDist); //NOTE: custom.y is either 1 when moving in, 2 when moving out
-
-                float3 worldPos = float3(position.xy + objPos, position.z);
+                float3 worldPos = float3(position.xy + objPos, scrollOutput.z);
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
                 o.instanceID = v.instanceID;
-                o.scroll = scroll;
 
                 return o;
             }
@@ -82,7 +82,11 @@ Shader "Custom/s_atlasScroll"
             half4 frag(Varyings i) : SV_Target
             {
                 uint id = i.instanceID;
+                
                 AtlasSprite spriteData = _SpriteData[id];
+
+                uint particleID = spriteData.custom.x;
+                float4 scrollOutput = _ScrollOutput[particleID];
 
                 float2 uvSize = spriteData.uvSizeAndPos.xy;
                 float2 uvPos = spriteData.uvSizeAndPos.zw;
@@ -93,7 +97,8 @@ Shader "Custom/s_atlasScroll"
                 float2 flip = spriteData.scaleAndFlip.zw;
 
                 i.uv *= scale.xy;
-                i.uv.x += (_MetersTravelled / width) * i.scroll;
+                float meterOffset = scrollOutput.x * spriteData.custom.y;
+                i.uv.x += (meterOffset / width) * step(1.1, scale);
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;

@@ -1,42 +1,51 @@
 using System.Collections.Generic;
 using UnityEngine;
 using static AtlasSpawn;
+[ExecuteAlways]
 public class ScrollSpawner : MonoBehaviour
 {
-    const int MAX_ACTIVE_SCROLLERS = 64;
+
 
     public SpawnSO spawner;
-    public TripSO demoTrip;
+    public TripSO trip;
     public SpyStatsSO spyStats;
     public GameEventDataSO gameEventData;
 
-
-    public Scroller scroller_prefab;
-
     public Queue<Scroller> scrollRendererPool;
     public Scroller[] activeScrollers;
-    public ScrollSprite[] scrollSprites;
     public int nextSpawnIndex;
     public int activeSpawnerCount;
-    public Bounds spawnerBounds;
-    public Scroller scroller_staticPrefab;
     private void OnEnable()
     {
+        InitScrollers();
         gameEventData.OnTicketInspect.RegisterListener(SetScrollers);
     }
     private void OnDisable()
     {
+        ResetScrollerSpawner();
         gameEventData.OnTicketInspect.UnregisterListener(SetScrollers);
+
     }
     private void Start()
     {
+        InitScrollers();
+    }
+
+
+
+    private void InitScrollers()
+    {
         scrollRendererPool = new Queue<Scroller>();
         activeScrollers = new Scroller[MAX_ACTIVE_SCROLLERS];
-        scrollSprites = demoTrip.scrollSprites;
-        spawnerBounds = spawner.bounds;
-        scroller_staticPrefab = scroller_prefab;
+        SetScrollers();
+
     }
-    public void SetScrollers()
+    private void ResetScrollerSpawner()
+    {
+        nextSpawnIndex = 0;
+        activeSpawnerCount = 0;
+    }
+    private void SetScrollers()
     {
         for (int i = 0; i < activeSpawnerCount; i++)
         {
@@ -48,9 +57,9 @@ public class ScrollSpawner : MonoBehaviour
             }
         }
 
-        for (int i = nextSpawnIndex; i < scrollSprites.Length; i++)
+        for (int i = nextSpawnIndex; i < trip.scrollSprites.Length; i++)
         {
-            ScrollSprite nextScrollSprite = scrollSprites[i];
+            ScrollSprite nextScrollSprite = trip.scrollSprites[i];
 
             if (nextScrollSprite.ticketCheckStart == spyStats.ticketsCheckedTotal)
             {
@@ -68,14 +77,15 @@ public class ScrollSpawner : MonoBehaviour
         if (scrollRendererPool.Count > 0)
         {
             Scroller scroller = scrollRendererPool.Dequeue();
-            scroller.gameObject.SetActive(true);
+
             scroller.InitScroll(scrollSprite, activeSpawnerCount);
 
             activeScrollers[activeSpawnerCount] = scroller;
         }
         else
         {
-            Scroller scroller = Instantiate(scroller_staticPrefab);
+            Scroller scroller = Instantiate(spawner.scroller_prefab);
+            scroller.gameObject.SetActive(false);
             scroller.InitScroll(scrollSprite, activeSpawnerCount);
 
             activeScrollers[activeSpawnerCount] = scroller;

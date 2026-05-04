@@ -49,7 +49,7 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 0dd4e9f513284c64a9e1960098c18ff8, type: 3}
     material: {fileID: 2100000, guid: 37da044f890385e498638a5a5d35f34f, type: 2}
-    depthOrder: 6
+    depthOrder: 0
   atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -110,15 +110,18 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e70d1f1bf689bd44698866c8c59025bb, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Scroller
-  atlasRenderer: {fileID: 7842844317880843427}
-  spawner: {fileID: 11400000, guid: fa0e41c06b686dc46aecf54c90ff03e4, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+  spawner: {fileID: 11400000, guid: fa0e41c06b686dc46aecf54c90ff03e4, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  atlasRenderer: {fileID: 7842844317880843427}
   scrollSprite:
     ticketCheckStart: 0
     ticketCheckEnd: 0
+    atlas: {fileID: 0}
     scrollType: 0
     depth: 0
-    atlas: {fileID: 0}
     spriteIndex: 0
     height: 0
   activeScrollerIndex: 0
+  metersTravelledAtMoveOut: 0
+  state: 0

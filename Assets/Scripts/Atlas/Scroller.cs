@@ -1,7 +1,8 @@
 using UnityEngine;
+using UnityEngine.UIElements;
 using static Atlas;
-using static AtlasSpawn;
 using static AtlasRendering;
+using static AtlasSpawn;
 public class Scroller : MonoBehaviour
 {
     public TrainStatsSO trainStats;
@@ -18,20 +19,11 @@ public class Scroller : MonoBehaviour
     {
         ChooseState();
     }
-
     public void ChooseState()
     {
         if (spyStats.ticketsCheckedTotal >= scrollSprite.ticketCheckEnd)
         {
-            if ((trainStats.metersTravelled - metersTravelledAtMoveOut) > spawner.bounds.size.x)
-            {
-                SetState(ScrollState.Dead);
-            }
-            else
-            {
-               SetState(ScrollState.MovingOut);
-            }
-
+            SetState(ScrollState.MovingOut);
         }
         else if (spyStats.ticketsCheckedTotal >= scrollSprite.ticketCheckStart)
         {
@@ -62,8 +54,6 @@ public class Scroller : MonoBehaviour
                         atlasRenderer.rendererType = AtlasRendererType.SimpleWorld;
                         SimpleSprite sprite = atlasRenderer.atlas.simpleSprites[scrollSprite.spriteIndex];
                         atlasRenderer.SetWidthFromWorldSpace(spawner.bounds.size.x, ref sprite);
-                        atlasRenderer.custom.x = trainStats.metersTravelled;
-                        atlasRenderer.custom.y = 1;
                     }
                     break;
                     case ScrollSpriteType.Sliced:
@@ -74,8 +64,6 @@ public class Scroller : MonoBehaviour
 
                         for (int i = 0; i < 9; i++)
                         {
-                            atlasRenderer.customs[i].x = trainStats.metersTravelled;
-                            atlasRenderer.custom.y = 1;
                         }
                     }
                     break;
@@ -94,21 +82,16 @@ public class Scroller : MonoBehaviour
                     break;
                     case ScrollSpriteType.Tiled:
                     {
-                        atlasRenderer.custom.x = trainStats.metersTravelled - spawner.bounds.size.x;
-                        atlasRenderer.custom.y = 2;
                     }
                     break;
                     case ScrollSpriteType.Sliced:
                     {
                         for (int i = 0; i < 9; i++)
                         {
-                            atlasRenderer.custom.x = trainStats.metersTravelled - spawner.bounds.size.x;
-                            atlasRenderer.custom.y = 2;
                         }
                     }
                     break;
                 }
-                metersTravelledAtMoveOut = trainStats.metersTravelled;
             }
             break;
             case ScrollState.Dead:
@@ -128,7 +111,6 @@ public class Scroller : MonoBehaviour
             break;
             case ScrollState.MovingOut:
             {
-
             }
             break;
         }
@@ -138,40 +120,53 @@ public class Scroller : MonoBehaviour
         scrollSprite = scrollSpriteInput;
         atlasRenderer.batchKey.depthOrder = scrollSprite.depth;
         atlasRenderer.atlas = scrollSprite.atlas;
-
         activeScrollerIndex = activeIndex;
 
-        transform.position = new Vector3(spawner.bounds.max.x, 0, scrollSprite.depth);
 
         switch (scrollSprite.scrollType)
         {
             case ScrollSpriteType.Simple:
             {
+                transform.position = new Vector3(spawner.bounds.max.x, 0, scrollSprite.depth);
                 atlasRenderer.rendererType = AtlasRendererType.SimpleWorld;
                 SimpleSprite sprite = atlasRenderer.atlas.simpleSprites[scrollSprite.spriteIndex];
                 atlasRenderer.UpdateSpriteInputs(ref sprite);
-                atlasRenderer.custom.x = trainStats.metersTravelled;
             }
             break;
             case ScrollSpriteType.Tiled:
             {
+                transform.position = new Vector3(spawner.bounds.max.x, scrollSprite.height, scrollSprite.depth);
                 atlasRenderer.rendererType = AtlasRendererType.SimpleWorld;
                 SimpleSprite sprite = atlasRenderer.atlas.simpleSprites[scrollSprite.spriteIndex];
                 atlasRenderer.SetWidthFromWorldSpace(spawner.bounds.size.x, ref sprite);
-                atlasRenderer.custom.x = trainStats.metersTravelled;
+
+                atlasRenderer.custom.x = atlasRenderer.batchKey.depthOrder;
+
+                spawner.scrollMoveInputBuffer.GetData(spawner.moveInputs);
+                spawner.moveInputs[atlasRenderer.batchKey.depthOrder] = 1;
+                spawner.scrollMoveInputBuffer.SetData(spawner.moveInputs);
+                spawner.scrollCompute.Dispatch(spawner.scrollKernelUpdate, spawner.scrollComputeGroupSize, 1, 1);
             }
             break;
             case ScrollSpriteType.Sliced:
             {
+                atlasRenderer.rendererType = AtlasRendererType.SliceWorld;
                 SliceSprite sliceSprite = atlasRenderer.atlas.slicedSprites[scrollSprite.spriteIndex];
+                transform.position = new Vector3(spawner.bounds.max.x - sliceSprite.worldSlices.y, scrollSprite.height, scrollSprite.depth);
                 atlasRenderer.SetNineSliceWidthFromWorldSpace(spawner.bounds.size.x, ref sliceSprite);
 
                 for (int i = 0; i < 9; i++)
                 {
-                    atlasRenderer.customs[i].x = trainStats.metersTravelled;
+                    atlasRenderer.customs[i].x = atlasRenderer.batchKey.depthOrder;
                 }
+                spawner.scrollMoveInputBuffer.GetData(spawner.moveInputs);
+                spawner.moveInputs[atlasRenderer.batchKey.depthOrder] = 1;
+                spawner.scrollMoveInputBuffer.SetData(spawner.moveInputs);
+                spawner.scrollCompute.Dispatch(spawner.scrollKernelUpdate, spawner.scrollComputeGroupSize, 1, 1);
             }
             break;
         }
+
+        gameObject.SetActive(true);
     }
 }

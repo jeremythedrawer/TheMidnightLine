@@ -12,9 +12,14 @@ public static class AtlasSpawn
     public const float MID_MIN = 48.0f;
     public const float MID_SIZE = 16.0f;
     public const float BACK_MIN = 65.0f;
+    public const float BACK_SIZE = 63.0f;
 
-    const float BACK_SIZE = 63.0f;
+    public const float TRAIN_WHEEL_HEIGHT = -1.43f;
+    public const float TRAIN_LINE_HEIGHT = 5.11f;
+
     public const float FAR_CLIP = 128;
+    public const int MAX_ACTIVE_SCROLLERS = 64;
+    public const int SCROLL_PARTICLE_COUNT = 256;
 
     public const int ZONE_SPAWNER_COUNT = 8;
 
@@ -50,7 +55,12 @@ public static class AtlasSpawn
         Sliced,
         Tiled,
     }
-
+    public enum ScrollHeightPositionType
+    {
+        WorldZero,
+        TrainWheels,
+        TrainLine,
+    }
     public enum ZoneLabel
     {
         Foreground0,
@@ -117,7 +127,8 @@ public static class AtlasSpawn
         public AtlasSO atlas;
         
         public ScrollSpriteType scrollType;
-        
+        public ScrollHeightPositionType scrollHeightPositionType;
+
         public int depth;
         public int spriteIndex;
         public float height;

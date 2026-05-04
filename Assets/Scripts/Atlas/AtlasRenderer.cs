@@ -153,6 +153,7 @@ public class AtlasRenderer : MonoBehaviour
     }
     private void OnEnable()
     {
+        batchKey.texture = atlas.texture;
         RegisterRenderer(this);
     }
     private void OnDisable()
@@ -284,6 +285,10 @@ public class AtlasRenderer : MonoBehaviour
         };
 
         customs = new Vector4[9];
+        for (int i = 0;  i < customs.Length; i++)
+        {
+            customs[i] = custom;
+        }
         bounds.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldSliceWidth * width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldSliceHeight * height) + sliceSprite.worldSlices.w, 0.2f);
         boundsOffset = bounds.size * 0.5f;
 
@@ -302,7 +307,8 @@ public class AtlasRenderer : MonoBehaviour
     {
         float centerWorldSliceWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
 
-        width = (worldWidth / centerWorldSliceWidth) - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
+
+        width = worldWidth / centerWorldSliceWidth;
         UpdateSlicedSpriteInputs(ref sliceSprite);
         UpdateBounds();
     }

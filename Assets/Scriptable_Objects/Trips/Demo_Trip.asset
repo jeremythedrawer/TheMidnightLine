@@ -35,35 +35,39 @@ MonoBehaviour:
   - {fileID: 94976023300698573, guid: 309c427b4de8219458011f9f0e3445fd, type: 3}
   scrollSprites:
   - ticketCheckStart: 0
-    ticketCheckEnd: 5
-    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
-    scrollType: 1
-    depth: 5
-    spriteIndex: 2
-    height: 0
-  - ticketCheckStart: 0
-    ticketCheckEnd: 5
-    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
-    scrollType: 0
-    depth: 6
-    spriteIndex: 4
-    height: 0
-  - ticketCheckStart: 0
-    ticketCheckEnd: 4
-    atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
-    scrollType: 0
-    depth: 53
-    spriteIndex: 0
-    height: 0
-  - ticketCheckStart: 5
     ticketCheckEnd: 6
     atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
-    scrollType: 0
+    scrollType: 1
+    scrollHeightPositionType: 2
+    depth: 5
+    spriteIndex: 2
+    height: 5.11
+  - ticketCheckStart: 0
+    ticketCheckEnd: 3
+    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+    scrollType: 2
+    scrollHeightPositionType: 1
+    depth: 6
+    spriteIndex: 4
+    height: -1.43
+  - ticketCheckStart: 0
+    ticketCheckEnd: 3
+    atlas: {fileID: 11400000, guid: 130e47aef00c6024093f77ee756edb9c, type: 2}
+    scrollType: 2
+    scrollHeightPositionType: 0
+    depth: 52
+    spriteIndex: 0
+    height: 0
+  - ticketCheckStart: 3
+    ticketCheckEnd: 6
+    atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+    scrollType: 2
+    scrollHeightPositionType: 1
     depth: 6
     spriteIndex: 7
-    height: 0
+    height: -1.43
   minStationsTraitorsTravel: 2
   maxStationsTraitorsTravel: 4
-  nextStation: {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
+  nextStation: {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
   totalTicketsToCheck: 6
   ticketsCheckedSinceLastStation: 0

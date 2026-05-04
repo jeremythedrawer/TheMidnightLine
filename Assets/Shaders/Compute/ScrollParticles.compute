@@ -1,0 +1,52 @@
+#include "Assets/Shaders/HLSL/AtlasParticles.hlsl"
+
+#pragma kernel _ScrollInit
+#pragma kernel _ScrollUpdate
+
+RWStructuredBuffer<float4> _ScrollOutput;
+RWStructuredBuffer<uint> _MoveInput;
+
+float _CamVelocity;
+float _TrainVelocity;
+
+float3 _SpawnerMinPos;
+float3 _SpawnerMaxPos;
+float3 _SpawnerSize;
+
+uint _ParticleCount;
+
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void _ScrollInit(uint id : SV_DispatchThreadID)
+{
+    if (id >= _ParticleCount)
+        return;
+    float4 output = _ScrollOutput[id];
+    
+    output.z = (float) id % _SpawnerSize.z;
+    output.x = step(id, _SpawnerSize.x) * _SpawnerSize.x;
+    
+    output.w = ((_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z);
+    _ScrollOutput[id] = output;
+
+}
+
+[numthreads(THREADS_PER_GROUP, 1, 1)]
+void _ScrollUpdate(uint id : SV_DispatchThreadID)
+{
+    if (id >= _ParticleCount)
+        return;
+    float4 output = _ScrollOutput[id];
+    uint moveInput = _MoveInput[id];
+    
+    float velocity = (_CamVelocity * (1 - output.w)) + (_TrainVelocity * output.w);
+    
+    if (output.x > _SpawnerSize.x * 2)
+    {
+        output.x = step(_SpawnerSize.x,id) * _SpawnerSize.x;
+        moveInput = 0;
+    }
+    output.x += velocity * moveInput;
+    
+    _ScrollOutput[id] = output;
+}

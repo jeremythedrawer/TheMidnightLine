@@ -202,8 +202,6 @@ public class TrainController : MonoBehaviour
             case TrainStates.Accelerating:
             {
                 stats.curVelocity = IncreaseVelocity(stats.curVelocity, stats.targetVelocity, settings.acceleration);
-                stats.metersTravelled += stats.curVelocity * Time.fixedDeltaTime;
-                Shader.SetGlobalFloat("_MetersTravelled", stats.metersTravelled);
             }
             break;
 
@@ -214,15 +212,11 @@ public class TrainController : MonoBehaviour
                     stats.targetStopPosition = nextStation.transform.position.x;
                 }
                 stats.curVelocity = DecreaseVelocity(stats.curVelocity, stats.targetVelocity, stats.prevPeakVelocity, settings.deceleration, stats.targetStopPosition);
-                stats.metersTravelled += stats.curVelocity * Time.fixedDeltaTime;
-                Shader.SetGlobalFloat("_MetersTravelled", stats.metersTravelled);
             }
             break;
 
             case TrainStates.AtMaxSpeed:
             {
-                stats.metersTravelled = (stats.metersTravelled + stats.curVelocity * Time.fixedDeltaTime) % 1000f;
-                Shader.SetGlobalFloat("_MetersTravelled", stats.metersTravelled);
             }
             break;
         }

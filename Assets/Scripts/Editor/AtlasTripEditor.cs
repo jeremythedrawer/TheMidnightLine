@@ -16,7 +16,8 @@ public class AtlasTripEditor : EditorWindow
     public AtlasSO selectedAtlasSO;
     public int selectedScrollSpriteIndex;
     public ScrollSpriteType selectedScrollSpriteType;
-    
+    public ScrollHeightPositionType selectedHeightPositionType;
+
     private int selectedZoneIndex;
     private int selectedScrollIndex;
     private int dragOffsetWidth;
@@ -88,7 +89,6 @@ public class AtlasTripEditor : EditorWindow
 
                     EditorGUILayout.BeginVertical();
                     {
-                        ScrollSpriteType previousType = selectedScrollSpriteType;
                         List<ScrollSpriteType> validTypes = new List<ScrollSpriteType>();
 
                         if (selectedAtlasSO.slicedSprites.Length > 0)
@@ -98,12 +98,18 @@ public class AtlasTripEditor : EditorWindow
                         if (selectedAtlasSO.simpleSprites.Length > 0)
                         {
                             validTypes.Add(ScrollSpriteType.Simple);
+                            validTypes.Add(ScrollSpriteType.Tiled);
                         }
                         string[] options = validTypes.Select(v => v.ToString()).ToArray();
                         int currentIndex = validTypes.IndexOf(selectedScrollSpriteType);
                         if (currentIndex < 0) currentIndex = 0;
                         int newIndex = EditorGUILayout.Popup("Scroll Sprite Type", currentIndex, options);
                         selectedScrollSpriteType = validTypes[newIndex];
+                    }
+                    EditorGUILayout.EndVertical();
+                    EditorGUILayout.BeginVertical();
+                    {
+                        selectedHeightPositionType = (ScrollHeightPositionType)EditorGUILayout.EnumPopup("Height Position", selectedHeightPositionType, GUIWidth);
                     }
                     EditorGUILayout.EndVertical();
                 }
@@ -497,6 +503,7 @@ public class AtlasTripEditor : EditorWindow
 
                 selectedScrollSpriteIndex = scrollSprite.spriteIndex;
                 selectedScrollSpriteType = scrollSprite.scrollType;
+                selectedHeightPositionType = scrollSprite.scrollHeightPositionType;
                 selectedAtlasSO = scrollSprite.atlas;
             }
 
@@ -504,13 +511,32 @@ public class AtlasTripEditor : EditorWindow
             {
                 Handles.DrawSolidRectangleWithOutline(scrollBarRect, Color.clear, Color.blueViolet);
 
-                EditorGUI.BeginChangeCheck();
+                scrollSprite.scrollType = selectedScrollSpriteType;
+                scrollSprite.scrollHeightPositionType = selectedHeightPositionType;
+
+                switch(selectedHeightPositionType)
                 {
-                    scrollSprite.spriteIndex = selectedScrollSpriteIndex;
-                    scrollSprite.scrollType = selectedScrollSpriteType;
-                    scrollSprite.atlas = selectedAtlasSO;
+                    case ScrollHeightPositionType.WorldZero:
+                    {
+                        scrollSprite.height = 0;
+                    }
+                    break;
+                    case ScrollHeightPositionType.TrainLine:
+                    {
+                        scrollSprite.height = TRAIN_LINE_HEIGHT;
+                    }
+                    break;
+                    case ScrollHeightPositionType.TrainWheels:
+                    {
+                        scrollSprite.height = TRAIN_WHEEL_HEIGHT;
+                    }
+                    break;
                 }
-                EditorGUI.EndChangeCheck();
+
+                int maxIndex = scrollSprite.scrollType == ScrollSpriteType.Sliced ? scrollSprite.atlas.slicedSprites.Length - 1 : scrollSprite.atlas.simpleSprites.Length - 1;
+
+                scrollSprite.spriteIndex = Mathf.Clamp(selectedScrollSpriteIndex, 0, maxIndex);
+                scrollSprite.atlas = selectedAtlasSO;
 
                 if (e.type == EventType.MouseDrag)
                 {
