@@ -59,6 +59,8 @@ public class SpyBrain : MonoBehaviour
     {
         gameEventData.OnInteract.UnregisterListener(OpenTrainDoors);
         gameEventData.OnInteract.UnregisterListener(LookAtCarriageMap);
+
+        stats.ticketsCheckedTotal = 0;
     }
     private void Start()
     {

@@ -9,12 +9,10 @@ public class SpawnData : ScriptableObject
     public Material scrollMaterial;
 
     [Header("Generated")]
+    public bool active;
     public Bounds bounds;
 
-    public bool active;
-
-
-    public uint[] scrollMoveInputs;
+    public Vector2Int[] scrollMoveInputs;
     public int scrollKernelInit;
     public int scrollKernelUpdate;
     public int scrollComputeGroupSize;

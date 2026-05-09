@@ -57,10 +57,14 @@ public static class AtlasSpawn
     {
         public MaterialPropertyBlock mpb;
         public GraphicsBuffer argsBuffer;
+
         public int ticketCheckStart;
         public int ticketCheckEnd;
 
         public int particleCount;
+
+        public int minParticleIndex;
+        public int maxParticleIndex;
 
         public ParticleWidthType widthType;
 
@@ -68,6 +72,9 @@ public static class AtlasSpawn
         public int depthSize;
         public int spriteIndex;
         public float height;
+
+        public bool isDying;
+        public bool isAlive;
     }
 
     [Serializable] public struct ParticleSpriteData

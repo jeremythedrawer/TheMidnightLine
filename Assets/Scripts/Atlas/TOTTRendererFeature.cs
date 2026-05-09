@@ -212,12 +212,15 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             for (int i = 0; i < trip.particleAtlasArray.Length; i++)
             {
                 ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
+                if (particleAtlas.isCompleted) continue;
 
-                for (int j = particleAtlas.posDataIndexOffset; j < particleAtlas.posData.Length; j++)
+                for (int j = 0; j < particleAtlas.posData.Length; j++)
                 {
                     ParticlePosData posData = particleAtlas.posData[j];
                     if (spyStats.ticketsCheckedTotal < posData.ticketCheckStart) break;
+                    if (posData.argsBuffer == null) continue;
                     argsSpawn[1] = (uint)posData.particleCount;
+
                     posData.argsBuffer.SetData(argsSpawn);
                     
                     cmd.DrawProceduralIndirect(Matrix4x4.identity, spawner.zoneMaterial, shaderPass: 0, MeshTopology.Triangles, posData.argsBuffer, argsOffset: 0, posData.mpb);

@@ -44,7 +44,6 @@ Shader "Custom/s_zoneParticles"
             uint _SpriteCount;
             uint _ParticleOffset;
 
-
             float _DayNight;
             float3 _MainColor;
             float _DayNightFactor;

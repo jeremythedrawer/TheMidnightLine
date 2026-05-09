@@ -12,8 +12,8 @@ public class ParticleAtlas : ScriptableObject
     public ParticlePosData[] posData;
     
     public int posDataIndexOffset;
-
     public int spriteCount;
+    public bool isCompleted;
 
     [Header("Generated")]
     public ParticleSpriteData[] spriteData;

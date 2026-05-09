@@ -35,6 +35,8 @@ public class TrainController : MonoBehaviour
         trainCTS?.Cancel();
         trainCTS?.Dispose();
         trainCTS = null;
+
+        stats.curVelocity = 0;
     }
     private void Start()
     {

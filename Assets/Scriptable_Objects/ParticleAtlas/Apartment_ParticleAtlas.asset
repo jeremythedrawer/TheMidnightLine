@@ -14,9 +14,22 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ParticleAtlas
   atlas: {fileID: 11400000, guid: f86ccfc280901114c9e722a148ac3810, type: 2}
   particleType: 0
-  posData: []
+  posData:
+  - ticketCheckStart: 1
+    ticketCheckEnd: 2
+    particleCount: 644
+    minParticleIndex: 0
+    maxParticleIndex: 644
+    widthType: 0
+    depth: 41
+    depthSize: 9
+    spriteIndex: 0
+    height: 0
+    isDying: 0
+    isAlive: 0
   posDataIndexOffset: 0
   spriteCount: 11
+  isCompleted: 0
   spriteData:
   - uvSizeAndPos: {x: 0.13769531, y: 0.3112793, z: 0.001953125, w: 0.68847656}
     worldPivotAndSize: {x: 0, y: 0, z: 3.1333334, w: 7.0833335}

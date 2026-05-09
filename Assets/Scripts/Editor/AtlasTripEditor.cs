@@ -225,6 +225,8 @@ public class AtlasTripEditor : EditorWindow
     private void DrawThirdHeader()
     {
         if (trip == null || selectedParticleAtlas == null || selectedParticleAtlas.posData.Length == 0) return;
+
+        EditorGUI.BeginChangeCheck();
         EditorGUILayout.BeginHorizontal(horizontalGUI);
         {
             ParticlePosData selectedPosData = selectedParticleAtlas.posData[selectedPosDataIndex];
@@ -233,6 +235,11 @@ public class AtlasTripEditor : EditorWindow
             GUILayout.FlexibleSpace();
         }
         EditorGUILayout.EndHorizontal();
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            SaveTrip();
+        }
     }
     private void DrawGraph()
     {
@@ -468,16 +475,14 @@ public class AtlasTripEditor : EditorWindow
                                     }
                                     break;
                                 }
-
                             }
 
                             particleAtlas.posData[j] = particleData;
 
+
                             if (e.type == EventType.MouseUp)
                             {
-                                particleAtlas.posData = particleAtlas.posData.OrderBy(p => p.ticketCheckStart).ToArray();
-                                EditorUtility.SetDirty(particleAtlas);
-                                AssetDatabase.SaveAssetIfDirty(particleAtlas);
+                                SaveTrip();
                             }
                             Repaint();
                         }
@@ -489,23 +494,64 @@ public class AtlasTripEditor : EditorWindow
         }
         EditorGUILayout.EndVertical();
     }
+
+    private void SaveTrip()
+    {
+        for (int i = 0; i < trip.particleAtlasArray.Length; i++)
+        {
+            ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
+            particleAtlas.posData = particleAtlas.posData.OrderBy(p => p.ticketCheckStart).ToArray();
+        }
+        SetParticleIndices();
+        AssetDatabase.SaveAssets();
+    }
+    private void SetParticleIndices()
+    {
+        for (int i = 0; i < totalTicketChecks; i++)
+        {
+            int minParticle = 0;
+            int maxParticle = 0;
+
+            for (int j = 0; j < trip.particleAtlasArray.Length; j++)
+            {
+                ParticleAtlas particleAtlas = trip.particleAtlasArray[j];
+
+                for (int k = 0; k < particleAtlas.posData.Length; k++)
+                {
+                    ParticlePosData posData = particleAtlas.posData[k];
+
+                    if (posData.ticketCheckStart != i) break;
+
+                    maxParticle += (int)posData.particleCount;
+                    posData.minParticleIndex = minParticle;
+                    posData.maxParticleIndex = maxParticle;
+
+                    particleAtlas.posData[k] = posData;
+                    minParticle = maxParticle + 1;
+
+                }
+
+            }
+        }
+
+    }
 }
 
 
-[InitializeOnLoad]
-public static class AtlasTripEditorBootstrap
-{
-    static AtlasTripEditorBootstrap()
-    {
-        EditorApplication.delayCall += OnReload;
-    }
+//[InitializeOnLoad]
+//public static class AtlasTripEditorBootstrap
+//{
+//    static AtlasTripEditorBootstrap()
+//    {
+//        EditorApplication.delayCall += OnReload;
+//    }
 
-    private static void OnReload()
-    {
-        AtlasTripEditor window = EditorWindow.GetWindow<AtlasTripEditor>();
-        window?.Init();
-    }
-}
+//    private static void OnReload()
+//    {
+//        AtlasTripEditor window = EditorWindow.GetWindow<AtlasTripEditor>();
+//        window?.Init();
+//    }
+//}
 
 /*   
 

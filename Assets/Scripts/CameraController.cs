@@ -68,6 +68,8 @@ public class CameraController : MonoBehaviour
 #if UNITY_EDITOR
         Graphics.Blit(Texture2D.whiteTexture, carriageBoundsRT);
 #endif
+
+        stats.curVelocity = Vector3.zero;
     }
     private void Update()
     {

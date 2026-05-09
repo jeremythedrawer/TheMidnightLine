@@ -17,6 +17,8 @@ uint _ParticleCount;
 float _CamVelocity;
 float _TrainVelocity;
 
+uint _Init;
+
 [numthreads(THREADS_PER_GROUP, 1, 1)]
 void _ZoneInit(uint id : SV_DispatchThreadID)
 {
@@ -24,21 +26,35 @@ void _ZoneInit(uint id : SV_DispatchThreadID)
         return;
     
     float4 output = _ZoneOutput[id];
+    uint2 moveInput = _MoveInput[id];
+    
+    if (moveInput.y == 1)
+    {
+        _ZoneOutput[id] = output;
+        return;
+    }
+    
     float normID = (float) id / (float)_ParticleCount;
     
     float4 depthInput = _DepthInput[id];
     float startPos = depthInput.x;
     float localID = (float)(id - depthInput.w);
-    float density = (localID / depthInput.y);
+    float density = localID / depthInput.y;
     float size = depthInput.z * density;
     output.z = startPos + size;
     
     output.w = ((_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z);
     
-    float rand01 = HashIntTo01Float(id);
     
-    output.x = _SpawnerMinPos.x + _SpawnerSize.x * rand01;
+    if (_Init == 0)
+    {
+        float rand01 = HashIntTo01Float(id);
+        output.x = _SpawnerMinPos.x + _SpawnerSize.x * rand01;
+    }
     output.y = 0;
+    
+    moveInput.y = 1;
+    _MoveInput[id] = moveInput;
     _ZoneOutput[id] = output;
 }
 [numthreads(THREADS_PER_GROUP, 1, 1)]

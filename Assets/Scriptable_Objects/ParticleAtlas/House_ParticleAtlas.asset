@@ -17,22 +17,19 @@ MonoBehaviour:
   posData:
   - ticketCheckStart: 0
     ticketCheckEnd: 1
-    particleCount: 455
+    particleCount: 612
+    minParticleIndex: 0
+    maxParticleIndex: 612
     widthType: 0
-    depth: 27
-    depthSize: 1
+    depth: 41
+    depthSize: 9
     spriteIndex: 0
     height: 0
-  - ticketCheckStart: 0
-    ticketCheckEnd: 2
-    particleCount: 455
-    widthType: 0
-    depth: 39
-    depthSize: 17
-    spriteIndex: 0
-    height: 0
-  posDataIndexOffset: 0
+    isDying: 0
+    isAlive: 0
+  posDataIndexOffset: 1
   spriteCount: 8
+  isCompleted: 0
   spriteData:
   - uvSizeAndPos: {x: 0.22167969, y: 0.20117188, z: 0.001953125, w: 0.79589844}
     worldPivotAndSize: {x: 0, y: 0, z: 2.5222223, w: 2.288889}
