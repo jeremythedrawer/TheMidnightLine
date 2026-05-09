@@ -5,7 +5,7 @@ using static Spy;
 public class ParallaxController : MonoBehaviour
 {
     public TrainStatsSO trainStats;
-    public SpawnSO zoneStats;
+    public SpawnData zoneStats;
     public SpyStatsSO spyStats;
     public AtlasRenderer leftRenderer;
 
@@ -44,35 +44,35 @@ public class ParallaxController : MonoBehaviour
 
     private void FixedUpdate()
     {
-        if (!ignoreParallax)
-        {
-            float parallaxIncrement = UpdateParallaxPosition(camStats, spyStats, trainStats, parallaxFactor);
+        //if (!ignoreParallax)
+        //{
+        //    float parallaxIncrement = UpdateParallaxPosition(camStats, spyStats, trainStats, parallaxFactor);
 
-            worldPos.x -= parallaxIncrement;
-            bounds.center = worldPos + boundsOffset;
-        }
-        else if (spyStats.curLocationState != LocationState.Station)
-        {
-            worldPos.x -= UpdatePositionNoParallax(trainStats);
-        }
-        worldPos.x = Mathf.Round(worldPos.x * PIXELS_PER_UNIT) * UNITS_PER_PIXEL;
-        transform.position = worldPos;
+        //    worldPos.x -= parallaxIncrement;
+        //    bounds.center = worldPos + boundsOffset;
+        //}
+        //else if (spyStats.curLocationState != LocationState.Station)
+        //{
+        //    worldPos.x -= UpdatePositionNoParallax(trainStats);
+        //}
+        //worldPos.x = Mathf.Round(worldPos.x * PIXELS_PER_UNIT) * UNITS_PER_PIXEL;
+        //transform.position = worldPos;
 
-        if (bounds.max.x < zoneStats.bounds.min.x)
-        {
-            switch (repeatType)
-            {
-                case RepeatType.OneShot:
-                {
-                   // Destroy(gameObject);
-                }
-                break;
-                case RepeatType.Repeat:
-                {
-                    worldPos.x += zoneStats.bounds.max.x - bounds.min.x;
-                }
-                break;
-            }
-        }
+        //if (bounds.max.x < zoneStats.bounds.min.x)
+        //{
+        //    switch (repeatType)
+        //    {
+        //        case RepeatType.OneShot:
+        //        {
+        //           // Destroy(gameObject);
+        //        }
+        //        break;
+        //        case RepeatType.Repeat:
+        //        {
+        //            worldPos.x += zoneStats.bounds.max.x - bounds.min.x;
+        //        }
+        //        break;
+        //    }
+        //}
     }
 }

@@ -8,12 +8,13 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using static AtlasRendering;
 using static AtlasSpawn;
+using static Spy;
 
 public class TOTTRendererFeature : ScriptableRendererFeature
 {
-    public MaterialIDSO materialIDs;
     public TripSO trip;
-    public SpawnSO zoneSpawner;
+    public SpawnData spawnerData;
+    public SpyStatsSO spyStats;
     public CameraStatsSO cameraStats;
     public Mesh quad;
 
@@ -42,8 +43,8 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     public override void Create()
     {
         if (quad == null) quad = AtlasRendering.SetQuad();
-        batchPass = new AtlasBatchPass(materialIDs, cameraStats, quad);
-        particlePass = new AtlasParticlePass(trip, zoneSpawner, materialIDs);
+        batchPass = new AtlasBatchPass(cameraStats, quad);
+        particlePass = new AtlasParticlePass(trip, spawnerData, spyStats, quad);
         matrixPass = new MatrixPass(this);
         bloomPass = new BloomPass(this);
     }
@@ -57,15 +58,13 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     }
     private class AtlasBatchPass : ScriptableRenderPass
     {
-        private static MaterialIDSO materialIDs;
         private static CameraStatsSO cameraStats;
         private static Mesh quad;
         private uint[] args;
         
-        public AtlasBatchPass(MaterialIDSO materialID, CameraStatsSO camStats, Mesh quadToUse)
+        public AtlasBatchPass( CameraStatsSO camStats, Mesh quadToUse)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
-            materialIDs = materialID;
             cameraStats = camStats;
             quad = quadToUse;
         }
@@ -106,14 +105,12 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             foreach ((BatchKey key, SpriteBatch data) batch in spriteBatchList)
             {
                 int count = 0;
-                for (int i = 0; i < batch.data.rendererList.Count && count < MAX; i++)
+                for (int i = 0; i < batch.data.rendererList.Count && count < MAX_SPRITE_DATA_COUNT; i++)
                 {
                     AtlasRenderer renderer = batch.data.rendererList[i];
 
                     if (renderer == null || renderer.gameObject == null || !renderer.gameObject.activeInHierarchy) continue;
 #if UNITY_EDITOR
-
-
                     if (prefabStage != null)
                     {
                         if (renderer.gameObject.scene != prefabScene) continue;
@@ -134,7 +131,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                             batch.data.spriteData[count] = new SpriteData
                             {
                                 worldPosition = renderer.gameObject.transform.position,
-                                worldPivotAndScale = renderer.worldPivotAndSize,
+                                worldPivotAndSize = renderer.worldPivotAndSize,
                                 uvSizeAndPos = renderer.uvSizeAndPosition,
                                 scaleAndFlip = renderer.scaleAndFlip,
                                 custom = renderer.custom,
@@ -153,7 +150,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                                 batch.data.spriteData[count] = new SpriteData
                                 {
                                     worldPosition = renderer.transform.position,
-                                    worldPivotAndScale = renderer.worldPivotsAndSizes[j],
+                                    worldPivotAndSize = renderer.worldPivotsAndSizes[j],
                                     uvSizeAndPos = renderer.uvSizesAndPositions[j],
                                     scaleAndFlip = renderer.scalesAndFlips[j],
                                     custom = renderer.customs[j],
@@ -180,12 +177,17 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     private class AtlasParticlePass : ScriptableRenderPass
     {
         private TripSO trip;
-        private SpawnSO zoneSpawner;
-        public AtlasParticlePass(TripSO curTrip, SpawnSO spawner, MaterialIDSO matIDs)
+        private SpawnData spawner;
+        private SpyStatsSO spyStats;
+        private static Mesh quad;
+        public AtlasParticlePass(TripSO curTrip, SpawnData spawner, SpyStatsSO spyStats, Mesh quadToUse)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
             trip = curTrip;
-            zoneSpawner = spawner;
+            this.spawner = spawner;
+            this.spyStats = spyStats;
+            quad = quadToUse;
+
         }
 
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
@@ -199,18 +201,28 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
             builder.SetRenderFunc((AtlasPassData data, RasterGraphContext ctx) =>
             {
-                ExecuteZoneParticles(ctx.cmd);
+                ExecuteParticles(ctx.cmd);
             });
         }
 
-        private void ExecuteZoneParticles(RasterCommandBuffer cmd)
+        private void ExecuteParticles(RasterCommandBuffer cmd)
         {
-            for (int i = 0; i < trip.zoneAreas.Length; i++)
-            {
-                ZoneAreaSO zoneSpawnerData = trip.zoneAreas[i];
+            if (!spawner.active) return;
 
-                if (zoneSpawnerData.state == ZoneState.Dead) continue;
-                cmd.DrawProcedural(Matrix4x4.identity, zoneSpawner.zoneMaterial, shaderPass: 0, MeshTopology.Quads, zoneSpawnerData.particleCount * 4, 1, zoneSpawnerData.mpb);
+            for (int i = 0; i < trip.particleAtlasArray.Length; i++)
+            {
+                ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
+
+                for (int j = particleAtlas.posDataIndexOffset; j < particleAtlas.posData.Length; j++)
+                {
+                    ParticlePosData posData = particleAtlas.posData[j];
+                    if (spyStats.ticketsCheckedTotal < posData.ticketCheckStart) break;
+                    argsSpawn[1] = (uint)posData.particleCount;
+                    posData.argsBuffer.SetData(argsSpawn);
+                    
+                    cmd.DrawProceduralIndirect(Matrix4x4.identity, spawner.zoneMaterial, shaderPass: 0, MeshTopology.Triangles, posData.argsBuffer, argsOffset: 0, posData.mpb);
+                }
+
             }
         }
     }

@@ -5,10 +5,10 @@ using UnityEngine;
 using static Atlas;
 public static class AtlasRendering
 {
-    public const int MAX = 1024;
+    public const int MAX_SPRITE_DATA_COUNT = 1024;
     public const float LETTER_ADVANCE = 0.122f;
     public const float APPEAR_TEXT_TIME = 0.2f;
-    public static int SHADER_DATA_STRIDE = Marshal.SizeOf<SpriteData>();
+    public static int SPRITE_DATA_STRIDE = Marshal.SizeOf<SpriteData>();
     public static int ARGS_STRIDE = INT_SIZE * 5;
 
     public enum AtlasRendererType
@@ -35,7 +35,7 @@ public static class AtlasRendering
     [Serializable] public struct SpriteData
     {
         public Vector4 worldPosition;
-        public Vector4 worldPivotAndScale;
+        public Vector4 worldPivotAndSize;
         public Vector4 uvSizeAndPos;
         public Vector4 scaleAndFlip;
         public Vector4 custom;
@@ -47,7 +47,7 @@ public static class AtlasRendering
     public class SpriteBatch
     {
         public readonly List<AtlasRenderer> rendererList = new List<AtlasRenderer>();
-        public readonly SpriteData[] spriteData = new SpriteData[MAX];
+        public readonly SpriteData[] spriteData = new SpriteData[MAX_SPRITE_DATA_COUNT];
 
         public GraphicsBuffer spriteDataBuffer;
         public GraphicsBuffer argsBuffer;
@@ -78,7 +78,7 @@ public static class AtlasRendering
         if (!spriteBatchDict.TryGetValue(renderer.batchKey, out SpriteBatch batch))
         {
             batch = new SpriteBatch();
-            batch.spriteDataBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, MAX, SHADER_DATA_STRIDE);
+            batch.spriteDataBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, MAX_SPRITE_DATA_COUNT, SPRITE_DATA_STRIDE);
             batch.argsBuffer = new GraphicsBuffer(GraphicsBuffer.Target.IndirectArguments, 1, ARGS_STRIDE);
             spriteBatchDict.Add(renderer.batchKey, batch);
         }

@@ -5,72 +5,38 @@ public static class AtlasSpawn
 {
     public const float MAIN_MIN = 1.0f;
     public const float MAIN_MAX = 26.0f;
-    public const float TRAIN_TRACKS_DEPTH = 6f;
-    public const float TRAIN_LINE_DEPTH = 5f;
-    public const float FORE_MIN = 1.0f;
-    public const float FORE_SIZE = 1.0f;
-    public const float MID_MIN = 48.0f;
-    public const float MID_SIZE = 16.0f;
-    public const float BACK_MIN = 65.0f;
-    public const float BACK_SIZE = 63.0f;
 
+    public const int TRAIN_TRACKS_DEPTH = 6;
+    public const int TRAIN_LINE_DEPTH = 5;
     public const float TRAIN_WHEEL_HEIGHT = -1.43f;
     public const float TRAIN_LINE_HEIGHT = 5.11f;
 
     public const float FAR_CLIP = 128;
-    public const int MAX_ACTIVE_SCROLLERS = 64;
+
     public const int SCROLL_PARTICLE_COUNT = 256;
+    public const int ZONE_PARTICLE_COUNT = 2048;
 
-    public const int ZONE_SPAWNER_COUNT = 8;
+    public static int PARTICLE_SPRITE_DATA_STRIDE = Marshal.SizeOf<ParticleSpriteData>();
+    public const int MAX_PARTICLE_SPRITE_DATA_COUNT = 64;
 
-    public const int THREADS_PER_GROUP = 64;
-    public const int FORE_PARTICLE_COUNT = 16;
-    public const int MID_PARTICLE_COUNT = 128;
-    public const int BACK_PARTICLE_COUNT = 256;
+    public const float THREADS_PER_GROUP = 64;
 
-    public static readonly int MAX_VERTEX_COUNT = (FORE_PARTICLE_COUNT + MID_PARTICLE_COUNT + BACK_PARTICLE_COUNT) * 4;
-    public static readonly int ZONE_OUTPUT_STRIDE = Marshal.SizeOf(typeof(ZoneOutput));
-    public static readonly int ZONE_INPUT_STRIDE = Marshal.SizeOf(typeof(ZoneInput));
-
-    //TODO Need to set buffer strings to ids if this buffer idea works
-    public static string[] ZONE_STRINGS = { "_F0", "_M0", "_M1", "_M2", "_M3", "_B0", "_B1", "_B2" };
-    public static readonly string ACTIVE_STRING = "Active";
-    public static readonly string DEAD_COUNT_STRING = "DeadCount";
-    public static readonly string OUTPUT_STRING = "Output";
-    public static readonly string INPUT_STRING = "Input";
-    public static readonly string SPRITE_COUNT_STRING = "SpriteCount";
-    public static readonly string INIT_STRING = "Init";
-    public static readonly string INIT_SLICE_STRING = "InitSlice";
-    public static readonly string UPDATE_STRING = "Update";
-    public static readonly int[] PARTICLE_COUNTS = { FORE_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, MID_PARTICLE_COUNT, BACK_PARTICLE_COUNT, BACK_PARTICLE_COUNT, BACK_PARTICLE_COUNT };
-
-    public enum ZoneSpriteType
-    {
-        Simple,
-        Sliced,
+    public const int MAX_MPB_POOL_COUNT = 32;
+    public static MaterialPropertyBlock[] mpb_pool;
+    public static int mpbCount;
+    public static uint[] argsSpawn = new uint[5] { 6, 0, 0, 0, 0 };
+    public enum ParticleType
+    { 
+        Zone,
+        Scroll,
     }
-    public enum ScrollSpriteType
+
+
+    public enum ParticleWidthType
     { 
         Simple,
         Sliced,
         Tiled,
-    }
-    public enum ScrollHeightPositionType
-    {
-        WorldZero,
-        TrainWheels,
-        TrainLine,
-    }
-    public enum ZoneLabel
-    {
-        Foreground0,
-        Middleground0,
-        Middleground1,
-        Middleground2,
-        Middleground3,
-        Background0,
-        Background1,
-        Background2,
     }
     public enum ZoneState
     { 
@@ -86,51 +52,60 @@ public static class AtlasSpawn
         MovingOut,
         Dead,
     }
-    struct ZoneOutput
-    {
-        Vector4 uvSizeAndPos;
-        Vector4 position;
-        Vector4 scale;
-        Vector4 worldPivotAndSize;
-        float parallaxFactor;
-        float rand01;
-        uint alive;
-        uint randID;
-    };
 
-    [Serializable] public struct ZoneInput
+    [Serializable] public struct ParticlePosData
+    {
+        public MaterialPropertyBlock mpb;
+        public GraphicsBuffer argsBuffer;
+        public int ticketCheckStart;
+        public int ticketCheckEnd;
+
+        public int particleCount;
+
+        public ParticleWidthType widthType;
+
+        public int depth;
+        public int depthSize;
+        public int spriteIndex;
+        public float height;
+    }
+
+    [Serializable] public struct ParticleSpriteData
     {
         public Vector4 uvSizeAndPos;
         public Vector4 worldPivotAndSize;
-        public Vector4 sliceOffsetAndSize;
-    };
-
-    [Serializable] public struct ZoneAtlas
-    {
-        public int ticketCheckStart;
-        public int ticketCheckEnd;
-
-        public AtlasSO atlas;
-        
-        public ZoneSpriteType zoneType;
-
-        public Vector4[] uvSizeAndPosArray;
-        public Vector4[] worldPivotAndSizeArray;
-        public Vector4[] sliceOffsetsAndSizes;
+        public Vector4 scaleAndFlip;
     }
 
-    [Serializable] public struct ScrollSprite
+    public static void InitMPBPool()
     {
-        public int ticketCheckStart;
-        public int ticketCheckEnd;
+        mpb_pool = new MaterialPropertyBlock[MAX_MPB_POOL_COUNT];
+        mpbCount = -1;
+    }
 
-        public AtlasSO atlas;
+    public static MaterialPropertyBlock GetMPB()
+    {
+        MaterialPropertyBlock mpb_instance;
+        if (mpbCount < 0)
+        {
+            mpb_instance = new MaterialPropertyBlock();
+        }
+        else
+        {
+            mpb_instance = mpb_pool[mpbCount];
+            mpbCount--;
+        }
+
+
+        return mpb_instance;
+    }
+    public static void ReturnMPB(MaterialPropertyBlock mpb)
+    {
+        if (mpbCount == MAX_MPB_POOL_COUNT - 1) return;
+
+        mpbCount++;
         
-        public ScrollSpriteType scrollType;
-        public ScrollHeightPositionType scrollHeightPositionType;
-
-        public int depth;
-        public int spriteIndex;
-        public float height;
+        mpb.Clear();
+        mpb_pool[mpbCount] = mpb;
     }
 }

@@ -1,115 +1,105 @@
 Shader "Custom/s_atlasScroll"
 {
-    Properties
+	Properties
     {
-        [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
+        _AtlasTexture("Texture Atlas", 2D) = "white"
     }
 
     SubShader
     {
-        Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
-        ZWrite On
-        ZTest LEqual
-        Blend SrcAlpha OneMinusSrcAlpha
+        Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
         Pass
         {
             HLSLPROGRAM
+
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
-            #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
+            #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
             #include "Assets/Shaders/HLSL/AtlasParticles.hlsl"
+            #include "Assets/Shaders/HLSL/Random.hlsl"
 
             #pragma vertex vert
             #pragma fragment frag
 
-            struct Attributes
-            {
-                float4 positionOS : POSITION;
-                float2 uv : TEXCOORD0;
-                uint instanceID : SV_InstanceID;
-            };
+            #pragma multi_compile_instancing
 
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                uint instanceID : TEXCOORD1;
+                uint spriteID : TEXCOORD1;
             };
 
-            StructuredBuffer<AtlasSprite> _SpriteData;
-            StructuredBuffer<float4> _ScrollOutput;
-
+            StructuredBuffer<float4> _Particles;
+            StructuredBuffer<ParticleSprites> _SpriteData;
 
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
-            float _MetersTravelled;
-            float2 _SpawnerSize;
+            uint _SpriteCount;
+            uint _Depth;
 
-            float3 _MainColor;
+
             float _DayNight;
+            float3 _MainColor;
             float _DayNightFactor;
 
-            Varyings vert(Attributes v)
+
+            Varyings vert(uint vertexID : SV_VertexID, uint instanceID : SV_InstanceID)
             {
                 Varyings o;
 
-                AtlasSprite spriteData = _SpriteData[v.instanceID];
+                uint particleID = instanceID + _Depth;
+                float4 p = _Particles[particleID];
 
-                float3 position = spriteData.position.xyz;
+                uint spriteID = instanceID % _SpriteCount;
 
-                uint particleID = spriteData.custom.x;
-                float4 scrollOutput = _ScrollOutput[particleID];
-                 
-                float2 pivot = spriteData.pivotAndSize.xy;
-                float2 size = spriteData.pivotAndSize.zw;
-                
-                float2 scale = spriteData.scaleAndFlip.xy;
-                float2 objPos = v.positionOS.xy;
+                AtlasSprite s = _SpriteData[spriteID];
+
+                float2 objPos = QUAD_OFFSETS[vertexID];
+
+                float2 pivot = s.worldPivotAndSize.xy;
+                float2 size = s.worldPivotAndSize.zw;
+                float2 scale = s.scale.xy;
 
                 objPos *= size * scale;
-                objPos -= pivot;
-                objPos.x -= scrollOutput.x;
+                objPos += pivot;
 
-                float3 worldPos = float3(position.xy + objPos, scrollOutput.z);
+                float3 worldPos = float3(p.xy + objPos, p.z);
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
-                o.uv = v.uv;
-                o.instanceID = v.instanceID;
-
+                o.uv = QUAD_OFFSETS[vertexID];
+                o.spriteID = spriteID;
                 return o;
             }
 
             half4 frag(Varyings i) : SV_Target
             {
-                uint id = i.instanceID;
-                
-                AtlasSprite spriteData = _SpriteData[id];
+                AtlasSprite s = _SpriteData[i.spriteID];
 
-                uint particleID = spriteData.custom.x;
-                float4 scrollOutput = _ScrollOutput[particleID];
+                float2 scale  = s.scale.xy;
+                float2 uvSize = s.uvSizeAndPos.xy;
+                float2 uvPos = s.uvSizeAndPos.zw;
 
-                float2 uvSize = spriteData.uvSizeAndPos.xy;
-                float2 uvPos = spriteData.uvSizeAndPos.zw;
-
-                float width = spriteData.pivotAndSize.z;
-                
-                float2 scale = spriteData.scaleAndFlip.xy;
-                float2 flip = spriteData.scaleAndFlip.zw;
-
-                i.uv *= scale.xy;
-                float meterOffset = scrollOutput.x * spriteData.custom.y;
-                i.uv.x += (meterOffset / width) * step(1.1, scale);
+                i.uv *= scale;
                 i.uv = frac(i.uv);
-                i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;
                 i.uv += uvPos;
-                half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half grey = color.r + (-(_DayNight * 1.1 - 0.9) * _DayNightFactor);
-                half3 finalColor = grey + _MainColor;
+                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                clip(color.a - 0.001);
-                return half4 (finalColor, 1);
+                half color = tex.r;
+
+                int maxPos = BACK_MIN + BACK_SIZE;
+                int minPos = MID_MIN;
+
+                half bayerFactor = (p.z - MID_MIN) / (maxPos - minPos);
+                bayerFactor = bayerFactor * 0.5 + 0.5;
+                half bayerValue = bayerFactor * (_DayNight * 1.75 - 0.875);
+
+                half bayer = BayerX8((color - bayerValue), i.positionHCS.y);
+                half3 finalColor = bayer + _MainColor;
+                clip(tex.a - 0.001);
+                return half4(finalColor, 1);
             }
             ENDHLSL
         }

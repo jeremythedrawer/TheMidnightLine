@@ -1,0 +1,60 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67dedb76db2597d40812be99ec4521df, type: 3}
+  m_Name: House_ParticleAtlas
+  m_EditorClassIdentifier: Assembly-CSharp::ParticleAtlas
+  atlas: {fileID: 11400000, guid: b7293c5d7b7f8814a972cc266c414cf8, type: 2}
+  particleType: 0
+  posData:
+  - ticketCheckStart: 0
+    ticketCheckEnd: 1
+    particleCount: 455
+    widthType: 0
+    depth: 27
+    depthSize: 1
+    spriteIndex: 0
+    height: 0
+  - ticketCheckStart: 0
+    ticketCheckEnd: 2
+    particleCount: 455
+    widthType: 0
+    depth: 39
+    depthSize: 17
+    spriteIndex: 0
+    height: 0
+  posDataIndexOffset: 0
+  spriteCount: 8
+  spriteData:
+  - uvSizeAndPos: {x: 0.22167969, y: 0.20117188, z: 0.001953125, w: 0.79589844}
+    worldPivotAndSize: {x: 0, y: 0, z: 2.5222223, w: 2.288889}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  - uvSizeAndPos: {x: 0.34179688, y: 0.23583984, z: 0.5419922, w: 0.7602539}
+    worldPivotAndSize: {x: 0, y: 0, z: 3.8888888, w: 2.6833334}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  - uvSizeAndPos: {x: 0.3149414, y: 0.28320312, z: 0.22607422, w: 0.71533203}
+    worldPivotAndSize: {x: 0, y: 0, z: 3.5833333, w: 3.2222223}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  - uvSizeAndPos: {x: 0.40966797, y: 0.28076172, z: 0.0034179688, w: 0.43310547}
+    worldPivotAndSize: {x: 0, y: 0, z: 4.661111, w: 3.1944444}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  - uvSizeAndPos: {x: 0.27001953, y: 0.2680664, z: 0.41357422, w: 0.43164062}
+    worldPivotAndSize: {x: 0, y: 0, z: 3.0722222, w: 3.05}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  - uvSizeAndPos: {x: 0.30078125, y: 0.32714844, z: 0.6923828, w: 0.42822266}
+    worldPivotAndSize: {x: 0, y: 0, z: 3.4222221, w: 3.7222223}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  - uvSizeAndPos: {x: 0.28125, y: 0.22070312, z: 0.46777344, w: 0.14501953}
+    worldPivotAndSize: {x: 0, y: 0, z: 3.2, w: 2.511111}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  - uvSizeAndPos: {x: 0.43408203, y: 0.28271484, z: 0.020019531, w: 0.13085938}
+    worldPivotAndSize: {x: 0, y: 0, z: 4.938889, w: 3.2166667}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}

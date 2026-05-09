@@ -1,187 +1,227 @@
-using System.Collections.Generic;
+using System;
 using UnityEngine;
-using UnityEngine.EventSystems;
+using static AtlasRendering;
 using static AtlasSpawn;
 using static Spy;
 using static Train;
 [ExecuteAlways]
 public class SpawnMaster : MonoBehaviour
 {
-    public SpawnSO spawner;
+    public SpawnData spawnData;
     public CameraSettingsSO camSettings;
     public CameraStatsSO camStats;
     public TripSO trip;
     public TrainStatsSO trainStats;
     public SpyStatsSO spyStats;
     public GameEventDataSO gameEventData;
-
-    public ZoneSpawner[] zoneSpawners;
-
-    public Queue<Scroller> scrollRendererPool;
-    public Scroller[] activeScrollers;
-
-    public ComputeBuffer scrollOutputBuffer;
     
     public int nextSpawnIndex;
-    public int activeSpawnerCount;
-
-
+    
     private void OnEnable()
     {
         InitBoundParameters();
-        
+
+        AtlasSpawn.InitMPBPool();
+
         InitZoneCompute();
         InitScrollCompute();
-
-        InitZoneSpawners();
-        InitScrollers();
-
-        gameEventData.OnTicketInspect.RegisterListener(SetScrollers);
+        
+        InitParticles();
+        ChangeParticles();
     }
     private void OnDisable()
     {
-        ResetScrollerSpawner();
-        gameEventData.OnTicketInspect.UnregisterListener(SetScrollers);
-
+        Dispose();
     }
     private void Update()
     {
-        spawner.zoneCompute.SetFloat("_CamVelocity", camStats.curVelocity.x);
-        spawner.scrollCompute.SetFloat("_CamVelocity", camStats.curVelocity.x);
+        spawnData.zoneCompute.SetFloat("_CamVelocity", camStats.curVelocity.x);
+        spawnData.scrollCompute.SetFloat("_CamVelocity", camStats.curVelocity.x);
         if (spyStats.curLocationState != LocationState.Station)
         {
-            spawner.zoneCompute.SetFloat("_TrainVelocity", (trainStats.curVelocity * Time.deltaTime));
-            spawner.scrollCompute.SetFloat("_TrainVelocity", (trainStats.curVelocity * Time.deltaTime));
+            spawnData.zoneCompute.SetFloat("_TrainVelocity", (trainStats.curVelocity * Time.deltaTime));
+            spawnData.scrollCompute.SetFloat("_TrainVelocity", (trainStats.curVelocity * Time.deltaTime));
         }
 
-        spawner.scrollCompute.Dispatch(spawner.scrollKernelUpdate, spawner.scrollComputeGroupSize, 1, 1);
+        spawnData.scrollCompute.Dispatch(spawnData.scrollKernelUpdate, spawnData.scrollComputeGroupSize, 1, 1);
+        spawnData.zoneCompute.Dispatch(spawnData.zoneKernelUpdate, spawnData.zoneComputeGroupSize, 1, 1);
+
+        UpdateInitComputeEditor();
+
     }
     private void InitBoundParameters()
     {
-        spawner.bounds.center = new Vector3(TRAIN_WORLD_POS, 0, FAR_CLIP * 0.5f);
-
-        spawner.bounds.size = new Vector3(trip.stationsDataArray[0].station_prefab.frontPlatformRenderer.bounds.size.x + camStats.camBounds.size.x, trainStats.totalBounds.size.y + camStats.camBounds.size.y, FAR_CLIP);
-
-        transform.position = spawner.bounds.min;
+        spawnData.bounds.center = new Vector3(TRAIN_WORLD_POS, 0, FAR_CLIP * 0.5f);
+        spawnData.bounds.size = new Vector3(trip.stationsDataArray[0].station_prefab.frontPlatformRenderer.bounds.size.x + camStats.camBounds.size.x, trainStats.totalBounds.size.y + camStats.camBounds.size.y, FAR_CLIP);
+        transform.position = spawnData.bounds.min;
     }
     private void InitZoneCompute()
+    {   
+        spawnData.zoneCompute.SetVector("_SpawnerMinPos", spawnData.bounds.min);
+        spawnData.zoneCompute.SetVector("_SpawnerMaxPos", spawnData.bounds.max);
+        spawnData.zoneCompute.SetVector("_SpawnerSize", spawnData.bounds.size);
+        spawnData.zoneCompute.SetInt("_ParticleCount", ZONE_PARTICLE_COUNT);
+
+        spawnData.zoneMoveInputs = new Vector2Int[ZONE_PARTICLE_COUNT];
+        spawnData.zoneMoveInputBuffer = new ComputeBuffer(ZONE_PARTICLE_COUNT, sizeof(uint) * 2);
+
+        spawnData.zoneDepthInputs = new Vector4[(int)ZONE_PARTICLE_COUNT];
+        spawnData.zoneDepthInputBuffer = new ComputeBuffer((int)ZONE_PARTICLE_COUNT, sizeof(uint) * 4);
+
+
+        spawnData.zoneOutputBuffer = new ComputeBuffer(ZONE_PARTICLE_COUNT, sizeof(float) * 4);
+
+        spawnData.zoneComputeGroupSize = Mathf.CeilToInt((float)ZONE_PARTICLE_COUNT / THREADS_PER_GROUP);
+
+        spawnData.zoneKernelInit = spawnData.zoneCompute.FindKernel("_ZoneInit");
+        spawnData.zoneKernelUpdate = spawnData.zoneCompute.FindKernel("_ZoneUpdate");
+
+        spawnData.zoneCompute.SetBuffer(spawnData.zoneKernelInit, "_ZoneOutput", spawnData.zoneOutputBuffer);
+
+        spawnData.zoneCompute.SetBuffer(spawnData.zoneKernelInit, "_DepthInput", spawnData.zoneDepthInputBuffer);
+
+        spawnData.zoneCompute.SetBuffer(spawnData.zoneKernelUpdate, "_ZoneOutput", spawnData.zoneOutputBuffer);
+        spawnData.zoneCompute.SetBuffer(spawnData.zoneKernelUpdate, "_MoveInput", spawnData.zoneMoveInputBuffer);
+
+        spawnData.zoneCompute.Dispatch(spawnData.zoneKernelInit, spawnData.zoneComputeGroupSize, 1, 1);
+    }
+    private void UpdateInitComputeEditor()
     {
-        spawner.zoneCompute.SetVector("_SpawnerMinPos", spawner.bounds.min);
-        spawner.zoneCompute.SetVector("_SpawnerMaxPos", spawner.bounds.max);
-        spawner.zoneCompute.SetVector("_SpawnerSize", spawner.bounds.size);
-        spawner.zoneCompute.SetInt("_ForegroundParticleCount", FORE_PARTICLE_COUNT);
-        spawner.zoneCompute.SetInt("_MiddlegroundParticleCount", MID_PARTICLE_COUNT);
-        spawner.zoneCompute.SetInt("_BackgroundParticleCount", BACK_PARTICLE_COUNT);
-        spawner.zoneCompute.SetFloat("_TrainVelocity", 0);
+        spawnData.zoneDepthInputs = new Vector4[(int)ZONE_PARTICLE_COUNT];
+        int minParticle = 0;
+        int maxParticle = 0;
+
+        for (int i = 0; i < trip.particleAtlasArray.Length; i++)
+        {
+            ParticleAtlas particleAtlas  = trip.particleAtlasArray[i];
+
+            for (int j = 0; j < particleAtlas.posData.Length; j++)
+            {
+                ParticlePosData posData = particleAtlas.posData[j];
+                if (spyStats.ticketsCheckedTotal < posData.ticketCheckStart) break;
+                maxParticle += (int)posData.particleCount;
+                posData.mpb.SetInt("_ParticleOffset", (int)minParticle);
+
+                for (int k = minParticle; k <= maxParticle; k++)
+                {
+                    spawnData.zoneDepthInputs[k] = new Vector4(posData.depth, posData.particleCount, posData.depthSize, minParticle);
+                }
+                minParticle = maxParticle;
+            }
+        }
+
+        spawnData.zoneDepthInputBuffer.SetData(spawnData.zoneDepthInputs);
+        spawnData.zoneCompute.Dispatch(spawnData.zoneKernelInit, spawnData.zoneComputeGroupSize, 1, 1);
     }
     private void InitScrollCompute()
     {
-        spawner.scrollCompute.SetVector("_SpawnerMinPos", spawner.bounds.min);
-        spawner.scrollCompute.SetVector("_SpawnerMaxPos", spawner.bounds.max);
-        spawner.scrollCompute.SetVector("_SpawnerSize", spawner.bounds.size);
-        spawner.scrollCompute.SetInt("_ParticleCount", SCROLL_PARTICLE_COUNT);
-        spawner.scrollCompute.SetFloat("_TrainVelocity", 0);
+        spawnData.scrollCompute.SetVector("_SpawnerMinPos", spawnData.bounds.min);
+        spawnData.scrollCompute.SetVector("_SpawnerMaxPos", spawnData.bounds.max);
+        spawnData.scrollCompute.SetVector("_SpawnerSize", spawnData.bounds.size);
+        spawnData.scrollCompute.SetInt("_ParticleCount", SCROLL_PARTICLE_COUNT);
 
-        spawner.scrollKernelUpdate = spawner.scrollCompute.FindKernel("_ScrollUpdate");
-        spawner.scrollKernelInit = spawner.scrollCompute.FindKernel("_ScrollInit");
+        spawnData.scrollMoveInputs = new uint[SCROLL_PARTICLE_COUNT];
+        spawnData.scrollMoveInputBuffer = new ComputeBuffer(SCROLL_PARTICLE_COUNT, sizeof(uint));
 
-        spawner.scrollComputeGroupSize = Mathf.CeilToInt((float)SCROLL_PARTICLE_COUNT / (float)THREADS_PER_GROUP);
+        spawnData.scrollOutputBuffer = new ComputeBuffer(SCROLL_PARTICLE_COUNT, sizeof(float) * 4);
 
-        spawner.scrollMoveInputBuffer = new ComputeBuffer(SCROLL_PARTICLE_COUNT, sizeof(uint));
-        spawner.moveInputs = new uint[SCROLL_PARTICLE_COUNT];
-        spawner.scrollMoveInputBuffer.SetData(spawner.moveInputs);
-        spawner.scrollCompute.SetBuffer(spawner.scrollKernelUpdate, "_MoveInput", spawner.scrollMoveInputBuffer);
+        spawnData.scrollComputeGroupSize = Mathf.CeilToInt((float)SCROLL_PARTICLE_COUNT / THREADS_PER_GROUP);
 
-        scrollOutputBuffer = new ComputeBuffer(SCROLL_PARTICLE_COUNT, sizeof(float) * 4);
-        spawner.scrollCompute.SetBuffer(spawner.scrollKernelInit, "_ScrollOutput", scrollOutputBuffer);
-        spawner.scrollCompute.SetBuffer(spawner.scrollKernelUpdate, "_ScrollOutput", scrollOutputBuffer);
+        spawnData.scrollKernelInit = spawnData.scrollCompute.FindKernel("_ScrollInit");
+        spawnData.scrollKernelUpdate = spawnData.scrollCompute.FindKernel("_ScrollUpdate");
 
-        spawner.scrollCompute.Dispatch(spawner.scrollKernelInit, spawner.scrollComputeGroupSize, 1, 1);
-        
-        spawner.scrollMaterial.SetBuffer("_ScrollOutput", scrollOutputBuffer);
+        spawnData.scrollCompute.SetBuffer(spawnData.scrollKernelInit, "_ScrollOutput", spawnData.scrollOutputBuffer);
+
+        spawnData.scrollCompute.SetBuffer(spawnData.scrollKernelUpdate, "_ScrollOutput", spawnData.scrollOutputBuffer);
+        spawnData.scrollCompute.SetBuffer(spawnData.scrollKernelUpdate, "_MoveInput", spawnData.scrollMoveInputBuffer);
+
+        spawnData.scrollCompute.Dispatch(spawnData.scrollKernelInit, spawnData.scrollComputeGroupSize, 1, 1);
     }
-    private void InitZoneSpawners()
+    private void InitParticles()
     {
-        spawner.zoneCompute.SetInt("_Awake", 0);
-        for (int i = 0; i < zoneSpawners.Length; i++)
+        for (int i = 0; i < trip.particleAtlasArray.Length; i++)
         {
-            ZoneSpawner zoneSpawner = zoneSpawners[i];
-            zoneSpawner.gameObject.SetActive(true);
-            zoneSpawner.InitializeZoneSpawnData();
-        }
-       spawner.zoneCompute.SetInt("_Awake", 1);
-    }
-    private void InitScrollers()
-    {
-        ResetScrollerSpawner();
-        scrollRendererPool = new Queue<Scroller>();
-        activeScrollers = new Scroller[MAX_ACTIVE_SCROLLERS];
-        SetScrollers();
-    }
-    private void ResetScrollerSpawner()
-    {
-        nextSpawnIndex = 0;
-        activeSpawnerCount = 0;
-    }
-    private void SetScrollers()
-    {
-        for (int i = 0; i < activeSpawnerCount; i++)
-        {
-            Scroller scroller = activeScrollers[i];
+            ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
+            particleAtlas.spriteDataBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, MAX_PARTICLE_SPRITE_DATA_COUNT, PARTICLE_SPRITE_DATA_STRIDE);
+            particleAtlas.spriteDataBuffer.SetData(particleAtlas.spriteData, 0, 0, particleAtlas.spriteCount);
+            particleAtlas.posDataIndexOffset = 0;
 
-            if (scroller.state == ScrollState.Dead)
+            for (int j = 0; j < particleAtlas.posDataIndexOffset; j++)
             {
-                ReturnScroller(scroller);
+                ParticlePosData posData = particleAtlas.posData[j];
+                posData.mpb = null;
+                particleAtlas.posData[j] = posData;
             }
         }
 
-        for (int i = nextSpawnIndex; i < trip.scrollSprites.Length; i++)
-        {
-            ScrollSprite nextScrollSprite = trip.scrollSprites[i];
-
-            if (nextScrollSprite.ticketCheckStart == spyStats.ticketsCheckedTotal)
-            {
-                GetScroller(ref nextScrollSprite);
-            }
-            else
-            {
-                nextSpawnIndex = i;
-                break;
-            }
-        }
+        spawnData.active = true;
     }
-    private void GetScroller(ref ScrollSprite scrollSprite)
+    private void ChangeParticles()
     {
-        if (scrollRendererPool.Count > 0)
+        for (int i = 0; i < trip.particleAtlasArray.Length; i++)
         {
-            Scroller scroller = scrollRendererPool.Dequeue();
+            ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
 
-            scroller.InitScroll(scrollSprite, activeSpawnerCount);
+            for(int j = 0; j < particleAtlas.posDataIndexOffset; j++)
+            {
+                ParticlePosData posData = particleAtlas.posData[j];
+                if (posData.ticketCheckEnd < spyStats.ticketsCheckedTotal)
+                {
+                    ReturnMPB(posData.mpb);
+                }
+            }
 
-            activeScrollers[activeSpawnerCount] = scroller;
+            for (int j = particleAtlas.posDataIndexOffset; j < particleAtlas.posData.Length; j++)
+            {
+                ParticlePosData posData = particleAtlas.posData[j];
+
+                if (spyStats.ticketsCheckedTotal < posData.ticketCheckStart)
+                {
+                    particleAtlas.posDataIndexOffset = j;
+                    break;
+                }
+                posData.argsBuffer = new GraphicsBuffer(GraphicsBuffer.Target.IndirectArguments, 1, ARGS_STRIDE);
+                posData.mpb = GetMPB();
+
+                posData.mpb.SetTexture("_AtlasTexture", particleAtlas.atlas.texture);
+                posData.mpb.SetBuffer("_SpriteData", particleAtlas.spriteDataBuffer);
+                posData.mpb.SetInt("_SpriteCount", particleAtlas.spriteCount);
+
+                if (particleAtlas.particleType == ParticleType.Zone)
+                {
+                    posData.mpb.SetBuffer("_Particles", spawnData.zoneOutputBuffer);
+                }
+                else
+                {
+                    posData.mpb.SetBuffer("_Particles", spawnData.scrollOutputBuffer);
+                }
+
+                particleAtlas.posData[j] = posData;
+            }
         }
-        else
-        {
-            Scroller scroller = Instantiate(spawner.scroller_prefab);
-            scroller.gameObject.SetActive(false);
-            scroller.InitScroll(scrollSprite, activeSpawnerCount);
-
-            activeScrollers[activeSpawnerCount] = scroller;
-        }
-        activeSpawnerCount++;
     }
-    public void ReturnScroller(Scroller scroller)
+
+    private void Dispose()
     {
-        Scroller lastScroller = activeScrollers[activeSpawnerCount];
-        activeScrollers[scroller.activeScrollerIndex] = lastScroller;
-        scroller.gameObject.SetActive(false);
-        scrollRendererPool.Enqueue(scroller);
-        activeSpawnerCount--;
-    }
+        spawnData.scrollMoveInputBuffer?.Release();
+        spawnData.zoneMoveInputBuffer?.Release();
+        spawnData.scrollOutputBuffer?.Release();
+        spawnData.zoneOutputBuffer?.Release();
 
+        for (int i = 0; i < trip.particleAtlasArray.Length; i++)
+        {
+            ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
+            for (int j = 0; j < particleAtlas.posData.Length; j++)
+            {
+                particleAtlas.posData[j].argsBuffer?.Release();
+            }
+        }
+
+        spawnData.active = false;
+    }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.crimson;
-        Gizmos.DrawWireCube(spawner.bounds.center, spawner.bounds.size);
+        Gizmos.DrawWireCube(spawnData.bounds.center, spawnData.bounds.size);
     }
 }
