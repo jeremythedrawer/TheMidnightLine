@@ -5,9 +5,7 @@
 
 RWStructuredBuffer<float4> _ScrollOutput;
 RWStructuredBuffer<uint2> _MoveInput;
-
-float _CamVelocity;
-float _TrainVelocity;
+RWStructuredBuffer<float4> _DepthInput;
 
 float3 _SpawnerMinPos;
 float3 _SpawnerMaxPos;
@@ -15,17 +13,37 @@ float3 _SpawnerSize;
 
 uint _ParticleCount;
 
+float _CamVelocity;
+float _TrainVelocity;
+
+uint _Init;
+
 [numthreads(THREADS_PER_GROUP, 1, 1)]
 void _ScrollInit(uint id : SV_DispatchThreadID)
 {
     if (id >= _ParticleCount)
         return;
+    
     float4 output = _ScrollOutput[id];
+    uint2 moveInput = _MoveInput[id];
     
-    output.z = _SpawnerMinPos.z + ((float) id % _SpawnerSize.z);
-    output.x = _SpawnerMinPos.x + (step(id, _SpawnerSize.z) * _SpawnerSize.x);
+    if (moveInput.y == 1 || moveInput.x == 0)
+    {
+        _ScrollOutput[id] = output;
+        return;
+    }
     
-    output.w = ((_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z);
+    float4 depthInput = _DepthInput[id];
+    
+    
+    output.z = _SpawnerMinPos.z + depthInput.x;
+    output.x = _SpawnerMinPos.x + (((float) id % 2) * _SpawnerSize.x);
+    output.w = 1 - ((_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z);
+    
+    
+    moveInput.y = 1;
+    _MoveInput[id] = moveInput;
+    
     _ScrollOutput[id] = output;
 }
 
@@ -39,21 +57,24 @@ void _ScrollUpdate(uint id : SV_DispatchThreadID)
     
     float velocity = (_CamVelocity * (1 - output.w)) + (_TrainVelocity * output.w);
     
-    if (output.x < _SpawnerSize.x * 2)
+    float minXPos = _SpawnerMinPos.x - _SpawnerSize.x;
+    
+    
+    output.x -= velocity * moveInput.y;
+    float width = (_SpawnerMaxPos.x - _SpawnerMinPos.x) + _SpawnerSize.x;
+    if (output.x < minXPos)
     {
         if (moveInput.x == 0)
         {
             moveInput.y = 0;
-            output.x = _SpawnerMaxPos.x + (step(id, _SpawnerSize.z) * _SpawnerSize.x);
-            
+            output.x = _SpawnerMaxPos.x + (((float) id % 2) * _SpawnerSize.x);
             _MoveInput[id] = moveInput;
         }
         else
         {
-            output.x = _SpawnerMaxPos.x;
+            output.x += width;
         }
     }
-    output.x += velocity * moveInput.y;
     
     _ScrollOutput[id] = output;
 }

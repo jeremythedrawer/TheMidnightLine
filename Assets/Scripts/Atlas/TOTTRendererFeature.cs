@@ -163,6 +163,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     }
                 }
 
+
                 if (count == 0) continue;
 
                 batch.data.spriteDataBuffer.SetData(batch.data.spriteData, 0, 0, count);
@@ -223,7 +224,20 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
                     posData.argsBuffer.SetData(argsSpawn);
                     
-                    cmd.DrawProceduralIndirect(Matrix4x4.identity, spawner.zoneMaterial, shaderPass: 0, MeshTopology.Triangles, posData.argsBuffer, argsOffset: 0, posData.mpb);
+                    switch(particleAtlas.particleType)
+                    {
+                        case ParticleType.Zone:
+                        {
+                            cmd.DrawProceduralIndirect(Matrix4x4.identity, spawner.zoneData.material, shaderPass: 0, MeshTopology.Triangles, posData.argsBuffer, argsOffset: 0, posData.mpb);
+                        }
+                        break;
+
+                        case ParticleType.Scroll:
+                        {
+                            cmd.DrawProceduralIndirect(Matrix4x4.identity, spawner.scrollData.material, shaderPass: 0, MeshTopology.Triangles, posData.argsBuffer, argsOffset: 0, posData.mpb);
+                        }
+                        break;
+                    }
                 }
 
             }

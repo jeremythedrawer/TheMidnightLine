@@ -77,10 +77,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 2
   batchKey:
-    texture: {fileID: 2800000, guid: 0dd4e9f513284c64a9e1960098c18ff8, type: 3}
+    texture: {fileID: 2800000, guid: 857f07ac02073324d828fc8db55dd0e9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
     depthOrder: 25
-  atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+  atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 1
@@ -100,33 +100,33 @@ MonoBehaviour:
     worldSize: {x: 11.366667, y: 1.4222223, z: 1}
     index: 0
   bounds:
-    m_Center: {x: 87.10881, y: 0.7052222, z: 25.1}
-    m_Extent: {x: 20.801813, y: 0.6722222, z: 0.1}
+    m_Center: {x: 87.12478, y: 0.708, z: 25.1}
+    m_Extent: {x: 20.817778, y: 0.675, z: 0.1}
   worldPivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4222223}
   uvSizeAndPosition: {x: 0.49951172, y: 0.0625, z: 0, w: 0.9375}
   scaleAndFlip: {x: 1.39, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 20.801813, y: 0.6722222, z: 0.1}
+  boundsOffset: {x: 20.817778, y: 0.675, z: 0.1}
   worldPivotsAndSizes:
-  - {x: 0, y: 0, z: 0.70094854, w: 0}
-  - {x: -0.70094854, y: 0, z: 2.6981027, w: 0}
-  - {x: -40.90268, y: 0, z: 0.7009486, w: 0}
-  - {x: 0, y: -0, z: 0.70094854, w: 1.199403}
-  - {x: -0.70094854, y: -0, z: 2.6981027, w: 1.199403}
-  - {x: -40.90268, y: -0, z: 0.7009486, w: 1.199403}
-  - {x: 0, y: -1.199403, z: 0.70094854, w: 0.14504133}
-  - {x: -0.70094854, y: -1.199403, z: 2.6981027, w: 0.14504133}
-  - {x: -40.90268, y: -1.199403, z: 0.7009486, w: 0.14504133}
+  - {x: 0, y: 0, z: 0.7, w: 0}
+  - {x: -0.7, y: 0, z: 2.7, w: 0}
+  - {x: -40.93, y: 0, z: 0.7055555, w: 0}
+  - {x: 0, y: -0, z: 0.7, w: 1.2}
+  - {x: -0.7, y: -0, z: 2.7, w: 1.2}
+  - {x: -40.93, y: -0, z: 0.7055555, w: 1.2}
+  - {x: 0, y: -1.2, z: 0.7, w: 0.14999999}
+  - {x: -0.7, y: -1.2, z: 2.7, w: 0.14999999}
+  - {x: -40.93, y: -1.2, z: 0.7055555, w: 0.14999999}
   uvSizesAndPositions:
-  - {x: 0.030803401, y: 0, z: 0.8195801, w: 0.8769531}
-  - {x: 0.11881311, y: 0, z: 0.85038346, w: 0.8769531}
-  - {x: 0.030803405, y: 0, z: 0.96919656, w: 0.8769531}
-  - {x: 0.030803401, y: 0.052952286, z: 0.8195801, w: 0.8769531}
-  - {x: 0.11881311, y: 0.052952286, z: 0.85038346, w: 0.8769531}
-  - {x: 0.030803405, y: 0.052952286, z: 0.96919656, w: 0.8769531}
-  - {x: 0.030803401, y: 0.006373887, z: 0.8195801, w: 0.9299054}
-  - {x: 0.11881311, y: 0.006373887, z: 0.85038346, w: 0.9299054}
-  - {x: 0.030803405, y: 0.006373887, z: 0.96919656, w: 0.9299054}
+  - {x: 0.030761719, y: 0, z: 0, w: 0.87353516}
+  - {x: 0.118652344, y: 0, z: 0.030761719, w: 0.87353516}
+  - {x: 0.031005856, y: 0, z: 0.14941406, w: 0.87353516}
+  - {x: 0.030761719, y: 0.052734375, z: 0, w: 0.87353516}
+  - {x: 0.118652344, y: 0.052734375, z: 0.030761719, w: 0.87353516}
+  - {x: 0.031005856, y: 0.052734375, z: 0.14941406, w: 0.87353516}
+  - {x: 0.030761719, y: 0.0065917964, z: 0, w: 0.92626953}
+  - {x: 0.118652344, y: 0.0065917964, z: 0.030761719, w: 0.92626953}
+  - {x: 0.031005856, y: 0.0065917964, z: 0.14941406, w: 0.92626953}
   scalesAndFlips:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 14.9, y: 1, z: 1, w: 1}
@@ -155,22 +155,22 @@ MonoBehaviour:
   isAnimating: 0
   slicedSprite:
     sprite:
-      uvSizeAndPos: {x: 0.18041992, y: 0.059326172, z: 0.8195801, w: 0.8769531}
+      uvSizeAndPos: {x: 0.18041992, y: 0.059326172, z: 0, w: 0.87353516}
       uvPivot: {x: 0, y: 0}
-      worldSize: {x: 4.1, y: 1.3444444, z: 1}
+      worldSize: {x: 4.1055555, y: 1.35, z: 1}
       index: 1
-    slice: {x: 0.17073171, y: 0.8292683, z: 0, w: 0.892562}
+    slice: {x: 0.17050068, y: 0.82814616, z: 0, w: 0.8888889}
     uvSizeAndPos:
-    - {x: 0.030803401, y: 0, z: 0.8195801, w: 0.8769531}
-    - {x: 0.11881311, y: 0, z: 0.85038346, w: 0.8769531}
-    - {x: 0.030803405, y: 0, z: 0.96919656, w: 0.8769531}
-    - {x: 0.030803401, y: 0.052952286, z: 0.8195801, w: 0.8769531}
-    - {x: 0.11881311, y: 0.052952286, z: 0.85038346, w: 0.8769531}
-    - {x: 0.030803405, y: 0.052952286, z: 0.96919656, w: 0.8769531}
-    - {x: 0.030803401, y: 0.006373887, z: 0.8195801, w: 0.9299054}
-    - {x: 0.11881311, y: 0.006373887, z: 0.85038346, w: 0.9299054}
-    - {x: 0.030803405, y: 0.006373887, z: 0.96919656, w: 0.9299054}
-    worldSlices: {x: 0.70094854, y: 0.7009486, z: 0, w: 0.14504133}
+    - {x: 0.030761719, y: 0, z: 0, w: 0.87353516}
+    - {x: 0.118652344, y: 0, z: 0.030761719, w: 0.87353516}
+    - {x: 0.031005856, y: 0, z: 0.14941406, w: 0.87353516}
+    - {x: 0.030761719, y: 0.052734375, z: 0, w: 0.87353516}
+    - {x: 0.118652344, y: 0.052734375, z: 0.030761719, w: 0.87353516}
+    - {x: 0.031005856, y: 0.052734375, z: 0.14941406, w: 0.87353516}
+    - {x: 0.030761719, y: 0.0065917964, z: 0, w: 0.92626953}
+    - {x: 0.118652344, y: 0.0065917964, z: 0.030761719, w: 0.92626953}
+    - {x: 0.031005856, y: 0.0065917964, z: 0.14941406, w: 0.92626953}
+    worldSlices: {x: 0.7, y: 0.7055555, z: 0, w: 0.14999999}
   quadCount: 0
   hasText: 0
 --- !u!1 &2811684460384202492
@@ -250,7 +250,7 @@ BoxCollider2D:
     drawMode: 2
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 113.61111, y: 1.4166666}
+  m_Size: {x: 113.66667, y: 1.4222223}
   m_EdgeRadius: 0
 --- !u!114 &5961614139172457733
 MonoBehaviour:
@@ -266,13 +266,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    texture: {fileID: 2800000, guid: 0dd4e9f513284c64a9e1960098c18ff8, type: 3}
+    texture: {fileID: 2800000, guid: 4bd321d6ab1cee54aa36e5e3e11116c9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
     depthOrder: 1
-  atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+  atlas: {fileID: 11400000, guid: 02557c0f0cb5708419d00e0cdc88b756, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 263022121493129215}
-  spriteIndex: 0
+  spriteIndex: 3
   flipX: 0
   flipY: 0
   width: 10
@@ -284,15 +284,15 @@ MonoBehaviour:
   textToCenter: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0, w: 0.9375}
+    uvSizeAndPos: {x: 0.99902344, y: 0.125, z: 0, w: 0.4975586}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 11.361111, y: 1.4166666, z: 1}
-    index: 0
+    worldSize: {x: 11.366667, y: 1.4222223, z: 1}
+    index: 3
   bounds:
     m_Center: {x: 123.140335, y: -0.6858888, z: 1}
-    m_Extent: {x: 56.805553, y: 0.7083333, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 11.361111, w: 1.4166666}
-  uvSizeAndPosition: {x: 0.49951172, y: 0.0625, z: 0, w: 0.9375}
+    m_Extent: {x: 56.833336, y: 0.7111111, z: 0.1}
+  worldPivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4222223}
+  uvSizeAndPosition: {x: 0.99902344, y: 0.125, z: 0, w: 0.4975586}
   scaleAndFlip: {x: 10, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
   boundsOffset: {x: 56.833336, y: 0.7111111, z: 0}
@@ -303,8 +303,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
+  prevSpriteIndexFlipH: 3
+  prevSpriteIndexFlipV: 3
   isAnimating: 0
   slicedSprite:
     sprite:
@@ -363,10 +363,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 2
   batchKey:
-    texture: {fileID: 2800000, guid: 0dd4e9f513284c64a9e1960098c18ff8, type: 3}
+    texture: {fileID: 2800000, guid: 857f07ac02073324d828fc8db55dd0e9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
     depthOrder: 25
-  atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+  atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 1
@@ -386,33 +386,33 @@ MonoBehaviour:
     worldSize: {x: 11.366667, y: 1.4222223, z: 1}
     index: 0
   bounds:
-    m_Center: {x: 156.51805, y: 0.7052222, z: 25.1}
-    m_Extent: {x: 23.31105, y: 0.6722222, z: 0.1}
+    m_Center: {x: 156.53578, y: 0.708, z: 25.1}
+    m_Extent: {x: 23.32878, y: 0.675, z: 0.1}
   worldPivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4222223}
   uvSizeAndPosition: {x: 0.49951172, y: 0.0625, z: 0, w: 0.9375}
   scaleAndFlip: {x: 1.39, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 23.31105, y: 0.6722222, z: 0.1}
+  boundsOffset: {x: 23.32878, y: 0.675, z: 0.1}
   worldPivotsAndSizes:
-  - {x: 0, y: 0, z: 0.70094854, w: 0}
-  - {x: -0.70094854, y: 0, z: 2.6981027, w: 0}
-  - {x: -45.92115, y: 0, z: 0.7009486, w: 0}
-  - {x: 0, y: -0, z: 0.70094854, w: 1.199403}
-  - {x: -0.70094854, y: -0, z: 2.6981027, w: 1.199403}
-  - {x: -45.92115, y: -0, z: 0.7009486, w: 1.199403}
-  - {x: 0, y: -1.199403, z: 0.70094854, w: 0.14504133}
-  - {x: -0.70094854, y: -1.199403, z: 2.6981027, w: 0.14504133}
-  - {x: -45.92115, y: -1.199403, z: 0.7009486, w: 0.14504133}
+  - {x: 0, y: 0, z: 0.7, w: 0}
+  - {x: -0.7, y: 0, z: 2.7, w: 0}
+  - {x: -45.952, y: 0, z: 0.7055555, w: 0}
+  - {x: 0, y: -0, z: 0.7, w: 1.2}
+  - {x: -0.7, y: -0, z: 2.7, w: 1.2}
+  - {x: -45.952, y: -0, z: 0.7055555, w: 1.2}
+  - {x: 0, y: -1.2, z: 0.7, w: 0.14999999}
+  - {x: -0.7, y: -1.2, z: 2.7, w: 0.14999999}
+  - {x: -45.952, y: -1.2, z: 0.7055555, w: 0.14999999}
   uvSizesAndPositions:
-  - {x: 0.030803401, y: 0, z: 0.8195801, w: 0.8769531}
-  - {x: 0.11881311, y: 0, z: 0.85038346, w: 0.8769531}
-  - {x: 0.030803405, y: 0, z: 0.96919656, w: 0.8769531}
-  - {x: 0.030803401, y: 0.052952286, z: 0.8195801, w: 0.8769531}
-  - {x: 0.11881311, y: 0.052952286, z: 0.85038346, w: 0.8769531}
-  - {x: 0.030803405, y: 0.052952286, z: 0.96919656, w: 0.8769531}
-  - {x: 0.030803401, y: 0.006373887, z: 0.8195801, w: 0.9299054}
-  - {x: 0.11881311, y: 0.006373887, z: 0.85038346, w: 0.9299054}
-  - {x: 0.030803405, y: 0.006373887, z: 0.96919656, w: 0.9299054}
+  - {x: 0.030761719, y: 0, z: 0, w: 0.87353516}
+  - {x: 0.118652344, y: 0, z: 0.030761719, w: 0.87353516}
+  - {x: 0.031005856, y: 0, z: 0.14941406, w: 0.87353516}
+  - {x: 0.030761719, y: 0.052734375, z: 0, w: 0.87353516}
+  - {x: 0.118652344, y: 0.052734375, z: 0.030761719, w: 0.87353516}
+  - {x: 0.031005856, y: 0.052734375, z: 0.14941406, w: 0.87353516}
+  - {x: 0.030761719, y: 0.0065917964, z: 0, w: 0.92626953}
+  - {x: 0.118652344, y: 0.0065917964, z: 0.030761719, w: 0.92626953}
+  - {x: 0.031005856, y: 0.0065917964, z: 0.14941406, w: 0.92626953}
   scalesAndFlips:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 16.76, y: 1, z: 1, w: 1}
@@ -441,22 +441,22 @@ MonoBehaviour:
   isAnimating: 0
   slicedSprite:
     sprite:
-      uvSizeAndPos: {x: 0.18041992, y: 0.059326172, z: 0.8195801, w: 0.8769531}
+      uvSizeAndPos: {x: 0.18041992, y: 0.059326172, z: 0, w: 0.87353516}
       uvPivot: {x: 0, y: 0}
-      worldSize: {x: 4.1, y: 1.3444444, z: 1}
+      worldSize: {x: 4.1055555, y: 1.35, z: 1}
       index: 1
-    slice: {x: 0.17073171, y: 0.8292683, z: 0, w: 0.892562}
+    slice: {x: 0.17050068, y: 0.82814616, z: 0, w: 0.8888889}
     uvSizeAndPos:
-    - {x: 0.030803401, y: 0, z: 0.8195801, w: 0.8769531}
-    - {x: 0.11881311, y: 0, z: 0.85038346, w: 0.8769531}
-    - {x: 0.030803405, y: 0, z: 0.96919656, w: 0.8769531}
-    - {x: 0.030803401, y: 0.052952286, z: 0.8195801, w: 0.8769531}
-    - {x: 0.11881311, y: 0.052952286, z: 0.85038346, w: 0.8769531}
-    - {x: 0.030803405, y: 0.052952286, z: 0.96919656, w: 0.8769531}
-    - {x: 0.030803401, y: 0.006373887, z: 0.8195801, w: 0.9299054}
-    - {x: 0.11881311, y: 0.006373887, z: 0.85038346, w: 0.9299054}
-    - {x: 0.030803405, y: 0.006373887, z: 0.96919656, w: 0.9299054}
-    worldSlices: {x: 0.70094854, y: 0.7009486, z: 0, w: 0.14504133}
+    - {x: 0.030761719, y: 0, z: 0, w: 0.87353516}
+    - {x: 0.118652344, y: 0, z: 0.030761719, w: 0.87353516}
+    - {x: 0.031005856, y: 0, z: 0.14941406, w: 0.87353516}
+    - {x: 0.030761719, y: 0.052734375, z: 0, w: 0.87353516}
+    - {x: 0.118652344, y: 0.052734375, z: 0.030761719, w: 0.87353516}
+    - {x: 0.031005856, y: 0.052734375, z: 0.14941406, w: 0.87353516}
+    - {x: 0.030761719, y: 0.0065917964, z: 0, w: 0.92626953}
+    - {x: 0.118652344, y: 0.0065917964, z: 0.030761719, w: 0.92626953}
+    - {x: 0.031005856, y: 0.0065917964, z: 0.14941406, w: 0.92626953}
+    worldSlices: {x: 0.7, y: 0.7055555, z: 0, w: 0.14999999}
   quadCount: 0
   hasText: 0
 --- !u!1 &3872012436576265919
@@ -536,7 +536,7 @@ BoxCollider2D:
     drawMode: 2
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 113.61111, y: 1.4166666}
+  m_Size: {x: 113.66667, y: 1.4222223}
   m_EdgeRadius: 0
 --- !u!114 &8659392252403590689
 MonoBehaviour:
@@ -552,13 +552,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    texture: {fileID: 2800000, guid: 0dd4e9f513284c64a9e1960098c18ff8, type: 3}
+    texture: {fileID: 2800000, guid: 4bd321d6ab1cee54aa36e5e3e11116c9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
     depthOrder: 23
-  atlas: {fileID: 11400000, guid: c7a955ee40a0d6148999eb45f95fff3a, type: 2}
+  atlas: {fileID: 11400000, guid: 02557c0f0cb5708419d00e0cdc88b756, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 6674433707631677740}
-  spriteIndex: 0
+  spriteIndex: 1
   flipX: 0
   flipY: 0
   width: 10
@@ -570,15 +570,15 @@ MonoBehaviour:
   textToCenter: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0, w: 0.9375}
+    uvSizeAndPos: {x: 0.99902344, y: 0.125, z: 0, w: 0.74902344}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 11.361111, y: 1.4166666, z: 1}
-    index: 0
+    worldSize: {x: 11.366667, y: 1.4222223, z: 1}
+    index: 1
   bounds:
     m_Center: {x: 123.140335, y: -0.6858888, z: 23}
-    m_Extent: {x: 56.805553, y: 0.7083333, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 11.361111, w: 1.4166666}
-  uvSizeAndPosition: {x: 0.49951172, y: 0.0625, z: 0, w: 0.9375}
+    m_Extent: {x: 56.833336, y: 0.7111111, z: 0.1}
+  worldPivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4222223}
+  uvSizeAndPosition: {x: 0.99902344, y: 0.125, z: 0, w: 0.74902344}
   scaleAndFlip: {x: 10, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
   boundsOffset: {x: 56.833336, y: 0.7111111, z: 0}
@@ -589,8 +589,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
+  prevSpriteIndexFlipH: 1
+  prevSpriteIndexFlipV: 1
   isAnimating: 0
   slicedSprite:
     sprite:

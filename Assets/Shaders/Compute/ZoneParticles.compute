@@ -28,7 +28,7 @@ void _ZoneInit(uint id : SV_DispatchThreadID)
     float4 output = _ZoneOutput[id];
     uint2 moveInput = _MoveInput[id];
     
-    if (moveInput.y == 1)
+    if (moveInput.y == 1 || moveInput.x == 0)
     {
         _ZoneOutput[id] = output;
         return;
@@ -43,7 +43,7 @@ void _ZoneInit(uint id : SV_DispatchThreadID)
     float size = depthInput.z * density;
     output.z = startPos + size;
     
-    output.w = ((_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z);
+    output.w = 1 - ((_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z);
     
     
     if (_Init == 0)
@@ -55,6 +55,7 @@ void _ZoneInit(uint id : SV_DispatchThreadID)
     
     moveInput.y = 1;
     _MoveInput[id] = moveInput;
+    
     _ZoneOutput[id] = output;
 }
 [numthreads(THREADS_PER_GROUP, 1, 1)]

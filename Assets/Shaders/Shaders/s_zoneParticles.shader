@@ -70,7 +70,7 @@ Shader "Custom/s_zoneParticles"
                 objPos *= size * scale;
                 objPos += pivot;
 
-                float3 worldPos = float3(p.x + objPos.x, p.y + objPos.y, p.z);
+                float3 worldPos = float3(p.xy + objPos, p.z);
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = QUAD_TRIANGLE_OFFSETS[quadVertexID];
@@ -109,7 +109,7 @@ Shader "Custom/s_zoneParticles"
 
                 half bayer = BayerX8((color - bayerValue), i.positionHCS.y);
                 half3 finalColor = bayer + _MainColor;
-                return half4(color.xxx, 1);
+                return half4(finalColor, 1);
             }
             ENDHLSL
         }

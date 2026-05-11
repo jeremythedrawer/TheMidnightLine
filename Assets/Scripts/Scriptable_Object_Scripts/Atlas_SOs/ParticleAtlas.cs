@@ -27,13 +27,15 @@ public class ParticleAtlas : ScriptableObject
             return;
         }
 
-            float width = 1;
+        float width = 1;
         float height = 1;
 
         int totalSprites = atlas.simpleSprites.Length + (atlas.slicedSprites.Length * 9);
         ParticleSpriteData[] newSpriteDataArray = new ParticleSpriteData[totalSprites];
 
         int spriteIndex = 0;
+
+        spriteCount = 0;
         for (int i = 0; i < atlas.simpleSprites.Length; i++)
         {
             ParticleSpriteData newSpriteData = new ParticleSpriteData();
@@ -42,6 +44,7 @@ public class ParticleAtlas : ScriptableObject
             newSpriteData.worldPivotAndSize = new Vector4(0, 0, sprite.worldSize.x, sprite.worldSize.y);
             newSpriteData.scaleAndFlip = new Vector4(width, height, 1, 1);
             newSpriteDataArray[spriteIndex++] = newSpriteData;
+            spriteCount++;
         }
 
 
@@ -98,6 +101,7 @@ public class ParticleAtlas : ScriptableObject
                 newSpriteData.scaleAndFlip = scalesAndFlips[j];
                 newSpriteDataArray[spriteIndex++] = newSpriteData;
             }
+            spriteCount++;
         }
 
         spriteData = newSpriteDataArray;

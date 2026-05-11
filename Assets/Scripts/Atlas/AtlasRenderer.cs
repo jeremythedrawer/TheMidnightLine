@@ -296,7 +296,6 @@ public class AtlasRenderer : MonoBehaviour
         boxCollider.size = bounds.size;
         boxCollider.offset = boundsOffset;
     }
-
     public void SetWidthFromWorldSpace(float worldWidth, ref SimpleSprite sprite)
     {
         width = worldWidth / sprite.worldSize.x;
@@ -694,7 +693,6 @@ public class AtlasRenderer : MonoBehaviour
             customs[i].w = alpha;
         }
     }
-
     [ContextMenu("Set Scrolling Text")]public void SetScrollingText()
     {
         customs = new Vector4[worldPivotsAndSizes.Length];

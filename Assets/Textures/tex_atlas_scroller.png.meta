@@ -1,22 +1,31 @@
 fileFormatVersion: 2
-guid: 9b2b6180ea0f7034fa35273d019dae82
+guid: 857f07ac02073324d828fc8db55dd0e9
 TextureImporter:
   internalIDToNameTable:
   - first:
-      213: -409976292747475414
-    second: tex_atlas_tunnels_0
+      213: -4641680347878647621
+    second: tex_atlas_scroller_0
   - first:
-      213: -2554376487003522672
-    second: tex_atlas_tunnels_1
+      213: -5220092657197612326
+    second: tex_atlas_scroller_1
   - first:
-      213: 8814051120920940484
-    second: tex_atlas_tunnels_2
+      213: 4541730446248811319
+    second: tex_atlas_scroller_2
   - first:
-      213: 4559851786020276479
-    second: tex_atlas_tunnels_3
+      213: -6983708883527973746
+    second: tex_atlas_scroller_3
   - first:
-      213: -5486606268107117946
-    second: tex_atlas_tunnels_4
+      213: -918984747727885047
+    second: tex_atlas_scroller_4
+  - first:
+      213: 7678215338979776084
+    second: tex_atlas_scroller_5
+  - first:
+      213: -8434016143038378949
+    second: tex_atlas_scroller_6
+  - first:
+      213: -3826278841190326940
+    second: tex_atlas_scroller_7
   externalObjects: {}
   serializedVersion: 13
   mipmaps:
@@ -125,13 +134,13 @@ TextureImporter:
     serializedVersion: 2
     sprites:
     - serializedVersion: 2
-      name: tex_atlas_tunnels_0
+      name: tex_atlas_scroller_0
       rect:
         serializedVersion: 2
         x: 0
-        y: 3940
-        width: 1219
-        height: 156
+        y: 3968
+        width: 1024
+        height: 128
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -140,86 +149,108 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: a268470ebb87f4af0800000000000000
-      internalID: -409976292747475414
+      spriteID: bb818c7f050759fb0800000000000000
+      internalID: -4641680347878647621
       vertices: []
       indices: 
       edges: []
       weights: []
     - serializedVersion: 2
-      name: tex_atlas_tunnels_1
-      rect:
-        serializedVersion: 2
-        x: 1217
-        y: 3394
-        width: 633
-        height: 702
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 0997b856e180d8cd0800000000000000
-      internalID: -2554376487003522672
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: tex_atlas_tunnels_2
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 2835
-        width: 4067
-        height: 387
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: 4cf40aeabccc15a70800000000000000
-      internalID: 8814051120920940484
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: tex_atlas_tunnels_3
-      rect:
-        serializedVersion: 2
-        x: 16
-        y: 2509
-        width: 4058
-        height: 305
-      alignment: 0
-      pivot: {x: 0, y: 0}
-      border: {x: 0, y: 0, z: 0, w: 0}
-      customData: 
-      outline: []
-      physicsShape: []
-      tessellationDetail: -1
-      bones: []
-      spriteID: ff84b2e4a09d74f30800000000000000
-      internalID: 4559851786020276479
-      vertices: []
-      indices: 
-      edges: []
-      weights: []
-    - serializedVersion: 2
-      name: tex_atlas_tunnels_4
+      name: tex_atlas_scroller_1
       rect:
         serializedVersion: 2
         x: 0
-        y: 577
+        y: 3724
+        width: 740
+        height: 245
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: ad28c11b2618e87b0800000000000000
+      internalID: -5220092657197612326
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_scroller_2
+      rect:
+        serializedVersion: 2
+        x: 1024
+        y: 3730
+        width: 444
+        height: 366
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 73b9c3a17c7770f30800000000000000
+      internalID: 4541730446248811319
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_scroller_3
+      rect:
+        serializedVersion: 2
+        x: 2129
+        y: 3622
+        width: 429
+        height: 474
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: e84439e85c1e41f90800000000000000
+      internalID: -6983708883527973746
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_scroller_4
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3463
+        width: 2047
+        height: 258
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 90d6dadad3c1f33f0800000000000000
+      internalID: -918984747727885047
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_scroller_5
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 3062
         width: 4096
-        height: 1783
+        height: 400
       alignment: 0
       pivot: {x: 0, y: 0}
       border: {x: 0, y: 0, z: 0, w: 0}
@@ -228,8 +259,52 @@ TextureImporter:
       physicsShape: []
       tessellationDetail: -1
       bones: []
-      spriteID: 68a2b0f1ba8abd3b0800000000000000
-      internalID: -5486606268107117946
+      spriteID: 45658dc7b208e8a60800000000000000
+      internalID: 7678215338979776084
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_scroller_6
+      rect:
+        serializedVersion: 2
+        x: 0
+        y: 2047
+        width: 1756
+        height: 1017
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: b3c8944d00b54fa80800000000000000
+      internalID: -8434016143038378949
+      vertices: []
+      indices: 
+      edges: []
+      weights: []
+    - serializedVersion: 2
+      name: tex_atlas_scroller_7
+      rect:
+        serializedVersion: 2
+        x: 2047
+        y: 2394
+        width: 2049
+        height: 671
+      alignment: 0
+      pivot: {x: 0, y: 0}
+      border: {x: 0, y: 0, z: 0, w: 0}
+      customData: 
+      outline: []
+      physicsShape: []
+      tessellationDetail: -1
+      bones: []
+      spriteID: 46dd14b9aa356eac0800000000000000
+      internalID: -3826278841190326940
       vertices: []
       indices: 
       edges: []
@@ -248,11 +323,14 @@ TextureImporter:
     spriteCustomMetadata:
       entries: []
     nameFileIdTable:
-      tex_atlas_tunnels_0: -409976292747475414
-      tex_atlas_tunnels_1: -2554376487003522672
-      tex_atlas_tunnels_2: 8814051120920940484
-      tex_atlas_tunnels_3: 4559851786020276479
-      tex_atlas_tunnels_4: -5486606268107117946
+      tex_atlas_scroller_0: -4641680347878647621
+      tex_atlas_scroller_1: -5220092657197612326
+      tex_atlas_scroller_2: 4541730446248811319
+      tex_atlas_scroller_3: -6983708883527973746
+      tex_atlas_scroller_4: -918984747727885047
+      tex_atlas_scroller_5: 7678215338979776084
+      tex_atlas_scroller_6: -8434016143038378949
+      tex_atlas_scroller_7: -3826278841190326940
   mipmapLimitGroupName: 
   pSDRemoveMatte: 0
   userData: 
