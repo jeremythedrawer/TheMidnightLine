@@ -1,8 +1,9 @@
+using UnityEditor;
 using UnityEngine;
 using static Atlas;
-using static AtlasRendering;
 using static AtlasSpawn;
 [CreateAssetMenu(fileName = "ParticleAtlas", menuName = "Atlas / Particle Atlas")]
+
 public class ParticleAtlas : ScriptableObject
 {
     public AtlasSO atlas;

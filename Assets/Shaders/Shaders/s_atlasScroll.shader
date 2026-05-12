@@ -37,7 +37,8 @@ Shader "Custom/s_atlasScroll"
             SAMPLER(sampler_AtlasTexture);
 
             uint _SpriteIndex;
-            
+            uint _SpriteCount;
+
             uint _ParticleOffset;
 
             float _DayNight;
@@ -49,10 +50,10 @@ Shader "Custom/s_atlasScroll"
             {
                 Varyings o;
 
-                uint particleID = instanceID + _ParticleOffset;
+                uint particleID = floor(instanceID / _SpriteCount) + _ParticleOffset;
                 float4 p = _Particles[particleID];
 
-                uint spriteID = _SpriteIndex;
+                uint spriteID = _SpriteIndex + (instanceID % _SpriteCount);
 
                 ParticleSprites s = _SpriteData[spriteID];
 
@@ -63,8 +64,8 @@ Shader "Custom/s_atlasScroll"
                 float2 size = s.worldPivotAndSize.zw;
                 float2 scale = s.scaleAndFlip.xy;
 
-                objPos *= size * scale;
-                objPos += pivot;
+                objPos *= size;
+                objPos -= pivot;
 
                 float3 worldPos = float3(p.xy + objPos, p.z);
 

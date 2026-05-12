@@ -263,26 +263,7 @@ public class AtlasRenderer : MonoBehaviour
             new Vector4(-sliceSprite.worldSlices.x, -topRowPos, centerWorldSliceWidth, sliceSprite.worldSlices.w),
             new Vector4(-rightColPos, -topRowPos, sliceSprite.worldSlices.y, sliceSprite.worldSlices.w),
         };
-
-        Vector4 scaleFlipCQuad = Vector4.one;
-        Vector4 scaleFlipHQuad = new Vector4(width, 1, 1, 1);
-        Vector4 scaleFlipVQuad = new Vector4(1, height, 1, 1);
-        Vector4 scaleFlipMQuad = new Vector4(width, height, 1, 1);
-
-        scalesAndFlips = new Vector4[]
-        {
-            scaleFlipCQuad,
-            scaleFlipHQuad,
-            scaleFlipCQuad,
-
-            scaleFlipVQuad,
-            scaleFlipMQuad,
-            scaleFlipVQuad,
-
-            scaleFlipCQuad,
-            scaleFlipHQuad,
-            scaleFlipCQuad
-        };
+        scalesAndFlips = GetScaleAndFlipSliceNineSliceArray(width, height);
 
         customs = new Vector4[9];
         for (int i = 0;  i < customs.Length; i++)

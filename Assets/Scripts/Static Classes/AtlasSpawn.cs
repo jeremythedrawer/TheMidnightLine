@@ -76,7 +76,10 @@ public static class AtlasSpawn
 
         public int depth;
         public int depthSize;
+        
         public int spriteIndex;
+        public int spritesPerParticle;
+
         public float height;
 
         public bool isDying;

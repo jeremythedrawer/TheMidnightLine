@@ -38,6 +38,7 @@ void _ScrollInit(uint id : SV_DispatchThreadID)
     
     output.z = _SpawnerMinPos.z + depthInput.x;
     output.x = _SpawnerMinPos.x + (((float) id % 2) * _SpawnerSize.x);
+    output.y = 0;
     output.w = 1 - ((_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z);
     
     

@@ -72,7 +72,7 @@ public class AtlasTripEditor : EditorWindow
     }
     public void Init()
     {
-        fullRect = new Rect(0, 0, position.width, 3000);
+        fullRect = new Rect(0, 0, position.width, 10000);
 
         graphPos = new Vector2(PADDING, 100 + HEADER_COL_HEIGHT);
         graphSize = new Vector2(fullRect.width - PADDING * 2, fullRect.height);
@@ -370,34 +370,24 @@ public class AtlasTripEditor : EditorWindow
                             
                             Rect barRect = new Rect(barX, barY, barWidth, barHeight);
 
-                            ParticleSpriteData spriteData;
-
-                            if (particleAtlas.particleType == ParticleType.Zone)
-                            {
-                                spriteData = particleAtlas.spriteData[j];
-                            }
-                            else
-                            {
-                                spriteData = particleAtlas.spriteData[posData.spriteIndex];
-                            }
-
-                            float spritePixelWidth = spriteData.uvSizeAndPos.x * particleAtlas.atlas.texture.width;
-                            float spritePixelHeight = spriteData.uvSizeAndPos.y * particleAtlas.atlas.texture.height;
-                            float scale = graphRowHeight / spritePixelHeight;
-                            float scaledWidth = spritePixelWidth * scale;
-                            float scaledHeight = spritePixelHeight * scale;
-
+                            float scaledWidth = 1;
+                            float scaledHeight = 1;
                             GUI.BeginGroup(barRect);
                             {
                                 switch(particleAtlas.particleType)
                                 {
                                     case ParticleType.Zone:
                                     {
-                                        int texSpriteIndex = 0;
+
                                         for (float x = 0; x < barWidth; x += scaledWidth)
                                         {
                                             for(float y = 0;  y < barHeight; y += scaledHeight)
                                             {
+                                                ParticleSpriteData spriteData = particleAtlas.spriteData[j];
+                                                scaledWidth = GetScaledWidth(spriteData, particleAtlas);
+                                                scaledHeight = GetScaledHeight(spriteData, particleAtlas);
+                                                int texSpriteIndex = 0;
+
                                                 ParticleSpriteData s = particleAtlas.spriteData[texSpriteIndex % particleAtlas.spriteData.Length];
 
                                                 Vector2 uvPos = new Vector2(s.uvSizeAndPos.z, s.uvSizeAndPos.w);
@@ -406,24 +396,77 @@ public class AtlasTripEditor : EditorWindow
 
                                                 Rect spriteRect = new Rect(x, y, scaledWidth, scaledHeight);
                                                 GUI.DrawTextureWithTexCoords(spriteRect, particleAtlas.atlas.texture, uvRect);
+                                                
                                                 texSpriteIndex++;
                                             }
                                         }
                                     }
                                     break;
-
                                     case ParticleType.Scroll:
                                     {
-                                        for (float x = 0; x < barWidth; x += scaledWidth)
+                                        switch(posData.widthType)
                                         {
-                                            ParticleSpriteData s = particleAtlas.spriteData[posData.spriteIndex];
+                                            case ParticleWidthType.Simple:
+                                            case ParticleWidthType.Tiled:
+                                            {
+                                                ParticleSpriteData spriteData = particleAtlas.spriteData[posData.spriteIndex];
+                                                scaledWidth = GetScaledWidth(spriteData, particleAtlas);
+                                                scaledHeight = GetScaledHeight(spriteData, particleAtlas);
+                                                for (float x = 0; x < barWidth; x += scaledWidth)
+                                                {
+                                                    Vector2 uvPos = new Vector2(spriteData.uvSizeAndPos.z, spriteData.uvSizeAndPos.w);
+                                                    Vector2 uvSize = new Vector2(spriteData.uvSizeAndPos.x, spriteData.uvSizeAndPos.y);
+                                                    Rect uvRect = new Rect(uvPos, uvSize);
 
-                                            Vector2 uvPos = new Vector2(s.uvSizeAndPos.z, s.uvSizeAndPos.w);
-                                            Vector2 uvSize = new Vector2(s.uvSizeAndPos.x, s.uvSizeAndPos.y);
-                                            Rect uvRect = new Rect(uvPos, uvSize);
+                                                    Rect spriteRect = new Rect(x, 0, scaledWidth, scaledHeight);
+                                                    GUI.DrawTextureWithTexCoords(spriteRect,particleAtlas.atlas.texture, uvRect);
+                                                }
+                                            }
+                                            break;
 
-                                            Rect spriteRect = new Rect(x, 0, scaledWidth, scaledHeight);
-                                            GUI.DrawTextureWithTexCoords(spriteRect,particleAtlas.atlas.texture, uvRect);
+                                            case ParticleWidthType.Sliced:
+                                            {
+
+                                                float totalPixelHeight = 0;
+                                                float totalPixelWidth = 0;
+
+                                                for (int k = 0; k < 9; k++)
+                                                {
+                                                    ParticleSpriteData spriteData = particleAtlas.spriteData[posData.spriteIndex + k];
+                                                    float spritePixelWidth = spriteData.uvSizeAndPos.x * particleAtlas.atlas.texture.width;
+                                                    float spritePixelheight = spriteData.uvSizeAndPos.y * particleAtlas.atlas.texture.height;
+                                                    totalPixelWidth += spritePixelWidth;
+                                                    totalPixelHeight += spritePixelheight;
+                                                }
+
+                                                int sliceIndex = 0;
+                                                float sliceYPos = barHeight;
+                                                for (int y = 0; y < 3; y++)
+                                                {
+                                                    float sliceXPos = 0;
+                                                    for (int x = 0; x < 3; x++)
+                                                    {
+                                                        ParticleSpriteData spriteData = particleAtlas.spriteData[posData.spriteIndex + sliceIndex];
+                                                        float spritePixelWidth = spriteData.uvSizeAndPos.x * particleAtlas.atlas.texture.width;
+                                                        float spritePixelheight = spriteData.uvSizeAndPos.y * particleAtlas.atlas.texture.height;
+
+                                                        scaledWidth = (spritePixelWidth / totalPixelWidth) * barWidth * 3;
+                                                        scaledHeight = (spritePixelheight / totalPixelHeight) * barHeight * 3;
+
+                                                        Vector2 uvPos = new Vector2(spriteData.uvSizeAndPos.z, spriteData.uvSizeAndPos.w);
+                                                        Vector2 uvSize = new Vector2(spriteData.uvSizeAndPos.x, spriteData.uvSizeAndPos.y);
+                                                        Rect uvRect = new Rect(uvPos, uvSize);
+
+                                                        Rect spriteRect = new Rect(sliceXPos, sliceYPos - scaledHeight, scaledWidth, scaledHeight);
+                                                        GUI.DrawTextureWithTexCoords(spriteRect, particleAtlas.atlas.texture, uvRect);
+                                                        sliceIndex++;
+                                                        sliceXPos += scaledWidth;
+                                                       // Handles.DrawSolidRectangleWithOutline(spriteRect, Color.clear, Color.green);
+                                                    }
+                                                    sliceYPos -= scaledHeight;
+                                                }
+                                            }
+                                            break;
                                         }
                                     }
                                     break;
@@ -448,8 +491,10 @@ public class AtlasTripEditor : EditorWindow
 
                                 isAdjustingMetersStart = e.mousePosition.x < barRect.center.x;
                                 isAdjustingDepthSize = e.mousePosition.y > barRect.center.y && particleAtlas.particleType == ParticleType.Zone;
-                                
-                                selectedSpriteIndex = posData.spriteIndex;
+
+                                int baseIndex = particleAtlas.atlas.simpleSprites.Length;
+
+                                selectedSpriteIndex = posData.widthType == ParticleWidthType.Sliced ? baseIndex + ((posData.spriteIndex - baseIndex) / 8) : posData.spriteIndex;
                                 selectedParticleAtlas = trip.particleAtlasArray[selectedParticlAtlasIndex];
                                 selectedParticleCount = posData.particleCount;
 
@@ -458,8 +503,26 @@ public class AtlasTripEditor : EditorWindow
                             if (selectedParticlAtlasIndex != i || selectedPosDataIndex != j) continue;
 
                             Handles.DrawSolidRectangleWithOutline(barRect, Color.clear, Color.blueViolet);
+
+                            int spriteIndex = selectedSpriteIndex;
+                            int spriteCount = 1;
+                            ParticleWidthType widthType = posData.widthType;
                             
-                            posData.spriteIndex = selectedSpriteIndex;
+                            if (selectedSpriteIndex >= particleAtlas.atlas.simpleSprites.Length)
+                            {
+                                widthType = ParticleWidthType.Sliced;
+                                spriteCount = 9;
+                                spriteIndex = particleAtlas.atlas.simpleSprites.Length + ((selectedSpriteIndex - particleAtlas.atlas.simpleSprites.Length) * 9);
+                            }
+                            else
+                            {
+                                widthType = ParticleWidthType.Tiled;
+                            }
+
+
+                            posData.spriteIndex = spriteIndex;
+                            posData.spritesPerParticle = spriteCount;
+                            posData.widthType = widthType;
                             posData.particleCount = selectedParticleCount;
 
                             if (e.type == EventType.MouseDrag)
@@ -527,6 +590,33 @@ public class AtlasTripEditor : EditorWindow
         EditorGUILayout.EndVertical();
     }
 
+    private float GetScaledWidth(ParticleSpriteData spriteData, ParticleAtlas particleAtlas)
+    {
+        float spritePixelWidth = spriteData.uvSizeAndPos.x * particleAtlas.atlas.texture.width;
+        float spritePixelHeight = spriteData.uvSizeAndPos.y * particleAtlas.atlas.texture.height;
+        float scale = graphRowHeight / spritePixelHeight;
+        return spritePixelWidth * scale;
+    }
+    private float GetScaledHeight(ParticleSpriteData spriteData, ParticleAtlas particleAtlas)
+    {
+        float spritePixelHeight = spriteData.uvSizeAndPos.y * particleAtlas.atlas.texture.height;
+        float scale = graphRowHeight / spritePixelHeight;
+        return spritePixelHeight * scale;
+    }
+    private float GetScaledHeightSlice(ParticleSpriteData spriteData, ParticleAtlas particleAtlas)
+    {
+        float spritePixelHeight = spriteData.uvSizeAndPos.y * particleAtlas.atlas.texture.height;
+        float scale = graphRowHeight / Mathf.Max(spritePixelHeight, 0.0001f);
+        return spritePixelHeight * scale * 0.33333f;
+    }
+
+    private float GetScaledWidthSlice(ParticleSpriteData spriteData, ParticleAtlas particleAtlas)
+    {
+        float spritePixelWidth = spriteData.uvSizeAndPos.x * particleAtlas.atlas.texture.width;
+        float spritePixelHeight = spriteData.uvSizeAndPos.y * particleAtlas.atlas.texture.height;
+        float scale = graphRowHeight / Mathf.Max(spritePixelHeight, 0.0001f);
+        return spritePixelWidth * scale * 0.333333f;
+    }
     private void SaveTrip()
     {
         for (int i = 0; i < trip.particleAtlasArray.Length; i++)

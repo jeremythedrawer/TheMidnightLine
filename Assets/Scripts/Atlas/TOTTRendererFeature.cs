@@ -220,10 +220,11 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     ParticlePosData posData = particleAtlas.posData[j];
                     if (spyStats.ticketsCheckedTotal < posData.ticketCheckStart) break;
                     if (posData.argsBuffer == null) continue;
-                    argsSpawn[1] = (uint)posData.particleCount;
-
-                    posData.argsBuffer.SetData(argsSpawn);
                     
+                    argsSpawn[1] = (uint)(posData.particleCount * posData.spritesPerParticle);
+                    Debug.Log((uint)(posData.particleCount * posData.spritesPerParticle));
+                    posData.argsBuffer.SetData(argsSpawn);
+
                     switch(particleAtlas.particleType)
                     {
                         case ParticleType.Zone:

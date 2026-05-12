@@ -36,8 +36,6 @@ public class SpawnMaster : MonoBehaviour
         
         InitParticles();
         ChangeParticles();
-
-
         gameEventData.OnTicketInspect.RegisterListener(ChangeParticles);
     }
     private void OnDisable()
@@ -143,11 +141,40 @@ public class SpawnMaster : MonoBehaviour
             {
                 case ParticleType.Scroll:
                 {
-                    for (int j = 0; j < particleAtlas.spriteData.Length; j++)
+                    for(int j = 0; j < particleAtlas.posData.Length; j++)
                     {
-                        ParticleSpriteData particleSpriteData = particleAtlas.spriteData[j];
-                        particleSpriteData.scaleAndFlip.x = spawnData.bounds.size.x / particleSpriteData.worldPivotAndSize.z;
-                        particleAtlas.spriteData[j] = particleSpriteData;
+                        ParticlePosData posData = particleAtlas.posData[j];
+                        switch (posData.widthType)
+                        {
+                            case ParticleWidthType.Tiled:
+                            {
+                                for (int k = 0; k < posData.spritesPerParticle; k++)
+                                {
+                                    ParticleSpriteData particleSpriteData = particleAtlas.spriteData[posData.spriteIndex + k];
+                                    particleSpriteData.scaleAndFlip.x = spawnData.bounds.size.x / particleSpriteData.worldPivotAndSize.z;
+                                    particleAtlas.spriteData[posData.spriteIndex + k] = particleSpriteData;
+                                }
+                            }
+                            break;
+
+                            case ParticleWidthType.Sliced:
+                            {
+
+                                ParticleSpriteData centerSprite = particleAtlas.spriteData[posData.spriteIndex + 4];
+                                float boundWidth = spawnData.bounds.size.x / centerSprite.worldPivotAndSize.z;
+                                Vector4[] sliceScaleAndFlipArray = GetScaleAndFlipSliceNineSliceArray(boundWidth, 1);
+                                for (int k = 0; k < posData.spritesPerParticle; k++)
+                                {
+                                    ParticleSpriteData particleSpriteData = particleAtlas.spriteData[posData.spriteIndex + k];
+
+                                    particleSpriteData.scaleAndFlip = sliceScaleAndFlipArray[k];
+                                    Debug.Log(k + ": " + sliceScaleAndFlipArray[k] + " | " + posData.spritesPerParticle);
+                                    particleAtlas.spriteData[posData.spriteIndex + k] = particleSpriteData;
+                                }
+                            }
+                            break;
+
+                        }
 
                     }
                 }
@@ -155,10 +182,10 @@ public class SpawnMaster : MonoBehaviour
             }
 
             particleAtlas.spriteDataBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, MAX_PARTICLE_SPRITE_DATA_COUNT, PARTICLE_SPRITE_DATA_STRIDE);
-            particleAtlas.spriteDataBuffer.SetData(particleAtlas.spriteData, 0, 0, particleAtlas.spriteCount);
+            particleAtlas.spriteDataBuffer.SetData(particleAtlas.spriteData, 0, 0, particleAtlas.spriteData.Length);
             particleAtlas.posDataIndexOffset = 0;
 
-            for (int j = 0; j < particleAtlas.posDataIndexOffset; j++)
+            for (int j = 0; j < particleAtlas.posData.Length; j++)
             {
                 ParticlePosData posData = particleAtlas.posData[j];
                 posData.mpb = null;
@@ -167,8 +194,6 @@ public class SpawnMaster : MonoBehaviour
         }
 
         spawnData.active = true;
-
-        Debug.Log((spawnData.bounds.min.x + spawnData.bounds.size.x) + " | " + spawnData.bounds.max.x);
     }
     private void ChangeParticles()
     {
@@ -276,7 +301,7 @@ public class SpawnMaster : MonoBehaviour
             posData.mpb.SetInt("_ParticleOffset", posData.minParticleIndex);
             posData.mpb.SetBuffer("_Particles", spawnComputeData.outputBuffer);
 
-            posData.mpb.SetInt("_SpriteCount", particleAtlas.spriteCount);
+            posData.mpb.SetInt("_SpriteCount", posData.spritesPerParticle);
             posData.mpb.SetInt("_SpriteIndex", posData.spriteIndex);
 
             for (int k = posData.minParticleIndex; k <= posData.maxParticleIndex; k++)
