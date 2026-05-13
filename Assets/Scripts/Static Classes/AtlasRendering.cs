@@ -296,4 +296,21 @@ public static class AtlasRendering
             scaleFlipCQuad
         };
     }
+
+    public static Vector4[] SetNewWorldPivotsNineSliceArray(float width, float height, Vector4[] worldPivotsAndSizes)
+    {
+        Vector4 middlePivotAndSize = worldPivotsAndSizes[4];
+
+        float rightColPos = middlePivotAndSize.x + middlePivotAndSize.z * width;
+        float topRowPos = middlePivotAndSize.y + middlePivotAndSize.w * height;
+
+        worldPivotsAndSizes[2].x = rightColPos;
+        worldPivotsAndSizes[5].x = rightColPos;
+        worldPivotsAndSizes[6].y = topRowPos;
+        worldPivotsAndSizes[7].y = topRowPos;
+        worldPivotsAndSizes[8].x = rightColPos;
+        worldPivotsAndSizes[8].y = topRowPos;
+
+        return worldPivotsAndSizes;
+    }
 }

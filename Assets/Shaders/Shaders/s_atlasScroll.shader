@@ -64,8 +64,8 @@ Shader "Custom/s_atlasScroll"
                 float2 size = s.worldPivotAndSize.zw;
                 float2 scale = s.scaleAndFlip.xy;
 
-                objPos *= size;
-                objPos -= pivot;
+                objPos *= size * scale;
+                objPos += pivot;
 
                 float3 worldPos = float3(p.xy + objPos, p.z);
 

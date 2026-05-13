@@ -1,5 +1,6 @@
 using System;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using static AtlasRendering;
 using static AtlasSpawn;
@@ -37,23 +38,29 @@ public class SpawnMaster : MonoBehaviour
         InitParticles();
         ChangeParticles();
         gameEventData.OnTicketInspect.RegisterListener(ChangeParticles);
+
+#if UNITY_EDITOR
+        //EditorApplication.update += UpdateParticlesEditor;
+#endif
     }
     private void OnDisable()
     {
         gameEventData.OnTicketInspect.UnregisterListener(ChangeParticles);
+#if UNITY_EDITOR
+       // EditorApplication.update -= UpdateParticlesEditor;
+#endif
         Dispose();
     }
     private void Update()
     {
         UpdateSpawnCompute(ref spawnData.scrollData);
         UpdateSpawnCompute(ref spawnData.zoneData);
-
-        UpdateDelayedParticleQueue();
-
-#if UNITY_EDITOR
+        //UpdateDelayedParticleQueue();
+        //InitZoneCompute();
+        //InitScrollCompute();
+        //InitParticles();
+        //ChangeParticles();
        // if (!Application.isPlaying) UpdateInitComputeEditor();
-#endif
-
     }
     private void InitBoundParameters()
     {
@@ -81,12 +88,16 @@ public class SpawnMaster : MonoBehaviour
 
         spawnData.zoneData.moveInputs = new Vector2Int[ZONE_PARTICLE_COUNT];
         Array.Fill(spawnData.zoneData.moveInputs, Vector2Int.zero);
+
+        spawnData.zoneData.moveInputBuffer?.Release();
         spawnData.zoneData.moveInputBuffer = new ComputeBuffer(ZONE_PARTICLE_COUNT, sizeof(uint) * 2);
         spawnData.zoneData.moveInputBuffer.SetData(spawnData.zoneData.moveInputs);
 
         spawnData.zoneData.depthInputs = new Vector4[(int)ZONE_PARTICLE_COUNT];
+        spawnData.zoneData.depthInputBuffer?.Release();
         spawnData.zoneData.depthInputBuffer = new ComputeBuffer((int)ZONE_PARTICLE_COUNT, sizeof(uint) * 4);
 
+        spawnData.zoneData.outputBuffer?.Release();
         spawnData.zoneData.outputBuffer = new ComputeBuffer(ZONE_PARTICLE_COUNT, sizeof(float) * 4);
 
         spawnData.zoneData.groupSize = Mathf.CeilToInt((float)ZONE_PARTICLE_COUNT / THREADS_PER_GROUP);
@@ -111,12 +122,15 @@ public class SpawnMaster : MonoBehaviour
 
         spawnData.scrollData.moveInputs = new Vector2Int[SCROLL_PARTICLE_COUNT];
         Array.Fill(spawnData.scrollData.moveInputs, Vector2Int.zero);
+        spawnData.scrollData.moveInputBuffer?.Release();
         spawnData.scrollData.moveInputBuffer = new ComputeBuffer(SCROLL_PARTICLE_COUNT, sizeof(uint) * 2);
         spawnData.scrollData.moveInputBuffer.SetData(spawnData.scrollData.moveInputs);
 
         spawnData.scrollData.depthInputs = new Vector4[(int)SCROLL_PARTICLE_COUNT];
+        spawnData.scrollData.depthInputBuffer?.Release();
         spawnData.scrollData.depthInputBuffer = new ComputeBuffer((int)SCROLL_PARTICLE_COUNT, sizeof(uint) * 4);
 
+        spawnData.scrollData.outputBuffer?.Release();
         spawnData.scrollData.outputBuffer = new ComputeBuffer(SCROLL_PARTICLE_COUNT, sizeof(float) * 4);
 
         spawnData.scrollData.groupSize = Mathf.CeilToInt((float)SCROLL_PARTICLE_COUNT / THREADS_PER_GROUP);
@@ -137,60 +151,17 @@ public class SpawnMaster : MonoBehaviour
         {
             ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
 
-            switch(particleAtlas.particleType)
-            {
-                case ParticleType.Scroll:
-                {
-                    for(int j = 0; j < particleAtlas.posData.Length; j++)
-                    {
-                        ParticlePosData posData = particleAtlas.posData[j];
-                        switch (posData.widthType)
-                        {
-                            case ParticleWidthType.Tiled:
-                            {
-                                for (int k = 0; k < posData.spritesPerParticle; k++)
-                                {
-                                    ParticleSpriteData particleSpriteData = particleAtlas.spriteData[posData.spriteIndex + k];
-                                    particleSpriteData.scaleAndFlip.x = spawnData.bounds.size.x / particleSpriteData.worldPivotAndSize.z;
-                                    particleAtlas.spriteData[posData.spriteIndex + k] = particleSpriteData;
-                                }
-                            }
-                            break;
-
-                            case ParticleWidthType.Sliced:
-                            {
-
-                                ParticleSpriteData centerSprite = particleAtlas.spriteData[posData.spriteIndex + 4];
-                                float boundWidth = spawnData.bounds.size.x / centerSprite.worldPivotAndSize.z;
-                                Vector4[] sliceScaleAndFlipArray = GetScaleAndFlipSliceNineSliceArray(boundWidth, 1);
-                                for (int k = 0; k < posData.spritesPerParticle; k++)
-                                {
-                                    ParticleSpriteData particleSpriteData = particleAtlas.spriteData[posData.spriteIndex + k];
-
-                                    particleSpriteData.scaleAndFlip = sliceScaleAndFlipArray[k];
-                                    Debug.Log(k + ": " + sliceScaleAndFlipArray[k] + " | " + posData.spritesPerParticle);
-                                    particleAtlas.spriteData[posData.spriteIndex + k] = particleSpriteData;
-                                }
-                            }
-                            break;
-
-                        }
-
-                    }
-                }
-                break;
-            }
-
+            particleAtlas.spriteDataBuffer?.Release();
             particleAtlas.spriteDataBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, MAX_PARTICLE_SPRITE_DATA_COUNT, PARTICLE_SPRITE_DATA_STRIDE);
             particleAtlas.spriteDataBuffer.SetData(particleAtlas.spriteData, 0, 0, particleAtlas.spriteData.Length);
             particleAtlas.posDataIndexOffset = 0;
 
-            for (int j = 0; j < particleAtlas.posData.Length; j++)
-            {
-                ParticlePosData posData = particleAtlas.posData[j];
-                posData.mpb = null;
-                particleAtlas.posData[j] = posData;
-            }
+            //for (int j = 0; j < particleAtlas.posData.Length; j++)
+            //{
+            //    ParticlePosData posData = particleAtlas.posData[j];
+            //    posData.mpb = null;
+            //    particleAtlas.posData[j] = posData;
+            //}
         }
 
         spawnData.active = true;
@@ -399,15 +370,28 @@ public class SpawnMaster : MonoBehaviour
     }
     private void DisposeCompute(ref SpawnComputeData spawnComputeData)
     {
-
         spawnComputeData.compute.SetFloat("_TrainVelocity", 0);
         spawnComputeData.moveInputBuffer?.Release();
         spawnComputeData.depthInputBuffer?.Release();
         spawnComputeData.outputBuffer?.Release();
+    }
+#if UNITY_EDITOR
+    private void UpdateParticlesEditor()
+    {
+        Debug.Log("Updating particles");
+        UpdateSpawnCompute(ref spawnData.scrollData);
+        UpdateSpawnCompute(ref spawnData.zoneData);
+
+        InitZoneCompute();
+        InitScrollCompute();
+        InitParticles();
+        ChangeParticles();
+        SceneView.RepaintAll();
     }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.crimson;
         Gizmos.DrawWireCube(spawnData.bounds.center, spawnData.bounds.size);
     }
+#endif
 }

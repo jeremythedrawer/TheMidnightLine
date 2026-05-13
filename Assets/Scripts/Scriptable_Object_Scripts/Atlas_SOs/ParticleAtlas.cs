@@ -22,6 +22,11 @@ public class ParticleAtlas : ScriptableObject
 
     private void OnValidate()
     {
+        SetSpriteData();
+    }
+
+    public void SetSpriteData()
+    {
         if (atlas == null)
         {
             spriteData = null;
@@ -44,31 +49,11 @@ public class ParticleAtlas : ScriptableObject
             newSpriteData.uvSizeAndPos = sprite.uvSizeAndPos;
             newSpriteData.worldPivotAndSize = new Vector4(0, 0, sprite.worldSize.x, sprite.worldSize.y);
             newSpriteData.scaleAndFlip = new Vector4(width, height, 1, 1);
-            newSpriteDataArray[spriteIndex++] = newSpriteData;
+            newSpriteDataArray[spriteIndex] = newSpriteData;
+            spriteIndex++;
             spriteCount++;
         }
 
-
-
-        Vector4 scaleFlipCQuad = Vector4.one;
-        Vector4 scaleFlipHQuad = new Vector4(width, 1, 1, 1);
-        Vector4 scaleFlipVQuad = new Vector4(1, height, 1, 1);
-        Vector4 scaleFlipMQuad = new Vector4(width, height, 1, 1);
-
-        Vector4[] scalesAndFlips = new Vector4[]
-        {
-            scaleFlipCQuad,
-            scaleFlipHQuad,
-            scaleFlipCQuad,
-
-            scaleFlipVQuad,
-            scaleFlipMQuad,
-            scaleFlipVQuad,
-
-            scaleFlipCQuad,
-            scaleFlipHQuad,
-            scaleFlipCQuad
-        };
         for (int i = 0; i < atlas.slicedSprites.Length; i++)
         {
             SliceSprite sliceSprite = atlas.slicedSprites[i];
@@ -82,16 +67,16 @@ public class ParticleAtlas : ScriptableObject
             Vector4[] worldPivotsAndSizes = new Vector4[]
             {
                 new Vector4(0, 0, sliceSprite.worldSlices.x, sliceSprite.worldSlices.z),
-                new Vector4(-sliceSprite.worldSlices.x, 0, centerWorldSliceWidth, sliceSprite.worldSlices.z),
-                new Vector4(-rightColPos, 0, sliceSprite.worldSlices.y, sliceSprite.worldSlices.z),
+                new Vector4(sliceSprite.worldSlices.x, 0, centerWorldSliceWidth, sliceSprite.worldSlices.z),
+                new Vector4(rightColPos, 0, sliceSprite.worldSlices.y, sliceSprite.worldSlices.z),
 
-                new Vector4(0, -sliceSprite.worldSlices.z, sliceSprite.worldSlices.x, centerWorldSliceHeight),
-                new Vector4(-sliceSprite.worldSlices.x, -sliceSprite.worldSlices.z, centerWorldSliceWidth, centerWorldSliceHeight),
-                new Vector4(-rightColPos, -sliceSprite.worldSlices.z, sliceSprite.worldSlices.y, centerWorldSliceHeight),
+                new Vector4(0, sliceSprite.worldSlices.z, sliceSprite.worldSlices.x, centerWorldSliceHeight),
+                new Vector4(sliceSprite.worldSlices.x, sliceSprite.worldSlices.z, centerWorldSliceWidth, centerWorldSliceHeight),
+                new Vector4(rightColPos, sliceSprite.worldSlices.z, sliceSprite.worldSlices.y, centerWorldSliceHeight),
 
-                new Vector4(0, -topRowPos, sliceSprite.worldSlices.x, sliceSprite.worldSlices.w),
-                new Vector4(-sliceSprite.worldSlices.x, -topRowPos, centerWorldSliceWidth, sliceSprite.worldSlices.w),
-                new Vector4(-rightColPos, -topRowPos, sliceSprite.worldSlices.y, sliceSprite.worldSlices.w),
+                new Vector4(0, topRowPos, sliceSprite.worldSlices.x, sliceSprite.worldSlices.w),
+                new Vector4(sliceSprite.worldSlices.x, topRowPos, centerWorldSliceWidth, sliceSprite.worldSlices.w),
+                new Vector4(rightColPos, topRowPos, sliceSprite.worldSlices.y, sliceSprite.worldSlices.w),
             };
 
             for (int j = 0; j < 9; j++)
@@ -99,8 +84,9 @@ public class ParticleAtlas : ScriptableObject
                 ParticleSpriteData newSpriteData = new ParticleSpriteData();
                 newSpriteData.uvSizeAndPos = sliceSprite.uvSizeAndPos[j];
                 newSpriteData.worldPivotAndSize = worldPivotsAndSizes[j];
-                newSpriteData.scaleAndFlip = scalesAndFlips[j];
-                newSpriteDataArray[spriteIndex++] = newSpriteData;
+                newSpriteData.scaleAndFlip = Vector4.one;
+                newSpriteDataArray[spriteIndex] = newSpriteData;
+                spriteIndex++;
             }
             spriteCount++;
         }

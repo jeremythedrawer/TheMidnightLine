@@ -61,7 +61,7 @@ void _ScrollUpdate(uint id : SV_DispatchThreadID)
     float minXPos = _SpawnerMinPos.x - _SpawnerSize.x;
     
     
-    output.x -= velocity * moveInput.y;
+    output.x -= _CamVelocity;
     float width = (_SpawnerMaxPos.x - _SpawnerMinPos.x) + _SpawnerSize.x;
     if (output.x < minXPos)
     {

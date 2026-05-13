@@ -80,7 +80,8 @@ public static class AtlasSpawn
         public int spriteIndex;
         public int spritesPerParticle;
 
-        public float height;
+        public float posY;
+        public float sizeY;
 
         public bool isDying;
         public bool isAlive;

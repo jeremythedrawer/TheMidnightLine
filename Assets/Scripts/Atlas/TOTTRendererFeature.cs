@@ -222,7 +222,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     if (posData.argsBuffer == null) continue;
                     
                     argsSpawn[1] = (uint)(posData.particleCount * posData.spritesPerParticle);
-                    Debug.Log((uint)(posData.particleCount * posData.spritesPerParticle));
                     posData.argsBuffer.SetData(argsSpawn);
 
                     switch(particleAtlas.particleType)
