@@ -81,7 +81,9 @@ public static class AtlasSpawn
         public int spritesPerParticle;
 
         public float posY;
-        public float sizeY;
+        public float scaleY;
+
+        public Vector2Int prevDepthIndices;
 
         public bool isDying;
         public bool isAlive;
@@ -96,6 +98,7 @@ public static class AtlasSpawn
 
     [Serializable] public struct SpawnComputeData
     {
+        public ParticleType particleType;
         public ComputeShader compute;
         public Material material;
 
@@ -103,10 +106,14 @@ public static class AtlasSpawn
         public ComputeBuffer moveInputBuffer;
         public ComputeBuffer outputBuffer;
         public ComputeBuffer depthInputBuffer;
+        public ComputeBuffer heightInputBuffer;
+        public ComputeBuffer prevIndicesInputsBuffer;
 
         public Vector2Int[] moveInputs;
         public Vector4[] depthInputs;
-  
+        public float[] heightInputs;
+        public Vector2Int[] prevIndicesInputs;
+
         public int initKernel;
         public int updateKernel;
         public int groupSize;

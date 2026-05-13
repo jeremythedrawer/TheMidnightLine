@@ -6,6 +6,8 @@
 RWStructuredBuffer<float4> _ScrollOutput;
 RWStructuredBuffer<uint2> _MoveInput;
 RWStructuredBuffer<float4> _DepthInput;
+RWStructuredBuffer<float> _HeightInput;
+RWStructuredBuffer<float4> _PrevIndicesInput;
 
 float3 _SpawnerMinPos;
 float3 _SpawnerMaxPos;
@@ -37,9 +39,24 @@ void _ScrollInit(uint id : SV_DispatchThreadID)
     
     
     output.z = _SpawnerMinPos.z + depthInput.x;
-    output.x = _SpawnerMinPos.x + (((float) id % 2) * _SpawnerSize.x);
-    output.y = 0;
-    output.w = 1 - ((_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z);
+    
+    
+    if (_Init == 0)
+    {
+        output.x = _SpawnerMinPos.x + (((float) id % 2) * _SpawnerSize.x);
+    }
+    else
+    {        
+        uint2 prevIndices = _PrevIndicesInput[id];
+        float4 prevOutput = _ScrollOutput[prevIndices.x];
+        float4 prevPrevOutput = _ScrollOutput[prevIndices.y];   
+        
+        float rightXPos = max(prevOutput.x, prevPrevOutput.x);
+        
+        output.x = (rightXPos + _SpawnerSize.x) +(((float) id % 2) * _SpawnerSize.x);
+    }
+    output.y = _HeightInput[id];
+    output.w = ((_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z);
     
     
     moveInput.y = 1;
@@ -61,7 +78,6 @@ void _ScrollUpdate(uint id : SV_DispatchThreadID)
     float minXPos = _SpawnerMinPos.x - _SpawnerSize.x;
     
     
-    output.x -= _CamVelocity;
     float width = (_SpawnerMaxPos.x - _SpawnerMinPos.x) + _SpawnerSize.x;
     if (output.x < minXPos)
     {
@@ -77,5 +93,6 @@ void _ScrollUpdate(uint id : SV_DispatchThreadID)
         }
     }
     
+    output.x -= velocity * moveInput.y;
     _ScrollOutput[id] = output;
 }

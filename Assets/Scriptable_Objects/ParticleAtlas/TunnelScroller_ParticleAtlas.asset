@@ -18,18 +18,60 @@ MonoBehaviour:
   - ticketCheckStart: 0
     ticketCheckEnd: 1
     particleCount: 2
-    minParticleIndex: 2
-    maxParticleIndex: 3
+    minParticleIndex: 0
+    maxParticleIndex: 1
     widthType: 1
-    depth: 27
+    depth: 32
     depthSize: 1
     spriteIndex: 20
     spritesPerParticle: 9
-    posY: -0.2
-    sizeY: 6.71
+    posY: -1.9
+    sizeY: 4.09
     isDying: 0
     isAlive: 0
-  posDataIndexOffset: 1
+  - ticketCheckStart: 0
+    ticketCheckEnd: 1
+    particleCount: 2
+    minParticleIndex: 2
+    maxParticleIndex: 3
+    widthType: 1
+    depth: 31
+    depthSize: 1
+    spriteIndex: 2
+    spritesPerParticle: 9
+    posY: 1.9
+    sizeY: 3.81
+    isDying: 0
+    isAlive: 0
+  - ticketCheckStart: 0
+    ticketCheckEnd: 1
+    particleCount: 2
+    minParticleIndex: 4
+    maxParticleIndex: 5
+    widthType: 2
+    depth: 29
+    depthSize: 1
+    spriteIndex: 1
+    spritesPerParticle: 1
+    posY: -3.9
+    sizeY: 1
+    isDying: 0
+    isAlive: 0
+  - ticketCheckStart: 0
+    ticketCheckEnd: 1
+    particleCount: 2
+    minParticleIndex: 6
+    maxParticleIndex: 7
+    widthType: 1
+    depth: 30
+    depthSize: 1
+    spriteIndex: 11
+    spritesPerParticle: 9
+    posY: 4.8
+    sizeY: 1
+    isDying: 0
+    isAlive: 0
+  posDataIndexOffset: 4
   spriteCount: 5
   isCompleted: 0
   spriteData:
@@ -38,7 +80,7 @@ MonoBehaviour:
     scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.29736328, y: 0.037841797, z: 0, w: 0}
     worldPivotAndSize: {x: 0, y: 0, z: 6.766667, w: 0.8611111}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+    scaleAndFlip: {x: 19.950739, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.06640625, y: 0.03515625, z: 0.0041503906, w: 0.90112305}
     worldPivotAndSize: {x: 0, y: 0, z: 1.511111, w: 0.8}
     scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
@@ -94,29 +136,29 @@ MonoBehaviour:
     worldPivotAndSize: {x: 16.688889, y: 1.2166667, z: 5.8444443, w: 0.46666664}
     scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0, y: 0.0234375, z: 0.10644531, w: 0.5280762}
-    worldPivotAndSize: {x: 0, y: -1.8000002, z: 0, w: 0.5333333}
+    worldPivotAndSize: {x: 0, y: 0, z: 0, w: 0.5333333}
     scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.89331055, y: 0.0234375, z: 0.10644531, w: 0.5280762}
-    worldPivotAndSize: {x: 0, y: -1.8000002, z: 20.327778, w: 0.5333333}
-    scaleAndFlip: {x: 6.6408854, y: 1, z: 1, w: 1}
+    worldPivotAndSize: {x: 0, y: 0, z: 20.327778, w: 0.5333333}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.00024414388, y: 0.0234375, z: 0.99975586, w: 0.5280762}
-    worldPivotAndSize: {x: 134.99445, y: -1.8000002, z: 0.0055556297, w: 0.5333333}
+    worldPivotAndSize: {x: 20.327778, y: 0, z: 0.0055556297, w: 0.5333333}
     scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0, y: 0.15600584, z: 0.10644531, w: 0.5515137}
-    worldPivotAndSize: {x: 0, y: -1.2666668, z: 0, w: 3.55}
-    scaleAndFlip: {x: 1, y: 6.71, z: 1, w: 1}
+    worldPivotAndSize: {x: 0, y: 0.5333333, z: 0, w: 3.55}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.89331055, y: 0.15600584, z: 0.10644531, w: 0.5515137}
-    worldPivotAndSize: {x: 0, y: -1.2666668, z: 20.327778, w: 3.55}
-    scaleAndFlip: {x: 6.6408854, y: 6.71, z: 1, w: 1}
+    worldPivotAndSize: {x: 0, y: 0.5333333, z: 20.327778, w: 3.55}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.00024414388, y: 0.15600584, z: 0.99975586, w: 0.5515137}
-    worldPivotAndSize: {x: 134.99445, y: -1.2666668, z: 0.0055556297, w: 3.55}
-    scaleAndFlip: {x: 1, y: 6.71, z: 1, w: 1}
+    worldPivotAndSize: {x: 20.327778, y: 0.5333333, z: 0.0055556297, w: 3.55}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0, y: 0.09521485, z: 0.10644531, w: 0.70751953}
-    worldPivotAndSize: {x: 0, y: 22.553833, z: 0, w: 2.1666667}
+    worldPivotAndSize: {x: 0, y: 4.083333, z: 0, w: 2.1666667}
     scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.89331055, y: 0.09521485, z: 0.10644531, w: 0.70751953}
-    worldPivotAndSize: {x: 0, y: 22.553833, z: 20.327778, w: 2.1666667}
-    scaleAndFlip: {x: 6.6408854, y: 1, z: 1, w: 1}
+    worldPivotAndSize: {x: 0, y: 4.083333, z: 20.327778, w: 2.1666667}
+    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.00024414388, y: 0.09521485, z: 0.99975586, w: 0.70751953}
-    worldPivotAndSize: {x: 134.99445, y: 22.553833, z: 0.0055556297, w: 2.1666667}
+    worldPivotAndSize: {x: 20.327778, y: 4.083333, z: 0.0055556297, w: 2.1666667}
     scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}

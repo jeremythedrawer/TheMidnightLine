@@ -237,6 +237,16 @@ public class AtlasTripEditor : EditorWindow
                     particleDataList.RemoveAt(selectedPosDataIndex);
                     selectedParticleAtlas.posData = particleDataList.ToArray();
                     selectedPosDataIndex = Mathf.Clamp(selectedPosDataIndex - 1, 0, selectedParticleAtlas.posData.Length - 1);
+
+                    if (selectedParticleAtlas.posData.Length > 0)
+                    {
+                        ParticlePosData posData = selectedParticleAtlas.posData[selectedPosDataIndex];
+
+                        selectedParticleCount = posData.particleCount;
+                        selectedsizeY = posData.scaleY;
+                        selectedYPos = posData.posY;
+                        selectedSpriteIndex = posData.spriteIndex;
+                    }
                 }
             }
 
@@ -247,7 +257,7 @@ public class AtlasTripEditor : EditorWindow
     }
     private void DrawThirdHeader()
     {
-        if (trip == null || selectedParticleAtlas == null || selectedParticleAtlas.posData.Length == 0) return;
+        if (trip == null || selectedParticleAtlas == null || selectedParticleAtlas.posData.Length == 0 || selectedPosDataIndex == -1) return;
 
         EditorGUI.BeginChangeCheck();
         EditorGUILayout.BeginHorizontal(horizontalGUI);
@@ -286,6 +296,7 @@ public class AtlasTripEditor : EditorWindow
         if (trip == null || trip.stationsDataArray.Length == 0) return;
 
         Event e = Event.current;
+        bool clickedBar = false;
 
         Vector2 vertLineTop = new Vector2();
         Vector2 vertLineBottom = new Vector2();
@@ -505,10 +516,13 @@ public class AtlasTripEditor : EditorWindow
                             }
                             GUI.EndGroup();
 
+
                             if (e.type == EventType.MouseDown && barRect.Contains(e.mousePosition))
                             {
                                 selectedParticlAtlasIndex = i;
                                 selectedPosDataIndex = j;
+
+                                clickedBar = true;
 
                                 int mouseTicketXPos = (int)((e.mousePosition.x - graphRect.xMin) / totalTicketCheckXIncrement);
                                 int mouseDepthYPos = (int)((e.mousePosition.y - graphRect.yMin) / graphRowHeight);
@@ -527,7 +541,7 @@ public class AtlasTripEditor : EditorWindow
                                 selectedSpriteIndex = posData.widthType == ParticleWidthType.Sliced ? baseIndex + ((posData.spriteIndex - baseIndex) / 8) : posData.spriteIndex;
                                 selectedParticleAtlas = trip.particleAtlasArray[selectedParticlAtlasIndex];
                                 selectedParticleCount = posData.particleCount;
-                                selectedsizeY = posData.sizeY;
+                                selectedsizeY = posData.scaleY;
                                 selectedYPos = posData.posY;
                             }
 
@@ -554,7 +568,7 @@ public class AtlasTripEditor : EditorWindow
                             posData.spritesPerParticle = spriteCount;
                             posData.widthType = widthType;
                             posData.particleCount = selectedParticleCount;
-                            posData.sizeY = selectedsizeY;
+                            posData.scaleY = selectedsizeY;
                             switch (posData.depth)
                             {
                                 case TRAIN_LINE_DEPTH:
@@ -578,13 +592,19 @@ public class AtlasTripEditor : EditorWindow
                             {
                                 case ParticleWidthType.Tiled:
                                 {
-                                    for (int k = 0; k < posData.spritesPerParticle; k++)
-                                    {
-                                        ParticleSpriteData particleSpriteData = particleAtlas.spriteData[posData.spriteIndex + k];
-                                        particleSpriteData.scaleAndFlip.x = spawnData.bounds.size.x / particleSpriteData.worldPivotAndSize.z;
-                                        particleSpriteData.scaleAndFlip.y = posData.sizeY;
-                                        particleAtlas.spriteData[posData.spriteIndex + k] = particleSpriteData;
-                                    }
+                                    ParticleSpriteData newSpriteData = particleAtlas.spriteData[posData.spriteIndex];
+
+                                    SimpleSprite sprite = particleAtlas.atlas.simpleSprites[posData.spriteIndex];
+                                    newSpriteData.uvSizeAndPos = sprite.uvSizeAndPos;
+
+                                    float scaleX = spawnData.bounds.size.x / newSpriteData.worldPivotAndSize.z;
+
+                                    float pivotX = -sprite.uvPivot.x * sprite.worldSize.x * scaleX;
+                                    float pivotY = -sprite.uvPivot.y * sprite.worldSize.y * posData.scaleY;
+                                    newSpriteData.worldPivotAndSize = new Vector4(pivotX, pivotY, sprite.worldSize.x, sprite.worldSize.y);
+                                    newSpriteData.scaleAndFlip.x = scaleX;
+                                    newSpriteData.scaleAndFlip.y = posData.scaleY;
+                                    particleAtlas.spriteData[posData.spriteIndex] = newSpriteData;
                                 }
                                 break;
 
@@ -594,28 +614,16 @@ public class AtlasTripEditor : EditorWindow
                                     ParticleSpriteData centerSprite = particleAtlas.spriteData[posData.spriteIndex + 4];
                                     ParticleSpriteData rightSprite = particleAtlas.spriteData[posData.spriteIndex + 5];
                                     float boundWidth = (spawnData.bounds.size.x - leftSprite.worldPivotAndSize.z - rightSprite.worldPivotAndSize.z) / centerSprite.worldPivotAndSize.z;
-                                    Vector4[] sliceScaleAndFlipArray = GetScaleAndFlipSliceNineSliceArray(boundWidth, posData.sizeY);
-
-                                    //int lastpriteIndex = posData.spriteIndex + posData.spritesPerParticle;
-                                    //Vector4[] slicePivotAndSizeArray = new Vector4[posData.spritesPerParticle];
-                                    //for (int k = 0; k < posData.spritesPerParticle; k++)
-                                    //{
-                                    //    Vector4 slicePivotAndSize = particleAtlas.spriteData[posData.spriteIndex + k].worldPivotAndSize;
-                                    //    slicePivotAndSize.y += posData.posY;
-                                    //    slicePivotAndSizeArray[k] = slicePivotAndSize;
-                                    //}
-
-                                    // slicePivotAndSizeArray = SetNewWorldPivotsNineSliceArray(boundWidth, posData.sizeY, slicePivotAndSizeArray);
+                                    Vector4[] sliceScaleAndFlipArray = GetScaleAndFlipSliceNineSliceArray(boundWidth, posData.scaleY);
 
                                     int sliceSpriteIndex = (posData.spriteIndex - particleAtlas.atlas.simpleSprites.Length) / 9;
                                     
                                     SliceSprite sliceSprite = particleAtlas.atlas.slicedSprites[sliceSpriteIndex];
-                                    Debug.Log(sliceSpriteIndex);
                                     float centerWorldSliceWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
                                     float centerWorldSliceHeight = sliceSprite.sprite.worldSize.y - sliceSprite.worldSlices.z - sliceSprite.worldSlices.w;
 
                                     float rightColPos = sliceSprite.worldSlices.x + (centerWorldSliceWidth * boundWidth);
-                                    float topRowPos = sliceSprite.worldSlices.z + (centerWorldSliceHeight * posData.sizeY);
+                                    float topRowPos = sliceSprite.worldSlices.z + (centerWorldSliceHeight * posData.scaleY);
 
                                     Vector4[] worldPivotsAndSizes = new Vector4[]
                                     {
@@ -639,7 +647,6 @@ public class AtlasTripEditor : EditorWindow
                                         newSpriteData.uvSizeAndPos = sliceSprite.uvSizeAndPos[k];
 
                                         Vector4 worldPivotsAndSize = worldPivotsAndSizes[k];
-                                        worldPivotsAndSize.y += posData.posY;
 
                                         newSpriteData.worldPivotAndSize = worldPivotsAndSize;
                                         newSpriteData.scaleAndFlip = sliceScaleAndFlipArray[k];
@@ -688,6 +695,12 @@ public class AtlasTripEditor : EditorWindow
                         }
                     }
                 }
+
+                if (e.type == EventType.MouseDown && !clickedBar)
+                {
+                    selectedPosDataIndex = -1;
+                    selectedParticlAtlasIndex = -1;
+                }
                 Handles.EndGUI();
             }
             GUI.EndScrollView();
@@ -714,10 +727,41 @@ public class AtlasTripEditor : EditorWindow
         for (int i = 0; i < trip.particleAtlasArray.Length; i++)
         {
             ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
-            particleAtlas.posData = particleAtlas.posData.OrderBy(p => p.ticketCheckStart).ToArray();
+            particleAtlas.posData = particleAtlas.posData.OrderBy(p => p.ticketCheckStart).ThenBy(p => p.depth).ToArray();
         }
         SetParticleIndices(ParticleType.Zone, ZONE_PARTICLE_COUNT);
         SetParticleIndices(ParticleType.Scroll, SCROLL_PARTICLE_COUNT);
+
+        for (int i = 0; i < trip.particleAtlasArray.Length; i++)
+        {
+            ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
+
+            for (int j = 0; j < particleAtlas.posData.Length; j++)
+            {
+                ParticlePosData posData = particleAtlas.posData[j];
+                posData.prevDepthIndices = new Vector2Int(-1, -1);
+                int lastestTicketStart = 0;
+                ParticlePosData prevPosData = default;
+                for(int k = 0; k < trip.particleAtlasArray.Length;  k++)
+                {
+                    ParticleAtlas otherParticleAtlas = trip.particleAtlasArray[k];
+
+                    for(int l = 0; l < otherParticleAtlas.posData.Length; l++)
+                    {
+                        ParticlePosData otherPosData = otherParticleAtlas.posData[l];
+
+                        if (otherPosData.ticketCheckStart >= posData.ticketCheckStart) continue;
+                        if (otherPosData.depth != posData.depth) continue;
+                        if (otherPosData.ticketCheckStart < lastestTicketStart) continue;
+
+                        lastestTicketStart = otherPosData.ticketCheckStart;
+                        prevPosData = otherPosData;
+                    }
+                }
+                posData.prevDepthIndices = new Vector2Int(prevPosData.minParticleIndex, prevPosData.maxParticleIndex);
+                particleAtlas.posData[j] = posData;
+            }
+        }
         AssetDatabase.SaveAssets();
     }
     private void SetParticleIndices(ParticleType particleType, int maxParticleCount)
@@ -737,7 +781,7 @@ public class AtlasTripEditor : EditorWindow
                 {
                     ParticlePosData posData = particleAtlas.posData[k];
 
-                    if (posData.ticketCheckStart != i) break;
+                    if (posData.ticketCheckStart != i) continue;
 
                     maxParticle += (int)posData.particleCount;
                     maxParticle %= maxParticleCount;

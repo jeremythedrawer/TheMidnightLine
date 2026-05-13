@@ -20,11 +20,6 @@ public class ParticleAtlas : ScriptableObject
     public ParticleSpriteData[] spriteData;
     public GraphicsBuffer spriteDataBuffer;
 
-    private void OnValidate()
-    {
-        SetSpriteData();
-    }
-
     public void SetSpriteData()
     {
         if (atlas == null)
@@ -32,7 +27,6 @@ public class ParticleAtlas : ScriptableObject
             spriteData = null;
             return;
         }
-
         float width = 1;
         float height = 1;
 
@@ -47,7 +41,10 @@ public class ParticleAtlas : ScriptableObject
             ParticleSpriteData newSpriteData = new ParticleSpriteData();
             SimpleSprite sprite = atlas.simpleSprites[i];
             newSpriteData.uvSizeAndPos = sprite.uvSizeAndPos;
-            newSpriteData.worldPivotAndSize = new Vector4(0, 0, sprite.worldSize.x, sprite.worldSize.y);
+
+            float pivotX = sprite.uvPivot.x * sprite.worldSize.x;
+            float pivotY = sprite.uvPivot.y * sprite.worldSize.y;
+            newSpriteData.worldPivotAndSize = new Vector4(pivotX, pivotY, sprite.worldSize.x, sprite.worldSize.y);
             newSpriteData.scaleAndFlip = new Vector4(width, height, 1, 1);
             newSpriteDataArray[spriteIndex] = newSpriteData;
             spriteIndex++;
@@ -92,5 +89,23 @@ public class ParticleAtlas : ScriptableObject
         }
 
         spriteData = newSpriteDataArray;
+    }
+}
+
+[CustomEditor(typeof(ParticleAtlas))]
+public class ParticleAtlasEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        ParticleAtlas particleAtlas = (ParticleAtlas)target;
+
+        if (GUILayout.Button("Set Sprite Data"))
+        {
+            particleAtlas.SetSpriteData();
+
+            EditorUtility.SetDirty(particleAtlas);
+        }
     }
 }

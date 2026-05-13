@@ -7,6 +7,8 @@
 RWStructuredBuffer<float4> _ZoneOutput;
 RWStructuredBuffer<uint2> _MoveInput;
 RWStructuredBuffer<float4> _DepthInput;
+RWStructuredBuffer<float> _HeightInput;
+
 
 float3 _SpawnerMinPos;
 float3 _SpawnerMaxPos;
@@ -43,7 +45,7 @@ void _ZoneInit(uint id : SV_DispatchThreadID)
     float size = depthInput.z * density;
     output.z = startPos + size;
     
-    output.w = 1 - ((_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z);
+    output.w = ((_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z);
     
     
     if (_Init == 0)
@@ -51,7 +53,7 @@ void _ZoneInit(uint id : SV_DispatchThreadID)
         float rand01 = HashIntTo01Float(id);
         output.x = _SpawnerMinPos.x + _SpawnerSize.x * rand01;
     }
-    output.y = 0;
+    output.y = _HeightInput[id];
     
     moveInput.y = 1;
     _MoveInput[id] = moveInput;
