@@ -22,7 +22,7 @@ public class TrainController : MonoBehaviour
     public TrainStates curState;
     public bool closingSlideDoors;
     public int curStationIndex;
-
+    public float metersTravelled;
 
     public static Carriage[] allCarriages;
     
@@ -204,6 +204,9 @@ public class TrainController : MonoBehaviour
             case TrainStates.Accelerating:
             {
                 stats.curVelocity = IncreaseVelocity(stats.curVelocity, stats.targetVelocity, settings.acceleration);
+                metersTravelled += stats.curVelocity * Time.fixedDeltaTime;
+                metersTravelled %= 1000;
+                Shader.SetGlobalFloat("_MetersTravelled", metersTravelled);
             }
             break;
 
@@ -214,11 +217,17 @@ public class TrainController : MonoBehaviour
                     stats.targetStopPosition = nextStation.transform.position.x;
                 }
                 stats.curVelocity = DecreaseVelocity(stats.curVelocity, stats.targetVelocity, stats.prevPeakVelocity, settings.deceleration, stats.targetStopPosition);
+                metersTravelled += stats.curVelocity * Time.fixedDeltaTime;
+                metersTravelled %= 1000;
+                Shader.SetGlobalFloat("_MetersTravelled", metersTravelled);
             }
             break;
 
             case TrainStates.AtMaxSpeed:
             {
+                metersTravelled += stats.curVelocity * Time.fixedDeltaTime;
+                metersTravelled %= 1000;
+                Shader.SetGlobalFloat("_MetersTravelled", metersTravelled);
             }
             break;
         }

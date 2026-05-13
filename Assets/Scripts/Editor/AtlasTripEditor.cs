@@ -24,7 +24,7 @@ public class AtlasTripEditor : EditorWindow
 
     static GUIStyle stationLabel;
     static GUIStyle depthLabel;
-    static GUIStyle particleAvailCountLabel;
+    static GUIStyle graphHeader_style;
 
     static Rect fullRect;
     static Rect scrollViewRect;
@@ -35,7 +35,8 @@ public class AtlasTripEditor : EditorWindow
     static Vector2 graphSize;
     static Vector2 scroll;
 
-    static int[] particleAvailCount_array;
+    static int[] particleAvailCount_zone_array;
+    static int[] particleAvailCount_scroll_array;
 
     static int totalTicketChecks;
     static int selectedPosDataIndex;
@@ -55,8 +56,10 @@ public class AtlasTripEditor : EditorWindow
     public ParticleAtlas selectedParticleAtlas;
     public int selectedSpriteIndex;
     public int selectedParticleCount;
+    public float[] selectedDayNightValues;
     public float selectedsizeY;
     public float selectedYPos;
+
 
     public ParticleWidthType selectedScrollSpriteType;
 
@@ -109,7 +112,7 @@ public class AtlasTripEditor : EditorWindow
 
         fullRect.height += PADDING * 4;
 
-        scrollViewRect = new Rect(0, graphPos.y + 50, position.width, position.height);
+        scrollViewRect = new Rect(0, graphPos.y + 100, position.width, position.height);
         graphRect = new Rect(graphPos, graphSize);
         
         stationRectPosY = graphPos.y - STATION_RECT_Y_OFFSET;
@@ -128,11 +131,11 @@ public class AtlasTripEditor : EditorWindow
         depthLabel.normal.textColor = Color.white;
         depthLabel.fontSize = 16;
 
-        particleAvailCountLabel = new GUIStyle();
-        particleAvailCountLabel.alignment = TextAnchor.LowerLeft;
-        particleAvailCountLabel.normal.textColor = Color.white;
-        particleAvailCountLabel.fontSize = 16;
-        particleAvailCountLabel.fontStyle = FontStyle.Normal;
+        graphHeader_style = new GUIStyle();
+        graphHeader_style.alignment = TextAnchor.LowerLeft;
+        graphHeader_style.normal.textColor = Color.white;
+        graphHeader_style.fontSize = 16;
+        graphHeader_style.fontStyle = FontStyle.Normal;
     }
     private void GUISetUp()
     {
@@ -144,24 +147,45 @@ public class AtlasTripEditor : EditorWindow
             totalTicketChecks += station.ticketsToCheckBeforeSpawn;
         }
 
-        particleAvailCount_array = new int[totalTicketChecks];
+        particleAvailCount_zone_array = new int[totalTicketChecks];
+        particleAvailCount_scroll_array = new int[totalTicketChecks];
 
-        Array.Fill(particleAvailCount_array, ZONE_PARTICLE_COUNT);
+        Array.Fill(particleAvailCount_zone_array, ZONE_PARTICLE_COUNT);
+        Array.Fill(particleAvailCount_scroll_array, SCROLL_PARTICLE_COUNT);
 
-        for (int i = 0; i < particleAvailCount_array.Length; i++)
+        for (int i = 0; i < particleAvailCount_zone_array.Length; i++)
         {
             for (int j = 0; j < trip.particleAtlasArray.Length; j++)
             {
                 ParticleAtlas particleAtlas = trip.particleAtlasArray[j];
 
-                for (int k = 0; k < particleAtlas.posData.Length; k++)
+                switch(particleAtlas.particleType)
                 {
-                    ParticlePosData posData = particleAtlas.posData[k];
-
-                    if (posData.ticketCheckStart <= i && posData.ticketCheckEnd > i)
+                    case ParticleType.Scroll:
                     {
-                        particleAvailCount_array[i] -= posData.particleCount;
+                        for (int k = 0; k < particleAtlas.posData.Length; k++)
+                        {
+                            ParticlePosData posData = particleAtlas.posData[k];
+                            if (posData.ticketCheckStart <= i && posData.ticketCheckEnd > i)
+                            {
+                                particleAvailCount_scroll_array[i] -= posData.particleCount;
+                            }
+                        }
                     }
+                    break;
+
+                    case ParticleType.Zone:
+                    {
+                        for (int k = 0; k < particleAtlas.posData.Length; k++)
+                        {
+                            ParticlePosData posData = particleAtlas.posData[k];
+                            if (posData.ticketCheckStart <= i && posData.ticketCheckEnd > i)
+                            {
+                                particleAvailCount_zone_array[i] -= posData.particleCount;
+                            }
+                        }
+                    }
+                    break;
                 }
             }
         }
@@ -267,7 +291,7 @@ public class AtlasTripEditor : EditorWindow
             {
                 case ParticleType.Zone:
                 {
-                    selectedParticleCount = EditorGUILayout.IntSlider(new GUIContent("Particle Count") , selectedParticleCount, 1, particleAvailCount_array[selectedPosData.ticketCheckStart], headerGUI);
+                    selectedParticleCount = EditorGUILayout.IntSlider(new GUIContent("Particle Count") , selectedParticleCount, 1, particleAvailCount_zone_array[selectedPosData.ticketCheckStart], headerGUI);
                 }
                 break;
 
@@ -309,6 +333,25 @@ public class AtlasTripEditor : EditorWindow
         horLineRight.x = graphRect.xMax;
 
         float totalTicketCheckXIncrement = (1 / (float)totalTicketChecks) * graphSize.x;
+
+        if (trip.dayNightValues == null)
+        {
+            trip.dayNightValues = new float[totalTicketChecks];
+        }
+        if (totalTicketChecks > trip.dayNightValues.Length )
+        {
+            List<float> dayNightValuesList = trip.dayNightValues.ToList();
+            dayNightValuesList.AddRange(new float[totalTicketChecks - trip.dayNightValues.Length]);
+            trip.dayNightValues = dayNightValuesList.ToArray();
+        }
+        else if (totalTicketChecks < trip.dayNightValues.Length)
+        {
+            List<float> dayNightValuesList = trip.dayNightValues.ToList();
+            dayNightValuesList.RemoveRange(trip.dayNightValues.Length - 1, trip.dayNightValues.Length - totalTicketChecks);
+            trip.dayNightValues = dayNightValuesList.ToArray();
+        }
+
+        selectedDayNightValues = trip.dayNightValues;
         EditorGUILayout.BeginVertical();
         {
             Handles.BeginGUI();
@@ -321,10 +364,20 @@ public class AtlasTripEditor : EditorWindow
 
                     if (i < totalTicketChecks)
                     {
-                        string particleAvailCount_string = particleAvailCount_array[i].ToString();
-                        Vector2 particleAvailLabelSize = particleAvailCountLabel.CalcSize(new GUIContent(particleAvailCount_string));
-                        Rect particleAvailLabelRect = new Rect(posX - (particleAvailLabelSize.x * 0.5f), vertLineTop.y + particleAvailLabelSize.y, particleAvailLabelSize.x, particleAvailLabelSize.y);
-                        GUI.Label(particleAvailLabelRect, particleAvailCount_string, particleAvailCountLabel);
+                        string particleAvailCount_zone_string = particleAvailCount_zone_array[i].ToString();
+                        Vector2 particleAvailCountSize_zone = graphHeader_style.CalcSize(new GUIContent(particleAvailCount_zone_string));
+                        Rect particleAvailCountRect_zone = new Rect(posX - (particleAvailCountSize_zone.x * 0.5f), vertLineTop.y + particleAvailCountSize_zone.y, particleAvailCountSize_zone.x, particleAvailCountSize_zone.y);
+                        GUI.Label(particleAvailCountRect_zone, particleAvailCount_zone_string, graphHeader_style);
+
+                        string particleAvailCount_scroll_string = particleAvailCount_scroll_array[i].ToString();
+                        Vector2 particleAvailCountSize_scroll = graphHeader_style.CalcSize(new GUIContent(particleAvailCount_scroll_string));
+                        Rect particleAvailCountRect_scroll = new Rect(posX - (particleAvailCountSize_scroll.x * 0.5f), vertLineTop.y + particleAvailCountSize_scroll.y + particleAvailCountSize_zone.y, particleAvailCountSize_scroll.x, particleAvailCountSize_scroll.y);
+                        GUI.Label(particleAvailCountRect_scroll, particleAvailCount_scroll_string, graphHeader_style);
+
+
+                        Rect dayNightSliderRect = new Rect(posX - 50, particleAvailCountRect_scroll.yMin + 30, 200, 18);
+                        EditorGUI.BeginChangeCheck();
+                        selectedDayNightValues[i] = EditorGUI.Slider(dayNightSliderRect, GUIContent.none, selectedDayNightValues[i], 0, 1);
                     }
 
                     StationSO station = trip.stationsDataArray[stationIndex];
@@ -342,6 +395,29 @@ public class AtlasTripEditor : EditorWindow
                         ticketChecks = 0;
                     }
                     ticketChecks++;
+
+                    if (i == totalTicketChecks)
+                    {
+                        string zoneParticlesLeft_string = "Zone Particles Left";
+                        Vector2 zoneParticleAvailLabelSize = graphHeader_style.CalcSize(new GUIContent(zoneParticlesLeft_string));
+                        Rect zoneParticleAvailLabelRect = new Rect(posX - (zoneParticleAvailLabelSize.x * 0.5f), vertLineTop.y + zoneParticleAvailLabelSize.y, zoneParticleAvailLabelSize.x, zoneParticleAvailLabelSize.y);
+                        GUI.Label(zoneParticleAvailLabelRect, zoneParticlesLeft_string, graphHeader_style);
+
+                        string scrollParticlesLeft_string = "Scroll Particles Left";
+                        Vector2 scrollParticleAvailLabelSize = graphHeader_style.CalcSize(new GUIContent(scrollParticlesLeft_string));
+                        Rect scrollParticleAvailLabelRect = new Rect(posX - (scrollParticleAvailLabelSize.x * 0.5f), vertLineTop.y + scrollParticleAvailLabelSize.y + zoneParticleAvailLabelSize.y, scrollParticleAvailLabelSize.x, scrollParticleAvailLabelSize.y);
+                        GUI.Label(scrollParticleAvailLabelRect, scrollParticlesLeft_string, graphHeader_style);
+
+                        string dayNightValue_string = "Day Night Values";
+                        Vector2 dayNightLabelSize = graphHeader_style.CalcSize(new GUIContent(dayNightValue_string));
+                        Rect dayNighteAvailLabelRect = new Rect(posX - (dayNightLabelSize.x * 0.5f), vertLineTop.y + dayNightLabelSize.y + scrollParticleAvailLabelSize.y + zoneParticleAvailLabelSize.y, dayNightLabelSize.x, dayNightLabelSize.y);
+                        GUI.Label(dayNighteAvailLabelRect, dayNightValue_string, graphHeader_style);
+                    }
+                }
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    trip.dayNightValues = selectedDayNightValues;
                 }
             }
             Handles.EndGUI();

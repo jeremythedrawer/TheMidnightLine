@@ -10,6 +10,7 @@ using static Train;
 public class SpawnMaster : MonoBehaviour
 {
     const float DELAYED_PARTICLE_QUEUE_TICK = 1f;
+    const float DAY_NIGHT_TRANSITION_TIME = 0.2f;
 
     public SpawnData spawnData;
     public CameraSettingsSO camSettings;
@@ -18,15 +19,21 @@ public class SpawnMaster : MonoBehaviour
     public TrainStatsSO trainStats;
     public SpyStatsSO spyStats;
     public GameEventDataSO gameEventData;
-    
+    public ColorsSO colorSO;
+
     public int nextSpawnIndex;
     public float delayParticleQueueClock;
-
+    public float curDayNightValue;
+    public float targetNightValue;
+    public float prevNightValue;
+    public float dayNightClock;
     public Queue<DelayedParticleData> delayedParticlesQueue;
     private void OnEnable()
     {
         Dispose();
         delayedParticlesQueue = new Queue<DelayedParticleData>();
+        curDayNightValue = colorSO.dayNight;
+        targetNightValue = trip.dayNightValues[0];
 
         InitBoundParameters();
 
@@ -56,6 +63,7 @@ public class SpawnMaster : MonoBehaviour
     {
         UpdateSpawnCompute(ref spawnData.scrollData);
         UpdateSpawnCompute(ref spawnData.zoneData);
+        UpdateDayNightCycle();
         //UpdateDelayedParticleQueue();
         //InitZoneCompute();
         //InitScrollCompute();
@@ -213,6 +221,9 @@ public class SpawnMaster : MonoBehaviour
 
         ReinitSpawnCompute(ref spawnData.zoneData);
         ReinitSpawnCompute(ref spawnData.scrollData);
+
+        prevNightValue = curDayNightValue;
+        targetNightValue = trip.dayNightValues[spyStats.ticketsCheckedTotal];
     }
     private void SwapParticles(ParticleAtlas particleAtlas, ref SpawnComputeData spawnComputeData)
     {
@@ -444,6 +455,13 @@ public class SpawnMaster : MonoBehaviour
         spawnComputeData.outputBuffer?.Release();
         spawnComputeData.outputBuffer = null;
 
+    }
+
+    private void UpdateDayNightCycle()
+    {
+        curDayNightValue = Mathf.Lerp(curDayNightValue, targetNightValue, Time.deltaTime * DAY_NIGHT_TRANSITION_TIME);
+
+        colorSO.dayNight = curDayNightValue;
     }
 #if UNITY_EDITOR
     private void UpdateParticlesEditor()
