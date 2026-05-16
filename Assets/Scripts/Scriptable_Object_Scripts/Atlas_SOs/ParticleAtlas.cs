@@ -17,9 +17,8 @@ public class ParticleAtlas : ScriptableObject
     public bool isCompleted;
 
     [Header("Generated")]
-    public ParticleSpriteData[] spriteData;
+    public ParticleSpritesData[] spriteData;
     public GraphicsBuffer spriteDataBuffer;
-
     public void SetSpriteData()
     {
         if (atlas == null)
@@ -31,21 +30,20 @@ public class ParticleAtlas : ScriptableObject
         float height = 1;
 
         int totalSprites = atlas.simpleSprites.Length + (atlas.slicedSprites.Length * 9);
-        ParticleSpriteData[] newSpriteDataArray = new ParticleSpriteData[totalSprites];
+        ParticleSpritesData[] newSpriteDataArray = new ParticleSpritesData[totalSprites];
 
         int spriteIndex = 0;
 
         spriteCount = 0;
         for (int i = 0; i < atlas.simpleSprites.Length; i++)
         {
-            ParticleSpriteData newSpriteData = new ParticleSpriteData();
+            ParticleSpritesData newSpriteData = new ParticleSpritesData();
             SimpleSprite sprite = atlas.simpleSprites[i];
             newSpriteData.uvSizeAndPos = sprite.uvSizeAndPos;
 
             float pivotX = sprite.uvPivot.x * sprite.worldSize.x;
             float pivotY = sprite.uvPivot.y * sprite.worldSize.y;
             newSpriteData.worldPivotAndSize = new Vector4(pivotX, pivotY, sprite.worldSize.x, sprite.worldSize.y);
-            newSpriteData.scaleAndFlip = new Vector4(width, height, 1, 1);
             newSpriteDataArray[spriteIndex] = newSpriteData;
             spriteIndex++;
             spriteCount++;
@@ -78,10 +76,9 @@ public class ParticleAtlas : ScriptableObject
 
             for (int j = 0; j < 9; j++)
             {
-                ParticleSpriteData newSpriteData = new ParticleSpriteData();
+                ParticleSpritesData newSpriteData = new ParticleSpritesData();
                 newSpriteData.uvSizeAndPos = sliceSprite.uvSizeAndPos[j];
                 newSpriteData.worldPivotAndSize = worldPivotsAndSizes[j];
-                newSpriteData.scaleAndFlip = Vector4.one;
                 newSpriteDataArray[spriteIndex] = newSpriteData;
                 spriteIndex++;
             }

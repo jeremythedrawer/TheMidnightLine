@@ -47,7 +47,7 @@ void _ScrollInit(uint id : SV_DispatchThreadID)
     }
     else
     {        
-        uint2 prevIndices = _PrevIndicesInput[id];
+        float4 prevIndices = _PrevIndicesInput[id];
         float4 prevOutput = _ScrollOutput[prevIndices.x];
         float4 prevPrevOutput = _ScrollOutput[prevIndices.y];   
         

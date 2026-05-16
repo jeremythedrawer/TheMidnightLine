@@ -28,16 +28,8 @@ static const float2 QUAD_TRIANGLE_OFFSETS[6] =
     float2(1, 0)
 };
 
-struct ParticleSprites
+struct ParticleSprite
 {
     float4 uvSizeAndPos;
     float4 worldPivotAndSize;
-    float4 scaleAndFlip;
-};
-
-struct ZoneInput
-{
-    float4 uvSizeAndPos;
-    float4 worldPivotAndSize;
-    float4 sliceOffsetAndSize;
 };

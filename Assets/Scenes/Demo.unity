@@ -545,7 +545,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1906852023038626615, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: totalBounds.m_Center.y
-      value: 0.12555552
+      value: -0.4644444
       objectReference: {fileID: 0}
     - target: {fileID: 1906852023038626615, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: totalBounds.m_Center.z
@@ -2330,40 +2330,16 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 186391526444955506, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-      propertyPath: spawnData
-      value: 
-      objectReference: {fileID: 11400000, guid: cb76807a71f74704a94a0f5cfe3b2c50, type: 2}
-    - target: {fileID: 186391526444955506, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-      propertyPath: nextSpawnIndex
-      value: 0
+      propertyPath: dayNightClock
+      value: 0.0771243
       objectReference: {fileID: 0}
     - target: {fileID: 186391526444955506, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-      propertyPath: activeSpawnerCount
-      value: 3
+      propertyPath: prevNightValue
+      value: 1e-44
       objectReference: {fileID: 0}
     - target: {fileID: 186391526444955506, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-      propertyPath: delayParticleQueueClock
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 186391526444955506, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-      propertyPath: 'activeScrollers.Array.data[0]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 186391526444955506, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-      propertyPath: 'activeScrollers.Array.data[1]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 186391526444955506, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-      propertyPath: 'activeScrollers.Array.data[2]'
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 599752083782146398, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 638578981910380985, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
+      propertyPath: curDayNightValue
+      value: 1e-44
       objectReference: {fileID: 0}
     - target: {fileID: 6553536322854344460, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
       propertyPath: m_Name
@@ -2413,20 +2389,8 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 7289410310615507127, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-      propertyPath: m_IsActive
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 599752083782146398, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-    - {fileID: 638578981910380985, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-    - {fileID: 3165114709391801609, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-    - {fileID: 6466628949898588334, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-    - {fileID: 798664790641993266, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-    - {fileID: 1735100797041787753, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-    - {fileID: 2263722114950716112, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
-    - {fileID: 7289410310615507127, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}

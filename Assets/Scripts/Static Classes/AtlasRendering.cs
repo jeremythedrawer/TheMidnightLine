@@ -296,6 +296,25 @@ public static class AtlasRendering
             scaleFlipCQuad
         };
     }
+    public static Vector4[] GetQuadScalesNineSlice(float width, float height, float centerWidth, float centerHeight)
+    {
+        float pivotWidth = (width - 1) * centerWidth;
+        float pivotHeight = (height - 1) * centerHeight;
+        return new Vector4[]
+        {
+            new Vector4(1, 1, 0, 0),
+            new Vector4(width, 1, 0, 0),
+            new Vector4(1, 1, pivotWidth, 0),
+
+            new Vector4(1, height, 0, 0),
+            new Vector4(width, height, 0, 0),
+            new Vector4(1, height, pivotWidth, 0),
+
+            new Vector4(1, 1, 0, pivotHeight),
+            new Vector4(width, 1, 0, pivotHeight),
+            new Vector4(1, 1, pivotWidth, pivotHeight),
+        };
+    }
 
     public static Vector4[] SetNewWorldPivotsNineSliceArray(float width, float height, Vector4[] worldPivotsAndSizes)
     {

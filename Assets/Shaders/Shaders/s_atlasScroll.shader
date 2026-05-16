@@ -24,21 +24,25 @@ Shader "Custom/s_atlasScroll"
 
             struct Varyings
             {
-                float4 positionHCS : SV_POSITION;
-                float2 uv : TEXCOORD0;
-                uint spriteID : TEXCOORD1;
-                uint particleID : TEXCOORD2;
+                float4 positionHCS          : SV_POSITION;
+                float2 uv                   : TEXCOORD0;
+                float4 particle             : TEXCOORD1;
+                float4 quadAndPivotScales   : TEXCOORD2;
+                float4 uvSizeAndPos         : TEXCOORD3;
             };
 
             StructuredBuffer<float4> _Particles;
-            StructuredBuffer<ParticleSprites> _SpriteData;
-
+            StructuredBuffer<ParticleSprite> _SpriteData;
+            StructuredBuffer<float4> _QuadAndPivotScales;
+            
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
             uint _SpriteIndex;
             uint _SpriteCount;
+            uint _SpritesPerParticle;
 
+            uint _QuadScaleCount;
             uint _ParticleOffset;
 
             float _DayNight;
@@ -50,21 +54,21 @@ Shader "Custom/s_atlasScroll"
             {
                 Varyings o;
 
-                uint particleID = floor(instanceID / _SpriteCount) + _ParticleOffset;
+                uint particleID = floor(instanceID / _SpritesPerParticle) + _ParticleOffset;
                 float4 p = _Particles[particleID];
 
-                uint spriteID = _SpriteIndex + (instanceID % _SpriteCount);
+                uint spriteID = _SpriteIndex + (instanceID % _SpritesPerParticle);
+                float4 quadAndPivotScales = _QuadAndPivotScales[instanceID % _QuadScaleCount];
 
-                ParticleSprites s = _SpriteData[spriteID];
+                ParticleSprite s = _SpriteData[spriteID];
 
                 uint quadVertexID = vertexID % 6;
                 float2 objPos = QUAD_TRIANGLE_OFFSETS[vertexID];
 
                 float2 pivot = s.worldPivotAndSize.xy;
                 float2 size = s.worldPivotAndSize.zw;
-                float2 scale = s.scaleAndFlip.xy;
 
-                objPos *= size * scale;
+                objPos *= size;
                 objPos += pivot;
 
                 float3 worldPos = float3(p.xy + objPos, p.z);
@@ -72,21 +76,22 @@ Shader "Custom/s_atlasScroll"
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = QUAD_TRIANGLE_OFFSETS[quadVertexID];
 
-                o.spriteID = spriteID;
-                o.particleID = particleID;
+                o.particle = p;
+                o.quadAndPivotScales = quadAndPivotScales;
+                o.uvSizeAndPos = s.uvSizeAndPos;
                 return o;
             }
 
             half4 frag(Varyings i) : SV_Target
             {
-                ParticleSprites s = _SpriteData[i.spriteID];
-                float4 p = _Particles[i.particleID];
+                float4 p = i.particle;
 
-                float2 scale  = s.scaleAndFlip.xy;
-                float2 uvSize = s.uvSizeAndPos.xy;
-                float2 uvPos = s.uvSizeAndPos.zw;
+                float2 quadScale = i.quadAndPivotScales.xy;
 
-                i.uv *= scale;
+                float2 uvSize = i.uvSizeAndPos.xy;
+                float2 uvPos = i.uvSizeAndPos.zw;
+
+                i.uv *= quadScale;
                 i.uv = frac(i.uv);
                 i.uv *= uvSize;
                 i.uv += uvPos;

@@ -39,6 +39,7 @@ public class SpawnMaster : MonoBehaviour
 
         AtlasSpawn.InitMPBPool();
         AtlasSpawn.InitArgsPool();
+        AtlasSpawn.InitQuadScalePool();
 
         InitZoneCompute();
         InitScrollCompute();
@@ -61,10 +62,10 @@ public class SpawnMaster : MonoBehaviour
     }
     private void Update()
     {
-        UpdateSpawnCompute(ref spawnData.scrollData);
+       // UpdateSpawnCompute(ref spawnData.scrollData);
         UpdateSpawnCompute(ref spawnData.zoneData);
         UpdateDayNightCycle();
-        //UpdateDelayedParticleQueue();
+        UpdateDelayedParticleQueue();
         //InitZoneCompute();
         //InitScrollCompute();
         //InitParticles();
@@ -79,7 +80,7 @@ public class SpawnMaster : MonoBehaviour
     }
     private void UpdateSpawnCompute(ref SpawnComputeData computeData)
     {
-        computeData.compute.SetFloat("_CamVelocity", (camStats.curVelocity.x * Time.deltaTime));
+        computeData.compute.SetFloat("_CamVelocity", (camStats.curVelocity.x));
         if (spyStats.curLocationState != LocationState.Station)
         {
             computeData.compute.SetFloat("_TrainVelocity", (trainStats.curVelocity * Time.deltaTime));
@@ -180,16 +181,11 @@ public class SpawnMaster : MonoBehaviour
             ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
 
             particleAtlas.spriteDataBuffer?.Release();
-            particleAtlas.spriteDataBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, MAX_PARTICLE_SPRITE_DATA_COUNT, PARTICLE_SPRITE_DATA_STRIDE);
-            particleAtlas.spriteDataBuffer.SetData(particleAtlas.spriteData, 0, 0, particleAtlas.spriteData.Length);
-            particleAtlas.posDataIndexOffset = 0;
 
-            //for (int j = 0; j < particleAtlas.posData.Length; j++)
-            //{
-            //    ParticlePosData posData = particleAtlas.posData[j];
-            //    posData.mpb = null;
-            //    particleAtlas.posData[j] = posData;
-            //}
+            particleAtlas.spriteDataBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, particleAtlas.spriteData.Length, PARTICLE_SPRITE_DATA_STRIDE);
+            particleAtlas.spriteDataBuffer.SetData(particleAtlas.spriteData);
+
+            particleAtlas.posDataIndexOffset = 0;
         }
 
         spawnData.active = true;
@@ -252,6 +248,7 @@ public class SpawnMaster : MonoBehaviour
                 }
 
                 ReturnMPB(posData.mpb);
+                ReturnQuadScaleBuffer(posData.quadScaleBuffer);
 
                 if (particleAtlas.posDataIndexOffset == particleAtlas.posData.Length) particleAtlas.isCompleted = true;
             }
@@ -296,14 +293,24 @@ public class SpawnMaster : MonoBehaviour
             }
 
             posData.argsBuffer = GetArgsBuffer();
+            posData.quadScaleBuffer = GetQuadScaleBuffer();
             posData.mpb = GetMPB();
 
             posData.mpb.SetTexture("_AtlasTexture", particleAtlas.atlas.texture);
+            
             posData.mpb.SetBuffer("_SpriteData", particleAtlas.spriteDataBuffer);
+
+            
+            posData.quadScaleBuffer.SetData(posData.quadScales);
+            
+            posData.mpb.SetInt("_QuadScaleCount", posData.quadScales.Length);
+            posData.mpb.SetBuffer("_QuadAndPivotScales", posData.quadScaleBuffer);
+
             posData.mpb.SetInt("_ParticleOffset", posData.minParticleIndex);
             posData.mpb.SetBuffer("_Particles", spawnComputeData.outputBuffer);
+            posData.mpb.SetInt("_SpriteCount", particleAtlas.spriteData.Length);
+            posData.mpb.SetInt("_SpritesPerParticle", posData.spritesPerParticle);
 
-            posData.mpb.SetInt("_SpriteCount", posData.spritesPerParticle);
             posData.mpb.SetInt("_SpriteIndex", posData.spriteIndex);
 
 
@@ -397,7 +404,21 @@ public class SpawnMaster : MonoBehaviour
 
         delayedParticleData.posData.mpb.SetTexture("_AtlasTexture", delayedParticleData.particleAtlas.atlas.texture);
         delayedParticleData.posData.mpb.SetBuffer("_SpriteData", delayedParticleData.particleAtlas.spriteDataBuffer);
-        delayedParticleData.posData.mpb.SetInt("_SpriteCount", delayedParticleData.particleAtlas.spriteCount);
+
+        switch(delayedParticleData.particleAtlas.particleType)
+        {
+            case ParticleType.Zone:
+            {
+                delayedParticleData.posData.mpb.SetInt("_SpriteCount", delayedParticleData.particleAtlas.spriteCount);
+            }
+            break;
+
+            case ParticleType.Scroll:
+            {
+                delayedParticleData.posData.mpb.SetInt("_SpriteCount", delayedParticleData.posData.spritesPerParticle);
+            }
+            break;
+        }        
         delayedParticleData.posData.mpb.SetInt("_ParticleOffset", delayedParticleData.posData.minParticleIndex);
 
         delayedParticleData.posData.mpb.SetBuffer("_Particles", delayedParticleData.spawnComputeData.outputBuffer);
@@ -430,6 +451,8 @@ public class SpawnMaster : MonoBehaviour
             {
                 particleAtlas.posData[j].argsBuffer?.Release();
                 particleAtlas.posData[j].argsBuffer = null;
+                particleAtlas.posData[j].quadScaleBuffer?.Release();
+                particleAtlas.posData[j].quadScaleBuffer = null;
                 particleAtlas.posData[j].isDying = false;
             }
 
