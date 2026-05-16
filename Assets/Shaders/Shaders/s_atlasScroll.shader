@@ -58,18 +58,23 @@ Shader "Custom/s_atlasScroll"
                 float4 p = _Particles[particleID];
 
                 uint spriteID = _SpriteIndex + (instanceID % _SpritesPerParticle);
+                ParticleSprite s = _SpriteData[spriteID];
+                
                 float4 quadAndPivotScales = _QuadAndPivotScales[instanceID % _QuadScaleCount];
 
-                ParticleSprite s = _SpriteData[spriteID];
 
                 uint quadVertexID = vertexID % 6;
                 float2 objPos = QUAD_TRIANGLE_OFFSETS[vertexID];
 
                 float2 pivot = s.worldPivotAndSize.xy;
                 float2 size = s.worldPivotAndSize.zw;
+                float2 quadScale = quadAndPivotScales.xy;
+                float2 pivotScale = quadAndPivotScales.zw;
 
                 objPos *= size;
+                objPos *= quadScale;
                 objPos += pivot;
+                objPos += pivotScale;
 
                 float3 worldPos = float3(p.xy + objPos, p.z);
 
