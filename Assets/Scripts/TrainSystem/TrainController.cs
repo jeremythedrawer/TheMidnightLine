@@ -18,7 +18,7 @@ public class TrainController : MonoBehaviour
     public Carriage[] carriages;
     CancellationTokenSource trainCTS;
     public Station[] stations;
-    public static Station nextStation;
+    public static Station nextStation_instance;
     public TrainStates curState;
     public bool closingSlideDoors;
     public int curStationIndex;
@@ -165,11 +165,11 @@ public class TrainController : MonoBehaviour
             {
                 if (trip.ticketsCheckedSinceLastStation >= trip.nextStation.ticketsToCheckBeforeSpawn)
                 {
-                    nextStation = stations[curStationIndex];
+                    nextStation_instance = stations[curStationIndex];
                     float stationXPos = GetBrakeDistance(stats.curVelocity, settings.deceleration) + TRAIN_WORLD_POS;
-                    nextStation.transform.position = new Vector3(stationXPos, 0, 0);
-                    nextStation.gameObject.SetActive(true);
-                    nextStation.SpawnNPCs();
+                    nextStation_instance.transform.position = new Vector3(stationXPos, 0, 0);
+                    nextStation_instance.gameObject.SetActive(true);
+                    nextStation_instance.SpawnNPCs();
 
                     stats.targetVelocity = 0;
                 }
@@ -212,9 +212,9 @@ public class TrainController : MonoBehaviour
 
             case TrainStates.Decelerating:
             {
-                if (nextStation != null)
+                if (nextStation_instance != null)
                 {
-                    stats.targetStopPosition = nextStation.transform.position.x;
+                    stats.targetStopPosition = nextStation_instance.transform.position.x;
                 }
                 stats.curVelocity = DecreaseVelocity(stats.curVelocity, stats.targetVelocity, stats.prevPeakVelocity, settings.deceleration, stats.targetStopPosition);
                 metersTravelled += stats.curVelocity * Time.fixedDeltaTime;

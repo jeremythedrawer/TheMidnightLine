@@ -14,151 +14,66 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ParticleAtlas
   atlas: {fileID: 11400000, guid: 91a76d1021d06b44e8a05e3ccbdfef68, type: 2}
   particleType: 1
-  posData:
-  - ticketCheckStart: 0
-    ticketCheckEnd: 1
-    particleCount: 2
-    minParticleIndex: 0
-    maxParticleIndex: 1
-    widthType: 1
-    depth: 32
-    depthSize: 1
-    spriteIndex: 20
-    spritesPerParticle: 9
-    posY: -1.9
-    sizeY: 4.09
-    isDying: 0
-    isAlive: 0
-  - ticketCheckStart: 0
-    ticketCheckEnd: 1
-    particleCount: 2
-    minParticleIndex: 2
-    maxParticleIndex: 3
-    widthType: 1
-    depth: 31
-    depthSize: 1
-    spriteIndex: 2
-    spritesPerParticle: 9
-    posY: 1.9
-    sizeY: 3.81
-    isDying: 0
-    isAlive: 0
-  - ticketCheckStart: 0
-    ticketCheckEnd: 1
-    particleCount: 2
-    minParticleIndex: 4
-    maxParticleIndex: 5
-    widthType: 2
-    depth: 29
-    depthSize: 1
-    spriteIndex: 1
-    spritesPerParticle: 1
-    posY: -3.9
-    sizeY: 1
-    isDying: 0
-    isAlive: 0
-  - ticketCheckStart: 0
-    ticketCheckEnd: 1
-    particleCount: 2
-    minParticleIndex: 6
-    maxParticleIndex: 7
-    widthType: 1
-    depth: 30
-    depthSize: 1
-    spriteIndex: 11
-    spritesPerParticle: 9
-    posY: 4.8
-    sizeY: 1
-    isDying: 0
-    isAlive: 0
-  posDataIndexOffset: 4
+  posData: []
+  posDataIndexOffset: 0
   spriteCount: 5
   isCompleted: 0
   spriteData:
   - uvSizeAndPos: {x: 0.64624023, y: 0.46972656, z: 0.35375977, w: 0}
     worldPivotAndSize: {x: 0, y: 0, z: 14.705556, w: 10.688889}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.29736328, y: 0.037841797, z: 0, w: 0}
     worldPivotAndSize: {x: 0, y: 0, z: 6.766667, w: 0.8611111}
-    scaleAndFlip: {x: 19.950739, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.06640625, y: 0.03515625, z: 0.0041503906, w: 0.90112305}
     worldPivotAndSize: {x: 0, y: 0, z: 1.511111, w: 0.8}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.8583985, y: 0.03515625, z: 0.07055664, w: 0.90112305}
     worldPivotAndSize: {x: 1.511111, y: 0, z: 19.533335, w: 0.8}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.06762692, y: 0.03515625, z: 0.92895514, w: 0.90112305}
     worldPivotAndSize: {x: 21.044445, y: 0, z: 1.5388882, w: 0.8}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.06640625, y: 0.029296877, z: 0.0041503906, w: 0.9362793}
     worldPivotAndSize: {x: 0, y: 0.8, z: 1.511111, w: 0.6666666}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.8583985, y: 0.029296877, z: 0.07055664, w: 0.9362793}
     worldPivotAndSize: {x: 1.511111, y: 0.8, z: 19.533335, w: 0.6666666}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.06762692, y: 0.029296877, z: 0.92895514, w: 0.9362793}
     worldPivotAndSize: {x: 21.044445, y: 0.8, z: 1.5388882, w: 0.6666666}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.06640625, y: 0.029541014, z: 0.0041503906, w: 0.9655762}
     worldPivotAndSize: {x: 0, y: 1.4666667, z: 1.511111, w: 0.6722222}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.8583985, y: 0.029541014, z: 0.07055664, w: 0.9655762}
     worldPivotAndSize: {x: 1.511111, y: 1.4666667, z: 19.533335, w: 0.6722222}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.06762692, y: 0.029541014, z: 0.92895514, w: 0.9655762}
     worldPivotAndSize: {x: 21.044445, y: 1.4666667, z: 1.5388882, w: 0.6722222}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.2553711, y: 0.027832031, z: 0.0041503906, w: 0.8215332}
     worldPivotAndSize: {x: 0, y: 0, z: 5.811111, w: 0.6333333}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.47802734, y: 0.027832031, z: 0.25952148, w: 0.8215332}
     worldPivotAndSize: {x: 5.811111, y: 0, z: 10.877777, w: 0.6333333}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.25683594, y: 0.027832031, z: 0.7375488, w: 0.8215332}
     worldPivotAndSize: {x: 16.688889, y: 0, z: 5.8444443, w: 0.6333333}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.2553711, y: 0.025634767, z: 0.0041503906, w: 0.84936523}
     worldPivotAndSize: {x: 0, y: 0.6333333, z: 5.811111, w: 0.5833333}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.47802734, y: 0.025634767, z: 0.25952148, w: 0.84936523}
     worldPivotAndSize: {x: 5.811111, y: 0.6333333, z: 10.877777, w: 0.5833333}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.25683594, y: 0.025634767, z: 0.7375488, w: 0.84936523}
     worldPivotAndSize: {x: 16.688889, y: 0.6333333, z: 5.8444443, w: 0.5833333}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.2553711, y: 0.02050781, z: 0.0041503906, w: 0.875}
     worldPivotAndSize: {x: 0, y: 1.2166667, z: 5.811111, w: 0.46666664}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.47802734, y: 0.02050781, z: 0.25952148, w: 0.875}
     worldPivotAndSize: {x: 5.811111, y: 1.2166667, z: 10.877777, w: 0.46666664}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.25683594, y: 0.02050781, z: 0.7375488, w: 0.875}
     worldPivotAndSize: {x: 16.688889, y: 1.2166667, z: 5.8444443, w: 0.46666664}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0, y: 0.0234375, z: 0.10644531, w: 0.5280762}
     worldPivotAndSize: {x: 0, y: 0, z: 0, w: 0.5333333}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.89331055, y: 0.0234375, z: 0.10644531, w: 0.5280762}
     worldPivotAndSize: {x: 0, y: 0, z: 20.327778, w: 0.5333333}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.00024414388, y: 0.0234375, z: 0.99975586, w: 0.5280762}
     worldPivotAndSize: {x: 20.327778, y: 0, z: 0.0055556297, w: 0.5333333}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0, y: 0.15600584, z: 0.10644531, w: 0.5515137}
     worldPivotAndSize: {x: 0, y: 0.5333333, z: 0, w: 3.55}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.89331055, y: 0.15600584, z: 0.10644531, w: 0.5515137}
     worldPivotAndSize: {x: 0, y: 0.5333333, z: 20.327778, w: 3.55}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.00024414388, y: 0.15600584, z: 0.99975586, w: 0.5515137}
     worldPivotAndSize: {x: 20.327778, y: 0.5333333, z: 0.0055556297, w: 3.55}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0, y: 0.09521485, z: 0.10644531, w: 0.70751953}
     worldPivotAndSize: {x: 0, y: 4.083333, z: 0, w: 2.1666667}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.89331055, y: 0.09521485, z: 0.10644531, w: 0.70751953}
     worldPivotAndSize: {x: 0, y: 4.083333, z: 20.327778, w: 2.1666667}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   - uvSizeAndPos: {x: 0.00024414388, y: 0.09521485, z: 0.99975586, w: 0.70751953}
     worldPivotAndSize: {x: 20.327778, y: 4.083333, z: 0.0055556297, w: 2.1666667}
-    scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}

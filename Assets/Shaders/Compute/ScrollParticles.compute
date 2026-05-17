@@ -56,7 +56,7 @@ void _ScrollInit(uint id : SV_DispatchThreadID)
         output.x = (rightXPos + _SpawnerSize.x) +(((float) id % 2) * _SpawnerSize.x);
     }
     output.y = _HeightInput[id];
-    output.w = ((_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z);
+    output.w = (_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z;
     
     
     moveInput.y = 1;

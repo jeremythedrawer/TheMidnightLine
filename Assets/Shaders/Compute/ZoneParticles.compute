@@ -44,7 +44,7 @@ void _ZoneInit(uint id : SV_DispatchThreadID)
     float density = localID / depthInput.y;
     float size = depthInput.z * density;
     output.z = startPos + size;
-    output.w = ((_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z);
+    output.w = (_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z;
     
     if (_Init == 0)
     {

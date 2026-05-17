@@ -1,20 +1,15 @@
 using UnityEngine;
-using static Parallax;
+using static AtlasSpawn;
 using static Atlas;
-using static Spy;
 public class ParallaxController : MonoBehaviour
 {
     public TrainStatsSO trainStats;
-    public SpawnData zoneStats;
+    public SpawnData spawnData;
     public SpyStatsSO spyStats;
     public AtlasRenderer leftRenderer;
-
-    public Parallax.RepeatType repeatType;
-    
-    public bool ignoreParallax;
-    
-    [Header("Using Parallax")]
     public CameraStatsSO camStats;
+
+    [Range(0, FAR_CLIP)] public float worldDepth;
 
     [Header("Multiple Sprites")]
     public AtlasRenderer rightRenderer;
@@ -24,6 +19,10 @@ public class ParallaxController : MonoBehaviour
     public Vector3 worldPos;
     public Bounds bounds;
     public Vector3 boundsOffset;
+    private void OnEnable()
+    {
+        parallaxFactor = (FAR_CLIP - worldDepth) / FAR_CLIP;
+    }
     private void Start()
     {
         worldPos = transform.position;
@@ -36,43 +35,24 @@ public class ParallaxController : MonoBehaviour
         }
 
         boundsOffset = bounds.center - worldPos;
-        if (!ignoreParallax)
-        {
-            parallaxFactor = GetParallaxFactor(transform.position.z);
-        }
     }
 
+    private void Update()
+    {
+        if (bounds.max.x > spawnData.bounds.min.x)
+        {
+            float parallaxVelocity = (camStats.curVelocity.x * (1 - parallaxFactor));
+            if (spyStats.curLocationState != Spy.LocationState.Station)
+            {
+                parallaxVelocity += trainStats.curVelocity * Time.deltaTime * parallaxFactor;
+            }
+            worldPos.x -= parallaxVelocity;
+            //worldPos.x = Mathf.Round(worldPos.x * PIXELS_PER_UNIT) * UNITS_PER_PIXEL;
+            transform.position = worldPos;
+        }
+    }
     private void FixedUpdate()
     {
-        //if (!ignoreParallax)
-        //{
-        //    float parallaxIncrement = UpdateParallaxPosition(camStats, spyStats, trainStats, parallaxFactor);
-
-        //    worldPos.x -= parallaxIncrement;
-        //    bounds.center = worldPos + boundsOffset;
-        //}
-        //else if (spyStats.curLocationState != LocationState.Station)
-        //{
-        //    worldPos.x -= UpdatePositionNoParallax(trainStats);
-        //}
-        //worldPos.x = Mathf.Round(worldPos.x * PIXELS_PER_UNIT) * UNITS_PER_PIXEL;
-        //transform.position = worldPos;
-
-        //if (bounds.max.x < zoneStats.bounds.min.x)
-        //{
-        //    switch (repeatType)
-        //    {
-        //        case RepeatType.OneShot:
-        //        {
-        //           // Destroy(gameObject);
-        //        }
-        //        break;
-        //        case RepeatType.Repeat:
-        //        {
-        //            worldPos.x += zoneStats.bounds.max.x - bounds.min.x;
-        //        }
-        //        break;
-        //    }
-        //}
+        bounds.center = worldPos + boundsOffset;
     }
 }

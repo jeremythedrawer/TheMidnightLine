@@ -47,30 +47,18 @@ public class SpawnMaster : MonoBehaviour
         InitParticles();
         ChangeParticles();
         gameEventData.OnTicketInspect.RegisterListener(ChangeParticles);
-
-#if UNITY_EDITOR
-        //EditorApplication.update += UpdateParticlesEditor;
-#endif
     }
     private void OnDisable()
     {
         gameEventData.OnTicketInspect.UnregisterListener(ChangeParticles);
-#if UNITY_EDITOR
-       // EditorApplication.update -= UpdateParticlesEditor;
-#endif
         Dispose();
     }
     private void Update()
     {
-       // UpdateSpawnCompute(ref spawnData.scrollData);
+        UpdateSpawnCompute(ref spawnData.scrollData);
         UpdateSpawnCompute(ref spawnData.zoneData);
         UpdateDayNightCycle();
         UpdateDelayedParticleQueue();
-        //InitZoneCompute();
-        //InitScrollCompute();
-        //InitParticles();
-        //ChangeParticles();
-       // if (!Application.isPlaying) UpdateInitComputeEditor();
     }
     private void InitBoundParameters()
     {
@@ -80,7 +68,7 @@ public class SpawnMaster : MonoBehaviour
     }
     private void UpdateSpawnCompute(ref SpawnComputeData computeData)
     {
-        computeData.compute.SetFloat("_CamVelocity", (camStats.curVelocity.x));
+        computeData.compute.SetFloat("_CamVelocity", camStats.curVelocity.x);
         if (spyStats.curLocationState != LocationState.Station)
         {
             computeData.compute.SetFloat("_TrainVelocity", (trainStats.curVelocity * Time.deltaTime));
@@ -242,16 +230,34 @@ public class SpawnMaster : MonoBehaviour
             }
             else
             {
+                bool isDead = true;
                 for (int k = posData.minParticleIndex; k <= posData.maxParticleIndex; k++)
                 {
-                    if (spawnComputeData.moveInputs[k].y == 1) break;
+                    if (spawnComputeData.moveInputs[k].y == 1)
+                    {
+                        isDead = false;
+                        break;
+                    }
                 }
 
-                ReturnMPB(posData.mpb);
-                ReturnQuadScaleBuffer(posData.quadScaleBuffer);
+                if (!isDead) continue;
 
-                if (particleAtlas.posDataIndexOffset == particleAtlas.posData.Length) particleAtlas.isCompleted = true;
+                if (posData.mpb != null)
+                {
+                    ReturnMPB(posData.mpb);
+                    posData.mpb = null;
+
+                }
+                if (posData.quadScaleBuffer != null)
+                {
+                    ReturnQuadScaleBuffer(posData.quadScaleBuffer);
+                    posData.quadScaleBuffer = null;
+                }
+
+                if (i == particleAtlas.posDataIndexOffset - 1 && particleAtlas.posDataIndexOffset == particleAtlas.posData.Length) particleAtlas.isCompleted = true;
             }
+
+            particleAtlas.posData[i] = posData;
         }
 
         if (particleAtlas.posDataIndexOffset == particleAtlas.posData.Length) return;
@@ -293,16 +299,16 @@ public class SpawnMaster : MonoBehaviour
             }
 
             posData.argsBuffer = GetArgsBuffer();
+
             posData.quadScaleBuffer = GetQuadScaleBuffer();
+            posData.quadScaleBuffer.SetData(posData.quadScales);
+            
             posData.mpb = GetMPB();
 
             posData.mpb.SetTexture("_AtlasTexture", particleAtlas.atlas.texture);
             
             posData.mpb.SetBuffer("_SpriteData", particleAtlas.spriteDataBuffer);
 
-            
-            posData.quadScaleBuffer.SetData(posData.quadScales);
-            
             posData.mpb.SetInt("_QuadScaleCount", posData.quadScales.Length);
             posData.mpb.SetBuffer("_QuadAndPivotScales", posData.quadScaleBuffer);
 
@@ -312,7 +318,6 @@ public class SpawnMaster : MonoBehaviour
             posData.mpb.SetInt("_SpritesPerParticle", posData.spritesPerParticle);
 
             posData.mpb.SetInt("_SpriteIndex", posData.spriteIndex);
-
 
             switch (spawnComputeData.particleType)
             {
@@ -339,9 +344,6 @@ public class SpawnMaster : MonoBehaviour
                 }
                 break;
             }
-
-
-
             particleAtlas.posData[j] = posData;
 
             if (j == particleAtlas.posData.Length - 1)
@@ -487,18 +489,6 @@ public class SpawnMaster : MonoBehaviour
         colorSO.dayNight = curDayNightValue;
     }
 #if UNITY_EDITOR
-    private void UpdateParticlesEditor()
-    {
-        Debug.Log("Updating particles");
-        UpdateSpawnCompute(ref spawnData.scrollData);
-        UpdateSpawnCompute(ref spawnData.zoneData);
-
-        InitZoneCompute();
-        InitScrollCompute();
-        InitParticles();
-        ChangeParticles();
-        SceneView.RepaintAll();
-    }
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.crimson;

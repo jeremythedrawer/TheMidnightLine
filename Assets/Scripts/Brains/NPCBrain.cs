@@ -209,7 +209,9 @@ public class NPCBrain : MonoBehaviour
             case NPCState.Walking:
             {
                 targetXVelocity = npc.moveSpeed * move;
-                rigidBody.linearVelocityX = targetXVelocity;
+                Vector3 localPos = transform.localPosition;
+                localPos.x += targetXVelocity * Time.fixedDeltaTime;
+                transform.localPosition = localPos;
             }
             break;
         }
@@ -736,7 +738,7 @@ public class NPCBrain : MonoBehaviour
     }
     public void DisembarkTrain()
     {
-        Station station = TrainController.nextStation;
+        Station station = TrainController.nextStation_instance;
         AtlasRenderer stationPlatform = station.station.isFrontOfTrain ? station.frontPlatformRenderer : station.backPlatformRenderer;
         transform.SetParent(stationPlatform.transform, true);
         atlasRenderer.UpdateDepthRealtime(stationPlatform.batchKey.depthOrder);

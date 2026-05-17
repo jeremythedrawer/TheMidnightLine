@@ -6,7 +6,7 @@ float2 _BoundCenter;
 
 float _DeltaTime;
 
-float2 _TextureSize;
+uint2 _TextureSize;
 [numthreads(8, 8, 1)]
 void CSCarriageBounds(uint3 id : SV_DispatchThreadID)
 {

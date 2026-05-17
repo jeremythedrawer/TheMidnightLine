@@ -2,12 +2,7 @@ Shader "Custom/s_zoneParticles"
 {
     SubShader
     {
-        Tags { "Queue"="AlphaTest" "RenderType"="TransparentCutout" }
-
-        ZWrite On
-        ZTest LEqual
-        Cull Off
-        Blend Off
+        Tags { "RenderType" = "Opaque" "RenderPipeline" = "UniversalPipeline" }
         Pass
         {
             HLSLPROGRAM
