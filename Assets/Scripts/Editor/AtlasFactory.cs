@@ -7,22 +7,33 @@ using static Atlas;
 
 public class AtlasFactory : EditorWindow
 {
-    private AtlasSO atlas;
-    private Texture2D markerTexture;
-    private Vector2 scroll;
+    static Color selectedColor = Color.red;
+    static Color unselectedColor = new Color(0, 0.2f, 0.2f);
 
-    private float cellSize = 256f;
-    private float markerSize = 4f;
+    const float HEADER_COL_HEIGHT = 20;
+    const float PADDING = 100;
+    const float MARKER_SIZE = 4f;
 
-    private int selectedIndex;
+    static GUILayoutOption[] headerGUI;
+    static GUILayoutOption[] horizontalGUI;
+    static GUILayoutOption[] inputGUI;
+    static GUILayoutOption[] buttonGUI;
+
+    
+    static Vector2 scroll;
+    
+    public AtlasSO atlas;
+    public Texture2D markerTexture;
+    public bool generateSprites;
+
+    public float cellSize;
+    public int selectedIndex;
+    
 
     //Preview
-    private float previewScale =  0.2f;
-    private Vector2 previewPosition = Vector2.zero;
     private int selectedMotionIndex;
 
     private Rect previewRect;
-    private RenderTexture previewRT;
     private SimpleSprite previewSprite;
     private int flip;
     private Color32 previewBGColor;
@@ -41,6 +52,7 @@ public class AtlasFactory : EditorWindow
 
     //Motion
     private AtlasClip previewClip;
+
     private int[] motionSelections;
     private int[] holdTimeValues;
     private float editorTimeDelta;
@@ -54,7 +66,15 @@ public class AtlasFactory : EditorWindow
 
     const float padding = 50f;
     const float GUIHeaderColoumnWidth = 300;
-    private float halfWindowWidth;
+
+
+    GUILayoutOption[] spriteDirectoryLayout;
+    GUILayoutOption[] previewLayout;
+    GUILayoutOption[] overviewLayout;
+
+    private float directoryWidth = 0.33f;
+    private float previewWidth = 0.33f;
+    private float overviewWidth = 0.33f;
 
     [MenuItem("Tools/Atlas Factory")]
     private static void Open()
@@ -67,84 +87,147 @@ public class AtlasFactory : EditorWindow
     }
     private void OnGUI()
     {
-        halfWindowWidth = position.width * 0.5f;
-
-        GUILayoutOption[] GUIWidth = { GUILayout.Width(GUIHeaderColoumnWidth) };
-        GUILayoutOption GUIHalfWindowWidth = GUILayout.Width(halfWindowWidth);
-
+        Init();
+        DrawWindowOptions();
+        DrawFirstHeader();
         EditorGUILayout.BeginHorizontal();
+            DrawSpriteDirectorySection();
+            DrawPreviewSection();
+            DrawOverviewSection();
+        EditorGUILayout.EndHorizontal();
+    }
+    private void Init()
+    {
+        horizontalGUI = new GUILayoutOption[] { GUILayout.Height(HEADER_COL_HEIGHT) };
 
-        #region Input Fields
-        EditorGUILayout.BeginVertical(GUIWidth);
-        EditorGUILayout.LabelField("Inputs", EditorStyles.boldLabel);
-
-        EditorGUI.BeginChangeCheck();
-        atlas = (AtlasSO)EditorGUILayout.ObjectField("Atlas", atlas, typeof(AtlasSO), allowSceneObjects: false, GUIWidth);
-        markerTexture = (Texture2D)EditorGUILayout.ObjectField("Marker Texture", markerTexture, typeof(Texture2D), allowSceneObjects: false, GUIWidth);
-        EditorGUI.EndChangeCheck();
-
-        if (atlas == null)
+        spriteDirectoryLayout = new GUILayoutOption[] { GUILayout.Width(directoryWidth * position.width) };
+        previewLayout = new GUILayoutOption[] { GUILayout.Width(previewWidth * position.width) };
+        overviewLayout = new GUILayoutOption[] { GUILayout.Width(overviewWidth * position.width) };
+    }
+    private void DrawWindowOptions()
+    {
+        EditorGUILayout.BeginHorizontal();
         {
-            EditorGUILayout.EndVertical();
-            EditorGUILayout.EndHorizontal();
-            return;
-        }
 
-        bool generateSprites = GUILayout.Button("Generate Sprites", GUIWidth);
+            EditorGUILayout.LabelField("Directory Width", GUILayout.Width(140));
+            directoryWidth = GUILayout.HorizontalSlider(directoryWidth, 0.1f, 1f);
+
+            EditorGUILayout.LabelField("Preview Width", GUILayout.Width(120));
+            previewWidth = GUILayout.HorizontalSlider(previewWidth, 0.1f, 1f);
+
+            EditorGUILayout.LabelField("Atlas Overview Width", GUILayout.Width(160));
+            overviewWidth = GUILayout.HorizontalSlider(overviewWidth, 0.1f, 1f);
+
+        }
+        EditorGUILayout.EndHorizontal();
+    }
+    private void DrawFirstHeader()
+    {
+        EditorGUILayout.BeginHorizontal();
+        {
+            EditorGUILayout.LabelField("Inputs", EditorStyles.boldLabel);
+
+            EditorGUI.BeginChangeCheck();
+            atlas = (AtlasSO)EditorGUILayout.ObjectField("Atlas", atlas, typeof(AtlasSO), allowSceneObjects: false, inputGUI);
+            markerTexture = (Texture2D)EditorGUILayout.ObjectField("Marker Texture", markerTexture, typeof(Texture2D), allowSceneObjects: false, inputGUI);
+            generateSprites = GUILayout.Button("Generate Sprites", buttonGUI);
+
+        }
+        EditorGUILayout.EndHorizontal();
+        
+        if (atlas == null || atlas.texture == null) return;
 
         if (generateSprites)
         {
-            if (atlas.texture == null) return;
             simpleSpritesFound = 0;
             motionSpritesFound = 0;
             sliceSpritesFound = 0;
 
             previewClip = default;
             selectedIndex = 0;
-            MakeTextureReadable(atlas.texture);
-            if (markerTexture != null)
-            {
-                MakeTextureReadable(markerTexture);
-            }
             GenerateSprites();
             atlas.UpdateClipDictionary();
             GetMotionData();
 
-            previewRT = null;
             flip = 1;
             EditorUtility.SetDirty(atlas);
             AssetDatabase.SaveAssets();
             AssetDatabase.Refresh();
         }
+    }
+    private void DrawSpriteDirectorySection()
+    {
+        if (atlas == null) return;
 
-        EditorGUILayout.EndVertical();
-        #endregion
-
-        #region View Fields
-        EditorGUILayout.BeginVertical(GUILayout.Width(halfWindowWidth - GUIHeaderColoumnWidth));
-        EditorGUILayout.LabelField("View", EditorStyles.boldLabel);
-        cellSize = EditorGUILayout.FloatField("Cell Size", cellSize, GUIWidth);
-        markerSize = EditorGUILayout.FloatField("Marker Size", markerSize, GUIWidth);
-        EditorGUILayout.EndVertical();
-        #endregion
-
-        #region Right Column Fields
-        EditorGUILayout.BeginVertical(GUIWidth);
-        EditorGUILayout.LabelField("Motion", EditorStyles.boldLabel);
-        if (MotionEnumDictionary.TryGetValue(atlas.entityMotionType, out Type enumType))
+        EditorGUILayout.BeginVertical(spriteDirectoryLayout);
         {
-            Enum motionEnum = (Enum)Enum.ToObject(enumType, selectedMotionIndex);
-            EditorGUILayout.LabelField($"Preview Motion: {motionEnum}", GUIWidth);
+            cellSize = EditorGUILayout.FloatField("Cell Size", cellSize, headerGUI);
+            scroll = EditorGUILayout.BeginScrollView(scroll);
+
+            float finalCellSize = cellSize + padding;
+            int columns = Mathf.CeilToInt(((directoryWidth * position.width) - finalCellSize) / finalCellSize);
+            columns = Mathf.Max(1, columns);
+            int gridIndex = 0;
+
+            for (int i = 0; i < atlas.simpleSprites.Length; i++)
+            {
+                if (i % columns == 0) EditorGUILayout.BeginHorizontal();
+
+                DrawAtlasSprite(atlas.simpleSprites[i], gridIndex);
+                gridIndex++;
+                if (i % columns == columns - 1 || i == atlas.simpleSprites.Length - 1) EditorGUILayout.EndHorizontal();
+            }
+
+            if (motionSelections != null && motionSelections.Length > 0)
+            {
+                for (int i = 0; i < atlas.motionSprites.Length; i++)
+                {
+                    if (i % columns == 0) EditorGUILayout.BeginHorizontal();
+
+                    DrawAtlasSprite(atlas.motionSprites[i].sprite, gridIndex, motionSpriteNullable: atlas.motionSprites[i]);
+                    gridIndex++;
+
+                    if (i % columns == columns - 1 || i == atlas.motionSprites.Length - 1) EditorGUILayout.EndHorizontal();
+                }
+            }
+
+            for (int i = 0; i < atlas.slicedSprites.Length; i++)
+            {
+                if (i % columns == 0) EditorGUILayout.BeginHorizontal();
+
+                DrawAtlasSprite(atlas.slicedSprites[i].sprite, gridIndex, slicedSpriteNullable: atlas.slicedSprites[i]);
+                gridIndex++;
+
+                if (i % columns == columns - 1 || i == atlas.slicedSprites.Length - 1) EditorGUILayout.EndHorizontal();
+            }
+            EditorGUILayout.EndScrollView();
         }
-
-        if (atlas.clipDict != null)
+        EditorGUILayout.EndVertical();
+    }
+    private void DrawPreviewSection()
+    {
+        if (atlas == null) return;
+        EditorGUILayout.BeginVertical(previewLayout);
         {
+            if (MotionEnumDictionary.TryGetValue(atlas.entityMotionType, out Type enumType))
+            {
+                Enum motionEnum = (Enum)Enum.ToObject(enumType, selectedMotionIndex);
+                EditorGUILayout.LabelField($"Preview Motion: {motionEnum}", headerGUI);
+            }
+
+            if (atlas.clipDict == null)
+            {
+                previewClip = default;
+                EditorGUILayout.EndVertical(); 
+                return; 
+            }
+
             if (atlas.clipDict.TryGetValue(selectedMotionIndex, out AtlasClip clip))
             {
                 previewClip = clip;
                 EditorGUI.BeginChangeCheck();
 
-                previewClip.clipType = (ClipType)EditorGUILayout.EnumPopup("Clip Type", previewClip.clipType, GUIWidth);
+                previewClip.clipType = (ClipType)EditorGUILayout.EnumPopup("Clip Type", previewClip.clipType, headerGUI);
 
                 if (EditorGUI.EndChangeCheck())
                 {
@@ -160,110 +243,88 @@ public class AtlasFactory : EditorWindow
                             break;
                         }
                     }
-                   atlas.UpdateClipDictionary();
+                    atlas.UpdateClipDictionary();
                 }
             }
-            else
+
+            if (GUILayout.Button("Play", headerGUI))
             {
-                EditorGUILayout.LabelField("No motion selected", EditorStyles.boldLabel);
+                startMotion = true;
+                editorTimeDelta = 0;
+                curFrameIndex = 0;
             }
+            if (GUILayout.Button("Stop", headerGUI))
+            {
+                startMotion = false;
+            }
+            if (GUILayout.Button("Flip", headerGUI))
+            {
+                flip = flip == 1 ? -1 : 1;
+            }
+
+            DrawPreview();
+        }
+        EditorGUILayout.EndVertical();
+    }
+    private void DrawOverviewSection()
+    {
+        EditorGUILayout.BeginVertical(overviewLayout);
+        {
+            DrawAtlasOverview();
+        }
+        EditorGUILayout.EndVertical();
+    }
+    private void DrawPreview()
+    {
+        float previewSize = previewWidth * position.width;
+
+        Rect containterRect = GUILayoutUtility.GetRect(previewSize, previewSize, GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false));
+
+        if (Event.current.type != EventType.Repaint) return;
+
+        float spritePixelWidth = previewSprite.uvSizeAndPos.x * atlas.texture.width;
+        float spritePixelHeight = previewSprite.uvSizeAndPos.y * atlas.texture.height;
+
+        float scale = Mathf.Min(containterRect.width / spritePixelWidth, containterRect.height / spritePixelHeight);
+
+        float drawWidth = spritePixelWidth * scale;
+        float drawHeight = spritePixelHeight * scale;
+
+        Vector2 pivot = new Vector2(containterRect.center.x, containterRect.yMin);
+        float flipUVPivot = flip == 1 ? previewSprite.uvPivot.x : 1 - previewSprite.uvPivot.x;
+        float pivotX = flipUVPivot * drawWidth;
+        float pivotY = (1 - previewSprite.uvPivot.y) * drawHeight;
+
+        previewRect = new Rect(pivot.x - pivotX, pivot.y - (drawHeight - pivotY), drawWidth, drawHeight);
+
+        Rect uvRect;
+
+        if (flip == 1)
+        {
+            uvRect = new Rect(
+                previewSprite.uvSizeAndPos.z,
+                previewSprite.uvSizeAndPos.w,
+                previewSprite.uvSizeAndPos.x,
+                previewSprite.uvSizeAndPos.y
+            );
         }
         else
         {
-            previewClip = default;
+            uvRect = new Rect(
+                previewSprite.uvSizeAndPos.z + previewSprite.uvSizeAndPos.x,
+                previewSprite.uvSizeAndPos.w,
+                -previewSprite.uvSizeAndPos.x,
+                previewSprite.uvSizeAndPos.y
+            );
         }
 
-            EditorGUILayout.EndVertical();
-        EditorGUILayout.BeginVertical(GUIHalfWindowWidth);
-        EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
+        GUI.DrawTextureWithTexCoords(previewRect, atlas.texture, uvRect);
 
-        if (GUILayout.Button("Play", GUIWidth))
+        Handles.BeginGUI();
         {
-            startMotion = true;
-            editorTimeDelta = 0;
-            curFrameIndex = 0;
+            Handles.DrawSolidRectangleWithOutline(containterRect, Color.clear, selectedColor);
         }
-        if (GUILayout.Button("Stop", GUIWidth))
-        {
-            startMotion = false;
-        }
-        if (GUILayout.Button("Flip", GUIWidth))
-        {
-            flip = flip == 1 ? -1 : 1;
-        }
-        previewScale = EditorGUILayout.FloatField("Preview Scale", previewScale, GUIWidth);
-        previewPosition = EditorGUILayout.Vector2Field("Preview Position", previewPosition, GUIWidth);
-        previewBGColor = EditorGUILayout.ColorField("Background Color", previewBGColor, GUIWidth);
-        if (atlas.clips == null)
-        {
-            EditorGUILayout.EndVertical();
-            EditorGUILayout.EndHorizontal();
-            return;
-        }
-
-        EditorGUILayout.EndVertical();
-        #endregion
-
-        EditorGUILayout.EndHorizontal();
-
-        EditorGUILayout.Space(10);
-
-        EditorGUILayout.BeginHorizontal();
-
-        #region Sprite Editor
-        EditorGUILayout.BeginVertical(GUIHalfWindowWidth);
-        scroll = EditorGUILayout.BeginScrollView(scroll);
-        int columns = Mathf.RoundToInt((halfWindowWidth - padding) / (cellSize + padding));
-        columns = Mathf.Max(1, columns);
-
-
-        int gridIndex = 0;
-        for (int i = 0; i < atlas.simpleSprites.Length; i++)
-        {
-            if (i % columns == 0) EditorGUILayout.BeginHorizontal();
-
-            DrawAtlasSprite(atlas.simpleSprites[i], gridIndex);
-            gridIndex++;
-
-            if (i % columns == columns - 1 || i == atlas.simpleSprites.Length - 1) EditorGUILayout.EndHorizontal();
-        }
-        for (int i = 0; i < atlas.motionSprites.Length; i++)
-        {
-            if (i % columns == 0) EditorGUILayout.BeginHorizontal();
-
-            DrawAtlasSprite(atlas.motionSprites[i].sprite, gridIndex, motionSpriteNullable: atlas.motionSprites[i]);
-            gridIndex++;
-
-            if (i % columns == columns - 1 || i == atlas.motionSprites.Length - 1) EditorGUILayout.EndHorizontal();
-        }
-        for (int i = 0; i < atlas.slicedSprites.Length; i++)
-        {
-            if (i % columns == 0) EditorGUILayout.BeginHorizontal();
-
-            DrawAtlasSprite(atlas.slicedSprites[i].sprite, gridIndex, slicedSpriteNullable: atlas.slicedSprites[i]);
-            gridIndex++;
-
-            if (i % columns == columns - 1 || i == atlas.slicedSprites.Length - 1) EditorGUILayout.EndHorizontal();
-        }
-
-        EditorGUILayout.EndScrollView();
-        EditorGUILayout.EndVertical();
-        #endregion
-
-        #region Preview Window
-
-        EditorGUILayout.BeginVertical(GUIHalfWindowWidth);
-
-        EditorGUILayout.LabelField("Preview", EditorStyles.boldLabel);
-        DrawPreview();
-        EditorGUILayout.EndVertical();
-        #endregion
-
-        EditorGUILayout.EndHorizontal();
-
-        GUI.enabled = atlas != null;
-
-        RearrangeIndex();
+        Handles.EndGUI();
     }
     private void GenerateSprites()
     {
@@ -286,6 +347,7 @@ public class AtlasFactory : EditorWindow
 
         if (atlas.motionSprites.Length > 0)
         {
+
             newMotionSprites = atlas.motionSprites.ToList();
         }
         else
@@ -323,7 +385,7 @@ public class AtlasFactory : EditorWindow
                     if (atlasPixels[index].a == 0 && markerPixels[index].a == 0) continue;
                     pixelPositions = FloodFill(x, y, atlas.texture.width, atlas.texture.height, ref visited, atlasPixels, markerPixels);
                 }
-                if (pixelPositions.Count < 30) continue;
+                if (pixelPositions.Count < 10) continue;
                 
                 CreateAtlasSprite(pixelPositions, atlas.texture.width, atlas.texture.height, atlasPixels, curSpriteIndex);
                 curSpriteIndex++;
@@ -449,7 +511,6 @@ public class AtlasFactory : EditorWindow
             }
         }
 
-
         SimpleSprite newSimpleSprite = new SimpleSprite();
 
         float spriteWidth = maxX - minX + 1;
@@ -480,12 +541,12 @@ public class AtlasFactory : EditorWindow
             if (motionSpritesFound < newMotionSprites.Count)
             {
                 newMotionSprites[motionSpritesFound] = newMotionSprite;
-                motionSpritesFound++;
             }
             else
             {
                 newMotionSprites.Add(newMotionSprite);
             }
+            motionSpritesFound++;
         }
         else if (slicesFound >  0)
         {
@@ -570,18 +631,17 @@ public class AtlasFactory : EditorWindow
     {
         if (newSimpleSprites.Count > 1)
         {
-            newSimpleSprites.OrderByDescending(s => s.uvSizeAndPos.w).ThenBy(s => s.uvSizeAndPos.z);
+            newSimpleSprites = newSimpleSprites.OrderByDescending(s => s.uvSizeAndPos.w).ThenBy(s => s.uvSizeAndPos.z).ToList();
         }
         if (newMotionSprites.Count > 1)
         {
-            newMotionSprites.OrderByDescending(s => s.sprite.uvSizeAndPos.w).ThenBy(s => s.sprite.uvSizeAndPos.z);
+            newMotionSprites = newMotionSprites.OrderByDescending(s => s.sprite.uvSizeAndPos.w).ThenBy(s => s.sprite.uvSizeAndPos.z).ToList();
         }
         if (newSliceSprites.Count > 1)
         {
-            newSliceSprites.OrderByDescending(s => s.sprite.uvSizeAndPos.w).ThenBy(s => s.sprite.uvSizeAndPos.z);
+           newSliceSprites = newSliceSprites.OrderByDescending(s => s.sprite.uvSizeAndPos.w).ThenBy(s => s.sprite.uvSizeAndPos.z).ToList();
         }
     }
-
     private void SetSpriteArray()
     {
         for(int i = newSimpleSprites.Count - 1; i >= 0; i--)
@@ -598,7 +658,7 @@ public class AtlasFactory : EditorWindow
                 if (oldRect.Overlaps(newRect))
                 {
                     atlas.simpleSprites[j] = newSprite;
-                    newSimpleSprites.Remove(newSimpleSprites[i]);
+                    newSimpleSprites.RemoveAt(i);
                     break;
                 }
             }
@@ -626,7 +686,7 @@ public class AtlasFactory : EditorWindow
                 if (oldRect.Overlaps(newRect))
                 {
                     atlas.motionSprites[j] = newMotionSprites[i];
-                    newMotionSprites.Remove(newMotionSprites[i]);
+                    newMotionSprites.RemoveAt(i);
                     break;
                 }
             }
@@ -654,7 +714,7 @@ public class AtlasFactory : EditorWindow
                 if (oldRect.Overlaps(newRect))
                 {
                     atlas.slicedSprites[j] = newSliceSprites[i];
-                    newSliceSprites.Remove(newSliceSprites[i]);
+                    newSliceSprites.RemoveAt(i);
                     break;
                 }
             }
@@ -685,16 +745,6 @@ public class AtlasFactory : EditorWindow
                 }
             }
         }
-    }
-    private void MakeTextureReadable(Texture texture)
-    {
-        string path = AssetDatabase.GetAssetPath(texture);
-        TextureImporter textureImporter = (TextureImporter)AssetImporter.GetAtPath(path);
-        if (textureImporter.isReadable) return;
-
-        textureImporter.isReadable = true;
-        textureImporter.SaveAndReimport();
-
     }
     private void GetMotionData()
     {
@@ -741,7 +791,7 @@ public class AtlasFactory : EditorWindow
         GUI.DrawTextureWithTexCoords(spriteRect, atlas.texture, uvRect, alphaBlend: true);
 
         Vector2 pivotPos = new Vector2(Mathf.Lerp(spriteRect.xMin, spriteRect.xMax, atlasSprite.uvPivot.x),Mathf.Lerp(spriteRect.yMax, spriteRect.yMin, atlasSprite.uvPivot.y));
-        Rect pivotRect = new Rect(pivotPos - Vector2.one * markerSize, Vector2.one * (markerSize * 2));
+        Rect pivotRect = new Rect(pivotPos - Vector2.one * MARKER_SIZE, Vector2.one * (MARKER_SIZE * 2));
 
         Handles.BeginGUI();
         Handles.DrawSolidRectangleWithOutline(spriteRect, Color.clear, Color.grey);
@@ -789,7 +839,7 @@ public class AtlasFactory : EditorWindow
                         markerNormalized.x += atlasSprite.uvPivot.x;
                         markerNormalized.y += atlasSprite.uvPivot.y;
                         Vector2 markerRectPos =  new Vector2(Mathf.Lerp(spriteRect.xMin, spriteRect.xMax, markerNormalized.x), Mathf.Lerp(spriteRect.yMax, spriteRect.yMin, markerNormalized.y));
-                        Rect markerRect = new Rect(markerRectPos - Vector2.one * markerSize, Vector2.one * (markerSize * 2));
+                        Rect markerRect = new Rect(markerRectPos - Vector2.one * MARKER_SIZE, Vector2.one * (MARKER_SIZE * 2));
                         Handles.DrawSolidRectangleWithOutline(markerRect, Color.clear, atlasMarker.color);
                         break;
                     }
@@ -803,6 +853,15 @@ public class AtlasFactory : EditorWindow
 
             Rect animTypeRect = new Rect(minRectX, clipDataRectYPos, clipDataRectWidth, spriteDataRectHeight);
             Rect holdTimeRect = new Rect(spriteRect.center.x, clipDataRectYPos, clipDataRectWidth, spriteDataRectHeight);
+
+            //Sprite Index Label
+            Vector2 indexPos = new Vector2(spriteRect.xMin, spriteRect.yMin);
+            GUIStyle indexStyle = new GUIStyle(EditorStyles.boldLabel)
+            {
+                alignment = TextAnchor.UpperLeft,
+                normal = { textColor = Color.white }
+            };
+            GUI.Label(new Rect(indexPos, new Vector2(20, 20)), atlasSprite.index.ToString(), indexStyle);
 
             EditorGUI.BeginChangeCheck();
 
@@ -964,6 +1023,58 @@ public class AtlasFactory : EditorWindow
                 }
             }
         }
+        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.LeftArrow)
+        {
+            if (selectedIndex == 0) return;
+            selectedIndex--;
+            if (motionSpriteNullable.HasValue)
+            {
+                int motionIndex = selectedIndex - atlas.simpleSprites.Length;
+                previewSprite = atlas.motionSprites[motionIndex].sprite;
+            }
+            else if (slicedSpriteNullable.HasValue)
+            {
+                int sliceIndex = selectedIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
+                previewSprite = atlas.motionSprites[sliceIndex].sprite;
+            }
+            else
+            {
+               previewSprite = atlas.simpleSprites[selectedIndex];
+            }
+            curFrameIndex = 0;
+            e.Use();
+        }
+
+        if (e.type == EventType.KeyDown && e.keyCode == KeyCode.RightArrow)
+        {
+            if (motionSpriteNullable.HasValue)
+            {
+                int motionIndex = selectedIndex - atlas.simpleSprites.Length;
+                if (motionIndex == atlas.motionSprites.Length - 1) return;
+                selectedIndex++;
+                motionIndex = selectedIndex - atlas.simpleSprites.Length;
+
+                previewSprite = atlas.motionSprites[motionIndex].sprite;
+            }
+            else if (slicedSpriteNullable.HasValue)
+            {
+                int sliceIndex = selectedIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
+                if (sliceIndex == atlas.slicedSprites.Length - 1) return;
+                selectedIndex++;
+                sliceIndex = selectedIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
+
+                previewSprite = atlas.motionSprites[sliceIndex].sprite;
+            }
+            else
+            {
+                if (selectedIndex == atlas.simpleSprites.Length - 1) return;
+                selectedIndex++;
+
+                previewSprite = atlas.simpleSprites[selectedIndex];
+            }
+            curFrameIndex = 0;
+            e.Use();
+        }
 
         if (selectedIndex == gridIndex)
         {
@@ -977,135 +1088,112 @@ public class AtlasFactory : EditorWindow
             Handles.DrawSolidRectangleWithOutline(shiftRightRect, Color.yellowNice, Color.black);
 
             
-            if (shiftLeftRect.Contains(e.mousePosition))
+            if ((shiftLeftRect.Contains(e.mousePosition) && e.type == EventType.MouseDown && e.button == 0))
             {
-                if (e.type == EventType.MouseDown && e.button == 0)
-                {
-                    if (selectedIndex == 0) return;
-                    if (motionSpriteNullable.HasValue)
-                    {
-                        int motionIndex = selectedIndex - atlas.simpleSprites.Length;
-                        atlas.motionSprites[motionIndex] = atlas.motionSprites[motionIndex - 1];
-                        atlas.motionSprites[motionIndex - 1] = motionSpriteNullable.Value;
-                    }
-                    else if (slicedSpriteNullable.HasValue)
-                    {
-                        int sliceIndex = selectedIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
-                        atlas.slicedSprites[sliceIndex] = atlas.slicedSprites[sliceIndex - 1];
-                        atlas.slicedSprites[sliceIndex - 1] = slicedSpriteNullable.Value;
-                    }
-                    else
-                    {
-                        atlas.simpleSprites[selectedIndex] = atlas.simpleSprites[selectedIndex - 1];
-                        atlas.simpleSprites[selectedIndex - 1] = atlasSprite;
-                    }
-                    selectedIndex--;
-                    EditorUtility.SetDirty(atlas);
-                    AssetDatabase.SaveAssets();
-                }
+                HandleShiftLeft();
             }
 
-            if (shiftRightRect.Contains(e.mousePosition))
+            if (e.type == EventType.KeyDown && e.keyCode == KeyCode.Q)
             {
-                if (e.type == EventType.MouseDown && e.button == 0)
-                {
-                    if (motionSpriteNullable.HasValue)
-                    {
-                        int motionIndex = selectedIndex - atlas.simpleSprites.Length;
-                        if (motionIndex == atlas.motionSprites.Length - 1) return;
-                        atlas.motionSprites[motionIndex] = atlas.motionSprites[motionIndex + 1];
-                        atlas.motionSprites[motionIndex + 1] = motionSpriteNullable.Value;
-                        selectedIndex++;
-                    }
-                    else if (slicedSpriteNullable.HasValue)
-                    {
-                        int sliceIndex = selectedIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
-                        if (sliceIndex == atlas.slicedSprites.Length - 1) return;
-                        atlas.slicedSprites[sliceIndex] = atlas.slicedSprites[sliceIndex + 1];
-                        atlas.slicedSprites[sliceIndex + 1] = slicedSpriteNullable.Value;
-                        selectedIndex++;
-                    }
-                    else
-                    {
-                        if (selectedIndex == atlas.simpleSprites.Length - 1) return;
+                HandleShiftLeft();
+                e.Use();
+            }
 
-                        atlas.simpleSprites[selectedIndex] = atlas.simpleSprites[selectedIndex + 1];
-                        atlas.simpleSprites[selectedIndex + 1] = atlasSprite;
-                        selectedIndex++;
-                    }
-                    EditorUtility.SetDirty(atlas);
-                    AssetDatabase.SaveAssets();
+            if (e.type == EventType.KeyDown && e.keyCode == KeyCode.E)
+            {
+                HandleShiftRight();
+                e.Use();
+            }
+            
+            if ((shiftRightRect.Contains(e.mousePosition) && e.type == EventType.MouseDown && e.button == 0))
+            {
+                HandleShiftRight();
+            }
+
+            void HandleShiftRight()
+            {
+                if (motionSpriteNullable.HasValue)
+                {
+                    int motionIndex = selectedIndex - atlas.simpleSprites.Length;
+                    if (motionIndex == atlas.motionSprites.Length - 1) return;
+
+                    atlas.motionSprites[motionIndex] = atlas.motionSprites[motionIndex + 1];
+                    atlas.motionSprites[motionIndex].sprite.index = motionIndex;
+
+                    atlas.motionSprites[motionIndex + 1] = motionSpriteNullable.Value;
+                    atlas.motionSprites[motionIndex + 1].sprite.index = motionIndex + 1;
+
+                    selectedIndex++;
                 }
+                else if (slicedSpriteNullable.HasValue)
+                {
+                    int sliceIndex = selectedIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
+                    if (sliceIndex == atlas.slicedSprites.Length - 1) return;
+
+                    atlas.slicedSprites[sliceIndex] = atlas.slicedSprites[sliceIndex + 1];
+                    atlas.slicedSprites[sliceIndex].sprite.index = sliceIndex;
+
+                    atlas.slicedSprites[sliceIndex + 1] = slicedSpriteNullable.Value;
+                    atlas.slicedSprites[sliceIndex + 1].sprite.index = sliceIndex + 1;
+
+                    selectedIndex++;
+                }
+                else
+                {
+                    if (selectedIndex == atlas.simpleSprites.Length - 1) return;
+
+                    atlas.simpleSprites[selectedIndex] = atlas.simpleSprites[selectedIndex + 1];
+                    atlas.simpleSprites[selectedIndex].index = selectedIndex;
+
+                    atlas.simpleSprites[selectedIndex + 1] = atlasSprite;
+                    atlas.simpleSprites[selectedIndex + 1].index = selectedIndex + 1;
+
+                    selectedIndex++;
+                }
+                EditorUtility.SetDirty(atlas);
+                AssetDatabase.SaveAssets();
+            }
+            void HandleShiftLeft()
+            {
+                if (selectedIndex == 0) return;
+                if (motionSpriteNullable.HasValue)
+                {
+                    int motionIndex = selectedIndex - atlas.simpleSprites.Length;
+
+                    atlas.motionSprites[motionIndex] = atlas.motionSprites[motionIndex - 1];
+                    atlas.motionSprites[motionIndex].sprite.index = motionIndex;
+
+
+                    atlas.motionSprites[motionIndex - 1] = motionSpriteNullable.Value;
+                    atlas.motionSprites[motionIndex - 1].sprite.index = motionIndex - 1;
+                }
+                else if (slicedSpriteNullable.HasValue)
+                {
+                    int sliceIndex = selectedIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
+
+                    atlas.slicedSprites[sliceIndex] = atlas.slicedSprites[sliceIndex - 1];
+                    atlas.slicedSprites[sliceIndex].sprite.index = sliceIndex;
+
+                    atlas.slicedSprites[sliceIndex - 1] = slicedSpriteNullable.Value;
+                    atlas.slicedSprites[sliceIndex - 1].sprite.index = sliceIndex - 1;
+                }
+                else
+                {
+                    atlas.simpleSprites[selectedIndex] = atlas.simpleSprites[selectedIndex - 1];
+                    atlas.simpleSprites[selectedIndex].index = selectedIndex;
+
+                    atlas.simpleSprites[selectedIndex - 1] = atlasSprite;
+                    atlas.simpleSprites[selectedIndex - 1].index = selectedIndex - 1;
+                }
+                selectedIndex--;
+                EditorUtility.SetDirty(atlas);
+                AssetDatabase.SaveAssets();
             }
         }
         Handles.EndGUI();
-
-        //Sprite Index Label
-        Vector2 indexPos = new Vector2(spriteRect.xMin, spriteRect.yMin);
-        GUIStyle indexStyle = new GUIStyle(EditorStyles.boldLabel) 
-        { 
-            alignment = TextAnchor.UpperLeft, normal = { textColor = Color.white } 
-        };
-        GUI.Label(new Rect(indexPos, new Vector2(20, 20)), atlasSprite.index.ToString(), indexStyle);
     }
-    private void DrawPreview()
+    private void HandleShiftRight()
     {
-        if (previewRT == null || previewRT.width != previewRect.width)
-        {
-            previewRect = new Rect(halfWindowWidth + 50, 200, 700, 700);
-            previewRT = new RenderTexture((int)previewRect.width, (int)previewRect.height, 16, RenderTextureFormat.ARGB32);
-            previewRT.Create();
-            previewRT.filterMode = FilterMode.Point;
-        }
-
-        RenderTexture.active = previewRT;
-        GL.Clear(true, true, previewBGColor);
-
-        float spritePixelHeight = previewSprite.uvSizeAndPos.y * atlas.texture.height;
-        float aspect = position.width / position.height;
-        float scaledWidth = atlas.texture.width * previewScale * aspect;
-        float scaledHeight = spritePixelHeight * previewScale;
-
-        float scaledSpriteWidth = scaledWidth * previewSprite.uvSizeAndPos.x;
-
-        // Pivot offset in pixels
-        float pivotOffsetX = previewSprite.uvPivot.x * scaledSpriteWidth;
-        float pivotOffsetY = previewSprite.uvPivot.y * scaledHeight;
-
-        float posX = pivotOffsetX * -flip;
-
-        if (!previewClip.Equals(default(AtlasClip)))
-        {
-            float maxClipOffset = float.MinValue;
-            for (int i = 0; i < previewClip.keyFrames.Length; i++)
-            {
-                SimpleSprite curSprite = previewClip.keyFrames[i].motionSprite.sprite;
-                float pivotWithFlip = flip == 1 ? curSprite.uvPivot.x : 1 - curSprite.uvPivot.x;
-                float curSpritePivotPixelLength = pivotWithFlip * curSprite.uvSizeAndPos.x * scaledWidth;
-
-                if (curSpritePivotPixelLength > maxClipOffset)
-                {
-                    maxClipOffset = curSpritePivotPixelLength;
-                }
-            }
-
-            posX += maxClipOffset;
-        }
-        else
-        {
-            float pivotWithFlip = flip == 1 ? previewSprite.uvPivot.x : 1 - previewSprite.uvPivot.x;
-            posX += pivotWithFlip * scaledSpriteWidth;
-        }
-            float posY = (previewRT.height - scaledHeight) + pivotOffsetY;
-        posX += previewPosition.x;
-        posY += previewPosition.y;
-        Rect destRect = new Rect(posX, posY, scaledSpriteWidth * flip, scaledHeight);
-        Rect uvRect = new Rect(previewSprite.uvSizeAndPos.z, previewSprite.uvSizeAndPos.w, previewSprite.uvSizeAndPos.x, previewSprite.uvSizeAndPos.y);
-
-        Graphics.DrawTexture(destRect, atlas.texture, uvRect, 0, 0, 0, 0);
-
-        RenderTexture.active = null;
-        GUI.DrawTexture(previewRect, previewRT);
 
     }
     private void UpdateMotionPreview()
@@ -1129,7 +1217,71 @@ public class AtlasFactory : EditorWindow
             }
         }
     }
-    private void RearrangeIndex()
+    private void DrawAtlasOverview()
     {
+        if (atlas == null || atlas.texture == null) return;
+
+        float atlasSize = overviewWidth * position.width;
+
+        Rect atlasRect = GUILayoutUtility.GetRect( atlasSize, atlasSize, GUILayout.Width(atlasSize), GUILayout.Height(atlasSize));
+
+        float texAspect = (float)atlas.texture.width / atlas.texture.height;
+
+        if (texAspect > 1f)
+        {
+            float height = atlasRect.width / texAspect;
+            atlasRect.y += (atlasRect.height - height) * 0.5f;
+            atlasRect.height = height;
+        }
+        else
+        {
+            float width = atlasRect.height * texAspect;
+            atlasRect.x += (atlasRect.width - width) * 0.5f;
+            atlasRect.width = width;
+        }
+
+        GUI.DrawTexture(atlasRect, atlas.texture, ScaleMode.StretchToFill, true);
+        Handles.BeginGUI();
+        {
+            int index = 0;
+            for (int i = 0; i < atlas.simpleSprites.Length; i++)
+            {
+                DrawSpriteRect( atlasRect, atlas.simpleSprites[i], selectedIndex == index ? selectedColor : unselectedColor);
+                index++;
+            }
+
+            for (int i = 0; i < atlas.motionSprites.Length; i++)
+            {
+                DrawSpriteRect(atlasRect, atlas.motionSprites[i].sprite, selectedIndex == index ? selectedColor : unselectedColor);
+                index++;
+            }
+
+            for (int i = 0; i < atlas.slicedSprites.Length; i++)
+            {
+                DrawSpriteRect(atlasRect, atlas.slicedSprites[i].sprite, selectedIndex == index? selectedColor : unselectedColor );
+                index++;
+            }
+        }
+        Handles.EndGUI();
     }
+    void DrawSpriteRect(Rect atlasRect, SimpleSprite sprite, Color color)
+    {
+        Rect r = new Rect(
+            atlasRect.x + sprite.uvSizeAndPos.z * atlasRect.width,
+            atlasRect.y + (1f - sprite.uvSizeAndPos.w - sprite.uvSizeAndPos.y) * atlasRect.height,
+            sprite.uvSizeAndPos.x * atlasRect.width,
+            sprite.uvSizeAndPos.y * atlasRect.height
+        );
+
+        Handles.DrawSolidRectangleWithOutline(r, Color.clear, color);
+    }
+
 }
+
+//    ))
+//  .-#-------.
+// /___________\ My cozy little house protected from the monstrosity above. VISITS: 1
+//  | [] _ [] |
+//  |   |*|   |
+//  |   | |   |
+//  ^^^^^^^^^^^

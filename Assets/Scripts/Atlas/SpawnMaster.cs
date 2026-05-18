@@ -10,7 +10,7 @@ using static Train;
 public class SpawnMaster : MonoBehaviour
 {
     const float DELAYED_PARTICLE_QUEUE_TICK = 1f;
-    const float DAY_NIGHT_TRANSITION_TIME = 0.2f;
+    const float DAY_NIGHT_TRANSITION_TIME = 0.4f;
 
     public SpawnData spawnData;
     public CameraSettingsSO camSettings;
@@ -158,6 +158,7 @@ public class SpawnMaster : MonoBehaviour
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.initKernel, "_HeightInput", spawnData.scrollData.heightInputBuffer);
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.initKernel, "_PrevIndicesInput", spawnData.scrollData.prevIndicesInputsBuffer);
 
+        //spawnData.scrollData.compute.SetMatrix()
 
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.updateKernel, "_ScrollOutput", spawnData.scrollData.outputBuffer);
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.updateKernel, "_MoveInput", spawnData.scrollData.moveInputBuffer);

@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 564784607166531398}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: -9.64, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -64,18 +64,18 @@ MonoBehaviour:
   textToCenter: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.6062012, y: 0.27441406, z: 0.0029296875, w: 0.0021972656}
+    uvSizeAndPos: {x: 0.30322266, y: 0.13720703, z: 0.0012207031, w: 0.5878906}
     uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 13.794444, y: 6.2444444, z: 1}
+    worldSize: {x: 6.9, y: 3.1222222, z: 1}
     index: 1
   bounds:
-    m_Center: {x: 300, y: 3.1222222, z: 25}
-    m_Extent: {x: 6.897222, y: 3.1222222, z: 0.1}
-  worldPivotAndSize: {x: 6.897222, y: 0, z: 13.794444, w: 6.2444444}
-  uvSizeAndPosition: {x: 0.6062012, y: 0.27441406, z: 0.0029296875, w: 0.0021972656}
+    m_Center: {x: 290.36, y: 1.5611111, z: 25}
+    m_Extent: {x: 3.45, y: 1.5611111, z: 0.1}
+  worldPivotAndSize: {x: 3.45, y: 0, z: 6.9, w: 3.1222222}
+  uvSizeAndPosition: {x: 0.30322266, y: 0.13720703, z: 0.0012207031, w: 0.5878906}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0, y: 3.1222222, z: 0}
+  boundsOffset: {x: 0, y: 1.5611111, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -154,7 +154,7 @@ Transform:
   m_GameObject: {fileID: 1457642922105256361}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -54.100006, y: -1.36, z: 1}
+  m_LocalPosition: {x: -54.100006, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
@@ -170,7 +170,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1457642922105256361}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
   m_Name: 
@@ -352,7 +352,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 56.833344, y: 0.7111111}
+  m_Offset: {x: 28.444458, y: -0.35555553}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -362,7 +362,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 113.66667, y: 1.4222223}
+  m_Size: {x: 56.88889, y: 0.7111111}
   m_EdgeRadius: 0
 --- !u!114 &6538026656819698166
 MonoBehaviour:
@@ -396,18 +396,18 @@ MonoBehaviour:
   textToCenter: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.99902344, y: 0.125, z: 0, w: 0.4975586}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 11.366667, y: 1.4222223, z: 1}
+    uvSizeAndPos: {x: 1, y: 0.125, z: 0, w: 0.4970703}
+    uvPivot: {x: 0, y: 1}
+    worldSize: {x: 5.688889, y: 0.7111111, z: 1}
     index: 3
   bounds:
-    m_Center: {x: 302.73334, y: -0.6488889, z: 1.1}
-    m_Extent: {x: 56.833336, y: 0.7111111, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4222223}
-  uvSizeAndPosition: {x: 0.99902344, y: 0.125, z: 0, w: 0.4975586}
+    m_Center: {x: 274.34445, y: -0.35555556, z: 1.1}
+    m_Extent: {x: 28.444445, y: 0.35555556, z: 0.1}
+  worldPivotAndSize: {x: 0, y: 0.7111111, z: 5.688889, w: 0.7111111}
+  uvSizeAndPosition: {x: 1, y: 0.125, z: 0, w: 0.4970703}
   scaleAndFlip: {x: 10, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 56.833336, y: 0.7111111, z: 0.1}
+  boundsOffset: {x: 28.444445, y: -0.35555556, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
   - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
@@ -517,7 +517,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 2851846638580115691}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
   m_Name: 
@@ -562,7 +562,7 @@ Transform:
   m_GameObject: {fileID: 4464945837297462622}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -54.1, y: -1.36, z: -1}
+  m_LocalPosition: {x: -54.1, y: 0, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -602,7 +602,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 56.833344, y: 0.7111111}
+  m_Offset: {x: 28.444458, y: -0.35555556}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -612,7 +612,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 113.66667, y: 1.4222223}
+  m_Size: {x: 56.88889, y: 0.7111111}
   m_EdgeRadius: 0
 --- !u!114 &7602902344402833865
 MonoBehaviour:
@@ -646,18 +646,18 @@ MonoBehaviour:
   textToCenter: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.99902344, y: 0.125, z: 0, w: 0.875}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 11.366667, y: 1.4222223, z: 1}
+    uvSizeAndPos: {x: 1, y: 0.125, z: 0, w: 0.875}
+    uvPivot: {x: 0, y: 1}
+    worldSize: {x: 5.688889, y: 0.7111111, z: 1}
     index: 0
   bounds:
-    m_Center: {x: 302.73334, y: -0.6488889, z: 23}
-    m_Extent: {x: 56.833336, y: 0.7111111, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4222223}
-  uvSizeAndPosition: {x: 0.99902344, y: 0.125, z: 0, w: 0.875}
+    m_Center: {x: 274.34445, y: -0.35555556, z: 23}
+    m_Extent: {x: 28.444445, y: 0.35555556, z: 0.1}
+  worldPivotAndSize: {x: 0, y: 0.7111111, z: 5.688889, w: 0.7111111}
+  uvSizeAndPosition: {x: 1, y: 0.125, z: 0, w: 0.875}
   scaleAndFlip: {x: 10, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 56.833336, y: 0.7111111, z: 0}
+  boundsOffset: {x: 28.444445, y: -0.35555556, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -695,7 +695,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!4 &3806329923578194732
 Transform:
   m_ObjectHideFlags: 0
@@ -748,7 +748,7 @@ MonoBehaviour:
     worldSize: {x: 0, y: 0, z: 0}
     index: 0
   bounds:
-    m_Center: {x: 302.47333, y: -1.3227222, z: 0.1}
+    m_Center: {x: 302.47333, y: 0.037277818, z: 0.1}
     m_Extent: {x: 57.883335, y: 0.69727784, z: 0.1}
   worldPivotAndSize: {x: 0, y: 0, z: 0, w: 0}
   uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}

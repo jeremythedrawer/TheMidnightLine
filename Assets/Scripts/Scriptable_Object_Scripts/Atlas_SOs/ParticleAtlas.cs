@@ -89,6 +89,7 @@ public class ParticleAtlas : ScriptableObject
     }
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(ParticleAtlas))]
 public class ParticleAtlasEditor : Editor
 {
@@ -106,3 +107,5 @@ public class ParticleAtlasEditor : Editor
         }
     }
 }
+
+#endif

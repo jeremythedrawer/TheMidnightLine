@@ -47,12 +47,29 @@ public class ParallaxController : MonoBehaviour
                 parallaxVelocity += trainStats.curVelocity * Time.deltaTime * parallaxFactor;
             }
             worldPos.x -= parallaxVelocity;
-            //worldPos.x = Mathf.Round(worldPos.x * PIXELS_PER_UNIT) * UNITS_PER_PIXEL;
-            transform.position = worldPos;
+            worldPos.x = Mathf.Round(worldPos.x / camStats.worldUnitsPerPixel) * camStats.worldUnitsPerPixel;
         }
+    }
+    private void LateUpdate()
+    {
+        transform.position = GetSnappedPosition(worldPos);
     }
     private void FixedUpdate()
     {
         bounds.center = worldPos + boundsOffset;
+    }
+
+    private Vector3 GetSnappedPosition(Vector3 pos)
+    {
+        Matrix4x4 w2c = camStats.worldToCam;
+        Matrix4x4 c2w = camStats.camToWorld;
+
+        Vector3 camSpace = w2c.MultiplyPoint3x4(pos);
+
+        camSpace.x = Mathf.Round(camSpace.x / camStats.worldUnitsPerPixel) * camStats.worldUnitsPerPixel;
+        camSpace.y = Mathf.Round(camSpace.y / camStats.worldUnitsPerPixel) * camStats.worldUnitsPerPixel;
+
+        Vector3 snappedWorld = c2w.MultiplyPoint3x4(camSpace);
+        return snappedWorld;
     }
 }

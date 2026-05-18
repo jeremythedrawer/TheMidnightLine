@@ -4,6 +4,7 @@ using static Atlas;
 using static Spy;
 public class CameraController : MonoBehaviour
 {
+
     const float RES_Y = 640;
     const float RES_X = 1920;
     const float RES_Y_HALF = 320;
@@ -42,7 +43,8 @@ public class CameraController : MonoBehaviour
         stats.curWorldPos = transform.position;
         stats.camBounds = new Bounds();
         stats.camBounds.size = new Vector3(cam.orthographicSize * 2 * cam.aspect, cam.orthographicSize * 2, cam.farClipPlane + cam.nearClipPlane);
-        stats.worldUnitsPerPixel = stats.camBounds.size.y / Screen.height;
+        stats.worldUnitsPerPixel = (cam.orthographicSize * 2) / RES_Y;
+
 
         renderTextureScale = 16;
         carriageBoundsRT.Release();
@@ -78,11 +80,20 @@ public class CameraController : MonoBehaviour
         curXOffset = spyStats.spriteFlip ? -settings.horizontalOffset : settings.horizontalOffset; // camera offsets when player is moving
         stats.camBounds.center = centerBounds;
 
+        stats.worldToCam = cam.worldToCameraMatrix;
+        stats.camToWorld = cam.cameraToWorldMatrix;
+        
         stats.prevWorldPos = stats.curWorldPos;
         stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, targetWorldPos, Time.deltaTime * settings.damping);
-
+        Vector3 snappedPos = GetSnappedPosition(stats.curWorldPos);
+        stats.curWorldPos = snappedPos;
         transform.position = stats.curWorldPos;
         stats.curVelocity = -(stats.curWorldPos - stats.prevWorldPos);
+
+
+    }
+    private void LateUpdate()
+    {
     }
     private void ChooseStates()
     {
@@ -177,13 +188,15 @@ public class CameraController : MonoBehaviour
     }
     private Vector3 GetSnappedPosition(Vector3 pos)
     {
-        pos.x = Mathf.Round(pos.x / stats.worldUnitsPerPixel) * stats.worldUnitsPerPixel;
-        pos.y = Mathf.Round(pos.y / stats.worldUnitsPerPixel) * stats.worldUnitsPerPixel;
+        float pixelSize = stats.worldUnitsPerPixel;
+
+        pos.x = Mathf.Round(pos.x / pixelSize) * pixelSize;
+        pos.y = Mathf.Round(pos.y / pixelSize) * pixelSize;
 
         return pos;
     }
     private float GetSnappedOrthoSize()
     {
-        return (RES_Y_HALF / PIXELS_PER_UNIT) * 2;
+        return (RES_Y_HALF / PIXELS_PER_UNIT);
     }
 }

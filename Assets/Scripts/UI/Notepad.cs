@@ -8,7 +8,7 @@ using static NPC;
 public class Notepad : MonoBehaviour
 {
     public const float WRITE_LETTER_TIME = 0.1f;
-    const float PAGE_SPAWN_POS_Y_OFFSET = 0.2f;
+    const float PAGE_SPAWN_POS_Y_OFFSET = 0.1f;
     const float LEFTHAND_DAMPING = 10f;
     const float PENCIL_DISTANCE_THRESHOLD = 0.1f;
     const float PENCIL_VERTICAL_FREQUENCY = 7f;

@@ -76,7 +76,7 @@ float BayerMatrix(float value, float bayerIndex, float2 pixelCoord)
 
 float1 BayerX8(float value, float2 pixelCoord)
 {
-    const int N = 8;
+    const uint N = 8;
     int y = (int) pixelCoord.y % N;
     int pattern[8] = { 0, 4, 2, 6, 1, 5, 3, 7 };
     float threshold = (pattern[y] + 0.5) / N;

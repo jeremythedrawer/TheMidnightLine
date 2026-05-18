@@ -22,8 +22,8 @@ public class ColorPicker : MonoBehaviour
         Shader.SetGlobalColor("_SuspicionColor", colorsSO.suspicionColor);
         Shader.SetGlobalColor("_RuledOutColor", colorsSO.ruledOutColor);
 
-        Shader.SetGlobalFloat("_DayNight", colorsSO.dayNight);
         Shader.SetGlobalFloat("_DayNightFactor", colorsSO.dayNightFactor);
 #endif
+        Shader.SetGlobalFloat("_DayNight", colorsSO.dayNight);
     }
 }

@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2970277754564569683
+--- !u!1 &603188575107045783
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,37 +8,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 6748688604042277783}
-  - component: {fileID: 4786430230042699320}
+  - component: {fileID: 3053867881359104425}
+  - component: {fileID: 7173167384514547535}
   m_Layer: 0
-  m_Name: SlideDoor_left
+  m_Name: SlideDoor_right
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &6748688604042277783
+--- !u!4 &3053867881359104425
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2970277754564569683}
+  m_GameObject: {fileID: 603188575107045783}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7910079628831785843}
+  m_Father: {fileID: 910265071453005942}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4786430230042699320
+--- !u!114 &7173167384514547535
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2970277754564569683}
+  m_GameObject: {fileID: 603188575107045783}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
@@ -48,11 +48,11 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 17
+    depthOrder: 15
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 3
+  spriteIndex: 2
   flipX: 0
   flipY: 0
   width: 1
@@ -64,18 +64,18 @@ MonoBehaviour:
   textToCenter: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.024902344, y: 0.087402344, z: 0.89453125, w: 0.91259766}
-    uvPivot: {x: 1, y: 0}
-    worldSize: {x: 0.28333333, y: 0.99444443, z: 1}
-    index: 3
+    uvSizeAndPos: {x: 0.0107421875, y: 0.084472656, z: 0.81689453, w: 0.91552734}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.12222222, y: 0.9611111, z: 1}
+    index: 2
   bounds:
-    m_Center: {x: 5.089336, y: -2.6617777, z: 5}
-    m_Extent: {x: 0.14166667, y: 0.49722221, z: 0.1}
-  worldPivotAndSize: {x: 0.28333333, y: 0, z: 0.28333333, w: 0.99444443}
-  uvSizeAndPosition: {x: 0.024902344, y: 0.087402344, z: 0.89453125, w: 0.91259766}
+    m_Center: {x: 8.4881115, y: -2.6054444, z: 15.993}
+    m_Extent: {x: 0.06111111, y: 0.48055556, z: 0.1}
+  worldPivotAndSize: {x: 0, y: 0, z: 0.12222222, w: 0.9611111}
+  uvSizeAndPosition: {x: 0.0107421875, y: 0.084472656, z: 0.81689453, w: 0.91552734}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: -0.14166667, y: 0.49722221, z: 0}
+  boundsOffset: {x: 0.06111111, y: 0.48055556, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -83,8 +83,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 3
-  prevSpriteIndexFlipV: 3
+  prevSpriteIndexFlipH: 2
+  prevSpriteIndexFlipV: 2
   isAnimating: 0
   slicedSprite:
     sprite:
@@ -97,7 +97,7 @@ MonoBehaviour:
     worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
   hasText: 0
---- !u!1 &4773278680072365645
+--- !u!1 &2547279726429130056
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -105,73 +105,39 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 7910079628831785843}
-  - component: {fileID: 8546514872825154048}
-  - component: {fileID: 1947835105430571282}
+  - component: {fileID: 910265071453005942}
+  - component: {fileID: 8822498294225560087}
   m_Layer: 16
-  m_Name: SlideDoors_interior
+  m_Name: SlideDoors_gangway
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &7910079628831785843
+--- !u!4 &910265071453005942
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4773278680072365645}
+  m_GameObject: {fileID: 2547279726429130056}
   serializedVersion: 2
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 5.231003, y: -3.159, z: 5}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 8.427, y: -3.086, z: 15.993}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
-  - {fileID: 5406099015200027308}
-  - {fileID: 6748688604042277783}
+  - {fileID: 3053867881359104425}
+  - {fileID: 4382000540421118098}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8546514872825154048
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4773278680072365645}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 874bf1172ab6e7047bd479128420855f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
-  rightSlideDoorRenderer: {fileID: 210511920772162634}
-  leftSlideDoorRenderer: {fileID: 4786430230042699320}
-  boxCollider: {fileID: 1947835105430571282}
-  curState: 0
-  rightSlideDoor_transform: {fileID: 6748688604042277783}
-  leftSlideDoor_transform: {fileID: 5406099015200027308}
-  rightSlideDoorPos: {x: 0, y: 0, z: 0}
-  leftSlideDoorPos: {x: 0, y: 0, z: 0}
-  activeMoveAmount: 0
-  unlockMoveAmount: 0
-  moveTimer: 0
-  boardTrainQueue:
-    npcs: []
-    npcsCount: 0
-    timer: 0
-  disembarkTrainQueue:
-    npcs: []
-    npcsCount: 0
-    timer: 0
---- !u!61 &1947835105430571282
+--- !u!61 &8822498294225560087
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4773278680072365645}
+  m_GameObject: {fileID: 2547279726429130056}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -195,11 +161,11 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 1
+  m_IsTrigger: 0
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.009429932, y: 0.5023677}
+  m_Offset: {x: 0.000045776367, y: 0.47908807}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -209,9 +175,9 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.23522949, y: 0.9827286}
+  m_Size: {x: 0.24624634, y: 0.9564166}
   m_EdgeRadius: 0
---- !u!1 &7582128904083616402
+--- !u!1 &5214989286677709142
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -219,37 +185,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 5406099015200027308}
-  - component: {fileID: 210511920772162634}
+  - component: {fileID: 4382000540421118098}
+  - component: {fileID: 2525118812539751741}
   m_Layer: 0
-  m_Name: SlideDoor_right
+  m_Name: SlideDoor_left
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &5406099015200027308
+--- !u!4 &4382000540421118098
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7582128904083616402}
+  m_GameObject: {fileID: 5214989286677709142}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 1}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 7910079628831785843}
+  m_Father: {fileID: 910265071453005942}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &210511920772162634
+--- !u!114 &2525118812539751741
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7582128904083616402}
+  m_GameObject: {fileID: 5214989286677709142}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
@@ -259,11 +225,11 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 17
+    depthOrder: 16
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 4
+  spriteIndex: 1
   flipX: 0
   flipY: 0
   width: 1
@@ -275,18 +241,18 @@ MonoBehaviour:
   textToCenter: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.024902344, y: 0.087402344, z: 0.92285156, w: 0.91259766}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0.28333333, y: 0.99444443, z: 1}
-    index: 4
+    uvSizeAndPos: {x: 0.0107421875, y: 0.084472656, z: 0.8041992, w: 0.91552734}
+    uvPivot: {x: 1, y: 0}
+    worldSize: {x: 0.12222222, y: 0.9611111, z: 1}
+    index: 1
   bounds:
-    m_Center: {x: 5.3726697, y: -2.6617777, z: 5}
-    m_Extent: {x: 0.14166667, y: 0.49722221, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 0.28333333, w: 0.99444443}
-  uvSizeAndPosition: {x: 0.024902344, y: 0.087402344, z: 0.92285156, w: 0.91259766}
+    m_Center: {x: 8.365889, y: -2.6054444, z: 16.993}
+    m_Extent: {x: 0.06111111, y: 0.48055556, z: 0.1}
+  worldPivotAndSize: {x: 0.12222222, y: 0, z: 0.12222222, w: 0.9611111}
+  uvSizeAndPosition: {x: 0.0107421875, y: 0.084472656, z: 0.8041992, w: 0.91552734}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.14166667, y: 0.49722221, z: 0}
+  boundsOffset: {x: -0.06111111, y: 0.48055556, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -294,8 +260,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 4
-  prevSpriteIndexFlipV: 4
+  prevSpriteIndexFlipH: 1
+  prevSpriteIndexFlipV: 1
   isAnimating: 0
   slicedSprite:
     sprite:

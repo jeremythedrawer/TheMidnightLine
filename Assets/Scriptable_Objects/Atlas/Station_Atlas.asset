@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 33fd095fffb8f844e9fa149db1599080, type: 3}
-  m_Name: Novograd-Gorov_Atlas
+  m_Name: Station_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
   texture: {fileID: 2800000, guid: 4a9bdb32b0f04fc40ae0c04a7a31065a, type: 3}
-  isParticleAtlas: 0
+  spriteConnectColor:
+    serializedVersion: 2
+    rgba: 0
   entityMotionType: 0
   pivotColor:
     serializedVersion: 2
@@ -21,20 +23,20 @@ MonoBehaviour:
   sliceColor:
     serializedVersion: 2
     rgba: 4294901760
-  particleType: 0
   motionSprites: []
   simpleSprites:
-  - uvSizeAndPos: {x: 0.8808594, y: 0.53027344, z: 0.00048828125, w: 0.29638672}
+  - uvSizeAndPos: {x: 0.4404297, y: 0.265625, z: 0, w: 0.734375}
     uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 20.044445, y: 12.066667, z: 1}
+    worldSize: {x: 10.0222225, y: 6.0444446, z: 1}
     index: 0
-  - uvSizeAndPos: {x: 0.6062012, y: 0.27441406, z: 0.0029296875, w: 0.0021972656}
+  - uvSizeAndPos: {x: 0.30322266, y: 0.13720703, z: 0.0012207031, w: 0.5878906}
     uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 13.794444, y: 6.2444444, z: 1}
+    worldSize: {x: 6.9, y: 3.1222222, z: 1}
     index: 1
+  - uvSizeAndPos: {x: 0.88623047, y: 0.3696289, z: 0.0009765625, w: 0.21557617}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 20.166666, y: 8.411111, z: 1}
+    index: 2
   slicedSprites: []
-  particleSprites: []
-  particleUVSizeAndPosArray: []
-  worldSizesArray: []
   clips: []
   markers: []

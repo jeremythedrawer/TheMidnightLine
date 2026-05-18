@@ -52,8 +52,8 @@ MonoBehaviour:
     depthOrder: 5
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
-  boxCollider: {fileID: 0}
-  spriteIndex: 10
+  boxCollider: {fileID: 8598963554960458903}
+  spriteIndex: 5
   flipX: 0
   flipY: 0
   width: 1
@@ -65,18 +65,18 @@ MonoBehaviour:
   textToCenter: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.08886719, y: 0.09765625, z: 0.9020996, w: 0.40234375}
-    uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 2.0222223, y: 2.2222223, z: 1}
-    index: 10
+    uvSizeAndPos: {x: 0.0390625, y: 0.099121094, z: 0.84228516, w: 0.9008789}
+    uvPivot: {x: 1, y: 0}
+    worldSize: {x: 0.44444445, y: 1.1277778, z: 1}
+    index: 5
   bounds:
-    m_Center: {x: 21.47, y: -1.4794037, z: 5}
-    m_Extent: {x: 1.0111111, y: 1.1111112, z: 0.1}
-  worldPivotAndSize: {x: 1.0111111, y: 0, z: 2.0222223, w: 2.2222223}
-  uvSizeAndPosition: {x: 0.08886719, y: 0.09765625, z: 0.9020996, w: 0.40234375}
+    m_Center: {x: 21.334755, y: 0.37222618, z: 0}
+    m_Extent: {x: 0.22222222, y: 0.5638889, z: 0.1}
+  worldPivotAndSize: {x: 0.44444445, y: 0, z: 0.44444445, w: 1.1277778}
+  uvSizeAndPosition: {x: 0.0390625, y: 0.099121094, z: 0.84228516, w: 0.9008789}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0, y: 1.1111112, z: 0}
+  boundsOffset: {x: -0.22222222, y: 0.5638889, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -84,8 +84,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 10
-  prevSpriteIndexFlipV: 10
+  prevSpriteIndexFlipH: 5
+  prevSpriteIndexFlipV: 5
   isAnimating: 0
   slicedSprite:
     sprite:
@@ -124,7 +124,7 @@ Transform:
   m_GameObject: {fileID: 7875982843920766221}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.21, y: 3.68, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -164,7 +164,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.18399048, y: -0.74119306}
+  m_Offset: {x: -0.222229, y: 0.5638889}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -174,5 +174,5 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 1.9111938, y: 2.7395053}
+  m_Size: {x: 0.44444445, y: 1.1277778}
   m_EdgeRadius: 0

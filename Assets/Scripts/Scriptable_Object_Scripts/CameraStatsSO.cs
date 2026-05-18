@@ -9,4 +9,7 @@ public class CameraStatsSO : ScriptableObject
     public Vector3 curWorldPos;
     public Vector3 prevWorldPos;
     public Vector3 curVelocity;
+
+    public Matrix4x4 worldToCam;
+    public Matrix4x4 camToWorld;
 }
