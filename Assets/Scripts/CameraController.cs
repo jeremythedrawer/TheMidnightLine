@@ -8,7 +8,7 @@ public class CameraController : MonoBehaviour
     const float RES_Y = 640;
     const float RES_X = 1920;
     const float RES_Y_HALF = 320;
-    const float GAUSSIAN_VARIANCE = 60;
+    const float GAUSSIAN_VARIANCE = 90;
 
     public CameraSettingsSO settings;
     public CameraStatsSO stats;
@@ -114,7 +114,6 @@ public class CameraController : MonoBehaviour
                 float distFromCenter = spyStats.curWorldPos.x - spyStats.curLocationBounds.center.x;
 
                 carriageT = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
-                carriageT *= carriageT * 0.5f;
 
                 targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.curWorldPos.x + curXOffset, carriageT);
 

@@ -72,11 +72,11 @@ MonoBehaviour:
     worldSize: {x: 0.08888889, y: 0.5388889, z: 1}
     index: 0
   - uvSizeAndPos: {x: 0.0107421875, y: 0.084472656, z: 0.8041992, w: 0.91552734}
-    uvPivot: {x: 1, y: 0.5}
+    uvPivot: {x: 1, y: 0}
     worldSize: {x: 0.12222222, y: 0.9611111, z: 1}
     index: 1
   - uvSizeAndPos: {x: 0.0107421875, y: 0.084472656, z: 0.81689453, w: 0.91552734}
-    uvPivot: {x: 0, y: 0.5}
+    uvPivot: {x: 0, y: 0}
     worldSize: {x: 0.12222222, y: 0.9611111, z: 1}
     index: 2
   - uvSizeAndPos: {x: 0.024902344, y: 0.087402344, z: 0.89453125, w: 0.91259766}
@@ -88,7 +88,7 @@ MonoBehaviour:
     worldSize: {x: 0.28333333, y: 0.99444443, z: 1}
     index: 4
   - uvSizeAndPos: {x: 0.045898438, y: 0.099121094, z: 0.8354492, w: 0.9008789}
-    uvPivot: {x: 1, y: 0}
+    uvPivot: {x: 0, y: 0.5}
     worldSize: {x: 0.5222222, y: 1.1277778, z: 1}
     index: 5
   - uvSizeAndPos: {x: 0.7939453, y: 0.14111328, z: 0, w: 0.8588867}
@@ -108,16 +108,16 @@ MonoBehaviour:
     worldSize: {x: 0.49444443, y: 0.4888889, z: 1}
     index: 9
   - uvSizeAndPos: {x: 0.005859375, y: 0.019042969, z: 0.90234375, w: 0.7631836}
-    uvPivot: {x: 0.5, y: 0}
+    uvPivot: {x: 0.5, y: 1}
     worldSize: {x: 0.06666667, y: 0.21666667, z: 1}
     index: 10
   - uvSizeAndPos: {x: 0.85302734, y: 0.18945312, z: 0, w: 0.66845703}
     uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 9.705556, y: 2.1555555, z: 1}
     index: 11
-  - uvSizeAndPos: {x: 0.81884766, y: 0.115722656, z: 0.029785156, w: 0.54589844}
+  - uvSizeAndPos: {x: 0.8071289, y: 0.10546875, z: 0.041503906, w: 0.54589844}
     uvPivot: {x: 0.5, y: 0}
-    worldSize: {x: 9.316667, y: 1.3166667, z: 1}
+    worldSize: {x: 9.183333, y: 1.2, z: 1}
     index: 12
   - uvSizeAndPos: {x: 0.22705078, y: 0.096191406, z: 0.33154297, w: 0.44384766}
     uvPivot: {x: 0.5, y: 0}
@@ -135,6 +135,10 @@ MonoBehaviour:
     uvPivot: {x: 0, y: 0.5}
     worldSize: {x: 0.5888889, y: 1.8388889, z: 1}
     index: 16
+  - uvSizeAndPos: {x: 0.021484375, y: 0.115722656, z: 0.5620117, w: 0.4272461}
+    uvPivot: {x: 1, y: 0}
+    worldSize: {x: 0.24444444, y: 1.3166667, z: 1}
+    index: 17
   slicedSprites:
   - sprite:
       uvSizeAndPos: {x: 0.07470703, y: 0.10498047, z: 0.92089844, w: 0.7011719}

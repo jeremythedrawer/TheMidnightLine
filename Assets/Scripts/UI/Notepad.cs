@@ -10,9 +10,9 @@ public class Notepad : MonoBehaviour
     public const float WRITE_LETTER_TIME = 0.1f;
     const float PAGE_SPAWN_POS_Y_OFFSET = 0.1f;
     const float LEFTHAND_DAMPING = 10f;
-    const float PENCIL_DISTANCE_THRESHOLD = 0.1f;
+    const float PENCIL_DISTANCE_THRESHOLD = 0.05f;
     const float PENCIL_VERTICAL_FREQUENCY = 7f;
-    const float PENCIL_VERTICAL_MAGNITUDE = 0.16f;
+    const float PENCIL_VERTICAL_MAGNITUDE = 0.07f;
 
     public enum KeyframeState
     {
@@ -88,6 +88,8 @@ public class Notepad : MonoBehaviour
     }
     private void Start()
     {
+        notepadData.curState = NotepadData.State.None;
+
         handFlipPage_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.FlipHand];
         rotatePencil_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.RotatingPencil];
 
@@ -191,7 +193,7 @@ public class Notepad : MonoBehaviour
             break;
             case NotepadData.State.Writing:
             {
-                leftHand_renderer.UpdateSpriteInputs(ref  leftHand_renderer.atlas.motionSprites[rotatePencil_clip.keyframeStartIndex].sprite);
+                leftHand_renderer.UpdateSpriteInputs(ref leftHand_renderer.atlas.motionSprites[rotatePencil_clip.keyframeStartIndex].sprite);
                 
                 curStationNameBounds = activePage.GetStationNameBounds();
 

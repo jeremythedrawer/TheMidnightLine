@@ -227,49 +227,44 @@ public class SpyBrain : MonoBehaviour
 
                     if ((!isTouchingGangwayDoorRight && wasTouchingGangwayDoorRight) && !isTouchingGangwayDoorLeft)
                     {
-                        if (atlasRenderer.flipX)
+                        if (curGangwayDoor.isLeftOfCarriage)
                         {
-                            if (curGangwayDoor.isLeftOfCarriage)
-                            {
-                                curGangwayDoor.carriage.MoveUp();
-                                stats.curLocationBounds = curGangwayDoor.gangway.exteriorRenderer.bounds;
-                                stats.curLocationState = LocationState.Gangway;
-                            }
-                            else
-                            {
-                                curGangwayDoor.gangway.MoveUp();
-                                stats.curLocationBounds = curGangwayDoor.carriage.totalBounds;
-                                stats.curLocationState = LocationState.Carriage;
-                            }
-                            curGangwayDoor.CloseDoors();
+                            curGangwayDoor.carriage.MoveUp();
+                            stats.curLocationBounds = curGangwayDoor.gangway.exteriorRenderer.bounds;
+                            stats.curLocationState = LocationState.Gangway;
                         }
+                        else
+                        {
+                            Debug.Log("right");
+                            curGangwayDoor.gangway.MoveUp();
+                            stats.curLocationBounds = curGangwayDoor.carriage.totalBounds;
+                            stats.curLocationState = LocationState.Carriage;
+                        }
+                        curGangwayDoor.CloseDoors();
                     }
-
-
-                    if ((!isTouchingGangwayDoorLeft && wasTouchingGangwayDoorLeft) && !isTouchingGangwayDoorRight)
+                    else if ((!isTouchingGangwayDoorLeft && wasTouchingGangwayDoorLeft) && !isTouchingGangwayDoorRight)
                     {
-                        if (!atlasRenderer.flipX)
+                        if (curGangwayDoor.isLeftOfCarriage)
                         {
-                            if (curGangwayDoor.isLeftOfCarriage)
-                            {
-                                curGangwayDoor.gangway.MoveUp();
-                                stats.curLocationBounds = curGangwayDoor.carriage.totalBounds;
-                                stats.curLocationState = LocationState.Carriage;
-                            }
-                            else
-                            {
-                                curGangwayDoor.carriage.MoveUp();
-                                stats.curLocationBounds = curGangwayDoor.gangway.exteriorRenderer.bounds;
-                                stats.curLocationState = LocationState.Gangway;
-                            }
-                            curGangwayDoor.CloseDoors();
+                            curGangwayDoor.gangway.MoveUp();
+                            curGangwayDoor.carriage.MoveDown();
+                            stats.curLocationBounds = curGangwayDoor.carriage.totalBounds;
+                            stats.curLocationState = LocationState.Carriage;
                         }
+                        else
+                        {
+                            curGangwayDoor.carriage.MoveUp();
+                            curGangwayDoor.gangway.MoveDown();
+                            stats.curLocationBounds = curGangwayDoor.gangway.exteriorRenderer.bounds;
+                            stats.curLocationState = LocationState.Gangway;
+                        }
+                        curGangwayDoor.CloseDoors();
 
                     }
-                    if ((isTouchingGangwayDoorLeft && !wasTouchingGangwayDoorLeft) && !isTouchingGangwayDoorRight)
+                    else if ((isTouchingGangwayDoorLeft && !wasTouchingGangwayDoorLeft) && !isTouchingGangwayDoorRight)
                     {
                         curGangwayDoor = gangwayDoorLeftHit.collider.GetComponent<GangwayDoor>();
-                        if (curGangwayDoor.isLeftOfCarriage && atlasRenderer.flipX)
+                        if (curGangwayDoor.isLeftOfCarriage)
                         {
                             curGangwayDoor.gangway.MoveDown();
                         }
@@ -277,6 +272,10 @@ public class SpyBrain : MonoBehaviour
                         {
                             curGangwayDoor.carriage.MoveDown();
                         }
+                    }
+                    else if ((isTouchingGangwayDoorRight && !wasTouchingGangwayDoorRight) && !isTouchingGangwayDoorLeft)
+                    {
+                        curGangwayDoor = gangwayDoorRightHit.collider.GetComponent<GangwayDoor>();
                     }
                     wasTouchingGangwayDoorLeft = isTouchingGangwayDoorLeft;
                     wasTouchingGangwayDoorRight = isTouchingGangwayDoorRight;

@@ -220,8 +220,6 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void FlipH(bool flipLeft)
     {
-        if (flipX == flipLeft && sprite.index == prevSpriteIndexFlipH) return;
-
         flipX = flipLeft;
         scaleAndFlip.z = flipLeft ? -1 : 1;
         float flipPivot = flipLeft ? 1 - sprite.uvPivot.x : sprite.uvPivot.x;
@@ -231,8 +229,6 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void FlipV(bool flipDown)
     {
-        if (flipY == flipDown && sprite.index == prevSpriteIndexFlipV) return;
-
         flipY = flipDown;
         scaleAndFlip.w = flipDown ? -1 : 1;
         float flipPivot = flipDown ? 1 - sprite.uvPivot.y : sprite.uvPivot.y;
