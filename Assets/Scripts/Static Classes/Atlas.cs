@@ -14,9 +14,6 @@ public static class Atlas
     public static int INT_SIZE = sizeof(uint);
     public enum NPCMotion // NOTE(Jeremy): If adding a new motion put it at the bottom or it will mess with the clip indexes for the clip dictionary.
     {
-        None,
-        SittingAboutToEat,
-        SittingAboutToRead,
         SittingBlinking,
         SittingBreathing,
         SittingCalling,
@@ -26,7 +23,6 @@ public static class Atlas
         SittingSick,
         SittingSleeping,
         Smoking,
-        StandingAboutToEat,
         StandingBlinking,
         StandingBreathing,
         StandingCalling,
@@ -37,34 +33,23 @@ public static class Atlas
         StandingSleeping,
         Walking,
         Vandalising,
-        NPCMotionCount,
     }
     public enum SpyMotion
     {
-        None,
-        Walking,
-        Running,
         StandingBreathing,
-        Climbing,
-        Hanging,
-        GrabLedge,
-        StartRun,
-        StandingCalling,
-        Clipboard,
-        Jump,
-        Fall,
-        HeavyLand,
-        Death,
+        Ticket,
+        NotepadHolding,
+        NotepadFlipping,
+        NotepadWriting,
+        Walking,
     }
     public enum TrainMotion
     {
-        None,
         TrainDoor,
     }
 
     public enum NotepadMotion
-    { 
-        None,
+    {
         FlipHand,
         FlipPage,
         RotatingPencil,
@@ -125,6 +110,7 @@ public static class Atlas
     {
         public SimpleSprite sprite;
         public MarkerPosition[] markers;
+        public int holdFrames;
     }
     [Serializable] public struct SliceSprite
     {
@@ -133,21 +119,17 @@ public static class Atlas
         public Vector4[] uvSizeAndPos;
         public Vector4 worldSlices;
     }
-    [Serializable] public struct AtlasKeyframe
-    {
-        public MotionSprite motionSprite;
-        public int holdTime;
-    }
     [Serializable] public struct AtlasClip
     {
         public string clipName; // HACK: Take out for production build. Cant use #if UNITY_EDITOR because it'll crash the build. :(
-        public AtlasKeyframe[] keyFrames;
         public ClipType clipType;
         public int motionIndex;
+        public int keyframeStartIndex;
+        public int keyframeEndIndex;
         public float time;
     }
 
-    public static readonly Dictionary<EntityMotionType, Type> MotionEnumDictionary =
+    public static readonly Dictionary<EntityMotionType, Type> motionEnumDictionary =
     new Dictionary<EntityMotionType, Type>
     {
         { EntityMotionType.NPC, typeof(NPCMotion) },

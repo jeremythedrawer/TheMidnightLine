@@ -174,12 +174,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 1
   batchKey:
+    texture: {fileID: 2800000, guid: e67057ee85abdac409fcfda2715bd2db, type: 3}
     material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
     depthOrder: 1
   atlas: {fileID: 11400000, guid: 5085181b26ea31b4b9430dc5ce3bcdf5, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 0
+  spriteIndex: 1
   flipX: 0
   flipY: 0
   width: 1
@@ -191,18 +192,18 @@ MonoBehaviour:
   textToCenter: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.13134766, y: 0.119140625, z: 0.00048828125, w: 0.87646484}
-    uvPivot: {x: 0.43122676, y: 0}
-    worldSize: {x: 1.4944445, y: 1.3555555, z: 1}
-    index: 0
+    uvSizeAndPos: {x: 0.057617188, y: 0.15820312, z: 0.0625, w: 0.8388672}
+    uvPivot: {x: 0.4915254, y: 0}
+    worldSize: {x: 0.32777777, y: 0.9, z: 1}
+    index: 1
   bounds:
-    m_Center: {x: 307.84277, y: 1.5607778, z: 1}
-    m_Extent: {x: 0.74722224, y: 0.67777777, z: 0.1}
-  worldPivotAndSize: {x: 0.64444447, y: 0, z: 1.4944445, w: 1.3555555}
-  uvSizeAndPosition: {x: 0.13134766, y: 0.119140625, z: 0.00048828125, w: 0.87646484}
+    m_Center: {x: 86.155334, y: 2.141, z: 1}
+    m_Extent: {x: 0.16388889, y: 0.45, z: 0.1}
+  worldPivotAndSize: {x: 0.1611111, y: 0, z: 0.32777777, w: 0.9}
+  uvSizeAndPosition: {x: 0.057617188, y: 0.15820312, z: 0.0625, w: 0.8388672}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.10277778, y: 0.67777777, z: 0}
+  boundsOffset: {x: 0.002777785, y: 0.45, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -210,8 +211,9 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 1
+  prevSpriteIndexFlipV: 1
   isAnimating: 0
   slicedSprite:
     sprite:
@@ -258,7 +260,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0.8440052}
+  m_Offset: {x: -0.008758545, y: 0.45295334}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.5, y: 0}
@@ -268,7 +270,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.24868774, y: 1.6880105}
+  m_Size: {x: 0.11450195, y: 0.87156224}
   m_EdgeRadius: 0
 --- !u!114 &8541590373058370183
 MonoBehaviour:
@@ -285,8 +287,6 @@ MonoBehaviour:
   rigidBody: {fileID: 2814450545205291383}
   boxCollider: {fileID: 4281581721833017353}
   atlasRenderer: {fileID: 5735628127011101087}
-  carriageBoundsCompute: {fileID: 7200000, guid: 618a34bb9382ab542b78c179e2a23646, type: 3}
-  carriageBoundsRT: {fileID: 8400000, guid: 3af89f38fb042f94aafb4dc72f9a56a9, type: 2}
   settings: {fileID: 11400000, guid: ff622072eaf75a443bdc1bbda3340ef0, type: 2}
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   stats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
@@ -305,30 +305,28 @@ MonoBehaviour:
   npcTicketCheck: {fileID: 0}
   curClip:
     clipName: 
-    keyFrames: []
     clipType: 0
     motionIndex: 0
+    keyframeStartIndex: 0
+    keyframeEndIndex: 0
     time: 0
   clipTime: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  carriageBoundsKernel: 0
-  threadGroupX: 0
-  threadGroupY: 0
   canExitCheckTicket: 0
   canExitNotepad: 0
   checkingCarriageMap: 0
   collisionData:
-    groundLeft: {x: 307.518, y: 0.734}
-    groundRight: {x: 307.96198, y: 0.734}
-    stepTopLeft: {x: 307.518, y: 0.954}
-    stepTopRight: {x: 307.96198, y: 0.954}
-    stepBottomLeft: {x: 307.518, y: 0.883}
-    stepBottomRight: {x: 307.96198, y: 0.883}
-    wallTopLeft: {x: 307.44998, y: 2.543}
-    wallTopRight: {x: 308.03, y: 2.543}
-    wallBottomLeft: {x: 307.44998, y: 1.643}
-    wallBottomRight: {x: 308.03, y: 1.643}
+    groundLeft: {x: 85.93056, y: 1.5419999}
+    groundRight: {x: 86.37456, y: 1.5419999}
+    stepTopLeft: {x: 85.93056, y: 1.762}
+    stepTopRight: {x: 86.37456, y: 1.762}
+    stepBottomLeft: {x: 85.93056, y: 1.691}
+    stepBottomRight: {x: 86.37456, y: 1.691}
+    wallTopLeft: {x: 85.86256, y: 3.3509998}
+    wallTopRight: {x: 86.44256, y: 3.3509998}
+    wallBottomLeft: {x: 85.86256, y: 2.451}
+    wallBottomRight: {x: 86.44256, y: 2.451}
     stepFilter:
       useTriggers: 0
       useLayerMask: 0

@@ -181,7 +181,7 @@ public class NPCBrain : MonoBehaviour
                 if (curGlyph != null)
                 {
                     atlasRenderer.PlayClip(ref curClip, curGlyph.transform);
-                    if (!playingGlyph && curClip.keyFrames[atlasRenderer.curFrameIndex].motionSprite.markers.Length > 0)
+                    if (!playingGlyph &&  atlas.motionSprites[curFrameIndex].markers.Length > 0)
                     {
                         curGlyph.Play();
                         playingGlyph = true;

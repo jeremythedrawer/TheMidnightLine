@@ -70,7 +70,6 @@ public class Notepad : MonoBehaviour
     
     public Bounds curStationNameBounds;
     
-    public int lastLeftHandKeyframeIndex;
     public int leftHandDepthFront;
     public int leftHandDepthBack;
     
@@ -100,7 +99,6 @@ public class Notepad : MonoBehaviour
         handFlipPage_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.FlipHand];
         rotatePencil_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.RotatingPencil];
 
-        lastLeftHandKeyframeIndex = handFlipPage_clip.keyFrames.Length - 1;
         leftHandDepthFront =  (int)(bindingRings_renderer.transform.position.z - 1);
         leftHandDepthBack = (int)(rightHand_renderer.transform.position.z + 1);
 
@@ -201,7 +199,7 @@ public class Notepad : MonoBehaviour
             break;
             case State.Writing:
             {
-                leftHand_renderer.UpdateSpriteInputs(ref rotatePencil_clip.keyFrames[0].motionSprite.sprite);
+                leftHand_renderer.UpdateSpriteInputs(ref  leftHand_renderer.atlas.motionSprites[rotatePencil_clip.keyframeStartIndex].sprite);
                 
                 curStationNameBounds = activePage.GetStationNameBounds();
 
@@ -346,7 +344,7 @@ public class Notepad : MonoBehaviour
                     break;
                 }
 
-                if (leftHand_renderer.curFrameIndex == lastLeftHandKeyframeIndex)
+                if (leftHand_renderer.curFrameIndex == handFlipPage_clip.keyframeEndIndex)
                 {
                     if (curKeyframeState == KeyframeState.None) return;
 

@@ -26,10 +26,6 @@ public class AtlasSO : ScriptableObject
     
     public Dictionary<int, AtlasClip> clipDict;
 
-    private void OnEnable()
-    {
-        UpdateClipDictionary();
-    }
     public void UpdateClipDictionary()
     {
         clipDict = BuildClipKeys(clips);

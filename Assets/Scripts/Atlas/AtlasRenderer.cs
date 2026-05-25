@@ -58,6 +58,7 @@ public class AtlasRenderer : MonoBehaviour
     public float keyframeClock;
     public int curFrameIndex;
     public int prevFrameIndex;
+    public int curMotionIndex;
     public int prevSpriteIndexFlipH;
     public int prevSpriteIndexFlipV;
     public bool isAnimating;
@@ -153,6 +154,7 @@ public class AtlasRenderer : MonoBehaviour
     }
     private void OnEnable()
     {
+        if (batchKey.texture == null) return;
         batchKey.texture = atlas.texture;
         RegisterRenderer(this);
     }
@@ -294,7 +296,13 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void PlayClip(ref AtlasClip clip, Transform markerTransform = null)
     {
-        MotionSprite motionSprite = GetNextKeyframeSprite(ref clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
+        if (clip.motionIndex != curMotionIndex)
+        {
+            curFrameIndex = clip.keyframeStartIndex;
+            curMotionIndex = clip.motionIndex;
+        }
+        MotionSprite motionSprite = GetNextKeyframeIndex(atlas, clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
+
         if (motionSprite.sprite.index == sprite.index) return;
 
         if (markerTransform != null && motionSprite.markers.Length > 0)
@@ -319,7 +327,7 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void PlayClipReverse(AtlasClip clip, Transform markerTransform = null)
     {
-        MotionSprite motionSprite = GetNextKeyframeSpriteReverse(ref clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
+        MotionSprite motionSprite = GetNextKeyframeSpriteReverse(atlas, clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
         if (motionSprite.sprite.index == sprite.index) return;
 
         if (markerTransform != null && motionSprite.markers.Length > 0)
@@ -342,7 +350,7 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void PlayManualClip(ref AtlasClip clip, float currentTime, Transform markerTransform = null)
     {
-        MotionSprite motionSprite = GetNextKeyframeSpriteManual(ref clip, currentTime);
+        MotionSprite motionSprite = GetNextKeyframeSpriteManual(atlas, clip, currentTime);
         if (motionSprite.sprite.index == sprite.index) return;
 
         if (markerTransform != null && motionSprite.markers.Length > 0)
@@ -358,14 +366,14 @@ public class AtlasRenderer : MonoBehaviour
     private async UniTask PlayingClipOneShot(AtlasClip clip, Transform markerTransform = null)
     {
         keyframeClock = 0;
-        int lastIndex = clip.keyFrames.Length - 1;
+        int lastIndex = clip.keyframeEndIndex;
         try
         {
             curFrameIndex = 0;
             isAnimating = true;
             while (curFrameIndex < lastIndex)
             {
-                MotionSprite motionSprite = GetNextKeyframeSprite(ref clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
+                MotionSprite motionSprite = GetNextKeyframeIndex(atlas, clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
                 if (motionSprite.sprite.index != sprite.index)
                 {
                     if (markerTransform != null && motionSprite.markers.Length > 0)
@@ -390,13 +398,13 @@ public class AtlasRenderer : MonoBehaviour
     private async UniTask PlayingClipOneShotReverse(AtlasClip clip, Transform markerTransform = null)
     {
         keyframeClock = 0;
-        curFrameIndex = clip.keyFrames.Length - 1;
+        curFrameIndex = clip.keyframeEndIndex;
         try
         {
             isAnimating = true;
             while (curFrameIndex >= 0)
             {
-                MotionSprite motionSprite = AtlasRendering.GetNextKeyframeSpriteReverse(ref clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
+                MotionSprite motionSprite = GetNextKeyframeSpriteReverse(atlas, clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
 
                 if (motionSprite.sprite.index != sprite.index)
                 {

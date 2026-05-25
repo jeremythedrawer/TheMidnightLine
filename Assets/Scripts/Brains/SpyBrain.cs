@@ -89,7 +89,6 @@ public class SpyBrain : MonoBehaviour
     private void FixedUpdate()
     {
         FixedUpdateStates();
-        CalculateCollisionPoints();
 
         Physics2D.Linecast(collisionData.stepBottomLeft, collisionData.stepTopLeft, collisionData.stepFilter, collisionData.leftStepResults);
         Physics2D.Linecast(collisionData.stepBottomRight, collisionData.stepTopRight, collisionData.stepFilter, collisionData.rightStepResults);

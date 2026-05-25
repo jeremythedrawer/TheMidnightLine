@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 6908580579022855336}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 5, y: 0, z: 182.48}
+  m_LocalPosition: {x: 5, y: -2.96, z: 182.48}
   m_LocalScale: {x: 20, y: 20, z: 20}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -116,7 +116,7 @@ Transform:
   m_GameObject: {fileID: 7062505887703836089}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -5, y: -0.63, z: 182.48}
+  m_LocalPosition: {x: -5, y: -2.8, z: 182.48}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -251,7 +251,7 @@ Camera:
   far clip plane: 200
   field of view: 60
   orthographic: 1
-  orthographic size: 3.69
+  orthographic size: 1.777778
   m_Depth: -1
   m_CullingMask:
     serializedVersion: 2
@@ -339,8 +339,8 @@ MonoBehaviour:
   spyInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
-  carriageBoundsCompute: {fileID: 0}
-  carriageBoundsRT: {fileID: 0}
+  carriageBoundsCompute: {fileID: 7200000, guid: 618a34bb9382ab542b78c179e2a23646, type: 3}
+  carriageBoundsRT: {fileID: 8400000, guid: 3af89f38fb042f94aafb4dc72f9a56a9, type: 2}
   curState: 0
   cam: {fileID: 1712475161015034151}
   targetWorldPos: {x: 0, y: 0, z: 0}
@@ -359,6 +359,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 538277491773755138}
     m_Modifications:
+    - target: {fileID: 43451965131833119, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 43451965131833119, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: bounds.m_Center.x
       value: 301.818
@@ -391,6 +395,10 @@ PrefabInstance:
       propertyPath: worldPivotAndSize.z
       value: 0.30000004
       objectReference: {fileID: 0}
+    - target: {fileID: 549165195583526056, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 549165195583526056, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: sprite.uvPivot.x
       value: 0.5
@@ -495,6 +503,10 @@ PrefabInstance:
       propertyPath: totalBounds.m_Extent.y
       value: 4.951667
       objectReference: {fileID: 0}
+    - target: {fileID: 808036112311189565, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 808036112311189565, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: boundsOffset.x
       value: 0.47706112
@@ -652,6 +664,10 @@ PrefabInstance:
       value: 0.06666667
       objectReference: {fileID: 0}
     - target: {fileID: 1207930104628538709, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
+    - target: {fileID: 1207930104628538709, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: bounds.m_Center.x
       value: 299.43167
       objectReference: {fileID: 0}
@@ -683,6 +699,10 @@ PrefabInstance:
       propertyPath: worldPivotAndSize.z
       value: 4.0277777
       objectReference: {fileID: 0}
+    - target: {fileID: 1442798746595164124, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 1442798746595164124, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: sprite.uvPivot.x
       value: 0
@@ -788,6 +808,10 @@ PrefabInstance:
       value: 0.6888889
       objectReference: {fileID: 0}
     - target: {fileID: 4110908267735836474, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
+    - target: {fileID: 4110908267735836474, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: bounds.m_Center.x
       value: 302.612
       objectReference: {fileID: 0}
@@ -827,6 +851,10 @@ PrefabInstance:
       propertyPath: m_IsActive
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 4483112655608136027, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 4483112655608136027, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: sprite.uvPivot.x
       value: 0
@@ -908,6 +936,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 2100000, guid: 12c2dbd000184ef46b9f4c55426baf8d, type: 2}
     - target: {fileID: 4782379390424050782, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
+    - target: {fileID: 4782379390424050782, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: bounds.m_Center.x
       value: 302.8177
       objectReference: {fileID: 0}
@@ -955,6 +987,10 @@ PrefabInstance:
       propertyPath: batchKey.depthOrder
       value: -1
       objectReference: {fileID: 0}
+    - target: {fileID: 5128884171410632046, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 5128884171410632046, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: boundsOffset.x
       value: 0.3054556
@@ -1087,6 +1123,10 @@ PrefabInstance:
       propertyPath: worldPivotsAndSizes.Array.data[8].z
       value: 0.044444446
       objectReference: {fileID: 0}
+    - target: {fileID: 5455617494090396567, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 5455617494090396567, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: boundsOffset.x
       value: 0.40521953
@@ -1279,6 +1319,10 @@ PrefabInstance:
       propertyPath: worldPivotsAndSizes.Array.data[13].z
       value: 0.022222223
       objectReference: {fileID: 0}
+    - target: {fileID: 5609024358638817100, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 5609024358638817100, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: boundsOffset.x
       value: 0.49322784
@@ -1484,6 +1528,10 @@ PrefabInstance:
       value: 0.022222223
       objectReference: {fileID: 0}
     - target: {fileID: 5785387709329943226, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
+    - target: {fileID: 5785387709329943226, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: sprite.uvPivot.x
       value: 0
       objectReference: {fileID: 0}
@@ -1512,6 +1560,10 @@ PrefabInstance:
       value: 0.08611111
       objectReference: {fileID: 0}
     - target: {fileID: 5785387709329943226, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: -38
+      objectReference: {fileID: 0}
+    - target: {fileID: 5785387709329943226, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: uvSizeAndPosition.w
       value: 0.84375
       objectReference: {fileID: 0}
@@ -1527,6 +1579,10 @@ PrefabInstance:
       propertyPath: sprite.uvSizeAndPos.w
       value: 0.84375
       objectReference: {fileID: 0}
+    - target: {fileID: 5956653477285991142, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 5956653477285991142, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: bounds.m_Center.x
       value: 306.21664
@@ -1549,7 +1605,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5956653477285991142, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: batchKey.depthOrder
-      value: -2
+      value: -1
       objectReference: {fileID: 0}
     - target: {fileID: 5956653477285991142, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: worldPivotAndSize.w
@@ -1559,6 +1615,10 @@ PrefabInstance:
       propertyPath: worldPivotAndSize.z
       value: 1.6666667
       objectReference: {fileID: 0}
+    - target: {fileID: 6181457068075430136, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 6181457068075430136, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: sprite.uvPivot.x
       value: 0
@@ -1588,6 +1648,10 @@ PrefabInstance:
       value: 0.083333336
       objectReference: {fileID: 0}
     - target: {fileID: 6181457068075430136, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: -38
+      objectReference: {fileID: 0}
+    - target: {fileID: 6181457068075430136, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: uvSizeAndPosition.w
       value: 0.84375
       objectReference: {fileID: 0}
@@ -1603,6 +1667,10 @@ PrefabInstance:
       propertyPath: sprite.uvSizeAndPos.w
       value: 0.84375
       objectReference: {fileID: 0}
+    - target: {fileID: 6403673605923402769, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 6403673605923402769, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: bounds.m_Center.x
       value: 302.65643
@@ -1631,6 +1699,10 @@ PrefabInstance:
       propertyPath: worldPivotAndSize.z
       value: 1.6333333
       objectReference: {fileID: 0}
+    - target: {fileID: 6711307986246254403, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 6711307986246254403, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: bounds.m_Center.x
       value: 303.73553
@@ -1684,6 +1756,10 @@ PrefabInstance:
       value: 1.9777778
       objectReference: {fileID: 0}
     - target: {fileID: 7148725006676311721, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
+    - target: {fileID: 7148725006676311721, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -1728,6 +1804,10 @@ PrefabInstance:
       value: 0.84375
       objectReference: {fileID: 0}
     - target: {fileID: 7993045042067085842, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
+    - target: {fileID: 7993045042067085842, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: bounds.m_Center.x
       value: 301.60333
       objectReference: {fileID: 0}
@@ -1759,6 +1839,10 @@ PrefabInstance:
       propertyPath: worldPivotAndSize.z
       value: 5.666667
       objectReference: {fileID: 0}
+    - target: {fileID: 8271897046711043776, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 8271897046711043776, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: boundsOffset.x
       value: 0.1798111
@@ -1843,6 +1927,10 @@ PrefabInstance:
       propertyPath: worldPivotsAndSizes.Array.data[4].z
       value: 0.022222223
       objectReference: {fileID: 0}
+    - target: {fileID: 8505159643660972924, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 8505159643660972924, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: boundsOffset.x
       value: 0.57303894
@@ -2143,6 +2231,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 8979378592812050113, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
+      propertyPath: cam
+      value: 
+      objectReference: {fileID: 1712475161015034151}
     - target: {fileID: 8979378592812050113, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: boundsOffset.x
       value: 0.44183895

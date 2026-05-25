@@ -194,7 +194,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.0927887, y: 0.6982471}
+  m_Offset: {x: -0.17033386, y: 0.36548066}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.41025642, y: 0}
@@ -204,7 +204,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.25491333, y: 1.3964942}
+  m_Size: {x: 0.099823, y: 0.6994133}
   m_EdgeRadius: 0
 --- !u!114 &8312574823374561200
 MonoBehaviour:
@@ -238,15 +238,15 @@ MonoBehaviour:
   textToCenter: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.036621094, y: 0.125, z: 0.0087890625, w: 0.8745117}
-    uvPivot: {x: 0.41333333, y: 0}
-    worldSize: {x: 0.41666666, y: 1.4222223, z: 1}
+    uvSizeAndPos: {x: 0.036132812, y: 0.125, z: 0.0087890625, w: 0.875}
+    uvPivot: {x: 0.4054054, y: 0}
+    worldSize: {x: 0.20555556, y: 0.7111111, z: 1}
     index: 0
   bounds:
     m_Center: {x: 307.05832, y: 2.527111, z: 0}
-    m_Extent: {x: 0.20833333, y: 0.7111111, z: 0.1}
-  worldPivotAndSize: {x: 0.26666665, y: 0, z: 0.41666666, w: 1.4222223}
-  uvSizeAndPosition: {x: 0.036621094, y: 0.125, z: 0.0087890625, w: 0.8745117}
+    m_Extent: {x: 0.10277778, y: 0.35555556, z: 0.1}
+  worldPivotAndSize: {x: 0.26666665, y: 0, z: 0.20555556, w: 0.7111111}
+  uvSizeAndPosition: {x: 0.036132812, y: 0.125, z: 0.0087890625, w: 0.875}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
   boundsOffset: {x: 0.058333337, y: 0.8361111, z: 0}
@@ -257,6 +257,7 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  curMotionIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
   isAnimating: 0
@@ -324,9 +325,10 @@ MonoBehaviour:
     behaviours: 0
   curClip:
     clipName: 
-    keyFrames: []
     clipType: 0
     motionIndex: 0
+    keyframeStartIndex: 0
+    keyframeEndIndex: 0
     time: 0
   curState: 0
   curPath: 0

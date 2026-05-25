@@ -102,151 +102,138 @@ public static class AtlasRendering
 
         }
     }
-    public static ref MotionSprite GetNextKeyframeSprite(ref AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
+    public static MotionSprite GetNextKeyframeIndex(AtlasSO atlas, AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {
+        if (curFrameIndex > clip.keyframeEndIndex || curFrameIndex < 0) curFrameIndex = 0;
+
         keyframeClock += Time.deltaTime;
 
-        float frameTime = keyframeClock * FRAMES_PER_SEC;
-        if (curFrameIndex >= clip.keyFrames.Length || curFrameIndex < 0) curFrameIndex = 0;
-        AtlasKeyframe curKeyFrame = clip.keyFrames[curFrameIndex];
+        MotionSprite curMotionSprite = atlas.motionSprites[curFrameIndex];
+        int curFrame = (int)(keyframeClock * FRAMES_PER_SEC);
+     
+        if (curFrame < curMotionSprite.holdFrames) return curMotionSprite;
 
         switch (clip.clipType)
         {
             case ClipType.Loop:
             {
-                if (frameTime >= curKeyFrame.holdTime)
+                prevFrameIndex = curFrameIndex;
+                curFrameIndex++;
+
+                if (curFrameIndex > clip.keyframeEndIndex)
                 {
-                    prevFrameIndex = curFrameIndex;
-                    curFrameIndex++;
-
-                    if (curFrameIndex >= clip.keyFrames.Length)
-                    {
-                        curFrameIndex = 0;
-                    }
-
-                    keyframeClock = 0;
+                    curFrameIndex = clip.keyframeStartIndex;
                 }
+
+                keyframeClock = 0;
             }
             break;
             case ClipType.PingPong:
             {
-                if (frameTime >= curKeyFrame.holdTime)
+                if (curFrameIndex < clip.keyframeEndIndex && (curFrameIndex > prevFrameIndex || curFrameIndex == clip.keyframeStartIndex))
                 {
-                    if (curFrameIndex < clip.keyFrames.Length - 1 && (curFrameIndex > prevFrameIndex || curFrameIndex == 0))
-                    {
-                        prevFrameIndex = curFrameIndex;
-                        curFrameIndex++;
-                    }
-                    else
-                    {
-                        prevFrameIndex = curFrameIndex;
-                        curFrameIndex--;
-                    }
-                    keyframeClock = 0;
+                    prevFrameIndex = curFrameIndex;
+                    curFrameIndex++;
                 }
+                else
+                {
+                    prevFrameIndex = curFrameIndex;
+                    curFrameIndex--;
+                }
+                keyframeClock = 0;
             }
             break;
             case ClipType.OneShot:
             {
-                if (frameTime >= curKeyFrame.holdTime)
+                prevFrameIndex = curFrameIndex;
+                if (curFrameIndex < clip.keyframeEndIndex)
                 {
-                    prevFrameIndex = curFrameIndex;
-                    if (curFrameIndex < clip.keyFrames.Length - 1)
-                    {
-                        curFrameIndex++;
-                    }
-                    keyframeClock = 0;
+                    curFrameIndex++;
                 }
+                keyframeClock = 0;
             }
             break;
         }
 
-        return ref clip.keyFrames[curFrameIndex].motionSprite;
+        return atlas.motionSprites[curFrameIndex];
     }
-    public static ref MotionSprite GetNextKeyframeSpriteReverse(ref AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
+    public static MotionSprite GetNextKeyframeSpriteReverse(AtlasSO atlas, AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {
+        if (curFrameIndex > clip.keyframeEndIndex || curFrameIndex < 0) curFrameIndex = 0;
+
         keyframeClock += Time.deltaTime;
 
-        float frameTime = keyframeClock * FRAMES_PER_SEC;
-        if (curFrameIndex >= clip.keyFrames.Length || curFrameIndex < 0) curFrameIndex = 0;
-        AtlasKeyframe curKeyFrame = clip.keyFrames[curFrameIndex];
+        MotionSprite curMotionSprite = atlas.motionSprites[curFrameIndex];
+        int curFrame = (int)(keyframeClock * FRAMES_PER_SEC);
 
-        if (frameTime >= curKeyFrame.holdTime)
+        if (curFrame < curMotionSprite.holdFrames) return curMotionSprite;
+
+        prevFrameIndex = curFrameIndex;
+        if (curFrameIndex > 0)
         {
-            prevFrameIndex = curFrameIndex;
-            if (curFrameIndex > 0)
-            {
-                curFrameIndex--;
-            }
-            keyframeClock = 0;
+            curFrameIndex--;
         }
+        keyframeClock = 0;
 
-        return ref clip.keyFrames[curFrameIndex].motionSprite;
+        return atlas.motionSprites[curFrameIndex];
     }
-    public static ref MotionSprite GetNextKeyframeSpriteManual(ref AtlasClip clip, float currentTime)
+    public static MotionSprite GetNextKeyframeSpriteManual(AtlasSO atlas, AtlasClip clip, float currentTime)
     {
-        int maxIndex = clip.keyFrames.Length - 1;
-        int curFrameIndex = Mathf.Clamp(Mathf.FloorToInt((clip.keyFrames.Length - 1) * currentTime), 0, maxIndex);
-        return ref clip.keyFrames[curFrameIndex].motionSprite;
+        int curFrameIndex = (int)Mathf.Lerp(clip.keyframeStartIndex, clip.keyframeEndIndex, currentTime);
+        return atlas.motionSprites[curFrameIndex];
     }
-    public static ref SimpleSprite GetNextKeyframeSpriteEditor(ref AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
+    public static MotionSprite GetNextKeyframeIndexEditor(AtlasSO atlas, AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {
-        float frameTime = keyframeClock * FRAMES_PER_SEC;
-        if (curFrameIndex >= clip.keyFrames.Length || curFrameIndex < 0) curFrameIndex = 0;
-        AtlasKeyframe curKeyFrame = clip.keyFrames[curFrameIndex];
+        if (curFrameIndex > clip.keyframeEndIndex || curFrameIndex < 0) curFrameIndex = 0;
+
+        MotionSprite curMotionSprite = atlas.motionSprites[curFrameIndex];
+        int curFrame = (int)(keyframeClock * FRAMES_PER_SEC);
+
+        if (curFrame < curMotionSprite.holdFrames) return curMotionSprite;
 
         switch (clip.clipType)
         {
             case ClipType.Loop:
             {
-                if (frameTime >= curKeyFrame.holdTime)
+                prevFrameIndex = curFrameIndex;
+                curFrameIndex++;
+
+                if (curFrameIndex > clip.keyframeEndIndex)
                 {
-                    prevFrameIndex = curFrameIndex;
-                    curFrameIndex++;
-
-                    if (curFrameIndex >= clip.keyFrames.Length)
-                    {
-                        curFrameIndex = 0;
-                    }
-
-                    keyframeClock = 0;
+                    curFrameIndex = clip.keyframeStartIndex;
                 }
+
+                keyframeClock = 0;
             }
             break;
             case ClipType.PingPong:
             {
-                if (frameTime >= curKeyFrame.holdTime)
+                if (curFrameIndex < clip.keyframeEndIndex && (curFrameIndex > prevFrameIndex || curFrameIndex == clip.keyframeStartIndex))
                 {
-                    if (curFrameIndex < clip.keyFrames.Length - 1 && (curFrameIndex > prevFrameIndex || curFrameIndex == 0))
-                    {
-                        prevFrameIndex = curFrameIndex;
-                        curFrameIndex++;
-                    }
-                    else
-                    {
-                        prevFrameIndex = curFrameIndex;
-                        curFrameIndex--;
-                    }
-                    keyframeClock = 0;
+                    prevFrameIndex = curFrameIndex;
+                    curFrameIndex++;
                 }
+                else
+                {
+                    prevFrameIndex = curFrameIndex;
+                    curFrameIndex--;
+                }
+                keyframeClock = 0;
             }
             break;
             case ClipType.OneShot:
             {
-                if (frameTime >= curKeyFrame.holdTime)
+                prevFrameIndex = curFrameIndex;
+                if (curFrameIndex < clip.keyframeEndIndex)
                 {
-                    prevFrameIndex = curFrameIndex;
-                    if (curFrameIndex < clip.keyFrames.Length - 1)
-                    {
-                        curFrameIndex++;
-                    }
-                    keyframeClock = 0;
+                    curFrameIndex++;
                 }
+                keyframeClock = 0;
             }
             break;
         }
 
-        return ref clip.keyFrames[curFrameIndex].motionSprite.sprite;
+        return atlas.motionSprites[curFrameIndex];
     }
     public static Mesh SetQuad()
     {
@@ -315,7 +302,6 @@ public static class AtlasRendering
             new Vector4(1, 1, pivotWidth, pivotHeight),
         };
     }
-
     public static Vector4[] SetNewWorldPivotsNineSliceArray(float width, float height, Vector4[] worldPivotsAndSizes)
     {
         Vector4 middlePivotAndSize = worldPivotsAndSizes[4];

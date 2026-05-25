@@ -107,7 +107,7 @@ Shader "Custom/s_zoneParticles"
 
                 half bayer = BayerX8((color - bayerValue), i.positionHCS.y);
                 half3 finalColor = bayer + _MainColor;
-                return half4(color.xxx, 1);
+                return half4(finalColor, 1);
             }
             ENDHLSL
         }

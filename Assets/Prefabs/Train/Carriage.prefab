@@ -15,7 +15,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6283648621410223278
 Transform:
   m_ObjectHideFlags: 0
@@ -120,11 +120,11 @@ MonoBehaviour:
   seatRenderers:
   - {fileID: 3705765459553740809}
   - {fileID: 3550374363842774671}
-  - {fileID: 0}
+  - {fileID: 7124821817594034148}
   grapPoleRenderers:
   - {fileID: 7412466534817934392}
-  - {fileID: 0}
-  - {fileID: 0}
+  - {fileID: 2617015964369887263}
+  - {fileID: 7071706674951241697}
   insideBoundsCollider: {fileID: 4967624362453220076}
   smokingRoomColliders:
   - {fileID: 8152975921336346681}
@@ -134,8 +134,8 @@ MonoBehaviour:
   - {fileID: 661518849086085401}
   interiorSlideDoors:
   - {fileID: 8185190912822213980}
-  - {fileID: 0}
-  map: {fileID: 0}
+  - {fileID: 9051678911522993358}
+  map: {fileID: 294483142283370181}
   wheelCircumference: 0
   alpha: 0
   seatData:
@@ -176,7 +176,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &6850571809195558672
 Transform:
   m_ObjectHideFlags: 0
@@ -186,7 +186,7 @@ Transform:
   m_GameObject: {fileID: 2569232535716239486}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -4.484, y: 1.209, z: 15}
+  m_LocalPosition: {x: 2.617, y: 1.209, z: 15}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -226,7 +226,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.044448853, y: 0.2694435}
+  m_Offset: {x: 0.044433594, y: 0.26944447}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -275,7 +275,7 @@ MonoBehaviour:
     worldSize: {x: 0.08888889, y: 0.5388889, z: 1}
     index: 0
   bounds:
-    m_Center: {x: 106.93681, y: -53.521557, z: 15}
+    m_Center: {x: 114.03781, y: -53.521557, z: 15}
     m_Extent: {x: 0.044444446, y: 0.26944444, z: 0.1}
   worldPivotAndSize: {x: 0, y: 0, z: 0.08888889, w: 0.5388889}
   uvSizeAndPosition: {x: 0.0078125, y: 0.04736328, z: 0.88427734, w: 0.9526367}
@@ -289,6 +289,7 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  curMotionIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
   isAnimating: 0
@@ -399,6 +400,7 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  curMotionIndex: 0
   prevSpriteIndexFlipH: 11
   prevSpriteIndexFlipV: 11
   isAnimating: 0
@@ -496,6 +498,7 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  curMotionIndex: 0
   prevSpriteIndexFlipH: 13
   prevSpriteIndexFlipV: 13
   isAnimating: 0
@@ -629,6 +632,7 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  curMotionIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
   isAnimating: 0
@@ -951,6 +955,7 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  curMotionIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
   isAnimating: 0
@@ -1084,6 +1089,7 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  curMotionIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
   isAnimating: 0
@@ -1338,6 +1344,7 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  curMotionIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
   isAnimating: 0
@@ -1444,6 +1451,7 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  curMotionIndex: 0
   prevSpriteIndexFlipH: 6
   prevSpriteIndexFlipV: 6
   isAnimating: 0
@@ -1541,6 +1549,7 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  curMotionIndex: 0
   prevSpriteIndexFlipH: 12
   prevSpriteIndexFlipV: 12
   isAnimating: 0
@@ -2340,6 +2349,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
   m_PrefabInstance: {fileID: 794137656801820366}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &9051678911522993358 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8546514872825154048, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
+  m_PrefabInstance: {fileID: 794137656801820366}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874bf1172ab6e7047bd479128420855f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1001 &956831794483558581
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -3834,6 +3854,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+--- !u!114 &2617015964369887263 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 3180647652098633204}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
 --- !u!4 &7528687754748074771 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
@@ -5163,6 +5194,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4924874964354692839, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
   m_PrefabInstance: {fileID: 7661137364205826570}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7071706674951241697 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
+  m_PrefabInstance: {fileID: 7661137364205826570}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
 --- !u!1001 &7820498069647386981
 PrefabInstance:
   m_ObjectHideFlags: 0

@@ -12,7 +12,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: bf0d793ee487e47449a2d13d1680f678, type: 3}
   m_Name: SpySettings_SO
   m_EditorClassIdentifier: 
-  moveSpeed: 3
+  moveSpeed: 1.5
   runSpeedMultiplier: 2
   groundAccelation: 12
   groundDecelaration: 0.5
@@ -24,11 +24,11 @@ MonoBehaviour:
   antiGravApexThreshold: 5
   gravityScale: 25
   antiGravMultiplier: 0.5
-  groundBufferVertical: 0.149
-  groundBufferHorizontal: 0.222
-  topStepBuffer: 0.071
-  bottomStepBuffer: 0
-  wallBuffer: 0.29
-  headBuffer: 1.66
-  wasteBuffer: 0.76
+  groundBufferVertical: 0.014
+  groundBufferHorizontal: 0.147
+  topStepBuffer: 0.073
+  bottomStepBuffer: 0.042
+  wallBuffer: 0.11
+  headBuffer: 0.88
+  wasteBuffer: 0.35
   depthPositionInTrain: 0
