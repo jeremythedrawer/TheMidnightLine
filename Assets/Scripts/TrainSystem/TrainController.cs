@@ -16,6 +16,7 @@ public class TrainController : MonoBehaviour
 
     [Header("Generated")]
     public Carriage[] carriages;
+    public Gangway[] gangways;
     CancellationTokenSource trainCTS;
     public Station[] stations;
     public static Station nextStation_instance;
@@ -24,7 +25,8 @@ public class TrainController : MonoBehaviour
     public int curStationIndex;
     public float metersTravelled;
 
-    public static Carriage[] allCarriages;
+    public static Carriage[] staticCarriages;
+    public static Gangway[] staticGangways;
     
     private void OnValidate()
     {
@@ -67,8 +69,8 @@ public class TrainController : MonoBehaviour
             carriage.SetSignToNextStation(trip.nextStation.stationName);
         }
         SetSlideDoorPositions(offset);
-        allCarriages = carriages;
-
+        staticCarriages = carriages;
+        staticGangways = gangways;
         MoveTrainToStartPosition().Forget();
     }
     private void Update()
@@ -358,15 +360,27 @@ public class TrainController : MonoBehaviour
         stats.trainToMaxSpawnDist = spawner.bounds.max.x - stats.totalBounds.center.x;
         Shader.SetGlobalVector("_TrainBoundsMin", stats.totalBounds.min);
     }
-    public static Carriage GetCarriage(float xPos)
+    public static Carriage GetCarriage(Bounds bounds)
     {
-        for (int i = 0; i < allCarriages.Length; i++)
+        for (int i = 0; i < staticCarriages.Length; i++)
         {
-            Carriage carriage = allCarriages[i];
+            Carriage carriage = staticCarriages[i];
 
-            if (xPos > carriage.carriageWallRenderer.bounds.min.x && xPos < carriage.carriageWallRenderer.bounds.max.x)
+            if (bounds.max.x > carriage.carriageWallRenderer.bounds.min.x && bounds.min.x < carriage.carriageWallRenderer.bounds.max.x)
             {
                 return carriage;
+            }
+        }
+        return null;
+    }
+    public static Gangway GetGangway(Bounds bounds)
+    {
+        for (int i = 0; i < staticGangways.Length; i++)
+        {
+            Gangway gangway = staticGangways[i];
+            if (bounds.max.x > gangway.exteriorRenderer.bounds.min.x && bounds.min.x < gangway.exteriorRenderer.bounds.max.x)
+            {
+                return gangway;
             }
         }
         return null;

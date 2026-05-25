@@ -48,7 +48,7 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 15
+    depthOrder: 17
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -65,7 +65,7 @@ MonoBehaviour:
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.0107421875, y: 0.084472656, z: 0.81689453, w: 0.91552734}
-    uvPivot: {x: 0, y: 0}
+    uvPivot: {x: 0, y: 0.5}
     worldSize: {x: 0.12222222, y: 0.9611111, z: 1}
     index: 2
   bounds:
@@ -83,6 +83,7 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  curMotionIndex: 0
   prevSpriteIndexFlipH: 2
   prevSpriteIndexFlipV: 2
   isAnimating: 0
@@ -107,8 +108,9 @@ GameObject:
   m_Component:
   - component: {fileID: 910265071453005942}
   - component: {fileID: 8822498294225560087}
-  m_Layer: 16
-  m_Name: SlideDoors_gangway
+  - component: {fileID: 5419837151026585543}
+  m_Layer: 24
+  m_Name: GangwayDoors
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -127,6 +129,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 5166988967932840510}
   - {fileID: 3053867881359104425}
   - {fileID: 4382000540421118098}
   m_Father: {fileID: 0}
@@ -161,7 +164,7 @@ BoxCollider2D:
   m_CallbackLayers:
     serializedVersion: 2
     m_Bits: 4294967295
-  m_IsTrigger: 0
+  m_IsTrigger: 1
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
@@ -176,6 +179,107 @@ BoxCollider2D:
     adaptiveTiling: 0
   m_AutoTiling: 0
   m_Size: {x: 0.24624634, y: 0.9564166}
+  m_EdgeRadius: 0
+--- !u!114 &5419837151026585543
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2547279726429130056}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7dd071d5ae9e33f4cb38fcf328b7df34, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::GangwayDoor
+  carriage: {fileID: 0}
+  gangway: {fileID: 0}
+  rightDoor: {fileID: 3053867881359104425}
+  leftDoor: {fileID: 4382000540421118098}
+  wallCollider: {fileID: 5947334122806028835}
+  layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
+  isLeftOfCarriage: 0
+  curX: 0
+  rightPos: {x: 0, y: 0, z: 0}
+  leftPos: {x: 0, y: 0, z: 0}
+  isOpen: 0
+--- !u!1 &3551257077229998293
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5166988967932840510}
+  - component: {fileID: 5947334122806028835}
+  m_Layer: 7
+  m_Name: Wall
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5166988967932840510
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3551257077229998293}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 910265071453005942}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!61 &5947334122806028835
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3551257077229998293}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: 0.09744263, y: 0.47908807}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0, y: 0}
+    oldSize: {x: 0, y: 0}
+    newSize: {x: 0, y: 0}
+    adaptiveTilingThreshold: 0
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.039855957, y: 0.9564166}
   m_EdgeRadius: 0
 --- !u!1 &5214989286677709142
 GameObject:
@@ -203,7 +307,7 @@ Transform:
   m_GameObject: {fileID: 5214989286677709142}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: -1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -225,7 +329,7 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 16
+    depthOrder: 17
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -242,11 +346,11 @@ MonoBehaviour:
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.0107421875, y: 0.084472656, z: 0.8041992, w: 0.91552734}
-    uvPivot: {x: 1, y: 0}
+    uvPivot: {x: 1, y: 0.5}
     worldSize: {x: 0.12222222, y: 0.9611111, z: 1}
     index: 1
   bounds:
-    m_Center: {x: 8.365889, y: -2.6054444, z: 16.993}
+    m_Center: {x: 8.365889, y: -2.6054444, z: 15.993}
     m_Extent: {x: 0.06111111, y: 0.48055556, z: 0.1}
   worldPivotAndSize: {x: 0.12222222, y: 0, z: 0.12222222, w: 0.9611111}
   uvSizeAndPosition: {x: 0.0107421875, y: 0.084472656, z: 0.8041992, w: 0.91552734}
@@ -260,6 +364,7 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  curMotionIndex: 0
   prevSpriteIndexFlipH: 1
   prevSpriteIndexFlipV: 1
   isAnimating: 0

@@ -23,6 +23,7 @@ public class LayerSettingsSO : ScriptableObject
         public LayerMask climbingBounds;
         public LayerMask gangwayDoor;
         public LayerMask smokingRoom;
+        public LayerMask smokingRoomDoor;
         public LayerMask carriage;
         public LayerMask carriageMap;
     }

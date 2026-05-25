@@ -1,81 +1,95 @@
 using Cysharp.Threading.Tasks;
+using System;
+using System.Threading;
+using UnityEditor;
 using UnityEngine;
-using static Atlas;
-
 public class GangwayDoor : MonoBehaviour
 {
-    private static float DOOR_MOVE_TIME = 0.3f;
+    const float DOOR_MOVE_TIME = 0.5f;
+    const float DOOR_MOVE_AMOUNT = 0.1f;
 
-    [SerializeField] BoxCollider2D wallCollider;
-    [SerializeField] LayerSettingsSO layerSettings;
-    [SerializeField] AtlasRenderer atlasRenderer;
-    [SerializeField] Carriage carriage;
-    [SerializeField] SpyStatsSO spyStats;
-
+    public Carriage carriage;
+    public Gangway gangway;
+    public Transform rightDoor;
+    public Transform leftDoor;
+    public BoxCollider2D wallCollider;
+    public LayerSettingsSO layerSettings;
+    public bool isLeftOfCarriage;
     [Header("Generated")]
+    public float curX;
+    public Vector3 rightPos;
+    public Vector3 leftPos;
+    public CancellationTokenSource ctsMove;
     public bool isOpen;
-    public AtlasClip doorClip;
-
 
     private void Start()
     {
-        doorClip = atlasRenderer.atlas.clipDict[(int)TrainMotion.TrainDoor];
+        rightPos = rightDoor.localPosition;
+        leftPos = leftDoor.localPosition;
     }
-
-    private void OnTriggerExit2D(Collider2D collision)
+    public void OpenDoors()
     {
-        if ((layerSettings.spy & (1 << collision.gameObject.layer)) == 0 || !isOpen) return;
+        ctsMove?.Cancel();
+        ctsMove?.Dispose();
 
-        ClosingDoor().Forget();
-
-        if ((atlasRenderer.flipX && spyStats.curWorldPos.x < transform.position.x) || (!atlasRenderer.flipX && spyStats.curWorldPos.x > transform.position.x))
-        {
-            carriage.MoveUp();
-        }
-    }
-
-    public void OpenDoor()
-    {
-        if (isOpen) return;
-
-        OpeningDoor().Forget();
-        carriage.MoveDown();
-    }
-    private async UniTask OpeningDoor()
-    {
-        float elapsedTime = 0;
-
-        while (elapsedTime < DOOR_MOVE_TIME)
-        {
-            elapsedTime += Time.deltaTime;
-
-            float t = Mathf.Pow((elapsedTime / DOOR_MOVE_TIME), 2);
-
-            atlasRenderer.PlayManualClip(ref doorClip, t);
-
-            await UniTask.Yield();
-        }
-        atlasRenderer.PlayManualClip(ref doorClip, 1);
+        ctsMove = new CancellationTokenSource();
         isOpen = true;
+
+        Opening().Forget();
         wallCollider.enabled = false;
     }
-
-    private async UniTask ClosingDoor()
+    public void CloseDoors()
     {
-        float elapsedTime = DOOR_MOVE_TIME;
+        ctsMove?.Cancel();
+        ctsMove?.Dispose();
 
-        while (elapsedTime > 0)
-        {
-            elapsedTime -= Time.deltaTime;
+        ctsMove = new CancellationTokenSource();
 
-            float t = Mathf.Pow((elapsedTime / DOOR_MOVE_TIME), 2);
-
-            atlasRenderer.PlayManualClip(ref doorClip, t);
-
-            await UniTask.Yield();
-        }
-        atlasRenderer.PlayManualClip(ref doorClip, 0);
-        isOpen = false;
+        Closing().Forget();
         wallCollider.enabled = true;
     }
+
+    private async UniTask Closing()
+    {
+        float elaspedTime = (curX / DOOR_MOVE_AMOUNT) * DOOR_MOVE_TIME;
+        try
+        {
+            while (elaspedTime > 0)
+            {
+                elaspedTime -= Time.deltaTime;
+
+                curX = (elaspedTime / DOOR_MOVE_TIME) * DOOR_MOVE_AMOUNT;
+                rightPos.x = curX;
+                leftPos.x = -curX;
+                rightDoor.localPosition = rightPos;
+                leftDoor.localPosition = leftPos;
+                await UniTask.Yield(PlayerLoopTiming.Update, ctsMove.Token);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
+    private async UniTask Opening()
+    {
+        float elaspedTime = (curX / DOOR_MOVE_AMOUNT) * DOOR_MOVE_TIME;
+        try
+        {
+            while (elaspedTime < DOOR_MOVE_TIME)
+            {
+                elaspedTime += Time.deltaTime;
+
+                curX = (elaspedTime / DOOR_MOVE_TIME) * DOOR_MOVE_AMOUNT;
+                rightPos.x = curX;
+                leftPos.x = -curX;
+                rightDoor.localPosition = rightPos;
+                leftDoor.localPosition = leftPos;
+                await UniTask.Yield(cancellationToken: ctsMove.Token);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+        }
+    }
+
 }

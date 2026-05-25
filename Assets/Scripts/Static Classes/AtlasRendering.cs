@@ -104,7 +104,7 @@ public static class AtlasRendering
     }
     public static MotionSprite GetNextKeyframeIndex(AtlasSO atlas, AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {
-        if (curFrameIndex > clip.keyframeEndIndex || curFrameIndex < 0) curFrameIndex = 0;
+        if (curFrameIndex > clip.keyframeEndIndex || curFrameIndex < clip.keyframeStartIndex) curFrameIndex = clip.keyframeStartIndex;
 
         keyframeClock += Time.deltaTime;
 
@@ -159,20 +159,16 @@ public static class AtlasRendering
     }
     public static MotionSprite GetNextKeyframeSpriteReverse(AtlasSO atlas, AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
     {
-        if (curFrameIndex > clip.keyframeEndIndex || curFrameIndex < 0) curFrameIndex = 0;
+        if (curFrameIndex > clip.keyframeEndIndex || curFrameIndex < clip.keyframeStartIndex) curFrameIndex = clip.keyframeEndIndex;
 
         keyframeClock += Time.deltaTime;
 
         MotionSprite curMotionSprite = atlas.motionSprites[curFrameIndex];
         int curFrame = (int)(keyframeClock * FRAMES_PER_SEC);
-
         if (curFrame < curMotionSprite.holdFrames) return curMotionSprite;
 
         prevFrameIndex = curFrameIndex;
-        if (curFrameIndex > 0)
-        {
-            curFrameIndex--;
-        }
+        if (curFrameIndex > clip.keyframeStartIndex) curFrameIndex--;
         keyframeClock = 0;
 
         return atlas.motionSprites[curFrameIndex];

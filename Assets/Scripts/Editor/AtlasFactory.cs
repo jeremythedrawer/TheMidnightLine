@@ -263,7 +263,10 @@ public class AtlasFactory : EditorWindow
                 flip = flip == 1 ? -1 : 1;
             }
             DrawPreview();
-            DrawClipOptions();
+            if (atlas.entityMotionType != EntityMotionType.None)
+            {
+                DrawClipOptions();
+            }
         }
         EditorGUILayout.EndVertical();
     }
@@ -957,10 +960,10 @@ public class AtlasFactory : EditorWindow
                 for (int i = 0; i < simplePivots.Length; i++)
                 {
                     Vector2 curPivot = simplePivots[i];
-                    Vector2 rectOffset = spriteRect.size * new Vector2(curPivot.x, 1 - curPivot.y);
-                    Vector2 buttonOffset = spriteButtonSize * new Vector2(1 - curPivot.x, curPivot.y);
+                    Vector2 rectOffset = gridRect.size * new Vector2(curPivot.x, 1 - curPivot.y);
+                    Vector2 buttonOffset = spriteButtonSize * new Vector2(curPivot.x, 1- curPivot.y);
 
-                    Rect buttonRect = new Rect(spriteRect.min + rectOffset - buttonOffset, spriteButtonSize);
+                    Rect buttonRect = new Rect(gridRect.min + rectOffset - buttonOffset, spriteButtonSize);
 
                     GUI.depth = 0;
                     if (GUI.Button(buttonRect, GUIContent.none))
@@ -1026,8 +1029,8 @@ public class AtlasFactory : EditorWindow
         if (selectedIndex == gridIndex)
         {
             float quarterWidth = spriteRect.width * 0.25f;
-            Vector2 shiftLeftPos = new Vector2(spriteRect.center.x - quarterWidth, spriteRect.center.y);
-            Vector2 shiftRightPos = new Vector2(spriteRect.center.x + quarterWidth, spriteRect.center.y);
+            Vector2 shiftLeftPos = new Vector2(gridRect.center.x - quarterWidth, gridRect.center.y);
+            Vector2 shiftRightPos = new Vector2(gridRect.center.x + quarterWidth, gridRect.center.y);
             Rect shiftLeftRect = new Rect(shiftLeftPos, spriteButtonSize);
             Rect shiftRightRect = new Rect(shiftRightPos, spriteButtonSize);
 

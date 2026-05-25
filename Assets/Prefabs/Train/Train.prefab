@@ -110,12 +110,18 @@ Transform:
   m_Children:
   - {fileID: 4956038889005829410}
   - {fileID: 1017361498969225400}
-  - {fileID: 6369069457146913952}
-  - {fileID: 3937308424301275163}
-  - {fileID: 8049118433393258597}
+  - {fileID: 3017302220410772362}
   - {fileID: 3003250847305436366}
+  - {fileID: 6205594791246168869}
+  - {fileID: 6369069457146913952}
+  - {fileID: 3650556719521652799}
   - {fileID: 8425512921560725679}
+  - {fileID: 1269192804697234148}
+  - {fileID: 3937308424301275163}
+  - {fileID: 5710166087942050372}
   - {fileID: 2637398345308849982}
+  - {fileID: 2564298556517655661}
+  - {fileID: 8049118433393258597}
   - {fileID: 54838768567328827}
   - {fileID: 9003130763215504752}
   m_Father: {fileID: 0}
@@ -145,6 +151,10 @@ MonoBehaviour:
   - {fileID: 2654805752091498528}
   - {fileID: 5336932751171556507}
   - {fileID: 1369252309698071781}
+  gangways:
+  - {fileID: 7613139605872041265}
+  - {fileID: 3812175888517884240}
+  - {fileID: 7247159638094485185}
   stations: []
   curState: 0
   closingSlideDoors: 0
@@ -167,10 +177,6 @@ PrefabInstance:
       value: 0.0027779043
       objectReference: {fileID: 0}
     - target: {fileID: 425327658487763734, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 425327658487763734, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 138.98354
       objectReference: {fileID: 0}
@@ -187,10 +193,6 @@ PrefabInstance:
       value: 0.6674445
       objectReference: {fileID: 0}
     - target: {fileID: 715707886116985476, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 715707886116985476, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 135.48753
       objectReference: {fileID: 0}
@@ -198,13 +200,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.020222276
       objectReference: {fileID: 0}
-    - target: {fileID: 775913092245095364, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 143.7601
-      objectReference: {fileID: 0}
-    - target: {fileID: 775913092245095364, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.38439992
+    - target: {fileID: 1216921443825505339, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1216921443825505339, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -218,13 +216,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396677
       objectReference: {fileID: 0}
-    - target: {fileID: 1427406648660390237, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -315.355
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427406648660390237, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 1449806487017179106, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1449806487017179106, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -238,22 +232,6 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396677
       objectReference: {fileID: 0}
-    - target: {fileID: 1649018049302991546, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 132.46654
-      objectReference: {fileID: 0}
-    - target: {fileID: 1649018049302991546, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.37451088
-      objectReference: {fileID: 0}
-    - target: {fileID: 1752460043569291432, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -309.71402
-      objectReference: {fileID: 0}
-    - target: {fileID: 1752460043569291432, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
-      objectReference: {fileID: 0}
     - target: {fileID: 1912865132648504416, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: m_Offset.x
       value: 0.044448853
@@ -266,6 +244,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Carriage (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 1925452446521450062, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1973942795463874482, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 1973942795463874482, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
@@ -277,6 +263,10 @@ PrefabInstance:
     - target: {fileID: 1973942795463874482, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
       value: 0.42396677
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047053650897774784, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2047053650897774784, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -298,9 +288,21 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.016444504
       objectReference: {fileID: 0}
+    - target: {fileID: 2462744422042896658, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: -309.5421
+      objectReference: {fileID: 0}
+    - target: {fileID: 2462744422042896658, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.4475556
+      objectReference: {fileID: 0}
+    - target: {fileID: 2613900237663771687, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2613900237663771687, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 137.40698
+      value: 136.88399
       objectReference: {fileID: 0}
     - target: {fileID: 2613900237663771687, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
@@ -315,6 +317,10 @@ PrefabInstance:
       value: 0.11652231
       objectReference: {fileID: 0}
     - target: {fileID: 2632501533003588259, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2632501533003588259, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 135.54932
       objectReference: {fileID: 0}
@@ -324,7 +330,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2714249603256640129, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 133.55344
+      value: 140.65443
       objectReference: {fileID: 0}
     - target: {fileID: 2714249603256640129, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
@@ -340,14 +346,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3343234967528171496, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 141.79688
+      value: -300.38312
       objectReference: {fileID: 0}
     - target: {fileID: 3343234967528171496, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.0014443696
+      value: 0.4475556
       objectReference: {fileID: 0}
     - target: {fileID: 3389602565251253534, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.y
+      propertyPath: sprite.uvPivot.x
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3389602565251253534, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
@@ -364,19 +370,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3550374363842774671, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.29055545
+      value: -0.2035555
       objectReference: {fileID: 0}
-    - target: {fileID: 3610580502016271494, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -309.863
-      objectReference: {fileID: 0}
-    - target: {fileID: 3610580502016271494, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 3700516021807857612, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3700516021807857612, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3700516021807857612, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -392,15 +394,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3705765459553740809, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.26755545
+      value: -0.2035555
       objectReference: {fileID: 0}
-    - target: {fileID: 4144872968269084019, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -315.20602
-      objectReference: {fileID: 0}
-    - target: {fileID: 4144872968269084019, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 4227183859493802005, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4227183859493802005, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -455,6 +453,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4491242870498755532, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491242870498755532, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -467,8 +469,12 @@ PrefabInstance:
       value: 0.42396677
       objectReference: {fileID: 0}
     - target: {fileID: 4837856507406420738, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4837856507406420738, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4837856507406420738, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -480,11 +486,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4999033885614477668, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999033885614477668, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4999033885614477668, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -495,8 +497,12 @@ PrefabInstance:
       value: 0.020222276
       objectReference: {fileID: 0}
     - target: {fileID: 5198302266055975973, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5198302266055975973, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5198302266055975973, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -508,7 +514,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5233752221908729529, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5233752221908729529, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -519,8 +525,12 @@ PrefabInstance:
       value: 0.040777862
       objectReference: {fileID: 0}
     - target: {fileID: 5263859571274599946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5263859571274599946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5263859571274599946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -532,11 +542,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5289907751043733750, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5289907751043733750, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5289907751043733750, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -546,21 +552,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.020222276
       objectReference: {fileID: 0}
-    - target: {fileID: 5744495876009708912, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -315.09604
-      objectReference: {fileID: 0}
-    - target: {fileID: 5744495876009708912, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 4.721345
-      objectReference: {fileID: 0}
-    - target: {fileID: 5861897991129263878, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -309.337
-      objectReference: {fileID: 0}
-    - target: {fileID: 5861897991129263878, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 5939265727734634524, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5939265727734634524, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -574,14 +568,6 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396677
       objectReference: {fileID: 0}
-    - target: {fileID: 6221133387892559988, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -309.466
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221133387892559988, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
-      objectReference: {fileID: 0}
     - target: {fileID: 6221786814295384650, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 135.83264
@@ -590,17 +576,13 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.016444504
       objectReference: {fileID: 0}
-    - target: {fileID: 6225468614533140680, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 133.03322
-      objectReference: {fileID: 0}
-    - target: {fileID: 6225468614533140680, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.3745104
+    - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -609,6 +591,10 @@ PrefabInstance:
     - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
       value: -1.1619996
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479280935627971477, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6479280935627971477, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -623,6 +609,10 @@ PrefabInstance:
       value: 0.42396677
       objectReference: {fileID: 0}
     - target: {fileID: 6492683870333089598, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492683870333089598, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -635,6 +625,10 @@ PrefabInstance:
       value: 0.42396677
       objectReference: {fileID: 0}
     - target: {fileID: 6707803112391952460, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707803112391952460, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -645,6 +639,10 @@ PrefabInstance:
     - target: {fileID: 6707803112391952460, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
       value: 0.42396677
+      objectReference: {fileID: 0}
+    - target: {fileID: 6838510829540582631, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6838510829540582631, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -666,13 +664,25 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.11652231
       objectReference: {fileID: 0}
+    - target: {fileID: 7109598958771489632, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: -309.41992
+      objectReference: {fileID: 0}
+    - target: {fileID: 7109598958771489632, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.4475556
+      objectReference: {fileID: 0}
     - target: {fileID: 7124821817594034148, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 134.41576
       objectReference: {fileID: 0}
     - target: {fileID: 7124821817594034148, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.29055545
+      value: -0.2035555
+      objectReference: {fileID: 0}
+    - target: {fileID: 7207307466969309906, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7207307466969309906, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -681,14 +691,6 @@ PrefabInstance:
     - target: {fileID: 7207307466969309906, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
       value: 1.3782222
-      objectReference: {fileID: 0}
-    - target: {fileID: 7368515562513200756, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 130.29054
-      objectReference: {fileID: 0}
-    - target: {fileID: 7368515562513200756, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.68695533
       objectReference: {fileID: 0}
     - target: {fileID: 7412466534817934392, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -699,6 +701,10 @@ PrefabInstance:
       value: 0.11652231
       objectReference: {fileID: 0}
     - target: {fileID: 7883198929589499098, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7883198929589499098, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 139.03831
       objectReference: {fileID: 0}
@@ -706,33 +712,21 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.016444504
       objectReference: {fileID: 0}
-    - target: {fileID: 7957013431130658987, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -309.60403
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957013431130658987, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 4.721345
-      objectReference: {fileID: 0}
     - target: {fileID: 7990157493597676954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 141.9191
+      value: -300.26093
       objectReference: {fileID: 0}
     - target: {fileID: 7990157493597676954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.0014443696
+      value: 0.4475556
       objectReference: {fileID: 0}
-    - target: {fileID: 8110371826755615453, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -314.829
-      objectReference: {fileID: 0}
-    - target: {fileID: 8110371826755615453, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 8573727060515690007, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8573727060515690007, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8573727060515690007, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -742,13 +736,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: -1.1619996
       objectReference: {fileID: 0}
-    - target: {fileID: 8611329731224651183, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -314.958
-      objectReference: {fileID: 0}
-    - target: {fileID: 8611329731224651183, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 8657647465503431730, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8657647465503431730, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -791,6 +781,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3523537623804074138}
     m_Modifications:
+    - target: {fileID: 448707822228658856, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 142.24222
+      objectReference: {fileID: 0}
+    - target: {fileID: 448707822228658856, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -0.029999971
+      objectReference: {fileID: 0}
+    - target: {fileID: 448707822228658856, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 15.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 448707822228658856, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4197639099000157790, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 142.3561
+      objectReference: {fileID: 0}
+    - target: {fileID: 4197639099000157790, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -0.013999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4197639099000157790, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4197639099000157790, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4677828558281895733, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: m_Name
       value: Gangway  (1)
@@ -805,7 +827,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7492218563405334078, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.83
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7492218563405334078, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -924,10 +946,367 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 60a692a8379238943829345fe37604e7, type: 3}
+--- !u!114 &3812175888517884240 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2878727668652644289, guid: 60a692a8379238943829345fe37604e7, type: 3}
+  m_PrefabInstance: {fileID: 1374963798276570769}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e2b317ad4695e840aa4267902d31366, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gangway
 --- !u!4 &8425512921560725679 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7492218563405334078, guid: 60a692a8379238943829345fe37604e7, type: 3}
   m_PrefabInstance: {fileID: 1374963798276570769}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2106837330971275922
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3523537623804074138}
+    m_Modifications:
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -0.309
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.139
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 141.80988
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.002555579
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2547279726429130056, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_Name
+      value: GangwayDoors_RightOfCarriage (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3053867881359104425, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4382000540421118098, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: gangway
+      value: 
+      objectReference: {fileID: 3812175888517884240}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: carriage
+      value: 
+      objectReference: {fileID: 5336932751171556507}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: sprite.uvPivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 141.9321
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.002555579
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 17
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+--- !u!4 &1269192804697234148 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+  m_PrefabInstance: {fileID: 2106837330971275922}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &2701725608528983036
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3523537623804074138}
+    m_Modifications:
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 10.009
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.139
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 152.12788
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.002555579
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2547279726429130056, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_Name
+      value: GangwayDoors_LeftOfCarriage
+      objectReference: {fileID: 0}
+    - target: {fileID: 3053867881359104425, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4382000540421118098, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: gangway
+      value: 
+      objectReference: {fileID: 7613139605872041265}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: carriage
+      value: 
+      objectReference: {fileID: 8262660341119566904}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: isLeftOfCarriage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: sprite.uvPivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 152.2501
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.002555579
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 4
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+--- !u!4 &3017302220410772362 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+  m_PrefabInstance: {fileID: 2701725608528983036}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1001 &3402432895630887963
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3523537623804074138}
+    m_Modifications:
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -10.103
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.139
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 132.01588
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.002555579
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2547279726429130056, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_Name
+      value: GangwayDoors_RightOfCarriage (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3053867881359104425, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4382000540421118098, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: gangway
+      value: 
+      objectReference: {fileID: 7247159638094485185}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: carriage
+      value: 
+      objectReference: {fileID: 1369252309698071781}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: sprite.uvPivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 132.1381
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.002555579
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 17
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+--- !u!4 &2564298556517655661 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+  m_PrefabInstance: {fileID: 3402432895630887963}
   m_PrefabAsset: {fileID: 0}
 --- !u!1001 &3702240672497208554
 PrefabInstance:
@@ -937,22 +1316,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3523537623804074138}
     m_Modifications:
-    - target: {fileID: 7752087058430021, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 174.13719
-      objectReference: {fileID: 0}
-    - target: {fileID: 7752087058430021, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.3613993
-      objectReference: {fileID: 0}
-    - target: {fileID: 17552717172943595, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 175.09831
-      objectReference: {fileID: 0}
-    - target: {fileID: 17552717172943595, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.36139977
-      objectReference: {fileID: 0}
     - target: {fileID: 20454376822744809, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 160.36519
@@ -961,25 +1324,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.0027776659
       objectReference: {fileID: 0}
-    - target: {fileID: 295036079826751624, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 178.92279
-      objectReference: {fileID: 0}
-    - target: {fileID: 295036079826751624, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 0.41405633
-      objectReference: {fileID: 0}
-    - target: {fileID: 370195607810582595, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 170.64182
-      objectReference: {fileID: 0}
-    - target: {fileID: 370195607810582595, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 0.41405633
-      objectReference: {fileID: 0}
-    - target: {fileID: 425327658487763734, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.x
-      value: 0.5
+    - target: {fileID: 46315645217960116, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 425327658487763734, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -998,10 +1345,6 @@ PrefabInstance:
       value: 0.6674443
       objectReference: {fileID: 0}
     - target: {fileID: 715707886116985476, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 715707886116985476, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 155.0153
       objectReference: {fileID: 0}
@@ -1009,37 +1352,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.020222038
       objectReference: {fileID: 0}
-    - target: {fileID: 775913092245095364, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 181.28386
-      objectReference: {fileID: 0}
-    - target: {fileID: 775913092245095364, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.38439992
-      objectReference: {fileID: 0}
-    - target: {fileID: 912699399857660955, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 169.91275
-      objectReference: {fileID: 0}
-    - target: {fileID: 912699399857660955, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 0.41405633
-      objectReference: {fileID: 0}
-    - target: {fileID: 977721427412163792, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 179.65176
-      objectReference: {fileID: 0}
-    - target: {fileID: 977721427412163792, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 0.41405633
-      objectReference: {fileID: 0}
-    - target: {fileID: 1066256266935050899, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 175.0981
-      objectReference: {fileID: 0}
-    - target: {fileID: 1066256266935050899, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.3613993
+    - target: {fileID: 1216921443825505339, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1216921443825505339, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -1053,13 +1368,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396653
       objectReference: {fileID: 0}
-    - target: {fileID: 1427406648660390237, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -277.83124
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427406648660390237, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 1449806487017179106, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1449806487017179106, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -1073,30 +1384,6 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396653
       objectReference: {fileID: 0}
-    - target: {fileID: 1649018049302991546, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 169.99031
-      objectReference: {fileID: 0}
-    - target: {fileID: 1649018049302991546, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.37451088
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707195893382602010, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -278.90268
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707195893382602010, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 1.2144891
-      objectReference: {fileID: 0}
-    - target: {fileID: 1752460043569291432, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -272.19025
-      objectReference: {fileID: 0}
-    - target: {fileID: 1752460043569291432, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
-      objectReference: {fileID: 0}
     - target: {fileID: 1912865132648504416, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: m_Offset.x
       value: 0.044448853
@@ -1109,9 +1396,9 @@ PrefabInstance:
       propertyPath: m_Name
       value: Carriage
       objectReference: {fileID: 0}
-    - target: {fileID: 1925452446521450062, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: m_IsActive
-      value: 1
+    - target: {fileID: 1973942795463874482, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1973942795463874482, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -1126,6 +1413,10 @@ PrefabInstance:
       value: 0.42396653
       objectReference: {fileID: 0}
     - target: {fileID: 2047053650897774784, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047053650897774784, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -1137,14 +1428,6 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396653
       objectReference: {fileID: 0}
-    - target: {fileID: 2234501247438208445, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 168.68918
-      objectReference: {fileID: 0}
-    - target: {fileID: 2234501247438208445, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.36139977
-      objectReference: {fileID: 0}
     - target: {fileID: 2285017976270451763, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 158.84941
@@ -1153,9 +1436,21 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.016444266
       objectReference: {fileID: 0}
+    - target: {fileID: 2462744422042896658, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: -290.01434
+      objectReference: {fileID: 0}
+    - target: {fileID: 2462744422042896658, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.44755536
+      objectReference: {fileID: 0}
+    - target: {fileID: 2613900237663771687, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2613900237663771687, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 156.93475
+      value: 156.41176
       objectReference: {fileID: 0}
     - target: {fileID: 2613900237663771687, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
@@ -1170,6 +1465,10 @@ PrefabInstance:
       value: 0.116522074
       objectReference: {fileID: 0}
     - target: {fileID: 2632501533003588259, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2632501533003588259, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 155.07709
       objectReference: {fileID: 0}
@@ -1179,7 +1478,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2714249603256640129, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 153.0812
+      value: 160.1822
       objectReference: {fileID: 0}
     - target: {fileID: 2714249603256640129, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
@@ -1193,24 +1492,16 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.0027776659
       objectReference: {fileID: 0}
-    - target: {fileID: 3266328935857906005, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 171.83356
-      objectReference: {fileID: 0}
-    - target: {fileID: 3266328935857906005, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -2.5801768
-      objectReference: {fileID: 0}
     - target: {fileID: 3343234967528171496, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 161.32465
+      value: -280.85535
       objectReference: {fileID: 0}
     - target: {fileID: 3343234967528171496, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.001444608
+      value: 0.44755536
       objectReference: {fileID: 0}
     - target: {fileID: 3389602565251253534, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.y
+      propertyPath: sprite.uvPivot.x
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3389602565251253534, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
@@ -1227,19 +1518,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3550374363842774671, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.2905557
+      value: -0.20355573
       objectReference: {fileID: 0}
-    - target: {fileID: 3610580502016271494, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -272.33923
-      objectReference: {fileID: 0}
-    - target: {fileID: 3610580502016271494, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 3700516021807857612, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3700516021807857612, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3700516021807857612, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1255,47 +1542,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3705765459553740809, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.26755568
+      value: -0.20355573
       objectReference: {fileID: 0}
-    - target: {fileID: 3745795594663594901, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 168.68924
-      objectReference: {fileID: 0}
-    - target: {fileID: 3745795594663594901, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.3613993
-      objectReference: {fileID: 0}
-    - target: {fileID: 3928911738451644920, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 169.43372
-      objectReference: {fileID: 0}
-    - target: {fileID: 3928911738451644920, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -2.5801768
-      objectReference: {fileID: 0}
-    - target: {fileID: 4073060342557794204, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 180.5737
-      objectReference: {fileID: 0}
-    - target: {fileID: 4073060342557794204, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -2.5801768
-      objectReference: {fileID: 0}
-    - target: {fileID: 4144872968269084019, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -277.68225
-      objectReference: {fileID: 0}
-    - target: {fileID: 4144872968269084019, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
-      objectReference: {fileID: 0}
-    - target: {fileID: 4189230969529228219, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 181.45007
-      objectReference: {fileID: 0}
-    - target: {fileID: 4189230969529228219, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.93484426
+    - target: {fileID: 4227183859493802005, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4227183859493802005, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -1350,6 +1601,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4491242870498755532, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491242870498755532, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -1361,33 +1616,13 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396653
       objectReference: {fileID: 0}
-    - target: {fileID: 4498439411272089347, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 174.13155
-      objectReference: {fileID: 0}
-    - target: {fileID: 4498439411272089347, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.35584366
-      objectReference: {fileID: 0}
-    - target: {fileID: 4578419912634244431, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 169.65036
-      objectReference: {fileID: 0}
-    - target: {fileID: 4578419912634244431, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.36139977
-      objectReference: {fileID: 0}
-    - target: {fileID: 4741126622765172946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: smokingRoomCollider_right
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 4741126622765172946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: smokingRoomColliders.Array.size
-      value: 1
+    - target: {fileID: 4837856507406420738, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4837856507406420738, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4837856507406420738, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1399,11 +1634,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4999033885614477668, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999033885614477668, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4999033885614477668, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1414,8 +1645,12 @@ PrefabInstance:
       value: 0.020222038
       objectReference: {fileID: 0}
     - target: {fileID: 5198302266055975973, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5198302266055975973, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5198302266055975973, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1427,7 +1662,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5233752221908729529, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5233752221908729529, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1438,8 +1673,12 @@ PrefabInstance:
       value: 0.040777624
       objectReference: {fileID: 0}
     - target: {fileID: 5263859571274599946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5263859571274599946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5263859571274599946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1451,11 +1690,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5289907751043733750, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5289907751043733750, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5289907751043733750, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1465,37 +1700,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.020222038
       objectReference: {fileID: 0}
-    - target: {fileID: 5529601040614031338, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 175.10378
-      objectReference: {fileID: 0}
-    - target: {fileID: 5529601040614031338, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.35584414
-      objectReference: {fileID: 0}
-    - target: {fileID: 5641649110576292065, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 174.13698
-      objectReference: {fileID: 0}
-    - target: {fileID: 5641649110576292065, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.36139977
-      objectReference: {fileID: 0}
-    - target: {fileID: 5744495876009708912, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -277.57227
-      objectReference: {fileID: 0}
-    - target: {fileID: 5744495876009708912, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 4.721345
-      objectReference: {fileID: 0}
-    - target: {fileID: 5861897991129263878, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -271.81323
-      objectReference: {fileID: 0}
-    - target: {fileID: 5861897991129263878, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 5939265727734634524, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5939265727734634524, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -1509,14 +1716,6 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396653
       objectReference: {fileID: 0}
-    - target: {fileID: 6221133387892559988, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -271.94226
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221133387892559988, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
-      objectReference: {fileID: 0}
     - target: {fileID: 6221786814295384650, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 155.36041
@@ -1525,25 +1724,13 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.016444266
       objectReference: {fileID: 0}
-    - target: {fileID: 6225468614533140680, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 170.55699
-      objectReference: {fileID: 0}
-    - target: {fileID: 6225468614533140680, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.3745104
-      objectReference: {fileID: 0}
-    - target: {fileID: 6284243366702849896, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -278.33603
-      objectReference: {fileID: 0}
-    - target: {fileID: 6284243366702849896, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 1.2144896
+    - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1552,6 +1739,10 @@ PrefabInstance:
     - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
       value: -1.1619998
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479280935627971477, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6479280935627971477, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -1566,6 +1757,10 @@ PrefabInstance:
       value: 0.42396653
       objectReference: {fileID: 0}
     - target: {fileID: 6492683870333089598, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492683870333089598, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -1577,13 +1772,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396653
       objectReference: {fileID: 0}
-    - target: {fileID: 6524936833096192706, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 178.19365
-      objectReference: {fileID: 0}
-    - target: {fileID: 6524936833096192706, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -2.5801768
+    - target: {fileID: 6707803112391952460, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6707803112391952460, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -1598,6 +1789,10 @@ PrefabInstance:
       value: 0.42396653
       objectReference: {fileID: 0}
     - target: {fileID: 6838510829540582631, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6838510829540582631, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -1609,14 +1804,6 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396653
       objectReference: {fileID: 0}
-    - target: {fileID: 6883110598256000975, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 169.6503
-      objectReference: {fileID: 0}
-    - target: {fileID: 6883110598256000975, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.3613993
-      objectReference: {fileID: 0}
     - target: {fileID: 7071706674951241697, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 159.55475
@@ -1625,21 +1812,29 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.116522074
       objectReference: {fileID: 0}
+    - target: {fileID: 7109598958771489632, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: -289.89215
+      objectReference: {fileID: 0}
+    - target: {fileID: 7109598958771489632, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.44755536
+      objectReference: {fileID: 0}
     - target: {fileID: 7124821817594034148, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 153.94353
       objectReference: {fileID: 0}
     - target: {fileID: 7124821817594034148, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.2905557
+      value: -0.20355573
       objectReference: {fileID: 0}
-    - target: {fileID: 7185645043188479603, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 166.81389
+    - target: {fileID: 7207307466969309906, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: m_Enabled
+      value: 1
       objectReference: {fileID: 0}
-    - target: {fileID: 7185645043188479603, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -2.5801768
+    - target: {fileID: 7207307466969309906, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7207307466969309906, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1649,22 +1844,6 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 1.378222
       objectReference: {fileID: 0}
-    - target: {fileID: 7368515562513200756, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 167.81432
-      objectReference: {fileID: 0}
-    - target: {fileID: 7368515562513200756, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.68695533
-      objectReference: {fileID: 0}
-    - target: {fileID: 7385323923086403791, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 171.73488
-      objectReference: {fileID: 0}
-    - target: {fileID: 7385323923086403791, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.93484426
-      objectReference: {fileID: 0}
     - target: {fileID: 7412466534817934392, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 157.47575
@@ -1673,21 +1852,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.116522074
       objectReference: {fileID: 0}
-    - target: {fileID: 7521873210029609715, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -207.53194
-      objectReference: {fileID: 0}
-    - target: {fileID: 7521873210029609715, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 1.1736001
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550275423125424672, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 167.5462
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550275423125424672, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.93484426
+    - target: {fileID: 7883198929589499098, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7883198929589499098, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1697,41 +1864,21 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.016444266
       objectReference: {fileID: 0}
-    - target: {fileID: 7957013431130658987, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -272.08026
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957013431130658987, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 4.721345
-      objectReference: {fileID: 0}
     - target: {fileID: 7990157493597676954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 161.44687
+      value: -280.73315
       objectReference: {fileID: 0}
     - target: {fileID: 7990157493597676954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.001444608
+      value: 0.44755536
       objectReference: {fileID: 0}
-    - target: {fileID: 8110371826755615453, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -277.30524
-      objectReference: {fileID: 0}
-    - target: {fileID: 8110371826755615453, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
-      objectReference: {fileID: 0}
-    - target: {fileID: 8272066991523447574, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 179.3858
-      objectReference: {fileID: 0}
-    - target: {fileID: 8272066991523447574, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 0.41405633
+    - target: {fileID: 8573727060515690007, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8573727060515690007, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8573727060515690007, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1741,13 +1888,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: -1.1619998
       objectReference: {fileID: 0}
-    - target: {fileID: 8611329731224651183, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -277.43423
-      objectReference: {fileID: 0}
-    - target: {fileID: 8611329731224651183, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 8657647465503431730, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8657647465503431730, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -1761,18 +1904,8 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396653
       objectReference: {fileID: 0}
-    - target: {fileID: 8826751379725383557, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 170.37581
-      objectReference: {fileID: 0}
-    - target: {fileID: 8826751379725383557, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 0.41405633
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
-    m_RemovedGameObjects:
-    - {fileID: 4870614369846389462, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-    - {fileID: 4664487488882389983, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+    m_RemovedGameObjects: []
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
@@ -1792,6 +1925,124 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcfc7245b1ede504e9a7727cee02f3ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!1001 &4469972974570965065
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3523537623804074138}
+    m_Modifications:
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.262
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.139
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 142.38087
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.002555579
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2547279726429130056, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_Name
+      value: GangwayDoors_LeftOfCarriage (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3053867881359104425, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4382000540421118098, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: gangway
+      value: 
+      objectReference: {fileID: 3812175888517884240}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: carriage
+      value: 
+      objectReference: {fileID: 2654805752091498528}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: isLeftOfCarriage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: sprite.uvPivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 142.5031
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.002555579
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 4
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+--- !u!4 &3650556719521652799 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+  m_PrefabInstance: {fileID: 4469972974570965065}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &4854984597635236096
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1800,6 +2051,38 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3523537623804074138}
     m_Modifications:
+    - target: {fileID: 448707822228658856, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 132.44221
+      objectReference: {fileID: 0}
+    - target: {fileID: 448707822228658856, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -0.029999971
+      objectReference: {fileID: 0}
+    - target: {fileID: 448707822228658856, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 15.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 448707822228658856, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 4197639099000157790, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 132.55609
+      objectReference: {fileID: 0}
+    - target: {fileID: 4197639099000157790, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -0.013999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4197639099000157790, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 3
+      objectReference: {fileID: 0}
+    - target: {fileID: 4197639099000157790, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4677828558281895733, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: m_Name
       value: Gangway  (2)
@@ -1814,7 +2097,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7492218563405334078, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.83
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7492218563405334078, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1938,6 +2221,135 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7492218563405334078, guid: 60a692a8379238943829345fe37604e7, type: 3}
   m_PrefabInstance: {fileID: 4854984597635236096}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7247159638094485185 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2878727668652644289, guid: 60a692a8379238943829345fe37604e7, type: 3}
+  m_PrefabInstance: {fileID: 4854984597635236096}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e2b317ad4695e840aa4267902d31366, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gangway
+--- !u!1001 &4872750279136803378
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3523537623804074138}
+    m_Modifications:
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -9.517
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.139
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 132.60188
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.002555579
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 2547279726429130056, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_Name
+      value: GangwayDoors_LeftOfCarriage (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3053867881359104425, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4382000540421118098, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: gangway
+      value: 
+      objectReference: {fileID: 7247159638094485185}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: carriage
+      value: 
+      objectReference: {fileID: 5336932751171556507}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: isLeftOfCarriage
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: sprite.uvPivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 132.7241
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.002555579
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 4
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 4
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+--- !u!4 &5710166087942050372 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+  m_PrefabInstance: {fileID: 4872750279136803378}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &5644142475037952752
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -1946,6 +2358,30 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 3523537623804074138}
     m_Modifications:
+    - target: {fileID: 448707822228658856, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 151.9992
+      objectReference: {fileID: 0}
+    - target: {fileID: 448707822228658856, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -0.029999971
+      objectReference: {fileID: 0}
+    - target: {fileID: 448707822228658856, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 15.58
+      objectReference: {fileID: 0}
+    - target: {fileID: 4197639099000157790, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 152.1131
+      objectReference: {fileID: 0}
+    - target: {fileID: 4197639099000157790, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -0.013999999
+      objectReference: {fileID: 0}
+    - target: {fileID: 4197639099000157790, guid: 60a692a8379238943829345fe37604e7, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 3
+      objectReference: {fileID: 0}
     - target: {fileID: 4677828558281895733, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: m_Name
       value: 'Gangway '
@@ -1960,7 +2396,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7492218563405334078, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: 4.83
+      value: 3
       objectReference: {fileID: 0}
     - target: {fileID: 7492218563405334078, guid: 60a692a8379238943829345fe37604e7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -1990,90 +2426,6 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: sprite.uvPivot.x
-      value: 1
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: sprite.uvPivot.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 152.08176
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.026111066
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: bounds.m_Center.z
-      value: 4.83
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: bounds.m_Extent.x
-      value: 0.22222222
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: bounds.m_Extent.y
-      value: 0.5638889
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: sprite.worldSize.x
-      value: 0.44444445
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: sprite.worldSize.y
-      value: 1.1277778
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: batchKey.depthOrder
-      value: 4
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: uvSizeAndPosition.w
-      value: 0.9008789
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: uvSizeAndPosition.x
-      value: 0.0390625
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: uvSizeAndPosition.y
-      value: 0.099121094
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: uvSizeAndPosition.z
-      value: 0.84228516
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: worldPivotAndSize.w
-      value: 1.1277778
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: worldPivotAndSize.z
-      value: 0.44444445
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: sprite.uvSizeAndPos.w
-      value: 0.9008789
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: sprite.uvSizeAndPos.x
-      value: 0.0390625
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: sprite.uvSizeAndPos.y
-      value: 0.099121094
-      objectReference: {fileID: 0}
-    - target: {fileID: 8116773644300879248, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: sprite.uvSizeAndPos.z
-      value: 0.84228516
-      objectReference: {fileID: 0}
-    - target: {fileID: 8598963554960458903, guid: 60a692a8379238943829345fe37604e7, type: 3}
-      propertyPath: m_Offset.x
-      value: -0.222229
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2084,6 +2436,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7492218563405334078, guid: 60a692a8379238943829345fe37604e7, type: 3}
   m_PrefabInstance: {fileID: 5644142475037952752}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7613139605872041265 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2878727668652644289, guid: 60a692a8379238943829345fe37604e7, type: 3}
+  m_PrefabInstance: {fileID: 5644142475037952752}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4e2b317ad4695e840aa4267902d31366, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::Gangway
 --- !u!1001 &5965952513306723383
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2099,10 +2462,6 @@ PrefabInstance:
     - target: {fileID: 20454376822744809, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
       value: 0.0027779043
-      objectReference: {fileID: 0}
-    - target: {fileID: 425327658487763734, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.x
-      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 425327658487763734, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2121,10 +2480,6 @@ PrefabInstance:
       value: 0.6674445
       objectReference: {fileID: 0}
     - target: {fileID: 715707886116985476, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 715707886116985476, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 125.69454
       objectReference: {fileID: 0}
@@ -2132,13 +2487,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.020222276
       objectReference: {fileID: 0}
-    - target: {fileID: 775913092245095364, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 124.83011
-      objectReference: {fileID: 0}
-    - target: {fileID: 775913092245095364, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.38439992
+    - target: {fileID: 1216921443825505339, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1216921443825505339, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -2152,13 +2503,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396677
       objectReference: {fileID: 0}
-    - target: {fileID: 1427406648660390237, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -334.285
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427406648660390237, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 1449806487017179106, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1449806487017179106, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -2172,33 +2519,25 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396677
       objectReference: {fileID: 0}
-    - target: {fileID: 1649018049302991546, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 113.53655
-      objectReference: {fileID: 0}
-    - target: {fileID: 1649018049302991546, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.37451088
-      objectReference: {fileID: 0}
-    - target: {fileID: 1752460043569291432, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -328.644
-      objectReference: {fileID: 0}
-    - target: {fileID: 1752460043569291432, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
-      objectReference: {fileID: 0}
     - target: {fileID: 1912865132648504416, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: m_Offset.x
-      value: 0.044433594
+      value: 0.044448853
       objectReference: {fileID: 0}
     - target: {fileID: 1912865132648504416, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: m_Offset.y
-      value: 0.26944447
+      value: 0.26944444
       objectReference: {fileID: 0}
     - target: {fileID: 1925452446521450062, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: m_Name
       value: Carriage (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1925452446521450062, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1973942795463874482, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1973942795463874482, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -2211,6 +2550,10 @@ PrefabInstance:
     - target: {fileID: 1973942795463874482, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
       value: 0.42396677
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047053650897774784, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 2047053650897774784, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -2232,9 +2575,21 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.016444504
       objectReference: {fileID: 0}
+    - target: {fileID: 2462744422042896658, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: -319.3351
+      objectReference: {fileID: 0}
+    - target: {fileID: 2462744422042896658, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.4475556
+      objectReference: {fileID: 0}
+    - target: {fileID: 2613900237663771687, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2613900237663771687, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 127.61398
+      value: 127.09098
       objectReference: {fileID: 0}
     - target: {fileID: 2613900237663771687, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
@@ -2249,6 +2604,10 @@ PrefabInstance:
       value: 0.11652231
       objectReference: {fileID: 0}
     - target: {fileID: 2632501533003588259, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2632501533003588259, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 125.75631
       objectReference: {fileID: 0}
@@ -2258,7 +2617,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2714249603256640129, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 123.76043
+      value: 130.86143
       objectReference: {fileID: 0}
     - target: {fileID: 2714249603256640129, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
@@ -2274,14 +2633,14 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3343234967528171496, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 132.00388
+      value: -310.17612
       objectReference: {fileID: 0}
     - target: {fileID: 3343234967528171496, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.0014443696
+      value: 0.4475556
       objectReference: {fileID: 0}
     - target: {fileID: 3389602565251253534, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.y
+      propertyPath: sprite.uvPivot.x
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3389602565251253534, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
@@ -2298,19 +2657,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3550374363842774671, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.29055545
+      value: -0.2035555
       objectReference: {fileID: 0}
-    - target: {fileID: 3610580502016271494, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -328.793
-      objectReference: {fileID: 0}
-    - target: {fileID: 3610580502016271494, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 3700516021807857612, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3700516021807857612, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3700516021807857612, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2326,15 +2681,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3705765459553740809, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.26755545
+      value: -0.2035555
       objectReference: {fileID: 0}
-    - target: {fileID: 4144872968269084019, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -334.13602
-      objectReference: {fileID: 0}
-    - target: {fileID: 4144872968269084019, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 4227183859493802005, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4227183859493802005, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -2389,6 +2740,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4491242870498755532, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491242870498755532, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -2401,8 +2756,12 @@ PrefabInstance:
       value: 0.42396677
       objectReference: {fileID: 0}
     - target: {fileID: 4837856507406420738, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4837856507406420738, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4837856507406420738, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2414,11 +2773,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4999033885614477668, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999033885614477668, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4999033885614477668, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2429,8 +2784,12 @@ PrefabInstance:
       value: 0.020222276
       objectReference: {fileID: 0}
     - target: {fileID: 5198302266055975973, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5198302266055975973, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5198302266055975973, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2442,7 +2801,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5233752221908729529, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5233752221908729529, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2453,8 +2812,12 @@ PrefabInstance:
       value: 0.040777862
       objectReference: {fileID: 0}
     - target: {fileID: 5263859571274599946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5263859571274599946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5263859571274599946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2466,11 +2829,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5289907751043733750, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5289907751043733750, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5289907751043733750, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2480,21 +2839,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.020222276
       objectReference: {fileID: 0}
-    - target: {fileID: 5744495876009708912, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -334.02603
-      objectReference: {fileID: 0}
-    - target: {fileID: 5744495876009708912, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 4.721345
-      objectReference: {fileID: 0}
-    - target: {fileID: 5861897991129263878, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -328.267
-      objectReference: {fileID: 0}
-    - target: {fileID: 5861897991129263878, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 5939265727734634524, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5939265727734634524, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -2508,14 +2855,6 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396677
       objectReference: {fileID: 0}
-    - target: {fileID: 6221133387892559988, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -328.396
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221133387892559988, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
-      objectReference: {fileID: 0}
     - target: {fileID: 6221786814295384650, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 126.03965
@@ -2524,17 +2863,13 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.016444504
       objectReference: {fileID: 0}
-    - target: {fileID: 6225468614533140680, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 114.10322
-      objectReference: {fileID: 0}
-    - target: {fileID: 6225468614533140680, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.3745104
+    - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2543,6 +2878,10 @@ PrefabInstance:
     - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
       value: -1.1619996
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479280935627971477, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6479280935627971477, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -2557,6 +2896,10 @@ PrefabInstance:
       value: 0.42396677
       objectReference: {fileID: 0}
     - target: {fileID: 6492683870333089598, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492683870333089598, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -2569,6 +2912,10 @@ PrefabInstance:
       value: 0.42396677
       objectReference: {fileID: 0}
     - target: {fileID: 6707803112391952460, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6707803112391952460, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -2579,6 +2926,10 @@ PrefabInstance:
     - target: {fileID: 6707803112391952460, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
       value: 0.42396677
+      objectReference: {fileID: 0}
+    - target: {fileID: 6838510829540582631, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6838510829540582631, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -2600,13 +2951,25 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.11652231
       objectReference: {fileID: 0}
+    - target: {fileID: 7109598958771489632, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: -319.21292
+      objectReference: {fileID: 0}
+    - target: {fileID: 7109598958771489632, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.4475556
+      objectReference: {fileID: 0}
     - target: {fileID: 7124821817594034148, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 124.62276
       objectReference: {fileID: 0}
     - target: {fileID: 7124821817594034148, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.29055545
+      value: -0.2035555
+      objectReference: {fileID: 0}
+    - target: {fileID: 7207307466969309906, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7207307466969309906, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2615,14 +2978,6 @@ PrefabInstance:
     - target: {fileID: 7207307466969309906, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
       value: 1.3782222
-      objectReference: {fileID: 0}
-    - target: {fileID: 7368515562513200756, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 111.36055
-      objectReference: {fileID: 0}
-    - target: {fileID: 7368515562513200756, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.68695533
       objectReference: {fileID: 0}
     - target: {fileID: 7412466534817934392, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2633,6 +2988,10 @@ PrefabInstance:
       value: 0.11652231
       objectReference: {fileID: 0}
     - target: {fileID: 7883198929589499098, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 7883198929589499098, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 129.24532
       objectReference: {fileID: 0}
@@ -2640,33 +2999,21 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.016444504
       objectReference: {fileID: 0}
-    - target: {fileID: 7957013431130658987, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -328.53403
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957013431130658987, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 4.721345
-      objectReference: {fileID: 0}
     - target: {fileID: 7990157493597676954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 132.1261
+      value: -310.05392
       objectReference: {fileID: 0}
     - target: {fileID: 7990157493597676954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.0014443696
+      value: 0.4475556
       objectReference: {fileID: 0}
-    - target: {fileID: 8110371826755615453, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -333.759
-      objectReference: {fileID: 0}
-    - target: {fileID: 8110371826755615453, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 8573727060515690007, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8573727060515690007, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8573727060515690007, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2676,13 +3023,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: -1.1619996
       objectReference: {fileID: 0}
-    - target: {fileID: 8611329731224651183, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -333.888
-      objectReference: {fileID: 0}
-    - target: {fileID: 8611329731224651183, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 8657647465503431730, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8657647465503431730, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -2717,6 +3060,120 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 4431371205824164946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
   m_PrefabInstance: {fileID: 5965952513306723383}
   m_PrefabAsset: {fileID: 0}
+--- !u!1001 &6539045067646626643
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 3523537623804074138}
+    m_Modifications:
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 9.438009
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -0.139
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 151.55688
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.002555579
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2525118812539751741, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 2547279726429130056, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_Name
+      value: GangwayDoors_RightOfCarriage
+      objectReference: {fileID: 0}
+    - target: {fileID: 3053867881359104425, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4382000540421118098, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: gangway
+      value: 
+      objectReference: {fileID: 7613139605872041265}
+    - target: {fileID: 5419837151026585543, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: carriage
+      value: 
+      objectReference: {fileID: 2654805752091498528}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: sprite.uvPivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 151.67911
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.002555579
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 17
+      objectReference: {fileID: 0}
+    - target: {fileID: 7173167384514547535, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+      propertyPath: batchKey.depthOrder
+      value: 17
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+--- !u!4 &6205594791246168869 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 910265071453005942, guid: 9c16db4130895a34c84cbb11f35ccfdf, type: 3}
+  m_PrefabInstance: {fileID: 6539045067646626643}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1001 &7285731622635376882
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -2732,26 +3189,6 @@ PrefabInstance:
     - target: {fileID: 20454376822744809, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
       value: 0.0027779043
-      objectReference: {fileID: 0}
-    - target: {fileID: 295036079826751624, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 157.10841
-      objectReference: {fileID: 0}
-    - target: {fileID: 295036079826751624, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 0.41405633
-      objectReference: {fileID: 0}
-    - target: {fileID: 370195607810582595, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 148.82744
-      objectReference: {fileID: 0}
-    - target: {fileID: 370195607810582595, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 0.41405633
-      objectReference: {fileID: 0}
-    - target: {fileID: 425327658487763734, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.x
-      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 425327658487763734, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2770,10 +3207,6 @@ PrefabInstance:
       value: 0.6674445
       objectReference: {fileID: 0}
     - target: {fileID: 715707886116985476, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.x
-      value: 0.5
-      objectReference: {fileID: 0}
-    - target: {fileID: 715707886116985476, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 145.24654
       objectReference: {fileID: 0}
@@ -2781,37 +3214,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.020222276
       objectReference: {fileID: 0}
-    - target: {fileID: 775913092245095364, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 162.6201
-      objectReference: {fileID: 0}
-    - target: {fileID: 775913092245095364, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.38439992
-      objectReference: {fileID: 0}
-    - target: {fileID: 912699399857660955, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 148.09837
-      objectReference: {fileID: 0}
-    - target: {fileID: 912699399857660955, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 0.41405633
-      objectReference: {fileID: 0}
-    - target: {fileID: 977721427412163792, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 157.8374
-      objectReference: {fileID: 0}
-    - target: {fileID: 977721427412163792, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 0.41405633
-      objectReference: {fileID: 0}
-    - target: {fileID: 1066256266935050899, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 153.28372
-      objectReference: {fileID: 0}
-    - target: {fileID: 1066256266935050899, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.3613993
+    - target: {fileID: 1216921443825505339, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1216921443825505339, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -2825,13 +3230,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396677
       objectReference: {fileID: 0}
-    - target: {fileID: 1427406648660390237, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -296.49503
-      objectReference: {fileID: 0}
-    - target: {fileID: 1427406648660390237, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 1449806487017179106, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1449806487017179106, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -2845,30 +3246,6 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396677
       objectReference: {fileID: 0}
-    - target: {fileID: 1649018049302991546, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 151.32654
-      objectReference: {fileID: 0}
-    - target: {fileID: 1649018049302991546, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.37451088
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707195893382602010, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -300.71704
-      objectReference: {fileID: 0}
-    - target: {fileID: 1707195893382602010, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 1.2144891
-      objectReference: {fileID: 0}
-    - target: {fileID: 1752460043569291432, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -290.854
-      objectReference: {fileID: 0}
-    - target: {fileID: 1752460043569291432, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
-      objectReference: {fileID: 0}
     - target: {fileID: 1912865132648504416, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: m_Offset.x
       value: 0.044448853
@@ -2880,6 +3257,14 @@ PrefabInstance:
     - target: {fileID: 1925452446521450062, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: m_Name
       value: Carriage (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1925452446521450062, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1973942795463874482, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 1973942795463874482, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -2894,6 +3279,10 @@ PrefabInstance:
       value: 0.42396677
       objectReference: {fileID: 0}
     - target: {fileID: 2047053650897774784, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 2047053650897774784, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -2905,14 +3294,6 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396677
       objectReference: {fileID: 0}
-    - target: {fileID: 2234501247438208445, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 146.8748
-      objectReference: {fileID: 0}
-    - target: {fileID: 2234501247438208445, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.36139977
-      objectReference: {fileID: 0}
     - target: {fileID: 2285017976270451763, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 149.08064
@@ -2921,9 +3302,21 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.016444504
       objectReference: {fileID: 0}
+    - target: {fileID: 2462744422042896658, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: -299.7831
+      objectReference: {fileID: 0}
+    - target: {fileID: 2462744422042896658, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.4475556
+      objectReference: {fileID: 0}
+    - target: {fileID: 2613900237663771687, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
     - target: {fileID: 2613900237663771687, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 147.16599
+      value: 146.64299
       objectReference: {fileID: 0}
     - target: {fileID: 2613900237663771687, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
@@ -2938,6 +3331,10 @@ PrefabInstance:
       value: 0.11652231
       objectReference: {fileID: 0}
     - target: {fileID: 2632501533003588259, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 2632501533003588259, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 145.30832
       objectReference: {fileID: 0}
@@ -2947,7 +3344,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2714249603256640129, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 143.31244
+      value: 150.41344
       objectReference: {fileID: 0}
     - target: {fileID: 2714249603256640129, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
@@ -2961,24 +3358,16 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.0027779043
       objectReference: {fileID: 0}
-    - target: {fileID: 3266328935857906005, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 150.01918
-      objectReference: {fileID: 0}
-    - target: {fileID: 3266328935857906005, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -2.5801768
-      objectReference: {fileID: 0}
     - target: {fileID: 3343234967528171496, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 151.55588
+      value: -290.6241
       objectReference: {fileID: 0}
     - target: {fileID: 3343234967528171496, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.0014443696
+      value: 0.4475556
       objectReference: {fileID: 0}
     - target: {fileID: 3389602565251253534, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.y
+      propertyPath: sprite.uvPivot.x
       value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3389602565251253534, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
@@ -2995,19 +3384,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3550374363842774671, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.29055545
+      value: -0.2035555
       objectReference: {fileID: 0}
-    - target: {fileID: 3610580502016271494, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -291.00302
-      objectReference: {fileID: 0}
-    - target: {fileID: 3610580502016271494, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 3700516021807857612, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3700516021807857612, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 3700516021807857612, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3023,39 +3408,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3705765459553740809, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.26755545
+      value: -0.2035555
       objectReference: {fileID: 0}
-    - target: {fileID: 3928911738451644920, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 147.61934
-      objectReference: {fileID: 0}
-    - target: {fileID: 3928911738451644920, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -2.5801768
-      objectReference: {fileID: 0}
-    - target: {fileID: 4073060342557794204, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 158.75932
-      objectReference: {fileID: 0}
-    - target: {fileID: 4073060342557794204, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -2.5801768
-      objectReference: {fileID: 0}
-    - target: {fileID: 4144872968269084019, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -296.346
-      objectReference: {fileID: 0}
-    - target: {fileID: 4144872968269084019, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
-      objectReference: {fileID: 0}
-    - target: {fileID: 4189230969529228219, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 159.6357
-      objectReference: {fileID: 0}
-    - target: {fileID: 4189230969529228219, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.93484426
+    - target: {fileID: 4227183859493802005, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4227183859493802005, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -3110,6 +3467,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4491242870498755532, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4491242870498755532, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -3121,17 +3482,13 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396677
       objectReference: {fileID: 0}
-    - target: {fileID: 4498439411272089347, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 152.31717
-      objectReference: {fileID: 0}
-    - target: {fileID: 4498439411272089347, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.35584366
+    - target: {fileID: 4837856507406420738, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4837856507406420738, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 4837856507406420738, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3143,11 +3500,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4999033885614477668, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 4999033885614477668, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4999033885614477668, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3158,8 +3511,12 @@ PrefabInstance:
       value: 0.020222276
       objectReference: {fileID: 0}
     - target: {fileID: 5198302266055975973, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5198302266055975973, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5198302266055975973, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3171,7 +3528,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5233752221908729529, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.x
-      value: 0
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5233752221908729529, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3182,8 +3539,12 @@ PrefabInstance:
       value: 0.040777862
       objectReference: {fileID: 0}
     - target: {fileID: 5263859571274599946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 5263859571274599946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5263859571274599946, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3195,11 +3556,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5289907751043733750, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 5289907751043733750, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: sprite.uvPivot.y
-      value: 0.5
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5289907751043733750, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3209,37 +3566,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.020222276
       objectReference: {fileID: 0}
-    - target: {fileID: 5529601040614031338, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 153.2894
-      objectReference: {fileID: 0}
-    - target: {fileID: 5529601040614031338, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.35584414
-      objectReference: {fileID: 0}
-    - target: {fileID: 5641649110576292065, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 152.3226
-      objectReference: {fileID: 0}
-    - target: {fileID: 5641649110576292065, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.36139977
-      objectReference: {fileID: 0}
-    - target: {fileID: 5744495876009708912, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -296.23602
-      objectReference: {fileID: 0}
-    - target: {fileID: 5744495876009708912, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 4.721345
-      objectReference: {fileID: 0}
-    - target: {fileID: 5861897991129263878, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -290.47702
-      objectReference: {fileID: 0}
-    - target: {fileID: 5861897991129263878, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 5939265727734634524, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 5939265727734634524, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -3253,14 +3582,6 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396677
       objectReference: {fileID: 0}
-    - target: {fileID: 6221133387892559988, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -290.60602
-      objectReference: {fileID: 0}
-    - target: {fileID: 6221133387892559988, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
-      objectReference: {fileID: 0}
     - target: {fileID: 6221786814295384650, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 145.59164
@@ -3269,25 +3590,13 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.016444504
       objectReference: {fileID: 0}
-    - target: {fileID: 6225468614533140680, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 151.89322
-      objectReference: {fileID: 0}
-    - target: {fileID: 6225468614533140680, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.3745104
-      objectReference: {fileID: 0}
-    - target: {fileID: 6284243366702849896, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -300.1504
-      objectReference: {fileID: 0}
-    - target: {fileID: 6284243366702849896, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 1.2144896
+    - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3296,6 +3605,10 @@ PrefabInstance:
     - target: {fileID: 6404959137940048954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
       value: -1.1619996
+      objectReference: {fileID: 0}
+    - target: {fileID: 6479280935627971477, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6479280935627971477, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -3310,6 +3623,10 @@ PrefabInstance:
       value: 0.42396677
       objectReference: {fileID: 0}
     - target: {fileID: 6492683870333089598, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6492683870333089598, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -3321,13 +3638,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396677
       objectReference: {fileID: 0}
-    - target: {fileID: 6524936833096192706, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 156.37927
-      objectReference: {fileID: 0}
-    - target: {fileID: 6524936833096192706, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -2.5801768
+    - target: {fileID: 6707803112391952460, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 6707803112391952460, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -3342,6 +3655,10 @@ PrefabInstance:
       value: 0.42396677
       objectReference: {fileID: 0}
     - target: {fileID: 6838510829540582631, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 6838510829540582631, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
       value: 0
       objectReference: {fileID: 0}
@@ -3353,14 +3670,6 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.42396677
       objectReference: {fileID: 0}
-    - target: {fileID: 6883110598256000975, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 147.83592
-      objectReference: {fileID: 0}
-    - target: {fileID: 6883110598256000975, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.3613993
-      objectReference: {fileID: 0}
     - target: {fileID: 7071706674951241697, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 149.78598
@@ -3369,21 +3678,25 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.11652231
       objectReference: {fileID: 0}
+    - target: {fileID: 7109598958771489632, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: -299.66092
+      objectReference: {fileID: 0}
+    - target: {fileID: 7109598958771489632, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.4475556
+      objectReference: {fileID: 0}
     - target: {fileID: 7124821817594034148, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 144.17476
       objectReference: {fileID: 0}
     - target: {fileID: 7124821817594034148, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.29055545
+      value: -0.2035555
       objectReference: {fileID: 0}
-    - target: {fileID: 7185645043188479603, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 144.99951
-      objectReference: {fileID: 0}
-    - target: {fileID: 7185645043188479603, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -2.5801768
+    - target: {fileID: 7207307466969309906, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 7207307466969309906, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3393,22 +3706,6 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 1.3782222
       objectReference: {fileID: 0}
-    - target: {fileID: 7368515562513200756, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 149.15054
-      objectReference: {fileID: 0}
-    - target: {fileID: 7368515562513200756, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.68695533
-      objectReference: {fileID: 0}
-    - target: {fileID: 7385323923086403791, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 149.9205
-      objectReference: {fileID: 0}
-    - target: {fileID: 7385323923086403791, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.93484426
-      objectReference: {fileID: 0}
     - target: {fileID: 7412466534817934392, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
       value: 147.70699
@@ -3417,21 +3714,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.11652231
       objectReference: {fileID: 0}
-    - target: {fileID: 7521873210029609715, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 162.35861
-      objectReference: {fileID: 0}
-    - target: {fileID: 7521873210029609715, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.3053999
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550275423125424672, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 145.73183
-      objectReference: {fileID: 0}
-    - target: {fileID: 7550275423125424672, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: -0.93484426
+    - target: {fileID: 7883198929589499098, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 7883198929589499098, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3441,41 +3726,21 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 0.016444504
       objectReference: {fileID: 0}
-    - target: {fileID: 7957013431130658987, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -290.74402
-      objectReference: {fileID: 0}
-    - target: {fileID: 7957013431130658987, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 4.721345
-      objectReference: {fileID: 0}
     - target: {fileID: 7990157493597676954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 151.6781
+      value: -290.50192
       objectReference: {fileID: 0}
     - target: {fileID: 7990157493597676954, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.0014443696
+      value: 0.4475556
       objectReference: {fileID: 0}
-    - target: {fileID: 8110371826755615453, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -295.96902
-      objectReference: {fileID: 0}
-    - target: {fileID: 8110371826755615453, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
-      objectReference: {fileID: 0}
-    - target: {fileID: 8272066991523447574, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 157.57143
-      objectReference: {fileID: 0}
-    - target: {fileID: 8272066991523447574, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 0.41405633
+    - target: {fileID: 8573727060515690007, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8573727060515690007, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 1
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8573727060515690007, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3485,13 +3750,9 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: -1.1619996
       objectReference: {fileID: 0}
-    - target: {fileID: 8611329731224651183, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: -296.09802
-      objectReference: {fileID: 0}
-    - target: {fileID: 8611329731224651183, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 5.028789
+    - target: {fileID: 8657647465503431730, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0.5
       objectReference: {fileID: 0}
     - target: {fileID: 8657647465503431730, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: sprite.uvPivot.y
@@ -3504,14 +3765,6 @@ PrefabInstance:
     - target: {fileID: 8657647465503431730, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
       propertyPath: bounds.m_Center.y
       value: 0.42396677
-      objectReference: {fileID: 0}
-    - target: {fileID: 8826751379725383557, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 148.56143
-      objectReference: {fileID: 0}
-    - target: {fileID: 8826751379725383557, guid: ef1cc0a024ae4f640919152257286d01, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 0.41405633
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -3555,12 +3808,108 @@ PrefabInstance:
       value: 0.22619724
       objectReference: {fileID: 0}
     - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: spriteIndex
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: sprite.index
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: boundsOffset.x
+      value: 0.29444444
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: boundsOffset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: sprite.uvPivot.y
+      value: 0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
       propertyPath: bounds.m_Center.x
       value: 122.78442
       objectReference: {fileID: 0}
     - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -0.061377764
+      value: -0.10799998
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: bounds.m_Extent.x
+      value: 0.29444444
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: bounds.m_Extent.y
+      value: 0.91944444
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: sprite.worldSize.x
+      value: 0.5888889
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: sprite.worldSize.y
+      value: 1.8388889
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: uvSizeAndPosition.w
+      value: 0.3696289
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: uvSizeAndPosition.x
+      value: 0.051757812
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: uvSizeAndPosition.y
+      value: 0.1616211
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: uvSizeAndPosition.z
+      value: 0.095214844
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: worldPivotAndSize.w
+      value: 1.8388889
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: worldPivotAndSize.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: worldPivotAndSize.y
+      value: 0.91944444
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: worldPivotAndSize.z
+      value: 0.5888889
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: prevSpriteIndexFlipH
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: prevSpriteIndexFlipV
+      value: 16
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: sprite.uvSizeAndPos.w
+      value: 0.3696289
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: sprite.uvSizeAndPos.x
+      value: 0.051757812
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: sprite.uvSizeAndPos.y
+      value: 0.1616211
+      objectReference: {fileID: 0}
+    - target: {fileID: 4563364402707015840, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
+      propertyPath: sprite.uvSizeAndPos.z
+      value: 0.095214844
       objectReference: {fileID: 0}
     - target: {fileID: 8771613292555547314, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3568,7 +3917,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8771613292555547314, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.6418222
+      value: 0.231
       objectReference: {fileID: 0}
     - target: {fileID: 8771613292555547314, guid: d913e38cd4525d74bbf43ea7043ca195, type: 3}
       propertyPath: m_LocalPosition.z
@@ -3632,12 +3981,32 @@ PrefabInstance:
     m_TransformParent: {fileID: 3523537623804074138}
     m_Modifications:
     - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: spriteIndex
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: sprite.index
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: boundsOffset.x
+      value: 0.4888889
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: boundsOffset.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: sprite.uvPivot.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
       propertyPath: sprite.uvPivot.y
-      value: 0.5
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 161.74889
+      value: 161.73788
       objectReference: {fileID: 0}
     - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
       propertyPath: bounds.m_Center.y
@@ -3648,12 +4017,84 @@ PrefabInstance:
       value: 18
       objectReference: {fileID: 0}
     - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: bounds.m_Extent.x
+      value: 0.4888889
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: bounds.m_Extent.y
+      value: 0.82222223
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: sprite.worldSize.x
+      value: 0.9777778
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: sprite.worldSize.y
+      value: 1.6444445
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
       propertyPath: batchKey.depthOrder
       value: 18
       objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: uvSizeAndPosition.w
+      value: 0.38916016
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: uvSizeAndPosition.x
+      value: 0.0859375
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: uvSizeAndPosition.y
+      value: 0.14453125
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: uvSizeAndPosition.z
+      value: 0.1508789
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: worldPivotAndSize.w
+      value: 1.6444445
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: worldPivotAndSize.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: worldPivotAndSize.y
+      value: 0.82222223
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: worldPivotAndSize.z
+      value: 0.9777778
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: prevSpriteIndexFlipH
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: prevSpriteIndexFlipV
+      value: 15
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: sprite.uvSizeAndPos.w
+      value: 0.38916016
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: sprite.uvSizeAndPos.x
+      value: 0.0859375
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: sprite.uvSizeAndPos.y
+      value: 0.14453125
+      objectReference: {fileID: 0}
+    - target: {fileID: 2622812054174737368, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: sprite.uvSizeAndPos.z
+      value: 0.1508789
+      objectReference: {fileID: 0}
     - target: {fileID: 4119130086404529599, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 19.08
+      value: 19.069
       objectReference: {fileID: 0}
     - target: {fileID: 4119130086404529599, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
       propertyPath: m_LocalPosition.y
@@ -3691,9 +4132,29 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 4236172537894789572, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: m_Size.x
+      value: 0.9777778
+      objectReference: {fileID: 0}
+    - target: {fileID: 4236172537894789572, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: m_Size.y
+      value: 1.6444445
+      objectReference: {fileID: 0}
+    - target: {fileID: 4236172537894789572, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: m_Offset.x
+      value: 0.4888916
+      objectReference: {fileID: 0}
+    - target: {fileID: 4236172537894789572, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: m_Offset.y
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 8688904155562760458, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
       propertyPath: m_Name
       value: Drivers Pit
+      objectReference: {fileID: 0}
+    - target: {fileID: 8688904155562760458, guid: cf370a3d91b2df546903ff4a18c8024d, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

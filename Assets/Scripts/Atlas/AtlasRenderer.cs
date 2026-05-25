@@ -205,6 +205,7 @@ public class AtlasRenderer : MonoBehaviour
         if (boxCollider == null) return;
         boxCollider.size = bounds.size;
         boxCollider.offset = bounds.center - transform.position;
+        spriteIndex = sprite.index;
     }
     public void UpdateDepthEditor(Transform transform)
     {
@@ -370,7 +371,7 @@ public class AtlasRenderer : MonoBehaviour
         int lastIndex = clip.keyframeEndIndex;
         try
         {
-            curFrameIndex = 0;
+            curFrameIndex = clip.keyframeStartIndex;
             isAnimating = true;
             while (curFrameIndex < lastIndex)
             {
@@ -403,7 +404,7 @@ public class AtlasRenderer : MonoBehaviour
         try
         {
             isAnimating = true;
-            while (curFrameIndex >= 0)
+            while (curFrameIndex > clip.keyframeStartIndex)
             {
                 MotionSprite motionSprite = GetNextKeyframeSpriteReverse(atlas, clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
 

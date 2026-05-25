@@ -129,7 +129,10 @@ public class CameraController : MonoBehaviour
             case LocationState.Gangway:
             {
                 targetWorldPos.x = spyStats.curWorldPos.x + curXOffset;
-                carriageBoundsCompute.SetVector("_BoundSize", Vector2.zero);
+                Vector2 centerTrainSpace = (spyStats.curLocationBounds.center - trainStats.totalBounds.min) * renderTextureScale;
+                Vector2 sizeTrainSpace = (spyStats.curLocationBounds.size) * renderTextureScale;
+                carriageBoundsCompute.SetVector("_BoundCenter", centerTrainSpace);
+                carriageBoundsCompute.SetVector("_BoundSize", sizeTrainSpace);
                 carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);
                 carriageBoundsCompute.Dispatch(carriageBoundsKernel, threadGroupX, threadGroupY, 1);
 
@@ -158,11 +161,6 @@ public class CameraController : MonoBehaviour
             {
             }
             break;
-            case LocationState.Gangway:
-            {
-
-            }
-            break;
         }
     }
     private void ExitState()
@@ -176,12 +174,6 @@ public class CameraController : MonoBehaviour
 
             case LocationState.Carriage:
             {
-            }
-            break;
-
-            case LocationState.Gangway:
-            {
-
             }
             break;
         }

@@ -21,19 +21,26 @@ public class SpyBrain : MonoBehaviour
     public LayerSettingsSO layerSettings;
     public GameEventDataSO gameEventData;
     public CameraStatsSO camStats;
+    public NotepadData notepadData;
     public TripSO trip;
 
     [Header("Generated")]
     public AtlasSO atlas;
     public SlideDoors slideDoors;
-    public GangwayDoor gangwayDoor;
+    public HingedDoor smokingRoomDoor;
+    public GangwayDoor curGangwayDoor;
     public Carriage curCarriage;
     public CarriageMap curCarriageMap;
     public NPCBrain npcTicketCheck;
     public AtlasClip curClip;
+    public NotepadData.State curNotepadState;
+
     public float clipTime;
     public int curFrameIndex;
     public int prevFrameIndex;
+
+    public bool wasTouchingGangwayDoorLeft;
+    public bool wasTouchingGangwayDoorRight;
 
     public bool canExitCheckTicket;
     public bool canExitNotepad;
@@ -67,15 +74,9 @@ public class SpyBrain : MonoBehaviour
         atlas = atlasRenderer.atlas;
         atlas.UpdateClipDictionary();
         stats.curState = SpyState.None;
-        rigidBody.gravityScale = settings.gravityScale;
         stats.curGroundLayer = layerSettings.stationLayers.ground;
         stats.curWallLayer = layerSettings.stationWallLayers;
         rigidBody.includeLayers = layerSettings.stationMask;
-
-        collisionData.leftStepResults = new RaycastHit2D[1];
-        collisionData.rightStepResults = new RaycastHit2D[1];
-
-        collisionData.stepFilter = new ContactFilter2D() { useLayerMask = true, layerMask = layerSettings.stationLayers.ground };
 
         stats.curLocationState = LocationState.Station;
     }
@@ -89,56 +90,12 @@ public class SpyBrain : MonoBehaviour
     private void FixedUpdate()
     {
         FixedUpdateStates();
-
-        Physics2D.Linecast(collisionData.stepBottomLeft, collisionData.stepTopLeft, collisionData.stepFilter, collisionData.leftStepResults);
-        Physics2D.Linecast(collisionData.stepBottomRight, collisionData.stepTopRight, collisionData.stepFilter, collisionData.rightStepResults);
-
-        if (collisionData.leftStepResults[0].collider != default)
-        {
-            Bounds hitColliderHeight = collisionData.leftStepResults[0].collider.bounds;
-            if (hitColliderHeight.max.y < collisionData.stepTopLeft.y)
-            {
-                rigidBody.gravityScale = 0;
-                rigidBody.position = new Vector2(rigidBody.position.x - 0.1f, hitColliderHeight.max.y);
-            }
-            collisionData.leftStepResults[0] = default;
-        }
-        else if (collisionData.rightStepResults[0] != default)
-        {
-            Bounds hitColliderHeight = collisionData.rightStepResults[0].collider.bounds;
-            if (hitColliderHeight.max.y < collisionData.stepTopRight.y)
-            {
-                rigidBody.gravityScale = 0;
-                rigidBody.position = new Vector2(rigidBody.position.x + 0.1f, hitColliderHeight.max.y);
-            }
-            collisionData.rightStepResults[0] = default;
-        }
-
-        bool leftWallTouch = Physics2D.Linecast(collisionData.wallBottomLeft, collisionData.wallTopLeft, stats.curWallLayer);
-        bool rightWallTouch = Physics2D.Linecast(collisionData.wallBottomRight, collisionData.wallTopRight, stats.curWallLayer);
+        bool leftWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, stats.curWallLayer);
+        bool rightWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, stats.curWallLayer);
 
         stats.walkingIntoWall = (leftWallTouch && playerInputs.move == -1) || (rightWallTouch && playerInputs.move == 1);
 
         rigidBody.linearVelocity = stats.moveVelocity;
-    }
-    private void OnTriggerEnter2D(Collider2D collision)
-    {
-        if (stats.curLocationState == LocationState.Station) return;
-
-        int collisionLayerValue = 1 << collision.gameObject.layer;
-
-        if (((layerSettings.trainLayers.insideCarriageBounds.value & collisionLayerValue) != 0) || (layerSettings.trainLayers.smokingRoom.value & collisionLayerValue) != 0)
-        {
-            stats.curLocationState = LocationState.Carriage;
-            curCarriage = TrainController.GetCarriage(transform.position.x);
-            stats.curLocationBounds = curCarriage.totalBounds;
-        }
-        else if ((layerSettings.trainLayers.gangwayBounds.value & (1 << collision.gameObject.layer)) != 0)
-        {
-            stats.curLocationState = LocationState.Gangway;
-            stats.curLocationBounds = collision.bounds;
-            curCarriage = null;
-        }
     }
     private void ChooseState()
     {
@@ -199,6 +156,50 @@ public class SpyBrain : MonoBehaviour
                 {
                     checkingNotepad = false;
                 }
+
+                if (notepadData.curState != curNotepadState)
+                {
+                    switch (notepadData.curState)
+                    {
+                        case NotepadData.State.FlippingUp:
+                        {
+                            curClip = atlas.clipDict[(int)SpyMotion.NotepadFlipping];
+                            atlasRenderer.PlayClipOneShot(curClip);
+                        }
+                        break;
+                        case NotepadData.State.FlippingDown:
+                        {
+                            curClip = atlas.clipDict[(int)SpyMotion.NotepadFlipping];
+                            atlasRenderer.PlayClipOneShotReverse(curClip);
+
+                        }
+                        break;
+                        case NotepadData.State.Stationary:
+                        {
+                            curClip = atlas.clipDict[(int)SpyMotion.NotepadHolding];
+                        }
+                        break;
+                        case NotepadData.State.Writing:
+                        {
+                            curClip = atlas.clipDict[(int)SpyMotion.NotepadWriting];
+                            atlasRenderer.PlayClipOneShot(curClip);
+                        }
+                        break;
+                        case NotepadData.State.Erasing:
+                        {
+                            curClip = atlas.clipDict[(int)SpyMotion.NotepadWriting];
+                            atlasRenderer.PlayClipOneShotReverse(curClip);
+
+                        }
+                        break;
+                    }
+                    curNotepadState = notepadData.curState;
+                }
+
+                if (curNotepadState == NotepadData.State.Stationary)
+                {
+                    atlasRenderer.PlayClip(ref curClip);
+                }
             }
             break;
         }
@@ -214,6 +215,73 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Walk:
             {
+
+                if (stats.curLocationState != LocationState.Station)
+                {
+                    CalculateCollisionPoints();
+
+                    RaycastHit2D gangwayDoorLeftHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, layerSettings.trainLayers.gangwayDoor);
+                    RaycastHit2D gangwayDoorRightHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, layerSettings.trainLayers.gangwayDoor);
+                    bool isTouchingGangwayDoorLeft = gangwayDoorLeftHit.collider != null;
+                    bool isTouchingGangwayDoorRight = gangwayDoorRightHit.collider != null;
+
+                    if ((!isTouchingGangwayDoorRight && wasTouchingGangwayDoorRight) && !isTouchingGangwayDoorLeft)
+                    {
+                        if (atlasRenderer.flipX)
+                        {
+                            if (curGangwayDoor.isLeftOfCarriage)
+                            {
+                                curGangwayDoor.carriage.MoveUp();
+                                stats.curLocationBounds = curGangwayDoor.gangway.exteriorRenderer.bounds;
+                                stats.curLocationState = LocationState.Gangway;
+                            }
+                            else
+                            {
+                                curGangwayDoor.gangway.MoveUp();
+                                stats.curLocationBounds = curGangwayDoor.carriage.totalBounds;
+                                stats.curLocationState = LocationState.Carriage;
+                            }
+                            curGangwayDoor.CloseDoors();
+                        }
+                    }
+
+
+                    if ((!isTouchingGangwayDoorLeft && wasTouchingGangwayDoorLeft) && !isTouchingGangwayDoorRight)
+                    {
+                        if (!atlasRenderer.flipX)
+                        {
+                            if (curGangwayDoor.isLeftOfCarriage)
+                            {
+                                curGangwayDoor.gangway.MoveUp();
+                                stats.curLocationBounds = curGangwayDoor.carriage.totalBounds;
+                                stats.curLocationState = LocationState.Carriage;
+                            }
+                            else
+                            {
+                                curGangwayDoor.carriage.MoveUp();
+                                stats.curLocationBounds = curGangwayDoor.gangway.exteriorRenderer.bounds;
+                                stats.curLocationState = LocationState.Gangway;
+                            }
+                            curGangwayDoor.CloseDoors();
+                        }
+
+                    }
+                    if ((isTouchingGangwayDoorLeft && !wasTouchingGangwayDoorLeft) && !isTouchingGangwayDoorRight)
+                    {
+                        curGangwayDoor = gangwayDoorLeftHit.collider.GetComponent<GangwayDoor>();
+                        if (curGangwayDoor.isLeftOfCarriage && atlasRenderer.flipX)
+                        {
+                            curGangwayDoor.gangway.MoveDown();
+                        }
+                        else
+                        {
+                            curGangwayDoor.carriage.MoveDown();
+                        }
+                    }
+                    wasTouchingGangwayDoorLeft = isTouchingGangwayDoorLeft;
+                    wasTouchingGangwayDoorRight = isTouchingGangwayDoorRight;
+                }
+
                 stats.targetXVelocity = (settings.moveSpeed * playerInputs.move);
                 stats.moveVelocity.x = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.fixedDeltaTime);
             }
@@ -243,7 +311,8 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Ticket:
             {
-                curClip = atlas.clipDict[(int)SpyMotion.StandingBreathing];
+                curClip = atlas.clipDict[(int)SpyMotion.Ticket];
+                atlasRenderer.PlayClipOneShot(curClip);
 
                 RaycastHit2D npcHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, transform.right, boxCollider.bounds.size.x, layerSettings.npc);
 
@@ -269,6 +338,7 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Notepad:
             {
+                curClip = atlas.clipDict[(int)SpyMotion.NotepadHolding];
                 checkingNotepad = true;
                 canExitNotepad = false;
             }
@@ -292,6 +362,7 @@ public class SpyBrain : MonoBehaviour
             case SpyState.Ticket:
             {
                 if (npcTicketCheck != null) npcTicketCheck.ticketIsBeingChecked = false;
+                atlasRenderer.PlayClipOneShotReverse(curClip);
             }
             break;
 
@@ -315,26 +386,13 @@ public class SpyBrain : MonoBehaviour
         float groundLeft = transform.position.x - settings.groundBufferHorizontal;
         float groundRight = transform.position.x + settings.groundBufferHorizontal;
         float groundBottom = transform.position.y - settings.groundBufferVertical;
-        float stepTop = transform.position.y + settings.topStepBuffer;
-        float stepBottom = transform.position.y + settings.bottomStepBuffer;
-        float waste = transform.position.y + settings.wasteBuffer;
-        float wallLeft = transform.position.x - settings.wallBuffer;
-        float wallRight = transform.position.x + settings.wallBuffer;
-        float head = transform.position.y + settings.headBuffer;
+        float wallLeft = boxCollider.bounds.center.x - settings.wallWidthBuffer;
+        float wallRight = boxCollider.bounds.center.x + settings.wallWidthBuffer;
         collisionData.groundLeft = new Vector2(groundLeft, groundBottom);
         collisionData.groundRight = new Vector2(groundRight, groundBottom);
 
-        collisionData.stepTopLeft = new Vector2(groundLeft, stepTop);
-        collisionData.stepTopRight = new Vector2(groundRight, stepTop);
-
-        collisionData.stepBottomLeft = new Vector2(groundLeft, stepBottom);
-        collisionData.stepBottomRight = new Vector2(groundRight, stepBottom);
-
-        collisionData.wallTopLeft = new Vector2(wallLeft, head);
-        collisionData.wallTopRight = new Vector2(wallRight, head);
-
-        collisionData.wallBottomLeft = new Vector2(wallLeft, waste);
-        collisionData.wallBottomRight = new Vector2(wallRight, waste);
+        collisionData.wallLeft = new Vector2(wallLeft, boxCollider.bounds.center.y);
+        collisionData.wallRight = new Vector2(wallRight, boxCollider.bounds.center.y);
 
     }
     private void OpenTrainDoors()
@@ -361,16 +419,15 @@ public class SpyBrain : MonoBehaviour
 
                         if (insideCarriageHit.collider != null)
                         {
-                            curCarriage = TrainController.GetCarriage(transform.position.x);
+                            curCarriage = TrainController.GetCarriage(boxCollider.bounds);
                             curCarriage.MoveDown();
                         }
                         stats.curGroundLayer = layerSettings.trainLayers.ground;
                         stats.curWallLayer = layerSettings.trainWallLayers;
                         stats.curLocationState = LocationState.Carriage;
-
+                        stats.curLocationBounds = curCarriage.totalBounds;
                         rigidBody.includeLayers = layerSettings.trainMask;
 
-                        collisionData.stepFilter.layerMask = layerSettings.trainLayers.ground;
                         atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.frontMin);
                     }
                     break;
@@ -379,18 +436,65 @@ public class SpyBrain : MonoBehaviour
         }
         else
         {
-            RaycastHit2D left = Physics2D.Linecast(collisionData.wallBottomLeft, collisionData.wallTopLeft, layerSettings.trainLayers.gangwayDoor);
-            RaycastHit2D right = Physics2D.Linecast(collisionData.wallBottomRight, collisionData.wallTopRight, layerSettings.trainLayers.gangwayDoor);
+            if (atlasRenderer.flipX)
+            {
 
-            if (left.collider != null)
-            {
-                gangwayDoor = left.collider.GetComponent<GangwayDoor>();
-                gangwayDoor.OpenDoor();
+                RaycastHit2D leftSmokingRoomDoorHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, layerSettings.trainLayers.smokingRoomDoor);
+                if (leftSmokingRoomDoorHit.collider != null)
+                {
+                    smokingRoomDoor = leftSmokingRoomDoorHit.collider.GetComponent<HingedDoor>();
+                    smokingRoomDoor.OpenDoor();
+                }
+                else
+                {
+                    RaycastHit2D leftGangwayDoorHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, layerSettings.trainLayers.gangwayDoor);
+                    if (leftGangwayDoorHit.collider != null)
+                    {
+                        curGangwayDoor = leftGangwayDoorHit.collider.GetComponent<GangwayDoor>();
+                        curGangwayDoor.OpenDoors();
+
+                        if (curGangwayDoor.isLeftOfCarriage)
+                        {
+                            stats.curLocationBounds = curGangwayDoor.gangway.exteriorRenderer.bounds;
+                            stats.curLocationState = LocationState.Gangway;
+                        }
+                        else
+                        {
+                            stats.curLocationBounds = curGangwayDoor.carriage.totalBounds;
+                            stats.curLocationState = LocationState.Carriage;
+                        }
+
+                    }
+                }
+
             }
-            else if (right.collider != null)
+            else
             {
-                gangwayDoor = right.collider.GetComponent<GangwayDoor>();
-                gangwayDoor.OpenDoor();
+                RaycastHit2D rightSmokingRoomDoorHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, layerSettings.trainLayers.smokingRoomDoor);
+
+                if (rightSmokingRoomDoorHit.collider != null)
+                {
+                    smokingRoomDoor = rightSmokingRoomDoorHit.collider.GetComponent<HingedDoor>();
+                    smokingRoomDoor.OpenDoor();
+                }
+                else
+                {
+                    RaycastHit2D rightGangwayDoorHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, layerSettings.trainLayers.gangwayDoor);
+                    if (rightGangwayDoorHit.collider != null)
+                    {
+                        curGangwayDoor = rightGangwayDoorHit.collider.GetComponent<GangwayDoor>();
+                        curGangwayDoor.OpenDoors();
+                        if (curGangwayDoor.isLeftOfCarriage)
+                        {
+                            curGangwayDoor.carriage.MoveDown();
+                        }
+                        else
+                        {
+                            curGangwayDoor.gangway.MoveDown();
+                        }
+                    }
+
+                }
             }
 
         }
@@ -434,12 +538,10 @@ public class SpyBrain : MonoBehaviour
         Gizmos.DrawLine(collisionData.groundLeft, collisionData.groundRight);
 
         Gizmos.color = Color.indianRed;
-        Gizmos.DrawLine(collisionData.stepBottomLeft, collisionData.stepTopLeft);
-        Gizmos.DrawLine(collisionData.stepBottomRight, collisionData.stepTopRight);
 
         Gizmos.color = stats.walkingIntoWall ? Color.forestGreen : Color.red;
-        Gizmos.DrawLine(collisionData.wallTopLeft, collisionData.wallBottomLeft);
-        Gizmos.DrawLine(collisionData.wallTopRight, collisionData.wallBottomRight);
+        Gizmos.DrawLine(collisionData.wallLeft, boxCollider.bounds.center);
+        Gizmos.DrawLine(collisionData.wallRight, boxCollider.bounds.center);
 
     }
 }

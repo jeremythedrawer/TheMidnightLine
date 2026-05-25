@@ -25,6 +25,7 @@ public class GameplayUI : MonoBehaviour
     public CameraStatsSO cameraStats;
     public SpyStatsSO spyStats;
     public GameEventDataSO gameEventData;
+    public NotepadData notepadData;
     public TripSO trip;
 
     public Material matrix_material; 
@@ -93,7 +94,7 @@ public class GameplayUI : MonoBehaviour
     }
     private void ChooseState()
     {
-        if (spyStats.curState == SpyState.Notepad || notepad.curState != Notepad.State.Stationary)
+        if (spyStats.curState == SpyState.Notepad || notepadData.curState != NotepadData.State.Stationary)
         {
             SetState(State.Notepad);
         }

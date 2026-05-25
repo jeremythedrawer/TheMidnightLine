@@ -13,7 +13,9 @@ MonoBehaviour:
   m_Name: Glyphs_Atlas
   m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
   texture: {fileID: 2800000, guid: 7f69f70a0c9a70946adf610e822aa616, type: 3}
-  isParticleAtlas: 0
+  spriteConnectColor:
+    serializedVersion: 2
+    rgba: 0
   entityMotionType: 0
   pivotColor:
     serializedVersion: 2
@@ -21,48 +23,41 @@ MonoBehaviour:
   sliceColor:
     serializedVersion: 2
     rgba: 4294901760
-  particleType: 0
   motionSprites: []
   simpleSprites:
-  - uvSizeAndPos: {x: 0.2109375, y: 0.29296875, z: 0.28125, w: 0.05859375}
+  - uvSizeAndPos: {x: 0.1015625, y: 0.2734375, z: 0.5546875, w: 0.0703125}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0.3, y: 0.41666666, z: 1}
+    worldSize: {x: 0.072222225, y: 0.19444445, z: 1}
     index: 0
-  - uvSizeAndPos: {x: 0.10546875, y: 0.29296875, z: 0.55078125, w: 0.0703125}
+  - uvSizeAndPos: {x: 0.1953125, y: 0.2734375, z: 0.2890625, w: 0.0625}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0.15, y: 0.41666666, z: 1}
+    worldSize: {x: 0.1388889, y: 0.19444445, z: 1}
     index: 1
-  - uvSizeAndPos: {x: 0.23828125, y: 0.30078125, z: 0.00390625, w: 0.03125}
+  - uvSizeAndPos: {x: 0.234375, y: 0.2890625, z: 0.0078125, w: 0.0390625}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0.33888888, y: 0.42777777, z: 1}
+    worldSize: {x: 0.16666667, y: 0.20555556, z: 1}
     index: 2
-  - uvSizeAndPos: {x: 0.18359375, y: 0.3515625, z: 0.78125, w: 0.0078125}
+  - uvSizeAndPos: {x: 0.171875, y: 0.34375, z: 0.7890625, w: 0.0078125}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0.2611111, y: 0.5, z: 1}
+    worldSize: {x: 0.12222222, y: 0.24444444, z: 1}
     index: 3
-  - uvSizeAndPos: {x: 0.18359375, y: 0.3515625, z: 0.78125, w: 0.0078125}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0.2611111, y: 0.5, z: 1}
-    index: 4
   slicedSprites:
   - sprite:
-      uvSizeAndPos: {x: 0.31640625, y: 0.29296875, z: 0.01171875, w: 0.40234375}
+      uvSizeAndPos: {x: 0.3125, y: 0.28125, z: 0.015625, w: 0.40625}
       uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0.45, y: 0.41666666, z: 1}
+      worldSize: {x: 0.22222222, y: 0.2, z: 1}
       index: 0
-    slice: {x: 0.50617284, y: 0.5802469, z: 0.52, w: 0.6666667}
+    slice: {x: 0.5, y: 0.575, z: 0.5277778, w: 0.6666667}
     uvSizeAndPos:
-    - {x: 0.16015625, y: 0.15234375, z: 0.01171875, w: 0.40234375}
-    - {x: 0.023437506, y: 0.15234375, z: 0.171875, w: 0.40234375}
-    - {x: 0.1328125, y: 0.15234375, z: 0.1953125, w: 0.40234375}
-    - {x: 0.16015625, y: 0.04296876, z: 0.01171875, w: 0.5546875}
-    - {x: 0.023437506, y: 0.04296876, z: 0.171875, w: 0.5546875}
-    - {x: 0.1328125, y: 0.04296876, z: 0.1953125, w: 0.5546875}
-    - {x: 0.16015625, y: 0.09765624, z: 0.01171875, w: 0.59765625}
-    - {x: 0.023437506, y: 0.09765624, z: 0.171875, w: 0.59765625}
-    - {x: 0.1328125, y: 0.09765624, z: 0.1953125, w: 0.59765625}
-    worldSlices: {x: 0.22777778, y: 0.18888888, z: 0.21666665, w: 0.13888888}
-  particleSprites: []
-  particleUVSizeAndPosArray: []
+    - {x: 0.15625, y: 0.1484375, z: 0.015625, w: 0.40625}
+    - {x: 0.023437496, y: 0.1484375, z: 0.171875, w: 0.40625}
+    - {x: 0.1328125, y: 0.1484375, z: 0.1953125, w: 0.40625}
+    - {x: 0.15625, y: 0.0390625, z: 0.015625, w: 0.5546875}
+    - {x: 0.023437496, y: 0.0390625, z: 0.171875, w: 0.5546875}
+    - {x: 0.1328125, y: 0.0390625, z: 0.1953125, w: 0.5546875}
+    - {x: 0.15625, y: 0.09374999, z: 0.015625, w: 0.59375}
+    - {x: 0.023437496, y: 0.09374999, z: 0.171875, w: 0.59375}
+    - {x: 0.1328125, y: 0.09374999, z: 0.1953125, w: 0.59375}
+    worldSlices: {x: 0.11111111, y: 0.094444446, z: 0.10555556, w: 0.06666666}
   clips: []
   markers: []

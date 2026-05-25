@@ -433,7 +433,7 @@ public class NPCBrain : MonoBehaviour
                 if (!onTrain)
                 {
                     RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
-                    curCarriage = TrainController.GetCarriage(transform.position.x);
+                    curCarriage = TrainController.GetCarriage(boxCollider.bounds);
                 }
                 queuedForSlideDoor = false;
                 behaving = false;
