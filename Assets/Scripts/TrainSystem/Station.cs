@@ -34,7 +34,7 @@ public class Station : MonoBehaviour
 
             if (i % 2 == 0)
             {
-                bystander.atlasRenderer.FlipH(true, bystander.atlasRenderer.sprite);
+                bystander.atlasRenderer.FlipH(true);
             }
         }
 
@@ -57,7 +57,7 @@ public class Station : MonoBehaviour
             traitor.disembarkingStation = trip.stationsDataArray[traitorProfile.disembarkingStationIndex];
             if (i % 2 == 0)
             {
-                traitor.atlasRenderer.FlipH(true, traitor.atlasRenderer.sprite);
+                traitor.atlasRenderer.FlipH(true);
             }
         }
     }

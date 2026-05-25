@@ -3,7 +3,7 @@ using UnityEngine.VFX;
 using static Atlas;
 public static class NPC
 {
-    public const float CLOSE_TO_TARGET_BUFFER = 0.1f;
+    public const float CLOSE_TO_TARGET_BUFFER = 0.03f;
     public const float ADJUST_COLOR_TIME = 0.5f;
     public const float MIN_START_MOVE_TIME = 0.3f;
     public const float MAX_START_MOVE_TIME = 1f;

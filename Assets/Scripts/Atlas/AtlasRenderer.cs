@@ -116,7 +116,8 @@ public class AtlasRenderer : MonoBehaviour
             }
             break;
         }
-
+        FlipH(flipX);
+        FlipV(flipY);
         batchKey.texture = atlas.texture;
     }
     private void Awake()
@@ -196,8 +197,8 @@ public class AtlasRenderer : MonoBehaviour
 
         bounds.size = new Vector3(scaleAndFlip.x * worldPivotAndSize.z, scaleAndFlip.y * worldPivotAndSize.w, 0.2f);
         
-        FlipH(flipX, newSprite);
-        FlipV(flipY, newSprite);
+        FlipH(flipX);
+        FlipV(flipY);
 
         bounds.center = new Vector3(transform.position.x + boundsOffset.x, transform.position.y + boundsOffset.y, transform.position.z);
 
@@ -216,27 +217,27 @@ public class AtlasRenderer : MonoBehaviour
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, newDepth);
     }
-    public void FlipH(bool flipLeft, SimpleSprite curSprite)
+    public void FlipH(bool flipLeft)
     {
-        if (flipX == flipLeft && curSprite.index == prevSpriteIndexFlipH) return;
+        if (flipX == flipLeft && sprite.index == prevSpriteIndexFlipH) return;
 
         flipX = flipLeft;
         scaleAndFlip.z = flipLeft ? -1 : 1;
-        float flipPivot = flipLeft ? 1 - curSprite.uvPivot.x : curSprite.uvPivot.x;
+        float flipPivot = flipLeft ? 1 - sprite.uvPivot.x : sprite.uvPivot.x;
         worldPivotAndSize.x = flipPivot * scaleAndFlip.x * worldPivotAndSize.z;
         boundsOffset.x = (bounds.size.x * 0.5f) - worldPivotAndSize.x;
-        prevSpriteIndexFlipH = curSprite.index;
+        prevSpriteIndexFlipH = sprite.index;
     }
-    public void FlipV(bool flipDown, SimpleSprite curSprite)
+    public void FlipV(bool flipDown)
     {
-        if (flipY == flipDown && curSprite.index == prevSpriteIndexFlipV) return;
+        if (flipY == flipDown && sprite.index == prevSpriteIndexFlipV) return;
 
         flipY = flipDown;
         scaleAndFlip.w = flipDown ? -1 : 1;
-        float flipPivot = flipDown ? 1 - curSprite.uvPivot.y : curSprite.uvPivot.y;
+        float flipPivot = flipDown ? 1 - sprite.uvPivot.y : sprite.uvPivot.y;
         worldPivotAndSize.y = flipPivot * scaleAndFlip.y * worldPivotAndSize.w;
         boundsOffset.y = (bounds.size.y * 0.5f) - worldPivotAndSize.y;
-        prevSpriteIndexFlipV = curSprite.index;
+        prevSpriteIndexFlipV = sprite.index;
     }
     public void UpdateBounds()
     {        

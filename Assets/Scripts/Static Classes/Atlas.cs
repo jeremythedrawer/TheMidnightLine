@@ -14,6 +14,7 @@ public static class Atlas
     public static int INT_SIZE = sizeof(uint);
     public enum NPCMotion // NOTE(Jeremy): If adding a new motion put it at the bottom or it will mess with the clip indexes for the clip dictionary.
     {
+        None,
         SittingBlinking,
         SittingBreathing,
         SittingCalling,
@@ -36,6 +37,7 @@ public static class Atlas
     }
     public enum SpyMotion
     {
+        None,
         StandingBreathing,
         Ticket,
         NotepadHolding,
@@ -45,11 +47,13 @@ public static class Atlas
     }
     public enum TrainMotion
     {
+        None,
         TrainDoor,
     }
 
     public enum NotepadMotion
     {
+        None,
         FlipHand,
         FlipPage,
         RotatingPencil,
@@ -57,6 +61,7 @@ public static class Atlas
 
     public enum EntityMotionType
     {
+        None,
         NPC,
         Spy,
         Notepad,

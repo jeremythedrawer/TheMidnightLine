@@ -157,7 +157,7 @@ public class NPCBrain : MonoBehaviour
             {
                 move = Mathf.Sign(targetDist);
                 atlasRenderer.PlayClip(ref curClip);
-                atlasRenderer.FlipH(move < 0, atlasRenderer.sprite);
+                atlasRenderer.FlipH(move < 0);
 
                 if (curPath == NPCPath.ToExitStation)
                 {
@@ -413,6 +413,8 @@ public class NPCBrain : MonoBehaviour
             case NPCPath.SittingInTrain:
             {
                 atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.carriageSeat);
+                transform.position = new Vector3(targetXPos, transform.position.y, transform.position.z);
+                atlasRenderer.FlipH(false);
 
             }
             break;

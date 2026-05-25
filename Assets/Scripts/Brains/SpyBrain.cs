@@ -417,7 +417,7 @@ public class SpyBrain : MonoBehaviour
     private void Flip(bool flip)
     {
         stats.spriteFlip = flip;
-        atlasRenderer.FlipH(flip, atlasRenderer.sprite);
+        atlasRenderer.FlipH(flip);
     }
     public static void ToggleTicketCheckAbility(bool toggle)
     {

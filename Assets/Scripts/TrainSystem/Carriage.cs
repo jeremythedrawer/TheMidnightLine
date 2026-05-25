@@ -187,7 +187,7 @@ public class Carriage : MonoBehaviour
         for (int i = 0; i < seatRenderers.Length; i++)
         {
             AtlasRenderer seat = seatRenderers[i];
-            float firstSeatPos = seat.transform.position.x + (tileWidth * 0.5f);
+            float firstSeatPos = seat.transform.position.x + (tileWidth * 0.25f);
 
             for (int j = 0; j < seatsPerRenderer[i]; j++)
             {

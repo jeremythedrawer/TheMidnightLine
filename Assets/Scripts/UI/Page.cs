@@ -134,7 +134,7 @@ public class Page : MonoBehaviour
         if (exitButton_renderer.flipY != pointDown)
         {
             exitButton_renderer.custom.x = invert ? 0 : 1;
-            exitButton_renderer.FlipV(pointDown, exitButton_renderer.sprite);
+            exitButton_renderer.FlipV(pointDown);
         }
 
     }

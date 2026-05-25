@@ -180,7 +180,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: 5085181b26ea31b4b9430dc5ce3bcdf5, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 1
+  spriteIndex: 0
   flipX: 0
   flipY: 0
   width: 1
@@ -192,18 +192,18 @@ MonoBehaviour:
   textToCenter: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.057617188, y: 0.15820312, z: 0.0625, w: 0.8388672}
+    uvSizeAndPos: {x: 0.057617188, y: 0.15722656, z: 0.0009765625, w: 0.8388672}
     uvPivot: {x: 0.4915254, y: 0}
-    worldSize: {x: 0.32777777, y: 0.9, z: 1}
-    index: 1
+    worldSize: {x: 0.32777777, y: 0.89444447, z: 1}
+    index: 0
   bounds:
-    m_Center: {x: 86.155334, y: 2.141, z: 1}
-    m_Extent: {x: 0.16388889, y: 0.45, z: 0.1}
-  worldPivotAndSize: {x: 0.1611111, y: 0, z: 0.32777777, w: 0.9}
-  uvSizeAndPosition: {x: 0.057617188, y: 0.15820312, z: 0.0625, w: 0.8388672}
+    m_Center: {x: 86.155334, y: 2.1382222, z: 1}
+    m_Extent: {x: 0.16388889, y: 0.44722223, z: 0.1}
+  worldPivotAndSize: {x: 0.1611111, y: 0, z: 0.32777777, w: 0.89444447}
+  uvSizeAndPosition: {x: 0.057617188, y: 0.15722656, z: 0.0009765625, w: 0.8388672}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.002777785, y: 0.45, z: 0}
+  boundsOffset: {x: 0.002777785, y: 0.44722223, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -212,8 +212,8 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 1
-  prevSpriteIndexFlipV: 1
+  prevSpriteIndexFlipH: 0
+  prevSpriteIndexFlipV: 0
   isAnimating: 0
   slicedSprite:
     sprite:
@@ -317,16 +317,16 @@ MonoBehaviour:
   canExitNotepad: 0
   checkingCarriageMap: 0
   collisionData:
-    groundLeft: {x: 85.93056, y: 1.5419999}
-    groundRight: {x: 86.37456, y: 1.5419999}
-    stepTopLeft: {x: 85.93056, y: 1.762}
-    stepTopRight: {x: 86.37456, y: 1.762}
-    stepBottomLeft: {x: 85.93056, y: 1.691}
-    stepBottomRight: {x: 86.37456, y: 1.691}
-    wallTopLeft: {x: 85.86256, y: 3.3509998}
-    wallTopRight: {x: 86.44256, y: 3.3509998}
-    wallBottomLeft: {x: 85.86256, y: 2.451}
-    wallBottomRight: {x: 86.44256, y: 2.451}
+    groundLeft: {x: 86.005554, y: 1.6769999}
+    groundRight: {x: 86.29956, y: 1.6769999}
+    stepTopLeft: {x: 86.005554, y: 1.7639999}
+    stepTopRight: {x: 86.29956, y: 1.7639999}
+    stepBottomLeft: {x: 86.005554, y: 1.733}
+    stepBottomRight: {x: 86.29956, y: 1.733}
+    wallTopLeft: {x: 86.04256, y: 2.571}
+    wallTopRight: {x: 86.26256, y: 2.571}
+    wallBottomLeft: {x: 86.04256, y: 2.041}
+    wallBottomRight: {x: 86.26256, y: 2.041}
     stepFilter:
       useTriggers: 0
       useLayerMask: 0

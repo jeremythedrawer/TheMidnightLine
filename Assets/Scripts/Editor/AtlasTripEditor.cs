@@ -726,7 +726,7 @@ public class AtlasTripEditor : EditorWindow
                                     break;
                                     default:
                                     {
-                                        posData.posY = selectedPosY;
+                                        posData.posY = 0;
                                     }
                                     break;
                                 }
