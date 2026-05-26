@@ -74,6 +74,7 @@ public class SpawnMaster : MonoBehaviour
             computeData.compute.SetFloat("_TrainVelocity", (trainStats.curVelocity * Time.deltaTime));
         }
         computeData.compute.Dispatch(computeData.updateKernel, computeData.groupSize, 1, 1);
+
     }
     private void InitZoneCompute()
     {   
@@ -142,6 +143,7 @@ public class SpawnMaster : MonoBehaviour
         spawnData.scrollData.prevIndicesInputsBuffer?.Release();
         spawnData.scrollData.prevIndicesInputsBuffer = new ComputeBuffer(SCROLL_PARTICLE_COUNT, sizeof(uint) * 2);
         
+
         spawnData.scrollData.outputBuffer?.Release();
         spawnData.scrollData.outputBuffer = new ComputeBuffer(SCROLL_PARTICLE_COUNT, sizeof(float) * 4);
 
@@ -157,8 +159,6 @@ public class SpawnMaster : MonoBehaviour
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.initKernel, "_DepthInput", spawnData.scrollData.depthInputBuffer);
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.initKernel, "_HeightInput", spawnData.scrollData.heightInputBuffer);
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.initKernel, "_PrevIndicesInput", spawnData.scrollData.prevIndicesInputsBuffer);
-
-        //spawnData.scrollData.compute.SetMatrix()
 
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.updateKernel, "_ScrollOutput", spawnData.scrollData.outputBuffer);
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.updateKernel, "_MoveInput", spawnData.scrollData.moveInputBuffer);

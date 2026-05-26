@@ -327,7 +327,6 @@ public class SpyBrain : MonoBehaviour
 
 
                     stats.ticketsCheckedTotal++;
-                    trip.ticketsCheckedSinceLastStation++;
                     checkingTicket = true;
 
                     gameEventData.OnTicketInspect.Raise();
@@ -359,8 +358,13 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Ticket:
             {
-                if (npcTicketCheck != null) npcTicketCheck.ticketIsBeingChecked = false;
-                atlasRenderer.PlayClipOneShotReverse(curClip);
+                if (npcTicketCheck != null)
+                {
+                    trip.ticketsCheckedSinceLastStation++;
+                    npcTicketCheck.ticketIsBeingChecked = false;
+                    atlasRenderer.PlayClipOneShotReverse(curClip);
+                    npcTicketCheck = null;
+                }
             }
             break;
 
@@ -417,7 +421,7 @@ public class SpyBrain : MonoBehaviour
 
                         if (insideCarriageHit.collider != null)
                         {
-                            curCarriage = TrainController.GetCarriage(boxCollider.bounds);
+                            curCarriage = TrainController.GetCarriage(insideCarriageHit.collider);
                             curCarriage.MoveDown();
                         }
                         stats.curGroundLayer = layerSettings.trainLayers.ground;

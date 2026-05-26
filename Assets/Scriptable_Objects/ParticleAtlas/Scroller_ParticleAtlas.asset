@@ -17,38 +17,30 @@ MonoBehaviour:
   posData:
   - prevDepthIndices: {x: 0, y: 0}
     quadScales:
-    - {x: 1, y: 1, z: 0, w: 0}
-    - {x: 27.307287, y: 1, z: 0, w: 0}
-    - {x: 1, y: 1, z: 112.244446, w: 0}
-    - {x: 1, y: 1, z: 0, w: 0}
-    - {x: 27.307287, y: 1, z: 0, w: 0}
-    - {x: 1, y: 1, z: 112.244446, w: 0}
-    - {x: 1, y: 1, z: 0, w: 0}
-    - {x: 27.307287, y: 1, z: 0, w: 0}
-    - {x: 1, y: 1, z: 112.244446, w: 0}
-    widthType: 1
+    - {x: 5.943304, y: 1, z: 0, w: 0}
+    widthType: 2
     ticketCheckStart: 0
     ticketCheckEnd: 6
-    quadCount: 18
+    quadCount: 2
     particleCount: 2
     minParticleIndex: 0
     maxParticleIndex: 1
     depth: 5
     depthSize: 1
-    spriteIndex: 23
-    spritesPerParticle: 9
-    posY: 2.324
+    spriteIndex: 3
+    spritesPerParticle: 1
+    posY: 2.353
     scaleY: 1
-    scaleX: 27.307287
+    scaleX: 5.943304
     randScale: 0
     isDying: 0
     isAlive: 0
   - prevDepthIndices: {x: 0, y: 0}
     quadScales:
-    - {x: 11.876833, y: 1, z: 0, w: 0}
+    - {x: 11.909893, y: 1, z: 0, w: 0}
     widthType: 2
     ticketCheckStart: 0
-    ticketCheckEnd: 2
+    ticketCheckEnd: 1
     quadCount: 2
     particleCount: 2
     minParticleIndex: 2
@@ -57,29 +49,29 @@ MonoBehaviour:
     depthSize: 1
     spriteIndex: 2
     spritesPerParticle: 1
-    posY: -1
+    posY: -0.903
     scaleY: 1
-    scaleX: 11.876833
+    scaleX: 11.909893
     randScale: 0
     isDying: 0
     isAlive: 0
   - prevDepthIndices: {x: 2, y: 3}
     quadScales:
-    - {x: 13.893654, y: 1, z: 0, w: 0}
+    - {x: 13.897143, y: 1, z: 0, w: 0}
     widthType: 2
-    ticketCheckStart: 2
-    ticketCheckEnd: 6
+    ticketCheckStart: 1
+    ticketCheckEnd: 3
     quadCount: 2
     particleCount: 2
     minParticleIndex: 4
     maxParticleIndex: 5
     depth: 6
     depthSize: 1
-    spriteIndex: 4
+    spriteIndex: 5
     spritesPerParticle: 1
-    posY: -1
+    posY: -0.903
     scaleY: 1
-    scaleX: 13.893654
+    scaleX: 13.897143
     randScale: 0
     isDying: 0
     isAlive: 0
@@ -87,67 +79,51 @@ MonoBehaviour:
   spriteCount: 8
   isCompleted: 0
   spriteData:
-  - uvSizeAndPos: {x: 0.107910156, y: 0.08911133, z: 0.33325195, w: 0.9099121}
-    worldPivotAndSize: {x: -0, y: -0, z: 2.4555554, w: 2.0277777}
-  - uvSizeAndPos: {x: 0.10424805, y: 0.115478516, z: 0.44970703, w: 0.8820801}
-    worldPivotAndSize: {x: -0, y: -0, z: 2.3722222, w: 2.6277778}
-  - uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0, w: 0.80981445}
-    worldPivotAndSize: {x: -0, y: -1.4222223, z: 11.366667, w: 1.4222223}
-  - uvSizeAndPos: {x: 0.5, y: 0.16333008, z: 0.5, w: 0.5488281}
-    worldPivotAndSize: {x: -0, y: -0, z: 11.377778, w: 3.7166667}
-  - uvSizeAndPos: {x: 0.42700195, y: 0.24780273, z: 0.0014648438, w: 0.46411133}
-    worldPivotAndSize: {x: -0, y: -5.638889, z: 9.716666, w: 5.638889}
-  - uvSizeAndPos: {x: 0.022216797, y: 0.014892578, z: 0.044433594, w: 0.9470215}
-    worldPivotAndSize: {x: 0, y: 0, z: 0.50555557, w: 0.3388889}
-  - uvSizeAndPos: {x: 0.21899414, y: 0.014892578, z: 0.06665039, w: 0.9470215}
-    worldPivotAndSize: {x: 0.50555557, y: 0, z: 4.9833336, w: 0.3388889}
-  - uvSizeAndPos: {x: 0.028320305, y: 0.014892578, z: 0.28564453, w: 0.9470215}
-    worldPivotAndSize: {x: 5.488889, y: 0, z: 0.6444443, w: 0.3388889}
-  - uvSizeAndPos: {x: 0.022216797, y: 0.006347656, z: 0.044433594, w: 0.96191406}
-    worldPivotAndSize: {x: 0, y: 0.3388889, z: 0.50555557, w: 0.1444445}
-  - uvSizeAndPos: {x: 0.21899414, y: 0.006347656, z: 0.06665039, w: 0.96191406}
-    worldPivotAndSize: {x: 0.50555557, y: 0.3388889, z: 4.9833336, w: 0.1444445}
-  - uvSizeAndPos: {x: 0.028320305, y: 0.006347656, z: 0.28564453, w: 0.96191406}
-    worldPivotAndSize: {x: 5.488889, y: 0.3388889, z: 0.6444443, w: 0.1444445}
-  - uvSizeAndPos: {x: 0.022216797, y: 0.025634766, z: 0.044433594, w: 0.9682617}
-    worldPivotAndSize: {x: 0, y: 0.4833334, z: 0.50555557, w: 0.5833333}
-  - uvSizeAndPos: {x: 0.21899414, y: 0.025634766, z: 0.06665039, w: 0.9682617}
-    worldPivotAndSize: {x: 0.50555557, y: 0.4833334, z: 4.9833336, w: 0.5833333}
-  - uvSizeAndPos: {x: 0.028320305, y: 0.025634766, z: 0.28564453, w: 0.9682617}
-    worldPivotAndSize: {x: 5.488889, y: 0.4833334, z: 0.6444443, w: 0.5833333}
-  - uvSizeAndPos: {x: 0.030761719, y: 0, z: 0, w: 0.87353516}
-    worldPivotAndSize: {x: 0, y: 0, z: 0.7, w: 0}
-  - uvSizeAndPos: {x: 0.118652344, y: 0, z: 0.030761719, w: 0.87353516}
-    worldPivotAndSize: {x: 0.7, y: 0, z: 2.7, w: 0}
-  - uvSizeAndPos: {x: 0.031005856, y: 0, z: 0.14941406, w: 0.87353516}
-    worldPivotAndSize: {x: 3.4, y: 0, z: 0.7055555, w: 0}
-  - uvSizeAndPos: {x: 0.030761719, y: 0.052734375, z: 0, w: 0.87353516}
-    worldPivotAndSize: {x: 0, y: 0, z: 0.7, w: 1.2}
-  - uvSizeAndPos: {x: 0.118652344, y: 0.052734375, z: 0.030761719, w: 0.87353516}
-    worldPivotAndSize: {x: 0.7, y: 0, z: 2.7, w: 1.2}
-  - uvSizeAndPos: {x: 0.031005856, y: 0.052734375, z: 0.14941406, w: 0.87353516}
-    worldPivotAndSize: {x: 3.4, y: 0, z: 0.7055555, w: 1.2}
-  - uvSizeAndPos: {x: 0.030761719, y: 0.0065917964, z: 0, w: 0.92626953}
-    worldPivotAndSize: {x: 0, y: 1.2, z: 0.7, w: 0.14999999}
-  - uvSizeAndPos: {x: 0.118652344, y: 0.0065917964, z: 0.030761719, w: 0.92626953}
-    worldPivotAndSize: {x: 0.7, y: 1.2, z: 2.7, w: 0.14999999}
-  - uvSizeAndPos: {x: 0.031005856, y: 0.0065917964, z: 0.14941406, w: 0.92626953}
-    worldPivotAndSize: {x: 3.4, y: 1.2, z: 0.7055555, w: 0.14999999}
-  - uvSizeAndPos: {x: 0.4104004, y: 0.0009765625, z: 0, w: 0.71191406}
-    worldPivotAndSize: {x: 0, y: 0, z: 9.338889, w: 0.022222223}
-  - uvSizeAndPos: {x: 0.1875, y: 0.0009765625, z: 0.4104004, w: 0.71191406}
-    worldPivotAndSize: {x: 9.338889, y: 0, z: 4.2666674, w: 0.022222223}
-  - uvSizeAndPos: {x: 0.4020996, y: 0.0009765625, z: 0.5979004, w: 0.71191406}
-    worldPivotAndSize: {x: 13.6055565, y: 0, z: 9.15, w: 0.022222223}
-  - uvSizeAndPos: {x: 0.4104004, y: 0.06738282, z: 0, w: 0.7128906}
-    worldPivotAndSize: {x: 0, y: 0.022222223, z: 9.338889, w: 1.5333333}
-  - uvSizeAndPos: {x: 0.1875, y: 0.06738282, z: 0.4104004, w: 0.7128906}
-    worldPivotAndSize: {x: 9.338889, y: 0.022222223, z: 4.2666674, w: 1.5333333}
-  - uvSizeAndPos: {x: 0.4020996, y: 0.06738282, z: 0.5979004, w: 0.7128906}
-    worldPivotAndSize: {x: 13.6055565, y: 0.022222223, z: 9.15, w: 1.5333333}
-  - uvSizeAndPos: {x: 0.4104004, y: 0.028808592, z: 0, w: 0.78027344}
-    worldPivotAndSize: {x: 0, y: 1.5555556, z: 9.338889, w: 0.6555555}
-  - uvSizeAndPos: {x: 0.1875, y: 0.028808592, z: 0.4104004, w: 0.78027344}
-    worldPivotAndSize: {x: 9.338889, y: 1.5555556, z: 4.2666674, w: 0.6555555}
-  - uvSizeAndPos: {x: 0.4020996, y: 0.028808592, z: 0.5979004, w: 0.78027344}
-    worldPivotAndSize: {x: 13.6055565, y: 1.5555556, z: 9.15, w: 0.6555555}
+  - uvSizeAndPos: {x: 0.107910156, y: 0.08935547, z: 0.33251953, w: 0.91064453}
+    worldPivotAndSize: {x: -0, y: -0, z: 1.2277777, w: 1.0166667}
+  - uvSizeAndPos: {x: 0.10449219, y: 0.115722656, z: 0.44873047, w: 0.8828125}
+    worldPivotAndSize: {x: -0, y: -0, z: 1.1888889, w: 1.3166667}
+  - uvSizeAndPos: {x: 0.49853516, y: 0.0625, z: 0, w: 0.8105469}
+    worldPivotAndSize: {x: -0, y: -0.7111111, z: 5.672222, w: 0.7111111}
+  - uvSizeAndPos: {x: 0.99902344, y: 0.09716797, z: 0, w: 0.7128906}
+    worldPivotAndSize: {x: -0, y: -0, z: 11.366667, w: 1.1055555}
+  - uvSizeAndPos: {x: 0.5, y: 0.16308594, z: 0.49902344, w: 0.5498047}
+    worldPivotAndSize: {x: -0, y: -0, z: 5.688889, w: 1.8555555}
+  - uvSizeAndPos: {x: 0.4272461, y: 0.24804688, z: 0.00048828125, w: 0.4555664}
+    worldPivotAndSize: {x: -0, y: -2.8222222, z: 4.861111, w: 2.8222222}
+  - uvSizeAndPos: {x: 0.021972656, y: 0.015136719, z: 0.04345703, w: 0.9477539}
+    worldPivotAndSize: {x: 0, y: 0, z: 0.25, w: 0.17222221}
+  - uvSizeAndPos: {x: 0.21923828, y: 0.015136719, z: 0.06542969, w: 0.9477539}
+    worldPivotAndSize: {x: 0.25, y: 0, z: 2.4944444, w: 0.17222221}
+  - uvSizeAndPos: {x: 0.028320305, y: 0.015136719, z: 0.28466797, w: 0.9477539}
+    worldPivotAndSize: {x: 2.7444444, y: 0, z: 0.32222214, w: 0.17222221}
+  - uvSizeAndPos: {x: 0.021972656, y: 0.006347657, z: 0.04345703, w: 0.9628906}
+    worldPivotAndSize: {x: 0, y: 0.17222221, z: 0.25, w: 0.07222228}
+  - uvSizeAndPos: {x: 0.21923828, y: 0.006347657, z: 0.06542969, w: 0.9628906}
+    worldPivotAndSize: {x: 0.25, y: 0.17222221, z: 2.4944444, w: 0.07222228}
+  - uvSizeAndPos: {x: 0.028320305, y: 0.006347657, z: 0.28466797, w: 0.9628906}
+    worldPivotAndSize: {x: 2.7444444, y: 0.17222221, z: 0.32222214, w: 0.07222228}
+  - uvSizeAndPos: {x: 0.021972656, y: 0.025390623, z: 0.04345703, w: 0.9692383}
+    worldPivotAndSize: {x: 0, y: 0.24444449, z: 0.25, w: 0.28888887}
+  - uvSizeAndPos: {x: 0.21923828, y: 0.025390623, z: 0.06542969, w: 0.9692383}
+    worldPivotAndSize: {x: 0.25, y: 0.24444449, z: 2.4944444, w: 0.28888887}
+  - uvSizeAndPos: {x: 0.028320305, y: 0.025390623, z: 0.28466797, w: 0.9692383}
+    worldPivotAndSize: {x: 2.7444444, y: 0.24444449, z: 0.32222214, w: 0.28888887}
+  - uvSizeAndPos: {x: 0.029785156, y: 0, z: 0, w: 0.8745117}
+    worldPivotAndSize: {x: 0, y: 0, z: 0.3388889, w: 0}
+  - uvSizeAndPos: {x: 0.11865234, y: 0, z: 0.029785156, w: 0.8745117}
+    worldPivotAndSize: {x: 0.3388889, y: 0, z: 1.35, w: 0}
+  - uvSizeAndPos: {x: 0.031250004, y: 0, z: 0.1484375, w: 0.8745117}
+    worldPivotAndSize: {x: 1.6888889, y: 0, z: 0.3555556, w: 0}
+  - uvSizeAndPos: {x: 0.029785156, y: 0.052734375, z: 0, w: 0.8745117}
+    worldPivotAndSize: {x: 0, y: 0, z: 0.3388889, w: 0.59999996}
+  - uvSizeAndPos: {x: 0.11865234, y: 0.052734375, z: 0.029785156, w: 0.8745117}
+    worldPivotAndSize: {x: 0.3388889, y: 0, z: 1.35, w: 0.59999996}
+  - uvSizeAndPos: {x: 0.031250004, y: 0.052734375, z: 0.1484375, w: 0.8745117}
+    worldPivotAndSize: {x: 1.6888889, y: 0, z: 0.3555556, w: 0.59999996}
+  - uvSizeAndPos: {x: 0.029785156, y: 0.0063476567, z: 0, w: 0.9272461}
+    worldPivotAndSize: {x: 0, y: 0.59999996, z: 0.3388889, w: 0.07222223}
+  - uvSizeAndPos: {x: 0.11865234, y: 0.0063476567, z: 0.029785156, w: 0.9272461}
+    worldPivotAndSize: {x: 0.3388889, y: 0.59999996, z: 1.35, w: 0.07222223}
+  - uvSizeAndPos: {x: 0.031250004, y: 0.0063476567, z: 0.1484375, w: 0.9272461}
+    worldPivotAndSize: {x: 1.6888889, y: 0.59999996, z: 0.3555556, w: 0.07222223}

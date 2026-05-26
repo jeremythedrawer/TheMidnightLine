@@ -47,7 +47,7 @@ public class ParallaxController : MonoBehaviour
                 parallaxVelocity += trainStats.curVelocity * Time.deltaTime * parallaxFactor;
             }
             worldPos.x -= parallaxVelocity;
-            worldPos.x = Mathf.Round(worldPos.x / camStats.worldUnitsPerPixel) * camStats.worldUnitsPerPixel;
+
         }
     }
     private void LateUpdate()

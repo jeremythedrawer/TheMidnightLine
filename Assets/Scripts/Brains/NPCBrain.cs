@@ -181,7 +181,7 @@ public class NPCBrain : MonoBehaviour
                 if (curGlyph != null)
                 {
                     atlasRenderer.PlayClip(ref curClip, curGlyph.transform);
-                    if (!playingGlyph &&  atlas.motionSprites[curFrameIndex].markers.Length > 0)
+                    if (!playingGlyph &&  atlas.motionSprites[atlasRenderer.sprite.index].markers.Length > 0)
                     {
                         curGlyph.Play();
                         playingGlyph = true;
@@ -416,6 +416,7 @@ public class NPCBrain : MonoBehaviour
                 transform.position = new Vector3(targetXPos, transform.position.y, transform.position.z);
                 atlasRenderer.FlipH(false);
 
+
             }
             break;
             case NPCPath.StandingInTrain:
@@ -433,7 +434,7 @@ public class NPCBrain : MonoBehaviour
                 if (!onTrain)
                 {
                     RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
-                    curCarriage = TrainController.GetCarriage(boxCollider.bounds);
+                    curCarriage = TrainController.GetCarriage(carriageHit.collider);
                 }
                 queuedForSlideDoor = false;
                 behaving = false;
@@ -764,7 +765,7 @@ public class NPCBrain : MonoBehaviour
     private void QueueForSeat()
     {
         if (disembarking) return;
-        curCarriage.AddToSeatQueue(this);
+        curCarriage?.AddToSeatQueue(this);
         queuedForSeat = true;
     }
     public void AssignSeat(int seatIndex)

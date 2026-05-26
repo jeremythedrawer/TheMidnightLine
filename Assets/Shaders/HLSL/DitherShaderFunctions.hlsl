@@ -125,3 +125,8 @@ float BayerX248(float value, float2 pixelCoord)
         x8 * m4 +
         full * m5;
 }
+
+void BayerX8_float(float value, float2 pixelCoord, out float bayer)
+{
+    bayer = BayerX8(value, pixelCoord);
+}

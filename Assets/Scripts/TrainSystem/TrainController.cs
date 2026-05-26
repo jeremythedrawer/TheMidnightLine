@@ -4,6 +4,7 @@ using UnityEngine;
 using static Train;
 using static Spy;
 using UnityEditor;
+using System.Collections.Generic;
 public class TrainController : MonoBehaviour
 {
     public TrainSettingsSO settings;
@@ -26,8 +27,9 @@ public class TrainController : MonoBehaviour
     public int curStationIndex;
     public float metersTravelled;
 
-    public static Carriage[] staticCarriages;
-    public static Gangway[] staticGangways;
+    public bool skipMoveToStart;
+
+    public static Dictionary<Collider2D, Carriage> carriageDict;
     private void OnValidate()
     {
         SetBounds();
@@ -42,8 +44,29 @@ public class TrainController : MonoBehaviour
     }
     private void Start()
     {
+        Init();
+        if (skipMoveToStart)
+        {
+            SkipMoveTrainToStartPosition();
+        }
+        else
+        {
+            MoveTrainToStartPosition().Forget();
+        }
+    }
+    private void Update()
+    {
+        ChooseState();
+        UpdateState();
+    }
+    private void FixedUpdate()
+    {
+        FixedUpdateState();
+    }
+    public void Init()
+    {
         StationSO stationData = trip.stationsDataArray[0];
-        
+
         stats.curVelocity = KMPHToVelocity(stationData.targetKMPH);
         stats.targetVelocity = 0;
 
@@ -60,6 +83,8 @@ public class TrainController : MonoBehaviour
         stats.targetStopPosition = transform.position.x;
 
         float offset = TRAIN_WORLD_POS - transform.position.x;
+
+        carriageDict = new Dictionary<Collider2D, Carriage>();
         for (int i = 0; i < carriages.Length; i++)
         {
             Carriage carriage = carriages[i];
@@ -67,20 +92,10 @@ public class TrainController : MonoBehaviour
             carriage.SetSmokerRoomData(offset);
             carriage.SetTotalBounds(offset);
             carriage.SetSignToNextStation(trip.nextStation.stationName);
+
+            carriageDict.Add(carriage.insideBoundsCollider, carriage);
         }
         SetSlideDoorPositions(offset);
-        staticCarriages = carriages;
-        staticGangways = gangways;
-        MoveTrainToStartPosition().Forget();
-    }
-    private void Update()
-    {
-        ChooseState();
-        UpdateState();
-    }
-    private void FixedUpdate()
-    {
-        FixedUpdateState();
     }
     private void ChooseState()
     {
@@ -360,30 +375,9 @@ public class TrainController : MonoBehaviour
         stats.trainToMaxSpawnDist = spawner.bounds.max.x - stats.totalBounds.center.x;
         Shader.SetGlobalVector("_TrainBoundsMin", stats.totalBounds.min);
     }
-    public static Carriage GetCarriage(Bounds bounds)
+    public static Carriage GetCarriage(Collider2D collider)
     {
-        for (int i = 0; i < staticCarriages.Length; i++)
-        {
-            Carriage carriage = staticCarriages[i];
-
-            if (bounds.max.x > carriage.carriageWallRenderer.bounds.min.x && bounds.min.x < carriage.carriageWallRenderer.bounds.max.x)
-            {
-                return carriage;
-            }
-        }
-        return null;
-    }
-    public static Gangway GetGangway(Bounds bounds)
-    {
-        for (int i = 0; i < staticGangways.Length; i++)
-        {
-            Gangway gangway = staticGangways[i];
-            if (bounds.max.x > gangway.exteriorRenderer.bounds.min.x && bounds.min.x < gangway.exteriorRenderer.bounds.max.x)
-            {
-                return gangway;
-            }
-        }
-        return null;
+        return carriageDict[collider];
     }
     private void OnDrawGizmos()
     {
@@ -399,11 +393,7 @@ public class TrainController : MonoBehaviour
 
         stats.curVelocity = 0;
 
-        transform.position = new Vector3(
-            TRAIN_WORLD_POS,
-            transform.position.y,
-            transform.position.z
-        );
+        transform.position = new Vector3(TRAIN_WORLD_POS, transform.position.y, transform.position.z);
 
         stats.totalBounds.center = transform.position;
         stats.trainToMaxSpawnDist = spawner.bounds.max.x - stats.totalBounds.center.x;
@@ -423,18 +413,44 @@ public class TrainController : MonoBehaviour
 }
 
 [CustomEditor(typeof(TrainController))]
-public class TrainControllerEditor : Editor 
+public class TrainControllerEditor : Editor
 {
+    private const string SKIP_MOVING_KEY = "TrainControllerEditor_SkipMoving";
+    private bool skipMoving;
+
+    private void OnEnable()
+    {
+        skipMoving = EditorPrefs.GetBool(SKIP_MOVING_KEY, false);
+
+        if (skipMoving)
+        {
+            TrainController trainController = (TrainController)target;
+            trainController.skipMoveToStart = true;
+        }
+    }
+
     public override void OnInspectorGUI()
     {
         DrawDefaultInspector();
 
-        TrainController trainController = (TrainController)target;
+        Rect rect = EditorGUILayout.GetControlRect();
 
-        if (GUILayout.Button("Skip Moving"))
+        GUIStyle style = new GUIStyle(EditorStyles.boldLabel)
         {
-            trainController.SkipMoveTrainToStartPosition();
-        }
+            alignment = TextAnchor.MiddleCenter
+        };
 
+        EditorGUI.LabelField(rect, "Editor", style);
+
+        bool newValue = EditorGUILayout.Toggle("Skip Moving", skipMoving);
+
+        if (newValue != skipMoving)
+        {
+            skipMoving = newValue;
+
+            EditorPrefs.SetBool(SKIP_MOVING_KEY, skipMoving);
+            TrainController trainController = (TrainController)target;
+            trainController.skipMoveToStart = skipMoving;
+        }
     }
 }

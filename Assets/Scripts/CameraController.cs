@@ -85,7 +85,7 @@ public class CameraController : MonoBehaviour
         
         stats.prevWorldPos = stats.curWorldPos;
         stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, targetWorldPos, Time.deltaTime * settings.damping);
-        Vector3 snappedPos = GetSnappedPosition(stats.curWorldPos);
+        Vector3 snappedPos = GetSnappedPosition(stats.curWorldPos, stats.worldUnitsPerPixel);
         stats.curWorldPos = snappedPos;
         transform.position = stats.curWorldPos;
         stats.curVelocity = -(stats.curWorldPos - stats.prevWorldPos);
@@ -177,12 +177,11 @@ public class CameraController : MonoBehaviour
             break;
         }
     }
-    private Vector3 GetSnappedPosition(Vector3 pos)
+    public static Vector3 GetSnappedPosition(Vector3 pos, float unitsPerPixel)
     {
-        float pixelSize = stats.worldUnitsPerPixel;
 
-        pos.x = Mathf.Round(pos.x / pixelSize) * pixelSize;
-        pos.y = Mathf.Round(pos.y / pixelSize) * pixelSize;
+        pos.x = Mathf.Round(pos.x / unitsPerPixel) * unitsPerPixel;
+        pos.y = Mathf.Round(pos.y / unitsPerPixel) * unitsPerPixel;
 
         return pos;
     }
