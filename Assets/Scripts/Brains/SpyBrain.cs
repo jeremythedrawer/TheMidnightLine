@@ -235,7 +235,6 @@ public class SpyBrain : MonoBehaviour
                         }
                         else
                         {
-                            Debug.Log("right");
                             curGangwayDoor.gangway.MoveUp();
                             stats.curLocationBounds = curGangwayDoor.carriage.totalBounds;
                             stats.curLocationState = LocationState.Carriage;

@@ -3,6 +3,7 @@ using System.Threading;
 using UnityEngine;
 using static Train;
 using static Spy;
+using UnityEditor;
 public class TrainController : MonoBehaviour
 {
     public TrainSettingsSO settings;
@@ -27,7 +28,6 @@ public class TrainController : MonoBehaviour
 
     public static Carriage[] staticCarriages;
     public static Gangway[] staticGangways;
-    
     private void OnValidate()
     {
         SetBounds();
@@ -393,6 +393,23 @@ public class TrainController : MonoBehaviour
         Gizmos.DrawLine(new Vector3(stats.totalBounds.center.x, stats.totalBounds.min.y, stats.totalBounds.min.z), new Vector3(stats.totalBounds.center.x, stats.totalBounds.max.y, stats.totalBounds.min.z));
     }
 #if UNITY_EDITOR
+    public void SkipMoveTrainToStartPosition()
+    {
+        trainCTS?.Cancel();
+
+        stats.curVelocity = 0;
+
+        transform.position = new Vector3(
+            TRAIN_WORLD_POS,
+            transform.position.y,
+            transform.position.z
+        );
+
+        stats.totalBounds.center = transform.position;
+        stats.trainToMaxSpawnDist = spawner.bounds.max.x - stats.totalBounds.center.x;
+
+        Shader.SetGlobalVector("_TrainBoundsMin", stats.totalBounds.min);
+    }
     private void OnGUI()
     {
         string kmphString = stats.curVelocity.ToString("F2");
@@ -403,4 +420,21 @@ public class TrainController : MonoBehaviour
         GUI.Label(rect, kmphString, style);
     }
 #endif
+}
+
+[CustomEditor(typeof(TrainController))]
+public class TrainControllerEditor : Editor 
+{
+    public override void OnInspectorGUI()
+    {
+        DrawDefaultInspector();
+
+        TrainController trainController = (TrainController)target;
+
+        if (GUILayout.Button("Skip Moving"))
+        {
+            trainController.SkipMoveTrainToStartPosition();
+        }
+
+    }
 }
