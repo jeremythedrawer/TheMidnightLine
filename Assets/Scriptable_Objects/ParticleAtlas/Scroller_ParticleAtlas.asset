@@ -15,12 +15,15 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
   particleType: 1
   posData:
-  - prevDepthIndices: {x: 0, y: 0}
+  - preScrollers: []
+    postScrollers: []
     quadScales:
     - {x: 5.943304, y: 1, z: 0, w: 0}
+    prevDepthIndices: {x: 0, y: 0}
     widthType: 2
+    spawnState: 1
     ticketCheckStart: 0
-    ticketCheckEnd: 6
+    ticketCheckEnd: 3
     quadCount: 2
     particleCount: 2
     minParticleIndex: 0
@@ -33,12 +36,13 @@ MonoBehaviour:
     scaleY: 1
     scaleX: 5.943304
     randScale: 0
-    isDying: 0
-    isAlive: 0
-  - prevDepthIndices: {x: 0, y: 0}
+  - preScrollers: []
+    postScrollers: []
     quadScales:
-    - {x: 11.909893, y: 1, z: 0, w: 0}
+    - {x: 13.790401, y: 1, z: 0, w: 0}
+    prevDepthIndices: {x: 0, y: 0}
     widthType: 2
+    spawnState: 1
     ticketCheckStart: 0
     ticketCheckEnd: 1
     quadCount: 2
@@ -51,16 +55,17 @@ MonoBehaviour:
     spritesPerParticle: 1
     posY: -0.903
     scaleY: 1
-    scaleX: 11.909893
+    scaleX: 13.790401
     randScale: 0
-    isDying: 0
-    isAlive: 0
-  - prevDepthIndices: {x: 2, y: 3}
+  - preScrollers: []
+    postScrollers: []
     quadScales:
     - {x: 13.897143, y: 1, z: 0, w: 0}
+    prevDepthIndices: {x: 2, y: 3}
     widthType: 2
+    spawnState: 0
     ticketCheckStart: 1
-    ticketCheckEnd: 3
+    ticketCheckEnd: 5
     quadCount: 2
     particleCount: 2
     minParticleIndex: 4
@@ -73,8 +78,6 @@ MonoBehaviour:
     scaleY: 1
     scaleX: 13.897143
     randScale: 0
-    isDying: 0
-    isAlive: 0
   posDataIndexOffset: 2
   spriteCount: 8
   isCompleted: 0

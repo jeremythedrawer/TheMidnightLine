@@ -26,7 +26,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1763133387426676554}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: -2.3870049, y: -0.6418222, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -67,7 +67,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.2995615, y: 0.9247743}
+  m_Offset: {x: 0.24040985, y: 0.010279179}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -77,7 +77,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.5991192, y: 1.8495486}
+  m_Size: {x: 0.22080994, y: 1.8487098}
   m_EdgeRadius: 0
 --- !u!114 &4563364402707015840
 MonoBehaviour:
@@ -99,7 +99,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 15
+  spriteIndex: 16
   flipX: 0
   flipY: 0
   width: 1
@@ -111,18 +111,18 @@ MonoBehaviour:
   textToCenter: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.051757812, y: 0.1616211, z: 0.095214844, w: 0.39697266}
-    uvPivot: {x: 0, y: 0}
+    uvSizeAndPos: {x: 0.051757812, y: 0.1616211, z: 0.095214844, w: 0.3696289}
+    uvPivot: {x: 0, y: 0.5}
     worldSize: {x: 0.5888889, y: 1.8388889, z: 1}
-    index: 15
+    index: 16
   bounds:
-    m_Center: {x: -2.0925603, y: 0.27762222, z: 3}
+    m_Center: {x: -2.0925603, y: -0.6418222, z: 3}
     m_Extent: {x: 0.29444444, y: 0.91944444, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 0.5888889, w: 1.8388889}
-  uvSizeAndPosition: {x: 0.051757812, y: 0.1616211, z: 0.095214844, w: 0.39697266}
+  worldPivotAndSize: {x: 0, y: 0.91944444, z: 0.5888889, w: 1.8388889}
+  uvSizeAndPosition: {x: 0.051757812, y: 0.1616211, z: 0.095214844, w: 0.3696289}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.29444444, y: 0.91944444, z: 0}
+  boundsOffset: {x: 0.29444444, y: 0, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -130,8 +130,9 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 15
-  prevSpriteIndexFlipV: 15
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 16
+  prevSpriteIndexFlipV: 16
   isAnimating: 0
   slicedSprite:
     sprite:

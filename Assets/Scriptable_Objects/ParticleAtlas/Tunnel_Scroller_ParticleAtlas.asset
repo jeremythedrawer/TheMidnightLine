@@ -1,0 +1,180 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 67dedb76db2597d40812be99ec4521df, type: 3}
+  m_Name: Tunnel_Scroller_ParticleAtlas
+  m_EditorClassIdentifier: Assembly-CSharp::ParticleAtlas
+  atlas: {fileID: 11400000, guid: 91a76d1021d06b44e8a05e3ccbdfef68, type: 2}
+  particleType: 1
+  posData:
+  - preScrollers: []
+    postScrollers: []
+    quadScales:
+    - {x: 1, y: 1, z: 0, w: 0}
+    - {x: 11.349337, y: 1, z: 0, w: 0}
+    - {x: 1, y: 1, z: 56.288887, w: 0}
+    - {x: 1, y: 1, z: 0, w: 0}
+    - {x: 11.349337, y: 1, z: 0, w: 0}
+    - {x: 1, y: 1, z: 56.288887, w: 0}
+    - {x: 1, y: 1, z: 0, w: 0}
+    - {x: 11.349337, y: 1, z: 0, w: 0}
+    - {x: 1, y: 1, z: 56.288887, w: 0}
+    prevDepthIndices: {x: 0, y: 0}
+    widthType: 1
+    spawnState: 0
+    ticketCheckStart: 1
+    ticketCheckEnd: 4
+    quadCount: 18
+    particleCount: 2
+    minParticleIndex: 6
+    maxParticleIndex: 7
+    depth: 24
+    depthSize: 1
+    spriteIndex: 13
+    spritesPerParticle: 9
+    posY: 1.79
+    scaleY: 1
+    scaleX: 11.349337
+    randScale: 0
+  - preScrollers: []
+    postScrollers: []
+    quadScales:
+    - {x: 1, y: 1, z: 0, w: 0}
+    - {x: 6.757817, y: 1, z: 0, w: 0}
+    - {x: 1, y: 1, z: 56.266666, w: 0}
+    - {x: 1, y: 1, z: 0, w: 0}
+    - {x: 6.757817, y: 1, z: 0, w: 0}
+    - {x: 1, y: 1, z: 56.266666, w: 0}
+    - {x: 1, y: 1, z: 0, w: 0}
+    - {x: 6.757817, y: 1, z: 0, w: 0}
+    - {x: 1, y: 1, z: 56.266666, w: 0}
+    prevDepthIndices: {x: 0, y: 0}
+    widthType: 1
+    spawnState: 0
+    ticketCheckStart: 1
+    ticketCheckEnd: 4
+    quadCount: 18
+    particleCount: 2
+    minParticleIndex: 8
+    maxParticleIndex: 9
+    depth: 25
+    depthSize: 1
+    spriteIndex: 4
+    spritesPerParticle: 9
+    posY: 0.59
+    scaleY: 1
+    scaleX: 6.757817
+    randScale: 0
+  - preScrollers:
+    - spriteData:
+      - spriteIndex: 1
+        offset: {x: -0.91, y: 0, z: -21, w: 0}
+        scale: {x: 1, y: 1, z: 0, w: 0}
+      - spriteIndex: 0
+        offset: {x: -4, y: 0, z: 0, w: 0}
+        scale: {x: 1, y: 1, z: 0, w: 0}
+      - spriteIndex: 3
+        offset: {x: -30, y: 0, z: 1, w: 0}
+        scale: {x: 4, y: 1, z: 0, w: 0}
+    postScrollers: []
+    quadScales:
+    - {x: 1, y: 1, z: 0, w: 0}
+    - {x: 6.647895, y: 1, z: 0, w: 0}
+    - {x: 1, y: 1, z: 57.388893, w: 0}
+    - {x: 1, y: 2, z: 0, w: 0}
+    - {x: 6.647895, y: 2, z: 0, w: 0}
+    - {x: 1, y: 2, z: 57.388893, w: 0}
+    - {x: 1, y: 1, z: 0, w: 1.7777777}
+    - {x: 6.647895, y: 1, z: 0, w: 1.7777777}
+    - {x: 1, y: 1, z: 57.388893, w: 1.7777777}
+    prevDepthIndices: {x: 0, y: 0}
+    widthType: 1
+    spawnState: 0
+    ticketCheckStart: 1
+    ticketCheckEnd: 4
+    quadCount: 18
+    particleCount: 2
+    minParticleIndex: 10
+    maxParticleIndex: 11
+    depth: 26
+    depthSize: 1
+    spriteIndex: 22
+    spritesPerParticle: 9
+    posY: -1
+    scaleY: 2
+    scaleX: 6.647895
+    randScale: 0
+  posDataIndexOffset: 0
+  spriteCount: 7
+  isCompleted: 0
+  spriteData:
+  - uvSizeAndPos: {x: 0.17504883, y: 0.2199707, z: 0.5036621, w: 0.76953125}
+    worldPivotAndSize: {x: 0, y: 0, z: 3.9833333, w: 5.0055556}
+  - uvSizeAndPos: {x: 0.20214844, y: 0.22021484, z: 0.67944336, w: 0.7692871}
+    worldPivotAndSize: {x: -0, y: -0, z: 4.6, w: 5.0111113}
+  - uvSizeAndPos: {x: 0.1484375, y: 0.018798828, z: 0, w: 0.49975586}
+    worldPivotAndSize: {x: -0, y: -0, z: 3.3777778, w: 0.42777777}
+  - uvSizeAndPos: {x: 0.32299805, y: 0.23486328, z: 0.17675781, w: 0.49975586}
+    worldPivotAndSize: {x: -0, y: -0, z: 7.35, w: 5.3444443}
+  - uvSizeAndPos: {x: 0.032714844, y: 0.017578125, z: 0.001953125, w: 0.9501953}
+    worldPivotAndSize: {x: 0, y: 0, z: 0.74444443, w: 0.4}
+  - uvSizeAndPos: {x: 0.42944336, y: 0.017578125, z: 0.03466797, w: 0.9501953}
+    worldPivotAndSize: {x: 0.74444443, y: 0, z: 9.7722225, w: 0.4}
+  - uvSizeAndPos: {x: 0.033935547, y: 0.017578125, z: 0.46411133, w: 0.9501953}
+    worldPivotAndSize: {x: 10.516667, y: 0, z: 0.77222216, w: 0.4}
+  - uvSizeAndPos: {x: 0.032714844, y: 0.014892577, z: 0.001953125, w: 0.96777344}
+    worldPivotAndSize: {x: 0, y: 0.4, z: 0.74444443, w: 0.33888888}
+  - uvSizeAndPos: {x: 0.42944336, y: 0.014892577, z: 0.03466797, w: 0.96777344}
+    worldPivotAndSize: {x: 0.74444443, y: 0.4, z: 9.7722225, w: 0.33888888}
+  - uvSizeAndPos: {x: 0.033935547, y: 0.014892577, z: 0.46411133, w: 0.96777344}
+    worldPivotAndSize: {x: 10.516667, y: 0.4, z: 0.77222216, w: 0.33888888}
+  - uvSizeAndPos: {x: 0.032714844, y: 0.014648438, z: 0.001953125, w: 0.982666}
+    worldPivotAndSize: {x: 0, y: 0.73888886, z: 0.74444443, w: 0.33333334}
+  - uvSizeAndPos: {x: 0.42944336, y: 0.014648438, z: 0.03466797, w: 0.982666}
+    worldPivotAndSize: {x: 0.74444443, y: 0.73888886, z: 9.7722225, w: 0.33333334}
+  - uvSizeAndPos: {x: 0.033935547, y: 0.014648438, z: 0.46411133, w: 0.982666}
+    worldPivotAndSize: {x: 10.516667, y: 0.73888886, z: 0.77222216, w: 0.33333334}
+  - uvSizeAndPos: {x: 0.1274414, y: 0.014160156, z: 0.001953125, w: 0.9104004}
+    worldPivotAndSize: {x: 0, y: 0, z: 2.9, w: 0.32222223}
+  - uvSizeAndPos: {x: 0.23901366, y: 0.014160156, z: 0.12939453, w: 0.9104004}
+    worldPivotAndSize: {x: 2.9, y: 0, z: 5.4388885, w: 0.32222223}
+  - uvSizeAndPos: {x: 0.12866211, y: 0.014160156, z: 0.3684082, w: 0.9104004}
+    worldPivotAndSize: {x: 8.338888, y: 0, z: 2.927778, w: 0.32222223}
+  - uvSizeAndPos: {x: 0.1274414, y: 0.012939453, z: 0.001953125, w: 0.92456055}
+    worldPivotAndSize: {x: 0, y: 0.32222223, z: 2.9, w: 0.29444444}
+  - uvSizeAndPos: {x: 0.23901366, y: 0.012939453, z: 0.12939453, w: 0.92456055}
+    worldPivotAndSize: {x: 2.9, y: 0.32222223, z: 5.4388885, w: 0.29444444}
+  - uvSizeAndPos: {x: 0.12866211, y: 0.012939453, z: 0.3684082, w: 0.92456055}
+    worldPivotAndSize: {x: 8.338888, y: 0.32222223, z: 2.927778, w: 0.29444444}
+  - uvSizeAndPos: {x: 0.1274414, y: 0.010009765, z: 0.001953125, w: 0.9375}
+    worldPivotAndSize: {x: 0, y: 0.6166667, z: 2.9, w: 0.22777776}
+  - uvSizeAndPos: {x: 0.23901366, y: 0.010009765, z: 0.12939453, w: 0.9375}
+    worldPivotAndSize: {x: 2.9, y: 0.6166667, z: 5.4388885, w: 0.22777776}
+  - uvSizeAndPos: {x: 0.12866211, y: 0.010009765, z: 0.3684082, w: 0.9375}
+    worldPivotAndSize: {x: 8.338888, y: 0.6166667, z: 2.927778, w: 0.22777776}
+  - uvSizeAndPos: {x: 0, y: 0.011962891, z: 0.052978516, w: 0.7636719}
+    worldPivotAndSize: {x: 0, y: 0, z: 0, w: 0.27222222}
+  - uvSizeAndPos: {x: 0.4465332, y: 0.011962891, z: 0.052978516, w: 0.7636719}
+    worldPivotAndSize: {x: 0, y: 0, z: 10.161112, w: 0.27222222}
+  - uvSizeAndPos: {x: 0.00024414388, y: 0.011962891, z: 0.49951172, w: 0.7636719}
+    worldPivotAndSize: {x: 10.161112, y: 0, z: 0.0055556297, w: 0.27222222}
+  - uvSizeAndPos: {x: 0, y: 0.078125, z: 0.052978516, w: 0.77563477}
+    worldPivotAndSize: {x: 0, y: 0.27222222, z: 0, w: 1.7777777}
+  - uvSizeAndPos: {x: 0.4465332, y: 0.078125, z: 0.052978516, w: 0.77563477}
+    worldPivotAndSize: {x: 0, y: 0.27222222, z: 10.161112, w: 1.7777777}
+  - uvSizeAndPos: {x: 0.00024414388, y: 0.078125, z: 0.49951172, w: 0.77563477}
+    worldPivotAndSize: {x: 10.161112, y: 0.27222222, z: 0.0055556297, w: 1.7777777}
+  - uvSizeAndPos: {x: 0, y: 0.047363285, z: 0.052978516, w: 0.85375977}
+    worldPivotAndSize: {x: 0, y: 2.05, z: 0, w: 1.0777779}
+  - uvSizeAndPos: {x: 0.4465332, y: 0.047363285, z: 0.052978516, w: 0.85375977}
+    worldPivotAndSize: {x: 0, y: 2.05, z: 10.161112, w: 1.0777779}
+  - uvSizeAndPos: {x: 0.00024414388, y: 0.047363285, z: 0.49951172, w: 0.85375977}
+    worldPivotAndSize: {x: 10.161112, y: 2.05, z: 0.0055556297, w: 1.0777779}

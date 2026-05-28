@@ -54,7 +54,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         renderer.EnqueuePass(batchPass);
         renderer.EnqueuePass(particlePass);
         renderer.EnqueuePass(matrixPass);
-        //renderer.EnqueuePass(bloomPass);
     }
     private class AtlasBatchPass : ScriptableRenderPass
     {
@@ -235,6 +234,30 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                         case ParticleType.Scroll:
                         {
                             cmd.DrawProceduralIndirect(Matrix4x4.identity, spawner.scrollData.material, shaderPass: 0, MeshTopology.Triangles, posData.argsBuffer, argsOffset: 0, posData.mpb);
+
+                            switch (posData.spawnState)
+                            {
+                                case SpawnState.MovingIn:
+                                {
+                                    for (int k = 0; k < posData.preScrollers.Length; k++)
+                                    {
+                                        EdgeScroller preScroller = posData.preScrollers[k];
+                                        argsSpawn[1] = (uint)preScroller.spriteData.Length;
+                                        preScroller.argsBuffer.SetData(argsSpawn);
+                                        cmd.DrawProceduralIndirect(Matrix4x4.identity, spawner.edgeScrollMaterial, shaderPass: 0, MeshTopology.Triangles, preScroller.argsBuffer, argsOffset: 0, preScroller.mpb);
+                                    }
+                                }
+                                break;
+                                //case SpawnState.MovingOut:
+                                //{
+                                //    for (int k = 0; k < posData.postScrollers.Length; k++)
+                                //    {
+                                //        EdgeScroller postScroller = posData.postScrollers[k];
+                                //        cmd.DrawProceduralIndirect(Matrix4x4.identity, spawner.scrollData.material, shaderPass: 0, MeshTopology.Triangles, postScroller.argsBuffer, argsOffset: 0, postScroller.mpb);
+                                //    }
+                                //}
+                                //break;
+                            }
                         }
                         break;
                     }

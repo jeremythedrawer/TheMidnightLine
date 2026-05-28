@@ -4,7 +4,7 @@
 #pragma kernel _ScrollUpdate
 
 RWStructuredBuffer<float4> _ScrollOutput;
-RWStructuredBuffer<uint2> _MoveInput;
+RWStructuredBuffer<uint> _MoveInput;
 RWStructuredBuffer<float4> _DepthInput;
 RWStructuredBuffer<float> _HeightInput;
 RWStructuredBuffer<uint2> _PrevIndicesInput;
@@ -18,7 +18,10 @@ uint _ParticleCount;
 float _CamVelocity;
 float _TrainVelocity;
 
+float _DeltaTime;
+
 uint _Init;
+
 
 [numthreads(THREADS_PER_GROUP, 1, 1)]
 void _ScrollInit(uint id : SV_DispatchThreadID)
@@ -27,9 +30,9 @@ void _ScrollInit(uint id : SV_DispatchThreadID)
         return;
     
     float4 output = _ScrollOutput[id];
-    uint2 moveInput = _MoveInput[id];
-    
-    if (moveInput.y == 1 || moveInput.x == 0)
+    uint moveInput = _MoveInput[id];
+     
+    if (((moveInput & (1 << BORN_BIT)) == 0) || ((moveInput & (1 << DEAD_BIT) == 0)))
     {
         _ScrollOutput[id] = output;
         return;
@@ -37,10 +40,8 @@ void _ScrollInit(uint id : SV_DispatchThreadID)
     
     float4 depthInput = _DepthInput[id];
     
-    
     output.z = _SpawnerMinPos.z + depthInput.x;
     output.y = _HeightInput[id];
-    
     
     if (_Init == 0)
     {
@@ -49,19 +50,30 @@ void _ScrollInit(uint id : SV_DispatchThreadID)
     else
     {        
         uint2 prevIndices = _PrevIndicesInput[id];
-        float4 prevOutput = _ScrollOutput[prevIndices.x];
-        float4 prevPrevOutput = _ScrollOutput[prevIndices.y];   
         
-        float rightXPos = max(prevOutput.x, prevPrevOutput.x);
+        if (prevIndices.x != prevIndices.y)
+        {
+            float4 prevOutput = _ScrollOutput[prevIndices.x];
+            float4 prevPrevOutput = _ScrollOutput[prevIndices.y];
         
-        output.x = (rightXPos + _SpawnerSize.x) +(((float) id % 2) * _SpawnerSize.x); 
+            float rightXPos = max(prevOutput.x, prevPrevOutput.x);
+        
+            output.x = (rightXPos + _SpawnerSize.x) + (((float) id % 2) * _SpawnerSize.x);             
+        }
+        else
+        {
+            output.x = _SpawnerMaxPos.x + (((float) id % 2) * _SpawnerSize.x);             
+        }
+
     }
     
     
     output.w = (_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z;
     
+    moveInput &= ~(1 << BORN_BIT);
+    moveInput &= ~(1 << DEAD_BIT); // NOTE: Setting dead input to 0
+    moveInput &= ~(1 << FIRST_OUT_OF_BOUNDS_BIT); //NOTE: Setting first out of bounds input to 0
     
-    moveInput.y = 1;
     _MoveInput[id] = moveInput;
     
     _ScrollOutput[id] = output;
@@ -73,19 +85,23 @@ void _ScrollUpdate(uint id : SV_DispatchThreadID)
     if (id >= _ParticleCount)
         return;
     float4 output = _ScrollOutput[id];
-    uint2 moveInput = _MoveInput[id];
+    uint moveInput = _MoveInput[id];
     
-    float velocity = (_CamVelocity * (1 - output.w)) + (_TrainVelocity * output.w);
+    float camVelocity = _CamVelocity * (1 - output.w) * _DeltaTime;
+    float trainVelocity = _TrainVelocity * output.w * _DeltaTime;
+    float velocity = camVelocity + trainVelocity;
     
     float minXPos = _SpawnerMinPos.x - _SpawnerSize.x;
     
-    
     float width = (_SpawnerMaxPos.x - _SpawnerMinPos.x) + _SpawnerSize.x;
+    
     if (output.x < minXPos)
     {
-        if (moveInput.x == 0)
+        if ((moveInput & (1 << DYING_BIT)) != 0)
         {
-            moveInput.y = 0;
+            moveInput |= 1 << DEAD_BIT; // NOTE: Setting dead input to 1
+            moveInput &= ~(1 << BORN_BIT); //NOTE: No Longer born
+            
             output.x = _SpawnerMaxPos.x + (((float) id % 2) * _SpawnerSize.x);
             _MoveInput[id] = moveInput;
         }
@@ -95,6 +111,13 @@ void _ScrollUpdate(uint id : SV_DispatchThreadID)
         }
     }
     
-    output.x -= velocity * moveInput.y;
+    if (output.x < _SpawnerMinPos.x)
+    {
+        moveInput |= 1 << FIRST_OUT_OF_BOUNDS_BIT;
+        _MoveInput[id] = moveInput;
+    }
+    
+    uint isDead = (moveInput >> DEAD_BIT) & 1;
+    output.x -= velocity * (1 - isDead);
     _ScrollOutput[id] = output;
 }

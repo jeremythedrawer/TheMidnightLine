@@ -49,7 +49,7 @@ public static class Train
 
     public static float IncreaseVelocity(float curVelocity, float targetVelocity, float accelSpeed)
     {
-        float maxDelta = accelSpeed * Time.fixedDeltaTime;
+        float maxDelta = accelSpeed * Time.deltaTime;
         return Mathf.MoveTowards(curVelocity, targetVelocity, maxDelta);
     }
 
@@ -59,7 +59,7 @@ public static class Train
         float distToTarget = targetWorldPos - TRAIN_WORLD_POS;
         float absDistToTarget = Mathf.Abs(distToTarget);
 
-        float maxDelta = decelSpeed * Time.fixedDeltaTime;
+        float maxDelta = decelSpeed * Time.deltaTime;
 
         if (absDistToTarget < CLOSE_TO_STOP_VELOCITY)
         {

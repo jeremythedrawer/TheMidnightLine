@@ -867,8 +867,6 @@ public class AtlasFactory : EditorWindow
 
         Color defaultColor = Color.grey;
 
-
-
         Handles.color = selectedIndex == gridIndex ? selectedColor : defaultColor;
         Handles.DrawSolidRectangleWithOutline(gridRect, Color.clear, Handles.color);
 
@@ -1230,7 +1228,7 @@ public class AtlasFactory : EditorWindow
     [UnityEditor.Callbacks.DidReloadScripts]
     private static void OnScriptsReloaded()
     {
-        AtlasFactory atlasFactory = GetWindow<AtlasFactory>();
+        AtlasFactory atlasFactory = Resources.FindObjectsOfTypeAll<AtlasFactory>().FirstOrDefault();
 
         if (atlasFactory != null && atlasFactory.atlas != null)
         {

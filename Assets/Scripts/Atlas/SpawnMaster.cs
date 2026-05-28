@@ -1,7 +1,9 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
+using UnityEngine.Rendering;
 using static AtlasRendering;
 using static AtlasSpawn;
 using static Spy;
@@ -21,12 +23,14 @@ public class SpawnMaster : MonoBehaviour
     public GameEventDataSO gameEventData;
     public ColorsSO colorSO;
 
+    [Header("Generated")]
     public int nextSpawnIndex;
     public float delayParticleQueueClock;
     public float curDayNightValue;
     public float targetNightValue;
     public float prevNightValue;
     public float dayNightClock;
+
     public Queue<DelayedParticleData> delayedParticlesQueue;
     private void OnEnable()
     {
@@ -40,6 +44,7 @@ public class SpawnMaster : MonoBehaviour
         AtlasSpawn.InitMPBPool();
         AtlasSpawn.InitArgsPool();
         AtlasSpawn.InitQuadScalePool();
+        AtlasSpawn.InitEdgeSpritePool();
 
         InitZoneCompute();
         InitScrollCompute();
@@ -47,10 +52,12 @@ public class SpawnMaster : MonoBehaviour
         InitParticles();
         ChangeParticles();
         gameEventData.OnTicketInspect.RegisterListener(ChangeParticles);
+        gameEventData.OnMetersAtSpawnBounds.RegisterListener(DespawnEdgeScrollers);
     }
     private void OnDisable()
     {
         gameEventData.OnTicketInspect.UnregisterListener(ChangeParticles);
+        gameEventData.OnMetersAtSpawnBounds.UnregisterListener(DespawnEdgeScrollers);
         Dispose();
     }
     private void Update()
@@ -59,6 +66,7 @@ public class SpawnMaster : MonoBehaviour
         UpdateSpawnCompute(ref spawnData.zoneData);
         UpdateDayNightCycle();
         UpdateDelayedParticleQueue();
+
     }
     private void InitBoundParameters()
     {
@@ -71,8 +79,9 @@ public class SpawnMaster : MonoBehaviour
         computeData.compute.SetFloat("_CamVelocity", camStats.curVelocity.x);
         if (spyStats.curLocationState != LocationState.Station)
         {
-            computeData.compute.SetFloat("_TrainVelocity", (trainStats.curVelocity * Time.deltaTime));
+            computeData.compute.SetFloat("_TrainVelocity", trainStats.curVelocity);
         }
+        computeData.compute.SetFloat("_DeltaTime", Time.deltaTime);
         computeData.compute.Dispatch(computeData.updateKernel, computeData.groupSize, 1, 1);
 
     }
@@ -85,11 +94,10 @@ public class SpawnMaster : MonoBehaviour
 
         spawnData.zoneData.compute.SetInt("_Init", 0);
 
-        spawnData.zoneData.moveInputs = new Vector2Int[ZONE_PARTICLE_COUNT];
-        Array.Fill(spawnData.zoneData.moveInputs, Vector2Int.zero);
-
+        spawnData.zoneData.moveInputs = new uint[ZONE_PARTICLE_COUNT];
+        Array.Fill(spawnData.zoneData.moveInputs, (uint)0);
         spawnData.zoneData.moveInputBuffer?.Release();
-        spawnData.zoneData.moveInputBuffer = new ComputeBuffer(ZONE_PARTICLE_COUNT, sizeof(uint) * 2);
+        spawnData.zoneData.moveInputBuffer = new ComputeBuffer(ZONE_PARTICLE_COUNT, sizeof(uint));
         spawnData.zoneData.moveInputBuffer.SetData(spawnData.zoneData.moveInputs);
 
         spawnData.zoneData.depthInputs = new Vector4[ZONE_PARTICLE_COUNT];
@@ -125,10 +133,10 @@ public class SpawnMaster : MonoBehaviour
 
         spawnData.scrollData.compute.SetInt("_Init", 0);
 
-        spawnData.scrollData.moveInputs = new Vector2Int[SCROLL_PARTICLE_COUNT];
-        Array.Fill(spawnData.scrollData.moveInputs, Vector2Int.zero);
+        spawnData.scrollData.moveInputs = new uint[SCROLL_PARTICLE_COUNT];
+        Array.Fill(spawnData.scrollData.moveInputs, (uint)0);
         spawnData.scrollData.moveInputBuffer?.Release();
-        spawnData.scrollData.moveInputBuffer = new ComputeBuffer(SCROLL_PARTICLE_COUNT, sizeof(uint) * 2);
+        spawnData.scrollData.moveInputBuffer = new ComputeBuffer(SCROLL_PARTICLE_COUNT, sizeof(uint));
         spawnData.scrollData.moveInputBuffer.SetData(spawnData.scrollData.moveInputs);
 
         spawnData.scrollData.depthInputs = new Vector4[SCROLL_PARTICLE_COUNT];
@@ -146,8 +154,6 @@ public class SpawnMaster : MonoBehaviour
 
         spawnData.scrollData.outputBuffer?.Release();
         spawnData.scrollData.outputBuffer = new ComputeBuffer(SCROLL_PARTICLE_COUNT, sizeof(float) * 4);
-
-
 
         spawnData.scrollData.groupSize = Mathf.CeilToInt((float)SCROLL_PARTICLE_COUNT / THREADS_PER_GROUP);
 
@@ -218,15 +224,15 @@ public class SpawnMaster : MonoBehaviour
 
             if (posData.ticketCheckEnd > spyStats.ticketsCheckedTotal) continue;
 
-            if (!posData.isDying)
+            if (posData.spawnState != SpawnState.MovingOut)
             {
                 for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
                 {
-                    Vector2Int newMoveInput = spawnComputeData.moveInputs[j];
-                    newMoveInput.x = 0;
+                    uint newMoveInput = spawnComputeData.moveInputs[j];
+                    newMoveInput |= (int)ParticleStates.Dying;
                     spawnComputeData.moveInputs[j] = newMoveInput;
                 }
-                posData.isDying = true;
+                posData.spawnState = SpawnState.MovingOut;
                 particleAtlas.posData[i] = posData;
             }
             else
@@ -234,7 +240,7 @@ public class SpawnMaster : MonoBehaviour
                 bool isDead = true;
                 for (int k = posData.minParticleIndex; k <= posData.maxParticleIndex; k++)
                 {
-                    if (spawnComputeData.moveInputs[k].y == 1)
+                    if ((spawnComputeData.moveInputs[k] & (uint)ParticleStates.Dead) == 0)
                     {
                         isDead = false;
                         break;
@@ -264,21 +270,23 @@ public class SpawnMaster : MonoBehaviour
         if (particleAtlas.posDataIndexOffset == particleAtlas.posData.Length) return;
 
         int newOffset = particleAtlas.posDataIndexOffset;
-        for (int j = particleAtlas.posDataIndexOffset; j < particleAtlas.posData.Length; j++)
+
+        for (int i = particleAtlas.posDataIndexOffset; i < particleAtlas.posData.Length; i++)
         {
-            ParticlePosData posData = particleAtlas.posData[j];
+            ParticlePosData posData = particleAtlas.posData[i];
 
             if (spyStats.ticketsCheckedTotal < posData.ticketCheckStart)
             {
-                newOffset = j;
+                newOffset = i;
                 break;
             }
 
             bool particlesAvailable = true;
 
-            for (int k = posData.minParticleIndex; k <= posData.maxParticleIndex; k++)
+            for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
             {
-                if (spawnComputeData.moveInputs[k] != Vector2Int.zero)
+                uint moveInputs = spawnComputeData.moveInputs[j];
+                if ((moveInputs & (uint)ParticleStates.Born) != 0)
                 {
                     particlesAvailable = false;
                     break;
@@ -291,7 +299,7 @@ public class SpawnMaster : MonoBehaviour
                 { 
                     posData = posData,
                     particleAtlas = particleAtlas,
-                    index = j,
+                    index = i,
                     spawnComputeData = spawnComputeData,
                 };
 
@@ -320,36 +328,59 @@ public class SpawnMaster : MonoBehaviour
 
             posData.mpb.SetInt("_SpriteIndex", posData.spriteIndex);
 
+            posData.spawnState = SpawnState.MovingIn;
+
+            for (int j = 0; j < posData.preScrollers.Length; j++)
+            {
+                EdgeScroller preScroller = posData.preScrollers[j];
+                
+                preScroller.mpb = GetMPB();
+                preScroller.argsBuffer = GetArgsBuffer();
+                preScroller.edgeSpriteDataBuffer = GetEdgeSpriteBuffer();
+                preScroller.edgeSpriteDataBuffer.SetData(preScroller.spriteData);
+                
+                preScroller.mpb.SetTexture("_AtlasTexture", particleAtlas.atlas.texture);
+                
+                preScroller.mpb.SetBuffer("_Particles", spawnComputeData.outputBuffer);
+                preScroller.mpb.SetBuffer("_SpriteData", particleAtlas.spriteDataBuffer);
+                preScroller.mpb.SetBuffer("_EdgeSpriteData", preScroller.edgeSpriteDataBuffer);
+
+                preScroller.mpb.SetInt("_ParticleOffset", posData.minParticleIndex);
+
+                posData.preScrollers[j] = preScroller;
+
+            }
+
             switch (spawnComputeData.particleType)
             {
                 case ParticleType.Zone:
                 {
-                    for (int k = posData.minParticleIndex; k <= posData.maxParticleIndex; k++)
+                    for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
                     {
-                        spawnComputeData.depthInputs[k] = new Vector4(posData.depth, posData.particleCount, posData.depthSize, posData.minParticleIndex);
-                        spawnComputeData.heightInputs[k] = posData.posY;
-                        spawnComputeData.moveInputs[k] = new Vector2Int(1, 0);
+                        spawnComputeData.depthInputs[j] = new Vector4(posData.depth, posData.particleCount, posData.depthSize, posData.minParticleIndex);
+                        spawnComputeData.heightInputs[j] = posData.posY;
+                        spawnComputeData.moveInputs[j] |= (uint)ParticleStates.Born;
                     }
                 }
                 break;
 
                 case ParticleType.Scroll:
                 {
-                    for (int k = posData.minParticleIndex; k <= posData.maxParticleIndex; k++)
+                    for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
                     {
-                        spawnComputeData.depthInputs[k] = new Vector4(posData.depth, posData.particleCount, posData.depthSize, posData.minParticleIndex);
-                        spawnComputeData.heightInputs[k] = posData.posY;
-                        spawnComputeData.prevIndicesInputs[k] = posData.prevDepthIndices;
-                        spawnComputeData.moveInputs[k] = new Vector2Int(1, 0);
+                        spawnComputeData.depthInputs[j] = new Vector4(posData.depth, posData.particleCount, posData.depthSize, posData.minParticleIndex);
+                        spawnComputeData.heightInputs[j] = posData.posY;
+                        spawnComputeData.prevIndicesInputs[j] = posData.prevDepthIndices;
+                        spawnComputeData.moveInputs[j] |= (uint)ParticleStates.Born;
                     }
                 }
                 break;
             }
-            particleAtlas.posData[j] = posData;
+            particleAtlas.posData[i] = posData;
 
-            if (j == particleAtlas.posData.Length - 1)
+            if (i == particleAtlas.posData.Length - 1)
             {
-                newOffset = j + 1;
+                newOffset = i + 1;
             }
         }
 
@@ -393,7 +424,7 @@ public class SpawnMaster : MonoBehaviour
 
         for (int i = delayedParticleData.posData.minParticleIndex; i <= delayedParticleData.posData.maxParticleIndex; i++)
         {
-            if (delayedParticleData.spawnComputeData.moveInputs[i] != Vector2Int.zero)
+            if ((delayedParticleData.spawnComputeData.moveInputs[i] & (uint)ParticleStates.Dead) != 0)
             {
                 delayParticleQueueClock = 0;
                 return;
@@ -430,7 +461,7 @@ public class SpawnMaster : MonoBehaviour
         {
             delayedParticleData.spawnComputeData.depthInputs[k] = new Vector4(delayedParticleData.posData.depth, delayedParticleData.posData.particleCount, delayedParticleData.posData.depthSize, delayedParticleData.posData.minParticleIndex);
 
-            delayedParticleData.spawnComputeData.moveInputs[k] = new Vector2Int(1, 0);
+            delayedParticleData.spawnComputeData.moveInputs[k] = 0;
         }
 
         delayedParticleData.particleAtlas.posData[delayedParticleData.index] = delayedParticleData.posData;
@@ -441,6 +472,42 @@ public class SpawnMaster : MonoBehaviour
 
         delayedParticlesQueue.Dequeue();
         delayParticleQueueClock = 0;
+    }    
+    private void DespawnEdgeScrollers()
+    {
+        DespawningEdgeScrollers().Forget();
+    }
+    private async UniTask DespawningEdgeScrollers()
+    {
+        AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(spawnData.scrollData.moveInputBuffer);
+        while (!request.done) await UniTask.Yield();
+        if (request.hasError)
+        {
+            Debug.LogWarning("Requesting scrollData resulted in error");
+        }
+        else
+        {
+            spawnData.scrollData.moveInputs = request.GetData<uint>().ToArray();
+
+            for(int i = 0; i < trip.particleAtlasArray.Length; i++)
+            {
+                ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
+
+                for (int j = 0; j < particleAtlas.posDataIndexOffset; j++)
+                {
+                    ParticlePosData posData = particleAtlas.posData[j];
+
+                    if (posData.spawnState != SpawnState.MovingIn) continue;
+
+                    if ((spawnData.scrollData.moveInputs[posData.minParticleIndex] & (uint)ParticleStates.FirstOutOfBounds) == 0) continue;
+
+                    posData.spawnState = SpawnState.Alive;
+                    particleAtlas.posData[j] = posData;
+                }
+
+            }
+        }
+
     }
     private void Dispose()
     {
@@ -456,7 +523,7 @@ public class SpawnMaster : MonoBehaviour
                 particleAtlas.posData[j].argsBuffer = null;
                 particleAtlas.posData[j].quadScaleBuffer?.Release();
                 particleAtlas.posData[j].quadScaleBuffer = null;
-                particleAtlas.posData[j].isDying = false;
+                particleAtlas.posData[j].spawnState = SpawnState.None;
             }
 
             particleAtlas.spriteDataBuffer?.Release();
@@ -482,7 +549,6 @@ public class SpawnMaster : MonoBehaviour
         spawnComputeData.outputBuffer = null;
 
     }
-
     private void UpdateDayNightCycle()
     {
         curDayNightValue = Mathf.Lerp(curDayNightValue, targetNightValue, Time.deltaTime * DAY_NIGHT_TRANSITION_TIME);

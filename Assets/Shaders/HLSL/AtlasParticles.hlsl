@@ -1,5 +1,11 @@
 #define THREADS_PER_GROUP 64
 
+#define BORN_BIT 0
+#define DYING_BIT 1
+#define DEAD_BIT 2
+#define FIRST_OUT_OF_BOUNDS_BIT 3
+
+
 static const float FORE_MIN = 1.0;
 static const float FORE_SIZE = 1.0;
 
@@ -32,4 +38,11 @@ struct ParticleSprite
 {
     float4 uvSizeAndPos;
     float4 worldPivotAndSize;
+};
+
+struct EdgeSprite
+{
+    uint spriteIndex;
+    float4 offset;
+    float4 scale;
 };

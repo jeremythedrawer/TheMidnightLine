@@ -1,11 +1,12 @@
 using System;
 using System.Runtime.InteropServices;
+using Unity.Mathematics;
 using UnityEngine;
 using static AtlasRendering;
 public static class AtlasSpawn
 {
-    public const float MAIN_MIN = 1.0f;
-    public const float MAIN_MAX = 26.0f;
+    public const float MAIN_MIN = 3.0f;
+    public const float MAIN_MAX = 17.0f;
 
     public const int TRAIN_TRACKS_DEPTH = 6;
     public const int TRAIN_LINE_DEPTH = 5;
@@ -18,12 +19,16 @@ public static class AtlasSpawn
     public const int ZONE_PARTICLE_COUNT = 1024;
 
     public const int MAX_QUAD_COUNT = 16384;
-    
+
+    public const int MAX_EDGE_SPRITE_COUNT = 16;
+
     public const int MAX_POS_DATA_AT_ONCE_COUNT = 32;
+    public const int MAX_EDGE_SPRITE_DATA_AT_ONCE_COUNT = 32;
     public const int MAX_PARTICLE_SPRITE_DATA_COUNT = 128;
     public const float THREADS_PER_GROUP = 64;
 
     public static int PARTICLE_SPRITE_DATA_STRIDE = Marshal.SizeOf<ParticleSpritesData>();
+    public static int EDGE_SPRITE_DATA_STRIDE = Marshal.SizeOf<EdgeSpriteData>();
 
     public static MaterialPropertyBlock[] mpb_pool;
     public static int mpbPoolCount;
@@ -34,7 +39,20 @@ public static class AtlasSpawn
     public static GraphicsBuffer[] quadScaleBuffer_pool;
     public static int quadScaleBufferPoolCount;
 
+    public static GraphicsBuffer[] edgeSpriteDataBuffer_pool;
+    public static int edgeSpriteDataBufferPoolCount;
+
     public static uint[] argsSpawn = new uint[5] { 6, 0, 0, 0, 0 };
+
+
+    [Flags] public enum ParticleStates
+    {
+        None = 0,
+        Born = 1 << 0,
+        Dying = 1 << 1,
+        Dead = 1 << 2,
+        FirstOutOfBounds = 1 << 3,
+    }
     public enum ParticleType
     { 
         Zone,
@@ -48,32 +66,42 @@ public static class AtlasSpawn
         Sliced,
         Tiled,
     }
-    public enum ZoneState
-    { 
-        None,
-        Alive,
-        Dying,
-        Dead,
-    }
-    public enum ScrollState
+    public enum SpawnState
     { 
         None,
         MovingIn,
         MovingOut,
-        Dead,
+        Alive,
+    }
+
+    [Serializable] public struct EdgeSpriteData
+    {
+        public uint spriteIndex;
+        public Vector4 offset;
+        public Vector4 scale;
+    }
+    [Serializable] public struct EdgeScroller
+    {
+        public EdgeSpriteData[] spriteData;
+        public MaterialPropertyBlock mpb;
+        public GraphicsBuffer argsBuffer;
+        public GraphicsBuffer edgeSpriteDataBuffer;
     }
 
     [Serializable] public struct ParticlePosData
     {
+        public EdgeScroller[] preScrollers;
+        public EdgeScroller[] postScrollers;
+
+        public Vector4[] quadScales;        
 
         public Vector2Int prevDepthIndices;
         public MaterialPropertyBlock mpb;
         public GraphicsBuffer argsBuffer;
-
-        public Vector4[] quadScales;
         public GraphicsBuffer quadScaleBuffer;
 
         public ParticleWidthType widthType;
+        public SpawnState spawnState;
 
         public int ticketCheckStart;
         public int ticketCheckEnd;
@@ -95,8 +123,6 @@ public static class AtlasSpawn
         public float scaleX;
         public float randScale;
 
-        public bool isDying;
-        public bool isAlive;
     }
 
     [Serializable] public struct ParticleSpritesData
@@ -118,7 +144,7 @@ public static class AtlasSpawn
         public ComputeBuffer heightInputBuffer;
         public ComputeBuffer prevIndicesInputsBuffer;
 
-        public Vector2Int[] moveInputs;
+        public uint[] moveInputs;
         public Vector4[] depthInputs;
         public float[] heightInputs;
         public Vector2Int[] prevIndicesInputs;
@@ -152,6 +178,11 @@ public static class AtlasSpawn
     {
         quadScaleBuffer_pool = new GraphicsBuffer[MAX_PARTICLE_SPRITE_DATA_COUNT];
         quadScaleBufferPoolCount = -1;
+    }
+    public static void InitEdgeSpritePool()
+    {
+        edgeSpriteDataBuffer_pool = new GraphicsBuffer[MAX_EDGE_SPRITE_DATA_AT_ONCE_COUNT];
+        edgeSpriteDataBufferPoolCount = -1;
     }
     public static MaterialPropertyBlock GetMPB()
     {
@@ -229,5 +260,28 @@ public static class AtlasSpawn
         quadScaleBufferPoolCount++;
 
         quadScaleBuffer_pool[quadScaleBufferPoolCount] = quadScaleBuffer;
+    }
+
+    public static GraphicsBuffer GetEdgeSpriteBuffer()
+    {
+        GraphicsBuffer edgeSpriteBuffer_instance;
+
+        if (edgeSpriteDataBufferPoolCount < 0)
+        {
+            edgeSpriteBuffer_instance = new GraphicsBuffer(GraphicsBuffer.Target.Structured, MAX_EDGE_SPRITE_COUNT, EDGE_SPRITE_DATA_STRIDE);
+        }
+        else
+        {
+            edgeSpriteBuffer_instance = edgeSpriteDataBuffer_pool[edgeSpriteDataBufferPoolCount];
+            edgeSpriteDataBufferPoolCount--;
+        }
+        return edgeSpriteBuffer_instance;
+    }
+
+    public static void ReturnEdgeSpriteBuffer(GraphicsBuffer edgeSpriteBuffer)
+    {
+        if (edgeSpriteDataBufferPoolCount == MAX_EDGE_SPRITE_DATA_AT_ONCE_COUNT - 1) return;
+        edgeSpriteDataBufferPoolCount++;
+        edgeSpriteDataBuffer_pool[edgeSpriteDataBufferPoolCount] = edgeSpriteBuffer;
     }
 }

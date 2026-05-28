@@ -9,4 +9,6 @@ public class SpawnData : ScriptableObject
 
     public SpawnComputeData zoneData;
     public SpawnComputeData scrollData;
+
+    public Material edgeScrollMaterial;
 }

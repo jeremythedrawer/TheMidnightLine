@@ -15,7 +15,8 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: 7bd15aca28e0873468552b14aa4bd880, type: 2}
   particleType: 0
   posData:
-  - prevDepthIndices: {x: 0, y: 0}
+  - preScrollers: []
+    postScrollers: []
     quadScales:
     - {x: 1, y: 1, z: 0, w: 0}
     - {x: 3.8633127, y: 1, z: 0, w: 0}
@@ -1034,23 +1035,23 @@ MonoBehaviour:
     - {x: 1, y: 1, z: 0, w: 2.5294797}
     - {x: 10.012913, y: 1, z: 0, w: 2.5294797}
     - {x: 1, y: 1, z: 9.313343, w: 2.5294797}
+    prevDepthIndices: {x: 0, y: 0}
     widthType: 1
+    spawnState: 1
     ticketCheckStart: 0
     ticketCheckEnd: 1
     quadCount: 1017
     particleCount: 113
-    minParticleIndex: 436
-    maxParticleIndex: 548
-    depth: 101
-    depthSize: 25
+    minParticleIndex: 311
+    maxParticleIndex: 423
+    depth: 57
+    depthSize: 19
     spriteIndex: 0
     spritesPerParticle: 9
     posY: 0
     scaleY: 4.68
     scaleX: 5.74
     randScale: 8
-    isDying: 0
-    isAlive: 0
   posDataIndexOffset: 1
   spriteCount: 8
   isCompleted: 0

@@ -5,7 +5,7 @@
 #pragma kernel _ZoneUpdate
 
 RWStructuredBuffer<float4> _ZoneOutput;
-RWStructuredBuffer<uint2> _MoveInput;
+RWStructuredBuffer<uint> _MoveInput;
 RWStructuredBuffer<float4> _DepthInput;
 RWStructuredBuffer<float> _HeightInput;
 
@@ -19,6 +19,8 @@ uint _ParticleCount;
 float _CamVelocity;
 float _TrainVelocity;
 
+float _DeltaTime;
+
 uint _Init;
 
 [numthreads(THREADS_PER_GROUP, 1, 1)]
@@ -28,9 +30,9 @@ void _ZoneInit(uint id : SV_DispatchThreadID)
         return;
     
     float4 output = _ZoneOutput[id];
-    uint2 moveInput = _MoveInput[id];
+    uint moveInput = _MoveInput[id];
     
-    if (moveInput.y == 1 || moveInput.x == 0)
+    if ((moveInput & (1 << BORN_BIT)) != 0)
     {
         _ZoneOutput[id] = output;
         return;
@@ -53,7 +55,10 @@ void _ZoneInit(uint id : SV_DispatchThreadID)
     }
     output.y = _HeightInput[id];
     
-    moveInput.y = 1;
+    moveInput |= 1 << BORN_BIT;
+    moveInput &= ~(1 << DEAD_BIT); // NOTE: Setting dead input to 0
+    moveInput &= ~(1 << FIRST_OUT_OF_BOUNDS_BIT); //NOTE: Setting first out of bounds input to 0
+    
     _MoveInput[id] = moveInput;
     
     _ZoneOutput[id] = output;
@@ -65,15 +70,18 @@ void _ZoneUpdate(uint id : SV_DispatchThreadID)
         return;
     
     float4 output = _ZoneOutput[id];
-    uint2 moveInput = _MoveInput[id];
+    uint moveInput = _MoveInput[id];
     
-    float velocity = (_CamVelocity * (1 - output.w)) + (_TrainVelocity * output.w);
+    float camVelocity = _CamVelocity * (1 - output.w) * _DeltaTime;
+    float trainVelocity = _TrainVelocity * output.w * _DeltaTime;
+    float velocity = camVelocity + trainVelocity;
 
     if (output.x < _SpawnerMinPos.x)
     {
-        if (moveInput.x == 0)
+        if ((moveInput & (1 << DYING_BIT)) != 0)
         {
-            moveInput.y = 0;
+            moveInput |= 1 << DEAD_BIT; // NOTE: Setting dead input to 1
+            moveInput &= ~(1 << BORN_BIT); //NOTE: No Longer born
             float rand01 = HashIntTo01Float(id);
             output.x = _SpawnerMaxPos.x + _SpawnerSize.x * rand01;
             
@@ -85,7 +93,8 @@ void _ZoneUpdate(uint id : SV_DispatchThreadID)
         }
     }
     
-    output.x -= velocity * moveInput.y;
+    uint isDead = (moveInput >> DEAD_BIT) & 1;
+    output.x -= velocity * (1 - isDead);
     
     _ZoneOutput[id] = output;
 }

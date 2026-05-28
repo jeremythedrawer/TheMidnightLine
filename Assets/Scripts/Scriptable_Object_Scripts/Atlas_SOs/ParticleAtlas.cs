@@ -41,13 +41,14 @@ public class ParticleAtlas : ScriptableObject
             SimpleSprite sprite = atlas.simpleSprites[i];
             newSpriteData.uvSizeAndPos = sprite.uvSizeAndPos;
 
-            float pivotX = sprite.uvPivot.x * sprite.worldSize.x;
-            float pivotY = sprite.uvPivot.y * sprite.worldSize.y;
+            float pivotX = -sprite.uvPivot.x * sprite.worldSize.x;
+            float pivotY = -sprite.uvPivot.y * sprite.worldSize.y;
             newSpriteData.worldPivotAndSize = new Vector4(pivotX, pivotY, sprite.worldSize.x, sprite.worldSize.y);
             newSpriteDataArray[spriteIndex] = newSpriteData;
             spriteIndex++;
             spriteCount++;
         }
+
 
         for (int i = 0; i < atlas.slicedSprites.Length; i++)
         {
