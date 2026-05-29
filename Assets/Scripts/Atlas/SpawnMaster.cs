@@ -104,9 +104,9 @@ public class SpawnMaster : MonoBehaviour
         spawnData.zoneData.depthInputBuffer?.Release();
         spawnData.zoneData.depthInputBuffer = new ComputeBuffer(ZONE_PARTICLE_COUNT, sizeof(uint) * 4);
 
-        spawnData.zoneData.heightInputs = new float[ZONE_PARTICLE_COUNT];
-        spawnData.zoneData.heightInputBuffer?.Release();
-        spawnData.zoneData.heightInputBuffer = new ComputeBuffer(ZONE_PARTICLE_COUNT, sizeof(float));
+        spawnData.zoneData.offsetInputs = new Vector4[ZONE_PARTICLE_COUNT];
+        spawnData.zoneData.offsetInputBuffer?.Release();
+        spawnData.zoneData.offsetInputBuffer = new ComputeBuffer(ZONE_PARTICLE_COUNT, sizeof(float) * 4);
 
         spawnData.zoneData.outputBuffer?.Release();
         spawnData.zoneData.outputBuffer = new ComputeBuffer(ZONE_PARTICLE_COUNT, sizeof(float) * 4);
@@ -119,7 +119,7 @@ public class SpawnMaster : MonoBehaviour
         spawnData.zoneData.compute.SetBuffer(spawnData.zoneData.initKernel, "_ZoneOutput", spawnData.zoneData.outputBuffer);
         spawnData.zoneData.compute.SetBuffer(spawnData.zoneData.initKernel, "_DepthInput", spawnData.zoneData.depthInputBuffer);
         spawnData.zoneData.compute.SetBuffer(spawnData.zoneData.initKernel, "_MoveInput", spawnData.zoneData.moveInputBuffer);
-        spawnData.zoneData.compute.SetBuffer(spawnData.zoneData.initKernel, "_HeightInput", spawnData.zoneData.heightInputBuffer);
+        spawnData.zoneData.compute.SetBuffer(spawnData.zoneData.initKernel, "_OffsetInput", spawnData.zoneData.offsetInputBuffer);
 
         spawnData.zoneData.compute.SetBuffer(spawnData.zoneData.updateKernel, "_ZoneOutput", spawnData.zoneData.outputBuffer);
         spawnData.zoneData.compute.SetBuffer(spawnData.zoneData.updateKernel, "_MoveInput", spawnData.zoneData.moveInputBuffer);
@@ -143,9 +143,9 @@ public class SpawnMaster : MonoBehaviour
         spawnData.scrollData.depthInputBuffer?.Release();
         spawnData.scrollData.depthInputBuffer = new ComputeBuffer(SCROLL_PARTICLE_COUNT, sizeof(uint) * 4);
 
-        spawnData.scrollData.heightInputs = new float[SCROLL_PARTICLE_COUNT];
-        spawnData.scrollData.heightInputBuffer?.Release();
-        spawnData.scrollData.heightInputBuffer = new ComputeBuffer(SCROLL_PARTICLE_COUNT, sizeof(float));
+        spawnData.scrollData.offsetInputs = new Vector4[SCROLL_PARTICLE_COUNT];
+        spawnData.scrollData.offsetInputBuffer?.Release();
+        spawnData.scrollData.offsetInputBuffer = new ComputeBuffer(SCROLL_PARTICLE_COUNT, sizeof(float) * 4);
 
         spawnData.scrollData.prevIndicesInputs = new Vector2Int[SCROLL_PARTICLE_COUNT];
         spawnData.scrollData.prevIndicesInputsBuffer?.Release();
@@ -163,7 +163,7 @@ public class SpawnMaster : MonoBehaviour
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.initKernel, "_ScrollOutput", spawnData.scrollData.outputBuffer);
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.initKernel, "_MoveInput", spawnData.scrollData.moveInputBuffer);
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.initKernel, "_DepthInput", spawnData.scrollData.depthInputBuffer);
-        spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.initKernel, "_HeightInput", spawnData.scrollData.heightInputBuffer);
+        spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.initKernel, "_OffsetInput", spawnData.scrollData.offsetInputBuffer);
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.initKernel, "_PrevIndicesInput", spawnData.scrollData.prevIndicesInputsBuffer);
 
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.updateKernel, "_ScrollOutput", spawnData.scrollData.outputBuffer);
@@ -358,7 +358,8 @@ public class SpawnMaster : MonoBehaviour
                     for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
                     {
                         spawnComputeData.depthInputs[j] = new Vector4(posData.depth, posData.particleCount, posData.depthSize, posData.minParticleIndex);
-                        spawnComputeData.heightInputs[j] = posData.posY;
+                        spawnComputeData.offsetInputs[j].x = posData.posX;
+                        spawnComputeData.offsetInputs[j].y = posData.posY;
                         spawnComputeData.moveInputs[j] |= (uint)ParticleStates.Born;
                     }
                 }
@@ -369,7 +370,8 @@ public class SpawnMaster : MonoBehaviour
                     for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
                     {
                         spawnComputeData.depthInputs[j] = new Vector4(posData.depth, posData.particleCount, posData.depthSize, posData.minParticleIndex);
-                        spawnComputeData.heightInputs[j] = posData.posY;
+                        spawnComputeData.offsetInputs[j].x = posData.posX;
+                        spawnComputeData.offsetInputs[j].y = posData.posY;
                         spawnComputeData.prevIndicesInputs[j] = posData.prevDepthIndices;
                         spawnComputeData.moveInputs[j] |= (uint)ParticleStates.Born;
                     }
@@ -389,7 +391,7 @@ public class SpawnMaster : MonoBehaviour
     private void ReinitSpawnCompute(ref SpawnComputeData spawnComputeData)
     {
         spawnComputeData.depthInputBuffer.SetData(spawnComputeData.depthInputs);
-        spawnComputeData.heightInputBuffer.SetData(spawnComputeData.heightInputs);
+        spawnComputeData.offsetInputBuffer.SetData(spawnComputeData.offsetInputs);
         spawnComputeData.moveInputBuffer.SetData(spawnComputeData.moveInputs);
 
         switch(spawnComputeData.particleType)
@@ -541,8 +543,8 @@ public class SpawnMaster : MonoBehaviour
         spawnComputeData.moveInputBuffer = null;
         spawnComputeData.depthInputBuffer?.Release();
         spawnComputeData.depthInputBuffer = null;
-        spawnComputeData.heightInputBuffer?.Release();
-        spawnComputeData.heightInputBuffer = null;
+        spawnComputeData.offsetInputBuffer?.Release();
+        spawnComputeData.offsetInputBuffer = null;
         spawnComputeData.prevIndicesInputsBuffer?.Release();
         spawnComputeData.prevIndicesInputsBuffer = null;
         spawnComputeData.outputBuffer?.Release();

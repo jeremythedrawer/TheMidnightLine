@@ -119,6 +119,138 @@ NavMeshSettings:
     debug:
       m_Flags: 0
   m_NavMeshData: {fileID: 0}
+--- !u!1 &13518524
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 13518525}
+  m_Layer: 0
+  m_Name: particle
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 0
+--- !u!4 &13518525
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 13518524}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 266.2222, y: 0, z: 25}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 182236599}
+  - {fileID: 2087453198}
+  - {fileID: 1426984780}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &182236598
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 182236599}
+  - component: {fileID: 182236600}
+  m_Layer: 0
+  m_Name: GameObject
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &182236599
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182236598}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 13518525}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &182236600
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 182236598}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    texture: {fileID: 2800000, guid: 538527a76c560c443bf2608640d0afd3, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
+    depthOrder: 25
+  atlas: {fileID: 11400000, guid: 91a76d1021d06b44e8a05e3ccbdfef68, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  scrollSize: 0
+  textToCenter: 0
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.17504883, y: 0.2199707, z: 0.5036621, w: 0.76953125}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 3.9833333, y: 5.0055556, z: 1}
+    index: 0
+  bounds:
+    m_Center: {x: 264.21387, y: 2.5027778, z: 25}
+    m_Extent: {x: 1.9916667, y: 2.5027778, z: 0.1}
+  worldPivotAndSize: {x: 0, y: 0, z: 3.9833333, w: 5.0055556}
+  uvSizeAndPosition: {x: 0.17504883, y: 0.2199707, z: 0.5036621, w: 0.76953125}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 1.9916667, y: 2.5027778, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 0
+  prevSpriteIndexFlipV: 0
+  isAnimating: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+  hasText: 0
 --- !u!1 &907767653
 GameObject:
   m_ObjectHideFlags: 0
@@ -158,7 +290,7 @@ Transform:
   m_GameObject: {fileID: 907767653}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 260.91, y: -0.903, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -337,6 +469,202 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
+--- !u!1 &1426984779
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1426984780}
+  - component: {fileID: 1426984781}
+  m_Layer: 0
+  m_Name: GameObject (1)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1426984780
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1426984779}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -30, y: 0, z: 1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 13518525}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1426984781
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1426984779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    texture: {fileID: 2800000, guid: 538527a76c560c443bf2608640d0afd3, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
+    depthOrder: 26
+  atlas: {fileID: 11400000, guid: 91a76d1021d06b44e8a05e3ccbdfef68, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 3
+  flipX: 0
+  flipY: 0
+  width: 4
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  scrollSize: 0
+  textToCenter: 0
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.32299805, y: 0.23486328, z: 0.17675781, w: 0.49975586}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 7.35, y: 5.3444443, z: 1}
+    index: 3
+  bounds:
+    m_Center: {x: 250.9222, y: 2.6722221, z: 26}
+    m_Extent: {x: 14.7, y: 2.6722221, z: 0.1}
+  worldPivotAndSize: {x: 0, y: 0, z: 7.35, w: 5.3444443}
+  uvSizeAndPosition: {x: 0.32299805, y: 0.23486328, z: 0.17675781, w: 0.49975586}
+  scaleAndFlip: {x: 4, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 14.7, y: 2.6722221, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 3
+  prevSpriteIndexFlipV: 3
+  isAnimating: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+  hasText: 0
+--- !u!1 &2087453197
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2087453198}
+  - component: {fileID: 2087453199}
+  m_Layer: 0
+  m_Name: GameObject (2)
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2087453198
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2087453197}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.91, y: 0, z: -21}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 13518525}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2087453199
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2087453197}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    texture: {fileID: 2800000, guid: 538527a76c560c443bf2608640d0afd3, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
+    depthOrder: 4
+  atlas: {fileID: 11400000, guid: 91a76d1021d06b44e8a05e3ccbdfef68, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 1
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  text: 
+  kerning: 1.1
+  spacing: 1
+  scrollSize: 0
+  textToCenter: 0
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.20214844, y: 0.22021484, z: 0.67944336, w: 0.7692871}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 4.6, y: 5.0111113, z: 1}
+    index: 1
+  bounds:
+    m_Center: {x: 267.61218, y: 2.5055556, z: 4}
+    m_Extent: {x: 2.3, y: 2.5055556, z: 0.1}
+  worldPivotAndSize: {x: 0, y: 0, z: 4.6, w: 5.0111113}
+  uvSizeAndPosition: {x: 0.20214844, y: 0.22021484, z: 0.67944336, w: 0.7692871}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 2.3, y: 2.5055556, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 1
+  prevSpriteIndexFlipV: 1
+  isAnimating: 0
+  slicedSprite:
+    sprite:
+      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+      uvPivot: {x: 0, y: 0}
+      worldSize: {x: 0, y: 0, z: 0}
+      index: 0
+    slice: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: []
+    worldSlices: {x: 0, y: 0, z: 0, w: 0}
+  quadCount: 0
+  hasText: 0
 --- !u!1001 &134255976489355507
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -469,7 +797,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 355057960334088607, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 293.14984
+      value: 266.34982
       objectReference: {fileID: 0}
     - target: {fileID: 355057960334088607, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -481,7 +809,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 538277491773755138, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 291.7
+      value: 264.9
       objectReference: {fileID: 0}
     - target: {fileID: 538277491773755138, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: m_LocalPosition.y
@@ -521,7 +849,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 773471922493913502, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 295.50583
+      value: 268.7058
       objectReference: {fileID: 0}
     - target: {fileID: 773471922493913502, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -537,7 +865,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1042626977016187938, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 293.35803
+      value: 266.558
       objectReference: {fileID: 0}
     - target: {fileID: 1042626977016187938, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -549,7 +877,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1629531250730952012, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 294.50336
+      value: 267.70334
       objectReference: {fileID: 0}
     - target: {fileID: 1629531250730952012, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -561,7 +889,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1906852023038626615, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: totalBounds.m_Center.x
-      value: 294.50336
+      value: 267.70334
       objectReference: {fileID: 0}
     - target: {fileID: 1906852023038626615, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: totalBounds.m_Center.y
@@ -573,7 +901,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1965009319074775543, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 290.71832
+      value: 263.9183
       objectReference: {fileID: 0}
     - target: {fileID: 1965009319074775543, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -585,7 +913,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2354864887520791375, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 295.55646
+      value: 268.75644
       objectReference: {fileID: 0}
     - target: {fileID: 2354864887520791375, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -597,7 +925,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2689521002506829853, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 296.63556
+      value: 269.83554
       objectReference: {fileID: 0}
     - target: {fileID: 2689521002506829853, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -609,7 +937,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2898507729149220324, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 286.6089
+      value: 259.80887
       objectReference: {fileID: 0}
     - target: {fileID: 2898507729149220324, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -621,7 +949,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3087792396735770040, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 298.28336
+      value: 271.48334
       objectReference: {fileID: 0}
     - target: {fileID: 3087792396735770040, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -633,7 +961,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3294577087890509734, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 286.7672
+      value: 259.9672
       objectReference: {fileID: 0}
     - target: {fileID: 3294577087890509734, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -645,7 +973,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3730806920895155401, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 295.25623
+      value: 268.4562
       objectReference: {fileID: 0}
     - target: {fileID: 3730806920895155401, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -657,7 +985,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3866063184393826322, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 295.35223
+      value: 268.55222
       objectReference: {fileID: 0}
     - target: {fileID: 3866063184393826322, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -669,7 +997,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4192339583887971072, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 295.7177
+      value: 268.9177
       objectReference: {fileID: 0}
     - target: {fileID: 4192339583887971072, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -681,7 +1009,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4565865996461642288, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 295.22748
+      value: 268.42746
       objectReference: {fileID: 0}
     - target: {fileID: 4565865996461642288, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -693,7 +1021,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4718826133342132324, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 295.51202
+      value: 268.712
       objectReference: {fileID: 0}
     - target: {fileID: 4718826133342132324, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -705,7 +1033,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5064145091631300101, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 295.97458
+      value: 269.17456
       objectReference: {fileID: 0}
     - target: {fileID: 5064145091631300101, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -721,7 +1049,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7078193288221371117, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 295.7205
+      value: 268.92047
       objectReference: {fileID: 0}
     - target: {fileID: 7078193288221371117, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -733,7 +1061,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7544422263841231371, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 292.3317
+      value: 265.53168
       objectReference: {fileID: 0}
     - target: {fileID: 7544422263841231371, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -749,7 +1077,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7815323997792534658, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 295.13647
+      value: 268.33646
       objectReference: {fileID: 0}
     - target: {fileID: 7815323997792534658, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -761,7 +1089,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8306602007839604579, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 295.5121
+      value: 268.71207
       objectReference: {fileID: 0}
     - target: {fileID: 8306602007839604579, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -773,7 +1101,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8712808594419335233, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 294.71802
+      value: 267.918
       objectReference: {fileID: 0}
     - target: {fileID: 8712808594419335233, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -785,7 +1113,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9218662561827777526, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 295.00403
+      value: 268.204
       objectReference: {fileID: 0}
     - target: {fileID: 9218662561827777526, guid: a8c503419b02fe542a45aedf7c3ba5bd, type: 3}
       propertyPath: bounds.m_Center.y
@@ -1904,6 +2232,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Train
       objectReference: {fileID: 0}
+    - target: {fileID: 6298906954904896265, guid: 21929a47a6d4178429c330cde08c43f0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 6452369960755819333, guid: 21929a47a6d4178429c330cde08c43f0, type: 3}
       propertyPath: bounds.m_Center.x
       value: 285.89792
@@ -2599,3 +2931,4 @@ SceneRoots:
   - {fileID: 7868559055525440052}
   - {fileID: 4599845829002923455}
   - {fileID: 907767655}
+  - {fileID: 13518525}

@@ -119,6 +119,7 @@ public static class AtlasSpawn
         public int spritesPerParticle;
 
         public float posY;
+        public float posX;
         public float scaleY;
         public float scaleX;
         public float randScale;
@@ -141,12 +142,12 @@ public static class AtlasSpawn
         public ComputeBuffer moveInputBuffer;
         public ComputeBuffer outputBuffer;
         public ComputeBuffer depthInputBuffer;
-        public ComputeBuffer heightInputBuffer;
+        public ComputeBuffer offsetInputBuffer;
         public ComputeBuffer prevIndicesInputsBuffer;
 
         public uint[] moveInputs;
         public Vector4[] depthInputs;
-        public float[] heightInputs;
+        public Vector4[] offsetInputs;
         public Vector2Int[] prevIndicesInputs;
 
         public int initKernel;

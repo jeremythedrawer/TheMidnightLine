@@ -7,7 +7,7 @@
 RWStructuredBuffer<float4> _ZoneOutput;
 RWStructuredBuffer<uint> _MoveInput;
 RWStructuredBuffer<float4> _DepthInput;
-RWStructuredBuffer<float> _HeightInput;
+RWStructuredBuffer<float4> _OffsetInput;
 
 
 float3 _SpawnerMinPos;
@@ -32,7 +32,7 @@ void _ZoneInit(uint id : SV_DispatchThreadID)
     float4 output = _ZoneOutput[id];
     uint moveInput = _MoveInput[id];
     
-    if ((moveInput & (1 << BORN_BIT)) != 0)
+    if (((moveInput & (1 << BORN_BIT)) == 0) || ((moveInput & (1 << DEAD_BIT) == 0)))
     {
         _ZoneOutput[id] = output;
         return;
@@ -53,7 +53,7 @@ void _ZoneInit(uint id : SV_DispatchThreadID)
         float rand01 = HashIntTo01Float(id);
         output.x = _SpawnerMinPos.x + _SpawnerSize.x * rand01;
     }
-    output.y = _HeightInput[id];
+    output.y = _OffsetInput[id].y;
     
     moveInput |= 1 << BORN_BIT;
     moveInput &= ~(1 << DEAD_BIT); // NOTE: Setting dead input to 0

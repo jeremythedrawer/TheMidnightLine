@@ -23,7 +23,10 @@ public class AtlasTripEditor : EditorWindow
     TripSO trip;
     
     ParticleAtlas selectedParticleAtlas;
-    
+
+    GameObject selectedPreScrollerPrefab;
+    GameObject selectedPostScrollerPrefab;
+
     Vector3 selectedEdgeScrollOffset;
     Vector2 selectedEdgeScale;
     
@@ -402,62 +405,100 @@ public class AtlasTripEditor : EditorWindow
 
         ParticleAtlas particleAtlas = trip.particleAtlasArray[selectedParticlAtlasIndex];
         ParticlePosData posData = particleAtlas.posData[selectedPosDataIndex];
-        Handles.BeginGUI();
+
+        float halfSidePanelWidth = sidePanelRect.width * 0.5f;
+        float quarterSidePanelWidth = sidePanelRect.width * 0.25f; 
+
+        Rect preScrollerObjectRect = new Rect(sidePanelRect.x, HEADER_COL_HEIGHT * 3, halfSidePanelWidth + quarterSidePanelWidth, HEADER_COL_HEIGHT);
+        Rect postScrollerObjectRect = new Rect(sidePanelRect.x, preScrollerObjectRect.y + HEADER_COL_HEIGHT, preScrollerObjectRect.width, HEADER_COL_HEIGHT);
+
+        EditorGUI.BeginChangeCheck();
+        selectedPreScrollerPrefab = (GameObject)EditorGUI.ObjectField(preScrollerObjectRect, new GUIContent("Pre Scroller Prefab"), selectedPreScrollerPrefab, typeof(GameObject), allowSceneObjects: false);
+        bool applyChanges = GUI.Button(new Rect(preScrollerObjectRect.x + halfSidePanelWidth + quarterSidePanelWidth, preScrollerObjectRect.y, quarterSidePanelWidth, HEADER_COL_HEIGHT), new GUIContent("Apply Changes"));
+        if (applyChanges || EditorGUI.EndChangeCheck())
         {
-            Rect headerRect = new Rect(sidePanelRect.x, HEADER_COL_HEIGHT * 3, sidePanelRect.width, HEADER_COL_HEIGHT + 100);
-            
-            Handles.DrawSolidRectangleWithOutline(headerRect, Color.clear, Color.white);
+            AtlasRenderer[] atlasRenderers = selectedPreScrollerPrefab.GetComponentsInChildren<AtlasRenderer>();
 
-            if (GUI.Button(new Rect(headerRect.x, headerRect.y, headerRect.width, HEADER_COL_HEIGHT), "Add Pre Scroller"))
+            if (posData.preScrollers == null || posData.preScrollers.Length == 0)
             {
-                if (posData.preScrollers.Length == 0)
-                {
-                    posData.preScrollers = new EdgeScroller[1];
-                }
+                posData.preScrollers = new EdgeScroller[1];
+            }
+            Debug.Log("Apply Changes");
+            posData.preScrollers[0].spriteData = new EdgeSpriteData[atlasRenderers.Length];
 
-                List<EdgeSpriteData> preScrollerList = posData.preScrollers[0].spriteData == null ? new List<EdgeSpriteData>() : posData.preScrollers[0].spriteData.ToList();
-                preScrollerList.Add(new EdgeSpriteData() { scale = new Vector4(1, 1, 0, 0) });
-                posData.preScrollers[0].spriteData = preScrollerList.ToArray();
-
-                selectedParticleAtlas.posData[selectedPosDataIndex] = posData;
-                
-                SaveTrip(particleAtlas);
+            for (int i = 0; i < atlasRenderers.Length; i++)
+            {
+                AtlasRenderer atlasRenderer = atlasRenderers[i];
+                posData.preScrollers[0].spriteData[i] = new EdgeSpriteData()
+                { 
+                    spriteIndex = (uint)atlasRenderer.spriteIndex,
+                    offset = new Vector4(atlasRenderer.transform.localPosition.x, atlasRenderer.transform.localPosition.y, atlasRenderer.transform.localPosition.z),
+                    scale = new Vector4(atlasRenderer.width, atlasRenderer.height),
+                };
             }
 
-            if (GUI.Button(new Rect(headerRect.x, headerRect.y + HEADER_COL_HEIGHT, headerRect.width, HEADER_COL_HEIGHT), "Remove Pre Scroller"))
-            {
-                List<EdgeSpriteData> preScrollerList = posData.preScrollers[0].spriteData.ToList();
-                preScrollerList.RemoveAt(selectedEdgeScrollIndex);
-                posData.preScrollers[0].spriteData = preScrollerList.ToArray();
+            selectedParticleAtlas.posData[selectedPosDataIndex] = posData;
+            Repaint();
 
-                particleAtlas.posData[selectedPosDataIndex] = posData;
-
-                SaveTrip(particleAtlas);
-            }
-
-            if (GUI.Button(new Rect(headerRect.x, headerRect.y + (HEADER_COL_HEIGHT * 2), headerRect.width, HEADER_COL_HEIGHT), "Add Post Scroller"))
-            {
-                List<EdgeSpriteData> postScrollerList = posData.postScrollers == null ? new List<EdgeSpriteData>() : posData.postScrollers[0].spriteData.ToList();
-                postScrollerList.Add(new EdgeSpriteData() { scale = new Vector4(1, 1, 0 ,0) });
-                posData.postScrollers[0].spriteData = postScrollerList.ToArray();
-
-                selectedParticleAtlas.posData[selectedPosDataIndex] = posData;
-                
-                SaveTrip(particleAtlas);
-            }
-
-            if (GUI.Button(new Rect(headerRect.x, headerRect.y + (HEADER_COL_HEIGHT * 3), headerRect.width, HEADER_COL_HEIGHT), "Remove Post Scroller"))
-            {
-                List<EdgeSpriteData> postScrollerList = posData.postScrollers[0].spriteData.ToList();
-                postScrollerList.RemoveAt(selectedEdgeScrollIndex);
-                posData.postScrollers[0].spriteData = postScrollerList.ToArray();
-
-                particleAtlas.posData[selectedPosDataIndex] = posData;
-
-                SaveTrip(particleAtlas);
-            }
         }
-        Handles.EndGUI();
+
+        EditorGUI.BeginChangeCheck();
+        selectedPostScrollerPrefab = (GameObject)EditorGUI.ObjectField(postScrollerObjectRect, new GUIContent("Post Scroller Prefab"), selectedPostScrollerPrefab, typeof(GameObject),allowSceneObjects: false);
+        if (EditorGUI.EndChangeCheck())
+        {
+
+        }
+
+
+            //if (GUI.Button(new Rect(headerRect.x, headerRect.y, headerRect.width, HEADER_COL_HEIGHT), "Add Pre Scroller"))
+            //{
+            //    if (posData.preScrollers.Length == 0)
+            //    {
+            //        posData.preScrollers = new EdgeScroller[1];
+            //    }
+
+            //    List<EdgeSpriteData> preScrollerList = posData.preScrollers[0].spriteData == null ? new List<EdgeSpriteData>() : posData.preScrollers[0].spriteData.ToList();
+            //    preScrollerList.Add(new EdgeSpriteData() { scale = new Vector4(1, 1, 0, 0) });
+            //    posData.preScrollers[0].spriteData = preScrollerList.ToArray();
+
+            //    selectedParticleAtlas.posData[selectedPosDataIndex] = posData;
+                
+            //    SaveTrip(particleAtlas);
+            //}
+
+            //if (GUI.Button(new Rect(headerRect.x, headerRect.y + HEADER_COL_HEIGHT, headerRect.width, HEADER_COL_HEIGHT), "Remove Pre Scroller"))
+            //{
+            //    List<EdgeSpriteData> preScrollerList = posData.preScrollers[0].spriteData.ToList();
+            //    preScrollerList.RemoveAt(selectedEdgeScrollIndex);
+            //    posData.preScrollers[0].spriteData = preScrollerList.ToArray();
+
+            //    particleAtlas.posData[selectedPosDataIndex] = posData;
+
+            //    SaveTrip(particleAtlas);
+            //}
+
+            //if (GUI.Button(new Rect(headerRect.x, headerRect.y + (HEADER_COL_HEIGHT * 2), headerRect.width, HEADER_COL_HEIGHT), "Add Post Scroller"))
+            //{
+            //    List<EdgeSpriteData> postScrollerList = posData.postScrollers == null ? new List<EdgeSpriteData>() : posData.postScrollers[0].spriteData.ToList();
+            //    postScrollerList.Add(new EdgeSpriteData() { scale = new Vector4(1, 1, 0 ,0) });
+            //    posData.postScrollers[0].spriteData = postScrollerList.ToArray();
+
+            //    selectedParticleAtlas.posData[selectedPosDataIndex] = posData;
+                
+            //    SaveTrip(particleAtlas);
+            //}
+
+            //if (GUI.Button(new Rect(headerRect.x, headerRect.y + (HEADER_COL_HEIGHT * 3), headerRect.width, HEADER_COL_HEIGHT), "Remove Post Scroller"))
+            //{
+            //    List<EdgeSpriteData> postScrollerList = posData.postScrollers[0].spriteData.ToList();
+            //    postScrollerList.RemoveAt(selectedEdgeScrollIndex);
+            //    posData.postScrollers[0].spriteData = postScrollerList.ToArray();
+
+            //    particleAtlas.posData[selectedPosDataIndex] = posData;
+
+            //    SaveTrip(particleAtlas);
+            //}
+
 
 
         if (posData.preScrollers == null || posData.preScrollers.Length == 0) return;
@@ -484,7 +525,6 @@ public class AtlasTripEditor : EditorWindow
         }
         GUI.EndScrollView();
     }
-
     private EdgeSpriteData[] DrawEdgeScrollers(EdgeSpriteData[] edgeScrollers, float containerHeight, Event e, ParticleAtlas particleAtlas, float startHeight, bool isPreScroller)
     {
         float quarterWidth = sidePanelRect.width * 0.25f;
@@ -895,11 +935,12 @@ public class AtlasTripEditor : EditorWindow
 
                             particleAtlas.posData[j] = posData;
 
-                            if (e.type == EventType.MouseUp)
+                            if (e.type == EventType.MouseUp && adjustingBar)
                             {
                                 adjustingBar = false;
                                 SaveOrderedPosData();
                                 SavePrevDepthIndices();
+                                ApplySelectedParticleChanges(ref posData, selectedParticleAtlas);
                             }
 
                         }
@@ -968,9 +1009,12 @@ public class AtlasTripEditor : EditorWindow
         }
         else
         {
+            if (selectedWidthType == ParticleWidthType.Sliced)
+            {
+                selectedWidthType = ParticleWidthType.Simple;
+            }
             widthType = selectedWidthType;
         }
-
         posData.widthType = widthType;
 
         switch (posData.widthType)

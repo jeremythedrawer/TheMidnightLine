@@ -15,75 +15,17 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: 91a76d1021d06b44e8a05e3ccbdfef68, type: 2}
   particleType: 1
   posData:
-  - preScrollers: []
-    postScrollers: []
-    quadScales:
-    - {x: 1, y: 1, z: 0, w: 0}
-    - {x: 11.349337, y: 1, z: 0, w: 0}
-    - {x: 1, y: 1, z: 56.288887, w: 0}
-    - {x: 1, y: 1, z: 0, w: 0}
-    - {x: 11.349337, y: 1, z: 0, w: 0}
-    - {x: 1, y: 1, z: 56.288887, w: 0}
-    - {x: 1, y: 1, z: 0, w: 0}
-    - {x: 11.349337, y: 1, z: 0, w: 0}
-    - {x: 1, y: 1, z: 56.288887, w: 0}
-    prevDepthIndices: {x: 0, y: 0}
-    widthType: 1
-    spawnState: 0
-    ticketCheckStart: 1
-    ticketCheckEnd: 4
-    quadCount: 18
-    particleCount: 2
-    minParticleIndex: 6
-    maxParticleIndex: 7
-    depth: 24
-    depthSize: 1
-    spriteIndex: 13
-    spritesPerParticle: 9
-    posY: 1.79
-    scaleY: 1
-    scaleX: 11.349337
-    randScale: 0
-  - preScrollers: []
-    postScrollers: []
-    quadScales:
-    - {x: 1, y: 1, z: 0, w: 0}
-    - {x: 6.757817, y: 1, z: 0, w: 0}
-    - {x: 1, y: 1, z: 56.266666, w: 0}
-    - {x: 1, y: 1, z: 0, w: 0}
-    - {x: 6.757817, y: 1, z: 0, w: 0}
-    - {x: 1, y: 1, z: 56.266666, w: 0}
-    - {x: 1, y: 1, z: 0, w: 0}
-    - {x: 6.757817, y: 1, z: 0, w: 0}
-    - {x: 1, y: 1, z: 56.266666, w: 0}
-    prevDepthIndices: {x: 0, y: 0}
-    widthType: 1
-    spawnState: 0
-    ticketCheckStart: 1
-    ticketCheckEnd: 4
-    quadCount: 18
-    particleCount: 2
-    minParticleIndex: 8
-    maxParticleIndex: 9
-    depth: 25
-    depthSize: 1
-    spriteIndex: 4
-    spritesPerParticle: 9
-    posY: 0.59
-    scaleY: 1
-    scaleX: 6.757817
-    randScale: 0
   - preScrollers:
     - spriteData:
-      - spriteIndex: 1
-        offset: {x: -0.91, y: 0, z: -21, w: 0}
-        scale: {x: 1, y: 1, z: 0, w: 0}
       - spriteIndex: 0
         offset: {x: -4, y: 0, z: 0, w: 0}
         scale: {x: 1, y: 1, z: 0, w: 0}
+      - spriteIndex: 1
+        offset: {x: -0.96, y: 0, z: -25.57, w: 0}
+        scale: {x: 1, y: 1, z: 0, w: 0}
       - spriteIndex: 3
-        offset: {x: -30, y: 0, z: 1, w: 0}
-        scale: {x: 4, y: 1, z: 0, w: 0}
+        offset: {x: -46.52, y: 0, z: 1, w: 0}
+        scale: {x: 6.1, y: 1, z: 0, w: 0}
     postScrollers: []
     quadScales:
     - {x: 1, y: 1, z: 0, w: 0}
@@ -97,27 +39,28 @@ MonoBehaviour:
     - {x: 1, y: 1, z: 57.388893, w: 1.7777777}
     prevDepthIndices: {x: 0, y: 0}
     widthType: 1
-    spawnState: 0
-    ticketCheckStart: 1
+    spawnState: 1
+    ticketCheckStart: 0
     ticketCheckEnd: 4
     quadCount: 18
     particleCount: 2
-    minParticleIndex: 10
-    maxParticleIndex: 11
-    depth: 26
+    minParticleIndex: 4
+    maxParticleIndex: 5
+    depth: 21
     depthSize: 1
     spriteIndex: 22
     spritesPerParticle: 9
-    posY: -1
+    posY: 0
+    posX: 0
     scaleY: 2
     scaleX: 6.647895
     randScale: 0
-  posDataIndexOffset: 0
+  posDataIndexOffset: 1
   spriteCount: 7
   isCompleted: 0
   spriteData:
   - uvSizeAndPos: {x: 0.17504883, y: 0.2199707, z: 0.5036621, w: 0.76953125}
-    worldPivotAndSize: {x: 0, y: 0, z: 3.9833333, w: 5.0055556}
+    worldPivotAndSize: {x: -0, y: -0, z: 3.9833333, w: 5.0055556}
   - uvSizeAndPos: {x: 0.20214844, y: 0.22021484, z: 0.67944336, w: 0.7692871}
     worldPivotAndSize: {x: -0, y: -0, z: 4.6, w: 5.0111113}
   - uvSizeAndPos: {x: 0.1484375, y: 0.018798828, z: 0, w: 0.49975586}
