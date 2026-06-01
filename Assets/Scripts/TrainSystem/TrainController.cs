@@ -7,6 +7,8 @@ using UnityEditor;
 using System.Collections.Generic;
 public class TrainController : MonoBehaviour
 {
+    const float VELOCITY_BUFFER = 0.5f;
+    const float DEFAULT_TARGET_KMPH = 40;
     public TrainSettingsSO settings;
     public TrainStatsSO stats;
     public TripSO trip;
@@ -26,21 +28,27 @@ public class TrainController : MonoBehaviour
     public bool closingSlideDoors;
     public int curStationIndex;
     public float metersTravelled;
-
     public bool skipMoveToStart;
 
     public static Dictionary<Collider2D, Carriage> carriageDict;
+
+    public float metersTravelledOnBezier;
     private void OnValidate()
     {
         SetBounds();
     }
+    private void OnEnable()
+    {
+        gameEventData.OnTicketInspect.RegisterListener(UpdateTicketInspectParams);
+    }
     private void OnDisable()
     {
+        gameEventData.OnTicketInspect.UnregisterListener(UpdateTicketInspectParams);
         trainCTS?.Cancel();
         trainCTS?.Dispose();
         trainCTS = null;
 
-        stats.curVelocity = 0;
+        stats.curVelocity = Vector2.zero;
     }
     private void Start()
     {
@@ -61,13 +69,15 @@ public class TrainController : MonoBehaviour
     }
     public void Init()
     {
-        StationSO stationData = trip.stationsDataArray[0];
+        stats.targetKMPH = trip.kmValues[0];
 
-        stats.curVelocity = KMPHToVelocity(stationData.targetKMPH);
-        stats.targetVelocity = 0;
+        stats.curVelocity.x = KMPHToVelocity(stats.targetKMPH);
+        stats.targetVelocity = Vector2.zero;
 
         stats.totalPassengersBoarded = 0;
         stats.slideDoorsAmountOpened = 0;
+
+        stats.targetElevatePos = Vector2.zero;
 
         trainCTS = new CancellationTokenSource();
 
@@ -95,15 +105,15 @@ public class TrainController : MonoBehaviour
     }
     private void ChooseState()
     {
-        if (stats.curVelocity < CLOSE_TO_STOP_VELOCITY && stats.targetVelocity == 0)
+        if (stats.curVelocity.x < CLOSE_TO_STOP_VELOCITY && stats.targetVelocity.x == 0)
         {
             SetState(TrainStates.Stopped);
         }
-        else if (stats.targetVelocity == 0)
+        else if ((stats.curVelocity.x - stats.targetVelocity.x) > VELOCITY_BUFFER)
         {
             SetState(TrainStates.Decelerating);
         }
-        else if (stats.curVelocity < stats.targetVelocity)
+        else if ((stats.curVelocity.x - stats.targetVelocity.x) < VELOCITY_BUFFER)
         {
             SetState(TrainStates.Accelerating);
         }
@@ -134,7 +144,7 @@ public class TrainController : MonoBehaviour
 
             case TrainStates.Decelerating:
             {
-                stats.prevPeakVelocity = stats.curVelocity;
+                stats.prevPeakVelocity = stats.curVelocity.x;
                 gameEventData.OnTrainDeceleration.Raise();
             }
             break;
@@ -148,7 +158,7 @@ public class TrainController : MonoBehaviour
             case TrainStates.Stopped:
             {
                 stats.targetPassengersBoarding = trip.nextStation.bystanderProfiles.Length + trip.nextStation.traitorProfiles.Length;
-                stats.curVelocity = 0;
+                stats.curVelocity = Vector2.zero;
                 if (trip.nextStation.isFrontOfTrain)
                 {
                     for (int i = 0; i < carriages.Length; i++)
@@ -176,7 +186,7 @@ public class TrainController : MonoBehaviour
         {
             case TrainStates.Accelerating:
             {
-                stats.curVelocity = IncreaseVelocity(stats.curVelocity, stats.targetVelocity, settings.acceleration);
+                stats.curVelocity.x = IncreaseVelocity(stats.curVelocity.x, stats.targetVelocity.x, settings.acceleration);
                 HandleTrainMeters();
             }
             break;
@@ -186,7 +196,7 @@ public class TrainController : MonoBehaviour
                 {
                     stats.targetStopPosition = nextStation_instance.transform.position.x;
                 }
-                stats.curVelocity = DecreaseVelocity(stats.curVelocity, stats.targetVelocity, stats.prevPeakVelocity, settings.deceleration, stats.targetStopPosition);
+                stats.curVelocity.x = DecreaseVelocity(stats.curVelocity.x, stats.targetVelocity.x, stats.prevPeakVelocity, settings.deceleration, stats.targetStopPosition);
                 HandleTrainMeters();
             }
             break;
@@ -195,12 +205,12 @@ public class TrainController : MonoBehaviour
                 if (trip.ticketsCheckedSinceLastStation >= trip.nextStation.ticketsToCheckBeforeSpawn)
                 {
                     nextStation_instance = stations[curStationIndex];
-                    float stationXPos = GetBrakeDistance(stats.curVelocity, settings.deceleration) + TRAIN_WORLD_POS;
+                    float stationXPos = GetBrakeDistance(stats.curVelocity.x, settings.deceleration) + TRAIN_WORLD_POS;
                     nextStation_instance.transform.position = new Vector3(stationXPos, 0, 0);
                     nextStation_instance.gameObject.SetActive(true);
                     nextStation_instance.SpawnNPCs();
-
-                    stats.targetVelocity = 0;
+                    gameEventData.OnStationSpawn.Raise();
+                    stats.targetVelocity = Vector2.zero;
                 }
                 HandleTrainMeters();
             }
@@ -219,8 +229,7 @@ public class TrainController : MonoBehaviour
                     {
                         curStationIndex++;
                         trip.nextStation = trip.stationsDataArray[curStationIndex];
-
-                        stats.targetVelocity = KMPHToVelocity(trip.nextStation.targetKMPH);
+                        stats.targetVelocity.x = KMPHToVelocity(DEFAULT_TARGET_KMPH);
                     }
                 }
             }
@@ -281,7 +290,8 @@ public class TrainController : MonoBehaviour
         int slideDoorsPerCarriage = carriages[0].exteriorSlideDoors.Length;
         int totalSlideDoors = carriages.Length * slideDoorsPerCarriage;
 
-        stats.slideDoorPositions = new float[totalSlideDoors];
+        stats.exteriorSlideDoorPositions = new float[totalSlideDoors];
+        stats.interiorSlideDoorPositions = new float[totalSlideDoors];
 
         for (int i = 0; i < carriages.Length; i++)
         {
@@ -290,7 +300,8 @@ public class TrainController : MonoBehaviour
             for (int j = 0; j < carriage.exteriorSlideDoors.Length; j++)
             {
                 int curIndex = i * slideDoorsPerCarriage + j;
-                stats.slideDoorPositions[curIndex] = carriage.exteriorSlideDoors[j].transform.position.x + offset;
+                stats.exteriorSlideDoorPositions[curIndex] = carriage.exteriorSlideDoors[j].transform.position.x + offset;
+                stats.interiorSlideDoorPositions[curIndex] = carriage.interiorSlideDoors[j].transform.position.x + offset;
             }
         }
     }
@@ -340,7 +351,7 @@ public class TrainController : MonoBehaviour
     }
     private void HandleTrainMeters()
     {
-        metersTravelled += stats.curVelocity * Time.deltaTime;
+        metersTravelled += stats.curVelocity.x * Time.deltaTime;
         if (metersTravelled > spawnData.bounds.size.x)
         {
             gameEventData.OnMetersAtSpawnBounds.Raise();
@@ -348,14 +359,29 @@ public class TrainController : MonoBehaviour
         }
         Shader.SetGlobalFloat("_MetersTravelled", metersTravelled);
     }
+    private void UpdateTicketInspectParams()
+    {
+        stats.targetElevatePos = trip.elevationValues[spyStats.ticketsCheckedTotal];
+        stats.targetKMPH = trip.kmValues[spyStats.ticketsCheckedTotal];
+        stats.targetVelocity.x = KMPHToVelocity(stats.targetKMPH);
+        metersTravelledOnBezier = 0;
+        MoveOnBezier().Forget();
+    }
+    private async UniTask MoveOnBezier()
+    {
+        while(metersTravelledOnBezier < stats.targetElevatePos.x)
+        {
+            stats.curVelocity.y = GetElevateVelocityBezier(stats.curVelocity, stats.targetElevatePos, ref metersTravelledOnBezier).y;
+            await UniTask.Yield();
+        }
+    }
     private async UniTask MoveTrainToStartPosition()
     {        
-        while (stats.curVelocity != 0)
+        while (stats.curVelocity.x != 0)
         {
-            stats.targetStopPosition += stats.curVelocity * Time.fixedDeltaTime;
+            stats.targetStopPosition += stats.curVelocity.x * Time.deltaTime;
             transform.position = new Vector3(stats.targetStopPosition, transform.position.y, transform.position.z);
-
-            await UniTask.Yield(PlayerLoopTiming.FixedUpdate, trainCTS.Token);
+            await UniTask.Yield(trainCTS.Token);
         }
         
         transform.position = new Vector3(TRAIN_WORLD_POS, transform.position.y, transform.position.z);
@@ -379,7 +405,7 @@ public class TrainController : MonoBehaviour
     {
         trainCTS?.Cancel();
 
-        stats.curVelocity = 0;
+        stats.curVelocity = Vector2.zero;
 
         transform.position = new Vector3(TRAIN_WORLD_POS, transform.position.y, transform.position.z);
 

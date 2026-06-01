@@ -98,7 +98,7 @@ public class GameplayUI : MonoBehaviour
         {
             SetState(State.Notepad);
         }
-        else if (spyStats.curState == SpyState.Ticket)
+        else if (SpyBrain.checkingTicket)
         {
             SetState(State.Ticket);
         }

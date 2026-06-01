@@ -76,10 +76,10 @@ public class SpawnMaster : MonoBehaviour
     }
     private void UpdateSpawnCompute(ref SpawnComputeData computeData)
     {
-        computeData.compute.SetFloat("_CamVelocity", camStats.curVelocity.x);
+        computeData.compute.SetVector("_CamVelocity", camStats.curVelocity);
         if (spyStats.curLocationState != LocationState.Station)
         {
-            computeData.compute.SetFloat("_TrainVelocity", trainStats.curVelocity);
+            computeData.compute.SetVector("_TrainVelocity", trainStats.curVelocity);
         }
         computeData.compute.SetFloat("_DeltaTime", Time.deltaTime);
         computeData.compute.Dispatch(computeData.updateKernel, computeData.groupSize, 1, 1);
@@ -229,7 +229,7 @@ public class SpawnMaster : MonoBehaviour
                 for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
                 {
                     uint newMoveInput = spawnComputeData.moveInputs[j];
-                    newMoveInput |= (int)ParticleStates.Dying;
+                    newMoveInput |= (int)ParticleMoveInputs.Dying;
                     spawnComputeData.moveInputs[j] = newMoveInput;
                 }
                 posData.spawnState = SpawnState.MovingOut;
@@ -240,7 +240,7 @@ public class SpawnMaster : MonoBehaviour
                 bool isDead = true;
                 for (int k = posData.minParticleIndex; k <= posData.maxParticleIndex; k++)
                 {
-                    if ((spawnComputeData.moveInputs[k] & (uint)ParticleStates.Dead) == 0)
+                    if ((spawnComputeData.moveInputs[k] & (uint)ParticleMoveInputs.Dead) == 0)
                     {
                         isDead = false;
                         break;
@@ -286,7 +286,7 @@ public class SpawnMaster : MonoBehaviour
             for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
             {
                 uint moveInputs = spawnComputeData.moveInputs[j];
-                if ((moveInputs & (uint)ParticleStates.Born) != 0)
+                if ((moveInputs & (uint)ParticleMoveInputs.Born) != 0)
                 {
                     particlesAvailable = false;
                     break;
@@ -360,7 +360,16 @@ public class SpawnMaster : MonoBehaviour
                         spawnComputeData.depthInputs[j] = new Vector4(posData.depth, posData.particleCount, posData.depthSize, posData.minParticleIndex);
                         spawnComputeData.offsetInputs[j].x = posData.posX;
                         spawnComputeData.offsetInputs[j].y = posData.posY;
-                        spawnComputeData.moveInputs[j] |= (uint)ParticleStates.Born;
+                        spawnComputeData.moveInputs[j] |= (uint)ParticleMoveInputs.Born;
+
+                        if (posData.elevate)
+                        {
+                            spawnComputeData.moveInputs[j] |= (uint)ParticleMoveInputs.Elevation;
+                        }
+                        else
+                        {
+                            spawnComputeData.moveInputs[j] &= ~((uint)ParticleMoveInputs.Elevation);
+                        }
                     }
                 }
                 break;
@@ -372,12 +381,23 @@ public class SpawnMaster : MonoBehaviour
                         spawnComputeData.depthInputs[j] = new Vector4(posData.depth, posData.particleCount, posData.depthSize, posData.minParticleIndex);
                         spawnComputeData.offsetInputs[j].x = posData.posX;
                         spawnComputeData.offsetInputs[j].y = posData.posY;
+                        
+                        if (posData.elevate)
+                        {
+                            spawnComputeData.moveInputs[j] |= (uint)ParticleMoveInputs.Elevation;
+                        }
+                        else
+                        {
+                            spawnComputeData.moveInputs[j] &= ~((uint)ParticleMoveInputs.Elevation);
+                        }
+                        spawnComputeData.moveInputs[j] |= (uint)ParticleMoveInputs.Born;
+
                         spawnComputeData.prevIndicesInputs[j] = posData.prevDepthIndices;
-                        spawnComputeData.moveInputs[j] |= (uint)ParticleStates.Born;
                     }
                 }
                 break;
             }
+
             particleAtlas.posData[i] = posData;
 
             if (i == particleAtlas.posData.Length - 1)
@@ -426,7 +446,7 @@ public class SpawnMaster : MonoBehaviour
 
         for (int i = delayedParticleData.posData.minParticleIndex; i <= delayedParticleData.posData.maxParticleIndex; i++)
         {
-            if ((delayedParticleData.spawnComputeData.moveInputs[i] & (uint)ParticleStates.Dead) != 0)
+            if ((delayedParticleData.spawnComputeData.moveInputs[i] & (uint)ParticleMoveInputs.Dead) != 0)
             {
                 delayParticleQueueClock = 0;
                 return;
@@ -501,7 +521,7 @@ public class SpawnMaster : MonoBehaviour
 
                     if (posData.spawnState != SpawnState.MovingIn) continue;
 
-                    if ((spawnData.scrollData.moveInputs[posData.minParticleIndex] & (uint)ParticleStates.FirstOutOfBounds) == 0) continue;
+                    if ((spawnData.scrollData.moveInputs[posData.minParticleIndex] & (uint)ParticleMoveInputs.FirstOutOfBounds) == 0) continue;
 
                     posData.spawnState = SpawnState.Alive;
                     particleAtlas.posData[j] = posData;
@@ -536,19 +556,21 @@ public class SpawnMaster : MonoBehaviour
 
         spawnData.active = false;
     }
-    private void DisposeCompute(ref SpawnComputeData spawnComputeData)
+    private void DisposeCompute(ref SpawnComputeData computeData)
     {
-        spawnComputeData.compute.SetFloat("_TrainVelocity", 0);
-        spawnComputeData.moveInputBuffer?.Release();
-        spawnComputeData.moveInputBuffer = null;
-        spawnComputeData.depthInputBuffer?.Release();
-        spawnComputeData.depthInputBuffer = null;
-        spawnComputeData.offsetInputBuffer?.Release();
-        spawnComputeData.offsetInputBuffer = null;
-        spawnComputeData.prevIndicesInputsBuffer?.Release();
-        spawnComputeData.prevIndicesInputsBuffer = null;
-        spawnComputeData.outputBuffer?.Release();
-        spawnComputeData.outputBuffer = null;
+        computeData.moveInputBuffer?.Release();
+        computeData.moveInputBuffer = null;
+        computeData.depthInputBuffer?.Release();
+        computeData.depthInputBuffer = null;
+        computeData.offsetInputBuffer?.Release();
+        computeData.offsetInputBuffer = null;
+        computeData.prevIndicesInputsBuffer?.Release();
+        computeData.prevIndicesInputsBuffer = null;
+        computeData.outputBuffer?.Release();
+        computeData.outputBuffer = null;
+
+        computeData.compute.SetVector("_CamVelocity", Vector4.zero);
+        computeData.compute.SetVector("_TrainVelocity", Vector4.zero);
 
     }
     private void UpdateDayNightCycle()

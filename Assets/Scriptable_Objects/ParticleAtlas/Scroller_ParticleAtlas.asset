@@ -18,13 +18,14 @@ MonoBehaviour:
   - preScrollers:
     - spriteData: []
     postScrollers: []
+    prefabGUID: 73003fd2c9941f8428e7816d1debbff5
     quadScales:
     - {x: 5.943304, y: 1, z: 0, w: 0}
     prevDepthIndices: {x: 0, y: 0}
     widthType: 2
     spawnState: 1
     ticketCheckStart: 0
-    ticketCheckEnd: 1
+    ticketCheckEnd: 9
     quadCount: 2
     particleCount: 2
     minParticleIndex: 0
@@ -38,10 +39,11 @@ MonoBehaviour:
     scaleY: 1
     scaleX: 5.943304
     randScale: 0
-    prefabGUID: 73003fd2c9941f8428e7816d1debbff5
+    elevate: 0
   - preScrollers:
     - spriteData: []
     postScrollers: []
+    prefabGUID: 88213bfcf45a1e14dbff676518b881d0
     quadScales:
     - {x: 11.909893, y: 1, z: 0, w: 0}
     prevDepthIndices: {x: 0, y: 0}
@@ -62,7 +64,32 @@ MonoBehaviour:
     scaleY: 1
     scaleX: 11.909893
     randScale: 0
-    prefabGUID: 88213bfcf45a1e14dbff676518b881d0
+    elevate: 0
+  - preScrollers:
+    - spriteData: []
+    postScrollers: []
+    prefabGUID: b1cb8e4805978934c88f2d54dccf7603
+    quadScales:
+    - {x: 13.897143, y: 1, z: 0, w: 0}
+    prevDepthIndices: {x: 2, y: 3}
+    widthType: 2
+    spawnState: 0
+    ticketCheckStart: 1
+    ticketCheckEnd: 9
+    quadCount: 2
+    particleCount: 2
+    minParticleIndex: 4
+    maxParticleIndex: 5
+    depth: 6
+    depthSize: 1
+    spriteIndex: 5
+    spritesPerParticle: 1
+    posY: -0.903
+    posX: -0
+    scaleY: 1
+    scaleX: 13.897143
+    randScale: 0
+    elevate: 0
   posDataIndexOffset: 2
   spriteCount: 8
   isCompleted: 0
@@ -78,7 +105,7 @@ MonoBehaviour:
   - uvSizeAndPos: {x: 0.5, y: 0.16308594, z: 0.49902344, w: 0.5498047}
     worldPivotAndSize: {x: -0, y: -0, z: 5.688889, w: 1.8555555}
   - uvSizeAndPos: {x: 0.4272461, y: 0.24804688, z: 0.00048828125, w: 0.4555664}
-    worldPivotAndSize: {x: -0, y: -2.8222222, z: 4.861111, w: 2.8222222}
+    worldPivotAndSize: {x: 0, y: 2.8222222, z: 4.861111, w: 2.8222222}
   - uvSizeAndPos: {x: 0.021972656, y: 0.015136719, z: 0.04345703, w: 0.9477539}
     worldPivotAndSize: {x: 0, y: 0, z: 0.25, w: 0.17222221}
   - uvSizeAndPos: {x: 0.21923828, y: 0.015136719, z: 0.06542969, w: 0.9477539}

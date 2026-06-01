@@ -16,8 +16,8 @@ float3 _SpawnerSize;
 
 uint _ParticleCount;
 
-float _CamVelocity;
-float _TrainVelocity;
+float2 _CamVelocity;
+float2 _TrainVelocity;
 
 float _DeltaTime;
 
@@ -72,9 +72,9 @@ void _ZoneUpdate(uint id : SV_DispatchThreadID)
     float4 output = _ZoneOutput[id];
     uint moveInput = _MoveInput[id];
     
-    float camVelocity = _CamVelocity * (1 - output.w) * _DeltaTime;
-    float trainVelocity = _TrainVelocity * output.w * _DeltaTime;
-    float velocity = camVelocity + trainVelocity;
+    float2 camVelocity = _CamVelocity * (1 - output.w) * _DeltaTime;
+    float2 trainVelocity = _TrainVelocity * output.w * _DeltaTime;
+    float2 velocity = camVelocity + trainVelocity;
 
     if (output.x < _SpawnerMinPos.x)
     {
@@ -94,7 +94,10 @@ void _ZoneUpdate(uint id : SV_DispatchThreadID)
     }
     
     uint isDead = (moveInput >> DEAD_BIT) & 1;
-    output.x -= velocity * (1 - isDead);
+    uint willElevate = (moveInput >> ELEVATION_BIT) & 1;
+    
+    velocity.y *= willElevate;
+    output.xy -= velocity.xy * (1 - isDead);
     
     _ZoneOutput[id] = output;
 }

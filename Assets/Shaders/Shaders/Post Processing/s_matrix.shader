@@ -34,7 +34,6 @@ Shader "Custom/s_matrix"
 
 			horizon = BayerX8(horizon, input.texcoord.y * _ScreenParams.y);
 
-
 			float final = horizon + stars;
 
 			return half4(final.xxx + _MainColor,0);

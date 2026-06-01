@@ -324,8 +324,6 @@ public class SpyBrain : MonoBehaviour
                     stats.boardingStationName = trip.stationsDataArray[npcTicketCheck.profile.boardingStationIndex].name;
                     stats.disembarkingStationName = trip.stationsDataArray[npcTicketCheck.profile.disembarkingStationIndex].name;
                     canExitCheckTicket = false;
-
-
                     stats.ticketsCheckedTotal++;
                     checkingTicket = true;
 

@@ -41,12 +41,13 @@ public class ParallaxController : MonoBehaviour
     {
         if (bounds.max.x > spawnData.bounds.min.x)
         {
-            float parallaxVelocity = (camStats.curVelocity.x * Time.deltaTime * (1 - parallaxFactor));
+            Vector2 parallaxVelocity = (camStats.curVelocity * Time.deltaTime * (1 - parallaxFactor));
             if (spyStats.curLocationState != Spy.LocationState.Station)
             {
                 parallaxVelocity += trainStats.curVelocity * Time.deltaTime * parallaxFactor;
             }
-            worldPos.x -= parallaxVelocity;
+            worldPos.x -= parallaxVelocity.x;
+            worldPos.y -= parallaxVelocity.y;
 
         }
     }

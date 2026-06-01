@@ -9,7 +9,9 @@ public class TripSO : ScriptableObject
     public NPCBrain[] npc_prefabsArray;
 
     public float[] dayNightValues;
-    public float[] elevationValues;
+    public Vector2[] elevationValues;
+    public float[] kmValues;
+
     [Header("Settings")]
     public int minStationsTraitorsTravel = 2;
     public int maxStationsTraitorsTravel = 4;

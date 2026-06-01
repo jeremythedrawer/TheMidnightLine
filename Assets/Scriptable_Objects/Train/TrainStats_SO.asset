@@ -12,14 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6c10404039fafce499ae801caf0d85e7, type: 3}
   m_Name: TrainStats_SO
   m_EditorClassIdentifier: 
-  curVelocity: 0
-  targetVelocity: 0
-  prevPeakVelocity: 0
-  targetStopPosition: 0
-  distToSpawnNextStation: 0
-  trainToMaxSpawnDist: 54.385864
+  curVelocity: {x: 0, y: 0}
+  targetVelocity: {x: 6.166667, y: 0}
+  prevPeakVelocity: 11.111112
+  targetStopPosition: 308.2
+  targetKMPH: 22.2
+  targetElevatePos: {x: 1, y: 1}
+  distToSpawnNextStation: 86.47077
+  trainToMaxSpawnDist: 33.77777
   totalPassengersBoarded: 0
-  targetPassengersBoarding: 37
+  targetPassengersBoarding: 28
   slideDoorsAmountOpened: 0
   depthSections:
     min: 3
@@ -30,6 +32,7 @@ MonoBehaviour:
     backMax: 10
     carriageSeat: 14
   totalBounds:
-    m_Center: {x: -356.32974, y: 1.2422446, z: 1.5}
-    m_Extent: {x: 43.730865, y: 1.8234221, z: 1.5}
-  slideDoorPositions: []
+    m_Center: {x: 142.33337, y: -0.06999993, z: 1.5}
+    m_Extent: {x: 19.8434, y: 0.9574444, z: 1.5}
+  exteriorSlideDoorPositions: []
+  interiorSlideDoorPositions: []

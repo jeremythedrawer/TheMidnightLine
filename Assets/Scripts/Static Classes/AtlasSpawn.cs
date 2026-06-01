@@ -45,13 +45,15 @@ public static class AtlasSpawn
     public static uint[] argsSpawn = new uint[5] { 6, 0, 0, 0, 0 };
 
 
-    [Flags] public enum ParticleStates
+    [Flags] public enum ParticleMoveInputs
     {
         None = 0,
         Born = 1 << 0,
         Dying = 1 << 1,
         Dead = 1 << 2,
         FirstOutOfBounds = 1 << 3,
+        Elevation = 1 << 4,
+
     }
     public enum ParticleType
     { 
@@ -93,6 +95,7 @@ public static class AtlasSpawn
         public EdgeScroller[] preScrollers;
         public EdgeScroller[] postScrollers;
 
+        public string prefabGUID;
         public Vector4[] quadScales;
 
         public Vector2Int prevDepthIndices;
@@ -125,7 +128,7 @@ public static class AtlasSpawn
         public float scaleX;
         public float randScale;
 
-        public string prefabGUID;
+        public bool elevate;
     }
 
     [Serializable] public struct ParticleSpritesData

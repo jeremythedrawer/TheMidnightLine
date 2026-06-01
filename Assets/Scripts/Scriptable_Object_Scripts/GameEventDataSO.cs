@@ -11,5 +11,6 @@ public class GameEventDataSO : ScriptableObject
     public GameEvent OnTrainDeceleration;
     public GameEvent OnTicketInspect;
     public GameEvent OnMetersAtSpawnBounds;
+    public GameEvent OnStationSpawn;
 
 }

@@ -1,16 +1,16 @@
-using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using static Train;
-using static UnityEngine.GraphicsBuffer;
 
 [CreateAssetMenu(fileName = "TrainStats_SO", menuName = "Midnight Line SOs / Train Stats SO")]
 public class TrainStatsSO : ScriptableObject
 {
-    public float curVelocity;
-    public float targetVelocity;
+    public Vector2 curVelocity;
+    public Vector2 targetVelocity;
     public float prevPeakVelocity;
     public float targetStopPosition;
+    public float targetKMPH;
+
+    public Vector2 targetElevatePos;
 
     public float distToSpawnNextStation;
 
@@ -24,5 +24,6 @@ public class TrainStatsSO : ScriptableObject
     public DepthSections depthSections;
     public Bounds totalBounds;
 
-    public float[] slideDoorPositions;    
+    public float[] exteriorSlideDoorPositions;    
+    public float[] interiorSlideDoorPositions;    
 }

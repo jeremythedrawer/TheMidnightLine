@@ -4,7 +4,7 @@
 #define DYING_BIT 1
 #define DEAD_BIT 2
 #define FIRST_OUT_OF_BOUNDS_BIT 3
-
+#define ELEVATION_BIT 4
 
 static const float FORE_MIN = 1.0;
 static const float FORE_SIZE = 1.0;

@@ -61,7 +61,6 @@ public class NPCBrain : MonoBehaviour
 
     public int smokerRoomIndex;
     public int seatPosIndex;
-    public int selectedProfileIndex;
 
     public int curFrameIndex;
     public int prevAtlasIndex;
@@ -86,17 +85,16 @@ public class NPCBrain : MonoBehaviour
     {
         gameEventData.OnStationArrival.RegisterListener(PrepareToBoardTrain);
 
-        gameEventData.OnTrainDeceleration.RegisterListener(PrepareToDisembarkTrain);
+        gameEventData.OnStationSpawn.RegisterListener(PrepareToDisembarkTrain);
     }
     private void OnDisable()
     {
-        gameEventData.OnTrainDeceleration.UnregisterListener(PrepareToDisembarkTrain);
+        gameEventData.OnStationSpawn.UnregisterListener(PrepareToDisembarkTrain);
         gameEventData.OnStationArrival.UnregisterListener(PrepareToBoardTrain);
     }
     private void Start()
     {
         seatPosIndex = int.MaxValue;
-        selectedProfileIndex = int.MaxValue;
         atlas = atlasRenderer.atlas;
 
         rigidBody.includeLayers = layerSettings.stationMask;
@@ -124,7 +122,7 @@ public class NPCBrain : MonoBehaviour
         {
             SetState(NPCState.TicketCheck);
         }
-        else if (Mathf.Abs(targetDist) > CLOSE_TO_TARGET_BUFFER)
+        else if (Mathf.Abs(targetDist) >= boxCollider.bounds.extents.x)
         {
             SetState(NPCState.Walking);
         }
@@ -458,14 +456,28 @@ public class NPCBrain : MonoBehaviour
             {
                 float shortestDist = float.MaxValue;
                 float selectedSlideDoorPos = float.MaxValue;
-                for (int i = 0; i < trainStats.slideDoorPositions.Length; i++)
-                {
-                    float dist = Mathf.Abs(trainStats.slideDoorPositions[i] - transform.position.x);
 
-                    if (dist < shortestDist)
+                if (trip.nextStation.isFrontOfTrain)
+                {
+                    for (int i = 0; i < trainStats.exteriorSlideDoorPositions.Length; i++)
                     {
+                        float dist = Mathf.Abs(trainStats.exteriorSlideDoorPositions[i] - transform.position.x);
+
+                        if (dist > shortestDist) continue;
                         shortestDist = dist;
-                        selectedSlideDoorPos = trainStats.slideDoorPositions[i];
+                        selectedSlideDoorPos = trainStats.exteriorSlideDoorPositions[i];
+
+                    }
+                }
+                else
+                {
+                    for (int i = 0; i < trainStats.interiorSlideDoorPositions.Length; i++)
+                    {
+                        float dist = Mathf.Abs(trainStats.interiorSlideDoorPositions[i] - transform.position.x);
+
+                        if (dist > shortestDist) continue;
+                        shortestDist = dist;
+                        selectedSlideDoorPos = trainStats.interiorSlideDoorPositions[i];
                     }
                 }
 
