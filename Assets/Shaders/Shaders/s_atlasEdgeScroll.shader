@@ -70,7 +70,7 @@ Shader "Custom/s_atlasEdgeScroll"
                 objPos += pivot;
                 objPos += edgeOffset.xy;
 
-                float3 worldPos = float3(p.xyz + objPos, p.z + edgeOffset.z);
+                float3 worldPos = float3(p.xy + objPos, p.z + edgeOffset.z);
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = QUAD_TRIANGLE_OFFSETS[quadVertexID];

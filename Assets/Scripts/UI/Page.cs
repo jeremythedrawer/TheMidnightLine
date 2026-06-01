@@ -48,7 +48,7 @@ public class Page : MonoBehaviour
         behaviour0_renderer.SetText(npcData.behaviourDescDict[behaviours0]);
         behaviour1_renderer.SetText(npcData.behaviourDescDict[behaviours1]);
 
-        mugshot_renderer.UpdateSpriteInputs(ref mugshot_renderer.atlas.simpleSprites[traitorProfile.coveredMugshotIndex]);
+        mugshot_renderer.UpdateSpriteInputs(mugshot_renderer.atlas.simpleSprites[traitorProfile.coveredMugshotIndex]);
 
         chosenStationIndex = -1;
         chosenStation_renderer.SetText("");

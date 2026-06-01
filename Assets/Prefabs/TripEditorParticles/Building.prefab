@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &6118550194028867840
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6240214171154716957}
+  - component: {fileID: 2150744849369591105}
+  - component: {fileID: 442350294545246999}
+  m_Layer: 0
+  m_Name: Building
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6240214171154716957
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6118550194028867840}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 99.36, y: 0, z: -19.99}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2150744849369591105
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6118550194028867840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 2
+  batchKey:
+    texture: {fileID: 2800000, guid: 313de085264ddc848953f5be439b2d09, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
+    depthOrder: -19
+  atlas: {fileID: 11400000, guid: 7bd15aca28e0873468552b14aa4bd880, type: 2}
+  camStats: {fileID: 0}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  flipX: 0
+  flipY: 0
+  width: 2.81
+  height: 15.12
+  text: 
+  kerning: 1.1
+  spacing: 1
+  scrollSize: 0
+  textToCenter: 0
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.41015625, y: 0.28027344, z: 0.0029296875, w: 0.43359375}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 2.3333333, y: 1.5944444, z: 1}
+    index: 3
+  bounds:
+    m_Center: {x: 100.98683, y: 2.7283335, z: -19.89}
+    m_Extent: {x: 1.6268332, y: 2.7283335, z: 0.1}
+  worldPivotAndSize: {x: 0, y: 0, z: 2.3333333, w: 1.5944444}
+  uvSizeAndPosition: {x: 0.41015625, y: 0.28027344, z: 0.0029296875, w: 0.43359375}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 1.6268332, y: 2.7283335, z: 0.1}
+  worldPivotsAndSizes:
+  - {x: 0, y: 0, z: 0.19999999, w: 0}
+  - {x: -0.19999999, y: 0, z: 1.0333333, w: 0}
+  - {x: -3.1036665, y: 0, z: 0.14999999, w: 0}
+  - {x: 0, y: -0, z: 0.19999999, w: 0.33333334}
+  - {x: -0.19999999, y: -0, z: 1.0333333, w: 0.33333334}
+  - {x: -3.1036665, y: -0, z: 0.14999999, w: 0.33333334}
+  - {x: 0, y: -5.04, z: 0.19999999, w: 0.41666666}
+  - {x: -0.19999999, y: -5.04, z: 1.0333333, w: 0.41666666}
+  - {x: -3.1036665, y: -5.04, z: 0.14999999, w: 0.41666666}
+  uvSizesAndPositions:
+  - {x: 0.03515625, y: 0, z: 0.28808594, w: 0.76660156}
+  - {x: 0.18164062, y: 0, z: 0.3232422, w: 0.76660156}
+  - {x: 0.026367184, y: 0, z: 0.5048828, w: 0.76660156}
+  - {x: 0.03515625, y: 0.05859375, z: 0.28808594, w: 0.76660156}
+  - {x: 0.18164062, y: 0.05859375, z: 0.3232422, w: 0.76660156}
+  - {x: 0.026367184, y: 0.05859375, z: 0.5048828, w: 0.76660156}
+  - {x: 0.03515625, y: 0.07324219, z: 0.28808594, w: 0.8251953}
+  - {x: 0.18164062, y: 0.07324219, z: 0.3232422, w: 0.8251953}
+  - {x: 0.026367184, y: 0.07324219, z: 0.5048828, w: 0.8251953}
+  scalesAndFlips:
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 2.81, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 15.12, z: 1, w: 1}
+  - {x: 2.81, y: 15.12, z: 1, w: 1}
+  - {x: 1, y: 15.12, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 2.81, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  customs:
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 3
+  prevSpriteIndexFlipV: 3
+  isAnimating: 0
+  quadCount: 0
+  hasText: 0
+--- !u!114 &442350294545246999
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 6118550194028867840}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27bd6af9ba3f0e2478e744ca408714d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TripEditorPrefab
+  mainRenderer: {fileID: 2150744849369591105}
+  preScrollers: []
+  postScrollers: []

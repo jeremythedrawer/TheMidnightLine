@@ -72,8 +72,8 @@ Shader "Custom/s_atlasScroll"
 
                 objPos *= size;
                 objPos *= quadScale;
-                objPos += pivot;
-                objPos += pivotScale;
+                objPos -= pivot;
+                //objPos += pivotScale;
 
                 float3 worldPos = float3(p.xy + objPos, p.z);
 

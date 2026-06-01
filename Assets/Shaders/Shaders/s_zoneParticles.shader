@@ -24,7 +24,9 @@ Shader "Custom/s_zoneParticles"
                 float4 particle             : TEXCOORD1;
                 float4 quadAndPivotScales   : TEXCOORD2;
                 float4 uvSizeAndPos         : TEXCOORD3;
+                float3 worldPos         : TEXCOORD4;
             };
+
 
             StructuredBuffer<float4> _Particles;
             StructuredBuffer<ParticleSprite> _SpriteData;
@@ -67,11 +69,11 @@ Shader "Custom/s_zoneParticles"
 
                 objPos *= size;
                 objPos *= quadScale;
-                objPos += pivot;
+                objPos -= pivot;
                 objPos += pivotScale;
 
                 float3 worldPos = float3(p.xy + objPos, p.z);
-
+                o.worldPos = worldPos;
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = QUAD_TRIANGLE_OFFSETS[quadVertexID];
                 o.particle = p;
@@ -84,6 +86,7 @@ Shader "Custom/s_zoneParticles"
             {
                 float4 p = i.particle;
 
+
                 float2 quadScale = i.quadAndPivotScales.xy;
                 float2 uvSize = i.uvSizeAndPos.xy;
                 float2 uvPos = i.uvSizeAndPos.zw;
@@ -95,7 +98,8 @@ Shader "Custom/s_zoneParticles"
 
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
                 clip(tex.a - 0.001);
-
+               // return half4((distance(p.xyz, i.worldPos)).xxx,1);
+                
                 half color = tex.r;
 
                 int maxPos = BACK_MIN + BACK_SIZE;

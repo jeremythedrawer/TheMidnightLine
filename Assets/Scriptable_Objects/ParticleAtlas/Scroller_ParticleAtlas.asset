@@ -15,7 +15,8 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
   particleType: 1
   posData:
-  - preScrollers: []
+  - preScrollers:
+    - spriteData: []
     postScrollers: []
     quadScales:
     - {x: 5.943304, y: 1, z: 0, w: 0}
@@ -23,7 +24,7 @@ MonoBehaviour:
     widthType: 2
     spawnState: 1
     ticketCheckStart: 0
-    ticketCheckEnd: 3
+    ticketCheckEnd: 1
     quadCount: 2
     particleCount: 2
     minParticleIndex: 0
@@ -33,11 +34,13 @@ MonoBehaviour:
     spriteIndex: 3
     spritesPerParticle: 1
     posY: 2.353
-    posX: 0
+    posX: -0
     scaleY: 1
     scaleX: 5.943304
     randScale: 0
-  - preScrollers: []
+    prefabGUID: 73003fd2c9941f8428e7816d1debbff5
+  - preScrollers:
+    - spriteData: []
     postScrollers: []
     quadScales:
     - {x: 11.909893, y: 1, z: 0, w: 0}
@@ -55,32 +58,11 @@ MonoBehaviour:
     spriteIndex: 2
     spritesPerParticle: 1
     posY: -0.903
-    posX: 0
+    posX: -0
     scaleY: 1
     scaleX: 11.909893
     randScale: 0
-  - preScrollers: []
-    postScrollers: []
-    quadScales:
-    - {x: 13.897143, y: 1, z: 0, w: 0}
-    prevDepthIndices: {x: 2, y: 3}
-    widthType: 2
-    spawnState: 0
-    ticketCheckStart: 1
-    ticketCheckEnd: 5
-    quadCount: 2
-    particleCount: 2
-    minParticleIndex: 6
-    maxParticleIndex: 7
-    depth: 6
-    depthSize: 1
-    spriteIndex: 5
-    spritesPerParticle: 1
-    posY: -0.903
-    posX: 0
-    scaleY: 1
-    scaleX: 13.897143
-    randScale: 0
+    prefabGUID: 88213bfcf45a1e14dbff676518b881d0
   posDataIndexOffset: 2
   spriteCount: 8
   isCompleted: 0
@@ -90,9 +72,9 @@ MonoBehaviour:
   - uvSizeAndPos: {x: 0.10449219, y: 0.115722656, z: 0.44873047, w: 0.8828125}
     worldPivotAndSize: {x: -0, y: -0, z: 1.1888889, w: 1.3166667}
   - uvSizeAndPos: {x: 0.49853516, y: 0.0625, z: 0, w: 0.8105469}
-    worldPivotAndSize: {x: -0, y: -0.7111111, z: 5.672222, w: 0.7111111}
+    worldPivotAndSize: {x: 0, y: 0.7111111, z: 5.672222, w: 0.7111111}
   - uvSizeAndPos: {x: 0.99902344, y: 0.09716797, z: 0, w: 0.7128906}
-    worldPivotAndSize: {x: -0, y: -0, z: 11.366667, w: 1.1055555}
+    worldPivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.1055555}
   - uvSizeAndPos: {x: 0.5, y: 0.16308594, z: 0.49902344, w: 0.5498047}
     worldPivotAndSize: {x: -0, y: -0, z: 5.688889, w: 1.8555555}
   - uvSizeAndPos: {x: 0.4272461, y: 0.24804688, z: 0.00048828125, w: 0.4555664}

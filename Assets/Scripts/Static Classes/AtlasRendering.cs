@@ -279,8 +279,12 @@ public static class AtlasRendering
             scaleFlipCQuad
         };
     }
-    public static Vector4[] GetQuadScalesNineSlice(float width, float height, float centerWidth, float centerHeight)
+    public static Vector4[] GetQuadScalesNineSlice(float width, float height, SliceSprite sliceSprite)
     {
+
+        float centerWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
+        float centerHeight = sliceSprite.sprite.worldSize.y - sliceSprite.worldSlices.z - sliceSprite.worldSlices.w;
+
         float pivotWidth = (width - 1) * centerWidth;
         float pivotHeight = (height - 1) * centerHeight;
         return new Vector4[]
@@ -313,5 +317,28 @@ public static class AtlasRendering
         worldPivotsAndSizes[8].y = topRowPos;
 
         return worldPivotsAndSizes;
+    }
+
+    public static Vector4[] SetWorldPivotAndSizes(SliceSprite sliceSprite, float width, float height)
+    {
+        float centerWorldSliceWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
+        float centerWorldSliceHeight = sliceSprite.sprite.worldSize.y - sliceSprite.worldSlices.z - sliceSprite.worldSlices.w;
+
+        float rightColPos = sliceSprite.worldSlices.x + (centerWorldSliceWidth * width);
+        float topRowPos = sliceSprite.worldSlices.z + (centerWorldSliceHeight * height);
+        return new Vector4[]
+        {
+            new Vector4(0, 0, sliceSprite.worldSlices.x, sliceSprite.worldSlices.z),
+            new Vector4(-sliceSprite.worldSlices.x, 0, centerWorldSliceWidth, sliceSprite.worldSlices.z),
+            new Vector4(-rightColPos, 0, sliceSprite.worldSlices.y, sliceSprite.worldSlices.z),
+
+            new Vector4(0, -sliceSprite.worldSlices.z, sliceSprite.worldSlices.x, centerWorldSliceHeight),
+            new Vector4(-sliceSprite.worldSlices.x, -sliceSprite.worldSlices.z, centerWorldSliceWidth, centerWorldSliceHeight),
+            new Vector4(-rightColPos, -sliceSprite.worldSlices.z, sliceSprite.worldSlices.y, centerWorldSliceHeight),
+
+            new Vector4(0, -topRowPos, sliceSprite.worldSlices.x, sliceSprite.worldSlices.w),
+            new Vector4(-sliceSprite.worldSlices.x, -topRowPos, centerWorldSliceWidth, sliceSprite.worldSlices.w),
+            new Vector4(-rightColPos, -topRowPos, sliceSprite.worldSlices.y, sliceSprite.worldSlices.w),
+        };
     }
 }

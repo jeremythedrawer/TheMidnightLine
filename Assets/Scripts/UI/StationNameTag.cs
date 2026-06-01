@@ -42,7 +42,7 @@ public class StationNameTag : MonoBehaviour
             background_renderer.enabled = true;
             background_renderer.transform.localPosition = backgroundLocalPos;
             float worldWidth = text_renderer.bounds.size.x + PADDING * 2;
-            background_renderer.SetNineSliceWidthFromWorldSpace(worldWidth, ref background_renderer.slicedSprite);
+            background_renderer.SetNineSliceWidthFromWorldSpace(worldWidth, background_renderer.atlas.slicedSprites[background_renderer.spriteIndex]);
         }
     }
 }

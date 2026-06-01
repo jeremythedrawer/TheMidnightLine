@@ -193,7 +193,7 @@ public class Notepad : MonoBehaviour
             break;
             case NotepadData.State.Writing:
             {
-                leftHand_renderer.UpdateSpriteInputs(ref leftHand_renderer.atlas.motionSprites[rotatePencil_clip.keyframeStartIndex].sprite);
+                leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[rotatePencil_clip.keyframeStartIndex].sprite);
                 
                 curStationNameBounds = activePage.GetStationNameBounds();
 

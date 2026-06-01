@@ -65,7 +65,6 @@ public class AtlasRenderer : MonoBehaviour
     public CancellationTokenSource ctsOneShot;
 
     [Header("Sliced Generated")]
-    public SliceSprite slicedSprite;
     public int quadCount;
 
 
@@ -82,7 +81,7 @@ public class AtlasRenderer : MonoBehaviour
                 if (atlas.simpleSprites.Length == 0) { Debug.LogWarning("Atlas does not have Simple Sprites"); return; }
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.simpleSprites.Length - 1);
                 sprite = atlas.simpleSprites[spriteIndex];
-                UpdateSpriteInputs(ref sprite);
+                UpdateSpriteInputs(sprite);
                 UpdateBounds();
             }
             break;
@@ -93,7 +92,7 @@ public class AtlasRenderer : MonoBehaviour
                 if (atlas.motionSprites.Length == 0) { Debug.LogWarning("Atlas does not have Motion Sprites"); return; }
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.motionSprites.Length - 1);
                 sprite = atlas.motionSprites[spriteIndex].sprite;
-                UpdateSpriteInputs(ref sprite);
+                UpdateSpriteInputs(sprite);
                 UpdateBounds();
             }
             break;
@@ -103,8 +102,7 @@ public class AtlasRenderer : MonoBehaviour
             {
                 if (atlas.slicedSprites.Length == 0) { Debug.LogWarning("Atlas does not have Sliced Sprites"); return; }
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.slicedSprites.Length - 1);
-                slicedSprite = atlas.slicedSprites[spriteIndex];
-                UpdateSlicedSpriteInputs(ref slicedSprite);
+                UpdateSlicedSpriteInputs(atlas.slicedSprites[spriteIndex]);
                 UpdateBounds();
             }
             break;
@@ -176,7 +174,7 @@ public class AtlasRenderer : MonoBehaviour
         }
 #endif
     }
-    public void UpdateSpriteInputs(ref SimpleSprite newSprite)
+    public void UpdateSpriteInputs(SimpleSprite newSprite)
     {
         if (rendererType > AtlasRendererType.TextWorld)
         {
@@ -240,29 +238,13 @@ public class AtlasRenderer : MonoBehaviour
     {        
         bounds.center = transform.position + boundsOffset;
     }
-    public void UpdateSlicedSpriteInputs(ref SliceSprite sliceSprite)
+    public void UpdateSlicedSpriteInputs(SliceSprite sliceSprite)
     {
-        uvSizesAndPositions = sliceSprite.uvSizeAndPos;
+        uvSizesAndPositions = new Vector4[9];
+        Array.Copy(sliceSprite.uvSizeAndPos, uvSizesAndPositions, sliceSprite.uvSizeAndPos.Length);
+        
+        worldPivotsAndSizes = SetWorldPivotAndSizes(sliceSprite, width, height);
 
-        float centerWorldSliceWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
-        float centerWorldSliceHeight = sliceSprite.sprite.worldSize.y - sliceSprite.worldSlices.z - sliceSprite.worldSlices.w;
-
-        float rightColPos = sliceSprite.worldSlices.x + (centerWorldSliceWidth * width);
-        float topRowPos = sliceSprite.worldSlices.z + (centerWorldSliceHeight * height);
-        worldPivotsAndSizes = new Vector4[]
-        {
-            new Vector4(0, 0, sliceSprite.worldSlices.x, sliceSprite.worldSlices.z),
-            new Vector4(-sliceSprite.worldSlices.x, 0, centerWorldSliceWidth, sliceSprite.worldSlices.z),
-            new Vector4(-rightColPos, 0, sliceSprite.worldSlices.y, sliceSprite.worldSlices.z),
-
-            new Vector4(0, -sliceSprite.worldSlices.z, sliceSprite.worldSlices.x, centerWorldSliceHeight),
-            new Vector4(-sliceSprite.worldSlices.x, -sliceSprite.worldSlices.z, centerWorldSliceWidth, centerWorldSliceHeight),
-            new Vector4(-rightColPos, -sliceSprite.worldSlices.z, sliceSprite.worldSlices.y, centerWorldSliceHeight),
-
-            new Vector4(0, -topRowPos, sliceSprite.worldSlices.x, sliceSprite.worldSlices.w),
-            new Vector4(-sliceSprite.worldSlices.x, -topRowPos, centerWorldSliceWidth, sliceSprite.worldSlices.w),
-            new Vector4(-rightColPos, -topRowPos, sliceSprite.worldSlices.y, sliceSprite.worldSlices.w),
-        };
         scalesAndFlips = GetScaleAndFlipSliceNineSliceArray(width, height);
 
         customs = new Vector4[9];
@@ -270,26 +252,27 @@ public class AtlasRenderer : MonoBehaviour
         {
             customs[i] = custom;
         }
-        bounds.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldSliceWidth * width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldSliceHeight * height) + sliceSprite.worldSlices.w, 0.2f);
+        Vector4 centerWorldPivot = worldPivotsAndSizes[4];
+        bounds.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldPivot.z * width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldPivot.w * height) + sliceSprite.worldSlices.w, 0.2f);
         boundsOffset = bounds.size * 0.5f;
 
         if (boxCollider == null) return;
         boxCollider.size = bounds.size;
         boxCollider.offset = boundsOffset;
     }
-    public void SetWidthFromWorldSpace(float worldWidth, ref SimpleSprite sprite)
+    public void SetWidthFromWorldSpace(float worldWidth, SimpleSprite sprite)
     {
         width = worldWidth / sprite.worldSize.x;
-        UpdateSpriteInputs(ref sprite);
+        UpdateSpriteInputs(sprite);
         UpdateBounds();
     }
-    public void SetNineSliceWidthFromWorldSpace(float worldWidth, ref SliceSprite sliceSprite)
+    public void SetNineSliceWidthFromWorldSpace(float worldWidth, SliceSprite sliceSprite)
     {
         float centerWorldSliceWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
 
 
         width = worldWidth / centerWorldSliceWidth;
-        UpdateSlicedSpriteInputs(ref sliceSprite);
+        UpdateSlicedSpriteInputs(sliceSprite);
         UpdateBounds();
     }
     public void PlayClip(ref AtlasClip clip, Transform markerTransform = null)
@@ -311,7 +294,7 @@ public class AtlasRenderer : MonoBehaviour
             markerTransform.localPosition = markerPos;
         }
         sprite = motionSprite.sprite;
-        UpdateSpriteInputs(ref sprite);
+        UpdateSpriteInputs(sprite);
         isAnimating = true;
         
     }
@@ -336,7 +319,7 @@ public class AtlasRenderer : MonoBehaviour
             markerTransform.localPosition = markerPos;
         }
         sprite = motionSprite.sprite;
-        UpdateSpriteInputs(ref sprite);
+        UpdateSpriteInputs(sprite);
     }
     public void PlayClipOneShotReverse(AtlasClip clip, Transform markerTransform = null)
     {
@@ -359,7 +342,7 @@ public class AtlasRenderer : MonoBehaviour
             markerTransform.localPosition = markerPos;
         }
         sprite = motionSprite.sprite;
-        UpdateSpriteInputs(ref sprite);
+        UpdateSpriteInputs(sprite);
     }
     private async UniTask PlayingClipOneShot(AtlasClip clip, Transform markerTransform = null)
     {
@@ -382,7 +365,7 @@ public class AtlasRenderer : MonoBehaviour
                         markerTransform.localPosition = markerPos;
                     }
                     sprite = motionSprite.sprite;
-                    UpdateSpriteInputs(ref sprite);
+                    UpdateSpriteInputs(sprite);
                 }
                 await UniTask.Yield(ctsOneShot.Token);
             }
@@ -414,7 +397,7 @@ public class AtlasRenderer : MonoBehaviour
                         markerTransform.localPosition = markerPos;
                     }
                     sprite = motionSprite.sprite;
-                    UpdateSpriteInputs(ref sprite);
+                    UpdateSpriteInputs(sprite);
                 }
 
                 await UniTask.Yield(ctsOneShot.Token);
@@ -736,11 +719,7 @@ public class AtlasRendererEditor : Editor
             foreach (KeyValuePair<int, AtlasClip> kvp in renderer.atlas.clipDict)
             {
                 EditorGUILayout.BeginHorizontal();
-
-                // Key
                 EditorGUILayout.LabelField(kvp.Key.ToString(), GUILayout.MaxWidth(150));
-
-                // Value (AtlasClip reference)
                 EditorGUILayout.LabelField(kvp.Value.clipName, GUILayout.MaxWidth(150));
 
                 EditorGUILayout.EndHorizontal();

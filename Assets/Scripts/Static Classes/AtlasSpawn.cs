@@ -93,9 +93,10 @@ public static class AtlasSpawn
         public EdgeScroller[] preScrollers;
         public EdgeScroller[] postScrollers;
 
-        public Vector4[] quadScales;        
+        public Vector4[] quadScales;
 
         public Vector2Int prevDepthIndices;
+        
         public MaterialPropertyBlock mpb;
         public GraphicsBuffer argsBuffer;
         public GraphicsBuffer quadScaleBuffer;
@@ -124,6 +125,7 @@ public static class AtlasSpawn
         public float scaleX;
         public float randScale;
 
+        public string prefabGUID;
     }
 
     [Serializable] public struct ParticleSpritesData
