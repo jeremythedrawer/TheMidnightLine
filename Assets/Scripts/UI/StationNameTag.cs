@@ -1,37 +1,60 @@
 using UnityEngine;
 using static Atlas;
+using static AtlasRendering;
 
 [ExecuteAlways]
 public class StationNameTag : MonoBehaviour
 {
     const float PADDING = 0.05f; 
-    public AtlasRenderer text_renderer;
+    public AtlasTextRenderer text_renderer;
     public AtlasRenderer background_renderer;
 
     [Header("Generated")]
     public Vector3 backgroundLocalPos;
 
-    private void Start()
-    {
-
-    }
-
     private void Update()
     {
 #if UNITY_EDITOR
-        if (!Application.isPlaying)
-        {
-            backgroundLocalPos.y = background_renderer.transform.localPosition.y;
-            backgroundLocalPos.z = background_renderer.transform.localPosition.z;
-            SetText(text_renderer.text);
-        }
+        SetTextEditor();
 #endif
+    }
+    public void SetTextEditor()
+    {
+        if (text_renderer == null) return;
+        if (Application.isPlaying) return;
+
+        backgroundLocalPos.z = 1;
+        SetText(text_renderer.text);
+
     }
     public void SetText(string text)
     {
         text_renderer.SetText(text);
 
-        backgroundLocalPos.x = -text_renderer.bounds.extents.x - PADDING;
+
+        switch(text_renderer.alignmentType)
+        {
+            case AtlasTextAlignmentType.Left:
+            {
+                backgroundLocalPos.x = -PADDING;
+
+            }
+            break;
+            case AtlasTextAlignmentType.Center:
+            {
+                backgroundLocalPos.x = -text_renderer.bounds.extents.x - PADDING;
+
+            }
+            break;
+            case AtlasTextAlignmentType.Right:
+            {
+
+                backgroundLocalPos.x = -text_renderer.bounds.size.x - PADDING;
+            }
+            break;
+        }
+
+        backgroundLocalPos.y = -text_renderer.bounds.size.y - PADDING;
 
         if (!text_renderer.hasText)
         {
@@ -40,9 +63,15 @@ public class StationNameTag : MonoBehaviour
         else
         {
             background_renderer.enabled = true;
+
+            Vector2 worldSize = new Vector2();
+            worldSize.x = text_renderer.bounds.size.x + PADDING * 2;
+            worldSize.y = text_renderer.bounds.size.y + PADDING * 2;
+
             background_renderer.transform.localPosition = backgroundLocalPos;
-            float worldWidth = text_renderer.bounds.size.x + PADDING * 2;
-            background_renderer.SetNineSliceWidthFromWorldSpace(worldWidth, background_renderer.atlas.slicedSprites[background_renderer.spriteIndex]);
+
+
+            background_renderer.SetNineSliceSizeFromWorldSpace(worldSize, background_renderer.atlas.slicedSprites[background_renderer.spriteIndex]);
         }
     }
 }

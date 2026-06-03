@@ -66,7 +66,7 @@ Shader "Custom/s_exteriorWalls"
                 float2 objPos = v.positionOS.xy;
 
                 objPos *= size * scale;
-                objPos -= pivot;
+                objPos += pivot;
 
                 o.worldPos = float3(position.xy + objPos, position.z);
 

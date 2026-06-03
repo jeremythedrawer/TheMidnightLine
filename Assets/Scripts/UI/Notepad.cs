@@ -8,7 +8,6 @@ using static NPC;
 public class Notepad : MonoBehaviour
 {
     public const float WRITE_LETTER_TIME = 0.1f;
-    const float PAGE_SPAWN_POS_Y_OFFSET = 0.1f;
     const float LEFTHAND_DAMPING = 10f;
     const float PENCIL_DISTANCE_THRESHOLD = 0.05f;
     const float PENCIL_VERTICAL_FREQUENCY = 7f;
@@ -34,6 +33,8 @@ public class Notepad : MonoBehaviour
     public AtlasRenderer frontFingers_renderer;
     public AtlasRenderer bindingRings_renderer;
     public AtlasRenderer leftHand_renderer;
+
+    public Transform pageTransform;
 
     public TextAsset namesJSON;
 
@@ -299,7 +300,7 @@ public class Notepad : MonoBehaviour
             {
                 switch (leftHand_renderer.curFrameIndex)
                 {
-                    case 2:
+                    case 1:
                     {
                         if (curKeyframeState == KeyframeState.PaperClip) return;
    
@@ -631,10 +632,9 @@ public class Notepad : MonoBehaviour
                     }
                 }
 
-                Vector3 pagePos = bindingRings_renderer.transform.position + Vector3.forward;
-                if (createPageIndex != 0) pagePos.z += 2;
-                pagePos.y += PAGE_SPAWN_POS_Y_OFFSET;
-                Page page = Instantiate(page_prefab, pagePos, Quaternion.identity, transform);
+                Vector3 pagePos = pageTransform.position;
+                if (createPageIndex != 0) pagePos.z += 3;
+                Page page = Instantiate(page_prefab, pagePos, Quaternion.identity, pageTransform);
                 page.Init(traitorProfile);
                 page.gameObject.name = "Page_" + createPageIndex;
                 page.pageNumber_renderer.SetText("Page " + (createPageIndex + 1));
@@ -722,5 +722,11 @@ public class Notepad : MonoBehaviour
             dict[value] = value.ToString().Replace("_", " ");
         }
         return dict;
+    }
+
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.red;
+        Gizmos.DrawWireSphere(transform.InverseTransformPoint(leftHandTargetPos), 0.1f);
     }
 }

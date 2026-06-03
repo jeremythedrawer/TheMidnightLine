@@ -375,7 +375,7 @@ public class AtlasFactory : EditorWindow
         float drawWidth = spritePixelWidth * scale;
         float drawHeight = spritePixelHeight * scale;
 
-        Vector2 pivot = new Vector2(containterRect.center.x, containterRect.center.y);
+        Vector2 pivot = new Vector2(containterRect.center.x, containterRect.y);
         float flipUVPivot = flip == 1 ? previewSprite.uvPivot.x : 1 - previewSprite.uvPivot.x;
         float pivotX = flipUVPivot * drawWidth;
         float pivotY = (1 - previewSprite.uvPivot.y) * drawHeight;

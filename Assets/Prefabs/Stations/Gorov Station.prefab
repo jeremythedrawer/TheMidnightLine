@@ -88,11 +88,6 @@ MonoBehaviour:
   flipY: 0
   width: 14.9
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0, w: 0.9375}
@@ -102,7 +97,7 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 76.71172, y: 0.3691111, z: 25.1}
     m_Extent: {x: 10.404722, y: 0.3361111, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4222223}
+  worldPivotAndSize: {x: -0, y: -0, z: 11.366667, w: 1.4222223}
   uvSizeAndPosition: {x: 0.49951172, y: 0.0625, z: 0, w: 0.9375}
   scaleAndFlip: {x: 1.39, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -154,26 +149,7 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0.1796875, y: 0.05908203, z: 0, w: 0.8745117}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 2.0444446, y: 0.6722222, z: 1}
-      index: 1
-    slice: {x: 0.16576087, y: 0.82608694, z: 0, w: 0.892562}
-    uvSizeAndPos:
-    - {x: 0.029785156, y: 0, z: 0, w: 0.8745117}
-    - {x: 0.11865234, y: 0, z: 0.029785156, w: 0.8745117}
-    - {x: 0.031250004, y: 0, z: 0.1484375, w: 0.8745117}
-    - {x: 0.029785156, y: 0.052734375, z: 0, w: 0.8745117}
-    - {x: 0.11865234, y: 0.052734375, z: 0.029785156, w: 0.8745117}
-    - {x: 0.031250004, y: 0.052734375, z: 0.1484375, w: 0.8745117}
-    - {x: 0.029785156, y: 0.0063476567, z: 0, w: 0.9272461}
-    - {x: 0.11865234, y: 0.0063476567, z: 0.029785156, w: 0.9272461}
-    - {x: 0.031250004, y: 0.0063476567, z: 0.1484375, w: 0.9272461}
-    worldSlices: {x: 0.3388889, y: 0.3555556, z: 0, w: 0.07222223}
   quadCount: 0
-  hasText: 0
 --- !u!1 &2811684460384202492
 GameObject:
   m_ObjectHideFlags: 0
@@ -241,7 +217,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 28.444443, y: -0.35555553}
+  m_Offset: {x: 28.444443, y: -0.35555556}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -278,11 +254,6 @@ MonoBehaviour:
   flipY: 0
   width: 10
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 1, y: 0.125, z: 0, w: 0.4970703}
@@ -292,7 +263,7 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 94.75144, y: -0.35555556, z: 1}
     m_Extent: {x: 28.444445, y: 0.35555556, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0.7111111, z: 5.688889, w: 0.7111111}
+  worldPivotAndSize: {x: -0, y: -0.7111111, z: 5.688889, w: 0.7111111}
   uvSizeAndPosition: {x: 1, y: 0.125, z: 0, w: 0.4970703}
   scaleAndFlip: {x: 10, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -308,17 +279,7 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 3
   prevSpriteIndexFlipV: 3
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
-  hasText: 0
 --- !u!1 &3243849537673383197
 GameObject:
   m_ObjectHideFlags: 0
@@ -376,11 +337,6 @@ MonoBehaviour:
   flipY: 0
   width: 16.76
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.49951172, y: 0.0625, z: 0, w: 0.9375}
@@ -390,7 +346,7 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 111.29022, y: 0.3691111, z: 25.1}
     m_Extent: {x: 11.660223, y: 0.3361111, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4222223}
+  worldPivotAndSize: {x: -0, y: -0, z: 11.366667, w: 1.4222223}
   uvSizeAndPosition: {x: 0.49951172, y: 0.0625, z: 0, w: 0.9375}
   scaleAndFlip: {x: 1.39, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -442,26 +398,7 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0.1796875, y: 0.05908203, z: 0, w: 0.8745117}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 2.0444446, y: 0.6722222, z: 1}
-      index: 1
-    slice: {x: 0.16576087, y: 0.82608694, z: 0, w: 0.892562}
-    uvSizeAndPos:
-    - {x: 0.029785156, y: 0, z: 0, w: 0.8745117}
-    - {x: 0.11865234, y: 0, z: 0.029785156, w: 0.8745117}
-    - {x: 0.031250004, y: 0, z: 0.1484375, w: 0.8745117}
-    - {x: 0.029785156, y: 0.052734375, z: 0, w: 0.8745117}
-    - {x: 0.11865234, y: 0.052734375, z: 0.029785156, w: 0.8745117}
-    - {x: 0.031250004, y: 0.052734375, z: 0.1484375, w: 0.8745117}
-    - {x: 0.029785156, y: 0.0063476567, z: 0, w: 0.9272461}
-    - {x: 0.11865234, y: 0.0063476567, z: 0.029785156, w: 0.9272461}
-    - {x: 0.031250004, y: 0.0063476567, z: 0.1484375, w: 0.9272461}
-    worldSlices: {x: 0.3388889, y: 0.3555556, z: 0, w: 0.07222223}
   quadCount: 0
-  hasText: 0
 --- !u!1 &3872012436576265919
 GameObject:
   m_ObjectHideFlags: 0
@@ -529,7 +466,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 28.444443, y: -0.35555553}
+  m_Offset: {x: 28.444443, y: -0.35555556}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -566,11 +503,6 @@ MonoBehaviour:
   flipY: 0
   width: 10
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 1, y: 0.125, z: 0, w: 0.74902344}
@@ -580,7 +512,7 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 94.75144, y: -0.35555556, z: 23}
     m_Extent: {x: 28.444445, y: 0.35555556, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0.7111111, z: 5.688889, w: 0.7111111}
+  worldPivotAndSize: {x: -0, y: -0.7111111, z: 5.688889, w: 0.7111111}
   uvSizeAndPosition: {x: 1, y: 0.125, z: 0, w: 0.74902344}
   scaleAndFlip: {x: 10, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -596,17 +528,7 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 1
   prevSpriteIndexFlipV: 1
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
-  hasText: 0
 --- !u!1 &5142636741076062865
 GameObject:
   m_ObjectHideFlags: 0
@@ -711,11 +633,6 @@ MonoBehaviour:
   flipY: 0
   width: 23.09
   height: 1.97
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.99902344, y: 0.125, z: 0, w: 0.74902344}
@@ -725,7 +642,7 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 94.39447, y: -0.64830554, z: 0.1}
     m_Extent: {x: 29.08447, y: 0.30169448, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.4222223}
+  worldPivotAndSize: {x: -0, y: -0, z: 11.366667, w: 1.4222223}
   uvSizeAndPosition: {x: 0.99902344, y: 0.125, z: 0, w: 0.74902344}
   scaleAndFlip: {x: 10, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -777,26 +694,7 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 1
   prevSpriteIndexFlipV: 1
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0.26953125, y: 0.046875, z: 0.04345703, w: 0.9477539}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 3.0666666, y: 0.53333336, z: 1}
-      index: 0
-    slice: {x: 0.08152174, y: 0.89492756, z: 0.32291666, w: 0.45833334}
-    uvSizeAndPos:
-    - {x: 0.021972656, y: 0.015136719, z: 0.04345703, w: 0.9477539}
-    - {x: 0.21923828, y: 0.015136719, z: 0.06542969, w: 0.9477539}
-    - {x: 0.028320305, y: 0.015136719, z: 0.28466797, w: 0.9477539}
-    - {x: 0.021972656, y: 0.006347657, z: 0.04345703, w: 0.9628906}
-    - {x: 0.21923828, y: 0.006347657, z: 0.06542969, w: 0.9628906}
-    - {x: 0.028320305, y: 0.006347657, z: 0.28466797, w: 0.9628906}
-    - {x: 0.021972656, y: 0.025390623, z: 0.04345703, w: 0.9692383}
-    - {x: 0.21923828, y: 0.025390623, z: 0.06542969, w: 0.9692383}
-    - {x: 0.028320305, y: 0.025390623, z: 0.28466797, w: 0.9692383}
-    worldSlices: {x: 0.25, y: 0.32222214, z: 0.17222221, w: 0.28888887}
   quadCount: 0
-  hasText: 0
 --- !u!1 &6951541954276182966
 GameObject:
   m_ObjectHideFlags: 0
@@ -854,11 +752,6 @@ MonoBehaviour:
   flipY: 0
   width: 1
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.4404297, y: 0.265625, z: 0, w: 0.734375}
@@ -868,7 +761,7 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 95.04, y: 3.0222223, z: 25}
     m_Extent: {x: 5.0111113, y: 3.0222223, z: 0.1}
-  worldPivotAndSize: {x: 5.0111113, y: 0, z: 10.0222225, w: 6.0444446}
+  worldPivotAndSize: {x: -5.0111113, y: -0, z: 10.0222225, w: 6.0444446}
   uvSizeAndPosition: {x: 0.4404297, y: 0.265625, z: 0, w: 0.734375}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -884,17 +777,7 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
-  hasText: 0
 --- !u!1 &7818414305050200138
 GameObject:
   m_ObjectHideFlags: 0

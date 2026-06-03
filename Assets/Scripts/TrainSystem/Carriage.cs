@@ -15,7 +15,7 @@ public class Carriage : MonoBehaviour
     public LayerSettingsSO layerSettings;
     public MaterialIDSO materialIDs;
 
-    public AtlasRenderer nextStationSignRenderer;
+    public AtlasTextRenderer nextStationSignRenderer;
     public AtlasRenderer carriageWallRenderer;
     public AtlasRenderer[] exteriorRenderers;
     public AtlasRenderer[] seatRenderers;

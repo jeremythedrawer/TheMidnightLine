@@ -45,11 +45,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 4
+  rendererType: 3
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
-    depthOrder: 0
+    depthOrder: -37
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -58,25 +58,20 @@ MonoBehaviour:
   flipY: 0
   width: 1
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.08203125, y: 0.10546875, z: 0.2421875, w: 0.84375}
-    uvPivot: {x: 0, y: 0}
+    uvPivot: {x: 0, y: 1}
     worldSize: {x: 0.11666667, y: 0.15, z: 1}
     index: 2
   bounds:
-    m_Center: {x: 300.61832, y: 3.4650002, z: -39}
+    m_Center: {x: 300.61832, y: 3.315, z: -39}
     m_Extent: {x: 0.058333334, y: 0.07500001, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 0.11666667, w: 0.15000002}
+  worldPivotAndSize: {x: 0, y: 0.15000002, z: 0.11666667, w: 0.15000002}
   uvSizeAndPosition: {x: 0.08203125, y: 0.10546875, z: 0.2421875, w: 0.84375}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.058333334, y: 0.07500001, z: 0}
+  boundsOffset: {x: 0.058333334, y: -0.07500001, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -84,20 +79,11 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
+  curMotionIndex: 0
   prevSpriteIndexFlipH: 2
   prevSpriteIndexFlipV: 2
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
-  hasText: 0
 --- !u!114 &6855063242500057171
 MonoBehaviour:
   m_ObjectHideFlags: 0

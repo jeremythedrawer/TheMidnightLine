@@ -4,8 +4,8 @@ using UnityEngine;
 public class Ticket : MonoBehaviour
 {
     public AtlasRenderer ticket_renderer;
-    public AtlasRenderer boardingStation_renderer;
-    public AtlasRenderer disembarkingStation_renderer;
+    public AtlasTextRenderer boardingStation_renderer;
+    public AtlasTextRenderer disembarkingStation_renderer;
 
     public Bounds totalBounds;
     private void OnValidate()

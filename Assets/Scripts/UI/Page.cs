@@ -8,18 +8,16 @@ public class Page : MonoBehaviour
 {
     public TripSO trip;
     public NPCsDataSO npcData;
+
+    public AtlasTextRenderer behaviour0_renderer;
+    public AtlasTextRenderer behaviour1_renderer;
+    public AtlasTextRenderer chosenStation_renderer;
+    public AtlasTextRenderer pageNumber_renderer;
+
     public AtlasRenderer paper_renderer;
-
-    public AtlasRenderer behaviour0_renderer;
-    public AtlasRenderer behaviour1_renderer;
-    public AtlasRenderer name_renderer;
-    public AtlasRenderer chosenStation_renderer;
-    public AtlasRenderer pageNumber_renderer;
     public AtlasRenderer mugshot_renderer;
-
     public AtlasRenderer paperCornerLeft_renderer;
     public AtlasRenderer paperCornerRight_renderer;
-
     public AtlasRenderer exitButton_renderer;
 
     [Header("Generated")]
@@ -32,6 +30,7 @@ public class Page : MonoBehaviour
     public bool isLastPage;
     public bool isFirstPage;
     public CancellationTokenSource ctsWrite;
+    public string previewStationText;
     private void OnDisable()
     {
         ctsWrite?.Cancel();
@@ -44,7 +43,6 @@ public class Page : MonoBehaviour
         behaviours0 = GetBehaviourAtIndex(traitorProfile.behaviours, 0);
         behaviours1 = GetBehaviourAtIndex(traitorProfile.behaviours, 1);
 
-        name_renderer.SetText(traitorProfile.fullName);
         behaviour0_renderer.SetText(npcData.behaviourDescDict[behaviours0]);
         behaviour1_renderer.SetText(npcData.behaviourDescDict[behaviours1]);
 
@@ -87,7 +85,6 @@ public class Page : MonoBehaviour
     }
     public void TogglePageContentTopHalf(bool toggle)
     {
-        name_renderer.enabled = toggle;
         mugshot_renderer.enabled = toggle;
         exitButton_renderer.enabled = toggle;
     }
@@ -98,15 +95,24 @@ public class Page : MonoBehaviour
         behaviour0_renderer.UpdateDepthRealtime(contentDepth);
         behaviour1_renderer.UpdateDepthRealtime(contentDepth);
         chosenStation_renderer.UpdateDepthRealtime(contentDepth);
-        name_renderer.UpdateDepthRealtime(contentDepth);
+
+        if (!isFirstPage)
+        {
+            paperCornerLeft_renderer.UpdateDepthRealtime(contentDepth);
+        }
+        if (!isLastPage)
+        {
+            paperCornerLeft_renderer.UpdateDepthRealtime(contentDepth);
+        }
         mugshot_renderer.UpdateDepthRealtime(contentDepth);
         pageNumber_renderer.UpdateDepthRealtime(contentDepth);
+        exitButton_renderer.UpdateDepthRealtime(contentDepth);
     }
     public void WriteChosenStationText(int stationIndex)
     {
         chosenStationIndex = stationIndex;
         chosenStationName = trip.stationsDataArray[chosenStationIndex].stationName;
-        stationNameBounds = chosenStation_renderer.GetTextBounds(chosenStationName);
+        stationNameBounds = chosenStation_renderer.GetBounds(chosenStationName);
 
         ctsWrite?.Cancel();
         ctsWrite = new CancellationTokenSource();
@@ -120,9 +126,9 @@ public class Page : MonoBehaviour
     }
     public void SetPreviewStationText(int stationIndex)
     {
-        string previewStationText = trip.stationsDataArray[stationIndex].stationName;
+        previewStationText = trip.stationsDataArray[stationIndex].stationName;
         chosenStation_renderer.SetText(previewStationText);
-        stationNameBounds = chosenStation_renderer.bounds;
+        stationNameBounds = chosenStation_renderer.GetBounds(previewStationText);
         chosenStation_renderer.enabled = true;
     }
     public void UpdatePreviewStationText(bool appear,  ref float clock)
@@ -158,7 +164,7 @@ public class Page : MonoBehaviour
     }
     public Bounds GetStationNameBounds()
     {
-        return chosenStation_renderer.bounds;
+        return chosenStation_renderer.GetBounds(previewStationText);
     }
     private async UniTask ErasingStationName()
     {

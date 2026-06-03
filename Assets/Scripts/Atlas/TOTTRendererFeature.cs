@@ -98,28 +98,23 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 #if UNITY_EDITOR
             PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
             Scene prefabScene = default;
-
             if (prefabStage != null) prefabScene = prefabStage.scene;
 #endif
-            foreach ((BatchKey key, SpriteBatch data) batch in spriteBatchList)
+            foreach ((BatchKey key, SpriteBatch data) spriteBatch in spriteBatchList)
             {
                 int count = 0;
-                for (int i = 0; i < batch.data.rendererList.Count && count < MAX_SPRITE_DATA_COUNT; i++)
+                for (int i = 0; i < spriteBatch.data.atlasRendererList.Count && count < MAX_SPRITE_DATA_COUNT; i++)
                 {
-                    AtlasRenderer renderer = batch.data.rendererList[i];
+                    AtlasRenderer renderer = spriteBatch.data.atlasRendererList[i];
 
-                    if (renderer == null || renderer.gameObject == null || !renderer.gameObject.activeInHierarchy) continue;
+                    if (renderer.gameObject == null || !renderer.gameObject.activeInHierarchy) continue;
 #if UNITY_EDITOR
-                    if (prefabStage != null)
-                    {
-                        if (renderer.gameObject.scene != prefabScene) continue;
-                    }
-#endif
-
-                    renderer.UpdateBounds();
-#if !UNITY_EDITOR
+                    if (prefabStage != null) { if (renderer.gameObject.scene != prefabScene) continue; }
+#else
                     //if (renderer.bounds.max.x < cameraStats.camWorldLeft || renderer.bounds.min.x > cameraStats.camWorldRight || renderer.bounds.max.y < cameraStats.camWorldBottom || renderer.bounds.min.y > cameraStats.camWorldTop) continue; //TODO: use new cam bounds
 #endif
+                    renderer.UpdateBounds();
+
                     switch (renderer.rendererType)
                     { 
                         case AtlasRendererType.SimpleWorld:
@@ -127,34 +122,33 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                         case AtlasRendererType.SimpleScreen:
                         case AtlasRendererType.MotionScreen:
                         {
-                            batch.data.spriteData[count] = new SpriteData
-                            {
-                                worldPosition = renderer.gameObject.transform.position,
-                                worldPivotAndSize = renderer.worldPivotAndSize,
-                                uvSizeAndPos = renderer.uvSizeAndPosition,
-                                scaleAndFlip = renderer.scaleAndFlip,
-                                custom = renderer.custom,
-                            };
+                            SpriteData spriteData = spriteBatch.data.spriteData[count];
+
+                            spriteData.worldPosition = renderer.transform.position;
+                            spriteData.worldPivotAndSize = renderer.worldPivotAndSize;
+                            spriteData.uvSizeAndPos = renderer.uvSizeAndPosition;
+                            spriteData.scaleAndFlip = renderer.scaleAndFlip;
+                            spriteData.custom = renderer.custom;
+                            spriteBatch.data.spriteData[count] = spriteData;
+
                             count++;
                         }
                         break;
 
                         case AtlasRendererType.SliceWorld:
-                        case AtlasRendererType.TextWorld:
                         case AtlasRendererType.SliceScreen:
-                        case AtlasRendererType.TextScreen:
                         {
                             for (int j = 0; j < renderer.worldPivotsAndSizes.Length; j++)
                             {
-                                batch.data.spriteData[count] = new SpriteData
-                                {
-                                    worldPosition = renderer.transform.position,
-                                    worldPivotAndSize = renderer.worldPivotsAndSizes[j],
-                                    uvSizeAndPos = renderer.uvSizesAndPositions[j],
-                                    scaleAndFlip = renderer.scalesAndFlips[j],
-                                    custom = renderer.customs[j],
+                                SpriteData spriteData = spriteBatch.data.spriteData[count];
 
-                                };
+                                spriteData.worldPosition = renderer.transform.position;    
+                                spriteData.worldPivotAndSize = renderer.worldPivotsAndSizes[j];
+                                spriteData.uvSizeAndPos = renderer.uvSizesAndPositions[j];
+                                spriteData.scaleAndFlip = renderer.scalesAndFlips[j];
+                                spriteData.custom = renderer.customs[j];
+                                spriteBatch.data.spriteData[count] = spriteData;
+
                                 count++;
                             }
                         }
@@ -162,15 +156,53 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     }
                 }
 
+                if (count == 0) continue;
+
+                spriteBatch.data.spriteDataBuffer.SetData(spriteBatch.data.spriteData, 0, 0, count);
+                args[1] = (uint)count;
+                spriteBatch.data.argsBuffer.SetData(args);
+                spriteBatch.data.mpb.SetBuffer("_SpriteData", spriteBatch.data.spriteDataBuffer);
+                spriteBatch.data.mpb.SetTexture("_AtlasTexture", spriteBatch.key.texture);
+                cmd.DrawMeshInstancedIndirect(quad, 0, spriteBatch.key.material, 0, spriteBatch.data.argsBuffer, 0, spriteBatch.data.mpb);
+            }
+
+            foreach((BatchKey key, TextBatch data) textBatch in textBatchList)
+            {
+                int count = 0;
+                for (int i = 0; i < textBatch.data.atlasTextRendererList.Count && count < MAX_SPRITE_DATA_COUNT; i++)
+                {
+                    AtlasTextRenderer renderer = textBatch.data.atlasTextRendererList[i];
+
+                    if (renderer.gameObject == null || !renderer.gameObject.activeInHierarchy) continue;
+
+#if UNITY_EDITOR
+                    if (prefabStage != null) { if (renderer.gameObject.scene != prefabScene) continue; }
+#else
+                    //if (renderer.bounds.max.x < cameraStats.camWorldLeft || renderer.bounds.min.x > cameraStats.camWorldRight || renderer.bounds.max.y < cameraStats.camWorldBottom || renderer.bounds.min.y > cameraStats.camWorldTop) continue; //TODO: use new cam bounds
+#endif
+                    for (int j = 0; j < renderer.worldPivotsAndSizes.Length; j++)
+                    {
+                        SpriteData spriteData = textBatch.data.spriteData[count];
+
+                        spriteData.worldPosition = renderer.transform.position;
+                        spriteData.worldPivotAndSize = renderer.worldPivotsAndSizes[j];
+                        spriteData.uvSizeAndPos = renderer.uvSizesAndPositions[j];
+                        spriteData.scaleAndFlip = renderer.scalesAndFlips[j];
+                        spriteData.custom = renderer.customs[j];
+                        textBatch.data.spriteData[count] = spriteData;
+
+                        count++;
+                    }
+                }
 
                 if (count == 0) continue;
 
-                batch.data.spriteDataBuffer.SetData(batch.data.spriteData, 0, 0, count);
+                textBatch.data.spriteDataBuffer.SetData(textBatch.data.spriteData, 0, 0, count);
                 args[1] = (uint)count;
-                batch.data.argsBuffer.SetData(args);
-                batch.data.mpb.SetBuffer("_SpriteData", batch.data.spriteDataBuffer);
-                batch.data.mpb.SetTexture("_AtlasTexture", batch.key.texture);
-                cmd.DrawMeshInstancedIndirect(quad, 0, batch.key.material, 0, batch.data.argsBuffer, 0, batch.data.mpb);
+                textBatch.data.argsBuffer.SetData(args);
+                textBatch.data.mpb.SetBuffer("_SpriteData", textBatch.data.spriteDataBuffer);
+                textBatch.data.mpb.SetTexture("_AtlasTexture", textBatch.key.texture);
+                cmd.DrawMeshInstancedIndirect(quad, 0, textBatch.key.material, 0, textBatch.data.argsBuffer, 0, textBatch.data.mpb);
             }
         }
     }

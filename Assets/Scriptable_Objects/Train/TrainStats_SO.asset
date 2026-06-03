@@ -13,11 +13,11 @@ MonoBehaviour:
   m_Name: TrainStats_SO
   m_EditorClassIdentifier: 
   curVelocity: {x: 0, y: 0}
-  targetVelocity: {x: 6.166667, y: 0}
-  prevPeakVelocity: 11.111112
+  targetVelocity: {x: 10, y: 0}
+  prevPeakVelocity: 7.08
   targetStopPosition: 308.2
-  targetKMPH: 22.2
-  targetElevatePos: {x: 1, y: 1}
+  targetKMPH: 17
+  targetElevatePos: {x: 0, y: 0}
   distToSpawnNextStation: 86.47077
   trainToMaxSpawnDist: 33.77777
   totalPassengersBoarded: 0
@@ -32,7 +32,23 @@ MonoBehaviour:
     backMax: 10
     carriageSeat: 14
   totalBounds:
-    m_Center: {x: 142.33337, y: -0.06999993, z: 1.5}
-    m_Extent: {x: 19.8434, y: 0.9574444, z: 1.5}
-  exteriorSlideDoorPositions: []
-  interiorSlideDoorPositions: []
+    m_Center: {x: 308.3534, y: 0.41900003, z: 1.5}
+    m_Extent: {x: 19.843384, y: 0.9574444, z: 1.5}
+  exteriorSlideDoorPositions:
+  - 316.52777
+  - 313.03876
+  - 306.759
+  - 303.27
+  - 297
+  - 293.511
+  - 287.207
+  - 283.718
+  interiorSlideDoorPositions:
+  - 316.18976
+  - 312.69376
+  - 306.421
+  - 302.925
+  - 296.662
+  - 293.166
+  - 286.869
+  - 283.373

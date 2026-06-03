@@ -541,11 +541,30 @@ public class SpawnMaster : MonoBehaviour
             ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
             for (int j = 0; j < particleAtlas.posData.Length; j++)
             {
-                particleAtlas.posData[j].argsBuffer?.Release();
-                particleAtlas.posData[j].argsBuffer = null;
-                particleAtlas.posData[j].quadScaleBuffer?.Release();
-                particleAtlas.posData[j].quadScaleBuffer = null;
-                particleAtlas.posData[j].spawnState = SpawnState.None;
+                ParticlePosData posData = particleAtlas.posData[j];
+                posData.argsBuffer?.Release();
+                posData.argsBuffer = null;
+                posData.quadScaleBuffer?.Release();
+                posData.quadScaleBuffer = null;
+                posData.spawnState = SpawnState.None;
+
+                for (int k = 0; k < posData.preScrollers.Length; k++)
+                {
+                    EdgeScroller preScroller = posData.preScrollers[k];
+                    preScroller.argsBuffer?.Release();
+                    preScroller.argsBuffer = null;
+                    preScroller.edgeSpriteDataBuffer?.Release();
+                    preScroller.edgeSpriteDataBuffer = null;
+                }
+
+                for (int k = 0; k < posData.postScrollers.Length; k++)
+                {
+                    EdgeScroller postScroller = posData.postScrollers[k];
+                    postScroller.argsBuffer?.Release();
+                    postScroller.argsBuffer = null;
+                    postScroller.edgeSpriteDataBuffer?.Release();
+                    postScroller.edgeSpriteDataBuffer = null;
+                }
             }
 
             particleAtlas.spriteDataBuffer?.Release();

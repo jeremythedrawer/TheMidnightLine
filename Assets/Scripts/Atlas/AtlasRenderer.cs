@@ -30,14 +30,6 @@ public class AtlasRenderer : MonoBehaviour
     public float width = 1;
     public float height = 1;
 
-    [Header("Text Settings")]
-    [TextArea(3, 10)]
-    public string text;
-    public float kerning = 1.1f;
-    public float spacing = 1;
-    public float scrollSize;
-    public bool textToCenter;
-
     [Header("Generated")]
     public Camera cam;
     public SimpleSprite sprite;
@@ -67,55 +59,45 @@ public class AtlasRenderer : MonoBehaviour
     [Header("Sliced Generated")]
     public int quadCount;
 
-
-    [Header("Text Generated")]
-    public bool hasText;
     private void OnValidate()
     {
         if (atlas == null) return;
+
         switch (rendererType)
         {
             case AtlasRendererType.SimpleScreen:
             case AtlasRendererType.SimpleWorld:
             {
-                if (atlas.simpleSprites.Length == 0) { Debug.LogWarning("Atlas does not have Simple Sprites"); return; }
+                if (atlas.simpleSprites.Length == 0) { Debug.LogWarning("Atlas does not have Simple Sprites at: " + name); return; }
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.simpleSprites.Length - 1);
                 sprite = atlas.simpleSprites[spriteIndex];
                 UpdateSpriteInputs(sprite);
-                UpdateBounds();
             }
             break;
             
             case AtlasRendererType.MotionScreen:
             case AtlasRendererType.MotionWorld:
             {
-                if (atlas.motionSprites.Length == 0) { Debug.LogWarning("Atlas does not have Motion Sprites"); return; }
+                if (atlas.motionSprites.Length == 0) { Debug.LogWarning("Atlas does not have Motion Sprites at: " + name); return; }
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.motionSprites.Length - 1);
                 sprite = atlas.motionSprites[spriteIndex].sprite;
                 UpdateSpriteInputs(sprite);
-                UpdateBounds();
             }
             break;
 
             case AtlasRendererType.SliceScreen:
             case AtlasRendererType.SliceWorld:
             {
-                if (atlas.slicedSprites.Length == 0) { Debug.LogWarning("Atlas does not have Sliced Sprites"); return; }
+                if (atlas.slicedSprites.Length == 0) { Debug.LogWarning("Atlas does not have Sliced Sprites at: " + name); return; }
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.slicedSprites.Length - 1);
                 UpdateSlicedSpriteInputs(atlas.slicedSprites[spriteIndex]);
-                UpdateBounds();
-            }
-            break;
-
-            case AtlasRendererType.TextScreen:
-            case AtlasRendererType.TextWorld:
-            {
-                SetText(text);
             }
             break;
         }
+
         FlipH(flipX);
         FlipV(flipY);
+        
         batchKey.texture = atlas.texture;
     }
     private void Awake()
@@ -130,7 +112,6 @@ public class AtlasRenderer : MonoBehaviour
             case AtlasRendererType.SimpleScreen:
             {
                 cam = Camera.main;
-
             }
             break;
             case AtlasRendererType.MotionScreen:
@@ -142,11 +123,6 @@ public class AtlasRenderer : MonoBehaviour
             case AtlasRendererType.SliceScreen:
             {
                 cam = Camera.main;   
-            }
-            break;
-            case AtlasRendererType.TextScreen:
-            {
-                cam = Camera.main;
             }
             break;
         }
@@ -176,7 +152,8 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void UpdateSpriteInputs(SimpleSprite newSprite)
     {
-        if (rendererType > AtlasRendererType.TextWorld)
+        sprite = newSprite;
+        if (rendererType > AtlasRendererType.SliceWorld)
         {
             Vector2 spritePixelSize = newSprite.worldSize * PIXELS_PER_UNIT;
             worldPivotAndSize.z = spritePixelSize.x * camStats.worldUnitsPerPixel;
@@ -221,8 +198,8 @@ public class AtlasRenderer : MonoBehaviour
         flipX = flipLeft;
         scaleAndFlip.z = flipLeft ? -1 : 1;
         float flipPivot = flipLeft ? 1 - sprite.uvPivot.x : sprite.uvPivot.x;
-        worldPivotAndSize.x = flipPivot * scaleAndFlip.x * worldPivotAndSize.z;
-        boundsOffset.x = (bounds.size.x * 0.5f) - worldPivotAndSize.x;
+        worldPivotAndSize.x = -flipPivot * scaleAndFlip.x * worldPivotAndSize.z;
+        boundsOffset.x = (bounds.size.x * 0.5f) + worldPivotAndSize.x;
         prevSpriteIndexFlipH = sprite.index;
     }
     public void FlipV(bool flipDown)
@@ -230,8 +207,8 @@ public class AtlasRenderer : MonoBehaviour
         flipY = flipDown;
         scaleAndFlip.w = flipDown ? -1 : 1;
         float flipPivot = flipDown ? 1 - sprite.uvPivot.y : sprite.uvPivot.y;
-        worldPivotAndSize.y = flipPivot * scaleAndFlip.y * worldPivotAndSize.w;
-        boundsOffset.y = (bounds.size.y * 0.5f) - worldPivotAndSize.y;
+        worldPivotAndSize.y = -flipPivot * scaleAndFlip.y * worldPivotAndSize.w;
+        boundsOffset.y = (bounds.size.y * 0.5f) + worldPivotAndSize.y;
         prevSpriteIndexFlipV = sprite.index;
     }
     public void UpdateBounds()
@@ -264,16 +241,14 @@ public class AtlasRenderer : MonoBehaviour
     {
         width = worldWidth / sprite.worldSize.x;
         UpdateSpriteInputs(sprite);
-        UpdateBounds();
     }
-    public void SetNineSliceWidthFromWorldSpace(float worldWidth, SliceSprite sliceSprite)
+    public void SetNineSliceSizeFromWorldSpace(Vector2 worldSize, SliceSprite sliceSprite)
     {
         float centerWorldSliceWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
-
-
-        width = worldWidth / centerWorldSliceWidth;
+        float centerWorldSliceHeight = sliceSprite.sprite.worldSize.y - sliceSprite.worldSlices.z - sliceSprite.worldSlices.w;
+        width = worldSize.x / centerWorldSliceWidth;
+        height = worldSize.y / centerWorldSliceHeight;
         UpdateSlicedSpriteInputs(sliceSprite);
-        UpdateBounds();
     }
     public void PlayClip(ref AtlasClip clip, Transform markerTransform = null)
     {
@@ -408,268 +383,6 @@ public class AtlasRenderer : MonoBehaviour
         catch (OperationCanceledException)
         {
             isAnimating = false;
-        }
-    }
-    public void SetText(string inputText)
-    {
-        text = inputText;
-        float cursorX = 0;
-
-        int maxChars = inputText.Length;
-
-        worldPivotsAndSizes = new Vector4[maxChars];
-        uvSizesAndPositions = new Vector4[maxChars];
-        scalesAndFlips = new Vector4[maxChars];
-        customs = new Vector4[maxChars];
-        int spriteIndex = 0;
-        
-        float minX = float.MaxValue;
-        float maxX = float.MinValue;
-        float maxY = float.MinValue;
-
-        switch(rendererType)
-        {
-            case AtlasRendererType.TextScreen:
-            {
-                for (int i = 0; i < text.Length; i++)
-                {
-                    char c = text[i];
-                    if (c == ' ')
-                    {
-                        cursorX += spacing;
-                        continue;
-                    }
-
-                    int letterIndex = c - 33;
-                    if (letterIndex < 0) continue;
-
-                    if (letterIndex >= 0)
-                    {
-                        SimpleSprite sprite = atlas.simpleSprites[letterIndex];
-                        float letterPos = cursorX * kerning * camStats.worldUnitsPerPixel;
-                        Vector2 spritePixelSize = sprite.worldSize * PIXELS_PER_UNIT;
-                        Vector4 worldPivotAndSize = new Vector4(-letterPos, 0, spritePixelSize.x * camStats.worldUnitsPerPixel, spritePixelSize.y * camStats.worldUnitsPerPixel);
-                        worldPivotsAndSizes[spriteIndex] = worldPivotAndSize;
-
-                        float left = -worldPivotAndSize.x;
-                        float right = -worldPivotAndSize.x + worldPivotAndSize.z;
-
-                        if (left < minX) minX = left;
-                        if (right > maxX) maxX = right;
-                        if (worldPivotAndSize.w > maxY) maxY = worldPivotAndSize.w;
-
-                        float widthRatio = spritePixelSize.x / LETTER_ADVANCE;
-                        float advanceScale = widthRatio * 0.5f + 0.5f;
-                        cursorX += LETTER_ADVANCE * advanceScale;
-
-                        uvSizesAndPositions[spriteIndex] = sprite.uvSizeAndPos;
-                        scalesAndFlips[spriteIndex] = Vector4.one;
-                        spriteIndex++;
-                    }
-                }
-            }
-            break;
-
-            case AtlasRendererType.TextWorld:
-            {
-                for (int i = 0; i < text.Length; i++)
-                {
-                    int asciiIndex = (int)text[i];
-                    int letterIndex = asciiIndex - 33;
-                    if (asciiIndex == 32)
-                    {
-                        cursorX += spacing;
-                    }
-                    else if (letterIndex >= 0)
-                    {
-                        SimpleSprite sprite = atlas.simpleSprites[letterIndex];
-
-                        float letterPos = cursorX * kerning;
-                        Vector4 worldPivotAndSize = new Vector4(-letterPos, 0, sprite.worldSize.x, sprite.worldSize.y);
-                        worldPivotsAndSizes[spriteIndex] = worldPivotAndSize;
-
-                        float right = worldPivotAndSize.x + worldPivotAndSize.z;
-
-                        if (worldPivotAndSize.x < minX) minX = worldPivotAndSize.x;
-                        if (right > maxX) maxX = right;
-                        if (worldPivotAndSize.w > maxY) maxY = worldPivotAndSize.w;
-
-
-                        float widthRatio = sprite.worldSize.x / LETTER_ADVANCE;
-                        float advanceScale = widthRatio * 0.5f + 0.5f;
-                        cursorX += LETTER_ADVANCE * advanceScale;
-
-                        uvSizesAndPositions[spriteIndex] = sprite.uvSizeAndPos;
-                        scalesAndFlips[spriteIndex] = Vector4.one;
-                        spriteIndex++;
-                    }
-                }
-            }
-            break;
-        }
-
-        if (maxChars == 0)
-        {
-            bounds.size = Vector3.zero;
-            bounds.center = transform.position;
-            boundsOffset = Vector3.zero;
-            hasText = false;
-        }
-        else
-        {
-            if (textToCenter)
-            {
-                float centerOffset = (minX + maxX) * 0.5f;
-
-                for (int i = 0; i < worldPivotsAndSizes.Length; i++)
-                {
-                    Vector4 v = worldPivotsAndSizes[i];
-                    v.x += centerOffset;
-                    worldPivotsAndSizes[i] = v;
-                }
-
-                minX -= centerOffset;
-                maxX -= centerOffset;
-            }
-            float width = maxX - minX;
-
-            bounds.size = new Vector3(width, maxY, 0f);
-            boundsOffset = new Vector3(minX + width * 0.5f, maxY * 0.5f, 0f);
-            bounds.center = transform.position + boundsOffset;
-            hasText = true;
-        }
-    }
-    public Bounds GetTextBounds(string inputText)
-    {
-        float cursorX = 0;
-        Bounds b = new Bounds();
-
-        int spriteIndex = 0;
-
-        float minX = float.MaxValue;
-        float maxX = float.MinValue;
-        float maxY = float.MinValue;
-
-        switch (rendererType)
-        {
-            case AtlasRendererType.TextScreen:
-            {
-                for (int i = 0; i < inputText.Length; i++)
-                {
-                    int asciiIndex = (int)inputText[i];
-                    int letterIndex = asciiIndex - 33;
-                    if (asciiIndex == 32)
-                    {
-                        cursorX += spacing;
-                    }
-                    else if (letterIndex >= 0)
-                    {
-                        SimpleSprite sprite = atlas.simpleSprites[letterIndex];
-                        float letterPos = cursorX * kerning * camStats.worldUnitsPerPixel;
-                        Vector2 spritePixelSize = sprite.worldSize * PIXELS_PER_UNIT;
-                        Vector4 worldPivotAndSize = new Vector4(-letterPos, 0, spritePixelSize.x * camStats.worldUnitsPerPixel, spritePixelSize.y * camStats.worldUnitsPerPixel);
-
-                        float right = letterPos + worldPivotAndSize.z;
-
-                        if (letterPos < minX) minX = letterPos;
-                        if (right > maxX) maxX = right;
-                        if (worldPivotAndSize.w > maxY) maxY = worldPivotAndSize.w;
-
-                        float widthRatio = spritePixelSize.x / LETTER_ADVANCE;
-                        float advanceScale = widthRatio * 0.5f + 0.5f;
-                        cursorX += LETTER_ADVANCE * advanceScale;
-
-                        spriteIndex++;
-                    }
-                }
-            }
-            break;
-
-            case AtlasRendererType.TextWorld:
-            {
-                for (int i = 0; i < inputText.Length; i++)
-                {
-                    int asciiIndex = (int)inputText[i];
-                    int letterIndex = asciiIndex - 33;
-                    if (asciiIndex == 32)
-                    {
-                        cursorX += spacing;
-                    }
-                    else if (letterIndex >= 0)
-                    {
-                        SimpleSprite sprite = atlas.simpleSprites[letterIndex];
-
-                        float letterPos = cursorX * kerning;
-                        Vector4 worldPivotAndSize = new Vector4(letterPos, 0, sprite.worldSize.x, sprite.worldSize.y);
-
-                        float right = worldPivotAndSize.x + worldPivotAndSize.z;
-
-                        if (worldPivotAndSize.x < minX) minX = worldPivotAndSize.x;
-                        if (right > maxX) maxX = right;
-                        if (worldPivotAndSize.w > maxY) maxY = worldPivotAndSize.w;
-
-
-                        float widthRatio = sprite.worldSize.x / LETTER_ADVANCE;
-                        float advanceScale = widthRatio * 0.5f + 0.5f;
-                        cursorX += LETTER_ADVANCE * advanceScale;
-
-                        spriteIndex++;
-                    }
-                }
-            }
-            break;
-        }
-
-        b.size = new Vector3(maxX, maxY, 0f);
-        Vector3 bOffset = new Vector3(maxX * 0.5f, maxY * 0.5f, 0f);
-        b.center = transform.position + bOffset;
-
-        return b;
-    }
-    public void AppearText(float normAmount, bool appear, ref float clock)
-    {
-        if (appear)
-        {
-            if (clock > 0)
-            {
-                clock -= Time.deltaTime;
-                float t = (clock / APPEAR_TEXT_TIME) * normAmount + normAmount;
-
-                for (int i = 0; i < customs.Length; i++)
-                {
-                    customs[i].w = t;
-                }
-            }
-        }
-        else
-        {
-            if (clock < APPEAR_TEXT_TIME)
-            {
-                clock += Time.deltaTime;
-                float t = (clock / APPEAR_TEXT_TIME) * normAmount + normAmount;
-
-                for (int i = 0; i < customs.Length; i++)
-                {
-                    customs[i].w = t;
-                }
-            }
-
-        }
-    }
-    public void SetTextAlpha(float alpha)
-    {
-        for (int i = 0; i < customs.Length; i++)
-        {
-            customs[i].w = alpha;
-        }
-    }
-    [ContextMenu("Set Scrolling Text")]public void SetScrollingText()
-    {
-        customs = new Vector4[worldPivotsAndSizes.Length];
-        for (int i = 0; i < customs.Length; i++)
-        {
-            customs[i].x = bounds.size.x;
-            customs[i].y = scrollSize;
         }
     }
 #if UNITY_EDITOR

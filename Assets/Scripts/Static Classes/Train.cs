@@ -74,7 +74,6 @@ public static class Train
             return Mathf.MoveTowards(curVelocity, initVelocity, maxDelta);
         }
     }
-
     public static Vector2 GetElevateVelocityBezier(Vector2 curVelocity, Vector2 targetPos, ref float metersTravelledOnBezier)
     {
         metersTravelledOnBezier += curVelocity.x * Time.deltaTime;

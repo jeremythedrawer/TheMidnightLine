@@ -42,7 +42,7 @@ public class GlyphSetter : MonoBehaviour
         SetSliceSpriteAndUVSizePosArray();
         SetMesh();
     }
-    private void OnDestroy()
+    private void OnDisable()
     {
         ReleaseBuffers();
     }

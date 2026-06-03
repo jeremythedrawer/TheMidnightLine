@@ -61,7 +61,7 @@ Shader "Custom/s_atlasAppear"
                 float2 objPos = v.positionOS.xy;
 
                 objPos *= size * scale;
-                objPos -= pivot;
+                objPos += pivot;
                 objPos.x += spriteData.custom.y * (spriteData.custom.a);
                 float3 worldPos = float3(position.xy + objPos, position.z);
 

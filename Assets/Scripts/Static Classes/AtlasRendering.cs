@@ -16,16 +16,31 @@ public static class AtlasRendering
     { 
         SimpleWorld,
         MotionWorld,
-
         SliceWorld,
-        TextWorld,
 
         SimpleScreen,
         MotionScreen,
-
         SliceScreen,
-        TextScreen,
     }
+    public enum AtlasTextRendererType
+    {
+        SimpleWorld,
+        ScrollWorld,
+    }
+    public enum AtlasTextAlignmentType
+    {
+        Left,
+        Center,
+        Right,
+    }
+
+
+    [Serializable] public struct TextBoxData
+    {
+        public Vector2 size;
+        public float[] lineWidths;
+    }
+
 
     [Serializable] public struct BatchKey
     {
@@ -42,28 +57,50 @@ public static class AtlasRendering
         public Vector4 custom;
     }
 
-    public static readonly Dictionary<BatchKey, SpriteBatch> spriteBatchDict = new Dictionary<BatchKey, SpriteBatch>();
-    public static readonly List<(BatchKey, SpriteBatch)> spriteBatchList = new List<(BatchKey, SpriteBatch)> ();
+    public static Dictionary<BatchKey, SpriteBatch> spriteBatchDict = new Dictionary<BatchKey, SpriteBatch>();
+    public static List<(BatchKey, SpriteBatch)> spriteBatchList = new List<(BatchKey, SpriteBatch)> ();
+    public static Dictionary<BatchKey, TextBatch> textBatchDict = new Dictionary<BatchKey, TextBatch>();
+    public static List<(BatchKey, TextBatch)> textBatchList = new List<(BatchKey, TextBatch)>();
 
     public class SpriteBatch
     {
-        public readonly List<AtlasRenderer> rendererList = new List<AtlasRenderer>();
-        public readonly SpriteData[] spriteData = new SpriteData[MAX_SPRITE_DATA_COUNT];
+        public List<AtlasRenderer> atlasRendererList = new List<AtlasRenderer>();
+
+        public SpriteData[] spriteData = new SpriteData[MAX_SPRITE_DATA_COUNT];
 
         public GraphicsBuffer spriteDataBuffer;
         public GraphicsBuffer argsBuffer;
 
-        public readonly MaterialPropertyBlock mpb = new MaterialPropertyBlock();
+        public MaterialPropertyBlock mpb;
     }
+    public class TextBatch
+    {
+        public List<AtlasTextRenderer> atlasTextRendererList = new List<AtlasTextRenderer>();
+
+        public SpriteData[] spriteData = new SpriteData[MAX_SPRITE_DATA_COUNT];
+
+        public GraphicsBuffer spriteDataBuffer;
+        public GraphicsBuffer argsBuffer;
+
+        public MaterialPropertyBlock mpb;
+    }
+
     public static void PrepareFrame()
     {
         spriteBatchList.Clear();
-
         foreach (KeyValuePair<BatchKey, SpriteBatch> kv in spriteBatchDict)
         {
             BatchKey key = kv.Key;
             SpriteBatch batch = kv.Value;
             spriteBatchList.Add((key, batch));
+        }
+        textBatchList.Clear();
+
+        foreach (KeyValuePair<BatchKey, TextBatch> kv in textBatchDict)
+        {
+            BatchKey key = kv.Key;
+            TextBatch batch = kv.Value;
+            textBatchList.Add((key, batch));
         }
     }
     public static void RegisterRenderer(AtlasRenderer renderer)
@@ -80,17 +117,19 @@ public static class AtlasRendering
             batch = new SpriteBatch();
             batch.spriteDataBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, MAX_SPRITE_DATA_COUNT, SPRITE_DATA_STRIDE);
             batch.argsBuffer = new GraphicsBuffer(GraphicsBuffer.Target.IndirectArguments, 1, ARGS_STRIDE);
+            batch.mpb = new MaterialPropertyBlock();
+
             spriteBatchDict.Add(renderer.batchKey, batch);
         }
 
-        batch.rendererList.Add(renderer);
+        batch.atlasRendererList.Add(renderer);
     }
     public static void UnregisterRenderer(AtlasRenderer renderer)
     {
         if (!spriteBatchDict.TryGetValue(renderer.batchKey, out SpriteBatch batch)) return;
 
-        batch.rendererList.Remove(renderer);
-        if (batch.rendererList.Count == 0)
+        batch.atlasRendererList.Remove(renderer);
+        if (batch.atlasRendererList.Count == 0)
         {
             batch.spriteDataBuffer?.Release();
             batch.spriteDataBuffer = null;
@@ -100,6 +139,42 @@ public static class AtlasRendering
 
             spriteBatchDict.Remove(renderer.batchKey);
 
+        }
+    }
+    public static void RegisterTextRenderer(AtlasTextRenderer renderer)
+    {
+        if (renderer.batchKey.material == null) return;
+        renderer.batchKey.material.enableInstancing = true;
+
+        UnregisterTextRenderer(renderer);
+        renderer.batchKey.depthOrder = (int)renderer.transform.position.z;
+
+        if (!textBatchDict.TryGetValue(renderer.batchKey, out TextBatch batch))
+        {
+            batch = new TextBatch();
+            
+            batch.spriteDataBuffer = new GraphicsBuffer(GraphicsBuffer.Target.Structured, MAX_SPRITE_DATA_COUNT, SPRITE_DATA_STRIDE);
+            batch.argsBuffer = new GraphicsBuffer(GraphicsBuffer.Target.IndirectArguments, 1, ARGS_STRIDE);
+            batch.mpb = new MaterialPropertyBlock();
+
+            textBatchDict.Add(renderer.batchKey, batch);
+        }
+        batch.atlasTextRendererList.Add(renderer);
+    }
+    public static void UnregisterTextRenderer(AtlasTextRenderer renderer)
+    {
+        if (!textBatchDict.TryGetValue(renderer.batchKey, out TextBatch batch)) return;
+
+        batch.atlasTextRendererList.Remove(renderer);
+        if (batch.atlasTextRendererList.Count == 0)
+        {
+            batch.spriteDataBuffer?.Release();
+            batch.spriteDataBuffer = null;
+
+            batch.argsBuffer?.Release();
+            batch.argsBuffer = null;
+
+            textBatchDict.Remove(renderer.batchKey);
         }
     }
     public static MotionSprite GetNextKeyframeIndex(AtlasSO atlas, AtlasClip clip, ref float keyframeClock, ref int curFrameIndex, ref int prevFrameIndex)
@@ -302,23 +377,6 @@ public static class AtlasRendering
             new Vector4(1, 1, pivotWidth, pivotHeight),
         };
     }
-    public static Vector4[] SetNewWorldPivotsNineSliceArray(float width, float height, Vector4[] worldPivotsAndSizes)
-    {
-        Vector4 middlePivotAndSize = worldPivotsAndSizes[4];
-
-        float rightColPos = middlePivotAndSize.x + middlePivotAndSize.z * width;
-        float topRowPos = middlePivotAndSize.y + middlePivotAndSize.w * height;
-
-        worldPivotsAndSizes[2].x = rightColPos;
-        worldPivotsAndSizes[5].x = rightColPos;
-        worldPivotsAndSizes[6].y = topRowPos;
-        worldPivotsAndSizes[7].y = topRowPos;
-        worldPivotsAndSizes[8].x = rightColPos;
-        worldPivotsAndSizes[8].y = topRowPos;
-
-        return worldPivotsAndSizes;
-    }
-
     public static Vector4[] SetWorldPivotAndSizes(SliceSprite sliceSprite, float width, float height)
     {
         float centerWorldSliceWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
@@ -329,16 +387,16 @@ public static class AtlasRendering
         return new Vector4[]
         {
             new Vector4(0, 0, sliceSprite.worldSlices.x, sliceSprite.worldSlices.z),
-            new Vector4(-sliceSprite.worldSlices.x, 0, centerWorldSliceWidth, sliceSprite.worldSlices.z),
-            new Vector4(-rightColPos, 0, sliceSprite.worldSlices.y, sliceSprite.worldSlices.z),
+            new Vector4(sliceSprite.worldSlices.x, 0, centerWorldSliceWidth, sliceSprite.worldSlices.z),
+            new Vector4(rightColPos, 0, sliceSprite.worldSlices.y, sliceSprite.worldSlices.z),
 
-            new Vector4(0, -sliceSprite.worldSlices.z, sliceSprite.worldSlices.x, centerWorldSliceHeight),
-            new Vector4(-sliceSprite.worldSlices.x, -sliceSprite.worldSlices.z, centerWorldSliceWidth, centerWorldSliceHeight),
-            new Vector4(-rightColPos, -sliceSprite.worldSlices.z, sliceSprite.worldSlices.y, centerWorldSliceHeight),
+            new Vector4(0, sliceSprite.worldSlices.z, sliceSprite.worldSlices.x, centerWorldSliceHeight),
+            new Vector4(sliceSprite.worldSlices.x, sliceSprite.worldSlices.z, centerWorldSliceWidth, centerWorldSliceHeight),
+            new Vector4(rightColPos, sliceSprite.worldSlices.z, sliceSprite.worldSlices.y, centerWorldSliceHeight),
 
-            new Vector4(0, -topRowPos, sliceSprite.worldSlices.x, sliceSprite.worldSlices.w),
-            new Vector4(-sliceSprite.worldSlices.x, -topRowPos, centerWorldSliceWidth, sliceSprite.worldSlices.w),
-            new Vector4(-rightColPos, -topRowPos, sliceSprite.worldSlices.y, sliceSprite.worldSlices.w),
+            new Vector4(0, topRowPos, sliceSprite.worldSlices.x, sliceSprite.worldSlices.w),
+            new Vector4(sliceSprite.worldSlices.x, topRowPos, centerWorldSliceWidth, sliceSprite.worldSlices.w),
+            new Vector4(rightColPos, topRowPos, sliceSprite.worldSlices.y, sliceSprite.worldSlices.w),
         };
     }
 }

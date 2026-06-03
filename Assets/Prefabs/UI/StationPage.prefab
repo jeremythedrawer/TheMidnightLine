@@ -1,143 +1,5 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &543666705203732659
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5373812233296960608}
-  - component: {fileID: 4243298849842064577}
-  m_Layer: 0
-  m_Name: Name
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5373812233296960608
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 543666705203732659}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.59000313, y: -1.037, z: -1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7380519998003774169}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4243298849842064577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 543666705203732659}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 7
-  batchKey:
-    texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
-    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
-    depthOrder: -25
-  atlas: {fileID: 11400000, guid: afe44af98e97f2a4ab43981104af4d1c, type: 2}
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 0
-  flipX: 0
-  flipY: 0
-  width: 0
-  height: 0
-  text: First Name
-  kerning: 3
-  spacing: 5
-  scrollSize: 0
-  textToCenter: 0
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0, y: 0, z: 0}
-    index: 0
-  bounds:
-    m_Center: {x: 299.71545, y: 4.8246665, z: 15.92}
-    m_Extent: {x: 0.3054556, y: 0.09166667, z: 0}
-  worldPivotAndSize: {x: 0, y: 0, z: 0, w: 0}
-  uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
-  scaleAndFlip: {x: 0, y: 0, z: 0, w: 0}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.3054556, y: 0.09166667, z: 0}
-  worldPivotsAndSizes:
-  - {x: -0, y: 0, z: 0.038888894, w: 0.18333334}
-  - {x: -0.059350006, y: 0, z: 0.011111111, w: 0.18333334}
-  - {x: -0.07703334, y: 0, z: 0.022222223, w: 0.18333334}
-  - {x: -0.111383334, y: 0, z: 0.038888894, w: 0.18333334}
-  - {x: -0.17073335, y: 0, z: 0.033333335, w: 0.18333334}
-  - {x: -0.30508333, y: 0, z: 0.05, w: 0.18333334}
-  - {x: -0.38110003, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.44878337, y: 0, z: 0.07777779, w: 0.18333334}
-  - {x: -0.56646675, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: 0, y: 0, z: 0, w: 0}
-  uvSizesAndPositions:
-  - {x: 0.02734375, y: 0.12890625, z: 0.38671875, w: 0.73828125}
-  - {x: 0.0078125, y: 0.12890625, z: 0.671875, w: 0.60546875}
-  - {x: 0.015625, y: 0.12890625, z: 0.94921875, w: 0.60546875}
-  - {x: 0.02734375, y: 0.12890625, z: 0.96875, w: 0.60546875}
-  - {x: 0.0234375, y: 0.12890625, z: 0, w: 0.47265625}
-  - {x: 0.03515625, y: 0.12890625, z: 0.63671875, w: 0.73828125}
-  - {x: 0.03125, y: 0.12890625, z: 0.390625, w: 0.60546875}
-  - {x: 0.0546875, y: 0.12890625, z: 0.75, w: 0.60546875}
-  - {x: 0.03125, y: 0.12890625, z: 0.53125, w: 0.60546875}
-  - {x: 0, y: 0, z: 0, w: 0}
-  scalesAndFlips:
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 0, y: 0, z: 0, w: 0}
-  customs:
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  curMotionIndex: 0
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
-  hasText: 1
 --- !u!1 &826454790681439854
 GameObject:
   m_ObjectHideFlags: 0
@@ -164,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 826454790681439854}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.5080031, y: -0.24199986, z: -2}
+  m_LocalPosition: {x: -0.606, y: -0.313, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -182,11 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 4
+  rendererType: 3
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
-    depthOrder: -26
+    depthOrder: -36
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -195,11 +57,6 @@ MonoBehaviour:
   flipY: 1
   width: 1
   height: 1
-  text: 
-  kerning: 0
-  spacing: 0
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.14453125, y: 0.14453125, z: 0.3515625, w: 0.84375}
@@ -207,9 +64,9 @@ MonoBehaviour:
     worldSize: {x: 0.20555556, y: 0.20555556, z: 1}
     index: 3
   bounds:
-    m_Center: {x: 299.492, y: 5.528, z: 14.92}
+    m_Center: {x: 299.394, y: 5.457, z: 14.92}
     m_Extent: {x: 0.10277778, y: 0.10277778, z: 0.1}
-  worldPivotAndSize: {x: 0.10277778, y: 0.10277778, z: 0.20555556, w: 0.20555556}
+  worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
   uvSizeAndPosition: {x: 0.14453125, y: 0.14453125, z: 0.3515625, w: 0.84375}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: -1}
   custom: {x: 1, y: 0, z: 0, w: 0}
@@ -225,17 +82,7 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 3
   prevSpriteIndexFlipV: 3
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
-  hasText: 0
 --- !u!1 &2191616955255421442
 GameObject:
   m_ObjectHideFlags: 0
@@ -262,7 +109,7 @@ Transform:
   m_GameObject: {fileID: 2191616955255421442}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.136, y: -0.8149998, z: -1}
+  m_LocalPosition: {x: -0.226, y: -0.892, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -280,11 +127,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 4
+  rendererType: 3
   batchKey:
     texture: {fileID: 2800000, guid: baee2ed3eb8895e45805e19093805a27, type: 3}
     material: {fileID: 2100000, guid: c30f9b5dfdb7915458408b63fcc55b9b, type: 2}
-    depthOrder: -25
+    depthOrder: -35
   atlas: {fileID: 11400000, guid: d3627110c6f36b84b93e607b7dc6d005, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -293,11 +140,6 @@ MonoBehaviour:
   flipY: 0
   width: 1
   height: 1
-  text: 
-  kerning: 0
-  spacing: 0
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.060546875, y: 0.057128906, z: 0.23046875, w: 0.94189453}
@@ -305,13 +147,13 @@ MonoBehaviour:
     worldSize: {x: 0.6888889, y: 0.65, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 300.55292, y: 5.605, z: 15.92}
+    m_Center: {x: 300.11844, y: 5.2029996, z: 15.92}
     m_Extent: {x: 0.34444445, y: 0.325, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 0.6888889, w: 0.65}
+  worldPivotAndSize: {x: -0, y: -0, z: 0.6888889, w: 0.65}
   uvSizeAndPosition: {x: 0.060546875, y: 0.057128906, z: 0.23046875, w: 0.94189453}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.6888889, y: 0.65, z: 0}
+  boundsOffset: {x: 0.34444445, y: 0.325, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -323,17 +165,7 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 4
   prevSpriteIndexFlipV: 4
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
-  hasText: 0
 --- !u!1 &2488520917910274587
 GameObject:
   m_ObjectHideFlags: 0
@@ -343,7 +175,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3401857208857989724}
-  - component: {fileID: 3925012540275241528}
+  - component: {fileID: 5180166987920443640}
   m_Layer: 0
   m_Name: Behaviour_0
   m_TagString: Untagged
@@ -360,13 +192,13 @@ Transform:
   m_GameObject: {fileID: 2488520917910274587}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.661, y: -1.515, z: -1}
+  m_LocalPosition: {x: -0.753, y: -1.099, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7380519998003774169}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3925012540275241528
+--- !u!114 &5180166987920443640
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -375,63 +207,41 @@ MonoBehaviour:
   m_GameObject: {fileID: 2488520917910274587}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Script: {fileID: 11500000, guid: f55b4786e96a8dd42b04bb6173006f35, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 7
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasTextRenderer
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
-    depthOrder: -25
-  atlas: {fileID: 11400000, guid: afe44af98e97f2a4ab43981104af4d1c, type: 2}
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 0
-  flipX: 0
-  flipY: 0
-  width: 0
-  height: 0
-  text: First Behaviour
-  kerning: 3
-  spacing: 5
+    depthOrder: -35
+  textAtlas: {fileID: 11400000, guid: 03871f642f841d447a7b9560fa5d0c24, type: 2}
+  text: Behaviour 0
+  kerning: 1
+  spacing: 0.05
   scrollSize: 0
-  textToCenter: 0
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0, y: 0, z: 0}
-    index: 0
+  alignmentType: 0
   bounds:
-    m_Center: {x: 299.7442, y: 4.346667, z: 15.92}
-    m_Extent: {x: 0.40521953, y: 0.09166667, z: 0}
-  worldPivotAndSize: {x: 0, y: 0, z: 0, w: 0}
-  uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
-  scaleAndFlip: {x: 0, y: 0, z: 0, w: 0}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.40521953, y: 0.09166667, z: 0}
+    m_Center: {x: 299.65344, y: 4.5793333, z: 15.92}
+    m_Extent: {x: 0.40644446, y: 0.09166667, z: 0}
+  textBoxData:
+    size: {x: 0.8128889, y: 0.18333334}
+    lineWidths:
+    - 0.8128889
+  boundsOffset: {x: 0.40644446, y: -0.09166667, z: 0}
   worldPivotsAndSizes:
-  - {x: -0, y: 0, z: 0.038888894, w: 0.18333334}
-  - {x: -0.059350006, y: 0, z: 0.011111111, w: 0.18333334}
-  - {x: -0.07703334, y: 0, z: 0.022222223, w: 0.18333334}
-  - {x: -0.111383334, y: 0, z: 0.038888894, w: 0.18333334}
-  - {x: -0.17073335, y: 0, z: 0.033333335, w: 0.18333334}
-  - {x: -0.30508333, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.3727667, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.44045004, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.5081334, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.57581675, y: 0, z: 0.038888894, w: 0.18333334}
-  - {x: -0.63516676, y: 0, z: 0.011111111, w: 0.18333334}
-  - {x: -0.6528501, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.72053343, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.7882168, y: 0, z: 0.022222223, w: 0.18333334}
+  - {x: -0, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.083222225, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.16644445, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.24966668, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.3328889, y: -0.18333334, z: 0.03888889, w: 0.18333334}
+  - {x: 0.41333336, y: -0.18333334, z: 0.011111111, w: 0.18333334}
+  - {x: 0.47988892, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.5631111, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.64633334, y: -0.18333334, z: 0.022222223, w: 0.18333334}
+  - {x: 0.7684445, y: -0.18333334, z: 0.044444446, w: 0.18333334}
   - {x: 0, y: 0, z: 0, w: 0}
   uvSizesAndPositions:
-  - {x: 0.02734375, y: 0.12890625, z: 0.38671875, w: 0.73828125}
-  - {x: 0.0078125, y: 0.12890625, z: 0.671875, w: 0.60546875}
-  - {x: 0.015625, y: 0.12890625, z: 0.94921875, w: 0.60546875}
-  - {x: 0.02734375, y: 0.12890625, z: 0.96875, w: 0.60546875}
-  - {x: 0.0234375, y: 0.12890625, z: 0, w: 0.47265625}
   - {x: 0.03125, y: 0.12890625, z: 0.25390625, w: 0.73828125}
   - {x: 0.03125, y: 0.12890625, z: 0.53125, w: 0.60546875}
   - {x: 0.03125, y: 0.12890625, z: 0.63671875, w: 0.60546875}
@@ -441,12 +251,9 @@ MonoBehaviour:
   - {x: 0.03125, y: 0.12890625, z: 0.84375, w: 0.60546875}
   - {x: 0.03125, y: 0.12890625, z: 0.02734375, w: 0.47265625}
   - {x: 0.015625, y: 0.12890625, z: 0.94921875, w: 0.60546875}
+  - {x: 0.03125, y: 0.12890625, z: 0.5546875, w: 0.87109375}
   - {x: 0, y: 0, z: 0, w: 0}
   scalesAndFlips:
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
@@ -470,27 +277,6 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  curMotionIndex: 0
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
   hasText: 1
 --- !u!1 &3031531853131365240
 GameObject:
@@ -503,7 +289,7 @@ GameObject:
   - component: {fileID: 7380519998003774169}
   - component: {fileID: 3293984349451637370}
   m_Layer: 0
-  m_Name: Page
+  m_Name: StationPage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -532,7 +318,6 @@ Transform:
   - {fileID: 5396196692458561425}
   - {fileID: 6905171277351112}
   - {fileID: 5967655690559425254}
-  - {fileID: 5373812233296960608}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3293984349451637370
@@ -549,12 +334,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Page
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
+  behaviour0_renderer: {fileID: 5180166987920443640}
+  behaviour1_renderer: {fileID: 2322028569944472143}
+  chosenStation_renderer: {fileID: 1407368147541437526}
+  pageNumber_renderer: {fileID: 581004557939880678}
   paper_renderer: {fileID: 2670676497328436670}
-  behaviour0_renderer: {fileID: 3925012540275241528}
-  behaviour1_renderer: {fileID: 3465815437186109155}
-  name_renderer: {fileID: 4243298849842064577}
-  chosenStation_renderer: {fileID: 8572872064146997650}
-  pageNumber_renderer: {fileID: 1082521566760503151}
   mugshot_renderer: {fileID: 4580197788305518065}
   paperCornerLeft_renderer: {fileID: 7623350588780838515}
   paperCornerRight_renderer: {fileID: 4898080337301717236}
@@ -601,7 +385,7 @@ Transform:
   m_GameObject: {fileID: 3958053313500941109}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.5569968, y: -2.2089999, z: -2}
+  m_LocalPosition: {x: 0.605, y: -2.278, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -619,11 +403,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 4
+  rendererType: 3
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
-    depthOrder: -26
+    depthOrder: -36
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -632,25 +416,20 @@ MonoBehaviour:
   flipY: 0
   width: 1
   height: 1
-  text: 
-  kerning: 0
-  spacing: 0
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.1328125, y: 0.14453125, z: 0.51171875, w: 0.83984375}
-    uvPivot: {x: 0, y: 0}
+    uvPivot: {x: 1, y: 0}
     worldSize: {x: 0.18888889, y: 0.20555556, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 300.65146, y: 3.6637778, z: 14.92}
+    m_Center: {x: 300.51056, y: 3.5947776, z: 14.92}
     m_Extent: {x: 0.094444446, y: 0.10277778, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 0.18888889, w: 0.20555556}
+  worldPivotAndSize: {x: -0.18888889, y: -0, z: 0.18888889, w: 0.20555556}
   uvSizeAndPosition: {x: 0.1328125, y: 0.14453125, z: 0.51171875, w: 0.83984375}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.094444446, y: 0.10277778, z: 0}
+  boundsOffset: {x: -0.094444446, y: 0.10277778, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -662,17 +441,7 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 4
   prevSpriteIndexFlipV: 4
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
-  hasText: 0
 --- !u!1 &4143792154808190999
 GameObject:
   m_ObjectHideFlags: 0
@@ -682,7 +451,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7456237863597015280}
-  - component: {fileID: 3465815437186109155}
+  - component: {fileID: 2322028569944472143}
   m_Layer: 0
   m_Name: Behaviour_1
   m_TagString: Untagged
@@ -699,13 +468,13 @@ Transform:
   m_GameObject: {fileID: 4143792154808190999}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.6530032, y: -1.6529999, z: -1}
+  m_LocalPosition: {x: -0.7529983, y: -1.413, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7380519998003774169}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3465815437186109155
+--- !u!114 &2322028569944472143
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -714,65 +483,41 @@ MonoBehaviour:
   m_GameObject: {fileID: 4143792154808190999}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Script: {fileID: 11500000, guid: f55b4786e96a8dd42b04bb6173006f35, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 7
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasTextRenderer
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
-    depthOrder: -25
-  atlas: {fileID: 11400000, guid: afe44af98e97f2a4ab43981104af4d1c, type: 2}
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 0
-  flipX: 0
-  flipY: 0
-  width: 0
-  height: 0
-  text: Second Behaviour
-  kerning: 3
-  spacing: 5
+    depthOrder: -35
+  textAtlas: {fileID: 11400000, guid: 03871f642f841d447a7b9560fa5d0c24, type: 2}
+  text: Behaviour 1
+  kerning: 1
+  spacing: 0.05
   scrollSize: 0
-  textToCenter: 0
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0, y: 0, z: 0}
-    index: 0
+  alignmentType: 0
   bounds:
-    m_Center: {x: 299.8402, y: 4.208667, z: 15.92}
-    m_Extent: {x: 0.49322784, y: 0.09166667, z: 0}
-  worldPivotAndSize: {x: 0, y: 0, z: 0, w: 0}
-  uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
-  scaleAndFlip: {x: 0, y: 0, z: 0, w: 0}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.49322784, y: 0.09166667, z: 0}
+    m_Center: {x: 299.64233, y: 4.265333, z: 15.92}
+    m_Extent: {x: 0.39533335, y: 0.09166667, z: 0}
+  textBoxData:
+    size: {x: 0.7906667, y: 0.18333334}
+    lineWidths:
+    - 0.7906667
+  boundsOffset: {x: 0.39533335, y: -0.09166667, z: 0}
   worldPivotsAndSizes:
-  - {x: -0, y: 0, z: 0.038888894, w: 0.18333334}
-  - {x: -0.059350006, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.12703334, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.19471668, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.2624, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.33008334, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.48110002, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.54878336, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.6164667, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.6841501, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.75183344, y: 0, z: 0.038888894, w: 0.18333334}
-  - {x: -0.81118345, y: 0, z: 0.011111111, w: 0.18333334}
-  - {x: -0.8288668, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.8965501, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.96423346, y: 0, z: 0.022222223, w: 0.18333334}
+  - {x: -0, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.083222225, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.16644445, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.24966668, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.3328889, y: -0.18333334, z: 0.03888889, w: 0.18333334}
+  - {x: 0.41333336, y: -0.18333334, z: 0.011111111, w: 0.18333334}
+  - {x: 0.47988892, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.5631111, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.64633334, y: -0.18333334, z: 0.022222223, w: 0.18333334}
+  - {x: 0.7684445, y: -0.18333334, z: 0.022222223, w: 0.18333334}
   - {x: 0, y: 0, z: 0, w: 0}
   uvSizesAndPositions:
-  - {x: 0.02734375, y: 0.12890625, z: 0.82421875, w: 0.73828125}
-  - {x: 0.03125, y: 0.12890625, z: 0.53125, w: 0.60546875}
-  - {x: 0.03125, y: 0.12890625, z: 0.4609375, w: 0.60546875}
-  - {x: 0.03125, y: 0.12890625, z: 0.84375, w: 0.60546875}
-  - {x: 0.03125, y: 0.12890625, z: 0.80859375, w: 0.60546875}
-  - {x: 0.03125, y: 0.12890625, z: 0.49609375, w: 0.60546875}
   - {x: 0.03125, y: 0.12890625, z: 0.25390625, w: 0.73828125}
   - {x: 0.03125, y: 0.12890625, z: 0.53125, w: 0.60546875}
   - {x: 0.03125, y: 0.12890625, z: 0.63671875, w: 0.60546875}
@@ -782,13 +527,9 @@ MonoBehaviour:
   - {x: 0.03125, y: 0.12890625, z: 0.84375, w: 0.60546875}
   - {x: 0.03125, y: 0.12890625, z: 0.02734375, w: 0.47265625}
   - {x: 0.015625, y: 0.12890625, z: 0.94921875, w: 0.60546875}
+  - {x: 0.015625, y: 0.12890625, z: 0.58984375, w: 0.87109375}
   - {x: 0, y: 0, z: 0, w: 0}
   scalesAndFlips:
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
@@ -812,28 +553,6 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  curMotionIndex: 0
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
   hasText: 1
 --- !u!1 &5113536589409016990
 GameObject:
@@ -861,7 +580,7 @@ Transform:
   m_GameObject: {fileID: 5113536589409016990}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.47000313, y: -2.1849997, z: -2}
+  m_LocalPosition: {x: -0.794, y: -2.281, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -879,11 +598,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 4
+  rendererType: 3
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
-    depthOrder: -26
+    depthOrder: -36
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -892,25 +611,20 @@ MonoBehaviour:
   flipY: 0
   width: 1
   height: 1
-  text: 
-  kerning: 0
-  spacing: 0
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.1328125, y: 0.14453125, z: 0.51171875, w: 0.83984375}
-    uvPivot: {x: 0, y: 0}
+    uvPivot: {x: 1, y: 0}
     worldSize: {x: 0.18888889, y: 0.20555556, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 299.43555, y: 3.687778, z: 14.92}
+    m_Center: {x: 299.30045, y: 3.5917778, z: 14.92}
     m_Extent: {x: 0.094444446, y: 0.10277778, z: 0.1}
-  worldPivotAndSize: {x: 0.18888889, y: 0, z: 0.18888889, w: 0.20555556}
+  worldPivotAndSize: {x: -0, y: -0, z: 0.18888889, w: 0.20555556}
   uvSizeAndPosition: {x: 0.1328125, y: 0.14453125, z: 0.51171875, w: 0.83984375}
   scaleAndFlip: {x: 1, y: 1, z: -1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
-  boundsOffset: {x: -0.094444446, y: 0.10277778, z: 0}
+  boundsOffset: {x: 0.094444446, y: 0.10277778, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -922,17 +636,7 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 4
   prevSpriteIndexFlipV: 4
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
-  hasText: 0
 --- !u!1 &6692531169113885166
 GameObject:
   m_ObjectHideFlags: 0
@@ -942,7 +646,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1917585177641865970}
-  - component: {fileID: 8572872064146997650}
+  - component: {fileID: 1407368147541437526}
   m_Layer: 0
   m_Name: ChosenStation
   m_TagString: Untagged
@@ -959,13 +663,13 @@ Transform:
   m_GameObject: {fileID: 6692531169113885166}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.47700322, y: -1.9819996, z: -1}
+  m_LocalPosition: {x: -0.7529983, y: -1.719, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7380519998003774169}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8572872064146997650
+--- !u!114 &1407368147541437526
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -974,68 +678,61 @@ MonoBehaviour:
   m_GameObject: {fileID: 6692531169113885166}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Script: {fileID: 11500000, guid: f55b4786e96a8dd42b04bb6173006f35, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 7
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasTextRenderer
+  rendererType: 0
   batchKey:
-    texture: {fileID: 2800000, guid: daf6157dafed19d4b87a1f029e28c28e, type: 3}
+    texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
     material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
-    depthOrder: -25
-  atlas: {fileID: 11400000, guid: 87bd20d859e420d408fdef20fd10809c, type: 2}
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 0
-  flipX: 0
-  flipY: 0
-  width: 0
-  height: 0
-  text: STATION NAME
-  kerning: 2.2
-  spacing: 3
+    depthOrder: -35
+  textAtlas: {fileID: 11400000, guid: 03871f642f841d447a7b9560fa5d0c24, type: 2}
+  text: Chosen Station
+  kerning: 0.8
+  spacing: 0.05
   scrollSize: 0
-  textToCenter: 0
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0, y: 0, z: 0}
-    index: 0
+  alignmentType: 0
   bounds:
-    m_Center: {x: 300.00006, y: 3.843556, z: 15.92}
-    m_Extent: {x: 0.47706112, y: 0.055555556, z: 0}
-  worldPivotAndSize: {x: 0, y: 0, z: 0, w: 0}
-  uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
-  scaleAndFlip: {x: 0, y: 0, z: 0, w: 0}
-  custom: {x: 0, y: 0, z: 0, w: 0.16}
-  boundsOffset: {x: 0.47706112, y: 0.055555556, z: 0}
+    m_Center: {x: 299.67426, y: 3.9593334, z: 15.92}
+    m_Extent: {x: 0.42724445, y: 0.09166667, z: 0}
+  textBoxData:
+    size: {x: 0.8544889, y: 0.18333334}
+    lineWidths:
+    - 1.0681111
+  boundsOffset: {x: 0.42724445, y: -0.09166667, z: 0}
   worldPivotsAndSizes:
-  - {x: -0, y: 0, z: 0.07222223, w: 0.11111111}
-  - {x: -0.08019001, y: 0, z: 0.07222223, w: 0.11111111}
-  - {x: -0.16038002, y: 0, z: 0.083333336, w: 0.11111111}
-  - {x: -0.25279224, y: 0, z: 0.07222223, w: 0.11111111}
-  - {x: -0.33298224, y: 0, z: 0.055555556, w: 0.11111111}
-  - {x: -0.3948389, y: 0, z: 0.094444446, w: 0.11111111}
-  - {x: -0.49947336, y: 0, z: 0.07222223, w: 0.11111111}
-  - {x: -0.61633, y: 0, z: 0.07222223, w: 0.11111111}
-  - {x: -0.6965201, y: 0, z: 0.083333336, w: 0.11111111}
-  - {x: -0.7889323, y: 0, z: 0.08888889, w: 0.11111111}
-  - {x: -0.8874556, y: 0, z: 0.06666667, w: 0.11111111}
+  - {x: -0, y: -0.18333334, z: 0.03888889, w: 0.18333334}
+  - {x: 0.06435555, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.13093333, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.19751112, y: -0.18333334, z: 0.03888889, w: 0.18333334}
+  - {x: 0.26186666, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.32844445, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.4350222, y: -0.18333334, z: 0.03888889, w: 0.18333334}
+  - {x: 0.4993778, y: -0.18333334, z: 0.033333335, w: 0.18333334}
+  - {x: 0.56151116, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.6280889, y: -0.18333334, z: 0.033333335, w: 0.18333334}
+  - {x: 0.69022226, y: -0.18333334, z: 0.011111111, w: 0.18333334}
+  - {x: 0.74346673, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.81004447, y: -0.18333334, z: 0.044444446, w: 0.18333334}
   - {x: 0, y: 0, z: 0, w: 0}
   uvSizesAndPositions:
-  - {x: 0.05078125, y: 0.078125, z: 0.5, w: 0.515625}
-  - {x: 0.05078125, y: 0.078125, z: 0.5625, w: 0.515625}
-  - {x: 0.05859375, y: 0.078125, z: 0.09375, w: 0.6328125}
-  - {x: 0.05078125, y: 0.078125, z: 0.5625, w: 0.515625}
-  - {x: 0.0390625, y: 0.078125, z: 0.69921875, w: 0.6328125}
-  - {x: 0.06640625, y: 0.078125, z: 0.17578125, w: 0.515625}
-  - {x: 0.05078125, y: 0.078125, z: 0.10546875, w: 0.515625}
-  - {x: 0.05078125, y: 0.078125, z: 0.10546875, w: 0.515625}
-  - {x: 0.05859375, y: 0.078125, z: 0.09375, w: 0.6328125}
-  - {x: 0.0625, y: 0.078125, z: 0.015625, w: 0.515625}
-  - {x: 0.046875, y: 0.078125, z: 0.41015625, w: 0.6328125}
+  - {x: 0.02734375, y: 0.12890625, z: 0.2890625, w: 0.73828125}
+  - {x: 0.03125, y: 0.12890625, z: 0.63671875, w: 0.60546875}
+  - {x: 0.03125, y: 0.12890625, z: 0.84375, w: 0.60546875}
+  - {x: 0.02734375, y: 0.12890625, z: 0.96875, w: 0.60546875}
+  - {x: 0.03125, y: 0.12890625, z: 0.53125, w: 0.60546875}
+  - {x: 0.03125, y: 0.12890625, z: 0.80859375, w: 0.60546875}
+  - {x: 0.02734375, y: 0.12890625, z: 0.82421875, w: 0.73828125}
+  - {x: 0.0234375, y: 0.12890625, z: 0, w: 0.47265625}
+  - {x: 0.03125, y: 0.12890625, z: 0.390625, w: 0.60546875}
+  - {x: 0.0234375, y: 0.12890625, z: 0, w: 0.47265625}
+  - {x: 0.0078125, y: 0.12890625, z: 0.671875, w: 0.60546875}
+  - {x: 0.03125, y: 0.12890625, z: 0.84375, w: 0.60546875}
+  - {x: 0.03125, y: 0.12890625, z: 0.80859375, w: 0.60546875}
   - {x: 0, y: 0, z: 0, w: 0}
   scalesAndFlips:
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
@@ -1061,23 +758,8 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  curMotionIndex: 0
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
   hasText: 1
 --- !u!1 &8555246787508902657
 GameObject:
@@ -1105,7 +787,7 @@ Transform:
   m_GameObject: {fileID: 8555246787508902657}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -0.138, y: -0.08, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1123,11 +805,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 5
+  rendererType: 4
   batchKey:
     texture: {fileID: 2800000, guid: ce00a485150a179469cda6914ad00cce, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
-    depthOrder: -24
+    depthOrder: -34
   atlas: {fileID: 11400000, guid: eba6eb7239ccca949b91a3ab6672a7da, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -1136,11 +818,6 @@ MonoBehaviour:
   flipY: 0
   width: 1
   height: 1
-  text: 
-  kerning: 0
-  spacing: 0
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.071777344, y: 0.104003906, z: 0.66625977, w: 0.18383789}
@@ -1148,9 +825,9 @@ MonoBehaviour:
     worldSize: {x: 1.6333333, y: 2.3666666, z: 1}
     index: 12
   bounds:
-    m_Center: {x: 300.04443, y: 4.6144447, z: 16.92}
+    m_Center: {x: 299.90643, y: 4.534445, z: 16.92}
     m_Extent: {x: 0.81666666, y: 1.1833333, z: 0.1}
-  worldPivotAndSize: {x: 0.7722222, y: 2.3388886, z: 1.6333333, w: 2.3666666}
+  worldPivotAndSize: {x: -0.7722222, y: -2.3388886, z: 1.6333333, w: 2.3666666}
   uvSizeAndPosition: {x: 0.071777344, y: 0.104003906, z: 0.66625977, w: 0.18383789}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -1166,17 +843,7 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 12
   prevSpriteIndexFlipV: 12
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
-  hasText: 0
 --- !u!1 &8591854209274725004
 GameObject:
   m_ObjectHideFlags: 0
@@ -1186,7 +853,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2236656953462005341}
-  - component: {fileID: 1082521566760503151}
+  - component: {fileID: 581004557939880678}
   m_Layer: 0
   m_Name: PageNumber
   m_TagString: Untagged
@@ -1203,13 +870,13 @@ Transform:
   m_GameObject: {fileID: 8591854209274725004}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.18600315, y: -2.2329996, z: -1}
+  m_LocalPosition: {x: -0.144, y: -2.129, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 7380519998003774169}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1082521566760503151
+--- !u!114 &581004557939880678
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -1218,47 +885,34 @@ MonoBehaviour:
   m_GameObject: {fileID: 8591854209274725004}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Script: {fileID: 11500000, guid: f55b4786e96a8dd42b04bb6173006f35, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 7
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasTextRenderer
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
-    depthOrder: -25
-  atlas: {fileID: 11400000, guid: afe44af98e97f2a4ab43981104af4d1c, type: 2}
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 0
-  flipX: 0
-  flipY: 0
-  width: 0
-  height: 0
+    depthOrder: -35
+  textAtlas: {fileID: 11400000, guid: 03871f642f841d447a7b9560fa5d0c24, type: 2}
   text: Page 1
-  kerning: 3
-  spacing: 4
+  kerning: 1
+  spacing: 0.05
   scrollSize: 0
-  textToCenter: 0
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0, y: 0, z: 0}
-    index: 0
+  alignmentType: 1
   bounds:
-    m_Center: {x: 299.9938, y: 3.628667, z: 15.92}
-    m_Extent: {x: 0.1798111, y: 0.09166667, z: 0}
-  worldPivotAndSize: {x: 0, y: 0, z: 0, w: 0}
-  uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
-  scaleAndFlip: {x: 0, y: 0, z: 0, w: 0}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.1798111, y: 0.09166667, z: 0}
+    m_Center: {x: 299.856, y: 3.5493333, z: 15.92}
+    m_Extent: {x: 0.20255557, y: 0.09166667, z: 0}
+  textBoxData:
+    size: {x: 0.40511113, y: 0.18333334}
+    lineWidths:
+    - 0.40511113
+  boundsOffset: {x: 0, y: -0.09166667, z: 0}
   worldPivotsAndSizes:
-  - {x: -0, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.06768333, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.13536666, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.20305, y: 0, z: 0.044444446, w: 0.18333334}
-  - {x: -0.3374, y: 0, z: 0.022222223, w: 0.18333334}
+  - {x: -0.20255557, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: -0.11933334, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: -0.03611112, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.0471111, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.18033332, y: -0.18333334, z: 0.022222223, w: 0.18333334}
   - {x: 0, y: 0, z: 0, w: 0}
   uvSizesAndPositions:
   - {x: 0.03125, y: 0.12890625, z: 0.7109375, w: 0.73828125}
@@ -1281,23 +935,6 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  curMotionIndex: 0
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
-  isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
-  quadCount: 0
   hasText: 1
 --- !u!1 &9013908411491639950
 GameObject:
@@ -1325,7 +962,7 @@ Transform:
   m_GameObject: {fileID: 9013908411491639950}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.13597924, y: -0.8149998, z: -2}
+  m_LocalPosition: {x: -0.22600609, y: -0.892, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1343,11 +980,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 4
+  rendererType: 3
   batchKey:
     texture: {fileID: 2800000, guid: baee2ed3eb8895e45805e19093805a27, type: 3}
     material: {fileID: 2100000, guid: c30f9b5dfdb7915458408b63fcc55b9b, type: 2}
-    depthOrder: -26
+    depthOrder: -36
   atlas: {fileID: 11400000, guid: d3627110c6f36b84b93e607b7dc6d005, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -1356,11 +993,6 @@ MonoBehaviour:
   flipY: 0
   width: 1
   height: 1
-  text: 
-  kerning: 0
-  spacing: 0
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.060058594, y: 0.057128906, z: 0.2915039, w: 0.94140625}
@@ -1368,9 +1000,9 @@ MonoBehaviour:
     worldSize: {x: 0.68333334, y: 0.65, z: 1}
     index: 5
   bounds:
-    m_Center: {x: 300.2057, y: 5.2799997, z: 14.92}
+    m_Center: {x: 300.11566, y: 5.2029996, z: 14.92}
     m_Extent: {x: 0.34166667, y: 0.325, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 0.68333334, w: 0.65}
+  worldPivotAndSize: {x: -0, y: -0, z: 0.68333334, w: 0.65}
   uvSizeAndPosition: {x: 0.060058594, y: 0.057128906, z: 0.2915039, w: 0.94140625}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -1386,14 +1018,4 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 5
   prevSpriteIndexFlipV: 5
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
-  hasText: 0

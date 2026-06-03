@@ -56,7 +56,7 @@ Shader "Custom/s_atlasCharacter"
                 float2 objPos = v.positionOS.xy;
 
                 objPos *= size * scale;
-                objPos -= pivot;
+                objPos += pivot;
 
                 float3 worldPos = float3(position.xy + objPos, position.z);
 

@@ -1,9 +1,5 @@
 Shader "Custom/s_moon"
 {
-    Properties
-    {
-    }
-
     SubShader
     {
         Tags { "Queue" = "Transparent" "RenderType"="Transparent" }

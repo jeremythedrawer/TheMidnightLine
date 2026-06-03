@@ -29,7 +29,6 @@ public class GangwayDoor : MonoBehaviour
     }
     public void OpenDoors()
     {
-        Debug.Log("Open Doors");
         ctsMove?.Cancel();
         ctsMove?.Dispose();
 
