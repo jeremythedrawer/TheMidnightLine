@@ -1,8 +1,12 @@
-using NUnit.Framework;
 using System.Collections.Generic;
 using UnityEngine;
+
+using UnityEditor;
+using UnityEditor.IMGUI.Controls;
+
 using static Atlas;
 using static AtlasRendering;
+using static AtlasUI;
 
 [ExecuteAlways]
 public class AtlasTextRenderer : MonoBehaviour
@@ -14,8 +18,12 @@ public class AtlasTextRenderer : MonoBehaviour
     [TextArea(3, 10)] public string text;
     public float kerning = 1.1f;
     public float spacing = 1;
-    public float scrollSize;
     public AtlasTextAlignmentType alignmentType;
+
+    [Header("Scroll Settings")]
+    public float scrollSpeed;
+    public float scrollSpacing;
+    public float scrollBoundSize;
 
     [Header("Generated")]
     public Bounds bounds;
@@ -50,7 +58,6 @@ public class AtlasTextRenderer : MonoBehaviour
         if (!Application.isPlaying)
         {
             bounds = GetBounds(text);
-            UpdateDepthEditor();
         }
 #endif
     }
@@ -80,7 +87,7 @@ public class AtlasTextRenderer : MonoBehaviour
             break;
         }
     }
-    public void AppearText(float normAmount, bool appear, ref float clock)
+    public void UpdateAppearText(float normAmount, bool appear, ref float clock)
     {
         if (appear)
         {
@@ -107,7 +114,6 @@ public class AtlasTextRenderer : MonoBehaviour
                     customs[i].w = t;
                 }
             }
-
         }
     }
     public void SetTextAlpha(float alpha)
@@ -125,20 +131,17 @@ public class AtlasTextRenderer : MonoBehaviour
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, newDepth);
     }
-    public void UpdateDepthEditor()
-    {
-        if ((int)transform.position.z != batchKey.depthOrder)
-        {
-            RegisterTextRenderer(this);
-        }
-    }
     public void SetScrollingText()
     {
         customs = new Vector4[worldPivotsAndSizes.Length];
         for (int i = 0; i < customs.Length; i++)
         {
-            customs[i].x = bounds.size.x;
-            customs[i].y = scrollSize;
+            Vector4 custom = customs[i];
+            custom.x = scrollSpacing;
+            custom.y = scrollBoundSize;
+            custom.z = scrollSpeed;
+            custom.w = scrollSpeed < 0 ? 1 : 0;
+            customs[i] = custom; 
         }
     }
     public void SetTextWorld()
@@ -318,8 +321,62 @@ public class AtlasTextRenderer : MonoBehaviour
     }
     private void OnDrawGizmosSelected()
     {
+
         Gizmos.color = Color.indigo;
         Gizmos.DrawWireCube(bounds.center, bounds.size);
+        switch(rendererType)
+        {
+            case AtlasTextRendererType.SimpleWorld:
+            {
+            }
+            break;
+
+            case AtlasTextRendererType.ScrollWorld:
+            {
+                Gizmos.color = Color.red;
+                float scrollBoundsXPos = transform.position.x + scrollBoundSize * 0.5f; 
+                Gizmos.DrawWireCube(new Vector2(scrollBoundsXPos, bounds.center.y), new Vector2(scrollBoundSize, bounds.size.y));
+            }
+            break;
+        }
     }
 #endif
+}
+
+[CustomEditor(typeof(AtlasTextRenderer))]
+public class AtlasTextRendererEditor : Editor
+{
+    BoxBoundsHandle boundsHandle = new BoxBoundsHandle();
+
+    private void OnSceneGUI()
+    {
+        AtlasTextRenderer textRend = (AtlasTextRenderer)target;
+
+        switch(textRend.rendererType)
+        {
+            case AtlasTextRendererType.SimpleWorld:
+            {
+
+            }
+            break;
+            case AtlasTextRendererType.ScrollWorld:
+            {
+                float scrollBoundsXPos = textRend.transform.position.x + textRend.scrollBoundSize * 0.5f;
+                boundsHandle.center = new Vector2(scrollBoundsXPos, textRend.bounds.center.y);
+                boundsHandle.size = new Vector2(textRend.scrollBoundSize, textRend.bounds.size.y);
+                boundsHandle.SetColor(Color.red);
+                boundsHandle.DrawHandle();
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(textRend, "Resize Bounds");
+
+                    textRend.scrollBoundSize = boundsHandle.size.x;
+                    textRend.SetScrollingText();
+                }
+            }
+            break;
+        }
+
+    }
 }

@@ -7,7 +7,7 @@ public class PlayerInputsSO : ScriptableObject
     public bool run;
 
     public bool notepadKeyDown;
-    public Vector2 notepadChooseStationAndFlip;
+    public Vector2 notepadChoosePromptInputAndFlip;
     public bool notepadConfirmStation;
 
     public bool ticketCheckKeyDown;

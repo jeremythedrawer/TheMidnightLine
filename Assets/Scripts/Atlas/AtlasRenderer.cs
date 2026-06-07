@@ -184,10 +184,10 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void UpdateDepthEditor(Transform transform)
     {
-        if ((int)transform.position.z != batchKey.depthOrder)
-        {
-            RegisterRenderer(this);
-        }
+        //if ((int)transform.position.z != batchKey.depthOrder)
+        //{
+        //    RegisterRenderer(this);
+        //}
     }
     public void UpdateDepthRealtime(int newDepth)
     {

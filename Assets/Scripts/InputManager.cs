@@ -73,13 +73,13 @@ public class InputManager : MonoBehaviour
         notepadChooseStation_action.started += context =>
         {
             Vector2 move = context.ReadValue<Vector2>();
-            playerInputs.notepadChooseStationAndFlip.x = Mathf.RoundToInt(move.x);
+            playerInputs.notepadChoosePromptInputAndFlip.x = Mathf.RoundToInt(move.x);
         };
 
         notepadFlipPage_action.started += context =>
         {
             Vector2 move = context.ReadValue<Vector2>();
-            playerInputs.notepadChooseStationAndFlip.y = Mathf.RoundToInt(move.y);
+            playerInputs.notepadChoosePromptInputAndFlip.y = Mathf.RoundToInt(move.y);
         };
 
         ticket_action.started += context => playerInputs.ticketCheckKeyDown = true;
@@ -153,8 +153,8 @@ public class InputManager : MonoBehaviour
         playerInputs.mouseLeftDown = false;
         playerInputs.mouseLeftUp = false;
         playerInputs.mouseRightDown = false;
-        playerInputs.notepadChooseStationAndFlip.x = 0;
-        playerInputs.notepadChooseStationAndFlip.y = 0;
+        playerInputs.notepadChoosePromptInputAndFlip.x = 0;
+        playerInputs.notepadChoosePromptInputAndFlip.y = 0;
     }
     private void CheckDevice(InputControl value, InputEventPtr ptr)
     {

@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 826454790681439854}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.606, y: -0.313, z: -2}
+  m_LocalPosition: {x: -0.49302393, y: -0.24400023, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -48,7 +48,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
-    depthOrder: -36
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -64,7 +63,7 @@ MonoBehaviour:
     worldSize: {x: 0.20555556, y: 0.20555556, z: 1}
     index: 3
   bounds:
-    m_Center: {x: 299.394, y: 5.457, z: 14.92}
+    m_Center: {x: 299.507, y: 5.5259995, z: 14.92}
     m_Extent: {x: 0.10277778, y: 0.10277778, z: 0.1}
   worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
   uvSizeAndPosition: {x: 0.14453125, y: 0.14453125, z: 0.3515625, w: 0.84375}
@@ -109,7 +108,7 @@ Transform:
   m_GameObject: {fileID: 2191616955255421442}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.226, y: -0.892, z: -1}
+  m_LocalPosition: {x: -0.11302392, y: -0.82300025, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -131,7 +130,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: baee2ed3eb8895e45805e19093805a27, type: 3}
     material: {fileID: 2100000, guid: c30f9b5dfdb7915458408b63fcc55b9b, type: 2}
-    depthOrder: -35
   atlas: {fileID: 11400000, guid: d3627110c6f36b84b93e607b7dc6d005, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -147,7 +145,7 @@ MonoBehaviour:
     worldSize: {x: 0.6888889, y: 0.65, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 300.11844, y: 5.2029996, z: 15.92}
+    m_Center: {x: 300.2314, y: 5.2719994, z: 15.92}
     m_Extent: {x: 0.34444445, y: 0.325, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 0.6888889, w: 0.65}
   uvSizeAndPosition: {x: 0.060546875, y: 0.057128906, z: 0.23046875, w: 0.94189453}
@@ -192,7 +190,7 @@ Transform:
   m_GameObject: {fileID: 2488520917910274587}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.753, y: -1.099, z: -1}
+  m_LocalPosition: {x: -0.64, y: -1.03, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -214,7 +212,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
-    depthOrder: -35
   textAtlas: {fileID: 11400000, guid: 03871f642f841d447a7b9560fa5d0c24, type: 2}
   text: Behaviour 0
   kerning: 1
@@ -222,7 +219,7 @@ MonoBehaviour:
   scrollSize: 0
   alignmentType: 0
   bounds:
-    m_Center: {x: 299.65344, y: 4.5793333, z: 15.92}
+    m_Center: {x: 299.76642, y: 4.648333, z: 15.92}
     m_Extent: {x: 0.40644446, y: 0.09166667, z: 0}
   textBoxData:
     size: {x: 0.8128889, y: 0.18333334}
@@ -332,33 +329,45 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 6721a802313c2b44ba9fe3622ae03d13, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Page
+  pageType: 2
+  promptType: 1
+  clueType: 1
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
-  behaviour0_renderer: {fileID: 5180166987920443640}
-  behaviour1_renderer: {fileID: 2322028569944472143}
-  chosenStation_renderer: {fileID: 1407368147541437526}
-  pageNumber_renderer: {fileID: 581004557939880678}
-  paper_renderer: {fileID: 2670676497328436670}
-  mugshot_renderer: {fileID: 4580197788305518065}
-  paperCornerLeft_renderer: {fileID: 7623350588780838515}
-  paperCornerRight_renderer: {fileID: 4898080337301717236}
+  paperRenderer: {fileID: 2670676497328436670}
+  clueTextRenderers:
+  - {fileID: 5180166987920443640}
+  - {fileID: 2322028569944472143}
+  pictureRenderers:
+  - {fileID: 4580197788305518065}
+  - {fileID: 7459302900703187996}
+  answerTextRenderers:
+  - {fileID: 1407368147541437526}
+  contentTextRenderers: []
+  pageNumberRenderer: {fileID: 581004557939880678}
+  paperCornerLeftButtonRenderer: {fileID: 7623350588780838515}
+  paperCornerRightButtonRenderer: {fileID: 4898080337301717236}
   exitButton_renderer: {fileID: 8813909496853599495}
-  paperClip:
-    clipName: 
-    clipType: 0
-    motionIndex: 0
-    keyframeStartIndex: 0
-    keyframeEndIndex: 0
-    time: 0
-  behaviours0: 0
-  behaviours1: 0
-  chosenStationIndex: 0
-  stationNameBounds:
+  bottomTextRenderers:
+  - {fileID: 2322028569944472143}
+  - {fileID: 1407368147541437526}
+  - {fileID: 581004557939880678}
+  topTextRenderers:
+  - {fileID: 5180166987920443640}
+  bottomRenderers:
+  - {fileID: 4898080337301717236}
+  - {fileID: 7623350588780838515}
+  topRenderers:
+  - {fileID: 4580197788305518065}
+  - {fileID: 8813909496853599495}
+  - {fileID: 7459302900703187996}
+  activeAnswerTextRenderer: {fileID: 0}
+  promptInputIndex: 0
+  promtInputTextBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  chosenStationName: 
-  isLastPage: 0
-  isFirstPage: 0
+  promptInputText: 
+  previewAnswerText: 
 --- !u!1 &3958053313500941109
 GameObject:
   m_ObjectHideFlags: 0
@@ -385,7 +394,7 @@ Transform:
   m_GameObject: {fileID: 3958053313500941109}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.605, y: -2.278, z: -2}
+  m_LocalPosition: {x: 0.7179761, y: -2.2090003, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -407,7 +416,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
-    depthOrder: -36
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -423,7 +431,7 @@ MonoBehaviour:
     worldSize: {x: 0.18888889, y: 0.20555556, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 300.51056, y: 3.5947776, z: 14.92}
+    m_Center: {x: 300.62354, y: 3.6637774, z: 14.92}
     m_Extent: {x: 0.094444446, y: 0.10277778, z: 0.1}
   worldPivotAndSize: {x: -0.18888889, y: -0, z: 0.18888889, w: 0.20555556}
   uvSizeAndPosition: {x: 0.1328125, y: 0.14453125, z: 0.51171875, w: 0.83984375}
@@ -468,7 +476,7 @@ Transform:
   m_GameObject: {fileID: 4143792154808190999}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.7529983, y: -1.413, z: -1}
+  m_LocalPosition: {x: -0.6400222, y: -1.3440002, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -490,7 +498,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
-    depthOrder: -35
   textAtlas: {fileID: 11400000, guid: 03871f642f841d447a7b9560fa5d0c24, type: 2}
   text: Behaviour 1
   kerning: 1
@@ -498,7 +505,7 @@ MonoBehaviour:
   scrollSize: 0
   alignmentType: 0
   bounds:
-    m_Center: {x: 299.64233, y: 4.265333, z: 15.92}
+    m_Center: {x: 299.7553, y: 4.334333, z: 15.92}
     m_Extent: {x: 0.39533335, y: 0.09166667, z: 0}
   textBoxData:
     size: {x: 0.7906667, y: 0.18333334}
@@ -580,7 +587,7 @@ Transform:
   m_GameObject: {fileID: 5113536589409016990}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.794, y: -2.281, z: -2}
+  m_LocalPosition: {x: -0.68102396, y: -2.2120001, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -602,7 +609,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
-    depthOrder: -36
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -618,7 +624,7 @@ MonoBehaviour:
     worldSize: {x: 0.18888889, y: 0.20555556, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 299.30045, y: 3.5917778, z: 14.92}
+    m_Center: {x: 299.41342, y: 3.6607776, z: 14.92}
     m_Extent: {x: 0.094444446, y: 0.10277778, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 0.18888889, w: 0.20555556}
   uvSizeAndPosition: {x: 0.1328125, y: 0.14453125, z: 0.51171875, w: 0.83984375}
@@ -663,7 +669,7 @@ Transform:
   m_GameObject: {fileID: 6692531169113885166}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.7529983, y: -1.719, z: -1}
+  m_LocalPosition: {x: -0.6400222, y: -1.6500002, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -685,7 +691,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
     material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
-    depthOrder: -35
   textAtlas: {fileID: 11400000, guid: 03871f642f841d447a7b9560fa5d0c24, type: 2}
   text: Chosen Station
   kerning: 0.8
@@ -693,7 +698,7 @@ MonoBehaviour:
   scrollSize: 0
   alignmentType: 0
   bounds:
-    m_Center: {x: 299.67426, y: 3.9593334, z: 15.92}
+    m_Center: {x: 299.78723, y: 4.028333, z: 15.92}
     m_Extent: {x: 0.42724445, y: 0.09166667, z: 0}
   textBoxData:
     size: {x: 0.8544889, y: 0.18333334}
@@ -787,7 +792,7 @@ Transform:
   m_GameObject: {fileID: 8555246787508902657}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.138, y: -0.08, z: 0}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -809,7 +814,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: ce00a485150a179469cda6914ad00cce, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
-    depthOrder: -34
   atlas: {fileID: 11400000, guid: eba6eb7239ccca949b91a3ab6672a7da, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -825,7 +829,7 @@ MonoBehaviour:
     worldSize: {x: 1.6333333, y: 2.3666666, z: 1}
     index: 12
   bounds:
-    m_Center: {x: 299.90643, y: 4.534445, z: 16.92}
+    m_Center: {x: 300.04443, y: 4.6144447, z: 16.92}
     m_Extent: {x: 0.81666666, y: 1.1833333, z: 0.1}
   worldPivotAndSize: {x: -0.7722222, y: -2.3388886, z: 1.6333333, w: 2.3666666}
   uvSizeAndPosition: {x: 0.071777344, y: 0.104003906, z: 0.66625977, w: 0.18383789}
@@ -870,7 +874,7 @@ Transform:
   m_GameObject: {fileID: 8591854209274725004}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.144, y: -2.129, z: -1}
+  m_LocalPosition: {x: -0.03102392, y: -2.0600002, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -892,7 +896,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
-    depthOrder: -35
   textAtlas: {fileID: 11400000, guid: 03871f642f841d447a7b9560fa5d0c24, type: 2}
   text: Page 1
   kerning: 1
@@ -900,7 +903,7 @@ MonoBehaviour:
   scrollSize: 0
   alignmentType: 1
   bounds:
-    m_Center: {x: 299.856, y: 3.5493333, z: 15.92}
+    m_Center: {x: 299.96896, y: 3.618333, z: 15.92}
     m_Extent: {x: 0.20255557, y: 0.09166667, z: 0}
   textBoxData:
     size: {x: 0.40511113, y: 0.18333334}
@@ -962,7 +965,7 @@ Transform:
   m_GameObject: {fileID: 9013908411491639950}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.22600609, y: -0.892, z: -2}
+  m_LocalPosition: {x: -0.11303002, y: -0.82300025, z: -2}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -984,7 +987,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: baee2ed3eb8895e45805e19093805a27, type: 3}
     material: {fileID: 2100000, guid: c30f9b5dfdb7915458408b63fcc55b9b, type: 2}
-    depthOrder: -36
   atlas: {fileID: 11400000, guid: d3627110c6f36b84b93e607b7dc6d005, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -1000,7 +1002,7 @@ MonoBehaviour:
     worldSize: {x: 0.68333334, y: 0.65, z: 1}
     index: 5
   bounds:
-    m_Center: {x: 300.11566, y: 5.2029996, z: 14.92}
+    m_Center: {x: 300.22864, y: 5.2719994, z: 14.92}
     m_Extent: {x: 0.34166667, y: 0.325, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 0.68333334, w: 0.65}
   uvSizeAndPosition: {x: 0.060058594, y: 0.057128906, z: 0.2915039, w: 0.94140625}

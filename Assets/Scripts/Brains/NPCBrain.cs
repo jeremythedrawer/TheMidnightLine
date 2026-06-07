@@ -756,9 +756,8 @@ public class NPCBrain : MonoBehaviour
         Station station = TrainController.nextStation_instance;
         AtlasRenderer stationPlatform = station.station.isFrontOfTrain ? station.frontPlatformRenderer : station.backPlatformRenderer;
         transform.SetParent(stationPlatform.transform, true);
-        atlasRenderer.UpdateDepthRealtime(stationPlatform.batchKey.depthOrder);
+        atlasRenderer.UpdateDepthRealtime((int)stationPlatform.transform.position.z);
         rigidBody.includeLayers = layerSettings.stationMask;
-        atlasRenderer.UpdateDepthRealtime(stationPlatform.batchKey.depthOrder);
         onTrain = false;
         SetPath(NPCPath.ToExitStation);
     }

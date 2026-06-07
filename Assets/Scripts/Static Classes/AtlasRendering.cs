@@ -6,8 +6,6 @@ using static Atlas;
 public static class AtlasRendering
 {
     public const int MAX_SPRITE_DATA_COUNT = 1024;
-    public const float LETTER_ADVANCE = 0.122f;
-    public const float APPEAR_TEXT_TIME = 0.2f;
     public static int SPRITE_DATA_STRIDE = Marshal.SizeOf<SpriteData>();
 
     public static int ARGS_STRIDE = INT_SIZE * 5;
@@ -46,7 +44,6 @@ public static class AtlasRendering
     {
         public Texture2D texture;
         public Material material;
-        public int depthOrder;
     }
     [Serializable] public struct SpriteData
     {
@@ -110,7 +107,7 @@ public static class AtlasRendering
 
         UnregisterRenderer(renderer);
 
-        renderer.batchKey.depthOrder = (int)renderer.transform.position.z;
+        //renderer.batchKey.depthOrder = (int)renderer.transform.position.z;
 
         if (!spriteBatchDict.TryGetValue(renderer.batchKey, out SpriteBatch batch))
         {
@@ -147,7 +144,7 @@ public static class AtlasRendering
         renderer.batchKey.material.enableInstancing = true;
 
         UnregisterTextRenderer(renderer);
-        renderer.batchKey.depthOrder = (int)renderer.transform.position.z;
+      //  renderer.batchKey.depthOrder = (int)renderer.transform.position.z;
 
         if (!textBatchDict.TryGetValue(renderer.batchKey, out TextBatch batch))
         {

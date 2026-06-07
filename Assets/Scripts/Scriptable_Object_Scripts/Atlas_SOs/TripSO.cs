@@ -1,9 +1,11 @@
 using UnityEngine;
-using static AtlasSpawn;
-using static Atlas;
+
+using static AtlasUI;
+
 [CreateAssetMenu(fileName = "Trip", menuName = "Atlas / Trip")]
 public class TripSO : ScriptableObject
 {
+    public TripPrompt prompt;
     public ParticleAtlas[] particleAtlasArray;
     public StationSO[] stationsDataArray;
     public NPCBrain[] npc_prefabsArray;

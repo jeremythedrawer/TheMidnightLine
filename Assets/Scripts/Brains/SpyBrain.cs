@@ -1,7 +1,7 @@
-using Cysharp.Threading.Tasks;
-using System;
 using UnityEngine;
+
 using static Atlas;
+using static AtlasUI;
 using static Spy;
 
 public class SpyBrain : MonoBehaviour
@@ -33,7 +33,7 @@ public class SpyBrain : MonoBehaviour
     public CarriageMap curCarriageMap;
     public NPCBrain npcTicketCheck;
     public AtlasClip curClip;
-    public NotepadData.State curNotepadState;
+    public NotepadState curNotepadState;
 
     public float clipTime;
     public int curFrameIndex;
@@ -138,11 +138,11 @@ public class SpyBrain : MonoBehaviour
             case SpyState.Ticket:
             {
                 if (!playerInputs.ticketCheckKeyDown) canExitCheckTicket = true;
-                if((playerInputs.ticketCheckKeyDown && canExitCheckTicket) || playerInputs.notepadChooseStationAndFlip.x == 1)
+                if((playerInputs.ticketCheckKeyDown && canExitCheckTicket) || playerInputs.notepadChoosePromptInputAndFlip.x == 1)
                 {
                     checkingTicket = false;
                 }
-                if (playerInputs.notepadChooseStationAndFlip.x == -1)
+                if (playerInputs.notepadChoosePromptInputAndFlip.x == -1)
                 {
                     checkingTicket = false;
                 }
@@ -161,31 +161,31 @@ public class SpyBrain : MonoBehaviour
                 {
                     switch (notepadData.curState)
                     {
-                        case NotepadData.State.FlippingUp:
+                        case NotepadState.FlippingUp:
                         {
                             curClip = atlas.clipDict[(int)SpyMotion.NotepadFlipping];
                             atlasRenderer.PlayClipOneShot(curClip);
                         }
                         break;
-                        case NotepadData.State.FlippingDown:
+                        case NotepadState.FlippingDown:
                         {
                             curClip = atlas.clipDict[(int)SpyMotion.NotepadFlipping];
                             atlasRenderer.PlayClipOneShotReverse(curClip);
 
                         }
                         break;
-                        case NotepadData.State.Stationary:
+                        case NotepadState.Stationary:
                         {
                             curClip = atlas.clipDict[(int)SpyMotion.NotepadHolding];
                         }
                         break;
-                        case NotepadData.State.Writing:
+                        case NotepadState.Writing:
                         {
                             curClip = atlas.clipDict[(int)SpyMotion.NotepadWriting];
                             atlasRenderer.PlayClipOneShot(curClip);
                         }
                         break;
-                        case NotepadData.State.Erasing:
+                        case NotepadState.Erasing:
                         {
                             curClip = atlas.clipDict[(int)SpyMotion.NotepadWriting];
                             atlasRenderer.PlayClipOneShotReverse(curClip);
@@ -196,7 +196,7 @@ public class SpyBrain : MonoBehaviour
                     curNotepadState = notepadData.curState;
                 }
 
-                if (curNotepadState == NotepadData.State.Stationary)
+                if (curNotepadState == NotepadState.Stationary)
                 {
                     atlasRenderer.PlayClip(ref curClip);
                 }

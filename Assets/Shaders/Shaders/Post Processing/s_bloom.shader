@@ -22,8 +22,6 @@ Shader "Custom/s_bloom"
 			return (1 / sqrt(TWO_PI * sigmaSqu)) * pow(E, -(x * x) / (2 * sigmaSqu));
 		}
 
-
-
 		half4 bloomPre(Varyings input) : SV_TARGET
 		{
 			half3 col = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_LinearClamp, input.texcoord).rgb;

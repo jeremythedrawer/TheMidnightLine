@@ -341,13 +341,13 @@ public class TrainController : MonoBehaviour
     {
         Carriage sampleCarriage = carriages[0];
         AtlasRenderer grapPoleRenderer = sampleCarriage.grapPoleRenderers[0];
-        stats.depthSections.min = sampleCarriage.exteriorRenderers[0].batchKey.depthOrder;
-        stats.depthSections.max = sampleCarriage.interiorSlideDoors[0].rightSlideDoorRenderer.batchKey.depthOrder;
-        stats.depthSections.frontMin = grapPoleRenderer.batchKey.depthOrder - 2;
-        stats.depthSections.frontMax = grapPoleRenderer.batchKey.depthOrder - 1;
-        stats.depthSections.backMin = grapPoleRenderer.batchKey.depthOrder + 1;
-        stats.depthSections.backMax = grapPoleRenderer.batchKey.depthOrder + 2;
-        stats.depthSections.carriageSeat = sampleCarriage.seatRenderers[0].batchKey.depthOrder - 1;
+        stats.depthSections.min = (int)sampleCarriage.exteriorRenderers[0].transform.position.z;
+        stats.depthSections.max = (int)sampleCarriage.interiorSlideDoors[0].rightSlideDoorRenderer.transform.position.z;
+        stats.depthSections.frontMin = (int)grapPoleRenderer.transform.position.z;
+        stats.depthSections.frontMax = (int)grapPoleRenderer.transform.position.z;
+        stats.depthSections.backMin = (int)grapPoleRenderer.transform.position.z;
+        stats.depthSections.backMax = (int)grapPoleRenderer.transform.position.z;
+        stats.depthSections.carriageSeat = (int)sampleCarriage.seatRenderers[0].transform.position.z;
     }
     private void HandleTrainMeters()
     {

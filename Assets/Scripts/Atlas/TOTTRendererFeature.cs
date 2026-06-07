@@ -175,6 +175,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
                     if (renderer.gameObject == null || !renderer.gameObject.activeInHierarchy) continue;
 
+
 #if UNITY_EDITOR
                     if (prefabStage != null) { if (renderer.gameObject.scene != prefabScene) continue; }
 #else

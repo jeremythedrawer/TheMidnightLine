@@ -1,12 +1,5 @@
 Shader "Custom/s_atlasFontScroll"
 {
-    Properties
-    {
-        [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
-        _ScrollSpeed("Scroll Speed", Float) = 0.2
-        _Spacing("Spacing", Float) = 0.2
-    }
-
     SubShader
     {
         Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
@@ -33,7 +26,9 @@ Shader "Custom/s_atlasFontScroll"
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 float2 objPos : TEXCOORD1;
-                uint instanceID : TEXCOORD2;
+                float4 uvSizeAndPos : TEXCOORD2;
+                float scrollBoundWidth : TEXCOORD3;
+
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -41,61 +36,56 @@ Shader "Custom/s_atlasFontScroll"
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
-            float3 _MainColor;
-
-            CBUFFER_START(UnityPerMaterial)
-                float _ScrollSpeed;
-                float _Spacing;
-            CBUFFER_END
-
             Varyings vert(Attributes v)
             {
                 Varyings o;
 
                 AtlasSprite spriteData = _SpriteData[v.instanceID];
 
-
                 float3 position = spriteData.position.xyz;
-                
                 float2 pivot = spriteData.pivotAndSize.xy;
                 float2 size = spriteData.pivotAndSize.zw;
 
+                float scrollSpacing = spriteData.custom.x;
+                float scrollBoundWidth = spriteData.custom.y; 
+                float scrollSpeed = spriteData.custom.z;
+
+                float maskWidth = (scrollBoundWidth + scrollSpacing);
+                
+                float time = _Time.y * scrollSpeed;
+                float scrollingBackwards = spriteData.custom.w;
+
                 float2 objPos = v.positionOS.xy;
-
                 objPos *= size;
-                float time = _Time.y * _ScrollSpeed;
-
-                objPos.x += fmod(-time + pivot.x, spriteData.custom.x + _Spacing) * (spriteData.custom.y) + (spriteData.custom.y); //custom.x is the total bounds of the text
+                objPos.x += fmod(time + pivot.x, maskWidth) + (maskWidth * scrollingBackwards);
                 objPos += pivot.y;
                 float3 worldPos = float3(position.xy + objPos, position.z);
 
                 o.objPos = objPos;
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
-                o.instanceID = v.instanceID;
+                o.uvSizeAndPos = spriteData.uvSizeAndPos;
+                o.scrollBoundWidth = scrollBoundWidth;
 
                 return o;
             }
 
             half4 frag(Varyings i) : SV_Target
             {
-                uint id = i.instanceID;
-                AtlasSprite spriteData = _SpriteData[id];
-
-                float2 uvSize = spriteData.uvSizeAndPos.xy;
-                float2 uvPos = spriteData.uvSizeAndPos.zw;
+                float2 uvSize = i.uvSizeAndPos.xy;
+                float2 uvPos = i.uvSizeAndPos.zw;
 
                 i.uv = frac(i.uv);
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 finalColor = color.rgb + _MainColor;
+                half3 finalColor = color.rgb;
 
-                float mask = 10; //TODO: Set on custom.y
-                half rightMask = step(i.objPos.x, spriteData.custom.y);
+                half rightMask = step(i.objPos.x, i.scrollBoundWidth);
                 half leftMask = step(0,i.objPos.x);
                 half alpha = color.a * rightMask * leftMask;
+
                 clip(alpha - 0.001);
                 return half4 (finalColor, 1);
             }

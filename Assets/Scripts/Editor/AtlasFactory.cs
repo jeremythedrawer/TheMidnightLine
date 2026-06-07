@@ -67,10 +67,6 @@ public class AtlasFactory : EditorWindow
     private int motionSpritesFound;
     private int sliceSpritesFound;
 
-    const float padding = 50f;
-    const float GUIHeaderColoumnWidth = 300;
-
-
     GUILayoutOption[] spriteDirectoryLayout;
     GUILayoutOption[] previewLayout;
     GUILayoutOption[] overviewLayout;
@@ -403,7 +399,7 @@ public class AtlasFactory : EditorWindow
             );
         }
 
-        GUI.DrawTextureWithTexCoords(previewRect, atlas.texture, uvRect);
+        GUI.DrawTextureWithTexCoords(containterRect, atlas.texture, uvRect);
         Vector2 indexPos = new Vector2(containterRect.xMin, containterRect.yMin);
         GUIStyle indexStyle = new GUIStyle(EditorStyles.boldLabel)
         {

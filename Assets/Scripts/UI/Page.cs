@@ -1,221 +1,232 @@
-using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using UnityEngine;
+
 using static Atlas;
 using static NPC;
+using static AtlasUI;
+
 public class Page : MonoBehaviour
 {
+    public static AtlasClip paper_clip;
+    public PageType pageType;
+    public TripPrompt promptType;
+    public TripClue clueType;
+
     public TripSO trip;
     public NPCsDataSO npcData;
 
-    public AtlasTextRenderer behaviour0_renderer;
-    public AtlasTextRenderer behaviour1_renderer;
-    public AtlasTextRenderer chosenStation_renderer;
-    public AtlasTextRenderer pageNumber_renderer;
+    public AtlasRenderer paperRenderer;
 
-    public AtlasRenderer paper_renderer;
-    public AtlasRenderer mugshot_renderer;
-    public AtlasRenderer paperCornerLeft_renderer;
-    public AtlasRenderer paperCornerRight_renderer;
+    public AtlasTextRenderer[] clueTextRenderers;
+    public AtlasRenderer[] pictureRenderers;
+    public AtlasTextRenderer[] answerTextRenderers;
+
+    public AtlasTextRenderer[] contentTextRenderers;
+    
+
+    public AtlasTextRenderer pageNumberRenderer;
+    public AtlasRenderer paperCornerLeftButtonRenderer;
+    public AtlasRenderer paperCornerRightButtonRenderer;
     public AtlasRenderer exitButton_renderer;
 
+    public AtlasTextRenderer[] bottomTextRenderers;
+    public AtlasTextRenderer[] topTextRenderers;
+
+    public AtlasRenderer[] bottomRenderers;
+    public AtlasRenderer[] topRenderers;
+    
     [Header("Generated")]
-    public AtlasClip paperClip;
-    public Behaviours behaviours0;
-    public Behaviours behaviours1;
-    public int chosenStationIndex;
-    public Bounds stationNameBounds;
-    public string chosenStationName;
-    public bool isLastPage;
-    public bool isFirstPage;
+    public AtlasTextRenderer activeAnswerTextRenderer;
+    public int answerIndex;
+    public Bounds answerTextBounds;
+    
+    public string answerText;
+    public string previewAnswerText;
+
+    //public string playerSignature; //TODO: Put this in a player profile scriptable object
+
     public CancellationTokenSource ctsWrite;
-    public string previewStationText;
     private void OnDisable()
     {
         ctsWrite?.Cancel();
         ctsWrite = null;
     }
-    public void Init(NPCProfile traitorProfile)
+    public void Init()
     {
-        paperClip = paper_renderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
+        paper_clip = paperRenderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
+        
+        answerIndex = -1;
 
-        behaviours0 = GetBehaviourAtIndex(traitorProfile.behaviours, 0);
-        behaviours1 = GetBehaviourAtIndex(traitorProfile.behaviours, 1);
+        switch (pageType)
+        {
+            case PageType.Prompt:
+            {
+                string promptText = AtlasUI.promptDict[trip.prompt];
+                contentTextRenderers[0].SetText(promptText);
+            }
+            break;
 
-        behaviour0_renderer.SetText(npcData.behaviourDescDict[behaviours0]);
-        behaviour1_renderer.SetText(npcData.behaviourDescDict[behaviours1]);
+            case PageType.Confirm:
+            {
+                activeAnswerTextRenderer = answerTextRenderers[0];
+            }
+            break;
 
-        mugshot_renderer.UpdateSpriteInputs(mugshot_renderer.atlas.simpleSprites[traitorProfile.coveredMugshotIndex]);
+            case PageType.Profile:
+            {
+                activeAnswerTextRenderer = answerTextRenderers[0];
 
-        chosenStationIndex = -1;
-        chosenStation_renderer.SetText("");
+                for (int i = 0; i < answerTextRenderers.Length; i++)
+                {
+                    answerTextRenderers[i].SetText("");
+                }
+            }
+            break;
+        }
     }
-    public void PlayPaperClip()
+    public void InitBehaviourClueText(NPCProfile traitorProfile)
     {
-        paper_renderer.PlayClipOneShot(paperClip);
-    }
-    public void PlayPaperClipReverse()
-    {
-        paper_renderer.PlayClipOneShotReverse(paperClip);
+        for (int i = 0; i < clueTextRenderers.Length; i++)
+        {
+            Behaviours behaviour = GetBehaviourAtIndex(traitorProfile.behaviours, i);
+            clueTextRenderers[i].SetText(npcData.behaviourDescDict[behaviour]);
+        }
+        Init();
     }
     public void TogglePageContentBottomHalf(bool toggle)
     {
-        behaviour0_renderer.enabled = toggle;
-        behaviour1_renderer.enabled = toggle;
-        pageNumber_renderer.enabled = toggle;
-        
-        if(!isFirstPage)
+        if (bottomTextRenderers != null)
         {
-            paperCornerLeft_renderer.enabled = toggle;
+            for (int i = 0; i < bottomTextRenderers.Length; i++)
+            {
+                bottomTextRenderers[i].enabled = toggle;
+            }
         }
-        if(!isLastPage)
+        if (bottomRenderers != null)
         {
-            paperCornerRight_renderer.enabled = toggle;
-        }
-
-        if (chosenStationIndex == -1)
-        {
-            chosenStation_renderer.enabled = false;
-        }
-        else
-        {
-            chosenStation_renderer.enabled = toggle;
+            for (int i = 0; i < bottomRenderers.Length; i++)
+            {
+                bottomRenderers[i].enabled = toggle;
+            }
         }
     }
     public void TogglePageContentTopHalf(bool toggle)
     {
-        mugshot_renderer.enabled = toggle;
-        exitButton_renderer.enabled = toggle;
-    }
-    public void UpdatePageDepth(int depth)
-    {
-        paper_renderer.UpdateDepthRealtime(depth);
-        int contentDepth = depth - 1;
-        behaviour0_renderer.UpdateDepthRealtime(contentDepth);
-        behaviour1_renderer.UpdateDepthRealtime(contentDepth);
-        chosenStation_renderer.UpdateDepthRealtime(contentDepth);
-
-        if (!isFirstPage)
+        if (topTextRenderers != null)
         {
-            paperCornerLeft_renderer.UpdateDepthRealtime(contentDepth);
+            for (int i = 0; i < topTextRenderers.Length; i++)
+            {
+                topTextRenderers[i].enabled = toggle;
+            }
         }
-        if (!isLastPage)
-        {
-            paperCornerLeft_renderer.UpdateDepthRealtime(contentDepth);
-        }
-        mugshot_renderer.UpdateDepthRealtime(contentDepth);
-        pageNumber_renderer.UpdateDepthRealtime(contentDepth);
-        exitButton_renderer.UpdateDepthRealtime(contentDepth);
-    }
-    public void WriteChosenStationText(int stationIndex)
-    {
-        chosenStationIndex = stationIndex;
-        chosenStationName = trip.stationsDataArray[chosenStationIndex].stationName;
-        stationNameBounds = chosenStation_renderer.GetBounds(chosenStationName);
 
-        ctsWrite?.Cancel();
-        ctsWrite = new CancellationTokenSource();
-        WritingStationName(chosenStationName).Forget();
+        if (topRenderers != null)
+        {
+            for (int i = 0; i < topRenderers.Length; i++)
+            {
+                topRenderers[i].enabled = toggle;
+            }
+        }
+    }
+    public void PlayPaperClip()
+    {
+        paperRenderer.PlayClipOneShot(paper_clip);
+    }
+    public void PlayPaperClipReverse()
+    {
+        paperRenderer.PlayClipOneShotReverse(paper_clip);
+    }
+    public void SetPageDepth(float depth)
+    {
+        transform.position = new Vector3(transform.position.x, transform.position.y, depth);
+    }
+    public void WriteSignature()
+    {
+        answerText = "J.E";
+        answerTextBounds = activeAnswerTextRenderer.GetBounds(answerText);
+        WriteText(activeAnswerTextRenderer, answerText, ctsWrite, Notepad.WRITE_LETTER_TIME);
+    }
+    public void WriteAnswerText(int answerIndex)
+    {
+        this.answerIndex = answerIndex;
+
+        switch(promptType)
+        {
+            case TripPrompt.Stations:
+            {
+                answerText = trip.stationsDataArray[this.answerIndex].stationName;
+            }
+            break;
+            case TripPrompt.Sports_Teams:
+            {
+
+            }
+            break;
+        }
+        answerTextBounds = activeAnswerTextRenderer.GetBounds(answerText);
+        WriteText(activeAnswerTextRenderer, answerText, ctsWrite, Notepad.WRITE_LETTER_TIME);
     }
     public void EraseChosenStationText()
     {
-        ctsWrite?.Cancel();
-        ctsWrite = new CancellationTokenSource();
-        ErasingStationName().Forget();
+        EraseText(answerText, activeAnswerTextRenderer, ctsWrite, Notepad.WRITE_LETTER_TIME);
     }
-    public void SetPreviewStationText(int stationIndex)
+    public void SetPreviewAnswerText(int answerIndex)
     {
-        previewStationText = trip.stationsDataArray[stationIndex].stationName;
-        chosenStation_renderer.SetText(previewStationText);
-        stationNameBounds = chosenStation_renderer.GetBounds(previewStationText);
-        chosenStation_renderer.enabled = true;
+        switch (promptType)
+        {
+            case TripPrompt.Stations:
+            {
+                previewAnswerText = trip.stationsDataArray[answerIndex].stationName;
+                activeAnswerTextRenderer.SetText(previewAnswerText);
+                answerTextBounds = activeAnswerTextRenderer.GetBounds(previewAnswerText);
+            }
+            break;
+        }
     }
-    public void UpdatePreviewStationText(bool appear,  ref float clock)
+    public void SetPreviewSignatureText()
     {
-        chosenStation_renderer.AppearText(normAmount: 0.5f, appear, ref clock);
+        previewAnswerText = "J.E";
+        activeAnswerTextRenderer.SetText(previewAnswerText);
+        answerTextBounds = activeAnswerTextRenderer.GetBounds(previewAnswerText);
+    }
+    public void UpdatePreviewAnswerText(bool appear,  ref float clock)
+    {
+        switch (pageType)
+        {
+            case PageType.Profile:
+            case PageType.Confirm:
+            {
+                activeAnswerTextRenderer.UpdateAppearText(normAmount: 0.5f, appear, ref clock);
+            }
+            break;
+        }
+
     }
     public void InvertExitButton(bool invert, bool pointDown)
     {
         if (exitButton_renderer.flipY != pointDown)
         {
-            exitButton_renderer.custom.x = invert ? 0 : 1;
+            InvertButton(invert, exitButton_renderer);
             exitButton_renderer.FlipV(pointDown);
         }
-
     }
     public void InvertLeftArrowButton(bool invert)
     {
-        paperCornerLeft_renderer.custom.x = invert ? 0 : 1;
-    }
-    public void InverRightArrowButton(bool invert)
-    {
-        paperCornerRight_renderer.custom.x = invert ? 0 : 1;
-    }
-    public void HideRightArrowButton()
-    {
-        isLastPage = true;
-        paperCornerRight_renderer.enabled = false;
-    }
-    public void HideLeftArrowButton()
-    {
-        paperCornerLeft_renderer.enabled = false;
-        isFirstPage = true;
-    }
-    public Bounds GetStationNameBounds()
-    {
-        return chosenStation_renderer.GetBounds(previewStationText);
-    }
-    private async UniTask ErasingStationName()
-    {
-        string curStationString = chosenStation_renderer.text;
-        try
+        if (paperCornerLeftButtonRenderer != null)
         {
-            while (curStationString.Length > 0)
-            {
-                await UniTask.WaitForSeconds(Notepad.WRITE_LETTER_TIME, cancellationToken: ctsWrite.Token);
-                curStationString = curStationString[..^1];
-                chosenStation_renderer.SetText(curStationString);
-                chosenStation_renderer.SetTextAlpha(alpha: 0);
-            }
+            InvertButton(invert, paperCornerLeftButtonRenderer);
         }
-        catch (OperationCanceledException) { }
     }
-    private async UniTask WritingStationName(string stationName)
+    public void InvertRightArrowButton(bool invert)
     {
-        int stationNameLetterCount = stationName.Length;
-        int curLetterIndex = 0;
-
-        string curStationString = "";
-        chosenStation_renderer.SetText(curStationString);
-
-        try
+        if (paperCornerRightButtonRenderer != null)
         {
-            while (curLetterIndex < stationNameLetterCount)
-            {
-                curStationString += stationName[curLetterIndex];
-                await UniTask.WaitForSeconds(Notepad.WRITE_LETTER_TIME, cancellationToken: ctsWrite.Token);
-                chosenStation_renderer.SetText(curStationString);
-                chosenStation_renderer.SetTextAlpha(alpha: 0);
-                curLetterIndex++;
-            }
+            InvertButton(invert, paperCornerRightButtonRenderer);
         }
-        catch (OperationCanceledException) { }
     }
-    private Behaviours GetBehaviourAtIndex(Behaviours behaviours, int index)
+    public Bounds GetWritingBounds()
     {
-        int count = 0;
-        foreach(Behaviours flag in Enum.GetValues(typeof(Behaviours)))
-        {
-            if (flag == Behaviours.None) continue;
-
-            if ((behaviours & flag) != 0)
-            {
-                if (count == index) return flag;
-                count++;
-            }
-        }
-        return Behaviours.None;
+        return activeAnswerTextRenderer.GetBounds(previewAnswerText);
     }
-
 }

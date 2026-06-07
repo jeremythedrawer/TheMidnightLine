@@ -3,7 +3,7 @@ using System;
 using System.Threading;
 using UnityEngine;
 using static Spy;
-
+using static AtlasUI;
 public class GameplayUI : MonoBehaviour
 {
     const float TARGET_MARGIN = 0.01f;
@@ -94,7 +94,7 @@ public class GameplayUI : MonoBehaviour
     }
     private void ChooseState()
     {
-        if (spyStats.curState == SpyState.Notepad || notepadData.curState != NotepadData.State.Stationary)
+        if (spyStats.curState == SpyState.Notepad || notepadData.curState != NotepadState.Stationary)
         {
             SetState(State.Notepad);
         }
@@ -302,7 +302,7 @@ public class GameplayUI : MonoBehaviour
         float binderBoundsOffsetY = notepad.transform.position.y - notepad.bindingRings_renderer.bounds.min.y;
         notepadInactivePos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + binderBoundsOffsetY, notepad.transform.localPosition.z);
         notepadHoverPos = new Vector3(notepadInactivePos.x, notepadInactivePos.y + notepad.bindingRings_renderer.bounds.size.y, notepadInactivePos.z);
-        float ySize = notepad.page_prefab.paper_renderer.bounds.size.y;
+        float ySize = notepad.traitorPage_prefab.paperRenderer.bounds.size.y;
         Vector3 hoverSize = new Vector3(notepad.bindingRings_renderer.bounds.size.x, ySize, 0.2f);
         notepadHoverBounds = new Bounds(notepadHoverPos, hoverSize);
         notepad.transform.localPosition = notepadInactivePos;

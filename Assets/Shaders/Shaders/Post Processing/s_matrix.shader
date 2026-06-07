@@ -20,7 +20,8 @@ Shader "Custom/s_matrix"
 
 		float _MetersTravelled;
 		float _DayNight;
-		float3 _MainColor;
+		float3 _BlackColor;
+		float3 _WhiteColor;
 		half4 frag(Varyings input) : SV_TARGET
 		{
 			float2 aspect = float2(_ScreenParams.x / _ScreenParams.y, 1);
@@ -34,9 +35,9 @@ Shader "Custom/s_matrix"
 
 			horizon = BayerX8(horizon, input.texcoord.y * _ScreenParams.y);
 
-			float final = horizon + stars;
+			float3 final = lerp(_BlackColor, _WhiteColor, saturate(horizon + stars));
 
-			return half4(final.xxx + _MainColor,0);
+			return half4(final,0);
 		}
 	ENDHLSL
 
