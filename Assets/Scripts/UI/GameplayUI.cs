@@ -4,16 +4,15 @@ using System.Threading;
 using UnityEngine;
 using static Spy;
 using static AtlasUI;
+using UnityEngine.SceneManagement;
 public class GameplayUI : MonoBehaviour
 {
     const float TARGET_MARGIN = 0.01f;
     const float NATURAL_RADIUS = 0.1f;
     const float NATURAL_TICK_RATE = 2.5f;
-
     const float TICKET_ICON_PADDING = 0.2f;
     const float TICKET_ICON_APPEARING_DURATION = 0.5f;
-
-    const float FOCUS_TRANISTION_DURATION = 1f;
+    const float BLACK_SCENE_TIME = 3f;
     public enum State
     { 
         None,
@@ -28,7 +27,7 @@ public class GameplayUI : MonoBehaviour
     public NotepadData notepadData;
     public TripSO trip;
 
-    public Material matrix_material; 
+    public Material fadeBlackMaterial; 
 
     public Notepad notepad;
     public Ticket ticket;
@@ -54,16 +53,14 @@ public class GameplayUI : MonoBehaviour
     public Vector3 carriageMapActivePos;
     public Vector3 carriageMapInactivePos;
 
+    public Vector3 naturalMovePos;
+
     public Bounds notepadHoverBounds;
 
     public State curState;
     public float transitionTime;
-
     public float naturalMoveClock;
-
-    public float focusTime;
-
-    public Vector3 naturalMovePos;
+    public float fadeBlackClock;
 
     public TicketIcon[] ticketIcons;
     public TicketIcon curTicketIcon;
@@ -71,21 +68,24 @@ public class GameplayUI : MonoBehaviour
     public CancellationTokenSource ctsNotepad;
     public CancellationTokenSource ctsTicket;
     public CancellationTokenSource ctsCarriageMap;
-
+    public CancellationTokenSource ctsFadeBlack;
     private void OnEnable()
     {
         gameEventData.OnStationLeave.RegisterListener(SetNewTicketIcons);
         gameEventData.OnStationArrival.RegisterListener(DisappearTicketIcons);
+        gameEventData.OnChangeToScoreScene.RegisterListener(SetFadeToBlack);
     }
     private void OnDisable()
     {
         gameEventData.OnStationLeave.UnregisterListener(SetNewTicketIcons);
         gameEventData.OnStationArrival.UnregisterListener(DisappearTicketIcons);
+        gameEventData.OnChangeToScoreScene.UnregisterListener(SetFadeToBlack);
     }
     private void Start()
     {
         InitPOVUI();
         InitTicketIcons();
+        FadeFromBlack();
     }
     private void Update()
     {
@@ -164,14 +164,6 @@ public class GameplayUI : MonoBehaviour
             {
                 NaturalActiveMove(notepadActivePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * moveDamp);
-
-                if (focusTime < FOCUS_TRANISTION_DURATION)
-                {
-                    focusTime += Time.deltaTime;
-                    float t = focusTime / FOCUS_TRANISTION_DURATION;
-
-                    matrix_material.SetFloat("_Focus", t);
-                }
             }
             break;
             case State.Ticket:
@@ -212,14 +204,6 @@ public class GameplayUI : MonoBehaviour
                 else
                 {
                     notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadInactivePos, Time.deltaTime * moveDamp);
-                }
-
-                if (focusTime > 0)
-                {
-                    focusTime -= Time.deltaTime;
-                    float t = focusTime / FOCUS_TRANISTION_DURATION;
-
-                    matrix_material.SetFloat("_Focus", t);
                 }
             }
             break;
@@ -391,6 +375,27 @@ public class GameplayUI : MonoBehaviour
         }
         catch(OperationCanceledException)
         {
+        }
+    }
+    private void FadeFromBlack()
+    {
+        FadeBlack(fadeBlackMaterial, ctsFadeBlack, toFadeBlack: false);
+    }
+    private void SetFadeToBlack()
+    {
+        SetFadeBlack(fadeBlackMaterial, toFadeBlack: true);
+        SettingScoreScene().Forget();
+    }
+
+    private async UniTask SettingScoreScene()
+    {
+        await UniTask.WaitForSeconds(BLACK_SCENE_TIME);
+
+        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Score");
+
+        while(!asyncLoad.isDone)
+        {
+            await UniTask.Yield();
         }
     }
 

@@ -165,7 +165,7 @@ MonoBehaviour:
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   leftRenderer: {fileID: 3431643057223518621}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  worldDepth: 1
+  worldDepth: 51.9
   rightRenderer: {fileID: 0}
   parallaxFactor: 0
   worldPos: {x: 0, y: 0, z: 0}
@@ -173,6 +173,7 @@ MonoBehaviour:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   boundsOffset: {x: 0, y: 0, z: 0}
+  velocity: {x: 0, y: 0}
 --- !u!1 &1760855985880669352
 GameObject:
   m_ObjectHideFlags: 0
@@ -322,7 +323,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 28.444458, y: -0.35555556}
+  m_Offset: {x: 28.444458, y: -0.7111111}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -332,7 +333,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 56.88889, y: 0.7111111}
+  m_Size: {x: 56.88889, y: 1.4222223}
   m_EdgeRadius: 0
 --- !u!114 &6538026656819698166
 MonoBehaviour:
@@ -357,7 +358,7 @@ MonoBehaviour:
   flipX: 0
   flipY: 0
   width: 10
-  height: 1
+  height: 2
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 1, y: 0.125, z: 0, w: 0.4970703}
@@ -365,13 +366,13 @@ MonoBehaviour:
     worldSize: {x: 5.688889, y: 0.7111111, z: 1}
     index: 3
   bounds:
-    m_Center: {x: 300.52444, y: -0.35555556, z: 1}
-    m_Extent: {x: 28.444445, y: 0.35555556, z: 0.1}
-  worldPivotAndSize: {x: -0, y: -0.7111111, z: 5.688889, w: 0.7111111}
+    m_Center: {x: 300.52444, y: -0.7111111, z: 1}
+    m_Extent: {x: 28.444445, y: 0.7111111, z: 0.1}
+  worldPivotAndSize: {x: -0, y: -1.4222223, z: 5.688889, w: 0.7111111}
   uvSizeAndPosition: {x: 1, y: 0.125, z: 0, w: 0.4970703}
-  scaleAndFlip: {x: 10, y: 1, z: 1, w: 1}
+  scaleAndFlip: {x: 10, y: 2, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 28.444445, y: -0.35555556, z: 0.1}
+  boundsOffset: {x: 28.444445, y: -0.7111111, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 9.338889, w: 0.022222223}
   - {x: -9.338889, y: 0, z: 4.2666674, w: 0.022222223}
@@ -575,7 +576,7 @@ Transform:
   m_GameObject: {fileID: 5068393425464305075}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.31, y: -1.02, z: -1}
+  m_LocalPosition: {x: -1.31, y: -1.57, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -604,7 +605,7 @@ MonoBehaviour:
   flipX: 0
   flipY: 0
   width: 23
-  height: 3.27
+  height: 10.18
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -612,13 +613,13 @@ MonoBehaviour:
     worldSize: {x: 0, y: 0, z: 0}
     index: 0
   bounds:
-    m_Center: {x: 299.74222, y: -0.671361, z: 0.1}
-    m_Extent: {x: 28.972221, y: 0.34863895, z: 0.1}
+    m_Center: {x: 299.74222, y: -0.9718331, z: 0.1}
+    m_Extent: {x: 28.972221, y: 0.59816694, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 0, w: 0}
   uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
   scaleAndFlip: {x: 0, y: 0, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 28.972221, y: 0.34863895, z: 0.1}
+  boundsOffset: {x: 28.972221, y: 0.59816694, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.25, w: 0.17222221}
   - {x: 0.25, y: 0, z: 2.4944444, w: 0.17222221}
@@ -626,9 +627,9 @@ MonoBehaviour:
   - {x: 0, y: 0.17222221, z: 0.25, w: 0.07222228}
   - {x: 0.25, y: 0.17222221, z: 2.4944444, w: 0.07222228}
   - {x: 57.62222, y: 0.17222221, z: 0.32222214, w: 0.07222228}
-  - {x: 0, y: 0.40838906, z: 0.25, w: 0.28888887}
-  - {x: 0.25, y: 0.40838906, z: 2.4944444, w: 0.28888887}
-  - {x: 57.62222, y: 0.40838906, z: 0.32222214, w: 0.28888887}
+  - {x: 0, y: 0.907445, z: 0.25, w: 0.28888887}
+  - {x: 0.25, y: 0.907445, z: 2.4944444, w: 0.28888887}
+  - {x: 57.62222, y: 0.907445, z: 0.32222214, w: 0.28888887}
   uvSizesAndPositions:
   - {x: 0.021972656, y: 0.015136719, z: 0.04345703, w: 0.9477539}
   - {x: 0.21923828, y: 0.015136719, z: 0.06542969, w: 0.9477539}
@@ -643,9 +644,9 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 23, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 3.27, z: 1, w: 1}
-  - {x: 23, y: 3.27, z: 1, w: 1}
-  - {x: 1, y: 3.27, z: 1, w: 1}
+  - {x: 1, y: 10.18, z: 1, w: 1}
+  - {x: 23, y: 10.18, z: 1, w: 1}
+  - {x: 1, y: 10.18, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 23, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
@@ -751,6 +752,7 @@ MonoBehaviour:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   boundsOffset: {x: 0, y: 0, z: 0}
+  velocity: {x: 0, y: 0}
 --- !u!1 &8483931072574100276
 GameObject:
   m_ObjectHideFlags: 0

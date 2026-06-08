@@ -745,7 +745,7 @@ public class NPCBrain : MonoBehaviour
     public void BoardTrain()
     {
         transform.SetParent(null, true);
-        trainStats.totalPassengersBoarded++;
+        trainStats.totalNPCsBoarded++;
         QueueForSeat();
         rigidBody.includeLayers = layerSettings.trainMask;
         onTrain = true;
@@ -753,7 +753,7 @@ public class NPCBrain : MonoBehaviour
     }
     public void DisembarkTrain()
     {
-        Station station = TrainController.nextStation_instance;
+        Station station = TrainController.NextStationInstance;
         AtlasRenderer stationPlatform = station.station.isFrontOfTrain ? station.frontPlatformRenderer : station.backPlatformRenderer;
         transform.SetParent(stationPlatform.transform, true);
         atlasRenderer.UpdateDepthRealtime((int)stationPlatform.transform.position.z);
@@ -824,7 +824,14 @@ public class NPCBrain : MonoBehaviour
             case NPCPath.ToSlideDoor:
             {
                 NPCMotion standingMotion = RandomIdleMotion(NPCMotion.StandingBlinking, NPCMotion.StandingBreathing);
-                SetPath(NPCPath.AtSlideDoor);
+                if (spyStats.curLocationState == Spy.LocationState.Station && spyStats.signedNotepad)
+                {
+                    SetPath(NPCPath.StandingAtStation);
+                }
+                else
+                {
+                    SetPath(NPCPath.AtSlideDoor);
+                }
                 curClip = atlas.clipDict[(int)standingMotion];
             }
             break;

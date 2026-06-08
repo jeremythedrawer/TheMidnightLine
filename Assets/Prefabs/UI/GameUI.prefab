@@ -43,7 +43,7 @@ GameObject:
   - component: {fileID: 8808117606927964435}
   - component: {fileID: 4484735584121065813}
   m_Layer: 0
-  m_Name: UI
+  m_Name: GameUI
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -88,7 +88,7 @@ MonoBehaviour:
   gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
   notepadData: {fileID: 11400000, guid: 8e516d659eb1fc449bc178ad3fb0113d, type: 2}
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
-  matrix_material: {fileID: 0}
+  fadeBlackMaterial: {fileID: 0}
   notepad: {fileID: 700749529847056266}
   ticket: {fileID: 7063401080417137769}
   carriageMap: {fileID: 5956653477285991142}
@@ -105,14 +105,14 @@ MonoBehaviour:
   ticketInactivePos: {x: 0, y: 0, z: 0}
   carriageMapActivePos: {x: 0, y: 0, z: 0}
   carriageMapInactivePos: {x: 0, y: 0, z: 0}
+  naturalMovePos: {x: 0, y: 0, z: 0}
   notepadHoverBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   curState: 0
   transitionTime: 0
   naturalMoveClock: 0
-  focusTime: 0
-  naturalMovePos: {x: 0, y: 0, z: 0}
+  fadeBlackClock: 0
   ticketIcons: []
   curTicketIcon: {fileID: 0}
   ticketCount: 0

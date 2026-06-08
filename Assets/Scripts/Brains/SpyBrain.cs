@@ -61,11 +61,15 @@ public class SpyBrain : MonoBehaviour
     {     
         gameEventData.OnInteract.RegisterListener(OpenTrainDoors);
         gameEventData.OnInteract.RegisterListener(LookAtCarriageMap);
+
+        gameEventData.OnStationLeave.RegisterListener(MoveUpCurrentCarriageWall);
     }
     private void OnDisable()
     {
         gameEventData.OnInteract.UnregisterListener(OpenTrainDoors);
         gameEventData.OnInteract.UnregisterListener(LookAtCarriageMap);
+
+        gameEventData.OnStationLeave.UnregisterListener(MoveUpCurrentCarriageWall);
 
         stats.ticketsCheckedTotal = 0;
         stats.signedNotepad = false;
@@ -80,13 +84,13 @@ public class SpyBrain : MonoBehaviour
         rigidBody.includeLayers = layerSettings.stationMask;
 
         stats.curLocationState = LocationState.Station;
+
+        stats.curWorldPos = transform.position;
     }
     private void Update()
     {
         ChooseState();
         UpdateStates();
-
-        stats.curWorldPos = transform.position;
     }
     private void FixedUpdate()
     {
@@ -96,7 +100,6 @@ public class SpyBrain : MonoBehaviour
 
         stats.walkingIntoWall = (leftWallTouch && playerInputs.move == -1) || (rightWallTouch && playerInputs.move == 1);
 
-        rigidBody.linearVelocity = stats.moveVelocity;
     }
     private void ChooseState()
     {
@@ -134,6 +137,14 @@ public class SpyBrain : MonoBehaviour
             {
                 Flip(playerInputs.move < 0);
                 atlasRenderer.PlayClip(ref curClip);
+
+                stats.targetXVelocity = (settings.moveSpeed * playerInputs.move);
+                stats.moveVelocity.x = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.deltaTime);
+
+                stats.curWorldPos.x += stats.moveVelocity.x * Time.deltaTime;
+                stats.curWorldPos.y = transform.position.y;
+                stats.curWorldPos.z = transform.position.z;
+                transform.position = stats.curWorldPos;
             }
             break;
             case SpyState.Ticket:
@@ -216,7 +227,6 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Walk:
             {
-
                 if (stats.curLocationState != LocationState.Station)
                 {
                     CalculateCollisionPoints();
@@ -280,9 +290,6 @@ public class SpyBrain : MonoBehaviour
                     wasTouchingGangwayDoorLeft = isTouchingGangwayDoorLeft;
                     wasTouchingGangwayDoorRight = isTouchingGangwayDoorRight;
                 }
-
-                stats.targetXVelocity = (settings.moveSpeed * playerInputs.move);
-                stats.moveVelocity.x = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.fixedDeltaTime);
             }
             break;
         }
@@ -416,10 +423,17 @@ public class SpyBrain : MonoBehaviour
 
                     case SlideDoors.State.Opened:
                     {
-                        
                         if (stats.signedNotepad)
                         {
+                            stats.curGroundLayer = layerSettings.stationLayers.ground;
+                            stats.curWallLayer = layerSettings.stationWallLayers;
+                            stats.curLocationState = LocationState.Station;
+                            rigidBody.includeLayers = layerSettings.stationMask;
 
+                            Station station = TrainController.NextStationInstance;
+                            AtlasRenderer stationPlatform = station.station.isFrontOfTrain ? station.frontPlatformRenderer : station.backPlatformRenderer;
+                            transform.SetParent(stationPlatform.transform, true);
+                            atlasRenderer.UpdateDepthRealtime((int)stationPlatform.transform.position.z);
                         }
                         else
                         {
@@ -524,6 +538,13 @@ public class SpyBrain : MonoBehaviour
         else
         {
             checkingCarriageMap = false;
+        }
+    }
+    private void MoveUpCurrentCarriageWall()
+    {
+        if (stats.signedNotepad)
+        {
+            curCarriage.MoveUp();
         }
     }
     private void Flip(bool flip)

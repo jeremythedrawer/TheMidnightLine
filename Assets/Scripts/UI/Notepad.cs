@@ -89,7 +89,7 @@ public class Notepad : MonoBehaviour
     {
         nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
         npcData.behaviourDescDict = InitializeEnumToStringDict<Behaviours>();
-        AtlasUI.promptDict = InitializeEnumToStringDict<TripPrompt>();
+        AtlasUI.PromptDict = InitializeEnumToStringDict<TripPrompt>();
 
         CreateNPCProfiles();
 

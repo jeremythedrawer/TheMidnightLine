@@ -24,7 +24,7 @@ public class TrainController : MonoBehaviour
     public Gangway[] gangways;
     CancellationTokenSource trainCTS;
     public Station[] stations;
-    public static Station nextStation_instance;
+    public static Station NextStationInstance;
     public TrainStates curState;
     public bool closingSlideDoors;
     public int curStationIndex;
@@ -75,7 +75,7 @@ public class TrainController : MonoBehaviour
         stats.curVelocity.x = KMPHToVelocity(stats.targetKMPH);
         stats.targetVelocity = Vector2.zero;
 
-        stats.totalPassengersBoarded = 0;
+        stats.totalNPCsBoarded = 0;
         stats.slideDoorsAmountOpened = 0;
 
         stats.targetElevatePos = Vector2.zero;
@@ -87,7 +87,7 @@ public class TrainController : MonoBehaviour
         InitStations();
         SpawnFirstStation();
 
-        stats.targetStopPosition = transform.position.x;
+        stats.targetPosition = transform.position.x;
 
         float offset = TRAIN_WORLD_POS_X - transform.position.x;
 
@@ -158,7 +158,7 @@ public class TrainController : MonoBehaviour
 
             case TrainStates.Stopped:
             {
-                stats.targetPassengersBoarding = trip.nextStation.bystanderProfiles.Length + trip.nextStation.traitorProfiles.Length;
+                stats.targetNPCsToBoard = trip.nextStation.bystanderProfiles.Length + trip.nextStation.traitorProfiles.Length;
                 stats.curVelocity = Vector2.zero;
 
                 if (trip.nextStation.isFrontOfTrain)
@@ -196,11 +196,11 @@ public class TrainController : MonoBehaviour
             break;
             case TrainStates.Decelerating:
             {
-                if (nextStation_instance != null)
+                if (NextStationInstance != null)
                 {
-                    stats.targetStopPosition = nextStation_instance.transform.position.x;
+                    stats.targetPosition = NextStationInstance.transform.position.x;
                 }
-                stats.curVelocity.x = DecreaseVelocity(stats.curVelocity.x, stats.targetVelocity.x, stats.prevPeakVelocity, settings.deceleration, stats.targetStopPosition);
+                stats.curVelocity.x = DecreaseVelocity(stats.curVelocity.x, stats.targetVelocity.x, stats.prevPeakVelocity, settings.deceleration, stats.targetPosition);
                 HandleTrainMeters();
             }
             break;
@@ -216,21 +216,55 @@ public class TrainController : MonoBehaviour
             break;
             case TrainStates.Stopped:
             {
-                if (!spyStats.signedNotepad && stats.totalPassengersBoarded == stats.targetPassengersBoarding && spyStats.curLocationState != LocationState.Station)
-                {
-                    if (!closingSlideDoors)
-                    {
-                        CloseAllSlideDoors();
-                        closingSlideDoors = true;
-                    }
 
-                    if (stats.slideDoorsAmountOpened == 0)
+                switch (spyStats.curLocationState)
+                {
+                    case LocationState.Carriage:
+                    case LocationState.Gangway:
                     {
-                        curStationIndex++;
-                        trip.nextStation = trip.stationsDataArray[curStationIndex];
-                        stats.targetVelocity.x = KMPHToVelocity(DEFAULT_TARGET_KMPH);
+                        if (stats.totalNPCsBoarded == stats.targetNPCsToBoard && !spyStats.signedNotepad)
+                        {
+                            if (!closingSlideDoors)
+                            {
+                                CloseAllSlideDoors();
+                                closingSlideDoors = true;
+                            }
+
+                            if (stats.slideDoorsAmountOpened == 0)
+                            {
+                                curStationIndex++;
+                                trip.nextStation = trip.stationsDataArray[curStationIndex];
+                                stats.targetVelocity.x = KMPHToVelocity(DEFAULT_TARGET_KMPH);
+                            }
+                        }
                     }
+                    break;
+
+                    case LocationState.Station:
+                    {
+                        if (spyStats.signedNotepad)
+                        {
+                            if (!closingSlideDoors)
+                            {
+                                CloseAllSlideDoors();
+                                closingSlideDoors = true;
+                            }
+
+                            if (stats.slideDoorsAmountOpened == 0)
+                            {
+                                trainCTS?.Cancel();
+                                trainCTS = new CancellationTokenSource();
+                                MoveTrainAwayFromCamera().Forget();
+                                stats.targetVelocity.x = KMPHToVelocity(DEFAULT_TARGET_KMPH);
+
+
+                            }
+                        }
+                    }
+                    break;
                 }
+
+
             }
             break;
         }
@@ -259,7 +293,7 @@ public class TrainController : MonoBehaviour
 
             case TrainStates.Stopped:
             {
-                stats.totalPassengersBoarded = 0;
+                stats.totalNPCsBoarded = 0;
                 stats.distToSpawnNextStation = stats.trainToMaxSpawnDist - trip.nextStation.station_prefab.frontPlatformRenderer.transform.localPosition.x;
                 closingSlideDoors = false;
                 gameEventData.OnStationLeave.Raise();
@@ -269,12 +303,12 @@ public class TrainController : MonoBehaviour
     }
     private void SpawnStation()
     {
-        nextStation_instance = stations[curStationIndex];
-        float stationXPos = GetBrakeDistance(stats.curVelocity.x, settings.deceleration, nextStation_instance.parallaxController.parallaxFactor) + TRAIN_WORLD_POS_X;
-        nextStation_instance.transform.position = new Vector3(stationXPos, 0, 0);
-        nextStation_instance.gameObject.SetActive(true);
-        nextStation_instance.SpawnNPCs();
-        nextStation_instance.SetFrontParallaxPosition();
+        NextStationInstance = stations[curStationIndex];
+        float stationXPos = GetBrakeDistance(stats.curVelocity.x, settings.deceleration, NextStationInstance.parallaxController.parallaxFactor) + TRAIN_WORLD_POS_X;
+        NextStationInstance.transform.position = new Vector3(stationXPos, 0, 0);
+        NextStationInstance.gameObject.SetActive(true);
+        NextStationInstance.SpawnNPCs();
+        NextStationInstance.SetFrontParallaxPosition();
         gameEventData.OnStationSpawn.Raise();
     }
     private void CloseAllSlideDoors()
@@ -387,8 +421,8 @@ public class TrainController : MonoBehaviour
     {        
         while (stats.curVelocity.x != 0)
         {
-            stats.targetStopPosition += stats.curVelocity.x * Time.deltaTime;
-            transform.position = new Vector3(stats.targetStopPosition, transform.position.y, transform.position.z);
+            stats.targetPosition += stats.curVelocity.x * Time.deltaTime;
+            transform.position = new Vector3(stats.targetPosition, transform.position.y, transform.position.z);
             await UniTask.Yield(trainCTS.Token);
         }
         
@@ -396,6 +430,18 @@ public class TrainController : MonoBehaviour
         stats.totalBounds.center = transform.position;
         stats.trainToMaxSpawnDist = spawnData.bounds.max.x - stats.totalBounds.center.x;
         Shader.SetGlobalVector("_TrainBoundsMin", stats.totalBounds.min);
+    }
+    private async UniTask MoveTrainAwayFromCamera()
+    {
+        stats.targetPosition = transform.position.x;
+        float moveAwayPos = spawnData.bounds.max.x + stats.totalBounds.extents.x;
+        while (transform.position.x < moveAwayPos)
+        {
+            stats.targetPosition += stats.curVelocity.x * Time.deltaTime;
+            transform.position = new Vector3(stats.targetPosition, transform.position.y, transform.position.z);
+            await UniTask.Yield(trainCTS.Token);
+        }
+        gameEventData.OnChangeToScoreScene.Raise();
     }
     public static Carriage GetCarriage(Collider2D collider)
     {

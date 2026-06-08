@@ -3,15 +3,13 @@ Shader "Custom/s_matrix"
 	HLSLINCLUDE
 		#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 		#include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
+		#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareDepthTexture.hlsl"
 
 		#include "Assets/Shaders/HLSL/ColorSpace.hlsl"
 		#include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
 		#include "Assets/Shaders/HLSL/AtlasParticles.hlsl"
 		TEXTURE2D(_SourceTex);
 		SAMPLER(sampler_SourceTex);
-		
-		TEXTURE2D(_CameraDepthTexture);
-		SAMPLER(sampler_CameraDepthTexture);
 
 		TEXTURE2D(_NoiseTexture);
 		SAMPLER(sampler_NoiseTexture);
@@ -35,8 +33,21 @@ Shader "Custom/s_matrix"
 
 			horizon = BayerX8(horizon, input.texcoord.y * _ScreenParams.y);
 
-			float3 final = lerp(_BlackColor, _WhiteColor, saturate(horizon + stars));
 
+			float depth = 0;
+
+			#if UNITY_REVERSED_Z
+				depth = SampleSceneDepth(input.texcoord);
+			#else
+				depth = lerp(UNITY_NEAR_CLIP_VALUE, 1, SampleSceneDepth(input.texcoord);
+			#endif
+
+			float3 worldPos = ComputeWorldSpacePosition(input.texcoord, depth, UNITY_MATRIX_I_VP);
+
+			float ground = step(0, worldPos.y);
+			float greyScale = saturate(horizon + stars) * ground;
+
+			float3 final = lerp(_BlackColor, _WhiteColor, greyScale);
 			return half4(final,0);
 		}
 	ENDHLSL

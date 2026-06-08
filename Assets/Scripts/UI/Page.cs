@@ -62,7 +62,7 @@ public class Page : MonoBehaviour
         {
             case PageType.Prompt:
             {
-                string promptText = AtlasUI.promptDict[trip.prompt];
+                string promptText = AtlasUI.PromptDict[trip.prompt];
                 contentTextRenderers[0].SetText(promptText);
             }
             break;

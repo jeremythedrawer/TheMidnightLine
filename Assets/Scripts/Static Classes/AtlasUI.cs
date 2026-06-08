@@ -2,13 +2,14 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEngine;
 using static NPC;
 
 public static class AtlasUI
 {
     public const float LETTER_ADVANCE = 0.122f;
     public const float APPEAR_TEXT_TIME = 0.2f;
-
+    const float FADE_BLACK_DURATION = 1f;
     public enum NotepadState
     {
         None,
@@ -38,15 +39,40 @@ public static class AtlasUI
         Behaviours,
         Appearence
     }
-
-
-    public static Dictionary<TripPrompt, string> promptDict;
-    
+    public static Dictionary<TripPrompt, string> PromptDict;
     public static void WriteText(AtlasTextRenderer textRenderer, string text, CancellationTokenSource cts, float writeLetterTime)
     {
         cts?.Cancel();
         cts = new CancellationTokenSource();
         WritingText(text, textRenderer, cts, writeLetterTime).Forget();
+    }
+    public static void EraseText(string text, AtlasTextRenderer textRenderer, CancellationTokenSource cts, float writeLetterTime)
+    {
+        cts?.Cancel();
+        cts = new CancellationTokenSource();
+        ErasingText(text, textRenderer, cts, writeLetterTime).Forget();
+    }
+    public static void InvertButton(bool invert, AtlasRenderer renderer)
+    {
+        renderer.custom.x = invert ? 0 : 1;
+    }
+    public static void SetFadeBlack(Material fadeBlackMaterial, bool toFadeBlack)
+    {
+        fadeBlackMaterial.SetFloat("_Alpha", toFadeBlack ? 1 : 0);
+    }
+    public static void FadeBlack(Material fadeBlackMaterial, CancellationTokenSource cts, bool toFadeBlack)
+    {
+        cts?.Cancel();
+        cts = new CancellationTokenSource();
+
+        if (toFadeBlack)
+        {
+            FadingToBlack(fadeBlackMaterial, cts).Forget();
+        }
+        else
+        {
+            FadingFromBlack(fadeBlackMaterial, cts).Forget();
+        }
     }
     private static async UniTask WritingText(string text, AtlasTextRenderer textRenderer, CancellationTokenSource cts, float writeLetterTime)
     {
@@ -68,12 +94,6 @@ public static class AtlasUI
         }
         catch (OperationCanceledException) { }
     }
-    public static void EraseText(string text, AtlasTextRenderer textRenderer, CancellationTokenSource cts, float writeLetterTime)
-    {
-        cts?.Cancel();
-        cts = new CancellationTokenSource();
-        ErasingText(text, textRenderer, cts, writeLetterTime).Forget();
-    }
     private static async UniTask ErasingText(string text, AtlasTextRenderer textRenderer, CancellationTokenSource cts, float writeLetterTime)
     {
         string curStationString = text;
@@ -88,12 +108,39 @@ public static class AtlasUI
         }
         catch (OperationCanceledException) { }
     }
-
-    public static void InvertButton(bool invert, AtlasRenderer renderer)
+    private static async UniTask FadingToBlack(Material fadeBlackMaterial, CancellationTokenSource cts)
     {
-        renderer.custom.x = invert ? 0 : 1;
-    }
+        try
+        {
+            float elapsedTime = 0;
 
+            while(elapsedTime < FADE_BLACK_DURATION)
+            {
+                float t = elapsedTime / FADE_BLACK_DURATION;
+                fadeBlackMaterial.SetFloat("_Alpha", t);
+                elapsedTime += Time.deltaTime;
+                await UniTask.Yield(cts.Token);
+            }
+
+        }
+        catch (OperationCanceledException) { }
+    }
+    private static async UniTask FadingFromBlack(Material fadeBlackMaterial, CancellationTokenSource cts)
+    {
+        try
+        {
+            float elapsedTime = FADE_BLACK_DURATION;
+
+            while(elapsedTime > 0)
+            {
+                float t = elapsedTime / FADE_BLACK_DURATION;
+                fadeBlackMaterial.SetFloat("_Alpha", t);
+                elapsedTime -= Time.deltaTime;
+                await UniTask.Yield(cts.Token);
+            }
+        }
+        catch (OperationCanceledException) { }
+    }
     public static Behaviours GetBehaviourAtIndex(Behaviours behaviours, int index)
     {
         int count = 0;

@@ -7,7 +7,7 @@ public class TrainStatsSO : ScriptableObject
     public Vector2 curVelocity;
     public Vector2 targetVelocity;
     public float prevPeakVelocity;
-    public float targetStopPosition;
+    public float targetPosition;
     public float targetKMPH;
 
     public Vector2 targetElevatePos;
@@ -16,8 +16,8 @@ public class TrainStatsSO : ScriptableObject
 
     public float trainToMaxSpawnDist;
 
-    public int totalPassengersBoarded;
-    public int targetPassengersBoarding;
+    public int totalNPCsBoarded;
+    public int targetNPCsToBoard;
 
     public int slideDoorsAmountOpened;
 
