@@ -22,7 +22,6 @@ public class AtlasTextRenderer : MonoBehaviour
 
     [Header("Scroll Settings")]
     public float scrollSpeed;
-    public float scrollSpacing;
     public float scrollBoundSize;
 
     [Header("Generated")]
@@ -87,7 +86,7 @@ public class AtlasTextRenderer : MonoBehaviour
             break;
         }
     }
-    public void UpdateAppearText(float normAmount, bool appear, ref float clock)
+    public void UpdateAppearTextAlpha(float normAmount, bool appear, ref float clock)
     {
         if (appear)
         {
@@ -116,6 +115,13 @@ public class AtlasTextRenderer : MonoBehaviour
             }
         }
     }
+    public void SetAppearTextAlpha(float normAmount)
+    {
+        for (int i = 0; i < customs.Length; i++)
+        {
+            customs[i].w = normAmount;
+        }
+    }
     public void SetTextAlpha(float alpha)
     {
         for (int i = 0; i < customs.Length; i++)
@@ -137,7 +143,7 @@ public class AtlasTextRenderer : MonoBehaviour
         for (int i = 0; i < customs.Length; i++)
         {
             Vector4 custom = customs[i];
-            custom.x = scrollSpacing;
+            custom.x = bounds.size.x;
             custom.y = scrollBoundSize;
             custom.z = scrollSpeed;
             custom.w = scrollSpeed < 0 ? 1 : 0;
@@ -293,8 +299,8 @@ public class AtlasTextRenderer : MonoBehaviour
 
             SimpleSprite sprite = textAtlas.atlas.simpleSprites[letterIndex];
 
-            float letterPos = curPosX * kerning; // * camStates.worldUnitsPerPixel
-            float right = letterPos + sprite.worldSize.x; // * camStates.worldUnitsPerPixel * PIXELS_PER_UNIT
+            float letterPos = curPosX * kerning;
+            float right = letterPos + sprite.worldSize.x;
 
             if (right > maxX) maxX = right;
             if (right > maxLineX) maxLineX = right;

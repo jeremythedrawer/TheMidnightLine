@@ -1,5 +1,6 @@
 using UnityEngine;
 using static NPC;
+using static Train;
 public class Station : MonoBehaviour
 {
     const float SPAWN_BUFFER = 5f;
@@ -9,9 +10,14 @@ public class Station : MonoBehaviour
     public AtlasRenderer frontPlatformRenderer;
     public AtlasRenderer backPlatformRenderer;
     public Transform exitTransform;
+    public SpawnData spawnData;
+
+    public ParallaxController parallaxController;
+    public ParallaxController frontParallaxController;
     public void Start()
     {
         station.exitLocalPosX = exitTransform.localPosition.x;
+        parallaxController.Init(transform.position);
     }
     public void SpawnNPCs()
     {
@@ -60,5 +66,11 @@ public class Station : MonoBehaviour
                 traitor.atlasRenderer.FlipH(true);
             }
         }
+    }
+    public void SetFrontParallaxPosition()
+    {
+        float posX = TRAIN_WORLD_POS_X + ((transform.position.x - TRAIN_WORLD_POS_X) * (frontParallaxController.parallaxFactor / parallaxController.parallaxFactor));
+        Vector2 pos = new Vector2(posX, 0);
+        frontParallaxController.Init(pos);
     }
 }

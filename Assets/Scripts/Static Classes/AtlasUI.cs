@@ -63,7 +63,6 @@ public static class AtlasUI
                 curStationString += text[curLetterIndex];
                 await UniTask.WaitForSeconds(writeLetterTime, cancellationToken: cts.Token);
                 textRenderer.SetText(curStationString);
-                textRenderer.SetTextAlpha(alpha: 0);
                 curLetterIndex++;
             }
         }
@@ -85,7 +84,6 @@ public static class AtlasUI
                 await UniTask.WaitForSeconds(writeLetterTime, cancellationToken: cts.Token);
                 curStationString = curStationString[..^1];
                 textRenderer.SetText(curStationString);
-                textRenderer.SetTextAlpha(alpha: 0);
             }
         }
         catch (OperationCanceledException) { }

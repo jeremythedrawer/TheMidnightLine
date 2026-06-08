@@ -76,6 +76,7 @@ public class Carriage : MonoBehaviour
     {
         string text = "Next Station is " + stationName;
         nextStationSignRenderer.SetText(text);
+        nextStationSignRenderer.bounds = nextStationSignRenderer.GetBounds(text);
         nextStationSignRenderer.SetScrollingText();
     }
     public void SetSignToCurrentStation(string stationName)

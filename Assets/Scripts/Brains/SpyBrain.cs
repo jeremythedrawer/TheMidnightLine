@@ -68,6 +68,7 @@ public class SpyBrain : MonoBehaviour
         gameEventData.OnInteract.UnregisterListener(LookAtCarriageMap);
 
         stats.ticketsCheckedTotal = 0;
+        stats.signedNotepad = false;
     }
     private void Start()
     {
@@ -138,11 +139,11 @@ public class SpyBrain : MonoBehaviour
             case SpyState.Ticket:
             {
                 if (!playerInputs.ticketCheckKeyDown) canExitCheckTicket = true;
-                if((playerInputs.ticketCheckKeyDown && canExitCheckTicket) || playerInputs.notepadChoosePromptInputAndFlip.x == 1)
+                if((playerInputs.ticketCheckKeyDown && canExitCheckTicket) || playerInputs.notepadPreviewAnswerAndFlip.x == 1)
                 {
                     checkingTicket = false;
                 }
-                if (playerInputs.notepadChoosePromptInputAndFlip.x == -1)
+                if (playerInputs.notepadPreviewAnswerAndFlip.x == -1)
                 {
                     checkingTicket = false;
                 }
@@ -397,9 +398,9 @@ public class SpyBrain : MonoBehaviour
     }
     private void OpenTrainDoors()
     {
-        if (stats.curLocationState == LocationState.Station)
+        if (stats.curLocationState == LocationState.Station || (stats.curLocationState == LocationState.Carriage && stats.signedNotepad))
         {
-            RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.exteriorSlideDoors);
+            RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, trainStats.activeSlideDoorsMask);
 
             if (slideDoorHit.collider != null)
             {
@@ -415,20 +416,28 @@ public class SpyBrain : MonoBehaviour
 
                     case SlideDoors.State.Opened:
                     {
-                        RaycastHit2D insideCarriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
-
-                        if (insideCarriageHit.collider != null)
+                        
+                        if (stats.signedNotepad)
                         {
-                            curCarriage = TrainController.GetCarriage(insideCarriageHit.collider);
-                            curCarriage.MoveDown();
-                        }
-                        stats.curGroundLayer = layerSettings.trainLayers.ground;
-                        stats.curWallLayer = layerSettings.trainWallLayers;
-                        stats.curLocationState = LocationState.Carriage;
-                        stats.curLocationBounds = curCarriage.totalBounds;
-                        rigidBody.includeLayers = layerSettings.trainMask;
 
-                        atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.frontMin);
+                        }
+                        else
+                        {
+                            RaycastHit2D insideCarriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
+
+                            if (insideCarriageHit.collider != null)
+                            {
+                                curCarriage = TrainController.GetCarriage(insideCarriageHit.collider);
+                                curCarriage.MoveDown();
+                            }
+                            stats.curGroundLayer = layerSettings.trainLayers.ground;
+                            stats.curWallLayer = layerSettings.trainWallLayers;
+                            stats.curLocationState = LocationState.Carriage;
+                            stats.curLocationBounds = curCarriage.totalBounds;
+                            rigidBody.includeLayers = layerSettings.trainMask;
+
+                            atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.frontMin);
+                        }
                     }
                     break;
                 }
@@ -438,7 +447,6 @@ public class SpyBrain : MonoBehaviour
         {
             if (atlasRenderer.flipX)
             {
-
                 RaycastHit2D leftSmokingRoomDoorHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, layerSettings.trainLayers.smokingRoomDoor);
                 if (leftSmokingRoomDoorHit.collider != null)
                 {

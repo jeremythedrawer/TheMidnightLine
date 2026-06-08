@@ -48,30 +48,24 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 6c3a16917d22ca843a51762ac8067dc8, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 24
   atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 0
+  spriteIndex: 1
   flipX: 0
   flipY: 0
   width: 1
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.091796875, y: 0.032226562, z: 0.1586914, w: 0.9663086}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 1.0444444, y: 0.36666667, z: 1}
-    index: 0
+    index: 1
   bounds:
     m_Center: {x: -36.62778, y: 0.9833326, z: 17}
     m_Extent: {x: 0.5222222, y: 0.18333334, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 1.0444444, w: 0.36666667}
+  worldPivotAndSize: {x: -0, y: -0, z: 1.0444444, w: 0.36666667}
   uvSizeAndPosition: {x: 0.091796875, y: 0.032226562, z: 0.1586914, w: 0.9663086}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -84,17 +78,7 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
+  prevSpriteIndexFlipH: 1
+  prevSpriteIndexFlipV: 1
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
-  hasText: 0

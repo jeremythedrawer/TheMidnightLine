@@ -26,11 +26,11 @@ Transform:
   m_GameObject: {fileID: 564784607166531398}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -25.78, y: 0, z: 1}
+  m_LocalPosition: {x: 0.3999939, y: 0, z: 25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5744577681474587964}
+  m_Father: {fileID: 7355965477580141084}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &3115705022967103819
 MonoBehaviour:
@@ -48,7 +48,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 4a9bdb32b0f04fc40ae0c04a7a31065a, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 25
   atlas: {fileID: 11400000, guid: 02c9993b5b1bf6f4daa262e7f4f6313b, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -200,11 +199,11 @@ Transform:
   m_GameObject: {fileID: 1760855985880669352}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -23.23, y: 0, z: 0}
+  m_LocalPosition: {x: 2.9499817, y: 0, z: 24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5744577681474587964}
+  m_Father: {fileID: 7355965477580141084}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8693354195755448976
 MonoBehaviour:
@@ -222,7 +221,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 857f07ac02073324d828fc8db55dd0e9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 24
   atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -352,7 +350,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 4bd321d6ab1cee54aa36e5e3e11116c9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 1
   atlas: {fileID: 11400000, guid: 02557c0f0cb5708419d00e0cdc88b756, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 5364706768966122321}
@@ -423,67 +420,6 @@ MonoBehaviour:
   prevSpriteIndexFlipV: 3
   isAnimating: 0
   quadCount: 0
---- !u!1 &2851846638580115691
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 5744577681474587964}
-  - component: {fileID: 1729887259006574630}
-  m_Layer: 0
-  m_Name: Parallax_back
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &5744577681474587964
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2851846638580115691}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 26.179993, y: 0, z: 24}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 7908644130255970815}
-  - {fileID: 3452785068360572047}
-  - {fileID: 553272016925060896}
-  - {fileID: 5391427905344399454}
-  m_Father: {fileID: 7355965477580141084}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &1729887259006574630
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2851846638580115691}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
-  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  spawnData: {fileID: 11400000, guid: cb76807a71f74704a94a0f5cfe3b2c50, type: 2}
-  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  leftRenderer: {fileID: 7602902344402833865}
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  worldDepth: 10
-  rightRenderer: {fileID: 0}
-  parallaxFactor: 0
-  worldPos: {x: 0, y: 0, z: 0}
-  bounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0, y: 0, z: 0}
-  boundsOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &4464945837297462622
 GameObject:
   m_ObjectHideFlags: 0
@@ -511,11 +447,11 @@ Transform:
   m_GameObject: {fileID: 4464945837297462622}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -54.1, y: 0, z: -1}
+  m_LocalPosition: {x: -27.920013, y: 0, z: 23}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5744577681474587964}
+  m_Father: {fileID: 7355965477580141084}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!61 &5338574388934742838
 BoxCollider2D:
@@ -579,7 +515,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 4bd321d6ab1cee54aa36e5e3e11116c9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 23
   atlas: {fileID: 11400000, guid: 02557c0f0cb5708419d00e0cdc88b756, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 5338574388934742838}
@@ -662,7 +597,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 857f07ac02073324d828fc8db55dd0e9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 0
   atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -687,14 +621,14 @@ MonoBehaviour:
   boundsOffset: {x: 28.972221, y: 0.34863895, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.25, w: 0.17222221}
-  - {x: -0.25, y: 0, z: 2.4944444, w: 0.17222221}
-  - {x: -57.62222, y: 0, z: 0.32222214, w: 0.17222221}
-  - {x: 0, y: -0.17222221, z: 0.25, w: 0.07222228}
-  - {x: -0.25, y: -0.17222221, z: 2.4944444, w: 0.07222228}
-  - {x: -57.62222, y: -0.17222221, z: 0.32222214, w: 0.07222228}
-  - {x: 0, y: -0.40838906, z: 0.25, w: 0.28888887}
-  - {x: -0.25, y: -0.40838906, z: 2.4944444, w: 0.28888887}
-  - {x: -57.62222, y: -0.40838906, z: 0.32222214, w: 0.28888887}
+  - {x: 0.25, y: 0, z: 2.4944444, w: 0.17222221}
+  - {x: 57.62222, y: 0, z: 0.32222214, w: 0.17222221}
+  - {x: 0, y: 0.17222221, z: 0.25, w: 0.07222228}
+  - {x: 0.25, y: 0.17222221, z: 2.4944444, w: 0.07222228}
+  - {x: 57.62222, y: 0.17222221, z: 0.32222214, w: 0.07222228}
+  - {x: 0, y: 0.40838906, z: 0.25, w: 0.28888887}
+  - {x: 0.25, y: 0.40838906, z: 2.4944444, w: 0.28888887}
+  - {x: 57.62222, y: 0.40838906, z: 0.32222214, w: 0.28888887}
   uvSizesAndPositions:
   - {x: 0.021972656, y: 0.015136719, z: 0.04345703, w: 0.9477539}
   - {x: 0.21923828, y: 0.015136719, z: 0.06542969, w: 0.9477539}
@@ -743,6 +677,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7355965477580141084}
   - component: {fileID: 6700324006200157766}
+  - component: {fileID: 8735392734740914010}
   m_Layer: 0
   m_Name: Novograd Station
   m_TagString: Untagged
@@ -763,8 +698,11 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 7908644130255970815}
+  - {fileID: 3452785068360572047}
+  - {fileID: 553272016925060896}
+  - {fileID: 5391427905344399454}
   - {fileID: 4696413425584186154}
-  - {fileID: 5744577681474587964}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &6700324006200157766
@@ -785,6 +723,34 @@ MonoBehaviour:
   frontPlatformRenderer: {fileID: 6538026656819698166}
   backPlatformRenderer: {fileID: 7602902344402833865}
   exitTransform: {fileID: 2109486769195010804}
+  spawnData: {fileID: 11400000, guid: cb76807a71f74704a94a0f5cfe3b2c50, type: 2}
+  parallaxController: {fileID: 8735392734740914010}
+  frontParallaxController: {fileID: 9087196341359605238}
+--- !u!114 &8735392734740914010
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7425759775376924710}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9b8b180e42dd1da4e85c277c0ba9a76c, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ParallaxController
+  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+  spawnData: {fileID: 11400000, guid: cb76807a71f74704a94a0f5cfe3b2c50, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  leftRenderer: {fileID: 7602902344402833865}
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  worldDepth: 10
+  rightRenderer: {fileID: 0}
+  parallaxFactor: 0
+  worldPos: {x: 0, y: 0, z: 0}
+  bounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  boundsOffset: {x: 0, y: 0, z: 0}
 --- !u!1 &8483931072574100276
 GameObject:
   m_ObjectHideFlags: 0
@@ -811,11 +777,11 @@ Transform:
   m_GameObject: {fileID: 8483931072574100276}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -54.04, y: 0, z: 0}
+  m_LocalPosition: {x: -27.860016, y: 0, z: 24}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
-  m_Father: {fileID: 5744577681474587964}
+  m_Father: {fileID: 7355965477580141084}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &4488848452782115321
 MonoBehaviour:
@@ -833,7 +799,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 857f07ac02073324d828fc8db55dd0e9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 24
   atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}

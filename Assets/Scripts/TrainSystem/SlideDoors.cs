@@ -231,7 +231,6 @@ public class SlideDoors : MonoBehaviour
         npc.disembarkTrainQueueIndex = disembarkTrainQueue.npcsCount;
         disembarkTrainQueue.npcs[disembarkTrainQueue.npcsCount] = npc;
         disembarkTrainQueue.npcsCount++;
-        Debug.Log(npc.profile.fullName + " is disembarking");
     }
     public void ResetDoors()
     {

@@ -4,6 +4,7 @@ using UnityEngine;
 using static Atlas;
 using static NPC;
 using static AtlasUI;
+using static Spy;
 public class Notepad : MonoBehaviour
 {
     public const float WRITE_LETTER_TIME = 0.1f;
@@ -27,6 +28,8 @@ public class Notepad : MonoBehaviour
     public TripSO trip;
     public NPCsDataSO npcData;
     public CameraStatsSO camStats;
+    public SpyStatsSO spyStats;
+
     public NotepadData notepadData;
     
     public AtlasRenderer rightHand_renderer;
@@ -92,7 +95,6 @@ public class Notepad : MonoBehaviour
 
         notepadData.curState = NotepadState.None;
 
-        
         handFlipPage_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.FlipHand];
         rotatePencil_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.RotatingPencil];
 
@@ -116,33 +118,86 @@ public class Notepad : MonoBehaviour
     }
     private void ChooseState()
     {
-        if ((activePage.pageType != PageType.Confirm && (playerInputs.notepadChoosePromptInputAndFlip.y == 1 || willFlipUp) && !writeToggle && !eraseToggle) || flipToggle == 1)
+        switch (activePage.pageType)
         {
-            SetState(NotepadState.FlippingUp);
-        }
-        else if ((activePage.pageType != PageType.Prompt && (playerInputs.notepadChoosePromptInputAndFlip.y == -1 || willFlipDown) && !writeToggle && !eraseToggle) || flipToggle == -1)
-        {
-            SetState(NotepadState.FlippingDown);
-        }
-        else if (activePage.pageType != PageType.Prompt)
-        {
-            if ((playerInputs.notepadChoosePromptInputAndFlip.x != 0 && activePage.answerIndex != -1) || eraseToggle)
+            case PageType.Prompt:
             {
-                SetState(NotepadState.Erasing);
+                if (ToFlipUp())
+                {
+                    SetState(NotepadState.FlippingUp);
+                }
+                else
+                {
+                    SetState(NotepadState.Stationary);
+                }
             }
-            else if ((playerInputs.notepadConfirmStation && activePage.answerIndex == -1) || writeToggle)
+            break;
+
+            case PageType.Profile:
             {
-                SetState(NotepadState.Writing);
+                if (ToFlipUp())
+                {
+                    SetState(NotepadState.FlippingUp);
+                }
+                else if (ToFlipDown())
+                {
+                    SetState(NotepadState.FlippingDown);
+                }
+                else if (ToErase())
+                {
+                    SetState(NotepadState.Erasing);
+                }
+                else if (ToWrite())
+                {
+                    SetState(NotepadState.Writing);
+                }
+                else
+                {
+                    SetState(NotepadState.Stationary);
+                }
             }
-            else
+            break;
+
+            case PageType.Confirm:
             {
-                SetState(NotepadState.Stationary);
+                if (ToFlipDown())
+                {
+                    SetState(NotepadState.FlippingDown);
+                }
+                else if (ToErase())
+                {
+                    SetState(NotepadState.Erasing);
+                }
+                else if (ToWrite())
+                {
+                    if (spyStats.curLocationState != LocationState.Station)
+                    {
+                        SetState(NotepadState.Writing);
+                    }
+                }
+                else
+                {
+                    SetState(NotepadState.Stationary);
+                }
             }
+            break;
         }
-        else
-        {
-            SetState(NotepadState.Stationary);
-        }
+    }
+    private bool ToFlipUp()
+    {
+        return ((playerInputs.notepadPreviewAnswerAndFlip.y == 1 || willFlipUp) && !writeToggle && !eraseToggle) || flipToggle == 1;
+    }
+    private bool ToFlipDown()
+    {
+        return ((playerInputs.notepadPreviewAnswerAndFlip.y == -1 || willFlipDown) && !writeToggle && !eraseToggle) || flipToggle == -1;
+    }
+    private bool ToErase()
+    {
+        return (playerInputs.notepadPreviewAnswerAndFlip.x != 0 && activePage.answerText != "") || eraseToggle;
+    }
+    private bool ToWrite()
+    {
+        return (playerInputs.notepadConfirmAnswer && activePage.answerText == "") || writeToggle;
     }
     private void SetState(NotepadState newState)
     {
@@ -175,9 +230,8 @@ public class Notepad : MonoBehaviour
             case NotepadState.FlippingDown:
             {
                 activePage.SetPageDepth(rightHand_renderer.transform.position.z - 1);
-                activePageIndex--;
-                activePage = pages[activePageIndex];
-                activePage.gameObject.SetActive(true);
+
+                pages[activePageIndex - 1].gameObject.SetActive(true);
                 leftHand_renderer.PlayClipOneShotReverse(handFlipPage_clip);
 
                 curKeyframeState = KeyframeState.Start;
@@ -237,7 +291,6 @@ public class Notepad : MonoBehaviour
             break;
             case NotepadState.Stationary:
             {
-                Debug.Log(activePage.answerText);
                 if (activePage.answerText == "")
                 {
                     switch (activePage.pageType)
@@ -251,8 +304,11 @@ public class Notepad : MonoBehaviour
 
                         case PageType.Confirm:
                         {
-                            activePage.SetPreviewSignatureText();
-                            appearTextClock = APPEAR_TEXT_TIME;
+                            if (spyStats.curLocationState != LocationState.Station)
+                            {
+                                activePage.SetPreviewSignatureText();
+                                appearTextClock = APPEAR_TEXT_TIME;
+                            }
                         }
                         break;
                     }
@@ -281,12 +337,20 @@ public class Notepad : MonoBehaviour
             {
                 leftHandTargetPos = leftHandPencilInactivePos;
                 
-                if (playerInputs.notepadChoosePromptInputAndFlip.x != 0)
+                if (playerInputs.notepadPreviewAnswerAndFlip.x != 0)
                 {
-                    previewAnswerIndex += (int)playerInputs.notepadChoosePromptInputAndFlip.x;
+                    previewAnswerIndex += (int)playerInputs.notepadPreviewAnswerAndFlip.x;
                     previewAnswerIndex = (previewAnswerIndex + trip.stationsDataArray.Length) % trip.stationsDataArray.Length;
                 }
 
+                switch(activePage.pageType)
+                {
+                    case PageType.Confirm:
+                    {
+                        spyStats.signedNotepad = true;
+                    }
+                    break;
+                }
                 atStartPencilPos = false;
                 writeToggle = false;
             }
@@ -295,7 +359,7 @@ public class Notepad : MonoBehaviour
             {
                 leftHandTargetPos = leftHandPencilInactivePos;
 
-                activePage.answerIndex = -1;
+                activePage.answerText = "";
                 leftHand_renderer.PlayClipOneShotReverse(rotatePencil_clip);
                 atStartPencilPos = false;
                 eraseToggle = false;
@@ -316,6 +380,12 @@ public class Notepad : MonoBehaviour
                     {
                         if (curKeyframeState == KeyframeState.PaperClip) return;
                         activePage.PlayPaperClip();
+
+                        Page pageAhead = pages[activePageIndex + 1];
+                        if (pageAhead.answerText == "")
+                        {
+                            pageAhead.SetAnswerTextAlpha(normAmount: 1);
+                        }
                         curKeyframeState = KeyframeState.PaperClip;
                     }
                     break;
@@ -369,8 +439,10 @@ public class Notepad : MonoBehaviour
                     case 0:
                     {
                         if (curKeyframeState == KeyframeState.None) return;
+                        activePage.gameObject.SetActive(false);
+                        activePageIndex--;
+                        activePage = pages[activePageIndex];
 
-                        pages[activePageIndex + 1].gameObject.SetActive(false);
                         flipToggle = 0;
 
                         curKeyframeState = KeyframeState.None;
@@ -380,7 +452,7 @@ public class Notepad : MonoBehaviour
                     {
                         if (curKeyframeState == KeyframeState.TogglePageContentsBottomHalf) return;
 
-                        activePage.TogglePageContentBottomHalf(true);
+                        pages[activePageIndex - 1].TogglePageContentBottomHalf(true);
 
                         curKeyframeState = KeyframeState.TogglePageContentsBottomHalf;
                     }
@@ -390,7 +462,7 @@ public class Notepad : MonoBehaviour
                     {
                         if (curKeyframeState == KeyframeState.TogglePageContentsTopHalf) return;
 
-                        activePage.TogglePageContentTopHalf(true);
+                        pages[activePageIndex - 1].TogglePageContentTopHalf(true);
 
                         curKeyframeState = KeyframeState.TogglePageContentsTopHalf;
                     }
@@ -399,7 +471,7 @@ public class Notepad : MonoBehaviour
                     {
                         if (curKeyframeState == KeyframeState.PaperClip) return;
 
-                        activePage.PlayPaperClipReverse();
+                        pages[activePageIndex - 1].PlayPaperClipReverse();
 
                         curKeyframeState = KeyframeState.PaperClip;
                     }
@@ -409,8 +481,12 @@ public class Notepad : MonoBehaviour
                         if (curKeyframeState == KeyframeState.ChangeDepth) return;
 
                         leftHand_renderer.UpdateDepthRealtime(leftHandDepthFront);
-                        activePage.SetPageDepth(leftHandDepthFront + 2);
+                        pages[activePageIndex - 1].SetPageDepth(leftHandDepthFront + 2);
 
+                        if (pages[activePageIndex - 1].answerText == "")
+                        {
+                            pages[activePageIndex - 1].SetAnswerTextAlpha(normAmount: 1);
+                        }
                         curKeyframeState = KeyframeState.ChangeDepth;
                     }
                     break;
@@ -439,7 +515,7 @@ public class Notepad : MonoBehaviour
                             }
                             break;
                         }
-                        totalPencilTime = activePage.answerText.Length * WRITE_LETTER_TIME;
+                        totalPencilTime = (activePage.answerText.Length + 1) * WRITE_LETTER_TIME;
                         atStartPencilPos = true;
                     }
                 }
@@ -447,19 +523,23 @@ public class Notepad : MonoBehaviour
                 {
                     curPencilTime += Time.deltaTime;
                     float t = curPencilTime / totalPencilTime;
+                    curWritingBounds = activePage.GetWritingBounds();
                     float curPosX = Mathf.Lerp(curWritingBounds.min.x, curWritingBounds.max.x, t);
                     float randOffset = Mathf.PerlinNoise(curPencilTime * PENCIL_VERTICAL_FREQUENCY, curPencilTime * PENCIL_VERTICAL_FREQUENCY) * 2 - 1;
-                    float curPosY = activePage.answerTextBounds.center.y + (randOffset * PENCIL_VERTICAL_MAGNITUDE);
-                    leftHand_renderer.transform.position = new Vector3(curPosX, curPosY, leftHand_renderer.transform.position.z);
+                    float curPosY = curWritingBounds.center.y + (randOffset * PENCIL_VERTICAL_MAGNITUDE);
+
+                    Vector3 worldPos = new Vector3(curPosX, curPosY, leftHand_renderer.transform.position.z);
+
+                    leftHand_renderer.transform.position = worldPos;
 
                     if (t > 1f) writeToggle = false;
                 }
 
-                if (activePageIndex < lastPageIndex && playerInputs.notepadChoosePromptInputAndFlip.y == 1)
+                if (activePageIndex < lastPageIndex && playerInputs.notepadPreviewAnswerAndFlip.y == 1)
                 {
                     willFlipUp = true;
                 }
-                else if (activePageIndex > 0 && playerInputs.notepadChoosePromptInputAndFlip.y == -1)
+                else if (activePageIndex > 0 && playerInputs.notepadPreviewAnswerAndFlip.y == -1)
                 {
                     willFlipDown = true;
                 }
@@ -484,19 +564,20 @@ public class Notepad : MonoBehaviour
                 {
                     curPencilTime += Time.deltaTime;
                     float t = curPencilTime / totalPencilTime;
+                    curWritingBounds = activePage.GetWritingBounds();
                     float curPosX = Mathf.Lerp(curWritingBounds.max.x, curWritingBounds.min.x, t);
                     float randOffset = Mathf.PerlinNoise(curPencilTime * PENCIL_VERTICAL_FREQUENCY, curPencilTime * PENCIL_VERTICAL_FREQUENCY) * 2 - 1;
-                    float curPosY = activePage.answerTextBounds.center.y + (randOffset * PENCIL_VERTICAL_MAGNITUDE);
+                    float curPosY = curWritingBounds.center.y + (randOffset * PENCIL_VERTICAL_MAGNITUDE);
                     leftHand_renderer.transform.position = new Vector3(curPosX, curPosY, leftHand_renderer.transform.position.z);
 
                     if (activePage.activeAnswerTextRenderer.text.Length == 0) eraseToggle = false;
                 }
 
-                if (activePageIndex < lastPageIndex && playerInputs.notepadChoosePromptInputAndFlip.y == 1)
+                if (activePageIndex < lastPageIndex && playerInputs.notepadPreviewAnswerAndFlip.y == 1)
                 {
                     willFlipUp = true;
                 }
-                else if (activePageIndex > 0 && playerInputs.notepadChoosePromptInputAndFlip.y == -1)
+                else if (activePageIndex > 0 && playerInputs.notepadPreviewAnswerAndFlip.y == -1)
                 {
                     willFlipDown = true;
                 }
@@ -504,9 +585,9 @@ public class Notepad : MonoBehaviour
             break;
             case NotepadState.Stationary:
             {
-                if (playerInputs.notepadChoosePromptInputAndFlip.x != 0)
+                if (playerInputs.notepadPreviewAnswerAndFlip.x != 0)
                 {
-                    previewAnswerIndex += (int)playerInputs.notepadChoosePromptInputAndFlip.x;
+                    previewAnswerIndex += (int)playerInputs.notepadPreviewAnswerAndFlip.x;
                     previewAnswerIndex = (previewAnswerIndex + trip.stationsDataArray.Length) % trip.stationsDataArray.Length;
 
                     activePage.SetPreviewAnswerText(previewAnswerIndex);

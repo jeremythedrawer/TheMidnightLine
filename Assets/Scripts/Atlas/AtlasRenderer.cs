@@ -170,12 +170,11 @@ public class AtlasRenderer : MonoBehaviour
         scaleAndFlip.x = width;
         scaleAndFlip.y = height;
 
-        bounds.size = new Vector3(scaleAndFlip.x * worldPivotAndSize.z, scaleAndFlip.y * worldPivotAndSize.w, 0.2f);
         
         FlipH(flipX);
         FlipV(flipY);
+        SetBounds();
 
-        bounds.center = new Vector3(transform.position.x + boundsOffset.x, transform.position.y + boundsOffset.y, transform.position.z);
 
         if (boxCollider == null) return;
         boxCollider.size = bounds.size;
@@ -188,6 +187,16 @@ public class AtlasRenderer : MonoBehaviour
         //{
         //    RegisterRenderer(this);
         //}
+    }
+    public void SetBounds()
+    {
+        bounds.size = new Vector3(scaleAndFlip.x * worldPivotAndSize.z, scaleAndFlip.y * worldPivotAndSize.w, 0.2f);
+        bounds.center = new Vector3(transform.position.x + boundsOffset.x, transform.position.y + boundsOffset.y, transform.position.z);
+    }
+    public Bounds GetBounds()
+    {
+        SetBounds();
+        return bounds;
     }
     public void UpdateDepthRealtime(int newDepth)
     {

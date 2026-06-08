@@ -97,6 +97,9 @@ MonoBehaviour:
   frontPlatformRenderer: {fileID: 1047949136423536330}
   backPlatformRenderer: {fileID: 8122243838295327252}
   exitTransform: {fileID: 9065888923847162420}
+  spawnData: {fileID: 11400000, guid: cb76807a71f74704a94a0f5cfe3b2c50, type: 2}
+  parallaxController: {fileID: 5970183146856195421}
+  frontParallaxController: {fileID: 3069754515644380258}
 --- !u!114 &5970183146856195421
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -170,7 +173,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 4bd321d6ab1cee54aa36e5e3e11116c9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 28
   atlas: {fileID: 11400000, guid: 02557c0f0cb5708419d00e0cdc88b756, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -179,11 +181,6 @@ MonoBehaviour:
   flipY: 0
   width: 10
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 1, y: 0.125, z: 0, w: 0.6230469}
@@ -193,7 +190,7 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 206.17444, y: -0.35555556, z: 20.239769}
     m_Extent: {x: 28.444445, y: 0.35555556, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0.7111111, z: 5.688889, w: 0.7111111}
+  worldPivotAndSize: {x: -0, y: -0.7111111, z: 5.688889, w: 0.7111111}
   uvSizeAndPosition: {x: 1, y: 0.125, z: 0, w: 0.6230469}
   scaleAndFlip: {x: 10, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -210,7 +207,6 @@ MonoBehaviour:
   prevSpriteIndexFlipV: 2
   isAnimating: 0
   quadCount: 0
-  hasText: 0
 --- !u!1 &3886889580182261749
 GameObject:
   m_ObjectHideFlags: 0
@@ -259,7 +255,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 6c3a16917d22ca843a51762ac8067dc8, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 6
   atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -268,11 +263,6 @@ MonoBehaviour:
   flipY: 1
   width: 15.3
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.33007812, y: 0.103515625, z: 0.38476562, w: 0.8886719}
@@ -282,7 +272,7 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 206.394, y: -0.98888886, z: -1}
     m_Extent: {x: 28.730001, y: 0.5888889, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 1.1777778, z: 3.7555556, w: 1.1777778}
+  worldPivotAndSize: {x: -0, y: -1.1777778, z: 3.7555556, w: 1.1777778}
   uvSizeAndPosition: {x: 0.33007812, y: 0.103515625, z: 0.38476562, w: 0.8886719}
   scaleAndFlip: {x: 15.3, y: 1, z: 1, w: -1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -299,7 +289,6 @@ MonoBehaviour:
   prevSpriteIndexFlipV: 8
   isAnimating: 0
   quadCount: 0
-  hasText: 0
 --- !u!1 &5139829644407455510
 GameObject:
   m_ObjectHideFlags: 0
@@ -348,7 +337,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 6c3a16917d22ca843a51762ac8067dc8, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 7
   atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -357,11 +345,6 @@ MonoBehaviour:
   flipY: 0
   width: 15.3
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.33007812, y: 0.103515625, z: 0.38476562, w: 0.8886719}
@@ -371,7 +354,7 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 206.48, y: 2.2388887, z: 0}
     m_Extent: {x: 28.730001, y: 0.5888889, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 3.7555556, w: 1.1777778}
+  worldPivotAndSize: {x: -0, y: -0, z: 3.7555556, w: 1.1777778}
   uvSizeAndPosition: {x: 0.33007812, y: 0.103515625, z: 0.38476562, w: 0.8886719}
   scaleAndFlip: {x: 15.3, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -388,7 +371,6 @@ MonoBehaviour:
   prevSpriteIndexFlipV: 8
   isAnimating: 0
   quadCount: 0
-  hasText: 0
 --- !u!1 &6074763155199795878
 GameObject:
   m_ObjectHideFlags: 0
@@ -437,7 +419,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 4bd321d6ab1cee54aa36e5e3e11116c9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 7
   atlas: {fileID: 11400000, guid: 02557c0f0cb5708419d00e0cdc88b756, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -446,11 +427,6 @@ MonoBehaviour:
   flipY: 0
   width: 10
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 1, y: 0.125, z: 0, w: 0.4970703}
@@ -460,7 +436,7 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 206.17444, y: -0.35555556, z: 0}
     m_Extent: {x: 28.444445, y: 0.35555556, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0.7111111, z: 5.688889, w: 0.7111111}
+  worldPivotAndSize: {x: -0, y: -0.7111111, z: 5.688889, w: 0.7111111}
   uvSizeAndPosition: {x: 1, y: 0.125, z: 0, w: 0.4970703}
   scaleAndFlip: {x: 10, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -477,7 +453,6 @@ MonoBehaviour:
   prevSpriteIndexFlipV: 3
   isAnimating: 0
   quadCount: 0
-  hasText: 0
 --- !u!1 &6143859757605772998
 GameObject:
   m_ObjectHideFlags: 0
@@ -586,7 +561,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 6c3a16917d22ca843a51762ac8067dc8, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 30
   atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -595,11 +569,6 @@ MonoBehaviour:
   flipY: 0
   width: 94.7
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.052734375, y: 0.14550781, z: 0.35888672, w: 0.73095703}
@@ -609,7 +578,7 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 206.21, y: 0.8277778, z: 22.239769}
     m_Extent: {x: 28.41, y: 0.8277778, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 0.6, w: 1.6555556}
+  worldPivotAndSize: {x: -0, y: -0, z: 0.6, w: 1.6555556}
   uvSizeAndPosition: {x: 0.052734375, y: 0.14550781, z: 0.35888672, w: 0.73095703}
   scaleAndFlip: {x: 94.7, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -626,7 +595,6 @@ MonoBehaviour:
   prevSpriteIndexFlipV: 15
   isAnimating: 0
   quadCount: 0
-  hasText: 0
 --- !u!1 &8889692384159627793
 GameObject:
   m_ObjectHideFlags: 0
@@ -2252,7 +2220,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: worldPivotAndSize.x
-      value: 0.08888889
+      value: -0.08888889
       objectReference: {fileID: 0}
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: worldPivotAndSize.z
@@ -4302,7 +4270,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: worldPivotAndSize.x
-      value: 0.08888889
+      value: -0.08888889
       objectReference: {fileID: 0}
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: worldPivotAndSize.z

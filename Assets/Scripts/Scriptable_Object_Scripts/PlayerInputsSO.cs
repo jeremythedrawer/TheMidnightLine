@@ -7,8 +7,8 @@ public class PlayerInputsSO : ScriptableObject
     public bool run;
 
     public bool notepadKeyDown;
-    public Vector2 notepadChoosePromptInputAndFlip;
-    public bool notepadConfirmStation;
+    public Vector2 notepadPreviewAnswerAndFlip;
+    public bool notepadConfirmAnswer;
 
     public bool ticketCheckKeyDown;
     public bool interact;

@@ -68,18 +68,18 @@ public class InputManager : MonoBehaviour
         run_action.canceled += context => playerInputs.run = false;
 
         notepadToggle_action.started += context => playerInputs.notepadKeyDown = true;
-        notepadConfirmStation_action.started += context => playerInputs.notepadConfirmStation = true;
+        notepadConfirmStation_action.started += context => playerInputs.notepadConfirmAnswer = true;
 
         notepadChooseStation_action.started += context =>
         {
             Vector2 move = context.ReadValue<Vector2>();
-            playerInputs.notepadChoosePromptInputAndFlip.x = Mathf.RoundToInt(move.x);
+            playerInputs.notepadPreviewAnswerAndFlip.x = Mathf.RoundToInt(move.x);
         };
 
         notepadFlipPage_action.started += context =>
         {
             Vector2 move = context.ReadValue<Vector2>();
-            playerInputs.notepadChoosePromptInputAndFlip.y = Mathf.RoundToInt(move.y);
+            playerInputs.notepadPreviewAnswerAndFlip.y = Mathf.RoundToInt(move.y);
         };
 
         ticket_action.started += context => playerInputs.ticketCheckKeyDown = true;
@@ -147,14 +147,14 @@ public class InputManager : MonoBehaviour
     private void LateUpdate()
     {
         playerInputs.notepadKeyDown = false;
-        playerInputs.notepadConfirmStation = false;
+        playerInputs.notepadConfirmAnswer = false;
         playerInputs.ticketCheckKeyDown = false;
         playerInputs.interact = false;
         playerInputs.mouseLeftDown = false;
         playerInputs.mouseLeftUp = false;
         playerInputs.mouseRightDown = false;
-        playerInputs.notepadChoosePromptInputAndFlip.x = 0;
-        playerInputs.notepadChoosePromptInputAndFlip.y = 0;
+        playerInputs.notepadPreviewAnswerAndFlip.x = 0;
+        playerInputs.notepadPreviewAnswerAndFlip.y = 0;
     }
     private void CheckDevice(InputControl value, InputEventPtr ptr)
     {

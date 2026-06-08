@@ -48,7 +48,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 857f07ac02073324d828fc8db55dd0e9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 25
   atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -131,7 +130,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 4a9bdb32b0f04fc40ae0c04a7a31065a, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 25
   atlas: {fileID: 11400000, guid: 02c9993b5b1bf6f4daa262e7f4f6313b, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
@@ -246,7 +244,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 4bd321d6ab1cee54aa36e5e3e11116c9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 1
   atlas: {fileID: 11400000, guid: 02557c0f0cb5708419d00e0cdc88b756, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 3947141872535517702}
@@ -376,7 +373,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 4bd321d6ab1cee54aa36e5e3e11116c9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 23
   atlas: {fileID: 11400000, guid: 02557c0f0cb5708419d00e0cdc88b756, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 632288581041624891}
@@ -578,6 +574,9 @@ MonoBehaviour:
   frontPlatformRenderer: {fileID: 7534415128273116376}
   backPlatformRenderer: {fileID: 2209353661814701400}
   exitTransform: {fileID: 4741541458634704027}
+  spawnData: {fileID: 11400000, guid: cb76807a71f74704a94a0f5cfe3b2c50, type: 2}
+  parallaxController: {fileID: 1871317785357049319}
+  frontParallaxController: {fileID: 2535673929443026495}
 --- !u!114 &1871317785357049319
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -651,7 +650,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 857f07ac02073324d828fc8db55dd0e9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 25
   atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}

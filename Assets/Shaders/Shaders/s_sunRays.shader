@@ -83,7 +83,7 @@ Shader "Custom/s_sunRays"
 			    float rays = asin(sinT * pow((sinT * 0.5 + 0.5), 5)) + max(asin(sinT * sinT),0);
 
 			    float sunRays = round(saturate(rays - noise + sun + saturate(sun)));
-               // sunRays = BayerX8(sunRays - 0.5, i.positionHCS.y);
+                sunRays = BayerX8(sunRays - 0.5, i.positionHCS.y);
 
                 half horizonThreshold = step(0, i.worldPos.y);
                 half alpha = sunRays * horizonThreshold;

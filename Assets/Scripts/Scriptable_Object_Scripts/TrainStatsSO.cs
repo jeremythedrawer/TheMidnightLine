@@ -23,6 +23,7 @@ public class TrainStatsSO : ScriptableObject
 
     public DepthSections depthSections;
     public Bounds totalBounds;
+    public LayerMask activeSlideDoorsMask;
 
     public float[] exteriorSlideDoorPositions;    
     public float[] interiorSlideDoorPositions;    

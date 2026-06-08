@@ -9,8 +9,6 @@ public class LayerSettingsSO : ScriptableObject
     {
         public LayerMask ground;
     }
-    public StationLayers stationLayers;
-
     [Serializable] public struct TrainLayers
     {
         public LayerMask ground;
@@ -27,6 +25,8 @@ public class LayerSettingsSO : ScriptableObject
         public LayerMask carriage;
         public LayerMask carriageMap;
     }
+
+    public StationLayers stationLayers;
     public TrainLayers trainLayers;
 
     public LayerMask stationWallLayers;
@@ -34,8 +34,6 @@ public class LayerSettingsSO : ScriptableObject
 
     public LayerMask spy;
     public LayerMask npc;
-    public LayerMask phone;
-    public LayerMask death;
 
     [Header("Generated")]
     public LayerMask stationMask;

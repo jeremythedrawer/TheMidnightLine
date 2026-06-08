@@ -19,47 +19,29 @@ public class ParallaxController : MonoBehaviour
     public Vector3 worldPos;
     public Bounds bounds;
     public Vector3 boundsOffset;
+    public Vector2 velocity;
     private void OnEnable()
     {
         parallaxFactor = (FAR_CLIP - worldDepth) / FAR_CLIP;
     }
-    private void Start()
-    {
-        worldPos = transform.position;
-        bounds = leftRenderer.bounds;
-
-        if (rightRenderer)
-        {
-            Bounds rightBounds = rightRenderer.bounds;
-            bounds.Encapsulate(rightBounds);
-        }
-
-        boundsOffset = bounds.center - worldPos;
-    }
-
     private void Update()
     {
         if (bounds.max.x > spawnData.bounds.min.x)
         {
-            Vector2 parallaxVelocity = (camStats.curVelocity * Time.deltaTime * (1 - parallaxFactor));
+            velocity = (camStats.curVelocity * Time.deltaTime * (1 - parallaxFactor));
             if (spyStats.curLocationState != Spy.LocationState.Station)
             {
-                parallaxVelocity += trainStats.curVelocity * Time.deltaTime * parallaxFactor;
+                velocity += trainStats.curVelocity * Time.deltaTime * parallaxFactor;
             }
-            worldPos.x -= parallaxVelocity.x;
-            worldPos.y -= parallaxVelocity.y;
-
+            worldPos.x -= velocity.x;
+            worldPos.y -= velocity.y;
+            transform.position = worldPos;
         }
-    }
-    private void LateUpdate()
-    {
-        transform.position = GetSnappedPosition(worldPos);
     }
     private void FixedUpdate()
     {
         bounds.center = worldPos + boundsOffset;
     }
-
     private Vector3 GetSnappedPosition(Vector3 pos)
     {
         Matrix4x4 w2c = camStats.worldToCam;
@@ -72,5 +54,26 @@ public class ParallaxController : MonoBehaviour
 
         Vector3 snappedWorld = c2w.MultiplyPoint3x4(camSpace);
         return snappedWorld;
+    }
+
+    public void Init(Vector2 pos)
+    {
+        worldPos.x = pos.x;
+        worldPos.y = pos.y;
+        worldPos.z = transform.position.z;
+
+        transform.position = worldPos;
+        bounds = leftRenderer.GetBounds();
+        if (rightRenderer)
+        {
+            Bounds rightBounds = rightRenderer.GetBounds();
+            bounds.Encapsulate(rightBounds);
+        }
+        boundsOffset = bounds.center - worldPos;
+    }
+    private void OnDrawGizmosSelected()
+    {
+        Gizmos.color = Color.yellow;
+        Gizmos.DrawWireCube(bounds.center, bounds.size);
     }
 }

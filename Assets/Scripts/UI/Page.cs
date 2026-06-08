@@ -190,6 +190,14 @@ public class Page : MonoBehaviour
         activeAnswerTextRenderer.SetText(previewAnswerText);
         answerTextBounds = activeAnswerTextRenderer.GetBounds(previewAnswerText);
     }
+    public void SetAnswerTextAlpha(float normAmount)
+    {
+        for (int i = 0; i < answerTextRenderers.Length; i++)
+        {
+            AtlasTextRenderer renderer = answerTextRenderers[i];
+            renderer.SetAppearTextAlpha(normAmount);
+        }
+    }
     public void UpdatePreviewAnswerText(bool appear,  ref float clock)
     {
         switch (pageType)
@@ -197,7 +205,7 @@ public class Page : MonoBehaviour
             case PageType.Profile:
             case PageType.Confirm:
             {
-                activeAnswerTextRenderer.UpdateAppearText(normAmount: 0.5f, appear, ref clock);
+                activeAnswerTextRenderer.UpdateAppearTextAlpha(normAmount: 0.5f, appear, ref clock);
             }
             break;
         }

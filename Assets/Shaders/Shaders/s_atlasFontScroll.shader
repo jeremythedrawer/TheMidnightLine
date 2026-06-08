@@ -46,19 +46,24 @@ Shader "Custom/s_atlasFontScroll"
                 float2 pivot = spriteData.pivotAndSize.xy;
                 float2 size = spriteData.pivotAndSize.zw;
 
-                float scrollSpacing = spriteData.custom.x;
+                float textBoundWidth = spriteData.custom.x;
                 float scrollBoundWidth = spriteData.custom.y; 
                 float scrollSpeed = spriteData.custom.z;
+                float scrollingBackwards = spriteData.custom.w;
 
-                float maskWidth = (scrollBoundWidth + scrollSpacing);
+                float buffer = 0.05;
+                float repeatWidth = max(scrollBoundWidth, textBoundWidth);
                 
                 float time = _Time.y * scrollSpeed;
-                float scrollingBackwards = spriteData.custom.w;
 
                 float2 objPos = v.positionOS.xy;
                 objPos *= size;
-                objPos.x += fmod(time + pivot.x, maskWidth) + (maskWidth * scrollingBackwards);
-                objPos += pivot.y;
+
+                float bufferSign =  buffer * (scrollingBackwards * 2 - 1);
+                objPos.x += fmod(time + pivot.x, repeatWidth + (buffer * 2)) + bufferSign;
+                objPos.x += repeatWidth * scrollingBackwards;
+                
+                objPos.y += pivot.y;
                 float3 worldPos = float3(position.xy + objPos, position.z);
 
                 o.objPos = objPos;
