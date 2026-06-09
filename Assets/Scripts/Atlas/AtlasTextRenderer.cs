@@ -1,8 +1,10 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+#if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
+#endif
 
 using static Atlas;
 using static AtlasRendering;
@@ -336,19 +338,12 @@ public class AtlasTextRenderer : MonoBehaviour
             {
             }
             break;
-
-            case AtlasTextRendererType.ScrollWorld:
-            {
-                Gizmos.color = Color.red;
-                float scrollBoundsXPos = transform.position.x + scrollBoundSize * 0.5f; 
-                Gizmos.DrawWireCube(new Vector2(scrollBoundsXPos, bounds.center.y), new Vector2(scrollBoundSize, bounds.size.y));
-            }
-            break;
         }
     }
 #endif
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(AtlasTextRenderer))]
 public class AtlasTextRendererEditor : Editor
 {
@@ -368,7 +363,7 @@ public class AtlasTextRendererEditor : Editor
             case AtlasTextRendererType.ScrollWorld:
             {
                 float scrollBoundsXPos = textRend.transform.position.x + textRend.scrollBoundSize * 0.5f;
-                boundsHandle.center = new Vector2(scrollBoundsXPos, textRend.bounds.center.y);
+                boundsHandle.center = new Vector3(scrollBoundsXPos, textRend.bounds.center.y, textRend.transform.position.z);
                 boundsHandle.size = new Vector2(textRend.scrollBoundSize, textRend.bounds.size.y);
                 boundsHandle.SetColor(Color.red);
                 boundsHandle.DrawHandle();
@@ -386,3 +381,4 @@ public class AtlasTextRendererEditor : Editor
 
     }
 }
+#endif

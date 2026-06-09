@@ -2,7 +2,6 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using UnityEngine;
-using static UnityEditor.Rendering.ShadowCascadeGUI;
 
 public class Gangway : MonoBehaviour
 {

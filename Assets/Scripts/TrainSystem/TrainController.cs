@@ -54,6 +54,7 @@ public class TrainController : MonoBehaviour
     private void Start()
     {
         Init();
+#if UNITY_EDITOR
         if (skipMoveToStart)
         {
             SkipMoveTrainToStartPosition();
@@ -62,6 +63,9 @@ public class TrainController : MonoBehaviour
         {
             MoveTrainToStartPosition().Forget();
         }
+#else
+        MoveTrainToStartPosition().Forget();
+#endif
     }
     private void Update()
     {
@@ -468,18 +472,10 @@ public class TrainController : MonoBehaviour
 
         Shader.SetGlobalVector("_TrainBoundsMin", stats.totalBounds.min);
     }
-    private void OnGUI()
-    {
-        string kmphString = stats.curVelocity.ToString("F2");
-        GUIStyle style = new GUIStyle(GUI.skin.label);
-        style.alignment = TextAnchor.UpperCenter;
-        style.normal.textColor = Color.white;
-        Rect rect = new Rect(0, 20f, Screen.width - 20f, 25f); // full-width area, 20px margin
-        GUI.Label(rect, kmphString, style);
-    }
 #endif
 }
 
+#if UNITY_EDITOR
 [CustomEditor(typeof(TrainController))]
 public class TrainControllerEditor : Editor
 {
@@ -522,3 +518,4 @@ public class TrainControllerEditor : Editor
         }
     }
 }
+#endif

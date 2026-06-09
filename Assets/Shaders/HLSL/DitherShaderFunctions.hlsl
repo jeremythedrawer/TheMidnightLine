@@ -64,7 +64,7 @@ float BayerMatrix(float value, float bayerIndex, float2 pixelCoord)
     //float bayerValues = GetBayer8(pixelCoord.x, pixelCoord.y);
     const int N = 8;
 
-    int y = (int) pixelCoord.y % N;
+    uint y = (uint)pixelCoord.y % N;
 
     // 1D Bayer sequence (evenly distributed)
     int pattern[8] = { 0, 4, 2, 6, 1, 5, 3, 7 };

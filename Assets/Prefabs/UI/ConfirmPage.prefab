@@ -52,8 +52,9 @@ MonoBehaviour:
   text: _____
   kerning: 1.02
   spacing: 0.09
-  scrollSize: 0
   alignmentType: 0
+  scrollSpeed: 0
+  scrollBoundSize: 0
   bounds:
     m_Center: {x: 300.09256, y: 0.0043332875, z: 15.92}
     m_Extent: {x: 0.2595511, y: 0.09166667, z: 0}
@@ -87,6 +88,88 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   hasText: 1
+--- !u!1 &1446615636778628965
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6152190831687039748}
+  - component: {fileID: 3911591812244558260}
+  m_Layer: 0
+  m_Name: MeridiaEmblem
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6152190831687039748
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1446615636778628965}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.28500366, y: -1.287, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7380519998003774169}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3911591812244558260
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1446615636778628965}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 3
+  batchKey:
+    texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
+    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
+  atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 6
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.48046875, y: 0.734375, z: 0.02734375, w: 0.09765625}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.68333334, y: 1.0444444, z: 1}
+    index: 6
+  bounds:
+    m_Center: {x: 300.05667, y: 1.1552222, z: 15.92}
+    m_Extent: {x: 0.34166667, y: 0.5222222, z: 0.1}
+  worldPivotAndSize: {x: -0, y: -0, z: 0.68333334, w: 1.0444444}
+  uvSizeAndPosition: {x: 0.48046875, y: 0.734375, z: 0.02734375, w: 0.09765625}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 1, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.34166667, y: 0.5222222, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 6
+  prevSpriteIndexFlipV: 6
+  isAnimating: 0
+  quadCount: 0
 --- !u!1 &2086181211207709010
 GameObject:
   m_ObjectHideFlags: 0
@@ -221,8 +304,9 @@ MonoBehaviour:
   text: Sign When Completed
   kerning: 1
   spacing: 0.02
-  scrollSize: 0
   alignmentType: 0
+  scrollSpeed: 0
+  scrollBoundSize: 0
   bounds:
     m_Center: {x: 300.05878, y: 0.31533328, z: 15.92}
     m_Extent: {x: 0.71077776, y: 0.09166667, z: 0}
@@ -342,6 +426,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6152190831687039748}
   - {fileID: 9027941038772832681}
   - {fileID: 6265391370714878805}
   - {fileID: 3401857208857989724}
@@ -388,9 +473,10 @@ MonoBehaviour:
   - {fileID: 7862294593475275798}
   topRenderers:
   - {fileID: 1114506471185041396}
+  - {fileID: 3911591812244558260}
   activeAnswerTextRenderer: {fileID: 0}
-  promptInputIndex: 0
-  promtInputTextBounds:
+  answerIndex: 0
+  answerTextBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   answerText: 
@@ -447,8 +533,9 @@ MonoBehaviour:
   text: J.E
   kerning: 1.02
   spacing: 0.09
-  scrollSize: 0
   alignmentType: 0
+  scrollSpeed: 0
+  scrollBoundSize: 0
   bounds:
     m_Center: {x: 300.0863, y: 0.04077769, z: 15.92}
     m_Extent: {x: 0.12530333, y: 0.072222225, z: 0}

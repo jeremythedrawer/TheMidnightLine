@@ -86,8 +86,8 @@ public class CameraController : MonoBehaviour
         stats.prevWorldPos = stats.curWorldPos;
         stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, targetWorldPos, Time.deltaTime * settings.damping);
 
-        Vector3 snappedPos = GetSnappedPosition(stats.curWorldPos, stats.worldUnitsPerPixel);
-        stats.curWorldPos = snappedPos;
+        //Vector3 snappedPos = GetSnappedPosition(stats.curWorldPos, stats.worldUnitsPerPixel);
+        //stats.curWorldPos = snappedPos;
         transform.position = stats.curWorldPos;
 
         stats.curVelocity = -(stats.curWorldPos - stats.prevWorldPos) / Time.deltaTime;

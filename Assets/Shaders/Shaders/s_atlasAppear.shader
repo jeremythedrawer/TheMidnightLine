@@ -89,7 +89,7 @@ Shader "Custom/s_atlasAppear"
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-                half3 dayNightInvertColor = color + _DayNight;
+                half3 dayNightInvertColor = color.rgb + _DayNight;
 
                 half3 checkedColor = BayerX8(spriteData.custom.x, i.positionHCS) * _TicketCheckColor;
 

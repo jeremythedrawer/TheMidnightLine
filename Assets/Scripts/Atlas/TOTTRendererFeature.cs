@@ -113,6 +113,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 #else
                     //if (renderer.bounds.max.x < cameraStats.camWorldLeft || renderer.bounds.min.x > cameraStats.camWorldRight || renderer.bounds.max.y < cameraStats.camWorldBottom || renderer.bounds.min.y > cameraStats.camWorldTop) continue; //TODO: use new cam bounds
 #endif
+
                     renderer.UpdateBounds();
 
                     switch (renderer.rendererType)

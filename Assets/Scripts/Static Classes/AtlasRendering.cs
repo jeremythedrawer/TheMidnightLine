@@ -56,6 +56,7 @@ public static class AtlasRendering
 
     public static Dictionary<BatchKey, SpriteBatch> spriteBatchDict = new Dictionary<BatchKey, SpriteBatch>();
     public static List<(BatchKey, SpriteBatch)> spriteBatchList = new List<(BatchKey, SpriteBatch)> ();
+
     public static Dictionary<BatchKey, TextBatch> textBatchDict = new Dictionary<BatchKey, TextBatch>();
     public static List<(BatchKey, TextBatch)> textBatchList = new List<(BatchKey, TextBatch)>();
 
@@ -106,8 +107,6 @@ public static class AtlasRendering
         renderer.batchKey.material.enableInstancing = true;
 
         UnregisterRenderer(renderer);
-
-        //renderer.batchKey.depthOrder = (int)renderer.transform.position.z;
 
         if (!spriteBatchDict.TryGetValue(renderer.batchKey, out SpriteBatch batch))
         {

@@ -79,8 +79,6 @@ Shader "Custom/s_atlasFontScroll"
             {
                 float2 uvSize = i.uvSizeAndPos.xy;
                 float2 uvPos = i.uvSizeAndPos.zw;
-
-                i.uv = frac(i.uv);
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
