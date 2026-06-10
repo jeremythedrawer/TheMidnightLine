@@ -1,11 +1,5 @@
 Shader "Custom/s_atlasBayerRadial"
 {
-    Properties
-    {
-        [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
-        [NoScaleOffset] _NoiseTexture("Noise Texture", 2D) = "white"
-    }
-
     SubShader
     {
         Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
@@ -33,7 +27,9 @@ Shader "Custom/s_atlasBayerRadial"
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                uint instanceID : TEXCOORD1;
+                float4 uvSizeAndPos : TEXCOORD1;
+                float4 scaleAndFlip : TEXCOORD2;
+                float4 custom : TEXCOORD3;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -42,17 +38,12 @@ Shader "Custom/s_atlasBayerRadial"
 
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
-            TEXTURE2D(_NoiseTexture);
-            SAMPLER(sampler_NoiseTexture);
             Varyings vert(Attributes v)
             {
                 Varyings o;
-
                 AtlasSprite spriteData = _SpriteData[v.instanceID];
-
-
-                float3 position = spriteData.position.xyz;
                 
+                float3 position = spriteData.position.xyz;
                 float2 pivot = spriteData.pivotAndSize.xy;
                 float2 size = spriteData.pivotAndSize.zw;
                 
@@ -66,40 +57,42 @@ Shader "Custom/s_atlasBayerRadial"
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
-                o.instanceID = v.instanceID;
+                o.uvSizeAndPos = spriteData.uvSizeAndPos;
+                o.scaleAndFlip = spriteData.scaleAndFlip;
+                o.custom = spriteData.custom;
                 return o;
             }
 
             half4 frag(Varyings i) : SV_Target
             {
-                uint id = i.instanceID;
-                AtlasSprite spriteData = _SpriteData[id];
+                int uncoveredSpriteIndex = (int)i.custom.x;
 
-                float2 uvSize = spriteData.uvSizeAndPos.xy;
-                float2 uvPos = spriteData.uvSizeAndPos.zw;
+                AtlasSprite uncoveredSprite = _SpriteData[uncoveredSpriteIndex];
+
+                float2 coveredUVSize = i.uvSizeAndPos.xy;
+                float2 coveredUVPos = i.uvSizeAndPos.zw;
                 
-                float2 scale = spriteData.scaleAndFlip.xy;
-                float2 flip = spriteData.scaleAndFlip.zw;
+                float2 scale = i.scaleAndFlip.xy;
+                float2 flip = i.scaleAndFlip.zw;
 
                 float2 normUV = i.uv;
-                i.uv *= scale;
-                i.uv = frac(i.uv);
-                i.uv = (i.uv - 0.5) * flip + 0.5;
-                i.uv *= uvSize;
-                i.uv += uvPos;
-                half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+                float2 coveredSpriteUV = i.uv;
 
-                half4 noiseTex = SAMPLE_TEXTURE2D(_NoiseTexture, sampler_NoiseTexture, normUV);
+                coveredSpriteUV *= coveredUVSize ;
+                coveredSpriteUV += coveredUVPos ;
+                
+                half4 coveredSprite = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, coveredSpriteUV);
+
                 float2 centerUV = normUV * 2 - 1;
                 float radial = length(centerUV);
-                
-                float noise = noiseTex.r * 2 - 1;
-                half alpha = color.a + ((radial) - spriteData.custom.x);
-                //return alpha.xxxx;
+
+                float t = i.custom.x * 2 - 1;
+                half alpha = (radial) - t;
+
                 alpha = saturate(alpha); 
                 alpha = BayerMatrix(alpha, 1, i.positionHCS.xy);
 
-                half3 finalColor = color.rgb + _MainColor;
+                half3 finalColor = coveredSprite.rgb + _MainColor;
                 clip(alpha - 0.001);
 
                 return half4 (finalColor, 1);

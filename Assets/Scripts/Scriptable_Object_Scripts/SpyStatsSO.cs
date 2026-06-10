@@ -13,7 +13,6 @@ public class SpyStatsSO : ScriptableObject
     public bool spriteFlip;
     public bool walkingIntoWall;
 
-    public string ticketName;
     public string boardingStationName;
     public string disembarkingStationName;
 

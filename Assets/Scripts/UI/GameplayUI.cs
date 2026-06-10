@@ -12,7 +12,7 @@ public class GameplayUI : MonoBehaviour
     const float NATURAL_TICK_RATE = 2.5f;
     const float TICKET_ICON_PADDING = 0.2f;
     const float TICKET_ICON_APPEARING_DURATION = 0.5f;
-    const float BLACK_SCENE_TIME = 3f;
+
     public enum State
     { 
         None,
@@ -26,6 +26,7 @@ public class GameplayUI : MonoBehaviour
     public GameEventDataSO gameEventData;
     public NotepadData notepadData;
     public TripSO trip;
+    public SceneData sceneData;
 
     public Material fadeBlackMaterial; 
 
@@ -384,21 +385,8 @@ public class GameplayUI : MonoBehaviour
     private void SetFadeToBlack()
     {
         SetFadeBlack(fadeBlackMaterial, toFadeBlack: true);
-        SettingScoreScene().Forget();
+        Scenes.SetScoreScene(sceneData);
     }
-
-    private async UniTask SettingScoreScene()
-    {
-        await UniTask.WaitForSeconds(BLACK_SCENE_TIME);
-
-        AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Score");
-
-        while(!asyncLoad.isDone)
-        {
-            await UniTask.Yield();
-        }
-    }
-
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.yellowNice;

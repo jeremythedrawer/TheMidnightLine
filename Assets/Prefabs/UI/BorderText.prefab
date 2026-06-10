@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 3581687827106681615}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -1.0493988, y: -0.4166667, z: 1}
+  m_LocalPosition: {x: -0.54969937, y: -0.4166667, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -48,7 +48,6 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
-    depthOrder: 0
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -64,7 +63,7 @@ MonoBehaviour:
     worldSize: {x: 0, y: 0, z: 0}
     index: 0
   bounds:
-    m_Center: {x: 299.88718, y: 1.7021112, z: 0.1}
+    m_Center: {x: -4.116412, y: 1.2561111, z: 2.1}
     m_Extent: {x: 0.56358826, y: 0.25277779, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 0, w: 0}
   uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
@@ -129,7 +128,6 @@ GameObject:
   m_Component:
   - component: {fileID: 791040492309394018}
   - component: {fileID: 3097631008010475687}
-  - component: {fileID: 9101982931079653005}
   m_Layer: 0
   m_Name: BorderText
   m_TagString: Untagged
@@ -165,21 +163,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: f55b4786e96a8dd42b04bb6173006f35, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasTextRenderer
-  rendererType: 0
+  rendererType: 2
   batchKey:
     texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
-    depthOrder: -1
   textAtlas: {fileID: 11400000, guid: 03871f642f841d447a7b9560fa5d0c24, type: 2}
   text: 'Jermy Edwards
 
     is cool'
   kerning: 1.01
   spacing: 0.03
-  scrollSize: 0
   alignmentType: 1
-  camStats: {fileID: 0}
-  cam: {fileID: 0}
+  scrollSpeed: 0
+  scrollBoundSize: 0
+  background_renderer: {fileID: 8301492207987582700}
   bounds:
     m_Center: {x: 300.373, y: 1.6826668, z: -1}
     m_Extent: {x: 0.49969938, y: 0.18333334, z: 0}
@@ -278,18 +275,4 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   hasText: 1
---- !u!114 &9101982931079653005
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4708286760101045831}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b7fb701fd08c4cb40845aa69a47de56f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::StationNameTag
-  text_renderer: {fileID: 3097631008010475687}
-  background_renderer: {fileID: 8301492207987582700}
-  backgroundLocalPos: {x: -1.0493988, y: -0.4166667, z: 1}
+  borderLocalPos: {x: -0.54969937, y: -0.4166667, z: 0}

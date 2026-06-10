@@ -22,8 +22,9 @@ public static class AtlasRendering
     }
     public enum AtlasTextRendererType
     {
-        SimpleWorld,
-        ScrollWorld,
+        Simple,
+        Scroll,
+        Border,
     }
     public enum AtlasTextAlignmentType
     {

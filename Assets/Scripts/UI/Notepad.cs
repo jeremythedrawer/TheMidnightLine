@@ -5,15 +5,18 @@ using static Atlas;
 using static NPC;
 using static AtlasUI;
 using static Spy;
+using static Scenes;
+using System.Linq;
 public class Notepad : MonoBehaviour
 {
     public const float WRITE_LETTER_TIME = 0.1f;
-    
+    public const int MIN_STATION_STOPS = 3;
+
     const float LEFTHAND_DAMPING = 10f;
     const float PENCIL_DISTANCE_THRESHOLD = 0.05f;
     const float PENCIL_VERTICAL_FREQUENCY = 7f;
     const float PENCIL_VERTICAL_MAGNITUDE = 0.07f;
-
+    const float REVEAL_TIME = 2f;
     public enum KeyframeState
     {
         None,
@@ -29,6 +32,8 @@ public class Notepad : MonoBehaviour
     public NPCsDataSO npcData;
     public CameraStatsSO camStats;
     public SpyStatsSO spyStats;
+    public SceneData sceneData;
+    public GameEventDataSO gameEventData;
 
     public NotepadData notepadData;
     
@@ -50,7 +55,8 @@ public class Notepad : MonoBehaviour
 
     public Page activePage;
     public Page[] pages;
-    
+    public TraitorProfile activeTraitorProfile;
+
     public NameData nameData;
     
     public int activePageIndex;
@@ -69,13 +75,12 @@ public class Notepad : MonoBehaviour
     
     public int leftHandDepthFront;
     public int leftHandDepthBack;
-    
-    public int createPageIndex;
 
     public int previewAnswerIndex;
 
     public int flipToggle;
     public bool writeToggle;
+    public bool revealToggle;
     public bool eraseToggle;
     public bool willFlipUp;
     public bool willFlipDown;
@@ -84,15 +89,23 @@ public class Notepad : MonoBehaviour
     public float totalPencilTime;
     public float curPencilTime;
     public float appearTextClock;
-
+    public float revealClock;
+    private void Awake()
+    {
+        switch (sceneData.activeSceneType)
+        {
+            case SceneType.Trip:
+            {
+                CreateNPCProfiles();
+            }
+            break;
+        }
+    }
     private void Start()
     {
-        nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
-        npcData.behaviourDescDict = InitializeEnumToStringDict<Behaviours>();
         AtlasUI.PromptDict = InitializeEnumToStringDict<TripPrompt>();
-
-        CreateNPCProfiles();
-
+        npcData.behaviourDescDict = InitializeEnumToStringDict<Behaviours>();
+        CreatePages();
         notepadData.curState = NotepadState.None;
 
         handFlipPage_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.FlipHand];
@@ -110,6 +123,20 @@ public class Notepad : MonoBehaviour
         leftHandOffScreenPos = leftHand_renderer.transform.parent.InverseTransformPoint(offscreenWorldPos);
 
         activePage = promptPage;
+        switch (sceneData.activeSceneType)
+        { 
+            case SceneType.Trip:
+            {
+            }
+            break;
+            case SceneType.Score:
+            {
+
+            }
+            break;
+        }
+
+
     }
     private void Update()
     {
@@ -151,6 +178,10 @@ public class Notepad : MonoBehaviour
                 {
                     SetState(NotepadState.Writing);
                 }
+                else if (ToReveal())
+                {
+                    SetState(NotepadState.Revealing);
+                }
                 else
                 {
                     SetState(NotepadState.Stationary);
@@ -185,19 +216,23 @@ public class Notepad : MonoBehaviour
     }
     private bool ToFlipUp()
     {
-        return ((playerInputs.notepadPreviewAnswerAndFlip.y == 1 || willFlipUp) && !writeToggle && !eraseToggle) || flipToggle == 1;
+        return ((playerInputs.notepadPreviewAnswerAndFlip.y == 1 || willFlipUp) && !writeToggle && !eraseToggle && !revealToggle) || flipToggle == 1;
     }
     private bool ToFlipDown()
     {
-        return ((playerInputs.notepadPreviewAnswerAndFlip.y == -1 || willFlipDown) && !writeToggle && !eraseToggle) || flipToggle == -1;
+        return ((playerInputs.notepadPreviewAnswerAndFlip.y == -1 || willFlipDown) && !writeToggle && !eraseToggle && !revealToggle) || flipToggle == -1;
     }
     private bool ToErase()
     {
-        return (playerInputs.notepadPreviewAnswerAndFlip.x != 0 && activePage.answerText != "") || eraseToggle;
+        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.notepadPreviewAnswerAndFlip.x != 0 && activePage.answerText != "") || eraseToggle;
     }
     private bool ToWrite()
     {
-        return (playerInputs.notepadConfirmAnswer && activePage.answerText == "") || writeToggle;
+        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.notepadConfirmAnswer && activePage.answerText == "") || writeToggle;
+    }
+    private bool ToReveal()
+    {
+        return (sceneData.activeSceneType == SceneType.Score && playerInputs.notepadConfirmAnswer) || revealToggle;
     }
     private void SetState(NotepadState newState)
     {
@@ -262,7 +297,9 @@ public class Notepad : MonoBehaviour
                     leftHand_renderer.transform.localPosition = leftHandOffScreenPos;
                     holdingPencil = true;
                 }
-                
+
+                activeTraitorProfile = trip.traitorProfiles[activePage.traitorIndex];
+
                 curPencilTime = 0;
                 writeToggle = true;
             }
@@ -284,7 +321,9 @@ public class Notepad : MonoBehaviour
                     leftHand_renderer.transform.localPosition = leftHandOffScreenPos;
                     holdingPencil = true;
                 }
-                
+
+                activeTraitorProfile = trip.traitorProfiles[activePage.traitorIndex];
+
                 curPencilTime = 0;
                 eraseToggle = true;
             }
@@ -313,6 +352,14 @@ public class Notepad : MonoBehaviour
                         break;
                     }
                 }
+            }
+            break;
+            case NotepadState.Revealing:
+            {
+                revealClock = 0;
+                revealToggle = true;
+
+                activeTraitorProfile = trip.traitorProfiles[activePage.traitorIndex];
             }
             break;
         }
@@ -350,9 +397,23 @@ public class Notepad : MonoBehaviour
                         spyStats.signedNotepad = true;
                     }
                     break;
+
+                    case PageType.Profile:
+                    {
+                        if(activeTraitorProfile.npcProfile.disembarkingStationIndex == activePage.answerIndex)
+                        {
+                            activeTraitorProfile.found = true;
+                        }
+                        trip.traitorProfiles[activePage.traitorIndex] = activeTraitorProfile;
+                    }
+                    break;
                 }
                 atStartPencilPos = false;
                 writeToggle = false;
+                
+
+
+
             }
             break;
             case NotepadState.Erasing:
@@ -363,6 +424,17 @@ public class Notepad : MonoBehaviour
                 leftHand_renderer.PlayClipOneShotReverse(rotatePencil_clip);
                 atStartPencilPos = false;
                 eraseToggle = false;
+
+                switch (activePage.pageType)
+                {
+                    case PageType.Profile:
+                    {
+                        activeTraitorProfile.found = false;
+                        trip.traitorProfiles[activePage.traitorIndex] = activeTraitorProfile;
+                    }
+                    break;
+
+                }
             }
             break;
         }
@@ -648,10 +720,26 @@ public class Notepad : MonoBehaviour
                 leftHand_renderer.transform.localPosition = Vector3.Lerp(leftHand_renderer.transform.localPosition, leftHandTargetPos, Time.deltaTime * LEFTHAND_DAMPING);
             }
             break;
+            case NotepadState.Revealing:
+            {
+                revealClock += Time.deltaTime;
+
+                if (activeTraitorProfile.found)
+                {
+                    activePage.UpdateMugShotReveal(revealClock / REVEAL_TIME);
+                }
+                if (revealClock > REVEAL_TIME)
+                {
+                    gameEventData.OnTraitorsFoundScoreUpdate.Raise();
+                    revealToggle = false;
+                }
+            }
+            break;
         }
     }
     private void CreateNPCProfiles()
     {
+        nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
         List<NPCProfile> totalNPCProfiles = new List<NPCProfile>();
         List<NPCProfile> bystanderProfiles = new List<NPCProfile>();
 
@@ -686,11 +774,8 @@ public class Notepad : MonoBehaviour
 
                     NPCProfile npcProfile = new NPCProfile
                     {
-                        fullName = name,
                         behaviours = twoBehaviours,
                         npcPrefabIndex = i,
-                        coveredMugshotIndex = npcPrefab.npc.coveredMugshotIndex,
-                        uncoveredMugshotIndex = npcPrefab.npc.uncoveredMugshotIndex,
                     };
 
                     if (k == j)
@@ -705,51 +790,51 @@ public class Notepad : MonoBehaviour
             }
         }
 
-        List<Page> pageList = new List<Page>();
-        pageList.Add(promptPage);
-        promptPage.Init();
-
+        int totalTraitorsInTrip = 0;
         for (int i = 0; i < trip.stationsDataArray.Length; i++)
         {
             StationSO station = trip.stationsDataArray[i];
+            totalTraitorsInTrip += station.traitorSpawnAmount;
+        }
+        trip.traitorProfiles = new TraitorProfile[totalTraitorsInTrip];
 
-            station.traitorProfiles = new NPCProfile[station.traitorSpawnAmount];
+        int stationIndex = 0;
+        int traitorsAtStation = 0;
+        for (int i = 0; i < totalTraitorsInTrip; i++)
+        {
+            StationSO station = trip.stationsDataArray[stationIndex];
 
-            for (int j = 0; j < station.traitorSpawnAmount; j++)
+            int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
+            NPCProfile traitorProfile = totalNPCProfiles[randProfileIndex];
+            traitorProfile.boardingStationIndex = stationIndex;
+            traitorProfile.disembarkingStationIndex = UnityEngine.Random.Range(Mathf.Min(stationIndex + MIN_STATION_STOPS, trip.stationsDataArray.Length - 1) , trip.stationsDataArray.Length - 1);
+
+            NPCSO traitor = trip.npc_prefabsArray[traitorProfile.npcPrefabIndex].npc;
+
+            trip.traitorProfiles[i] = new TraitorProfile()
             {
-                int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
+                npcProfile = traitorProfile,
+                coveredMugshotIndex = traitor.coveredMugshotIndex,
+                uncoveredMugshotIndex = traitor.uncoveredMugshotIndex,
+            };
+            totalNPCProfiles.RemoveAt(randProfileIndex);
+            for (int j = totalNPCProfiles.Count - 1; j >= 0; j--)
+            {
+                if (totalNPCProfiles[j].npcPrefabIndex != traitorProfile.npcPrefabIndex) continue;
 
-                NPCProfile traitorProfile = totalNPCProfiles[randProfileIndex];
-                traitorProfile.boardingStationIndex = i;
-                traitorProfile.disembarkingStationIndex = UnityEngine.Random.Range(i + trip.minStationsTraitorsTravel, trip.stationsDataArray.Length - 1);
-                station.traitorProfiles[j] = traitorProfile;
-
-                totalNPCProfiles.Remove(traitorProfile);
-                for (int k = totalNPCProfiles.Count - 1; k >=0 ; k--)
-                {
-                    if (totalNPCProfiles[k].npcPrefabIndex == traitorProfile.npcPrefabIndex)
-                    {
-                        bystanderProfiles.Add(totalNPCProfiles[k]);
-                        totalNPCProfiles.Remove(totalNPCProfiles[k]);
-                    }
-                }
-
-                Vector3 pagePos = pageTransform.position;
-                pagePos.z += 3;
-                Page traitorPage = Instantiate(traitorPage_prefab, pagePos, Quaternion.identity, pageTransform);
-                traitorPage.InitBehaviourClueText(traitorProfile);
-                traitorPage.gameObject.name = "Page_" + createPageIndex;
-                traitorPage.pageNumberRenderer.SetText("Page " + (createPageIndex + 1));
-
-                pageList.Add(traitorPage);
-                traitorPage.gameObject.SetActive(false);
-                createPageIndex++;
+                bystanderProfiles.Add(totalNPCProfiles[j]);
+                totalNPCProfiles.RemoveAt(j);
             }
+
+            if (traitorsAtStation == station.traitorSpawnAmount)
+            {
+                stationIndex++;
+                traitorsAtStation = 0;
+            }
+
+            traitorsAtStation++;
         }
 
-        pageList.Add(confirmPage);
-        confirmPage.Init();
-        pages = pageList.ToArray();
         activePageIndex = 0;
         lastPageIndex = pages.Length + 1;
 
@@ -769,12 +854,37 @@ public class Notepad : MonoBehaviour
                 NPCProfile bystanderProfile = totalNPCProfiles[randProfileIndex];
 
                 bystanderProfile.boardingStationIndex = i;
-                bystanderProfile.disembarkingStationIndex = UnityEngine.Random.Range(i + 1, trip.stationsDataArray.Length - 1);
+                bystanderProfile.disembarkingStationIndex = UnityEngine.Random.Range(Mathf.Min(stationIndex + MIN_STATION_STOPS, trip.stationsDataArray.Length - 1), trip.stationsDataArray.Length - 1);
 
                 totalNPCProfiles.RemoveAt(randProfileIndex);
                 station.bystanderProfiles[j] = bystanderProfile;
             }
         }
+    }
+    private void CreatePages()
+    {
+        List<Page> pageList = new List<Page>();
+        pageList.Add(promptPage);
+        promptPage.Init();
+
+        for (int i = 0; i < trip.traitorProfiles.Length; i++)
+        {
+            TraitorProfile traitorProfile = trip.traitorProfiles[i];
+
+            Vector3 pagePos = pageTransform.position;
+            pagePos.z += 3;
+            Page traitorPage = Instantiate(traitorPage_prefab, pagePos, Quaternion.identity, pageTransform);
+            traitorPage.InitBehaviourClueText(traitorProfile);
+            traitorPage.traitorIndex = i;
+            traitorPage.gameObject.name = "Page_" + i;
+            traitorPage.pageNumberRenderer.SetText("Page " + (i + 1));
+
+            pageList.Add(traitorPage);
+            traitorPage.gameObject.SetActive(false);
+        }
+        pageList.Add(confirmPage);
+        confirmPage.Init();
+        pages = pageList.ToArray();
     }
     private string GenerateName(Gender gender, Ethnicity ethnicity)
     {

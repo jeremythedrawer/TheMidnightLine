@@ -82,88 +82,6 @@ MonoBehaviour:
   prevSpriteIndexFlipV: 3
   isAnimating: 0
   quadCount: 0
---- !u!1 &2191616955255421442
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 6905171277351112}
-  - component: {fileID: 7459302900703187996}
-  m_Layer: 0
-  m_Name: Mugshot_uncovered
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 0
---- !u!4 &6905171277351112
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2191616955255421442}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.11302392, y: -0.82300025, z: -1}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7380519998003774169}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &7459302900703187996
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2191616955255421442}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 3
-  batchKey:
-    texture: {fileID: 2800000, guid: baee2ed3eb8895e45805e19093805a27, type: 3}
-    material: {fileID: 2100000, guid: c30f9b5dfdb7915458408b63fcc55b9b, type: 2}
-  atlas: {fileID: 11400000, guid: d3627110c6f36b84b93e607b7dc6d005, type: 2}
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 4
-  flipX: 0
-  flipY: 0
-  width: 1
-  height: 1
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.060546875, y: 0.057128906, z: 0.23046875, w: 0.94189453}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0.6888889, y: 0.65, z: 1}
-    index: 4
-  bounds:
-    m_Center: {x: 307.1014, y: 1.3319998, z: 15.92}
-    m_Extent: {x: 0.34444445, y: 0.325, z: 0.1}
-  worldPivotAndSize: {x: -0, y: -0, z: 0.6888889, w: 0.65}
-  uvSizeAndPosition: {x: 0.060546875, y: 0.057128906, z: 0.23046875, w: 0.94189453}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.34444445, y: 0.325, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  curMotionIndex: 0
-  prevSpriteIndexFlipH: 4
-  prevSpriteIndexFlipV: 4
-  isAnimating: 0
-  quadCount: 0
 --- !u!1 &2488520917910274587
 GameObject:
   m_ObjectHideFlags: 0
@@ -314,8 +232,8 @@ Transform:
   - {fileID: 312039608901426110}
   - {fileID: 1696253804529894416}
   - {fileID: 2421546654025876486}
+  - {fileID: 3175954178662032817}
   - {fileID: 5396196692458561425}
-  - {fileID: 6905171277351112}
   - {fileID: 5967655690559425254}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -342,7 +260,7 @@ MonoBehaviour:
   - {fileID: 2322028569944472143}
   pictureRenderers:
   - {fileID: 4580197788305518065}
-  - {fileID: 7459302900703187996}
+  - {fileID: 5491149246500630263}
   answerTextRenderers:
   - {fileID: 1407368147541437526}
   contentTextRenderers: []
@@ -356,15 +274,17 @@ MonoBehaviour:
   - {fileID: 581004557939880678}
   topTextRenderers:
   - {fileID: 5180166987920443640}
+  - {fileID: 948250517218008164}
   bottomRenderers:
   - {fileID: 4898080337301717236}
   - {fileID: 7623350588780838515}
   topRenderers:
   - {fileID: 4580197788305518065}
+  - {fileID: 5491149246500630263}
   - {fileID: 8813909496853599495}
-  - {fileID: 7459302900703187996}
   activeAnswerTextRenderer: {fileID: 0}
   answerIndex: 0
+  pageIndex: 0
   answerTextBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
@@ -781,7 +701,7 @@ GameObject:
   - component: {fileID: 3287887231861125074}
   - component: {fileID: 948250517218008164}
   m_Layer: 0
-  m_Name: Behaviour_0 (1)
+  m_Name: Information
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -882,6 +802,88 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   hasText: 1
+--- !u!1 &8431716071242227860
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3175954178662032817}
+  - component: {fileID: 5491149246500630263}
+  m_Layer: 0
+  m_Name: Mugshot_uncovered
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3175954178662032817
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8431716071242227860}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -0.11303002, y: -0.82300025, z: -1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 7380519998003774169}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5491149246500630263
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8431716071242227860}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 3
+  batchKey:
+    texture: {fileID: 2800000, guid: baee2ed3eb8895e45805e19093805a27, type: 3}
+    material: {fileID: 2100000, guid: c30f9b5dfdb7915458408b63fcc55b9b, type: 2}
+  atlas: {fileID: 11400000, guid: d3627110c6f36b84b93e607b7dc6d005, type: 2}
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 4
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.060546875, y: 0.057128906, z: 0.23046875, w: 0.94189453}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.6888889, y: 0.65, z: 1}
+    index: 4
+  bounds:
+    m_Center: {x: 307.1014, y: 1.3319998, z: 15.92}
+    m_Extent: {x: 0.34444445, y: 0.325, z: 0.1}
+  worldPivotAndSize: {x: -0, y: -0, z: 0.6888889, w: 0.65}
+  uvSizeAndPosition: {x: 0.060546875, y: 0.057128906, z: 0.23046875, w: 0.94189453}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.34444445, y: 0.325, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 4
+  prevSpriteIndexFlipV: 4
+  isAnimating: 0
+  quadCount: 0
 --- !u!1 &8555246787508902657
 GameObject:
   m_ObjectHideFlags: 0

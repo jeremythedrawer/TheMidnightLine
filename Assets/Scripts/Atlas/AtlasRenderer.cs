@@ -82,6 +82,7 @@ public class AtlasRenderer : MonoBehaviour
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.motionSprites.Length - 1);
                 sprite = atlas.motionSprites[spriteIndex].sprite;
                 UpdateSpriteInputs(sprite);
+                atlas.clipDict = BuildClipKeys(atlas.clips);
             }
             break;
 
@@ -153,6 +154,7 @@ public class AtlasRenderer : MonoBehaviour
     public void UpdateSpriteInputs(SimpleSprite newSprite)
     {
         sprite = newSprite;
+        spriteIndex = newSprite.index;
         if (rendererType > AtlasRendererType.SliceWorld)
         {
             Vector2 spritePixelSize = newSprite.worldSize * PIXELS_PER_UNIT;

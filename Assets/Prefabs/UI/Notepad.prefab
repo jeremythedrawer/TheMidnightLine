@@ -54,6 +54,8 @@ MonoBehaviour:
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  sceneData: {fileID: 11400000, guid: 3293190d726975e43a124435917a650c, type: 2}
+  gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
   notepadData: {fileID: 11400000, guid: 8e516d659eb1fc449bc178ad3fb0113d, type: 2}
   rightHand_renderer: {fileID: 4411935793220314665}
   frontFingers_renderer: {fileID: 3270573653072393315}
@@ -67,6 +69,16 @@ MonoBehaviour:
   curKeyframeState: 0
   activePage: {fileID: 0}
   pages: []
+  activeTraitorProfile:
+    npcProfile:
+      boardingStationIndex: 0
+      disembarkingStationIndex: 0
+      npcPrefabIndex: 0
+      behaviours: 0
+    fullName: 
+    coveredMugshotIndex: 0
+    uncoveredMugshotIndex: 0
+    found: 0
   nameData:
     firstNames: []
     lastNames: []
@@ -96,10 +108,10 @@ MonoBehaviour:
     m_Extent: {x: 0, y: 0, z: 0}
   leftHandDepthFront: 0
   leftHandDepthBack: 0
-  createPageIndex: 0
   previewAnswerIndex: 0
   flipToggle: 0
   writeToggle: 0
+  revealToggle: 0
   eraseToggle: 0
   willFlipUp: 0
   willFlipDown: 0
@@ -108,6 +120,7 @@ MonoBehaviour:
   totalPencilTime: 0
   curPencilTime: 0
   appearTextClock: 0
+  revealClock: 0
 --- !u!1 &2467022903358664946
 GameObject:
   m_ObjectHideFlags: 0
@@ -483,7 +496,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2540409711626796747, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -8.820223
+      value: -8.845222
       objectReference: {fileID: 0}
     - target: {fileID: 2540409711626796747, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
       propertyPath: bounds.m_Center.z
@@ -523,7 +536,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4109658658727222766, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -8.404666
+      value: -8.550666
       objectReference: {fileID: 0}
     - target: {fileID: 4109658658727222766, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
       propertyPath: bounds.m_Center.z
@@ -536,6 +549,18 @@ PrefabInstance:
     - target: {fileID: 4699505962369719100, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
       propertyPath: m_LocalPosition.y
       value: -0.35
+      objectReference: {fileID: 0}
+    - target: {fileID: 4875371539932061714, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 5.086667
+      objectReference: {fileID: 0}
+    - target: {fileID: 4875371539932061714, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -7.494778
+      objectReference: {fileID: 0}
+    - target: {fileID: 4875371539932061714, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 2
       objectReference: {fileID: 0}
     - target: {fileID: 7380519998003774169, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -689,6 +714,18 @@ PrefabInstance:
     - target: {fileID: 3031531853131365240, guid: 7c21d91b706dab147924808f0e05666d, type: 3}
       propertyPath: m_IsActive
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3911591812244558260, guid: 7c21d91b706dab147924808f0e05666d, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 5.0866632
+      objectReference: {fileID: 0}
+    - target: {fileID: 3911591812244558260, guid: 7c21d91b706dab147924808f0e05666d, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -7.494778
+      objectReference: {fileID: 0}
+    - target: {fileID: 3911591812244558260, guid: 7c21d91b706dab147924808f0e05666d, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 4109658658727222766, guid: 7c21d91b706dab147924808f0e05666d, type: 3}
       propertyPath: bounds.m_Center.x

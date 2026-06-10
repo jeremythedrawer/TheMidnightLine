@@ -22,19 +22,19 @@ public class Station : MonoBehaviour
     public void SpawnNPCs()
     {
         AtlasRenderer activePlatformRenderer = station.isFrontOfTrain ? frontPlatformRenderer : backPlatformRenderer;
+        activePlatformRenderer.UpdateBounds();
         for (int i = 0; i < station.bystanderProfiles.Length; i++)
         {
             NPCProfile bystanderProfile = station.bystanderProfiles[i];
-            activePlatformRenderer.UpdateBounds();
             float randXPos = Random.Range(activePlatformRenderer.bounds.min.x + SPAWN_BUFFER, activePlatformRenderer.bounds.max.x - SPAWN_BUFFER);
             
+
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, activePlatformRenderer.transform.position.z);
 
             NPCBrain bystander = Instantiate(trip.npc_prefabsArray[bystanderProfile.npcPrefabIndex], spawnPos, Quaternion.identity, activePlatformRenderer.transform);
             
             bystander.profile = bystanderProfile;
             bystander.role = Role.Bystander;
-            bystander.gameObject.name = bystanderProfile.fullName;
             bystander.boardingStation = station;
             bystander.disembarkingStation = trip.stationsDataArray[bystanderProfile.disembarkingStationIndex];
 
@@ -44,9 +44,11 @@ public class Station : MonoBehaviour
             }
         }
 
-        for (int i = 0; i < station.traitorProfiles.Length; i++)
+        int maxTraitorSpawnIndex = trip.traitorsSpawned + station.traitorSpawnAmount;
+
+        for (int i = trip.traitorsSpawned; i < maxTraitorSpawnIndex; i++)
         {
-            NPCProfile traitorProfile = station.traitorProfiles[i];
+            TraitorProfile traitorProfile = trip.traitorProfiles[i];
             float randXPos = Random.Range(
             activePlatformRenderer.bounds.min.x + SPAWN_BUFFER,
             activePlatformRenderer.bounds.max.x - SPAWN_BUFFER);
@@ -55,17 +57,17 @@ public class Station : MonoBehaviour
             transform.position.y + 0.1f,
             activePlatformRenderer.transform.position.z);
 
-            NPCBrain traitor = Instantiate(trip.npc_prefabsArray[traitorProfile.npcPrefabIndex], spawnPos, Quaternion.identity, activePlatformRenderer.transform);
-            traitor.profile = traitorProfile;
+            NPCBrain traitor = Instantiate(trip.npc_prefabsArray[traitorProfile.npcProfile.npcPrefabIndex], spawnPos, Quaternion.identity, activePlatformRenderer.transform);
+            traitor.profile = traitorProfile.npcProfile;
             traitor.role = Role.Traitor;
-            traitor.gameObject.name = traitorProfile.fullName;
             traitor.boardingStation = station;
-            traitor.disembarkingStation = trip.stationsDataArray[traitorProfile.disembarkingStationIndex];
+            traitor.disembarkingStation = trip.stationsDataArray[traitorProfile.npcProfile.disembarkingStationIndex];
             if (i % 2 == 0)
             {
                 traitor.atlasRenderer.FlipH(true);
             }
         }
+        trip.traitorsSpawned += station.traitorSpawnAmount;
     }
     public void SetFrontParallaxPosition()
     {

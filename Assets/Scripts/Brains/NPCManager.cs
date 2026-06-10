@@ -14,7 +14,7 @@ public class NPCManager : MonoBehaviour
     public int totalAgentCount;
 
     public static Dictionary<VisualEffect, Queue<VisualEffect>> glyph_poolsDict;
-    public static StationNameTag stationNameTag;
+    public static AtlasTextRenderer stationNameTag;
     private void Awake()
     {
 

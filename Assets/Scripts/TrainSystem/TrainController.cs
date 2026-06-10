@@ -50,6 +50,8 @@ public class TrainController : MonoBehaviour
         trainCTS = null;
 
         stats.curVelocity = Vector2.zero;
+
+        trip.traitorsSpawned = 0;
     }
     private void Start()
     {
@@ -162,7 +164,7 @@ public class TrainController : MonoBehaviour
 
             case TrainStates.Stopped:
             {
-                stats.targetNPCsToBoard = trip.nextStation.bystanderProfiles.Length + trip.nextStation.traitorProfiles.Length;
+                stats.targetNPCsToBoard = trip.nextStation.bystanderProfiles.Length + trip.nextStation.traitorSpawnAmount;
                 stats.curVelocity = Vector2.zero;
 
                 if (trip.nextStation.isFrontOfTrain)
@@ -203,6 +205,10 @@ public class TrainController : MonoBehaviour
                 if (NextStationInstance != null)
                 {
                     stats.targetPosition = NextStationInstance.transform.position.x;
+                }
+                else
+                {
+                    stats.targetPosition = TRAIN_WORLD_POS_X + VELOCITY_BUFFER + Mathf.Epsilon;
                 }
                 stats.curVelocity.x = DecreaseVelocity(stats.curVelocity.x, stats.targetVelocity.x, stats.prevPeakVelocity, settings.deceleration, stats.targetPosition);
                 HandleTrainMeters();

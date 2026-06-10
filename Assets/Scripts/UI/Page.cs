@@ -39,6 +39,7 @@ public class Page : MonoBehaviour
     [Header("Generated")]
     public AtlasTextRenderer activeAnswerTextRenderer;
     public int answerIndex;
+    public int traitorIndex;
     public Bounds answerTextBounds;
     
     public string answerText;
@@ -75,23 +76,31 @@ public class Page : MonoBehaviour
 
             case PageType.Profile:
             {
-                activeAnswerTextRenderer = answerTextRenderers[0];
 
-                for (int i = 0; i < answerTextRenderers.Length; i++)
-                {
-                    answerTextRenderers[i].SetText("");
-                }
             }
             break;
         }
     }
-    public void InitBehaviourClueText(NPCProfile traitorProfile)
+    public void InitBehaviourClueText(TraitorProfile traitorProfile)
     {
         for (int i = 0; i < clueTextRenderers.Length; i++)
         {
-            Behaviours behaviour = GetBehaviourAtIndex(traitorProfile.behaviours, i);
+            Behaviours behaviour = GetBehaviourAtIndex(traitorProfile.npcProfile.behaviours, i);
             clueTextRenderers[i].SetText(npcData.behaviourDescDict[behaviour]);
+
+            activeAnswerTextRenderer = answerTextRenderers[0];
         }
+        for (int i = 0; i < answerTextRenderers.Length; i++)
+        {
+            answerTextRenderers[i].SetText("");
+        }
+        AtlasRenderer coveredMugShot = pictureRenderers[0];
+        AtlasRenderer uncoveredMugShot = pictureRenderers[1];
+
+        int coveredMugShotIndex = traitorProfile.coveredMugshotIndex;
+        int uncoveredMugShotIndex = traitorProfile.uncoveredMugshotIndex;
+        coveredMugShot.UpdateSpriteInputs(coveredMugShot.atlas.simpleSprites[coveredMugShotIndex]);
+        uncoveredMugShot.UpdateSpriteInputs(uncoveredMugShot.atlas.simpleSprites[uncoveredMugShotIndex]);
         Init();
     }
     public void TogglePageContentBottomHalf(bool toggle)
@@ -209,7 +218,6 @@ public class Page : MonoBehaviour
             }
             break;
         }
-
     }
     public void InvertExitButton(bool invert, bool pointDown)
     {
@@ -232,6 +240,11 @@ public class Page : MonoBehaviour
         {
             InvertButton(invert, paperCornerRightButtonRenderer);
         }
+    }
+    public void UpdateMugShotReveal(float t)
+    {
+        AtlasRenderer coveredMugShot = pictureRenderers[0];
+        coveredMugShot.custom.x = Mathf.Clamp01(t);
     }
     public Bounds GetWritingBounds()
     {

@@ -73,16 +73,19 @@ public static class NPC
 
     [Serializable] public struct NPCProfile
     {
-        public string fullName;
-
         public int boardingStationIndex;
         public int disembarkingStationIndex;
 
         public int npcPrefabIndex;
+        public Behaviours behaviours;
+    }
+    [Serializable] public struct TraitorProfile
+    {
+        public NPCProfile npcProfile;
+        public string fullName;
         public int coveredMugshotIndex;
         public int uncoveredMugshotIndex;
-
-        public Behaviours behaviours;
+        public bool found;    
     }
 
     [Serializable] public struct NameData

@@ -1,6 +1,7 @@
 using UnityEngine;
 
 using static AtlasUI;
+using static NPC;
 
 [CreateAssetMenu(fileName = "Trip", menuName = "Atlas / Trip")]
 public class TripSO : ScriptableObject
@@ -14,10 +15,10 @@ public class TripSO : ScriptableObject
     public Vector2[] elevationValues;
     public float[] kmValues;
 
-    [Header("Settings")]
-    public int minStationsTraitorsTravel = 2;
-    public int maxStationsTraitorsTravel = 4;
     [Header("Generated")]
     public StationSO nextStation;
     public int ticketsCheckedSinceLastStation;
+    public int traitorsSpawned;
+    
+    public TraitorProfile[] traitorProfiles;
 }

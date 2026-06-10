@@ -26,10 +26,12 @@ public class AtlasTextRenderer : MonoBehaviour
     public float scrollSpeed;
     public float scrollBoundSize;
 
+    [Header("Border Settings")]
+    public AtlasRenderer background_renderer;
+
     [Header("Generated")]
     public Bounds bounds;
     public TextBoxData textBoxData;
-
     public Vector3 boundsOffset;
 
     public Vector4[] worldPivotsAndSizes;
@@ -37,6 +39,9 @@ public class AtlasTextRenderer : MonoBehaviour
     public Vector4[] scalesAndFlips;
     public Vector4[] customs;
     public bool hasText;
+
+    [Header("Border Generated")]
+    public Vector3 borderLocalPos;
 
     private void OnValidate()
     {
@@ -77,13 +82,19 @@ public class AtlasTextRenderer : MonoBehaviour
         SetTextWorld();
         switch (rendererType)
         {
-            case AtlasTextRendererType.SimpleWorld:
+            case AtlasTextRendererType.Simple:
             {
             }
             break;
-            case AtlasTextRendererType.ScrollWorld:
+            case AtlasTextRendererType.Scroll:
             {
+                bounds = GetBounds(text);
                 SetScrollingText();
+            }
+            break;
+            case AtlasTextRendererType.Border:
+            {
+                SetBorderText();
             }
             break;
         }
@@ -139,7 +150,7 @@ public class AtlasTextRenderer : MonoBehaviour
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, newDepth);
     }
-    public void SetScrollingText()
+    private void SetScrollingText()
     {
         customs = new Vector4[worldPivotsAndSizes.Length];
         for (int i = 0; i < customs.Length; i++)
@@ -150,6 +161,50 @@ public class AtlasTextRenderer : MonoBehaviour
             custom.z = scrollSpeed;
             custom.w = scrollSpeed < 0 ? 1 : 0;
             customs[i] = custom; 
+        }
+    }
+    private void SetBorderText()
+    {
+        switch (alignmentType)
+        {
+            case AtlasTextAlignmentType.Left:
+            {
+                borderLocalPos.x = -BORDER_PADDING;
+
+            }
+            break;
+            case AtlasTextAlignmentType.Center:
+            {
+                borderLocalPos.x = -bounds.extents.x - BORDER_PADDING;
+
+            }
+            break;
+            case AtlasTextAlignmentType.Right:
+            {
+
+                borderLocalPos.x = -bounds.size.x - BORDER_PADDING;
+            }
+            break;
+        }
+
+        borderLocalPos.y = -bounds.size.y - BORDER_PADDING;
+
+        if (!hasText)
+        {
+            background_renderer.enabled = false;
+        }
+        else
+        {
+            background_renderer.enabled = true;
+
+            Vector2 worldSize = new Vector2();
+            worldSize.x = bounds.size.x + BORDER_PADDING * 2;
+            worldSize.y = bounds.size.y + BORDER_PADDING * 2;
+
+            background_renderer.transform.localPosition = borderLocalPos;
+
+
+            background_renderer.SetNineSliceSizeFromWorldSpace(worldSize, background_renderer.atlas.slicedSprites[background_renderer.spriteIndex]);
         }
     }
     public void SetTextWorld()
@@ -334,7 +389,7 @@ public class AtlasTextRenderer : MonoBehaviour
         Gizmos.DrawWireCube(bounds.center, bounds.size);
         switch(rendererType)
         {
-            case AtlasTextRendererType.SimpleWorld:
+            case AtlasTextRendererType.Simple:
             {
             }
             break;
@@ -355,12 +410,12 @@ public class AtlasTextRendererEditor : Editor
 
         switch(textRend.rendererType)
         {
-            case AtlasTextRendererType.SimpleWorld:
+            case AtlasTextRendererType.Simple:
             {
 
             }
             break;
-            case AtlasTextRendererType.ScrollWorld:
+            case AtlasTextRendererType.Scroll:
             {
                 float scrollBoundsXPos = textRend.transform.position.x + textRend.scrollBoundSize * 0.5f;
                 boundsHandle.center = new Vector3(scrollBoundsXPos, textRend.bounds.center.y, textRend.transform.position.z);
@@ -373,7 +428,7 @@ public class AtlasTextRendererEditor : Editor
                     Undo.RecordObject(textRend, "Resize Bounds");
 
                     textRend.scrollBoundSize = boundsHandle.size.x;
-                    textRend.SetScrollingText();
+                    textRend.SetText(textRend.text);
                 }
             }
             break;

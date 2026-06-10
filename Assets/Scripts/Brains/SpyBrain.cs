@@ -327,7 +327,6 @@ public class SpyBrain : MonoBehaviour
                     npcTicketCheck = npcHit.transform.gameObject.GetComponent<NPCBrain>();
                     if (!npcTicketCheck.onTrain || npcTicketCheck.ticketHasBeenChecked) return;
                     npcTicketCheck.ticketIsBeingChecked = true;
-                    stats.ticketName = npcTicketCheck.profile.fullName;
                     
                     stats.boardingStationName = trip.stationsDataArray[npcTicketCheck.profile.boardingStationIndex].name;
                     stats.disembarkingStationName = trip.stationsDataArray[npcTicketCheck.profile.disembarkingStationIndex].name;

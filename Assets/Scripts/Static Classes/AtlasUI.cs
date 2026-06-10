@@ -7,6 +7,7 @@ using static NPC;
 
 public static class AtlasUI
 {
+    public const float BORDER_PADDING = 0.05f;
     public const float LETTER_ADVANCE = 0.122f;
     public const float APPEAR_TEXT_TIME = 0.2f;
     const float FADE_BLACK_DURATION = 1f;
@@ -18,6 +19,7 @@ public static class AtlasUI
         Erasing,
         FlippingUp,
         FlippingDown,
+        Revealing,
     }
     public enum PageType
     { 
