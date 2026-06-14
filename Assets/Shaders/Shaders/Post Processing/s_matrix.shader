@@ -45,7 +45,7 @@ Shader "Custom/s_matrix"
 			float3 worldPos = ComputeWorldSpacePosition(input.texcoord, depth, UNITY_MATRIX_I_VP);
 
 			float ground = step(0, worldPos.y);
-			float greyScale = saturate(horizon + stars) * ground;
+			float greyScale = saturate(horizon + stars);
 
 			float3 final = lerp(_BlackColor, _WhiteColor, greyScale);
 			return half4(final,0);

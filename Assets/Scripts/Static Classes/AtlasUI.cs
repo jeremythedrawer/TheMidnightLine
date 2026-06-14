@@ -4,13 +4,19 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using static NPC;
-
 public static class AtlasUI
 {
     public const float BORDER_PADDING = 0.05f;
     public const float LETTER_ADVANCE = 0.122f;
     public const float APPEAR_TEXT_TIME = 0.2f;
-    const float FADE_BLACK_DURATION = 1f;
+    public const float FADE_BLACK_DURATION = 1f;
+    public const float NATURAL_RADIUS = 0.1f;
+    public const float NATURAL_TICK_RATE = 2.5f;
+    public const float TARGET_MARGIN = 0.01f;
+    public const float MOVE_DAMP = 4;
+
+    public static float TransitionTime = -Mathf.Log(TARGET_MARGIN) / MOVE_DAMP;
+
     public enum NotepadState
     {
         None,
@@ -27,21 +33,39 @@ public static class AtlasUI
         Prompt,
         Profile,
         Confirm,
+        ColorKey,
     }
     public enum TripPrompt
     {
         None,
         Stations,
         Carriage_Numbers,
-        Sports_Teams
+        Sports_Teams,
+        Count,
     }
     public enum TripClue
     { 
         None,
         Behaviours,
-        Appearence
+        Appearence,
+        CarriageNumber,
     }
-    public static Dictionary<TripPrompt, string> PromptDict;
+    public enum UIState
+    {
+        None,
+        Notepad,
+        Ticket,
+        CarriageMap,
+    }
+    public static Vector3 NotepadActivePos;
+    public static Vector3 NotepadInactivePos;
+    public static Vector3 NnotepadHoverPos;
+
+    static float NaturalMoveClock;
+
+    public static event Action OnFinishFadeFromBlack;
+    public static Dictionary<TripPrompt, string> PromptStringDict;
+
     public static void WriteText(AtlasTextRenderer textRenderer, string text, CancellationTokenSource cts, float writeLetterTime)
     {
         cts?.Cancel();
@@ -74,6 +98,47 @@ public static class AtlasUI
         else
         {
             FadingFromBlack(fadeBlackMaterial, cts).Forget();
+        }
+    }
+    public static void UpdateNaturalPos(Vector3 activePos,  ref Vector3 naturalMovePos)
+    {
+        NaturalMoveClock += Time.deltaTime;
+
+        if (NaturalMoveClock > NATURAL_TICK_RATE)
+        {
+            Vector2 xyPos = UnityEngine.Random.insideUnitCircle * NATURAL_RADIUS;
+            NaturalMoveClock = 0;
+            naturalMovePos.x = activePos.x + (xyPos.x * 0.1f);
+            naturalMovePos.y = activePos.y + xyPos.y;
+            naturalMovePos.z = activePos.z;
+        }
+    }
+    public static void MoveUIElement(Behaviour behaviour, Vector3 nextPos, ref CancellationTokenSource cts, UIState curState)
+    {
+        cts?.Cancel();
+        cts = new CancellationTokenSource();
+        MovingUIElement(behaviour, cts, nextPos, curState).Forget();
+    }
+    private static async UniTask MovingUIElement(Behaviour behaviour, CancellationTokenSource cts, Vector3 nextPos, UIState curState)
+    {
+        float elapsedTime = 0f;
+
+        behaviour.enabled = true;
+        try
+        {
+            while (elapsedTime < TransitionTime)
+            {
+                behaviour.transform.localPosition = Vector3.Lerp(behaviour.transform.localPosition, nextPos, Time.deltaTime * MOVE_DAMP);
+                elapsedTime += Time.deltaTime;
+
+                await UniTask.Yield(cts.Token);
+
+            }
+            behaviour.transform.localPosition = nextPos;
+            if (curState == UIState.None) behaviour.enabled = false;
+        }
+        catch (OperationCanceledException)
+        {
         }
     }
     private static async UniTask WritingText(string text, AtlasTextRenderer textRenderer, CancellationTokenSource cts, float writeLetterTime)
@@ -140,6 +205,7 @@ public static class AtlasUI
                 elapsedTime -= Time.deltaTime;
                 await UniTask.Yield(cts.Token);
             }
+            OnFinishFadeFromBlack?.Invoke();
         }
         catch (OperationCanceledException) { }
     }
@@ -148,7 +214,7 @@ public static class AtlasUI
         int count = 0;
         foreach (Behaviours flag in Enum.GetValues(typeof(Behaviours)))
         {
-            if (flag == Behaviours.None) continue;
+            if (flag == Behaviours.None || flag == Behaviours.Count) continue;
 
             if ((behaviours & flag) != 0)
             {
@@ -157,5 +223,19 @@ public static class AtlasUI
             }
         }
         return Behaviours.None;
+    }
+    public static Dictionary<TEnum, string> InitEnumToStringDict<TEnum>() where TEnum : Enum
+    {
+        Dictionary<TEnum, string> dict = new Dictionary<TEnum, string>();
+
+        Array values = Enum.GetValues(typeof(TEnum));
+
+        foreach (TEnum value in values)
+        {
+            int int32 = Convert.ToInt32(value);
+            if (int32 == 0) continue;
+            dict.Add(value, value.ToString().Replace("_", " "));
+        }
+        return dict;
     }
 }

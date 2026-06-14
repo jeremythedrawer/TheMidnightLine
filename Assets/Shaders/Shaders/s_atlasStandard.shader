@@ -101,7 +101,7 @@ Shader "Custom/s_atlasStandard"
 
                 float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;
                 half4 carriageSDF = SAMPLE_TEXTURE2D(_CarriageBoundsTexture, sampler_CarriageBoundsTexture, worldToTrain);
-                float bayer = BayerX8(carriageSDF + 0.5,  i.positionHCS.x);
+                float bayer = BayerX8(carriageSDF + 0.5,  i.positionHCS.y);
 
                 float outside = max(step(worldToTrain.x, 0.0), step(1.0, worldToTrain.x));
                 outside = max(outside,max(step(worldToTrain.y, 0.0),step(1.0, worldToTrain.y)));

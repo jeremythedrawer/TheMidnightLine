@@ -44,7 +44,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 3
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
@@ -137,6 +137,7 @@ MonoBehaviour:
   alignmentType: 0
   scrollSpeed: 0
   scrollBoundSize: 0
+  background_renderer: {fileID: 0}
   bounds:
     m_Center: {x: 306.6364, y: 0.5663333, z: 15.92}
     m_Extent: {x: 0.40644446, y: 0.09166667, z: 0}
@@ -194,6 +195,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   hasText: 1
+  borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &3031531853131365240
 GameObject:
   m_ObjectHideFlags: 0
@@ -254,16 +256,18 @@ MonoBehaviour:
   clueType: 1
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   paperRenderer: {fileID: 2670676497328436670}
-  clueTextRenderers:
+  proceduralTextRenderers:
   - {fileID: 5180166987920443640}
   - {fileID: 2322028569944472143}
+  readOnlyTextRenderers:
+  - {fileID: 948250517218008164}
+  playerWriteTextRenderers:
+  - {fileID: 1407368147541437526}
   pictureRenderers:
   - {fileID: 4580197788305518065}
   - {fileID: 5491149246500630263}
-  answerTextRenderers:
-  - {fileID: 1407368147541437526}
-  contentTextRenderers: []
   pageNumberRenderer: {fileID: 581004557939880678}
   paperCornerLeftButtonRenderer: {fileID: 7623350588780838515}
   paperCornerRightButtonRenderer: {fileID: 4898080337301717236}
@@ -282,14 +286,17 @@ MonoBehaviour:
   - {fileID: 4580197788305518065}
   - {fileID: 5491149246500630263}
   - {fileID: 8813909496853599495}
-  activeAnswerTextRenderer: {fileID: 0}
-  answerIndex: 0
-  pageIndex: 0
-  answerTextBounds:
+  activePlayerWriteTextRenderer: {fileID: 0}
+  playerWriteIndex: 0
+  traitorIndex: 0
+  previewPlayerWriteIndex: 0
+  activePlayerWriteRowIndex: 0
+  isPlayerWriteTextPreviewSet: 
+  playerWriteTextBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  answerText: 
-  previewAnswerText: 
+  playerWriteText: 
+  previewPlayerWriteText: 
 --- !u!1 &3958053313500941109
 GameObject:
   m_ObjectHideFlags: 0
@@ -316,7 +323,7 @@ Transform:
   m_GameObject: {fileID: 3958053313500941109}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.7179761, y: -2.2090003, z: -2}
+  m_LocalPosition: {x: 0.7179761, y: -2.2090003, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -334,7 +341,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 3
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
@@ -353,7 +360,7 @@ MonoBehaviour:
     worldSize: {x: 0.18888889, y: 0.20555556, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 307.49353, y: -0.27622253, z: 14.92}
+    m_Center: {x: 307.49353, y: -0.27622253, z: 15.92}
     m_Extent: {x: 0.094444446, y: 0.10277778, z: 0.1}
   worldPivotAndSize: {x: -0.18888889, y: -0, z: 0.18888889, w: 0.20555556}
   uvSizeAndPosition: {x: 0.1328125, y: 0.14453125, z: 0.51171875, w: 0.83984375}
@@ -427,6 +434,7 @@ MonoBehaviour:
   alignmentType: 0
   scrollSpeed: 0
   scrollBoundSize: 0
+  background_renderer: {fileID: 0}
   bounds:
     m_Center: {x: 306.6253, y: 0.41033342, z: 15.92}
     m_Extent: {x: 0.39533335, y: 0.09166667, z: 0}
@@ -484,6 +492,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   hasText: 1
+  borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &5113536589409016990
 GameObject:
   m_ObjectHideFlags: 0
@@ -510,7 +519,7 @@ Transform:
   m_GameObject: {fileID: 5113536589409016990}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.68102396, y: -2.2120001, z: -2}
+  m_LocalPosition: {x: -0.68102396, y: -2.2120001, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -528,7 +537,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 3
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
@@ -547,7 +556,7 @@ MonoBehaviour:
     worldSize: {x: 0.18888889, y: 0.20555556, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 306.28342, y: -0.2792223, z: 14.92}
+    m_Center: {x: 306.28342, y: -0.2792223, z: 15.92}
     m_Extent: {x: 0.094444446, y: 0.10277778, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 0.18888889, w: 0.20555556}
   uvSizeAndPosition: {x: 0.1328125, y: 0.14453125, z: 0.51171875, w: 0.83984375}
@@ -621,6 +630,7 @@ MonoBehaviour:
   alignmentType: 0
   scrollSpeed: 0
   scrollBoundSize: 0
+  background_renderer: {fileID: 0}
   bounds:
     m_Center: {x: 306.7189, y: 0.052777775, z: 15.92}
     m_Extent: {x: 0.48891112, y: 0.072222225, z: 0}
@@ -690,6 +700,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   hasText: 1
+  borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &8273521396795708671
 GameObject:
   m_ObjectHideFlags: 0
@@ -745,6 +756,7 @@ MonoBehaviour:
   alignmentType: 1
   scrollSpeed: 0
   scrollBoundSize: 0
+  background_renderer: {fileID: 0}
   bounds:
     m_Center: {x: 306.872, y: 0.81233335, z: 15.92}
     m_Extent: {x: 0.43833333, y: 0.09166667, z: 0}
@@ -802,6 +814,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   hasText: 1
+  borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &8431716071242227860
 GameObject:
   m_ObjectHideFlags: 0
@@ -846,7 +859,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 3
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: baee2ed3eb8895e45805e19093805a27, type: 3}
     material: {fileID: 2100000, guid: c30f9b5dfdb7915458408b63fcc55b9b, type: 2}
@@ -928,7 +941,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 4
+  rendererType: 1
   batchKey:
     texture: {fileID: 2800000, guid: ce00a485150a179469cda6914ad00cce, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
@@ -1021,6 +1034,7 @@ MonoBehaviour:
   alignmentType: 1
   scrollSpeed: 0
   scrollBoundSize: 0
+  background_renderer: {fileID: 0}
   bounds:
     m_Center: {x: 306.83896, y: -0.3216668, z: 15.92}
     m_Extent: {x: 0.20255557, y: 0.09166667, z: 0}
@@ -1058,6 +1072,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   hasText: 1
+  borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &9013908411491639950
 GameObject:
   m_ObjectHideFlags: 0
@@ -1102,7 +1117,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 3
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: baee2ed3eb8895e45805e19093805a27, type: 3}
     material: {fileID: 2100000, guid: c30f9b5dfdb7915458408b63fcc55b9b, type: 2}

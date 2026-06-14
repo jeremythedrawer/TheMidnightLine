@@ -6,8 +6,7 @@ using static NPC;
 [CreateAssetMenu(fileName = "name_BehaviourContext", menuName = "Midnight Line SOs / NPC Behaviour Context")]
 public class NPCBehaviourContextSO : ScriptableObject
 {
-    public Behaviours behaviour;
-
+    public Behaviours behaviours;
     public VisualEffect glyphPrefab;
 
     public float minTime;

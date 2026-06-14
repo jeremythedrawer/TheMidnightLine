@@ -50,7 +50,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     }
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
-        PrepareFrame();
+        RefreshFrame();
         renderer.EnqueuePass(batchPass);
         renderer.EnqueuePass(particlePass);
         renderer.EnqueuePass(matrixPass);
@@ -120,8 +120,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     { 
                         case AtlasRendererType.SimpleWorld:
                         case AtlasRendererType.MotionWorld:
-                        case AtlasRendererType.SimpleScreen:
-                        case AtlasRendererType.MotionScreen:
                         {
                             SpriteData spriteData = spriteBatch.data.spriteData[count];
 
@@ -131,13 +129,11 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                             spriteData.scaleAndFlip = renderer.scaleAndFlip;
                             spriteData.custom = renderer.custom;
                             spriteBatch.data.spriteData[count] = spriteData;
-
                             count++;
                         }
                         break;
 
                         case AtlasRendererType.SliceWorld:
-                        case AtlasRendererType.SliceScreen:
                         {
                             for (int j = 0; j < renderer.worldPivotsAndSizes.Length; j++)
                             {

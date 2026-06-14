@@ -5,4 +5,5 @@ using static AtlasUI;
 public class NotepadData : ScriptableObject
 {
    public NotepadState curState;
+   public NotepadState prevState;
 }

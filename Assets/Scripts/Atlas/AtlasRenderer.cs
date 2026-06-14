@@ -65,7 +65,6 @@ public class AtlasRenderer : MonoBehaviour
 
         switch (rendererType)
         {
-            case AtlasRendererType.SimpleScreen:
             case AtlasRendererType.SimpleWorld:
             {
                 if (atlas.simpleSprites.Length == 0) { Debug.LogWarning("Atlas does not have Simple Sprites at: " + name); return; }
@@ -75,7 +74,6 @@ public class AtlasRenderer : MonoBehaviour
             }
             break;
             
-            case AtlasRendererType.MotionScreen:
             case AtlasRendererType.MotionWorld:
             {
                 if (atlas.motionSprites.Length == 0) { Debug.LogWarning("Atlas does not have Motion Sprites at: " + name); return; }
@@ -86,7 +84,6 @@ public class AtlasRenderer : MonoBehaviour
             }
             break;
 
-            case AtlasRendererType.SliceScreen:
             case AtlasRendererType.SliceWorld:
             {
                 if (atlas.slicedSprites.Length == 0) { Debug.LogWarning("Atlas does not have Sliced Sprites at: " + name); return; }
@@ -108,22 +105,6 @@ public class AtlasRenderer : MonoBehaviour
             case AtlasRendererType.MotionWorld:
             {
                 atlas.clipDict = BuildClipKeys(atlas.clips);
-            }
-            break;
-            case AtlasRendererType.SimpleScreen:
-            {
-                cam = Camera.main;
-            }
-            break;
-            case AtlasRendererType.MotionScreen:
-            {
-                atlas.clipDict = BuildClipKeys(atlas.clips);
-                cam = Camera.main;
-            }
-            break;
-            case AtlasRendererType.SliceScreen:
-            {
-                cam = Camera.main;   
             }
             break;
         }

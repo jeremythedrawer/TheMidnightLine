@@ -18,7 +18,8 @@ public static class NPC
     public enum Role
     {
         Traitor,
-        Bystander
+        Bystander,
+        Accomplice
     }
 
     public enum NPCPath
@@ -56,6 +57,22 @@ public static class NPC
         Enjoys_reading = 1 << 5,
         Frequently_ill = 1 << 6,
         Known_vandal = 1 << 7,
+        Count = 1 << 8, 
+    }
+
+    [Flags] public enum Appearences
+    {
+        None = 0,
+        LongWhiteHair = 1 << 0,
+        Necklace = 1 << 1,
+        ShortWhiteHair = 1 << 2,
+        Suit = 1 << 3,
+        ShortBlackHair = 1 << 4,
+        RoundGlasses = 1 << 5,
+        LongBlackHair = 1 << 6,
+        Beanie = 1 << 7,
+        CurlyWhiteHair = 1 << 8,
+        WhiteDreadlocks = 1 << 9,
     }
 
     public enum Gender

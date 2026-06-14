@@ -410,7 +410,7 @@ public class NPCBrain : MonoBehaviour
         {
             case NPCPath.SittingInTrain:
             {
-                atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.carriageSeat);
+                atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.carriageSeat - 1);
                 transform.position = new Vector3(targetXPos, transform.position.y, transform.position.z);
                 atlasRenderer.FlipH(false);
 
@@ -744,7 +744,7 @@ public class NPCBrain : MonoBehaviour
     }
     public void BoardTrain()
     {
-        transform.SetParent(null, true);
+        transform.SetParent(curCarriage.transform, true);
         trainStats.totalNPCsBoarded++;
         QueueForSeat();
         rigidBody.includeLayers = layerSettings.trainMask;
@@ -882,7 +882,6 @@ public class NPCBrain : MonoBehaviour
 
         int maxBits = 32;
 
-        // Note: Get current bit index
         int currentIndex = (int)Mathf.Log((int)curBehaviour, 2);
 
         for (int i = 1; i <= maxBits; i++)

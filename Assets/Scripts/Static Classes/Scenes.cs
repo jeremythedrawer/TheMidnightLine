@@ -19,7 +19,6 @@ public static class Scenes
     private static async UniTask SettingScoreScene(SceneData sceneData)
     {
         await UniTask.WaitForSeconds(BLACK_SCENE_TIME);
-
         sceneData.activeSceneType = SceneType.Score;
         AsyncOperation asyncLoad = SceneManager.LoadSceneAsync("Score");
 

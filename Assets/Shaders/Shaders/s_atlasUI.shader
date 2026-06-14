@@ -1,10 +1,5 @@
 Shader "Custom/s_atlasUI"
 {
-    Properties
-    {
-        [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
-    }
-
     SubShader
     {
         Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
@@ -31,8 +26,9 @@ Shader "Custom/s_atlasUI"
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                uint instanceID : TEXCOORD1;
-                float3 worldPos : TEXCOORD2;
+                float3 worldPos : TEXCOORD1;
+                float4 uvSizeAndPos : TEXCOORD2;
+                float4 scaleAndFlip : TEXCOORD3;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -44,12 +40,7 @@ Shader "Custom/s_atlasUI"
             SAMPLER(sampler_CarriageBoundsTexture);
 
             float3 _MainColor;
-            float _DayNight;
-            float _DayNightFactor;
-            float4 _BoundsMin;
-            float4 _BoundsMax;
-            float4 _TrainBoundsMin;
-            float4 _TrainBoundsSize;
+    
 
             Varyings vert(Attributes v)
             {
@@ -73,21 +64,20 @@ Shader "Custom/s_atlasUI"
                 o.worldPos = worldPos;
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
-                o.instanceID = v.instanceID;
+                o.uvSizeAndPos = spriteData.uvSizeAndPos;
+                o.scaleAndFlip = spriteData.scaleAndFlip;
 
                 return o;
             }
 
             half4 frag(Varyings i) : SV_Target
             {
-                uint id = i.instanceID;
-                AtlasSprite spriteData = _SpriteData[id];
 
-                float2 uvSize = spriteData.uvSizeAndPos.xy;
-                float2 uvPos = spriteData.uvSizeAndPos.zw;
+                float2 uvSize = i.uvSizeAndPos.xy;
+                float2 uvPos = i.uvSizeAndPos.zw;
                 
-                float2 scale = spriteData.scaleAndFlip.xy;
-                float2 flip = spriteData.scaleAndFlip.zw;
+                float2 scale = i.scaleAndFlip.xy;
+                float2 flip = i.scaleAndFlip.zw;
 
                 i.uv *= scale;
                 i.uv = frac(i.uv);

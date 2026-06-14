@@ -46,7 +46,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 3
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: ce00a485150a179469cda6914ad00cce, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
@@ -65,13 +65,13 @@ MonoBehaviour:
     worldSize: {x: 5.6666665, y: 3.9555554, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 2.8333335, y: 1.9777778, z: 25.59}
-    m_Extent: {x: 2.8333335, y: 1.9777778, z: 0.1}
-  worldPivotAndSize: {x: -0, y: -0, z: 5.666667, w: 3.9555557}
+    m_Center: {x: 2.8333333, y: 1.9777777, z: 25.59}
+    m_Extent: {x: 2.8333333, y: 1.9777777, z: 0.1}
+  worldPivotAndSize: {x: -0, y: -0, z: 5.6666665, w: 3.9555554}
   uvSizeAndPosition: {x: 0.24902344, y: 0.17382812, z: 0.4140625, w: 0.8117676}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 2.8333335, y: 1.9777778, z: 0}
+  boundsOffset: {x: 2.8333333, y: 1.9777777, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -139,6 +139,7 @@ MonoBehaviour:
   alignmentType: 0
   scrollSpeed: 0
   scrollBoundSize: 0
+  background_renderer: {fileID: 0}
   bounds:
     m_Center: {x: 1.8756638, y: 3.1243334, z: 24.59}
     m_Extent: {x: 0.79066664, y: 0.09166667, z: 0}
@@ -232,6 +233,7 @@ MonoBehaviour:
   - {x: 1.5813333, y: 0, z: 0, w: 0}
   - {x: 1.5813333, y: 0, z: 0, w: 0}
   hasText: 1
+  borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &4678076994412673266
 GameObject:
   m_ObjectHideFlags: 0
@@ -287,6 +289,7 @@ MonoBehaviour:
   alignmentType: 0
   scrollSpeed: 0
   scrollBoundSize: 0
+  background_renderer: {fileID: 0}
   bounds:
     m_Center: {x: 1.7106111, y: 3.5383334, z: 24.59}
     m_Extent: {x: 0.6256111, y: 0.09166667, z: 0}
@@ -364,6 +367,7 @@ MonoBehaviour:
   - {x: 1.2512223, y: 0, z: 0, w: 0}
   - {x: 1.2512223, y: 0, z: 0, w: 0}
   hasText: 1
+  borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &5359825768233355405
 GameObject:
   m_ObjectHideFlags: 0
@@ -413,5 +417,5 @@ MonoBehaviour:
   boardingStation_renderer: {fileID: 7126986648952851795}
   disembarkingStation_renderer: {fileID: 5086939238100302813}
   totalBounds:
-    m_Center: {x: 2.8333335, y: 1.9777778, z: 25.59}
-    m_Extent: {x: 2.8333335, y: 1.9777778, z: 0.1}
+    m_Center: {x: 2.8333333, y: 1.9777777, z: 25.59}
+    m_Extent: {x: 2.8333333, y: 1.9777777, z: 0.1}

@@ -15,10 +15,6 @@ public static class AtlasRendering
         SimpleWorld,
         MotionWorld,
         SliceWorld,
-
-        SimpleScreen,
-        MotionScreen,
-        SliceScreen,
     }
     public enum AtlasTextRendererType
     {
@@ -84,7 +80,7 @@ public static class AtlasRendering
         public MaterialPropertyBlock mpb;
     }
 
-    public static void PrepareFrame()
+    public static void RefreshFrame()
     {
         spriteBatchList.Clear();
         foreach (KeyValuePair<BatchKey, SpriteBatch> kv in spriteBatchDict)

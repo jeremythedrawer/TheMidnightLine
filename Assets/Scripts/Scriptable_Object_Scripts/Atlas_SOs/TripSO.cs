@@ -7,6 +7,7 @@ using static NPC;
 public class TripSO : ScriptableObject
 {
     public TripPrompt prompt;
+    public TripClue clue;
     public ParticleAtlas[] particleAtlasArray;
     public StationSO[] stationsDataArray;
     public NPCBrain[] npc_prefabsArray;

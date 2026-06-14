@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 1538872268477101567}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.285, y: -1.287, z: -1}
+  m_LocalPosition: {x: -0.611, y: -0.65, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,10 +44,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 3
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
-    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
+    material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
@@ -58,18 +58,18 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.48046875, y: 0.734375, z: 0.02734375, w: 0.09765625}
+    uvSizeAndPos: {x: 0.94140625, y: 0.234375, z: 0.01171875, w: 0.54296875}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0.68333334, y: 1.0444444, z: 1}
+    worldSize: {x: 1.3388889, y: 0.33333334, z: 1}
     index: 6
   bounds:
-    m_Center: {x: 300.05667, y: 1.1552222, z: 15.92}
-    m_Extent: {x: 0.34166667, y: 0.5222222, z: 0.1}
-  worldPivotAndSize: {x: -0, y: -0, z: 0.68333334, w: 1.0444444}
-  uvSizeAndPosition: {x: 0.48046875, y: 0.734375, z: 0.02734375, w: 0.09765625}
+    m_Center: {x: 300.05844, y: 1.4366666, z: 15.92}
+    m_Extent: {x: 0.66944444, y: 0.16666667, z: 0.1}
+  worldPivotAndSize: {x: -0, y: -0, z: 1.3388889, w: 0.33333334}
+  uvSizeAndPosition: {x: 0.94140625, y: 0.234375, z: 0.01171875, w: 0.54296875}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 1, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.34166667, y: 0.5222222, z: 0}
+  custom: {x: 0, y: 0, z: 0, w: 0.5}
+  boundsOffset: {x: 0.66944444, y: 0.16666667, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -137,6 +137,7 @@ MonoBehaviour:
   alignmentType: 1
   scrollSpeed: 0
   scrollBoundSize: 0
+  background_renderer: {fileID: 0}
   bounds:
     m_Center: {x: 300.057, y: 0.099333316, z: 15.92}
     m_Extent: {x: 0.22749999, y: 0.09166667, z: 0}
@@ -174,6 +175,7 @@ MonoBehaviour:
   - {x: 0.45499998, y: 0, z: 0, w: 0}
   - {x: 0.45499998, y: 0, z: 0, w: 0}
   hasText: 1
+  borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &3031531853131365240
 GameObject:
   m_ObjectHideFlags: 0
@@ -228,12 +230,13 @@ MonoBehaviour:
   clueType: 0
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   paperRenderer: {fileID: 2670676497328436670}
-  clueTextRenderers: []
-  pictureRenderers: []
-  answerTextRenderers: []
-  contentTextRenderers:
+  proceduralTextRenderers:
   - {fileID: 4109658658727222766}
+  readOnlyTextRenderers: []
+  playerWriteTextRenderers: []
+  pictureRenderers: []
   pageNumberRenderer: {fileID: 0}
   paperCornerLeftButtonRenderer: {fileID: 0}
   paperCornerRightButtonRenderer: {fileID: 2540409711626796747}
@@ -246,13 +249,15 @@ MonoBehaviour:
   topRenderers:
   - {fileID: 8897339101778285259}
   - {fileID: 4875371539932061714}
-  activeAnswerTextRenderer: {fileID: 0}
-  answerIndex: 0
-  answerTextBounds:
+  activePlayerWriteTextRenderer: {fileID: 0}
+  playerWriteIndex: 0
+  traitorIndex: 0
+  previewPlayerWriteIndex: 0
+  playerWriteTextBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  answerText: 
-  previewAnswerText: 
+  playerWriteText: 
+  previewPlayerWriteText: 
 --- !u!1 &3506944556660218531
 GameObject:
   m_ObjectHideFlags: 0
@@ -297,7 +302,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 3
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
@@ -379,7 +384,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 3
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
@@ -461,7 +466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 4
+  rendererType: 1
   batchKey:
     texture: {fileID: 2800000, guid: ce00a485150a179469cda6914ad00cce, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}

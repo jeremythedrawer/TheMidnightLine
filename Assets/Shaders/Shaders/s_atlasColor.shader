@@ -1,26 +1,20 @@
-Shader "Custom/s_atlasAppear"
+Shader "Custom/s_atlasColor"
 {
-    Properties
-    {
-        [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
-    }
-
     SubShader
     {
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+        Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
         ZWrite On
         ZTest LEqual
         Blend SrcAlpha OneMinusSrcAlpha
-
         Pass
         {
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
             #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
+            #include "Assets/Shaders/HLSL/ColorSpace.hlsl"
             #pragma vertex vert
             #pragma fragment frag
-
 
             struct Attributes
             {
@@ -33,17 +27,19 @@ Shader "Custom/s_atlasAppear"
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                uint instanceID : TEXCOORD1;
+                float3 worldPos : TEXCOORD1;
+                float4 uvSizeAndPos : TEXCOORD2;
+                float4 scaleAndFlip : TEXCOORD3;
+                float4 custom : TEXCOORD4;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
-            
+
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
-            float3 _TicketCheckColor;
-            float3 _MainColor;
-            float _DayNight;
+            TEXTURE2D(_CarriageBoundsTexture);
+            SAMPLER(sampler_CarriageBoundsTexture);
 
             Varyings vert(Attributes v)
             {
@@ -62,26 +58,26 @@ Shader "Custom/s_atlasAppear"
 
                 objPos *= size * scale;
                 objPos += pivot;
-                objPos.x += spriteData.custom.y * (spriteData.custom.a);
-                float3 worldPos = float3(position.xy + objPos, position.z);
 
+                float3 worldPos = float3(position.xy + objPos, position.z);
+                o.worldPos = worldPos;
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
-                o.instanceID = v.instanceID;
+                o.uvSizeAndPos = spriteData.uvSizeAndPos;
+                o.scaleAndFlip = spriteData.scaleAndFlip;
+                o.custom = spriteData.custom;
 
                 return o;
             }
 
             half4 frag(Varyings i) : SV_Target
             {
-                uint id = i.instanceID;
-                AtlasSprite spriteData = _SpriteData[id];
 
-                float2 uvSize = spriteData.uvSizeAndPos.xy;
-                float2 uvPos = spriteData.uvSizeAndPos.zw;
+                float2 uvSize = i.uvSizeAndPos.xy;
+                float2 uvPos = i.uvSizeAndPos.zw;
                 
-                float2 scale = spriteData.scaleAndFlip.xy;
-                float2 flip = spriteData.scaleAndFlip.zw;
+                float2 scale = i.scaleAndFlip.xy;
+                float2 flip = i.scaleAndFlip.zw;
 
                 i.uv *= scale;
                 i.uv = frac(i.uv);
@@ -89,14 +85,11 @@ Shader "Custom/s_atlasAppear"
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-                half3 dayNightInvertColor = color.rgb + _DayNight;
 
-                half3 checkedColor = BayerX8(spriteData.custom.x, i.positionHCS);//  * _TicketCheckColor;
+                float bayer = BayerX8(color * 0.5,  i.positionHCS.y);
 
-                half3 finalColor = max(dayNightInvertColor + (checkedColor - _DayNight) , _MainColor);
-
-                half alpha = BayerX8(color.a - spriteData.custom.a, i.positionHCS.xy);
-                clip(alpha - 0.001);
+                half3 finalColor = (color * i.custom.xyz);
+                clip((color.a) - 0.001);
                 return half4 (finalColor, 1);
             }
             ENDHLSL

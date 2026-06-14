@@ -64,7 +64,7 @@ public class NPCManager : MonoBehaviour
 
         foreach (NPCBehaviourContextSO context in npcsData.behaviourContexts)
         {
-            dict[context.behaviour] = context;
+            dict[context.behaviours] = context;
         }
 
         return dict;

@@ -1,11 +1,11 @@
 using System;
 using System.Threading;
 using UnityEngine;
-
+using UnityEngine.EventSystems;
 using static Atlas;
-using static NPC;
 using static AtlasUI;
-
+using static NPC;
+using static Spy;
 public class Page : MonoBehaviour
 {
     public static AtlasClip paper_clip;
@@ -15,15 +15,15 @@ public class Page : MonoBehaviour
 
     public TripSO trip;
     public NPCsDataSO npcData;
+    public SpyStatsSO spyStats;
 
     public AtlasRenderer paperRenderer;
 
-    public AtlasTextRenderer[] clueTextRenderers;
-    public AtlasRenderer[] pictureRenderers;
-    public AtlasTextRenderer[] answerTextRenderers;
+    public AtlasTextRenderer[] proceduralTextRenderers;
+    public AtlasTextRenderer[] readOnlyTextRenderers;
+    public AtlasTextRenderer[] playerWriteTextRenderers;
 
-    public AtlasTextRenderer[] contentTextRenderers;
-    
+    public AtlasRenderer[] pictureRenderers;
 
     public AtlasTextRenderer pageNumberRenderer;
     public AtlasRenderer paperCornerLeftButtonRenderer;
@@ -37,13 +37,18 @@ public class Page : MonoBehaviour
     public AtlasRenderer[] topRenderers;
     
     [Header("Generated")]
-    public AtlasTextRenderer activeAnswerTextRenderer;
-    public int answerIndex;
+    public AtlasTextRenderer activePlayerWriteTextRenderer;
+
+    public int playerWriteIndex;
     public int traitorIndex;
-    public Bounds answerTextBounds;
+    public int previewPlayerWriteIndex;
+    public int activePlayerWriteRowIndex;
+
+    public bool[] isPlayerWriteTextPreviewSet;
+    public Bounds playerWriteTextBounds;
     
-    public string answerText;
-    public string previewAnswerText;
+    public string playerWriteText;
+    public string previewPlayerWriteText;
 
     //public string playerSignature; //TODO: Put this in a player profile scriptable object
 
@@ -57,42 +62,62 @@ public class Page : MonoBehaviour
     {
         paper_clip = paperRenderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
         
-        answerIndex = -1;
+        playerWriteIndex = -1;
 
         switch (pageType)
         {
             case PageType.Prompt:
             {
-                string promptText = AtlasUI.PromptDict[trip.prompt];
-                contentTextRenderers[0].SetText(promptText);
+                string promptText = AtlasUI.PromptStringDict[trip.prompt];
+                proceduralTextRenderers[0].SetText(promptText);
             }
             break;
 
             case PageType.Confirm:
             {
-                activeAnswerTextRenderer = answerTextRenderers[0];
+                activePlayerWriteTextRenderer = playerWriteTextRenderers[0];
+                isPlayerWriteTextPreviewSet = new bool[playerWriteTextRenderers.Length];
             }
             break;
 
-            case PageType.Profile:
+            case PageType.ColorKey:
             {
+                activePlayerWriteTextRenderer = playerWriteTextRenderers[0];
+                isPlayerWriteTextPreviewSet = new bool[playerWriteTextRenderers.Length];
+                int traitorProfileLoops = 0;
+                for (int i = 0; i < playerWriteTextRenderers.Length; i++)
+                {
+                    int traitorProfileIndex = i;
+                    if (i == trip.traitorProfiles.Length)
+                    {
+                        traitorProfileLoops++;
+                        traitorProfileIndex = 0;
+                    }
+                    Behaviours behaviours = trip.traitorProfiles[traitorProfileIndex].npcProfile.behaviours;
+                    Behaviours curBehaviour = GetBehaviourAtIndex(behaviours, traitorProfileLoops);
 
+                    previewPlayerWriteText = npcData.behaviourStringDict[curBehaviour];
+                    playerWriteTextRenderers[i].SetText(previewPlayerWriteText);
+                }
             }
             break;
         }
     }
-    public void InitBehaviourClueText(TraitorProfile traitorProfile)
+    public void InitProfile(TraitorProfile traitorProfile)
     {
-        for (int i = 0; i < clueTextRenderers.Length; i++)
+        for (int i = 0; i < proceduralTextRenderers.Length; i++)
         {
             Behaviours behaviour = GetBehaviourAtIndex(traitorProfile.npcProfile.behaviours, i);
-            clueTextRenderers[i].SetText(npcData.behaviourDescDict[behaviour]);
-
-            activeAnswerTextRenderer = answerTextRenderers[0];
+            proceduralTextRenderers[i].SetText(npcData.behaviourStringDict[behaviour]);
         }
-        for (int i = 0; i < answerTextRenderers.Length; i++)
+        
+        activePlayerWriteTextRenderer = playerWriteTextRenderers[0];
+        
+        isPlayerWriteTextPreviewSet = new bool[playerWriteTextRenderers.Length];
+
+        for (int i = 0; i < playerWriteTextRenderers.Length; i++)
         {
-            answerTextRenderers[i].SetText("");
+            playerWriteTextRenderers[i].SetText(trip.stationsDataArray[previewPlayerWriteIndex].stationName);
         }
         AtlasRenderer coveredMugShot = pictureRenderers[0];
         AtlasRenderer uncoveredMugShot = pictureRenderers[1];
@@ -150,71 +175,159 @@ public class Page : MonoBehaviour
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, depth);
     }
-    public void WriteSignature()
+    public void WritePlayerWriteText()
     {
-        answerText = "J.E";
-        answerTextBounds = activeAnswerTextRenderer.GetBounds(answerText);
-        WriteText(activeAnswerTextRenderer, answerText, ctsWrite, Notepad.WRITE_LETTER_TIME);
-    }
-    public void WriteAnswerText(int answerIndex)
-    {
-        this.answerIndex = answerIndex;
+        playerWriteIndex = previewPlayerWriteIndex;
+        playerWriteText = activePlayerWriteTextRenderer.text;
+        playerWriteTextBounds = activePlayerWriteTextRenderer.GetBounds(playerWriteText);
 
-        switch(promptType)
+        WriteText(activePlayerWriteTextRenderer, playerWriteText, ctsWrite, Notepad.WRITE_LETTER_TIME);
+    }
+    public void ErasePlayerWriteText()
+    {
+        EraseText(playerWriteText, activePlayerWriteTextRenderer, ctsWrite, Notepad.WRITE_LETTER_TIME);
+    }
+    public void SwitchActivePreviewPlayerWriteText(int indexOffset)
+    {
+        previewPlayerWriteIndex += indexOffset;
+
+        switch (pageType)
         {
-            case TripPrompt.Stations:
+            case PageType.Profile:
             {
-                answerText = trip.stationsDataArray[this.answerIndex].stationName;
+                switch (promptType)
+                {
+                    case TripPrompt.Stations:
+                    {
+                        previewPlayerWriteIndex = (previewPlayerWriteIndex + trip.stationsDataArray.Length) % trip.stationsDataArray.Length;
+                        previewPlayerWriteText = trip.stationsDataArray[previewPlayerWriteIndex].stationName;
+                    }
+                    break;
+                }
+
+                activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
+                playerWriteTextBounds = activePlayerWriteTextRenderer.GetBounds(previewPlayerWriteText);
+                isPlayerWriteTextPreviewSet[0] = false;
             }
             break;
-            case TripPrompt.Sports_Teams:
-            {
 
+            case PageType.ColorKey:
+            {
+                switch (trip.clue)
+                {
+                    case TripClue.Behaviours:
+                    {
+                        int behaviourLength = (int)Mathf.Log((int)Behaviours.Count, 2) - 1;
+                        previewPlayerWriteIndex = ((previewPlayerWriteIndex + behaviourLength) % behaviourLength);
+                        Behaviours allBehaviours = (Behaviours)~(1 << behaviourLength);
+                        Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
+                        previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
+                        activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
+
+                        isPlayerWriteTextPreviewSet[activePlayerWriteRowIndex] = false;
+                        
+                        playerWriteTextBounds = activePlayerWriteTextRenderer.GetBounds(previewPlayerWriteText);
+                    }
+                    break;
+                }
             }
             break;
         }
-        answerTextBounds = activeAnswerTextRenderer.GetBounds(answerText);
-        WriteText(activeAnswerTextRenderer, answerText, ctsWrite, Notepad.WRITE_LETTER_TIME);
+
     }
-    public void EraseChosenStationText()
+    public void SetPreviewPlayerWriteTexts(NotepadState prevNotepadState)
     {
-        EraseText(answerText, activeAnswerTextRenderer, ctsWrite, Notepad.WRITE_LETTER_TIME);
-    }
-    public void SetPreviewAnswerText(int answerIndex)
-    {
-        switch (promptType)
+        switch(pageType)
         {
-            case TripPrompt.Stations:
+            case PageType.Profile:
             {
-                previewAnswerText = trip.stationsDataArray[answerIndex].stationName;
-                activeAnswerTextRenderer.SetText(previewAnswerText);
-                answerTextBounds = activeAnswerTextRenderer.GetBounds(previewAnswerText);
+                switch (promptType)
+                {
+                    case TripPrompt.Stations:
+                    {
+                        previewPlayerWriteText = trip.stationsDataArray[previewPlayerWriteIndex].stationName;
+                        activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
+                    }
+                    break;
+                }
+            }
+            break;
+
+            case PageType.Confirm:
+            {
+                if (spyStats.curLocationState != LocationState.Station)
+                {
+                    previewPlayerWriteText = "J.E";
+                    activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
+                }
+            }
+            break;
+
+            case PageType.ColorKey:
+            {
+                int behaviourLength = (int)Behaviours.Count - 1;
+                Behaviours allBehaviours = (Behaviours)~(1 << behaviourLength);
+                Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
+                previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
+                activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
             }
             break;
         }
-    }
-    public void SetPreviewSignatureText()
-    {
-        previewAnswerText = "J.E";
-        activeAnswerTextRenderer.SetText(previewAnswerText);
-        answerTextBounds = activeAnswerTextRenderer.GetBounds(previewAnswerText);
-    }
-    public void SetAnswerTextAlpha(float normAmount)
-    {
-        for (int i = 0; i < answerTextRenderers.Length; i++)
+
+        if (playerWriteTextRenderers.Length > 0)
         {
-            AtlasTextRenderer renderer = answerTextRenderers[i];
+            if (prevNotepadState == NotepadState.Erasing)
+            {
+                isPlayerWriteTextPreviewSet[activePlayerWriteRowIndex] = false;
+            }
+            else
+            {
+                for (int i = 0; i < isPlayerWriteTextPreviewSet.Length; i++)
+                {
+                    isPlayerWriteTextPreviewSet[i] = false;
+                }
+            }
+            playerWriteTextBounds = activePlayerWriteTextRenderer.GetBounds(previewPlayerWriteText);
+        }
+
+    }
+    public void SetPlayerWriteTextAlphaBottom(float normAmount)
+    {
+        for (int i = 0; i < bottomTextRenderers.Length; i++)
+        {
+            AtlasTextRenderer renderer = bottomTextRenderers[i];
             renderer.SetAppearTextAlpha(normAmount);
         }
     }
-    public void UpdatePreviewAnswerText(bool appear,  ref float clock)
+    public void SetPlayerWriteTextAlphaTop(float normAmount)
+    {
+        for (int i = 0; i < topTextRenderers.Length; i++)
+        {
+            AtlasTextRenderer renderer = topTextRenderers[i];
+            renderer.SetAppearTextAlpha(normAmount);
+        }
+    }
+    public void UpdatePreviewPlayerWriteText(bool appear, ref float clock)
     {
         switch (pageType)
         {
             case PageType.Profile:
             case PageType.Confirm:
             {
-                activeAnswerTextRenderer.UpdateAppearTextAlpha(normAmount: 0.5f, appear, ref clock);
+                if (isPlayerWriteTextPreviewSet[0]) return;
+                activePlayerWriteTextRenderer.UpdateAppearTextAlpha(normAmount: 0.5f, appear, ref clock);
+                if (clock <= 0) isPlayerWriteTextPreviewSet[0] = true;
+            }
+            break;
+            case PageType.ColorKey:
+            {
+                for(int i = 0; i < playerWriteTextRenderers.Length; i++)
+                {
+                    if (isPlayerWriteTextPreviewSet[i]) continue;
+                    AtlasTextRenderer behaviourTextRend = playerWriteTextRenderers[i];
+                    behaviourTextRend.UpdateAppearTextAlpha(normAmount: 0.5f, appear, ref clock);
+                    if (clock <= 0) isPlayerWriteTextPreviewSet[i] = true;
+                }
             }
             break;
         }
@@ -248,6 +361,6 @@ public class Page : MonoBehaviour
     }
     public Bounds GetWritingBounds()
     {
-        return activeAnswerTextRenderer.GetBounds(previewAnswerText);
+        return activePlayerWriteTextRenderer.GetBounds(previewPlayerWriteText);
     }
 }
