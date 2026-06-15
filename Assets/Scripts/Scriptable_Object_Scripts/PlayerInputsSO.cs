@@ -4,8 +4,7 @@ using UnityEngine;
 public class PlayerInputsSO : ScriptableObject
 {
     public int move;
-    public bool run;
-
+    public int numpad;
     public bool notepadKeyDown;
     public Vector2 notepadPreviewAnswerAndFlip;
     public bool notepadConfirmAnswer;

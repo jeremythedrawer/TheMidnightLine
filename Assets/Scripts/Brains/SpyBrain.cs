@@ -115,7 +115,7 @@ public class SpyBrain : MonoBehaviour
         {
             SetState(SpyState.CarriageMap);
         }
-        else if (playerInputs.move != 0 && !playerInputs.run && !stats.walkingIntoWall)
+        else if (playerInputs.move != 0 && !stats.walkingIntoWall)
         {
             SetState(SpyState.Walk);
         }

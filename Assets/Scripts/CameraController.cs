@@ -27,7 +27,6 @@ public class CameraController : MonoBehaviour
     public LocationState curState;
     public Camera cam;
     public Vector3 targetWorldPos;
-    public Vector3 centerBounds;
     public float curXOffset;
     public float carriageT;
 
@@ -78,7 +77,7 @@ public class CameraController : MonoBehaviour
         ChooseStates();
         UpdateStates();
         curXOffset = spyStats.spriteFlip ? -settings.horizontalOffset : settings.horizontalOffset; // camera offsets when player is moving
-        stats.camBounds.center = centerBounds;
+        stats.camBounds.center = transform.position;
 
         stats.worldToCam = cam.worldToCameraMatrix;
         stats.camToWorld = cam.cameraToWorldMatrix;

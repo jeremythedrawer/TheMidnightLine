@@ -12,21 +12,28 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2bd816355194c5042808dd7776208bba, type: 3}
   m_Name: Colors
   m_EditorClassIdentifier: Assembly-CSharp::ColorsSO
-  blackColor:
-    serializedVersion: 2
-    rgba: 0
-  whiteColor:
-    serializedVersion: 2
-    rgba: 16777215
-  ticketCheckColor:
-    serializedVersion: 2
-    rgba: 8522496
+  blackColor: {r: 0, g: 0, b: 0, a: 0}
+  whiteColor: {r: 1, g: 1, b: 1, a: 0}
+  selectableColors:
+  - {r: 0.6981132, g: 0, b: 0, a: 1}
+  - {r: 0.7924528, g: 0.31376302, b: 0, a: 1}
+  - {r: 1, g: 0.50490195, b: 0, a: 1}
+  - {r: 0.8396226, g: 0.6352408, b: 0, a: 1}
+  - {r: 0.5849056, g: 0.5849056, b: 0, a: 1}
+  - {r: 0.34323567, g: 0.4245283, b: 0, a: 1}
+  - {r: 0.17361112, g: 0.23584908, b: 0, a: 1}
+  - {r: 0.15667179, g: 0.41568628, b: 0, a: 1}
+  - {r: 0, g: 0.7735849, b: 0.43278974, a: 1}
+  - {r: 0, g: 0.5754717, b: 0.43357456, a: 1}
+  - {r: 0, g: 0.6071362, b: 0.6132076, a: 1}
+  - {r: 0, g: 0.35848773, b: 0.5188679, a: 1}
+  - {r: 0, g: 0.29346353, b: 0.6320754, a: 1}
+  - {r: 0.17048515, g: 0, b: 0.4339623, a: 1}
+  - {r: 0.42332062, g: 0, b: 0.745283, a: 1}
+  - {r: 0.6886792, g: 0, b: 0.5331712, a: 1}
   dayNight: 4e-45
   dayNightFactor: 0.024
   behaviourColors:
-  - behaviours: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - behaviours: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
-  - behaviours: 0
-    color: {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}

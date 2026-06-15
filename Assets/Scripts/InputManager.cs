@@ -13,12 +13,14 @@ public class InputManager : MonoBehaviour
     PlayerInput playerInput;
 
     InputAction move_action;
-    InputAction run_action;
 
     InputAction notepadToggle_action;
-    InputAction notepadConfirmStation_action;
-    InputAction notepadChooseStation_action;
     InputAction notepadFlipPage_action;
+
+    InputAction write_action;
+    InputAction preview_action;
+    InputAction numpad_action;
+
     InputAction ticket_action;
     InputAction interact_action;
 
@@ -38,15 +40,15 @@ public class InputManager : MonoBehaviour
         playerInput = GetComponent<PlayerInput>();
 
         move_action = playerInput.actions["Player/Movement"];
-        run_action = playerInput.actions["Player/Run"];
 
         notepadToggle_action = playerInput.actions["Player/NotepadToggle"];
-        notepadConfirmStation_action = playerInput.actions["Player/NotepadConfirmStation"];
-        notepadChooseStation_action = playerInput.actions["Player/NotepadChooseStation"];
         notepadFlipPage_action = playerInput.actions["Player/NotepadFlipPage"];
 
-        ticket_action = playerInput.actions["Player/Ticket"];
+        write_action = playerInput.actions["Player/Writing"];
+        preview_action = playerInput.actions["Player/Preview"];
+        numpad_action = playerInput.actions["Player/Numpad"];
 
+        ticket_action = playerInput.actions["Player/Ticket"];
         interact_action = playerInput.actions["Player/Interact"];
 
         mouseLeftDown_action = playerInput.actions["Player/MouseLeftDown"];
@@ -64,22 +66,24 @@ public class InputManager : MonoBehaviour
             playerInputs.move = 0;
         };
 
-        run_action.performed += context => playerInputs.run = true;
-        run_action.canceled += context => playerInputs.run = false;
-
         notepadToggle_action.started += context => playerInputs.notepadKeyDown = true;
-        notepadConfirmStation_action.started += context => playerInputs.notepadConfirmAnswer = true;
+        notepadFlipPage_action.started += context =>
+        {
+            Vector2 move = context.ReadValue<Vector2>();
+            playerInputs.notepadPreviewAnswerAndFlip.y = Mathf.RoundToInt(move.y);
+        };
 
-        notepadChooseStation_action.started += context =>
+        write_action.started += context => playerInputs.notepadConfirmAnswer = true;
+        preview_action.started += context =>
         {
             Vector2 move = context.ReadValue<Vector2>();
             playerInputs.notepadPreviewAnswerAndFlip.x = Mathf.RoundToInt(move.x);
         };
 
-        notepadFlipPage_action.started += context =>
+        numpad_action.started += context =>
         {
-            Vector2 move = context.ReadValue<Vector2>();
-            playerInputs.notepadPreviewAnswerAndFlip.y = Mathf.RoundToInt(move.y);
+            InputBinding activeBinding = numpad_action.GetBindingForControl(context.control).Value;
+            playerInputs.numpad = numpad_action.GetBindingIndex(activeBinding);
         };
 
         ticket_action.started += context => playerInputs.ticketCheckKeyDown = true;
@@ -155,6 +159,7 @@ public class InputManager : MonoBehaviour
         playerInputs.mouseRightDown = false;
         playerInputs.notepadPreviewAnswerAndFlip.x = 0;
         playerInputs.notepadPreviewAnswerAndFlip.y = 0;
+        playerInputs.numpad = -1;
     }
     private void CheckDevice(InputControl value, InputEventPtr ptr)
     {

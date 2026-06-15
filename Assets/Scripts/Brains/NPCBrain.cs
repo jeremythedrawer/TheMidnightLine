@@ -110,7 +110,7 @@ public class NPCBrain : MonoBehaviour
         UpdateStates();
         UpdatePath();
         AdjustAlpha();
-        AdjustFocusColors();
+        RespondToCursor();
     }
     private void FixedUpdate()
     {
@@ -569,7 +569,7 @@ public class NPCBrain : MonoBehaviour
             }
         }
     }
-    private void AdjustFocusColors()
+    private void RespondToCursor()
     {
         if (!onTrain) return;
 

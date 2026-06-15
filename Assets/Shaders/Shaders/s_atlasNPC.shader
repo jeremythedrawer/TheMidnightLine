@@ -33,7 +33,9 @@ Shader "Custom/s_atlasNPC"
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                uint instanceID : TEXCOORD1;
+                float4 uvSizeAndPos : TEXCOORD1;
+                float4 scaleAndFlip: TEXCOORD2;
+                float4 custom : TEXCOORD3;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -42,15 +44,16 @@ Shader "Custom/s_atlasNPC"
             SAMPLER(sampler_AtlasTexture);
 
             float3 _MainColor;
-            float3 _TicketCheckColor;
-            float3 _SuspicionColor;
-            float3 _RuledOutColor;
+
+            float3 _ColorKey0;
+            float3 _ColorKey1;
+            float3 _ColorKey2;
+
             Varyings vert(Attributes v)
             {
                 Varyings o;
 
                 AtlasSprite spriteData = _SpriteData[v.instanceID];
-
 
                 float3 position = spriteData.position.xyz;
                 
@@ -67,21 +70,19 @@ Shader "Custom/s_atlasNPC"
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
-                o.instanceID = v.instanceID;
-
+                o.uvSizeAndPos = spriteData.uvSizeAndPos;
+                o.scaleAndFlip = spriteData.scaleAndFlip;
+                o.custom = spriteData.custom;
                 return o;
             }
 
             half4 frag(Varyings i) : SV_Target
             {
-                uint id = i.instanceID;
-                AtlasSprite spriteData = _SpriteData[id];
+                float2 uvSize = i.uvSizeAndPos.xy;
+                float2 uvPos = i.uvSizeAndPos.zw;
 
-                float2 uvSize = spriteData.uvSizeAndPos.xy;
-                float2 uvPos = spriteData.uvSizeAndPos.zw;
-                
-                float2 scale = spriteData.scaleAndFlip.xy;
-                float2 flip = spriteData.scaleAndFlip.zw;
+                float2 scale = i.scaleAndFlip.xy;
+                float2 flip = i.scaleAndFlip.zw;
 
                 i.uv *= scale;
                 i.uv = frac(i.uv);
@@ -91,33 +92,11 @@ Shader "Custom/s_atlasNPC"
                 
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half t = saturate((spriteData.custom.x + spriteData.custom.y + spriteData.custom.z) * 0.5 - 0.5);
-
-                half ticketBayerValue = 1-(spriteData.custom.x - t);
-
-                half suspicionBayerValue = spriteData.custom.y - t;
-                half ruledOutBayerBalue = spriteData.custom.z - t;
-
-                int coordValue = i.positionHCS.y * 0.5;
-
-                half ticketCheckMask = 1 - BayerX8(ticketBayerValue, coordValue);
-                half3 ticketCheckColor =  ticketCheckMask * _TicketCheckColor;
-
-                half suspicionMask = BayerX8(suspicionBayerValue, coordValue);
-                half3 suspicionColor = suspicionMask * _SuspicionColor;
-
-                half ruledOutMask = BayerX8(ruledOutBayerBalue, coordValue);
-                half3 ruledOutColor = ruledOutMask * _RuledOutColor;
-
-                half3 focusColor = ticketCheckColor + suspicionColor + ruledOutColor;
-
-                half3 finalColor = max(color.r + focusColor, _MainColor);
-
-                half alphaValue = (spriteData.custom.a * 0.75);
+                half alphaValue = (i.custom.a * 0.75);
                 half alpha = BayerX8(color.a - alphaValue, i.positionHCS.xy);
                 clip(alpha - 0.001);
 
-                return half4 (finalColor, 1);
+                return half4 (color.rgb, 1);
             }
             ENDHLSL
         }

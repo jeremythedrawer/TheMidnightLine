@@ -5,7 +5,6 @@ Shader "Custom/s_atlasColor"
         Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
         ZWrite On
         ZTest LEqual
-        Blend SrcAlpha OneMinusSrcAlpha
         Pass
         {
             HLSLPROGRAM
@@ -70,7 +69,7 @@ Shader "Custom/s_atlasColor"
                 return o;
             }
 
-            half4 frag(Varyings i) : SV_Target
+            float4 frag(Varyings i) : SV_Target
             {
 
                 float2 uvSize = i.uvSizeAndPos.xy;
@@ -86,11 +85,8 @@ Shader "Custom/s_atlasColor"
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                float bayer = BayerX8(color * 0.5,  i.positionHCS.y);
-
-                half3 finalColor = (color * i.custom.xyz);
                 clip((color.a) - 0.001);
-                return half4 (finalColor, 1);
+                return float4 (i.custom.rgb * color, 1);
             }
             ENDHLSL
         }

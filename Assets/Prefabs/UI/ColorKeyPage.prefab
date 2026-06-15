@@ -58,7 +58,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.94140625, y: 0.234375, z: 0.01171875, w: 0.54296875}
+    uvSizeAndPos: {x: 0.47070312, y: 0.1171875, z: 0.0078125, w: 0.7753906}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 1.3388889, y: 0.33333334, z: 1}
     index: 6
@@ -66,7 +66,7 @@ MonoBehaviour:
     m_Center: {x: 300.05844, y: 1.4366666, z: 15.92}
     m_Extent: {x: 0.66944444, y: 0.16666667, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 1.3388889, w: 0.33333334}
-  uvSizeAndPosition: {x: 0.94140625, y: 0.234375, z: 0.01171875, w: 0.54296875}
+  uvSizeAndPosition: {x: 0.47070312, y: 0.1171875, z: 0.0078125, w: 0.7753906}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0.5}
   boundsOffset: {x: 0.66944444, y: 0.16666667, z: 0}
@@ -108,7 +108,7 @@ Transform:
   m_GameObject: {fileID: 1794616228762187890}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.147, y: -0.731, z: -1}
+  m_LocalPosition: {x: -0.403, y: -0.731, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -131,7 +131,7 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
   textAtlas: {fileID: 11400000, guid: 03871f642f841d447a7b9560fa5d0c24, type: 2}
-  text: Colors
+  text: Clue Markers
   kerning: 1
   spacing: 0.05
   alignmentType: 0
@@ -139,27 +139,39 @@ MonoBehaviour:
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
   bounds:
-    m_Center: {x: 300.06522, y: 1.0973332, z: 15.92}
-    m_Extent: {x: 0.21222222, y: 0.09166667, z: 0}
+    m_Center: {x: 300.04086, y: 1.0973332, z: 15.92}
+    m_Extent: {x: 0.4438889, y: 0.09166667, z: 0}
   textBoxData:
-    size: {x: 0.42444444, y: 0.18333334}
+    size: {x: 0.8877778, y: 0.18333334}
     lineWidths:
-    - 0.42444444
-  boundsOffset: {x: 0.21222222, y: -0.09166667, z: 0}
+    - 0.8877778
+  boundsOffset: {x: 0.4438889, y: -0.09166667, z: 0}
   worldPivotsAndSizes:
   - {x: -0, y: -0.18333334, z: 0.03888889, w: 0.18333334}
-  - {x: 0.08044444, y: -0.18333334, z: 0.044444446, w: 0.18333334}
-  - {x: 0.16366667, y: -0.18333334, z: 0.011111111, w: 0.18333334}
+  - {x: 0.08044444, y: -0.18333334, z: 0.011111111, w: 0.18333334}
+  - {x: 0.147, y: -0.18333334, z: 0.044444446, w: 0.18333334}
   - {x: 0.23022223, y: -0.18333334, z: 0.044444446, w: 0.18333334}
-  - {x: 0.31344444, y: -0.18333334, z: 0.022222223, w: 0.18333334}
-  - {x: 0.38555554, y: -0.18333334, z: 0.03888889, w: 0.18333334}
+  - {x: 0.36344445, y: -0.18333334, z: 0.06111111, w: 0.18333334}
+  - {x: 0.455, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.53822225, y: -0.18333334, z: 0.022222223, w: 0.18333334}
+  - {x: 0.6103334, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.6935556, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.7767778, y: -0.18333334, z: 0.022222223, w: 0.18333334}
+  - {x: 0.84888893, y: -0.18333334, z: 0.03888889, w: 0.18333334}
+  - {x: 0, y: 0, z: 0, w: 0}
   uvSizesAndPositions:
   - {x: 0.02734375, y: 0.12890625, z: 0.2890625, w: 0.73828125}
-  - {x: 0.03125, y: 0.12890625, z: 0.84375, w: 0.60546875}
   - {x: 0.0078125, y: 0.12890625, z: 0.73828125, w: 0.60546875}
-  - {x: 0.03125, y: 0.12890625, z: 0.84375, w: 0.60546875}
+  - {x: 0.03125, y: 0.12890625, z: 0.02734375, w: 0.47265625}
+  - {x: 0.03125, y: 0.12890625, z: 0.53125, w: 0.60546875}
+  - {x: 0.04296875, y: 0.12890625, z: 0.58984375, w: 0.73828125}
+  - {x: 0.03125, y: 0.12890625, z: 0.390625, w: 0.60546875}
+  - {x: 0.015625, y: 0.12890625, z: 0.94921875, w: 0.60546875}
+  - {x: 0.03125, y: 0.12890625, z: 0.703125, w: 0.60546875}
+  - {x: 0.03125, y: 0.12890625, z: 0.53125, w: 0.60546875}
   - {x: 0.015625, y: 0.12890625, z: 0.94921875, w: 0.60546875}
   - {x: 0.02734375, y: 0.12890625, z: 0.96875, w: 0.60546875}
+  - {x: 0, y: 0, z: 0, w: 0}
   scalesAndFlips:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
@@ -167,7 +179,19 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 0, y: 0, z: 0, w: 0}
   customs:
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
@@ -202,7 +226,7 @@ Transform:
   m_GameObject: {fileID: 2488520917910274587}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.443, y: -1.095, z: -1}
+  m_LocalPosition: {x: -0.415, y: -1.095, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -233,7 +257,7 @@ MonoBehaviour:
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
   bounds:
-    m_Center: {x: 299.9304, y: 0.7527777, z: 15.92}
+    m_Center: {x: 299.95837, y: 0.7527777, z: 15.92}
     m_Extent: {x: 0.3733778, y: 0.072222225, z: 0}
   textBoxData:
     size: {x: 0.7467556, y: 0.14444445}
@@ -332,6 +356,7 @@ Transform:
   - {fileID: 7208785665435263677}
   - {fileID: 705832913626294941}
   - {fileID: 5967655690559425254}
+  - {fileID: 4387204310195815813}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &8233736125140590318
@@ -352,6 +377,7 @@ MonoBehaviour:
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  colors: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
   paperRenderer: {fileID: 2670676497328436670}
   proceduralTextRenderers: []
   readOnlyTextRenderers:
@@ -360,7 +386,10 @@ MonoBehaviour:
   - {fileID: 4109658658727222766}
   - {fileID: 8351107793091605763}
   - {fileID: 9003480644258338096}
-  pictureRenderers: []
+  pictureRenderers:
+  - {fileID: 4785700800835313587}
+  - {fileID: 6123588381955079747}
+  - {fileID: 1488635258620953010}
   pageNumberRenderer: {fileID: 0}
   paperCornerLeftButtonRenderer: {fileID: 8045290928720822861}
   paperCornerRightButtonRenderer: {fileID: 2540409711626796747}
@@ -380,14 +409,18 @@ MonoBehaviour:
   - {fileID: 8897339101778285259}
   - {fileID: 4875371539932061714}
   - {fileID: 4785700800835313587}
+  colorPicker: {fileID: 302729222295899591}
   activePlayerWriteTextRenderer: {fileID: 0}
   playerWriteIndex: 0
   traitorIndex: 0
   previewPlayerWriteIndex: 0
+  activePlayerWriteRowIndex: 0
+  isPlayerWriteTextPreviewSet: 
+  playerWriteTexts: []
   playerWriteTextBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  playerWriteText: 
+  activePlayerWriteText: 
   previewPlayerWriteText: 
 --- !u!1 &3506944556660218531
 GameObject:
@@ -447,7 +480,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.14453125, y: 0.14453125, z: 0.3515625, w: 0.84375}
+    uvSizeAndPos: {x: 0.072265625, y: 0.072265625, z: 0.17773438, w: 0.92578125}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.20555556, y: 0.20555556, z: 1}
     index: 3
@@ -455,7 +488,7 @@ MonoBehaviour:
     m_Center: {x: 299.469, y: 1.678, z: 15.92}
     m_Extent: {x: 0.10277778, y: 0.10277778, z: 0.1}
   worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
-  uvSizeAndPosition: {x: 0.14453125, y: 0.14453125, z: 0.3515625, w: 0.84375}
+  uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.17773438, w: 0.92578125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
   boundsOffset: {x: 0, y: 0, z: 0}
@@ -497,7 +530,7 @@ Transform:
   m_GameObject: {fileID: 3928513581082641802}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.44298118, y: -1.656, z: -1}
+  m_LocalPosition: {x: -0.41499656, y: -1.656, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -528,7 +561,7 @@ MonoBehaviour:
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
   bounds:
-    m_Center: {x: 299.93594, y: 0.1917777, z: 15.92}
+    m_Center: {x: 299.96393, y: 0.1917777, z: 15.92}
     m_Extent: {x: 0.37893334, y: 0.072222225, z: 0}
   textBoxData:
     size: {x: 0.7578667, y: 0.14444445}
@@ -639,8 +672,8 @@ MonoBehaviour:
   spriteIndex: 0
   flipX: 0
   flipY: 0
-  width: 0.05
-  height: 0.26
+  width: 0
+  height: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -648,42 +681,42 @@ MonoBehaviour:
     worldSize: {x: 0, y: 0, z: 0}
     index: 0
   bounds:
-    m_Center: {x: 306.2097, y: 0.35727772, z: -32.9}
-    m_Extent: {x: 0.056666665, y: 0.06527778, z: 0.1}
+    m_Center: {x: 306.23914, y: 0.3864444, z: -32.9}
+    m_Extent: {x: 0.08611111, y: 0.09444444, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 0, w: 0}
   uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
   scaleAndFlip: {x: 0, y: 0, z: 1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.056666665, y: 0.06527778, z: 0.1}
+  boundsOffset: {x: 0.08611111, y: 0.09444444, z: 0.1}
   worldPivotsAndSizes:
-  - {x: 0, y: 0, z: 0.044444446, w: 0.044444446}
-  - {x: 0.044444446, y: 0, z: 0.37777776, w: 0.044444446}
-  - {x: 0.06333333, y: 0, z: 0.049999997, w: 0.044444446}
-  - {x: 0, y: 0.044444446, z: 0.044444446, w: 0.13888888}
-  - {x: 0.044444446, y: 0.044444446, z: 0.37777776, w: 0.13888888}
-  - {x: 0.06333333, y: 0.044444446, z: 0.049999997, w: 0.13888888}
-  - {x: 0, y: 0.08055555, z: 0.044444446, w: 0.050000004}
-  - {x: 0.044444446, y: 0.08055555, z: 0.37777776, w: 0.050000004}
-  - {x: 0.06333333, y: 0.08055555, z: 0.049999997, w: 0.050000004}
+  - {x: 0, y: 0, z: 0.08888889, w: 0.1}
+  - {x: 0.08888889, y: 0, z: 0.30555555, w: 0.1}
+  - {x: 0.08888889, y: 0, z: 0.08333334, w: 0.1}
+  - {x: 0, y: 0.1, z: 0.08888889, w: 0.3166667}
+  - {x: 0.08888889, y: 0.1, z: 0.30555555, w: 0.3166667}
+  - {x: 0.08888889, y: 0.1, z: 0.08333334, w: 0.3166667}
+  - {x: 0, y: 0.1, z: 0.08888889, w: 0.08888888}
+  - {x: 0.08888889, y: 0.1, z: 0.30555555, w: 0.08888888}
+  - {x: 0.08888889, y: 0.1, z: 0.08333334, w: 0.08888888}
   uvSizesAndPositions:
-  - {x: 0.03125, y: 0.03125, z: 0.05078125, w: 0.09765625}
-  - {x: 0.265625, y: 0.03125, z: 0.08203125, w: 0.09765625}
-  - {x: 0.035156246, y: 0.03125, z: 0.34765625, w: 0.09765625}
-  - {x: 0.03125, y: 0.09765625, z: 0.05078125, w: 0.12890625}
-  - {x: 0.265625, y: 0.09765625, z: 0.08203125, w: 0.12890625}
-  - {x: 0.035156246, y: 0.09765625, z: 0.34765625, w: 0.12890625}
-  - {x: 0.03125, y: 0.035156254, z: 0.05078125, w: 0.2265625}
-  - {x: 0.265625, y: 0.035156254, z: 0.08203125, w: 0.2265625}
-  - {x: 0.035156246, y: 0.035156254, z: 0.34765625, w: 0.2265625}
+  - {x: 0.03125, y: 0.03515625, z: 0.025390625, w: 0.5527344}
+  - {x: 0.10742187, y: 0.03515625, z: 0.056640625, w: 0.5527344}
+  - {x: 0.029296879, y: 0.03515625, z: 0.1640625, w: 0.5527344}
+  - {x: 0.03125, y: 0.11132813, z: 0.025390625, w: 0.5878906}
+  - {x: 0.10742187, y: 0.11132813, z: 0.056640625, w: 0.5878906}
+  - {x: 0.029296879, y: 0.11132813, z: 0.1640625, w: 0.5878906}
+  - {x: 0.03125, y: 0.031249998, z: 0.025390625, w: 0.69921875}
+  - {x: 0.10742187, y: 0.031249998, z: 0.056640625, w: 0.69921875}
+  - {x: 0.029296879, y: 0.031249998, z: 0.1640625, w: 0.69921875}
   scalesAndFlips:
   - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 0.05, y: 1, z: 1, w: 1}
+  - {x: 0, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 0.26, z: 1, w: 1}
-  - {x: 0.05, y: 0.26, z: 1, w: 1}
-  - {x: 1, y: 0.26, z: 1, w: 1}
+  - {x: 1, y: 0, z: 1, w: 1}
+  - {x: 0, y: 0, z: 1, w: 1}
+  - {x: 1, y: 0, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 0.05, y: 1, z: 1, w: 1}
+  - {x: 0, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   customs:
   - {x: 1, y: 0, z: 0, w: 0}
@@ -729,7 +762,7 @@ Transform:
   m_GameObject: {fileID: 5336562191547428120}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.4429822, y: -1.368, z: -1}
+  m_LocalPosition: {x: -0.41499758, y: -1.368, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -760,7 +793,7 @@ MonoBehaviour:
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
   bounds:
-    m_Center: {x: 299.93317, y: 0.4797777, z: 15.92}
+    m_Center: {x: 299.96115, y: 0.4797777, z: 15.92}
     m_Extent: {x: 0.37615556, y: 0.072222225, z: 0}
   textBoxData:
     size: {x: 0.7523111, y: 0.14444445}
@@ -875,7 +908,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.1328125, y: 0.14453125, z: 0.51171875, w: 0.83984375}
+    uvSizeAndPos: {x: 0.06640625, y: 0.072265625, z: 0.2578125, w: 0.9238281}
     uvPivot: {x: 1, y: 0}
     worldSize: {x: 0.18888889, y: 0.20555556, z: 1}
     index: 4
@@ -883,7 +916,7 @@ MonoBehaviour:
     m_Center: {x: 300.62958, y: -0.1952222, z: 15.92}
     m_Extent: {x: 0.094444446, y: 0.10277778, z: 0.1}
   worldPivotAndSize: {x: -0.18888889, y: -0, z: 0.18888889, w: 0.20555556}
-  uvSizeAndPosition: {x: 0.1328125, y: 0.14453125, z: 0.51171875, w: 0.83984375}
+  uvSizeAndPosition: {x: 0.06640625, y: 0.072265625, z: 0.2578125, w: 0.9238281}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
   boundsOffset: {x: -0.094444446, y: 0.10277778, z: 0}
@@ -957,7 +990,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.1328125, y: 0.14453125, z: 0.51171875, w: 0.83984375}
+    uvSizeAndPos: {x: 0.06640625, y: 0.072265625, z: 0.2578125, w: 0.9238281}
     uvPivot: {x: 1, y: 0}
     worldSize: {x: 0.18888889, y: 0.20555556, z: 1}
     index: 4
@@ -965,7 +998,7 @@ MonoBehaviour:
     m_Center: {x: 299.45044, y: -0.1952222, z: 15.92}
     m_Extent: {x: 0.094444446, y: 0.10277778, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 0.18888889, w: 0.20555556}
-  uvSizeAndPosition: {x: 0.1328125, y: 0.14453125, z: 0.51171875, w: 0.83984375}
+  uvSizeAndPosition: {x: 0.06640625, y: 0.072265625, z: 0.2578125, w: 0.9238281}
   scaleAndFlip: {x: 1, y: 1, z: -1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
   boundsOffset: {x: 0.094444446, y: 0.10277778, z: 0}
@@ -1035,8 +1068,8 @@ MonoBehaviour:
   spriteIndex: 0
   flipX: 0
   flipY: 0
-  width: 0.05
-  height: 0.26
+  width: 0
+  height: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -1044,42 +1077,42 @@ MonoBehaviour:
     worldSize: {x: 0, y: 0, z: 0}
     index: 0
   bounds:
-    m_Center: {x: 306.2097, y: -0.2247223, z: -32.9}
-    m_Extent: {x: 0.056666665, y: 0.06527778, z: 0.1}
+    m_Center: {x: 306.23914, y: -0.19555564, z: -32.9}
+    m_Extent: {x: 0.08611111, y: 0.09444444, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 0, w: 0}
   uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
   scaleAndFlip: {x: 0, y: 0, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 2, w: 0}
-  boundsOffset: {x: 0.056666665, y: 0.06527778, z: 0.1}
+  boundsOffset: {x: 0.08611111, y: 0.09444444, z: 0.1}
   worldPivotsAndSizes:
-  - {x: 0, y: 0, z: 0.044444446, w: 0.044444446}
-  - {x: 0.044444446, y: 0, z: 0.37777776, w: 0.044444446}
-  - {x: 0.06333333, y: 0, z: 0.049999997, w: 0.044444446}
-  - {x: 0, y: 0.044444446, z: 0.044444446, w: 0.13888888}
-  - {x: 0.044444446, y: 0.044444446, z: 0.37777776, w: 0.13888888}
-  - {x: 0.06333333, y: 0.044444446, z: 0.049999997, w: 0.13888888}
-  - {x: 0, y: 0.08055555, z: 0.044444446, w: 0.050000004}
-  - {x: 0.044444446, y: 0.08055555, z: 0.37777776, w: 0.050000004}
-  - {x: 0.06333333, y: 0.08055555, z: 0.049999997, w: 0.050000004}
+  - {x: 0, y: 0, z: 0.08888889, w: 0.1}
+  - {x: 0.08888889, y: 0, z: 0.30555555, w: 0.1}
+  - {x: 0.08888889, y: 0, z: 0.08333334, w: 0.1}
+  - {x: 0, y: 0.1, z: 0.08888889, w: 0.3166667}
+  - {x: 0.08888889, y: 0.1, z: 0.30555555, w: 0.3166667}
+  - {x: 0.08888889, y: 0.1, z: 0.08333334, w: 0.3166667}
+  - {x: 0, y: 0.1, z: 0.08888889, w: 0.08888888}
+  - {x: 0.08888889, y: 0.1, z: 0.30555555, w: 0.08888888}
+  - {x: 0.08888889, y: 0.1, z: 0.08333334, w: 0.08888888}
   uvSizesAndPositions:
-  - {x: 0.03125, y: 0.03125, z: 0.05078125, w: 0.09765625}
-  - {x: 0.265625, y: 0.03125, z: 0.08203125, w: 0.09765625}
-  - {x: 0.035156246, y: 0.03125, z: 0.34765625, w: 0.09765625}
-  - {x: 0.03125, y: 0.09765625, z: 0.05078125, w: 0.12890625}
-  - {x: 0.265625, y: 0.09765625, z: 0.08203125, w: 0.12890625}
-  - {x: 0.035156246, y: 0.09765625, z: 0.34765625, w: 0.12890625}
-  - {x: 0.03125, y: 0.035156254, z: 0.05078125, w: 0.2265625}
-  - {x: 0.265625, y: 0.035156254, z: 0.08203125, w: 0.2265625}
-  - {x: 0.035156246, y: 0.035156254, z: 0.34765625, w: 0.2265625}
+  - {x: 0.03125, y: 0.03515625, z: 0.025390625, w: 0.5527344}
+  - {x: 0.10742187, y: 0.03515625, z: 0.056640625, w: 0.5527344}
+  - {x: 0.029296879, y: 0.03515625, z: 0.1640625, w: 0.5527344}
+  - {x: 0.03125, y: 0.11132813, z: 0.025390625, w: 0.5878906}
+  - {x: 0.10742187, y: 0.11132813, z: 0.056640625, w: 0.5878906}
+  - {x: 0.029296879, y: 0.11132813, z: 0.1640625, w: 0.5878906}
+  - {x: 0.03125, y: 0.031249998, z: 0.025390625, w: 0.69921875}
+  - {x: 0.10742187, y: 0.031249998, z: 0.056640625, w: 0.69921875}
+  - {x: 0.029296879, y: 0.031249998, z: 0.1640625, w: 0.69921875}
   scalesAndFlips:
   - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 0.05, y: 1, z: 1, w: 1}
+  - {x: 0, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 0.26, z: 1, w: 1}
-  - {x: 0.05, y: 0.26, z: 1, w: 1}
-  - {x: 1, y: 0.26, z: 1, w: 1}
+  - {x: 1, y: 0, z: 1, w: 1}
+  - {x: 0, y: 0, z: 1, w: 1}
+  - {x: 1, y: 0, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 0.05, y: 1, z: 1, w: 1}
+  - {x: 0, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   customs:
   - {x: 0, y: 0, z: 2, w: 0}
@@ -1153,8 +1186,8 @@ MonoBehaviour:
   spriteIndex: 0
   flipX: 0
   flipY: 0
-  width: 0.05
-  height: 0.26
+  width: 0
+  height: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
@@ -1162,42 +1195,42 @@ MonoBehaviour:
     worldSize: {x: 0, y: 0, z: 0}
     index: 0
   bounds:
-    m_Center: {x: 306.2097, y: 0.0712777, z: -32.9}
-    m_Extent: {x: 0.056666665, y: 0.06527778, z: 0.1}
+    m_Center: {x: 306.23914, y: 0.10044436, z: -32.9}
+    m_Extent: {x: 0.08611111, y: 0.09444444, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 0, w: 0}
   uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
   scaleAndFlip: {x: 0, y: 0, z: 1, w: 1}
   custom: {x: 0, y: 1, z: 0, w: 0}
-  boundsOffset: {x: 0.056666665, y: 0.06527778, z: 0.1}
+  boundsOffset: {x: 0.08611111, y: 0.09444444, z: 0.1}
   worldPivotsAndSizes:
-  - {x: 0, y: 0, z: 0.044444446, w: 0.044444446}
-  - {x: 0.044444446, y: 0, z: 0.37777776, w: 0.044444446}
-  - {x: 0.06333333, y: 0, z: 0.049999997, w: 0.044444446}
-  - {x: 0, y: 0.044444446, z: 0.044444446, w: 0.13888888}
-  - {x: 0.044444446, y: 0.044444446, z: 0.37777776, w: 0.13888888}
-  - {x: 0.06333333, y: 0.044444446, z: 0.049999997, w: 0.13888888}
-  - {x: 0, y: 0.08055555, z: 0.044444446, w: 0.050000004}
-  - {x: 0.044444446, y: 0.08055555, z: 0.37777776, w: 0.050000004}
-  - {x: 0.06333333, y: 0.08055555, z: 0.049999997, w: 0.050000004}
+  - {x: 0, y: 0, z: 0.08888889, w: 0.1}
+  - {x: 0.08888889, y: 0, z: 0.30555555, w: 0.1}
+  - {x: 0.08888889, y: 0, z: 0.08333334, w: 0.1}
+  - {x: 0, y: 0.1, z: 0.08888889, w: 0.3166667}
+  - {x: 0.08888889, y: 0.1, z: 0.30555555, w: 0.3166667}
+  - {x: 0.08888889, y: 0.1, z: 0.08333334, w: 0.3166667}
+  - {x: 0, y: 0.1, z: 0.08888889, w: 0.08888888}
+  - {x: 0.08888889, y: 0.1, z: 0.30555555, w: 0.08888888}
+  - {x: 0.08888889, y: 0.1, z: 0.08333334, w: 0.08888888}
   uvSizesAndPositions:
-  - {x: 0.03125, y: 0.03125, z: 0.05078125, w: 0.09765625}
-  - {x: 0.265625, y: 0.03125, z: 0.08203125, w: 0.09765625}
-  - {x: 0.035156246, y: 0.03125, z: 0.34765625, w: 0.09765625}
-  - {x: 0.03125, y: 0.09765625, z: 0.05078125, w: 0.12890625}
-  - {x: 0.265625, y: 0.09765625, z: 0.08203125, w: 0.12890625}
-  - {x: 0.035156246, y: 0.09765625, z: 0.34765625, w: 0.12890625}
-  - {x: 0.03125, y: 0.035156254, z: 0.05078125, w: 0.2265625}
-  - {x: 0.265625, y: 0.035156254, z: 0.08203125, w: 0.2265625}
-  - {x: 0.035156246, y: 0.035156254, z: 0.34765625, w: 0.2265625}
+  - {x: 0.03125, y: 0.03515625, z: 0.025390625, w: 0.5527344}
+  - {x: 0.10742187, y: 0.03515625, z: 0.056640625, w: 0.5527344}
+  - {x: 0.029296879, y: 0.03515625, z: 0.1640625, w: 0.5527344}
+  - {x: 0.03125, y: 0.11132813, z: 0.025390625, w: 0.5878906}
+  - {x: 0.10742187, y: 0.11132813, z: 0.056640625, w: 0.5878906}
+  - {x: 0.029296879, y: 0.11132813, z: 0.1640625, w: 0.5878906}
+  - {x: 0.03125, y: 0.031249998, z: 0.025390625, w: 0.69921875}
+  - {x: 0.10742187, y: 0.031249998, z: 0.056640625, w: 0.69921875}
+  - {x: 0.029296879, y: 0.031249998, z: 0.1640625, w: 0.69921875}
   scalesAndFlips:
   - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 0.05, y: 1, z: 1, w: 1}
+  - {x: 0, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 1, y: 0.26, z: 1, w: 1}
-  - {x: 0.05, y: 0.26, z: 1, w: 1}
-  - {x: 1, y: 0.26, z: 1, w: 1}
+  - {x: 1, y: 0, z: 1, w: 1}
+  - {x: 0, y: 0, z: 1, w: 1}
+  - {x: 1, y: 0, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
-  - {x: 0.05, y: 1, z: 1, w: 1}
+  - {x: 0, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   customs:
   - {x: 0, y: 1, z: 0, w: 0}
@@ -1299,3 +1332,76 @@ MonoBehaviour:
   prevSpriteIndexFlipV: 12
   isAnimating: 0
   quadCount: 0
+--- !u!1001 &7660843965645182369
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 7380519998003774169}
+    m_Modifications:
+    - target: {fileID: 1383577117877000667, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: m_Name
+      value: ColorPallette
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247253459606769700, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: -2.037
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247253459606769700, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: -1.188
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247253459606769700, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -3
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247253459606769700, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247253459606769700, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247253459606769700, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247253459606769700, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247253459606769700, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247253459606769700, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6247253459606769700, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+--- !u!114 &302729222295899591 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 7954283146766850150, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+  m_PrefabInstance: {fileID: 7660843965645182369}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9422cdca9f06db6459d29eda1a89f40f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ColorPicker
+--- !u!4 &4387204310195815813 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 6247253459606769700, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+  m_PrefabInstance: {fileID: 7660843965645182369}
+  m_PrefabAsset: {fileID: 0}

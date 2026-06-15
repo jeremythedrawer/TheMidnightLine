@@ -69,3 +69,32 @@ float3 OKLABToRGB(float3 c)
     );
 
 }
+float3 RGBToLinear(float3 c)
+{
+    return (c <= 0.04045)
+        ? c / 12.92
+        : pow((c + 0.055) / 1.055, 2.4);
+}
+
+float3 LinearToRGB(float3 c)
+{
+    return (c <= 0.0031308)
+        ? c * 12.92
+        : 1.055 * pow(c, 1.0 / 2.4) - 0.055;
+}
+
+float3 RotateOKLABHue(float3 oklab, float t)
+{
+    float angle = t * 2.0 * 3.1415926;
+
+    float s = sin(angle);
+    float c = cos(angle);
+
+    float a = oklab.g;
+    float b = oklab.b;
+
+    float newA = a * c - b * s;
+    float newB = a * s + b * c;
+
+    return float3(oklab.r, newA, newB);
+}

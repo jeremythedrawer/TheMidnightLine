@@ -16,15 +16,6 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Run",
-                    "type": "Button",
-                    "id": "e6ef1aa9-a460-439f-a776-5e467b27b659",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "NotepadToggle",
                     "type": "Button",
                     "id": "ac29e519-7e48-478f-ad63-b10ac44b06d3",
@@ -34,7 +25,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "NotepadConfirmStation",
+                    "name": "Writing",
                     "type": "Button",
                     "id": "72e47197-bc13-40fa-93ac-3437fee94115",
                     "expectedControlType": "",
@@ -43,7 +34,7 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "NotepadChooseStation",
+                    "name": "Preview",
                     "type": "Button",
                     "id": "29cb3758-e4c2-47f0-8d05-8a604357ab6e",
                     "expectedControlType": "",
@@ -104,6 +95,15 @@
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": false
+                },
+                {
+                    "name": "Numpad",
+                    "type": "Button",
+                    "id": "04046e87-de17-4e10-b713-3e78ab059871",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
                 }
             ],
             "bindings": [
@@ -136,7 +136,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardAndMouse",
-                    "action": "NotepadConfirmStation",
+                    "action": "Writing",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -147,7 +147,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "NotepadConfirmStation",
+                    "action": "Writing",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -196,35 +196,13 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "",
-                    "id": "35aaf460-5579-45db-b407-e30ba582c637",
-                    "path": "<Keyboard>/leftShift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse;KeyboardAndMouse",
-                    "action": "Run",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "c6216c16-8df7-4890-a6ea-b6817d61b8bb",
-                    "path": "<Gamepad>/leftTrigger",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Gamepad",
-                    "action": "Run",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
                     "name": "Right Stick",
                     "id": "a1eb8400-7074-4206-abb1-9c44dc852646",
                     "path": "2DVector",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "NotepadChooseStation",
+                    "action": "Preview",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -235,7 +213,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Gamepad",
-                    "action": "NotepadChooseStation",
+                    "action": "Preview",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -246,7 +224,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Gamepad",
-                    "action": "NotepadChooseStation",
+                    "action": "Preview",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -257,7 +235,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "NotepadChooseStation",
+                    "action": "Preview",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -268,7 +246,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;KeyboardAndMouse",
-                    "action": "NotepadChooseStation",
+                    "action": "Preview",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -279,7 +257,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;KeyboardAndMouse",
-                    "action": "NotepadChooseStation",
+                    "action": "Preview",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -445,6 +423,116 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Ticket",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "8a553c8e-5f8b-419f-8207-c6ae30e9adf1",
+                    "path": "<Keyboard>/0",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardAndMouse",
+                    "action": "Numpad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b7e064d3-aa57-4d71-925e-3b0bbb02dd20",
+                    "path": "<Keyboard>/1",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardAndMouse",
+                    "action": "Numpad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "1427074c-c1a4-4a22-853e-9601ec4bd84e",
+                    "path": "<Keyboard>/2",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardAndMouse",
+                    "action": "Numpad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "2911ddc8-2cb2-49fb-a58c-cf07cf1a395a",
+                    "path": "<Keyboard>/3",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardAndMouse",
+                    "action": "Numpad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "523371a6-3133-42f7-85bc-655ce55f98c2",
+                    "path": "<Keyboard>/4",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardAndMouse",
+                    "action": "Numpad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "b1821a6f-e755-4401-9809-9ee2f2b7754a",
+                    "path": "<Keyboard>/5",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardAndMouse",
+                    "action": "Numpad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "4d5e3768-3d36-4277-812e-d9686e6e8a2e",
+                    "path": "<Keyboard>/6",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardAndMouse",
+                    "action": "Numpad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6eeaaf15-9676-469c-b286-32e0785514ba",
+                    "path": "<Keyboard>/7",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardAndMouse",
+                    "action": "Numpad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "117f9bde-1212-4f8b-bc31-6ca410974b5e",
+                    "path": "<Keyboard>/8",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardAndMouse",
+                    "action": "Numpad",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "ce8bd2a8-0c88-432e-936a-f46878cf5914",
+                    "path": "<Keyboard>/9",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardAndMouse",
+                    "action": "Numpad",
                     "isComposite": false,
                     "isPartOfComposite": false
                 }

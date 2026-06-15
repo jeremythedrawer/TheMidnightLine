@@ -2,8 +2,14 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using UnityEditor;
+
 using UnityEngine;
+
+#if UNITY_EDITOR
+using UnityEditor;
+using UnityEditor.IMGUI.Controls;
+#endif
+
 using static Atlas;
 using static AtlasRendering;
 
@@ -173,8 +179,24 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void SetBounds()
     {
-        bounds.size = new Vector3(scaleAndFlip.x * worldPivotAndSize.z, scaleAndFlip.y * worldPivotAndSize.w, 0.2f);
-        bounds.center = new Vector3(transform.position.x + boundsOffset.x, transform.position.y + boundsOffset.y, transform.position.z);
+
+        switch(rendererType)
+        {
+            case AtlasRendererType.SliceWorld:
+            {
+                SliceSprite sliceSprite = atlas.slicedSprites[spriteIndex];
+                Vector4 centerWorldPivot = worldPivotsAndSizes[4];
+                bounds.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldPivot.z * width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldPivot.w * height) + sliceSprite.worldSlices.w, 0.2f);
+            }
+            break;
+            case AtlasRendererType.MotionWorld:
+            case AtlasRendererType.SimpleWorld:
+            {
+                bounds.center = new Vector3(transform.position.x + boundsOffset.x, transform.position.y + boundsOffset.y, transform.position.z);
+                bounds.size = new Vector3(scaleAndFlip.x * worldPivotAndSize.z, scaleAndFlip.y * worldPivotAndSize.w, 0.2f);
+            }
+            break;
+        }
     }
     public Bounds GetBounds()
     {
@@ -206,6 +228,10 @@ public class AtlasRenderer : MonoBehaviour
     public void UpdateBounds()
     {        
         bounds.center = transform.position + boundsOffset;
+    }
+    public void UpdateSliceSpriteInputsSelf()
+    {
+        UpdateSlicedSpriteInputs(atlas.slicedSprites[spriteIndex]);
     }
     public void UpdateSlicedSpriteInputs(SliceSprite sliceSprite)
     {
@@ -383,55 +409,76 @@ public class AtlasRenderer : MonoBehaviour
         Gizmos.color = Color.clear;
         Gizmos.DrawCube(bounds.center, bounds.size);
     }
-    private void OnDrawGizmosSelected()
-    {
-        Gizmos.color = Color.indigo;
-        Gizmos.DrawWireCube(bounds.center, bounds.size);
-    }
 #endif
 }
 
 #if UNITY_EDITOR
-
 [CustomEditor(typeof(AtlasRenderer))]
 public class AtlasRendererEditor : Editor
 {
-    private bool showClipDict = true;
-
-    public override void OnInspectorGUI()
+    BoxBoundsHandle boundsHandle = new BoxBoundsHandle();
+    private void OnSceneGUI()
     {
-        // Draw normal inspector
-        DrawDefaultInspector();
+        AtlasRenderer rend = (AtlasRenderer)target;
 
-        AtlasRenderer renderer = (AtlasRenderer)target;
-
-        if (renderer.atlas == null)
-            return;
-
-        if (renderer.atlas.clipDict == null)
+        if (Selection.activeGameObject == rend.gameObject)
         {
-            EditorGUILayout.HelpBox("clipDict is null. Make sure it's built.", MessageType.Warning);
-            return;
+            EditorGUI.BeginChangeCheck();
+
+            boundsHandle.center = rend.transform.position + rend.boundsOffset;
+
+            switch (rend.rendererType)
+            {
+                case AtlasRendererType.SliceWorld:
+                {
+                    SliceSprite sliceSprite = rend.atlas.slicedSprites[rend.spriteIndex];
+
+                    Vector4 centerWorldPivot = rend.worldPivotsAndSizes[4];
+                    boundsHandle.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldPivot.z * rend.width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldPivot.w * rend.height) + sliceSprite.worldSlices.w, 0.2f);
+                }
+                break;
+                case AtlasRendererType.MotionWorld:
+                case AtlasRendererType.SimpleWorld:
+                {
+                    boundsHandle.size = new Vector3(rend.sprite.worldSize.x * rend.width, rend.sprite.worldSize.y * rend.height, 0.2f);
+                }
+                break;
+            }
         }
 
-        EditorGUILayout.Space();
-        showClipDict = EditorGUILayout.Foldout(showClipDict, "Clip Dictionary", true);
+        boundsHandle.SetColor(Color.green);
+        boundsHandle.DrawHandle();
 
-        if (showClipDict)
+        if (EditorGUI.EndChangeCheck())
         {
-            EditorGUI.indentLevel++;
+            Undo.RecordObject(rend, "Resize Bounds");
 
-            foreach (KeyValuePair<int, AtlasClip> kvp in renderer.atlas.clipDict)
+            switch (rend.rendererType)
             {
-                EditorGUILayout.BeginHorizontal();
-                EditorGUILayout.LabelField(kvp.Key.ToString(), GUILayout.MaxWidth(150));
-                EditorGUILayout.LabelField(kvp.Value.clipName, GUILayout.MaxWidth(150));
+                case AtlasRendererType.SliceWorld:
+                {
+                    SliceSprite sliceSprite = rend.atlas.slicedSprites[rend.spriteIndex];
+                    Vector4 centerWorldPivot = rend.worldPivotsAndSizes[4];
+                    float fixWidth = sliceSprite.worldSlices.x + sliceSprite.worldSlices.y;
+                    float fixHeight = sliceSprite.worldSlices.z + sliceSprite.worldSlices.w;
 
-                EditorGUILayout.EndHorizontal();
+                    rend.width = (boundsHandle.size.x - fixWidth) / centerWorldPivot.z;
+                    rend.height = (boundsHandle.size.y - fixHeight) / centerWorldPivot.w;
+                    rend.UpdateSlicedSpriteInputs(sliceSprite);
+                }
+                break;
+                case AtlasRendererType.MotionWorld:
+                case AtlasRendererType.SimpleWorld:
+                {
+                    rend.width = boundsHandle.size.x / rend.sprite.worldSize.x;
+                    rend.height = boundsHandle.size.y / rend.sprite.worldSize.y;
+                    rend.UpdateSpriteInputs(rend.sprite);
+                }
+                break;
             }
 
-            EditorGUI.indentLevel--;
         }
+
     }
 }
 #endif
