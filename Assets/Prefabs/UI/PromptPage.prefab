@@ -58,7 +58,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.94140625, y: 0.234375, z: 0.01171875, w: 0.54296875}
+    uvSizeAndPos: {x: 0.47070312, y: 0.1171875, z: 0.40820312, w: 0.87890625}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 1.3388889, y: 0.33333334, z: 1}
     index: 6
@@ -66,7 +66,7 @@ MonoBehaviour:
     m_Center: {x: 300.05844, y: 1.4366666, z: 15.92}
     m_Extent: {x: 0.66944444, y: 0.16666667, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 1.3388889, w: 0.33333334}
-  uvSizeAndPosition: {x: 0.94140625, y: 0.234375, z: 0.01171875, w: 0.54296875}
+  uvSizeAndPosition: {x: 0.47070312, y: 0.1171875, z: 0.40820312, w: 0.87890625}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0.5}
   boundsOffset: {x: 0.66944444, y: 0.16666667, z: 0}
@@ -231,6 +231,7 @@ MonoBehaviour:
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  colors: {fileID: 0}
   paperRenderer: {fileID: 2670676497328436670}
   proceduralTextRenderers:
   - {fileID: 4109658658727222766}
@@ -249,14 +250,18 @@ MonoBehaviour:
   topRenderers:
   - {fileID: 8897339101778285259}
   - {fileID: 4875371539932061714}
+  colorPicker: {fileID: 0}
   activePlayerWriteTextRenderer: {fileID: 0}
   playerWriteIndex: 0
   traitorIndex: 0
   previewPlayerWriteIndex: 0
+  activePlayerWriteRowIndex: 0
+  isPlayerWriteTextPreviewSet: 
+  playerWriteTexts: []
   playerWriteTextBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  playerWriteText: 
+  activePlayerWriteText: 
   previewPlayerWriteText: 
 --- !u!1 &3506944556660218531
 GameObject:
@@ -316,7 +321,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.14453125, y: 0.14453125, z: 0.3515625, w: 0.84375}
+    uvSizeAndPos: {x: 0.072265625, y: 0.072265625, z: 0.17773438, w: 0.92578125}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.20555556, y: 0.20555556, z: 1}
     index: 3
@@ -324,7 +329,7 @@ MonoBehaviour:
     m_Center: {x: 299.469, y: 1.678, z: 15.92}
     m_Extent: {x: 0.10277778, y: 0.10277778, z: 0.1}
   worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
-  uvSizeAndPosition: {x: 0.14453125, y: 0.14453125, z: 0.3515625, w: 0.84375}
+  uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.17773438, w: 0.92578125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
   boundsOffset: {x: 0, y: 0, z: 0}
@@ -366,7 +371,7 @@ Transform:
   m_GameObject: {fileID: 5535953902685461300}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.72402954, y: -2.218, z: -1}
+  m_LocalPosition: {x: 0.683, y: -2.141, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -398,18 +403,18 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.1328125, y: 0.14453125, z: 0.51171875, w: 0.83984375}
-    uvPivot: {x: 1, y: 0}
+    uvSizeAndPos: {x: 0.06640625, y: 0.072265625, z: 0.2578125, w: 0.9238281}
+    uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.18888889, y: 0.20555556, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 300.62958, y: -0.1952222, z: 15.92}
+    m_Center: {x: 300.683, y: -0.22100008, z: 15.92}
     m_Extent: {x: 0.094444446, y: 0.10277778, z: 0.1}
-  worldPivotAndSize: {x: -0.18888889, y: -0, z: 0.18888889, w: 0.20555556}
-  uvSizeAndPosition: {x: 0.1328125, y: 0.14453125, z: 0.51171875, w: 0.83984375}
+  worldPivotAndSize: {x: -0.094444446, y: -0.10277778, z: 0.18888889, w: 0.20555556}
+  uvSizeAndPosition: {x: 0.06640625, y: 0.072265625, z: 0.2578125, w: 0.9238281}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
-  boundsOffset: {x: -0.094444446, y: 0.10277778, z: 0}
+  boundsOffset: {x: 0, y: 0, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []

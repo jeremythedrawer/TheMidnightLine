@@ -138,6 +138,10 @@ public class AtlasRenderer : MonoBehaviour
         }
 #endif
     }
+    public void UpdateSpriteInputsByIndex(int index)
+    {
+        UpdateSpriteInputs(atlas.simpleSprites[index]);
+    }
     public void UpdateSpriteInputs(SimpleSprite newSprite)
     {
         sprite = newSprite;

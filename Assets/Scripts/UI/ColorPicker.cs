@@ -59,11 +59,7 @@ public class ColorPicker : MonoBehaviour
         for (int i = 0; i < colorRenderers.Length; i++)
         {
             AtlasRenderer colorRenderer = colorRenderers[i];
-
-            for (int j = 0; j < colorRenderer.customs.Length; j++)
-            {
-                colorRenderer.customs[j] = colorsSO.selectableColors[i].linear;
-            }
+            colorRenderer.custom = colorsSO.selectableColors[i].linear;
         }
     }
     public void SetOpenPosAndSize()
@@ -165,10 +161,7 @@ public class ColorPicker : MonoBehaviour
                 if (CursorController.IsInsideBounds(colorRenderer.GetBounds()))
                 {
                     Color selectedColor = colorsSO.selectableColors[i].linear;
-                    for (int j = 0; j < selectedRenderer.customs.Length; j++)
-                    {
-                        selectedRenderer.customs[j] = selectedColor;
-                    }
+                    selectedRenderer.custom = selectedColor;
                     Shader.SetGlobalColor("__ColorKey" + i, selectedColor);
                     break;
                 }
@@ -207,7 +200,7 @@ public class ColorPicker : MonoBehaviour
                 else
                 {
                     float easOutT = Mathf.Max(1 - Mathf.Pow(1 - (t - 0.5f) * 2, 5), 0);
-                    curHeight = openHeight * easOutT;
+                    curHeight = Mathf.Max(openHeight * easOutT, 0.5f);
                     palletteRenderer.height = curHeight;
                     palletteRenderer.UpdateSliceSpriteInputsSelf();
 

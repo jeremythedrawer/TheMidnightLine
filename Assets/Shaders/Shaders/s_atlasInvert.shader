@@ -86,7 +86,7 @@ Shader "Custom/s_atlasInvert"
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-                half3 invertColor = (1 - color.r);
+                half invertColor = (1 - color.r);
                 
                 half alpha = color.a;
                 float bayerMask = BayerX8(spriteData.custom.x, i.positionHCS.xy);

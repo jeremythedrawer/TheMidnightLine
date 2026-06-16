@@ -2,13 +2,14 @@ using System;
 using System.Reflection;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.EventSystems;
 using static Atlas;
 using static AtlasUI;
 using static NPC;
 using static Spy;
 public class Page : MonoBehaviour
 {
+    public const float FLIP_LOCAL_POS_Y = -1.656f;
+
     public static AtlasClip paper_clip;
     public PageType pageType;
     public TripPrompt promptType;
@@ -31,9 +32,6 @@ public class Page : MonoBehaviour
     public AtlasRenderer paperCornerLeftButtonRenderer;
     public AtlasRenderer paperCornerRightButtonRenderer;
     public AtlasRenderer exitButton_renderer;
-
-    public AtlasTextRenderer[] bottomTextRenderers;
-    public AtlasTextRenderer[] topTextRenderers;
 
     public AtlasRenderer[] bottomRenderers;
     public AtlasRenderer[] topRenderers;
@@ -59,29 +57,15 @@ public class Page : MonoBehaviour
     //public string playerSignature; //TODO: Put this in a player profile scriptable object
 
     public CancellationTokenSource ctsWrite;
+    private void OnEnable()
+    {
+        CursorController.OnMouseEnabled += ToggleCursorControlIcons;
+    }
     private void OnDisable()
     {
+        CursorController.OnMouseEnabled -= ToggleCursorControlIcons;
         ctsWrite?.Cancel();
         ctsWrite = null;
-    }
-    private void Update()
-    {
-        switch (pageType)
-        {
-            case PageType.ColorKey:
-            {
-                for (int i = 0; i < pictureRenderers.Length; i++)
-                {
-                    AtlasRenderer picRenderer = pictureRenderers[i];
-                    colorPicker.OpenColorPicker(picRenderer);
-                    if (ColorPicker.IsHoveringColorPicker) break;
-                }
-
-                colorPicker.CloseColorPicker();
-                colorPicker.SetNewColor();
-            }
-            break;
-        }
     }
     public void Init()
     {
@@ -165,13 +149,10 @@ public class Page : MonoBehaviour
     }
     public void TogglePageContentBottomHalf(bool toggle)
     {
-        if (bottomTextRenderers != null)
-        {
-            for (int i = 0; i < bottomTextRenderers.Length; i++)
-            {
-                bottomTextRenderers[i].enabled = toggle;
-            }
-        }
+        ToggleTextRenderers(playerWriteTextRenderers, toggle, topHalf: false);
+        ToggleTextRenderers(readOnlyTextRenderers, toggle, topHalf: false);
+        ToggleTextRenderers(proceduralTextRenderers, toggle, topHalf: false);
+
         if (bottomRenderers != null)
         {
             for (int i = 0; i < bottomRenderers.Length; i++)
@@ -182,19 +163,32 @@ public class Page : MonoBehaviour
     }
     public void TogglePageContentTopHalf(bool toggle)
     {
-        if (topTextRenderers != null)
-        {
-            for (int i = 0; i < topTextRenderers.Length; i++)
-            {
-                topTextRenderers[i].enabled = toggle;
-            }
-        }
+        ToggleTextRenderers(playerWriteTextRenderers, toggle, topHalf: true);
+        ToggleTextRenderers(readOnlyTextRenderers, toggle, topHalf: true);
+        ToggleTextRenderers(proceduralTextRenderers, toggle, topHalf: true);
 
         if (topRenderers != null)
         {
             for (int i = 0; i < topRenderers.Length; i++)
             {
                 topRenderers[i].enabled = toggle;
+            }
+        }
+    }
+
+    public void ToggleTextRenderers(AtlasTextRenderer[] textRenderers, bool toggle, bool topHalf)
+    {
+        if (textRenderers != null)
+        {
+            for (int i = 0; i < textRenderers.Length; i++)
+            {
+                AtlasTextRenderer renderer = textRenderers[i];
+
+                bool condition = topHalf ? renderer.transform.localPosition.y >= FLIP_LOCAL_POS_Y : renderer.transform.localPosition.y < FLIP_LOCAL_POS_Y;
+                if (condition)
+                {
+                    renderer.enabled = toggle;
+                }
             }
         }
     }
@@ -315,7 +309,7 @@ public class Page : MonoBehaviour
 
             case PageType.ColorKey:
             {
-                if (activePlayerWriteTextRenderer.text == "")
+                if (prevNotepadState == NotepadState.Erasing)
                 {
                     int behaviourLength = (int)Behaviours.Count - 1;
                     Behaviours allBehaviours = (Behaviours)~(1 << behaviourLength);
@@ -337,7 +331,10 @@ public class Page : MonoBehaviour
             {
                 for (int i = 0; i < isPlayerWriteTextPreviewSet.Length; i++)
                 {
-                    isPlayerWriteTextPreviewSet[i] = false;
+                    if (playerWriteTexts[i] == "")
+                    {
+                        isPlayerWriteTextPreviewSet[i] = false;
+                    }
                 }
             }
             playerWriteTextBounds = activePlayerWriteTextRenderer.GetBounds(previewPlayerWriteText);
@@ -346,23 +343,53 @@ public class Page : MonoBehaviour
     }
     public void SetPlayerWriteTextAlphaBottom(float normAmount)
     {
-        for (int i = 0; i < bottomTextRenderers.Length; i++)
+        for (int i = 0; i < playerWriteTextRenderers.Length; i++)
         {
-            AtlasTextRenderer renderer = bottomTextRenderers[i];
-            renderer.SetAppearTextAlpha(normAmount);
+            AtlasTextRenderer renderer = playerWriteTextRenderers[i];
+
+            if (renderer.transform.localPosition.y < FLIP_LOCAL_POS_Y)
+            {
+                if (playerWriteTexts[i] != "") continue;
+
+                renderer.SetAppearTextAlpha(normAmount);
+            }
         }
     }
     public void SetPlayerWriteTextAlphaTop(float normAmount)
     {
-        for (int i = 0; i < topTextRenderers.Length; i++)
+        for (int i = 0; i < playerWriteTextRenderers.Length; i++)
         {
-            AtlasTextRenderer renderer = topTextRenderers[i];
-            renderer.SetAppearTextAlpha(normAmount);
+            AtlasTextRenderer renderer = playerWriteTextRenderers[i];
+
+            if (renderer.transform.localPosition.y >= FLIP_LOCAL_POS_Y)
+            {
+                if (playerWriteTexts[i] != "") continue;
+
+                renderer.SetAppearTextAlpha(normAmount);
+            }
+        }
+    }
+    public void UpdatePage()
+    {
+        switch (pageType)
+        {
+            case PageType.ColorKey:
+            {
+                for (int i = 0; i < pictureRenderers.Length; i++)
+                {
+                    AtlasRenderer picRenderer = pictureRenderers[i];
+                    colorPicker.OpenColorPicker(picRenderer);
+                    if (ColorPicker.IsHoveringColorPicker) break;
+                }
+
+                colorPicker.CloseColorPicker();
+                colorPicker.SetNewColor();
+            }
+            break;
         }
     }
     public void UpdatePreviewPlayerWriteText(bool appear, ref float clock)
     {
-        if (activePlayerWriteText != "") return;
         switch (pageType)
         {
             case PageType.Profile:
@@ -391,7 +418,10 @@ public class Page : MonoBehaviour
         if (exitButton_renderer.flipY != pointDown)
         {
             InvertButton(invert, exitButton_renderer);
-            exitButton_renderer.FlipV(pointDown);
+            if (CursorController.active)
+            {
+                exitButton_renderer.FlipV(pointDown);
+            }
         }
     }
     public void InvertLeftArrowButton(bool invert)
@@ -421,6 +451,24 @@ public class Page : MonoBehaviour
         activePlayerWriteTextRenderer = playerWriteTextRenderers[activePlayerWriteRowIndex];
         previewPlayerWriteText = activePlayerWriteTextRenderer.text;
         activePlayerWriteText = playerWriteTexts[activePlayerWriteRowIndex];
+    }
+    public void ToggleCursorControlIcons()
+    {
+        if (CursorController.active)
+        {
+            exitButton_renderer.UpdateSpriteInputsByIndex(3);
+            paperCornerLeftButtonRenderer?.UpdateSpriteInputsByIndex(4);
+            paperCornerRightButtonRenderer?.UpdateSpriteInputsByIndex(4);
+        }
+        else
+        {
+            exitButton_renderer.UpdateSpriteInputsByIndex(7);
+            paperCornerLeftButtonRenderer?.UpdateSpriteInputsByIndex(10);
+            paperCornerRightButtonRenderer?.UpdateSpriteInputsByIndex(8);
+
+        }
+        paperCornerLeftButtonRenderer?.FlipH(CursorController.active);
+        exitButton_renderer.FlipV(CursorController.active);
     }
     public Bounds GetWritingBounds()
     {

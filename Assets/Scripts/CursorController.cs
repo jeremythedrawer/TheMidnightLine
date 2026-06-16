@@ -1,9 +1,10 @@
+using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
 public class CursorController : MonoBehaviour
 {
-    const float VISIBLE_TIMER = 1f;
+    const float VISIBLE_TIMER = 3f;
     const float MOVE_THRESHOLD = 0.01f;
 
     public PlayerInputsSO playerInputs;
@@ -11,9 +12,10 @@ public class CursorController : MonoBehaviour
     [Header("Generated")]
     public float timer;
     public static Vector3 curWorldPos;
-    public bool active;
-
+    public static bool active;
     public static AtlasRenderer prevRenderer;
+
+    public static event Action OnMouseEnabled;
     private void Start()
     {
         Cursor.visible = false;
@@ -40,13 +42,22 @@ public class CursorController : MonoBehaviour
 
             if (timer > VISIBLE_TIMER)
             {
-                active = false;
+                if (active)
+                {
+                    active = false;
+                    OnMouseEnabled?.Invoke();
+                }
             }
         }
         else
         {
-            timer = 0;
-            active = true;
+            if (!active)
+            {
+                timer = 0;
+                active = true;
+                OnMouseEnabled?.Invoke();
+            }
+
         }
     }
     public static bool IsInsideBounds(Bounds bounds)

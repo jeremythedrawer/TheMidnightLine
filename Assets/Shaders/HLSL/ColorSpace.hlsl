@@ -98,3 +98,17 @@ float3 RotateOKLABHue(float3 oklab, float t)
 
     return float3(oklab.r, newA, newB);
 }
+
+float LinearLightness(float3 linearRGB)
+{
+    float y = (0.2126 * linearRGB.r + 0.7152 * linearRGB.g + 0.0722 * linearRGB.b);
+    
+    if (y <= (216/24389))
+    {
+        return y * (24389 / 27);
+    }
+    else
+    {
+        return (pow(y, 0.3333) * 116 - 16) / 100;
+    }
+}

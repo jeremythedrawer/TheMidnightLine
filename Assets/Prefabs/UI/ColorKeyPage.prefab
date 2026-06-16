@@ -58,7 +58,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.47070312, y: 0.1171875, z: 0.0078125, w: 0.7753906}
+    uvSizeAndPos: {x: 0.47070312, y: 0.1171875, z: 0.40820312, w: 0.87890625}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 1.3388889, y: 0.33333334, z: 1}
     index: 6
@@ -66,7 +66,7 @@ MonoBehaviour:
     m_Center: {x: 300.05844, y: 1.4366666, z: 15.92}
     m_Extent: {x: 0.66944444, y: 0.16666667, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 1.3388889, w: 0.33333334}
-  uvSizeAndPosition: {x: 0.47070312, y: 0.1171875, z: 0.0078125, w: 0.7753906}
+  uvSizeAndPosition: {x: 0.47070312, y: 0.1171875, z: 0.40820312, w: 0.87890625}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0.5}
   boundsOffset: {x: 0.66944444, y: 0.16666667, z: 0}
@@ -644,7 +644,7 @@ Transform:
   m_GameObject: {fileID: 4782239739248836093}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.62697804, y: -1.248, z: -1}
+  m_LocalPosition: {x: -0.545, y: -1.171, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -662,32 +662,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 2
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 0
+  spriteIndex: 12
   flipX: 0
   flipY: 0
-  width: 0
-  height: 0
+  width: 1
+  height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0, y: 0, z: 0}
-    index: 0
+    uvSizeAndPos: {x: 0.072265625, y: 0.072265625, z: 0.3515625, w: 0.8027344}
+    uvPivot: {x: 0.5, y: 0.5}
+    worldSize: {x: 0.20555556, y: 0.20555556, z: 1}
+    index: 12
   bounds:
-    m_Center: {x: 306.23914, y: 0.3864444, z: -32.9}
-    m_Extent: {x: 0.08611111, y: 0.09444444, z: 0.1}
-  worldPivotAndSize: {x: -0, y: -0, z: 0, w: 0}
-  uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
-  scaleAndFlip: {x: 0, y: 0, z: 1, w: 1}
-  custom: {x: 1, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.08611111, y: 0.09444444, z: 0.1}
+    m_Center: {x: 299.455, y: 0.74899995, z: 15.92}
+    m_Extent: {x: 0.10277778, y: 0.10277778, z: 0.1}
+  worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
+  uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.3515625, w: 0.8027344}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 1, y: 0.43, z: 0, w: 0}
+  boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
   - {x: 0.08888889, y: 0, z: 0.30555555, w: 0.1}
@@ -732,8 +732,8 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
+  prevSpriteIndexFlipH: 12
+  prevSpriteIndexFlipV: 12
   isAnimating: 0
   quadCount: 0
 --- !u!1 &5336562191547428120
@@ -876,7 +876,7 @@ Transform:
   m_GameObject: {fileID: 5535953902685461300}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.72402954, y: -2.218, z: -1}
+  m_LocalPosition: {x: 0.669, y: -2.141, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -909,17 +909,17 @@ MonoBehaviour:
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.06640625, y: 0.072265625, z: 0.2578125, w: 0.9238281}
-    uvPivot: {x: 1, y: 0}
+    uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.18888889, y: 0.20555556, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 300.62958, y: -0.1952222, z: 15.92}
+    m_Center: {x: 300.669, y: -0.22100008, z: 15.92}
     m_Extent: {x: 0.094444446, y: 0.10277778, z: 0.1}
-  worldPivotAndSize: {x: -0.18888889, y: -0, z: 0.18888889, w: 0.20555556}
+  worldPivotAndSize: {x: -0.094444446, y: -0.10277778, z: 0.18888889, w: 0.20555556}
   uvSizeAndPosition: {x: 0.06640625, y: 0.072265625, z: 0.2578125, w: 0.9238281}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
-  boundsOffset: {x: -0.094444446, y: 0.10277778, z: 0}
+  boundsOffset: {x: 0, y: 0, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -958,7 +958,7 @@ Transform:
   m_GameObject: {fileID: 5837844341246591369}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.644, y: -2.218, z: -1}
+  m_LocalPosition: {x: -0.572, y: -2.141, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -991,17 +991,17 @@ MonoBehaviour:
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.06640625, y: 0.072265625, z: 0.2578125, w: 0.9238281}
-    uvPivot: {x: 1, y: 0}
+    uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.18888889, y: 0.20555556, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 299.45044, y: -0.1952222, z: 15.92}
+    m_Center: {x: 299.428, y: -0.22100008, z: 15.92}
     m_Extent: {x: 0.094444446, y: 0.10277778, z: 0.1}
-  worldPivotAndSize: {x: -0, y: -0, z: 0.18888889, w: 0.20555556}
+  worldPivotAndSize: {x: -0.094444446, y: -0.10277778, z: 0.18888889, w: 0.20555556}
   uvSizeAndPosition: {x: 0.06640625, y: 0.072265625, z: 0.2578125, w: 0.9238281}
   scaleAndFlip: {x: 1, y: 1, z: -1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.094444446, y: 0.10277778, z: 0}
+  boundsOffset: {x: 0, y: 0, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -1040,7 +1040,7 @@ Transform:
   m_GameObject: {fileID: 6163979868857295327}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.6269746, y: -1.83, z: -1}
+  m_LocalPosition: {x: -0.545, y: -1.757, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1058,32 +1058,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 2
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 0
+  spriteIndex: 14
   flipX: 0
   flipY: 0
-  width: 0
-  height: 0
+  width: 1
+  height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0, y: 0, z: 0}
-    index: 0
+    uvSizeAndPos: {x: 0.072265625, y: 0.072265625, z: 0.52734375, w: 0.8027344}
+    uvPivot: {x: 0.5, y: 0.5}
+    worldSize: {x: 0.20555556, y: 0.20555556, z: 1}
+    index: 14
   bounds:
-    m_Center: {x: 306.23914, y: -0.19555564, z: -32.9}
-    m_Extent: {x: 0.08611111, y: 0.09444444, z: 0.1}
-  worldPivotAndSize: {x: -0, y: -0, z: 0, w: 0}
-  uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
-  scaleAndFlip: {x: 0, y: 0, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 2, w: 0}
-  boundsOffset: {x: 0.08611111, y: 0.09444444, z: 0.1}
+    m_Center: {x: 299.455, y: 0.16299999, z: 15.92}
+    m_Extent: {x: 0.10277778, y: 0.10277778, z: 0.1}
+  worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
+  uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.52734375, w: 0.8027344}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 1, w: 0}
+  boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
   - {x: 0.08888889, y: 0, z: 0.30555555, w: 0.1}
@@ -1128,8 +1128,8 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
+  prevSpriteIndexFlipH: 14
+  prevSpriteIndexFlipV: 14
   isAnimating: 0
   quadCount: 0
 --- !u!1 &6696641624208924025
@@ -1158,7 +1158,7 @@ Transform:
   m_GameObject: {fileID: 6696641624208924025}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.6269746, y: -1.534, z: -1}
+  m_LocalPosition: {x: -0.545, y: -1.428, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1176,32 +1176,32 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 2
+  rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 0
+  spriteIndex: 13
   flipX: 0
   flipY: 0
-  width: 0
-  height: 0
+  width: 1
+  height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0, y: 0, z: 0}
-    index: 0
+    uvSizeAndPos: {x: 0.072265625, y: 0.072265625, z: 0.43945312, w: 0.8027344}
+    uvPivot: {x: 0.5, y: 0.5}
+    worldSize: {x: 0.20555556, y: 0.20555556, z: 1}
+    index: 13
   bounds:
-    m_Center: {x: 306.23914, y: 0.10044436, z: -32.9}
-    m_Extent: {x: 0.08611111, y: 0.09444444, z: 0.1}
-  worldPivotAndSize: {x: -0, y: -0, z: 0, w: 0}
-  uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
-  scaleAndFlip: {x: 0, y: 0, z: 1, w: 1}
+    m_Center: {x: 299.455, y: 0.49199998, z: 15.92}
+    m_Extent: {x: 0.10277778, y: 0.10277778, z: 0.1}
+  worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
+  uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.43945312, w: 0.8027344}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 1, z: 0, w: 0}
-  boundsOffset: {x: 0.08611111, y: 0.09444444, z: 0.1}
+  boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
   - {x: 0.08888889, y: 0, z: 0.30555555, w: 0.1}
@@ -1246,8 +1246,8 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
+  prevSpriteIndexFlipH: 13
+  prevSpriteIndexFlipV: 13
   isAnimating: 0
   quadCount: 0
 --- !u!1 &8555246787508902657
@@ -1340,9 +1340,117 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7380519998003774169}
     m_Modifications:
+    - target: {fileID: 122945413582333085, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.682
+      objectReference: {fileID: 0}
+    - target: {fileID: 122945413582333085, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 1.187
+      objectReference: {fileID: 0}
+    - target: {fileID: 122945413582333085, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 251319395118152068, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 251319395118152068, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.919
+      objectReference: {fileID: 0}
+    - target: {fileID: 251319395118152068, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 256646859580533124, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.138
+      objectReference: {fileID: 0}
+    - target: {fileID: 256646859580533124, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 1.187
+      objectReference: {fileID: 0}
+    - target: {fileID: 256646859580533124, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 1072431850739375077, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 1072431850739375077, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 1.449
+      objectReference: {fileID: 0}
+    - target: {fileID: 1072431850739375077, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
+      objectReference: {fileID: 0}
     - target: {fileID: 1383577117877000667, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
       propertyPath: m_Name
       value: ColorPallette
+      objectReference: {fileID: 0}
+    - target: {fileID: 3105534322397113469, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 3105534322397113469, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 1.187
+      objectReference: {fileID: 0}
+    - target: {fileID: 3105534322397113469, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832576697433141566, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.41
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832576697433141566, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 1.717
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832576697433141566, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 5112357865220533674, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.682
+      objectReference: {fileID: 0}
+    - target: {fileID: 5112357865220533674, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.919
+      objectReference: {fileID: 0}
+    - target: {fileID: 5112357865220533674, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 5246750928008050986, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.953
+      objectReference: {fileID: 0}
+    - target: {fileID: 5246750928008050986, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.919
+      objectReference: {fileID: 0}
+    - target: {fileID: 5246750928008050986, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 6235792729794440128, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.138
+      objectReference: {fileID: 0}
+    - target: {fileID: 6235792729794440128, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.919
+      objectReference: {fileID: 0}
+    - target: {fileID: 6235792729794440128, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
       objectReference: {fileID: 0}
     - target: {fileID: 6247253459606769700, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1383,6 +1491,90 @@ PrefabInstance:
     - target: {fileID: 6247253459606769700, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 6319296025456234023, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.953
+      objectReference: {fileID: 0}
+    - target: {fileID: 6319296025456234023, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 1.449
+      objectReference: {fileID: 0}
+    - target: {fileID: 6319296025456234023, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 6381135493218518059, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.682
+      objectReference: {fileID: 0}
+    - target: {fileID: 6381135493218518059, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 1.449
+      objectReference: {fileID: 0}
+    - target: {fileID: 6381135493218518059, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 6930496782516411602, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.138
+      objectReference: {fileID: 0}
+    - target: {fileID: 6930496782516411602, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 1.717
+      objectReference: {fileID: 0}
+    - target: {fileID: 6930496782516411602, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 7535542167871969874, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.138
+      objectReference: {fileID: 0}
+    - target: {fileID: 7535542167871969874, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 1.449
+      objectReference: {fileID: 0}
+    - target: {fileID: 7535542167871969874, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 7801746645574343777, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.953
+      objectReference: {fileID: 0}
+    - target: {fileID: 7801746645574343777, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 1.717
+      objectReference: {fileID: 0}
+    - target: {fileID: 7801746645574343777, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 7986750414561724611, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.953
+      objectReference: {fileID: 0}
+    - target: {fileID: 7986750414561724611, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 1.187
+      objectReference: {fileID: 0}
+    - target: {fileID: 7986750414561724611, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269033451537971587, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 298.682
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269033451537971587, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 1.717
+      objectReference: {fileID: 0}
+    - target: {fileID: 8269033451537971587, guid: 2ab9dd162b6ad2544b3efda2df0d70de, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 13.67
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

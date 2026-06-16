@@ -463,6 +463,7 @@ public class Notepad : MonoBehaviour
                     activePage.gameObject.SetActive(false);
                     activePageIndex++;
                     activePage = pages[activePageIndex];
+                    activePage.ToggleCursorControlIcons();
                     activePage.SetPageDepth(leftHandWorldDepthFront + 2);
                     flipToggle = 0;
 
@@ -482,6 +483,7 @@ public class Notepad : MonoBehaviour
                         activePage.gameObject.SetActive(false);
                         activePageIndex--;
                         activePage = pages[activePageIndex];
+                        activePage.ToggleCursorControlIcons();
 
                         flipToggle = 0;
 
@@ -617,42 +619,7 @@ public class Notepad : MonoBehaviour
             break;
             case NotepadState.Stationary:
             {
-                if (activePage.playerWriteTextRenderers.Length > 0 && !atOffCameraPos)
-                {
-                    float dist = (leftHand_renderer.transform.localPosition - leftHandTargetPos).sqrMagnitude;
-
-                    if (dist < PENCIL_DISTANCE_THRESHOLD * PENCIL_DISTANCE_THRESHOLD)
-                    {
-                        leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[rotatePencil_clip.keyframeStartIndex].sprite);
-                        curWritingBounds = activePage.GetWritingBounds();
-                        Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
-                        leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
-
-                        atOffCameraPos = true;
-                    }
-                }
-                else
-                {
-                    if (ColorPicker.EnteredColorPicker || ColorPicker.IsHoveringColorPicker)
-                    {
-                        leftHandTargetPos = leftHandOffScreenPos;
-                    }
-                    else if (ColorPicker.ClosedColorPicker)
-                    {
-                        Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
-                        leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
-                    }
-                    else if (playerInputs.numpad != -1)
-                    {
-                        activePage.SwitchActivePLayerWriteTextRenderer(playerInputs.numpad);
-                        curWritingBounds = activePage.GetWritingBounds();
-                        Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
-                        leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
-                    }
-                }
-
-
-                leftHand_renderer.transform.localPosition = Vector3.Lerp(leftHand_renderer.transform.localPosition, leftHandTargetPos, Time.deltaTime * LEFTHAND_DAMPING);
+                HandleStationaryLeftHandMove();
 
                 if (playerInputs.notepadPreviewAnswerAndFlip.x != 0)
                 {
@@ -660,6 +627,7 @@ public class Notepad : MonoBehaviour
                     appearTextClock = APPEAR_TEXT_TIME;
                 }
 
+                activePage.UpdatePage();
                 activePage.UpdatePreviewPlayerWriteText(appear: true, ref appearTextClock);
 
                 if (CursorController.IsInsideBounds(activePage.exitButton_renderer.bounds))
@@ -714,6 +682,7 @@ public class Notepad : MonoBehaviour
                 }
             }
             break;
+
             case NotepadState.Revealing:
             {
                 revealClock += Time.deltaTime;
@@ -733,6 +702,44 @@ public class Notepad : MonoBehaviour
             }
             break;
         }
+    }
+    private void HandleStationaryLeftHandMove()
+    {
+        if (activePage.playerWriteTextRenderers.Length > 0 && !atOffCameraPos)
+        {
+            float dist = (leftHand_renderer.transform.localPosition - leftHandTargetPos).sqrMagnitude;
+
+            if (dist < PENCIL_DISTANCE_THRESHOLD * PENCIL_DISTANCE_THRESHOLD)
+            {
+                leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[rotatePencil_clip.keyframeStartIndex].sprite);
+                curWritingBounds = activePage.GetWritingBounds();
+                Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
+                leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
+
+                atOffCameraPos = true;
+            }
+        }
+        else
+        {
+            if (ColorPicker.EnteredColorPicker || ColorPicker.IsHoveringColorPicker)
+            {
+                leftHandTargetPos = leftHandOffScreenPos;
+            }
+            else if (ColorPicker.ClosedColorPicker)
+            {
+                Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
+                leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
+            }
+            else if (playerInputs.numpad != -1)
+            {
+                activePage.SwitchActivePLayerWriteTextRenderer(playerInputs.numpad);
+                curWritingBounds = activePage.GetWritingBounds();
+                Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
+                leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
+            }
+        }
+
+        leftHand_renderer.transform.localPosition = Vector3.Lerp(leftHand_renderer.transform.localPosition, leftHandTargetPos, Time.deltaTime * LEFTHAND_DAMPING);
     }
     private void CreateNPCProfiles()
     {
