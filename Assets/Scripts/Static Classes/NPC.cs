@@ -1,9 +1,10 @@
 using System;
+using System.Collections.Generic;
+using UnityEngine;
 using UnityEngine.VFX;
 using static Atlas;
 public static class NPC
 {
-    public const float ADJUST_COLOR_TIME = 0.5f;
     public const float MIN_START_MOVE_TIME = 0.3f;
     public const float MAX_START_MOVE_TIME = 1f;
     public enum NPCState
@@ -37,14 +38,7 @@ public static class NPC
         ToStandAtStation,
         ToSlideDoor,
         ToExitStation,
-    }
-
-    public enum NPCMark
-    {
-        None,
-        TicketCheck,
-        Suspected,
-        RuledOut,
+        AtSmokerRoom,
     }
     [Flags] public enum Behaviours
     {

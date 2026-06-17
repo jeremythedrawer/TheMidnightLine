@@ -719,13 +719,13 @@ public class Notepad : MonoBehaviour
                 atOffCameraPos = true;
             }
         }
-        else
+        else if (activePage.colorPicker != null)
         {
-            if (ColorPicker.EnteredColorPicker || ColorPicker.IsHoveringColorPicker)
+            if (activePage.colorPicker.entered || activePage.colorPicker.isHovering)
             {
                 leftHandTargetPos = leftHandOffScreenPos;
             }
-            else if (ColorPicker.ClosedColorPicker)
+            else if (activePage.colorPicker.finishedClosing)
             {
                 Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
                 leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
@@ -737,6 +737,13 @@ public class Notepad : MonoBehaviour
                 Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
                 leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
             }
+        }
+        else if (playerInputs.numpad != -1)
+        {
+            activePage.SwitchActivePLayerWriteTextRenderer(playerInputs.numpad);
+            curWritingBounds = activePage.GetWritingBounds();
+            Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
+            leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
         }
 
         leftHand_renderer.transform.localPosition = Vector3.Lerp(leftHand_renderer.transform.localPosition, leftHandTargetPos, Time.deltaTime * LEFTHAND_DAMPING);

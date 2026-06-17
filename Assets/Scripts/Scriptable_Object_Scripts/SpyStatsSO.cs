@@ -4,6 +4,9 @@ using static Spy;
 [CreateAssetMenu(fileName = "SpyStats_SO", menuName = "Midnight Line SOs / Spy Stats SO")]
 public class SpyStatsSO : ScriptableObject
 {
+
+    public Carriage curCarriage;
+
     public Vector2 moveVelocity;
     public float targetXVelocity;
     public SpyState curState;

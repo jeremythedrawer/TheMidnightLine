@@ -46,8 +46,6 @@ Shader "Custom/s_atlasStandard"
             float3 _MainColor;
             float _DayNight;
             float _DayNightFactor;
-            float4 _BoundsMin;
-            float4 _BoundsMax;
             float4 _TrainBoundsMin;
             float4 _TrainBoundsSize;
 

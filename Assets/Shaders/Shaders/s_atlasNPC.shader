@@ -36,18 +36,24 @@ Shader "Custom/s_atlasNPC"
                 float4 uvSizeAndPos : TEXCOORD1;
                 float4 scaleAndFlip: TEXCOORD2;
                 float4 custom : TEXCOORD3;
+                float3 worldPos : TEXCOORD4;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
             
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
+            TEXTURE2D(_CarriageBoundsTexture);
+            SAMPLER(sampler_CarriageBoundsTexture);
 
             float3 _MainColor;
 
             float3 _ColorKey0;
             float3 _ColorKey1;
             float3 _ColorKey2;
+
+            float4 _TrainBoundsMin;
+            float4 _TrainBoundsSize;
 
             Varyings vert(Attributes v)
             {
@@ -73,6 +79,7 @@ Shader "Custom/s_atlasNPC"
                 o.uvSizeAndPos = spriteData.uvSizeAndPos;
                 o.scaleAndFlip = spriteData.scaleAndFlip;
                 o.custom = spriteData.custom;
+                o.worldPos = worldPos;
                 return o;
             }
 
@@ -91,11 +98,21 @@ Shader "Custom/s_atlasNPC"
                 i.uv += uvPos;
                 
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+                
+                uint colorKeyMask = (uint)i.custom.x;
 
-                half alphaValue = (i.custom.a * 0.75);
-                half alpha = BayerX8(color.a - alphaValue, i.positionHCS.xy);
+                uint colKey0 = (colorKeyMask & (1 << 0)) != 0;
+                uint colKey1 = (colorKeyMask & (1 << 1)) != 0;
+                uint colKey2 = (colorKeyMask & (1 << 2)) != 0;
+
+                float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;
+                half4 carriageSDF = SAMPLE_TEXTURE2D(_CarriageBoundsTexture, sampler_CarriageBoundsTexture, worldToTrain);
+                float bayer = BayerX8(carriageSDF + 0.5,  i.positionHCS.y);
+                float outside = max(step(worldToTrain.x, 0.0), step(1.0, worldToTrain.x));
+                outside = max(outside,max(step(worldToTrain.y, 0.0),step(1.0, worldToTrain.y)));
+                outside = max(outside, step(5, i.worldPos.z));
+                float alpha = max(bayer, outside) * color.a;
                 clip(alpha - 0.001);
-
                 return half4 (color.rgb, 1);
             }
             ENDHLSL

@@ -15,10 +15,6 @@ public class NPCManager : MonoBehaviour
 
     public static Dictionary<VisualEffect, Queue<VisualEffect>> glyph_poolsDict;
     public static AtlasTextRenderer stationNameTag;
-    private void Awake()
-    {
-
-    }
     private void Start()
     {
         glyph_poolsDict = new Dictionary<VisualEffect, Queue<VisualEffect>>();

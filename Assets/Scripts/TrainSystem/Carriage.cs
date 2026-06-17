@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using static NPC;
@@ -30,16 +31,30 @@ public class Carriage : MonoBehaviour
     public CarriageMap map;
 
     [Header("Generated")]
+    public Transform[] wheelTransforms;
+    
+    public CancellationTokenSource ctsFade;
+
+    public List<NPCBrain> curNPCs;
+
+    public SeatData seatData;
+    
+    public SmokersRoomData[] smokersRoomData;
+
+    public NPCQueue seatQueue;
+    
+    public Bounds totalBounds;
+    
+    public int seatAmount;
+
     public float wheelCircumference;
     public float alpha;
-    public SeatData seatData;
-    public SmokersRoomData[] smokersRoomData;
-    public Transform[] wheelTransforms;
-    public CancellationTokenSource ctsFade;
     public float prevMeters;
-    public int seatAmount;
-    public NPCQueue seatQueue;
-    public Bounds totalBounds;
+
+    private void Start()
+    {
+        curNPCs = new List<NPCBrain>();
+    }
     private void Update()
     {
         ProcessSeatQueue();
@@ -206,6 +221,14 @@ public class Carriage : MonoBehaviour
             totalBounds.Encapsulate(smokingRoomColliders[i].bounds);
         }
         totalBounds.center = new Vector3(totalBounds.center.x + offset, totalBounds.center.y, totalBounds.center.z);
+    }
+    public void AddNPC(NPCBrain npc)
+    {
+        curNPCs.Add(npc);
+    }
+    public void RemoveNPC(NPCBrain npc)
+    {
+        curNPCs.Remove(npc);
     }
     private async UniTask MovingDown()
     {

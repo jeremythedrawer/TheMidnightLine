@@ -29,7 +29,6 @@ public class SpyBrain : MonoBehaviour
     public SlideDoors slideDoors;
     public HingedDoor smokingRoomDoor;
     public GangwayDoor curGangwayDoor;
-    public Carriage curCarriage;
     public CarriageMap curCarriageMap;
     public NPCBrain npcTicketCheck;
     public AtlasClip curClip;
@@ -440,13 +439,13 @@ public class SpyBrain : MonoBehaviour
 
                             if (insideCarriageHit.collider != null)
                             {
-                                curCarriage = TrainController.GetCarriage(insideCarriageHit.collider);
-                                curCarriage.MoveDown();
+                                stats.curCarriage = TrainController.GetCarriage(insideCarriageHit.collider);
+                                stats.curCarriage.MoveDown();
                             }
                             stats.curGroundLayer = layerSettings.trainLayers.ground;
                             stats.curWallLayer = layerSettings.trainWallLayers;
                             stats.curLocationState = LocationState.Carriage;
-                            stats.curLocationBounds = curCarriage.totalBounds;
+                            stats.curLocationBounds = stats.curCarriage.totalBounds;
                             rigidBody.includeLayers = layerSettings.trainMask;
 
                             atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.frontMin);
@@ -508,6 +507,7 @@ public class SpyBrain : MonoBehaviour
                         if (curGangwayDoor.isLeftOfCarriage)
                         {
                             curGangwayDoor.carriage.MoveDown();
+                            stats.curCarriage = curGangwayDoor.carriage;
                         }
                         else
                         {
@@ -522,14 +522,14 @@ public class SpyBrain : MonoBehaviour
     }
     private void LookAtCarriageMap()
     {
-        if (curCarriage == null) return;
+        if (stats.curCarriage == null) return;
 
         if (!checkingCarriageMap)
         {
             RaycastHit2D carriageMapHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.carriageMap);
             if (carriageMapHit.collider != null)
             {
-                curCarriageMap= curCarriage.map;
+                curCarriageMap= stats.curCarriage.map;
                 curCarriageMap.InteractEffect();
                 checkingCarriageMap = true;
             }
@@ -543,7 +543,7 @@ public class SpyBrain : MonoBehaviour
     {
         if (stats.signedNotepad)
         {
-            curCarriage.MoveUp();
+            stats.curCarriage.MoveUp();
         }
     }
     private void Flip(bool flip)

@@ -48,7 +48,6 @@ public class NPCBrain : MonoBehaviour
     public float move;
 
     public float alphaClock;
-    public float hoverClock;
 
     public Behaviours curBehaviour;
     public NPCProfile profile;
@@ -56,7 +55,6 @@ public class NPCBrain : MonoBehaviour
         
     public NPCState curState;
     public NPCPath curPath;
-    public NPCMark curMark;
     public Role role;
 
     public int smokerRoomIndex;
@@ -81,10 +79,11 @@ public class NPCBrain : MonoBehaviour
     public int disembarkTrainQueueIndex;
 
     public bool isClicked;
+
+
     private void OnEnable()
     {
         gameEventData.OnStationArrival.RegisterListener(PrepareToBoardTrain);
-
         gameEventData.OnStationSpawn.RegisterListener(PrepareToDisembarkTrain);
     }
     private void OnDisable()
@@ -109,8 +108,6 @@ public class NPCBrain : MonoBehaviour
         ChooseStates();
         UpdateStates();
         UpdatePath();
-        AdjustAlpha();
-        RespondToCursor();
     }
     private void FixedUpdate()
     {
@@ -296,7 +293,6 @@ public class NPCBrain : MonoBehaviour
             case NPCState.TicketCheck:
             {
                 targetDist = targetXPos - transform.position.x;
-                AdjustTicketCheckColor();
                 ticketHasBeenChecked = true;
 
             }
@@ -433,6 +429,7 @@ public class NPCBrain : MonoBehaviour
                 {
                     RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
                     curCarriage = TrainController.GetCarriage(carriageHit.collider);
+                    curCarriage.AddNPC(this);
                 }
                 queuedForSlideDoor = false;
                 behaving = false;
@@ -494,7 +491,7 @@ public class NPCBrain : MonoBehaviour
                     seatPosIndex = int.MaxValue;
                 }
                 if (queuedForSeat) curCarriage.RemoveFromSeatQueue(this); // To prevent them from going back to the chair if they are queued
-
+                SetStandingDepthInTrain();
                 if (curCarriage.smokersRoomData.Length > 1 && curCarriage.smokersRoomData[1].npcCount < curCarriage.smokersRoomData[0].npcCount) // selected smoker room is based on which room has less npcs
                 {
                     smokerRoomIndex = 1;
@@ -505,9 +502,14 @@ public class NPCBrain : MonoBehaviour
                 }
 
                 curCarriage.smokersRoomData[smokerRoomIndex].npcCount++;
-                SetStandingDepthInTrain();
                 targetXPos = UnityEngine.Random.Range(curCarriage.smokersRoomData[smokerRoomIndex].minXPos, curCarriage.smokersRoomData[smokerRoomIndex].maxXPos);
                 targetDist = targetXPos - transform.position.x;
+            }
+            break;
+
+            case NPCPath.AtSmokerRoom:
+            {
+                SetStandingDepthInTrain();
             }
             break;
 
@@ -546,202 +548,6 @@ public class NPCBrain : MonoBehaviour
 
         }
     }
-    private void AdjustAlpha()
-    {
-        if ((spyStats.curGroundLayer != layerSettings.trainLayers.ground || !boardingStation.isFrontOfTrain) && alphaClock >= ADJUST_COLOR_TIME) return;
-        
-        if (transform.position.z < spyStats.curWorldPos.z && transform.position.x > spyStats.curLocationBounds.min.x && transform.position.x < spyStats.curLocationBounds.max.x)
-        {
-            if (alphaClock < ADJUST_COLOR_TIME)
-            {
-                alphaClock += Time.deltaTime;
-                float t = alphaClock / ADJUST_COLOR_TIME;
-                atlasRenderer.custom.w = t;
-            }
-        }
-        else
-        {
-            if (alphaClock > 0)
-            {
-                alphaClock -= Time.deltaTime;
-                float t = alphaClock / ADJUST_COLOR_TIME;
-                atlasRenderer.custom.w = t;
-            }
-        }
-    }
-    private void RespondToCursor()
-    {
-        if (!onTrain) return;
-
-        if (CursorController.IsInsideBounds(atlasRenderer.bounds))
-        {
-            if (hoverClock < ADJUST_COLOR_TIME)
-            {
-                hoverClock += Time.deltaTime;
-                float t = hoverClock / ADJUST_COLOR_TIME;
-
-                if (ticketHasBeenChecked)
-                {
-                    int charCount = Mathf.FloorToInt(t * disembarkingStation.stationName.Length);
-                    charCount = Mathf.Clamp(charCount, 0, disembarkingStation.stationName.Length);
-                    string curStationNameText = disembarkingStation.stationName.Substring(0, charCount);
-                    NPCManager.stationNameTag.SetText(curStationNameText);
-                }
-
-                switch(curMark)
-                {
-                    case NPCMark.Suspected:
-                    {
-                        atlasRenderer.custom.y = 1 - (t * 0.5f);
-                        atlasRenderer.custom.z = t * 0.5f;
-                    }
-                    break;
-
-                    case NPCMark.RuledOut:
-                    {
-                        atlasRenderer.custom.z = 1 - (t * 0.5f);
-                        atlasRenderer.custom.y = t * 0.5f;
-                    }
-                    break;
-
-                    case NPCMark.None:
-                    {
-                        atlasRenderer.custom.y = t * 0.5f;
-                        atlasRenderer.custom.z = t * 0.5f;
-
-                    }
-                    break;
-                }
-            }
-
-            if (playerInputs.mouseLeftDown)
-            {
-                isClicked = true;
-
-                if (curMark != NPCMark.Suspected)
-                {
-                    curMark = NPCMark.Suspected;
-                    atlasRenderer.custom.y = 1;
-                    atlasRenderer.custom.z = 0;
-                }
-                else
-                {
-                    curMark = NPCMark.None;
-                    atlasRenderer.custom.y = 0;
-                    atlasRenderer.custom.z = 0;
-                }
-            }
-            else if (playerInputs.mouseRightDown)
-            {
-                isClicked = true;
-
-                if (curMark != NPCMark.RuledOut)
-                {
-                    curMark = NPCMark.RuledOut;
-                    atlasRenderer.custom.z = 1;
-                    atlasRenderer.custom.y = 0;
-                }
-                else
-                {
-                    curMark = NPCMark.None;
-                    atlasRenderer.custom.y = 0;
-                    atlasRenderer.custom.z = 0;
-                }
-            }
-
-            if (ticketHasBeenChecked)
-            {
-                NPCManager.stationNameTag.transform.position = new Vector3(atlasRenderer.bounds.center.x, atlasRenderer.bounds.max.y, 0);
-            }
-        }
-        else if (hoverClock > 0)
-        {
-            hoverClock -= Time.deltaTime;
-            float t = hoverClock / ADJUST_COLOR_TIME;
-
-            if (ticketHasBeenChecked)
-            {
-                int charCount = Mathf.FloorToInt(t * disembarkingStation.stationName.Length);
-                charCount = Mathf.Clamp(charCount, 0, disembarkingStation.stationName.Length);
-
-                string curStationNameText = disembarkingStation.stationName.Substring(0, charCount);
-
-                NPCManager.stationNameTag.SetText(curStationNameText);
-                NPCManager.stationNameTag.transform.position = new Vector3(atlasRenderer.bounds.center.x, atlasRenderer.bounds.max.y, 0);
-            }
-
-            switch (curMark)
-            {
-                case NPCMark.Suspected:
-                {
-                    if (isClicked)
-                    {
-                        atlasRenderer.custom.y = 1;
-                        atlasRenderer.custom.z = 0;
-                    }
-                    else
-                    {
-                        atlasRenderer.custom.y = 1 - (t * 0.5f);
-                        atlasRenderer.custom.z = t * 0.5f;
-                    }
-                }
-                break;
-
-                case NPCMark.RuledOut:
-                {
-                    if (isClicked)
-                    {
-                        atlasRenderer.custom.z = 1;
-                        atlasRenderer.custom.y = 0;
-
-                    }
-                    else
-                    {
-                        atlasRenderer.custom.z = 1 - (t * 0.5f);
-                        atlasRenderer.custom.y = t * 0.5f;
-                    }
-                }
-                break;
-
-                case NPCMark.None:
-                {
-                    if (isClicked)
-                    {
-                        atlasRenderer.custom.y = 0;
-                        atlasRenderer.custom.z = 0;
-                    }
-                    else
-                    {
-                        atlasRenderer.custom.y = t * 0.5f;
-                        atlasRenderer.custom.z = t * 0.5f;
-                    }
-
-                }
-                break;
-            }
-        }
-        else if (isClicked)
-        {
-            isClicked = false;
-        }
-    }
-    private void AdjustTicketCheckColor()
-    {
-        AdjustingTicketCheckColor().Forget();
-    }
-    private async UniTask AdjustingTicketCheckColor()
-    {
-        float elapsed = 0;
-
-        while (elapsed < ADJUST_COLOR_TIME)
-        {
-            elapsed += Time.deltaTime;
-            await UniTask.Yield();
-            atlasRenderer.custom.x = elapsed / ADJUST_COLOR_TIME;
-        }
-
-        atlasRenderer.custom.x = 1;
-    }
     public void BoardTrain()
     {
         transform.SetParent(curCarriage.transform, true);
@@ -759,6 +565,7 @@ public class NPCBrain : MonoBehaviour
         atlasRenderer.UpdateDepthRealtime((int)stationPlatform.transform.position.z);
         rigidBody.includeLayers = layerSettings.stationMask;
         onTrain = false;
+        curCarriage.RemoveNPC(this);
         SetPath(NPCPath.ToExitStation);
     }
     private void PrepareToDisembarkTrain()
@@ -845,6 +652,12 @@ public class NPCBrain : MonoBehaviour
             break;
 
             case NPCPath.ToSmokerRoom:
+            {
+                NPCMotion standingMotion = RandomIdleMotion(NPCMotion.StandingBlinking, NPCMotion.StandingBreathing);
+                SetPath(NPCPath.AtSmokerRoom);
+                curClip = atlas.clipDict[(int)standingMotion];
+            }
+            break;
             case NPCPath.ToStandInTrain:
             {
                 NPCMotion standingMotion = RandomIdleMotion(NPCMotion.StandingBlinking, NPCMotion.StandingBreathing);

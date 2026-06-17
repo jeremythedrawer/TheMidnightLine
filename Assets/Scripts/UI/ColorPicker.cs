@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System.Threading;
 using UnityEngine;
 public class ColorPicker : MonoBehaviour
 {
@@ -13,23 +15,23 @@ public class ColorPicker : MonoBehaviour
     public Vector2[] openColorRendererPositions;
 
     public float openClock;
-    public float openWidth;
-    public float openHeight;
-    public Vector3 openLocalPos;
-    public Vector3 closeLocalPos;
-    public Vector3 curLocalPos;
+    public float openSpriteWidth;
+    public float openSpriteHeight;
+    public float curSpriteWidth;
+    public float curSpriteHeight;
 
-    public float curWidth;
-    public float curHeight;
-
+    public Vector3 openWorldSize;
+    public Vector3 openWorldPos;
+    public Vector3 closeWorldPos;
+    public Vector3 curWorldPos;
     public Vector3 closeColorRendererPosition;
 
-    public static bool IsHoveringColorPicker;
-    public static bool EnteredColorPicker;
-    public static bool ClosedColorPicker;
-
     public bool isHovering;
+    public bool entered;
+    public bool finishedOpening;
+    public bool finishedClosing;
     public bool isClosed;
+
     private void Start()
     {
         SetSelectableColors();
@@ -48,8 +50,7 @@ public class ColorPicker : MonoBehaviour
         Shader.SetGlobalColor("_WhiteColor", colorsSO.whiteColor);
         Shader.SetGlobalFloat("_DayNightFactor", colorsSO.dayNightFactor);
 
-        isHovering = IsHoveringColorPicker;
-        isClosed = ClosedColorPicker;
+        isClosed = finishedClosing;
 
 #endif
         Shader.SetGlobalFloat("_DayNight", colorsSO.dayNight);
@@ -64,9 +65,9 @@ public class ColorPicker : MonoBehaviour
     }
     public void SetOpenPosAndSize()
     {
-        openWidth = palletteRenderer.width;
-        openHeight = palletteRenderer.height;
-        openLocalPos.x = palletteRenderer.transform.localPosition.x;
+        openSpriteWidth = palletteRenderer.width;
+        openWorldSize = palletteRenderer.GetBounds().size;
+        openSpriteHeight = palletteRenderer.height;
 
         openColorRendererPositions = new Vector2[colorRenderers.Length];
         
@@ -78,9 +79,9 @@ public class ColorPicker : MonoBehaviour
         AtlasRenderer lastColorRenderer = colorRenderers[colorRenderers.Length - 1];
         closeColorRendererPosition = new Vector3(0, lastColorRenderer.transform.localPosition.y, lastColorRenderer.transform.localPosition.z);
 
-        closeLocalPos.z = palletteRenderer.transform.localPosition.z;
-        openLocalPos.z = palletteRenderer.transform.localPosition.z;
-        curLocalPos.z = palletteRenderer.transform.localPosition.z;
+        closeWorldPos.z = palletteRenderer.transform.position.z;
+        openWorldPos.z = palletteRenderer.transform.position.z;
+        curWorldPos.z = palletteRenderer.transform.position.z;
     }
     public void ToggleColorPicker(bool toggle, AtlasRenderer renderer = null)
     {
@@ -92,14 +93,17 @@ public class ColorPicker : MonoBehaviour
         if (renderer != null)
         {
             selectedRenderer = renderer;
-            Vector3 paletteBoundsLocalPos = palletteRenderer.transform.parent.InverseTransformPoint(selectedRenderer.bounds.min);
 
-            closeLocalPos.x = paletteBoundsLocalPos.x;
-            closeLocalPos.y = paletteBoundsLocalPos.y; 
+            Bounds selectedRendBounds = selectedRenderer.GetBounds();
 
-            openLocalPos.y = paletteBoundsLocalPos.y;
-            curLocalPos.y = paletteBoundsLocalPos.y;
-            palletteRenderer.transform.localPosition = curLocalPos;
+            closeWorldPos.x = selectedRendBounds.min.x;
+            closeWorldPos.y = selectedRendBounds.max.y;
+
+            openWorldPos.x = closeWorldPos.x - openWorldSize.x;
+            openWorldPos.y = closeWorldPos.y;
+            curWorldPos.y = closeWorldPos.y;
+
+            palletteRenderer.transform.localPosition = curWorldPos;
         }
         else
         {
@@ -107,27 +111,28 @@ public class ColorPicker : MonoBehaviour
         }
 
     }
-    public void OpenColorPicker(AtlasRenderer rend)
+    public void UpdateOpen(AtlasRenderer rend)
     {
         if (CursorController.EnteredBounds(rend))
         {
             ToggleColorPicker(true, rend);
-            EnteredColorPicker = true;
+            entered = true;
+            finishedOpening = false;
         }
-        else if (selectedRenderer != null && (CursorController.IsInsideBounds(selectedRenderer.bounds) || CursorController.IsInsideBounds(palletteRenderer.GetBounds())) && openClock < OPEN_TIME)
+        else if (openClock < OPEN_TIME)
         {
-            IsHoveringColorPicker = true;
-            EnteredColorPicker = false;
+            isHovering = true;
+            entered = false;
             openClock += Time.deltaTime;
             float t = openClock / OPEN_TIME;
             if (t < 0.5)
             {
                 float easeOutT = 1 - Mathf.Pow(1 - t * 2, 5);
-                curWidth = openWidth * easeOutT;
-                curLocalPos.x = Mathf.Lerp(closeLocalPos.x, openLocalPos.x, easeOutT);
+                curSpriteWidth = openSpriteWidth * easeOutT;
+                curWorldPos.x = Mathf.Lerp(closeWorldPos.x, openWorldPos.x, easeOutT);
 
-                palletteRenderer.transform.localPosition = curLocalPos;
-                palletteRenderer.width = curWidth;
+                palletteRenderer.transform.position = curWorldPos;
+                palletteRenderer.width = curSpriteWidth;
                 palletteRenderer.UpdateSliceSpriteInputsSelf();
                 for (int i = 0; i < colorRenderers.Length; i++)
                 {
@@ -138,8 +143,8 @@ public class ColorPicker : MonoBehaviour
             else
             {
                 float easOutT = 1 - Mathf.Pow(1 - (t - 0.5f) * 2, 5);
-                curHeight = openHeight * easOutT;
-                palletteRenderer.height = curHeight;
+                curSpriteHeight = Mathf.Lerp(0.5f, openSpriteHeight, easOutT);
+                palletteRenderer.height = curSpriteHeight;
                 palletteRenderer.UpdateSliceSpriteInputsSelf();
 
                 for (int i = 0; i < colorRenderers.Length; i++)
@@ -148,6 +153,10 @@ public class ColorPicker : MonoBehaviour
                     colorRenderers[i].transform.localPosition = new Vector3(openColorRendererPositions[i].x, posY, closeColorRendererPosition.z);
                 }
             }
+        }
+        else if (openClock >= OPEN_TIME && !finishedOpening)
+        {
+            finishedOpening = true;
         }
     }
     public void SetNewColor()
@@ -162,66 +171,62 @@ public class ColorPicker : MonoBehaviour
                 {
                     Color selectedColor = colorsSO.selectableColors[i].linear;
                     selectedRenderer.custom = selectedColor;
-                    Shader.SetGlobalColor("__ColorKey" + i, selectedColor);
+                    Shader.SetGlobalColor("_ColorKey" + i, selectedColor);
                     break;
                 }
             }
         }
     }
-    public void CloseColorPicker()
+    public void UpdateClose()
     {
         if (CursorController.ExitBounds() && openClock >= OPEN_TIME)
         {
-            IsHoveringColorPicker = false;
+            isHovering = false;
         }
-        else if (selectedRenderer != null && !CursorController.IsInsideBounds(selectedRenderer.bounds) && !CursorController.IsInsideBounds(palletteRenderer.GetBounds()))
+        else if (openClock > 0)
         {
-            IsHoveringColorPicker = false;
-            if (openClock > 0)
+            openClock -= Time.deltaTime;
+            float t = openClock / OPEN_TIME;
+
+            if (t < 0.5)
             {
-                openClock -= Time.deltaTime;
-                float t = openClock / OPEN_TIME;
+                float easeOutT = Mathf.Max(1 - Mathf.Pow(1 - t * 2, 5), 0);
+                curSpriteWidth = openSpriteWidth * easeOutT;
+                curWorldPos.x = Mathf.Lerp(closeWorldPos.x, openWorldPos.x, easeOutT);
 
-                if (t < 0.5)
+                palletteRenderer.transform.localPosition = curWorldPos;
+                palletteRenderer.width = curSpriteWidth;
+                palletteRenderer.UpdateSliceSpriteInputsSelf();
+                for (int i = 0; i < colorRenderers.Length; i++)
                 {
-                    float easeOutT = Mathf.Max(1 - Mathf.Pow(1 - t * 2, 5), 0);
-                    curWidth = openWidth * easeOutT;
-                    curLocalPos.x = Mathf.Lerp(closeLocalPos.x, openLocalPos.x, easeOutT);
-
-                    palletteRenderer.transform.localPosition = curLocalPos;
-                    palletteRenderer.width = curWidth;
-                    palletteRenderer.UpdateSliceSpriteInputsSelf();
-                    for (int i = 0; i < colorRenderers.Length; i++)
-                    {
-                        float posX = Mathf.Lerp(closeColorRendererPosition.x, openColorRendererPositions[i].x, easeOutT);
-                        colorRenderers[i].transform.localPosition = new Vector3(posX, closeColorRendererPosition.y, closeColorRendererPosition.z);
-                    }
-                }
-                else
-                {
-                    float easOutT = Mathf.Max(1 - Mathf.Pow(1 - (t - 0.5f) * 2, 5), 0);
-                    curHeight = Mathf.Max(openHeight * easOutT, 0.5f);
-                    palletteRenderer.height = curHeight;
-                    palletteRenderer.UpdateSliceSpriteInputsSelf();
-
-                    for (int i = 0; i < colorRenderers.Length; i++)
-                    {
-                        float posY = Mathf.Lerp(closeColorRendererPosition.y, openColorRendererPositions[i].y, easOutT);
-                        colorRenderers[i].transform.localPosition = new Vector3(openColorRendererPositions[i].x, posY, closeColorRendererPosition.z);
-                    }
+                    float posX = Mathf.Lerp(closeColorRendererPosition.x, openColorRendererPositions[i].x, easeOutT);
+                    colorRenderers[i].transform.localPosition = new Vector3(posX, closeColorRendererPosition.y, closeColorRendererPosition.z);
                 }
             }
             else
             {
-                if (ClosedColorPicker)
+                float easOutT = Mathf.Max(1 - Mathf.Pow(1 - (t - 0.5f) * 2, 5), 0);
+                curSpriteHeight = Mathf.Lerp(0.5f, openSpriteHeight, easOutT);
+                palletteRenderer.height = curSpriteHeight;
+                palletteRenderer.UpdateSliceSpriteInputsSelf();
+
+                for (int i = 0; i < colorRenderers.Length; i++)
                 {
-                    ClosedColorPicker = false;
-                    ToggleColorPicker(false);
+                    float posY = Mathf.Lerp(closeColorRendererPosition.y, openColorRendererPositions[i].y, easOutT);
+                    colorRenderers[i].transform.localPosition = new Vector3(openColorRendererPositions[i].x, posY, closeColorRendererPosition.z);
                 }
-                else
-                {
-                    ClosedColorPicker = true;
-                }
+            }
+        }
+        else
+        {
+            if (finishedClosing)
+            {
+                finishedClosing = false;
+                ToggleColorPicker(false);
+            }
+            else
+            {
+                finishedClosing = true;
             }
         }
     }

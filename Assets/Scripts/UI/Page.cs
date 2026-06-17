@@ -378,11 +378,11 @@ public class Page : MonoBehaviour
                 for (int i = 0; i < pictureRenderers.Length; i++)
                 {
                     AtlasRenderer picRenderer = pictureRenderers[i];
-                    colorPicker.OpenColorPicker(picRenderer);
-                    if (ColorPicker.IsHoveringColorPicker) break;
+                    colorPicker.UpdateOpen(picRenderer);
+                    if (colorPicker.isHovering) break;
                 }
 
-                colorPicker.CloseColorPicker();
+                colorPicker.UpdateClose();
                 colorPicker.SetNewColor();
             }
             break;
@@ -418,7 +418,7 @@ public class Page : MonoBehaviour
         if (exitButton_renderer.flipY != pointDown)
         {
             InvertButton(invert, exitButton_renderer);
-            if (CursorController.active)
+            if (CursorController.Active)
             {
                 exitButton_renderer.FlipV(pointDown);
             }
@@ -454,7 +454,7 @@ public class Page : MonoBehaviour
     }
     public void ToggleCursorControlIcons()
     {
-        if (CursorController.active)
+        if (CursorController.Active)
         {
             exitButton_renderer.UpdateSpriteInputsByIndex(3);
             paperCornerLeftButtonRenderer?.UpdateSpriteInputsByIndex(4);
@@ -467,8 +467,8 @@ public class Page : MonoBehaviour
             paperCornerRightButtonRenderer?.UpdateSpriteInputsByIndex(8);
 
         }
-        paperCornerLeftButtonRenderer?.FlipH(CursorController.active);
-        exitButton_renderer.FlipV(CursorController.active);
+        paperCornerLeftButtonRenderer?.FlipH(CursorController.Active);
+        exitButton_renderer.FlipV(CursorController.Active);
     }
     public Bounds GetWritingBounds()
     {
