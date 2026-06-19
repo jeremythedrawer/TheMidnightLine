@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 826454790681439854}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.49302393, y: -0.24400023, z: -2}
+  m_LocalPosition: {x: -0.49302393, y: -0.24400023, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -63,7 +63,7 @@ MonoBehaviour:
     worldSize: {x: 0.20555556, y: 0.20555556, z: 1}
     index: 3
   bounds:
-    m_Center: {x: 306.37698, y: 1.5859998, z: 14.92}
+    m_Center: {x: 306.37698, y: 1.5859998, z: 15.92}
     m_Extent: {x: 0.10277778, y: 0.10277778, z: 0.1}
   worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
   uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.17773438, w: 0.92578125}
@@ -257,37 +257,28 @@ MonoBehaviour:
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  colors: {fileID: 0}
+  colorsData: {fileID: 0}
+  playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   paperRenderer: {fileID: 2670676497328436670}
   proceduralTextRenderers:
   - {fileID: 5180166987920443640}
   - {fileID: 2322028569944472143}
   readOnlyTextRenderers:
   - {fileID: 948250517218008164}
+  - {fileID: 581004557939880678}
   playerWriteTextRenderers:
   - {fileID: 1407368147541437526}
-  pictureRenderers:
+  playerWriteRenderers:
   - {fileID: 4580197788305518065}
   - {fileID: 5491149246500630263}
+  readOnlyRenderers:
+  - {fileID: 8813909496853599495}
+  - {fileID: 4898080337301717236}
+  - {fileID: 7623350588780838515}
   pageNumberRenderer: {fileID: 581004557939880678}
   paperCornerLeftButtonRenderer: {fileID: 7623350588780838515}
   paperCornerRightButtonRenderer: {fileID: 4898080337301717236}
   exitButton_renderer: {fileID: 8813909496853599495}
-  bottomTextRenderers:
-  - {fileID: 2322028569944472143}
-  - {fileID: 1407368147541437526}
-  - {fileID: 581004557939880678}
-  topTextRenderers:
-  - {fileID: 5180166987920443640}
-  - {fileID: 948250517218008164}
-  bottomRenderers:
-  - {fileID: 4898080337301717236}
-  - {fileID: 7623350588780838515}
-  topRenderers:
-  - {fileID: 4580197788305518065}
-  - {fileID: 5491149246500630263}
-  - {fileID: 8813909496853599495}
-  colorPicker: {fileID: 0}
   activePlayerWriteTextRenderer: {fileID: 0}
   playerWriteIndex: 0
   traitorIndex: 0
@@ -820,7 +811,7 @@ Transform:
   m_GameObject: {fileID: 8431716071242227860}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.11303002, y: -0.82300025, z: -1}
+  m_LocalPosition: {x: -0.11303002, y: -0.82300025, z: -0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -857,7 +848,7 @@ MonoBehaviour:
     worldSize: {x: 0.6888889, y: 0.65, z: 1}
     index: 4
   bounds:
-    m_Center: {x: 307.1014, y: 1.3319998, z: 15.92}
+    m_Center: {x: 307.1014, y: 1.3319998, z: 16.42}
     m_Extent: {x: 0.34444445, y: 0.325, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 0.6888889, w: 0.65}
   uvSizeAndPosition: {x: 0.060546875, y: 0.057128906, z: 0.23046875, w: 0.94189453}
@@ -1078,7 +1069,7 @@ Transform:
   m_GameObject: {fileID: 9013908411491639950}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.11303002, y: -0.82300025, z: -2}
+  m_LocalPosition: {x: -0.11303002, y: -0.82300025, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1115,7 +1106,7 @@ MonoBehaviour:
     worldSize: {x: 0.68333334, y: 0.65, z: 1}
     index: 5
   bounds:
-    m_Center: {x: 307.09863, y: 1.3319998, z: 14.92}
+    m_Center: {x: 307.09863, y: 1.3319998, z: 15.92}
     m_Extent: {x: 0.34166667, y: 0.325, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 0.68333334, w: 0.65}
   uvSizeAndPosition: {x: 0.060058594, y: 0.057128906, z: 0.2915039, w: 0.94140625}

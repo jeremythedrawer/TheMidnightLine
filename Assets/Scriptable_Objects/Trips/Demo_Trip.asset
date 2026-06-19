@@ -45,13 +45,13 @@ MonoBehaviour:
   - 0
   - 0
   elevationValues:
-  - {x: 0, y: 1}
-  - {x: 1, y: 1}
-  - {x: 0.617, y: 1}
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
-  - {x: 3.649e-41, y: 9.63e-43}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   kmValues:
@@ -64,19 +64,25 @@ MonoBehaviour:
   - 10
   - 10
   - 10
-  nextStation: {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
+  nextStation: {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
   ticketsCheckedSinceLastStation: 0
   traitorsSpawned: 0
+  unlockedClueMarkerCount: 1
+  selectedClueMarkerIndex: 0
+  selectedClueMarkerColors:
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 0, g: 0, b: 0, a: 0}
   traitorProfiles:
   - npcProfile:
       boardingStationIndex: 0
       disembarkingStationIndex: 2
-      npcPrefabIndex: 6
-      behaviours: 96
+      npcPrefabIndex: 3
+      behaviours: 3
     fullName: 
-    coveredMugshotIndex: 13
-    uncoveredMugshotIndex: 12
-    found: 0
+    coveredMugshotIndex: 7
+    uncoveredMugshotIndex: 6
+    found: 1
   - npcProfile:
       boardingStationIndex: 0
       disembarkingStationIndex: 1
@@ -85,4 +91,4 @@ MonoBehaviour:
     fullName: 
     coveredMugshotIndex: 9
     uncoveredMugshotIndex: 8
-    found: 0
+    found: 1

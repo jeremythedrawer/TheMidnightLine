@@ -101,10 +101,18 @@ Shader "Custom/s_atlasNPC"
                 
                 uint colorKeyMask = (uint)i.custom.x;
 
-                uint colKey0 = (colorKeyMask & (1 << 0)) != 0;
-                uint colKey1 = (colorKeyMask & (1 << 1)) != 0;
-                uint colKey2 = (colorKeyMask & (1 << 2)) != 0;
+                uint colKeyMask0 = (colorKeyMask & (1 << 0)) != 0;
+                uint colKeyMask1 = (colorKeyMask & (1 << 1)) != 0;
+                uint colKeyMask2 = (colorKeyMask & (1 << 2)) != 0;
 
+                half3 colKey0 = colKeyMask0 * _ColorKey0;
+                half3 colKey1 = colKeyMask1 * _ColorKey1;
+                half3 colKey2 = colKeyMask2 * _ColorKey2;
+
+                half hoverColor = i.custom.y * 0.05;
+                half3 finalColor = color.rgb + colKey0 + colKey1 + colKey2 + hoverColor;
+
+                
                 float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;
                 half4 carriageSDF = SAMPLE_TEXTURE2D(_CarriageBoundsTexture, sampler_CarriageBoundsTexture, worldToTrain);
                 float bayer = BayerX8(carriageSDF + 0.5,  i.positionHCS.y);
@@ -113,7 +121,8 @@ Shader "Custom/s_atlasNPC"
                 outside = max(outside, step(5, i.worldPos.z));
                 float alpha = max(bayer, outside) * color.a;
                 clip(alpha - 0.001);
-                return half4 (color.rgb, 1);
+
+                return half4 (finalColor, 1);
             }
             ENDHLSL
         }

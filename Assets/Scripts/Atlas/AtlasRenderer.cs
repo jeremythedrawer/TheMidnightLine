@@ -21,9 +21,6 @@ public class AtlasRenderer : MonoBehaviour
     public BatchKey batchKey;
     public AtlasSO atlas;
 
-    [Header("Screen Inputs")]
-    public CameraStatsSO camStats;
-
     [Header("Collisions")]
     public BoxCollider2D boxCollider;
 
@@ -98,9 +95,6 @@ public class AtlasRenderer : MonoBehaviour
             }
             break;
         }
-
-        FlipH(flipX);
-        FlipV(flipY);
         
         batchKey.texture = atlas.texture;
     }
@@ -146,26 +140,16 @@ public class AtlasRenderer : MonoBehaviour
     {
         sprite = newSprite;
         spriteIndex = newSprite.index;
-        if (rendererType > AtlasRendererType.SliceWorld)
-        {
-            Vector2 spritePixelSize = newSprite.worldSize * PIXELS_PER_UNIT;
-            worldPivotAndSize.z = spritePixelSize.x * camStats.worldUnitsPerPixel;
-            worldPivotAndSize.w = spritePixelSize.y * camStats.worldUnitsPerPixel;
-        }
-        else
-        {
-            worldPivotAndSize.z = newSprite.worldSize.x;
-            worldPivotAndSize.w = newSprite.worldSize.y;
-        }
-
+        worldPivotAndSize.z = newSprite.worldSize.x;
+        worldPivotAndSize.w = newSprite.worldSize.y;
         uvSizeAndPosition = newSprite.uvSizeAndPos;
         
         scaleAndFlip.x = width;
         scaleAndFlip.y = height;
 
         
-        FlipH(flipX);
-        FlipV(flipY);
+        FlipHSimple(flipX);
+        FlipVSimple(flipY);
         SetBounds();
 
 
@@ -190,6 +174,7 @@ public class AtlasRenderer : MonoBehaviour
             {
                 SliceSprite sliceSprite = atlas.slicedSprites[spriteIndex];
                 Vector4 centerWorldPivot = worldPivotsAndSizes[4];
+                bounds.center = new Vector3(transform.position.x + boundsOffset.x, transform.position.y + boundsOffset.y, transform.position.z);
                 bounds.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldPivot.z * width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldPivot.w * height) + sliceSprite.worldSlices.w, 0.2f);
             }
             break;
@@ -211,7 +196,7 @@ public class AtlasRenderer : MonoBehaviour
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, newDepth);
     }
-    public void FlipH(bool flipLeft)
+    public void FlipHSimple(bool flipLeft)
     {
         flipX = flipLeft;
         scaleAndFlip.z = flipLeft ? -1 : 1;
@@ -220,7 +205,7 @@ public class AtlasRenderer : MonoBehaviour
         boundsOffset.x = (bounds.size.x * 0.5f) + worldPivotAndSize.x;
         prevSpriteIndexFlipH = sprite.index;
     }
-    public void FlipV(bool flipDown)
+    public void FlipVSimple(bool flipDown)
     {
         flipY = flipDown;
         scaleAndFlip.w = flipDown ? -1 : 1;
@@ -228,6 +213,29 @@ public class AtlasRenderer : MonoBehaviour
         worldPivotAndSize.y = -flipPivot * scaleAndFlip.y * worldPivotAndSize.w;
         boundsOffset.y = (bounds.size.y * 0.5f) + worldPivotAndSize.y;
         prevSpriteIndexFlipV = sprite.index;
+    }
+
+    public void FlipHSlice(bool flipLeft, SliceSprite sliceSprite)
+    {
+        flipX = flipLeft;
+        float flipPivot = flipLeft ? 1 - sprite.uvPivot.x : sprite.uvPivot.x;
+
+        worldPivotAndSize.x = -flipPivot * (width * worldPivotsAndSizes[4].z) - (sprite.uvPivot.x * (sliceSprite.worldSlices.x + sliceSprite.worldSlices.y));
+
+        boundsOffset.x = (bounds.size.x * 0.5f) + worldPivotAndSize.x;
+        prevSpriteIndexFlipH = sprite.index;
+    }
+    public void FlipVSlice(bool flipDown, SliceSprite sliceSprite)
+    {
+        flipY = flipDown;
+
+        float flipPivot = flipDown ? 1 - sprite.uvPivot.y : sprite.uvPivot.y;
+
+        worldPivotAndSize.x = -flipPivot * (width * worldPivotsAndSizes[4].w) - (sprite.uvPivot.y * (sliceSprite.worldSlices.z + sliceSprite.worldSlices.w));
+
+        boundsOffset.y = (bounds.size.y * 0.5f) + worldPivotAndSize.y;
+        prevSpriteIndexFlipH = sprite.index;
+
     }
     public void UpdateBounds()
     {        
@@ -239,6 +247,11 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void UpdateSlicedSpriteInputs(SliceSprite sliceSprite)
     {
+        sprite = sliceSprite.sprite;
+
+        scaleAndFlip.x = width;
+        scaleAndFlip.y = height;
+
         uvSizesAndPositions = new Vector4[9];
         Array.Copy(sliceSprite.uvSizeAndPos, uvSizesAndPositions, sliceSprite.uvSizeAndPos.Length);
         
@@ -253,11 +266,15 @@ public class AtlasRenderer : MonoBehaviour
         }
         Vector4 centerWorldPivot = worldPivotsAndSizes[4];
         bounds.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldPivot.z * width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldPivot.w * height) + sliceSprite.worldSlices.w, 0.2f);
-        boundsOffset = bounds.size * 0.5f;
+
+        FlipHSlice(flipX, sliceSprite);
+        FlipVSlice(flipY, sliceSprite);
 
         if (boxCollider == null) return;
         boxCollider.size = bounds.size;
         boxCollider.offset = boundsOffset;
+
+
     }
     public void SetWidthFromWorldSpace(float worldWidth, SimpleSprite sprite)
     {

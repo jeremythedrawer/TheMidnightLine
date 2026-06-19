@@ -45,6 +45,8 @@ public class SpyBrain : MonoBehaviour
     public bool canExitNotepad;
     public bool checkingCarriageMap;
 
+    public static Carriage CurCarriage;
+
     public static bool canCheckTicket;
     public static bool checkingTicket;
     public static bool checkingNotepad;
@@ -257,6 +259,7 @@ public class SpyBrain : MonoBehaviour
                         {
                             curGangwayDoor.gangway.MoveUp();
                             curGangwayDoor.carriage.MoveDown();
+                            CurCarriage = curGangwayDoor.carriage;
                             stats.curLocationBounds = curGangwayDoor.carriage.totalBounds;
                             stats.curLocationState = LocationState.Carriage;
                         }
@@ -280,6 +283,7 @@ public class SpyBrain : MonoBehaviour
                         else
                         {
                             curGangwayDoor.carriage.MoveDown();
+                            CurCarriage = curGangwayDoor.carriage;
                         }
                     }
                     else if ((isTouchingGangwayDoorRight && !wasTouchingGangwayDoorRight) && !isTouchingGangwayDoorLeft)
@@ -439,13 +443,13 @@ public class SpyBrain : MonoBehaviour
 
                             if (insideCarriageHit.collider != null)
                             {
-                                stats.curCarriage = TrainController.GetCarriage(insideCarriageHit.collider);
-                                stats.curCarriage.MoveDown();
+                                CurCarriage = TrainController.GetCarriage(insideCarriageHit.collider);
+                                CurCarriage.MoveDown();
                             }
                             stats.curGroundLayer = layerSettings.trainLayers.ground;
                             stats.curWallLayer = layerSettings.trainWallLayers;
                             stats.curLocationState = LocationState.Carriage;
-                            stats.curLocationBounds = stats.curCarriage.totalBounds;
+                            stats.curLocationBounds = CurCarriage.totalBounds;
                             rigidBody.includeLayers = layerSettings.trainMask;
 
                             atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.frontMin);
@@ -507,7 +511,7 @@ public class SpyBrain : MonoBehaviour
                         if (curGangwayDoor.isLeftOfCarriage)
                         {
                             curGangwayDoor.carriage.MoveDown();
-                            stats.curCarriage = curGangwayDoor.carriage;
+                            CurCarriage = curGangwayDoor.carriage;
                         }
                         else
                         {
@@ -522,14 +526,14 @@ public class SpyBrain : MonoBehaviour
     }
     private void LookAtCarriageMap()
     {
-        if (stats.curCarriage == null) return;
+        if (CurCarriage == null) return;
 
         if (!checkingCarriageMap)
         {
             RaycastHit2D carriageMapHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.carriageMap);
             if (carriageMapHit.collider != null)
             {
-                curCarriageMap= stats.curCarriage.map;
+                curCarriageMap= CurCarriage.map;
                 curCarriageMap.InteractEffect();
                 checkingCarriageMap = true;
             }
@@ -543,13 +547,13 @@ public class SpyBrain : MonoBehaviour
     {
         if (stats.signedNotepad)
         {
-            stats.curCarriage.MoveUp();
+            CurCarriage.MoveUp();
         }
     }
     private void Flip(bool flip)
     {
         stats.spriteFlip = flip;
-        atlasRenderer.FlipH(flip);
+        atlasRenderer.FlipHSimple(flip);
     }
     public static void ToggleTicketCheckAbility(bool toggle)
     {

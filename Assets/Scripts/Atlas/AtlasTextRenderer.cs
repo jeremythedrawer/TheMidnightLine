@@ -165,6 +165,8 @@ public class AtlasTextRenderer : MonoBehaviour
     }
     private void SetBorderText()
     {
+        borderLocalPos.z = background_renderer.transform.localPosition.z;
+
         switch (alignmentType)
         {
             case AtlasTextAlignmentType.Left:

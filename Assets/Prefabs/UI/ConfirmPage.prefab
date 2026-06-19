@@ -457,7 +457,8 @@ MonoBehaviour:
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  colors: {fileID: 0}
+  colorsData: {fileID: 0}
+  playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   paperRenderer: {fileID: 2670676497328436670}
   proceduralTextRenderers: []
   readOnlyTextRenderers:
@@ -465,22 +466,15 @@ MonoBehaviour:
   - {fileID: 4109658658727222766}
   playerWriteTextRenderers:
   - {fileID: 1252599110513882049}
-  pictureRenderers: []
+  playerWriteRenderers: []
+  readOnlyRenderers:
+  - {fileID: 3911591812244558260}
+  - {fileID: 7862294593475275798}
+  - {fileID: 1114506471185041396}
   pageNumberRenderer: {fileID: 0}
   paperCornerLeftButtonRenderer: {fileID: 7862294593475275798}
   paperCornerRightButtonRenderer: {fileID: 0}
   exitButton_renderer: {fileID: 1114506471185041396}
-  bottomTextRenderers:
-  - {fileID: 4109658658727222766}
-  - {fileID: 3013745686857610078}
-  - {fileID: 1252599110513882049}
-  topTextRenderers: []
-  bottomRenderers:
-  - {fileID: 7862294593475275798}
-  topRenderers:
-  - {fileID: 1114506471185041396}
-  - {fileID: 3911591812244558260}
-  colorPicker: {fileID: 0}
   activePlayerWriteTextRenderer: {fileID: 0}
   playerWriteIndex: 0
   traitorIndex: 0

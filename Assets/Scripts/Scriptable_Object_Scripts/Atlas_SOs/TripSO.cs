@@ -21,5 +21,9 @@ public class TripSO : ScriptableObject
     public int ticketsCheckedSinceLastStation;
     public int traitorsSpawned;
     
+    public int unlockedClueMarkerCount;
+    public int selectedClueMarkerIndex;
+    public Color[] selectedClueMarkerColors;
+
     public TraitorProfile[] traitorProfiles;
 }

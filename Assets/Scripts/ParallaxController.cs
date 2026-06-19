@@ -42,19 +42,6 @@ public class ParallaxController : MonoBehaviour
     {
         bounds.center = worldPos + boundsOffset;
     }
-    private Vector3 GetSnappedPosition(Vector3 pos)
-    {
-        Matrix4x4 w2c = camStats.worldToCam;
-        Matrix4x4 c2w = camStats.camToWorld;
-
-        Vector3 camSpace = w2c.MultiplyPoint3x4(pos);
-
-        camSpace.x = Mathf.Round(camSpace.x / camStats.worldUnitsPerPixel) * camStats.worldUnitsPerPixel;
-        camSpace.y = Mathf.Round(camSpace.y / camStats.worldUnitsPerPixel) * camStats.worldUnitsPerPixel;
-
-        Vector3 snappedWorld = c2w.MultiplyPoint3x4(camSpace);
-        return snappedWorld;
-    }
 
     public void Init(Vector2 pos)
     {

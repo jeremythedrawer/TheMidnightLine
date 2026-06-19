@@ -16,6 +16,7 @@ public class GameplayUI : MonoBehaviour
     public GameEventDataSO gameEventData;
     public NotepadData notepadData;
     public TripSO trip;
+
     public SceneData sceneData;
 
     public Material fadeBlackMaterial; 
@@ -29,6 +30,18 @@ public class GameplayUI : MonoBehaviour
 
 
     [Header("Generated")]
+    public TicketIcon[] ticketIcons;
+    public TicketIcon curTicketIcon;
+    
+    public CancellationTokenSource ctsNotepad;
+    public CancellationTokenSource ctsTicket;
+    public CancellationTokenSource ctsCarriageMap;
+    public CancellationTokenSource ctsFadeBlack;
+
+    public ColorPicker colorPicker;
+
+    public Bounds notepadHoverBounds;
+
     public Vector3 backgroundActivePos;
     public Vector3 backgroundInactivePos;
 
@@ -40,19 +53,14 @@ public class GameplayUI : MonoBehaviour
 
     public Vector3 naturalMovePos;
 
-    public Bounds notepadHoverBounds;
-
     public UIState curState;
+
+    public int ticketCount;
+    
     public float naturalMoveClock;
     public float fadeBlackClock;
 
-    public TicketIcon[] ticketIcons;
-    public TicketIcon curTicketIcon;
-    public int ticketCount;
-    public CancellationTokenSource ctsNotepad;
-    public CancellationTokenSource ctsTicket;
-    public CancellationTokenSource ctsCarriageMap;
-    public CancellationTokenSource ctsFadeBlack;
+
     private void OnEnable()
     {
         gameEventData.OnStationLeave.RegisterListener(SetNewTicketIcons);
@@ -203,6 +211,8 @@ public class GameplayUI : MonoBehaviour
             {
                 MoveUIElement(notepad, NotepadInactivePos, ref ctsNotepad, curState);
                 notepad.enabled = false;
+
+                colorPicker.Close();
             }
             break;
             case UIState.Ticket:
@@ -255,6 +265,8 @@ public class GameplayUI : MonoBehaviour
         notepad.enabled = false;
         ticket.gameObject.SetActive(false);
         carriageMap.gameObject.SetActive(false);
+
+        colorPicker = SceneController.GetColorPicker();
     }
     private void InitTicketIcons()
     {

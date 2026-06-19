@@ -78,25 +78,27 @@ Shader "Custom/s_atlasColor"
                 float2 scale = i.scaleAndFlip.xy;
                 float2 flip = i.scaleAndFlip.zw;
 
-                float2 absUV = abs(i.uv - 0.5);
-                float squareMask = step(max(absUV.x, absUV.y), 0.35);
-                //return squareMask.xxxx;
-
                 i.uv *= scale;
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;
                 i.uv += uvPos;
+
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                clip((tex.a) - 0.001);
                 
+                half border = saturate(tex.r + tex.g);
+                half invertT = i.custom.a;
+                half3 invertTex = lerp(tex.rgb, 1 - tex.rgb, invertT);
+                half whiteTex = saturate(invertTex.g - invertTex.r);
+                half blackTex = (1- invertTex.g);
+                
+                half t = round(LinearLightness(i.custom.rgb));
 
-                float invertMask = (1 - tex.r) * squareMask;
-                float t = round(LinearLightness(i.custom.rgb));
-                half3 finalCol = lerp(invertMask + (i.custom.rgb * squareMask), tex.r * i.custom.rgb, t);
+                half3 finalCol = lerp((blackTex + i.custom.rgb) * border , whiteTex * i.custom.rgb, t);
 
-                return half4 (finalCol, 1);
+                clip((tex.a) - 0.001);
+                return half4 (finalCol.rgb, 1);
             }
             ENDHLSL
         }

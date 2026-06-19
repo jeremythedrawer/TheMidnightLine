@@ -13,24 +13,32 @@ public class CursorController : MonoBehaviour
     public LayerSettingsSO layerSettings;
     public SpyStatsSO spyStats;
     public AtlasRenderer cursorRenderer;
-    public ColorPicker npcColorPicker;
 
     [Header("Generated")]
-    public float timer;
     public NPCBrain hoveredNPC;
+    public ColorPicker colorPicker;
 
-    public static Vector3 CurWorldPos;
-    public static bool Active;
+    public float timer;
+
     public static AtlasRenderer PrevRenderer;
     public static AtlasRenderer CursorRenderer;
+    
     public static Bounds CursorBounds;
+    
+    public static Vector3 CurWorldPos;
+    
+    public static bool Active;
+
     public static event Action OnMouseEnabled;
+    public static event Action OnMouseDisabled;
+
+
     private void Start()
     {
         Cursor.visible = false;
         CursorRenderer = cursorRenderer;
 
-        npcColorPicker.transform.SetParent(null);
+        colorPicker = SceneController.GetColorPicker();
     }
     private void Update()
     {
@@ -40,22 +48,24 @@ public class CursorController : MonoBehaviour
             CurWorldPos = playerInputs.mouseWorldPos;
             transform.position = CurWorldPos;
 
-            if (playerInputs.mouseLeftDown)
+            CursorBounds = cursorRenderer.GetBounds();
+
+            if (spyStats.curLocationState != Spy.LocationState.Station)
             {
-                ClickNPC();
+                HoverNPC();
+                
+                if (playerInputs.mouseLeftDown)
+                {
+                    if (hoveredNPC != null)
+                    {
+                        colorPicker.Open(hoveredNPC.atlasRenderer, openAllColors: false);
+                    }
+                }
             }
         }
         else
         {
             cursorRenderer.enabled = false;
-        }
-        if (hoveredNPC != null)
-        {
-            npcColorPicker.UpdateOpen(hoveredNPC.atlasRenderer);
-        }
-        else
-        {
-            npcColorPicker.UpdateClose();
         }
     }
     private void LateUpdate()
@@ -71,7 +81,7 @@ public class CursorController : MonoBehaviour
                 {
                     hoveredNPC = null;
                     Active = false;
-                    OnMouseEnabled?.Invoke();
+                    OnMouseDisabled?.Invoke();
                 }
             }
         }
@@ -86,38 +96,41 @@ public class CursorController : MonoBehaviour
 
         }
     }
-    private void ClickNPC()
+    private void HoverNPC()
     {
-        if (spyStats.curLocationState != Spy.LocationState.Station)
+        bool foundNPC = false;
+        for (int i = 0; i < SpyBrain.CurCarriage.curNPCs.Count; i++)
         {
-            CursorBounds = cursorRenderer.GetBounds();
+            NPCBrain npc = SpyBrain.CurCarriage.curNPCs[i];
 
-            bool foundNPC = false;
-            for (int i = 0; i < spyStats.curCarriage.curNPCs.Count; i++)
+            if (IsInsideBounds(npc.atlasRenderer.bounds))
             {
-                NPCBrain npc = spyStats.curCarriage.curNPCs[i];
-
-                if (IsInsideBounds(npc.atlasRenderer.bounds))
+                if (hoveredNPC != npc)
                 {
                     hoveredNPC = npc;
-                    foundNPC = true;
-                    break;
+                    hoveredNPC.ToggleHoverColor(true);
                 }
+                foundNPC = true;
+                break;
             }
+        }
 
-            if (!foundNPC)
+        if (!foundNPC)
+        {
+            if (hoveredNPC != null)
             {
+                hoveredNPC?.ToggleHoverColor(false);
                 hoveredNPC = null;
-            }            
+            }
         }
     }
     public static bool IsInsideBounds(Bounds bounds)
     {
-        return CursorBounds.min.x >= bounds.min.x && CursorBounds.max.x <= bounds.max.x && CursorBounds.min.y >= bounds.min.y && CursorBounds.max.y <= bounds.max.y;
+        return CursorBounds.max.x >= bounds.min.x && CursorBounds.min.x <= bounds.max.x && CursorBounds.max.y >= bounds.min.y && CursorBounds.min.y <= bounds.max.y;
     }
     public static bool EnteredBounds(AtlasRenderer renderer)
     {
-        if (IsInsideBounds(renderer.bounds))
+        if (IsInsideBounds(renderer.GetBounds()))
         {
             if (PrevRenderer != renderer)
             {
@@ -136,7 +149,7 @@ public class CursorController : MonoBehaviour
     }
     public static bool ExitBounds()
     {
-        if (PrevRenderer != null && !IsInsideBounds(PrevRenderer.bounds))
+        if (PrevRenderer != null && !IsInsideBounds(PrevRenderer.GetBounds()))
         {
             PrevRenderer = null;
             return true;

@@ -18,7 +18,7 @@ public class Page : MonoBehaviour
     public TripSO trip;
     public NPCsDataSO npcData;
     public SpyStatsSO spyStats;
-    public ColorsSO colors;
+    public PlayerInputsSO playerInputs;
 
     public AtlasRenderer paperRenderer;
 
@@ -26,17 +26,13 @@ public class Page : MonoBehaviour
     public AtlasTextRenderer[] readOnlyTextRenderers;
     public AtlasTextRenderer[] playerWriteTextRenderers;
 
-    public AtlasRenderer[] pictureRenderers;
+    public AtlasRenderer[] playerWriteRenderers;
+    public AtlasRenderer[] readOnlyRenderers;
 
     public AtlasTextRenderer pageNumberRenderer;
     public AtlasRenderer paperCornerLeftButtonRenderer;
     public AtlasRenderer paperCornerRightButtonRenderer;
     public AtlasRenderer exitButton_renderer;
-
-    public AtlasRenderer[] bottomRenderers;
-    public AtlasRenderer[] topRenderers;
-    
-    public ColorPicker colorPicker;
 
     [Header("Generated")]
     public AtlasTextRenderer activePlayerWriteTextRenderer;
@@ -99,26 +95,65 @@ public class Page : MonoBehaviour
                 playerWriteTexts = new string[playerWriteTextRenderers.Length];
                 Array.Fill(playerWriteTexts, "");
 
-                int traitorProfileLoops = 0;
-                for (int i = 0; i < playerWriteTextRenderers.Length; i++)
+                for (int i = 0; i < playerWriteRenderers.Length; i++)
                 {
-                    int traitorProfileIndex = i;
-                    if (i == trip.traitorProfiles.Length)
-                    {
-                        traitorProfileLoops++;
-                        traitorProfileIndex = 0;
-                    }
-                    Behaviours behaviours = trip.traitorProfiles[traitorProfileIndex].npcProfile.behaviours;
-                    Behaviours curBehaviour = GetBehaviourAtIndex(behaviours, traitorProfileLoops);
-
-                    previewPlayerWriteText = npcData.behaviourStringDict[curBehaviour];
-                    playerWriteTextRenderers[i].SetText(previewPlayerWriteText);
+                    playerWriteRenderers[i].enabled = false;
                 }
 
-                colors.behaviourColors = new Color[playerWriteTextRenderers.Length];
+                EnableClueRow(trip.unlockedClueMarkerCount - 1);
             }
             break;
         }
+    }
+    public void EnableClueRow(int index)
+    {
+        AtlasTextRenderer playerWriteTexRend = playerWriteTextRenderers[index];
+
+        int traitorIndex = index % trip.traitorProfiles.Length;
+        Behaviours behaviours = trip.traitorProfiles[traitorIndex].npcProfile.behaviours;
+
+        int behaveIndex = index % 2;
+        Behaviours curBehaviour = GetBehaviourAtIndex(behaviours, behaveIndex);
+
+        previewPlayerWriteText = npcData.behaviourStringDict[curBehaviour];
+        playerWriteTexRend.SetText(previewPlayerWriteText);
+
+        playerWriteTexRend.enabled = true;
+        playerWriteRenderers[index].enabled = true;
+    }
+    public void UpdatePage()
+    {
+        switch (pageType)
+        {
+            case PageType.ColorKey:
+            {
+                bool foundColorKeyRend = false;
+                for (int i = 0; i < playerWriteRenderers.Length; i++)
+                {
+                    AtlasRenderer colorKeyRend = playerWriteRenderers[i];
+                    if (colorKeyRend.enabled && CursorController.IsInsideBounds(colorKeyRend.GetBounds()) && !foundColorKeyRend)
+                    {
+                        colorKeyRend.custom.w = 1;
+
+                        if (playerInputs.mouseLeftDown)
+                        {
+                            ColorPicker colorPicker = SceneController.GetColorPicker();
+                            colorPicker.Open(colorKeyRend, openAllColors: true);
+
+                            trip.selectedClueMarkerIndex = activePlayerWriteRowIndex;
+
+                        }
+                        foundColorKeyRend = true;
+                    }
+                    else
+                    {
+                        colorKeyRend.custom.w = 0;
+                    }
+                }
+            }
+            break;
+        }
+
     }
     public void InitProfile(TraitorProfile traitorProfile)
     {
@@ -138,8 +173,8 @@ public class Page : MonoBehaviour
         {
             playerWriteTextRenderers[i].SetText(trip.stationsDataArray[previewPlayerWriteIndex].stationName);
         }
-        AtlasRenderer coveredMugShot = pictureRenderers[0];
-        AtlasRenderer uncoveredMugShot = pictureRenderers[1];
+        AtlasRenderer coveredMugShot = playerWriteRenderers[0];
+        AtlasRenderer uncoveredMugShot = playerWriteRenderers[1];
 
         int coveredMugShotIndex = traitorProfile.coveredMugshotIndex;
         int uncoveredMugShotIndex = traitorProfile.uncoveredMugshotIndex;
@@ -153,12 +188,23 @@ public class Page : MonoBehaviour
         ToggleTextRenderers(readOnlyTextRenderers, toggle, topHalf: false);
         ToggleTextRenderers(proceduralTextRenderers, toggle, topHalf: false);
 
-        if (bottomRenderers != null)
+        ToggleRenderers(readOnlyRenderers, toggle, topHalf: false);
+
+        switch(pageType)
         {
-            for (int i = 0; i < bottomRenderers.Length; i++)
+            case PageType.Prompt:
+            case PageType.Profile:
+            case PageType.Confirm:
             {
-                bottomRenderers[i].enabled = toggle;
+                ToggleRenderers(playerWriteRenderers, toggle, topHalf: false);
             }
+            break;
+
+            case PageType.ColorKey:
+            {
+                ToggleClueRowRenderers(toggle, topHalf: false);
+            }
+            break;
         }
     }
     public void TogglePageContentTopHalf(bool toggle)
@@ -167,27 +213,112 @@ public class Page : MonoBehaviour
         ToggleTextRenderers(readOnlyTextRenderers, toggle, topHalf: true);
         ToggleTextRenderers(proceduralTextRenderers, toggle, topHalf: true);
 
-        if (topRenderers != null)
+        ToggleRenderers(readOnlyRenderers, toggle, topHalf: true);
+
+        switch (pageType)
         {
-            for (int i = 0; i < topRenderers.Length; i++)
+            case PageType.Prompt:
+            case PageType.Profile:
+            case PageType.Confirm:
             {
-                topRenderers[i].enabled = toggle;
+                ToggleRenderers(playerWriteRenderers, toggle, topHalf: true);
             }
+            break;
+
+            case PageType.ColorKey:
+            {
+                ToggleClueRowRenderers(toggle, topHalf: true);
+
+            }
+            break;
         }
     }
-
     public void ToggleTextRenderers(AtlasTextRenderer[] textRenderers, bool toggle, bool topHalf)
     {
         if (textRenderers != null)
         {
-            for (int i = 0; i < textRenderers.Length; i++)
+            if (topHalf)
             {
-                AtlasTextRenderer renderer = textRenderers[i];
-
-                bool condition = topHalf ? renderer.transform.localPosition.y >= FLIP_LOCAL_POS_Y : renderer.transform.localPosition.y < FLIP_LOCAL_POS_Y;
-                if (condition)
+                for (int i = 0; i < textRenderers.Length; i++)
                 {
-                    renderer.enabled = toggle;
+                    AtlasTextRenderer renderer = textRenderers[i];
+                    if (renderer.transform.localPosition.y >= FLIP_LOCAL_POS_Y)
+                    {
+                        renderer.enabled = toggle;
+                    }
+                }
+            }
+            else
+            {
+                for (int i = 0; i < textRenderers.Length; i++)
+                {
+                    AtlasTextRenderer renderer = textRenderers[i];
+                    if (renderer.transform.localPosition.y < FLIP_LOCAL_POS_Y)
+                    {
+                        renderer.enabled = toggle;
+                    }
+                }
+            }
+        }
+    }
+    public void ToggleRenderers(AtlasRenderer[] renderers, bool toggle, bool topHalf)
+    {
+        if (topHalf)
+        {
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                AtlasRenderer rend = renderers[i];
+
+                float localBoundsMinY = transform.InverseTransformPoint(rend.GetBounds().center).y;
+
+                if (localBoundsMinY >= FLIP_LOCAL_POS_Y)
+                {
+                    rend.enabled = toggle;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                AtlasRenderer rend = renderers[i];
+
+                float localBoundsMaxY = transform.InverseTransformPoint(rend.GetBounds().center).y;
+
+                if (localBoundsMaxY < FLIP_LOCAL_POS_Y)
+                {
+                    rend.enabled = toggle;
+                }
+            }
+        }
+    }
+    public void ToggleClueRowRenderers(bool toggle, bool topHalf)
+    {
+        if (topHalf)
+        {
+            for (int i = 0; i < trip.unlockedClueMarkerCount; i++)
+            {
+                AtlasRenderer rend = playerWriteRenderers[i];
+
+                float localBoundsMinY = transform.InverseTransformPoint(rend.GetBounds().min).y;
+
+                if (localBoundsMinY >= FLIP_LOCAL_POS_Y)
+                {
+                    rend.enabled = toggle;
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < trip.unlockedClueMarkerCount; i++)
+            {
+                AtlasRenderer rend = playerWriteRenderers[i];
+
+                float localBoundsMaxY = transform.InverseTransformPoint(rend.GetBounds().max).y;
+
+                if (localBoundsMaxY < FLIP_LOCAL_POS_Y)
+                {
+                    rend.enabled = toggle;
                 }
             }
         }
@@ -369,25 +500,6 @@ public class Page : MonoBehaviour
             }
         }
     }
-    public void UpdatePage()
-    {
-        switch (pageType)
-        {
-            case PageType.ColorKey:
-            {
-                for (int i = 0; i < pictureRenderers.Length; i++)
-                {
-                    AtlasRenderer picRenderer = pictureRenderers[i];
-                    colorPicker.UpdateOpen(picRenderer);
-                    if (colorPicker.isHovering) break;
-                }
-
-                colorPicker.UpdateClose();
-                colorPicker.SetNewColor();
-            }
-            break;
-        }
-    }
     public void UpdatePreviewPlayerWriteText(bool appear, ref float clock)
     {
         switch (pageType)
@@ -420,7 +532,7 @@ public class Page : MonoBehaviour
             InvertButton(invert, exitButton_renderer);
             if (CursorController.Active)
             {
-                exitButton_renderer.FlipV(pointDown);
+                exitButton_renderer.FlipVSimple(pointDown);
             }
         }
     }
@@ -440,7 +552,7 @@ public class Page : MonoBehaviour
     }
     public void UpdateMugShotReveal(float t)
     {
-        AtlasRenderer coveredMugShot = pictureRenderers[0];
+        AtlasRenderer coveredMugShot = playerWriteRenderers[0];
         coveredMugShot.custom.x = Mathf.Clamp01(t);
     }
     public void SwitchActivePLayerWriteTextRenderer(int numpad)
@@ -467,8 +579,8 @@ public class Page : MonoBehaviour
             paperCornerRightButtonRenderer?.UpdateSpriteInputsByIndex(8);
 
         }
-        paperCornerLeftButtonRenderer?.FlipH(CursorController.Active);
-        exitButton_renderer.FlipV(CursorController.Active);
+        paperCornerLeftButtonRenderer?.FlipHSimple(CursorController.Active);
+        exitButton_renderer.FlipVSimple(CursorController.Active);
     }
     public Bounds GetWritingBounds()
     {

@@ -31,7 +31,7 @@ public class AtlasFactory : EditorWindow
     public bool generateSprites;
 
     public float cellSize;
-    public int selectedIndex;
+    public int selectedGridIndex;
     
 
     //Preview
@@ -151,7 +151,7 @@ public class AtlasFactory : EditorWindow
             sliceSpritesFound = 0;
 
             previewClip = default;
-            selectedIndex = 0;
+            selectedGridIndex = 0;
             GenerateSprites();
             atlas.UpdateClipDictionary();
 
@@ -863,16 +863,16 @@ public class AtlasFactory : EditorWindow
 
         Color defaultColor = Color.grey;
 
-        Handles.color = selectedIndex == gridIndex ? selectedColor : defaultColor;
+        Handles.color = selectedGridIndex == gridIndex ? selectedColor : defaultColor;
         Handles.DrawSolidRectangleWithOutline(gridRect, Color.clear, Handles.color);
 
         Event e = Event.current;
 
-        if (gridRect.Contains(e.mousePosition) && selectedIndex != gridIndex)
+        if (gridRect.Contains(e.mousePosition) && selectedGridIndex != gridIndex)
         {
             if (e.type == EventType.MouseDown && e.button == 0)
             {
-                selectedIndex = gridIndex;
+                selectedGridIndex = gridIndex;
                 previewSprite = atlasSprite;
                 e.Use();
             }
@@ -932,7 +932,7 @@ public class AtlasFactory : EditorWindow
         }
         else if (slicedSpriteNullable.HasValue)
         {
-            if (selectedIndex == gridIndex)
+            if (selectedGridIndex == gridIndex)
             {
                 SliceSprite slicedSprite = slicedSpriteNullable.Value;
                 Handles.color = Color.orange;
@@ -946,11 +946,30 @@ public class AtlasFactory : EditorWindow
 
                 Handles.DrawLine(new Vector3(spriteRect.xMin, bottomPos), new Vector3(spriteRect.xMax, bottomPos));
                 Handles.DrawLine(new Vector3(spriteRect.xMin, topPos), new Vector3(spriteRect.xMax, topPos));
+
+                for (int i = 0; i < simplePivots.Length; i++)
+                {
+                    Vector2 curPivot = simplePivots[i];
+                    Vector2 rectOffset = gridRect.size * new Vector2(curPivot.x, 1 - curPivot.y);
+                    Vector2 buttonOffset = spriteButtonSize * new Vector2(curPivot.x, 1 - curPivot.y);
+
+                    Rect buttonRect = new Rect(gridRect.min + rectOffset - buttonOffset, spriteButtonSize);
+
+                    GUI.depth = 0;
+                    if (GUI.Button(buttonRect, GUIContent.none))
+                    {
+                        Debug.Log(selectedGridIndex);
+                        atlas.slicedSprites[slicedSprite.sprite.index].sprite.uvPivot = curPivot;
+
+                        EditorUtility.SetDirty(atlas);
+                        AssetDatabase.SaveAssetIfDirty(atlas);
+                    }
+                }
             }
         }
         else
         {
-            if (selectedIndex == gridIndex)
+            if (selectedGridIndex == gridIndex)
             {
                 for (int i = 0; i < simplePivots.Length; i++)
                 {
@@ -963,7 +982,7 @@ public class AtlasFactory : EditorWindow
                     GUI.depth = 0;
                     if (GUI.Button(buttonRect, GUIContent.none))
                     {
-                        atlas.simpleSprites[selectedIndex].uvPivot = curPivot;
+                        atlas.simpleSprites[selectedGridIndex].uvPivot = curPivot;
                         EditorUtility.SetDirty(atlas);
                         AssetDatabase.SaveAssetIfDirty(atlas);
                     }
@@ -972,21 +991,21 @@ public class AtlasFactory : EditorWindow
         }
         if (e.type == EventType.KeyDown && e.keyCode == KeyCode.LeftArrow)
         {
-            if (selectedIndex == 0) return;
-            selectedIndex--;
+            if (selectedGridIndex == 0) return;
+            selectedGridIndex--;
             if (motionSpriteNullable.HasValue)
             {
-                int motionIndex = selectedIndex - atlas.simpleSprites.Length;
+                int motionIndex = selectedGridIndex - atlas.simpleSprites.Length;
                 previewSprite = atlas.motionSprites[motionIndex].sprite;
             }
             else if (slicedSpriteNullable.HasValue)
             {
-                int sliceIndex = selectedIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
+                int sliceIndex = selectedGridIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
                 previewSprite = atlas.motionSprites[sliceIndex].sprite;
             }
             else
             {
-               previewSprite = atlas.simpleSprites[selectedIndex];
+               previewSprite = atlas.simpleSprites[selectedGridIndex];
             }
             e.Use();
         }
@@ -995,33 +1014,33 @@ public class AtlasFactory : EditorWindow
         {
             if (motionSpriteNullable.HasValue)
             {
-                int motionIndex = selectedIndex - atlas.simpleSprites.Length;
+                int motionIndex = selectedGridIndex - atlas.simpleSprites.Length;
                 if (motionIndex == atlas.motionSprites.Length - 1) return;
-                selectedIndex++;
-                motionIndex = selectedIndex - atlas.simpleSprites.Length;
+                selectedGridIndex++;
+                motionIndex = selectedGridIndex - atlas.simpleSprites.Length;
 
                 previewSprite = atlas.motionSprites[motionIndex].sprite;
             }
             else if (slicedSpriteNullable.HasValue)
             {
-                int sliceIndex = selectedIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
+                int sliceIndex = selectedGridIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
                 if (sliceIndex == atlas.slicedSprites.Length - 1) return;
-                selectedIndex++;
-                sliceIndex = selectedIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
+                selectedGridIndex++;
+                sliceIndex = selectedGridIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
 
                 previewSprite = atlas.motionSprites[sliceIndex].sprite;
             }
             else
             {
-                if (selectedIndex == atlas.simpleSprites.Length - 1) return;
-                selectedIndex++;
+                if (selectedGridIndex == atlas.simpleSprites.Length - 1) return;
+                selectedGridIndex++;
 
-                previewSprite = atlas.simpleSprites[selectedIndex];
+                previewSprite = atlas.simpleSprites[selectedGridIndex];
             }
             e.Use();
         }
 
-        if (selectedIndex == gridIndex)
+        if (selectedGridIndex == gridIndex)
         {
             float quarterWidth = spriteRect.width * 0.25f;
             Vector2 shiftLeftPos = new Vector2(gridRect.center.x - quarterWidth, gridRect.center.y);
@@ -1060,7 +1079,7 @@ public class AtlasFactory : EditorWindow
             {
                 if (motionSpriteNullable.HasValue)
                 {
-                    int motionIndex = selectedIndex - atlas.simpleSprites.Length;
+                    int motionIndex = selectedGridIndex - atlas.simpleSprites.Length;
                     if (motionIndex == atlas.motionSprites.Length - 1) return;
 
                     atlas.motionSprites[motionIndex] = atlas.motionSprites[motionIndex + 1];
@@ -1069,11 +1088,11 @@ public class AtlasFactory : EditorWindow
                     atlas.motionSprites[motionIndex + 1] = motionSpriteNullable.Value;
                     atlas.motionSprites[motionIndex + 1].sprite.index = motionIndex + 1;
 
-                    selectedIndex++;
+                    selectedGridIndex++;
                 }
                 else if (slicedSpriteNullable.HasValue)
                 {
-                    int sliceIndex = selectedIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
+                    int sliceIndex = selectedGridIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
                     if (sliceIndex == atlas.slicedSprites.Length - 1) return;
 
                     atlas.slicedSprites[sliceIndex] = atlas.slicedSprites[sliceIndex + 1];
@@ -1082,19 +1101,19 @@ public class AtlasFactory : EditorWindow
                     atlas.slicedSprites[sliceIndex + 1] = slicedSpriteNullable.Value;
                     atlas.slicedSprites[sliceIndex + 1].sprite.index = sliceIndex + 1;
 
-                    selectedIndex++;
+                    selectedGridIndex++;
                 }
                 else
                 {
-                    if (selectedIndex == atlas.simpleSprites.Length - 1) return;
+                    if (selectedGridIndex == atlas.simpleSprites.Length - 1) return;
 
-                    atlas.simpleSprites[selectedIndex] = atlas.simpleSprites[selectedIndex + 1];
-                    atlas.simpleSprites[selectedIndex].index = selectedIndex;
+                    atlas.simpleSprites[selectedGridIndex] = atlas.simpleSprites[selectedGridIndex + 1];
+                    atlas.simpleSprites[selectedGridIndex].index = selectedGridIndex;
 
-                    atlas.simpleSprites[selectedIndex + 1] = atlasSprite;
-                    atlas.simpleSprites[selectedIndex + 1].index = selectedIndex + 1;
+                    atlas.simpleSprites[selectedGridIndex + 1] = atlasSprite;
+                    atlas.simpleSprites[selectedGridIndex + 1].index = selectedGridIndex + 1;
 
-                    selectedIndex++;
+                    selectedGridIndex++;
                 }
 
                 EditorUtility.SetDirty(atlas);
@@ -1102,10 +1121,10 @@ public class AtlasFactory : EditorWindow
             }
             void HandleShiftLeft()
             {
-                if (selectedIndex == 0) return;
+                if (selectedGridIndex == 0) return;
                 if (motionSpriteNullable.HasValue)
                 {
-                    int motionIndex = selectedIndex - atlas.simpleSprites.Length;
+                    int motionIndex = selectedGridIndex - atlas.simpleSprites.Length;
 
                     atlas.motionSprites[motionIndex] = atlas.motionSprites[motionIndex - 1];
                     atlas.motionSprites[motionIndex].sprite.index = motionIndex;
@@ -1116,7 +1135,7 @@ public class AtlasFactory : EditorWindow
                 }
                 else if (slicedSpriteNullable.HasValue)
                 {
-                    int sliceIndex = selectedIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
+                    int sliceIndex = selectedGridIndex - atlas.simpleSprites.Length - atlas.motionSprites.Length;
 
                     atlas.slicedSprites[sliceIndex] = atlas.slicedSprites[sliceIndex - 1];
                     atlas.slicedSprites[sliceIndex].sprite.index = sliceIndex;
@@ -1126,13 +1145,13 @@ public class AtlasFactory : EditorWindow
                 }
                 else
                 {
-                    atlas.simpleSprites[selectedIndex] = atlas.simpleSprites[selectedIndex - 1];
-                    atlas.simpleSprites[selectedIndex].index = selectedIndex;
+                    atlas.simpleSprites[selectedGridIndex] = atlas.simpleSprites[selectedGridIndex - 1];
+                    atlas.simpleSprites[selectedGridIndex].index = selectedGridIndex;
 
-                    atlas.simpleSprites[selectedIndex - 1] = atlasSprite;
-                    atlas.simpleSprites[selectedIndex - 1].index = selectedIndex - 1;
+                    atlas.simpleSprites[selectedGridIndex - 1] = atlasSprite;
+                    atlas.simpleSprites[selectedGridIndex - 1].index = selectedGridIndex - 1;
                 }
-                selectedIndex--;
+                selectedGridIndex--;
                 
                 EditorUtility.SetDirty(atlas);
                 AssetDatabase.SaveAssets();
@@ -1191,19 +1210,19 @@ public class AtlasFactory : EditorWindow
             int index = 0;
             for (int i = 0; i < atlas.simpleSprites.Length; i++)
             {
-                DrawSpriteRect( atlasRect, atlas.simpleSprites[i], selectedIndex == index ? selectedColor : unselectedColor);
+                DrawSpriteRect( atlasRect, atlas.simpleSprites[i], selectedGridIndex == index ? selectedColor : unselectedColor);
                 index++;
             }
 
             for (int i = 0; i < atlas.motionSprites.Length; i++)
             {
-                DrawSpriteRect(atlasRect, atlas.motionSprites[i].sprite, selectedIndex == index ? selectedColor : unselectedColor);
+                DrawSpriteRect(atlasRect, atlas.motionSprites[i].sprite, selectedGridIndex == index ? selectedColor : unselectedColor);
                 index++;
             }
 
             for (int i = 0; i < atlas.slicedSprites.Length; i++)
             {
-                DrawSpriteRect(atlasRect, atlas.slicedSprites[i].sprite, selectedIndex == index? selectedColor : unselectedColor );
+                DrawSpriteRect(atlasRect, atlas.slicedSprites[i].sprite, selectedGridIndex == index? selectedColor : unselectedColor );
                 index++;
             }
         }

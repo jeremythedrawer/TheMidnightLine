@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 3581687827106681615}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.54969937, y: -0.4166667, z: 0}
+  m_LocalPosition: {x: -0.54969937, y: -0.4166667, z: 0.5}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -44,12 +44,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 5
+  rendererType: 2
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
   spriteIndex: 0
   flipX: 0
@@ -58,26 +57,26 @@ MonoBehaviour:
   height: 1.4736841
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
+    uvSizeAndPos: {x: 0.16796875, y: 0.17773438, z: 0.025390625, w: 0.5527344}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0, y: 0, z: 0}
+    worldSize: {x: 0.47777778, y: 0.50555557, z: 1}
     index: 0
   bounds:
-    m_Center: {x: -4.116412, y: 1.2561111, z: 2.1}
+    m_Center: {x: -4.673889, y: 1.2711111, z: -37.4}
     m_Extent: {x: 0.6358105, y: 0.32777777, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 0, w: 0}
   uvSizeAndPosition: {x: 0, y: 0, z: 0, w: 0}
-  scaleAndFlip: {x: 0, y: 0, z: 1, w: 1}
+  scaleAndFlip: {x: 3.5980322, y: 1.4736841, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
   boundsOffset: {x: 0.6358105, y: 0.32777777, z: 0.1}
   worldPivotsAndSizes:
-  - {x: 0, y: 0, z: 0.08888889, w: 0.1}
-  - {x: 0.08888889, y: 0, z: 0.30555555, w: 0.1}
-  - {x: 1.1882876, y: 0, z: 0.08333334, w: 0.1}
-  - {x: 0, y: 0.1, z: 0.08888889, w: 0.3166667}
+  - {x: -0, y: -0, z: 0.08888889, w: 0.1}
+  - {x: 0.08888889, y: -0, z: 0.30555555, w: 0.1}
+  - {x: 1.1882876, y: -0, z: 0.08333334, w: 0.1}
+  - {x: -0, y: 0.1, z: 0.08888889, w: 0.3166667}
   - {x: 0.08888889, y: 0.1, z: 0.30555555, w: 0.3166667}
   - {x: 1.1882876, y: 0.1, z: 0.08333334, w: 0.3166667}
-  - {x: 0, y: 0.56666666, z: 0.08888889, w: 0.08888888}
+  - {x: -0, y: 0.56666666, z: 0.08888889, w: 0.08888888}
   - {x: 0.08888889, y: 0.56666666, z: 0.30555555, w: 0.08888888}
   - {x: 1.1882876, y: 0.56666666, z: 0.08333334, w: 0.08888888}
   uvSizesAndPositions:
@@ -275,4 +274,4 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   hasText: 1
-  borderLocalPos: {x: -0.54969937, y: -0.4166667, z: 0}
+  borderLocalPos: {x: -0.54969937, y: -0.4166667, z: 0.5}

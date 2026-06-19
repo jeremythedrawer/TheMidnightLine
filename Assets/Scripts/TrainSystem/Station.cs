@@ -18,6 +18,7 @@ public class Station : MonoBehaviour
     {
         station.exitLocalPosX = exitTransform.localPosition.x;
         parallaxController.Init(transform.position);
+        SetFrontParallaxPosition();
     }
     public void SpawnNPCs()
     {
@@ -40,7 +41,7 @@ public class Station : MonoBehaviour
 
             if (i % 2 == 0)
             {
-                bystander.atlasRenderer.FlipH(true);
+                bystander.atlasRenderer.FlipHSimple(true);
             }
         }
 
@@ -64,7 +65,7 @@ public class Station : MonoBehaviour
             traitor.disembarkingStation = trip.stationsDataArray[traitorProfile.npcProfile.disembarkingStationIndex];
             if (i % 2 == 0)
             {
-                traitor.atlasRenderer.FlipH(true);
+                traitor.atlasRenderer.FlipHSimple(true);
             }
         }
         trip.traitorsSpawned += station.traitorSpawnAmount;
