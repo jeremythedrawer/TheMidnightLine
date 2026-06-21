@@ -13,9 +13,43 @@ MonoBehaviour:
   m_Name: CameraStats_SO
   m_EditorClassIdentifier: 
   camBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 10.666667, y: 3.5555556, z: 100.005}
-  worldUnitsPerPixel: 0.011111111
-  curWorldPos: {x: 308.53958, y: 2.09, z: -40}
-  prevWorldPos: {x: 308.53958, y: 2.09, z: -40}
+    m_Center: {x: 285.50397, y: 0.6999997, z: -40}
+    m_Extent: {x: 5.3333335, y: 1.7777778, z: 100.005}
+  worldUnitsPerPixel: 0.0055555557
+  curWorldPos: {x: 285.504, y: 0.6999997, z: -40}
+  prevWorldPos: {x: 285.50397, y: 0.6999997, z: -40}
   curVelocity: {x: 0, y: 0, z: 0}
+  worldToCam:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: -285.50397
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: -0.6999997
+    e20: 0
+    e21: 0
+    e22: -1
+    e23: -40
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1
+  camToWorld:
+    e00: 1
+    e01: 0
+    e02: 0
+    e03: 285.50397
+    e10: 0
+    e11: 1
+    e12: 0
+    e13: 0.6999997
+    e20: -0
+    e21: -0
+    e22: -1
+    e23: -40
+    e30: 0
+    e31: 0
+    e32: 0
+    e33: 1

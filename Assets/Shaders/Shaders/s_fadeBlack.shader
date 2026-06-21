@@ -3,7 +3,6 @@ Shader "Custom/s_fadeBlack"
     Properties
     {
         _Alpha("Alpha", Range(0,1)) = 0
-        _Color("Color", Color) = (0,0,0,1)
         [NoScaleOffset] _NoiseTexture("Noise Texture", 2D) = "white"
     }
 
@@ -25,12 +24,12 @@ Shader "Custom/s_fadeBlack"
             
             CBUFFER_START(UnityPerMaterial)
                 float _Alpha;
-                float4 _Color;
             CBUFFER_END
 
             TEXTURE2D(_NoiseTexture);
             SAMPLER(sampler_NoiseTexture);
 
+            float3 _BlackColor;
             struct Attributes
             {
                 float4 positionOS : POSITION;
@@ -41,7 +40,6 @@ Shader "Custom/s_fadeBlack"
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                float3 worldPos : TEXCOORD1;
             };
 
             Varyings vert(Attributes v)
@@ -59,7 +57,9 @@ Shader "Custom/s_fadeBlack"
             {
                 float mask = BayerX8(_Alpha, i.positionHCS.y);
                 clip(mask - 0.001);
-                return half4(mask * _Color.rgb, 1);
+
+                half3 col = mask * _BlackColor;
+                return half4(col, 1);
             }
             ENDHLSL
         }

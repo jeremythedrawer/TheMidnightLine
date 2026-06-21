@@ -116,11 +116,15 @@ public static class AtlasRendering
         }
 
         batch.atlasRendererList.Add(renderer);
+
+
     }
     public static void UnregisterRenderer(AtlasRenderer renderer)
     {
-        if (!spriteBatchDict.TryGetValue(renderer.batchKey, out SpriteBatch batch)) return;
-
+        if (!spriteBatchDict.TryGetValue(renderer.batchKey, out SpriteBatch batch))
+        {
+            return;
+        }
         batch.atlasRendererList.Remove(renderer);
         if (batch.atlasRendererList.Count == 0)
         {
@@ -131,7 +135,6 @@ public static class AtlasRendering
             batch.argsBuffer = null;
 
             spriteBatchDict.Remove(renderer.batchKey);
-
         }
     }
     public static void RegisterTextRenderer(AtlasTextRenderer renderer)
@@ -140,7 +143,6 @@ public static class AtlasRendering
         renderer.batchKey.material.enableInstancing = true;
 
         UnregisterTextRenderer(renderer);
-      //  renderer.batchKey.depthOrder = (int)renderer.transform.position.z;
 
         if (!textBatchDict.TryGetValue(renderer.batchKey, out TextBatch batch))
         {

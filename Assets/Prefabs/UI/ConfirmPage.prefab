@@ -56,14 +56,13 @@ MonoBehaviour:
   scrollSpeed: 0
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
-  bounds:
-    m_Center: {x: 300.09256, y: 0.0043332875, z: 15.92}
-    m_Extent: {x: 0.2595511, y: 0.09166667, z: 0}
   textBoxData:
     size: {x: 0.5191022, y: 0.18333334}
     lineWidths:
     - 0.50892377
-  boundsOffset: {x: 0.2595511, y: -0.09166667, z: 0}
+  bounds:
+    m_Center: {x: 300.09256, y: 0.0043332875, z: 15.92}
+    m_Extent: {x: 0.2595511, y: 0.09166667, z: 0}
   worldPivotsAndSizes:
   - {x: -0, y: -0.18333334, z: 0.08888889, w: 0.18333334}
   - {x: 0.10755333, y: -0.18333334, z: 0.08888889, w: 0.18333334}
@@ -88,6 +87,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.2595511, y: -0.09166667, z: 0}
   hasText: 1
   borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &1446615636778628965
@@ -116,7 +116,7 @@ Transform:
   m_GameObject: {fileID: 1446615636778628965}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.596, y: -0.625, z: -1}
+  m_LocalPosition: {x: -0.633, y: -0.625, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -139,7 +139,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
   spriteIndex: 6
   flipX: 0
@@ -153,7 +152,7 @@ MonoBehaviour:
     worldSize: {x: 1.3388889, y: 0.33333334, z: 1}
     index: 6
   bounds:
-    m_Center: {x: 300.07343, y: 1.4616666, z: 15.92}
+    m_Center: {x: 300.03644, y: 1.4616666, z: 15.92}
     m_Extent: {x: 0.66944444, y: 0.16666667, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 1.3388889, w: 0.33333334}
   uvSizeAndPosition: {x: 0.47070312, y: 0.1171875, z: 0.40820312, w: 0.87890625}
@@ -198,7 +197,7 @@ Transform:
   m_GameObject: {fileID: 2086181211207709010}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.618, y: -2.141, z: -1}
+  m_LocalPosition: {x: -0.57, y: -2.141, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -221,25 +220,24 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 4
-  flipX: 1
+  spriteIndex: 10
+  flipX: 0
   flipY: 0
   width: 1
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.06640625, y: 0.072265625, z: 0.2578125, w: 0.9238281}
+    uvSizeAndPos: {x: 0.072265625, y: 0.072265625, z: 0.18554688, w: 0.82421875}
     uvPivot: {x: 0.5, y: 0.5}
-    worldSize: {x: 0.18888889, y: 0.20555556, z: 1}
-    index: 4
+    worldSize: {x: 0.20555556, y: 0.20555556, z: 1}
+    index: 10
   bounds:
-    m_Center: {x: 299.382, y: -0.22100008, z: 15.92}
-    m_Extent: {x: 0.094444446, y: 0.10277778, z: 0.1}
-  worldPivotAndSize: {x: -0.094444446, y: -0.10277778, z: 0.18888889, w: 0.20555556}
-  uvSizeAndPosition: {x: 0.06640625, y: 0.072265625, z: 0.2578125, w: 0.9238281}
-  scaleAndFlip: {x: 1, y: 1, z: -1, w: 1}
+    m_Center: {x: 299.43, y: -0.22100008, z: 15.92}
+    m_Extent: {x: 0.10277778, y: 0.10277778, z: 0.1}
+  worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
+  uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.18554688, w: 0.82421875}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
   boundsOffset: {x: 0, y: 0, z: 0}
   worldPivotsAndSizes: []
@@ -250,8 +248,8 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 4
-  prevSpriteIndexFlipV: 4
+  prevSpriteIndexFlipH: 10
+  prevSpriteIndexFlipV: 10
   isAnimating: 0
   quadCount: 0
 --- !u!1 &2488520917910274587
@@ -310,14 +308,13 @@ MonoBehaviour:
   scrollSpeed: 0
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
-  bounds:
-    m_Center: {x: 300.05878, y: 0.31533328, z: 15.92}
-    m_Extent: {x: 0.71077776, y: 0.09166667, z: 0}
   textBoxData:
     size: {x: 1.4215555, y: 0.18333334}
     lineWidths:
     - 1.4215555
-  boundsOffset: {x: 0.71077776, y: -0.09166667, z: 0}
+  bounds:
+    m_Center: {x: 300.05878, y: 0.31533328, z: 15.92}
+    m_Extent: {x: 0.71077776, y: 0.09166667, z: 0}
   worldPivotsAndSizes:
   - {x: -0, y: -0.18333334, z: 0.03888889, w: 0.18333334}
   - {x: 0.08044444, y: -0.18333334, z: 0.011111111, w: 0.18333334}
@@ -398,6 +395,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.71077776, y: -0.09166667, z: 0}
   hasText: 1
   borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &3031531853131365240
@@ -457,7 +455,6 @@ MonoBehaviour:
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  colorsData: {fileID: 0}
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   paperRenderer: {fileID: 2670676497328436670}
   proceduralTextRenderers: []
@@ -543,14 +540,13 @@ MonoBehaviour:
   scrollSpeed: 0
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
-  bounds:
-    m_Center: {x: 300.0863, y: 0.04077769, z: 15.92}
-    m_Extent: {x: 0.12530333, y: 0.072222225, z: 0}
   textBoxData:
     size: {x: 0.25060666, y: 0.14444445}
     lineWidths:
     - 0.2456928
-  boundsOffset: {x: 0.12530333, y: -0.072222225, z: 0}
+  bounds:
+    m_Center: {x: 300.0863, y: 0.04077769, z: 15.92}
+    m_Extent: {x: 0.12530333, y: 0.072222225, z: 0}
   worldPivotsAndSizes:
   - {x: -0, y: -0.14444445, z: 0.06111111, w: 0.11111111}
   - {x: 0.093386665, y: -0.14444445, z: 0.055555556, w: 0.11111111}
@@ -567,6 +563,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.12530333, y: -0.072222225, z: 0}
   hasText: 1
   borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &8555246787508902657
@@ -618,7 +615,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: ce00a485150a179469cda6914ad00cce, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
   atlas: {fileID: 11400000, guid: eba6eb7239ccca949b91a3ab6672a7da, type: 2}
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
   spriteIndex: 12
   flipX: 0
@@ -677,7 +673,7 @@ Transform:
   m_GameObject: {fileID: 8893580184930464331}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.47998047, y: -0.23200035, z: -1}
+  m_LocalPosition: {x: -0.47998047, y: -0.221, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -700,25 +696,24 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 3
+  spriteIndex: 7
   flipX: 0
-  flipY: 1
+  flipY: 0
   width: 1
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.072265625, y: 0.072265625, z: 0.17773438, w: 0.92578125}
+    uvSizeAndPos: {x: 0.072265625, y: 0.072265625, z: 0.8925781, w: 0.91015625}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.20555556, y: 0.20555556, z: 1}
-    index: 3
+    index: 7
   bounds:
-    m_Center: {x: 299.52002, y: 1.6879996, z: 15.92}
+    m_Center: {x: 299.52002, y: 1.699, z: 15.92}
     m_Extent: {x: 0.10277778, y: 0.10277778, z: 0.1}
   worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
-  uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.17773438, w: 0.92578125}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: -1}
+  uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.8925781, w: 0.91015625}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
   boundsOffset: {x: 0, y: 0, z: 0}
   worldPivotsAndSizes: []
@@ -729,7 +724,7 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 3
-  prevSpriteIndexFlipV: 3
+  prevSpriteIndexFlipH: 7
+  prevSpriteIndexFlipV: 7
   isAnimating: 0
   quadCount: 0

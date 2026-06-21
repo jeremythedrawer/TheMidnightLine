@@ -27,7 +27,7 @@ Transform:
   m_GameObject: {fileID: 5800864803375953941}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 211.3, y: 8.02, z: -19.99}
+  m_LocalPosition: {x: 211.3, y: 0, z: -19.99}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -49,20 +49,13 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 857f07ac02073324d828fc8db55dd0e9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: -19
   atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 3
   flipX: 0
   flipY: 0
   width: 1
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.99902344, y: 0.09716797, z: 0, w: 0.7128906}
@@ -70,9 +63,9 @@ MonoBehaviour:
     worldSize: {x: 11.366667, y: 1.1055555, z: 1}
     index: 3
   bounds:
-    m_Center: {x: 216.98334, y: 8.572779, z: -19.99}
+    m_Center: {x: 216.98334, y: 0.55277777, z: -19.99}
     m_Extent: {x: 5.6833334, y: 0.55277777, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 11.366667, w: 1.1055555}
+  worldPivotAndSize: {x: -0, y: -0, z: 11.366667, w: 1.1055555}
   uvSizeAndPosition: {x: 0.99902344, y: 0.09716797, z: 0, w: 0.7128906}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -89,7 +82,6 @@ MonoBehaviour:
   prevSpriteIndexFlipV: 3
   isAnimating: 0
   quadCount: 0
-  hasText: 0
 --- !u!114 &9118113372713852469
 MonoBehaviour:
   m_ObjectHideFlags: 0

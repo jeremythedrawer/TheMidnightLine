@@ -149,12 +149,10 @@ public class NPCBrain : MonoBehaviour
         if (disembarking) return;
         SetPath(NPCPath.ToStandInTrain);
     }
-    public void ToggleHoverColor(bool toggle)
+    public void ToggleHover(bool toggle)
     {
         atlasRenderer.custom.y = toggle ? 1 : 0;
     }
-
-
     private void SetState(NPCState newState)
     {
         if (curState == newState) return;

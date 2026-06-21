@@ -42,7 +42,7 @@ Shader "Custom/s_atlasAppear"
             SAMPLER(sampler_AtlasTexture);
 
             float3 _TicketCheckColor;
-            float3 _MainColor;
+            float3 _BlackColor;
             float _DayNight;
 
             Varyings vert(Attributes v)
@@ -91,9 +91,9 @@ Shader "Custom/s_atlasAppear"
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
                 half3 dayNightInvertColor = color.rgb + _DayNight;
 
-                half3 checkedColor = BayerX8(spriteData.custom.x, i.positionHCS);//  * _TicketCheckColor;
+                half3 checkedColor = BayerX8(spriteData.custom.x, i.positionHCS.y);//  * _TicketCheckColor;
 
-                half3 finalColor = max(dayNightInvertColor + (checkedColor - _DayNight) , _MainColor);
+                half3 finalColor = max(dayNightInvertColor + (checkedColor - _DayNight) , _BlackColor);
 
                 half alpha = BayerX8(color.a - spriteData.custom.a, i.positionHCS.xy);
                 clip(alpha - 0.001);

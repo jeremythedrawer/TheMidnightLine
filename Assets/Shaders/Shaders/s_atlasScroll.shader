@@ -46,9 +46,11 @@ Shader "Custom/s_atlasScroll"
             uint _ParticleOffset;
 
             float _DayNight;
-            float3 _MainColor;
+            float3 _BlackColor;
             float _DayNightFactor;
 
+            float4 _TrainBoundsMin;
+            float4 _TrainBoundsSize;
 
             Varyings vert(uint vertexID : SV_VertexID, uint instanceID : SV_InstanceID)
             {
@@ -73,7 +75,6 @@ Shader "Custom/s_atlasScroll"
                 objPos *= size;
                 objPos *= quadScale;
                 objPos += pivot;
-                //objPos += pivotScale;
 
                 float3 worldPos = float3(p.xy + objPos, p.z);
 
@@ -105,17 +106,12 @@ Shader "Custom/s_atlasScroll"
 
                 half color = tex.r;
 
-                return color.xxxx;
-
-                int maxPos = BACK_MIN + BACK_SIZE;
-                int minPos = MID_MIN;
-
-                half bayerFactor = (p.z - MID_MIN) / (maxPos - minPos);
-                bayerFactor = bayerFactor * 0.5 + 0.5;
+                half minPos = _TrainBoundsMin.z + _TrainBoundsSize.z;
+                half bayerFactor = (p.z - minPos) / (FAR_CLIP - minPos);
                 half bayerValue = bayerFactor * (_DayNight * 1.75 - 0.875);
 
                 half bayer = BayerX8((color - bayerValue), i.positionHCS.y);
-                half3 finalColor = bayer + _MainColor;
+                half3 finalColor = bayer + _BlackColor;
                 return half4(finalColor, 1);
             }
             ENDHLSL

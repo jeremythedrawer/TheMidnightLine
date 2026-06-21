@@ -50,19 +50,6 @@ public class Page : MonoBehaviour
     public string activePlayerWriteText;
     public string previewPlayerWriteText;
 
-    //public string playerSignature; //TODO: Put this in a player profile scriptable object
-
-    public CancellationTokenSource ctsWrite;
-    private void OnEnable()
-    {
-        CursorController.OnMouseEnabled += ToggleCursorControlIcons;
-    }
-    private void OnDisable()
-    {
-        CursorController.OnMouseEnabled -= ToggleCursorControlIcons;
-        ctsWrite?.Cancel();
-        ctsWrite = null;
-    }
     public void Init()
     {
         paper_clip = paperRenderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
@@ -95,11 +82,6 @@ public class Page : MonoBehaviour
                 playerWriteTexts = new string[playerWriteTextRenderers.Length];
                 Array.Fill(playerWriteTexts, "");
 
-                for (int i = 0; i < playerWriteRenderers.Length; i++)
-                {
-                    playerWriteRenderers[i].enabled = false;
-                }
-
                 EnableClueRow(trip.unlockedClueMarkerCount - 1);
             }
             break;
@@ -119,7 +101,7 @@ public class Page : MonoBehaviour
         playerWriteTexRend.SetText(previewPlayerWriteText);
 
         playerWriteTexRend.enabled = true;
-        playerWriteRenderers[index].enabled = true;
+        playerWriteRenderers[index].custom = Vector3.one;
     }
     public void UpdatePage()
     {
@@ -128,10 +110,10 @@ public class Page : MonoBehaviour
             case PageType.ColorKey:
             {
                 bool foundColorKeyRend = false;
-                for (int i = 0; i < playerWriteRenderers.Length; i++)
+                for (int i = 0; i < trip.unlockedClueMarkerCount; i++)
                 {
                     AtlasRenderer colorKeyRend = playerWriteRenderers[i];
-                    if (colorKeyRend.enabled && CursorController.IsInsideBounds(colorKeyRend.GetBounds()) && !foundColorKeyRend)
+                    if (CursorController.IsInsideBounds(colorKeyRend.GetBounds()) && !foundColorKeyRend)
                     {
                         colorKeyRend.custom.w = 1;
 
@@ -189,23 +171,7 @@ public class Page : MonoBehaviour
         ToggleTextRenderers(proceduralTextRenderers, toggle, topHalf: false);
 
         ToggleRenderers(readOnlyRenderers, toggle, topHalf: false);
-
-        switch(pageType)
-        {
-            case PageType.Prompt:
-            case PageType.Profile:
-            case PageType.Confirm:
-            {
-                ToggleRenderers(playerWriteRenderers, toggle, topHalf: false);
-            }
-            break;
-
-            case PageType.ColorKey:
-            {
-                ToggleClueRowRenderers(toggle, topHalf: false);
-            }
-            break;
-        }
+        ToggleRenderers(playerWriteRenderers, toggle, topHalf: false);
     }
     public void TogglePageContentTopHalf(bool toggle)
     {
@@ -214,24 +180,7 @@ public class Page : MonoBehaviour
         ToggleTextRenderers(proceduralTextRenderers, toggle, topHalf: true);
 
         ToggleRenderers(readOnlyRenderers, toggle, topHalf: true);
-
-        switch (pageType)
-        {
-            case PageType.Prompt:
-            case PageType.Profile:
-            case PageType.Confirm:
-            {
-                ToggleRenderers(playerWriteRenderers, toggle, topHalf: true);
-            }
-            break;
-
-            case PageType.ColorKey:
-            {
-                ToggleClueRowRenderers(toggle, topHalf: true);
-
-            }
-            break;
-        }
+        ToggleRenderers(playerWriteRenderers, toggle, topHalf: true);
     }
     public void ToggleTextRenderers(AtlasTextRenderer[] textRenderers, bool toggle, bool topHalf)
     {
@@ -292,37 +241,6 @@ public class Page : MonoBehaviour
             }
         }
     }
-    public void ToggleClueRowRenderers(bool toggle, bool topHalf)
-    {
-        if (topHalf)
-        {
-            for (int i = 0; i < trip.unlockedClueMarkerCount; i++)
-            {
-                AtlasRenderer rend = playerWriteRenderers[i];
-
-                float localBoundsMinY = transform.InverseTransformPoint(rend.GetBounds().min).y;
-
-                if (localBoundsMinY >= FLIP_LOCAL_POS_Y)
-                {
-                    rend.enabled = toggle;
-                }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < trip.unlockedClueMarkerCount; i++)
-            {
-                AtlasRenderer rend = playerWriteRenderers[i];
-
-                float localBoundsMaxY = transform.InverseTransformPoint(rend.GetBounds().max).y;
-
-                if (localBoundsMaxY < FLIP_LOCAL_POS_Y)
-                {
-                    rend.enabled = toggle;
-                }
-            }
-        }
-    }
     public void PlayPaperClip()
     {
         paperRenderer.PlayClipOneShot(paper_clip);
@@ -342,22 +260,12 @@ public class Page : MonoBehaviour
         playerWriteTexts[activePlayerWriteRowIndex] = activePlayerWriteText;
         playerWriteTextBounds = activePlayerWriteTextRenderer.GetBounds(activePlayerWriteText);
 
-        switch (pageType)
-        { 
-            case PageType.ColorKey:
-            {
-                //colors
-            }
-            break;
-        }
-
-
-        WriteText(activePlayerWriteTextRenderer, activePlayerWriteText, ctsWrite, Notepad.WRITE_LETTER_TIME);
+        activePlayerWriteTextRenderer.WriteText(activePlayerWriteText, Notepad.WRITE_LETTER_TIME);
     }
     public void ErasePlayerWriteText()
     {
         playerWriteTexts[activePlayerWriteRowIndex] = "";
-        EraseText(activePlayerWriteText, activePlayerWriteTextRenderer, ctsWrite, Notepad.WRITE_LETTER_TIME);
+        activePlayerWriteTextRenderer.EraseText(activePlayerWriteText, Notepad.WRITE_LETTER_TIME);
     }
     public void SwitchActivePreviewPlayerWriteText(int indexOffset)
     {
@@ -563,24 +471,6 @@ public class Page : MonoBehaviour
         activePlayerWriteTextRenderer = playerWriteTextRenderers[activePlayerWriteRowIndex];
         previewPlayerWriteText = activePlayerWriteTextRenderer.text;
         activePlayerWriteText = playerWriteTexts[activePlayerWriteRowIndex];
-    }
-    public void ToggleCursorControlIcons()
-    {
-        if (CursorController.Active)
-        {
-            exitButton_renderer.UpdateSpriteInputsByIndex(3);
-            paperCornerLeftButtonRenderer?.UpdateSpriteInputsByIndex(4);
-            paperCornerRightButtonRenderer?.UpdateSpriteInputsByIndex(4);
-        }
-        else
-        {
-            exitButton_renderer.UpdateSpriteInputsByIndex(7);
-            paperCornerLeftButtonRenderer?.UpdateSpriteInputsByIndex(10);
-            paperCornerRightButtonRenderer?.UpdateSpriteInputsByIndex(8);
-
-        }
-        paperCornerLeftButtonRenderer?.FlipHSimple(CursorController.Active);
-        exitButton_renderer.FlipVSimple(CursorController.Active);
     }
     public Bounds GetWritingBounds()
     {

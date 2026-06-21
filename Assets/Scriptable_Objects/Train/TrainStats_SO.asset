@@ -13,35 +13,38 @@ MonoBehaviour:
   m_Name: TrainStats_SO
   m_EditorClassIdentifier: 
   curVelocity: {x: 0, y: 0}
-  targetVelocity: {x: 10, y: 0}
-  prevPeakVelocity: 7.08
-  targetStopPosition: 308.2
-  targetKMPH: 17
+  targetVelocity: {x: 0, y: 0}
+  prevPeakVelocity: 9.472222
+  targetPosition: 145.8
+  targetKMPH: 34.1
   targetElevatePos: {x: 0, y: 0}
-  distToSpawnNextStation: 86.47077
+  distToSpawnNextStation: 60.95777
   trainToMaxSpawnDist: 33.77777
-  totalPassengersBoarded: 0
-  targetPassengersBoarding: 28
-  slideDoorsAmountOpened: 0
+  totalNPCsBoarded: 3
+  targetNPCsToBoard: 11
+  slideDoorsAmountOpened: 3
   depthSections:
     min: 3
     max: 17
-    frontMin: 6
-    frontMax: 7
-    backMin: 9
-    backMax: 10
-    carriageSeat: 14
+    frontMin: 8
+    frontMax: 8
+    backMin: 8
+    backMax: 8
+    carriageSeat: 15
   totalBounds:
-    m_Center: {x: 308.3534, y: 0.41900003, z: 1.5}
-    m_Extent: {x: 19.843384, y: 0.9574444, z: 1.5}
+    m_Center: {x: 141.25339, y: 0.41900003, z: 1.5}
+    m_Extent: {x: 24.5434, y: 0.9574444, z: 1.5}
+  activeSlideDoorsMask:
+    serializedVersion: 2
+    m_Bits: 4194304
   exteriorSlideDoorPositions:
   - 316.52777
   - 313.03876
-  - 306.759
+  - 306.75897
   - 303.27
   - 297
   - 293.511
-  - 287.207
+  - 287.20697
   - 283.718
   interiorSlideDoorPositions:
   - 316.18976

@@ -107,7 +107,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                 {
                     AtlasRenderer renderer = spriteBatch.data.atlasRendererList[i];
 
-                    if (renderer.gameObject == null || !renderer.gameObject.activeInHierarchy) continue;
+                    if (renderer == null || !renderer.gameObject.activeInHierarchy) continue;
 #if UNITY_EDITOR
                     if (prefabStage != null) { if (renderer.gameObject.scene != prefabScene) continue; }
 #else
@@ -249,6 +249,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     ParticlePosData posData = particleAtlas.posData[j];
                     if (spyStats.ticketsCheckedTotal < posData.ticketCheckStart) break;
                     if (posData.argsBuffer == null) continue;
+
 
                     argsSpawn[1] = posData.quadCount;
                     posData.argsBuffer.SetData(argsSpawn);

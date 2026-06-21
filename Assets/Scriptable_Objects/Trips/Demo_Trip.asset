@@ -21,11 +21,13 @@ MonoBehaviour:
   - {fileID: 11400000, guid: abf5051c889b6444aa08499e01c10fc4, type: 2}
   - {fileID: 11400000, guid: 357154f373a41684ea6991690bd10c52, type: 2}
   - {fileID: 11400000, guid: 550abf757e9f50645b3d06cb79ddfb74, type: 2}
+  - {fileID: 11400000, guid: 6ed87a1ca417091488a94b5784d18b75, type: 2}
   stationsDataArray:
   - {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
   - {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
   - {fileID: 11400000, guid: 134e92c40424a324c80e62fb7525f100, type: 2}
   - {fileID: 11400000, guid: 943d44fe5abb9e34a8ac880c80c72af9, type: 2}
+  - {fileID: 11400000, guid: b93f4eeb1c65e734e87b647acbb56161, type: 2}
   npc_prefabsArray:
   - {fileID: 94976023300698573, guid: 236df137b9dfc13469fc4820124f097b, type: 3}
   - {fileID: 94976023300698573, guid: d02c48e5c3c73f148b26393aa574b573, type: 3}
@@ -36,14 +38,17 @@ MonoBehaviour:
   - {fileID: 94976023300698573, guid: 309c427b4de8219458011f9f0e3445fd, type: 3}
   dayNightValues:
   - 0
-  - 1
-  - 1
-  - 1
-  - 0.617
-  - 1
   - 0
   - 0
   - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 1
+  - 1
   elevationValues:
   - {x: 0, y: 0}
   - {x: 1, y: 0}
@@ -54,8 +59,11 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 1, y: 0}
+  - {x: 0, y: 0}
   kmValues:
-  - 51.9
+  - 34.1
   - 22.2
   - 10
   - 10
@@ -64,31 +72,35 @@ MonoBehaviour:
   - 10
   - 10
   - 10
-  nextStation: {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
+  - 34.1
+  - 22.2
+  - 10
+  nextStation: {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
   ticketsCheckedSinceLastStation: 0
   traitorsSpawned: 0
   unlockedClueMarkerCount: 1
   selectedClueMarkerIndex: 0
   selectedClueMarkerColors:
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
-  - {r: 0, g: 0, b: 0, a: 0}
+  - {r: 1, g: 1, b: 1, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
   traitorProfiles:
   - npcProfile:
       boardingStationIndex: 0
       disembarkingStationIndex: 2
-      npcPrefabIndex: 3
+      npcPrefabIndex: 2
       behaviours: 3
     fullName: 
-    coveredMugshotIndex: 7
-    uncoveredMugshotIndex: 6
-    found: 1
+    coveredMugshotIndex: 5
+    uncoveredMugshotIndex: 4
+    found: 0
   - npcProfile:
       boardingStationIndex: 0
       disembarkingStationIndex: 1
-      npcPrefabIndex: 4
+      npcPrefabIndex: 0
       behaviours: 3
     fullName: 
-    coveredMugshotIndex: 9
-    uncoveredMugshotIndex: 8
-    found: 1
+    coveredMugshotIndex: 1
+    uncoveredMugshotIndex: 0
+    found: 0

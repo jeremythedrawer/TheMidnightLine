@@ -5,6 +5,7 @@ public class SceneController : MonoBehaviour
 {
     public SceneData sceneData;
     public static Transform Transform;
+
     public static Notepad Notepad;
     public static ColorPicker ColorPicker;
     public static InputManager InputManager;

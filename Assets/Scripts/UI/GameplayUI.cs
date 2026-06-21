@@ -9,6 +9,7 @@ public class GameplayUI : MonoBehaviour
 {
     const float TICKET_ICON_PADDING = 0.2f;
     const float TICKET_ICON_APPEARING_DURATION = 0.5f;
+    const float NOTEPAD_INACTIVE_OFFSET = 1.8f;
 
     public PlayerInputsSO playerInputs;
     public CameraStatsSO cameraStats;
@@ -176,7 +177,7 @@ public class GameplayUI : MonoBehaviour
                 notepadHoverBounds.center = notepad.transform.position;
                 if (CursorController.IsInsideBounds(notepadHoverBounds))
                 {
-                    notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NnotepadHoverPos, Time.deltaTime * MOVE_DAMP);
+                    notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadHoverPos, Time.deltaTime * MOVE_DAMP);
                     if (CursorController.IsInsideBounds(notepad.activePage.exitButton_renderer.bounds))
                     {
                         if (playerInputs.mouseLeftDown)
@@ -244,14 +245,14 @@ public class GameplayUI : MonoBehaviour
 
         NotepadActivePos = notepad.transform.localPosition;
         float binderBoundsOffsetX = notepad.bindingRings_renderer.bounds.max.x - notepad.transform.position.x;
-        float binderBoundsOffsetY = notepad.transform.position.y - notepad.activePage.exitButton_renderer.bounds.min.y;
+        float binderBoundsOffsetY = notepad.transform.position.y - NOTEPAD_INACTIVE_OFFSET;
 
         NotepadInactivePos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + binderBoundsOffsetY, notepad.transform.localPosition.z);
-        NnotepadHoverPos = new Vector3(NotepadInactivePos.x, NotepadInactivePos.y + notepad.bindingRings_renderer.bounds.size.y, NotepadInactivePos.z);
+        NotepadHoverPos = new Vector3(NotepadInactivePos.x, NotepadInactivePos.y + notepad.bindingRings_renderer.bounds.size.y, NotepadInactivePos.z);
 
         float ySize = notepad.traitorPage_prefab.paperRenderer.bounds.size.y;
         Vector3 hoverSize = new Vector3(notepad.bindingRings_renderer.bounds.size.x, ySize, 0.2f);
-        notepadHoverBounds = new Bounds(NnotepadHoverPos, hoverSize);
+        notepadHoverBounds = new Bounds(NotepadHoverPos, hoverSize);
         notepad.transform.localPosition = NotepadInactivePos;
 
         ticketActivePos = ticket.transform.localPosition;

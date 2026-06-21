@@ -4,10 +4,6 @@ using static Atlas;
 using static Spy;
 public class CameraController : MonoBehaviour
 {
-
-    const float RES_Y = 640;
-    const float RES_X = 1920;
-    const float RES_Y_HALF = 320;
     const float GAUSSIAN_VARIANCE = 90;
 
     public CameraSettingsSO settings;
@@ -42,7 +38,7 @@ public class CameraController : MonoBehaviour
         stats.curWorldPos = transform.position;
         stats.camBounds = new Bounds();
         stats.camBounds.size = new Vector3(cam.orthographicSize * 2 * cam.aspect, cam.orthographicSize * 2, cam.farClipPlane + cam.nearClipPlane);
-        stats.worldUnitsPerPixel = (cam.orthographicSize * 2) / RES_Y;
+        stats.worldUnitsPerPixel = (cam.orthographicSize * 2) / Screen.height;
 
 
         renderTextureScale = 16;
@@ -186,6 +182,6 @@ public class CameraController : MonoBehaviour
     }
     private float GetSnappedOrthoSize()
     {
-        return (RES_Y_HALF / PIXELS_PER_UNIT);
+        return (Screen.height * 0.5f / PIXELS_PER_UNIT);
     }
 }

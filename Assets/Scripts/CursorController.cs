@@ -13,6 +13,7 @@ public class CursorController : MonoBehaviour
     public LayerSettingsSO layerSettings;
     public SpyStatsSO spyStats;
     public AtlasRenderer cursorRenderer;
+    public AtlasTextRenderer cursorTag;
 
     [Header("Generated")]
     public NPCBrain hoveredNPC;
@@ -31,7 +32,6 @@ public class CursorController : MonoBehaviour
 
     public static event Action OnMouseEnabled;
     public static event Action OnMouseDisabled;
-
 
     private void Start()
     {
@@ -107,8 +107,9 @@ public class CursorController : MonoBehaviour
             {
                 if (hoveredNPC != npc)
                 {
+                    hoveredNPC?.ToggleHover(false);
                     hoveredNPC = npc;
-                    hoveredNPC.ToggleHoverColor(true);
+                    hoveredNPC.ToggleHover(true);
                 }
                 foundNPC = true;
                 break;
@@ -119,14 +120,14 @@ public class CursorController : MonoBehaviour
         {
             if (hoveredNPC != null)
             {
-                hoveredNPC?.ToggleHoverColor(false);
+                hoveredNPC?.ToggleHover(false);
                 hoveredNPC = null;
             }
         }
     }
     public static bool IsInsideBounds(Bounds bounds)
     {
-        return CursorBounds.max.x >= bounds.min.x && CursorBounds.min.x <= bounds.max.x && CursorBounds.max.y >= bounds.min.y && CursorBounds.min.y <= bounds.max.y;
+        return CursorBounds.min.x >= bounds.min.x && CursorBounds.min.x <= bounds.max.x && CursorBounds.max.y >= bounds.min.y && CursorBounds.max.y <= bounds.max.y;
     }
     public static bool EnteredBounds(AtlasRenderer renderer)
     {

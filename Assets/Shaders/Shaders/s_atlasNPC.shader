@@ -46,7 +46,7 @@ Shader "Custom/s_atlasNPC"
             TEXTURE2D(_CarriageBoundsTexture);
             SAMPLER(sampler_CarriageBoundsTexture);
 
-            float3 _MainColor;
+            float3 _BlackColor;
 
             float3 _ColorKey0;
             float3 _ColorKey1;
@@ -110,12 +110,12 @@ Shader "Custom/s_atlasNPC"
                 half3 colKey2 = colKeyMask2 * _ColorKey2;
 
                 half hoverColor = i.custom.y * 0.05;
-                half3 finalColor = color.rgb + colKey0 + colKey1 + colKey2 + hoverColor;
+                half3 finalColor = color.rgb + colKey0 + colKey1 + colKey2 + hoverColor + _BlackColor;
 
                 
                 float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;
                 half4 carriageSDF = SAMPLE_TEXTURE2D(_CarriageBoundsTexture, sampler_CarriageBoundsTexture, worldToTrain);
-                float bayer = BayerX8(carriageSDF + 0.5,  i.positionHCS.y);
+                float bayer = BayerX8(carriageSDF.r + 0.5,  i.positionHCS.y);
                 float outside = max(step(worldToTrain.x, 0.0), step(1.0, worldToTrain.x));
                 outside = max(outside,max(step(worldToTrain.y, 0.0),step(1.0, worldToTrain.y)));
                 outside = max(outside, step(5, i.worldPos.z));

@@ -94,7 +94,6 @@ public class Notepad : MonoBehaviour
     public bool atStartPencilPos;
     public bool atOffCameraPos;
     
-
     private void Awake()
     {
         switch (sceneData.activeSceneType)
@@ -105,6 +104,7 @@ public class Notepad : MonoBehaviour
             }
             break;
         }
+        activePage = promptPage;
     }
     private void Start()
     {
@@ -120,13 +120,12 @@ public class Notepad : MonoBehaviour
         leftHandWorldDepthBack = (int)(rightHand_renderer.transform.position.z + 1);
 
         Vector3 flipWorldPos = new Vector3(bindingRings_renderer.transform.position.x, bindingRings_renderer.transform.position.y, leftHand_renderer.transform.position.z);
-        leftHandFlipPos = leftHand_renderer.transform.parent.InverseTransformPoint(flipWorldPos);
-        float distLeftHandToOffScreen = camStats.camBounds.min.y - (leftHand_renderer.bounds.max.y - leftHand_renderer.transform.position.y);
-        Vector3 offscreenWorldPos = new Vector3(leftHand_renderer.transform.position.x, distLeftHandToOffScreen, leftHand_renderer.transform.position.z);
-        leftHandOffScreenPos = leftHand_renderer.transform.parent.InverseTransformPoint(offscreenWorldPos);
+        leftHandFlipPos = transform.InverseTransformPoint(flipWorldPos);
+
+        Vector3 offscreenLocalPos = new Vector3(-transform.localPosition.x, transform.localPosition.y - camStats.camBounds.extents.y, leftHand_renderer.transform.localPosition.z);
+        leftHandOffScreenPos = offscreenLocalPos;
         leftHandTargetPos = leftHandOffScreenPos;
 
-        activePage = promptPage;
         switch (sceneData.activeSceneType)
         { 
             case SceneType.Trip:
@@ -311,9 +310,9 @@ public class Notepad : MonoBehaviour
                     activePage.gameObject.SetActive(false);
                     activePageIndex++;
                     activePage = pages[activePageIndex];
-                    activePage.ToggleCursorControlIcons();
                     activePage.SetPageDepth(leftHandWorldDepthFront + 2);
                     flipToggle = 0;
+
 
                     curKeyframeState = KeyframeState.None;
 
@@ -331,7 +330,6 @@ public class Notepad : MonoBehaviour
                         activePage.gameObject.SetActive(false);
                         activePageIndex--;
                         activePage = pages[activePageIndex];
-                        activePage.ToggleCursorControlIcons();
 
                         flipToggle = 0;
 
@@ -618,7 +616,10 @@ public class Notepad : MonoBehaviour
             {
                 if (activePage.playerWriteTextRenderers.Length > 0 && prevState != NotepadState.Writing && prevState != NotepadState.Erasing)
                 {
-                    leftHandTargetPos = leftHandOffScreenPos;
+                    Bounds rendBounds = leftHand_renderer.GetBounds();
+                    Vector4 uvPivot = leftHand_renderer.sprite.uvPivot;
+                    Vector3 spritePivotOffset = new Vector3(rendBounds.extents.x * (1 - uvPivot.x), rendBounds.size.y * (1 - uvPivot.y));
+                    leftHandTargetPos = leftHandOffScreenPos - spritePivotOffset;
                     atOffCameraPos = false;
                 }
 
@@ -724,9 +725,16 @@ public class Notepad : MonoBehaviour
             if (dist < PENCIL_DISTANCE_THRESHOLD * PENCIL_DISTANCE_THRESHOLD)
             {
                 leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[rotatePencil_clip.keyframeStartIndex].sprite);
+
+                Bounds rendBounds = leftHand_renderer.GetBounds();
+                Vector4 uvPivot = leftHand_renderer.sprite.uvPivot;
+                Vector3 spritePivotOffset = new Vector3(rendBounds.extents.x * (1 - uvPivot.x), rendBounds.size.y * (1 - uvPivot.y));
+
+                leftHand_renderer.transform.localPosition = leftHandOffScreenPos - spritePivotOffset;
+
                 curWritingBounds = activePage.GetWritingBounds();
                 Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
-                leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
+                leftHandTargetPos = transform.InverseTransformPoint(startWriteWorldPos);
 
                 atOffCameraPos = true;
             }
@@ -735,11 +743,15 @@ public class Notepad : MonoBehaviour
         {
             if (colorPicker.curState == ColorPicker.State.Opened || colorPicker.curState == ColorPicker.State.Opening)
             {
-                leftHandTargetPos = leftHandOffScreenPos;
+                Bounds rendBounds = leftHand_renderer.GetBounds();
+                Vector4 uvPivot = leftHand_renderer.sprite.uvPivot;
+                Vector3 spritePivotOffset = new Vector3(rendBounds.extents.x * (1 - uvPivot.x), rendBounds.size.y * (1 - uvPivot.y));
+
+                leftHandTargetPos = leftHandOffScreenPos - spritePivotOffset;
             }
             else if (colorPicker.curState == ColorPicker.State.Closed)
             {
-                Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
+                Vector3 startWriteWorldPos = new Vector3(activePage.playerWriteRenderers[activePage.activePlayerWriteRowIndex].GetBounds().min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
                 leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
             }
             else if (playerInputs.numpad != -1)
@@ -911,7 +923,6 @@ public class Notepad : MonoBehaviour
         confirmPage.Init();
         pages = pageList.ToArray();
     }
-
     private string GenerateName(Gender gender, Ethnicity ethnicity)
     {
         string genderString = gender.ToString();

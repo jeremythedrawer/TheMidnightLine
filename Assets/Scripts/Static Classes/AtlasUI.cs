@@ -6,7 +6,7 @@ using UnityEngine;
 using static NPC;
 public static class AtlasUI
 {
-    public const float BORDER_PADDING = 0.05f;
+    public const float BORDER_PADDING = 0f;
     public const float LETTER_ADVANCE = 0.122f;
     public const float APPEAR_TEXT_TIME = 0.2f;
     public const float FADE_BLACK_DURATION = 1f;
@@ -59,25 +59,12 @@ public static class AtlasUI
     }
     public static Vector3 NotepadActivePos;
     public static Vector3 NotepadInactivePos;
-    public static Vector3 NnotepadHoverPos;
+    public static Vector3 NotepadHoverPos;
 
     static float NaturalMoveClock;
 
     public static event Action OnFinishFadeFromBlack;
     public static Dictionary<TripPrompt, string> PromptStringDict;
-
-    public static void WriteText(AtlasTextRenderer textRenderer, string text, CancellationTokenSource cts, float writeLetterTime)
-    {
-        cts?.Cancel();
-        cts = new CancellationTokenSource();
-        WritingText(text, textRenderer, cts, writeLetterTime).Forget();
-    }
-    public static void EraseText(string text, AtlasTextRenderer textRenderer, CancellationTokenSource cts, float writeLetterTime)
-    {
-        cts?.Cancel();
-        cts = new CancellationTokenSource();
-        ErasingText(text, textRenderer, cts, writeLetterTime).Forget();
-    }
     public static void InvertButton(bool invert, AtlasRenderer renderer)
     {
         renderer.custom.x = invert ? 0 : 1;
@@ -140,40 +127,6 @@ public static class AtlasUI
         catch (OperationCanceledException)
         {
         }
-    }
-    private static async UniTask WritingText(string text, AtlasTextRenderer textRenderer, CancellationTokenSource cts, float writeLetterTime)
-    {
-        int stationNameLetterCount = text.Length;
-        int curLetterIndex = 0;
-
-        string curStationString = "";
-        textRenderer.SetText(curStationString);
-
-        try
-        {
-            while (curLetterIndex < stationNameLetterCount)
-            {
-                curStationString += text[curLetterIndex];
-                await UniTask.WaitForSeconds(writeLetterTime, cancellationToken: cts.Token);
-                textRenderer.SetText(curStationString);
-                curLetterIndex++;
-            }
-        }
-        catch (OperationCanceledException) { }
-    }
-    private static async UniTask ErasingText(string text, AtlasTextRenderer textRenderer, CancellationTokenSource cts, float writeLetterTime)
-    {
-        string curStationString = text;
-        try
-        {
-            while (curStationString.Length > 0)
-            {
-                await UniTask.WaitForSeconds(writeLetterTime, cancellationToken: cts.Token);
-                curStationString = curStationString[..^1];
-                textRenderer.SetText(curStationString);
-            }
-        }
-        catch (OperationCanceledException) { }
     }
     private static async UniTask FadingToBlack(Material fadeBlackMaterial, CancellationTokenSource cts)
     {

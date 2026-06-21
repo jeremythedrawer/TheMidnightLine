@@ -206,10 +206,6 @@ public class TrainController : MonoBehaviour
                 {
                     stats.targetPosition = NextStationInstance.transform.position.x;
                 }
-                else
-                {
-                    stats.targetPosition = TRAIN_WORLD_POS_X + VELOCITY_BUFFER + Mathf.Epsilon;
-                }
                 stats.curVelocity.x = DecreaseVelocity(stats.curVelocity.x, stats.targetVelocity.x, stats.prevPeakVelocity, settings.deceleration, stats.targetPosition);
                 HandleTrainMeters();
             }
@@ -384,10 +380,8 @@ public class TrainController : MonoBehaviour
     }
     private void SetBounds()
     {
-        stats.totalBounds = driversPit.bounds;
-        stats.totalBounds.Encapsulate(backSprite.bounds);
-        stats.totalBounds.size = new Vector3(stats.totalBounds.size.x, stats.totalBounds.size.y, stats.depthSections.min);
-        stats.totalBounds.center = new Vector3(stats.totalBounds.center.x, stats.totalBounds.center.y, stats.totalBounds.size.z * 0.5f);
+        stats.totalBounds = backSprite.GetBounds();
+        stats.totalBounds.Encapsulate(driversPit.GetBounds());
     }
     private void SetDepthSections()
     {
@@ -428,7 +422,7 @@ public class TrainController : MonoBehaviour
         }
     }
     private async UniTask MoveTrainToStartPosition()
-    {        
+    {
         while (stats.curVelocity.x != 0)
         {
             stats.targetPosition += stats.curVelocity.x * Time.deltaTime;

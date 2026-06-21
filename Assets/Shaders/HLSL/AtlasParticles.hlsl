@@ -6,14 +6,7 @@
 #define FIRST_OUT_OF_BOUNDS_BIT 3
 #define ELEVATION_BIT 4
 
-static const float FORE_MIN = 1.0;
-static const float FORE_SIZE = 1.0;
-
-static const float MID_MIN = 48.0;
-static const float MID_SIZE = 16.0;
-
-static const float BACK_MIN = 65.0;
-static const float BACK_SIZE = 63.0;
+#define FAR_CLIP 128
 
 static const float2 QUAD_OFFSETS[4] =
 {

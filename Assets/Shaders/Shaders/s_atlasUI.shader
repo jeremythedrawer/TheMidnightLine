@@ -39,7 +39,7 @@ Shader "Custom/s_atlasUI"
             TEXTURE2D(_CarriageBoundsTexture);
             SAMPLER(sampler_CarriageBoundsTexture);
 
-            float3 _MainColor;
+            float3 _BlackColor;
     
 
             Varyings vert(Attributes v)
@@ -85,9 +85,9 @@ Shader "Custom/s_atlasUI"
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-                half3 finalColor = color.r + _MainColor;
+                half3 finalColor = color.r + _BlackColor;
                 clip(color.a - 0.001);
-                return half4 (finalColor.xxx, 1);
+                return half4 (finalColor, 1);
             }
             ENDHLSL
         }

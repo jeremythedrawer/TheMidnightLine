@@ -9,11 +9,15 @@ using UnityEditor.IMGUI.Controls;
 using static Atlas;
 using static AtlasRendering;
 using static AtlasUI;
+using System.Threading;
+using Cysharp.Threading.Tasks;
+using System;
 
 [ExecuteAlways]
 public class AtlasTextRenderer : MonoBehaviour
 {
     public AtlasTextRendererType rendererType;
+
     public BatchKey batchKey;
     public TextAtlas textAtlas;
 
@@ -30,14 +34,19 @@ public class AtlasTextRenderer : MonoBehaviour
     public AtlasRenderer background_renderer;
 
     [Header("Generated")]
-    public Bounds bounds;
+    public CancellationTokenSource ctsWrite;
+
     public TextBoxData textBoxData;
-    public Vector3 boundsOffset;
+    
+    public Bounds bounds;
 
     public Vector4[] worldPivotsAndSizes;
     public Vector4[] uvSizesAndPositions;
     public Vector4[] scalesAndFlips;
     public Vector4[] customs;
+
+    public Vector3 boundsOffset;
+    
     public bool hasText;
 
     [Header("Border Generated")]
@@ -94,6 +103,7 @@ public class AtlasTextRenderer : MonoBehaviour
             break;
             case AtlasTextRendererType.Border:
             {
+                bounds = GetBounds(text);
                 SetBorderText();
             }
             break;
@@ -171,25 +181,24 @@ public class AtlasTextRenderer : MonoBehaviour
         {
             case AtlasTextAlignmentType.Left:
             {
-                borderLocalPos.x = -BORDER_PADDING;
-
+                borderLocalPos.x = -background_renderer.worldPivotsAndSizes[0].z;
             }
             break;
             case AtlasTextAlignmentType.Center:
             {
-                borderLocalPos.x = -bounds.extents.x - BORDER_PADDING;
+                borderLocalPos.x = -bounds.extents.x - background_renderer.worldPivotsAndSizes[0].z;
 
             }
             break;
             case AtlasTextAlignmentType.Right:
             {
 
-                borderLocalPos.x = -bounds.size.x - BORDER_PADDING;
+                borderLocalPos.x = -bounds.size.x - background_renderer.worldPivotsAndSizes[0].z;
             }
             break;
         }
 
-        borderLocalPos.y = -bounds.size.y - BORDER_PADDING;
+        borderLocalPos.y = -background_renderer.worldPivotsAndSizes[0].w - bounds.size.y;
 
         if (!hasText)
         {
@@ -204,7 +213,6 @@ public class AtlasTextRenderer : MonoBehaviour
             worldSize.y = bounds.size.y + BORDER_PADDING * 2;
 
             background_renderer.transform.localPosition = borderLocalPos;
-
 
             background_renderer.SetNineSliceSizeFromWorldSpace(worldSize, background_renderer.atlas.slicedSprites[background_renderer.spriteIndex]);
         }
@@ -378,6 +386,54 @@ public class AtlasTextRenderer : MonoBehaviour
         };
     }
 
+    public void WriteText(string text, float writeLetterTime)
+    {
+        ctsWrite?.Cancel();
+        ctsWrite = new CancellationTokenSource();
+
+        WritingText(text, writeLetterTime).Forget();
+    }
+    private async UniTask WritingText(string text, float writeLetterTime)
+    {
+        int stationNameLetterCount = text.Length;
+        int curLetterIndex = 0;
+
+        string curStationString = "";
+        SetText(curStationString);
+
+        try
+        {
+            while (curLetterIndex < stationNameLetterCount)
+            {
+                curStationString += text[curLetterIndex];
+                await UniTask.WaitForSeconds(writeLetterTime, cancellationToken: ctsWrite.Token);
+                SetText(curStationString);
+                curLetterIndex++;
+            }
+        }
+        catch (OperationCanceledException) { }
+    }
+
+    public void EraseText(string text, float writeLetterTime)
+    {
+        ctsWrite?.Cancel();
+        ctsWrite = new CancellationTokenSource();
+        ErasingText(text, writeLetterTime).Forget();
+    }
+    private async UniTask ErasingText(string text, float writeLetterTime)
+    {
+        string curStationString = text;
+        try
+        {
+            while (curStationString.Length > 0)
+            {
+                await UniTask.WaitForSeconds(writeLetterTime, cancellationToken: ctsWrite.Token);
+                curStationString = curStationString[..^1];
+                SetText(curStationString);
+            }
+        }
+        catch (OperationCanceledException) { }
+    }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {

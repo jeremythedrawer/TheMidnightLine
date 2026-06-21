@@ -2,6 +2,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
@@ -13,41 +14,34 @@ public class AtlasTripEditor : EditorWindow
 {
     const float ROW_HEIGHT = 20;
     const float COLUMN_WIDTH = 150;
-
     const float GRAPH_POS_Y = 100;
+    const float PADDING = 70;
+    const float SIDE_PANEL_WIDTH = 250;
+    const float EDGE_SCROLLER_INPUT_AMOUNT = 3;
+    const float FULL_RECT_HEIGHT = 3000;
 
     const int STATION_LABEL_ROW = 1;
     const int KM_LABEL_ROW = 2;
     const int DAY_NIGHT_ROW = 3;
     const int ELEVATION_ROW = 4;
 
-    const float PADDING = 70;
-    const float SIDE_PANEL_WIDTH = 250;
-    const float EDGE_SCROLLER_INPUT_AMOUNT = 3;
-    const float FULL_RECT_HEIGHT = 3000;
-
     static SpawnData spawnData;
     
+    GUIStyle depthLabel;
+    GUIStyle graphHeaderLabel;
+
     TripSO trip;
 
     ParticleAtlas selectedParticleAtlas;
     
     TripEditorPrefab selectedPrefab;
 
-    ParticleWidthType selectedWidthType;
+    Color[] particleAtlasColors;
+
+    Vector2[] selectedElevationValues;
 
     float[] selectedKMValues;
     float[] selectedDayNightValues;
-    Vector2[] selectedElevationValues;
-
-    int selectedParticleCount;
-    int selectedPosDataIndex;
-    int curPosY;
-
-    float selectedRandScale;
-
-    GUIStyle depthLabel;
-    GUIStyle graphHeaderLabel;
 
     Rect fullRect;
     Rect graphScrollRect;
@@ -55,15 +49,21 @@ public class AtlasTripEditor : EditorWindow
     Rect sidePanelScrollRect;
     Rect sidePanelRect;
 
+    ParticleWidthType selectedWidthType;
+
     Vector2 graphScroll;
     Vector2 sidePanelScroll;
 
+    int selectedParticleCount;
+    int selectedPosDataIndex;
+    int curPosY;
     int totalTicketChecks;
     int dragOffsetWidth;
     int dragOffsetHeight;
     int dragOffsetStartX;
     int dragOffsetStartY;
 
+    float selectedRandScale;
     float graphRowHeight;
 
     bool adjustingBar;
@@ -86,13 +86,10 @@ public class AtlasTripEditor : EditorWindow
                 spawnData = foundSpawnData;
             }
         }
-
-        tripEditor.Init();
     }
     private void OnGUI()
     {
         Init();
-        GUISetUp();
 
         DrawFirstHeader();
         DrawSecondHeader();
@@ -144,33 +141,56 @@ public class AtlasTripEditor : EditorWindow
 
         curPosY = 0;
 
+        if (trip != null)
+        {
+            totalTicketChecks = 0;
+            for (int i = 0; i < trip.stationsDataArray.Length; i++)
+            {
+                StationSO station = trip.stationsDataArray[i];
+                totalTicketChecks += station.ticketsToCheckBeforeSpawn;
+            }
+            trip.dayNightValues = CorrectArrayLength(trip.dayNightValues);
+            trip.elevationValues = CorrectArrayLength(trip.elevationValues);
+            trip.kmValues = CorrectArrayLength(trip.kmValues);
 
+            selectedDayNightValues = trip.dayNightValues;
+            selectedElevationValues = trip.elevationValues;
+            selectedKMValues = trip.kmValues;
+
+            particleAtlasColors = new Color[trip.particleAtlasArray.Length];
+            for (int i = 0; i < particleAtlasColors.Length; i++)
+            {
+                particleAtlasColors[i] = Color.HSVToRGB((float)i / (float)particleAtlasColors.Length, 1, 1);
+            }
+
+        }
     }
-    private void GUISetUp()
+    private T[] CorrectArrayLength<T>(T[] array)
     {
-        if (trip == null) return;
-        totalTicketChecks = 0;
-        for (int i = 0; i < trip.stationsDataArray.Length; i++)
+        if (array ==  null)
         {
-            StationSO station = trip.stationsDataArray[i];
-            totalTicketChecks += station.ticketsToCheckBeforeSpawn;
+            return new T[totalTicketChecks];
         }
 
-        if (trip.dayNightValues == null)
+        int diff = array.Length - totalTicketChecks;
+
+
+        List<T> list = array.ToList();
+        if (diff < 0)
         {
-            trip.dayNightValues = new float[totalTicketChecks];
+            for (int i = 0; i < -diff; i++)
+            {
+                T t = array[i];
+                list.Add(t);
+            }
         }
-        if (trip.elevationValues == null)
+        else if (diff > 0)
         {
-            trip.elevationValues = new Vector2[totalTicketChecks];
+            int startRemoveIndex = array.Length - diff;
+            list.RemoveRange(startRemoveIndex, diff);
         }
-        if (trip.kmValues == null)
-        {
-            trip.kmValues = new float[totalTicketChecks];
-        }
-        selectedDayNightValues = trip.dayNightValues;
-        selectedElevationValues = trip.elevationValues;
-        selectedKMValues = trip.kmValues;
+
+        return list.ToArray();
     }
     private void DrawFirstHeader()
     {
@@ -288,7 +308,7 @@ public class AtlasTripEditor : EditorWindow
                 selectedParticleAtlas = null;
             }
 
-            if (atlasToParticleAtlasDict.TryGetValue(selectedPrefab.mainRenderer.atlas, out selectedParticleAtlas))
+            if (selectedPosDataIndex != -1 && atlasToParticleAtlasDict.TryGetValue(selectedPrefab.mainRenderer.atlas, out selectedParticleAtlas))
             {
                 Debug.Log(selectedPosDataIndex);
                 ParticlePosData selectedPosData = selectedParticleAtlas.posData[selectedPosDataIndex];
@@ -623,7 +643,6 @@ public class AtlasTripEditor : EditorWindow
                         Handles.DrawLine(vertLineTop, vertLineBottom);
                     }
 
-
                     for (int i = 0; i <= FAR_CLIP; i++)
                     {
                         float posY = graphRect.yMin + (i * graphRowHeight);
@@ -648,7 +667,6 @@ public class AtlasTripEditor : EditorWindow
                         Handles.Label(depthLabelPos, depthString, depthLabel);
                     }
 
-
                     for (int i = 0; i < trip.particleAtlasArray.Length; i++)
                     {
                         ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
@@ -669,86 +687,13 @@ public class AtlasTripEditor : EditorWindow
                             
                             Rect barRect = new Rect(barX, barY, barWidth, barHeight);
 
-                            float scaledWidth = 1;
-                            float scaledHeight = 1;
-                            GUI.BeginGroup(barRect);
-                            {
-                                switch(particleAtlas.particleType)
-                                {
-                                    case ParticleType.Zone:
-                                    {
-                                        switch(posData.widthType)
-                                        {
-                                            case ParticleWidthType.Simple:
-                                            case ParticleWidthType.Tiled:
-                                            {
-                                                for (float x = 0; x < barWidth; x += scaledWidth)
-                                                {
-                                                    for(float y = 0;  y < barHeight; y += scaledHeight)
-                                                    {
-                                                        ParticleSpritesData spriteData = particleAtlas.spriteData[j];
-                                                        scaledWidth = GetScaledWidth(spriteData, particleAtlas);
-                                                        scaledHeight = GetScaledHeight(spriteData, particleAtlas);
-                                                        int texSpriteIndex = 0;
+                            Handles.DrawSolidRectangleWithOutline(barRect, particleAtlasColors[i], Color.black);
 
-                                                        ParticleSpritesData s = particleAtlas.spriteData[texSpriteIndex % particleAtlas.spriteData.Length];
+                            GUID posDataGuid = new GUID(posData.prefabGUID);
+                            TripEditorPrefab posDataPrefab = (TripEditorPrefab)AssetDatabase.LoadAssetByGUID(posDataGuid, typeof(TripEditorPrefab));
 
-                                                        Vector2 uvPos = new Vector2(s.uvSizeAndPos.z, s.uvSizeAndPos.w);
-                                                        Vector2 uvSize = new Vector2(s.uvSizeAndPos.x, s.uvSizeAndPos.y);
-                                                        Rect uvRect = new Rect(uvPos, uvSize);
-
-                                                        Rect spriteRect = new Rect(x, y, scaledWidth, scaledHeight);
-                                                        GUI.DrawTextureWithTexCoords(spriteRect, particleAtlas.atlas.texture, uvRect);
-                                                
-                                                        texSpriteIndex++;
-                                                    }
-                                                }
-                                            }
-                                            break;
-
-                                            case ParticleWidthType.Sliced:
-                                            {
-                                                DrawNineSliceBar(particleAtlas, posData, barHeight, barWidth);
-                                            }
-                                            break;
-                                        }
-                                    }
-                                    break;
-                                    case ParticleType.Scroll:
-                                    {
-                                        switch(posData.widthType)
-                                        {
-                                            case ParticleWidthType.Simple:
-                                            case ParticleWidthType.Tiled:
-                                            {
-                                                ParticleSpritesData spriteData = particleAtlas.spriteData[posData.spriteIndex];
-                                                scaledWidth = GetScaledWidth(spriteData, particleAtlas);
-                                                scaledHeight = GetScaledHeight(spriteData, particleAtlas);
-                                                for (float x = 0; x < barWidth; x += scaledWidth)
-                                                {
-                                                    Vector2 uvPos = new Vector2(spriteData.uvSizeAndPos.z, spriteData.uvSizeAndPos.w);
-                                                    Vector2 uvSize = new Vector2(spriteData.uvSizeAndPos.x, spriteData.uvSizeAndPos.y);
-                                                    Rect uvRect = new Rect(uvPos, uvSize);
-
-                                                    Rect spriteRect = new Rect(x, 0, scaledWidth, scaledHeight);
-                                                    GUI.DrawTextureWithTexCoords(spriteRect,particleAtlas.atlas.texture, uvRect);
-                                                }
-                                            }
-                                            break;
-
-                                            case ParticleWidthType.Sliced:
-                                            {
-                                                DrawNineSliceBar(particleAtlas, posData, barHeight, barWidth);
-                                            }
-                                            break;
-                                        }
-                                    }
-                                    break;
-                                }
-
-                            }
-                            GUI.EndGroup();
-
+                            EditorGUI.LabelField(barRect, posDataPrefab.name, GUIStyle.none);
+                            
                             if (e.type == EventType.MouseDown && barRect.Contains(e.mousePosition))
                             {
                                 selectedParticleAtlas = trip.particleAtlasArray[i];
@@ -774,9 +719,7 @@ public class AtlasTripEditor : EditorWindow
                                 selectedWidthType = posData.widthType;
                                 selectedElevation = posData.elevate;
 
-                                GUID posDataGuid = new GUID(posData.prefabGUID);
-                                selectedPrefab = (TripEditorPrefab)AssetDatabase.LoadAssetByGUID(posDataGuid, typeof(TripEditorPrefab));
-
+                                selectedPrefab = posDataPrefab;
                                 Repaint();
                             }
 
@@ -818,7 +761,6 @@ public class AtlasTripEditor : EditorWindow
                             {
                                 adjustingBar = false;
                                 ApplyPrefabToPosData(ref posData);
-                                //SaveOrderedPosData();
                                 SavePrevDepthIndices();
                             }
                         }
@@ -920,7 +862,7 @@ public class AtlasTripEditor : EditorWindow
         {
             selectedPosDataIndex = selectedParticleAtlas.posData.Length - 1;
         }
-
+        
         selectedParticleAtlas.posData[selectedPosDataIndex] = posData;
         Repaint();
 

@@ -37,8 +37,7 @@ Shader "Custom/s_atlasColor"
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
-            TEXTURE2D(_CarriageBoundsTexture);
-            SAMPLER(sampler_CarriageBoundsTexture);
+            float3 _BlackColor;
 
             Varyings vert(Attributes v)
             {
@@ -92,11 +91,14 @@ Shader "Custom/s_atlasColor"
                 half3 invertTex = lerp(tex.rgb, 1 - tex.rgb, invertT);
                 half whiteTex = saturate(invertTex.g - invertTex.r);
                 half blackTex = (1- invertTex.g);
+
+                half3 col = i.custom.rgb + _BlackColor;
+                half t = round(LinearLightness(col));
+                half3 finalCol = lerp((blackTex + col) * border , whiteTex * col, t);
                 
-                half t = round(LinearLightness(i.custom.rgb));
-
-                half3 finalCol = lerp((blackTex + i.custom.rgb) * border , whiteTex * i.custom.rgb, t);
-
+                half bayerValue = 1 - saturate(ceil(i.custom.r + i.custom.g + i.custom.b) + 0.25);
+                float bayer = BayerX8(bayerValue,  i.positionHCS.x - i.positionHCS.y);
+                finalCol += bayer;
                 clip((tex.a) - 0.001);
                 return half4 (finalCol.rgb, 1);
             }

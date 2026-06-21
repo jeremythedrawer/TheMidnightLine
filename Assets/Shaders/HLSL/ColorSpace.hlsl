@@ -109,6 +109,6 @@ float LinearLightness(float3 linearRGB)
     }
     else
     {
-        return (pow(y, 0.3333) * 116 - 16) / 100;
+        return (pow(abs(y), 0.3333) * 116 - 16) / 100;
     }
 }

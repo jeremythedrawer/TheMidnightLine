@@ -73,6 +73,7 @@ public class SpawnMaster : MonoBehaviour
         spawnData.bounds.center = new Vector3(TRAIN_WORLD_POS_X, 0, FAR_CLIP * 0.5f);
         spawnData.bounds.size = new Vector3(trip.stationsDataArray[0].station_prefab.frontPlatformRenderer.bounds.size.x + camStats.camBounds.size.x, trainStats.totalBounds.size.y + camStats.camBounds.size.y, FAR_CLIP);
         transform.position = spawnData.bounds.min;
+
     }
     private void UpdateSpawnCompute(ref SpawnComputeData computeData)
     {
@@ -515,12 +516,15 @@ public class SpawnMaster : MonoBehaviour
             {
                 ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
 
+                if (particleAtlas.particleType != ParticleType.Scroll) continue;
+
                 for (int j = 0; j < particleAtlas.posDataIndexOffset; j++)
                 {
                     ParticlePosData posData = particleAtlas.posData[j];
 
                     if (posData.spawnState != SpawnState.MovingIn) continue;
 
+                    Debug.Log(posData.minParticleIndex + " | " + particleAtlas.name);
                     if ((spawnData.scrollData.moveInputs[posData.minParticleIndex] & (uint)ParticleMoveInputs.FirstOutOfBounds) == 0) continue;
 
                     posData.spawnState = SpawnState.Alive;
@@ -548,22 +552,28 @@ public class SpawnMaster : MonoBehaviour
                 posData.quadScaleBuffer = null;
                 posData.spawnState = SpawnState.None;
 
-                for (int k = 0; k < posData.preScrollers.Length; k++)
+                if (posData.preScrollers != null)
                 {
-                    EdgeScroller preScroller = posData.preScrollers[k];
-                    preScroller.argsBuffer?.Release();
-                    preScroller.argsBuffer = null;
-                    preScroller.edgeSpriteDataBuffer?.Release();
-                    preScroller.edgeSpriteDataBuffer = null;
+                    for (int k = 0; k < posData.preScrollers.Length; k++)
+                    {
+                        EdgeScroller preScroller = posData.preScrollers[k];
+                        preScroller.argsBuffer?.Release();
+                        preScroller.argsBuffer = null;
+                        preScroller.edgeSpriteDataBuffer?.Release();
+                        preScroller.edgeSpriteDataBuffer = null;
+                    }
                 }
 
-                for (int k = 0; k < posData.postScrollers.Length; k++)
+                if (posData.postScrollers != null)
                 {
-                    EdgeScroller postScroller = posData.postScrollers[k];
-                    postScroller.argsBuffer?.Release();
-                    postScroller.argsBuffer = null;
-                    postScroller.edgeSpriteDataBuffer?.Release();
-                    postScroller.edgeSpriteDataBuffer = null;
+                    for (int k = 0; k < posData.postScrollers.Length; k++)
+                    {
+                        EdgeScroller postScroller = posData.postScrollers[k];
+                        postScroller.argsBuffer?.Release();
+                        postScroller.argsBuffer = null;
+                        postScroller.edgeSpriteDataBuffer?.Release();
+                        postScroller.edgeSpriteDataBuffer = null;
+                    }
                 }
             }
 

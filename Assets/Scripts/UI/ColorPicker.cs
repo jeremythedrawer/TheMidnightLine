@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using UnityEngine;
-[ExecuteAlways]
+
 public class ColorPicker : MonoBehaviour
 {
     public enum State
@@ -26,6 +26,7 @@ public class ColorPicker : MonoBehaviour
     
     [Header("Generated")]
     public AtlasRenderer selectedRenderer;
+    public AtlasRenderer prevHoveredColorRenderer;
 
     public CancellationTokenSource ctsOpen;
 
@@ -55,7 +56,11 @@ public class ColorPicker : MonoBehaviour
     private void Awake()
     {
         trip.unlockedClueMarkerCount = 1;
-        SceneController.KeepColorPicker(this);
+
+        if (Application.isPlaying)
+        {
+            SceneController.KeepColorPicker(this);
+        }
     }
     private void Start()
     {
@@ -92,15 +97,18 @@ public class ColorPicker : MonoBehaviour
         switch(curState)
         {
             case State.Opened:
+            case State.Opening:
             {
-                if (playerInputs.mouseLeftDown)
+                for (int i = 0; i < activeColorAmount; i++)
                 {
-                    for (int i = 0; i < activeColorAmount; i++)
-                    {
-                        AtlasRenderer colorRend = colorRenderers[i];
+                    AtlasRenderer colorRend = colorRenderers[i];
 
-                        if (CursorController.IsInsideBounds(colorRend.bounds))
+                    if (CursorController.IsInsideBounds(colorRend.bounds))
+                    {
+                        if (playerInputs.mouseLeftHold)
                         {
+                            colorRend.custom.w = 0;
+
                             if (openedFully)
                             {
                                 SetNewColor(i);
@@ -109,9 +117,25 @@ public class ColorPicker : MonoBehaviour
                             {
                                 SetNPCColor(i);
                             }
-                            return;
                         }
+                        else
+                        {
+                            colorRend.custom.w = 1;   
+
+                        }
+
+                        prevHoveredColorRenderer = colorRend;
+                        return;
                     }
+                    else if (colorRend == prevHoveredColorRenderer)
+                    {
+                        colorRend.custom.w = 1;
+                        prevHoveredColorRenderer = null;
+                        return;
+                    }
+                }
+                if (playerInputs.mouseLeftDown && !CursorController.IsInsideBounds(paletteRenderer.bounds))
+                {
                     Close();
                 }
             }
@@ -123,9 +147,20 @@ public class ColorPicker : MonoBehaviour
         for (int i = 0; i < colorRenderers.Length; i++)
         {
             AtlasRenderer colorRenderer = colorRenderers[i];
-            colorRenderer.custom = colorsData.selectableClueColors[i].linear;
+            colorRenderer.enabled = false;
         }
-        trip.selectedClueMarkerColors = new Color[3];
+        trip.selectedClueMarkerColors = new Color[]
+        {
+            Color.white,
+            Color.black,
+            Color.black,
+            Color.black,
+        };
+        for (int i = 0; i < trip.selectedClueMarkerColors.Length - 1; i++)
+        {
+            Shader.SetGlobalColor("_ColorKey" + i, Color.black);
+        }
+
     }
     public void SetOpenPosAndSize()
     {
@@ -165,19 +200,18 @@ public class ColorPicker : MonoBehaviour
         Vector4 paletteTopRightWPS = paletteRenderer.worldPivotsAndSizes[8];
 
         sliceWorldSize = new Vector2(paletteBottomLeftWPS.z + paletteTopRightWPS.z, paletteBottomLeftWPS.w + paletteTopRightWPS.w);
-
-        
     }
     public void TurnOff()
     {
         paletteRenderer.enabled = false;
 
-        for(int i = 0; i < colorRenderers.Length; i++)
+        for(int i = 0; i < activeColorAmount; i++)
         {
             colorRenderers[i].enabled = false;
         }
 
         selectedRenderer = null;
+        transform.SetParent(null);
     }
     public void TurnOn(bool openFully, AtlasRenderer rend)
     {
@@ -185,10 +219,13 @@ public class ColorPicker : MonoBehaviour
 
         openedFully = openFully;
 
-        activeColorAmount = openedFully ? colorRenderers.Length : trip.unlockedClueMarkerCount;
+        activeColorAmount = openedFully ? colorRenderers.Length : trip.selectedClueMarkerColors.Length;
+        Color[] colorsToUse = openedFully ? colorsData.selectableClueColors : trip.selectedClueMarkerColors;
 
         for (int i = 0; i < activeColorAmount; i++)
         {
+            AtlasRenderer colorRend = colorRenderers[i];
+            colorRend.custom = colorsToUse[i].linear;
             colorRenderers[i].enabled = true;
         }
         
@@ -220,15 +257,16 @@ public class ColorPicker : MonoBehaviour
     }
     public void SetNewColor(int index)
     {
-        Color selectedColor = colorsData.selectableClueColors[index].linear;
-        selectedRenderer.custom = selectedColor;
-        trip.selectedClueMarkerColors[trip.selectedClueMarkerIndex] = selectedColor;
+        Color selectedColor = colorsData.selectableClueColors[index];
+        selectedRenderer.custom = selectedColor.linear;
+        trip.selectedClueMarkerColors[trip.selectedClueMarkerIndex + 1] = selectedColor;
 
-        Shader.SetGlobalColor("_ColorKey" + trip.selectedClueMarkerIndex, selectedColor);
+        Shader.SetGlobalColor("_ColorKey" + trip.selectedClueMarkerIndex, selectedColor.linear);
+
     }
     public void SetNPCColor(int index)
     {
-        selectedRenderer.custom.x = 1 << index;
+        selectedRenderer.custom.x = 1 << (index - 1);
     }
     public void Open(AtlasRenderer rend, bool openAllColors)
     {
@@ -236,23 +274,6 @@ public class ColorPicker : MonoBehaviour
         {
             ctsOpen?.Cancel();
             ctsOpen = new CancellationTokenSource();
-
-            if (openAllColors)
-            {
-                for (int i = 0; i < trip.unlockedClueMarkerCount; i++)
-                {
-                    AtlasRenderer colorRend = colorRenderers[i];
-                    colorRend.custom = colorsData.selectableClueColors[i].linear;
-                }
-            }
-            else
-            {
-                for(int i = 0; i < trip.unlockedClueMarkerCount; i++)
-                {
-                    AtlasRenderer colorRend = colorRenderers[i];
-                    colorRend.custom = trip.selectedClueMarkerColors[i];
-                }
-            }
 
             TurnOn(openAllColors, rend);
             Opening().Forget();
@@ -265,6 +286,7 @@ public class ColorPicker : MonoBehaviour
             ctsOpen?.Cancel();
             ctsOpen = new CancellationTokenSource();
 
+            transform.SetParent(selectedRenderer.transform);
             Closing().Forget();
         }
     }
@@ -284,11 +306,10 @@ public class ColorPicker : MonoBehaviour
                     float easeOutT = 1 - Mathf.Pow(1 - t * 2, 5);
                     curSpriteWidth = openSpriteWidth * easeOutT;
 
-                    paletteRenderer.transform.position = curWorldPos;
                     paletteRenderer.width = curSpriteWidth;
                     paletteRenderer.UpdateSliceSpriteInputsSelf();
 
-                    for (int i = 0; i < colorRenderers.Length; i++)
+                    for (int i = 0; i < activeColorAmount; i++)
                     {
                         float posX = Mathf.Lerp(closeColorRendererPosition.x, openColorRendererPositions[i].x, easeOutT);
                         colorRenderers[i].transform.localPosition = new Vector3(posX, closeColorRendererPosition.y, closeColorRendererPosition.z);
@@ -301,7 +322,7 @@ public class ColorPicker : MonoBehaviour
                     paletteRenderer.height = curSpriteHeight;
                     paletteRenderer.UpdateSliceSpriteInputsSelf();
 
-                    for (int i = 0; i < colorRenderers.Length; i++)
+                    for (int i = 0; i < activeColorAmount; i++)
                     {
                         float posY = Mathf.Lerp(closeColorRendererPosition.y, openColorRendererPositions[i].y, easOutT);
                         colorRenderers[i].transform.localPosition = new Vector3(openColorRendererPositions[i].x, posY, closeColorRendererPosition.z);
@@ -333,10 +354,9 @@ public class ColorPicker : MonoBehaviour
                     float easeOutT = Mathf.Max(1 - Mathf.Pow(1 - t * 2, 5), 0);
                     curSpriteWidth = openSpriteWidth * easeOutT;
 
-                    paletteRenderer.transform.position = curWorldPos;
                     paletteRenderer.width = curSpriteWidth;
                     paletteRenderer.UpdateSliceSpriteInputsSelf();
-                    for (int i = 0; i < colorRenderers.Length; i++)
+                    for (int i = 0; i < activeColorAmount; i++)
                     {
                         float posX = Mathf.Lerp(closeColorRendererPosition.x, openColorRendererPositions[i].x, easeOutT);
                         colorRenderers[i].transform.localPosition = new Vector3(posX, closeColorRendererPosition.y, closeColorRendererPosition.z);
@@ -349,7 +369,7 @@ public class ColorPicker : MonoBehaviour
                     paletteRenderer.height = curSpriteHeight;
                     paletteRenderer.UpdateSliceSpriteInputsSelf();
 
-                    for (int i = 0; i < colorRenderers.Length; i++)
+                    for (int i = 0; i < activeColorAmount; i++)
                     {
                         float posY = Mathf.Lerp(closeColorRendererPosition.y, openColorRendererPositions[i].y, easOutT);
                         colorRenderers[i].transform.localPosition = new Vector3(openColorRendererPositions[i].x, posY, closeColorRendererPosition.z);
