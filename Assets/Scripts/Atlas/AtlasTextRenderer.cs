@@ -414,13 +414,13 @@ public class AtlasTextRenderer : MonoBehaviour
         catch (OperationCanceledException) { }
     }
 
-    public void EraseText(string text, float writeLetterTime)
+    public void EraseText(float writeLetterTime)
     {
         ctsWrite?.Cancel();
         ctsWrite = new CancellationTokenSource();
-        ErasingText(text, writeLetterTime).Forget();
+        ErasingText(writeLetterTime).Forget();
     }
-    private async UniTask ErasingText(string text, float writeLetterTime)
+    private async UniTask ErasingText(float writeLetterTime)
     {
         string curStationString = text;
         try

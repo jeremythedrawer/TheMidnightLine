@@ -64,7 +64,7 @@ MonoBehaviour:
     worldSize: {x: 0.11666667, y: 0.15, z: 1}
     index: 2
   bounds:
-    m_Center: {x: -0.9816666, y: -0.13393016, z: 2}
+    m_Center: {x: 300.61832, y: 3.315, z: -39}
     m_Extent: {x: 0.058333334, y: 0.075, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0.15, z: 0.11666667, w: 0.15}
   uvSizeAndPosition: {x: 0.041015625, y: 0.052734375, z: 0.123046875, w: 0.92578125}
@@ -99,6 +99,7 @@ MonoBehaviour:
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   cursorRenderer: {fileID: 2498722044689734534}
+  cursorTag: {fileID: 314741943003348959}
   hoveredNPC: {fileID: 0}
   colorPicker: {fileID: 0}
   timer: 0
@@ -188,15 +189,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: bounds.m_Center.x
-      value: -10.214996
+      value: 291.385
       objectReference: {fileID: 0}
     - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: bounds.m_Center.y
-      value: 2.8183334
+      value: 6.267264
       objectReference: {fileID: 0}
     - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: bounds.m_Center.z
-      value: 1.5
+      value: -39.5
       objectReference: {fileID: 0}
     - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: bounds.m_Extent.x
@@ -1119,6 +1120,17 @@ PrefabInstance:
     m_AddedGameObjects: []
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a60205565b75911419fff067243fa492, type: 3}
+--- !u!114 &314741943003348959 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
+  m_PrefabInstance: {fileID: 3360475717485881208}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f55b4786e96a8dd42b04bb6173006f35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasTextRenderer
 --- !u!4 &2619012502505084186 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 791040492309394018, guid: a60205565b75911419fff067243fa492, type: 3}

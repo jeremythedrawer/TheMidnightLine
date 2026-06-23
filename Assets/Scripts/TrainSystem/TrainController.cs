@@ -1,14 +1,29 @@
-using Cysharp.Threading.Tasks;
-using System.Threading;
 using UnityEngine;
+
+using Cysharp.Threading.Tasks;
+
+using System;
+using System.Threading;
+using System.Collections.Generic;
+
 using static Train;
 using static Spy;
+
+#if UNITY_EDITOR
 using UnityEditor;
-using System.Collections.Generic;
+#endif
 public class TrainController : MonoBehaviour
 {
     const float VELOCITY_BUFFER = 0.5f;
     const float DEFAULT_TARGET_KMPH = 40;
+
+
+    public static Station NextStationInstance;
+    
+    public static Dictionary<Collider2D, Carriage> CarriageDict;
+
+    public static event Action OnTrainAtStartPosition;
+
     public TrainSettingsSO settings;
     public TrainStatsSO stats;
     public LayerSettingsSO layerSettings;
@@ -16,24 +31,28 @@ public class TrainController : MonoBehaviour
     public SpawnData spawnData;
     public GameEventDataSO gameEventData;
     public SpyStatsSO spyStats;
+    
     public AtlasRenderer backSprite;
-    public AtlasRenderer driversPit;
+    public AtlasRenderer driversPit; 
 
     [Header("Generated")]
     public Carriage[] carriages;
     public Gangway[] gangways;
-    CancellationTokenSource trainCTS;
     public Station[] stations;
-    public static Station NextStationInstance;
+
+    public CancellationTokenSource trainCTS;
+    
     public TrainStates curState;
-    public bool closingSlideDoors;
+    
     public int curStationIndex;
+    
     public float metersTravelled;
-    public bool skipMoveToStart;
-
-    public static Dictionary<Collider2D, Carriage> carriageDict;
-
     public float metersTravelledOnBezier;
+    public float renderTextureScale;
+    
+    public bool skipMoveToStart;
+    public bool closingSlideDoors;
+
     private void OnValidate()
     {
         SetBounds();
@@ -56,6 +75,7 @@ public class TrainController : MonoBehaviour
     private void Start()
     {
         Init();
+
 #if UNITY_EDITOR
         if (skipMoveToStart)
         {
@@ -97,7 +117,7 @@ public class TrainController : MonoBehaviour
 
         float offset = TRAIN_WORLD_POS_X - transform.position.x;
 
-        carriageDict = new Dictionary<Collider2D, Carriage>();
+        CarriageDict = new Dictionary<Collider2D, Carriage>();
         for (int i = 0; i < carriages.Length; i++)
         {
             Carriage carriage = carriages[i];
@@ -106,7 +126,7 @@ public class TrainController : MonoBehaviour
             carriage.SetTotalBounds(offset);
             carriage.SetSignToNextStation(trip.nextStation.stationName);
 
-            carriageDict.Add(carriage.insideBoundsCollider, carriage);
+            CarriageDict.Add(carriage.insideBoundsCollider, carriage);
         }
         SetSlideDoorPositions(offset);
     }
@@ -382,6 +402,9 @@ public class TrainController : MonoBehaviour
     {
         stats.totalBounds = backSprite.GetBounds();
         stats.totalBounds.Encapsulate(driversPit.GetBounds());
+
+        Shader.SetGlobalVector("_TrainBoundsMin", stats.totalBounds.min);
+        Shader.SetGlobalVector("_TrainBoundsSize", stats.totalBounds.size);
     }
     private void SetDepthSections()
     {
@@ -413,6 +436,14 @@ public class TrainController : MonoBehaviour
         metersTravelledOnBezier = 0;
         MoveOnBezier().Forget();
     }
+
+    private void InitAtStartPosition()
+    {
+        transform.position = new Vector3(TRAIN_WORLD_POS_X, transform.position.y, transform.position.z);
+        SetBounds();
+        stats.trainToMaxSpawnDist = spawnData.bounds.max.x - stats.totalBounds.center.x;
+        OnTrainAtStartPosition.Invoke();
+    }
     private async UniTask MoveOnBezier()
     {
         while(metersTravelledOnBezier < stats.targetElevatePos.x)
@@ -429,11 +460,7 @@ public class TrainController : MonoBehaviour
             transform.position = new Vector3(stats.targetPosition, transform.position.y, transform.position.z);
             await UniTask.Yield(trainCTS.Token);
         }
-        
-        transform.position = new Vector3(TRAIN_WORLD_POS_X, transform.position.y, transform.position.z);
-        stats.totalBounds.center = transform.position;
-        stats.trainToMaxSpawnDist = spawnData.bounds.max.x - stats.totalBounds.center.x;
-        Shader.SetGlobalVector("_TrainBoundsMin", stats.totalBounds.min);
+        InitAtStartPosition();
     }
     private async UniTask MoveTrainAwayFromCamera()
     {
@@ -449,8 +476,9 @@ public class TrainController : MonoBehaviour
     }
     public static Carriage GetCarriage(Collider2D collider)
     {
-        return carriageDict[collider];
+        return CarriageDict[collider];
     }
+#if UNITY_EDITOR
     private void OnDrawGizmos()
     {
         Gizmos.color = Color.red;
@@ -458,19 +486,11 @@ public class TrainController : MonoBehaviour
         Gizmos.DrawLine(new Vector3(stats.totalBounds.min.x, stats.totalBounds.center.y, stats.totalBounds.min.z) , new Vector3(stats.totalBounds.max.x, stats.totalBounds.center.y, stats.totalBounds.min.z));
         Gizmos.DrawLine(new Vector3(stats.totalBounds.center.x, stats.totalBounds.min.y, stats.totalBounds.min.z), new Vector3(stats.totalBounds.center.x, stats.totalBounds.max.y, stats.totalBounds.min.z));
     }
-#if UNITY_EDITOR
     public void SkipMoveTrainToStartPosition()
     {
         trainCTS?.Cancel();
-
         stats.curVelocity = Vector2.zero;
-
-        transform.position = new Vector3(TRAIN_WORLD_POS_X, transform.position.y, transform.position.z);
-
-        stats.totalBounds.center = transform.position;
-        stats.trainToMaxSpawnDist = spawnData.bounds.max.x - stats.totalBounds.center.x;
-
-        Shader.SetGlobalVector("_TrainBoundsMin", stats.totalBounds.min);
+        InitAtStartPosition();
     }
 #endif
 }

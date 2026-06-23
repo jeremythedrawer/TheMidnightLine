@@ -176,15 +176,14 @@ MonoBehaviour:
   scrollSpeed: 0
   scrollBoundSize: 0
   background_renderer: {fileID: 8301492207987582700}
-  bounds:
-    m_Center: {x: 300.373, y: 1.6826668, z: -1}
-    m_Extent: {x: 0.49969938, y: 0.18333334, z: 0}
   textBoxData:
     size: {x: 0.99939877, y: 0.36666667}
     lineWidths:
     - 0.98950374
     - 0.43766773
-  boundsOffset: {x: 0, y: -0.18333334, z: 0}
+  bounds:
+    m_Center: {x: 300.373, y: 1.6826668, z: -1}
+    m_Extent: {x: 0.49969938, y: 0.18333334, z: 0}
   worldPivotsAndSizes:
   - {x: -0.49969938, y: -0.18333334, z: 0.03888889, w: 0.18333334}
   - {x: -0.41845047, y: -0.18333334, z: 0.044444446, w: 0.18333334}
@@ -273,5 +272,6 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0, y: -0.18333334, z: 0}
   hasText: 1
   borderLocalPos: {x: -0.5885883, y: -0.46666667, z: 0.5}

@@ -149,9 +149,23 @@ public class NPCBrain : MonoBehaviour
         if (disembarking) return;
         SetPath(NPCPath.ToStandInTrain);
     }
-    public void ToggleHover(bool toggle)
+    public void ToggleHover(AtlasTextRenderer cursorTag, bool toggle)
     {
         atlasRenderer.custom.y = toggle ? 1 : 0;
+        if (ticketHasBeenChecked)
+        {
+            if (toggle)
+            {
+                cursorTag.WriteText(trip.stationsDataArray[profile.disembarkingStationIndex].name, writeLetterTime: 0.05f);
+                cursorTag.transform.SetParent(transform, worldPositionStays: true);
+                cursorTag.transform.position = new Vector3(atlasRenderer.bounds.center.x, atlasRenderer.bounds.max.y + cursorTag.background_renderer.bounds.size.y, cursorTag.transform.position.z);
+            }
+            else
+            {
+                cursorTag.EraseText(writeLetterTime: 0.05f);
+                cursorTag.transform.SetParent(null, worldPositionStays: true);
+            }
+        }
     }
     private void SetState(NPCState newState)
     {
@@ -210,6 +224,7 @@ public class NPCBrain : MonoBehaviour
                     NPCMotion standingMotion = RandomIdleMotion(NPCMotion.StandingBlinking, NPCMotion.StandingBreathing);
                     curClip = atlas.clipDict[(int)standingMotion];
                 }
+                atlasRenderer.custom.z = 1;
             }
             break;
             case NPCState.Behaviour:

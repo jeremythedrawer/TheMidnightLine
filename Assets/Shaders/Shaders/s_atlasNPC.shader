@@ -51,7 +51,7 @@ Shader "Custom/s_atlasNPC"
             float3 _ColorKey0;
             float3 _ColorKey1;
             float3 _ColorKey2;
-
+            float3 _ColorTicket;
             float4 _TrainBoundsMin;
             float4 _TrainBoundsSize;
 
@@ -109,20 +109,26 @@ Shader "Custom/s_atlasNPC"
                 half3 colKey1 = colKeyMask1 * _ColorKey1;
                 half3 colKey2 = colKeyMask2 * _ColorKey2;
 
-                half hoverColor = i.custom.y * 0.05;
-                half3 finalColor = color.rgb + colKey0 + colKey1 + colKey2 + hoverColor + _BlackColor;
+                half hoverColor = i.custom.y;
+                half ticketCheckMask = i.custom.z;
 
+                float bayerColMask = BayerX8(hoverColor * 0.5, i.positionHCS.y);
+
+                half3 finalColor = (color.rgb * ticketCheckMask) + colKey0 + colKey1 + colKey2 + _BlackColor;
+
+                half3 bayerColor = lerp(finalColor, 1, bayerColMask);
                 
                 float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;
                 half4 carriageSDF = SAMPLE_TEXTURE2D(_CarriageBoundsTexture, sampler_CarriageBoundsTexture, worldToTrain);
                 float bayer = BayerX8(carriageSDF.r + 0.5,  i.positionHCS.y);
+
                 float outside = max(step(worldToTrain.x, 0.0), step(1.0, worldToTrain.x));
                 outside = max(outside,max(step(worldToTrain.y, 0.0),step(1.0, worldToTrain.y)));
-                outside = max(outside, step(5, i.worldPos.z));
+                outside = max(outside, step(_TrainBoundsMin.z,i.worldPos.z));
                 float alpha = max(bayer, outside) * color.a;
                 clip(alpha - 0.001);
 
-                return half4 (finalColor, 1);
+                return half4 (bayerColor, 1);
             }
             ENDHLSL
         }

@@ -146,7 +146,6 @@ public class Notepad : MonoBehaviour
         ChooseState();
         UpdateState();
     }
-
     private void ChooseState()
     {
         switch (activePage.pageType)
@@ -960,7 +959,6 @@ public class Notepad : MonoBehaviour
 
         return firstName + " " + lastName;
     }
-
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

@@ -11,6 +11,7 @@ public class Page : MonoBehaviour
     public const float FLIP_LOCAL_POS_Y = -1.656f;
 
     public static AtlasClip paper_clip;
+
     public PageType pageType;
     public TripPrompt promptType;
     public TripClue clueType;
@@ -265,7 +266,7 @@ public class Page : MonoBehaviour
     public void ErasePlayerWriteText()
     {
         playerWriteTexts[activePlayerWriteRowIndex] = "";
-        activePlayerWriteTextRenderer.EraseText(activePlayerWriteText, Notepad.WRITE_LETTER_TIME);
+        activePlayerWriteTextRenderer.EraseText(Notepad.WRITE_LETTER_TIME);
     }
     public void SwitchActivePreviewPlayerWriteText(int indexOffset)
     {
@@ -438,10 +439,6 @@ public class Page : MonoBehaviour
         if (exitButton_renderer.flipY != pointDown)
         {
             InvertButton(invert, exitButton_renderer);
-            if (CursorController.Active)
-            {
-                exitButton_renderer.FlipVSimple(pointDown);
-            }
         }
     }
     public void InvertLeftArrowButton(bool invert)

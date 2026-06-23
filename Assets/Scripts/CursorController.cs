@@ -37,8 +37,8 @@ public class CursorController : MonoBehaviour
     {
         Cursor.visible = false;
         CursorRenderer = cursorRenderer;
-
         colorPicker = SceneController.GetColorPicker();
+        cursorTag.SetText("");
     }
     private void Update()
     {
@@ -107,9 +107,9 @@ public class CursorController : MonoBehaviour
             {
                 if (hoveredNPC != npc)
                 {
-                    hoveredNPC?.ToggleHover(false);
+                    hoveredNPC?.ToggleHover(cursorTag, false);
                     hoveredNPC = npc;
-                    hoveredNPC.ToggleHover(true);
+                    hoveredNPC.ToggleHover(cursorTag, true);
                 }
                 foundNPC = true;
                 break;
@@ -120,7 +120,7 @@ public class CursorController : MonoBehaviour
         {
             if (hoveredNPC != null)
             {
-                hoveredNPC?.ToggleHover(false);
+                hoveredNPC?.ToggleHover(cursorTag, false);
                 hoveredNPC = null;
             }
         }

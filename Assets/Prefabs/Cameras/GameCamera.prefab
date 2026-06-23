@@ -161,8 +161,8 @@ MonoBehaviour:
   spyInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
-  carriageBoundsCompute: {fileID: 7200000, guid: 618a34bb9382ab542b78c179e2a23646, type: 3}
   carriageBoundsRT: {fileID: 8400000, guid: 3af89f38fb042f94aafb4dc72f9a56a9, type: 2}
+  carriageBoundsCompute: {fileID: 7200000, guid: 618a34bb9382ab542b78c179e2a23646, type: 3}
   curState: 0
   cam: {fileID: 1712475161015034151}
   targetWorldPos: {x: 0, y: 0, z: 0}
@@ -171,7 +171,6 @@ MonoBehaviour:
   carriageBoundsKernel: 0
   threadGroupX: 0
   threadGroupY: 0
-  renderTextureScale: 0
 --- !u!1001 &3166701691714090586
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -706,7 +705,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6181457068075430136, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 293.6872
+      value: 293.8062
       objectReference: {fileID: 0}
     - target: {fileID: 6181457068075430136, guid: ed7d18b90ab829b47af864cb4f04d4fe, type: 3}
       propertyPath: bounds.m_Center.y

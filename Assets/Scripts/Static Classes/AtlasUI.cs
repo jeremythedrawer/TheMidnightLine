@@ -141,7 +141,7 @@ public static class AtlasUI
                 elapsedTime += Time.deltaTime;
                 await UniTask.Yield(cts.Token);
             }
-
+            fadeBlackMaterial.SetFloat("_Alpha", 1);
         }
         catch (OperationCanceledException) { }
     }
@@ -158,6 +158,7 @@ public static class AtlasUI
                 elapsedTime -= Time.deltaTime;
                 await UniTask.Yield(cts.Token);
             }
+            fadeBlackMaterial.SetFloat("_Alpha", 0);
             OnFinishFadeFromBlack?.Invoke();
         }
         catch (OperationCanceledException) { }

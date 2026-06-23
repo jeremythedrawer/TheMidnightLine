@@ -92,6 +92,7 @@ Shader "Custom/s_atlasStandard"
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;
                 i.uv += uvPos;
+
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
                 half grey = color.r + (-(_DayNight * 1.1 - 0.9) * _DayNightFactor);
@@ -103,10 +104,9 @@ Shader "Custom/s_atlasStandard"
 
                 float outside = max(step(worldToTrain.x, 0.0), step(1.0, worldToTrain.x));
                 outside = max(outside,max(step(worldToTrain.y, 0.0),step(1.0, worldToTrain.y)));
-                outside = max(outside, step(5, i.worldPos.z));
-
-
+                outside = max(outside, step(_TrainBoundsMin.z,i.worldPos.z));
                 float alpha = max(bayer, outside) * color.a;
+
                 clip(alpha - 0.001);
                 return half4 (finalColor, 1);
             }
