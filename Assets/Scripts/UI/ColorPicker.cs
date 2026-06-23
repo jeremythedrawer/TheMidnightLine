@@ -3,15 +3,9 @@ using System;
 using System.Threading;
 using UnityEngine;
 
+using static AtlasUI;
 public class ColorPicker : MonoBehaviour
 {
-    public enum State
-    {
-        Opening,
-        Opened,
-        Closing,
-        Closed,
-    }
     public const float OPEN_TIME = 1;
     public const float COLOR_GRID_GAP = 0.272f;
     public const int COLOR_GRID_X_COUNT = 4;
@@ -31,8 +25,6 @@ public class ColorPicker : MonoBehaviour
     public CancellationTokenSource ctsOpen;
 
     public Vector2[] openColorRendererPositions;
-
-    public State curState;
 
     public Vector3 curWorldPos;
     public Vector3 closeColorRendererPosition;
@@ -64,7 +56,7 @@ public class ColorPicker : MonoBehaviour
     }
     private void Start()
     {
-        curState = State.Closed;
+        colorsData.curState = ColorPickerState.Closed;
 
         SetSelectableColors();
         SetOpenPosAndSize();
@@ -92,12 +84,24 @@ public class ColorPicker : MonoBehaviour
 
         UpdateState();
     }
+    private void SetState(ColorPickerState newState)
+    {
+        if (colorsData.curState == newState)
+        {
+            colorsData.enteredState = ColorPickerState.None;
+            return;
+        }
+        ExitState();
+        colorsData.curState = newState;
+        colorsData.enteredState = newState;
+        EnterState();
+    }
     private void UpdateState()
     {
-        switch(curState)
+        switch(colorsData.curState)
         {
-            case State.Opened:
-            case State.Opening:
+            case ColorPickerState.Opened:
+            case ColorPickerState.Opening:
             {
                 for (int i = 0; i < activeColorAmount; i++)
                 {
@@ -142,6 +146,32 @@ public class ColorPicker : MonoBehaviour
             break;
         }
     }
+    private void EnterState()
+    {
+        switch(colorsData.curState)
+        {
+            case ColorPickerState.Opening:
+            {
+
+            }
+            break;
+            case ColorPickerState.Opened:
+            {
+
+            }
+            break;
+            case ColorPickerState.Closed:
+            {
+
+            }
+            break;
+        }
+    }
+    private void ExitState()
+    {
+
+    }
+
     private void SetSelectableColors()
     {
         for (int i = 0; i < colorRenderers.Length; i++)
@@ -270,7 +300,7 @@ public class ColorPicker : MonoBehaviour
     }
     public void Open(AtlasRenderer rend, bool openAllColors)
     {
-        if (curState == State.Closed)
+        if (colorsData.curState == ColorPickerState.Closed)
         {
             ctsOpen?.Cancel();
             ctsOpen = new CancellationTokenSource();
@@ -281,7 +311,7 @@ public class ColorPicker : MonoBehaviour
     }
     public void Close()
     {
-        if (curState == State.Opened || curState == State.Opening)
+        if (colorsData.curState == ColorPickerState.Opened || colorsData.curState == ColorPickerState.Opening)
         {
             ctsOpen?.Cancel();
             ctsOpen = new CancellationTokenSource();
@@ -294,7 +324,7 @@ public class ColorPicker : MonoBehaviour
     {
         try
         {
-            curState = State.Opening;
+            SetState(ColorPickerState.Opening);
 
             while (openClock < OPEN_TIME)
             {
@@ -330,8 +360,7 @@ public class ColorPicker : MonoBehaviour
                 }
                 await UniTask.Yield(ctsOpen.Token);
             }
-            curState = State.Opened;
-
+            SetState(ColorPickerState.Opened);
         }
         catch (OperationCanceledException)
         {
@@ -342,7 +371,7 @@ public class ColorPicker : MonoBehaviour
     {
         try
         {
-            curState = State.Closing;
+            SetState(ColorPickerState.Closing);
 
             while(openClock > 0)
             {
@@ -377,8 +406,7 @@ public class ColorPicker : MonoBehaviour
                 }
                 await UniTask.Yield(ctsOpen.Token);
             }
-
-            curState = State.Closed;
+            SetState(ColorPickerState.Closed);
 
             TurnOff();
 

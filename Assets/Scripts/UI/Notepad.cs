@@ -34,6 +34,7 @@ public class Notepad : MonoBehaviour
     public SpyStatsSO spyStats;
     public SceneData sceneData;
     public GameEventDataSO gameEventData;
+    public ColorsSO colorsData;
 
     public NotepadData notepadData;
     
@@ -106,6 +107,15 @@ public class Notepad : MonoBehaviour
         }
         activePage = promptPage;
     }
+    private void OnEnable()
+    {
+        EnableNotepad();
+    }
+    private void OnDisable()
+    {
+        SetLeftHandDefaultSprite();
+        
+    }
     private void Start()
     {
         AtlasUI.PromptStringDict = InitEnumToStringDict<TripPrompt>();
@@ -122,7 +132,7 @@ public class Notepad : MonoBehaviour
         Vector3 flipWorldPos = new Vector3(bindingRings_renderer.transform.position.x, bindingRings_renderer.transform.position.y, leftHand_renderer.transform.position.z);
         leftHandFlipPos = transform.InverseTransformPoint(flipWorldPos);
 
-        Vector3 offscreenLocalPos = new Vector3(-transform.localPosition.x, transform.localPosition.y - camStats.camBounds.extents.y, leftHand_renderer.transform.localPosition.z);
+        Vector3 offscreenLocalPos = new Vector3(-transform.localPosition.x * 0.5f, camStats.camBounds.extents.y - transform.localPosition.y - camStats.camBounds.size.y, leftHand_renderer.transform.localPosition.z);
         leftHandOffScreenPos = offscreenLocalPos;
         leftHandTargetPos = leftHandOffScreenPos;
 
@@ -586,7 +596,8 @@ public class Notepad : MonoBehaviour
             break;
             case NotepadState.Writing:
             {
-                leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[rotatePencil_clip.keyframeStartIndex].sprite);
+                SetLeftHandHoldingPencilSprite();
+
                 curWritingBounds = activePage.GetWritingBounds();
                 Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHand_renderer.transform.position.z);
                 leftHandPencilPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
@@ -723,12 +734,11 @@ public class Notepad : MonoBehaviour
 
             if (dist < PENCIL_DISTANCE_THRESHOLD * PENCIL_DISTANCE_THRESHOLD)
             {
-                leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[rotatePencil_clip.keyframeStartIndex].sprite);
+                SetLeftHandHoldingPencilSprite();
 
                 Bounds rendBounds = leftHand_renderer.GetBounds();
                 Vector4 uvPivot = leftHand_renderer.sprite.uvPivot;
                 Vector3 spritePivotOffset = new Vector3(rendBounds.extents.x * (1 - uvPivot.x), rendBounds.size.y * (1 - uvPivot.y));
-
                 leftHand_renderer.transform.localPosition = leftHandOffScreenPos - spritePivotOffset;
 
                 curWritingBounds = activePage.GetWritingBounds();
@@ -740,15 +750,14 @@ public class Notepad : MonoBehaviour
         }
         else if (activePage.pageType == PageType.ColorKey)
         {
-            if (colorPicker.curState == ColorPicker.State.Opened || colorPicker.curState == ColorPicker.State.Opening)
+            if (colorsData.enteredState == ColorPickerState.Opened || colorsData.enteredState == ColorPickerState.Opening)
             {
                 Bounds rendBounds = leftHand_renderer.GetBounds();
                 Vector4 uvPivot = leftHand_renderer.sprite.uvPivot;
                 Vector3 spritePivotOffset = new Vector3(rendBounds.extents.x * (1 - uvPivot.x), rendBounds.size.y * (1 - uvPivot.y));
-
                 leftHandTargetPos = leftHandOffScreenPos - spritePivotOffset;
             }
-            else if (colorPicker.curState == ColorPicker.State.Closed)
+            else if (colorsData.enteredState == ColorPickerState.Closed)
             {
                 Vector3 startWriteWorldPos = new Vector3(activePage.playerWriteRenderers[activePage.activePlayerWriteRowIndex].GetBounds().min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
                 leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
@@ -770,6 +779,18 @@ public class Notepad : MonoBehaviour
         }
 
         leftHand_renderer.transform.localPosition = Vector3.Lerp(leftHand_renderer.transform.localPosition, leftHandTargetPos, Time.deltaTime * LEFTHAND_DAMPING);
+    }
+    public void SetLeftHandHoldingPencilSprite()
+    {
+        leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[rotatePencil_clip.keyframeStartIndex].sprite);
+    }
+    public void SetLeftHandDefaultSprite()
+    {
+        leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[handFlipPage_clip.keyframeStartIndex].sprite);
+    }
+    public void EnableNotepad()
+    {
+        EnterState(NotepadState.None);
     }
     private void CreateNPCProfiles()
     {

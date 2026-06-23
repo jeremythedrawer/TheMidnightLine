@@ -23,15 +23,19 @@ public class GameplayUI : MonoBehaviour
     public Material fadeBlackMaterial; 
 
     public Notepad notepad;
+
     public Ticket ticket;
-    public AtlasRenderer carriageMap;
-    public Transform ticketIconTransform;
 
     public TicketIcon ticketIcon_prefab;
+
+    public AtlasRenderer carriageMap;
+
+    public Transform ticketIconTransform;
 
 
     [Header("Generated")]
     public TicketIcon[] ticketIcons;
+    
     public TicketIcon curTicketIcon;
     
     public CancellationTokenSource ctsNotepad;
@@ -60,7 +64,6 @@ public class GameplayUI : MonoBehaviour
     
     public float naturalMoveClock;
     public float fadeBlackClock;
-
 
     private void OnEnable()
     {
@@ -109,7 +112,7 @@ public class GameplayUI : MonoBehaviour
     private void SetState(UIState newState)
     {
         if (curState == newState) return;
-        ExitState();
+        ExitState(newState);
         curState = newState;
         EnterState();
     }
@@ -204,21 +207,20 @@ public class GameplayUI : MonoBehaviour
             break;
         }
     }
-    private void ExitState()
+    private void ExitState(UIState newState)
     {
         switch (curState)
         {
             case UIState.Notepad:
             {
-                MoveUIElement(notepad, NotepadInactivePos, ref ctsNotepad, curState);
-                notepad.enabled = false;
+                MoveUIElement(notepad, NotepadInactivePos, ref ctsNotepad, newState);
 
                 colorPicker.Close();
             }
             break;
             case UIState.Ticket:
             {
-                MoveUIElement(ticket, ticketInactivePos, ref ctsTicket, curState);
+                MoveUIElement(ticket, ticketInactivePos, ref ctsTicket, newState);
 
                 curTicketIcon.RipStubTicket();
 
@@ -226,7 +228,7 @@ public class GameplayUI : MonoBehaviour
             break;
             case UIState.CarriageMap:
             {
-                MoveUIElement(carriageMap, carriageMapInactivePos, ref ctsCarriageMap, curState);
+                MoveUIElement(carriageMap, carriageMapInactivePos, ref ctsCarriageMap, newState);
             }
             break;
             case UIState.None:

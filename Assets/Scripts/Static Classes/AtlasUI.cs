@@ -27,6 +27,15 @@ public static class AtlasUI
         FlippingDown,
         Revealing,
     }
+    public enum ColorPickerState
+    {
+        None,
+        Opening,
+        Opened,
+        Closing,
+        Closed,
+    }
+
     public enum PageType
     { 
         None,
@@ -122,6 +131,7 @@ public static class AtlasUI
 
             }
             behaviour.transform.localPosition = nextPos;
+            Debug.Log(curState);
             if (curState == UIState.None) behaviour.enabled = false;
         }
         catch (OperationCanceledException)
