@@ -17,7 +17,7 @@ public class TripSO : ScriptableObject
     public float[] kmValues;
 
     [Header("Generated")]
-    public StationSO nextStation;
+    public StationSO stationAhead;
     public int ticketsCheckedSinceLastStation;
     public int traitorsSpawned;
     

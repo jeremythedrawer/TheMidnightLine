@@ -86,7 +86,8 @@ public class Notepad : MonoBehaviour
     public float curPencilTime;
     public float appearTextClock;
     public float revealClock;
-    
+
+    public bool active;
     public bool writeToggle;
     public bool revealToggle;
     public bool eraseToggle;
@@ -107,14 +108,9 @@ public class Notepad : MonoBehaviour
         }
         activePage = promptPage;
     }
-    private void OnEnable()
-    {
-        EnableNotepad();
-    }
     private void OnDisable()
     {
-        SetLeftHandDefaultSprite();
-        
+        DisableNotepad();
     }
     private void Start()
     {
@@ -153,6 +149,7 @@ public class Notepad : MonoBehaviour
     }
     private void Update()
     {
+        if (!active) return;
         ChooseState();
         UpdateState();
     }
@@ -486,19 +483,22 @@ public class Notepad : MonoBehaviour
                 activePage.UpdatePage();
                 if (CursorController.IsInsideBounds(activePage.exitButton_renderer.bounds))
                 {
-                    if (playerInputs.mouseLeftDown)
+                    if (playerInputs.mouseLeftHold)
                     {
-                        activePage.InvertExitButton(invert: false, pointDown: true);
-                        SpyBrain.ToggleNotepad(false);
+                        activePage.InvertExitButton(invert: false);
                     }
                     else
                     {
-                        activePage.InvertExitButton(invert: true, pointDown: true);
+                        activePage.InvertExitButton(invert: true);
+                    }
+                    if (playerInputs.mouseLeftUp)
+                    {
+                        SpyBrain.ToggleNotepad(false);
                     }
                 }
                 else
                 {
-                    activePage.InvertExitButton(invert: false, pointDown: false);
+                    activePage.InvertExitButton(invert: false);
                 }
 
                 if (activePageIndex != 0 && CursorController.IsInsideBounds(activePage.paperCornerLeftButtonRenderer.bounds))
@@ -752,6 +752,8 @@ public class Notepad : MonoBehaviour
         {
             if (colorsData.enteredState == ColorPickerState.Opened || colorsData.enteredState == ColorPickerState.Opening)
             {
+                colorsData.enteredState = ColorPickerState.None;
+
                 Bounds rendBounds = leftHand_renderer.GetBounds();
                 Vector4 uvPivot = leftHand_renderer.sprite.uvPivot;
                 Vector3 spritePivotOffset = new Vector3(rendBounds.extents.x * (1 - uvPivot.x), rendBounds.size.y * (1 - uvPivot.y));
@@ -759,6 +761,8 @@ public class Notepad : MonoBehaviour
             }
             else if (colorsData.enteredState == ColorPickerState.Closed)
             {
+                colorsData.enteredState = ColorPickerState.None;
+
                 Vector3 startWriteWorldPos = new Vector3(activePage.playerWriteRenderers[activePage.activePlayerWriteRowIndex].GetBounds().min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
                 leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
             }
@@ -784,13 +788,23 @@ public class Notepad : MonoBehaviour
     {
         leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[rotatePencil_clip.keyframeStartIndex].sprite);
     }
-    public void SetLeftHandDefaultSprite()
+    public void EnterNotepad()
     {
-        leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[handFlipPage_clip.keyframeStartIndex].sprite);
-    }
-    public void EnableNotepad()
-    {
+        active = true;
         EnterState(NotepadState.None);
+    }
+    public void ExitNotepad()
+    {
+        Bounds rendBounds = leftHand_renderer.GetBounds();
+        Vector4 uvPivot = leftHand_renderer.sprite.uvPivot;
+        Vector3 spritePivotOffset = new Vector3(rendBounds.extents.x * (1 - uvPivot.x), rendBounds.size.y * (1 - uvPivot.y));
+        leftHandTargetPos = leftHandOffScreenPos + spritePivotOffset;
+        active = false;
+    }
+    public void DisableNotepad()
+    {
+        leftHandTargetPos = leftHandFlipPos;
+        leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[handFlipPage_clip.keyframeStartIndex].sprite);
     }
     private void CreateNPCProfiles()
     {

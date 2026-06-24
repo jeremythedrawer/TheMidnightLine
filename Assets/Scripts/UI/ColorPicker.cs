@@ -6,7 +6,7 @@ using UnityEngine;
 using static AtlasUI;
 public class ColorPicker : MonoBehaviour
 {
-    public const float OPEN_TIME = 1;
+    public const float OPEN_TIME_ROW_COL = 0.0625f;
     public const float COLOR_GRID_GAP = 0.272f;
     public const int COLOR_GRID_X_COUNT = 4;
     public const int COLOR_GRID_Y_COUNT = 4;
@@ -34,6 +34,8 @@ public class ColorPicker : MonoBehaviour
     public Vector2 sliceWorldSize;
 
     public int activeColorAmount;
+    public int curGridRowCount;
+    public int curGridColCount;
 
     public float openClock;
     public float openSpriteWidth;
@@ -44,7 +46,7 @@ public class ColorPicker : MonoBehaviour
     public float tileHeight;
 
     public bool openedFully;
-
+    public bool canClose;
     private void Awake()
     {
         trip.unlockedClueMarkerCount = 1;
@@ -86,11 +88,7 @@ public class ColorPicker : MonoBehaviour
     }
     private void SetState(ColorPickerState newState)
     {
-        if (colorsData.curState == newState)
-        {
-            colorsData.enteredState = ColorPickerState.None;
-            return;
-        }
+        if (colorsData.curState == newState) return;
         ExitState();
         colorsData.curState = newState;
         colorsData.enteredState = newState;
@@ -100,8 +98,8 @@ public class ColorPicker : MonoBehaviour
     {
         switch(colorsData.curState)
         {
-            case ColorPickerState.Opened:
             case ColorPickerState.Opening:
+            case ColorPickerState.Opened:
             {
                 for (int i = 0; i < activeColorAmount; i++)
                 {
@@ -138,10 +136,12 @@ public class ColorPicker : MonoBehaviour
                         return;
                     }
                 }
-                if (playerInputs.mouseLeftDown && !CursorController.IsInsideBounds(paletteRenderer.bounds))
+
+                if (canClose && playerInputs.mouseLeftDown && !CursorController.IsInsideBounds(paletteRenderer.bounds))
                 {
                     Close();
                 }
+                canClose = true;
             }
             break;
         }
@@ -152,7 +152,7 @@ public class ColorPicker : MonoBehaviour
         {
             case ColorPickerState.Opening:
             {
-
+                canClose = false;
             }
             break;
             case ColorPickerState.Opened:
@@ -266,8 +266,8 @@ public class ColorPicker : MonoBehaviour
         curWorldPos.x = selectedRendBounds.min.x;
         curWorldPos.y = selectedRendBounds.max.y;
         
-        int curGridColCount = Mathf.Min(activeColorAmount, COLOR_GRID_X_COUNT);
-        int curGridRowCount = Mathf.CeilToInt((float)activeColorAmount / (float)COLOR_GRID_X_COUNT);
+        curGridColCount = Mathf.Min(activeColorAmount, COLOR_GRID_X_COUNT);
+        curGridRowCount = Mathf.CeilToInt((float)activeColorAmount / (float)COLOR_GRID_X_COUNT);
 
         int curXGapCount = curGridColCount - 1;
         int curYGapCount = curGridRowCount - 1;
@@ -326,14 +326,24 @@ public class ColorPicker : MonoBehaviour
         {
             SetState(ColorPickerState.Opening);
 
-            while (openClock < OPEN_TIME)
+            float totalTime = curGridRowCount * curGridColCount * OPEN_TIME_ROW_COL;
+            openClock = Mathf.Max(openClock, 0);
+
+            float rowsToClose = (float)(curGridRowCount - 1);
+            float colsToClose = (float)(curGridColCount - 1);
+
+            float normRowTime = rowsToClose / (rowsToClose + colsToClose);
+            float normColTime = 1 - normRowTime;
+
+            while (openClock < totalTime)
             {
                 openClock += Time.deltaTime;
-                float t = openClock / OPEN_TIME;
+                float t = openClock / totalTime;
      
-                if (t < 0.5)
+                if (t < normColTime)
                 {
-                    float easeOutT = 1 - Mathf.Pow(1 - t * 2, 5);
+                    float easeOutT = EaseOutT(t / normColTime, 5);
+
                     curSpriteWidth = openSpriteWidth * easeOutT;
 
                     paletteRenderer.width = curSpriteWidth;
@@ -347,7 +357,7 @@ public class ColorPicker : MonoBehaviour
                 }
                 else
                 {
-                    float easOutT = 1 - Mathf.Pow(1 - (t - 0.5f) * 2, 5);
+                    float easOutT = EaseOutT((t / normRowTime) - 1, 5);
                     curSpriteHeight = Mathf.Lerp(tileHeight, openSpriteHeight, easOutT);
                     paletteRenderer.height = curSpriteHeight;
                     paletteRenderer.UpdateSliceSpriteInputsSelf();
@@ -364,7 +374,7 @@ public class ColorPicker : MonoBehaviour
         }
         catch (OperationCanceledException)
         {
-
+            SetState(ColorPickerState.Opened);
         }
     }
     public async UniTask Closing()
@@ -373,14 +383,24 @@ public class ColorPicker : MonoBehaviour
         {
             SetState(ColorPickerState.Closing);
 
-            while(openClock > 0)
+            float totalTime = curGridRowCount * curGridColCount * OPEN_TIME_ROW_COL;
+            openClock = Mathf.Min(openClock, totalTime);
+
+            float rowsToClose = (float)(curGridRowCount - 1);
+            float colsToClose = (float)(curGridColCount - 1);
+
+            float normRowTime = rowsToClose / (rowsToClose + colsToClose);
+            float normColTime = 1 - normRowTime;
+
+            while (openClock > 0)
             {
                 openClock -= Time.deltaTime;
-                float t = openClock / OPEN_TIME;
 
-                if (t < 0.5)
+                float t = openClock / totalTime; 
+
+                if (t < normColTime)
                 {
-                    float easeOutT = Mathf.Max(1 - Mathf.Pow(1 - t * 2, 5), 0);
+                    float easeOutT = EaseOutT(t / normColTime, 5);
                     curSpriteWidth = openSpriteWidth * easeOutT;
 
                     paletteRenderer.width = curSpriteWidth;
@@ -393,7 +413,7 @@ public class ColorPicker : MonoBehaviour
                 }
                 else
                 {
-                    float easOutT = Mathf.Max(1 - Mathf.Pow(1 - (t - 0.5f) * 2, 5), 0);
+                    float easOutT = EaseOutT((t / normRowTime) - 1, 5);
                     curSpriteHeight = Mathf.Lerp(tileHeight, openSpriteHeight, easOutT);
                     paletteRenderer.height = curSpriteHeight;
                     paletteRenderer.UpdateSliceSpriteInputsSelf();
@@ -407,13 +427,17 @@ public class ColorPicker : MonoBehaviour
                 await UniTask.Yield(ctsOpen.Token);
             }
             SetState(ColorPickerState.Closed);
-
             TurnOff();
 
         }
         catch (OperationCanceledException)
         {
-
+            SetState(ColorPickerState.Closed);
         }
+    }
+
+    float EaseOutT(float t, float p)
+    {
+        return Mathf.Max(1 - Mathf.Pow(1 - t, p), 0);
     }
 }

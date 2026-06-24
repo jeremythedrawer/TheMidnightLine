@@ -47,13 +47,13 @@ public static class Train
         return (velocity * velocity) / (2f * decelSpeed) / (1 - (parallaxFactor + Mathf.Epsilon));
     }
 
-    public static float IncreaseVelocity(float curVelocity, float targetVelocity, float accelSpeed)
+    public static float ChangeVelocity(float curVelocity, float targetVelocity, float accelSpeed)
     {
         float maxDelta = accelSpeed * Time.deltaTime;
         return Mathf.MoveTowards(curVelocity, targetVelocity, maxDelta);
     }
 
-    public static float DecreaseVelocity(float curVelocity, float targetVelocity, float initVelocity, float decelSpeed, float targetWorldPos)
+    public static float DecreaseVelocityToTarget(float curVelocity, float targetVelocity, float initVelocity, float decelSpeed, float targetWorldPos)
     {
         float brakeDistance = GetBrakeDistance(curVelocity, decelSpeed, 0);
         float distToTarget = targetWorldPos - TRAIN_WORLD_POS_X;
@@ -94,7 +94,6 @@ public static class Train
 
         return (p0 * w0) + (p1 * w1) + (p2 * w2) + (p3 * w3);
     }
-
     public static Vector2 GetEaseInOutBezierPos(float t, Vector2 targetPos)
     {
         Vector2 halfTargPos = targetPos * 0.5f;

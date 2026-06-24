@@ -434,26 +434,19 @@ public class Page : MonoBehaviour
             break;
         }
     }
-    public void InvertExitButton(bool invert, bool pointDown)
+    public void InvertExitButton(bool invert)
     {
-        if (exitButton_renderer.flipY != pointDown)
-        {
-            InvertButton(invert, exitButton_renderer);
-        }
+        InvertButton(invert, exitButton_renderer);
     }
     public void InvertLeftArrowButton(bool invert)
     {
-        if (paperCornerLeftButtonRenderer != null)
-        {
-            InvertButton(invert, paperCornerLeftButtonRenderer);
-        }
+        if (paperCornerLeftButtonRenderer == null) return;
+        InvertButton(invert, paperCornerLeftButtonRenderer);
     }
     public void InvertRightArrowButton(bool invert)
     {
-        if (paperCornerRightButtonRenderer != null)
-        {
-            InvertButton(invert, paperCornerRightButtonRenderer);
-        }
+        if (paperCornerRightButtonRenderer == null) return;
+        InvertButton(invert, paperCornerRightButtonRenderer);
     }
     public void UpdateMugShotReveal(float t)
     {

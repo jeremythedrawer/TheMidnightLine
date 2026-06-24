@@ -131,7 +131,6 @@ public static class AtlasUI
 
             }
             behaviour.transform.localPosition = nextPos;
-            Debug.Log(curState);
             if (curState == UIState.None) behaviour.enabled = false;
         }
         catch (OperationCanceledException)

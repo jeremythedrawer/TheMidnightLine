@@ -161,6 +161,7 @@ public class AtlasTripEditor : EditorWindow
             for (int i = 0; i < particleAtlasColors.Length; i++)
             {
                 particleAtlasColors[i] = Color.HSVToRGB((float)i / (float)particleAtlasColors.Length, 1, 1);
+                particleAtlasColors[i].a = 0.5f;
             }
 
         }

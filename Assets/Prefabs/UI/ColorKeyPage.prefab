@@ -137,14 +137,13 @@ MonoBehaviour:
   scrollSpeed: 0
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
-  bounds:
-    m_Center: {x: 300.04086, y: 1.0973332, z: 15.92}
-    m_Extent: {x: 0.4438889, y: 0.09166667, z: 0}
   textBoxData:
     size: {x: 0.8877778, y: 0.18333334}
     lineWidths:
     - 0.8877778
-  boundsOffset: {x: 0.4438889, y: -0.09166667, z: 0}
+  bounds:
+    m_Center: {x: 300.04086, y: 1.0973332, z: 15.92}
+    m_Extent: {x: 0.4438889, y: 0.09166667, z: 0}
   worldPivotsAndSizes:
   - {x: -0, y: -0.18333334, z: 0.03888889, w: 0.18333334}
   - {x: 0.08044444, y: -0.18333334, z: 0.011111111, w: 0.18333334}
@@ -197,6 +196,7 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.4438889, y: -0.09166667, z: 0}
   hasText: 1
   borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &2488520917910274587
@@ -255,18 +255,18 @@ MonoBehaviour:
   scrollSpeed: 0
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
-  bounds:
-    m_Center: {x: 299.58002, y: 0.7527777, z: 15.92}
-    m_Extent: {x: 0, y: 0.072222225, z: 0}
   textBoxData:
     size: {x: 0, y: 0.14444445}
     lineWidths:
     - 0
-  boundsOffset: {x: 0, y: -0.072222225, z: 0}
+  bounds:
+    m_Center: {x: 299.58002, y: 0.7527777, z: 15.92}
+    m_Extent: {x: 0, y: 0.072222225, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
   customs: []
+  boundsOffset: {x: 0, y: -0.072222225, z: 0}
   hasText: 0
   borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &3031531853131365240
@@ -502,18 +502,18 @@ MonoBehaviour:
   scrollSpeed: 0
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
-  bounds:
-    m_Center: {x: 299.58002, y: 0.1917777, z: 15.92}
-    m_Extent: {x: 0, y: 0.072222225, z: 0}
   textBoxData:
     size: {x: 0, y: 0.14444445}
     lineWidths:
     - 0
-  boundsOffset: {x: 0, y: -0.072222225, z: 0}
+  bounds:
+    m_Center: {x: 299.58002, y: 0.1917777, z: 15.92}
+    m_Extent: {x: 0, y: 0.072222225, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
   customs: []
+  boundsOffset: {x: 0, y: -0.072222225, z: 0}
   hasText: 0
   borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &4782239739248836093
@@ -653,18 +653,18 @@ MonoBehaviour:
   scrollSpeed: 0
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
-  bounds:
-    m_Center: {x: 299.58002, y: 0.4797777, z: 15.92}
-    m_Extent: {x: 0, y: 0.072222225, z: 0}
   textBoxData:
     size: {x: 0, y: 0.14444445}
     lineWidths:
     - 0
-  boundsOffset: {x: 0, y: -0.072222225, z: 0}
+  bounds:
+    m_Center: {x: 299.58002, y: 0.4797777, z: 15.92}
+    m_Extent: {x: 0, y: 0.072222225, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
   customs: []
+  boundsOffset: {x: 0, y: -0.072222225, z: 0}
   hasText: 0
   borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &5535953902685461300
@@ -798,22 +798,22 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 9
+  spriteIndex: 10
   flipX: 0
   flipY: 0
   width: 1
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.072265625, y: 0.072265625, z: 0.095703125, w: 0.82421875}
+    uvSizeAndPos: {x: 0.072265625, y: 0.072265625, z: 0.18554688, w: 0.82421875}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.20555556, y: 0.20555556, z: 1}
-    index: 9
+    index: 10
   bounds:
     m_Center: {x: 299.428, y: -0.22100008, z: 15.92}
     m_Extent: {x: 0.10277778, y: 0.10277778, z: 0.1}
   worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
-  uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.095703125, w: 0.82421875}
+  uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.18554688, w: 0.82421875}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
   boundsOffset: {x: 0, y: 0, z: 0}
@@ -825,8 +825,8 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 9
-  prevSpriteIndexFlipV: 9
+  prevSpriteIndexFlipH: 10
+  prevSpriteIndexFlipV: 10
   isAnimating: 0
   quadCount: 0
 --- !u!1 &6163979868857295327

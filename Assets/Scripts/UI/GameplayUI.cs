@@ -64,7 +64,6 @@ public class GameplayUI : MonoBehaviour
     
     public float naturalMoveClock;
     public float fadeBlackClock;
-
     private void OnEnable()
     {
         gameEventData.OnStationLeave.RegisterListener(SetNewTicketIcons);
@@ -124,6 +123,7 @@ public class GameplayUI : MonoBehaviour
             {
                 notepad.gameObject.SetActive(true);
                 notepad.enabled = true;
+                notepad.EnterNotepad();
                 naturalMovePos = NotepadActivePos;
                 ctsNotepad?.Cancel();
             }
@@ -178,30 +178,21 @@ public class GameplayUI : MonoBehaviour
             case UIState.None:
             {
                 notepadHoverBounds.center = notepad.transform.position;
-                if (CursorController.IsInsideBounds(notepadHoverBounds))
+                if (CursorController.IsInsideBounds(notepad.activePage.exitButton_renderer.bounds))
                 {
                     notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadHoverPos, Time.deltaTime * MOVE_DAMP);
-                    if (CursorController.IsInsideBounds(notepad.activePage.exitButton_renderer.bounds))
-                    {
-                        if (playerInputs.mouseLeftDown)
-                        {
-                            SpyBrain.ToggleNotepad(true);
-                            notepad.activePage.InvertExitButton(invert: false, pointDown: false);
-                        }
-                        else
-                        {
-                            notepad.activePage.InvertExitButton(invert: true, pointDown: false);
-                        }
-                    }
-                    else
-                    {
 
-                        notepad.activePage.InvertExitButton(invert: false, pointDown: true);
+                    notepad.activePage.InvertExitButton(invert: true);
+                    if (playerInputs.mouseLeftUp)
+                    {
+                        notepad.activePage.InvertExitButton(invert: false);
+                        SpyBrain.ToggleNotepad(true);
                     }
                 }
                 else
                 {
                     notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadInactivePos, Time.deltaTime * MOVE_DAMP);
+                    notepad.activePage.InvertExitButton(invert: false);
                 }
             }
             break;
@@ -214,7 +205,7 @@ public class GameplayUI : MonoBehaviour
             case UIState.Notepad:
             {
                 MoveUIElement(notepad, NotepadInactivePos, ref ctsNotepad, newState);
-
+                notepad.ExitNotepad();
                 colorPicker.Close();
             }
             break;
@@ -288,7 +279,6 @@ public class GameplayUI : MonoBehaviour
     }
     private void SetNewTicketIcons()
     {
-        SpyBrain.ToggleTicketCheckAbility(toggle: false);
         curTicketIcon = ticketIcons[0];
         SettingNewTicketIcons().Forget();
     }
@@ -299,7 +289,7 @@ public class GameplayUI : MonoBehaviour
     }
     private async UniTask SettingNewTicketIcons()
     {
-        ticketCount = trip.nextStation.ticketsToCheckBeforeSpawn;
+        ticketCount = trip.stationAhead.ticketsToCheckBeforeSpawn;
         int curTicketIconIndex = 0;
 
         while(curTicketIconIndex < ticketCount)
@@ -313,7 +303,7 @@ public class GameplayUI : MonoBehaviour
     }
     private async UniTask DisappearingTicketIcons()
     {
-        ticketCount = trip.nextStation.ticketsToCheckBeforeSpawn;
+        ticketCount = trip.stationAhead.ticketsToCheckBeforeSpawn;
         int curTicketIconIndex = ticketCount - 1;
 
         while (curTicketIconIndex >= 0)

@@ -385,7 +385,6 @@ public class AtlasTextRenderer : MonoBehaviour
             lineWidths = linesWidths.ToArray(),
         };
     }
-
     public void WriteText(string text, float writeLetterTime)
     {
         ctsWrite?.Cancel();

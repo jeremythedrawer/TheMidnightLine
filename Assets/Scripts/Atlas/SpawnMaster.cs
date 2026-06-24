@@ -524,7 +524,6 @@ public class SpawnMaster : MonoBehaviour
 
                     if (posData.spawnState != SpawnState.MovingIn) continue;
 
-                    Debug.Log(posData.minParticleIndex + " | " + particleAtlas.name);
                     if ((spawnData.scrollData.moveInputs[posData.minParticleIndex] & (uint)ParticleMoveInputs.FirstOutOfBounds) == 0) continue;
 
                     posData.spawnState = SpawnState.Alive;

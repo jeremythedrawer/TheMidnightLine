@@ -59,6 +59,7 @@ public class CursorController : MonoBehaviour
                     if (hoveredNPC != null)
                     {
                         colorPicker.Open(hoveredNPC.atlasRenderer, openAllColors: false);
+                        hoveredNPC.ToggleHover(cursorTag, false);
                     }
                 }
             }

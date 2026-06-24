@@ -40,7 +40,7 @@ Shader "Custom/s_atlasInvert"
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
-            float3 _MainColor;
+            float3 _BlackColor;
 
             Varyings vert(Attributes v)
             {
@@ -90,7 +90,7 @@ Shader "Custom/s_atlasInvert"
                 
                 half alpha = color.a;
                 float bayerMask = BayerX8(spriteData.custom.x, i.positionHCS.xy);
-                half3 finalColor = lerp(invertColor, color.rgb, bayerMask) + _MainColor;
+                half3 finalColor = lerp(invertColor, color.rgb, bayerMask) + _BlackColor;
                 clip(alpha - 0.001);
 
                 return half4 (finalColor, 1);

@@ -366,7 +366,7 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Ticket:
             {
-                if (npcTicketCheck != null)
+                if (npcTicketCheck != null && !npcTicketCheck.ticketHasBeenChecked)
                 {
                     trip.ticketsCheckedSinceLastStation++;
                     npcTicketCheck.ticketIsBeingChecked = false;

@@ -112,10 +112,9 @@ Shader "Custom/s_atlasNPC"
                 half hoverColor = i.custom.y;
                 half ticketCheckMask = i.custom.z;
 
-                float bayerColMask = BayerX8(hoverColor * 0.5, i.positionHCS.y);
-
                 half3 finalColor = (color.rgb * ticketCheckMask) + colKey0 + colKey1 + colKey2 + _BlackColor;
 
+                float bayerColMask = BayerX8(hoverColor * 0.5, i.positionHCS.y);
                 half3 bayerColor = lerp(finalColor, 1, bayerColMask);
                 
                 float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;

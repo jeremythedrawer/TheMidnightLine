@@ -413,7 +413,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCPath.AtSlideDoor:
             {
-                LayerMask slideDoorLayer = trip.nextStation.isFrontOfTrain ? layerSettings.trainLayers.exteriorSlideDoors : layerSettings.trainLayers.interiorSlideDoors;
+                LayerMask slideDoorLayer = trip.stationAhead.isFrontOfTrain ? layerSettings.trainLayers.exteriorSlideDoors : layerSettings.trainLayers.interiorSlideDoors;
                 RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, slideDoorLayer);
 
                 curSlideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
@@ -447,7 +447,7 @@ public class NPCBrain : MonoBehaviour
                 float shortestDist = float.MaxValue;
                 float selectedSlideDoorPos = float.MaxValue;
 
-                if (trip.nextStation.isFrontOfTrain)
+                if (trip.stationAhead.isFrontOfTrain)
                 {
                     for (int i = 0; i < trainStats.exteriorSlideDoorPositions.Length; i++)
                     {
@@ -686,7 +686,7 @@ public class NPCBrain : MonoBehaviour
     
     private void PrepareToDisembarkTrain()
     {
-        if (!onTrain || trip.nextStation.stationIndex != profile.disembarkingStationIndex) return;
+        if (!onTrain || trip.stationAhead.stationIndex != profile.disembarkingStationIndex) return;
         disembarking = true;
         if (queuedForSeat) curCarriage.RemoveFromSeatQueue(this);
         SetPath(NPCPath.ToSlideDoor);
@@ -734,7 +734,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void PrepareToBoardTrain()
     {
-        if (onTrain || trip.nextStation.stationIndex != profile.boardingStationIndex) return;
+        if (onTrain || trip.stationAhead.stationIndex != profile.boardingStationIndex) return;
         SetPath(NPCPath.ToSlideDoor);
     }
     
