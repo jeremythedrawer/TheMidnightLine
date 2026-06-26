@@ -37,6 +37,10 @@ public class ParallaxController : MonoBehaviour
             worldPos.y -= velocity.y;
             transform.position = worldPos;
         }
+        else
+        { 
+            Destroy(gameObject);
+        }
     }
     private void FixedUpdate()
     {

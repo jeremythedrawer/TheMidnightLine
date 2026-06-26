@@ -13,8 +13,11 @@ using UnityEditor;
 
 public class NPCBrain : MonoBehaviour
 {
-    public NPCSO npc;
     public AtlasRenderer atlasRenderer;
+    public Rigidbody2D rigidBody;
+    public BoxCollider2D boxCollider;
+    
+    public NPCSO npc;
     public NPCsDataSO npcData;
     public LayerSettingsSO layerSettings;
     public TrainSettingsSO trainSettings;
@@ -23,9 +26,7 @@ public class NPCBrain : MonoBehaviour
     public PlayerInputsSO playerInputs;
     public SpyStatsSO spyStats;
     public TripSO trip;
-
-    public Rigidbody2D rigidBody;
-    public BoxCollider2D boxCollider;
+    public SpawnData spawnData;
 
     [Header("Generated")]
     public AtlasSO atlas;
@@ -577,6 +578,10 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCPath.ToExitStation:
             {
+                if (atlasRenderer.bounds.max.x < spawnData.bounds.min.x)
+                {
+                    NPCManager.ReturnNPC(trip.npcDataArray[profile.npcPrefabIndex].prefab , this);
+                }
             }
             break;
             case NPCPath.ToStandAtStation:

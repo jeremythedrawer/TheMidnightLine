@@ -15,5 +15,5 @@ public class StationSO : ScriptableObject
     public string stationName;
     public int stationIndex;
     public float exitLocalPosX;
-    public  NPCProfile[] bystanderProfiles;
+    public NPCProfile[] bystanderProfiles;
 }

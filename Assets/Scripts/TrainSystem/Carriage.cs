@@ -92,7 +92,7 @@ public class Carriage : MonoBehaviour
     }
     public void SetSignToNextStation(string stationName)
     {
-        string text = trainStats.curStationIndex < trip.stationsDataArray.Length ? "Next Station is " : "Terminating at " + stationName;
+        string text = (trainStats.curStationIndex < trip.stationsDataArray.Length ? "Next Station is " : "Terminating at ") + stationName;
         nextStationSignRenderer.SetText(text);
     }
     public void SetSignToCurrentStation(string stationName)

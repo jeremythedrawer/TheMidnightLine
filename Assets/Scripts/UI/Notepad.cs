@@ -11,6 +11,7 @@ public class Notepad : MonoBehaviour
 {
     public const float WRITE_LETTER_TIME = 0.1f;
     public const int MIN_STATION_STOPS = 1;
+    public const int MAX_STATION_STOPS = 2;
 
     const float LEFTHAND_DAMPING = 7f;
     const float PENCIL_DISTANCE_THRESHOLD = 0.05f;
@@ -865,13 +866,14 @@ public class Notepad : MonoBehaviour
                 totalNPCProfiles.RemoveAt(j);
             }
 
+            traitorsAtStation++;
+
             if (traitorsAtStation == station.traitorSpawnAmount)
             {
                 stationIndex++;
                 traitorsAtStation = 0;
             }
 
-            traitorsAtStation++;
         }
 
         activePageIndex = 0;
@@ -890,14 +892,24 @@ public class Notepad : MonoBehaviour
                 NPCProfile bystanderProfile = totalNPCProfiles[profileIndex];
 
                 bystanderProfile.boardingStationIndex = i;
-                bystanderProfile.disembarkingStationIndex = UnityEngine.Random.Range(stationIndex + MIN_STATION_STOPS, trip.stationsDataArray.Length);
 
+                int stationsLeft = trip.stationsDataArray.Length - i;
+                
+                float normSpawnIndex = (float)j / (float)station.bystanderSpawnCount;
+                float gaussianNormSpawnIndex = NormalGaussianValue(normSpawnIndex);
+
+                bystanderProfile.disembarkingStationIndex = i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft);
+                Debug.Log(bystanderProfile.disembarkingStationIndex);
                 station.bystanderProfiles[j] = bystanderProfile;
 
                 profileIndex++;
                 profileIndex %= totalNPCProfiles.Count;
             }
         }
+    }
+    private float NormalGaussianValue(float t)
+    {
+        return Mathf.Exp(-(Mathf.Pow(t - 0.5f, 2) / 0.045f)) * 0.5f;
     }
     private void CreatePages()
     {
