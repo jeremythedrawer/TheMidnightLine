@@ -70,6 +70,9 @@ public class GameplayUI : MonoBehaviour
         gameEventData.OnStationArrival.RegisterListener(DisappearTicketIcons);
         gameEventData.OnChangeToScoreScene.RegisterListener(SetFadeToBlack);
         gameEventData.OnChangeToScoreScene.RegisterListener(KeepNotepad);
+
+        SpyBrain.OnTicketCheckHoverDisabled += RevertCurTicketIcon;
+        SpyBrain.OnTicketCheckHoverEnabled += InvertCurTicketIcon;
     }
     private void OnDisable()
     {
@@ -77,6 +80,9 @@ public class GameplayUI : MonoBehaviour
         gameEventData.OnStationArrival.UnregisterListener(DisappearTicketIcons);
         gameEventData.OnChangeToScoreScene.UnregisterListener(SetFadeToBlack);
         gameEventData.OnChangeToScoreScene.UnregisterListener(KeepNotepad);
+
+        SpyBrain.OnTicketCheckHoverDisabled -= RevertCurTicketIcon;
+        SpyBrain.OnTicketCheckHoverEnabled -= InvertCurTicketIcon;
     }
     private void Start()
     {
@@ -95,7 +101,7 @@ public class GameplayUI : MonoBehaviour
         {
             SetState(UIState.Notepad);
         }
-        else if (SpyBrain.checkingTicket)
+        else if (spyStats.curState == SpyState.Ticket)
         {
             SetState(UIState.Ticket);
         }
@@ -135,9 +141,6 @@ public class GameplayUI : MonoBehaviour
                 naturalMovePos = ticketActivePos;
                 ticket.SetText(spyStats.boardingStationName, spyStats.disembarkingStationName);
                 ctsTicket?.Cancel();
-
-                curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
-                curTicketIcon.CheckTicket();
             }
             break;
             case UIState.CarriageMap:
@@ -214,6 +217,7 @@ public class GameplayUI : MonoBehaviour
                 MoveUIElement(ticket, ticketInactivePos, ref ctsTicket, newState);
 
                 curTicketIcon.RipStubTicket();
+                curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
 
             }
             break;
@@ -262,6 +266,7 @@ public class GameplayUI : MonoBehaviour
 
         colorPicker = SceneController.GetColorPicker();
     }
+
     private void InitTicketIcons()
     {
         ticketIcons = new TicketIcon[8];
@@ -286,6 +291,23 @@ public class GameplayUI : MonoBehaviour
     {
         trip.ticketsCheckedSinceLastStation = 0;
         DisappearingTicketIcons().Forget();
+    }
+    private void InvertCurTicketIcon()
+    {
+        curTicketIcon.InvertIcon(toggle: true);
+    }
+    private void RevertCurTicketIcon()
+    {
+        curTicketIcon.InvertIcon(toggle: false);
+    }
+    private void FadeFromBlack()
+    {
+        FadeBlack(fadeBlackMaterial, ctsFadeBlack, toFadeBlack: false);
+    }
+    private void SetFadeToBlack()
+    {
+        SetFadeBlack(fadeBlackMaterial, toFadeBlack: true);
+        Scenes.SetScoreScene(sceneData);
     }
     private async UniTask SettingNewTicketIcons()
     {
@@ -312,15 +334,6 @@ public class GameplayUI : MonoBehaviour
             curTicketIconIndex--;
             await UniTask.WaitForSeconds(TICKET_ICON_APPEARING_DURATION);
         }
-    }
-    private void FadeFromBlack()
-    {
-        FadeBlack(fadeBlackMaterial, ctsFadeBlack, toFadeBlack: false);
-    }
-    private void SetFadeToBlack()
-    {
-        SetFadeBlack(fadeBlackMaterial, toFadeBlack: true);
-        Scenes.SetScoreScene(sceneData);
     }
     public void KeepNotepad()
     {

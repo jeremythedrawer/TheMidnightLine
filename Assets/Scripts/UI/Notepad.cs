@@ -800,11 +800,11 @@ public class Notepad : MonoBehaviour
                     flagCount++;
                 }
             }
-            for (int j = 0; j < flagCount - 1; j++)
+            for (int j = 0; j < flagCount; j++)
             {
                 Behaviours firstBehaviour = (Behaviours)validFlags[j];
 
-                for (int k = j; k < flagCount - 1; k++)
+                for (int k = j; k < flagCount; k++)
                 {
                     Behaviours secondBehaviour = (Behaviours)validFlags[k];
                     Behaviours twoBehaviours = firstBehaviour | secondBehaviour;
@@ -838,6 +838,7 @@ public class Notepad : MonoBehaviour
 
         int stationIndex = 0;
         int traitorsAtStation = 0;
+
         for (int i = 0; i < totalTraitorsInTrip; i++)
         {
             StationSO station = trip.stationsDataArray[stationIndex];
@@ -845,7 +846,7 @@ public class Notepad : MonoBehaviour
             int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
             NPCProfile traitorProfile = totalNPCProfiles[randProfileIndex];
             traitorProfile.boardingStationIndex = stationIndex;
-            traitorProfile.disembarkingStationIndex = UnityEngine.Random.Range(Mathf.Min(stationIndex + MIN_STATION_STOPS, trip.stationsDataArray.Length - 1) , trip.stationsDataArray.Length - 1);
+            traitorProfile.disembarkingStationIndex = UnityEngine.Random.Range(stationIndex + MIN_STATION_STOPS, trip.stationsDataArray.Length);
 
             NPCSO traitor = trip.npcDataArray[traitorProfile.npcPrefabIndex];
 
@@ -875,27 +876,26 @@ public class Notepad : MonoBehaviour
 
         activePageIndex = 0;
 
-
         totalNPCProfiles.AddRange(bystanderProfiles);
 
+        int profileIndex = 0;
         for (int i = 0; i < trip.stationsDataArray.Length; i++)
         {
             StationSO station = trip.stationsDataArray[i];
-            int bystandersToSpawnAtStation = (int)(station.busynessFactor * totalNPCProfiles.Count);
-            station.bystanderProfiles = new NPCProfile[bystandersToSpawnAtStation];
 
-            for (int j = 0; j < bystandersToSpawnAtStation; j++)
+            station.bystanderProfiles = new NPCProfile[station.bystanderSpawnCount];
+
+            for (int j = 0; j < station.bystanderSpawnCount; j++)
             {
-                if (totalNPCProfiles.Count == 0) { Debug.LogWarning("the total of the station busynessFactor exceeds 1. Total should be between 0 - 1"); return; }
-                int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
-
-                NPCProfile bystanderProfile = totalNPCProfiles[randProfileIndex];
+                NPCProfile bystanderProfile = totalNPCProfiles[profileIndex];
 
                 bystanderProfile.boardingStationIndex = i;
-                bystanderProfile.disembarkingStationIndex = UnityEngine.Random.Range(Mathf.Min(stationIndex + MIN_STATION_STOPS, trip.stationsDataArray.Length - 1), trip.stationsDataArray.Length - 1);
+                bystanderProfile.disembarkingStationIndex = UnityEngine.Random.Range(stationIndex + MIN_STATION_STOPS, trip.stationsDataArray.Length);
 
-                totalNPCProfiles.RemoveAt(randProfileIndex);
                 station.bystanderProfiles[j] = bystanderProfile;
+
+                profileIndex++;
+                profileIndex %= totalNPCProfiles.Count;
             }
         }
     }

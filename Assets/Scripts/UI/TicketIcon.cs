@@ -13,9 +13,11 @@ public class TicketIcon : MonoBehaviour
     {
         stubTicket.custom.y = stubTicket.bounds.size.x;
     }
-    public void CheckTicket()
+    public void InvertIcon(bool toggle)
     {
-        Checking().Forget();
+        float value = toggle ? 1f : 0f;
+        mainTicket.custom.x = value;
+        stubTicket.custom.x = value;
     }
     public void RipStubTicket()
     {
@@ -33,23 +35,6 @@ public class TicketIcon : MonoBehaviour
     {
         mainTicket.custom.w = 1;
         stubTicket.custom.w = 1;
-    }
-    private async UniTask Checking()
-    {
-        float elapsed = 0;
-
-        while(elapsed < USE_TIME)
-        {
-            elapsed += Time.deltaTime;
-            float t = elapsed / USE_TIME;
-
-            mainTicket.custom.x = t;
-            stubTicket.custom.x = t;
-            await UniTask.Yield();
-        }
-
-        mainTicket.custom.x = 1;
-        stubTicket.custom.x = 1;
     }
     private async UniTask RippingStubTicket()
     {
@@ -89,9 +74,6 @@ public class TicketIcon : MonoBehaviour
         {
             elapsed += Time.deltaTime;
             float t = elapsed / USE_TIME;
-            
-            mainTicket.custom.x = 1 - t;
-            mainTicket.custom.x = 1 - t;
 
             mainTicket.custom.w = t;
             stubTicket.custom.w = t;
@@ -100,8 +82,5 @@ public class TicketIcon : MonoBehaviour
         }
         mainTicket.custom.w = 1;
         stubTicket.custom.w = 1;
-        
-        mainTicket.custom.x = 0;
-        stubTicket.custom.x = 0;
     }
 }

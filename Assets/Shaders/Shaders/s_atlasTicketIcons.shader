@@ -1,4 +1,4 @@
-Shader "Custom/s_atlasAppear"
+Shader "Custom/s_atlasTicketIcons"
 {
     Properties
     {
@@ -91,7 +91,15 @@ Shader "Custom/s_atlasAppear"
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 finalColor = color + _BlackColor;
+                half ticketCheck = BayerX8(i.custom.x, i.positionHCS.y);
+
+                half3 colorA = lerp(color.rgb, 1 - color.rgb, ticketCheck);
+                half3 colorB = lerp(1 - color.rgb, color.rgb, ticketCheck); 
+
+                float dayNightBayer = BayerX8(_DayNight, i.positionHCS.y);
+                half3 dayNightInvertColor = lerp(colorA, colorB, dayNightBayer);
+
+                half3 finalColor = dayNightInvertColor + _BlackColor;
 
                 half alpha = BayerX8(color.a - i.custom.a, i.positionHCS.xy);
                 clip(alpha - 0.001);

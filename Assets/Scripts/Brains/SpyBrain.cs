@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 using static Atlas;
@@ -7,6 +8,9 @@ using static Spy;
 public class SpyBrain : MonoBehaviour
 {
     public static Carriage CurCarriage;
+
+    public static event Action OnTicketCheckHoverEnabled;
+    public static event Action OnTicketCheckHoverDisabled;
 
     public static bool canCheckTicket;
     public static bool checkingTicket;
@@ -372,6 +376,11 @@ public class SpyBrain : MonoBehaviour
                     atlasRenderer.PlayClipOneShotReverse(curClip);
                     npcTicketCheck = null;
                 }
+
+                if (trip.ticketsCheckedSinceLastStation == trip.stationAhead.ticketsToCheckBeforeSpawn)
+                {
+                    canCheckTicket = false;
+                }
             }
             break;
 
@@ -396,16 +405,28 @@ public class SpyBrain : MonoBehaviour
 
             if (npcHit.collider == null)
             {
-                npcTicketCheck?.ToggleTicketCheckHover(toggle: false);
-                npcTicketCheck = null;
-                return;
+                if (npcTicketCheck != null)
+                {
+                    npcTicketCheck.ToggleTicketCheckHover(toggle: false);
+                    npcTicketCheck = null;
+                    OnTicketCheckHoverDisabled.Invoke();
+                }
             }
-            NPCBrain npc = CurCarriage.GetNPCFromCollider((BoxCollider2D)npcHit.collider);
-            if (npc != npcTicketCheck)
+            else
             {
-                npcTicketCheck?.ToggleTicketCheckHover(toggle: false);
-                npcTicketCheck = npc;
-                npcTicketCheck.ToggleTicketCheckHover(toggle: true);
+                NPCBrain npc = CurCarriage.GetNPCFromCollider((BoxCollider2D)npcHit.collider);
+
+                if (npc != null && npc != npcTicketCheck)
+                {
+                    npcTicketCheck?.ToggleTicketCheckHover(toggle: false);
+                    
+                    if (!npc.ticketHasBeenChecked)
+                    {
+                        npcTicketCheck = npc;
+                        npcTicketCheck.ToggleTicketCheckHover(toggle: true);
+                        OnTicketCheckHoverEnabled.Invoke();
+                    }
+                }
             }
         }
     }

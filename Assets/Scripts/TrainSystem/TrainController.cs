@@ -191,8 +191,6 @@ public class TrainController : MonoBehaviour
 
             case TrainStates.Stopped:
             {
-                SpyBrain.ToggleTicketCheckAbility(toggle: false);
-
                 stats.targetNPCsToBoard = trip.stationAhead.bystanderProfiles.Length + trip.stationAhead.traitorSpawnAmount;
                 stats.curVelocity = Vector2.zero;
 
@@ -266,20 +264,23 @@ public class TrainController : MonoBehaviour
                     {
                         offTrainClock = 0;
 
-                        if (stats.totalNPCsBoarded == stats.targetNPCsToBoard)
+                        if (stats.curStationIndex < trip.stationsDataArray.Length - 1)
                         {
-                            if (!closingSlideDoors)
+                            if (stats.totalNPCsBoarded == stats.targetNPCsToBoard)
                             {
-                                CloseAllSlideDoors();
-                                closingSlideDoors = true;
-                            }
+                                if (!closingSlideDoors)
+                                {
+                                    CloseAllSlideDoors();
+                                    closingSlideDoors = true;
+                                }
 
-                            if (stats.slideDoorsAmountOpened == 0)
-                            {
-                                stats.curStationIndex++;
-                                trip.stationAhead = trip.stationsDataArray[stats.curStationIndex];
-                                NextStationInstance = null;
-                                stats.targetVelocity.x = KMPHToVelocity(DEFAULT_TARGET_KMPH);
+                                if (stats.slideDoorsAmountOpened == 0)
+                                {
+                                    stats.curStationIndex++;
+                                        trip.stationAhead = trip.stationsDataArray[stats.curStationIndex];
+                                        NextStationInstance = null;
+                                        stats.targetVelocity.x = KMPHToVelocity(DEFAULT_TARGET_KMPH);
+                                }
                             }
                         }
                     }
@@ -301,6 +302,7 @@ public class TrainController : MonoBehaviour
 
                             if (stats.slideDoorsAmountOpened == 0)
                             {
+                                SpyBrain.CurCarriage.MoveUp();
                                 trainCTS?.Cancel();
                                 trainCTS = new CancellationTokenSource();
                                 MoveTrainAwayFromCamera().Forget();
@@ -351,7 +353,7 @@ public class TrainController : MonoBehaviour
     private void SpawnStation()
     {
         NextStationInstance = stations[stats.curStationIndex];
-        float stationXPos = GetBrakeDistance(stats.curVelocity.x, settings.deceleration, NextStationInstance.parallaxController.parallaxFactor) + TRAIN_WORLD_POS_X;
+        float stationXPos = spawnData.bounds.max.x + (NextStationInstance.transform.position.x - NextStationInstance.frontPlatformRenderer.bounds.min.x);
         NextStationInstance.transform.position = new Vector3(stationXPos, 0, 0);
         NextStationInstance.gameObject.SetActive(true);
         NextStationInstance.SpawnNPCs();
@@ -452,8 +454,10 @@ public class TrainController : MonoBehaviour
     }
     private void UpdateTicketInspectParams()
     {
-        stats.targetElevatePos = trip.elevationValues[spyStats.ticketsCheckedTotal];
-        stats.targetKMPH = trip.kmValues[spyStats.ticketsCheckedTotal];
+        int ticketParamsIndex = spyStats.ticketsCheckedTotal - 1;
+        stats.targetElevatePos = trip.elevationValues[ticketParamsIndex];
+        stats.targetKMPH = trip.kmValues[ticketParamsIndex];
+        stats.targetNightValue = trip.dayNightValues[ticketParamsIndex];
         stats.targetVelocity.x = KMPHToVelocity(stats.targetKMPH);
         metersTravelledOnBezier = 0;
         MoveOnBezier().Forget();
@@ -559,6 +563,8 @@ public class TrainControllerEditor : Editor
             EditorPrefs.SetBool(SKIP_MOVING_KEY, skipMoving);
             TrainController trainController = (TrainController)target;
             trainController.skipMoveToStart = skipMoving;
+            EditorUtility.SetDirty(trainController);
+            AssetDatabase.SaveAssetIfDirty(trainController);
         }
     }
 }

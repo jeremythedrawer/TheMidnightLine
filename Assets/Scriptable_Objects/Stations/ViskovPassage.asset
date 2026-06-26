@@ -13,83 +13,51 @@ MonoBehaviour:
   m_Name: ViskovPassage
   m_EditorClassIdentifier: 
   station_prefab: {fileID: 7984465553792076042, guid: b25464ee2ee392f46b171d7011a751d9, type: 3}
-  targetKMPH: 50
   ticketsToCheckBeforeSpawn: 3
-  busynessFactor: 0.5
+  bystanderSpawnCount: 20
   traitorSpawnAmount: 0
   isFrontOfTrain: 0
   stationName: Vyskov Passage
-  stationIndex: 0
+  stationIndex: 3
   exitLocalPosX: 0
   bystanderProfiles:
-  - fullName: Aelewhat Dermas
-    boardingStationIndex: 1
-    disembarkingStationIndex: 2
-    npcPrefabIndex: 5
-    coveredMugshotIndex: 11
-    uncoveredMugshotIndex: 10
-    behaviours: 136
-  - fullName: Natalie Gerald
-    boardingStationIndex: 1
-    disembarkingStationIndex: 2
-    npcPrefabIndex: 6
-    coveredMugshotIndex: 13
-    uncoveredMugshotIndex: 12
-    behaviours: 2
-  - fullName: Ivan Petrov
-    boardingStationIndex: 1
+  - boardingStationIndex: 3
     disembarkingStationIndex: 2
     npcPrefabIndex: 2
-    coveredMugshotIndex: 5
-    uncoveredMugshotIndex: 4
-    behaviours: 6
-  - fullName: Penelope Gerald
-    boardingStationIndex: 1
+    behaviours: 1
+  - boardingStationIndex: 3
     disembarkingStationIndex: 2
+    npcPrefabIndex: 1
+    behaviours: 18
+  - boardingStationIndex: 3
+    disembarkingStationIndex: 2
+    npcPrefabIndex: 1
+    behaviours: 18
+  - boardingStationIndex: 3
+    disembarkingStationIndex: 3
+    npcPrefabIndex: 1
+    behaviours: 2
+  - boardingStationIndex: 3
+    disembarkingStationIndex: 3
+    npcPrefabIndex: 1
+    behaviours: 8
+  - boardingStationIndex: 3
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 3
+    behaviours: 2
+  - boardingStationIndex: 3
+    disembarkingStationIndex: 3
     npcPrefabIndex: 6
-    coveredMugshotIndex: 13
-    uncoveredMugshotIndex: 12
-    behaviours: 32
-  - fullName: Natalie Gerald
-    boardingStationIndex: 1
+    behaviours: 2
+  - boardingStationIndex: 3
+    disembarkingStationIndex: 2
+    npcPrefabIndex: 5
+    behaviours: 2
+  - boardingStationIndex: 3
     disembarkingStationIndex: 2
     npcPrefabIndex: 0
-    coveredMugshotIndex: 1
-    uncoveredMugshotIndex: 0
-    behaviours: 1
-  - fullName: Ahad Dehghani
-    boardingStationIndex: 1
-    disembarkingStationIndex: 2
-    npcPrefabIndex: 5
-    coveredMugshotIndex: 11
-    uncoveredMugshotIndex: 10
-    behaviours: 130
-  - fullName: Johnathan Gerald
-    boardingStationIndex: 1
-    disembarkingStationIndex: 2
-    npcPrefabIndex: 1
-    coveredMugshotIndex: 3
-    uncoveredMugshotIndex: 2
-    behaviours: 10
-  - fullName: Ivan Petrov
-    boardingStationIndex: 1
-    disembarkingStationIndex: 2
-    npcPrefabIndex: 4
-    coveredMugshotIndex: 9
-    uncoveredMugshotIndex: 8
-    behaviours: 5
-  - fullName: Ivan Petrov
-    boardingStationIndex: 1
+    behaviours: 2
+  - boardingStationIndex: 3
     disembarkingStationIndex: 2
     npcPrefabIndex: 2
-    coveredMugshotIndex: 5
-    uncoveredMugshotIndex: 4
-    behaviours: 5
-  - fullName: Johnathan Richardson
-    boardingStationIndex: 1
-    disembarkingStationIndex: 2
-    npcPrefabIndex: 1
-    coveredMugshotIndex: 3
-    uncoveredMugshotIndex: 2
-    behaviours: 2
-  traitorProfiles: []
+    behaviours: 1

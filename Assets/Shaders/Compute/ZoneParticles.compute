@@ -48,14 +48,18 @@ void _ZoneInit(uint id : SV_DispatchThreadID)
     output.z = startPos + size;
     output.w = (_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z;
     
+    float rand01 = HashIntTo01Float(id);
     if (_Init == 0)
     {
-        float rand01 = HashIntTo01Float(id);
         output.x = _SpawnerMinPos.x + _SpawnerSize.x * rand01;
+    }
+    else
+    {
+        output.x = _SpawnerMaxPos.x + _SpawnerSize.x * rand01;
     }
     output.y = _OffsetInput[id].y;
     
-    moveInput |= 1 << BORN_BIT;
+    moveInput &= ~(1 << BORN_BIT);
     moveInput &= ~(1 << DEAD_BIT); // NOTE: Setting dead input to 0
     moveInput &= ~(1 << FIRST_OUT_OF_BOUNDS_BIT); //NOTE: Setting first out of bounds input to 0
     

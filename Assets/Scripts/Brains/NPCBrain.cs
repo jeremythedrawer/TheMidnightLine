@@ -169,7 +169,7 @@ public class NPCBrain : MonoBehaviour
     }
     public void ToggleTicketCheckHover(bool toggle)
     {
-        atlasRenderer.custom.w = toggle && !ticketHasBeenChecked ? 1 : 0; 
+        atlasRenderer.custom.w = toggle ? 1 : 0; 
     }
     private void SetState(NPCState newState)
     {
@@ -624,7 +624,16 @@ public class NPCBrain : MonoBehaviour
             case NPCPath.ToSlideDoor:
             {
                 NPCMotion standingMotion = RandomIdleMotion(NPCMotion.StandingBlinking, NPCMotion.StandingBreathing);
-                SetPath(NPCPath.AtSlideDoor);
+
+                if (spyStats.curLocationState == Spy.LocationState.Station && trainStats.curStationIndex > 0)
+                {
+                    SetPath(NPCPath.StandingAtStation);
+                }
+                else
+                {
+                    SetPath(NPCPath.AtSlideDoor);
+                }
+
                 curClip = atlas.clipDict[(int)standingMotion];
             }
             break;

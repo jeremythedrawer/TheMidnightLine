@@ -28,7 +28,6 @@ public class Station : MonoBehaviour
         {
             NPCProfile bystanderProfile = station.bystanderProfiles[i];
             float randXPos = Random.Range(activePlatformRenderer.bounds.min.x + SPAWN_BUFFER, activePlatformRenderer.bounds.max.x - SPAWN_BUFFER);
-            
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, activePlatformRenderer.transform.position.z);
 

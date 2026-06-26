@@ -7,7 +7,7 @@ public class StationSO : ScriptableObject
     public Station station_prefab;
     public int ticketsToCheckBeforeSpawn = 0;
 
-    [Range(0, 1)]public float busynessFactor = 0.2f;
+    public int bystanderSpawnCount = 10;
     public int traitorSpawnAmount = 2;
 
     public bool isFrontOfTrain;

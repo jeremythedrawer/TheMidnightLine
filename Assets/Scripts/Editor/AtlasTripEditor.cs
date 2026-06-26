@@ -1,8 +1,6 @@
-using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using Unity.Mathematics;
 using UnityEditor;
 using UnityEngine;
 
@@ -21,14 +19,17 @@ public class AtlasTripEditor : EditorWindow
     const float FULL_RECT_HEIGHT = 3000;
 
     const int STATION_LABEL_ROW = 1;
-    const int KM_LABEL_ROW = 2;
-    const int DAY_NIGHT_ROW = 3;
-    const int ELEVATION_ROW = 4;
+    const int NPC_GRADIENT_ROW = 2;
+    const int KM_LABEL_ROW = 3;
+    const int DAY_NIGHT_ROW = 4;
+    const int ELEVATION_ROW = 5;
 
     static SpawnData spawnData;
     
     GUIStyle depthLabel;
     GUIStyle graphHeaderLabel;
+
+    Gradient npcGradient;
 
     TripSO trip;
 
@@ -163,7 +164,7 @@ public class AtlasTripEditor : EditorWindow
                 particleAtlasColors[i] = Color.HSVToRGB((float)i / (float)particleAtlasColors.Length, 1, 1);
                 particleAtlasColors[i].a = 0.5f;
             }
-
+            npcGradient = new Gradient();
         }
     }
     private T[] CorrectArrayLength<T>(T[] array)
@@ -198,7 +199,7 @@ public class AtlasTripEditor : EditorWindow
         Rect tripLabelRect = new Rect(0, curPosY, graphRect.x, ROW_HEIGHT);
         GUIContent tripContent = new GUIContent("Trip");
         EditorGUI.LabelField(tripLabelRect, tripContent);
-        
+
         Rect tripInputRect = new Rect(graphRect.x, curPosY, COLUMN_WIDTH, ROW_HEIGHT);
         
         EditorGUI.BeginChangeCheck();
@@ -508,6 +509,7 @@ public class AtlasTripEditor : EditorWindow
         int ticketChecks = 0;
 
         float stationRectPosY = curPosY + (ROW_HEIGHT * STATION_LABEL_ROW);
+        float npcGradientPosY = curPosY + (ROW_HEIGHT * NPC_GRADIENT_ROW);
         float kmRectPosY = curPosY + (ROW_HEIGHT * KM_LABEL_ROW);
         float dayNightRectPosY = curPosY + (ROW_HEIGHT * DAY_NIGHT_ROW);
         float elevationRectPosY = curPosY + (ROW_HEIGHT * ELEVATION_ROW);
@@ -522,6 +524,9 @@ public class AtlasTripEditor : EditorWindow
             fontSize = 16,
             fontStyle = FontStyle.Bold
         };
+
+        Rect npcGradientRect = new Rect(graphRect.x, npcGradientPosY, graphRect.size.x, ROW_HEIGHT);
+
 
         for (int i = 0; i <= totalTicketChecks; i++)
         {

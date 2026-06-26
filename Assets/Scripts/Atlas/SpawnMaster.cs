@@ -26,18 +26,11 @@ public class SpawnMaster : MonoBehaviour
     [Header("Generated")]
     public int nextSpawnIndex;
     public float delayParticleQueueClock;
-    public float curDayNightValue;
-    public float targetNightValue;
-    public float prevNightValue;
-    public float dayNightClock;
-
     public Queue<DelayedParticleData> delayedParticlesQueue;
     private void OnEnable()
     {
         Dispose();
         delayedParticlesQueue = new Queue<DelayedParticleData>();
-        curDayNightValue = colorSO.dayNight;
-        targetNightValue = trip.dayNightValues[0];
 
         InitBoundParameters();
 
@@ -64,7 +57,6 @@ public class SpawnMaster : MonoBehaviour
     {
         UpdateSpawnCompute(ref spawnData.scrollData);
         UpdateSpawnCompute(ref spawnData.zoneData);
-        UpdateDayNightCycle();
         UpdateDelayedParticleQueue();
 
     }
@@ -213,9 +205,6 @@ public class SpawnMaster : MonoBehaviour
 
         ReinitSpawnCompute(ref spawnData.zoneData);
         ReinitSpawnCompute(ref spawnData.scrollData);
-
-        prevNightValue = curDayNightValue;
-        targetNightValue = trip.dayNightValues[spyStats.ticketsCheckedTotal];
     }
     private void SwapParticles(ParticleAtlas particleAtlas, ref SpawnComputeData spawnComputeData)
     {
@@ -600,12 +589,6 @@ public class SpawnMaster : MonoBehaviour
         computeData.compute.SetVector("_CamVelocity", Vector4.zero);
         computeData.compute.SetVector("_TrainVelocity", Vector4.zero);
 
-    }
-    private void UpdateDayNightCycle()
-    {
-        curDayNightValue = Mathf.Lerp(curDayNightValue, targetNightValue, Time.deltaTime * DAY_NIGHT_TRANSITION_TIME);
-
-        colorSO.dayNight = curDayNightValue;
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()

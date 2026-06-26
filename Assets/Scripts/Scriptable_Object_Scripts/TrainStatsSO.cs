@@ -21,6 +21,7 @@ public class TrainStatsSO : ScriptableObject
     public float prevPeakVelocity;
     public float targetPosition;
     public float targetKMPH;
+    public float targetNightValue;
     public float distToSpawnNextStation;
     public float trainToMaxSpawnDist;
 
