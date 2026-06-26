@@ -8,7 +8,6 @@ using static NPC;
 public class NPCsDataSO : ScriptableObject
 {
     public NPCBehaviourContextSO[] behaviourContexts;
-    public AtlasTextRenderer stationNameTag_prefab;
     [Header("Generated")]
     public Dictionary<Behaviours, string> behaviourStringDict;
     public Dictionary<Behaviours, NPCBehaviourContextSO> behaviourContextDict;

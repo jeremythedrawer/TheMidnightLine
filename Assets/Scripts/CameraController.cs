@@ -1,5 +1,5 @@
 using UnityEngine;
-using System;
+
 using static Atlas;
 using static Spy;
 public class CameraController : MonoBehaviour
@@ -57,6 +57,7 @@ public class CameraController : MonoBehaviour
     {
         ChooseStates();
         UpdateStates();
+
         curXOffset = spyStats.spriteFlip ? -settings.horizontalOffset : settings.horizontalOffset; // camera offsets when player is moving
         stats.camBounds.center = transform.position;
 

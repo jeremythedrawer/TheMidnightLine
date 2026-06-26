@@ -34,6 +34,8 @@ public static class Atlas
         StandingSleeping,
         Walking,
         Vandalising,
+        SittingDistracted,
+        StandingDistracted,
     }
     public enum SpyMotion
     {

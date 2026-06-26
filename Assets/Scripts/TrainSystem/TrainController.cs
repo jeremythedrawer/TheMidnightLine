@@ -16,6 +16,7 @@ public class TrainController : MonoBehaviour
 {
     const float VELOCITY_BUFFER = 0.5f;
     const float DEFAULT_TARGET_KMPH = 40;
+    const float OFF_TRAIN_TIME_BUFFER = 5;
 
     public static Station NextStationInstance;
     
@@ -44,13 +45,12 @@ public class TrainController : MonoBehaviour
     public CancellationTokenSource trainCTS;
     
     public TrainStates curState;
-    
-    public int curStationIndex;
-    
+
     public float metersTravelled;
     public float metersTravelledOnBezier;
     public float renderTextureScale;
-    
+    public float offTrainClock;
+
     public bool skipMoveToStart;
     public bool closingSlideDoors;
     public bool atStartPosition;
@@ -100,6 +100,9 @@ public class TrainController : MonoBehaviour
     }
     public void Init()
     {
+
+        stats.curStationIndex = 0;
+
         stats.targetKMPH = trip.kmValues[0];
 
         stats.curVelocity.x = KMPHToVelocity(stats.targetKMPH);
@@ -246,7 +249,7 @@ public class TrainController : MonoBehaviour
             break;
             case TrainStates.AtMaxSpeed:
             {
-                if (trip.ticketsCheckedSinceLastStation == trip.stationAhead.ticketsToCheckBeforeSpawn || spyStats.signedNotepad)
+                if (trip.ticketsCheckedSinceLastStation == trip.stationAhead.ticketsToCheckBeforeSpawn)
                 {
                     SpawnStation();
                     stats.targetVelocity = Vector2.zero;
@@ -261,7 +264,9 @@ public class TrainController : MonoBehaviour
                     case LocationState.Carriage:
                     case LocationState.Gangway:
                     {
-                        if (stats.totalNPCsBoarded == stats.targetNPCsToBoard && !spyStats.signedNotepad)
+                        offTrainClock = 0;
+
+                        if (stats.totalNPCsBoarded == stats.targetNPCsToBoard)
                         {
                             if (!closingSlideDoors)
                             {
@@ -271,8 +276,8 @@ public class TrainController : MonoBehaviour
 
                             if (stats.slideDoorsAmountOpened == 0)
                             {
-                                curStationIndex++;
-                                trip.stationAhead = trip.stationsDataArray[curStationIndex];
+                                stats.curStationIndex++;
+                                trip.stationAhead = trip.stationsDataArray[stats.curStationIndex];
                                 NextStationInstance = null;
                                 stats.targetVelocity.x = KMPHToVelocity(DEFAULT_TARGET_KMPH);
                             }
@@ -282,8 +287,12 @@ public class TrainController : MonoBehaviour
 
                     case LocationState.Station:
                     {
-                        if (spyStats.signedNotepad)
+                        if (stats.curStationIndex > 0)
                         {
+                            offTrainClock += Time.deltaTime;
+                         
+                            if (offTrainClock < OFF_TRAIN_TIME_BUFFER) return;
+                            
                             if (!closingSlideDoors)
                             {
                                 CloseAllSlideDoors();
@@ -296,8 +305,6 @@ public class TrainController : MonoBehaviour
                                 trainCTS = new CancellationTokenSource();
                                 MoveTrainAwayFromCamera().Forget();
                                 stats.targetVelocity.x = KMPHToVelocity(DEFAULT_TARGET_KMPH);
-
-
                             }
                         }
                     }
@@ -343,7 +350,7 @@ public class TrainController : MonoBehaviour
     }
     private void SpawnStation()
     {
-        NextStationInstance = stations[curStationIndex];
+        NextStationInstance = stations[stats.curStationIndex];
         float stationXPos = GetBrakeDistance(stats.curVelocity.x, settings.deceleration, NextStationInstance.parallaxController.parallaxFactor) + TRAIN_WORLD_POS_X;
         NextStationInstance.transform.position = new Vector3(stationXPos, 0, 0);
         NextStationInstance.gameObject.SetActive(true);
@@ -390,7 +397,7 @@ public class TrainController : MonoBehaviour
     }
     private void SpawnFirstStation()
     {
-        Station firstStation = stations[curStationIndex];
+        Station firstStation = stations[stats.curStationIndex];
         NextStationInstance = firstStation;
         firstStation.transform.position = new Vector3(TRAIN_WORLD_POS_X, 0, 0);
 

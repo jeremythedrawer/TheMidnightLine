@@ -2,7 +2,8 @@ Shader "Custom/s_atlasSpy"
 {
     Properties
     {
-        [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
+        [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white" {}
+        _SpyColor("Spy Color", Color) = (1,1,1,1)
     }
 
     SubShader
@@ -38,7 +39,7 @@ Shader "Custom/s_atlasSpy"
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
-            float3 _MainColor;
+            float3 _SpyColor;
             float _DayNight;
             float _DayNightFactor;
             Varyings vert(Attributes v)
@@ -86,7 +87,7 @@ Shader "Custom/s_atlasSpy"
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 finalColor = color.r + _MainColor;
+                half3 finalColor = color.r + _SpyColor;
 
                 clip(color.a - 0.001);
                 return half4 (finalColor, 1);

@@ -100,9 +100,9 @@ public class CursorController : MonoBehaviour
     private void HoverNPC()
     {
         bool foundNPC = false;
-        for (int i = 0; i < SpyBrain.CurCarriage.curNPCs.Count; i++)
+        for (int i = 0; i < SpyBrain.CurCarriage.curNPCList.Count; i++)
         {
-            NPCBrain npc = SpyBrain.CurCarriage.curNPCs[i];
+            NPCBrain npc = SpyBrain.CurCarriage.curNPCList[i];
 
             if (IsInsideBounds(npc.atlasRenderer.bounds))
             {

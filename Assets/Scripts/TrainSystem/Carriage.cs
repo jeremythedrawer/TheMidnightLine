@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Runtime.ConstrainedExecution;
 using System.Threading;
 using UnityEngine;
 using static NPC;
@@ -35,7 +36,8 @@ public class Carriage : MonoBehaviour
     
     public CancellationTokenSource ctsFade;
 
-    public List<NPCBrain> curNPCs;
+    public List<NPCBrain> curNPCList;
+    public Dictionary<BoxCollider2D, NPCBrain> curNPCDict;
 
     public SeatData seatData;
     
@@ -53,7 +55,8 @@ public class Carriage : MonoBehaviour
 
     private void Start()
     {
-        curNPCs = new List<NPCBrain>();
+        curNPCList = new List<NPCBrain>();
+        curNPCDict = new Dictionary<BoxCollider2D, NPCBrain>();
     }
     private void Update()
     {
@@ -224,11 +227,18 @@ public class Carriage : MonoBehaviour
     }
     public void AddNPC(NPCBrain npc)
     {
-        curNPCs.Add(npc);
+        curNPCList.Add(npc);
+        curNPCDict.Add(npc.boxCollider, npc);
     }
     public void RemoveNPC(NPCBrain npc)
     {
-        curNPCs.Remove(npc);
+        curNPCList.Remove(npc);
+        curNPCDict.Remove(npc.boxCollider);
+    }
+    public NPCBrain GetNPCFromCollider(BoxCollider2D collider)
+    {
+        curNPCDict.TryGetValue(collider, out NPCBrain npc);
+        return npc;
     }
     private async UniTask MovingDown()
     {

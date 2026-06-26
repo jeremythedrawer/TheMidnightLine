@@ -50,7 +50,6 @@ public class Notepad : MonoBehaviour
     public Page traitorPage_prefab;
     public Page promptPage;
     public Page colorKeyPage;
-    public Page confirmPage;
 
     [Header("Generated")]
 
@@ -191,30 +190,6 @@ public class Notepad : MonoBehaviour
                 else if (ToReveal())
                 {
                     SetState(NotepadState.Revealing);
-                }
-                else
-                {
-                    SetState(NotepadState.Stationary);
-                }
-            }
-            break;
-
-            case PageType.Confirm:
-            {
-                if (ToFlipDown())
-                {
-                    SetState(NotepadState.FlippingDown);
-                }
-                else if (ToErase())
-                {
-                    SetState(NotepadState.Erasing);
-                }
-                else if (ToWrite())
-                {
-                    if (spyStats.curLocationState != LocationState.Station)
-                    {
-                        SetState(NotepadState.Writing);
-                    }
                 }
                 else
                 {
@@ -658,12 +633,6 @@ public class Notepad : MonoBehaviour
             {
                 switch(activePage.pageType)
                 {
-                    case PageType.Confirm:
-                    {
-                        spyStats.signedNotepad = true;
-                    }
-                    break;
-
                     case PageType.Profile:
                     {
                         if(activeTraitorProfile.npcProfile.disembarkingStationIndex == activePage.playerWriteIndex)
@@ -708,7 +677,7 @@ public class Notepad : MonoBehaviour
     }
     private bool ToFlipUp()
     {
-        return ((playerInputs.notepadPreviewAnswerAndFlip.y == 1 || willFlipUp) && !writeToggle && !eraseToggle && !revealToggle) || flipToggle == 1;
+        return ((playerInputs.notepadPreviewAnswerAndFlip.y == 1 || willFlipUp) && activePageIndex < lastPageIndex && !writeToggle && !eraseToggle && !revealToggle) || flipToggle == 1;
     }
     private bool ToFlipDown()
     {
@@ -812,11 +781,11 @@ public class Notepad : MonoBehaviour
         List<NPCProfile> totalNPCProfiles = new List<NPCProfile>();
         List<NPCProfile> bystanderProfiles = new List<NPCProfile>();
 
-        for (int i = 0; i < trip.npc_prefabsArray.Length; i++)
+        for (int i = 0; i < trip.npcDataArray.Length; i++)
         {
-            NPCBrain npcPrefab = trip.npc_prefabsArray[i];
+            NPCSO npc = trip.npcDataArray[i];
 
-            int behaviourValue = (int)npcPrefab.npc.behaviours;
+            int behaviourValue = (int)npc.behaviours;
 
             int[] validFlags = new int[32];
             int flagCount = 0;
@@ -839,7 +808,7 @@ public class Notepad : MonoBehaviour
                 {
                     Behaviours secondBehaviour = (Behaviours)validFlags[k];
                     Behaviours twoBehaviours = firstBehaviour | secondBehaviour;
-                    string name = GenerateName(npcPrefab.npc.gender, npcPrefab.npc.ethnicity);
+                    string name = GenerateName(npc.gender, npc.ethnicity);
 
                     NPCProfile npcProfile = new NPCProfile
                     {
@@ -878,7 +847,7 @@ public class Notepad : MonoBehaviour
             traitorProfile.boardingStationIndex = stationIndex;
             traitorProfile.disembarkingStationIndex = UnityEngine.Random.Range(Mathf.Min(stationIndex + MIN_STATION_STOPS, trip.stationsDataArray.Length - 1) , trip.stationsDataArray.Length - 1);
 
-            NPCSO traitor = trip.npc_prefabsArray[traitorProfile.npcPrefabIndex].npc;
+            NPCSO traitor = trip.npcDataArray[traitorProfile.npcPrefabIndex];
 
             trip.traitorProfiles[i] = new TraitorProfile()
             {
@@ -905,7 +874,7 @@ public class Notepad : MonoBehaviour
         }
 
         activePageIndex = 0;
-        lastPageIndex = pages.Length + 1;
+
 
         totalNPCProfiles.AddRange(bystanderProfiles);
 
@@ -953,9 +922,8 @@ public class Notepad : MonoBehaviour
             pageList.Add(traitorPage);
             traitorPage.gameObject.SetActive(false);
         }
-        pageList.Add(confirmPage);
-        confirmPage.Init();
         pages = pageList.ToArray();
+        lastPageIndex = pages.Length - 1;
     }
     private string GenerateName(Gender gender, Ethnicity ethnicity)
     {

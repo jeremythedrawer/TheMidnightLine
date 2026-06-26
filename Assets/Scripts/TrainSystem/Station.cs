@@ -32,7 +32,7 @@ public class Station : MonoBehaviour
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, activePlatformRenderer.transform.position.z);
 
-            NPCBrain bystander = Instantiate(trip.npc_prefabsArray[bystanderProfile.npcPrefabIndex], spawnPos, Quaternion.identity, activePlatformRenderer.transform);
+            NPCBrain bystander = Instantiate(trip.npcDataArray[bystanderProfile.npcPrefabIndex].prefab, spawnPos, Quaternion.identity, activePlatformRenderer.transform);
             
             bystander.profile = bystanderProfile;
             bystander.role = Role.Bystander;
@@ -58,7 +58,7 @@ public class Station : MonoBehaviour
             transform.position.y + 0.1f,
             activePlatformRenderer.transform.position.z);
 
-            NPCBrain traitor = Instantiate(trip.npc_prefabsArray[traitorProfile.npcProfile.npcPrefabIndex], spawnPos, Quaternion.identity, activePlatformRenderer.transform);
+            NPCBrain traitor = Instantiate(trip.npcDataArray[traitorProfile.npcProfile.npcPrefabIndex].prefab, spawnPos, Quaternion.identity, activePlatformRenderer.transform);
             traitor.profile = traitorProfile.npcProfile;
             traitor.role = Role.Traitor;
             traitor.boardingStation = station;

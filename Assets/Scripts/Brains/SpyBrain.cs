@@ -6,6 +6,12 @@ using static Spy;
 
 public class SpyBrain : MonoBehaviour
 {
+    public static Carriage CurCarriage;
+
+    public static bool canCheckTicket;
+    public static bool checkingTicket;
+    public static bool checkingNotepad;
+
     [Header("Components")]
     public Rigidbody2D rigidBody;
     public BoxCollider2D boxCollider;
@@ -30,50 +36,49 @@ public class SpyBrain : MonoBehaviour
     public HingedDoor smokingRoomDoor;
     public GangwayDoor curGangwayDoor;
     public CarriageMap curCarriageMap;
+
     public NPCBrain npcTicketCheck;
+
     public AtlasClip curClip;
+
+    public CollisionData collisionData;
+    
     public NotepadState curNotepadState;
 
     public float clipTime;
+    public float lastGroundYPos;
+    
     public int curFrameIndex;
     public int prevFrameIndex;
 
     public bool wasTouchingGangwayDoorLeft;
     public bool wasTouchingGangwayDoorRight;
-
     public bool canExitCheckTicket;
     public bool canExitNotepad;
     public bool checkingCarriageMap;
 
-    public static Carriage CurCarriage;
 
-    public static bool canCheckTicket;
-    public static bool checkingTicket;
-    public static bool checkingNotepad;
 
-    public CollisionData collisionData;
 
-    public float lastGroundYPos;
     private void OnValidate()
     {
         CalculateCollisionPoints();
     }
     private void OnEnable()
     {     
-        gameEventData.OnInteract.RegisterListener(OpenTrainDoors);
+        gameEventData.OnInteract.RegisterListener(OpenSlideDoors);
         gameEventData.OnInteract.RegisterListener(LookAtCarriageMap);
 
         gameEventData.OnStationLeave.RegisterListener(MoveUpCurrentCarriageWall);
     }
     private void OnDisable()
     {
-        gameEventData.OnInteract.UnregisterListener(OpenTrainDoors);
+        gameEventData.OnInteract.UnregisterListener(OpenSlideDoors);
         gameEventData.OnInteract.UnregisterListener(LookAtCarriageMap);
 
         gameEventData.OnStationLeave.UnregisterListener(MoveUpCurrentCarriageWall);
 
         stats.ticketsCheckedTotal = 0;
-        stats.signedNotepad = false;
     }
     private void Start()
     {
@@ -96,6 +101,7 @@ public class SpyBrain : MonoBehaviour
     private void FixedUpdate()
     {
         FixedUpdateStates();
+        CheckIfTicketCheckHover();
         bool leftWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, stats.curWallLayer);
         bool rightWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, stats.curWallLayer);
 
@@ -104,7 +110,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void ChooseState()
     {
-        if ((playerInputs.ticketCheckKeyDown && canCheckTicket) || checkingTicket)
+        if ((playerInputs.ticketCheckKeyDown && canCheckTicket && npcTicketCheck != null && npcTicketCheck.onTrain && !npcTicketCheck.ticketHasBeenChecked) || checkingTicket)
         {
             SetState(SpyState.Ticket);
         }
@@ -271,11 +277,11 @@ public class SpyBrain : MonoBehaviour
                             stats.curLocationState = LocationState.Gangway;
                         }
                         curGangwayDoor.CloseDoors();
-
                     }
                     else if ((isTouchingGangwayDoorLeft && !wasTouchingGangwayDoorLeft) && !isTouchingGangwayDoorRight)
                     {
                         curGangwayDoor = gangwayDoorLeftHit.collider.GetComponent<GangwayDoor>();
+                        curGangwayDoor.OpenDoors();
                         if (curGangwayDoor.isLeftOfCarriage)
                         {
                             curGangwayDoor.gangway.MoveDown();
@@ -289,6 +295,7 @@ public class SpyBrain : MonoBehaviour
                     else if ((isTouchingGangwayDoorRight && !wasTouchingGangwayDoorRight) && !isTouchingGangwayDoorLeft)
                     {
                         curGangwayDoor = gangwayDoorRightHit.collider.GetComponent<GangwayDoor>();
+                        curGangwayDoor.OpenDoors();
                     }
                     wasTouchingGangwayDoorLeft = isTouchingGangwayDoorLeft;
                     wasTouchingGangwayDoorRight = isTouchingGangwayDoorRight;
@@ -320,25 +327,17 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Ticket:
             {
+                npcTicketCheck.ticketIsBeingChecked = true;
                 curClip = atlas.clipDict[(int)SpyMotion.Ticket];
                 atlasRenderer.PlayClipOneShot(curClip);
-
-                RaycastHit2D npcHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, transform.right, boxCollider.bounds.size.x, layerSettings.npc);
-
-                if (npcHit.collider != null)
-                {
-                    npcTicketCheck = npcHit.transform.gameObject.GetComponent<NPCBrain>();
-                    if (!npcTicketCheck.onTrain || npcTicketCheck.ticketHasBeenChecked) return;
-                    npcTicketCheck.ticketIsBeingChecked = true;
                     
-                    stats.boardingStationName = trip.stationsDataArray[npcTicketCheck.profile.boardingStationIndex].name;
-                    stats.disembarkingStationName = trip.stationsDataArray[npcTicketCheck.profile.disembarkingStationIndex].name;
-                    canExitCheckTicket = false;
-                    stats.ticketsCheckedTotal++;
-                    checkingTicket = true;
+                stats.boardingStationName = trip.stationsDataArray[npcTicketCheck.profile.boardingStationIndex].name;
+                stats.disembarkingStationName = trip.stationsDataArray[npcTicketCheck.profile.disembarkingStationIndex].name;
+                canExitCheckTicket = false;
+                stats.ticketsCheckedTotal++;
+                checkingTicket = true;
 
-                    gameEventData.OnTicketInspect.Raise();
-                }
+                gameEventData.OnTicketInspect.Raise();
             }
             break;
             case SpyState.Notepad:
@@ -389,6 +388,27 @@ public class SpyBrain : MonoBehaviour
             break;
         }
     }
+    private void CheckIfTicketCheckHover()
+    {
+        if (canCheckTicket)
+        {
+            RaycastHit2D npcHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, transform.right, boxCollider.bounds.size.x, layerSettings.npc);
+
+            if (npcHit.collider == null)
+            {
+                npcTicketCheck?.ToggleTicketCheckHover(toggle: false);
+                npcTicketCheck = null;
+                return;
+            }
+            NPCBrain npc = CurCarriage.GetNPCFromCollider((BoxCollider2D)npcHit.collider);
+            if (npc != npcTicketCheck)
+            {
+                npcTicketCheck?.ToggleTicketCheckHover(toggle: false);
+                npcTicketCheck = npc;
+                npcTicketCheck.ToggleTicketCheckHover(toggle: true);
+            }
+        }
+    }
     private void CalculateCollisionPoints()
     {
         if (settings == null) return;
@@ -405,123 +425,71 @@ public class SpyBrain : MonoBehaviour
         collisionData.wallRight = new Vector2(wallRight, boxCollider.bounds.center.y);
 
     }
-    private void OpenTrainDoors()
+    private void OpenSlideDoors()
     {
-        if (stats.curLocationState == LocationState.Station || (stats.curLocationState == LocationState.Carriage && stats.signedNotepad))
+        RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, trainStats.activeSlideDoorsMask);
+
+        if (slideDoorHit.collider == null) return;
+
+        slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>(); //TODO: Put into dictionary
+
+        switch(slideDoors.curState)
         {
-            RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, trainStats.activeSlideDoorsMask);
-
-            if (slideDoorHit.collider != null)
+            case SlideDoors.State.Unlocked:
             {
-                slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>(); //TODO: Put into dictionary
+                slideDoors.OpenDoors();
+            }
+            break;
 
-                switch(slideDoors.curState)
+            case SlideDoors.State.Opened:
+            {
+                switch (stats.curLocationState)
                 {
-                    case SlideDoors.State.Unlocked:
+                    case LocationState.Carriage:
                     {
-                        slideDoors.OpenDoors();
-                    }
-                    break;
-
-                    case SlideDoors.State.Opened:
-                    {
-                        if (stats.signedNotepad)
+                        if (trainStats.curStationIndex > 0)
                         {
                             stats.curGroundLayer = layerSettings.stationLayers.ground;
                             stats.curWallLayer = layerSettings.stationWallLayers;
                             stats.curLocationState = LocationState.Station;
+
                             rigidBody.includeLayers = layerSettings.stationMask;
 
                             Station station = TrainController.NextStationInstance;
+                        
                             AtlasRenderer stationPlatform = station.station.isFrontOfTrain ? station.frontPlatformRenderer : station.backPlatformRenderer;
+                        
                             transform.SetParent(stationPlatform.transform, true);
+                        
                             atlasRenderer.UpdateDepthRealtime((int)stationPlatform.transform.position.z);
-                        }
-                        else
-                        {
-                            RaycastHit2D insideCarriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
-
-                            if (insideCarriageHit.collider != null)
-                            {
-                                CurCarriage = TrainController.GetCarriage(insideCarriageHit.collider);
-                                CurCarriage.MoveDown();
-                            }
-                            stats.curGroundLayer = layerSettings.trainLayers.ground;
-                            stats.curWallLayer = layerSettings.trainWallLayers;
-                            stats.curLocationState = LocationState.Carriage;
-                            stats.curLocationBounds = CurCarriage.totalBounds;
-                            rigidBody.includeLayers = layerSettings.trainMask;
-
-                            atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.frontMin);
                         }
                     }
                     break;
-                }
-            }
-        }
-        else
-        {
-            if (atlasRenderer.flipX)
-            {
-                RaycastHit2D leftSmokingRoomDoorHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, layerSettings.trainLayers.smokingRoomDoor);
-                if (leftSmokingRoomDoorHit.collider != null)
-                {
-                    smokingRoomDoor = leftSmokingRoomDoorHit.collider.GetComponent<HingedDoor>();
-                    smokingRoomDoor.OpenDoor();
-                }
-                else
-                {
-                    RaycastHit2D leftGangwayDoorHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, layerSettings.trainLayers.gangwayDoor);
-                    if (leftGangwayDoorHit.collider != null)
+
+                    case LocationState.Station:
                     {
-                        curGangwayDoor = leftGangwayDoorHit.collider.GetComponent<GangwayDoor>();
-                        curGangwayDoor.OpenDoors();
+                        RaycastHit2D insideCarriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
 
-                        if (curGangwayDoor.isLeftOfCarriage)
+                        if (insideCarriageHit.collider != null)
                         {
-                            stats.curLocationBounds = curGangwayDoor.gangway.exteriorRenderer.bounds;
-                            stats.curLocationState = LocationState.Gangway;
+                            CurCarriage = TrainController.GetCarriage(insideCarriageHit.collider);
+                            CurCarriage.MoveDown();
                         }
-                        else
-                        {
-                            stats.curLocationBounds = curGangwayDoor.carriage.totalBounds;
-                            stats.curLocationState = LocationState.Carriage;
-                        }
+                        stats.curGroundLayer = layerSettings.trainLayers.ground;
+                        stats.curWallLayer = layerSettings.trainWallLayers;
+                        stats.curLocationState = LocationState.Carriage;
+                        stats.curLocationBounds = CurCarriage.totalBounds;
+                        rigidBody.includeLayers = layerSettings.trainMask;
+                        
+                        transform.SetParent(CurCarriage.transform, true);
 
+                        atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.frontMin);
                     }
+                    break;
                 }
 
             }
-            else
-            {
-                RaycastHit2D rightSmokingRoomDoorHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, layerSettings.trainLayers.smokingRoomDoor);
-
-                if (rightSmokingRoomDoorHit.collider != null)
-                {
-                    smokingRoomDoor = rightSmokingRoomDoorHit.collider.GetComponent<HingedDoor>();
-                    smokingRoomDoor.OpenDoor();
-                }
-                else
-                {
-                    RaycastHit2D rightGangwayDoorHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, layerSettings.trainLayers.gangwayDoor);
-                    if (rightGangwayDoorHit.collider != null)
-                    {
-                        curGangwayDoor = rightGangwayDoorHit.collider.GetComponent<GangwayDoor>();
-                        curGangwayDoor.OpenDoors();
-                        if (curGangwayDoor.isLeftOfCarriage)
-                        {
-                            curGangwayDoor.carriage.MoveDown();
-                            CurCarriage = curGangwayDoor.carriage;
-                        }
-                        else
-                        {
-                            curGangwayDoor.gangway.MoveDown();
-                        }
-                    }
-
-                }
-            }
-
+            break;
         }
     }
     private void LookAtCarriageMap()
@@ -545,10 +513,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void MoveUpCurrentCarriageWall()
     {
-        if (stats.signedNotepad)
-        {
-            CurCarriage.MoveUp();
-        }
+
     }
     private void Flip(bool flip)
     {

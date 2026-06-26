@@ -66,15 +66,6 @@ public class Page : MonoBehaviour
             }
             break;
 
-            case PageType.Confirm:
-            {
-                activePlayerWriteTextRenderer = playerWriteTextRenderers[0];
-                isPlayerWriteTextPreviewSet = new bool[playerWriteTextRenderers.Length];
-                playerWriteTexts = new string[playerWriteTextRenderers.Length];
-                Array.Fill(playerWriteTexts, "");
-            }
-            break;
-
             case PageType.ColorKey:
             {
                 activePlayerWriteTextRenderer = playerWriteTextRenderers[0];
@@ -337,16 +328,6 @@ public class Page : MonoBehaviour
             }
             break;
 
-            case PageType.Confirm:
-            {
-                if (spyStats.curLocationState != LocationState.Station)
-                {
-                    previewPlayerWriteText = "J.E";
-                    activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
-                }
-            }
-            break;
-
             case PageType.ColorKey:
             {
                 if (prevNotepadState == NotepadState.Erasing)
@@ -414,13 +395,6 @@ public class Page : MonoBehaviour
         switch (pageType)
         {
             case PageType.Profile:
-            case PageType.Confirm:
-            {
-                if (isPlayerWriteTextPreviewSet[0]) return;
-                activePlayerWriteTextRenderer.UpdateAppearTextAlpha(normAmount: 0.5f, appear, ref clock);
-                if (clock <= 0) isPlayerWriteTextPreviewSet[0] = true;
-            }
-            break;
             case PageType.ColorKey:
             {
                 for(int i = 0; i < playerWriteTextRenderers.Length; i++)

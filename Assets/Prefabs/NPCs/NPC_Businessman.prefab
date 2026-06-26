@@ -194,7 +194,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.009262085, y: 0.4435115}
+  m_Offset: {x: -0.022216797, y: 0.4416666}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.42708334, y: 0.0031055901}
@@ -204,7 +204,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.07595825, y: 0.8457761}
+  m_Size: {x: 0.2777778, y: 0.8833333}
   m_EdgeRadius: 0
 --- !u!114 &5997687124654494123
 MonoBehaviour:
@@ -222,20 +222,13 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 1602fa2914d12994d8cfd5021338c0b7, type: 3}
     material: {fileID: 2100000, guid: a33a67236ad4eb248b44964a793ad770, type: 2}
-    depthOrder: 0
   atlas: {fileID: 11400000, guid: ff7aac1304a148e42a703514d188d9c9, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 1
   flipX: 0
   flipY: 0
   width: 1
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.048828125, y: 0.15527344, z: 0.047851562, w: 0.84375}
@@ -245,7 +238,7 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 306.97778, y: 2.1326666, z: 0}
     m_Extent: {x: 0.1388889, y: 0.44166666, z: 0.1}
-  worldPivotAndSize: {x: 0.16111112, y: 0, z: 0.2777778, w: 0.8833333}
+  worldPivotAndSize: {x: -0.16111112, y: -0, z: 0.2777778, w: 0.8833333}
   uvSizeAndPosition: {x: 0.048828125, y: 0.15527344, z: 0.047851562, w: 0.84375}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
@@ -261,17 +254,7 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 1
   prevSpriteIndexFlipV: 1
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
-  hasText: 0
 --- !u!114 &94976023300698573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -303,7 +286,6 @@ MonoBehaviour:
   curSlideDoors: {fileID: 0}
   curCarriage: {fileID: 0}
   curGlyph: {fileID: 0}
-  curSpriteMarkerLocalPosition: {x: 0, y: 0}
   targetXVelocity: 0
   targetXPos: 0
   targetDist: 0
@@ -313,15 +295,11 @@ MonoBehaviour:
   atlasIndexClock: 0
   move: 0
   alphaClock: 0
-  hoverClock: 0
-  curBehaviour: 0
+  curSpriteMarkerLocalPosition: {x: 0, y: 0}
   profile:
-    fullName: 
     boardingStationIndex: 0
     disembarkingStationIndex: 0
     npcPrefabIndex: 0
-    coveredMugshotIndex: 0
-    uncoveredMugshotIndex: 0
     behaviours: 0
   curClip:
     clipName: 
@@ -330,13 +308,12 @@ MonoBehaviour:
     keyframeStartIndex: 0
     keyframeEndIndex: 0
     time: 0
+  curBehaviour: 0
   curState: 0
   curPath: 0
-  curMark: 0
   role: 0
   smokerRoomIndex: 0
   seatPosIndex: 0
-  selectedProfileIndex: 0
   curFrameIndex: 0
   prevAtlasIndex: 0
   startFade: 0

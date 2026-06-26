@@ -22,5 +22,4 @@ public class SpyStatsSO : ScriptableObject
     public int ticketsCheckedTotal;
     public LayerMask curGroundLayer;
     public LayerMask curWallLayer;
-    public bool signedNotepad;
 }

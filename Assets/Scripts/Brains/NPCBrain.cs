@@ -167,6 +167,10 @@ public class NPCBrain : MonoBehaviour
             }
         }
     }
+    public void ToggleTicketCheckHover(bool toggle)
+    {
+        atlasRenderer.custom.w = toggle && !ticketHasBeenChecked ? 1 : 0; 
+    }
     private void SetState(NPCState newState)
     {
         if (curState == newState) return;
@@ -620,14 +624,7 @@ public class NPCBrain : MonoBehaviour
             case NPCPath.ToSlideDoor:
             {
                 NPCMotion standingMotion = RandomIdleMotion(NPCMotion.StandingBlinking, NPCMotion.StandingBreathing);
-                if (spyStats.curLocationState == Spy.LocationState.Station && spyStats.signedNotepad)
-                {
-                    SetPath(NPCPath.StandingAtStation);
-                }
-                else
-                {
-                    SetPath(NPCPath.AtSlideDoor);
-                }
+                SetPath(NPCPath.AtSlideDoor);
                 curClip = atlas.clipDict[(int)standingMotion];
             }
             break;

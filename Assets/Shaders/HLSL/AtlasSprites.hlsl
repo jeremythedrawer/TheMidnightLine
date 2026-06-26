@@ -1,4 +1,13 @@
-static const float METERS_TRAVELLED_DIVISOR = 1000;
+#define METERS_TRAVELLED_DIVISOR 1000;
+
+static const float2 BOX_BLUR_OFFSET[4] =
+{
+    float2 (-1, -1),
+    float2 (1, -1),
+    float2 (-1, 1),
+    float2 (1, 1),
+};
+
 struct AtlasSprite
 {
     float4 position;

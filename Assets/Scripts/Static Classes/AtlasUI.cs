@@ -41,7 +41,6 @@ public static class AtlasUI
         None,
         Prompt,
         Profile,
-        Confirm,
         ColorKey,
     }
     public enum TripPrompt

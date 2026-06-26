@@ -1,10 +1,5 @@
 Shader "Custom/s_atlasNPC"
 {
-    Properties
-    {
-        [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
-    }
-
     SubShader
     {
         Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
@@ -18,6 +13,7 @@ Shader "Custom/s_atlasNPC"
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
             #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
+
             #pragma vertex vert
             #pragma fragment frag
 
@@ -32,26 +28,33 @@ Shader "Custom/s_atlasNPC"
             struct Varyings
             {
                 float4 positionHCS : SV_POSITION;
-                float2 uv : TEXCOORD0;
-                float4 uvSizeAndPos : TEXCOORD1;
-                float4 scaleAndFlip: TEXCOORD2;
-                float4 custom : TEXCOORD3;
-                float3 worldPos : TEXCOORD4;
+                float4 uvSizeAndPos : TEXCOORD0;
+                float4 scaleAndFlip: TEXCOORD1;
+                float4 custom : TEXCOORD2;
+
+                float3 worldPos : TEXCOORD3;
+                
+                float2 uv : TEXCOORD4;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
             
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
+            float4 _AtlasTexture_TexelSize;
+
             TEXTURE2D(_CarriageBoundsTexture);
             SAMPLER(sampler_CarriageBoundsTexture);
 
-            float3 _BlackColor;
+            TEXTURE2D(_DiagonalTexture);
+            SAMPLER(sampler_DiagonalTexture);
 
+            float3 _BlackColor;
             float3 _ColorKey0;
             float3 _ColorKey1;
             float3 _ColorKey2;
             float3 _ColorTicket;
+
             float4 _TrainBoundsMin;
             float4 _TrainBoundsSize;
 
@@ -97,8 +100,19 @@ Shader "Custom/s_atlasNPC"
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 
-                half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-                
+                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+
+                float outline = 0;
+                for (int index = 0; index < 4; index++)
+                {
+                    float2 uvOffset = i.uv + (BOX_BLUR_OFFSET[index] / _AtlasTexture_TexelSize.zw);
+                    half4 blurTex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, uvOffset);
+                    outline += blurTex.a;
+                }
+                outline /= 4;
+                outline *= (1 - outline);
+                outline = ceil(outline);
+
                 uint colorKeyMask = (uint)i.custom.x;
 
                 uint colKeyMask0 = (colorKeyMask & (1 << 0)) != 0;
@@ -109,13 +123,15 @@ Shader "Custom/s_atlasNPC"
                 half3 colKey1 = colKeyMask1 * _ColorKey1;
                 half3 colKey2 = colKeyMask2 * _ColorKey2;
 
-                half hoverColor = i.custom.y;
+                half mouseColor = i.custom.y;
                 half ticketCheckMask = i.custom.z;
+                half ticketCheckHover = i.custom.w;
+                outline = lerp(outline, 1 - outline, ticketCheckHover);
 
-                half3 finalColor = (color.rgb * ticketCheckMask) + colKey0 + colKey1 + colKey2 + _BlackColor;
+                half3 finalColor = (tex.rgb * ticketCheckMask) + colKey0 + colKey1 + colKey2 + _BlackColor + (outline * (1 - ticketCheckMask));
 
-                float bayerColMask = BayerX8(hoverColor * 0.5, i.positionHCS.y);
-                half3 bayerColor = lerp(finalColor, 1, bayerColMask);
+                float bayerColMask = BayerX8(mouseColor * 0.5, i.positionHCS.y);
+                half3 bayerColor = lerp(finalColor, 1 - ticketCheckHover, bayerColMask);
                 
                 float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;
                 half4 carriageSDF = SAMPLE_TEXTURE2D(_CarriageBoundsTexture, sampler_CarriageBoundsTexture, worldToTrain);
@@ -124,7 +140,7 @@ Shader "Custom/s_atlasNPC"
                 float outside = max(step(worldToTrain.x, 0.0), step(1.0, worldToTrain.x));
                 outside = max(outside,max(step(worldToTrain.y, 0.0),step(1.0, worldToTrain.y)));
                 outside = max(outside, step(_TrainBoundsMin.z,i.worldPos.z));
-                float alpha = max(bayer, outside) * color.a;
+                float alpha = max(bayer, outside) * tex.a;
                 clip(alpha - 0.001);
 
                 return half4 (bayerColor, 1);

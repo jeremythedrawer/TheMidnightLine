@@ -8,19 +8,18 @@ public class NPCManager : MonoBehaviour
 {
     public TripSO trip;
     public NPCsDataSO npcsData;
+    public Texture2D diagonalTexture;
 
     [Header("Generated")]
     public bool npcFindingChair;
     public int totalAgentCount;
 
     public static Dictionary<VisualEffect, Queue<VisualEffect>> glyph_poolsDict;
-    public static AtlasTextRenderer stationNameTag;
     private void Start()
     {
         glyph_poolsDict = new Dictionary<VisualEffect, Queue<VisualEffect>>();
         npcsData.behaviourContextDict = SetBehaviourContextDictionary();
-        stationNameTag = Instantiate(npcsData.stationNameTag_prefab);
-        stationNameTag.SetText("");
+        Shader.SetGlobalTexture("_DiagonalTexture", diagonalTexture);
     }
     public static VisualEffect GetGlyph(VisualEffect glyphPrefab, Transform parent)
     {

@@ -10,7 +10,7 @@ public class TripSO : ScriptableObject
     public TripClue clue;
     public ParticleAtlas[] particleAtlasArray;
     public StationSO[] stationsDataArray;
-    public NPCBrain[] npc_prefabsArray;
+    public NPCSO[] npcDataArray;
 
     public float[] dayNightValues;
     public Vector2[] elevationValues;
@@ -18,12 +18,15 @@ public class TripSO : ScriptableObject
 
     [Header("Generated")]
     public StationSO stationAhead;
+
+    public Color[] selectedClueMarkerColors;
+    
+    public TraitorProfile[] traitorProfiles;
+    
     public int ticketsCheckedSinceLastStation;
     public int traitorsSpawned;
-    
     public int unlockedClueMarkerCount;
     public int selectedClueMarkerIndex;
-    public Color[] selectedClueMarkerColors;
 
-    public TraitorProfile[] traitorProfiles;
+
 }
