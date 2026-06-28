@@ -72,6 +72,7 @@ public class ScoreUI : MonoBehaviour
             {
                 notepad.gameObject.SetActive(true);
                 notepad.enabled = true;
+                notepad.active = true;
                 naturalMovePos = NotepadActivePos;
                 ctsNotepad?.Cancel();
             }

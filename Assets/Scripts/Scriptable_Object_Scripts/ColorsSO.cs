@@ -6,6 +6,8 @@ using static AtlasUI;
 [CreateAssetMenu(fileName = "Colors", menuName = "Midnight Line SOs / Colors")]
 public class ColorsSO : ScriptableObject
 {
+    public Texture2D diagonalTexture;
+
     public Color blackColor;
     public Color whiteColor;
 
@@ -16,6 +18,6 @@ public class ColorsSO : ScriptableObject
 
 
     [Header("Generated")]
-    public ColorPickerState curState;
-    public ColorPickerState enteredState;
+    public PickerState curState;
+    public PickerState enteredState;
 }

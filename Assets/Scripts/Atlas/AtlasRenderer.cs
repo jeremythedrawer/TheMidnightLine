@@ -96,7 +96,6 @@ public class AtlasRenderer : MonoBehaviour
             break;
         }
         
-        if (batchKey.texture == null) return;
         batchKey.texture = atlas.texture;
         RegisterRenderer(this);
 

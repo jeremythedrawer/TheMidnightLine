@@ -6,10 +6,10 @@ using UnityEngine;
 using static AtlasUI;
 public class ColorPicker : MonoBehaviour
 {
-    public const float OPEN_TIME_ROW_COL = 0.0625f;
-    public const float COLOR_GRID_GAP = 0.272f;
     public const int COLOR_GRID_X_COUNT = 4;
     public const int COLOR_GRID_Y_COUNT = 4;
+    public const int LOCK_SPRITE_INDEX = 18;
+    public const int COLOR_SQUARE_SPRITE_INDEX = 5;
 
     public TripSO trip;
     public ColorsSO colorsData;
@@ -53,12 +53,12 @@ public class ColorPicker : MonoBehaviour
 
         if (Application.isPlaying)
         {
-            SceneController.KeepColorPicker(this);
+            SceneController.SetColorPicker(this);
         }
     }
     private void Start()
     {
-        colorsData.curState = ColorPickerState.Closed;
+        colorsData.curState = PickerState.Closed;
 
         SetSelectableColors();
         SetOpenPosAndSize();
@@ -70,6 +70,7 @@ public class ColorPicker : MonoBehaviour
         Shader.SetGlobalColor("_WhiteColor", colorsData.whiteColor);
         Shader.SetGlobalFloat("_DayNight", colorsData.dayNight);
         Shader.SetGlobalFloat("_DayNightFactor", colorsData.dayNightFactor);
+        Shader.SetGlobalTexture("_DiagonalTexture", colorsData.diagonalTexture);
     }
     private void Update()
     {
@@ -86,7 +87,7 @@ public class ColorPicker : MonoBehaviour
 
         UpdateState();
     }
-    private void SetState(ColorPickerState newState)
+    private void SetState(PickerState newState)
     {
         if (colorsData.curState == newState) return;
         ExitState();
@@ -98,8 +99,8 @@ public class ColorPicker : MonoBehaviour
     {
         switch(colorsData.curState)
         {
-            case ColorPickerState.Opening:
-            case ColorPickerState.Opened:
+            case PickerState.Opening:
+            case PickerState.Opened:
             {
                 for (int i = 0; i < activeColorAmount; i++)
                 {
@@ -110,7 +111,15 @@ public class ColorPicker : MonoBehaviour
                         if (playerInputs.mouseLeftHold)
                         {
                             colorRend.custom.w = 0;
+                        }
+                        else
+                        {
+                            colorRend.custom.w = 1;   
 
+                        }
+
+                        if (playerInputs.mouseLeftUp)
+                        {
                             if (openedFully)
                             {
                                 SetNewColor(i);
@@ -119,11 +128,6 @@ public class ColorPicker : MonoBehaviour
                             {
                                 SetNPCColor(i);
                             }
-                        }
-                        else
-                        {
-                            colorRend.custom.w = 1;   
-
                         }
 
                         prevHoveredColorRenderer = colorRend;
@@ -150,17 +154,17 @@ public class ColorPicker : MonoBehaviour
     {
         switch(colorsData.curState)
         {
-            case ColorPickerState.Opening:
+            case PickerState.Opening:
             {
                 canClose = false;
             }
             break;
-            case ColorPickerState.Opened:
+            case PickerState.Opened:
             {
 
             }
             break;
-            case ColorPickerState.Closed:
+            case PickerState.Closed:
             {
 
             }
@@ -171,7 +175,6 @@ public class ColorPicker : MonoBehaviour
     {
 
     }
-
     private void SetSelectableColors()
     {
         for (int i = 0; i < colorRenderers.Length; i++)
@@ -182,6 +185,7 @@ public class ColorPicker : MonoBehaviour
         trip.selectedClueMarkerColors = new Color[]
         {
             Color.white,
+            Color.black,
             Color.black,
             Color.black,
             Color.black,
@@ -203,7 +207,7 @@ public class ColorPicker : MonoBehaviour
         for (int y = 0; y < COLOR_GRID_Y_COUNT;  y++)
         {
             int rowIndex = y * COLOR_GRID_X_COUNT;
-            float yPos = firstColorRendPos.y + (y * COLOR_GRID_GAP);
+            float yPos = firstColorRendPos.y + (y * GRID_GAP);
 
             for (int x = 0; x < COLOR_GRID_X_COUNT; x++)
             {
@@ -211,7 +215,7 @@ public class ColorPicker : MonoBehaviour
 
                 AtlasRenderer colorRend = colorRenderers[flatIndex];
 
-                float xPos = firstColorRendPos.x - (x * COLOR_GRID_GAP);
+                float xPos = firstColorRendPos.x - (x * GRID_GAP);
                 openColorRendererPositions[flatIndex] = new Vector3(xPos, yPos, -1);
 
                 colorRend.transform.localPosition = openColorRendererPositions[flatIndex];
@@ -249,14 +253,45 @@ public class ColorPicker : MonoBehaviour
 
         openedFully = openFully;
 
-        activeColorAmount = openedFully ? colorRenderers.Length : trip.selectedClueMarkerColors.Length;
-        Color[] colorsToUse = openedFully ? colorsData.selectableClueColors : trip.selectedClueMarkerColors;
-
-        for (int i = 0; i < activeColorAmount; i++)
+        if (openedFully)
         {
-            AtlasRenderer colorRend = colorRenderers[i];
-            colorRend.custom = colorsToUse[i].linear;
-            colorRenderers[i].enabled = true;
+            activeColorAmount = colorRenderers.Length;
+            Color[] colorsToUse = colorsData.selectableClueColors;
+            for (int i = 0; i < activeColorAmount; i++)
+            {
+                AtlasRenderer colorRend = colorRenderers[i];
+                colorRend.custom = colorsToUse[i].linear;
+                colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                colorRend.enabled = true;
+            }
+
+        }
+        else
+        {
+            activeColorAmount = trip.selectedClueMarkerColors.Length;
+            Color[] colorsToUse = trip.selectedClueMarkerColors;
+
+            for (int i = 0; i < activeColorAmount; i++)
+            {
+                AtlasRenderer colorRend = colorRenderers[i];
+                colorRend.custom = colorsToUse[i].linear;
+                colorRend.enabled = true;
+
+                if (i == activeColorAmount - 1)
+                {
+                    colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                    colorRend.custom.x = -1;
+                    continue;
+                }
+                if (i <= trip.unlockedClueMarkerCount)
+                {
+                    colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                }
+                else
+                {
+                    colorRend.UpdateSpriteInputsByIndex(LOCK_SPRITE_INDEX);
+                }
+            }
         }
         
         selectedRenderer = rend;
@@ -272,8 +307,8 @@ public class ColorPicker : MonoBehaviour
         int curXGapCount = curGridColCount - 1;
         int curYGapCount = curGridRowCount - 1;
 
-        float totalGapWidth = curXGapCount * COLOR_GRID_GAP;
-        float totalGapHeight = curYGapCount * COLOR_GRID_GAP;
+        float totalGapWidth = curXGapCount * GRID_GAP;
+        float totalGapHeight = curYGapCount * GRID_GAP;
 
         tileWidth = colorRendererWorldSize.x / paletteCenterSliceWorldSize.x;
         tileHeight = colorRendererWorldSize.y / paletteCenterSliceWorldSize.y;
@@ -292,7 +327,6 @@ public class ColorPicker : MonoBehaviour
         trip.selectedClueMarkerColors[trip.selectedClueMarkerIndex + 1] = selectedColor;
 
         Shader.SetGlobalColor("_ColorKey" + trip.selectedClueMarkerIndex, selectedColor.linear);
-
     }
     public void SetNPCColor(int index)
     {
@@ -300,7 +334,7 @@ public class ColorPicker : MonoBehaviour
     }
     public void Open(AtlasRenderer rend, bool openAllColors)
     {
-        if (colorsData.curState == ColorPickerState.Closed)
+        if (colorsData.curState == PickerState.Closed)
         {
             ctsOpen?.Cancel();
             ctsOpen = new CancellationTokenSource();
@@ -311,7 +345,7 @@ public class ColorPicker : MonoBehaviour
     }
     public void Close()
     {
-        if (colorsData.curState == ColorPickerState.Opened || colorsData.curState == ColorPickerState.Opening)
+        if (colorsData.curState == PickerState.Opened || colorsData.curState == PickerState.Opening)
         {
             ctsOpen?.Cancel();
             ctsOpen = new CancellationTokenSource();
@@ -324,7 +358,7 @@ public class ColorPicker : MonoBehaviour
     {
         try
         {
-            SetState(ColorPickerState.Opening);
+            SetState(PickerState.Opening);
 
             float totalTime = curGridRowCount * curGridColCount * OPEN_TIME_ROW_COL;
             openClock = Mathf.Max(openClock, 0);
@@ -334,7 +368,7 @@ public class ColorPicker : MonoBehaviour
 
             float normRowTime = rowsToClose / (rowsToClose + colsToClose);
             float normColTime = 1 - normRowTime;
-
+            
             while (openClock < totalTime)
             {
                 openClock += Time.deltaTime;
@@ -357,7 +391,7 @@ public class ColorPicker : MonoBehaviour
                 }
                 else
                 {
-                    float easOutT = EaseOutT((t / normRowTime) - 1, 5);
+                    float easOutT = EaseOutT((t - normColTime) / normRowTime, 5);
                     curSpriteHeight = Mathf.Lerp(tileHeight, openSpriteHeight, easOutT);
                     paletteRenderer.height = curSpriteHeight;
                     paletteRenderer.UpdateSliceSpriteInputsSelf();
@@ -370,18 +404,18 @@ public class ColorPicker : MonoBehaviour
                 }
                 await UniTask.Yield(ctsOpen.Token);
             }
-            SetState(ColorPickerState.Opened);
+            SetState(PickerState.Opened);
         }
         catch (OperationCanceledException)
         {
-            SetState(ColorPickerState.Opened);
+            SetState(PickerState.Opened);
         }
     }
     public async UniTask Closing()
     {
         try
         {
-            SetState(ColorPickerState.Closing);
+            SetState(PickerState.Closing);
 
             float totalTime = curGridRowCount * curGridColCount * OPEN_TIME_ROW_COL;
             openClock = Mathf.Min(openClock, totalTime);
@@ -413,7 +447,7 @@ public class ColorPicker : MonoBehaviour
                 }
                 else
                 {
-                    float easOutT = EaseOutT((t / normRowTime) - 1, 5);
+                    float easOutT = EaseOutT((t - normColTime) / normRowTime, 5);
                     curSpriteHeight = Mathf.Lerp(tileHeight, openSpriteHeight, easOutT);
                     paletteRenderer.height = curSpriteHeight;
                     paletteRenderer.UpdateSliceSpriteInputsSelf();
@@ -426,18 +460,13 @@ public class ColorPicker : MonoBehaviour
                 }
                 await UniTask.Yield(ctsOpen.Token);
             }
-            SetState(ColorPickerState.Closed);
+            SetState(PickerState.Closed);
             TurnOff();
 
         }
         catch (OperationCanceledException)
         {
-            SetState(ColorPickerState.Closed);
+            SetState(PickerState.Closed);
         }
-    }
-
-    float EaseOutT(float t, float p)
-    {
-        return Mathf.Max(1 - Mathf.Pow(1 - t, p), 0);
     }
 }

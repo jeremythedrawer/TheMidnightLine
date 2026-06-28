@@ -15,6 +15,9 @@ public static class AtlasUI
     public const float TARGET_MARGIN = 0.01f;
     public const float MOVE_DAMP = 4;
 
+    public const float OPEN_TIME_ROW_COL = 0.0625f;
+    public const float GRID_GAP = 0.272f;
+
     public static float TransitionTime = -Mathf.Log(TARGET_MARGIN) / MOVE_DAMP;
 
     public enum NotepadState
@@ -27,7 +30,7 @@ public static class AtlasUI
         FlippingDown,
         Revealing,
     }
-    public enum ColorPickerState
+    public enum PickerState
     {
         None,
         Opening,
@@ -199,5 +202,9 @@ public static class AtlasUI
             dict.Add(value, value.ToString().Replace("_", " "));
         }
         return dict;
+    }
+    public static float EaseOutT(float t, float p)
+    {
+        return Mathf.Max(1 - Mathf.Pow(1 - t, p), 0);
     }
 }

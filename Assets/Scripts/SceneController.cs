@@ -8,6 +8,9 @@ public class SceneController : MonoBehaviour
 
     public static Notepad Notepad;
     public static ColorPicker ColorPicker;
+    public static NPCPicker NPCPicker;
+    public static SpyBrain Spy;
+
     public static InputManager InputManager;
     private void Awake()
     {
@@ -21,11 +24,21 @@ public class SceneController : MonoBehaviour
         notepad.transform.SetParent(Transform, true);
         Notepad = notepad;
     }
-    public static void KeepColorPicker(ColorPicker colorPicker)
+    public static void SetColorPicker(ColorPicker colorPicker)
     {
-        colorPicker.transform.SetParent(Transform, true);
         ColorPicker = colorPicker;
     }
+
+    public static void SetNPCPicker(NPCPicker npcPicker)
+    {
+        NPCPicker = npcPicker;
+    }
+
+    public static void SetSpyBrain(SpyBrain spy)
+    {
+        Spy = spy;
+    }
+
     public static void KeepInputManager(InputManager inputManager)
     {
         inputManager.transform.SetParent(Transform, true);
@@ -41,8 +54,17 @@ public class SceneController : MonoBehaviour
     {
         return ColorPicker;
     }
+    public static NPCPicker GetNPCPicker()
+    {
+        return NPCPicker;
+    }
     public static InputManager GetInputManager()
     {
         return InputManager;
+    }
+
+    public static SpyBrain GetSpy()
+    {
+        return Spy;
     }
 }

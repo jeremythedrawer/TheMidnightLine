@@ -203,6 +203,7 @@ public class AtlasTripEditor : EditorWindow
         Rect tripInputRect = new Rect(graphRect.x, curPosY, COLUMN_WIDTH, ROW_HEIGHT);
         
         EditorGUI.BeginChangeCheck();
+
         trip = (TripSO)EditorGUI.ObjectField(tripInputRect, GUIContent.none, trip, typeof(TripSO), allowSceneObjects: false);
 
         if (EditorGUI.EndChangeCheck())

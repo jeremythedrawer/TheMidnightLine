@@ -720,23 +720,23 @@ public class Notepad : MonoBehaviour
         }
         else if (activePage.pageType == PageType.ColorKey)
         {
-            if (colorsData.enteredState == ColorPickerState.Opened || colorsData.enteredState == ColorPickerState.Opening)
+            if (colorsData.enteredState == PickerState.Opened || colorsData.enteredState == PickerState.Opening)
             {
-                colorsData.enteredState = ColorPickerState.None;
+                colorsData.enteredState = PickerState.None;
 
                 Bounds rendBounds = leftHand_renderer.GetBounds();
                 Vector4 uvPivot = leftHand_renderer.sprite.uvPivot;
                 Vector3 spritePivotOffset = new Vector3(rendBounds.extents.x * (1 - uvPivot.x), rendBounds.size.y * (1 - uvPivot.y));
                 leftHandTargetPos = leftHandOffScreenPos - spritePivotOffset;
             }
-            else if (colorsData.enteredState == ColorPickerState.Closed)
+            else if (colorsData.enteredState == PickerState.Closed)
             {
-                colorsData.enteredState = ColorPickerState.None;
+                colorsData.enteredState = PickerState.None;
 
                 Vector3 startWriteWorldPos = new Vector3(activePage.playerWriteRenderers[activePage.activePlayerWriteRowIndex].GetBounds().min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
                 leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
             }
-            else if (playerInputs.numpad != -1)
+            else if (playerInputs.numpad != -1 && playerInputs.numpad < trip.unlockedClueMarkerCount)
             {
                 activePage.SwitchActivePLayerWriteTextRenderer(playerInputs.numpad);
                 curWritingBounds = activePage.GetWritingBounds();
@@ -847,15 +847,18 @@ public class Notepad : MonoBehaviour
             int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
             NPCProfile traitorProfile = totalNPCProfiles[randProfileIndex];
             traitorProfile.boardingStationIndex = stationIndex;
-            traitorProfile.disembarkingStationIndex = UnityEngine.Random.Range(stationIndex + MIN_STATION_STOPS, trip.stationsDataArray.Length);
+
+            int stationsLeft = trip.stationsDataArray.Length - stationIndex;
+            float normSpawnIndex = (float)i / (float)station.bystanderSpawnCount;
+            float gaussianNormSpawnIndex = NormalGaussianValue(normSpawnIndex);
+            traitorProfile.disembarkingStationIndex = stationIndex + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft) + MIN_STATION_STOPS;
 
             NPCSO traitor = trip.npcDataArray[traitorProfile.npcPrefabIndex];
 
             trip.traitorProfiles[i] = new TraitorProfile()
             {
                 npcProfile = traitorProfile,
-                coveredMugshotIndex = traitor.coveredMugshotIndex,
-                uncoveredMugshotIndex = traitor.uncoveredMugshotIndex,
+                mugShotIndex = traitor.mugShotIndex,
             };
             totalNPCProfiles.RemoveAt(randProfileIndex);
             for (int j = totalNPCProfiles.Count - 1; j >= 0; j--)
@@ -894,12 +897,10 @@ public class Notepad : MonoBehaviour
                 bystanderProfile.boardingStationIndex = i;
 
                 int stationsLeft = trip.stationsDataArray.Length - i;
-                
                 float normSpawnIndex = (float)j / (float)station.bystanderSpawnCount;
                 float gaussianNormSpawnIndex = NormalGaussianValue(normSpawnIndex);
-
                 bystanderProfile.disembarkingStationIndex = i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft);
-                Debug.Log(bystanderProfile.disembarkingStationIndex);
+
                 station.bystanderProfiles[j] = bystanderProfile;
 
                 profileIndex++;
@@ -919,9 +920,18 @@ public class Notepad : MonoBehaviour
         pageList.Add(colorKeyPage);
         colorKeyPage.Init();
 
+
+        List<int> randIndicesList = new List<int>(trip.traitorProfiles.Length);
+        for(int i = 0; i < trip.traitorProfiles.Length; i++)
+        {
+            randIndicesList.Add(i);
+        }
+
         for (int i = 0; i < trip.traitorProfiles.Length; i++)
         {
-            TraitorProfile traitorProfile = trip.traitorProfiles[i];
+            int randIndex = UnityEngine.Random.Range(0, randIndicesList.Count);
+            TraitorProfile traitorProfile = trip.traitorProfiles[randIndicesList[randIndex]];
+            randIndicesList.RemoveAt(randIndex);
 
             Vector3 pagePos = pageTransform.position;
             pagePos.z += 3;

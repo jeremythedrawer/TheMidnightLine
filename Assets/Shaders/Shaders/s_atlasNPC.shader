@@ -53,7 +53,6 @@ Shader "Custom/s_atlasNPC"
             float3 _ColorKey0;
             float3 _ColorKey1;
             float3 _ColorKey2;
-            float3 _ColorTicket;
 
             float4 _TrainBoundsMin;
             float4 _TrainBoundsSize;
@@ -98,6 +97,9 @@ Shader "Custom/s_atlasNPC"
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;
+
+                float2 diagonalTexUV = i.uv;
+
                 i.uv += uvPos;
                 
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
@@ -118,17 +120,22 @@ Shader "Custom/s_atlasNPC"
                 uint colKeyMask0 = (colorKeyMask & (1 << 0)) != 0;
                 uint colKeyMask1 = (colorKeyMask & (1 << 1)) != 0;
                 uint colKeyMask2 = (colorKeyMask & (1 << 2)) != 0;
+                uint diagonalMask = (colorKeyMask & (1 << 3)) != 0;
+
+                half4 diagonalTex = SAMPLE_TEXTURE2D(_DiagonalTexture, sampler_DiagonalTexture, diagonalTexUV);
 
                 half3 colKey0 = colKeyMask0 * _ColorKey0;
                 half3 colKey1 = colKeyMask1 * _ColorKey1;
                 half3 colKey2 = colKeyMask2 * _ColorKey2;
+                half3 diagonal = diagonalMask * diagonalTex.rgb;
 
                 half mouseColor = i.custom.y;
                 half ticketCheckMask = i.custom.z;
                 half ticketCheckHover = i.custom.w;
+
                 outline = lerp(outline, 1 - outline, ticketCheckHover);
 
-                half3 finalColor = (tex.rgb * ticketCheckMask) + colKey0 + colKey1 + colKey2 + _BlackColor + (outline * (1 - ticketCheckMask));
+                half3 finalColor = (tex.rgb * ticketCheckMask) + diagonal + colKey0 + colKey1 + colKey2 + _BlackColor + (outline * (1 - ticketCheckMask));
 
                 float bayerColMask = BayerX8(mouseColor * 0.5, i.positionHCS.y);
                 half3 bayerColor = lerp(finalColor, 1 - ticketCheckHover, bayerColMask);

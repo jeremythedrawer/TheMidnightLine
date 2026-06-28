@@ -150,8 +150,8 @@ public class Page : MonoBehaviour
         AtlasRenderer coveredMugShot = playerWriteRenderers[0];
         AtlasRenderer uncoveredMugShot = playerWriteRenderers[1];
 
-        int coveredMugShotIndex = traitorProfile.coveredMugshotIndex;
-        int uncoveredMugShotIndex = traitorProfile.uncoveredMugshotIndex;
+        int uncoveredMugShotIndex = traitorProfile.mugShotIndex * 2;
+        int coveredMugShotIndex = uncoveredMugShotIndex + 1;
         coveredMugShot.UpdateSpriteInputs(coveredMugShot.atlas.simpleSprites[coveredMugShotIndex]);
         uncoveredMugShot.UpdateSpriteInputs(uncoveredMugShot.atlas.simpleSprites[uncoveredMugShotIndex]);
         Init();

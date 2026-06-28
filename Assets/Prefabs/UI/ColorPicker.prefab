@@ -49,7 +49,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -128,7 +127,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6247253459606769700}
   - component: {fileID: 1849436935815050231}
-  - component: {fileID: 7954283146766850150}
+  - component: {fileID: 8283568383269068160}
   m_Layer: 0
   m_Name: ColorPicker
   m_TagString: Untagged
@@ -184,7 +183,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 1
   flipX: 0
@@ -198,7 +196,7 @@ MonoBehaviour:
     worldSize: {x: 0.5777778, y: 0.50555557, z: 1}
     index: 1
   bounds:
-    m_Center: {x: 302.96948, y: -2.8665037, z: -38.4}
+    m_Center: {x: 270.5195, y: 4.038496, z: -38.4}
     m_Extent: {x: 0.6505127, y: 0.65349627, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 1.3388889, w: 0.33333334}
   uvSizeAndPosition: {x: 0.94140625, y: 0.234375, z: 0.01171875, w: 0.54296875}
@@ -253,7 +251,7 @@ MonoBehaviour:
   prevSpriteIndexFlipV: 6
   isAnimating: 0
   quadCount: 0
---- !u!114 &7954283146766850150
+--- !u!114 &8283568383269068160
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -262,7 +260,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 1383577117877000667}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9422cdca9f06db6459d29eda1a89f40f, type: 3}
+  m_Script: {fileID: 11500000, guid: a85b4b835b9bb56408bec25b17ebb3a3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ColorPicker
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
@@ -287,38 +285,25 @@ MonoBehaviour:
   - {fileID: 5246750928008050986}
   paletteRenderer: {fileID: 1849436935815050231}
   selectedRenderer: {fileID: 0}
-  openColorRendererPositions:
-  - {x: -0.2972222, y: 0.25277779}
-  - {x: -0.5692222, y: 0.25277779}
-  - {x: -0.8412222, y: 0.25277779}
-  - {x: -1.1132222, y: 0.25277779}
-  - {x: -0.2972222, y: 0.52477777}
-  - {x: -0.5692222, y: 0.52477777}
-  - {x: -0.8412222, y: 0.52477777}
-  - {x: -1.1132222, y: 0.52477777}
-  - {x: -0.2972222, y: 0.79677784}
-  - {x: -0.5692222, y: 0.79677784}
-  - {x: -0.8412222, y: 0.79677784}
-  - {x: -1.1132222, y: 0.79677784}
-  - {x: -0.2972222, y: 1.0687778}
-  - {x: -0.5692222, y: 1.0687778}
-  - {x: -0.8412222, y: 1.0687778}
-  - {x: -1.1132222, y: 1.0687778}
-  curState: 3
-  curWorldPos: {x: 0, y: 0, z: -38.5}
-  closeColorRendererPosition: {x: -0.2972222, y: 0.25277779, z: -0.1}
-  paletteCenterSliceWorldSize: {x: 0.3166667, y: 0.27222222, z: 0}
-  colorRendererWorldSize: {x: 0.20555556, y: 0.20555556}
-  sliceWorldSize: {x: 0.2611111, y: 0.23333333}
+  prevHoveredColorRenderer: {fileID: 0}
+  openColorRendererPositions: []
+  curWorldPos: {x: 0, y: 0, z: 0}
+  closeColorRendererPosition: {x: 0, y: 0, z: 0}
+  paletteCenterSliceWorldSize: {x: 0, y: 0, z: 0}
+  colorRendererWorldSize: {x: 0, y: 0}
+  sliceWorldSize: {x: 0, y: 0}
   activeColorAmount: 0
+  curGridRowCount: 0
+  curGridColCount: 0
   openClock: 0
-  openSpriteWidth: 3.231128
-  openSpriteHeight: 3.6994507
+  openSpriteWidth: 0
+  openSpriteHeight: 0
   curSpriteWidth: 0
   curSpriteHeight: 0
   tileWidth: 0
   tileHeight: 0
   openedFully: 0
+  canClose: 0
 --- !u!1 &1984690796715567621
 GameObject:
   m_ObjectHideFlags: 0
@@ -368,7 +353,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -486,7 +470,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -604,7 +587,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -722,7 +704,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -840,7 +821,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -958,7 +938,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -1076,7 +1055,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -1194,7 +1172,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -1312,7 +1289,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -1430,7 +1406,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -1548,7 +1523,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -1666,7 +1640,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -1784,7 +1757,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -1902,7 +1874,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0
@@ -2020,7 +1991,6 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
     material: {fileID: 2100000, guid: af29ac0dee21fe54eb2ae973509bb3c8, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 5
   flipX: 0

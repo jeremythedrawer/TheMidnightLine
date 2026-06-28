@@ -95,8 +95,7 @@ public static class NPC
     {
         public NPCProfile npcProfile;
         public string fullName;
-        public int coveredMugshotIndex;
-        public int uncoveredMugshotIndex;
+        public int mugShotIndex;
         public bool found;    
     }
 

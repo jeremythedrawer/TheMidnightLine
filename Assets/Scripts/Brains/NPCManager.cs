@@ -26,7 +26,6 @@ public class NPCManager : MonoBehaviour
     {
 
         npcsData.behaviourContextDict = SetBehaviourContextDictionary();
-        Shader.SetGlobalTexture("_DiagonalTexture", diagonalTexture);
     }
     public static VisualEffect GetGlyph(VisualEffect glyphPrefab, Transform parent)
     {

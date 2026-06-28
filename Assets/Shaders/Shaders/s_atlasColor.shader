@@ -36,6 +36,11 @@ Shader "Custom/s_atlasColor"
 
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
+            float4 _AtlasTexture_TexelSize;
+
+            TEXTURE2D(_DiagonalTexture);
+            SAMPLER(sampler_DiagonalTexture);
+            float4 _DiagonalTexture_TexelSize;
 
             float3 _BlackColor;
 
@@ -70,7 +75,6 @@ Shader "Custom/s_atlasColor"
 
             half4 frag(Varyings i) : SV_Target
             {
-
                 float2 uvSize = i.uvSizeAndPos.xy;
                 float2 uvPos = i.uvSizeAndPos.zw;
                 
@@ -84,7 +88,6 @@ Shader "Custom/s_atlasColor"
                 i.uv += uvPos;
 
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-
                 
                 half border = saturate(tex.r + tex.g);
                 half invertT = i.custom.a;
@@ -92,13 +95,16 @@ Shader "Custom/s_atlasColor"
                 half whiteTex = saturate(invertTex.g - invertTex.r);
                 half blackTex = (1- invertTex.g);
 
-                half3 col = i.custom.rgb + _BlackColor;
-                half t = round(LinearLightness(col));
-                half3 finalCol = lerp((blackTex + col) * border , whiteTex * col, t);
+                float2 diagonalUV = i.uv * (_DiagonalTexture_TexelSize.xy / _AtlasTexture_TexelSize.xy);
+                half4 diagonalTex = SAMPLE_TEXTURE2D(_DiagonalTexture, sampler_DiagonalTexture, diagonalUV);
                 
-                half bayerValue = 1 - saturate(ceil(i.custom.r + i.custom.g + i.custom.b) + 0.25);
-                float bayer = BayerX8(bayerValue,  i.positionHCS.x - i.positionHCS.y);
-                finalCol += bayer;
+                half diagonalMask = 1 - ceil(i.custom.r + 0.1);
+                half diagonal = diagonalTex.r * saturate(diagonalMask);
+                half3 col = saturate(i.custom.rgb) + _BlackColor + diagonal;
+                half t = round(LinearLightness(col));
+
+                half3 finalCol = lerp((blackTex + col) * border , whiteTex * col, t);
+
                 clip((tex.a) - 0.001);
                 return half4 (finalCol.rgb, 1);
             }

@@ -101,7 +101,7 @@ public class GameplayUI : MonoBehaviour
         {
             SetState(UIState.Notepad);
         }
-        else if (spyStats.curState == SpyState.Ticket)
+        else if (SpyBrain.CheckingTicket)
         {
             SetState(UIState.Ticket);
         }
@@ -136,7 +136,6 @@ public class GameplayUI : MonoBehaviour
             break;
             case UIState.Ticket:
             {
-                
                 ticket.gameObject.SetActive(true);
                 naturalMovePos = ticketActivePos;
                 ticket.SetText(spyStats.boardingStationName, spyStats.disembarkingStationName);

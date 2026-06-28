@@ -12,8 +12,7 @@ public class NPCSO : ScriptableObject
     public Behaviours behaviours;
     public Gender gender;
     public Ethnicity ethnicity;
-    public int uncoveredMugshotIndex;
-    public int coveredMugshotIndex;
+    public int mugShotIndex;
     
     [Header("Difficulty")]
     public Vector2 idleDurationRange = new Vector2(10, 30);

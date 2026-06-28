@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using UnityEngine;
 
 using static Atlas;
@@ -8,13 +9,16 @@ using static Spy;
 public class SpyBrain : MonoBehaviour
 {
     public static Carriage CurCarriage;
+    
+    public static NPCBrain ChosenNPCToTicketCheck;
 
     public static event Action OnTicketCheckHoverEnabled;
     public static event Action OnTicketCheckHoverDisabled;
 
-    public static bool canCheckTicket;
-    public static bool checkingTicket;
-    public static bool checkingNotepad;
+    public static bool CanCheckTicket;
+    public static bool CheckingTicket;
+    public static bool CheckingNotepad;
+    public static bool PickingNPCToTicketCheck;
 
     [Header("Components")]
     public Rigidbody2D rigidBody;
@@ -35,13 +39,18 @@ public class SpyBrain : MonoBehaviour
     public TripSO trip;
 
     [Header("Generated")]
+    public NPCBrain[] possibleNPCsToTicketCheck;
+
     public AtlasSO atlas;
+    
     public SlideDoors slideDoors;
+    
     public HingedDoor smokingRoomDoor;
+    
     public GangwayDoor curGangwayDoor;
+    
     public CarriageMap curCarriageMap;
 
-    public NPCBrain npcTicketCheck;
 
     public AtlasClip curClip;
 
@@ -54,15 +63,13 @@ public class SpyBrain : MonoBehaviour
     
     public int curFrameIndex;
     public int prevFrameIndex;
+    public int npcsTicketHoverCount;
 
     public bool wasTouchingGangwayDoorLeft;
     public bool wasTouchingGangwayDoorRight;
     public bool canExitCheckTicket;
     public bool canExitNotepad;
     public bool checkingCarriageMap;
-
-
-
 
     private void OnValidate()
     {
@@ -96,6 +103,8 @@ public class SpyBrain : MonoBehaviour
         stats.curLocationState = LocationState.Station;
 
         stats.curWorldPos = transform.position;
+
+        possibleNPCsToTicketCheck = new NPCBrain[8];
     }
     private void Update()
     {
@@ -105,7 +114,6 @@ public class SpyBrain : MonoBehaviour
     private void FixedUpdate()
     {
         FixedUpdateStates();
-        CheckIfTicketCheckHover();
         bool leftWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, stats.curWallLayer);
         bool rightWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, stats.curWallLayer);
 
@@ -114,11 +122,11 @@ public class SpyBrain : MonoBehaviour
     }
     private void ChooseState()
     {
-        if ((playerInputs.ticketCheckKeyDown && canCheckTicket && npcTicketCheck != null && npcTicketCheck.onTrain && !npcTicketCheck.ticketHasBeenChecked) || checkingTicket)
+        if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && npcsTicketHoverCount > 0) || CheckingTicket || PickingNPCToTicketCheck)
         {
             SetState(SpyState.Ticket);
         }
-        else if (playerInputs.notepadKeyDown || checkingNotepad)
+        else if (playerInputs.notepadKeyDown || CheckingNotepad)
         {
             SetState(SpyState.Notepad);
         }
@@ -160,14 +168,17 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Ticket:
             {
-                if (!playerInputs.ticketCheckKeyDown) canExitCheckTicket = true;
-                if((playerInputs.ticketCheckKeyDown && canExitCheckTicket) || playerInputs.notepadPreviewAnswerAndFlip.x == 1)
+                if (ChosenNPCToTicketCheck != null && !CheckingTicket)
                 {
-                    checkingTicket = false;
+                    SetCheckTicket(ChosenNPCToTicketCheck);
                 }
-                if (playerInputs.notepadPreviewAnswerAndFlip.x == -1)
+
+                if (!playerInputs.ticketCheckKeyDown) canExitCheckTicket = true;
+
+                if((playerInputs.ticketCheckKeyDown && canExitCheckTicket) || playerInputs.notepadPreviewAnswerAndFlip.x != 0)
                 {
-                    checkingTicket = false;
+                    CheckingTicket = false;
+                    PickingNPCToTicketCheck = false;
                 }
             }
             break;
@@ -177,7 +188,7 @@ public class SpyBrain : MonoBehaviour
 
                 if (playerInputs.notepadKeyDown && canExitNotepad)
                 {
-                    checkingNotepad = false;
+                    CheckingNotepad = false;
                 }
 
                 if (notepadData.curState != curNotepadState)
@@ -233,7 +244,7 @@ public class SpyBrain : MonoBehaviour
         {
             case SpyState.Idle:
             {
-
+                CheckIfTicketCheckHover();
             }
             break;
             case SpyState.Walk:
@@ -303,6 +314,8 @@ public class SpyBrain : MonoBehaviour
                     }
                     wasTouchingGangwayDoorLeft = isTouchingGangwayDoorLeft;
                     wasTouchingGangwayDoorRight = isTouchingGangwayDoorRight;
+
+                    CheckIfTicketCheckHover();
                 }
             }
             break;
@@ -331,23 +344,24 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Ticket:
             {
-                npcTicketCheck.ticketIsBeingChecked = true;
-                curClip = atlas.clipDict[(int)SpyMotion.Ticket];
-                atlasRenderer.PlayClipOneShot(curClip);
-                    
-                stats.boardingStationName = trip.stationsDataArray[npcTicketCheck.profile.boardingStationIndex].name;
-                stats.disembarkingStationName = trip.stationsDataArray[npcTicketCheck.profile.disembarkingStationIndex].name;
+                if (npcsTicketHoverCount == 1)
+                {
+                    SetCheckTicket(possibleNPCsToTicketCheck[0]);
+                }
+                else
+                {
+                    PickingNPCToTicketCheck = true;
+                    NPCPicker npcPicker = SceneController.GetNPCPicker();
+                    possibleNPCsToTicketCheck = possibleNPCsToTicketCheck.Where(npc => npc != null).OrderByDescending(npc => npc.transform.position.x).ToArray();
+                    npcPicker.Open(possibleNPCsToTicketCheck, npcsTicketHoverCount);
+                }
                 canExitCheckTicket = false;
-                stats.ticketsCheckedTotal++;
-                checkingTicket = true;
-
-                gameEventData.OnTicketInspect.Raise();
             }
             break;
             case SpyState.Notepad:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.NotepadHolding];
-                checkingNotepad = true;
+                CheckingNotepad = true;
                 canExitNotepad = false;
             }
             break;
@@ -369,24 +383,28 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Ticket:
             {
-                if (npcTicketCheck != null && !npcTicketCheck.ticketHasBeenChecked)
+                if (ChosenNPCToTicketCheck != null && !ChosenNPCToTicketCheck.ticketHasBeenChecked)
                 {
                     trip.ticketsCheckedSinceLastStation++;
-                    npcTicketCheck.ticketIsBeingChecked = false;
+                    ChosenNPCToTicketCheck.ticketIsBeingChecked = false;
                     atlasRenderer.PlayClipOneShotReverse(curClip);
-                    npcTicketCheck = null;
+                    ChosenNPCToTicketCheck = null;
                 }
 
                 if (trip.ticketsCheckedSinceLastStation == trip.stationAhead.ticketsToCheckBeforeSpawn)
                 {
-                    canCheckTicket = false;
+                    CanCheckTicket = false;
                 }
+
+                PickingNPCToTicketCheck = false;
+                NPCPicker npcPicker = SceneController.GetNPCPicker();
+                npcPicker.Close();
             }
             break;
 
             case SpyState.Notepad:
             {
-                checkingNotepad = false;
+                CheckingNotepad = false;
             }
             break;
 
@@ -397,34 +415,48 @@ public class SpyBrain : MonoBehaviour
             break;
         }
     }
+    public void SetCheckTicket(NPCBrain chosenNPC)
+    {
+        ChosenNPCToTicketCheck = chosenNPC;
+        ChosenNPCToTicketCheck.ticketIsBeingChecked = true;
+        PickingNPCToTicketCheck = false;
+        curClip = atlas.clipDict[(int)SpyMotion.Ticket];
+        atlasRenderer.PlayClipOneShot(curClip);
+
+        stats.boardingStationName = trip.stationsDataArray[ChosenNPCToTicketCheck.profile.boardingStationIndex].name;
+        stats.disembarkingStationName = trip.stationsDataArray[ChosenNPCToTicketCheck.profile.disembarkingStationIndex].name;
+        stats.ticketsCheckedTotal++;
+        CheckingTicket = true;
+        gameEventData.OnTicketInspect.Raise();
+    }
     private void CheckIfTicketCheckHover()
     {
-        if (canCheckTicket)
+        if (CanCheckTicket)
         {
-            RaycastHit2D npcHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0, transform.right, boxCollider.bounds.size.x, layerSettings.npc);
+            Bounds spyBounds = atlasRenderer.bounds;
 
-            if (npcHit.collider == null)
-            {
-                if (npcTicketCheck != null)
-                {
-                    npcTicketCheck.ToggleTicketCheckHover(toggle: false);
-                    npcTicketCheck = null;
-                    OnTicketCheckHoverDisabled.Invoke();
-                }
-            }
-            else
-            {
-                NPCBrain npc = CurCarriage.GetNPCFromCollider((BoxCollider2D)npcHit.collider);
+            npcsTicketHoverCount = 0;
 
-                if (npc != null && npc != npcTicketCheck)
+            for (int i = 0; i < CurCarriage.curNPCList.Count; i++)
+            {
+                if (npcsTicketHoverCount < possibleNPCsToTicketCheck.Length)
                 {
-                    npcTicketCheck?.ToggleTicketCheckHover(toggle: false);
-                    
-                    if (!npc.ticketHasBeenChecked)
+                    NPCBrain npc = CurCarriage.curNPCList[i];
+                    if (npc.ticketHasBeenChecked) continue;
+
+                    Bounds npcBounds = npc.atlasRenderer.bounds;
+
+                    if (spyBounds.max.x > npcBounds.min.x && spyBounds.min.x < npcBounds.max.x)
                     {
-                        npcTicketCheck = npc;
-                        npcTicketCheck.ToggleTicketCheckHover(toggle: true);
+                        npc.ToggleTicketCheckHover(toggle: true);
+                        possibleNPCsToTicketCheck[npcsTicketHoverCount] = npc;
+                        npcsTicketHoverCount++;
                         OnTicketCheckHoverEnabled.Invoke();
+                    }
+                    else
+                    {
+                        npc.ToggleTicketCheckHover(toggle: false);
+                        OnTicketCheckHoverDisabled.Invoke();
                     }
                 }
             }
@@ -541,13 +573,17 @@ public class SpyBrain : MonoBehaviour
         stats.spriteFlip = flip;
         atlasRenderer.FlipHSimple(flip);
     }
+    public static void ChooseNPCTicketToCheck(NPCBrain chosenNPC)
+    {
+        ChosenNPCToTicketCheck = chosenNPC;
+    }
     public static void ToggleTicketCheckAbility(bool toggle)
     {
-        canCheckTicket = toggle;
+        CanCheckTicket = toggle;
     }
     public static void ToggleNotepad(bool toggle)
     {
-        checkingNotepad = toggle;
+        CheckingNotepad = toggle;
     }
     private void OnDrawGizmos()
     {
