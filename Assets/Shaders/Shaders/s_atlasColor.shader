@@ -100,10 +100,10 @@ Shader "Custom/s_atlasColor"
                 
                 half diagonalMask = 1 - ceil(i.custom.r + 0.1);
                 half diagonal = diagonalTex.r * saturate(diagonalMask);
-                half3 col = saturate(i.custom.rgb) + _BlackColor + diagonal;
+                half3 col = saturate(i.custom.rgb) + diagonal;
                 half t = round(LinearLightness(col));
 
-                half3 finalCol = lerp((blackTex + col) * border , whiteTex * col, t);
+                half3 finalCol = lerp((blackTex + col) * border + _BlackColor, whiteTex * col + _BlackColor, t);
 
                 clip((tex.a) - 0.001);
                 return half4 (finalCol.rgb, 1);

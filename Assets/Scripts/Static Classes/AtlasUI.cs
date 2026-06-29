@@ -35,6 +35,7 @@ public static class AtlasUI
         None,
         Opening,
         Opened,
+        Adjusting,
         Closing,
         Closed,
     }

@@ -63,7 +63,8 @@ public class SpyBrain : MonoBehaviour
     
     public int curFrameIndex;
     public int prevFrameIndex;
-    public int npcsTicketHoverCount;
+    public int curNPCTicketCheckHoverCount;
+    public int prevNPCTicketCheckHoverCount;
 
     public bool wasTouchingGangwayDoorLeft;
     public bool wasTouchingGangwayDoorRight;
@@ -122,7 +123,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void ChooseState()
     {
-        if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && npcsTicketHoverCount > 0) || CheckingTicket || PickingNPCToTicketCheck)
+        if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount > 0) || CheckingTicket || PickingNPCToTicketCheck)
         {
             SetState(SpyState.Ticket);
         }
@@ -319,6 +320,17 @@ public class SpyBrain : MonoBehaviour
                 }
             }
             break;
+            case SpyState.Ticket:
+            {
+                CheckIfTicketCheckHover();
+                if (prevNPCTicketCheckHoverCount != curNPCTicketCheckHoverCount)
+                {
+                    NPCPicker npcPicker = SceneController.GetNPCPicker();
+                    QuickSortNPCByXPos(possibleNPCsToTicketCheck, 0, curNPCTicketCheckHoverCount - 1);
+                    npcPicker.Adjust(possibleNPCsToTicketCheck, curNPCTicketCheckHoverCount);
+                }
+            }
+            break;
         }
     }
     private void SetState(SpyState newState)
@@ -344,7 +356,7 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Ticket:
             {
-                if (npcsTicketHoverCount == 1)
+                if (curNPCTicketCheckHoverCount == 1)
                 {
                     SetCheckTicket(possibleNPCsToTicketCheck[0]);
                 }
@@ -352,8 +364,8 @@ public class SpyBrain : MonoBehaviour
                 {
                     PickingNPCToTicketCheck = true;
                     NPCPicker npcPicker = SceneController.GetNPCPicker();
-                    possibleNPCsToTicketCheck = possibleNPCsToTicketCheck.Where(npc => npc != null).OrderByDescending(npc => npc.transform.position.x).ToArray();
-                    npcPicker.Open(possibleNPCsToTicketCheck, npcsTicketHoverCount);
+                    QuickSortNPCByXPos(possibleNPCsToTicketCheck, 0, curNPCTicketCheckHoverCount - 1);
+                    npcPicker.Open(possibleNPCsToTicketCheck, curNPCTicketCheckHoverCount);
                 }
                 canExitCheckTicket = false;
             }
@@ -435,11 +447,12 @@ public class SpyBrain : MonoBehaviour
         {
             Bounds spyBounds = atlasRenderer.bounds;
 
-            npcsTicketHoverCount = 0;
+            prevNPCTicketCheckHoverCount = curNPCTicketCheckHoverCount;
+            curNPCTicketCheckHoverCount = 0;
 
             for (int i = 0; i < CurCarriage.curNPCList.Count; i++)
             {
-                if (npcsTicketHoverCount < possibleNPCsToTicketCheck.Length)
+                if (curNPCTicketCheckHoverCount < possibleNPCsToTicketCheck.Length)
                 {
                     NPCBrain npc = CurCarriage.curNPCList[i];
                     if (npc.ticketHasBeenChecked) continue;
@@ -449,8 +462,8 @@ public class SpyBrain : MonoBehaviour
                     if (spyBounds.max.x > npcBounds.min.x && spyBounds.min.x < npcBounds.max.x)
                     {
                         npc.ToggleTicketCheckHover(toggle: true);
-                        possibleNPCsToTicketCheck[npcsTicketHoverCount] = npc;
-                        npcsTicketHoverCount++;
+                        possibleNPCsToTicketCheck[curNPCTicketCheckHoverCount] = npc;
+                        curNPCTicketCheckHoverCount++;
                         OnTicketCheckHoverEnabled.Invoke();
                     }
                     else
@@ -584,6 +597,55 @@ public class SpyBrain : MonoBehaviour
     public static void ToggleNotepad(bool toggle)
     {
         CheckingNotepad = toggle;
+    }
+    public static void QuickSortNPCByXPos(NPCBrain[] npcs, int left, int right)
+    {
+        if (left < right)
+        {
+            int pivot = PartitionNPC(npcs, left, right);
+
+            if (pivot > 1)
+            {
+                QuickSortNPCByXPos(npcs, left, pivot - 1);
+            }
+
+            int pivotAhead = pivot + 1;
+            if (pivotAhead < right)
+            {
+                QuickSortNPCByXPos(npcs, pivotAhead, right);
+            }
+        }
+    }
+    private static int PartitionNPC(NPCBrain[] npcs, int left, int right)
+    {
+        NPCBrain leftNPC = npcs[left];
+
+        while(true)
+        {
+            while (npcs[left].transform.position.x > leftNPC.transform.position.x)
+            {
+                left++;
+            }
+
+            while (npcs[right].transform.position.x < leftNPC.transform.position.x)
+            {
+                right--;
+            }
+
+            if (left < right)
+            {
+                if (npcs[left] == npcs[right]) return right;
+
+                NPCBrain npcTemp = npcs[left];
+
+                npcs[left] = npcs[right];
+                npcs[right] = npcTemp;
+            }
+            else
+            {
+                return right;
+            }
+        }
     }
     private void OnDrawGizmos()
     {

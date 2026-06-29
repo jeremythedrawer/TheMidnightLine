@@ -105,6 +105,8 @@ public class NPCBrain : MonoBehaviour
         atlasRenderer.UpdateDepthRealtime((int)transform.position.z);
         smokerRoomIndex = -1; //NOTE: -1 is used as a condition to find a smokers room in the smoker state
         targetAlpha = 1;
+
+        curBehaviour = GetRandomBehaviour();
     }
     private void Update()
     {
@@ -753,7 +755,7 @@ public class NPCBrain : MonoBehaviour
     {
         return UnityEngine.Random.Range(0, 2) == 0 ? motion1 : motion2;
     }
-    public Behaviours GetRandomBehaviours(Behaviours npcBehaviours)
+    public Behaviours GetRandomBehaviour()
     {
         Behaviours[] allBehaviours = (Behaviours[])Enum.GetValues(typeof(Behaviours));
 
@@ -761,27 +763,14 @@ public class NPCBrain : MonoBehaviour
         for (int i = 0; i < allBehaviours.Length; i++)
         {
             Behaviours b = allBehaviours[i];
-            if (b != 0 && npcBehaviours.HasFlag(b))
+            if (b != 0 && profile.behaviours.HasFlag(b))
             {
                 allowedBehaviours.Add(b);
             }
         }
 
-        Behaviours firstBehave = allowedBehaviours[UnityEngine.Random.Range(0, allowedBehaviours.Count)];
-        if (allowedBehaviours.Count == 1)
-        {
-            return firstBehave;
-        }
-
-        Behaviours secondBehave;
-        do
-        {
-            secondBehave = allowedBehaviours[UnityEngine.Random.Range(0, allowedBehaviours.Count)];
-        }
-        while (secondBehave == firstBehave);
-
-        Behaviours behaviours = firstBehave | secondBehave;
-        return behaviours;
+        Behaviours selectedBehaviour = allowedBehaviours[UnityEngine.Random.Range(0, allowedBehaviours.Count)];
+        return selectedBehaviour;
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
