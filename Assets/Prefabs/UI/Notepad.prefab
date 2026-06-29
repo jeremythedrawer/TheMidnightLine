@@ -67,7 +67,6 @@ MonoBehaviour:
   traitorPage_prefab: {fileID: 3293984349451637370, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
   promptPage: {fileID: 6336500136933926793}
   colorKeyPage: {fileID: 3350228236901539166}
-  confirmPage: {fileID: 0}
   pages: []
   activePage: {fileID: 0}
   colorPicker: {fileID: 0}
@@ -78,8 +77,7 @@ MonoBehaviour:
       npcPrefabIndex: 0
       behaviours: 0
     fullName: 
-    coveredMugshotIndex: 0
-    uncoveredMugshotIndex: 0
+    mugShotIndex: 0
     found: 0
   handFlipPage_clip:
     clipName: 
@@ -488,6 +486,18 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 6943387517606910861}
     m_Modifications:
+    - target: {fileID: 1907040693666170095, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 5.071
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907040693666170095, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -7.6363335
+      objectReference: {fileID: 0}
+    - target: {fileID: 1907040693666170095, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 2
+      objectReference: {fileID: 0}
     - target: {fileID: 2540409711626796747, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
       propertyPath: bounds.m_Center.x
       value: 5.7130003
@@ -732,6 +742,10 @@ PrefabInstance:
     - target: {fileID: 3031531853131365240, guid: 5aacea950cd4da5418979b691dc182bf, type: 3}
       propertyPath: m_Name
       value: ColorKeyPage
+      objectReference: {fileID: 0}
+    - target: {fileID: 3031531853131365240, guid: 5aacea950cd4da5418979b691dc182bf, type: 3}
+      propertyPath: m_IsActive
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3216263492707104779, guid: 5aacea950cd4da5418979b691dc182bf, type: 3}
       propertyPath: bounds.m_Center.x

@@ -174,6 +174,11 @@ public class NPCBrain : MonoBehaviour
     {
         atlasRenderer.custom.w = toggle ? 1 : 0; 
     }
+    public void Unveil()
+    {
+        atlasRenderer.custom.z = 1;
+        ticketHasBeenChecked = true;
+    }
     private void SetState(NPCState newState)
     {
         if (curState == newState) return;
@@ -231,7 +236,6 @@ public class NPCBrain : MonoBehaviour
                     NPCMotion standingMotion = RandomIdleMotion(NPCMotion.StandingBlinking, NPCMotion.StandingBreathing);
                     curClip = atlas.clipDict[(int)standingMotion];
                 }
-                atlasRenderer.custom.z = 1;
             }
             break;
             case NPCState.Behaviour:
@@ -355,8 +359,6 @@ public class NPCBrain : MonoBehaviour
             case NPCState.TicketCheck:
             {
                 targetDist = targetXPos - transform.position.x;
-                ticketHasBeenChecked = true;
-
             }
             break;
 
@@ -392,7 +394,6 @@ public class NPCBrain : MonoBehaviour
         }
 
     }
-    
     private void SetPath(NPCPath newPath)
     {
         if (curPath == newPath) return;
@@ -696,7 +697,6 @@ public class NPCBrain : MonoBehaviour
 
         }
     }
-    
     private void PrepareToDisembarkTrain()
     {
         if (!onTrain || trip.stationAhead.stationIndex != profile.disembarkingStationIndex) return;
@@ -750,7 +750,6 @@ public class NPCBrain : MonoBehaviour
         if (onTrain || trip.stationAhead.stationIndex != profile.boardingStationIndex) return;
         SetPath(NPCPath.ToSlideDoor);
     }
-    
     private NPCMotion RandomIdleMotion(NPCMotion motion1, NPCMotion motion2)
     {
         return UnityEngine.Random.Range(0, 2) == 0 ? motion1 : motion2;

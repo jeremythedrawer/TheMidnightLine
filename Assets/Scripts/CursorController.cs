@@ -12,6 +12,8 @@ public class CursorController : MonoBehaviour
     public PlayerInputsSO playerInputs;
     public LayerSettingsSO layerSettings;
     public SpyStatsSO spyStats;
+    public TripSO trip;
+
     public AtlasRenderer cursorRenderer;
     public AtlasTextRenderer cursorTag;
 
@@ -58,8 +60,22 @@ public class CursorController : MonoBehaviour
                 {
                     if (hoveredNPC != null)
                     {
-                        colorPicker.Open(hoveredNPC.atlasRenderer, openAllColors: false);
-                        hoveredNPC.ToggleHover(cursorTag, false);
+                        if (trip.unlockedClueMarkerCount == 0)
+                        {
+                            if (hoveredNPC.atlasRenderer.custom.x == 0)
+                            {
+                                hoveredNPC.atlasRenderer.custom.x = 1 << 3;
+                            }
+                            else
+                            {
+                                hoveredNPC.atlasRenderer.custom.x = 0;
+                            }
+                        }
+                        else
+                        {
+                            colorPicker.Open(hoveredNPC.atlasRenderer, openAllColors: false);
+                            hoveredNPC.ToggleHover(cursorTag, false);
+                        }
                     }
                 }
             }

@@ -73,8 +73,6 @@ public class Page : MonoBehaviour
                 isPlayerWriteTextPreviewSet = new bool[playerWriteTextRenderers.Length];
                 playerWriteTexts = new string[playerWriteTextRenderers.Length];
                 Array.Fill(playerWriteTexts, "");
-
-                EnableClueRow(trip.unlockedClueMarkerCount - 1);
             }
             break;
         }

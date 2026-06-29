@@ -917,8 +917,6 @@ public class Notepad : MonoBehaviour
         List<Page> pageList = new List<Page>();
         pageList.Add(promptPage);
         promptPage.Init();
-        pageList.Add(colorKeyPage);
-        colorKeyPage.Init();
 
 
         List<int> randIndicesList = new List<int>(trip.traitorProfiles.Length);
@@ -944,8 +942,13 @@ public class Notepad : MonoBehaviour
             pageList.Add(traitorPage);
             traitorPage.gameObject.SetActive(false);
         }
+        
+        pageList.Add(colorKeyPage);
+        colorKeyPage.Init();
+
         pages = pageList.ToArray();
         lastPageIndex = pages.Length - 1;
+
     }
     private string GenerateName(Gender gender, Ethnicity ethnicity)
     {

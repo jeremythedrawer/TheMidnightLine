@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 3860740957169187632}
   - component: {fileID: 42514526293997219}
   m_Layer: 0
-  m_Name: NPCIcons
+  m_Name: NPCIcons1
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -67,7 +67,7 @@ MonoBehaviour:
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
   uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
+  custom: {x: 0, y: 0, z: 0, w: 1}
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
@@ -128,7 +128,7 @@ GameObject:
   - component: {fileID: 6257093253846840446}
   - component: {fileID: 1580298850503417269}
   m_Layer: 0
-  m_Name: NPCIcons
+  m_Name: NPCIcons5
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -184,7 +184,7 @@ MonoBehaviour:
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
   uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
+  custom: {x: 0, y: 0, z: 0, w: 1}
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
@@ -266,12 +266,12 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children:
   - {fileID: 1860335016353694840}
-  - {fileID: 2154265048737153948}
-  - {fileID: 13799677093161959}
-  - {fileID: 6393064298484858566}
   - {fileID: 3860740957169187632}
-  - {fileID: 6257093253846840446}
+  - {fileID: 13799677093161959}
   - {fileID: 7804541401204915780}
+  - {fileID: 2154265048737153948}
+  - {fileID: 6257093253846840446}
+  - {fileID: 6393064298484858566}
   - {fileID: 1125711513002524082}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -374,12 +374,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCPicker
   npcIconRenderers:
   - {fileID: 6930496782516411602}
-  - {fileID: 3624752895173531858}
-  - {fileID: 328626354481165703}
-  - {fileID: 3939263600240463968}
   - {fileID: 42514526293997219}
-  - {fileID: 1580298850503417269}
+  - {fileID: 328626354481165703}
   - {fileID: 3206941183027501488}
+  - {fileID: 3624752895173531858}
+  - {fileID: 1580298850503417269}
+  - {fileID: 3939263600240463968}
   - {fileID: 1291583114916238326}
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
@@ -414,7 +414,7 @@ GameObject:
   - component: {fileID: 13799677093161959}
   - component: {fileID: 328626354481165703}
   m_Layer: 0
-  m_Name: NPCIcons
+  m_Name: NPCIcons2
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -470,7 +470,7 @@ MonoBehaviour:
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
   uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
+  custom: {x: 0, y: 0, z: 0, w: 1}
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
@@ -531,7 +531,7 @@ GameObject:
   - component: {fileID: 6393064298484858566}
   - component: {fileID: 3939263600240463968}
   m_Layer: 0
-  m_Name: NPCIcons
+  m_Name: NPCIcons6
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -587,7 +587,7 @@ MonoBehaviour:
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
   uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
+  custom: {x: 0, y: 0, z: 0, w: 1}
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
@@ -648,7 +648,7 @@ GameObject:
   - component: {fileID: 1860335016353694840}
   - component: {fileID: 6930496782516411602}
   m_Layer: 0
-  m_Name: NPCIcons
+  m_Name: NPCIcons0
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -704,7 +704,7 @@ MonoBehaviour:
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
   uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
+  custom: {x: 0, y: 0, z: 0, w: 1}
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
@@ -765,7 +765,7 @@ GameObject:
   - component: {fileID: 1125711513002524082}
   - component: {fileID: 1291583114916238326}
   m_Layer: 0
-  m_Name: NPCIcons
+  m_Name: NPCIcons7
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -821,7 +821,7 @@ MonoBehaviour:
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
   uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
+  custom: {x: 0, y: 0, z: 0, w: 1}
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
@@ -882,7 +882,7 @@ GameObject:
   - component: {fileID: 2154265048737153948}
   - component: {fileID: 3624752895173531858}
   m_Layer: 0
-  m_Name: NPCIcons
+  m_Name: NPCIcons4
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -938,7 +938,7 @@ MonoBehaviour:
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
   uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
+  custom: {x: 0, y: 0, z: 0, w: 1}
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
@@ -999,7 +999,7 @@ GameObject:
   - component: {fileID: 7804541401204915780}
   - component: {fileID: 3206941183027501488}
   m_Layer: 0
-  m_Name: NPCIcons
+  m_Name: NPCIcons3
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1055,7 +1055,7 @@ MonoBehaviour:
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
   uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
+  custom: {x: 0, y: 0, z: 0, w: 1}
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}

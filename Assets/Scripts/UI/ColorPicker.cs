@@ -49,7 +49,7 @@ public class ColorPicker : MonoBehaviour
     public bool canClose;
     private void Awake()
     {
-        trip.unlockedClueMarkerCount = 1;
+        trip.unlockedClueMarkerCount = 0;
 
         if (Application.isPlaying)
         {

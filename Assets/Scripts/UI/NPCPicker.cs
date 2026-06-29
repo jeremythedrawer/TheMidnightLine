@@ -99,6 +99,7 @@ public class NPCPicker : MonoBehaviour
                         if (playerInputs.mouseLeftUp)
                         {
                             SpyBrain.ChooseNPCTicketToCheck(possibleNPCs[i]);
+                            Close();
                         }
 
                         prevHoveredNPCIconRenderer = npcIconRend;
@@ -112,11 +113,9 @@ public class NPCPicker : MonoBehaviour
                     }
                 }
 
-                if (canClose && playerInputs.mouseLeftDown && !CursorController.IsInsideBounds(paletteRenderer.bounds))
+                if (canClose && playerInputs.mouseLeftUp && !CursorController.IsInsideBounds(paletteRenderer.bounds))
                 {
                     Close();
-                    SpyBrain.CheckingTicket = false;
-                    SpyBrain.PickingNPCToTicketCheck = false;
                 }
                 canClose = true;
             }

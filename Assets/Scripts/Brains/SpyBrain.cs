@@ -16,7 +16,6 @@ public class SpyBrain : MonoBehaviour
     public static event Action OnTicketCheckHoverDisabled;
 
     public static bool CanCheckTicket;
-    public static bool CheckingTicket;
     public static bool CheckingNotepad;
     public static bool PickingNPCToTicketCheck;
 
@@ -64,12 +63,10 @@ public class SpyBrain : MonoBehaviour
     public int curFrameIndex;
     public int prevFrameIndex;
     public int curNPCTicketCheckHoverCount;
-    public int prevNPCTicketCheckHoverCount;
 
     public bool wasTouchingGangwayDoorLeft;
     public bool wasTouchingGangwayDoorRight;
-    public bool canExitCheckTicket;
-    public bool canExitNotepad;
+    public bool canExitState;
     public bool checkingCarriageMap;
 
     private void OnValidate()
@@ -123,9 +120,13 @@ public class SpyBrain : MonoBehaviour
     }
     private void ChooseState()
     {
-        if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount > 0) || CheckingTicket || PickingNPCToTicketCheck)
+        if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount == 1) || ChosenNPCToTicketCheck != null)
         {
-            SetState(SpyState.Ticket);
+            SetState(SpyState.TicketCheck);
+        }
+        else if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount > 1) || PickingNPCToTicketCheck)
+        {
+            SetState(SpyState.PickingNPCTicketCheck);
         }
         else if (playerInputs.notepadKeyDown || CheckingNotepad)
         {
@@ -167,27 +168,33 @@ public class SpyBrain : MonoBehaviour
                 transform.position = stats.curWorldPos;
             }
             break;
-            case SpyState.Ticket:
+            case SpyState.TicketCheck:
             {
-                if (ChosenNPCToTicketCheck != null && !CheckingTicket)
+                if (!playerInputs.ticketCheckKeyDown) canExitState = true;
+
+                if((playerInputs.ticketCheckKeyDown && canExitState) || playerInputs.notepadPreviewAnswerAndFlip.x != 0)
                 {
-                    SetCheckTicket(ChosenNPCToTicketCheck);
+                    ChosenNPCToTicketCheck.ticketIsBeingChecked = false;
+                    ChosenNPCToTicketCheck = null;
                 }
+            }
+            break;
+            case SpyState.PickingNPCTicketCheck:
+            {
+                if (!playerInputs.ticketCheckKeyDown) canExitState = true;
 
-                if (!playerInputs.ticketCheckKeyDown) canExitCheckTicket = true;
-
-                if((playerInputs.ticketCheckKeyDown && canExitCheckTicket) || playerInputs.notepadPreviewAnswerAndFlip.x != 0)
+                if ((playerInputs.ticketCheckKeyDown && canExitState) || playerInputs.notepadPreviewAnswerAndFlip.x != 0)
                 {
-                    CheckingTicket = false;
                     PickingNPCToTicketCheck = false;
                 }
             }
             break;
+
             case SpyState.Notepad:
             {
-                if(!playerInputs.notepadKeyDown) canExitNotepad = true;
+                if(!playerInputs.notepadKeyDown) canExitState = true;
 
-                if (playerInputs.notepadKeyDown && canExitNotepad)
+                if (playerInputs.notepadKeyDown && canExitState)
                 {
                     CheckingNotepad = false;
                 }
@@ -320,15 +327,14 @@ public class SpyBrain : MonoBehaviour
                 }
             }
             break;
-            case SpyState.Ticket:
+            case SpyState.TicketCheck:
             {
                 CheckIfTicketCheckHover();
-                if (prevNPCTicketCheckHoverCount != curNPCTicketCheckHoverCount)
-                {
-                    NPCPicker npcPicker = SceneController.GetNPCPicker();
-                    QuickSortNPCByXPos(possibleNPCsToTicketCheck, 0, curNPCTicketCheckHoverCount - 1);
-                    npcPicker.Adjust(possibleNPCsToTicketCheck, curNPCTicketCheckHoverCount);
-                }
+            }
+            break;
+            case SpyState.PickingNPCTicketCheck:
+            {
+
             }
             break;
         }
@@ -342,6 +348,8 @@ public class SpyBrain : MonoBehaviour
     }
     private void EnterState()
     {
+        canExitState = false;
+
         switch (stats.curState)
         {
             case SpyState.Idle:
@@ -354,27 +362,45 @@ public class SpyBrain : MonoBehaviour
                 curClip = atlas.clipDict[(int)SpyMotion.Walking];
             }
             break;
-            case SpyState.Ticket:
+            case SpyState.TicketCheck:
             {
-                if (curNPCTicketCheckHoverCount == 1)
+                if (ChosenNPCToTicketCheck == null)
                 {
-                    SetCheckTicket(possibleNPCsToTicketCheck[0]);
+                    ChosenNPCToTicketCheck = possibleNPCsToTicketCheck[0];
                 }
-                else
+                ChosenNPCToTicketCheck.ticketIsBeingChecked = true;
+                ChosenNPCToTicketCheck.Unveil();
+
+                curClip = atlas.clipDict[(int)SpyMotion.Ticket];
+                atlasRenderer.PlayClipOneShot(curClip);
+
+                stats.boardingStationName = trip.stationsDataArray[ChosenNPCToTicketCheck.profile.boardingStationIndex].name;
+                stats.disembarkingStationName = trip.stationsDataArray[ChosenNPCToTicketCheck.profile.disembarkingStationIndex].name;
+                stats.ticketsCheckedTotal++;
+                gameEventData.OnTicketInspect.Raise();
+
+                canExitState = false;
+            }
+            break;
+            case SpyState.PickingNPCTicketCheck:
+            {
+                PickingNPCToTicketCheck = true;
+                NPCPicker npcPicker = SceneController.GetNPCPicker();
+                QuickSortNPCByXPos(possibleNPCsToTicketCheck, 0, curNPCTicketCheckHoverCount - 1);
+
+                for (int i = 0; i < curNPCTicketCheckHoverCount; i++)
                 {
-                    PickingNPCToTicketCheck = true;
-                    NPCPicker npcPicker = SceneController.GetNPCPicker();
-                    QuickSortNPCByXPos(possibleNPCsToTicketCheck, 0, curNPCTicketCheckHoverCount - 1);
-                    npcPicker.Open(possibleNPCsToTicketCheck, curNPCTicketCheckHoverCount);
+                    possibleNPCsToTicketCheck[i].ticketIsBeingChecked = true;
                 }
-                canExitCheckTicket = false;
+
+                npcPicker.Open(possibleNPCsToTicketCheck, curNPCTicketCheckHoverCount);
+
             }
             break;
             case SpyState.Notepad:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.NotepadHolding];
                 CheckingNotepad = true;
-                canExitNotepad = false;
             }
             break;
         }
@@ -393,27 +419,34 @@ public class SpyBrain : MonoBehaviour
                 stats.moveVelocity.x = 0;
             }
             break;
-            case SpyState.Ticket:
+            case SpyState.TicketCheck:
             {
-                if (ChosenNPCToTicketCheck != null && !ChosenNPCToTicketCheck.ticketHasBeenChecked)
-                {
-                    trip.ticketsCheckedSinceLastStation++;
-                    ChosenNPCToTicketCheck.ticketIsBeingChecked = false;
-                    atlasRenderer.PlayClipOneShotReverse(curClip);
-                    ChosenNPCToTicketCheck = null;
-                }
-
+                trip.ticketsCheckedSinceLastStation++;
+                atlasRenderer.PlayClipOneShotReverse(curClip);
                 if (trip.ticketsCheckedSinceLastStation == trip.stationAhead.ticketsToCheckBeforeSpawn)
                 {
                     CanCheckTicket = false;
                 }
-
-                PickingNPCToTicketCheck = false;
-                NPCPicker npcPicker = SceneController.GetNPCPicker();
-                npcPicker.Close();
             }
             break;
 
+            case SpyState.PickingNPCTicketCheck:
+            {
+                PickingNPCToTicketCheck = false;
+                NPCPicker npcPicker = SceneController.GetNPCPicker();
+                npcPicker.Close();
+
+                for (int i = 0; i < curNPCTicketCheckHoverCount; i++)
+                {
+                    NPCBrain npc = possibleNPCsToTicketCheck[i];
+                    if (npc != ChosenNPCToTicketCheck)
+                    {
+                        npc.ticketIsBeingChecked = false;
+                        npc.ToggleTicketCheckHover(false);
+                    }
+                }
+            }
+            break;
             case SpyState.Notepad:
             {
                 CheckingNotepad = false;
@@ -427,27 +460,12 @@ public class SpyBrain : MonoBehaviour
             break;
         }
     }
-    public void SetCheckTicket(NPCBrain chosenNPC)
-    {
-        ChosenNPCToTicketCheck = chosenNPC;
-        ChosenNPCToTicketCheck.ticketIsBeingChecked = true;
-        PickingNPCToTicketCheck = false;
-        curClip = atlas.clipDict[(int)SpyMotion.Ticket];
-        atlasRenderer.PlayClipOneShot(curClip);
-
-        stats.boardingStationName = trip.stationsDataArray[ChosenNPCToTicketCheck.profile.boardingStationIndex].name;
-        stats.disembarkingStationName = trip.stationsDataArray[ChosenNPCToTicketCheck.profile.disembarkingStationIndex].name;
-        stats.ticketsCheckedTotal++;
-        CheckingTicket = true;
-        gameEventData.OnTicketInspect.Raise();
-    }
     private void CheckIfTicketCheckHover()
     {
         if (CanCheckTicket)
         {
             Bounds spyBounds = atlasRenderer.bounds;
 
-            prevNPCTicketCheckHoverCount = curNPCTicketCheckHoverCount;
             curNPCTicketCheckHoverCount = 0;
 
             for (int i = 0; i < CurCarriage.curNPCList.Count; i++)
@@ -469,9 +487,13 @@ public class SpyBrain : MonoBehaviour
                     else
                     {
                         npc.ToggleTicketCheckHover(toggle: false);
-                        OnTicketCheckHoverDisabled.Invoke();
                     }
                 }
+            }
+
+            if (curNPCTicketCheckHoverCount == 0)
+            {
+                OnTicketCheckHoverDisabled.Invoke();
             }
         }
     }

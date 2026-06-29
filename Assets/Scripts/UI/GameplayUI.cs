@@ -101,7 +101,7 @@ public class GameplayUI : MonoBehaviour
         {
             SetState(UIState.Notepad);
         }
-        else if (SpyBrain.CheckingTicket)
+        else if (spyStats.curState == SpyState.TicketCheck)
         {
             SetState(UIState.Ticket);
         }
@@ -265,7 +265,6 @@ public class GameplayUI : MonoBehaviour
 
         colorPicker = SceneController.GetColorPicker();
     }
-
     private void InitTicketIcons()
     {
         ticketIcons = new TicketIcon[8];
@@ -277,6 +276,7 @@ public class GameplayUI : MonoBehaviour
             Vector3 pos = new Vector3(xPos, ticketIconTransform.position.y, ticketIconTransform.position.z);
             TicketIcon ticketIcon = Instantiate(ticketIcon_prefab, pos, Quaternion.identity, ticketIconTransform);
             ticketIcon.Init();
+            ticketIcon.name = "TicketIcon" + i;
             ticketIcons[i] = ticketIcon;
         }
         curTicketIcon = ticketIcons[0];
