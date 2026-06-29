@@ -46,34 +46,29 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 0
   batchKey:
-    material: {fileID: 2100000, guid: 15f54dd6c712a2145bfb83fce89dd2f4, type: 2}
-    depthOrder: 24
+    texture: {fileID: 2800000, guid: 6c3a16917d22ca843a51762ac8067dc8, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
   atlas: {fileID: 11400000, guid: c17d24e540e4a59409580e1f763593e7, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 2
+  spriteIndex: 5
   flipX: 0
   flipY: 0
   width: 1
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.045410156, y: 0.06713867, z: 0.30273438, w: 0.842041}
+    uvSizeAndPos: {x: 0.044921875, y: 0.06640625, z: 0.3305664, w: 0.93310547}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 1.0333333, y: 1.5277778, z: 1}
-    index: 2
+    worldSize: {x: 0.51111114, y: 0.75555557, z: 1}
+    index: 5
   bounds:
-    m_Center: {x: 12.040667, y: 0.8438889, z: 0}
-    m_Extent: {x: 0.51666665, y: 0.7638889, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0, z: 1.0333333, w: 1.5277778}
-  uvSizeAndPosition: {x: 0.045410156, y: 0.06713867, z: 0.30273438, w: 0.842041}
+    m_Center: {x: 11.779555, y: 0.4577778, z: 0}
+    m_Extent: {x: 0.25555557, y: 0.37777779, z: 0.1}
+  worldPivotAndSize: {x: -0, y: -0, z: 0.51111114, w: 0.75555557}
+  uvSizeAndPosition: {x: 0.044921875, y: 0.06640625, z: 0.3305664, w: 0.93310547}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.51666665, y: 0.7638889, z: 0}
+  boundsOffset: {x: 0.25555557, y: 0.37777779, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -81,16 +76,8 @@ MonoBehaviour:
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  prevSpriteIndexFlipH: 2
-  prevSpriteIndexFlipV: 2
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 5
+  prevSpriteIndexFlipV: 5
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
