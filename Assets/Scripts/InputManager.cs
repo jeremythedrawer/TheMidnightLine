@@ -87,6 +87,7 @@ public class InputManager : MonoBehaviour
         };
 
         ticket_action.started += context => playerInputs.ticketCheckKeyDown = true;
+        ticket_action.canceled += context => playerInputs.ticketCheckKeyUp = true;
 
         interact_action.started += context =>
         {
@@ -154,6 +155,7 @@ public class InputManager : MonoBehaviour
         playerInputs.notepadKeyDown = false;
         playerInputs.notepadConfirmAnswer = false;
         playerInputs.ticketCheckKeyDown = false;
+        playerInputs.ticketCheckKeyUp = false;
         playerInputs.interact = false;
         playerInputs.mouseLeftDown = false;
         playerInputs.mouseLeftUp = false;

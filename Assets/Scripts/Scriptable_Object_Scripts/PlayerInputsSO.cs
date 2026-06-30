@@ -10,6 +10,7 @@ public class PlayerInputsSO : ScriptableObject
     public bool notepadConfirmAnswer;
 
     public bool ticketCheckKeyDown;
+    public bool ticketCheckKeyUp;
     public bool interact;
 
     public Vector3 mouseScreenPos;

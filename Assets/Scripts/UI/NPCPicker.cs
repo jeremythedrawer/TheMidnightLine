@@ -142,7 +142,7 @@ public class NPCPicker : MonoBehaviour
                 {
                     Close();
                 }
-                if (playerInputs.mouseLeftUp)
+                if (playerInputs.mouseLeftUp || playerInputs.ticketCheckKeyUp)
                 {
                     canClose = true;
                 }
@@ -316,6 +316,7 @@ public class NPCPicker : MonoBehaviour
     }
     public void Close()
     {
+        Debug.Log("closing");
         if (curPickerState == PickerState.Opened || curPickerState == PickerState.Opening)
         {
             ctsOpen?.Cancel();

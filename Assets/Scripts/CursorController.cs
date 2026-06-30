@@ -93,6 +93,10 @@ public class CursorController : MonoBehaviour
         else
         {
             cursorRenderer.enabled = false;
+            if (spyStats.moveVelocity.x != 0)
+            {
+                EraseCursorTag();
+            }
         }
     }
     private void LateUpdate()
@@ -108,7 +112,6 @@ public class CursorController : MonoBehaviour
                 if (Active)
                 {
                     Active = false;
-                    EraseCursorTag();
                     OnMouseDisabled?.Invoke();
                 }
             }
@@ -128,6 +131,7 @@ public class CursorController : MonoBehaviour
     private void HoverNPC()
     {
         hoveredNPCCount = 0;
+        bool hoveringRevealedNPC = false;
         for (int i = 0; i < SpyBrain.CurCarriage.curNPCList.Count; i++)
         {
             NPCBrain npc = SpyBrain.CurCarriage.curNPCList[i];
@@ -137,6 +141,7 @@ public class CursorController : MonoBehaviour
                 hoveredNPCs[hoveredNPCCount] = npc;
                 hoveredNPCCount++;
                 npc.ToggleHover(true);
+                if (npc.ticketHasBeenChecked) hoveringRevealedNPC = true;
             }
             else
             {
@@ -144,15 +149,12 @@ public class CursorController : MonoBehaviour
             }
         }
 
-        if (hoveredNPCCount == 1 && !cursorTag.hasText)
+        if (hoveredNPCCount == 1 && !cursorTag.hasText && hoveringRevealedNPC)
         {
             NPCBrain selectedNPC = hoveredNPCs[0];
-            if (selectedNPC.ticketHasBeenChecked)
-            {
-                WriteCursorTag(hoveredNPCs[0]);
-            }
+            WriteCursorTag(selectedNPC);
         }
-        else if (hoveredNPCCount == 0)
+        else if (!hoveringRevealedNPC)
         {
             EraseCursorTag();
         }

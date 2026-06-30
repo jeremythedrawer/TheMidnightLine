@@ -181,9 +181,9 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.PickingNPCTicketCheck:
             {
-                if (!playerInputs.ticketCheckKeyDown) canExitState = true;
+                if (playerInputs.ticketCheckKeyUp) canExitState = true;
 
-                if ((playerInputs.ticketCheckKeyDown && canExitState) || playerInputs.notepadPreviewAnswerAndFlip.x != 0)
+                if (((playerInputs.ticketCheckKeyDown || playerInputs.mouseLeftUp) && canExitState) || playerInputs.notepadPreviewAnswerAndFlip.x != 0)
                 {
                     PickingNPCToTicketCheck = false;
                 }
