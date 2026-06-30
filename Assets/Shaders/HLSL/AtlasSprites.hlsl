@@ -15,4 +15,5 @@ struct AtlasSprite
     float4 uvSizeAndPos;
     float4 scaleAndFlip;
     float4 custom;
+    int customBit;
 };

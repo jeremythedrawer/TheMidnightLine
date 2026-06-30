@@ -1,6 +1,9 @@
 using System;
 using System.Collections.Generic;
 using System.Runtime.InteropServices;
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
 using UnityEngine;
 using static Atlas;
 public static class AtlasRendering
@@ -49,6 +52,7 @@ public static class AtlasRendering
         public Vector4 uvSizeAndPos;
         public Vector4 scaleAndFlip;
         public Vector4 custom;
+        public int customBit;
     }
 
     public static Dictionary<BatchKey, SpriteBatch> spriteBatchDict = new Dictionary<BatchKey, SpriteBatch>();
@@ -79,24 +83,39 @@ public static class AtlasRendering
 
         public MaterialPropertyBlock mpb;
     }
-
     public static void RefreshFrame()
     {
         spriteBatchList.Clear();
-        foreach (KeyValuePair<BatchKey, SpriteBatch> kv in spriteBatchDict)
+
+        foreach (var kv in spriteBatchDict)
         {
-            BatchKey key = kv.Key;
-            SpriteBatch batch = kv.Value;
-            spriteBatchList.Add((key, batch));
+            spriteBatchList.Add((kv.Key, kv.Value));
         }
+
         textBatchList.Clear();
 
-        foreach (KeyValuePair<BatchKey, TextBatch> kv in textBatchDict)
+        foreach (var kv in textBatchDict)
         {
-            BatchKey key = kv.Key;
-            TextBatch batch = kv.Value;
-            textBatchList.Add((key, batch));
+            textBatchList.Add((kv.Key, kv.Value));
         }
+    }
+    public static void Dispose()
+    {
+        foreach (var batch in spriteBatchDict.Values)
+        {
+            batch.spriteDataBuffer?.Release();
+            batch.argsBuffer?.Release();
+        }
+
+        spriteBatchDict.Clear();
+
+        foreach (var batch in textBatchDict.Values)
+        {
+            batch.spriteDataBuffer?.Release();
+            batch.argsBuffer?.Release();
+        }
+
+        textBatchDict.Clear();
     }
     public static void RegisterRenderer(AtlasRenderer renderer)
     {
@@ -133,6 +152,7 @@ public static class AtlasRendering
 
             batch.argsBuffer?.Release();
             batch.argsBuffer = null;
+
 
             spriteBatchDict.Remove(renderer.batchKey);
         }
@@ -400,3 +420,15 @@ public static class AtlasRendering
         };
     }
 }
+
+#if UNITY_EDITOR
+
+[InitializeOnLoad]
+public static class AtlasSpriteCleanup
+{
+    static AtlasSpriteCleanup()
+    {
+        AssemblyReloadEvents.beforeAssemblyReload += AtlasRendering.Dispose;
+    }
+}
+#endif

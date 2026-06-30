@@ -359,19 +359,19 @@ public class AtlasFactory : EditorWindow
     {
         float previewSize = previewWidth * position.width;
 
-        Rect containterRect = GUILayoutUtility.GetRect(previewSize, previewSize, GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false));
+        Rect containerRect = GUILayoutUtility.GetRect(previewSize, previewSize, GUILayout.ExpandWidth(false), GUILayout.ExpandHeight(false));
 
         if (Event.current.type != EventType.Repaint) return;
 
         float spritePixelWidth = previewSprite.uvSizeAndPos.x * atlas.texture.width;
         float spritePixelHeight = previewSprite.uvSizeAndPos.y * atlas.texture.height;
 
-        float scale = Mathf.Min(containterRect.width / spritePixelWidth, containterRect.height / spritePixelHeight);
+        float scale = Mathf.Min(containerRect.width / spritePixelWidth, containerRect.height / spritePixelHeight);
 
         float drawWidth = spritePixelWidth * scale;
         float drawHeight = spritePixelHeight * scale;
 
-        Vector2 pivot = new Vector2(containterRect.center.x, containterRect.y);
+        Vector2 pivot = new Vector2(containerRect.center.x, containerRect.y);
         float flipUVPivot = flip == 1 ? previewSprite.uvPivot.x : 1 - previewSprite.uvPivot.x;
         float pivotX = flipUVPivot * drawWidth;
         float pivotY = (1 - previewSprite.uvPivot.y) * drawHeight;
@@ -399,8 +399,35 @@ public class AtlasFactory : EditorWindow
             );
         }
 
-        GUI.DrawTextureWithTexCoords(containterRect, atlas.texture, uvRect);
-        Vector2 indexPos = new Vector2(containterRect.xMin, containterRect.yMin);
+
+        Rect imageRect = new Rect();
+        
+        float spriteAspect = previewSprite.uvSizeAndPos.x / previewSprite.uvSizeAndPos.y;
+
+
+        float maxWidth = 0;
+        float maxHeight = 0;
+
+        if (atlas.clipDict.TryGetValue(selectedMotionIndex, out AtlasClip clip))
+        {
+            for (int i = clip.keyframeStartIndex; i <= clip.keyframeEndIndex; i++)
+            {
+                MotionSprite motionSprite = atlas.motionSprites[i];
+
+                maxWidth = Mathf.Max(maxWidth, motionSprite.sprite.uvSizeAndPos.x);
+                maxHeight = Mathf.Max(maxHeight, motionSprite.sprite.uvSizeAndPos.y);
+            }
+        }
+        float clipScale = Mathf.Min(containerRect.width / maxWidth, containerRect.height / maxHeight);
+
+        imageRect.width = previewSprite.uvSizeAndPos.x * clipScale;
+        imageRect.height = previewSprite.uvSizeAndPos.y * clipScale;
+
+        imageRect.x = containerRect.center.x - previewSprite.uvPivot.x * imageRect.width;
+        imageRect.y = containerRect.yMax - (1 - previewSprite.uvPivot.y) * imageRect.height;
+
+        GUI.DrawTextureWithTexCoords(imageRect, atlas.texture, uvRect);
+        Vector2 indexPos = new Vector2(containerRect.xMin, containerRect.yMin);
         GUIStyle indexStyle = new GUIStyle(EditorStyles.boldLabel)
         {
             alignment = TextAnchor.UpperLeft,
@@ -410,7 +437,7 @@ public class AtlasFactory : EditorWindow
         GUI.Label(new Rect(indexPos, new Vector2(20, 20)), curFrameIndex.ToString(), indexStyle);
         Handles.BeginGUI();
         {
-            Handles.DrawSolidRectangleWithOutline(containterRect, Color.clear, selectedColor);
+            Handles.DrawSolidRectangleWithOutline(containerRect, Color.clear, selectedColor);
         }
         Handles.EndGUI();
     }
@@ -958,7 +985,6 @@ public class AtlasFactory : EditorWindow
                     GUI.depth = 0;
                     if (GUI.Button(buttonRect, GUIContent.none))
                     {
-                        Debug.Log(selectedGridIndex);
                         atlas.slicedSprites[slicedSprite.sprite.index].sprite.uvPivot = curPivot;
 
                         EditorUtility.SetDirty(atlas);

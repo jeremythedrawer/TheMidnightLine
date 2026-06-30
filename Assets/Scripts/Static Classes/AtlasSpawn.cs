@@ -1,6 +1,7 @@
 using System;
 using System.Runtime.InteropServices;
 using Unity.Mathematics;
+using UnityEditor;
 using UnityEngine;
 using static AtlasRendering;
 public static class AtlasSpawn
@@ -290,4 +291,31 @@ public static class AtlasSpawn
         edgeSpriteDataBufferPoolCount++;
         edgeSpriteDataBuffer_pool[edgeSpriteDataBufferPoolCount] = edgeSpriteBuffer;
     }
+
+    public static void Dispose()
+    {
+        for (int i = 0; i < argsBufferPoolCount; i++)
+        {
+            argsBuffer_pool[i]?.Release();
+        }
+        for (int i = 0; i < quadScaleBufferPoolCount; i++)
+        {
+            quadScaleBuffer_pool[i]?.Release();
+        }
+        for(int i = 0; i < edgeSpriteDataBufferPoolCount; i++)
+        {
+            edgeSpriteDataBuffer_pool[i]?.Release();
+        }
+    }
 }
+#if UNITY_EDITOR
+
+[InitializeOnLoad]
+public static class AtlasSpawnCleanup
+{
+    static AtlasSpawnCleanup()
+    {
+        AssemblyReloadEvents.beforeAssemblyReload += AtlasSpawn.Dispose;
+    }
+}
+#endif

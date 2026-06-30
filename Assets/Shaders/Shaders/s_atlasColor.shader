@@ -30,6 +30,7 @@ Shader "Custom/s_atlasColor"
                 float4 uvSizeAndPos : TEXCOORD2;
                 float4 scaleAndFlip : TEXCOORD3;
                 float4 custom : TEXCOORD4;
+                int customBit : TEXCOORD5;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -69,6 +70,7 @@ Shader "Custom/s_atlasColor"
                 o.uvSizeAndPos = spriteData.uvSizeAndPos;
                 o.scaleAndFlip = spriteData.scaleAndFlip;
                 o.custom = spriteData.custom;
+                o.customBit = spriteData.customBit;
 
                 return o;
             }
@@ -98,9 +100,9 @@ Shader "Custom/s_atlasColor"
                 float2 diagonalUV = i.uv * (_DiagonalTexture_TexelSize.xy / _AtlasTexture_TexelSize.xy);
                 half4 diagonalTex = SAMPLE_TEXTURE2D(_DiagonalTexture, sampler_DiagonalTexture, diagonalUV);
                 
-                half diagonalMask = 1 - ceil(i.custom.r + 0.1);
-                half diagonal = diagonalTex.r * saturate(diagonalMask);
-                half3 col = saturate(i.custom.rgb) + diagonal;
+                half diagonalMask = i.customBit;
+                half diagonal = diagonalTex.r * diagonalMask;
+                half3 col = i.custom.rgb + diagonal;
                 half t = round(LinearLightness(col));
 
                 half3 finalCol = lerp((blackTex + col) * border + _BlackColor, whiteTex * col + _BlackColor, t);

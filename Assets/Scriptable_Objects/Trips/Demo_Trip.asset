@@ -26,6 +26,8 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
   - {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
   - {fileID: 11400000, guid: 134e92c40424a324c80e62fb7525f100, type: 2}
+  - {fileID: 11400000, guid: 9f6e7f784f9a69e45888de3dba9c0035, type: 2}
+  - {fileID: 11400000, guid: fb864fd428b19724aaa23f291b0ae7c2, type: 2}
   - {fileID: 11400000, guid: eb5f645bebb98e94587ae21c24fa0179, type: 2}
   - {fileID: 11400000, guid: 943d44fe5abb9e34a8ac880c80c72af9, type: 2}
   - {fileID: 11400000, guid: b93f4eeb1c65e734e87b647acbb56161, type: 2}
@@ -57,9 +59,16 @@ MonoBehaviour:
   - 0
   - 0
   - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
   elevationValues:
   - {x: 0, y: 0}
-  - {x: 1, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -69,7 +78,16 @@ MonoBehaviour:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
-  - {x: 1, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -97,7 +115,15 @@ MonoBehaviour:
   - 34.1
   - 34.1
   - 34.1
-  stationAhead: {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
+  - 34.1
+  - 22.2
+  - 34.1
+  - 34.1
+  - 34.1
+  - 22.2
+  - 34.1
+  - 34.1
+  stationAhead: {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
   selectedClueMarkerColors:
   - {r: 1, g: 1, b: 1, a: 1}
   - {r: 0, g: 0, b: 0, a: 1}
@@ -106,38 +132,22 @@ MonoBehaviour:
   - {r: 0, g: 0, b: 0, a: 1}
   traitorProfiles:
   - npcProfile:
-      boardingStationIndex: 0
-      disembarkingStationIndex: 2
+      boardingStationIndex: 2
+      disembarkingStationIndex: 6
       npcPrefabIndex: 6
       behaviours: 6
     fullName: 
     mugShotIndex: 4
     found: 0
   - npcProfile:
-      boardingStationIndex: 0
-      disembarkingStationIndex: 2
+      boardingStationIndex: 3
+      disembarkingStationIndex: 5
       npcPrefabIndex: 5
-      behaviours: 66
+      behaviours: 96
     fullName: 
     mugShotIndex: 6
     found: 0
-  - npcProfile:
-      boardingStationIndex: 1
-      disembarkingStationIndex: 3
-      npcPrefabIndex: 3
-      behaviours: 3
-    fullName: 
-    mugShotIndex: 3
-    found: 0
-  - npcProfile:
-      boardingStationIndex: 2
-      disembarkingStationIndex: 4
-      npcPrefabIndex: 2
-      behaviours: 3
-    fullName: 
-    mugShotIndex: 2
-    found: 0
   ticketsCheckedSinceLastStation: 0
   traitorsSpawned: 0
-  unlockedClueMarkerCount: 1
+  unlockedClueMarkerCount: 0
   selectedClueMarkerIndex: 0

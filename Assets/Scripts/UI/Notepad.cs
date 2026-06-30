@@ -43,6 +43,7 @@ public class Notepad : MonoBehaviour
     public AtlasRenderer frontFingers_renderer;
     public AtlasRenderer bindingRings_renderer;
     public AtlasRenderer leftHand_renderer;
+    public AtlasRenderer tabRenderer;
 
     public Transform pageTransform;
 
@@ -110,7 +111,8 @@ public class Notepad : MonoBehaviour
     }
     private void OnDisable()
     {
-        DisableNotepad();
+        leftHandTargetPos = leftHandFlipPos;
+        leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[handFlipPage_clip.keyframeStartIndex].sprite);
     }
     private void Start()
     {
@@ -146,6 +148,8 @@ public class Notepad : MonoBehaviour
         }
 
         colorPicker = SceneController.GetColorPicker();
+
+        tabRenderer.enabled = false;
     }
     private void Update()
     {
@@ -153,6 +157,16 @@ public class Notepad : MonoBehaviour
         ChooseState();
         UpdateState();
     }
+
+    public void ExitNotepad()
+    {
+        Bounds rendBounds = leftHand_renderer.GetBounds();
+        Vector4 uvPivot = leftHand_renderer.sprite.uvPivot;
+        Vector3 spritePivotOffset = new Vector3(rendBounds.extents.x * (1 - uvPivot.x), rendBounds.size.y * (1 - uvPivot.y));
+        leftHandTargetPos = leftHandOffScreenPos + spritePivotOffset;
+        active = false;
+    }
+
     private void ChooseState()
     {
         switch (activePage.pageType)
@@ -626,6 +640,154 @@ public class Notepad : MonoBehaviour
             break;
         }
     }
+    private void CreateNPCProfiles()
+    {
+        nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
+        List<NPCProfile> totalNPCProfiles = new List<NPCProfile>();
+        List<NPCProfile> bystanderProfiles = new List<NPCProfile>();
+
+        for (int i = 0; i < trip.npcDataArray.Length; i++)
+        {
+            NPCSO npc = trip.npcDataArray[i];
+
+            int behaviourValue = (int)npc.behaviours;
+
+            int[] validFlags = new int[32];
+            int flagCount = 0;
+
+            for (int j = 0; j < 32; j++)
+            {
+                int flag = 1 << j;
+
+                if ((behaviourValue & flag) != 0)
+                {
+                    validFlags[flagCount] = flag;
+                    flagCount++;
+                }
+            }
+            for (int j = 0; j < flagCount; j++)
+            {
+                Behaviours firstBehaviour = (Behaviours)validFlags[j];
+
+                for (int k = j; k < flagCount; k++)
+                {
+                    Behaviours secondBehaviour = (Behaviours)validFlags[k];
+                    Behaviours twoBehaviours = firstBehaviour | secondBehaviour;
+                    string name = GenerateName(npc.gender, npc.ethnicity);
+
+                    NPCProfile npcProfile = new NPCProfile
+                    {
+                        behaviours = twoBehaviours,
+                        npcPrefabIndex = i,
+                    };
+
+                    if (k == j)
+                    {
+                        bystanderProfiles.Add(npcProfile);
+                    }
+                    else
+                    {
+                        totalNPCProfiles.Add(npcProfile);
+                    }
+                }
+            }
+        }
+
+        int totalTraitorsInTrip = 0;
+
+        for (int i = 0; i < trip.stationsDataArray.Length; i++)
+        {
+            StationSO station = trip.stationsDataArray[i];
+            totalTraitorsInTrip += station.traitorSpawnCount;
+        }
+        trip.traitorProfiles = new TraitorProfile[totalTraitorsInTrip];;
+
+        int traitorIndex = 0;
+        for (int i = 0; i < trip.stationsDataArray.Length; i++)
+        {
+            StationSO station = trip.stationsDataArray[i];
+
+            for (int j = 0; j < station.traitorSpawnCount; j++)
+            {
+                int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
+                NPCProfile traitorProfile = totalNPCProfiles[randProfileIndex];
+                traitorProfile.boardingStationIndex = i;
+
+                int stationsLeft = trip.stationsDataArray.Length - i;
+                float normSpawnIndex = UnityEngine.Random.Range(0, stationsLeft + 1) / (float)stationsLeft;
+                float gaussianNormSpawnIndex = NormalGaussianValue(normSpawnIndex);
+                traitorProfile.disembarkingStationIndex = i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft) + MIN_STATION_STOPS;
+
+                NPCSO traitor = trip.npcDataArray[traitorProfile.npcPrefabIndex];
+
+                trip.traitorProfiles[traitorIndex] = new TraitorProfile()
+                {
+                    npcProfile = traitorProfile,
+                    mugShotIndex = traitor.mugShotIndex,
+                };
+
+                totalNPCProfiles.RemoveAt(randProfileIndex);
+
+                for (int k = totalNPCProfiles.Count - 1; k >= 0; k--)
+                {
+                    if (totalNPCProfiles[k].npcPrefabIndex != traitorProfile.npcPrefabIndex) continue;
+
+                    bystanderProfiles.Add(totalNPCProfiles[k]);
+                    totalNPCProfiles.RemoveAt(k);
+                }
+
+                traitorIndex++;
+            }
+        }
+
+        for (int i = 0; i < trip.stationsDataArray.Length; i++)
+        {
+            StationSO station = trip.stationsDataArray[i];
+            station.accompliceProfiles = new NPCProfile[station.accompliceSpawnCount];
+
+            for (int j = 0; j < station.accompliceSpawnCount; j++)
+            {
+                int randPrefabIndex = UnityEngine.Random.Range(0, trip.npcDataArray.Length);
+                NPCProfile accompliceProfile = new NPCProfile();
+
+                accompliceProfile.npcPrefabIndex = randPrefabIndex;
+                accompliceProfile.boardingStationIndex = i;
+                accompliceProfile.disembarkingStationIndex = trip.stationsDataArray.Length - 1;
+
+                station.accompliceProfiles[j] = accompliceProfile;
+            }
+
+        }
+
+        activePageIndex = 0;
+
+        totalNPCProfiles.AddRange(bystanderProfiles);
+
+        int profileIndex = 0;
+        for (int i = 0; i < trip.stationsDataArray.Length; i++)
+        {
+            StationSO station = trip.stationsDataArray[i];
+
+            station.bystanderProfiles = new NPCProfile[station.bystanderSpawnCount];
+
+            for (int j = 0; j < station.bystanderSpawnCount; j++)
+            {
+                NPCProfile bystanderProfile = totalNPCProfiles[profileIndex];
+
+                bystanderProfile.boardingStationIndex = i;
+
+                int stationsLeft = trip.stationsDataArray.Length - i;
+                float normSpawnIndex = (float)j / (float)station.bystanderSpawnCount;
+                float gaussianNormSpawnIndex = NormalGaussianValue(normSpawnIndex);
+                bystanderProfile.disembarkingStationIndex = i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft);
+
+                station.bystanderProfiles[j] = bystanderProfile;
+
+                profileIndex++;
+                profileIndex %= totalNPCProfiles.Count;
+            }
+        }
+    }
     private void ExitState()
     {
         switch (notepadData.curState)
@@ -675,26 +837,6 @@ public class Notepad : MonoBehaviour
             break;
         }
 
-    }
-    private bool ToFlipUp()
-    {
-        return ((playerInputs.notepadPreviewAnswerAndFlip.y == 1 || willFlipUp) && activePageIndex < lastPageIndex && !writeToggle && !eraseToggle && !revealToggle) || flipToggle == 1;
-    }
-    private bool ToFlipDown()
-    {
-        return ((playerInputs.notepadPreviewAnswerAndFlip.y == -1 || willFlipDown) && !writeToggle && !eraseToggle && !revealToggle) || flipToggle == -1;
-    }
-    private bool ToErase()
-    {
-        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.notepadPreviewAnswerAndFlip.x != 0 && activePage.activePlayerWriteText != "") || eraseToggle;
-    }
-    private bool ToWrite()
-    {
-        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.notepadConfirmAnswer && activePage.activePlayerWriteText == "") || writeToggle;
-    }
-    private bool ToReveal()
-    {
-        return (sceneData.activeSceneType == SceneType.Score && playerInputs.notepadConfirmAnswer) || revealToggle;
     }
     private void HandleStationaryLeftHandMove()
     {
@@ -763,155 +905,6 @@ public class Notepad : MonoBehaviour
         active = true;
         EnterState(NotepadState.None);
     }
-    public void ExitNotepad()
-    {
-        Bounds rendBounds = leftHand_renderer.GetBounds();
-        Vector4 uvPivot = leftHand_renderer.sprite.uvPivot;
-        Vector3 spritePivotOffset = new Vector3(rendBounds.extents.x * (1 - uvPivot.x), rendBounds.size.y * (1 - uvPivot.y));
-        leftHandTargetPos = leftHandOffScreenPos + spritePivotOffset;
-        active = false;
-    }
-    public void DisableNotepad()
-    {
-        leftHandTargetPos = leftHandFlipPos;
-        leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[handFlipPage_clip.keyframeStartIndex].sprite);
-    }
-    private void CreateNPCProfiles()
-    {
-        nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
-        List<NPCProfile> totalNPCProfiles = new List<NPCProfile>();
-        List<NPCProfile> bystanderProfiles = new List<NPCProfile>();
-
-        for (int i = 0; i < trip.npcDataArray.Length; i++)
-        {
-            NPCSO npc = trip.npcDataArray[i];
-
-            int behaviourValue = (int)npc.behaviours;
-
-            int[] validFlags = new int[32];
-            int flagCount = 0;
-
-            for (int j = 0; j < 32; j++)
-            {
-                int flag = 1 << j;
-
-                if ((behaviourValue & flag) != 0)
-                {
-                    validFlags[flagCount] = flag;
-                    flagCount++;
-                }
-            }
-            for (int j = 0; j < flagCount; j++)
-            {
-                Behaviours firstBehaviour = (Behaviours)validFlags[j];
-
-                for (int k = j; k < flagCount; k++)
-                {
-                    Behaviours secondBehaviour = (Behaviours)validFlags[k];
-                    Behaviours twoBehaviours = firstBehaviour | secondBehaviour;
-                    string name = GenerateName(npc.gender, npc.ethnicity);
-
-                    NPCProfile npcProfile = new NPCProfile
-                    {
-                        behaviours = twoBehaviours,
-                        npcPrefabIndex = i,
-                    };
-
-                    if (k == j)
-                    {
-                        bystanderProfiles.Add(npcProfile);
-                    }
-                    else
-                    {
-                        totalNPCProfiles.Add(npcProfile);
-                    }
-                }
-            }
-        }
-
-        int totalTraitorsInTrip = 0;
-        for (int i = 0; i < trip.stationsDataArray.Length; i++)
-        {
-            StationSO station = trip.stationsDataArray[i];
-            totalTraitorsInTrip += station.traitorSpawnAmount;
-        }
-        trip.traitorProfiles = new TraitorProfile[totalTraitorsInTrip];
-
-        int stationIndex = 0;
-        int traitorsAtStation = 0;
-
-        for (int i = 0; i < totalTraitorsInTrip; i++)
-        {
-            StationSO station = trip.stationsDataArray[stationIndex];
-
-            int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
-            NPCProfile traitorProfile = totalNPCProfiles[randProfileIndex];
-            traitorProfile.boardingStationIndex = stationIndex;
-
-            int stationsLeft = trip.stationsDataArray.Length - stationIndex;
-            float normSpawnIndex = (float)i / (float)station.bystanderSpawnCount;
-            float gaussianNormSpawnIndex = NormalGaussianValue(normSpawnIndex);
-            traitorProfile.disembarkingStationIndex = stationIndex + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft) + MIN_STATION_STOPS;
-
-            NPCSO traitor = trip.npcDataArray[traitorProfile.npcPrefabIndex];
-
-            trip.traitorProfiles[i] = new TraitorProfile()
-            {
-                npcProfile = traitorProfile,
-                mugShotIndex = traitor.mugShotIndex,
-            };
-            totalNPCProfiles.RemoveAt(randProfileIndex);
-            for (int j = totalNPCProfiles.Count - 1; j >= 0; j--)
-            {
-                if (totalNPCProfiles[j].npcPrefabIndex != traitorProfile.npcPrefabIndex) continue;
-
-                bystanderProfiles.Add(totalNPCProfiles[j]);
-                totalNPCProfiles.RemoveAt(j);
-            }
-
-            traitorsAtStation++;
-
-            if (traitorsAtStation == station.traitorSpawnAmount)
-            {
-                stationIndex++;
-                traitorsAtStation = 0;
-            }
-
-        }
-
-        activePageIndex = 0;
-
-        totalNPCProfiles.AddRange(bystanderProfiles);
-
-        int profileIndex = 0;
-        for (int i = 0; i < trip.stationsDataArray.Length; i++)
-        {
-            StationSO station = trip.stationsDataArray[i];
-
-            station.bystanderProfiles = new NPCProfile[station.bystanderSpawnCount];
-
-            for (int j = 0; j < station.bystanderSpawnCount; j++)
-            {
-                NPCProfile bystanderProfile = totalNPCProfiles[profileIndex];
-
-                bystanderProfile.boardingStationIndex = i;
-
-                int stationsLeft = trip.stationsDataArray.Length - i;
-                float normSpawnIndex = (float)j / (float)station.bystanderSpawnCount;
-                float gaussianNormSpawnIndex = NormalGaussianValue(normSpawnIndex);
-                bystanderProfile.disembarkingStationIndex = i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft);
-
-                station.bystanderProfiles[j] = bystanderProfile;
-
-                profileIndex++;
-                profileIndex %= totalNPCProfiles.Count;
-            }
-        }
-    }
-    private float NormalGaussianValue(float t)
-    {
-        return Mathf.Exp(-(Mathf.Pow(t - 0.5f, 2) / 0.045f)) * 0.5f;
-    }
     private void CreatePages()
     {
         List<Page> pageList = new List<Page>();
@@ -950,6 +943,36 @@ public class Notepad : MonoBehaviour
         lastPageIndex = pages.Length - 1;
 
     }
+    private void SetTab()
+    {
+
+    }
+    private float NormalGaussianValue(float t)
+    {
+        return Mathf.Exp(-(Mathf.Pow(t - 0.5f, 2) / 0.045f)) * 0.5f;
+    }
+    
+    private bool ToFlipUp()
+    {
+        return ((playerInputs.notepadPreviewAnswerAndFlip.y == 1 || willFlipUp) && activePageIndex < lastPageIndex && !writeToggle && !eraseToggle && !revealToggle) || flipToggle == 1;
+    }
+    private bool ToFlipDown()
+    {
+        return ((playerInputs.notepadPreviewAnswerAndFlip.y == -1 || willFlipDown) && !writeToggle && !eraseToggle && !revealToggle) || flipToggle == -1;
+    }
+    private bool ToErase()
+    {
+        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.notepadPreviewAnswerAndFlip.x != 0 && activePage.activePlayerWriteText != "") || eraseToggle;
+    }
+    private bool ToWrite()
+    {
+        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.notepadConfirmAnswer && activePage.activePlayerWriteText == "") || writeToggle;
+    }
+    private bool ToReveal()
+    {
+        return (sceneData.activeSceneType == SceneType.Score && playerInputs.notepadConfirmAnswer) || revealToggle;
+    }
+    
     private string GenerateName(Gender gender, Ethnicity ethnicity)
     {
         string genderString = gender.ToString();
@@ -987,6 +1010,7 @@ public class Notepad : MonoBehaviour
 
         return firstName + " " + lastName;
     }
+    
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

@@ -44,7 +44,7 @@ public class Station : MonoBehaviour
             }
         }
 
-        int maxTraitorSpawnIndex = trip.traitorsSpawned + station.traitorSpawnAmount;
+        int maxTraitorSpawnIndex = trip.traitorsSpawned + station.traitorSpawnCount;
 
         for (int i = trip.traitorsSpawned; i < maxTraitorSpawnIndex; i++)
         {
@@ -63,7 +63,28 @@ public class Station : MonoBehaviour
                 traitor.atlasRenderer.FlipHSimple(true);
             }
         }
-        trip.traitorsSpawned += station.traitorSpawnAmount;
+        trip.traitorsSpawned += station.traitorSpawnCount;
+
+        for (int i = 0; i < station.accompliceProfiles.Length; i++)
+        {
+            NPCProfile accompliceProfile = station.accompliceProfiles[i];
+            float randXPos = Random.Range(activePlatformRenderer.bounds.min.x + SPAWN_BUFFER, activePlatformRenderer.bounds.max.x - SPAWN_BUFFER);
+
+            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, activePlatformRenderer.transform.position.z);
+
+            NPCBrain accomplice = NPCManager.GetNPC(trip.npcDataArray[accompliceProfile.npcPrefabIndex].prefab, spawnPos, activePlatformRenderer.transform);
+
+            accomplice.profile = accompliceProfile;
+            accomplice.role = Role.Accomplice;
+            accomplice.boardingStation = station;
+            accomplice.disembarkingStation = trip.stationsDataArray[accompliceProfile.disembarkingStationIndex];
+
+            if (i % 2 == 0)
+            {
+                accomplice.atlasRenderer.FlipHSimple(true);
+            }
+        }
+
     }
     public void SetFrontParallaxPosition()
     {

@@ -39,7 +39,11 @@ public static class AtlasUI
         Closing,
         Closed,
     }
-
+    public enum PickerFunctionType
+    {
+        TicketCheck,
+        Color,
+    }
     public enum PageType
     { 
         None,

@@ -7,6 +7,9 @@ public static class NPC
 {
     public const float MIN_START_MOVE_TIME = 0.3f;
     public const float MAX_START_MOVE_TIME = 1f;
+
+    public const int MERIDIA_COLOR_BIT = 4;
+    public const int DIAGONAL_TEXTURE_BIT = 3;
     public enum NPCState
     {
         None,
@@ -121,6 +124,56 @@ public static class NPC
         public NPCBrain[] npcs;
         public int npcsCount;
         public float timer;
+    }
+
+    public static void QuickSortNPCByXPos(NPCBrain[] npcs, int left, int right)
+    {
+        if (left < right)
+        {
+            int pivot = PartitionNPC(npcs, left, right);
+
+            if (pivot > 1)
+            {
+                QuickSortNPCByXPos(npcs, left, pivot - 1);
+            }
+
+            int pivotAhead = pivot + 1;
+            if (pivotAhead < right)
+            {
+                QuickSortNPCByXPos(npcs, pivotAhead, right);
+            }
+        }
+    }
+    private static int PartitionNPC(NPCBrain[] npcs, int left, int right)
+    {
+        NPCBrain leftNPC = npcs[left];
+
+        while (true)
+        {
+            while (npcs[left].transform.position.x > leftNPC.transform.position.x)
+            {
+                left++;
+            }
+
+            while (npcs[right].transform.position.x < leftNPC.transform.position.x)
+            {
+                right--;
+            }
+
+            if (left < right)
+            {
+                if (npcs[left] == npcs[right]) return right;
+
+                NPCBrain npcTemp = npcs[left];
+
+                npcs[left] = npcs[right];
+                npcs[right] = npcTemp;
+            }
+            else
+            {
+                return right;
+            }
+        }
     }
 }
 

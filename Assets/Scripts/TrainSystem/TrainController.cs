@@ -61,6 +61,7 @@ public class TrainController : MonoBehaviour
     private void OnEnable()
     {
         gameEventData.OnTicketInspect.RegisterListener(UpdateTicketInspectParams);
+
     }
     private void OnDisable()
     {
@@ -70,8 +71,6 @@ public class TrainController : MonoBehaviour
         trainCTS = null;
 
         stats.curVelocity = Vector2.zero;
-
-        trip.traitorsSpawned = 0;
     }
     private void Start()
     {
@@ -100,6 +99,7 @@ public class TrainController : MonoBehaviour
     }
     public void Init()
     {
+        trip.traitorsSpawned = 0;
 
         stats.curStationIndex = 0;
 
@@ -191,7 +191,7 @@ public class TrainController : MonoBehaviour
 
             case TrainStates.Stopped:
             {
-                stats.targetNPCsToBoard = trip.stationAhead.bystanderProfiles.Length + trip.stationAhead.traitorSpawnAmount;
+                stats.targetNPCsToBoard = trip.stationAhead.bystanderSpawnCount + trip.stationAhead.traitorSpawnCount + trip.stationAhead.accompliceSpawnCount;
                 stats.curVelocity = Vector2.zero;
 
                 if (trip.stationAhead.isFrontOfTrain)

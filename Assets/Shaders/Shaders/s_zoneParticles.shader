@@ -71,7 +71,7 @@ Shader "Custom/s_zoneParticles"
 
                 objPos *= size;
                 objPos *= quadScale;
-                objPos -= pivot;
+                objPos += pivot;
                 objPos += pivotScale;
 
                 float3 worldPos = float3(p.xy + objPos, p.z);

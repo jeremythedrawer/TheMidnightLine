@@ -31,10 +31,9 @@ Shader "Custom/s_atlasNPC"
                 float4 uvSizeAndPos : TEXCOORD0;
                 float4 scaleAndFlip: TEXCOORD1;
                 float4 custom : TEXCOORD2;
-
                 float3 worldPos : TEXCOORD3;
-                
                 float2 uv : TEXCOORD4;
+                uint customBit : TEXCOORD5;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -50,9 +49,12 @@ Shader "Custom/s_atlasNPC"
             SAMPLER(sampler_DiagonalTexture);
 
             float3 _BlackColor;
+            
             float3 _ColorKey0;
             float3 _ColorKey1;
             float3 _ColorKey2;
+
+            float3 _MeridiaColor;
 
             float4 _TrainBoundsMin;
             float4 _TrainBoundsSize;
@@ -82,6 +84,7 @@ Shader "Custom/s_atlasNPC"
                 o.scaleAndFlip = spriteData.scaleAndFlip;
                 o.custom = spriteData.custom;
                 o.worldPos = worldPos;
+                o.customBit = spriteData.customBit;
                 return o;
             }
 
@@ -115,12 +118,14 @@ Shader "Custom/s_atlasNPC"
                 outline *= (1 - outline);
                 outline = ceil(outline);
 
-                uint colorKeyMask = (uint)i.custom.x;
+                int colorKeyMask = i.customBit;
 
-                uint colKeyMask0 = (colorKeyMask & (1 << 0)) != 0;
-                uint colKeyMask1 = (colorKeyMask & (1 << 1)) != 0;
-                uint colKeyMask2 = (colorKeyMask & (1 << 2)) != 0;
-                uint diagonalMask = (colorKeyMask & (1 << 3)) != 0;
+                int colKeyMask0 = (colorKeyMask & (1 << 0)) != 0;
+                int colKeyMask1 = (colorKeyMask & (1 << 1)) != 0;
+                int colKeyMask2 = (colorKeyMask & (1 << 2)) != 0;
+                int diagonalMask = (colorKeyMask & (1 << 3)) != 0;
+                int meridiaColorMask = (colorKeyMask & (1 << 4)) != 0;
+
 
                 half4 diagonalTex = SAMPLE_TEXTURE2D(_DiagonalTexture, sampler_DiagonalTexture, diagonalTexUV);
 
@@ -128,6 +133,7 @@ Shader "Custom/s_atlasNPC"
                 half3 colKey1 = colKeyMask1 * _ColorKey1;
                 half3 colKey2 = colKeyMask2 * _ColorKey2;
                 half3 diagonal = diagonalMask * diagonalTex.rgb;
+                half3 meridiaColor = meridiaColorMask * _MeridiaColor;
 
                 half mouseColor = i.custom.y;
                 half ticketCheckMask = i.custom.z;
@@ -135,10 +141,11 @@ Shader "Custom/s_atlasNPC"
 
                 outline = lerp(outline, 1 - outline, ticketCheckHover);
 
-                half3 finalColor = (tex.rgb * ticketCheckMask) + diagonal + colKey0 + colKey1 + colKey2 + _BlackColor + (outline * (1 - ticketCheckMask));
+                half3 finalColor = (tex.rgb * ticketCheckMask) + (outline * (1 - ticketCheckMask));
+                finalColor += diagonal + colKey0 + colKey1 + colKey2 + _BlackColor + meridiaColor;
 
                 float bayerColMask = BayerX8(mouseColor * 0.5, i.positionHCS.y);
-                half3 bayerColor = lerp(finalColor, 1 - ticketCheckHover, bayerColMask);
+                finalColor += bayerColMask;
                 
                 float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;
                 half4 carriageSDF = SAMPLE_TEXTURE2D(_CarriageBoundsTexture, sampler_CarriageBoundsTexture, worldToTrain);
@@ -150,7 +157,7 @@ Shader "Custom/s_atlasNPC"
                 float alpha = max(bayer, outside) * tex.a;
                 clip(alpha - 0.001);
 
-                return half4 (bayerColor, 1);
+                return half4 (finalColor, 1);
             }
             ENDHLSL
         }

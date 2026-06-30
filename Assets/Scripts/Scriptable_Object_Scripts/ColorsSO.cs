@@ -10,6 +10,7 @@ public class ColorsSO : ScriptableObject
 
     public Color blackColor;
     public Color whiteColor;
+    public Color meridiaColor;
 
     public Color[] selectableClueColors;
 

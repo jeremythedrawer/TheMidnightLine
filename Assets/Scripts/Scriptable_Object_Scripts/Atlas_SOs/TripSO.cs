@@ -22,7 +22,7 @@ public class TripSO : ScriptableObject
     public Color[] selectedClueMarkerColors;
     
     public TraitorProfile[] traitorProfiles;
-    
+
     public int ticketsCheckedSinceLastStation;
     public int traitorsSpawned;
     public int unlockedClueMarkerCount;

@@ -8,7 +8,8 @@ public class StationSO : ScriptableObject
     public int ticketsToCheckBeforeSpawn = 0;
 
     public int bystanderSpawnCount = 10;
-    public int traitorSpawnAmount = 2;
+    public int traitorSpawnCount = 2;
+    public int accompliceSpawnCount = 0;
 
     public bool isFrontOfTrain;
     [Header("Generated")]
@@ -16,4 +17,5 @@ public class StationSO : ScriptableObject
     public int stationIndex;
     public float exitLocalPosX;
     public NPCProfile[] bystanderProfiles;
+    public NPCProfile[] accompliceProfiles;
 }

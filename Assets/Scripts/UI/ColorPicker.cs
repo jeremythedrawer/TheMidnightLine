@@ -66,10 +66,13 @@ public class ColorPicker : MonoBehaviour
         {
             TurnOff();
         }
-        Shader.SetGlobalColor("_BlackColor", colorsData.blackColor);
-        Shader.SetGlobalColor("_WhiteColor", colorsData.whiteColor);
+        Shader.SetGlobalColor("_BlackColor", colorsData.blackColor.linear);
+        Shader.SetGlobalColor("_WhiteColor", colorsData.whiteColor.linear);
+        Shader.SetGlobalColor("_MeridiaColor", colorsData.meridiaColor.linear);
+
         Shader.SetGlobalFloat("_DayNight", colorsData.dayNight);
         Shader.SetGlobalFloat("_DayNightFactor", colorsData.dayNightFactor);
+
         Shader.SetGlobalTexture("_DiagonalTexture", colorsData.diagonalTexture);
     }
     private void Update()
@@ -79,8 +82,10 @@ public class ColorPicker : MonoBehaviour
         {
             SetSelectableColors();
         }
-        Shader.SetGlobalColor("_BlackColor", colorsData.blackColor);
-        Shader.SetGlobalColor("_WhiteColor", colorsData.whiteColor);
+        Shader.SetGlobalColor("_BlackColor", colorsData.blackColor.linear);
+        Shader.SetGlobalColor("_WhiteColor", colorsData.whiteColor.linear);
+        Shader.SetGlobalColor("_MeridiaColor", colorsData.meridiaColor.linear);
+
         Shader.SetGlobalFloat("_DayNightFactor", colorsData.dayNightFactor);
 #endif
         Shader.SetGlobalFloat("_DayNight", colorsData.dayNight);
@@ -280,16 +285,18 @@ public class ColorPicker : MonoBehaviour
                 if (i == activeColorAmount - 1)
                 {
                     colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
-                    colorRend.custom.x = -1;
+                    colorRend.customBit = 1;
                     continue;
                 }
                 if (i <= trip.unlockedClueMarkerCount)
                 {
                     colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                    colorRend.customBit = 0;
                 }
                 else
                 {
                     colorRend.UpdateSpriteInputsByIndex(LOCK_SPRITE_INDEX);
+                    colorRend.customBit = 0;
                 }
             }
         }
@@ -330,7 +337,7 @@ public class ColorPicker : MonoBehaviour
     }
     public void SetNPCColor(int index)
     {
-        selectedRenderer.custom.x = 1 << (index - 1);
+        selectedRenderer.customBit = 1 << index;
     }
     public void Open(AtlasRenderer rend, bool openAllColors)
     {

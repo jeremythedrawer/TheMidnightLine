@@ -5,7 +5,7 @@ using UnityEngine;
 using static Atlas;
 using static AtlasUI;
 using static Spy;
-
+using static NPC;
 public class SpyBrain : MonoBehaviour
 {
     public static Carriage CurCarriage;
@@ -369,7 +369,7 @@ public class SpyBrain : MonoBehaviour
                     ChosenNPCToTicketCheck = possibleNPCsToTicketCheck[0];
                 }
                 ChosenNPCToTicketCheck.ticketIsBeingChecked = true;
-                ChosenNPCToTicketCheck.Unveil();
+                ChosenNPCToTicketCheck.ToggleUnveil(true);
 
                 curClip = atlas.clipDict[(int)SpyMotion.Ticket];
                 atlasRenderer.PlayClipOneShot(curClip);
@@ -393,7 +393,7 @@ public class SpyBrain : MonoBehaviour
                     possibleNPCsToTicketCheck[i].ticketIsBeingChecked = true;
                 }
 
-                npcPicker.Open(possibleNPCsToTicketCheck, curNPCTicketCheckHoverCount);
+                npcPicker.Open(possibleNPCsToTicketCheck, curNPCTicketCheckHoverCount, PickerFunctionType.TicketCheck);
 
             }
             break;
@@ -619,55 +619,6 @@ public class SpyBrain : MonoBehaviour
     public static void ToggleNotepad(bool toggle)
     {
         CheckingNotepad = toggle;
-    }
-    public static void QuickSortNPCByXPos(NPCBrain[] npcs, int left, int right)
-    {
-        if (left < right)
-        {
-            int pivot = PartitionNPC(npcs, left, right);
-
-            if (pivot > 1)
-            {
-                QuickSortNPCByXPos(npcs, left, pivot - 1);
-            }
-
-            int pivotAhead = pivot + 1;
-            if (pivotAhead < right)
-            {
-                QuickSortNPCByXPos(npcs, pivotAhead, right);
-            }
-        }
-    }
-    private static int PartitionNPC(NPCBrain[] npcs, int left, int right)
-    {
-        NPCBrain leftNPC = npcs[left];
-
-        while(true)
-        {
-            while (npcs[left].transform.position.x > leftNPC.transform.position.x)
-            {
-                left++;
-            }
-
-            while (npcs[right].transform.position.x < leftNPC.transform.position.x)
-            {
-                right--;
-            }
-
-            if (left < right)
-            {
-                if (npcs[left] == npcs[right]) return right;
-
-                NPCBrain npcTemp = npcs[left];
-
-                npcs[left] = npcs[right];
-                npcs[right] = npcTemp;
-            }
-            else
-            {
-                return right;
-            }
-        }
     }
     private void OnDrawGizmos()
     {

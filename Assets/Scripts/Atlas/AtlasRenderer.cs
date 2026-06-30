@@ -41,6 +41,8 @@ public class AtlasRenderer : MonoBehaviour
     public Vector4 uvSizeAndPosition;
     public Vector4 scaleAndFlip;
     public Vector4 custom;
+    public int customBit;
+
 
     public Vector3 boundsOffset;
 

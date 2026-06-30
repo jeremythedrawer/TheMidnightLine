@@ -48,7 +48,7 @@ public class AtlasTextRenderer : MonoBehaviour
     public Vector3 boundsOffset;
     
     public bool hasText;
-
+    public bool erasingText;
     [Header("Border Generated")]
     public Vector3 borderLocalPos;
 
@@ -417,6 +417,7 @@ public class AtlasTextRenderer : MonoBehaviour
     {
         ctsWrite?.Cancel();
         ctsWrite = new CancellationTokenSource();
+        erasingText = true;
         ErasingText(writeLetterTime).Forget();
     }
     private async UniTask ErasingText(float writeLetterTime)
@@ -430,8 +431,12 @@ public class AtlasTextRenderer : MonoBehaviour
                 curStationString = curStationString[..^1];
                 SetText(curStationString);
             }
+            erasingText = false;
         }
-        catch (OperationCanceledException) { }
+        catch (OperationCanceledException) 
+        { 
+            erasingText = false;
+        }
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()

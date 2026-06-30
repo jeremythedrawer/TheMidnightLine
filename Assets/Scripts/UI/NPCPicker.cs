@@ -4,8 +4,10 @@ using System.Threading;
 using UnityEngine;
 
 using static AtlasUI;
+using static NPC;
 public class NPCPicker : MonoBehaviour
 {
+
     public const int GRID_X_COUNT = 8;
     public const int GRID_Y_COUNT = 1;
 
@@ -34,8 +36,9 @@ public class NPCPicker : MonoBehaviour
     public Vector2 npcIconRendererWorldSize;
     public Vector2 sliceWorldSize;
 
-    public PickerState curState;
-    public PickerState enteredState;
+    public PickerState curPickerState;
+    public PickerState enteredPickerState;
+    public PickerFunctionType functionType;
 
     public int curGridColCount;
 
@@ -50,14 +53,14 @@ public class NPCPicker : MonoBehaviour
 
     private void Awake()
     {
+    }
+    private void Start()
+    {
         if (Application.isPlaying)
         {
             SceneController.SetNPCPicker(this);
         }
-    }
-    private void Start()
-    {
-        curState = PickerState.Closed;
+        curPickerState = PickerState.Closed;
         SetOpenPosAndSize();
     }
 
@@ -68,15 +71,15 @@ public class NPCPicker : MonoBehaviour
 
     private void SetState(PickerState newState)
     {
-        if (curState == newState) return;
+        if (curPickerState == newState) return;
         ExitState();
-        curState = newState;
-        enteredState = newState;
+        curPickerState = newState;
+        enteredPickerState = newState;
         EnterState();
     }
     private void UpdateState()
     {
-        switch (curState)
+        switch (curPickerState)
         {
             case PickerState.Opening:
             case PickerState.Opened:
@@ -96,9 +99,31 @@ public class NPCPicker : MonoBehaviour
                             npcIconRend.custom.w = 1;
                         }
 
-                        if (playerInputs.mouseLeftUp)
+                        if (playerInputs.mouseLeftUp && canClose)
                         {
-                            SpyBrain.ChooseNPCTicketToCheck(possibleNPCs[i]);
+                            if (functionType == PickerFunctionType.TicketCheck)
+                            {
+                                SpyBrain.ChooseNPCTicketToCheck(possibleNPCs[i]);
+                            }
+                            else if (functionType == PickerFunctionType.Color)
+                            {
+                                NPCBrain selectedNPC = possibleNPCs[i];
+                                if (trip.unlockedClueMarkerCount == 0)
+                                {
+                                    if ((selectedNPC.atlasRenderer.customBit & (1 << DIAGONAL_TEXTURE_BIT)) == 0)
+                                    {
+                                        selectedNPC.atlasRenderer.customBit |= 1 << DIAGONAL_TEXTURE_BIT;
+                                    }
+                                    else
+                                    {
+                                        selectedNPC.atlasRenderer.customBit &= ~(1 << DIAGONAL_TEXTURE_BIT);
+                                    }
+                                }
+                                else
+                                {
+                                    SceneController.GetColorPicker().Open(selectedNPC.atlasRenderer, openAllColors: false);
+                                }
+                            }
                             Close();
                         }
 
@@ -117,14 +142,17 @@ public class NPCPicker : MonoBehaviour
                 {
                     Close();
                 }
-                canClose = true;
+                if (playerInputs.mouseLeftUp)
+                {
+                    canClose = true;
+                }
             }
             break;
         }
     }
     private void EnterState()
     {
-        switch (curState)
+        switch (curPickerState)
         {
             case PickerState.Opening:
             {
@@ -207,10 +235,10 @@ public class NPCPicker : MonoBehaviour
         possibleNPCs = npcs;
         curGridColCount = npcCount;
 
-        for (int i = 0; i < npcs.Length; i++)
+        for (int i = 0; i < possibleNPCs.Length; i++)
         {
             AtlasRenderer iconRend = npcIconRenderers[i];
-            NPCBrain npcBrain = npcs[i];
+            NPCBrain npcBrain = possibleNPCs[i];
 
             if (npcBrain == null) break;
 
@@ -218,8 +246,8 @@ public class NPCPicker : MonoBehaviour
             {
                 iconRend.enabled = true;
                 iconRend.UpdateSpriteInputsByIndex(npcBrain.npc.mugShotIndex);
-                int npcColorIndex = Convert.ToInt32($"{npcBrain.atlasRenderer.custom.x}", 10);
-
+                int npcColorIndex = Convert.ToInt32($"{npcBrain.atlasRenderer.customBit}", 10);
+                Debug.Log(npcColorIndex);
                 if (npcColorIndex < trip.selectedClueMarkerColors.Length)
                 {
                     Color iconColor = trip.selectedClueMarkerColors[npcColorIndex];
@@ -229,13 +257,15 @@ public class NPCPicker : MonoBehaviour
                 }
                 else
                 {
-                    iconRend.custom.x = -1;
+                    iconRend.customBit = 1;
+                    iconRend.custom.x = 0;
                     iconRend.custom.y = 0;
                     iconRend.custom.z = 0;
                 }
             }
             else
             {
+                iconRend.customBit = 0;
                 iconRend.enabled = false;
             }
         }
@@ -262,12 +292,14 @@ public class NPCPicker : MonoBehaviour
         paletteRenderer.height = tileHeight;
     }
 
-    public void Open(NPCBrain[] npcs, int npcCount)
+    public void Open(NPCBrain[] npcs, int npcCount, PickerFunctionType funcType)
     {
-        if (curState == PickerState.Closed)
+        if (curPickerState == PickerState.Closed)
         {
             ctsOpen?.Cancel();
             ctsOpen = new CancellationTokenSource();
+
+            functionType = funcType;
 
             TurnOn(npcs, npcCount);
             Opening().Forget();
@@ -284,7 +316,7 @@ public class NPCPicker : MonoBehaviour
     }
     public void Close()
     {
-        if (curState == PickerState.Opened || curState == PickerState.Opening)
+        if (curPickerState == PickerState.Opened || curPickerState == PickerState.Opening)
         {
             ctsOpen?.Cancel();
             ctsOpen = new CancellationTokenSource();

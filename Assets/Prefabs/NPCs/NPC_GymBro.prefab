@@ -12,7 +12,6 @@ GameObject:
   - component: {fileID: 8099043674557259294}
   - component: {fileID: 118950378541814445}
   - component: {fileID: 7958201747531856237}
-  - component: {fileID: 8312574823374561200}
   - component: {fileID: 94976023300698573}
   m_Layer: 14
   m_Name: NPC_GymBro
@@ -206,55 +205,6 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.085235596, y: 0.78059363}
   m_EdgeRadius: 0
---- !u!114 &8312574823374561200
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439452552751748441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 1
-  batchKey:
-    texture: {fileID: 2800000, guid: e933d0910ec269e44bf94764a8490b8e, type: 3}
-    material: {fileID: 2100000, guid: a33a67236ad4eb248b44964a793ad770, type: 2}
-  atlas: {fileID: 11400000, guid: 4a27dcc4048457048a9afbb90208879c, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 11
-  flipX: 0
-  flipY: 0
-  width: 1
-  height: 1
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.048828125, y: 0.14257812, z: 0.5703125, w: 0.8574219}
-    uvPivot: {x: 0.58, y: 0}
-    worldSize: {x: 0.2777778, y: 0.8111111, z: 1}
-    index: 11
-  bounds:
-    m_Center: {x: 306.97778, y: 2.0965555, z: 0}
-    m_Extent: {x: 0.1388889, y: 0.40555555, z: 0.1}
-  worldPivotAndSize: {x: -0.16111112, y: -0, z: 0.2777778, w: 0.8111111}
-  uvSizeAndPosition: {x: 0.048828125, y: 0.14257812, z: 0.5703125, w: 0.8574219}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 1, w: 0}
-  boundsOffset: {x: -0.02222222, y: 0.40555555, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  curMotionIndex: 0
-  prevSpriteIndexFlipH: 11
-  prevSpriteIndexFlipV: 11
-  isAnimating: 0
-  quadCount: 0
 --- !u!114 &94976023300698573
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -267,7 +217,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5aba9d0984809d4e8382d8abe5c0c9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  atlasRenderer: {fileID: 8312574823374561200}
+  atlasRenderer: {fileID: 0}
   rigidBody: {fileID: 118950378541814445}
   boxCollider: {fileID: 7958201747531856237}
   npc: {fileID: 11400000, guid: ed55ab0ee584afd459355277d983c98b, type: 2}

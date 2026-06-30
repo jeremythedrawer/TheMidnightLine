@@ -82,17 +82,17 @@ public class NPCBrain : MonoBehaviour
     public int boardTrainQueueIndex;
     public int disembarkTrainQueueIndex;
 
-    public bool isClicked;
-
     private void OnEnable()
     {
         gameEventData.OnStationArrival.RegisterListener(PrepareToBoardTrain);
         gameEventData.OnStationSpawn.RegisterListener(PrepareToDisembarkTrain);
+        CursorController.OnMouseDisabled += DisableHover;
     }
     private void OnDisable()
     {
         gameEventData.OnStationSpawn.UnregisterListener(PrepareToDisembarkTrain);
         gameEventData.OnStationArrival.UnregisterListener(PrepareToBoardTrain);
+        CursorController.OnMouseDisabled -= DisableHover;
     }
     private void Start()
     {
@@ -106,7 +106,15 @@ public class NPCBrain : MonoBehaviour
         smokerRoomIndex = -1; //NOTE: -1 is used as a condition to find a smokers room in the smoker state
         targetAlpha = 1;
 
-        curBehaviour = GetRandomBehaviour();
+
+        if (role == Role.Accomplice)
+        {
+            atlasRenderer.customBit = 1 << MERIDIA_COLOR_BIT;
+        }
+        else
+        {
+            curBehaviour = GetRandomBehaviour();
+        }
     }
     private void Update()
     {
@@ -118,7 +126,6 @@ public class NPCBrain : MonoBehaviour
     {
         FixedUpdateStates();
     }
-
     public void BoardTrain()
     {
         transform.SetParent(curCarriage.transform, true);
@@ -152,32 +159,23 @@ public class NPCBrain : MonoBehaviour
         if (disembarking) return;
         SetPath(NPCPath.ToStandInTrain);
     }
-    public void ToggleHover(AtlasTextRenderer cursorTag, bool toggle)
+    private void DisableHover()
     {
+        atlasRenderer.custom.y = 0;
+    }
+    public void ToggleHover(bool toggle)
+    {
+
         atlasRenderer.custom.y = toggle ? 1 : 0;
-        if (ticketHasBeenChecked)
-        {
-            if (toggle)
-            {
-                cursorTag.WriteText(trip.stationsDataArray[profile.disembarkingStationIndex].name, writeLetterTime: 0.05f);
-                cursorTag.transform.SetParent(transform, worldPositionStays: true);
-                cursorTag.transform.position = new Vector3(atlasRenderer.bounds.center.x, atlasRenderer.bounds.max.y + cursorTag.background_renderer.bounds.size.y, cursorTag.transform.position.z);
-            }
-            else
-            {
-                cursorTag.EraseText(writeLetterTime: 0.05f);
-                cursorTag.transform.SetParent(null, worldPositionStays: true);
-            }
-        }
     }
     public void ToggleTicketCheckHover(bool toggle)
     {
         atlasRenderer.custom.w = toggle ? 1 : 0; 
     }
-    public void Unveil()
+    public void ToggleUnveil(bool toggle)
     {
-        atlasRenderer.custom.z = 1;
-        ticketHasBeenChecked = true;
+        atlasRenderer.custom.z = toggle ? 1 : 0;
+        ticketHasBeenChecked = toggle;
     }
     private void SetState(NPCState newState)
     {
@@ -271,11 +269,16 @@ public class NPCBrain : MonoBehaviour
                 UpdateIdlePath();
 
                 atlasRenderer.PlayClip(ref curClip);
-                behaviourClock += Time.deltaTime;
-                if (behaviourClock > stateDuration)
+
+                if (role != Role.Accomplice)
                 {
-                    PickNextBehaviour();
+                    behaviourClock += Time.deltaTime;
+                    if (behaviourClock > stateDuration)
+                    {
+                        PickNextBehaviour();
+                    }
                 }
+
             }
             break;
             case NPCState.Walking:
@@ -583,6 +586,8 @@ public class NPCBrain : MonoBehaviour
             {
                 if (atlasRenderer.bounds.max.x < spawnData.bounds.min.x)
                 {
+                    disembarking = false;
+                    ToggleUnveil(false);
                     NPCManager.ReturnNPC(trip.npcDataArray[profile.npcPrefabIndex].prefab , this);
                 }
             }
@@ -702,6 +707,10 @@ public class NPCBrain : MonoBehaviour
         if (!onTrain || trip.stationAhead.stationIndex != profile.disembarkingStationIndex) return;
         disembarking = true;
         if (queuedForSeat) curCarriage.RemoveFromSeatQueue(this);
+        if (seatPosIndex != int.MaxValue && curCarriage.seatData.filled[seatPosIndex])
+        {
+            curCarriage.seatData.filled[seatPosIndex] = false;
+        }
         SetPath(NPCPath.ToSlideDoor);
     }
     private void QueueForSeat()
@@ -776,29 +785,35 @@ public class NPCBrain : MonoBehaviour
     {
         if (!Application.isPlaying) return;
 
-        if (curState == NPCState.Walking)
-        {
-            Gizmos.color = Color.magenta;
-            Gizmos.DrawLine(boxCollider.bounds.center, new Vector3(targetXPos, boxCollider.bounds.center.y, transform.position.z));
-        }
-
         Vector3 typeLabel = transform.position + atlasRenderer.sprite.worldSize + Vector3.up * 0.2f;
         Vector3 stateLabel = typeLabel + Vector3.up;
 
         GUIStyle typeStyle = new GUIStyle();
-        typeStyle.normal.textColor = role == Role.Traitor ? Color.red : Color.green;
+
+        switch(role)
+        {
+            case Role.Accomplice:
+            {
+                typeStyle.normal.textColor = Color.yellow;
+            }
+            break;
+
+            case Role.Traitor:
+            {
+                typeStyle.normal.textColor = Color.red;
+            }
+            break;
+
+            case Role.Bystander:
+            {
+                typeStyle.normal.textColor = Color.green;
+            }
+            break;
+        }
         typeStyle.alignment = TextAnchor.UpperCenter;
         typeStyle.fontSize = 10;
 
-        GUIStyle stateStyle = new GUIStyle();
-        stateStyle.normal.textColor = role == Role.Traitor ? Color.red : Color.green;
-        stateStyle.alignment = TextAnchor.UpperCenter;
-        stateStyle.fontSize = 10;
-
-        // Draw the label in Scene view
         Handles.Label(typeLabel, role.ToString(), typeStyle);
-        Handles.Label(stateLabel, curClip.ToString(), stateStyle);
-
     }
 #endif
 }
