@@ -25,6 +25,8 @@ public class TicketIcon : MonoBehaviour
     }
     public void Appear()
     {
+        mainTicket.custom.x = 0;
+        stubTicket.custom.x = 0;
         Appearing().Forget();
     }
     public void Disappear()

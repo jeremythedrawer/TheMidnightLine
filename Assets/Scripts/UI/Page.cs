@@ -111,7 +111,7 @@ public class Page : MonoBehaviour
                         {
                             ColorPicker colorPicker = SceneController.GetColorPicker();
                             colorPicker.Open(colorKeyRend, openAllColors: true);
-
+                            SwitchActivePLayerWriteTextRenderer(i);
                             trip.selectedClueMarkerIndex = activePlayerWriteRowIndex;
 
                         }
@@ -425,14 +425,16 @@ public class Page : MonoBehaviour
         AtlasRenderer coveredMugShot = playerWriteRenderers[0];
         coveredMugShot.custom.x = Mathf.Clamp01(t);
     }
-    public void SwitchActivePLayerWriteTextRenderer(int numpad)
+    public void SwitchActivePLayerWriteTextRenderer(int index)
     {
-        if (numpad > playerWriteTextRenderers.Length) return;
+        if (index < playerWriteTextRenderers.Length)
+        {
+            activePlayerWriteRowIndex = index;
+            activePlayerWriteTextRenderer = playerWriteTextRenderers[activePlayerWriteRowIndex];
+            previewPlayerWriteText = activePlayerWriteTextRenderer.text;
+            activePlayerWriteText = playerWriteTexts[activePlayerWriteRowIndex];
+        }
 
-        activePlayerWriteRowIndex = numpad - 1;
-        activePlayerWriteTextRenderer = playerWriteTextRenderers[activePlayerWriteRowIndex];
-        previewPlayerWriteText = activePlayerWriteTextRenderer.text;
-        activePlayerWriteText = playerWriteTexts[activePlayerWriteRowIndex];
     }
     public Bounds GetWritingBounds()
     {

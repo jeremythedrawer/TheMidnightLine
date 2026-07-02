@@ -57,7 +57,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.22222222, y: 0.22222222, z: 1}
     index: 0
@@ -65,9 +65,10 @@ MonoBehaviour:
     m_Center: {x: -0.581, y: 0.276, z: -0.1}
     m_Extent: {x: 0.11111111, y: 0.11111111, z: 0.1}
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
-  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 1}
+  customBit: 0
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
@@ -174,7 +175,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.22222222, y: 0.22222222, z: 1}
     index: 0
@@ -182,9 +183,10 @@ MonoBehaviour:
     m_Center: {x: -1.657, y: 0.276, z: -0.1}
     m_Extent: {x: 0.11111111, y: 0.11111111, z: 0.1}
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
-  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 1}
+  customBit: 0
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
@@ -311,6 +313,7 @@ MonoBehaviour:
   uvSizeAndPosition: {x: 0.94140625, y: 0.234375, z: 0.01171875, w: 0.54296875}
   scaleAndFlip: {x: 6.6807175, y: 0.87504154, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
   boundsOffset: {x: -1.1883359, y: 0.23576954, z: 0.1}
   worldPivotsAndSizes:
   - {x: -2.3766718, y: -0, z: 0.06666667, w: 0.15}
@@ -372,7 +375,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a0fc4744bd056204c94333beaf9ad8a6, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::NPCPicker
-  npcIconRenderers:
+  iconRenderers:
   - {fileID: 6930496782516411602}
   - {fileID: 42514526293997219}
   - {fileID: 328626354481165703}
@@ -383,18 +386,19 @@ MonoBehaviour:
   - {fileID: 1291583114916238326}
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
+  colorData: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
   paletteRenderer: {fileID: 1849436935815050231}
   possibleNPCs: []
   selectedRenderer: {fileID: 0}
-  prevHoveredNPCIconRenderer: {fileID: 0}
-  openNPCIconRendererPositions: []
+  openIconRendererPositions: []
   curWorldPos: {x: 0, y: 0, z: 0}
-  closeColorRendererPosition: {x: 0, y: 0, z: 0}
+  closeIconRendererPosition: {x: 0, y: 0, z: 0}
   paletteCenterSliceWorldSize: {x: 0, y: 0, z: 0}
-  npcIconRendererWorldSize: {x: 0, y: 0}
+  iconRendererWorldSize: {x: 0, y: 0}
   sliceWorldSize: {x: 0, y: 0}
-  curState: 0
-  enteredState: 0
+  curPickerState: 0
+  enteredPickerState: 0
+  functionType: 0
   curGridColCount: 0
   openClock: 0
   openSpriteWidth: 0
@@ -460,7 +464,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.22222222, y: 0.22222222, z: 1}
     index: 0
@@ -468,9 +472,10 @@ MonoBehaviour:
     m_Center: {x: -0.847, y: 0.276, z: -0.1}
     m_Extent: {x: 0.11111111, y: 0.11111111, z: 0.1}
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
-  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 1}
+  customBit: 0
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
@@ -577,7 +582,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.22222222, y: 0.22222222, z: 1}
     index: 0
@@ -585,9 +590,10 @@ MonoBehaviour:
     m_Center: {x: -1.923, y: 0.276, z: -0.1}
     m_Extent: {x: 0.11111111, y: 0.11111111, z: 0.1}
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
-  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 1}
+  customBit: 0
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
@@ -694,7 +700,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.22222222, y: 0.22222222, z: 1}
     index: 0
@@ -702,9 +708,10 @@ MonoBehaviour:
     m_Center: {x: -0.304, y: 0.276, z: -0.1}
     m_Extent: {x: 0.11111111, y: 0.11111111, z: 0.1}
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
-  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 1}
+  customBit: 0
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
@@ -811,7 +818,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.22222222, y: 0.22222222, z: 1}
     index: 0
@@ -819,9 +826,10 @@ MonoBehaviour:
     m_Center: {x: -2.1999998, y: 0.276, z: -0.1}
     m_Extent: {x: 0.11111111, y: 0.11111111, z: 0.1}
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
-  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 1}
+  customBit: 0
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
@@ -928,7 +936,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.22222222, y: 0.22222222, z: 1}
     index: 0
@@ -936,9 +944,10 @@ MonoBehaviour:
     m_Center: {x: -1.38, y: 0.276, z: -0.1}
     m_Extent: {x: 0.11111111, y: 0.11111111, z: 0.1}
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
-  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 1}
+  customBit: 0
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}
@@ -1045,7 +1054,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+    uvSizeAndPos: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
     uvPivot: {x: 0.5, y: 0.5}
     worldSize: {x: 0.22222222, y: 0.22222222, z: 1}
     index: 0
@@ -1053,9 +1062,10 @@ MonoBehaviour:
     m_Center: {x: -1.124, y: 0.276, z: -0.1}
     m_Extent: {x: 0.11111111, y: 0.11111111, z: 0.1}
   worldPivotAndSize: {x: -0.11111111, y: -0.11111111, z: 0.22222222, w: 0.22222222}
-  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0029296875, w: 0.95703125}
+  uvSizeAndPosition: {x: 0.0390625, y: 0.0390625, z: 0.0009765625, w: 0.95703125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 1}
+  customBit: 0
   boundsOffset: {x: 0, y: 0, z: 0.1}
   worldPivotsAndSizes:
   - {x: 0, y: 0, z: 0.08888889, w: 0.1}

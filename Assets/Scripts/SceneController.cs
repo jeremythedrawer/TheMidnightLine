@@ -9,6 +9,7 @@ public class SceneController : MonoBehaviour
     public static Notepad Notepad;
     public static ColorPicker ColorPicker;
     public static NPCPicker NPCPicker;
+    public static UnlockPicker UnlockPicker;
     public static SpyBrain Spy;
 
     public static InputManager InputManager;
@@ -38,7 +39,10 @@ public class SceneController : MonoBehaviour
     {
         Spy = spy;
     }
-
+    public static void SetUnlockPicker(UnlockPicker unlockPicker)
+    {
+        UnlockPicker = unlockPicker;
+    }
     public static void KeepInputManager(InputManager inputManager)
     {
         inputManager.transform.SetParent(Transform, true);
@@ -62,7 +66,10 @@ public class SceneController : MonoBehaviour
     {
         return InputManager;
     }
-
+    public static UnlockPicker GetUnlockPicker()
+    {
+        return UnlockPicker;
+    }
     public static SpyBrain GetSpy()
     {
         return Spy;

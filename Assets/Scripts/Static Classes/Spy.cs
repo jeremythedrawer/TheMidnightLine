@@ -10,6 +10,7 @@ public static class Spy
         Walk,
         PickingNPCTicketCheck,
         TicketCheck,
+        TalkingToAccomplice,
         Notepad,
         CarriageMap,
     }

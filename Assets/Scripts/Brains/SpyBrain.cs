@@ -10,7 +10,7 @@ public class SpyBrain : MonoBehaviour
 {
     public static Carriage CurCarriage;
     
-    public static NPCBrain ChosenNPCToTicketCheck;
+    public static NPCBrain ChosenNPC;
 
     public static event Action OnTicketCheckHoverEnabled;
     public static event Action OnTicketCheckHoverDisabled;
@@ -120,9 +120,21 @@ public class SpyBrain : MonoBehaviour
     }
     private void ChooseState()
     {
-        if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount == 1) || ChosenNPCToTicketCheck != null)
+        if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount == 1) || ChosenNPC != null)
         {
-            SetState(SpyState.TicketCheck);
+            if (ChosenNPC == null)
+            {
+                ChosenNPC = possibleNPCsToTicketCheck[0];
+            }
+
+            if (ChosenNPC.role == Role.Accomplice)
+            {
+                SetState(SpyState.TalkingToAccomplice);
+            }
+            else
+            {
+                SetState(SpyState.TicketCheck);
+            }
         }
         else if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount > 1) || PickingNPCToTicketCheck)
         {
@@ -170,23 +182,34 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.TicketCheck:
             {
-                if (!playerInputs.ticketCheckKeyDown) canExitState = true;
-
-                if((playerInputs.ticketCheckKeyDown && canExitState) || playerInputs.notepadPreviewAnswerAndFlip.x != 0)
+                if((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveDown)  && canExitState)
                 {
-                    ChosenNPCToTicketCheck.ticketIsBeingChecked = false;
-                    ChosenNPCToTicketCheck = null;
+                    ChosenNPC.ToggleUnveil(true);
+                    FinishWithChosenNPC();
                 }
+                if (!playerInputs.ticketCheckKeyHold && !playerInputs.mouseLeftHold && playerInputs.move == 0) canExitState = true;
             }
             break;
+            case SpyState.TalkingToAccomplice:
+            {
+                if ((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveDown) && canExitState)
+                {
+                    SceneController.GetUnlockPicker().Close();
+                    FinishWithChosenNPC();
+                }
+
+                if (!playerInputs.ticketCheckKeyHold && !playerInputs.mouseLeftHold && playerInputs.move == 0) canExitState = true;
+            }
+            break;
+
             case SpyState.PickingNPCTicketCheck:
             {
-                if (playerInputs.ticketCheckKeyUp) canExitState = true;
-
-                if (((playerInputs.ticketCheckKeyDown || playerInputs.mouseLeftUp) && canExitState) || playerInputs.notepadPreviewAnswerAndFlip.x != 0)
+                if ((playerInputs.mouseLeftUp || playerInputs.move != 0) && canExitState)
                 {
                     PickingNPCToTicketCheck = false;
                 }
+
+                if (playerInputs.mouseLeftUp) canExitState = true;
             }
             break;
 
@@ -329,7 +352,7 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.TicketCheck:
             {
-                CheckIfTicketCheckHover();
+
             }
             break;
             case SpyState.PickingNPCTicketCheck:
@@ -364,24 +387,33 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.TicketCheck:
             {
-                if (ChosenNPCToTicketCheck == null)
-                {
-                    ChosenNPCToTicketCheck = possibleNPCsToTicketCheck[0];
-                }
-                ChosenNPCToTicketCheck.ticketIsBeingChecked = true;
-                ChosenNPCToTicketCheck.ToggleUnveil(true);
+                ChosenNPC.talkingToSpy = true;
 
                 curClip = atlas.clipDict[(int)SpyMotion.Ticket];
                 atlasRenderer.PlayClipOneShot(curClip);
 
-                stats.boardingStationName = trip.stationsDataArray[ChosenNPCToTicketCheck.profile.boardingStationIndex].name;
-                stats.disembarkingStationName = trip.stationsDataArray[ChosenNPCToTicketCheck.profile.disembarkingStationIndex].name;
+                stats.boardingStationName = trip.stationsDataArray[ChosenNPC.profile.boardingStationIndex].name;
+                stats.disembarkingStationName = trip.stationsDataArray[ChosenNPC.profile.disembarkingStationIndex].name;
                 stats.ticketsCheckedTotal++;
                 gameEventData.OnTicketInspect.Raise();
 
                 canExitState = false;
             }
             break;
+
+            case SpyState.TalkingToAccomplice:
+            {
+                ChosenNPC.talkingToSpy = true;
+
+                curClip = atlas.clipDict[(int)SpyMotion.StandingBreathing];
+                atlasRenderer.PlayClipOneShot(curClip);
+                canExitState = false;
+
+                UnlockType curUnlockType = trip.unlockedRuleOutMarker ? UnlockType.Color : UnlockType.RuleOut;
+                SceneController.GetUnlockPicker().Open(unlockSelectionAmount: 1, curUnlockType, ChosenNPC.atlasRenderer);
+            }
+            break;
+
             case SpyState.PickingNPCTicketCheck:
             {
                 PickingNPCToTicketCheck = true;
@@ -390,7 +422,7 @@ public class SpyBrain : MonoBehaviour
 
                 for (int i = 0; i < curNPCTicketCheckHoverCount; i++)
                 {
-                    possibleNPCsToTicketCheck[i].ticketIsBeingChecked = true;
+                    possibleNPCsToTicketCheck[i].talkingToSpy = true;
                 }
 
                 npcPicker.Open(possibleNPCsToTicketCheck, curNPCTicketCheckHoverCount, PickerFunctionType.TicketCheck);
@@ -430,6 +462,11 @@ public class SpyBrain : MonoBehaviour
             }
             break;
 
+            case SpyState.TalkingToAccomplice:
+            {
+            }
+            break;
+
             case SpyState.PickingNPCTicketCheck:
             {
                 PickingNPCToTicketCheck = false;
@@ -439,9 +476,9 @@ public class SpyBrain : MonoBehaviour
                 for (int i = 0; i < curNPCTicketCheckHoverCount; i++)
                 {
                     NPCBrain npc = possibleNPCsToTicketCheck[i];
-                    if (npc != ChosenNPCToTicketCheck)
+                    if (npc != ChosenNPC)
                     {
-                        npc.ticketIsBeingChecked = false;
+                        npc.talkingToSpy = false;
                         npc.ToggleTicketCheckHover(false);
                     }
                 }
@@ -610,7 +647,12 @@ public class SpyBrain : MonoBehaviour
     }
     public static void ChooseNPCTicketToCheck(NPCBrain chosenNPC)
     {
-        ChosenNPCToTicketCheck = chosenNPC;
+        ChosenNPC = chosenNPC;
+    }
+    public static void FinishWithChosenNPC()
+    {
+        ChosenNPC.talkingToSpy = false;
+        ChosenNPC = null;
     }
     public static void ToggleTicketCheckAbility(bool toggle)
     {

@@ -32,7 +32,11 @@ Shader "Custom/s_atlasInvert"
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                uint instanceID : TEXCOORD1;
+                float3 worldPos : TEXCOORD1;
+                float4 uvSizeAndPos : TEXCOORD2;
+                float4 scaleAndFlip : TEXCOORD3;
+                float4 custom : TEXCOORD4;
+                int customBit : TEXCOORD5;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -41,7 +45,7 @@ Shader "Custom/s_atlasInvert"
             SAMPLER(sampler_AtlasTexture);
 
             float3 _BlackColor;
-
+            float3 _MeridiaColor;
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -64,20 +68,20 @@ Shader "Custom/s_atlasInvert"
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
-                o.instanceID = v.instanceID;
+                o.uvSizeAndPos = spriteData.uvSizeAndPos;
+                o.scaleAndFlip = spriteData.scaleAndFlip;
+                o.custom = spriteData.custom;
+                o.customBit = spriteData.customBit;
                 return o;
             }
 
             half4 frag(Varyings i) : SV_Target
             {
-                uint id = i.instanceID;
-                AtlasSprite spriteData = _SpriteData[id];
-
-                float2 uvSize = spriteData.uvSizeAndPos.xy;
-                float2 uvPos = spriteData.uvSizeAndPos.zw;
+                float2 uvSize = i.uvSizeAndPos.xy;
+                float2 uvPos = i.uvSizeAndPos.zw;
                 
-                float2 scale = spriteData.scaleAndFlip.xy;
-                float2 flip = spriteData.scaleAndFlip.zw;
+                float2 scale = i.scaleAndFlip.xy;
+                float2 flip = i.scaleAndFlip.zw;
 
                 float2 normUV = i.uv;
                 i.uv *= scale;
@@ -89,8 +93,13 @@ Shader "Custom/s_atlasInvert"
                 half invertColor = (1 - color.r);
                 
                 half alpha = color.a;
-                float bayerMask = BayerX8(spriteData.custom.x, i.positionHCS.xy);
-                half3 finalColor = lerp(invertColor, color.rgb, bayerMask) + _BlackColor;
+                float bayerMask = BayerX8(i.custom.x, i.positionHCS.xy);
+
+                int bitMask = i.customBit;
+                int meridiaColorMask = saturate(bitMask & (1 << MERIDIA_COLOR_BIT));
+                float3 meridiaColor = meridiaColorMask * _MeridiaColor;
+
+                half3 finalColor = lerp(invertColor, color.rgb, bayerMask) + _BlackColor + meridiaColor;
                 clip(alpha - 0.001);
 
                 return half4 (finalColor, 1);

@@ -48,6 +48,9 @@ Shader "Custom/s_atlasNPC"
             TEXTURE2D(_DiagonalTexture);
             SAMPLER(sampler_DiagonalTexture);
 
+            TEXTURE2D(_StripesTexture);
+            SAMPLER(sampler_StripesTexture);
+
             float3 _BlackColor;
             
             float3 _ColorKey0;
@@ -106,6 +109,8 @@ Shader "Custom/s_atlasNPC"
                 i.uv += uvPos;
                 
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+                half4 diagonalTex = SAMPLE_TEXTURE2D(_DiagonalTexture, sampler_DiagonalTexture, diagonalTexUV);
+                half4 stripesTex = SAMPLE_TEXTURE2D(_StripesTexture, sampler_StripesTexture, diagonalTexUV);
 
                 float outline = 0;
                 for (int index = 0; index < 4; index++)
@@ -117,32 +122,51 @@ Shader "Custom/s_atlasNPC"
                 outline /= 4;
                 outline *= (1 - outline);
                 outline = ceil(outline);
+                float invertOutline = 1 - outline;
 
-                int colorKeyMask = i.customBit;
+                int bitMask = i.customBit;
 
-                int colKeyMask0 = (colorKeyMask & (1 << 0)) != 0;
-                int colKeyMask1 = (colorKeyMask & (1 << 1)) != 0;
-                int colKeyMask2 = (colorKeyMask & (1 << 2)) != 0;
-                int diagonalMask = (colorKeyMask & (1 << 3)) != 0;
-                int meridiaColorMask = (colorKeyMask & (1 << 4)) != 0;
+                int diagonalMask = (bitMask & (1 << DIAGONAL_TEXTURE_BIT));
+                half3 diagonal = diagonalMask * diagonalTex.r;
+
+                int colorMask = bitMask & ~((1 << DIAGONAL_TEXTURE_BIT) | (1 << MERIDIA_COLOR_BIT));
+
+                int colKeyMask0 = colorMask == (1 << 0);
+                int colKeyMask1 = colorMask == (1 << 1);
+                int colKeyMask2 = colorMask == (1 << 2);
+
+                int colKeyMask01 = colorMask == ((1 << 0) | (1 << 1));
+                int colKeyMask02 = colorMask == ((1 << 0) | (1 << 2));
+                int colKeyMask12 = colorMask == ((1 << 1) | (1 << 2));
+
+                int colKeyMask012  = colorMask == ((1 << 0) | (1 << 1) | (1 << 2));
 
 
-                half4 diagonalTex = SAMPLE_TEXTURE2D(_DiagonalTexture, sampler_DiagonalTexture, diagonalTexUV);
+                half ticketCheckMask = i.custom.z;
 
                 half3 colKey0 = colKeyMask0 * _ColorKey0;
                 half3 colKey1 = colKeyMask1 * _ColorKey1;
                 half3 colKey2 = colKeyMask2 * _ColorKey2;
-                half3 diagonal = diagonalMask * diagonalTex.rgb;
+
+                half invertPatternR = 1 - stripesTex.r;
+
+                half3 colKey01 = colKeyMask01 * ((_ColorKey0 * stripesTex.r) + (_ColorKey1 * invertPatternR));
+                half3 colKey02 = colKeyMask02 * ((_ColorKey0 * stripesTex.r) + (_ColorKey2 * invertPatternR));
+                half3 colKey12 = colKeyMask12 * ((_ColorKey1 * stripesTex.r) + (_ColorKey2 * invertPatternR));
+
+                half3 colKey012 = colKeyMask012 * ((_ColorKey0 * (stripesTex.g - stripesTex.b)) + (_ColorKey1 * (stripesTex.b - stripesTex.g)) + (_ColorKey2 * (stripesTex.g * stripesTex.b)));
+
+                int meridiaColorMask = saturate(bitMask & (1 << MERIDIA_COLOR_BIT));
                 half3 meridiaColor = meridiaColorMask * _MeridiaColor;
 
                 half mouseColor = i.custom.y;
-                half ticketCheckMask = i.custom.z;
                 half ticketCheckHover = i.custom.w;
+                //return half4 (ticketCheckMask.rrr, 1);
 
                 outline = lerp(outline, 1 - outline, ticketCheckHover);
-
                 half3 finalColor = (tex.rgb * ticketCheckMask) + (outline * (1 - ticketCheckMask));
-                finalColor += diagonal + colKey0 + colKey1 + colKey2 + _BlackColor + meridiaColor;
+
+                finalColor += diagonal + colKey0 + colKey1 + colKey2 + colKey01 + colKey02 + colKey12 + colKey012 + _BlackColor + meridiaColor;
 
                 float bayerColMask = BayerX8(mouseColor * 0.5, i.positionHCS.y);
                 finalColor += bayerColMask;

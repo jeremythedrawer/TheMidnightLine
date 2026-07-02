@@ -10,6 +10,7 @@ public class ColorPicker : MonoBehaviour
     public const int COLOR_GRID_Y_COUNT = 4;
     public const int LOCK_SPRITE_INDEX = 18;
     public const int COLOR_SQUARE_SPRITE_INDEX = 5;
+    public const int TICK_SPRITE_INDEX = 22;
 
     public TripSO trip;
     public ColorsSO colorsData;
@@ -47,6 +48,7 @@ public class ColorPicker : MonoBehaviour
 
     public bool openedFully;
     public bool canClose;
+    
     private void Awake()
     {
         trip.unlockedClueMarkerCount = 0;
@@ -74,6 +76,7 @@ public class ColorPicker : MonoBehaviour
         Shader.SetGlobalFloat("_DayNightFactor", colorsData.dayNightFactor);
 
         Shader.SetGlobalTexture("_DiagonalTexture", colorsData.diagonalTexture);
+        Shader.SetGlobalTexture("_StripesTexture", colorsData.stripesTexture);
     }
     private void Update()
     {
@@ -111,17 +114,9 @@ public class ColorPicker : MonoBehaviour
                 {
                     AtlasRenderer colorRend = colorRenderers[i];
 
-                    if (CursorController.IsInsideBounds(colorRend.bounds))
+                    if (CursorController.IsInsideBounds(colorRend.bounds) && colorRend.spriteIndex != LOCK_SPRITE_INDEX)
                     {
-                        if (playerInputs.mouseLeftHold)
-                        {
-                            colorRend.custom.w = 0;
-                        }
-                        else
-                        {
-                            colorRend.custom.w = 1;   
-
-                        }
+                        colorRend.custom.w = 0;
 
                         if (playerInputs.mouseLeftUp)
                         {
@@ -132,6 +127,15 @@ public class ColorPicker : MonoBehaviour
                             else
                             {
                                 SetNPCColor(i);
+
+                                if (colorRend.spriteIndex == TICK_SPRITE_INDEX)
+                                {
+                                    colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                                }
+                                else
+                                {
+                                    colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+                                }
                             }
                         }
 
@@ -189,8 +193,6 @@ public class ColorPicker : MonoBehaviour
         }
         trip.selectedClueMarkerColors = new Color[]
         {
-            Color.white,
-            Color.black,
             Color.black,
             Color.black,
             Color.black,
@@ -199,7 +201,6 @@ public class ColorPicker : MonoBehaviour
         {
             Shader.SetGlobalColor("_ColorKey" + i, Color.black);
         }
-
     }
     public void SetOpenPosAndSize()
     {
@@ -257,6 +258,7 @@ public class ColorPicker : MonoBehaviour
         paletteRenderer.enabled = true;
 
         openedFully = openFully;
+        selectedRenderer = rend;
 
         if (openedFully)
         {
@@ -266,6 +268,7 @@ public class ColorPicker : MonoBehaviour
             {
                 AtlasRenderer colorRend = colorRenderers[i];
                 colorRend.custom = colorsToUse[i].linear;
+                colorRend.customBit = 0;
                 colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
                 colorRend.enabled = true;
             }
@@ -273,35 +276,58 @@ public class ColorPicker : MonoBehaviour
         }
         else
         {
-            activeColorAmount = trip.selectedClueMarkerColors.Length;
+            activeColorAmount = trip.selectedClueMarkerColors.Length + 1;
             Color[] colorsToUse = trip.selectedClueMarkerColors;
 
             for (int i = 0; i < activeColorAmount; i++)
             {
                 AtlasRenderer colorRend = colorRenderers[i];
-                colorRend.custom = colorsToUse[i].linear;
                 colorRend.enabled = true;
 
-                if (i == activeColorAmount - 1)
+                if (i == 0)
                 {
-                    colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
-                    colorRend.customBit = 1;
+                    if ((selectedRenderer.customBit & (1 << DIAGONAL_TEXTURE_BIT)) != 0)
+                    {
+                        colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+                    }
+                    else
+                    {
+                        colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                    }
+                    colorRend.customBit = 1 << DIAGONAL_TEXTURE_BIT;
+                    colorRend.custom.x = 0;
+                    colorRend.custom.y = 0;
+                    colorRend.custom.z = 0;
                     continue;
                 }
-                if (i <= trip.unlockedClueMarkerCount)
+
+                if (i > trip.unlockedClueMarkerCount)
                 {
-                    colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
-                    colorRend.customBit = 0;
+                    colorRend.UpdateSpriteInputsByIndex(LOCK_SPRITE_INDEX);
+                    colorRend.custom.x = 0;
+                    colorRend.custom.y = 0;
+                    colorRend.custom.z = 0;
                 }
                 else
                 {
-                    colorRend.UpdateSpriteInputsByIndex(LOCK_SPRITE_INDEX);
-                    colorRend.customBit = 0;
+                    int colorIndex = i - 1;
+
+                    if ((selectedRenderer.customBit & (1 << colorIndex)) != 0)
+                    {
+                        colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+                    }
+                    else
+                    {
+                        colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                    }
+                    Color color = trip.selectedClueMarkerColors[i - 1].linear;
+                    colorRend.custom.x = color.r;
+                    colorRend.custom.y = color.g;
+                    colorRend.custom.z = color.b;
                 }
+                colorRend.customBit = 0;
             }
         }
-        
-        selectedRenderer = rend;
 
         Bounds selectedRendBounds = selectedRenderer.GetBounds();
 
@@ -331,13 +357,36 @@ public class ColorPicker : MonoBehaviour
     {
         Color selectedColor = colorsData.selectableClueColors[index];
         selectedRenderer.custom = selectedColor.linear;
-        trip.selectedClueMarkerColors[trip.selectedClueMarkerIndex + 1] = selectedColor;
+        trip.selectedClueMarkerColors[trip.selectedClueMarkerIndex] = selectedColor;
 
         Shader.SetGlobalColor("_ColorKey" + trip.selectedClueMarkerIndex, selectedColor.linear);
     }
     public void SetNPCColor(int index)
     {
-        selectedRenderer.customBit = 1 << index;
+        int colorIndex = index - 1;
+
+        if (colorIndex >= 0)
+        {
+            if ((selectedRenderer.customBit & (1 << colorIndex)) != 0)
+            {
+                selectedRenderer.customBit &= ~(1 << colorIndex);
+            }
+            else
+            {
+                selectedRenderer.customBit |= 1 << colorIndex;
+            }
+        }
+        else
+        {
+            if ((selectedRenderer.customBit & (1 << DIAGONAL_TEXTURE_BIT)) != 0)
+            {
+                selectedRenderer.customBit &= ~(1 << DIAGONAL_TEXTURE_BIT);
+            }
+            else
+            {
+                selectedRenderer.customBit |= 1 << DIAGONAL_TEXTURE_BIT;
+            }
+        }
     }
     public void Open(AtlasRenderer rend, bool openAllColors)
     {

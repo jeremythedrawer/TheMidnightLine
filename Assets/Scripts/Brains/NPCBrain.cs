@@ -1,11 +1,11 @@
-using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
-using static Atlas;
-using static NPC;
 using UnityEngine.VFX;
 using System.Collections.Generic;
 
+using static Atlas;
+using static AtlasUI;
+using static NPC;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -68,7 +68,7 @@ public class NPCBrain : MonoBehaviour
     public int prevAtlasIndex;
 
     public bool startFade;
-    public bool ticketIsBeingChecked;
+    public bool talkingToSpy;
     public bool ticketHasBeenChecked;
     public bool playingGlyph;
     public bool behaving;
@@ -109,7 +109,7 @@ public class NPCBrain : MonoBehaviour
 
         if (role == Role.Accomplice)
         {
-            atlasRenderer.customBit = 1 << MERIDIA_COLOR_BIT;
+            atlasRenderer.customBit |= 1 << MERIDIA_COLOR_BIT;
         }
         else
         {
@@ -165,8 +165,10 @@ public class NPCBrain : MonoBehaviour
     }
     public void ToggleHover(bool toggle)
     {
-
-        atlasRenderer.custom.y = toggle ? 1 : 0;
+        if (trip.unlockedRuleOutMarker)
+        {
+            atlasRenderer.custom.y = toggle ? 1 : 0;
+        }
     }
     public void ToggleTicketCheckHover(bool toggle)
     {
@@ -187,7 +189,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void ChooseStates()
     {
-        if (ticketIsBeingChecked)
+        if (talkingToSpy)
         {
             SetState(NPCState.TicketCheck);
         }

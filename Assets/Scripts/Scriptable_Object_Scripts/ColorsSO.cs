@@ -7,6 +7,7 @@ using static AtlasUI;
 public class ColorsSO : ScriptableObject
 {
     public Texture2D diagonalTexture;
+    public Texture2D stripesTexture;
 
     public Color blackColor;
     public Color whiteColor;

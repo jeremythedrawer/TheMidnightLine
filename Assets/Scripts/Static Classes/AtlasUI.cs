@@ -6,6 +6,11 @@ using UnityEngine;
 using static NPC;
 public static class AtlasUI
 {
+    
+
+    public const int MERIDIA_COLOR_BIT = 4;
+    public const int DIAGONAL_TEXTURE_BIT = 3;
+
     public const float BORDER_PADDING = 0f;
     public const float LETTER_ADVANCE = 0.122f;
     public const float APPEAR_TEXT_TIME = 0.2f;
@@ -14,7 +19,6 @@ public static class AtlasUI
     public const float NATURAL_TICK_RATE = 2.5f;
     public const float TARGET_MARGIN = 0.01f;
     public const float MOVE_DAMP = 4;
-
     public const float OPEN_TIME_ROW_COL = 0.0625f;
     public const float GRID_GAP = 0.272f;
 
@@ -44,6 +48,13 @@ public static class AtlasUI
         TicketCheck,
         Color,
     }
+    [Flags]public enum UnlockType
+    { 
+        None = 0,
+        RuleOut = 1 << 0,
+        Color = 1 << 1,
+    }
+
     public enum PageType
     { 
         None,

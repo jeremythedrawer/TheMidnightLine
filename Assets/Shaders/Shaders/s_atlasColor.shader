@@ -44,6 +44,7 @@ Shader "Custom/s_atlasColor"
             float4 _DiagonalTexture_TexelSize;
 
             float3 _BlackColor;
+            float3 _MeridiaColor;
 
             Varyings vert(Attributes v)
             {
@@ -100,12 +101,19 @@ Shader "Custom/s_atlasColor"
                 float2 diagonalUV = i.uv * (_DiagonalTexture_TexelSize.xy / _AtlasTexture_TexelSize.xy);
                 half4 diagonalTex = SAMPLE_TEXTURE2D(_DiagonalTexture, sampler_DiagonalTexture, diagonalUV);
                 
-                half diagonalMask = i.customBit;
+                int bitMask = i.customBit;
+
+                int diagonalMask = (bitMask & (1 << DIAGONAL_TEXTURE_BIT)) != 0;
+                int meridiaColorMask = (bitMask & (1 << MERIDIA_COLOR_BIT)) != 0;
+                float3 meridiaColor = meridiaColorMask * _MeridiaColor;
+
                 half diagonal = diagonalTex.r * diagonalMask;
+
+
                 half3 col = i.custom.rgb + diagonal;
                 half t = round(LinearLightness(col));
 
-                half3 finalCol = lerp((blackTex + col) * border + _BlackColor, whiteTex * col + _BlackColor, t);
+                half3 finalCol = lerp((blackTex + col) * border + _BlackColor + meridiaColor, whiteTex * col + _BlackColor + meridiaColor, 0);
 
                 clip((tex.a) - 0.001);
                 return half4 (finalCol.rgb, 1);

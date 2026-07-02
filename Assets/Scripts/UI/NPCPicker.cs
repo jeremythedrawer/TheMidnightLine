@@ -7,14 +7,14 @@ using static AtlasUI;
 using static NPC;
 public class NPCPicker : MonoBehaviour
 {
-
     public const int GRID_X_COUNT = 8;
     public const int GRID_Y_COUNT = 1;
 
-    public AtlasRenderer[] npcIconRenderers;
+    public AtlasRenderer[] iconRenderers;
 
     public TripSO trip;
     public PlayerInputsSO playerInputs;
+    public ColorsSO colorData;
 
     public AtlasRenderer paletteRenderer;
 
@@ -23,17 +23,16 @@ public class NPCPicker : MonoBehaviour
     public NPCBrain[] possibleNPCs;
 
     public AtlasRenderer selectedRenderer;
-    public AtlasRenderer prevHoveredNPCIconRenderer;
 
     public CancellationTokenSource ctsOpen;
 
-    public Vector2[] openNPCIconRendererPositions;
+    public Vector2[] openIconRendererPositions;
 
     public Vector3 curWorldPos;
-    public Vector3 closeColorRendererPosition;
+    public Vector3 closeIconRendererPosition;
     public Vector3 paletteCenterSliceWorldSize;
 
-    public Vector2 npcIconRendererWorldSize;
+    public Vector2 iconRendererWorldSize;
     public Vector2 sliceWorldSize;
 
     public PickerState curPickerState;
@@ -51,9 +50,6 @@ public class NPCPicker : MonoBehaviour
 
     public bool canClose;
 
-    private void Awake()
-    {
-    }
     private void Start()
     {
         if (Application.isPlaying)
@@ -63,7 +59,6 @@ public class NPCPicker : MonoBehaviour
         curPickerState = PickerState.Closed;
         SetOpenPosAndSize();
     }
-
     private void Update()
     {
         UpdateState();
@@ -86,18 +81,11 @@ public class NPCPicker : MonoBehaviour
             {
                 for (int i = 0; i < curGridColCount; i++)
                 {
-                    AtlasRenderer npcIconRend = npcIconRenderers[i];
+                    AtlasRenderer npcIconRend = iconRenderers[i];
 
                     if (CursorController.IsInsideBounds(npcIconRend.bounds))
                     {
-                        if (playerInputs.mouseLeftHold)
-                        {
-                            npcIconRend.custom.w = 0;
-                        }
-                        else
-                        {
-                            npcIconRend.custom.w = 1;
-                        }
+                        npcIconRend.custom.w = 1;
 
                         if (playerInputs.mouseLeftUp && canClose)
                         {
@@ -126,15 +114,11 @@ public class NPCPicker : MonoBehaviour
                             }
                             Close();
                         }
-
-                        prevHoveredNPCIconRenderer = npcIconRend;
                         return;
                     }
-                    else if (npcIconRend == prevHoveredNPCIconRenderer)
+                    else
                     {
-                        npcIconRend.custom.w = 1;
-                        prevHoveredNPCIconRenderer = null;
-                        return;
+                        npcIconRend.custom.w = 0;
                     }
                 }
 
@@ -177,9 +161,9 @@ public class NPCPicker : MonoBehaviour
     }
     public void SetOpenPosAndSize()
     {
-        openNPCIconRendererPositions = new Vector2[npcIconRenderers.Length];
+        openIconRendererPositions = new Vector2[iconRenderers.Length];
 
-        AtlasRenderer firstColorRend = npcIconRenderers[0];
+        AtlasRenderer firstColorRend = iconRenderers[0];
         Vector4 paletteBottomRightWPS = paletteRenderer.worldPivotsAndSizes[5];
         Vector2 firstColorRendPos = new Vector2(paletteBottomRightWPS.x + firstColorRend.worldPivotAndSize.x, paletteBottomRightWPS.y - firstColorRend.worldPivotAndSize.y);
 
@@ -192,18 +176,18 @@ public class NPCPicker : MonoBehaviour
             {
                 int flatIndex = x + rowIndex;
 
-                AtlasRenderer npcIconRend = npcIconRenderers[flatIndex];
+                AtlasRenderer npcIconRend = iconRenderers[flatIndex];
 
                 float xPos = firstColorRendPos.x - (x * GRID_GAP);
-                openNPCIconRendererPositions[flatIndex] = new Vector3(xPos, yPos, -1);
+                openIconRendererPositions[flatIndex] = new Vector3(xPos, yPos, -1);
 
-                npcIconRend.transform.localPosition = openNPCIconRendererPositions[flatIndex];
+                npcIconRend.transform.localPosition = openIconRendererPositions[flatIndex];
                 npcIconRend.enabled = false;
             }
         }
 
-        closeColorRendererPosition = new Vector3(firstColorRendPos.x, firstColorRendPos.y, -0.1f);
-        npcIconRendererWorldSize = firstColorRend.sprite.worldSize;
+        closeIconRendererPosition = new Vector3(firstColorRendPos.x, firstColorRendPos.y, -0.1f);
+        iconRendererWorldSize = firstColorRend.sprite.worldSize;
 
         curWorldPos.z = paletteRenderer.transform.position.z;
 
@@ -215,14 +199,13 @@ public class NPCPicker : MonoBehaviour
 
         sliceWorldSize = new Vector2(paletteBottomLeftWPS.z + paletteTopRightWPS.z, paletteBottomLeftWPS.w + paletteTopRightWPS.w);
     }
-
     public void TurnOff()
     {
         paletteRenderer.enabled = false;
 
         for (int i = 0; i < curGridColCount; i++)
         {
-            npcIconRenderers[i].enabled = false;
+            iconRenderers[i].enabled = false;
         }
 
         selectedRenderer = null;
@@ -237,7 +220,7 @@ public class NPCPicker : MonoBehaviour
 
         for (int i = 0; i < possibleNPCs.Length; i++)
         {
-            AtlasRenderer iconRend = npcIconRenderers[i];
+            AtlasRenderer iconRend = iconRenderers[i];
             NPCBrain npcBrain = possibleNPCs[i];
 
             if (npcBrain == null) break;
@@ -245,23 +228,58 @@ public class NPCPicker : MonoBehaviour
             if (i < npcCount)
             {
                 iconRend.enabled = true;
-                iconRend.UpdateSpriteInputsByIndex(npcBrain.npc.mugShotIndex);
-                int npcColorIndex = Convert.ToInt32($"{npcBrain.atlasRenderer.customBit}", 10);
-                Debug.Log(npcColorIndex);
-                if (npcColorIndex < trip.selectedClueMarkerColors.Length)
+                int npcIconIndex = (npcBrain.npc.mugShotIndex * 2);
+                if (npcBrain.ticketHasBeenChecked) npcIconIndex += 1;
+
+                iconRend.UpdateSpriteInputsByIndex(npcIconIndex);
+
+                if (npcBrain.role == Role.Accomplice)
                 {
-                    Color iconColor = trip.selectedClueMarkerColors[npcColorIndex];
-                    iconRend.custom.x = iconColor.r; 
-                    iconRend.custom.y = iconColor.g; 
-                    iconRend.custom.z = iconColor.b; 
+                    Color iconColor = colorData.meridiaColor.linear;
+
+                    iconRend.custom.x = iconColor.r;
+                    iconRend.custom.y = iconColor.g;
+                    iconRend.custom.z = iconColor.b;
+
+                    int npcColorIndex = Convert.ToInt32($"{npcBrain.atlasRenderer.customBit}", 10);
+                    if (npcColorIndex == trip.selectedClueMarkerColors.Length)
+                    {
+                        iconRend.customBit |= 1 << DIAGONAL_TEXTURE_BIT;
+                    }
+                    else
+                    {
+                        iconRend.customBit &= ~(1<< DIAGONAL_TEXTURE_BIT);
+                    }
                 }
                 else
                 {
-                    iconRend.customBit = 1;
-                    iconRend.custom.x = 0;
-                    iconRend.custom.y = 0;
-                    iconRend.custom.z = 0;
+                    int npcColorIndex = Convert.ToInt32($"{npcBrain.atlasRenderer.customBit}", 10);
+                    if (npcColorIndex > 0) 
+                    {
+                        if (npcColorIndex < trip.selectedClueMarkerColors.Length)
+                        {
+                            Color iconColor = trip.selectedClueMarkerColors[npcColorIndex];
+                            iconRend.custom.x = iconColor.r; 
+                            iconRend.custom.y = iconColor.g; 
+                            iconRend.custom.z = iconColor.b; 
+                        }
+                        else
+                        {
+                            iconRend.customBit = 1;
+                            iconRend.custom.x = 0;
+                            iconRend.custom.y = 0;
+                            iconRend.custom.z = 0;
+                        }
+                    }
+                    else
+                    {
+                        iconRend.custom.x = 0;
+                        iconRend.custom.y = 0;
+                        iconRend.custom.z = 0;
+                    }
+
                 }
+                iconRend.custom.w = 0;
             }
             else
             {
@@ -282,8 +300,8 @@ public class NPCPicker : MonoBehaviour
 
         float totalGapWidth = curXGapCount * GRID_GAP;
 
-        tileWidth = npcIconRendererWorldSize.x / paletteCenterSliceWorldSize.x;
-        tileHeight = npcIconRendererWorldSize.y / paletteCenterSliceWorldSize.y;
+        tileWidth = iconRendererWorldSize.x / paletteCenterSliceWorldSize.x;
+        tileHeight = iconRendererWorldSize.y / paletteCenterSliceWorldSize.y;
 
         openSpriteWidth = (tileWidth * curGridColCount) + totalGapWidth;
 
@@ -291,7 +309,6 @@ public class NPCPicker : MonoBehaviour
         paletteRenderer.width = tileWidth;
         paletteRenderer.height = tileHeight;
     }
-
     public void Open(NPCBrain[] npcs, int npcCount, PickerFunctionType funcType)
     {
         if (curPickerState == PickerState.Closed)
@@ -305,7 +322,6 @@ public class NPCPicker : MonoBehaviour
             Opening().Forget();
         }
     }
-
     public void Adjust(NPCBrain[] npcs, int npcCount)
     {
         ctsOpen?.Cancel();
@@ -316,7 +332,6 @@ public class NPCPicker : MonoBehaviour
     }
     public void Close()
     {
-        Debug.Log("closing");
         if (curPickerState == PickerState.Opened || curPickerState == PickerState.Opening)
         {
             ctsOpen?.Cancel();
@@ -350,8 +365,8 @@ public class NPCPicker : MonoBehaviour
                     paletteRenderer.UpdateSliceSpriteInputsSelf();
                     for (int i = 0; i < curGridColCount; i++)
                     {
-                        float posX = Mathf.Lerp(closeColorRendererPosition.x, openNPCIconRendererPositions[i].x, easeOutT);
-                        npcIconRenderers[i].transform.localPosition = new Vector3(posX, closeColorRendererPosition.y, closeColorRendererPosition.z);
+                        float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
+                        iconRenderers[i].transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
                     }
                     await UniTask.Yield(ctsOpen.Token);
                 }
@@ -372,8 +387,8 @@ public class NPCPicker : MonoBehaviour
 
                     for (int i = 0; i < curGridColCount; i++)
                     {
-                        float posX = Mathf.Lerp(closeColorRendererPosition.x, openNPCIconRendererPositions[i].x, easeOutT);
-                        npcIconRenderers[i].transform.localPosition = new Vector3(posX, closeColorRendererPosition.y, closeColorRendererPosition.z);
+                        float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
+                        iconRenderers[i].transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
                     }
                     await UniTask.Yield(ctsOpen.Token);
                 }
@@ -409,8 +424,8 @@ public class NPCPicker : MonoBehaviour
 
                 for (int i = 0; i < curGridColCount; i++)
                 {
-                    float posX = Mathf.Lerp(closeColorRendererPosition.x, openNPCIconRendererPositions[i].x, easeOutT);
-                    npcIconRenderers[i].transform.localPosition = new Vector3(posX, closeColorRendererPosition.y, closeColorRendererPosition.z);
+                    float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
+                    iconRenderers[i].transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
                 }
                 await UniTask.Yield(ctsOpen.Token);
             }
@@ -443,8 +458,8 @@ public class NPCPicker : MonoBehaviour
                 paletteRenderer.UpdateSliceSpriteInputsSelf();
                 for (int i = 0; i < curGridColCount; i++)
                 {
-                    float posX = Mathf.Lerp(closeColorRendererPosition.x, openNPCIconRendererPositions[i].x, easeOutT);
-                    npcIconRenderers[i].transform.localPosition = new Vector3(posX, closeColorRendererPosition.y, closeColorRendererPosition.z);
+                    float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
+                    iconRenderers[i].transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
                 }
                 await UniTask.Yield(ctsOpen.Token);
             }

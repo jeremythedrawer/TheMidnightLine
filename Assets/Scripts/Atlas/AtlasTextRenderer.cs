@@ -25,6 +25,7 @@ public class AtlasTextRenderer : MonoBehaviour
     public float kerning = 1.1f;
     public float spacing = 1;
     public AtlasTextAlignmentType alignmentType;
+    public Color color;
 
     [Header("Scroll Settings")]
     public float scrollSpeed;
@@ -59,7 +60,7 @@ public class AtlasTextRenderer : MonoBehaviour
     }
     private void OnEnable()
     {
-        batchKey.texture = textAtlas.atlas.texture;
+        batchKey.texture = textAtlas?.atlas?.texture;
         textAtlas?.SetWorldSpaceLineHeight();
         RegisterTextRenderer(this);
     }
@@ -72,6 +73,7 @@ public class AtlasTextRenderer : MonoBehaviour
 #if UNITY_EDITOR
         if (!Application.isPlaying)
         {
+            if (textAtlas == null) return;
             bounds = GetBounds(text);
         }
 #endif
@@ -93,6 +95,7 @@ public class AtlasTextRenderer : MonoBehaviour
         {
             case AtlasTextRendererType.Simple:
             {
+                SetColorText();
             }
             break;
             case AtlasTextRendererType.Scroll:
@@ -105,6 +108,7 @@ public class AtlasTextRenderer : MonoBehaviour
             {
                 bounds = GetBounds(text);
                 SetBorderText();
+                SetColorText();
             }
             break;
         }
@@ -162,7 +166,6 @@ public class AtlasTextRenderer : MonoBehaviour
     }
     private void SetScrollingText()
     {
-        customs = new Vector4[worldPivotsAndSizes.Length];
         for (int i = 0; i < customs.Length; i++)
         {
             Vector4 custom = customs[i];
@@ -171,6 +174,19 @@ public class AtlasTextRenderer : MonoBehaviour
             custom.z = scrollSpeed;
             custom.w = scrollSpeed < 0 ? 1 : 0;
             customs[i] = custom; 
+        }
+    }
+    private void SetColorText()
+    {
+        Color linearColor = color.linear;
+
+        for (int i = 0; i < customs.Length; i++)
+        {
+            Vector4 custom = customs[i];
+            custom.x = linearColor.r;
+            custom.y = linearColor.g;
+            custom.z = linearColor.b;
+            customs[i] = custom;
         }
     }
     private void SetBorderText()

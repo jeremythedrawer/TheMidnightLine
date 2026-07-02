@@ -880,7 +880,7 @@ public class Notepad : MonoBehaviour
             }
             else if (playerInputs.numpad != -1 && playerInputs.numpad < trip.unlockedClueMarkerCount)
             {
-                activePage.SwitchActivePLayerWriteTextRenderer(playerInputs.numpad);
+                activePage.SwitchActivePLayerWriteTextRenderer(playerInputs.numpad -1);
                 curWritingBounds = activePage.GetWritingBounds();
                 Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
                 leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
@@ -888,7 +888,7 @@ public class Notepad : MonoBehaviour
         }
         else if (playerInputs.numpad != -1)
         {
-            activePage.SwitchActivePLayerWriteTextRenderer(playerInputs.numpad);
+            activePage.SwitchActivePLayerWriteTextRenderer(playerInputs.numpad - 1);
             curWritingBounds = activePage.GetWritingBounds();
             Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
             leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);

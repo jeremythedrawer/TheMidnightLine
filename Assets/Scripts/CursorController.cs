@@ -59,7 +59,7 @@ public class CursorController : MonoBehaviour
             {
                 if (cursorIsMoving && SceneController.GetNPCPicker().curPickerState == PickerState.Closed) HoverNPC();
                 
-                if (playerInputs.mouseLeftDown)
+                if (playerInputs.mouseLeftDown && trip.unlockedRuleOutMarker)
                 {
                     if (hoveredNPCCount == 1)
                     {
@@ -149,7 +149,7 @@ public class CursorController : MonoBehaviour
             }
         }
 
-        if (hoveredNPCCount == 1 && !cursorTag.hasText && hoveringRevealedNPC)
+        if (hoveredNPCCount == 1 && hoveringRevealedNPC)
         {
             NPCBrain selectedNPC = hoveredNPCs[0];
             WriteCursorTag(selectedNPC);
@@ -161,16 +161,17 @@ public class CursorController : MonoBehaviour
     }
     public void WriteCursorTag(NPCBrain npc)
     {
-        cursorTag.WriteText(trip.stationsDataArray[npc.profile.disembarkingStationIndex].name, writeLetterTime: 0.05f);
-        cursorTag.transform.SetParent(transform, worldPositionStays: true);
+        cursorTag.SetText(trip.stationsDataArray[npc.profile.disembarkingStationIndex].name);
         cursorTag.transform.position = new Vector3(npc.atlasRenderer.bounds.center.x, npc.atlasRenderer.bounds.max.y + cursorTag.background_renderer.bounds.size.y, cursorTag.transform.position.z);
+        cursorTag.transform.SetParent(npc.transform, worldPositionStays: true);
     }
     public void EraseCursorTag()
     {
         if(!cursorTag.erasingText && cursorTag.hasText)
         {
-            cursorTag.EraseText(writeLetterTime: 0.05f);
+            cursorTag.SetText("");
             cursorTag.transform.SetParent(transform, worldPositionStays: true);
+            cursorTag.transform.localPosition = new Vector3(0, 0, -0.5f);
         }
     }
     public static bool IsInsideBounds(Bounds bounds)

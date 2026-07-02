@@ -29,6 +29,8 @@ Shader "Custom/s_atlasUI"
                 float3 worldPos : TEXCOORD1;
                 float4 uvSizeAndPos : TEXCOORD2;
                 float4 scaleAndFlip : TEXCOORD3;
+                float4 custom : TEXCOORD4;
+                int customBit : TEXCOORD5;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -40,7 +42,7 @@ Shader "Custom/s_atlasUI"
             SAMPLER(sampler_CarriageBoundsTexture);
 
             float3 _BlackColor;
-    
+            float3 _MeridiaColor;
 
             Varyings vert(Attributes v)
             {
@@ -66,7 +68,8 @@ Shader "Custom/s_atlasUI"
                 o.uv = v.uv;
                 o.uvSizeAndPos = spriteData.uvSizeAndPos;
                 o.scaleAndFlip = spriteData.scaleAndFlip;
-
+                o.custom = spriteData.custom;
+                o.customBit = spriteData.customBit;
                 return o;
             }
 
@@ -84,8 +87,16 @@ Shader "Custom/s_atlasUI"
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;
                 i.uv += uvPos;
+
+                int bitMask = i.customBit;
+                int meridiaColorMask = saturate(bitMask & (1 << MERIDIA_COLOR_BIT));
+                float3 meridiaColor = meridiaColorMask * _MeridiaColor;
+
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-                half3 finalColor = color.r + _BlackColor;
+
+
+                half3 finalColor = color.r + _BlackColor + meridiaColor + i.custom.rgb;
+                
                 clip(color.a - 0.001);
                 return half4 (finalColor, 1);
             }

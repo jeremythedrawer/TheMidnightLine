@@ -29,7 +29,7 @@ Shader "Custom/s_fadeBlack"
             TEXTURE2D(_NoiseTexture);
             SAMPLER(sampler_NoiseTexture);
 
-            float3 _BlackColor;
+
             struct Attributes
             {
                 float4 positionOS : POSITION;
@@ -42,11 +42,15 @@ Shader "Custom/s_fadeBlack"
                 float2 uv : TEXCOORD0;
             };
 
+            float3 _BlackColor;
+            float4 _CameraSizeAndPos;
+
             Varyings vert(Attributes v)
             {
                 Varyings o;
 
                 float3 objPos = v.positionOS.xyz;
+                objPos.xy *= _CameraSizeAndPos.xy;
                 o.positionHCS = TransformObjectToHClip(objPos);
                 o.uv = v.uv;
                 

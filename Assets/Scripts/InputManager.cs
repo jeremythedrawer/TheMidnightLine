@@ -56,6 +56,10 @@ public class InputManager : MonoBehaviour
 
         mouseRightDown_action = playerInput.actions["Player/MouseRightDown"];
 
+        move_action.started += context =>
+        {
+            playerInputs.moveDown = true;
+        };
         move_action.performed += context =>
         {
             Vector2 move = context.ReadValue<Vector2>();
@@ -64,6 +68,7 @@ public class InputManager : MonoBehaviour
         move_action.canceled += context =>
         {
             playerInputs.move = 0;
+            playerInputs.moveUp = true;
         };
 
         notepadToggle_action.started += context => playerInputs.notepadKeyDown = true;
@@ -87,9 +92,15 @@ public class InputManager : MonoBehaviour
         };
 
         ticket_action.started += context => playerInputs.ticketCheckKeyDown = true;
-        ticket_action.canceled += context => playerInputs.ticketCheckKeyUp = true;
+        ticket_action.performed += context => playerInputs.ticketCheckKeyHold = true;
 
-        interact_action.started += context =>
+        ticket_action.canceled += context =>
+        {
+            playerInputs.ticketCheckKeyUp = true;
+            playerInputs.ticketCheckKeyHold = false;
+        };
+
+            interact_action.started += context =>
         {
             gameEventData.OnInteract.Raise();
             playerInputs.interact = true;
@@ -160,6 +171,9 @@ public class InputManager : MonoBehaviour
         playerInputs.mouseLeftDown = false;
         playerInputs.mouseLeftUp = false;
         playerInputs.mouseRightDown = false;
+        playerInputs.moveUp = false;
+        playerInputs.moveDown = false;
+
         playerInputs.notepadPreviewAnswerAndFlip.x = 0;
         playerInputs.notepadPreviewAnswerAndFlip.y = 0;
         playerInputs.numpad = -1;

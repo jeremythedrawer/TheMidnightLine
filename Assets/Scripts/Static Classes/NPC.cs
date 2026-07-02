@@ -8,8 +8,6 @@ public static class NPC
     public const float MIN_START_MOVE_TIME = 0.3f;
     public const float MAX_START_MOVE_TIME = 1f;
 
-    public const int MERIDIA_COLOR_BIT = 4;
-    public const int DIAGONAL_TEXTURE_BIT = 3;
     public enum NPCState
     {
         None,
