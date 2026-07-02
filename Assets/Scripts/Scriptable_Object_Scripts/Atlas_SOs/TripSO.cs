@@ -28,7 +28,7 @@ public class TripSO : ScriptableObject
     public int unlockedClueMarkerCount;
     public int selectedClueMarkerIndex;
 
-    public bool unlockedRuleOutMarker;
+    public UnlockType curUnlocks;
 
 
 }

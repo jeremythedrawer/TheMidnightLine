@@ -409,7 +409,20 @@ public class SpyBrain : MonoBehaviour
                 atlasRenderer.PlayClipOneShot(curClip);
                 canExitState = false;
 
-                UnlockType curUnlockType = trip.unlockedRuleOutMarker ? UnlockType.Color : UnlockType.RuleOut;
+                UnlockType curUnlockType = UnlockType.Color;
+
+                if ((trip.curUnlocks & UnlockType.RuleOut) == 0)
+                {
+                    curUnlockType = UnlockType.RuleOut;
+                }
+                else if ((trip.curUnlocks & UnlockType.Color) == 0)
+                {
+                    curUnlockType = UnlockType.Color;
+                }
+                else if ((trip.curUnlocks & UnlockType.MultiColor) == 0)
+                {
+                    curUnlockType = UnlockType.MultiColor;
+                }
                 SceneController.GetUnlockPicker().Open(unlockSelectionAmount: 1, curUnlockType, ChosenNPC.atlasRenderer);
             }
             break;

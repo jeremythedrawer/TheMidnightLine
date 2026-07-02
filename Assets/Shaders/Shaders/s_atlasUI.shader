@@ -92,12 +92,14 @@ Shader "Custom/s_atlasUI"
                 int meridiaColorMask = saturate(bitMask & (1 << MERIDIA_COLOR_BIT));
                 float3 meridiaColor = meridiaColorMask * _MeridiaColor;
 
-                half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
+                half invertT = i.custom.a;
+                half3 invertTex = lerp(tex.rgb, 1 - tex.rgb, invertT);
 
-                half3 finalColor = color.r + _BlackColor + meridiaColor + i.custom.rgb;
+                half3 finalColor = invertTex.rgb + _BlackColor + meridiaColor + i.custom.rgb;
                 
-                clip(color.a - 0.001);
+                clip(tex.a - 0.001);
                 return half4 (finalColor, 1);
             }
             ENDHLSL

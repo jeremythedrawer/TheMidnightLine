@@ -12,6 +12,11 @@ public class UnlockPicker : MonoBehaviour
 
     public const int RULE_OUT_ICON_SPRITE_INDEX = 19;
     public const int COLOR_ICON_SPRITE_INDEX = 20;
+    public const int MULTI_COLOR_ICON_SPRITE_INDEX = 23;
+
+    public static event Action<UnlockType> OnNewAbilityUnlocked;
+    public static event Action OnNewColorUnlocked;
+
 
     public AtlasRenderer[] iconRenderers;
 
@@ -54,7 +59,7 @@ public class UnlockPicker : MonoBehaviour
         curPickerState = PickerState.Closed;
         SetOpenPosAndSize();
 
-        trip.unlockedRuleOutMarker = false;
+        trip.curUnlocks = UnlockType.None;
         paletteRenderer.customBit = 1 << MERIDIA_COLOR_BIT;
 
         for (int i = 0; i < iconRenderers.Length; i++)
@@ -107,15 +112,29 @@ public class UnlockPicker : MonoBehaviour
                                 else
                                 {
                                     UnlockType selectedUnlockType = (UnlockType)(1 << j);
-
                                     if ((selectedUnlockType & UnlockType.RuleOut) != 0)
                                     {
-                                        trip.unlockedRuleOutMarker = true;
+                                        trip.curUnlocks |= UnlockType.RuleOut;
+                                        OnNewAbilityUnlocked?.Invoke(UnlockType.RuleOut);
                                     }
                                     else if ((selectedUnlockType & UnlockType.Color) != 0)
                                     {
+                                        if (trip.unlockedClueMarkerCount == 0)
+                                        {
+                                            trip.curUnlocks |= UnlockType.Color;
+                                            OnNewAbilityUnlocked.Invoke(UnlockType.Color);
+                                        }
+                                        trip.unlockedClueMarkerCount++;
+                                        OnNewColorUnlocked?.Invoke();
+                                    }
+                                    else if ((selectedUnlockType & UnlockType.MultiColor) != 0)
+                                    {
+                                        trip.curUnlocks |= UnlockType.MultiColor;
+                                        OnNewAbilityUnlocked?.Invoke(UnlockType.MultiColor);
+                                        OnNewColorUnlocked?.Invoke();
                                         trip.unlockedClueMarkerCount++;
                                     }
+
                                     break;
                                 }
                             }
@@ -219,6 +238,7 @@ public class UnlockPicker : MonoBehaviour
         curUnlockType = unlockType;
 
         int iconIndex = 0;
+
         if ((unlockType & UnlockType.RuleOut) != 0)
         {
             AtlasRenderer iconRend = iconRenderers[iconIndex];
@@ -235,11 +255,23 @@ public class UnlockPicker : MonoBehaviour
         {
             AtlasRenderer iconRend = iconRenderers[iconIndex];
             iconRend.enabled = true;
-            iconRend.custom.x = 1;
+            iconRend.custom.x = 0;
             iconRend.custom.y = 0;
             iconRend.custom.z = 0;
             iconRend.custom.w = 1;
             iconRend.UpdateSpriteInputsByIndex(COLOR_ICON_SPRITE_INDEX);
+            iconIndex++;
+        }
+
+        if ((unlockType & UnlockType.MultiColor) != 0)
+        {
+            AtlasRenderer iconRend = iconRenderers[iconIndex];
+            iconRend.enabled = true;
+            iconRend.custom.x = 0;
+            iconRend.custom.y = 0;
+            iconRend.custom.z = 0;
+            iconRend.custom.w = 1;
+            iconRend.UpdateSpriteInputsByIndex(MULTI_COLOR_ICON_SPRITE_INDEX);
             iconIndex++;
         }
 

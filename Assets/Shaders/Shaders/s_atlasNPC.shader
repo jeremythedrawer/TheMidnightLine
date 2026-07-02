@@ -161,7 +161,6 @@ Shader "Custom/s_atlasNPC"
 
                 half mouseColor = i.custom.y;
                 half ticketCheckHover = i.custom.w;
-                //return half4 (ticketCheckMask.rrr, 1);
 
                 outline = lerp(outline, 1 - outline, ticketCheckHover);
                 half3 finalColor = (tex.rgb * ticketCheckMask) + (outline * (1 - ticketCheckMask));

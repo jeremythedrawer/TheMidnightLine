@@ -96,7 +96,7 @@ public class NPCPicker : MonoBehaviour
                             else if (functionType == PickerFunctionType.Color)
                             {
                                 NPCBrain selectedNPC = possibleNPCs[i];
-                                if (trip.unlockedClueMarkerCount == 0)
+                                if ((trip.curUnlocks & UnlockType.Color) == 0)
                                 {
                                     if ((selectedNPC.atlasRenderer.customBit & (1 << DIAGONAL_TEXTURE_BIT)) == 0)
                                     {

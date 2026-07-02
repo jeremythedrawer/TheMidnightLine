@@ -32,6 +32,252 @@ Transform:
   - {fileID: 6845069501522430149}
   m_Father: {fileID: 8808117606927964435}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!1 &3187870862528334948
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6913212667731181088}
+  - component: {fileID: 7874314738988264612}
+  m_Layer: 0
+  m_Name: RuleOutAbilityIcon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6913212667731181088
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3187870862528334948}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -5.115, y: 1.119, z: 3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8808117606927964435}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &7874314738988264612
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3187870862528334948}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
+    material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
+  atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 19
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.11328125, y: 0.109375, z: 0.4453125, w: 0.671875}
+    uvPivot: {x: 0.5, y: 0.5}
+    worldSize: {x: 0.32222223, y: 0.31111112, z: 1}
+    index: 19
+  bounds:
+    m_Center: {x: -5.115, y: 1.119, z: 3}
+    m_Extent: {x: 0.16111112, y: 0.15555556, z: 0.1}
+  worldPivotAndSize: {x: -0.16111112, y: -0.15555556, z: 0.32222223, w: 0.31111112}
+  uvSizeAndPosition: {x: 0.11328125, y: 0.109375, z: 0.4453125, w: 0.671875}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
+  boundsOffset: {x: 0, y: 0, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 19
+  prevSpriteIndexFlipV: 19
+  isAnimating: 0
+  quadCount: 0
+--- !u!1 &3187938318560503949
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3362051493597469376}
+  - component: {fileID: 190701537030873360}
+  m_Layer: 0
+  m_Name: ColorAbilityIcon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3362051493597469376
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3187938318560503949}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.735, y: 1.119, z: 3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8808117606927964435}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &190701537030873360
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3187938318560503949}
+  m_Enabled: 0
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
+    material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
+  atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 20
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.11328125, y: 0.109375, z: 0.5800781, w: 0.671875}
+    uvPivot: {x: 0.5, y: 0.5}
+    worldSize: {x: 0.32222223, y: 0.31111112, z: 1}
+    index: 20
+  bounds:
+    m_Center: {x: -4.735, y: 1.119, z: 3}
+    m_Extent: {x: 0.16111112, y: 0.15555556, z: 0.1}
+  worldPivotAndSize: {x: -0.16111112, y: -0.15555556, z: 0.32222223, w: 0.31111112}
+  uvSizeAndPosition: {x: 0.11328125, y: 0.109375, z: 0.5800781, w: 0.671875}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
+  boundsOffset: {x: 0, y: 0, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 20
+  prevSpriteIndexFlipV: 20
+  isAnimating: 0
+  quadCount: 0
+--- !u!1 &3761832737462054916
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 468561904138666441}
+  - component: {fileID: 3055106755715326576}
+  m_Layer: 0
+  m_Name: MultiColorAbilityIcon
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &468561904138666441
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3761832737462054916}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -4.36, y: 1.119, z: 3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 8808117606927964435}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3055106755715326576
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3761832737462054916}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
+    material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
+  atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 23
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.11328125, y: 0.109375, z: 0.5800781, w: 0.546875}
+    uvPivot: {x: 0.5, y: 0.5}
+    worldSize: {x: 0.32222223, y: 0.31111112, z: 1}
+    index: 23
+  bounds:
+    m_Center: {x: -4.36, y: 1.119, z: 3}
+    m_Extent: {x: 0.16111112, y: 0.15555556, z: 0.1}
+  worldPivotAndSize: {x: -0.16111112, y: -0.15555556, z: 0.32222223, w: 0.31111112}
+  uvSizeAndPosition: {x: 0.11328125, y: 0.109375, z: 0.5800781, w: 0.546875}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
+  boundsOffset: {x: 0, y: 0, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 23
+  prevSpriteIndexFlipV: 23
+  isAnimating: 0
+  quadCount: 0
 --- !u!1 &4411161129615601001
 GameObject:
   m_ObjectHideFlags: 0
@@ -62,6 +308,9 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children:
+  - {fileID: 6913212667731181088}
+  - {fileID: 3362051493597469376}
+  - {fileID: 468561904138666441}
   - {fileID: 3788959731342699844}
   - {fileID: 7785879239634033540}
   - {fileID: 6227278811360202824}
@@ -97,6 +346,9 @@ MonoBehaviour:
   ticket: {fileID: 7063401080417137769}
   ticketIcon_prefab: {fileID: 7450212901381826310, guid: bd6534ac2c0749f43a6e6a4081b1a283, type: 3}
   carriageMap: {fileID: 5956653477285991142}
+  ruleOutAbilityIcon: {fileID: 7874314738988264612}
+  colorAbilityIcon: {fileID: 190701537030873360}
+  multiColorAbilityIcon: {fileID: 3055106755715326576}
   ticketIconTransform: {fileID: 8328713222595932860}
   ticketIcons: []
   curTicketIcon: {fileID: 0}
@@ -1435,15 +1687,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8887810985537258041, guid: 97ee08ce1da45014eafc5f5ff1730072, type: 3}
       propertyPath: totalBounds.m_Center.x
-      value: 2.8033345
+      value: 277.80334
       objectReference: {fileID: 0}
     - target: {fileID: 8887810985537258041, guid: 97ee08ce1da45014eafc5f5ff1730072, type: 3}
       propertyPath: totalBounds.m_Center.y
-      value: -0.8022225
+      value: -0.0422225
       objectReference: {fileID: 0}
     - target: {fileID: 8887810985537258041, guid: 97ee08ce1da45014eafc5f5ff1730072, type: 3}
       propertyPath: totalBounds.m_Center.z
-      value: 3
+      value: -37
       objectReference: {fileID: 0}
     - target: {fileID: 8887810985537258041, guid: 97ee08ce1da45014eafc5f5ff1730072, type: 3}
       propertyPath: totalBounds.m_Extent.x

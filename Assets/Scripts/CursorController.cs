@@ -59,7 +59,7 @@ public class CursorController : MonoBehaviour
             {
                 if (cursorIsMoving && SceneController.GetNPCPicker().curPickerState == PickerState.Closed) HoverNPC();
                 
-                if (playerInputs.mouseLeftDown && trip.unlockedRuleOutMarker)
+                if (playerInputs.mouseLeftDown && (trip.curUnlocks & UnlockType.RuleOut) != 0)
                 {
                     if (hoveredNPCCount == 1)
                     {

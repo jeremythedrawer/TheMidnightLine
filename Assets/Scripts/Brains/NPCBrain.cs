@@ -165,7 +165,7 @@ public class NPCBrain : MonoBehaviour
     }
     public void ToggleHover(bool toggle)
     {
-        if (trip.unlockedRuleOutMarker)
+        if ((trip.curUnlocks & UnlockType.RuleOut) != 0)
         {
             atlasRenderer.custom.y = toggle ? 1 : 0;
         }
@@ -590,6 +590,11 @@ public class NPCBrain : MonoBehaviour
                 {
                     disembarking = false;
                     ToggleUnveil(false);
+                    atlasRenderer.custom.x = 0;
+                    atlasRenderer.custom.y = 0;
+                    atlasRenderer.custom.z = 0;
+                    atlasRenderer.custom.w = 0;
+                    atlasRenderer.customBit = 0;
                     NPCManager.ReturnNPC(trip.npcDataArray[profile.npcPrefabIndex].prefab , this);
                 }
             }

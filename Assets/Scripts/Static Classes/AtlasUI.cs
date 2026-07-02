@@ -6,10 +6,12 @@ using UnityEngine;
 using static NPC;
 public static class AtlasUI
 {
-    
-
     public const int MERIDIA_COLOR_BIT = 4;
     public const int DIAGONAL_TEXTURE_BIT = 3;
+
+    public const int LOCK_SPRITE_INDEX = 18;
+    public const int COLOR_SQUARE_SPRITE_INDEX = 5;
+    public const int TICK_SPRITE_INDEX = 22;
 
     public const float BORDER_PADDING = 0f;
     public const float LETTER_ADVANCE = 0.122f;
@@ -53,6 +55,7 @@ public static class AtlasUI
         None = 0,
         RuleOut = 1 << 0,
         Color = 1 << 1,
+        MultiColor = 1 << 2,
     }
 
     public enum PageType

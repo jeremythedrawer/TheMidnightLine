@@ -77,21 +77,43 @@ public class Page : MonoBehaviour
             break;
         }
     }
-    public void EnableClueRow(int index)
+    public void SetClueRows(int oldIndex)
     {
-        AtlasTextRenderer playerWriteTexRend = playerWriteTextRenderers[index];
+        for (int i = oldIndex; i < trip.unlockedClueMarkerCount; i++)
+        {
+            AtlasTextRenderer playerWriteTexRend = playerWriteTextRenderers[i];
 
-        int traitorIndex = index % trip.traitorProfiles.Length;
+            int traitorIndex = i % trip.traitorProfiles.Length;
+            Behaviours behaviours = trip.traitorProfiles[traitorIndex].npcProfile.behaviours;
+
+            int behaveIndex = i % 2;
+            Behaviours curBehaviour = GetBehaviourAtIndex(behaviours, behaveIndex);
+
+            previewPlayerWriteText = npcData.behaviourStringDict[curBehaviour];
+            playerWriteTexRend.SetText(previewPlayerWriteText);
+            playerWriteTexRend.enabled = true;
+            playerWriteTexRend.SetAppearTextAlpha(normAmount: 0.5f);
+            playerWriteRenderers[i].custom = Vector3.one;
+            playerWriteRenderers[i].UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+        }
+    }
+    public void SetNextClueRow()
+    {
+        int i = trip.unlockedClueMarkerCount - 1;
+        AtlasTextRenderer playerWriteTexRend = playerWriteTextRenderers[i];
+
+        int traitorIndex = i % trip.traitorProfiles.Length;
         Behaviours behaviours = trip.traitorProfiles[traitorIndex].npcProfile.behaviours;
 
-        int behaveIndex = index % 2;
+        int behaveIndex = i % 2;
         Behaviours curBehaviour = GetBehaviourAtIndex(behaviours, behaveIndex);
 
         previewPlayerWriteText = npcData.behaviourStringDict[curBehaviour];
         playerWriteTexRend.SetText(previewPlayerWriteText);
 
         playerWriteTexRend.enabled = true;
-        playerWriteRenderers[index].custom = Vector3.one;
+        playerWriteRenderers[i].custom = Vector3.one;
+        playerWriteRenderers[i].UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
     }
     public void UpdatePage()
     {
@@ -105,7 +127,7 @@ public class Page : MonoBehaviour
                     AtlasRenderer colorKeyRend = playerWriteRenderers[i];
                     if (CursorController.IsInsideBounds(colorKeyRend.GetBounds()) && !foundColorKeyRend)
                     {
-                        colorKeyRend.custom.w = 1;
+                        colorKeyRend.custom.w = 0;
 
                         if (playerInputs.mouseLeftDown)
                         {
@@ -119,7 +141,7 @@ public class Page : MonoBehaviour
                     }
                     else
                     {
-                        colorKeyRend.custom.w = 0;
+                        colorKeyRend.custom.w = 1;
                     }
                 }
             }
@@ -434,7 +456,6 @@ public class Page : MonoBehaviour
             previewPlayerWriteText = activePlayerWriteTextRenderer.text;
             activePlayerWriteText = playerWriteTexts[activePlayerWriteRowIndex];
         }
-
     }
     public Bounds GetWritingBounds()
     {

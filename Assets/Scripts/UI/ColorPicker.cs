@@ -8,9 +8,6 @@ public class ColorPicker : MonoBehaviour
 {
     public const int COLOR_GRID_X_COUNT = 4;
     public const int COLOR_GRID_Y_COUNT = 4;
-    public const int LOCK_SPRITE_INDEX = 18;
-    public const int COLOR_SQUARE_SPRITE_INDEX = 5;
-    public const int TICK_SPRITE_INDEX = 22;
 
     public TripSO trip;
     public ColorsSO colorsData;
@@ -369,22 +366,50 @@ public class ColorPicker : MonoBehaviour
         {
             if ((selectedRenderer.customBit & (1 << colorIndex)) != 0)
             {
-                selectedRenderer.customBit &= ~(1 << colorIndex);
+                if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
+                {
+                    selectedRenderer.customBit &= ~(1 << colorIndex);
+                }
+                else
+                {
+                    selectedRenderer.customBit = 0;
+                }
             }
             else
             {
-                selectedRenderer.customBit |= 1 << colorIndex;
+                if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
+                {
+                    selectedRenderer.customBit |= 1 << colorIndex;
+                }
+                else
+                {
+                    selectedRenderer.customBit = 1 << colorIndex;
+                }
             }
         }
         else
         {
             if ((selectedRenderer.customBit & (1 << DIAGONAL_TEXTURE_BIT)) != 0)
             {
-                selectedRenderer.customBit &= ~(1 << DIAGONAL_TEXTURE_BIT);
+                if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
+                {
+                    selectedRenderer.customBit &= ~(1 << DIAGONAL_TEXTURE_BIT);
+                }
+                else
+                {
+                    selectedRenderer.customBit = 0;
+                }
             }
             else
             {
-                selectedRenderer.customBit |= 1 << DIAGONAL_TEXTURE_BIT;
+                if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
+                {
+                    selectedRenderer.customBit |= 1 << DIAGONAL_TEXTURE_BIT;
+                }
+                else
+                {
+                    selectedRenderer.customBit = 1 << DIAGONAL_TEXTURE_BIT;
+                }
             }
         }
     }

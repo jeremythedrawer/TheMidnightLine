@@ -82,6 +82,7 @@ public class Notepad : MonoBehaviour
     public int leftHandWorldDepthFront;
     public int leftHandWorldDepthBack;
     public int flipToggle;
+    public int oldClueMarkerCount;
 
     public float totalPencilTime;
     public float curPencilTime;
@@ -109,10 +110,16 @@ public class Notepad : MonoBehaviour
         }
         activePage = promptPage;
     }
+    private void OnEnable()
+    {
+        UnlockPicker.OnNewColorUnlocked += EnableClueRowOnActivePage;
+    }
     private void OnDisable()
     {
         leftHandTargetPos = leftHandFlipPos;
         leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[handFlipPage_clip.keyframeStartIndex].sprite);
+        UnlockPicker.OnNewColorUnlocked -= EnableClueRowOnActivePage;
+
     }
     private void Start()
     {
@@ -157,7 +164,6 @@ public class Notepad : MonoBehaviour
         ChooseState();
         UpdateState();
     }
-
     public void ExitNotepad()
     {
         Bounds rendBounds = leftHand_renderer.GetBounds();
@@ -166,7 +172,6 @@ public class Notepad : MonoBehaviour
         leftHandTargetPos = leftHandOffScreenPos + spritePivotOffset;
         active = false;
     }
-
     private void ChooseState()
     {
         switch (activePage.pageType)
@@ -553,8 +558,14 @@ public class Notepad : MonoBehaviour
         {
             case NotepadState.FlippingUp:
             {
-                Page traitorPageAhead = pages[activePageIndex + 1];
-                traitorPageAhead.gameObject.SetActive(true);
+                Page pageAhead = pages[activePageIndex + 1];
+                pageAhead.gameObject.SetActive(true);
+
+                if (pageAhead.pageType == PageType.ColorKey && oldClueMarkerCount < trip.unlockedClueMarkerCount)
+                {
+                    pageAhead.SetClueRows(oldClueMarkerCount);
+                    oldClueMarkerCount = trip.unlockedClueMarkerCount;
+                }
 
                 leftHand_renderer.UpdateDepthRealtime(leftHandWorldDepthFront);
                 leftHand_renderer.PlayClipOneShot(handFlipPage_clip);
@@ -862,6 +873,8 @@ public class Notepad : MonoBehaviour
         }
         else if (activePage.pageType == PageType.ColorKey)
         {
+            if (trip.unlockedClueMarkerCount == 0) return;
+
             if (colorsData.enteredState == PickerState.Opened || colorsData.enteredState == PickerState.Opening)
             {
                 colorsData.enteredState = PickerState.None;
@@ -878,7 +891,7 @@ public class Notepad : MonoBehaviour
                 Vector3 startWriteWorldPos = new Vector3(activePage.playerWriteRenderers[activePage.activePlayerWriteRowIndex].GetBounds().min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
                 leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
             }
-            else if (playerInputs.numpad != -1 && playerInputs.numpad < trip.unlockedClueMarkerCount)
+            else if (playerInputs.numpad != -1 && playerInputs.numpad <= trip.unlockedClueMarkerCount)
             {
                 activePage.SwitchActivePLayerWriteTextRenderer(playerInputs.numpad -1);
                 curWritingBounds = activePage.GetWritingBounds();
@@ -904,6 +917,11 @@ public class Notepad : MonoBehaviour
     {
         active = true;
         EnterState(NotepadState.None);
+        if (activePage.pageType == PageType.ColorKey && oldClueMarkerCount < trip.unlockedClueMarkerCount)
+        {
+            activePage.SetClueRows(oldClueMarkerCount);
+            oldClueMarkerCount = trip.unlockedClueMarkerCount;
+        }
     }
     private void CreatePages()
     {
@@ -947,11 +965,18 @@ public class Notepad : MonoBehaviour
     {
 
     }
+    private void EnableClueRowOnActivePage()
+    {
+        if (activePage != null && activePage.pageType == PageType.ColorKey)
+        {
+            activePage.SetNextClueRow();
+            oldClueMarkerCount = trip.unlockedClueMarkerCount;
+        }
+    }
     private float NormalGaussianValue(float t)
     {
         return Mathf.Exp(-(Mathf.Pow(t - 0.5f, 2) / 0.045f)) * 0.5f;
     }
-    
     private bool ToFlipUp()
     {
         return ((playerInputs.notepadPreviewAnswerAndFlip.y == 1 || willFlipUp) && activePageIndex < lastPageIndex && !writeToggle && !eraseToggle && !revealToggle) || flipToggle == 1;
@@ -972,7 +997,6 @@ public class Notepad : MonoBehaviour
     {
         return (sceneData.activeSceneType == SceneType.Score && playerInputs.notepadConfirmAnswer) || revealToggle;
     }
-    
     private string GenerateName(Gender gender, Ethnicity ethnicity)
     {
         string genderString = gender.ToString();

@@ -10,6 +10,7 @@ public class GameplayUI : MonoBehaviour
     const float TICKET_ICON_PADDING = 0.2f;
     const float TICKET_ICON_APPEARING_DURATION = 0.5f;
     const float NOTEPAD_INACTIVE_OFFSET = 1.8f;
+    const float ABILITY_ICON_APPEAR_TIME = 1f;
 
     public PlayerInputsSO playerInputs;
     public CameraStatsSO cameraStats;
@@ -29,6 +30,9 @@ public class GameplayUI : MonoBehaviour
     public TicketIcon ticketIcon_prefab;
 
     public AtlasRenderer carriageMap;
+    public AtlasRenderer ruleOutAbilityIcon;
+    public AtlasRenderer colorAbilityIcon;
+    public AtlasRenderer multiColorAbilityIcon;
 
     public Transform ticketIconTransform;
 
@@ -73,6 +77,7 @@ public class GameplayUI : MonoBehaviour
 
         SpyBrain.OnTicketCheckHoverDisabled += RevertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverEnabled += InvertCurTicketIcon;
+        UnlockPicker.OnNewAbilityUnlocked += AppearNewAbilityIcon;
     }
     private void OnDisable()
     {
@@ -83,17 +88,23 @@ public class GameplayUI : MonoBehaviour
 
         SpyBrain.OnTicketCheckHoverDisabled -= RevertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverEnabled -= InvertCurTicketIcon;
+        UnlockPicker.OnNewAbilityUnlocked -= AppearNewAbilityIcon;
     }
     private void Start()
     {
         InitPOVUI();
         InitTicketIcons();
+        InitAbiltiyIcons();
         FadeFromBlack();
     }
     private void Update()
     {
         ChooseState();
         UpdateState();
+    }
+    private void KeepNotepad()
+    {
+        SceneController.KeepNotepad(notepad);
     }
     private void ChooseState()
     {
@@ -281,6 +292,12 @@ public class GameplayUI : MonoBehaviour
         }
         curTicketIcon = ticketIcons[0];
     }
+    private void InitAbiltiyIcons()
+    {
+        ruleOutAbilityIcon.custom.w = 1;
+        colorAbilityIcon.custom.w = 1;
+        multiColorAbilityIcon.custom.w = 1;
+    }
     private void SetNewTicketIcons()
     {
         curTicketIcon = ticketIcons[0];
@@ -334,9 +351,40 @@ public class GameplayUI : MonoBehaviour
             await UniTask.WaitForSeconds(TICKET_ICON_APPEARING_DURATION);
         }
     }
-    public void KeepNotepad()
+    private void AppearNewAbilityIcon(UnlockType unlockType)
     {
-        SceneController.KeepNotepad(notepad);
+        switch(unlockType)
+        {
+            case UnlockType.RuleOut:
+            {
+                Appearing(ruleOutAbilityIcon).Forget();
+
+            }
+            break;
+            case UnlockType.Color:
+            {
+                Appearing(colorAbilityIcon).Forget();
+            }
+            break;
+            case UnlockType.MultiColor:
+            {
+                Appearing(multiColorAbilityIcon).Forget();
+            }
+            break;
+        }
+    }
+    private async UniTask Appearing(AtlasRenderer renderer)
+    {
+        float elapsed = ABILITY_ICON_APPEAR_TIME;
+
+        while (elapsed > 0)
+        {
+            elapsed -= Time.deltaTime;
+            float t = elapsed / ABILITY_ICON_APPEAR_TIME;
+            renderer.custom.w = t;
+            await UniTask.Yield();
+        }
+        renderer.custom.w = 0;
     }
     private void OnDrawGizmos()
     {
