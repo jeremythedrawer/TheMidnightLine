@@ -127,11 +127,28 @@ public class ColorPicker : MonoBehaviour
 
                                 if (colorRend.spriteIndex == TICK_SPRITE_INDEX)
                                 {
-                                    colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                                        colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+
                                 }
                                 else
                                 {
-                                    colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+                                    if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
+                                    {
+                                        colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+                                    }
+                                    else
+                                    {
+                                        for (int j = 0; j < activeColorAmount; j++)
+                                        {
+                                            AtlasRenderer otherColorRend = colorRenderers[j];
+                                            if (otherColorRend != colorRend && otherColorRend.spriteIndex == TICK_SPRITE_INDEX)
+                                            {
+                                                otherColorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                                            }
+                                        }
+
+                                        colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+                                    }
                                 }
                             }
                         }

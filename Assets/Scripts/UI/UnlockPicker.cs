@@ -27,7 +27,7 @@ public class UnlockPicker : MonoBehaviour
 
     [Header("Generated")]
 
-    public AtlasRenderer selectedRenderer;
+    public NPCBrain selectedNPC;
 
     public CancellationTokenSource ctsOpen;
 
@@ -139,8 +139,9 @@ public class UnlockPicker : MonoBehaviour
                                 }
                             }
                             
-                            selectedRenderer.customBit &= ~(1 << MERIDIA_COLOR_BIT);
-                            selectedRenderer.custom.z = 1;
+                            selectedNPC.atlasRenderer.customBit &= ~(1 << MERIDIA_COLOR_BIT);
+                            selectedNPC.atlasRenderer.custom.z = 1;
+                            selectedNPC.ticketHasBeenChecked = true;
                         }
                         return;
                     }
@@ -226,10 +227,10 @@ public class UnlockPicker : MonoBehaviour
             iconRenderers[i].enabled = false;
         }
 
-        selectedRenderer = null;
+        selectedNPC = null;
         transform.SetParent(null);
     }
-    public void TurnOn(int unlockSelectionAmount, UnlockType unlockType,  AtlasRenderer rend)
+    public void TurnOn(int unlockSelectionAmount, UnlockType unlockType,  NPCBrain npc)
     {
         paletteRenderer.enabled = true;
 
@@ -275,9 +276,9 @@ public class UnlockPicker : MonoBehaviour
             iconIndex++;
         }
 
-        selectedRenderer = rend;
+        selectedNPC = npc;
 
-        Bounds selectedRendBounds = selectedRenderer.GetBounds();
+        Bounds selectedRendBounds = selectedNPC.atlasRenderer.GetBounds();
 
         curWorldPos.x = selectedRendBounds.min.x;
         curWorldPos.y = selectedRendBounds.max.y;
@@ -295,7 +296,7 @@ public class UnlockPicker : MonoBehaviour
         paletteRenderer.width = tileWidth;
         paletteRenderer.height = tileHeight;
     }
-    public void Open(int unlockSelectionAmount, UnlockType unlockType, AtlasRenderer rend)
+    public void Open(int unlockSelectionAmount, UnlockType unlockType, NPCBrain npc)
     {
         if (curPickerState == PickerState.Closed)
         {
@@ -303,7 +304,7 @@ public class UnlockPicker : MonoBehaviour
             ctsOpen = new CancellationTokenSource();
 
 
-            TurnOn(unlockSelectionAmount, unlockType, rend);
+            TurnOn(unlockSelectionAmount, unlockType, npc);
             Opening().Forget();
         }
     }
@@ -314,7 +315,7 @@ public class UnlockPicker : MonoBehaviour
             ctsOpen?.Cancel();
             ctsOpen = new CancellationTokenSource();
 
-            transform.SetParent(selectedRenderer.transform);
+            transform.SetParent(selectedNPC.transform);
             Closing().Forget();
         }
     }

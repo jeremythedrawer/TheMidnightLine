@@ -423,7 +423,7 @@ public class SpyBrain : MonoBehaviour
                 {
                     curUnlockType = UnlockType.MultiColor;
                 }
-                SceneController.GetUnlockPicker().Open(unlockSelectionAmount: 1, curUnlockType, ChosenNPC.atlasRenderer);
+                SceneController.GetUnlockPicker().Open(unlockSelectionAmount: 1, curUnlockType, ChosenNPC);
             }
             break;
 

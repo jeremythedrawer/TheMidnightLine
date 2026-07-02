@@ -93,7 +93,10 @@ public class Page : MonoBehaviour
             playerWriteTexRend.SetText(previewPlayerWriteText);
             playerWriteTexRend.enabled = true;
             playerWriteTexRend.SetAppearTextAlpha(normAmount: 0.5f);
-            playerWriteRenderers[i].custom = Vector3.one;
+            playerWriteRenderers[i].custom.x = 0;
+            playerWriteRenderers[i].custom.y = 0;
+            playerWriteRenderers[i].custom.z = 0;
+            playerWriteRenderers[i].custom.w = 0;
             playerWriteRenderers[i].UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
         }
     }
