@@ -46,6 +46,7 @@ Shader "Custom/s_atlasInvert"
 
             float3 _BlackColor;
             float3 _MeridiaColor;
+
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -68,6 +69,7 @@ Shader "Custom/s_atlasInvert"
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
+                o.worldPos = worldPos;
                 o.uvSizeAndPos = spriteData.uvSizeAndPos;
                 o.scaleAndFlip = spriteData.scaleAndFlip;
                 o.custom = spriteData.custom;

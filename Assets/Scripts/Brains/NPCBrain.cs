@@ -94,7 +94,17 @@ public class NPCBrain : MonoBehaviour
         gameEventData.OnStationArrival.UnregisterListener(PrepareToBoardTrain);
         CursorController.OnMouseDisabled -= DisableHover;
     }
-    private void Start()
+    private void Update()
+    {
+        ChooseStates();
+        UpdateStates();
+        UpdatePath();
+    }
+    private void FixedUpdate()
+    {
+        FixedUpdateStates();
+    }
+    public void Init()
     {
         seatPosIndex = int.MaxValue;
         atlas = atlasRenderer.atlas;
@@ -102,8 +112,7 @@ public class NPCBrain : MonoBehaviour
         rigidBody.includeLayers = layerSettings.stationMask;
         curPath = NPCPath.ToStandAtStation;
 
-        atlasRenderer.UpdateDepthRealtime((int)transform.position.z);
-        smokerRoomIndex = -1; //NOTE: -1 is used as a condition to find a smokers room in the smoker state
+        smokerRoomIndex = -1;
         targetAlpha = 1;
 
 
@@ -115,16 +124,6 @@ public class NPCBrain : MonoBehaviour
         {
             curBehaviour = GetRandomBehaviour();
         }
-    }
-    private void Update()
-    {
-        ChooseStates();
-        UpdateStates();
-        UpdatePath();
-    }
-    private void FixedUpdate()
-    {
-        FixedUpdateStates();
     }
     public void BoardTrain()
     {
@@ -313,9 +312,10 @@ public class NPCBrain : MonoBehaviour
                     atlasRenderer.PlayClip(ref curClip, curGlyph.transform);
                     if (!playingGlyph &&  atlas.motionSprites[atlasRenderer.sprite.index].markers.Length > 0)
                     {
+                        curGlyph.gameObject.SetActive(true);
                         curGlyph.Play();
                         playingGlyph = true;
-                        if ((curBehaviour & Behaviours.Smoke_addict) != 0)
+                        if (curBehaviour == Behaviours.Smoke_addict)
                         {
                             curGlyph.SetFloat("_Lifetime", stateDuration - behaviourClock);
                         }
@@ -371,20 +371,36 @@ public class NPCBrain : MonoBehaviour
             {
                 if (curGlyph != null) NPCManager.ReturnGlyph(curBehaviourContext.glyphPrefab, curGlyph);
 
-                if ((curBehaviour & Behaviours.Smoke_addict) != 0)
+
+                switch(curBehaviour)
                 {
-                    curGlyph.Reinit();
-                    curGlyph.gameObject.SetActive(false);
-                    if (newState != NPCState.TicketCheck)
+                    case Behaviours.Smoke_addict:
                     {
-                        curCarriage.smokersRoomData[smokerRoomIndex].npcCount--;
-                        smokerRoomIndex = -1;
-                        QueueForSeat();
+                        curGlyph.Reinit();
+                        curGlyph.gameObject.SetActive(false);
+                        if (newState != NPCState.TicketCheck)
+                        {
+                            curCarriage.smokersRoomData[smokerRoomIndex].npcCount--;
+                            smokerRoomIndex = -1;
+                            QueueForSeat();
+                        }
                     }
-                }
-                else if ((curBehaviour & Behaviours.Always_on_call) != 0)
-                {
-                    curGlyph.gameObject.SetActive(false);
+                    break;
+
+                    case Behaviours.Always_on_call:
+                    {
+                        curGlyph.gameObject.SetActive(false);
+                    }
+                    break;
+
+                    case Behaviours.Known_vandal:
+                    {
+                        if (newState != NPCState.TicketCheck)
+                        {
+                            QueueForSeat();
+                        }
+                    }
+                    break;
                 }
 
                 if (newState != NPCState.TicketCheck)

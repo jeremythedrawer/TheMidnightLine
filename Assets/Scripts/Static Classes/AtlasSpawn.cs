@@ -7,7 +7,7 @@ using static AtlasRendering;
 public static class AtlasSpawn
 {
     public const float MAIN_MIN = 3.0f;
-    public const float MAIN_MAX = 17.0f;
+    public const float MAIN_MAX = 26.0f;
 
     public const int TRAIN_TRACKS_DEPTH = 6;
     public const int TRAIN_LINE_DEPTH = 5;

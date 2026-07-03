@@ -358,7 +358,6 @@ public class GameplayUI : MonoBehaviour
             case UnlockType.RuleOut:
             {
                 Appearing(ruleOutAbilityIcon).Forget();
-
             }
             break;
             case UnlockType.Color:

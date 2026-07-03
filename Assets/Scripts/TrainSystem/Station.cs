@@ -42,6 +42,7 @@ public class Station : MonoBehaviour
             {
                 bystander.atlasRenderer.FlipHSimple(true);
             }
+            bystander.Init();
         }
 
         int maxTraitorSpawnIndex = trip.traitorsSpawned + station.traitorSpawnCount;
@@ -62,6 +63,7 @@ public class Station : MonoBehaviour
             {
                 traitor.atlasRenderer.FlipHSimple(true);
             }
+            traitor.Init();
         }
         trip.traitorsSpawned += station.traitorSpawnCount;
 
@@ -83,6 +85,7 @@ public class Station : MonoBehaviour
             {
                 accomplice.atlasRenderer.FlipHSimple(true);
             }
+            accomplice.Init();
         }
 
     }

@@ -126,52 +126,32 @@ public static class NPC
 
     public static void QuickSortNPCByXPos(NPCBrain[] npcs, int left, int right)
     {
-        if (left < right)
-        {
-            int pivot = PartitionNPC(npcs, left, right);
+        if (left >= right) return;
 
-            if (pivot > 1)
-            {
-                QuickSortNPCByXPos(npcs, left, pivot - 1);
-            }
+        int index = PartitionNPC(npcs, left, right);
 
-            int pivotAhead = pivot + 1;
-            if (pivotAhead < right)
-            {
-                QuickSortNPCByXPos(npcs, pivotAhead, right);
-            }
-        }
+        QuickSortNPCByXPos(npcs, left, index - 1);
+        QuickSortNPCByXPos(npcs, index, right);
     }
     private static int PartitionNPC(NPCBrain[] npcs, int left, int right)
     {
-        NPCBrain leftNPC = npcs[left];
+        float pivot = npcs[(left + right) / 2].transform.position.x;
 
-        while (true)
+        while (left <= right)
         {
-            while (npcs[left].transform.position.x > leftNPC.transform.position.x)
-            {
-                left++;
-            }
+            while (npcs[left].transform.position.x > pivot) left++;
 
-            while (npcs[right].transform.position.x < leftNPC.transform.position.x)
+            while (npcs[right].transform.position.x < pivot) right--;
+
+            if (left <= right)
             {
+                (npcs[left], npcs[right]) = (npcs[right], npcs[left]);
+                left++;
                 right--;
             }
-
-            if (left < right)
-            {
-                if (npcs[left] == npcs[right]) return right;
-
-                NPCBrain npcTemp = npcs[left];
-
-                npcs[left] = npcs[right];
-                npcs[right] = npcTemp;
-            }
-            else
-            {
-                return right;
-            }
         }
+
+        return left;
     }
 }
 

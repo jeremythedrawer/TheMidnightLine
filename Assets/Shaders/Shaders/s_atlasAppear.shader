@@ -91,7 +91,7 @@ Shader "Custom/s_atlasAppear"
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 finalColor = color + _BlackColor;
+                half3 finalColor = color.rgb + _BlackColor;
 
                 half alpha = BayerX8(color.a - i.custom.a, i.positionHCS.xy);
                 clip(alpha - 0.001);

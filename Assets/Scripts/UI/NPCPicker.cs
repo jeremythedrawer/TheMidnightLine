@@ -258,17 +258,18 @@ public class NPCPicker : MonoBehaviour
                     {
                         if (npcColorIndex < trip.selectedClueMarkerColors.Length)
                         {
-                            Color iconColor = trip.selectedClueMarkerColors[npcColorIndex];
+                            Color iconColor = trip.selectedClueMarkerColors[npcColorIndex].linear;
                             iconRend.custom.x = iconColor.r; 
                             iconRend.custom.y = iconColor.g; 
-                            iconRend.custom.z = iconColor.b; 
+                            iconRend.custom.z = iconColor.b;
+                            iconRend.customBit = 0;
                         }
                         else
                         {
-                            iconRend.customBit = 1;
                             iconRend.custom.x = 0;
                             iconRend.custom.y = 0;
                             iconRend.custom.z = 0;
+                            iconRend.customBit = 1 << DIAGONAL_TEXTURE_BIT;
                         }
                     }
                     else
@@ -276,6 +277,7 @@ public class NPCPicker : MonoBehaviour
                         iconRend.custom.x = 0;
                         iconRend.custom.y = 0;
                         iconRend.custom.z = 0;
+                        iconRend.customBit = 0;
                     }
 
                 }

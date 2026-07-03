@@ -76,7 +76,9 @@ public class NPCManager : MonoBehaviour
             npc.gameObject.transform.parent = parent;
             return npc;
         }
-        return Instantiate(npcPrefab, spawnPos, Quaternion.identity, parent);
+        NPCBrain newNPC = Instantiate(npcPrefab, spawnPos, Quaternion.identity, parent);
+
+        return newNPC;
     }
 
     public static void ReturnNPC(NPCBrain npcPrefab, NPCBrain npcInstance)

@@ -42,7 +42,7 @@ public class UnlockPicker : MonoBehaviour
 
     public PickerState curPickerState;
     public PickerState enteredPickerState;
-    public UnlockType curUnlockType;
+    public UnlockType curUnlockSelectioMask;
 
     public int curGridColCount;
 
@@ -102,7 +102,7 @@ public class UnlockPicker : MonoBehaviour
                             int validIndex = 0;
                             for (int j = 0; j < 32; j++)
                             {
-                                if (((int)curUnlockType & (1 << j)) == 0) continue;
+                                if (((int)curUnlockSelectioMask & (1 << j)) == 0) continue;
                                 
                                 if (validIndex != i)
                                 {
@@ -236,7 +236,7 @@ public class UnlockPicker : MonoBehaviour
 
         curGridColCount = unlockSelectionAmount;
 
-        curUnlockType = unlockType;
+        curUnlockSelectioMask = unlockType;
 
         int iconIndex = 0;
 
