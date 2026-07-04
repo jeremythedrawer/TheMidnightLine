@@ -4,19 +4,25 @@ using UnityEngine.InputSystem;
 using static AtlasUI;
 public class ScoreUI : MonoBehaviour
 {
-    public TripSO trip;
-    public AtlasTextRenderer scoreRenderer;
     public Material fadeBlackMaterial;
+
+    public TripSO trip;
     public GameEventDataSO gameEventData;
     public CameraStatsSO cameraStats;
+    
+    public AtlasTextRenderer scoreRenderer;
 
     [Header("Generated")]
+    public Notepad notepad;
+
     public CancellationTokenSource ctsFadeBlack;
     public CancellationTokenSource ctsNotepad;
-    public Notepad notepad;
-    public int traitorsRevealed;
-    public UIState curState;
+
     public Vector3 naturalMovePos;
+
+    public UIState curState;
+
+    public int traitorsRevealed;
     private void Start()
     {
         FadeFromBlack();
