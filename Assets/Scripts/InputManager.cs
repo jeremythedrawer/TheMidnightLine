@@ -24,6 +24,8 @@ public class InputManager : MonoBehaviour
     InputAction ticket_action;
     InputAction interact_action;
 
+    InputAction shift_action;
+
     InputAction mouseLeftDown_action;
     InputAction mouseLeftPress_action;
     InputAction mouseRightDown_action;
@@ -50,6 +52,8 @@ public class InputManager : MonoBehaviour
 
         ticket_action = playerInput.actions["Player/Ticket"];
         interact_action = playerInput.actions["Player/Interact"];
+
+        shift_action = playerInput.actions["Player/Shift"];
 
         mouseLeftDown_action = playerInput.actions["Player/MouseLeftDown"];
         mouseLeftPress_action = playerInput.actions["Player/MouseLeftPress"];
@@ -100,10 +104,16 @@ public class InputManager : MonoBehaviour
             playerInputs.ticketCheckKeyHold = false;
         };
 
-            interact_action.started += context =>
+        interact_action.started += context =>
         {
             gameEventData.OnInteract.Raise();
             playerInputs.interact = true;
+        };
+
+        shift_action.started += context => playerInputs.shiftDown = true;
+        shift_action.canceled += context =>
+        {
+            playerInputs.shiftUp = true;
         };
 
         mouseLeftDown_action.started += context => playerInputs.mouseLeftDown = true;
@@ -178,6 +188,9 @@ public class InputManager : MonoBehaviour
         playerInputs.mouseRightUp = false;
         playerInputs.moveUp = false;
         playerInputs.moveDown = false;
+
+        playerInputs.shiftDown = false;
+        playerInputs.shiftUp = false;
 
         playerInputs.notepadPreviewAnswerAndFlip.x = 0;
         playerInputs.notepadPreviewAnswerAndFlip.y = 0;

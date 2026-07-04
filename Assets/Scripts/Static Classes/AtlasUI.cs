@@ -6,9 +6,13 @@ using UnityEngine;
 using static NPC;
 public static class AtlasUI
 {
-    public const int LOCK_SPRITE_INDEX = 18;
     public const int COLOR_SQUARE_SPRITE_INDEX = 5;
+    public const int ONE_NUMPAD_SPRITE_INDEX = 12;
+    public const int TWO_NUMPAD_SPRITE_INDEX = 13;
+    public const int THREE_NUMPAD_SPRITE_INDEX = 14;
+    public const int LOCK_SPRITE_INDEX = 18;
     public const int TICK_SPRITE_INDEX = 22;
+    public const int FOUR_NUMPAD_SPRITE_INDEX = 25;
 
     public const float BORDER_PADDING = 0f;
     public const float LETTER_ADVANCE = 0.122f;

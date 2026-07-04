@@ -16,7 +16,7 @@ MonoBehaviour:
   ticketsToCheckBeforeSpawn: 0
   bystanderSpawnCount: 11
   traitorSpawnCount: 0
-  accompliceSpawnCount: 0
+  accompliceSpawnCount: 3
   isFrontOfTrain: 1
   stationName: Old Vinrose Station
   stationIndex: 0
@@ -60,14 +60,22 @@ MonoBehaviour:
     behaviours: 6
   - boardingStationIndex: 0
     disembarkingStationIndex: 1
-    npcPrefabIndex: 3
+    npcPrefabIndex: 4
     behaviours: 3
   - boardingStationIndex: 0
     disembarkingStationIndex: 1
-    npcPrefabIndex: 3
-    behaviours: 5
+    npcPrefabIndex: 4
+    behaviours: 33
   accompliceProfiles:
   - boardingStationIndex: 0
-    disembarkingStationIndex: 6
-    npcPrefabIndex: 0
+    disembarkingStationIndex: 7
+    npcPrefabIndex: 2
+    behaviours: 0
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 7
+    npcPrefabIndex: 3
+    behaviours: 0
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 7
+    npcPrefabIndex: 3
     behaviours: 0

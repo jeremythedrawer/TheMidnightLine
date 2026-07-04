@@ -77,46 +77,54 @@ public class Page : MonoBehaviour
             break;
         }
     }
-    public void SetClueRows(int oldIndex)
+    public void SetRuleOutRow()
     {
-        for (int i = oldIndex; i < trip.unlockedClueMarkerCount; i++)
-        {
-            AtlasTextRenderer playerWriteTexRend = playerWriteTextRenderers[i];
+        AtlasTextRenderer playerWriteTextRend = playerWriteTextRenderers[0];
+        previewPlayerWriteText = "Rule Out";
+        playerWriteTextRend.SetText(previewPlayerWriteText);
 
-            int traitorIndex = i % trip.traitorProfiles.Length;
-            Behaviours behaviours = trip.traitorProfiles[traitorIndex].npcProfile.behaviours;
-
-            int behaveIndex = i % 2;
-            Behaviours curBehaviour = GetBehaviourAtIndex(behaviours, behaveIndex);
-
-            previewPlayerWriteText = npcData.behaviourStringDict[curBehaviour];
-            playerWriteTexRend.SetText(previewPlayerWriteText);
-            playerWriteTexRend.enabled = true;
-            playerWriteTexRend.SetAppearTextAlpha(normAmount: 0.5f);
-            playerWriteRenderers[i].custom.x = 0;
-            playerWriteRenderers[i].custom.y = 0;
-            playerWriteRenderers[i].custom.z = 0;
-            playerWriteRenderers[i].custom.w = 0;
-            playerWriteRenderers[i].UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
-        }
+        playerWriteTextRend.enabled = true;
+        AtlasRenderer playerWriteRend = playerWriteRenderers[0];
+        playerWriteRend.customBit |= (int)ColorBits.Diagonal;
+        playerWriteRend.UpdateSpriteInputsByIndex(ONE_NUMPAD_SPRITE_INDEX);
+        isPlayerWriteTextPreviewSet[0] = false;
     }
-    public void SetNextClueRow()
+    public void SetNextColorRow(int nextIndex)
     {
-        int i = trip.unlockedClueMarkerCount - 1;
-        AtlasTextRenderer playerWriteTexRend = playerWriteTextRenderers[i];
+        AtlasTextRenderer playerWriteTextRend = playerWriteTextRenderers[nextIndex];
 
-        int traitorIndex = i % trip.traitorProfiles.Length;
+        int traitorIndex = nextIndex % trip.traitorProfiles.Length;
         Behaviours behaviours = trip.traitorProfiles[traitorIndex].npcProfile.behaviours;
 
-        int behaveIndex = i % 2;
+        int behaveIndex = nextIndex % 2;
         Behaviours curBehaviour = GetBehaviourAtIndex(behaviours, behaveIndex);
 
         previewPlayerWriteText = npcData.behaviourStringDict[curBehaviour];
-        playerWriteTexRend.SetText(previewPlayerWriteText);
+        playerWriteTextRend.SetText(previewPlayerWriteText);
+        playerWriteTextRend.SetAppearTextAlpha(1);
+        isPlayerWriteTextPreviewSet[nextIndex] = false;
 
-        playerWriteTexRend.enabled = true;
-        playerWriteRenderers[i].custom = Vector3.one;
-        playerWriteRenderers[i].UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+        playerWriteTextRend.enabled = true;
+        AtlasRenderer playerWriteRend = playerWriteRenderers[nextIndex];
+
+        switch (nextIndex)
+        {
+            case 1:
+            {
+                playerWriteRend.UpdateSpriteInputsByIndex(TWO_NUMPAD_SPRITE_INDEX);
+            }
+            break;
+            case 2:
+            {
+                playerWriteRend.UpdateSpriteInputsByIndex(THREE_NUMPAD_SPRITE_INDEX);
+            }
+            break;
+            case 3:
+            {
+                playerWriteRend.UpdateSpriteInputsByIndex(FOUR_NUMPAD_SPRITE_INDEX);
+            }
+            break;
+        }
     }
     public void UpdatePage()
     {
@@ -125,19 +133,18 @@ public class Page : MonoBehaviour
             case PageType.ColorKey:
             {
                 bool foundColorKeyRend = false;
-                for (int i = 0; i < trip.unlockedClueMarkerCount; i++)
+                for (int i = 0; i < trip.unlockedColorMarkerCount; i++)
                 {
-                    AtlasRenderer colorKeyRend = playerWriteRenderers[i];
+                    AtlasRenderer colorKeyRend = playerWriteRenderers[i + 1];
                     if (CursorController.IsInsideBounds(colorKeyRend.GetBounds()) && !foundColorKeyRend)
                     {
                         colorKeyRend.custom.w = 0;
 
                         if (playerInputs.mouseLeftDown)
                         {
-                            ColorPicker colorPicker = SceneController.GetColorPicker();
-                            colorPicker.Open(colorKeyRend, openAllColors: true);
+                            SceneController.GetColorPicker().Open(colorKeyRend, openAllColors: true);
                             SwitchActivePLayerWriteTextRenderer(i);
-                            trip.selectedClueMarkerIndex = activePlayerWriteRowIndex;
+                            trip.selectedColorMarkerIndex = activePlayerWriteRowIndex;
 
                         }
                         foundColorKeyRend = true;
@@ -146,6 +153,11 @@ public class Page : MonoBehaviour
                     {
                         colorKeyRend.custom.w = 1;
                     }
+                }
+
+                if (playerInputs.shiftDown && activePlayerWriteRowIndex > 0)
+                {
+                    SceneController.GetColorPicker().Open(playerWriteRenderers[activePlayerWriteRowIndex], openAllColors: true);
                 }
             }
             break;
@@ -273,7 +285,7 @@ public class Page : MonoBehaviour
         playerWriteIndex = previewPlayerWriteIndex;
         activePlayerWriteText = activePlayerWriteTextRenderer.text;
         playerWriteTexts[activePlayerWriteRowIndex] = activePlayerWriteText;
-        playerWriteTextBounds = activePlayerWriteTextRenderer.GetBounds(activePlayerWriteText);
+        playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePlayerWriteText);
 
         activePlayerWriteTextRenderer.WriteText(activePlayerWriteText, Notepad.WRITE_LETTER_TIME);
     }
@@ -301,7 +313,7 @@ public class Page : MonoBehaviour
                 }
 
                 activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
-                playerWriteTextBounds = activePlayerWriteTextRenderer.GetBounds(previewPlayerWriteText);
+                playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
                 isPlayerWriteTextPreviewSet[0] = false;
             }
             break;
@@ -314,16 +326,19 @@ public class Page : MonoBehaviour
                     {
                         if (activePlayerWriteText == "")
                         {
-                            int behaviourLength = (int)Mathf.Log((int)Behaviours.Count, 2) - 1;
-                            previewPlayerWriteIndex = ((previewPlayerWriteIndex + behaviourLength) % behaviourLength);
-                            Behaviours allBehaviours = (Behaviours)~(1 << behaviourLength);
-                            Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
-                            previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
-                            activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
+                            if (activePlayerWriteRowIndex > 0)
+                            {
+                                int behaviourLength = (int)Mathf.Log((int)Behaviours.Count, 2) - 1;
+                                previewPlayerWriteIndex = Mathf.Max((previewPlayerWriteIndex + behaviourLength) % behaviourLength, 1);
+                                Behaviours allBehaviours = (Behaviours)~(1 << behaviourLength);
+                                Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
+                                previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
+                                activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
 
-                            isPlayerWriteTextPreviewSet[activePlayerWriteRowIndex] = false;
+                                isPlayerWriteTextPreviewSet[activePlayerWriteRowIndex] = false;
 
-                            playerWriteTextBounds = activePlayerWriteTextRenderer.GetBounds(previewPlayerWriteText);
+                                playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
+                            }
                         }
                     }
                     break;
@@ -355,11 +370,20 @@ public class Page : MonoBehaviour
             {
                 if (prevNotepadState == NotepadState.Erasing)
                 {
-                    int behaviourLength = (int)Behaviours.Count - 1;
-                    Behaviours allBehaviours = (Behaviours)~(1 << behaviourLength);
-                    Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
-                    previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
-                    activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
+                    if (activePlayerWriteRowIndex == 0)
+                    {
+                        previewPlayerWriteText = "Rule Out";
+                        activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
+                    }
+                    else
+                    {
+                        int behaviourLength = (int)Behaviours.Count - 1;
+                        Behaviours allBehaviours = (Behaviours)~(1 << behaviourLength);
+                        Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
+                        previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
+                        activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
+
+                    }
                 }
             }
             break;
@@ -381,7 +405,7 @@ public class Page : MonoBehaviour
                     }
                 }
             }
-            playerWriteTextBounds = activePlayerWriteTextRenderer.GetBounds(previewPlayerWriteText);
+            playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
         }
 
     }
@@ -462,6 +486,6 @@ public class Page : MonoBehaviour
     }
     public Bounds GetWritingBounds()
     {
-        return activePlayerWriteTextRenderer.GetBounds(previewPlayerWriteText);
+        return activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
     }
 }

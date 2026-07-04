@@ -34,6 +34,15 @@
                     "initialStateCheck": false
                 },
                 {
+                    "name": "Shift",
+                    "type": "Button",
+                    "id": "83b2f63d-cc9e-4cd6-9b32-e6c01f091179",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
                     "name": "Preview",
                     "type": "Button",
                     "id": "29cb3758-e4c2-47f0-8d05-8a604357ab6e",
@@ -148,6 +157,17 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Writing",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "6bd07fb2-5df3-4705-bd12-93802260570a",
+                    "path": "<Keyboard>/leftShift",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": "KeyboardAndMouse",
+                    "action": "Shift",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

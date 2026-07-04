@@ -25,7 +25,10 @@ public class PlayerInputsSO : ScriptableObject
     public bool mouseLeftDown;
     public bool mouseLeftHold;
     public bool mouseLeftUp;
-    
+
+    public bool shiftDown;
+    public bool shiftUp;
+
     public bool mouseRightDown;
     public bool mouseRightUp;
 }

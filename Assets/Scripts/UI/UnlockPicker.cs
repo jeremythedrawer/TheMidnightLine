@@ -119,12 +119,12 @@ public class UnlockPicker : MonoBehaviour
                                     }
                                     else if ((selectedUnlockType & UnlockType.Color) != 0)
                                     {
-                                        if (trip.unlockedClueMarkerCount == 0)
+                                        if (trip.unlockedColorMarkerCount == 0)
                                         {
                                             trip.curUnlocks |= UnlockType.Color;
                                             OnNewAbilityUnlocked.Invoke(UnlockType.Color);
                                         }
-                                        trip.unlockedClueMarkerCount++;
+                                        trip.unlockedColorMarkerCount++;
                                         OnNewColorUnlocked?.Invoke();
                                     }
                                     else if ((selectedUnlockType & UnlockType.MultiColor) != 0)
@@ -132,7 +132,7 @@ public class UnlockPicker : MonoBehaviour
                                         trip.curUnlocks |= UnlockType.MultiColor;
                                         OnNewAbilityUnlocked?.Invoke(UnlockType.MultiColor);
                                         OnNewColorUnlocked?.Invoke();
-                                        trip.unlockedClueMarkerCount++;
+                                        trip.unlockedColorMarkerCount++;
                                     }
 
                                     break;

@@ -63,10 +63,11 @@ public class CursorController : MonoBehaviour
                 {
                     if (playerInputs.mouseLeftDown)
                     {
+                        NPCBrain selectedNPC = hoveredNPCs[0];
+
                         if (hoveredNPCCount == 1)
                         {
-                            NPCBrain selectedNPC = hoveredNPCs[0];
-                            if (trip.unlockedClueMarkerCount == 0)
+                            if (trip.unlockedColorMarkerCount == 0)
                             {
                                 if ((selectedNPC.atlasRenderer.customBit & (int)ColorBits.Diagonal) == 0)
                                 {
@@ -91,9 +92,9 @@ public class CursorController : MonoBehaviour
                     }
                     else if (playerInputs.mouseRightDown)
                     {
+                        NPCBrain selectedNPC = hoveredNPCs[0];
                         if (hoveredNPCCount == 1)
                         {
-                            NPCBrain selectedNPC = hoveredNPCs[0];
                             if ((selectedNPC.atlasRenderer.customBit & ((int)ColorBits.Diagonal)) == 0)
                             {
                                 selectedNPC.atlasRenderer.customBit |= (int)ColorBits.Diagonal;

@@ -74,7 +74,6 @@ public class NPCBrain : MonoBehaviour
     public bool behaving;
     public bool disembarking;
     public bool onTrain;
-
     public bool queuedForSeat;
     public bool queuedForSlideDoor;
 
@@ -139,7 +138,7 @@ public class NPCBrain : MonoBehaviour
         Station station = TrainController.NextStationInstance;
         AtlasRenderer stationPlatform = station.station.isFrontOfTrain ? station.frontPlatformRenderer : station.backPlatformRenderer;
         transform.SetParent(stationPlatform.transform, true);
-        atlasRenderer.UpdateDepthRealtime((int)stationPlatform.transform.position.z);
+        atlasRenderer.UpdateWorldDepth((int)stationPlatform.transform.position.z);
         rigidBody.includeLayers = layerSettings.stationMask;
         onTrain = false;
         curCarriage.RemoveNPC(this);
@@ -428,7 +427,7 @@ public class NPCBrain : MonoBehaviour
         {
             case NPCPath.SittingInTrain:
             {
-                atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.carriageSeat - 1);
+                atlasRenderer.UpdateWorldDepth(trainStats.depthSections.carriageSeat - 1);
                 transform.position = new Vector3(targetXPos, transform.position.y, transform.position.z);
                 atlasRenderer.FlipHSimple(false);
 
@@ -746,7 +745,7 @@ public class NPCBrain : MonoBehaviour
     {
         if (!onTrain) return;
         int depth = UnityEngine.Random.Range(trainStats.depthSections.frontMin, trainStats.depthSections.backMax);
-        atlasRenderer.UpdateDepthRealtime(depth);
+        atlasRenderer.UpdateWorldDepth(depth);
     }
     private void PickNextBehaviour()
     {

@@ -48,7 +48,7 @@ public class ColorPicker : MonoBehaviour
     
     private void Awake()
     {
-        trip.unlockedClueMarkerCount = 0;
+        trip.unlockedColorMarkerCount = 0;
 
         if (Application.isPlaying)
         {
@@ -163,7 +163,7 @@ public class ColorPicker : MonoBehaviour
                     }
                 }
 
-                if (canClose && playerInputs.mouseLeftDown && !CursorController.IsInsideBounds(paletteRenderer.bounds))
+                if (canClose && (playerInputs.mouseLeftDown || playerInputs.shiftDown) && !CursorController.IsInsideBounds(paletteRenderer.bounds))
                 {
                     Close();
                 }
@@ -315,7 +315,7 @@ public class ColorPicker : MonoBehaviour
                     colorRend.custom.y = 0;
                     colorRend.custom.z = 0;
                 }
-                else if (colorIndex < trip.unlockedClueMarkerCount)
+                else if (colorIndex < trip.unlockedColorMarkerCount)
                 {
                     if ((selectedRenderer.customBit & (1 << colorIndex)) != 0)
                     {
@@ -345,6 +345,7 @@ public class ColorPicker : MonoBehaviour
                     colorRend.custom.y = 0;
                     colorRend.custom.z = 0;
                 }
+                colorRend.custom.w = 1;
             }
         }
 
@@ -376,9 +377,9 @@ public class ColorPicker : MonoBehaviour
     {
         Color selectedColor = colorsData.selectableClueColors[index];
         selectedRenderer.custom = selectedColor.linear;
-        trip.selectedClueMarkerColors[trip.selectedClueMarkerIndex] = selectedColor;
+        trip.selectedClueMarkerColors[trip.selectedColorMarkerIndex] = selectedColor;
 
-        Shader.SetGlobalColor("_ColorKey" + trip.selectedClueMarkerIndex, selectedColor.linear);
+        Shader.SetGlobalColor("_ColorKey" + trip.selectedColorMarkerIndex, selectedColor.linear);
     }
     public void SetNPCColor(int index)
     {

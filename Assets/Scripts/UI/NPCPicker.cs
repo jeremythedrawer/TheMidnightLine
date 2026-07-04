@@ -269,7 +269,6 @@ public class NPCPicker : MonoBehaviour
                 else
                 {
                     int npcColorIndex = Convert.ToInt32($"{npcBrain.atlasRenderer.customBit}", 10) - 1;
-                    Debug.Log(npcColorIndex);
                     if (npcColorIndex >= 0) 
                     {
                         if (npcColorIndex < trip.selectedClueMarkerColors.Length)

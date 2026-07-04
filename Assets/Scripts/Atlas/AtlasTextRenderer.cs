@@ -50,13 +50,14 @@ public class AtlasTextRenderer : MonoBehaviour
     
     public bool hasText;
     public bool erasingText;
+    public bool completedWritingText;
     [Header("Border Generated")]
     public Vector3 borderLocalPos;
 
     private void OnValidate()
     {
         SetText(text);
-        bounds = GetBounds(text);
+        bounds = GetBoundsNewText(text);
     }
     private void OnEnable()
     {
@@ -74,7 +75,7 @@ public class AtlasTextRenderer : MonoBehaviour
         if (!Application.isPlaying)
         {
             if (textAtlas == null) return;
-            bounds = GetBounds(text);
+            bounds = GetBoundsNewText(text);
         }
 #endif
     }
@@ -100,13 +101,13 @@ public class AtlasTextRenderer : MonoBehaviour
             break;
             case AtlasTextRendererType.Scroll:
             {
-                bounds = GetBounds(text);
+                bounds = GetBoundsNewText(text);
                 SetScrollingText();
             }
             break;
             case AtlasTextRendererType.Border:
             {
-                bounds = GetBounds(text);
+                bounds = GetBoundsNewText(text);
                 SetBorderText();
                 SetColorText();
             }
@@ -317,7 +318,11 @@ public class AtlasTextRenderer : MonoBehaviour
         }
 
     }
-    public Bounds GetBounds(string text)
+    public Bounds GetBoundsCurrentText()
+    {
+        return GetBoundsNewText(text);
+    }
+    public Bounds GetBoundsNewText(string text)
     {
         Bounds bounds = new Bounds();
 
@@ -425,6 +430,7 @@ public class AtlasTextRenderer : MonoBehaviour
                 SetText(curStationString);
                 curLetterIndex++;
             }
+            completedWritingText = true;
         }
         catch (OperationCanceledException) { }
     }
@@ -434,18 +440,19 @@ public class AtlasTextRenderer : MonoBehaviour
         ctsWrite?.Cancel();
         ctsWrite = new CancellationTokenSource();
         erasingText = true;
+        completedWritingText = false;
         ErasingText(writeLetterTime).Forget();
     }
     private async UniTask ErasingText(float writeLetterTime)
     {
-        string curStationString = text;
+        string curText = text;
         try
         {
-            while (curStationString.Length > 0)
+            while (curText.Length > 0)
             {
                 await UniTask.WaitForSeconds(writeLetterTime, cancellationToken: ctsWrite.Token);
-                curStationString = curStationString[..^1];
-                SetText(curStationString);
+                curText = curText[..^1];
+                SetText(curText);
             }
             erasingText = false;
         }

@@ -118,6 +118,7 @@ public class SpyBrain : MonoBehaviour
         stats.walkingIntoWall = (leftWallTouch && playerInputs.move == -1) || (rightWallTouch && playerInputs.move == 1);
 
     }
+
     private void ChooseState()
     {
         if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount == 1) || ChosenNPC != null)
@@ -599,7 +600,7 @@ public class SpyBrain : MonoBehaviour
                         
                             transform.SetParent(stationPlatform.transform, true);
                         
-                            atlasRenderer.UpdateDepthRealtime((int)stationPlatform.transform.position.z);
+                            atlasRenderer.UpdateWorldDepth((int)stationPlatform.transform.position.z);
                         }
                     }
                     break;
@@ -621,7 +622,7 @@ public class SpyBrain : MonoBehaviour
                         
                         transform.SetParent(CurCarriage.transform, true);
 
-                        atlasRenderer.UpdateDepthRealtime(trainStats.depthSections.frontMin);
+                        atlasRenderer.UpdateWorldDepth(trainStats.depthSections.frontMin);
                     }
                     break;
                 }

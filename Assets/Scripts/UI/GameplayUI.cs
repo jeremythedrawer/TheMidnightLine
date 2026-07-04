@@ -12,6 +12,7 @@ public class GameplayUI : MonoBehaviour
     const float NOTEPAD_INACTIVE_OFFSET = 1.8f;
     const float ABILITY_ICON_APPEAR_TIME = 1f;
 
+
     public PlayerInputsSO playerInputs;
     public CameraStatsSO cameraStats;
     public SpyStatsSO spyStats;
@@ -35,7 +36,6 @@ public class GameplayUI : MonoBehaviour
     public AtlasRenderer multiColorAbilityIcon;
 
     public Transform ticketIconTransform;
-
 
     [Header("Generated")]
     public TicketIcon[] ticketIcons;
@@ -63,6 +63,7 @@ public class GameplayUI : MonoBehaviour
     public Vector3 naturalMovePos;
 
     public UIState curState;
+    public UnlockType curUnlockType;
 
     public int ticketCount;
     
@@ -78,6 +79,7 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnTicketCheckHoverDisabled += RevertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverEnabled += InvertCurTicketIcon;
         UnlockPicker.OnNewAbilityUnlocked += AppearNewAbilityIcon;
+
     }
     private void OnDisable()
     {
@@ -102,6 +104,7 @@ public class GameplayUI : MonoBehaviour
         ChooseState();
         UpdateState();
     }
+
     private void KeepNotepad()
     {
         SceneController.KeepNotepad(notepad);
@@ -325,6 +328,28 @@ public class GameplayUI : MonoBehaviour
         SetFadeBlack(fadeBlackMaterial, toFadeBlack: true);
         Scenes.SetScoreScene(sceneData);
     }
+    private void AppearNewAbilityIcon(UnlockType unlockType)
+    {
+        switch(unlockType)
+        {
+            case UnlockType.RuleOut:
+            {
+                Appearing(ruleOutAbilityIcon).Forget();
+            }
+            break;
+            case UnlockType.Color:
+            {
+                Appearing(colorAbilityIcon).Forget();
+            }
+            break;
+            case UnlockType.MultiColor:
+            {
+                Appearing(multiColorAbilityIcon).Forget();
+            }
+            break;
+        }
+    }
+
     private async UniTask SettingNewTicketIcons()
     {
         ticketCount = trip.stationAhead.ticketsToCheckBeforeSpawn;
@@ -349,27 +374,6 @@ public class GameplayUI : MonoBehaviour
             ticketIcons[curTicketIconIndex].Disappear();
             curTicketIconIndex--;
             await UniTask.WaitForSeconds(TICKET_ICON_APPEARING_DURATION);
-        }
-    }
-    private void AppearNewAbilityIcon(UnlockType unlockType)
-    {
-        switch(unlockType)
-        {
-            case UnlockType.RuleOut:
-            {
-                Appearing(ruleOutAbilityIcon).Forget();
-            }
-            break;
-            case UnlockType.Color:
-            {
-                Appearing(colorAbilityIcon).Forget();
-            }
-            break;
-            case UnlockType.MultiColor:
-            {
-                Appearing(multiColorAbilityIcon).Forget();
-            }
-            break;
         }
     }
     private async UniTask Appearing(AtlasRenderer renderer)

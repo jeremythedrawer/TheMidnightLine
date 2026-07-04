@@ -121,20 +121,12 @@ public class AtlasRenderer : MonoBehaviour
     }
     private void OnDisable()
     {
+        ctsOneShot?.Cancel();
         UnregisterRenderer(this);
     }
     private void OnDestroy()
     {
         UnregisterRenderer(this);
-    }
-    private void Update()
-    {
-#if UNITY_EDITOR
-        if (!Application.isPlaying)
-        {
-            UpdateDepthEditor(transform);
-        }
-#endif
     }
     public void UpdateSpriteInputsByIndex(int index)
     {
@@ -161,13 +153,6 @@ public class AtlasRenderer : MonoBehaviour
         boxCollider.size = bounds.size;
         boxCollider.offset = bounds.center - transform.position;
         spriteIndex = sprite.index;
-    }
-    public void UpdateDepthEditor(Transform transform)
-    {
-        //if ((int)transform.position.z != batchKey.depthOrder)
-        //{
-        //    RegisterRenderer(this);
-        //}
     }
     public void SetBounds()
     {
@@ -196,7 +181,7 @@ public class AtlasRenderer : MonoBehaviour
         SetBounds();
         return bounds;
     }
-    public void UpdateDepthRealtime(int newDepth)
+    public void UpdateWorldDepth(int newDepth)
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, newDepth);
     }
