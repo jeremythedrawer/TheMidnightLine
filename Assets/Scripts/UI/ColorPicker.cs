@@ -127,8 +127,7 @@ public class ColorPicker : MonoBehaviour
 
                                 if (colorRend.spriteIndex == TICK_SPRITE_INDEX)
                                 {
-                                        colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
-
+                                    colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
                                 }
                                 else
                                 {
@@ -291,16 +290,17 @@ public class ColorPicker : MonoBehaviour
         else
         {
             activeColorAmount = trip.selectedClueMarkerColors.Length + 1;
-            Color[] colorsToUse = trip.selectedClueMarkerColors;
 
             for (int i = 0; i < activeColorAmount; i++)
             {
                 AtlasRenderer colorRend = colorRenderers[i];
                 colorRend.enabled = true;
 
+                int colorIndex = i - 1;
+
                 if (i == 0)
                 {
-                    if ((selectedRenderer.customBit & (1 << DIAGONAL_TEXTURE_BIT)) != 0)
+                    if ((selectedRenderer.customBit & ((int)ColorBits.Diagonal)) != 0)
                     {
                         colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
                     }
@@ -308,38 +308,43 @@ public class ColorPicker : MonoBehaviour
                     {
                         colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
                     }
-                    colorRend.customBit = 1 << DIAGONAL_TEXTURE_BIT;
-                    colorRend.custom.x = 0;
-                    colorRend.custom.y = 0;
-                    colorRend.custom.z = 0;
-                    continue;
-                }
 
-                if (i > trip.unlockedClueMarkerCount)
-                {
-                    colorRend.UpdateSpriteInputsByIndex(LOCK_SPRITE_INDEX);
+                    colorRend.customBit |= (int)ColorBits.Diagonal;
+
                     colorRend.custom.x = 0;
                     colorRend.custom.y = 0;
                     colorRend.custom.z = 0;
                 }
-                else
+                else if (colorIndex < trip.unlockedClueMarkerCount)
                 {
-                    int colorIndex = i - 1;
-
                     if ((selectedRenderer.customBit & (1 << colorIndex)) != 0)
                     {
                         colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
                     }
                     else
                     {
+
                         colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
                     }
-                    Color color = trip.selectedClueMarkerColors[i - 1].linear;
+
+                    Color color = trip.selectedClueMarkerColors[colorIndex].linear;
+
+                    colorRend.customBit = 0;
+
                     colorRend.custom.x = color.r;
                     colorRend.custom.y = color.g;
                     colorRend.custom.z = color.b;
                 }
-                colorRend.customBit = 0;
+                else
+                {
+                    colorRend.UpdateSpriteInputsByIndex(LOCK_SPRITE_INDEX);
+
+                    colorRend.customBit = 0;
+
+                    colorRend.custom.x = 0;
+                    colorRend.custom.y = 0;
+                    colorRend.custom.z = 0;
+                }
             }
         }
 
@@ -406,11 +411,11 @@ public class ColorPicker : MonoBehaviour
         }
         else
         {
-            if ((selectedRenderer.customBit & (1 << DIAGONAL_TEXTURE_BIT)) != 0)
+            if ((selectedRenderer.customBit & (int)ColorBits.Diagonal) != 0)
             {
                 if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
                 {
-                    selectedRenderer.customBit &= ~(1 << DIAGONAL_TEXTURE_BIT);
+                    selectedRenderer.customBit &= ~((int)ColorBits.Diagonal);
                 }
                 else
                 {
@@ -421,11 +426,11 @@ public class ColorPicker : MonoBehaviour
             {
                 if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
                 {
-                    selectedRenderer.customBit |= 1 << DIAGONAL_TEXTURE_BIT;
+                    selectedRenderer.customBit |= (int)ColorBits.Diagonal;
                 }
                 else
                 {
-                    selectedRenderer.customBit = 1 << DIAGONAL_TEXTURE_BIT;
+                    selectedRenderer.customBit = (int)ColorBits.Diagonal;
                 }
             }
         }

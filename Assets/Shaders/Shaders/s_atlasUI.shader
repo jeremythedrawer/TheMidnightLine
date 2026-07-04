@@ -89,7 +89,7 @@ Shader "Custom/s_atlasUI"
                 i.uv += uvPos;
 
                 int bitMask = i.customBit;
-                int meridiaColorMask = saturate(bitMask & (1 << MERIDIA_COLOR_BIT));
+                int meridiaColorMask = saturate(bitMask & MERIDIA_COLOR_BIT);
                 float3 meridiaColor = meridiaColorMask * _MeridiaColor;
 
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);

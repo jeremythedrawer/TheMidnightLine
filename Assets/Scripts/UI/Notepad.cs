@@ -94,8 +94,8 @@ public class Notepad : MonoBehaviour
     [Flags] public enum SubState
     { 
         None = 0,
-        FlipUpToggle = 1 << 0,
-        FlipDownToggle = 1 << 1,
+        IsFlippingUp = 1 << 0,
+        IsFlippingDown = 1 << 1,
         WriteToggle = 1 << 2,
         EraseToggle = 1 << 3,
         RevealToggle = 1 << 4,
@@ -344,7 +344,7 @@ public class Notepad : MonoBehaviour
                     activePage = pages[activePageIndex];
                     activePage.SetPageDepth(leftHandWorldDepthFront + 2);
 
-                    subState &= ~(SubState.CanFlipUp | SubState.CanWillFlipUp | SubState.FlipUpToggle);
+                    subState &= ~(SubState.CanFlipUp | SubState.CanWillFlipUp | SubState.IsFlippingUp);
                     curKeyframeState = KeyframeState.None;
                 }
             }
@@ -377,7 +377,7 @@ public class Notepad : MonoBehaviour
                         activePageIndex--;
                         activePage = pages[activePageIndex];
 
-                        subState &= ~(SubState.CanFlipDown | SubState.CanWillFlipDown | SubState.FlipDownToggle);
+                        subState &= ~(SubState.CanFlipDown | SubState.CanWillFlipDown | SubState.IsFlippingDown);
 
                         curKeyframeState = KeyframeState.None;
                     }
@@ -550,7 +550,7 @@ public class Notepad : MonoBehaviour
                     if (playerInputs.mouseLeftDown)
                     {
                         activePage.InvertLeftArrowButton(false);
-                        subState |= SubState.FlipDownToggle;
+                        subState |= SubState.IsFlippingDown;
                     }
                     else
                     {
@@ -567,7 +567,7 @@ public class Notepad : MonoBehaviour
                     if (playerInputs.mouseLeftDown)
                     {
                         activePage.InvertRightArrowButton(false);
-                        subState |= SubState.FlipUpToggle;
+                        subState |= SubState.IsFlippingUp;
                     }
                     else
                     {
@@ -621,7 +621,7 @@ public class Notepad : MonoBehaviour
 
                 curKeyframeState = KeyframeState.Start;
 
-                subState |= SubState.FlipUpToggle;
+                subState |= SubState.IsFlippingUp;
                 subState &= ~(SubState.WillFlipUp);                
 
                 leftHand_renderer.transform.localPosition = leftHandFlipPos;
@@ -637,7 +637,7 @@ public class Notepad : MonoBehaviour
 
                 curKeyframeState = KeyframeState.Start;
                 
-                subState |= SubState.FlipDownToggle;
+                subState |= SubState.IsFlippingDown;
                 subState &= ~(SubState.WillFlipDown);
 
                 leftHand_renderer.transform.localPosition = leftHandFlipPos;
@@ -1044,11 +1044,11 @@ public class Notepad : MonoBehaviour
     }
     private bool ToFlipUp()
     {
-        return ((playerInputs.notepadPreviewAnswerAndFlip.y == 1 && activePageIndex < lastPageIndex) || (subState & (SubState.WillFlipUp | SubState.FlipUpToggle)) != 0) && (subState & SubState.CanFlipUp) != 0;
+        return ((playerInputs.notepadPreviewAnswerAndFlip.y == 1 && activePageIndex < lastPageIndex) || (subState & (SubState.WillFlipUp | SubState.IsFlippingUp)) != 0) && (subState & SubState.CanFlipUp) != 0;
     }
     private bool ToFlipDown()
     {
-        return ((playerInputs.notepadPreviewAnswerAndFlip.y == -1 && activePageIndex > 0) || (subState & (SubState.WillFlipDown | SubState.FlipDownToggle)) != 0) && (subState & SubState.CanFlipDown) != 0;
+        return ((playerInputs.notepadPreviewAnswerAndFlip.y == -1 && activePageIndex > 0) || (subState & (SubState.WillFlipDown | SubState.IsFlippingDown)) != 0) && (subState & SubState.CanFlipDown) != 0;
     }
     private bool ToErase()
     {

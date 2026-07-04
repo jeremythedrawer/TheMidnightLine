@@ -48,10 +48,12 @@ public class TicketIcon : MonoBehaviour
             float t = elapsed / USE_TIME;
             float easeOutT = Mathf.Pow(t, 0.25f);
             stubTicket.custom.w = easeOutT;
+            mainTicket.custom.x = 1 - easeOutT;
             await UniTask.Yield();
         }
 
         stubTicket.custom.w = 1;
+        mainTicket.custom.x = 0;
     }
     private async UniTask Appearing()
     {

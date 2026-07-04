@@ -118,7 +118,7 @@ public class NPCBrain : MonoBehaviour
 
         if (role == Role.Accomplice)
         {
-            atlasRenderer.customBit |= 1 << MERIDIA_COLOR_BIT;
+            atlasRenderer.customBit |= (int)ColorBits.Meridia;
         }
         else
         {

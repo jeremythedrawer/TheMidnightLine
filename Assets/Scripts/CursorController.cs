@@ -59,34 +59,57 @@ public class CursorController : MonoBehaviour
             {
                 if (cursorIsMoving && SceneController.GetNPCPicker().curPickerState == PickerState.Closed) HoverNPC();
                 
-                if (playerInputs.mouseLeftDown && (trip.curUnlocks & UnlockType.RuleOut) != 0)
+                if ((trip.curUnlocks & UnlockType.RuleOut) != 0)
                 {
-                    if (hoveredNPCCount == 1)
+                    if (playerInputs.mouseLeftDown)
                     {
-                        NPCBrain selectedNPC = hoveredNPCs[0];
-                        if (trip.unlockedClueMarkerCount == 0)
+                        if (hoveredNPCCount == 1)
                         {
-                            if ((selectedNPC.atlasRenderer.customBit & (1 << DIAGONAL_TEXTURE_BIT)) == 0)
+                            NPCBrain selectedNPC = hoveredNPCs[0];
+                            if (trip.unlockedClueMarkerCount == 0)
                             {
-                                selectedNPC.atlasRenderer.customBit |= 1 << DIAGONAL_TEXTURE_BIT;
+                                if ((selectedNPC.atlasRenderer.customBit & (int)ColorBits.Diagonal) == 0)
+                                {
+                                    selectedNPC.atlasRenderer.customBit |= (int)ColorBits.Diagonal;
+                                }
+                                else
+                                {
+                                    selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Diagonal);
+                                }
                             }
                             else
                             {
-                                selectedNPC.atlasRenderer.customBit &= ~(1 << DIAGONAL_TEXTURE_BIT);
+                                SceneController.GetColorPicker().Open(selectedNPC.atlasRenderer, openAllColors: false);
                             }
+                            selectedNPC.ToggleHover(false);
                         }
-                        else
+                        else if (hoveredNPCCount > 1)
                         {
-                            SceneController.GetColorPicker().Open(selectedNPC.atlasRenderer, openAllColors: false);
+                            QuickSortNPCByXPos(hoveredNPCs, 0, hoveredNPCCount - 1);
+                            SceneController.GetNPCPicker().Open(hoveredNPCs, hoveredNPCCount, PickerFunctionType.Color);
                         }
-                        selectedNPC.ToggleHover(false);
                     }
-                    else if (hoveredNPCCount > 1)
+                    else if (playerInputs.mouseRightDown)
                     {
-                        QuickSortNPCByXPos(hoveredNPCs, 0, hoveredNPCCount - 1);
-                        SceneController.GetNPCPicker().Open(hoveredNPCs, hoveredNPCCount, PickerFunctionType.Color);
+                        if (hoveredNPCCount == 1)
+                        {
+                            NPCBrain selectedNPC = hoveredNPCs[0];
+                            if ((selectedNPC.atlasRenderer.customBit & ((int)ColorBits.Diagonal)) == 0)
+                            {
+                                selectedNPC.atlasRenderer.customBit |= (int)ColorBits.Diagonal;
+                            }
+                            else
+                            {
+                                selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Diagonal);
+                            }
+                            selectedNPC.ToggleHover(false);
+                        }
+                        else if (hoveredNPCCount > 1)
+                        {
+                            QuickSortNPCByXPos(hoveredNPCs, 0, hoveredNPCCount - 1);
+                            SceneController.GetNPCPicker().Open(hoveredNPCs, hoveredNPCCount, PickerFunctionType.RuleOut);
+                        }
                     }
-
                 }
             }
         }
@@ -154,7 +177,7 @@ public class CursorController : MonoBehaviour
             NPCBrain selectedNPC = hoveredNPCs[0];
             WriteCursorTag(selectedNPC);
         }
-        else if (!hoveringRevealedNPC)
+        else if (!hoveringRevealedNPC || hoveredNPCCount > 1)
         {
             EraseCursorTag();
         }

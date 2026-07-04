@@ -126,21 +126,20 @@ Shader "Custom/s_atlasNPC"
 
                 int bitMask = i.customBit;
 
-                int diagonalMask = (bitMask & (1 << DIAGONAL_TEXTURE_BIT));
+                int diagonalMask = (bitMask & DIAGONAL_TEXTURE_BIT);
                 half3 diagonal = diagonalMask * diagonalTex.r;
 
-                int colorMask = bitMask & ~((1 << DIAGONAL_TEXTURE_BIT) | (1 << MERIDIA_COLOR_BIT));
+                int colorMask = bitMask & ~(DIAGONAL_TEXTURE_BIT | MERIDIA_COLOR_BIT);
 
-                int colKeyMask0 = colorMask == (1 << 0);
-                int colKeyMask1 = colorMask == (1 << 1);
-                int colKeyMask2 = colorMask == (1 << 2);
+                int colKeyMask0 = colorMask == COLOR_KEY_BIT_0;
+                int colKeyMask1 = colorMask == COLOR_KEY_BIT_1;
+                int colKeyMask2 = colorMask == COLOR_KEY_BIT_2;
 
-                int colKeyMask01 = colorMask == ((1 << 0) | (1 << 1));
-                int colKeyMask02 = colorMask == ((1 << 0) | (1 << 2));
-                int colKeyMask12 = colorMask == ((1 << 1) | (1 << 2));
+                int colKeyMask01 = colorMask == (COLOR_KEY_BIT_0 | COLOR_KEY_BIT_1);
+                int colKeyMask02 = colorMask == (COLOR_KEY_BIT_0 | COLOR_KEY_BIT_2);
+                int colKeyMask12 = colorMask == (COLOR_KEY_BIT_1 | COLOR_KEY_BIT_2);
 
-                int colKeyMask012  = colorMask == ((1 << 0) | (1 << 1) | (1 << 2));
-
+                int colKeyMask012 = colorMask == (COLOR_KEY_BIT_0 | COLOR_KEY_BIT_1 | COLOR_KEY_BIT_2);
 
                 half ticketCheckMask = i.custom.z;
 
@@ -156,7 +155,7 @@ Shader "Custom/s_atlasNPC"
 
                 half3 colKey012 = colKeyMask012 * ((_ColorKey0 * (stripesTex.g - stripesTex.b)) + (_ColorKey1 * (stripesTex.b - stripesTex.g)) + (_ColorKey2 * (stripesTex.g * stripesTex.b)));
 
-                int meridiaColorMask = saturate(bitMask & (1 << MERIDIA_COLOR_BIT));
+                int meridiaColorMask = saturate(bitMask & MERIDIA_COLOR_BIT);
                 half3 meridiaColor = meridiaColorMask * _MeridiaColor;
 
                 half mouseColor = i.custom.y;

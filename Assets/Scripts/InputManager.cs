@@ -107,14 +107,17 @@ public class InputManager : MonoBehaviour
         };
 
         mouseLeftDown_action.started += context => playerInputs.mouseLeftDown = true;
-        mouseRightDown_action.started += context => playerInputs.mouseRightDown = true;
-
-
         mouseLeftPress_action.performed += context => playerInputs.mouseLeftHold = true;
         mouseLeftPress_action.canceled += context =>
         {
             playerInputs.mouseLeftUp = true;
             playerInputs.mouseLeftHold = false;
+        };
+
+        mouseRightDown_action.started += context => playerInputs.mouseRightDown = true;
+        mouseRightDown_action.canceled += context =>
+        {
+            playerInputs.mouseRightUp = true;
         };
 
     }
@@ -168,9 +171,11 @@ public class InputManager : MonoBehaviour
         playerInputs.ticketCheckKeyDown = false;
         playerInputs.ticketCheckKeyUp = false;
         playerInputs.interact = false;
+
         playerInputs.mouseLeftDown = false;
         playerInputs.mouseLeftUp = false;
         playerInputs.mouseRightDown = false;
+        playerInputs.mouseRightUp = false;
         playerInputs.moveUp = false;
         playerInputs.moveDown = false;
 

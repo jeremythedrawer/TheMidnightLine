@@ -87,30 +87,50 @@ public class NPCPicker : MonoBehaviour
                     {
                         npcIconRend.custom.w = 1;
 
-                        if (playerInputs.mouseLeftUp && canClose)
+                        if ((playerInputs.mouseLeftUp || playerInputs.mouseRightUp) && canClose)
                         {
-                            if (functionType == PickerFunctionType.TicketCheck)
+                            switch(functionType)
                             {
-                                SpyBrain.ChooseNPCTicketToCheck(possibleNPCs[i]);
-                            }
-                            else if (functionType == PickerFunctionType.Color)
-                            {
-                                NPCBrain selectedNPC = possibleNPCs[i];
-                                if ((trip.curUnlocks & UnlockType.Color) == 0)
+                                case PickerFunctionType.TicketCheck:
                                 {
-                                    if ((selectedNPC.atlasRenderer.customBit & (1 << DIAGONAL_TEXTURE_BIT)) == 0)
+                                    SpyBrain.ChooseNPCTicketToCheck(possibleNPCs[i]);
+                                }
+                                break;
+
+                                case PickerFunctionType.Color:
+                                {
+                                    NPCBrain selectedNPC = possibleNPCs[i];
+                                    if ((trip.curUnlocks & UnlockType.Color) == 0)
                                     {
-                                        selectedNPC.atlasRenderer.customBit |= 1 << DIAGONAL_TEXTURE_BIT;
+                                        if ((selectedNPC.atlasRenderer.customBit & ((int)ColorBits.Diagonal)) == 0)
+                                        {
+                                            selectedNPC.atlasRenderer.customBit |= (int)ColorBits.Diagonal;
+                                        }
+                                        else
+                                        {
+                                            selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Diagonal);
+                                        }
                                     }
                                     else
                                     {
-                                        selectedNPC.atlasRenderer.customBit &= ~(1 << DIAGONAL_TEXTURE_BIT);
+                                        SceneController.GetColorPicker().Open(selectedNPC.atlasRenderer, openAllColors: false);
                                     }
                                 }
-                                else
+                                break;
+
+                                case PickerFunctionType.RuleOut:
                                 {
-                                    SceneController.GetColorPicker().Open(selectedNPC.atlasRenderer, openAllColors: false);
+                                    NPCBrain selectedNPC = possibleNPCs[i];
+                                    if ((selectedNPC.atlasRenderer.customBit & ((int)ColorBits.Diagonal)) == 0)
+                                    {
+                                        selectedNPC.atlasRenderer.customBit |= (int)ColorBits.Diagonal;
+                                    }
+                                    else
+                                    {
+                                        selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Diagonal);
+                                    }
                                 }
+                                break;
                             }
                             Close();
                         }
@@ -122,11 +142,11 @@ public class NPCPicker : MonoBehaviour
                     }
                 }
 
-                if (canClose && playerInputs.mouseLeftUp && !CursorController.IsInsideBounds(paletteRenderer.bounds))
+                if (canClose && (playerInputs.mouseLeftUp || playerInputs.mouseRightUp) && !CursorController.IsInsideBounds(paletteRenderer.bounds))
                 {
                     Close();
                 }
-                if (playerInputs.mouseLeftUp || playerInputs.ticketCheckKeyUp)
+                if (playerInputs.mouseLeftUp || playerInputs.ticketCheckKeyUp || playerInputs.mouseRightUp)
                 {
                     canClose = true;
                 }
@@ -235,26 +255,22 @@ public class NPCPicker : MonoBehaviour
 
                 if (npcBrain.role == Role.Accomplice)
                 {
-                    Color iconColor = colorData.meridiaColor.linear;
+                    iconRend.customBit |= (int)ColorBits.Meridia;
 
-                    iconRend.custom.x = iconColor.r;
-                    iconRend.custom.y = iconColor.g;
-                    iconRend.custom.z = iconColor.b;
-
-                    int npcColorIndex = Convert.ToInt32($"{npcBrain.atlasRenderer.customBit}", 10);
-                    if (npcColorIndex == trip.selectedClueMarkerColors.Length)
+                    if ((npcBrain.atlasRenderer.customBit & (int)ColorBits.Diagonal) != 0)
                     {
-                        iconRend.customBit |= 1 << DIAGONAL_TEXTURE_BIT;
+                        iconRend.customBit |= (int)ColorBits.Diagonal;
                     }
                     else
                     {
-                        iconRend.customBit &= ~(1<< DIAGONAL_TEXTURE_BIT);
+                        iconRend.customBit &= ~((int)ColorBits.Diagonal);
                     }
                 }
                 else
                 {
-                    int npcColorIndex = Convert.ToInt32($"{npcBrain.atlasRenderer.customBit}", 10);
-                    if (npcColorIndex > 0) 
+                    int npcColorIndex = Convert.ToInt32($"{npcBrain.atlasRenderer.customBit}", 10) - 1;
+                    Debug.Log(npcColorIndex);
+                    if (npcColorIndex >= 0) 
                     {
                         if (npcColorIndex < trip.selectedClueMarkerColors.Length)
                         {
@@ -269,7 +285,7 @@ public class NPCPicker : MonoBehaviour
                             iconRend.custom.x = 0;
                             iconRend.custom.y = 0;
                             iconRend.custom.z = 0;
-                            iconRend.customBit = 1 << DIAGONAL_TEXTURE_BIT;
+                            iconRend.customBit = (int)ColorBits.Diagonal;
                         }
                     }
                     else
@@ -343,7 +359,6 @@ public class NPCPicker : MonoBehaviour
             Closing().Forget();
         }
     }
-
     public async UniTask Adjusting()
     {
         try

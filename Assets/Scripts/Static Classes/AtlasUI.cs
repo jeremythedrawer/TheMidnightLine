@@ -6,9 +6,6 @@ using UnityEngine;
 using static NPC;
 public static class AtlasUI
 {
-    public const int MERIDIA_COLOR_BIT = 4;
-    public const int DIAGONAL_TEXTURE_BIT = 3;
-
     public const int LOCK_SPRITE_INDEX = 18;
     public const int COLOR_SQUARE_SPRITE_INDEX = 5;
     public const int TICK_SPRITE_INDEX = 22;
@@ -49,6 +46,7 @@ public static class AtlasUI
     {
         TicketCheck,
         Color,
+        RuleOut,
     }
     [Flags]public enum UnlockType
     { 
@@ -56,6 +54,16 @@ public static class AtlasUI
         RuleOut = 1 << 0,
         Color = 1 << 1,
         MultiColor = 1 << 2,
+    }
+
+    [Flags] public enum ColorBits
+    { 
+        None = 0,
+        Color1 = 1 << 0,
+        Color2 = 1 << 1,
+        Color3 = 1 << 2,
+        Diagonal = 1 << 3,
+        Meridia = 1 << 4,
     }
 
     public enum PageType

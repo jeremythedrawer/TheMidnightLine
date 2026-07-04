@@ -60,11 +60,11 @@ public class UnlockPicker : MonoBehaviour
         SetOpenPosAndSize();
 
         trip.curUnlocks = UnlockType.None;
-        paletteRenderer.customBit = 1 << MERIDIA_COLOR_BIT;
+        paletteRenderer.customBit = (int)ColorBits.Meridia;
 
         for (int i = 0; i < iconRenderers.Length; i++)
         {
-            iconRenderers[i].customBit = 1 << MERIDIA_COLOR_BIT;
+            iconRenderers[i].customBit = (int)ColorBits.Meridia;
             iconRenderers[i].enabled = false;
         }
     }
@@ -139,7 +139,7 @@ public class UnlockPicker : MonoBehaviour
                                 }
                             }
                             
-                            selectedNPC.atlasRenderer.customBit &= ~(1 << MERIDIA_COLOR_BIT);
+                            selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Meridia);
                             selectedNPC.atlasRenderer.custom.z = 1;
                             selectedNPC.ticketHasBeenChecked = true;
                         }

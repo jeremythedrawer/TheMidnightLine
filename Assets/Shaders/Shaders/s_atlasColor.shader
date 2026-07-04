@@ -103,14 +103,14 @@ Shader "Custom/s_atlasColor"
                 
                 int bitMask = i.customBit;
 
-                int diagonalMask = saturate(bitMask & (1 << DIAGONAL_TEXTURE_BIT));
+                int diagonalMask = saturate(bitMask & DIAGONAL_TEXTURE_BIT);
                 half diagonal = diagonalTex.r * diagonalMask;
 
 
                 half3 col = i.custom.rgb + diagonal;
                 half t = round(LinearLightness(col));
 
-                int meridiaColorMask = saturate(bitMask & (1 << MERIDIA_COLOR_BIT));
+                int meridiaColorMask = saturate(bitMask & MERIDIA_COLOR_BIT);
                 float3 meridiaColor = meridiaColorMask * _MeridiaColor;
 
                 half3 finalCol = lerp((blackTex + col) * border + _BlackColor + meridiaColor, whiteTex * col + _BlackColor + meridiaColor, 0);

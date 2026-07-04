@@ -145,6 +145,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                                 spriteData.uvSizeAndPos = renderer.uvSizesAndPositions[j];
                                 spriteData.scaleAndFlip = renderer.scalesAndFlips[j];
                                 spriteData.custom = renderer.customs[j];
+                                spriteData.customBit = renderer.customBit;
                                 spriteBatch.data.spriteData[count] = spriteData;
 
                                 count++;
