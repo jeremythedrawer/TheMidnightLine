@@ -77,7 +77,7 @@ public class Page : MonoBehaviour
             break;
         }
     }
-    public void SetRuleOutRow()
+    public void InitRuleOutRow()
     {
         AtlasTextRenderer playerWriteTextRend = playerWriteTextRenderers[0];
         previewPlayerWriteText = "Rule Out";
@@ -86,10 +86,9 @@ public class Page : MonoBehaviour
         playerWriteTextRend.enabled = true;
         AtlasRenderer playerWriteRend = playerWriteRenderers[0];
         playerWriteRend.customBit |= (int)ColorBits.Diagonal;
-        playerWriteRend.UpdateSpriteInputsByIndex(ONE_NUMPAD_SPRITE_INDEX);
         isPlayerWriteTextPreviewSet[0] = false;
     }
-    public void SetNextColorRow(int nextIndex)
+    public void InitNextColorRow(int nextIndex)
     {
         AtlasTextRenderer playerWriteTextRend = playerWriteTextRenderers[nextIndex];
 
@@ -105,10 +104,18 @@ public class Page : MonoBehaviour
         isPlayerWriteTextPreviewSet[nextIndex] = false;
 
         playerWriteTextRend.enabled = true;
-        AtlasRenderer playerWriteRend = playerWriteRenderers[nextIndex];
+    }
+    public void UnlockColorRow(int index)
+    {
+        AtlasRenderer playerWriteRend = playerWriteRenderers[index];
 
-        switch (nextIndex)
+        switch (index)
         {
+            case 0:
+            {
+                playerWriteRend.UpdateSpriteInputsByIndex(ONE_NUMPAD_SPRITE_INDEX);
+            }
+            break;
             case 1:
             {
                 playerWriteRend.UpdateSpriteInputsByIndex(TWO_NUMPAD_SPRITE_INDEX);
@@ -135,8 +142,9 @@ public class Page : MonoBehaviour
                 bool foundColorKeyRend = false;
                 for (int i = 0; i < trip.unlockedColorMarkerCount; i++)
                 {
-                    AtlasRenderer colorKeyRend = playerWriteRenderers[i + 1];
-                    if (CursorController.IsInsideBounds(colorKeyRend.GetBounds()) && !foundColorKeyRend)
+                    int colorIndex = i + 1;
+                    AtlasRenderer colorKeyRend = playerWriteRenderers[colorIndex];
+                    if (!foundColorKeyRend && playerWriteTexts[colorIndex] != "" && CursorController.IsInsideBounds(colorKeyRend.GetBounds()))
                     {
                         colorKeyRend.custom.w = 0;
 

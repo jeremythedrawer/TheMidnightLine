@@ -119,7 +119,7 @@ public class Notepad : MonoBehaviour
     public bool active;
 
     public SubState subState;
-    public UnlockType completedUnlocks;
+
 
     public bool atStartPencilPos;
     public bool atOffCameraPos;
@@ -144,7 +144,7 @@ public class Notepad : MonoBehaviour
 
         if (tabRenderer.enabled)
         {
-            if (trip.curUnlocks == completedUnlocks)
+            if (trip.curUnlocks == notepadData.completedUnlocks)
             {
                 tabRenderer.enabled = false;
             }
@@ -177,6 +177,7 @@ public class Notepad : MonoBehaviour
             {
                 CreatePages();
                 colorPicker = SceneController.GetColorPicker();
+                notepadData.completedUnlocks = UnlockType.None;
             }
             break;
             case SceneType.Score:
@@ -202,34 +203,43 @@ public class Notepad : MonoBehaviour
 
         if (activePage.pageType == PageType.ColorKey)
         {
-            if ((completedUnlocks & UnlockType.RuleOut) == 0 && (trip.curUnlocks & UnlockType.RuleOut) != 0)
+            if ((notepadData.completedUnlocks & UnlockType.RuleOut) == 0 && (trip.curUnlocks & UnlockType.RuleOut) != 0)
             {
-                activePage.SetRuleOutRow();
+                activePage.InitRuleOutRow();
                 appearTextClock = APPEAR_TEXT_TIME;
+
             }
-            else if ((completedUnlocks & UnlockType.Color) == 0 && (trip.curUnlocks & UnlockType.Color) != 0)
+            else if ((notepadData.completedUnlocks & UnlockType.Color) == 0 && (trip.curUnlocks & UnlockType.Color) != 0)
             {
-                activePage.SetNextColorRow(1);
+                activePage.InitNextColorRow(1);
                 appearTextClock = APPEAR_TEXT_TIME;
+                activePage.SwitchActivePLayerWriteTextRenderer(1);
+                curWritingBounds = activePage.GetWritingBounds();
+                Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
+                leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
             }
-            else if ((completedUnlocks & UnlockType.MultiColor) == 0 && (trip.curUnlocks & UnlockType.MultiColor) != 0)
+            else if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0 && (trip.curUnlocks & UnlockType.MultiColor) != 0)
             {
-                activePage.SetNextColorRow(2);
+                activePage.InitNextColorRow(2);
                 appearTextClock = APPEAR_TEXT_TIME;
+                activePage.SwitchActivePLayerWriteTextRenderer(2);
+                curWritingBounds = activePage.GetWritingBounds();
+                Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
+                leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
             }
         }
 
-        if (trip.curUnlocks != completedUnlocks)
+        if (trip.curUnlocks != notepadData.completedUnlocks)
         {
-            if ((completedUnlocks & UnlockType.RuleOut) == 0)
+            if ((notepadData.completedUnlocks & UnlockType.RuleOut) == 0)
             {
                 SetTab(TabDirection.Left, colorKeyPage.playerWriteRenderers[0].GetBounds());
             }
-            else if ((completedUnlocks & UnlockType.Color) == 0)
+            else if ((notepadData.completedUnlocks & UnlockType.Color) == 0)
             {
                 SetTab(TabDirection.Left, colorKeyPage.playerWriteRenderers[1].GetBounds());
             }
-            else if ((completedUnlocks & UnlockType.MultiColor) == 0)
+            else if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0)
             {
                 SetTab(TabDirection.Left, colorKeyPage.playerWriteRenderers[2].GetBounds());
             }
@@ -680,20 +690,30 @@ public class Notepad : MonoBehaviour
                         tabRenderer.transform.SetParent(nextPage.transform, worldPositionStays: true);
                         tabRenderer.transform.localPosition = new Vector3(tabRenderer.transform.localPosition.x, tabRenderer.transform.localPosition.y, -1);
 
-                        if ((completedUnlocks & UnlockType.RuleOut) == 0)
+                        if ((notepadData.completedUnlocks & UnlockType.RuleOut) == 0)
                         {
-                            nextPage.SetRuleOutRow();
+                            nextPage.InitRuleOutRow();
                             appearTextClock = APPEAR_TEXT_TIME;
                         }
-                        else if ((completedUnlocks & UnlockType.Color) == 0)
+                        else if ((notepadData.completedUnlocks & UnlockType.Color) == 0)
                         {
-                            nextPage.SetNextColorRow(1);
+                            nextPage.InitNextColorRow(1);
                             appearTextClock = APPEAR_TEXT_TIME;
+
+                            nextPage.SwitchActivePLayerWriteTextRenderer(1);
+                            curWritingBounds = nextPage.GetWritingBounds();
+                            Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
+                            leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
                         }
-                        else if ((completedUnlocks & UnlockType.MultiColor) == 0)
+                        else if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0)
                         {
-                            nextPage.SetNextColorRow(2);
+                            nextPage.InitNextColorRow(2);
                             appearTextClock = APPEAR_TEXT_TIME;
+
+                            nextPage.SwitchActivePLayerWriteTextRenderer(2);
+                            curWritingBounds = nextPage.GetWritingBounds();
+                            Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
+                            leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
                         }
                     }
 
@@ -968,42 +988,55 @@ public class Notepad : MonoBehaviour
                     {
                         if (tabRenderer.enabled)
                         {
-                            if (activePage.playerWriteTextRenderers[0].completedWritingText && (completedUnlocks & UnlockType.RuleOut) == 0)
+                            if (activePage.playerWriteTextRenderers[0].completedWritingText && (notepadData.completedUnlocks & UnlockType.RuleOut) == 0)
                             {
-                                completedUnlocks |= UnlockType.RuleOut;
-
-                                if (completedUnlocks != trip.curUnlocks)
+                                notepadData.completedUnlocks |= UnlockType.RuleOut;
+                                activePage.UnlockColorRow(0);
+                                if (notepadData.completedUnlocks != trip.curUnlocks)
                                 {
-                                    if ((completedUnlocks & UnlockType.Color) == 0)
+                                    if ((notepadData.completedUnlocks & UnlockType.Color) == 0)
                                     {
                                         SetTab(TabDirection.Left, activePage.playerWriteRenderers[1].bounds);
-                                        activePage.SetNextColorRow(1);
+                                        activePage.InitNextColorRow(1);
                                         appearTextClock = APPEAR_TEXT_TIME;
+
+                                        activePage.SwitchActivePLayerWriteTextRenderer(1);
+                                        curWritingBounds = activePage.GetWritingBounds();
+                                        Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
+                                        leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
                                     }
                                 }
                             }
-                            else if (activePage.playerWriteTextRenderers[1].completedWritingText && (completedUnlocks & UnlockType.Color) == 0)
+                            else if (activePage.playerWriteTextRenderers[1].completedWritingText && (notepadData.completedUnlocks & UnlockType.Color) == 0)
                             {
-                                completedUnlocks |= UnlockType.Color;
+                                notepadData.completedUnlocks |= UnlockType.Color;
                                 trip.selectedColorMarkerIndex = 0;
-                                colorPicker.Open(activePage.playerWriteRenderers[1], openAllColors: true);
 
-                                if (completedUnlocks != trip.curUnlocks)
+                                colorPicker.Open(activePage.playerWriteRenderers[1], openAllColors: true);
+                                activePage.UnlockColorRow(1);
+
+                                if (notepadData.completedUnlocks != trip.curUnlocks)
                                 {
-                                    if ((completedUnlocks & UnlockType.MultiColor) == 0)
+                                    if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0)
                                     {
                                         SetTab(TabDirection.Left, activePage.playerWriteRenderers[2].bounds);
-                                        activePage.SetNextColorRow(2);
+                                        activePage.InitNextColorRow(2);
                                         appearTextClock = APPEAR_TEXT_TIME;
+
+                                        activePage.SwitchActivePLayerWriteTextRenderer(2);
+                                        curWritingBounds = activePage.GetWritingBounds();
+                                        Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
+                                        leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
                                     }
                                 }
 
                             }
-                            else if (activePage.playerWriteTextRenderers[2].completedWritingText && (completedUnlocks & UnlockType.MultiColor) == 0)
+                            else if (activePage.playerWriteTextRenderers[2].completedWritingText && (notepadData.completedUnlocks & UnlockType.MultiColor) == 0)
                             {
-                                completedUnlocks |= UnlockType.MultiColor;
+                                notepadData.completedUnlocks |= UnlockType.MultiColor;
                                 trip.selectedColorMarkerIndex = 1;
                                 colorPicker.Open(activePage.playerWriteRenderers[2], openAllColors: true);
+                                activePage.UnlockColorRow(2);
                             }
                         }
                         else if (activePage.activePlayerWriteRowIndex > 0 && activePage.playerWriteRenderers[activePage.activePlayerWriteRowIndex] && trip.selectedClueMarkerColors[activePage.activePlayerWriteRowIndex - 1] == Color.black)
@@ -1087,7 +1120,7 @@ public class Notepad : MonoBehaviour
                 Vector3 startWriteWorldPos = new Vector3(activePage.playerWriteRenderers[activePage.activePlayerWriteRowIndex].GetBounds().min.x, curWritingBounds.center.y, leftHandWorldDepthFront);
                 leftHandTargetPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
             }
-            else if (playerInputs.numpad > 0 && playerInputs.numpad <= trip.unlockedColorMarkerCount + 1)
+            else if (playerInputs.numpad > 0 && playerInputs.numpad <= activePage.playerWriteTextRenderers.Length)
             {
                 activePage.SwitchActivePLayerWriteTextRenderer(playerInputs.numpad - 1);
                 curWritingBounds = activePage.GetWritingBounds();
