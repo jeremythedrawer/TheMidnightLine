@@ -657,10 +657,8 @@ public class Notepad : MonoBehaviour
             {
                 revealClock += Time.deltaTime;
 
-                if (activeTraitorProfile.found)
-                {
-                    activePage.UpdateMugShotReveal(revealClock / REVEAL_TIME);
-                }
+                activePage.UpdateMugShotReveal(revealClock / REVEAL_TIME);
+
                 if (revealClock > REVEAL_TIME)
                 {
                     if (activeTraitorProfile.found)
@@ -979,8 +977,17 @@ public class Notepad : MonoBehaviour
                         if(activeTraitorProfile.npcProfile.disembarkingStationIndex == activePage.playerWriteIndex)
                         {
                             activeTraitorProfile.found = true;
+                            trip.traitorProfiles[activePage.traitorIndex] = activeTraitorProfile;
+                            
+                            activePage.playerWriteRenderers[0].customBit |= (int)ColorBits.Diagonal;
                         }
-                        trip.traitorProfiles[activePage.traitorIndex] = activeTraitorProfile;
+                        else
+                        {
+                            activeTraitorProfile.found = false;
+                            trip.traitorProfiles[activePage.traitorIndex] = activeTraitorProfile;
+
+                            activePage.playerWriteRenderers[0].customBit &= ~((int)ColorBits.Diagonal);
+                        }
                     }
                     break;
 
@@ -1064,6 +1071,8 @@ public class Notepad : MonoBehaviour
                     {
                         activeTraitorProfile.found = false;
                         trip.traitorProfiles[activePage.traitorIndex] = activeTraitorProfile;
+                     
+                        activePage.playerWriteRenderers[0].customBit &= ~((int)ColorBits.Diagonal);
                     }
                     break;
                 }

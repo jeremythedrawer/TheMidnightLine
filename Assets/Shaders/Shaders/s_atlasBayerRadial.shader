@@ -30,6 +30,7 @@ Shader "Custom/s_atlasBayerRadial"
                 float4 uvSizeAndPos : TEXCOORD1;
                 float4 scaleAndFlip : TEXCOORD2;
                 float4 custom : TEXCOORD3;
+                int customBit : TEXCOORD4;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -38,6 +39,7 @@ Shader "Custom/s_atlasBayerRadial"
 
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
+
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -60,15 +62,12 @@ Shader "Custom/s_atlasBayerRadial"
                 o.uvSizeAndPos = spriteData.uvSizeAndPos;
                 o.scaleAndFlip = spriteData.scaleAndFlip;
                 o.custom = spriteData.custom;
+                o.customBit = spriteData.customBit;
                 return o;
             }
 
             half4 frag(Varyings i) : SV_Target
             {
-                int uncoveredSpriteIndex = (int)i.custom.x;
-
-                AtlasSprite uncoveredSprite = _SpriteData[uncoveredSpriteIndex];
-
                 float2 coveredUVSize = i.uvSizeAndPos.xy;
                 float2 coveredUVPos = i.uvSizeAndPos.zw;
                 
@@ -78,21 +77,32 @@ Shader "Custom/s_atlasBayerRadial"
                 float2 normUV = i.uv;
                 float2 coveredSpriteUV = i.uv;
 
-                coveredSpriteUV *= coveredUVSize ;
-                coveredSpriteUV += coveredUVPos ;
+                coveredSpriteUV *= coveredUVSize;
+                coveredSpriteUV += coveredUVPos;
                 
                 half4 coveredSprite = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, coveredSpriteUV);
 
+
+                int toReveal = saturate(i.customBit & DIAGONAL_TEXTURE_BIT);
+                int toHide = floor(1 - toReveal);
+
+                float revealT = (i.custom.x * toReveal) * 2 - 1;
+                float hideT = (i.custom.x * toHide) * 2 - 1.5;
+
                 float2 centerUV = normUV * 2 - 1;
                 float radial = length(centerUV);
-
-                float t = i.custom.x * 2 - 1;
-                half alpha = (radial) - t;
-
+                half alpha = radial - revealT;
                 alpha = saturate(alpha); 
                 alpha = BayerMatrix(alpha, 1, i.positionHCS.xy);
 
-                half3 finalColor = coveredSprite.rgb + _BlackColor;
+                float diagonalGradient = normUV.y + normUV.x;
+                
+
+                half diagonal = diagonalGradient + hideT;
+                diagonal = saturate(diagonal) * 0.125;
+                diagonal = BayerX8(diagonal, i.positionHCS.x - i.positionHCS.y);
+
+                half3 finalColor = coveredSprite.rgb + _BlackColor + diagonal;
                 clip(alpha - 0.001);
 
                 return half4 (finalColor, 1);
