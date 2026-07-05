@@ -9,8 +9,10 @@ public class ScoreUI : MonoBehaviour
     public TripSO trip;
     public GameEventDataSO gameEventData;
     public CameraStatsSO cameraStats;
-    
+    public PlayerInputsSO playerInputs;
+
     public AtlasTextRenderer scoreRenderer;
+    public AtlasTextRenderer thankYouRenderer;
 
     [Header("Generated")]
     public Notepad notepad;
@@ -22,21 +24,24 @@ public class ScoreUI : MonoBehaviour
 
     public UIState curState;
 
-    public int traitorsRevealed;
+    public int traitorsFound;
+
     private void Start()
     {
         FadeFromBlack();
         GetNotepad();
+        GetScore();
+        SetTexts();
     }
     private void OnEnable()
     {
-        gameEventData.OnTraitorsFoundScoreUpdate.RegisterListener(SetTraitorsFoundScore);
         OnFinishFadeFromBlack += SetToNotepadState;
+        Notepad.OnFinishRevealingOutcomes += WriteTraitorsFoundScore;
     }
     private void OnDisable()
     {
-        gameEventData.OnTraitorsFoundScoreUpdate.UnregisterListener(SetTraitorsFoundScore);
         OnFinishFadeFromBlack -= SetToNotepadState;
+        Notepad.OnFinishRevealingOutcomes -= WriteTraitorsFoundScore;
     }
     private void Update()
     {
@@ -46,18 +51,29 @@ public class ScoreUI : MonoBehaviour
     {
         notepad = SceneController.GetNotepad(transform);
     }
+    private void GetScore()
+    {
+        for (int i = 0; i < trip.traitorProfiles.Length; i++)
+        {
+            if (trip.traitorProfiles[i].found)
+            {
+                traitorsFound++;
+            }
+        }
+    }
+    private void SetTexts()
+    {
+        scoreRenderer.SetText("");
+        thankYouRenderer.SetText("");
+    }
     private void FadeFromBlack()
     {
         FadeBlack(fadeBlackMaterial, ctsFadeBlack, toFadeBlack: false);
     }
-    public void InitTraitorsFoundScore()
+    public void WriteTraitorsFoundScore()
     {
-        scoreRenderer.SetText("Traitors found: " + 0 + " / " + trip.traitorProfiles.Length);
-    }
-    public void SetTraitorsFoundScore()
-    {
-        traitorsRevealed++;
-        scoreRenderer.SetText("Traitors found: " + traitorsRevealed + " / " + trip.traitorProfiles.Length);
+        string text = "Traitors found: " + traitorsFound + " / " + trip.traitorProfiles.Length;
+        scoreRenderer.WriteText(text, Notepad.WRITE_LETTER_TIME);
     }
     private void SetToNotepadState()
     {
@@ -99,6 +115,12 @@ public class ScoreUI : MonoBehaviour
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
             }
             break;
+        }
+
+        if (scoreRenderer.completedWritingText && !thankYouRenderer.hasText && (playerInputs.mouseLeftDown || playerInputs.spacebarDown || playerInputs.mouseRightDown))
+        {
+            string text = "Thank you for playing! - Jeremy Edwards 2026";
+            thankYouRenderer.WriteText(text, Notepad.WRITE_LETTER_TIME);
         }
     }
     private void ExitState()

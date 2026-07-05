@@ -75,13 +75,11 @@ Shader "Custom/s_atlasBayerRadial"
                 float2 flip = i.scaleAndFlip.zw;
 
                 float2 normUV = i.uv;
-                float2 coveredSpriteUV = i.uv;
-
-                coveredSpriteUV *= coveredUVSize;
-                coveredSpriteUV += coveredUVPos;
+                i.uv *= coveredUVSize;
+                i.uv += coveredUVPos;
                 
-                half4 coveredSprite = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, coveredSpriteUV);
-
+                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+                tex.r = lerp(tex.r, 1 - tex.r, i.custom.w);
 
                 int toReveal = saturate(i.customBit & DIAGONAL_TEXTURE_BIT);
                 int toHide = floor(1 - toReveal);
@@ -96,13 +94,12 @@ Shader "Custom/s_atlasBayerRadial"
                 alpha = BayerMatrix(alpha, 1, i.positionHCS.xy);
 
                 float diagonalGradient = normUV.y + normUV.x;
-                
 
                 half diagonal = diagonalGradient + hideT;
                 diagonal = saturate(diagonal) * 0.125;
                 diagonal = BayerX8(diagonal, i.positionHCS.x - i.positionHCS.y);
 
-                half3 finalColor = coveredSprite.rgb + _BlackColor + diagonal;
+                half3 finalColor = tex.r + _BlackColor + diagonal;
                 clip(alpha - 0.001);
 
                 return half4 (finalColor, 1);

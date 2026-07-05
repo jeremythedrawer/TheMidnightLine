@@ -14,7 +14,7 @@ public class PlayerInputsSO : ScriptableObject
     public int numpad;
     
     public bool notepadKeyDown;
-    public bool notepadConfirmAnswer;
+    public bool spacebarDown;
     public bool ticketCheckKeyDown;
     public bool ticketCheckKeyHold;
     public bool ticketCheckKeyUp;

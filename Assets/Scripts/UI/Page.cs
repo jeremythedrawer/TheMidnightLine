@@ -1,11 +1,8 @@
 using System;
-using System.Reflection;
-using System.Threading;
 using UnityEngine;
 using static Atlas;
 using static AtlasUI;
 using static NPC;
-using static Spy;
 public class Page : MonoBehaviour
 {
     public const float FLIP_LOCAL_POS_Y = -1.656f;
@@ -20,6 +17,7 @@ public class Page : MonoBehaviour
     public NPCsDataSO npcData;
     public SpyStatsSO spyStats;
     public PlayerInputsSO playerInputs;
+
 
     public AtlasRenderer paperRenderer;
 
@@ -171,6 +169,25 @@ public class Page : MonoBehaviour
             break;
         }
 
+        if (CursorController.IsInsideBounds(exitButton_renderer.bounds))
+        {
+            if (playerInputs.mouseLeftHold)
+            {
+                InvertExitButton(invert: false);
+            }
+            else
+            {
+                InvertExitButton(invert: true);
+            }
+            if (playerInputs.mouseLeftUp)
+            {
+                SpyBrain.ToggleNotepad(false);
+            }
+        }
+        else
+        {
+            InvertExitButton(invert: false);
+        }
     }
     public void InitProfile(TraitorProfile traitorProfile)
     {

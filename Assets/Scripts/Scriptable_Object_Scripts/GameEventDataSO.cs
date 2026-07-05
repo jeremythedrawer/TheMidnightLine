@@ -15,5 +15,4 @@ public class GameEventDataSO : ScriptableObject
     public GameEvent OnStationSpawn;
 
     public GameEvent OnChangeToScoreScene;
-    public GameEvent OnTraitorsFoundScoreUpdate;
 }

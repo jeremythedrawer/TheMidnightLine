@@ -82,7 +82,7 @@ public class InputManager : MonoBehaviour
             playerInputs.notepadPreviewAnswerAndFlip.y = Mathf.RoundToInt(move.y);
         };
 
-        write_action.started += context => playerInputs.notepadConfirmAnswer = true;
+        write_action.started += context => playerInputs.spacebarDown = true;
         preview_action.started += context =>
         {
             Vector2 move = context.ReadValue<Vector2>();
@@ -177,7 +177,7 @@ public class InputManager : MonoBehaviour
     private void LateUpdate()
     {
         playerInputs.notepadKeyDown = false;
-        playerInputs.notepadConfirmAnswer = false;
+        playerInputs.spacebarDown = false;
         playerInputs.ticketCheckKeyDown = false;
         playerInputs.ticketCheckKeyUp = false;
         playerInputs.interact = false;
