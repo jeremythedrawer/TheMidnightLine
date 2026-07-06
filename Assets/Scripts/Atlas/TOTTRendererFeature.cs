@@ -271,6 +271,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                             {
                                 case SpawnState.MovingIn:
                                 {
+                                    if (posData.preScrollers == null) return;
                                     for (int k = 0; k < posData.preScrollers.Length; k++)
                                     {
                                         EdgeScroller preScroller = posData.preScrollers[k];
@@ -282,6 +283,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                                 break;
                                 case SpawnState.MovingOut:
                                 {
+                                    if (posData.postScrollers == null)
                                     for (int k = 0; k < posData.postScrollers.Length; k++)
                                     {
                                         EdgeScroller postScroller = posData.postScrollers[k];

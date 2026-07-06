@@ -211,8 +211,6 @@ public class SpawnMaster : MonoBehaviour
         {
             ParticlePosData posData = particleAtlas.posData[i];
 
-            if (posData.ticketCheckEnd > spyStats.ticketsCheckedTotal) continue;
-
             if (posData.spawnState != SpawnState.MovingOut)
             {
                 int particleIndex = (spawnComputeData.moveInputs[posData.maxParticleIndex] & (int)ParticleMoveInputs.PostAtMinBit) != 0 ? posData.minParticleIndex : posData.maxParticleIndex;
@@ -386,30 +384,66 @@ public class SpawnMaster : MonoBehaviour
                 }
                 break;
 
+
                 case ParticleType.Scroll:
                 {
-                    for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
+                    if (posData.widthType == ParticleWidthType.Sliced)
                     {
-                        spawnComputeData.depthInputs[j] = new Vector4(posData.depth, posData.particleCount, posData.depthSize, posData.minParticleIndex);
-
-                        Vector4 offsetInput = new Vector4();
-                        offsetInput.x = posData.posX;
-                        offsetInput.y = posData.posY;
-                        offsetInput.z = posData.scaleX * particleAtlas.spriteData[posData.spriteIndex].worldPivotAndSize.z;
-
-                        spawnComputeData.offsetInputs[j] = offsetInput;
-                        
-                        if (posData.elevate)
+                        for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
                         {
-                            spawnComputeData.moveInputs[j] |= (uint)ParticleMoveInputs.Elevation;
-                        }
-                        else
-                        {
-                            spawnComputeData.moveInputs[j] &= ~((uint)ParticleMoveInputs.Elevation);
-                        }
-                        spawnComputeData.moveInputs[j] |= (uint)ParticleMoveInputs.Born;
+                            spawnComputeData.depthInputs[j] = new Vector4(posData.depth, posData.particleCount, posData.depthSize, posData.minParticleIndex);
 
-                        spawnComputeData.prevIndicesInputs[j] = posData.prevDepthIndices;
+                            Vector4 offsetInput = new Vector4();
+                            offsetInput.x = posData.posX;
+                            offsetInput.y = posData.posY;
+
+                            float widthOffset = particleAtlas.spriteData[posData.spriteIndex].worldPivotAndSize.z;
+                            widthOffset += posData.scaleX * particleAtlas.spriteData[posData.spriteIndex + 1].worldPivotAndSize.z;
+                            widthOffset += particleAtlas.spriteData[posData.spriteIndex + 2].worldPivotAndSize.z;
+
+                            offsetInput.z = widthOffset;
+
+                            spawnComputeData.offsetInputs[j] = offsetInput;
+
+                            if (posData.elevate)
+                            {
+                                spawnComputeData.moveInputs[j] |= (uint)ParticleMoveInputs.Elevation;
+                            }
+                            else
+                            {
+                                spawnComputeData.moveInputs[j] &= ~((uint)ParticleMoveInputs.Elevation);
+                            }
+                            spawnComputeData.moveInputs[j] |= (uint)ParticleMoveInputs.Born;
+
+                            spawnComputeData.prevIndicesInputs[j] = posData.prevDepthIndices;
+                        }
+
+                    }
+                    else
+                    {
+                        for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
+                        {
+                            spawnComputeData.depthInputs[j] = new Vector4(posData.depth, posData.particleCount, posData.depthSize, posData.minParticleIndex);
+
+                            Vector4 offsetInput = new Vector4();
+                            offsetInput.x = posData.posX;
+                            offsetInput.y = posData.posY;
+                            offsetInput.z = posData.scaleX * particleAtlas.spriteData[posData.spriteIndex].worldPivotAndSize.z;
+
+                            spawnComputeData.offsetInputs[j] = offsetInput;
+
+                            if (posData.elevate)
+                            {
+                                spawnComputeData.moveInputs[j] |= (uint)ParticleMoveInputs.Elevation;
+                            }
+                            else
+                            {
+                                spawnComputeData.moveInputs[j] &= ~((uint)ParticleMoveInputs.Elevation);
+                            }
+                            spawnComputeData.moveInputs[j] |= (uint)ParticleMoveInputs.Born;
+
+                            spawnComputeData.prevIndicesInputs[j] = posData.prevDepthIndices;
+                        }
                     }
                 }
                 break;

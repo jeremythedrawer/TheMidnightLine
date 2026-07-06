@@ -291,6 +291,16 @@ public class AtlasTripEditor : EditorWindow
         bool removeParticleData = GUI.Button(removePosDataRect, "Remove Particle");
         if (removeParticleData)
         {
+            if (atlasToParticleAtlasDict == null)
+            {
+                atlasToParticleAtlasDict = new Dictionary<AtlasSO, ParticleAtlas>();
+                for (int i = 0; i < trip.particleAtlasArray.Length; i++)
+                {
+                    ParticleAtlas particleAtlasKeyValue = trip.particleAtlasArray[i];
+                    atlasToParticleAtlasDict.Add(particleAtlasKeyValue.atlas, particleAtlasKeyValue);
+                }
+            }
+
             if (atlasToParticleAtlasDict.TryGetValue(selectedPrefab.mainRenderer.atlas, out selectedParticleAtlas))
             {
                 List<ParticlePosData> particleDataList = selectedParticleAtlas.posData.ToList();
@@ -317,6 +327,15 @@ public class AtlasTripEditor : EditorWindow
             if (selectedPrefab == null)
             {
                 selectedParticleAtlas = null;
+            }
+            if (atlasToParticleAtlasDict == null)
+            {
+                atlasToParticleAtlasDict = new Dictionary<AtlasSO, ParticleAtlas>();
+                for (int i = 0; i < trip.particleAtlasArray.Length; i++)
+                {
+                    ParticleAtlas particleAtlasKeyValue = trip.particleAtlasArray[i];
+                    atlasToParticleAtlasDict.Add(particleAtlasKeyValue.atlas, particleAtlasKeyValue);
+                }
             }
 
             if (selectedPosDataIndex != -1 && atlasToParticleAtlasDict.TryGetValue(selectedPrefab.mainRenderer.atlas, out selectedParticleAtlas))
@@ -848,16 +867,39 @@ public class AtlasTripEditor : EditorWindow
                 posData.postScrollers[0].spriteData = new EdgeSpriteData[selectedPrefab.preScrollers.Length];
             }
 
-            for (int i = 0; i < selectedPrefab.postScrollers.Length; i++)
+            
+            if (posData.widthType == ParticleWidthType.Sliced)
             {
-                AtlasRenderer atlasRenderer = selectedPrefab.postScrollers[i];
-                float widthOffset = posData.scaleX * particleAtlas.spriteData[posData.spriteIndex].worldPivotAndSize.z;
-                posData.postScrollers[0].spriteData[i] = new EdgeSpriteData()
-                { 
-                    spriteIndex = (uint)atlasRenderer.spriteIndex,
-                    offset = new Vector4(atlasRenderer.transform.localPosition.x + widthOffset, atlasRenderer.transform.localPosition.y, atlasRenderer.transform.localPosition.z),
-                    scale = new Vector4(atlasRenderer.width, atlasRenderer.height),
-                };
+                for (int i = 0; i < selectedPrefab.postScrollers.Length; i++)
+                {
+                    AtlasRenderer atlasRenderer = selectedPrefab.postScrollers[i];
+
+                    float widthOffset = particleAtlas.spriteData[posData.spriteIndex].worldPivotAndSize.z;
+                    widthOffset += posData.scaleX * particleAtlas.spriteData[posData.spriteIndex + 1].worldPivotAndSize.z;
+                    widthOffset += particleAtlas.spriteData[posData.spriteIndex + 2].worldPivotAndSize.z;
+                    posData.postScrollers[0].spriteData[i] = new EdgeSpriteData()
+                    {
+                        spriteIndex = (uint)atlasRenderer.spriteIndex,
+                        offset = new Vector4(atlasRenderer.transform.localPosition.x + widthOffset, atlasRenderer.transform.localPosition.y, atlasRenderer.transform.localPosition.z),
+                        scale = new Vector4(atlasRenderer.width, atlasRenderer.height),
+                    };
+                }
+            }
+            else
+            {
+                for (int i = 0; i < selectedPrefab.postScrollers.Length; i++)
+                {
+                    AtlasRenderer atlasRenderer = selectedPrefab.postScrollers[i];
+
+                    float widthOffset = posData.scaleX * particleAtlas.spriteData[posData.spriteIndex].worldPivotAndSize.z;
+                    posData.postScrollers[0].spriteData[i] = new EdgeSpriteData()
+                    {
+                        spriteIndex = (uint)atlasRenderer.spriteIndex,
+                        offset = new Vector4(atlasRenderer.transform.localPosition.x + widthOffset, atlasRenderer.transform.localPosition.y, atlasRenderer.transform.localPosition.z),
+                        scale = new Vector4(atlasRenderer.width, atlasRenderer.height),
+                    };
+                }
+
             }
         }
         else
