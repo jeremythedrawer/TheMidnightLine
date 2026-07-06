@@ -54,6 +54,7 @@ public static class AtlasSpawn
         Dead = 1 << 2,
         FirstOutOfBounds = 1 << 3,
         Elevation = 1 << 4,
+        PostAtMinBit = 1 << 5,
 
     }
     public enum ParticleType

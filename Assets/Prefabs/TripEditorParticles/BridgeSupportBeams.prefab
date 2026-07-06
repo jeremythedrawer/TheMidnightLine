@@ -1,0 +1,404 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &197558959458372595
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7815039856611930333}
+  - component: {fileID: 1330992442409982716}
+  - component: {fileID: 6369505598932716817}
+  m_Layer: 0
+  m_Name: StartSupportBeam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7815039856611930333
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197558959458372595}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6325268630529132745}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1330992442409982716
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197558959458372595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    texture: {fileID: 2800000, guid: 857f07ac02073324d828fc8db55dd0e9, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
+  atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 5
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.26123047, y: 0.29345703, z: 0.52197266, w: 0.42382812}
+    uvPivot: {x: 1, y: 0}
+    worldSize: {x: 2.9722223, y: 3.338889, z: 1}
+    index: 5
+  bounds:
+    m_Center: {x: 270.0139, y: 0.6994444, z: -19.99}
+    m_Extent: {x: 1.4861112, y: 1.6694444, z: 0.1}
+  worldPivotAndSize: {x: -2.9722223, y: -0, z: 2.9722223, w: 3.338889}
+  uvSizeAndPosition: {x: 0.26123047, y: 0.29345703, z: 0.52197266, w: 0.42382812}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
+  boundsOffset: {x: -1.4861112, y: 1.6694444, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 5
+  prevSpriteIndexFlipV: 5
+  isAnimating: 0
+  quadCount: 0
+--- !u!114 &6369505598932716817
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 197558959458372595}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27bd6af9ba3f0e2478e744ca408714d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TripEditorPrefab
+  mainRenderer: {fileID: 1330992442409982716}
+  preScrollers:
+  - {fileID: 0}
+  postScrollers:
+  - {fileID: 0}
+--- !u!1 &2292585225262029309
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2911387612567101304}
+  - component: {fileID: 6552782789357949224}
+  - component: {fileID: 220732487031541506}
+  m_Layer: 0
+  m_Name: EndSupportBeam
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2911387612567101304
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2292585225262029309}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 3390777469810522242}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6552782789357949224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2292585225262029309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    texture: {fileID: 2800000, guid: 857f07ac02073324d828fc8db55dd0e9, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
+  atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 9
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.26123047, y: 0.29345703, z: 0.5859375, w: 0.12792969}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 2.9722223, y: 3.338889, z: 1}
+    index: 9
+  bounds:
+    m_Center: {x: 280.0461, y: 0.6994444, z: -19.99}
+    m_Extent: {x: 1.4861112, y: 1.6694444, z: 0.1}
+  worldPivotAndSize: {x: -0, y: -0, z: 2.9722223, w: 3.338889}
+  uvSizeAndPosition: {x: 0.26123047, y: 0.29345703, z: 0.5859375, w: 0.12792969}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
+  boundsOffset: {x: 1.4861112, y: 1.6694444, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 9
+  prevSpriteIndexFlipV: 9
+  isAnimating: 0
+  quadCount: 0
+--- !u!114 &220732487031541506
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2292585225262029309}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27bd6af9ba3f0e2478e744ca408714d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TripEditorPrefab
+  mainRenderer: {fileID: 6552782789357949224}
+  preScrollers:
+  - {fileID: 0}
+  postScrollers:
+  - {fileID: 0}
+--- !u!1 &5698645146607212779
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6325268630529132745}
+  - component: {fileID: 5371682541683330903}
+  m_Layer: 0
+  m_Name: Left
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6325268630529132745
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5698645146607212779}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7815039856611930333}
+  m_Father: {fileID: 7203090984202075477}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5371682541683330903
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5698645146607212779}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27bd6af9ba3f0e2478e744ca408714d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TripEditorPrefab
+  mainRenderer: {fileID: 0}
+  preScrollers:
+  - {fileID: 0}
+  postScrollers:
+  - {fileID: 0}
+--- !u!1 &8512330655706343443
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 3390777469810522242}
+  - component: {fileID: 2860736958218042695}
+  m_Layer: 0
+  m_Name: Right
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &3390777469810522242
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8512330655706343443}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 7.06, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2911387612567101304}
+  m_Father: {fileID: 7203090984202075477}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &2860736958218042695
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8512330655706343443}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27bd6af9ba3f0e2478e744ca408714d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TripEditorPrefab
+  mainRenderer: {fileID: 0}
+  preScrollers:
+  - {fileID: 0}
+  postScrollers:
+  - {fileID: 0}
+--- !u!1 &8766939288341254032
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7203090984202075477}
+  - component: {fileID: 921251662647262215}
+  - component: {fileID: 4853197864510131413}
+  m_Layer: 0
+  m_Name: BridgeSupportBeams
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7203090984202075477
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8766939288341254032}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 271.5, y: -0.97, z: -19.99}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 6325268630529132745}
+  - {fileID: 3390777469810522242}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &921251662647262215
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8766939288341254032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    texture: {fileID: 2800000, guid: 857f07ac02073324d828fc8db55dd0e9, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
+  atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 4
+  flipX: 0
+  flipY: 0
+  width: 1.1932471
+  height: 0.99999994
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.5209961, y: 0.29345703, z: 0, w: 0.42382812}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 5.927778, y: 3.338889, z: 1}
+    index: 4
+  bounds:
+    m_Center: {x: 275.03665, y: 0.6994443, z: -19.99}
+    m_Extent: {x: 3.5366518, y: 1.6694443, z: 0.1}
+  worldPivotAndSize: {x: -0, y: -0, z: 5.927778, w: 3.338889}
+  uvSizeAndPosition: {x: 0.5209961, y: 0.29345703, z: 0, w: 0.42382812}
+  scaleAndFlip: {x: 1.1932471, y: 0.99999994, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
+  boundsOffset: {x: 3.5366518, y: 1.6694443, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 4
+  prevSpriteIndexFlipV: 4
+  isAnimating: 0
+  quadCount: 0
+--- !u!114 &4853197864510131413
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8766939288341254032}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 27bd6af9ba3f0e2478e744ca408714d8, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::TripEditorPrefab
+  mainRenderer: {fileID: 921251662647262215}
+  preScrollers:
+  - {fileID: 1330992442409982716}
+  postScrollers:
+  - {fileID: 6552782789357949224}

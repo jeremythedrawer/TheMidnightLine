@@ -104,13 +104,11 @@ Shader "Custom/s_atlasScroll"
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
                 clip(tex.a - 0.001);
 
-                half color = tex.r;
-
                 half minPos = _TrainBoundsMin.z + _TrainBoundsSize.z;
                 half bayerFactor = (p.z - minPos) / (FAR_CLIP - minPos);
                 half bayerValue = bayerFactor * (_DayNight * 1.75 - 0.875);
+                half bayer = BayerX8((tex.r - bayerValue), i.positionHCS.y);
 
-                half bayer = BayerX8((color - bayerValue), i.positionHCS.y);
                 half3 finalColor = bayer + _BlackColor;
                 return half4(finalColor, 1);
             }

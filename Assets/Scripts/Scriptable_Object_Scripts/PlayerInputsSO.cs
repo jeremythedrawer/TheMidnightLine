@@ -15,10 +15,13 @@ public class PlayerInputsSO : ScriptableObject
     
     public bool notepadKeyDown;
     public bool spacebarDown;
+
     public bool ticketCheckKeyDown;
     public bool ticketCheckKeyHold;
     public bool ticketCheckKeyUp;
+    
     public bool interact;
+    
     public bool moveUp;
     public bool moveDown;
 

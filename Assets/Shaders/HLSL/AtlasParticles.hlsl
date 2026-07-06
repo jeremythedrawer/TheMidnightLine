@@ -1,10 +1,11 @@
 #define THREADS_PER_GROUP 64
 
-#define BORN_BIT 0
-#define DYING_BIT 1
-#define DEAD_BIT 2
-#define FIRST_OUT_OF_BOUNDS_BIT 3
-#define ELEVATION_BIT 4
+#define BORN_BIT 1 << 0
+#define DYING_BIT 1 << 1
+#define DEAD_BIT 1 << 2
+#define FIRST_OUT_OF_BOUNDS_BIT 1 << 3
+#define ELEVATION_BIT 1 << 4
+#define POST_AT_MIN_BIT 1 << 5
 
 #define FAR_CLIP 128
 

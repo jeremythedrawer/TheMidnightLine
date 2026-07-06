@@ -31,20 +31,22 @@ void _ScrollInit(uint id : SV_DispatchThreadID)
     
     float4 output = _ScrollOutput[id];
     uint moveInput = _MoveInput[id];
-     
-    if (((moveInput & (1 << BORN_BIT)) == 0) || ((moveInput & (1 << DEAD_BIT) == 0)))
+    
+    
+    if ((moveInput & BORN_BIT) == 0 || (moveInput & DEAD_BIT) != 0)
     {
-        _ScrollOutput[id] = output;
         return;
     }
     
     float4 depthInput = _DepthInput[id];
     output.z = _SpawnerMinPos.z + depthInput.x;
-    
+
+    float4 offsetInput = _OffsetInput[id];
+    float spawnerOffset = (((float) id % 2) * offsetInput.z);
     
     if (_Init == 0)
     {
-        output.x = _SpawnerMinPos.x + (((float) id % 2) * _SpawnerSize.x);
+        output.x = _SpawnerMinPos.x + spawnerOffset;
     }
     else
     {        
@@ -57,23 +59,20 @@ void _ScrollInit(uint id : SV_DispatchThreadID)
         
             float rightXPos = max(prevOutput.x, prevPrevOutput.x);
         
-            output.x = (rightXPos + _SpawnerSize.x) + (((float) id % 2) * _SpawnerSize.x);             
+            output.x = (rightXPos + _SpawnerSize.x) + spawnerOffset;
         }
         else
         {
-            output.x = _SpawnerMaxPos.x + (((float) id % 2) * _SpawnerSize.x);             
+            output.x = _SpawnerMaxPos.x + spawnerOffset;
         }
     }
     
-    float4 offsetInput = _OffsetInput[id];
     output.y = offsetInput.y;
     output.x += offsetInput.x;
     
     output.w = (_SpawnerMaxPos.z - output.z) / _SpawnerMaxPos.z;
     
-    moveInput &= ~(1 << BORN_BIT);
-    moveInput &= ~(1 << DEAD_BIT); // NOTE: Setting dead input to 0
-    moveInput &= ~(1 << FIRST_OUT_OF_BOUNDS_BIT); //NOTE: Setting first out of bounds input to 0
+    moveInput &= ~(BORN_BIT | DEAD_BIT | FIRST_OUT_OF_BOUNDS_BIT);
     
     _MoveInput[id] = moveInput;
     
@@ -92,34 +91,35 @@ void _ScrollUpdate(uint id : SV_DispatchThreadID)
     float2 trainVelocity = _TrainVelocity * output.w * _DeltaTime;
     float2 velocity = camVelocity + trainVelocity;
     
-    float minXPos = _SpawnerMinPos.x - _SpawnerSize.x;
+    float4 offsetInput = _OffsetInput[id];
+    float minXPos = _SpawnerMinPos.x - offsetInput.z;
     
-    float width = (_SpawnerMaxPos.x - _SpawnerMinPos.x) + _SpawnerSize.x;
     
     if (output.x < minXPos)
     {
-        if ((moveInput & (1 << DYING_BIT)) != 0)
+        if ((moveInput & DYING_BIT) != 0)
         {
-            moveInput |= 1 << DEAD_BIT; // NOTE: Setting dead input to 1
-            moveInput &= ~(1 << BORN_BIT); //NOTE: No Longer born
+            moveInput |= DEAD_BIT;
             
-            output.x = _SpawnerMaxPos.x + (((float) id % 2) * _SpawnerSize.x);
+            output.x = _SpawnerMaxPos.x;
             _MoveInput[id] = moveInput;
         }
         else
         {
-            output.x += width;
+            moveInput ^= POST_AT_MIN_BIT;
+            output.x += offsetInput.z * 2;
         }
     }
     
     if (output.x < _SpawnerMinPos.x)
     {
-        moveInput |= 1 << FIRST_OUT_OF_BOUNDS_BIT;
+        moveInput ^= POST_AT_MIN_BIT;
+        moveInput |= FIRST_OUT_OF_BOUNDS_BIT;
         _MoveInput[id] = moveInput;
     }
     
-    uint isDead = (moveInput >> DEAD_BIT) & 1;
-    uint willElevate = (moveInput >> ELEVATION_BIT) & 1;
+    uint isDead = saturate(moveInput & DEAD_BIT);
+    uint willElevate = saturate(moveInput & ELEVATION_BIT);
     
     velocity.y *= willElevate;
     output.xy -= velocity.xy * (1 - isDead);

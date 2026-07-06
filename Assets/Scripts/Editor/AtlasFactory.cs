@@ -4,14 +4,13 @@ using System.Linq;
 using UnityEditor;
 using UnityEngine;
 using static Atlas;
+using static UnityEngine.GUI;
 
 public class AtlasFactory : EditorWindow
 {
     static Color selectedColor = Color.red;
     static Color unselectedColor = new Color(0, 0.5f, 0.5f);
 
-    const float HEADER_COL_HEIGHT = 20;
-    const float PADDING = 100;
     const float MARKER_SIZE = 2f;
 
     static GUILayoutOption[] headerLayout;
@@ -39,10 +38,8 @@ public class AtlasFactory : EditorWindow
     private bool[] enabledClipsCheckboxes;
     private Array atlasEnum_array;
 
-    private Rect previewRect;
     private SimpleSprite previewSprite;
     private int flip;
-    private Color32 previewBGColor;
 
     List<SimpleSprite> newSimpleSprites;
     List<MotionSprite> newMotionSprites;
@@ -376,8 +373,6 @@ public class AtlasFactory : EditorWindow
         float pivotX = flipUVPivot * drawWidth;
         float pivotY = (1 - previewSprite.uvPivot.y) * drawHeight;
 
-        previewRect = new Rect(pivot.x - pivotX, pivot.y - (drawHeight - pivotY), drawWidth, drawHeight);
-
         Rect uvRect;
 
         if (flip == 1)
@@ -401,15 +396,11 @@ public class AtlasFactory : EditorWindow
 
 
         Rect imageRect = new Rect();
-        
-        float spriteAspect = previewSprite.uvSizeAndPos.x / previewSprite.uvSizeAndPos.y;
-
-
-        float maxWidth = 0;
-        float maxHeight = 0;
 
         if (atlas.clipDict.TryGetValue(selectedMotionIndex, out AtlasClip clip))
         {
+            float maxWidth = 0;
+            float maxHeight = 0;
             for (int i = clip.keyframeStartIndex; i <= clip.keyframeEndIndex; i++)
             {
                 MotionSprite motionSprite = atlas.motionSprites[i];
@@ -417,14 +408,32 @@ public class AtlasFactory : EditorWindow
                 maxWidth = Mathf.Max(maxWidth, motionSprite.sprite.uvSizeAndPos.x);
                 maxHeight = Mathf.Max(maxHeight, motionSprite.sprite.uvSizeAndPos.y);
             }
+            float clipScale = Mathf.Min(containerRect.width / maxWidth, containerRect.height / maxHeight);
+
+            imageRect.width = previewSprite.uvSizeAndPos.x * clipScale;
+            imageRect.height = previewSprite.uvSizeAndPos.y * clipScale;
+
+            imageRect.x = containerRect.center.x - previewSprite.uvPivot.x * imageRect.width;
+            imageRect.y = containerRect.yMax - (1 - previewSprite.uvPivot.y) * imageRect.height;
         }
-        float clipScale = Mathf.Min(containerRect.width / maxWidth, containerRect.height / maxHeight);
+        else
+        {
+            float spriteAspect = previewSprite.uvSizeAndPos.x / previewSprite.uvSizeAndPos.y;
 
-        imageRect.width = previewSprite.uvSizeAndPos.x * clipScale;
-        imageRect.height = previewSprite.uvSizeAndPos.y * clipScale;
+            if (spriteAspect > 1)
+            {
+                imageRect.width = containerRect.width;
+                imageRect.height =  containerRect.height / spriteAspect;
+            }
+            else
+            {
+                imageRect.width = containerRect.width * spriteAspect;
+                imageRect.height = containerRect.height;
+            }
 
-        imageRect.x = containerRect.center.x - previewSprite.uvPivot.x * imageRect.width;
-        imageRect.y = containerRect.yMax - (1 - previewSprite.uvPivot.y) * imageRect.height;
+            imageRect.x = containerRect.xMin;
+            imageRect.y = containerRect.yMax - imageRect.height;
+        }
 
         GUI.DrawTextureWithTexCoords(imageRect, atlas.texture, uvRect);
         Vector2 indexPos = new Vector2(containerRect.xMin, containerRect.yMin);
@@ -878,15 +887,17 @@ public class AtlasFactory : EditorWindow
             normal = { textColor = Color.white }
         };
 
-        Vector2 spriteTextSize = new Vector2(gridRect.width - spriteRect.width, 20);
 
-        Vector2 spriteIndexTextPos = new Vector2(spriteRect.xMax, spriteRect.yMin);
-        Vector2 clipNameTextPos = new Vector2(spriteRect.xMax, spriteIndexTextPos.y + spriteTextSize.y);
 
-        Rect spriteIndexTextRect = new Rect(spriteIndexTextPos, spriteTextSize);
-        Rect clipNameRect = new Rect(clipNameTextPos, spriteTextSize);
+        GUIContent indexGUIContent = new GUIContent("Index: " + atlasSprite.index.ToString());
 
-        GUI.Label(spriteIndexTextRect, "Index: " + atlasSprite.index.ToString(), spriteTextStyle);
+        Vector2 indexTextSize = spriteTextStyle.CalcSize(indexGUIContent);
+
+        Vector2 spriteIndexTextPos = new Vector2(gridRect.xMax - indexTextSize.x, gridRect.yMax - indexTextSize.y);
+        Rect spriteIndexTextRect = new Rect(spriteIndexTextPos, indexTextSize);
+
+
+        GUI.Label(spriteIndexTextRect, indexGUIContent, spriteTextStyle);
 
         Color defaultColor = Color.grey;
 
@@ -910,13 +921,19 @@ public class AtlasFactory : EditorWindow
         if (motionSpriteNullable.HasValue)
         {
             MotionSprite motionSprite = motionSpriteNullable.Value;
+
             for (int i = 0; i < atlas.clips.Length; i++)
             {
                 AtlasClip atlasClip = atlas.clips[i];
 
                 if (atlasSprite.index >= atlasClip.keyframeStartIndex && atlasSprite.index <= atlasClip.keyframeEndIndex)
                 {
-                    GUI.Label(clipNameRect, "Clip: " + atlasClip.clipName, spriteTextStyle);
+                    GUIContent clipGUIContent = new GUIContent("Clip: " + atlasClip.clipName);
+                    Vector2 clipTextSize = spriteTextStyle.CalcSize(clipGUIContent);
+                    Vector2 clipNameTextPos = new Vector2(gridRect.xMax - clipTextSize.x, gridRect.yMax - indexTextSize.y - clipTextSize.y);
+
+                    Rect clipNameRect = new Rect(clipNameTextPos, clipTextSize);
+                    GUI.Label(clipNameRect, clipGUIContent, spriteTextStyle);
                     defaultColor = unselectedColor;
                     break;
                 }

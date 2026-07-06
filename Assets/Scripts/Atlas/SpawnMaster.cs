@@ -1,10 +1,8 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
-using static AtlasRendering;
 using static AtlasSpawn;
 using static Spy;
 using static Train;
@@ -161,6 +159,7 @@ public class SpawnMaster : MonoBehaviour
 
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.updateKernel, "_ScrollOutput", spawnData.scrollData.outputBuffer);
         spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.updateKernel, "_MoveInput", spawnData.scrollData.moveInputBuffer);
+        spawnData.scrollData.compute.SetBuffer(spawnData.scrollData.updateKernel, "_OffsetInput", spawnData.scrollData.offsetInputBuffer);
     }
     private void InitParticles()
     {
@@ -216,6 +215,27 @@ public class SpawnMaster : MonoBehaviour
 
             if (posData.spawnState != SpawnState.MovingOut)
             {
+                int particleIndex = (spawnComputeData.moveInputs[posData.maxParticleIndex] & (int)ParticleMoveInputs.PostAtMinBit) != 0 ? posData.minParticleIndex : posData.maxParticleIndex;
+                for (int j = 0; j < posData.postScrollers.Length; j++)
+                {
+                    EdgeScroller postScroller = posData.postScrollers[j];
+
+                    postScroller.mpb = GetMPB();
+                    postScroller.argsBuffer = GetArgsBuffer();
+                    postScroller.edgeSpriteDataBuffer = GetEdgeSpriteBuffer();
+                    postScroller.edgeSpriteDataBuffer.SetData(postScroller.spriteData);
+
+                    postScroller.mpb.SetTexture("_AtlasTexture", particleAtlas.atlas.texture);
+
+                    postScroller.mpb.SetBuffer("_Particles", spawnComputeData.outputBuffer);
+                    postScroller.mpb.SetBuffer("_SpriteData", particleAtlas.spriteDataBuffer);
+                    postScroller.mpb.SetBuffer("_EdgeSpriteData", postScroller.edgeSpriteDataBuffer);
+
+                    postScroller.mpb.SetInt("_ParticleOffset", particleIndex);
+
+                    posData.postScrollers[j] = postScroller;
+                }
+
                 for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
                 {
                     uint newMoveInput = spawnComputeData.moveInputs[j];
@@ -343,11 +363,13 @@ public class SpawnMaster : MonoBehaviour
 
             switch (spawnComputeData.particleType)
             {
+
                 case ParticleType.Zone:
                 {
                     for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
                     {
                         spawnComputeData.depthInputs[j] = new Vector4(posData.depth, posData.particleCount, posData.depthSize, posData.minParticleIndex);
+
                         spawnComputeData.offsetInputs[j].x = posData.posX;
                         spawnComputeData.offsetInputs[j].y = posData.posY;
                         spawnComputeData.moveInputs[j] |= (uint)ParticleMoveInputs.Born;
@@ -369,8 +391,13 @@ public class SpawnMaster : MonoBehaviour
                     for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
                     {
                         spawnComputeData.depthInputs[j] = new Vector4(posData.depth, posData.particleCount, posData.depthSize, posData.minParticleIndex);
-                        spawnComputeData.offsetInputs[j].x = posData.posX;
-                        spawnComputeData.offsetInputs[j].y = posData.posY;
+
+                        Vector4 offsetInput = new Vector4();
+                        offsetInput.x = posData.posX;
+                        offsetInput.y = posData.posY;
+                        offsetInput.z = posData.scaleX * particleAtlas.spriteData[posData.spriteIndex].worldPivotAndSize.z;
+
+                        spawnComputeData.offsetInputs[j] = offsetInput;
                         
                         if (posData.elevate)
                         {

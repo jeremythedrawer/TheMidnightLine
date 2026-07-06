@@ -20,7 +20,7 @@ MonoBehaviour:
     postScrollers: []
     prefabGUID: 73003fd2c9941f8428e7816d1debbff5
     quadScales:
-    - {x: 5.943304, y: 1, z: 0, w: 0}
+    - {x: 6, y: 1, z: 0, w: 0}
     prevDepthIndices: {x: 0, y: 0}
     widthType: 2
     spawnState: 1
@@ -32,37 +32,68 @@ MonoBehaviour:
     maxParticleIndex: 1
     depth: 5
     depthSize: 1
-    spriteIndex: 3
+    spriteIndex: 0
     spritesPerParticle: 1
     posY: 2.353
     posX: -0
     scaleY: 1
-    scaleX: 5.943304
+    scaleX: 6
     randScale: 0
     elevate: 0
-  - preScrollers:
-    - spriteData: []
+  - preScrollers: []
     postScrollers: []
     prefabGUID: 88213bfcf45a1e14dbff676518b881d0
     quadScales:
-    - {x: 11.909893, y: 1, z: 0, w: 0}
+    - {x: 12, y: 1, z: 0, w: 0}
     prevDepthIndices: {x: 0, y: 0}
     widthType: 2
     spawnState: 1
     ticketCheckStart: 0
-    ticketCheckEnd: 6
+    ticketCheckEnd: 23
     quadCount: 2
     particleCount: 2
     minParticleIndex: 2
     maxParticleIndex: 3
     depth: 6
     depthSize: 1
-    spriteIndex: 2
+    spriteIndex: 3
     spritesPerParticle: 1
     posY: -0.903
     posX: -0
     scaleY: 1
-    scaleX: 11.909893
+    scaleX: 12
+    randScale: 0
+    elevate: 0
+  - preScrollers:
+    - spriteData:
+      - spriteIndex: 5
+        offset: {x: 0, y: 0, z: 0, w: 0}
+        scale: {x: 1, y: 1, z: 0, w: 0}
+    postScrollers:
+    - spriteData:
+      - spriteIndex: 9
+        offset: {x: 71.13333, y: 0, z: 0, w: 0}
+        scale: {x: 1, y: 1, z: 0, w: 0}
+    prefabGUID: 646639db45f7d3f48aae64d498c3e580
+    quadScales:
+    - {x: 12, y: 0.99999994, z: 0, w: 0}
+    prevDepthIndices: {x: 0, y: 0}
+    widthType: 2
+    spawnState: 1
+    ticketCheckStart: 0
+    ticketCheckEnd: 1
+    quadCount: 2
+    particleCount: 2
+    minParticleIndex: 4
+    maxParticleIndex: 5
+    depth: 27
+    depthSize: 1
+    spriteIndex: 4
+    spritesPerParticle: 1
+    posY: -0.97
+    posX: -0
+    scaleY: 0.99999994
+    scaleX: 12
     randScale: 0
     elevate: 0
   - preScrollers:
@@ -70,49 +101,24 @@ MonoBehaviour:
     postScrollers: []
     prefabGUID: 9ecf53fd39bcd6b4aa1f68c82bea7bdb
     quadScales:
-    - {x: 60.8, y: 1, z: 0, w: 0}
+    - {x: 61, y: 1, z: 0, w: 0}
     prevDepthIndices: {x: 0, y: 0}
     widthType: 2
     spawnState: 1
-    ticketCheckStart: 0
-    ticketCheckEnd: 8
-    quadCount: 2
-    particleCount: 2
-    minParticleIndex: 4
-    maxParticleIndex: 5
-    depth: 27
-    depthSize: 1
-    spriteIndex: 7
-    spritesPerParticle: 1
-    posY: 0
-    posX: -0
-    scaleY: 1
-    scaleX: 60.8
-    randScale: 0
-    elevate: 1
-  - preScrollers:
-    - spriteData: []
-    postScrollers: []
-    prefabGUID: 1bd08759cc7de51418872fda61460146
-    quadScales:
-    - {x: 11.875, y: 1, z: 0, w: 0}
-    prevDepthIndices: {x: 0, y: 0}
-    widthType: 2
-    spawnState: 1
-    ticketCheckStart: 0
-    ticketCheckEnd: 7
+    ticketCheckStart: 1
+    ticketCheckEnd: 2
     quadCount: 2
     particleCount: 2
     minParticleIndex: 6
     maxParticleIndex: 7
-    depth: 30
+    depth: 29
     depthSize: 1
-    spriteIndex: 4
+    spriteIndex: 8
     spritesPerParticle: 1
     posY: 0
     posX: -0
     scaleY: 1
-    scaleX: 11.875
+    scaleX: 61
     randScale: 0
     elevate: 1
   - preScrollers:
@@ -120,24 +126,49 @@ MonoBehaviour:
     postScrollers: []
     prefabGUID: 1bd08759cc7de51418872fda61460146
     quadScales:
-    - {x: 11.875, y: 1, z: 0, w: 0}
-    prevDepthIndices: {x: 0, y: 0}
+    - {x: 12, y: 1, z: 0, w: 0}
+    prevDepthIndices: {x: 43, y: 336}
     widthType: 2
     spawnState: 1
-    ticketCheckStart: 0
-    ticketCheckEnd: 6
+    ticketCheckStart: 1
+    ticketCheckEnd: 2
     quadCount: 2
     particleCount: 2
     minParticleIndex: 8
     maxParticleIndex: 9
-    depth: 40
+    depth: 30
     depthSize: 1
-    spriteIndex: 4
+    spriteIndex: 2
     spritesPerParticle: 1
     posY: 0
     posX: -0
     scaleY: 1
-    scaleX: 11.875
+    scaleX: 12
+    randScale: 0
+    elevate: 1
+  - preScrollers:
+    - spriteData: []
+    postScrollers: []
+    prefabGUID: 1bd08759cc7de51418872fda61460146
+    quadScales:
+    - {x: 12, y: 1, z: 0, w: 0}
+    prevDepthIndices: {x: 0, y: 0}
+    widthType: 2
+    spawnState: 1
+    ticketCheckStart: 1
+    ticketCheckEnd: 5
+    quadCount: 2
+    particleCount: 2
+    minParticleIndex: 10
+    maxParticleIndex: 11
+    depth: 40
+    depthSize: 1
+    spriteIndex: 2
+    spritesPerParticle: 1
+    posY: 0
+    posX: -0
+    scaleY: 1
+    scaleX: 12
     randScale: 0
     elevate: 1
   - preScrollers:
@@ -145,16 +176,16 @@ MonoBehaviour:
     postScrollers: []
     prefabGUID: b1cb8e4805978934c88f2d54dccf7603
     quadScales:
-    - {x: 13.897143, y: 1, z: 0, w: 0}
+    - {x: 23, y: 1, z: 0, w: 0}
     prevDepthIndices: {x: 2, y: 3}
     widthType: 2
-    spawnState: 2
-    ticketCheckStart: 6
-    ticketCheckEnd: 12
+    spawnState: 3
+    ticketCheckStart: 23
+    ticketCheckEnd: 25
     quadCount: 2
     particleCount: 2
-    minParticleIndex: 10
-    maxParticleIndex: 11
+    minParticleIndex: 12
+    maxParticleIndex: 13
     depth: 6
     depthSize: 1
     spriteIndex: 5
@@ -162,7 +193,7 @@ MonoBehaviour:
     posY: -0.903
     posX: -0
     scaleY: 1
-    scaleX: 13.897143
+    scaleX: 23
     randScale: 0
     elevate: 0
   - preScrollers:
@@ -170,48 +201,48 @@ MonoBehaviour:
     postScrollers: []
     prefabGUID: 88213bfcf45a1e14dbff676518b881d0
     quadScales:
-    - {x: 11.909893, y: 1, z: 0, w: 0}
-    prevDepthIndices: {x: 10, y: 11}
+    - {x: 12, y: 1, z: 0, w: 0}
+    prevDepthIndices: {x: 12, y: 13}
     widthType: 2
     spawnState: 3
-    ticketCheckStart: 12
+    ticketCheckStart: 25
     ticketCheckEnd: 27
     quadCount: 2
     particleCount: 2
-    minParticleIndex: 12
-    maxParticleIndex: 13
+    minParticleIndex: 14
+    maxParticleIndex: 15
     depth: 6
     depthSize: 1
-    spriteIndex: 2
+    spriteIndex: 3
     spritesPerParticle: 1
     posY: -0.903
     posX: -0
     scaleY: 1
-    scaleX: 11.909893
+    scaleX: 12
     randScale: 0
     elevate: 0
-  posDataIndexOffset: 5
+  posDataIndexOffset: 3
   spriteCount: 8
   isCompleted: 0
   spriteData:
-  - uvSizeAndPos: {x: 0.107910156, y: 0.08935547, z: 0.33251953, w: 0.91064453}
-    worldPivotAndSize: {x: -0, y: -0, z: 1.2277777, w: 1.0166667}
+  - uvSizeAndPos: {x: 0.99902344, y: 0.09716797, z: 0, w: 0.90283203}
+    worldPivotAndSize: {x: -0, y: -0, z: 11.366667, w: 1.1055555}
   - uvSizeAndPos: {x: 0.10449219, y: 0.115722656, z: 0.44873047, w: 0.8828125}
     worldPivotAndSize: {x: -0, y: -0, z: 1.1888889, w: 1.3166667}
-  - uvSizeAndPos: {x: 0.49853516, y: 0.0625, z: 0, w: 0.8105469}
-    worldPivotAndSize: {x: -0, y: -0.7111111, z: 5.672222, w: 0.7111111}
-  - uvSizeAndPos: {x: 0.99902344, y: 0.09716797, z: 0, w: 0.7128906}
-    worldPivotAndSize: {x: -0, y: -0, z: 11.366667, w: 1.1055555}
-  - uvSizeAndPos: {x: 0.5, y: 0.16308594, z: 0.49902344, w: 0.5498047}
+  - uvSizeAndPos: {x: 0.5, y: 0.16308594, z: 0.49902344, w: 0.7397461}
     worldPivotAndSize: {x: -0, y: -0, z: 5.688889, w: 1.8555555}
-  - uvSizeAndPos: {x: 0.4272461, y: 0.24804688, z: 0.00048828125, w: 0.4555664}
-    worldPivotAndSize: {x: -0, y: -2.8222222, z: 4.861111, w: 2.8222222}
-  - uvSizeAndPos: {x: 0.021972656, y: 0.015136719, z: 0.04345703, w: 0.9477539}
-    worldPivotAndSize: {x: 0, y: 0, z: 0.25, w: 0.17222221}
+  - uvSizeAndPos: {x: 0.49853516, y: 0.0625, z: 0, w: 0.75390625}
+    worldPivotAndSize: {x: -0, y: -0.7111111, z: 5.672222, w: 0.7111111}
+  - uvSizeAndPos: {x: 0.5209961, y: 0.29345703, z: 0, w: 0.42382812}
+    worldPivotAndSize: {x: -0, y: -0, z: 5.927778, w: 3.338889}
+  - uvSizeAndPos: {x: 0.26123047, y: 0.29345703, z: 0.52197266, w: 0.42382812}
+    worldPivotAndSize: {x: -2.9722223, y: -0, z: 2.9722223, w: 3.338889}
   - uvSizeAndPos: {x: 0.09765625, y: 0.09716797, z: 0.5620117, w: 0.8911133}
     worldPivotAndSize: {x: -0, y: -1.1055555, z: 1.1111112, w: 1.1055555}
-  - uvSizeAndPos: {x: 0.028320305, y: 0.015136719, z: 0.28466797, w: 0.9477539}
-    worldPivotAndSize: {x: 2.7444444, y: 0, z: 0.32222214, w: 0.17222221}
+  - uvSizeAndPos: {x: 0.5209961, y: 0.29345703, z: 0, w: 0.2319336}
+    worldPivotAndSize: {x: -0, y: -0, z: 5.927778, w: 3.338889}
+  - uvSizeAndPos: {x: 0.09765625, y: 0.09716797, z: 0.48632812, w: 0.3251953}
+    worldPivotAndSize: {x: -0, y: -1.1055555, z: 1.1111112, w: 1.1055555}
   - uvSizeAndPos: {x: 0.021972656, y: 0.006347657, z: 0.04345703, w: 0.9628906}
     worldPivotAndSize: {x: 0, y: 0.17222221, z: 0.25, w: 0.07222228}
   - uvSizeAndPos: {x: 0.21923828, y: 0.006347657, z: 0.06542969, w: 0.9628906}

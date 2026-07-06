@@ -74,8 +74,7 @@ public class AtlasRenderer : MonoBehaviour
             {
                 if (atlas.simpleSprites.Length == 0) { Debug.LogWarning("Atlas does not have Simple Sprites at: " + name); return; }
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.simpleSprites.Length - 1);
-                sprite = atlas.simpleSprites[spriteIndex];
-                UpdateSpriteInputs(sprite);
+                UpdateSpriteInputsByIndex(spriteIndex);
             }
             break;
             
@@ -191,7 +190,7 @@ public class AtlasRenderer : MonoBehaviour
         scaleAndFlip.z = flipLeft ? -1 : 1;
         float flipPivot = flipLeft ? 1 - sprite.uvPivot.x : sprite.uvPivot.x;
         worldPivotAndSize.x = -flipPivot * scaleAndFlip.x * worldPivotAndSize.z;
-        boundsOffset.x = (bounds.size.x * 0.5f) + worldPivotAndSize.x;
+        boundsOffset.x = (scaleAndFlip.x * worldPivotAndSize.z * 0.5f) + worldPivotAndSize.x;
         prevSpriteIndexFlipH = sprite.index;
     }
     public void FlipVSimple(bool flipDown)
@@ -200,7 +199,7 @@ public class AtlasRenderer : MonoBehaviour
         scaleAndFlip.w = flipDown ? -1 : 1;
         float flipPivot = flipDown ? 1 - sprite.uvPivot.y : sprite.uvPivot.y;
         worldPivotAndSize.y = -flipPivot * scaleAndFlip.y * worldPivotAndSize.w;
-        boundsOffset.y = (bounds.size.y * 0.5f) + worldPivotAndSize.y;
+        boundsOffset.y = (scaleAndFlip.y * worldPivotAndSize.w * 0.5f) + worldPivotAndSize.y;
         prevSpriteIndexFlipV = sprite.index;
     }
 

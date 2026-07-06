@@ -171,10 +171,8 @@ public class SpyBrain : MonoBehaviour
             {
                 Flip(playerInputs.move < 0);
                 atlasRenderer.PlayClip(ref curClip);
-
                 stats.targetXVelocity = (settings.moveSpeed * playerInputs.move);
                 stats.moveVelocity.x = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.deltaTime);
-
                 stats.curWorldPos.x += stats.moveVelocity.x * Time.deltaTime;
                 stats.curWorldPos.y = transform.position.y;
                 stats.curWorldPos.z = transform.position.z;
@@ -281,9 +279,9 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Walk:
             {
+                CalculateCollisionPoints();
                 if (stats.curLocationState != LocationState.Station)
                 {
-                    CalculateCollisionPoints();
 
                     RaycastHit2D gangwayDoorLeftHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, layerSettings.trainLayers.gangwayDoor);
                     RaycastHit2D gangwayDoorRightHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, layerSettings.trainLayers.gangwayDoor);

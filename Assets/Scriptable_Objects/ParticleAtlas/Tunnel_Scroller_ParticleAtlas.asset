@@ -26,7 +26,17 @@ MonoBehaviour:
       - spriteIndex: 3
         offset: {x: -130.9, y: 0, z: 1, w: 0}
         scale: {x: 17.48259, y: 1, z: 0, w: 0}
-    postScrollers: []
+    postScrollers:
+    - spriteData:
+      - spriteIndex: 0
+        offset: {x: 12.52, y: 0, z: 0, w: 0}
+        scale: {x: 1, y: 1, z: 0, w: 0}
+      - spriteIndex: 1
+        offset: {x: 15.490021, y: 0, z: -21, w: 0}
+        scale: {x: 1, y: 1, z: 0, w: 0}
+      - spriteIndex: 3
+        offset: {x: 16.829987, y: 0, z: 1, w: 0}
+        scale: {x: 3, y: 1, z: 0, w: 0}
     prefabGUID: b17535265377277498cc9bf746c84160
     quadScales:
     - {x: 1, y: 1, z: 0, w: 0}
@@ -38,16 +48,16 @@ MonoBehaviour:
     - {x: 1, y: 1, z: 0, w: 1.7777777}
     - {x: 6.647895, y: 1, z: 0, w: 1.7777777}
     - {x: 1, y: 1, z: 57.388893, w: 1.7777777}
-    prevDepthIndices: {x: 43, y: 336}
+    prevDepthIndices: {x: 4, y: 5}
     widthType: 1
-    spawnState: 2
-    ticketCheckStart: 12
-    ticketCheckEnd: 26
+    spawnState: 3
+    ticketCheckStart: 26
+    ticketCheckEnd: 27
     quadCount: 18
     particleCount: 2
-    minParticleIndex: 14
-    maxParticleIndex: 15
-    depth: 26
+    minParticleIndex: 16
+    maxParticleIndex: 17
+    depth: 27
     depthSize: 1
     spriteIndex: 22
     spritesPerParticle: 9

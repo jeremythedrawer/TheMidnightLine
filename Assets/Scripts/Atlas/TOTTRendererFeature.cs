@@ -252,7 +252,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     if (spyStats.ticketsCheckedTotal < posData.ticketCheckStart) break;
                     if (posData.argsBuffer == null) continue;
 
-
                     argsSpawn[1] = posData.quadCount;
                     posData.argsBuffer.SetData(argsSpawn);
 
@@ -281,15 +280,18 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                                     }
                                 }
                                 break;
-                                //case SpawnState.MovingOut:
-                                //{
-                                //    for (int k = 0; k < posData.postScrollers.Length; k++)
-                                //    {
-                                //        EdgeScroller postScroller = posData.postScrollers[k];
-                                //        cmd.DrawProceduralIndirect(Matrix4x4.identity, spawner.scrollData.material, shaderPass: 0, MeshTopology.Triangles, postScroller.argsBuffer, argsOffset: 0, postScroller.mpb);
-                                //    }
-                                //}
-                                //break;
+                                case SpawnState.MovingOut:
+                                {
+                                    for (int k = 0; k < posData.postScrollers.Length; k++)
+                                    {
+                                        EdgeScroller postScroller = posData.postScrollers[k];
+                                        argsSpawn[1] = (uint)postScroller.spriteData.Length;
+                                        Debug.Log(postScroller.spriteData.Length);
+                                        postScroller.argsBuffer.SetData(argsSpawn);
+                                        cmd.DrawProceduralIndirect(Matrix4x4.identity, spawner.edgeScrollMaterial, shaderPass: 0, MeshTopology.Triangles, postScroller.argsBuffer, argsOffset: 0, postScroller.mpb);
+                                    }
+                                }
+                                break;
                             }
                         }
                         break;

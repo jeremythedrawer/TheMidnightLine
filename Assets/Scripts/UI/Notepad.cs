@@ -1,14 +1,10 @@
 using System;
 using System.Collections.Generic;
-using System.Linq;
-using UnityEditor.Build;
 using UnityEngine;
 using static Atlas;
 using static AtlasUI;
-using static GameplayUI;
 using static NPC;
 using static Scenes;
-using static Spy;
 public class Notepad : MonoBehaviour
 {
     const int TAB_HORIZONTAL_SPRITE_INDEX = 21;
@@ -140,6 +136,17 @@ public class Notepad : MonoBehaviour
         activePage = promptPage;
     }
 
+    private void OnEnable()
+    {
+        switch (sceneData.activeSceneType)
+        {
+            case SceneType.Score:
+            {
+                SkipToPage(0);
+            }
+            break;
+        }
+    }
     private void OnDisable()
     {
         leftHandTargetPos = leftHandFlipPos;

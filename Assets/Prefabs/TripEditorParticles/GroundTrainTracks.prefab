@@ -49,33 +49,27 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 857f07ac02073324d828fc8db55dd0e9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 8
   atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
-  spriteIndex: 2
+  spriteIndex: 3
   flipX: 0
   flipY: 0
   width: 1
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.49853516, y: 0.0625, z: 0, w: 0.8105469}
+    uvSizeAndPos: {x: 0.49853516, y: 0.0625, z: 0, w: 0.75390625}
     uvPivot: {x: 0, y: 1}
     worldSize: {x: 5.672222, y: 0.7111111, z: 1}
-    index: 2
+    index: 3
   bounds:
     m_Center: {x: 5.7516413, y: -0.35555556, z: 8.58259}
     m_Extent: {x: 2.836111, y: 0.35555556, z: 0.1}
-  worldPivotAndSize: {x: 0, y: 0.7111111, z: 5.672222, w: 0.7111111}
-  uvSizeAndPosition: {x: 0.49853516, y: 0.0625, z: 0, w: 0.8105469}
+  worldPivotAndSize: {x: -0, y: -0.7111111, z: 5.672222, w: 0.7111111}
+  uvSizeAndPosition: {x: 0.49853516, y: 0.0625, z: 0, w: 0.75390625}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
   boundsOffset: {x: 2.836111, y: -0.35555556, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
@@ -85,11 +79,10 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 2
-  prevSpriteIndexFlipV: 2
+  prevSpriteIndexFlipH: 3
+  prevSpriteIndexFlipV: 3
   isAnimating: 0
   quadCount: 0
-  hasText: 0
 --- !u!114 &5422872058028129636
 MonoBehaviour:
   m_ObjectHideFlags: 0

@@ -32,9 +32,8 @@ void _ZoneInit(uint id : SV_DispatchThreadID)
     float4 output = _ZoneOutput[id];
     uint moveInput = _MoveInput[id];
     
-    if (((moveInput & (1 << BORN_BIT)) == 0) || ((moveInput & (1 << DEAD_BIT) == 0)))
+    if ((moveInput & BORN_BIT) == 0  || (moveInput & DEAD_BIT) != 0)
     {
-        _ZoneOutput[id] = output;
         return;
     }
     
@@ -59,9 +58,7 @@ void _ZoneInit(uint id : SV_DispatchThreadID)
     }
     output.y = _OffsetInput[id].y;
     
-    moveInput &= ~(1 << BORN_BIT);
-    moveInput &= ~(1 << DEAD_BIT); // NOTE: Setting dead input to 0
-    moveInput &= ~(1 << FIRST_OUT_OF_BOUNDS_BIT); //NOTE: Setting first out of bounds input to 0
+    moveInput &= ~(BORN_BIT | DEAD_BIT | FIRST_OUT_OF_BOUNDS_BIT);
     
     _MoveInput[id] = moveInput;
     
@@ -82,10 +79,9 @@ void _ZoneUpdate(uint id : SV_DispatchThreadID)
 
     if (output.x < _SpawnerMinPos.x)
     {
-        if ((moveInput & (1 << DYING_BIT)) != 0)
+        if ((moveInput & DYING_BIT) != 0)
         {
-            moveInput |= 1 << DEAD_BIT; // NOTE: Setting dead input to 1
-            moveInput &= ~(1 << BORN_BIT); //NOTE: No Longer born
+            moveInput |= DEAD_BIT;
             float rand01 = HashIntTo01Float(id);
             output.x = _SpawnerMaxPos.x + _SpawnerSize.x * rand01;
             
@@ -97,8 +93,8 @@ void _ZoneUpdate(uint id : SV_DispatchThreadID)
         }
     }
     
-    uint isDead = (moveInput >> DEAD_BIT) & 1;
-    uint willElevate = (moveInput >> ELEVATION_BIT) & 1;
+    uint isDead = saturate(moveInput & DEAD_BIT);
+    uint willElevate = saturate(moveInput & ELEVATION_BIT);
     
     velocity.y *= willElevate;
     output.xy -= velocity.xy * (1 - isDead);
