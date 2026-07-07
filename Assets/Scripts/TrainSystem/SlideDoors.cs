@@ -24,10 +24,12 @@ public class SlideDoors : MonoBehaviour
     public AtlasRenderer rightSlideDoorRenderer;
     public AtlasRenderer leftSlideDoorRenderer;
     public BoxCollider2D boxCollider;
+
     [Header("Generated")]
     public State curState;
     public Transform rightSlideDoor_transform;
     public Transform leftSlideDoor_transform;
+    public Carriage carriage;
 
     public Vector3 rightSlideDoorPos;
     public Vector3 leftSlideDoorPos;

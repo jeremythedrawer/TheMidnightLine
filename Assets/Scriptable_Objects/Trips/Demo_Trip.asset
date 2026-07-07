@@ -39,6 +39,7 @@ MonoBehaviour:
   - {fileID: 11400000, guid: c76632ac0a69b974aaa74e6cd1646b89, type: 2}
   - {fileID: 11400000, guid: 8357ed2722fa5fd439046aa12a4199b6, type: 2}
   - {fileID: 11400000, guid: ed55ab0ee584afd459355277d983c98b, type: 2}
+  - {fileID: 11400000, guid: adbbf3e2e7f721843a635fe3790ce01a, type: 2}
   dayNightValues:
   - 0
   - 0
@@ -55,18 +56,18 @@ MonoBehaviour:
   - 0
   - 0
   - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
-  - 0
+  - 0.1
+  - 0.2
+  - 0.3
+  - 0.4
+  - 0.5
+  - 0.6
+  - 0.7
+  - 0.8
+  - 0.9
+  - 1
+  - 1
+  - 1
   elevationValues:
   - {x: 0, y: 0}
   - {x: 0, y: 0}
@@ -105,48 +106,48 @@ MonoBehaviour:
   - 34.1
   - 34.1
   - 34.1
+  - 40
+  - 40
+  - 40
+  - 40
+  - 30
+  - 30
+  - 30
+  - 30
+  - 22
+  - 22
+  - 22
+  - 22.2
+  - 22
   - 34.1
   - 34.1
   - 22.2
   - 34.1
   - 34.1
-  - 34.1
-  - 34.1
-  - 34.1
-  - 34.1
-  - 34.1
-  - 34.1
-  - 22.2
-  - 34.1
-  - 34.1
-  - 34.1
-  - 22.2
-  - 34.1
-  - 34.1
-  stationAhead: {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
+  stationAhead: {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
   selectedClueMarkerColors:
-  - {r: 0.8490566, g: 0.18312988, b: 0, a: 1}
-  - {r: 0.07769162, g: 0, b: 0.7075472, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
   - {r: 0, g: 0, b: 0, a: 1}
   traitorProfiles:
   - npcProfile:
       boardingStationIndex: 2
-      disembarkingStationIndex: 5
-      npcPrefabIndex: 3
-      behaviours: 6
+      disembarkingStationIndex: 4
+      npcPrefabIndex: 6
+      behaviours: 12
     fullName: 
-    mugShotIndex: 3
+    mugShotIndex: 5
     found: 0
   - npcProfile:
       boardingStationIndex: 4
       disembarkingStationIndex: 6
-      npcPrefabIndex: 5
-      behaviours: 66
+      npcPrefabIndex: 4
+      behaviours: 34
     fullName: 
-    mugShotIndex: 6
+    mugShotIndex: 0
     found: 0
   ticketsCheckedSinceLastStation: 0
   traitorsSpawned: 0
-  unlockedColorMarkerCount: 2
+  unlockedColorMarkerCount: 0
   selectedColorMarkerIndex: 1
-  curUnlocks: 7
+  curUnlocks: 0

@@ -234,8 +234,4 @@ public static class AtlasUI
         }
         return dict;
     }
-    public static float EaseOutT(float t, float p)
-    {
-        return Mathf.Max(1 - Mathf.Pow(1 - t, p), 0);
-    }
 }

@@ -843,7 +843,6 @@ public class Notepad : MonoBehaviour
             for (int j = 0; j < flagCount; j++)
             {
                 Behaviours firstBehaviour = (Behaviours)validFlags[j];
-
                 for (int k = j; k < flagCount; k++)
                 {
                     Behaviours secondBehaviour = (Behaviours)validFlags[k];
@@ -856,6 +855,7 @@ public class Notepad : MonoBehaviour
                         npcPrefabIndex = i,
                     };
 
+                    Debug.Log(npcProfile.npcPrefabIndex);
                     if (k == j)
                     {
                         bystanderProfiles.Add(npcProfile);
@@ -937,8 +937,6 @@ public class Notepad : MonoBehaviour
         activePageIndex = 0;
 
         totalNPCProfiles.AddRange(bystanderProfiles);
-
-        int profileIndex = 0;
         for (int i = 0; i < trip.stationsDataArray.Length; i++)
         {
             StationSO station = trip.stationsDataArray[i];
@@ -947,7 +945,8 @@ public class Notepad : MonoBehaviour
 
             for (int j = 0; j < station.bystanderSpawnCount; j++)
             {
-                NPCProfile bystanderProfile = totalNPCProfiles[profileIndex];
+                int randIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
+                NPCProfile bystanderProfile = totalNPCProfiles[randIndex];
 
                 bystanderProfile.boardingStationIndex = i;
 
@@ -957,9 +956,6 @@ public class Notepad : MonoBehaviour
                 bystanderProfile.disembarkingStationIndex = i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft);
 
                 station.bystanderProfiles[j] = bystanderProfile;
-
-                profileIndex++;
-                profileIndex %= totalNPCProfiles.Count;
             }
         }
     }

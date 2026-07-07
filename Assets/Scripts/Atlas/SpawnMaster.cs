@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
+using System.Threading;
 using UnityEngine;
 using UnityEngine.Rendering;
 using static AtlasSpawn;
@@ -10,7 +11,7 @@ using static Train;
 public class SpawnMaster : MonoBehaviour
 {
     const float DELAYED_PARTICLE_QUEUE_TICK = 1f;
-    const float DAY_NIGHT_TRANSITION_TIME = 0.4f;
+    const float DAY_NIGHT_TRANSITION_TIME = 5;
 
     public SpawnData spawnData;
     public CameraSettingsSO camSettings;
@@ -24,6 +25,8 @@ public class SpawnMaster : MonoBehaviour
     [Header("Generated")]
     public int nextSpawnIndex;
     public float delayParticleQueueClock;
+    public float curDayNight;
+    public CancellationTokenSource ctsDayNight;
     public Queue<DelayedParticleData> delayedParticlesQueue;
     private void OnEnable()
     {
@@ -74,7 +77,6 @@ public class SpawnMaster : MonoBehaviour
         }
         computeData.compute.SetFloat("_DeltaTime", Time.deltaTime);
         computeData.compute.Dispatch(computeData.updateKernel, computeData.groupSize, 1, 1);
-
     }
     private void InitZoneCompute()
     {   
@@ -204,34 +206,40 @@ public class SpawnMaster : MonoBehaviour
 
         ReinitSpawnCompute(ref spawnData.zoneData);
         ReinitSpawnCompute(ref spawnData.scrollData);
+
+        UpdateSky();
     }
     private void SwapParticles(ParticleAtlas particleAtlas, ref SpawnComputeData spawnComputeData)
     {
         for (int i = 0; i < particleAtlas.posDataIndexOffset; i++)
         {
             ParticlePosData posData = particleAtlas.posData[i];
+            if (posData.ticketCheckEnd > spyStats.ticketsCheckedTotal) continue;
 
             if (posData.spawnState != SpawnState.MovingOut)
             {
-                int particleIndex = (spawnComputeData.moveInputs[posData.maxParticleIndex] & (int)ParticleMoveInputs.PostAtMinBit) != 0 ? posData.minParticleIndex : posData.maxParticleIndex;
-                for (int j = 0; j < posData.postScrollers.Length; j++)
+                if (posData.postScrollers != null)
                 {
-                    EdgeScroller postScroller = posData.postScrollers[j];
+                    int particleIndex = (spawnComputeData.moveInputs[posData.maxParticleIndex] & (int)ParticleMoveInputs.PostAtMinBit) != 0 ? posData.minParticleIndex : posData.maxParticleIndex;
+                    for (int j = 0; j < posData.postScrollers.Length; j++)
+                    {
+                        EdgeScroller postScroller = posData.postScrollers[j];
 
-                    postScroller.mpb = GetMPB();
-                    postScroller.argsBuffer = GetArgsBuffer();
-                    postScroller.edgeSpriteDataBuffer = GetEdgeSpriteBuffer();
-                    postScroller.edgeSpriteDataBuffer.SetData(postScroller.spriteData);
+                        postScroller.mpb = GetMPB();
+                        postScroller.argsBuffer = GetArgsBuffer();
+                        postScroller.edgeSpriteDataBuffer = GetEdgeSpriteBuffer();
+                        postScroller.edgeSpriteDataBuffer.SetData(postScroller.spriteData);
 
-                    postScroller.mpb.SetTexture("_AtlasTexture", particleAtlas.atlas.texture);
+                        postScroller.mpb.SetTexture("_AtlasTexture", particleAtlas.atlas.texture);
 
-                    postScroller.mpb.SetBuffer("_Particles", spawnComputeData.outputBuffer);
-                    postScroller.mpb.SetBuffer("_SpriteData", particleAtlas.spriteDataBuffer);
-                    postScroller.mpb.SetBuffer("_EdgeSpriteData", postScroller.edgeSpriteDataBuffer);
+                        postScroller.mpb.SetBuffer("_Particles", spawnComputeData.outputBuffer);
+                        postScroller.mpb.SetBuffer("_SpriteData", particleAtlas.spriteDataBuffer);
+                        postScroller.mpb.SetBuffer("_EdgeSpriteData", postScroller.edgeSpriteDataBuffer);
 
-                    postScroller.mpb.SetInt("_ParticleOffset", particleIndex);
+                        postScroller.mpb.SetInt("_ParticleOffset", particleIndex);
 
-                    posData.postScrollers[j] = postScroller;
+                        posData.postScrollers[j] = postScroller;
+                    }
                 }
 
                 for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
@@ -338,25 +346,28 @@ public class SpawnMaster : MonoBehaviour
 
             posData.spawnState = SpawnState.MovingIn;
 
-            for (int j = 0; j < posData.preScrollers.Length; j++)
+            if (posData.preScrollers != null)
             {
-                EdgeScroller preScroller = posData.preScrollers[j];
+                for (int j = 0; j < posData.preScrollers.Length; j++)
+                {
+                    EdgeScroller preScroller = posData.preScrollers[j];
                 
-                preScroller.mpb = GetMPB();
-                preScroller.argsBuffer = GetArgsBuffer();
-                preScroller.edgeSpriteDataBuffer = GetEdgeSpriteBuffer();
-                preScroller.edgeSpriteDataBuffer.SetData(preScroller.spriteData);
+                    preScroller.mpb = GetMPB();
+                    preScroller.argsBuffer = GetArgsBuffer();
+                    preScroller.edgeSpriteDataBuffer = GetEdgeSpriteBuffer();
+                    preScroller.edgeSpriteDataBuffer.SetData(preScroller.spriteData);
                 
-                preScroller.mpb.SetTexture("_AtlasTexture", particleAtlas.atlas.texture);
+                    preScroller.mpb.SetTexture("_AtlasTexture", particleAtlas.atlas.texture);
                 
-                preScroller.mpb.SetBuffer("_Particles", spawnComputeData.outputBuffer);
-                preScroller.mpb.SetBuffer("_SpriteData", particleAtlas.spriteDataBuffer);
-                preScroller.mpb.SetBuffer("_EdgeSpriteData", preScroller.edgeSpriteDataBuffer);
+                    preScroller.mpb.SetBuffer("_Particles", spawnComputeData.outputBuffer);
+                    preScroller.mpb.SetBuffer("_SpriteData", particleAtlas.spriteDataBuffer);
+                    preScroller.mpb.SetBuffer("_EdgeSpriteData", preScroller.edgeSpriteDataBuffer);
 
-                preScroller.mpb.SetInt("_ParticleOffset", posData.minParticleIndex);
+                    preScroller.mpb.SetInt("_ParticleOffset", posData.minParticleIndex);
 
-                posData.preScrollers[j] = preScroller;
+                    posData.preScrollers[j] = preScroller;
 
+                }
             }
 
             switch (spawnComputeData.particleType)
@@ -550,6 +561,12 @@ public class SpawnMaster : MonoBehaviour
     {
         DespawningEdgeScrollers().Forget();
     }
+    private void UpdateSky()
+    {
+        ctsDayNight?.Cancel();
+        ctsDayNight = new CancellationTokenSource();
+        UpdatingSky().Forget();
+    }
     private async UniTask DespawningEdgeScrollers()
     {
         AsyncGPUReadbackRequest request = AsyncGPUReadback.Request(spawnData.scrollData.moveInputBuffer);
@@ -583,6 +600,32 @@ public class SpawnMaster : MonoBehaviour
             }
         }
 
+    }
+    private async UniTask UpdatingSky()
+    {
+        float nextDayNight = trip.dayNightValues[spyStats.ticketsCheckedTotal];
+        float elapsedTime = 0;
+        float dayNight = curDayNight;
+        try
+        {
+            while(elapsedTime < DAY_NIGHT_TRANSITION_TIME)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = elapsedTime / DAY_NIGHT_TRANSITION_TIME;
+               // t = Curves.EaseInOutCubic(t); 
+
+                dayNight = Mathf.Lerp(curDayNight, nextDayNight, t);
+
+                Shader.SetGlobalFloat("_DayNight", dayNight);
+                await UniTask.Yield(ctsDayNight.Token);
+            }
+            curDayNight = nextDayNight;
+            Shader.SetGlobalFloat("_DayNight", curDayNight);
+        }
+        catch (OperationCanceledException)
+        {
+            curDayNight = dayNight;
+        }
     }
     private void Dispose()
     {

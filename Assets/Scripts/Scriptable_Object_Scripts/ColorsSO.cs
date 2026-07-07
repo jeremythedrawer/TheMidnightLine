@@ -15,7 +15,6 @@ public class ColorsSO : ScriptableObject
 
     public Color[] selectableClueColors;
 
-    [Range(0,1)]public float dayNight;
     [Range(0,1)]public float dayNightFactor;
 
 

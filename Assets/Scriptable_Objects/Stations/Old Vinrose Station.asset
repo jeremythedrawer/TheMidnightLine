@@ -14,9 +14,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   station_prefab: {fileID: 6700324006200157766, guid: a6bd14f8ce78f87409d71c0d0d7cbdca, type: 3}
   ticketsToCheckBeforeSpawn: 0
-  bystanderSpawnCount: 11
+  bystanderSpawnCount: 10
   traitorSpawnCount: 0
-  accompliceSpawnCount: 3
+  accompliceSpawnCount: 0
   isFrontOfTrain: 1
   stationName: Old Vinrose Station
   stationIndex: 0
@@ -24,30 +24,18 @@ MonoBehaviour:
   bystanderProfiles:
   - boardingStationIndex: 0
     disembarkingStationIndex: 1
-    npcPrefabIndex: 0
-    behaviours: 10
-  - boardingStationIndex: 0
-    disembarkingStationIndex: 1
-    npcPrefabIndex: 0
-    behaviours: 130
-  - boardingStationIndex: 0
-    disembarkingStationIndex: 1
-    npcPrefabIndex: 0
-    behaviours: 136
-  - boardingStationIndex: 0
-    disembarkingStationIndex: 2
     npcPrefabIndex: 1
     behaviours: 10
   - boardingStationIndex: 0
-    disembarkingStationIndex: 3
+    disembarkingStationIndex: 1
     npcPrefabIndex: 1
     behaviours: 18
   - boardingStationIndex: 0
-    disembarkingStationIndex: 4
+    disembarkingStationIndex: 1
     npcPrefabIndex: 1
     behaviours: 24
   - boardingStationIndex: 0
-    disembarkingStationIndex: 4
+    disembarkingStationIndex: 2
     npcPrefabIndex: 2
     behaviours: 3
   - boardingStationIndex: 0
@@ -55,27 +43,39 @@ MonoBehaviour:
     npcPrefabIndex: 2
     behaviours: 5
   - boardingStationIndex: 0
-    disembarkingStationIndex: 2
+    disembarkingStationIndex: 4
     npcPrefabIndex: 2
     behaviours: 6
   - boardingStationIndex: 0
-    disembarkingStationIndex: 1
-    npcPrefabIndex: 4
+    disembarkingStationIndex: 4
+    npcPrefabIndex: 3
     behaviours: 3
   - boardingStationIndex: 0
+    disembarkingStationIndex: 3
+    npcPrefabIndex: 3
+    behaviours: 5
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    npcPrefabIndex: 3
+    behaviours: 6
+  - boardingStationIndex: 0
     disembarkingStationIndex: 1
-    npcPrefabIndex: 4
-    behaviours: 33
+    npcPrefabIndex: 5
+    behaviours: 34
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 5
+    behaviours: 66
   accompliceProfiles:
   - boardingStationIndex: 0
     disembarkingStationIndex: 7
-    npcPrefabIndex: 2
+    npcPrefabIndex: 0
     behaviours: 0
   - boardingStationIndex: 0
     disembarkingStationIndex: 7
-    npcPrefabIndex: 3
+    npcPrefabIndex: 1
     behaviours: 0
   - boardingStationIndex: 0
     disembarkingStationIndex: 7
-    npcPrefabIndex: 3
+    npcPrefabIndex: 4
     behaviours: 0

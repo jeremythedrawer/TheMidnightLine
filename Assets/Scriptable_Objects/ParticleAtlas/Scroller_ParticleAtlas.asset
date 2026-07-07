@@ -15,8 +15,7 @@ MonoBehaviour:
   atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
   particleType: 1
   posData:
-  - preScrollers:
-    - spriteData: []
+  - preScrollers: []
     postScrollers: []
     prefabGUID: 73003fd2c9941f8428e7816d1debbff5
     quadScales:
@@ -35,7 +34,7 @@ MonoBehaviour:
     spriteIndex: 0
     spritesPerParticle: 1
     posY: 2.353
-    posX: -0
+    posX: 0
     scaleY: 1
     scaleX: 6
     randScale: 0
@@ -73,7 +72,7 @@ MonoBehaviour:
     widthType: 2
     spawnState: 1
     ticketCheckStart: 0
-    ticketCheckEnd: 21
+    ticketCheckEnd: 23
     quadCount: 2
     particleCount: 2
     minParticleIndex: 4
@@ -95,7 +94,7 @@ MonoBehaviour:
     - {x: 12, y: 1, z: 0, w: 0}
     prevDepthIndices: {x: 0, y: 0}
     widthType: 2
-    spawnState: 3
+    spawnState: 1
     ticketCheckStart: 0
     ticketCheckEnd: 12
     quadCount: 2
@@ -136,15 +135,14 @@ MonoBehaviour:
     scaleX: 12
     randScale: 0
     elevate: 1
-  - preScrollers:
-    - spriteData: []
+  - preScrollers: []
     postScrollers: []
     prefabGUID: b1cb8e4805978934c88f2d54dccf7603
     quadScales:
     - {x: 23, y: 1, z: 0, w: 0}
     prevDepthIndices: {x: 2, y: 3}
     widthType: 2
-    spawnState: 3
+    spawnState: 1
     ticketCheckStart: 23
     ticketCheckEnd: 25
     quadCount: 2
@@ -156,7 +154,7 @@ MonoBehaviour:
     spriteIndex: 5
     spritesPerParticle: 1
     posY: -0.903
-    posX: -0
+    posX: 0
     scaleY: 1
     scaleX: 23
     randScale: 0
@@ -218,7 +216,7 @@ MonoBehaviour:
     scaleX: 12
     randScale: 0
     elevate: 0
-  posDataIndexOffset: 2
+  posDataIndexOffset: 5
   spriteCount: 12
   isCompleted: 0
   spriteData:

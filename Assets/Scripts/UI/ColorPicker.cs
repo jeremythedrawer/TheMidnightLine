@@ -69,7 +69,6 @@ public class ColorPicker : MonoBehaviour
         Shader.SetGlobalColor("_WhiteColor", colorsData.whiteColor.linear);
         Shader.SetGlobalColor("_MeridiaColor", colorsData.meridiaColor.linear);
 
-        Shader.SetGlobalFloat("_DayNight", colorsData.dayNight);
         Shader.SetGlobalFloat("_DayNightFactor", colorsData.dayNightFactor);
 
         Shader.SetGlobalTexture("_DiagonalTexture", colorsData.diagonalTexture);
@@ -88,8 +87,6 @@ public class ColorPicker : MonoBehaviour
 
         Shader.SetGlobalFloat("_DayNightFactor", colorsData.dayNightFactor);
 #endif
-        Shader.SetGlobalFloat("_DayNight", colorsData.dayNight);
-
         UpdateState();
     }
     private void SetState(PickerState newState)
@@ -480,7 +477,7 @@ public class ColorPicker : MonoBehaviour
      
                 if (t < normColTime)
                 {
-                    float easeOutT = EaseOutT(t / normColTime, 5);
+                    float easeOutT = Curves.EaseOutT(t / normColTime, 5);
 
                     curSpriteWidth = openSpriteWidth * easeOutT;
 
@@ -495,7 +492,7 @@ public class ColorPicker : MonoBehaviour
                 }
                 else
                 {
-                    float easOutT = EaseOutT((t - normColTime) / normRowTime, 5);
+                    float easOutT = Curves.EaseOutT((t - normColTime) / normRowTime, 5);
                     curSpriteHeight = Mathf.Lerp(tileHeight, openSpriteHeight, easOutT);
                     paletteRenderer.height = curSpriteHeight;
                     paletteRenderer.UpdateSliceSpriteInputsSelf();
@@ -538,7 +535,7 @@ public class ColorPicker : MonoBehaviour
 
                 if (t < normColTime)
                 {
-                    float easeOutT = EaseOutT(t / normColTime, 5);
+                    float easeOutT = Curves.EaseOutT(t / normColTime, 5);
                     curSpriteWidth = openSpriteWidth * easeOutT;
 
                     paletteRenderer.width = curSpriteWidth;
@@ -551,7 +548,7 @@ public class ColorPicker : MonoBehaviour
                 }
                 else
                 {
-                    float easOutT = EaseOutT((t - normColTime) / normRowTime, 5);
+                    float easOutT = Curves.EaseOutT((t - normColTime) / normRowTime, 5);
                     curSpriteHeight = Mathf.Lerp(tileHeight, openSpriteHeight, easOutT);
                     paletteRenderer.height = curSpriteHeight;
                     paletteRenderer.UpdateSliceSpriteInputsSelf();

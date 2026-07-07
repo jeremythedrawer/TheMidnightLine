@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 using static Train;
 
@@ -10,9 +11,9 @@ public class TrainStatsSO : ScriptableObject
     public Bounds totalBounds;
     
     public DepthSections depthSections;
-    
-    public float[] exteriorSlideDoorPositions;    
-    public float[] interiorSlideDoorPositions;    
+
+    public float[] exteriorSlideDoorXBounds;    
+    public float[] interiorSlideDoorXBounds;    
 
     public Vector2 curVelocity;
     public Vector2 targetVelocity;

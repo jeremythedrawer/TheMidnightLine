@@ -6,6 +6,8 @@ using System.Collections.Generic;
 using static Atlas;
 using static AtlasUI;
 using static NPC;
+using Cysharp.Threading.Tasks;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -81,6 +83,7 @@ public class NPCBrain : MonoBehaviour
     public int boardTrainQueueIndex;
     public int disembarkTrainQueueIndex;
 
+    public delegate void Callback();
     private void OnEnable()
     {
         gameEventData.OnStationArrival.RegisterListener(PrepareToBoardTrain);
@@ -191,7 +194,7 @@ public class NPCBrain : MonoBehaviour
         {
             SetState(NPCState.TicketCheck);
         }
-        else if (Mathf.Abs(targetDist) >= boxCollider.bounds.extents.x)
+        else if (Mathf.Abs(targetDist) >= 0.04f)
         {
             SetState(NPCState.Walking);
         }
@@ -430,8 +433,6 @@ public class NPCBrain : MonoBehaviour
                 atlasRenderer.UpdateWorldDepth(trainStats.depthSections.carriageSeat - 1);
                 transform.position = new Vector3(targetXPos, transform.position.y, transform.position.z);
                 atlasRenderer.FlipHSimple(false);
-
-
             }
             break;
             case NPCPath.StandingInTrain:
@@ -441,15 +442,9 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCPath.AtSlideDoor:
             {
-                LayerMask slideDoorLayer = trip.stationAhead.isFrontOfTrain ? layerSettings.trainLayers.exteriorSlideDoors : layerSettings.trainLayers.interiorSlideDoors;
-                RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, slideDoorLayer);
-
-                curSlideDoors = slideDoorHit.collider.GetComponent<SlideDoors>();
-
                 if (!onTrain)
                 {
-                    RaycastHit2D carriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.size, 0.0f, transform.right, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
-                    curCarriage = TrainController.GetCarriage(carriageHit.collider);
+                    curCarriage = curSlideDoors.carriage;
                     curCarriage.AddNPC(this);
                 }
                 queuedForSlideDoor = false;
@@ -472,34 +467,41 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCPath.ToSlideDoor:
             {
-                float shortestDist = float.MaxValue;
-                float selectedSlideDoorPos = float.MaxValue;
-
                 if (trip.stationAhead.isFrontOfTrain)
                 {
-                    for (int i = 0; i < trainStats.exteriorSlideDoorPositions.Length; i++)
+                    bool foundDoor = false;
+                    for(int i = 0; i < trainStats.exteriorSlideDoorXBounds.Length; i++)
                     {
-                        float dist = Mathf.Abs(trainStats.exteriorSlideDoorPositions[i] - transform.position.x);
-
-                        if (dist > shortestDist) continue;
-                        shortestDist = dist;
-                        selectedSlideDoorPos = trainStats.exteriorSlideDoorPositions[i];
-
+                        if (transform.position.x > trainStats.exteriorSlideDoorXBounds[i])
+                        {
+                            curSlideDoors = TrainController.ExteriorSlideDoors[i];
+                            
+                            foundDoor = true;
+                            break;
+                        }
                     }
+                    if (!foundDoor) curSlideDoors = TrainController.ExteriorSlideDoors[^1];
                 }
                 else
                 {
-                    for (int i = 0; i < trainStats.interiorSlideDoorPositions.Length; i++)
+                    bool foundDoor = false;
+                    for (int i = 0; i < trainStats.interiorSlideDoorXBounds.Length; i++)
                     {
-                        float dist = Mathf.Abs(trainStats.interiorSlideDoorPositions[i] - transform.position.x);
-
-                        if (dist > shortestDist) continue;
-                        shortestDist = dist;
-                        selectedSlideDoorPos = trainStats.interiorSlideDoorPositions[i];
+                        if (transform.position.x > trainStats.interiorSlideDoorXBounds[i])
+                        {
+                            curSlideDoors = TrainController.InteriorSlideDoors[i];
+                            foundDoor = true;
+                            break;
+                        }
                     }
+                    if (!foundDoor) curSlideDoors = TrainController.InteriorSlideDoors[^1];
                 }
 
-                targetXPos = selectedSlideDoorPos;
+                float extents = boxCollider.bounds.extents.x;
+                float slideDoorsXPos = curSlideDoors.transform.position.x;
+                float minX =  slideDoorsXPos - extents;
+                float maxX = slideDoorsXPos + extents;
+                targetXPos = UnityEngine.Random.Range(minX, maxX);
                 targetDist = targetXPos - transform.position.x;
                 behaving = false;
             }
@@ -733,7 +735,9 @@ public class NPCBrain : MonoBehaviour
         {
             curCarriage.seatData.filled[seatPosIndex] = false;
         }
-        SetPath(NPCPath.ToSlideDoor);
+
+        Callback callback = SetPathToSlideDoorCallback;
+        WaitForRandomSeconds(callback).Forget();
     }
     private void QueueForSeat()
     {
@@ -779,7 +783,22 @@ public class NPCBrain : MonoBehaviour
     private void PrepareToBoardTrain()
     {
         if (onTrain || trip.stationAhead.stationIndex != profile.boardingStationIndex) return;
+        Callback callback = SetPathToSlideDoorCallback;
+        WaitForRandomSeconds(callback).Forget();
+
+    
+    }
+    private void SetPathToSlideDoorCallback()
+    {
         SetPath(NPCPath.ToSlideDoor);
+    }
+    private async UniTask WaitForRandomSeconds(Callback callback)
+    {
+        await UniTask.Yield();
+
+        float randTime = UnityEngine.Random.Range(1, 3);
+        await UniTask.WaitForSeconds(randTime);
+        callback();
     }
     private NPCMotion RandomIdleMotion(NPCMotion motion1, NPCMotion motion2)
     {

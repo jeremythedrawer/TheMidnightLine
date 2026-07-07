@@ -81,22 +81,22 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
   atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 1
+  spriteIndex: 7
   flipX: 0
   flipY: 0
   width: 13.136363
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.10449219, y: 0.115722656, z: 0.44873047, w: 0.8828125}
+    uvSizeAndPos: {x: 0.10449219, y: 0.115722656, z: 0.38085938, w: 0.30517578}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 1.1888889, y: 1.3166667, z: 1}
-    index: 1
+    index: 7
   bounds:
     m_Center: {x: 279.86282, y: 0.65833336, z: 26}
     m_Extent: {x: 7.8088384, y: 0.65833336, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 1.1888889, w: 1.3166667}
-  uvSizeAndPosition: {x: 0.10449219, y: 0.115722656, z: 0.44873047, w: 0.8828125}
+  uvSizeAndPosition: {x: 0.10449219, y: 0.115722656, z: 0.38085938, w: 0.30517578}
   scaleAndFlip: {x: 13.136363, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
   customBit: 0
@@ -145,8 +145,8 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 1
-  prevSpriteIndexFlipV: 1
+  prevSpriteIndexFlipH: 7
+  prevSpriteIndexFlipV: 7
   isAnimating: 0
   quadCount: 0
 --- !u!1 &2811684460384202492
@@ -328,22 +328,22 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
   atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 1
+  spriteIndex: 7
   flipX: 0
   flipY: 0
   width: 15.118631
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.10449219, y: 0.115722656, z: 0.44873047, w: 0.8828125}
+    uvSizeAndPos: {x: 0.10449219, y: 0.115722656, z: 0.38085938, w: 0.30517578}
     uvPivot: {x: 0, y: 0}
     worldSize: {x: 1.1888889, y: 1.3166667, z: 1}
-    index: 1
+    index: 7
   bounds:
     m_Center: {x: 319.90717, y: 0.65833336, z: 26}
     m_Extent: {x: 8.987186, y: 0.65833336, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 1.1888889, w: 1.3166667}
-  uvSizeAndPosition: {x: 0.10449219, y: 0.115722656, z: 0.44873047, w: 0.8828125}
+  uvSizeAndPosition: {x: 0.10449219, y: 0.115722656, z: 0.38085938, w: 0.30517578}
   scaleAndFlip: {x: 15.118631, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
   customBit: 0
@@ -392,8 +392,8 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 1
-  prevSpriteIndexFlipV: 1
+  prevSpriteIndexFlipH: 7
+  prevSpriteIndexFlipV: 7
   isAnimating: 0
   quadCount: 0
 --- !u!1 &3872012436576265919
@@ -867,7 +867,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3066907409969786012, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 29.54
+      value: 29.782
       objectReference: {fileID: 0}
     - target: {fileID: 3066907409969786012, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1003,7 +1003,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3066907409969786012, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -27.08
+      value: -27.27
       objectReference: {fileID: 0}
     - target: {fileID: 3066907409969786012, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_LocalPosition.y
@@ -1747,18 +1747,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1537715050535178429}
     m_Modifications:
-    - target: {fileID: 5149488402981695555, guid: 082799eda0dcf3c48b8eeb6a08ae8434, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 291.29944
-      objectReference: {fileID: 0}
-    - target: {fileID: 5149488402981695555, guid: 082799eda0dcf3c48b8eeb6a08ae8434, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 0.49722221
-      objectReference: {fileID: 0}
-    - target: {fileID: 5149488402981695555, guid: 082799eda0dcf3c48b8eeb6a08ae8434, type: 3}
-      propertyPath: bounds.m_Center.z
-      value: 23
-      objectReference: {fileID: 0}
     - target: {fileID: 2985511534948343525, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
       propertyPath: bounds.m_Center.x
       value: 290.53943
@@ -1810,6 +1798,18 @@ PrefabInstance:
     - target: {fileID: 6941684785654458942, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
       propertyPath: m_Name
       value: VendingMachine (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 5149488402981695555, guid: 082799eda0dcf3c48b8eeb6a08ae8434, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 291.29944
+      objectReference: {fileID: 0}
+    - target: {fileID: 5149488402981695555, guid: 082799eda0dcf3c48b8eeb6a08ae8434, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.49722221
+      objectReference: {fileID: 0}
+    - target: {fileID: 5149488402981695555, guid: 082799eda0dcf3c48b8eeb6a08ae8434, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 23
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -2067,18 +2067,6 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 1537715050535178429}
     m_Modifications:
-    - target: {fileID: 5149488402981695555, guid: 082799eda0dcf3c48b8eeb6a08ae8434, type: 3}
-      propertyPath: bounds.m_Center.x
-      value: 291.93344
-      objectReference: {fileID: 0}
-    - target: {fileID: 5149488402981695555, guid: 082799eda0dcf3c48b8eeb6a08ae8434, type: 3}
-      propertyPath: bounds.m_Center.y
-      value: 0.49722221
-      objectReference: {fileID: 0}
-    - target: {fileID: 5149488402981695555, guid: 082799eda0dcf3c48b8eeb6a08ae8434, type: 3}
-      propertyPath: bounds.m_Center.z
-      value: 23
-      objectReference: {fileID: 0}
     - target: {fileID: 2985511534948343525, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
       propertyPath: bounds.m_Center.x
       value: 291.17343
@@ -2130,6 +2118,18 @@ PrefabInstance:
     - target: {fileID: 6941684785654458942, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
       propertyPath: m_Name
       value: VendingMachine
+      objectReference: {fileID: 0}
+    - target: {fileID: 5149488402981695555, guid: 082799eda0dcf3c48b8eeb6a08ae8434, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 291.93344
+      objectReference: {fileID: 0}
+    - target: {fileID: 5149488402981695555, guid: 082799eda0dcf3c48b8eeb6a08ae8434, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 0.49722221
+      objectReference: {fileID: 0}
+    - target: {fileID: 5149488402981695555, guid: 082799eda0dcf3c48b8eeb6a08ae8434, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 23
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

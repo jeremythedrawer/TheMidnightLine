@@ -609,7 +609,7 @@ public class SpyBrain : MonoBehaviour
 
                         if (insideCarriageHit.collider != null)
                         {
-                            CurCarriage = TrainController.GetCarriage(insideCarriageHit.collider);
+                            CurCarriage = slideDoors.carriage;
                             CurCarriage.MoveDown();
                         }
                         stats.curGroundLayer = layerSettings.trainLayers.ground;

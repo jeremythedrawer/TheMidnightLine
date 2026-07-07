@@ -19,8 +19,9 @@ public class TrainController : MonoBehaviour
     const float OFF_TRAIN_TIME_BUFFER = 5;
 
     public static Station NextStationInstance;
-    
-    public static Dictionary<Collider2D, Carriage> CarriageDict;
+
+    public static SlideDoors[] ExteriorSlideDoors;
+    public static SlideDoors[] InteriorSlideDoors;
 
     public static event Action OnTrainAtStartPosition;
 
@@ -124,7 +125,6 @@ public class TrainController : MonoBehaviour
 
         float offset = TRAIN_WORLD_POS_X - transform.position.x;
 
-        CarriageDict = new Dictionary<Collider2D, Carriage>();
         for (int i = 0; i < carriages.Length; i++)
         {
             Carriage carriage = carriages[i];
@@ -132,14 +132,11 @@ public class TrainController : MonoBehaviour
             carriage.SetSmokerRoomData(offset);
             carriage.SetTotalBounds(offset);
             carriage.SetSignToNextStation(trip.stationAhead.stationName);
-
-            CarriageDict.Add(carriage.insideBoundsCollider, carriage);
         }
-        SetSlideDoorPositions(offset);
     }
     private void ChooseState()
     {
-        if (stats.curVelocity.x < CLOSE_TO_STOP_VELOCITY && stats.targetVelocity.x == 0)
+        if (stats.curVelocity.x < CLOSE_TO_STOP_VELOCITY && stats.targetVelocity.x == 0 && atStartPosition)
         {
             SetState(TrainStates.Stopped);
         }
@@ -377,13 +374,13 @@ public class TrainController : MonoBehaviour
             }
         }
     }
-    private void SetSlideDoorPositions(float offset)
+    private void SetSlideDoorPositions()
     {
         int slideDoorsPerCarriage = carriages[0].exteriorSlideDoors.Length;
         int totalSlideDoors = carriages.Length * slideDoorsPerCarriage;
 
-        stats.exteriorSlideDoorPositions = new float[totalSlideDoors];
-        stats.interiorSlideDoorPositions = new float[totalSlideDoors];
+        ExteriorSlideDoors = new SlideDoors[totalSlideDoors];
+        InteriorSlideDoors = new SlideDoors[totalSlideDoors];
 
         for (int i = 0; i < carriages.Length; i++)
         {
@@ -391,10 +388,29 @@ public class TrainController : MonoBehaviour
 
             for (int j = 0; j < carriage.exteriorSlideDoors.Length; j++)
             {
+                SlideDoors exteriorDoors = carriage.exteriorSlideDoors[j];
+                SlideDoors interiorDoors = carriage.interiorSlideDoors[j];
+
                 int curIndex = i * slideDoorsPerCarriage + j;
-                stats.exteriorSlideDoorPositions[curIndex] = carriage.exteriorSlideDoors[j].transform.position.x + offset;
-                stats.interiorSlideDoorPositions[curIndex] = carriage.interiorSlideDoors[j].transform.position.x + offset;
+                ExteriorSlideDoors[curIndex] = exteriorDoors;
+                InteriorSlideDoors[curIndex] = interiorDoors;
             }
+        }
+
+        int xBoundsCount = totalSlideDoors - 1;
+        stats.exteriorSlideDoorXBounds = new float[xBoundsCount];
+        stats.interiorSlideDoorXBounds = new float[xBoundsCount];
+        for (int i = 0; i < xBoundsCount; i++)
+        {
+            float curExteriorDoorPosX = ExteriorSlideDoors[i].transform.position.x;
+            float nextExteriorDoorPosX = ExteriorSlideDoors[i + 1].transform.position.x;
+
+            stats.exteriorSlideDoorXBounds[i] = curExteriorDoorPosX + ((nextExteriorDoorPosX - curExteriorDoorPosX) * 0.5f);
+
+            float curInteriorDoorPosX = InteriorSlideDoors[i].transform.position.x;
+            float nextInteriorDoorPosX = InteriorSlideDoors[i + 1].transform.position.x;
+
+            stats.interiorSlideDoorXBounds[i] = curInteriorDoorPosX + ((nextInteriorDoorPosX - curInteriorDoorPosX) * 0.5f);
         }
     }
     private void SpawnFirstStation()
@@ -462,11 +478,11 @@ public class TrainController : MonoBehaviour
         metersTravelledOnBezier = 0;
         MoveOnBezier().Forget();
     }
-
     private void InitAtStartPosition()
     {
         transform.position = new Vector3(TRAIN_WORLD_POS_X, transform.position.y, transform.position.z);
         SetBounds();
+        SetSlideDoorPositions();
         stats.trainToMaxSpawnDist = spawnData.bounds.max.x - stats.totalBounds.center.x;
         OnTrainAtStartPosition.Invoke();
         atStartPosition = true;
@@ -502,10 +518,7 @@ public class TrainController : MonoBehaviour
         }
         gameEventData.OnChangeToScoreScene.Raise();
     }
-    public static Carriage GetCarriage(Collider2D collider)
-    {
-        return CarriageDict[collider];
-    }
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {

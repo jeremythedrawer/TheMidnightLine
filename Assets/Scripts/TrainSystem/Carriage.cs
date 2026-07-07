@@ -57,6 +57,12 @@ public class Carriage : MonoBehaviour
     {
         curNPCList = new List<NPCBrain>();
         curNPCDict = new Dictionary<BoxCollider2D, NPCBrain>();
+
+        for(int i = 0; i < exteriorSlideDoors.Length; i++)
+        {
+            exteriorSlideDoors[i].carriage = this;
+            interiorSlideDoors[i].carriage = this;
+        }
     }
     private void Update()
     {

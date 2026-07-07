@@ -374,7 +374,7 @@ public class NPCPicker : MonoBehaviour
 
                     float t = openClock / totalTime;
 
-                    float easeOutT = EaseOutT(t, 5);
+                    float easeOutT = Curves.EaseOutT(t, 5);
                     curSpriteWidth = openSpriteWidth * easeOutT;
 
                     paletteRenderer.width = curSpriteWidth;
@@ -394,7 +394,7 @@ public class NPCPicker : MonoBehaviour
                     openClock += Time.deltaTime;
                     float t = openClock / totalTime;
 
-                    float easeOutT = EaseOutT(t, 5);
+                    float easeOutT = Curves.EaseOutT(t, 5);
 
                     curSpriteWidth = openSpriteWidth * easeOutT;
 
@@ -431,7 +431,7 @@ public class NPCPicker : MonoBehaviour
                 openClock += Time.deltaTime;
                 float t = openClock / totalTime;
 
-                float easeOutT = EaseOutT(t, 5);
+                float easeOutT = Curves.EaseOutT(t, 5);
 
                 curSpriteWidth = openSpriteWidth * easeOutT;
 
@@ -467,7 +467,7 @@ public class NPCPicker : MonoBehaviour
 
                 float t = openClock / totalTime;
 
-                float easeOutT = EaseOutT(t, 5);
+                float easeOutT = Curves.EaseOutT(t, 5);
                 curSpriteWidth = openSpriteWidth * easeOutT;
 
                 paletteRenderer.width = curSpriteWidth;

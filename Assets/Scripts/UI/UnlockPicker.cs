@@ -333,7 +333,7 @@ public class UnlockPicker : MonoBehaviour
                 openClock += Time.deltaTime;
                 float t = openClock / totalTime;
 
-                float easeOutT = EaseOutT(t, 5);
+                float easeOutT = Curves.EaseOutT(t, 5);
 
                 curSpriteWidth = openSpriteWidth * easeOutT;
 
@@ -369,7 +369,7 @@ public class UnlockPicker : MonoBehaviour
 
                 float t = openClock / totalTime;
 
-                float easeOutT = EaseOutT(t, 5);
+                float easeOutT = Curves.EaseOutT(t, 5);
                 curSpriteWidth = openSpriteWidth * easeOutT;
 
                 paletteRenderer.width = curSpriteWidth;
