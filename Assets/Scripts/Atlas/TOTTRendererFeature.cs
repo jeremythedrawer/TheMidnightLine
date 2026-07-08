@@ -173,12 +173,10 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                     AtlasTextRenderer renderer = textBatch.data.atlasTextRendererList[i];
 
                     if (renderer.gameObject == null || !renderer.gameObject.activeInHierarchy) continue;
-
-
 #if UNITY_EDITOR
                     if (prefabStage != null) { if (renderer.gameObject.scene != prefabScene) continue; }
 #else
-                    //if (renderer.bounds.max.x < cameraStats.camWorldLeft || renderer.bounds.min.x > cameraStats.camWorldRight || renderer.bounds.max.y < cameraStats.camWorldBottom || renderer.bounds.min.y > cameraStats.camWorldTop) continue; //TODO: use new cam bounds
+                    //if (renderer.bounds.max.x < cameraStats.camWorldLeft || renderer.bounds.min.x > cameraStats.camWorldRight || renderer.bounds.max.y < cameraStats.camWorldBottom || renderer.bounds.min.y > cameraStats.camWorldTop) continue;
 #endif
                     for (int j = 0; j < renderer.worldPivotsAndSizes.Length; j++)
                     {
@@ -249,7 +247,9 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                 for (int j = 0; j < particleAtlas.posData.Length; j++)
                 {
                     ParticlePosData posData = particleAtlas.posData[j];
+
                     if (spyStats.ticketsCheckedTotal < posData.ticketCheckStart) break;
+                    
                     if (posData.argsBuffer == null) continue;
 
                     argsSpawn[1] = posData.quadCount;

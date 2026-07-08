@@ -180,7 +180,7 @@ public class AtlasRenderer : MonoBehaviour
         SetBounds();
         return bounds;
     }
-    public void UpdateWorldDepth(int newDepth)
+    public void UpdateWorldDepth(float newDepth)
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, newDepth);
     }
@@ -298,7 +298,6 @@ public class AtlasRenderer : MonoBehaviour
         sprite = motionSprite.sprite;
         UpdateSpriteInputs(sprite);
         isAnimating = true;
-        
     }
     public void PlayClipOneShot(AtlasClip clip, Transform markerTransform = null)
     {

@@ -85,6 +85,7 @@ public static class Atlas
         Music = 1 << 3,
         Climb = 1 << 4,
         Coughing = 1 << 5,
+        QuestionMark = 1 << 6,
     }
     public enum SpriteMode
     {
@@ -128,23 +129,13 @@ public static class Atlas
     }
     [Serializable] public struct AtlasClip
     {
-        public string clipName; // HACK: Take out for production build. Cant use #if UNITY_EDITOR because it'll crash the build. :(
+        public string clipName;
         public ClipType clipType;
         public int motionIndex;
         public int keyframeStartIndex;
         public int keyframeEndIndex;
         public float time;
     }
-
-    public static readonly Dictionary<EntityMotionType, Type> motionEnumDictionary =
-    new Dictionary<EntityMotionType, Type>
-    {
-        { EntityMotionType.NPC, typeof(NPCMotion) },
-        { EntityMotionType.Spy, typeof(SpyMotion) },
-        { EntityMotionType.Train, typeof(TrainMotion) },
-        { EntityMotionType.Notepad, typeof(NotepadMotion) },
-    };
-
     public static Dictionary<int, AtlasClip> BuildClipKeys(AtlasClip[] clips)
     {
         Dictionary<int, AtlasClip> clipDict = new Dictionary<int, AtlasClip>();
@@ -157,4 +148,14 @@ public static class Atlas
 
         return clipDict;
     }
+
+    public static readonly Dictionary<EntityMotionType, Type> motionEnumDictionary =
+    new Dictionary<EntityMotionType, Type>
+    {
+        { EntityMotionType.NPC, typeof(NPCMotion) },
+        { EntityMotionType.Spy, typeof(SpyMotion) },
+        { EntityMotionType.Train, typeof(TrainMotion) },
+        { EntityMotionType.Notepad, typeof(NotepadMotion) },
+    };
+
 }

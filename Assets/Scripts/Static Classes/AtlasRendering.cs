@@ -135,8 +135,6 @@ public static class AtlasRendering
         }
 
         batch.atlasRendererList.Add(renderer);
-
-
     }
     public static void UnregisterRenderer(AtlasRenderer renderer)
     {

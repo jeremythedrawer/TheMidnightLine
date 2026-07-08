@@ -620,7 +620,7 @@ public class SpyBrain : MonoBehaviour
                         
                         transform.SetParent(CurCarriage.transform, true);
 
-                        atlasRenderer.UpdateWorldDepth(trainStats.depthSections.frontMin);
+                        atlasRenderer.UpdateWorldDepth(trainStats.depthSections.frontStandingBack);
                     }
                     break;
                 }

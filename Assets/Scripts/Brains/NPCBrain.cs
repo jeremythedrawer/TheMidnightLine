@@ -244,6 +244,7 @@ public class NPCBrain : MonoBehaviour
                 if (curBehaviourContext.glyphPrefab != null)
                 {
                     curGlyph = NPCManager.GetGlyph(curBehaviourContext.glyphPrefab, transform);
+                    curGlyph.transform.position = new Vector3(transform.position.x, transform.position.y, trainStats.depthSections.frontStandingFront);
                 }
 
                 if (prevState != NPCState.TicketCheck)
@@ -312,15 +313,28 @@ public class NPCBrain : MonoBehaviour
                 if (curGlyph != null)
                 {
                     atlasRenderer.PlayClip(ref curClip, curGlyph.transform);
-                    if (!playingGlyph &&  atlas.motionSprites[atlasRenderer.sprite.index].markers.Length > 0)
+                    if (atlas.motionSprites[atlasRenderer.sprite.index].markers.Length > 0)
                     {
-                        curGlyph.gameObject.SetActive(true);
-                        curGlyph.Play();
-                        playingGlyph = true;
-                        if (curBehaviour == Behaviours.Smoke_addict)
+                        if (!playingGlyph)
                         {
-                            curGlyph.SetFloat("_Lifetime", stateDuration - behaviourClock);
+                            curGlyph.gameObject.SetActive(true);
+                            curGlyph.Play();
+                            playingGlyph = true;
+                            if (curBehaviour == Behaviours.Smoke_addict)
+                            {
+                                curGlyph.SetFloat("_Lifetime", stateDuration - behaviourClock);
+                            }
+
+                            if (curBehaviour == Behaviours.Always_on_call)
+                            {
+
+                            }
                         }
+                    }
+                    else if (playingGlyph)
+                    {
+                        playingGlyph = false;
+                        curGlyph.Stop();
                     }
                 }
                 else
@@ -430,7 +444,8 @@ public class NPCBrain : MonoBehaviour
         {
             case NPCPath.SittingInTrain:
             {
-                atlasRenderer.UpdateWorldDepth(trainStats.depthSections.carriageSeat - 1);
+                float seatDepthOffset = (float)seatPosIndex / (float)curCarriage.seatData.xPos.Length;
+                atlasRenderer.UpdateWorldDepth(trainStats.depthSections.carriageSeat + seatDepthOffset);
                 transform.position = new Vector3(targetXPos, transform.position.y, transform.position.z);
                 atlasRenderer.FlipHSimple(false);
             }
@@ -748,7 +763,7 @@ public class NPCBrain : MonoBehaviour
     private void SetStandingDepthInTrain()
     {
         if (!onTrain) return;
-        int depth = UnityEngine.Random.Range(trainStats.depthSections.frontMin, trainStats.depthSections.backMax);
+        int depth = UnityEngine.Random.Range(trainStats.depthSections.frontStandingBack, trainStats.depthSections.backStandingFront);
         atlasRenderer.UpdateWorldDepth(depth);
     }
     private void PickNextBehaviour()

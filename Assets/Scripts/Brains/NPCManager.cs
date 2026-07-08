@@ -3,19 +3,21 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using static NPC;
-
+using static AtlasRendering;
 public class NPCManager : MonoBehaviour
 {
+    public static Dictionary<VisualEffect, Queue<VisualEffect>> GlyphPoolDict;
+    public static Dictionary<NPCBrain, Queue<NPCBrain>> NPCPoolDict;
+
     public TripSO trip;
     public NPCsDataSO npcsData;
     public Texture2D diagonalTexture;
+    public AtlasSO glyphAtlas;
 
     [Header("Generated")]
     public bool npcFindingChair;
     public int totalAgentCount;
 
-    public static Dictionary<VisualEffect, Queue<VisualEffect>> GlyphPoolDict;
-    public static Dictionary<NPCBrain, Queue<NPCBrain>> NPCPoolDict;
 
     private void Awake()
     {
@@ -24,7 +26,6 @@ public class NPCManager : MonoBehaviour
     }
     private void Start()
     {
-
         npcsData.behaviourContextDict = SetBehaviourContextDictionary();
     }
     public static VisualEffect GetGlyph(VisualEffect glyphPrefab, Transform parent)
@@ -37,15 +38,16 @@ public class NPCManager : MonoBehaviour
 
         if (queue.Count > 0)
         {
-            VisualEffect gylphInstance = queue.Dequeue();
-            gylphInstance.gameObject.SetActive(true);
-            gylphInstance.Reinit();
-            gylphInstance.gameObject.transform.position = parent.position;
-            gylphInstance.gameObject.transform.parent = parent;
-            return gylphInstance;
+            VisualEffect glyphInstance = queue.Dequeue();
+            glyphInstance.gameObject.SetActive(true);
+            glyphInstance.Reinit();
+            glyphInstance.Stop();
+            glyphInstance.gameObject.transform.parent = parent;
+            return glyphInstance;
         }
 
-        return Instantiate(glyphPrefab, parent.transform.position, parent.transform.rotation, parent);
+        VisualEffect newVisualEffect = Instantiate(glyphPrefab, parent);
+        return newVisualEffect;
     }
     public static void ReturnGlyph(VisualEffect glyphPrefab, VisualEffect glyphInstance)
     {

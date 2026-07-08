@@ -26,13 +26,13 @@ public static class Train
     }
     [Serializable] public struct DepthSections
     {
-        public int min;
-        public int max;
+        public int front;
+        public int back;
 
-        public int frontMin;
-        public int frontMax;
-        public int backMin;
-        public int backMax;
+        public int frontStandingBack;
+        public int frontStandingFront;
+        public int backStandingBack;
+        public int backStandingFront;
 
         public int carriageSeat;
     }

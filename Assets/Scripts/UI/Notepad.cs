@@ -855,7 +855,6 @@ public class Notepad : MonoBehaviour
                         npcPrefabIndex = i,
                     };
 
-                    Debug.Log(npcProfile.npcPrefabIndex);
                     if (k == j)
                     {
                         bystanderProfiles.Add(npcProfile);

@@ -13,8 +13,6 @@ public class GlyphSetter : MonoBehaviour
     public float heightMin;
     public float height;
 
-    public Mesh quad;
-
     public AtlasSO glyphAtlas;
     public VisualEffect vfx;
     public GraphicsBuffer uvSizeAndPosBuffer;
@@ -40,7 +38,6 @@ public class GlyphSetter : MonoBehaviour
         GetLifetime();
         CreateBuffers();
         SetSliceSpriteAndUVSizePosArray();
-        SetMesh();
     }
     private void OnDisable()
     {
@@ -65,10 +62,6 @@ public class GlyphSetter : MonoBehaviour
         {
             uvSizeAndPosArray[i] = sliceSprite.uvSizeAndPos[i];
         }
-    }
-    private void SetMesh()
-    {
-        vfx.SetMesh("_Quad", quad);
     }
     private void CreateBuffers()
     {
