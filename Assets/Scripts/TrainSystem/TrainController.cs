@@ -484,7 +484,7 @@ public class TrainController : MonoBehaviour
         SetBounds();
         SetSlideDoorPositions();
         stats.trainToMaxSpawnDist = spawnData.bounds.max.x - stats.totalBounds.center.x;
-        OnTrainAtStartPosition.Invoke();
+        OnTrainAtStartPosition?.Invoke();
         atStartPosition = true;
     }
     private async UniTask MoveOnBezier()

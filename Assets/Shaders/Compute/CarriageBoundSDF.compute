@@ -1,6 +1,7 @@
 #pragma kernel CSCarriageBounds
 
 #define SCALE 32
+#define SPEED 5
 
 RWTexture2D<float4> _SDFTexture;
 
@@ -10,6 +11,7 @@ float4 _BoundsSize;
 float _DeltaTime;
 
 uint2 _TextureSize;
+
 [numthreads(8, 8, 1)]
 void CSCarriageBounds(uint3 id : SV_DispatchThreadID)
 {
@@ -28,7 +30,7 @@ void CSCarriageBounds(uint3 id : SV_DispatchThreadID)
     float4 current = _SDFTexture[id.xy];
     
     
-    float finalMask = (current.r + (ndcTargetMask * _DeltaTime));
+    float finalMask = (current.r + (ndcTargetMask * _DeltaTime * SPEED));
     
     _SDFTexture[id.xy] = float4(finalMask.xxxx);
 }

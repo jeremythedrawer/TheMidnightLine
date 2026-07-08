@@ -6,8 +6,10 @@ using static NPC;
 using static AtlasRendering;
 public class NPCManager : MonoBehaviour
 {
+    public const int MAX_GRAFFITI_RENDERERS = 8;
     public static Dictionary<VisualEffect, Queue<VisualEffect>> GlyphPoolDict;
     public static Dictionary<NPCBrain, Queue<NPCBrain>> NPCPoolDict;
+
 
     public TripSO trip;
     public NPCsDataSO npcsData;
@@ -15,18 +17,50 @@ public class NPCManager : MonoBehaviour
     public AtlasSO glyphAtlas;
 
     [Header("Generated")]
+
+    public static Graffiti[] graffitiPool;
+    
     public bool npcFindingChair;
     public int totalAgentCount;
-
+    public static int graffitiRendererCount;
 
     private void Awake()
     {
         GlyphPoolDict = new Dictionary<VisualEffect, Queue<VisualEffect>>();
         NPCPoolDict = new Dictionary<NPCBrain, Queue<NPCBrain>>();
+        
+        graffitiPool = new Graffiti[MAX_GRAFFITI_RENDERERS];
+        graffitiRendererCount = -1;
     }
     private void Start()
     {
         npcsData.behaviourContextDict = SetBehaviourContextDictionary();
+    }
+
+    public static Graffiti GetGraffitiRenderer(Graffiti graffitiPrefab)
+    {
+        Graffiti graffitInstance;
+
+        if (graffitiRendererCount < 0)
+        {
+            graffitInstance = Instantiate(graffitiPrefab);
+
+        }
+        else
+        {
+            graffitInstance = graffitiPool[graffitiRendererCount];
+            graffitiRendererCount--;
+        }
+
+        return graffitInstance;
+    }
+
+    public static void ReturnGraffiti(Graffiti graffiti)
+    {
+        if (graffitiRendererCount == MAX_GRAFFITI_RENDERERS - 1) return;
+
+        graffitiRendererCount++;
+        graffitiPool[graffitiRendererCount] = graffiti;
     }
     public static VisualEffect GetGlyph(VisualEffect glyphPrefab, Transform parent)
     {
@@ -61,7 +95,6 @@ public class NPCManager : MonoBehaviour
 
         queue.Enqueue(glyphInstance);
     }
-
     public static NPCBrain GetNPC(NPCBrain npcPrefab, Vector3 spawnPos, Transform parent)
     {
         if (!NPCPoolDict.TryGetValue(npcPrefab, out Queue<NPCBrain> queue))
@@ -82,7 +115,6 @@ public class NPCManager : MonoBehaviour
 
         return newNPC;
     }
-
     public static void ReturnNPC(NPCBrain npcPrefab, NPCBrain npcInstance)
     {
         npcInstance.gameObject.transform.parent = null;
@@ -94,7 +126,6 @@ public class NPCManager : MonoBehaviour
         queue.Enqueue(npcInstance);
         npcInstance.gameObject.SetActive(false);
     }
-
     private Dictionary<Behaviours, NPCBehaviourContextSO> SetBehaviourContextDictionary()
     {
         Dictionary<Behaviours, NPCBehaviourContextSO> dict = new Dictionary<Behaviours, NPCBehaviourContextSO>();

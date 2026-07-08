@@ -42,7 +42,9 @@ public class NPCBrain : MonoBehaviour
     public Carriage curCarriage;
 
     public VisualEffect curGlyph;
-    
+
+    public Graffiti graffiti;
+
     public float targetXVelocity;
     public float targetXPos; 
     public float targetDist;
@@ -247,6 +249,16 @@ public class NPCBrain : MonoBehaviour
                     curGlyph.transform.position = new Vector3(transform.position.x, transform.position.y, trainStats.depthSections.frontStandingFront);
                 }
 
+                if (curBehaviour == Behaviours.Known_vandal)
+                {
+                    graffiti = NPCManager.GetGraffitiRenderer(npcData.graffitiPrefab);
+                    int graffitiIndex = UnityEngine.Random.Range(0, graffiti.atlas.simpleSprites.Length - 1);
+                    graffiti.SetSprites(graffitiIndex);
+                    graffiti.transform.position = new Vector3(transform.position.x, atlasRenderer.bounds.max.y, trainStats.depthSections.carriageSeat + 1.5f);
+
+                    atlasRenderer.UpdateWorldDepth(trainStats.depthSections.backStandingBack);
+                }
+
                 if (prevState != NPCState.TicketCheck)
                 {
                     stateDuration = UnityEngine.Random.Range(curBehaviourContext.minTime, curBehaviourContext.maxTime);
@@ -342,6 +354,11 @@ public class NPCBrain : MonoBehaviour
                     atlasRenderer.PlayClip(ref curClip);
                 }
                 behaviourClock += Time.deltaTime;
+
+                if (curBehaviour == Behaviours.Known_vandal)
+                {
+                    graffiti.UpdateAlpha(behaviourClock / stateDuration);
+                }
 
                 if (behaviourClock > stateDuration) behaving = false;
             }

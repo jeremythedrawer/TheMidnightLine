@@ -184,14 +184,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: dcfc7245b1ede504e9a7727cee02f3ec, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
-  trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
-  gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
-  layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
-  materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
-  nextStationSignRenderer: {fileID: 4446128368829462913}
-  carriageWallRenderer: {fileID: 3389602565251253534}
   exteriorRenderers:
   - {fileID: 5233752221908729529}
   - {fileID: 2632501533003588259}
@@ -206,6 +198,15 @@ MonoBehaviour:
   - {fileID: 7412466534817934392}
   - {fileID: 2617015964369887263}
   - {fileID: 0}
+  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+  trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
+  trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
+  gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
+  layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
+  materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
+  graffitiAtlas: {fileID: 11400000, guid: d65e1e6dedb07d84fbb079c8dfb3da8a, type: 2}
+  nextStationSignRenderer: {fileID: 4446128368829462913}
+  carriageWallRenderer: {fileID: 3389602565251253534}
   insideBoundsCollider: {fileID: 4967624362453220076}
   smokingRoomColliders:
   - {fileID: 8152975921336346681}
@@ -217,6 +218,7 @@ MonoBehaviour:
   - {fileID: 8185190912822213980}
   - {fileID: 9051678911522993358}
   map: {fileID: 294483142283370181}
+  graffitiRT: {fileID: 0}
   wheelTransforms:
   - {fileID: 8067662884716964620}
   - {fileID: 0}
@@ -237,6 +239,10 @@ MonoBehaviour:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
   seatAmount: 0
+  graffitiKernel: 0
+  threadGroupX: 0
+  threadGroupY: 0
+  graffitiCount: 0
   wheelCircumference: 0
   alpha: 0
   prevMeters: 0
@@ -609,7 +615,7 @@ MonoBehaviour:
     worldSize: {x: 0.7888889, y: 0.3888889, z: 1}
     index: 1
   bounds:
-    m_Center: {x: 2.1316323, y: 0.2854445, z: 15.1}
+    m_Center: {x: -7.627367, y: 0.2854445, z: 15.1}
     m_Extent: {x: 0.51364136, y: 0.19444445, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
@@ -883,7 +889,7 @@ MonoBehaviour:
     worldSize: {x: 0.7888889, y: 0.3888889, z: 1}
     index: 1
   bounds:
-    m_Center: {x: 7.5427685, y: 0.2854445, z: 15.1}
+    m_Center: {x: -2.216231, y: 0.2854445, z: 15.1}
     m_Extent: {x: 0.62777776, y: 0.19444445, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
@@ -1113,7 +1119,7 @@ MonoBehaviour:
     worldSize: {x: 0.7888889, y: 0.3888889, z: 1}
     index: 1
   bounds:
-    m_Center: {x: 4.7327685, y: 0.2854445, z: 15.1}
+    m_Center: {x: -5.026231, y: 0.2854445, z: 15.1}
     m_Extent: {x: 1.3277776, y: 0.19444445, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
@@ -1262,7 +1268,7 @@ GameObject:
   - component: {fileID: 3063617264005690026}
   - component: {fileID: 2613900237663771687}
   m_Layer: 0
-  m_Name: InteriorWalls
+  m_Name: BackWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -1277,7 +1283,7 @@ Transform:
   m_GameObject: {fileID: 8920817511674990011}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.781, y: 0.828, z: 16}
+  m_LocalPosition: {x: -5.357, y: 0.828, z: 16}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1309,18 +1315,18 @@ MonoBehaviour:
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.8071289, y: 0.10546875, z: 0.041503906, w: 0.54589844}
-    uvPivot: {x: 0.5, y: 0}
+    uvPivot: {x: 0, y: 0}
     worldSize: {x: 9.183333, y: 1.2, z: 1}
     index: 12
   bounds:
-    m_Center: {x: 110.595375, y: -53.572002, z: 16}
+    m_Center: {x: 110.61104, y: -53.572002, z: 16}
     m_Extent: {x: 4.5916667, y: 0.6, z: 0.1}
-  worldPivotAndSize: {x: -4.5916667, y: -0, z: 9.183333, w: 1.2}
+  worldPivotAndSize: {x: -0, y: -0, z: 9.183333, w: 1.2}
   uvSizeAndPosition: {x: 0.8071289, y: 0.10546875, z: 0.041503906, w: 0.54589844}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
   customBit: 0
-  boundsOffset: {x: 0, y: 0.6, z: 0}
+  boundsOffset: {x: 4.5916667, y: 0.6, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -1914,7 +1920,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 108.87093
+      value: 108.89294
       objectReference: {fileID: 0}
     - target: {fileID: 210511920772162634, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.y
@@ -1994,7 +2000,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 108.58759
+      value: 108.6096
       objectReference: {fileID: 0}
     - target: {fileID: 4786430230042699320, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: bounds.m_Center.y
@@ -2070,7 +2076,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -2.647
+      value: -2.625
       objectReference: {fileID: 0}
     - target: {fileID: 7910079628831785843, guid: 12fb6ebe4adf15d4bae2800ecdbb032f, type: 3}
       propertyPath: m_LocalPosition.y
@@ -2502,7 +2508,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 2.6979911
+      value: -7.0610085
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.y
@@ -3297,7 +3303,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 6.135991
+      value: -3.623009
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.y

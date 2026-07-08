@@ -1,0 +1,42 @@
+#pragma kernel CSGraffiti
+#define SPEED 5
+RWTexture2D<float4> _GraffitiTexture;
+
+Texture2D<float4> _GraffitiAtlas;
+SamplerState sampler_GraffitiAtlas;
+
+uint2 _GraffitiAtlasTextureSize;
+
+RWStructuredBuffer<uint4> _GraffitiPixelSizeAndPositions;
+RWStructuredBuffer<float4> _GraffitiUVSizeAndPositions;
+
+float _DeltaTime;
+
+int _GraffitiCount;
+uint2 _TextureSize;
+
+[numthreads(8,8,1)]
+void CSGraffiti (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= _TextureSize.x || id.y >= _TextureSize.y)
+        return;
+    
+    float4 current = _GraffitiTexture[id.xy];
+    float3 graffitiMask = float3(0,0,0);
+    for (int i = 0; i < _GraffitiCount; i++)
+    {
+        uint4 graffitiPixelSizeAndPos = _GraffitiPixelSizeAndPositions[i];
+        uint2 maxPos = graffitiPixelSizeAndPos.xy + graffitiPixelSizeAndPos.zw;
+        if (id.x < graffitiPixelSizeAndPos.x || id.y < graffitiPixelSizeAndPos.y || id.x > maxPos.x || id.y > maxPos.y)
+            return;
+        float4 graffitiUVSizeAndPos = _GraffitiUVSizeAndPositions[i];
+        
+        float2 local = (float2(id.xy)) - graffitiPixelSizeAndPos.xy / graffitiUVSizeAndPos.zw;
+        float2 graffitiUV = graffitiUVSizeAndPos.xy + local * graffitiUVSizeAndPos.zw;
+        
+        float4 graffitiTex = _GraffitiAtlas.SampleLevel(sampler_GraffitiAtlas, graffitiUV, 0);
+        
+        graffitiMask = current.rgb - (graffitiTex.rgb * _DeltaTime * SPEED);
+    }
+    _GraffitiTexture[id.xy] = float4(graffitiMask, 1);
+}

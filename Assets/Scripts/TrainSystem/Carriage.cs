@@ -4,24 +4,28 @@ using System.Collections.Generic;
 using System.Runtime.ConstrainedExecution;
 using System.Threading;
 using UnityEngine;
+using static Atlas;
 using static NPC;
 using static Train;
 
 public class Carriage : MonoBehaviour
 {
     const float QUEUE_TICK_RATE = 0.3f;
+    public AtlasRenderer[] exteriorRenderers;
+    public AtlasRenderer[] seatRenderers;
+    public AtlasRenderer[] grapPoleRenderers;
+
     public TrainStatsSO trainStats;
     public TrainSettingsSO trainSettings;
     public TripSO trip;
     public GameEventDataSO gameEventData;
     public LayerSettingsSO layerSettings;
     public MaterialIDSO materialIDs;
+    public AtlasSO graffitiAtlas;
 
     public AtlasTextRenderer nextStationSignRenderer;
+
     public AtlasRenderer carriageWallRenderer;
-    public AtlasRenderer[] exteriorRenderers;
-    public AtlasRenderer[] seatRenderers;
-    public AtlasRenderer[] grapPoleRenderers;
 
     public BoxCollider2D insideBoundsCollider;
     public BoxCollider2D[] smokingRoomColliders;
@@ -30,6 +34,8 @@ public class Carriage : MonoBehaviour
     public SlideDoors[] interiorSlideDoors;
     
     public CarriageMap map;
+
+    public RenderTexture graffitiRT;
 
     [Header("Generated")]
     public Transform[] wheelTransforms;
@@ -48,6 +54,10 @@ public class Carriage : MonoBehaviour
     public Bounds totalBounds;
     
     public int seatAmount;
+    public int graffitiKernel;
+    public int threadGroupX;
+    public int threadGroupY;
+    public int graffitiCount;
 
     public float wheelCircumference;
     public float alpha;

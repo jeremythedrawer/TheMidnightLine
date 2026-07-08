@@ -7,6 +7,7 @@ public class CameraController : MonoBehaviour
     const float GAUSSIAN_VARIANCE = 90;
     const float CARRIAGE_BOUNDS_TEXTURE_SCALE = 32f;
 
+
     public CameraSettingsSO settings;
     public CameraStatsSO stats;
     public SpyStatsSO spyStats;
@@ -79,14 +80,14 @@ public class CameraController : MonoBehaviour
 
     private void SetCarriageSDFCompute()
     {
-        carriageBoundsRT.Release();
-        carriageBoundsRT.width = (int)(trainStats.totalBounds.size.x * CARRIAGE_BOUNDS_TEXTURE_SCALE);
-        carriageBoundsRT.height = (int)(trainStats.totalBounds.size.y * CARRIAGE_BOUNDS_TEXTURE_SCALE);
+        //carriageBoundsRT.width = (int)(trainStats.totalBounds.size.x * CARRIAGE_BOUNDS_TEXTURE_SCALE);
+        //carriageBoundsRT.height = (int)(trainStats.totalBounds.size.y * CARRIAGE_BOUNDS_TEXTURE_SCALE);
+        //carriageBoundsRT.enableRandomWrite = true;
+        //carriageBoundsRT.Create();
         Graphics.Blit(Texture2D.whiteTexture, carriageBoundsRT);
-        carriageBoundsRT.Create();
 
-        threadGroupX = Mathf.CeilToInt(carriageBoundsRT.width / 8);
-        threadGroupY = Mathf.CeilToInt(carriageBoundsRT.height / 8);
+        threadGroupX = Mathf.CeilToInt(carriageBoundsRT.width / 8.0f);
+        threadGroupY = Mathf.CeilToInt(carriageBoundsRT.height / 8.0f);
 
         carriageBoundsKernel = carriageBoundsCompute.FindKernel("CSCarriageBounds");
         carriageBoundsCompute.SetTexture(carriageBoundsKernel, "_SDFTexture", carriageBoundsRT);
@@ -94,6 +95,8 @@ public class CameraController : MonoBehaviour
 
         Shader.SetGlobalTexture("_CarriageBoundsTexture", carriageBoundsRT);
     }
+
+
     private void ChooseStates()
     {
         SetState(spyStats.curLocationState);
@@ -115,7 +118,6 @@ public class CameraController : MonoBehaviour
                 carriageT = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
 
                 targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.curWorldPos.x + curXOffset, carriageT);
-
                 carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);
                 
                 carriageBoundsCompute.Dispatch(carriageBoundsKernel, threadGroupX, threadGroupY, 1);

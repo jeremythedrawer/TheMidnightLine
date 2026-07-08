@@ -8,6 +8,8 @@ using static NPC;
 public class NPCsDataSO : ScriptableObject
 {
     public NPCBehaviourContextSO[] behaviourContexts;
+    public Graffiti graffitiPrefab;
+    
     [Header("Generated")]
     public Dictionary<Behaviours, string> behaviourStringDict;
     public Dictionary<Behaviours, NPCBehaviourContextSO> behaviourContextDict;

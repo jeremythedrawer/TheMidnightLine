@@ -1,8 +1,14 @@
-Shader "Custom/s_atlasStandard"
+Shader "Custom/s_atlasGraffiti"
 {
     Properties
     {
         [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
+        [NoScaleOffset] _NoiseTexture("Noise Texture", 2D) = "white"
+
+        
+        [Enum(UnityEngine.Rendering.CompareFunction)]
+        _StencilComp("Stencil Comparison", Float) = 3
+
     }
 
     SubShader
@@ -10,18 +16,19 @@ Shader "Custom/s_atlasStandard"
         Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
         ZWrite On
         ZTest LEqual
-        Blend SrcAlpha OneMinusSrcAlpha
+        Blend DstColor Zero
         Stencil
         {
             Ref 1
-            Comp Always
-            Pass Replace
+            Comp [_StencilComp]
+            Pass Keep
         }
-
         Pass
         {
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
+            #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/DeclareOpaqueTexture.hlsl"
+
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
             #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
             #pragma vertex vert
@@ -41,21 +48,22 @@ Shader "Custom/s_atlasStandard"
                 float3 worldPos : TEXCOORD1;
                 float4 uvSizeAndPos : TEXCOORD2;
                 float4 scaleAndFlip : TEXCOORD3;
+                float4 custom : TEXCOORD4;
             };
-
             StructuredBuffer<AtlasSprite> _SpriteData;
 
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
-            TEXTURE2D(_CarriageBoundsTexture);
-            SAMPLER(sampler_CarriageBoundsTexture);
+            TEXTURE2D(_NoiseTexture);
+            SAMPLER(sampler_NoiseTexture);
 
             float3 _BlackColor;
             float _DayNight;
             float _DayNightFactor;
             float4 _TrainBoundsMin;
             float4 _TrainBoundsSize;
+
 
             Varyings vert(Attributes v)
             {
@@ -81,6 +89,7 @@ Shader "Custom/s_atlasStandard"
                 o.uv = v.uv;
                 o.uvSizeAndPos = spriteData.uvSizeAndPos;
                 o.scaleAndFlip = spriteData.scaleAndFlip;
+                o.custom = spriteData.custom;
                 return o;
             }
 
@@ -92,6 +101,8 @@ Shader "Custom/s_atlasStandard"
                 float2 scale = i.scaleAndFlip.xy;
                 float2 flip = i.scaleAndFlip.zw;
 
+                float2 normUV = i.uv;
+
                 i.uv *= scale;
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
@@ -99,20 +110,18 @@ Shader "Custom/s_atlasStandard"
                 i.uv += uvPos;
 
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-
+                half4 noiseTex = SAMPLE_TEXTURE2D(_NoiseTexture, sampler_NoiseTexture, i.uv);
+               
                 half grey = color.r + (-(_DayNight * 1.1 - 0.9) * _DayNightFactor);
                 half3 finalColor = grey + _BlackColor;
 
-                float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;
-                half4 carriageSDF = SAMPLE_TEXTURE2D(_CarriageBoundsTexture, sampler_CarriageBoundsTexture, worldToTrain);
-                float bayer = BayerX8(carriageSDF.r + 0.5,  i.positionHCS.y);
+                half noise = noiseTex.b + (i.custom.x * 2 - 1);
+                half bayerNoise = BayerX8(noise, i.positionHCS.y);
 
-                float outside = max(step(worldToTrain.x, 0.0), step(1.0, worldToTrain.x));
-                outside = max(outside,max(step(worldToTrain.y, 0.0),step(1.0, worldToTrain.y)));
-                outside = max(outside, step(_TrainBoundsMin.z,i.worldPos.z));
-                float alpha = max(bayer, outside) * color.a;
+                float alpha = color.a * bayerNoise;
 
                 clip(alpha - 0.001);
+
                 return half4 (finalColor, 1);
             }
             ENDHLSL
