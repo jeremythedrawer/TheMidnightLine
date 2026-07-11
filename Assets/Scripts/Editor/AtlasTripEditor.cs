@@ -668,11 +668,22 @@ public class AtlasTripEditor : EditorWindow
                     Rect trainRect = new Rect(trainRectPos, trainRectSize);
                     Handles.DrawSolidRectangleWithOutline(trainRect, Color.darkRed, Color.clear);
 
+                    int ticketChecksStation = trip.stationsDataArray[0].ticketsToCheckBeforeSpawn;
                     for (int i = 0; i <= totalTicketChecks;i++)
                     {
                         float posX = graphRect.x + i * totalTicketCheckXIncrement;
                         vertLineTop.x = posX;
                         vertLineBottom.x = posX;
+
+                        if (i == ticketChecksStation)
+                        {
+                            Handles.color = Color.yellow;
+                            ticketChecksStation += trip.stationsDataArray[Mathf.Min(i + 1, trip.stationsDataArray.Length - 1)].ticketsToCheckBeforeSpawn; 
+                        }
+                        else
+                        {
+                            Handles.color = Color.white;
+                        }
                         Handles.DrawLine(vertLineTop, vertLineBottom);
                     }
 
@@ -681,6 +692,7 @@ public class AtlasTripEditor : EditorWindow
                         float posY = graphRect.yMin + (i * graphRowHeight);
                         horLineLeft.y = posY;
                         horLineRight.y = posY;
+                        Handles.color = Color.white;
                         Handles.DrawLine(horLineLeft, horLineRight);
 
                         if (i == 0) continue;

@@ -96,7 +96,7 @@ Shader "Custom/s_atlasTicketIcons"
                 half3 colorA = lerp(color.rgb, 1 - color.rgb, ticketCheck);
                 half3 colorB = lerp(1 - color.rgb, color.rgb, ticketCheck); 
 
-                float dayNightBayer = BayerX8(_DayNight, i.positionHCS.y);
+                float dayNightBayer = BayerX8(round(_DayNight), i.positionHCS.y);
                 half3 dayNightInvertColor = lerp(colorA, colorB, dayNightBayer);
 
                 half3 finalColor = dayNightInvertColor + _BlackColor;

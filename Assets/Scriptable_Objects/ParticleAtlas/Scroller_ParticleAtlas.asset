@@ -24,7 +24,7 @@ MonoBehaviour:
     widthType: 2
     spawnState: 1
     ticketCheckStart: 0
-    ticketCheckEnd: 27
+    ticketCheckEnd: 21
     quadCount: 2
     particleCount: 2
     minParticleIndex: 0
@@ -48,7 +48,7 @@ MonoBehaviour:
     widthType: 2
     spawnState: 1
     ticketCheckStart: 0
-    ticketCheckEnd: 23
+    ticketCheckEnd: 17
     quadCount: 2
     particleCount: 2
     minParticleIndex: 2
@@ -72,7 +72,7 @@ MonoBehaviour:
     widthType: 2
     spawnState: 1
     ticketCheckStart: 0
-    ticketCheckEnd: 23
+    ticketCheckEnd: 17
     quadCount: 2
     particleCount: 2
     minParticleIndex: 4
@@ -120,7 +120,7 @@ MonoBehaviour:
     widthType: 2
     spawnState: 1
     ticketCheckStart: 0
-    ticketCheckEnd: 18
+    ticketCheckEnd: 12
     quadCount: 2
     particleCount: 2
     minParticleIndex: 8
@@ -143,8 +143,8 @@ MonoBehaviour:
     prevDepthIndices: {x: 2, y: 3}
     widthType: 2
     spawnState: 1
-    ticketCheckStart: 23
-    ticketCheckEnd: 25
+    ticketCheckStart: 17
+    ticketCheckEnd: 19
     quadCount: 2
     particleCount: 2
     minParticleIndex: 10
@@ -175,8 +175,8 @@ MonoBehaviour:
     prevDepthIndices: {x: 4, y: 5}
     widthType: 2
     spawnState: 1
-    ticketCheckStart: 23
-    ticketCheckEnd: 25
+    ticketCheckStart: 17
+    ticketCheckEnd: 19
     quadCount: 2
     particleCount: 2
     minParticleIndex: 12
@@ -191,8 +191,7 @@ MonoBehaviour:
     scaleX: 12
     randScale: 0
     elevate: 0
-  - preScrollers:
-    - spriteData: []
+  - preScrollers: []
     postScrollers: []
     prefabGUID: 88213bfcf45a1e14dbff676518b881d0
     quadScales:
@@ -200,8 +199,8 @@ MonoBehaviour:
     prevDepthIndices: {x: 10, y: 11}
     widthType: 2
     spawnState: 3
-    ticketCheckStart: 25
-    ticketCheckEnd: 27
+    ticketCheckStart: 19
+    ticketCheckEnd: 21
     quadCount: 2
     particleCount: 2
     minParticleIndex: 14
@@ -211,12 +210,36 @@ MonoBehaviour:
     spriteIndex: 3
     spritesPerParticle: 1
     posY: -0.903
-    posX: -0
+    posX: 0
     scaleY: 1
     scaleX: 12
     randScale: 0
     elevate: 0
-  posDataIndexOffset: 5
+  - preScrollers: []
+    postScrollers: []
+    prefabGUID: 9ecf53fd39bcd6b4aa1f68c82bea7bdb
+    quadScales:
+    - {x: 1, y: 1, z: 0, w: 0}
+    prevDepthIndices: {x: 12, y: 13}
+    widthType: 0
+    spawnState: 0
+    ticketCheckStart: 19
+    ticketCheckEnd: 20
+    quadCount: 2
+    particleCount: 2
+    minParticleIndex: 16
+    maxParticleIndex: 17
+    depth: 27
+    depthSize: 1
+    spriteIndex: 8
+    spritesPerParticle: 1
+    posY: 0
+    posX: 0
+    scaleY: 1
+    scaleX: 1
+    randScale: 0
+    elevate: 1
+  posDataIndexOffset: 0
   spriteCount: 12
   isCompleted: 0
   spriteData:
