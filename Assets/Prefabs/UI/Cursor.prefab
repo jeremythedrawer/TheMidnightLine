@@ -70,6 +70,7 @@ MonoBehaviour:
   uvSizeAndPosition: {x: 0.041015625, y: 0.052734375, z: 0.123046875, w: 0.92578125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
   boundsOffset: {x: 0.058333334, y: -0.075, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
@@ -101,9 +102,10 @@ MonoBehaviour:
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   cursorRenderer: {fileID: 2498722044689734534}
   cursorTag: {fileID: 314741943003348959}
-  hoveredNPC: {fileID: 0}
-  colorPicker: {fileID: 0}
+  hoveredNPCs: []
+  hoveredNPCCount: 0
   timer: 0
+  cursorIsMoving: 0
 --- !u!1001 &3360475717485881208
 PrefabInstance:
   m_ObjectHideFlags: 0

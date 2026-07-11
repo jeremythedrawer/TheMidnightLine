@@ -62,33 +62,18 @@ public class TrainController : MonoBehaviour
     private void OnEnable()
     {
         gameEventData.OnTicketInspect.RegisterListener(UpdateTicketInspectParams);
-
+        Scenes.OnLoadTrip1 += Init;
     }
     private void OnDisable()
     {
         gameEventData.OnTicketInspect.UnregisterListener(UpdateTicketInspectParams);
+        Scenes.OnLoadTrip1 -= Init;
+        
         trainCTS?.Cancel();
         trainCTS?.Dispose();
         trainCTS = null;
 
         stats.curVelocity = Vector2.zero;
-    }
-    private void Start()
-    {
-        Init();
-
-#if UNITY_EDITOR
-        if (skipMoveToStart)
-        {
-            SkipMoveTrainToStartPosition();
-        }
-        else
-        {
-            MoveTrainToStartPosition().Forget();
-        }
-#else
-        MoveTrainToStartPosition().Forget();
-#endif
     }
     private void Update()
     {
@@ -133,6 +118,19 @@ public class TrainController : MonoBehaviour
             carriage.SetTotalBounds(offset);
             carriage.SetSignToNextStation(trip.stationAhead.stationName);
         }
+
+#if UNITY_EDITOR
+        if (skipMoveToStart)
+        {
+            SkipMoveTrainToStartPosition();
+        }
+        else
+        {
+            MoveTrainToStartPosition().Forget();
+        }
+#else
+        MoveTrainToStartPosition().Forget();
+#endif
     }
     private void ChooseState()
     {
@@ -442,7 +440,6 @@ public class TrainController : MonoBehaviour
     {
         stats.totalBounds = backSprite.GetBounds();
         stats.totalBounds.Encapsulate(driversPit.GetBounds());
-
         Shader.SetGlobalVector("_TrainBoundsMin", stats.totalBounds.min);
         Shader.SetGlobalVector("_TrainBoundsSize", stats.totalBounds.size);
     }
@@ -470,7 +467,7 @@ public class TrainController : MonoBehaviour
     }
     private void UpdateTicketInspectParams()
     {
-        int ticketParamsIndex = spyStats.ticketsCheckedTotal - 1;
+        int ticketParamsIndex = trip.ticketsCheckedTotal - 1;
         stats.targetElevatePos = trip.elevationValues[ticketParamsIndex];
         stats.targetKMPH = trip.kmValues[ticketParamsIndex];
         stats.targetNightValue = trip.dayNightValues[ticketParamsIndex];
@@ -516,7 +513,7 @@ public class TrainController : MonoBehaviour
             transform.position = new Vector3(stats.targetPosition, transform.position.y, transform.position.z);
             await UniTask.Yield(trainCTS.Token);
         }
-        gameEventData.OnChangeToScoreScene.Raise();
+        gameEventData.OnFinishTripScene.Raise();
     }
 
 #if UNITY_EDITOR

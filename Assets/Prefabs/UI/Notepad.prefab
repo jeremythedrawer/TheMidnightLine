@@ -61,7 +61,7 @@ MonoBehaviour:
   notepadData: {fileID: 11400000, guid: 8e516d659eb1fc449bc178ad3fb0113d, type: 2}
   rightHand_renderer: {fileID: 4411935793220314665}
   frontFingers_renderer: {fileID: 3270573653072393315}
-  bindingRings_renderer: {fileID: 1510350144271576134}
+  bindingRingsRend: {fileID: 1510350144271576134}
   leftHand_renderer: {fileID: 8131932147061306431}
   tabRenderer: {fileID: 6320700536072520551}
   pageTransform: {fileID: 6943387517606910861}
@@ -82,45 +82,23 @@ MonoBehaviour:
     fullName: 
     mugShotIndex: 0
     found: 0
-  handFlipPage_clip:
-    clipName: 
-    clipType: 0
-    motionIndex: 0
-    keyframeStartIndex: 0
-    keyframeEndIndex: 0
-    time: 0
-  rotatePencil_clip:
-    clipName: 
-    clipType: 0
-    motionIndex: 0
-    keyframeStartIndex: 0
-    keyframeEndIndex: 0
-    time: 0
   nameData:
     firstNames: []
     lastNames: []
   curWritingBounds:
     m_Center: {x: 0, y: 0, z: 0}
     m_Extent: {x: 0, y: 0, z: 0}
-  leftHandFlipPos: {x: 0, y: 0, z: 0}
-  leftHandPencilPos: {x: 0, y: 0, z: 0}
-  leftHandTargetPos: {x: 0, y: 0, z: 0}
-  leftHandOffScreenPos: {x: 0, y: 0, z: 0}
+  leftHandTargetLocalPos: {x: 0, y: 0, z: 0}
   curKeyframeState: 0
   activePageIndex: 0
   lastPageIndex: 0
-  leftHandWorldDepthFront: 0
-  leftHandWorldDepthBack: 0
-  oldColorMarkerCount: 0
+  traitorOutcomesRevealed: 0
+  tabWorldDepthBack: 0
   totalPencilTime: 0
   curPencilTime: 0
   appearTextClock: 0
   revealClock: 0
-  active: 0
-  enabledRuledOutRow: 0
   subState: 0
-  nextUnlock: 0
-  curCompletedUnlocks: 0
   atStartPencilPos: 0
   atOffCameraPos: 0
 --- !u!1 &2467022903358664946
@@ -149,7 +127,7 @@ Transform:
   m_GameObject: {fileID: 2467022903358664946}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: -0.28, z: 0}
+  m_LocalPosition: {x: 0, y: -0.19, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -185,7 +163,7 @@ MonoBehaviour:
     worldSize: {x: 3.9277778, y: 3.6833334, z: 1}
     index: 0
   bounds:
-    m_Center: {x: 3.071667, y: -8.846111, z: 0}
+    m_Center: {x: 3.071667, y: -8.756111, z: 0}
     m_Extent: {x: 1.9638889, y: 1.8416667, z: 0.1}
   worldPivotAndSize: {x: -3.9222221, y: -3.6777778, z: 3.9277778, w: 3.6833334}
   uvSizeAndPosition: {x: 0.17260742, y: 0.16186523, z: 0.66552734, w: 0.81274414}

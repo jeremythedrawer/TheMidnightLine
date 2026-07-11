@@ -248,7 +248,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                 {
                     ParticlePosData posData = particleAtlas.posData[j];
 
-                    if (spyStats.ticketsCheckedTotal < posData.ticketCheckStart) break;
+                    if (trip.ticketsCheckedTotal < posData.ticketCheckStart) break;
                     
                     if (posData.argsBuffer == null) continue;
 

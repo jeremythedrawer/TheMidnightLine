@@ -11,8 +11,12 @@ public class ScoreUI : MonoBehaviour
     public CameraStatsSO cameraStats;
     public PlayerInputsSO playerInputs;
 
+    public SceneData sceneData;
+
     public AtlasTextRenderer scoreRenderer;
     public AtlasTextRenderer thankYouRenderer;
+    public AtlasTextRenderer playAgainRenderer;
+    public AtlasTextRenderer quitRenderer;
 
     [Header("Generated")]
     public Notepad notepad;
@@ -46,6 +50,9 @@ public class ScoreUI : MonoBehaviour
     private void Update()
     {
         UpdateState();
+        HandleTextSkips();
+        HandleQuitButton();
+        HandlePlayAgainButton();
     }
     private void GetNotepad()
     {
@@ -65,6 +72,8 @@ public class ScoreUI : MonoBehaviour
     {
         scoreRenderer.SetText("");
         thankYouRenderer.SetText("");
+        playAgainRenderer.SetText("");
+        quitRenderer.SetText("");
     }
     private void FadeFromBlack()
     {
@@ -73,7 +82,7 @@ public class ScoreUI : MonoBehaviour
     public void WriteTraitorsFoundScore()
     {
         string text = "Traitors found: " + traitorsFound + " / " + trip.traitorProfiles.Length;
-        scoreRenderer.WriteText(text, Notepad.WRITE_LETTER_TIME);
+        scoreRenderer.WriteText(text, Notepad.WRITE_LETTER_TIME, WriteThankYou);
     }
     private void SetToNotepadState()
     {
@@ -92,10 +101,8 @@ public class ScoreUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                notepad.gameObject.SetActive(true);
-                notepad.enabled = true;
-                notepad.active = true;
-                naturalMovePos = NotepadActivePos;
+                notepad.EnterNotepad();
+                naturalMovePos = NotepadActiveLocalPos;
                 ctsNotepad?.Cancel();
             }
             break;
@@ -111,16 +118,90 @@ public class ScoreUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                UpdateNaturalPos(NotepadActivePos, ref naturalMovePos);
+                UpdateNaturalPos(NotepadActiveLocalPos, ref naturalMovePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
             }
             break;
         }
-
-        if (scoreRenderer.completedWritingText && !thankYouRenderer.hasText && (playerInputs.mouseLeftDown || playerInputs.spacebarDown || playerInputs.mouseRightDown))
+    }
+    private void HandleTextSkips()
+    {
+        if (playerInputs.spacebarDown)
         {
-            string text = "Thank you for playing! - Jeremy Edwards 2026";
-            thankYouRenderer.WriteText(text, Notepad.WRITE_LETTER_TIME);
+            if (scoreRenderer.hasText && !scoreRenderer.completedWritingText)
+            {
+                scoreRenderer.ctsWrite.Cancel();
+            }
+            else if (thankYouRenderer.hasText && !thankYouRenderer.completedWritingText)
+            {
+                thankYouRenderer.ctsWrite.Cancel();
+            }
+            else if (playAgainRenderer.hasText && !playAgainRenderer.completedWritingText)
+            {
+                playAgainRenderer.ctsWrite.Cancel();
+                quitRenderer.ctsWrite.Cancel();
+            }
+        }
+    }
+    private void WriteThankYou()
+    {
+        string text = "Thank you for playing! - Jeremy Edwards 2026";
+        thankYouRenderer.WriteText(text, Notepad.WRITE_LETTER_TIME, WriteButtons);
+    }
+    private void WriteButtons()
+    {
+        WriteQuit();
+        WritePlayAgain();
+    }
+    private void WriteQuit()
+    {
+        string text = "Quit";
+        quitRenderer.WriteText(text, Notepad.WRITE_LETTER_TIME);
+    }
+    private void WritePlayAgain()
+    {
+        string text = "Play Again?";
+        playAgainRenderer.WriteText(text, Notepad.WRITE_LETTER_TIME);
+    }
+    private void HandlePlayAgainButton()
+    {
+        if (CursorController.IsInsideBounds(playAgainRenderer.background_renderer.bounds))
+        {
+            playAgainRenderer.SetColorText(Color.white);
+            playAgainRenderer.background_renderer.SetSliceCustom(w: 1);
+            if (playerInputs.mouseLeftDown)
+            {
+                SetFadeToBlack();
+                gameEventData.OnReset.Raise();
+            }
+        }
+        else
+        {
+            playAgainRenderer.SetColorText(Color.black);
+            playAgainRenderer.background_renderer.SetSliceCustom(w: 0);
+        }
+    }
+
+    private void SetFadeToBlack()
+    {
+        SetFadeBlack(fadeBlackMaterial, toFadeBlack: true);
+        Scenes.SetTripScene(sceneData);
+    }
+    private void HandleQuitButton()
+    {
+        if (CursorController.IsInsideBounds(quitRenderer.background_renderer.bounds))
+        {
+            quitRenderer.SetColorText(Color.white);
+            quitRenderer.background_renderer.SetSliceCustom(w: 1);
+            if (playerInputs.mouseLeftDown)
+            {
+                Application.Quit();
+            }
+        }
+        else
+        {
+            quitRenderer.SetColorText(Color.black);
+            quitRenderer.background_renderer.SetSliceCustom(w: 0);
         }
     }
     private void ExitState()
@@ -129,7 +210,7 @@ public class ScoreUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                MoveUIElement(notepad, NotepadInactivePos, ref ctsNotepad, curState);
+                MoveUIElement(notepad.transform, NotepadInactiveLocalPos, ref ctsNotepad, curState);
                 notepad.enabled = false;
             }
             break;

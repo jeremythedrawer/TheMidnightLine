@@ -45,22 +45,18 @@ public class ColorPicker : MonoBehaviour
 
     public bool openedFully;
     public bool canClose;
-    
-    private void Awake()
-    {
-        trip.unlockedColorMarkerCount = 0;
+   
 
-        if (Application.isPlaying)
-        {
-            SceneController.SetColorPicker(this);
-        }
+    private void OnEnable()
+    {
+        Scenes.OnLoadTrip0 += Init;
+    }
+    private void OnDisable()
+    {
+        Scenes.OnLoadTrip0 -= Init;
     }
     private void Start()
     {
-        colorsData.curState = PickerState.Closed;
-
-        SetSelectableColors();
-        SetOpenPosAndSize();
         if (Application.isPlaying)
         {
             TurnOff();
@@ -73,6 +69,14 @@ public class ColorPicker : MonoBehaviour
 
         Shader.SetGlobalTexture("_DiagonalTexture", colorsData.diagonalTexture);
         Shader.SetGlobalTexture("_StripesTexture", colorsData.stripesTexture);
+    }
+    private void Init()
+    {
+        trip.unlockedColorMarkerCount = 0;
+        colorsData.curState = PickerState.Closed;
+        SetSelectableColors();
+        SetOpenPosAndSize();
+        SceneController.SetColorPicker(this);
     }
     private void Update()
     {

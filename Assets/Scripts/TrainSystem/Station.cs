@@ -13,10 +13,11 @@ public class Station : MonoBehaviour
 
     public ParallaxController parallaxController;
     public ParallaxController frontParallaxController;
-    public void Start()
+    public void OnEnable()
     {
         station.exitLocalPosX = exitTransform.localPosition.x;
-        parallaxController.Init(transform.position);
+        parallaxController.SetParrallaxFactor();
+        parallaxController.SetWorldPos(transform.position);
         SetFrontParallaxPosition();
     }
     public void SpawnNPCs()
@@ -91,8 +92,9 @@ public class Station : MonoBehaviour
     }
     public void SetFrontParallaxPosition()
     {
+        frontParallaxController.SetParrallaxFactor();
         float posX = TRAIN_WORLD_POS_X + ((transform.position.x - TRAIN_WORLD_POS_X) * (frontParallaxController.parallaxFactor / parallaxController.parallaxFactor));
         Vector2 pos = new Vector2(posX, 0);
-        frontParallaxController.Init(pos);
+        frontParallaxController.SetWorldPos(pos);
     }
 }

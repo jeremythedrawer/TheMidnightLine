@@ -47,8 +47,6 @@ public class GameplayUI : MonoBehaviour
     public CancellationTokenSource ctsCarriageMap;
     public CancellationTokenSource ctsFadeBlack;
 
-    public ColorPicker colorPicker;
-
     public Bounds notepadHoverBounds;
 
     public Vector3 backgroundActivePos;
@@ -73,38 +71,40 @@ public class GameplayUI : MonoBehaviour
     {
         gameEventData.OnStationLeave.RegisterListener(SetNewTicketIcons);
         gameEventData.OnStationArrival.RegisterListener(DisappearTicketIcons);
-        gameEventData.OnChangeToScoreScene.RegisterListener(SetFadeToBlack);
-        gameEventData.OnChangeToScoreScene.RegisterListener(KeepNotepad);
+        gameEventData.OnFinishTripScene.RegisterListener(SetFadeToBlack);
+        gameEventData.OnFinishTripScene.RegisterListener(KeepNotepad);
 
         SpyBrain.OnTicketCheckHoverDisabled += RevertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverEnabled += InvertCurTicketIcon;
         UnlockPicker.OnNewAbilityUnlocked += AppearNewAbilityIcon;
+
+        Scenes.OnLoadTrip0 += Init;
 
     }
     private void OnDisable()
     {
         gameEventData.OnStationLeave.UnregisterListener(SetNewTicketIcons);
         gameEventData.OnStationArrival.UnregisterListener(DisappearTicketIcons);
-        gameEventData.OnChangeToScoreScene.UnregisterListener(SetFadeToBlack);
-        gameEventData.OnChangeToScoreScene.UnregisterListener(KeepNotepad);
+        gameEventData.OnFinishTripScene.UnregisterListener(SetFadeToBlack);
+        gameEventData.OnFinishTripScene.UnregisterListener(KeepNotepad);
 
         SpyBrain.OnTicketCheckHoverDisabled -= RevertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverEnabled -= InvertCurTicketIcon;
         UnlockPicker.OnNewAbilityUnlocked -= AppearNewAbilityIcon;
-    }
-    private void Start()
-    {
-        InitPOVUI();
-        InitTicketIcons();
-        InitAbiltiyIcons();
-        FadeFromBlack();
+        Scenes.OnLoadTrip0 -= Init;
     }
     private void Update()
     {
         ChooseState();
         UpdateState();
     }
-
+    private void Init()
+    {
+        InitPOVUI();
+        InitTicketIcons();
+        InitAbiltiyIcons();
+        FadeFromBlack();
+    }
     private void KeepNotepad()
     {
         SceneController.KeepNotepad(notepad);
@@ -141,10 +141,8 @@ public class GameplayUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                notepad.gameObject.SetActive(true);
-                notepad.enabled = true;
                 notepad.EnterNotepad();
-                naturalMovePos = NotepadActivePos;
+                naturalMovePos = NotepadActiveLocalPos;
                 ctsNotepad?.Cancel();
             }
             break;
@@ -176,7 +174,7 @@ public class GameplayUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                UpdateNaturalPos(NotepadActivePos, ref naturalMovePos);
+                UpdateNaturalPos(NotepadActiveLocalPos, ref naturalMovePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
             }
             break;
@@ -207,7 +205,7 @@ public class GameplayUI : MonoBehaviour
                 }
                 else
                 {
-                    notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadInactivePos, Time.deltaTime * MOVE_DAMP);
+                    notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadInactiveLocalPos, Time.deltaTime * MOVE_DAMP);
                     notepad.activePage.InvertExitButton(invert: false);
                 }
             }
@@ -220,14 +218,14 @@ public class GameplayUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                MoveUIElement(notepad, NotepadInactivePos, ref ctsNotepad, newState);
+                MoveUIElement(notepad.transform, NotepadInactiveLocalPos, ref ctsNotepad, newState);
                 notepad.ExitNotepad();
-                colorPicker.Close();
+                SceneController.GetColorPicker().Close();
             }
             break;
             case UIState.Ticket:
             {
-                MoveUIElement(ticket, ticketInactivePos, ref ctsTicket, newState);
+                MoveUIElement(ticket.transform, ticketInactivePos, ref ctsTicket, newState);
 
                 curTicketIcon.RipStubTicket();
                 curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
@@ -236,7 +234,7 @@ public class GameplayUI : MonoBehaviour
             break;
             case UIState.CarriageMap:
             {
-                MoveUIElement(carriageMap, carriageMapInactivePos, ref ctsCarriageMap, newState);
+                MoveUIElement(carriageMap.transform, carriageMapInactivePos, ref ctsCarriageMap, newState);
             }
             break;
             case UIState.None:
@@ -248,22 +246,20 @@ public class GameplayUI : MonoBehaviour
     }
     private void InitPOVUI()
     {
-        notepad.gameObject.SetActive(true);
-
         float halfCamWidth = cameraStats.camBounds.extents.x;
         float halfCamHeight = cameraStats.camBounds.extents.y;
 
-        NotepadActivePos = notepad.transform.localPosition;
-        float binderBoundsOffsetX = notepad.bindingRings_renderer.bounds.max.x - notepad.transform.position.x;
+        NotepadActiveLocalPos = notepad.transform.localPosition;
+        float binderBoundsOffsetX = notepad.bindingRingsRend.bounds.max.x - notepad.transform.position.x;
         float binderBoundsOffsetY = notepad.transform.position.y - NOTEPAD_INACTIVE_OFFSET;
 
-        NotepadInactivePos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + binderBoundsOffsetY, notepad.transform.localPosition.z);
-        NotepadHoverPos = new Vector3(NotepadInactivePos.x, NotepadInactivePos.y + notepad.bindingRings_renderer.bounds.size.y, NotepadInactivePos.z);
+        NotepadInactiveLocalPos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + binderBoundsOffsetY, notepad.transform.localPosition.z);
+        NotepadHoverPos = new Vector3(NotepadInactiveLocalPos.x, NotepadInactiveLocalPos.y + notepad.bindingRingsRend.bounds.size.y, NotepadInactiveLocalPos.z);
 
         float ySize = notepad.traitorPage_prefab.paperRenderer.bounds.size.y;
-        Vector3 hoverSize = new Vector3(notepad.bindingRings_renderer.bounds.size.x, ySize, 0.2f);
+        Vector3 hoverSize = new Vector3(notepad.bindingRingsRend.bounds.size.x, ySize, 0.2f);
         notepadHoverBounds = new Bounds(NotepadHoverPos, hoverSize);
-        notepad.transform.localPosition = NotepadInactivePos;
+        notepad.transform.localPosition = NotepadInactiveLocalPos;
 
         ticketActivePos = ticket.transform.localPosition;
         ticketInactivePos = new Vector3(halfCamWidth, -halfCamHeight + ticket.totalBounds.size.y, ticket.transform.localPosition.z);
@@ -272,12 +268,6 @@ public class GameplayUI : MonoBehaviour
         carriageMapActivePos = carriageMap.transform.localPosition;
         carriageMapInactivePos = new Vector3(halfCamWidth, carriageMap.transform.localPosition.y, carriageMap.transform.localPosition.z);
         carriageMap.transform.localPosition = carriageMapInactivePos;
-
-        notepad.enabled = false;
-        ticket.gameObject.SetActive(false);
-        carriageMap.gameObject.SetActive(false);
-
-        colorPicker = SceneController.GetColorPicker();
     }
     private void InitTicketIcons()
     {
@@ -317,7 +307,8 @@ public class GameplayUI : MonoBehaviour
     }
     private void RevertCurTicketIcon()
     {
-        curTicketIcon.InvertIcon(toggle: false);
+
+        curTicketIcon?.InvertIcon(toggle: false);
     }
     private void FadeFromBlack()
     {
@@ -371,6 +362,7 @@ public class GameplayUI : MonoBehaviour
 
         while (curTicketIconIndex >= 0)
         {
+            ticketIcons[curTicketIconIndex].InvertIcon(toggle: false);
             ticketIcons[curTicketIconIndex].Disappear();
             curTicketIconIndex--;
             await UniTask.WaitForSeconds(TICKET_ICON_APPEARING_DURATION);

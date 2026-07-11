@@ -54,6 +54,8 @@ public class AtlasTextRenderer : MonoBehaviour
     [Header("Border Generated")]
     public Vector3 borderLocalPos;
 
+    public delegate void OnCompletedWritingText();
+
     private void OnValidate()
     {
         SetText(text);
@@ -96,7 +98,7 @@ public class AtlasTextRenderer : MonoBehaviour
         {
             case AtlasTextRendererType.Simple:
             {
-                SetColorText();
+                SetColorText(color);
             }
             break;
             case AtlasTextRendererType.Scroll:
@@ -109,7 +111,7 @@ public class AtlasTextRenderer : MonoBehaviour
             {
                 bounds = GetBoundsNewText(text);
                 SetBorderText();
-                SetColorText();
+                SetColorText(color);
             }
             break;
         }
@@ -177,7 +179,7 @@ public class AtlasTextRenderer : MonoBehaviour
             customs[i] = custom; 
         }
     }
-    private void SetColorText()
+    public void SetColorText(Color color)
     {
         Color linearColor = color.linear;
 
@@ -406,14 +408,14 @@ public class AtlasTextRenderer : MonoBehaviour
             lineWidths = linesWidths.ToArray(),
         };
     }
-    public void WriteText(string text, float writeLetterTime)
+    public void WriteText(string text, float writeLetterTime, OnCompletedWritingText callback = null)
     {
         ctsWrite?.Cancel();
         ctsWrite = new CancellationTokenSource();
 
-        WritingText(text, writeLetterTime).Forget();
+        WritingText(text, writeLetterTime, callback).Forget();
     }
-    private async UniTask WritingText(string text, float writeLetterTime)
+    private async UniTask WritingText(string text, float writeLetterTime, OnCompletedWritingText callback = null)
     {
         int stationNameLetterCount = text.Length;
         int curLetterIndex = 0;
@@ -431,8 +433,17 @@ public class AtlasTextRenderer : MonoBehaviour
                 curLetterIndex++;
             }
             completedWritingText = true;
+            if (callback != null) callback();
         }
-        catch (OperationCanceledException) { }
+        catch (OperationCanceledException)
+        {
+            if (callback != null)
+            {
+                SetText(text);
+                completedWritingText = true;
+                callback();
+            }
+        }
     }
 
     public void EraseText(float writeLetterTime)

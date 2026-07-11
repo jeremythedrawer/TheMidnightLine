@@ -3,13 +3,11 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using static NPC;
-using static AtlasRendering;
 public class NPCManager : MonoBehaviour
 {
     public const int MAX_GRAFFITI_RENDERERS = 8;
     public static Dictionary<VisualEffect, Queue<VisualEffect>> GlyphPoolDict;
     public static Dictionary<NPCBrain, Queue<NPCBrain>> NPCPoolDict;
-
 
     public TripSO trip;
     public NPCsDataSO npcsData;
@@ -24,17 +22,16 @@ public class NPCManager : MonoBehaviour
     public int totalAgentCount;
     public static int graffitiRendererCount;
 
-    private void Awake()
+    private void OnEnable()
     {
-        GlyphPoolDict = new Dictionary<VisualEffect, Queue<VisualEffect>>();
-        NPCPoolDict = new Dictionary<NPCBrain, Queue<NPCBrain>>();
-        
+        Scenes.OnLoadTrip0 += InitPoolsDict;
         graffitiPool = new Graffiti[MAX_GRAFFITI_RENDERERS];
         graffitiRendererCount = -1;
-    }
-    private void Start()
-    {
         npcsData.behaviourContextDict = SetBehaviourContextDictionary();
+    }
+    private void OnDisable()
+    {
+        Scenes.OnLoadTrip0 -= InitPoolsDict;
     }
 
     public static Graffiti GetGraffitiRenderer(Graffiti graffitiPrefab)
@@ -125,6 +122,26 @@ public class NPCManager : MonoBehaviour
         }
         queue.Enqueue(npcInstance);
         npcInstance.gameObject.SetActive(false);
+    }
+    private void InitPoolsDict()
+    {
+        if (NPCPoolDict != null)
+        {
+            NPCPoolDict.Clear();
+        }
+        else
+        {
+            NPCPoolDict = new Dictionary<NPCBrain, Queue<NPCBrain>>();
+        }
+
+        if (GlyphPoolDict != null)
+        {
+            GlyphPoolDict.Clear();
+        }
+        else
+        {
+            GlyphPoolDict = new Dictionary<VisualEffect, Queue<VisualEffect>>();
+        }
     }
     private Dictionary<Behaviours, NPCBehaviourContextSO> SetBehaviourContextDictionary()
     {

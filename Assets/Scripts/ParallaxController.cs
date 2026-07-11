@@ -20,10 +20,7 @@ public class ParallaxController : MonoBehaviour
     public Bounds bounds;
     public Vector3 boundsOffset;
     public Vector2 velocity;
-    private void OnEnable()
-    {
-        parallaxFactor = (FAR_CLIP - worldDepth) / FAR_CLIP;
-    }
+
     private void Update()
     {
         if (bounds.max.x > spawnData.bounds.min.x)
@@ -46,8 +43,11 @@ public class ParallaxController : MonoBehaviour
     {
         bounds.center = worldPos + boundsOffset;
     }
-
-    public void Init(Vector2 pos)
+    public void SetParrallaxFactor()
+    {
+        parallaxFactor = (FAR_CLIP - worldDepth) / FAR_CLIP;
+    }
+    public void SetWorldPos(Vector2 pos)
     {
         worldPos.x = pos.x;
         worldPos.y = pos.y;

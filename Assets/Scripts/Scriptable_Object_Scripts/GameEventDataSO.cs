@@ -14,5 +14,5 @@ public class GameEventDataSO : ScriptableObject
     public GameEvent OnMetersAtSpawnBounds;
     public GameEvent OnStationSpawn;
 
-    public GameEvent OnChangeToScoreScene;
+    public GameEvent OnFinishTripScene;
 }

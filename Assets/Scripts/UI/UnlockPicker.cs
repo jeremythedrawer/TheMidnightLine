@@ -52,8 +52,15 @@ public class UnlockPicker : MonoBehaviour
     public float curSpriteHeight;
     public float tileWidth;
     public float tileHeight;
-
-    private void Start()
+    private void OnEnable()
+    {
+        Scenes.OnLoadTrip0 += Init;
+    }
+    private void OnDisable()
+    {
+        Scenes.OnLoadTrip0 -= Init;
+    }
+    private void Init()
     {
         SceneController.SetUnlockPicker(this);
         curPickerState = PickerState.Closed;
@@ -68,7 +75,6 @@ public class UnlockPicker : MonoBehaviour
             iconRenderers[i].enabled = false;
         }
     }
-
     private void Update()
     {
         UpdateState();

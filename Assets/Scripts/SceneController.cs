@@ -1,6 +1,7 @@
 using UnityEngine;
 using static Scenes;
 using static AtlasUI;
+using UnityEngine.SceneManagement;
 public class SceneController : MonoBehaviour
 {
     public SceneData sceneData;
@@ -13,13 +14,22 @@ public class SceneController : MonoBehaviour
     public static SpyBrain Spy;
 
     public static InputManager InputManager;
+
     private void Awake()
     {
-        sceneData.activeSceneType = SceneType.Trip;
-        DontDestroyOnLoad(this);
+    }
+    private void Start()
+    {
+        sceneData.demoScene = SceneManager.GetSceneByBuildIndex(1);
+        sceneData.scoreScene = SceneManager.GetSceneByBuildIndex(2);
+
+        Scenes.SetTripScene(sceneData);
         Transform = transform;
     }
-
+    private void OnApplicationQuit()
+    {
+        sceneData.sceneLoaded = false;
+    }
     public static void KeepNotepad(Notepad notepad)
     {
         notepad.transform.SetParent(Transform, true);
@@ -43,15 +53,14 @@ public class SceneController : MonoBehaviour
     {
         UnlockPicker = unlockPicker;
     }
-    public static void KeepInputManager(InputManager inputManager)
+    public static void SetInputManager(InputManager inputManager)
     {
-        inputManager.transform.SetParent(Transform, true);
         InputManager = inputManager;
     }
     public static Notepad GetNotepad(Transform transform)
     {
         Notepad.transform.SetParent(transform, true);
-        Notepad.transform.localPosition = NotepadInactivePos;
+        Notepad.transform.localPosition = NotepadInactiveLocalPos;
         return Notepad;
     }
     public static ColorPicker GetColorPicker()

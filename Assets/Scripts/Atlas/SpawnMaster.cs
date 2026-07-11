@@ -30,6 +30,29 @@ public class SpawnMaster : MonoBehaviour
     public Queue<DelayedParticleData> delayedParticlesQueue;
     private void OnEnable()
     {
+#if UNITY_EDITOR
+        Init();
+#endif
+        gameEventData.OnTicketInspect.RegisterListener(ChangeParticles);
+        gameEventData.OnMetersAtSpawnBounds.RegisterListener(DespawnEdgeScrollers);
+        Scenes.OnLoadTrip2 += Init;
+    }
+    private void OnDisable()
+    {
+        gameEventData.OnTicketInspect.UnregisterListener(ChangeParticles);
+        gameEventData.OnMetersAtSpawnBounds.UnregisterListener(DespawnEdgeScrollers);
+        Scenes.OnLoadTrip2 -= Init;
+        Dispose();
+    }
+    private void Update()
+    {
+        UpdateSpawnCompute(ref spawnData.scrollData);
+        UpdateSpawnCompute(ref spawnData.zoneData);
+        UpdateDelayedParticleQueue();
+
+    }
+    private void Init()
+    {
         Dispose();
         delayedParticlesQueue = new Queue<DelayedParticleData>();
 
@@ -42,24 +65,9 @@ public class SpawnMaster : MonoBehaviour
 
         InitZoneCompute();
         InitScrollCompute();
-        
+
         InitParticles();
         ChangeParticles();
-        gameEventData.OnTicketInspect.RegisterListener(ChangeParticles);
-        gameEventData.OnMetersAtSpawnBounds.RegisterListener(DespawnEdgeScrollers);
-    }
-    private void OnDisable()
-    {
-        gameEventData.OnTicketInspect.UnregisterListener(ChangeParticles);
-        gameEventData.OnMetersAtSpawnBounds.UnregisterListener(DespawnEdgeScrollers);
-        Dispose();
-    }
-    private void Update()
-    {
-        UpdateSpawnCompute(ref spawnData.scrollData);
-        UpdateSpawnCompute(ref spawnData.zoneData);
-        UpdateDelayedParticleQueue();
-
     }
     private void InitBoundParameters()
     {
@@ -214,7 +222,7 @@ public class SpawnMaster : MonoBehaviour
         for (int i = 0; i < particleAtlas.posDataIndexOffset; i++)
         {
             ParticlePosData posData = particleAtlas.posData[i];
-            if (posData.ticketCheckEnd > spyStats.ticketsCheckedTotal) continue;
+            if (posData.ticketCheckEnd > trip.ticketsCheckedTotal) continue;
 
             if (posData.spawnState != SpawnState.MovingOut)
             {
@@ -291,7 +299,7 @@ public class SpawnMaster : MonoBehaviour
         {
             ParticlePosData posData = particleAtlas.posData[i];
 
-            if (spyStats.ticketsCheckedTotal < posData.ticketCheckStart)
+            if (trip.ticketsCheckedTotal < posData.ticketCheckStart)
             {
                 newOffset = i;
                 break;
@@ -603,7 +611,7 @@ public class SpawnMaster : MonoBehaviour
     }
     private async UniTask UpdatingSky()
     {
-        float nextDayNight = trip.dayNightValues[spyStats.ticketsCheckedTotal];
+        float nextDayNight = trip.dayNightValues[trip.ticketsCheckedTotal];
         float elapsedTime = 0;
         float dayNight = curDayNight;
         try

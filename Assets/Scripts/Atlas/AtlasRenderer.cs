@@ -92,6 +92,7 @@ public class AtlasRenderer : MonoBehaviour
             {
                 if (atlas.slicedSprites.Length == 0) { Debug.LogWarning("Atlas does not have Sliced Sprites at: " + name); return; }
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.slicedSprites.Length - 1);
+                customs = new Vector4[9];
                 UpdateSlicedSpriteInputs(atlas.slicedSprites[spriteIndex]);
             }
             break;
@@ -129,7 +130,28 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void UpdateSpriteInputsByIndex(int index)
     {
-        UpdateSpriteInputs(atlas.simpleSprites[index]);
+        switch (rendererType)
+        { 
+            case AtlasRendererType.SimpleWorld:
+            {
+                UpdateSpriteInputs(atlas.simpleSprites[index]);
+
+            }
+            break;
+
+            case AtlasRendererType.MotionWorld:
+            {
+                UpdateSpriteInputs(atlas.motionSprites[index].sprite);
+            }
+            break;
+
+            case AtlasRendererType.SliceWorld:
+            {
+                UpdateSlicedSpriteInputs(atlas.slicedSprites[index]);
+            }
+            break;
+        }
+
     }
     public void UpdateSpriteInputs(SimpleSprite newSprite)
     {
@@ -247,7 +269,6 @@ public class AtlasRenderer : MonoBehaviour
 
         scalesAndFlips = GetScaleAndFlipSliceNineSliceArray(width, height);
 
-        customs = new Vector4[9];
         for (int i = 0;  i < customs.Length; i++)
         {
             customs[i] = custom;
@@ -261,8 +282,18 @@ public class AtlasRenderer : MonoBehaviour
         if (boxCollider == null) return;
         boxCollider.size = bounds.size;
         boxCollider.offset = boundsOffset;
+    }
+    public void SetSliceCustom(float x = 0, float y = 0, float z = 0, float w = 0)
+    {
+        custom.x = x;
+        custom.y = y;
+        custom.z = z;
+        custom.w = w;
 
-
+        for (int i = 0; i < customs.Length; i++)
+        {
+            customs[i] = custom;
+        }
     }
     public void SetWidthFromWorldSpace(float worldWidth, SimpleSprite sprite)
     {

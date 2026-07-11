@@ -7,7 +7,6 @@ public class CameraController : MonoBehaviour
     const float GAUSSIAN_VARIANCE = 90;
     const float CARRIAGE_BOUNDS_TEXTURE_SCALE = 32f;
 
-
     public CameraSettingsSO settings;
     public CameraStatsSO stats;
     public SpyStatsSO spyStats;
@@ -41,15 +40,10 @@ public class CameraController : MonoBehaviour
         stats.worldUnitsPerPixel = (cam.orthographicSize * 2) / Screen.height;
 
         Shader.SetGlobalVector("_CameraSizeAndPos", new Vector4(stats.camBounds.size.x, stats.camBounds.size.y, stats.camBounds.center.x, stats.camBounds.center.y));
-    }
-
-    private void OnEnable()
-    {
-        TrainController.OnTrainAtStartPosition += SetCarriageSDFCompute;
+        SetCarriageSDFCompute();
     }
     private void OnDisable()
     {
-        TrainController.OnTrainAtStartPosition -= SetCarriageSDFCompute;
         stats.curVelocity = Vector3.zero;
 
 #if UNITY_EDITOR
@@ -61,7 +55,7 @@ public class CameraController : MonoBehaviour
         ChooseStates();
         UpdateStates();
 
-        curXOffset = spyStats.spriteFlip ? -settings.horizontalOffset : settings.horizontalOffset; // camera offsets when player is moving
+        curXOffset = spyStats.spriteFlip ? -settings.horizontalOffset : settings.horizontalOffset;
         stats.camBounds.center = transform.position;
 
         stats.worldToCam = cam.worldToCameraMatrix;
@@ -74,16 +68,15 @@ public class CameraController : MonoBehaviour
 
         stats.curVelocity = -(stats.curWorldPos - stats.prevWorldPos) / Time.deltaTime;
     }
-    private void LateUpdate()
-    {
-    }
 
     private void SetCarriageSDFCompute()
     {
-        //carriageBoundsRT.width = (int)(trainStats.totalBounds.size.x * CARRIAGE_BOUNDS_TEXTURE_SCALE);
-        //carriageBoundsRT.height = (int)(trainStats.totalBounds.size.y * CARRIAGE_BOUNDS_TEXTURE_SCALE);
-        //carriageBoundsRT.enableRandomWrite = true;
-        //carriageBoundsRT.Create();
+        carriageBoundsRT.Release();
+        carriageBoundsRT.width = (int)(trainStats.totalBounds.size.x * CARRIAGE_BOUNDS_TEXTURE_SCALE);
+        carriageBoundsRT.height = (int)(trainStats.totalBounds.size.y * CARRIAGE_BOUNDS_TEXTURE_SCALE);
+        carriageBoundsRT.enableRandomWrite = true;
+        carriageBoundsRT.Create();
+
         Graphics.Blit(Texture2D.whiteTexture, carriageBoundsRT);
 
         threadGroupX = Mathf.CeilToInt(carriageBoundsRT.width / 8.0f);

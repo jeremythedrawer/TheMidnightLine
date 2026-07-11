@@ -99,8 +99,8 @@ public static class AtlasUI
         Ticket,
         CarriageMap,
     }
-    public static Vector3 NotepadActivePos;
-    public static Vector3 NotepadInactivePos;
+    public static Vector3 NotepadActiveLocalPos;
+    public static Vector3 NotepadInactiveLocalPos;
     public static Vector3 NotepadHoverPos;
 
     static float NaturalMoveClock;
@@ -142,29 +142,25 @@ public static class AtlasUI
             naturalMovePos.z = activePos.z;
         }
     }
-    public static void MoveUIElement(Behaviour behaviour, Vector3 nextPos, ref CancellationTokenSource cts, UIState curState)
+    public static void MoveUIElement(Transform transform, Vector3 nextPos, ref CancellationTokenSource cts, UIState curState)
     {
         cts?.Cancel();
         cts = new CancellationTokenSource();
-        MovingUIElement(behaviour, cts, nextPos, curState).Forget();
+        MovingUIElement(transform, cts, nextPos, curState).Forget();
     }
-    private static async UniTask MovingUIElement(Behaviour behaviour, CancellationTokenSource cts, Vector3 nextPos, UIState curState)
+    private static async UniTask MovingUIElement(Transform transform, CancellationTokenSource cts, Vector3 nextPos, UIState curState)
     {
         float elapsedTime = 0f;
-
-        behaviour.enabled = true;
         try
         {
             while (elapsedTime < TransitionTime)
             {
-                behaviour.transform.localPosition = Vector3.Lerp(behaviour.transform.localPosition, nextPos, Time.deltaTime * MOVE_DAMP);
+                transform.transform.localPosition = Vector3.Lerp(transform.transform.localPosition, nextPos, Time.deltaTime * MOVE_DAMP);
                 elapsedTime += Time.deltaTime;
 
                 await UniTask.Yield(cts.Token);
-
             }
-            behaviour.transform.localPosition = nextPos;
-            if (curState == UIState.None) behaviour.enabled = false;
+            transform.transform.localPosition = nextPos;
         }
         catch (OperationCanceledException)
         {

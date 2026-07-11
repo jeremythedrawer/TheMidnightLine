@@ -9,6 +9,7 @@ public class InputManager : MonoBehaviour
     public PlayerInputsSO playerInputs;
     public SpyStatsSO spyStats;
     public GameEventDataSO gameEventData;
+    public SceneData sceneData;
 
     PlayerInput playerInput;
 
@@ -129,7 +130,6 @@ public class InputManager : MonoBehaviour
         {
             playerInputs.mouseRightUp = true;
         };
-
     }
 
     private void OnEnable()
@@ -146,10 +146,12 @@ public class InputManager : MonoBehaviour
     private void Start()
     {
         playerInputs.mouseScreenPos.z = 1;
-        SceneController.KeepInputManager(this);
+        SceneController.SetInputManager(this);
     }
     private void Update()
     {
+        if (!sceneData.sceneLoaded) return;
+
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.RightShift))
         {
             resetElaspedTime += Time.deltaTime;
@@ -208,7 +210,10 @@ public class InputManager : MonoBehaviour
 
     private void OnDrawGizmosSelected()
     {
-        Gizmos.color = Color.white;
-        Gizmos.DrawLine(Camera.main.ScreenToWorldPoint(playerInputs.startDragMouseScreenPos), Camera.main.ScreenToWorldPoint(playerInputs.mouseScreenPos));
+        if (sceneData.sceneLoaded)
+        {
+            Gizmos.color = Color.white;
+            Gizmos.DrawLine(Camera.main.ScreenToWorldPoint(playerInputs.startDragMouseScreenPos), Camera.main.ScreenToWorldPoint(playerInputs.mouseScreenPos));
+        }
     }
 }

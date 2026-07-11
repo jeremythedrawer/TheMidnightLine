@@ -50,20 +50,24 @@ public class NPCPicker : MonoBehaviour
 
     public bool canClose;
 
-    private void Start()
+    private void OnEnable()
     {
-        if (Application.isPlaying)
-        {
-            SceneController.SetNPCPicker(this);
-        }
-        curPickerState = PickerState.Closed;
-        SetOpenPosAndSize();
+        Scenes.OnLoadTrip0 += Init;
+    }
+    private void OnDisable()
+    {
+        Scenes.OnLoadTrip0 -= Init;
     }
     private void Update()
     {
         UpdateState();
     }
-
+    private void Init()
+    {
+        SceneController.SetNPCPicker(this);
+        curPickerState = PickerState.Closed;
+        SetOpenPosAndSize();
+    }
     private void SetState(PickerState newState)
     {
         if (curPickerState == newState) return;

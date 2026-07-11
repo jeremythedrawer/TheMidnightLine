@@ -19,7 +19,6 @@ public class SpyStatsSO : ScriptableObject
 
     [Header("To Save")]
     public Vector3 curWorldPos;
-    public int ticketsCheckedTotal;
     public LayerMask curGroundLayer;
     public LayerMask curWallLayer;
 }

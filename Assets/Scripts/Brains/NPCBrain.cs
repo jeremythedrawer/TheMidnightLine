@@ -98,6 +98,12 @@ public class NPCBrain : MonoBehaviour
         gameEventData.OnStationArrival.UnregisterListener(PrepareToBoardTrain);
         CursorController.OnMouseDisabled -= DisableHover;
     }
+    private void OnDestroy()
+    {
+        gameEventData.OnStationSpawn.UnregisterListener(PrepareToDisembarkTrain);
+        gameEventData.OnStationArrival.UnregisterListener(PrepareToBoardTrain);
+        CursorController.OnMouseDisabled -= DisableHover;        
+    }
     private void Update()
     {
         ChooseStates();
@@ -255,7 +261,7 @@ public class NPCBrain : MonoBehaviour
                     int graffitiIndex = UnityEngine.Random.Range(0, graffiti.atlas.simpleSprites.Length - 1);
                     graffiti.SetSprites(graffitiIndex);
                     graffiti.transform.position = new Vector3(transform.position.x, atlasRenderer.bounds.max.y, trainStats.depthSections.carriageSeat + 1.5f);
-
+                    graffiti.transform.SetParent(curCarriage.transform);
                     atlasRenderer.UpdateWorldDepth(trainStats.depthSections.backStandingBack);
                 }
 
@@ -817,8 +823,6 @@ public class NPCBrain : MonoBehaviour
         if (onTrain || trip.stationAhead.stationIndex != profile.boardingStationIndex) return;
         Callback callback = SetPathToSlideDoorCallback;
         WaitForRandomSeconds(callback).Forget();
-
-    
     }
     private void SetPathToSlideDoorCallback()
     {
