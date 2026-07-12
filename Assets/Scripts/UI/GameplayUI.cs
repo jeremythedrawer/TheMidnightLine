@@ -4,11 +4,10 @@ using System.Threading;
 using UnityEngine;
 using static Spy;
 using static AtlasUI;
-using UnityEngine.SceneManagement;
 public class GameplayUI : MonoBehaviour
 {
     const float TICKET_ICON_PADDING = 0.2f;
-    const float TICKET_ICON_APPEARING_DURATION = 0.5f;
+    const float APPEARING_TIME = 0.5f;
     const float NOTEPAD_INACTIVE_OFFSET = 1.8f;
     const float ABILITY_ICON_APPEAR_TIME = 1f;
 
@@ -34,6 +33,7 @@ public class GameplayUI : MonoBehaviour
     public AtlasRenderer ruleOutAbilityIcon;
     public AtlasRenderer colorAbilityIcon;
     public AtlasRenderer multiColorAbilityIcon;
+    public AtlasRenderer keyIcon;
 
     public Transform ticketIconTransform;
 
@@ -67,6 +67,7 @@ public class GameplayUI : MonoBehaviour
     
     public float naturalMoveClock;
     public float fadeBlackClock;
+
     private void OnEnable()
     {
         gameEventData.OnStationLeave.RegisterListener(SetNewTicketIcons);
@@ -76,6 +77,10 @@ public class GameplayUI : MonoBehaviour
 
         SpyBrain.OnTicketCheckHoverDisabled += RevertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverEnabled += InvertCurTicketIcon;
+        SpyBrain.OnFoundExteriorSlideDoors += ShowWIcon;
+        SpyBrain.OnWalkPastExteriorSlideDoors += HideKeyIcon;
+        SpyBrain.OnEnteredTrain += DisappearKeyIcon;
+
         UnlockPicker.OnNewAbilityUnlocked += AppearNewAbilityIcon;
 
         Scenes.OnLoadTrip0 += Init;
@@ -90,7 +95,12 @@ public class GameplayUI : MonoBehaviour
 
         SpyBrain.OnTicketCheckHoverDisabled -= RevertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverEnabled -= InvertCurTicketIcon;
+        SpyBrain.OnFoundExteriorSlideDoors -= ShowWIcon;
+        SpyBrain.OnWalkPastExteriorSlideDoors -= HideKeyIcon;
+        SpyBrain.OnEnteredTrain -= DisappearKeyIcon;
+        
         UnlockPicker.OnNewAbilityUnlocked -= AppearNewAbilityIcon;
+        
         Scenes.OnLoadTrip0 -= Init;
     }
     private void Update()
@@ -192,7 +202,7 @@ public class GameplayUI : MonoBehaviour
             case UIState.None:
             {
                 notepadHoverBounds.center = notepad.transform.position;
-                if (CursorController.IsInsideBounds(notepad.activePage.exitButton_renderer.bounds))
+                if (CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds))
                 {
                     notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadHoverPos, Time.deltaTime * MOVE_DAMP);
 
@@ -340,7 +350,33 @@ public class GameplayUI : MonoBehaviour
             break;
         }
     }
+    private void ShowWIcon(Vector2 position)
+    {
+        keyIcon.transform.SetParent(null);
+        keyIcon.custom.w = 0;
+        keyIcon.UpdateSpriteInputsByIndex((int)KeySpriteIndices.W);
+        keyIcon.transform.position = new Vector3(position.x, position.y + keyIcon.bounds.size.y, keyIcon.transform.position.z);
+    }
+    private void HideKeyIcon()
+    {
+        keyIcon.custom.w = 1;
+    }
+    private void DisappearKeyIcon()
+    {
+        DisappearingKeyIcon().Forget();
+    }
+    private async UniTask DisappearingKeyIcon()
+    {
+        float elapsedTime = 0;
 
+        while(elapsedTime < APPEARING_TIME)
+        {
+            elapsedTime += Time.deltaTime;
+            keyIcon.custom.w = elapsedTime / APPEARING_TIME;
+            await UniTask.Yield();
+        }
+        keyIcon.custom.w = 1;
+    }
     private async UniTask SettingNewTicketIcons()
     {
         ticketCount = trip.stationAhead.ticketsToCheckBeforeSpawn;
@@ -350,7 +386,7 @@ public class GameplayUI : MonoBehaviour
         {
             ticketIcons[curTicketIconIndex].Appear();
             curTicketIconIndex++;
-            await UniTask.WaitForSeconds(TICKET_ICON_APPEARING_DURATION);
+            await UniTask.WaitForSeconds(APPEARING_TIME);
         }
 
         SpyBrain.ToggleTicketCheckAbility(toggle: true);
@@ -365,7 +401,7 @@ public class GameplayUI : MonoBehaviour
             ticketIcons[curTicketIconIndex].InvertIcon(toggle: false);
             ticketIcons[curTicketIconIndex].Disappear();
             curTicketIconIndex--;
-            await UniTask.WaitForSeconds(TICKET_ICON_APPEARING_DURATION);
+            await UniTask.WaitForSeconds(APPEARING_TIME);
         }
     }
     private async UniTask Appearing(AtlasRenderer renderer)

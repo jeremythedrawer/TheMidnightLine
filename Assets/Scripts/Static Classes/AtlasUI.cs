@@ -99,6 +99,27 @@ public static class AtlasUI
         Ticket,
         CarriageMap,
     }
+
+    public enum KeySpriteIndices
+    { 
+        Cursor = 2,
+        UpArrow = 3,
+        Q = 7,
+        W = 8,
+        A = 9,
+        S = 10,
+        D = 11,
+        One = 12,
+        Two = 13,
+        Three = 14,
+        Shift = 15,
+        E = 16,
+        Space = 26,
+        Pointer = 27,
+        
+    }
+
+
     public static Vector3 NotepadActiveLocalPos;
     public static Vector3 NotepadInactiveLocalPos;
     public static Vector3 NotepadHoverPos;

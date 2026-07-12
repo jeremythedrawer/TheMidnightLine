@@ -13,6 +13,9 @@ public class SpyBrain : MonoBehaviour
 
     public static event Action OnTicketCheckHoverEnabled;
     public static event Action OnTicketCheckHoverDisabled;
+    public static event Action<Vector2> OnFoundExteriorSlideDoors;
+    public static event Action OnWalkPastExteriorSlideDoors;
+    public static event Action OnEnteredTrain;
 
     public static bool CanCheckTicket;
     public static bool CheckingNotepad;
@@ -67,6 +70,7 @@ public class SpyBrain : MonoBehaviour
     public bool wasTouchingGangwayDoorRight;
     public bool canExitState;
     public bool checkingCarriageMap;
+    public bool canOpenSlideDoor;
 
     private void OnValidate()
     {
@@ -76,8 +80,8 @@ public class SpyBrain : MonoBehaviour
     {     
         gameEventData.OnInteract.RegisterListener(OpenSlideDoors);
         gameEventData.OnInteract.RegisterListener(LookAtCarriageMap);
-
-        gameEventData.OnStationLeave.RegisterListener(MoveUpCurrentCarriageWall);
+        gameEventData.OnStationArrival.RegisterListener(EnableCanOpenSlideDoor);
+        gameEventData.OnStationLeave.RegisterListener(DisableCanOpenSlideDoor);
 
         Scenes.OnLoadTrip0 += Init;
     }
@@ -85,8 +89,9 @@ public class SpyBrain : MonoBehaviour
     {
         gameEventData.OnInteract.UnregisterListener(OpenSlideDoors);
         gameEventData.OnInteract.UnregisterListener(LookAtCarriageMap);
+        gameEventData.OnStationArrival.UnregisterListener(EnableCanOpenSlideDoor);
+        gameEventData.OnStationLeave.UnregisterListener(DisableCanOpenSlideDoor);
 
-        gameEventData.OnStationLeave.UnregisterListener(MoveUpCurrentCarriageWall);
         Scenes.OnLoadTrip0 -= Init;
     }
     private void Update()
@@ -101,7 +106,6 @@ public class SpyBrain : MonoBehaviour
         bool rightWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, stats.curWallLayer);
 
         stats.walkingIntoWall = (leftWallTouch && playerInputs.move == -1) || (rightWallTouch && playerInputs.move == 1);
-
     }
 
     public void Init()
@@ -182,6 +186,25 @@ public class SpyBrain : MonoBehaviour
                 stats.curWorldPos.y = transform.position.y;
                 stats.curWorldPos.z = transform.position.z;
                 transform.position = stats.curWorldPos;
+
+                if (canOpenSlideDoor)
+                {
+                    switch (stats.curLocationState)
+                    { 
+                        case LocationState.Station:
+                        {
+                            GetSlideDoorAtStation();
+                        }
+                        break;
+                    
+                        case LocationState.Carriage:
+                        {
+                            GetSlideDoorInTrain();
+                        }
+                        break;
+                    }
+                }
+
             }
             break;
             case SpyState.TicketCheck:
@@ -568,13 +591,61 @@ public class SpyBrain : MonoBehaviour
         collisionData.wallRight = new Vector2(wallRight, boxCollider.bounds.center.y);
 
     }
+    private void GetSlideDoorAtStation()
+    {
+        Bounds spyBounds = atlasRenderer.bounds;
+        SlideDoors foundSlideDoor = null;
+        for (int i = 0; i < TrainController.ExteriorSlideDoors.Length; i++)
+        {
+            SlideDoors slideDoor = TrainController.ExteriorSlideDoors[i];
+            Bounds slideDoorBounds = slideDoor.boxCollider.bounds;
+            if (spyBounds.min.x > slideDoorBounds.min.x && spyBounds.max.x < slideDoorBounds.max.x)
+            {
+                if (slideDoor.curState == SlideDoors.State.Unlocked || slideDoor.curState == SlideDoors.State.Opened)
+                {
+                    foundSlideDoor = TrainController.ExteriorSlideDoors[i];
+                    break;
+                }
+            }
+        }
+
+        if (foundSlideDoor != null && slideDoors == null)
+        {
+            OnFoundExteriorSlideDoors?.Invoke(new Vector2(foundSlideDoor.boxCollider.bounds.center.x, foundSlideDoor.boxCollider.bounds.max.y));
+        }
+        else if (foundSlideDoor == null && slideDoors != null)
+        {
+            OnWalkPastExteriorSlideDoors?.Invoke();
+        }
+        slideDoors = foundSlideDoor;
+    }
+    private void GetSlideDoorInTrain()
+    {
+        Bounds spyBounds = atlasRenderer.bounds;
+        SlideDoors foundSlideDoor = null;
+        for (int i = 0; i < TrainController.InteriorSlideDoors.Length; i++)
+        {
+            foundSlideDoor = TrainController.InteriorSlideDoors[i];
+            Bounds slideDoorBounds = foundSlideDoor.boxCollider.bounds;
+            if (spyBounds.min.x > slideDoorBounds.min.x && spyBounds.max.x < slideDoorBounds.max.x)
+            {
+                foundSlideDoor = TrainController.ExteriorSlideDoors[i];
+                break;
+            }
+        }
+        slideDoors = foundSlideDoor;
+    }
+    private void EnableCanOpenSlideDoor()
+    {
+        canOpenSlideDoor = true;
+    }
+    private void DisableCanOpenSlideDoor()
+    {
+        canOpenSlideDoor = false;
+    }
     private void OpenSlideDoors()
     {
-        RaycastHit2D slideDoorHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, trainStats.activeSlideDoorsMask);
-
-        if (slideDoorHit.collider == null) return;
-
-        slideDoors = slideDoorHit.collider.GetComponent<SlideDoors>(); //TODO: Put into dictionary
+        if (slideDoors == null || !canOpenSlideDoor) return;
 
         switch(slideDoors.curState)
         {
@@ -610,14 +681,10 @@ public class SpyBrain : MonoBehaviour
                     break;
 
                     case LocationState.Station:
-                    {
-                        RaycastHit2D insideCarriageHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.insideCarriageBounds);
+                    {                        
+                        CurCarriage = slideDoors.carriage;
+                        CurCarriage.MoveDown();
 
-                        if (insideCarriageHit.collider != null)
-                        {
-                            CurCarriage = slideDoors.carriage;
-                            CurCarriage.MoveDown();
-                        }
                         stats.curGroundLayer = layerSettings.trainLayers.ground;
                         stats.curWallLayer = layerSettings.trainWallLayers;
                         stats.curLocationState = LocationState.Carriage;
@@ -627,6 +694,7 @@ public class SpyBrain : MonoBehaviour
                         transform.SetParent(CurCarriage.transform, true);
 
                         atlasRenderer.UpdateWorldDepth(trainStats.depthSections.frontStandingBack);
+                        OnEnteredTrain?.Invoke();
                     }
                     break;
                 }
@@ -653,10 +721,6 @@ public class SpyBrain : MonoBehaviour
         {
             checkingCarriageMap = false;
         }
-    }
-    private void MoveUpCurrentCarriageWall()
-    {
-
     }
     private void Flip(bool flip)
     {

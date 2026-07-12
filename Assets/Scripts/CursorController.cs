@@ -200,7 +200,22 @@ public class CursorController : MonoBehaviour
     }
     public static bool IsInsideBounds(Bounds bounds)
     {
-        return CursorBounds.min.x >= bounds.min.x && CursorBounds.min.x <= bounds.max.x && CursorBounds.max.y >= bounds.min.y && CursorBounds.max.y <= bounds.max.y;
+        bool inside = CursorBounds.min.x >= bounds.min.x && CursorBounds.min.x <= bounds.max.x && CursorBounds.max.y >= bounds.min.y && CursorBounds.max.y <= bounds.max.y;
+        if (inside)
+        {
+            if (CursorRenderer.spriteIndex == (int)KeySpriteIndices.Cursor)
+            {
+                CursorRenderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.Pointer);
+            }
+        }
+        else
+        {
+            if (CursorRenderer.spriteIndex == (int)KeySpriteIndices.Pointer)
+            {
+                CursorRenderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.Cursor);
+            }
+        }
+        return inside;
     }
     public static bool EnteredBounds(AtlasRenderer renderer)
     {
