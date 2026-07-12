@@ -12,10 +12,12 @@ public class SpyBrain : MonoBehaviour
     public static NPCBrain ChosenNPC;
 
     public static event Action OnTicketCheckHoverEnabled;
+    public static event Action<Vector2> OnTicketCheckHoverEnabledFirstTime;
     public static event Action OnTicketCheckHoverDisabled;
     public static event Action<Vector2> OnFoundExteriorSlideDoors;
     public static event Action OnWalkPastExteriorSlideDoors;
     public static event Action OnEnteredTrain;
+    public static event Action OnTicketInspect;
 
     public static bool CanCheckTicket;
     public static bool CheckingNotepad;
@@ -424,7 +426,7 @@ public class SpyBrain : MonoBehaviour
                 stats.boardingStationName = trip.stationsDataArray[ChosenNPC.profile.boardingStationIndex].name;
                 stats.disembarkingStationName = trip.stationsDataArray[ChosenNPC.profile.disembarkingStationIndex].name;
                 trip.ticketsCheckedTotal++;
-                gameEventData.OnTicketInspect.Raise();
+                OnTicketInspect?.Invoke();
 
                 canExitState = false;
             }
@@ -542,6 +544,7 @@ public class SpyBrain : MonoBehaviour
         if (CanCheckTicket)
         {
             Bounds spyBounds = atlasRenderer.bounds;
+            Bounds npcBounds = default;
 
             curNPCTicketCheckHoverCount = 0;
 
@@ -552,14 +555,13 @@ public class SpyBrain : MonoBehaviour
                     NPCBrain npc = CurCarriage.curNPCList[i];
                     if (npc.ticketHasBeenChecked) continue;
 
-                    Bounds npcBounds = npc.atlasRenderer.bounds;
+                    npcBounds = npc.atlasRenderer.bounds;
 
                     if (spyBounds.max.x > npcBounds.min.x && spyBounds.min.x < npcBounds.max.x)
                     {
                         npc.ToggleTicketCheckHover(toggle: true);
                         possibleNPCsToTicketCheck[curNPCTicketCheckHoverCount] = npc;
                         curNPCTicketCheckHoverCount++;
-                        OnTicketCheckHoverEnabled?.Invoke();
                     }
                     else
                     {
@@ -570,6 +572,16 @@ public class SpyBrain : MonoBehaviour
                 if (curNPCTicketCheckHoverCount == 0)
                 {
                     OnTicketCheckHoverDisabled?.Invoke();
+                }
+                else
+                {
+                    OnTicketCheckHoverEnabled?.Invoke();
+
+                    if (trip.ticketsCheckedTotal == 0)
+                    {
+                        OnTicketCheckHoverEnabledFirstTime?.Invoke(new Vector2(npcBounds.center.x, npcBounds.max.y));
+                    }
+
                 }
             }
 

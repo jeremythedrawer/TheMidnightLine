@@ -33,13 +33,13 @@ public class SpawnMaster : MonoBehaviour
 #if UNITY_EDITOR
         Init();
 #endif
-        gameEventData.OnTicketInspect.RegisterListener(ChangeParticles);
+        SpyBrain.OnTicketInspect += ChangeParticles;
         gameEventData.OnMetersAtSpawnBounds.RegisterListener(DespawnEdgeScrollers);
         Scenes.OnLoadTrip2 += Init;
     }
     private void OnDisable()
     {
-        gameEventData.OnTicketInspect.UnregisterListener(ChangeParticles);
+        SpyBrain.OnTicketInspect -= ChangeParticles;
         gameEventData.OnMetersAtSpawnBounds.UnregisterListener(DespawnEdgeScrollers);
         Scenes.OnLoadTrip2 -= Init;
         Dispose();

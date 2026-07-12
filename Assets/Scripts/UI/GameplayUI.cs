@@ -76,10 +76,13 @@ public class GameplayUI : MonoBehaviour
         gameEventData.OnFinishTripScene.RegisterListener(KeepNotepad);
 
         SpyBrain.OnTicketCheckHoverDisabled += RevertCurTicketIcon;
+        SpyBrain.OnTicketCheckHoverDisabled += HideKeyIcon;
         SpyBrain.OnTicketCheckHoverEnabled += InvertCurTicketIcon;
+        SpyBrain.OnTicketCheckHoverEnabledFirstTime += ShowEIcon;
         SpyBrain.OnFoundExteriorSlideDoors += ShowWIcon;
         SpyBrain.OnWalkPastExteriorSlideDoors += HideKeyIcon;
         SpyBrain.OnEnteredTrain += DisappearKeyIcon;
+        SpyBrain.OnTicketInspect += DisappearKeyIcon;
 
         UnlockPicker.OnNewAbilityUnlocked += AppearNewAbilityIcon;
 
@@ -94,10 +97,13 @@ public class GameplayUI : MonoBehaviour
         gameEventData.OnFinishTripScene.UnregisterListener(KeepNotepad);
 
         SpyBrain.OnTicketCheckHoverDisabled -= RevertCurTicketIcon;
+        SpyBrain.OnTicketCheckHoverDisabled -= HideKeyIcon;
         SpyBrain.OnTicketCheckHoverEnabled -= InvertCurTicketIcon;
         SpyBrain.OnFoundExteriorSlideDoors -= ShowWIcon;
+        SpyBrain.OnTicketCheckHoverEnabledFirstTime -= ShowEIcon;
         SpyBrain.OnWalkPastExteriorSlideDoors -= HideKeyIcon;
         SpyBrain.OnEnteredTrain -= DisappearKeyIcon;
+        SpyBrain.OnTicketInspect -= DisappearKeyIcon;
         
         UnlockPicker.OnNewAbilityUnlocked -= AppearNewAbilityIcon;
         
@@ -352,9 +358,20 @@ public class GameplayUI : MonoBehaviour
     }
     private void ShowWIcon(Vector2 position)
     {
+        ShowKeyIcon(position, KeySpriteIndices.W);
+    }
+    private void ShowEIcon(Vector2 position)
+    {
+        if (trip.ticketsCheckedTotal == 0)
+        {
+            ShowKeyIcon(position, KeySpriteIndices.E);
+        }
+    }
+    private void ShowKeyIcon(Vector2 position, KeySpriteIndices keySpriteIndex)
+    {
         keyIcon.transform.SetParent(null);
         keyIcon.custom.w = 0;
-        keyIcon.UpdateSpriteInputsByIndex((int)KeySpriteIndices.W);
+        keyIcon.UpdateSpriteInputsByIndex((int)keySpriteIndex);
         keyIcon.transform.position = new Vector3(position.x, position.y + keyIcon.bounds.size.y, keyIcon.transform.position.z);
     }
     private void HideKeyIcon()
@@ -363,7 +380,10 @@ public class GameplayUI : MonoBehaviour
     }
     private void DisappearKeyIcon()
     {
-        DisappearingKeyIcon().Forget();
+        if (keyIcon.custom.w == 0)
+        {
+            DisappearingKeyIcon().Forget();
+        }
     }
     private async UniTask DisappearingKeyIcon()
     {

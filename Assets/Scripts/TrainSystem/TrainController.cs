@@ -61,12 +61,12 @@ public class TrainController : MonoBehaviour
     }
     private void OnEnable()
     {
-        gameEventData.OnTicketInspect.RegisterListener(UpdateTicketInspectParams);
+        SpyBrain.OnTicketInspect += UpdateTicketInspectParams;
         Scenes.OnLoadTrip1 += Init;
     }
     private void OnDisable()
     {
-        gameEventData.OnTicketInspect.UnregisterListener(UpdateTicketInspectParams);
+        SpyBrain.OnTicketInspect -= UpdateTicketInspectParams;
         Scenes.OnLoadTrip1 -= Init;
         
         trainCTS?.Cancel();
