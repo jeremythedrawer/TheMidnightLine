@@ -116,14 +116,13 @@ public class Notepad : MonoBehaviour
     public bool atOffCameraPos;
     private void OnEnable()
     {
-        Scenes.OnLoadTrip0 += PrepareForTrip;
+        Scenes.OnLoadTrip2 += PrepareForTrip;
         Scenes.OnLoadScore += PrepareForScore;
     }
     private void OnDisable()
     {
-        Scenes.OnLoadTrip0 -= PrepareForTrip;
+        Scenes.OnLoadTrip2 -= PrepareForTrip;
         Scenes.OnLoadScore -= PrepareForScore;
-        OffScreen();
     }
     private void Start()
     {
@@ -131,28 +130,8 @@ public class Notepad : MonoBehaviour
 
         npcData.behaviourStringDict = InitEnumToStringDict<Behaviours>();
 
-        notepadData.handFlipPage_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.FlipHand];
-        notepadData.rotatePencil_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.RotatingPencil];
-        notepadData.leftHandWorldDepthFront =  (int)(bindingRingsRend.transform.position.z - 1);
-        notepadData.leftHandWorldDepthBack = (int)(rightHand_renderer.transform.position.z + 1);
-
-        Vector3 flipWorldPos = new Vector3();
-        flipWorldPos.x = bindingRingsRend.transform.position.x;
-        flipWorldPos.y = bindingRingsRend.transform.position.y;
-        flipWorldPos.z = leftHand_renderer.transform.position.z;
-
-        notepadData.leftHandFlipPos = transform.InverseTransformPoint(flipWorldPos);
-
-        SimpleSprite holdingPencilSprite = leftHand_renderer.atlas.motionSprites[HOLDING_PENCIL_SPRITE_INDEX].sprite;
-        float worldPivotOffsetY = holdingPencilSprite.worldSize.y * (1 - holdingPencilSprite.uvPivot.y);
-
-        notepadData.leftHandOffScreenLocalPos.x = -NotepadActiveLocalPos.x * 0.5f;
-        notepadData.leftHandOffScreenLocalPos.y = camStats.camBounds.extents.y - NotepadActiveLocalPos.y - camStats.camBounds.size.y - worldPivotOffsetY;
-        notepadData.leftHandOffScreenLocalPos.z = leftHand_renderer.transform.localPosition.z;
-
         tabWorldDepthBack = rightHand_renderer.transform.position.z - 0.5f;
         activePage = promptPage;
-
     }
     private void Update()
     {
@@ -254,6 +233,7 @@ public class Notepad : MonoBehaviour
                 SetTab(TabDirection.Left, colorKeyPage.playerWriteRenderers[2].GetBounds());
             }
         }
+        notepadData.checkingNotepad = true;
     }
     public void ExitNotepad()
     {
@@ -619,50 +599,9 @@ public class Notepad : MonoBehaviour
             case NotepadState.Stationary:
             {
                 HandleStationaryLeftHandMove();
-
-                if (sceneData.activeSceneType == SceneType.Trip && playerInputs.notepadPreviewAnswerAndFlip.x != 0)
-                {
-                    activePage.SwitchActivePreviewPlayerWriteText((int)playerInputs.notepadPreviewAnswerAndFlip.x);
-                    appearTextClock = APPEAR_TEXT_TIME;
-                }
-                
+                HandlePlayerInputs();
                 activePage.UpdatePreviewPlayerWriteText(appear: true, ref appearTextClock);
-
                 activePage.UpdatePage();
-
-                if (activePageIndex != 0 && CursorController.IsInsideBounds(activePage.paperCornerLeftButtonRenderer.bounds))
-                {
-                    if (playerInputs.mouseLeftDown)
-                    {
-                        activePage.InvertLeftArrowButton(false);
-                        subState |= SubState.IsFlippingDown;
-                    }
-                    else
-                    {
-                        activePage.InvertLeftArrowButton(true);
-                    }
-                }
-                else
-                {
-                    activePage.InvertLeftArrowButton(false);
-                }
-
-                if (activePageIndex != pages.Length - 1 && CursorController.IsInsideBounds(activePage.paperCornerRightButtonRenderer.bounds))
-                {
-                    if (playerInputs.mouseLeftDown)
-                    {
-                        activePage.InvertRightArrowButton(false);
-                        subState |= SubState.IsFlippingUp;
-                    }
-                    else
-                    {
-                        activePage.InvertRightArrowButton(true);
-                    }
-                }
-                else
-                {
-                    activePage.InvertRightArrowButton(false);
-                }
             }
             break;
             case NotepadState.Revealing:
@@ -1158,6 +1097,112 @@ public class Notepad : MonoBehaviour
         }
         leftHand_renderer.transform.localPosition = Vector3.Lerp(leftHand_renderer.transform.localPosition, leftHandTargetLocalPos, Time.deltaTime * LEFTHAND_DAMPING);
     }
+    private void HandlePlayerInputs()
+    {
+        if (sceneData.activeSceneType == SceneType.Trip && playerInputs.notepadPreviewAnswerAndFlip.x != 0)
+        {
+            activePage.SwitchActivePreviewPlayerWriteText((int)playerInputs.notepadPreviewAnswerAndFlip.x);
+            appearTextClock = APPEAR_TEXT_TIME;
+        }
+        bool atButton = false;
+        if (activePageIndex != 0 && CursorController.IsInsideBounds(activePage.paperCornerLeftButtonRenderer.bounds, isClickable: true))
+        {
+            if (playerInputs.mouseLeftDown)
+            {
+                activePage.InvertLeftArrowButton(false);
+                subState |= SubState.IsFlippingDown;
+            }
+            else
+            {
+                activePage.InvertLeftArrowButton(true);
+            }
+            atButton = true;
+        }
+        else
+        {
+            activePage.InvertLeftArrowButton(false);
+        }
+        if (atButton) return;
+
+        if (activePageIndex != pages.Length - 1 && CursorController.IsInsideBounds(activePage.paperCornerRightButtonRenderer.bounds, isClickable: true))
+        {
+            if (playerInputs.mouseLeftDown)
+            {
+                activePage.InvertRightArrowButton(false);
+                subState |= SubState.IsFlippingUp;
+            }
+            else
+            {
+                activePage.InvertRightArrowButton(true);
+            }
+            atButton = true;
+        }
+        else
+        {
+            activePage.InvertRightArrowButton(false);
+        }
+        if (atButton) return;
+        if (sceneData.activeSceneType != SceneType.Trip) return;
+
+        if (activePage.switchLeftButtonRenderer != null && CursorController.IsInsideBounds(activePage.switchLeftButtonRenderer.bounds, isClickable: true))
+        {
+            if (playerInputs.mouseLeftDown)
+            {
+                activePage.InvertSwitchLeftButton(false);
+                activePage.SwitchActivePreviewPlayerWriteText(-1);
+                appearTextClock = APPEAR_TEXT_TIME;
+            }
+            else
+            {
+                activePage.InvertSwitchLeftButton(true);
+            }
+            atButton = true;
+        }
+        else
+        {
+            activePage.InvertSwitchLeftButton(false);
+        }
+        if (atButton) return;
+
+        if (activePage.switchRightButtonRenderer != null && CursorController.IsInsideBounds(activePage.switchRightButtonRenderer.bounds, isClickable: true))
+        {
+            if (playerInputs.mouseLeftDown)
+            {
+                activePage.InvertSwitchRightButton(false);
+                activePage.SwitchActivePreviewPlayerWriteText(1);
+                appearTextClock = APPEAR_TEXT_TIME;
+            }
+            else
+            {
+                activePage.InvertSwitchRightButton(true);
+            }
+        }
+        else
+        {
+            activePage.InvertSwitchRightButton(false);
+        }
+
+
+        if (CursorController.IsInsideBounds(activePage.exitButton_renderer.bounds, isClickable: true))
+        {
+            if (playerInputs.mouseLeftHold)
+            {
+                activePage.InvertExitButton(invert: false);
+            }
+            else
+            {
+                activePage.InvertExitButton(invert: true);
+            }
+            if (playerInputs.mouseLeftUp)
+            {
+                notepadData.checkingNotepad = false;
+            }
+        }
+        else
+        {
+            activePage.InvertExitButton(invert: false);
+        }
+    }
     public void SetLeftHandHoldingPencilSprite()
     {
         leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[notepadData.rotatePencil_clip.keyframeStartIndex].sprite);
@@ -1187,7 +1232,6 @@ public class Notepad : MonoBehaviour
             traitorPage.InitProfile(traitorProfile);
             traitorPage.traitorIndex = i;
             traitorPage.gameObject.name = "Page_" + i;
-            traitorPage.pageNumberRenderer.SetText("Page " + (i + 1));
 
             pageList.Add(traitorPage);
             traitorPage.gameObject.SetActive(false);
@@ -1281,7 +1325,7 @@ public class Notepad : MonoBehaviour
         if (mugShotRenderer.custom.x == 1) return false;
 
         bool clickedOnMugshot = false;
-        if (mugShotRenderer.custom.x == 0 && CursorController.IsInsideBounds(mugShotRenderer.GetBounds()))
+        if (mugShotRenderer.custom.x == 0 && CursorController.IsInsideBounds(mugShotRenderer.GetBounds(), isClickable: true))
         {
             if (playerInputs.mouseLeftDown)
             {
@@ -1300,7 +1344,6 @@ public class Notepad : MonoBehaviour
         }
         return ((playerInputs.spacebarDown || clickedOnMugshot) && traitorOutcomesRevealed < trip.traitorProfiles.Length) || (subState & SubState.RevealToggle) != 0;
     }
-
     private string GenerateName(Gender gender, Ethnicity ethnicity)
     {
         string genderString = gender.ToString();

@@ -13,7 +13,12 @@ public static class AtlasUI
     public const int LOCK_SPRITE_INDEX = 18;
     public const int TICK_SPRITE_INDEX = 22;
     public const int FOUR_NUMPAD_SPRITE_INDEX = 25;
+    public const int HOLDING_PENCIL_SPRITE_INDEX = 16;
 
+    public const float LEFTHAND_DAMPING = 7f;
+    public const float PENCIL_DISTANCE_THRESHOLD = 0.05f;
+    public const float PENCIL_VERTICAL_FREQUENCY = 7f;
+    public const float PENCIL_VERTICAL_MAGNITUDE = 0.07f;
     public const float BORDER_PADDING = 0f;
     public const float LETTER_ADVANCE = 0.122f;
     public const float APPEAR_TEXT_TIME = 0.2f;
@@ -24,8 +29,19 @@ public static class AtlasUI
     public const float MOVE_DAMP = 4;
     public const float OPEN_TIME_ROW_COL = 0.0625f;
     public const float GRID_GAP = 0.272f;
-
+    public const float WRITE_LETTER_TIME = 0.1f;
+    public const float NOTEPAD_INACTIVE_OFFSET = 0.3f;
     public static float TransitionTime = -Mathf.Log(TARGET_MARGIN) / MOVE_DAMP;
+
+    public enum NotepadKeyframeState
+    {
+        None,
+        Start,
+        PaperClip,
+        TogglePageContentsBottomHalf,
+        TogglePageContentsTopHalf,
+        ChangeDepth,
+    }
 
     public enum NotepadState
     {
@@ -52,6 +68,23 @@ public static class AtlasUI
         Color,
         RuleOut,
     }
+    [Flags] public enum NotepadSubState
+    {
+        None = 0,
+        IsFlippingUp = 1 << 0,
+        IsFlippingDown = 1 << 1,
+        WriteToggle = 1 << 2,
+        EraseToggle = 1 << 3,
+        RevealToggle = 1 << 4,
+        WillFlipUp = 1 << 5,
+        WillFlipDown = 1 << 6,
+        CanFlipUp = 1 << 7,
+        CanFlipDown = 1 << 8,
+        CanWillFlipUp = 1 << 9,
+        CanWillFlipDown = 1 << 10,
+        OnScreen = 1 << 11,
+        InUse = 1 << 12,
+    }
     [Flags]public enum UnlockType
     { 
         None = 0,
@@ -76,6 +109,8 @@ public static class AtlasUI
         Prompt,
         Profile,
         ColorKey,
+        Start,
+        Options,
     }
     public enum TripPrompt
     {

@@ -165,7 +165,7 @@ public class ScoreUI : MonoBehaviour
     }
     private void HandlePlayAgainButton()
     {
-        if (CursorController.IsInsideBounds(playAgainRenderer.background_renderer.bounds))
+        if (CursorController.IsInsideBounds(playAgainRenderer.background_renderer.bounds, isClickable: true))
         {
             playAgainRenderer.SetColorText(Color.white);
             playAgainRenderer.background_renderer.SetSliceCustom(w: 1);
@@ -181,15 +181,14 @@ public class ScoreUI : MonoBehaviour
             playAgainRenderer.background_renderer.SetSliceCustom(w: 0);
         }
     }
-
     private void SetFadeToBlack()
     {
         SetFadeBlack(fadeBlackMaterial, toFadeBlack: true);
-        Scenes.SetTripScene(sceneData);
+        Scenes.SetScene(sceneData, Scenes.SceneType.Trip , sceneIndex: 2);
     }
     private void HandleQuitButton()
     {
-        if (CursorController.IsInsideBounds(quitRenderer.background_renderer.bounds))
+        if (CursorController.IsInsideBounds(quitRenderer.background_renderer.bounds, isClickable: true))
         {
             quitRenderer.SetColorText(Color.white);
             quitRenderer.background_renderer.SetSliceCustom(w: 1);
@@ -211,7 +210,6 @@ public class ScoreUI : MonoBehaviour
             case UIState.Notepad:
             {
                 MoveUIElement(notepad.transform, NotepadInactiveLocalPos, ref ctsNotepad, curState);
-                notepad.enabled = false;
             }
             break;
         }

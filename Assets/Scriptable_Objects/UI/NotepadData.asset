@@ -12,4 +12,26 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968269b1d6895ab46b4078836056d640, type: 3}
   m_Name: NotepadData
   m_EditorClassIdentifier: Assembly-CSharp::NotepadData
+  handFlipPage_clip:
+    clipName: FlipHand
+    clipType: 2
+    motionIndex: 1
+    keyframeStartIndex: 0
+    keyframeEndIndex: 11
+    time: 0
+  rotatePencil_clip:
+    clipName: RotatingPencil
+    clipType: 2
+    motionIndex: 3
+    keyframeStartIndex: 16
+    keyframeEndIndex: 20
+    time: 0
   curState: 1
+  prevState: 2
+  completedUnlocks: 0
+  leftHandFlipPos: {x: 0.059999943, y: -0.08800006, z: 0}
+  leftHandPencilPos: {x: -0.17000008, y: -1.8012222, z: 0.9859848}
+  leftHandOffScreenLocalPos: {x: -1.79, y: -4.192222, z: 0}
+  leftHandWorldDepthFront: -39
+  leftHandWorldDepthBack: -32
+  checkingNotepad: 0

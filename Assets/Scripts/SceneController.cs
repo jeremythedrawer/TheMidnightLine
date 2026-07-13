@@ -15,15 +15,9 @@ public class SceneController : MonoBehaviour
 
     public static InputManager InputManager;
 
-    private void Awake()
-    {
-    }
     private void Start()
     {
-        sceneData.demoScene = SceneManager.GetSceneByBuildIndex(1);
-        sceneData.scoreScene = SceneManager.GetSceneByBuildIndex(2);
-
-        Scenes.SetTripScene(sceneData);
+        sceneData.sceneLoaded = true;
         Transform = transform;
     }
     private void OnApplicationQuit()

@@ -1,3 +1,4 @@
+using System;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "SpyInputs_SO", menuName = "Midnight Line SOs / Spy Inputs SO")]
@@ -12,8 +13,9 @@ public class PlayerInputsSO : ScriptableObject
 
     public int move;
     public int numpad;
-    
+
     public bool notepadKeyDown;
+    public bool notepadKeyUp;
     public bool spacebarDown;
 
     public bool ticketCheckKeyDown;

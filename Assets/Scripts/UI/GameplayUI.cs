@@ -8,7 +8,6 @@ public class GameplayUI : MonoBehaviour
 {
     const float TICKET_ICON_PADDING = 0.2f;
     const float APPEARING_TIME = 0.5f;
-    const float NOTEPAD_INACTIVE_OFFSET = 1.8f;
     const float ABILITY_ICON_APPEAR_TIME = 1f;
 
 
@@ -47,8 +46,6 @@ public class GameplayUI : MonoBehaviour
     public CancellationTokenSource ctsCarriageMap;
     public CancellationTokenSource ctsFadeBlack;
 
-    public Bounds notepadHoverBounds;
-
     public Vector3 backgroundActivePos;
     public Vector3 backgroundInactivePos;
 
@@ -67,6 +64,8 @@ public class GameplayUI : MonoBehaviour
     
     public float naturalMoveClock;
     public float fadeBlackClock;
+
+    public bool canExitState;
 
     private void OnEnable()
     {
@@ -127,7 +126,7 @@ public class GameplayUI : MonoBehaviour
     }
     private void ChooseState()
     {
-        if (spyStats.curState == SpyState.Notepad || notepadData.curState != NotepadState.Stationary)
+        if (playerInputs.notepadKeyDown || notepadData.checkingNotepad)
         {
             SetState(UIState.Notepad);
         }
@@ -153,6 +152,8 @@ public class GameplayUI : MonoBehaviour
     }
     public void EnterState()
     {
+        canExitState = false;
+
         switch (curState)
         {
             case UIState.Notepad:
@@ -192,6 +193,18 @@ public class GameplayUI : MonoBehaviour
             {
                 UpdateNaturalPos(NotepadActiveLocalPos, ref naturalMovePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
+
+                if (playerInputs.notepadKeyDown && canExitState)
+                {
+                    notepadData.checkingNotepad = false;
+                }
+
+                if (playerInputs.notepadKeyUp)
+                {
+                    canExitState = true;
+                }
+
+
             }
             break;
             case UIState.Ticket:
@@ -207,8 +220,7 @@ public class GameplayUI : MonoBehaviour
             break;
             case UIState.None:
             {
-                notepadHoverBounds.center = notepad.transform.position;
-                if (CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds))
+                if (CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds, isClickable: true))
                 {
                     notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadHoverPos, Time.deltaTime * MOVE_DAMP);
 
@@ -216,7 +228,7 @@ public class GameplayUI : MonoBehaviour
                     if (playerInputs.mouseLeftUp)
                     {
                         notepad.activePage.InvertExitButton(invert: false);
-                        SpyBrain.ToggleNotepad(true);
+                        notepadData.checkingNotepad = true;
                     }
                 }
                 else
@@ -265,17 +277,9 @@ public class GameplayUI : MonoBehaviour
         float halfCamWidth = cameraStats.camBounds.extents.x;
         float halfCamHeight = cameraStats.camBounds.extents.y;
 
-        NotepadActiveLocalPos = notepad.transform.localPosition;
-        float binderBoundsOffsetX = notepad.bindingRingsRend.bounds.max.x - notepad.transform.position.x;
-        float binderBoundsOffsetY = notepad.transform.position.y - NOTEPAD_INACTIVE_OFFSET;
-
-        NotepadInactiveLocalPos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + binderBoundsOffsetY, notepad.transform.localPosition.z);
-        NotepadHoverPos = new Vector3(NotepadInactiveLocalPos.x, NotepadInactiveLocalPos.y + notepad.bindingRingsRend.bounds.size.y, NotepadInactiveLocalPos.z);
-
-        float ySize = notepad.traitorPage_prefab.paperRenderer.bounds.size.y;
-        Vector3 hoverSize = new Vector3(notepad.bindingRingsRend.bounds.size.x, ySize, 0.2f);
-        notepadHoverBounds = new Bounds(NotepadHoverPos, hoverSize);
         notepad.transform.localPosition = NotepadInactiveLocalPos;
+
+        notepadData.checkingNotepad = false;
 
         ticketActivePos = ticket.transform.localPosition;
         ticketInactivePos = new Vector3(halfCamWidth, -halfCamHeight + ticket.totalBounds.size.y, ticket.transform.localPosition.z);
@@ -333,7 +337,7 @@ public class GameplayUI : MonoBehaviour
     private void SetFadeToBlack()
     {
         SetFadeBlack(fadeBlackMaterial, toFadeBlack: true);
-        Scenes.SetScoreScene(sceneData);
+        Scenes.SetScene(sceneData, Scenes.SceneType.Score, sceneIndex: 3);
     }
     private void AppearNewAbilityIcon(UnlockType unlockType)
     {
@@ -436,11 +440,5 @@ public class GameplayUI : MonoBehaviour
             await UniTask.Yield();
         }
         renderer.custom.w = 0;
-    }
-    private void OnDrawGizmos()
-    {
-        Gizmos.color = Color.yellowNice;
-
-        Gizmos.DrawWireCube(notepadHoverBounds.center, notepadHoverBounds.size);
     }
 }

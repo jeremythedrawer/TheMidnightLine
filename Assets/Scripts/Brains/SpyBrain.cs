@@ -20,7 +20,6 @@ public class SpyBrain : MonoBehaviour
     public static event Action OnTicketInspect;
 
     public static bool CanCheckTicket;
-    public static bool CheckingNotepad;
     public static bool PickingNPCToTicketCheck;
 
     [Header("Components")]
@@ -152,7 +151,7 @@ public class SpyBrain : MonoBehaviour
         {
             SetState(SpyState.PickingNPCTicketCheck);
         }
-        else if (playerInputs.notepadKeyDown || CheckingNotepad)
+        else if (playerInputs.notepadKeyDown || notepadData.checkingNotepad)
         {
             SetState(SpyState.Notepad);
         }
@@ -248,11 +247,6 @@ public class SpyBrain : MonoBehaviour
             case SpyState.Notepad:
             {
                 if(!playerInputs.notepadKeyDown) canExitState = true;
-
-                if (playerInputs.notepadKeyDown && canExitState)
-                {
-                    CheckingNotepad = false;
-                }
 
                 if (notepadData.curState != curNotepadState)
                 {
@@ -427,8 +421,6 @@ public class SpyBrain : MonoBehaviour
                 stats.disembarkingStationName = trip.stationsDataArray[ChosenNPC.profile.disembarkingStationIndex].name;
                 trip.ticketsCheckedTotal++;
                 OnTicketInspect?.Invoke();
-
-                canExitState = false;
             }
             break;
 
@@ -437,7 +429,6 @@ public class SpyBrain : MonoBehaviour
                 ChosenNPC.talkingToSpy = true;
 
                 curClip = atlas.clipDict[(int)SpyMotion.StandingBreathing];
-                canExitState = false;
 
                 UnlockType curUnlockType = UnlockType.Color;
 
@@ -475,7 +466,6 @@ public class SpyBrain : MonoBehaviour
             case SpyState.Notepad:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.NotepadHolding];
-                CheckingNotepad = true;
             }
             break;
         }
@@ -526,11 +516,6 @@ public class SpyBrain : MonoBehaviour
                 }
             }
             break;
-            case SpyState.Notepad:
-            {
-                CheckingNotepad = false;
-            }
-            break;
 
             case SpyState.CarriageMap:
             {
@@ -544,7 +529,6 @@ public class SpyBrain : MonoBehaviour
         if (CanCheckTicket)
         {
             Bounds spyBounds = atlasRenderer.bounds;
-            Bounds npcBounds = default;
 
             curNPCTicketCheckHoverCount = 0;
 
@@ -555,11 +539,12 @@ public class SpyBrain : MonoBehaviour
                     NPCBrain npc = CurCarriage.curNPCList[i];
                     if (npc.ticketHasBeenChecked) continue;
 
-                    npcBounds = npc.atlasRenderer.bounds;
+                    Bounds npcBounds = npc.atlasRenderer.bounds;
 
                     if (spyBounds.max.x > npcBounds.min.x && spyBounds.min.x < npcBounds.max.x)
                     {
                         npc.ToggleTicketCheckHover(toggle: true);
+
                         possibleNPCsToTicketCheck[curNPCTicketCheckHoverCount] = npc;
                         curNPCTicketCheckHoverCount++;
                     }
@@ -579,7 +564,8 @@ public class SpyBrain : MonoBehaviour
 
                     if (trip.ticketsCheckedTotal == 0)
                     {
-                        OnTicketCheckHoverEnabledFirstTime?.Invoke(new Vector2(npcBounds.center.x, npcBounds.max.y));
+                        AtlasRenderer npcRend = possibleNPCsToTicketCheck[0].atlasRenderer;
+                        OnTicketCheckHoverEnabledFirstTime?.Invoke(new Vector2(npcRend.transform.position.x, npcRend.bounds.max.y));
                     }
 
                 }
@@ -752,10 +738,7 @@ public class SpyBrain : MonoBehaviour
     {
         CanCheckTicket = toggle;
     }
-    public static void ToggleNotepad(bool toggle)
-    {
-        CheckingNotepad = toggle;
-    }
+
     private void OnDrawGizmos()
     {
         CalculateCollisionPoints();

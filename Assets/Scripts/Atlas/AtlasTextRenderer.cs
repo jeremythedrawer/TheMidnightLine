@@ -91,7 +91,7 @@ public class AtlasTextRenderer : MonoBehaviour
         worldPivotsAndSizes = new Vector4[maxChars];
         uvSizesAndPositions = new Vector4[maxChars];
         scalesAndFlips = new Vector4[maxChars];
-        customs = new Vector4[maxChars];
+        if (customs == null || customs.Length != maxChars ) customs = new Vector4[maxChars];
 
         SetTextWorld();
         switch (rendererType)

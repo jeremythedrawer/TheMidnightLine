@@ -17,6 +17,7 @@ public class CursorController : MonoBehaviour
     public static Vector3 CurWorldPos;
     
     public static bool Active;
+    public static bool CanClick;
 
     public static event Action OnMouseEnabled;
     public static event Action OnMouseDisabled;
@@ -37,7 +38,7 @@ public class CursorController : MonoBehaviour
     public float timer;
 
     public bool cursorIsMoving;
-
+    
     private void Start()
     {
         Cursor.visible = false;
@@ -45,6 +46,7 @@ public class CursorController : MonoBehaviour
         cursorTag.SetText("");
         hoveredNPCs = new NPCBrain[8];
     }
+    
     private void Update()
     {
         if (Active)
@@ -149,18 +151,34 @@ public class CursorController : MonoBehaviour
                 Active = true;
                 OnMouseEnabled?.Invoke();
             }
+        }
 
+        if (CanClick)
+        {
+            if (cursorRenderer.spriteIndex == (int)KeySpriteIndices.Cursor)
+            {
+                cursorRenderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.Pointer);
+            }
+            CanClick = false;
+        }
+        else
+        {
+            if (cursorRenderer.spriteIndex == (int)KeySpriteIndices.Pointer)
+            {
+                cursorRenderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.Cursor);
+            }
         }
     }
     private void HoverNPC()
     {
         hoveredNPCCount = 0;
         bool hoveringRevealedNPC = false;
+        bool canClick = (trip.curUnlocks & UnlockType.RuleOut) != 0;
         for (int i = 0; i < SpyBrain.CurCarriage.curNPCList.Count; i++)
         {
             NPCBrain npc = SpyBrain.CurCarriage.curNPCList[i];
 
-            if (IsInsideBounds(npc.atlasRenderer.bounds) && hoveredNPCCount < hoveredNPCs.Length)
+            if (IsInsideBounds(npc.atlasRenderer.bounds, isClickable: canClick) && hoveredNPCCount < hoveredNPCs.Length)
             {
                 hoveredNPCs[hoveredNPCCount] = npc;
                 hoveredNPCCount++;
@@ -198,54 +216,41 @@ public class CursorController : MonoBehaviour
             cursorTag.transform.localPosition = new Vector3(0, 0, -0.5f);
         }
     }
-    public static bool IsInsideBounds(Bounds bounds)
+    public static bool IsInsideBounds(Bounds bounds,  bool isClickable)
     {
         bool inside = CursorBounds.min.x >= bounds.min.x && CursorBounds.min.x <= bounds.max.x && CursorBounds.max.y >= bounds.min.y && CursorBounds.max.y <= bounds.max.y;
-        if (inside)
-        {
-            if (CursorRenderer.spriteIndex == (int)KeySpriteIndices.Cursor)
-            {
-                CursorRenderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.Pointer);
-            }
-        }
-        else
-        {
-            if (CursorRenderer.spriteIndex == (int)KeySpriteIndices.Pointer)
-            {
-                CursorRenderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.Cursor);
-            }
-        }
+        if (inside && isClickable) CanClick = true;
         return inside;
     }
-    public static bool EnteredBounds(AtlasRenderer renderer)
-    {
-        if (IsInsideBounds(renderer.GetBounds()))
-        {
-            if (PrevRenderer != renderer)
-            {
-                PrevRenderer = renderer;
-                return true;
-            }
-            else
-            {
-                return false;
-            }
-        }
-        else
-        {
-            return false;
-        }
-    }
-    public static bool ExitBounds()
-    {
-        if (PrevRenderer != null && !IsInsideBounds(PrevRenderer.GetBounds()))
-        {
-            PrevRenderer = null;
-            return true;
-        }
-        else
-        {
-            return false;
-        }
-    }
+    //public static bool EnteredBounds(AtlasRenderer renderer)
+    //{
+    //    if (IsInsideBounds(renderer.GetBounds()))
+    //    {
+    //        if (PrevRenderer != renderer)
+    //        {
+    //            PrevRenderer = renderer;
+    //            return true;
+    //        }
+    //        else
+    //        {
+    //            return false;
+    //        }
+    //    }
+    //    else
+    //    {
+    //        return false;
+    //    }
+    //}
+    //public static bool ExitBounds()
+    //{
+    //    if (PrevRenderer != null && !IsInsideBounds(PrevRenderer.GetBounds()))
+    //    {
+    //        PrevRenderer = null;
+    //        return true;
+    //    }
+    //    else
+    //    {
+    //        return false;
+    //    }
+    //}
 }

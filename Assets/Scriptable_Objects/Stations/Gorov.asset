@@ -10,7 +10,7 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: e08da0cf3188a1846a9ee74041e52789, type: 3}
-  m_Name: Gorov Station
+  m_Name: Gorov
   m_EditorClassIdentifier: 
   station_prefab: {fileID: 1017561232239447498, guid: f0cc9e9c368834b46babe4d23fff0232, type: 3}
   ticketsToCheckBeforeSpawn: 3
@@ -18,68 +18,72 @@ MonoBehaviour:
   traitorSpawnCount: 0
   accompliceSpawnCount: 1
   isFrontOfTrain: 0
-  stationName: Gorov Station
+  stationName: Gorov
   stationIndex: 1
   exitLocalPosX: -6.05
   bystanderProfiles:
   - boardingStationIndex: 1
     disembarkingStationIndex: 2
-    npcPrefabIndex: 0
-    behaviours: 8
+    npcPrefabIndex: 6
+    behaviours: 5
   - boardingStationIndex: 1
     disembarkingStationIndex: 2
-    npcPrefabIndex: 0
-    behaviours: 128
+    npcPrefabIndex: 7
+    behaviours: 260
   - boardingStationIndex: 1
     disembarkingStationIndex: 2
-    npcPrefabIndex: 1
-    behaviours: 2
-  - boardingStationIndex: 1
-    disembarkingStationIndex: 2
-    npcPrefabIndex: 1
-    behaviours: 8
-  - boardingStationIndex: 1
-    disembarkingStationIndex: 2
-    npcPrefabIndex: 1
-    behaviours: 16
-  - boardingStationIndex: 1
-    disembarkingStationIndex: 3
-    npcPrefabIndex: 2
+    npcPrefabIndex: 3
     behaviours: 1
   - boardingStationIndex: 1
-    disembarkingStationIndex: 3
+    disembarkingStationIndex: 2
     npcPrefabIndex: 2
-    behaviours: 2
+    behaviours: 5
   - boardingStationIndex: 1
     disembarkingStationIndex: 3
+    npcPrefabIndex: 6
+    behaviours: 6
+  - boardingStationIndex: 1
+    disembarkingStationIndex: 3
+    npcPrefabIndex: 6
+    behaviours: 6
+  - boardingStationIndex: 1
+    disembarkingStationIndex: 4
     npcPrefabIndex: 2
     behaviours: 4
   - boardingStationIndex: 1
-    disembarkingStationIndex: 3
-    npcPrefabIndex: 3
-    behaviours: 1
+    disembarkingStationIndex: 5
+    npcPrefabIndex: 0
+    behaviours: 130
+  - boardingStationIndex: 1
+    disembarkingStationIndex: 5
+    npcPrefabIndex: 2
+    behaviours: 5
+  - boardingStationIndex: 1
+    disembarkingStationIndex: 4
+    npcPrefabIndex: 2
+    behaviours: 3
   - boardingStationIndex: 1
     disembarkingStationIndex: 3
-    npcPrefabIndex: 3
-    behaviours: 2
+    npcPrefabIndex: 7
+    behaviours: 8
   - boardingStationIndex: 1
     disembarkingStationIndex: 3
     npcPrefabIndex: 3
     behaviours: 4
   - boardingStationIndex: 1
     disembarkingStationIndex: 2
-    npcPrefabIndex: 4
-    behaviours: 1
-  - boardingStationIndex: 1
-    disembarkingStationIndex: 2
-    npcPrefabIndex: 4
+    npcPrefabIndex: 6
     behaviours: 2
   - boardingStationIndex: 1
     disembarkingStationIndex: 2
-    npcPrefabIndex: 4
-    behaviours: 32
+    npcPrefabIndex: 0
+    behaviours: 130
   - boardingStationIndex: 1
     disembarkingStationIndex: 2
-    npcPrefabIndex: 5
+    npcPrefabIndex: 6
     behaviours: 2
-  accompliceProfiles: []
+  accompliceProfiles:
+  - boardingStationIndex: 1
+    disembarkingStationIndex: 7
+    npcPrefabIndex: 4
+    behaviours: 0

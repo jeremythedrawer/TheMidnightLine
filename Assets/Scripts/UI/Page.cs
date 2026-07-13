@@ -28,9 +28,11 @@ public class Page : MonoBehaviour
     public AtlasRenderer[] playerWriteRenderers;
     public AtlasRenderer[] readOnlyRenderers;
 
-    public AtlasTextRenderer pageNumberRenderer;
     public AtlasRenderer paperCornerLeftButtonRenderer;
     public AtlasRenderer paperCornerRightButtonRenderer;
+
+    public AtlasRenderer switchLeftButtonRenderer;
+    public AtlasRenderer switchRightButtonRenderer;
     public AtlasRenderer exitButton_renderer;
 
     [Header("Generated")]
@@ -68,6 +70,15 @@ public class Page : MonoBehaviour
             {
                 activePlayerWriteTextRenderer = playerWriteTextRenderers[0];
                 
+                isPlayerWriteTextPreviewSet = new bool[playerWriteTextRenderers.Length];
+                playerWriteTexts = new string[playerWriteTextRenderers.Length];
+                Array.Fill(playerWriteTexts, "");
+            }
+            break;
+
+            case PageType.Start:
+            {
+                activePlayerWriteTextRenderer = playerWriteTextRenderers[0];
                 isPlayerWriteTextPreviewSet = new bool[playerWriteTextRenderers.Length];
                 playerWriteTexts = new string[playerWriteTextRenderers.Length];
                 Array.Fill(playerWriteTexts, "");
@@ -142,7 +153,7 @@ public class Page : MonoBehaviour
                 {
                     int colorIndex = i + 1;
                     AtlasRenderer colorKeyRend = playerWriteRenderers[colorIndex];
-                    if (!foundColorKeyRend && playerWriteTexts[colorIndex] != "" && CursorController.IsInsideBounds(colorKeyRend.GetBounds()))
+                    if (!foundColorKeyRend && playerWriteTexts[colorIndex] != "" && CursorController.IsInsideBounds(colorKeyRend.GetBounds(), isClickable: true))
                     {
                         colorKeyRend.custom.w = 0;
 
@@ -167,26 +178,6 @@ public class Page : MonoBehaviour
                 }
             }
             break;
-        }
-
-        if (CursorController.IsInsideBounds(exitButton_renderer.bounds))
-        {
-            if (playerInputs.mouseLeftHold)
-            {
-                InvertExitButton(invert: false);
-            }
-            else
-            {
-                InvertExitButton(invert: true);
-            }
-            if (playerInputs.mouseLeftUp)
-            {
-                SpyBrain.ToggleNotepad(false);
-            }
-        }
-        else
-        {
-            InvertExitButton(invert: false);
         }
     }
     public void InitProfile(TraitorProfile traitorProfile)
@@ -359,15 +350,32 @@ public class Page : MonoBehaviour
                                 Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
                                 previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
                                 activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
-
+                                playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
                                 isPlayerWriteTextPreviewSet[activePlayerWriteRowIndex] = false;
 
-                                playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
                             }
                         }
                     }
                     break;
                 }
+            }
+            break;
+
+            case PageType.Start:
+            {
+                previewPlayerWriteIndex %= 2;
+                if (previewPlayerWriteIndex == 0)
+                {
+                    previewPlayerWriteText = "Start";
+                }
+                else
+                {
+                    previewPlayerWriteText = "Quit";
+                }
+
+                activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
+                playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
+                isPlayerWriteTextPreviewSet[0] = false;
             }
             break;
         }
@@ -385,6 +393,7 @@ public class Page : MonoBehaviour
                     {
                         previewPlayerWriteText = trip.stationsDataArray[previewPlayerWriteIndex].stationName;
                         activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
+                        
                     }
                     break;
                 }
@@ -410,6 +419,13 @@ public class Page : MonoBehaviour
 
                     }
                 }
+            }
+            break;
+
+            case PageType.Start:
+            {
+                previewPlayerWriteText = previewPlayerWriteIndex % 2 == 0 ? "Start" : "Quit";
+                activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
             }
             break;
         }
@@ -468,12 +484,13 @@ public class Page : MonoBehaviour
         {
             case PageType.Profile:
             case PageType.ColorKey:
+            case PageType.Start:
             {
                 for(int i = 0; i < playerWriteTextRenderers.Length; i++)
                 {
                     if (isPlayerWriteTextPreviewSet[i]) continue;
-                    AtlasTextRenderer behaviourTextRend = playerWriteTextRenderers[i];
-                    behaviourTextRend.UpdateAppearTextAlpha(normAmount: 0.5f, appear, ref clock);
+                    AtlasTextRenderer playerWriteTextRend = playerWriteTextRenderers[i];
+                    playerWriteTextRend.UpdateAppearTextAlpha(normAmount: 0.5f, appear, ref clock);
                     if (clock <= 0) isPlayerWriteTextPreviewSet[i] = true;
                 }
             }
@@ -493,6 +510,16 @@ public class Page : MonoBehaviour
     {
         if (paperCornerRightButtonRenderer == null) return;
         InvertButton(invert, paperCornerRightButtonRenderer);
+    }
+    public void InvertSwitchLeftButton(bool invert)
+    {
+        if (switchLeftButtonRenderer == null) return;
+        InvertButton(invert, switchLeftButtonRenderer);
+    }
+    public void InvertSwitchRightButton(bool invert)
+    {
+        if (switchRightButtonRenderer == null) return;
+        InvertButton(invert, switchRightButtonRenderer);
     }
     public void UpdateMugShotReveal(float t)
     {

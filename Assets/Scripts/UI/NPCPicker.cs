@@ -87,7 +87,7 @@ public class NPCPicker : MonoBehaviour
                 {
                     AtlasRenderer npcIconRend = iconRenderers[i];
 
-                    if (CursorController.IsInsideBounds(npcIconRend.bounds))
+                    if (CursorController.IsInsideBounds(npcIconRend.bounds, isClickable: true))
                     {
                         npcIconRend.custom.w = 1;
 
@@ -146,7 +146,7 @@ public class NPCPicker : MonoBehaviour
                     }
                 }
 
-                if (canClose && (playerInputs.mouseLeftUp || playerInputs.mouseRightUp) && !CursorController.IsInsideBounds(paletteRenderer.bounds))
+                if (canClose && (playerInputs.mouseLeftUp || playerInputs.mouseRightUp) && !CursorController.IsInsideBounds(paletteRenderer.bounds, isClickable: false))
                 {
                     Close();
                 }

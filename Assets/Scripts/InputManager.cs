@@ -77,6 +77,8 @@ public class InputManager : MonoBehaviour
         };
 
         notepadToggle_action.started += context => playerInputs.notepadKeyDown = true;
+        notepadToggle_action.canceled += context => playerInputs.notepadKeyUp = true;
+
         notepadFlipPage_action.started += context =>
         {
             Vector2 move = context.ReadValue<Vector2>();
@@ -179,6 +181,7 @@ public class InputManager : MonoBehaviour
     private void LateUpdate()
     {
         playerInputs.notepadKeyDown = false;
+        playerInputs.notepadKeyUp = false;
         playerInputs.spacebarDown = false;
         playerInputs.ticketCheckKeyDown = false;
         playerInputs.ticketCheckKeyUp = false;

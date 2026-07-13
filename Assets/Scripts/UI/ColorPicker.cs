@@ -112,7 +112,7 @@ public class ColorPicker : MonoBehaviour
                 {
                     AtlasRenderer colorRend = colorRenderers[i];
 
-                    if (CursorController.IsInsideBounds(colorRend.bounds) && colorRend.spriteIndex != LOCK_SPRITE_INDEX)
+                    if (CursorController.IsInsideBounds(colorRend.bounds, isClickable: true) && colorRend.spriteIndex != LOCK_SPRITE_INDEX)
                     {
                         colorRend.custom.w = 0;
 
@@ -164,7 +164,7 @@ public class ColorPicker : MonoBehaviour
                     }
                 }
 
-                if (canClose && (playerInputs.mouseLeftDown || playerInputs.shiftDown) && !CursorController.IsInsideBounds(paletteRenderer.bounds))
+                if (canClose && (playerInputs.mouseLeftDown || playerInputs.shiftDown) && !CursorController.IsInsideBounds(paletteRenderer.bounds, isClickable: false))
                 {
                     Close();
                 }

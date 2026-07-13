@@ -99,7 +99,7 @@ public class UnlockPicker : MonoBehaviour
                 {
                     AtlasRenderer iconRend = iconRenderers[i];
 
-                    if (CursorController.IsInsideBounds(iconRend.bounds))
+                    if (CursorController.IsInsideBounds(iconRend.bounds, isClickable: true))
                     {
                         iconRend.custom.w = 1;
 
