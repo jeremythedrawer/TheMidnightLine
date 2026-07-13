@@ -158,13 +158,15 @@ Shader "Custom/s_atlasNPC"
                 int meridiaColorMask = saturate(bitMask & MERIDIA_COLOR_BIT);
                 half3 meridiaColor = meridiaColorMask * _MeridiaColor;
 
+                half3 blackColor = (1 - meridiaColorMask) * _BlackColor;
+
                 half mouseColor = i.custom.y;
                 half ticketCheckHover = i.custom.w;
 
                 outline = lerp(outline, 1 - outline, ticketCheckHover);
                 half3 finalColor = (tex.rgb * ticketCheckMask) + (outline * (1 - ticketCheckMask));
 
-                finalColor += diagonal + colKey0 + colKey1 + colKey2 + colKey01 + colKey02 + colKey12 + colKey012 + _BlackColor + meridiaColor;
+                finalColor += diagonal + colKey0 + colKey1 + colKey2 + colKey01 + colKey02 + colKey12 + colKey012 + blackColor + meridiaColor;
 
                 float bayerColMask = BayerX8(mouseColor * 0.5, i.positionHCS.y);
                 finalColor += bayerColMask;

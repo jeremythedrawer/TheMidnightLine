@@ -3,6 +3,7 @@ using System.Net.Sockets;
 using System.Threading;
 using UnityEngine;
 using static AtlasUI;
+using static Scenes;
 using static Spy;
 
 public class StartUI : MonoBehaviour
@@ -11,13 +12,15 @@ public class StartUI : MonoBehaviour
 
     public TripSO trip;
     public GameEventDataSO gameEventData;
-    public CameraStatsSO cameraStats;
+    public CameraStatsSO camStats;
     public PlayerInputsSO playerInputs;
     public NotepadData notepadData;
 
     public SceneData sceneData;
 
     public StartNotepad notepad;
+
+    public FadeBlack fadeBlack;
 
     [Header("Generated")]
     public Vector3 naturalMovePos;
@@ -32,25 +35,27 @@ public class StartUI : MonoBehaviour
 
     private void Start()
     {
-        FadeFromBlack();
         InitPOVUI();
     }
     private void OnEnable()
     {
-        OnFinishFadeFromBlack += SetToNoneState;
+        FadeBlack.OnFinishFadeFromBlack += SetToNoneState;
+        StartNotepad.OnStartGame += StartGame;
     }
     private void OnDisable()
     {
-        OnFinishFadeFromBlack -= SetToNoneState;
+        FadeBlack.OnFinishFadeFromBlack -= SetToNoneState;
+        StartNotepad.OnStartGame -= StartGame;
     }
     private void Update()
     {
         ChooseState();
         UpdateState();
+        fadeBlack.CheckToFadeFromBlack();
     }
-    private void FadeFromBlack()
+    private void StartGame()
     {
-        FadeBlack(fadeBlackMaterial, ctsFadeBlack, toFadeBlack: false);
+        fadeBlack.FadeToBlack("April 27, 1992, Meridia", SceneType.Trip, sceneIndex: 2);
     }
     private void SetToNoneState()
     {
@@ -106,17 +111,15 @@ public class StartUI : MonoBehaviour
                 {
                     notepadData.checkingNotepad = false;
                 }
-                if (playerInputs.notepadKeyUp)
-                {
-                    canExitState = true;
-                }
+                canExitState = true;
             }
             break;
 
             case UIState.None:
             {
-                if (CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds, isClickable: true))
+                if (canExitState && CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds, isClickable: true))
                 {
+                    ctsNotepad?.Cancel();
                     notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadHoverPos, Time.deltaTime * MOVE_DAMP);
 
                     notepad.activePage.InvertExitButton(invert: true);
@@ -131,6 +134,7 @@ public class StartUI : MonoBehaviour
                     notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadInactiveLocalPos, Time.deltaTime * MOVE_DAMP);
                     notepad.activePage.InvertExitButton(invert: false);
                 }
+                canExitState = true;
             }
             break;
         }
@@ -149,8 +153,8 @@ public class StartUI : MonoBehaviour
     }
     private void InitPOVUI()
     {
-        float halfCamWidth = cameraStats.camBounds.extents.x;
-        float halfCamHeight = cameraStats.camBounds.extents.y;
+        float halfCamWidth = camStats.camBounds.extents.x;
+        float halfCamHeight = camStats.camBounds.extents.y;
 
         NotepadActiveLocalPos = notepad.transform.localPosition;
         float binderBoundsOffsetX = notepad.bindingRingsRend.bounds.max.x - notepad.transform.position.x;
@@ -161,5 +165,7 @@ public class StartUI : MonoBehaviour
         float ySize = notepad.startPage.paperRenderer.bounds.size.y;
         Vector3 hoverSize = new Vector3(notepad.bindingRingsRend.bounds.size.x, ySize, 0.2f);
         notepad.transform.localPosition = NotepadInactiveLocalPos;
+
+        Shader.SetGlobalVector("_CameraSizeAndPos", new Vector4(camStats.camBounds.size.x, camStats.camBounds.size.y, camStats.camBounds.center.x, camStats.camBounds.center.y));
     }
 }

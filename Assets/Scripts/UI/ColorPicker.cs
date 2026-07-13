@@ -6,8 +6,19 @@ using UnityEngine;
 using static AtlasUI;
 public class ColorPicker : MonoBehaviour
 {
-    public const int COLOR_GRID_X_COUNT = 4;
-    public const int COLOR_GRID_Y_COUNT = 4;
+    public enum ColorPickerType
+    { 
+        Clue,
+        Main,
+    }
+
+    public enum SelectType
+    {
+        NPC,
+        Clue,
+        Main,
+        Meridia
+    }
 
     public TripSO trip;
     public ColorsSO colorsData;
@@ -16,6 +27,11 @@ public class ColorPicker : MonoBehaviour
     public AtlasRenderer[] colorRenderers;
     public AtlasRenderer paletteRenderer;
     
+    public ColorPickerType colorPickerType;
+
+    public int colorGridXCount = 4;
+    public int colorGridYCount = 4;
+
     [Header("Generated")]
     public AtlasRenderer selectedRenderer;
     public AtlasRenderer prevHoveredColorRenderer;
@@ -43,17 +59,13 @@ public class ColorPicker : MonoBehaviour
     public float tileWidth;
     public float tileHeight;
 
-    public bool openedFully;
+    public SelectType selectType;
     public bool canClose;
    
 
     private void OnEnable()
     {
-        Scenes.OnLoadTrip0 += Init;
-    }
-    private void OnDisable()
-    {
-        Scenes.OnLoadTrip0 -= Init;
+        Init();
     }
     private void Start()
     {
@@ -76,21 +88,9 @@ public class ColorPicker : MonoBehaviour
         colorsData.curState = PickerState.Closed;
         SetSelectableColors();
         SetOpenPosAndSize();
-        SceneController.SetColorPicker(this);
     }
     private void Update()
     {
-#if UNITY_EDITOR
-        if (!Application.isPlaying)
-        {
-            SetSelectableColors();
-        }
-        Shader.SetGlobalColor("_BlackColor", colorsData.blackColor.linear);
-        Shader.SetGlobalColor("_WhiteColor", colorsData.whiteColor.linear);
-        Shader.SetGlobalColor("_MeridiaColor", colorsData.meridiaColor.linear);
-
-        Shader.SetGlobalFloat("_DayNightFactor", colorsData.dayNightFactor);
-#endif
         UpdateState();
     }
     private void SetState(PickerState newState)
@@ -108,62 +108,143 @@ public class ColorPicker : MonoBehaviour
             case PickerState.Opening:
             case PickerState.Opened:
             {
-                for (int i = 0; i < activeColorAmount; i++)
-                {
-                    AtlasRenderer colorRend = colorRenderers[i];
 
-                    if (CursorController.IsInsideBounds(colorRend.bounds, isClickable: true) && colorRend.spriteIndex != LOCK_SPRITE_INDEX)
+                switch (selectType)
+                { 
+                    case SelectType.Clue:
                     {
-                        colorRend.custom.w = 0;
-
-                        if (playerInputs.mouseLeftUp)
+                        for (int i = 0; i < activeColorAmount; i++)
                         {
-                            if (openedFully)
-                            {
-                                SetNewColor(i);
-                            }
-                            else
-                            {
-                                SetNPCColor(i);
+                            AtlasRenderer colorRend = colorRenderers[i];
 
-                                if (colorRend.spriteIndex == TICK_SPRITE_INDEX)
+                            if (CursorController.IsInsideBounds(colorRend.bounds, isClickable: true) && colorRend.spriteIndex != LOCK_SPRITE_INDEX)
+                            {
+                                colorRend.custom.w = 0;
+
+                                if (playerInputs.mouseLeftUp)
                                 {
-                                    colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                                    SetNewClueColor(i);
                                 }
-                                else
+                                prevHoveredColorRenderer = colorRend;
+                                return;
+                            }
+                            else if (colorRend == prevHoveredColorRenderer)
+                            {
+                                colorRend.custom.w = 1;
+                                prevHoveredColorRenderer = null;
+                                return;
+                            }
+                        }
+                    }
+                    break;
+
+                    case SelectType.NPC:
+                    {
+                        for (int i = 0; i < activeColorAmount; i++)
+                        {
+                            AtlasRenderer colorRend = colorRenderers[i];
+
+                            if (CursorController.IsInsideBounds(colorRend.bounds, isClickable: true) && colorRend.spriteIndex != LOCK_SPRITE_INDEX)
+                            {
+                                colorRend.custom.w = 0;
+
+                                if (playerInputs.mouseLeftUp)
                                 {
-                                    if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
+                                    SetNPCColor(i);
+
+                                    if (colorRend.spriteIndex == TICK_SPRITE_INDEX)
                                     {
-                                        colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+                                        colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
                                     }
                                     else
                                     {
-                                        for (int j = 0; j < activeColorAmount; j++)
+                                        if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
                                         {
-                                            AtlasRenderer otherColorRend = colorRenderers[j];
-                                            if (otherColorRend != colorRend && otherColorRend.spriteIndex == TICK_SPRITE_INDEX)
-                                            {
-                                                otherColorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
-                                            }
+                                            colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
                                         }
+                                        else
+                                        {
+                                            for (int j = 0; j < activeColorAmount; j++)
+                                            {
+                                                AtlasRenderer otherColorRend = colorRenderers[j];
+                                                if (otherColorRend != colorRend && otherColorRend.spriteIndex == TICK_SPRITE_INDEX)
+                                                {
+                                                    otherColorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                                                }
+                                            }
 
-                                        colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+                                            colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+                                        }
                                     }
                                 }
+
+                                prevHoveredColorRenderer = colorRend;
+                                return;
+                            }
+                            else if (colorRend == prevHoveredColorRenderer)
+                            {
+                                colorRend.custom.w = 1;
+                                prevHoveredColorRenderer = null;
+                                return;
                             }
                         }
-
-                        prevHoveredColorRenderer = colorRend;
-                        return;
                     }
-                    else if (colorRend == prevHoveredColorRenderer)
+                    break;
+
+                    case SelectType.Main:
                     {
-                        colorRend.custom.w = 1;
-                        prevHoveredColorRenderer = null;
-                        return;
-                    }
-                }
+                        for (int i = 0; i < activeColorAmount; i++)
+                        {
+                            AtlasRenderer colorRend = colorRenderers[i];
 
+                            if (CursorController.IsInsideBounds(colorRend.bounds, isClickable: true) && colorRend.spriteIndex != LOCK_SPRITE_INDEX)
+                            {
+                                colorRend.custom.w = 0;
+
+                                if (playerInputs.mouseLeftUp)
+                                {
+                                    SetNewMainColor(i);
+                                }
+                                prevHoveredColorRenderer = colorRend;
+                                return;
+                            }
+                            else if (colorRend == prevHoveredColorRenderer)
+                            {
+                                colorRend.custom.w = 1;
+                                prevHoveredColorRenderer = null;
+                                return;
+                            }
+                        }
+                    }
+                    break;
+
+                    case SelectType.Meridia:
+                    {
+                        for (int i = 0; i < activeColorAmount; i++)
+                        {
+                            AtlasRenderer colorRend = colorRenderers[i];
+
+                            if (CursorController.IsInsideBounds(colorRend.bounds, isClickable: true) && colorRend.spriteIndex != LOCK_SPRITE_INDEX)
+                            {
+                                colorRend.custom.w = 0;
+
+                                if (playerInputs.mouseLeftUp)
+                                {
+                                    SetNewMeridiaColor(i);
+                                }
+                                prevHoveredColorRenderer = colorRend;
+                                return;
+                            }
+                            else if (colorRend == prevHoveredColorRenderer)
+                            {
+                                colorRend.custom.w = 1;
+                                prevHoveredColorRenderer = null;
+                                return;
+                            }
+                        }
+                    }
+                    break;
+                }
                 if (canClose && (playerInputs.mouseLeftDown || playerInputs.shiftDown) && !CursorController.IsInsideBounds(paletteRenderer.bounds, isClickable: false))
                 {
                     Close();
@@ -205,15 +286,24 @@ public class ColorPicker : MonoBehaviour
             AtlasRenderer colorRenderer = colorRenderers[i];
             colorRenderer.enabled = false;
         }
-        trip.selectedClueMarkerColors = new Color[]
+
+        if (colorPickerType == ColorPickerType.Clue)
         {
-            Color.black,
-            Color.black,
-            Color.black,
-        };
-        for (int i = 0; i < trip.selectedClueMarkerColors.Length - 1; i++)
+            trip.selectedClueMarkerColors = new Color[]
+            {
+                Color.black,
+                Color.black,
+                Color.black,
+            };
+            for (int i = 0; i < trip.selectedClueMarkerColors.Length - 1; i++)
+            {
+                Shader.SetGlobalColor("_ColorKey" + i, Color.black);
+            }
+            SceneController.SetClueColorPicker(this);
+        }
+        else
         {
-            Shader.SetGlobalColor("_ColorKey" + i, Color.black);
+            SceneController.SetMainColorPicker(this);
         }
     }
     public void SetOpenPosAndSize()
@@ -224,12 +314,12 @@ public class ColorPicker : MonoBehaviour
         Vector4 paletteBottomRightWPS = paletteRenderer.worldPivotsAndSizes[5];
         Vector2 firstColorRendPos = new Vector2(paletteBottomRightWPS.x + firstColorRend.worldPivotAndSize.x, paletteBottomRightWPS.y - firstColorRend.worldPivotAndSize.y);
 
-        for (int y = 0; y < COLOR_GRID_Y_COUNT;  y++)
+        for (int y = 0; y < colorGridYCount;  y++)
         {
-            int rowIndex = y * COLOR_GRID_X_COUNT;
+            int rowIndex = y * colorGridXCount;
             float yPos = firstColorRendPos.y + (y * GRID_GAP);
 
-            for (int x = 0; x < COLOR_GRID_X_COUNT; x++)
+            for (int x = 0; x < colorGridXCount; x++)
             {
                 int flatIndex = x + rowIndex;
 
@@ -267,17 +357,19 @@ public class ColorPicker : MonoBehaviour
         selectedRenderer = null;
         transform.SetParent(null);
     }
-    public void TurnOn(bool openFully, AtlasRenderer rend)
+    public void TurnOn(SelectType selectedType, AtlasRenderer rend)
     {
         paletteRenderer.enabled = true;
 
-        openedFully = openFully;
+        selectType = selectedType;
         selectedRenderer = rend;
 
-        if (openedFully)
+        if (selectType != SelectType.NPC)
         {
             activeColorAmount = colorRenderers.Length;
-            Color[] colorsToUse = colorsData.selectableClueColors;
+
+            Color[] colorsToUse =  colorPickerType == ColorPickerType.Clue ? colorsData.selectableClueColors : colorsData.selectableMainColors;
+
             for (int i = 0; i < activeColorAmount; i++)
             {
                 AtlasRenderer colorRend = colorRenderers[i];
@@ -355,8 +447,8 @@ public class ColorPicker : MonoBehaviour
         curWorldPos.x = selectedRendBounds.min.x;
         curWorldPos.y = selectedRendBounds.max.y;
         
-        curGridColCount = Mathf.Min(activeColorAmount, COLOR_GRID_X_COUNT);
-        curGridRowCount = Mathf.CeilToInt((float)activeColorAmount / (float)COLOR_GRID_X_COUNT);
+        curGridColCount = Mathf.Min(activeColorAmount, colorGridXCount);
+        curGridRowCount = Mathf.CeilToInt((float)activeColorAmount / (float)colorGridXCount);
 
         int curXGapCount = curGridColCount - 1;
         int curYGapCount = curGridRowCount - 1;
@@ -374,13 +466,27 @@ public class ColorPicker : MonoBehaviour
         paletteRenderer.width = tileWidth;
         paletteRenderer.height = tileHeight;
     }
-    public void SetNewColor(int index)
+    public void SetNewClueColor(int index)
     {
         Color selectedColor = colorsData.selectableClueColors[index];
         selectedRenderer.custom = selectedColor.linear;
         trip.selectedClueMarkerColors[trip.selectedColorMarkerIndex] = selectedColor;
 
         Shader.SetGlobalColor("_ColorKey" + trip.selectedColorMarkerIndex, selectedColor.linear);
+    }
+    public void SetNewMainColor(int index)
+    {
+        Color selectedColor = colorsData.selectableMainColors[index];
+        selectedRenderer.custom = selectedColor.linear;
+        colorsData.blackColor = selectedColor;
+        Shader.SetGlobalColor("_BlackColor", colorsData.blackColor.linear);
+    }
+    public void SetNewMeridiaColor(int index)
+    {
+        Color selectedColor = colorsData.selectableMainColors[index];
+        selectedRenderer.custom = selectedColor.linear;
+        colorsData.meridiaColor = selectedColor;
+        Shader.SetGlobalColor("_MeridiaColor", colorsData.meridiaColor.linear);
     }
     public void SetNPCColor(int index)
     {
@@ -437,14 +543,14 @@ public class ColorPicker : MonoBehaviour
             }
         }
     }
-    public void Open(AtlasRenderer rend, bool openAllColors)
+    public void Open(AtlasRenderer rend, SelectType selectedType)
     {
         if (colorsData.curState == PickerState.Closed)
         {
             ctsOpen?.Cancel();
             ctsOpen = new CancellationTokenSource();
 
-            TurnOn(openAllColors, rend);
+            TurnOn(selectedType, rend);
             Opening().Forget();
         }
     }

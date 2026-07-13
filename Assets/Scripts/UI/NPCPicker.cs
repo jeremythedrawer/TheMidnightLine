@@ -117,7 +117,7 @@ public class NPCPicker : MonoBehaviour
                                     }
                                     else
                                     {
-                                        SceneController.GetColorPicker().Open(selectedNPC.atlasRenderer, openAllColors: false);
+                                        SceneController.GetClueColorPicker().Open(selectedNPC.atlasRenderer, ColorPicker.SelectType.NPC);
                                     }
                                 }
                                 break;

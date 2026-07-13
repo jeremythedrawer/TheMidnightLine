@@ -102,8 +102,9 @@ Shader "Custom/s_atlasBayerRadial"
 
                 int meridiaColorMask = saturate(i.customBit & MERIDIA_COLOR_BIT);
                 float3 meridiaColor = meridiaColorMask * _MeridiaColor;
+                float3 blackColor = (1 - meridiaColorMask) * _BlackColor;
 
-                half3 finalColor = tex.r + _BlackColor + diagonal + meridiaColor;
+                half3 finalColor = tex.r + blackColor + diagonal + meridiaColor;
                 clip(alpha - 0.001);
 
                 return half4 (finalColor, 1);

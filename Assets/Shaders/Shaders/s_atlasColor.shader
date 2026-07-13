@@ -113,7 +113,9 @@ Shader "Custom/s_atlasColor"
                 int meridiaColorMask = saturate(bitMask & MERIDIA_COLOR_BIT);
                 float3 meridiaColor = meridiaColorMask * _MeridiaColor;
 
-                half3 finalCol = lerp((blackTex + col) * border + _BlackColor + meridiaColor, whiteTex * col + _BlackColor + meridiaColor, t);
+                float3 blackColor = (1 - meridiaColorMask) * _BlackColor;
+
+                half3 finalCol = lerp((blackTex + col) * border + blackColor + meridiaColor, whiteTex * col + blackColor + meridiaColor, t);
 
                 clip((tex.a) - 0.001);
                 return half4 (finalCol.rgb, 1);

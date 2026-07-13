@@ -168,7 +168,7 @@ public class Notepad : MonoBehaviour
         CreatePages();
         activePage = promptPage;
         notepadData.completedUnlocks = UnlockType.None;
-        colorPicker = SceneController.GetColorPicker();
+        colorPicker = SceneController.GetClueColorPicker();
 
         notepadData.curState = NotepadState.None;
         subState = SubState.None;
@@ -969,7 +969,7 @@ public class Notepad : MonoBehaviour
                                 notepadData.completedUnlocks |= UnlockType.Color;
                                 trip.selectedColorMarkerIndex = 0;
 
-                                colorPicker.Open(activePage.playerWriteRenderers[1], openAllColors: true);
+                                colorPicker.Open(activePage.playerWriteRenderers[1], ColorPicker.SelectType.Clue);
                                 activePage.UnlockColorRow(1);
 
                                 if (notepadData.completedUnlocks != trip.curUnlocks)
@@ -992,13 +992,13 @@ public class Notepad : MonoBehaviour
                             {
                                 notepadData.completedUnlocks |= UnlockType.MultiColor;
                                 trip.selectedColorMarkerIndex = 1;
-                                colorPicker.Open(activePage.playerWriteRenderers[2], openAllColors: true);
+                                colorPicker.Open(activePage.playerWriteRenderers[2], ColorPicker.SelectType.Clue);
                                 activePage.UnlockColorRow(2);
                             }
                         }
                         else if (activePage.activePlayerWriteRowIndex > 0 && activePage.playerWriteRenderers[activePage.activePlayerWriteRowIndex] && trip.selectedClueMarkerColors[activePage.activePlayerWriteRowIndex - 1] == Color.black)
                         {
-                            colorPicker.Open(activePage.playerWriteRenderers[activePage.activePlayerWriteRowIndex], openAllColors: true);
+                            colorPicker.Open(activePage.playerWriteRenderers[activePage.activePlayerWriteRowIndex], ColorPicker.SelectType.Clue);
                         }
                     }
                     break;
@@ -1142,6 +1142,28 @@ public class Notepad : MonoBehaviour
             activePage.InvertRightArrowButton(false);
         }
         if (atButton) return;
+
+        if (CursorController.IsInsideBounds(activePage.exitButton_renderer.bounds, isClickable: true))
+        {
+            if (playerInputs.mouseLeftHold)
+            {
+                activePage.InvertExitButton(invert: false);
+            }
+            else
+            {
+                activePage.InvertExitButton(invert: true);
+            }
+            if (playerInputs.mouseLeftUp)
+            {
+                notepadData.checkingNotepad = false;
+            }
+        }
+        else
+        {
+            activePage.InvertExitButton(invert: false);
+        }
+        if (atButton) return;
+
         if (sceneData.activeSceneType != SceneType.Trip) return;
 
         if (activePage.switchLeftButtonRenderer != null && CursorController.IsInsideBounds(activePage.switchLeftButtonRenderer.bounds, isClickable: true))
@@ -1176,31 +1198,11 @@ public class Notepad : MonoBehaviour
             {
                 activePage.InvertSwitchRightButton(true);
             }
+            atButton = true;
         }
         else
         {
             activePage.InvertSwitchRightButton(false);
-        }
-
-
-        if (CursorController.IsInsideBounds(activePage.exitButton_renderer.bounds, isClickable: true))
-        {
-            if (playerInputs.mouseLeftHold)
-            {
-                activePage.InvertExitButton(invert: false);
-            }
-            else
-            {
-                activePage.InvertExitButton(invert: true);
-            }
-            if (playerInputs.mouseLeftUp)
-            {
-                notepadData.checkingNotepad = false;
-            }
-        }
-        else
-        {
-            activePage.InvertExitButton(invert: false);
         }
     }
     public void SetLeftHandHoldingPencilSprite()

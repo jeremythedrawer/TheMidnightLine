@@ -14,12 +14,12 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ColorsSO
   diagonalTexture: {fileID: 2800000, guid: 978ce193cb5053f4a874f77a4a703843, type: 3}
   stripesTexture: {fileID: 2800000, guid: e79d2aed4797d95429fea934fa64538a, type: 3}
-  blackColor: {r: 0, g: 0.10793166, b: 0.20754719, a: 0}
+  blackColor: {r: 0.12379907, g: 0.036489844, b: 0.18867922, a: 1}
   whiteColor: {r: 1, g: 1, b: 1, a: 0}
-  meridiaColor: {r: 0.2924528, g: 0, b: 0.12374613, a: 0}
+  meridiaColor: {r: 0.29411766, g: 0, b: 0.1254902, a: 1}
   selectableClueColors:
-  - {r: 1, g: 0, b: 0.02300644, a: 1}
-  - {r: 0.8490566, g: 0.18312988, b: 0, a: 1}
+  - {r: 1, g: 0, b: 0.02352953, a: 1}
+  - {r: 0.7264151, g: 0.11756517, b: 0, a: 1}
   - {r: 0.69803923, g: 0.23454936, b: 0, a: 1}
   - {r: 0.9150943, g: 0.583126, b: 0, a: 1}
   - {r: 0.5176471, g: 0.3568661, b: 0, a: 1}
@@ -34,7 +34,16 @@ MonoBehaviour:
   - {r: 0.16628739, g: 0, b: 0.6132076, a: 1}
   - {r: 0.39397162, g: 0, b: 0.764151, a: 1}
   - {r: 0.4421626, g: 0, b: 0.45490196, a: 1}
-  dayNight: 4e-45
+  selectableMainColors:
+  - {r: 0.20784314, g: 0, b: 0, a: 1}
+  - {r: 0, g: 0.20073219, b: 0.20784314, a: 1}
+  - {r: 0.091635086, g: 0.20784314, b: 0, a: 1}
+  - {r: 0.11521495, g: 0, b: 0.20784314, a: 1}
+  - {r: 0, g: 0.056058574, b: 0.20784314, a: 1}
+  - {r: 0.20784314, g: 0.18921363, b: 0, a: 1}
+  - {r: 0, g: 0.20784314, b: 0.052657213, a: 1}
+  - {r: 0.20784314, g: 0, b: 0.16347982, a: 1}
+  - {r: 0, g: 0, b: 0, a: 1}
   dayNightFactor: 0.024
   curState: 5
-  enteredState: 4
+  enteredState: 5

@@ -14,6 +14,7 @@ public class ColorsSO : ScriptableObject
     public Color meridiaColor;
 
     public Color[] selectableClueColors;
+    public Color[] selectableMainColors;
 
     [Range(0,1)]public float dayNightFactor;
 

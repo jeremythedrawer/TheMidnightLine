@@ -591,6 +591,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void GetSlideDoorAtStation()
     {
+        if (!canOpenSlideDoor) return;
         Bounds spyBounds = atlasRenderer.bounds;
         SlideDoors foundSlideDoor = null;
         for (int i = 0; i < TrainController.ExteriorSlideDoors.Length; i++)
@@ -619,6 +620,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void GetSlideDoorInTrain()
     {
+        if (!canOpenSlideDoor) return;
         Bounds spyBounds = atlasRenderer.bounds;
         SlideDoors foundSlideDoor = null;
         for (int i = 0; i < TrainController.InteriorSlideDoors.Length; i++)
@@ -627,7 +629,7 @@ public class SpyBrain : MonoBehaviour
             Bounds slideDoorBounds = foundSlideDoor.boxCollider.bounds;
             if (spyBounds.min.x > slideDoorBounds.min.x && spyBounds.max.x < slideDoorBounds.max.x)
             {
-                foundSlideDoor = TrainController.ExteriorSlideDoors[i];
+                foundSlideDoor = TrainController.InteriorSlideDoors[i];
                 break;
             }
         }

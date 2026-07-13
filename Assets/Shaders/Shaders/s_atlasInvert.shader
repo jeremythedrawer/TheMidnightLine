@@ -101,7 +101,9 @@ Shader "Custom/s_atlasInvert"
                 int meridiaColorMask = saturate(bitMask & MERIDIA_COLOR_BIT);
                 float3 meridiaColor = meridiaColorMask * _MeridiaColor;
 
-                half3 finalColor = lerp(invertColor, color.rgb, bayerMask) + _BlackColor + meridiaColor;
+                float3 blackColor = (1 - meridiaColorMask) * _BlackColor;
+
+                half3 finalColor = lerp(invertColor, color.rgb, bayerMask) + blackColor + meridiaColor;
                 clip(alpha - 0.001);
 
                 return half4 (finalColor, 1);

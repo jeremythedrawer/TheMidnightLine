@@ -59,6 +59,8 @@ public class StartNotepad : MonoBehaviour
     public CancellationTokenSource ctsFadeBlack;
 
 
+    public static event Action OnStartGame;
+
     private void Start()
     {
         CreatePages();
@@ -542,8 +544,8 @@ public class StartNotepad : MonoBehaviour
                         {
                             if (activePage.playerWriteIndex == 0)
                             {
-                                FadeBlack(fadeBlackMaterial, ctsFadeBlack, toFadeBlack: true);
-                                Scenes.SetScene(sceneData, SceneType.Trip, sceneIndex: 2);
+                                OnStartGame?.Invoke();
+
                             }
                             else
                             {
@@ -582,7 +584,6 @@ public class StartNotepad : MonoBehaviour
     }
     private void HandleStationaryLeftHandMove()
     {
-        if (sceneData.activeSceneType != SceneType.Trip) return;
         if (activePage.playerWriteTextRenderers.Length > 0 && !atOffCameraPos)
         {
             float dist = (leftHand_renderer.transform.localPosition - leftHandTargetLocalPos).sqrMagnitude;
@@ -657,7 +658,6 @@ public class StartNotepad : MonoBehaviour
             activePage.InvertRightArrowButton(false);
         }
         if (atButton) return;
-        if (sceneData.activeSceneType != SceneType.Trip) return;
 
         if (activePage.switchLeftButtonRenderer != null && CursorController.IsInsideBounds(activePage.switchLeftButtonRenderer.bounds, isClickable: true))
         {
@@ -691,12 +691,13 @@ public class StartNotepad : MonoBehaviour
             {
                 activePage.InvertSwitchRightButton(true);
             }
+            atButton = true;
         }
         else
         {
             activePage.InvertSwitchRightButton(false);
         }
-
+        if (atButton) return;
         if (CursorController.IsInsideBounds(activePage.exitButton_renderer.bounds, isClickable: true))
         {
             if (playerInputs.mouseLeftHold)
@@ -734,11 +735,6 @@ public class StartNotepad : MonoBehaviour
         lastPageIndex = pages.Length - 1;
 
     }
-    private void SetFadeToBlack()
-    {
-        SetFadeBlack(fadeBlackMaterial, toFadeBlack: true);
-        Scenes.SetScene(sceneData, Scenes.SceneType.Trip, sceneIndex: 2);
-    }
     private bool ToFlipUp()
     {
         return ((playerInputs.notepadPreviewAnswerAndFlip.y == 1 && activePageIndex < lastPageIndex) || (subState & (NotepadSubState.WillFlipUp | NotepadSubState.IsFlippingUp)) != 0) && (subState & NotepadSubState.CanFlipUp) != 0;
@@ -749,10 +745,10 @@ public class StartNotepad : MonoBehaviour
     }
     private bool ToErase()
     {
-        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.notepadPreviewAnswerAndFlip.x != 0 && activePage.activePlayerWriteText != "") || (subState & NotepadSubState.EraseToggle) != 0;
+        return ( playerInputs.notepadPreviewAnswerAndFlip.x != 0 && activePage.activePlayerWriteText != "") || (subState & NotepadSubState.EraseToggle) != 0;
     }
     private bool ToWrite()
     {
-        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.spacebarDown && activePage.activePlayerWriteText == "") || (subState & NotepadSubState.WriteToggle) != 0;
+        return (playerInputs.spacebarDown && activePage.activePlayerWriteText == "") || (subState & NotepadSubState.WriteToggle) != 0;
     }
 }

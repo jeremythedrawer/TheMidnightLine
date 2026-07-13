@@ -39,7 +39,6 @@ public class CameraController : MonoBehaviour
         stats.camBounds.size = new Vector3(cam.orthographicSize * 2 * cam.aspect, cam.orthographicSize * 2, cam.farClipPlane + cam.nearClipPlane);
         stats.worldUnitsPerPixel = (cam.orthographicSize * 2) / Screen.height;
 
-        Shader.SetGlobalVector("_CameraSizeAndPos", new Vector4(stats.camBounds.size.x, stats.camBounds.size.y, stats.camBounds.center.x, stats.camBounds.center.y));
         SetCarriageSDFCompute();
     }
     private void OnDisable()

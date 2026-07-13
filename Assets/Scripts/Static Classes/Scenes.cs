@@ -24,7 +24,6 @@ public static class Scenes
     }
     private static async UniTask SettingScene(SceneData sceneData, SceneType sceneType, int sceneIndex)
     {
-        await UniTask.WaitForSeconds(BLACK_SCENE_TIME);
         sceneData.sceneLoaded = false;
 
         for (int i = 1; i < SceneManager.sceneCountInBuildSettings; i++)

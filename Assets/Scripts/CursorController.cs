@@ -27,6 +27,8 @@ public class CursorController : MonoBehaviour
     public SpyStatsSO spyStats;
     public TripSO trip;
 
+    public SceneData sceneData;
+
     public AtlasRenderer cursorRenderer;
     public AtlasTextRenderer cursorTag;
 
@@ -57,7 +59,7 @@ public class CursorController : MonoBehaviour
 
             CursorBounds = cursorRenderer.GetBounds();
 
-            if (spyStats.curLocationState != Spy.LocationState.Station)
+            if (sceneData.activeSceneType == Scenes.SceneType.Trip && spyStats.curLocationState != Spy.LocationState.Station)
             {
                 if (cursorIsMoving && SceneController.GetNPCPicker().curPickerState == PickerState.Closed) HoverNPC();
                 
@@ -82,7 +84,7 @@ public class CursorController : MonoBehaviour
                             }
                             else
                             {
-                                SceneController.GetColorPicker().Open(selectedNPC.atlasRenderer, openAllColors: false);
+                                SceneController.GetClueColorPicker().Open(selectedNPC.atlasRenderer, ColorPicker.SelectType.NPC);
                             }
                             selectedNPC.ToggleHover(false);
                         }

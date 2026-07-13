@@ -13,6 +13,8 @@ public class ScoreUI : MonoBehaviour
 
     public SceneData sceneData;
 
+    public FadeBlack fadeBlack;
+
     public AtlasTextRenderer scoreRenderer;
     public AtlasTextRenderer thankYouRenderer;
     public AtlasTextRenderer playAgainRenderer;
@@ -32,19 +34,18 @@ public class ScoreUI : MonoBehaviour
 
     private void Start()
     {
-        FadeFromBlack();
         GetNotepad();
         GetScore();
         SetTexts();
     }
     private void OnEnable()
     {
-        OnFinishFadeFromBlack += SetToNotepadState;
+        FadeBlack.OnFinishFadeFromBlack += SetToNotepadState;
         Notepad.OnFinishRevealingOutcomes += WriteTraitorsFoundScore;
     }
     private void OnDisable()
     {
-        OnFinishFadeFromBlack -= SetToNotepadState;
+        FadeBlack.OnFinishFadeFromBlack -= SetToNotepadState;
         Notepad.OnFinishRevealingOutcomes -= WriteTraitorsFoundScore;
     }
     private void Update()
@@ -53,6 +54,7 @@ public class ScoreUI : MonoBehaviour
         HandleTextSkips();
         HandleQuitButton();
         HandlePlayAgainButton();
+        fadeBlack.CheckToFadeFromBlack();
     }
     private void GetNotepad()
     {
@@ -74,10 +76,6 @@ public class ScoreUI : MonoBehaviour
         thankYouRenderer.SetText("");
         playAgainRenderer.SetText("");
         quitRenderer.SetText("");
-    }
-    private void FadeFromBlack()
-    {
-        FadeBlack(fadeBlackMaterial, ctsFadeBlack, toFadeBlack: false);
     }
     public void WriteTraitorsFoundScore()
     {
@@ -171,7 +169,7 @@ public class ScoreUI : MonoBehaviour
             playAgainRenderer.background_renderer.SetSliceCustom(w: 1);
             if (playerInputs.mouseLeftDown)
             {
-                SetFadeToBlack();
+                fadeBlack.FadeToBlack("April 27, 1992, Meridia", Scenes.SceneType.Trip, sceneIndex: 2);
                 gameEventData.OnReset.Raise();
             }
         }
@@ -180,11 +178,6 @@ public class ScoreUI : MonoBehaviour
             playAgainRenderer.SetColorText(Color.black);
             playAgainRenderer.background_renderer.SetSliceCustom(w: 0);
         }
-    }
-    private void SetFadeToBlack()
-    {
-        SetFadeBlack(fadeBlackMaterial, toFadeBlack: true);
-        Scenes.SetScene(sceneData, Scenes.SceneType.Trip , sceneIndex: 2);
     }
     private void HandleQuitButton()
     {

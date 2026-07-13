@@ -10,13 +10,14 @@ public class GameplayUI : MonoBehaviour
     const float APPEARING_TIME = 0.5f;
     const float ABILITY_ICON_APPEAR_TIME = 1f;
 
-
     public PlayerInputsSO playerInputs;
     public CameraStatsSO cameraStats;
     public SpyStatsSO spyStats;
     public GameEventDataSO gameEventData;
     public NotepadData notepadData;
     public TripSO trip;
+
+    public FadeBlack fadeBlack;
 
     public SceneData sceneData;
 
@@ -112,13 +113,13 @@ public class GameplayUI : MonoBehaviour
     {
         ChooseState();
         UpdateState();
+        fadeBlack.CheckToFadeFromBlack();
     }
     private void Init()
     {
         InitPOVUI();
         InitTicketIcons();
         InitAbiltiyIcons();
-        FadeFromBlack();
     }
     private void KeepNotepad()
     {
@@ -220,8 +221,10 @@ public class GameplayUI : MonoBehaviour
             break;
             case UIState.None:
             {
-                if (CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds, isClickable: true))
+                if (canExitState && CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds, isClickable: true))
                 {
+                    ctsNotepad?.Cancel();
+
                     notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadHoverPos, Time.deltaTime * MOVE_DAMP);
 
                     notepad.activePage.InvertExitButton(invert: true);
@@ -236,6 +239,7 @@ public class GameplayUI : MonoBehaviour
                     notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadInactiveLocalPos, Time.deltaTime * MOVE_DAMP);
                     notepad.activePage.InvertExitButton(invert: false);
                 }
+                canExitState = true;
             }
             break;
         }
@@ -248,7 +252,7 @@ public class GameplayUI : MonoBehaviour
             {
                 MoveUIElement(notepad.transform, NotepadInactiveLocalPos, ref ctsNotepad, newState);
                 notepad.ExitNotepad();
-                SceneController.GetColorPicker().Close();
+                SceneController.GetClueColorPicker().Close();
             }
             break;
             case UIState.Ticket:
@@ -330,14 +334,9 @@ public class GameplayUI : MonoBehaviour
 
         curTicketIcon?.InvertIcon(toggle: false);
     }
-    private void FadeFromBlack()
-    {
-        FadeBlack(fadeBlackMaterial, ctsFadeBlack, toFadeBlack: false);
-    }
     private void SetFadeToBlack()
     {
-        SetFadeBlack(fadeBlackMaterial, toFadeBlack: true);
-        Scenes.SetScene(sceneData, Scenes.SceneType.Score, sceneIndex: 3);
+        fadeBlack.FadeToBlack("Results", Scenes.SceneType.Score, sceneIndex: 3);
     }
     private void AppearNewAbilityIcon(UnlockType unlockType)
     {

@@ -71,6 +71,7 @@ MonoBehaviour:
   boundsOffset: {x: 0, y: -0.09166667, z: 0}
   hasText: 0
   erasingText: 0
+  completedWritingText: 0
   borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &5600323493904064240
 GameObject:
@@ -83,6 +84,7 @@ GameObject:
   - component: {fileID: 2960991171135392626}
   - component: {fileID: 3847394230642647657}
   - component: {fileID: 701178244806972408}
+  - component: {fileID: 512795658295950366}
   m_Layer: 0
   m_Name: FadeBlack
   m_TagString: Untagged
@@ -98,7 +100,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5600323493904064240}
   serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
   m_LocalPosition: {x: 0.025, y: -0.0132, z: 7.7279015}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
@@ -124,7 +126,7 @@ MeshRenderer:
   m_Enabled: 1
   m_CastShadows: 0
   m_ReceiveShadows: 1
-  m_DynamicOccludee: 1
+  m_DynamicOccludee: 0
   m_StaticShadowCaster: 0
   m_MotionVectors: 1
   m_LightProbeUsage: 1
@@ -162,3 +164,22 @@ MeshRenderer:
   m_SortingLayer: 0
   m_SortingOrder: 0
   m_AdditionalVertexStreams: {fileID: 0}
+--- !u!114 &512795658295950366
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5600323493904064240}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: b2d839b3667ced2468a91f2a72b686a0, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::FadeBlack
+  sceneData: {fileID: 11400000, guid: 3293190d726975e43a124435917a650c, type: 2}
+  fadeBlackMaterial: {fileID: 2100000, guid: d7e800c5760a0a94698f28dbdb5c3a9e, type: 2}
+  playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
+  textRenderer: {fileID: 1716753188756788558}
+  curSceneType: 0
+  curSceneIndex: 1
+  finishedFade: 0

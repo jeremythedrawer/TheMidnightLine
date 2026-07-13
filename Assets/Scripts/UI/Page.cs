@@ -159,7 +159,7 @@ public class Page : MonoBehaviour
 
                         if (playerInputs.mouseLeftDown)
                         {
-                            SceneController.GetColorPicker().Open(colorKeyRend, openAllColors: true);
+                            SceneController.GetClueColorPicker().Open(colorKeyRend, ColorPicker.SelectType.Clue);
                             SwitchActivePLayerWriteTextRenderer(i);
                             trip.selectedColorMarkerIndex = activePlayerWriteRowIndex;
 
@@ -174,7 +174,49 @@ public class Page : MonoBehaviour
 
                 if (playerInputs.shiftDown && activePlayerWriteRowIndex > 0)
                 {
-                    SceneController.GetColorPicker().Open(playerWriteRenderers[activePlayerWriteRowIndex], openAllColors: true);
+                    SceneController.GetClueColorPicker().Open(playerWriteRenderers[activePlayerWriteRowIndex], ColorPicker.SelectType.Clue);
+                }
+            }
+            break;
+
+            case PageType.Options:
+            {
+                for (int i = 0; i < playerWriteRenderers.Length; i++)
+                {
+                    AtlasRenderer colorKeyRend = playerWriteRenderers[i];
+                    bool foundColorKeyRend = false;
+                    if (!foundColorKeyRend && CursorController.IsInsideBounds(colorKeyRend.GetBounds(), isClickable: true))
+                    {
+                        if (playerInputs.mouseLeftDown)
+                        {
+                            if (i == 0)
+                            {
+                                SceneController.GetMainColorPicker().Open(colorKeyRend, ColorPicker.SelectType.Main);
+                            }
+                            else
+                            {
+                                SceneController.GetMainColorPicker().Open(colorKeyRend, ColorPicker.SelectType.Meridia);
+                            }
+                                SwitchActivePLayerWriteTextRenderer(i);
+                        }
+                        colorKeyRend.custom.w = 0;
+                    }
+                    else
+                    {
+                        colorKeyRend.custom.w = 1;
+                    }
+                }
+
+                if (playerInputs.shiftDown)
+                {
+                    if (activePlayerWriteRowIndex == 0)
+                    {
+                        SceneController.GetMainColorPicker().Open(playerWriteRenderers[activePlayerWriteRowIndex], ColorPicker.SelectType.Main);
+                    }
+                    else
+                    {
+                        SceneController.GetMainColorPicker().Open(playerWriteRenderers[activePlayerWriteRowIndex], ColorPicker.SelectType.Meridia);
+                    }
                 }
             }
             break;

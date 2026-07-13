@@ -7,7 +7,5 @@ using static Scenes;
 public class SceneData : ScriptableObject
 {
     public SceneType activeSceneType;
-
-
     public bool sceneLoaded;
 }

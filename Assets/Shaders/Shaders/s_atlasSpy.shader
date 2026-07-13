@@ -88,7 +88,7 @@ Shader "Custom/s_atlasSpy"
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 finalColor = color.r + _MeridiaColor + _BlackColor;
+                half3 finalColor = color.r + _MeridiaColor;
 
                 clip(color.a - 0.001);
                 return half4 (finalColor, 1);

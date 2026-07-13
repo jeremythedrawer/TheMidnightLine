@@ -30,7 +30,7 @@ public static class AtlasUI
     public const float OPEN_TIME_ROW_COL = 0.0625f;
     public const float GRID_GAP = 0.272f;
     public const float WRITE_LETTER_TIME = 0.1f;
-    public const float NOTEPAD_INACTIVE_OFFSET = 0.3f;
+    public const float NOTEPAD_INACTIVE_OFFSET = 0.37f;
     public static float TransitionTime = -Mathf.Log(TARGET_MARGIN) / MOVE_DAMP;
 
     public enum NotepadKeyframeState
@@ -161,29 +161,10 @@ public static class AtlasUI
 
     static float NaturalMoveClock;
 
-    public static event Action OnFinishFadeFromBlack;
     public static Dictionary<TripPrompt, string> PromptStringDict;
     public static void InvertButton(bool invert, AtlasRenderer renderer)
     {
         renderer.custom.x = invert ? 0 : 1;
-    }
-    public static void SetFadeBlack(Material fadeBlackMaterial, bool toFadeBlack)
-    {
-        fadeBlackMaterial.SetFloat("_Alpha", toFadeBlack ? 1 : 0);
-    }
-    public static void FadeBlack(Material fadeBlackMaterial, CancellationTokenSource cts, bool toFadeBlack)
-    {
-        cts?.Cancel();
-        cts = new CancellationTokenSource();
-
-        if (toFadeBlack)
-        {
-            FadingToBlack(fadeBlackMaterial, cts).Forget();
-        }
-        else
-        {
-            FadingFromBlack(fadeBlackMaterial, cts).Forget();
-        }
     }
     public static void UpdateNaturalPos(Vector3 activePos,  ref Vector3 naturalMovePos)
     {
@@ -221,41 +202,6 @@ public static class AtlasUI
         catch (OperationCanceledException)
         {
         }
-    }
-    private static async UniTask FadingToBlack(Material fadeBlackMaterial, CancellationTokenSource cts)
-    {
-        try
-        {
-            float elapsedTime = 0;
-
-            while(elapsedTime < FADE_BLACK_DURATION)
-            {
-                float t = elapsedTime / FADE_BLACK_DURATION;
-                fadeBlackMaterial.SetFloat("_Alpha", t);
-                elapsedTime += Time.deltaTime;
-                await UniTask.Yield(cts.Token);
-            }
-            fadeBlackMaterial.SetFloat("_Alpha", 1);
-        }
-        catch (OperationCanceledException) { }
-    }
-    private static async UniTask FadingFromBlack(Material fadeBlackMaterial, CancellationTokenSource cts)
-    {
-        try
-        {
-            float elapsedTime = FADE_BLACK_DURATION;
-
-            while(elapsedTime > 0)
-            {
-                float t = elapsedTime / FADE_BLACK_DURATION;
-                fadeBlackMaterial.SetFloat("_Alpha", t);
-                elapsedTime -= Time.deltaTime;
-                await UniTask.Yield(cts.Token);
-            }
-            fadeBlackMaterial.SetFloat("_Alpha", 0);
-            OnFinishFadeFromBlack?.Invoke();
-        }
-        catch (OperationCanceledException) { }
     }
     public static Behaviours GetBehaviourAtIndex(Behaviours behaviours, int index)
     {
