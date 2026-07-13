@@ -30,7 +30,7 @@ public static class AtlasUI
     public const float OPEN_TIME_ROW_COL = 0.0625f;
     public const float GRID_GAP = 0.272f;
     public const float WRITE_LETTER_TIME = 0.1f;
-    public const float NOTEPAD_INACTIVE_OFFSET = 0.37f;
+    public const float NOTEPAD_INACTIVE_OFFSET = 0.39f;
     public static float TransitionTime = -Mathf.Log(TARGET_MARGIN) / MOVE_DAMP;
 
     public enum NotepadKeyframeState

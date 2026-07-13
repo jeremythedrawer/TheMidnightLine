@@ -55,7 +55,7 @@ public class StartUI : MonoBehaviour
     }
     private void StartGame()
     {
-        fadeBlack.FadeToBlack("April 27, 1992, Meridia", SceneType.Trip, sceneIndex: 2);
+        fadeBlack.FadeToBlack("April 27, 1999, Meridia", SceneType.Trip, sceneIndex: 2);
     }
     private void SetToNoneState()
     {

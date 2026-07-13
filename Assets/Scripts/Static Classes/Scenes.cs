@@ -41,7 +41,7 @@ public static class Scenes
         while (!asyncLoad.isDone) await UniTask.Yield();
 
         Scene newScene = SceneManager.GetSceneByBuildIndex(sceneIndex);
-        
+
         SceneManager.SetActiveScene(newScene);
 
         sceneData.activeSceneType = sceneType;

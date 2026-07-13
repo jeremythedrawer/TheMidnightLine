@@ -611,7 +611,7 @@ public class SpawnMaster : MonoBehaviour
     }
     private async UniTask UpdatingSky()
     {
-        float nextDayNight = trip.dayNightValues[trip.ticketsCheckedTotal];
+        float nextDayNight = trip.dayNightValues[Mathf.Min(trip.ticketsCheckedTotal, trip.dayNightValues.Length - 1)];
         float elapsedTime = 0;
         float dayNight = curDayNight;
         try

@@ -169,7 +169,7 @@ public class ScoreUI : MonoBehaviour
             playAgainRenderer.background_renderer.SetSliceCustom(w: 1);
             if (playerInputs.mouseLeftDown)
             {
-                fadeBlack.FadeToBlack("April 27, 1992, Meridia", Scenes.SceneType.Trip, sceneIndex: 2);
+                fadeBlack.FadeToBlack("April 27, 1999, Meridia", Scenes.SceneType.Trip, sceneIndex: 2);
                 gameEventData.OnReset.Raise();
             }
         }

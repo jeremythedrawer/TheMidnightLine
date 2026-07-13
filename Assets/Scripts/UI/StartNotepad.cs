@@ -551,6 +551,7 @@ public class StartNotepad : MonoBehaviour
                             {
                                 Application.Quit();
                             }
+                            notepadData.checkingNotepad = false;
                         }
                     }
                     break;

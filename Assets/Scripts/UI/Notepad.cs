@@ -12,8 +12,7 @@ public class Notepad : MonoBehaviour
     const int HOLDING_PENCIL_SPRITE_INDEX = 16;
 
     public const float WRITE_LETTER_TIME = 0.1f;
-    public const int MIN_STATION_STOPS = 1;
-    public const int MAX_STATION_STOPS = 2;
+    public const int MIN_STATION_STOPS = 2;
 
     const float LEFTHAND_DAMPING = 7f;
     const float PENCIL_DISTANCE_THRESHOLD = 0.05f;
@@ -614,7 +613,9 @@ public class Notepad : MonoBehaviour
                 {
                     activePage.UpdateMugShotReveal(1);
                     subState &= ~(SubState.RevealToggle);
-                    
+
+                    activePage.WriteForPlayerWriteText(trip.stationsDataArray[activeTraitorProfile.npcProfile.disembarkingStationIndex].name);
+
                     traitorOutcomesRevealed++;
 
                     if (traitorOutcomesRevealed == trip.traitorProfiles.Length)
@@ -835,7 +836,7 @@ public class Notepad : MonoBehaviour
                 int stationsLeft = trip.stationsDataArray.Length - i;
                 float normSpawnIndex = UnityEngine.Random.Range(0, stationsLeft + 1) / (float)stationsLeft;
                 float gaussianNormSpawnIndex = NormalGaussianValue(normSpawnIndex);
-                traitorProfile.disembarkingStationIndex = i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft) + MIN_STATION_STOPS;
+                traitorProfile.disembarkingStationIndex = Mathf.Min(i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft) + MIN_STATION_STOPS, trip.stationsDataArray.Length - 1);
 
                 NPCSO traitor = trip.npcDataArray[traitorProfile.npcPrefabIndex];
 
@@ -897,7 +898,7 @@ public class Notepad : MonoBehaviour
                 int stationsLeft = trip.stationsDataArray.Length - i;
                 float normSpawnIndex = (float)j / (float)station.bystanderSpawnCount;
                 float gaussianNormSpawnIndex = NormalGaussianValue(normSpawnIndex);
-                bystanderProfile.disembarkingStationIndex = i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft);
+                bystanderProfile.disembarkingStationIndex = Mathf.Min(i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft), trip.stationsDataArray.Length - 1);
 
                 station.bystanderProfiles[j] = bystanderProfile;
             }

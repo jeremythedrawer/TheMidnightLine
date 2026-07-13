@@ -63,6 +63,7 @@ public class NPCBrain : MonoBehaviour
     public Behaviours curBehaviour;
     public NPCState curState;
     public NPCPath curPath;
+    public NPCPath prevPath;
     public Role role;
 
     public int smokerRoomIndex;
@@ -458,6 +459,7 @@ public class NPCBrain : MonoBehaviour
     {
         if (curPath == newPath) return;
         ExitPath();
+        prevPath = curPath;
         curPath = newPath;
         EnterPath();
     }
@@ -633,6 +635,10 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCPath.StandingAtStation:
             {
+                if (prevPath == NPCPath.ToSlideDoor && spyStats.curLocationState != Spy.LocationState.Station)
+                {
+                    SetPath(NPCPath.ToSlideDoor);
+                }
             }
             break;
             case NPCPath.SittingAtStation:

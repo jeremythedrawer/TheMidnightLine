@@ -175,6 +175,24 @@ public class SpyBrain : MonoBehaviour
             case SpyState.Idle:
             {
                 atlasRenderer.PlayClip(ref curClip);
+
+                if (canOpenSlideDoor && !notepadData.checkingNotepad)
+                {
+                    switch (stats.curLocationState)
+                    {
+                        case LocationState.Station:
+                        {
+                            GetSlideDoorAtStation();
+                        }
+                        break;
+
+                        case LocationState.Carriage:
+                        {
+                            GetSlideDoorInTrain();
+                        }
+                        break;
+                    }
+                }
             }
             break;
             case SpyState.Walk:
@@ -188,7 +206,7 @@ public class SpyBrain : MonoBehaviour
                 stats.curWorldPos.z = transform.position.z;
                 transform.position = stats.curWorldPos;
 
-                if (canOpenSlideDoor)
+                if (canOpenSlideDoor && !notepadData.checkingNotepad)
                 {
                     switch (stats.curLocationState)
                     { 
@@ -591,18 +609,34 @@ public class SpyBrain : MonoBehaviour
     }
     private void GetSlideDoorAtStation()
     {
-        if (!canOpenSlideDoor) return;
         Bounds spyBounds = atlasRenderer.bounds;
         SlideDoors foundSlideDoor = null;
-        for (int i = 0; i < TrainController.ExteriorSlideDoors.Length; i++)
+
+        if (trip.stationsDataArray[trainStats.curStationIndex].isFrontOfTrain)
         {
-            SlideDoors slideDoor = TrainController.ExteriorSlideDoors[i];
-            Bounds slideDoorBounds = slideDoor.boxCollider.bounds;
-            if (spyBounds.min.x > slideDoorBounds.min.x && spyBounds.max.x < slideDoorBounds.max.x)
+            for (int i = 0; i < TrainController.ExteriorSlideDoors.Length; i++)
             {
-                if (slideDoor.curState == SlideDoors.State.Unlocked || slideDoor.curState == SlideDoors.State.Opened)
+                SlideDoors slideDoor = TrainController.ExteriorSlideDoors[i];
+                Bounds slideDoorBounds = slideDoor.boxCollider.bounds;
+                if (spyBounds.min.x > slideDoorBounds.min.x && spyBounds.max.x < slideDoorBounds.max.x)
                 {
-                    foundSlideDoor = TrainController.ExteriorSlideDoors[i];
+                    if (slideDoor.curState == SlideDoors.State.Unlocked || slideDoor.curState == SlideDoors.State.Opened)
+                    {
+                        foundSlideDoor = TrainController.ExteriorSlideDoors[i];
+                        break;
+                    }
+                }
+            }
+        }
+        else
+        {
+            for (int i = 0; i < TrainController.InteriorSlideDoors.Length; i++)
+            {
+                foundSlideDoor = TrainController.InteriorSlideDoors[i];
+                Bounds slideDoorBounds = foundSlideDoor.boxCollider.bounds;
+                if (spyBounds.min.x > slideDoorBounds.min.x && spyBounds.max.x < slideDoorBounds.max.x)
+                {
+                    foundSlideDoor = TrainController.InteriorSlideDoors[i];
                     break;
                 }
             }
@@ -620,7 +654,6 @@ public class SpyBrain : MonoBehaviour
     }
     private void GetSlideDoorInTrain()
     {
-        if (!canOpenSlideDoor) return;
         Bounds spyBounds = atlasRenderer.bounds;
         SlideDoors foundSlideDoor = null;
         for (int i = 0; i < TrainController.InteriorSlideDoors.Length; i++)
@@ -637,6 +670,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void EnableCanOpenSlideDoor()
     {
+        slideDoors = null;
         canOpenSlideDoor = true;
     }
     private void DisableCanOpenSlideDoor()
@@ -645,7 +679,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void OpenSlideDoors()
     {
-        if (slideDoors == null || !canOpenSlideDoor) return;
+        if (slideDoors == null || !canOpenSlideDoor || notepadData.checkingNotepad) return;
 
         switch(slideDoors.curState)
         {

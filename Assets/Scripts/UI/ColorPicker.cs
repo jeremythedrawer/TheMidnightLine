@@ -61,8 +61,9 @@ public class ColorPicker : MonoBehaviour
 
     public SelectType selectType;
     public bool canClose;
-   
 
+    public int selectedMeridiaColorIndex;
+    public int selectedMainColorIndex;
     private void OnEnable()
     {
         Init();
@@ -197,7 +198,9 @@ public class ColorPicker : MonoBehaviour
                         {
                             AtlasRenderer colorRend = colorRenderers[i];
 
-                            if (CursorController.IsInsideBounds(colorRend.bounds, isClickable: true) && colorRend.spriteIndex != LOCK_SPRITE_INDEX)
+                            if (selectedMainColorIndex == i || selectedMeridiaColorIndex == i) continue;
+                            
+                            if (CursorController.IsInsideBounds(colorRend.bounds, isClickable: true))
                             {
                                 colorRend.custom.w = 0;
 
@@ -206,13 +209,11 @@ public class ColorPicker : MonoBehaviour
                                     SetNewMainColor(i);
                                 }
                                 prevHoveredColorRenderer = colorRend;
-                                return;
                             }
                             else if (colorRend == prevHoveredColorRenderer)
                             {
                                 colorRend.custom.w = 1;
                                 prevHoveredColorRenderer = null;
-                                return;
                             }
                         }
                     }
@@ -223,8 +224,8 @@ public class ColorPicker : MonoBehaviour
                         for (int i = 0; i < activeColorAmount; i++)
                         {
                             AtlasRenderer colorRend = colorRenderers[i];
-
-                            if (CursorController.IsInsideBounds(colorRend.bounds, isClickable: true) && colorRend.spriteIndex != LOCK_SPRITE_INDEX)
+                            if (selectedMainColorIndex == i || selectedMeridiaColorIndex == i) continue;
+                            if (CursorController.IsInsideBounds(colorRend.bounds, isClickable: true))
                             {
                                 colorRend.custom.w = 0;
 
@@ -233,13 +234,11 @@ public class ColorPicker : MonoBehaviour
                                     SetNewMeridiaColor(i);
                                 }
                                 prevHoveredColorRenderer = colorRend;
-                                return;
                             }
                             else if (colorRend == prevHoveredColorRenderer)
                             {
                                 colorRend.custom.w = 1;
                                 prevHoveredColorRenderer = null;
-                                return;
                             }
                         }
                     }
@@ -305,6 +304,12 @@ public class ColorPicker : MonoBehaviour
         {
             SceneController.SetMainColorPicker(this);
         }
+
+        if (colorPickerType == ColorPickerType.Main)
+        {
+            SetNewMainColor(0);
+            SetNewMeridiaColor(1);
+        }
     }
     public void SetOpenPosAndSize()
     {
@@ -364,36 +369,102 @@ public class ColorPicker : MonoBehaviour
         selectType = selectedType;
         selectedRenderer = rend;
 
-        if (selectType != SelectType.NPC)
+        switch(selectedType)
         {
-            activeColorAmount = colorRenderers.Length;
-
-            Color[] colorsToUse =  colorPickerType == ColorPickerType.Clue ? colorsData.selectableClueColors : colorsData.selectableMainColors;
-
-            for (int i = 0; i < activeColorAmount; i++)
+            case SelectType.NPC:
             {
-                AtlasRenderer colorRend = colorRenderers[i];
-                colorRend.custom = colorsToUse[i].linear;
-                colorRend.customBit = 0;
-                colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
-                colorRend.enabled = true;
-            }
+                activeColorAmount = trip.selectedClueMarkerColors.Length + 1;
 
-        }
-        else
-        {
-            activeColorAmount = trip.selectedClueMarkerColors.Length + 1;
-
-            for (int i = 0; i < activeColorAmount; i++)
-            {
-                AtlasRenderer colorRend = colorRenderers[i];
-                colorRend.enabled = true;
-
-                int colorIndex = i - 1;
-
-                if (i == 0)
+                for (int i = 0; i < activeColorAmount; i++)
                 {
-                    if ((selectedRenderer.customBit & ((int)ColorBits.Diagonal)) != 0)
+                    AtlasRenderer colorRend = colorRenderers[i];
+                    colorRend.enabled = true;
+
+                    int colorIndex = i - 1;
+
+                    if (i == 0)
+                    {
+                        if ((selectedRenderer.customBit & ((int)ColorBits.Diagonal)) != 0)
+                        {
+                            colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+                        }
+                        else
+                        {
+                            colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                        }
+
+                        colorRend.customBit |= (int)ColorBits.Diagonal;
+
+                        colorRend.custom.x = 0;
+                        colorRend.custom.y = 0;
+                        colorRend.custom.z = 0;
+                    }
+                    else if (colorIndex < trip.unlockedColorMarkerCount)
+                    {
+                        if ((selectedRenderer.customBit & (1 << colorIndex)) != 0)
+                        {
+                            colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+                        }
+                        else
+                        {
+
+                            colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                        }
+
+                        Color color = trip.selectedClueMarkerColors[colorIndex].linear;
+
+                        colorRend.customBit = 0;
+
+                        colorRend.custom.x = color.r;
+                        colorRend.custom.y = color.g;
+                        colorRend.custom.z = color.b;
+                    }
+                    else
+                    {
+                        colorRend.UpdateSpriteInputsByIndex(LOCK_SPRITE_INDEX);
+
+                        colorRend.customBit = 0;
+
+                        colorRend.custom.x = 0;
+                        colorRend.custom.y = 0;
+                        colorRend.custom.z = 0;
+                    }
+                    colorRend.custom.w = 1;
+                }
+            }
+            break;
+
+            case SelectType.Clue:
+            {
+                activeColorAmount = colorRenderers.Length;
+
+                Color[] colorsToUse = colorPickerType == ColorPickerType.Clue ? colorsData.selectableClueColors : colorsData.selectableMainColors;
+
+                for (int i = 0; i < activeColorAmount; i++)
+                {
+                    AtlasRenderer colorRend = colorRenderers[i];
+                    colorRend.custom = colorsToUse[i].linear;
+                    colorRend.customBit = 0;
+                    colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                    colorRend.enabled = true;
+                }
+            }
+            break;
+
+            case SelectType.Meridia:
+            case SelectType.Main:
+            {
+                activeColorAmount = colorRenderers.Length;
+
+                Color[] colorsToUse = colorPickerType == ColorPickerType.Clue ? colorsData.selectableClueColors : colorsData.selectableMainColors;
+
+                for (int i = 0; i < activeColorAmount; i++)
+                {
+                    AtlasRenderer colorRend = colorRenderers[i];
+                    colorRend.custom = colorsToUse[i].linear;
+                    colorRend.customBit = 0;
+                    colorRend.enabled = true;
+                    if (i == selectedMainColorIndex || i == selectedMeridiaColorIndex)
                     {
                         colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
                     }
@@ -401,45 +472,9 @@ public class ColorPicker : MonoBehaviour
                     {
                         colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
                     }
-
-                    colorRend.customBit |= (int)ColorBits.Diagonal;
-
-                    colorRend.custom.x = 0;
-                    colorRend.custom.y = 0;
-                    colorRend.custom.z = 0;
                 }
-                else if (colorIndex < trip.unlockedColorMarkerCount)
-                {
-                    if ((selectedRenderer.customBit & (1 << colorIndex)) != 0)
-                    {
-                        colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
-                    }
-                    else
-                    {
-
-                        colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
-                    }
-
-                    Color color = trip.selectedClueMarkerColors[colorIndex].linear;
-
-                    colorRend.customBit = 0;
-
-                    colorRend.custom.x = color.r;
-                    colorRend.custom.y = color.g;
-                    colorRend.custom.z = color.b;
-                }
-                else
-                {
-                    colorRend.UpdateSpriteInputsByIndex(LOCK_SPRITE_INDEX);
-
-                    colorRend.customBit = 0;
-
-                    colorRend.custom.x = 0;
-                    colorRend.custom.y = 0;
-                    colorRend.custom.z = 0;
-                }
-                colorRend.custom.w = 1;
             }
+            break;
         }
 
         Bounds selectedRendBounds = selectedRenderer.GetBounds();
@@ -476,15 +511,34 @@ public class ColorPicker : MonoBehaviour
     }
     public void SetNewMainColor(int index)
     {
+        selectedMainColorIndex = index;
         Color selectedColor = colorsData.selectableMainColors[index];
-        selectedRenderer.custom = selectedColor.linear;
+        if (selectedRenderer != null) selectedRenderer.custom = selectedColor.linear;
+
+        for (int i = 0; i < activeColorAmount; i++)
+        {
+            colorRenderers[i].UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+            colorRenderers[i].custom.w = 1;
+        }
+        colorRenderers[selectedMainColorIndex].UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+        colorRenderers[selectedMeridiaColorIndex].UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
         colorsData.blackColor = selectedColor;
+        
         Shader.SetGlobalColor("_BlackColor", colorsData.blackColor.linear);
+
     }
     public void SetNewMeridiaColor(int index)
     {
-        Color selectedColor = colorsData.selectableMainColors[index];
-        selectedRenderer.custom = selectedColor.linear;
+        selectedMeridiaColorIndex = index;
+        Color selectedColor = colorsData.selectableMainColors[selectedMeridiaColorIndex];
+        if (selectedRenderer != null) selectedRenderer.custom = selectedColor.linear;
+        for (int i = 0; i < activeColorAmount; i++)
+        {
+            colorRenderers[i].UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+            colorRenderers[i].custom.w = 1;
+        }
+        colorRenderers[selectedMainColorIndex].UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+        colorRenderers[selectedMeridiaColorIndex].UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
         colorsData.meridiaColor = selectedColor;
         Shader.SetGlobalColor("_MeridiaColor", colorsData.meridiaColor.linear);
     }

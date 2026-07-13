@@ -347,6 +347,15 @@ public class Page : MonoBehaviour
 
         activePlayerWriteTextRenderer.WriteText(activePlayerWriteText, Notepad.WRITE_LETTER_TIME);
     }
+    public void WriteForPlayerWriteText(string text)
+    {
+        playerWriteIndex = previewPlayerWriteIndex;
+        activePlayerWriteText = text;
+        playerWriteTexts[activePlayerWriteRowIndex] = activePlayerWriteText;
+        playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePlayerWriteText);
+
+        activePlayerWriteTextRenderer.WriteText(activePlayerWriteText, Notepad.WRITE_LETTER_TIME);
+    }
     public void ErasePlayerWriteText()
     {
         playerWriteTexts[activePlayerWriteRowIndex] = "";

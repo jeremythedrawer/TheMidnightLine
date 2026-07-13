@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   station_prefab: {fileID: 6700324006200157766, guid: a6bd14f8ce78f87409d71c0d0d7cbdca, type: 3}
   ticketsToCheckBeforeSpawn: 0
-  bystanderSpawnCount: 10
-  traitorSpawnCount: 0
+  bystanderSpawnCount: 3
+  traitorSpawnCount: 1
   accompliceSpawnCount: 0
   isFrontOfTrain: 1
   stationName: Old Vinrose
@@ -24,42 +24,42 @@ MonoBehaviour:
   bystanderProfiles:
   - boardingStationIndex: 0
     disembarkingStationIndex: 1
-    npcPrefabIndex: 7
-    behaviours: 16
+    npcPrefabIndex: 5
+    behaviours: 32
   - boardingStationIndex: 0
     disembarkingStationIndex: 1
     npcPrefabIndex: 2
-    behaviours: 1
+    behaviours: 6
   - boardingStationIndex: 0
     disembarkingStationIndex: 1
+    npcPrefabIndex: 7
+    behaviours: 272
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 2
     npcPrefabIndex: 6
-    behaviours: 2
+    behaviours: 5
   - boardingStationIndex: 0
-    disembarkingStationIndex: 2
-    npcPrefabIndex: 3
+    disembarkingStationIndex: 4
+    npcPrefabIndex: 6
     behaviours: 1
   - boardingStationIndex: 0
     disembarkingStationIndex: 4
     npcPrefabIndex: 7
-    behaviours: 4
-  - boardingStationIndex: 0
-    disembarkingStationIndex: 4
-    npcPrefabIndex: 0
-    behaviours: 2
-  - boardingStationIndex: 0
-    disembarkingStationIndex: 4
-    npcPrefabIndex: 7
-    behaviours: 8
-  - boardingStationIndex: 0
-    disembarkingStationIndex: 2
-    npcPrefabIndex: 7
-    behaviours: 12
-  - boardingStationIndex: 0
-    disembarkingStationIndex: 1
-    npcPrefabIndex: 1
     behaviours: 16
   - boardingStationIndex: 0
-    disembarkingStationIndex: 1
+    disembarkingStationIndex: 4
+    npcPrefabIndex: 2
+    behaviours: 4
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 2
     npcPrefabIndex: 7
     behaviours: 12
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 7
+    behaviours: 24
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 1
+    npcPrefabIndex: 7
+    behaviours: 4
   accompliceProfiles: []
