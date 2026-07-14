@@ -115,11 +115,13 @@ public class Notepad : MonoBehaviour
     public bool atOffCameraPos;
     private void OnEnable()
     {
+        Scenes.OnLoadTrip0 += CreateNPCProfiles;
         Scenes.OnLoadTrip2 += PrepareForTrip;
         Scenes.OnLoadScore += PrepareForScore;
     }
     private void OnDisable()
     {
+        Scenes.OnLoadTrip0 -= CreateNPCProfiles;
         Scenes.OnLoadTrip2 -= PrepareForTrip;
         Scenes.OnLoadScore -= PrepareForScore;
     }
@@ -163,7 +165,6 @@ public class Notepad : MonoBehaviour
     }
     private void PrepareForTrip()
     {
-        CreateNPCProfiles();
         CreatePages();
         activePage = promptPage;
         notepadData.completedUnlocks = UnlockType.None;

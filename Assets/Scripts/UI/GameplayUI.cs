@@ -2,8 +2,9 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using UnityEngine;
-using static Spy;
+using UnityEngine.UIElements;
 using static AtlasUI;
+using static Spy;
 public class GameplayUI : MonoBehaviour
 {
     const float TICKET_ICON_PADDING = 0.2f;
@@ -34,6 +35,9 @@ public class GameplayUI : MonoBehaviour
     public AtlasRenderer colorAbilityIcon;
     public AtlasRenderer multiColorAbilityIcon;
     public AtlasRenderer keyIcon;
+
+    public AtlasRenderer redoButton;
+    public AtlasRenderer quitButton;
 
     public Transform ticketIconTransform;
 
@@ -114,6 +118,8 @@ public class GameplayUI : MonoBehaviour
         ChooseState();
         UpdateState();
         fadeBlack.CheckToFadeFromBlack();
+        HandlePlayAgainButton();
+        HandleQuitButton();
     }
     private void Init()
     {
@@ -386,6 +392,40 @@ public class GameplayUI : MonoBehaviour
         if (keyIcon.custom.w == 0)
         {
             DisappearingKeyIcon().Forget();
+        }
+    }
+
+    private void HandlePlayAgainButton()
+    {
+        if (CursorController.IsInsideBounds(redoButton.bounds, isClickable: true))
+        {
+            redoButton.custom.w = 1;
+
+            if (playerInputs.mouseLeftDown)
+            {
+                fadeBlack.FadeToBlack("Find where the Traitors are going.", Scenes.SceneType.Trip, sceneIndex: 2);
+                gameEventData.OnReset.Raise();
+            }
+        }
+        else
+        {
+            redoButton.custom.w = 0;
+        }
+    }
+    private void HandleQuitButton()
+    {
+        if (CursorController.IsInsideBounds(quitButton.bounds, isClickable: true))
+        {
+            quitButton.custom.w = 1;
+
+            if (playerInputs.mouseLeftDown)
+            {
+                Application.Quit();
+            }
+        }
+        else
+        {
+            quitButton.custom.w = 0;
         }
     }
     private async UniTask DisappearingKeyIcon()

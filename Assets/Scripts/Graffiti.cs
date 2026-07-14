@@ -54,10 +54,10 @@ public class Graffiti : MonoBehaviour
             AtlasRenderer renderer = renderers[i];
             renderer.custom.x = alpha;
         }
-        if (alpha > 0.9f)
-        {
-            active = true;
-            clock = LIFETIME;
-        }
+    }
+    public void StartDisappearing()
+    {
+        active = true;
+        clock = LIFETIME;
     }
 }

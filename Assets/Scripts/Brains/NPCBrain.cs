@@ -7,6 +7,8 @@ using static Atlas;
 using static AtlasUI;
 using static NPC;
 using Cysharp.Threading.Tasks;
+using System.Threading;
+
 
 
 #if UNITY_EDITOR
@@ -44,6 +46,8 @@ public class NPCBrain : MonoBehaviour
     public VisualEffect curGlyph;
 
     public Graffiti graffiti;
+
+    public CancellationTokenSource ctsWaitForRandSeconds;
 
     public float targetXVelocity;
     public float targetXPos; 
@@ -98,12 +102,14 @@ public class NPCBrain : MonoBehaviour
         gameEventData.OnStationSpawn.UnregisterListener(PrepareToDisembarkTrain);
         gameEventData.OnStationArrival.UnregisterListener(PrepareToBoardTrain);
         CursorController.OnMouseDisabled -= DisableHover;
+        ctsWaitForRandSeconds?.Cancel();
     }
     private void OnDestroy()
     {
         gameEventData.OnStationSpawn.UnregisterListener(PrepareToDisembarkTrain);
         gameEventData.OnStationArrival.UnregisterListener(PrepareToBoardTrain);
         CursorController.OnMouseDisabled -= DisableHover;        
+        ctsWaitForRandSeconds?.Cancel();
     }
     private void Update()
     {
@@ -435,6 +441,7 @@ public class NPCBrain : MonoBehaviour
 
                     case Behaviours.Known_vandal:
                     {
+                        graffiti.StartDisappearing();
                         if (newState != NPCState.TicketCheck)
                         {
                             QueueForSeat();
@@ -781,6 +788,8 @@ public class NPCBrain : MonoBehaviour
         }
 
         Callback callback = SetPathToSlideDoorCallback;
+        ctsWaitForRandSeconds?.Cancel();
+        ctsWaitForRandSeconds = new CancellationTokenSource();
         WaitForRandomSeconds(callback).Forget();
     }
     private void QueueForSeat()
@@ -828,6 +837,8 @@ public class NPCBrain : MonoBehaviour
     {
         if (onTrain || trip.stationAhead.stationIndex != profile.boardingStationIndex) return;
         Callback callback = SetPathToSlideDoorCallback;
+        ctsWaitForRandSeconds?.Cancel();
+        ctsWaitForRandSeconds = new CancellationTokenSource();
         WaitForRandomSeconds(callback).Forget();
     }
     private void SetPathToSlideDoorCallback()
@@ -836,11 +847,17 @@ public class NPCBrain : MonoBehaviour
     }
     private async UniTask WaitForRandomSeconds(Callback callback)
     {
-        await UniTask.Yield();
+        try
+        {
+            await UniTask.Yield();
+            float randTime = UnityEngine.Random.Range(1, 3);
+            await UniTask.WaitForSeconds(randTime, cancellationToken: ctsWaitForRandSeconds.Token);
+            callback();
+        }
+        catch(OperationCanceledException)
+        {
 
-        float randTime = UnityEngine.Random.Range(1, 3);
-        await UniTask.WaitForSeconds(randTime);
-        callback();
+        }
     }
     private NPCMotion RandomIdleMotion(NPCMotion motion1, NPCMotion motion2)
     {

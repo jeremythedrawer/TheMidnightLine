@@ -386,6 +386,7 @@ public class TrainController : MonoBehaviour
 
             for (int j = 0; j < carriage.exteriorSlideDoors.Length; j++)
             {
+
                 SlideDoors exteriorDoors = carriage.exteriorSlideDoors[j];
                 SlideDoors interiorDoors = carriage.interiorSlideDoors[j];
 
