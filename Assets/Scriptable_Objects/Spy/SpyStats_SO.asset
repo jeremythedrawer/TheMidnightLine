@@ -13,22 +13,20 @@ MonoBehaviour:
   m_Name: SpyStats_SO
   m_EditorClassIdentifier: 
   moveVelocity: {x: 0, y: 0}
-  targetXVelocity: 1.5
+  targetXVelocity: -1.5
   curState: 1
-  curLocationState: 1
+  curLocationState: 4
   curLocationBounds:
-    m_Center: {x: 285.49802, y: 0.6064613, z: 0}
-    m_Extent: {x: 4.3422546, y: 0.60106206, z: 0}
-  spriteFlip: 0
+    m_Center: {x: -3.102069, y: 1.1100001, z: 8}
+    m_Extent: {x: 8.379307, y: 1.0944777, z: 0.27980995}
+  spriteFlip: 1
   walkingIntoWall: 0
   boardingStationName: NovogradStation
   disembarkingStationName: GorovStation
-  curWorldPos: {x: 279.77145, y: 0, z: 1}
-  ticketsCheckedTotal: 0
+  curWorldPos: {x: -11.210756, y: 0, z: 2}
   curGroundLayer:
     serializedVersion: 2
     m_Bits: 32768
   curWallLayer:
     serializedVersion: 2
-    m_Bits: 0
-  signedNotepad: 0
+    m_Bits: 32768

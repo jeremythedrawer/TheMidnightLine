@@ -21,6 +21,8 @@ public static class Spy
         Station,
         Carriage,
         Gangway,
+        MeetingRoom,
+        Bunker
     }
 
     [Serializable] public struct CollisionData

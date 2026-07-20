@@ -151,7 +151,6 @@ public class AtlasRenderer : MonoBehaviour
             }
             break;
         }
-
     }
     public void UpdateSpriteInputs(SimpleSprite newSprite)
     {

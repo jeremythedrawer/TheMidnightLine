@@ -20,4 +20,5 @@ public class NotepadData : ScriptableObject
     public int leftHandWorldDepthBack;
 
     public bool checkingNotepad;
+    public bool collected;
 }

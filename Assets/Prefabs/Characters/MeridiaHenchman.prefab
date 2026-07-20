@@ -1,0 +1,107 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4310546005359535565
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 5752152008107022976}
+  - component: {fileID: 6605147100382442943}
+  - component: {fileID: 6729765551717479125}
+  m_Layer: 0
+  m_Name: MeridiaHenchman
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &5752152008107022976
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4310546005359535565}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -1.249, y: 0, z: 6}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &6605147100382442943
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4310546005359535565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 1
+  batchKey:
+    texture: {fileID: 2800000, guid: ac84d2d5582430a4f88c43c22854166d, type: 3}
+    material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
+  atlas: {fileID: 11400000, guid: 976a03830754854478443255a876376b, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.13671875, y: 0.23046875, z: 0.001953125, w: 0.765625}
+    uvPivot: {x: 0.37142858, y: 0}
+    worldSize: {x: 0.3888889, y: 0.65555555, z: 1}
+    index: 0
+  bounds:
+    m_Center: {x: -1.199, y: 0.32777777, z: 5}
+    m_Extent: {x: 0.19444445, y: 0.32777777, z: 0.1}
+  worldPivotAndSize: {x: -0.14444445, y: -0, z: 0.3888889, w: 0.65555555}
+  uvSizeAndPosition: {x: 0.13671875, y: 0.23046875, z: 0.001953125, w: 0.765625}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
+  boundsOffset: {x: 0.049999997, y: 0.32777777, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 1.4829507
+  curFrameIndex: 0
+  prevFrameIndex: 1
+  curMotionIndex: 1
+  prevSpriteIndexFlipH: 0
+  prevSpriteIndexFlipV: 0
+  isAnimating: 1
+  quadCount: 0
+--- !u!114 &6729765551717479125
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4310546005359535565}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 74561103b08f4454eaa4692867fb523b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::SimpleMotionPlayer
+  atlasRenderer: {fileID: 6605147100382442943}
+  atlas: {fileID: 11400000, guid: 976a03830754854478443255a876376b, type: 2}
+  clip:
+    clipName: SittingBreathing1
+    clipType: 1
+    motionIndex: 1
+    keyframeStartIndex: 0
+    keyframeEndIndex: 2
+    time: 0
+  clipIndex: 1

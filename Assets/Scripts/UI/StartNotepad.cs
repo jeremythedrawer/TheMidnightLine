@@ -58,33 +58,11 @@ public class StartNotepad : MonoBehaviour
 
     public CancellationTokenSource ctsFadeBlack;
 
-
-    public static event Action OnStartGame;
-
     private void Start()
     {
         CreatePages();
 
-        notepadData.handFlipPage_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.FlipHand];
-        notepadData.rotatePencil_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.RotatingPencil];
-        notepadData.leftHandWorldDepthFront = (int)(bindingRingsRend.transform.position.z - 1);
-        notepadData.leftHandWorldDepthBack = (int)(rightHand_renderer.transform.position.z + 1);
 
-        Vector3 flipWorldPos = new Vector3();
-        flipWorldPos.x = bindingRingsRend.transform.position.x;
-        flipWorldPos.y = bindingRingsRend.transform.position.y;
-        flipWorldPos.z = leftHand_renderer.transform.position.z;
-
-        notepadData.leftHandFlipPos = transform.InverseTransformPoint(flipWorldPos);
-
-        SimpleSprite holdingPencilSprite = leftHand_renderer.atlas.motionSprites[HOLDING_PENCIL_SPRITE_INDEX].sprite;
-        float worldPivotOffsetY = holdingPencilSprite.worldSize.y * (1 - holdingPencilSprite.uvPivot.y);
-
-        notepadData.leftHandOffScreenLocalPos.x = -NotepadActiveLocalPos.x * 0.5f;
-        notepadData.leftHandOffScreenLocalPos.y = camStats.camBounds.extents.y - NotepadActiveLocalPos.y - camStats.camBounds.size.y - worldPivotOffsetY;
-        notepadData.leftHandOffScreenLocalPos.z = leftHand_renderer.transform.localPosition.z;
-
-        notepadData.curState = NotepadState.None;
 
         leftHandTargetLocalPos = notepadData.leftHandOffScreenLocalPos;
         activePage = startPage;
@@ -544,7 +522,6 @@ public class StartNotepad : MonoBehaviour
                         {
                             if (activePage.playerWriteIndex == 0)
                             {
-                                OnStartGame?.Invoke();
 
                             }
                             else

@@ -99,7 +99,6 @@ Shader "Custom/s_zoneParticles"
 
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
                 clip(tex.a - 0.001);
-               // return half4((distance(p.xyz, i.worldPos)).xxx,1);
                 
                 half color = tex.r;
 

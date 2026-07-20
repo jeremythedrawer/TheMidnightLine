@@ -4,6 +4,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "GameEventDataSO", menuName = "Midnight Line SOs / Game Event Data SO")]
 public class GameEventDataSO : ScriptableObject
 {
+    public GameEvent OnStartGame;
     public GameEvent OnReset;
     public GameEvent OnInteract;
 

@@ -18,7 +18,7 @@ public class StartUI : MonoBehaviour
 
     public SceneData sceneData;
 
-    public StartNotepad notepad;
+    public Notepad notepad;
 
     public FadeBlack fadeBlack;
 
@@ -40,12 +40,12 @@ public class StartUI : MonoBehaviour
     private void OnEnable()
     {
         FadeBlack.OnFinishFadeFromBlack += SetToNoneState;
-        StartNotepad.OnStartGame += StartGame;
+        gameEventData.OnStartGame.RegisterListener(StartGame);
     }
     private void OnDisable()
     {
         FadeBlack.OnFinishFadeFromBlack -= SetToNoneState;
-        StartNotepad.OnStartGame -= StartGame;
+        gameEventData.OnStartGame.UnregisterListener(StartGame);
     }
     private void Update()
     {
@@ -131,8 +131,11 @@ public class StartUI : MonoBehaviour
                 }
                 else
                 {
-                    notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadInactiveLocalPos, Time.deltaTime * MOVE_DAMP);
-                    notepad.activePage.InvertExitButton(invert: false);
+                    if (notepadData.collected)
+                    {
+                        notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadInactiveLocalPos, Time.deltaTime * MOVE_DAMP);
+                        notepad.activePage.InvertExitButton(invert: false);
+                    }
                 }
                 canExitState = true;
             }
@@ -160,11 +163,19 @@ public class StartUI : MonoBehaviour
         float binderBoundsOffsetX = notepad.bindingRingsRend.bounds.max.x - notepad.transform.position.x;
 
         NotepadInactiveLocalPos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + NOTEPAD_INACTIVE_OFFSET, notepad.transform.localPosition.z);
-        NotepadHoverPos = new Vector3(NotepadInactiveLocalPos.x, NotepadInactiveLocalPos.y + notepad.bindingRingsRend.bounds.size.y, NotepadInactiveLocalPos.z);
 
-        float ySize = notepad.startPage.paperRenderer.bounds.size.y;
-        Vector3 hoverSize = new Vector3(notepad.bindingRingsRend.bounds.size.x, ySize, 0.2f);
-        notepad.transform.localPosition = NotepadInactiveLocalPos;
+        float bindingRingsHeight = notepad.bindingRingsRend.bounds.size.y;
+
+        NotepadHoverPos = new Vector3(NotepadInactiveLocalPos.x, NotepadInactiveLocalPos.y + bindingRingsHeight, NotepadInactiveLocalPos.z);
+
+        Vector3 startPos = new Vector3();
+        startPos.x = NotepadInactiveLocalPos.x;
+        startPos.y = -halfCamHeight - bindingRingsHeight;
+        startPos.z = NotepadInactiveLocalPos.z;
+
+        notepad.transform.localPosition = startPos;
+
+        notepadData.collected = false;
 
         Shader.SetGlobalVector("_CameraSizeAndPos", new Vector4(camStats.camBounds.size.x, camStats.camBounds.size.y, camStats.camBounds.center.x, camStats.camBounds.center.y));
     }

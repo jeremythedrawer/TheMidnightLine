@@ -6,6 +6,7 @@ using UnityEngine.SceneManagement;
 public static class Scenes
 {
     const float BLACK_SCENE_TIME = 3f;
+   
 
     public static event Action OnLoadScore;
     public static event Action OnLoadTrip0;

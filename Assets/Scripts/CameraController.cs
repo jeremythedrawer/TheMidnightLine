@@ -24,31 +24,29 @@ public class CameraController : MonoBehaviour
     public Camera cam;
     public Vector3 targetWorldPos;
     public float curXOffset;
-    public float carriageT;
 
     public int carriageBoundsKernel;
     public int threadGroupX;
     public int threadGroupY;
     private void Start()
     {
-        cam.orthographicSize = GetSnappedOrthoSize();
-        targetWorldPos.z = transform.position.z;
-        targetWorldPos.y = settings.verticalOffset;
-        stats.curWorldPos = transform.position;
-        stats.camBounds = new Bounds();
-        stats.camBounds.size = new Vector3(cam.orthographicSize * 2 * cam.aspect, cam.orthographicSize * 2, cam.farClipPlane + cam.nearClipPlane);
-        stats.worldUnitsPerPixel = (cam.orthographicSize * 2) / Screen.height;
-
-        SetCarriageSDFCompute();
+    }
+    private void OnEnable()
+    {
+        Init();
+        Scenes.OnLoadTrip0 += TripInit;
     }
     private void OnDisable()
     {
+        Scenes.OnLoadTrip0 -= TripInit;
+
         stats.curVelocity = Vector3.zero;
 
 #if UNITY_EDITOR
         Graphics.Blit(Texture2D.whiteTexture, carriageBoundsRT);
 #endif
     }
+    
     private void Update()
     {
         ChooseStates();
@@ -67,7 +65,28 @@ public class CameraController : MonoBehaviour
 
         stats.curVelocity = -(stats.curWorldPos - stats.prevWorldPos) / Time.deltaTime;
     }
+    private void Init()
+    {
+        cam = Camera.main;
+        cam.orthographicSize = GetSnappedOrthoSize();
+        targetWorldPos.z = transform.position.z;
+        targetWorldPos.y = settings.verticalOffset;
+        
+        stats.curWorldPos = transform.position;
+        stats.camBounds = new Bounds();
+        stats.camBounds.size = new Vector3(cam.orthographicSize * 2 * cam.aspect, cam.orthographicSize * 2, cam.farClipPlane + cam.nearClipPlane);
+        stats.worldUnitsPerPixel = (cam.orthographicSize * 2) / Screen.height;
 
+        Graphics.Blit(Texture2D.whiteTexture, carriageBoundsRT);
+    }
+    private void TripInit()
+    {
+        cam = Camera.main;
+        cam.orthographicSize = GetSnappedOrthoSize();
+        targetWorldPos.z = transform.position.z;
+        targetWorldPos.y = settings.verticalOffset;
+        SetCarriageSDFCompute();
+    }
     private void SetCarriageSDFCompute()
     {
         carriageBoundsRT.Release();
@@ -107,12 +126,21 @@ public class CameraController : MonoBehaviour
             {
                 float distFromCenter = spyStats.curWorldPos.x - spyStats.curLocationBounds.center.x;
 
-                carriageT = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
+                float carriageT = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
 
                 targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.curWorldPos.x + curXOffset, carriageT);
                 carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);
                 
                 carriageBoundsCompute.Dispatch(carriageBoundsKernel, threadGroupX, threadGroupY, 1);
+            }
+            break;
+            case LocationState.MeetingRoom:
+            case LocationState.Bunker:
+            {
+                float distFromCenter = spyStats.curWorldPos.x - spyStats.curLocationBounds.center.x;
+                float t = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
+                targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.curWorldPos.x + curXOffset, t);
+                targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, spyStats.curLocationBounds.min.x + stats.camBounds.extents.x, spyStats.curLocationBounds.max.x - stats.camBounds.extents.x);
             }
             break;
             case LocationState.Gangway:

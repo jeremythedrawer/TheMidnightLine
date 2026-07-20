@@ -84,7 +84,8 @@ public class SpyBrain : MonoBehaviour
         gameEventData.OnStationArrival.RegisterListener(EnableCanOpenSlideDoor);
         gameEventData.OnStationLeave.RegisterListener(DisableCanOpenSlideDoor);
 
-        Scenes.OnLoadTrip0 += Init;
+        Scenes.OnLoadTrip0 += TripInit;
+        Init();
     }
     private void OnDisable()
     {
@@ -93,7 +94,7 @@ public class SpyBrain : MonoBehaviour
         gameEventData.OnStationArrival.UnregisterListener(EnableCanOpenSlideDoor);
         gameEventData.OnStationLeave.UnregisterListener(DisableCanOpenSlideDoor);
 
-        Scenes.OnLoadTrip0 -= Init;
+        Scenes.OnLoadTrip0 -= TripInit;
     }
     private void Update()
     {
@@ -116,18 +117,25 @@ public class SpyBrain : MonoBehaviour
 
         stats.curGroundLayer = layerSettings.stationLayers.ground;
         stats.curWallLayer = layerSettings.stationWallLayers;
-
-        stats.curLocationState = LocationState.Station;
-
         stats.curWorldPos = transform.position;
-
-        SetState(SpyState.None);
+        
         rigidBody.includeLayers = layerSettings.stationMask;
 
-        possibleNPCsToTicketCheck = new NPCBrain[8];
+        SetState(SpyState.None);
 
+        stats.curLocationState = LocationState.MeetingRoom;
+        stats.curLocationBounds = camStats.meetingBounds;
+    }
+    public void TripInit()
+    {
+        rigidBody.includeLayers = layerSettings.stationMask;
+        atlas = atlasRenderer.atlas;
+        atlas.UpdateClipDictionary();
+        SetState(SpyState.None);
         trip.ticketsCheckedTotal = 0;
+        stats.curLocationState = LocationState.Station;
         CanCheckTicket = false;
+        possibleNPCsToTicketCheck = new NPCBrain[8];
     }
     private void ChooseState()
     {
@@ -774,7 +782,6 @@ public class SpyBrain : MonoBehaviour
     {
         CanCheckTicket = toggle;
     }
-
     private void OnDrawGizmos()
     {
         CalculateCollisionPoints();

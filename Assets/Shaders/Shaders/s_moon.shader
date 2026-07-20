@@ -1,5 +1,14 @@
 Shader "Custom/s_moon"
 {
+    Properties
+    {
+        _XOffset("X Offset", Range(-4, 4)) = 0.5
+        _YOffset("Y Offset", Range(-4, 4)) = 0
+        _CrescentSize("Crescent Size", Range(0, 2)) = 1
+        _Fade("Fade", Range(-1,1)) = 0.25
+        _FadeSpeed("Fade Speed", Range(0, 20)) = 5
+    }
+
     SubShader
     {
         Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
@@ -29,6 +38,13 @@ Shader "Custom/s_moon"
                 float3 worldPos : TEXCOORD1;
             };
 
+            CBUFFER_START(UnityPerMaterial)
+                float _XOffset;
+                float _YOffset;
+                float _CrescentSize;
+                float _Fade;
+                float _FadeSpeed;
+            CBUFFER_END
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -52,14 +68,13 @@ Shader "Custom/s_moon"
             {
                 float2 p = i.uv * 2 - 1;
                 float circle = 1 - length(p);
-                float cutCircle = length(p - float2(0.5, 0));
+                float cutCircle = length(p / _CrescentSize - float2(_XOffset, _YOffset));
 
-
-                float fade = i.uv.y * 0.75 + 0.25;
+                float fade = i.uv.y * (1 - _Fade) + _Fade;
 
                 float fullMoon = ceil(circle) * floor(cutCircle);
                 float mask = fullMoon * fade;
-                mask = BayerX8(mask, i.positionHCS.y + (_Time.y * 5));
+                mask = BayerX8(mask, i.positionHCS.y + (_Time.y * _FadeSpeed));
 
                 clip(mask - 0.001);
                 return half4(mask.xxx, 1);

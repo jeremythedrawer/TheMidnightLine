@@ -160,7 +160,7 @@ public class AtlasFactory : EditorWindow
     }
     private void OnAtlasChange()
     {
-        if (motionEnumDictionary.TryGetValue(atlas.entityMotionType, out Type enumType))
+        if (MotionEnumDictionary.TryGetValue(atlas.entityMotionType, out Type enumType))
         {
             atlasEnum_array = Enum.GetValues(enumType);
             enabledClipsCheckboxes = new bool[atlasEnum_array.Length];
@@ -223,7 +223,7 @@ public class AtlasFactory : EditorWindow
         if (atlas == null) return;
         EditorGUILayout.BeginVertical(previewLayout);
         {
-            if (motionEnumDictionary.TryGetValue(atlas.entityMotionType, out Type enumType))
+            if (MotionEnumDictionary.TryGetValue(atlas.entityMotionType, out Type enumType))
             {
                 Enum motionEnum = (Enum)Enum.ToObject(enumType, selectedMotionIndex);
                 EditorGUILayout.LabelField($"Preview Motion: {motionEnum}", headerLayout);

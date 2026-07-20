@@ -52,7 +52,27 @@ public static class Atlas
         None,
         TrainDoor,
     }
-
+    public enum MeridiaCabinetMotion
+    {
+        None,
+        Clock,
+        Door,
+    }
+    public enum MeridiaHenchman
+    {
+        None,
+        SittingBreathing1,
+        SittingBreathing2,
+        SittingBreathing3,
+        SittingBreathing4,
+        SittingBreathing5,
+        SittingBreathing6,
+    }
+    public enum MeridiaPresident
+    {
+        None,
+        SittingBreathing,
+    }
     public enum NotepadMotion
     {
         None,
@@ -68,6 +88,9 @@ public static class Atlas
         Spy,
         Notepad,
         Train,
+        MeridiaCabinet,
+        MeridiaHenchman,
+        MeridiaPresident,
     }
     public enum ClipType
     {
@@ -149,13 +172,16 @@ public static class Atlas
         return clipDict;
     }
 
-    public static readonly Dictionary<EntityMotionType, Type> motionEnumDictionary =
+    public static readonly Dictionary<EntityMotionType, Type> MotionEnumDictionary =
     new Dictionary<EntityMotionType, Type>
     {
         { EntityMotionType.NPC, typeof(NPCMotion) },
         { EntityMotionType.Spy, typeof(SpyMotion) },
         { EntityMotionType.Train, typeof(TrainMotion) },
         { EntityMotionType.Notepad, typeof(NotepadMotion) },
+        { EntityMotionType.MeridiaCabinet, typeof(MeridiaCabinetMotion) },
+        { EntityMotionType.MeridiaHenchman, typeof(MeridiaHenchman) },
+        { EntityMotionType.MeridiaPresident, typeof(MeridiaPresident) }
     };
 
 }

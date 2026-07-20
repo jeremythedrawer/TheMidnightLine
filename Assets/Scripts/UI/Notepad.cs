@@ -113,26 +113,19 @@ public class Notepad : MonoBehaviour
 
     public bool atStartPencilPos;
     public bool atOffCameraPos;
+    
     private void OnEnable()
     {
-        Scenes.OnLoadTrip0 += CreateNPCProfiles;
-        Scenes.OnLoadTrip2 += PrepareForTrip;
         Scenes.OnLoadScore += PrepareForScore;
     }
     private void OnDisable()
     {
-        Scenes.OnLoadTrip0 -= CreateNPCProfiles;
-        Scenes.OnLoadTrip2 -= PrepareForTrip;
         Scenes.OnLoadScore -= PrepareForScore;
     }
     private void Start()
     {
-        AtlasUI.PromptStringDict = InitEnumToStringDict<TripPrompt>();
-
-        npcData.behaviourStringDict = InitEnumToStringDict<Behaviours>();
-
-        tabWorldDepthBack = rightHand_renderer.transform.position.z - 0.5f;
-        activePage = promptPage;
+        CreateNPCProfiles();
+        PrepareNotepad();
     }
     private void Update()
     {
@@ -163,9 +156,13 @@ public class Notepad : MonoBehaviour
             }
         }
     }
-    private void PrepareForTrip()
+    private void PrepareNotepad()
     {
+        AtlasUI.PromptStringDict = InitEnumToStringDict<TripPrompt>();
+        npcData.behaviourStringDict = InitEnumToStringDict<Behaviours>();
+
         CreatePages();
+        
         activePage = promptPage;
         notepadData.completedUnlocks = UnlockType.None;
         colorPicker = SceneController.GetClueColorPicker();
@@ -174,7 +171,29 @@ public class Notepad : MonoBehaviour
         subState = SubState.None;
         leftHandTargetLocalPos = notepadData.leftHandOffScreenLocalPos;
         tabRenderer.enabled = false;
+        tabWorldDepthBack = rightHand_renderer.transform.position.z - 0.5f;
 
+
+        Vector3 flipWorldPos = new Vector3();
+        flipWorldPos.x = bindingRingsRend.transform.position.x;
+        flipWorldPos.y = bindingRingsRend.transform.position.y;
+        flipWorldPos.z = leftHand_renderer.transform.position.z;
+        notepadData.leftHandFlipPos = transform.InverseTransformPoint(flipWorldPos);
+
+        notepadData.handFlipPage_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.FlipHand];
+        notepadData.rotatePencil_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.RotatingPencil];
+        notepadData.leftHandWorldDepthFront = (int)(bindingRingsRend.transform.position.z - 1);
+        notepadData.leftHandWorldDepthBack = (int)(rightHand_renderer.transform.position.z + 1);
+
+        notepadData.leftHandOffScreenLocalPos.x = -NotepadActiveLocalPos.x * 0.5f;
+
+
+        SimpleSprite holdingPencilSprite = leftHand_renderer.atlas.motionSprites[HOLDING_PENCIL_SPRITE_INDEX].sprite;
+        float worldPivotOffsetY = holdingPencilSprite.worldSize.y * (1 - holdingPencilSprite.uvPivot.y);
+        notepadData.leftHandOffScreenLocalPos.y = camStats.camBounds.extents.y - NotepadActiveLocalPos.y - camStats.camBounds.size.y - worldPivotOffsetY;
+        notepadData.leftHandOffScreenLocalPos.z = leftHand_renderer.transform.localPosition.z;
+
+        notepadData.curState = NotepadState.None;
     }
     private void PrepareForScore()
     {
@@ -1227,14 +1246,15 @@ public class Notepad : MonoBehaviour
         for (int i = 0; i < trip.traitorProfiles.Length; i++)
         {
             int randIndex = UnityEngine.Random.Range(0, randIndicesList.Count);
-            TraitorProfile traitorProfile = trip.traitorProfiles[randIndicesList[randIndex]];
+            int traitorIndex = randIndicesList[randIndex];
+            TraitorProfile traitorProfile = trip.traitorProfiles[traitorIndex];
             randIndicesList.RemoveAt(randIndex);
 
             Vector3 pagePos = pageTransform.position;
             pagePos.z += 3;
             Page traitorPage = Instantiate(traitorPage_prefab, pagePos, Quaternion.identity, pageTransform);
             traitorPage.InitProfile(traitorProfile);
-            traitorPage.traitorIndex = i;
+            traitorPage.traitorIndex = traitorIndex;
             traitorPage.gameObject.name = "Page_" + i;
 
             pageList.Add(traitorPage);

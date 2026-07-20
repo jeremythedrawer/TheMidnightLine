@@ -1,0 +1,57 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33fd095fffb8f844e9fa149db1599080, type: 3}
+  m_Name: Character_MeridiaPresident_Atlas
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
+  texture: {fileID: 2800000, guid: 75dff0c7261a9d447a3dd4f51fb11b85, type: 3}
+  spriteConnectColor:
+    serializedVersion: 2
+    rgba: 0
+  entityMotionType: 7
+  pivotColor:
+    serializedVersion: 2
+    rgba: 255
+  sliceColor:
+    serializedVersion: 2
+    rgba: 0
+  motionSprites:
+  - sprite:
+      uvSizeAndPos: {x: 0.11328125, y: 0.22851562, z: 0.001953125, w: 0.7675781}
+      uvPivot: {x: 0.46551725, y: 0}
+      worldSize: {x: 0.32222223, y: 0.65, z: 1}
+      index: 0
+    markers: []
+    holdFrames: 60
+  - sprite:
+      uvSizeAndPos: {x: 0.11328125, y: 0.23046875, z: 0.123046875, w: 0.7675781}
+      uvPivot: {x: 0.46551725, y: 0}
+      worldSize: {x: 0.32222223, y: 0.65555555, z: 1}
+      index: 1
+    markers: []
+    holdFrames: 20
+  - sprite:
+      uvSizeAndPos: {x: 0.11328125, y: 0.23242188, z: 0.24414062, w: 0.7675781}
+      uvPivot: {x: 0.46551725, y: 0}
+      worldSize: {x: 0.32222223, y: 0.6611111, z: 1}
+      index: 2
+    markers: []
+    holdFrames: 60
+  simpleSprites: []
+  slicedSprites: []
+  clips:
+  - clipName: SittingBreathing
+    clipType: 1
+    motionIndex: 1
+    keyframeStartIndex: 0
+    keyframeEndIndex: 2
+    time: 0
+  markers: []

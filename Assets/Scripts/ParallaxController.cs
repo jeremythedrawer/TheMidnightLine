@@ -8,6 +8,7 @@ public class ParallaxController : MonoBehaviour
     public SpyStatsSO spyStats;
     public AtlasRenderer leftRenderer;
     public CameraStatsSO camStats;
+    
 
     [Range(0, FAR_CLIP)] public float worldDepth;
 
@@ -20,19 +21,20 @@ public class ParallaxController : MonoBehaviour
     public Bounds bounds;
     public Vector3 boundsOffset;
     public Vector2 velocity;
-
+    public bool ignoreSpawnBounds;
+    private void Start()
+    {
+        if (ignoreSpawnBounds)
+        {
+            worldPos = transform.position;
+            SetParrallaxFactor();
+        }
+    }
     private void Update()
     {
-        if (bounds.max.x > spawnData.bounds.min.x)
+        if (bounds.max.x > spawnData.bounds.min.x || ignoreSpawnBounds)
         {
-            velocity = camStats.curVelocity * Time.deltaTime * (1 - parallaxFactor);
-            if (spyStats.curLocationState != Spy.LocationState.Station)
-            {
-                velocity += trainStats.curVelocity * Time.deltaTime * parallaxFactor;
-            }
-            worldPos.x -= velocity.x;
-            worldPos.y -= velocity.y;
-            transform.position = worldPos;
+            UpdateWorldPos();
         }
         else
         { 
@@ -61,6 +63,18 @@ public class ParallaxController : MonoBehaviour
             bounds.Encapsulate(rightBounds);
         }
         boundsOffset = bounds.center - worldPos;
+    }
+
+    public void UpdateWorldPos()
+    {
+        velocity = camStats.curVelocity * Time.deltaTime * (1 - parallaxFactor);
+        if (spyStats.curLocationState != Spy.LocationState.Station)
+        {
+            velocity += trainStats.curVelocity * Time.deltaTime * parallaxFactor;
+        }
+        worldPos.x -= velocity.x;
+        worldPos.y -= velocity.y;
+        transform.position = worldPos;
     }
     private void OnDrawGizmosSelected()
     {
