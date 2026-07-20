@@ -23,6 +23,7 @@ public class CameraController : MonoBehaviour
     public LocationState curState;
     public Camera cam;
     public Vector3 targetWorldPos;
+    public Vector3 rawCurWorldPos;
     public float curXOffset;
 
     public int carriageBoundsKernel;
@@ -59,11 +60,14 @@ public class CameraController : MonoBehaviour
         stats.camToWorld = cam.cameraToWorldMatrix;
         
         stats.prevWorldPos = stats.curWorldPos;
-        stats.curWorldPos = Vector3.Lerp(stats.curWorldPos, targetWorldPos, Time.deltaTime * settings.damping);
-
+        rawCurWorldPos = Vector3.Lerp(rawCurWorldPos, targetWorldPos, Time.deltaTime * settings.damping);
+        stats.curWorldPos = GetSnappedPosition(rawCurWorldPos, stats.worldUnitsPerPixel);
         transform.position = stats.curWorldPos;
-
         stats.curVelocity = -(stats.curWorldPos - stats.prevWorldPos) / Time.deltaTime;
+    }
+    private void LateUpdate()
+    {
+        SendDataToPixelPerfectShader();
     }
     private void Init()
     {
@@ -200,13 +204,22 @@ public class CameraController : MonoBehaviour
             break;
         }
     }
-    public static Vector3 GetSnappedPosition(Vector3 pos, float unitsPerPixel)
+    public Vector3 GetSnappedPosition(Vector3 pos, float unitsPerPixel)
     {
+        Matrix4x4 W2C = cam.worldToCameraMatrix;
+        Matrix4x4 C2W = cam.cameraToWorldMatrix;
 
-        pos.x = Mathf.Round(pos.x / unitsPerPixel) * unitsPerPixel;
-        pos.y = Mathf.Round(pos.y / unitsPerPixel) * unitsPerPixel;
+        Vector3 camSpace = W2C.MultiplyPoint3x4(pos);
+        camSpace.x = Mathf.Round(camSpace.x / unitsPerPixel) * unitsPerPixel;
+        camSpace.y = Mathf.Round(camSpace.y / unitsPerPixel) * unitsPerPixel;
 
-        return pos;
+        Vector3 snappedPos = C2W.MultiplyPoint3x4(camSpace);
+        return snappedPos;
+    }
+
+    private void SendDataToPixelPerfectShader()
+    {
+        Shader.SetGlobalVector("_SnapDiff", rawCurWorldPos - stats.curWorldPos);
     }
     private float GetSnappedOrthoSize()
     {

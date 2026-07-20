@@ -8,7 +8,6 @@ using UnityEngine.Rendering.Universal;
 using UnityEngine.SceneManagement;
 using static AtlasRendering;
 using static AtlasSpawn;
-using static Spy;
 
 public class TOTTRendererFeature : ScriptableRendererFeature
 {
@@ -19,22 +18,12 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     public Mesh quad;
 
     public Material matrixMaterial;
-    public Material bloomMaterial;
-
-    [Header("Bloom Settings")]
-    public int bloomMipLevel;
-    public float bloomIntensity;
-    public float bloomSpread;
-
-
-    [Header("Matrix Settings")]
-    public Texture2D noiseTexture;
+    public Material pixelPerfectMaterial;
 
     private AtlasBatchPass batchPass;
     private AtlasParticlePass particlePass;
     private MatrixPass matrixPass;
-    private BloomPass bloomPass;
-
+    private PixelPerfectPass pixelPerfectPass;
     private class AtlasPassData
     {
         public CameraStatsSO cameraStats;
@@ -46,7 +35,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         batchPass = new AtlasBatchPass(cameraStats, quad);
         particlePass = new AtlasParticlePass(trip, spawnerData, spyStats, quad);
         matrixPass = new MatrixPass(this);
-        bloomPass = new BloomPass(this);
+        pixelPerfectPass = new PixelPerfectPass(this);
     }
     public override void AddRenderPasses(ScriptableRenderer renderer, ref RenderingData renderingData)
     {
@@ -54,6 +43,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         renderer.EnqueuePass(batchPass);
         renderer.EnqueuePass(particlePass);
         renderer.EnqueuePass(matrixPass);
+        renderer.EnqueuePass(pixelPerfectPass);
     }
     private class AtlasBatchPass : ScriptableRenderPass
     {
@@ -303,23 +293,19 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             }
         }
     }
-    private class BloomPass : ScriptableRenderPass
+    private class PixelPerfectPass : ScriptableRenderPass
     {
         private static TOTTRendererFeature rendererFeature;
-        public BloomPass(TOTTRendererFeature srf)
+        public PixelPerfectPass(TOTTRendererFeature srf)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingTransparents;
             rendererFeature = srf;
         }
-        private class BloomPassData
+        private class PixelPerfectPassData
         {
             public TextureHandle curSourceColor;
             public TextureHandle targetColor;
-            public TextureHandle originalCameraColor;
             public Material material;
-            public int bloomMipLevel;
-            public float bloomIntensity;
-            public float bloomSpread;
         }
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
         {
@@ -327,87 +313,34 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             UniversalCameraData cameraData = frameData.Get<UniversalCameraData>();
             if (cameraData.cameraType != CameraType.Game) return;
             if (!resourceData.cameraColor.IsValid()) return;
-            if (rendererFeature.bloomMaterial == null) return;
+            if (rendererFeature.pixelPerfectMaterial == null) return;
 
             TextureDesc camColorTexDesc = resourceData.cameraColor.GetDescriptor(renderGraph);
-            camColorTexDesc.name = "BloomTexture";
-            camColorTexDesc.useMipMap = true;
-            camColorTexDesc.autoGenerateMips = true;
+            camColorTexDesc.name = "PixelPerfectTexture";
 
-            TextureHandle bloomPreTexHandle = renderGraph.CreateTexture(camColorTexDesc);
-            TextureHandle bloomHTexHandle = renderGraph.CreateTexture(camColorTexDesc);
-            TextureHandle bloomVTexHandle = renderGraph.CreateTexture(camColorTexDesc);
+            TextureHandle texHandle = renderGraph.CreateTexture(camColorTexDesc);
 
-            BloomPassData passData;
-            using (IRasterRenderGraphBuilder preBuilder = renderGraph.AddRasterRenderPass<BloomPassData>("Bloom Pre Pass", out passData))
+            PixelPerfectPassData passData;
+            using (IRasterRenderGraphBuilder preBuilder = renderGraph.AddRasterRenderPass<PixelPerfectPassData>("Pixel Perfect Pass", out passData))
             {
                 passData.curSourceColor = resourceData.cameraColor;
-                passData.targetColor = bloomPreTexHandle;
-                passData.material = rendererFeature.bloomMaterial;
-                passData.bloomMipLevel = rendererFeature.bloomMipLevel;
-                passData.bloomIntensity = rendererFeature.bloomIntensity;
-                passData.bloomSpread = rendererFeature.bloomSpread;
-
+                passData.targetColor = texHandle;
+                passData.material = rendererFeature.pixelPerfectMaterial;
 
                 preBuilder.UseTexture(passData.curSourceColor);
                 preBuilder.SetRenderAttachment(passData.targetColor, index: 0, AccessFlags.WriteAll);
 
-                preBuilder.SetRenderFunc((BloomPassData data, RasterGraphContext ctx) =>
+                preBuilder.SetRenderFunc((PixelPerfectPassData data, RasterGraphContext ctx) =>
                 {
-                    ExecutePreBloomPass(data, ctx);
-                });
-            }
-
-            using (IRasterRenderGraphBuilder preBuilder = renderGraph.AddRasterRenderPass<BloomPassData>("Bloom Horizontal Pass", out passData))
-            {
-                passData.curSourceColor = bloomPreTexHandle;
-                passData.targetColor = bloomHTexHandle;
-                passData.material = rendererFeature.bloomMaterial;
-
-                preBuilder.UseTexture(passData.curSourceColor);
-                preBuilder.SetRenderAttachment(passData.targetColor, index: 0, AccessFlags.WriteAll);
-
-                preBuilder.SetRenderFunc((BloomPassData data, RasterGraphContext ctx) =>
-                {
-                    ExecuteHBloomPass(data, ctx);
-                });
-            }
-
-            using (IRasterRenderGraphBuilder preBuilder = renderGraph.AddRasterRenderPass<BloomPassData>("Bloom Vertical Pass", out passData))
-            {
-                passData.curSourceColor = bloomHTexHandle;
-                passData.targetColor = bloomVTexHandle;
-                passData.material = rendererFeature.bloomMaterial;
-                passData.originalCameraColor = resourceData.cameraColor;
-
-                preBuilder.UseTexture(passData.curSourceColor);
-                preBuilder.UseTexture(passData.originalCameraColor);
-                preBuilder.SetRenderAttachment(passData.targetColor, index: 0, AccessFlags.WriteAll);
-
-                preBuilder.SetRenderFunc((BloomPassData data, RasterGraphContext ctx) =>
-                {
-                    ExecuteVBloomPass(data, ctx);
+                    ExecutePixelPerfectPass(data, ctx);
                 });
             }
 
             resourceData.cameraColor = passData.targetColor;
         }
-        private static void ExecutePreBloomPass(BloomPassData passData, RasterGraphContext ctx)
+        private static void ExecutePixelPerfectPass(PixelPerfectPassData passData, RasterGraphContext ctx)
         {
-            if (passData.material == null) return;
-            passData.material.SetFloat("_MipLevel", passData.bloomMipLevel);
-            passData.material.SetFloat("_BloomIntensity", passData.bloomIntensity);
-            passData.material.SetFloat("_BloomSpread", passData.bloomSpread);
             Blitter.BlitTexture(ctx.cmd, passData.curSourceColor, Vector2.one, passData.material, pass: 0);
-        }
-        private static void ExecuteHBloomPass(BloomPassData passData, RasterGraphContext ctx)
-        {
-            Blitter.BlitTexture(ctx.cmd, passData.curSourceColor, Vector2.one, passData.material, pass: 1);
-        }
-        private static void ExecuteVBloomPass(BloomPassData passData, RasterGraphContext ctx)
-        {
-            passData.material.SetTexture("_SourceTex", passData.originalCameraColor);
-            Blitter.BlitTexture(ctx.cmd, passData.curSourceColor, Vector2.one, passData.material, pass: 2);
         }
     }
     private class MatrixPass : ScriptableRenderPass
@@ -461,7 +394,6 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         {
             passData.material.SetTexture("_SourceTex", passData.sourceColor);
             passData.material.SetTexture("_CameraDepthTexture", passData.depthTexture);
-            passData.material.SetTexture("_NoiseTexture", rendererFeature.noiseTexture);
             Blitter.BlitTexture(ctx.cmd, passData.sourceColor, Vector2.one, passData.material, 0);
         }
     }
