@@ -36,6 +36,9 @@ public class StartUI : MonoBehaviour
     private void Start()
     {
         InitPOVUI();
+        Shader.SetGlobalFloat("_DayNight", 1);
+        fadeBlack.SetValue(1);
+        fadeBlack.FadeFromBlack();
     }
     private void OnEnable()
     {

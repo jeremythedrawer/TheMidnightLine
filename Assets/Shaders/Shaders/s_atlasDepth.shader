@@ -56,8 +56,6 @@ Shader "Custom/s_atlasDepth"
             float3 _BlackColor;
             float _DayNight;
             float _DayNightFactor;
-            float4 _TrainBoundsMin;
-            float4 _TrainBoundsSize;
 
             Varyings vert(Attributes v)
             {
@@ -102,14 +100,14 @@ Shader "Custom/s_atlasDepth"
 
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half grey = color.r + (-(_DayNight * 1.1 - 0.9) * _DayNightFactor);
+                half grey = color.r + (-(_DayNight * 1.1 - 0.9));
 
-                float bayerValue = i.worldPos.z / FAR_CLIP;
+                float bayerFactor = i.worldPos.z / FAR_CLIP;
+                half bayerValue = bayerFactor * (_DayNight * 1.75 - 0.875);
 
-                float bayer = BayerX8(bayerValue,  i.positionHCS.y);
+                half bayer = BayerX8((color - bayerValue), i.positionHCS.y);
 
-                half3 finalColor = grey + _BlackColor + bayer;
-
+                half3 finalColor = bayer + _BlackColor;
                 clip(color.a - 0.001);
                 return half4 (finalColor, 1);
             }

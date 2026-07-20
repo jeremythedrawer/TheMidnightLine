@@ -54,7 +54,7 @@ MonoBehaviour:
   spriteIndex: 16
   flipX: 0
   flipY: 0
-  width: 1
+  width: 1.0000001
   height: 1
   cam: {fileID: 0}
   sprite:
@@ -64,13 +64,13 @@ MonoBehaviour:
     index: 16
   bounds:
     m_Center: {x: 4.8755555, y: 0.6111111, z: 6}
-    m_Extent: {x: 0.21666667, y: 0.6111111, z: 0.1}
-  worldPivotAndSize: {x: -0.21111111, y: -0, z: 0.43333334, w: 1.2222222}
+    m_Extent: {x: 0.2166667, y: 0.6111111, z: 0.1}
+  worldPivotAndSize: {x: -0.21111114, y: -0, z: 0.43333334, w: 1.2222222}
   uvSizeAndPosition: {x: 0.076171875, y: 0.21484375, z: 0.07128906, w: 0.4453125}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  scaleAndFlip: {x: 1.0000001, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
   customBit: 0
-  boundsOffset: {x: 0.005555555, y: 0.6111111, z: 0}
+  boundsOffset: {x: 0.005555551, y: 0.6111111, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -102,8 +102,6 @@ MonoBehaviour:
   bunkerWallRenderer: {fileID: 0}
   spy: {fileID: 0}
   doorType: 0
-  opened: 0
-  spyInBounds: 0
   clip:
     clipName: 
     clipType: 0
@@ -112,5 +110,8 @@ MonoBehaviour:
     keyframeEndIndex: 0
     time: 0
   triggerBounds:
-    m_Center: {x: 0, y: 0, z: 0}
-    m_Extent: {x: 0.084649086, y: 0.5734916, z: 1}
+    m_Center: {x: 3.085167, y: 0.58992183, z: 423}
+    m_Extent: {x: 0.084969684, y: 0.5920609, z: 1}
+  boundsOffset: {x: 0.07200909, y: 0.594222, z: 0}
+  opened: 0
+  spyInBounds: 0

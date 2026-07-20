@@ -1,5 +1,9 @@
 Shader "Custom/s_matrix"
 {
+	Properties
+    {
+        [NoScaleOffset] _NoiseTexture("Noise Atlas", 2D) = "white"
+    }
 	HLSLINCLUDE
 		#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
 		#include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"

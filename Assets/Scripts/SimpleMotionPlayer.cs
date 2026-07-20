@@ -31,6 +31,8 @@ public class SimpleMotionPlayerEditor : Editor
 {
     public override void OnInspectorGUI()
     {
+        serializedObject.Update();
+
         SimpleMotionPlayer motionPlayer = (SimpleMotionPlayer)target;
         if (motionPlayer.atlasRenderer == null)
         {
@@ -51,9 +53,11 @@ public class SimpleMotionPlayerEditor : Editor
             {
                 motionPlayer.clip = motionPlayer.atlas.clipDict[clipIndex];
                 motionPlayer.clipIndex = clipIndex;
+                EditorUtility.SetDirty(motionPlayer);
             }
         }
         DrawDefaultInspector();
+        serializedObject.ApplyModifiedProperties();
     }
 }
 

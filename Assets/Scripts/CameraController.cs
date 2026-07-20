@@ -204,10 +204,10 @@ public class CameraController : MonoBehaviour
             break;
         }
     }
-    public Vector3 GetSnappedPosition(Vector3 pos, float unitsPerPixel)
+    public static Vector3 GetSnappedPosition(Vector3 pos, float unitsPerPixel)
     {
-        Matrix4x4 W2C = cam.worldToCameraMatrix;
-        Matrix4x4 C2W = cam.cameraToWorldMatrix;
+        Matrix4x4 W2C = Camera.main.worldToCameraMatrix;
+        Matrix4x4 C2W = Camera.main.cameraToWorldMatrix;
 
         Vector3 camSpace = W2C.MultiplyPoint3x4(pos);
         camSpace.x = Mathf.Round(camSpace.x / unitsPerPixel) * unitsPerPixel;

@@ -620,7 +620,6 @@ public class SpawnMaster : MonoBehaviour
             {
                 elapsedTime += Time.deltaTime;
                 float t = elapsedTime / DAY_NIGHT_TRANSITION_TIME;
-               // t = Curves.EaseInOutCubic(t); 
 
                 dayNight = Mathf.Lerp(curDayNight, nextDayNight, t);
 

@@ -26,18 +26,27 @@ public class FadeBlack : MonoBehaviour
         ctsFadeBlack = new CancellationTokenSource();
         FadingToBlack(text, sceneType, sceneIndex).Forget();
     }
-    public void FadeFromBlack()
-    {
-        ctsFadeBlack?.Cancel();
-        ctsFadeBlack = new CancellationTokenSource();
-        FadingFromBlack().Forget();
-    }
     public void CheckToFadeFromBlack()
     {
         if (finishedFade && (playerInputs.mouseLeftUp || playerInputs.spacebarDown || playerInputs.move != 0))
         {
-            FadeFromBlack();
+            FadeFromBlackWithSceneChange();
         }
+    }
+    public void FadeFromBlack()
+    {
+        ctsFadeBlack?.Cancel();
+        ctsFadeBlack = new CancellationTokenSource();
+
+        FadingFromBlack().Forget();
+    }
+    public void FadeFromBlackWithSceneChange()
+    {
+        Scenes.SetScene(sceneData, curSceneType, curSceneIndex);
+        ctsFadeBlack?.Cancel();
+        ctsFadeBlack = new CancellationTokenSource();
+
+        FadingFromBlack().Forget();
     }
     private async UniTask FadingToBlack(string text, SceneType sceneType, int sceneIndex)
     {
@@ -66,7 +75,6 @@ public class FadeBlack : MonoBehaviour
         try
         {
             float elapsedTime = FADE_BLACK_DURATION;
-            Scenes.SetScene(sceneData, curSceneType, curSceneIndex);
             while (elapsedTime > 0)
             {
                 float t = elapsedTime / FADE_BLACK_DURATION;
@@ -80,6 +88,10 @@ public class FadeBlack : MonoBehaviour
             OnFinishFadeFromBlack?.Invoke();
         }
         catch (OperationCanceledException) { }
+    }
+    public void SetValue(float value)
+    {
+        fadeBlackMaterial.SetFloat("_Alpha", value);
     }
     private void SetFinishFade()
     {

@@ -8,6 +8,7 @@ public class ParallaxController : MonoBehaviour
     public SpyStatsSO spyStats;
     public AtlasRenderer leftRenderer;
     public CameraStatsSO camStats;
+    public bool ignoreSpawnBounds;
     
 
     [Range(0, FAR_CLIP)] public float worldDepth;
@@ -21,7 +22,6 @@ public class ParallaxController : MonoBehaviour
     public Bounds bounds;
     public Vector3 boundsOffset;
     public Vector2 velocity;
-    public bool ignoreSpawnBounds;
     private void Start()
     {
         if (ignoreSpawnBounds)
@@ -74,6 +74,7 @@ public class ParallaxController : MonoBehaviour
         }
         worldPos.x -= velocity.x;
         worldPos.y -= velocity.y;
+        worldPos = CameraController.GetSnappedPosition(worldPos, camStats.worldUnitsPerPixel);
         transform.position = worldPos;
     }
     private void OnDrawGizmosSelected()

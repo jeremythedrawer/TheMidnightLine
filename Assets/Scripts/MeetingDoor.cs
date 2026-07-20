@@ -26,10 +26,13 @@ public class MeetingDoor : MonoBehaviour
 
 
     [Header("Generated")]
-    public bool opened;
-    public bool spyInBounds;
     public AtlasClip clip;
     public Bounds triggerBounds;
+
+    public Vector3 boundsOffset;
+
+    public bool opened;
+    public bool spyInBounds;
     private void Start()
     {
         clip = atlasRenderer.atlas.clipDict[(int)MeridiaCabinetMotion.Door];
@@ -64,10 +67,14 @@ public class MeetingDoor : MonoBehaviour
                     {
                         if (spyStats.moveVelocity.x > 0)
                         {
+                            spyStats.curLocationState = Spy.LocationState.Bunker;
+                            spyStats.curLocationBounds = camStats.bunkerBounds;
                             spy.transform.position = new Vector3(spy.transform.position.x, spy.transform.position.y, 11);
                         }
                         else
                         {
+                            spyStats.curLocationState = Spy.LocationState.MeetingRoom;
+                            spyStats.curLocationBounds = camStats.meetingBounds;
                             spy.transform.position = new Vector3(spy.transform.position.x, spy.transform.position.y, 2);
                         }
                     }
@@ -100,8 +107,6 @@ public class MeetingDoor : MonoBehaviour
                 break;
                 case MeetingDoorType.Bunker:
                 {
-                    spyStats.curLocationState = Spy.LocationState.Bunker;
-                    spyStats.curLocationBounds = camStats.bunkerBounds;
                     bunkerWallRenderer.boxCollider.enabled = false;
                 }
                 break;
@@ -120,21 +125,25 @@ public class MeetingDoorEditor : Editor
     {
         MeetingDoor door = (MeetingDoor)target;
 
-        if (Selection.activeGameObject == door.gameObject)
+        using (new Handles.DrawingScope(door.transform.localToWorldMatrix))
         {
-            EditorGUI.BeginChangeCheck();
+            boundsHandle.center = door.transform.InverseTransformPoint(door.triggerBounds.center);
             boundsHandle.size = door.triggerBounds.size;
-            boundsHandle.center = door.transform.position;
-        }
 
-        boundsHandle.SetColor(Color.magenta);
-        boundsHandle.DrawHandle();
+            EditorGUI.BeginChangeCheck();
 
-        if (EditorGUI.EndChangeCheck())
-        {
-            Undo.RecordObject(door, "Resize Bounds");
-            door.triggerBounds.size = boundsHandle.size;
-            door.triggerBounds.center = boundsHandle.center;
+            boundsHandle.SetColor(Color.magenta);
+            boundsHandle.DrawHandle();
+
+            if (EditorGUI.EndChangeCheck())
+            {
+                Undo.RecordObject(door, "Edit Trigger");
+
+                door.triggerBounds.center = door.transform.TransformPoint(boundsHandle.center);
+                door.triggerBounds.size = boundsHandle.size;
+
+                EditorUtility.SetDirty(door);
+            }
         }
     }
 }
