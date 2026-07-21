@@ -73,10 +73,13 @@ public class CameraController : MonoBehaviour
     {
         cam = Camera.main;
         cam.orthographicSize = GetSnappedOrthoSize();
+
         targetWorldPos.z = transform.position.z;
-        targetWorldPos.y = settings.verticalOffset;
+        targetWorldPos.y = transform.position.y;
         
         stats.curWorldPos = transform.position;
+        rawCurWorldPos = transform.position;
+
         stats.camBounds = new Bounds();
         stats.camBounds.size = new Vector3(cam.orthographicSize * 2 * cam.aspect, cam.orthographicSize * 2, cam.farClipPlane + cam.nearClipPlane);
         stats.worldUnitsPerPixel = (cam.orthographicSize * 2) / Screen.height;
@@ -89,6 +92,8 @@ public class CameraController : MonoBehaviour
         cam.orthographicSize = GetSnappedOrthoSize();
         targetWorldPos.z = transform.position.z;
         targetWorldPos.y = settings.verticalOffset;
+        stats.curWorldPos = transform.position;
+        rawCurWorldPos = transform.position;
         SetCarriageSDFCompute();
     }
     private void SetCarriageSDFCompute()

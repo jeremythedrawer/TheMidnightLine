@@ -31,7 +31,10 @@ public class SpawnMaster : MonoBehaviour
     private void OnEnable()
     {
 #if UNITY_EDITOR
-        Init();
+        if (!Application.isPlaying)
+        {
+            Init();
+        }
 #endif
         SpyBrain.OnTicketInspect += ChangeParticles;
         gameEventData.OnMetersAtSpawnBounds.RegisterListener(DespawnEdgeScrollers);

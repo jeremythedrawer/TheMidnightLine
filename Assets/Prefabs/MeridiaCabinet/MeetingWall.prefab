@@ -29,8 +29,7 @@ Transform:
   m_LocalPosition: {x: -5.39, y: 0, z: 10}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
-  m_Children:
-  - {fileID: 3827216532118668736}
+  m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &9103103627595502992
@@ -63,7 +62,7 @@ MonoBehaviour:
     worldSize: {x: 2.338889, y: 0.48333332, z: 1}
     index: 0
   bounds:
-    m_Center: {x: -0.684556, y: 1.1363332, z: 10}
+    m_Center: {x: 273.09946, y: 1.1163334, z: 10}
     m_Extent: {x: 4.669444, y: 1.1363332, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 0.9722222, w: 0.59444445}
   uvSizeAndPosition: {x: 0.17089844, y: 0.10449219, z: 0.81933594, w: 0.6582031}
@@ -117,87 +116,5 @@ MonoBehaviour:
   curMotionIndex: 0
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 9
-  isAnimating: 0
-  quadCount: 0
---- !u!1 &4796642349321346921
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 3827216532118668736}
-  - component: {fileID: 6445407601346356160}
-  m_Layer: 0
-  m_Name: MeetingFrontWall
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &3827216532118668736
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4796642349321346921}
-  serializedVersion: 2
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 9.339, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_ConstrainProportionsScale: 0
-  m_Children: []
-  m_Father: {fileID: 7075333377992342990}
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &6445407601346356160
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 4796642349321346921}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 0
-  batchKey:
-    texture: {fileID: 2800000, guid: ccab804644e4972428c7004e07093731, type: 3}
-    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-  atlas: {fileID: 11400000, guid: 0044ba0587196ef4fbb6c5b0a2ef8433, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 11
-  flipX: 0
-  flipY: 0
-  width: 120.80261
-  height: 0.9999999
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.24511719, y: 0.39941406, z: 0.74902344, w: 0.25683594}
-    uvPivot: {x: 0, y: 0}
-    worldSize: {x: 1.3944445, y: 2.2722223, z: 1}
-    index: 11
-  bounds:
-    m_Center: {x: 88.17526, y: 1.136111, z: 10}
-    m_Extent: {x: 84.226265, y: 1.136111, z: 0.1}
-  worldPivotAndSize: {x: -0, y: -0, z: 1.3944445, w: 2.2722223}
-  uvSizeAndPosition: {x: 0.24511719, y: 0.39941406, z: 0.74902344, w: 0.25683594}
-  scaleAndFlip: {x: 120.80261, y: 0.9999999, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  customBit: 0
-  boundsOffset: {x: 84.226265, y: 1.136111, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  curMotionIndex: 0
-  prevSpriteIndexFlipH: 11
-  prevSpriteIndexFlipV: 11
   isAnimating: 0
   quadCount: 0

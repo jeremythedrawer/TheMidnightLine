@@ -12,6 +12,7 @@ public class MeetingDoor : MonoBehaviour
     { 
         Start,
         Bunker,
+        Quit,
     }
 
     public GameEventDataSO gameEventData;
@@ -21,6 +22,8 @@ public class MeetingDoor : MonoBehaviour
     public AtlasRenderer atlasRenderer;
     public AtlasRenderer bunkerWallRenderer;
     public SpyBrain spy;
+    public Room meetingRoom;
+    public Room bunkerRoom;
 
     public MeetingDoorType doorType;
 
@@ -69,6 +72,8 @@ public class MeetingDoor : MonoBehaviour
                         {
                             spyStats.curLocationState = Spy.LocationState.Bunker;
                             spyStats.curLocationBounds = camStats.bunkerBounds;
+                            bunkerRoom.MoveDown();
+                            meetingRoom.MoveUp();
                             spy.transform.position = new Vector3(spy.transform.position.x, spy.transform.position.y, 11);
                         }
                         else
@@ -76,6 +81,16 @@ public class MeetingDoor : MonoBehaviour
                             spyStats.curLocationState = Spy.LocationState.MeetingRoom;
                             spyStats.curLocationBounds = camStats.meetingBounds;
                             spy.transform.position = new Vector3(spy.transform.position.x, spy.transform.position.y, 2);
+                            bunkerRoom.MoveUp();
+                            meetingRoom.MoveDown();
+                        }
+                    }
+                    break;
+                    case MeetingDoorType.Quit:
+                    {
+                        if (spyStats.moveVelocity.x < 0)
+                        {
+                            Application.Quit();
                         }
                     }
                     break;

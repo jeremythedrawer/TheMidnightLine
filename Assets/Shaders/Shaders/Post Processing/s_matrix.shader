@@ -34,7 +34,6 @@ Shader "Custom/s_matrix"
 
 			float horizon = sin(min(gradient + _DayNight, PI * 0.5) * PI) * 0.5 + 0.5;
 			float stars = step(0.55,saturate(noiseTex.r - 1 + _DayNight) * (1-horizon));
-
 			horizon = BayerX8(horizon, input.texcoord.y * _ScreenParams.y);
 
 
@@ -51,7 +50,7 @@ Shader "Custom/s_matrix"
 			float ground = step(0, worldPos.y);
 			float greyScale = saturate(horizon + stars);
 
-			float3 final = lerp(_BlackColor, _WhiteColor, greyScale);
+			float3 final = lerp(_BlackColor, 1, greyScale);
 			return half4(final,0);
 		}
 	ENDHLSL

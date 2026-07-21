@@ -34,8 +34,10 @@ Shader "Custom/s_exteriorWalls"
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                uint instanceID : TEXCOORD1;
-                float3 worldPos : TEXCOORD2;
+                float4 uvSizeAndPos : TEXCOORD1;
+                float4 scaleAndFlip : TEXCOORD2;
+                float3 worldPos : TEXCOORD3;
+                float3 spritePos : TEXCOORD4;
             };
 
             CBUFFER_START(UnityPerMaterial)
@@ -71,25 +73,22 @@ Shader "Custom/s_exteriorWalls"
                 o.worldPos = float3(position.xy + objPos, position.z);
 
                 o.worldPos.y -= spriteData.custom.x * 3.3; //Moving Wall
-
+                o.spritePos = position;
                 o.positionHCS = TransformWorldToHClip(o.worldPos);
                 o.uv = v.uv;
-                o.instanceID = v.instanceID;
-
+                o.uvSizeAndPos = spriteData.uvSizeAndPos;
+                o.scaleAndFlip = spriteData.scaleAndFlip;
                 return o;
             }
 
 
             half4 frag(Varyings i) : SV_Target
             {
-                uint id = i.instanceID;
-                AtlasSprite spriteData = _SpriteData[id];
-
-                float2 uvSize = spriteData.uvSizeAndPos.xy;
-                float2 uvPos = spriteData.uvSizeAndPos.zw;
+                float2 uvSize = i.uvSizeAndPos.xy;
+                float2 uvPos = i.uvSizeAndPos.zw;
                 
-                float2 scale = spriteData.scaleAndFlip.xy;
-                float2 flip = spriteData.scaleAndFlip.zw;
+                float2 scale = i.scaleAndFlip.xy;
+                float2 flip = i.scaleAndFlip.zw;
 
                 i.uv *= scale.xy;
                 i.uv = frac(i.uv);
@@ -101,7 +100,7 @@ Shader "Custom/s_exteriorWalls"
                 half grey = color.r + (-(_DayNight * 1.1 - 0.9) * _DayNightFactor);
                 half3 finalColor = grey + _BlackColor;
 
-                half worldClip = step(_WorldClip, i.worldPos.y);
+                half worldClip = step(i.spritePos.y, i.worldPos.y);
                 float alpha = color.a * worldClip;
                 clip(alpha - 0.001);
                 return half4 (finalColor, 1);
