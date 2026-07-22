@@ -11,34 +11,38 @@ public class MeetingDoor : MonoBehaviour
     public enum MeetingDoorType
     { 
         Start,
-        Bunker,
-        Quit,
+        BetweenRooms,
     }
-
+    
     public GameEventDataSO gameEventData;
     public SpyStatsSO spyStats;
     public CameraStatsSO camStats;
 
     public AtlasRenderer atlasRenderer;
-    public AtlasRenderer bunkerWallRenderer;
-    public SpyBrain spy;
-    public Room meetingRoom;
-    public Room bunkerRoom;
+    public AtlasRenderer iconRenderer;
+
+    public Room rightRoom;
+    public Room leftRoom;
 
     public MeetingDoorType doorType;
+    public MeridiaCabinetMotion motion;
 
+    public float leftDepth;
+    public float rightDepth;
+
+    public bool unlocked;
 
     [Header("Generated")]
+
     public AtlasClip clip;
     public Bounds triggerBounds;
-
     public Vector3 boundsOffset;
 
     public bool opened;
     public bool spyInBounds;
     private void Start()
     {
-        clip = atlasRenderer.atlas.clipDict[(int)MeridiaCabinetMotion.Door];
+        clip = atlasRenderer.atlas.clipDict[(int)motion];
     }
     private void OnEnable()
     {
@@ -54,59 +58,106 @@ public class MeetingDoor : MonoBehaviour
 
         if (!spyInBounds)
         {
-            if (spyStats.curWorldPos.x > triggerBounds.min.x && spyStats.curWorldPos.x < triggerBounds.max.x)
+            switch (doorType)
             {
-                switch (doorType)
+                case MeetingDoorType.Start:
                 {
-                    case MeetingDoorType.Start:
+                    if (spyStats.moveVelocity.x > 0 && spyStats.curWorldPos.x > triggerBounds.center.x && spyStats.curWorldPos.x < triggerBounds.max.x)
                     {
-                        if (spyStats.moveVelocity.x > 0)
-                        {
-                            gameEventData.OnStartGame.Raise();
-                        }
-                    }
-                    break;
-                    case MeetingDoorType.Bunker:
-                    {
-                        if (spyStats.moveVelocity.x > 0)
-                        {
-                            spyStats.curLocationState = Spy.LocationState.Bunker;
-                            spyStats.curLocationBounds = camStats.bunkerBounds;
-                            bunkerRoom.MoveDown();
-                            meetingRoom.MoveUp();
-                            spy.transform.position = new Vector3(spy.transform.position.x, spy.transform.position.y, 11);
-                        }
-                        else
-                        {
-                            spyStats.curLocationState = Spy.LocationState.MeetingRoom;
-                            spyStats.curLocationBounds = camStats.meetingBounds;
-                            spy.transform.position = new Vector3(spy.transform.position.x, spy.transform.position.y, 2);
-                            bunkerRoom.MoveUp();
-                            meetingRoom.MoveDown();
-                        }
-                    }
-                    break;
-                    case MeetingDoorType.Quit:
-                    {
-                        if (spyStats.moveVelocity.x < 0)
-                        {
-                            Application.Quit();
-                        }
-                    }
-                    break;
-                }
+                        gameEventData.OnStartGame.Raise();
+                        SceneController.Spy.transform.position = new Vector3(SceneController.Spy.transform.position.x, SceneController.Spy.transform.position.y, 11);
+                        rightRoom.MoveUp();
 
-                spyInBounds = true;
+                        spyInBounds = true;
+                    }
+                }
+                break;
+                case MeetingDoorType.BetweenRooms:
+                {
+                    Transform spyTransform = SceneController.Spy.transform;
+
+                    if (spyStats.moveVelocity.x > 0 && spyStats.curWorldPos.x > triggerBounds.center.x && spyStats.curWorldPos.x < triggerBounds.max.x)
+                    {
+                        spyStats.curLocationState = Spy.LocationState.Bunker;
+                        spyStats.curLocationBounds = camStats.bunkerBounds;
+                        rightRoom.MoveDown();
+                        leftRoom.MoveUp();
+
+                        spyTransform.position = new Vector3(spyTransform.position.x, spyTransform.position.y, rightDepth);
+                        spyInBounds = true;
+                    }
+                    else if (spyStats.moveVelocity.x < 0 && spyStats.curWorldPos.x > triggerBounds.min.x && spyStats.curWorldPos.x < triggerBounds.center.x)
+                    {
+                        spyStats.curLocationState = Spy.LocationState.MeetingRoom;
+                        spyStats.curLocationBounds = camStats.meetingBounds;
+
+                        spyTransform.position = new Vector3(spyTransform.position.x, spyTransform.position.y, leftDepth);
+
+                        rightRoom.MoveUp();
+                        leftRoom.MoveDown();
+
+                        spyInBounds = true;
+                    }
+                }
+                break;
             }
         }
-        else if (spyStats.curWorldPos.x < triggerBounds.min.x || spyStats.curWorldPos.x > triggerBounds.max.x)
+        else
         {
-            spyInBounds = false;
+            switch (doorType)
+            {
+                case MeetingDoorType.Start:
+                {
+                    if (spyStats.moveVelocity.x > 0 && spyStats.curWorldPos.x > triggerBounds.max.x)
+                    {
+                        gameEventData.OnStartGame.Raise();
+                        SceneController.Spy.transform.position = new Vector3(SceneController.Spy.transform.position.x, SceneController.Spy.transform.position.y, 11);
+                        rightRoom.MoveUp();
+                        spyInBounds = false;
+                    }
+                }
+                break;
+                case MeetingDoorType.BetweenRooms:
+                {
+                    Transform spyTransform = SceneController.Spy.transform;
+
+                    if (spyStats.moveVelocity.x > 0 && spyStats.curWorldPos.x > triggerBounds.max.x)
+                    {
+                        spyStats.curLocationState = Spy.LocationState.Bunker;
+                        spyStats.curLocationBounds = camStats.bunkerBounds;
+                        rightRoom.MoveDown();
+                        leftRoom.MoveUp();
+
+                        spyTransform.position = new Vector3(spyTransform.position.x, spyTransform.position.y, rightDepth);
+                        
+                        spyInBounds = false;
+                    }
+                    else if (spyStats.moveVelocity.x < 0 && spyStats.curWorldPos.x < triggerBounds.min.x)
+                    {
+                        spyStats.curLocationState = Spy.LocationState.MeetingRoom;
+                        spyStats.curLocationBounds = camStats.meetingBounds;
+
+                        spyTransform.position = new Vector3(spyTransform.position.x, spyTransform.position.y, leftDepth);
+
+                        rightRoom.MoveUp();
+                        leftRoom.MoveDown();
+
+                        atlasRenderer.PlayClipOneShotReverse(clip);
+                        spyInBounds = false;
+                        opened = false;
+                        leftRoom.ToggleRightWall(true);
+                    }
+                }
+                break;
+            }
+
+
         }
     }
     public void OpenDoor()
     {
-        float spyXPos = spyStats.curWorldPos.x;
+        if (!unlocked) return;
+
         Bounds atlasBounds = atlasRenderer.bounds;
         
         if (!opened && spyStats.curWorldPos.x > atlasBounds.min.x && spyStats.curWorldPos.x < atlasBounds.max.x)
@@ -120,45 +171,59 @@ public class MeetingDoor : MonoBehaviour
                     gameEventData.OnStartGame.Raise();
                 }
                 break;
-                case MeetingDoorType.Bunker:
+                case MeetingDoorType.BetweenRooms:
                 {
-                    bunkerWallRenderer.boxCollider.enabled = false;
+                    leftRoom.ToggleRightWall(false);
                 }
                 break;
             }
         }
     }
 }
-
 #if UNITY_EDITOR
 [CustomEditor(typeof(MeetingDoor))]
-public class MeetingDoorEditor : Editor 
-{ 
+public class MeetingDoorEditor : Editor
+{
     BoxBoundsHandle boundsHandle = new BoxBoundsHandle();
+
+    private Vector3 lastPosition;
+
+    private void OnEnable()
+    {
+        lastPosition = ((MeetingDoor)target).transform.position;
+    }
 
     private void OnSceneGUI()
     {
         MeetingDoor door = (MeetingDoor)target;
+        Transform t = door.transform;
 
-        using (new Handles.DrawingScope(door.transform.localToWorldMatrix))
+        Vector3 delta = t.position - lastPosition;
+
+        if (delta != Vector3.zero)
         {
-            boundsHandle.center = door.transform.InverseTransformPoint(door.triggerBounds.center);
-            boundsHandle.size = door.triggerBounds.size;
+            door.triggerBounds.center += delta;
+            lastPosition = t.position;
 
-            EditorGUI.BeginChangeCheck();
+            EditorUtility.SetDirty(door);
+        }
 
-            boundsHandle.SetColor(Color.magenta);
-            boundsHandle.DrawHandle();
+        boundsHandle.center = door.triggerBounds.center;
+        boundsHandle.size = door.triggerBounds.size;
 
-            if (EditorGUI.EndChangeCheck())
-            {
-                Undo.RecordObject(door, "Edit Trigger");
+        EditorGUI.BeginChangeCheck();
 
-                door.triggerBounds.center = door.transform.TransformPoint(boundsHandle.center);
-                door.triggerBounds.size = boundsHandle.size;
+        boundsHandle.SetColor(Color.magenta);
+        boundsHandle.DrawHandle();
 
-                EditorUtility.SetDirty(door);
-            }
+        if (EditorGUI.EndChangeCheck())
+        {
+            Undo.RecordObject(door, "Edit Door Trigger Bounds");
+
+            door.triggerBounds.center = boundsHandle.center;
+            door.triggerBounds.size = boundsHandle.size;
+
+            EditorUtility.SetDirty(door);
         }
     }
 }

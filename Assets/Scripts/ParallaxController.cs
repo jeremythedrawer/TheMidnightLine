@@ -74,7 +74,7 @@ public class ParallaxController : MonoBehaviour
         }
         worldPos.x -= velocity.x;
         worldPos.y -= velocity.y;
-        worldPos = CameraController.GetSnappedPosition(worldPos, camStats.worldUnitsPerPixel);
+        //worldPos = CameraController.GetSnappedPosition(worldPos, camStats.worldUnitsPerPixel);
         transform.position = worldPos;
     }
     private void OnDrawGizmosSelected()

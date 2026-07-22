@@ -1,13 +1,5 @@
 Shader "Custom/s_exteriorWalls"
 {
-    Properties
-    {
-        [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
-        _UVSizeAndPos ("UV Size And Pos", Vector) = (0,0,0,0)
-        _WidthHeightFlip ("Width Height And Flip", Vector) = (0,0,0,0)
-        _WorldClip("World Clip", Float) = 0
-    }
-
     SubShader
     {
         Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
@@ -38,6 +30,7 @@ Shader "Custom/s_exteriorWalls"
                 float4 scaleAndFlip : TEXCOORD2;
                 float3 worldPos : TEXCOORD3;
                 float3 spritePos : TEXCOORD4;
+                float4 custom : TEXCOORD5;
             };
 
             CBUFFER_START(UnityPerMaterial)
@@ -78,6 +71,7 @@ Shader "Custom/s_exteriorWalls"
                 o.uv = v.uv;
                 o.uvSizeAndPos = spriteData.uvSizeAndPos;
                 o.scaleAndFlip = spriteData.scaleAndFlip;
+                o.custom = spriteData.custom;
                 return o;
             }
 
@@ -91,6 +85,7 @@ Shader "Custom/s_exteriorWalls"
                 float2 flip = i.scaleAndFlip.zw;
 
                 i.uv *= scale.xy;
+                i.uv.x += i.custom.y;
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;

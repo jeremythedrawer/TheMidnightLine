@@ -1081,6 +1081,7 @@ public class AtlasFactory : EditorWindow
                 previewSprite = atlas.simpleSprites[selectedGridIndex];
             }
             e.Use();
+
         }
 
         if (selectedGridIndex == gridIndex)

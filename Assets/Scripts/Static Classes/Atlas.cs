@@ -57,6 +57,7 @@ public static class Atlas
         None,
         Clock,
         Door,
+        Elevator,
     }
     public enum MeridiaHenchman
     {

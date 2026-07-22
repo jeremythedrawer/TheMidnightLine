@@ -17,6 +17,9 @@ public class Room : MonoBehaviour
     public CameraStatsSO camStats;
     public LocationState locationState;
     public AtlasRenderer exteriorWallRenderer;
+    public BoxCollider2D leftWallCollider;
+    public BoxCollider2D rightWallCollider;
+
     [Header("Generated")]
     public Bounds bounds;
     public float curMoveWallTime;
@@ -46,13 +49,20 @@ public class Room : MonoBehaviour
 
         MovingUp().Forget();
     }
-
     public void MoveDown()
     {
         ctsWall?.Cancel();
         ctsWall = new CancellationTokenSource();
 
         MovingDown().Forget();
+    }
+    public void ToggleLeftWall(bool toggle)
+    {
+        leftWallCollider.enabled = toggle;
+    }
+    public void ToggleRightWall(bool toggle)
+    {
+        rightWallCollider.enabled = toggle;
     }
 
     private async UniTask MovingDown()
@@ -107,17 +117,33 @@ public class Room : MonoBehaviour
 public class RoomEditor : Editor
 {
     BoxBoundsHandle boundsHandle = new BoxBoundsHandle();
+
+    private Vector3 lastPosition;
+
+    private void OnEnable()
+    {
+        lastPosition = ((Room)target).transform.position;
+    }
+
     private void OnSceneGUI()
     {
         Room room = (Room)target;
+        Transform t = room.transform;
 
-        if (Selection.activeGameObject == room.gameObject)
+        Vector3 delta = t.position - lastPosition;
+
+        if (delta != Vector3.zero)
         {
-            EditorGUI.BeginChangeCheck();
-
-            boundsHandle.size = room.bounds.size;
-            boundsHandle.center = room.transform.position;
+            room.bounds.center += delta;
+            lastPosition = t.position;
+            EditorUtility.SetDirty(room);
         }
+
+        boundsHandle.center = room.bounds.center;
+        boundsHandle.size = room.bounds.size;
+
+        EditorGUI.BeginChangeCheck();
+
         boundsHandle.SetColor(Color.orange);
         boundsHandle.DrawHandle();
 
@@ -125,10 +151,11 @@ public class RoomEditor : Editor
         if (EditorGUI.EndChangeCheck())
         {
 
-            Undo.RecordObject(room, "Resize Bounds");
+            Undo.RecordObject(room, "Resize Room Bounds");
             
-            room.bounds.size = boundsHandle.size;
             room.bounds.center = boundsHandle.center;
+            room.bounds.size = boundsHandle.size;
+            EditorUtility.SetDirty(room);
         }
     }
 }

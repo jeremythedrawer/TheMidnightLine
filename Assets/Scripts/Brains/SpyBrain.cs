@@ -109,8 +109,7 @@ public class SpyBrain : MonoBehaviour
 
         stats.walkingIntoWall = (leftWallTouch && playerInputs.move == -1) || (rightWallTouch && playerInputs.move == 1);
     }
-
-    public void Init()
+    private void Init()
     {
         atlas = atlasRenderer.atlas;
         atlas.UpdateClipDictionary();
@@ -125,8 +124,10 @@ public class SpyBrain : MonoBehaviour
 
         stats.curLocationState = LocationState.MeetingRoom;
         stats.curLocationBounds = camStats.meetingBounds;
+
+        SceneController.SetSpyBrain(this);
     }
-    public void TripInit()
+    private void TripInit()
     {
         rigidBody.includeLayers = layerSettings.stationMask;
         atlas = atlasRenderer.atlas;
