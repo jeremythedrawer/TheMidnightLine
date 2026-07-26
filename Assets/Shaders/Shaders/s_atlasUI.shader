@@ -31,6 +31,7 @@ Shader "Custom/s_atlasUI"
                 float4 scaleAndFlip : TEXCOORD3;
                 float4 custom : TEXCOORD4;
                 int customBit : TEXCOORD5;
+                float id : TEXCOORD6;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -70,12 +71,15 @@ Shader "Custom/s_atlasUI"
                 o.scaleAndFlip = spriteData.scaleAndFlip;
                 o.custom = spriteData.custom;
                 o.customBit = spriteData.customBit;
+
+                o.id = v.instanceID;
                 return o;
             }
 
             half4 frag(Varyings i) : SV_Target
             {
 
+                //return half4(i.id.xxx / 9 ,1 );
                 float2 uvSize = i.uvSizeAndPos.xy;
                 float2 uvPos = i.uvSizeAndPos.zw;
                 

@@ -36,11 +36,15 @@ public class CameraController : MonoBehaviour
     {
         Init();
         Scenes.OnLoadTrip0 += TripInit;
+        StartUI.OnClickOptions += MoveToOptionsMenu;
+        StartUI.OnClickBackFromOptions += MoveToMainMenu;
     }
     private void OnDisable()
     {
         Scenes.OnLoadTrip0 -= TripInit;
-
+        StartUI.OnClickOptions -= MoveToOptionsMenu;
+        StartUI.OnClickBackFromOptions -= MoveToMainMenu;
+            
         stats.curVelocity = Vector3.zero;
 
 #if UNITY_EDITOR
@@ -115,8 +119,6 @@ public class CameraController : MonoBehaviour
 
         Shader.SetGlobalTexture("_CarriageBoundsTexture", carriageBoundsRT);
     }
-
-
     private void ChooseStates()
     {
         SetState(spyStats.curLocationState);
@@ -194,7 +196,8 @@ public class CameraController : MonoBehaviour
             break;
             case LocationState.Elevator:
             {
-                targetWorldPos.x = spyStats.curLocationBounds.center.x;
+                Bounds curLocBounds = spyStats.curLocationBounds;
+                targetWorldPos.x = curLocBounds.center.x + (curLocBounds.size.x * 0.25f);
             }
             break;
         }
@@ -213,6 +216,16 @@ public class CameraController : MonoBehaviour
             }
             break;
         }
+    }
+    private void MoveToOptionsMenu()
+    {
+        Bounds curLocBounds = spyStats.curLocationBounds;
+        targetWorldPos.x = curLocBounds.min.x + (curLocBounds.size.x * 0.25f);
+    }
+    private void MoveToMainMenu()
+    {
+        Bounds curLocBounds = spyStats.curLocationBounds;
+        targetWorldPos.x = curLocBounds.center.x + (curLocBounds.size.x * 0.25f);
     }
     public static Vector3 GetSnappedPosition(Vector3 pos, float unitsPerPixel)
     {

@@ -109,8 +109,6 @@ public static class AtlasUI
         Prompt,
         Profile,
         ColorKey,
-        Start,
-        Options,
     }
     public enum TripPrompt
     {
@@ -130,9 +128,12 @@ public static class AtlasUI
     public enum UIState
     {
         None,
+        StartMenu,
+        OptionsMenu,
         Notepad,
         Ticket,
         CarriageMap,
+
     }
 
     public enum KeySpriteIndices

@@ -8,6 +8,10 @@ using static Spy;
 
 public class StartUI : MonoBehaviour
 {
+    public static event Action OnClickOptions;
+    public static event Action OnClickBackFromOptions;
+    public static event Action OnStartGame;
+
     public AtlasRenderer keyIconRenderer;
 
     public Material fadeBlackMaterial;
@@ -17,6 +21,13 @@ public class StartUI : MonoBehaviour
     public CameraStatsSO camStats;
     public PlayerInputsSO playerInputs;
     public NotepadData notepadData;
+
+    public AtlasTextRenderer startRenderer;
+    public AtlasTextRenderer optionsRenderer;
+    public AtlasTextRenderer quitRenderer;
+    public AtlasTextRenderer mainColorRenderer;
+    public AtlasTextRenderer meridiaColorRenderer;
+
 
     public SceneData sceneData;
 
@@ -30,6 +41,7 @@ public class StartUI : MonoBehaviour
     public UIState curState;
 
     public bool canExitState;
+    public bool atOptions;
 
     public CancellationTokenSource ctsFadeBlack;
     public CancellationTokenSource ctsNotepad;
@@ -41,39 +53,34 @@ public class StartUI : MonoBehaviour
         Shader.SetGlobalFloat("_DayNight", 1);
         fadeBlack.SetValue(1);
         fadeBlack.FadeFromBlack();
+
+        SetState(UIState.StartMenu);
     }
     private void OnEnable()
-    {
-        FadeBlack.OnFinishFadeFromBlack += SetToNoneState;
-        
+    {        
         NotepadProp.OnSpyEnter += SetNotepadCollectIcon;
         NotepadProp.OnSpyExit += DisableNotepadCollectIcon;
 
         gameEventData.OnNotepadCollect.RegisterListener(DisableNotepadCollectIcon);
 
-        gameEventData.OnStartGame.RegisterListener(StartGame);
+        gameEventData.OnStartTrip.RegisterListener(StartTrip);
     }
     private void OnDisable()
     {
-        FadeBlack.OnFinishFadeFromBlack -= SetToNoneState;
         NotepadProp.OnSpyEnter -= SetNotepadCollectIcon;
         NotepadProp.OnSpyExit -= DisableNotepadCollectIcon;
         gameEventData.OnNotepadCollect.UnregisterListener(DisableNotepadCollectIcon);
-        gameEventData.OnStartGame.UnregisterListener(StartGame);
+        gameEventData.OnStartTrip.UnregisterListener(StartTrip);
     }
     private void Update()
     {
-        ChooseState();
+        //ChooseState();
         UpdateState();
         fadeBlack.CheckToFadeFromBlack();
     }
-    private void StartGame()
+    private void StartTrip()
     {
         fadeBlack.FadeToBlack("Find where the Traitors are going.", SceneType.Trip, sceneIndex: 2);
-    }
-    private void SetToNoneState()
-    {
-        SetState(UIState.None);
     }
     private void SetNotepadCollectIcon(Vector2 position)
     {
@@ -88,7 +95,7 @@ public class StartUI : MonoBehaviour
     }
     private void ChooseState()
     {
-        if ((notepadData.collected && playerInputs.notepadKeyDown) || notepadData.checkingNotepad)
+        if ((notepadData.collected && playerInputs.notepadKeyDown) || notepadData.checkingNotepad) // TODO: Set up as action
         {
             SetState(UIState.Notepad);
         }
@@ -136,7 +143,6 @@ public class StartUI : MonoBehaviour
                 {
                     notepadData.checkingNotepad = false;
                 }
-                canExitState = true;
             }
             break;
 
@@ -162,10 +168,23 @@ public class StartUI : MonoBehaviour
                         notepad.activePage.InvertExitButton(invert: false);
                     }
                 }
-                canExitState = true;
+            }
+            break;
+
+            case UIState.StartMenu:
+            {
+                HandleMainMenuButtonButton();
+            }
+            break;
+
+            case UIState.OptionsMenu:
+            {
+                HandleOptionsButtons();
+
             }
             break;
         }
+        canExitState = true;
     }
     private void ExitState()
     {
@@ -204,4 +223,93 @@ public class StartUI : MonoBehaviour
 
         Shader.SetGlobalVector("_CameraSizeAndPos", new Vector4(camStats.camBounds.size.x, camStats.camBounds.size.y, camStats.camBounds.center.x, camStats.camBounds.center.y));
     }
+    private void HandleMainMenuButtonButton()
+    {
+        if (CursorController.IsInsideBounds(quitRenderer.background_renderer.bounds, isClickable: true))
+        {
+
+            quitRenderer.SetColorText(Color.white);
+            quitRenderer.background_renderer.SetSliceCustom(w: 1);
+            if (playerInputs.mouseLeftDown)
+            {
+                Application.Quit();
+            }
+        }
+        else
+        {
+            quitRenderer.SetColorText(Color.black);
+            quitRenderer.background_renderer.SetSliceCustom(w: 0);
+        }
+
+        if (CursorController.IsInsideBounds(optionsRenderer.background_renderer.bounds, isClickable: true))
+        {
+            optionsRenderer.SetColorText(Color.white);
+            optionsRenderer.background_renderer.SetSliceCustom(w: 1);
+            if (playerInputs.mouseLeftDown)
+            {
+                optionsRenderer.SetText("Back");
+                OnClickOptions?.Invoke();
+                SetState(UIState.OptionsMenu);
+            }
+        }
+        else
+        {
+            optionsRenderer.SetColorText(Color.black);
+            optionsRenderer.background_renderer.SetSliceCustom(w: 0);
+        }
+
+        if (CursorController.IsInsideBounds(startRenderer.background_renderer.bounds, isClickable: true))
+        {
+
+            startRenderer.SetColorText(Color.white);
+            startRenderer.background_renderer.SetSliceCustom(w: 1);
+            if (playerInputs.mouseLeftDown)
+            {
+                OnStartGame?.Invoke();
+                SetState(UIState.None);
+            }
+        }
+        else
+        {
+            startRenderer.SetColorText(Color.black);
+            startRenderer.background_renderer.SetSliceCustom(w: 0);
+        }
+    }
+
+    private void HandleOptionsButtons()
+    {
+        if (CursorController.IsInsideBounds(mainColorRenderer.background_renderer.bounds, isClickable: true))
+        {
+            mainColorRenderer.SetColorText(Color.white);
+            mainColorRenderer.background_renderer.SetSliceCustom(w: 1);
+            if (playerInputs.mouseLeftDown)
+            {
+                SceneController.GetMainColorPicker().Open(mainColorRenderer.background_renderer, ColorPicker.SelectType.Main, ColorPicker.Direction.BottomRight);
+            }
+        }
+        else
+        {
+            mainColorRenderer.SetColorText(Color.black);
+            mainColorRenderer.background_renderer.SetSliceCustom(w: 0);
+        }
+
+        if (CursorController.IsInsideBounds(optionsRenderer.background_renderer.bounds, isClickable: true))
+        {
+            optionsRenderer.SetColorText(Color.white);
+            optionsRenderer.background_renderer.SetSliceCustom(w: 1);
+            if (playerInputs.mouseLeftDown)
+            {
+                optionsRenderer.SetText("Options");
+                OnClickBackFromOptions?.Invoke();
+                SetState(UIState.StartMenu);
+            }
+        }
+        else
+        {
+            optionsRenderer.SetColorText(Color.black);
+            optionsRenderer.background_renderer.SetSliceCustom(w: 0);
+        }
+    }
+
+
 }

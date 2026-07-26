@@ -227,22 +227,20 @@ public class AtlasRenderer : MonoBehaviour
     public void FlipHSlice(bool flipLeft, SliceSprite sliceSprite)
     {
         flipX = flipLeft;
-        float flipPivot = flipLeft ? 1 - sprite.uvPivot.x : sprite.uvPivot.x;
-
-        worldPivotAndSize.x = -flipPivot * (width * worldPivotsAndSizes[4].z) - (sprite.uvPivot.x * (sliceSprite.worldSlices.x + sliceSprite.worldSlices.y));
-
-        boundsOffset.x = (bounds.size.x * 0.5f) + worldPivotAndSize.x;
+        float npcPivot = sliceSprite.sprite.uvPivot.x * 2 - 1;
+        float flipPivot = flipLeft ? npcPivot : -npcPivot;
+        boundsOffset.x = bounds.size.x * flipPivot * 0.5f;
         prevSpriteIndexFlipH = sprite.index;
     }
     public void FlipVSlice(bool flipDown, SliceSprite sliceSprite)
     {
         flipY = flipDown;
 
-        float flipPivot = flipDown ? 1 - sprite.uvPivot.y : sprite.uvPivot.y;
+        float npcPivot = sliceSprite.sprite.uvPivot.y * 2 - 1;
 
-        worldPivotAndSize.x = -flipPivot * (width * worldPivotsAndSizes[4].w) - (sprite.uvPivot.y * (sliceSprite.worldSlices.z + sliceSprite.worldSlices.w));
+        float flipPivot = flipDown ? npcPivot : -npcPivot;
 
-        boundsOffset.y = (bounds.size.y * 0.5f) + worldPivotAndSize.y;
+        boundsOffset.y = bounds.size.y * flipPivot * 0.5f;
         prevSpriteIndexFlipH = sprite.index;
 
     }
@@ -264,9 +262,11 @@ public class AtlasRenderer : MonoBehaviour
         uvSizesAndPositions = new Vector4[9];
         Array.Copy(sliceSprite.uvSizeAndPos, uvSizesAndPositions, sliceSprite.uvSizeAndPos.Length);
         
-        worldPivotsAndSizes = SetWorldPivotAndSizes(sliceSprite, width, height);
+        FlipHSlice(flipX, sliceSprite);
+        FlipVSlice(flipY, sliceSprite);
 
-        scalesAndFlips = GetScaleAndFlipSliceNineSliceArray(width, height);
+        scalesAndFlips = GetScaleAndFlipSliceNineSliceArray(width, height, flipX ? -1 : 1, flipY ? -1 : 1);
+        worldPivotsAndSizes = SetWorldPivotAndSizes(sliceSprite, width, height, flipX, flipY);
 
         for (int i = 0;  i < customs.Length; i++)
         {
@@ -275,8 +275,6 @@ public class AtlasRenderer : MonoBehaviour
         Vector4 centerWorldPivot = worldPivotsAndSizes[4];
         bounds.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldPivot.z * width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldPivot.w * height) + sliceSprite.worldSlices.w, 0.2f);
 
-        FlipHSlice(flipX, sliceSprite);
-        FlipVSlice(flipY, sliceSprite);
 
         if (boxCollider == null) return;
         boxCollider.size = bounds.size;

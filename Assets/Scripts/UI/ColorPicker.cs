@@ -20,6 +20,14 @@ public class ColorPicker : MonoBehaviour
         Meridia
     }
 
+    public enum Direction
+    {
+        BottomLeft,
+        BottomRight,
+        TopLeft,
+        TopRight,
+    }
+
     public TripSO trip;
     public ColorsSO colorsData;
     public PlayerInputsSO playerInputs;
@@ -28,6 +36,7 @@ public class ColorPicker : MonoBehaviour
     public AtlasRenderer paletteRenderer;
     
     public ColorPickerType colorPickerType;
+    public Direction direction;
 
     public int colorGridXCount = 4;
     public int colorGridYCount = 4;
@@ -38,7 +47,8 @@ public class ColorPicker : MonoBehaviour
 
     public CancellationTokenSource ctsOpen;
 
-    public Vector2[] openColorRendererPositions;
+    public Vector2[] defaultOpenColorRendPositions;
+    public Vector2[] curOpenColorRendPositions;
 
     public Vector3 curWorldPos;
     public Vector3 closeColorRendererPosition;
@@ -304,16 +314,11 @@ public class ColorPicker : MonoBehaviour
         {
             SceneController.SetMainColorPicker(this);
         }
-
-        if (colorPickerType == ColorPickerType.Main)
-        {
-            SetNewMainColor(0);
-            SetNewMeridiaColor(1);
-        }
     }
     public void SetOpenPosAndSize()
     {
-        openColorRendererPositions = new Vector2[colorRenderers.Length];
+        defaultOpenColorRendPositions = new Vector2[colorRenderers.Length];
+        curOpenColorRendPositions = new Vector2[colorRenderers.Length];
 
         AtlasRenderer firstColorRend = colorRenderers[0];
         Vector4 paletteBottomRightWPS = paletteRenderer.worldPivotsAndSizes[5];
@@ -331,9 +336,9 @@ public class ColorPicker : MonoBehaviour
                 AtlasRenderer colorRend = colorRenderers[flatIndex];
 
                 float xPos = firstColorRendPos.x - (x * GRID_GAP);
-                openColorRendererPositions[flatIndex] = new Vector3(xPos, yPos, -1);
+                defaultOpenColorRendPositions[flatIndex] = new Vector3(xPos, yPos, -1);
 
-                colorRend.transform.localPosition = openColorRendererPositions[flatIndex];
+                colorRend.transform.localPosition = defaultOpenColorRendPositions[flatIndex];
             }
         }
 
@@ -362,12 +367,80 @@ public class ColorPicker : MonoBehaviour
         selectedRenderer = null;
         transform.SetParent(null);
     }
-    public void TurnOn(SelectType selectedType, AtlasRenderer rend)
+    public void TurnOn(SelectType selectedType, AtlasRenderer rend, Direction direction = Direction.TopLeft)
     {
         paletteRenderer.enabled = true;
 
         selectType = selectedType;
         selectedRenderer = rend;
+        Bounds selectedRendBounds = selectedRenderer.GetBounds();
+        curWorldPos.y = selectedRendBounds.max.y;
+
+        switch (direction)
+        {
+            case Direction.TopLeft:
+            {
+                paletteRenderer.flipX = false;
+                paletteRenderer.flipY = false;
+
+                for (int i = 0; i < curOpenColorRendPositions.Length; i ++)
+                {
+                    Vector2 defPos = defaultOpenColorRendPositions[i];
+                    curOpenColorRendPositions[i] = defPos;
+                }
+
+                curWorldPos.x = selectedRendBounds.min.x;
+            }
+            break;
+
+            case Direction.TopRight:
+            {
+                paletteRenderer.flipX = true;
+                paletteRenderer.flipY = false;
+
+                for (int i = 0; i < curOpenColorRendPositions.Length; i++)
+                {
+                    Vector2 defPos = defaultOpenColorRendPositions[i];
+                    defPos.x *= -1;
+                    curOpenColorRendPositions[i] = defPos;
+                }
+                curWorldPos.x = selectedRendBounds.max.x;
+            }
+            break;
+
+            case Direction.BottomLeft:
+            {
+                paletteRenderer.flipX = false;
+                paletteRenderer.flipY = true;
+
+                for (int i = 0; i < curOpenColorRendPositions.Length; i++)
+                {
+                    Vector2 defPos = defaultOpenColorRendPositions[i];
+                    defPos.y *= -1;
+                    curOpenColorRendPositions[i] = defPos;
+                }
+                curWorldPos.x = selectedRendBounds.min.x;
+            }
+            break;
+
+            case Direction.BottomRight:
+            {
+                paletteRenderer.flipX = true;
+                paletteRenderer.flipY = true;
+
+                for (int i = 0; i < curOpenColorRendPositions.Length; i++)
+                {
+                    Vector2 defPos = defaultOpenColorRendPositions[i];
+                    defPos.x *= -1;
+                    defPos.y *= -1;
+                    curOpenColorRendPositions[i] = defPos;
+                }
+
+                curWorldPos.x = selectedRendBounds.max.x;
+            }
+            break;
+        }
+        paletteRenderer.UpdateSliceSpriteInputsSelf();
 
         switch(selectedType)
         {
@@ -477,11 +550,7 @@ public class ColorPicker : MonoBehaviour
             break;
         }
 
-        Bounds selectedRendBounds = selectedRenderer.GetBounds();
 
-        curWorldPos.x = selectedRendBounds.min.x;
-        curWorldPos.y = selectedRendBounds.max.y;
-        
         curGridColCount = Mathf.Min(activeColorAmount, colorGridXCount);
         curGridRowCount = Mathf.CeilToInt((float)activeColorAmount / (float)colorGridXCount);
 
@@ -597,14 +666,14 @@ public class ColorPicker : MonoBehaviour
             }
         }
     }
-    public void Open(AtlasRenderer rend, SelectType selectedType)
+    public void Open(AtlasRenderer rend, SelectType selectedType, Direction direction = Direction.TopLeft)
     {
         if (colorsData.curState == PickerState.Closed)
         {
             ctsOpen?.Cancel();
             ctsOpen = new CancellationTokenSource();
 
-            TurnOn(selectedType, rend);
+            TurnOn(selectedType, rend, direction);
             Opening().Forget();
         }
     }
@@ -650,7 +719,7 @@ public class ColorPicker : MonoBehaviour
 
                     for (int i = 0; i < activeColorAmount; i++)
                     {
-                        float posX = Mathf.Lerp(closeColorRendererPosition.x, openColorRendererPositions[i].x, easeOutT);
+                        float posX = Mathf.Lerp(closeColorRendererPosition.x, curOpenColorRendPositions[i].x, easeOutT);
                         colorRenderers[i].transform.localPosition = new Vector3(posX, closeColorRendererPosition.y, closeColorRendererPosition.z);
                     }
                 }
@@ -663,8 +732,8 @@ public class ColorPicker : MonoBehaviour
 
                     for (int i = 0; i < activeColorAmount; i++)
                     {
-                        float posY = Mathf.Lerp(closeColorRendererPosition.y, openColorRendererPositions[i].y, easOutT);
-                        colorRenderers[i].transform.localPosition = new Vector3(openColorRendererPositions[i].x, posY, closeColorRendererPosition.z);
+                        float posY = Mathf.Lerp(closeColorRendererPosition.y, curOpenColorRendPositions[i].y, easOutT);
+                        colorRenderers[i].transform.localPosition = new Vector3(curOpenColorRendPositions[i].x, posY, closeColorRendererPosition.z);
                     }
                 }
                 await UniTask.Yield(ctsOpen.Token);
@@ -706,7 +775,7 @@ public class ColorPicker : MonoBehaviour
                     paletteRenderer.UpdateSliceSpriteInputsSelf();
                     for (int i = 0; i < activeColorAmount; i++)
                     {
-                        float posX = Mathf.Lerp(closeColorRendererPosition.x, openColorRendererPositions[i].x, easeOutT);
+                        float posX = Mathf.Lerp(closeColorRendererPosition.x, curOpenColorRendPositions[i].x, easeOutT);
                         colorRenderers[i].transform.localPosition = new Vector3(posX, closeColorRendererPosition.y, closeColorRendererPosition.z);
                     }
                 }
@@ -719,8 +788,8 @@ public class ColorPicker : MonoBehaviour
 
                     for (int i = 0; i < activeColorAmount; i++)
                     {
-                        float posY = Mathf.Lerp(closeColorRendererPosition.y, openColorRendererPositions[i].y, easOutT);
-                        colorRenderers[i].transform.localPosition = new Vector3(openColorRendererPositions[i].x, posY, closeColorRendererPosition.z);
+                        float posY = Mathf.Lerp(closeColorRendererPosition.y, curOpenColorRendPositions[i].y, easOutT);
+                        colorRenderers[i].transform.localPosition = new Vector3(curOpenColorRendPositions[i].x, posY, closeColorRendererPosition.z);
                     }
                 }
                 await UniTask.Yield(ctsOpen.Token);

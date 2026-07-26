@@ -75,15 +75,6 @@ public class Page : MonoBehaviour
                 Array.Fill(playerWriteTexts, "");
             }
             break;
-
-            case PageType.Start:
-            {
-                activePlayerWriteTextRenderer = playerWriteTextRenderers[0];
-                isPlayerWriteTextPreviewSet = new bool[playerWriteTextRenderers.Length];
-                playerWriteTexts = new string[playerWriteTextRenderers.Length];
-                Array.Fill(playerWriteTexts, "");
-            }
-            break;
         }
     }
     public void InitRuleOutRow()
@@ -175,48 +166,6 @@ public class Page : MonoBehaviour
                 if (playerInputs.shiftDown && activePlayerWriteRowIndex > 0)
                 {
                     SceneController.GetClueColorPicker().Open(playerWriteRenderers[activePlayerWriteRowIndex], ColorPicker.SelectType.Clue);
-                }
-            }
-            break;
-
-            case PageType.Options:
-            {
-                for (int i = 0; i < playerWriteRenderers.Length; i++)
-                {
-                    AtlasRenderer colorKeyRend = playerWriteRenderers[i];
-                    bool foundColorKeyRend = false;
-                    if (!foundColorKeyRend && CursorController.IsInsideBounds(colorKeyRend.GetBounds(), isClickable: true))
-                    {
-                        if (playerInputs.mouseLeftDown)
-                        {
-                            if (i == 0)
-                            {
-                                SceneController.GetMainColorPicker().Open(colorKeyRend, ColorPicker.SelectType.Main);
-                            }
-                            else
-                            {
-                                SceneController.GetMainColorPicker().Open(colorKeyRend, ColorPicker.SelectType.Meridia);
-                            }
-                                SwitchActivePLayerWriteTextRenderer(i);
-                        }
-                        colorKeyRend.custom.w = 0;
-                    }
-                    else
-                    {
-                        colorKeyRend.custom.w = 1;
-                    }
-                }
-
-                if (playerInputs.shiftDown)
-                {
-                    if (activePlayerWriteRowIndex == 0)
-                    {
-                        SceneController.GetMainColorPicker().Open(playerWriteRenderers[activePlayerWriteRowIndex], ColorPicker.SelectType.Main);
-                    }
-                    else
-                    {
-                        SceneController.GetMainColorPicker().Open(playerWriteRenderers[activePlayerWriteRowIndex], ColorPicker.SelectType.Meridia);
-                    }
                 }
             }
             break;
@@ -411,24 +360,6 @@ public class Page : MonoBehaviour
                 }
             }
             break;
-
-            case PageType.Start:
-            {
-                previewPlayerWriteIndex %= 2;
-                if (previewPlayerWriteIndex == 0)
-                {
-                    previewPlayerWriteText = "Start";
-                }
-                else
-                {
-                    previewPlayerWriteText = "Quit";
-                }
-
-                activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
-                playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
-                isPlayerWriteTextPreviewSet[0] = false;
-            }
-            break;
         }
 
     }
@@ -470,13 +401,6 @@ public class Page : MonoBehaviour
 
                     }
                 }
-            }
-            break;
-
-            case PageType.Start:
-            {
-                previewPlayerWriteText = previewPlayerWriteIndex % 2 == 0 ? "Start" : "Quit";
-                activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
             }
             break;
         }
@@ -535,7 +459,6 @@ public class Page : MonoBehaviour
         {
             case PageType.Profile:
             case PageType.ColorKey:
-            case PageType.Start:
             {
                 for(int i = 0; i < playerWriteTextRenderers.Length; i++)
                 {

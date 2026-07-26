@@ -67,7 +67,7 @@ public class MeetingDoor : MonoBehaviour
                 {
                     if (spyStats.moveVelocity.x > 0 && spyStats.curWorldPos.x > triggerBounds.center.x && spyStats.curWorldPos.x < triggerBounds.max.x && !atlasRenderer.isAnimating)
                     {
-                        gameEventData.OnStartGame.Raise();
+                        gameEventData.OnStartTrip.Raise();
                         SceneController.Spy.transform.position = new Vector3(SceneController.Spy.transform.position.x, SceneController.Spy.transform.position.y, 11);
                         leftRoom.MoveUp();
 
