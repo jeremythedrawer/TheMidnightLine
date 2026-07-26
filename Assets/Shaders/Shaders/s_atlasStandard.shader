@@ -1,9 +1,5 @@
 Shader "Custom/s_atlasStandard"
 {
-    Properties
-    {
-        [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
-    }
 
     SubShader
     {
@@ -41,6 +37,7 @@ Shader "Custom/s_atlasStandard"
                 float3 worldPos : TEXCOORD1;
                 float4 uvSizeAndPos : TEXCOORD2;
                 float4 scaleAndFlip : TEXCOORD3;
+                float4 custom : TEXCOORD4;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -81,6 +78,7 @@ Shader "Custom/s_atlasStandard"
                 o.uv = v.uv;
                 o.uvSizeAndPos = spriteData.uvSizeAndPos;
                 o.scaleAndFlip = spriteData.scaleAndFlip;
+                o.custom = spriteData.custom;
                 return o;
             }
 
@@ -93,6 +91,7 @@ Shader "Custom/s_atlasStandard"
                 float2 flip = i.scaleAndFlip.zw;
 
                 i.uv *= scale;
+                i.uv += i.custom.xy * flip;
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;

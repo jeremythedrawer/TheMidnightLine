@@ -2,7 +2,8 @@ Shader "Custom/s_matrix"
 {
 	Properties
     {
-        [NoScaleOffset] _NoiseTexture("Noise Atlas", 2D) = "white"
+        [NoScaleOffset] _NoiseTexture("Noise Atlas", 2D) = "white" {}
+		_Test("Test", Range(0,1)) = 0
     }
 	HLSLINCLUDE
 		#include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
@@ -24,16 +25,21 @@ Shader "Custom/s_matrix"
 		float _DayNight;
 		float3 _BlackColor;
 		float3 _WhiteColor;
+
+		CBUFFER_START(UnityPerMaterial)
+		float _Test;
+		CBUFFER_END
+
 		half4 frag(Varyings input) : SV_TARGET
 		{
 			float2 aspect = float2(_ScreenParams.x / _ScreenParams.y, 1);
-			float2 centerUV = input.texcoord * aspect - 0.5 * aspect;
+			float2 centerUV = input.texcoord * aspect * 0.5;
 			float4 noiseTex = SAMPLE_TEXTURE2D_X(_NoiseTexture, sampler_NoiseTexture, centerUV);
-
+			//return noiseTex;
 			float gradient = input.texcoord.y; 
 
 			float horizon = sin(min(gradient + _DayNight, PI * 0.5) * PI) * 0.5 + 0.5;
-			float stars = step(0.55,saturate(noiseTex.r - 1 + _DayNight) * (1-horizon));
+			float stars = step(1, noiseTex.r + _DayNight * 0.13); //* (1-horizon));
 			horizon = BayerX8(horizon, input.texcoord.y * _ScreenParams.y);
 
 

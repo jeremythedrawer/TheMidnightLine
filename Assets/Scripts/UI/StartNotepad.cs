@@ -544,11 +544,6 @@ public class StartNotepad : MonoBehaviour
                 leftHand_renderer.PlayClipOneShotReverse(notepadData.rotatePencil_clip);
                 atStartPencilPos = false;
                 subState &= ~(NotepadSubState.EraseToggle);
-
-                switch (activePage.pageType)
-                {
-
-                }
             }
             break;
 

@@ -7,8 +7,6 @@ public class CameraStatsSO : ScriptableObject
     public Matrix4x4 camToWorld;
 
     public Bounds camBounds;
-    public Bounds meetingBounds;
-    public Bounds bunkerBounds;
 
     public Vector3 curWorldPos;
     public Vector3 prevWorldPos;

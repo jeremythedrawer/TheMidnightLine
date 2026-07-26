@@ -192,6 +192,11 @@ public class CameraController : MonoBehaviour
                 carriageBoundsCompute.SetVector("_BoundsSize", spyStats.curLocationBounds.size);
             }
             break;
+            case LocationState.Elevator:
+            {
+                targetWorldPos.x = spyStats.curLocationBounds.center.x;
+            }
+            break;
         }
     }
     private void ExitState()

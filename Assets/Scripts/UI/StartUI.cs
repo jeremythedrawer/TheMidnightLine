@@ -8,6 +8,8 @@ using static Spy;
 
 public class StartUI : MonoBehaviour
 {
+    public AtlasRenderer keyIconRenderer;
+
     public Material fadeBlackMaterial;
 
     public TripSO trip;
@@ -43,11 +45,20 @@ public class StartUI : MonoBehaviour
     private void OnEnable()
     {
         FadeBlack.OnFinishFadeFromBlack += SetToNoneState;
+        
+        NotepadProp.OnSpyEnter += SetNotepadCollectIcon;
+        NotepadProp.OnSpyExit += DisableNotepadCollectIcon;
+
+        gameEventData.OnNotepadCollect.RegisterListener(DisableNotepadCollectIcon);
+
         gameEventData.OnStartGame.RegisterListener(StartGame);
     }
     private void OnDisable()
     {
         FadeBlack.OnFinishFadeFromBlack -= SetToNoneState;
+        NotepadProp.OnSpyEnter -= SetNotepadCollectIcon;
+        NotepadProp.OnSpyExit -= DisableNotepadCollectIcon;
+        gameEventData.OnNotepadCollect.UnregisterListener(DisableNotepadCollectIcon);
         gameEventData.OnStartGame.UnregisterListener(StartGame);
     }
     private void Update()
@@ -64,9 +75,20 @@ public class StartUI : MonoBehaviour
     {
         SetState(UIState.None);
     }
+    private void SetNotepadCollectIcon(Vector2 position)
+    {
+        keyIconRenderer.enabled = true;
+        keyIconRenderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.W);
+        keyIconRenderer.transform.SetParent(null);
+        keyIconRenderer.transform.position = new Vector3(position.x, position.y + keyIconRenderer.bounds.size.y, keyIconRenderer.transform.position.z);
+    }
+    private void DisableNotepadCollectIcon()
+    {
+        keyIconRenderer.enabled = false;
+    }
     private void ChooseState()
     {
-        if (playerInputs.notepadKeyDown || notepadData.checkingNotepad)
+        if ((notepadData.collected && playerInputs.notepadKeyDown) || notepadData.checkingNotepad)
         {
             SetState(UIState.Notepad);
         }

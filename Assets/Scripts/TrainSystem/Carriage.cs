@@ -269,7 +269,7 @@ public class Carriage : MonoBehaviour
                 alpha = alpha < 0.5 ? 16 * alpha * alpha * alpha * alpha * alpha : 1 - Mathf.Pow(-2 * alpha + 2, 5) * 0.5f; 
                 for (int i = 0; i < exteriorRenderers.Length; i++)
                 {
-                    exteriorRenderers[i].custom.x = alpha;
+                    exteriorRenderers[i].custom.z = alpha;
                 }
 
                 await UniTask.Yield(cancellationToken: ctsFade.Token);
@@ -292,7 +292,7 @@ public class Carriage : MonoBehaviour
                 alpha = alpha < 0.5 ? 16 * alpha * alpha * alpha * alpha * alpha : 1 - Mathf.Pow(-2 * alpha + 2, 5) * 0.5f;
                 for (int i = 0; i < exteriorRenderers.Length; i++)
                 {
-                    exteriorRenderers[i].custom.x = alpha;
+                    exteriorRenderers[i].custom.z = alpha;
                 }
 
                 await UniTask.Yield(PlayerLoopTiming.Update, ctsFade.Token);

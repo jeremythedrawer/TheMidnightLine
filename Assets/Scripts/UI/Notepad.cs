@@ -187,6 +187,7 @@ public class Notepad : MonoBehaviour
 
         notepadData.leftHandOffScreenLocalPos.x = -NotepadActiveLocalPos.x * 0.5f;
 
+        notepadData.collected = false;
 
         SimpleSprite holdingPencilSprite = leftHand_renderer.atlas.motionSprites[HOLDING_PENCIL_SPRITE_INDEX].sprite;
         float worldPivotOffsetY = holdingPencilSprite.worldSize.y * (1 - holdingPencilSprite.uvPivot.y);

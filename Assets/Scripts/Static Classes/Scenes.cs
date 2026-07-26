@@ -9,6 +9,7 @@ public static class Scenes
    
 
     public static event Action OnLoadScore;
+    public static event Action OnLoadStart;
     public static event Action OnLoadTrip0;
     public static event Action OnLoadTrip1;
     public static event Action OnLoadTrip2;
@@ -52,7 +53,7 @@ public static class Scenes
         { 
             case SceneType.Start:
             {
-
+                OnLoadStart?.Invoke();
             }
             break;
             case SceneType.Trip:

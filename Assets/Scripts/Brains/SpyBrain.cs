@@ -84,6 +84,7 @@ public class SpyBrain : MonoBehaviour
         gameEventData.OnStationArrival.RegisterListener(EnableCanOpenSlideDoor);
         gameEventData.OnStationLeave.RegisterListener(DisableCanOpenSlideDoor);
 
+        Scenes.OnLoadStart += StartInit;
         Scenes.OnLoadTrip0 += TripInit;
         Init();
     }
@@ -94,6 +95,7 @@ public class SpyBrain : MonoBehaviour
         gameEventData.OnStationArrival.UnregisterListener(EnableCanOpenSlideDoor);
         gameEventData.OnStationLeave.UnregisterListener(DisableCanOpenSlideDoor);
 
+        Scenes.OnLoadStart -= StartInit;
         Scenes.OnLoadTrip0 -= TripInit;
     }
     private void Update()
@@ -122,21 +124,18 @@ public class SpyBrain : MonoBehaviour
 
         SetState(SpyState.None);
 
-        stats.curLocationState = LocationState.MeetingRoom;
-        stats.curLocationBounds = camStats.meetingBounds;
-
+        stats.spyHeight = atlasRenderer.bounds.size.y;
         SceneController.SetSpyBrain(this);
     }
     private void TripInit()
     {
-        rigidBody.includeLayers = layerSettings.stationMask;
-        atlas = atlasRenderer.atlas;
-        atlas.UpdateClipDictionary();
-        SetState(SpyState.None);
         trip.ticketsCheckedTotal = 0;
         stats.curLocationState = LocationState.Station;
-        CanCheckTicket = false;
         possibleNPCsToTicketCheck = new NPCBrain[8];
+    }
+    private void StartInit()
+    {
+        stats.curLocationState = LocationState.Elevator;
     }
     private void ChooseState()
     {

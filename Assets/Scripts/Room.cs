@@ -19,28 +19,10 @@ public class Room : MonoBehaviour
     public AtlasRenderer exteriorWallRenderer;
     public BoxCollider2D leftWallCollider;
     public BoxCollider2D rightWallCollider;
-
     [Header("Generated")]
     public Bounds bounds;
     public float curMoveWallTime;
     public CancellationTokenSource ctsWall;
-    public void Start()
-    {
-        switch (locationState)
-        { 
-            case LocationState.MeetingRoom:
-            {
-                camStats.meetingBounds = bounds;
-            }
-            break;
-
-            case LocationState.Bunker:
-            {
-                camStats.bunkerBounds = bounds;
-            }
-            break;
-        }
-    }
 
     public void MoveUp()
     {
@@ -77,7 +59,7 @@ public class Room : MonoBehaviour
                 curMoveWallTime = elaspedTime / MOVE_WALL_TIME;
                 curMoveWallTime = EaseInOutCubic(curMoveWallTime);
 
-                exteriorWallRenderer.custom.x = curMoveWallTime;
+                exteriorWallRenderer.custom.z = curMoveWallTime;
 
                 await UniTask.Yield(cancellationToken: ctsWall.Token);
             }
@@ -99,7 +81,7 @@ public class Room : MonoBehaviour
                 curMoveWallTime = elaspedTime / MOVE_WALL_TIME;
                 curMoveWallTime = EaseInOutCubic(curMoveWallTime);
 
-                exteriorWallRenderer.custom.x = curMoveWallTime;
+                exteriorWallRenderer.custom.z = curMoveWallTime;
 
                 await UniTask.Yield(PlayerLoopTiming.Update, ctsWall.Token);
             }

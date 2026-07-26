@@ -65,7 +65,7 @@ Shader "Custom/s_exteriorWalls"
 
                 o.worldPos = float3(position.xy + objPos, position.z);
 
-                o.worldPos.y -= spriteData.custom.x * 3.3; //Moving Wall
+                o.worldPos.y -= spriteData.custom.z * size.y;
                 o.spritePos = position;
                 o.positionHCS = TransformWorldToHClip(o.worldPos);
                 o.uv = v.uv;
@@ -85,7 +85,7 @@ Shader "Custom/s_exteriorWalls"
                 float2 flip = i.scaleAndFlip.zw;
 
                 i.uv *= scale.xy;
-                i.uv.x += i.custom.y;
+                i.uv += i.custom.xy;
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;

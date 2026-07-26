@@ -48,6 +48,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 382195a04a51f3940b3269ac3a8dbf87, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::StartUI
+  keyIconRenderer: {fileID: 9219517092114128391}
   fadeBlackMaterial: {fileID: 2100000, guid: d7e800c5760a0a94698f28dbdb5c3a9e, type: 2}
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
@@ -86,7 +87,7 @@ Transform:
   m_GameObject: {fileID: 7638506800086665004}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalPosition: {x: -6.76, y: 0, z: 1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -122,7 +123,7 @@ MonoBehaviour:
     worldSize: {x: 0.20555556, y: 0.20555556, z: 1}
     index: 8
   bounds:
-    m_Center: {x: 0, y: 0, z: 0}
+    m_Center: {x: -6.76, y: 0, z: 1}
     m_Extent: {x: 0.10277778, y: 0.10277778, z: 0.1}
   worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
   uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.009765625, w: 0.82421875}
@@ -216,11 +217,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6743610418794037652, guid: cbe1fc6ce67b4de44b15f88662e82f5e, type: 3}
       propertyPath: bounds.m_Center.x
-      value: -11.287774
+      value: 262.13223
       objectReference: {fileID: 0}
     - target: {fileID: 6743610418794037652, guid: cbe1fc6ce67b4de44b15f88662e82f5e, type: 3}
       propertyPath: bounds.m_Center.y
-      value: 3.921708
+      value: 3.9017081
       objectReference: {fileID: 0}
     - target: {fileID: 6743610418794037652, guid: cbe1fc6ce67b4de44b15f88662e82f5e, type: 3}
       propertyPath: bounds.m_Center.z
