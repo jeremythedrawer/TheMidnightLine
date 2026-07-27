@@ -43,6 +43,7 @@ Shader "Custom/s_exteriorWalls"
             SAMPLER(sampler_AtlasTexture);
 
             float3 _BlackColor;
+            float3 _WhiteColor;
             float _DayNight;
             float _DayNightFactor;
             Varyings vert(Attributes v)
@@ -93,7 +94,7 @@ Shader "Custom/s_exteriorWalls"
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
                 half grey = color.r + (-(_DayNight * 1.1 - 0.9) * _DayNightFactor);
-                half3 finalColor = grey + _BlackColor;
+                half3 finalColor = lerp(_BlackColor, _WhiteColor,saturate(grey));
 
                 half worldClip = step(i.spritePos.y, i.worldPos.y);
                 float alpha = color.a * worldClip;

@@ -44,6 +44,7 @@ Shader "Custom/s_atlasUI"
 
             float3 _BlackColor;
             float3 _MeridiaColor;
+            float3 _WhiteColor;
 
             Varyings vert(Attributes v)
             {
@@ -100,9 +101,9 @@ Shader "Custom/s_atlasUI"
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
                 half invertT = i.custom.a;
-                half3 invertTex = lerp(tex.rgb, 1 - tex.rgb, invertT);
+                half invertTex = lerp(tex.r, 1 - tex.r, invertT);
 
-                half3 finalColor = invertTex.rgb + blackColor + meridiaColor + i.custom.rgb;
+                half3 finalColor = lerp(blackColor + meridiaColor + i.custom.rgb, _WhiteColor, invertTex);
                 
                 clip(tex.a - 0.001);
                 return half4 (finalColor, 1);

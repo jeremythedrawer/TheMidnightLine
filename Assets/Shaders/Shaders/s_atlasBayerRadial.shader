@@ -36,6 +36,7 @@ Shader "Custom/s_atlasBayerRadial"
             StructuredBuffer<AtlasSprite> _SpriteData;
 
             float3 _BlackColor;
+            float3 _WhiteColor;
             float3 _MeridiaColor;
 
             TEXTURE2D(_AtlasTexture);
@@ -104,7 +105,7 @@ Shader "Custom/s_atlasBayerRadial"
                 float3 meridiaColor = meridiaColorMask * _MeridiaColor;
                 float3 blackColor = (1 - meridiaColorMask) * _BlackColor;
 
-                half3 finalColor = tex.r + blackColor + diagonal + meridiaColor;
+                half3 finalColor = lerp(blackColor + diagonal + meridiaColor, _WhiteColor, tex.r);
                 clip(alpha - 0.001);
 
                 return half4 (finalColor, 1);

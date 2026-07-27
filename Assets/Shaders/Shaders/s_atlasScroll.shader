@@ -47,6 +47,7 @@ Shader "Custom/s_atlasScroll"
 
             float _DayNight;
             float3 _BlackColor;
+            float3 _WhiteColor;
             float _DayNightFactor;
 
             float4 _TrainBoundsMin;
@@ -109,7 +110,7 @@ Shader "Custom/s_atlasScroll"
                 half bayerValue = bayerFactor * (_DayNight * 1.75 - 0.875);
                 half bayer = BayerX8((tex.r - bayerValue), i.positionHCS.y);
 
-                half3 finalColor = bayer + _BlackColor;
+                half3 finalColor = lerp(_BlackColor, _WhiteColor, bayer);
                 return half4(finalColor, 1);
             }
             ENDHLSL

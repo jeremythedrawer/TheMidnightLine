@@ -16,8 +16,8 @@ public class ColorPicker : MonoBehaviour
     {
         NPC,
         Clue,
-        Main,
-        Meridia
+        Dark,
+        Light
     }
 
     public enum Direction
@@ -51,7 +51,8 @@ public class ColorPicker : MonoBehaviour
     public Vector2[] curOpenColorRendPositions;
 
     public Vector3 curWorldPos;
-    public Vector3 closeColorRendererPosition;
+    public Vector3 defaultCloseColorRendPos;
+    public Vector3 curCloseColorRendPos;
     public Vector3 paletteCenterSliceWorldSize;
 
     public Vector2 colorRendererWorldSize;
@@ -72,8 +73,8 @@ public class ColorPicker : MonoBehaviour
     public SelectType selectType;
     public bool canClose;
 
-    public int selectedMeridiaColorIndex;
-    public int selectedMainColorIndex;
+    public int selectedLightColorIndex;
+    public int selectedDarkColorIndex;
     private void OnEnable()
     {
         Init();
@@ -202,13 +203,13 @@ public class ColorPicker : MonoBehaviour
                     }
                     break;
 
-                    case SelectType.Main:
+                    case SelectType.Dark:
                     {
                         for (int i = 0; i < activeColorAmount; i++)
                         {
                             AtlasRenderer colorRend = colorRenderers[i];
 
-                            if (selectedMainColorIndex == i || selectedMeridiaColorIndex == i) continue;
+                            if (selectedDarkColorIndex == i) continue;
                             
                             if (CursorController.IsInsideBounds(colorRend.bounds, isClickable: true))
                             {
@@ -216,7 +217,7 @@ public class ColorPicker : MonoBehaviour
 
                                 if (playerInputs.mouseLeftUp)
                                 {
-                                    SetNewMainColor(i);
+                                    SetNewDarkColor(i);
                                 }
                                 prevHoveredColorRenderer = colorRend;
                             }
@@ -229,19 +230,19 @@ public class ColorPicker : MonoBehaviour
                     }
                     break;
 
-                    case SelectType.Meridia:
+                    case SelectType.Light:
                     {
                         for (int i = 0; i < activeColorAmount; i++)
                         {
                             AtlasRenderer colorRend = colorRenderers[i];
-                            if (selectedMainColorIndex == i || selectedMeridiaColorIndex == i) continue;
+                            if (selectedLightColorIndex == i) continue;
                             if (CursorController.IsInsideBounds(colorRend.bounds, isClickable: true))
                             {
                                 colorRend.custom.w = 0;
 
                                 if (playerInputs.mouseLeftUp)
                                 {
-                                    SetNewMeridiaColor(i);
+                                    SetNewLightColor(i);
                                 }
                                 prevHoveredColorRenderer = colorRend;
                             }
@@ -342,7 +343,7 @@ public class ColorPicker : MonoBehaviour
             }
         }
 
-        closeColorRendererPosition = new Vector3(firstColorRendPos.x, firstColorRendPos.y, -0.1f);
+        defaultCloseColorRendPos = new Vector3(firstColorRendPos.x, firstColorRendPos.y, -0.1f);
         colorRendererWorldSize = firstColorRend.sprite.worldSize;
 
         curWorldPos.z = paletteRenderer.transform.position.z;
@@ -388,6 +389,8 @@ public class ColorPicker : MonoBehaviour
                     Vector2 defPos = defaultOpenColorRendPositions[i];
                     curOpenColorRendPositions[i] = defPos;
                 }
+                Vector3 newClosePos = defaultCloseColorRendPos;
+                curCloseColorRendPos = newClosePos;
 
                 curWorldPos.x = selectedRendBounds.min.x;
             }
@@ -400,10 +403,15 @@ public class ColorPicker : MonoBehaviour
 
                 for (int i = 0; i < curOpenColorRendPositions.Length; i++)
                 {
-                    Vector2 defPos = defaultOpenColorRendPositions[i];
-                    defPos.x *= -1;
-                    curOpenColorRendPositions[i] = defPos;
+                    Vector2 newPos = defaultOpenColorRendPositions[i];
+                    newPos.x *= -1;
+                    curOpenColorRendPositions[i] = newPos;
                 }
+                Vector3 newClosePos = defaultCloseColorRendPos;
+                newClosePos.x *= -1;
+
+                curCloseColorRendPos = newClosePos;
+
                 curWorldPos.x = selectedRendBounds.max.x;
             }
             break;
@@ -419,6 +427,12 @@ public class ColorPicker : MonoBehaviour
                     defPos.y *= -1;
                     curOpenColorRendPositions[i] = defPos;
                 }
+
+                Vector3 newClosePos = defaultCloseColorRendPos;
+                newClosePos.y *= -1;
+
+                curCloseColorRendPos = newClosePos;
+
                 curWorldPos.x = selectedRendBounds.min.x;
             }
             break;
@@ -435,7 +449,10 @@ public class ColorPicker : MonoBehaviour
                     defPos.y *= -1;
                     curOpenColorRendPositions[i] = defPos;
                 }
-
+                Vector3 newClosePos = defaultCloseColorRendPos;
+                newClosePos.x *= -1;
+                newClosePos.y *= -1;
+                curCloseColorRendPos = newClosePos;
                 curWorldPos.x = selectedRendBounds.max.x;
             }
             break;
@@ -511,7 +528,7 @@ public class ColorPicker : MonoBehaviour
             {
                 activeColorAmount = colorRenderers.Length;
 
-                Color[] colorsToUse = colorPickerType == ColorPickerType.Clue ? colorsData.selectableClueColors : colorsData.selectableMainColors;
+                Color[] colorsToUse = colorPickerType == ColorPickerType.Clue ? colorsData.selectableClueColors : colorsData.selectableDarkColors;
 
                 for (int i = 0; i < activeColorAmount; i++)
                 {
@@ -524,12 +541,11 @@ public class ColorPicker : MonoBehaviour
             }
             break;
 
-            case SelectType.Meridia:
-            case SelectType.Main:
+            case SelectType.Light:
             {
                 activeColorAmount = colorRenderers.Length;
 
-                Color[] colorsToUse = colorPickerType == ColorPickerType.Clue ? colorsData.selectableClueColors : colorsData.selectableMainColors;
+                Color[] colorsToUse = colorPickerType == ColorPickerType.Clue ? colorsData.selectableClueColors : colorsData.selectableLightColors;
 
                 for (int i = 0; i < activeColorAmount; i++)
                 {
@@ -537,7 +553,30 @@ public class ColorPicker : MonoBehaviour
                     colorRend.custom = colorsToUse[i].linear;
                     colorRend.customBit = 0;
                     colorRend.enabled = true;
-                    if (i == selectedMainColorIndex || i == selectedMeridiaColorIndex)
+                    if (i == selectedLightColorIndex)
+                    {
+                        colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+                    }
+                    else
+                    {
+                        colorRend.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+                    }
+                }
+            }
+            break;
+            case SelectType.Dark:
+            {
+                activeColorAmount = colorRenderers.Length;
+
+                Color[] colorsToUse = colorPickerType == ColorPickerType.Clue ? colorsData.selectableClueColors : colorsData.selectableDarkColors;
+
+                for (int i = 0; i < activeColorAmount; i++)
+                {
+                    AtlasRenderer colorRend = colorRenderers[i];
+                    colorRend.custom = colorsToUse[i].linear;
+                    colorRend.customBit = 0;
+                    colorRend.enabled = true;
+                    if (i == selectedDarkColorIndex)
                     {
                         colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
                     }
@@ -578,10 +617,10 @@ public class ColorPicker : MonoBehaviour
 
         Shader.SetGlobalColor("_ColorKey" + trip.selectedColorMarkerIndex, selectedColor.linear);
     }
-    public void SetNewMainColor(int index)
+    public void SetNewDarkColor(int index)
     {
-        selectedMainColorIndex = index;
-        Color selectedColor = colorsData.selectableMainColors[index];
+        selectedDarkColorIndex = index;
+        Color selectedColor = colorsData.selectableDarkColors[index];
         if (selectedRenderer != null) selectedRenderer.custom = selectedColor.linear;
 
         for (int i = 0; i < activeColorAmount; i++)
@@ -589,27 +628,25 @@ public class ColorPicker : MonoBehaviour
             colorRenderers[i].UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
             colorRenderers[i].custom.w = 1;
         }
-        colorRenderers[selectedMainColorIndex].UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
-        colorRenderers[selectedMeridiaColorIndex].UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+        colorRenderers[selectedDarkColorIndex].UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
         colorsData.blackColor = selectedColor;
         
         Shader.SetGlobalColor("_BlackColor", colorsData.blackColor.linear);
 
     }
-    public void SetNewMeridiaColor(int index)
+    public void SetNewLightColor(int index)
     {
-        selectedMeridiaColorIndex = index;
-        Color selectedColor = colorsData.selectableMainColors[selectedMeridiaColorIndex];
+        selectedLightColorIndex = index;
+        Color selectedColor = colorsData.selectableLightColors[selectedLightColorIndex];
         if (selectedRenderer != null) selectedRenderer.custom = selectedColor.linear;
         for (int i = 0; i < activeColorAmount; i++)
         {
             colorRenderers[i].UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
             colorRenderers[i].custom.w = 1;
         }
-        colorRenderers[selectedMainColorIndex].UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
-        colorRenderers[selectedMeridiaColorIndex].UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
-        colorsData.meridiaColor = selectedColor;
-        Shader.SetGlobalColor("_MeridiaColor", colorsData.meridiaColor.linear);
+        colorRenderers[selectedLightColorIndex].UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+        colorsData.whiteColor = selectedColor;
+        Shader.SetGlobalColor("_WhiteColor", colorsData.whiteColor.linear);
     }
     public void SetNPCColor(int index)
     {
@@ -719,8 +756,8 @@ public class ColorPicker : MonoBehaviour
 
                     for (int i = 0; i < activeColorAmount; i++)
                     {
-                        float posX = Mathf.Lerp(closeColorRendererPosition.x, curOpenColorRendPositions[i].x, easeOutT);
-                        colorRenderers[i].transform.localPosition = new Vector3(posX, closeColorRendererPosition.y, closeColorRendererPosition.z);
+                        float posX = Mathf.Lerp(curCloseColorRendPos.x, curOpenColorRendPositions[i].x, easeOutT);
+                        colorRenderers[i].transform.localPosition = new Vector3(posX, curCloseColorRendPos.y, curCloseColorRendPos.z);
                     }
                 }
                 else
@@ -732,8 +769,8 @@ public class ColorPicker : MonoBehaviour
 
                     for (int i = 0; i < activeColorAmount; i++)
                     {
-                        float posY = Mathf.Lerp(closeColorRendererPosition.y, curOpenColorRendPositions[i].y, easOutT);
-                        colorRenderers[i].transform.localPosition = new Vector3(curOpenColorRendPositions[i].x, posY, closeColorRendererPosition.z);
+                        float posY = Mathf.Lerp(curCloseColorRendPos.y, curOpenColorRendPositions[i].y, easOutT);
+                        colorRenderers[i].transform.localPosition = new Vector3(curOpenColorRendPositions[i].x, posY, curCloseColorRendPos.z);
                     }
                 }
                 await UniTask.Yield(ctsOpen.Token);
@@ -775,8 +812,8 @@ public class ColorPicker : MonoBehaviour
                     paletteRenderer.UpdateSliceSpriteInputsSelf();
                     for (int i = 0; i < activeColorAmount; i++)
                     {
-                        float posX = Mathf.Lerp(closeColorRendererPosition.x, curOpenColorRendPositions[i].x, easeOutT);
-                        colorRenderers[i].transform.localPosition = new Vector3(posX, closeColorRendererPosition.y, closeColorRendererPosition.z);
+                        float posX = Mathf.Lerp(curCloseColorRendPos.x, curOpenColorRendPositions[i].x, easeOutT);
+                        colorRenderers[i].transform.localPosition = new Vector3(posX, curCloseColorRendPos.y, curCloseColorRendPos.z);
                     }
                 }
                 else
@@ -788,8 +825,8 @@ public class ColorPicker : MonoBehaviour
 
                     for (int i = 0; i < activeColorAmount; i++)
                     {
-                        float posY = Mathf.Lerp(closeColorRendererPosition.y, curOpenColorRendPositions[i].y, easOutT);
-                        colorRenderers[i].transform.localPosition = new Vector3(curOpenColorRendPositions[i].x, posY, closeColorRendererPosition.z);
+                        float posY = Mathf.Lerp(curCloseColorRendPos.y, curOpenColorRendPositions[i].y, easOutT);
+                        colorRenderers[i].transform.localPosition = new Vector3(curOpenColorRendPositions[i].x, posY, curCloseColorRendPos.z);
                     }
                 }
                 await UniTask.Yield(ctsOpen.Token);

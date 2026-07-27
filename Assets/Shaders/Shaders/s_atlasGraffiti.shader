@@ -59,6 +59,7 @@ Shader "Custom/s_atlasGraffiti"
             SAMPLER(sampler_NoiseTexture);
 
             float3 _BlackColor;
+            float3 _WhiteColor;
             float _DayNight;
             float _DayNightFactor;
             float4 _TrainBoundsMin;
@@ -113,7 +114,7 @@ Shader "Custom/s_atlasGraffiti"
                 half4 noiseTex = SAMPLE_TEXTURE2D(_NoiseTexture, sampler_NoiseTexture, i.uv);
                
                 half grey = color.r + (-(_DayNight * 1.1 - 0.9) * _DayNightFactor);
-                half3 finalColor = grey + _BlackColor;
+                half3 finalColor = lerp(_BlackColor, _WhiteColor, grey);
 
                 half noise = noiseTex.b + (i.custom.x * 2 - 1);
                 half bayerNoise = BayerX8(noise, i.positionHCS.y);

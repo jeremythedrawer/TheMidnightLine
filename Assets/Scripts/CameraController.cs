@@ -38,12 +38,14 @@ public class CameraController : MonoBehaviour
         Scenes.OnLoadTrip0 += TripInit;
         StartUI.OnClickOptions += MoveToOptionsMenu;
         StartUI.OnClickBackFromOptions += MoveToMainMenu;
+        StartUI.OnStartGame += MoveToPlayer;
     }
     private void OnDisable()
     {
         Scenes.OnLoadTrip0 -= TripInit;
         StartUI.OnClickOptions -= MoveToOptionsMenu;
         StartUI.OnClickBackFromOptions -= MoveToMainMenu;
+        StartUI.OnStartGame -= MoveToPlayer;
             
         stats.curVelocity = Vector3.zero;
 
@@ -226,6 +228,10 @@ public class CameraController : MonoBehaviour
     {
         Bounds curLocBounds = spyStats.curLocationBounds;
         targetWorldPos.x = curLocBounds.center.x + (curLocBounds.size.x * 0.25f);
+    }
+    private void MoveToPlayer()
+    {
+        targetWorldPos.x = spyStats.curWorldPos.x;
     }
     public static Vector3 GetSnappedPosition(Vector3 pos, float unitsPerPixel)
     {

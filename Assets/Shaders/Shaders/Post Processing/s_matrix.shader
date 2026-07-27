@@ -56,7 +56,7 @@ Shader "Custom/s_matrix"
 			float ground = step(0, worldPos.y);
 			float greyScale = saturate(horizon + stars);
 
-			float3 final = lerp(_BlackColor, 1, greyScale);
+			float3 final = lerp(_BlackColor, _WhiteColor, greyScale);
 			return half4(final,0);
 		}
 	ENDHLSL

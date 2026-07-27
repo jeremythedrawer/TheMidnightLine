@@ -24,6 +24,7 @@ Shader "Custom/s_moon"
             #pragma fragment frag
 
             float _DayNight;
+            float3 _WhiteColor;
 
             struct Attributes
             {
@@ -76,8 +77,9 @@ Shader "Custom/s_moon"
                 float mask = fullMoon * fade;
                 mask = BayerX8(mask, i.positionHCS.y + (_Time.y * _FadeSpeed));
 
+                float3 finalColor = mask * _WhiteColor;
                 clip(mask - 0.001);
-                return half4(mask.xxx, 1);
+                return half4(finalColor, 1);
             }
             ENDHLSL
         }

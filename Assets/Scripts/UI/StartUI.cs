@@ -25,8 +25,8 @@ public class StartUI : MonoBehaviour
     public AtlasTextRenderer startRenderer;
     public AtlasTextRenderer optionsRenderer;
     public AtlasTextRenderer quitRenderer;
-    public AtlasTextRenderer mainColorRenderer;
-    public AtlasTextRenderer meridiaColorRenderer;
+    public AtlasTextRenderer darkColorRenderer;
+    public AtlasTextRenderer lightColorRenderer;
 
 
     public SceneData sceneData;
@@ -64,6 +64,8 @@ public class StartUI : MonoBehaviour
         gameEventData.OnNotepadCollect.RegisterListener(DisableNotepadCollectIcon);
 
         gameEventData.OnStartTrip.RegisterListener(StartTrip);
+        gameEventData.OnToStartMenu.RegisterListener(SetToStartMenuState);
+        gameEventData.OnFromStartMenu.RegisterListener(SetStateToNone);
     }
     private void OnDisable()
     {
@@ -71,10 +73,11 @@ public class StartUI : MonoBehaviour
         NotepadProp.OnSpyExit -= DisableNotepadCollectIcon;
         gameEventData.OnNotepadCollect.UnregisterListener(DisableNotepadCollectIcon);
         gameEventData.OnStartTrip.UnregisterListener(StartTrip);
+        gameEventData.OnToStartMenu.UnregisterListener(SetToStartMenuState);
+        gameEventData.OnFromStartMenu.UnregisterListener(SetStateToNone);
     }
     private void Update()
     {
-        //ChooseState();
         UpdateState();
         fadeBlack.CheckToFadeFromBlack();
     }
@@ -103,6 +106,10 @@ public class StartUI : MonoBehaviour
         {
             SetState(UIState.None);
         }
+    }
+    private void SetToStartMenuState()
+    {
+        SetState(UIState.StartMenu);
     }
     private void SetState(UIState newState)
     {
@@ -173,7 +180,7 @@ public class StartUI : MonoBehaviour
 
             case UIState.StartMenu:
             {
-                HandleMainMenuButtonButton();
+                HandleMainMenuButtons();
             }
             break;
 
@@ -223,7 +230,7 @@ public class StartUI : MonoBehaviour
 
         Shader.SetGlobalVector("_CameraSizeAndPos", new Vector4(camStats.camBounds.size.x, camStats.camBounds.size.y, camStats.camBounds.center.x, camStats.camBounds.center.y));
     }
-    private void HandleMainMenuButtonButton()
+    private void HandleMainMenuButtons()
     {
         if (CursorController.IsInsideBounds(quitRenderer.background_renderer.bounds, isClickable: true))
         {
@@ -267,6 +274,9 @@ public class StartUI : MonoBehaviour
             {
                 OnStartGame?.Invoke();
                 SetState(UIState.None);
+
+                startRenderer.SetColorText(Color.black);
+                startRenderer.background_renderer.SetSliceCustom(w: 0);
             }
         }
         else
@@ -278,20 +288,36 @@ public class StartUI : MonoBehaviour
 
     private void HandleOptionsButtons()
     {
-        if (CursorController.IsInsideBounds(mainColorRenderer.background_renderer.bounds, isClickable: true))
+        if (CursorController.IsInsideBounds(darkColorRenderer.background_renderer.bounds, isClickable: true))
         {
-            mainColorRenderer.SetColorText(Color.white);
-            mainColorRenderer.background_renderer.SetSliceCustom(w: 1);
+            darkColorRenderer.SetColorText(Color.white);
+            darkColorRenderer.background_renderer.SetSliceCustom(w: 1);
             if (playerInputs.mouseLeftDown)
             {
-                SceneController.GetMainColorPicker().Open(mainColorRenderer.background_renderer, ColorPicker.SelectType.Main, ColorPicker.Direction.BottomRight);
+                SceneController.GetMainColorPicker().Open(darkColorRenderer.background_renderer, ColorPicker.SelectType.Dark, ColorPicker.Direction.BottomRight);
             }
         }
         else
         {
-            mainColorRenderer.SetColorText(Color.black);
-            mainColorRenderer.background_renderer.SetSliceCustom(w: 0);
+            darkColorRenderer.SetColorText(Color.black);
+            darkColorRenderer.background_renderer.SetSliceCustom(w: 0);
         }
+
+        if (CursorController.IsInsideBounds(lightColorRenderer.background_renderer.bounds, isClickable: true))
+        {
+            lightColorRenderer.SetColorText(Color.white);
+            lightColorRenderer.background_renderer.SetSliceCustom(w: 1);
+            if (playerInputs.mouseLeftDown)
+            {
+                SceneController.GetMainColorPicker().Open(lightColorRenderer.background_renderer, ColorPicker.SelectType.Light, ColorPicker.Direction.BottomRight);
+            }
+        }
+        else
+        {
+            lightColorRenderer.SetColorText(Color.black);
+            lightColorRenderer.background_renderer.SetSliceCustom(w: 0);
+        }
+
 
         if (CursorController.IsInsideBounds(optionsRenderer.background_renderer.bounds, isClickable: true))
         {
@@ -311,5 +337,9 @@ public class StartUI : MonoBehaviour
         }
     }
 
+    private void SetStateToNone()
+    {
+        SetState(UIState.None);
+    }
 
 }

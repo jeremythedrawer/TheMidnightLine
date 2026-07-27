@@ -45,6 +45,7 @@ Shader "Custom/s_atlasTicketIcons"
 
             float3 _TicketCheckColor;
             float3 _BlackColor;
+            float3 _WhiteColor;
             float _DayNight;
 
             Varyings vert(Attributes v)
@@ -99,7 +100,7 @@ Shader "Custom/s_atlasTicketIcons"
                 float dayNightBayer = BayerX8(round(_DayNight), i.positionHCS.y);
                 half3 dayNightInvertColor = lerp(colorA, colorB, dayNightBayer);
 
-                half3 finalColor = dayNightInvertColor + _BlackColor;
+                half3 finalColor = lerp(_BlackColor, _WhiteColor, dayNightInvertColor);
 
                 half alpha = BayerX8(color.a - i.custom.a, i.positionHCS.xy);
                 clip(alpha - 0.001);

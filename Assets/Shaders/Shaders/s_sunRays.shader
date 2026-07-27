@@ -31,7 +31,7 @@ Shader "Custom/s_sunRays"
 		    SAMPLER(sampler_NoiseTexture);
 
             float _DayNight;
-
+            float3 _WhiteColor;
             struct Attributes
             {
                 float4 positionOS : POSITION;
@@ -97,12 +97,13 @@ Shader "Custom/s_sunRays"
 			    float rays = asin(sinT * pow((sinT * 0.5 + 0.5), 5)) + max(asin(sinT * sinT),0);
 
 			    float sunRays = round(saturate(rays - noise + sun + saturate(sun)));
+                float3 finalColor = sunRays * _WhiteColor;
 
                 half horizonThreshold = step(0, i.worldPos.y);
                 half alpha = sunRays * horizonThreshold;
 
                 clip(alpha- 0.001);
-                return half4(sunRays.xxx, 1);
+                return half4(finalColor, 1);
             }
             ENDHLSL
         }

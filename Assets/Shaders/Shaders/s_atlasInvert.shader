@@ -45,6 +45,7 @@ Shader "Custom/s_atlasInvert"
             SAMPLER(sampler_AtlasTexture);
 
             float3 _BlackColor;
+            float3 _WhiteColor;
             float3 _MeridiaColor;
 
             Varyings vert(Attributes v)
@@ -103,7 +104,7 @@ Shader "Custom/s_atlasInvert"
 
                 float3 blackColor = (1 - meridiaColorMask) * _BlackColor;
 
-                half3 finalColor = lerp(invertColor, color.rgb, bayerMask) + blackColor + meridiaColor;
+                half3 finalColor = lerp(blackColor + meridiaColor, _WhiteColor, lerp(invertColor, color.r, bayerMask));
                 clip(alpha - 0.001);
 
                 return half4 (finalColor, 1);

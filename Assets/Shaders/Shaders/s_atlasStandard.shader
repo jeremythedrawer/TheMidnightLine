@@ -49,6 +49,7 @@ Shader "Custom/s_atlasStandard"
             SAMPLER(sampler_CarriageBoundsTexture);
 
             float3 _BlackColor;
+            float3 _WhiteColor;
             float _DayNight;
             float _DayNightFactor;
             float4 _TrainBoundsMin;
@@ -100,7 +101,7 @@ Shader "Custom/s_atlasStandard"
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
                 half grey = color.r + (-(_DayNight * 1.1 - 0.9) * _DayNightFactor);
-                half3 finalColor = grey + _BlackColor;
+                half3 finalColor = lerp(_BlackColor, _WhiteColor, saturate(grey));
 
                 float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;
                 half4 carriageSDF = SAMPLE_TEXTURE2D(_CarriageBoundsTexture, sampler_CarriageBoundsTexture, worldToTrain);

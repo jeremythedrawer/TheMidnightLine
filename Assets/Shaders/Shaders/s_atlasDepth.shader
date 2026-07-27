@@ -54,6 +54,7 @@ Shader "Custom/s_atlasDepth"
             SAMPLER(sampler_CarriageBoundsTexture);
 
             float3 _BlackColor;
+            float3 _WhiteColor;
             float _DayNight;
             float _DayNightFactor;
 
@@ -107,7 +108,7 @@ Shader "Custom/s_atlasDepth"
 
                 half bayer = BayerX8((color - bayerValue), i.positionHCS.y);
 
-                half3 finalColor = bayer + _BlackColor;
+                half3 finalColor = lerp(_BlackColor, _WhiteColor, bayer);
                 clip(color.a - 0.001);
                 return half4 (finalColor, 1);
             }

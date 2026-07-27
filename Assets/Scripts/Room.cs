@@ -14,6 +14,7 @@ using UnityEditor.IMGUI.Controls;
 public class Room : MonoBehaviour
 {
     const float MOVE_WALL_TIME = 0.8f;
+    public const float MOVE_WALL_VALUE = 2f;
     public CameraStatsSO camStats;
     public LocationState locationState;
     public AtlasRenderer exteriorWallRenderer;
@@ -21,7 +22,6 @@ public class Room : MonoBehaviour
     public BoxCollider2D rightWallCollider;
     [Header("Generated")]
     public Bounds bounds;
-    public float curMoveWallTime;
     public CancellationTokenSource ctsWall;
 
     public void MoveUp()
@@ -46,24 +46,23 @@ public class Room : MonoBehaviour
     {
         rightWallCollider.enabled = toggle;
     }
-
     private async UniTask MovingDown()
     {
-        float elaspedTime = curMoveWallTime * MOVE_WALL_TIME;
+        float elaspedTime = (exteriorWallRenderer.custom.z / MOVE_WALL_VALUE) * MOVE_WALL_TIME;
         try
         {
             while (elaspedTime < MOVE_WALL_TIME)
             {
                 elaspedTime += Time.deltaTime;
 
-                curMoveWallTime = elaspedTime / MOVE_WALL_TIME;
-                curMoveWallTime = EaseInOutCubic(curMoveWallTime);
+                float t = elaspedTime / MOVE_WALL_TIME;
+                t = EaseInOutCubic(t);
 
-                exteriorWallRenderer.custom.z = curMoveWallTime;
+                exteriorWallRenderer.custom.z = t * MOVE_WALL_VALUE;
 
-                await UniTask.Yield(cancellationToken: ctsWall.Token);
+                await UniTask.Yield(ctsWall.Token);
             }
-            exteriorWallRenderer.custom.x = 1;
+            exteriorWallRenderer.custom.z = MOVE_WALL_VALUE;
         }
         catch (OperationCanceledException)
         {
@@ -71,22 +70,22 @@ public class Room : MonoBehaviour
     }
     private async UniTask MovingUp()
     {
-        float elaspedTime = curMoveWallTime * MOVE_WALL_TIME;
+        float elaspedTime = (exteriorWallRenderer.custom.z / MOVE_WALL_VALUE) * MOVE_WALL_TIME;
         try
         {
             while (elaspedTime > 0)
             {
                 elaspedTime -= Time.deltaTime;
 
-                curMoveWallTime = elaspedTime / MOVE_WALL_TIME;
-                curMoveWallTime = EaseInOutCubic(curMoveWallTime);
+                float t = elaspedTime / MOVE_WALL_TIME;
+                t = EaseInOutCubic(t);
 
-                exteriorWallRenderer.custom.z = curMoveWallTime;
+                exteriorWallRenderer.custom.z = t * MOVE_WALL_VALUE;
 
-                await UniTask.Yield(PlayerLoopTiming.Update, ctsWall.Token);
+                await UniTask.Yield(ctsWall.Token);
             }
 
-            exteriorWallRenderer.custom.x = 0;
+            exteriorWallRenderer.custom.z = 0;
         }
         catch (OperationCanceledException)
         {

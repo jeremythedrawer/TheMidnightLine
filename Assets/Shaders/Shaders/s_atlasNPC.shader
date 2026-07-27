@@ -53,6 +53,7 @@ Shader "Custom/s_atlasNPC"
 
             float3 _BlackColor;
             
+
             float3 _ColorKey0;
             float3 _ColorKey1;
             float3 _ColorKey2;
@@ -164,7 +165,7 @@ Shader "Custom/s_atlasNPC"
                 half ticketCheckHover = i.custom.w;
 
                 outline = lerp(outline, 1 - outline, ticketCheckHover);
-                half3 finalColor = (tex.rgb * ticketCheckMask) + (outline * (1 - ticketCheckMask));
+                half3 finalColor = (tex.r * ticketCheckMask) + (outline * (1 - ticketCheckMask));
 
                 finalColor += diagonal + colKey0 + colKey1 + colKey2 + colKey01 + colKey02 + colKey12 + colKey012 + blackColor + meridiaColor;
 
