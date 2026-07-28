@@ -280,6 +280,7 @@ public class StartUI : MonoBehaviour
                 optionsButton.renderer.SetText("Back");
                 MoveButtonAway(quitButton);
                 MoveButtonAway(startButton);
+                MoveButtonToRight(optionsButton);
                 OnClickOptions?.Invoke();
                 SetState(UIState.OptionsMenu);
             }
@@ -352,6 +353,7 @@ public class StartUI : MonoBehaviour
                 optionsButton.renderer.SetText("Options");
                 MoveButtonBack(startButton);
                 MoveButtonBack(quitButton);
+                MoveButtonBack(optionsButton);
                 OnClickBackFromOptions?.Invoke();
                 SetState(UIState.StartMenu);
             }
@@ -368,6 +370,12 @@ public class StartUI : MonoBehaviour
         button.ctsMove?.Cancel();
         button.ctsMove = new CancellationTokenSource();
         MovingButtonAwayRight(button).Forget();
+    }
+    private void MoveButtonToRight(TextButton button)
+    {
+        button.ctsMove?.Cancel();
+        button.ctsMove = new CancellationTokenSource();
+        MovingButtonToRight(button).Forget();
     }
     private void MoveButtonBack(TextButton button)
     {
@@ -396,6 +404,33 @@ public class StartUI : MonoBehaviour
         catch(OperationCanceledException)
         {
 
+        }
+    }
+    private async UniTask MovingButtonToRight(TextButton button)
+    {
+        AtlasTextRenderer buttonRend = button.renderer;
+        
+        Transform buttonTransform = buttonRend.transform;
+        buttonTransform.SetParent(transform);
+        Bounds buttonBounds = buttonRend.background_renderer.GetBounds();
+
+        Vector3 buttonPos = buttonRend.transform.localPosition;
+        float targetPosX = -buttonPos.x;
+        try
+        {
+            while (buttonPos.x < targetPosX * 0.995f)
+            {
+                buttonPos.x = Mathf.Lerp(buttonPos.x, targetPosX, Time.deltaTime * 2);
+                buttonTransform.localPosition = buttonPos;
+
+                await UniTask.Yield(button.ctsMove.Token);
+            }
+            buttonTransform.SetParent(null);
+
+        }
+        catch (OperationCanceledException)
+        {
+            buttonTransform.SetParent(null);
         }
     }
     private async UniTask MoveButtonBackFromRight(TextButton button)

@@ -31,8 +31,9 @@ public class GameplayUI : MonoBehaviour
     public TicketIcon ticketIcon_prefab;
 
     public AtlasRenderer carriageMap;
-    public AtlasTextRenderer traitorCountText;
     public AtlasRenderer keyIcon;
+    public AtlasRenderer traitorIcon;
+    public AtlasTextRenderer traitorCountText;
 
     public AtlasRenderer redoButton;
     public AtlasRenderer quitButton;
@@ -374,7 +375,7 @@ public class GameplayUI : MonoBehaviour
     }
     private void DecreaseTraitorCount()
     {
-        traitorCount++;
+        traitorCount--;
         traitorCountText.SetText("x" + traitorCount);
     }
     private void HandlePlayAgainButton()

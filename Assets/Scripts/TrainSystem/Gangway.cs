@@ -41,7 +41,7 @@ public class Gangway : MonoBehaviour
 
                 alpha = elaspedTime / trainSettings.exteriorWallFadeTime;
                 alpha = alpha < 0.5 ? 16 * alpha * alpha * alpha * alpha * alpha : 1 - Mathf.Pow(-2 * alpha + 2, 5) * 0.5f;
-                exteriorRenderer.custom.x = alpha;
+                exteriorRenderer.custom.z = alpha;
 
                 await UniTask.Yield(cancellationToken: ctsFade.Token);
             }
@@ -61,7 +61,7 @@ public class Gangway : MonoBehaviour
 
                 alpha = elaspedTime / trainSettings.exteriorWallFadeTime;
                 alpha = alpha < 0.5 ? 16 * alpha * alpha * alpha * alpha * alpha : 1 - Mathf.Pow(-2 * alpha + 2, 5) * 0.5f;
-                exteriorRenderer.custom.x = alpha;
+                exteriorRenderer.custom.z = alpha;
 
                 await UniTask.Yield(PlayerLoopTiming.Update, ctsFade.Token);
             }
