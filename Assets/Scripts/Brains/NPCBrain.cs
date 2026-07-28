@@ -17,6 +17,9 @@ using UnityEditor;
 
 public class NPCBrain : MonoBehaviour
 {
+    public static event Action OnTraitorBoardedTrain;
+    public static event Action OnTraitorDisembarkedTrain;
+
     public AtlasRenderer atlasRenderer;
     public Rigidbody2D rigidBody;
     public BoxCollider2D boxCollider;
@@ -150,6 +153,11 @@ public class NPCBrain : MonoBehaviour
         rigidBody.includeLayers = layerSettings.trainMask;
         onTrain = true;
         SetStandingDepthInTrain();
+
+        if (role == Role.Traitor)
+        {
+            OnTraitorBoardedTrain?.Invoke();
+        }
     }
     public void DisembarkTrain()
     {
@@ -161,6 +169,10 @@ public class NPCBrain : MonoBehaviour
         onTrain = false;
         curCarriage.RemoveNPC(this);
         SetPath(NPCPath.ToExitStation);
+        if (role == Role.Traitor)
+        {
+            OnTraitorDisembarkedTrain?.Invoke();
+        }
     }
     public void AssignSeat(int seatIndex)
     {

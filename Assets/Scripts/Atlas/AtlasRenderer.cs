@@ -60,6 +60,7 @@ public class AtlasRenderer : MonoBehaviour
     public int prevSpriteIndexFlipV;
     public bool isAnimating;
     public CancellationTokenSource ctsOneShot;
+    public CancellationTokenSource ctsAppear;
 
     [Header("Sliced Generated")]
     public int quadCount;
@@ -122,6 +123,7 @@ public class AtlasRenderer : MonoBehaviour
     private void OnDisable()
     {
         ctsOneShot?.Cancel();
+        ctsAppear?.Cancel();
         UnregisterRenderer(this);
     }
     private void OnDestroy()
@@ -373,6 +375,12 @@ public class AtlasRenderer : MonoBehaviour
         sprite = motionSprite.sprite;
         UpdateSpriteInputs(sprite);
     }
+    public void Appear(float time)
+    {
+        ctsAppear?.Cancel();
+        ctsAppear = new CancellationTokenSource();
+        Appearing(time).Forget();
+    }
     private async UniTask PlayingClipOneShot(AtlasClip clip, Transform markerTransform = null)
     {
         keyframeClock = 0;
@@ -438,6 +446,27 @@ public class AtlasRenderer : MonoBehaviour
         {
             isAnimating = false;
         }
+    }
+    private async UniTask Appearing(float time)
+    {
+        float elapsed = time;
+
+        try
+        {
+            while (elapsed > 0)
+            {
+                elapsed -= Time.deltaTime;
+                float t = elapsed / time;
+                custom.w = t;
+                await UniTask.Yield(ctsAppear.Token);
+            }
+            custom.w = 0;
+        }
+        catch (OperationCanceledException)
+        {
+            custom.w = 0;
+        }
+
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()

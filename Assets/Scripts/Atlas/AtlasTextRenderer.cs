@@ -320,9 +320,50 @@ public class AtlasTextRenderer : MonoBehaviour
         }
 
     }
+    public void WriteText(string text, float writeLetterTime, OnCompletedWritingText callback = null)
+    {
+        ctsWrite?.Cancel();
+        ctsWrite = new CancellationTokenSource();
+
+        WritingText(text, writeLetterTime, callback).Forget();
+    }
+    public void EraseText(float writeLetterTime)
+    {
+        ctsWrite?.Cancel();
+        ctsWrite = new CancellationTokenSource();
+        erasingText = true;
+        completedWritingText = false;
+        ErasingText(writeLetterTime).Forget();
+    }
     public Bounds GetBoundsCurrentText()
     {
-        return GetBoundsNewText(text);
+        Bounds bounds = new Bounds();
+
+        bounds.size = textBoxData.size;
+
+        switch (alignmentType)
+        {
+            case AtlasTextAlignmentType.Left:
+            {
+                boundsOffset = new Vector3(textBoxData.size.x * 0.5f, -textBoxData.size.y * 0.5f, 0f);
+            }
+            break;
+
+            case AtlasTextAlignmentType.Center:
+            {
+                boundsOffset = new Vector3(0, -textBoxData.size.y * 0.5f, 0f);
+            }
+            break;
+
+            case AtlasTextAlignmentType.Right:
+            {
+                boundsOffset = new Vector3(-textBoxData.size.x * 0.5f, -textBoxData.size.y * 0.5f, 0f);
+            }
+            break;
+        }
+        bounds.center = transform.position + boundsOffset;
+
+        return bounds;
     }
     public Bounds GetBoundsNewText(string text)
     {
@@ -408,13 +449,6 @@ public class AtlasTextRenderer : MonoBehaviour
             lineWidths = linesWidths.ToArray(),
         };
     }
-    public void WriteText(string text, float writeLetterTime, OnCompletedWritingText callback = null)
-    {
-        ctsWrite?.Cancel();
-        ctsWrite = new CancellationTokenSource();
-
-        WritingText(text, writeLetterTime, callback).Forget();
-    }
     private async UniTask WritingText(string text, float writeLetterTime, OnCompletedWritingText callback = null)
     {
         int stationNameLetterCount = text.Length;
@@ -444,15 +478,6 @@ public class AtlasTextRenderer : MonoBehaviour
                 callback();
             }
         }
-    }
-
-    public void EraseText(float writeLetterTime)
-    {
-        ctsWrite?.Cancel();
-        ctsWrite = new CancellationTokenSource();
-        erasingText = true;
-        completedWritingText = false;
-        ErasingText(writeLetterTime).Forget();
     }
     private async UniTask ErasingText(float writeLetterTime)
     {

@@ -19,6 +19,8 @@ public class NotepadProp : MonoBehaviour
 
     private void OnEnable()
     {
+        notepadData.collected = false;
+
         gameEventData.OnInteract.RegisterListener(NotepadCollected);
     }
     private void OnDisable()

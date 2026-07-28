@@ -31,9 +31,7 @@ public class GameplayUI : MonoBehaviour
     public TicketIcon ticketIcon_prefab;
 
     public AtlasRenderer carriageMap;
-    public AtlasRenderer ruleOutAbilityIcon;
-    public AtlasRenderer colorAbilityIcon;
-    public AtlasRenderer multiColorAbilityIcon;
+    public AtlasTextRenderer traitorCountText;
     public AtlasRenderer keyIcon;
 
     public AtlasRenderer redoButton;
@@ -66,7 +64,8 @@ public class GameplayUI : MonoBehaviour
     public UnlockType curUnlockType;
 
     public int ticketCount;
-    
+    public int traitorCount;
+
     public float naturalMoveClock;
     public float fadeBlackClock;
 
@@ -88,7 +87,8 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnEnteredTrain += DisappearKeyIcon;
         SpyBrain.OnTicketInspect += DisappearKeyIcon;
 
-        UnlockPicker.OnNewAbilityUnlocked += AppearNewAbilityIcon;
+        NPCBrain.OnTraitorDisembarkedTrain += DecreaseTraitorCount;
+        NPCBrain.OnTraitorBoardedTrain += IncreaseTraitorCount;
 
         Scenes.OnLoadTrip0 += Init;
 
@@ -109,8 +109,9 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnEnteredTrain -= DisappearKeyIcon;
         SpyBrain.OnTicketInspect -= DisappearKeyIcon;
         
-        UnlockPicker.OnNewAbilityUnlocked -= AppearNewAbilityIcon;
-        
+        NPCBrain.OnTraitorDisembarkedTrain -= DecreaseTraitorCount;
+        NPCBrain.OnTraitorBoardedTrain -= IncreaseTraitorCount;
+
         Scenes.OnLoadTrip0 -= Init;
     }
     private void Update()
@@ -125,7 +126,6 @@ public class GameplayUI : MonoBehaviour
     {
         InitPOVUI();
         InitTicketIcons();
-        InitAbiltiyIcons();
     }
     private void KeepNotepad()
     {
@@ -315,12 +315,6 @@ public class GameplayUI : MonoBehaviour
         }
         curTicketIcon = ticketIcons[0];
     }
-    private void InitAbiltiyIcons()
-    {
-        ruleOutAbilityIcon.custom.w = 1;
-        colorAbilityIcon.custom.w = 1;
-        multiColorAbilityIcon.custom.w = 1;
-    }
     private void SetNewTicketIcons()
     {
         curTicketIcon = ticketIcons[0];
@@ -343,27 +337,6 @@ public class GameplayUI : MonoBehaviour
     private void SetFadeToBlack()
     {
         fadeBlack.FadeToBlack("Results", Scenes.SceneType.Score, sceneIndex: 3);
-    }
-    private void AppearNewAbilityIcon(UnlockType unlockType)
-    {
-        switch(unlockType)
-        {
-            case UnlockType.RuleOut:
-            {
-                Appearing(ruleOutAbilityIcon).Forget();
-            }
-            break;
-            case UnlockType.Color:
-            {
-                Appearing(colorAbilityIcon).Forget();
-            }
-            break;
-            case UnlockType.MultiColor:
-            {
-                Appearing(multiColorAbilityIcon).Forget();
-            }
-            break;
-        }
     }
     private void ShowWIcon(Vector2 position)
     {
@@ -394,7 +367,16 @@ public class GameplayUI : MonoBehaviour
             DisappearingKeyIcon().Forget();
         }
     }
-
+    private void IncreaseTraitorCount()
+    {
+        traitorCount++;
+        traitorCountText.SetText("x" + traitorCount);
+    }
+    private void DecreaseTraitorCount()
+    {
+        traitorCount++;
+        traitorCountText.SetText("x" + traitorCount);
+    }
     private void HandlePlayAgainButton()
     {
         if (CursorController.IsInsideBounds(redoButton.bounds, isClickable: true))
@@ -466,18 +448,5 @@ public class GameplayUI : MonoBehaviour
             curTicketIconIndex--;
             await UniTask.WaitForSeconds(APPEARING_TIME);
         }
-    }
-    private async UniTask Appearing(AtlasRenderer renderer)
-    {
-        float elapsed = ABILITY_ICON_APPEAR_TIME;
-
-        while (elapsed > 0)
-        {
-            elapsed -= Time.deltaTime;
-            float t = elapsed / ABILITY_ICON_APPEAR_TIME;
-            renderer.custom.w = t;
-            await UniTask.Yield();
-        }
-        renderer.custom.w = 0;
     }
 }

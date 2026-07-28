@@ -25,8 +25,9 @@ public class Page : MonoBehaviour
     public AtlasTextRenderer[] readOnlyTextRenderers;
     public AtlasTextRenderer[] playerWriteTextRenderers;
 
-    public AtlasRenderer[] playerWriteRenderers;
+    public AtlasRenderer[] proceduralRenderers;
     public AtlasRenderer[] readOnlyRenderers;
+    public AtlasRenderer[] playerWriteRenderers;
 
     public AtlasRenderer paperCornerLeftButtonRenderer;
     public AtlasRenderer paperCornerRightButtonRenderer;
@@ -59,13 +60,6 @@ public class Page : MonoBehaviour
 
         switch (pageType)
         {
-            case PageType.Prompt:
-            {
-                string promptText = AtlasUI.PromptStringDict[trip.prompt];
-                proceduralTextRenderers[0].SetText(promptText);
-            }
-            break;
-
             case PageType.ColorKey:
             {
                 activePlayerWriteTextRenderer = playerWriteTextRenderers[0];
@@ -73,6 +67,11 @@ public class Page : MonoBehaviour
                 isPlayerWriteTextPreviewSet = new bool[playerWriteTextRenderers.Length];
                 playerWriteTexts = new string[playerWriteTextRenderers.Length];
                 Array.Fill(playerWriteTexts, "");
+
+                for (int i = 0; i < proceduralRenderers.Length; i++)
+                {
+                    proceduralRenderers[i].custom.w = 1;
+                }
             }
             break;
         }
@@ -132,6 +131,7 @@ public class Page : MonoBehaviour
             }
             break;
         }
+        proceduralRenderers[index].Appear(time: 1);
     }
     public void UpdatePage()
     {

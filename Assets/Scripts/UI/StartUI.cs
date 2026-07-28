@@ -1,7 +1,9 @@
+using Cysharp.Threading.Tasks;
 using System;
-using System.Net.Sockets;
 using System.Threading;
+
 using UnityEngine;
+
 using static AtlasUI;
 using static Scenes;
 using static Spy;
@@ -22,12 +24,13 @@ public class StartUI : MonoBehaviour
     public PlayerInputsSO playerInputs;
     public NotepadData notepadData;
 
-    public AtlasTextRenderer startRenderer;
-    public AtlasTextRenderer optionsRenderer;
-    public AtlasTextRenderer quitRenderer;
-    public AtlasTextRenderer darkColorRenderer;
-    public AtlasTextRenderer lightColorRenderer;
+    public Transform titleTransform;
 
+    public TextButton startButton;
+    public TextButton optionsButton;
+    public TextButton quitButton;
+    public TextButton darkColorButton;
+    public TextButton lightColorButton;
 
     public SceneData sceneData;
 
@@ -45,14 +48,17 @@ public class StartUI : MonoBehaviour
 
     public CancellationTokenSource ctsFadeBlack;
     public CancellationTokenSource ctsNotepad;
-
-
     private void Start()
     {
         InitPOVUI();
+        InitButtons();
+
+        titleTransform.SetParent(null);
+
         Shader.SetGlobalFloat("_DayNight", 1);
         fadeBlack.SetValue(1);
         fadeBlack.FadeFromBlack();
+        
 
         SetState(UIState.StartMenu);
     }
@@ -61,20 +67,27 @@ public class StartUI : MonoBehaviour
         NotepadProp.OnSpyEnter += SetNotepadCollectIcon;
         NotepadProp.OnSpyExit += DisableNotepadCollectIcon;
 
+        SpyBrain.OnOpenNotepad += SetToNotepadState;
+        SpyBrain.OnCloseNotepad += SetSToNoneState;
+
         gameEventData.OnNotepadCollect.RegisterListener(DisableNotepadCollectIcon);
 
         gameEventData.OnStartTrip.RegisterListener(StartTrip);
         gameEventData.OnToStartMenu.RegisterListener(SetToStartMenuState);
-        gameEventData.OnFromStartMenu.RegisterListener(SetStateToNone);
+        gameEventData.OnFromStartMenu.RegisterListener(SetSToNoneState);
     }
     private void OnDisable()
     {
         NotepadProp.OnSpyEnter -= SetNotepadCollectIcon;
         NotepadProp.OnSpyExit -= DisableNotepadCollectIcon;
+
+        SpyBrain.OnOpenNotepad -= SetToNotepadState;
+        SpyBrain.OnCloseNotepad -= SetSToNoneState;
+
         gameEventData.OnNotepadCollect.UnregisterListener(DisableNotepadCollectIcon);
         gameEventData.OnStartTrip.UnregisterListener(StartTrip);
         gameEventData.OnToStartMenu.UnregisterListener(SetToStartMenuState);
-        gameEventData.OnFromStartMenu.UnregisterListener(SetStateToNone);
+        gameEventData.OnFromStartMenu.UnregisterListener(SetSToNoneState);
     }
     private void Update()
     {
@@ -96,16 +109,13 @@ public class StartUI : MonoBehaviour
     {
         keyIconRenderer.enabled = false;
     }
-    private void ChooseState()
+    private void SetSToNoneState()
     {
-        if ((notepadData.collected && playerInputs.notepadKeyDown) || notepadData.checkingNotepad) // TODO: Set up as action
-        {
-            SetState(UIState.Notepad);
-        }
-        else
-        {
-            SetState(UIState.None);
-        }
+        SetState(UIState.None);
+    }
+    private void SetToNotepadState()
+    {
+        SetState(UIState.Notepad);
     }
     private void SetToStartMenuState()
     {
@@ -205,6 +215,20 @@ public class StartUI : MonoBehaviour
             break;
         }
     }
+    private void InitButtons()
+    {
+        InitButton(ref startButton);
+        InitButton(ref optionsButton);
+        InitButton(ref quitButton);
+        InitButton(ref darkColorButton);
+        InitButton(ref lightColorButton);
+
+    }
+    private void InitButton(ref TextButton button)
+    {
+        button.renderer.transform.SetParent(null);
+        button.startPos = button.renderer.transform.position;
+    }
     private void InitPOVUI()
     {
         float halfCamWidth = camStats.camBounds.extents.x;
@@ -232,11 +256,10 @@ public class StartUI : MonoBehaviour
     }
     private void HandleMainMenuButtons()
     {
-        if (CursorController.IsInsideBounds(quitRenderer.background_renderer.bounds, isClickable: true))
+        if (CursorController.IsInsideBounds(quitButton.renderer.background_renderer.bounds, isClickable: true))
         {
-
-            quitRenderer.SetColorText(Color.white);
-            quitRenderer.background_renderer.SetSliceCustom(w: 1);
+            quitButton.renderer.SetColorText(Color.white);
+            quitButton.renderer.background_renderer.SetSliceCustom(w: 1);
             if (playerInputs.mouseLeftDown)
             {
                 Application.Quit();
@@ -244,102 +267,158 @@ public class StartUI : MonoBehaviour
         }
         else
         {
-            quitRenderer.SetColorText(Color.black);
-            quitRenderer.background_renderer.SetSliceCustom(w: 0);
+            quitButton.renderer.SetColorText(Color.black);
+            quitButton.renderer.background_renderer.SetSliceCustom(w: 0);
         }
 
-        if (CursorController.IsInsideBounds(optionsRenderer.background_renderer.bounds, isClickable: true))
+        if (CursorController.IsInsideBounds(optionsButton.renderer.background_renderer.bounds, isClickable: true))
         {
-            optionsRenderer.SetColorText(Color.white);
-            optionsRenderer.background_renderer.SetSliceCustom(w: 1);
+            optionsButton.renderer.SetColorText(Color.white);
+            optionsButton.renderer.background_renderer.SetSliceCustom(w: 1);
             if (playerInputs.mouseLeftDown)
             {
-                optionsRenderer.SetText("Back");
+                optionsButton.renderer.SetText("Back");
+                MoveButtonAway(quitButton);
+                MoveButtonAway(startButton);
                 OnClickOptions?.Invoke();
                 SetState(UIState.OptionsMenu);
             }
         }
         else
         {
-            optionsRenderer.SetColorText(Color.black);
-            optionsRenderer.background_renderer.SetSliceCustom(w: 0);
+            optionsButton.renderer.SetColorText(Color.black);
+            optionsButton.renderer.background_renderer.SetSliceCustom(w: 0);
         }
 
-        if (CursorController.IsInsideBounds(startRenderer.background_renderer.bounds, isClickable: true))
+        if (CursorController.IsInsideBounds(startButton.renderer.background_renderer.bounds, isClickable: true))
         {
 
-            startRenderer.SetColorText(Color.white);
-            startRenderer.background_renderer.SetSliceCustom(w: 1);
+            startButton.renderer.SetColorText(Color.white);
+            startButton.renderer.background_renderer.SetSliceCustom(w: 1);
             if (playerInputs.mouseLeftDown)
             {
                 OnStartGame?.Invoke();
                 SetState(UIState.None);
 
-                startRenderer.SetColorText(Color.black);
-                startRenderer.background_renderer.SetSliceCustom(w: 0);
+                startButton.renderer.SetColorText(Color.black);
+                startButton.renderer.background_renderer.SetSliceCustom(w: 0);
             }
         }
         else
         {
-            startRenderer.SetColorText(Color.black);
-            startRenderer.background_renderer.SetSliceCustom(w: 0);
+            startButton.renderer.SetColorText(Color.black);
+            startButton.renderer.background_renderer.SetSliceCustom(w: 0);
         }
     }
-
     private void HandleOptionsButtons()
     {
-        if (CursorController.IsInsideBounds(darkColorRenderer.background_renderer.bounds, isClickable: true))
+        if (CursorController.IsInsideBounds(darkColorButton.renderer.background_renderer.bounds, isClickable: true))
         {
-            darkColorRenderer.SetColorText(Color.white);
-            darkColorRenderer.background_renderer.SetSliceCustom(w: 1);
+            darkColorButton.renderer.SetColorText(Color.white);
+            darkColorButton.renderer.background_renderer.SetSliceCustom(w: 1);
             if (playerInputs.mouseLeftDown)
             {
-                SceneController.GetMainColorPicker().Open(darkColorRenderer.background_renderer, ColorPicker.SelectType.Dark, ColorPicker.Direction.BottomRight);
+                SceneController.GetMainColorPicker().Open(darkColorButton.renderer.background_renderer, ColorPicker.SelectType.Dark, ColorPicker.Direction.BottomRight);
             }
         }
         else
         {
-            darkColorRenderer.SetColorText(Color.black);
-            darkColorRenderer.background_renderer.SetSliceCustom(w: 0);
+            darkColorButton.renderer.SetColorText(Color.black);
+            darkColorButton.renderer.background_renderer.SetSliceCustom(w: 0);
         }
 
-        if (CursorController.IsInsideBounds(lightColorRenderer.background_renderer.bounds, isClickable: true))
+        if (CursorController.IsInsideBounds(lightColorButton.renderer.background_renderer.bounds, isClickable: true))
         {
-            lightColorRenderer.SetColorText(Color.white);
-            lightColorRenderer.background_renderer.SetSliceCustom(w: 1);
+            lightColorButton.renderer.SetColorText(Color.white);
+            lightColorButton.renderer.background_renderer.SetSliceCustom(w: 1);
             if (playerInputs.mouseLeftDown)
             {
-                SceneController.GetMainColorPicker().Open(lightColorRenderer.background_renderer, ColorPicker.SelectType.Light, ColorPicker.Direction.BottomRight);
+                SceneController.GetMainColorPicker().Open(lightColorButton.renderer.background_renderer, ColorPicker.SelectType.Light, ColorPicker.Direction.BottomRight);
             }
         }
         else
         {
-            lightColorRenderer.SetColorText(Color.black);
-            lightColorRenderer.background_renderer.SetSliceCustom(w: 0);
+            lightColorButton.renderer.SetColorText(Color.black);
+            lightColorButton.renderer.background_renderer.SetSliceCustom(w: 0);
         }
 
 
-        if (CursorController.IsInsideBounds(optionsRenderer.background_renderer.bounds, isClickable: true))
+        if (CursorController.IsInsideBounds(optionsButton.renderer.background_renderer.bounds, isClickable: true))
         {
-            optionsRenderer.SetColorText(Color.white);
-            optionsRenderer.background_renderer.SetSliceCustom(w: 1);
+            optionsButton.renderer.SetColorText(Color.white);
+            optionsButton.renderer.background_renderer.SetSliceCustom(w: 1);
             if (playerInputs.mouseLeftDown)
             {
-                optionsRenderer.SetText("Options");
+                optionsButton.renderer.SetText("Options");
+                MoveButtonBack(startButton);
+                MoveButtonBack(quitButton);
                 OnClickBackFromOptions?.Invoke();
                 SetState(UIState.StartMenu);
             }
         }
         else
         {
-            optionsRenderer.SetColorText(Color.black);
-            optionsRenderer.background_renderer.SetSliceCustom(w: 0);
+            optionsButton.renderer.SetColorText(Color.black);
+            optionsButton.renderer.background_renderer.SetSliceCustom(w: 0);
         }
     }
 
-    private void SetStateToNone()
+    private void MoveButtonAway(TextButton button)
     {
-        SetState(UIState.None);
+        button.ctsMove?.Cancel();
+        button.ctsMove = new CancellationTokenSource();
+        MovingButtonAwayRight(button).Forget();
     }
+    private void MoveButtonBack(TextButton button)
+    {
+        button.ctsMove?.Cancel();
+        button.ctsMove = new CancellationTokenSource();
+        MoveButtonBackFromRight(button).Forget();
+    }
+    private async UniTask MovingButtonAwayRight(TextButton button)
+    {
+        AtlasTextRenderer buttonRend = button.renderer;
+        Transform buttonTransform = buttonRend.transform;
+        Bounds buttonBounds = buttonRend.background_renderer.GetBounds();
 
+        Vector3 buttonPos = buttonRend.transform.position;
+        try
+        {
+            while(camStats.camBounds.max.x > buttonRend.background_renderer.GetBounds().min.x)
+            {
+                buttonPos.x = Mathf.Lerp(buttonPos.x, camStats.camBounds.max.x + buttonBounds.size.x, Time.deltaTime * 2);
+
+                buttonTransform.position = buttonPos;
+
+                await UniTask.Yield(button.ctsMove.Token);
+            }
+        }
+        catch(OperationCanceledException)
+        {
+
+        }
+    }
+    private async UniTask MoveButtonBackFromRight(TextButton button)
+    {
+        AtlasTextRenderer buttonRend = button.renderer;
+        Transform buttonTransform = buttonRend.transform;
+        Bounds buttonBounds = buttonRend.background_renderer.GetBounds();
+
+        Vector3 buttonPos = buttonRend.transform.position;
+        try
+        {
+            while (buttonPos.x > button.startPos.x)
+            {
+                buttonPos.x = Mathf.Lerp(buttonPos.x, button.startPos.x - buttonBounds.extents.x, Time.deltaTime * 2);
+                buttonTransform.position = buttonPos;
+
+                await UniTask.Yield(button.ctsMove.Token);
+            }
+            buttonTransform.position = button.startPos;
+        }
+        catch(OperationCanceledException)
+        {
+
+        }
+    }
 }

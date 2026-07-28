@@ -18,6 +18,8 @@ public class SpyBrain : MonoBehaviour
     public static event Action OnWalkPastExteriorSlideDoors;
     public static event Action OnEnteredTrain;
     public static event Action OnTicketInspect;
+    public static event Action OnOpenNotepad;
+    public static event Action OnCloseNotepad;
 
     public static bool CanCheckTicket;
     public static bool PickingNPCToTicketCheck;
@@ -159,7 +161,7 @@ public class SpyBrain : MonoBehaviour
         {
             SetState(SpyState.PickingNPCTicketCheck);
         }
-        else if (playerInputs.notepadKeyDown || notepadData.checkingNotepad)
+        else if ((notepadData.collected && playerInputs.notepadKeyDown) || notepadData.checkingNotepad)
         {
             SetState(SpyState.Notepad);
         }
@@ -492,6 +494,7 @@ public class SpyBrain : MonoBehaviour
             case SpyState.Notepad:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.NotepadHolding];
+                OnOpenNotepad?.Invoke();
             }
             break;
         }
@@ -540,6 +543,12 @@ public class SpyBrain : MonoBehaviour
                         npc.ToggleTicketCheckHover(false);
                     }
                 }
+            }
+            break;
+
+            case SpyState.Notepad:
+            {
+                OnCloseNotepad?.Invoke();
             }
             break;
 

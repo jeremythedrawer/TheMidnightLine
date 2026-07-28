@@ -155,6 +155,13 @@ public static class AtlasUI
         
     }
 
+    [Serializable] public struct TextButton
+    {
+        public AtlasTextRenderer renderer;
+        [Header("Generated")]
+        public Vector3 startPos;
+        public CancellationTokenSource ctsMove;
+    }
 
     public static Vector3 NotepadActiveLocalPos;
     public static Vector3 NotepadInactiveLocalPos;

@@ -36,6 +36,7 @@ Shader "Custom/s_atlasAppear"
                 float4 uvSizeAndPos : TEXCOORD1;
                 float4 scaleAndFlip : TEXCOORD2;
                 float4 custom : TEXCOORD3;
+                int customBit : TEXCOORD4;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -46,6 +47,7 @@ Shader "Custom/s_atlasAppear"
             float3 _TicketCheckColor;
             float3 _BlackColor;
             float3 _WhiteColor;
+            float3 _MeridiaColor;
             float _DayNight;
 
             Varyings vert(Attributes v)
@@ -73,7 +75,7 @@ Shader "Custom/s_atlasAppear"
                 o.uvSizeAndPos = spriteData.uvSizeAndPos;
                 o.scaleAndFlip = spriteData.scaleAndFlip;
                 o.custom = spriteData.custom;
-
+                o.customBit = spriteData.customBit;
                 return o;
             }
 
@@ -92,7 +94,12 @@ Shader "Custom/s_atlasAppear"
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 finalColor = lerp(_BlackColor, _WhiteColor, color.r);
+                int bitMask = i.customBit;
+                int meridiaColorMask = saturate(bitMask & MERIDIA_COLOR_BIT);
+                float3 meridiaColor = meridiaColorMask * _MeridiaColor;
+                float3 blackColor = (1 - meridiaColorMask) * _BlackColor;
+
+                half3 finalColor = lerp(blackColor + meridiaColor, _WhiteColor, color.r);
 
                 half alpha = BayerX8(color.a - i.custom.a, i.positionHCS.xy);
                 clip(alpha - 0.001);

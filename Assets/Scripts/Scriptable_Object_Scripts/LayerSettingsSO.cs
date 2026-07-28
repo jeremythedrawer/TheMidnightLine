@@ -35,6 +35,7 @@ public class LayerSettingsSO : ScriptableObject
     public LayerMask spy;
     public LayerMask npc;
 
+
     [Header("Generated")]
     public LayerMask stationMask;
     public LayerMask trainMask;
