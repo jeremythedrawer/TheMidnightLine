@@ -14,7 +14,6 @@ public class SpyStatsSO : ScriptableObject
     public Vector2 moveVelocity;
     
     public float targetXVelocity;
-    public float spyHeight;
 
     public SpyState curState;
     public LocationState curLocationState;
@@ -25,7 +24,7 @@ public class SpyStatsSO : ScriptableObject
     public bool walkingIntoWall;
 
     [Header("To Save")]
-    public Vector3 curWorldPos;
+    public Bounds bounds;
     
     public LayerMask curGroundLayer;
     public LayerMask curWallLayer;

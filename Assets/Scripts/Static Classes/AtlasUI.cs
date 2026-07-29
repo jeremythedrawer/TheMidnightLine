@@ -189,7 +189,7 @@ public static class AtlasUI
     public static Dictionary<TripPrompt, string> PromptStringDict;
     public static void InvertButton(bool invert, AtlasRenderer renderer)
     {
-        renderer.custom.x = invert ? 0 : 1;
+        renderer.custom.x = invert ? 1 : 0;
     }
     public static void UpdateNaturalPos(Vector3 activePos,  ref Vector3 naturalMovePos)
     {

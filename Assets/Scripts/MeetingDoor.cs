@@ -1,5 +1,7 @@
 using UnityEngine;
 using static AtlasUI;
+using System;
+
 #if UNITY_EDITOR
 using UnityEditor;
 using UnityEditor.IMGUI.Controls;
@@ -8,6 +10,9 @@ using UnityEditor.IMGUI.Controls;
 using static Atlas;
 public class MeetingDoor : MonoBehaviour
 {
+    public static event Action<Vector2> OnSpyEnter;
+    public static event Action OnSpyExit;
+
     public enum MeetingDoorType
     { 
         Start,
@@ -48,6 +53,7 @@ public class MeetingDoor : MonoBehaviour
     private void OnEnable()
     {
         gameEventData.OnInteract.RegisterListener(OpenDoor);
+        gameEventData.OnInteract.RegisterListener(WalkThroughStartDoor);
         gameEventData.OnNotepadCollect.RegisterListener(UnlockStartDoor);
         MeridiaTower.OnArriveAtTopFloor += OpenAuto;
 
@@ -55,39 +61,37 @@ public class MeetingDoor : MonoBehaviour
     private void OnDisable()
     {
         gameEventData.OnInteract.UnregisterListener(OpenDoor);
+        gameEventData.OnInteract.UnregisterListener(WalkThroughStartDoor);
         gameEventData.OnNotepadCollect.UnregisterListener(UnlockStartDoor);
         MeridiaTower.OnArriveAtTopFloor -= OpenAuto;
     }
     private void Update()
     {
-        if (!opened) return;
-
         if (!spyInBounds)
         {
             switch (doorType)
             {
                 case MeetingDoorType.Start:
                 {
-                    if (spyStats.moveVelocity.x > 0 && spyStats.curWorldPos.x > triggerBounds.center.x && spyStats.curWorldPos.x < triggerBounds.max.x && !atlasRenderer.isAnimating)
+                    if (spyStats.bounds.center.x > triggerBounds.min.x && spyStats.bounds.center.x < triggerBounds.max.x && !atlasRenderer.isAnimating)
                     {
-                        gameEventData.OnStartTrip.Raise();
-                        SceneController.Spy.transform.position = new Vector3(SceneController.Spy.transform.position.x, SceneController.Spy.transform.position.y, 11);
-                        leftRoom.MoveUp();
-
+                        OnSpyEnter?.Invoke(new Vector2(triggerBounds.center.x, spyStats.bounds.max.y));
                         spyInBounds = true;
                     }
                 }
                 break;
                 case MeetingDoorType.BetweenRooms:
                 {
-                    Transform spyTransform = SceneController.Spy.transform;
+                    if (!opened) return;
 
-                    if (spyStats.moveVelocity.x > 0 && spyStats.curWorldPos.x > triggerBounds.center.x && spyStats.curWorldPos.x < triggerBounds.max.x)
+
+                    if (spyStats.moveVelocity.x > 0 && spyStats.bounds.center.x > triggerBounds.center.x && spyStats.bounds.center.x < triggerBounds.max.x)
                     {
                         spyStats.curLocationState = rightRoom.locationState;
                         spyStats.curLocationBounds = rightRoom.bounds;
 
-                        spyTransform.position = new Vector3(spyTransform.position.x, spyTransform.position.y, rightDepth);
+                        SpyBrain spy = SceneController.GetSpy();
+                        spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, leftDepth));
                         
                         rightRoom.MoveDown();
                         leftRoom.MoveUp();
@@ -99,12 +103,13 @@ public class MeetingDoor : MonoBehaviour
 
                         spyInBounds = true;
                     }
-                    else if (spyStats.moveVelocity.x < 0 && spyStats.curWorldPos.x > triggerBounds.min.x && spyStats.curWorldPos.x < triggerBounds.center.x)
+                    else if (spyStats.moveVelocity.x < 0 && spyStats.bounds.center.x > triggerBounds.min.x && spyStats.bounds.center.x < triggerBounds.center.x)
                     {
                         spyStats.curLocationState = leftRoom.locationState;
                         spyStats.curLocationBounds = leftRoom.bounds;
 
-                        spyTransform.position = new Vector3(spyTransform.position.x, spyTransform.position.y, leftDepth);
+                        SpyBrain spy = SceneController.GetSpy();
+                        spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, leftDepth));
 
                         rightRoom.MoveUp();
                         leftRoom.MoveDown();
@@ -124,27 +129,37 @@ public class MeetingDoor : MonoBehaviour
         {
             switch (doorType)
             {
+                case MeetingDoorType.Start:
+                {
+                    if (spyStats.bounds.center.x < triggerBounds.min.x || spyStats.bounds.center.x > triggerBounds.max.x)
+                    {
+                        OnSpyExit?.Invoke();
+                        spyInBounds = false;
+                    }
+                }
+                break;
                 case MeetingDoorType.BetweenRooms:
                 {
-                    Transform spyTransform = SceneController.Spy.transform;
 
-                    if (spyStats.moveVelocity.x > 0 && spyStats.curWorldPos.x > triggerBounds.max.x)
+                    if (spyStats.moveVelocity.x > 0 && spyStats.bounds.center.x > triggerBounds.max.x)
                     {
                         spyStats.curLocationState = rightRoom.locationState;
                         spyStats.curLocationBounds = rightRoom.bounds;
                         rightRoom.MoveDown();
                         leftRoom.MoveUp();
 
-                        spyTransform.position = new Vector3(spyTransform.position.x, spyTransform.position.y, rightDepth);
+                        SpyBrain spy = SceneController.GetSpy();
+                        spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, rightDepth));
                         
                         spyInBounds = false;
                     }
-                    else if (spyStats.moveVelocity.x < 0 && spyStats.curWorldPos.x < triggerBounds.min.x)
+                    else if (spyStats.moveVelocity.x < 0 && spyStats.bounds.center.x < triggerBounds.min.x)
                     {
                         spyStats.curLocationState = leftRoom.locationState;
                         spyStats.curLocationBounds = leftRoom.bounds;
 
-                        spyTransform.position = new Vector3(spyTransform.position.x, spyTransform.position.y, leftDepth);
+                        SpyBrain spy = SceneController.GetSpy();
+                        spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, leftDepth));
 
                         rightRoom.MoveUp();
                         leftRoom.MoveDown();
@@ -164,13 +179,23 @@ public class MeetingDoor : MonoBehaviour
 
         }
     }
+    private void WalkThroughStartDoor()
+    {
+        if (doorType == MeetingDoorType.Start && opened && spyInBounds && !atlasRenderer.isAnimating)
+        {
+            gameEventData.OnStartTrip.Raise();
+            SpyBrain spy = SceneController.GetSpy();
+            spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, rightDepth));
+            leftRoom.MoveUp();
+        }
+    }
     public void OpenDoor()
     {
         if (!unlocked) return;
 
         Bounds atlasBounds = atlasRenderer.bounds;
         
-        if (!opened && spyStats.curWorldPos.x > atlasBounds.min.x && spyStats.curWorldPos.x < atlasBounds.max.x)
+        if (!opened && spyStats.bounds.max.x > atlasBounds.min.x && spyStats.bounds.min.x < atlasBounds.max.x)
         {
             atlasRenderer.PlayClipOneShot(clip);
             opened = true;
@@ -194,13 +219,30 @@ public class MeetingDoor : MonoBehaviour
     {
         if (doorType != MeetingDoorType.Start) return;
         unlocked = true;
-        iconRenderer.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+        iconRenderer?.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
     }
     public void OpenAuto()
     {
         if (!auto) return;
-        unlocked = true;
-        OpenDoor();
+        if (!opened)
+        {
+            atlasRenderer.PlayClipOneShot(clip);
+            unlocked = true;
+            opened = true;
+            switch (doorType)
+            {
+                case MeetingDoorType.Start:
+                {
+
+                }
+                break;
+                case MeetingDoorType.BetweenRooms:
+                {
+                    leftRoom.ToggleRightWall(false);
+                }
+                break;
+            }
+        }
     }
 }
 #if UNITY_EDITOR

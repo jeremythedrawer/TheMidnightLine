@@ -62,6 +62,8 @@ public class SpyBrain : MonoBehaviour
     public AtlasClip curClip;
 
     public CollisionData collisionData;
+
+    public Vector3 curWorldPos;
     
     public NotepadState curNotepadState;
 
@@ -118,27 +120,24 @@ public class SpyBrain : MonoBehaviour
     }
     private void Init()
     {
+        curWorldPos = transform.position;
         atlas = atlasRenderer.atlas;
         atlas.UpdateClipDictionary();
 
         stats.curGroundLayer = layerSettings.stationLayers.ground;
         stats.curWallLayer = layerSettings.stationWallLayers;
-        stats.curWorldPos = transform.position;
-        
-        if (options.skipTutorial)
-        {
-            stats.tutorialState = TutorialState.Ticket | TutorialState.Picker | TutorialState.Traitor;
-        }
-        else
-        {
-            stats.tutorialState = TutorialState.None;
-        }
+        stats.bounds = atlasRenderer.bounds;
+        stats.tutorialState = TutorialState.None;
+
         rigidBody.includeLayers = layerSettings.stationMask;
 
         SetState(SpyState.None);
 
-        stats.spyHeight = atlasRenderer.bounds.size.y;
         SceneController.SetSpyBrain(this);
+    }
+    public void SetNewPosition(Vector3 newPosition)
+    {
+        transform.position = newPosition;
     }
     private void TripInit()
     {
@@ -222,10 +221,14 @@ public class SpyBrain : MonoBehaviour
                 atlasRenderer.PlayClip(ref curClip);
                 stats.targetXVelocity = (settings.moveSpeed * playerInputs.move);
                 stats.moveVelocity.x = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.deltaTime);
-                stats.curWorldPos.x += stats.moveVelocity.x * Time.deltaTime;
-                stats.curWorldPos.y = transform.position.y;
-                stats.curWorldPos.z = transform.position.z;
-                transform.position = stats.curWorldPos;
+
+                curWorldPos.x += stats.moveVelocity.x * Time.deltaTime;
+                curWorldPos.y = transform.position.y;
+                curWorldPos.z = transform.position.z;
+
+                transform.position = curWorldPos;
+
+                stats.bounds = atlasRenderer.bounds;
 
                 if (canOpenSlideDoor && !notepadData.checkingNotepad)
                 {
@@ -641,7 +644,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void GetSlideDoorAtStation()
     {
-        Bounds spyBounds = atlasRenderer.bounds;
+        Bounds spyBounds = stats.bounds;
         SlideDoors foundSlideDoor = null;
 
         if (trip.stationsDataArray[trainStats.curStationIndex].isFrontOfTrain)
@@ -650,7 +653,7 @@ public class SpyBrain : MonoBehaviour
             {
                 SlideDoors slideDoor = TrainController.ExteriorSlideDoors[i];
                 Bounds slideDoorBounds = slideDoor.boxCollider.bounds;
-                if (spyBounds.min.x > slideDoorBounds.min.x && spyBounds.max.x < slideDoorBounds.max.x)
+                if (spyBounds.center.x > slideDoorBounds.min.x && spyBounds.center.x < slideDoorBounds.max.x)
                 {
                     if (slideDoor.curState == SlideDoors.State.Unlocked || slideDoor.curState == SlideDoors.State.Opened)
                     {
@@ -666,7 +669,7 @@ public class SpyBrain : MonoBehaviour
             {
                 foundSlideDoor = TrainController.InteriorSlideDoors[i];
                 Bounds slideDoorBounds = foundSlideDoor.boxCollider.bounds;
-                if (spyBounds.min.x > slideDoorBounds.min.x && spyBounds.max.x < slideDoorBounds.max.x)
+                if (spyBounds.center.x > slideDoorBounds.min.x && spyBounds.center.x < slideDoorBounds.max.x)
                 {
                     foundSlideDoor = TrainController.InteriorSlideDoors[i];
                     break;
@@ -793,6 +796,7 @@ public class SpyBrain : MonoBehaviour
         stats.spriteFlip = flip;
         atlasRenderer.FlipHSimple(flip);
     }
+
     public static void ChooseNPCTicketToCheck(NPCBrain chosenNPC)
     {
         ChosenNPC = chosenNPC;

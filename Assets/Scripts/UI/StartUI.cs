@@ -23,14 +23,17 @@ public class StartUI : MonoBehaviour
     public CameraStatsSO camStats;
     public PlayerInputsSO playerInputs;
     public NotepadData notepadData;
+    public OptionsSO options;
 
     public Transform titleTransform;
 
     public TextUIElement startButton;
     public TextUIElement optionsButton;
     public TextUIElement quitButton;
+
     public TextUIElement darkColorButton;
     public TextUIElement lightColorButton;
+    public TextUIElement tutorialButton;
 
     public SceneData sceneData;
 
@@ -64,13 +67,18 @@ public class StartUI : MonoBehaviour
     }
     private void OnEnable()
     {        
-        NotepadProp.OnSpyEnter += SetNotepadCollectIcon;
-        NotepadProp.OnSpyExit += DisableNotepadCollectIcon;
+        NotepadProp.OnSpyEnter += SetInteractIcon;
+        NotepadProp.OnSpyExit += DisableInteractIcon;
 
         SpyBrain.OnOpenNotepad += SetToNotepadState;
         SpyBrain.OnCloseNotepad += SetSToNoneState;
 
-        gameEventData.OnNotepadCollect.RegisterListener(DisableNotepadCollectIcon);
+        MeetingDoor.OnSpyEnter += SetInteractIcon;
+        MeetingDoor.OnSpyExit += DisableInteractIcon;
+
+
+
+        gameEventData.OnNotepadCollect.RegisterListener(DisableInteractIcon);
 
         gameEventData.OnStartTrip.RegisterListener(StartTrip);
         gameEventData.OnToStartMenu.RegisterListener(SetToStartMenuState);
@@ -78,13 +86,16 @@ public class StartUI : MonoBehaviour
     }
     private void OnDisable()
     {
-        NotepadProp.OnSpyEnter -= SetNotepadCollectIcon;
-        NotepadProp.OnSpyExit -= DisableNotepadCollectIcon;
+        NotepadProp.OnSpyEnter -= SetInteractIcon;
+        NotepadProp.OnSpyExit -= DisableInteractIcon;
 
         SpyBrain.OnOpenNotepad -= SetToNotepadState;
         SpyBrain.OnCloseNotepad -= SetSToNoneState;
 
-        gameEventData.OnNotepadCollect.UnregisterListener(DisableNotepadCollectIcon);
+        MeetingDoor.OnSpyEnter -= SetInteractIcon;
+        MeetingDoor.OnSpyExit -= DisableInteractIcon;
+
+        gameEventData.OnNotepadCollect.UnregisterListener(DisableInteractIcon);
         gameEventData.OnStartTrip.UnregisterListener(StartTrip);
         gameEventData.OnToStartMenu.UnregisterListener(SetToStartMenuState);
         gameEventData.OnFromStartMenu.UnregisterListener(SetSToNoneState);
@@ -97,15 +108,16 @@ public class StartUI : MonoBehaviour
     private void StartTrip()
     {
         fadeBlack.FadeToBlackChangeScene("Find where the Traitors are going.", SceneType.Trip, sceneIndex: 2);
+        keyIconRenderer.enabled = false;
     }
-    private void SetNotepadCollectIcon(Vector2 position)
+    private void SetInteractIcon(Vector2 position)
     {
         keyIconRenderer.enabled = true;
         keyIconRenderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.W);
         keyIconRenderer.transform.SetParent(null);
         keyIconRenderer.transform.position = new Vector3(position.x, position.y + keyIconRenderer.bounds.size.y, keyIconRenderer.transform.position.z);
     }
-    private void DisableNotepadCollectIcon()
+    private void DisableInteractIcon()
     {
         keyIconRenderer.enabled = false;
     }
@@ -197,7 +209,6 @@ public class StartUI : MonoBehaviour
             case UIState.OptionsMenu:
             {
                 HandleOptionsButtons();
-
             }
             break;
         }
@@ -222,7 +233,9 @@ public class StartUI : MonoBehaviour
         InitButton(ref quitButton);
         InitButton(ref darkColorButton);
         InitButton(ref lightColorButton);
+        InitButton(ref tutorialButton);
 
+        options.skipTutorial = false;
     }
     private void InitButton(ref TextUIElement button)
     {
@@ -362,6 +375,57 @@ public class StartUI : MonoBehaviour
         {
             optionsButton.renderer.SetColorText(Color.black);
             optionsButton.renderer.background_renderer.SetSliceCustom(w: 0);
+        }
+
+        if (CursorController.IsInsideBounds(tutorialButton.renderer.background_renderer.bounds, isClickable: true))
+        {
+            if (options.skipTutorial)
+            {
+
+                if (playerInputs.mouseLeftDown)
+                {
+                    tutorialButton.renderer.SetColorText(Color.white);
+                    tutorialButton.renderer.background_renderer.SetSliceCustom(w: 1);
+                    tutorialButton.renderer.SetText("Run Tutorial");
+                    options.skipTutorial = false;
+                }
+                else
+                {
+
+                    tutorialButton.renderer.SetColorText(Color.black);
+                    tutorialButton.renderer.background_renderer.SetSliceCustom(w: 0);
+                }
+            }
+            else
+            {
+
+                if (playerInputs.mouseLeftDown)
+                {
+                    tutorialButton.renderer.SetColorText(Color.black);
+                    tutorialButton.renderer.background_renderer.SetSliceCustom(w: 0);
+                    tutorialButton.renderer.SetText("Skip Tutorial");
+                    options.skipTutorial = true;
+                }
+                else
+                {
+                    tutorialButton.renderer.SetColorText(Color.white);
+                    tutorialButton.renderer.background_renderer.SetSliceCustom(w: 1);
+                }
+            }
+        }
+        else
+        {
+            if (options.skipTutorial)
+            {
+                tutorialButton.renderer.SetColorText(Color.white);
+                tutorialButton.renderer.background_renderer.SetSliceCustom(w: 1);
+            }
+            else
+            {
+                tutorialButton.renderer.SetColorText(Color.black);
+                tutorialButton.renderer.background_renderer.SetSliceCustom(w: 0);
+            }
+
         }
     }
 

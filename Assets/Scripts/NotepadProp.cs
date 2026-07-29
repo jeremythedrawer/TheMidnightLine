@@ -33,12 +33,12 @@ public class NotepadProp : MonoBehaviour
         if (notepadData.collected) return;
 
         Bounds rendBounds = atlasRenderer.bounds;
-        if (!spyAtProp && spyStats.curWorldPos.x > rendBounds.min.x && spyStats.curWorldPos.x < rendBounds.max.x)
+        if (!spyAtProp && spyStats.bounds.max.x > rendBounds.min.x && spyStats.bounds.min.x < rendBounds.max.x)
         {
-            OnSpyEnter?.Invoke(new Vector2(rendBounds.center.x, spyStats.curWorldPos.y + spyStats.spyHeight));
+            OnSpyEnter?.Invoke(new Vector2(rendBounds.center.x, spyStats.bounds.max.y));
             spyAtProp = true;
         }
-        else if (spyAtProp && (spyStats.curWorldPos.x < rendBounds.min.x || spyStats.curWorldPos.x > rendBounds.max.x))
+        else if (spyAtProp && (spyStats.bounds.max.x < rendBounds.min.x || spyStats.bounds.min.x > rendBounds.max.x))
         {
             OnSpyExit?.Invoke();
             spyAtProp = false;

@@ -304,8 +304,7 @@ public class GameplayUI : MonoBehaviour
             {
                 MoveUIElement(ticket.transform, ticketInactivePos, ref ctsTicket, newState);
 
-
-                if ((spyStats.tutorialState & TutorialState.Ticket) == 0)
+                if (!options.skipTutorial && ((spyStats.tutorialState & TutorialState.Ticket) == 0))
                 {
                     MoveTutorialUIElement(curTicketIcon.mainTicket, options.ticketCountTutorialText);
                     curTutorialState = TutorialState.Ticket;
@@ -459,7 +458,7 @@ public class GameplayUI : MonoBehaviour
         traitorCount++;
         traitorCountText.SetText("x" + traitorCount);
 
-        if ((spyStats.tutorialState & TutorialState.Traitor) == 0)
+        if (options.skipTutorial && ((spyStats.tutorialState & TutorialState.Traitor) == 0))
         {
             MoveTutorialUIElement(traitorIcon, options.traitorCountTutorialText);
             curTutorialState = TutorialState.Traitor;

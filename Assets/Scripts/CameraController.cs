@@ -131,17 +131,17 @@ public class CameraController : MonoBehaviour
         {
             case LocationState.Station:
             {
-                targetWorldPos.x = spyStats.curWorldPos.x + curXOffset;
+                targetWorldPos.x = spyStats.bounds.center.x + curXOffset;
             }
             break;
 
             case LocationState.Carriage:
             {
-                float distFromCenter = spyStats.curWorldPos.x - spyStats.curLocationBounds.center.x;
+                float distFromCenter = spyStats.bounds.center.x - spyStats.curLocationBounds.center.x;
 
                 float carriageT = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
 
-                targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.curWorldPos.x + curXOffset, carriageT);
+                targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.bounds.center.x + curXOffset, carriageT);
                 carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);
                 
                 carriageBoundsCompute.Dispatch(carriageBoundsKernel, threadGroupX, threadGroupY, 1);
@@ -150,15 +150,15 @@ public class CameraController : MonoBehaviour
             case LocationState.MeetingRoom:
             case LocationState.Bunker:
             {
-                float distFromCenter = spyStats.curWorldPos.x - spyStats.curLocationBounds.center.x;
+                float distFromCenter = spyStats.bounds.center.x - spyStats.curLocationBounds.center.x;
                 float t = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
-                targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.curWorldPos.x + curXOffset, t);
+                targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.bounds.center.x + curXOffset, t);
                 targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, spyStats.curLocationBounds.min.x + stats.camBounds.extents.x, spyStats.curLocationBounds.max.x - stats.camBounds.extents.x);
             }
             break;
             case LocationState.Gangway:
             {
-                targetWorldPos.x = spyStats.curWorldPos.x + curXOffset;
+                targetWorldPos.x = spyStats.bounds.center.x + curXOffset;
 
                 carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);
 
@@ -231,7 +231,7 @@ public class CameraController : MonoBehaviour
     }
     private void MoveToPlayer()
     {
-        targetWorldPos.x = spyStats.curWorldPos.x;
+        targetWorldPos.x = spyStats.bounds.center.x;
     }
     public static Vector3 GetSnappedPosition(Vector3 pos, float unitsPerPixel)
     {
