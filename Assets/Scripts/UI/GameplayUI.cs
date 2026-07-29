@@ -2,14 +2,13 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using UnityEngine;
-using UnityEngine.UIElements;
 using static AtlasUI;
 using static Spy;
 public class GameplayUI : MonoBehaviour
 {
     const float TICKET_ICON_PADDING = 0.2f;
     const float APPEARING_TIME = 0.5f;
-    const float ABILITY_ICON_APPEAR_TIME = 1f;
+
 
     public PlayerInputsSO playerInputs;
     public CameraStatsSO cameraStats;
@@ -17,6 +16,7 @@ public class GameplayUI : MonoBehaviour
     public GameEventDataSO gameEventData;
     public NotepadData notepadData;
     public TripSO trip;
+    public OptionsSO options;
 
     public FadeBlack fadeBlack;
 
@@ -28,15 +28,18 @@ public class GameplayUI : MonoBehaviour
 
     public Ticket ticket;
 
-    public TicketIcon ticketIcon_prefab;
+    public TicketIcon ticketIconPrefab;
 
     public AtlasRenderer carriageMap;
-    public AtlasRenderer keyIcon;
-    public AtlasRenderer traitorIcon;
-    public AtlasTextRenderer traitorCountText;
 
-    public AtlasRenderer redoButton;
-    public AtlasRenderer quitButton;
+    public IconUIElement traitorIcon;
+    public IconUIElement redoButton;
+    public IconUIElement quitButton;
+    
+    public AtlasRenderer keyIcon;
+
+    public AtlasTextRenderer traitorCountText;
+    public AtlasTextRenderer tutorialText;
 
     public Transform ticketIconTransform;
 
@@ -49,6 +52,8 @@ public class GameplayUI : MonoBehaviour
     public CancellationTokenSource ctsTicket;
     public CancellationTokenSource ctsCarriageMap;
     public CancellationTokenSource ctsFadeBlack;
+
+    public IconUIElement curTutorialIcon;
 
     public Vector3 backgroundActivePos;
     public Vector3 backgroundInactivePos;
@@ -63,6 +68,7 @@ public class GameplayUI : MonoBehaviour
 
     public UIState curState;
     public UnlockType curUnlockType;
+    public TutorialState curTutorialState;
 
     public int ticketCount;
     public int traitorCount;
@@ -127,6 +133,7 @@ public class GameplayUI : MonoBehaviour
     {
         InitPOVUI();
         InitTicketIcons();
+        InitUIElements();
     }
     private void KeepNotepad()
     {
@@ -228,23 +235,45 @@ public class GameplayUI : MonoBehaviour
             break;
             case UIState.None:
             {
-                if (canExitState && CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds, isClickable: true))
+                switch(curTutorialState)
                 {
-                    ctsNotepad?.Cancel();
-
-                    notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadHoverPos, Time.deltaTime * MOVE_DAMP);
-
-                    notepad.activePage.InvertExitButton(invert: true);
-                    if (playerInputs.mouseLeftUp)
+                    case TutorialState.None:
                     {
-                        notepad.activePage.InvertExitButton(invert: false);
-                        notepadData.checkingNotepad = true;
+                        if (canExitState && CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds, isClickable: true))
+                        {
+                            ctsNotepad?.Cancel();
+
+                            notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadHoverPos, Time.deltaTime * MOVE_DAMP);
+
+                            notepad.activePage.InvertExitButton(invert: true);
+                            if (playerInputs.mouseLeftUp)
+                            {
+                                notepad.activePage.InvertExitButton(invert: false);
+                                notepadData.checkingNotepad = true;
+                            }
+                        }
+                        else
+                        {
+                            notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadInactiveLocalPos, Time.deltaTime * MOVE_DAMP);
+                            notepad.activePage.InvertExitButton(invert: false);
+                        }
                     }
-                }
-                else
-                {
-                    notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadInactiveLocalPos, Time.deltaTime * MOVE_DAMP);
-                    notepad.activePage.InvertExitButton(invert: false);
+                    break;
+
+                    case TutorialState.Ticket:
+                    {
+                        if (canExitState && playerInputs.spacebarDown)
+                        {
+                            MoveBackTutorialUIElement(curTutorialIcon);
+                            spyStats.tutorialState |= curTutorialState;
+
+                            curTicketIcon.RipStubTicket();
+                            curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
+
+                            curTutorialState = TutorialState.None;
+                        }
+                    }
+                    break;
                 }
                 canExitState = true;
             }
@@ -266,8 +295,17 @@ public class GameplayUI : MonoBehaviour
             {
                 MoveUIElement(ticket.transform, ticketInactivePos, ref ctsTicket, newState);
 
-                curTicketIcon.RipStubTicket();
-                curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
+
+                if ((spyStats.tutorialState & TutorialState.Ticket) == 0)
+                {
+                    MoveTutorialUIElement(curTicketIcon.mainTicket, options.ticketCountTutorialText);
+                    curTutorialState = TutorialState.Ticket;
+                }
+                else
+                {
+                    curTicketIcon.RipStubTicket();
+                    curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
+                }
 
             }
             break;
@@ -302,20 +340,27 @@ public class GameplayUI : MonoBehaviour
     }
     private void InitTicketIcons()
     {
-        ticketIcons = new TicketIcon[8];
+        ticketIcons = new TicketIcon[3];
 
-        float ticketIconSpacing = ticketIcon_prefab.mainTicket.bounds.size.x + ticketIcon_prefab.stubTicket.bounds.size.x + TICKET_ICON_PADDING;
+        float ticketIconSpacing = ticketIconPrefab.mainTicket.renderer.bounds.size.x + ticketIconPrefab.stubTicket.renderer.bounds.size.x + TICKET_ICON_PADDING;
         for (int i = 0; i < ticketIcons.Length; i++)
         {
             float xPos = ticketIconTransform.position.x + (ticketIconSpacing * i);
             Vector3 pos = new Vector3(xPos, ticketIconTransform.position.y, ticketIconTransform.position.z);
-            TicketIcon ticketIcon = Instantiate(ticketIcon_prefab, pos, Quaternion.identity, ticketIconTransform);
+            TicketIcon ticketIcon = Instantiate(ticketIconPrefab, pos, Quaternion.identity, transform);
             ticketIcon.Init();
             ticketIcon.name = "TicketIcon" + i;
             ticketIcons[i] = ticketIcon;
         }
         curTicketIcon = ticketIcons[0];
     }
+    private void InitUIElements()
+    {
+        traitorIcon.startPos = traitorIcon.renderer.transform.localPosition;
+        quitButton.startPos = quitButton.renderer.transform.localPosition;
+        redoButton.startPos = redoButton.renderer.transform.localPosition;
+    }
+
     private void SetNewTicketIcons()
     {
         curTicketIcon = ticketIcons[0];
@@ -337,7 +382,7 @@ public class GameplayUI : MonoBehaviour
     }
     private void SetFadeToBlack()
     {
-        fadeBlack.FadeToBlack("Results", Scenes.SceneType.Score, sceneIndex: 3);
+        fadeBlack.FadeToBlackChangeScene("Results", Scenes.SceneType.Score, sceneIndex: 3);
     }
     private void ShowWIcon(Vector2 position)
     {
@@ -380,26 +425,26 @@ public class GameplayUI : MonoBehaviour
     }
     private void HandlePlayAgainButton()
     {
-        if (CursorController.IsInsideBounds(redoButton.bounds, isClickable: true))
+        if (CursorController.IsInsideBounds(redoButton.renderer.bounds, isClickable: true))
         {
-            redoButton.custom.w = 1;
+            redoButton.renderer.custom.w = 1;
 
             if (playerInputs.mouseLeftDown)
             {
-                fadeBlack.FadeToBlack("Find where the Traitors are going.", Scenes.SceneType.Trip, sceneIndex: 2);
+                fadeBlack.FadeToBlackChangeScene("Find where the Traitors are going.", Scenes.SceneType.Trip, sceneIndex: 2);
                 gameEventData.OnReset.Raise();
             }
         }
         else
         {
-            redoButton.custom.w = 0;
+            redoButton.renderer.custom.w = 0;
         }
     }
     private void HandleQuitButton()
     {
-        if (CursorController.IsInsideBounds(quitButton.bounds, isClickable: true))
+        if (CursorController.IsInsideBounds(quitButton.renderer.bounds, isClickable: true))
         {
-            quitButton.custom.w = 1;
+            quitButton.renderer.custom.w = 1;
 
             if (playerInputs.mouseLeftDown)
             {
@@ -408,8 +453,25 @@ public class GameplayUI : MonoBehaviour
         }
         else
         {
-            quitButton.custom.w = 0;
+            quitButton.renderer.custom.w = 0;
         }
+    }
+    private void MoveTutorialUIElement(IconUIElement uiIcon, string text)
+    {
+        uiIcon.ctsMove?.Cancel();
+        uiIcon.ctsMove = new CancellationTokenSource();
+
+        curTutorialIcon = uiIcon;
+
+        MovingTutorialUIElement(uiIcon, text).Forget();
+        fadeBlack.FadeToBlack(0.75f);
+    }
+    private void MoveBackTutorialUIElement(IconUIElement uiElement)
+    {
+        uiElement.ctsMove?.Cancel();
+        uiElement.ctsMove = new CancellationTokenSource();
+        MovingBackTutorialUIElement(uiElement).Forget();
+        fadeBlack.FadeFromBlack();
     }
     private async UniTask DisappearingKeyIcon()
     {
@@ -436,6 +498,8 @@ public class GameplayUI : MonoBehaviour
         }
 
         SpyBrain.ToggleTicketCheckAbility(toggle: true);
+
+
     }
     private async UniTask DisappearingTicketIcons()
     {
@@ -448,6 +512,61 @@ public class GameplayUI : MonoBehaviour
             ticketIcons[curTicketIconIndex].Disappear();
             curTicketIconIndex--;
             await UniTask.WaitForSeconds(APPEARING_TIME);
+        }
+    }
+    private async UniTask MovingTutorialUIElement(IconUIElement uiElement, string text)
+    {
+        AtlasRenderer iconRenderer = uiElement.renderer;
+        Transform iconTransform = iconRenderer.transform;
+        
+        Vector2 targetPos = new Vector2();
+        targetPos.x = 0;
+
+        float localPivotPosY = iconRenderer.bounds.size.y * iconRenderer.sprite.uvPivot.y;
+        targetPos.y = cameraStats.camBounds.extents.y - localPivotPosY - UI_POSITION_BUFFER;
+
+        Vector2 curPos = new Vector2();
+        curPos.x = iconTransform.localPosition.x;
+        curPos.y = iconTransform.localPosition.y;
+
+        try
+        {
+            while ((curPos - targetPos).sqrMagnitude > 0.05f)
+            {
+                curPos = Vector2.Lerp(curPos, targetPos, Time.deltaTime * 2);
+                iconTransform.localPosition = new Vector3(curPos.x, curPos.y, 1);
+                await UniTask.Yield(uiElement.ctsMove.Token);
+            }
+            float tutTextLocaPosY = iconTransform.localPosition.y - localPivotPosY - tutorialText.background_renderer.worldPivotsAndSizes[8].w - 0.1f;
+            tutorialText.transform.localPosition = new Vector3(iconTransform.localPosition.x, tutTextLocaPosY, 1);
+            tutorialText.SetText(text);
+        }
+        catch(OperationCanceledException)
+        {
+
+        }
+    }
+    private async UniTask MovingBackTutorialUIElement(IconUIElement uiElement)
+    {
+        Transform iconTransform = uiElement.renderer.transform;
+
+        Vector3 curPos = iconTransform.localPosition;
+
+        try
+        {
+            tutorialText.SetText("");
+            while ((curPos - uiElement.startPos).sqrMagnitude > 0.01f)
+            {
+                curPos = Vector3.Lerp(curPos, uiElement.startPos, Time.deltaTime * 2);
+
+                iconTransform.localPosition = curPos;
+                await UniTask.Yield(uiElement.ctsMove.Token);
+            }
+            iconTransform.localPosition = uiElement.startPos;
+        }
+        catch (OperationCanceledException)
+        {
+
         }
     }
 }

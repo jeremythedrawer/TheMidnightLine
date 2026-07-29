@@ -14,7 +14,7 @@ public class NPCPicker : MonoBehaviour
 
     public TripSO trip;
     public PlayerInputsSO playerInputs;
-    public ColorsSO colorData;
+    public OptionsSO colorData;
 
     public AtlasRenderer paletteRenderer;
 

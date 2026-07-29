@@ -65,18 +65,23 @@ MonoBehaviour:
   startButton:
     renderer: {fileID: 3935552475086739149}
     startPos: {x: 0, y: 0, z: 0}
+    hovered: 0
   optionsButton:
     renderer: {fileID: 4086047115762157651}
     startPos: {x: 0, y: 0, z: 0}
+    hovered: 0
   quitButton:
     renderer: {fileID: 7621464800628983968}
     startPos: {x: 0, y: 0, z: 0}
+    hovered: 0
   darkColorButton:
     renderer: {fileID: 3063899068285437220}
     startPos: {x: 0, y: 0, z: 0}
+    hovered: 0
   lightColorButton:
     renderer: {fileID: 5102328858439535800}
     startPos: {x: 0, y: 0, z: 0}
+    hovered: 0
   sceneData: {fileID: 11400000, guid: 3293190d726975e43a124435917a650c, type: 2}
   notepad: {fileID: 8954672620197622129}
   fadeBlack: {fileID: 5998209297801386569}
@@ -2740,6 +2745,18 @@ PrefabInstance:
       propertyPath: bounds.m_Center.z
       value: 10
       objectReference: {fileID: 0}
+    - target: {fileID: 1106139979049264312, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 3.6439998
+      objectReference: {fileID: 0}
+    - target: {fileID: 1106139979049264312, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -0.22399998
+      objectReference: {fileID: 0}
+    - target: {fileID: 1106139979049264312, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 1466766313142118153, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: bounds.m_Center.x
       value: 3.6244445
@@ -2826,11 +2843,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 2858700829934774792, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 3.4729998
+      value: 3.5670247
       objectReference: {fileID: 0}
     - target: {fileID: 2858700829934774792, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -1.142
+      value: -1.1389999
       objectReference: {fileID: 0}
     - target: {fileID: 2858700829934774792, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: bounds.m_Center.z
@@ -2857,6 +2874,18 @@ PrefabInstance:
       value: -0.5692222
       objectReference: {fileID: 0}
     - target: {fileID: 3449587988861367987, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 3455150011770278005, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 3.316
+      objectReference: {fileID: 0}
+    - target: {fileID: 3455150011770278005, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -0.85599995
+      objectReference: {fileID: 0}
+    - target: {fileID: 3455150011770278005, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: bounds.m_Center.z
       value: 10
       objectReference: {fileID: 0}
@@ -2984,6 +3013,30 @@ PrefabInstance:
       propertyPath: bounds.m_Center.z
       value: 7
       objectReference: {fileID: 0}
+    - target: {fileID: 5949420222387915496, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 4.053
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949420222387915496, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -0.85599995
+      objectReference: {fileID: 0}
+    - target: {fileID: 5949420222387915496, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6173110612634167378, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 3.6439998
+      objectReference: {fileID: 0}
+    - target: {fileID: 6173110612634167378, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -0.8513333
+      objectReference: {fileID: 0}
+    - target: {fileID: 6173110612634167378, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6320700536072520551, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: bounds.m_Center.x
       value: 4.451565
@@ -3010,13 +3063,25 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6569745794774094659, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 3.7029998
+      value: 3.797
       objectReference: {fileID: 0}
     - target: {fileID: 6569745794774094659, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -1.142
+      value: -1.1389999
       objectReference: {fileID: 0}
     - target: {fileID: 6569745794774094659, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 10
+      objectReference: {fileID: 0}
+    - target: {fileID: 6728040948238139625, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: 3.6959999
+      objectReference: {fileID: 0}
+    - target: {fileID: 6728040948238139625, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: -0.85599995
+      objectReference: {fileID: 0}
+    - target: {fileID: 6728040948238139625, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
       propertyPath: bounds.m_Center.z
       value: 10
       objectReference: {fileID: 0}

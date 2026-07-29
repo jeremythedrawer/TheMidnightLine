@@ -60,7 +60,7 @@ public class Notepad : MonoBehaviour
     public SpyStatsSO spyStats;
     public SceneData sceneData;
     public GameEventDataSO gameEventData;
-    public ColorsSO colorsData;
+    public OptionsSO colorsData;
 
     public NotepadData notepadData;
     

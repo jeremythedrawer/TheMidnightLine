@@ -20,7 +20,7 @@ public class SpawnMaster : MonoBehaviour
     public TrainStatsSO trainStats;
     public SpyStatsSO spyStats;
     public GameEventDataSO gameEventData;
-    public ColorsSO colorSO;
+    public OptionsSO colorSO;
 
     [Header("Generated")]
     public int nextSpawnIndex;

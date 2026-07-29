@@ -39,6 +39,7 @@ public class SpyBrain : MonoBehaviour
     public LayerSettingsSO layerSettings;
     public GameEventDataSO gameEventData;
     public CameraStatsSO camStats;
+    public OptionsSO options;
     public NotepadData notepadData;
     public TripSO trip;
 
@@ -122,6 +123,14 @@ public class SpyBrain : MonoBehaviour
         stats.curWallLayer = layerSettings.stationWallLayers;
         stats.curWorldPos = transform.position;
         
+        if (options.skipTutorial)
+        {
+            stats.tutorialState = TutorialState.Ticket | TutorialState.Picker | TutorialState.Traitor;
+        }
+        else
+        {
+            stats.tutorialState = TutorialState.None;
+        }
         rigidBody.includeLayers = layerSettings.stationMask;
 
         SetState(SpyState.None);

@@ -169,7 +169,7 @@ public class ScoreUI : MonoBehaviour
             playAgainRenderer.background_renderer.SetSliceCustom(w: 1);
             if (playerInputs.mouseLeftDown)
             {
-                fadeBlack.FadeToBlack("Find where the Traitors are going.", Scenes.SceneType.Trip, sceneIndex: 2);
+                fadeBlack.FadeToBlackChangeScene("Find where the Traitors are going.", Scenes.SceneType.Trip, sceneIndex: 2);
                 gameEventData.OnReset.Raise();
             }
         }

@@ -14,8 +14,8 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   station_prefab: {fileID: 6700324006200157766, guid: a6bd14f8ce78f87409d71c0d0d7cbdca, type: 3}
   ticketsToCheckBeforeSpawn: 0
-  bystanderSpawnCount: 2
-  traitorSpawnCount: 1
+  bystanderSpawnCount: 3
+  traitorSpawnCount: 0
   accompliceSpawnCount: 0
   isFrontOfTrain: 1
   stationName: Old Vinrose
@@ -24,14 +24,10 @@ MonoBehaviour:
   bystanderProfiles:
   - boardingStationIndex: 0
     disembarkingStationIndex: 1
-    npcPrefabIndex: 4
-    behaviours: 2
-  - boardingStationIndex: 0
-    disembarkingStationIndex: 3
-    npcPrefabIndex: 4
-    behaviours: 1
-  - boardingStationIndex: 0
-    disembarkingStationIndex: 3
     npcPrefabIndex: 3
-    behaviours: 4
+    behaviours: 5
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 4
+    npcPrefabIndex: 7
+    behaviours: 12
   accompliceProfiles: []

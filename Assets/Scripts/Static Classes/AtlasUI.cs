@@ -31,6 +31,7 @@ public static class AtlasUI
     public const float GRID_GAP = 0.272f;
     public const float WRITE_LETTER_TIME = 0.1f;
     public const float NOTEPAD_INACTIVE_OFFSET = 0.39f;
+    public const float UI_POSITION_BUFFER = 0.3f;
     public static float TransitionTime = -Mathf.Log(TARGET_MARGIN) / MOVE_DAMP;
 
     public enum NotepadKeyframeState
@@ -102,7 +103,13 @@ public static class AtlasUI
         Diagonal = 1 << 3,
         Meridia = 1 << 4,
     }
-
+    [Flags] public enum TutorialState
+    {
+        None = 0,
+        Ticket = 1 << 0,
+        Traitor = 1 << 1,
+        Picker = 1 << 2,
+    }
     public enum PageType
     { 
         None,
@@ -155,13 +162,23 @@ public static class AtlasUI
         
     }
 
-    [Serializable] public struct TextButton
+    [Serializable] public struct TextUIElement
     {
         public AtlasTextRenderer renderer;
         [Header("Generated")]
         public Vector3 startPos;
+        public bool hovered;
         public CancellationTokenSource ctsMove;
     }
+    [Serializable] public struct IconUIElement
+    {
+        public AtlasRenderer renderer;
+        [Header("Generated")]
+        public Vector3 startPos;
+        public bool hovered;
+        public CancellationTokenSource ctsMove;
+    }
+
 
     public static Vector3 NotepadActiveLocalPos;
     public static Vector3 NotepadInactiveLocalPos;

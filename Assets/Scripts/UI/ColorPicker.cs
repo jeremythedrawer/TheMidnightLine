@@ -29,7 +29,7 @@ public class ColorPicker : MonoBehaviour
     }
 
     public TripSO trip;
-    public ColorsSO colorsData;
+    public OptionsSO colorsData;
     public PlayerInputsSO playerInputs;
     
     public AtlasRenderer[] colorRenderers;

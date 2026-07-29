@@ -26,11 +26,11 @@ public class StartUI : MonoBehaviour
 
     public Transform titleTransform;
 
-    public TextButton startButton;
-    public TextButton optionsButton;
-    public TextButton quitButton;
-    public TextButton darkColorButton;
-    public TextButton lightColorButton;
+    public TextUIElement startButton;
+    public TextUIElement optionsButton;
+    public TextUIElement quitButton;
+    public TextUIElement darkColorButton;
+    public TextUIElement lightColorButton;
 
     public SceneData sceneData;
 
@@ -96,7 +96,7 @@ public class StartUI : MonoBehaviour
     }
     private void StartTrip()
     {
-        fadeBlack.FadeToBlack("Find where the Traitors are going.", SceneType.Trip, sceneIndex: 2);
+        fadeBlack.FadeToBlackChangeScene("Find where the Traitors are going.", SceneType.Trip, sceneIndex: 2);
     }
     private void SetNotepadCollectIcon(Vector2 position)
     {
@@ -224,7 +224,7 @@ public class StartUI : MonoBehaviour
         InitButton(ref lightColorButton);
 
     }
-    private void InitButton(ref TextButton button)
+    private void InitButton(ref TextUIElement button)
     {
         button.renderer.transform.SetParent(null);
         button.startPos = button.renderer.transform.position;
@@ -365,25 +365,25 @@ public class StartUI : MonoBehaviour
         }
     }
 
-    private void MoveButtonAway(TextButton button)
+    private void MoveButtonAway(TextUIElement button)
     {
         button.ctsMove?.Cancel();
         button.ctsMove = new CancellationTokenSource();
         MovingButtonAwayRight(button).Forget();
     }
-    private void MoveButtonToRight(TextButton button)
+    private void MoveButtonToRight(TextUIElement button)
     {
         button.ctsMove?.Cancel();
         button.ctsMove = new CancellationTokenSource();
         MovingButtonToRight(button).Forget();
     }
-    private void MoveButtonBack(TextButton button)
+    private void MoveButtonBack(TextUIElement button)
     {
         button.ctsMove?.Cancel();
         button.ctsMove = new CancellationTokenSource();
         MoveButtonBackFromRight(button).Forget();
     }
-    private async UniTask MovingButtonAwayRight(TextButton button)
+    private async UniTask MovingButtonAwayRight(TextUIElement button)
     {
         AtlasTextRenderer buttonRend = button.renderer;
         Transform buttonTransform = buttonRend.transform;
@@ -406,7 +406,7 @@ public class StartUI : MonoBehaviour
 
         }
     }
-    private async UniTask MovingButtonToRight(TextButton button)
+    private async UniTask MovingButtonToRight(TextUIElement button)
     {
         AtlasTextRenderer buttonRend = button.renderer;
         
@@ -433,7 +433,7 @@ public class StartUI : MonoBehaviour
             buttonTransform.SetParent(null);
         }
     }
-    private async UniTask MoveButtonBackFromRight(TextButton button)
+    private async UniTask MoveButtonBackFromRight(TextUIElement button)
     {
         AtlasTextRenderer buttonRend = button.renderer;
         Transform buttonTransform = buttonRend.transform;

@@ -1,23 +1,28 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
+using static AtlasUI;
+
 public class TicketIcon : MonoBehaviour
 {
     const float USE_TIME = 0.8f;
 
-    public AtlasRenderer mainTicket;
-    public AtlasRenderer stubTicket;
-    public ColorsSO colors;
+    public IconUIElement mainTicket;
+    public IconUIElement stubTicket;
+    public OptionsSO colors;
 
     private void Start()
     {
-        stubTicket.custom.y = stubTicket.bounds.size.x;
+        mainTicket.startPos = mainTicket.renderer.transform.localPosition;
+        stubTicket.startPos = stubTicket.renderer.transform.localPosition;
+
+        stubTicket.renderer.custom.y = stubTicket.renderer.bounds.size.x;
     }
     public void InvertIcon(bool toggle)
     {
         float value = toggle ? 1f : 0f;
-        mainTicket.custom.x = value;
-        stubTicket.custom.x = value;
+        mainTicket.renderer.custom.x = value;
+        stubTicket.renderer.custom.x = value;
     }
     public void RipStubTicket()
     {
@@ -25,8 +30,8 @@ public class TicketIcon : MonoBehaviour
     }
     public void Appear()
     {
-        mainTicket.custom.x = 0;
-        stubTicket.custom.x = 0;
+        mainTicket.renderer.custom.x = 0;
+        stubTicket.renderer.custom.x = 0;
         Appearing().Forget();
     }
     public void Disappear()
@@ -35,8 +40,8 @@ public class TicketIcon : MonoBehaviour
     }
     public void Init()
     {
-        mainTicket.custom.w = 1;
-        stubTicket.custom.w = 1;
+        mainTicket.renderer.custom.w = 1;
+        stubTicket.renderer.custom.w = 1;
     }
     private async UniTask RippingStubTicket()
     {
@@ -47,13 +52,13 @@ public class TicketIcon : MonoBehaviour
             elapsed += Time.deltaTime;
             float t = elapsed / USE_TIME;
             float easeOutT = Mathf.Pow(t, 0.25f);
-            stubTicket.custom.w = easeOutT;
-            mainTicket.custom.x = 1 - easeOutT;
+            stubTicket.renderer.custom.w = easeOutT;
+            mainTicket.renderer.custom.x = 1 - easeOutT;
             await UniTask.Yield();
         }
 
-        stubTicket.custom.w = 1;
-        mainTicket.custom.x = 0;
+        stubTicket.renderer.custom.w = 1;
+        mainTicket.renderer.custom.x = 0;
     }
     private async UniTask Appearing()
     {
@@ -63,12 +68,12 @@ public class TicketIcon : MonoBehaviour
         {
             elapsed -= Time.deltaTime;
             float t = elapsed / USE_TIME;
-            mainTicket.custom.w = t;
-            stubTicket.custom.w = t;
+            mainTicket.renderer.custom.w = t;
+            stubTicket.renderer.custom.w = t;
             await UniTask.Yield();
         }
-        mainTicket.custom.w = 0;
-        stubTicket.custom.w = 0;
+        mainTicket.renderer.custom.w = 0;
+        stubTicket.renderer.custom.w = 0;
     }
     private async UniTask Disappearing()
     {
@@ -79,12 +84,12 @@ public class TicketIcon : MonoBehaviour
             elapsed += Time.deltaTime;
             float t = elapsed / USE_TIME;
 
-            mainTicket.custom.w = t;
-            stubTicket.custom.w = t;
+            mainTicket.renderer.custom.w = t;
+            stubTicket.renderer.custom.w = t;
             
             await UniTask.Yield();
         }
-        mainTicket.custom.w = 1;
-        stubTicket.custom.w = 1;
+        mainTicket.renderer.custom.w = 1;
+        stubTicket.renderer.custom.w = 1;
     }
 }

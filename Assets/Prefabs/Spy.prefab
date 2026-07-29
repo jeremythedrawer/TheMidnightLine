@@ -176,20 +176,13 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: e67057ee85abdac409fcfda2715bd2db, type: 3}
     material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
-    depthOrder: 1
   atlas: {fileID: 11400000, guid: 5085181b26ea31b4b9430dc5ce3bcdf5, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 0
   flipX: 0
   flipY: 0
   width: 1
   height: 1
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
     uvSizeAndPos: {x: 0.057617188, y: 0.15722656, z: 0.0009765625, w: 0.8388672}
@@ -199,10 +192,11 @@ MonoBehaviour:
   bounds:
     m_Center: {x: 86.155334, y: 2.1382222, z: 1}
     m_Extent: {x: 0.16388889, y: 0.44722223, z: 0.1}
-  worldPivotAndSize: {x: 0.1611111, y: 0, z: 0.32777777, w: 0.89444447}
+  worldPivotAndSize: {x: -0.1611111, y: -0, z: 0.32777777, w: 0.89444447}
   uvSizeAndPosition: {x: 0.057617188, y: 0.15722656, z: 0.0009765625, w: 0.8388672}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
   boundsOffset: {x: 0.002777785, y: 0.44722223, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
@@ -215,17 +209,7 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 0
   prevSpriteIndexFlipV: 0
   isAnimating: 0
-  slicedSprite:
-    sprite:
-      uvSizeAndPos: {x: 0, y: 0, z: 0, w: 0}
-      uvPivot: {x: 0, y: 0}
-      worldSize: {x: 0, y: 0, z: 0}
-      index: 0
-    slice: {x: 0, y: 0, z: 0, w: 0}
-    uvSizeAndPos: []
-    worldSlices: {x: 0, y: 0, z: 0, w: 0}
   quadCount: 0
-  hasText: 0
 --- !u!61 &4281581721833017353
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -296,14 +280,15 @@ MonoBehaviour:
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  options: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
   notepadData: {fileID: 11400000, guid: 8e516d659eb1fc449bc178ad3fb0113d, type: 2}
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
+  possibleNPCsToTicketCheck: []
   atlas: {fileID: 0}
   slideDoors: {fileID: 0}
-  gangwayDoor: {fileID: 0}
-  curCarriage: {fileID: 0}
+  smokingRoomDoor: {fileID: 0}
+  curGangwayDoor: {fileID: 0}
   curCarriageMap: {fileID: 0}
-  npcTicketCheck: {fileID: 0}
   curClip:
     clipName: 
     clipType: 0
@@ -311,36 +296,19 @@ MonoBehaviour:
     keyframeStartIndex: 0
     keyframeEndIndex: 0
     time: 0
+  collisionData:
+    groundLeft: {x: 85.976555, y: 1.673}
+    groundRight: {x: 86.32856, y: 1.673}
+    wallLeft: {x: 86.06256, y: 1.691}
+    wallRight: {x: 86.24255, y: 1.691}
   curNotepadState: 0
   clipTime: 0
+  lastGroundYPos: 0
   curFrameIndex: 0
   prevFrameIndex: 0
-  canExitCheckTicket: 0
-  canExitNotepad: 0
+  curNPCTicketCheckHoverCount: 0
+  wasTouchingGangwayDoorLeft: 0
+  wasTouchingGangwayDoorRight: 0
+  canExitState: 0
   checkingCarriageMap: 0
-  collisionData:
-    groundLeft: {x: 86.005554, y: 1.6769999}
-    groundRight: {x: 86.29956, y: 1.6769999}
-    stepTopLeft: {x: 86.005554, y: 1.7639999}
-    stepTopRight: {x: 86.29956, y: 1.7639999}
-    stepBottomLeft: {x: 86.005554, y: 1.733}
-    stepBottomRight: {x: 86.29956, y: 1.733}
-    wallTopLeft: {x: 86.04256, y: 2.571}
-    wallTopRight: {x: 86.26256, y: 2.571}
-    wallBottomLeft: {x: 86.04256, y: 2.041}
-    wallBottomRight: {x: 86.26256, y: 2.041}
-    stepFilter:
-      useTriggers: 0
-      useLayerMask: 0
-      useDepth: 0
-      useOutsideDepth: 0
-      useNormalAngle: 0
-      useOutsideNormalAngle: 0
-      layerMask:
-        serializedVersion: 2
-        m_Bits: 0
-      minDepth: 0
-      maxDepth: 0
-      minNormalAngle: 0
-      maxNormalAngle: 0
-  lastGroundYPos: 0
+  canOpenSlideDoor: 0
