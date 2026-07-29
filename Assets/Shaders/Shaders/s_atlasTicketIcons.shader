@@ -65,7 +65,7 @@ Shader "Custom/s_atlasTicketIcons"
 
                 objPos *= size * scale;
                 objPos += pivot;
-                objPos.x += spriteData.custom.y * (spriteData.custom.a);
+                objPos.x += spriteData.custom.y * spriteData.custom.a;
                 float3 worldPos = float3(position.xy + objPos, position.z);
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
@@ -94,15 +94,15 @@ Shader "Custom/s_atlasTicketIcons"
 
                 half ticketCheck = BayerX8(i.custom.x, i.positionHCS.y);
 
-                half3 colorA = lerp(color.rgb, 1 - color.rgb, ticketCheck);
-                half3 colorB = lerp(1 - color.rgb, color.rgb, ticketCheck); 
+                half colorA = lerp(color.r, 1 - color.r, ticketCheck);
+                half colorB = lerp(1 - color.r, color.r, ticketCheck); 
 
                 float dayNightBayer = BayerX8(round(_DayNight), i.positionHCS.y);
-                half3 dayNightInvertColor = lerp(colorA, colorB, dayNightBayer);
+                half dayNightInvertColor = lerp(colorA, colorB, dayNightBayer);
 
                 half3 finalColor = lerp(_BlackColor, _WhiteColor, dayNightInvertColor);
 
-                half alpha = BayerX8(color.a - i.custom.a, i.positionHCS.xy);
+                half alpha = BayerX8(color.a - i.custom.a, i.positionHCS.y);
                 clip(alpha - 0.001);
                 return half4 (finalColor, 1);
             }

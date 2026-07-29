@@ -12,6 +12,7 @@ using UnityEditor.IMGUI.Controls;
 
 using static Atlas;
 using static AtlasRendering;
+using Unity.Collections.LowLevel.Unsafe;
 
 [ExecuteAlways]
 public class AtlasRenderer : MonoBehaviour
@@ -60,7 +61,7 @@ public class AtlasRenderer : MonoBehaviour
     public int prevSpriteIndexFlipV;
     public bool isAnimating;
     public CancellationTokenSource ctsOneShot;
-    public CancellationTokenSource ctsAppear;
+    public CancellationTokenSource ctsChangeCustom;
 
     [Header("Sliced Generated")]
     public int quadCount;
@@ -123,7 +124,7 @@ public class AtlasRenderer : MonoBehaviour
     private void OnDisable()
     {
         ctsOneShot?.Cancel();
-        ctsAppear?.Cancel();
+        ctsChangeCustom?.Cancel();
         UnregisterRenderer(this);
     }
     private void OnDestroy()
@@ -375,11 +376,41 @@ public class AtlasRenderer : MonoBehaviour
         sprite = motionSprite.sprite;
         UpdateSpriteInputs(sprite);
     }
-    public void Appear(float time)
+    public void ChangeCustom(float time, float newValue, int customChannel)
     {
-        ctsAppear?.Cancel();
-        ctsAppear = new CancellationTokenSource();
-        Appearing(time).Forget();
+        ctsChangeCustom?.Cancel();
+        ctsChangeCustom = new CancellationTokenSource();
+
+        switch(customChannel)
+        {
+            case 1:
+            {
+                ChangingCustomX(time, newValue).Forget();
+            }
+            break;
+            case 2:
+            {
+                ChangingCustomY(time, newValue).Forget();
+
+            }
+            break;
+            case 3:
+            {
+                ChangingCustomZ(time, newValue).Forget();
+
+            }
+            break;
+            case 4:
+            {
+                ChangingCustomW(time, newValue).Forget();
+
+            }
+            break;
+        }
+    }
+    public void SetAlpha(float alpha)
+    {
+        custom.w = alpha;
     }
     private async UniTask PlayingClipOneShot(AtlasClip clip, Transform markerTransform = null)
     {
@@ -447,27 +478,88 @@ public class AtlasRenderer : MonoBehaviour
             isAnimating = false;
         }
     }
-    private async UniTask Appearing(float time)
+    private async UniTask ChangingCustomX(float time, float newValue)
     {
-        float elapsed = time;
-
+        float elapsed = 0;
+        float startValue = custom.x;
         try
         {
-            while (elapsed > 0)
+            while (elapsed < time)
             {
-                elapsed -= Time.deltaTime;
+                elapsed += Time.deltaTime;
                 float t = elapsed / time;
-                custom.w = t;
-                await UniTask.Yield(ctsAppear.Token);
+                await UniTask.Yield(ctsChangeCustom.Token);
+                custom.x = Mathf.Lerp(startValue, newValue, t);
             }
-            custom.w = 0;
+            custom.x = newValue;
+        }
+        catch (OperationCanceledException)
+        {            
+            custom.x = newValue;
+        }
+    }
+    private async UniTask ChangingCustomY(float time, float newValue)
+    {
+        float elapsed = 0;
+        float startValue = custom.y;
+        try
+        {
+            while (elapsed < time)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / time;
+                await UniTask.Yield(ctsChangeCustom.Token);
+                custom.y = Mathf.Lerp(startValue, newValue, t);
+            }
+            custom.y = newValue;
         }
         catch (OperationCanceledException)
         {
-            custom.w = 0;
+            custom.y = newValue;
         }
-
     }
+    private async UniTask ChangingCustomZ(float time, float newValue)
+    {
+        float elapsed = 0;
+        float startValue = custom.z;
+        try
+        {
+            while (elapsed < time)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / time;
+                await UniTask.Yield(ctsChangeCustom.Token);
+                custom.z = Mathf.Lerp(startValue, newValue, t);
+            }
+            custom.z = newValue;
+        }
+        catch (OperationCanceledException)
+        {
+            custom.z = newValue;
+        }
+    }
+    private async UniTask ChangingCustomW(float time, float newValue)
+    {
+        float elapsed = 0;
+        float startValue = custom.w;
+        try
+        {
+            while (elapsed < time)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / time;
+                await UniTask.Yield(ctsChangeCustom.Token);
+                custom.w = Mathf.Lerp(startValue, newValue, t);
+            }
+            custom.w = newValue;
+        }
+        catch (OperationCanceledException)
+        {
+            custom.w = newValue;
+        }
+    }
+
+
 #if UNITY_EDITOR
     private void OnDrawGizmos()
     {

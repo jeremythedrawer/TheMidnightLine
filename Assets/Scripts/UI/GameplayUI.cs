@@ -17,6 +17,7 @@ public class GameplayUI : MonoBehaviour
     public NotepadData notepadData;
     public TripSO trip;
     public OptionsSO options;
+    public TrainStatsSO trainStats;
 
     public FadeBlack fadeBlack;
 
@@ -81,6 +82,8 @@ public class GameplayUI : MonoBehaviour
     private void OnEnable()
     {
         gameEventData.OnStationLeave.RegisterListener(SetNewTicketIcons);
+        gameEventData.OnStationLeave.RegisterListener(SetTraitorIcons);
+
         gameEventData.OnStationArrival.RegisterListener(DisappearTicketIcons);
         gameEventData.OnFinishTripScene.RegisterListener(SetFadeToBlack);
         gameEventData.OnFinishTripScene.RegisterListener(KeepNotepad);
@@ -93,6 +96,10 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnWalkPastExteriorSlideDoors += HideKeyIcon;
         SpyBrain.OnEnteredTrain += DisappearKeyIcon;
         SpyBrain.OnTicketInspect += DisappearKeyIcon;
+        SpyBrain.OnOpenNotepad += SetToNotepadState;
+        SpyBrain.OnCloseNotepad += SetToNoneState;
+        SpyBrain.OnTicketInspect += SetToTicketState;
+        SpyBrain.OnFinishTicketInspect += SetToNoneState;
 
         NPCBrain.OnTraitorDisembarkedTrain += DecreaseTraitorCount;
         NPCBrain.OnTraitorBoardedTrain += IncreaseTraitorCount;
@@ -103,9 +110,12 @@ public class GameplayUI : MonoBehaviour
     private void OnDisable()
     {
         gameEventData.OnStationLeave.UnregisterListener(SetNewTicketIcons);
+        gameEventData.OnStationLeave.UnregisterListener(SetTraitorIcons);
+
         gameEventData.OnStationArrival.UnregisterListener(DisappearTicketIcons);
         gameEventData.OnFinishTripScene.UnregisterListener(SetFadeToBlack);
         gameEventData.OnFinishTripScene.UnregisterListener(KeepNotepad);
+
 
         SpyBrain.OnTicketCheckHoverDisabled -= RevertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverDisabled -= HideKeyIcon;
@@ -115,6 +125,10 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnWalkPastExteriorSlideDoors -= HideKeyIcon;
         SpyBrain.OnEnteredTrain -= DisappearKeyIcon;
         SpyBrain.OnTicketInspect -= DisappearKeyIcon;
+        SpyBrain.OnOpenNotepad -= SetToNotepadState;
+        SpyBrain.OnCloseNotepad -= SetToNoneState;
+        SpyBrain.OnTicketInspect -= SetToTicketState;
+        SpyBrain.OnFinishTicketInspect -= SetToNoneState;
         
         NPCBrain.OnTraitorDisembarkedTrain -= DecreaseTraitorCount;
         NPCBrain.OnTraitorBoardedTrain -= IncreaseTraitorCount;
@@ -123,7 +137,6 @@ public class GameplayUI : MonoBehaviour
     }
     private void Update()
     {
-        ChooseState();
         UpdateState();
         fadeBlack.CheckToFadeFromBlack();
         HandlePlayAgainButton();
@@ -138,25 +151,6 @@ public class GameplayUI : MonoBehaviour
     private void KeepNotepad()
     {
         SceneController.KeepNotepad(notepad);
-    }
-    private void ChooseState()
-    {
-        if (playerInputs.notepadKeyDown || notepadData.checkingNotepad)
-        {
-            SetState(UIState.Notepad);
-        }
-        else if (spyStats.curState == SpyState.TicketCheck)
-        {
-            SetState(UIState.Ticket);
-        }
-        else if (spyStats.curState == SpyState.CarriageMap)
-        {
-            SetState(UIState.CarriageMap);
-        }
-        else
-        {
-            SetState(UIState.None);
-        }
     }
     private void SetState(UIState newState)
     {
@@ -268,7 +262,22 @@ public class GameplayUI : MonoBehaviour
                             spyStats.tutorialState |= curTutorialState;
 
                             curTicketIcon.RipStubTicket();
+                            curTicketIcon.InvertIcon(toggle: false);
                             curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
+
+                            curTutorialState = TutorialState.None;
+                        }
+                    }
+                    break;
+
+                    case TutorialState.Traitor:
+                    {
+                        if (canExitState && playerInputs.spacebarDown)
+                        {
+                            MoveBackTutorialUIElement(curTutorialIcon);
+                            traitorIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 1);
+                            traitorCountText.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 1);
+                            spyStats.tutorialState |= curTutorialState;
 
                             curTutorialState = TutorialState.None;
                         }
@@ -304,7 +313,10 @@ public class GameplayUI : MonoBehaviour
                 else
                 {
                     curTicketIcon.RipStubTicket();
-                    curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
+                    if (trip.ticketsCheckedSinceLastStation < ticketIcons.Length)
+                    {
+                        curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
+                    }
                 }
 
             }
@@ -320,6 +332,22 @@ public class GameplayUI : MonoBehaviour
             }
             break;
         }
+    }
+    private void SetToNotepadState()
+    {
+        SetState(UIState.Notepad);
+    }
+    private void SetToTicketState()
+    {
+        SetState(UIState.Ticket);
+    }
+    private void SetToCarriageMapState()
+    {
+        SetState(UIState.CarriageMap);
+    }
+    private void SetToNoneState()
+    {
+        SetState(UIState.None);
     }
     private void InitPOVUI()
     {
@@ -357,14 +385,25 @@ public class GameplayUI : MonoBehaviour
     private void InitUIElements()
     {
         traitorIcon.startPos = traitorIcon.renderer.transform.localPosition;
+        
+        traitorIcon.renderer.SetAlpha(0);
+        traitorCountText.SetAppearTextAlpha(0);
+
         quitButton.startPos = quitButton.renderer.transform.localPosition;
         redoButton.startPos = redoButton.renderer.transform.localPosition;
     }
-
     private void SetNewTicketIcons()
     {
         curTicketIcon = ticketIcons[0];
         SettingNewTicketIcons().Forget();
+    }
+    private void SetTraitorIcons()
+    {
+        if (trainStats.curStationIndex == 1)
+        {
+            traitorIcon.renderer.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 4);
+            traitorCountText.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 4);
+        }
     }
     private void DisappearTicketIcons()
     {
@@ -377,8 +416,10 @@ public class GameplayUI : MonoBehaviour
     }
     private void RevertCurTicketIcon()
     {
-
-        curTicketIcon?.InvertIcon(toggle: false);
+        if (curTutorialState != TutorialState.Ticket)
+        {
+            curTicketIcon?.InvertIcon(toggle: false);
+        }
     }
     private void SetFadeToBlack()
     {
@@ -398,17 +439,17 @@ public class GameplayUI : MonoBehaviour
     private void ShowKeyIcon(Vector2 position, KeySpriteIndices keySpriteIndex)
     {
         keyIcon.transform.SetParent(null);
-        keyIcon.custom.w = 0;
+        keyIcon.custom.w = 1;
         keyIcon.UpdateSpriteInputsByIndex((int)keySpriteIndex);
         keyIcon.transform.position = new Vector3(position.x, position.y + keyIcon.bounds.size.y, keyIcon.transform.position.z);
     }
     private void HideKeyIcon()
     {
-        keyIcon.custom.w = 1;
+        keyIcon.custom.w = 0;
     }
     private void DisappearKeyIcon()
     {
-        if (keyIcon.custom.w == 0)
+        if (keyIcon.custom.w == 1)
         {
             DisappearingKeyIcon().Forget();
         }
@@ -417,6 +458,16 @@ public class GameplayUI : MonoBehaviour
     {
         traitorCount++;
         traitorCountText.SetText("x" + traitorCount);
+
+        if ((spyStats.tutorialState & TutorialState.Traitor) == 0)
+        {
+            MoveTutorialUIElement(traitorIcon, options.traitorCountTutorialText);
+            curTutorialState = TutorialState.Traitor;
+
+            traitorIcon.renderer.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
+            traitorCountText.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
+            
+        }
     }
     private void DecreaseTraitorCount()
     {
@@ -464,7 +515,7 @@ public class GameplayUI : MonoBehaviour
         curTutorialIcon = uiIcon;
 
         MovingTutorialUIElement(uiIcon, text).Forget();
-        fadeBlack.FadeToBlack(0.75f);
+        fadeBlack.FadeToBlack(0.8f);
     }
     private void MoveBackTutorialUIElement(IconUIElement uiElement)
     {
@@ -475,15 +526,15 @@ public class GameplayUI : MonoBehaviour
     }
     private async UniTask DisappearingKeyIcon()
     {
-        float elapsedTime = 0;
+        float elapsedTime = APPEARING_TIME;
 
         while(elapsedTime < APPEARING_TIME)
         {
-            elapsedTime += Time.deltaTime;
+            elapsedTime -= Time.deltaTime;
             keyIcon.custom.w = elapsedTime / APPEARING_TIME;
             await UniTask.Yield();
         }
-        keyIcon.custom.w = 1;
+        keyIcon.custom.w = 0;
     }
     private async UniTask SettingNewTicketIcons()
     {

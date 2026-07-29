@@ -131,7 +131,7 @@ public class Page : MonoBehaviour
             }
             break;
         }
-        proceduralRenderers[index].Appear(time: 1);
+        proceduralRenderers[index].ChangeCustom(time: 1, newValue: 1, customChannel: 4);
     }
     public void UpdatePage()
     {

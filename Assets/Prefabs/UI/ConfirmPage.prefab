@@ -53,6 +53,7 @@ MonoBehaviour:
   kerning: 1.02
   spacing: 0.09
   alignmentType: 0
+  color: {r: 0, g: 0, b: 0, a: 0}
   scrollSpeed: 0
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
@@ -89,6 +90,8 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   boundsOffset: {x: 0.2595511, y: -0.09166667, z: 0}
   hasText: 1
+  erasingText: 0
+  completedWritingText: 0
   borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &1446615636778628965
 GameObject:
@@ -158,6 +161,7 @@ MonoBehaviour:
   uvSizeAndPosition: {x: 0.47070312, y: 0.1171875, z: 0.40820312, w: 0.87890625}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0.5}
+  customBit: 0
   boundsOffset: {x: 0.66944444, y: 0.16666667, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
@@ -218,7 +222,7 @@ MonoBehaviour:
   rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
-    material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
+    material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   boxCollider: {fileID: 0}
   spriteIndex: 10
@@ -239,6 +243,7 @@ MonoBehaviour:
   uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.18554688, w: 0.82421875}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
+  customBit: 0
   boundsOffset: {x: 0, y: 0, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
@@ -305,39 +310,40 @@ MonoBehaviour:
   kerning: 1
   spacing: 0.02
   alignmentType: 0
+  color: {r: 0, g: 0, b: 0, a: 0}
   scrollSpeed: 0
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
   textBoxData:
-    size: {x: 1.4215555, y: 0.18333334}
+    size: {x: 1.4243335, y: 0.18333334}
     lineWidths:
-    - 1.4215555
+    - 1.4243335
   bounds:
-    m_Center: {x: 300.05878, y: 0.31533328, z: 15.92}
-    m_Extent: {x: 0.71077776, y: 0.09166667, z: 0}
+    m_Center: {x: 300.06015, y: 0.31533328, z: 15.92}
+    m_Extent: {x: 0.7121667, y: 0.09166667, z: 0}
   worldPivotsAndSizes:
-  - {x: -0, y: -0.18333334, z: 0.03888889, w: 0.18333334}
-  - {x: 0.08044444, y: -0.18333334, z: 0.011111111, w: 0.18333334}
-  - {x: 0.147, y: -0.18333334, z: 0.044444446, w: 0.18333334}
-  - {x: 0.23022223, y: -0.18333334, z: 0.044444446, w: 0.18333334}
-  - {x: 0.33344445, y: -0.18333334, z: 0.11111111, w: 0.18333334}
-  - {x: 0.45000002, y: -0.18333334, z: 0.044444446, w: 0.18333334}
-  - {x: 0.53322226, y: -0.18333334, z: 0.044444446, w: 0.18333334}
-  - {x: 0.61644447, y: -0.18333334, z: 0.044444446, w: 0.18333334}
-  - {x: 0.71966666, y: -0.18333334, z: 0.03888889, w: 0.18333334}
-  - {x: 0.8001111, y: -0.18333334, z: 0.044444446, w: 0.18333334}
-  - {x: 0.8833333, y: -0.18333334, z: 0.07777778, w: 0.18333334}
-  - {x: 0.9832222, y: -0.18333334, z: 0.044444446, w: 0.18333334}
-  - {x: 1.0664444, y: -0.18333334, z: 0.011111111, w: 0.18333334}
-  - {x: 1.1329999, y: -0.18333334, z: 0.044444446, w: 0.18333334}
-  - {x: 1.2162222, y: -0.18333334, z: 0.033333335, w: 0.18333334}
-  - {x: 1.2938888, y: -0.18333334, z: 0.044444446, w: 0.18333334}
-  - {x: 1.3771111, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: -0, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.083222225, y: -0.18333334, z: 0.016666668, w: 0.18333334}
+  - {x: 0.15255556, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.23577778, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.33900002, y: -0.18333334, z: 0.11111111, w: 0.18333334}
+  - {x: 0.4555556, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.5387778, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.62200004, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.72522223, y: -0.18333334, z: 0.03888889, w: 0.18333334}
+  - {x: 0.8056667, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.8888889, y: -0.18333334, z: 0.072222225, w: 0.18333334}
+  - {x: 0.986, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 1.0692222, y: -0.18333334, z: 0.016666668, w: 0.18333334}
+  - {x: 1.1385555, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 1.2217778, y: -0.18333334, z: 0.027777778, w: 0.18333334}
+  - {x: 1.2966667, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 1.379889, y: -0.18333334, z: 0.044444446, w: 0.18333334}
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   uvSizesAndPositions:
-  - {x: 0.02734375, y: 0.12890625, z: 0.82421875, w: 0.73828125}
-  - {x: 0.0078125, y: 0.12890625, z: 0.671875, w: 0.60546875}
+  - {x: 0.03125, y: 0.12890625, z: 0.82421875, w: 0.73828125}
+  - {x: 0.01171875, y: 0.12890625, z: 0.671875, w: 0.60546875}
   - {x: 0.03125, y: 0.12890625, z: 0.6015625, w: 0.60546875}
   - {x: 0.03125, y: 0.12890625, z: 0.80859375, w: 0.60546875}
   - {x: 0.078125, y: 0.12890625, z: 0, w: 0.60546875}
@@ -346,11 +352,11 @@ MonoBehaviour:
   - {x: 0.03125, y: 0.12890625, z: 0.80859375, w: 0.60546875}
   - {x: 0.02734375, y: 0.12890625, z: 0.2890625, w: 0.73828125}
   - {x: 0.03125, y: 0.12890625, z: 0.84375, w: 0.60546875}
-  - {x: 0.0546875, y: 0.12890625, z: 0.75, w: 0.60546875}
+  - {x: 0.05078125, y: 0.12890625, z: 0.75390625, w: 0.60546875}
   - {x: 0.03125, y: 0.12890625, z: 0.87890625, w: 0.60546875}
-  - {x: 0.0078125, y: 0.12890625, z: 0.73828125, w: 0.60546875}
+  - {x: 0.01171875, y: 0.12890625, z: 0.73828125, w: 0.60546875}
   - {x: 0.03125, y: 0.12890625, z: 0.53125, w: 0.60546875}
-  - {x: 0.0234375, y: 0.12890625, z: 0, w: 0.47265625}
+  - {x: 0.01953125, y: 0.12890625, z: 0.00390625, w: 0.47265625}
   - {x: 0.03125, y: 0.12890625, z: 0.53125, w: 0.60546875}
   - {x: 0.03125, y: 0.12890625, z: 0.49609375, w: 0.60546875}
   - {x: 0, y: 0, z: 0, w: 0}
@@ -395,8 +401,10 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
   - {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.71077776, y: -0.09166667, z: 0}
+  boundsOffset: {x: 0.7121667, y: -0.09166667, z: 0}
   hasText: 1
+  erasingText: 0
+  completedWritingText: 0
   borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &3031531853131365240
 GameObject:
@@ -463,14 +471,16 @@ MonoBehaviour:
   - {fileID: 4109658658727222766}
   playerWriteTextRenderers:
   - {fileID: 1252599110513882049}
-  playerWriteRenderers: []
+  proceduralRenderers: []
   readOnlyRenderers:
   - {fileID: 3911591812244558260}
   - {fileID: 7862294593475275798}
   - {fileID: 1114506471185041396}
-  pageNumberRenderer: {fileID: 0}
+  playerWriteRenderers: []
   paperCornerLeftButtonRenderer: {fileID: 7862294593475275798}
   paperCornerRightButtonRenderer: {fileID: 0}
+  switchLeftButtonRenderer: {fileID: 0}
+  switchRightButtonRenderer: {fileID: 0}
   exitButton_renderer: {fileID: 1114506471185041396}
   activePlayerWriteTextRenderer: {fileID: 0}
   playerWriteIndex: 0
@@ -537,6 +547,7 @@ MonoBehaviour:
   kerning: 1.02
   spacing: 0.09
   alignmentType: 0
+  color: {r: 0, g: 0, b: 0, a: 0}
   scrollSpeed: 0
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
@@ -565,6 +576,8 @@ MonoBehaviour:
   - {x: 0, y: 0, z: 0, w: 0}
   boundsOffset: {x: 0.12530333, y: -0.072222225, z: 0}
   hasText: 1
+  erasingText: 0
+  completedWritingText: 0
   borderLocalPos: {x: 0, y: 0, z: 0}
 --- !u!1 &8555246787508902657
 GameObject:
@@ -634,6 +647,7 @@ MonoBehaviour:
   uvSizeAndPosition: {x: 0.071777344, y: 0.104003906, z: 0.66625977, w: 0.18383789}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
   boundsOffset: {x: 0.04444444, y: -1.1555554, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
@@ -694,7 +708,7 @@ MonoBehaviour:
   rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
-    material: {fileID: 2100000, guid: c2d87c8f159201c4594b6cd2a31255f3, type: 2}
+    material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   boxCollider: {fileID: 0}
   spriteIndex: 7
@@ -715,6 +729,7 @@ MonoBehaviour:
   uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.8925781, w: 0.91015625}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 1, y: 0, z: 0, w: 0}
+  customBit: 0
   boundsOffset: {x: 0, y: 0, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []

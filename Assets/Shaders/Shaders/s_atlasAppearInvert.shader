@@ -1,4 +1,4 @@
-Shader "Custom/s_atlasAppear"
+Shader "Custom/s_atlasAppearInvert"
 {
     Properties
     {
@@ -7,20 +7,19 @@ Shader "Custom/s_atlasAppear"
 
     SubShader
     {
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+        Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
         ZWrite On
         ZTest LEqual
         Blend SrcAlpha OneMinusSrcAlpha
-
         Pass
         {
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
             #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
+
             #pragma vertex vert
             #pragma fragment frag
-
 
             struct Attributes
             {
@@ -33,22 +32,21 @@ Shader "Custom/s_atlasAppear"
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                float4 uvSizeAndPos : TEXCOORD1;
-                float4 scaleAndFlip : TEXCOORD2;
-                float4 custom : TEXCOORD3;
-                int customBit : TEXCOORD4;
+                float3 worldPos : TEXCOORD1;
+                float4 uvSizeAndPos : TEXCOORD2;
+                float4 scaleAndFlip : TEXCOORD3;
+                float4 custom : TEXCOORD4;
+                int customBit : TEXCOORD5;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
-            
+
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
-            float3 _TicketCheckColor;
             float3 _BlackColor;
             float3 _WhiteColor;
             float3 _MeridiaColor;
-            float _DayNight;
 
             Varyings vert(Attributes v)
             {
@@ -67,11 +65,12 @@ Shader "Custom/s_atlasAppear"
 
                 objPos *= size * scale;
                 objPos += pivot;
-                objPos.x += spriteData.custom.y * (spriteData.custom.a);
+
                 float3 worldPos = float3(position.xy + objPos, position.z);
 
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
+                o.worldPos = worldPos;
                 o.uvSizeAndPos = spriteData.uvSizeAndPos;
                 o.scaleAndFlip = spriteData.scaleAndFlip;
                 o.custom = spriteData.custom;
@@ -87,22 +86,26 @@ Shader "Custom/s_atlasAppear"
                 float2 scale = i.scaleAndFlip.xy;
                 float2 flip = i.scaleAndFlip.zw;
 
+                float2 normUV = i.uv;
                 i.uv *= scale;
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+                float bayerMask = BayerX8(i.custom.x, i.positionHCS.xy);
 
                 int bitMask = i.customBit;
                 int meridiaColorMask = saturate(bitMask & MERIDIA_COLOR_BIT);
                 float3 meridiaColor = meridiaColorMask * _MeridiaColor;
+
                 float3 blackColor = (1 - meridiaColorMask) * _BlackColor;
 
-                half3 finalColor = lerp(blackColor + meridiaColor, _WhiteColor, color.r);
+                half3 finalColor = lerp(blackColor + meridiaColor, _WhiteColor, lerp(color.r, 1 - color.r, bayerMask));
 
-                half alpha = BayerX8(color.a - i.custom.a, i.positionHCS.xy);
+                half alpha = BayerX8(color.a * i.custom.a, i.positionHCS.xy);
                 clip(alpha - 0.001);
+
                 return half4 (finalColor, 1);
             }
             ENDHLSL

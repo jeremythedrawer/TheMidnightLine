@@ -17,7 +17,9 @@ public class SpyBrain : MonoBehaviour
     public static event Action<Vector2> OnFoundExteriorSlideDoors;
     public static event Action OnWalkPastExteriorSlideDoors;
     public static event Action OnEnteredTrain;
+
     public static event Action OnTicketInspect;
+    public static event Action OnFinishTicketInspect;
     public static event Action OnOpenNotepad;
     public static event Action OnCloseNotepad;
 
@@ -457,6 +459,7 @@ public class SpyBrain : MonoBehaviour
                 stats.boardingStationName = trip.stationsDataArray[ChosenNPC.profile.boardingStationIndex].name;
                 stats.disembarkingStationName = trip.stationsDataArray[ChosenNPC.profile.disembarkingStationIndex].name;
                 trip.ticketsCheckedTotal++;
+
                 OnTicketInspect?.Invoke();
             }
             break;
@@ -482,6 +485,7 @@ public class SpyBrain : MonoBehaviour
                     curUnlockType = UnlockType.MultiColor;
                 }
                 SceneController.GetUnlockPicker().Open(unlockSelectionAmount: 1, curUnlockType, ChosenNPC);
+
             }
             break;
 
@@ -525,10 +529,12 @@ public class SpyBrain : MonoBehaviour
             case SpyState.TicketCheck:
             {
                 trip.ticketsCheckedSinceLastStation++;
+                OnFinishTicketInspect?.Invoke();
                 if (trip.ticketsCheckedSinceLastStation == trip.stationAhead.ticketsToCheckBeforeSpawn)
                 {
                     CanCheckTicket = false;
                 }
+
             }
             break;
 

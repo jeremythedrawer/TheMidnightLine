@@ -36,6 +36,7 @@ public class AtlasTextRenderer : MonoBehaviour
 
     [Header("Generated")]
     public CancellationTokenSource ctsWrite;
+    public CancellationTokenSource ctsChangeCustom;
 
     public TextBoxData textBoxData;
     
@@ -120,9 +121,9 @@ public class AtlasTextRenderer : MonoBehaviour
     {
         if (appear)
         {
-            if (clock > 0)
+            if (clock < APPEAR_TEXT_TIME)
             {
-                clock -= Time.deltaTime;
+                clock += Time.deltaTime;
                 float t = (clock / APPEAR_TEXT_TIME) * normAmount + normAmount;
 
                 for (int i = 0; i < customs.Length; i++)
@@ -133,9 +134,9 @@ public class AtlasTextRenderer : MonoBehaviour
         }
         else
         {
-            if (clock < APPEAR_TEXT_TIME)
+            if (clock > 0)
             {
-                clock += Time.deltaTime;
+                clock -= Time.deltaTime;
                 float t = (clock / APPEAR_TEXT_TIME) * normAmount + normAmount;
 
                 for (int i = 0; i < customs.Length; i++)
@@ -150,13 +151,6 @@ public class AtlasTextRenderer : MonoBehaviour
         for (int i = 0; i < customs.Length; i++)
         {
             customs[i].w = normAmount;
-        }
-    }
-    public void SetTextAlpha(float alpha)
-    {
-        for (int i = 0; i < customs.Length; i++)
-        {
-            customs[i].w = alpha;
         }
     }
     public void UpdateBounds()
@@ -189,6 +183,7 @@ public class AtlasTextRenderer : MonoBehaviour
             custom.x = linearColor.r;
             custom.y = linearColor.g;
             custom.z = linearColor.b;
+            custom.w = linearColor.a;
             customs[i] = custom;
         }
     }
@@ -334,6 +329,40 @@ public class AtlasTextRenderer : MonoBehaviour
         erasingText = true;
         completedWritingText = false;
         ErasingText(writeLetterTime).Forget();
+    }
+    public void ChangeCustom(float time, float newValue, int customChannel)
+    {
+        ctsChangeCustom?.Cancel();
+        ctsChangeCustom = new CancellationTokenSource();
+
+        switch(customChannel)
+        {
+            case 1:
+            {
+                ChangingCustomX(time, newValue).Forget();
+
+            }
+            break;
+            case 2:
+            {
+                ChangingCustomY(time, newValue).Forget();
+
+            }
+            break;
+            case 3:
+            {
+                ChangingCustomZ(time, newValue).Forget();
+
+            }
+            break;
+            case 4:
+            {
+                ChangingCustomW(time, newValue).Forget();
+
+            }
+            break;
+
+        }
     }
     public Bounds GetBoundsCurrentText()
     {
@@ -495,6 +524,130 @@ public class AtlasTextRenderer : MonoBehaviour
         catch (OperationCanceledException) 
         { 
             erasingText = false;
+        }
+    }
+    private async UniTask ChangingCustomX(float time, float newValue)
+    {
+        try
+        {
+            float elapsed = 0;
+            float startValue = customs[0].x;
+
+            while (elapsed < time)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / time;
+                float curValue = Mathf.Lerp(startValue, newValue, t);
+                for (int i = 0; i < customs.Length; i++)
+                {
+                    customs[i].x = curValue;
+                }
+                await UniTask.Yield(ctsChangeCustom.Token);
+            }
+            for (int i = 0; i < customs.Length; i++)
+            {
+                customs[i].x = newValue;
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            for (int i = 0; i < customs.Length; i++)
+            {
+                customs[i].x = newValue;
+            }
+        }
+    }
+    private async UniTask ChangingCustomY(float time, float newValue)
+    {
+        try
+        {
+            float elapsed = 0;
+            float startValue = customs[0].y;
+
+            while (elapsed < time)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / time;
+                float curValue = Mathf.Lerp(startValue, newValue, t);
+                for (int i = 0; i < customs.Length; i++)
+                {
+                    customs[i].y = curValue;
+                }
+                await UniTask.Yield(ctsChangeCustom.Token);
+            }
+            for (int i = 0; i < customs.Length; i++)
+            {
+                customs[i].y = newValue;
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            for (int i = 0; i < customs.Length; i++)
+            {
+                customs[i].y = newValue;
+            }
+        }
+    }
+    private async UniTask ChangingCustomZ(float time, float newValue)
+    {
+        try
+        {
+            float elapsed = 0;
+            float startValue = customs[0].z;
+
+            while (elapsed < time)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / time;
+                float curValue = Mathf.Lerp(startValue, newValue, t);
+                for (int i = 0; i < customs.Length; i++)
+                {
+                    customs[i].z = curValue;
+                }
+                await UniTask.Yield(ctsChangeCustom.Token);
+            }
+            for (int i = 0; i < customs.Length; i++)
+            {
+                customs[i].z = newValue;
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            for (int i = 0; i < customs.Length; i++)
+            {
+                customs[i].z = newValue;
+            }
+        }
+    }
+    private async UniTask ChangingCustomW(float time, float newValue)
+    {
+        try
+        {
+            float elapsed = 0;
+            float startValue = customs[0].w;
+
+            while (elapsed < time)
+            {
+                elapsed += Time.deltaTime;
+                float t = elapsed / time;
+                float curValue = Mathf.Lerp(startValue, newValue, t);
+                for (int i = 0; i < customs.Length; i++)
+                {
+                    customs[i].w = curValue;
+                }
+                await UniTask.Yield(ctsChangeCustom.Token);
+            }
+            for (int i = 0; i < customs.Length; i++)
+            {
+                customs[i].w = newValue;
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            for (int i = 0; i < customs.Length; i++)
+            {
+                customs[i].w = newValue;
+            }
         }
     }
 #if UNITY_EDITOR
