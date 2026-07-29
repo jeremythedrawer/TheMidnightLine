@@ -81,7 +81,7 @@ public class FadeBlack : MonoBehaviour
     {
         try
         {
-            float elapsedTime = 0;
+            float elapsedTime = fadeBlackMaterial.GetFloat("_Alpha");
             finishedFade = false;
             float totalTime = FADE_BLACK_DURATION * value;
             while (elapsedTime < totalTime)
@@ -100,7 +100,7 @@ public class FadeBlack : MonoBehaviour
     {
         try
         {
-            float elapsedTime = FADE_BLACK_DURATION;
+            float elapsedTime = fadeBlackMaterial.GetFloat("_Alpha");
             while (elapsedTime > 0)
             {
                 float t = elapsedTime / FADE_BLACK_DURATION;
