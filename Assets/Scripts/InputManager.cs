@@ -210,13 +210,4 @@ public class InputManager : MonoBehaviour
     {
         gameEventData.OnReset.Raise();
     }
-
-    private void OnDrawGizmosSelected()
-    {
-        if (sceneData.sceneLoaded)
-        {
-            Gizmos.color = Color.white;
-            Gizmos.DrawLine(Camera.main.ScreenToWorldPoint(playerInputs.startDragMouseScreenPos), Camera.main.ScreenToWorldPoint(playerInputs.mouseScreenPos));
-        }
-    }
 }

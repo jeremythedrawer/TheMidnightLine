@@ -28,7 +28,7 @@ public class SceneController : MonoBehaviour
     }
     public static void KeepNotepad(Notepad notepad)
     {
-        notepad.transform.SetParent(Transform, true);
+        notepad.transform.SetParent(Transform, false);
         Notepad = notepad;
     }
     public static void SetClueColorPicker(ColorPicker colorPicker)
@@ -59,7 +59,6 @@ public class SceneController : MonoBehaviour
     public static Notepad GetNotepad(Transform transform)
     {
         Notepad.transform.SetParent(transform, true);
-        Notepad.transform.localPosition = NotepadInactiveLocalPos;
         return Notepad;
     }
     public static ColorPicker GetClueColorPicker()

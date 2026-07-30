@@ -16,6 +16,10 @@ public class NotepadData : ScriptableObject
     public Vector3 leftHandPencilPos;
     public Vector3 leftHandOffScreenLocalPos;
 
+    public Vector3 inactiveLocalPos;
+    public Vector3 hoverLocalPos;
+    public Vector3 activeLocalPos;
+
     public int leftHandWorldDepthFront;
     public int leftHandWorldDepthBack;
 

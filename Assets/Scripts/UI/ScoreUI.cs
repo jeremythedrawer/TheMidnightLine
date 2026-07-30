@@ -10,6 +10,7 @@ public class ScoreUI : MonoBehaviour
     public GameEventDataSO gameEventData;
     public CameraStatsSO cameraStats;
     public PlayerInputsSO playerInputs;
+    public NotepadData notepadData;
 
     public SceneData sceneData;
 
@@ -59,6 +60,7 @@ public class ScoreUI : MonoBehaviour
     private void GetNotepad()
     {
         notepad = SceneController.GetNotepad(transform);
+        notepad.transform.localPosition = notepadData.inactiveLocalPos;
     }
     private void GetScore()
     {
@@ -100,7 +102,7 @@ public class ScoreUI : MonoBehaviour
             case UIState.Notepad:
             {
                 notepad.EnterNotepad();
-                naturalMovePos = NotepadActiveLocalPos;
+                naturalMovePos = notepadData.activeLocalPos;
                 ctsNotepad?.Cancel();
             }
             break;
@@ -116,7 +118,7 @@ public class ScoreUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                UpdateNaturalPos(NotepadActiveLocalPos, ref naturalMovePos);
+                UpdateNaturalPos(notepadData.activeLocalPos, ref naturalMovePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
             }
             break;
@@ -202,7 +204,7 @@ public class ScoreUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                MoveUIElement(notepad.transform, NotepadInactiveLocalPos, ref ctsNotepad, curState);
+                MoveUIElement(notepad.transform, notepadData.inactiveLocalPos, ref ctsNotepad, curState);
             }
             break;
         }

@@ -116,16 +116,18 @@ public class Notepad : MonoBehaviour
     
     private void OnEnable()
     {
-        Scenes.OnLoadScore += PrepareForScore;
+        Scenes.OnLoadStart += CreateNPCProfiles;
+        Scenes.OnLoadStart += Init;
+        Scenes.OnLoadTrip0 += Reinit;
+
+        Scenes.OnLoadScore += Reinit;
     }
     private void OnDisable()
     {
-        Scenes.OnLoadScore -= PrepareForScore;
-    }
-    private void Start()
-    {
-        CreateNPCProfiles();
-        PrepareNotepad();
+        Scenes.OnLoadStart -= CreateNPCProfiles;
+        Scenes.OnLoadStart -= Init;
+        Scenes.OnLoadScore -= Reinit;
+        Scenes.OnLoadTrip0 -= Reinit;
     }
     private void Update()
     {
@@ -136,7 +138,7 @@ public class Notepad : MonoBehaviour
         }
         else
         {
-            if ((subState & SubState.OnScreen) != 0 && transform.localPosition == NotepadInactiveLocalPos)
+            if ((subState & SubState.OnScreen) != 0 && transform.localPosition == notepadData.inactiveLocalPos)
             {
                 subState &= ~(SubState.OnScreen);
                 OffScreen();
@@ -156,7 +158,7 @@ public class Notepad : MonoBehaviour
             }
         }
     }
-    private void PrepareNotepad()
+    private void Init()
     {
         AtlasUI.PromptStringDict = InitEnumToStringDict<TripPrompt>();
         npcData.behaviourStringDict = InitEnumToStringDict<Behaviours>();
@@ -185,23 +187,46 @@ public class Notepad : MonoBehaviour
         notepadData.leftHandWorldDepthFront = (int)(bindingRingsRend.transform.position.z - 1);
         notepadData.leftHandWorldDepthBack = (int)(rightHand_renderer.transform.position.z + 1);
 
-        notepadData.leftHandOffScreenLocalPos.x = -NotepadActiveLocalPos.x * 0.5f;
+        notepadData.leftHandOffScreenLocalPos.x = -notepadData.activeLocalPos.x * 0.5f;
 
         notepadData.collected = false;
         notepadData.checkingNotepad = false;
 
         SimpleSprite holdingPencilSprite = leftHand_renderer.atlas.motionSprites[HOLDING_PENCIL_SPRITE_INDEX].sprite;
         float worldPivotOffsetY = holdingPencilSprite.worldSize.y * (1 - holdingPencilSprite.uvPivot.y);
-        notepadData.leftHandOffScreenLocalPos.y = camStats.camBounds.extents.y - NotepadActiveLocalPos.y - camStats.camBounds.size.y - worldPivotOffsetY;
+        notepadData.leftHandOffScreenLocalPos.y = camStats.camBounds.extents.y - notepadData.activeLocalPos.y - camStats.camBounds.size.y - worldPivotOffsetY;
         notepadData.leftHandOffScreenLocalPos.z = leftHand_renderer.transform.localPosition.z;
 
         notepadData.curState = NotepadState.None;
+
+
+        float halfCamWidth = camStats.camBounds.extents.x;
+        float halfCamHeight = camStats.camBounds.extents.y;
+
+        notepadData.activeLocalPos = transform.localPosition;
+        float binderBoundsOffsetX = bindingRingsRend.bounds.max.x - transform.position.x;
+
+        notepadData.inactiveLocalPos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + NOTEPAD_INACTIVE_OFFSET, transform.localPosition.z);
+
+        float bindingRingsHeight = bindingRingsRend.bounds.size.y;
+
+        notepadData.hoverLocalPos = new Vector3(notepadData.inactiveLocalPos.x, notepadData.inactiveLocalPos.y + bindingRingsHeight, notepadData.inactiveLocalPos.z);
+
+        Vector3 startPos = new Vector3();
+        startPos.x = notepadData.inactiveLocalPos.x;
+        startPos.y = -halfCamHeight - bindingRingsHeight;
+        startPos.z = notepadData.inactiveLocalPos.z;
+
+        transform.localPosition = startPos;
+
+        SceneController.KeepNotepad(this);
     }
-    private void PrepareForScore()
+    private void Reinit()
     {
         SkipToPage(0);
 
         notepadData.curState = NotepadState.None;
+        notepadData.checkingNotepad = false;
         subState = SubState.None;
         leftHandTargetLocalPos = notepadData.leftHandOffScreenLocalPos;
         tabRenderer.enabled = false;
@@ -360,8 +385,6 @@ public class Notepad : MonoBehaviour
             page.SetPageDepth(pageTransform.position.z + 3);
         }
         activePage.SetPageDepth(pageTransform.position.z);
-
-        tabRenderer.enabled = false;
 
         subState &= ~(SubState.CanFlipDown | SubState.CanWillFlipDown | SubState.IsFlippingDown);
         curKeyframeState = KeyframeState.None;

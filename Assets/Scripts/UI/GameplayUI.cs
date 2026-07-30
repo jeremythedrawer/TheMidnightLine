@@ -86,7 +86,6 @@ public class GameplayUI : MonoBehaviour
 
         gameEventData.OnStationArrival.RegisterListener(DisappearTicketIcons);
         gameEventData.OnFinishTripScene.RegisterListener(SetFadeToBlack);
-        gameEventData.OnFinishTripScene.RegisterListener(KeepNotepad);
 
         SpyBrain.OnTicketCheckHoverDisabled += RevertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverDisabled += HideKeyIcon;
@@ -114,7 +113,6 @@ public class GameplayUI : MonoBehaviour
 
         gameEventData.OnStationArrival.UnregisterListener(DisappearTicketIcons);
         gameEventData.OnFinishTripScene.UnregisterListener(SetFadeToBlack);
-        gameEventData.OnFinishTripScene.UnregisterListener(KeepNotepad);
 
 
         SpyBrain.OnTicketCheckHoverDisabled -= RevertCurTicketIcon;
@@ -148,10 +146,6 @@ public class GameplayUI : MonoBehaviour
         InitTicketIcons();
         InitUIElements();
     }
-    private void KeepNotepad()
-    {
-        SceneController.KeepNotepad(notepad);
-    }
     private void SetState(UIState newState)
     {
         if (curState == newState) return;
@@ -168,7 +162,7 @@ public class GameplayUI : MonoBehaviour
             case UIState.Notepad:
             {
                 notepad.EnterNotepad();
-                naturalMovePos = NotepadActiveLocalPos;
+                naturalMovePos = notepadData.activeLocalPos;
                 ctsNotepad?.Cancel();
             }
             break;
@@ -200,7 +194,7 @@ public class GameplayUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                UpdateNaturalPos(NotepadActiveLocalPos, ref naturalMovePos);
+                UpdateNaturalPos(notepadData.activeLocalPos, ref naturalMovePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
 
                 if (playerInputs.notepadKeyDown && canExitState)
@@ -237,7 +231,7 @@ public class GameplayUI : MonoBehaviour
                         {
                             ctsNotepad?.Cancel();
 
-                            notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadHoverPos, Time.deltaTime * MOVE_DAMP);
+                            notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.hoverLocalPos, Time.deltaTime * MOVE_DAMP);
 
                             notepad.activePage.InvertExitButton(invert: true);
                             if (playerInputs.mouseLeftUp)
@@ -248,7 +242,7 @@ public class GameplayUI : MonoBehaviour
                         }
                         else
                         {
-                            notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadInactiveLocalPos, Time.deltaTime * MOVE_DAMP);
+                            notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.inactiveLocalPos, Time.deltaTime * MOVE_DAMP);
                             notepad.activePage.InvertExitButton(invert: false);
                         }
                     }
@@ -295,7 +289,7 @@ public class GameplayUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                MoveUIElement(notepad.transform, NotepadInactiveLocalPos, ref ctsNotepad, newState);
+                MoveUIElement(notepad.transform, notepadData.inactiveLocalPos, ref ctsNotepad, newState);
                 notepad.ExitNotepad();
                 SceneController.GetClueColorPicker().Close();
             }
@@ -350,12 +344,11 @@ public class GameplayUI : MonoBehaviour
     }
     private void InitPOVUI()
     {
+        notepad = SceneController.GetNotepad(transform);
+        notepad.transform.localPosition = notepadData.inactiveLocalPos;
+
         float halfCamWidth = cameraStats.camBounds.extents.x;
         float halfCamHeight = cameraStats.camBounds.extents.y;
-
-        notepad.transform.localPosition = NotepadInactiveLocalPos;
-
-        notepadData.checkingNotepad = false;
 
         ticketActivePos = ticket.transform.localPosition;
         ticketInactivePos = new Vector3(halfCamWidth, -halfCamHeight + ticket.totalBounds.size.y, ticket.transform.localPosition.z);
@@ -458,7 +451,7 @@ public class GameplayUI : MonoBehaviour
         traitorCount++;
         traitorCountText.SetText("x" + traitorCount);
 
-        if (options.skipTutorial && ((spyStats.tutorialState & TutorialState.Traitor) == 0))
+        if (!options.skipTutorial && ((spyStats.tutorialState & TutorialState.Traitor) == 0))
         {
             MoveTutorialUIElement(traitorIcon, options.traitorCountTutorialText);
             curTutorialState = TutorialState.Traitor;

@@ -180,9 +180,7 @@ public static class AtlasUI
     }
 
 
-    public static Vector3 NotepadActiveLocalPos;
-    public static Vector3 NotepadInactiveLocalPos;
-    public static Vector3 NotepadHoverPos;
+    
 
     static float NaturalMoveClock;
 

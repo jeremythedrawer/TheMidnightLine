@@ -53,7 +53,6 @@ public class StartUI : MonoBehaviour
     public CancellationTokenSource ctsNotepad;
     private void Start()
     {
-        InitPOVUI();
         InitButtons();
 
         titleTransform.SetParent(null);
@@ -79,6 +78,7 @@ public class StartUI : MonoBehaviour
 
 
         gameEventData.OnNotepadCollect.RegisterListener(DisableInteractIcon);
+        gameEventData.OnNotepadCollect.RegisterListener(GetNotepad);
 
         gameEventData.OnStartTrip.RegisterListener(StartTrip);
         gameEventData.OnToStartMenu.RegisterListener(SetToStartMenuState);
@@ -96,6 +96,8 @@ public class StartUI : MonoBehaviour
         MeetingDoor.OnSpyExit -= DisableInteractIcon;
 
         gameEventData.OnNotepadCollect.UnregisterListener(DisableInteractIcon);
+        gameEventData.OnNotepadCollect.UnregisterListener(GetNotepad);
+
         gameEventData.OnStartTrip.UnregisterListener(StartTrip);
         gameEventData.OnToStartMenu.UnregisterListener(SetToStartMenuState);
         gameEventData.OnFromStartMenu.UnregisterListener(SetSToNoneState);
@@ -109,6 +111,7 @@ public class StartUI : MonoBehaviour
     {
         fadeBlack.FadeToBlackChangeScene("Find where the Traitors are going.", SceneType.Trip, sceneIndex: 2);
         keyIconRenderer.enabled = false;
+        SceneController.KeepNotepad(notepad);
     }
     private void SetInteractIcon(Vector2 position)
     {
@@ -120,6 +123,11 @@ public class StartUI : MonoBehaviour
     private void DisableInteractIcon()
     {
         keyIconRenderer.enabled = false;
+    }
+    private void GetNotepad()
+    {
+        notepad = SceneController.GetNotepad(transform);
+        notepad.transform.localPosition = notepadData.inactiveLocalPos;
     }
     private void SetSToNoneState()
     {
@@ -148,7 +156,7 @@ public class StartUI : MonoBehaviour
             case UIState.Notepad:
             {
                 notepad.EnterNotepad();
-                naturalMovePos = NotepadActiveLocalPos;
+                naturalMovePos = notepadData.activeLocalPos;
                 ctsNotepad?.Cancel();
             }
             break;
@@ -165,7 +173,7 @@ public class StartUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                UpdateNaturalPos(NotepadActiveLocalPos, ref naturalMovePos);
+                UpdateNaturalPos(notepadData.activeLocalPos, ref naturalMovePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
 
                 if (playerInputs.notepadKeyDown && canExitState)
@@ -180,7 +188,7 @@ public class StartUI : MonoBehaviour
                 if (canExitState && CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds, isClickable: true))
                 {
                     ctsNotepad?.Cancel();
-                    notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadHoverPos, Time.deltaTime * MOVE_DAMP);
+                    notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.hoverLocalPos, Time.deltaTime * MOVE_DAMP);
 
                     notepad.activePage.InvertExitButton(invert: true);
                     if (playerInputs.mouseLeftUp)
@@ -193,7 +201,7 @@ public class StartUI : MonoBehaviour
                 {
                     if (notepadData.collected)
                     {
-                        notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, NotepadInactiveLocalPos, Time.deltaTime * MOVE_DAMP);
+                        notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.inactiveLocalPos, Time.deltaTime * MOVE_DAMP);
                         notepad.activePage.InvertExitButton(invert: false);
                     }
                 }
@@ -220,7 +228,7 @@ public class StartUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                MoveUIElement(notepad.transform, NotepadInactiveLocalPos, ref ctsNotepad, curState);
+                MoveUIElement(notepad.transform, notepadData.inactiveLocalPos, ref ctsNotepad, curState);
                 notepad.ExitNotepad();
             }
             break;
@@ -241,31 +249,6 @@ public class StartUI : MonoBehaviour
     {
         button.renderer.transform.SetParent(null);
         button.startPos = button.renderer.transform.position;
-    }
-    private void InitPOVUI()
-    {
-        float halfCamWidth = camStats.camBounds.extents.x;
-        float halfCamHeight = camStats.camBounds.extents.y;
-
-        NotepadActiveLocalPos = notepad.transform.localPosition;
-        float binderBoundsOffsetX = notepad.bindingRingsRend.bounds.max.x - notepad.transform.position.x;
-
-        NotepadInactiveLocalPos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + NOTEPAD_INACTIVE_OFFSET, notepad.transform.localPosition.z);
-
-        float bindingRingsHeight = notepad.bindingRingsRend.bounds.size.y;
-
-        NotepadHoverPos = new Vector3(NotepadInactiveLocalPos.x, NotepadInactiveLocalPos.y + bindingRingsHeight, NotepadInactiveLocalPos.z);
-
-        Vector3 startPos = new Vector3();
-        startPos.x = NotepadInactiveLocalPos.x;
-        startPos.y = -halfCamHeight - bindingRingsHeight;
-        startPos.z = NotepadInactiveLocalPos.z;
-
-        notepad.transform.localPosition = startPos;
-
-        notepadData.collected = false;
-
-        Shader.SetGlobalVector("_CameraSizeAndPos", new Vector4(camStats.camBounds.size.x, camStats.camBounds.size.y, camStats.camBounds.center.x, camStats.camBounds.center.y));
     }
     private void HandleMainMenuButtons()
     {
@@ -464,6 +447,7 @@ public class StartUI : MonoBehaviour
 
                 await UniTask.Yield(button.ctsMove.Token);
             }
+
         }
         catch(OperationCanceledException)
         {

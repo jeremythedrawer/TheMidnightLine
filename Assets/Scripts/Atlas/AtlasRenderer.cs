@@ -186,6 +186,10 @@ public class AtlasRenderer : MonoBehaviour
             {
                 SliceSprite sliceSprite = atlas.slicedSprites[spriteIndex];
                 Vector4 centerWorldPivot = worldPivotsAndSizes[4];
+
+                FlipHSlice(flipX, atlas.slicedSprites[spriteIndex]);
+                FlipVSlice(flipY, atlas.slicedSprites[spriteIndex]);
+
                 bounds.center = new Vector3(transform.position.x + boundsOffset.x, transform.position.y + boundsOffset.y, transform.position.z);
                 bounds.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldPivot.z * width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldPivot.w * height) + sliceSprite.worldSlices.w, 0.2f);
             }
@@ -230,8 +234,8 @@ public class AtlasRenderer : MonoBehaviour
     public void FlipHSlice(bool flipLeft, SliceSprite sliceSprite)
     {
         flipX = flipLeft;
-        float npcPivot = sliceSprite.sprite.uvPivot.x * 2 - 1;
-        float flipPivot = flipLeft ? npcPivot : -npcPivot;
+        float ndcPivot = sliceSprite.sprite.uvPivot.x * 2 - 1;
+        float flipPivot = flipLeft ? ndcPivot : -ndcPivot;
         boundsOffset.x = bounds.size.x * flipPivot * 0.5f;
         prevSpriteIndexFlipH = sprite.index;
     }
@@ -239,13 +243,12 @@ public class AtlasRenderer : MonoBehaviour
     {
         flipY = flipDown;
 
-        float npcPivot = sliceSprite.sprite.uvPivot.y * 2 - 1;
+        float ndcPivot = sliceSprite.sprite.uvPivot.y * 2 - 1;
 
-        float flipPivot = flipDown ? npcPivot : -npcPivot;
+        float flipPivot = flipDown ? ndcPivot : -ndcPivot;
 
         boundsOffset.y = bounds.size.y * flipPivot * 0.5f;
-        prevSpriteIndexFlipH = sprite.index;
-
+        prevSpriteIndexFlipV = sprite.index;
     }
     public void UpdateBounds()
     {        

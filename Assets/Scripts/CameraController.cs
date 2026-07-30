@@ -31,6 +31,7 @@ public class CameraController : MonoBehaviour
     public int threadGroupY;
     private void Start()
     {
+
     }
     private void OnEnable()
     {
@@ -90,7 +91,7 @@ public class CameraController : MonoBehaviour
         stats.camBounds.size = new Vector3(cam.orthographicSize * 2 * cam.aspect, cam.orthographicSize * 2, cam.farClipPlane + cam.nearClipPlane);
         stats.worldUnitsPerPixel = (cam.orthographicSize * 2) / Screen.height;
 
-        Graphics.Blit(Texture2D.whiteTexture, carriageBoundsRT);
+        Shader.SetGlobalVector("_CameraSizeAndPos", new Vector4(stats.camBounds.size.x, stats.camBounds.size.y, stats.camBounds.center.x, stats.camBounds.center.y));
     }
     private void TripInit()
     {
