@@ -20,12 +20,11 @@ public class GameplayUI : MonoBehaviour
     public TrainStatsSO trainStats;
 
     public FadeBlack fadeBlack;
-
+    public UnlockPicker unlockPicker;
     public SceneData sceneData;
 
     public Material fadeBlackMaterial; 
 
-    public Notepad notepad;
 
     public Ticket ticket;
 
@@ -40,13 +39,15 @@ public class GameplayUI : MonoBehaviour
     public AtlasRenderer keyIcon;
 
     public AtlasTextRenderer traitorCountText;
-    public AtlasTextRenderer tutorialText;
+    public AtlasTextRenderer tutorialRenderer;
 
     public Transform ticketIconTransform;
 
     [Header("Generated")]
     public TicketIcon[] ticketIcons;
     
+    public Notepad notepad;
+
     public TicketIcon curTicketIcon;
     
     public CancellationTokenSource ctsNotepad;
@@ -105,6 +106,8 @@ public class GameplayUI : MonoBehaviour
 
         Scenes.OnLoadTrip0 += Init;
 
+        UnlockPicker.OnFirstAbilityUnlock += MovePassengerMarkerTutorialIcon;
+
     }
     private void OnDisable()
     {
@@ -130,6 +133,8 @@ public class GameplayUI : MonoBehaviour
         
         NPCBrain.OnTraitorDisembarkedTrain -= DecreaseTraitorCount;
         NPCBrain.OnTraitorBoardedTrain -= IncreaseTraitorCount;
+
+        UnlockPicker.OnFirstAbilityUnlock -= MovePassengerMarkerTutorialIcon;
 
         Scenes.OnLoadTrip0 -= Init;
     }
@@ -244,13 +249,14 @@ public class GameplayUI : MonoBehaviour
                     {
                         if (canExitState && playerInputs.spacebarDown)
                         {
-                            MoveBackTutorialUIElement(curTutorialIcon);
-                            spyStats.tutorialState |= curTutorialState;
+                            curTutorialIcon.MoveBackTutorialUIElement(tutorialRenderer);
+                            fadeBlack.FadeFromBlack();
 
                             curTicketIcon.RipStubTicket();
                             curTicketIcon.InvertIcon(toggle: false);
                             curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
 
+                            spyStats.tutorialState |= curTutorialState;
                             curTutorialState = TutorialState.None;
                         }
                     }
@@ -260,12 +266,29 @@ public class GameplayUI : MonoBehaviour
                     {
                         if (canExitState && playerInputs.spacebarDown)
                         {
-                            MoveBackTutorialUIElement(curTutorialIcon);
+                            curTutorialIcon.MoveBackTutorialUIElement(tutorialRenderer);
+                            fadeBlack.FadeFromBlack();
+
                             traitorIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 1);
                             traitorCountText.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 1);
+                            
                             spyStats.tutorialState |= curTutorialState;
-
                             curTutorialState = TutorialState.None;
+                        }
+                    }
+                    break;
+
+                    case TutorialState.Marker:
+                    {
+                        if (canExitState && playerInputs.spacebarDown)
+                        {
+                            fadeBlack.FadeFromBlack();
+                            curTutorialIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 4);
+                            curTutorialIcon.renderer.transform.SetParent(unlockPicker.transform, true);
+
+                            spyStats.tutorialState |= curTutorialState;
+                            curTutorialState = TutorialState.None;
+                            tutorialRenderer.SetText("");
                         }
                     }
                     break;
@@ -292,7 +315,9 @@ public class GameplayUI : MonoBehaviour
 
                 if (!options.skipTutorial && ((spyStats.tutorialState & TutorialState.Ticket) == 0))
                 {
-                    MoveTutorialUIElement(curTicketIcon.mainTicket, options.ticketCountTutorialText);
+                    curTicketIcon.mainTicket.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.ticketCountTutorialText);
+                    curTutorialIcon = curTicketIcon.mainTicket;
+                    fadeBlack.FadeToBlack(0.8f);
                     curTutorialState = TutorialState.Ticket;
                 }
                 else
@@ -333,6 +358,18 @@ public class GameplayUI : MonoBehaviour
     private void SetToNoneState()
     {
         SetState(UIState.None);
+    }
+    private void MovePassengerMarkerTutorialIcon(IconUIElement icon)
+    {
+        if (!options.skipTutorial)
+        {
+            icon.renderer.transform.SetParent(transform, true);
+            icon.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.passengerMarkerTutorialText);
+            icon.renderer.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
+            curTutorialIcon = icon;
+            fadeBlack.FadeToBlack(value: 0.8f);
+            curTutorialState = TutorialState.Marker;
+        }
     }
     private void InitPOVUI()
     {
@@ -445,7 +482,10 @@ public class GameplayUI : MonoBehaviour
 
         if (!options.skipTutorial && ((spyStats.tutorialState & TutorialState.Traitor) == 0))
         {
-            MoveTutorialUIElement(traitorIcon, options.traitorCountTutorialText);
+            traitorIcon.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.traitorCountTutorialText);
+            curTutorialIcon = traitorIcon;
+
+            fadeBlack.FadeToBlack(0.8f);
             curTutorialState = TutorialState.Traitor;
 
             traitorIcon.renderer.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
@@ -491,23 +531,7 @@ public class GameplayUI : MonoBehaviour
             quitButton.renderer.custom.w = 0;
         }
     }
-    private void MoveTutorialUIElement(IconUIElement uiIcon, string text)
-    {
-        uiIcon.ctsMove?.Cancel();
-        uiIcon.ctsMove = new CancellationTokenSource();
 
-        curTutorialIcon = uiIcon;
-
-        MovingTutorialUIElement(uiIcon, text).Forget();
-        fadeBlack.FadeToBlack(0.8f);
-    }
-    private void MoveBackTutorialUIElement(IconUIElement uiElement)
-    {
-        uiElement.ctsMove?.Cancel();
-        uiElement.ctsMove = new CancellationTokenSource();
-        MovingBackTutorialUIElement(uiElement).Forget();
-        fadeBlack.FadeFromBlack();
-    }
     private async UniTask DisappearingKeyIcon()
     {
         float elapsedTime = APPEARING_TIME;
@@ -547,61 +571,6 @@ public class GameplayUI : MonoBehaviour
             ticketIcons[curTicketIconIndex].Disappear();
             curTicketIconIndex--;
             await UniTask.WaitForSeconds(APPEARING_TIME);
-        }
-    }
-    private async UniTask MovingTutorialUIElement(IconUIElement uiElement, string text)
-    {
-        AtlasRenderer iconRenderer = uiElement.renderer;
-        Transform iconTransform = iconRenderer.transform;
-        
-        Vector2 targetPos = new Vector2();
-        targetPos.x = 0;
-
-        float localPivotPosY = iconRenderer.bounds.size.y * iconRenderer.sprite.uvPivot.y;
-        targetPos.y = cameraStats.camBounds.extents.y - localPivotPosY - UI_POSITION_BUFFER;
-
-        Vector2 curPos = new Vector2();
-        curPos.x = iconTransform.localPosition.x;
-        curPos.y = iconTransform.localPosition.y;
-
-        try
-        {
-            while ((curPos - targetPos).sqrMagnitude > 0.05f)
-            {
-                curPos = Vector2.Lerp(curPos, targetPos, Time.deltaTime * 2);
-                iconTransform.localPosition = new Vector3(curPos.x, curPos.y, 1);
-                await UniTask.Yield(uiElement.ctsMove.Token);
-            }
-            float tutTextLocaPosY = iconTransform.localPosition.y - localPivotPosY - tutorialText.background_renderer.worldPivotsAndSizes[8].w - 0.1f;
-            tutorialText.transform.localPosition = new Vector3(iconTransform.localPosition.x, tutTextLocaPosY, 1);
-            tutorialText.SetText(text);
-        }
-        catch(OperationCanceledException)
-        {
-
-        }
-    }
-    private async UniTask MovingBackTutorialUIElement(IconUIElement uiElement)
-    {
-        Transform iconTransform = uiElement.renderer.transform;
-
-        Vector3 curPos = iconTransform.localPosition;
-
-        try
-        {
-            tutorialText.SetText("");
-            while ((curPos - uiElement.startPos).sqrMagnitude > 0.01f)
-            {
-                curPos = Vector3.Lerp(curPos, uiElement.startPos, Time.deltaTime * 2);
-
-                iconTransform.localPosition = curPos;
-                await UniTask.Yield(uiElement.ctsMove.Token);
-            }
-            iconTransform.localPosition = uiElement.startPos;
-        }
-        catch (OperationCanceledException)
-        {
-
         }
     }
 }

@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 using UnityEngine.InputSystem;
 using static AtlasUI;
@@ -111,7 +112,7 @@ public static class AtlasUI
         None = 0,
         Ticket = 1 << 0,
         Traitor = 1 << 1,
-        Picker = 1 << 2,
+        Marker = 1 << 2,
     }
     public enum PageType
     { 
@@ -435,6 +436,76 @@ public static class AtlasUI
                 break;
             }
         }
+
+        public void MoveTutorialUIElement(CameraStatsSO camStats, AtlasTextRenderer tutorialRenderer, string text)
+        {
+            ctsMove?.Cancel();
+            ctsMove = new CancellationTokenSource();
+
+            MovingTutorialUIElement(camStats, tutorialRenderer, text).Forget();
+        }
+        public void MoveBackTutorialUIElement(AtlasTextRenderer tutorialRenderer)
+        {
+            ctsMove?.Cancel();
+            ctsMove = new CancellationTokenSource();
+            MovingBackTutorialUIElement(tutorialRenderer).Forget();
+        }
+        private async UniTask MovingTutorialUIElement(CameraStatsSO camStats, AtlasTextRenderer tutorialRenderer, string text)
+        {
+            Transform iconTransform = renderer.transform;
+
+            Vector2 targetPos = new Vector2();
+            targetPos.x = 0;
+
+            float localPivotPosY = renderer.bounds.size.y * renderer.sprite.uvPivot.y;
+            targetPos.y = camStats.camBounds.extents.y - localPivotPosY - UI_POSITION_BUFFER;
+
+            Vector2 curPos = new Vector2();
+            curPos.x = iconTransform.localPosition.x;
+            curPos.y = iconTransform.localPosition.y;
+
+            try
+            {
+                while ((curPos - targetPos).sqrMagnitude > 0.05f)
+                {
+                    curPos = Vector2.Lerp(curPos, targetPos, Time.deltaTime * 2);
+                    iconTransform.localPosition = new Vector3(curPos.x, curPos.y, 1);
+                    await UniTask.Yield(ctsMove.Token);
+                }
+
+                float tutTextLocaPosY = iconTransform.localPosition.y - localPivotPosY - tutorialRenderer.background_renderer.worldPivotsAndSizes[8].w - 0.1f;
+                tutorialRenderer.transform.localPosition = new Vector3(iconTransform.localPosition.x, tutTextLocaPosY, 1);
+                tutorialRenderer.SetText(text);
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+        }
+        private async UniTask MovingBackTutorialUIElement(AtlasTextRenderer tutorialRenderer)
+        {
+            Transform iconTransform = renderer.transform;
+
+            Vector3 curPos = iconTransform.localPosition;
+
+            try
+            {
+                tutorialRenderer.SetText("");
+                while ((curPos - startPos).sqrMagnitude > 0.01f)
+                {
+                    curPos = Vector3.Lerp(curPos, startPos, Time.deltaTime * 2);
+
+                    iconTransform.localPosition = curPos;
+                    await UniTask.Yield(ctsMove.Token);
+                }
+                iconTransform.localPosition = startPos;
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+        }
+
     }
 
     static float NaturalMoveClock;

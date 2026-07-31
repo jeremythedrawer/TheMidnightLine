@@ -47,7 +47,7 @@ MonoBehaviour:
   rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
-    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
+    material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   boxCollider: {fileID: 0}
   spriteIndex: 20
@@ -62,7 +62,7 @@ MonoBehaviour:
     worldSize: {x: 0.32222223, y: 0.31111112, z: 1}
     index: 20
   bounds:
-    m_Center: {x: -0.728, y: 0.299, z: -0.1}
+    m_Center: {x: 5.4939847, y: 2.3770003, z: 40.9}
     m_Extent: {x: 0.16111112, y: 0.15555556, z: 0.1}
   worldPivotAndSize: {x: -0.16111112, y: -0.15555556, z: 0.32222223, w: 0.31111112}
   uvSizeAndPosition: {x: 0.11328125, y: 0.109375, z: 0.5800781, w: 0.671875}
@@ -184,7 +184,7 @@ MonoBehaviour:
     worldSize: {x: 0.5777778, y: 0.50555557, z: 1}
     index: 1
   bounds:
-    m_Center: {x: -0.68183315, y: 0.27192524, z: 0.1}
+    m_Center: {x: 5.5401516, y: 2.3499255, z: 41.1}
     m_Extent: {x: 0.68183315, y: 0.27192524, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 1.3388889, w: 0.33333334}
   uvSizeAndPosition: {x: 0.94140625, y: 0.234375, z: 0.01171875, w: 0.54296875}
@@ -264,6 +264,7 @@ MonoBehaviour:
     curState: 0
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   paletteRenderer: {fileID: 1849436935815050231}
   selectedNPC: {fileID: 0}
   openIconRendererPositions: []
@@ -282,6 +283,7 @@ MonoBehaviour:
   curSpriteHeight: 0
   tileWidth: 0
   tileHeight: 0
+  tutorialInUse: 0
 --- !u!1 &3794666490326613367
 GameObject:
   m_ObjectHideFlags: 0
@@ -329,7 +331,7 @@ MonoBehaviour:
   rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
-    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
+    material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   boxCollider: {fileID: 0}
   spriteIndex: 23
@@ -344,7 +346,7 @@ MonoBehaviour:
     worldSize: {x: 0.32222223, y: 0.31111112, z: 1}
     index: 23
   bounds:
-    m_Center: {x: -1.099, y: 0.299, z: -0.1}
+    m_Center: {x: 5.122985, y: 2.3770003, z: 40.9}
     m_Extent: {x: 0.16111112, y: 0.15555556, z: 0.1}
   worldPivotAndSize: {x: -0.16111112, y: -0.15555556, z: 0.32222223, w: 0.31111112}
   uvSizeAndPosition: {x: 0.11328125, y: 0.109375, z: 0.5800781, w: 0.546875}
@@ -447,7 +449,7 @@ MonoBehaviour:
   rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
-    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
+    material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   boxCollider: {fileID: 0}
   spriteIndex: 19
@@ -462,7 +464,7 @@ MonoBehaviour:
     worldSize: {x: 0.32222223, y: 0.31111112, z: 1}
     index: 19
   bounds:
-    m_Center: {x: -0.358, y: 0.307, z: -0.1}
+    m_Center: {x: 5.863985, y: 2.3850002, z: 40.9}
     m_Extent: {x: 0.16111112, y: 0.15555556, z: 0.1}
   worldPivotAndSize: {x: -0.16111112, y: -0.15555556, z: 0.32222223, w: 0.31111112}
   uvSizeAndPosition: {x: 0.11328125, y: 0.109375, z: 0.4453125, w: 0.671875}

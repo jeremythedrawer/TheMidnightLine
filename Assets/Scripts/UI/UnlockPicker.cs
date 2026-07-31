@@ -14,13 +14,13 @@ public class UnlockPicker : MonoBehaviour
     public const int COLOR_ICON_SPRITE_INDEX = 20;
     public const int MULTI_COLOR_ICON_SPRITE_INDEX = 23;
 
-    public static event Action<UnlockType> OnNewAbilityUnlocked;
-    public static event Action OnNewColorUnlocked;
+    public static event Action<IconUIElement> OnFirstAbilityUnlock;
 
     public IconUIElement[] icons;
 
     public TripSO trip;
     public PlayerInputsSO playerInputs;
+    public CameraStatsSO camStats;
 
     public AtlasRenderer paletteRenderer;
 
@@ -41,7 +41,7 @@ public class UnlockPicker : MonoBehaviour
 
     public PickerState curPickerState;
     public PickerState enteredPickerState;
-    public UnlockType curUnlockSelectioMask;
+    public UnlockType curUnlockSelectionMask;
 
     public int curGridColCount;
 
@@ -51,6 +51,8 @@ public class UnlockPicker : MonoBehaviour
     public float curSpriteHeight;
     public float tileWidth;
     public float tileHeight;
+
+    public bool tutorialInUse;
     private void OnEnable()
     {
         Scenes.OnLoadTrip0 += Init;
@@ -84,9 +86,9 @@ public class UnlockPicker : MonoBehaviour
                 int validIndex = 0;
                 for (int j = 0; j < 32; j++)
                 {
-                    if (((int)curUnlockSelectioMask & (1 << j)) == 0) continue;
+                    if (((int)curUnlockSelectionMask & (1 << j)) == 0) continue;
 
-                    if (validIndex != i)
+                    if (validIndex != index)
                     {
                         validIndex++;
                         continue;
@@ -97,23 +99,20 @@ public class UnlockPicker : MonoBehaviour
                         if ((selectedUnlockType & UnlockType.RuleOut) != 0)
                         {
                             trip.curUnlocks |= UnlockType.RuleOut;
-                            OnNewAbilityUnlocked?.Invoke(UnlockType.RuleOut);
+                            tutorialInUse = true;
+                            OnFirstAbilityUnlock?.Invoke(icon);
                         }
                         else if ((selectedUnlockType & UnlockType.Color) != 0)
                         {
                             if (trip.unlockedColorMarkerCount == 0)
                             {
                                 trip.curUnlocks |= UnlockType.Color;
-                                OnNewAbilityUnlocked?.Invoke(UnlockType.Color);
                             }
                             trip.unlockedColorMarkerCount++;
-                            OnNewColorUnlocked?.Invoke();
                         }
                         else if ((selectedUnlockType & UnlockType.MultiColor) != 0)
                         {
                             trip.curUnlocks |= UnlockType.MultiColor;
-                            OnNewAbilityUnlocked?.Invoke(UnlockType.MultiColor);
-                            OnNewColorUnlocked?.Invoke();
                             trip.unlockedColorMarkerCount++;
                         }
                         break;
@@ -229,9 +228,12 @@ public class UnlockPicker : MonoBehaviour
     {
         paletteRenderer.enabled = false;
 
-        for (int i = 0; i < curGridColCount; i++)
+        if (!tutorialInUse)
         {
-            icons[i].renderer.enabled = false;
+            for (int i = 0; i < curGridColCount; i++)
+            {
+                icons[i].renderer.enabled = false;
+            }
         }
 
         selectedNPC = null;
@@ -239,11 +241,12 @@ public class UnlockPicker : MonoBehaviour
     }
     public void TurnOn(int unlockSelectionAmount, UnlockType unlockType,  NPCBrain npc)
     {
+        tutorialInUse = false;
         paletteRenderer.enabled = true;
 
         curGridColCount = unlockSelectionAmount;
 
-        curUnlockSelectioMask = unlockType;
+        curUnlockSelectionMask = unlockType;
 
         int iconIndex = 0;
 
@@ -389,6 +392,7 @@ public class UnlockPicker : MonoBehaviour
                 await UniTask.Yield(ctsOpen.Token);
             }
             SetState(PickerState.Closed);
+
             TurnOff();
 
         }

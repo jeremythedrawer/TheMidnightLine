@@ -94,8 +94,11 @@ Shader "Custom/s_atlasColor"
                 
                 half border = saturate(tex.r + tex.g);
                 half invertT = i.custom.a;
+
                 half3 invertTex = lerp(tex.rgb, 1 - tex.rgb, invertT);
+                
                 half whiteTex = saturate(invertTex.g - invertTex.r);
+
                 half blackTex = (1- invertTex.g);
 
                 float2 diagonalUV = i.uv * (_DiagonalTexture_TexelSize.xy / _AtlasTexture_TexelSize.xy);
@@ -108,13 +111,13 @@ Shader "Custom/s_atlasColor"
 
 
                 half3 col = i.custom.rgb + diagonal;
-                half t = round(LinearLightness(col));
 
                 int meridiaColorMask = saturate(bitMask & MERIDIA_COLOR_BIT);
                 float3 meridiaColor = meridiaColorMask * _MeridiaColor;
 
                 float3 blackColor = (1 - meridiaColorMask) * _BlackColor;
 
+                half t = round(LinearLightness(col));
                 half3 finalCol = lerp((blackTex + col) * border + blackColor + meridiaColor, whiteTex * col + blackColor + meridiaColor, t);
 
                 clip((tex.a) - 0.001);
