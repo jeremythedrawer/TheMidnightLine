@@ -2,6 +2,7 @@ using System;
 using UnityEngine;
 using static Atlas;
 using static AtlasUI;
+using static Notepad;
 using static NPC;
 public class Page : MonoBehaviour
 {
@@ -17,7 +18,8 @@ public class Page : MonoBehaviour
     public NPCsDataSO npcData;
     public SpyStatsSO spyStats;
     public PlayerInputsSO playerInputs;
-
+    public NotepadData notepadData;
+    public OptionsSO options;
 
     public AtlasRenderer paperRenderer;
 
@@ -29,12 +31,11 @@ public class Page : MonoBehaviour
     public AtlasRenderer[] readOnlyRenderers;
     public AtlasRenderer[] playerWriteRenderers;
 
-    public AtlasRenderer paperCornerLeftButtonRenderer;
-    public AtlasRenderer paperCornerRightButtonRenderer;
+    public IconUIElement[] otherButtons;
 
-    public AtlasRenderer switchLeftButtonRenderer;
-    public AtlasRenderer switchRightButtonRenderer;
-    public AtlasRenderer exitButton_renderer;
+    public IconUIElement leftButton;
+    public IconUIElement rightButton;
+    public IconUIElement exitButton;
 
     [Header("Generated")]
     public AtlasTextRenderer activePlayerWriteTextRenderer;
@@ -44,7 +45,6 @@ public class Page : MonoBehaviour
     public int previewPlayerWriteIndex;
     public int activePlayerWriteRowIndex;
 
-    public bool[] isPlayerWriteTextPreviewSet;
     public string[] playerWriteTexts;
 
     public Bounds playerWriteTextBounds;
@@ -57,14 +57,42 @@ public class Page : MonoBehaviour
         paper_clip = paperRenderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
         
         playerWriteIndex = -1;
+        
+        exitButton.Init(ClickExitButton, EnterButton, ExitButton);
 
         switch (pageType)
         {
+            case PageType.Prompt:
+            {
+                rightButton.Init(ClickRightButton, EnterButton, ExitButton);
+            }
+            break;
+            case PageType.Profile:
+            {
+                rightButton.Init(ClickRightButton, EnterButton, ExitButton);
+                leftButton.Init(ClickLeftButton, EnterButton, ExitButton);
+            }
+            break;
             case PageType.ColorKey:
             {
+                leftButton.Init(ClickLeftButton, EnterButton, ExitButton);
+
+                for (int i = 0; i < otherButtons.Length; i++)
+                {
+                    int index = i;
+                    
+                    void ClickColor(IconUIElement icon)
+                    {
+                        SceneController.GetClueColorPicker().Open(otherButtons[index].renderer, ColorPicker.SelectType.Clue);
+                        SwitchActivePLayerWriteTextRenderer(index);
+                        trip.selectedColorMarkerIndex = activePlayerWriteRowIndex;
+                    }
+
+                    otherButtons[i].Init(ClickColor, EnterButton, ExitButton);
+                }
+
                 activePlayerWriteTextRenderer = playerWriteTextRenderers[0];
-                
-                isPlayerWriteTextPreviewSet = new bool[playerWriteTextRenderers.Length];
+
                 playerWriteTexts = new string[playerWriteTextRenderers.Length];
                 Array.Fill(playerWriteTexts, "");
 
@@ -85,7 +113,6 @@ public class Page : MonoBehaviour
         playerWriteTextRend.enabled = true;
         AtlasRenderer playerWriteRend = playerWriteRenderers[0];
         playerWriteRend.customBit |= (int)ColorBits.Diagonal;
-        isPlayerWriteTextPreviewSet[0] = false;
     }
     public void InitNextColorRow(int nextIndex)
     {
@@ -99,8 +126,7 @@ public class Page : MonoBehaviour
 
         previewPlayerWriteText = npcData.behaviourStringDict[curBehaviour];
         playerWriteTextRend.SetText(previewPlayerWriteText);
-        playerWriteTextRend.SetAppearTextAlpha(1);
-        isPlayerWriteTextPreviewSet[nextIndex] = false;
+        playerWriteTextRend.SetAppearTextAlpha(0);
 
         playerWriteTextRend.enabled = true;
     }
@@ -135,32 +161,28 @@ public class Page : MonoBehaviour
     }
     public void UpdatePage()
     {
+        exitButton.UpdateButton(playerInputs);
+
         switch (pageType)
         {
+            case PageType.Prompt:
+            {
+                rightButton.UpdateButton(playerInputs);
+            }
+            break;
+            case PageType.Profile:
+            {
+                rightButton.UpdateButton(playerInputs);
+                leftButton.UpdateButton(playerInputs);
+
+            }
+            break;
             case PageType.ColorKey:
             {
-                bool foundColorKeyRend = false;
+                leftButton.UpdateButton(playerInputs);
                 for (int i = 0; i < trip.unlockedColorMarkerCount; i++)
                 {
-                    int colorIndex = i + 1;
-                    AtlasRenderer colorKeyRend = playerWriteRenderers[colorIndex];
-                    if (!foundColorKeyRend && playerWriteTexts[colorIndex] != "" && CursorController.IsInsideBounds(colorKeyRend.GetBounds(), isClickable: true))
-                    {
-                        colorKeyRend.custom.w = 0;
-
-                        if (playerInputs.mouseLeftDown)
-                        {
-                            SceneController.GetClueColorPicker().Open(colorKeyRend, ColorPicker.SelectType.Clue);
-                            SwitchActivePLayerWriteTextRenderer(i);
-                            trip.selectedColorMarkerIndex = activePlayerWriteRowIndex;
-
-                        }
-                        foundColorKeyRend = true;
-                    }
-                    else
-                    {
-                        colorKeyRend.custom.w = 1;
-                    }
+                    otherButtons[i].UpdateButton(playerInputs);
                 }
 
                 if (playerInputs.shiftDown && activePlayerWriteRowIndex > 0)
@@ -180,14 +202,15 @@ public class Page : MonoBehaviour
         }
         
         activePlayerWriteTextRenderer = playerWriteTextRenderers[0];
-        
-        isPlayerWriteTextPreviewSet = new bool[playerWriteTextRenderers.Length];
+
         playerWriteTexts = new string[playerWriteTextRenderers.Length];
         Array.Fill(playerWriteTexts, "");
 
         for (int i = 0; i < playerWriteTextRenderers.Length; i++)
         {
-            playerWriteTextRenderers[i].SetText(trip.stationsDataArray[previewPlayerWriteIndex].stationName);
+            AtlasTextRenderer playerWriteTextRenderer = playerWriteTextRenderers[i];
+            playerWriteTextRenderer.SetText(trip.stationsDataArray[previewPlayerWriteIndex].stationName);
+            playerWriteTextRenderer.SetColorText(options.meridiaColor);
         }
         AtlasRenderer coveredMugShot = playerWriteRenderers[0];
         AtlasRenderer uncoveredMugShot = playerWriteRenderers[1];
@@ -328,9 +351,9 @@ public class Page : MonoBehaviour
                     break;
                 }
 
-                activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
+                activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
+                activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
                 playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
-                isPlayerWriteTextPreviewSet[0] = false;
             }
             break;
 
@@ -340,20 +363,19 @@ public class Page : MonoBehaviour
                 {
                     case TripClue.Behaviours:
                     {
-                        if (activePlayerWriteText == "")
+                        if (activePlayerWriteRowIndex > 0)
                         {
-                            if (activePlayerWriteRowIndex > 0)
-                            {
-                                int behaviourLength = (int)Mathf.Log((int)Behaviours.Count, 2) - 1;
-                                previewPlayerWriteIndex = Mathf.Max((previewPlayerWriteIndex + behaviourLength) % behaviourLength, 1);
-                                Behaviours allBehaviours = (Behaviours)~(1 << behaviourLength);
-                                Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
-                                previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
-                                activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
-                                playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
-                                isPlayerWriteTextPreviewSet[activePlayerWriteRowIndex] = false;
+                            int behaviourLength = (int)Behaviours.Count;
+                            previewPlayerWriteIndex = (previewPlayerWriteIndex + behaviourLength) % behaviourLength;
+                            Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
+                            Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
+                            previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
+                            
+                            activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
+                            activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
+                            
+                            playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
 
-                            }
                         }
                     }
                     break;
@@ -373,10 +395,11 @@ public class Page : MonoBehaviour
                 {
                     case TripPrompt.Stations:
                     {
-                        previewPlayerWriteText = trip.stationsDataArray[previewPlayerWriteIndex].stationName;
-                        activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
-                        activePlayerWriteTextRenderer.SetColorText(Color.clear);
-                        
+                        if (playerWriteTexts[activePlayerWriteRowIndex] == "")
+                        {
+                            previewPlayerWriteText = trip.stationsDataArray[previewPlayerWriteIndex].stationName;
+                            activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
+                        }
                     }
                     break;
                 }
@@ -390,40 +413,56 @@ public class Page : MonoBehaviour
                     if (activePlayerWriteRowIndex == 0)
                     {
                         previewPlayerWriteText = "Rule Out";
-                        activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
+                        activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
                     }
                     else
                     {
-                        int behaviourLength = (int)Behaviours.Count - 1;
-                        Behaviours allBehaviours = (Behaviours)~(1 << behaviourLength);
+                        int behaviourLength = (int)Behaviours.Count;
+                        previewPlayerWriteIndex = (previewPlayerWriteIndex + behaviourLength) % behaviourLength;
+                        Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
                         Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
                         previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
-                        activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
+                        activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
 
+                    }
+                }
+                else
+                {
+                    if ((trip.curUnlocks & UnlockType.RuleOut) != 0)
+                    {
+                        int totalUnlockCount = trip.unlockedColorMarkerCount + 1;
+
+                        for (int i = 0; i < totalUnlockCount; i++)
+                        {
+                            if (playerWriteTexts[i] != "") continue;
+                            AtlasTextRenderer curRend = playerWriteTextRenderers[i];
+                            if (i == 0)
+                            {
+                                previewPlayerWriteText = "Rule Out";
+                                curRend.SetText(previewPlayerWriteText, alpha: 0);
+                            }
+                            else
+                            {
+                                int behaviourLength = (int)Behaviours.Count;
+                                previewPlayerWriteIndex = (previewPlayerWriteIndex + behaviourLength) % behaviourLength;
+                                Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
+                                Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
+                                previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
+                                curRend.SetText(previewPlayerWriteText, alpha: 0);
+
+                            }
+                        }
                     }
                 }
             }
             break;
         }
-
         if (playerWriteTextRenderers.Length > 0)
         {
-            if (prevNotepadState == NotepadState.Erasing)
-            {
-                isPlayerWriteTextPreviewSet[activePlayerWriteRowIndex] = false;
-            }
-            else
-            {
-                for (int i = 0; i < isPlayerWriteTextPreviewSet.Length; i++)
-                {
-                    if (playerWriteTexts[i] == "")
-                    {
-                        isPlayerWriteTextPreviewSet[i] = false;
-                    }
-                }
-            }
             playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
         }
+
+        UpdatePreviewPlayerWriteText();
 
     }
     public void SetPlayerWriteTextAlphaBottom(float normAmount)
@@ -454,47 +493,102 @@ public class Page : MonoBehaviour
             }
         }
     }
-    public void UpdatePreviewPlayerWriteText(bool appear, ref float clock)
+    public void UpdatePreviewPlayerWriteText()
     {
         switch (pageType)
         {
             case PageType.Profile:
+            {
+                if (activePlayerWriteText == "")
+                {
+                    activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
+                }
+                else
+                {
+                    activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 1, customChannel: 4);
+                }
+            }
+            break;
             case PageType.ColorKey:
             {
-                for(int i = 0; i < playerWriteTextRenderers.Length; i++)
+                if ((trip.curUnlocks & UnlockType.RuleOut) != 0)
                 {
-                    if (isPlayerWriteTextPreviewSet[i]) continue;
-                    AtlasTextRenderer playerWriteTextRend = playerWriteTextRenderers[i];
-                    playerWriteTextRend.UpdateAppearTextAlpha(normAmount: 0.5f, appear, ref clock);
-                    if (clock <= 0) isPlayerWriteTextPreviewSet[i] = true;
+                    int totalUnlockCount = trip.unlockedColorMarkerCount + 1;
+
+                    for (int i = 0; i < totalUnlockCount; i++)
+                    {
+                        AtlasTextRenderer playerWriteTextRend = playerWriteTextRenderers[i];
+                        if (playerWriteTextRend.text == "") continue;
+                        if (playerWriteTexts[i] == "")
+                        {
+                            playerWriteTextRend.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
+                        }
+                        else
+                        {
+                            playerWriteTextRend.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 1, customChannel: 4);
+                        }
+                    }
                 }
             }
             break;
         }
     }
-    public void InvertExitButton(bool invert)
+    public void UpdateButtons()
     {
-        InvertButton(invert, exitButton_renderer);
+        exitButton.UpdateButton(playerInputs);
+
+        switch (pageType)
+        {
+            case PageType.Prompt:
+            {
+                rightButton.UpdateButton(playerInputs);
+            }
+            break;
+            case PageType.Profile:
+            {
+                rightButton.UpdateButton(playerInputs);
+                leftButton.UpdateButton(playerInputs);
+            }
+            break;
+            case PageType.ColorKey:
+            {
+                leftButton.UpdateButton(playerInputs);
+
+                for (int i = 0; i < otherButtons.Length; i++)
+                {
+                    otherButtons[i].UpdateButton(playerInputs);
+                }
+            }
+            break;
+        }
     }
-    public void InvertLeftArrowButton(bool invert)
+    
+    public void EnterButton(IconUIElement icon)
     {
-        if (paperCornerLeftButtonRenderer == null) return;
-        InvertButton(invert, paperCornerLeftButtonRenderer);
+        icon.renderer.custom.x = 1;
     }
-    public void InvertRightArrowButton(bool invert)
+    public void ExitButton(IconUIElement icon)
     {
-        if (paperCornerRightButtonRenderer == null) return;
-        InvertButton(invert, paperCornerRightButtonRenderer);
+        icon.renderer.custom.x = 0;
     }
-    public void InvertSwitchLeftButton(bool invert)
+    public void ClickExitButton(IconUIElement icon)
     {
-        if (switchLeftButtonRenderer == null) return;
-        InvertButton(invert, switchLeftButtonRenderer);
+        if (notepadData.checkingNotepad)
+        {
+            notepadData.checkingNotepad = false;
+        }
+        else
+        {
+            notepadData.checkingNotepad = true;
+        }
     }
-    public void InvertSwitchRightButton(bool invert)
+    public void ClickLeftButton(IconUIElement icon)
     {
-        if (switchRightButtonRenderer == null) return;
-        InvertButton(invert, switchRightButtonRenderer);
+        notepadData.subState |= SubState.IsFlippingDown;
+    }
+    public void ClickRightButton(IconUIElement icon)
+    {
+        notepadData.subState |= SubState.IsFlippingUp;
     }
     public void UpdateMugShotReveal(float t)
     {

@@ -109,7 +109,6 @@ public class InputManager : MonoBehaviour
 
         interact_action.started += context =>
         {
-            gameEventData.OnInteract?.Raise();
             playerInputs.interact = true;
         };
 

@@ -105,7 +105,7 @@ public class FadeBlack : MonoBehaviour
             {
                 float t = elapsedTime / FADE_BLACK_DURATION;
                 fadeBlackMaterial.SetFloat("_Alpha", t);
-                textRenderer.SetAppearTextAlpha(1 - t);
+                textRenderer.SetAppearTextAlpha(t);
                 elapsedTime -= Time.deltaTime;
                 await UniTask.Yield(ctsFadeBlack.Token);
             }

@@ -28,7 +28,7 @@ public class SceneController : MonoBehaviour
     }
     public static void KeepNotepad(Notepad notepad)
     {
-        notepad.transform.SetParent(Transform, false);
+        notepad.transform.SetParent(Transform, true);
         Notepad = notepad;
     }
     public static void SetClueColorPicker(ColorPicker colorPicker)

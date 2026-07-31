@@ -12,6 +12,7 @@ using UnityEditor.IMGUI.Controls;
 
 using static Atlas;
 using static AtlasRendering;
+using static AtlasUI;
 using Unity.Collections.LowLevel.Unsafe;
 
 [ExecuteAlways]

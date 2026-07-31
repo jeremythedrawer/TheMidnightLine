@@ -17,8 +17,7 @@ public class UnlockPicker : MonoBehaviour
     public static event Action<UnlockType> OnNewAbilityUnlocked;
     public static event Action OnNewColorUnlocked;
 
-
-    public AtlasRenderer[] iconRenderers;
+    public IconUIElement[] icons;
 
     public TripSO trip;
     public PlayerInputsSO playerInputs;
@@ -60,6 +59,10 @@ public class UnlockPicker : MonoBehaviour
     {
         Scenes.OnLoadTrip0 -= Init;
     }
+    private void Update()
+    {
+        UpdateState();
+    }
     private void Init()
     {
         SceneController.SetUnlockPicker(this);
@@ -69,15 +72,70 @@ public class UnlockPicker : MonoBehaviour
         trip.curUnlocks = UnlockType.None;
         paletteRenderer.customBit = (int)ColorBits.Meridia;
 
-        for (int i = 0; i < iconRenderers.Length; i++)
+        for (int i = 0; i < icons.Length; i++)
         {
-            iconRenderers[i].customBit = (int)ColorBits.Meridia;
-            iconRenderers[i].enabled = false;
+            icons[i].renderer.customBit = (int)ColorBits.Meridia;
+            icons[i].renderer.enabled = false;
+
+            int index = i;
+
+            void ClickIcon(IconUIElement icon)
+            {
+                int validIndex = 0;
+                for (int j = 0; j < 32; j++)
+                {
+                    if (((int)curUnlockSelectioMask & (1 << j)) == 0) continue;
+
+                    if (validIndex != i)
+                    {
+                        validIndex++;
+                        continue;
+                    }
+                    else
+                    {
+                        UnlockType selectedUnlockType = (UnlockType)(1 << j);
+                        if ((selectedUnlockType & UnlockType.RuleOut) != 0)
+                        {
+                            trip.curUnlocks |= UnlockType.RuleOut;
+                            OnNewAbilityUnlocked?.Invoke(UnlockType.RuleOut);
+                        }
+                        else if ((selectedUnlockType & UnlockType.Color) != 0)
+                        {
+                            if (trip.unlockedColorMarkerCount == 0)
+                            {
+                                trip.curUnlocks |= UnlockType.Color;
+                                OnNewAbilityUnlocked?.Invoke(UnlockType.Color);
+                            }
+                            trip.unlockedColorMarkerCount++;
+                            OnNewColorUnlocked?.Invoke();
+                        }
+                        else if ((selectedUnlockType & UnlockType.MultiColor) != 0)
+                        {
+                            trip.curUnlocks |= UnlockType.MultiColor;
+                            OnNewAbilityUnlocked?.Invoke(UnlockType.MultiColor);
+                            OnNewColorUnlocked?.Invoke();
+                            trip.unlockedColorMarkerCount++;
+                        }
+                        break;
+                    }
+                }
+
+                selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Meridia);
+                selectedNPC.atlasRenderer.custom.z = 1;
+                selectedNPC.ticketHasBeenChecked = true;
+            }
+            icons[i].Init(ClickIcon, EnterColorIcon, ExitColorIcon);
         }
+
     }
-    private void Update()
+
+    private void EnterColorIcon(IconUIElement icon)
     {
-        UpdateState();
+        icon.renderer.custom.w = 0;
+    }
+    private void ExitColorIcon(IconUIElement icon)
+    {
+        icon.renderer.custom.w = 1;
     }
 
     private void SetState(PickerState newState)
@@ -97,64 +155,7 @@ public class UnlockPicker : MonoBehaviour
             {
                 for (int i = 0; i < curGridColCount; i++)
                 {
-                    AtlasRenderer iconRend = iconRenderers[i];
-
-                    if (CursorController.IsInsideBounds(iconRend.bounds, isClickable: true))
-                    {
-                        iconRend.custom.w = 1;
-
-                        if (playerInputs.mouseLeftDown)
-                        {
-                            int validIndex = 0;
-                            for (int j = 0; j < 32; j++)
-                            {
-                                if (((int)curUnlockSelectioMask & (1 << j)) == 0) continue;
-                                
-                                if (validIndex != i)
-                                {
-                                    validIndex++;
-                                    continue;
-                                }
-                                else
-                                {
-                                    UnlockType selectedUnlockType = (UnlockType)(1 << j);
-                                    if ((selectedUnlockType & UnlockType.RuleOut) != 0)
-                                    {
-                                        trip.curUnlocks |= UnlockType.RuleOut;
-                                        OnNewAbilityUnlocked?.Invoke(UnlockType.RuleOut);
-                                    }
-                                    else if ((selectedUnlockType & UnlockType.Color) != 0)
-                                    {
-                                        if (trip.unlockedColorMarkerCount == 0)
-                                        {
-                                            trip.curUnlocks |= UnlockType.Color;
-                                            OnNewAbilityUnlocked.Invoke(UnlockType.Color);
-                                        }
-                                        trip.unlockedColorMarkerCount++;
-                                        OnNewColorUnlocked?.Invoke();
-                                    }
-                                    else if ((selectedUnlockType & UnlockType.MultiColor) != 0)
-                                    {
-                                        trip.curUnlocks |= UnlockType.MultiColor;
-                                        OnNewAbilityUnlocked?.Invoke(UnlockType.MultiColor);
-                                        OnNewColorUnlocked?.Invoke();
-                                        trip.unlockedColorMarkerCount++;
-                                    }
-
-                                    break;
-                                }
-                            }
-                            
-                            selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Meridia);
-                            selectedNPC.atlasRenderer.custom.z = 1;
-                            selectedNPC.ticketHasBeenChecked = true;
-                        }
-                        return;
-                    }
-                    else
-                    {
-                        iconRend.custom.w = 0;
-                    }
+                    icons[i].UpdateButton(playerInputs);
                 }
             }
             break;
@@ -186,9 +187,9 @@ public class UnlockPicker : MonoBehaviour
     }
     public void SetOpenPosAndSize()
     {
-        openIconRendererPositions = new Vector2[iconRenderers.Length];
+        openIconRendererPositions = new Vector2[icons.Length];
 
-        AtlasRenderer firstIconRend = iconRenderers[0];
+        AtlasRenderer firstIconRend = icons[0].renderer;
         Vector4 paletteBottomRightWPS = paletteRenderer.worldPivotsAndSizes[5];
         Vector2 firstIconRendPos = new Vector2(paletteBottomRightWPS.x + firstIconRend.worldPivotAndSize.x, paletteBottomRightWPS.y - firstIconRend.worldPivotAndSize.y);
 
@@ -201,7 +202,7 @@ public class UnlockPicker : MonoBehaviour
             {
                 int flatIndex = x + rowIndex;
 
-                AtlasRenderer npcIconRend = iconRenderers[flatIndex];
+                AtlasRenderer npcIconRend = icons[flatIndex].renderer;
 
                 float xPos = firstIconRendPos.x - (x * GRID_GAP);
                 openIconRendererPositions[flatIndex] = new Vector3(xPos, yPos, -1);
@@ -230,7 +231,7 @@ public class UnlockPicker : MonoBehaviour
 
         for (int i = 0; i < curGridColCount; i++)
         {
-            iconRenderers[i].enabled = false;
+            icons[i].renderer.enabled = false;
         }
 
         selectedNPC = null;
@@ -248,7 +249,7 @@ public class UnlockPicker : MonoBehaviour
 
         if ((unlockType & UnlockType.RuleOut) != 0)
         {
-            AtlasRenderer iconRend = iconRenderers[iconIndex];
+            AtlasRenderer iconRend = icons[iconIndex].renderer;
             iconRend.enabled = true;
             iconRend.UpdateSpriteInputsByIndex(RULE_OUT_ICON_SPRITE_INDEX);
             iconRend.custom.x = 0;
@@ -260,7 +261,7 @@ public class UnlockPicker : MonoBehaviour
         
         if ((unlockType & UnlockType.Color) != 0)
         {
-            AtlasRenderer iconRend = iconRenderers[iconIndex];
+            AtlasRenderer iconRend = icons[iconIndex].renderer;
             iconRend.enabled = true;
             iconRend.custom.x = 0;
             iconRend.custom.y = 0;
@@ -272,7 +273,7 @@ public class UnlockPicker : MonoBehaviour
 
         if ((unlockType & UnlockType.MultiColor) != 0)
         {
-            AtlasRenderer iconRend = iconRenderers[iconIndex];
+            AtlasRenderer iconRend = icons[iconIndex].renderer;
             iconRend.enabled = true;
             iconRend.custom.x = 0;
             iconRend.custom.y = 0;
@@ -349,7 +350,7 @@ public class UnlockPicker : MonoBehaviour
                 for (int i = 0; i < curGridColCount; i++)
                 {
                     float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
-                    iconRenderers[i].transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
+                    icons[i].renderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
                 }
                 await UniTask.Yield(ctsOpen.Token);
             }
@@ -383,7 +384,7 @@ public class UnlockPicker : MonoBehaviour
                 for (int i = 0; i < curGridColCount; i++)
                 {
                     float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
-                    iconRenderers[i].transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
+                    icons[i].renderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
                 }
                 await UniTask.Yield(ctsOpen.Token);
             }

@@ -48,7 +48,9 @@ public class AtlasTextRenderer : MonoBehaviour
     public Vector4[] customs;
 
     public Vector3 boundsOffset;
-    
+
+    public int customBit;
+
     public bool hasText;
     public bool erasingText;
     public bool completedWritingText;
@@ -60,6 +62,7 @@ public class AtlasTextRenderer : MonoBehaviour
     private void OnValidate()
     {
         SetText(text);
+
         bounds = GetBoundsNewText(text);
     }
     private void OnEnable()
@@ -82,7 +85,7 @@ public class AtlasTextRenderer : MonoBehaviour
         }
 #endif
     }
-    public void SetText(string inputText)
+    public void SetText(string inputText, float alpha = 1)
     {
         if (inputText == null) return;
         text = inputText;
@@ -92,9 +95,16 @@ public class AtlasTextRenderer : MonoBehaviour
         worldPivotsAndSizes = new Vector4[maxChars];
         uvSizesAndPositions = new Vector4[maxChars];
         scalesAndFlips = new Vector4[maxChars];
-        if (customs == null || customs.Length != maxChars ) customs = new Vector4[maxChars];
+
+        if (customs == null || customs.Length != maxChars) customs = new Vector4[maxChars];
+        
+        for (int i = 0; i < customs.Length; i++ )
+        {
+            customs[i].w = alpha;
+        }
 
         SetTextWorld();
+        
         switch (rendererType)
         {
             case AtlasTextRendererType.Simple:
@@ -111,39 +121,10 @@ public class AtlasTextRenderer : MonoBehaviour
             case AtlasTextRendererType.Border:
             {
                 bounds = GetBoundsNewText(text);
-                SetBorderText();
                 SetColorText(color);
+                SetBorderText();
             }
             break;
-        }
-    }
-    public void UpdateAppearTextAlpha(float normAmount, bool appear, ref float clock)
-    {
-        if (appear)
-        {
-            if (clock < APPEAR_TEXT_TIME)
-            {
-                clock += Time.deltaTime;
-                float t = (clock / APPEAR_TEXT_TIME) * normAmount;
-
-                for (int i = 0; i < customs.Length; i++)
-                {
-                    customs[i].w = t;
-                }
-            }
-        }
-        else
-        {
-            if (clock > 0)
-            {
-                clock -= Time.deltaTime;
-                float t = (clock / APPEAR_TEXT_TIME) * normAmount;
-
-                for (int i = 0; i < customs.Length; i++)
-                {
-                    customs[i].w = t;
-                }
-            }
         }
     }
     public void SetAppearTextAlpha(float normAmount)
@@ -183,7 +164,6 @@ public class AtlasTextRenderer : MonoBehaviour
             custom.x = linearColor.r;
             custom.y = linearColor.g;
             custom.z = linearColor.b;
-            custom.w = linearColor.a;
             customs[i] = custom;
         }
     }

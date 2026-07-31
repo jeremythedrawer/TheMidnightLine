@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using UnityEngine.InputSystem;
+using static AtlasUI;
 using static NPC;
 public static class AtlasUI
 {
@@ -103,6 +104,7 @@ public static class AtlasUI
         Color3 = 1 << 2,
         Diagonal = 1 << 3,
         Meridia = 1 << 4,
+        Invert = 1 << 5,
     }
     [Flags] public enum TutorialState
     {
@@ -169,29 +171,29 @@ public static class AtlasUI
         Hovered,
         Clicked,
     }
+    public enum MoveButtonDirection
+    { 
+        Left,
+        Right,
+    }
 
-    public delegate void OnEnter(TextUIElement textUIElement);
-    public delegate void OnExit(TextUIElement textUIElement);
-    public delegate void OnClick(TextUIElement textUIElement);
 
+    
     [Serializable] public struct TextUIElement
     {
+        public delegate void OnClick();
+
         public AtlasTextRenderer renderer;
 
-        public OnClick OnClick;
-        public OnEnter OnEnter;
-        public OnExit OnExit;
-
         [Header("Generated")]
-        public CancellationTokenSource ctsMove;
-
-        public Vector3 startPos;
+        public Vector3 activePos;
+        public OnClick OnClickCallback;
         public ButtonState curState;
-        public void Init(OnClick onClick, OnEnter onEnter, OnExit onExit)
+        public CancellationTokenSource ctsMove;
+        public void Init(OnClick onClickCallback)
         {
-            OnClick = onClick;
-            OnEnter = onEnter;
-            OnExit = onExit;
+            OnClickCallback = onClickCallback;
+            activePos = renderer.transform.localPosition;
         }
         public void UpdateButton(PlayerInputsSO playerInputs)
         {
@@ -201,7 +203,8 @@ public static class AtlasUI
                 {
                     if (CursorController.IsInsideBounds(renderer.background_renderer.bounds, isClickable: true))
                     {
-                        OnEnter(this);
+                        renderer.SetColorText(Color.white);
+                        renderer.background_renderer.customBit |= (int)ColorBits.Invert;
                         curState = ButtonState.Hovered;
                     }
                 }
@@ -210,12 +213,13 @@ public static class AtlasUI
                 {
                     if (!CursorController.IsInsideBounds(renderer.background_renderer.bounds, isClickable: true))
                     {
-                        OnExit(this);
+                        renderer.background_renderer.customBit &= (int)~ColorBits.Invert;
+                        renderer.SetColorText(Color.black);
                         curState = ButtonState.Unhovered;
                     }
                     else if (playerInputs.mouseLeftDown)
                     {
-                        OnClick(this);
+                        OnClickCallback();
                         curState = ButtonState.Clicked;
                     }
                 }
@@ -224,12 +228,207 @@ public static class AtlasUI
                 {
                     if (!CursorController.IsInsideBounds(renderer.background_renderer.bounds, isClickable: true))
                     {
-                        OnExit(this);
+                        renderer.SetColorText(Color.black);
+                        renderer.background_renderer.customBit &= (int)~ColorBits.Invert;
                         curState = ButtonState.Unhovered;
                     }
                     else if (playerInputs.mouseLeftUp)
                     {
-                        OnEnter(this);
+                        renderer.SetColorText(Color.white);
+                        renderer.background_renderer.customBit |= (int)ColorBits.Invert;
+                        curState = ButtonState.Hovered;
+                    }
+                }
+                break;
+            }
+        }
+        public void MoveButtonAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        {
+            ctsMove?.Cancel();
+            ctsMove = new CancellationTokenSource();
+            MovingButtonAway(camStats, dir).Forget();
+        }
+        public void SetButtonAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        {
+            Transform buttonTransform = renderer.transform;
+            Bounds buttonBounds = renderer.background_renderer.GetBounds();
+
+            Vector3 buttonPos = renderer.transform.localPosition;
+            Vector3 targetPos = buttonPos;
+
+            switch (dir)
+            {
+                case MoveButtonDirection.Left:
+                {
+                    targetPos.x = -camStats.camBounds.extents.x - buttonBounds.size.x;
+                }
+                break;
+                case MoveButtonDirection.Right:
+                {
+                    targetPos.x = camStats.camBounds.extents.x + buttonBounds.size.x;
+                }
+                break;
+            }
+            renderer.transform.localPosition = targetPos;
+        }
+        public void MoveButtonToRight()
+        {
+            ctsMove?.Cancel();
+            ctsMove = new CancellationTokenSource();
+            MovingButtonToOppositeX().Forget();
+        }
+        public void MoveButtonToActive()
+        {
+            ctsMove?.Cancel();
+            ctsMove = new CancellationTokenSource();
+            MovingButtonToActive().Forget();
+        }
+        private async UniTask MovingButtonAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        {
+            Transform buttonTransform = renderer.transform;
+            Bounds buttonBounds = renderer.background_renderer.GetBounds();
+
+            Vector3 buttonPos = renderer.transform.localPosition;
+            Vector3 targetPos = buttonPos;
+
+            switch(dir)
+            {
+                case MoveButtonDirection.Left:
+                {
+                    targetPos.x = -camStats.camBounds.extents.x - buttonBounds.size.x;
+                }
+                break;
+                case MoveButtonDirection.Right:
+                {
+                    targetPos.x = camStats.camBounds.extents.x + buttonBounds.size.x;
+                }
+                break;
+            }
+            try
+            {
+                while ((buttonPos - targetPos).sqrMagnitude > 0.005f)
+                {
+                    buttonPos = Vector3.Lerp(buttonPos, targetPos, Time.deltaTime * 2);
+
+                    buttonTransform.localPosition = buttonPos;
+
+                    await UniTask.Yield(ctsMove.Token);
+                }
+                buttonPos = targetPos;
+                buttonTransform.localPosition = buttonPos;
+
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+        }
+        private async UniTask MovingButtonToOppositeX()
+        {
+            Transform buttonTransform = renderer.transform;
+            Bounds buttonBounds = renderer.background_renderer.GetBounds();
+
+            Vector3 buttonPos = buttonTransform.localPosition;
+
+            float targetPosX = -activePos.x;
+            try
+            {
+                while (Mathf.Abs(buttonPos.x - targetPosX) > 0.005f)
+                {
+                    buttonPos.x = Mathf.Lerp(buttonPos.x, targetPosX, Time.deltaTime * 2);
+                    buttonTransform.localPosition = buttonPos;
+
+                    await UniTask.Yield(ctsMove.Token);
+                }
+                buttonPos.x = targetPosX;
+                buttonTransform.localPosition = buttonPos;
+            }
+            catch (OperationCanceledException)
+            {
+            }
+        }
+        private async UniTask MovingButtonToActive()
+        {
+            Transform buttonTransform = renderer.transform;
+            Bounds buttonBounds = renderer.background_renderer.GetBounds();
+            Vector3 buttonPos = buttonTransform.localPosition;
+            try
+            {
+                while ((buttonPos - activePos).sqrMagnitude > 0.005f)
+                {
+                    buttonPos = Vector3.Lerp(buttonPos, activePos, Time.deltaTime * 2);
+                    buttonTransform.localPosition = buttonPos;
+
+                    await UniTask.Yield(ctsMove.Token);
+                }
+                buttonTransform.localPosition = activePos;
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+        }
+    }
+    [Serializable] public struct IconUIElement
+    {
+        public delegate void OnClick(IconUIElement icon);
+        public delegate void OnEnter(IconUIElement icon);
+        public delegate void OnExit(IconUIElement icon);
+
+        public AtlasRenderer renderer;
+
+        public OnClick OnClickCallback;
+        public OnEnter OnEnterCallback;
+        public OnExit OnExitCallback;
+
+        [Header("Generated")]
+        public Vector3 startPos;
+        public ButtonState curState;
+
+        public CancellationTokenSource ctsMove;
+        public void Init(OnClick onClickCallback, OnEnter onEnterCallback, OnExit onExitCallback)
+        {
+            OnClickCallback = onClickCallback;
+            OnEnterCallback = onEnterCallback;
+            OnExitCallback = onExitCallback;
+        }
+        public void UpdateButton(PlayerInputsSO playerInputs)
+        {
+            switch (curState)
+            {
+                case ButtonState.Unhovered:
+                {
+                    if (CursorController.IsInsideBounds(renderer.bounds, isClickable: true))
+                    {
+                        OnEnterCallback(this);
+                        curState = ButtonState.Hovered;
+                    }
+                }
+                break;
+                case ButtonState.Hovered:
+                {
+                    if (!CursorController.IsInsideBounds(renderer.bounds, isClickable: true))
+                    {
+                        OnExitCallback(this);
+                        curState = ButtonState.Unhovered;
+                    }
+                    else if (playerInputs.mouseLeftDown)
+                    {
+                        OnClickCallback(this);
+                        curState = ButtonState.Clicked;
+                    }
+                }
+                break;
+                case ButtonState.Clicked:
+                {
+                    if (!CursorController.IsInsideBounds(renderer.bounds, isClickable: true))
+                    {
+                        OnExitCallback(this);
+                        curState = ButtonState.Unhovered;
+                    }
+                    else if (playerInputs.mouseLeftUp)
+                    {
+                        OnEnterCallback(this);
                         curState = ButtonState.Hovered;
                     }
                 }
@@ -237,25 +436,10 @@ public static class AtlasUI
             }
         }
     }
-    [Serializable] public struct IconElement
-    {
-        public AtlasRenderer renderer;
-        [Header("Generated")]
-        public Vector3 startPos;
-        public bool hovered;
-        public CancellationTokenSource ctsMove;
-    }
-
-
-    
 
     static float NaturalMoveClock;
 
     public static Dictionary<TripPrompt, string> PromptStringDict;
-    public static void InvertButton(bool invert, AtlasRenderer renderer)
-    {
-        renderer.custom.x = invert ? 1 : 0;
-    }
     public static void UpdateNaturalPos(Vector3 activePos,  ref Vector3 naturalMovePos)
     {
         NaturalMoveClock += Time.deltaTime;

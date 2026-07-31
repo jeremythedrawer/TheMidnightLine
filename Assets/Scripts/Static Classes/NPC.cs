@@ -53,7 +53,7 @@ public static class NPC
         Frequently_ill = 1 << 6,
         Known_vandal = 1 << 7,
         Gets_Distracted = 1 << 8,
-        Count = 1 << 9, 
+        Count = 9, 
     }
 
     [Flags] public enum Appearences

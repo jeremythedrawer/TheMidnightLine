@@ -33,9 +33,9 @@ public class GameplayUI : MonoBehaviour
 
     public AtlasRenderer carriageMap;
 
-    public IconElement traitorIcon;
-    public IconElement redoButton;
-    public IconElement quitButton;
+    public IconUIElement traitorIcon;
+    public IconUIElement redoButton;
+    public IconUIElement quitButton;
     
     public AtlasRenderer keyIcon;
 
@@ -54,7 +54,7 @@ public class GameplayUI : MonoBehaviour
     public CancellationTokenSource ctsCarriageMap;
     public CancellationTokenSource ctsFadeBlack;
 
-    public IconElement curTutorialIcon;
+    public IconUIElement curTutorialIcon;
 
     public Vector3 backgroundActivePos;
     public Vector3 backgroundInactivePos;
@@ -232,18 +232,10 @@ public class GameplayUI : MonoBehaviour
                             ctsNotepad?.Cancel();
 
                             notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.hoverLocalPos, Time.deltaTime * MOVE_DAMP);
-
-                            notepad.activePage.InvertExitButton(invert: true);
-                            if (playerInputs.mouseLeftUp)
-                            {
-                                notepad.activePage.InvertExitButton(invert: false);
-                                notepadData.checkingNotepad = true;
-                            }
                         }
                         else
                         {
                             notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.inactiveLocalPos, Time.deltaTime * MOVE_DAMP);
-                            notepad.activePage.InvertExitButton(invert: false);
                         }
                     }
                     break;
@@ -474,7 +466,7 @@ public class GameplayUI : MonoBehaviour
 
             if (playerInputs.mouseLeftDown)
             {
-                fadeBlack.FadeToBlackChangeScene("Find where the Traitors are going.", Scenes.SceneType.Trip, sceneIndex: 2);
+                fadeBlack.FadeToBlackChangeScene("Find where the TRAITORS are going.", Scenes.SceneType.Trip, sceneIndex: 2);
                 gameEventData.OnReset.Raise();
             }
         }
@@ -499,7 +491,7 @@ public class GameplayUI : MonoBehaviour
             quitButton.renderer.custom.w = 0;
         }
     }
-    private void MoveTutorialUIElement(IconElement uiIcon, string text)
+    private void MoveTutorialUIElement(IconUIElement uiIcon, string text)
     {
         uiIcon.ctsMove?.Cancel();
         uiIcon.ctsMove = new CancellationTokenSource();
@@ -509,7 +501,7 @@ public class GameplayUI : MonoBehaviour
         MovingTutorialUIElement(uiIcon, text).Forget();
         fadeBlack.FadeToBlack(0.8f);
     }
-    private void MoveBackTutorialUIElement(IconElement uiElement)
+    private void MoveBackTutorialUIElement(IconUIElement uiElement)
     {
         uiElement.ctsMove?.Cancel();
         uiElement.ctsMove = new CancellationTokenSource();
@@ -557,7 +549,7 @@ public class GameplayUI : MonoBehaviour
             await UniTask.WaitForSeconds(APPEARING_TIME);
         }
     }
-    private async UniTask MovingTutorialUIElement(IconElement uiElement, string text)
+    private async UniTask MovingTutorialUIElement(IconUIElement uiElement, string text)
     {
         AtlasRenderer iconRenderer = uiElement.renderer;
         Transform iconTransform = iconRenderer.transform;
@@ -589,7 +581,7 @@ public class GameplayUI : MonoBehaviour
 
         }
     }
-    private async UniTask MovingBackTutorialUIElement(IconElement uiElement)
+    private async UniTask MovingBackTutorialUIElement(IconUIElement uiElement)
     {
         Transform iconTransform = uiElement.renderer.transform;
 

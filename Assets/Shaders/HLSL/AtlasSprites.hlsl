@@ -5,6 +5,7 @@
 #define COLOR_KEY_BIT_2 1 << 2
 #define DIAGONAL_TEXTURE_BIT 1 << 3
 #define MERIDIA_COLOR_BIT 1 << 4
+#define INVERT_BIT 1 << 5
 
 
 static const float2 BOX_BLUR_OFFSET[4] =

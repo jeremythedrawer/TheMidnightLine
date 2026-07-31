@@ -70,7 +70,7 @@ public class StartUI : MonoBehaviour
         NotepadProp.OnSpyExit += DisableInteractIcon;
 
         SpyBrain.OnOpenNotepad += SetToNotepadState;
-        SpyBrain.OnCloseNotepad += SetSToNoneState;
+        SpyBrain.OnCloseNotepad += SetToNoneState;
 
         MeetingDoor.OnSpyEnter += SetInteractIcon;
         MeetingDoor.OnSpyExit += DisableInteractIcon;
@@ -82,7 +82,7 @@ public class StartUI : MonoBehaviour
 
         gameEventData.OnStartTrip.RegisterListener(StartTrip);
         gameEventData.OnToStartMenu.RegisterListener(SetToStartMenuState);
-        gameEventData.OnFromStartMenu.RegisterListener(SetSToNoneState);
+        gameEventData.OnFromStartMenu.RegisterListener(SetToNoneState);
     }
     private void OnDisable()
     {
@@ -90,7 +90,7 @@ public class StartUI : MonoBehaviour
         NotepadProp.OnSpyExit -= DisableInteractIcon;
 
         SpyBrain.OnOpenNotepad -= SetToNotepadState;
-        SpyBrain.OnCloseNotepad -= SetSToNoneState;
+        SpyBrain.OnCloseNotepad -= SetToNoneState;
 
         MeetingDoor.OnSpyEnter -= SetInteractIcon;
         MeetingDoor.OnSpyExit -= DisableInteractIcon;
@@ -100,7 +100,7 @@ public class StartUI : MonoBehaviour
 
         gameEventData.OnStartTrip.UnregisterListener(StartTrip);
         gameEventData.OnToStartMenu.UnregisterListener(SetToStartMenuState);
-        gameEventData.OnFromStartMenu.UnregisterListener(SetSToNoneState);
+        gameEventData.OnFromStartMenu.UnregisterListener(SetToNoneState);
     }
     private void Update()
     {
@@ -127,14 +127,17 @@ public class StartUI : MonoBehaviour
     private void GetNotepad()
     {
         notepad = SceneController.GetNotepad(transform);
-        notepad.transform.localPosition = notepadData.inactiveLocalPos;
     }
-    private void SetSToNoneState()
+    private void SetToNoneState()
     {
+        startButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+        optionsButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+        quitButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
         SetState(UIState.None);
     }
     private void SetToNotepadState()
     {
+        DisableInteractIcon();
         SetState(UIState.Notepad);
     }
     private void SetToStartMenuState()
@@ -153,6 +156,14 @@ public class StartUI : MonoBehaviour
         canExitState = false;
         switch (curState)
         {
+            case UIState.StartMenu:
+            {
+                startButton.MoveButtonToActive();
+                optionsButton.MoveButtonToActive();
+                quitButton.MoveButtonToActive();
+            }
+            break;
+
             case UIState.Notepad:
             {
                 notepad.EnterNotepad();
@@ -185,24 +196,16 @@ public class StartUI : MonoBehaviour
 
             case UIState.None:
             {
-                if (canExitState && CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds, isClickable: true))
+                if (notepadData.collected)
                 {
-                    ctsNotepad?.Cancel();
-                    notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.hoverLocalPos, Time.deltaTime * MOVE_DAMP);
-
-                    notepad.activePage.InvertExitButton(invert: true);
-                    if (playerInputs.mouseLeftUp)
+                    if (canExitState && CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds, isClickable: true))
                     {
-                        notepad.activePage.InvertExitButton(invert: false);
-                        notepadData.checkingNotepad = true;
+                        ctsNotepad?.Cancel();
+                        notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.hoverLocalPos, Time.deltaTime * MOVE_DAMP);
                     }
-                }
-                else
-                {
-                    if (notepadData.collected)
+                    else
                     {
                         notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.inactiveLocalPos, Time.deltaTime * MOVE_DAMP);
-                        notepad.activePage.InvertExitButton(invert: false);
                     }
                 }
             }
@@ -236,26 +239,20 @@ public class StartUI : MonoBehaviour
     }
     private void InitButtons()
     {
-        InitButton(ref startButton);
-        InitButton(ref optionsButton);
-        InitButton(ref quitButton);
-        InitButton(ref darkColorButton);
-        InitButton(ref lightColorButton);
-        InitButton(ref tutorialButton);
-
         options.skipTutorial = false;
 
-        startButton.Init(StartButtonClicked, UIButtonEnter, UIButtonExit);
-        optionsButton.Init(OptionsButtonClicked, UIButtonEnter, UIButtonExit);
-        quitButton.Init(QuitButtonClicked, UIButtonEnter, UIButtonExit);
-        darkColorButton.Init(DarkColorButtonClicked, UIButtonEnter, UIButtonExit);
-        lightColorButton.Init(LightColorButtonClicked, UIButtonEnter, UIButtonExit);
-        tutorialButton.Init(TutorialButtonClicked, UIButtonEnter, UIButtonExit);    
-    }
-    private void InitButton(ref TextUIElement button)
-    {
-        button.renderer.transform.SetParent(null);
-        button.startPos = button.renderer.transform.position;
+        startButton.Init(StartButtonClicked);
+        optionsButton.Init(OptionsButtonClicked);
+        quitButton.Init(QuitButtonClicked);
+        darkColorButton.Init(DarkColorButtonClicked);
+        lightColorButton.Init(LightColorButtonClicked);
+        tutorialButton.Init(TutorialButtonClicked);
+
+        darkColorButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+        lightColorButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+        tutorialButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+
+
     }
     private void UpdateMainMenuButtons()
     {
@@ -270,56 +267,62 @@ public class StartUI : MonoBehaviour
         lightColorButton.UpdateButton(playerInputs);
         tutorialButton.UpdateButton(playerInputs);
     }
-    
-    private void UIButtonEnter(TextUIElement textUIElement)
+    private void StartButtonClicked()
     {
-        textUIElement.renderer.SetColorText(Color.white);
-        textUIElement.renderer.background_renderer.SetSliceCustom(w: 1);
-    }
-    private void UIButtonExit(TextUIElement textUIElement)
-    {
-        textUIElement.renderer.SetColorText(Color.black);
-        textUIElement.renderer.background_renderer.SetSliceCustom(w: 0);
-    }
-    private void StartButtonClicked(TextUIElement textUIElement)
-    {
+        startButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+        optionsButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+        quitButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+
         OnStartGame?.Invoke();
         SetState(UIState.None);
+
+
     }
-    private void OptionsButtonClicked(TextUIElement textUIElement)
+    private void OptionsButtonClicked()
     {
         if (curState == UIState.StartMenu)
         {
-            textUIElement.renderer.SetText("Back");
-            MoveButtonAway(quitButton);
-            MoveButtonAway(startButton);
-            MoveButtonToRight(textUIElement);
+            optionsButton.renderer.SetText("Back");
+            quitButton.MoveButtonAway(camStats, MoveButtonDirection.Right);
+            startButton.MoveButtonAway(camStats, MoveButtonDirection.Right);
+            
+            optionsButton.MoveButtonToRight();
+
+            darkColorButton.MoveButtonToActive();
+            lightColorButton.MoveButtonToActive();
+            tutorialButton.MoveButtonToActive();
+
             OnClickOptions?.Invoke();
             SetState(UIState.OptionsMenu);
         }
         else if (curState == UIState.OptionsMenu)
         {
             optionsButton.renderer.SetText("Options");
-            MoveButtonBack(startButton);
-            MoveButtonBack(quitButton);
-            MoveButtonBack(optionsButton);
+            startButton.MoveButtonToActive();
+            quitButton.MoveButtonToActive();
+            optionsButton.MoveButtonToActive();
+
+            darkColorButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+            lightColorButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+            tutorialButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+
             OnClickBackFromOptions?.Invoke();
             SetState(UIState.StartMenu);
         }
     }
-    private void QuitButtonClicked(TextUIElement textUIElement)
+    private void QuitButtonClicked()
     {
         Application.Quit();
     }
-    private void DarkColorButtonClicked(TextUIElement textUIElement)
+    private void DarkColorButtonClicked()
     {
         SceneController.GetMainColorPicker().Open(darkColorButton.renderer.background_renderer, ColorPicker.SelectType.Dark, ColorPicker.Direction.BottomRight);
     }
-    private void LightColorButtonClicked(TextUIElement textUIElement)
+    private void LightColorButtonClicked()
     {
         SceneController.GetMainColorPicker().Open(lightColorButton.renderer.background_renderer, ColorPicker.SelectType.Light, ColorPicker.Direction.BottomRight);
     }
-    private void TutorialButtonClicked(TextUIElement textUIElement)
+    private void TutorialButtonClicked()
     {
         if (options.skipTutorial)
         {
@@ -330,98 +333,6 @@ public class StartUI : MonoBehaviour
         {
             tutorialButton.renderer.SetText("Skip Tutorial");
             options.skipTutorial = true;
-        }
-    }
-    private void MoveButtonAway(TextUIElement button)
-    {
-        button.ctsMove?.Cancel();
-        button.ctsMove = new CancellationTokenSource();
-        MovingButtonAwayRight(button).Forget();
-    }
-    private void MoveButtonToRight(TextUIElement button)
-    {
-        button.ctsMove?.Cancel();
-        button.ctsMove = new CancellationTokenSource();
-        MovingButtonToRight(button).Forget();
-    }
-    private void MoveButtonBack(TextUIElement button)
-    {
-        button.ctsMove?.Cancel();
-        button.ctsMove = new CancellationTokenSource();
-        MoveButtonBackFromRight(button).Forget();
-    }
-    private async UniTask MovingButtonAwayRight(TextUIElement button)
-    {
-        AtlasTextRenderer buttonRend = button.renderer;
-        Transform buttonTransform = buttonRend.transform;
-        Bounds buttonBounds = buttonRend.background_renderer.GetBounds();
-
-        Vector3 buttonPos = buttonRend.transform.position;
-        try
-        {
-            while(camStats.camBounds.max.x > buttonRend.background_renderer.GetBounds().min.x)
-            {
-                buttonPos.x = Mathf.Lerp(buttonPos.x, camStats.camBounds.max.x + buttonBounds.size.x, Time.deltaTime * 2);
-
-                buttonTransform.position = buttonPos;
-
-                await UniTask.Yield(button.ctsMove.Token);
-            }
-
-        }
-        catch(OperationCanceledException)
-        {
-
-        }
-    }
-    private async UniTask MovingButtonToRight(TextUIElement button)
-    {
-        AtlasTextRenderer buttonRend = button.renderer;
-        
-        Transform buttonTransform = buttonRend.transform;
-        buttonTransform.SetParent(transform);
-        Bounds buttonBounds = buttonRend.background_renderer.GetBounds();
-
-        Vector3 buttonPos = buttonRend.transform.localPosition;
-        float targetPosX = -buttonPos.x;
-        try
-        {
-            while (buttonPos.x < targetPosX * 0.995f)
-            {
-                buttonPos.x = Mathf.Lerp(buttonPos.x, targetPosX, Time.deltaTime * 2);
-                buttonTransform.localPosition = buttonPos;
-
-                await UniTask.Yield(button.ctsMove.Token);
-            }
-            buttonTransform.SetParent(null);
-
-        }
-        catch (OperationCanceledException)
-        {
-            buttonTransform.SetParent(null);
-        }
-    }
-    private async UniTask MoveButtonBackFromRight(TextUIElement button)
-    {
-        AtlasTextRenderer buttonRend = button.renderer;
-        Transform buttonTransform = buttonRend.transform;
-        Bounds buttonBounds = buttonRend.background_renderer.GetBounds();
-
-        Vector3 buttonPos = buttonRend.transform.position;
-        try
-        {
-            while (buttonPos.x > button.startPos.x)
-            {
-                buttonPos.x = Mathf.Lerp(buttonPos.x, button.startPos.x - buttonBounds.extents.x, Time.deltaTime * 2);
-                buttonTransform.position = buttonPos;
-
-                await UniTask.Yield(button.ctsMove.Token);
-            }
-            buttonTransform.position = button.startPos;
-        }
-        catch(OperationCanceledException)
-        {
-
         }
     }
 }

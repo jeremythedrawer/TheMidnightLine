@@ -10,7 +10,7 @@ public class NPCPicker : MonoBehaviour
     public const int GRID_X_COUNT = 8;
     public const int GRID_Y_COUNT = 1;
 
-    public AtlasRenderer[] iconRenderers;
+    public IconUIElement[] icons;
 
     public TripSO trip;
     public PlayerInputsSO playerInputs;
@@ -67,7 +67,70 @@ public class NPCPicker : MonoBehaviour
         SceneController.SetNPCPicker(this);
         curPickerState = PickerState.Closed;
         SetOpenPosAndSize();
+
+        for (int i = 0; i < icons.Length; i++)
+        {
+            int index = i;
+
+            void ClickIcon(IconUIElement icon)
+            {
+                switch (functionType)
+                {
+                    case PickerFunctionType.TicketCheck:
+                    {
+                        SpyBrain.ChooseNPCTicketToCheck(possibleNPCs[index]);
+                    }
+                    break;
+
+                    case PickerFunctionType.Color:
+                    {
+                        NPCBrain selectedNPC = possibleNPCs[index];
+                        if ((trip.curUnlocks & UnlockType.Color) == 0)
+                        {
+                            if ((selectedNPC.atlasRenderer.customBit & ((int)ColorBits.Diagonal)) == 0)
+                            {
+                                selectedNPC.atlasRenderer.customBit |= (int)ColorBits.Diagonal;
+                            }
+                            else
+                            {
+                                selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Diagonal);
+                            }
+                        }
+                        else
+                        {
+                            SceneController.GetClueColorPicker().Open(selectedNPC.atlasRenderer, ColorPicker.SelectType.NPC);
+                        }
+                    }
+                    break;
+
+                    case PickerFunctionType.RuleOut:
+                    {
+                        NPCBrain selectedNPC = possibleNPCs[index];
+                        if ((selectedNPC.atlasRenderer.customBit & ((int)ColorBits.Diagonal)) == 0)
+                        {
+                            selectedNPC.atlasRenderer.customBit |= (int)ColorBits.Diagonal;
+                        }
+                        else
+                        {
+                            selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Diagonal);
+                        }
+                    }
+                    break;
+                }
+                Close();
+            }
+            icons[i].Init(ClickIcon, EnterColorIcon, ExitColorIcon);
+        }
     }
+    private void EnterColorIcon(IconUIElement icon)
+    {
+        icon.renderer.custom.w = 0;
+    }
+    private void ExitColorIcon(IconUIElement icon)
+    {
+        icon.renderer.custom.w = 1;
+    }
+
     private void SetState(PickerState newState)
     {
         if (curPickerState == newState) return;
@@ -85,65 +148,7 @@ public class NPCPicker : MonoBehaviour
             {
                 for (int i = 0; i < curGridColCount; i++)
                 {
-                    AtlasRenderer npcIconRend = iconRenderers[i];
-
-                    if (CursorController.IsInsideBounds(npcIconRend.bounds, isClickable: true))
-                    {
-                        npcIconRend.custom.w = 1;
-
-                        if ((playerInputs.mouseLeftUp || playerInputs.mouseRightUp) && canClose)
-                        {
-                            switch(functionType)
-                            {
-                                case PickerFunctionType.TicketCheck:
-                                {
-                                    SpyBrain.ChooseNPCTicketToCheck(possibleNPCs[i]);
-                                }
-                                break;
-
-                                case PickerFunctionType.Color:
-                                {
-                                    NPCBrain selectedNPC = possibleNPCs[i];
-                                    if ((trip.curUnlocks & UnlockType.Color) == 0)
-                                    {
-                                        if ((selectedNPC.atlasRenderer.customBit & ((int)ColorBits.Diagonal)) == 0)
-                                        {
-                                            selectedNPC.atlasRenderer.customBit |= (int)ColorBits.Diagonal;
-                                        }
-                                        else
-                                        {
-                                            selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Diagonal);
-                                        }
-                                    }
-                                    else
-                                    {
-                                        SceneController.GetClueColorPicker().Open(selectedNPC.atlasRenderer, ColorPicker.SelectType.NPC);
-                                    }
-                                }
-                                break;
-
-                                case PickerFunctionType.RuleOut:
-                                {
-                                    NPCBrain selectedNPC = possibleNPCs[i];
-                                    if ((selectedNPC.atlasRenderer.customBit & ((int)ColorBits.Diagonal)) == 0)
-                                    {
-                                        selectedNPC.atlasRenderer.customBit |= (int)ColorBits.Diagonal;
-                                    }
-                                    else
-                                    {
-                                        selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Diagonal);
-                                    }
-                                }
-                                break;
-                            }
-                            Close();
-                        }
-                        return;
-                    }
-                    else
-                    {
-                        npcIconRend.custom.w = 0;
-                    }
+                    icons[i].UpdateButton(playerInputs);
                 }
 
                 if (canClose && (playerInputs.mouseLeftUp || playerInputs.mouseRightUp) && !CursorController.IsInsideBounds(paletteRenderer.bounds, isClickable: false))
@@ -185,9 +190,9 @@ public class NPCPicker : MonoBehaviour
     }
     public void SetOpenPosAndSize()
     {
-        openIconRendererPositions = new Vector2[iconRenderers.Length];
+        openIconRendererPositions = new Vector2[icons.Length];
 
-        AtlasRenderer firstColorRend = iconRenderers[0];
+        AtlasRenderer firstColorRend = icons[0].renderer;
         Vector4 paletteBottomRightWPS = paletteRenderer.worldPivotsAndSizes[5];
         Vector2 firstColorRendPos = new Vector2(paletteBottomRightWPS.x + firstColorRend.worldPivotAndSize.x, paletteBottomRightWPS.y - firstColorRend.worldPivotAndSize.y);
 
@@ -200,7 +205,7 @@ public class NPCPicker : MonoBehaviour
             {
                 int flatIndex = x + rowIndex;
 
-                AtlasRenderer npcIconRend = iconRenderers[flatIndex];
+                AtlasRenderer npcIconRend = icons[flatIndex].renderer;
 
                 float xPos = firstColorRendPos.x - (x * GRID_GAP);
                 openIconRendererPositions[flatIndex] = new Vector3(xPos, yPos, -1);
@@ -229,7 +234,7 @@ public class NPCPicker : MonoBehaviour
 
         for (int i = 0; i < curGridColCount; i++)
         {
-            iconRenderers[i].enabled = false;
+            icons[i].renderer.enabled = false;
         }
 
         selectedRenderer = null;
@@ -244,7 +249,7 @@ public class NPCPicker : MonoBehaviour
 
         for (int i = 0; i < possibleNPCs.Length; i++)
         {
-            AtlasRenderer iconRend = iconRenderers[i];
+            AtlasRenderer iconRend = icons[i].renderer;
             NPCBrain npcBrain = possibleNPCs[i];
 
             if (npcBrain == null) break;
@@ -386,7 +391,7 @@ public class NPCPicker : MonoBehaviour
                     for (int i = 0; i < curGridColCount; i++)
                     {
                         float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
-                        iconRenderers[i].transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
+                        icons[i].renderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
                     }
                     await UniTask.Yield(ctsOpen.Token);
                 }
@@ -408,7 +413,7 @@ public class NPCPicker : MonoBehaviour
                     for (int i = 0; i < curGridColCount; i++)
                     {
                         float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
-                        iconRenderers[i].transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
+                        icons[i].renderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
                     }
                     await UniTask.Yield(ctsOpen.Token);
                 }
@@ -445,7 +450,7 @@ public class NPCPicker : MonoBehaviour
                 for (int i = 0; i < curGridColCount; i++)
                 {
                     float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
-                    iconRenderers[i].transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
+                    icons[i].renderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
                 }
                 await UniTask.Yield(ctsOpen.Token);
             }
@@ -479,7 +484,7 @@ public class NPCPicker : MonoBehaviour
                 for (int i = 0; i < curGridColCount; i++)
                 {
                     float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
-                    iconRenderers[i].transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
+                    icons[i].renderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
                 }
                 await UniTask.Yield(ctsOpen.Token);
             }

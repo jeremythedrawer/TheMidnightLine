@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &2656565761815182428
+--- !u!1 &2733454188398179308
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,37 +8,37 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 2539190286512912846}
-  - component: {fileID: 3547463213942702984}
+  - component: {fileID: 6537886647558203820}
+  - component: {fileID: 7877707653400571869}
   m_Layer: 0
-  m_Name: paperCornerButton_left
+  m_Name: PageNumberIcon
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &2539190286512912846
+--- !u!4 &6537886647558203820
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2656565761815182428}
+  m_GameObject: {fileID: 2733454188398179308}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: -0.524, y: -2.141, z: -1}
+  m_LocalPosition: {x: -0.44400024, y: -2.187, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3547463213942702984
+--- !u!114 &7877707653400571869
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 2656565761815182428}
+  m_GameObject: {fileID: 2733454188398179308}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
@@ -50,26 +50,26 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 10
+  spriteIndex: 17
   flipX: 0
   flipY: 0
   width: 1
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.072265625, y: 0.072265625, z: 0.18554688, w: 0.82421875}
-    uvPivot: {x: 0.5, y: 0.5}
-    worldSize: {x: 0.20555556, y: 0.20555556, z: 1}
-    index: 10
+    uvSizeAndPos: {x: 0.03125, y: 0.03125, z: 0.859375, w: 0.8339844}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.08888889, y: 0.08888889, z: 1}
+    index: 17
   bounds:
-    m_Center: {x: -0.524, y: -2.141, z: -1}
-    m_Extent: {x: 0.10277778, y: 0.10277778, z: 0.1}
-  worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
-  uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.18554688, w: 0.82421875}
+    m_Center: {x: -0.3995558, y: -2.1425555, z: -1}
+    m_Extent: {x: 0.044444446, y: 0.044444446, z: 0.1}
+  worldPivotAndSize: {x: -0, y: -0, z: 0.08888889, w: 0.08888889}
+  uvSizeAndPosition: {x: 0.03125, y: 0.03125, z: 0.859375, w: 0.8339844}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 1, y: 0, z: 0, w: 0}
+  custom: {x: 0, y: 0, z: 0, w: 1}
   customBit: 16
-  boundsOffset: {x: 0, y: 0, z: 0}
+  boundsOffset: {x: 0.044444446, y: 0.044444446, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -78,7 +78,7 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 10
-  prevSpriteIndexFlipV: 10
+  prevSpriteIndexFlipH: 17
+  prevSpriteIndexFlipV: 17
   isAnimating: 0
   quadCount: 0

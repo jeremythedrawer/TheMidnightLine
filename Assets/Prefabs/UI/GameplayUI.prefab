@@ -74,9 +74,10 @@ MonoBehaviour:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   customs:
-  - {x: 0, y: 0, z: 0, w: 0}
-  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
   boundsOffset: {x: 0.15410556, y: -0.11388889, z: 0}
+  customBit: 0
   hasText: 1
   erasingText: 0
   completedWritingText: 0
@@ -321,15 +322,15 @@ MonoBehaviour:
   traitorIcon:
     renderer: {fileID: 7874314738988264612}
     startPos: {x: 0, y: 0, z: 0}
-    hovered: 0
+    curState: 0
   redoButton:
     renderer: {fileID: 3993144173328666064}
     startPos: {x: 0, y: 0, z: 0}
-    hovered: 0
+    curState: 0
   quitButton:
     renderer: {fileID: 5451998574160003559}
     startPos: {x: 0, y: 0, z: 0}
-    hovered: 0
+    curState: 0
   keyIcon: {fileID: 2910043383816947698}
   traitorCountText: {fileID: 7222817519706911780}
   tutorialText: {fileID: 7480303143090740645}
@@ -339,7 +340,7 @@ MonoBehaviour:
   curTutorialIcon:
     renderer: {fileID: 0}
     startPos: {x: 0, y: 0, z: 0}
-    hovered: 0
+    curState: 0
   backgroundActivePos: {x: 0, y: 0, z: 0}
   backgroundInactivePos: {x: 0, y: 0, z: 0}
   ticketActivePos: {x: 0, y: 0, z: 0}

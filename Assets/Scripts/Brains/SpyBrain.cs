@@ -148,6 +148,7 @@ public class SpyBrain : MonoBehaviour
     private void StartInit()
     {
         stats.curLocationState = LocationState.Elevator;
+        trip.curUnlocks = UnlockType.None;
     }
     private void ChooseState()
     {
@@ -213,6 +214,10 @@ public class SpyBrain : MonoBehaviour
                         break;
                     }
                 }
+                if (playerInputs.interact)
+                {
+                    gameEventData.OnInteract?.Raise();
+                }
             }
             break;
             case SpyState.Walk:
@@ -247,7 +252,10 @@ public class SpyBrain : MonoBehaviour
                         break;
                     }
                 }
-
+                if (playerInputs.interact)
+                {
+                    gameEventData.OnInteract?.Raise();
+                }
             }
             break;
             case SpyState.TicketCheck:

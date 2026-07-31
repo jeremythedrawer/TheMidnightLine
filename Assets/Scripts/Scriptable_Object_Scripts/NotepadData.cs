@@ -1,6 +1,7 @@
 using UnityEngine;
 using static Atlas;
 using static AtlasUI;
+using static Notepad;
 
 [CreateAssetMenu(fileName = "NotepadData", menuName = "Midnight Line SOs / Notepad")]
 public class NotepadData : ScriptableObject
@@ -10,6 +11,7 @@ public class NotepadData : ScriptableObject
 
     public NotepadState curState;
     public NotepadState prevState;
+    public SubState subState;
     public UnlockType completedUnlocks;
 
     public Vector3 leftHandFlipPos;
