@@ -241,13 +241,13 @@ public class Notepad : MonoBehaviour
             if ((notepadData.completedUnlocks & UnlockType.RuleOut) == 0 && (trip.curUnlocks & UnlockType.RuleOut) != 0)
             {
                 activePage.InitRuleOutRow();
-                appearTextClock = APPEAR_TEXT_TIME;
+                appearTextClock = 0;
 
             }
             else if ((notepadData.completedUnlocks & UnlockType.Color) == 0 && (trip.curUnlocks & UnlockType.Color) != 0)
             {
                 activePage.InitNextColorRow(1);
-                appearTextClock = APPEAR_TEXT_TIME;
+                appearTextClock = 0;
                 activePage.SwitchActivePLayerWriteTextRenderer(1);
                 curWritingBounds = activePage.GetWritingBounds();
                 Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, notepadData.leftHandWorldDepthFront);
@@ -256,7 +256,7 @@ public class Notepad : MonoBehaviour
             else if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0 && (trip.curUnlocks & UnlockType.MultiColor) != 0)
             {
                 activePage.InitNextColorRow(2);
-                appearTextClock = APPEAR_TEXT_TIME;
+                appearTextClock = 0;
                 activePage.SwitchActivePLayerWriteTextRenderer(2);
                 curWritingBounds = activePage.GetWritingBounds();
                 Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, notepadData.leftHandWorldDepthFront);
@@ -428,7 +428,7 @@ public class Notepad : MonoBehaviour
                         if (curKeyframeState == KeyframeState.TogglePageContentsBottomHalf) return;
                         if (nextPage.activePlayerWriteText == "")
                         {
-                            nextPage.SetPlayerWriteTextAlphaBottom(normAmount: 1);
+                            nextPage.SetPlayerWriteTextAlphaBottom(normAmount: 0);
                         }
                         activePage.TogglePageContentBottomHalf(false);
                         curKeyframeState = KeyframeState.TogglePageContentsBottomHalf;
@@ -440,7 +440,7 @@ public class Notepad : MonoBehaviour
                         if (curKeyframeState == KeyframeState.TogglePageContentsTopHalf) return;
                         if (nextPage.activePlayerWriteText == "")
                         {
-                            nextPage.SetPlayerWriteTextAlphaTop(normAmount: 1);
+                            nextPage.SetPlayerWriteTextAlphaTop(normAmount: 0);
                         }
                         activePage.TogglePageContentTopHalf(false);
                         curKeyframeState = KeyframeState.TogglePageContentsTopHalf;
@@ -517,7 +517,7 @@ public class Notepad : MonoBehaviour
 
                         if (pages[activePageIndex - 1].activePlayerWriteText == "")
                         {
-                            pages[activePageIndex - 1].SetPlayerWriteTextAlphaBottom(normAmount: 1);
+                            pages[activePageIndex - 1].SetPlayerWriteTextAlphaBottom(normAmount: 0);
                         }
                         curKeyframeState = KeyframeState.TogglePageContentsBottomHalf;
                     }
@@ -530,7 +530,7 @@ public class Notepad : MonoBehaviour
 
                         if (pages[activePageIndex - 1].activePlayerWriteText == "")
                         {
-                            pages[activePageIndex - 1].SetPlayerWriteTextAlphaTop(normAmount: 1);
+                            pages[activePageIndex - 1].SetPlayerWriteTextAlphaTop(normAmount: 0);
                         }
                         curKeyframeState = KeyframeState.TogglePageContentsTopHalf;
                     }
@@ -642,10 +642,14 @@ public class Notepad : MonoBehaviour
             break;
             case NotepadState.Stationary:
             {
-                HandleStationaryLeftHandMove();
                 HandlePlayerInputs();
-                activePage.UpdatePreviewPlayerWriteText(appear: true, ref appearTextClock);
-                activePage.UpdatePage();
+                HandleStationaryLeftHandMove();
+
+                if (sceneData.activeSceneType == SceneType.Trip)
+                {
+                    activePage.UpdatePreviewPlayerWriteText(appear: true, ref appearTextClock);
+                    activePage.UpdatePage();
+                }
             }
             break;
             case NotepadState.Revealing:
@@ -691,12 +695,12 @@ public class Notepad : MonoBehaviour
                         if ((notepadData.completedUnlocks & UnlockType.RuleOut) == 0)
                         {
                             nextPage.InitRuleOutRow();
-                            appearTextClock = APPEAR_TEXT_TIME;
+                            appearTextClock = 0;
                         }
                         else if ((notepadData.completedUnlocks & UnlockType.Color) == 0)
                         {
                             nextPage.InitNextColorRow(1);
-                            appearTextClock = APPEAR_TEXT_TIME;
+                            appearTextClock = 0;
 
                             nextPage.SwitchActivePLayerWriteTextRenderer(1);
                             curWritingBounds = nextPage.GetWritingBounds();
@@ -706,7 +710,7 @@ public class Notepad : MonoBehaviour
                         else if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0)
                         {
                             nextPage.InitNextColorRow(2);
-                            appearTextClock = APPEAR_TEXT_TIME;
+                            appearTextClock = 0;
 
                             nextPage.SwitchActivePLayerWriteTextRenderer(2);
                             curWritingBounds = nextPage.GetWritingBounds();
@@ -790,7 +794,7 @@ public class Notepad : MonoBehaviour
                 if (activePage.activePlayerWriteText == "")
                 {
                     activePage.SetPreviewPlayerWriteTexts(prevState);
-                    appearTextClock = APPEAR_TEXT_TIME;
+                    appearTextClock = 0;
                 }
 
                 subState |= (SubState.CanFlipUp | SubState.CanFlipDown);
@@ -1001,7 +1005,7 @@ public class Notepad : MonoBehaviour
                                     {
                                         SetTab(TabDirection.Left, activePage.playerWriteRenderers[1].bounds);
                                         activePage.InitNextColorRow(1);
-                                        appearTextClock = APPEAR_TEXT_TIME;
+                                        appearTextClock = 0;
 
                                         activePage.SwitchActivePLayerWriteTextRenderer(1);
                                         curWritingBounds = activePage.GetWritingBounds();
@@ -1024,7 +1028,7 @@ public class Notepad : MonoBehaviour
                                     {
                                         SetTab(TabDirection.Left, activePage.playerWriteRenderers[2].bounds);
                                         activePage.InitNextColorRow(2);
-                                        appearTextClock = APPEAR_TEXT_TIME;
+                                        appearTextClock = 0;
 
                                         activePage.SwitchActivePLayerWriteTextRenderer(2);
                                         curWritingBounds = activePage.GetWritingBounds();
@@ -1148,7 +1152,7 @@ public class Notepad : MonoBehaviour
         if (sceneData.activeSceneType == SceneType.Trip && playerInputs.notepadPreviewAnswerAndFlip.x != 0)
         {
             activePage.SwitchActivePreviewPlayerWriteText((int)playerInputs.notepadPreviewAnswerAndFlip.x);
-            appearTextClock = APPEAR_TEXT_TIME;
+            appearTextClock = 0;
         }
         bool atButton = false;
         if (activePageIndex != 0 && CursorController.IsInsideBounds(activePage.paperCornerLeftButtonRenderer.bounds, isClickable: true))
@@ -1218,7 +1222,7 @@ public class Notepad : MonoBehaviour
             {
                 activePage.InvertSwitchLeftButton(false);
                 activePage.SwitchActivePreviewPlayerWriteText(-1);
-                appearTextClock = APPEAR_TEXT_TIME;
+                appearTextClock = 0;
             }
             else
             {
@@ -1238,7 +1242,7 @@ public class Notepad : MonoBehaviour
             {
                 activePage.InvertSwitchRightButton(false);
                 activePage.SwitchActivePreviewPlayerWriteText(1);
-                appearTextClock = APPEAR_TEXT_TIME;
+                appearTextClock = 0;
             }
             else
             {

@@ -124,7 +124,7 @@ public class AtlasTextRenderer : MonoBehaviour
             if (clock < APPEAR_TEXT_TIME)
             {
                 clock += Time.deltaTime;
-                float t = (clock / APPEAR_TEXT_TIME) * normAmount + normAmount;
+                float t = (clock / APPEAR_TEXT_TIME) * normAmount;
 
                 for (int i = 0; i < customs.Length; i++)
                 {
@@ -137,7 +137,7 @@ public class AtlasTextRenderer : MonoBehaviour
             if (clock > 0)
             {
                 clock -= Time.deltaTime;
-                float t = (clock / APPEAR_TEXT_TIME) * normAmount + normAmount;
+                float t = (clock / APPEAR_TEXT_TIME) * normAmount;
 
                 for (int i = 0; i < customs.Length; i++)
                 {

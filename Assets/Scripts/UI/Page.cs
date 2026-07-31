@@ -375,6 +375,7 @@ public class Page : MonoBehaviour
                     {
                         previewPlayerWriteText = trip.stationsDataArray[previewPlayerWriteIndex].stationName;
                         activePlayerWriteTextRenderer.SetText(previewPlayerWriteText);
+                        activePlayerWriteTextRenderer.SetColorText(Color.clear);
                         
                     }
                     break;

@@ -210,7 +210,7 @@ public class StartUI : MonoBehaviour
 
             case UIState.StartMenu:
             {
-                HandleMainMenuButtons();
+                UpdateMainMenuButtons();
             }
             break;
 
@@ -244,174 +244,94 @@ public class StartUI : MonoBehaviour
         InitButton(ref tutorialButton);
 
         options.skipTutorial = false;
+
+        startButton.Init(StartButtonClicked, UIButtonEnter, UIButtonExit);
+        optionsButton.Init(OptionsButtonClicked, UIButtonEnter, UIButtonExit);
+        quitButton.Init(QuitButtonClicked, UIButtonEnter, UIButtonExit);
+        darkColorButton.Init(DarkColorButtonClicked, UIButtonEnter, UIButtonExit);
+        lightColorButton.Init(LightColorButtonClicked, UIButtonEnter, UIButtonExit);
+        tutorialButton.Init(TutorialButtonClicked, UIButtonEnter, UIButtonExit);    
     }
     private void InitButton(ref TextUIElement button)
     {
         button.renderer.transform.SetParent(null);
         button.startPos = button.renderer.transform.position;
     }
-    private void HandleMainMenuButtons()
+    private void UpdateMainMenuButtons()
     {
-        if (CursorController.IsInsideBounds(quitButton.renderer.background_renderer.bounds, isClickable: true))
-        {
-            quitButton.renderer.SetColorText(Color.white);
-            quitButton.renderer.background_renderer.SetSliceCustom(w: 1);
-            if (playerInputs.mouseLeftDown)
-            {
-                Application.Quit();
-            }
-        }
-        else
-        {
-            quitButton.renderer.SetColorText(Color.black);
-            quitButton.renderer.background_renderer.SetSliceCustom(w: 0);
-        }
-
-        if (CursorController.IsInsideBounds(optionsButton.renderer.background_renderer.bounds, isClickable: true))
-        {
-            optionsButton.renderer.SetColorText(Color.white);
-            optionsButton.renderer.background_renderer.SetSliceCustom(w: 1);
-            if (playerInputs.mouseLeftDown)
-            {
-                optionsButton.renderer.SetText("Back");
-                MoveButtonAway(quitButton);
-                MoveButtonAway(startButton);
-                MoveButtonToRight(optionsButton);
-                OnClickOptions?.Invoke();
-                SetState(UIState.OptionsMenu);
-            }
-        }
-        else
-        {
-            optionsButton.renderer.SetColorText(Color.black);
-            optionsButton.renderer.background_renderer.SetSliceCustom(w: 0);
-        }
-
-        if (CursorController.IsInsideBounds(startButton.renderer.background_renderer.bounds, isClickable: true))
-        {
-
-            startButton.renderer.SetColorText(Color.white);
-            startButton.renderer.background_renderer.SetSliceCustom(w: 1);
-            if (playerInputs.mouseLeftDown)
-            {
-                OnStartGame?.Invoke();
-                SetState(UIState.None);
-
-                startButton.renderer.SetColorText(Color.black);
-                startButton.renderer.background_renderer.SetSliceCustom(w: 0);
-            }
-        }
-        else
-        {
-            startButton.renderer.SetColorText(Color.black);
-            startButton.renderer.background_renderer.SetSliceCustom(w: 0);
-        }
+        startButton.UpdateButton(playerInputs);
+        quitButton.UpdateButton(playerInputs);
+        optionsButton.UpdateButton(playerInputs);
     }
     private void HandleOptionsButtons()
     {
-        if (CursorController.IsInsideBounds(darkColorButton.renderer.background_renderer.bounds, isClickable: true))
+        optionsButton.UpdateButton(playerInputs);
+        darkColorButton.UpdateButton(playerInputs);
+        lightColorButton.UpdateButton(playerInputs);
+        tutorialButton.UpdateButton(playerInputs);
+    }
+    
+    private void UIButtonEnter(TextUIElement textUIElement)
+    {
+        textUIElement.renderer.SetColorText(Color.white);
+        textUIElement.renderer.background_renderer.SetSliceCustom(w: 1);
+    }
+    private void UIButtonExit(TextUIElement textUIElement)
+    {
+        textUIElement.renderer.SetColorText(Color.black);
+        textUIElement.renderer.background_renderer.SetSliceCustom(w: 0);
+    }
+    private void StartButtonClicked(TextUIElement textUIElement)
+    {
+        OnStartGame?.Invoke();
+        SetState(UIState.None);
+    }
+    private void OptionsButtonClicked(TextUIElement textUIElement)
+    {
+        if (curState == UIState.StartMenu)
         {
-            darkColorButton.renderer.SetColorText(Color.white);
-            darkColorButton.renderer.background_renderer.SetSliceCustom(w: 1);
-            if (playerInputs.mouseLeftDown)
-            {
-                SceneController.GetMainColorPicker().Open(darkColorButton.renderer.background_renderer, ColorPicker.SelectType.Dark, ColorPicker.Direction.BottomRight);
-            }
+            textUIElement.renderer.SetText("Back");
+            MoveButtonAway(quitButton);
+            MoveButtonAway(startButton);
+            MoveButtonToRight(textUIElement);
+            OnClickOptions?.Invoke();
+            SetState(UIState.OptionsMenu);
         }
-        else
+        else if (curState == UIState.OptionsMenu)
         {
-            darkColorButton.renderer.SetColorText(Color.black);
-            darkColorButton.renderer.background_renderer.SetSliceCustom(w: 0);
-        }
-
-        if (CursorController.IsInsideBounds(lightColorButton.renderer.background_renderer.bounds, isClickable: true))
-        {
-            lightColorButton.renderer.SetColorText(Color.white);
-            lightColorButton.renderer.background_renderer.SetSliceCustom(w: 1);
-            if (playerInputs.mouseLeftDown)
-            {
-                SceneController.GetMainColorPicker().Open(lightColorButton.renderer.background_renderer, ColorPicker.SelectType.Light, ColorPicker.Direction.BottomRight);
-            }
-        }
-        else
-        {
-            lightColorButton.renderer.SetColorText(Color.black);
-            lightColorButton.renderer.background_renderer.SetSliceCustom(w: 0);
-        }
-
-
-        if (CursorController.IsInsideBounds(optionsButton.renderer.background_renderer.bounds, isClickable: true))
-        {
-            optionsButton.renderer.SetColorText(Color.white);
-            optionsButton.renderer.background_renderer.SetSliceCustom(w: 1);
-            if (playerInputs.mouseLeftDown)
-            {
-                optionsButton.renderer.SetText("Options");
-                MoveButtonBack(startButton);
-                MoveButtonBack(quitButton);
-                MoveButtonBack(optionsButton);
-                OnClickBackFromOptions?.Invoke();
-                SetState(UIState.StartMenu);
-            }
-        }
-        else
-        {
-            optionsButton.renderer.SetColorText(Color.black);
-            optionsButton.renderer.background_renderer.SetSliceCustom(w: 0);
-        }
-
-        if (CursorController.IsInsideBounds(tutorialButton.renderer.background_renderer.bounds, isClickable: true))
-        {
-            if (options.skipTutorial)
-            {
-
-                if (playerInputs.mouseLeftDown)
-                {
-                    tutorialButton.renderer.SetColorText(Color.white);
-                    tutorialButton.renderer.background_renderer.SetSliceCustom(w: 1);
-                    tutorialButton.renderer.SetText("Run Tutorial");
-                    options.skipTutorial = false;
-                }
-                else
-                {
-
-                    tutorialButton.renderer.SetColorText(Color.black);
-                    tutorialButton.renderer.background_renderer.SetSliceCustom(w: 0);
-                }
-            }
-            else
-            {
-
-                if (playerInputs.mouseLeftDown)
-                {
-                    tutorialButton.renderer.SetColorText(Color.black);
-                    tutorialButton.renderer.background_renderer.SetSliceCustom(w: 0);
-                    tutorialButton.renderer.SetText("Skip Tutorial");
-                    options.skipTutorial = true;
-                }
-                else
-                {
-                    tutorialButton.renderer.SetColorText(Color.white);
-                    tutorialButton.renderer.background_renderer.SetSliceCustom(w: 1);
-                }
-            }
-        }
-        else
-        {
-            if (options.skipTutorial)
-            {
-                tutorialButton.renderer.SetColorText(Color.white);
-                tutorialButton.renderer.background_renderer.SetSliceCustom(w: 1);
-            }
-            else
-            {
-                tutorialButton.renderer.SetColorText(Color.black);
-                tutorialButton.renderer.background_renderer.SetSliceCustom(w: 0);
-            }
-
+            optionsButton.renderer.SetText("Options");
+            MoveButtonBack(startButton);
+            MoveButtonBack(quitButton);
+            MoveButtonBack(optionsButton);
+            OnClickBackFromOptions?.Invoke();
+            SetState(UIState.StartMenu);
         }
     }
-
+    private void QuitButtonClicked(TextUIElement textUIElement)
+    {
+        Application.Quit();
+    }
+    private void DarkColorButtonClicked(TextUIElement textUIElement)
+    {
+        SceneController.GetMainColorPicker().Open(darkColorButton.renderer.background_renderer, ColorPicker.SelectType.Dark, ColorPicker.Direction.BottomRight);
+    }
+    private void LightColorButtonClicked(TextUIElement textUIElement)
+    {
+        SceneController.GetMainColorPicker().Open(lightColorButton.renderer.background_renderer, ColorPicker.SelectType.Light, ColorPicker.Direction.BottomRight);
+    }
+    private void TutorialButtonClicked(TextUIElement textUIElement)
+    {
+        if (options.skipTutorial)
+        {
+            tutorialButton.renderer.SetText("Run Tutorial");
+            options.skipTutorial = false;
+        }
+        else
+        {
+            tutorialButton.renderer.SetText("Skip Tutorial");
+            options.skipTutorial = true;
+        }
+    }
     private void MoveButtonAway(TextUIElement button)
     {
         button.ctsMove?.Cancel();

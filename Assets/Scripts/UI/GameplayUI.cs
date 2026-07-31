@@ -33,9 +33,9 @@ public class GameplayUI : MonoBehaviour
 
     public AtlasRenderer carriageMap;
 
-    public IconUIElement traitorIcon;
-    public IconUIElement redoButton;
-    public IconUIElement quitButton;
+    public IconElement traitorIcon;
+    public IconElement redoButton;
+    public IconElement quitButton;
     
     public AtlasRenderer keyIcon;
 
@@ -54,7 +54,7 @@ public class GameplayUI : MonoBehaviour
     public CancellationTokenSource ctsCarriageMap;
     public CancellationTokenSource ctsFadeBlack;
 
-    public IconUIElement curTutorialIcon;
+    public IconElement curTutorialIcon;
 
     public Vector3 backgroundActivePos;
     public Vector3 backgroundInactivePos;
@@ -499,7 +499,7 @@ public class GameplayUI : MonoBehaviour
             quitButton.renderer.custom.w = 0;
         }
     }
-    private void MoveTutorialUIElement(IconUIElement uiIcon, string text)
+    private void MoveTutorialUIElement(IconElement uiIcon, string text)
     {
         uiIcon.ctsMove?.Cancel();
         uiIcon.ctsMove = new CancellationTokenSource();
@@ -509,7 +509,7 @@ public class GameplayUI : MonoBehaviour
         MovingTutorialUIElement(uiIcon, text).Forget();
         fadeBlack.FadeToBlack(0.8f);
     }
-    private void MoveBackTutorialUIElement(IconUIElement uiElement)
+    private void MoveBackTutorialUIElement(IconElement uiElement)
     {
         uiElement.ctsMove?.Cancel();
         uiElement.ctsMove = new CancellationTokenSource();
@@ -557,7 +557,7 @@ public class GameplayUI : MonoBehaviour
             await UniTask.WaitForSeconds(APPEARING_TIME);
         }
     }
-    private async UniTask MovingTutorialUIElement(IconUIElement uiElement, string text)
+    private async UniTask MovingTutorialUIElement(IconElement uiElement, string text)
     {
         AtlasRenderer iconRenderer = uiElement.renderer;
         Transform iconTransform = iconRenderer.transform;
@@ -589,7 +589,7 @@ public class GameplayUI : MonoBehaviour
 
         }
     }
-    private async UniTask MovingBackTutorialUIElement(IconUIElement uiElement)
+    private async UniTask MovingBackTutorialUIElement(IconElement uiElement)
     {
         Transform iconTransform = uiElement.renderer.transform;
 

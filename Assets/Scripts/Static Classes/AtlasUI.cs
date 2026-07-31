@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.InputSystem;
 using static NPC;
 public static class AtlasUI
 {
@@ -159,18 +160,84 @@ public static class AtlasUI
         E = 16,
         Space = 26,
         Pointer = 27,
-        
+
     }
+
+    public enum ButtonState
+    { 
+        Unhovered,
+        Hovered,
+        Clicked,
+    }
+
+    public delegate void OnEnter(TextUIElement textUIElement);
+    public delegate void OnExit(TextUIElement textUIElement);
+    public delegate void OnClick(TextUIElement textUIElement);
 
     [Serializable] public struct TextUIElement
     {
         public AtlasTextRenderer renderer;
+
+        public OnClick OnClick;
+        public OnEnter OnEnter;
+        public OnExit OnExit;
+
         [Header("Generated")]
-        public Vector3 startPos;
-        public bool hovered;
         public CancellationTokenSource ctsMove;
+
+        public Vector3 startPos;
+        public ButtonState curState;
+        public void Init(OnClick onClick, OnEnter onEnter, OnExit onExit)
+        {
+            OnClick = onClick;
+            OnEnter = onEnter;
+            OnExit = onExit;
+        }
+        public void UpdateButton(PlayerInputsSO playerInputs)
+        {
+            switch (curState)
+            { 
+                case ButtonState.Unhovered:
+                {
+                    if (CursorController.IsInsideBounds(renderer.background_renderer.bounds, isClickable: true))
+                    {
+                        OnEnter(this);
+                        curState = ButtonState.Hovered;
+                    }
+                }
+                break;
+                case ButtonState.Hovered:
+                {
+                    if (!CursorController.IsInsideBounds(renderer.background_renderer.bounds, isClickable: true))
+                    {
+                        OnExit(this);
+                        curState = ButtonState.Unhovered;
+                    }
+                    else if (playerInputs.mouseLeftDown)
+                    {
+                        OnClick(this);
+                        curState = ButtonState.Clicked;
+                    }
+                }
+                break;
+                case ButtonState.Clicked:
+                {
+                    if (!CursorController.IsInsideBounds(renderer.background_renderer.bounds, isClickable: true))
+                    {
+                        OnExit(this);
+                        curState = ButtonState.Unhovered;
+                    }
+                    else if (playerInputs.mouseLeftUp)
+                    {
+                        OnEnter(this);
+                        curState = ButtonState.Hovered;
+                    }
+                }
+                break;
+            }
+        }
     }
-    [Serializable] public struct IconUIElement
+    [Serializable] public struct IconElement
     {
         public AtlasRenderer renderer;
         [Header("Generated")]

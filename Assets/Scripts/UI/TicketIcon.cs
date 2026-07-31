@@ -7,8 +7,8 @@ public class TicketIcon : MonoBehaviour
 {
     const float USE_TIME = 0.8f;
 
-    public IconUIElement mainTicket;
-    public IconUIElement stubTicket;
+    public IconElement mainTicket;
+    public IconElement stubTicket;
     public OptionsSO colors;
 
     private void Start()
