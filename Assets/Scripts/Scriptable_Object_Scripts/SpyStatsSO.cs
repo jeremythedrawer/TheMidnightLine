@@ -18,7 +18,8 @@ public class SpyStatsSO : ScriptableObject
     public SpyState curState;
     public LocationState curLocationState;
 
-    public TutorialState tutorialState;
+    public TutorialState tutorialsCompleted;
+    public TutorialState curTutorialState;
 
     public bool spriteFlip;
     public bool walkingIntoWall;

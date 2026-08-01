@@ -7,8 +7,6 @@ using static NPC;
 using static Scenes;
 public class Notepad : MonoBehaviour
 {
-    const int TAB_HORIZONTAL_SPRITE_INDEX = 21;
-    const int TAB_VERTICAL_SPRITE_INDEX = 24;
     const int HOLDING_PENCIL_SPRITE_INDEX = 16;
 
     public const float WRITE_LETTER_TIME = 0.1f;
@@ -69,7 +67,7 @@ public class Notepad : MonoBehaviour
 
     public TextAsset namesJSON;
 
-    public Page traitorPage_prefab;
+    public Page traitorPagePrefab;
     public Page promptPage;
     public Page colorKeyPage;
 
@@ -697,7 +695,6 @@ public class Notepad : MonoBehaviour
             case NotepadState.Writing:
             {
                 SetLeftHandHoldingPencilSprite();
-
                 curWritingBounds = activePage.GetWritingBounds();
                 Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, leftHand_renderer.transform.position.z);
                 notepadData.leftHandPencilPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
@@ -739,6 +736,18 @@ public class Notepad : MonoBehaviour
                     activePage.SetPreviewPlayerWriteTexts(prevState);
                 }
                 notepadData.subState |= (SubState.CanFlipUp | SubState.CanFlipDown);
+                switch (activePage.pageType)
+                {
+                    case PageType.ColorKey:
+                    {
+                        if ((notepadData.completedUnlocks & UnlockType.RuleOut) == 0 && (trip.curUnlocks & UnlockType.RuleOut) != 0)
+                        {
+                            notepadData.completedUnlocks |= UnlockType.RuleOut;
+                            activePage.ShowRuleOutRenderer();
+                        }
+                    }
+                    break;
+                }
             }
             break;
             case NotepadState.Revealing:
@@ -1013,9 +1022,12 @@ public class Notepad : MonoBehaviour
                 Vector3 spritePivotOffset = new Vector3(rendBounds.extents.x * (1 - uvPivot.x), rendBounds.size.y * (1 - uvPivot.y));
                 leftHand_renderer.transform.localPosition = notepadData.leftHandOffScreenLocalPos - spritePivotOffset;
 
-                curWritingBounds = activePage.GetWritingBounds();
-                Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, notepadData.leftHandWorldDepthFront);
-                leftHandTargetLocalPos = transform.InverseTransformPoint(startWriteWorldPos);
+                if (activePage.activePlayerWriteTextRenderer != null)
+                {
+                    curWritingBounds = activePage.GetWritingBounds();
+                    Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, notepadData.leftHandWorldDepthFront);
+                    leftHandTargetLocalPos = transform.InverseTransformPoint(startWriteWorldPos);
+                }
 
                 atOffCameraPos = true;
             }
@@ -1040,7 +1052,7 @@ public class Notepad : MonoBehaviour
                 Vector3 startWriteWorldPos = new Vector3(activePage.playerWriteRenderers[activePage.activePlayerWriteRowIndex].GetBounds().min.x, curWritingBounds.center.y, notepadData.leftHandWorldDepthFront);
                 leftHandTargetLocalPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
             }
-            else if (playerInputs.numpad > 0 && playerInputs.numpad <= activePage.playerWriteTextRenderers.Length)
+            else if (playerInputs.numpad > 0 && playerInputs.numpad <= trip.unlockedColorMarkerCount)
             {
                 activePage.SwitchActivePLayerWriteTextRenderer(playerInputs.numpad - 1);
                 curWritingBounds = activePage.GetWritingBounds();
@@ -1065,7 +1077,9 @@ public class Notepad : MonoBehaviour
     {
         List<Page> pageList = new List<Page>();
         pageList.Add(promptPage);
-        promptPage.Init();
+
+        int totalPages = trip.traitorProfiles.Length + 2;
+        promptPage.Init(0, totalPages);
 
 
         List<int> randIndicesList = new List<int>(trip.traitorProfiles.Length);
@@ -1083,8 +1097,8 @@ public class Notepad : MonoBehaviour
 
             Vector3 pagePos = pageTransform.position;
             pagePos.z += 3;
-            Page traitorPage = Instantiate(traitorPage_prefab, pagePos, Quaternion.identity, pageTransform);
-            traitorPage.InitProfile(traitorProfile);
+            Page traitorPage = Instantiate(traitorPagePrefab, pagePos, Quaternion.identity, pageTransform);
+            traitorPage.InitProfile(traitorProfile, i + 1, totalPages);
             traitorPage.traitorIndex = traitorIndex;
             traitorPage.gameObject.name = "Page_" + i;
 
@@ -1093,7 +1107,7 @@ public class Notepad : MonoBehaviour
         }
         
         pageList.Add(colorKeyPage);
-        colorKeyPage.Init();
+        colorKeyPage.Init(totalPages - 1, totalPages);
 
         pages = pageList.ToArray();
         lastPageIndex = pages.Length - 1;
@@ -1117,7 +1131,7 @@ public class Notepad : MonoBehaviour
     }
     private bool ToWrite()
     {
-        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.spacebarDown && activePage.activePlayerWriteText == "") || (notepadData.subState & SubState.WriteToggle) != 0;
+        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.spacebarDown && activePage.activePlayerWriteText == "" && activePage.activePlayerWriteTextRenderer != null) || (notepadData.subState & SubState.WriteToggle) != 0;
     }
     private bool ToReveal()
     {

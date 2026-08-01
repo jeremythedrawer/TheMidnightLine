@@ -484,7 +484,7 @@ public class ColorPicker : MonoBehaviour
         {
             case SelectType.NPC:
             {
-                activeColorAmount = trip.selectedClueMarkerColors.Length + 1;
+                activeColorAmount = trip.selectedClueMarkerColors.Length;
 
                 for (int i = 0; i < activeColorAmount; i++)
                 {

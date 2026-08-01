@@ -127,7 +127,7 @@ public class SpyBrain : MonoBehaviour
         stats.curGroundLayer = layerSettings.stationLayers.ground;
         stats.curWallLayer = layerSettings.stationWallLayers;
         stats.bounds = atlasRenderer.bounds;
-        stats.tutorialState = TutorialState.None;
+        stats.tutorialsCompleted = TutorialState.None;
 
         rigidBody.includeLayers = layerSettings.stationMask;
 
@@ -152,37 +152,44 @@ public class SpyBrain : MonoBehaviour
     }
     private void ChooseState()
     {
-        if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount == 1) || ChosenNPC != null)
+        if (stats.curTutorialState == TutorialState.None)
         {
-            if (ChosenNPC == null)
+            if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount == 1) || ChosenNPC != null)
             {
-                ChosenNPC = possibleNPCsToTicketCheck[0];
-            }
+                if (ChosenNPC == null)
+                {
+                    ChosenNPC = possibleNPCsToTicketCheck[0];
+                }
 
-            if (ChosenNPC.role == Role.Accomplice)
+                if (ChosenNPC.role == Role.Accomplice)
+                {
+                    SetState(SpyState.TalkingToAccomplice);
+                }
+                else
+                {
+                    SetState(SpyState.TicketCheck);
+                }
+            }
+            else if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount > 1) || PickingNPCToTicketCheck)
             {
-                SetState(SpyState.TalkingToAccomplice);
+                SetState(SpyState.PickingNPCTicketCheck);
+            }
+            else if ((notepadData.collected && playerInputs.notepadKeyDown) || notepadData.checkingNotepad)
+            {
+                SetState(SpyState.Notepad);
+            }
+            else if (checkingCarriageMap)
+            {
+                SetState(SpyState.CarriageMap);
+            }
+            else if (playerInputs.move != 0 && !stats.walkingIntoWall)
+            {
+                SetState(SpyState.Walk);
             }
             else
             {
-                SetState(SpyState.TicketCheck);
+                SetState(SpyState.Idle);
             }
-        }
-        else if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount > 1) || PickingNPCToTicketCheck)
-        {
-            SetState(SpyState.PickingNPCTicketCheck);
-        }
-        else if ((notepadData.collected && playerInputs.notepadKeyDown) || notepadData.checkingNotepad)
-        {
-            SetState(SpyState.Notepad);
-        }
-        else if (checkingCarriageMap)
-        {
-            SetState(SpyState.CarriageMap);
-        }
-        else if (playerInputs.move != 0 && !stats.walkingIntoWall)
-        {
-            SetState(SpyState.Walk);
         }
         else
         {

@@ -1,13 +1,17 @@
 using System;
 using UnityEngine;
+using System.Collections.Generic;
+
 using static Atlas;
 using static AtlasUI;
 using static Notepad;
 using static NPC;
+using System.Linq;
 public class Page : MonoBehaviour
 {
     public const float FLIP_LOCAL_POS_Y = -1.656f;
-
+    public const float PAGE_NUMBER_ICON_BUFFER_X = 0.05f;
+    public const float PAGE_NUMBER_ICON_BUFFER_Y = 0.15f;
     public static AtlasClip paper_clip;
 
     public PageType pageType;
@@ -20,6 +24,8 @@ public class Page : MonoBehaviour
     public PlayerInputsSO playerInputs;
     public NotepadData notepadData;
     public OptionsSO options;
+
+    public AtlasRenderer pageNumberIconPrefab;
 
     public AtlasRenderer paperRenderer;
 
@@ -39,6 +45,7 @@ public class Page : MonoBehaviour
 
     [Header("Generated")]
     public AtlasTextRenderer activePlayerWriteTextRenderer;
+    public AtlasRenderer[] pageNumberIconRenderers;
 
     public int playerWriteIndex;
     public int traitorIndex;
@@ -52,13 +59,38 @@ public class Page : MonoBehaviour
     public string activePlayerWriteText;
     public string previewPlayerWriteText;
 
-    public void Init()
+    public void Init(int pageIndex, int totalPages)
     {
         paper_clip = paperRenderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
         
         playerWriteIndex = -1;
         
         exitButton.Init(ClickExitButton, EnterButton, ExitButton);
+
+        Bounds pageNumberIconBounds = pageNumberIconPrefab.bounds;
+        float colSize = pageNumberIconBounds.size.x + PAGE_NUMBER_ICON_BUFFER_X;
+
+        pageNumberIconRenderers = new AtlasRenderer[totalPages];
+
+        Vector3 startPos = new Vector3();
+        startPos.x = (float)totalPages * colSize * -0.5f;
+        startPos.y = -paperRenderer.bounds.size.y + PAGE_NUMBER_ICON_BUFFER_Y;
+        startPos.z = exitButton.renderer.transform.localPosition.z;
+
+        for (int i = 0; i < totalPages; i++)
+        {
+            AtlasRenderer pageNumberIcon = Instantiate(pageNumberIconPrefab, transform);
+            Vector3 localPos = startPos;
+            
+            localPos.x += i * colSize;
+            pageNumberIcon.transform.localPosition = localPos;
+
+            if (i == pageIndex)
+            {
+                pageNumberIcon.custom.x = 1f;
+            }
+            pageNumberIconRenderers[i] = pageNumberIcon;
+        }
 
         switch (pageType)
         {
@@ -91,14 +123,12 @@ public class Page : MonoBehaviour
                     otherButtons[i].Init(ClickColor, EnterButton, ExitButton);
                 }
 
-                activePlayerWriteTextRenderer = playerWriteTextRenderers[0];
-
                 playerWriteTexts = new string[playerWriteTextRenderers.Length];
                 Array.Fill(playerWriteTexts, "");
 
                 for (int i = 0; i < proceduralRenderers.Length; i++)
                 {
-                    proceduralRenderers[i].custom.w = 1;
+                    proceduralRenderers[i].custom.w = 0;
                 }
             }
             break;
@@ -119,6 +149,10 @@ public class Page : MonoBehaviour
         playerWriteTextRend.SetAppearTextAlpha(0);
 
         playerWriteTextRend.enabled = true;
+    }
+    public void ShowRuleOutRenderer()
+    {
+        proceduralRenderers[0].ChangeCustom(time: 1, newValue: 1, customChannel: 4);
     }
     public void UnlockColorRow(int index)
     {
@@ -183,7 +217,7 @@ public class Page : MonoBehaviour
             break;
         }
     }
-    public void InitProfile(TraitorProfile traitorProfile)
+    public void InitProfile(TraitorProfile traitorProfile, int pageIndex, int totalPages)
     {
         for (int i = 0; i < proceduralTextRenderers.Length; i++)
         {
@@ -209,7 +243,7 @@ public class Page : MonoBehaviour
         int coveredMugShotIndex = uncoveredMugShotIndex + 1;
         coveredMugShot.UpdateSpriteInputs(coveredMugShot.atlas.simpleSprites[coveredMugShotIndex]);
         uncoveredMugShot.UpdateSpriteInputs(uncoveredMugShot.atlas.simpleSprites[uncoveredMugShotIndex]);
-        Init();
+        Init(pageIndex, totalPages);
     }
     public void TogglePageContentBottomHalf(bool toggle)
     {
@@ -219,6 +253,7 @@ public class Page : MonoBehaviour
 
         ToggleRenderers(readOnlyRenderers, toggle, topHalf: false);
         ToggleRenderers(playerWriteRenderers, toggle, topHalf: false);
+        ToggleRenderers(pageNumberIconRenderers, toggle, topHalf: false);
     }
     public void TogglePageContentTopHalf(bool toggle)
     {
@@ -228,6 +263,7 @@ public class Page : MonoBehaviour
 
         ToggleRenderers(readOnlyRenderers, toggle, topHalf: true);
         ToggleRenderers(playerWriteRenderers, toggle, topHalf: true);
+        ToggleRenderers(pageNumberIconRenderers, toggle, topHalf: true);
     }
     public void ToggleTextRenderers(AtlasTextRenderer[] textRenderers, bool toggle, bool topHalf)
     {
@@ -353,16 +389,19 @@ public class Page : MonoBehaviour
                 {
                     case TripClue.Behaviours:
                     {
-                        int behaviourLength = (int)Behaviours.Count;
-                        previewPlayerWriteIndex = (previewPlayerWriteIndex + behaviourLength) % behaviourLength;
-                        Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
-                        Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
-                        previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
+                        if (activePlayerWriteTextRenderer != null)
+                        {
+                            int behaviourLength = (int)Behaviours.Count;
+                            previewPlayerWriteIndex = (previewPlayerWriteIndex + behaviourLength) % behaviourLength;
+                            Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
+                            Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
+                            previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
                             
-                        activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
-                        activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
+                            activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
+                            activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
                             
-                        playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
+                            playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
+                        }
                     }
                     break;
                 }
@@ -388,6 +427,11 @@ public class Page : MonoBehaviour
                         }
                     }
                     break;
+                }
+                
+                if (playerWriteTextRenderers.Length > 0)
+                {
+                    playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
                 }
             }
             break;
@@ -419,15 +463,18 @@ public class Page : MonoBehaviour
                             previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
                             curRend.SetText(previewPlayerWriteText, alpha: 0);
                         }
+
+                        if (playerWriteTextRenderers.Length > 0)
+                        {
+                            if (activePlayerWriteTextRenderer == null) activePlayerWriteTextRenderer = playerWriteTextRenderers[activePlayerWriteRowIndex];
+                            playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
+                        }
                     }
                 }
             }
             break;
         }
-        if (playerWriteTextRenderers.Length > 0)
-        {
-            playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
-        }
+
 
         UpdatePreviewPlayerWriteText();
 

@@ -25,7 +25,6 @@ public class GameplayUI : MonoBehaviour
 
     public Material fadeBlackMaterial; 
 
-
     public Ticket ticket;
 
     public TicketIcon ticketIconPrefab;
@@ -70,7 +69,6 @@ public class GameplayUI : MonoBehaviour
 
     public UIState curState;
     public UnlockType curUnlockType;
-    public TutorialState curTutorialState;
 
     public int ticketCount;
     public int traitorCount;
@@ -228,7 +226,7 @@ public class GameplayUI : MonoBehaviour
             break;
             case UIState.None:
             {
-                switch(curTutorialState)
+                switch(spyStats.curTutorialState)
                 {
                     case TutorialState.None:
                     {
@@ -244,7 +242,6 @@ public class GameplayUI : MonoBehaviour
                         }
                     }
                     break;
-
                     case TutorialState.Ticket:
                     {
                         if (canExitState && playerInputs.spacebarDown)
@@ -262,13 +259,12 @@ public class GameplayUI : MonoBehaviour
                                 curTicketIcon.InvertIcon(toggle: false);
                                 curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
 
-                                spyStats.tutorialState |= curTutorialState;
-                                curTutorialState = TutorialState.None;
+                                spyStats.tutorialsCompleted |= spyStats.curTutorialState;
+                                spyStats.curTutorialState = TutorialState.None;
                             }
                         }
                     }
                     break;
-
                     case TutorialState.Traitor:
                     {
                         if (canExitState && playerInputs.spacebarDown)
@@ -285,13 +281,12 @@ public class GameplayUI : MonoBehaviour
                                 traitorIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 1);
                                 traitorCountText.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 1);
                             
-                                spyStats.tutorialState |= curTutorialState;
-                                curTutorialState = TutorialState.None;
+                                spyStats.tutorialsCompleted |= spyStats.curTutorialState;
+                                spyStats.curTutorialState = TutorialState.None;
                             }
                         }
                     }
                     break;
-
                     case TutorialState.Marker:
                     {
                         if (canExitState && playerInputs.spacebarDown)
@@ -307,8 +302,8 @@ public class GameplayUI : MonoBehaviour
 
                                 fadeBlack.FadeFromBlack();
 
-                                spyStats.tutorialState |= curTutorialState;
-                                curTutorialState = TutorialState.None;
+                                spyStats.tutorialsCompleted |= spyStats.curTutorialState;
+                                spyStats.curTutorialState = TutorialState.None;
                                 tutorialRenderer.SetText("");
                             }
                         }
@@ -335,12 +330,12 @@ public class GameplayUI : MonoBehaviour
             {
                 MoveUIElement(ticket.transform, ticketInactivePos, ref ctsTicket, newState);
 
-                if (!options.skipTutorial && ((spyStats.tutorialState & TutorialState.Ticket) == 0))
+                if (!options.skipTutorial && ((spyStats.tutorialsCompleted & TutorialState.Ticket) == 0))
                 {
                     curTicketIcon.mainTicket.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.ticketCountTutorialText);
                     curTutorialIcon = curTicketIcon.mainTicket;
                     fadeBlack.FadeToBlack(0.8f);
-                    curTutorialState = TutorialState.Ticket;
+                    spyStats.curTutorialState = TutorialState.Ticket;
                 }
                 else
                 {
@@ -392,7 +387,7 @@ public class GameplayUI : MonoBehaviour
             curTutorialIcon = icon;
 
             fadeBlack.FadeToBlack(value: 0.8f);
-            curTutorialState = TutorialState.Marker;
+            spyStats.curTutorialState = TutorialState.Marker;
         }
     }
     private void InitPOVUI()
@@ -461,7 +456,7 @@ public class GameplayUI : MonoBehaviour
     }
     private void RevertCurTicketIcon()
     {
-        if (curTutorialState != TutorialState.Ticket)
+        if (spyStats.curTutorialState != TutorialState.Ticket)
         {
             curTicketIcon?.InvertIcon(toggle: false);
         }
@@ -504,13 +499,13 @@ public class GameplayUI : MonoBehaviour
         traitorCount++;
         traitorCountText.SetText("x" + traitorCount);
 
-        if (!options.skipTutorial && ((spyStats.tutorialState & TutorialState.Traitor) == 0))
+        if (!options.skipTutorial && ((spyStats.tutorialsCompleted & TutorialState.Traitor) == 0))
         {
             traitorIcon.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.traitorCountTutorialText);
             curTutorialIcon = traitorIcon;
 
             fadeBlack.FadeToBlack(0.8f);
-            curTutorialState = TutorialState.Traitor;
+            spyStats.curTutorialState = TutorialState.Traitor;
 
             traitorIcon.renderer.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
             traitorCountText.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
