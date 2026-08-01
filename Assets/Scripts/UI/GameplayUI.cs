@@ -249,15 +249,22 @@ public class GameplayUI : MonoBehaviour
                     {
                         if (canExitState && playerInputs.spacebarDown)
                         {
-                            curTutorialIcon.MoveBackTutorialUIElement(tutorialRenderer);
-                            fadeBlack.FadeFromBlack();
+                            if (!tutorialRenderer.hasText)
+                            {
+                                curTutorialIcon.ctsMove?.Cancel();
+                            }
+                            else
+                            {
+                                curTutorialIcon.MoveBackTutorialUIElement(tutorialRenderer);
+                                fadeBlack.FadeFromBlack();
 
-                            curTicketIcon.RipStubTicket();
-                            curTicketIcon.InvertIcon(toggle: false);
-                            curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
+                                curTicketIcon.RipStubTicket();
+                                curTicketIcon.InvertIcon(toggle: false);
+                                curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
 
-                            spyStats.tutorialState |= curTutorialState;
-                            curTutorialState = TutorialState.None;
+                                spyStats.tutorialState |= curTutorialState;
+                                curTutorialState = TutorialState.None;
+                            }
                         }
                     }
                     break;
@@ -266,14 +273,21 @@ public class GameplayUI : MonoBehaviour
                     {
                         if (canExitState && playerInputs.spacebarDown)
                         {
-                            curTutorialIcon.MoveBackTutorialUIElement(tutorialRenderer);
-                            fadeBlack.FadeFromBlack();
+                            if (!tutorialRenderer.hasText)
+                            {
+                                curTutorialIcon.ctsMove?.Cancel();
+                            }
+                            else
+                            {
+                                curTutorialIcon.MoveBackTutorialUIElement(tutorialRenderer);
+                                fadeBlack.FadeFromBlack();
 
-                            traitorIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 1);
-                            traitorCountText.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 1);
+                                traitorIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 1);
+                                traitorCountText.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 1);
                             
-                            spyStats.tutorialState |= curTutorialState;
-                            curTutorialState = TutorialState.None;
+                                spyStats.tutorialState |= curTutorialState;
+                                curTutorialState = TutorialState.None;
+                            }
                         }
                     }
                     break;
@@ -282,13 +296,21 @@ public class GameplayUI : MonoBehaviour
                     {
                         if (canExitState && playerInputs.spacebarDown)
                         {
-                            fadeBlack.FadeFromBlack();
-                            curTutorialIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 4);
-                            curTutorialIcon.renderer.transform.SetParent(unlockPicker.transform, true);
+                            if (!tutorialRenderer.hasText)
+                            {
+                                curTutorialIcon.ctsMove?.Cancel();
+                            }
+                            else
+                            {
+                                curTutorialIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 4);
+                                curTutorialIcon.renderer.transform.SetParent(unlockPicker.transform, true);
 
-                            spyStats.tutorialState |= curTutorialState;
-                            curTutorialState = TutorialState.None;
-                            tutorialRenderer.SetText("");
+                                fadeBlack.FadeFromBlack();
+
+                                spyStats.tutorialState |= curTutorialState;
+                                curTutorialState = TutorialState.None;
+                                tutorialRenderer.SetText("");
+                            }
                         }
                     }
                     break;
@@ -366,7 +388,9 @@ public class GameplayUI : MonoBehaviour
             icon.renderer.transform.SetParent(transform, true);
             icon.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.passengerMarkerTutorialText);
             icon.renderer.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
+            
             curTutorialIcon = icon;
+
             fadeBlack.FadeToBlack(value: 0.8f);
             curTutorialState = TutorialState.Marker;
         }

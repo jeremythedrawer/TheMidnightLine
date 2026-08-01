@@ -448,6 +448,7 @@ public static class AtlasUI
         {
             ctsMove?.Cancel();
             ctsMove = new CancellationTokenSource();
+
             MovingBackTutorialUIElement(tutorialRenderer).Forget();
         }
         private async UniTask MovingTutorialUIElement(CameraStatsSO camStats, AtlasTextRenderer tutorialRenderer, string text)
@@ -479,7 +480,10 @@ public static class AtlasUI
             }
             catch (OperationCanceledException)
             {
-
+                iconTransform.localPosition = new Vector3(targetPos.x, targetPos.y, 1);
+                float tutTextLocaPosY = iconTransform.localPosition.y - localPivotPosY - tutorialRenderer.background_renderer.worldPivotsAndSizes[8].w - 0.1f;
+                tutorialRenderer.transform.localPosition = new Vector3(iconTransform.localPosition.x, tutTextLocaPosY, 1);
+                tutorialRenderer.SetText(text);
             }
         }
         private async UniTask MovingBackTutorialUIElement(AtlasTextRenderer tutorialRenderer)

@@ -104,16 +104,6 @@ public class Page : MonoBehaviour
             break;
         }
     }
-    public void InitRuleOutRow()
-    {
-        AtlasTextRenderer playerWriteTextRend = playerWriteTextRenderers[0];
-        previewPlayerWriteText = "Rule Out";
-        playerWriteTextRend.SetText(previewPlayerWriteText);
-
-        playerWriteTextRend.enabled = true;
-        AtlasRenderer playerWriteRend = playerWriteRenderers[0];
-        playerWriteRend.customBit |= (int)ColorBits.Diagonal;
-    }
     public void InitNextColorRow(int nextIndex)
     {
         AtlasTextRenderer playerWriteTextRend = playerWriteTextRenderers[nextIndex];
@@ -363,20 +353,16 @@ public class Page : MonoBehaviour
                 {
                     case TripClue.Behaviours:
                     {
-                        if (activePlayerWriteRowIndex > 0)
-                        {
-                            int behaviourLength = (int)Behaviours.Count;
-                            previewPlayerWriteIndex = (previewPlayerWriteIndex + behaviourLength) % behaviourLength;
-                            Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
-                            Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
-                            previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
+                        int behaviourLength = (int)Behaviours.Count;
+                        previewPlayerWriteIndex = (previewPlayerWriteIndex + behaviourLength) % behaviourLength;
+                        Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
+                        Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
+                        previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
                             
-                            activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
-                            activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
+                        activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
+                        activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
                             
-                            playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
-
-                        }
+                        playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
                     }
                     break;
                 }
@@ -410,47 +396,28 @@ public class Page : MonoBehaviour
             {
                 if (prevNotepadState == NotepadState.Erasing)
                 {
-                    if (activePlayerWriteRowIndex == 0)
-                    {
-                        previewPlayerWriteText = "Rule Out";
-                        activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
-                    }
-                    else
-                    {
-                        int behaviourLength = (int)Behaviours.Count;
-                        previewPlayerWriteIndex = (previewPlayerWriteIndex + behaviourLength) % behaviourLength;
-                        Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
-                        Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
-                        previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
-                        activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
-
-                    }
+                    int behaviourLength = (int)Behaviours.Count;
+                    previewPlayerWriteIndex = (previewPlayerWriteIndex + behaviourLength) % behaviourLength;
+                    Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
+                    Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
+                    previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
+                    activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
                 }
                 else
                 {
-                    if ((trip.curUnlocks & UnlockType.RuleOut) != 0)
+                    if ((trip.curUnlocks & UnlockType.Color) != 0)
                     {
-                        int totalUnlockCount = trip.unlockedColorMarkerCount + 1;
-
-                        for (int i = 0; i < totalUnlockCount; i++)
+                        for (int i = 0; i < trip.unlockedColorMarkerCount; i++)
                         {
                             if (playerWriteTexts[i] != "") continue;
-                            AtlasTextRenderer curRend = playerWriteTextRenderers[i];
-                            if (i == 0)
-                            {
-                                previewPlayerWriteText = "Rule Out";
-                                curRend.SetText(previewPlayerWriteText, alpha: 0);
-                            }
-                            else
-                            {
-                                int behaviourLength = (int)Behaviours.Count;
-                                previewPlayerWriteIndex = (previewPlayerWriteIndex + behaviourLength) % behaviourLength;
-                                Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
-                                Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
-                                previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
-                                curRend.SetText(previewPlayerWriteText, alpha: 0);
 
-                            }
+                            AtlasTextRenderer curRend = playerWriteTextRenderers[i];
+                            int behaviourLength = (int)Behaviours.Count;
+                            previewPlayerWriteIndex = (previewPlayerWriteIndex + behaviourLength) % behaviourLength;
+                            Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
+                            Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
+                            previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
+                            curRend.SetText(previewPlayerWriteText, alpha: 0);
                         }
                     }
                 }
@@ -513,9 +480,7 @@ public class Page : MonoBehaviour
             {
                 if ((trip.curUnlocks & UnlockType.RuleOut) != 0)
                 {
-                    int totalUnlockCount = trip.unlockedColorMarkerCount + 1;
-
-                    for (int i = 0; i < totalUnlockCount; i++)
+                    for (int i = 0; i < trip.unlockedColorMarkerCount; i++)
                     {
                         AtlasTextRenderer playerWriteTextRend = playerWriteTextRenderers[i];
                         if (playerWriteTextRend.text == "") continue;

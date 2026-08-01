@@ -34,9 +34,19 @@ public class FadeBlack : MonoBehaviour
     }
     public void CheckToFadeFromBlack()
     {
-        if (finishedFade && (playerInputs.mouseLeftUp || playerInputs.spacebarDown || playerInputs.move != 0))
+        if (finishedFade)
         {
-            FadeFromBlackWithSceneChange();
+            if (playerInputs.mouseLeftUp || playerInputs.spacebarDown || playerInputs.move != 0)
+            {
+                FadeFromBlackWithSceneChange();
+            }
+        }
+        else
+        {
+            if (playerInputs.spacebarDown)
+            {
+                textRenderer.ctsWrite?.Cancel();
+            }
         }
     }
     public void FadeFromBlack()

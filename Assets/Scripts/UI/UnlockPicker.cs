@@ -130,11 +130,11 @@ public class UnlockPicker : MonoBehaviour
 
     private void EnterColorIcon(IconUIElement icon)
     {
-        icon.renderer.custom.w = 0;
+        icon.renderer.custom.x = 1;
     }
     private void ExitColorIcon(IconUIElement icon)
     {
-        icon.renderer.custom.w = 1;
+        icon.renderer.custom.x = 0;
     }
 
     private void SetState(PickerState newState)

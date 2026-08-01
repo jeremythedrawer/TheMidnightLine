@@ -152,6 +152,9 @@ public class ColorPicker : MonoBehaviour
                         Color selectedColor = colorsData.selectableClueColors[index];
                         trip.selectedClueMarkerColors[trip.selectedColorMarkerIndex] = selectedColor;
                         Shader.SetGlobalColor("_ColorKey" + trip.selectedColorMarkerIndex, selectedColor.linear);
+                        selectedRenderer.custom.x = selectedColor.r;
+                        selectedRenderer.custom.y = selectedColor.g;
+                        selectedRenderer.custom.z = selectedColor.b;
                     }
                     break;
                     case SelectType.NPC:
