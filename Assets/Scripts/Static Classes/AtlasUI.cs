@@ -112,7 +112,12 @@ public static class AtlasUI
         None = 0,
         Ticket = 1 << 0,
         Traitor = 1 << 1,
-        Marker = 1 << 2,
+        RuleOut = 1 << 2,
+        Color1 = 1 << 3,
+        Color2 = 1 << 4,
+        Color3 = 1 << 5,
+        MultiColor = 1 << 6,
+
     }
     public enum PageType
     { 

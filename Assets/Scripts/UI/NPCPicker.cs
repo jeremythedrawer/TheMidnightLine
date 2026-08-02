@@ -78,7 +78,7 @@ public class NPCPicker : MonoBehaviour
                 {
                     case PickerFunctionType.TicketCheck:
                     {
-                        SpyBrain.ChooseNPCTicketToCheck(possibleNPCs[index]);
+                        SceneController.GetSpy().ChooseNPCTicketToCheck(possibleNPCs[index]);
                     }
                     break;
 

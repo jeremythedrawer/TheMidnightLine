@@ -55,7 +55,7 @@ public class ScoreUI : MonoBehaviour
         HandleTextSkips();
         HandleQuitButton();
         HandlePlayAgainButton();
-        fadeBlack.CheckToFadeFromBlack();
+        fadeBlack.CheckToFadeOutSceneChange();
     }
     private void GetNotepad()
     {
@@ -171,7 +171,7 @@ public class ScoreUI : MonoBehaviour
             playAgainRenderer.background_renderer.SetSliceCustom(w: 1);
             if (playerInputs.mouseLeftDown)
             {
-                fadeBlack.FadeToBlackChangeScene("Find where the Traitors are going.", Scenes.SceneType.Trip, sceneIndex: 2);
+                fadeBlack.FadeInChangeScene("Find where the Traitors are going.", Scenes.SceneType.Trip, sceneIndex: 2);
                 gameEventData.OnReset.Raise();
             }
         }

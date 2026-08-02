@@ -14,13 +14,16 @@ public class UnlockPicker : MonoBehaviour
     public const int COLOR_ICON_SPRITE_INDEX = 20;
     public const int MULTI_COLOR_ICON_SPRITE_INDEX = 23;
 
-    public static event Action<IconUIElement> OnFirstAbilityUnlock;
+    public static event Action<IconUIElement> OnRuleOutAbilityUnlock;
+    public static event Action<IconUIElement> OnColorAbilityUnlock;
+    public static event Action<IconUIElement> OnMutliColorAbilityUnlock;
 
     public IconUIElement[] icons;
 
     public TripSO trip;
     public PlayerInputsSO playerInputs;
     public CameraStatsSO camStats;
+    public SpyStatsSO spyStats;
 
     public AtlasRenderer paletteRenderer;
 
@@ -100,13 +103,14 @@ public class UnlockPicker : MonoBehaviour
                         {
                             trip.curUnlocks |= UnlockType.RuleOut;
                             tutorialInUse = true;
-                            OnFirstAbilityUnlock?.Invoke(icon);
+                            OnRuleOutAbilityUnlock?.Invoke(icon);
                         }
                         else if ((selectedUnlockType & UnlockType.Color) != 0)
                         {
                             if (trip.unlockedColorMarkerCount == 0)
                             {
                                 trip.curUnlocks |= UnlockType.Color;
+                                OnColorAbilityUnlock?.Invoke(icon);
                             }
                             trip.unlockedColorMarkerCount++;
                         }
@@ -114,6 +118,7 @@ public class UnlockPicker : MonoBehaviour
                         {
                             trip.curUnlocks |= UnlockType.MultiColor;
                             trip.unlockedColorMarkerCount++;
+                            OnMutliColorAbilityUnlock?.Invoke(icon);
                         }
                         break;
                     }
@@ -147,6 +152,7 @@ public class UnlockPicker : MonoBehaviour
     }
     private void UpdateState()
     {
+        if (spyStats.curTutorialState != TutorialState.None) return;
         switch (curPickerState)
         {
             case PickerState.Opening:

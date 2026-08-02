@@ -140,6 +140,11 @@ public class MeetingDoor : MonoBehaviour
                         OnSpyExit?.Invoke();
                         spyInBounds = false;
                     }
+                    else if (opened && !atlasRenderer.isAnimating && !spyStats.startTrip)
+                    {
+                        spyInBounds = false;
+                    }
+
                 }
                 break;
                 case MeetingDoorType.BetweenRooms:
@@ -192,12 +197,13 @@ public class MeetingDoor : MonoBehaviour
     }
     private void WalkThroughStartDoor()
     {
-        if (doorType == MeetingDoorType.Start && opened && spyInBounds && !atlasRenderer.isAnimating)
+        if (doorType == MeetingDoorType.Start && opened && spyInBounds && !spyStats.startTrip && !atlasRenderer.isAnimating)
         {
             gameEventData.OnStartTrip.Raise();
             SpyBrain spy = SceneController.GetSpy();
             spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, rightDepth));
             leftRoom.MoveUp();
+            spyStats.startTrip = true;
         }
     }
     public void OpenDoor()

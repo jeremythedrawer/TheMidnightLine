@@ -1,3 +1,4 @@
+using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using UnityEngine;
@@ -42,10 +43,10 @@ public class Notepad : MonoBehaviour
         CanWillFlipDown = 1 << 10,
         OnScreen = 1 << 11,
         InUse = 1 << 12,
-
     }
 
     public static event Action OnFinishRevealingOutcomes;
+    public static event Action OnWriteColorMarkerFirstTime;
 
     public PlayerInputsSO playerInputs;
     public TripSO trip;
@@ -949,7 +950,9 @@ public class Notepad : MonoBehaviour
                             trip.selectedColorMarkerIndex = 0;
 
                             SceneController.GetClueColorPicker().Open(activePage.playerWriteRenderers[0], ColorPicker.SelectType.Clue);
-                            activePage.UnlockColorRow(0);
+                            activePage.SetColorMarkerButtonSprite(0);
+
+                            OnWriteColorMarkerFirstTime?.Invoke();
 
                             if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0 && (trip.curUnlocks & UnlockType.MultiColor) != 0)
                             {
@@ -967,7 +970,7 @@ public class Notepad : MonoBehaviour
                             notepadData.completedUnlocks |= UnlockType.MultiColor;
                             trip.selectedColorMarkerIndex = 1;
                             colorPicker.Open(activePage.playerWriteRenderers[1], ColorPicker.SelectType.Clue);
-                            activePage.UnlockColorRow(1);
+                            activePage.SetColorMarkerButtonSprite(1);
                         }
                     }
                     break;
@@ -1198,6 +1201,36 @@ public class Notepad : MonoBehaviour
         return firstName + " " + lastName;
     }
     
+    
+    public void FlipToPage(int pageIndex)
+    {
+        FlippingToPage(pageIndex).Forget();
+    }
+    private async UniTask FlippingToPage(int pageIndex)
+    {
+        notepadData.subState &= ~(SubState.CanFlipUp | SubState.CanFlipDown);
+
+        if (activePage.pageIndex < pageIndex)
+        {
+            while (activePage.pageIndex != pageIndex)
+            {
+                SetState(NotepadState.FlippingUp);
+                while(notepadData.curState == NotepadState.FlippingUp) await UniTask.Yield();
+                await UniTask.Yield();
+            }
+            notepadData.subState |= SubState.CanFlipUp | SubState.CanFlipDown;
+        }
+        else if (activePage.pageIndex > 0)
+        {
+            while (activePage.pageIndex != pageIndex)
+            {
+                SetState(NotepadState.FlippingDown);
+                while (notepadData.curState == NotepadState.FlippingUp) await UniTask.Yield();
+                await UniTask.Yield();
+            }
+            notepadData.subState |= SubState.CanFlipUp | SubState.CanFlipDown;
+        }
+    }
     private void OnDrawGizmosSelected()
     {
         Gizmos.color = Color.red;

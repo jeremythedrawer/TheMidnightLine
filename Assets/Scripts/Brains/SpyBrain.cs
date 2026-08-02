@@ -9,7 +9,7 @@ public class SpyBrain : MonoBehaviour
 {
     public static Carriage CurCarriage;
     
-    public static NPCBrain ChosenNPC;
+    public NPCBrain chosenNPC;
 
     public static event Action OnTicketCheckHoverEnabled;
     public static event Action<Vector2> OnTicketCheckHoverEnabledFirstTime;
@@ -93,7 +93,7 @@ public class SpyBrain : MonoBehaviour
 
         Scenes.OnLoadStart += StartInit;
         Scenes.OnLoadTrip0 += TripInit;
-        Init();
+        EveryInit();
     }
     private void OnDisable()
     {
@@ -118,7 +118,7 @@ public class SpyBrain : MonoBehaviour
 
         stats.walkingIntoWall = (leftWallTouch && playerInputs.move == -1) || (rightWallTouch && playerInputs.move == 1);
     }
-    private void Init()
+    private void EveryInit()
     {
         curWorldPos = transform.position;
         atlas = atlasRenderer.atlas;
@@ -127,7 +127,7 @@ public class SpyBrain : MonoBehaviour
         stats.curGroundLayer = layerSettings.stationLayers.ground;
         stats.curWallLayer = layerSettings.stationWallLayers;
         stats.bounds = atlasRenderer.bounds;
-        stats.tutorialsCompleted = TutorialState.None;
+
 
         rigidBody.includeLayers = layerSettings.stationMask;
 
@@ -147,6 +147,9 @@ public class SpyBrain : MonoBehaviour
     }
     private void StartInit()
     {
+        stats.tutorialsCompleted = TutorialState.None;
+        stats.curTutorialState = TutorialState.None;
+        stats.startTrip = false;
         stats.curLocationState = LocationState.Elevator;
         trip.curUnlocks = UnlockType.None;
     }
@@ -154,14 +157,14 @@ public class SpyBrain : MonoBehaviour
     {
         if (stats.curTutorialState == TutorialState.None)
         {
-            if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount == 1) || ChosenNPC != null)
+            if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount == 1) || chosenNPC != null)
             {
-                if (ChosenNPC == null)
+                if (chosenNPC == null)
                 {
-                    ChosenNPC = possibleNPCsToTicketCheck[0];
+                    chosenNPC = possibleNPCsToTicketCheck[0];
                 }
 
-                if (ChosenNPC.role == Role.Accomplice)
+                if (chosenNPC.role == Role.Accomplice)
                 {
                     SetState(SpyState.TalkingToAccomplice);
                 }
@@ -190,10 +193,6 @@ public class SpyBrain : MonoBehaviour
             {
                 SetState(SpyState.Idle);
             }
-        }
-        else
-        {
-            SetState(SpyState.Idle);
         }
     }
     private void UpdateStates()
@@ -269,9 +268,9 @@ public class SpyBrain : MonoBehaviour
             {
                 atlasRenderer.PlayClip(ref curClip);
 
-                if((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveDown)  && canExitState)
+                if((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveDown || playerInputs.spacebarDown) && canExitState)
                 {
-                    ChosenNPC.ToggleUnveil(true);
+                    chosenNPC.ToggleUnveil(true);
                     FinishWithChosenNPC();
                 }
                 if (!playerInputs.ticketCheckKeyHold && !playerInputs.mouseLeftHold && playerInputs.move == 0) canExitState = true;
@@ -280,7 +279,7 @@ public class SpyBrain : MonoBehaviour
             case SpyState.TalkingToAccomplice:
             {
                 atlasRenderer.PlayClip(ref curClip);
-                if ((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveDown) && canExitState)
+                if ((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveDown || playerInputs.spacebarDown) && canExitState && stats.curTutorialState == TutorialState.None)
                 {
                     SceneController.GetUnlockPicker().Close();
                     FinishWithChosenNPC();
@@ -289,7 +288,6 @@ public class SpyBrain : MonoBehaviour
                 if (!playerInputs.ticketCheckKeyHold && !playerInputs.mouseLeftHold && playerInputs.move == 0) canExitState = true;
             }
             break;
-
             case SpyState.PickingNPCTicketCheck:
             {
                 if ((playerInputs.mouseLeftUp || playerInputs.move != 0) && canExitState)
@@ -300,10 +298,9 @@ public class SpyBrain : MonoBehaviour
                 if (playerInputs.mouseLeftUp) canExitState = true;
             }
             break;
-
             case SpyState.Notepad:
             {
-                if(!playerInputs.notepadKeyDown) canExitState = true;
+                if (playerInputs.notepadKeyUp) canExitState = true;
 
                 if (notepadData.curState != curNotepadState)
                 {
@@ -347,6 +344,10 @@ public class SpyBrain : MonoBehaviour
                 if (curNotepadState == NotepadState.Stationary)
                 {
                     atlasRenderer.PlayClip(ref curClip);
+                    if (playerInputs.notepadKeyDown && canExitState)
+                    {
+                        notepadData.checkingNotepad = false;
+                    }
                 }
             }
             break;
@@ -470,12 +471,12 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.TicketCheck:
             {
-                ChosenNPC.talkingToSpy = true;
+                chosenNPC.talkingToSpy = true;
 
                 curClip = atlas.clipDict[(int)SpyMotion.Ticket];
 
-                stats.boardingStationName = trip.stationsDataArray[ChosenNPC.profile.boardingStationIndex].name;
-                stats.disembarkingStationName = trip.stationsDataArray[ChosenNPC.profile.disembarkingStationIndex].name;
+                stats.boardingStationName = trip.stationsDataArray[chosenNPC.profile.boardingStationIndex].name;
+                stats.disembarkingStationName = trip.stationsDataArray[chosenNPC.profile.disembarkingStationIndex].name;
                 trip.ticketsCheckedTotal++;
 
                 OnTicketInspect?.Invoke();
@@ -484,7 +485,7 @@ public class SpyBrain : MonoBehaviour
 
             case SpyState.TalkingToAccomplice:
             {
-                ChosenNPC.talkingToSpy = true;
+                chosenNPC.talkingToSpy = true;
 
                 curClip = atlas.clipDict[(int)SpyMotion.StandingBreathing];
 
@@ -502,7 +503,7 @@ public class SpyBrain : MonoBehaviour
                 {
                     curUnlockType = UnlockType.MultiColor;
                 }
-                SceneController.GetUnlockPicker().Open(unlockSelectionAmount: 1, curUnlockType, ChosenNPC);
+                SceneController.GetUnlockPicker().Open(unlockSelectionAmount: 1, curUnlockType, chosenNPC);
 
             }
             break;
@@ -570,7 +571,7 @@ public class SpyBrain : MonoBehaviour
                 for (int i = 0; i < curNPCTicketCheckHoverCount; i++)
                 {
                     NPCBrain npc = possibleNPCsToTicketCheck[i];
-                    if (npc != ChosenNPC)
+                    if (npc != chosenNPC)
                     {
                         npc.talkingToSpy = false;
                         npc.ToggleTicketCheckHover(false);
@@ -811,15 +812,15 @@ public class SpyBrain : MonoBehaviour
         stats.spriteFlip = flip;
         atlasRenderer.FlipHSimple(flip);
     }
-
-    public static void ChooseNPCTicketToCheck(NPCBrain chosenNPC)
+    public void FinishWithChosenNPC()
     {
-        ChosenNPC = chosenNPC;
+        chosenNPC.talkingToSpy = false;
+        chosenNPC = null;
     }
-    public static void FinishWithChosenNPC()
+
+    public void ChooseNPCTicketToCheck(NPCBrain npc)
     {
-        ChosenNPC.talkingToSpy = false;
-        ChosenNPC = null;
+        chosenNPC = npc;
     }
     public static void ToggleTicketCheckAbility(bool toggle)
     {

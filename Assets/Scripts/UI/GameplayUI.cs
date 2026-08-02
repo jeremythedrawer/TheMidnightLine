@@ -104,8 +104,12 @@ public class GameplayUI : MonoBehaviour
 
         Scenes.OnLoadTrip0 += Init;
 
-        UnlockPicker.OnFirstAbilityUnlock += MovePassengerMarkerTutorialIcon;
+        UnlockPicker.OnRuleOutAbilityUnlock += MoveRuleOutMarkerTutorialIcon;
+        UnlockPicker.OnColorAbilityUnlock += MoveColorMarkerTutorialIcon;
 
+        Notepad.OnWriteColorMarkerFirstTime += SetTutorialTextToColor2;
+
+        ColorPicker.OnSelectClueColorFirstTime += SetTutorialTextToColor3;
     }
     private void OnDisable()
     {
@@ -132,14 +136,19 @@ public class GameplayUI : MonoBehaviour
         NPCBrain.OnTraitorDisembarkedTrain -= DecreaseTraitorCount;
         NPCBrain.OnTraitorBoardedTrain -= IncreaseTraitorCount;
 
-        UnlockPicker.OnFirstAbilityUnlock -= MovePassengerMarkerTutorialIcon;
+        UnlockPicker.OnRuleOutAbilityUnlock -= MoveRuleOutMarkerTutorialIcon;
+        UnlockPicker.OnColorAbilityUnlock -= MoveColorMarkerTutorialIcon;
 
         Scenes.OnLoadTrip0 -= Init;
+
+        Notepad.OnWriteColorMarkerFirstTime -= SetTutorialTextToColor2;
+
+        ColorPicker.OnSelectClueColorFirstTime -= SetTutorialTextToColor3;
     }
     private void Update()
     {
         UpdateState();
-        fadeBlack.CheckToFadeFromBlack();
+        fadeBlack.CheckToFadeOutSceneChange();
         HandlePlayAgainButton();
         HandleQuitButton();
     }
@@ -199,18 +208,41 @@ public class GameplayUI : MonoBehaviour
             {
                 UpdateNaturalPos(notepadData.activeLocalPos, ref naturalMovePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
-
-                if (playerInputs.notepadKeyDown && canExitState)
+                switch (spyStats.curTutorialState)
                 {
-                    notepadData.checkingNotepad = false;
+                    case TutorialState.Color1:
+                    {
+                        if (canExitState && playerInputs.spacebarDown)
+                        {
+                            if (!tutorialRenderer.hasText)
+                            {
+                                curTutorialIcon.ctsMove?.Cancel();
+                            }
+                        }
+                    }
+                    break;
+                    case TutorialState.Color2:
+                    {
+
+                    }
+                    break;
+                    case TutorialState.Color3:
+                    {
+                        if (canExitState && playerInputs.spacebarDown)
+                        {
+                            curTutorialIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 4);
+                            curTutorialIcon.renderer.transform.SetParent(unlockPicker.transform, true);
+
+                            fadeBlack.FadeOut();
+
+                            spyStats.tutorialsCompleted |= spyStats.curTutorialState;
+                            spyStats.curTutorialState = TutorialState.None;
+                            tutorialRenderer.SetText("");
+                        }
+                    }
+                    break;
                 }
-
-                if (playerInputs.notepadKeyUp)
-                {
-                    canExitState = true;
-                }
-
-
+                canExitState = true;
             }
             break;
             case UIState.Ticket:
@@ -253,7 +285,7 @@ public class GameplayUI : MonoBehaviour
                             else
                             {
                                 curTutorialIcon.MoveBackTutorialUIElement(tutorialRenderer);
-                                fadeBlack.FadeFromBlack();
+                                fadeBlack.FadeOut();
 
                                 curTicketIcon.RipStubTicket();
                                 curTicketIcon.InvertIcon(toggle: false);
@@ -276,7 +308,7 @@ public class GameplayUI : MonoBehaviour
                             else
                             {
                                 curTutorialIcon.MoveBackTutorialUIElement(tutorialRenderer);
-                                fadeBlack.FadeFromBlack();
+                                fadeBlack.FadeOut();
 
                                 traitorIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 1);
                                 traitorCountText.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 1);
@@ -287,7 +319,7 @@ public class GameplayUI : MonoBehaviour
                         }
                     }
                     break;
-                    case TutorialState.Marker:
+                    case TutorialState.RuleOut:
                     {
                         if (canExitState && playerInputs.spacebarDown)
                         {
@@ -300,11 +332,22 @@ public class GameplayUI : MonoBehaviour
                                 curTutorialIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 4);
                                 curTutorialIcon.renderer.transform.SetParent(unlockPicker.transform, true);
 
-                                fadeBlack.FadeFromBlack();
+                                fadeBlack.FadeOut();
 
                                 spyStats.tutorialsCompleted |= spyStats.curTutorialState;
                                 spyStats.curTutorialState = TutorialState.None;
                                 tutorialRenderer.SetText("");
+                            }
+                        }
+                    }
+                    break;
+                    case TutorialState.Color1:
+                    {
+                        if (canExitState && playerInputs.spacebarDown)
+                        {
+                            if (!tutorialRenderer.hasText)
+                            {
+                                curTutorialIcon.ctsMove?.Cancel();
                             }
                         }
                     }
@@ -334,7 +377,7 @@ public class GameplayUI : MonoBehaviour
                 {
                     curTicketIcon.mainTicket.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.ticketCountTutorialText);
                     curTutorialIcon = curTicketIcon.mainTicket;
-                    fadeBlack.FadeToBlack(0.8f);
+                    fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f);
                     spyStats.curTutorialState = TutorialState.Ticket;
                 }
                 else
@@ -376,18 +419,35 @@ public class GameplayUI : MonoBehaviour
     {
         SetState(UIState.None);
     }
-    private void MovePassengerMarkerTutorialIcon(IconUIElement icon)
+    private void MoveRuleOutMarkerTutorialIcon(IconUIElement icon)
     {
         if (!options.skipTutorial)
         {
             icon.renderer.transform.SetParent(transform, true);
-            icon.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.passengerMarkerTutorialText);
+            icon.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.passengerRuleOutTutorialText);
             icon.renderer.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
             
             curTutorialIcon = icon;
 
-            fadeBlack.FadeToBlack(value: 0.8f);
-            spyStats.curTutorialState = TutorialState.Marker;
+            fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f);
+            spyStats.curTutorialState = TutorialState.RuleOut;
+        }
+    }
+    private void MoveColorMarkerTutorialIcon(IconUIElement icon)
+    {
+        if (!options.skipTutorial)
+        {
+            SetToNotepadState();
+            notepad.FlipToPage(notepad.colorKeyPage.pageIndex);
+            
+            icon.renderer.transform.SetParent(transform, true);
+            icon.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.passengerColorMarkerTutorialText1);
+            icon.renderer.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
+
+            curTutorialIcon = icon;
+
+            fadeBlack.FadeIn(value: 0.8f, fadeBlackDepth: FadeBlack.NOTEPAD_DEPTH);
+            spyStats.curTutorialState = TutorialState.Color1;
         }
     }
     private void InitPOVUI()
@@ -463,7 +523,7 @@ public class GameplayUI : MonoBehaviour
     }
     private void SetFadeToBlack()
     {
-        fadeBlack.FadeToBlackChangeScene("Results", Scenes.SceneType.Score, sceneIndex: 3);
+        fadeBlack.FadeInChangeScene("Results", Scenes.SceneType.Score, sceneIndex: 3);
     }
     private void ShowWIcon(Vector2 position)
     {
@@ -494,6 +554,19 @@ public class GameplayUI : MonoBehaviour
             DisappearingKeyIcon().Forget();
         }
     }
+    private void SetTutorialTextToColor2()
+    {
+        tutorialRenderer.SetText(options.passengerColorMarkerTutorialText2);
+        spyStats.tutorialsCompleted |= spyStats.curTutorialState;
+        spyStats.curTutorialState = TutorialState.Color2;
+    }
+    private void SetTutorialTextToColor3()
+    {
+        tutorialRenderer.SetText(options.passengerColorMarkerTutorialText3);
+        spyStats.tutorialsCompleted |= spyStats.curTutorialState;
+        spyStats.curTutorialState = TutorialState.Color3;
+        fadeBlack.WaitAndSetSpacebar(waitTime: 2.5f);
+    }
     private void IncreaseTraitorCount()
     {
         traitorCount++;
@@ -504,7 +577,7 @@ public class GameplayUI : MonoBehaviour
             traitorIcon.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.traitorCountTutorialText);
             curTutorialIcon = traitorIcon;
 
-            fadeBlack.FadeToBlack(0.8f);
+            fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f);
             spyStats.curTutorialState = TutorialState.Traitor;
 
             traitorIcon.renderer.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
@@ -525,7 +598,7 @@ public class GameplayUI : MonoBehaviour
 
             if (playerInputs.mouseLeftDown)
             {
-                fadeBlack.FadeToBlackChangeScene("Find where the TRAITORS are going.", Scenes.SceneType.Trip, sceneIndex: 2);
+                fadeBlack.FadeInChangeScene("Find where the TRAITORS are going.", Scenes.SceneType.Trip, sceneIndex: 2);
                 gameEventData.OnReset.Raise();
             }
         }

@@ -58,8 +58,8 @@ public class StartUI : MonoBehaviour
         titleTransform.SetParent(null);
 
         Shader.SetGlobalFloat("_DayNight", 1);
-        fadeBlack.SetValue(1);
-        fadeBlack.FadeFromBlack();
+        fadeBlack.SetAlpha(1);
+        fadeBlack.FadeOut();
         
 
         SetState(UIState.StartMenu);
@@ -105,11 +105,11 @@ public class StartUI : MonoBehaviour
     private void Update()
     {
         UpdateState();
-        fadeBlack.CheckToFadeFromBlack();
+        fadeBlack.CheckToFadeOutSceneChange();
     }
     private void StartTrip()
     {
-        fadeBlack.FadeToBlackChangeScene("Find where the Traitors are going.", SceneType.Trip, sceneIndex: 2);
+        fadeBlack.FadeInChangeScene("FIND where the TRAITORS are going.", SceneType.Trip, sceneIndex: 2);
         keyIconRenderer.enabled = false;
         SceneController.KeepNotepad(notepad);
     }
@@ -186,11 +186,6 @@ public class StartUI : MonoBehaviour
             {
                 UpdateNaturalPos(notepadData.activeLocalPos, ref naturalMovePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
-
-                if (playerInputs.notepadKeyDown && canExitState)
-                {
-                    notepadData.checkingNotepad = false;
-                }
             }
             break;
 

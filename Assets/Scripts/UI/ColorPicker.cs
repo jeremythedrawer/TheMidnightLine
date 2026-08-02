@@ -28,10 +28,13 @@ public class ColorPicker : MonoBehaviour
         TopRight,
     }
 
+    public static event Action OnSelectClueColorFirstTime;
+
     public TripSO trip;
     public OptionsSO colorsData;
     public PlayerInputsSO playerInputs;
-    
+    public SpyStatsSO spyStats;
+
     public IconUIElement[] colorIcons;
     public AtlasRenderer paletteRenderer;
     
@@ -151,10 +154,16 @@ public class ColorPicker : MonoBehaviour
                     {
                         Color selectedColor = colorsData.selectableClueColors[index];
                         trip.selectedClueMarkerColors[trip.selectedColorMarkerIndex] = selectedColor;
-                        Shader.SetGlobalColor("_ColorKey" + trip.selectedColorMarkerIndex, selectedColor.linear);
+                        Color linearColor = selectedColor.linear;
+                        Shader.SetGlobalColor("_ColorKey" + trip.selectedColorMarkerIndex, linearColor);
                         selectedRenderer.custom.x = selectedColor.r;
                         selectedRenderer.custom.y = selectedColor.g;
                         selectedRenderer.custom.z = selectedColor.b;
+
+                        if (spyStats.curTutorialState == TutorialState.Color2)
+                        {
+                            OnSelectClueColorFirstTime?.Invoke();
+                        }
                     }
                     break;
                     case SelectType.NPC:
@@ -322,7 +331,6 @@ public class ColorPicker : MonoBehaviour
         {
             trip.selectedClueMarkerColors = new Color[]
             {
-                Color.black,
                 Color.black,
                 Color.black,
             };

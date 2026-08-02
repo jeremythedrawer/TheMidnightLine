@@ -23,8 +23,8 @@ public class SpyStatsSO : ScriptableObject
 
     public bool spriteFlip;
     public bool walkingIntoWall;
-
-    [Header("To Save")]
+    public bool startTrip;
+    
     public Bounds bounds;
     
     public LayerMask curGroundLayer;

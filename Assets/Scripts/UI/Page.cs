@@ -51,6 +51,7 @@ public class Page : MonoBehaviour
     public int traitorIndex;
     public int previewPlayerWriteIndex;
     public int activePlayerWriteRowIndex;
+    public int pageIndex;
 
     public string[] playerWriteTexts;
 
@@ -59,7 +60,7 @@ public class Page : MonoBehaviour
     public string activePlayerWriteText;
     public string previewPlayerWriteText;
 
-    public void Init(int pageIndex, int totalPages)
+    public void Init(int pageIndexInput, int totalPages)
     {
         paper_clip = paperRenderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
         
@@ -71,6 +72,7 @@ public class Page : MonoBehaviour
         float colSize = pageNumberIconBounds.size.x + PAGE_NUMBER_ICON_BUFFER_X;
 
         pageNumberIconRenderers = new AtlasRenderer[totalPages];
+        pageIndex = pageIndexInput;
 
         Vector3 startPos = new Vector3();
         startPos.x = (float)totalPages * colSize * -0.5f;
@@ -154,7 +156,7 @@ public class Page : MonoBehaviour
     {
         proceduralRenderers[0].ChangeCustom(time: 1, newValue: 1, customChannel: 4);
     }
-    public void UnlockColorRow(int index)
+    public void SetColorMarkerButtonSprite(int index)
     {
         AtlasRenderer playerWriteRend = playerWriteRenderers[index];
 
@@ -168,16 +170,6 @@ public class Page : MonoBehaviour
             case 1:
             {
                 playerWriteRend.UpdateSpriteInputsByIndex(TWO_NUMPAD_SPRITE_INDEX);
-            }
-            break;
-            case 2:
-            {
-                playerWriteRend.UpdateSpriteInputsByIndex(THREE_NUMPAD_SPRITE_INDEX);
-            }
-            break;
-            case 3:
-            {
-                playerWriteRend.UpdateSpriteInputsByIndex(FOUR_NUMPAD_SPRITE_INDEX);
             }
             break;
         }
