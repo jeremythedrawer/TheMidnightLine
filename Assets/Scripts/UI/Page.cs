@@ -66,7 +66,7 @@ public class Page : MonoBehaviour
         
         playerWriteIndex = -1;
         
-        exitButton.Init(ClickExitButton, EnterButton, ExitButton);
+        exitButton.InitButton(ClickExitButton, EnterButton, ExitButton);
 
         Bounds pageNumberIconBounds = pageNumberIconPrefab.bounds;
         float colSize = pageNumberIconBounds.size.x + PAGE_NUMBER_ICON_BUFFER_X;
@@ -98,18 +98,18 @@ public class Page : MonoBehaviour
         {
             case PageType.Prompt:
             {
-                rightButton.Init(ClickRightButton, EnterButton, ExitButton);
+                rightButton.InitButton(ClickRightButton, EnterButton, ExitButton);
             }
             break;
             case PageType.Profile:
             {
-                rightButton.Init(ClickRightButton, EnterButton, ExitButton);
-                leftButton.Init(ClickLeftButton, EnterButton, ExitButton);
+                rightButton.InitButton(ClickRightButton, EnterButton, ExitButton);
+                leftButton.InitButton(ClickLeftButton, EnterButton, ExitButton);
             }
             break;
             case PageType.ColorKey:
             {
-                leftButton.Init(ClickLeftButton, EnterButton, ExitButton);
+                leftButton.InitButton(ClickLeftButton, EnterButton, ExitButton);
 
                 for (int i = 0; i < otherButtons.Length; i++)
                 {
@@ -122,7 +122,7 @@ public class Page : MonoBehaviour
                         trip.selectedColorMarkerIndex = activePlayerWriteRowIndex;
                     }
 
-                    otherButtons[i].Init(ClickColor, EnterButton, ExitButton);
+                    otherButtons[i].InitButton(ClickColor, EnterButton, ExitButton);
                 }
 
                 playerWriteTexts = new string[playerWriteTextRenderers.Length];
@@ -324,9 +324,9 @@ public class Page : MonoBehaviour
     {
         paperRenderer.PlayClipOneShotReverse(paper_clip);
     }
-    public void SetPageDepth(float depth)
+    public void SetPageDepth(float localDepth)
     {
-        transform.position = new Vector3(transform.position.x, transform.position.y, depth);
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, localDepth);
     }
     public void WritePlayerWriteText()
     {
@@ -577,13 +577,13 @@ public class Page : MonoBehaviour
     }
     public void ClickExitButton(IconUIElement icon)
     {
-        if (notepadData.checkingNotepad)
+        if (spyStats.checkingNotepad)
         {
-            notepadData.checkingNotepad = false;
+            spyStats.checkingNotepad = false;
         }
         else
         {
-            notepadData.checkingNotepad = true;
+            spyStats.checkingNotepad = true;
         }
     }
     public void ClickLeftButton(IconUIElement icon)

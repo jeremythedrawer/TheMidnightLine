@@ -3,6 +3,8 @@ Shader "Custom/s_fadeBlack"
     Properties
     {
         _Alpha("Alpha", Range(0,1)) = 0
+        _UVPosX("UV Pos X", Range(0,1)) = 0
+        _Value("Value", Range(0,1)) = 0
         [NoScaleOffset] _NoiseTexture("Noise Texture", 2D) = "white"
     }
 
@@ -15,7 +17,6 @@ Shader "Custom/s_fadeBlack"
         Pass
         {
             HLSLPROGRAM
-            
 
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
@@ -24,6 +25,8 @@ Shader "Custom/s_fadeBlack"
             
             CBUFFER_START(UnityPerMaterial)
                 float _Alpha;
+                float _UVPosX;
+                float _Value;
             CBUFFER_END
 
             TEXTURE2D(_NoiseTexture);
@@ -59,7 +62,11 @@ Shader "Custom/s_fadeBlack"
             
             half4 frag(Varyings i) : SV_Target
             {
-                float mask = BayerX8(_Alpha, i.positionHCS.y);
+                float invertValue = 1 - _Value;
+                float2 centerUV = step(0, i.uv - _UVPosX * _Value) + invertValue;
+                float alpha = lerp(1 , _Alpha, _Value);
+                float mask = 1 - BayerX8(centerUV.x * alpha, i.positionHCS.y);
+
                 clip(mask - 0.001);
 
                 half3 col = mask * _BlackColor;

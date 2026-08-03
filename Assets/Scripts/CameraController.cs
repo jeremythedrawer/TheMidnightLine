@@ -15,6 +15,7 @@ public class CameraController : MonoBehaviour
     public PlayerInputsSO spyInputs;
     public LayerSettingsSO layerSettings;
     public GameEventDataSO gameEventData;
+    public SceneData sceneData;
 
     public RenderTexture carriageBoundsRT;
     public ComputeShader carriageBoundsCompute;
@@ -29,10 +30,7 @@ public class CameraController : MonoBehaviour
     public int carriageBoundsKernel;
     public int threadGroupX;
     public int threadGroupY;
-    private void Start()
-    {
 
-    }
     private void OnEnable()
     {
         Init();
@@ -199,8 +197,15 @@ public class CameraController : MonoBehaviour
             break;
             case LocationState.Elevator:
             {
-                Bounds curLocBounds = spyStats.curLocationBounds;
-                targetWorldPos.x = curLocBounds.center.x + (curLocBounds.size.x * 0.25f);
+                if (sceneData.activeSceneType == Scenes.SceneType.Start)
+                {
+                    Bounds curLocBounds = spyStats.curLocationBounds;
+                    targetWorldPos.x = curLocBounds.center.x + (curLocBounds.size.x * 0.25f);
+                }
+                else if (sceneData.activeSceneType == Scenes.SceneType.Score)
+                {
+                    MoveToPlayer();
+                }
             }
             break;
         }

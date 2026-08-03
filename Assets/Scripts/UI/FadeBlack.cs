@@ -20,9 +20,12 @@ public class FadeBlack : MonoBehaviour
 
     public static event Action OnFinishFadeFromBlack;
 
+    public PlayerInputsSO playerInputs;
+    public GameEventDataSO gameEventData;
+
     public SceneData sceneData;
     public Material fadeBlackMaterial;
-    public PlayerInputsSO playerInputs;
+
 
     public AtlasTextRenderer textRenderer;
     public AtlasRenderer spacebarRenderer;
@@ -33,28 +36,41 @@ public class FadeBlack : MonoBehaviour
     public SceneType curSceneType;
     public State curState;
     public int curSceneIndex;
-    public void FadeInChangeScene(string text, SceneType sceneType, int sceneIndex)
+
+    private void OnEnable()
+    {
+        gameEventData.OnFinishTripScene.RegisterListener(SetFadeToBlackToScore);
+    }
+    private void OnDisable()
+    {
+        gameEventData.OnFinishTripScene.UnregisterListener(SetFadeToBlackToScore);
+    }
+    private void SetFadeToBlackToScore()
+    {
+        FadeInChangeScene("Performance Review", Scenes.SceneType.Score, sceneIndex: 1);
+    }
+    public void FadeInChangeScene(string text, SceneType sceneType, int sceneIndex, float uvPosX = 0, float alpha = 0, float fadeBlackZPos = DEFAULT_DEPTH)
     {
         ctsFadeBlack?.Cancel();
         ctsFadeBlack = new CancellationTokenSource();
-        transform.localPosition = new Vector3(0, 0, DEFAULT_DEPTH);
-        FadingToBlackChangeScene(text, sceneType, sceneIndex).Forget();
+        transform.localPosition = new Vector3(0, 0, fadeBlackZPos);
+        FadingInChangeScene(text, sceneType, sceneIndex, uvPosX, alpha).Forget();
     }
-    public void FadeInWithSpacebar(float value, float spacebarWaitTime, float fadeBlackDepth = DEFAULT_DEPTH)
+    public void FadeInWithSpacebar(float value, float spacebarWaitTime, float uvPosX = 0, float alpha = 0, float fadeBlackZPos = DEFAULT_DEPTH)
     {
         ctsFadeBlack?.Cancel();
         ctsFadeBlack = new CancellationTokenSource();
 
-        transform.localPosition = new Vector3(0, 0, fadeBlackDepth);
-        FadingInWithSpacebar(value, spacebarWaitTime).Forget();
+        transform.localPosition = new Vector3(0, 0, fadeBlackZPos);
+        FadingInSpacebar(value, uvPosX, alpha, spacebarWaitTime).Forget();
     }
-    public void FadeIn(float value, float fadeBlackDepth = DEFAULT_DEPTH)
+    public void FadeIn(float value, float uvPosX = 0, float alpha = 0, float fadeBlackZPos = DEFAULT_DEPTH)
     {
         ctsFadeBlack?.Cancel();
         ctsFadeBlack = new CancellationTokenSource();
 
-        transform.localPosition = new Vector3(0, 0, fadeBlackDepth);
-        FadingIn(value).Forget();
+        transform.localPosition = new Vector3(0, 0, fadeBlackZPos);
+        FadingIn(value, uvPosX, alpha).Forget();
     }
     public void CheckToFadeOutSceneChange()
     {
@@ -62,7 +78,7 @@ public class FadeBlack : MonoBehaviour
         {
             if (playerInputs.mouseLeftUp || playerInputs.spacebarDown || playerInputs.move != 0)
             {
-                FadeOutWithSceneChange();
+                FadeOutChangeScene();
             }
         }
         else if (curState == State.FadingIn || curState == State.WritingText)
@@ -80,7 +96,7 @@ public class FadeBlack : MonoBehaviour
 
         FadingOut().Forget();
     }
-    public void FadeOutWithSceneChange()
+    public void FadeOutChangeScene()
     {
         Scenes.SetScene(sceneData, curSceneType, curSceneIndex);
         ctsFadeBlack?.Cancel();
@@ -88,20 +104,24 @@ public class FadeBlack : MonoBehaviour
 
         FadingOut().Forget();
     }
-    private async UniTask FadingToBlackChangeScene(string text, SceneType sceneType, int sceneIndex)
+    private async UniTask FadingInChangeScene(string text, SceneType sceneType, int sceneIndex, float uvPosX = 0, float alpha = 0)
     {
         try
         {
             float elapsedTime = 0;
             curState = State.FadingIn;
+
+            fadeBlackMaterial.SetFloat("_UVPosX", uvPosX);
+            fadeBlackMaterial.SetFloat("_Alpha", alpha);
+            
             while (elapsedTime < FADE_BLACK_DURATION)
             {
                 float t = elapsedTime / FADE_BLACK_DURATION;
-                fadeBlackMaterial.SetFloat("_Alpha", t);
+                fadeBlackMaterial.SetFloat("_Value", t);
                 elapsedTime += Time.deltaTime;
                 await UniTask.Yield(ctsFadeBlack.Token);
             }
-            fadeBlackMaterial.SetFloat("_Alpha", 1);
+            fadeBlackMaterial.SetFloat("_Value", 1);
             curSceneType = sceneType;
             curSceneIndex = sceneIndex;
             curState = State.WritingText;
@@ -111,42 +131,51 @@ public class FadeBlack : MonoBehaviour
         catch (OperationCanceledException) { }
     }
 
-    private async UniTask FadingInWithSpacebar(float value, float spacebarWaitTime)
+    private async UniTask FadingInSpacebar(float newValue, float uvPosX, float alpha, float spacebarWaitTime)
     {
         try
         {
-            float elapsedTime = fadeBlackMaterial.GetFloat("_Alpha");
+            float elapsedTime = fadeBlackMaterial.GetFloat("_Value");
+
             curState = State.FadingIn;
-            float totalTime = FADE_BLACK_DURATION * value;
+            float totalTime = FADE_BLACK_DURATION * newValue;
+            
+            fadeBlackMaterial.SetFloat("_UVPosX", uvPosX);
+            fadeBlackMaterial.SetFloat("_Alpha", alpha);
+            
             while (elapsedTime < totalTime)
             {
-                float t = (elapsedTime / totalTime) * value;
-                fadeBlackMaterial.SetFloat("_Alpha", t);
+                float t = (elapsedTime / totalTime) * newValue;
+                fadeBlackMaterial.SetFloat("_Value", t);
                 elapsedTime += Time.deltaTime;
                 await UniTask.Yield(ctsFadeBlack.Token);
             }
-            fadeBlackMaterial.SetFloat("_Alpha", value);
+            fadeBlackMaterial.SetFloat("_Value", newValue);
             curState = State.FinishedFadeIn;
             WaitAndSetSpacebar(spacebarWaitTime);
 
         }
         catch (OperationCanceledException) { }
     }
-    private async UniTask FadingIn(float value)
+    private async UniTask FadingIn(float value, float uvPosX, float alpha)
     {
         try
         {
-            float elapsedTime = fadeBlackMaterial.GetFloat("_Alpha");
+            float elapsedTime = fadeBlackMaterial.GetFloat("_Value");
             curState = State.FadingIn;
             float totalTime = FADE_BLACK_DURATION * value;
+
+            fadeBlackMaterial.SetFloat("_UVPosX", uvPosX);
+            fadeBlackMaterial.SetFloat("_Alpha", alpha);
+            
             while (elapsedTime < totalTime)
             {
                 float t = (elapsedTime / totalTime) * value;
-                fadeBlackMaterial.SetFloat("_Alpha", t);
+                fadeBlackMaterial.SetFloat("_Value", t);
                 elapsedTime += Time.deltaTime;
                 await UniTask.Yield(ctsFadeBlack.Token);
             }
-            fadeBlackMaterial.SetFloat("_Alpha", value);
+            fadeBlackMaterial.SetFloat("_Value", value);
             curState = State.FinishedFadeIn;
         }
         catch (OperationCanceledException) { }
@@ -155,18 +184,18 @@ public class FadeBlack : MonoBehaviour
     {
         try
         {
-            float elapsedTime = fadeBlackMaterial.GetFloat("_Alpha");
+            float elapsedTime = fadeBlackMaterial.GetFloat("_Value");
             spacebarRenderer.custom.w = 0;
             curState = State.FadingOut;
             while (elapsedTime > 0)
             {
                 float t = elapsedTime / FADE_BLACK_DURATION;
-                fadeBlackMaterial.SetFloat("_Alpha", t);
+                fadeBlackMaterial.SetFloat("_Value", t);
                 textRenderer.SetAppearTextAlpha(t);
                 elapsedTime -= Time.deltaTime;
                 await UniTask.Yield(ctsFadeBlack.Token);
             }
-            fadeBlackMaterial.SetFloat("_Alpha", 0);
+            fadeBlackMaterial.SetFloat("_Value", 0);
             textRenderer.SetAppearTextAlpha(1);
             curState = State.FinishedFadeOut;
             OnFinishFadeFromBlack?.Invoke();
@@ -175,7 +204,7 @@ public class FadeBlack : MonoBehaviour
     }
     public void SetAlpha(float value)
     {
-        fadeBlackMaterial.SetFloat("_Alpha", value);
+        fadeBlackMaterial.SetFloat("_Value", value);
     }
     private void FinishWritingWithSceneChange()
     {

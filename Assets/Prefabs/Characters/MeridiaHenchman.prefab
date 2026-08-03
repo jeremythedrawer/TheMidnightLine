@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5752152008107022976}
   - component: {fileID: 6605147100382442943}
-  - component: {fileID: 6729765551717479125}
+  - component: {fileID: 249929080054241729}
   m_Layer: 0
   m_Name: MeridiaHenchman
   m_TagString: Untagged
@@ -51,39 +51,39 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
   atlas: {fileID: 11400000, guid: 976a03830754854478443255a876376b, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 0
+  spriteIndex: 1
   flipX: 0
   flipY: 0
   width: 1
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.13671875, y: 0.23046875, z: 0.001953125, w: 0.765625}
+    uvSizeAndPos: {x: 0.13671875, y: 0.23242188, z: 0.14257812, w: 0.765625}
     uvPivot: {x: 0.37142858, y: 0}
-    worldSize: {x: 0.3888889, y: 0.65555555, z: 1}
-    index: 0
+    worldSize: {x: 0.3888889, y: 0.6611111, z: 1}
+    index: 1
   bounds:
-    m_Center: {x: -1.199, y: 0.32777777, z: 5}
-    m_Extent: {x: 0.19444445, y: 0.32777777, z: 0.1}
-  worldPivotAndSize: {x: -0.14444445, y: -0, z: 0.3888889, w: 0.65555555}
-  uvSizeAndPosition: {x: 0.13671875, y: 0.23046875, z: 0.001953125, w: 0.765625}
+    m_Center: {x: -1.199, y: 0.33055556, z: 6}
+    m_Extent: {x: 0.19444445, y: 0.33055556, z: 0.1}
+  worldPivotAndSize: {x: -0.14444445, y: -0, z: 0.3888889, w: 0.6611111}
+  uvSizeAndPosition: {x: 0.13671875, y: 0.23242188, z: 0.14257812, w: 0.765625}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
   customBit: 0
-  boundsOffset: {x: 0.049999997, y: 0.32777777, z: 0}
+  boundsOffset: {x: 0.049999997, y: 0.33055556, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
   customs: []
-  keyframeClock: 1.4829507
-  curFrameIndex: 0
-  prevFrameIndex: 1
+  keyframeClock: 0
+  curFrameIndex: 1
+  prevFrameIndex: 0
   curMotionIndex: 1
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
+  prevSpriteIndexFlipH: 1
+  prevSpriteIndexFlipV: 1
   isAnimating: 1
   quadCount: 0
---- !u!114 &6729765551717479125
+--- !u!114 &249929080054241729
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -92,16 +92,8 @@ MonoBehaviour:
   m_GameObject: {fileID: 4310546005359535565}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 74561103b08f4454eaa4692867fb523b, type: 3}
+  m_Script: {fileID: 11500000, guid: 7b089e360c0b8fa4fb460db0a47425e2, type: 3}
   m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::SimpleMotionPlayer
+  m_EditorClassIdentifier: Assembly-CSharp::HenchmanBrain
   atlasRenderer: {fileID: 6605147100382442943}
-  atlas: {fileID: 11400000, guid: 976a03830754854478443255a876376b, type: 2}
-  clip:
-    clipName: SittingBreathing1
-    clipType: 1
-    motionIndex: 1
-    keyframeStartIndex: 0
-    keyframeEndIndex: 2
-    time: 0
-  clipIndex: 1
+  curState: 0

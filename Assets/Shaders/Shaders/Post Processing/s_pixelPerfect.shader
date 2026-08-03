@@ -9,7 +9,7 @@ Shader "Custom/s_pixelPerfect"
 
 		half4 frag(Varyings input) : SV_TARGET
 		{
-			float uvDiff = _SnapDiff / _ScreenParams.xy;
+			float2 uvDiff = _SnapDiff / _ScreenParams.xy;
 			half3 col = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_PointClamp, input.texcoord - uvDiff).rgb;
 			return half4(col, 1);
 

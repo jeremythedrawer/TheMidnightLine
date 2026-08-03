@@ -84,6 +84,16 @@ public static class NPC
         Arabic,
     }
 
+    public enum HenchmanState
+    {
+        Sitting,
+        Shooting,
+    }
+    public enum PresidentState
+    { 
+        Sitting,
+        Handshaking,s
+    }
     [Serializable] public struct NPCProfile
     {
         public int boardingStationIndex;

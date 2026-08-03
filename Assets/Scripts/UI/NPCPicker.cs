@@ -119,7 +119,7 @@ public class NPCPicker : MonoBehaviour
                 }
                 Close();
             }
-            icons[i].Init(ClickIcon, EnterColorIcon, ExitColorIcon);
+            icons[i].InitButton(ClickIcon, EnterColorIcon, ExitColorIcon);
         }
     }
     private void EnterColorIcon(IconUIElement icon)

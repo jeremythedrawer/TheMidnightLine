@@ -156,9 +156,9 @@ public class ColorPicker : MonoBehaviour
                         trip.selectedClueMarkerColors[trip.selectedColorMarkerIndex] = selectedColor;
                         Color linearColor = selectedColor.linear;
                         Shader.SetGlobalColor("_ColorKey" + trip.selectedColorMarkerIndex, linearColor);
-                        selectedRenderer.custom.x = selectedColor.r;
-                        selectedRenderer.custom.y = selectedColor.g;
-                        selectedRenderer.custom.z = selectedColor.b;
+                        selectedRenderer.custom.x = linearColor.r;
+                        selectedRenderer.custom.y = linearColor.g;
+                        selectedRenderer.custom.z = linearColor.b;
 
                         if (spyStats.curTutorialState == TutorialState.Color2)
                         {
@@ -249,7 +249,7 @@ public class ColorPicker : MonoBehaviour
                     break;
                 }
             }
-            colorIcons[i].Init(ClickIcon, EnterColorIcon, ExitColorIcon);
+            colorIcons[i].InitButton(ClickIcon, EnterColorIcon, ExitColorIcon);
         }
     }
     private void Update()
@@ -331,6 +331,7 @@ public class ColorPicker : MonoBehaviour
         {
             trip.selectedClueMarkerColors = new Color[]
             {
+                Color.black,
                 Color.black,
                 Color.black,
             };

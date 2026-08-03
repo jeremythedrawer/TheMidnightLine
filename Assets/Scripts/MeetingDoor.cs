@@ -46,6 +46,10 @@ public class MeetingDoor : MonoBehaviour
 
     public bool opened;
     public bool spyInBounds;
+#if UNITY_EDITOR
+    [Header("Editor")]
+    public bool skipToScore;
+#endif
     private void Start()
     {
         clip = atlasRenderer.atlas.clipDict[(int)motion];
@@ -197,6 +201,24 @@ public class MeetingDoor : MonoBehaviour
     }
     private void WalkThroughStartDoor()
     {
+#if UNITY_EDITOR
+
+        if (doorType == MeetingDoorType.Start && opened && spyInBounds && !spyStats.startTrip && !atlasRenderer.isAnimating)
+        {
+            if (skipToScore)
+            {
+                gameEventData.OnFinishTripScene.Raise();
+            }
+            else
+            {
+                gameEventData.OnStartTrip.Raise();
+            }
+            SpyBrain spy = SceneController.GetSpy();
+            spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, rightDepth));
+            leftRoom.MoveUp();
+            spyStats.startTrip = true;
+        }
+#else
         if (doorType == MeetingDoorType.Start && opened && spyInBounds && !spyStats.startTrip && !atlasRenderer.isAnimating)
         {
             gameEventData.OnStartTrip.Raise();
@@ -205,6 +227,7 @@ public class MeetingDoor : MonoBehaviour
             leftRoom.MoveUp();
             spyStats.startTrip = true;
         }
+#endif
     }
     public void OpenDoor()
     {

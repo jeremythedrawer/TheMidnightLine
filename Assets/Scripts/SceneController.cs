@@ -56,9 +56,9 @@ public class SceneController : MonoBehaviour
     {
         InputManager = inputManager;
     }
-    public static Notepad GetNotepad(Transform transform)
+    public static Notepad GetNotepad(Transform newTransform)
     {
-        Notepad.transform.SetParent(transform, true);
+        Notepad.transform.SetParent(newTransform, true);
         return Notepad;
     }
     public static ColorPicker GetClueColorPicker()

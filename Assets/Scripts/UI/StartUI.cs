@@ -24,6 +24,7 @@ public class StartUI : MonoBehaviour
     public PlayerInputsSO playerInputs;
     public NotepadData notepadData;
     public OptionsSO options;
+    public SceneData sceneData;
 
     public Transform titleTransform;
 
@@ -35,9 +36,12 @@ public class StartUI : MonoBehaviour
     public TextUIElement lightColorButton;
     public TextUIElement tutorialButton;
 
-    public SceneData sceneData;
+    public TextUIElement thankYouMessage;
+    public TextUIElement playAgainButton;
 
-    public Notepad notepad;
+    public IconUIElement titleIcon1;
+    public IconUIElement titleIcon2;
+
 
     public FadeBlack fadeBlack;
 
@@ -49,20 +53,13 @@ public class StartUI : MonoBehaviour
     public bool canExitState;
     public bool atOptions;
 
+    public Notepad notepad;
+
     public CancellationTokenSource ctsFadeBlack;
     public CancellationTokenSource ctsNotepad;
     private void Start()
     {
-        InitButtons();
 
-        titleTransform.SetParent(null);
-
-        Shader.SetGlobalFloat("_DayNight", 1);
-        fadeBlack.SetAlpha(1);
-        fadeBlack.FadeOut();
-        
-
-        SetState(UIState.StartMenu);
     }
     private void OnEnable()
     {        
@@ -75,7 +72,8 @@ public class StartUI : MonoBehaviour
         MeetingDoor.OnSpyEnter += SetInteractIcon;
         MeetingDoor.OnSpyExit += DisableInteractIcon;
 
-
+        Scenes.OnLoadScore += ScoreSceneInit;
+        Scenes.OnLoadStart += StartSceneInit;
 
         gameEventData.OnNotepadCollect.RegisterListener(DisableInteractIcon);
         gameEventData.OnNotepadCollect.RegisterListener(GetNotepad);
@@ -95,6 +93,9 @@ public class StartUI : MonoBehaviour
         MeetingDoor.OnSpyEnter -= SetInteractIcon;
         MeetingDoor.OnSpyExit -= DisableInteractIcon;
 
+        Scenes.OnLoadStart -= StartSceneInit;
+        Scenes.OnLoadScore -= ScoreSceneInit;
+
         gameEventData.OnNotepadCollect.UnregisterListener(DisableInteractIcon);
         gameEventData.OnNotepadCollect.UnregisterListener(GetNotepad);
 
@@ -106,6 +107,75 @@ public class StartUI : MonoBehaviour
     {
         UpdateState();
         fadeBlack.CheckToFadeOutSceneChange();
+    }
+    private void StartSceneInit()
+    {
+        startButton.InitButton(StartButtonClicked);
+        optionsButton.InitButton(OptionsButtonClicked);
+        quitButton.InitButton(QuitButtonClicked);
+        
+        darkColorButton.InitButton(DarkColorButtonClicked);
+        lightColorButton.InitButton(LightColorButtonClicked);
+        tutorialButton.InitButton(TutorialButtonClicked);
+
+        titleIcon1.InitImage();
+        titleIcon2.InitImage();
+        
+        darkColorButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+        lightColorButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+        tutorialButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+        thankYouMessage.SetButtonAway(camStats, MoveButtonDirection.Left);
+        playAgainButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+        
+        titleTransform.SetParent(null);
+
+        Shader.SetGlobalFloat("_DayNight", 1);
+
+        fadeBlack.SetAlpha(1);
+        fadeBlack.FadeOut();
+
+        options.skipTutorial = false;
+
+        SetState(UIState.StartMenu);
+    }
+    private void ScoreSceneInit()
+    {
+        startButton.InitButton(StartButtonClicked);
+        optionsButton.InitButton(OptionsButtonClicked);
+        quitButton.InitButton(QuitButtonClicked);
+        
+        darkColorButton.InitButton(DarkColorButtonClicked);
+        lightColorButton.InitButton(LightColorButtonClicked);
+        tutorialButton.InitButton(TutorialButtonClicked);
+        
+        thankYouMessage.InitMessage();
+        playAgainButton.InitButton(PlayAgainClicked);
+
+        titleIcon1.InitImage();
+        titleIcon2.InitImage();
+
+        startButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+        optionsButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+        quitButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+
+        darkColorButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+        lightColorButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+        tutorialButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+        
+        thankYouMessage.SetButtonAway(camStats, MoveButtonDirection.Left);
+        playAgainButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+
+        titleIcon1.SetButtonAway(camStats, MoveButtonDirection.Left);
+        titleIcon2.SetButtonAway(camStats, MoveButtonDirection.Left);
+
+        titleTransform.SetParent(null);
+
+        fadeBlack.SetAlpha(1);
+        fadeBlack.FadeOut();
+
+        Shader.SetGlobalFloat("_DayNight", 1);
+
+        SetState(UIState.None);
     }
     private void StartTrip()
     {
@@ -127,6 +197,7 @@ public class StartUI : MonoBehaviour
     private void GetNotepad()
     {
         notepad = SceneController.GetNotepad(transform);
+        notepad.Init();
     }
     private void SetToNoneState()
     {
@@ -214,7 +285,13 @@ public class StartUI : MonoBehaviour
 
             case UIState.OptionsMenu:
             {
-                HandleOptionsButtons();
+                UpdateOptionsButtons();
+            }
+            break;
+
+            case UIState.EndMenu:
+            {
+                UpdateEndMenuButtons();
             }
             break;
         }
@@ -232,35 +309,36 @@ public class StartUI : MonoBehaviour
             break;
         }
     }
-    private void InitButtons()
-    {
-        options.skipTutorial = false;
 
-        startButton.Init(StartButtonClicked);
-        optionsButton.Init(OptionsButtonClicked);
-        quitButton.Init(QuitButtonClicked);
-        darkColorButton.Init(DarkColorButtonClicked);
-        lightColorButton.Init(LightColorButtonClicked);
-        tutorialButton.Init(TutorialButtonClicked);
-
-        darkColorButton.SetButtonAway(camStats, MoveButtonDirection.Left);
-        lightColorButton.SetButtonAway(camStats, MoveButtonDirection.Left);
-        tutorialButton.SetButtonAway(camStats, MoveButtonDirection.Left);
-
-
-    }
     private void UpdateMainMenuButtons()
     {
         startButton.UpdateButton(playerInputs);
         quitButton.UpdateButton(playerInputs);
         optionsButton.UpdateButton(playerInputs);
     }
-    private void HandleOptionsButtons()
+    private void UpdateOptionsButtons()
     {
         optionsButton.UpdateButton(playerInputs);
         darkColorButton.UpdateButton(playerInputs);
         lightColorButton.UpdateButton(playerInputs);
         tutorialButton.UpdateButton(playerInputs);
+    }
+    private void UpdateEndMenuButtons()
+    {
+        playAgainButton.UpdateButton(playerInputs);
+        quitButton.UpdateButton(playerInputs);
+    }
+    private void PlayAgainClicked()
+    {
+        //TODO: Reset stats, seemless transition to start scene
+        playAgainButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+        thankYouMessage.MoveButtonAway(camStats, MoveButtonDirection.Left);
+        
+        startButton.MoveButtonToActive();
+        optionsButton.MoveButtonToActive();
+
+        gameEventData.OnPlayAgain.Raise();
+        SetState(UIState.StartMenu);
     }
     private void StartButtonClicked()
     {
@@ -270,39 +348,49 @@ public class StartUI : MonoBehaviour
 
         OnStartGame?.Invoke();
         SetState(UIState.None);
-
-
     }
     private void OptionsButtonClicked()
     {
-        if (curState == UIState.StartMenu)
+        switch(curState)
         {
-            optionsButton.renderer.SetText("Back");
-            quitButton.MoveButtonAway(camStats, MoveButtonDirection.Right);
-            startButton.MoveButtonAway(camStats, MoveButtonDirection.Right);
-            
-            optionsButton.MoveButtonToRight();
+            case UIState.StartMenu:
+            {
+                optionsButton.renderer.SetText("Back");
+                quitButton.MoveButtonAway(camStats, MoveButtonDirection.Right);
+                startButton.MoveButtonAway(camStats, MoveButtonDirection.Right);
 
-            darkColorButton.MoveButtonToActive();
-            lightColorButton.MoveButtonToActive();
-            tutorialButton.MoveButtonToActive();
+                optionsButton.MoveButtonToRight();
 
-            OnClickOptions?.Invoke();
-            SetState(UIState.OptionsMenu);
-        }
-        else if (curState == UIState.OptionsMenu)
-        {
-            optionsButton.renderer.SetText("Options");
-            startButton.MoveButtonToActive();
-            quitButton.MoveButtonToActive();
-            optionsButton.MoveButtonToActive();
+                darkColorButton.MoveButtonToActive();
+                lightColorButton.MoveButtonToActive();
+                tutorialButton.MoveButtonToActive();
 
-            darkColorButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
-            lightColorButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
-            tutorialButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+                OnClickOptions?.Invoke();
+                SetState(UIState.OptionsMenu);
+            }
+            break;
+            case UIState.OptionsMenu:
+            {
+                optionsButton.renderer.SetText("Options");
+                startButton.MoveButtonToActive();
+                quitButton.MoveButtonToActive();
+                optionsButton.MoveButtonToActive();
 
-            OnClickBackFromOptions?.Invoke();
-            SetState(UIState.StartMenu);
+                darkColorButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+                lightColorButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+                tutorialButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+
+                OnClickBackFromOptions?.Invoke();
+                if (sceneData.activeSceneType == SceneType.Start)
+                {
+                    SetState(UIState.StartMenu);
+                }
+                else
+                {
+                    SetState(UIState.EndMenu);
+                }
+            }
+            break;
         }
     }
     private void QuitButtonClicked()

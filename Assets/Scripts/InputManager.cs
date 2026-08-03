@@ -159,7 +159,7 @@ public class InputManager : MonoBehaviour
             if (resetElaspedTime > resetThresholdTime)
             {
                 resetElaspedTime = 0;
-                gameEventData.OnReset.Raise();
+                gameEventData.OnResetTrip.Raise();
             }
         }
         Vector2 screenPos = Mouse.current.position.ReadValue();
@@ -207,6 +207,6 @@ public class InputManager : MonoBehaviour
     }
     private void OnApplicationQuit()
     {
-        gameEventData.OnReset.Raise();
+        gameEventData.OnResetTrip.Raise();
     }
 }

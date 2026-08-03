@@ -178,14 +178,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d839b3667ced2468a91f2a72b686a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FadeBlack
+  playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
+  gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
   sceneData: {fileID: 11400000, guid: 3293190d726975e43a124435917a650c, type: 2}
   fadeBlackMaterial: {fileID: 2100000, guid: d7e800c5760a0a94698f28dbdb5c3a9e, type: 2}
-  playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   textRenderer: {fileID: 1716753188756788558}
   spacebarRenderer: {fileID: 8674335462849722870}
   curSceneType: 0
+  curState: 0
   curSceneIndex: 1
-  finishedFade: 0
 --- !u!1 &6416276270781061555
 GameObject:
   m_ObjectHideFlags: 0

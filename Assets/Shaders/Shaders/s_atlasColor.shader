@@ -118,7 +118,7 @@ Shader "Custom/s_atlasColor"
                 float3 blackColor = (1 - meridiaColorMask) * _BlackColor;
 
                 half t = round(LinearLightness(col));
-                half3 finalCol = lerp((blackTex + col) * border + blackColor + meridiaColor, whiteTex * col + blackColor + meridiaColor, t);
+                half3 finalCol = lerp(lerp(blackColor + meridiaColor, (blackTex + col), border), lerp(blackColor + meridiaColor, col, whiteTex), t);
 
                 clip((tex.a) - 0.001);
                 return half4 (finalCol.rgb, 1);

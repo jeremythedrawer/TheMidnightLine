@@ -39,7 +39,6 @@ Shader "Custom/s_shiny"
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                float3 worldPos : TEXCOORD1;
             };
 
             CBUFFER_START(UnityPerMaterial)

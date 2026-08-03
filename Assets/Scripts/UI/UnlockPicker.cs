@@ -128,7 +128,7 @@ public class UnlockPicker : MonoBehaviour
                 selectedNPC.atlasRenderer.custom.z = 1;
                 selectedNPC.ticketHasBeenChecked = true;
             }
-            icons[i].Init(ClickIcon, EnterColorIcon, ExitColorIcon);
+            icons[i].InitButton(ClickIcon, EnterColorIcon, ExitColorIcon);
         }
 
     }

@@ -2,10 +2,8 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-using UnityEditor.Rendering.LookDev;
 using UnityEngine;
-using UnityEngine.InputSystem;
-using static AtlasUI;
+
 using static NPC;
 public static class AtlasUI
 {
@@ -146,6 +144,7 @@ public static class AtlasUI
         None,
         StartMenu,
         OptionsMenu,
+        EndMenu,
         Notepad,
         Ticket,
         CarriageMap,
@@ -196,9 +195,13 @@ public static class AtlasUI
         public OnClick OnClickCallback;
         public ButtonState curState;
         public CancellationTokenSource ctsMove;
-        public void Init(OnClick onClickCallback)
+        public void InitButton(OnClick onClickCallback)
         {
             OnClickCallback = onClickCallback;
+            activePos = renderer.transform.localPosition;
+        }
+        public void InitMessage()
+        {
             activePos = renderer.transform.localPosition;
         }
         public void UpdateButton(PlayerInputsSO playerInputs)
@@ -383,20 +386,25 @@ public static class AtlasUI
 
         public AtlasRenderer renderer;
 
-        public OnClick OnClickCallback;
-        public OnEnter OnEnterCallback;
-        public OnExit OnExitCallback;
-
         [Header("Generated")]
         public Vector3 startPos;
         public ButtonState curState;
 
+        public OnClick OnClickCallback;
+        public OnEnter OnEnterCallback;
+        public OnExit OnExitCallback;
+
         public CancellationTokenSource ctsMove;
-        public void Init(OnClick onClickCallback, OnEnter onEnterCallback, OnExit onExitCallback)
+        public void InitButton(OnClick onClickCallback, OnEnter onEnterCallback, OnExit onExitCallback)
         {
             OnClickCallback = onClickCallback;
             OnEnterCallback = onEnterCallback;
             OnExitCallback = onExitCallback;
+            startPos = renderer.transform.localPosition;
+        }
+        public void InitImage()
+        {
+            startPos = renderer.transform.localPosition;
         }
         public void UpdateButton(PlayerInputsSO playerInputs)
         {
@@ -441,7 +449,47 @@ public static class AtlasUI
                 break;
             }
         }
+        public void MoveButtonAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        {
+            ctsMove?.Cancel();
+            ctsMove = new CancellationTokenSource();
+            MovingButtonAway(camStats, dir).Forget();
+        }
+        public void SetButtonAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        {
+            Transform buttonTransform = renderer.transform;
+            Bounds buttonBounds = renderer.GetBounds();
 
+            Vector3 buttonPos = renderer.transform.localPosition;
+            Vector3 targetPos = buttonPos;
+
+            switch (dir)
+            {
+                case MoveButtonDirection.Left:
+                {
+                    targetPos.x = -camStats.camBounds.extents.x - buttonBounds.size.x;
+                }
+                break;
+                case MoveButtonDirection.Right:
+                {
+                    targetPos.x = camStats.camBounds.extents.x + buttonBounds.size.x;
+                }
+                break;
+            }
+            renderer.transform.localPosition = targetPos;
+        }
+        public void MoveButtonToRight()
+        {
+            ctsMove?.Cancel();
+            ctsMove = new CancellationTokenSource();
+            MovingButtonToOppositeX().Forget();
+        }
+        public void MoveButtonToActive()
+        {
+            ctsMove?.Cancel();
+            ctsMove = new CancellationTokenSource();
+            MovingButtonToActive().Forget();
+        }
         public void MoveTutorialUIElement(CameraStatsSO camStats, AtlasTextRenderer tutorialRenderer, string text)
         {
             ctsMove?.Cancel();
@@ -508,6 +556,91 @@ public static class AtlasUI
                     await UniTask.Yield(ctsMove.Token);
                 }
                 iconTransform.localPosition = startPos;
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+        }
+        private async UniTask MovingButtonAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        {
+            Transform buttonTransform = renderer.transform;
+            Bounds buttonBounds = renderer.GetBounds();
+
+            Vector3 buttonPos = renderer.transform.localPosition;
+            Vector3 targetPos = buttonPos;
+
+            switch (dir)
+            {
+                case MoveButtonDirection.Left:
+                {
+                    targetPos.x = -camStats.camBounds.extents.x - buttonBounds.size.x;
+                }
+                break;
+                case MoveButtonDirection.Right:
+                {
+                    targetPos.x = camStats.camBounds.extents.x + buttonBounds.size.x;
+                }
+                break;
+            }
+            try
+            {
+                while ((buttonPos - targetPos).sqrMagnitude > 0.005f)
+                {
+                    buttonPos = Vector3.Lerp(buttonPos, targetPos, Time.deltaTime * 2);
+
+                    buttonTransform.localPosition = buttonPos;
+
+                    await UniTask.Yield(ctsMove.Token);
+                }
+                buttonPos = targetPos;
+                buttonTransform.localPosition = buttonPos;
+
+            }
+            catch (OperationCanceledException)
+            {
+
+            }
+        }
+        private async UniTask MovingButtonToOppositeX()
+        {
+            Transform buttonTransform = renderer.transform;
+            Bounds buttonBounds = renderer.GetBounds();
+
+            Vector3 buttonPos = buttonTransform.localPosition;
+
+            float targetPosX = -startPos.x;
+            try
+            {
+                while (Mathf.Abs(buttonPos.x - targetPosX) > 0.005f)
+                {
+                    buttonPos.x = Mathf.Lerp(buttonPos.x, targetPosX, Time.deltaTime * 2);
+                    buttonTransform.localPosition = buttonPos;
+
+                    await UniTask.Yield(ctsMove.Token);
+                }
+                buttonPos.x = targetPosX;
+                buttonTransform.localPosition = buttonPos;
+            }
+            catch (OperationCanceledException)
+            {
+            }
+        }
+        private async UniTask MovingButtonToActive()
+        {
+            Transform buttonTransform = renderer.transform;
+            Bounds buttonBounds = renderer.GetBounds();
+            Vector3 buttonPos = buttonTransform.localPosition;
+            try
+            {
+                while ((buttonPos - startPos).sqrMagnitude > 0.005f)
+                {
+                    buttonPos = Vector3.Lerp(buttonPos, startPos, Time.deltaTime * 2);
+                    buttonTransform.localPosition = buttonPos;
+
+                    await UniTask.Yield(ctsMove.Token);
+                }
+                buttonTransform.localPosition = startPos;
             }
             catch (OperationCanceledException)
             {

@@ -106,7 +106,7 @@ Shader "Custom/s_atlasDepth"
                 float bayerFactor = i.worldPos.z / FAR_CLIP;
                 half bayerValue = bayerFactor * (_DayNight * 1.75 - 0.875);
 
-                half bayer = BayerX8((color - bayerValue), i.positionHCS.y);
+                half bayer = BayerX8((color.r - bayerValue), i.positionHCS.y);
 
                 half3 finalColor = lerp(_BlackColor, _WhiteColor, bayer);
                 clip(color.a - 0.001);

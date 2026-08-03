@@ -64,8 +64,6 @@ public class Notepad : MonoBehaviour
     public AtlasRenderer bindingRingsRend;
     public AtlasRenderer leftHand_renderer;
 
-    public Transform pageTransform;
-
     public TextAsset namesJSON;
 
     public Page traitorPagePrefab;
@@ -107,22 +105,18 @@ public class Notepad : MonoBehaviour
 
     private void Start()
     {
-        activePage = promptPage;
-        notepadData.curState = NotepadState.None;
+        SceneController.KeepNotepad(this);
+        gameObject.SetActive(false);
     }
     private void OnEnable()
     {
         Scenes.OnLoadStart += CreateNPCProfiles;
-        Scenes.OnLoadStart += Init;
-        
         Scenes.OnLoadTrip1 += Reinit;
-
         Scenes.OnLoadScore += Reinit;
     }
     private void OnDisable()
     {
         Scenes.OnLoadStart -= CreateNPCProfiles;
-        Scenes.OnLoadStart -= Init;
 
         Scenes.OnLoadTrip1 -= Reinit;
         
@@ -141,79 +135,68 @@ public class Notepad : MonoBehaviour
             if ((notepadData.subState & SubState.OnScreen) != 0 && transform.localPosition == notepadData.inactiveLocalPos)
             {
                 notepadData.subState &= ~(SubState.OnScreen);
-                OffScreen();
+                SetLeftHandOffScreen();
             }
         }
     }
-    public void OffScreen()
+    public void SetLeftHandOffScreen()
     {
         leftHandTargetLocalPos = notepadData.leftHandFlipPos;
         leftHand_renderer.UpdateSpriteInputs(leftHand_renderer.atlas.motionSprites[notepadData.handFlipPage_clip.keyframeStartIndex].sprite);
     }
-    private void Init()
+    public void Init()
     {
+        gameObject.SetActive(true);
         AtlasUI.PromptStringDict = InitEnumToStringDict<TripPrompt>();
         npcData.behaviourStringDict = InitEnumToStringDict<Behaviours>();
 
-        CreatePages();
         
         activePage = promptPage;
-        notepadData.completedUnlocks = UnlockType.None;
-
-        notepadData.subState = SubState.None;
-        leftHandTargetLocalPos = notepadData.leftHandOffScreenLocalPos;
+        
+        
         tabWorldDepthBack = rightHand_renderer.transform.position.z - 0.5f;
 
         Vector3 flipWorldPos = new Vector3();
-        flipWorldPos.x = bindingRingsRend.transform.position.x;
-        flipWorldPos.y = bindingRingsRend.transform.position.y;
-        flipWorldPos.z = leftHand_renderer.transform.position.z;
-        notepadData.leftHandFlipPos = transform.InverseTransformPoint(flipWorldPos);
-
+        flipWorldPos.x = bindingRingsRend.transform.localPosition.x;
+        flipWorldPos.y = bindingRingsRend.transform.localPosition.y;
+        flipWorldPos.z = leftHand_renderer.transform.localPosition.z;
+        
+        notepadData.leftHandFlipPos = flipWorldPos;
+        notepadData.completedUnlocks = UnlockType.None;
+        notepadData.subState = SubState.None;
         notepadData.handFlipPage_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.FlipHand];
         notepadData.rotatePencil_clip = leftHand_renderer.atlas.clipDict[(int)NotepadMotion.RotatingPencil];
-        notepadData.leftHandWorldDepthFront = (int)(bindingRingsRend.transform.position.z - 1);
-        notepadData.leftHandWorldDepthBack = (int)(rightHand_renderer.transform.position.z + 1);
-
+        notepadData.leftHandDepthFront = bindingRingsRend.transform.localPosition.z - 1;
+        notepadData.activePageDepth = bindingRingsRend.transform.localPosition.z + 1;
+        notepadData.leftHandDepthBack = rightHand_renderer.transform.localPosition.z + 1;
         notepadData.leftHandOffScreenLocalPos.x = -notepadData.activeLocalPos.x * 0.5f;
 
-        notepadData.collected = false;
-        notepadData.checkingNotepad = false;
+        notepadData.activeLocalPos = new Vector3(3.57998657f, 1, 5);
 
         SimpleSprite holdingPencilSprite = leftHand_renderer.atlas.motionSprites[HOLDING_PENCIL_SPRITE_INDEX].sprite;
         float worldPivotOffsetY = holdingPencilSprite.worldSize.y * (1 - holdingPencilSprite.uvPivot.y);
         notepadData.leftHandOffScreenLocalPos.y = camStats.camBounds.extents.y - notepadData.activeLocalPos.y - camStats.camBounds.size.y - worldPivotOffsetY;
         notepadData.leftHandOffScreenLocalPos.z = leftHand_renderer.transform.localPosition.z;
 
-
         float halfCamWidth = camStats.camBounds.extents.x;
         float halfCamHeight = camStats.camBounds.extents.y;
-
-        notepadData.activeLocalPos = transform.localPosition;
         float binderBoundsOffsetX = bindingRingsRend.bounds.max.x - transform.position.x;
-
-        notepadData.inactiveLocalPos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + NOTEPAD_INACTIVE_OFFSET, transform.localPosition.z);
+        notepadData.inactiveLocalPos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + NOTEPAD_INACTIVE_OFFSET, notepadData.activeLocalPos.z);
 
         float bindingRingsHeight = bindingRingsRend.bounds.size.y;
+        notepadData.hoverLocalPos = new Vector3(notepadData.inactiveLocalPos.x, notepadData.inactiveLocalPos.y + bindingRingsHeight, notepadData.activeLocalPos.z);
 
-        notepadData.hoverLocalPos = new Vector3(notepadData.inactiveLocalPos.x, notepadData.inactiveLocalPos.y + bindingRingsHeight, notepadData.inactiveLocalPos.z);
-
-        Vector3 startPos = new Vector3();
-        startPos.x = notepadData.inactiveLocalPos.x;
-        startPos.y = -halfCamHeight - bindingRingsHeight;
-        startPos.z = notepadData.inactiveLocalPos.z;
-
-        transform.localPosition = startPos;
-
-        SceneController.KeepNotepad(this);
         notepadData.curState = NotepadState.Stationary;
+        
+        leftHandTargetLocalPos = notepadData.leftHandOffScreenLocalPos;
+        
+        CreatePages();
     }
     private void Reinit()
     {
         SkipToPage(0);
 
         notepadData.curState = NotepadState.Stationary;
-        notepadData.checkingNotepad = false;
         notepadData.subState = SubState.None;
         leftHandTargetLocalPos = notepadData.leftHandOffScreenLocalPos;
         colorPicker = SceneController.GetClueColorPicker();
@@ -230,20 +213,18 @@ public class Notepad : MonoBehaviour
                 activePage.InitNextColorRow(0);
                 activePage.SwitchActivePLayerWriteTextRenderer(0);
                 curWritingBounds = activePage.GetWritingBounds();
-                Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, notepadData.leftHandWorldDepthFront);
-                leftHandTargetLocalPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
+                SetLeftHandTargetPosToWritingBounds();
             }
             else if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0 && (trip.curUnlocks & UnlockType.MultiColor) != 0)
             {
                 activePage.InitNextColorRow(1);
                 activePage.SwitchActivePLayerWriteTextRenderer(1);
                 curWritingBounds = activePage.GetWritingBounds();
-                Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, notepadData.leftHandWorldDepthFront);
-                leftHandTargetLocalPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
+                SetLeftHandTargetPosToWritingBounds();
             }
         }
 
-        notepadData.checkingNotepad = true;
+        spyStats.checkingNotepad = true;
     }
     public void ExitNotepad()
     {
@@ -346,9 +327,9 @@ public class Notepad : MonoBehaviour
             page.paperRenderer.UpdateSpriteInputsByIndex(12);
             page.TogglePageContentTopHalf(true);
             page.TogglePageContentBottomHalf(true);
-            page.SetPageDepth(pageTransform.position.z + 3);
+            page.SetPageDepth(bindingRingsRend.transform.localPosition.z + 3);
         }
-        activePage.SetPageDepth(pageTransform.position.z);
+        activePage.SetPageDepth(notepadData.activePageDepth);
 
         notepadData.subState &= ~(SubState.CanFlipDown | SubState.CanWillFlipDown | SubState.IsFlippingDown);
         curKeyframeState = KeyframeState.None;
@@ -414,8 +395,8 @@ public class Notepad : MonoBehaviour
                     case 7:
                     {
                         if (curKeyframeState == KeyframeState.ChangeDepth) return;
-                        activePage.SetPageDepth(notepadData.leftHandWorldDepthBack + 1);
-                        leftHand_renderer.UpdateWorldDepth(notepadData.leftHandWorldDepthBack);
+                        activePage.SetPageDepth(notepadData.leftHandDepthBack + 1);
+                        leftHand_renderer.SetLocalDepth(notepadData.leftHandDepthBack);
                         curKeyframeState = KeyframeState.ChangeDepth;
 
                     }
@@ -428,7 +409,7 @@ public class Notepad : MonoBehaviour
                     activePage.gameObject.SetActive(false);
                     activePageIndex++;
                     activePage = pages[activePageIndex];
-                    activePage.SetPageDepth(notepadData.leftHandWorldDepthFront + 2);
+                    activePage.SetPageDepth(notepadData.leftHandDepthFront + 2);
 
                     notepadData.subState &= ~(SubState.CanFlipUp | SubState.CanWillFlipUp | SubState.IsFlippingUp);
                     curKeyframeState = KeyframeState.None;
@@ -507,8 +488,8 @@ public class Notepad : MonoBehaviour
                     {
                         if (curKeyframeState == KeyframeState.ChangeDepth) return;
 
-                        leftHand_renderer.UpdateWorldDepth(notepadData.leftHandWorldDepthFront);
-                        pages[activePageIndex - 1].SetPageDepth(notepadData.leftHandWorldDepthFront + 2);
+                        leftHand_renderer.SetLocalDepth(notepadData.leftHandDepthFront);
+                        pages[activePageIndex - 1].SetPageDepth(notepadData.leftHandDepthFront + 2);
 
 
                         curKeyframeState = KeyframeState.ChangeDepth;
@@ -648,23 +629,20 @@ public class Notepad : MonoBehaviour
                     if ((notepadData.completedUnlocks & UnlockType.Color) == 0 && (trip.curUnlocks & UnlockType.Color) != 0)
                     {
                         nextPage.InitNextColorRow(0);
-
                         nextPage.SwitchActivePLayerWriteTextRenderer(0);
                         curWritingBounds = nextPage.GetWritingBounds();
-                        Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, notepadData.leftHandWorldDepthFront);
-                        leftHandTargetLocalPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
+                        SetLeftHandTargetPosToWritingBounds();
                     }
                     else if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0 && (trip.curUnlocks & UnlockType.MultiColor) != 0)
                     {
                         nextPage.InitNextColorRow(1);
                         nextPage.SwitchActivePLayerWriteTextRenderer(1);
                         curWritingBounds = nextPage.GetWritingBounds();
-                        Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, notepadData.leftHandWorldDepthFront);
-                        leftHandTargetLocalPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
+                        SetLeftHandTargetPosToWritingBounds();
                     }
                 }
 
-                leftHand_renderer.UpdateWorldDepth(notepadData.leftHandWorldDepthFront);
+                leftHand_renderer.SetLocalDepth(notepadData.leftHandDepthFront);
                 leftHand_renderer.PlayClipOneShot(notepadData.handFlipPage_clip);
 
                 curKeyframeState = KeyframeState.Start;
@@ -678,7 +656,7 @@ public class Notepad : MonoBehaviour
             break;
             case NotepadState.FlippingDown:
             {
-                activePage.SetPageDepth(rightHand_renderer.transform.position.z - 1);
+                activePage.SetPageDepth(rightHand_renderer.transform.localPosition.z - 1);
 
                 pages[activePageIndex - 1].gameObject.SetActive(true);
                 leftHand_renderer.PlayClipOneShotReverse(notepadData.handFlipPage_clip);
@@ -690,7 +668,7 @@ public class Notepad : MonoBehaviour
                 notepadData.subState &= ~(SubState.CanFlipUp);
 
                 leftHand_renderer.transform.localPosition = notepadData.leftHandFlipPos;
-                leftHand_renderer.UpdateWorldDepth(notepadData.leftHandWorldDepthBack);
+                leftHand_renderer.SetLocalDepth(notepadData.leftHandDepthBack);
             }
             break;
             case NotepadState.Writing:
@@ -760,6 +738,12 @@ public class Notepad : MonoBehaviour
             }
             break;
         }
+    }
+    private void SetLeftHandTargetPosToWritingBounds()
+    {
+        Vector2 writePos = new Vector2(curWritingBounds.min.x, curWritingBounds.center.y);
+        leftHandTargetLocalPos = transform.InverseTransformPoint(writePos);
+        leftHandTargetLocalPos.z = notepadData.leftHandDepthFront;
     }
     private void CreateNPCProfiles()
     {
@@ -960,8 +944,9 @@ public class Notepad : MonoBehaviour
                                 activePage.SwitchActivePLayerWriteTextRenderer(1);
                                 
                                 curWritingBounds = activePage.GetWritingBounds();
-                                
-                                Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, notepadData.leftHandWorldDepthFront);
+                                SetLeftHandTargetPosToWritingBounds();
+
+                                Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, notepadData.leftHandDepthFront);
                                 leftHandTargetLocalPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
                             }
                         }
@@ -1012,6 +997,8 @@ public class Notepad : MonoBehaviour
     private void HandleStationaryLeftHandMove()
     {
         if (sceneData.activeSceneType != SceneType.Trip) return;
+        if ((notepadData.subState & SubState.InUse) == 0) return;
+
         if (activePage.playerWriteTextRenderers.Length > 0 && !atOffCameraPos)
         {
             float dist = (leftHand_renderer.transform.localPosition - leftHandTargetLocalPos).sqrMagnitude;
@@ -1028,8 +1015,7 @@ public class Notepad : MonoBehaviour
                 if (activePage.activePlayerWriteTextRenderer != null)
                 {
                     curWritingBounds = activePage.GetWritingBounds();
-                    Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, notepadData.leftHandWorldDepthFront);
-                    leftHandTargetLocalPos = transform.InverseTransformPoint(startWriteWorldPos);
+                    SetLeftHandTargetPosToWritingBounds();
                 }
 
                 atOffCameraPos = true;
@@ -1051,24 +1037,21 @@ public class Notepad : MonoBehaviour
             else if (colorsData.enteredState == PickerState.Closed)
             {
                 colorsData.enteredState = PickerState.None;
-
-                Vector3 startWriteWorldPos = new Vector3(activePage.playerWriteRenderers[activePage.activePlayerWriteRowIndex].GetBounds().min.x, curWritingBounds.center.y, notepadData.leftHandWorldDepthFront);
-                leftHandTargetLocalPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
+                curWritingBounds = activePage.GetWritingBounds();
+                SetLeftHandTargetPosToWritingBounds();
             }
             else if (playerInputs.numpad > 0 && playerInputs.numpad <= trip.unlockedColorMarkerCount)
             {
                 activePage.SwitchActivePLayerWriteTextRenderer(playerInputs.numpad - 1);
                 curWritingBounds = activePage.GetWritingBounds();
-                Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, notepadData.leftHandWorldDepthFront);
-                leftHandTargetLocalPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
+                SetLeftHandTargetPosToWritingBounds();
             }
         }
         else if (playerInputs.numpad != -1)
         {
             activePage.SwitchActivePLayerWriteTextRenderer(playerInputs.numpad - 1);
             curWritingBounds = activePage.GetWritingBounds();
-            Vector3 startWriteWorldPos = new Vector3(curWritingBounds.min.x, curWritingBounds.center.y, notepadData.leftHandWorldDepthFront);
-            leftHandTargetLocalPos = leftHand_renderer.transform.parent.InverseTransformPoint(startWriteWorldPos);
+            SetLeftHandTargetPosToWritingBounds();
         }
         leftHand_renderer.transform.localPosition = Vector3.Lerp(leftHand_renderer.transform.localPosition, leftHandTargetLocalPos, Time.deltaTime * LEFTHAND_DAMPING);
     }
@@ -1098,9 +1081,8 @@ public class Notepad : MonoBehaviour
             TraitorProfile traitorProfile = trip.traitorProfiles[traitorIndex];
             randIndicesList.RemoveAt(randIndex);
 
-            Vector3 pagePos = pageTransform.position;
-            pagePos.z += 3;
-            Page traitorPage = Instantiate(traitorPagePrefab, pagePos, Quaternion.identity, pageTransform);
+            Page traitorPage = Instantiate(traitorPagePrefab, transform);
+            traitorPage.transform.localPosition = new Vector3(0, 0, notepadData.leftHandDepthBack - 1);
             traitorPage.InitProfile(traitorProfile, i + 1, totalPages);
             traitorPage.traitorIndex = traitorIndex;
             traitorPage.gameObject.name = "Page_" + i;

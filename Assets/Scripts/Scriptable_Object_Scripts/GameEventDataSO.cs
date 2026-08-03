@@ -5,7 +5,8 @@ using UnityEngine;
 public class GameEventDataSO : ScriptableObject
 {
     public GameEvent OnStartTrip;
-    public GameEvent OnReset;
+    public GameEvent OnResetTrip;
+    public GameEvent OnPlayAgain;
     public GameEvent OnInteract;
 
     public GameEvent OnStationArrival;

@@ -93,6 +93,7 @@ public class SpyBrain : MonoBehaviour
 
         Scenes.OnLoadStart += StartInit;
         Scenes.OnLoadTrip0 += TripInit;
+        Scenes.OnLoadScore += ScoreInit;
         EveryInit();
     }
     private void OnDisable()
@@ -104,6 +105,7 @@ public class SpyBrain : MonoBehaviour
 
         Scenes.OnLoadStart -= StartInit;
         Scenes.OnLoadTrip0 -= TripInit;
+        Scenes.OnLoadScore -= ScoreInit;
     }
     private void Update()
     {
@@ -127,7 +129,7 @@ public class SpyBrain : MonoBehaviour
         stats.curGroundLayer = layerSettings.stationLayers.ground;
         stats.curWallLayer = layerSettings.stationWallLayers;
         stats.bounds = atlasRenderer.bounds;
-
+        stats.checkingNotepad = false;
 
         rigidBody.includeLayers = layerSettings.stationMask;
 
@@ -153,6 +155,10 @@ public class SpyBrain : MonoBehaviour
         stats.curLocationState = LocationState.Elevator;
         trip.curUnlocks = UnlockType.None;
     }
+    private void ScoreInit()
+    {
+        stats.curLocationState = LocationState.Elevator;
+    }
     private void ChooseState()
     {
         if (stats.curTutorialState == TutorialState.None)
@@ -177,7 +183,7 @@ public class SpyBrain : MonoBehaviour
             {
                 SetState(SpyState.PickingNPCTicketCheck);
             }
-            else if ((notepadData.collected && playerInputs.notepadKeyDown) || notepadData.checkingNotepad)
+            else if ((notepadData.collected && playerInputs.notepadKeyDown) || stats.checkingNotepad)
             {
                 SetState(SpyState.Notepad);
             }
@@ -203,7 +209,7 @@ public class SpyBrain : MonoBehaviour
             {
                 atlasRenderer.PlayClip(ref curClip);
 
-                if (canOpenSlideDoor && !notepadData.checkingNotepad)
+                if (canOpenSlideDoor && !stats.checkingNotepad)
                 {
                     switch (stats.curLocationState)
                     {
@@ -241,7 +247,7 @@ public class SpyBrain : MonoBehaviour
 
                 stats.bounds = atlasRenderer.bounds;
 
-                if (canOpenSlideDoor && !notepadData.checkingNotepad)
+                if (canOpenSlideDoor && !stats.checkingNotepad)
                 {
                     switch (stats.curLocationState)
                     { 
@@ -346,7 +352,7 @@ public class SpyBrain : MonoBehaviour
                     atlasRenderer.PlayClip(ref curClip);
                     if (playerInputs.notepadKeyDown && canExitState)
                     {
-                        notepadData.checkingNotepad = false;
+                        stats.checkingNotepad = false;
                     }
                 }
             }
@@ -730,7 +736,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void OpenSlideDoors()
     {
-        if (slideDoors == null || !canOpenSlideDoor || notepadData.checkingNotepad) return;
+        if (slideDoors == null || !canOpenSlideDoor || stats.checkingNotepad) return;
 
         switch(slideDoors.curState)
         {
@@ -760,7 +766,7 @@ public class SpyBrain : MonoBehaviour
                         
                             transform.SetParent(stationPlatform.transform, true);
                         
-                            atlasRenderer.UpdateWorldDepth((int)stationPlatform.transform.position.z);
+                            atlasRenderer.SetWorldDepth((int)stationPlatform.transform.position.z);
                         }
                     }
                     break;
@@ -778,7 +784,7 @@ public class SpyBrain : MonoBehaviour
                         
                         transform.SetParent(CurCarriage.transform, true);
 
-                        atlasRenderer.UpdateWorldDepth(trainStats.depthSections.frontStandingBack);
+                        atlasRenderer.SetWorldDepth(trainStats.depthSections.frontStandingBack);
                         OnEnteredTrain?.Invoke();
                     }
                     break;
@@ -811,6 +817,10 @@ public class SpyBrain : MonoBehaviour
     {
         stats.spriteFlip = flip;
         atlasRenderer.FlipHSimple(flip);
+    }
+    public void SetStateToNotepad()
+    {
+        SetState(SpyState.Notepad);
     }
     public void FinishWithChosenNPC()
     {

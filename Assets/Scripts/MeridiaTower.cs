@@ -27,10 +27,13 @@ public class MeridiaTower : MonoBehaviour
     private void OnEnable()
     {
         StartUI.OnStartGame += MoveToTopFloor;
+
+        Scenes.OnLoadScore += MoveToTopFloor;
     }
     private void OnDisable()
     {
         StartUI.OnStartGame -= MoveToTopFloor;
+        Scenes.OnLoadScore -= MoveToTopFloor;
         ctsTopFloor?.Cancel();
     }
     private void Update()

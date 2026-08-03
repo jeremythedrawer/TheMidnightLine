@@ -24,7 +24,9 @@ public class SpyStatsSO : ScriptableObject
     public bool spriteFlip;
     public bool walkingIntoWall;
     public bool startTrip;
-    
+
+    public bool checkingNotepad;
+
     public Bounds bounds;
     
     public LayerMask curGroundLayer;

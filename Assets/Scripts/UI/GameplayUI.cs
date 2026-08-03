@@ -84,7 +84,6 @@ public class GameplayUI : MonoBehaviour
         gameEventData.OnStationLeave.RegisterListener(SetTraitorIcons);
 
         gameEventData.OnStationArrival.RegisterListener(DisappearTicketIcons);
-        gameEventData.OnFinishTripScene.RegisterListener(SetFadeToBlack);
 
         SpyBrain.OnTicketCheckHoverDisabled += RevertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverDisabled += HideKeyIcon;
@@ -117,8 +116,6 @@ public class GameplayUI : MonoBehaviour
         gameEventData.OnStationLeave.UnregisterListener(SetTraitorIcons);
 
         gameEventData.OnStationArrival.UnregisterListener(DisappearTicketIcons);
-        gameEventData.OnFinishTripScene.UnregisterListener(SetFadeToBlack);
-
 
         SpyBrain.OnTicketCheckHoverDisabled -= RevertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverDisabled -= HideKeyIcon;
@@ -238,6 +235,8 @@ public class GameplayUI : MonoBehaviour
                             spyStats.tutorialsCompleted |= spyStats.curTutorialState;
                             spyStats.curTutorialState = TutorialState.None;
                             tutorialRenderer.SetText("");
+
+                            spyStats.checkingNotepad = false;
                         }
                     }
                     break;
@@ -431,6 +430,8 @@ public class GameplayUI : MonoBehaviour
 
             fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f);
             spyStats.curTutorialState = TutorialState.RuleOut;
+            SceneController.GetSpy().FinishWithChosenNPC();
+            SceneController.GetUnlockPicker().Close();
         }
     }
     private void MoveColorMarkerTutorialIcon(IconUIElement icon)
@@ -438,6 +439,7 @@ public class GameplayUI : MonoBehaviour
         if (!options.skipTutorial)
         {
             SetToNotepadState();
+            spyStats.checkingNotepad = true;
             notepad.FlipToPage(notepad.colorKeyPage.pageIndex);
             
             icon.renderer.transform.SetParent(transform, true);
@@ -446,8 +448,12 @@ public class GameplayUI : MonoBehaviour
 
             curTutorialIcon = icon;
 
-            fadeBlack.FadeIn(value: 0.8f, fadeBlackDepth: FadeBlack.NOTEPAD_DEPTH);
+            fadeBlack.FadeIn(value: 0.8f, fadeBlackZPos: FadeBlack.NOTEPAD_DEPTH);
             spyStats.curTutorialState = TutorialState.Color1;
+
+            SceneController.GetSpy().FinishWithChosenNPC();
+            SceneController.GetSpy().SetStateToNotepad();
+            SceneController.GetUnlockPicker().Close();
         }
     }
     private void InitPOVUI()
@@ -520,10 +526,6 @@ public class GameplayUI : MonoBehaviour
         {
             curTicketIcon?.InvertIcon(toggle: false);
         }
-    }
-    private void SetFadeToBlack()
-    {
-        fadeBlack.FadeInChangeScene("Results", Scenes.SceneType.Score, sceneIndex: 3);
     }
     private void ShowWIcon(Vector2 position)
     {
@@ -598,8 +600,8 @@ public class GameplayUI : MonoBehaviour
 
             if (playerInputs.mouseLeftDown)
             {
-                fadeBlack.FadeInChangeScene("Find where the TRAITORS are going.", Scenes.SceneType.Trip, sceneIndex: 2);
-                gameEventData.OnReset.Raise();
+                fadeBlack.FadeInChangeScene(options.startTripText, Scenes.SceneType.Trip, sceneIndex: 2);
+                gameEventData.OnResetTrip.Raise();
             }
         }
         else

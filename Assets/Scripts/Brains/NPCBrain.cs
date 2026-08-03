@@ -164,7 +164,7 @@ public class NPCBrain : MonoBehaviour
         Station station = TrainController.NextStationInstance;
         AtlasRenderer stationPlatform = station.station.isFrontOfTrain ? station.frontPlatformRenderer : station.backPlatformRenderer;
         transform.SetParent(stationPlatform.transform, true);
-        atlasRenderer.UpdateWorldDepth((int)stationPlatform.transform.position.z);
+        atlasRenderer.SetWorldDepth((int)stationPlatform.transform.position.z);
         rigidBody.includeLayers = layerSettings.stationMask;
         onTrain = false;
         curCarriage.RemoveNPC(this);
@@ -281,7 +281,7 @@ public class NPCBrain : MonoBehaviour
                     graffiti.SetSprites(graffitiIndex);
                     graffiti.transform.position = new Vector3(transform.position.x, atlasRenderer.bounds.max.y, trainStats.depthSections.carriageSeat + 1.5f);
                     graffiti.transform.SetParent(curCarriage.transform);
-                    atlasRenderer.UpdateWorldDepth(trainStats.depthSections.backStandingBack);
+                    atlasRenderer.SetWorldDepth(trainStats.depthSections.backStandingBack);
                 }
 
                 if (prevState != NPCState.TicketCheck)
@@ -489,7 +489,7 @@ public class NPCBrain : MonoBehaviour
             case NPCPath.SittingInTrain:
             {
                 float seatDepthOffset = (float)seatPosIndex / (float)curCarriage.seatData.xPos.Length;
-                atlasRenderer.UpdateWorldDepth(trainStats.depthSections.carriageSeat + seatDepthOffset);
+                atlasRenderer.SetWorldDepth(trainStats.depthSections.carriageSeat + seatDepthOffset);
                 transform.position = new Vector3(targetXPos, transform.position.y, transform.position.z);
                 atlasRenderer.FlipHSimple(false);
             }
@@ -814,7 +814,7 @@ public class NPCBrain : MonoBehaviour
     {
         if (!onTrain) return;
         int depth = UnityEngine.Random.Range(trainStats.depthSections.frontStandingBack, trainStats.depthSections.backStandingFront);
-        atlasRenderer.UpdateWorldDepth(depth);
+        atlasRenderer.SetWorldDepth(depth);
     }
     private void PickNextBehaviour()
     {

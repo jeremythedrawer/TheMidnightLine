@@ -22,9 +22,9 @@ public class NotepadData : ScriptableObject
     public Vector3 hoverLocalPos;
     public Vector3 activeLocalPos;
 
-    public int leftHandWorldDepthFront;
-    public int leftHandWorldDepthBack;
+    public float leftHandDepthFront;
+    public float activePageDepth;
+    public float leftHandDepthBack;
 
-    public bool checkingNotepad;
     public bool collected;
 }

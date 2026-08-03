@@ -209,9 +209,13 @@ public class AtlasRenderer : MonoBehaviour
         SetBounds();
         return bounds;
     }
-    public void UpdateWorldDepth(float newDepth)
+    public void SetWorldDepth(float newDepth)
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, newDepth);
+    }
+    public void SetLocalDepth(float newDepth)
+    {
+        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, newDepth);
     }
     public void FlipHSimple(bool flipLeft)
     {
