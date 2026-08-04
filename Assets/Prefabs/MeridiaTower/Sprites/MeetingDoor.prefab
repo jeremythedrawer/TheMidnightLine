@@ -98,12 +98,17 @@ MonoBehaviour:
   gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  sceneData: {fileID: 11400000, guid: 3293190d726975e43a124435917a650c, type: 2}
   atlasRenderer: {fileID: 3393514277809197538}
-  bunkerWallRenderer: {fileID: 0}
-  spy: {fileID: 0}
-  meetingRoom: {fileID: 0}
-  bunkerRoom: {fileID: 0}
+  iconRenderer: {fileID: 0}
+  rightRoom: {fileID: 0}
+  leftRoom: {fileID: 0}
   doorType: 0
+  motion: 0
+  leftDepth: 0
+  rightDepth: 0
+  unlocked: 0
+  auto: 0
   clip:
     clipName: 
     clipType: 0
@@ -117,3 +122,4 @@ MonoBehaviour:
   boundsOffset: {x: 0.07200909, y: 0.594222, z: 0}
   opened: 0
   spyInBounds: 0
+  skipToScore: 0

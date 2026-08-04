@@ -22,6 +22,7 @@ public class MeetingDoor : MonoBehaviour
     public GameEventDataSO gameEventData;
     public SpyStatsSO spyStats;
     public CameraStatsSO camStats;
+    public SceneData sceneData;
 
     public AtlasRenderer atlasRenderer;
     public AtlasRenderer iconRenderer;
@@ -58,7 +59,7 @@ public class MeetingDoor : MonoBehaviour
     {
         gameEventData.OnInteract.RegisterListener(OpenDoor);
         gameEventData.OnInteract.RegisterListener(WalkThroughStartDoor);
-        gameEventData.OnNotepadCollect.RegisterListener(UnlockStartDoor);
+        NotepadProp.OnNotepadCollect += UnlockStartDoor;
         MeridiaTower.OnArriveAtTopFloor += OpenAuto;
 
     }
@@ -66,7 +67,8 @@ public class MeetingDoor : MonoBehaviour
     {
         gameEventData.OnInteract.UnregisterListener(OpenDoor);
         gameEventData.OnInteract.UnregisterListener(WalkThroughStartDoor);
-        gameEventData.OnNotepadCollect.UnregisterListener(UnlockStartDoor);
+
+        NotepadProp.OnNotepadCollect -= UnlockStartDoor;
         MeridiaTower.OnArriveAtTopFloor -= OpenAuto;
     }
     private void Update()
@@ -122,7 +124,7 @@ public class MeetingDoor : MonoBehaviour
                         rightRoom.MoveUp();
                         leftRoom.MoveDown();
 
-                        if (leftRoom.locationState == Spy.LocationState.Elevator)
+                        if (sceneData.activeSceneType == Scenes.SceneType.Start && leftRoom.locationState == Spy.LocationState.Elevator)
                         {
                             gameEventData.OnToStartMenu.Raise();
                         }

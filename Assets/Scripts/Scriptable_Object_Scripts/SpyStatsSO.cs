@@ -26,7 +26,7 @@ public class SpyStatsSO : ScriptableObject
     public bool startTrip;
 
     public bool checkingNotepad;
-
+    public bool playerInputsEnabled;
     public Bounds bounds;
     
     public LayerMask curGroundLayer;

@@ -61,6 +61,8 @@ public class AtlasTextRenderer : MonoBehaviour
 
     private void OnValidate()
     {
+        if (textAtlas == null) return;
+        if (batchKey.material == null) return;
         SetText(text);
 
         bounds = GetBoundsNewText(text);

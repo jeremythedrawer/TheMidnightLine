@@ -17,8 +17,6 @@ public class GameEventDataSO : ScriptableObject
 
     public GameEvent OnFinishTripScene;
 
-    public GameEvent OnNotepadCollect;
-
     public GameEvent OnToStartMenu;
     public GameEvent OnFromStartMenu;
 }

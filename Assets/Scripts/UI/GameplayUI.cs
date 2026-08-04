@@ -234,6 +234,7 @@ public class GameplayUI : MonoBehaviour
 
                             spyStats.tutorialsCompleted |= spyStats.curTutorialState;
                             spyStats.curTutorialState = TutorialState.None;
+                            spyStats.playerInputsEnabled = true;
                             tutorialRenderer.SetText("");
 
                             spyStats.checkingNotepad = false;
@@ -292,6 +293,7 @@ public class GameplayUI : MonoBehaviour
 
                                 spyStats.tutorialsCompleted |= spyStats.curTutorialState;
                                 spyStats.curTutorialState = TutorialState.None;
+                                spyStats.playerInputsEnabled = true;
                             }
                         }
                     }
@@ -314,6 +316,7 @@ public class GameplayUI : MonoBehaviour
                             
                                 spyStats.tutorialsCompleted |= spyStats.curTutorialState;
                                 spyStats.curTutorialState = TutorialState.None;
+                                spyStats.playerInputsEnabled = true;
                             }
                         }
                     }
@@ -335,6 +338,7 @@ public class GameplayUI : MonoBehaviour
 
                                 spyStats.tutorialsCompleted |= spyStats.curTutorialState;
                                 spyStats.curTutorialState = TutorialState.None;
+                                spyStats.playerInputsEnabled = true;
                                 tutorialRenderer.SetText("");
                             }
                         }
@@ -378,6 +382,7 @@ public class GameplayUI : MonoBehaviour
                     curTutorialIcon = curTicketIcon.mainTicket;
                     fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f);
                     spyStats.curTutorialState = TutorialState.Ticket;
+                    spyStats.playerInputsEnabled = false;
                 }
                 else
                 {
@@ -430,6 +435,8 @@ public class GameplayUI : MonoBehaviour
 
             fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f);
             spyStats.curTutorialState = TutorialState.RuleOut;
+            spyStats.playerInputsEnabled = false;
+
             SceneController.GetSpy().FinishWithChosenNPC();
             SceneController.GetUnlockPicker().Close();
         }
@@ -448,8 +455,9 @@ public class GameplayUI : MonoBehaviour
 
             curTutorialIcon = icon;
 
-            fadeBlack.FadeIn(value: 0.8f, fadeBlackZPos: FadeBlack.NOTEPAD_DEPTH);
+            fadeBlack.FadeIn(value: 1, alpha: 0.2f, fadeBlackZPos: FadeBlack.NOTEPAD_DEPTH);
             spyStats.curTutorialState = TutorialState.Color1;
+            spyStats.playerInputsEnabled = false;
 
             SceneController.GetSpy().FinishWithChosenNPC();
             SceneController.GetSpy().SetStateToNotepad();
@@ -581,6 +589,7 @@ public class GameplayUI : MonoBehaviour
 
             fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f);
             spyStats.curTutorialState = TutorialState.Traitor;
+            spyStats.playerInputsEnabled = false;
 
             traitorIcon.renderer.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
             traitorCountText.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);

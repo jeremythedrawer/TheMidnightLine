@@ -207,6 +207,6 @@ public class InputManager : MonoBehaviour
     }
     private void OnApplicationQuit()
     {
-        gameEventData.OnResetTrip.Raise();
+        gameEventData.OnResetTrip?.Raise();
     }
 }

@@ -92,8 +92,12 @@ public class SpyBrain : MonoBehaviour
         gameEventData.OnStationLeave.RegisterListener(DisableCanOpenSlideDoor);
 
         Scenes.OnLoadStart += StartInit;
+
         Scenes.OnLoadTrip0 += TripInit;
         Scenes.OnLoadScore += ScoreInit;
+        
+        NotepadProp.OnNotepadReturn += SetStateToIdle;
+
         EveryInit();
     }
     private void OnDisable()
@@ -104,8 +108,11 @@ public class SpyBrain : MonoBehaviour
         gameEventData.OnStationLeave.UnregisterListener(DisableCanOpenSlideDoor);
 
         Scenes.OnLoadStart -= StartInit;
+
         Scenes.OnLoadTrip0 -= TripInit;
         Scenes.OnLoadScore -= ScoreInit;
+
+        NotepadProp.OnNotepadReturn -= SetStateToIdle;
     }
     private void Update()
     {
@@ -131,6 +138,9 @@ public class SpyBrain : MonoBehaviour
         stats.bounds = atlasRenderer.bounds;
         stats.checkingNotepad = false;
 
+        stats.curTutorialState = TutorialState.None;
+        stats.playerInputsEnabled = true;
+
         rigidBody.includeLayers = layerSettings.stationMask;
 
         SetState(SpyState.None);
@@ -150,7 +160,6 @@ public class SpyBrain : MonoBehaviour
     private void StartInit()
     {
         stats.tutorialsCompleted = TutorialState.None;
-        stats.curTutorialState = TutorialState.None;
         stats.startTrip = false;
         stats.curLocationState = LocationState.Elevator;
         trip.curUnlocks = UnlockType.None;
@@ -161,7 +170,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void ChooseState()
     {
-        if (stats.curTutorialState == TutorialState.None)
+        if (stats.playerInputsEnabled)
         {
             if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount == 1) || chosenNPC != null)
             {
@@ -821,6 +830,10 @@ public class SpyBrain : MonoBehaviour
     public void SetStateToNotepad()
     {
         SetState(SpyState.Notepad);
+    }
+    public void SetStateToIdle()
+    {
+        SetState(SpyState.Idle);
     }
     public void FinishWithChosenNPC()
     {

@@ -1,14 +1,18 @@
 using System;
 using UnityEngine;
 
+using static Scenes;
 public class NotepadProp : MonoBehaviour
 {
     public static event Action<Vector2> OnSpyEnter;
     public static event Action OnSpyExit;
+    public static event Action OnNotepadCollect;
+    public static event Action OnNotepadReturn;
 
     public AtlasRenderer atlasRenderer;
     public MeshRenderer shinyRenderer;
 
+    public SceneData sceneData;
     public GameEventDataSO gameEventData;
     public NotepadData notepadData;
     public SpyStatsSO spyStats;
@@ -19,18 +23,48 @@ public class NotepadProp : MonoBehaviour
 
     private void OnEnable()
     {
-        notepadData.collected = false;
+        Scenes.OnLoadStart += StartSceneInit;
+        Scenes.OnLoadScore += ScoreSceneInit;
         gameEventData.OnInteract.RegisterListener(NotepadCollected);
     }
     private void OnDisable()
     {
+        Scenes.OnLoadStart -= StartSceneInit;
+        Scenes.OnLoadScore -= ScoreSceneInit;
+
         gameEventData.OnInteract.UnregisterListener(NotepadCollected);
     }
-
     public void Update()
     {
-        if (notepadData.collected) return;
+        switch(sceneData.activeSceneType)
+        {
+            case SceneType.Start:
+            {
+                if (notepadData.collected) return;
+                CheckSpyEnterExit();
 
+            }
+            break;
+            case SceneType.Score:
+            {
+                if (!notepadData.collected) return;
+                CheckSpyEnterExit();
+
+            }
+            break;
+        }
+    }
+    private void StartSceneInit()
+    {
+        notepadData.collected = false;
+    }
+    private void ScoreSceneInit()
+    {
+        atlasRenderer.enabled = false;
+        shinyRenderer.enabled = false;
+    }
+    private void CheckSpyEnterExit()
+    {
         Bounds rendBounds = atlasRenderer.bounds;
         if (!spyAtProp && spyStats.bounds.max.x > rendBounds.min.x && spyStats.bounds.min.x < rendBounds.max.x)
         {
@@ -45,13 +79,32 @@ public class NotepadProp : MonoBehaviour
     }
     public void NotepadCollected()
     {
-        if (spyAtProp && !notepadData.collected)
+        switch(sceneData.activeSceneType)
         {
-            notepadData.collected = true;
-            gameEventData.OnNotepadCollect?.Raise();
+            case SceneType.Start:
+            {
+                if (spyAtProp && !notepadData.collected)
+                {
+                    notepadData.collected = true;
+                    OnNotepadCollect?.Invoke();
 
-            atlasRenderer.enabled = false;
-            shinyRenderer.enabled = false;
+                    atlasRenderer.enabled = false;
+                    shinyRenderer.enabled = false;
+                }
+            }
+            break;
+            case SceneType.Score:
+            {
+                if (spyAtProp && notepadData.collected)
+                {
+                    notepadData.collected = false;
+                    OnNotepadReturn?.Invoke();
+
+                    atlasRenderer.enabled = true;
+                }
+            }
+            break;
         }
+
     }
 }

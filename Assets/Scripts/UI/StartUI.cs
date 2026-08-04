@@ -10,6 +10,10 @@ using static Spy;
 
 public class StartUI : MonoBehaviour
 {
+    const float OUTCOME_PAGE_X_OFFSET = 0.3f;
+    const float OUTCOME_PAGE_MOVE_X = 0.5f;
+    const float OUTCOME_PAGE_MOVE_Y = 0.5f;
+
     public static event Action OnClickOptions;
     public static event Action OnClickBackFromOptions;
     public static event Action OnStartGame;
@@ -25,6 +29,7 @@ public class StartUI : MonoBehaviour
     public NotepadData notepadData;
     public OptionsSO options;
     public SceneData sceneData;
+    public SpyStatsSO spyStats;
 
     public Transform titleTransform;
 
@@ -39,6 +44,9 @@ public class StartUI : MonoBehaviour
     public TextUIElement thankYouMessage;
     public TextUIElement playAgainButton;
 
+    public TextUIElement traitorsFoundMessage;
+    public TextUIElement outcomeMessage;
+
     public IconUIElement titleIcon1;
     public IconUIElement titleIcon2;
 
@@ -46,21 +54,31 @@ public class StartUI : MonoBehaviour
     public FadeBlack fadeBlack;
 
     [Header("Generated")]
+    public Vector3[] outcomePageInactivePositions;
+    public Vector3[] outcomePageHoverPositions;
+    public Vector3[] outcomePageActivePositions;
+
     public Vector3 naturalMovePos;
+    public Vector3 outcomePageStartPos;
+
 
     public UIState curState;
 
     public bool canExitState;
     public bool atOptions;
+    public bool outcomeSetUpCompleted;
+
+    public Page[] profilePages;
 
     public Notepad notepad;
-
+    
+    public Page hoveredPage;
+    public Page activePage;
+    
     public CancellationTokenSource ctsFadeBlack;
     public CancellationTokenSource ctsNotepad;
-    private void Start()
-    {
+    public CancellationTokenSource ctsPagesStartOutcome;
 
-    }
     private void OnEnable()
     {        
         NotepadProp.OnSpyEnter += SetInteractIcon;
@@ -75,8 +93,10 @@ public class StartUI : MonoBehaviour
         Scenes.OnLoadScore += ScoreSceneInit;
         Scenes.OnLoadStart += StartSceneInit;
 
-        gameEventData.OnNotepadCollect.RegisterListener(DisableInteractIcon);
-        gameEventData.OnNotepadCollect.RegisterListener(GetNotepad);
+        NotepadProp.OnNotepadCollect += DisableInteractIcon;
+        NotepadProp.OnNotepadCollect += GetNotepad;
+        NotepadProp.OnNotepadReturn += DisableInteractIcon;
+        NotepadProp.OnNotepadReturn += SetToOutcomeState;
 
         gameEventData.OnStartTrip.RegisterListener(StartTrip);
         gameEventData.OnToStartMenu.RegisterListener(SetToStartMenuState);
@@ -96,8 +116,10 @@ public class StartUI : MonoBehaviour
         Scenes.OnLoadStart -= StartSceneInit;
         Scenes.OnLoadScore -= ScoreSceneInit;
 
-        gameEventData.OnNotepadCollect.UnregisterListener(DisableInteractIcon);
-        gameEventData.OnNotepadCollect.UnregisterListener(GetNotepad);
+        NotepadProp.OnNotepadCollect -= DisableInteractIcon;
+        NotepadProp.OnNotepadCollect -= GetNotepad;
+        NotepadProp.OnNotepadReturn -= DisableInteractIcon;
+        NotepadProp.OnNotepadReturn -= SetToOutcomeState;
 
         gameEventData.OnStartTrip.UnregisterListener(StartTrip);
         gameEventData.OnToStartMenu.UnregisterListener(SetToStartMenuState);
@@ -121,12 +143,14 @@ public class StartUI : MonoBehaviour
         titleIcon1.InitImage();
         titleIcon2.InitImage();
         
-        darkColorButton.SetButtonAway(camStats, MoveButtonDirection.Left);
-        lightColorButton.SetButtonAway(camStats, MoveButtonDirection.Left);
-        tutorialButton.SetButtonAway(camStats, MoveButtonDirection.Left);
-        thankYouMessage.SetButtonAway(camStats, MoveButtonDirection.Left);
-        playAgainButton.SetButtonAway(camStats, MoveButtonDirection.Left);
-        
+        darkColorButton.SetAway(camStats, MoveButtonDirection.Left);
+        lightColorButton.SetAway(camStats, MoveButtonDirection.Left);
+        tutorialButton.SetAway(camStats, MoveButtonDirection.Left);
+        thankYouMessage.SetAway(camStats, MoveButtonDirection.Left);
+        playAgainButton.SetAway(camStats, MoveButtonDirection.Left);
+        traitorsFoundMessage.SetAway(camStats, MoveButtonDirection.Left);
+        outcomeMessage.SetAway(camStats, MoveButtonDirection.Left);
+
         titleTransform.SetParent(null);
 
         Shader.SetGlobalFloat("_DayNight", 1);
@@ -151,19 +175,25 @@ public class StartUI : MonoBehaviour
         thankYouMessage.InitMessage();
         playAgainButton.InitButton(PlayAgainClicked);
 
+        traitorsFoundMessage.InitMessage();
+        outcomeMessage.InitMessage();
+        
         titleIcon1.InitImage();
         titleIcon2.InitImage();
 
-        startButton.SetButtonAway(camStats, MoveButtonDirection.Left);
-        optionsButton.SetButtonAway(camStats, MoveButtonDirection.Left);
-        quitButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+        startButton.SetAway(camStats, MoveButtonDirection.Left);
+        optionsButton.SetAway(camStats, MoveButtonDirection.Left);
+        quitButton.SetAway(camStats, MoveButtonDirection.Left);
 
-        darkColorButton.SetButtonAway(camStats, MoveButtonDirection.Left);
-        lightColorButton.SetButtonAway(camStats, MoveButtonDirection.Left);
-        tutorialButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+        darkColorButton.SetAway(camStats, MoveButtonDirection.Left);
+        lightColorButton.SetAway(camStats, MoveButtonDirection.Left);
+        tutorialButton.SetAway(camStats, MoveButtonDirection.Left);
         
-        thankYouMessage.SetButtonAway(camStats, MoveButtonDirection.Left);
-        playAgainButton.SetButtonAway(camStats, MoveButtonDirection.Left);
+        thankYouMessage.SetAway(camStats, MoveButtonDirection.Left);
+        playAgainButton.SetAway(camStats, MoveButtonDirection.Left);
+
+        traitorsFoundMessage.SetAway(camStats, MoveButtonDirection.Left);
+        outcomeMessage.SetAway(camStats, MoveButtonDirection.Left);
 
         titleIcon1.SetButtonAway(camStats, MoveButtonDirection.Left);
         titleIcon2.SetButtonAway(camStats, MoveButtonDirection.Left);
@@ -176,6 +206,8 @@ public class StartUI : MonoBehaviour
         Shader.SetGlobalFloat("_DayNight", 1);
 
         SetState(UIState.None);
+
+        notepad = SceneController.GetNotepad(transform);
     }
     private void StartTrip()
     {
@@ -215,6 +247,10 @@ public class StartUI : MonoBehaviour
     {
         SetState(UIState.StartMenu);
     }
+    private void SetToOutcomeState()
+    {
+        SetState(UIState.Outcome);
+    }
     private void SetState(UIState newState)
     {
         if (curState == newState) return;
@@ -229,9 +265,9 @@ public class StartUI : MonoBehaviour
         {
             case UIState.StartMenu:
             {
-                startButton.MoveButtonToActive();
-                optionsButton.MoveButtonToActive();
-                quitButton.MoveButtonToActive();
+                startButton.MoveElementToActive();
+                optionsButton.MoveElementToActive();
+                quitButton.MoveElementToActive();
             }
             break;
 
@@ -240,6 +276,75 @@ public class StartUI : MonoBehaviour
                 notepad.EnterNotepad();
                 naturalMovePos = notepadData.activeLocalPos;
                 ctsNotepad?.Cancel();
+            }
+            break;
+
+            case UIState.Outcome:
+            {
+                notepad.SkipToPage(0);
+                traitorsFoundMessage.MoveElementToActive(snap: false);
+                outcomeMessage.MoveElementToActive(snap: false);
+                spyStats.playerInputsEnabled = false;
+
+                profilePages = new Page[trip.traitorProfiles.Length];
+
+
+                outcomePageHoverPositions = new Vector3[trip.traitorProfiles.Length];
+                outcomePageActivePositions = new Vector3[trip.traitorProfiles.Length];
+                outcomePageInactivePositions = new Vector3[trip.traitorProfiles.Length];
+
+                outcomePageStartPos.x = -notepad.pages[1].paperRenderer.bounds.size.x - OUTCOME_PAGE_X_OFFSET;
+                outcomePageStartPos.y = notepadData.offSceenLocalPos.y;
+
+                for (int i = 0; i < trip.traitorProfiles.Length; i++)
+                {
+                    Page profilePage = notepad.pages[i + 1];
+
+                    int index = i;
+
+                    void OnEnter(IconUIElement icon)
+                    {
+                        hoveredPage = profilePages[index];
+                        icon.renderer.custom.x = 1;
+                    }
+                    void OnExit(IconUIElement icon)
+                    {
+                        icon.renderer.custom.x = 0;
+                    }
+                    void OnClick(IconUIElement icon)
+                    {
+                        activePage = profilePages[index];
+                        icon.renderer.custom.x = 0;
+                    }
+                    profilePage.exitButton.InitButton(OnClick, OnEnter, OnExit);
+                    
+                    profilePage.transform.SetParent(transform, worldPositionStays: true);
+                    outcomePageStartPos.z = notepadData.activeLocalPos.z + (i * 3);
+                    profilePage.transform.localPosition = outcomePageStartPos;
+
+                    profilePage.gameObject.SetActive(true);
+
+                    profilePages[i] = profilePage;
+
+                    Page samplePage = profilePages[0];
+                    Bounds exitButtonBounds = samplePage.exitButton.renderer.bounds;
+                    float exitButtonDistFromLeftEdge = exitButtonBounds.min.x - samplePage.paperRenderer.bounds.min.x;
+                    float xOffset = exitButtonBounds.size.x + (exitButtonDistFromLeftEdge * 2);
+
+                    outcomePageInactivePositions[i].x = outcomePageStartPos.x - (xOffset * i);
+                    outcomePageInactivePositions[i].y = notepadData.inactiveLocalPos.y + ((i % 2) * 0.02f);
+                    outcomePageInactivePositions[i].z = outcomePageStartPos.z;
+
+                    outcomePageHoverPositions[i].x = outcomePageInactivePositions[i].x;
+                    outcomePageHoverPositions[i].y = notepadData.hoverLocalPos.y;
+                    outcomePageHoverPositions[i].z = outcomePageStartPos.z;
+
+                    outcomePageActivePositions[i].x = outcomePageInactivePositions[i].x;
+                    outcomePageActivePositions[i].y = notepadData.activeLocalPos.y;
+                    outcomePageActivePositions[i].z = outcomePageStartPos.z;
+                }
+
+                MoveProfilePagesToStartOutComePosition();
             }
             break;
             case UIState.None:
@@ -264,6 +369,7 @@ public class StartUI : MonoBehaviour
             {
                 if (notepadData.collected)
                 {
+                    if (notepad.transform.parent != transform) return;
                     if (canExitState && CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds, isClickable: true))
                     {
                         ctsNotepad?.Cancel();
@@ -294,6 +400,63 @@ public class StartUI : MonoBehaviour
                 UpdateEndMenuButtons();
             }
             break;
+
+            case UIState.Outcome:
+            {
+                if (notepad == null || notepad.transform.parent != transform) return;
+                notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.offSceenLocalPos, Time.deltaTime * MOVE_DAMP);
+
+                if (outcomeSetUpCompleted)
+                {
+                    if (activePage == null)
+                    {
+                        for (int i = 0; i < profilePages.Length; i++)
+                        {
+                            Page page = profilePages[i];
+
+                            page.exitButton.UpdateButton(playerInputs);
+                    
+                            if (page == hoveredPage)
+                            {
+                                if (CursorController.IsInsideBounds(page.paperRenderer.bounds, isClickable:  false))
+                                {
+                                    float curPosY = Mathf.Lerp(page.transform.localPosition.y, notepadData.hoverLocalPos.y, Time.deltaTime * MOVE_DAMP);
+                                    page.transform.localPosition = new Vector3(page.transform.localPosition.x, curPosY, page.transform.localPosition.z);
+                                }
+                                else
+                                {
+                                    hoveredPage = null;
+                                }
+                            }
+                            else
+                            {
+                                float curPosY = Mathf.Lerp(page.transform.localPosition.y, notepadData.inactiveLocalPos.y, Time.deltaTime * MOVE_DAMP);
+                                page.transform.localPosition = new Vector3(page.transform.localPosition.x, curPosY, page.transform.localPosition.z);
+                            }
+                        }
+                    }
+                    else
+                    {
+                        for (int i = 0; i < profilePages.Length; i++)
+                        {
+                            Page page = profilePages[i];
+
+                            if (page == activePage)
+                            {
+                                float curPosY = Mathf.Lerp(page.transform.localPosition.y, notepadData.activeLocalPos.y, Time.deltaTime * MOVE_DAMP);
+                                page.transform.localPosition = new Vector3(page.transform.localPosition.x, curPosY, page.transform.localPosition.z);
+                            }
+                            else
+                            {
+                                float curPosY = Mathf.Lerp(page.transform.localPosition.y, notepadData.inactiveLocalPos.y, Time.deltaTime * MOVE_DAMP);
+                                page.transform.localPosition = new Vector3(page.transform.localPosition.x, curPosY, page.transform.localPosition.z);
+                            }
+                        }
+                    }
+
+                }
+            }
+            break;
         }
         canExitState = true;
     }
@@ -309,7 +472,6 @@ public class StartUI : MonoBehaviour
             break;
         }
     }
-
     private void UpdateMainMenuButtons()
     {
         startButton.UpdateButton(playerInputs);
@@ -334,8 +496,8 @@ public class StartUI : MonoBehaviour
         playAgainButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
         thankYouMessage.MoveButtonAway(camStats, MoveButtonDirection.Left);
         
-        startButton.MoveButtonToActive();
-        optionsButton.MoveButtonToActive();
+        startButton.MoveElementToActive();
+        optionsButton.MoveElementToActive();
 
         gameEventData.OnPlayAgain.Raise();
         SetState(UIState.StartMenu);
@@ -361,9 +523,9 @@ public class StartUI : MonoBehaviour
 
                 optionsButton.MoveButtonToRight();
 
-                darkColorButton.MoveButtonToActive();
-                lightColorButton.MoveButtonToActive();
-                tutorialButton.MoveButtonToActive();
+                darkColorButton.MoveElementToActive();
+                lightColorButton.MoveElementToActive();
+                tutorialButton.MoveElementToActive();
 
                 OnClickOptions?.Invoke();
                 SetState(UIState.OptionsMenu);
@@ -372,9 +534,9 @@ public class StartUI : MonoBehaviour
             case UIState.OptionsMenu:
             {
                 optionsButton.renderer.SetText("Options");
-                startButton.MoveButtonToActive();
-                quitButton.MoveButtonToActive();
-                optionsButton.MoveButtonToActive();
+                startButton.MoveElementToActive();
+                quitButton.MoveElementToActive();
+                optionsButton.MoveElementToActive();
 
                 darkColorButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
                 lightColorButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
@@ -416,6 +578,65 @@ public class StartUI : MonoBehaviour
         {
             tutorialButton.renderer.SetText("Skip Tutorial");
             options.skipTutorial = true;
+        }
+    }
+    private void MoveProfilePagesToStartOutComePosition()
+    {
+        ctsPagesStartOutcome?.Cancel();
+        ctsPagesStartOutcome = new CancellationTokenSource();
+        MovingProfilePagesToStartOutComePosition().Forget();
+    }
+    private async UniTask MovingProfilePagesToStartOutComePosition()
+    {
+        try
+        {
+            float elapsedTime = 0;
+
+            while(elapsedTime < OUTCOME_PAGE_MOVE_Y)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = elapsedTime / OUTCOME_PAGE_MOVE_Y;
+
+                for (int i = 0; i < profilePages.Length; i++)
+                {
+                    Page page = profilePages[i];
+                    float posY = Mathf.Lerp(outcomePageStartPos.y, outcomePageInactivePositions[i].y, t);
+                    page.transform.localPosition = new Vector3(page.transform.localPosition.x, posY, page.transform.localPosition.z);
+                }
+                await UniTask.Yield(ctsPagesStartOutcome.Token);
+            }
+            
+            elapsedTime = 0;
+
+            while(elapsedTime < OUTCOME_PAGE_MOVE_X)
+            {
+                elapsedTime += Time.deltaTime;
+                float t = elapsedTime / OUTCOME_PAGE_MOVE_X;
+
+                for (int i = 0; i < profilePages.Length; i++)
+                {
+                    Page page = profilePages[i];
+                    float posX = Mathf.Lerp(outcomePageStartPos.x, outcomePageInactivePositions[i].x, t);
+                    page.transform.localPosition = new Vector3(posX, page.transform.localPosition.y, page.transform.localPosition.z);
+                }
+                await UniTask.Yield(ctsPagesStartOutcome.Token);
+            }
+            outcomeSetUpCompleted = true;
+        }
+        catch (OperationCanceledException)
+        {
+            Page samplePage = profilePages[0];
+            Bounds exitButtonBounds = samplePage.exitButton.renderer.bounds;
+            float exitButtonDistFromLeftEdge = exitButtonBounds.min.x - samplePage.paperRenderer.bounds.min.x;
+            float xOffset = exitButtonBounds.size.x + (exitButtonDistFromLeftEdge * 2);
+
+            for (int i = 0; i < profilePages.Length; i++)
+            {
+                Page page = profilePages[i];
+                page.transform.localPosition = outcomePageInactivePositions[i];
+            }
+
+            outcomeSetUpCompleted = true;
         }
     }
 }

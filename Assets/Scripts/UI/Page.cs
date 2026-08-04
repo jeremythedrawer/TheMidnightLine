@@ -566,7 +566,6 @@ public class Page : MonoBehaviour
             break;
         }
     }
-    
     public void EnterButton(IconUIElement icon)
     {
         icon.renderer.custom.x = 1;

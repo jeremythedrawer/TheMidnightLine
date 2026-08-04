@@ -110,16 +110,19 @@ public class Notepad : MonoBehaviour
     }
     private void OnEnable()
     {
+        gameEventData.OnFinishTripScene.RegisterListener(KeepNotepad);
+
         Scenes.OnLoadStart += CreateNPCProfiles;
         Scenes.OnLoadTrip1 += Reinit;
         Scenes.OnLoadScore += Reinit;
     }
     private void OnDisable()
     {
+        gameEventData.OnFinishTripScene.UnregisterListener(KeepNotepad);
+
         Scenes.OnLoadStart -= CreateNPCProfiles;
 
         Scenes.OnLoadTrip1 -= Reinit;
-        
         Scenes.OnLoadScore -= Reinit;
     }
     private void Update()
@@ -182,6 +185,7 @@ public class Notepad : MonoBehaviour
         float halfCamHeight = camStats.camBounds.extents.y;
         float binderBoundsOffsetX = bindingRingsRend.bounds.max.x - transform.position.x;
         notepadData.inactiveLocalPos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + NOTEPAD_INACTIVE_OFFSET, notepadData.activeLocalPos.z);
+        notepadData.offSceenLocalPos = new Vector3(notepadData.inactiveLocalPos.x, -halfCamHeight - NOTEPAD_INACTIVE_OFFSET, notepadData.activeLocalPos.z); 
 
         float bindingRingsHeight = bindingRingsRend.bounds.size.y;
         notepadData.hoverLocalPos = new Vector3(notepadData.inactiveLocalPos.x, notepadData.inactiveLocalPos.y + bindingRingsHeight, notepadData.activeLocalPos.z);
@@ -191,6 +195,10 @@ public class Notepad : MonoBehaviour
         leftHandTargetLocalPos = notepadData.leftHandOffScreenLocalPos;
         
         CreatePages();
+    }
+    private void KeepNotepad()
+    {
+        SceneController.KeepNotepad(this);
     }
     private void Reinit()
     {
@@ -314,7 +322,7 @@ public class Notepad : MonoBehaviour
         notepadData.curState = newState;
         EnterState(notepadData.prevState);
     }
-    private void SkipToPage(int index)
+    public void SkipToPage(int index)
     {
         activePage.gameObject.SetActive(false);
         activePageIndex = index;
@@ -1182,7 +1190,6 @@ public class Notepad : MonoBehaviour
 
         return firstName + " " + lastName;
     }
-    
     
     public void FlipToPage(int pageIndex)
     {

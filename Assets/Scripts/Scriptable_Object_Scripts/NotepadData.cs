@@ -21,6 +21,7 @@ public class NotepadData : ScriptableObject
     public Vector3 inactiveLocalPos;
     public Vector3 hoverLocalPos;
     public Vector3 activeLocalPos;
+    public Vector3 offSceenLocalPos;
 
     public float leftHandDepthFront;
     public float activePageDepth;
