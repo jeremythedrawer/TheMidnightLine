@@ -27,7 +27,7 @@ public class NPCManager : MonoBehaviour
         Scenes.OnLoadTrip0 += InitPoolsDict;
         graffitiPool = new Graffiti[MAX_GRAFFITI_RENDERERS];
         graffitiRendererCount = -1;
-        npcsData.behaviourContextDict = SetBehaviourContextDictionary();
+        npcsData.behaviourContextDict = SetBehaviourContextDictionary(npcsData.behaviourContexts);
     }
     private void OnDisable()
     {
@@ -142,17 +142,6 @@ public class NPCManager : MonoBehaviour
         {
             GlyphPoolDict = new Dictionary<VisualEffect, Queue<VisualEffect>>();
         }
-    }
-    private Dictionary<Behaviours, NPCBehaviourContextSO> SetBehaviourContextDictionary()
-    {
-        Dictionary<Behaviours, NPCBehaviourContextSO> dict = new Dictionary<Behaviours, NPCBehaviourContextSO>();
-
-        foreach (NPCBehaviourContextSO context in npcsData.behaviourContexts)
-        {
-            dict[context.behaviours] = context;
-        }
-
-        return dict;
     }
 }
 

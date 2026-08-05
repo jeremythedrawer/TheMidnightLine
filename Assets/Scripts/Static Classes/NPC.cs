@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
 using static Atlas;
+using static NPC;
 public static class NPC
 {
     public const float MIN_START_MOVE_TIME = 0.3f;
@@ -162,6 +163,18 @@ public static class NPC
         }
 
         return left;
+    }
+
+    public static Dictionary<Behaviours, NPCBehaviourContextSO> SetBehaviourContextDictionary(NPCBehaviourContextSO[] behaviourContexts)
+    {
+        Dictionary<Behaviours, NPCBehaviourContextSO> dict = new Dictionary<Behaviours, NPCBehaviourContextSO>();
+
+        foreach (NPCBehaviourContextSO context in behaviourContexts)
+        {
+            dict[context.behaviours] = context;
+        }
+
+        return dict;
     }
 }
 

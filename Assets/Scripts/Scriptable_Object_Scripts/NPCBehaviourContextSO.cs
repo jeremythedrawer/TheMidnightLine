@@ -6,14 +6,15 @@ using static NPC;
 [CreateAssetMenu(fileName = "name_BehaviourContext", menuName = "Midnight Line SOs / NPC Behaviour Context")]
 public class NPCBehaviourContextSO : ScriptableObject
 {
-    public Behaviours behaviours;
     public VisualEffect glyphPrefab;
+
+    [TextArea(3, 10)] public string wasFoundSentence;
 
     public float minTime;
     public float maxTime;
 
+    public Behaviours behaviours;
     public NPCMotion sittingMotion;
     public NPCMotion standingMotion;
-
     public NPCPath pathToTake;
 }

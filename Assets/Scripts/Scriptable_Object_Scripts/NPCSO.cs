@@ -4,16 +4,17 @@ using static NPC;
 public class NPCSO : ScriptableObject
 {
     public NPCBrain prefab;
-    
-    [Header("Movement")]
-    public float moveSpeed = 5f;
 
-    [Header("Profile")]
+    [TextArea(3,10)]public string offenceSentence;
+
+    public Vector2 idleDurationRange = new Vector2(10, 30);
+
+    public float moveSpeed = 5f;
+    
+    public int mugShotIndex;
+    
     public Behaviours behaviours;
     public Gender gender;
     public Ethnicity ethnicity;
-    public int mugShotIndex;
     
-    [Header("Difficulty")]
-    public Vector2 idleDurationRange = new Vector2(10, 30);
 }

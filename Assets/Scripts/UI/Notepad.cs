@@ -34,15 +34,14 @@ public class Notepad : MonoBehaviour
         IsFlippingDown = 1 << 1,
         WriteToggle = 1 << 2,
         EraseToggle = 1 << 3,
-        RevealToggle = 1 << 4,
-        WillFlipUp = 1 << 5,
-        WillFlipDown = 1 << 6,
-        CanFlipUp = 1 << 7,
-        CanFlipDown = 1 << 8,
-        CanWillFlipUp = 1 << 9,
-        CanWillFlipDown = 1 << 10,
-        OnScreen = 1 << 11,
-        InUse = 1 << 12,
+        WillFlipUp = 1 << 4,
+        WillFlipDown = 1 << 5,
+        CanFlipUp = 1 << 6,
+        CanFlipDown = 1 << 7,
+        CanWillFlipUp = 1 << 8,
+        CanWillFlipDown = 1 << 9,
+        OnScreen = 1 << 10,
+        InUse = 1 << 11,
     }
 
     public static event Action OnFinishRevealingOutcomes;
@@ -98,7 +97,6 @@ public class Notepad : MonoBehaviour
 
     public float totalPencilTime;
     public float curPencilTime;
-    public float revealClock;
 
     public bool atStartPencilPos;
     public bool atOffCameraPos;
@@ -107,20 +105,18 @@ public class Notepad : MonoBehaviour
     {
         SceneController.KeepNotepad(this);
         gameObject.SetActive(false);
+        CreateNPCProfiles();
     }
     private void OnEnable()
     {
         gameEventData.OnFinishTripScene.RegisterListener(KeepNotepad);
 
-        Scenes.OnLoadStart += CreateNPCProfiles;
         Scenes.OnLoadTrip1 += Reinit;
         Scenes.OnLoadScore += Reinit;
     }
     private void OnDisable()
     {
         gameEventData.OnFinishTripScene.UnregisterListener(KeepNotepad);
-
-        Scenes.OnLoadStart -= CreateNPCProfiles;
 
         Scenes.OnLoadTrip1 -= Reinit;
         Scenes.OnLoadScore -= Reinit;
@@ -261,11 +257,7 @@ public class Notepad : MonoBehaviour
 
             case PageType.Profile:
             {
-                if (ToReveal())
-                {
-                    SetState(NotepadState.Revealing);
-                }
-                else if (ToFlipUp())
+                if (ToFlipUp())
                 {
                     SetState(NotepadState.FlippingUp);
                 }
@@ -599,28 +591,6 @@ public class Notepad : MonoBehaviour
                 activePage.UpdatePage();
             }
             break;
-            case NotepadState.Revealing:
-            {
-                revealClock += Time.deltaTime;
-
-                activePage.UpdateMugShotReveal(revealClock / REVEAL_TIME);
-
-                if (revealClock > REVEAL_TIME)
-                {
-                    activePage.UpdateMugShotReveal(1);
-                    notepadData.subState &= ~(SubState.RevealToggle);
-
-                    activePage.WriteForPlayerWriteText(trip.stationsDataArray[activeTraitorProfile.npcProfile.disembarkingStationIndex].name);
-
-                    traitorOutcomesRevealed++;
-
-                    if (traitorOutcomesRevealed == trip.traitorProfiles.Length)
-                    {
-                        OnFinishRevealingOutcomes.Invoke();
-                    }
-                }
-            }
-            break;
         }
     }
     private void EnterState(NotepadState prevState)
@@ -737,14 +707,6 @@ public class Notepad : MonoBehaviour
                 }
             }
             break;
-            case NotepadState.Revealing:
-            {
-                revealClock = 0;
-                notepadData.subState |= SubState.RevealToggle;
-
-                activeTraitorProfile = trip.traitorProfiles[activePage.traitorIndex];
-            }
-            break;
         }
     }
     private void SetLeftHandTargetPosToWritingBounds()
@@ -756,6 +718,7 @@ public class Notepad : MonoBehaviour
     private void CreateNPCProfiles()
     {
         nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
+
         List<NPCProfile> totalNPCProfiles = new List<NPCProfile>();
         List<NPCProfile> bystanderProfiles = new List<NPCProfile>();
 
@@ -785,7 +748,6 @@ public class Notepad : MonoBehaviour
                 {
                     Behaviours secondBehaviour = (Behaviours)validFlags[k];
                     Behaviours twoBehaviours = firstBehaviour | secondBehaviour;
-                    string name = GenerateName(npc.gender, npc.ethnicity);
 
                     NPCProfile npcProfile = new NPCProfile
                     {
@@ -832,10 +794,12 @@ public class Notepad : MonoBehaviour
 
                 NPCSO traitor = trip.npcDataArray[traitorProfile.npcPrefabIndex];
 
+                string name = GenerateName(traitor.gender, traitor.ethnicity);
                 trip.traitorProfiles[traitorIndex] = new TraitorProfile()
                 {
                     npcProfile = traitorProfile,
                     mugShotIndex = traitor.mugShotIndex,
+                    fullName = name,
                 };
 
                 totalNPCProfiles.RemoveAt(randProfileIndex);
@@ -917,19 +881,18 @@ public class Notepad : MonoBehaviour
                 {
                     case PageType.Profile:
                     {
-                        if(activeTraitorProfile.npcProfile.disembarkingStationIndex == activePage.playerWriteIndex)
+                        if(!activeTraitorProfile.found)
                         {
-                            activeTraitorProfile.found = true;
-                            trip.traitorProfiles[activePage.traitorIndex] = activeTraitorProfile;
-                            
-                            activePage.playerWriteRenderers[0].customBit |= (int)ColorBits.Diagonal;
+                            if (activeTraitorProfile.npcProfile.disembarkingStationIndex == activePage.playerWriteIndex)
+                            {
+                                activeTraitorProfile.found = true;
+                                trip.traitorProfiles[activePage.traitorIndex] = activeTraitorProfile;
+                            }
                         }
                         else
                         {
                             activeTraitorProfile.found = false;
                             trip.traitorProfiles[activePage.traitorIndex] = activeTraitorProfile;
-
-                            activePage.playerWriteRenderers[0].customBit &= ~((int)ColorBits.Diagonal);
                         }
                     }
                     break;
@@ -1126,33 +1089,6 @@ public class Notepad : MonoBehaviour
     {
         return (sceneData.activeSceneType == SceneType.Trip && playerInputs.spacebarDown && activePage.activePlayerWriteText == "" && activePage.activePlayerWriteTextRenderer != null) || (notepadData.subState & SubState.WriteToggle) != 0;
     }
-    private bool ToReveal()
-    {
-        if (sceneData.activeSceneType != SceneType.Score) return false;
-
-        AtlasRenderer mugShotRenderer = activePage.playerWriteRenderers[0];
-        if (mugShotRenderer.custom.x == 1) return false;
-
-        bool clickedOnMugshot = false;
-        if (mugShotRenderer.custom.x == 0 && CursorController.IsInsideBounds(mugShotRenderer.GetBounds(), isClickable: true))
-        {
-            if (playerInputs.mouseLeftDown)
-            {
-                mugShotRenderer.custom.w = 0;
-                clickedOnMugshot = true;
-            }
-            else
-            {
-                mugShotRenderer.custom.w = 1;
-                clickedOnMugshot = false;
-            }
-        }
-        else
-        {
-            mugShotRenderer.custom.w = 0;
-        }
-        return ((playerInputs.spacebarDown || clickedOnMugshot) && traitorOutcomesRevealed < trip.traitorProfiles.Length) || (notepadData.subState & SubState.RevealToggle) != 0;
-    }
     private string GenerateName(Gender gender, Ethnicity ethnicity)
     {
         string genderString = gender.ToString();
@@ -1168,7 +1104,6 @@ public class Notepad : MonoBehaviour
                 firstNamesList.Add(fn);
             }
         }
-
         if (firstNamesList.Count == 0) return "NoFirstName";
 
         int firstNameIndex = UnityEngine.Random.Range(0, firstNamesList.Count);

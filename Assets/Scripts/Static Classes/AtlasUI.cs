@@ -53,7 +53,6 @@ public static class AtlasUI
         Erasing,
         FlippingUp,
         FlippingDown,
-        Revealing,
     }
     public enum PickerState
     {
@@ -277,6 +276,14 @@ public static class AtlasUI
                 break;
             }
             renderer.transform.localPosition = targetPos;
+        }
+        public void SetToActivePosition()
+        {
+            renderer.transform.localPosition = activePos;
+        }
+        public void SetToCustomPosition(Vector3 newPos)
+        {
+            renderer.transform.localPosition = newPos;
         }
         public void MoveButtonToRight()
         {

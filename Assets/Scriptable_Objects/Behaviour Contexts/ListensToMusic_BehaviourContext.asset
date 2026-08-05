@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd177bb62fd7f5147b69e6b35c3f9f37, type: 3}
   m_Name: ListensToMusic_BehaviourContext
   m_EditorClassIdentifier: Assembly-CSharp::NPCBehaviourContextSO
-  behaviours: 8
   glyphPrefab: {fileID: 8898805483392028272, guid: 6d2feea3f9febc34e9aaf6a57dbbc27a, type: 3}
+  wasFoundSentence: "{name}:\n\nFound at a record \nshop near \n{location}."
   minTime: 15
   maxTime: 30
+  behaviours: 8
   sittingMotion: 5
   standingMotion: 14
   pathToTake: 0

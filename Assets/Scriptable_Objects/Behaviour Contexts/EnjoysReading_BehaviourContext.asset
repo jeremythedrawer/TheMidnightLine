@@ -12,10 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd177bb62fd7f5147b69e6b35c3f9f37, type: 3}
   m_Name: EnjoysReading_BehaviourContext
   m_EditorClassIdentifier: Assembly-CSharp::NPCBehaviourContextSO
-  behaviours: 32
   glyphPrefab: {fileID: 0}
+  wasFoundSentence: '{name}:
+
+
+    Found at a library
+
+    in {location}.'
   minTime: 20
   maxTime: 30
+  behaviours: 32
   sittingMotion: 6
   standingMotion: 15
   pathToTake: 0

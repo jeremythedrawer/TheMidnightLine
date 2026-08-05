@@ -1,6 +1,6 @@
 %YAML 1.1
 %TAG !u! tag:unity3d.com,2011:
---- !u!1 &1439452552751748441
+--- !u!1 &7733667973093463101
 GameObject:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -8,41 +8,90 @@ GameObject:
   m_PrefabAsset: {fileID: 0}
   serializedVersion: 6
   m_Component:
-  - component: {fileID: 15911325801640563}
-  - component: {fileID: 8099043674557259294}
-  - component: {fileID: 118950378541814445}
-  - component: {fileID: 7958201747531856237}
-  - component: {fileID: 5997687124654494123}
-  - component: {fileID: 94976023300698573}
+  - component: {fileID: 6931312496982284968}
+  - component: {fileID: 7732631492685130664}
+  - component: {fileID: 6420348308866692437}
+  - component: {fileID: 8824921806515184331}
+  - component: {fileID: 8296881156365639583}
+  - component: {fileID: 5571533063624656214}
   m_Layer: 14
-  m_Name: NPC_Businessman
+  m_Name: GlassesLady
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!4 &15911325801640563
+--- !u!4 &6931312496982284968
 Transform:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439452552751748441}
+  m_GameObject: {fileID: 7733667973093463101}
   serializedVersion: 2
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 307, y: 1.691, z: 0}
+  m_LocalPosition: {x: 294.11673, y: 0.05, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!82 &8099043674557259294
+--- !u!114 &7732631492685130664
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7733667973093463101}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 1
+  batchKey:
+    texture: {fileID: 2800000, guid: c030ddf380095854590c2ab803ea6f6e, type: 3}
+    material: {fileID: 2100000, guid: a33a67236ad4eb248b44964a793ad770, type: 2}
+  atlas: {fileID: 11400000, guid: fbd7996a0270fc4408dbda4ef884f608, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.037109375, y: 0.14355469, z: 0.0009765625, w: 0.85058594}
+    uvPivot: {x: 0.47368422, y: 0}
+    worldSize: {x: 0.21111111, y: 0.81666666, z: 1}
+    index: 0
+  bounds:
+    m_Center: {x: 294.12228, y: 0.45833334, z: 0}
+    m_Extent: {x: 0.10555556, y: 0.40833333, z: 0.1}
+  worldPivotAndSize: {x: -0.1, y: -0, z: 0.21111111, w: 0.81666666}
+  uvSizeAndPosition: {x: 0.037109375, y: 0.14355469, z: 0.0009765625, w: 0.85058594}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  boundsOffset: {x: 0.005555555, y: 0.40833333, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 0
+  prevSpriteIndexFlipV: 0
+  isAnimating: 0
+  quadCount: 0
+--- !u!82 &6420348308866692437
 AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439452552751748441}
+  m_GameObject: {fileID: 7733667973093463101}
   m_Enabled: 1
   serializedVersion: 4
   OutputAudioMixerGroup: {fileID: 0}
@@ -133,14 +182,14 @@ AudioSource:
     m_PreInfinity: 2
     m_PostInfinity: 2
     m_RotationOrder: 4
---- !u!50 &118950378541814445
+--- !u!50 &8824921806515184331
 Rigidbody2D:
   serializedVersion: 5
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439452552751748441}
+  m_GameObject: {fileID: 7733667973093463101}
   m_BodyType: 0
   m_Simulated: 1
   m_UseFullKinematicContacts: 0
@@ -160,13 +209,13 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 4
---- !u!61 &7958201747531856237
+--- !u!61 &8296881156365639583
 BoxCollider2D:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439452552751748441}
+  m_GameObject: {fileID: 7733667973093463101}
   m_Enabled: 1
   serializedVersion: 3
   m_Density: 1
@@ -194,83 +243,34 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: -0.005722046, y: 0.4533042}
+  m_Offset: {x: 0.01222229, y: 0.40691304}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.42708334, y: 0.0031055901}
-    oldSize: {x: 0.96, y: 3.22}
-    newSize: {x: 1.25, y: 3.23}
+    pivot: {x: 0.51282054, y: 0}
+    oldSize: {x: 0.78, y: 2.94}
+    newSize: {x: 0.78, y: 2.93}
     adaptiveTilingThreshold: 0.5
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.12454224, y: 0.8600581}
+  m_Size: {x: 0.090789795, y: 0.7727872}
   m_EdgeRadius: 0
---- !u!114 &5997687124654494123
+--- !u!114 &5571533063624656214
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439452552751748441}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 1
-  batchKey:
-    texture: {fileID: 2800000, guid: 1602fa2914d12994d8cfd5021338c0b7, type: 3}
-    material: {fileID: 2100000, guid: a33a67236ad4eb248b44964a793ad770, type: 2}
-  atlas: {fileID: 11400000, guid: ff7aac1304a148e42a703514d188d9c9, type: 2}
-  boxCollider: {fileID: 0}
-  spriteIndex: 1
-  flipX: 0
-  flipY: 0
-  width: 1
-  height: 1
-  cam: {fileID: 0}
-  sprite:
-    uvSizeAndPos: {x: 0.048828125, y: 0.15527344, z: 0.047851562, w: 0.84375}
-    uvPivot: {x: 0.58, y: 0}
-    worldSize: {x: 0.2777778, y: 0.8833333, z: 1}
-    index: 1
-  bounds:
-    m_Center: {x: 306.97778, y: 2.1326666, z: 0}
-    m_Extent: {x: 0.1388889, y: 0.44166666, z: 0.1}
-  worldPivotAndSize: {x: -0.16111112, y: -0, z: 0.2777778, w: 0.8833333}
-  uvSizeAndPosition: {x: 0.048828125, y: 0.15527344, z: 0.047851562, w: 0.84375}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
-  custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: -0.02222222, y: 0.44166666, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  keyframeClock: 0
-  curFrameIndex: 0
-  prevFrameIndex: 0
-  curMotionIndex: 0
-  prevSpriteIndexFlipH: 1
-  prevSpriteIndexFlipV: 1
-  isAnimating: 0
-  quadCount: 0
---- !u!114 &94976023300698573
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1439452552751748441}
+  m_GameObject: {fileID: 7733667973093463101}
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: c5aba9d0984809d4e8382d8abe5c0c9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  atlasRenderer: {fileID: 5997687124654494123}
-  rigidBody: {fileID: 118950378541814445}
-  boxCollider: {fileID: 7958201747531856237}
-  npc: {fileID: 11400000, guid: 8b2f9c6da9033cd4a8c6c5677fbb3e2c, type: 2}
+  atlasRenderer: {fileID: 7732631492685130664}
+  rigidBody: {fileID: 8824921806515184331}
+  boxCollider: {fileID: 8296881156365639583}
+  npc: {fileID: 11400000, guid: 1d1f8d46e230b6140be513acdbfef0f0, type: 2}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}

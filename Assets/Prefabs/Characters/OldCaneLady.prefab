@@ -12,10 +12,10 @@ GameObject:
   - component: {fileID: 8099043674557259294}
   - component: {fileID: 118950378541814445}
   - component: {fileID: 7958201747531856237}
-  - component: {fileID: 8201393409819018847}
+  - component: {fileID: 8312574823374561200}
   - component: {fileID: 94976023300698573}
   m_Layer: 14
-  m_Name: NPC_NecklaceLady
+  m_Name: OldCaneLady
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
   m_NavMeshLayer: 0
@@ -194,7 +194,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.017501831, y: 0.41893303}
+  m_Offset: {x: -0.007156372, y: 0.3516152}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0.41025642, y: 0}
@@ -204,9 +204,9 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.06826782, y: 0.8063252}
+  m_Size: {x: 0.09341431, y: 0.67168236}
   m_EdgeRadius: 0
---- !u!114 &8201393409819018847
+--- !u!114 &8312574823374561200
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -220,9 +220,9 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
   rendererType: 1
   batchKey:
-    texture: {fileID: 2800000, guid: 8d8f53d53f4401641ba51ddc11f980b9, type: 3}
+    texture: {fileID: 2800000, guid: 1d077636b535a8c488f7fa70226783a9, type: 3}
     material: {fileID: 2100000, guid: a33a67236ad4eb248b44964a793ad770, type: 2}
-  atlas: {fileID: 11400000, guid: cdd9a76821dbdf242a4c71f6762fc644, type: 2}
+  atlas: {fileID: 11400000, guid: a11f73adf1bcb6b4da0441b4776c8933, type: 2}
   boxCollider: {fileID: 0}
   spriteIndex: 0
   flipX: 0
@@ -231,18 +231,18 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.034179688, y: 0.14648438, z: 0.01953125, w: 0.8535156}
-    uvPivot: {x: 0.42857143, y: 0}
-    worldSize: {x: 0.19444445, y: 0.8333333, z: 1}
+    uvSizeAndPos: {x: 0.036132812, y: 0.125, z: 0.0087890625, w: 0.875}
+    uvPivot: {x: 0.4054054, y: 0}
+    worldSize: {x: 0.20555556, y: 0.7111111, z: 1}
     index: 0
   bounds:
-    m_Center: {x: 307.0139, y: 2.1076667, z: 0}
-    m_Extent: {x: 0.097222224, y: 0.41666666, z: 0.1}
-  worldPivotAndSize: {x: -0.083333336, y: -0, z: 0.19444445, w: 0.8333333}
-  uvSizeAndPosition: {x: 0.034179688, y: 0.14648438, z: 0.01953125, w: 0.8535156}
+    m_Center: {x: 307.01944, y: 2.0465555, z: 0}
+    m_Extent: {x: 0.10277778, y: 0.35555556, z: 0.1}
+  worldPivotAndSize: {x: -0.083333336, y: -0, z: 0.20555556, w: 0.7111111}
+  uvSizeAndPosition: {x: 0.036132812, y: 0.125, z: 0.0087890625, w: 0.875}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.013888888, y: 0.41666666, z: 0}
+  boundsOffset: {x: 0.019444443, y: 0.35555556, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -267,10 +267,10 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c5aba9d0984809d4e8382d8abe5c0c9b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  atlasRenderer: {fileID: 8201393409819018847}
+  atlasRenderer: {fileID: 8312574823374561200}
   rigidBody: {fileID: 118950378541814445}
   boxCollider: {fileID: 7958201747531856237}
-  npc: {fileID: 11400000, guid: c76632ac0a69b974aaa74e6cd1646b89, type: 2}
+  npc: {fileID: 11400000, guid: 8357ed2722fa5fd439046aa12a4199b6, type: 2}
   npcData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}

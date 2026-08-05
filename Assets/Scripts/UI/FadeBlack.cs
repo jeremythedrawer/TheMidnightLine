@@ -40,16 +40,10 @@ public class FadeBlack : MonoBehaviour
     private void OnEnable()
     {
         gameEventData.OnFinishTripScene.RegisterListener(FadeToBlackToScoreScene);
-        NotepadProp.OnNotepadReturn += FadeToOutcome;
     }
     private void OnDisable()
     {
         gameEventData.OnFinishTripScene.UnregisterListener(FadeToBlackToScoreScene);
-        NotepadProp.OnNotepadReturn -= FadeToOutcome;
-    }
-    private void FadeToOutcome()
-    {
-        FadeIn(value: 1, uvPosX: 0.5f, alpha: 0.2f, NOTEPAD_DEPTH);
     }
     private void FadeToBlackToScoreScene()
     {

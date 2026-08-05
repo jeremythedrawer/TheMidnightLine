@@ -466,10 +466,11 @@ public class Page : MonoBehaviour
             }
             break;
         }
-
-
         UpdatePreviewPlayerWriteText();
-
+    }
+    public void SetActiveRendererText(string text)
+    {
+        activePlayerWriteTextRenderer?.SetText(text);
     }
     public void SetPlayerWriteTextAlphaBottom(float normAmount)
     {

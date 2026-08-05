@@ -12,10 +12,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: cd177bb62fd7f5147b69e6b35c3f9f37, type: 3}
   m_Name: FrequentlyIll_BehaviourContext
   m_EditorClassIdentifier: Assembly-CSharp::NPCBehaviourContextSO
-  behaviours: 64
   glyphPrefab: {fileID: 0}
+  wasFoundSentence: "{name}:\n\nFound at a local \nchemist of \n{location}."
   minTime: 5
   maxTime: 10
+  behaviours: 64
   sittingMotion: 7
   standingMotion: 16
   pathToTake: 0

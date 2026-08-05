@@ -13,9 +13,11 @@ MonoBehaviour:
   m_Name: NPC_Businessman
   m_EditorClassIdentifier: 
   prefab: {fileID: 94976023300698573, guid: d02c48e5c3c73f148b26393aa574b573, type: 3}
+  offenceSentence: "Arrested for coordinating \nactivities affiliated with \nan organisation
+    listed \nunder the Registry of \nVinrose Terrorist Groups."
+  idleDurationRange: {x: 5, y: 10}
   moveSpeed: 0.5
+  mugShotIndex: 1
   behaviours: 26
   gender: 0
   ethnicity: 1
-  mugShotIndex: 1
-  idleDurationRange: {x: 5, y: 10}
