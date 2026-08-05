@@ -46,6 +46,8 @@ public static class Atlas
         NotepadFlipping,
         NotepadWriting,
         Walking,
+        Handshake,
+        ShotByGun,
     }
     public enum TrainMotion
     {
@@ -68,11 +70,14 @@ public static class Atlas
         SittingBreathing4,
         SittingBreathing5,
         SittingBreathing6,
+        ShootGun,
     }
     public enum MeridiaPresident
     {
         None,
         SittingBreathing,
+        StartHandshake,
+        Handshake,
     }
     public enum NotepadMotion
     {

@@ -25,26 +25,68 @@ MonoBehaviour:
     rgba: 0
   motionSprites:
   - sprite:
-      uvSizeAndPos: {x: 0.11328125, y: 0.22851562, z: 0.001953125, w: 0.7675781}
-      uvPivot: {x: 0.46551725, y: 0}
-      worldSize: {x: 0.32222223, y: 0.65, z: 1}
+      uvSizeAndPos: {x: 0.1171875, y: 0.23242188, z: 0.001953125, w: 0.7675781}
+      uvPivot: {x: 0.46666667, y: 0}
+      worldSize: {x: 0.33333334, y: 0.6611111, z: 1}
       index: 0
     markers: []
     holdFrames: 60
   - sprite:
-      uvSizeAndPos: {x: 0.11328125, y: 0.23046875, z: 0.123046875, w: 0.7675781}
-      uvPivot: {x: 0.46551725, y: 0}
-      worldSize: {x: 0.32222223, y: 0.65555555, z: 1}
+      uvSizeAndPos: {x: 0.119140625, y: 0.234375, z: 0.119140625, w: 0.765625}
+      uvPivot: {x: 0.45901638, y: 0}
+      worldSize: {x: 0.33888888, y: 0.6666667, z: 1}
       index: 1
     markers: []
     holdFrames: 20
   - sprite:
-      uvSizeAndPos: {x: 0.11328125, y: 0.23242188, z: 0.24414062, w: 0.7675781}
-      uvPivot: {x: 0.46551725, y: 0}
-      worldSize: {x: 0.32222223, y: 0.6611111, z: 1}
+      uvSizeAndPos: {x: 0.119140625, y: 0.23632812, z: 0.23828125, w: 0.7636719}
+      uvPivot: {x: 0.45901638, y: 0}
+      worldSize: {x: 0.33888888, y: 0.6722222, z: 1}
       index: 2
     markers: []
     holdFrames: 60
+  - sprite:
+      uvSizeAndPos: {x: 0.109375, y: 0.32226562, z: 0.35742188, w: 0.6777344}
+      uvPivot: {x: 0.5535714, y: 0}
+      worldSize: {x: 0.31111112, y: 0.9166667, z: 1}
+      index: 3
+    markers: []
+    holdFrames: 5
+  - sprite:
+      uvSizeAndPos: {x: 0.109375, y: 0.32226562, z: 0.47070312, w: 0.6777344}
+      uvPivot: {x: 0.5535714, y: 0}
+      worldSize: {x: 0.31111112, y: 0.9166667, z: 1}
+      index: 4
+    markers: []
+    holdFrames: 5
+  - sprite:
+      uvSizeAndPos: {x: 0.12890625, y: 0.32226562, z: 0.5859375, w: 0.6777344}
+      uvPivot: {x: 0.6212121, y: 0}
+      worldSize: {x: 0.36666667, y: 0.9166667, z: 1}
+      index: 5
+    markers: []
+    holdFrames: 5
+  - sprite:
+      uvSizeAndPos: {x: 0.12890625, y: 0.32226562, z: 0.73046875, w: 0.6777344}
+      uvPivot: {x: 0.6212121, y: 0}
+      worldSize: {x: 0.36666667, y: 0.9166667, z: 1}
+      index: 6
+    markers: []
+    holdFrames: 5
+  - sprite:
+      uvSizeAndPos: {x: 0.12890625, y: 0.32226562, z: 0.8613281, w: 0.6777344}
+      uvPivot: {x: 0.6212121, y: 0}
+      worldSize: {x: 0.36666667, y: 0.9166667, z: 1}
+      index: 7
+    markers: []
+    holdFrames: 5
+  - sprite:
+      uvSizeAndPos: {x: 0.12890625, y: 0.32226562, z: 0.005859375, w: 0.4375}
+      uvPivot: {x: 0.6212121, y: 0}
+      worldSize: {x: 0.36666667, y: 0.9166667, z: 1}
+      index: 8
+    markers: []
+    holdFrames: 5
   simpleSprites: []
   slicedSprites: []
   clips:
@@ -53,5 +95,17 @@ MonoBehaviour:
     motionIndex: 1
     keyframeStartIndex: 0
     keyframeEndIndex: 2
+    time: 0
+  - clipName: Handshake
+    clipType: 2
+    motionIndex: 2
+    keyframeStartIndex: 3
+    keyframeEndIndex: 5
+    time: 0
+  - clipName: Handshake
+    clipType: 1
+    motionIndex: 3
+    keyframeStartIndex: 6
+    keyframeEndIndex: 8
     time: 0
   markers: []

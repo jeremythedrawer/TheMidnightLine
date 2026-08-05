@@ -15,7 +15,7 @@ MonoBehaviour:
   texture: {fileID: 2800000, guid: e67057ee85abdac409fcfda2715bd2db, type: 3}
   spriteConnectColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4278255615
   entityMotionType: 2
   pivotColor:
     serializedVersion: 2
@@ -185,6 +185,83 @@ MonoBehaviour:
       index: 22
     markers: []
     holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.057617188, y: 0.15722656, z: 0.453125, w: 0.6767578}
+      uvPivot: {x: 0.42372882, y: 0}
+      worldSize: {x: 0.32777777, y: 0.89444447, z: 1}
+      index: 23
+    markers: []
+    holdFrames: 5
+  - sprite:
+      uvSizeAndPos: {x: 0.057617188, y: 0.15722656, z: 0.5126953, w: 0.6767578}
+      uvPivot: {x: 0.42372882, y: 0}
+      worldSize: {x: 0.32777777, y: 0.89444447, z: 1}
+      index: 24
+    markers: []
+    holdFrames: 5
+  - sprite:
+      uvSizeAndPos: {x: 0.056640625, y: 0.15722656, z: 0.5732422, w: 0.6767578}
+      uvPivot: {x: 0.43103448, y: 0}
+      worldSize: {x: 0.32222223, y: 0.89444447, z: 1}
+      index: 25
+    markers: []
+    holdFrames: 5
+  - sprite:
+      uvSizeAndPos: {x: 0.12011719, y: 0.16894531, z: 0.6308594, w: 0.6669922}
+      uvPivot: {x: 0.8292683, y: 0}
+      worldSize: {x: 0.68333334, y: 0.9611111, z: 1}
+      index: 26
+    markers: []
+    holdFrames: 6
+  - sprite:
+      uvSizeAndPos: {x: 0.15820312, y: 0.18359375, z: 0.7529297, w: 0.6455078}
+      uvPivot: {x: 0.7222222, y: 0}
+      worldSize: {x: 0.9, y: 1.0444444, z: 1}
+      index: 27
+    markers: []
+    holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.17089844, y: 0.19238281, z: 0.001953125, w: 0.4814453}
+      uvPivot: {x: 0.69142854, y: 0}
+      worldSize: {x: 0.9722222, y: 1.0944444, z: 1}
+      index: 28
+    markers: []
+    holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.19238281, y: 0.19824219, z: 0.17578125, w: 0.4716797}
+      uvPivot: {x: 0.60913706, y: 0}
+      worldSize: {x: 1.0944444, y: 1.1277778, z: 1}
+      index: 29
+    markers: []
+    holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.20214844, y: 0.18261719, z: 0.375, w: 0.4892578}
+      uvPivot: {x: 0.5942029, y: 0}
+      worldSize: {x: 1.15, y: 1.0388889, z: 1}
+      index: 30
+    markers: []
+    holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.13085938, y: 0.19335938, z: 0.5810547, w: 0.47070312}
+      uvPivot: {x: 0.91791046, y: 0}
+      worldSize: {x: 0.74444443, y: 1.1, z: 1}
+      index: 31
+    markers: []
+    holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.140625, y: 0.04296875, z: 0.7910156, w: 0.5986328}
+      uvPivot: {x: 0.8541667, y: 0}
+      worldSize: {x: 0.8, y: 0.24444444, z: 1}
+      index: 32
+    markers: []
+    holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.14355469, y: 0.0234375, z: 0.79296875, w: 0.5546875}
+      uvPivot: {x: 0.8367347, y: 0}
+      worldSize: {x: 0.81666666, y: 0.13333334, z: 1}
+      index: 33
+    markers: []
+    holdFrames: 3
   simpleSprites: []
   slicedSprites: []
   clips:
@@ -223,5 +300,17 @@ MonoBehaviour:
     motionIndex: 6
     keyframeStartIndex: 15
     keyframeEndIndex: 22
+    time: 0
+  - clipName: Handshake
+    clipType: 1
+    motionIndex: 7
+    keyframeStartIndex: 23
+    keyframeEndIndex: 25
+    time: 0
+  - clipName: ShotByGun
+    clipType: 0
+    motionIndex: 8
+    keyframeStartIndex: 26
+    keyframeEndIndex: 33
     time: 0
   markers: []
