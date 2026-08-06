@@ -41,12 +41,12 @@ public class ScoreUI : MonoBehaviour
     }
     private void OnEnable()
     {
-        FadeBlack.OnFinishFadeFromBlack += SetToNotepadState;
+        FadeBlack.OnFinishFadeOut += SetToNotepadState;
         Notepad.OnFinishRevealingOutcomes += WriteTraitorsFoundScore;
     }
     private void OnDisable()
     {
-        FadeBlack.OnFinishFadeFromBlack -= SetToNotepadState;
+        FadeBlack.OnFinishFadeOut -= SetToNotepadState;
         Notepad.OnFinishRevealingOutcomes -= WriteTraitorsFoundScore;
     }
     private void Update()

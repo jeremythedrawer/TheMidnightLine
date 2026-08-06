@@ -22,8 +22,13 @@ public class Room : MonoBehaviour
     public BoxCollider2D rightWallCollider;
     [Header("Generated")]
     public Bounds bounds;
+    public float startWallValue;
     public CancellationTokenSource ctsWall;
 
+    private void Start()
+    {
+        startWallValue = exteriorWallRenderer.custom.z;
+    }
     public void MoveUp()
     {
         ctsWall?.Cancel();
@@ -31,12 +36,12 @@ public class Room : MonoBehaviour
 
         MovingUp().Forget();
     }
-    public void MoveDown()
+    public void MoveDown(bool toStart = false)
     {
         ctsWall?.Cancel();
         ctsWall = new CancellationTokenSource();
 
-        MovingDown().Forget();
+        MovingDown(toStart).Forget();
     }
     public void ToggleLeftWall(bool toggle)
     {
@@ -46,9 +51,11 @@ public class Room : MonoBehaviour
     {
         rightWallCollider.enabled = toggle;
     }
-    private async UniTask MovingDown()
+    private async UniTask MovingDown(bool toStart)
     {
-        float elaspedTime = (exteriorWallRenderer.custom.z / MOVE_WALL_VALUE) * MOVE_WALL_TIME;
+        float moveWallValue = toStart ? startWallValue : MOVE_WALL_VALUE;
+
+        float elaspedTime = (exteriorWallRenderer.custom.z / moveWallValue) * MOVE_WALL_TIME;
         try
         {
             while (elaspedTime < MOVE_WALL_TIME)
@@ -58,11 +65,11 @@ public class Room : MonoBehaviour
                 float t = elaspedTime / MOVE_WALL_TIME;
                 t = EaseInOutCubic(t);
 
-                exteriorWallRenderer.custom.z = t * MOVE_WALL_VALUE;
+                exteriorWallRenderer.custom.z = t * moveWallValue;
 
                 await UniTask.Yield(ctsWall.Token);
             }
-            exteriorWallRenderer.custom.z = MOVE_WALL_VALUE;
+            exteriorWallRenderer.custom.z = moveWallValue;
         }
         catch (OperationCanceledException)
         {

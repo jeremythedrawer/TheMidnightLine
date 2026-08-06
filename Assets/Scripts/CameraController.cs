@@ -1,3 +1,5 @@
+using Cysharp.Threading.Tasks;
+using System;
 using UnityEngine;
 
 using static Atlas;
@@ -6,6 +8,8 @@ public class CameraController : MonoBehaviour
 {
     const float GAUSSIAN_VARIANCE = 90;
     const float CARRIAGE_BOUNDS_TEXTURE_SCALE = 32f;
+
+    public static event Action OnStartPlayAgain;
 
     public CameraSettingsSO settings;
     public CameraStatsSO stats;
@@ -31,6 +35,7 @@ public class CameraController : MonoBehaviour
     public int threadGroupX;
     public int threadGroupY;
 
+    public bool isShaking;
     private void OnEnable()
     {
         Init();
@@ -38,6 +43,8 @@ public class CameraController : MonoBehaviour
         StartUI.OnClickOptions += MoveToOptionsMenu;
         StartUI.OnClickBackFromOptions += MoveToMainMenu;
         StartUI.OnStartGame += MoveToPlayer;
+
+        HenchmanBrain.OnShoot += ShakeFromGunShot;
     }
     private void OnDisable()
     {
@@ -46,13 +53,13 @@ public class CameraController : MonoBehaviour
         StartUI.OnClickBackFromOptions -= MoveToMainMenu;
         StartUI.OnStartGame -= MoveToPlayer;
             
+        HenchmanBrain.OnShoot -= ShakeFromGunShot;
         stats.curVelocity = Vector3.zero;
 
 #if UNITY_EDITOR
         Graphics.Blit(Texture2D.whiteTexture, carriageBoundsRT);
 #endif
     }
-    
     private void Update()
     {
         ChooseStates();
@@ -68,7 +75,7 @@ public class CameraController : MonoBehaviour
         rawCurWorldPos = Vector3.Lerp(rawCurWorldPos, targetWorldPos, Time.deltaTime * settings.damping);
         stats.curWorldPos = GetSnappedPosition(rawCurWorldPos, stats.worldUnitsPerPixel);
         transform.position = stats.curWorldPos;
-        stats.curVelocity = -(stats.curWorldPos - stats.prevWorldPos) / Time.deltaTime;
+        stats.curVelocity = -(stats.curWorldPos - stats.prevWorldPos) / Time.unscaledDeltaTime;
     }
     private void LateUpdate()
     {
@@ -149,10 +156,13 @@ public class CameraController : MonoBehaviour
             case LocationState.MeetingRoom:
             case LocationState.Bunker:
             {
-                float distFromCenter = spyStats.bounds.center.x - spyStats.curLocationBounds.center.x;
-                float t = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
-                targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.bounds.center.x + curXOffset, t);
-                targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, spyStats.curLocationBounds.min.x + stats.camBounds.extents.x, spyStats.curLocationBounds.max.x - stats.camBounds.extents.x);
+                if (!isShaking)
+                {
+                    float distFromCenter = spyStats.bounds.center.x - spyStats.curLocationBounds.center.x;
+                    float t = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
+                    targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.bounds.center.x + curXOffset, t);
+                    targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, spyStats.curLocationBounds.min.x + stats.camBounds.extents.x, spyStats.curLocationBounds.max.x - stats.camBounds.extents.x);
+                }
             }
             break;
             case LocationState.Gangway:
@@ -162,6 +172,15 @@ public class CameraController : MonoBehaviour
                 carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);
 
                 carriageBoundsCompute.Dispatch(carriageBoundsKernel, threadGroupX, threadGroupY, 1);
+            }
+            break;
+
+            case LocationState.Elevator:
+            {
+                if (spyStats.curState == SpyState.ShotAt && (rawCurWorldPos - targetWorldPos).sqrMagnitude < 0.05f)
+                {
+                    OnStartPlayAgain?.Invoke();
+                }
             }
             break;
         }
@@ -251,7 +270,6 @@ public class CameraController : MonoBehaviour
         Vector3 snappedPos = C2W.MultiplyPoint3x4(camSpace);
         return snappedPos;
     }
-
     private void SendDataToPixelPerfectShader()
     {
         Shader.SetGlobalVector("_SnapDiff", rawCurWorldPos - stats.curWorldPos);
@@ -259,5 +277,29 @@ public class CameraController : MonoBehaviour
     private float GetSnappedOrthoSize()
     {
         return (Screen.height * 0.5f / PIXELS_PER_UNIT);
+    }
+    private void ShakeFromGunShot()
+    {
+        Shake(time: 0.5f, intensity: 5f);
+    }
+    private void Shake(float time, float intensity)
+    {
+        Shaking(time, intensity).Forget();
+    }
+    private async UniTask Shaking(float time, float intensity)
+    {
+        float clock = time;
+        Vector3 startWorldPos = targetWorldPos;
+        isShaking = true;
+        while (clock >= 0)
+        {
+            clock -= Time.unscaledDeltaTime;
+            float t = clock / time;
+            Vector2 randPoint = UnityEngine.Random.insideUnitCircle * (intensity * t);
+            targetWorldPos = new Vector3(startWorldPos.x + randPoint.x, startWorldPos.y + randPoint.y, startWorldPos.z);
+            await UniTask.Yield();
+        }
+        isShaking = false;
+        targetWorldPos = startWorldPos;
     }
 }

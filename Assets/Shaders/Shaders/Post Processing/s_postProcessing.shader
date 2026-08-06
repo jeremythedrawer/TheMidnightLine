@@ -1,4 +1,4 @@
-Shader "Custom/s_pixelPerfect"
+Shader "Custom/s_postProcessing"
 {
     HLSLINCLUDE
         #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
@@ -6,12 +6,14 @@ Shader "Custom/s_pixelPerfect"
 		#include "Packages/com.unity.render-pipelines.core/Runtime/Utilities/Blit.hlsl"
 
 		float2 _SnapDiff;
-
+		int _Invert;
 		half4 frag(Varyings input) : SV_TARGET
 		{
 			float2 uvDiff = _SnapDiff / _ScreenParams.xy;
 			half3 col = SAMPLE_TEXTURE2D_X(_BlitTexture, sampler_PointClamp, input.texcoord - uvDiff).rgb;
-			return half4(col, 1);
+			half3 invertCol = 1 - col;
+			half3 finalCol = lerp(col, invertCol, _Invert);
+			return half4(finalCol, 1);
 
 		}
 	ENDHLSL

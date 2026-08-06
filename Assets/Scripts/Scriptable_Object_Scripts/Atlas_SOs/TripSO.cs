@@ -32,5 +32,5 @@ public class TripSO : ScriptableObject
 
     public UnlockType curUnlocks;
 
-
+    public bool failed;
 }

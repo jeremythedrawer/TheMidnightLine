@@ -124,9 +124,13 @@ public class MeetingDoor : MonoBehaviour
                         rightRoom.MoveUp();
                         leftRoom.MoveDown();
 
-                        if (sceneData.activeSceneType == Scenes.SceneType.Start && leftRoom.locationState == Spy.LocationState.Elevator)
+                        if (leftRoom.locationState == Spy.LocationState.Elevator)
                         {
-                            gameEventData.OnToStartMenu.Raise();
+                            if (sceneData.activeSceneType == Scenes.SceneType.Start)
+                            {
+                                gameEventData.OnToStartMenu.Raise();
+                            }
+                            atlasRenderer.PlayClipOneShot(clip);
                         }
 
                         spyInBounds = true;
@@ -161,6 +165,8 @@ public class MeetingDoor : MonoBehaviour
                         {
                             OnSpyExit?.Invoke();
                             spyInBounds = false;
+
+
                         }
                     }
                     else if (spyStats.moveVelocity.x > 0 && spyStats.bounds.center.x > triggerBounds.max.x)
@@ -172,6 +178,11 @@ public class MeetingDoor : MonoBehaviour
 
                         SpyBrain spy = SceneController.GetSpy();
                         spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, rightDepth));
+
+                        if (leftRoom.locationState == Spy.LocationState.Elevator)
+                        {
+                            atlasRenderer.PlayClipOneShotReverse(clip);
+                        }
 
                         spyInBounds = false;
                     }
@@ -257,7 +268,6 @@ public class MeetingDoor : MonoBehaviour
             }
         }
     }
-
     public void UnlockStartDoor()
     {
         if (doorType != MeetingDoorType.Start) return;

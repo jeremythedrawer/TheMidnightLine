@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 6605147100382442943}
   - component: {fileID: 249929080054241729}
   m_Layer: 0
-  m_Name: MeridiaHenchman
+  m_Name: Henchman
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -58,7 +58,7 @@ MonoBehaviour:
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.13671875, y: 0.23242188, z: 0.14257812, w: 0.765625}
+    uvSizeAndPos: {x: 0.068359375, y: 0.11621094, z: 0.07128906, w: 0.8828125}
     uvPivot: {x: 0.37142858, y: 0}
     worldSize: {x: 0.3888889, y: 0.6611111, z: 1}
     index: 1
@@ -66,7 +66,7 @@ MonoBehaviour:
     m_Center: {x: -1.199, y: 0.33055556, z: 6}
     m_Extent: {x: 0.19444445, y: 0.33055556, z: 0.1}
   worldPivotAndSize: {x: -0.14444445, y: -0, z: 0.3888889, w: 0.6611111}
-  uvSizeAndPosition: {x: 0.13671875, y: 0.23242188, z: 0.14257812, w: 0.765625}
+  uvSizeAndPosition: {x: 0.068359375, y: 0.11621094, z: 0.07128906, w: 0.8828125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
   customBit: 0
@@ -95,5 +95,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7b089e360c0b8fa4fb460db0a47425e2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::HenchmanBrain
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  curTrip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   atlasRenderer: {fileID: 6605147100382442943}
+  postProcessingMaterial: {fileID: 2100000, guid: c732ea9afb202b949950f7c43d136835, type: 2}
+  sittingMotion: 1
+  shootDist: 0
+  isShooter: 0
   curState: 0
+  curClip:
+    clipName: 
+    clipType: 0
+    motionIndex: 0
+    keyframeStartIndex: 0
+    keyframeEndIndex: 0
+    time: 0
+  curFrameIndex: 0
+  isShooting: 0

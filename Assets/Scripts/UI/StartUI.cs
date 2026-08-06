@@ -90,6 +90,7 @@ public class StartUI : MonoBehaviour
     public bool canExitState;
     public bool atOptions;
     public bool outcomeSetUpCompleted;
+    public bool spyFailed;
 
     public Page[] profilePages;
 
@@ -102,6 +103,9 @@ public class StartUI : MonoBehaviour
     public CancellationTokenSource ctsNotepad;
     public CancellationTokenSource ctsOutcomePageMove;
 
+
+    [Header("Editor")]
+    public bool skipOutcomeSequence;
     private void OnEnable()
     {        
         NotepadProp.OnSpyEnter += SetInteractIcon;
@@ -120,6 +124,10 @@ public class StartUI : MonoBehaviour
         NotepadProp.OnNotepadCollect += GetNotepad;
         NotepadProp.OnNotepadReturn += DisableInteractIcon;
         NotepadProp.OnNotepadReturn += SetToOutcomeState;
+
+        FadeBlack.OnFinishFadeOut += SetTripOutcome;
+
+        CameraController.OnStartPlayAgain += SetToEndMenuState;
 
         gameEventData.OnStartTrip.RegisterListener(StartTrip);
         gameEventData.OnToStartMenu.RegisterListener(SetToStartMenuState);
@@ -144,6 +152,10 @@ public class StartUI : MonoBehaviour
         NotepadProp.OnNotepadReturn -= DisableInteractIcon;
         NotepadProp.OnNotepadReturn -= SetToOutcomeState;
 
+        FadeBlack.OnFinishFadeOut -= SetTripOutcome;
+
+        CameraController.OnStartPlayAgain -= SetToEndMenuState;
+        
         gameEventData.OnStartTrip.UnregisterListener(StartTrip);
         gameEventData.OnToStartMenu.UnregisterListener(SetToStartMenuState);
         gameEventData.OnFromStartMenu.UnregisterListener(SetToNoneState);
@@ -278,6 +290,10 @@ public class StartUI : MonoBehaviour
     {
         SetState(UIState.Outcome);
     }
+    private void SetToEndMenuState()
+    {
+        SetState(UIState.EndMenu);
+    }
     private void SetState(UIState newState)
     {
         if (curState == newState) return;
@@ -294,6 +310,13 @@ public class StartUI : MonoBehaviour
             {
                 startButton.MoveElementToActive();
                 optionsButton.MoveElementToActive();
+                quitButton.MoveElementToActive();
+            }
+            break;
+            case UIState.EndMenu:
+            {
+                thankYouMessage.MoveElementToActive();
+                playAgainButton.MoveElementToActive();
                 quitButton.MoveElementToActive();
             }
             break;
@@ -512,7 +535,7 @@ public class StartUI : MonoBehaviour
                                     activePage = null;
 
                                     curTraitorProfilesReviewed++;
-                                    if (curTraitorProfilesReviewed == trip.traitorProfiles.Length)
+                                    if (curTraitorProfilesReviewed == trip.traitorProfiles.Length || skipOutcomeSequence)
                                     {
                                         SetState(UIState.None);
                                     }
@@ -523,6 +546,7 @@ public class StartUI : MonoBehaviour
                                 if ((curRevealSequence & RevealSequence.Mugshot) == 0)
                                 {
                                     RevealMugshot();
+                                    spyFailed = true;
                                     curRevealSequence |= RevealSequence.Mugshot;
                                 }
                                 else if ((curRevealSequence & RevealSequence.ShowCorrectStation) == 0)
@@ -543,7 +567,7 @@ public class StartUI : MonoBehaviour
                                     activePage = null;
 
                                     curTraitorProfilesReviewed++;
-                                    if (curTraitorProfilesReviewed == trip.traitorProfiles.Length)
+                                    if (curTraitorProfilesReviewed == trip.traitorProfiles.Length || skipOutcomeSequence)
                                     {
                                         SetState(UIState.None);
                                     }
@@ -576,6 +600,10 @@ public class StartUI : MonoBehaviour
             break;
         }
     }
+    private void SetTripOutcome()
+    {
+        if (spyFailed) trip.failed = true;
+    }
     private void UpdateMainMenuButtons()
     {
         startButton.UpdateButton(playerInputs);
@@ -596,7 +624,6 @@ public class StartUI : MonoBehaviour
     }
     private void PlayAgainClicked()
     {
-        //TODO: Reset stats, seemless transition to start scene
         playAgainButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
         thankYouMessage.MoveButtonAway(camStats, MoveButtonDirection.Left);
         

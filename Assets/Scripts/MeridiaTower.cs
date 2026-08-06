@@ -5,6 +5,13 @@ using UnityEngine;
 
 public class MeridiaTower : MonoBehaviour
 {
+    public enum ScrollState
+    {
+        None,
+        Up,
+        Down,
+    }
+
     public static event Action OnArriveAtTopFloor;
 
     public SpyStatsSO spyStats;
@@ -16,54 +23,86 @@ public class MeridiaTower : MonoBehaviour
     public BoxCollider2D elevatorGround;
 
     [Header("Generated")]
-    public bool scroll;
+    public ScrollState scroll;
     public CancellationTokenSource ctsTopFloor;
 
     private void Start()
     {
         spyStats.curLocationBounds = elevatorRoom.bounds;
-        scroll = true;
+        scroll = ScrollState.Up;
     }
     private void OnEnable()
     {
         StartUI.OnStartGame += MoveToTopFloor;
-
         Scenes.OnLoadScore += MoveToTopFloor;
+        SpyBrain.OnReturnToElevator += SetScrollToDown;
     }
     private void OnDisable()
     {
         StartUI.OnStartGame -= MoveToTopFloor;
         Scenes.OnLoadScore -= MoveToTopFloor;
+
+        SpyBrain.OnReturnToElevator -= SetScrollToDown;
+
         ctsTopFloor?.Cancel();
     }
     private void Update()
     {
-        if (scroll)
+        switch (scroll)
         {
-            for (int i = 0; i < elevatorScrollingRenderers.Length; i++)
+            case ScrollState.Up:
             {
-                AtlasRenderer rend = elevatorScrollingRenderers[i];
-                rend.custom.y += Time.deltaTime / rend.sprite.worldSize.y;
-                if (rend.custom.y >= 1) rend.custom.y = 0;
-            }
+                for (int i = 0; i < elevatorScrollingRenderers.Length; i++)
+                {
+                    AtlasRenderer rend = elevatorScrollingRenderers[i];
+                    rend.custom.y += Time.deltaTime / rend.sprite.worldSize.y;
+                    if (rend.custom.y >= 1) rend.custom.y = 0;
+                }
 
-            for (int i = 0; i < elevatorChains.Length; i++)
-            {
-                AtlasRenderer rend = elevatorScrollingRenderers[i];
-                rend.custom.y += Time.deltaTime / rend.sprite.worldSize.y;
-                if (rend.custom.y >= 1) rend.custom.y = 0;
+                for (int i = 0; i < elevatorChains.Length; i++)
+                {
+                    AtlasRenderer rend = elevatorChains[i];
+                    rend.custom.y += Time.deltaTime / rend.sprite.worldSize.y;
+                    if (rend.custom.y >= 1) rend.custom.y = 0;
+                }
             }
+            break;
+
+            case ScrollState.Down:
+            {
+                for (int i = 0; i < elevatorScrollingRenderers.Length; i++)
+                {
+                    AtlasRenderer rend = elevatorScrollingRenderers[i];
+                    rend.custom.y -= Time.deltaTime / rend.sprite.worldSize.y;
+                    if (rend.custom.y <= -1) rend.custom.y = 0;
+                }
+
+                for (int i = 0; i < elevatorChains.Length; i++)
+                {
+                    AtlasRenderer rend = elevatorChains[i];
+                    rend.custom.y -= Time.deltaTime / rend.sprite.worldSize.y;
+                    if (rend.custom.y <= -1) rend.custom.y = 0;
+                }
+            }
+            break;
         }
     }
     private void MoveToTopFloor()
     {
-        scroll = false;
+        scroll = ScrollState.None;
 
         ctsTopFloor?.Cancel();
         ctsTopFloor = new CancellationTokenSource();
         elevator.SetParent(null);
 
         MovingToTopFloor().Forget();
+    }
+    private void SetScrollToDown()
+    {
+        meetingRoom.MoveUp();
+        elevatorRoom.MoveDown(toStart: true);
+        spyStats.curLocationBounds = elevatorRoom.bounds;
+        scroll = ScrollState.Down;
     }
     private async UniTask MovingToTopFloor()
     {

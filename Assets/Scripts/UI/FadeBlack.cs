@@ -18,7 +18,7 @@ public class FadeBlack : MonoBehaviour
         ReadyToSceneChange,
     }
 
-    public static event Action OnFinishFadeFromBlack;
+    public static event Action OnFinishFadeOut;
 
     public PlayerInputsSO playerInputs;
     public GameEventDataSO gameEventData;
@@ -202,7 +202,7 @@ public class FadeBlack : MonoBehaviour
             fadeBlackMaterial.SetFloat("_Value", 0);
             textRenderer.SetAppearTextAlpha(1);
             curState = State.FinishedFadeOut;
-            OnFinishFadeFromBlack?.Invoke();
+            OnFinishFadeOut?.Invoke();
         }
         catch (OperationCanceledException) { }
     }

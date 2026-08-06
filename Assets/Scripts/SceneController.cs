@@ -22,6 +22,14 @@ public class SceneController : MonoBehaviour
         sceneData.activeSceneType = SceneType.Start;
         Transform = transform;
     }
+    private void OnEnable()
+    {
+        SpyBrain.OnReturnToElevator += SetSceneTypeToStart;
+    }
+    private void OnDisable()
+    {
+        SpyBrain.OnReturnToElevator -= SetSceneTypeToStart;
+    }
     private void OnApplicationQuit()
     {
         sceneData.sceneLoaded = false;
@@ -30,6 +38,10 @@ public class SceneController : MonoBehaviour
     {
         notepad.transform.SetParent(Transform, true);
         Notepad = notepad;
+    }
+    private void SetSceneTypeToStart()
+    {
+        sceneData.activeSceneType = SceneType.Start;
     }
     public static void SetClueColorPicker(ColorPicker colorPicker)
     {

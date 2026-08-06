@@ -13,6 +13,7 @@ public static class Spy
         TalkingToAccomplice,
         Notepad,
         CarriageMap,
+        ShotAt,
     }
 
     public enum LocationState

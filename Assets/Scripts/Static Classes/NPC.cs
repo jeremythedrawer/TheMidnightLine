@@ -87,13 +87,15 @@ public static class NPC
 
     public enum HenchmanState
     {
+        None,
         Sitting,
         Shooting,
     }
     public enum PresidentState
     { 
+        None,
         Sitting,
-        Handshaking,s
+        Handshaking,
     }
     [Serializable] public struct NPCProfile
     {

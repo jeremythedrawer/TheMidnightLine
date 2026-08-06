@@ -5,12 +5,14 @@ using static Atlas;
 using static AtlasUI;
 using static Spy;
 using static NPC;
+using Cysharp.Threading.Tasks;
 public class SpyBrain : MonoBehaviour
 {
+    const float PLAY_AGAIN_HOLD_TIME = 3f;
     public static Carriage CurCarriage;
-    
     public NPCBrain chosenNPC;
 
+    public static event Action OnReturnToElevator;
     public static event Action OnTicketCheckHoverEnabled;
     public static event Action<Vector2> OnTicketCheckHoverEnabledFirstTime;
     public static event Action OnTicketCheckHoverDisabled;
@@ -44,6 +46,7 @@ public class SpyBrain : MonoBehaviour
     public OptionsSO options;
     public NotepadData notepadData;
     public TripSO trip;
+    public SceneData sceneData;
 
     [Header("Generated")]
     public NPCBrain[] possibleNPCsToTicketCheck;
@@ -80,6 +83,7 @@ public class SpyBrain : MonoBehaviour
     public bool checkingCarriageMap;
     public bool canOpenSlideDoor;
 
+    public bool finishedGettingShot;
     private void OnValidate()
     {
         CalculateCollisionPoints();
@@ -98,6 +102,8 @@ public class SpyBrain : MonoBehaviour
         
         NotepadProp.OnNotepadReturn += SetStateToIdle;
 
+        HenchmanBrain.OnShoot += SetStateToShotAt;
+
         EveryInit();
     }
     private void OnDisable()
@@ -113,6 +119,8 @@ public class SpyBrain : MonoBehaviour
         Scenes.OnLoadScore -= ScoreInit;
 
         NotepadProp.OnNotepadReturn -= SetStateToIdle;
+
+        HenchmanBrain.OnShoot -= SetStateToShotAt;
     }
     private void Update()
     {
@@ -159,6 +167,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void StartInit()
     {
+        trip.failed = false;
         stats.tutorialsCompleted = TutorialState.None;
         stats.startTrip = false;
         stats.curLocationState = LocationState.Elevator;
@@ -170,44 +179,43 @@ public class SpyBrain : MonoBehaviour
     }
     private void ChooseState()
     {
-        if (stats.playerInputsEnabled)
-        {
-            if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount == 1) || chosenNPC != null)
-            {
-                if (chosenNPC == null)
-                {
-                    chosenNPC = possibleNPCsToTicketCheck[0];
-                }
+        if (!stats.playerInputsEnabled) return;
 
-                if (chosenNPC.role == Role.Accomplice)
-                {
-                    SetState(SpyState.TalkingToAccomplice);
-                }
-                else
-                {
-                    SetState(SpyState.TicketCheck);
-                }
-            }
-            else if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount > 1) || PickingNPCToTicketCheck)
+        if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount == 1) || chosenNPC != null)
+        {
+            if (chosenNPC == null)
             {
-                SetState(SpyState.PickingNPCTicketCheck);
+                chosenNPC = possibleNPCsToTicketCheck[0];
             }
-            else if ((notepadData.collected && playerInputs.notepadKeyDown) || stats.checkingNotepad)
+
+            if (chosenNPC.role == Role.Accomplice)
             {
-                SetState(SpyState.Notepad);
-            }
-            else if (checkingCarriageMap)
-            {
-                SetState(SpyState.CarriageMap);
-            }
-            else if (playerInputs.move != 0 && !stats.walkingIntoWall)
-            {
-                SetState(SpyState.Walk);
+                SetState(SpyState.TalkingToAccomplice);
             }
             else
             {
-                SetState(SpyState.Idle);
+                SetState(SpyState.TicketCheck);
             }
+        }
+        else if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount > 1) || PickingNPCToTicketCheck)
+        {
+            SetState(SpyState.PickingNPCTicketCheck);
+        }
+        else if ((notepadData.collected && playerInputs.notepadKeyDown) || stats.checkingNotepad)
+        {
+            SetState(SpyState.Notepad);
+        }
+        else if (checkingCarriageMap)
+        {
+            SetState(SpyState.CarriageMap);
+        }
+        else if (playerInputs.move != 0 && !stats.walkingIntoWall)
+        {
+            SetState(SpyState.Walk);
+        }
+        else
+        {
+            SetState(SpyState.Idle);
         }
     }
     private void UpdateStates()
@@ -363,6 +371,15 @@ public class SpyBrain : MonoBehaviour
                     {
                         stats.checkingNotepad = false;
                     }
+                }
+            }
+            break;
+            case SpyState.ShotAt:
+            {
+                if (!atlasRenderer.isAnimating && !finishedGettingShot)
+                {
+                    finishedGettingShot = true;
+                    WaitToPlayAgain();
                 }
             }
             break;
@@ -522,7 +539,6 @@ public class SpyBrain : MonoBehaviour
 
             }
             break;
-
             case SpyState.PickingNPCTicketCheck:
             {
                 PickingNPCToTicketCheck = true;
@@ -542,6 +558,13 @@ public class SpyBrain : MonoBehaviour
             {
                 curClip = atlas.clipDict[(int)SpyMotion.NotepadHolding];
                 OnOpenNotepad?.Invoke();
+            }
+            break;
+            case SpyState.ShotAt:
+            {
+                curClip = atlas.clipDict[(int)SpyMotion.ShotByGun];
+                atlasRenderer.PlayClipOneShot(curClip);
+                stats.playerInputsEnabled = false;
             }
             break;
         }
@@ -835,15 +858,33 @@ public class SpyBrain : MonoBehaviour
     {
         SetState(SpyState.Idle);
     }
+    public void SetStateToShotAt()
+    {
+        SetState(SpyState.ShotAt);
+    }
     public void FinishWithChosenNPC()
     {
         chosenNPC.talkingToSpy = false;
         chosenNPC = null;
     }
-
     public void ChooseNPCTicketToCheck(NPCBrain npc)
     {
         chosenNPC = npc;
+    }
+    private void WaitToPlayAgain()
+    {
+        WaitingToPlayAgain().Forget();
+    }
+    private async UniTask WaitingToPlayAgain()
+    {
+        float clock = 0;
+        while(clock < PLAY_AGAIN_HOLD_TIME)
+        {
+            clock += Time.deltaTime;
+            await UniTask.Yield();
+        }
+        stats.curLocationState = LocationState.Elevator;
+        OnReturnToElevator?.Invoke();
     }
     public static void ToggleTicketCheckAbility(bool toggle)
     {
