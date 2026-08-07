@@ -12,6 +12,7 @@ public class SpyStatsSO : ScriptableObject
     public Bounds curLocationBounds;
     
     public Vector2 moveVelocity;
+    public Vector2 startPos;
     
     public float targetXVelocity;
 

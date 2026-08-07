@@ -24,11 +24,11 @@ public class SceneController : MonoBehaviour
     }
     private void OnEnable()
     {
-        SpyBrain.OnReturnToElevator += SetSceneTypeToStart;
+        SpyBrain.OnAfterOutcomeSequence += SetSceneTypeToStart;
     }
     private void OnDisable()
     {
-        SpyBrain.OnReturnToElevator -= SetSceneTypeToStart;
+        SpyBrain.OnAfterOutcomeSequence -= SetSceneTypeToStart;
     }
     private void OnApplicationQuit()
     {

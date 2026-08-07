@@ -1,10 +1,10 @@
 using UnityEngine;
-using static Spy;
-using static Curves;
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 
+using static Spy;
+using static Curves;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -13,35 +13,53 @@ using UnityEditor.IMGUI.Controls;
 
 public class Room : MonoBehaviour
 {
+    public const float MOVE_DOWN_WALL_VALUE_LEVEL_ONE = 1.5f;
+    public const float MOVE_DOWN_WALL_VALUE_LEVEL_ZERO = 5.5f;
+
     const float MOVE_WALL_TIME = 0.8f;
-    public const float MOVE_WALL_VALUE = 2f;
+
     public CameraStatsSO camStats;
-    public LocationState locationState;
+    public MeridiaTowerData meridiaTowerData;
+
     public AtlasRenderer exteriorWallRenderer;
+    
     public BoxCollider2D leftWallCollider;
     public BoxCollider2D rightWallCollider;
+    
+    public LocationState locationState;
     [Header("Generated")]
     public Bounds bounds;
-    public float startWallValue;
     public CancellationTokenSource ctsWall;
-
-    private void Start()
-    {
-        startWallValue = exteriorWallRenderer.custom.z;
-    }
+    public float curMoveDownWallValue;
     public void MoveUp()
     {
+        if (exteriorWallRenderer == null) return;
         ctsWall?.Cancel();
         ctsWall = new CancellationTokenSource();
 
         MovingUp().Forget();
     }
-    public void MoveDown(bool toStart = false)
+    public void MoveDown()
     {
+        if (exteriorWallRenderer == null) return;
         ctsWall?.Cancel();
         ctsWall = new CancellationTokenSource();
 
-        MovingDown(toStart).Forget();
+        switch(meridiaTowerData.curLevel)
+        {
+            case MeetingDoor.Level.Zero:
+            {
+                curMoveDownWallValue = MOVE_DOWN_WALL_VALUE_LEVEL_ZERO;
+            }
+            break;
+            case MeetingDoor.Level.One:
+            {
+                curMoveDownWallValue = MOVE_DOWN_WALL_VALUE_LEVEL_ONE;
+            }
+            break;
+        }
+
+        MovingDown().Forget();
     }
     public void ToggleLeftWall(bool toggle)
     {
@@ -51,11 +69,9 @@ public class Room : MonoBehaviour
     {
         rightWallCollider.enabled = toggle;
     }
-    private async UniTask MovingDown(bool toStart)
+    private async UniTask MovingDown()
     {
-        float moveWallValue = toStart ? startWallValue : MOVE_WALL_VALUE;
-
-        float elaspedTime = (exteriorWallRenderer.custom.z / moveWallValue) * MOVE_WALL_TIME;
+        float elaspedTime = (exteriorWallRenderer.custom.z / curMoveDownWallValue) * MOVE_WALL_TIME;
         try
         {
             while (elaspedTime < MOVE_WALL_TIME)
@@ -65,11 +81,11 @@ public class Room : MonoBehaviour
                 float t = elaspedTime / MOVE_WALL_TIME;
                 t = EaseInOutCubic(t);
 
-                exteriorWallRenderer.custom.z = t * moveWallValue;
+                exteriorWallRenderer.custom.z = t * curMoveDownWallValue;
 
                 await UniTask.Yield(ctsWall.Token);
             }
-            exteriorWallRenderer.custom.z = moveWallValue;
+            exteriorWallRenderer.custom.z = curMoveDownWallValue;
         }
         catch (OperationCanceledException)
         {
@@ -77,7 +93,7 @@ public class Room : MonoBehaviour
     }
     private async UniTask MovingUp()
     {
-        float elaspedTime = (exteriorWallRenderer.custom.z / MOVE_WALL_VALUE) * MOVE_WALL_TIME;
+        float elaspedTime = (exteriorWallRenderer.custom.z / MOVE_DOWN_WALL_VALUE_LEVEL_ONE) * MOVE_WALL_TIME;
         try
         {
             while (elaspedTime > 0)
@@ -87,7 +103,7 @@ public class Room : MonoBehaviour
                 float t = elaspedTime / MOVE_WALL_TIME;
                 t = EaseInOutCubic(t);
 
-                exteriorWallRenderer.custom.z = t * MOVE_WALL_VALUE;
+                exteriorWallRenderer.custom.z = t * MOVE_DOWN_WALL_VALUE_LEVEL_ONE;
 
                 await UniTask.Yield(ctsWall.Token);
             }

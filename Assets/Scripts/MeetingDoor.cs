@@ -1,5 +1,6 @@
 using UnityEngine;
 using static AtlasUI;
+using static Spy;
 using System;
 
 #if UNITY_EDITOR
@@ -18,11 +19,17 @@ public class MeetingDoor : MonoBehaviour
         Start,
         BetweenRooms,
     }
-    
+    public enum Level
+    {
+        Zero,
+        One,
+    }
+
     public GameEventDataSO gameEventData;
     public SpyStatsSO spyStats;
     public CameraStatsSO camStats;
     public SceneData sceneData;
+    public MeridiaTowerData meridiaTowerData;
 
     public AtlasRenderer atlasRenderer;
     public AtlasRenderer iconRenderer;
@@ -32,7 +39,7 @@ public class MeetingDoor : MonoBehaviour
 
     public MeetingDoorType doorType;
     public MeridiaCabinetMotion motion;
-
+    public Level level;
     public float leftDepth;
     public float rightDepth;
 
@@ -60,7 +67,7 @@ public class MeetingDoor : MonoBehaviour
         gameEventData.OnInteract.RegisterListener(OpenDoor);
         gameEventData.OnInteract.RegisterListener(WalkThroughStartDoor);
         NotepadProp.OnNotepadCollect += UnlockStartDoor;
-        MeridiaTower.OnArriveAtTopFloor += OpenAuto;
+        MeridiaTower.OnArriveAtFloor += OpenArrivingAtFloor;
 
     }
     private void OnDisable()
@@ -69,10 +76,11 @@ public class MeetingDoor : MonoBehaviour
         gameEventData.OnInteract.UnregisterListener(WalkThroughStartDoor);
 
         NotepadProp.OnNotepadCollect -= UnlockStartDoor;
-        MeridiaTower.OnArriveAtTopFloor -= OpenAuto;
+        MeridiaTower.OnArriveAtFloor -= OpenArrivingAtFloor;
     }
     private void Update()
     {
+        if (meridiaTowerData.curLevel != level || meridiaTowerData.elevatorMoving) return;
         if (!spyInBounds)
         {
             switch (doorType)
@@ -88,9 +96,9 @@ public class MeetingDoor : MonoBehaviour
                 break;
                 case MeetingDoorType.BetweenRooms:
                 {
-                    if (!opened)
+                    if (!opened && !auto)
                     {
-                        if (!auto && spyStats.bounds.center.x > triggerBounds.min.x && spyStats.bounds.center.x < triggerBounds.max.x)
+                        if (spyStats.bounds.center.x > triggerBounds.min.x && spyStats.bounds.center.x < triggerBounds.max.x)
                         {
                             OnSpyEnter?.Invoke(new Vector2(triggerBounds.center.x, spyStats.bounds.max.y));
                             spyInBounds = true;
@@ -107,10 +115,14 @@ public class MeetingDoor : MonoBehaviour
                         rightRoom.MoveDown();
                         leftRoom.MoveUp();
 
+                        if (auto) OpenDoor();
+                        
                         if (leftRoom.locationState == Spy.LocationState.Elevator)
                         {
                             gameEventData.OnFromStartMenu.Raise();
                         }
+
+
                         spyInBounds = true;
                     }
                     else if (spyStats.moveVelocity.x < 0 && spyStats.bounds.center.x > triggerBounds.min.x && spyStats.bounds.center.x < triggerBounds.center.x)
@@ -121,8 +133,10 @@ public class MeetingDoor : MonoBehaviour
                         SpyBrain spy = SceneController.GetSpy();
                         spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, leftDepth));
 
-                        rightRoom.MoveUp();
+                        rightRoom?.MoveUp();
                         leftRoom.MoveDown();
+
+                        if (auto) OpenDoor();
 
                         if (leftRoom.locationState == Spy.LocationState.Elevator)
                         {
@@ -165,8 +179,6 @@ public class MeetingDoor : MonoBehaviour
                         {
                             OnSpyExit?.Invoke();
                             spyInBounds = false;
-
-
                         }
                     }
                     else if (spyStats.moveVelocity.x > 0 && spyStats.bounds.center.x > triggerBounds.max.x)
@@ -182,6 +194,7 @@ public class MeetingDoor : MonoBehaviour
                         if (leftRoom.locationState == Spy.LocationState.Elevator)
                         {
                             atlasRenderer.PlayClipOneShotReverse(clip);
+                            opened = false;
                         }
 
                         spyInBounds = false;
@@ -274,14 +287,16 @@ public class MeetingDoor : MonoBehaviour
         unlocked = true;
         iconRenderer.enabled = false;
     }
-    public void OpenAuto()
+    public void OpenArrivingAtFloor(LocationState locationState)
     {
-        if (!auto) return;
+        if (!auto || rightRoom.locationState != locationState) return;
+
         if (!opened)
         {
             atlasRenderer.PlayClipOneShot(clip);
             unlocked = true;
             opened = true;
+            level = meridiaTowerData.curLevel;
             switch (doorType)
             {
                 case MeetingDoorType.Start:
@@ -296,6 +311,11 @@ public class MeetingDoor : MonoBehaviour
                 break;
             }
         }
+    }
+    public void SetRightRoom(Room room, Level newLevel)
+    {
+        rightRoom = room;
+        level = newLevel;
     }
 }
 #if UNITY_EDITOR

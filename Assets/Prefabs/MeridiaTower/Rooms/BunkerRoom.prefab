@@ -62,14 +62,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::Room
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  locationState: 5
+  meridiaTowerData: {fileID: 11400000, guid: 0c096b94ad74a7a42a53acea7c2760e8, type: 2}
   exteriorWallRenderer: {fileID: 8888627642922579582}
   leftWallCollider: {fileID: 0}
   rightWallCollider: {fileID: 0}
+  locationState: 5
   bounds:
     m_Center: {x: 285.95444, y: 0.7542327, z: 13}
     m_Extent: {x: 6.134369, y: 0.7543897, z: 1}
-  curMoveWallTime: 0
+  curMoveDownWallValue: 0
 --- !u!1001 &129422442189976205
 PrefabInstance:
   m_ObjectHideFlags: 0

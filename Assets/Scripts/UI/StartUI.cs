@@ -11,6 +11,8 @@ using static Spy;
 
 public class StartUI : MonoBehaviour
 {
+    public static event Action OnPlayAgain;
+
     [Flags] public enum RevealSequence
     { 
         None = 0,
@@ -127,7 +129,7 @@ public class StartUI : MonoBehaviour
 
         FadeBlack.OnFinishFadeOut += SetTripOutcome;
 
-        CameraController.OnStartPlayAgain += SetToEndMenuState;
+        CameraController.OnArrivedAtElevator += SetToEndMenuState;
 
         gameEventData.OnStartTrip.RegisterListener(StartTrip);
         gameEventData.OnToStartMenu.RegisterListener(SetToStartMenuState);
@@ -154,7 +156,7 @@ public class StartUI : MonoBehaviour
 
         FadeBlack.OnFinishFadeOut -= SetTripOutcome;
 
-        CameraController.OnStartPlayAgain -= SetToEndMenuState;
+        CameraController.OnArrivedAtElevator -= SetToEndMenuState;
         
         gameEventData.OnStartTrip.UnregisterListener(StartTrip);
         gameEventData.OnToStartMenu.UnregisterListener(SetToStartMenuState);
@@ -626,12 +628,9 @@ public class StartUI : MonoBehaviour
     {
         playAgainButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
         thankYouMessage.MoveButtonAway(camStats, MoveButtonDirection.Left);
-        
-        startButton.MoveElementToActive();
-        optionsButton.MoveElementToActive();
+        quitButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
 
-        gameEventData.OnPlayAgain.Raise();
-        SetState(UIState.StartMenu);
+        OnPlayAgain?.Invoke();
     }
     private void StartButtonClicked()
     {
@@ -860,7 +859,7 @@ public class StartUI : MonoBehaviour
         {
             Vector3 curPos = activePageTransform.localPosition;
 
-            float targetPosX = outcomePageEndPosX + OVERSHOOT_MULTIPLIER;
+            float targetPosX = outcomePageEndPosX - OVERSHOOT_MULTIPLIER;
             while ((curPos.x - outcomePageEndPosX) > 0)
             {
                 curPos.x = Mathf.Lerp(curPos.x, targetPosX, Time.deltaTime * MOVE_DAMP);

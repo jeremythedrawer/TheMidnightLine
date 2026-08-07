@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour
     const float GAUSSIAN_VARIANCE = 90;
     const float CARRIAGE_BOUNDS_TEXTURE_SCALE = 32f;
 
-    public static event Action OnStartPlayAgain;
+    public static event Action OnArrivedAtElevator;
 
     public CameraSettingsSO settings;
     public CameraStatsSO stats;
@@ -179,7 +179,7 @@ public class CameraController : MonoBehaviour
             {
                 if (spyStats.curState == SpyState.ShotAt && (rawCurWorldPos - targetWorldPos).sqrMagnitude < 0.05f)
                 {
-                    OnStartPlayAgain?.Invoke();
+                    OnArrivedAtElevator?.Invoke();
                 }
             }
             break;

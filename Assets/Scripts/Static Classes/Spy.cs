@@ -25,8 +25,7 @@ public static class Spy
         MeetingRoom,
         Bunker,
         Elevator,
-
-
+        BottomFloor,
     }
 
     [Serializable] public struct CollisionData

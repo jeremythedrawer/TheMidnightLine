@@ -12,14 +12,13 @@ public class SpyBrain : MonoBehaviour
     public static Carriage CurCarriage;
     public NPCBrain chosenNPC;
 
-    public static event Action OnReturnToElevator;
+    public static event Action OnAfterOutcomeSequence;
     public static event Action OnTicketCheckHoverEnabled;
     public static event Action<Vector2> OnTicketCheckHoverEnabledFirstTime;
     public static event Action OnTicketCheckHoverDisabled;
     public static event Action<Vector2> OnFoundExteriorSlideDoors;
     public static event Action OnWalkPastExteriorSlideDoors;
     public static event Action OnEnteredTrain;
-
     public static event Action OnTicketInspect;
     public static event Action OnFinishTicketInspect;
     public static event Action OnOpenNotepad;
@@ -47,6 +46,7 @@ public class SpyBrain : MonoBehaviour
     public NotepadData notepadData;
     public TripSO trip;
     public SceneData sceneData;
+    public MeridiaTowerData meridiaTowerData;
 
     [Header("Generated")]
     public NPCBrain[] possibleNPCsToTicketCheck;
@@ -67,7 +67,7 @@ public class SpyBrain : MonoBehaviour
     public CollisionData collisionData;
 
     public Vector3 curWorldPos;
-    
+
     public NotepadState curNotepadState;
 
     public float clipTime;
@@ -82,7 +82,6 @@ public class SpyBrain : MonoBehaviour
     public bool canExitState;
     public bool checkingCarriageMap;
     public bool canOpenSlideDoor;
-
     public bool finishedGettingShot;
     private void OnValidate()
     {
@@ -104,6 +103,8 @@ public class SpyBrain : MonoBehaviour
 
         HenchmanBrain.OnShoot += SetStateToShotAt;
 
+        MeridiaTower.OnArriveAtFloor += SetSpyToBottomFloor;
+
         EveryInit();
     }
     private void OnDisable()
@@ -121,6 +122,8 @@ public class SpyBrain : MonoBehaviour
         NotepadProp.OnNotepadReturn -= SetStateToIdle;
 
         HenchmanBrain.OnShoot -= SetStateToShotAt;
+
+        MeridiaTower.OnArriveAtFloor -= SetSpyToBottomFloor;
     }
     private void Update()
     {
@@ -170,6 +173,7 @@ public class SpyBrain : MonoBehaviour
         trip.failed = false;
         stats.tutorialsCompleted = TutorialState.None;
         stats.startTrip = false;
+        stats.startPos = new Vector2(transform.position.x, transform.position.y);
         stats.curLocationState = LocationState.Elevator;
         trip.curUnlocks = UnlockType.None;
     }
@@ -251,9 +255,23 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Walk:
             {
-                Flip(playerInputs.move < 0);
+                if (stats.playerInputsEnabled)
+                {
+                    Flip(playerInputs.move < 0);
+                    stats.targetXVelocity = settings.moveSpeed * playerInputs.move;
+                    
+                    if (playerInputs.interact) gameEventData.OnInteract?.Raise();
+                }
+                else
+                {
+                    if (curWorldPos.x <= stats.startPos.x)
+                    {
+                        stats.playerInputsEnabled = true;
+                        sceneData.activeSceneType = Scenes.SceneType.Start;
+                        gameEventData.OnToStartMenu?.Raise();
+                    }
+                }
                 atlasRenderer.PlayClip(ref curClip);
-                stats.targetXVelocity = (settings.moveSpeed * playerInputs.move);
                 stats.moveVelocity.x = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.deltaTime);
 
                 curWorldPos.x += stats.moveVelocity.x * Time.deltaTime;
@@ -280,10 +298,6 @@ public class SpyBrain : MonoBehaviour
                         }
                         break;
                     }
-                }
-                if (playerInputs.interact)
-                {
-                    gameEventData.OnInteract?.Raise();
                 }
             }
             break;
@@ -875,6 +889,15 @@ public class SpyBrain : MonoBehaviour
     {
         WaitingToPlayAgain().Forget();
     }
+    private void SetSpyToBottomFloor(LocationState location)
+    {
+        if (location != LocationState.BottomFloor) return;
+        SetState(SpyState.Walk);
+        Flip(true);
+        stats.targetXVelocity = -settings.moveSpeed;
+        transform.position = new Vector3(meridiaTowerData.bottomFloorCenterTopPos.x, meridiaTowerData.bottomFloorCenterTopPos.y, transform.position.z);
+        curWorldPos = transform.position;
+    }
     private async UniTask WaitingToPlayAgain()
     {
         float clock = 0;
@@ -884,7 +907,7 @@ public class SpyBrain : MonoBehaviour
             await UniTask.Yield();
         }
         stats.curLocationState = LocationState.Elevator;
-        OnReturnToElevator?.Invoke();
+        OnAfterOutcomeSequence?.Invoke();
     }
     public static void ToggleTicketCheckAbility(bool toggle)
     {
