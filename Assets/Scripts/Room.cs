@@ -47,12 +47,12 @@ public class Room : MonoBehaviour
 
         switch(meridiaTowerData.curLevel)
         {
-            case MeetingDoor.Level.Zero:
+            case 0:
             {
                 curMoveDownWallValue = MOVE_DOWN_WALL_VALUE_LEVEL_ZERO;
             }
             break;
-            case MeetingDoor.Level.One:
+            case 1:
             {
                 curMoveDownWallValue = MOVE_DOWN_WALL_VALUE_LEVEL_ONE;
             }

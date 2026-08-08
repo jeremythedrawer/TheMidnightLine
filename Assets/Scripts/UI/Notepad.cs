@@ -44,7 +44,6 @@ public class Notepad : MonoBehaviour
         InUse = 1 << 11,
     }
 
-    public static event Action OnFinishRevealingOutcomes;
     public static event Action OnWriteColorMarkerFirstTime;
 
     public PlayerInputsSO playerInputs;

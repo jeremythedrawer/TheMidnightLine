@@ -34,6 +34,7 @@ public class NPCBrain : MonoBehaviour
     public SpyStatsSO spyStats;
     public TripSO trip;
     public SpawnData spawnData;
+    public CameraStatsSO camStats;
 
     [Header("Generated")]
     public AtlasSO atlas;
@@ -654,7 +655,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCPath.StandingAtStation:
             {
-                if (prevPath == NPCPath.ToSlideDoor && spyStats.curLocationState != Spy.LocationState.Station)
+                if (prevPath == NPCPath.ToSlideDoor && camStats.curLocationState != Spy.LocationState.Station)
                 {
                     SetPath(NPCPath.ToSlideDoor);
                 }
@@ -725,7 +726,7 @@ public class NPCBrain : MonoBehaviour
             {
                 NPCMotion standingMotion = RandomIdleMotion(NPCMotion.StandingBlinking, NPCMotion.StandingBreathing);
 
-                if (spyStats.curLocationState == Spy.LocationState.Station && trainStats.curStationIndex > 0)
+                if (camStats.curLocationState == Spy.LocationState.Station && trainStats.curStationIndex > 0)
                 {
                     SetPath(NPCPath.StandingAtStation);
                 }

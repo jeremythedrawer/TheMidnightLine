@@ -341,10 +341,6 @@ public class ColorPicker : MonoBehaviour
             }
             SceneController.SetClueColorPicker(this);
         }
-        else
-        {
-            SceneController.SetMainColorPicker(this);
-        }
     }
     public void SetOpenPosAndSize()
     {

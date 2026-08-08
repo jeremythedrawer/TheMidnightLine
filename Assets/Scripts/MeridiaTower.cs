@@ -6,6 +6,11 @@ using UnityEngine;
 using static Spy;
 public class MeridiaTower : MonoBehaviour
 {
+    public static event Action OnArriveAtBottomFloor;
+
+    public static event Action OnEnterMeetingRoomFromElevator;
+    public static event Action OnEnterStartElevator;
+
     public enum ScrollState
     {
         None,
@@ -13,58 +18,67 @@ public class MeridiaTower : MonoBehaviour
         Down,
     }
 
-    public static event Action<LocationState> OnArriveAtFloor;
-
     public SpyStatsSO spyStats;
     public MeridiaTowerData meridiaTowerData;
+    public CameraStatsSO camStats;
+    public SceneData sceneData;
+    public GameEventDataSO gameEventData;
 
     public Room elevatorRoom;
     public Room meetingRoom;
     public Room bottomRoom;
 
-    public MeetingDoor elevatorDoor;
+    public RoomDoor tripElevatorDoor;
+    public RoomDoor elevatorMeetingDoor;
+    public RoomDoor bottomElevatorDoor;
+
+    public StartElevator startElevator;
 
     public AtlasRenderer[] elevatorScrollingRenderers;
-    public AtlasRenderer[] elevatorChains;
 
-    public Transform elevatorTransform;
-    
-    public BoxCollider2D elevatorGround;
     public BoxCollider2D bottomGround;
 
     [Header("Generated")]
     public ScrollState scroll;
-    public CancellationTokenSource ctsElevatorMove;
     public float startGamePosY;
-    private void Start()
-    {
-        startGamePosY = transform.position.y;
-        spyStats.curLocationBounds = elevatorRoom.bounds;
-        meridiaTowerData.curLevel = MeetingDoor.Level.Zero;
-        meridiaTowerData.elevatorMoving = true;
-        scroll = ScrollState.Up;
-    }
+    public CancellationTokenSource ctsElevatorMove;
     private void OnEnable()
     {
-        StartUI.OnStartGame += MoveToMeetingFloor;
+        StartUI.OnStartButtonClicked += MoveToMeetingFloor;
 
         Scenes.OnLoadScore += MoveToMeetingFloor;
-        
+
+        NotepadProp.OnNotepadCollect += UnlockTripDoor;
         SpyBrain.OnAfterOutcomeSequence += MoveDownToBetweenFloors;
+        SpyBrain.OnEnteredElevatorGoingUp += MoveUpToBetweenFloors;
 
         StartUI.OnPlayAgain += MoveToBottomFloor;
+
+        gameEventData.OnInteract.RegisterListener(WalkThroughStartDoor);
 
     }
     private void OnDisable()
     {
-        StartUI.OnStartGame -= MoveToMeetingFloor;
+        StartUI.OnStartButtonClicked -= MoveToMeetingFloor;
         Scenes.OnLoadScore -= MoveToMeetingFloor;
 
         SpyBrain.OnAfterOutcomeSequence -= MoveDownToBetweenFloors;
-        
+        SpyBrain.OnEnteredElevatorGoingUp -= MoveUpToBetweenFloors;
+
         StartUI.OnPlayAgain -= MoveToBottomFloor;
 
+        gameEventData.OnInteract.UnregisterListener(WalkThroughStartDoor);
+        
         ctsElevatorMove?.Cancel();
+    }
+
+    private void Start()
+    {
+        startGamePosY = transform.position.y;
+        camStats.curLocationBounds = elevatorRoom.bounds;
+        meridiaTowerData.curLevel = 0;
+        meridiaTowerData.elevatorMoving = true;
+        scroll = ScrollState.Up;
     }
     private void Update()
     {
@@ -79,12 +93,7 @@ public class MeridiaTower : MonoBehaviour
                     if (rend.custom.y >= 1) rend.custom.y = 0;
                 }
 
-                for (int i = 0; i < elevatorChains.Length; i++)
-                {
-                    AtlasRenderer rend = elevatorChains[i];
-                    rend.custom.y += Time.deltaTime / rend.sprite.worldSize.y;
-                    if (rend.custom.y >= 1) rend.custom.y = 0;
-                }
+                startElevator.ScrollingChainsDown();
             }
             break;
 
@@ -97,50 +106,85 @@ public class MeridiaTower : MonoBehaviour
                     if (rend.custom.y <= -1) rend.custom.y = 0;
                 }
 
-                for (int i = 0; i < elevatorChains.Length; i++)
-                {
-                    AtlasRenderer rend = elevatorChains[i];
-                    rend.custom.y -= Time.deltaTime / rend.sprite.worldSize.y;
-                    if (rend.custom.y <= -1) rend.custom.y = 0;
-                }
+                startElevator.ScrollingChainsDown();
+
             }
             break;
         }
-    }
-    private void MoveToMeetingFloor()
-    {
-        scroll = ScrollState.None;
 
+        if (sceneData.activeSceneType == Scenes.SceneType.Start)
+        {
+            if ((elevatorMeetingDoor.curSubState & RoomDoor.SubState.ExitBoundsRight) != 0)
+            {
+                OnEnterMeetingRoomFromElevator?.Invoke();
+            }
+            else if ((elevatorMeetingDoor.curSubState & RoomDoor.SubState.ExitBoundsLeft) != 0)
+            {
+                OnEnterStartElevator?.Invoke();
+            }
+        }
+
+
+    }
+    public void MoveToMeetingFloor()
+    {
         ctsElevatorMove?.Cancel();
         ctsElevatorMove = new CancellationTokenSource();
-        elevatorTransform.SetParent(null);
+        transform.SetParent(null);
+
+        scroll = ScrollState.None;
 
         MovingToMeetingFloor().Forget();
     }
-    private void MoveToBottomFloor()
+    public void MoveToBottomFloor()
     {
-        scroll = ScrollState.None;
-
         ctsElevatorMove?.Cancel();
         ctsElevatorMove = new CancellationTokenSource();
-        elevatorTransform.SetParent(null);
+        transform.SetParent(null);
+
+        scroll = ScrollState.None;
 
         MovingToBottomFloor().Forget();
     }
-
-    private void MoveDownToBetweenFloors()
+    public void MoveDownToBetweenFloors()
     {
         ctsElevatorMove?.Cancel();
         ctsElevatorMove = new CancellationTokenSource();
-        elevatorTransform.SetParent(null);
+        transform.SetParent(null);
 
         meridiaTowerData.elevatorMoving = true;
-        meridiaTowerData.curLevel = MeetingDoor.Level.Zero;
+        meridiaTowerData.curLevel = 0;
 
-        meetingRoom.MoveUp();
-        spyStats.curLocationBounds = elevatorRoom.bounds;
+        camStats.curLocationBounds = elevatorRoom.bounds;
+
+        scroll = ScrollState.None;
+
+        elevatorMeetingDoor.CloseDoor();
 
         MovingDownToBetweenFloors().Forget();
+    }
+    public void MoveUpToBetweenFloors()
+    {
+        ctsElevatorMove?.Cancel();
+        ctsElevatorMove = new CancellationTokenSource();
+        transform.SetParent(null);
+
+        meridiaTowerData.elevatorMoving = true;
+        meridiaTowerData.curLevel = 0;
+
+        camStats.curLocationBounds = elevatorRoom.bounds;
+
+        scroll = ScrollState.None;
+
+        MovingUpToBetweenFloors().Forget();
+    }
+    public void UnlockTripDoor()
+    {
+        tripElevatorDoor.UnlockDoor();
+    }
+    private void WalkThroughStartDoor()
+    {
+        tripElevatorDoor.WalkThroughStartDoor();
     }
     private async UniTask MovingToMeetingFloor()
     {
@@ -152,24 +196,21 @@ public class MeridiaTower : MonoBehaviour
             while (wallRend.custom.y < 1)
             {
                 wallRend.custom.y += Time.deltaTime;
-                for (int i = 0; i < elevatorChains.Length; i++)
-                {
-                    AtlasRenderer rend = elevatorChains[i];
-                    rend.custom.y += Time.deltaTime / rend.sprite.worldSize.y;
-                    if (rend.custom.y >= 1) rend.custom.y = 0;
-                }
+
+                startElevator.ScrollingChainsUp();
+
                 await UniTask.Yield(ctsElevatorMove.Token);
             }
             wallRend.custom.y = 1;
         }
-        catch(OperationCanceledException)
+        catch (OperationCanceledException)
         {
 
         }
 
         float startPosY = transform.position.y;
         float curPosY = startPosY;
-        float targetPosY = elevatorTransform.position.y + elevatorGround.bounds.size.y;
+        float targetPosY = startElevator.transform.position.y + startElevator.GetGroundBounds().size.y;
         AtlasRenderer elevatorWallRend = elevatorRoom.exteriorWallRenderer;
         float startElevatorZ = elevatorWallRend.custom.z;
         try
@@ -183,23 +224,23 @@ public class MeridiaTower : MonoBehaviour
                 float elevatorT = Mathf.InverseLerp(startPosY, targetPosY, curPosY);
                 elevatorWallRend.custom.z = Mathf.Lerp(startElevatorZ, Room.MOVE_DOWN_WALL_VALUE_LEVEL_ONE, elevatorT);
 
-                for (int i = 0; i < elevatorChains.Length; i++)
-                {
-                    AtlasRenderer rend = elevatorChains[i];
-                    rend.custom.y += Time.deltaTime / rend.sprite.worldSize.y;
-                    if (rend.custom.y >= 1) rend.custom.y = 0;
-                }
+                startElevator.ScrollingChainsUp();
 
                 await UniTask.Yield(ctsElevatorMove.Token);
             }
             transform.position = new Vector3(transform.position.x, targetPosY, transform.position.z);
             elevatorWallRend.custom.z = Room.MOVE_DOWN_WALL_VALUE_LEVEL_ONE;
-            elevatorDoor.SetRightRoom(meetingRoom, MeetingDoor.Level.One);
-            meridiaTowerData.curLevel = MeetingDoor.Level.One;
+
+            meridiaTowerData.curLevel = 1;
+            startElevator.SetRightRoom(meetingRoom);
+
             meridiaTowerData.elevatorMoving = false;
-            OnArriveAtFloor?.Invoke(LocationState.MeetingRoom);
+
+            elevatorMeetingDoor.OpenDoor();
+            
+            startElevator.OpenElevatorDoor();
         }
-        catch(OperationCanceledException)
+        catch (OperationCanceledException)
         {
 
         }
@@ -228,17 +269,44 @@ public class MeridiaTower : MonoBehaviour
                 float elevatorT = Mathf.InverseLerp(startPosY, targetPosY, curPosY);
                 elevatorWallRend.custom.z = Mathf.Lerp(startElevatorZ, Room.MOVE_DOWN_WALL_VALUE_LEVEL_ZERO, elevatorT);
 
-                for (int i = 0; i < elevatorChains.Length; i++)
-                {
-                    AtlasRenderer rend = elevatorChains[i];
-                    rend.custom.y -= Time.deltaTime / rend.sprite.worldSize.y;
-                    if (rend.custom.y <= -1) rend.custom.y = 0;
-                }
+                startElevator.ScrollingChainsDown();
+
                 await UniTask.Yield(ctsElevatorMove.Token);
             }
             transform.position = new Vector3(transform.position.x, targetPosY, transform.position.z);
             elevatorWallRend.custom.z = Room.MOVE_DOWN_WALL_VALUE_LEVEL_ZERO;
             scroll = ScrollState.Down;
+        }
+        catch (OperationCanceledException)
+        {
+
+        }
+    }
+    private async UniTask MovingUpToBetweenFloors()
+    {
+        AtlasRenderer wallRend = meetingRoom.exteriorWallRenderer;
+        float wallRendSpriteHeight = wallRend.sprite.worldSize.y;
+
+        float startPosY = transform.position.y;
+        float curPosY = startPosY;
+        float targetPosY = startGamePosY;
+
+        try
+        {
+            while (curPosY > targetPosY)
+            {
+                float t = Time.deltaTime * wallRendSpriteHeight;
+                curPosY -= t;
+                transform.position = new Vector3(transform.position.x, curPosY, transform.position.z);
+
+                float elevatorT = Mathf.InverseLerp(startPosY, targetPosY, curPosY);
+
+                startElevator.ScrollingChainsUp();
+
+                await UniTask.Yield(ctsElevatorMove.Token);
+            }
+            transform.position = new Vector3(transform.position.x, targetPosY, transform.position.z);
+            scroll = ScrollState.Up;
         }
         catch (OperationCanceledException)
         {
@@ -255,12 +323,9 @@ public class MeridiaTower : MonoBehaviour
             while (wallRend.custom.y > -1)
             {
                 wallRend.custom.y -= Time.deltaTime;
-                for (int i = 0; i < elevatorChains.Length; i++)
-                {
-                    AtlasRenderer rend = elevatorChains[i];
-                    rend.custom.y -= Time.deltaTime / rend.sprite.worldSize.y;
-                    if (rend.custom.y <= -1) rend.custom.y = 0;
-                }
+                
+                startElevator.ScrollingChainsDown();
+
                 await UniTask.Yield(ctsElevatorMove.Token);
             }
             wallRend.custom.y = 0;
@@ -271,7 +336,7 @@ public class MeridiaTower : MonoBehaviour
         }
 
         float curPosY = transform.position.y;
-        float targetPosY = elevatorTransform.position.y - bottomRoom.transform.localPosition.y;
+        float targetPosY = startElevator.transform.position.y - bottomRoom.transform.localPosition.y;
         try
         {
             while (curPosY < targetPosY)
@@ -280,24 +345,22 @@ public class MeridiaTower : MonoBehaviour
                 curPosY += t;
                 transform.position = new Vector3(transform.position.x, curPosY, transform.position.z);
 
-                for (int i = 0; i < elevatorChains.Length; i++)
-                {
-                    AtlasRenderer rend = elevatorChains[i];
-                    rend.custom.y -= Time.deltaTime / rend.sprite.worldSize.y;
-                    if (rend.custom.y <= -1) rend.custom.y = 0;
-                }
+                startElevator.ScrollingChainsDown();
+
                 await UniTask.Yield(ctsElevatorMove.Token);
             }
-            
+
             transform.position = new Vector3(transform.position.x, targetPosY, transform.position.z);
+
+            meridiaTowerData.curLevel = 0;
+            startElevator.SetRightRoom(bottomRoom);
             
-            elevatorDoor.SetRightRoom(bottomRoom, MeetingDoor.Level.Zero);
+            bottomElevatorDoor.OpenDoor();
             
-            meridiaTowerData.curLevel = MeetingDoor.Level.Zero;
             meridiaTowerData.elevatorMoving = false;
             meridiaTowerData.bottomFloorCenterTopPos = new Vector2(bottomGround.bounds.center.x, bottomGround.bounds.max.y);
-            
-            OnArriveAtFloor?.Invoke(LocationState.BottomFloor);
+
+            OnArriveAtBottomFloor?.Invoke();
         }
         catch (OperationCanceledException)
         {

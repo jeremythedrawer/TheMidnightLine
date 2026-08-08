@@ -32,7 +32,8 @@ public class TrainController : MonoBehaviour
     public SpawnData spawnData;
     public GameEventDataSO gameEventData;
     public SpyStatsSO spyStats;
-    
+    public CameraStatsSO camStats;
+
     public AtlasRenderer backSprite;
     public AtlasRenderer driversPit; 
 
@@ -252,7 +253,7 @@ public class TrainController : MonoBehaviour
             break;
             case TrainStates.Stopped:
             {
-                switch (spyStats.curLocationState)
+                switch (camStats.curLocationState)
                 {
                     case LocationState.Carriage:
                     case LocationState.Gangway:

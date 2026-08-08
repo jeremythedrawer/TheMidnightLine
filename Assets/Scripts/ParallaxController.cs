@@ -5,7 +5,6 @@ public class ParallaxController : MonoBehaviour
 {
     public TrainStatsSO trainStats;
     public SpawnData spawnData;
-    public SpyStatsSO spyStats;
     public AtlasRenderer leftRenderer;
     public CameraStatsSO camStats;
     public bool ignoreSpawnBounds;
@@ -68,7 +67,7 @@ public class ParallaxController : MonoBehaviour
     public void UpdateWorldPos()
     {
         velocity = camStats.curVelocity * Time.deltaTime * (1 - parallaxFactor);
-        if (spyStats.curLocationState == Spy.LocationState.Carriage || spyStats.curLocationState == Spy.LocationState.Gangway)
+        if (camStats.curLocationState == Spy.LocationState.Carriage || camStats.curLocationState == Spy.LocationState.Gangway)
         {
             velocity += trainStats.curVelocity * Time.deltaTime * parallaxFactor;
         }

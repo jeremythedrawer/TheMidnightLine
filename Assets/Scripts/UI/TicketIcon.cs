@@ -13,8 +13,8 @@ public class TicketIcon : MonoBehaviour
 
     private void Start()
     {
-        mainTicket.startPos = mainTicket.renderer.transform.localPosition;
-        stubTicket.startPos = stubTicket.renderer.transform.localPosition;
+        mainTicket.activePos = mainTicket.renderer.transform.localPosition;
+        stubTicket.activePos = stubTicket.renderer.transform.localPosition;
 
         stubTicket.renderer.custom.y = stubTicket.renderer.bounds.size.x;
     }

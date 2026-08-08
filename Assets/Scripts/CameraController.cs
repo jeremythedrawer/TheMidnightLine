@@ -40,18 +40,24 @@ public class CameraController : MonoBehaviour
     {
         Init();
         Scenes.OnLoadTrip0 += TripInit;
+        Scenes.OnLoadStart += TowerInit;
+        Scenes.OnLoadScore += TowerInit;
+
         StartUI.OnClickOptions += MoveToOptionsMenu;
         StartUI.OnClickBackFromOptions += MoveToMainMenu;
-        StartUI.OnStartGame += MoveToPlayer;
+        StartUI.OnStartButtonClicked += MoveToPlayer;
 
         HenchmanBrain.OnShoot += ShakeFromGunShot;
     }
     private void OnDisable()
     {
         Scenes.OnLoadTrip0 -= TripInit;
+        Scenes.OnLoadStart -= TowerInit;
+        Scenes.OnLoadScore -= TowerInit;
+
         StartUI.OnClickOptions -= MoveToOptionsMenu;
         StartUI.OnClickBackFromOptions -= MoveToMainMenu;
-        StartUI.OnStartGame -= MoveToPlayer;
+        StartUI.OnStartButtonClicked -= MoveToPlayer;
             
         HenchmanBrain.OnShoot -= ShakeFromGunShot;
         stats.curVelocity = Vector3.zero;
@@ -99,14 +105,13 @@ public class CameraController : MonoBehaviour
         Shader.SetGlobalVector("_CameraSizeAndPos", new Vector4(stats.camBounds.size.x, stats.camBounds.size.y, stats.camBounds.center.x, stats.camBounds.center.y));
     }
     private void TripInit()
-    {
-        cam = Camera.main;
-        cam.orthographicSize = GetSnappedOrthoSize();
-        targetWorldPos.z = transform.position.z;
-        targetWorldPos.y = settings.verticalOffset;
-        stats.curWorldPos = transform.position;
-        rawCurWorldPos = transform.position;
+    {        
+        stats.curLocationState = LocationState.Station;        
         SetCarriageSDFCompute();
+    }
+    private void TowerInit()
+    {
+        stats.curLocationState = LocationState.Elevator;
     }
     private void SetCarriageSDFCompute()
     {
@@ -129,7 +134,7 @@ public class CameraController : MonoBehaviour
     }
     private void ChooseStates()
     {
-        SetState(spyStats.curLocationState);
+        SetState(stats.curLocationState);
     }
     private void UpdateStates()
     {
@@ -143,11 +148,11 @@ public class CameraController : MonoBehaviour
 
             case LocationState.Carriage:
             {
-                float distFromCenter = spyStats.bounds.center.x - spyStats.curLocationBounds.center.x;
+                float distFromCenter = spyStats.bounds.center.x - stats.curLocationBounds.center.x;
 
                 float carriageT = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
 
-                targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.bounds.center.x + curXOffset, carriageT);
+                targetWorldPos.x = Mathf.Lerp(stats.curLocationBounds.center.x, spyStats.bounds.center.x + curXOffset, carriageT);
                 carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);
                 
                 carriageBoundsCompute.Dispatch(carriageBoundsKernel, threadGroupX, threadGroupY, 1);
@@ -158,10 +163,10 @@ public class CameraController : MonoBehaviour
             {
                 if (!isShaking)
                 {
-                    float distFromCenter = spyStats.bounds.center.x - spyStats.curLocationBounds.center.x;
+                    float distFromCenter = spyStats.bounds.center.x - stats.curLocationBounds.center.x;
                     float t = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
-                    targetWorldPos.x = Mathf.Lerp(spyStats.curLocationBounds.center.x, spyStats.bounds.center.x + curXOffset, t);
-                    targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, spyStats.curLocationBounds.min.x + stats.camBounds.extents.x, spyStats.curLocationBounds.max.x - stats.camBounds.extents.x);
+                    targetWorldPos.x = Mathf.Lerp(stats.curLocationBounds.center.x, spyStats.bounds.center.x + curXOffset, t);
+                    targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, stats.curLocationBounds.min.x + stats.camBounds.extents.x, stats.curLocationBounds.max.x - stats.camBounds.extents.x);
                 }
             }
             break;
@@ -204,21 +209,21 @@ public class CameraController : MonoBehaviour
 
             case LocationState.Carriage:
             {
-                carriageBoundsCompute.SetVector("_BoundsCenter", (spyStats.curLocationBounds.center - trainStats.totalBounds.min));
-                carriageBoundsCompute.SetVector("_BoundsSize", spyStats.curLocationBounds.size);
+                carriageBoundsCompute.SetVector("_BoundsCenter", (stats.curLocationBounds.center - trainStats.totalBounds.min));
+                carriageBoundsCompute.SetVector("_BoundsSize", stats.curLocationBounds.size);
             }
             break;
             case LocationState.Gangway:
             {
-                carriageBoundsCompute.SetVector("_BoundsCenter", (spyStats.curLocationBounds.center - trainStats.totalBounds.min));
-                carriageBoundsCompute.SetVector("_BoundsSize", spyStats.curLocationBounds.size);
+                carriageBoundsCompute.SetVector("_BoundsCenter", (stats.curLocationBounds.center - trainStats.totalBounds.min));
+                carriageBoundsCompute.SetVector("_BoundsSize", stats.curLocationBounds.size);
             }
             break;
             case LocationState.Elevator:
             {
                 if (sceneData.activeSceneType == Scenes.SceneType.Start)
                 {
-                    Bounds curLocBounds = spyStats.curLocationBounds;
+                    Bounds curLocBounds = stats.curLocationBounds;
                     targetWorldPos.x = curLocBounds.center.x + (curLocBounds.size.x * 0.25f);
                 }
                 else if (sceneData.activeSceneType == Scenes.SceneType.Score)
@@ -246,12 +251,12 @@ public class CameraController : MonoBehaviour
     }
     private void MoveToOptionsMenu()
     {
-        Bounds curLocBounds = spyStats.curLocationBounds;
+        Bounds curLocBounds = stats.curLocationBounds;
         targetWorldPos.x = curLocBounds.min.x + (curLocBounds.size.x * 0.25f);
     }
     private void MoveToMainMenu()
     {
-        Bounds curLocBounds = spyStats.curLocationBounds;
+        Bounds curLocBounds = stats.curLocationBounds;
         targetWorldPos.x = curLocBounds.center.x + (curLocBounds.size.x * 0.25f);
     }
     private void MoveToPlayer()

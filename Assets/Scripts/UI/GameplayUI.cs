@@ -498,13 +498,13 @@ public class GameplayUI : MonoBehaviour
     }
     private void InitUIElements()
     {
-        traitorIcon.startPos = traitorIcon.renderer.transform.localPosition;
+        traitorIcon.activePos = traitorIcon.renderer.transform.localPosition;
         
         traitorIcon.renderer.SetAlpha(0);
         traitorCountText.SetAppearTextAlpha(0);
 
-        quitButton.startPos = quitButton.renderer.transform.localPosition;
-        redoButton.startPos = redoButton.renderer.transform.localPosition;
+        quitButton.activePos = quitButton.renderer.transform.localPosition;
+        redoButton.activePos = redoButton.renderer.transform.localPosition;
     }
     private void SetNewTicketIcons()
     {

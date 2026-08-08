@@ -15,7 +15,4 @@ public class GameEventDataSO : ScriptableObject
     public GameEvent OnStationSpawn;
 
     public GameEvent OnFinishTripScene;
-
-    public GameEvent OnToStartMenu;
-    public GameEvent OnFromStartMenu;
 }

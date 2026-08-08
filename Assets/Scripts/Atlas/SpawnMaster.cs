@@ -18,7 +18,6 @@ public class SpawnMaster : MonoBehaviour
     public CameraStatsSO camStats;
     public TripSO trip;
     public TrainStatsSO trainStats;
-    public SpyStatsSO spyStats;
     public GameEventDataSO gameEventData;
     public OptionsSO colorSO;
 
@@ -82,7 +81,7 @@ public class SpawnMaster : MonoBehaviour
     private void UpdateSpawnCompute(ref SpawnComputeData computeData)
     {
         computeData.compute.SetVector("_CamVelocity", camStats.curVelocity);
-        if (spyStats.curLocationState != LocationState.Station)
+        if (camStats.curLocationState != LocationState.Station)
         {
             computeData.compute.SetVector("_TrainVelocity", trainStats.curVelocity);
         }

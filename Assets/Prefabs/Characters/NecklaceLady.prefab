@@ -242,6 +242,7 @@ MonoBehaviour:
   uvSizeAndPosition: {x: 0.034179688, y: 0.14648438, z: 0.01953125, w: 0.8535156}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
   boundsOffset: {x: 0.013888888, y: 0.41666666, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
@@ -280,6 +281,7 @@ MonoBehaviour:
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   spawnData: {fileID: 11400000, guid: cb76807a71f74704a94a0f5cfe3b2c50, type: 2}
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   atlas: {fileID: 0}
   boardingStation: {fileID: 0}
   disembarkingStation: {fileID: 0}
@@ -287,6 +289,7 @@ MonoBehaviour:
   curSlideDoors: {fileID: 0}
   curCarriage: {fileID: 0}
   curGlyph: {fileID: 0}
+  graffiti: {fileID: 0}
   targetXVelocity: 0
   targetXPos: 0
   targetDist: 0
@@ -312,13 +315,14 @@ MonoBehaviour:
   curBehaviour: 0
   curState: 0
   curPath: 0
+  prevPath: 0
   role: 0
   smokerRoomIndex: 0
   seatPosIndex: 0
   curFrameIndex: 0
   prevAtlasIndex: 0
   startFade: 0
-  ticketIsBeingChecked: 0
+  talkingToSpy: 0
   ticketHasBeenChecked: 0
   playingGlyph: 0
   behaving: 0
@@ -329,4 +333,3 @@ MonoBehaviour:
   seatQueueIndex: 0
   boardTrainQueueIndex: 0
   disembarkTrainQueueIndex: 0
-  isClicked: 0

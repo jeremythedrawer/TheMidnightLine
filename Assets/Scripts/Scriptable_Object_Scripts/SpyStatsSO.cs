@@ -8,8 +8,6 @@ public class SpyStatsSO : ScriptableObject
 {
     public string boardingStationName;
     public string disembarkingStationName;
-
-    public Bounds curLocationBounds;
     
     public Vector2 moveVelocity;
     public Vector2 startPos;
@@ -17,7 +15,6 @@ public class SpyStatsSO : ScriptableObject
     public float targetXVelocity;
 
     public SpyState curState;
-    public LocationState curLocationState;
 
     public TutorialState tutorialsCompleted;
     public TutorialState curTutorialState;

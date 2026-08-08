@@ -25,6 +25,7 @@ public class CursorController : MonoBehaviour
     public PlayerInputsSO playerInputs;
     public LayerSettingsSO layerSettings;
     public SpyStatsSO spyStats;
+    public CameraStatsSO camStats;
     public TripSO trip;
 
     public SceneData sceneData;
@@ -59,7 +60,7 @@ public class CursorController : MonoBehaviour
 
             CursorBounds = cursorRenderer.GetBounds();
 
-            if (sceneData.activeSceneType == Scenes.SceneType.Trip && spyStats.curLocationState != Spy.LocationState.Station)
+            if (sceneData.activeSceneType == Scenes.SceneType.Trip && camStats.curLocationState != Spy.LocationState.Station)
             {
                 if (cursorIsMoving && SceneController.GetNPCPicker().curPickerState == PickerState.Closed) HoverNPC();
                 

@@ -3,7 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
-
+using static Atlas;
 using static NPC;
 public static class AtlasUI
 {
@@ -248,11 +248,11 @@ public static class AtlasUI
                 break;
             }
         }
-        public void MoveButtonAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        public void MoveAway(CameraStatsSO camStats, MoveButtonDirection dir)
         {
             ctsMove?.Cancel();
             ctsMove = new CancellationTokenSource();
-            MovingButtonAway(camStats, dir).Forget();
+            MovingAway(camStats, dir).Forget();
         }
         public void SetAway(CameraStatsSO camStats, MoveButtonDirection dir)
         {
@@ -285,21 +285,21 @@ public static class AtlasUI
         {
             renderer.transform.localPosition = newPos;
         }
-        public void MoveButtonToRight()
+        public void MoveToRight()
         {
             ctsMove?.Cancel();
             ctsMove = new CancellationTokenSource();
-            MovingButtonToOppositeX().Forget();
+            MovingToRight().Forget();
         }
-        public void MoveElementToActive(bool snap = true)
+        public void MoveToActive()
         {
             ctsMove?.Cancel();
             ctsMove = new CancellationTokenSource();
-            MovingButtonToActive(snap).Forget();
+            MovingButtonToActive().Forget();
         }
-        private async UniTask MovingButtonAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        private async UniTask MovingAway(CameraStatsSO camStats, MoveButtonDirection dir)
         {
-            Transform buttonTransform = renderer.transform;
+            Transform textTransform = renderer.transform;
             Bounds buttonBounds = renderer.rendererType == AtlasRendering.AtlasTextRendererType.Border ? renderer.background_renderer.GetBounds() : renderer.GetBoundsCurrentText();
 
             Vector3 buttonPos = renderer.transform.localPosition;
@@ -324,44 +324,40 @@ public static class AtlasUI
                 {
                     buttonPos = Vector3.Lerp(buttonPos, targetPos, Time.deltaTime * 2);
 
-                    buttonTransform.localPosition = buttonPos;
+                    textTransform.localPosition = buttonPos;
 
                     await UniTask.Yield(ctsMove.Token);
                 }
-                buttonPos = targetPos;
-                buttonTransform.localPosition = buttonPos;
-
+                textTransform.localPosition = targetPos;
             }
             catch (OperationCanceledException)
             {
 
             }
         }
-        private async UniTask MovingButtonToOppositeX()
+        private async UniTask MovingToRight()
         {
             Transform buttonTransform = renderer.transform;
             Bounds buttonBounds = renderer.rendererType == AtlasRendering.AtlasTextRendererType.Border ? renderer.background_renderer.GetBounds() : renderer.GetBoundsCurrentText();
 
-            Vector3 buttonPos = buttonTransform.localPosition;
+            Vector3 curPos = buttonTransform.localPosition;
 
             float targetPosX = -activePos.x;
             try
             {
-                while (Mathf.Abs(buttonPos.x - targetPosX) > 0.005f)
+                while (Mathf.Abs(curPos.x - targetPosX) > 0.005f)
                 {
-                    buttonPos.x = Mathf.Lerp(buttonPos.x, targetPosX, Time.deltaTime * 2);
-                    buttonTransform.localPosition = buttonPos;
+                    curPos.x = Mathf.Lerp(curPos.x, targetPosX, Time.deltaTime * 2);
+                    buttonTransform.localPosition = curPos;
 
                     await UniTask.Yield(ctsMove.Token);
                 }
-                buttonPos.x = targetPosX;
-                buttonTransform.localPosition = buttonPos;
             }
             catch (OperationCanceledException)
             {
             }
         }
-        private async UniTask MovingButtonToActive(bool snap)
+        private async UniTask MovingButtonToActive()
         {
             Transform buttonTransform = renderer.transform;
             Bounds buttonBounds = renderer.rendererType == AtlasRendering.AtlasTextRendererType.Border ? renderer.background_renderer.GetBounds() : renderer.GetBoundsCurrentText();
@@ -374,10 +370,6 @@ public static class AtlasUI
                     buttonTransform.localPosition = buttonPos;
 
                     await UniTask.Yield(ctsMove.Token);
-                }
-                if (snap)
-                {
-                    buttonTransform.localPosition = activePos;
                 }
             }
             catch (OperationCanceledException)
@@ -395,7 +387,7 @@ public static class AtlasUI
         public AtlasRenderer renderer;
 
         [Header("Generated")]
-        public Vector3 startPos;
+        public Vector3 activePos;
         public ButtonState curState;
 
         public OnClick OnClickCallback;
@@ -408,11 +400,11 @@ public static class AtlasUI
             OnClickCallback = onClickCallback;
             OnEnterCallback = onEnterCallback;
             OnExitCallback = onExitCallback;
-            startPos = renderer.transform.localPosition;
+            activePos = renderer.transform.localPosition;
         }
         public void InitImage()
         {
-            startPos = renderer.transform.localPosition;
+            activePos = renderer.transform.localPosition;
         }
         public void UpdateButton(PlayerInputsSO playerInputs)
         {
@@ -457,27 +449,27 @@ public static class AtlasUI
                 break;
             }
         }
-        public void MoveButtonAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        public void MoveAway(CameraStatsSO camStats, MoveButtonDirection dir)
         {
             ctsMove?.Cancel();
             ctsMove = new CancellationTokenSource();
-            MovingButtonAway(camStats, dir).Forget();
+            MovingAway(camStats, dir).Forget();
         }
-        public void SetButtonAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        public void SetAway(CameraStatsSO camStats, MoveButtonDirection dir)
         {
             SetRendererAway(renderer, camStats, dir);
         }
-        public void MoveButtonToRight()
+        public void MoveToRight()
         {
             ctsMove?.Cancel();
             ctsMove = new CancellationTokenSource();
-            MovingButtonToOppositeX().Forget();
+            MovingRight().Forget();
         }
-        public void MoveButtonToActive()
+        public void MoveToActive()
         {
             ctsMove?.Cancel();
             ctsMove = new CancellationTokenSource();
-            MovingButtonToActive().Forget();
+            MovingToActive().Forget();
         }
         public void MoveTutorialUIElement(CameraStatsSO camStats, AtlasTextRenderer tutorialRenderer, string text)
         {
@@ -537,21 +529,21 @@ public static class AtlasUI
             try
             {
                 tutorialRenderer.SetText("");
-                while ((curPos - startPos).sqrMagnitude > 0.01f)
+                while ((curPos - activePos).sqrMagnitude > 0.01f)
                 {
-                    curPos = Vector3.Lerp(curPos, startPos, Time.deltaTime * 2);
+                    curPos = Vector3.Lerp(curPos, activePos, Time.deltaTime * 2);
 
                     iconTransform.localPosition = curPos;
                     await UniTask.Yield(ctsMove.Token);
                 }
-                iconTransform.localPosition = startPos;
+                iconTransform.localPosition = activePos;
             }
             catch (OperationCanceledException)
             {
 
             }
         }
-        private async UniTask MovingButtonAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        private async UniTask MovingAway(CameraStatsSO camStats, MoveButtonDirection dir)
         {
             Transform buttonTransform = renderer.transform;
             Bounds buttonBounds = renderer.GetBounds();
@@ -582,8 +574,7 @@ public static class AtlasUI
 
                     await UniTask.Yield(ctsMove.Token);
                 }
-                buttonPos = targetPos;
-                buttonTransform.localPosition = buttonPos;
+                buttonTransform.localPosition = targetPos;
 
             }
             catch (OperationCanceledException)
@@ -591,45 +582,45 @@ public static class AtlasUI
 
             }
         }
-        private async UniTask MovingButtonToOppositeX()
+        private async UniTask MovingRight()
         {
             Transform buttonTransform = renderer.transform;
-            Bounds buttonBounds = renderer.GetBounds();
+            Bounds bounds = renderer.GetBounds();
+            
+            SimpleSprite sprite = renderer.sprite;
 
-            Vector3 buttonPos = buttonTransform.localPosition;
+            Vector3 curPos = buttonTransform.localPosition;
 
-            float targetPosX = -startPos.x;
+            float ndcPivot = sprite.uvPivot.x * 2 - 1;
+            float targetPosX = -activePos.x + (sprite.worldSize.x * ndcPivot);
             try
             {
-                while (Mathf.Abs(buttonPos.x - targetPosX) > 0.005f)
+                while (Mathf.Abs(curPos.x - targetPosX) > 0.005f)
                 {
-                    buttonPos.x = Mathf.Lerp(buttonPos.x, targetPosX, Time.deltaTime * 2);
-                    buttonTransform.localPosition = buttonPos;
+                    curPos.x = Mathf.Lerp(curPos.x, targetPosX, Time.deltaTime * 2);
+                    buttonTransform.localPosition = curPos;
 
                     await UniTask.Yield(ctsMove.Token);
                 }
-                buttonPos.x = targetPosX;
-                buttonTransform.localPosition = buttonPos;
             }
             catch (OperationCanceledException)
             {
             }
         }
-        private async UniTask MovingButtonToActive()
+        private async UniTask MovingToActive()
         {
             Transform buttonTransform = renderer.transform;
             Bounds buttonBounds = renderer.GetBounds();
             Vector3 buttonPos = buttonTransform.localPosition;
             try
             {
-                while ((buttonPos - startPos).sqrMagnitude > 0.005f)
+                while ((buttonPos - activePos).sqrMagnitude > 0.005f)
                 {
-                    buttonPos = Vector3.Lerp(buttonPos, startPos, Time.deltaTime * 2);
+                    buttonPos = Vector3.Lerp(buttonPos, activePos, Time.deltaTime * 2);
                     buttonTransform.localPosition = buttonPos;
 
                     await UniTask.Yield(ctsMove.Token);
                 }
-                buttonTransform.localPosition = startPos;
             }
             catch (OperationCanceledException)
             {

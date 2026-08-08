@@ -9,7 +9,6 @@ public class SceneController : MonoBehaviour
 
     public static Notepad Notepad;
     public static ColorPicker ClueColorPicker;
-    public static ColorPicker MainColorPicker;
     public static NPCPicker NPCPicker;
     public static UnlockPicker UnlockPicker;
     public static SpyBrain Spy;
@@ -47,10 +46,6 @@ public class SceneController : MonoBehaviour
     {
         ClueColorPicker = colorPicker;
     }
-    public static void SetMainColorPicker(ColorPicker mainColorPicker)
-    {
-        MainColorPicker = mainColorPicker;
-    }
     public static void SetNPCPicker(NPCPicker npcPicker)
     {
         NPCPicker = npcPicker;
@@ -76,10 +71,6 @@ public class SceneController : MonoBehaviour
     public static ColorPicker GetClueColorPicker()
     {
         return ClueColorPicker;
-    }
-    public static ColorPicker GetMainColorPicker()
-    {
-        return MainColorPicker;
     }
     public static NPCPicker GetNPCPicker()
     {

@@ -31,11 +31,13 @@ public class StartUI : MonoBehaviour
 
     public static event Action OnClickOptions;
     public static event Action OnClickBackFromOptions;
-    public static event Action OnStartGame;
+    public static event Action OnStartButtonClicked;
 
     public AtlasRenderer keyIconRenderer;
 
     public Material fadeBlackMaterial;
+
+    public ColorPicker mainColorPicker;
 
     public TripSO trip;
     public GameEventDataSO gameEventData;
@@ -46,8 +48,6 @@ public class StartUI : MonoBehaviour
     public SceneData sceneData;
     public SpyStatsSO spyStats;
     public NPCsDataSO npcsData;
-
-    public Transform titleTransform;
 
     public TextUIElement startButton;
     public TextUIElement optionsButton;
@@ -64,9 +64,7 @@ public class StartUI : MonoBehaviour
     public TextUIElement locationMessage;
     public TextUIElement arrestMessage;
 
-
-    public IconUIElement titleIcon1;
-    public IconUIElement titleIcon2;
+    public IconUIElement titleIcon;
 
     public FadeBlack fadeBlack;
 
@@ -87,6 +85,7 @@ public class StartUI : MonoBehaviour
     public int curTraitorProfilesReviewed;
 
     public UIState curState;
+
     public RevealSequence curRevealSequence;
 
     public bool canExitState;
@@ -115,9 +114,10 @@ public class StartUI : MonoBehaviour
 
         SpyBrain.OnOpenNotepad += SetToNotepadState;
         SpyBrain.OnCloseNotepad += SetToNoneState;
+        SpyBrain.OnEnteredElevatorGoingUp += SetToStartMenuState;
 
-        MeetingDoor.OnSpyEnter += SetInteractIcon;
-        MeetingDoor.OnSpyExit += DisableInteractIcon;
+        RoomDoor.OnSpyAtDoorToOpen += SetInteractIcon;
+        RoomDoor.OnSpyExit += DisableInteractIcon;
 
         Scenes.OnLoadScore += ScoreSceneInit;
         Scenes.OnLoadStart += StartSceneInit;
@@ -131,9 +131,10 @@ public class StartUI : MonoBehaviour
 
         CameraController.OnArrivedAtElevator += SetToEndMenuState;
 
+        MeridiaTower.OnEnterStartElevator += SetToStartMenuState;
+        MeridiaTower.OnEnterMeetingRoomFromElevator += SetToNoneState;
+
         gameEventData.OnStartTrip.RegisterListener(StartTrip);
-        gameEventData.OnToStartMenu.RegisterListener(SetToStartMenuState);
-        gameEventData.OnFromStartMenu.RegisterListener(SetToNoneState);
     }
     private void OnDisable()
     {
@@ -142,9 +143,10 @@ public class StartUI : MonoBehaviour
 
         SpyBrain.OnOpenNotepad -= SetToNotepadState;
         SpyBrain.OnCloseNotepad -= SetToNoneState;
+        SpyBrain.OnEnteredElevatorGoingUp -= SetToStartMenuState;
 
-        MeetingDoor.OnSpyEnter -= SetInteractIcon;
-        MeetingDoor.OnSpyExit -= DisableInteractIcon;
+        RoomDoor.OnSpyAtDoorToOpen -= SetInteractIcon;
+        RoomDoor.OnSpyExit -= DisableInteractIcon;
 
         Scenes.OnLoadStart -= StartSceneInit;
         Scenes.OnLoadScore -= ScoreSceneInit;
@@ -157,144 +159,16 @@ public class StartUI : MonoBehaviour
         FadeBlack.OnFinishFadeOut -= SetTripOutcome;
 
         CameraController.OnArrivedAtElevator -= SetToEndMenuState;
-        
+
+        MeridiaTower.OnEnterStartElevator -= SetToStartMenuState;
+        MeridiaTower.OnEnterMeetingRoomFromElevator -= SetToNoneState;
+
         gameEventData.OnStartTrip.UnregisterListener(StartTrip);
-        gameEventData.OnToStartMenu.UnregisterListener(SetToStartMenuState);
-        gameEventData.OnFromStartMenu.UnregisterListener(SetToNoneState);
     }
     private void Update()
     {
         UpdateState();
         fadeBlack.CheckToFadeOutSceneChange();
-    }
-    private void StartSceneInit()
-    {
-        startButton.InitButton(StartButtonClicked);
-        optionsButton.InitButton(OptionsButtonClicked);
-        quitButton.InitButton(QuitButtonClicked);
-        
-        darkColorButton.InitButton(DarkColorButtonClicked);
-        lightColorButton.InitButton(LightColorButtonClicked);
-        tutorialButton.InitButton(TutorialButtonClicked);
-
-        titleIcon1.InitImage();
-        titleIcon2.InitImage();
-        
-        darkColorButton.SetAway(camStats, MoveButtonDirection.Left);
-        lightColorButton.SetAway(camStats, MoveButtonDirection.Left);
-        tutorialButton.SetAway(camStats, MoveButtonDirection.Left);
-        thankYouMessage.SetAway(camStats, MoveButtonDirection.Left);
-        playAgainButton.SetAway(camStats, MoveButtonDirection.Left);
-        traitorsFoundMessage.SetAway(camStats, MoveButtonDirection.Left);
-        locationMessage.SetAway(camStats, MoveButtonDirection.Left);
-        arrestMessage.SetAway(camStats, MoveButtonDirection.Left);
-
-        titleTransform.SetParent(null);
-
-        Shader.SetGlobalFloat("_DayNight", 1);
-
-        fadeBlack.SetAlpha(1);
-        fadeBlack.FadeOut();
-
-        options.skipTutorial = false;
-
-        SetState(UIState.StartMenu);
-    }
-    private void ScoreSceneInit()
-    {
-        startButton.InitButton(StartButtonClicked);
-        optionsButton.InitButton(OptionsButtonClicked);
-        quitButton.InitButton(QuitButtonClicked);
-        
-        darkColorButton.InitButton(DarkColorButtonClicked);
-        lightColorButton.InitButton(LightColorButtonClicked);
-        tutorialButton.InitButton(TutorialButtonClicked);
-        
-        playAgainButton.InitButton(PlayAgainClicked);
-        thankYouMessage.InitMessage();
-
-        traitorsFoundMessage.InitMessage();
-        locationMessage.InitMessage();
-        arrestMessage.InitMessage();
-        
-        titleIcon1.InitImage();
-        titleIcon2.InitImage();
-
-        startButton.SetAway(camStats, MoveButtonDirection.Left);
-        optionsButton.SetAway(camStats, MoveButtonDirection.Left);
-        quitButton.SetAway(camStats, MoveButtonDirection.Left);
-
-        darkColorButton.SetAway(camStats, MoveButtonDirection.Left);
-        lightColorButton.SetAway(camStats, MoveButtonDirection.Left);
-        tutorialButton.SetAway(camStats, MoveButtonDirection.Left);
-        
-        thankYouMessage.SetAway(camStats, MoveButtonDirection.Left);
-        playAgainButton.SetAway(camStats, MoveButtonDirection.Left);
-
-        traitorsFoundMessage.SetAway(camStats, MoveButtonDirection.Left);
-
-        locationMessage.SetAway(camStats, MoveButtonDirection.Left);
-        arrestMessage.SetAway(camStats, MoveButtonDirection.Left);
-
-        titleIcon1.SetButtonAway(camStats, MoveButtonDirection.Left);
-        titleIcon2.SetButtonAway(camStats, MoveButtonDirection.Left);
-
-        titleTransform.SetParent(null);
-
-        fadeBlack.SetAlpha(1);
-        fadeBlack.FadeOut();
-
-        Shader.SetGlobalFloat("_DayNight", 1);
-
-        SetState(UIState.None);
-
-        notepad = SceneController.GetNotepad(transform);
-    }
-    private void StartTrip()
-    {
-        fadeBlack.FadeInChangeScene("FIND where the TRAITORS are going.", SceneType.Trip, sceneIndex: 2);
-        keyIconRenderer.enabled = false;
-        SceneController.KeepNotepad(notepad);
-    }
-    private void SetInteractIcon(Vector2 position)
-    {
-        keyIconRenderer.enabled = true;
-        keyIconRenderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.W);
-        keyIconRenderer.transform.SetParent(null);
-        keyIconRenderer.transform.position = new Vector3(position.x, position.y + keyIconRenderer.bounds.size.y, keyIconRenderer.transform.position.z);
-    }
-    private void DisableInteractIcon()
-    {
-        keyIconRenderer.enabled = false;
-    }
-    private void GetNotepad()
-    {
-        notepad = SceneController.GetNotepad(transform);
-        notepad.Init();
-    }
-    private void SetToNoneState()
-    {
-        startButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
-        optionsButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
-        quitButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
-        SetState(UIState.None);
-    }
-    private void SetToNotepadState()
-    {
-        DisableInteractIcon();
-        SetState(UIState.Notepad);
-    }
-    private void SetToStartMenuState()
-    {
-        SetState(UIState.StartMenu);
-    }
-    private void SetToOutcomeState()
-    {
-        SetState(UIState.Outcome);
-    }
-    private void SetToEndMenuState()
-    {
-        SetState(UIState.EndMenu);
     }
     private void SetState(UIState newState)
     {
@@ -310,16 +184,17 @@ public class StartUI : MonoBehaviour
         {
             case UIState.StartMenu:
             {
-                startButton.MoveElementToActive();
-                optionsButton.MoveElementToActive();
-                quitButton.MoveElementToActive();
+                startButton.MoveToActive();
+                optionsButton.MoveToActive();
+                quitButton.MoveToActive();
+                titleIcon.MoveToActive();
             }
             break;
             case UIState.EndMenu:
             {
-                thankYouMessage.MoveElementToActive();
-                playAgainButton.MoveElementToActive();
-                quitButton.MoveElementToActive();
+                thankYouMessage.MoveToActive();
+                playAgainButton.MoveToActive();
+                quitButton.MoveToActive();
             }
             break;
 
@@ -334,7 +209,7 @@ public class StartUI : MonoBehaviour
             case UIState.Outcome:
             {
                 notepad.SkipToPage(0);
-                traitorsFoundMessage.MoveElementToActive(snap: false);
+                traitorsFoundMessage.MoveToActive();
                 spyStats.playerInputsEnabled = false;
 
                 profilePages = new Page[trip.traitorProfiles.Length];
@@ -408,7 +283,10 @@ public class StartUI : MonoBehaviour
             break;
             case UIState.None:
             {
-
+                startButton.MoveAway(camStats, MoveButtonDirection.Left);
+                optionsButton.MoveAway(camStats, MoveButtonDirection.Left);
+                quitButton.MoveAway(camStats, MoveButtonDirection.Left);
+                titleIcon.MoveAway(camStats, MoveButtonDirection.Left);
             }
             break;
         }
@@ -596,11 +474,130 @@ public class StartUI : MonoBehaviour
             case UIState.Outcome:
             {
                 fadeBlack.FadeOut();
-                traitorsFoundMessage.MoveButtonAway(camStats, MoveButtonDirection.Left);
+                traitorsFoundMessage.MoveAway(camStats, MoveButtonDirection.Left);
                 spyStats.playerInputsEnabled = true;
             }
             break;
         }
+    }
+    private void StartSceneInit()
+    {
+        startButton.InitButton(StartButtonClicked);
+        optionsButton.InitButton(OptionsButtonClicked);
+        quitButton.InitButton(QuitButtonClicked);
+        
+        darkColorButton.InitButton(DarkColorButtonClicked);
+        lightColorButton.InitButton(LightColorButtonClicked);
+        tutorialButton.InitButton(TutorialButtonClicked);
+
+        titleIcon.InitImage();
+
+        darkColorButton.SetAway(camStats, MoveButtonDirection.Left);
+        lightColorButton.SetAway(camStats, MoveButtonDirection.Left);
+        tutorialButton.SetAway(camStats, MoveButtonDirection.Left);
+        thankYouMessage.SetAway(camStats, MoveButtonDirection.Left);
+        playAgainButton.SetAway(camStats, MoveButtonDirection.Left);
+        traitorsFoundMessage.SetAway(camStats, MoveButtonDirection.Left);
+        locationMessage.SetAway(camStats, MoveButtonDirection.Left);
+        arrestMessage.SetAway(camStats, MoveButtonDirection.Left);
+
+        Shader.SetGlobalFloat("_DayNight", 1);
+
+        fadeBlack.SetAlpha(1);
+        fadeBlack.FadeOut();
+
+        options.skipTutorial = false;
+
+        SetState(UIState.StartMenu);
+    }
+    private void ScoreSceneInit()
+    {
+        startButton.InitButton(StartButtonClicked);
+        optionsButton.InitButton(OptionsButtonClicked);
+        quitButton.InitButton(QuitButtonClicked);
+        
+        darkColorButton.InitButton(DarkColorButtonClicked);
+        lightColorButton.InitButton(LightColorButtonClicked);
+        tutorialButton.InitButton(TutorialButtonClicked);
+        
+        playAgainButton.InitButton(PlayAgainClicked);
+        thankYouMessage.InitMessage();
+
+        traitorsFoundMessage.InitMessage();
+        locationMessage.InitMessage();
+        arrestMessage.InitMessage();
+        
+        titleIcon.InitImage();
+
+        startButton.SetAway(camStats, MoveButtonDirection.Left);
+        optionsButton.SetAway(camStats, MoveButtonDirection.Left);
+        quitButton.SetAway(camStats, MoveButtonDirection.Left);
+
+        darkColorButton.SetAway(camStats, MoveButtonDirection.Left);
+        lightColorButton.SetAway(camStats, MoveButtonDirection.Left);
+        tutorialButton.SetAway(camStats, MoveButtonDirection.Left);
+        
+        thankYouMessage.SetAway(camStats, MoveButtonDirection.Left);
+        playAgainButton.SetAway(camStats, MoveButtonDirection.Left);
+
+        traitorsFoundMessage.SetAway(camStats, MoveButtonDirection.Left);
+
+        locationMessage.SetAway(camStats, MoveButtonDirection.Left);
+        arrestMessage.SetAway(camStats, MoveButtonDirection.Left);
+
+        titleIcon.SetAway(camStats, MoveButtonDirection.Left);
+
+        fadeBlack.SetAlpha(1);
+        fadeBlack.FadeOut();
+
+        Shader.SetGlobalFloat("_DayNight", 1);
+
+        SetState(UIState.None);
+
+        notepad = SceneController.GetNotepad(transform);
+    }
+    private void StartTrip()
+    {
+        fadeBlack.FadeInChangeScene("FIND where the TRAITORS are going.", SceneType.Trip, sceneIndex: 2);
+        keyIconRenderer.enabled = false;
+        SceneController.KeepNotepad(notepad);
+    }
+    private void SetInteractIcon(Vector2 position)
+    {
+        keyIconRenderer.enabled = true;
+        keyIconRenderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.W);
+        keyIconRenderer.transform.SetParent(null);
+        keyIconRenderer.transform.position = new Vector3(position.x, position.y + keyIconRenderer.bounds.size.y, keyIconRenderer.transform.position.z);
+    }
+    private void DisableInteractIcon()
+    {
+        keyIconRenderer.enabled = false;
+    }
+    private void GetNotepad()
+    {
+        notepad = SceneController.GetNotepad(transform);
+        notepad.Init();
+    }
+    private void SetToNoneState()
+    {
+        SetState(UIState.None);
+    }
+    private void SetToNotepadState()
+    {
+        DisableInteractIcon();
+        SetState(UIState.Notepad);
+    }
+    private void SetToStartMenuState()
+    {
+        SetState(UIState.StartMenu);
+    }
+    private void SetToOutcomeState()
+    {
+        SetState(UIState.Outcome);
+    }
+    private void SetToEndMenuState()
+    {
+        SetState(UIState.EndMenu);
     }
     private void SetTripOutcome()
     {
@@ -626,19 +623,20 @@ public class StartUI : MonoBehaviour
     }
     private void PlayAgainClicked()
     {
-        playAgainButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
-        thankYouMessage.MoveButtonAway(camStats, MoveButtonDirection.Left);
-        quitButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+        playAgainButton.MoveAway(camStats, MoveButtonDirection.Left);
+        thankYouMessage.MoveAway(camStats, MoveButtonDirection.Left);
+        quitButton.MoveAway(camStats, MoveButtonDirection.Left);
 
         OnPlayAgain?.Invoke();
     }
     private void StartButtonClicked()
     {
-        startButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
-        optionsButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
-        quitButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+        startButton.MoveAway(camStats, MoveButtonDirection.Left);
+        optionsButton.MoveAway(camStats, MoveButtonDirection.Left);
+        quitButton.MoveAway(camStats, MoveButtonDirection.Left);
+        titleIcon.MoveAway(camStats, MoveButtonDirection.Left);
 
-        OnStartGame?.Invoke();
+        OnStartButtonClicked?.Invoke();
         SetState(UIState.None);
     }
     private void OptionsButtonClicked()
@@ -648,14 +646,15 @@ public class StartUI : MonoBehaviour
             case UIState.StartMenu:
             {
                 optionsButton.renderer.SetText("Back");
-                quitButton.MoveButtonAway(camStats, MoveButtonDirection.Right);
-                startButton.MoveButtonAway(camStats, MoveButtonDirection.Right);
+                quitButton.MoveAway(camStats, MoveButtonDirection.Right);
+                startButton.MoveAway(camStats, MoveButtonDirection.Right);
 
-                optionsButton.MoveButtonToRight();
+                optionsButton.MoveToRight();
+                titleIcon.MoveToRight();
 
-                darkColorButton.MoveElementToActive();
-                lightColorButton.MoveElementToActive();
-                tutorialButton.MoveElementToActive();
+                darkColorButton.MoveToActive();
+                lightColorButton.MoveToActive();
+                tutorialButton.MoveToActive();
 
                 OnClickOptions?.Invoke();
                 SetState(UIState.OptionsMenu);
@@ -664,23 +663,16 @@ public class StartUI : MonoBehaviour
             case UIState.OptionsMenu:
             {
                 optionsButton.renderer.SetText("Options");
-                startButton.MoveElementToActive();
-                quitButton.MoveElementToActive();
-                optionsButton.MoveElementToActive();
+                startButton.MoveToActive();
+                quitButton.MoveToActive();
+                optionsButton.MoveToActive();
 
-                darkColorButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
-                lightColorButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
-                tutorialButton.MoveButtonAway(camStats, MoveButtonDirection.Left);
+                darkColorButton.MoveAway(camStats, MoveButtonDirection.Left);
+                lightColorButton.MoveAway(camStats, MoveButtonDirection.Left);
+                tutorialButton.MoveAway(camStats, MoveButtonDirection.Left);
 
                 OnClickBackFromOptions?.Invoke();
-                if (sceneData.activeSceneType == SceneType.Start)
-                {
-                    SetState(UIState.StartMenu);
-                }
-                else
-                {
-                    SetState(UIState.EndMenu);
-                }
+                SetState(UIState.StartMenu);
             }
             break;
         }
@@ -691,11 +683,11 @@ public class StartUI : MonoBehaviour
     }
     private void DarkColorButtonClicked()
     {
-        SceneController.GetMainColorPicker().Open(darkColorButton.renderer.background_renderer, ColorPicker.SelectType.Dark, ColorPicker.Direction.BottomRight);
+        mainColorPicker.Open(darkColorButton.renderer.background_renderer, ColorPicker.SelectType.Dark, ColorPicker.Direction.BottomRight);
     }
     private void LightColorButtonClicked()
     {
-        SceneController.GetMainColorPicker().Open(lightColorButton.renderer.background_renderer, ColorPicker.SelectType.Light, ColorPicker.Direction.BottomRight);
+        mainColorPicker.Open(lightColorButton.renderer.background_renderer, ColorPicker.SelectType.Light, ColorPicker.Direction.BottomRight);
     }
     private void TutorialButtonClicked()
     {
