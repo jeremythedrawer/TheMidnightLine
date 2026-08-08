@@ -88,7 +88,7 @@ public class RoomDoor : MonoBehaviour
     }
     private void LateUpdate()
     {
-        curSubState &= ~(SubState.EnterBoundsLeft | SubState.EnterBoundsRight | SubState.ExitBoundsLeft | SubState.ExitBoundsRight);
+
     }
     private void SetState(State newState)
     {
@@ -104,6 +104,10 @@ public class RoomDoor : MonoBehaviour
             case State.Opened:
             {
                 prevSubState = SubState.None;
+                if ((curSubState & SubState.InBounds) != 0)
+                {
+                    curSubState |= SubState.EnteredBounds;
+                }
             }
             break;
             case State.Closed:
@@ -130,67 +134,20 @@ public class RoomDoor : MonoBehaviour
         {
             case State.Opened:
             {   
-                if((curSubState & SubState.EnterBoundsRight) != 0)
-                {
-                    leftRoom.ToggleRightWall(false);
-                }
-                else if ((curSubState & SubState.ExitBoundsRight) != 0)
-                {
-                    if (rightRoom != null)
-                    {
-                        camStats.curLocationState = rightRoom.locationState;
-                        camStats.curLocationBounds = rightRoom.bounds;
-                    }
-                    SpyBrain spy = SceneController.GetSpy();
-                    spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, rightDepth));
-
-                    rightRoom?.MoveDown();
-                    leftRoom?.MoveUp();
-                }
-                else if ((curSubState & SubState.EnterBoundsLeft) != 0)
-                {
-                    if (leftRoom != null)
-                    {
-                        camStats.curLocationState = leftRoom.locationState;
-                        camStats.curLocationBounds = leftRoom.bounds;
-                    }
-
-                    SpyBrain spy = SceneController.GetSpy();
-                    spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, leftDepth));
-
-                    rightRoom?.MoveUp();
-                    leftRoom?.MoveDown();
-
-                    if (motion != MeridiaCabinetMotion.Elevator)
-                    {
-                        CloseDoor();
-                    }
-                    leftRoom?.ToggleRightWall(true);
-                }
-
+                HandleSpyPositionsAuto();
             }
             break;
             case State.Closed:
             {
                 if ((curSubState & SubState.EnteredBounds) != 0)
                 {
-                    if (!auto)
-                    {
-                        return;
-                    }
-                    else
-                    {
-                        OpenDoor();
-                    }
-                }
-                else if ((curSubState & SubState.ExitBounds) != 0)
-                {
-                    CloseDoor();
+                    if (auto) OpenDoor();
                 }
             }
             break;
             case State.Opening:
             {
+                HandleSpyPositionsAuto();
                 if (!atlasRenderer.isAnimating) SetState(State.Opened);
             }
             break;
@@ -231,6 +188,8 @@ public class RoomDoor : MonoBehaviour
     }
     private void UpdateSubStates()
     {
+        curSubState &= ~(SubState.EnteredBounds | SubState.ExitBounds);
+
         if ((curSubState & SubState.InBounds) == 0 && spyStats.bounds.center.x > triggerBounds.min.x && spyStats.bounds.center.x < triggerBounds.center.x)
         {
             curSubState |= SubState.InBounds;
@@ -305,6 +264,48 @@ public class RoomDoor : MonoBehaviour
     public void LockDoor()
     {
         unlocked = false;
+    }
+    private void HandleSpyPositionsAuto()
+    {
+        if (!auto) return;
+
+        if ((curSubState & SubState.EnterBoundsRight) != 0)
+        {
+            leftRoom.ToggleRightWall(false);
+        }
+        else if ((curSubState & SubState.ExitBoundsRight) != 0)
+        {
+            if (rightRoom != null)
+            {
+                camStats.curLocationState = rightRoom.locationState;
+                camStats.curLocationBounds = rightRoom.bounds;
+            }
+            SpyBrain spy = SceneController.GetSpy();
+            spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, rightDepth));
+
+            rightRoom?.MoveDown();
+            leftRoom?.MoveUp();
+        }
+        else if ((curSubState & SubState.EnterBoundsLeft) != 0)
+        {
+            if (leftRoom != null)
+            {
+                camStats.curLocationState = leftRoom.locationState;
+                camStats.curLocationBounds = leftRoom.bounds;
+            }
+
+            SpyBrain spy = SceneController.GetSpy();
+            spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, leftDepth));
+
+            rightRoom?.MoveUp();
+            leftRoom?.MoveDown();
+
+            if (motion != MeridiaCabinetMotion.Elevator)
+            {
+                CloseDoor();
+            }
+            leftRoom?.ToggleRightWall(true);
+        }
     }
 }
 #if UNITY_EDITOR

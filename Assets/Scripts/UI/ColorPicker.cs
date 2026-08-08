@@ -81,11 +81,13 @@ public class ColorPicker : MonoBehaviour
     {
         Scenes.OnLoadStart += Init;
         Scenes.OnLoadTrip0 += Init;
+        StartUI.OnPlayAgain += Init;
     }
     private void OnDisable()
     {
         Scenes.OnLoadStart -= Init;
         Scenes.OnLoadTrip0 -= Init;
+        StartUI.OnPlayAgain -= Init;
         
     }
     private void Start()

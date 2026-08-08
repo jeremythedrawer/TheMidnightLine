@@ -12,6 +12,7 @@ using static Spy;
 public class StartUI : MonoBehaviour
 {
     public static event Action OnPlayAgain;
+    public static event Action OnFinishedOutcomeSequence;
 
     [Flags] public enum RevealSequence
     { 
@@ -48,6 +49,7 @@ public class StartUI : MonoBehaviour
     public SceneData sceneData;
     public SpyStatsSO spyStats;
     public NPCsDataSO npcsData;
+    public MeridiaTowerData meridiaTowerData;
 
     public TextUIElement startButton;
     public TextUIElement optionsButton;
@@ -91,7 +93,6 @@ public class StartUI : MonoBehaviour
     public bool canExitState;
     public bool atOptions;
     public bool outcomeSetUpCompleted;
-    public bool spyFailed;
 
     public Page[] profilePages;
 
@@ -127,12 +128,12 @@ public class StartUI : MonoBehaviour
         NotepadProp.OnNotepadReturn += DisableInteractIcon;
         NotepadProp.OnNotepadReturn += SetToOutcomeState;
 
-        FadeBlack.OnFinishFadeOut += SetTripOutcome;
+        FadeBlack.OnFinishFadeOut += SetToNoneStateFromOutcome;
 
         CameraController.OnArrivedAtElevator += SetToEndMenuState;
 
         MeridiaTower.OnEnterStartElevator += SetToStartMenuState;
-        MeridiaTower.OnEnterMeetingRoomFromElevator += SetToNoneState;
+        MeridiaTower.OnExitStartElevator += SetToNoneState;
 
         gameEventData.OnStartTrip.RegisterListener(StartTrip);
     }
@@ -156,12 +157,12 @@ public class StartUI : MonoBehaviour
         NotepadProp.OnNotepadReturn -= DisableInteractIcon;
         NotepadProp.OnNotepadReturn -= SetToOutcomeState;
 
-        FadeBlack.OnFinishFadeOut -= SetTripOutcome;
+        FadeBlack.OnFinishFadeOut -= SetToNoneStateFromOutcome;
 
         CameraController.OnArrivedAtElevator -= SetToEndMenuState;
 
         MeridiaTower.OnEnterStartElevator -= SetToStartMenuState;
-        MeridiaTower.OnEnterMeetingRoomFromElevator -= SetToNoneState;
+        MeridiaTower.OnExitStartElevator -= SetToNoneState;
 
         gameEventData.OnStartTrip.UnregisterListener(StartTrip);
     }
@@ -190,6 +191,24 @@ public class StartUI : MonoBehaviour
                 titleIcon.MoveToActive();
             }
             break;
+            case UIState.OptionsMenu:
+            {
+                optionsButton.renderer.SetText("Back");
+                quitButton.MoveAway(camStats, MoveButtonDirection.Right);
+                startButton.MoveAway(camStats, MoveButtonDirection.Right);
+
+                optionsButton.MoveToRight();
+                titleIcon.MoveToRight();
+
+                darkColorButton.MoveToActive();
+                lightColorButton.MoveToActive();
+                tutorialButton.MoveToActive();
+
+                spyStats.playerInputsEnabled = false;
+
+                OnClickOptions?.Invoke();
+            }
+            break;
             case UIState.EndMenu:
             {
                 thankYouMessage.MoveToActive();
@@ -211,6 +230,7 @@ public class StartUI : MonoBehaviour
                 notepad.SkipToPage(0);
                 traitorsFoundMessage.MoveToActive();
                 spyStats.playerInputsEnabled = false;
+               
 
                 profilePages = new Page[trip.traitorProfiles.Length];
 
@@ -417,7 +437,8 @@ public class StartUI : MonoBehaviour
                                     curTraitorProfilesReviewed++;
                                     if (curTraitorProfilesReviewed == trip.traitorProfiles.Length || skipOutcomeSequence)
                                     {
-                                        SetState(UIState.None);
+                                        fadeBlack.FadeOut();
+                                        traitorsFoundMessage.MoveAway(camStats, MoveButtonDirection.Left);
                                     }
                                 }
                             }
@@ -426,7 +447,8 @@ public class StartUI : MonoBehaviour
                                 if ((curRevealSequence & RevealSequence.Mugshot) == 0)
                                 {
                                     RevealMugshot();
-                                    spyFailed = true;
+
+                                    trip.failed = true;
                                     curRevealSequence |= RevealSequence.Mugshot;
                                 }
                                 else if ((curRevealSequence & RevealSequence.ShowCorrectStation) == 0)
@@ -449,7 +471,8 @@ public class StartUI : MonoBehaviour
                                     curTraitorProfilesReviewed++;
                                     if (curTraitorProfilesReviewed == trip.traitorProfiles.Length || skipOutcomeSequence)
                                     {
-                                        SetState(UIState.None);
+                                        fadeBlack.FadeOut();
+                                        traitorsFoundMessage.MoveAway(camStats, MoveButtonDirection.Left);
                                     }
                                 }
                             }
@@ -465,6 +488,21 @@ public class StartUI : MonoBehaviour
     {
         switch (curState)
         {
+            case UIState.OptionsMenu:
+            {
+                optionsButton.renderer.SetText("Options");
+                startButton.MoveToActive();
+                quitButton.MoveToActive();
+                optionsButton.MoveToActive();
+
+                darkColorButton.MoveAway(camStats, MoveButtonDirection.Left);
+                lightColorButton.MoveAway(camStats, MoveButtonDirection.Left);
+                tutorialButton.MoveAway(camStats, MoveButtonDirection.Left);
+
+                spyStats.playerInputsEnabled = true;
+                OnClickBackFromOptions?.Invoke();
+            }
+            break;
             case UIState.Notepad:
             {
                 MoveUIElement(notepad.transform, notepadData.inactiveLocalPos, ref ctsNotepad, curState);
@@ -473,9 +511,9 @@ public class StartUI : MonoBehaviour
             break;
             case UIState.Outcome:
             {
-                fadeBlack.FadeOut();
-                traitorsFoundMessage.MoveAway(camStats, MoveButtonDirection.Left);
+
                 spyStats.playerInputsEnabled = true;
+                OnFinishedOutcomeSequence?.Invoke();
             }
             break;
         }
@@ -578,6 +616,13 @@ public class StartUI : MonoBehaviour
         notepad = SceneController.GetNotepad(transform);
         notepad.PickUpNotepad();
     }
+    private void SetToNoneStateFromOutcome()
+    {
+        if(curState == UIState.Outcome)
+        {
+            SetState(UIState.None);
+        }
+    }
     private void SetToNoneState()
     {
         SetState(UIState.None);
@@ -599,10 +644,7 @@ public class StartUI : MonoBehaviour
     {
         SetState(UIState.EndMenu);
     }
-    private void SetTripOutcome()
-    {
-        if (spyFailed) trip.failed = true;
-    }
+
     private void UpdateMainMenuButtons()
     {
         startButton.UpdateButton(playerInputs);
@@ -627,6 +669,8 @@ public class StartUI : MonoBehaviour
         thankYouMessage.MoveAway(camStats, MoveButtonDirection.Left);
         quitButton.MoveAway(camStats, MoveButtonDirection.Left);
 
+        options.skipTutorial = false;
+
         OnPlayAgain?.Invoke();
     }
     private void StartButtonClicked()
@@ -645,33 +689,11 @@ public class StartUI : MonoBehaviour
         {
             case UIState.StartMenu:
             {
-                optionsButton.renderer.SetText("Back");
-                quitButton.MoveAway(camStats, MoveButtonDirection.Right);
-                startButton.MoveAway(camStats, MoveButtonDirection.Right);
-
-                optionsButton.MoveToRight();
-                titleIcon.MoveToRight();
-
-                darkColorButton.MoveToActive();
-                lightColorButton.MoveToActive();
-                tutorialButton.MoveToActive();
-
-                OnClickOptions?.Invoke();
                 SetState(UIState.OptionsMenu);
             }
             break;
             case UIState.OptionsMenu:
             {
-                optionsButton.renderer.SetText("Options");
-                startButton.MoveToActive();
-                quitButton.MoveToActive();
-                optionsButton.MoveToActive();
-
-                darkColorButton.MoveAway(camStats, MoveButtonDirection.Left);
-                lightColorButton.MoveAway(camStats, MoveButtonDirection.Left);
-                tutorialButton.MoveAway(camStats, MoveButtonDirection.Left);
-
-                OnClickBackFromOptions?.Invoke();
                 SetState(UIState.StartMenu);
             }
             break;

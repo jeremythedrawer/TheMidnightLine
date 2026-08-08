@@ -8,7 +8,7 @@ public class MeridiaTower : MonoBehaviour
 {
     public static event Action OnArriveAtBottomFloor;
 
-    public static event Action OnEnterMeetingRoomFromElevator;
+    public static event Action OnExitStartElevator;
     public static event Action OnEnterStartElevator;
 
     public static event Action<Vector2> OnSpyEnterTripDoor;
@@ -47,7 +47,7 @@ public class MeridiaTower : MonoBehaviour
     public CancellationTokenSource ctsElevatorMove;
     private void OnEnable()
     {
-        StartUI.OnStartButtonClicked += MoveToMeetingFloor;
+        StartUI.OnStartButtonClicked += StartButtonClicked;
 
         Scenes.OnLoadScore += MoveToMeetingFloor;
 
@@ -63,7 +63,8 @@ public class MeridiaTower : MonoBehaviour
     }
     private void OnDisable()
     {
-        StartUI.OnStartButtonClicked -= MoveToMeetingFloor;
+        StartUI.OnStartButtonClicked -= StartButtonClicked;
+
         Scenes.OnLoadScore -= MoveToMeetingFloor;
 
         NotepadProp.OnNotepadCollect -= UnlockTripDoor;
@@ -80,11 +81,7 @@ public class MeridiaTower : MonoBehaviour
 
     private void Start()
     {
-        startGamePosY = transform.position.y;
-        camStats.curLocationBounds = elevatorRoom.bounds;
-        meridiaTowerData.curLevel = 0;
-        meridiaTowerData.elevatorMoving = true;
-        scroll = ScrollState.Up;
+        Init();
     }
     private void Update()
     {
@@ -122,7 +119,7 @@ public class MeridiaTower : MonoBehaviour
         {
             if ((elevatorMeetingDoor.curSubState & RoomDoor.SubState.ExitBoundsRight) != 0)
             {
-                OnEnterMeetingRoomFromElevator?.Invoke();
+                OnExitStartElevator?.Invoke();
             }
             else if ((elevatorMeetingDoor.curSubState & RoomDoor.SubState.ExitBoundsLeft) != 0)
             {
@@ -137,9 +134,23 @@ public class MeridiaTower : MonoBehaviour
             {
                 OnSpyExitTripDoor.Invoke();
             }
+            
         }
     }
     
+    private void Init()
+    {
+        startGamePosY = transform.position.y;
+        camStats.curLocationBounds = elevatorRoom.bounds;
+        meridiaTowerData.curLevel = 0;
+        meridiaTowerData.elevatorMoving = true;
+        scroll = ScrollState.Up;
+    }
+    public void StartButtonClicked()
+    {
+        if (meridiaTowerData.curLevel == 1) return;
+        MoveToMeetingFloor();
+    }
     public void MoveToMeetingFloor()
     {
         ctsElevatorMove?.Cancel();
@@ -255,7 +266,6 @@ public class MeridiaTower : MonoBehaviour
             meridiaTowerData.elevatorMoving = false;
 
             elevatorMeetingDoor.OpenDoor();
-            
             startElevator.OpenElevatorDoor();
         }
         catch (OperationCanceledException)

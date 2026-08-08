@@ -51,26 +51,26 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: 23b2bdc88a5b16d44b1363df59427aca, type: 2}
   atlas: {fileID: 11400000, guid: e53f1dcaa48660341b3a4b7692325f58, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 0
+  spriteIndex: 7
   flipX: 0
   flipY: 0
   width: 1
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.11328125, y: 0.22851562, z: 0.001953125, w: 0.7675781}
-    uvPivot: {x: 0.46551725, y: 0}
-    worldSize: {x: 0.32222223, y: 0.65, z: 1}
-    index: 0
+    uvSizeAndPos: {x: 0.12695312, y: 0.32226562, z: 0.84765625, w: 0.6777344}
+    uvPivot: {x: 0.63076925, y: 0}
+    worldSize: {x: 0.3611111, y: 0.9166667, z: 1}
+    index: 7
   bounds:
-    m_Center: {x: 11.290103, y: 0.325, z: -3}
-    m_Extent: {x: 0.16111112, y: 0.325, z: 0.1}
-  worldPivotAndSize: {x: -0.15, y: -0, z: 0.32222223, w: 0.65}
-  uvSizeAndPosition: {x: 0.11328125, y: 0.22851562, z: 0.001953125, w: 0.7675781}
+    m_Center: {x: 11.23177, y: 0.45833334, z: -3}
+    m_Extent: {x: 0.18055555, y: 0.45833334, z: 0.1}
+  worldPivotAndSize: {x: -0.22777778, y: -0, z: 0.3611111, w: 0.9166667}
+  uvSizeAndPosition: {x: 0.12695312, y: 0.32226562, z: 0.84765625, w: 0.6777344}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
   customBit: 0
-  boundsOffset: {x: 0.01111111, y: 0.325, z: 0}
+  boundsOffset: {x: -0.047222227, y: 0.45833334, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -79,8 +79,8 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 1
   curMotionIndex: 1
-  prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 0
+  prevSpriteIndexFlipH: 7
+  prevSpriteIndexFlipV: 7
   isAnimating: 1
   quadCount: 0
 --- !u!114 &3934073937517691138
@@ -95,3 +95,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 951b0c58cff8fca4996bad6557ab043b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::PresidentBrain
+  atlasRenderer: {fileID: 5113805469294098105}
+  curTrip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
+  spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  meridiaTowerData: {fileID: 11400000, guid: 0c096b94ad74a7a42a53acea7c2760e8, type: 2}
+  handShakeDist: 0.38
+  curState: 0
+  curClip:
+    clipName: 
+    clipType: 0
+    motionIndex: 0
+    keyframeStartIndex: 0
+    keyframeEndIndex: 0
+    time: 0

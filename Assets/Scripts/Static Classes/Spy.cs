@@ -14,6 +14,7 @@ public static class Spy
         Notepad,
         CarriageMap,
         ShotAt,
+        HandShake,
     }
 
     public enum LocationState

@@ -98,11 +98,15 @@ public class SpyBrain : MonoBehaviour
         Scenes.OnLoadStart += StartInit;
         Scenes.OnLoadTrip0 += TripInit;
 
+        GameplayUI.OnIncreaseTraitorCountFirstTime += SetStateToIdle;
+
         NotepadProp.OnNotepadReturn += SetStateToIdle;
 
         HenchmanBrain.OnShoot += SetStateToShotAt;
 
         MeridiaTower.OnArriveAtBottomFloor += SetSpyToBottomFloor;
+
+        PresidentBrain.OnShakeHands += SetStateToHandShake;
 
         EveryInit();
     }
@@ -116,9 +120,13 @@ public class SpyBrain : MonoBehaviour
         Scenes.OnLoadStart -= StartInit;
         Scenes.OnLoadTrip0 -= TripInit;
 
+        GameplayUI.OnIncreaseTraitorCountFirstTime -= SetStateToIdle;
+
         NotepadProp.OnNotepadReturn -= SetStateToIdle;
 
         HenchmanBrain.OnShoot -= SetStateToShotAt;
+
+        PresidentBrain.OnShakeHands -= SetStateToHandShake;
 
         MeridiaTower.OnArriveAtBottomFloor -= SetSpyToBottomFloor;
     }
@@ -184,14 +192,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void ChooseState()
     {
-        if (!stats.playerInputsEnabled)
-        {
-            if (stats.curState == SpyState.Walk)
-            {
-                SetState(SpyState.Idle);
-            }
-            return;
-        }
+        if (!stats.playerInputsEnabled) return;
 
         if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount == 1) || chosenNPC != null)
         {
@@ -404,6 +405,12 @@ public class SpyBrain : MonoBehaviour
                 }
             }
             break;
+            case SpyState.HandShake:
+            {
+                atlasRenderer.PlayClip(ref curClip);
+            }
+            break;
+
         }
     }
     private void FixedUpdateStates()
@@ -586,6 +593,13 @@ public class SpyBrain : MonoBehaviour
                 curClip = atlas.clipDict[(int)SpyMotion.ShotByGun];
                 atlasRenderer.PlayClipOneShot(curClip);
                 stats.playerInputsEnabled = false;
+            }
+            break;
+            case SpyState.HandShake:
+            {
+                curClip = atlas.clipDict[(int)SpyMotion.Handshake];
+                stats.playerInputsEnabled = false;
+                WaitToPlayAgain();
             }
             break;
         }
@@ -882,6 +896,10 @@ public class SpyBrain : MonoBehaviour
     public void SetStateToShotAt()
     {
         SetState(SpyState.ShotAt);
+    }
+    public void SetStateToHandShake()
+    {
+        SetState(SpyState.HandShake);
     }
     public void FinishWithChosenNPC()
     {

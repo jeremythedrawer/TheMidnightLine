@@ -8,7 +8,8 @@ public class CameraController : MonoBehaviour
 {
     const float GAUSSIAN_VARIANCE = 90;
     const float CARRIAGE_BOUNDS_TEXTURE_SCALE = 32f;
-
+    const float NORMAL_DAMPING = 3;
+    const float SLOW_DAMPING = 1;
     public static event Action OnArrivedAtElevator;
 
     public CameraSettingsSO settings;
@@ -25,11 +26,15 @@ public class CameraController : MonoBehaviour
     public ComputeShader carriageBoundsCompute;
 
     [Header("Generated")]
-    public LocationState curState;
     public Camera cam;
+    
+    public LocationState curState;
+    
     public Vector3 targetWorldPos;
     public Vector3 rawCurWorldPos;
+
     public float curXOffset;
+    public float curDamping;
 
     public int carriageBoundsKernel;
     public int threadGroupX;
@@ -48,6 +53,10 @@ public class CameraController : MonoBehaviour
         StartUI.OnStartButtonClicked += MoveToPlayer;
 
         HenchmanBrain.OnShoot += ShakeFromGunShot;
+
+        StartUI.OnPlayAgain += SetToNormalDamping;
+
+        SpyBrain.OnAfterOutcomeSequence += SetToSlowDamping;
     }
     private void OnDisable()
     {
@@ -60,9 +69,13 @@ public class CameraController : MonoBehaviour
         StartUI.OnStartButtonClicked -= MoveToPlayer;
             
         HenchmanBrain.OnShoot -= ShakeFromGunShot;
-        stats.curVelocity = Vector3.zero;
+
+        SpyBrain.OnAfterOutcomeSequence -= SetToSlowDamping;
+
+        StartUI.OnPlayAgain -= SetToNormalDamping;
 
 #if UNITY_EDITOR
+        stats.curVelocity = Vector3.zero;
         Graphics.Blit(Texture2D.whiteTexture, carriageBoundsRT);
 #endif
     }
@@ -78,7 +91,7 @@ public class CameraController : MonoBehaviour
         stats.camToWorld = cam.cameraToWorldMatrix;
         
         stats.prevWorldPos = stats.curWorldPos;
-        rawCurWorldPos = Vector3.Lerp(rawCurWorldPos, targetWorldPos, Time.deltaTime * settings.damping);
+        rawCurWorldPos = Vector3.Lerp(rawCurWorldPos, targetWorldPos, Time.deltaTime * curDamping);
         stats.curWorldPos = GetSnappedPosition(rawCurWorldPos, stats.worldUnitsPerPixel);
         transform.position = stats.curWorldPos;
         stats.curVelocity = -(stats.curWorldPos - stats.prevWorldPos) / Time.unscaledDeltaTime;
@@ -91,6 +104,8 @@ public class CameraController : MonoBehaviour
     {
         cam = Camera.main;
         cam.orthographicSize = GetSnappedOrthoSize();
+        
+        curDamping = NORMAL_DAMPING;
 
         targetWorldPos.z = transform.position.z;
         targetWorldPos.y = transform.position.y;
@@ -182,7 +197,7 @@ public class CameraController : MonoBehaviour
 
             case LocationState.Elevator:
             {
-                if (spyStats.curState == SpyState.ShotAt && (rawCurWorldPos - targetWorldPos).sqrMagnitude < 0.05f)
+                if ((spyStats.curState == SpyState.ShotAt || spyStats.curState == SpyState.HandShake) && (rawCurWorldPos - targetWorldPos).sqrMagnitude < 0.05f)
                 {
                     OnArrivedAtElevator?.Invoke();
                 }
@@ -262,6 +277,14 @@ public class CameraController : MonoBehaviour
     private void MoveToPlayer()
     {
         targetWorldPos.x = spyStats.bounds.center.x;
+    }
+    private void SetToSlowDamping()
+    {
+        curDamping = SLOW_DAMPING;
+    }
+    private void SetToNormalDamping()
+    {
+        curDamping = NORMAL_DAMPING;
     }
     public static Vector3 GetSnappedPosition(Vector3 pos, float unitsPerPixel)
     {

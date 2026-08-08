@@ -1,6 +1,5 @@
 using System;
 using UnityEngine;
-using System.Collections.Generic;
 
 using static Atlas;
 using static AtlasUI;
@@ -227,11 +226,6 @@ public class Page : MonoBehaviour
         {
             Behaviours behaviour = GetBehaviourAtIndex(traitorProfile.npcProfile.behaviours, i);
             proceduralTextRenderers[i].SetText(npcData.behaviourStringDict[behaviour]);
-            playerWriteRenderers[0].custom.x = 0;
-            playerWriteRenderers[0].custom.y = 0;
-            playerWriteRenderers[0].custom.z = 0;
-            playerWriteRenderers[0].custom.w = 0;
-
         }
         
         activePlayerWriteTextRenderer = playerWriteTextRenderers[0];
@@ -251,6 +245,13 @@ public class Page : MonoBehaviour
         int uncoveredMugShotIndex = traitorProfile.mugShotIndex * 2;
         int coveredMugShotIndex = uncoveredMugShotIndex + 1;
         coveredMugShot.UpdateSpriteInputs(coveredMugShot.atlas.simpleSprites[coveredMugShotIndex]);
+
+        coveredMugShot.custom.x = 0;
+        coveredMugShot.custom.y = 0;
+        coveredMugShot.custom.z = 0;
+        coveredMugShot.custom.w = 0;
+        coveredMugShot.customBit &= ~(int)ColorBits.Diagonal;
+
         uncoveredMugShot.UpdateSpriteInputs(uncoveredMugShot.atlas.simpleSprites[uncoveredMugShotIndex]);
         Init(pageIndex, totalPages);
     }

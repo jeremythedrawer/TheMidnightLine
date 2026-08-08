@@ -95,6 +95,7 @@ public static class NPC
     { 
         None,
         Sitting,
+        StartHandshake,
         Handshaking,
     }
     [Serializable] public struct NPCProfile

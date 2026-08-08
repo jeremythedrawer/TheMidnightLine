@@ -9,6 +9,7 @@ public class GameplayUI : MonoBehaviour
     const float TICKET_ICON_PADDING = 0.2f;
     const float APPEARING_TIME = 0.5f;
 
+    public static event Action OnIncreaseTraitorCountFirstTime;
 
     public PlayerInputsSO playerInputs;
     public CameraStatsSO cameraStats;
@@ -593,7 +594,7 @@ public class GameplayUI : MonoBehaviour
 
             traitorIcon.renderer.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
             traitorCountText.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
-            
+            OnIncreaseTraitorCountFirstTime?.Invoke();
         }
     }
     private void DecreaseTraitorCount()

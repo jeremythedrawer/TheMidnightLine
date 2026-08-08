@@ -11,7 +11,6 @@ public class HenchmanBrain : MonoBehaviour
 
     public SpyStatsSO spyStats;
     public TripSO curTrip;
-    public SceneData sceneData;
 
     public AtlasRenderer atlasRenderer;
     
@@ -31,20 +30,22 @@ public class HenchmanBrain : MonoBehaviour
     public int curFrameIndex;
 
     public bool hasShot;
-    private void Start()
-    {
-    }
+    public bool willShoot;
     private void OnEnable()
     {
         Scenes.OnLoadStart += SetToSittingState;
         Scenes.OnLoadScore += SetToSittingState;
+        
         StartUI.OnPlayAgain += SetToSittingState;
+        StartUI.OnFinishedOutcomeSequence += SetWillShoot;
     }
     private void OnDisable()
     {
         Scenes.OnLoadStart -= SetToSittingState;
         Scenes.OnLoadScore -= SetToSittingState;
+
         StartUI.OnPlayAgain -= SetToSittingState;
+        StartUI.OnFinishedOutcomeSequence -= SetWillShoot;
     }
     private void Update()
     {
@@ -63,7 +64,8 @@ public class HenchmanBrain : MonoBehaviour
         {
             case HenchmanState.Sitting:
             {
-
+                hasShot = false;
+                willShoot = false;
                 curClip = atlasRenderer.atlas.clipDict[(int)sittingMotion];
             }
             break;
@@ -83,7 +85,7 @@ public class HenchmanBrain : MonoBehaviour
             {
                 atlasRenderer.PlayClip(ref curClip);
 
-                if (isShooter && curTrip.failed && spyStats.spriteFlip && sceneData.activeSceneType == Scenes.SceneType.Score && spyStats.bounds.center.x < transform.position.x + shootDist)
+                if (isShooter && willShoot && spyStats.spriteFlip && spyStats.bounds.center.x < transform.position.x + shootDist)
                 {
                     SetState(HenchmanState.Shooting);
                 }
@@ -122,6 +124,10 @@ public class HenchmanBrain : MonoBehaviour
     private void SetToSittingState()
     {
         SetState(HenchmanState.Sitting);
+    }
+    private void SetWillShoot()
+    {
+        if (curTrip.failed) willShoot = true;
     }
     private void PauseFrame()
     {
