@@ -25,12 +25,15 @@ public class NotepadProp : MonoBehaviour
     {
         Scenes.OnLoadStart += StartSceneInit;
         Scenes.OnLoadScore += ScoreSceneInit;
+        StartUI.OnPlayAgain += PlayAgain;
         gameEventData.OnInteract.RegisterListener(NotepadCollected);
     }
     private void OnDisable()
     {
         Scenes.OnLoadStart -= StartSceneInit;
         Scenes.OnLoadScore -= ScoreSceneInit;
+
+        StartUI.OnPlayAgain -= PlayAgain;
 
         gameEventData.OnInteract.UnregisterListener(NotepadCollected);
     }
@@ -105,6 +108,11 @@ public class NotepadProp : MonoBehaviour
             }
             break;
         }
-
+    }
+    public void PlayAgain()
+    {
+        notepadData.collected = false;
+        atlasRenderer.enabled = true;
+        shinyRenderer.enabled = true;
     }
 }

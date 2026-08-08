@@ -11,6 +11,9 @@ public class MeridiaTower : MonoBehaviour
     public static event Action OnEnterMeetingRoomFromElevator;
     public static event Action OnEnterStartElevator;
 
+    public static event Action<Vector2> OnSpyEnterTripDoor;
+    public static event Action OnSpyExitTripDoor;
+
     public enum ScrollState
     {
         None,
@@ -50,6 +53,7 @@ public class MeridiaTower : MonoBehaviour
 
         NotepadProp.OnNotepadCollect += UnlockTripDoor;
         SpyBrain.OnAfterOutcomeSequence += MoveDownToBetweenFloors;
+        SpyBrain.OnAfterOutcomeSequence += MoveMeetingWallUp;
         SpyBrain.OnEnteredElevatorGoingUp += MoveUpToBetweenFloors;
 
         StartUI.OnPlayAgain += MoveToBottomFloor;
@@ -62,7 +66,9 @@ public class MeridiaTower : MonoBehaviour
         StartUI.OnStartButtonClicked -= MoveToMeetingFloor;
         Scenes.OnLoadScore -= MoveToMeetingFloor;
 
+        NotepadProp.OnNotepadCollect -= UnlockTripDoor;
         SpyBrain.OnAfterOutcomeSequence -= MoveDownToBetweenFloors;
+        SpyBrain.OnAfterOutcomeSequence -= MoveMeetingWallUp;
         SpyBrain.OnEnteredElevatorGoingUp -= MoveUpToBetweenFloors;
 
         StartUI.OnPlayAgain -= MoveToBottomFloor;
@@ -122,15 +128,23 @@ public class MeridiaTower : MonoBehaviour
             {
                 OnEnterStartElevator?.Invoke();
             }
+
+            if ((tripElevatorDoor.curSubState & RoomDoor.SubState.EnteredBounds) != 0)
+            {
+                OnSpyEnterTripDoor.Invoke(new Vector2(tripElevatorDoor.atlasRenderer.bounds.center.x, tripElevatorDoor.atlasRenderer.bounds.max.y));
+            }
+            else if ((tripElevatorDoor.curSubState & RoomDoor.SubState.ExitBounds) != 0)
+            {
+                OnSpyExitTripDoor.Invoke();
+            }
         }
-
-
     }
+    
     public void MoveToMeetingFloor()
     {
         ctsElevatorMove?.Cancel();
         ctsElevatorMove = new CancellationTokenSource();
-        transform.SetParent(null);
+        startElevator.transform.SetParent(null);
 
         scroll = ScrollState.None;
 
@@ -140,7 +154,7 @@ public class MeridiaTower : MonoBehaviour
     {
         ctsElevatorMove?.Cancel();
         ctsElevatorMove = new CancellationTokenSource();
-        transform.SetParent(null);
+        startElevator.transform.SetParent(null);
 
         scroll = ScrollState.None;
 
@@ -150,7 +164,7 @@ public class MeridiaTower : MonoBehaviour
     {
         ctsElevatorMove?.Cancel();
         ctsElevatorMove = new CancellationTokenSource();
-        transform.SetParent(null);
+        startElevator.transform.SetParent(null);
 
         meridiaTowerData.elevatorMoving = true;
         meridiaTowerData.curLevel = 0;
@@ -167,7 +181,7 @@ public class MeridiaTower : MonoBehaviour
     {
         ctsElevatorMove?.Cancel();
         ctsElevatorMove = new CancellationTokenSource();
-        transform.SetParent(null);
+        startElevator.transform.SetParent(null);
 
         meridiaTowerData.elevatorMoving = true;
         meridiaTowerData.curLevel = 0;
@@ -185,6 +199,10 @@ public class MeridiaTower : MonoBehaviour
     private void WalkThroughStartDoor()
     {
         tripElevatorDoor.WalkThroughStartDoor();
+    }
+    private void MoveMeetingWallUp()
+    {
+        meetingRoom.MoveUp();
     }
     private async UniTask MovingToMeetingFloor()
     {
@@ -356,6 +374,7 @@ public class MeridiaTower : MonoBehaviour
             startElevator.SetRightRoom(bottomRoom);
             
             bottomElevatorDoor.OpenDoor();
+            startElevator.OpenElevatorDoor();
             
             meridiaTowerData.elevatorMoving = false;
             meridiaTowerData.bottomFloorCenterTopPos = new Vector2(bottomGround.bounds.center.x, bottomGround.bounds.max.y);

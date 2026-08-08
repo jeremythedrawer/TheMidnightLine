@@ -74,7 +74,6 @@ public class UnlockPicker : MonoBehaviour
         curPickerState = PickerState.Closed;
         SetOpenPosAndSize();
 
-        trip.curUnlocks = UnlockType.None;
         paletteRenderer.customBit = (int)ColorBits.Meridia;
 
         for (int i = 0; i < icons.Length; i++)

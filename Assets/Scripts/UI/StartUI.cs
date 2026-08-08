@@ -116,8 +116,8 @@ public class StartUI : MonoBehaviour
         SpyBrain.OnCloseNotepad += SetToNoneState;
         SpyBrain.OnEnteredElevatorGoingUp += SetToStartMenuState;
 
-        RoomDoor.OnSpyAtDoorToOpen += SetInteractIcon;
-        RoomDoor.OnSpyExit += DisableInteractIcon;
+        MeridiaTower.OnSpyEnterTripDoor += SetInteractIcon;
+        MeridiaTower.OnSpyExitTripDoor += DisableInteractIcon;
 
         Scenes.OnLoadScore += ScoreSceneInit;
         Scenes.OnLoadStart += StartSceneInit;
@@ -145,8 +145,8 @@ public class StartUI : MonoBehaviour
         SpyBrain.OnCloseNotepad -= SetToNoneState;
         SpyBrain.OnEnteredElevatorGoingUp -= SetToStartMenuState;
 
-        RoomDoor.OnSpyAtDoorToOpen -= SetInteractIcon;
-        RoomDoor.OnSpyExit -= DisableInteractIcon;
+        MeridiaTower.OnSpyEnterTripDoor -= SetInteractIcon;
+        MeridiaTower.OnSpyExitTripDoor -= DisableInteractIcon;
 
         Scenes.OnLoadStart -= StartSceneInit;
         Scenes.OnLoadScore -= ScoreSceneInit;
@@ -576,7 +576,7 @@ public class StartUI : MonoBehaviour
     private void GetNotepad()
     {
         notepad = SceneController.GetNotepad(transform);
-        notepad.Init();
+        notepad.PickUpNotepad();
     }
     private void SetToNoneState()
     {

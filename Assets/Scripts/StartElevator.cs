@@ -23,10 +23,12 @@ public class StartElevator : MonoBehaviour
     private void OnEnable()
     {
         SpyBrain.OnEnteredElevatorGoingUp += CloseElevatorDoor;
+        SpyBrain.OnAfterOutcomeSequence += CloseElevatorDoor;
     }
     private void OnDisable()
     {
         SpyBrain.OnEnteredElevatorGoingUp -= CloseElevatorDoor;
+        SpyBrain.OnAfterOutcomeSequence -= CloseElevatorDoor;
     }
     public void ScrollingChainsUp()
     {

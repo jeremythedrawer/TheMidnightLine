@@ -6,4 +6,5 @@ public class MeridiaTowerData : ScriptableObject
     public Vector2 bottomFloorCenterTopPos;
     public int curLevel;
     public bool elevatorMoving;
+    public bool elevatorDoorOpen;
 }

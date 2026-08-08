@@ -30,8 +30,6 @@ public class RoomDoor : MonoBehaviour
         EnteredBounds = EnterBoundsLeft | EnterBoundsRight,
         ExitBounds = ExitBoundsLeft | ExitBoundsRight,
     }
-    public static event Action<Vector2> OnSpyAtDoorToOpen;
-    public static event Action OnSpyExit;
 
     public GameEventDataSO gameEventData;
     public SpyStatsSO spyStats;
@@ -105,7 +103,7 @@ public class RoomDoor : MonoBehaviour
         {
             case State.Opened:
             {
-
+                prevSubState = SubState.None;
             }
             break;
             case State.Closed:
@@ -178,7 +176,6 @@ public class RoomDoor : MonoBehaviour
                 {
                     if (!auto)
                     {
-                        OnSpyAtDoorToOpen?.Invoke(new Vector2(triggerBounds.center.x, spyStats.bounds.max.y));
                         return;
                     }
                     else
@@ -189,7 +186,6 @@ public class RoomDoor : MonoBehaviour
                 else if ((curSubState & SubState.ExitBounds) != 0)
                 {
                     CloseDoor();
-                    OnSpyExit?.Invoke();
                 }
             }
             break;
@@ -235,7 +231,7 @@ public class RoomDoor : MonoBehaviour
     }
     private void UpdateSubStates()
     {
-        if ((curSubState & SubState.InBounds) == 0 && spyStats.bounds.center.x > triggerBounds.min.x && spyStats.bounds.center.x < triggerBounds.max.x)
+        if ((curSubState & SubState.InBounds) == 0 && spyStats.bounds.center.x > triggerBounds.min.x && spyStats.bounds.center.x < triggerBounds.center.x)
         {
             curSubState |= SubState.InBounds;
 
@@ -250,7 +246,7 @@ public class RoomDoor : MonoBehaviour
                 prevSubState = SubState.EnterBoundsLeft;
             }
         }
-        else if ((curSubState & SubState.InBounds) != 0 && (spyStats.bounds.center.x < triggerBounds.min.x || spyStats.bounds.center.x > triggerBounds.max.x))
+        else if ((curSubState & SubState.InBounds) != 0 && (spyStats.bounds.center.x < triggerBounds.min.x || spyStats.bounds.center.x > triggerBounds.center.x))
         {
             curSubState &= ~SubState.InBounds;
 
@@ -300,7 +296,6 @@ public class RoomDoor : MonoBehaviour
     public void OpenDoor()
     {
         atlasRenderer.PlayClipOneShot(clip);
-        OnSpyExit?.Invoke();
         SetState(State.Opening);
     }
     public void UnlockDoor()

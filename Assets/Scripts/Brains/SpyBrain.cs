@@ -135,6 +135,14 @@ public class SpyBrain : MonoBehaviour
 
         stats.walkingIntoWall = (leftWallTouch && playerInputs.move == -1) || (rightWallTouch && playerInputs.move == 1);
     }
+    private void PlayAgainInit()
+    {
+        stats.playerInputsEnabled = true;
+        sceneData.activeSceneType = Scenes.SceneType.Start;
+
+        EveryInit();
+        StartInit();
+    }
     private void EveryInit()
     {
         curWorldPos = transform.position;
@@ -176,7 +184,14 @@ public class SpyBrain : MonoBehaviour
     }
     private void ChooseState()
     {
-        if (!stats.playerInputsEnabled) return;
+        if (!stats.playerInputsEnabled)
+        {
+            if (stats.curState == SpyState.Walk)
+            {
+                SetState(SpyState.Idle);
+            }
+            return;
+        }
 
         if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount == 1) || chosenNPC != null)
         {
@@ -259,9 +274,8 @@ public class SpyBrain : MonoBehaviour
                 {
                     if (curWorldPos.x <= stats.startPos.x)
                     {
-                        stats.playerInputsEnabled = true;
-                        sceneData.activeSceneType = Scenes.SceneType.Start;
                         OnEnteredElevatorGoingUp.Invoke();
+                        PlayAgainInit();
                     }
                 }
                 atlasRenderer.PlayClip(ref curClip);
@@ -901,6 +915,7 @@ public class SpyBrain : MonoBehaviour
         camStats.curLocationState = LocationState.Elevator;
         OnAfterOutcomeSequence?.Invoke();
     }
+
     public static void ToggleTicketCheckAbility(bool toggle)
     {
         CanCheckTicket = toggle;

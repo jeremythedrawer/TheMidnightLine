@@ -116,6 +116,17 @@ public class AtlasRenderer : MonoBehaviour
             break;
         }
     }
+    private void Start()
+    {
+        switch (rendererType)
+        {
+            case AtlasRendererType.MotionWorld:
+            {
+                atlas.clipDict = BuildClipKeys(atlas.clips);
+            }
+            break;
+        }
+    }
     private void OnEnable()
     {
         if (batchKey.texture == null) return;

@@ -132,6 +132,18 @@ public class Page : MonoBehaviour
                 {
                     proceduralRenderers[i].custom.w = 0;
                 }
+                for (int i = 0; i < playerWriteTextRenderers.Length; i++)
+                {
+                    playerWriteTextRenderers[i].SetText("");
+                    AtlasRenderer behaviourButton = playerWriteRenderers[i];
+
+                    behaviourButton.UpdateSpriteInputsByIndex(LOCK_SPRITE_INDEX);
+
+                    behaviourButton.custom.x = 0;
+                    behaviourButton.custom.y = 0;
+                    behaviourButton.custom.z = 0;
+                    behaviourButton.custom.w = 1;
+                }
             }
             break;
         }
@@ -215,6 +227,11 @@ public class Page : MonoBehaviour
         {
             Behaviours behaviour = GetBehaviourAtIndex(traitorProfile.npcProfile.behaviours, i);
             proceduralTextRenderers[i].SetText(npcData.behaviourStringDict[behaviour]);
+            playerWriteRenderers[0].custom.x = 0;
+            playerWriteRenderers[0].custom.y = 0;
+            playerWriteRenderers[0].custom.z = 0;
+            playerWriteRenderers[0].custom.w = 0;
+
         }
         
         activePlayerWriteTextRenderer = playerWriteTextRenderers[0];
