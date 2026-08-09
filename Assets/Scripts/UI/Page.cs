@@ -160,6 +160,7 @@ public class Page : MonoBehaviour
     {
         playerWriteTexts = new string[playerWriteTextRenderers.Length];
         Array.Fill(playerWriteTexts, "");
+        activePlayerWriteTextRenderer.SetText("");
     }
     public void InitNextColorRow(int nextIndex)
     {

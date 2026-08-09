@@ -29,7 +29,7 @@ public class AgreementPage : MonoBehaviour
     private void OnEnable()
     {
         Scenes.OnLoadStart += Init;
-        
+        Scenes.OnLoadScore += DisableSelf;
         AgreementProp.OnAgreementCollect += MoveToActivePosition;
         
         LeftHand.OnAtStartWritePos += WriteSignature;
@@ -39,6 +39,7 @@ public class AgreementPage : MonoBehaviour
     private void OnDisable()
     {
         Scenes.OnLoadStart -= Init;
+        Scenes.OnLoadScore -= DisableSelf;
         
         AgreementProp.OnAgreementCollect -= MoveToActivePosition;
 
@@ -71,6 +72,10 @@ public class AgreementPage : MonoBehaviour
         page.InitAgreementPage();
         leftHand.Init(selectedWriteLetterTime: 1.2f);
         leftHand.SetState(LeftHand.State.OffScreen);
+    }
+    public void DisableSelf()
+    {
+        gameObject.SetActive(false);
     }
     public void MoveToActivePosition()
     {

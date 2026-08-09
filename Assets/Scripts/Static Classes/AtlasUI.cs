@@ -31,6 +31,7 @@ public static class AtlasUI
     public const float GRID_GAP = 0.272f;
     public const float NOTEPAD_INACTIVE_OFFSET = 0.39f;
     public const float UI_POSITION_BUFFER = 0.3f;
+    public const float PRINT_LETTER_TIME = 0.05f;
     public static float TransitionTime = -Mathf.Log(TARGET_MARGIN) / MOVE_DAMP;
 
     public enum NotepadKeyframeState

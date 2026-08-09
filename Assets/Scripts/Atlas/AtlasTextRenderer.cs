@@ -302,10 +302,10 @@ public class AtlasTextRenderer : MonoBehaviour
         ctsWrite?.Cancel();
         ctsWrite = new CancellationTokenSource();
     }
-    public void WriteText(string text, float writeLetterTime, OnCompletedWritingText callback = null)
+    public void WriteText(string text, float writeLetterTime, OnCompletedWritingText callback = null, bool setTextIfCancelled = false)
     {
         CancelWriting();
-        WritingText(text, writeLetterTime, callback).Forget();
+        WritingText(text, writeLetterTime, callback, setTextIfCancelled).Forget();
     }
     public void EraseText(float writeLetterTime)
     {
@@ -462,7 +462,7 @@ public class AtlasTextRenderer : MonoBehaviour
             lineWidths = linesWidths.ToArray(),
         };
     }
-    private async UniTask WritingText(string text, float writeLetterTime, OnCompletedWritingText callback = null)
+    private async UniTask WritingText(string text, float writeLetterTime, OnCompletedWritingText callback, bool setTextIfCancelled)
     {
         int stationNameLetterCount = text.Length;
         int curLetterIndex = 0;
@@ -484,11 +484,11 @@ public class AtlasTextRenderer : MonoBehaviour
         }
         catch (OperationCanceledException)
         {
-            if (callback != null)
+            if (setTextIfCancelled)
             {
                 SetText(text);
                 completedWritingText = true;
-                callback();
+                if (callback != null) callback();
             }
         }
     }

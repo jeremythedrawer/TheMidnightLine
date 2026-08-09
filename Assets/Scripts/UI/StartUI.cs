@@ -73,6 +73,7 @@ public class StartUI : MonoBehaviour
 
     [Header("Generated")]
 
+    public string curLocationText;
     public Vector3[] outcomePageInactivePositions;
 
     public TraitorProfile curTraitorProfile;
@@ -421,12 +422,12 @@ public class StartUI : MonoBehaviour
                                 }
                                 else if ((curRevealSequence & RevealSequence.LocationText) == 0)
                                 {
-                                    SetLocationText();
+                                    WriteLocationText();
                                     curRevealSequence |= RevealSequence.LocationText;
                                 }
                                 else if ((curRevealSequence & RevealSequence.ArrestText) == 0)
                                 {
-                                    SetArrestText();
+                                    WriteArrestText();
                                     curRevealSequence |= RevealSequence.ArrestText;
                                 }
                                 else
@@ -682,7 +683,8 @@ public class StartUI : MonoBehaviour
 
         options.skipTutorial = false;
 
-        agreementPage.enabled = true;
+        agreementPage.gameObject.SetActive(true);
+        agreementPage.Init();
 
         OnPlayAgain?.Invoke();
     }
@@ -737,8 +739,10 @@ public class StartUI : MonoBehaviour
             options.skipTutorial = true;
         }
     }
-    private void SetLocationText()
+    private void WriteLocationText()
     {
+        CancelCurrentOutcomeTask();
+        
         int npcIndex = curTraitorProfile.npcProfile.npcPrefabIndex;
         NPCSO npc = trip.npcDataArray[npcIndex];
 
@@ -750,12 +754,15 @@ public class StartUI : MonoBehaviour
 
         if (npcsData.behaviourContextDict == null) npcsData.behaviourContextDict = SetBehaviourContextDictionary(npcsData.behaviourContexts);
         NPCBehaviourContextSO behaveCTX = npcsData.behaviourContextDict[behaviour];
-        string locationText = behaveCTX.wasFoundSentence.Replace("{name}", traitorName).Replace("{location}", disembarkingStationName);
+        curLocationText = behaveCTX.wasFoundSentence.Replace("{name}", traitorName).Replace("{location}", disembarkingStationName);
         locationMessage.SetToActivePosition();
-        locationMessage.renderer.SetText(locationText);
+        locationMessage.renderer.WriteText(curLocationText, PRINT_LETTER_TIME, setTextIfCancelled: true);
     }
-    private void SetArrestText()
+    private void WriteArrestText()
     {
+        CancelCurrentOutcomeTask();
+        locationMessage.renderer.CancelWriting();
+
         int npcIndex = curTraitorProfile.npcProfile.npcPrefabIndex;
         NPCSO npc = trip.npcDataArray[npcIndex];
 
@@ -763,40 +770,42 @@ public class StartUI : MonoBehaviour
 
         Vector3 pos = new Vector3();
         pos.x = locMesPos.x;
-        pos.y = locMesPos.y - locationMessage.renderer.GetBoundsCurrentText().size.y - arrestMessage.renderer.textAtlas.typeWorldHeight;
+        pos.y = locMesPos.y - locationMessage.renderer.GetBoundsNewText(curLocationText).size.y - arrestMessage.renderer.textAtlas.typeWorldHeight;
         pos.z = locMesPos.z;
 
         arrestMessage.SetToCustomPosition(pos);
-        arrestMessage.renderer.SetText(npc.offenceSentence);
+        arrestMessage.renderer.WriteText(npc.offenceSentence, PRINT_LETTER_TIME, setTextIfCancelled: true);
     }
     private void MoveProfilePagesToStartOutcomePosition()
     {
-        ctsOutcomePageMove?.Cancel();
-        ctsOutcomePageMove = new CancellationTokenSource();
+        CancelCurrentOutcomeTask();
         MovingProfilePagesToStartOutComePosition().Forget();
     }
     private void MovePageToActivePosition()
     {
-        ctsOutcomePageMove?.Cancel();
-        ctsOutcomePageMove = new CancellationTokenSource();
+        CancelCurrentOutcomeTask();
         MovingPageToActivePosition().Forget();
     }
     private void MovePageToEndPosition()
     {
-        ctsOutcomePageMove?.Cancel();
-        ctsOutcomePageMove = new CancellationTokenSource();
+        CancelCurrentOutcomeTask();
+        arrestMessage.renderer.CancelWriting();
         MovingPageToEndPosition().Forget();
     }
     private void RevealMugshot()
     {
-        ctsOutcomePageMove?.Cancel();
-        ctsOutcomePageMove = new CancellationTokenSource();
+        CancelCurrentOutcomeTask();
 
         if (curTraitorProfile.found)
         {
             activePage.playerWriteRenderers[0].customBit |= (int)ColorBits.Diagonal;
         }
         RevealingPage().Forget();
+    }
+    private void CancelCurrentOutcomeTask()
+    {
+        ctsOutcomePageMove?.Cancel();
+        ctsOutcomePageMove = new CancellationTokenSource();
     }
     private async UniTask MovingProfilePagesToStartOutComePosition()
     {
@@ -917,6 +926,7 @@ public class StartUI : MonoBehaviour
         catch (OperationCanceledException)
         {
             activePage.UpdateMugShotReveal(1);
+            traitorsFoundMessage.renderer.SetText("Traitors Found: " + curTraitorsShown);
         }
     }
 }
