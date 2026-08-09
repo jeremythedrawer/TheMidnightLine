@@ -10,8 +10,6 @@ using static Scenes;
 
 public class StartUI : MonoBehaviour
 {
-    public static event Action OnPlayAgain;
-    public static event Action OnFinishedOutcomeSequence;
 
     [Flags] public enum RevealSequence
     { 
@@ -29,6 +27,8 @@ public class StartUI : MonoBehaviour
     const float OUTCOME_PAGE_MOVE_X = 0.5f;
     const float OUTCOME_PAGE_MOVE_Y = 0.5f;
 
+    public static event Action OnPlayAgain;
+    public static event Action OnFinishedOutcomeSequence;
     public static event Action OnClickOptions;
     public static event Action OnClickBackFromOptions;
     public static event Action OnStartButtonClicked;
@@ -38,6 +38,8 @@ public class StartUI : MonoBehaviour
     public Material fadeBlackMaterial;
 
     public ColorPicker mainColorPicker;
+
+    public AgreementPage agreementPage;
 
     public TripSO trip;
     public GameEventDataSO gameEventData;
@@ -109,23 +111,25 @@ public class StartUI : MonoBehaviour
     public bool skipOutcomeSequence;
     private void OnEnable()
     {        
-        NotepadProp.OnSpyEnter += ShowWIcon;
-        NotepadProp.OnSpyExit += HideKeyIcon;
+        AgreementProp.OnSpyEnter += ShowWIcon;
+        AgreementProp.OnSpyExit += HideKeyIcon;
+        AgreementProp.OnAgreementCollect += HideKeyIcon;
+        AgreementProp.OnAgreementCollect += SetFadeForAgreement;
+        AgreementProp.OnNotepadReturn += HideKeyIcon;
+        AgreementProp.OnNotepadReturn += SetToOutcomeState;
+
+        AgreementPage.OnAgreementSigned += GetNotepad;
+        AgreementPage.OnAgreementSigned += SetFadeOut;
 
         SpyBrain.OnOpenNotepad += SetToNotepadState;
         SpyBrain.OnCloseNotepad += SetToNoneState;
         SpyBrain.OnEnteredElevatorGoingUp += SetToStartMenuState;
-
+        
         MeridiaTower.OnSpyEnterTripDoor += ShowWIcon;
         MeridiaTower.OnSpyExitTripDoor += HideKeyIcon;
 
         Scenes.OnLoadScore += ScoreSceneInit;
         Scenes.OnLoadStart += StartSceneInit;
-
-        NotepadProp.OnNotepadCollect += HideKeyIcon;
-        NotepadProp.OnNotepadCollect += GetNotepad;
-        NotepadProp.OnNotepadReturn += HideKeyIcon;
-        NotepadProp.OnNotepadReturn += SetToOutcomeState;
 
         FadeBlack.OnFinishFadeOut += SetToNoneStateFromOutcome;
 
@@ -138,8 +142,15 @@ public class StartUI : MonoBehaviour
     }
     private void OnDisable()
     {
-        NotepadProp.OnSpyEnter -= ShowWIcon;
-        NotepadProp.OnSpyExit -= HideKeyIcon;
+        AgreementProp.OnSpyEnter -= ShowWIcon;
+        AgreementProp.OnSpyExit -= HideKeyIcon;
+        AgreementProp.OnAgreementCollect -= SetFadeForAgreement;
+        AgreementProp.OnAgreementCollect -= HideKeyIcon;
+        AgreementProp.OnNotepadReturn -= HideKeyIcon;
+        AgreementProp.OnNotepadReturn -= SetToOutcomeState;
+
+        AgreementPage.OnAgreementSigned -= GetNotepad;
+        AgreementPage.OnAgreementSigned -= SetFadeOut;
 
         SpyBrain.OnOpenNotepad -= SetToNotepadState;
         SpyBrain.OnCloseNotepad -= SetToNoneState;
@@ -151,10 +162,6 @@ public class StartUI : MonoBehaviour
         Scenes.OnLoadStart -= StartSceneInit;
         Scenes.OnLoadScore -= ScoreSceneInit;
 
-        NotepadProp.OnNotepadCollect -= HideKeyIcon;
-        NotepadProp.OnNotepadCollect -= GetNotepad;
-        NotepadProp.OnNotepadReturn -= HideKeyIcon;
-        NotepadProp.OnNotepadReturn -= SetToOutcomeState;
 
         FadeBlack.OnFinishFadeOut -= SetToNoneStateFromOutcome;
 
@@ -603,18 +610,6 @@ public class StartUI : MonoBehaviour
     {
         ShowKeyIcon(keyIconRenderer, position, KeySpriteIndices.W);
     }
-    private void ShowEIcon(Vector2 position)
-    {
-        ShowKeyIcon(keyIconRenderer, position, KeySpriteIndices.E);
-    }
-    private void ShowQIcon(Vector2 position)
-    {
-        ShowKeyIcon(keyIconRenderer, position, KeySpriteIndices.Q);
-    }
-    private void ShowSIcon(Vector2 position)
-    {
-        ShowKeyIcon(keyIconRenderer, position, KeySpriteIndices.S);
-    }
     private void HideKeyIcon()
     {
         keyIconRenderer.enabled = false;
@@ -623,6 +618,14 @@ public class StartUI : MonoBehaviour
     {
         notepad = SceneController.GetNotepad(transform);
         notepad.PickUpNotepad();
+    }
+    private void SetFadeForAgreement()
+    {
+        fadeBlack.FadeIn(value: 1, uvPosX: 0.5f, alpha: 0.2f, FadeBlack.NOTEPAD_DEPTH);
+    }
+    private void SetFadeOut()
+    {
+        fadeBlack.FadeOut();
     }
     private void SetToNoneStateFromOutcome()
     {
@@ -678,6 +681,8 @@ public class StartUI : MonoBehaviour
         quitButton.MoveAway(camStats, MoveButtonDirection.Left);
 
         options.skipTutorial = false;
+
+        agreementPage.enabled = true;
 
         OnPlayAgain?.Invoke();
     }

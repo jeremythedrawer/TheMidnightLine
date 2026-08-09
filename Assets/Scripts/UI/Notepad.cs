@@ -168,7 +168,7 @@ public class Notepad : MonoBehaviour
             notepadData.leftHandDepthBack = rightHand_renderer.transform.localPosition.z + 1;
             notepadData.activePageDepth = bindingRingsRend.transform.localPosition.z + 1;
 
-            leftHand.Init();
+            leftHand.Init(selectedWriteLetterTime: 0.1f);
 
             float halfCamWidth = camStats.camBounds.extents.x;
             float halfCamHeight = camStats.camBounds.extents.y;

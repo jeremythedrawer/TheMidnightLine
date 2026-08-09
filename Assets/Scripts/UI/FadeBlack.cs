@@ -8,6 +8,7 @@ public class FadeBlack : MonoBehaviour
 {
     public const float DEFAULT_DEPTH = 2;
     public const float NOTEPAD_DEPTH = 12.5f;
+    public const float PRINT_LETTER_TIME = 0.05f;
     [Flags] public enum State
     { 
         FadingIn,
@@ -129,7 +130,7 @@ public class FadeBlack : MonoBehaviour
             curSceneType = sceneType;
             curSceneIndex = sceneIndex;
             curState = State.WritingText;
-            textRenderer.WriteText(text, WRITE_LETTER_TIME, FinishWritingWithSceneChange);
+            textRenderer.WriteText(text, PRINT_LETTER_TIME, FinishWritingWithSceneChange);
 
         }
         catch (OperationCanceledException) { }

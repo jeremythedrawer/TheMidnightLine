@@ -2,11 +2,11 @@ using System;
 using UnityEngine;
 
 using static Scenes;
-public class NotepadProp : MonoBehaviour
+public class AgreementProp : MonoBehaviour
 {
     public static event Action<Vector2> OnSpyEnter;
     public static event Action OnSpyExit;
-    public static event Action OnNotepadCollect;
+    public static event Action OnAgreementCollect;
     public static event Action OnNotepadReturn;
 
     public AtlasRenderer atlasRenderer;
@@ -88,9 +88,8 @@ public class NotepadProp : MonoBehaviour
             {
                 if (spyAtProp && !notepadData.collected)
                 {
-                    notepadData.collected = true;
-                    OnNotepadCollect?.Invoke();
-
+                    OnAgreementCollect?.Invoke();
+                    spyStats.playerInputsEnabled = false;
                     atlasRenderer.enabled = false;
                     shinyRenderer.enabled = false;
                 }

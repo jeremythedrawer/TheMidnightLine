@@ -51,7 +51,7 @@ public class MeridiaTower : MonoBehaviour
 
         Scenes.OnLoadScore += MoveToMeetingFloor;
 
-        NotepadProp.OnNotepadCollect += UnlockTripDoor;
+        AgreementPage.OnAgreementSigned += UnlockTripDoor;
         SpyBrain.OnAfterOutcomeSequence += MoveDownToBetweenFloors;
         SpyBrain.OnAfterOutcomeSequence += MoveMeetingWallUp;
         SpyBrain.OnEnteredElevatorGoingUp += MoveUpToBetweenFloors;
@@ -67,7 +67,7 @@ public class MeridiaTower : MonoBehaviour
 
         Scenes.OnLoadScore -= MoveToMeetingFloor;
 
-        NotepadProp.OnNotepadCollect -= UnlockTripDoor;
+        AgreementPage.OnAgreementSigned -= UnlockTripDoor;
         SpyBrain.OnAfterOutcomeSequence -= MoveDownToBetweenFloors;
         SpyBrain.OnAfterOutcomeSequence -= MoveMeetingWallUp;
         SpyBrain.OnEnteredElevatorGoingUp -= MoveUpToBetweenFloors;

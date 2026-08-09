@@ -65,51 +65,35 @@ public class Page : MonoBehaviour
         paper_clip = paperRenderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
         
         playerWriteIndex = -1;
-        
-        exitButton.InitButton(ClickExitButton, EnterExitButton, ExitExitButton);
 
-        Bounds pageNumberIconBounds = pageNumberIconPrefab.bounds;
-        float colSize = pageNumberIconBounds.size.x + PAGE_NUMBER_ICON_BUFFER_X;
+
 
         pageNumberIconRenderers = new AtlasRenderer[totalPages];
         pageIndex = pageIndexInput;
-
-        Vector3 startPos = new Vector3();
-        startPos.x = (float)totalPages * colSize * -0.5f;
-        startPos.y = -paperRenderer.bounds.size.y + PAGE_NUMBER_ICON_BUFFER_Y;
-        startPos.z = exitButton.renderer.transform.localPosition.z;
-
-        for (int i = 0; i < totalPages; i++)
-        {
-            AtlasRenderer pageNumberIcon = Instantiate(pageNumberIconPrefab, transform);
-            Vector3 localPos = startPos;
-            
-            localPos.x += i * colSize;
-            pageNumberIcon.transform.localPosition = localPos;
-
-            if (i == pageIndex)
-            {
-                pageNumberIcon.custom.x = 1f;
-            }
-            pageNumberIconRenderers[i] = pageNumberIcon;
-        }
 
         switch (pageType)
         {
             case PageType.Prompt:
             {
+                exitButton.InitButton(ClickExitButton, EnterExitButton, ExitExitButton);
                 rightButton.InitButton(ClickRightButton, EnterRightButton, ExitRightButton);
+
+                InitPageNumberIcons(totalPages);
             }
             break;
             case PageType.Profile:
             {
+                exitButton.InitButton(ClickExitButton, EnterExitButton, ExitExitButton);
                 rightButton.InitButton(ClickRightButton, EnterRightButton, ExitRightButton);
                 leftButton.InitButton(ClickLeftButton, EnterLeftButton, ExitLeftButton);
+                InitPageNumberIcons(totalPages);
             }
             break;
             case PageType.ColorKey:
             {
+                exitButton.InitButton(ClickExitButton, EnterExitButton, ExitExitButton);
                 leftButton.InitButton(ClickLeftButton, EnterLeftButton, ExitLeftButton);
+                InitPageNumberIcons(totalPages);
 
                 for (int i = 0; i < otherButtons.Length; i++)
                 {
@@ -147,6 +131,35 @@ public class Page : MonoBehaviour
             }
             break;
         }
+    }
+    private void InitPageNumberIcons(int totalPages)
+    {
+        Bounds pageNumberIconBounds = pageNumberIconPrefab.bounds;
+        float colSize = pageNumberIconBounds.size.x + PAGE_NUMBER_ICON_BUFFER_X;
+        Vector3 startPos = new Vector3();
+        startPos.x = (float)totalPages * colSize * -0.5f;
+        startPos.y = -paperRenderer.bounds.size.y + PAGE_NUMBER_ICON_BUFFER_Y;
+        startPos.z = exitButton.renderer.transform.localPosition.z;
+
+        for (int i = 0; i < totalPages; i++)
+        {
+            AtlasRenderer pageNumberIcon = Instantiate(pageNumberIconPrefab, transform);
+            Vector3 localPos = startPos;
+
+            localPos.x += i * colSize;
+            pageNumberIcon.transform.localPosition = localPos;
+
+            if (i == pageIndex)
+            {
+                pageNumberIcon.custom.x = 1f;
+            }
+            pageNumberIconRenderers[i] = pageNumberIcon;
+        }
+    }
+    public void InitAgreementPage()
+    {
+        playerWriteTexts = new string[playerWriteTextRenderers.Length];
+        Array.Fill(playerWriteTexts, "");
     }
     public void InitNextColorRow(int nextIndex)
     {
@@ -388,15 +401,6 @@ public class Page : MonoBehaviour
 
         activePlayerWriteTextRenderer.WriteText(activePlayerWriteText, LeftHand.WRITE_LETTER_TIME);
     }
-    public void WriteForPlayerWriteText(string text)
-    {
-        playerWriteIndex = previewPlayerWriteIndex;
-        activePlayerWriteText = text;
-        playerWriteTexts[activePlayerWriteRowIndex] = activePlayerWriteText;
-        playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePlayerWriteText);
-
-        activePlayerWriteTextRenderer.WriteText(activePlayerWriteText, LeftHand.WRITE_LETTER_TIME);
-    }
     public void ErasePlayerWriteText()
     {
         playerWriteTexts[activePlayerWriteRowIndex] = "";
@@ -516,6 +520,12 @@ public class Page : MonoBehaviour
                 }
             }
             break;
+
+            case PageType.Agreement:
+            {
+                activePlayerWriteTextRenderer.SetText("~", alpha: 0);
+            }
+            break;
         }
         UpdatePreviewPlayerWriteText();
     }
@@ -585,6 +595,11 @@ public class Page : MonoBehaviour
                         }
                     }
                 }
+            }
+            break;
+            case PageType.Agreement:
+            {
+                activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
             }
             break;
         }

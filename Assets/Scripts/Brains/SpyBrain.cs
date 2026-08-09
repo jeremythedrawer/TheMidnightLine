@@ -99,8 +99,9 @@ public class SpyBrain : MonoBehaviour
         Scenes.OnLoadTrip0 += TripInit;
 
         GameplayUI.OnIncreaseTraitorCountFirstTime += SetStateToIdle;
-
-        NotepadProp.OnNotepadReturn += SetStateToIdle;
+        
+        AgreementProp.OnAgreementCollect += SetStateToIdle;
+        AgreementProp.OnNotepadReturn += SetStateToIdle;
 
         HenchmanBrain.OnShoot += SetStateToShotAt;
 
@@ -122,7 +123,8 @@ public class SpyBrain : MonoBehaviour
 
         GameplayUI.OnIncreaseTraitorCountFirstTime -= SetStateToIdle;
 
-        NotepadProp.OnNotepadReturn -= SetStateToIdle;
+        AgreementProp.OnAgreementCollect -= SetStateToIdle;
+        AgreementProp.OnNotepadReturn -= SetStateToIdle;
 
         HenchmanBrain.OnShoot -= SetStateToShotAt;
 

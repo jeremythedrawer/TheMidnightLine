@@ -1,9 +1,6 @@
 using System;
 using UnityEngine;
-using UnityEngine.InputSystem;
 using static Atlas;
-using static AtlasUI;
-using static Scenes;
 public class LeftHand : MonoBehaviour
 {
     public enum State
@@ -18,6 +15,7 @@ public class LeftHand : MonoBehaviour
     }
 
     public const float WRITE_LETTER_TIME = 0.1f;
+    public const float WRITE_SIGNATURE_TIME = 1.2f;
 
     const int HOLDING_PENCIL_SPRITE_INDEX = 16;
     const int RESTING_SPRITE_INDEX = 0;
@@ -30,6 +28,7 @@ public class LeftHand : MonoBehaviour
     public static event Action OnFinishWriting;
     public static event Action OnAtStartErasePos;
     public static event Action OnFinishErasing;
+    public static event Action OnAtStationaryPos;
 
     public CameraStatsSO camStats;
     public TripSO curTrip;
@@ -48,6 +47,7 @@ public class LeftHand : MonoBehaviour
 
     public float totalPencilTime;
     public float curPencilTime;
+    public float writeLetterTime;
 
     public bool atTargetPos;
     private void OnEnable()
@@ -84,7 +84,7 @@ public class LeftHand : MonoBehaviour
                 curPencilTime = 0;
                 atTargetPos = false;
                 atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.rotatePencil_clip.keyframeStartIndex].sprite);
-                totalPencilTime = (activePage.previewPlayerWriteText.Length + 1) * WRITE_LETTER_TIME;
+                totalPencilTime = (activePage.previewPlayerWriteText.Length + 1) * writeLetterTime;
 
                 MoveToEdgeTextBounds(leftEdge: true);
             }
@@ -96,7 +96,7 @@ public class LeftHand : MonoBehaviour
                 atTargetPos = false;
                 atlasRenderer.PlayClipOneShot(notepadData.rotatePencil_clip);
 
-                totalPencilTime = (activePage.activePlayerWriteText.Length + 1) * WRITE_LETTER_TIME;
+                totalPencilTime = (activePage.activePlayerWriteText.Length + 1) * writeLetterTime;
 
                 MoveToEdgeTextBounds(leftEdge: false);
             }
@@ -104,6 +104,8 @@ public class LeftHand : MonoBehaviour
 
             case State.Stationary:
             {
+                atTargetPos = false;
+
                 atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.rotatePencil_clip.keyframeStartIndex].sprite);
                 MoveToEdgeTextBounds(leftEdge: true);
             }
@@ -198,7 +200,17 @@ public class LeftHand : MonoBehaviour
 
             case State.Stationary:
             {
-                transform.localPosition = Vector3.Lerp(transform.localPosition, targetLocalPos, Time.deltaTime * MOVE_DAMP);
+                if (!atTargetPos)
+                {
+                    transform.localPosition = Vector3.Lerp(transform.localPosition, targetLocalPos, Time.deltaTime * MOVE_DAMP);
+
+                    float dist = (transform.localPosition - targetLocalPos).sqrMagnitude;
+                    if (dist < PENCIL_DISTANCE_THRESHOLD)
+                    {
+                        OnAtStationaryPos?.Invoke();
+                        atTargetPos = true;
+                    }
+                }
             }
             break;
 
@@ -281,7 +293,7 @@ public class LeftHand : MonoBehaviour
             break;
         }
     }
-    public void Init()
+    public void Init(float selectedWriteLetterTime)
     {
         targetLocalPos = notepadData.leftHandOffScreenLocalPos;
         notepadData.handFlipPage_clip = atlasRenderer.atlas.clipDict[(int)NotepadMotion.FlipHand];
@@ -294,6 +306,7 @@ public class LeftHand : MonoBehaviour
         notepadData.leftHandOffScreenLocalPos.x = -Notepad.ACTIVE_POS.x * 0.5f;
         notepadData.leftHandOffScreenLocalPos.z = transform.localPosition.z;
 
+        writeLetterTime = selectedWriteLetterTime;
     }
     public void Reinit()
     {
