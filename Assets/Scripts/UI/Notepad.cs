@@ -942,7 +942,7 @@ public class Notepad : MonoBehaviour
             Page traitorPage = pages[i];
             traitorPage.transform.SetParent(transform);
             traitorPage.transform.localPosition = new Vector3(0, 0, notepadData.leftHandDepthBack - 1);
-            traitorPage.InitProfile(traitorProfile, i + 1, pages.Length);
+            traitorPage.InitProfile(traitorProfile, i, pages.Length);
             traitorPage.traitorIndex = traitorIndex;
             traitorPage.gameObject.name = "Page_" + i;
             traitorPage.gameObject.SetActive(false);
