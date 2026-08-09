@@ -164,9 +164,30 @@ public class Page : MonoBehaviour
 
         playerWriteTextRend.enabled = true;
     }
-    public void ShowRuleOutRenderer()
+    public void ShowUnlockAbilityRenderer(UnlockType unlockType)
     {
-        proceduralRenderers[0].ChangeCustom(time: 1, newValue: 1, customChannel: 4);
+        int index = -1;
+        switch(unlockType)
+        {
+            case UnlockType.RuleOut:
+            {
+                index = 0;
+            }
+            break;
+
+            case UnlockType.Color:
+            {
+                index = 1;
+            }
+            break;
+
+            case UnlockType.MultiColor:
+            {
+                index = 2;
+            }
+            break;
+        }
+        proceduralRenderers[index].ChangeCustom(time: 1, newValue: 1, customChannel: 4);
     }
     public void SetColorMarkerButtonSprite(int index)
     {
@@ -187,10 +208,12 @@ public class Page : MonoBehaviour
         }
         proceduralRenderers[index].ChangeCustom(time: 1, newValue: 1, customChannel: 4);
     }
-    public void UpdatePage()
+    public void UpdateExitButton()
     {
         exitButton.UpdateButton(playerInputs);
-
+    }
+    public void UpdatePage()
+    {
         switch (pageType)
         {
             case PageType.Prompt:
@@ -209,9 +232,13 @@ public class Page : MonoBehaviour
             {
                 leftButton.UpdateButton(playerInputs);
 
-                for (int i = 0; i < trip.unlockedColorMarkerCount; i++)
+                if ((notepadData.completedUnlocks & UnlockType.Color) != 0)
                 {
-                    otherButtons[i].UpdateButton(playerInputs);
+                    otherButtons[0].UpdateButton(playerInputs);
+                }
+                if ((notepadData.completedUnlocks & UnlockType.MultiColor) != 0)
+                {
+                    otherButtons[1].UpdateButton(playerInputs);
                 }
 
                 if (playerInputs.shiftDown && activePlayerWriteRowIndex > 0)
@@ -348,6 +375,10 @@ public class Page : MonoBehaviour
     {
         transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, localDepth);
     }
+    public void CancelPlayerWrite()
+    {
+        activePlayerWriteTextRenderer.CancelWriting();
+    }
     public void WritePlayerWriteText()
     {
         playerWriteIndex = previewPlayerWriteIndex;
@@ -355,7 +386,7 @@ public class Page : MonoBehaviour
         playerWriteTexts[activePlayerWriteRowIndex] = activePlayerWriteText;
         playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePlayerWriteText);
 
-        activePlayerWriteTextRenderer.WriteText(activePlayerWriteText, Notepad.WRITE_LETTER_TIME);
+        activePlayerWriteTextRenderer.WriteText(activePlayerWriteText, LeftHand.WRITE_LETTER_TIME);
     }
     public void WriteForPlayerWriteText(string text)
     {
@@ -364,12 +395,12 @@ public class Page : MonoBehaviour
         playerWriteTexts[activePlayerWriteRowIndex] = activePlayerWriteText;
         playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePlayerWriteText);
 
-        activePlayerWriteTextRenderer.WriteText(activePlayerWriteText, Notepad.WRITE_LETTER_TIME);
+        activePlayerWriteTextRenderer.WriteText(activePlayerWriteText, LeftHand.WRITE_LETTER_TIME);
     }
     public void ErasePlayerWriteText()
     {
         playerWriteTexts[activePlayerWriteRowIndex] = "";
-        activePlayerWriteTextRenderer.EraseText(Notepad.WRITE_LETTER_TIME);
+        activePlayerWriteTextRenderer.EraseText(LeftHand.WRITE_LETTER_TIME);
     }
     public void SwitchActivePreviewPlayerWriteText(int indexOffset)
     {
@@ -669,6 +700,6 @@ public class Page : MonoBehaviour
     }
     public Bounds GetWritingBounds()
     {
-        return activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
+        return activePlayerWriteTextRenderer.GetBoundsCurrentText();
     }
 }

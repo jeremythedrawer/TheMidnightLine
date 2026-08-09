@@ -29,6 +29,8 @@ public class ColorPicker : MonoBehaviour
     }
 
     public static event Action OnSelectClueColorFirstTime;
+    public static event Action OnCloseCluePicker;
+    public static event Action OnOpenCluePicker;
 
     public TripSO trip;
     public OptionsSO colorsData;
@@ -165,6 +167,7 @@ public class ColorPicker : MonoBehaviour
                         if (spyStats.curTutorialState == TutorialState.Color2)
                         {
                             OnSelectClueColorFirstTime?.Invoke();
+                            Close();
                         }
                     }
                     break;
@@ -263,7 +266,6 @@ public class ColorPicker : MonoBehaviour
         if (colorsData.curState == newState) return;
         ExitState();
         colorsData.curState = newState;
-        colorsData.enteredState = newState;
         EnterState();
     }
     private void EnterColorIcon(IconUIElement icon)
@@ -395,12 +397,15 @@ public class ColorPicker : MonoBehaviour
 
         selectedRenderer = null;
         transform.SetParent(null);
+        if (selectType == SelectType.Clue) OnCloseCluePicker?.Invoke();
     }
     public void TurnOn(SelectType selectedType, AtlasRenderer rend, Direction direction = Direction.TopLeft)
     {
         paletteRenderer.enabled = true;
 
         selectType = selectedType;
+        if (selectType == SelectType.Clue) OnOpenCluePicker?.Invoke();
+
         selectedRenderer = rend;
         Bounds selectedRendBounds = selectedRenderer.GetBounds();
         curWorldPos.y = selectedRendBounds.max.y;
@@ -645,6 +650,7 @@ public class ColorPicker : MonoBehaviour
             ctsOpen = new CancellationTokenSource();
 
             TurnOn(selectedType, rend, direction);
+
             Opening().Forget();
         }
     }

@@ -32,5 +32,4 @@ public class OptionsSO : ScriptableObject
 
     [Header("Generated")]
     public PickerState curState;
-    public PickerState enteredState;
 }

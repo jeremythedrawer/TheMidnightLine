@@ -297,17 +297,19 @@ public class AtlasTextRenderer : MonoBehaviour
         }
 
     }
-    public void WriteText(string text, float writeLetterTime, OnCompletedWritingText callback = null)
+    public void CancelWriting()
     {
         ctsWrite?.Cancel();
         ctsWrite = new CancellationTokenSource();
-
+    }
+    public void WriteText(string text, float writeLetterTime, OnCompletedWritingText callback = null)
+    {
+        CancelWriting();
         WritingText(text, writeLetterTime, callback).Forget();
     }
     public void EraseText(float writeLetterTime)
     {
-        ctsWrite?.Cancel();
-        ctsWrite = new CancellationTokenSource();
+        CancelWriting();
         erasingText = true;
         completedWritingText = false;
         ErasingText(writeLetterTime).Forget();

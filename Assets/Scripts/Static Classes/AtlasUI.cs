@@ -16,7 +16,6 @@ public static class AtlasUI
     public const int FOUR_NUMPAD_SPRITE_INDEX = 25;
     public const int HOLDING_PENCIL_SPRITE_INDEX = 16;
 
-    public const float LEFTHAND_DAMPING = 7f;
     public const float PENCIL_DISTANCE_THRESHOLD = 0.05f;
     public const float PENCIL_VERTICAL_FREQUENCY = 7f;
     public const float PENCIL_VERTICAL_MAGNITUDE = 0.07f;
@@ -134,6 +133,7 @@ public static class AtlasUI
         Prompt,
         Profile,
         ColorKey,
+        Agreement,
     }
     public enum TripPrompt
     {

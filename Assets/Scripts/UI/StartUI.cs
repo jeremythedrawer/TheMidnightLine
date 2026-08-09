@@ -219,7 +219,7 @@ public class StartUI : MonoBehaviour
             case UIState.Notepad:
             {
                 notepad.EnterNotepad();
-                naturalMovePos = notepadData.activeLocalPos;
+                naturalMovePos = Notepad.ACTIVE_POS;
                 ctsNotepad?.Cancel();
             }
             break;
@@ -244,7 +244,7 @@ public class StartUI : MonoBehaviour
                 outcomePageStartPos.y = notepadData.offSceenLocalPos.y;
 
                 outcomePageActivePos.x = outcomePageStartPos.x;
-                outcomePageActivePos.y = notepadData.activeLocalPos.y;
+                outcomePageActivePos.y = Notepad.ACTIVE_POS.y;
 
                 outcomePageEndPosX = -camStats.camBounds.extents.x - paperBounds.size.x;
 
@@ -281,7 +281,7 @@ public class StartUI : MonoBehaviour
                     
                     profilePage.transform.SetParent(transform, worldPositionStays: true);
                     
-                    outcomePageStartPos.z = notepadData.activeLocalPos.z + (i * 3);
+                    outcomePageStartPos.z = Notepad.ACTIVE_POS.z + (i * 3);
                     outcomePageActivePos.z = outcomePageStartPos.z;
                     
                     profilePage.transform.localPosition = outcomePageStartPos;
@@ -316,7 +316,7 @@ public class StartUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                UpdateNaturalPos(notepadData.activeLocalPos, ref naturalMovePos);
+                UpdateNaturalPos(Notepad.ACTIVE_POS, ref naturalMovePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
             }
             break;

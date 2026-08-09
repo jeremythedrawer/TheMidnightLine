@@ -75,6 +75,7 @@ public class RoomDoor : MonoBehaviour
     private void OnEnable()
     {
         gameEventData.OnInteract.RegisterListener(OpenDoorOnInteract);
+        prevSubState = SubState.ExitBoundsLeft;
     }
     private void OnDisable()
     {
@@ -103,7 +104,6 @@ public class RoomDoor : MonoBehaviour
         {
             case State.Opened:
             {
-                prevSubState = SubState.None;
                 if ((curSubState & SubState.InBounds) != 0)
                 {
                     curSubState |= SubState.EnteredBounds;
@@ -231,10 +231,14 @@ public class RoomDoor : MonoBehaviour
             {
                 gameEventData.OnFinishTripScene.Raise();
             }
+            else
+            {
+                gameEventData.OnStartTrip.Raise();
+            }
 #else
             gameEventData.OnStartTrip.Raise();
 #endif
-            SpyBrain spy = SceneController.GetSpy();
+                SpyBrain spy = SceneController.GetSpy();
             spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, rightDepth));
             leftRoom.MoveUp();
             spyStats.startTrip = true;

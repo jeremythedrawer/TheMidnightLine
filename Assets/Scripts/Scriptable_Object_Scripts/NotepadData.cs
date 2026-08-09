@@ -9,13 +9,12 @@ public class NotepadData : ScriptableObject
     public AtlasClip handFlipPage_clip;
     public AtlasClip rotatePencil_clip;
 
-    public Vector3 leftHandFlipPos;
-    public Vector3 leftHandPencilPos;
     public Vector3 leftHandOffScreenLocalPos;
     public Vector3 inactiveLocalPos;
     public Vector3 hoverLocalPos;
-    public Vector3 activeLocalPos;
     public Vector3 offSceenLocalPos;
+    
+    public Vector2 leftHandFlipPos;
     
     public NotepadState curState;
     public NotepadState prevState;

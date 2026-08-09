@@ -109,6 +109,7 @@ public class UnlockPicker : MonoBehaviour
                             if (trip.unlockedColorMarkerCount == 0)
                             {
                                 trip.curUnlocks |= UnlockType.Color;
+                                tutorialInUse = true;
                                 OnColorAbilityUnlock?.Invoke(icon);
                             }
                             trip.unlockedColorMarkerCount++;

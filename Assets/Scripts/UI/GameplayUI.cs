@@ -172,7 +172,7 @@ public class GameplayUI : MonoBehaviour
             case UIState.Notepad:
             {
                 notepad.EnterNotepad();
-                naturalMovePos = notepadData.activeLocalPos;
+                naturalMovePos = Notepad.ACTIVE_POS;
                 ctsNotepad?.Cancel();
             }
             break;
@@ -204,7 +204,7 @@ public class GameplayUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                UpdateNaturalPos(notepadData.activeLocalPos, ref naturalMovePos);
+                UpdateNaturalPos(Notepad.ACTIVE_POS, ref naturalMovePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
                 switch (spyStats.curTutorialState)
                 {
