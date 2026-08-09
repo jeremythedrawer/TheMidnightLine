@@ -463,6 +463,7 @@ public class StartUI : MonoBehaviour
                                     int correctionStationIndex = curTraitorProfile.npcProfile.disembarkingStationIndex;
                                     string correctStation = trip.stationsDataArray[correctionStationIndex].name;
                                     
+                                    CancelCurrentOutcomeTask();
                                     activePage.SetActiveRendererText(correctStation);
                                     activePage.activePlayerWriteTextRenderer.SetAppearTextAlpha(normAmount: 0);
                                     activePage.activePlayerWriteTextRenderer.ChangeCustom(time: 1f, newValue: 1, customChannel: 4);

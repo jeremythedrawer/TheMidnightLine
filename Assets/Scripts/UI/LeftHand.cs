@@ -15,7 +15,6 @@ public class LeftHand : MonoBehaviour
     }
 
     public const float WRITE_LETTER_TIME = 0.1f;
-    public const float WRITE_SIGNATURE_TIME = 1.2f;
 
     const int HOLDING_PENCIL_SPRITE_INDEX = 16;
     const int RESTING_SPRITE_INDEX = 0;
@@ -47,7 +46,6 @@ public class LeftHand : MonoBehaviour
 
     public float totalPencilTime;
     public float curPencilTime;
-    public float writeLetterTime;
 
     public bool atTargetPos;
     private void OnEnable()
@@ -84,7 +82,7 @@ public class LeftHand : MonoBehaviour
                 curPencilTime = 0;
                 atTargetPos = false;
                 atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.rotatePencil_clip.keyframeStartIndex].sprite);
-                totalPencilTime = (activePage.previewPlayerWriteText.Length + 1) * writeLetterTime;
+                totalPencilTime = (activePage.previewPlayerWriteText.Length + 1) * WRITE_LETTER_TIME;
 
                 MoveToEdgeTextBounds(leftEdge: true);
             }
@@ -96,7 +94,7 @@ public class LeftHand : MonoBehaviour
                 atTargetPos = false;
                 atlasRenderer.PlayClipOneShot(notepadData.rotatePencil_clip);
 
-                totalPencilTime = (activePage.activePlayerWriteText.Length + 1) * writeLetterTime;
+                totalPencilTime = (activePage.activePlayerWriteText.Length + 1) * WRITE_LETTER_TIME;
 
                 MoveToEdgeTextBounds(leftEdge: false);
             }
@@ -293,7 +291,7 @@ public class LeftHand : MonoBehaviour
             break;
         }
     }
-    public void Init(float selectedWriteLetterTime)
+    public void Init()
     {
         targetLocalPos = notepadData.leftHandOffScreenLocalPos;
         notepadData.handFlipPage_clip = atlasRenderer.atlas.clipDict[(int)NotepadMotion.FlipHand];
@@ -305,8 +303,6 @@ public class LeftHand : MonoBehaviour
         notepadData.leftHandOffScreenLocalPos.y = camStats.camBounds.extents.y - Notepad.ACTIVE_POS.y - camStats.camBounds.size.y - worldPivotOffsetY;
         notepadData.leftHandOffScreenLocalPos.x = -Notepad.ACTIVE_POS.x * 0.5f;
         notepadData.leftHandOffScreenLocalPos.z = transform.localPosition.z;
-
-        writeLetterTime = selectedWriteLetterTime;
     }
     public void Reinit()
     {

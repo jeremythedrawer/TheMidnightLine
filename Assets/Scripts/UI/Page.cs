@@ -524,7 +524,8 @@ public class Page : MonoBehaviour
 
             case PageType.Agreement:
             {
-                activePlayerWriteTextRenderer.SetText("~", alpha: 0);
+                previewPlayerWriteText = "{|}~";
+                activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
             }
             break;
         }

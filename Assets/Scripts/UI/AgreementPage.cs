@@ -70,7 +70,7 @@ public class AgreementPage : MonoBehaviour
         transform.localPosition = offscreenPos;
 
         page.InitAgreementPage();
-        leftHand.Init(selectedWriteLetterTime: 1.2f);
+        leftHand.Init();
         leftHand.SetState(LeftHand.State.OffScreen);
     }
     public void DisableSelf()

@@ -937,8 +937,8 @@ MonoBehaviour:
     texture: {fileID: 2800000, guid: daf6157dafed19d4b87a1f029e28c28e, type: 3}
     material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
   textAtlas: {fileID: 11400000, guid: f1430f24e892d15458609d5d7429b7a0, type: 2}
-  text: ~
-  kerning: 0.8
+  text: '{|}~'
+  kerning: 0.84
   spacing: 0.05
   alignmentType: 0
   color: {r: 0, g: 0, b: 0, a: 1}
@@ -946,21 +946,33 @@ MonoBehaviour:
   scrollBoundSize: 0
   background_renderer: {fileID: 0}
   textBoxData:
-    size: {x: 0.42777777, y: 0.14444445}
+    size: {x: 0.39405334, y: 0.14444445}
     lineWidths:
-    - 0.5347222
+    - 0.46911114
   bounds:
-    m_Center: {x: 307.0239, y: -0.035222165, z: 18.92}
-    m_Extent: {x: 0.21388888, y: 0.072222225, z: 0}
+    m_Center: {x: 307.00702, y: -0.035222165, z: 18.92}
+    m_Extent: {x: 0.19702667, y: 0.072222225, z: 0}
   worldPivotsAndSizes:
-  - {x: -0, y: -0.14444445, z: 0.42777777, w: 0.13333334}
+  - {x: -0, y: -0.14444445, z: 0.11666667, w: 0.13333334}
+  - {x: 0.10024, y: -0.14444445, z: 0.094444446, w: 0.13333334}
+  - {x: 0.19114666, y: -0.14444445, z: 0.083333336, w: 0.13333334}
+  - {x: 0.27738667, y: -0.14444445, z: 0.11666667, w: 0.13333334}
   uvSizesAndPositions:
-  - {x: 0.30078125, y: 0.09375, z: 0.26171875, w: 0.15234375}
+  - {x: 0.08203125, y: 0.09375, z: 0.26171875, w: 0.15234375}
+  - {x: 0.06640625, y: 0.09375, z: 0.34765625, w: 0.15234375}
+  - {x: 0.05859375, y: 0.09375, z: 0.41796875, w: 0.15234375}
+  - {x: 0.08203125, y: 0.09375, z: 0.48046875, w: 0.15234375}
   scalesAndFlips:
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1, y: 1, z: 1, w: 1}
   customs:
   - {x: 0, y: 0, z: 0, w: 1}
-  boundsOffset: {x: 0.21388888, y: -0.072222225, z: 0}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  boundsOffset: {x: 0.19702667, y: -0.072222225, z: 0}
   customBit: 0
   hasText: 1
   erasingText: 0
