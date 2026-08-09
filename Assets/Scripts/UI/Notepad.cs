@@ -17,7 +17,7 @@ public class Notepad : MonoBehaviour
     const float PENCIL_DISTANCE_THRESHOLD = 0.05f;
     const float PENCIL_VERTICAL_FREQUENCY = 7f;
     const float PENCIL_VERTICAL_MAGNITUDE = 0.07f;
-    const float REVEAL_TIME = 2f;
+
     public enum KeyframeState
     {
         None,

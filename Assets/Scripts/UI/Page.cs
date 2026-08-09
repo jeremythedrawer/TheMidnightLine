@@ -11,6 +11,7 @@ public class Page : MonoBehaviour
     public const float FLIP_LOCAL_POS_Y = -1.656f;
     public const float PAGE_NUMBER_ICON_BUFFER_X = 0.05f;
     public const float PAGE_NUMBER_ICON_BUFFER_Y = 0.15f;
+
     public static AtlasClip paper_clip;
 
     public PageType pageType;
@@ -65,7 +66,7 @@ public class Page : MonoBehaviour
         
         playerWriteIndex = -1;
         
-        exitButton.InitButton(ClickExitButton, EnterButton, ExitButton);
+        exitButton.InitButton(ClickExitButton, EnterExitButton, ExitExitButton);
 
         Bounds pageNumberIconBounds = pageNumberIconPrefab.bounds;
         float colSize = pageNumberIconBounds.size.x + PAGE_NUMBER_ICON_BUFFER_X;
@@ -97,18 +98,18 @@ public class Page : MonoBehaviour
         {
             case PageType.Prompt:
             {
-                rightButton.InitButton(ClickRightButton, EnterButton, ExitButton);
+                rightButton.InitButton(ClickRightButton, EnterRightButton, ExitRightButton);
             }
             break;
             case PageType.Profile:
             {
-                rightButton.InitButton(ClickRightButton, EnterButton, ExitButton);
-                leftButton.InitButton(ClickLeftButton, EnterButton, ExitButton);
+                rightButton.InitButton(ClickRightButton, EnterRightButton, ExitRightButton);
+                leftButton.InitButton(ClickLeftButton, EnterLeftButton, ExitLeftButton);
             }
             break;
             case PageType.ColorKey:
             {
-                leftButton.InitButton(ClickLeftButton, EnterButton, ExitButton);
+                leftButton.InitButton(ClickLeftButton, EnterLeftButton, ExitLeftButton);
 
                 for (int i = 0; i < otherButtons.Length; i++)
                 {
@@ -121,7 +122,7 @@ public class Page : MonoBehaviour
                         trip.selectedColorMarkerIndex = activePlayerWriteRowIndex;
                     }
 
-                    otherButtons[i].InitButton(ClickColor, EnterButton, ExitButton);
+                    otherButtons[i].InitButton(ClickColor, EnterButtonNormal, ExitButtonNormal);
                 }
 
                 playerWriteTexts = new string[playerWriteTextRenderers.Length];
@@ -207,6 +208,7 @@ public class Page : MonoBehaviour
             case PageType.ColorKey:
             {
                 leftButton.UpdateButton(playerInputs);
+
                 for (int i = 0; i < trip.unlockedColorMarkerCount; i++)
                 {
                     otherButtons[i].UpdateButton(playerInputs);
@@ -585,16 +587,54 @@ public class Page : MonoBehaviour
             break;
         }
     }
-    public void EnterButton(IconUIElement icon)
+    public void EnterButtonNormal(IconUIElement icon)
     {
         icon.renderer.custom.x = 1;
     }
-    public void ExitButton(IconUIElement icon)
+    public void ExitButtonNormal(IconUIElement icon)
     {
         icon.renderer.custom.x = 0;
     }
+    public void EnterExitButton(IconUIElement icon)
+    {
+        icon.renderer.custom.x = 1;
+
+        icon.renderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.Q);
+        icon.renderer.FlipHSimple(false);
+        icon.renderer.FlipVSimple(false);
+    }
+    public void EnterLeftButton(IconUIElement icon)
+    {
+        icon.renderer.custom.x = 1;
+        icon.renderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.W);
+        icon.renderer.FlipHSimple(false);
+    }
+    public void EnterRightButton(IconUIElement icon)
+    {
+        icon.renderer.custom.x = 1;
+        icon.renderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.S);
+    }
+    public void ExitExitButton(IconUIElement icon)
+    {
+        icon.renderer.custom.x = 0;
+        icon.renderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.Corner);
+        icon.renderer.FlipHSimple(true);
+        icon.renderer.FlipVSimple(true);
+    }
+    public void ExitLeftButton(IconUIElement icon)
+    {
+        icon.renderer.custom.x = 0;
+        icon.renderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.Corner);
+        icon.renderer.FlipHSimple(true);
+    }
+    public void ExitRightButton(IconUIElement icon)
+    {
+        icon.renderer.custom.x = 0;
+        icon.renderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.Corner);
+    }
     public void ClickExitButton(IconUIElement icon)
     {
+        
         if (spyStats.checkingNotepad)
         {
             spyStats.checkingNotepad = false;

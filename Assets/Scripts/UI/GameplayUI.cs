@@ -538,21 +538,19 @@ public class GameplayUI : MonoBehaviour
     }
     private void ShowWIcon(Vector2 position)
     {
-        ShowKeyIcon(position, KeySpriteIndices.W);
+        ShowKeyIcon(keyIcon, position, KeySpriteIndices.W);
     }
     private void ShowEIcon(Vector2 position)
     {
-        if (trip.ticketsCheckedTotal == 0)
-        {
-            ShowKeyIcon(position, KeySpriteIndices.E);
-        }
+        ShowKeyIcon(keyIcon, position, KeySpriteIndices.E);
     }
-    private void ShowKeyIcon(Vector2 position, KeySpriteIndices keySpriteIndex)
+    private void ShowQIcon(Vector2 position)
     {
-        keyIcon.transform.SetParent(null);
-        keyIcon.custom.w = 1;
-        keyIcon.UpdateSpriteInputsByIndex((int)keySpriteIndex);
-        keyIcon.transform.position = new Vector3(position.x, position.y + keyIcon.bounds.size.y, keyIcon.transform.position.z);
+        ShowKeyIcon(keyIcon, position, KeySpriteIndices.Q);
+    }
+    private void ShowSIcon(Vector2 position)
+    {
+        ShowKeyIcon(keyIcon, position, KeySpriteIndices.S);
     }
     private void HideKeyIcon()
     {

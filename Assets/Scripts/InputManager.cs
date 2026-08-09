@@ -76,8 +76,8 @@ public class InputManager : MonoBehaviour
             playerInputs.moveUp = true;
         };
 
-        notepadToggle_action.started += context => playerInputs.notepadKeyDown = true;
-        notepadToggle_action.canceled += context => playerInputs.notepadKeyUp = true;
+        notepadToggle_action.started += context => playerInputs.notepadToggleKeyDown = true;
+        notepadToggle_action.canceled += context => playerInputs.notepadExitKeyUp = true;
 
         notepadFlipPage_action.started += context =>
         {
@@ -179,8 +179,8 @@ public class InputManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        playerInputs.notepadKeyDown = false;
-        playerInputs.notepadKeyUp = false;
+        playerInputs.notepadToggleKeyDown = false;
+        playerInputs.notepadExitKeyUp = false;
         playerInputs.spacebarDown = false;
         playerInputs.ticketCheckKeyDown = false;
         playerInputs.ticketCheckKeyUp = false;

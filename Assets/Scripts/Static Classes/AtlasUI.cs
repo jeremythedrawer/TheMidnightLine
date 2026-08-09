@@ -114,7 +114,19 @@ public static class AtlasUI
         Color2 = 1 << 4,
         Color3 = 1 << 5,
         MultiColor = 1 << 6,
-
+    }
+    [Flags] public enum KeyIconActions
+    {
+        None = 0,
+        ExitNotepad = 1 << 0,
+        FlipUpNotepad = 1 << 1,
+        FlipDownNotepad = 1 << 2,
+        WriteNotepad = 1 << 3,
+        EraseNotepad = 1 << 4,
+        CarouselNotepadLeft = 1 << 5,
+        CarouselNotepadRight = 1 << 6,
+        EnterTrain = 1 << 6,
+        ExitTrain = 1 << 7,
     }
     public enum PageType
     { 
@@ -155,6 +167,7 @@ public static class AtlasUI
     { 
         Cursor = 2,
         UpArrow = 3,
+        Corner = 4,
         Q = 7,
         W = 8,
         A = 9,
@@ -181,6 +194,8 @@ public static class AtlasUI
         Left,
         Right,
     }
+    static float NaturalMoveClock;
+    public static Dictionary<TripPrompt, string> PromptStringDict;
     [Serializable] public struct TextUIElement
     {
         public delegate void OnClick();
@@ -652,10 +667,6 @@ public static class AtlasUI
         }
         renderer.transform.localPosition = targetPos;
     }
-
-    static float NaturalMoveClock;
-
-    public static Dictionary<TripPrompt, string> PromptStringDict;
     public static void UpdateNaturalPos(Vector3 activePos,  ref Vector3 naturalMovePos)
     {
         NaturalMoveClock += Time.deltaTime;
@@ -674,6 +685,14 @@ public static class AtlasUI
         cts?.Cancel();
         cts = new CancellationTokenSource();
         MovingUIElement(transform, cts, nextPos, curState).Forget();
+    }
+    public static void ShowKeyIcon(AtlasRenderer renderer, Vector2 position, KeySpriteIndices keySpriteIndex)
+    {
+        renderer.enabled = true;
+        renderer.custom.w = 1;
+        renderer.transform.SetParent(null);
+        renderer.UpdateSpriteInputsByIndex((int)keySpriteIndex);
+        renderer.transform.position = new Vector3(position.x, position.y + renderer.bounds.size.y, renderer.transform.position.z);
     }
     private static async UniTask MovingUIElement(Transform transform, CancellationTokenSource cts, Vector3 nextPos, UIState curState)
     {

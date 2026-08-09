@@ -214,7 +214,7 @@ public class SpyBrain : MonoBehaviour
         {
             SetState(SpyState.PickingNPCTicketCheck);
         }
-        else if ((notepadData.collected && playerInputs.notepadKeyDown) || stats.checkingNotepad)
+        else if ((notepadData.collected && playerInputs.notepadToggleKeyDown) || stats.checkingNotepad)
         {
             SetState(SpyState.Notepad);
         }
@@ -345,7 +345,7 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Notepad:
             {
-                if (playerInputs.notepadKeyUp) canExitState = true;
+                if (playerInputs.notepadExitKeyUp) canExitState = true;
 
                 if (notepadData.curState != curNotepadState)
                 {
@@ -389,7 +389,7 @@ public class SpyBrain : MonoBehaviour
                 if (curNotepadState == NotepadState.Stationary)
                 {
                     atlasRenderer.PlayClip(ref curClip);
-                    if (playerInputs.notepadKeyDown && canExitState)
+                    if (playerInputs.notepadToggleKeyDown && canExitState)
                     {
                         stats.checkingNotepad = false;
                     }
@@ -585,6 +585,7 @@ public class SpyBrain : MonoBehaviour
             case SpyState.Notepad:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.NotepadHolding];
+
                 OnOpenNotepad?.Invoke();
             }
             break;

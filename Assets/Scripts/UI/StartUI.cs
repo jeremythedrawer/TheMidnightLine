@@ -7,7 +7,6 @@ using UnityEngine;
 using static AtlasUI;
 using static NPC;
 using static Scenes;
-using static Spy;
 
 public class StartUI : MonoBehaviour
 {
@@ -110,22 +109,22 @@ public class StartUI : MonoBehaviour
     public bool skipOutcomeSequence;
     private void OnEnable()
     {        
-        NotepadProp.OnSpyEnter += SetInteractIcon;
-        NotepadProp.OnSpyExit += DisableInteractIcon;
+        NotepadProp.OnSpyEnter += ShowWIcon;
+        NotepadProp.OnSpyExit += HideKeyIcon;
 
         SpyBrain.OnOpenNotepad += SetToNotepadState;
         SpyBrain.OnCloseNotepad += SetToNoneState;
         SpyBrain.OnEnteredElevatorGoingUp += SetToStartMenuState;
 
-        MeridiaTower.OnSpyEnterTripDoor += SetInteractIcon;
-        MeridiaTower.OnSpyExitTripDoor += DisableInteractIcon;
+        MeridiaTower.OnSpyEnterTripDoor += ShowWIcon;
+        MeridiaTower.OnSpyExitTripDoor += HideKeyIcon;
 
         Scenes.OnLoadScore += ScoreSceneInit;
         Scenes.OnLoadStart += StartSceneInit;
 
-        NotepadProp.OnNotepadCollect += DisableInteractIcon;
+        NotepadProp.OnNotepadCollect += HideKeyIcon;
         NotepadProp.OnNotepadCollect += GetNotepad;
-        NotepadProp.OnNotepadReturn += DisableInteractIcon;
+        NotepadProp.OnNotepadReturn += HideKeyIcon;
         NotepadProp.OnNotepadReturn += SetToOutcomeState;
 
         FadeBlack.OnFinishFadeOut += SetToNoneStateFromOutcome;
@@ -139,22 +138,22 @@ public class StartUI : MonoBehaviour
     }
     private void OnDisable()
     {
-        NotepadProp.OnSpyEnter -= SetInteractIcon;
-        NotepadProp.OnSpyExit -= DisableInteractIcon;
+        NotepadProp.OnSpyEnter -= ShowWIcon;
+        NotepadProp.OnSpyExit -= HideKeyIcon;
 
         SpyBrain.OnOpenNotepad -= SetToNotepadState;
         SpyBrain.OnCloseNotepad -= SetToNoneState;
         SpyBrain.OnEnteredElevatorGoingUp -= SetToStartMenuState;
 
-        MeridiaTower.OnSpyEnterTripDoor -= SetInteractIcon;
-        MeridiaTower.OnSpyExitTripDoor -= DisableInteractIcon;
+        MeridiaTower.OnSpyEnterTripDoor -= ShowWIcon;
+        MeridiaTower.OnSpyExitTripDoor -= HideKeyIcon;
 
         Scenes.OnLoadStart -= StartSceneInit;
         Scenes.OnLoadScore -= ScoreSceneInit;
 
-        NotepadProp.OnNotepadCollect -= DisableInteractIcon;
+        NotepadProp.OnNotepadCollect -= HideKeyIcon;
         NotepadProp.OnNotepadCollect -= GetNotepad;
-        NotepadProp.OnNotepadReturn -= DisableInteractIcon;
+        NotepadProp.OnNotepadReturn -= HideKeyIcon;
         NotepadProp.OnNotepadReturn -= SetToOutcomeState;
 
         FadeBlack.OnFinishFadeOut -= SetToNoneStateFromOutcome;
@@ -600,14 +599,23 @@ public class StartUI : MonoBehaviour
         keyIconRenderer.enabled = false;
         SceneController.KeepNotepad(notepad);
     }
-    private void SetInteractIcon(Vector2 position)
+    private void ShowWIcon(Vector2 position)
     {
-        keyIconRenderer.enabled = true;
-        keyIconRenderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.W);
-        keyIconRenderer.transform.SetParent(null);
-        keyIconRenderer.transform.position = new Vector3(position.x, position.y + keyIconRenderer.bounds.size.y, keyIconRenderer.transform.position.z);
+        ShowKeyIcon(keyIconRenderer, position, KeySpriteIndices.W);
     }
-    private void DisableInteractIcon()
+    private void ShowEIcon(Vector2 position)
+    {
+        ShowKeyIcon(keyIconRenderer, position, KeySpriteIndices.E);
+    }
+    private void ShowQIcon(Vector2 position)
+    {
+        ShowKeyIcon(keyIconRenderer, position, KeySpriteIndices.Q);
+    }
+    private void ShowSIcon(Vector2 position)
+    {
+        ShowKeyIcon(keyIconRenderer, position, KeySpriteIndices.S);
+    }
+    private void HideKeyIcon()
     {
         keyIconRenderer.enabled = false;
     }
@@ -629,7 +637,7 @@ public class StartUI : MonoBehaviour
     }
     private void SetToNotepadState()
     {
-        DisableInteractIcon();
+        HideKeyIcon();
         SetState(UIState.Notepad);
     }
     private void SetToStartMenuState()
