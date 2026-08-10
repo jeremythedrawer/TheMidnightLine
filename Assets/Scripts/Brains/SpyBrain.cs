@@ -24,6 +24,8 @@ public class SpyBrain : MonoBehaviour
     public static event Action OnOpenNotepad;
     public static event Action OnCloseNotepad;
     public static event Action OnEnteredElevatorGoingUp;
+    public static event Action OnCheckCarriageMap;
+    public static event Action OnUncheckCarriageMap;
 
     public static bool CanCheckTicket;
     public static bool PickingNPCToTicketCheck;
@@ -60,7 +62,7 @@ public class SpyBrain : MonoBehaviour
     
     public GangwayDoor curGangwayDoor;
     
-    public CarriageMap curCarriageMap;
+    public CarriageMapProp curCarriageMap;
 
 
     public AtlasClip curClip;
@@ -323,6 +325,13 @@ public class SpyBrain : MonoBehaviour
                 if (!playerInputs.ticketCheckKeyHold && !playerInputs.mouseLeftHold && playerInputs.move == 0) canExitState = true;
             }
             break;
+            case SpyState.CarriageMap:
+            {
+                if (!playerInputs.interact) canExitState = true;
+
+                if (playerInputs.interact && canExitState) checkingCarriageMap = false;
+            }
+            break;
             case SpyState.TalkingToAccomplice:
             {
                 atlasRenderer.PlayClip(ref curClip);
@@ -545,6 +554,11 @@ public class SpyBrain : MonoBehaviour
             }
             break;
 
+            case SpyState.CarriageMap:
+            {
+                OnCheckCarriageMap?.Invoke();
+            }
+            break;
             case SpyState.TalkingToAccomplice:
             {
                 chosenNPC.talkingToSpy = true;
@@ -587,7 +601,6 @@ public class SpyBrain : MonoBehaviour
             case SpyState.Notepad:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.NotepadHolding];
-
                 OnOpenNotepad?.Invoke();
             }
             break;
@@ -632,7 +645,13 @@ public class SpyBrain : MonoBehaviour
 
             }
             break;
-
+            case SpyState.CarriageMap:
+            {
+                OnUncheckCarriageMap?.Invoke();
+                curCarriageMap.StopUsing();
+                checkingCarriageMap = false;
+            }
+            break;
             case SpyState.TalkingToAccomplice:
             {
             }
@@ -659,12 +678,6 @@ public class SpyBrain : MonoBehaviour
             case SpyState.Notepad:
             {
                 OnCloseNotepad?.Invoke();
-            }
-            break;
-
-            case SpyState.CarriageMap:
-            {
-                curCarriageMap.CancelEffect();
             }
             break;
         }
@@ -783,13 +796,13 @@ public class SpyBrain : MonoBehaviour
     {
         Bounds spyBounds = stats.bounds;
         SlideDoors foundSlideDoor = null;
-        for (int i = 0; i < TrainController.InteriorSlideDoors.Length; i++)
+        for (int i = 0; i < CurCarriage.interiorSlideDoors.Length; i++)
         {
-            SlideDoors slideDoor = TrainController.ExteriorSlideDoors[i];
+            SlideDoors slideDoor = CurCarriage.interiorSlideDoors[i];
             Bounds slideDoorBounds = slideDoor.boxCollider.bounds;
             if (spyBounds.center.x > slideDoorBounds.min.x && spyBounds.center.x < slideDoorBounds.max.x)
             {
-                foundSlideDoor = TrainController.InteriorSlideDoors[i];
+                foundSlideDoor = slideDoor;
                 break;
             }
         }
@@ -883,17 +896,17 @@ public class SpyBrain : MonoBehaviour
 
         if (!checkingCarriageMap)
         {
-            RaycastHit2D carriageMapHit = Physics2D.BoxCast(boxCollider.bounds.center, boxCollider.bounds.extents, 0.0f, Vector2.zero, 0.0f, layerSettings.trainLayers.carriageMap);
-            if (carriageMapHit.collider != null)
+            for (int i = 0; i < CurCarriage.maps.Length; i++)
             {
-                curCarriageMap= CurCarriage.map;
-                curCarriageMap.InteractEffect();
-                checkingCarriageMap = true;
+                CarriageMapProp map = CurCarriage.maps[i];
+                Bounds mapBounds = map.atlasRenderer.bounds;
+                if (stats.bounds.center.x > mapBounds.min.x && stats.bounds.center.x < mapBounds.max.x)
+                {
+                    curCarriageMap = map;
+                    curCarriageMap.Use();
+                    checkingCarriageMap = true;
+                }
             }
-        }
-        else
-        {
-            checkingCarriageMap = false;
         }
     }
     private void Flip(bool flip)

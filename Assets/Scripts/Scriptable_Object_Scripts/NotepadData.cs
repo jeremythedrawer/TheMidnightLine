@@ -28,6 +28,7 @@ public class NotepadData : ScriptableObject
     public int profileWriteCount;
 
     public bool collected;
+    public bool signedAgreement;
     public bool playerHasUsedExitKey;
     public bool playerHasUsedLeftKey;
     public bool playerHasUsedRightKey;

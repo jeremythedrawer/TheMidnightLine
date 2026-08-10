@@ -29,6 +29,7 @@ public class ColorPicker : MonoBehaviour
     }
 
     public static event Action OnSelectClueColorFirstTime;
+    public static event Action OnSelectSecondClueColorFirstTime;
     public static event Action OnCloseCluePicker;
     public static event Action OnOpenCluePicker;
 
@@ -167,6 +168,11 @@ public class ColorPicker : MonoBehaviour
                         if (spyStats.curTutorialState == TutorialState.Color2)
                         {
                             OnSelectClueColorFirstTime?.Invoke();
+                            Close();
+                        }
+                        if (spyStats.curTutorialState == TutorialState.MultiColor1)
+                        {
+                            OnSelectSecondClueColorFirstTime?.Invoke();
                             Close();
                         }
                     }

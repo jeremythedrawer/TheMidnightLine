@@ -16,13 +16,14 @@ public class OptionsSO : ScriptableObject
 
     [Range(0,1)] public float dayNightFactor;
 
-    [TextArea(3, 10)] public string startTripText;
     [TextArea(3, 10)] public string traitorCountTutorialText;
     [TextArea(3, 10)] public string ticketCountTutorialText;
     [TextArea(3, 10)] public string passengerRuleOutTutorialText; 
     [TextArea(3, 10)] public string passengerColorMarkerTutorialText1;
     [TextArea(3, 10)] public string passengerColorMarkerTutorialText2;
     [TextArea(3, 10)] public string passengerColorMarkerTutorialText3;
+    [TextArea(3, 10)] public string passengerMulticolorMarkerTutorialText1;
+    [TextArea(3, 10)] public string passengerMulticolorMarkerTutorialText2;
 
     [Header("User Picked")]
     public Color blackColor;

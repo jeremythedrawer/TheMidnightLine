@@ -112,7 +112,8 @@ public static class AtlasUI
         Color1 = 1 << 3,
         Color2 = 1 << 4,
         Color3 = 1 << 5,
-        MultiColor = 1 << 6,
+        MultiColor1 = 1 << 6,
+        MultiColor2 = 1 << 7,
     }
     [Flags] public enum KeyIconActions
     {
@@ -400,22 +401,24 @@ public static class AtlasUI
         public delegate void OnExit(IconUIElement icon);
 
         public AtlasRenderer renderer;
-
+        public bool holdToClick;
         [Header("Generated")]
         public Vector3 activePos;
         public ButtonState curState;
+        public float holdClock;
 
         public OnClick OnClickCallback;
         public OnEnter OnEnterCallback;
         public OnExit OnExitCallback;
 
         public CancellationTokenSource ctsMove;
-        public void InitButton(OnClick onClickCallback, OnEnter onEnterCallback, OnExit onExitCallback)
+        public void InitButton(OnClick onClickCallback, OnEnter onEnterCallback, OnExit onExitCallback, bool isHold = false)
         {
             OnClickCallback = onClickCallback;
             OnEnterCallback = onEnterCallback;
             OnExitCallback = onExitCallback;
             activePos = renderer.transform.localPosition;
+            holdToClick = isHold;
         }
         public void InitImage()
         {
@@ -443,8 +446,16 @@ public static class AtlasUI
                     }
                     else if (playerInputs.mouseLeftDown)
                     {
-                        OnClickCallback(this);
                         curState = ButtonState.Clicked;
+                        if (!holdToClick)
+                        {
+                            OnClickCallback(this);
+                        }
+                        else
+                        {
+                            holdClock = 0;
+                        }
+
                     }
                 }
                 break;
@@ -459,6 +470,16 @@ public static class AtlasUI
                     {
                         OnEnterCallback(this);
                         curState = ButtonState.Hovered;
+                    }
+
+                    if (holdToClick)
+                    {
+                        holdClock += Time.deltaTime;
+
+                        if (holdClock > 3)
+                        {
+                            OnClickCallback(this);
+                        }
                     }
                 }
                 break;

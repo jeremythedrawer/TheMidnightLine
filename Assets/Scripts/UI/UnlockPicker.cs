@@ -118,6 +118,7 @@ public class UnlockPicker : MonoBehaviour
                         {
                             trip.curUnlocks |= UnlockType.MultiColor;
                             trip.unlockedColorMarkerCount++;
+                            tutorialInUse = true;
                             OnMutliColorAbilityUnlock?.Invoke(icon);
                         }
                         break;

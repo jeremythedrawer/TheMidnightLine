@@ -153,15 +153,6 @@ public class InputManager : MonoBehaviour
     {
         if (!sceneData.sceneLoaded) return;
 
-        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.RightShift))
-        {
-            resetElaspedTime += Time.deltaTime;
-            if (resetElaspedTime > resetThresholdTime)
-            {
-                resetElaspedTime = 0;
-                gameEventData.OnResetTrip.Raise();
-            }
-        }
         Vector2 screenPos = Mouse.current.position.ReadValue();
         playerInputs.mouseScreenPos.x = Mathf.Clamp(screenPos.x, 0f, Screen.width);
         playerInputs.mouseScreenPos.y = Mathf.Clamp(screenPos.y, 0f, Screen.height);

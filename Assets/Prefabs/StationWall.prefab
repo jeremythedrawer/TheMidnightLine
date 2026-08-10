@@ -10,6 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3066907409969786012}
   - component: {fileID: 773424968904668228}
+  - component: {fileID: 6529591359439808583}
   m_Layer: 15
   m_Name: StationWall
   m_TagString: Untagged
@@ -66,7 +67,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0, y: 0}
+  m_Offset: {x: 0, y: 0.51528823}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -76,5 +77,55 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.25, y: 1}
+  m_Size: {x: 0.25, y: 1.0233624}
   m_EdgeRadius: 0
+--- !u!114 &6529591359439808583
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1480898102046865986}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    texture: {fileID: 2800000, guid: 857f07ac02073324d828fc8db55dd0e9, type: 3}
+    material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
+  atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 6
+  flipX: 0
+  flipY: 0
+  width: 1.042
+  height: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.107910156, y: 0.08935547, z: 0.27148438, w: 0.33154297}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 1.2277777, y: 1.0166667, z: 1}
+    index: 6
+  bounds:
+    m_Center: {x: -26.440329, y: 0.99833333, z: 0}
+    m_Extent: {x: 0.6396722, y: 0.5083333, z: 0.1}
+  worldPivotAndSize: {x: -0, y: -0, z: 1.2277777, w: 1.0166667}
+  uvSizeAndPosition: {x: 0.107910156, y: 0.08935547, z: 0.27148438, w: 0.33154297}
+  scaleAndFlip: {x: 1.042, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
+  boundsOffset: {x: 0.6396722, y: 0.5083333, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 6
+  prevSpriteIndexFlipV: 6
+  isAnimating: 0
+  quadCount: 0

@@ -33,7 +33,7 @@ public class Carriage : MonoBehaviour
     public SlideDoors[] exteriorSlideDoors;
     public SlideDoors[] interiorSlideDoors;
     
-    public CarriageMap map;
+    public CarriageMapProp[] maps;
 
     public RenderTexture graffitiRT;
 

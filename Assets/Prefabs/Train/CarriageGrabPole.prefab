@@ -26,7 +26,7 @@ Transform:
   m_GameObject: {fileID: 1535647642363425843}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.563, y: 1.013, z: -0.25}
+  m_LocalPosition: {x: 0.563, y: 0.081000805, z: -0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -62,7 +62,7 @@ MonoBehaviour:
     worldSize: {x: 0.06666667, y: 0.21666667, z: 1}
     index: 10
   bounds:
-    m_Center: {x: -4.7669864, y: -2.2133334, z: 7.75}
+    m_Center: {x: -4.7669864, y: -3.1453326, z: 7.75}
     m_Extent: {x: 0.033333335, y: 0.108333334, z: 0.1}
   worldPivotAndSize: {x: -0.033333335, y: -0.21666667, z: 0.06666667, w: 0.21666667}
   uvSizeAndPosition: {x: 0.005859375, y: 0.019042969, z: 0.90234375, w: 0.7631836}
@@ -108,7 +108,7 @@ Transform:
   m_GameObject: {fileID: 2862701673191317230}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.315, y: 1.013, z: -0.25}
+  m_LocalPosition: {x: 0.315, y: 0.081, z: -0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -144,7 +144,7 @@ MonoBehaviour:
     worldSize: {x: 0.06666667, y: 0.21666667, z: 1}
     index: 10
   bounds:
-    m_Center: {x: -5.0149865, y: -2.2133334, z: 7.75}
+    m_Center: {x: -5.0149865, y: -3.1453333, z: 7.75}
     m_Extent: {x: 0.033333335, y: 0.108333334, z: 0.1}
   worldPivotAndSize: {x: -0.033333335, y: -0.21666667, z: 0.06666667, w: 0.21666667}
   uvSizeAndPosition: {x: 0.005859375, y: 0.019042969, z: 0.90234375, w: 0.7631836}
@@ -225,39 +225,39 @@ MonoBehaviour:
   height: 1.0232068
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.07470703, y: 0.10498047, z: 0.92089844, w: 0.7011719}
+    uvSizeAndPos: {x: 0.07470703, y: 0.021484375, z: 0.92089844, w: 0.78466797}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 0.85, y: 1.1944444, z: 1}
+    worldSize: {x: 0.85, y: 0.24444444, z: 1}
     index: 0
   bounds:
-    m_Center: {x: 2.6979911, y: 0.6210174, z: 8.1}
-    m_Extent: {x: 0.4250002, y: 0.61101735, z: 0.1}
+    m_Center: {x: 112.46338, y: -53.55598, z: 10.1}
+    m_Extent: {x: 0.4250002, y: 0.124994144, z: 0.1}
   worldPivotAndSize: {x: -0, y: 0, z: 0.17777778, w: 1.0722222}
   uvSizeAndPosition: {x: 0.0078125, y: 0.04711914, z: 0.88427734, w: 0.95288086}
   scaleAndFlip: {x: 1.0000008, y: 1.0232068, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
   customBit: 0
-  boundsOffset: {x: 0.4250002, y: 0.61101735, z: 0.1}
+  boundsOffset: {x: 0.4250002, y: 0.124994144, z: 0.1}
   worldPivotsAndSizes:
   - {x: -0, y: -0, z: 0.25, w: 0}
   - {x: 0.25, y: -0, z: 0.4055556, w: 0}
   - {x: 0.65555596, y: -0, z: 0.19444443, w: 0}
-  - {x: -0, y: 0, z: 0.25, w: 1.1888888}
-  - {x: 0.25, y: 0, z: 0.4055556, w: 1.1888888}
-  - {x: 0.65555596, y: 0, z: 0.19444443, w: 1.1888888}
-  - {x: -0, y: 1.2164792, z: 0.25, w: 0.005555587}
-  - {x: 0.25, y: 1.2164792, z: 0.4055556, w: 0.005555587}
-  - {x: 0.65555596, y: 1.2164792, z: 0.19444443, w: 0.005555587}
+  - {x: -0, y: 0, z: 0.25, w: 0.23888889}
+  - {x: 0.25, y: 0, z: 0.4055556, w: 0.23888889}
+  - {x: 0.65555596, y: 0, z: 0.19444443, w: 0.23888889}
+  - {x: -0, y: 0.24443275, z: 0.25, w: 0.00555555}
+  - {x: 0.25, y: 0.24443275, z: 0.4055556, w: 0.00555555}
+  - {x: 0.65555596, y: 0.24443275, z: 0.19444443, w: 0.00555555}
   uvSizesAndPositions:
-  - {x: 0.021972656, y: 0, z: 0.92089844, w: 0.7011719}
-  - {x: 0.03564453, y: 0, z: 0.9428711, w: 0.7011719}
-  - {x: 0.017089842, y: 0, z: 0.9785156, w: 0.7011719}
-  - {x: 0.021972656, y: 0.10449219, z: 0.92089844, w: 0.7011719}
-  - {x: 0.03564453, y: 0.10449219, z: 0.9428711, w: 0.7011719}
-  - {x: 0.017089842, y: 0.10449219, z: 0.9785156, w: 0.7011719}
-  - {x: 0.021972656, y: 0.000488284, z: 0.92089844, w: 0.80566406}
-  - {x: 0.03564453, y: 0.000488284, z: 0.9428711, w: 0.80566406}
-  - {x: 0.017089842, y: 0.000488284, z: 0.9785156, w: 0.80566406}
+  - {x: 0.021972656, y: 0, z: 0.92089844, w: 0.78466797}
+  - {x: 0.03564453, y: 0, z: 0.9428711, w: 0.78466797}
+  - {x: 0.017089842, y: 0, z: 0.9785156, w: 0.78466797}
+  - {x: 0.021972656, y: 0.020996094, z: 0.92089844, w: 0.78466797}
+  - {x: 0.03564453, y: 0.020996094, z: 0.9428711, w: 0.78466797}
+  - {x: 0.017089842, y: 0.020996094, z: 0.9785156, w: 0.78466797}
+  - {x: 0.021972656, y: 0.00048828078, z: 0.92089844, w: 0.80566406}
+  - {x: 0.03564453, y: 0.00048828078, z: 0.9428711, w: 0.80566406}
+  - {x: 0.017089842, y: 0.00048828078, z: 0.9785156, w: 0.80566406}
   scalesAndFlips:
   - {x: 1, y: 1, z: 1, w: 1}
   - {x: 1.0000008, y: 1, z: 1, w: 1}
@@ -283,7 +283,7 @@ MonoBehaviour:
   prevFrameIndex: 0
   curMotionIndex: 0
   prevSpriteIndexFlipH: 0
-  prevSpriteIndexFlipV: 4
+  prevSpriteIndexFlipV: 0
   isAnimating: 0
   quadCount: 0
 --- !u!1 &5882755592766324067
@@ -312,7 +312,7 @@ Transform:
   m_GameObject: {fileID: 5882755592766324067}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.692, y: 1.013, z: -0.25}
+  m_LocalPosition: {x: 0.692, y: 0.081000805, z: -0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -348,7 +348,7 @@ MonoBehaviour:
     worldSize: {x: 0.06666667, y: 0.21666667, z: 1}
     index: 10
   bounds:
-    m_Center: {x: -4.6379867, y: -2.2133334, z: 7.75}
+    m_Center: {x: -4.6379867, y: -3.1453326, z: 7.75}
     m_Extent: {x: 0.033333335, y: 0.108333334, z: 0.1}
   worldPivotAndSize: {x: -0.033333335, y: -0.21666667, z: 0.06666667, w: 0.21666667}
   uvSizeAndPosition: {x: 0.005859375, y: 0.019042969, z: 0.90234375, w: 0.7631836}
@@ -394,7 +394,7 @@ Transform:
   m_GameObject: {fileID: 8626379676573130849}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.166, y: 1.013, z: -0.25}
+  m_LocalPosition: {x: 0.166, y: 0.081000805, z: -0.25}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -430,7 +430,7 @@ MonoBehaviour:
     worldSize: {x: 0.06666667, y: 0.21666667, z: 1}
     index: 10
   bounds:
-    m_Center: {x: -5.1639867, y: -2.2133334, z: 7.75}
+    m_Center: {x: -5.1639867, y: -3.1453326, z: 7.75}
     m_Extent: {x: 0.033333335, y: 0.108333334, z: 0.1}
   worldPivotAndSize: {x: -0.033333335, y: -0.21666667, z: 0.06666667, w: 0.21666667}
   uvSizeAndPosition: {x: 0.005859375, y: 0.019042969, z: 0.90234375, w: 0.7631836}

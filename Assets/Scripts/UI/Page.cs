@@ -398,6 +398,7 @@ public class Page : MonoBehaviour
     }
     public void WritePlayerWriteText()
     {
+        Debug.Log(previewPlayerWriteIndices.Length + " | " + activePlayerWriteRowIndex);
         playerWriteIndex = previewPlayerWriteIndices[activePlayerWriteRowIndex];
         activePlayerWriteText = activePlayerWriteTextRenderer.text;
         playerWriteTexts[activePlayerWriteRowIndex] = activePlayerWriteText;

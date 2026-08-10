@@ -111,7 +111,6 @@ public class LeftHand : MonoBehaviour
                 atTargetPos = false;
 
                 atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.rotatePencil_clip.keyframeStartIndex].sprite);
-                MoveToEdgeTextBounds(leftEdge: true);
             }
             break;
 
@@ -239,6 +238,7 @@ public class LeftHand : MonoBehaviour
                         if (activePage.activePlayerWriteTextRenderer != null && !movedForColorPicker)
                         {
                             SetState(State.Stationary);
+                            MoveToEdgeTextBounds(leftEdge: true);
                         }
                     }
                 }
@@ -326,6 +326,7 @@ public class LeftHand : MonoBehaviour
     {
         movedForColorPicker = false;
         SetState(State.Stationary);
+        MoveToEdgeTextBounds(leftEdge: true);
     }
     public void MoveForColorPicker()
     {
@@ -338,7 +339,7 @@ public class LeftHand : MonoBehaviour
         {
             atTargetPos = false;
             Bounds paperBounds = activePage.paperRenderer.GetBounds();
-
+            curTextBounds = activePage.GetWritingBounds();
             Vector2 writePos = new Vector2();
             writePos.x = paperBounds.min.x;
             writePos.y = curTextBounds.center.y;

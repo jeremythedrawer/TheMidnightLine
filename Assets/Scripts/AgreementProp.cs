@@ -26,7 +26,7 @@ public class AgreementProp : MonoBehaviour
         Scenes.OnLoadStart += StartSceneInit;
         Scenes.OnLoadScore += ScoreSceneInit;
         StartUI.OnPlayAgain += PlayAgain;
-        gameEventData.OnInteract.RegisterListener(NotepadCollected);
+        gameEventData.OnInteract.RegisterListener(AgreementShown);
     }
     private void OnDisable()
     {
@@ -35,7 +35,7 @@ public class AgreementProp : MonoBehaviour
 
         StartUI.OnPlayAgain -= PlayAgain;
 
-        gameEventData.OnInteract.UnregisterListener(NotepadCollected);
+        gameEventData.OnInteract.UnregisterListener(AgreementShown);
     }
     public void Update()
     {
@@ -60,6 +60,7 @@ public class AgreementProp : MonoBehaviour
     private void StartSceneInit()
     {
         notepadData.collected = false;
+        notepadData.signedAgreement = false;
     }
     private void ScoreSceneInit()
     {
@@ -80,13 +81,13 @@ public class AgreementProp : MonoBehaviour
             spyAtProp = false;
         }
     }
-    public void NotepadCollected()
+    public void AgreementShown()
     {
         switch(sceneData.activeSceneType)
         {
             case SceneType.Start:
             {
-                if (spyAtProp && !notepadData.collected)
+                if (spyAtProp && !notepadData.signedAgreement)
                 {
                     OnAgreementCollect?.Invoke();
                     spyStats.playerInputsEnabled = false;
@@ -111,6 +112,7 @@ public class AgreementProp : MonoBehaviour
     public void PlayAgain()
     {
         notepadData.collected = false;
+        notepadData.signedAgreement = false;
         atlasRenderer.enabled = true;
         shinyRenderer.enabled = true;
     }

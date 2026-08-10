@@ -34,7 +34,6 @@ public class GameplayUI : MonoBehaviour
 
     public IconUIElement traitorIcon;
     public IconUIElement redoButton;
-    public IconUIElement quitButton;
     
     public AtlasRenderer keyIcon;
 
@@ -100,6 +99,8 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnCloseNotepad += SetToNoneState;
         SpyBrain.OnTicketInspect += SetToTicketState;
         SpyBrain.OnFinishTicketInspect += SetToNoneState;
+        SpyBrain.OnUncheckCarriageMap += SetToNoneState;
+        SpyBrain.OnCheckCarriageMap += SetToCarriageMapState;
 
         NPCBrain.OnTraitorDisembarkedTrain += DecreaseTraitorCount;
         NPCBrain.OnTraitorBoardedTrain += IncreaseTraitorCount;
@@ -108,10 +109,12 @@ public class GameplayUI : MonoBehaviour
 
         UnlockPicker.OnRuleOutAbilityUnlock += MoveRuleOutMarkerTutorialIcon;
         UnlockPicker.OnColorAbilityUnlock += MoveColorMarkerTutorialIcon;
+        UnlockPicker.OnMutliColorAbilityUnlock += MoveMulticolorMarkerTutorialIcon;
 
         Notepad.OnWriteColorMarkerFirstTime += SetTutorialTextToColor2;
 
         ColorPicker.OnSelectClueColorFirstTime += SetTutorialTextToColor3;
+        ColorPicker.OnSelectSecondClueColorFirstTime += SetTutorialTextToMultiColor2;
     }
     private void OnDisable()
     {
@@ -133,25 +136,28 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnCloseNotepad -= SetToNoneState;
         SpyBrain.OnTicketInspect -= SetToTicketState;
         SpyBrain.OnFinishTicketInspect -= SetToNoneState;
+        SpyBrain.OnUncheckCarriageMap -= SetToNoneState;
+        SpyBrain.OnCheckCarriageMap -= SetToCarriageMapState;
         
         NPCBrain.OnTraitorDisembarkedTrain -= DecreaseTraitorCount;
         NPCBrain.OnTraitorBoardedTrain -= IncreaseTraitorCount;
 
         UnlockPicker.OnRuleOutAbilityUnlock -= MoveRuleOutMarkerTutorialIcon;
         UnlockPicker.OnColorAbilityUnlock -= MoveColorMarkerTutorialIcon;
+        UnlockPicker.OnMutliColorAbilityUnlock -= MoveMulticolorMarkerTutorialIcon;
 
         Scenes.OnLoadTrip0 -= Init;
 
         Notepad.OnWriteColorMarkerFirstTime -= SetTutorialTextToColor2;
 
         ColorPicker.OnSelectClueColorFirstTime -= SetTutorialTextToColor3;
+        ColorPicker.OnSelectSecondClueColorFirstTime -= SetTutorialTextToMultiColor2;
     }
     private void Update()
     {
         UpdateState();
+        redoButton.UpdateButton(playerInputs);
         fadeBlack.CheckToFadeOutSceneChange();
-        HandlePlayAgainButton();
-        HandleQuitButton();
     }
     private void Init()
     {
@@ -189,10 +195,8 @@ public class GameplayUI : MonoBehaviour
             break;
             case UIState.CarriageMap:
             {
-
                 carriageMap.gameObject.SetActive(true);
                 ctsCarriageMap?.Cancel();
-
             }
             break;
             case UIState.None:
@@ -210,6 +214,7 @@ public class GameplayUI : MonoBehaviour
                 UpdateNaturalPos(Notepad.ACTIVE_POS, ref naturalMovePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
                 if ((notepad.transform.localPosition - naturalMovePos).sqrMagnitude < 0.05f) notepadData.subState |= Notepad.SubState.InUse;
+
                 switch (spyStats.curTutorialState)
                 {
                     case TutorialState.Color1:
@@ -229,6 +234,35 @@ public class GameplayUI : MonoBehaviour
                     }
                     break;
                     case TutorialState.Color3:
+                    {
+                        if (canExitState && playerInputs.spacebarDown)
+                        {
+                            curTutorialIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 4);
+                            curTutorialIcon.renderer.transform.SetParent(unlockPicker.transform, true);
+
+                            fadeBlack.FadeOut();
+
+                            spyStats.tutorialsCompleted |= spyStats.curTutorialState;
+                            spyStats.curTutorialState = TutorialState.None;
+                            spyStats.playerInputsEnabled = true;
+                            tutorialRenderer.SetText("");
+
+                            spyStats.checkingNotepad = false;
+                        }
+                    }
+                    break;
+                    case TutorialState.MultiColor1:
+                    {
+                        if (canExitState && playerInputs.spacebarDown)
+                        {
+                            if (!tutorialRenderer.hasText)
+                            {
+                                curTutorialIcon.ctsMove?.Cancel();
+                            }
+                        }
+                    }
+                    break;
+                    case TutorialState.MultiColor2:
                     {
                         if (canExitState && playerInputs.spacebarDown)
                         {
@@ -370,6 +404,7 @@ public class GameplayUI : MonoBehaviour
     {
         switch (curState)
         {
+
             case UIState.Notepad:
             {
                 MoveUIElement(notepad.transform, notepadData.inactiveLocalPos, ref ctsNotepad, newState);
@@ -469,6 +504,29 @@ public class GameplayUI : MonoBehaviour
             SceneController.GetUnlockPicker().Close();
         }
     }
+    private void MoveMulticolorMarkerTutorialIcon(IconUIElement icon)
+    {
+        if (!options.skipTutorial)
+        {
+            SetToNotepadState();
+            spyStats.checkingNotepad = true;
+            notepad.FlipToPage(notepad.colorKeyPage.pageIndex);
+
+            icon.renderer.transform.SetParent(transform, true);
+            icon.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.passengerMulticolorMarkerTutorialText1);
+            icon.renderer.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
+
+            curTutorialIcon = icon;
+
+            fadeBlack.FadeIn(value: 1, alpha: 0.2f, uvPosY: 0.3f, fadeBlackZPos: FadeBlack.NOTEPAD_DEPTH);
+            spyStats.curTutorialState = TutorialState.MultiColor1;
+            spyStats.playerInputsEnabled = false;
+
+            SceneController.GetSpy().FinishWithChosenNPC();
+            SceneController.GetSpy().SetStateToNotepad();
+            SceneController.GetUnlockPicker().Close();
+        }
+    }
     private void InitPOVUI()
     {
         notepad = SceneController.GetNotepad(transform);
@@ -482,7 +540,7 @@ public class GameplayUI : MonoBehaviour
         ticket.transform.localPosition = ticketInactivePos;
 
         carriageMapActivePos = carriageMap.transform.localPosition;
-        carriageMapInactivePos = new Vector3(halfCamWidth, carriageMap.transform.localPosition.y, carriageMap.transform.localPosition.z);
+        carriageMapInactivePos = new Vector3(halfCamWidth, carriageMapActivePos.y, carriageMap.transform.localPosition.z);
         carriageMap.transform.localPosition = carriageMapInactivePos;
     }
     private void InitTicketIcons()
@@ -508,7 +566,7 @@ public class GameplayUI : MonoBehaviour
         traitorIcon.renderer.SetAlpha(0);
         traitorCountText.SetAppearTextAlpha(0);
 
-        quitButton.activePos = quitButton.renderer.transform.localPosition;
+        redoButton.InitButton(ClickRedo, EnterButton, ExitButton, isHold: true);
         redoButton.activePos = redoButton.renderer.transform.localPosition;
     }
     private void SetNewTicketIcons()
@@ -573,6 +631,12 @@ public class GameplayUI : MonoBehaviour
         spyStats.tutorialsCompleted |= spyStats.curTutorialState;
         spyStats.curTutorialState = TutorialState.Color2;
     }
+    private void SetTutorialTextToMultiColor2()
+    {
+        tutorialRenderer.SetText(options.passengerMulticolorMarkerTutorialText2);
+        spyStats.tutorialsCompleted |= spyStats.curTutorialState;
+        spyStats.curTutorialState = TutorialState.MultiColor2;
+    }
     private void SetTutorialTextToColor3()
     {
         tutorialRenderer.SetText(options.passengerColorMarkerTutorialText3);
@@ -604,38 +668,21 @@ public class GameplayUI : MonoBehaviour
         traitorCount--;
         traitorCountText.SetText("x" + traitorCount);
     }
-    private void HandlePlayAgainButton()
+    private void ClickRedo(IconUIElement icon)
     {
-        if (CursorController.IsInsideBounds(redoButton.renderer.bounds, isClickable: true))
-        {
-            redoButton.renderer.custom.w = 1;
-
-            if (playerInputs.mouseLeftDown)
-            {
-                fadeBlack.FadeInChangeScene(options.startTripText, Scenes.SceneType.Trip, sceneIndex: 2);
-                gameEventData.OnResetTrip.Raise();
-            }
-        }
-        else
-        {
-            redoButton.renderer.custom.w = 0;
-        }
+        icon.renderer.custom.x = 0;
+        fadeBlack.FadeInChangeScene("", Scenes.SceneType.Start, sceneIndex: 1);
+        SceneController.KeepNotepad(notepad);
+        notepad.gameObject.SetActive(false);
     }
-    private void HandleQuitButton()
+    private void EnterButton(IconUIElement icon)
     {
-        if (CursorController.IsInsideBounds(quitButton.renderer.bounds, isClickable: true))
-        {
-            quitButton.renderer.custom.w = 1;
+        icon.renderer.custom.x = 1;
 
-            if (playerInputs.mouseLeftDown)
-            {
-                Application.Quit();
-            }
-        }
-        else
-        {
-            quitButton.renderer.custom.w = 0;
-        }
+    }
+    private void ExitButton(IconUIElement icon)
+    {
+        icon.renderer.custom.x = 0;
     }
 
     private async UniTask DisappearingKeyIcon()

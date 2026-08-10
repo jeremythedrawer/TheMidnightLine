@@ -58,7 +58,6 @@ public class StartUI : MonoBehaviour
 
     public TextUIElement darkColorButton;
     public TextUIElement lightColorButton;
-    public TextUIElement tutorialButton;
 
     public TextUIElement thankYouMessage;
     public TextUIElement playAgainButton;
@@ -209,7 +208,6 @@ public class StartUI : MonoBehaviour
 
                 darkColorButton.MoveToActive();
                 lightColorButton.MoveToActive();
-                tutorialButton.MoveToActive();
 
                 spyStats.playerInputsEnabled = false;
 
@@ -506,7 +504,6 @@ public class StartUI : MonoBehaviour
 
                 darkColorButton.MoveAway(camStats, MoveButtonDirection.Left);
                 lightColorButton.MoveAway(camStats, MoveButtonDirection.Left);
-                tutorialButton.MoveAway(camStats, MoveButtonDirection.Left);
 
                 spyStats.playerInputsEnabled = true;
                 OnClickBackFromOptions?.Invoke();
@@ -535,13 +532,11 @@ public class StartUI : MonoBehaviour
         
         darkColorButton.InitButton(DarkColorButtonClicked);
         lightColorButton.InitButton(LightColorButtonClicked);
-        tutorialButton.InitButton(TutorialButtonClicked);
 
         titleIcon.InitImage();
 
         darkColorButton.SetAway(camStats, MoveButtonDirection.Left);
         lightColorButton.SetAway(camStats, MoveButtonDirection.Left);
-        tutorialButton.SetAway(camStats, MoveButtonDirection.Left);
         thankYouMessage.SetAway(camStats, MoveButtonDirection.Left);
         playAgainButton.SetAway(camStats, MoveButtonDirection.Left);
         traitorsFoundMessage.SetAway(camStats, MoveButtonDirection.Left);
@@ -565,7 +560,6 @@ public class StartUI : MonoBehaviour
         
         darkColorButton.InitButton(DarkColorButtonClicked);
         lightColorButton.InitButton(LightColorButtonClicked);
-        tutorialButton.InitButton(TutorialButtonClicked);
         
         playAgainButton.InitButton(PlayAgainClicked);
         thankYouMessage.InitMessage();
@@ -582,7 +576,6 @@ public class StartUI : MonoBehaviour
 
         darkColorButton.SetAway(camStats, MoveButtonDirection.Left);
         lightColorButton.SetAway(camStats, MoveButtonDirection.Left);
-        tutorialButton.SetAway(camStats, MoveButtonDirection.Left);
         
         thankYouMessage.SetAway(camStats, MoveButtonDirection.Left);
         playAgainButton.SetAway(camStats, MoveButtonDirection.Left);
@@ -605,7 +598,7 @@ public class StartUI : MonoBehaviour
     }
     private void StartTrip()
     {
-        fadeBlack.FadeInChangeScene("FIND where the TRAITORS are going.", SceneType.Trip, sceneIndex: 2);
+        fadeBlack.FadeInChangeScene("Old Vinrose to Meridia Hall", SceneType.Trip, sceneIndex: 2);
         keyIconRenderer.enabled = false;
         SceneController.KeepNotepad(notepad);
     }
@@ -670,7 +663,6 @@ public class StartUI : MonoBehaviour
         optionsButton.UpdateButton(playerInputs);
         darkColorButton.UpdateButton(playerInputs);
         lightColorButton.UpdateButton(playerInputs);
-        tutorialButton.UpdateButton(playerInputs);
     }
     private void UpdateEndMenuButtons()
     {
@@ -727,19 +719,6 @@ public class StartUI : MonoBehaviour
     private void LightColorButtonClicked()
     {
         mainColorPicker.Open(lightColorButton.renderer.background_renderer, ColorPicker.SelectType.Light, ColorPicker.Direction.BottomRight);
-    }
-    private void TutorialButtonClicked()
-    {
-        if (options.skipTutorial)
-        {
-            tutorialButton.renderer.SetText("Run Tutorial");
-            options.skipTutorial = false;
-        }
-        else
-        {
-            tutorialButton.renderer.SetText("Skip Tutorial");
-            options.skipTutorial = true;
-        }
     }
     private void WriteLocationText()
     {

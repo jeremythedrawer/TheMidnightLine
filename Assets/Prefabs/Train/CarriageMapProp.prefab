@@ -1,0 +1,98 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &4059646192361577460
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 4963920137862022298}
+  - component: {fileID: 4493341669954937099}
+  - component: {fileID: 2298888635042274639}
+  m_Layer: 20
+  m_Name: CarriageMapProp
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &4963920137862022298
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4059646192361577460}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0.253, y: 1.597, z: 15}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &4493341669954937099
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4059646192361577460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
+    material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
+  atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 19
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.017089844, y: 0.045410156, z: 0.6303711, w: 0.49658203}
+    uvPivot: {x: 0, y: 0.5}
+    worldSize: {x: 0.19444445, y: 0.51666665, z: 1}
+    index: 19
+  bounds:
+    m_Center: {x: 0.35022223, y: 1.597, z: 15}
+    m_Extent: {x: 0.097222224, y: 0.25833333, z: 0.1}
+  worldPivotAndSize: {x: -0, y: -0.25833333, z: 0.19444445, w: 0.51666665}
+  uvSizeAndPosition: {x: 0.017089844, y: 0.045410156, z: 0.6303711, w: 0.49658203}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 1}
+  customBit: 0
+  boundsOffset: {x: 0.097222224, y: 0, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 19
+  prevSpriteIndexFlipV: 19
+  isAnimating: 0
+  quadCount: 0
+--- !u!114 &2298888635042274639
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4059646192361577460}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 3d15e441a96f4be47a7d696e3d1452eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::CarriageMap
+  atlasRenderer: {fileID: 4493341669954937099}

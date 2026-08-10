@@ -210,7 +210,11 @@ public class Notepad : MonoBehaviour
 
         }
 
-        if (activePage.activePlayerWriteTextRenderer != null) leftHand.SetState(LeftHand.State.Stationary);
+        if (activePage.activePlayerWriteTextRenderer != null)
+        {
+            leftHand.SetState(LeftHand.State.Stationary);
+            leftHand.MoveToEdgeTextBounds(leftEdge: true);
+        }
         spyStats.checkingNotepad = true;
     }
     public void ExitNotepad()
@@ -597,6 +601,7 @@ public class Notepad : MonoBehaviour
                 if (prevState == NotepadState.Writing || prevState == NotepadState.Erasing)
                 {
                     leftHand.SetState(LeftHand.State.Stationary);
+                    leftHand.MoveToEdgeTextBounds(leftEdge: true);
                 }
                 else
                 {
@@ -681,7 +686,6 @@ public class Notepad : MonoBehaviour
                         }
                         else if (activePage.playerWriteTextRenderers[1].completedWritingText && (notepadData.completedUnlocks & UnlockType.MultiColor) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
                         {
-                            notepadData.completedUnlocks |= UnlockType.MultiColor;
                             curTrip.selectedColorMarkerIndex = 1;
                             colorPicker.Open(activePage.playerWriteRenderers[1], ColorPicker.SelectType.Clue);
                             activePage.SetColorMarkerButtonSprite(1);
@@ -695,6 +699,7 @@ public class Notepad : MonoBehaviour
             {
                 activePage.activePlayerWriteText = "";
                 leftHand.SetState(LeftHand.State.Stationary);
+                leftHand.MoveToEdgeTextBounds(leftEdge: true);    
                 notepadData.subState &= ~(SubState.EraseToggle);
 
                 switch (activePage.pageType)
@@ -1031,7 +1036,7 @@ public class Notepad : MonoBehaviour
             while (activePage.pageIndex != pageIndex)
             {
                 SetState(NotepadState.FlippingUp);
-                while(notepadData.curState == NotepadState.FlippingUp) await UniTask.Yield();
+                while(notepadData.curState != NotepadState.Stationary) await UniTask.Yield();
                 await UniTask.Yield();
             }
             notepadData.subState |= SubState.CanFlipUp | SubState.CanFlipDown;
@@ -1041,7 +1046,7 @@ public class Notepad : MonoBehaviour
             while (activePage.pageIndex != pageIndex)
             {
                 SetState(NotepadState.FlippingDown);
-                while (notepadData.curState == NotepadState.FlippingUp) await UniTask.Yield();
+                while (notepadData.curState != NotepadState.Stationary) await UniTask.Yield();
                 await UniTask.Yield();
             }
             notepadData.subState |= SubState.CanFlipUp | SubState.CanFlipDown;

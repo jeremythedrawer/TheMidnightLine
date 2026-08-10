@@ -1,19 +1,19 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
 
-public class CarriageMap : MonoBehaviour
+public class CarriageMapProp : MonoBehaviour
 {
     const float EFFECT_TIME = 0.2f;
     public AtlasRenderer atlasRenderer;
-    public void InteractEffect()
+    public void Use()
     {
-        Interacting().Forget();
+        Using().Forget();
     }
-    public void CancelEffect()
+    public void StopUsing()
     {
-        Cancelling().Forget();
+        StoppingUsing().Forget();
     }
-    private async UniTask Interacting()
+    private async UniTask Using()
     {
         float elapsedTime = 0;
         while (elapsedTime < EFFECT_TIME)
@@ -27,7 +27,7 @@ public class CarriageMap : MonoBehaviour
         atlasRenderer.custom.x = 1;
     }
 
-    private async UniTask Cancelling()
+    private async UniTask StoppingUsing()
     {
         float elapsedTime = EFFECT_TIME;
 

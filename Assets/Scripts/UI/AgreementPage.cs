@@ -26,26 +26,26 @@ public class AgreementPage : MonoBehaviour
 
     public CancellationTokenSource ctsMove;
 
+    private void Start()
+    {
+        Init();
+    }
     private void OnEnable()
     {
-        Scenes.OnLoadStart += Init;
         Scenes.OnLoadScore += DisableSelf;
         AgreementProp.OnAgreementCollect += MoveToActivePosition;
         
         LeftHand.OnAtStartWritePos += WriteSignature;
         LeftHand.OnFinishWriting += FinishWritingSignature;
-        LeftHand.OnAtStationaryPos += ExitAgreementPage;
     }
     private void OnDisable()
     {
-        Scenes.OnLoadStart -= Init;
         Scenes.OnLoadScore -= DisableSelf;
         
         AgreementProp.OnAgreementCollect -= MoveToActivePosition;
 
         LeftHand.OnAtStartWritePos -= WriteSignature;
         LeftHand.OnFinishWriting -= FinishWritingSignature;
-        LeftHand.OnAtStationaryPos -= ExitAgreementPage;
     }
     private void Update()
     {
@@ -97,16 +97,11 @@ public class AgreementPage : MonoBehaviour
     private void FinishWritingSignature()
     {
         leftHand.SetState(LeftHand.State.Stationary);
-    }
-    private void ExitAgreementPage()
-    {
-        if (!atActivePos) return;
-
-        notepadData.collected = true;
-        atActivePos = false;
-        spyStats.playerInputsEnabled = true;
-        MoveToInactivePosition();
+        leftHand.MoveToLeftOfPaper();
         OnAgreementSigned?.Invoke();
+        MoveToInactivePosition();
+        spyStats.playerInputsEnabled = true;
+        notepadData.signedAgreement = true;
     }
     public async UniTask MovingToActivePosition()
     {    
@@ -121,6 +116,7 @@ public class AgreementPage : MonoBehaviour
         atActivePos = true;
         page.SetPreviewPlayerWriteTexts(NotepadState.None);
         leftHand.SetState(LeftHand.State.Stationary);
+        leftHand.MoveToLeftOfPaper();
     }
     public async UniTask MovingToInactivePosition()
     {
@@ -133,5 +129,8 @@ public class AgreementPage : MonoBehaviour
             await UniTask.Yield();
         }
         gameObject.SetActive(false);
+        notepadData.collected = true;
+        atActivePos = false;
+
     }
 }
