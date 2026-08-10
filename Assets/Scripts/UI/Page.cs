@@ -5,7 +5,6 @@ using static Atlas;
 using static AtlasUI;
 using static Notepad;
 using static NPC;
-using System.Linq;
 public class Page : MonoBehaviour
 {
     public const float FLIP_LOCAL_POS_Y = -1.656f;
@@ -13,6 +12,9 @@ public class Page : MonoBehaviour
     public const float PAGE_NUMBER_ICON_BUFFER_Y = 0.15f;
 
     public static AtlasClip paper_clip;
+
+    public static event Action OnEnterColorKeyIcon;
+    public static event Action OnExitColorKeyIcon;
 
     public PageType pageType;
     public TripPrompt promptType;
@@ -47,9 +49,9 @@ public class Page : MonoBehaviour
     public AtlasTextRenderer activePlayerWriteTextRenderer;
     public AtlasRenderer[] pageNumberIconRenderers;
 
+    public int[] previewPlayerWriteIndices;
     public int playerWriteIndex;
     public int traitorIndex;
-    public int previewPlayerWriteIndex;
     public int activePlayerWriteRowIndex;
     public int pageIndex;
 
@@ -58,8 +60,7 @@ public class Page : MonoBehaviour
     public Bounds playerWriteTextBounds;
     
     public string activePlayerWriteText;
-    public string previewPlayerWriteText;
-
+    public string activePreviewPlayerWriteText;
     public void Init(int pageIndexInput, int totalPages)
     {
         paper_clip = paperRenderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
@@ -104,11 +105,12 @@ public class Page : MonoBehaviour
                         trip.selectedColorMarkerIndex = activePlayerWriteRowIndex;
                     }
 
-                    otherButtons[i].InitButton(ClickColor, EnterButtonNormal, ExitButtonNormal);
+                    otherButtons[i].InitButton(ClickColor, EnterColorButton, ExitColorButton);
                 }
 
                 playerWriteTexts = new string[playerWriteTextRenderers.Length];
                 Array.Fill(playerWriteTexts, "");
+                previewPlayerWriteIndices = new int[playerWriteTextRenderers.Length];
 
                 for (int i = 0; i < proceduralRenderers.Length; i++)
                 {
@@ -159,6 +161,7 @@ public class Page : MonoBehaviour
         playerWriteTexts = new string[playerWriteTextRenderers.Length];
         Array.Fill(playerWriteTexts, "");
         activePlayerWriteTextRenderer.SetText("");
+        previewPlayerWriteIndices = new int[playerWriteTextRenderers.Length];
     }
     public void InitNextColorRow(int nextIndex)
     {
@@ -170,8 +173,8 @@ public class Page : MonoBehaviour
         int behaveIndex = nextIndex % 2;
         Behaviours curBehaviour = GetBehaviourAtIndex(behaviours, behaveIndex);
 
-        previewPlayerWriteText = npcData.behaviourStringDict[curBehaviour];
-        playerWriteTextRend.SetText(previewPlayerWriteText);
+       string nextText = npcData.behaviourStringDict[curBehaviour];
+        playerWriteTextRend.SetText(nextText);
         playerWriteTextRend.SetAppearTextAlpha(0);
 
         playerWriteTextRend.enabled = true;
@@ -274,10 +277,12 @@ public class Page : MonoBehaviour
         playerWriteTexts = new string[playerWriteTextRenderers.Length];
         Array.Fill(playerWriteTexts, "");
 
+        previewPlayerWriteIndices = new int[playerWriteTextRenderers.Length];
+
         for (int i = 0; i < playerWriteTextRenderers.Length; i++)
         {
             AtlasTextRenderer playerWriteTextRenderer = playerWriteTextRenderers[i];
-            playerWriteTextRenderer.SetText(trip.stationsDataArray[previewPlayerWriteIndex].stationName);
+            playerWriteTextRenderer.SetText(trip.stationsDataArray[0].stationName);
             playerWriteTextRenderer.SetColorText(options.meridiaColor);
         }
         AtlasRenderer coveredMugShot = playerWriteRenderers[0];
@@ -393,7 +398,7 @@ public class Page : MonoBehaviour
     }
     public void WritePlayerWriteText()
     {
-        playerWriteIndex = previewPlayerWriteIndex;
+        playerWriteIndex = previewPlayerWriteIndices[activePlayerWriteRowIndex];
         activePlayerWriteText = activePlayerWriteTextRenderer.text;
         playerWriteTexts[activePlayerWriteRowIndex] = activePlayerWriteText;
         playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePlayerWriteText);
@@ -407,7 +412,7 @@ public class Page : MonoBehaviour
     }
     public void SwitchActivePreviewPlayerWriteText(int indexOffset)
     {
-        previewPlayerWriteIndex += indexOffset;
+        previewPlayerWriteIndices[activePlayerWriteRowIndex] += indexOffset;
 
         switch (pageType)
         {
@@ -417,15 +422,15 @@ public class Page : MonoBehaviour
                 {
                     case TripPrompt.Stations:
                     {
-                        previewPlayerWriteIndex = (previewPlayerWriteIndex + trip.stationsDataArray.Length) % trip.stationsDataArray.Length;
-                        previewPlayerWriteText = trip.stationsDataArray[previewPlayerWriteIndex].stationName;
+                        previewPlayerWriteIndices[activePlayerWriteRowIndex] = (previewPlayerWriteIndices[activePlayerWriteRowIndex] + trip.stationsDataArray.Length) % trip.stationsDataArray.Length;
+                        activePreviewPlayerWriteText = trip.stationsDataArray[previewPlayerWriteIndices[activePlayerWriteRowIndex]].stationName;
                     }
                     break;
                 }
 
-                activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
+                activePlayerWriteTextRenderer.SetText(activePreviewPlayerWriteText, alpha: 0);
                 activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
-                playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
+                playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePreviewPlayerWriteText);
             }
             break;
 
@@ -438,15 +443,15 @@ public class Page : MonoBehaviour
                         if (activePlayerWriteTextRenderer != null)
                         {
                             int behaviourLength = (int)Behaviours.Count;
-                            previewPlayerWriteIndex = (previewPlayerWriteIndex + behaviourLength) % behaviourLength;
+                            previewPlayerWriteIndices[activePlayerWriteRowIndex] = (previewPlayerWriteIndices[activePlayerWriteRowIndex] + behaviourLength) % behaviourLength;
                             Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
-                            Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
-                            previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
+                            Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndices[activePlayerWriteRowIndex]);
+                            activePreviewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
                             
-                            activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
+                            activePlayerWriteTextRenderer.SetText(activePreviewPlayerWriteText, alpha: 0);
                             activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
                             
-                            playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
+                            playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePreviewPlayerWriteText);
                         }
                     }
                     break;
@@ -468,8 +473,8 @@ public class Page : MonoBehaviour
                     {
                         if (playerWriteTexts[activePlayerWriteRowIndex] == "")
                         {
-                            previewPlayerWriteText = trip.stationsDataArray[previewPlayerWriteIndex].stationName;
-                            activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
+                            activePreviewPlayerWriteText = trip.stationsDataArray[previewPlayerWriteIndices[activePlayerWriteRowIndex]].stationName;
+                            activePlayerWriteTextRenderer.SetText(activePreviewPlayerWriteText, alpha: 0);
                         }
                     }
                     break;
@@ -477,7 +482,7 @@ public class Page : MonoBehaviour
                 
                 if (playerWriteTextRenderers.Length > 0)
                 {
-                    playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
+                    playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePreviewPlayerWriteText);
                 }
             }
             break;
@@ -487,13 +492,13 @@ public class Page : MonoBehaviour
                 if (prevNotepadState == NotepadState.Erasing)
                 {
                     int behaviourLength = (int)Behaviours.Count;
-                    previewPlayerWriteIndex = (previewPlayerWriteIndex + behaviourLength) % behaviourLength;
+                    previewPlayerWriteIndices[activePlayerWriteRowIndex] = (previewPlayerWriteIndices[activePlayerWriteRowIndex] + behaviourLength) % behaviourLength;
                     Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
-                    Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
-                    previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
-                    activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
+                    Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndices[activePlayerWriteRowIndex]);
+                    activePreviewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
+                    activePlayerWriteTextRenderer.SetText(activePreviewPlayerWriteText, alpha: 0);
                 }
-                else
+                else if (prevNotepadState != NotepadState.Writing)
                 {
                     if ((trip.curUnlocks & UnlockType.Color) != 0)
                     {
@@ -503,18 +508,15 @@ public class Page : MonoBehaviour
 
                             AtlasTextRenderer curRend = playerWriteTextRenderers[i];
                             int behaviourLength = (int)Behaviours.Count;
-                            previewPlayerWriteIndex = (previewPlayerWriteIndex + behaviourLength) % behaviourLength;
+                            previewPlayerWriteIndices[activePlayerWriteRowIndex] = (previewPlayerWriteIndices[activePlayerWriteRowIndex] + behaviourLength) % behaviourLength;
                             Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
-                            Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndex);
-                            previewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
-                            curRend.SetText(previewPlayerWriteText, alpha: 0);
+                            Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndices[activePlayerWriteRowIndex]);
+                            activePreviewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
+                            curRend.SetText(activePreviewPlayerWriteText, alpha: 0);
                         }
 
-                        if (playerWriteTextRenderers.Length > 0)
-                        {
-                            if (activePlayerWriteTextRenderer == null) activePlayerWriteTextRenderer = playerWriteTextRenderers[activePlayerWriteRowIndex];
-                            playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(previewPlayerWriteText);
-                        }
+                        if (activePlayerWriteTextRenderer == null) activePlayerWriteTextRenderer = playerWriteTextRenderers[activePlayerWriteRowIndex];
+                        playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePreviewPlayerWriteText);
                     }
                 }
             }
@@ -522,8 +524,8 @@ public class Page : MonoBehaviour
 
             case PageType.Agreement:
             {
-                previewPlayerWriteText = "{|}~";
-                activePlayerWriteTextRenderer.SetText(previewPlayerWriteText, alpha: 0);
+                activePreviewPlayerWriteText = "{|}~";
+                activePlayerWriteTextRenderer.SetText(activePreviewPlayerWriteText, alpha: 0);
             }
             break;
         }
@@ -633,13 +635,15 @@ public class Page : MonoBehaviour
             break;
         }
     }
-    public void EnterButtonNormal(IconUIElement icon)
+    public void EnterColorButton(IconUIElement icon)
     {
-        icon.renderer.custom.x = 1;
+        icon.renderer.custom.w = 1;
+        OnEnterColorKeyIcon?.Invoke();
     }
-    public void ExitButtonNormal(IconUIElement icon)
+    public void ExitColorButton(IconUIElement icon)
     {
-        icon.renderer.custom.x = 0;
+        icon.renderer.custom.w = 0;
+        OnExitColorKeyIcon?.Invoke();
     }
     public void EnterExitButton(IconUIElement icon)
     {
@@ -709,7 +713,7 @@ public class Page : MonoBehaviour
         {
             activePlayerWriteRowIndex = index;
             activePlayerWriteTextRenderer = playerWriteTextRenderers[activePlayerWriteRowIndex];
-            previewPlayerWriteText = activePlayerWriteTextRenderer.text;
+            activePreviewPlayerWriteText = activePlayerWriteTextRenderer.text;
             activePlayerWriteText = playerWriteTexts[activePlayerWriteRowIndex];
         }
     }

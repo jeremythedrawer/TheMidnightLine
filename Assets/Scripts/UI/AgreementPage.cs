@@ -100,6 +100,8 @@ public class AgreementPage : MonoBehaviour
     }
     private void ExitAgreementPage()
     {
+        if (!atActivePos) return;
+
         notepadData.collected = true;
         atActivePos = false;
         spyStats.playerInputsEnabled = true;

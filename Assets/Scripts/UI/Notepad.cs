@@ -9,7 +9,7 @@ using static NPC;
 using static Scenes;
 public class Notepad : MonoBehaviour
 {
-    public const int MIN_STATION_STOPS = 2;
+    public const int MIN_STATION_STOPS = 1;
 
     public static Vector3 ACTIVE_POS = new Vector3(3.57998657f, 1, 5);
     
@@ -35,8 +35,7 @@ public class Notepad : MonoBehaviour
         CanFlipDown = 1 << 7,
         CanWillFlipUp = 1 << 8,
         CanWillFlipDown = 1 << 9,
-        OnScreen = 1 << 10,
-        InUse = 1 << 11,
+        InUse = 1 << 10,
     }
 
     public static event Action OnWriteColorMarkerFirstTime;
@@ -127,13 +126,6 @@ public class Notepad : MonoBehaviour
             UpdateState();
             ChooseState();
         }
-        else if (((notepadData.subState & SubState.OnScreen) != 0))
-        {     
-            if (transform.localPosition == notepadData.inactiveLocalPos)
-            {
-                notepadData.subState &= ~(SubState.OnScreen);
-            }
-        }
     }
     public void Init()
     {
@@ -200,7 +192,6 @@ public class Notepad : MonoBehaviour
     }
     public void EnterNotepad()
     {
-        notepadData.subState |= (SubState.InUse | SubState.OnScreen);
         EnterState(NotepadState.None);
 
         if (activePage.pageType == PageType.ColorKey)

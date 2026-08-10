@@ -95,7 +95,7 @@ Shader "Custom/s_atlasColor"
                 half border = saturate(tex.r + tex.g);
                 half invertT = i.custom.a;
 
-                half3 invertTex = lerp(tex.rgb, 1 - tex.rgb, invertT);
+                half3 invertTex = lerp(1 - tex.rgb, tex.rgb, invertT);
                 
                 half whiteTex = saturate(invertTex.g - invertTex.r);
 

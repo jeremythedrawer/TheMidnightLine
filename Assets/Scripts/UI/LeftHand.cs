@@ -48,15 +48,21 @@ public class LeftHand : MonoBehaviour
     public float curPencilTime;
 
     public bool atTargetPos;
+    public bool movedForColorPicker;
     private void OnEnable()
     {
-        ColorPicker.OnCloseCluePicker += SetToStationaryState;
-        ColorPicker.OnOpenCluePicker += SetToOffScreenState;
+        ColorPicker.OnCloseCluePicker += ReturnAfterColorPickerClose;
+        ColorPicker.OnOpenCluePicker += MoveForColorPicker;
+
+        Page.OnEnterColorKeyIcon += MoveToLeftOfPaper;
+        Page.OnExitColorKeyIcon += MoveBackToTextBounds;
     }
     private void OnDisable()
     {
-        ColorPicker.OnCloseCluePicker -= SetToStationaryState;
-        ColorPicker.OnOpenCluePicker -= SetToOffScreenState;
+        ColorPicker.OnCloseCluePicker -= ReturnAfterColorPickerClose;
+        ColorPicker.OnOpenCluePicker -= MoveForColorPicker;
+        Page.OnEnterColorKeyIcon -= MoveToLeftOfPaper;
+        Page.OnExitColorKeyIcon -= MoveBackToTextBounds;
     }
     private void Update()
     {
@@ -82,7 +88,7 @@ public class LeftHand : MonoBehaviour
                 curPencilTime = 0;
                 atTargetPos = false;
                 atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.rotatePencil_clip.keyframeStartIndex].sprite);
-                totalPencilTime = (activePage.previewPlayerWriteText.Length + 1) * WRITE_LETTER_TIME;
+                totalPencilTime = (activePage.activePreviewPlayerWriteText.Length + 1) * WRITE_LETTER_TIME;
 
                 MoveToEdgeTextBounds(leftEdge: true);
             }
@@ -149,6 +155,7 @@ public class LeftHand : MonoBehaviour
                     if (dist < PENCIL_DISTANCE_THRESHOLD)
                     {
                         OnAtStartWritePos?.Invoke();
+                        curTextBounds = activePage.playerWriteTextBounds;
                         atTargetPos = true;
                     }
                 }
@@ -179,6 +186,7 @@ public class LeftHand : MonoBehaviour
                     if (dist < PENCIL_DISTANCE_THRESHOLD * PENCIL_DISTANCE_THRESHOLD)
                     {
                         OnAtStartErasePos?.Invoke();
+                        curTextBounds = activePage.GetWritingBounds();
                         atTargetPos = true;
                     }
                 }
@@ -186,11 +194,11 @@ public class LeftHand : MonoBehaviour
                 {
                     curPencilTime += Time.deltaTime;
                     float t = curPencilTime / totalPencilTime;
-                    float curPosX = Mathf.Lerp(curTextBounds.max.x, curTextBounds.min.x, t);
+                    float curWorldPosX = Mathf.Lerp(curTextBounds.max.x, curTextBounds.min.x, t);
                     float randOffset = Mathf.PerlinNoise(curPencilTime * PENCIL_VERTICAL_FREQUENCY, curPencilTime * PENCIL_VERTICAL_FREQUENCY) * 2 - 1;
-                    float curPosY = curTextBounds.center.y + (randOffset * PENCIL_VERTICAL_MAGNITUDE);
-                    transform.position = new Vector3(curPosX, curPosY, transform.position.z);
+                    float curWorldPosY = curTextBounds.center.y + (randOffset * PENCIL_VERTICAL_MAGNITUDE);
 
+                    transform.localPosition = transform.parent.InverseTransformPoint(new Vector3(curWorldPosX, curWorldPosY, transform.position.z));
                     if (t > 1f) OnFinishErasing?.Invoke();
                 }
             }
@@ -226,11 +234,12 @@ public class LeftHand : MonoBehaviour
                         Vector3 spritePivotOffset = new Vector3(rendBounds.extents.x * (1 - uvPivot.x), rendBounds.size.y * (1 - uvPivot.y));
                         transform.localPosition = notepadData.leftHandOffScreenLocalPos - spritePivotOffset;
 
-                        if (activePage.activePlayerWriteTextRenderer != null)
+                        atTargetPos = true;
+
+                        if (activePage.activePlayerWriteTextRenderer != null && !movedForColorPicker)
                         {
                             SetState(State.Stationary);
                         }
-                        atTargetPos = true;
                     }
                 }
             }
@@ -313,16 +322,42 @@ public class LeftHand : MonoBehaviour
         targetLocalPos = notepadData.leftHandFlipPos;
         atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.handFlipPage_clip.keyframeStartIndex].sprite);
     }
-    public void SetToStationaryState()
+    public void ReturnAfterColorPickerClose()
     {
+        movedForColorPicker = false;
         SetState(State.Stationary);
     }
-    public void SetToOffScreenState()
+    public void MoveForColorPicker()
     {
+        movedForColorPicker = true;
         SetState(State.OffScreen);
+    }
+    public void MoveToLeftOfPaper()
+    {
+        if (curState == State.Stationary)
+        {
+            atTargetPos = false;
+            Bounds paperBounds = activePage.paperRenderer.GetBounds();
+
+            Vector2 writePos = new Vector2();
+            writePos.x = paperBounds.min.x;
+            writePos.y = curTextBounds.center.y;
+
+            targetLocalPos = transform.parent.InverseTransformPoint(writePos);
+            targetLocalPos.z = notepadData.leftHandDepthFront;
+        }
+
+    }
+    public void MoveBackToTextBounds()
+    {
+        if (curState == State.Stationary)
+        {
+            MoveToEdgeTextBounds(leftEdge: true);
+        }
     }
     public void MoveToEdgeTextBounds(bool leftEdge)
     {
+        atTargetPos = false;
         curTextBounds = activePage.GetWritingBounds();
 
         Vector2 writePos = new Vector2();

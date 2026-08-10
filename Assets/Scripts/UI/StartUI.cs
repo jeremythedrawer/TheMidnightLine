@@ -326,6 +326,7 @@ public class StartUI : MonoBehaviour
             {
                 UpdateNaturalPos(Notepad.ACTIVE_POS, ref naturalMovePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
+                if ((notepad.transform.localPosition - naturalMovePos).sqrMagnitude < 0.05f) notepadData.subState |= Notepad.SubState.InUse;
             }
             break;
 
