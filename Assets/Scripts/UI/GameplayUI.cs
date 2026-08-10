@@ -301,15 +301,17 @@ public class GameplayUI : MonoBehaviour
                 {
                     case TutorialState.None:
                     {
-                        if (canExitState && CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds, isClickable: true))
+                        if(notepad.transform.parent == transform)
                         {
-                            ctsNotepad?.Cancel();
-
-                            notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.hoverLocalPos, Time.deltaTime * MOVE_DAMP);
-                        }
-                        else
-                        {
-                            notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.inactiveLocalPos, Time.deltaTime * MOVE_DAMP);
+                            if (canExitState && CursorController.IsInsideBounds(notepad.activePage.paperRenderer.bounds, isClickable: true))
+                            {
+                                ctsNotepad?.Cancel();
+                                notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.hoverLocalPos, Time.deltaTime * MOVE_DAMP);
+                            }
+                            else
+                            {
+                                notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.inactiveLocalPos, Time.deltaTime * MOVE_DAMP);
+                            }
                         }
                     }
                     break;
@@ -404,7 +406,6 @@ public class GameplayUI : MonoBehaviour
     {
         switch (curState)
         {
-
             case UIState.Notepad:
             {
                 MoveUIElement(notepad.transform, notepadData.inactiveLocalPos, ref ctsNotepad, newState);

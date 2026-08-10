@@ -154,7 +154,6 @@ public class LeftHand : MonoBehaviour
                     if (dist < PENCIL_DISTANCE_THRESHOLD)
                     {
                         OnAtStartWritePos?.Invoke();
-                        curTextBounds = activePage.playerWriteTextBounds;
                         atTargetPos = true;
                     }
                 }
@@ -162,14 +161,11 @@ public class LeftHand : MonoBehaviour
                 {
                     curPencilTime += Time.deltaTime;
                     float t = curPencilTime / totalPencilTime;
-
-                    float curPosX = Mathf.Lerp(curTextBounds.min.x, curTextBounds.max.x, t);
+                    curTextBounds = activePage.GetWritingBoundsOfNewText(activePage.activePlayerWriteText);
+                    float curWorldPosX = Mathf.Lerp(curTextBounds.min.x, curTextBounds.max.x, t);
                     float randOffset = Mathf.PerlinNoise(curPencilTime * PENCIL_VERTICAL_FREQUENCY, curPencilTime * PENCIL_VERTICAL_FREQUENCY) * 2 - 1;
-                    float curPosY = curTextBounds.center.y + (randOffset * PENCIL_VERTICAL_MAGNITUDE);
-
-                    Vector3 worldPos = new Vector3(curPosX, curPosY, transform.position.z);
-                    transform.position = worldPos;
-
+                    float curWorldPosY = curTextBounds.center.y + (randOffset * PENCIL_VERTICAL_MAGNITUDE);
+                    transform.localPosition = transform.parent.InverseTransformPoint(new Vector3(curWorldPosX, curWorldPosY, transform.position.z));
                     if (t > 1f) OnFinishWriting?.Invoke();
                 }
             }
@@ -185,7 +181,6 @@ public class LeftHand : MonoBehaviour
                     if (dist < PENCIL_DISTANCE_THRESHOLD * PENCIL_DISTANCE_THRESHOLD)
                     {
                         OnAtStartErasePos?.Invoke();
-                        curTextBounds = activePage.GetWritingBounds();
                         atTargetPos = true;
                     }
                 }
@@ -193,10 +188,10 @@ public class LeftHand : MonoBehaviour
                 {
                     curPencilTime += Time.deltaTime;
                     float t = curPencilTime / totalPencilTime;
+                    curTextBounds = activePage.GetWritingBoundsOfNewText(activePage.activePlayerWriteText);
                     float curWorldPosX = Mathf.Lerp(curTextBounds.max.x, curTextBounds.min.x, t);
                     float randOffset = Mathf.PerlinNoise(curPencilTime * PENCIL_VERTICAL_FREQUENCY, curPencilTime * PENCIL_VERTICAL_FREQUENCY) * 2 - 1;
                     float curWorldPosY = curTextBounds.center.y + (randOffset * PENCIL_VERTICAL_MAGNITUDE);
-
                     transform.localPosition = transform.parent.InverseTransformPoint(new Vector3(curWorldPosX, curWorldPosY, transform.position.z));
                     if (t > 1f) OnFinishErasing?.Invoke();
                 }
@@ -339,7 +334,7 @@ public class LeftHand : MonoBehaviour
         {
             atTargetPos = false;
             Bounds paperBounds = activePage.paperRenderer.GetBounds();
-            curTextBounds = activePage.GetWritingBounds();
+            curTextBounds = activePage.GetCurrentWritingBounds();
             Vector2 writePos = new Vector2();
             writePos.x = paperBounds.min.x;
             writePos.y = curTextBounds.center.y;
@@ -359,7 +354,7 @@ public class LeftHand : MonoBehaviour
     public void MoveToEdgeTextBounds(bool leftEdge)
     {
         atTargetPos = false;
-        curTextBounds = activePage.GetWritingBounds();
+        curTextBounds = activePage.GetCurrentWritingBounds();
 
         Vector2 writePos = new Vector2();
         writePos.x = leftEdge ? curTextBounds.min.x : curTextBounds.max.x;

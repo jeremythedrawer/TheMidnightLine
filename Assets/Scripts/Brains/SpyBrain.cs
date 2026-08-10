@@ -255,7 +255,10 @@ public class SpyBrain : MonoBehaviour
 
                         case LocationState.Carriage:
                         {
-                            GetSlideDoorInTrain();
+                            if (notepadData.profileWriteCount == trip.traitorProfiles.Length)
+                            {
+                                GetSlideDoorInTrain();
+                            }
                         }
                         break;
                     }
@@ -306,7 +309,10 @@ public class SpyBrain : MonoBehaviour
                     
                         case LocationState.Carriage:
                         {
-                            GetSlideDoorInTrain();
+                            if (notepadData.profileWriteCount == trip.traitorProfiles.Length)
+                            {
+                                GetSlideDoorInTrain();
+                            }
                         }
                         break;
                     }
@@ -327,6 +333,7 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.CarriageMap:
             {
+                atlasRenderer.PlayClip(ref curClip);
                 if (!playerInputs.interact) canExitState = true;
 
                 if (playerInputs.interact && canExitState) checkingCarriageMap = false;
@@ -556,6 +563,7 @@ public class SpyBrain : MonoBehaviour
 
             case SpyState.CarriageMap:
             {
+                curClip = atlas.clipDict[(int)SpyMotion.StandingBreathing];
                 OnCheckCarriageMap?.Invoke();
             }
             break;
@@ -807,17 +815,14 @@ public class SpyBrain : MonoBehaviour
             }
         }
 
-        if (notepadData.profileWriteCount == trip.traitorProfiles.Length)
+        if (foundSlideDoor != null && slideDoors == null)
         {
-            if (foundSlideDoor != null && slideDoors == null)
-            {
-                OnAtSlideDoors?.Invoke(new Vector2(foundSlideDoor.boxCollider.bounds.center.x, foundSlideDoor.boxCollider.bounds.max.y));
+            OnAtSlideDoors?.Invoke(new Vector2(foundSlideDoor.boxCollider.bounds.center.x, foundSlideDoor.boxCollider.bounds.max.y));
 
-            }
-            else if (foundSlideDoor == null && slideDoors != null)
-            {
-                OnWalkPastSlideDoors?.Invoke();
-            }
+        }
+        else if (foundSlideDoor == null && slideDoors != null)
+        {
+            OnWalkPastSlideDoors?.Invoke();
         }
         slideDoors = foundSlideDoor;
     }

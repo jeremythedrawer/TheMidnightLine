@@ -718,8 +718,12 @@ public class Page : MonoBehaviour
             activePlayerWriteText = playerWriteTexts[activePlayerWriteRowIndex];
         }
     }
-    public Bounds GetWritingBounds()
+    public Bounds GetCurrentWritingBounds()
     {
         return activePlayerWriteTextRenderer.GetBoundsCurrentText();
+    }
+    public Bounds GetWritingBoundsOfNewText(string newText)
+    {
+        return activePlayerWriteTextRenderer.GetBoundsNewText(newText);
     }
 }
