@@ -15,6 +15,7 @@ public class SceneController : MonoBehaviour
 
     public static InputManager InputManager;
 
+
     private void Start()
     {
         Scenes.SetScene(sceneData, SceneType.Start, sceneIndex: 1);

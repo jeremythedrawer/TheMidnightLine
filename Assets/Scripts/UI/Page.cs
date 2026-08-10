@@ -67,8 +67,36 @@ public class Page : MonoBehaviour
         
         playerWriteIndex = -1;
 
-        pageNumberIconRenderers = new AtlasRenderer[totalPages];
-        pageIndex = pageIndexInput;
+        activePlayerWriteText = "";
+        activePreviewPlayerWriteText = "";
+
+        if (pageNumberIconRenderers == null || pageNumberIconRenderers.Length == 0)
+        {
+            pageNumberIconRenderers = new AtlasRenderer[totalPages];
+            pageIndex = pageIndexInput;
+
+            Bounds pageNumberIconBounds = pageNumberIconPrefab.bounds;
+            float colSize = pageNumberIconBounds.size.x + PAGE_NUMBER_ICON_BUFFER_X;
+            Vector3 startPos = new Vector3();
+            startPos.x = (float)totalPages * colSize * -0.5f;
+            startPos.y = -paperRenderer.bounds.size.y + PAGE_NUMBER_ICON_BUFFER_Y;
+            startPos.z = exitButton.renderer.transform.localPosition.z;
+
+            for (int i = 0; i < totalPages; i++)
+            {
+                AtlasRenderer pageNumberIcon = Instantiate(pageNumberIconPrefab, transform);
+                Vector3 localPos = startPos;
+
+                localPos.x += i * colSize;
+                pageNumberIcon.transform.localPosition = localPos;
+
+                if (i == pageIndex)
+                {
+                    pageNumberIcon.custom.x = 1f;
+                }
+                pageNumberIconRenderers[i] = pageNumberIcon;
+            }
+        }
 
         switch (pageType)
         {
@@ -77,7 +105,6 @@ public class Page : MonoBehaviour
                 exitButton.InitButton(ClickExitButton, EnterExitButton, ExitExitButton);
                 rightButton.InitButton(ClickRightButton, EnterRightButton, ExitRightButton);
 
-                InitPageNumberIcons(totalPages);
             }
             break;
             case PageType.Profile:
@@ -85,14 +112,17 @@ public class Page : MonoBehaviour
                 exitButton.InitButton(ClickExitButton, EnterExitButton, ExitExitButton);
                 rightButton.InitButton(ClickRightButton, EnterRightButton, ExitRightButton);
                 leftButton.InitButton(ClickLeftButton, EnterLeftButton, ExitLeftButton);
-                InitPageNumberIcons(totalPages);
+
+                for (int i = 0; i < playerWriteTextRenderers.Length; i++)
+                {
+                    playerWriteTextRenderers[i].SetText("");
+                }
             }
             break;
             case PageType.ColorKey:
             {
                 exitButton.InitButton(ClickExitButton, EnterExitButton, ExitExitButton);
                 leftButton.InitButton(ClickLeftButton, EnterLeftButton, ExitLeftButton);
-                InitPageNumberIcons(totalPages);
 
                 for (int i = 0; i < otherButtons.Length; i++)
                 {
@@ -130,30 +160,6 @@ public class Page : MonoBehaviour
                 }
             }
             break;
-        }
-    }
-    private void InitPageNumberIcons(int totalPages)
-    {
-        Bounds pageNumberIconBounds = pageNumberIconPrefab.bounds;
-        float colSize = pageNumberIconBounds.size.x + PAGE_NUMBER_ICON_BUFFER_X;
-        Vector3 startPos = new Vector3();
-        startPos.x = (float)totalPages * colSize * -0.5f;
-        startPos.y = -paperRenderer.bounds.size.y + PAGE_NUMBER_ICON_BUFFER_Y;
-        startPos.z = exitButton.renderer.transform.localPosition.z;
-
-        for (int i = 0; i < totalPages; i++)
-        {
-            AtlasRenderer pageNumberIcon = Instantiate(pageNumberIconPrefab, transform);
-            Vector3 localPos = startPos;
-
-            localPos.x += i * colSize;
-            pageNumberIcon.transform.localPosition = localPos;
-
-            if (i == pageIndex)
-            {
-                pageNumberIcon.custom.x = 1f;
-            }
-            pageNumberIconRenderers[i] = pageNumberIcon;
         }
     }
     public void InitAgreementPage()

@@ -31,6 +31,7 @@ public class LeftHand : MonoBehaviour
 
     public CameraStatsSO camStats;
     public TripSO curTrip;
+    public SceneData sceneData;
 
     public AtlasRenderer atlasRenderer;
     public NotepadData notepadData;
@@ -230,7 +231,7 @@ public class LeftHand : MonoBehaviour
 
                         atTargetPos = true;
 
-                        if (activePage.activePlayerWriteTextRenderer != null && !movedForColorPicker)
+                        if (activePage.activePlayerWriteTextRenderer != null && !movedForColorPicker && sceneData.activeSceneType == Scenes.SceneType.Trip)
                         {
                             SetState(State.Stationary);
                             MoveToEdgeTextBounds(leftEdge: true);

@@ -6,6 +6,8 @@ using UnityEngine;
 using static AtlasUI;
 public class AgreementPage : MonoBehaviour
 {
+    public static Vector3 ACTIVE_POS = new Vector3(-1.70000005f, 0.800000012f, 0);
+    
     public static event Action OnAgreementSigned;
 
     public PlayerInputsSO playerInputs;
@@ -19,7 +21,6 @@ public class AgreementPage : MonoBehaviour
     public Page page;
 
     [Header("Generated")]
-    public Vector3 activePos;
     public Vector3 offscreenPos;
     public Vector3 curPos;
     public bool atActivePos;
@@ -59,13 +60,12 @@ public class AgreementPage : MonoBehaviour
     }
     public void Init()
     {
-        activePos = transform.localPosition;
-        offscreenPos.x = activePos.x;
+        offscreenPos.x = ACTIVE_POS.x;
 
         float uvPivotY = page.paperRenderer.sprite.uvPivot.y;
         float paperWorldSizeY = page.paperRenderer.bounds.size.y;
         offscreenPos.y = -camStats.camBounds.extents.y - paperWorldSizeY;
-        offscreenPos.z = activePos.z;
+        offscreenPos.z = ACTIVE_POS.z;
 
         transform.localPosition = offscreenPos;
 
@@ -107,9 +107,9 @@ public class AgreementPage : MonoBehaviour
     {    
         curPos = transform.localPosition;
 
-        while ((activePos.y - curPos.y) > 0.05f)
+        while ((ACTIVE_POS.y - curPos.y) > 0.05f)
         {
-            curPos.y = Mathf.Lerp(curPos.y, activePos.y, Time.deltaTime * MOVE_DAMP);
+            curPos.y = Mathf.Lerp(curPos.y, ACTIVE_POS.y, Time.deltaTime * MOVE_DAMP);
             transform.localPosition = curPos;
             await UniTask.Yield();
         }

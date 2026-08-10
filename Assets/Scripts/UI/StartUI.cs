@@ -614,6 +614,7 @@ public class StartUI : MonoBehaviour
     {
         notepad = SceneController.GetNotepad(transform);
         notepad.PickUpNotepad();
+        notepad.transform.localPosition = notepadData.offSceenLocalPos;
     }
     private void SetFadeForAgreement()
     {

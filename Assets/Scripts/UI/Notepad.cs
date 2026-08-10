@@ -90,6 +90,7 @@ public class Notepad : MonoBehaviour
     {
         Scenes.OnLoadTrip1 += Reinit;
         Scenes.OnLoadScore += Reinit;
+        Scenes.OnLoadStart += Init;
         
         StartUI.OnPlayAgain += Init;
 
@@ -106,6 +107,7 @@ public class Notepad : MonoBehaviour
     {
         Scenes.OnLoadTrip1 -= Reinit;
         Scenes.OnLoadScore -= Reinit;
+        Scenes.OnLoadStart -= Init;
         
         StartUI.OnPlayAgain -= Init;
         
@@ -142,10 +144,10 @@ public class Notepad : MonoBehaviour
 
         notepadData.completedUnlocks = UnlockType.None;
         notepadData.subState = SubState.None;
+        notepadData.profileWriteCount = 0;
 
         notepadData.curState = NotepadState.Stationary;
 
-        
         if (pages == null || pages.Length == 0)
         {
             AtlasUI.PromptStringDict = InitEnumToStringDict<TripPrompt>();
@@ -159,7 +161,6 @@ public class Notepad : MonoBehaviour
             notepadData.leftHandDepthFront = bindingRingsRend.transform.localPosition.z - 1;
             notepadData.leftHandDepthBack = rightHand_renderer.transform.localPosition.z + 1;
             notepadData.activePageDepth = bindingRingsRend.transform.localPosition.z + 1;
-            notepadData.profileWriteCount = 0;
 
             leftHand.Init();
 
@@ -210,12 +211,16 @@ public class Notepad : MonoBehaviour
 
         }
 
-        if (activePage.activePlayerWriteTextRenderer != null)
+        if (activePage.activePlayerWriteTextRenderer != null && sceneData.activeSceneType == SceneType.Trip)
         {
             leftHand.SetState(LeftHand.State.Stationary);
             leftHand.MoveToEdgeTextBounds(leftEdge: true);
         }
-        spyStats.checkingNotepad = true;
+        else
+        {
+            leftHand.SetState(LeftHand.State.OffScreen);
+        }
+            spyStats.checkingNotepad = true;
     }
     public void ExitNotepad()
     {

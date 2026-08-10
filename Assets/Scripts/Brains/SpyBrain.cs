@@ -255,7 +255,7 @@ public class SpyBrain : MonoBehaviour
 
                         case LocationState.Carriage:
                         {
-                            if (notepadData.profileWriteCount == trip.traitorProfiles.Length)
+                            if (notepadData.profileWriteCount == trip.traitorProfiles.Length && trainStats.curStationIndex > 0)
                             {
                                 GetSlideDoorInTrain();
                             }
@@ -309,7 +309,7 @@ public class SpyBrain : MonoBehaviour
                     
                         case LocationState.Carriage:
                         {
-                            if (notepadData.profileWriteCount == trip.traitorProfiles.Length)
+                            if (notepadData.profileWriteCount == trip.traitorProfiles.Length && trainStats.curStationIndex > 0)
                             {
                                 GetSlideDoorInTrain();
                             }
