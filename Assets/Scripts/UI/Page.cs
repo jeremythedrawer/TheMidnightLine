@@ -66,8 +66,6 @@ public class Page : MonoBehaviour
         
         playerWriteIndex = -1;
 
-
-
         pageNumberIconRenderers = new AtlasRenderer[totalPages];
         pageIndex = pageIndexInput;
 
@@ -654,13 +652,13 @@ public class Page : MonoBehaviour
     public void EnterLeftButton(IconUIElement icon)
     {
         icon.renderer.custom.x = 1;
-        icon.renderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.W);
+        icon.renderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.S);
         icon.renderer.FlipHSimple(false);
     }
     public void EnterRightButton(IconUIElement icon)
     {
         icon.renderer.custom.x = 1;
-        icon.renderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.S);
+        icon.renderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.W);
     }
     public void ExitExitButton(IconUIElement icon)
     {

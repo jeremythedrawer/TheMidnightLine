@@ -51,7 +51,7 @@ public class AgreementPage : MonoBehaviour
     {
         if (atActivePos)
         {
-            if (playerInputs.spacebarDown)
+            if (playerInputs.spacebarDown && page.activePlayerWriteText == "")
             {
                 leftHand.SetState(LeftHand.State.Writing);
             }
@@ -130,5 +130,6 @@ public class AgreementPage : MonoBehaviour
             transform.localPosition = curPos;
             await UniTask.Yield();
         }
+        gameObject.SetActive(false);
     }
 }

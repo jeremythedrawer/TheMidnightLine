@@ -26,9 +26,8 @@ public class RoomDoor : MonoBehaviour
         EnterBoundsRight = 1 << 2,
         ExitBoundsLeft = 1 << 3,
         ExitBoundsRight = 1 << 4,
-
-        EnteredBounds = EnterBoundsLeft | EnterBoundsRight,
-        ExitBounds = ExitBoundsLeft | ExitBoundsRight,
+        EnteredBounds = 1 << 5,
+        ExitBounds = 1 << 6,
     }
 
     public GameEventDataSO gameEventData;
@@ -188,37 +187,61 @@ public class RoomDoor : MonoBehaviour
     }
     private void UpdateSubStates()
     {
-        curSubState &= ~(SubState.EnteredBounds | SubState.ExitBounds);
+        curSubState &= ~(SubState.EnteredBounds | SubState.ExitBounds | SubState.EnterBoundsLeft | SubState.EnterBoundsRight | SubState.ExitBoundsLeft | SubState.ExitBoundsRight);
 
-        if ((curSubState & SubState.InBounds) == 0 && spyStats.bounds.center.x > triggerBounds.min.x && spyStats.bounds.center.x < triggerBounds.center.x)
+        if (spyStats.bounds.center.x > triggerBounds.min.x && spyStats.bounds.center.x < triggerBounds.max.x)
         {
-            curSubState |= SubState.InBounds;
+            if ((curSubState & SubState.InBounds) == 0)
+            {
+                curSubState |= SubState.InBounds;
+                curSubState |= SubState.EnteredBounds;
+            }
 
             if (spyStats.moveVelocity.x > 0)
             {
-                curSubState |= SubState.EnterBoundsRight;
-                prevSubState = SubState.EnterBoundsRight;
+                if (spyStats.bounds.center.x < triggerBounds.center.x)
+                {
+                    if (prevSubState != SubState.EnterBoundsRight)
+                    {
+                        curSubState |= SubState.EnterBoundsRight;
+                        prevSubState = SubState.EnterBoundsRight;
+                    }
+                }
+                else
+                {
+                    if (prevSubState == SubState.EnterBoundsRight)
+                    {
+                        curSubState |= SubState.ExitBoundsRight;
+                        prevSubState = SubState.ExitBoundsRight;
+                    }
+                }
             }
-            else if (spyStats.moveVelocity.x < 0)
+            else
             {
-                curSubState |= SubState.EnterBoundsLeft;
-                prevSubState = SubState.EnterBoundsLeft;
+                if (spyStats.bounds.center.x > triggerBounds.center.x)
+                {
+                    if (prevSubState != SubState.EnterBoundsLeft)
+                    {
+                        curSubState |= SubState.EnterBoundsLeft;
+                        prevSubState = SubState.EnterBoundsLeft;
+                    }
+                }
+                else
+                {
+                    if (prevSubState == SubState.EnterBoundsLeft)
+                    {
+                        curSubState |= SubState.ExitBoundsLeft;
+                        prevSubState = SubState.ExitBoundsLeft;
+                    }
+                }
             }
         }
-        else if ((curSubState & SubState.InBounds) != 0 && (spyStats.bounds.center.x < triggerBounds.min.x || spyStats.bounds.center.x > triggerBounds.center.x))
+        else
         {
-            curSubState &= ~SubState.InBounds;
-
-            if (spyStats.moveVelocity.x > 0 && prevSubState == SubState.EnterBoundsRight)
+            if ((curSubState & SubState.InBounds) != 0)
             {
-                curSubState |= SubState.ExitBoundsRight;
-                prevSubState = SubState.ExitBoundsRight;
-            }
-            else if (spyStats.moveVelocity.x < 0 && prevSubState == SubState.EnterBoundsLeft)
-            {
-                curSubState |= SubState.ExitBoundsLeft;
-                prevSubState = SubState.ExitBoundsLeft;
-
+                curSubState &= ~SubState.InBounds;
+                curSubState |= SubState.ExitBounds;
             }
         }
     }
