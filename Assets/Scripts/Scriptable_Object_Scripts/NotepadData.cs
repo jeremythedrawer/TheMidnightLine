@@ -25,8 +25,9 @@ public class NotepadData : ScriptableObject
     public float activePageDepth;
     public float leftHandDepthBack;
 
-    public bool collected;
+    public int profileWriteCount;
 
+    public bool collected;
     public bool playerHasUsedExitKey;
     public bool playerHasUsedLeftKey;
     public bool playerHasUsedRightKey;

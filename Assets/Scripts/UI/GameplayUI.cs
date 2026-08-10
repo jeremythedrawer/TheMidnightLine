@@ -83,6 +83,7 @@ public class GameplayUI : MonoBehaviour
     {
         gameEventData.OnStationLeave.RegisterListener(SetNewTicketIcons);
         gameEventData.OnStationLeave.RegisterListener(SetTraitorIcons);
+        gameEventData.OnStationLeave.RegisterListener(HideKeyIcon);
 
         gameEventData.OnStationArrival.RegisterListener(DisappearTicketIcons);
 
@@ -90,8 +91,9 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnTicketCheckHoverDisabled += HideKeyIcon;
         SpyBrain.OnTicketCheckHoverEnabled += InvertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverEnabledFirstTime += ShowEIcon;
-        SpyBrain.OnFoundExteriorSlideDoors += ShowWIcon;
-        SpyBrain.OnWalkPastExteriorSlideDoors += HideKeyIcon;
+        SpyBrain.OnAtSlideDoors += ShowWIcon;
+        SpyBrain.OnWalkPastSlideDoors += HideKeyIcon;
+
         SpyBrain.OnEnteredTrain += DisappearKeyIcon;
         SpyBrain.OnTicketInspect += DisappearKeyIcon;
         SpyBrain.OnOpenNotepad += SetToNotepadState;
@@ -115,15 +117,16 @@ public class GameplayUI : MonoBehaviour
     {
         gameEventData.OnStationLeave.UnregisterListener(SetNewTicketIcons);
         gameEventData.OnStationLeave.UnregisterListener(SetTraitorIcons);
+        gameEventData.OnStationLeave.UnregisterListener(HideKeyIcon);
 
         gameEventData.OnStationArrival.UnregisterListener(DisappearTicketIcons);
 
         SpyBrain.OnTicketCheckHoverDisabled -= RevertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverDisabled -= HideKeyIcon;
         SpyBrain.OnTicketCheckHoverEnabled -= InvertCurTicketIcon;
-        SpyBrain.OnFoundExteriorSlideDoors -= ShowWIcon;
+        SpyBrain.OnAtSlideDoors -= ShowWIcon;
         SpyBrain.OnTicketCheckHoverEnabledFirstTime -= ShowEIcon;
-        SpyBrain.OnWalkPastExteriorSlideDoors -= HideKeyIcon;
+        SpyBrain.OnWalkPastSlideDoors -= HideKeyIcon;
         SpyBrain.OnEnteredTrain -= DisappearKeyIcon;
         SpyBrain.OnTicketInspect -= DisappearKeyIcon;
         SpyBrain.OnOpenNotepad -= SetToNotepadState;

@@ -60,7 +60,6 @@ public class AgreementProp : MonoBehaviour
     private void StartSceneInit()
     {
         notepadData.collected = false;
-        Debug.Log("collected is false");
     }
     private void ScoreSceneInit()
     {

@@ -16,8 +16,8 @@ public class SpyBrain : MonoBehaviour
     public static event Action OnTicketCheckHoverEnabled;
     public static event Action<Vector2> OnTicketCheckHoverEnabledFirstTime;
     public static event Action OnTicketCheckHoverDisabled;
-    public static event Action<Vector2> OnFoundExteriorSlideDoors;
-    public static event Action OnWalkPastExteriorSlideDoors;
+    public static event Action<Vector2> OnAtSlideDoors;
+    public static event Action OnWalkPastSlideDoors;
     public static event Action OnEnteredTrain;
     public static event Action OnTicketInspect;
     public static event Action OnFinishTicketInspect;
@@ -759,8 +759,8 @@ public class SpyBrain : MonoBehaviour
         {
             for (int i = 0; i < TrainController.InteriorSlideDoors.Length; i++)
             {
-                foundSlideDoor = TrainController.InteriorSlideDoors[i];
-                Bounds slideDoorBounds = foundSlideDoor.boxCollider.bounds;
+                SlideDoors slideDoor = TrainController.ExteriorSlideDoors[i];
+                Bounds slideDoorBounds = slideDoor.boxCollider.bounds;
                 if (spyBounds.center.x > slideDoorBounds.min.x && spyBounds.center.x < slideDoorBounds.max.x)
                 {
                     foundSlideDoor = TrainController.InteriorSlideDoors[i];
@@ -771,26 +771,39 @@ public class SpyBrain : MonoBehaviour
 
         if (foundSlideDoor != null && slideDoors == null)
         {
-            OnFoundExteriorSlideDoors?.Invoke(new Vector2(foundSlideDoor.boxCollider.bounds.center.x, foundSlideDoor.boxCollider.bounds.max.y));
+            OnAtSlideDoors?.Invoke(new Vector2(foundSlideDoor.boxCollider.bounds.center.x, foundSlideDoor.boxCollider.bounds.max.y));
         }
         else if (foundSlideDoor == null && slideDoors != null)
         {
-            OnWalkPastExteriorSlideDoors?.Invoke();
+            OnWalkPastSlideDoors?.Invoke();
         }
         slideDoors = foundSlideDoor;
     }
     private void GetSlideDoorInTrain()
     {
-        Bounds spyBounds = atlasRenderer.bounds;
+        Bounds spyBounds = stats.bounds;
         SlideDoors foundSlideDoor = null;
         for (int i = 0; i < TrainController.InteriorSlideDoors.Length; i++)
         {
-            foundSlideDoor = TrainController.InteriorSlideDoors[i];
-            Bounds slideDoorBounds = foundSlideDoor.boxCollider.bounds;
-            if (spyBounds.min.x > slideDoorBounds.min.x && spyBounds.max.x < slideDoorBounds.max.x)
+            SlideDoors slideDoor = TrainController.ExteriorSlideDoors[i];
+            Bounds slideDoorBounds = slideDoor.boxCollider.bounds;
+            if (spyBounds.center.x > slideDoorBounds.min.x && spyBounds.center.x < slideDoorBounds.max.x)
             {
                 foundSlideDoor = TrainController.InteriorSlideDoors[i];
                 break;
+            }
+        }
+
+        if (notepadData.profileWriteCount == trip.traitorProfiles.Length)
+        {
+            if (foundSlideDoor != null && slideDoors == null)
+            {
+                OnAtSlideDoors?.Invoke(new Vector2(foundSlideDoor.boxCollider.bounds.center.x, foundSlideDoor.boxCollider.bounds.max.y));
+
+            }
+            else if (foundSlideDoor == null && slideDoors != null)
+            {
+                OnWalkPastSlideDoors?.Invoke();
             }
         }
         slideDoors = foundSlideDoor;
