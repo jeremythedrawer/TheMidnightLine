@@ -304,7 +304,7 @@ public class StartUI : MonoBehaviour
                     outcomePageInactivePositions[i].z = outcomePageStartPos.z;
                 }
 
-                fadeBlack.FadeIn(value: 1, uvPosX: 0.5f, alpha: 0.2f, FadeBlack.NOTEPAD_DEPTH);
+                fadeBlack.FadeIn(value: 1, uvPosX: 0.5f, uvPosY: 0, alpha: 0.2f, FadeBlack.NOTEPAD_DEPTH);
                 MoveProfilePagesToStartOutcomePosition();
             }
             break;
@@ -624,7 +624,7 @@ public class StartUI : MonoBehaviour
     }
     private void SetFadeForAgreement()
     {
-        fadeBlack.FadeIn(value: 1, uvPosX: 0.5f, alpha: 0.2f, FadeBlack.NOTEPAD_DEPTH);
+        fadeBlack.FadeIn(value: 1, uvPosX: 0.5f, uvPosY: 0, alpha: 0.2f, FadeBlack.NOTEPAD_DEPTH);
     }
     private void SetFadeOut()
     {

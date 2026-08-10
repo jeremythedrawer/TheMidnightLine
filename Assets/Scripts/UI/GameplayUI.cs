@@ -382,7 +382,7 @@ public class GameplayUI : MonoBehaviour
                 {
                     curTicketIcon.mainTicket.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.ticketCountTutorialText);
                     curTutorialIcon = curTicketIcon.mainTicket;
-                    fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f);
+                    fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f, uvPosX: 0, uvPosY: 0.5f);
                     spyStats.curTutorialState = TutorialState.Ticket;
                     spyStats.playerInputsEnabled = false;
                 }
@@ -435,7 +435,7 @@ public class GameplayUI : MonoBehaviour
             
             curTutorialIcon = icon;
 
-            fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f);
+            fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f, uvPosX: 0, uvPosY: 0.5f);
             spyStats.curTutorialState = TutorialState.RuleOut;
             spyStats.playerInputsEnabled = false;
 
@@ -457,7 +457,7 @@ public class GameplayUI : MonoBehaviour
 
             curTutorialIcon = icon;
 
-            fadeBlack.FadeIn(value: 1, alpha: 0.2f, fadeBlackZPos: FadeBlack.NOTEPAD_DEPTH);
+            fadeBlack.FadeIn(value: 1, alpha: 0.2f, uvPosY: 0.3f, fadeBlackZPos: FadeBlack.NOTEPAD_DEPTH);
             spyStats.curTutorialState = TutorialState.Color1;
             spyStats.playerInputsEnabled = false;
 
@@ -587,7 +587,7 @@ public class GameplayUI : MonoBehaviour
             traitorIcon.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.traitorCountTutorialText);
             curTutorialIcon = traitorIcon;
 
-            fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f);
+            fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f, uvPosX: 0, uvPosY: 0.5f);
             spyStats.curTutorialState = TutorialState.Traitor;
             spyStats.playerInputsEnabled = false;
 
