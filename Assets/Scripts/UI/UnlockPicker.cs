@@ -1,6 +1,7 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
+using UnityEditor.Rendering.LookDev;
 using UnityEngine;
 
 using static AtlasUI;
@@ -56,14 +57,11 @@ public class UnlockPicker : MonoBehaviour
     public float tileHeight;
 
     public bool tutorialInUse;
-    private void OnEnable()
+    private void Start()
     {
-        Scenes.OnLoadTrip0 += Init;
+        Init();
     }
-    private void OnDisable()
-    {
-        Scenes.OnLoadTrip0 -= Init;
-    }
+
     private void Update()
     {
         UpdateState();
@@ -163,6 +161,10 @@ public class UnlockPicker : MonoBehaviour
                 for (int i = 0; i < curGridColCount; i++)
                 {
                     icons[i].UpdateButton(playerInputs);
+                }
+                if (camStats.curLocationState != Spy.LocationState.Carriage)
+                {
+                    Close();
                 }
             }
             break;

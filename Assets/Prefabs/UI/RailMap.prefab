@@ -64,7 +64,7 @@ MonoBehaviour:
     worldSize: {x: 0.16111112, y: 0.10555556, z: 1}
     index: 3
   bounds:
-    m_Center: {x: 275.027, y: 2.208, z: -37}
+    m_Center: {x: 0.02699995, y: 1.448, z: 3}
     m_Extent: {x: 5.169, y: 0.05277778, z: 0.1}
   worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
   uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.7734375, w: 0.7949219}
@@ -147,6 +147,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 9010971722259031338}
     m_Modifications:
+    - target: {fileID: 2604347157907401183, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: custom.w
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 2604347157907401183, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
       propertyPath: bounds.m_Center.x
       value: -4.887

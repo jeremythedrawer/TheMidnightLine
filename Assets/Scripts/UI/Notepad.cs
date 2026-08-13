@@ -99,9 +99,8 @@ public class Notepad : MonoBehaviour
         LeftHand.OnFinishWriting += FinishWriting;
         LeftHand.OnAtStartErasePos += EraseAtActivePage;
         LeftHand.OnFinishErasing += FinishErasing;
-        
-        ColorPicker.OnCloseCluePicker += SetUnlockAbilityIcons;
 
+        ColorPicker.OnSelectClueColorFirstTime += SetUnlockAbilityIcons;
         gameEventData.OnFinishTripScene.RegisterListener(KeepNotepad);
     }
     private void OnDisable()
@@ -117,7 +116,7 @@ public class Notepad : MonoBehaviour
         LeftHand.OnAtStartErasePos -= EraseAtActivePage;
         LeftHand.OnFinishErasing -= FinishErasing;
 
-        ColorPicker.OnCloseCluePicker -= SetUnlockAbilityIcons;
+        ColorPicker.OnSelectClueColorFirstTime -= SetUnlockAbilityIcons;
 
         gameEventData.OnFinishTripScene.UnregisterListener(KeepNotepad);
     }
@@ -144,7 +143,7 @@ public class Notepad : MonoBehaviour
         activePage = promptPage;
         leftHand.SetActivePage(activePage);
 
-        notepadData.completedUnlocks = UnlockType.None;
+        notepadData.abilityIconsShown = UnlockType.None;
         notepadData.subState = SubState.None;
         notepadData.profileWriteCount = 0;
 
@@ -200,12 +199,12 @@ public class Notepad : MonoBehaviour
 
         if (activePage.pageType == PageType.ColorKey)
         {
-            if ((notepadData.completedUnlocks & UnlockType.Color) == 0 && (curTrip.curUnlocks & UnlockType.Color) != 0)
+            if ((notepadData.abilityIconsShown & UnlockType.Color) == 0 && (curTrip.curUnlocks & UnlockType.Color) != 0)
             {
                 activePage.InitNextColorRow(0);
                 activePage.SwitchWriteRow(0);
             }
-            else if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
+            else if ((notepadData.abilityIconsShown & UnlockType.MultiColor) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
             {
                 activePage.InitNextColorRow(1);
                 activePage.SwitchWriteRow(1);
@@ -549,12 +548,12 @@ public class Notepad : MonoBehaviour
 
                 if (nextPage.pageType == PageType.ColorKey)
                 {
-                    if ((notepadData.completedUnlocks & UnlockType.Color) == 0 && (curTrip.curUnlocks & UnlockType.Color) != 0)
+                    if ((notepadData.abilityIconsShown & UnlockType.Color) == 0 && (curTrip.curUnlocks & UnlockType.Color) != 0)
                     {
                         nextPage.InitNextColorRow(0);
                         nextPage.SwitchWriteRow(0);
                     }
-                    else if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
+                    else if ((notepadData.abilityIconsShown & UnlockType.MultiColor) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
                     {
                         nextPage.InitNextColorRow(1);
                         nextPage.SwitchWriteRow(1);
@@ -627,9 +626,9 @@ public class Notepad : MonoBehaviour
                 {
                     case PageType.ColorKey:
                     {
-                        if ((notepadData.completedUnlocks & UnlockType.RuleOut) == 0 && (curTrip.curUnlocks & UnlockType.RuleOut) != 0)
+                        if ((notepadData.abilityIconsShown & UnlockType.RuleOut) == 0 && (curTrip.curUnlocks & UnlockType.RuleOut) != 0)
                         {
-                            notepadData.completedUnlocks |= UnlockType.RuleOut;
+                            notepadData.abilityIconsShown |= UnlockType.RuleOut;
                             activePage.ShowUnlockAbilityRenderer(UnlockType.RuleOut);
                         }
                     }
@@ -678,7 +677,7 @@ public class Notepad : MonoBehaviour
 
                     case PageType.ColorKey:
                     {
-                        if (activePage.playerWriteTextRenderers[0].completedWritingText && (notepadData.completedUnlocks & UnlockType.Color) == 0 && (curTrip.curUnlocks & UnlockType.Color) != 0)
+                        if (activePage.playerWriteTextRenderers[0].completedWritingText && (spyStats.tutorialsCompleted & TutorialState.Color3) == 0 && (curTrip.curUnlocks & UnlockType.Color) != 0)
                         {
                             curTrip.selectedColorMarkerIndex = 0;
 
@@ -686,14 +685,14 @@ public class Notepad : MonoBehaviour
                             activePage.SetColorMarkerButtonSprite(0);
                             OnWriteColorMarkerFirstTime?.Invoke();
 
-                            if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
+                            if ((spyStats.tutorialsCompleted & TutorialState.MultiColor2) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
                             {
                                 activePage.InitNextColorRow(1);
                                 activePage.SwitchWriteRow(1);
                                 leftHand.MoveToEdgeTextBounds(leftEdge: true);
                             }
                         }
-                        else if (activePage.playerWriteTextRenderers[1].completedWritingText && (notepadData.completedUnlocks & UnlockType.MultiColor) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
+                        else if (activePage.playerWriteTextRenderers[1].completedWritingText && (spyStats.tutorialsCompleted & TutorialState.MultiColor2) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
                         {
                             curTrip.selectedColorMarkerIndex = 1;
                             colorPicker.Open(activePage.playerWriteRenderers[1], ColorPicker.SelectType.Clue);
@@ -879,16 +878,16 @@ public class Notepad : MonoBehaviour
             }
         }
     }
-    private void SetUnlockAbilityIcons()
+    public void SetUnlockAbilityIcons()
     {
-        if ((notepadData.completedUnlocks & UnlockType.Color) == 0 && (curTrip.curUnlocks & UnlockType.Color) != 0)
+        if ((notepadData.abilityIconsShown & UnlockType.Color) == 0 && (curTrip.curUnlocks & UnlockType.Color) != 0)
         {
-            notepadData.completedUnlocks |= UnlockType.Color;
+            notepadData.abilityIconsShown |= UnlockType.Color;
             activePage.ShowUnlockAbilityRenderer(UnlockType.Color);
         }
-        else if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
+        else if ((notepadData.abilityIconsShown & UnlockType.MultiColor) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
         {
-            notepadData.completedUnlocks |= UnlockType.MultiColor;
+            notepadData.abilityIconsShown |= UnlockType.MultiColor;
             activePage.ShowUnlockAbilityRenderer(UnlockType.MultiColor);
         }
     }
@@ -1045,7 +1044,6 @@ public class Notepad : MonoBehaviour
     }
     private async UniTask FlippingToPage(int pageIndex)
     {
-        notepadData.subState &= ~(SubState.CanFlipUp | SubState.CanFlipDown);
 
         while(notepadData.curState != NotepadState.Stationary) await UniTask.Yield();
 
@@ -1053,21 +1051,19 @@ public class Notepad : MonoBehaviour
         {
             while (activePage.pageIndex != pageIndex)
             {
-                SetState(NotepadState.FlippingUp);
-                while(notepadData.curState != NotepadState.Stationary) await UniTask.Yield();
+                notepadData.subState |= SubState.IsFlippingUp;
+                while((notepadData.subState & SubState.IsFlippingUp) != 0) await UniTask.Yield();
                 await UniTask.Yield();
             }
-            notepadData.subState |= SubState.CanFlipUp | SubState.CanFlipDown;
         }
         else if (activePage.pageIndex > 0)
         {
             while (activePage.pageIndex != pageIndex)
             {
-                SetState(NotepadState.FlippingDown);
-                while (notepadData.curState != NotepadState.Stationary) await UniTask.Yield();
+                notepadData.subState |= SubState.IsFlippingDown;
+                while ((notepadData.subState & SubState.IsFlippingDown) != 0) await UniTask.Yield();
                 await UniTask.Yield();
             }
-            notepadData.subState |= SubState.CanFlipUp | SubState.CanFlipDown;
         }
     }
 }

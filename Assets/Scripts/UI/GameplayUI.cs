@@ -82,6 +82,8 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnTicketCheckHoverEnabledFirstTime += ShowEIcon;
         SpyBrain.OnAtSlideDoors += ShowSpaceIcon;
         SpyBrain.OnWalkPastSlideDoors += HideKeyIcon;
+        SpyBrain.OnEnteredTrain += AppearRailMap;
+        SpyBrain.OnExitTrain += DissappearRailMap;
 
         SpyBrain.OnEnteredTrain += DisappearKeyIcon;
         SpyBrain.OnTicketInspect += DisappearKeyIcon;
@@ -103,7 +105,7 @@ public class GameplayUI : MonoBehaviour
         UnlockPicker.OnMutliColorAbilityUnlock += MoveMulticolorMarkerTutorialIcon;
 
         Notepad.OnWriteColorMarkerFirstTime += SetTutorialTextToColor2;
-        Notepad.OnEraseDuringTutorial += SetTutorialTextToColor1;
+        Notepad.OnEraseDuringTutorial += SetTutorialTextBackToColor1;
 
         ColorPicker.OnSelectClueColorFirstTime += SetTutorialTextToColor3;
         ColorPicker.OnSelectSecondClueColorFirstTime += SetTutorialTextToMultiColor2;
@@ -118,6 +120,7 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnTicketCheckHoverEnabledFirstTime -= ShowEIcon;
         SpyBrain.OnWalkPastSlideDoors -= HideKeyIcon;
         SpyBrain.OnEnteredTrain -= DisappearKeyIcon;
+        SpyBrain.OnExitTrain -= DissappearRailMap;
         SpyBrain.OnTicketInspect -= DisappearKeyIcon;
         SpyBrain.OnTicketInspect -= MoveRailMap;
         SpyBrain.OnOpenNotepad -= SetToNotepadState;
@@ -126,6 +129,7 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnFinishTicketInspect -= SetToNoneState;
         SpyBrain.OnUncheckCarriageMap -= SetToNoneState;
         SpyBrain.OnCheckCarriageMap -= SetToCarriageMapState;
+        SpyBrain.OnEnteredTrain += AppearRailMap;
         
         NPCBrain.OnTraitorDisembarkedTrain -= DecreaseTraitorCount;
         NPCBrain.OnTraitorBoardedTrain -= IncreaseTraitorCount;
@@ -137,7 +141,7 @@ public class GameplayUI : MonoBehaviour
         Scenes.OnLoadTrip0 -= Init;
 
         Notepad.OnWriteColorMarkerFirstTime -= SetTutorialTextToColor2;
-        Notepad.OnEraseDuringTutorial -= SetTutorialTextToColor1;
+        Notepad.OnEraseDuringTutorial -= SetTutorialTextBackToColor1;
 
         ColorPicker.OnSelectClueColorFirstTime -= SetTutorialTextToColor3;
         ColorPicker.OnSelectSecondClueColorFirstTime -= SetTutorialTextToMultiColor2;
@@ -517,6 +521,14 @@ public class GameplayUI : MonoBehaviour
     {
         ShowKeyIcon(keyIcon, position, KeySpriteIndices.E, Direction.Up);
     }
+    private void AppearRailMap()
+    {
+        railMap.Appear();
+    }
+    private void DissappearRailMap()
+    {
+        railMap.Dissappear();
+    }
     private void MoveRailMap()
     {
         railMap.MoveToNextPosition();
@@ -532,17 +544,16 @@ public class GameplayUI : MonoBehaviour
             DisappearingKeyIcon().Forget();
         }
     }
-    private void SetTutorialTextToColor1()
+    private void SetTutorialTextBackToColor1()
     {
-        tutorialRenderer.SetText(options.passengerColorMarkerTutorialText2);
-        spyStats.tutorialsCompleted |= spyStats.curTutorialState;
+        spyStats.tutorialsCompleted &= ~(TutorialState.Color1 | TutorialState.Color2 | TutorialState.Color3);
         spyStats.curTutorialState = TutorialState.Color1;
         tutorialRenderer.SetText(options.passengerColorMarkerTutorialText1);
     }
     private void SetTutorialTextToColor2()
     {
         tutorialRenderer.SetText(options.passengerColorMarkerTutorialText2);
-        spyStats.tutorialsCompleted |= spyStats.curTutorialState;
+        spyStats.tutorialsCompleted |= TutorialState.Color1;
         spyStats.curTutorialState = TutorialState.Color2;
     }
     private void SetTutorialTextToMultiColor2()

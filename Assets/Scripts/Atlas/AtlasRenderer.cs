@@ -178,7 +178,6 @@ public class AtlasRenderer : MonoBehaviour
         scaleAndFlip.x = width;
         scaleAndFlip.y = height;
 
-        
         FlipHSimple(flipX);
         FlipVSimple(flipY);
         SetBounds();
@@ -296,7 +295,6 @@ public class AtlasRenderer : MonoBehaviour
         Vector4 centerWorldPivot = worldPivotsAndSizes[4];
         bounds.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldPivot.z * width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldPivot.w * height) + sliceSprite.worldSlices.w, 0.2f);
 
-
         if (boxCollider == null) return;
         boxCollider.size = bounds.size;
         boxCollider.offset = boundsOffset;
@@ -308,10 +306,12 @@ public class AtlasRenderer : MonoBehaviour
         custom.z = z;
         custom.w = w;
 
+        if (customs.Length == 0) customs = new Vector4[9];
         for (int i = 0; i < customs.Length; i++)
         {
             customs[i] = custom;
         }
+        Debug.Log(gameObject.name + " | " + custom);
     }
     public void SetWidthFromWorldSpace(float worldWidth, SimpleSprite sprite)
     {

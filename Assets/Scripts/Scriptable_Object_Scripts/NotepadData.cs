@@ -19,7 +19,7 @@ public class NotepadData : ScriptableObject
     public NotepadState curState;
     public NotepadState prevState;
     public SubState subState;
-    public UnlockType completedUnlocks;
+    public UnlockType abilityIconsShown;
 
     public float leftHandDepthFront;
     public float activePageDepth;

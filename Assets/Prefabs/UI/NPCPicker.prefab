@@ -377,32 +377,49 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::NPCPicker
   icons:
   - renderer: {fileID: 6930496782516411602}
-    startPos: {x: 0, y: 0, z: 0}
+    holdToClick: 0
+    activePos: {x: 0, y: 0, z: 0}
     curState: 0
+    holdClock: 0
   - renderer: {fileID: 42514526293997219}
-    startPos: {x: 0, y: 0, z: 0}
+    holdToClick: 0
+    activePos: {x: 0, y: 0, z: 0}
     curState: 0
+    holdClock: 0
   - renderer: {fileID: 328626354481165703}
-    startPos: {x: 0, y: 0, z: 0}
+    holdToClick: 0
+    activePos: {x: 0, y: 0, z: 0}
     curState: 0
+    holdClock: 0
   - renderer: {fileID: 3206941183027501488}
-    startPos: {x: 0, y: 0, z: 0}
+    holdToClick: 0
+    activePos: {x: 0, y: 0, z: 0}
     curState: 0
+    holdClock: 0
   - renderer: {fileID: 3624752895173531858}
-    startPos: {x: 0, y: 0, z: 0}
+    holdToClick: 0
+    activePos: {x: 0, y: 0, z: 0}
     curState: 0
+    holdClock: 0
   - renderer: {fileID: 1580298850503417269}
-    startPos: {x: 0, y: 0, z: 0}
+    holdToClick: 0
+    activePos: {x: 0, y: 0, z: 0}
     curState: 0
+    holdClock: 0
   - renderer: {fileID: 3939263600240463968}
-    startPos: {x: 0, y: 0, z: 0}
+    holdToClick: 0
+    activePos: {x: 0, y: 0, z: 0}
     curState: 0
+    holdClock: 0
   - renderer: {fileID: 1291583114916238326}
-    startPos: {x: 0, y: 0, z: 0}
+    holdToClick: 0
+    activePos: {x: 0, y: 0, z: 0}
     curState: 0
+    holdClock: 0
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   colorData: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
+  cameraStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   paletteRenderer: {fileID: 1849436935815050231}
   possibleNPCs: []
   selectedRenderer: {fileID: 0}

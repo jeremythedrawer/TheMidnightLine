@@ -184,7 +184,7 @@ MonoBehaviour:
     worldSize: {x: 0.5777778, y: 0.50555557, z: 1}
     index: 1
   bounds:
-    m_Center: {x: 5.5401516, y: 2.3499255, z: 41.1}
+    m_Center: {x: -0.68183315, y: 0.27192524, z: 0.1}
     m_Extent: {x: 0.68183315, y: 0.27192524, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 1.3388889, w: 0.33333334}
   uvSizeAndPosition: {x: 0.94140625, y: 0.234375, z: 0.01171875, w: 0.54296875}
@@ -254,14 +254,20 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::UnlockPicker
   icons:
   - renderer: {fileID: 6930496782516411602}
-    startPos: {x: 0, y: 0, z: 0}
+    holdToClick: 0
+    activePos: {x: 0, y: 0, z: 0}
     curState: 0
+    holdClock: 0
   - renderer: {fileID: 8403005682078826508}
-    startPos: {x: 0, y: 0, z: 0}
+    holdToClick: 0
+    activePos: {x: 0, y: 0, z: 0}
     curState: 0
+    holdClock: 0
   - renderer: {fileID: 28452657578591668}
-    startPos: {x: 0, y: 0, z: 0}
+    holdToClick: 0
+    activePos: {x: 0, y: 0, z: 0}
     curState: 0
+    holdClock: 0
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}

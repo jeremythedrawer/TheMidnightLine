@@ -27,6 +27,7 @@ public class SpyBrain : MonoBehaviour
     public static event Action OnUncheckCarriageMap;
     public static event Action OnInteract;
     public static event Action OnMoveFirstTime;
+    public static event Action OnExitTrain;
 
     public static bool PickingNPCToTicketCheck;
 
@@ -882,6 +883,7 @@ public class SpyBrain : MonoBehaviour
                             transform.SetParent(stationPlatform.transform, true);
                         
                             atlasRenderer.SetWorldDepth((int)stationPlatform.transform.position.z);
+                            OnExitTrain?.Invoke();
                         }
                     }
                     break;

@@ -320,9 +320,10 @@ public class LeftHand : MonoBehaviour
     }
     public void ReturnAfterColorPickerClose()
     {
+        movedForColorPicker = false;
+        
         if (curState == State.OffScreen)
         {
-            movedForColorPicker = false;
             SetState(State.Stationary);
             MoveToEdgeTextBounds(leftEdge: true);
         }

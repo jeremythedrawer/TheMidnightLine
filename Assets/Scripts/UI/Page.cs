@@ -173,16 +173,15 @@ public class Page : MonoBehaviour
                 }
                 for (int i = 0; i < playerWriteTextRenderers.Length; i++)
                 {
-                    playerWriteTextRenderers[i].SetText("");
                     AtlasRenderer behaviourButton = playerWriteRenderers[i];
-                    startPlayerWritePositions[i] = playerWriteRenderers[i].transform.localPosition;
-
                     behaviourButton.UpdateSpriteInputsByIndex(LOCK_SPRITE_INDEX);
-
                     behaviourButton.custom.x = 0;
                     behaviourButton.custom.y = 0;
                     behaviourButton.custom.z = 0;
                     behaviourButton.custom.w = 1;
+
+                    playerWriteTextRenderers[i].SetText("");
+                    startPlayerWritePositions[i] = playerWriteTextRenderers[i].transform.localPosition;
                 }
             }
             break;
@@ -285,7 +284,7 @@ public class Page : MonoBehaviour
             {
                 leftButton.UpdateButton(playerInputs);
 
-                if ((trip.curUnlocks & UnlockType.Color) != 0)
+                if ((notepadData.abilityIconsShown & UnlockType.Color) != 0)
                 {
                     if (playerInputs.numpad > 0 && playerInputs.numpad <= trip.unlockedColorMarkerCount)
                     {
@@ -297,7 +296,7 @@ public class Page : MonoBehaviour
                     carouselRightButton.UpdateButton(playerInputs);
                     spaceBarButton.UpdateButton(playerInputs);
 
-                    if ((notepadData.completedUnlocks & UnlockType.MultiColor) != 0)
+                    if ((notepadData.abilityIconsShown & UnlockType.MultiColor) != 0)
                     {
                         otherButtons[1].UpdateButton(playerInputs);
                     }
@@ -547,8 +546,8 @@ public class Page : MonoBehaviour
                     activePreviewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
 
                     activePlayerWriteTextRenderer.SetAlignmentType(AtlasRendering.AtlasTextAlignmentType.Center);
-                    activePlayerWriteTextRenderer.SetText(activePreviewPlayerWriteText, alpha: 0);
                     activePlayerWriteTextRenderer.transform.localPosition = startPlayerWritePositions[activePlayerWriteRowIndex];
+                    activePlayerWriteTextRenderer.SetText(activePreviewPlayerWriteText, alpha: 0);
 
                 }
                 else if (prevNotepadState != NotepadState.Writing)

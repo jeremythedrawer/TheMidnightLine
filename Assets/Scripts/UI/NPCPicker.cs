@@ -15,6 +15,7 @@ public class NPCPicker : MonoBehaviour
     public TripSO trip;
     public PlayerInputsSO playerInputs;
     public OptionsSO colorData;
+    public CameraStatsSO cameraStats;
 
     public AtlasRenderer paletteRenderer;
 
@@ -151,7 +152,7 @@ public class NPCPicker : MonoBehaviour
                     icons[i].UpdateButton(playerInputs);
                 }
 
-                if (canClose && (playerInputs.mouseLeftUp || playerInputs.mouseRightUp) && !CursorController.IsInsideBounds(paletteRenderer.bounds, isClickable: false))
+                if (canClose && (playerInputs.mouseLeftUp || playerInputs.mouseRightUp || cameraStats.curLocationState != Spy.LocationState.Carriage) && !CursorController.IsInsideBounds(paletteRenderer.bounds, isClickable: false))
                 {
                     Close();
                 }

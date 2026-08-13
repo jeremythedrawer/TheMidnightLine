@@ -37,6 +37,7 @@ public class ColorPicker : MonoBehaviour
     public OptionsSO colorsData;
     public PlayerInputsSO playerInputs;
     public SpyStatsSO spyStats;
+    public CameraStatsSO camStats;
 
     public IconUIElement[] colorIcons;
     public AtlasRenderer paletteRenderer;
@@ -299,6 +300,10 @@ public class ColorPicker : MonoBehaviour
                 {
                     Close();
                 }
+                if (selectType == SelectType.NPC && camStats.curLocationState != Spy.LocationState.Carriage)
+                {
+                    Close();
+                }
                 canClose = true;
             }
             break;
@@ -359,6 +364,7 @@ public class ColorPicker : MonoBehaviour
 
         AtlasRenderer firstColorRend = colorIcons[0].renderer;
         Vector4 paletteBottomRightWPS = paletteRenderer.worldPivotsAndSizes[5];
+        Debug.Log(paletteBottomRightWPS);
         Vector2 firstColorRendPos = new Vector2(paletteBottomRightWPS.x + firstColorRend.worldPivotAndSize.x, paletteBottomRightWPS.y - firstColorRend.worldPivotAndSize.y);
 
         for (int y = 0; y < colorGridYCount;  y++)
@@ -381,7 +387,7 @@ public class ColorPicker : MonoBehaviour
 
         defaultCloseColorRendPos = new Vector3(firstColorRendPos.x, firstColorRendPos.y, -0.1f);
         colorRendererWorldSize = firstColorRend.sprite.worldSize;
-
+        Debug.Log(colorRendererWorldSize);
         curWorldPos.z = paletteRenderer.transform.position.z;
         
         Vector4 paletteCenterWPS = paletteRenderer.worldPivotsAndSizes[4];

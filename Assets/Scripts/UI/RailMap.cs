@@ -1,4 +1,5 @@
 using Cysharp.Threading.Tasks;
+using System;
 using System.Threading;
 using UnityEngine;
 using static Atlas;
@@ -6,6 +7,7 @@ using static Atlas;
 public class RailMap : MonoBehaviour
 {
     public const float MOVE_TIME = 3f;
+    public const float APPEARING_TIME = 1f;
 
     public TripSO curTrip;
 
@@ -15,21 +17,13 @@ public class RailMap : MonoBehaviour
     public AtlasRenderer ticketCheckIconRendPrefab;
 
     [Header("Generated")]
-    
+    AtlasRenderer[] markIcons;
     public float[] positions;
 
     public int curPosIndex;
 
     public CancellationTokenSource ctsMove;
-
-    private void OnEnable()
-    {
-        
-    }
-    private void OnDisable()
-    {
-        
-    }
+    public CancellationTokenSource ctsAppear;
     private void Start()
     {
         Init();
@@ -46,6 +40,8 @@ public class RailMap : MonoBehaviour
         float totalDist = endPos - startPos;
         float segment = totalDist / (totalPositions - 1);
 
+        markIcons = new AtlasRenderer[totalPositions];
+        
         float curPos = startPos;
         Vector3 localPos = new Vector3(0, 0, -0.5f);
         for (int i = 0; i < totalPositions; i++)
@@ -59,17 +55,35 @@ public class RailMap : MonoBehaviour
             {
                 AtlasRenderer stationIcon = Instantiate(stationIconRendPrefab, transform);
                 stationIcon.transform.localPosition = localPos;
+                stationIcon.custom.w = 0;
+                markIcons[i] = stationIcon;
             }
             else
             {
                 AtlasRenderer ticketCheckIcon = Instantiate(ticketCheckIconRendPrefab, transform);
                 ticketCheckIcon.transform.localPosition = new Vector3(localPos.x, -railMapRend.bounds.extents.y, localPos.z);
+                ticketCheckIcon.custom.w = 0;
+                markIcons[i] = ticketCheckIcon;
             }
             
             curPos += segment;
         }
 
         trainPosRend.transform.localPosition = new Vector3(startPos, localPos.y, -1);
+        railMapRend.SetSliceCustom(w: 0);
+        trainPosRend.custom.w = 0;
+    }
+    public void Appear()
+    {
+        ctsAppear?.Cancel();
+        ctsAppear = new CancellationTokenSource();
+        Appearing().Forget();
+    }
+    public void Dissappear()
+    {
+        ctsAppear?.Cancel();
+        ctsAppear = new CancellationTokenSource();
+        Dissappearing().Forget();
     }
     public void MoveToNextPosition()
     {
@@ -78,6 +92,75 @@ public class RailMap : MonoBehaviour
 
         MovingToNextPosition().Forget();
     }
+    private async UniTask Appearing()
+    {
+        float clock = 0;
+        try
+        {
+            while (clock < APPEARING_TIME)
+            {
+                clock += Time.deltaTime;
+                float t = clock / APPEARING_TIME;
+
+                for (int i = 0; i < markIcons.Length; i++)
+                {
+                    markIcons[i].custom.w = t;
+                }
+                trainPosRend.custom.w = t;
+                railMapRend.SetSliceCustom(w: t);
+                await UniTask.Yield(ctsAppear.Token);
+            }
+
+            for (int i = 0; i < markIcons.Length; i++)
+            {
+                markIcons[i].custom.w = 1;
+            }
+        }
+        catch(OperationCanceledException)
+        {
+            for (int i = 0; i < markIcons.Length; i++)
+            {
+                markIcons[i].custom.w = 1;
+            }
+            trainPosRend.custom.w = 1;
+            railMapRend.SetSliceCustom(w: 1);
+        }
+    }
+    private async UniTask Dissappearing()
+    {
+        float clock = APPEARING_TIME;
+
+        try
+        {
+            while (clock >= 0)
+            {
+                clock -= Time.deltaTime;
+                float t = clock / APPEARING_TIME;
+
+                for (int i = 0; i < markIcons.Length; i++)
+                {
+                    markIcons[i].custom.w = t;
+                }
+                trainPosRend.custom.w = t;
+                railMapRend.SetSliceCustom(w: t);
+                await UniTask.Yield(ctsAppear.Token);
+            }
+
+            for (int i = 0; i < markIcons.Length; i++)
+            {
+                markIcons[i].custom.w = 0;
+            }
+        }
+        catch (OperationCanceledException)
+        {
+            for (int i = 0; i < markIcons.Length; i++)
+            {
+                markIcons[i].custom.w = 0;
+            }
+            trainPosRend.custom.w = 0;
+            railMapRend.SetSliceCustom(w: 0);
+        }
+    }
     private async UniTask MovingToNextPosition()
     {
         float clock = 0;
@@ -85,14 +168,21 @@ public class RailMap : MonoBehaviour
         float startPos = curPos.x;
         curPosIndex++;
         float nextPos = positions[curPosIndex];
-        
-        while(clock < MOVE_TIME)
+
+        try
         {
-            clock += Time.deltaTime;
-            float t = clock / MOVE_TIME;
-            curPos.x = Mathf.Lerp(startPos, nextPos, t);
-            trainPosRend.transform.localPosition = curPos;
-            await UniTask.Yield();
+            while(clock < MOVE_TIME)
+            {
+                clock += Time.deltaTime;
+                float t = clock / MOVE_TIME;
+                curPos.x = Mathf.Lerp(startPos, nextPos, t);
+                trainPosRend.transform.localPosition = curPos;
+                await UniTask.Yield(ctsMove.Token);
+            }
+        }
+        catch(OperationCanceledException)
+        {
+
         }
     }
 }

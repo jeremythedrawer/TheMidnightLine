@@ -169,7 +169,7 @@ Shader "Custom/s_atlasNPC"
 
                 finalColor += diagonal + colKey0 + colKey1 + colKey2 + colKey01 + colKey02 + colKey12 + colKey012 + blackColor + meridiaColor;
 
-                float bayerColMask = BayerX8(mouseColor * 0.5, i.positionHCS.y);
+                float bayerColMask = BayerX8(mouseColor * 0.75, i.positionHCS.y);
                 finalColor += bayerColMask;
                 
                 float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;
