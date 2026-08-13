@@ -191,7 +191,6 @@ public class AtlasRenderer : MonoBehaviour
     }
     public void SetBounds()
     {
-
         switch(rendererType)
         {
             case AtlasRendererType.SliceWorld:

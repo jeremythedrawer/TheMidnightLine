@@ -16,6 +16,7 @@ public static class AtlasUI
     public const int FOUR_NUMPAD_SPRITE_INDEX = 25;
     public const int HOLDING_PENCIL_SPRITE_INDEX = 16;
 
+
     public const float PENCIL_DISTANCE_THRESHOLD = 0.05f;
     public const float PENCIL_VERTICAL_FREQUENCY = 7f;
     public const float PENCIL_VERTICAL_MAGNITUDE = 0.07f;
@@ -106,14 +107,13 @@ public static class AtlasUI
     [Flags] public enum TutorialState
     {
         None = 0,
-        Ticket = 1 << 0,
-        Traitor = 1 << 1,
-        RuleOut = 1 << 2,
-        Color1 = 1 << 3,
-        Color2 = 1 << 4,
-        Color3 = 1 << 5,
-        MultiColor1 = 1 << 6,
-        MultiColor2 = 1 << 7,
+        Traitor = 1 << 0,
+        RuleOut = 1 << 1,
+        Color1 = 1 << 2,
+        Color2 = 1 << 3,
+        Color3 = 1 << 4,
+        MultiColor1 = 1 << 5,
+        MultiColor2 = 1 << 6,
     }
     [Flags] public enum KeyIconActions
     {
@@ -181,6 +181,8 @@ public static class AtlasUI
         E = 16,
         Space = 26,
         Pointer = 27,
+        LeftTriangle = 32,
+        F = 33,
 
     }
 
@@ -190,10 +192,13 @@ public static class AtlasUI
         Hovered,
         Clicked,
     }
-    public enum MoveButtonDirection
+    [Flags] public enum Direction
     { 
-        Left,
-        Right,
+        None = 0,
+        Left = 1 << 0,
+        Right = 1 << 1,
+        Up = 1 << 2,
+        Down = 1 << 3,
     }
     static float NaturalMoveClock;
     public static Dictionary<TripPrompt, string> PromptStringDict;
@@ -264,13 +269,13 @@ public static class AtlasUI
                 break;
             }
         }
-        public void MoveAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        public void MoveAway(CameraStatsSO camStats, Direction dir)
         {
             ctsMove?.Cancel();
             ctsMove = new CancellationTokenSource();
             MovingAway(camStats, dir).Forget();
         }
-        public void SetAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        public void SetAway(CameraStatsSO camStats, Direction dir)
         {
             Transform buttonTransform = renderer.transform;
             Bounds buttonBounds = renderer.rendererType == AtlasRendering.AtlasTextRendererType.Border ? renderer.background_renderer.GetBounds() : renderer.GetBoundsCurrentText();
@@ -280,12 +285,12 @@ public static class AtlasUI
 
             switch (dir)
             {
-                case MoveButtonDirection.Left:
+                case Direction.Left:
                 {
                     targetPos.x = -camStats.camBounds.extents.x - buttonBounds.size.x;
                 }
                 break;
-                case MoveButtonDirection.Right:
+                case Direction.Right:
                 {
                     targetPos.x = camStats.camBounds.extents.x + buttonBounds.size.x;
                 }
@@ -313,7 +318,7 @@ public static class AtlasUI
             ctsMove = new CancellationTokenSource();
             MovingButtonToActive().Forget();
         }
-        private async UniTask MovingAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        private async UniTask MovingAway(CameraStatsSO camStats, Direction dir)
         {
             Transform textTransform = renderer.transform;
             Bounds buttonBounds = renderer.rendererType == AtlasRendering.AtlasTextRendererType.Border ? renderer.background_renderer.GetBounds() : renderer.GetBoundsCurrentText();
@@ -323,12 +328,12 @@ public static class AtlasUI
 
             switch(dir)
             {
-                case MoveButtonDirection.Left:
+                case Direction.Left:
                 {
                     targetPos.x = -camStats.camBounds.extents.x - buttonBounds.size.x;
                 }
                 break;
-                case MoveButtonDirection.Right:
+                case Direction.Right:
                 {
                     targetPos.x = camStats.camBounds.extents.x + buttonBounds.size.x;
                 }
@@ -417,11 +422,12 @@ public static class AtlasUI
             OnClickCallback = onClickCallback;
             OnEnterCallback = onEnterCallback;
             OnExitCallback = onExitCallback;
-            activePos = renderer.transform.localPosition;
             holdToClick = isHold;
+            InitPos();
         }
-        public void InitImage()
+        public void InitPos()
         {
+            renderer.SetBounds();
             activePos = renderer.transform.localPosition;
         }
         public void UpdateButton(PlayerInputsSO playerInputs)
@@ -485,13 +491,13 @@ public static class AtlasUI
                 break;
             }
         }
-        public void MoveAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        public void MoveAway(CameraStatsSO camStats, Direction dir)
         {
             ctsMove?.Cancel();
             ctsMove = new CancellationTokenSource();
             MovingAway(camStats, dir).Forget();
         }
-        public void SetAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        public void SetAway(CameraStatsSO camStats, Direction dir)
         {
             SetRendererAway(renderer, camStats, dir);
         }
@@ -579,7 +585,7 @@ public static class AtlasUI
 
             }
         }
-        private async UniTask MovingAway(CameraStatsSO camStats, MoveButtonDirection dir)
+        private async UniTask MovingAway(CameraStatsSO camStats, Direction dir)
         {
             Transform buttonTransform = renderer.transform;
             Bounds buttonBounds = renderer.GetBounds();
@@ -589,12 +595,12 @@ public static class AtlasUI
 
             switch (dir)
             {
-                case MoveButtonDirection.Left:
+                case Direction.Left:
                 {
                     targetPos.x = -camStats.camBounds.extents.x - buttonBounds.size.x;
                 }
                 break;
-                case MoveButtonDirection.Right:
+                case Direction.Right:
                 {
                     targetPos.x = camStats.camBounds.extents.x + buttonBounds.size.x;
                 }
@@ -665,7 +671,7 @@ public static class AtlasUI
         }
 
     }
-    public static void SetRendererAway(AtlasRenderer renderer, CameraStatsSO camStats, MoveButtonDirection dir, Transform parent = null)
+    public static void SetRendererAway(AtlasRenderer renderer, CameraStatsSO camStats, Direction dir, Transform parent = null)
     {
         Transform buttonTransform = parent == null ? renderer.transform : parent;
         Bounds buttonBounds = renderer.GetBounds();
@@ -675,12 +681,12 @@ public static class AtlasUI
 
         switch (dir)
         {
-            case MoveButtonDirection.Left:
+            case Direction.Left:
             {
                 targetPos.x = -camStats.camBounds.extents.x - buttonBounds.size.x;
             }
             break;
-            case MoveButtonDirection.Right:
+            case Direction.Right:
             {
                 targetPos.x = camStats.camBounds.extents.x + buttonBounds.size.x;
             }
@@ -707,13 +713,36 @@ public static class AtlasUI
         cts = new CancellationTokenSource();
         MovingUIElement(transform, cts, nextPos, curState).Forget();
     }
-    public static void ShowKeyIcon(AtlasRenderer renderer, Vector2 position, KeySpriteIndices keySpriteIndex)
+    public static void ShowKeyIcon(AtlasRenderer renderer, Vector2 position, KeySpriteIndices keySpriteIndex, Direction direction)
     {
         renderer.enabled = true;
         renderer.custom.w = 1;
         renderer.transform.SetParent(null);
         renderer.UpdateSpriteInputsByIndex((int)keySpriteIndex);
-        renderer.transform.position = new Vector3(position.x, position.y + renderer.bounds.size.y, renderer.transform.position.z);
+        
+        Vector2 boundsSize = renderer.bounds.size;
+        Vector3 newPos = position;
+        if ((direction & Direction.Left) != 0)
+        {
+            newPos.x -= boundsSize.x;
+        }
+        
+        if ((direction & Direction.Right) != 0)
+        {
+            newPos.x += boundsSize.x;
+        }
+
+        if ((direction & Direction.Down) != 0)
+        {
+            newPos.y -= boundsSize.y;
+        }
+        
+        if ((direction & Direction.Up) != 0)
+        {
+            newPos.y += boundsSize.y;
+        }
+        newPos.z = renderer.transform.position.z;
+        renderer.transform.position = newPos;
     }
     private static async UniTask MovingUIElement(Transform transform, CancellationTokenSource cts, Vector3 nextPos, UIState curState)
     {

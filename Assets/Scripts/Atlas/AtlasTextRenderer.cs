@@ -49,6 +49,8 @@ public class AtlasTextRenderer : MonoBehaviour
 
     public Vector3 boundsOffset;
 
+    public float curAlpha;
+
     public int customBit;
 
     public bool hasText;
@@ -100,9 +102,11 @@ public class AtlasTextRenderer : MonoBehaviour
 
         if (customs == null || customs.Length != maxChars) customs = new Vector4[maxChars];
         
+        curAlpha = alpha;
+
         for (int i = 0; i < customs.Length; i++ )
         {
-            customs[i].w = alpha;
+            customs[i].w = curAlpha;
         }
 
         SetTextWorld();
@@ -128,6 +132,10 @@ public class AtlasTextRenderer : MonoBehaviour
             }
             break;
         }
+    }
+    public void SetAlignmentType(AtlasTextAlignmentType newAlignType)
+    {
+        alignmentType = newAlignType;
     }
     public void SetAppearTextAlpha(float normAmount)
     {

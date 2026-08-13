@@ -73,12 +73,12 @@ public class RoomDoor : MonoBehaviour
     }
     private void OnEnable()
     {
-        gameEventData.OnInteract.RegisterListener(OpenDoorOnInteract);
+        SpyBrain.OnInteract += OpenDoorOnInteract;
         prevSubState = SubState.ExitBoundsLeft;
     }
     private void OnDisable()
     {
-        gameEventData.OnInteract.UnregisterListener(OpenDoorOnInteract);
+        SpyBrain.OnInteract -= OpenDoorOnInteract;
     }
     private void Update()
     {

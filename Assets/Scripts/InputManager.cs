@@ -1,4 +1,3 @@
-using Proselyte.Sigils;
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
@@ -13,121 +12,111 @@ public class InputManager : MonoBehaviour
 
     PlayerInput playerInput;
 
-    InputAction move_action;
+    InputAction moveAction;
 
-    InputAction notepadToggle_action;
-    InputAction notepadFlipPage_action;
+    InputAction notepadToggleAction;
+    InputAction notepadFlipPageAction;
 
-    InputAction write_action;
-    InputAction preview_action;
-    InputAction numpad_action;
+    InputAction writeAction;
+    InputAction carouselAction;
+    InputAction numpadAction;
 
-    InputAction ticket_action;
-    InputAction interact_action;
+    InputAction ticketAction;
+    InputAction interactAction;
 
-    InputAction shift_action;
-
-    InputAction mouseLeftDown_action;
-    InputAction mouseLeftPress_action;
-    InputAction mouseRightDown_action;
+    InputAction mouseLeftDownAction;
+    InputAction mosueLeftPressAction;
+    InputAction mouseRightPressAction;
 
     Action<string> OnDeviceChanged;
 
     public static InputDevice curDevice;
 
-    private float resetElaspedTime;
-    private float resetThresholdTime = 2;
-
     private void Awake()
     {
         playerInput = GetComponent<PlayerInput>();
 
-        move_action = playerInput.actions["Player/Movement"];
+        moveAction = playerInput.actions["Player/Movement"];
 
-        notepadToggle_action = playerInput.actions["Player/NotepadToggle"];
-        notepadFlipPage_action = playerInput.actions["Player/NotepadFlipPage"];
+        notepadToggleAction = playerInput.actions["Player/NotepadToggle"];
+        notepadFlipPageAction = playerInput.actions["Player/NotepadFlipPage"];
 
-        write_action = playerInput.actions["Player/Writing"];
-        preview_action = playerInput.actions["Player/Preview"];
-        numpad_action = playerInput.actions["Player/Numpad"];
+        writeAction = playerInput.actions["Player/Writing"];
+        carouselAction = playerInput.actions["Player/Carousel"];
+        numpadAction = playerInput.actions["Player/Numpad"];
 
-        ticket_action = playerInput.actions["Player/Ticket"];
-        interact_action = playerInput.actions["Player/Interact"];
+        ticketAction = playerInput.actions["Player/Ticket"];
+        interactAction = playerInput.actions["Player/Interact"];
 
-        shift_action = playerInput.actions["Player/Shift"];
+        mouseLeftDownAction = playerInput.actions["Player/MouseLeftDown"];
+        mosueLeftPressAction = playerInput.actions["Player/MouseLeftPress"];
+        mouseRightPressAction = playerInput.actions["Player/MouseRightDown"];
 
-        mouseLeftDown_action = playerInput.actions["Player/MouseLeftDown"];
-        mouseLeftPress_action = playerInput.actions["Player/MouseLeftPress"];
-
-        mouseRightDown_action = playerInput.actions["Player/MouseRightDown"];
-
-        move_action.started += context =>
+        moveAction.started += context =>
         {
-            playerInputs.moveDown = true;
+            playerInputs.moveKeyDown = true;
         };
-        move_action.performed += context =>
+        moveAction.performed += context =>
         {
-            Vector2 move = context.ReadValue<Vector2>();
-            playerInputs.move = Mathf.RoundToInt(move.x);
+            float move = context.ReadValue<float>();
+            playerInputs.move = (int)move;
         };
-        move_action.canceled += context =>
+        moveAction.canceled += context =>
         {
             playerInputs.move = 0;
-            playerInputs.moveUp = true;
+            playerInputs.moveKeyUp = true;
         };
 
-        notepadToggle_action.started += context => playerInputs.notepadToggleKeyDown = true;
-        notepadToggle_action.canceled += context => playerInputs.notepadExitKeyUp = true;
+        notepadToggleAction.started += context => playerInputs.notepadToggleKeyDown = true;
+        notepadToggleAction.canceled += context => playerInputs.notepadToggleKeyUp = true;
 
-        notepadFlipPage_action.started += context =>
+        notepadFlipPageAction.started += context =>
         {
-            Vector2 move = context.ReadValue<Vector2>();
-            playerInputs.notepadPreviewAnswerAndFlip.y = Mathf.RoundToInt(move.y);
+            float value = context.ReadValue<float>();
+            playerInputs.flipKeyDownValue = (int)value;
         };
 
-        write_action.started += context => playerInputs.spacebarDown = true;
-        preview_action.started += context =>
+        writeAction.started += context => playerInputs.writeKeyDown = true;
+
+        carouselAction.started += context =>
         {
-            Vector2 move = context.ReadValue<Vector2>();
-            playerInputs.notepadPreviewAnswerAndFlip.x = Mathf.RoundToInt(move.x);
+            float carouselValue = context.ReadValue<float>();
+            playerInputs.carouselKeyDownValue = (int)carouselValue;
         };
 
-        numpad_action.started += context =>
+        numpadAction.started += context =>
         {
-            InputBinding activeBinding = numpad_action.GetBindingForControl(context.control).Value;
-            playerInputs.numpad = numpad_action.GetBindingIndex(activeBinding);
+            InputBinding activeBinding = numpadAction.GetBindingForControl(context.control).Value;
+            playerInputs.numpad = numpadAction.GetBindingIndex(activeBinding);
         };
 
-        ticket_action.started += context => playerInputs.ticketCheckKeyDown = true;
-        ticket_action.performed += context => playerInputs.ticketCheckKeyHold = true;
+        ticketAction.started += context => playerInputs.ticketCheckKeyDown = true;
+        ticketAction.performed += context => playerInputs.ticketCheckKeyHold = true;
 
-        ticket_action.canceled += context =>
+        ticketAction.canceled += context =>
         {
             playerInputs.ticketCheckKeyUp = true;
             playerInputs.ticketCheckKeyHold = false;
         };
 
-        interact_action.started += context =>
+        interactAction.started += context =>
         {
-            playerInputs.interact = true;
+            playerInputs.interactKeyDown = true;
         };
 
-        shift_action.started += context => playerInputs.shiftDown = true;
-        shift_action.canceled += context =>
-        {
-            playerInputs.shiftUp = true;
-        };
+        mouseLeftDownAction.started += context => playerInputs.mouseLeftDown = true;
 
-        mouseLeftDown_action.started += context => playerInputs.mouseLeftDown = true;
-        mouseLeftPress_action.performed += context => playerInputs.mouseLeftHold = true;
-        mouseLeftPress_action.canceled += context =>
+        mosueLeftPressAction.performed += context => playerInputs.mouseLeftHold = true;
+
+        mosueLeftPressAction.canceled += context =>
         {
             playerInputs.mouseLeftUp = true;
             playerInputs.mouseLeftHold = false;
         };
 
-        mouseRightDown_action.started += context => playerInputs.mouseRightDown = true;
-        mouseRightDown_action.canceled += context =>
+        mouseRightPressAction.started += context => playerInputs.mouseRightDown = true;
+
+        mouseRightPressAction.canceled += context =>
         {
             playerInputs.mouseRightUp = true;
         };
@@ -138,7 +127,6 @@ public class InputManager : MonoBehaviour
         ++InputUser.listenForUnpairedDeviceActivity;
         InputUser.onUnpairedDeviceUsed += CheckDevice;
     }
-
     private void OnDisable()
     {
         InputUser.onUnpairedDeviceUsed -= CheckDevice;
@@ -157,38 +145,26 @@ public class InputManager : MonoBehaviour
         playerInputs.mouseScreenPos.x = Mathf.Clamp(screenPos.x, 0f, Screen.width);
         playerInputs.mouseScreenPos.y = Mathf.Clamp(screenPos.y, 0f, Screen.height);
         playerInputs.mouseWorldPos = Camera.main.ScreenToWorldPoint(playerInputs.mouseScreenPos);
-
-        if (playerInputs.mouseLeftDown)
-        {
-            playerInputs.startDragMouseScreenPos = playerInputs.mouseScreenPos;
-        }
-        if (playerInputs.mouseLeftUp)
-        {
-            playerInputs.endDragMouseScreenPos = playerInputs.mouseScreenPos;
-        }
     }
 
     private void LateUpdate()
     {
         playerInputs.notepadToggleKeyDown = false;
-        playerInputs.notepadExitKeyUp = false;
-        playerInputs.spacebarDown = false;
+        playerInputs.notepadToggleKeyUp = false;
+        playerInputs.writeKeyDown = false;
         playerInputs.ticketCheckKeyDown = false;
         playerInputs.ticketCheckKeyUp = false;
-        playerInputs.interact = false;
+        playerInputs.interactKeyDown = false;
 
         playerInputs.mouseLeftDown = false;
         playerInputs.mouseLeftUp = false;
         playerInputs.mouseRightDown = false;
         playerInputs.mouseRightUp = false;
-        playerInputs.moveUp = false;
-        playerInputs.moveDown = false;
+        playerInputs.moveKeyUp = false;
+        playerInputs.moveKeyDown = false;
 
-        playerInputs.shiftDown = false;
-        playerInputs.shiftUp = false;
-
-        playerInputs.notepadPreviewAnswerAndFlip.x = 0;
-        playerInputs.notepadPreviewAnswerAndFlip.y = 0;
+        playerInputs.carouselKeyDownValue = 0;
+        playerInputs.flipKeyDownValue = 0;
         playerInputs.numpad = -1;
     }
     private void CheckDevice(InputControl value, InputEventPtr ptr)

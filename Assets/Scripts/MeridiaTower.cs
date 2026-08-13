@@ -26,6 +26,7 @@ public class MeridiaTower : MonoBehaviour
     public CameraStatsSO camStats;
     public SceneData sceneData;
     public GameEventDataSO gameEventData;
+    public PlayerInputsSO playerInputs;
 
     public Room elevatorRoom;
     public Room meetingRoom;
@@ -52,13 +53,14 @@ public class MeridiaTower : MonoBehaviour
         Scenes.OnLoadScore += MoveToMeetingFloor;
 
         AgreementPage.OnAgreementSigned += UnlockTripDoor;
+
         SpyBrain.OnAfterOutcomeSequence += MoveDownToBetweenFloors;
         SpyBrain.OnAfterOutcomeSequence += MoveMeetingWallUp;
         SpyBrain.OnEnteredElevatorGoingUp += MoveUpToBetweenFloors;
 
         StartUI.OnPlayAgain += MoveToBottomFloor;
 
-        gameEventData.OnInteract.RegisterListener(WalkThroughStartDoor);
+        SpyBrain.OnInteract += WalkThroughStartDoor;
 
     }
     private void OnDisable()
@@ -68,14 +70,15 @@ public class MeridiaTower : MonoBehaviour
         Scenes.OnLoadScore -= MoveToMeetingFloor;
 
         AgreementPage.OnAgreementSigned -= UnlockTripDoor;
+
         SpyBrain.OnAfterOutcomeSequence -= MoveDownToBetweenFloors;
         SpyBrain.OnAfterOutcomeSequence -= MoveMeetingWallUp;
         SpyBrain.OnEnteredElevatorGoingUp -= MoveUpToBetweenFloors;
 
         StartUI.OnPlayAgain -= MoveToBottomFloor;
 
-        gameEventData.OnInteract.UnregisterListener(WalkThroughStartDoor);
-        
+        SpyBrain.OnInteract -= WalkThroughStartDoor;
+
         ctsElevatorMove?.Cancel();
     }
 
@@ -209,7 +212,10 @@ public class MeridiaTower : MonoBehaviour
     }
     private void WalkThroughStartDoor()
     {
-        tripElevatorDoor.WalkThroughStartDoor();
+        if (playerInputs.interactKeyDown)
+        {
+            tripElevatorDoor.WalkThroughStartDoor();
+        }
     }
     private void MoveMeetingWallUp()
     {

@@ -15,7 +15,7 @@ MonoBehaviour:
   texture: {fileID: 2800000, guid: 1602fa2914d12994d8cfd5021338c0b7, type: 3}
   spriteConnectColor:
     serializedVersion: 2
-    rgba: 0
+    rgba: 4278255615
   entityMotionType: 1
   pivotColor:
     serializedVersion: 2
@@ -107,14 +107,14 @@ MonoBehaviour:
       worldSize: {x: 0.29444444, y: 0.87777776, z: 1}
       index: 11
     markers: []
-    holdFrames: 10
+    holdFrames: 100
   - sprite:
       uvSizeAndPos: {x: 0.051757812, y: 0.15429688, z: 0.6435547, w: 0.84375}
       uvPivot: {x: 0.49056605, y: 0}
       worldSize: {x: 0.29444444, y: 0.87777776, z: 1}
       index: 12
     markers: []
-    holdFrames: 100
+    holdFrames: 10
   - sprite:
       uvSizeAndPos: {x: 0.051757812, y: 0.15332031, z: 0.6982422, w: 0.84375}
       uvPivot: {x: 0.49056605, y: 0}
@@ -237,14 +237,14 @@ MonoBehaviour:
     holdFrames: 50
   - sprite:
       uvSizeAndPos: {x: 0.053710938, y: 0.107421875, z: 0.6142578, w: 0.6826172}
-      uvPivot: {x: 0.018181818, y: 0}
+      uvPivot: {x: 0, y: 0}
       worldSize: {x: 0.30555555, y: 0.6111111, z: 1}
       index: 29
     markers: []
     holdFrames: 100
   - sprite:
       uvSizeAndPos: {x: 0.053710938, y: 0.107421875, z: 0.6689453, w: 0.6826172}
-      uvPivot: {x: 0.018181818, y: 0}
+      uvPivot: {x: 0, y: 0}
       worldSize: {x: 0.30555555, y: 0.6111111, z: 1}
       index: 30
     markers: []
@@ -278,17 +278,19 @@ MonoBehaviour:
     holdFrames: 60
   - sprite:
       uvSizeAndPos: {x: 0.053710938, y: 0.107421875, z: 0.88964844, w: 0.6826172}
-      uvPivot: {x: 0.018181818, y: 0}
+      uvPivot: {x: 0, y: 0}
       worldSize: {x: 0.30555555, y: 0.6111111, z: 1}
       index: 34
     markers: []
     holdFrames: 30
   - sprite:
       uvSizeAndPos: {x: 0.049804688, y: 0.10253906, z: 0.9482422, w: 0.6826172}
-      uvPivot: {x: 0.01818182, y: 0}
+      uvPivot: {x: 0, y: 0}
       worldSize: {x: 0.28333333, y: 0.5833333, z: 1}
       index: 35
-    markers: []
+    markers:
+    - objectPos: {x: 0.17222223, y: 0.48333332}
+      type: 8
     holdFrames: 100
   - sprite:
       uvSizeAndPos: {x: 0.053710938, y: 0.107421875, z: 0.0087890625, w: 0.5625}
@@ -376,7 +378,7 @@ MonoBehaviour:
     keyframeEndIndex: 43
     time: 0
   - clipName: SittingSleeping
-    clipType: 0
+    clipType: 1
     motionIndex: 8
     keyframeStartIndex: 31
     keyframeEndIndex: 33
@@ -425,4 +427,8 @@ MonoBehaviour:
   - color:
       serializedVersion: 2
       rgba: 4278255360
+    type: 8
+  - color:
+      serializedVersion: 2
+      rgba: 4294901760
     type: 8

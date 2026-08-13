@@ -5,7 +5,6 @@ using static Train;
 [CreateAssetMenu(fileName = "TrainStats_SO", menuName = "Midnight Line SOs / Train Stats SO")]
 public class TrainStatsSO : ScriptableObject
 {
-
     public LayerMask activeSlideDoorsMask;
     
     public Bounds totalBounds;

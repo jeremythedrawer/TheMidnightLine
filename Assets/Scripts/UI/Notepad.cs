@@ -39,6 +39,7 @@ public class Notepad : MonoBehaviour
     }
 
     public static event Action OnWriteColorMarkerFirstTime;
+    public static event Action OnEraseDuringTutorial;
 
     public PlayerInputsSO playerInputs;
     public TripSO curTrip;
@@ -123,6 +124,7 @@ public class Notepad : MonoBehaviour
     private void Update()
     {
         activePage.UpdateExitButton();
+
         if ((notepadData.subState & SubState.InUse) != 0)
         {
             UpdateState();
@@ -201,12 +203,12 @@ public class Notepad : MonoBehaviour
             if ((notepadData.completedUnlocks & UnlockType.Color) == 0 && (curTrip.curUnlocks & UnlockType.Color) != 0)
             {
                 activePage.InitNextColorRow(0);
-                activePage.SwitchActivePLayerWriteTextRenderer(0);
+                activePage.SwitchWriteRow(0);
             }
             else if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
             {
                 activePage.InitNextColorRow(1);
-                activePage.SwitchActivePLayerWriteTextRenderer(1);
+                activePage.SwitchWriteRow(1);
             }
 
         }
@@ -246,21 +248,21 @@ public class Notepad : MonoBehaviour
 
             case PageType.Profile:
             {
-                if (ToFlipUp())
-                {
-                    SetState(NotepadState.FlippingUp);
-                }
-                else if (ToFlipDown())
-                {
-                    SetState(NotepadState.FlippingDown);
-                }
-                else if (ToErase())
+                if (ToErase())
                 {
                     SetState(NotepadState.Erasing);
                 }
                 else if (ToWrite())
                 {
                     SetState(NotepadState.Writing);
+                }
+                else if (ToFlipUp())
+                {
+                    SetState(NotepadState.FlippingUp);
+                }
+                else if (ToFlipDown())
+                {
+                    SetState(NotepadState.FlippingDown);
                 }
                 else
                 {
@@ -271,21 +273,21 @@ public class Notepad : MonoBehaviour
 
             case PageType.ColorKey:
             {
-                if (ToFlipUp())
-                {
-                    SetState(NotepadState.FlippingUp);
-                }
-                else if (ToFlipDown())
-                {
-                    SetState(NotepadState.FlippingDown);
-                }
-                else if (ToErase())
+                if (ToErase())
                 {
                     SetState(NotepadState.Erasing);
                 }
                 else if (ToWrite())
                 {
                     SetState(NotepadState.Writing);
+                }
+                else if (ToFlipUp())
+                {
+                    SetState(NotepadState.FlippingUp);
+                }
+                else if (ToFlipDown())
+                {
+                    SetState(NotepadState.FlippingDown);
                 }
                 else
                 {
@@ -335,12 +337,12 @@ public class Notepad : MonoBehaviour
                 }
                 else
                 {
-                    if (activePageIndex < lastPageIndex - 1 && playerInputs.notepadPreviewAnswerAndFlip.y == 1)
+                    if (activePageIndex < lastPageIndex - 1 && playerInputs.flipKeyDownValue == 1)
                     {
                         notepadData.subState |= SubState.WillFlipUp;
                         notepadData.subState &= ~(SubState.WillFlipDown);
                     }
-                    if (activePageIndex > 0 && playerInputs.notepadPreviewAnswerAndFlip.y == -1)
+                    if (activePageIndex > 0 && playerInputs.flipKeyDownValue == -1)
                     {
                         notepadData.subState |= SubState.WillFlipDown;
                         notepadData.subState &= ~(SubState.WillFlipUp);
@@ -415,12 +417,12 @@ public class Notepad : MonoBehaviour
                 }
                 else
                 {
-                    if (activePageIndex < lastPageIndex && playerInputs.notepadPreviewAnswerAndFlip.y == 1)
+                    if (activePageIndex < lastPageIndex && playerInputs.flipKeyDownValue == 1)
                     {
                         notepadData.subState |= SubState.WillFlipUp;
                         notepadData.subState &= ~(SubState.WillFlipDown);
                     }
-                    else if (activePageIndex > 1 && playerInputs.notepadPreviewAnswerAndFlip.y == -1)
+                    else if (activePageIndex > 1 && playerInputs.flipKeyDownValue == -1)
                     {
                         notepadData.subState |= SubState.WillFlipDown;
                         notepadData.subState &= ~(SubState.WillFlipUp);
@@ -491,12 +493,12 @@ public class Notepad : MonoBehaviour
             break;
             case NotepadState.Writing:
             {
-                if (activePageIndex < lastPageIndex && playerInputs.notepadPreviewAnswerAndFlip.y == 1)
+                if (activePageIndex < lastPageIndex && playerInputs.flipKeyDownValue == 1)
                 {
                     notepadData.subState |= SubState.WillFlipUp;
                     notepadData.subState &= ~(SubState.WillFlipDown);
                 }
-                else if (activePageIndex > 0 && playerInputs.notepadPreviewAnswerAndFlip.y == -1)
+                else if (activePageIndex > 0 && playerInputs.flipKeyDownValue == -1)
                 {
                     notepadData.subState |= SubState.WillFlipDown;
                     notepadData.subState &= ~(SubState.WillFlipUp);
@@ -505,12 +507,12 @@ public class Notepad : MonoBehaviour
             break;
             case NotepadState.Erasing:
             {
-                if (activePageIndex < lastPageIndex && playerInputs.notepadPreviewAnswerAndFlip.y == 1)
+                if (activePageIndex < lastPageIndex && playerInputs.flipKeyDownValue == 1)
                 {
                     notepadData.subState |= SubState.WillFlipUp;
                     notepadData.subState &= ~(SubState.WillFlipDown);
                 }
-                else if (activePageIndex > 0 && playerInputs.notepadPreviewAnswerAndFlip.y == -1)
+                else if (activePageIndex > 0 && playerInputs.flipKeyDownValue == -1)
                 {
                     notepadData.subState |= SubState.WillFlipDown;
                     notepadData.subState &= ~(SubState.WillFlipUp);
@@ -519,18 +521,15 @@ public class Notepad : MonoBehaviour
             break;
             case NotepadState.Stationary:
             {
-                if (sceneData.activeSceneType == SceneType.Trip && activePage.activePlayerWriteText == "" && playerInputs.notepadPreviewAnswerAndFlip.x != 0)
+                if (sceneData.activeSceneType == SceneType.Trip && activePage.activePlayerWriteText == "" && playerInputs.carouselKeyDownValue != 0)
                 {
-                    activePage.SwitchActivePreviewPlayerWriteText((int)playerInputs.notepadPreviewAnswerAndFlip.x);
+                    activePage.SwitchActivePreviewPlayerWriteText((int)playerInputs.carouselKeyDownValue);
                 }
 
                 if (activePage.pageType == PageType.ColorKey)
                 {
-                    if ((curTrip.curUnlocks & UnlockType.Color) == 0) return;
-
                     if (playerInputs.numpad > 0 && playerInputs.numpad <= curTrip.unlockedColorMarkerCount)
-                    {
-                        activePage.SwitchActivePLayerWriteTextRenderer(playerInputs.numpad - 1);
+                    { 
                         leftHand.MoveToEdgeTextBounds(leftEdge: true);
                     }
                 }
@@ -553,12 +552,12 @@ public class Notepad : MonoBehaviour
                     if ((notepadData.completedUnlocks & UnlockType.Color) == 0 && (curTrip.curUnlocks & UnlockType.Color) != 0)
                     {
                         nextPage.InitNextColorRow(0);
-                        nextPage.SwitchActivePLayerWriteTextRenderer(0);
+                        nextPage.SwitchWriteRow(0);
                     }
                     else if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
                     {
                         nextPage.InitNextColorRow(1);
-                        nextPage.SwitchActivePLayerWriteTextRenderer(1);
+                        nextPage.SwitchWriteRow(1);
                     }
                 }
 
@@ -598,6 +597,11 @@ public class Notepad : MonoBehaviour
                 activeTraitorProfile = curTrip.traitorProfiles[activePage.traitorIndex];
                 
                 notepadData.subState |= SubState.EraseToggle;
+
+                if (spyStats.curTutorialState != TutorialState.None)
+                {
+                    OnEraseDuringTutorial?.Invoke();
+                }
 
             }
             break;
@@ -685,7 +689,7 @@ public class Notepad : MonoBehaviour
                             if ((notepadData.completedUnlocks & UnlockType.MultiColor) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
                             {
                                 activePage.InitNextColorRow(1);
-                                activePage.SwitchActivePLayerWriteTextRenderer(1);
+                                activePage.SwitchWriteRow(1);
                                 leftHand.MoveToEdgeTextBounds(leftEdge: true);
                             }
                         }
@@ -977,19 +981,19 @@ public class Notepad : MonoBehaviour
     }
     private bool ToFlipUp()
     {
-        return ((playerInputs.notepadPreviewAnswerAndFlip.y == 1 && activePageIndex < lastPageIndex) || (notepadData.subState & (SubState.WillFlipUp | SubState.IsFlippingUp)) != 0) && (notepadData.subState & SubState.CanFlipUp) != 0;
+        return ((playerInputs.flipKeyDownValue == 1 && activePageIndex < lastPageIndex) || (notepadData.subState & (SubState.WillFlipUp | SubState.IsFlippingUp)) != 0) && (notepadData.subState & SubState.CanFlipUp) != 0;
     }
     private bool ToFlipDown()
     {
-        return ((playerInputs.notepadPreviewAnswerAndFlip.y == -1 && activePageIndex > 0) || (notepadData.subState & (SubState.WillFlipDown | SubState.IsFlippingDown)) != 0) && (notepadData.subState & SubState.CanFlipDown) != 0;
+        return ((playerInputs.flipKeyDownValue == -1 && activePageIndex > 0) || (notepadData.subState & (SubState.WillFlipDown | SubState.IsFlippingDown)) != 0) && (notepadData.subState & SubState.CanFlipDown) != 0;
     }
     private bool ToErase()
     {
-        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.notepadPreviewAnswerAndFlip.x != 0 && activePage.activePlayerWriteText != "") || (notepadData.subState & SubState.EraseToggle) != 0;
+        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.carouselKeyDownValue != 0 && activePage.activePlayerWriteText != "") || (notepadData.subState & SubState.EraseToggle) != 0;
     }
     private bool ToWrite()
     {
-        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.spacebarDown && activePage.activePlayerWriteText == "" && activePage.activePlayerWriteTextRenderer != null) || (notepadData.subState & SubState.WriteToggle) != 0;
+        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.writeKeyDown && activePage.activePlayerWriteText == "" && activePage.activePlayerWriteTextRenderer != null) || (notepadData.subState & SubState.WriteToggle) != 0;
     }
     private string GenerateName(Gender gender, Ethnicity ethnicity)
     {
@@ -1030,11 +1034,20 @@ public class Notepad : MonoBehaviour
     
     public void FlipToPage(int pageIndex)
     {
-        FlippingToPage(pageIndex).Forget();
+        if (activePage.pageIndex == pageIndex)
+        {
+            activePage.SetPreviewPlayerWriteTexts(NotepadState.FlippingUp);
+        }
+        else
+        {
+            FlippingToPage(pageIndex).Forget();
+        }
     }
     private async UniTask FlippingToPage(int pageIndex)
     {
         notepadData.subState &= ~(SubState.CanFlipUp | SubState.CanFlipDown);
+
+        while(notepadData.curState != NotepadState.Stationary) await UniTask.Yield();
 
         if (activePage.pageIndex < pageIndex)
         {
@@ -1056,6 +1069,5 @@ public class Notepad : MonoBehaviour
             }
             notepadData.subState |= SubState.CanFlipUp | SubState.CanFlipDown;
         }
-        activePage.SetPreviewPlayerWriteTexts(NotepadState.FlippingUp);
     }
 }

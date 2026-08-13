@@ -6,7 +6,6 @@ public class GameEventDataSO : ScriptableObject
 {
     public GameEvent OnStartTrip;
     public GameEvent OnResetTrip;
-    public GameEvent OnInteract;
 
     public GameEvent OnStationArrival;
     public GameEvent OnStationLeave;

@@ -52,7 +52,7 @@ public class AgreementPage : MonoBehaviour
     {
         if (atActivePos)
         {
-            if (playerInputs.spacebarDown && page.activePlayerWriteText == "")
+            if (playerInputs.writeKeyDown && page.activePlayerWriteText == "")
             {
                 leftHand.SetState(LeftHand.State.Writing);
             }

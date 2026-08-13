@@ -10,7 +10,6 @@ public class SpyBrain : MonoBehaviour
 {
     const float PLAY_AGAIN_HOLD_TIME = 3f;
     public static Carriage CurCarriage;
-    public NPCBrain chosenNPC;
 
     public static event Action OnAfterOutcomeSequence;
     public static event Action OnTicketCheckHoverEnabled;
@@ -26,8 +25,9 @@ public class SpyBrain : MonoBehaviour
     public static event Action OnEnteredElevatorGoingUp;
     public static event Action OnCheckCarriageMap;
     public static event Action OnUncheckCarriageMap;
+    public static event Action OnInteract;
+    public static event Action OnMoveFirstTime;
 
-    public static bool CanCheckTicket;
     public static bool PickingNPCToTicketCheck;
 
     [Header("Components")]
@@ -53,6 +53,8 @@ public class SpyBrain : MonoBehaviour
 
     [Header("Generated")]
     public NPCBrain[] possibleNPCsToTicketCheck;
+
+    public NPCBrain chosenNPC;
 
     public AtlasSO atlas;
     
@@ -91,11 +93,12 @@ public class SpyBrain : MonoBehaviour
         CalculateCollisionPoints();
     }
     private void OnEnable()
-    {     
-        gameEventData.OnInteract.RegisterListener(OpenSlideDoors);
-        gameEventData.OnInteract.RegisterListener(LookAtCarriageMap);
-        gameEventData.OnStationArrival.RegisterListener(EnableCanOpenSlideDoor);
-        gameEventData.OnStationLeave.RegisterListener(DisableCanOpenSlideDoor);
+    {
+        SpyBrain.OnInteract += OpenSlideDoors;
+        SpyBrain.OnInteract += LookAtCarriageMap;
+
+        gameEventData.OnStationArrival.RegisterListener(SetInputsForTrainStop);
+        gameEventData.OnStationLeave.RegisterListener(SetInputsForTrainStart);
 
         Scenes.OnLoadStart += StartInit;
         Scenes.OnLoadTrip0 += TripInit;
@@ -115,10 +118,11 @@ public class SpyBrain : MonoBehaviour
     }
     private void OnDisable()
     {
-        gameEventData.OnInteract.UnregisterListener(OpenSlideDoors);
-        gameEventData.OnInteract.UnregisterListener(LookAtCarriageMap);
-        gameEventData.OnStationArrival.UnregisterListener(EnableCanOpenSlideDoor);
-        gameEventData.OnStationLeave.UnregisterListener(DisableCanOpenSlideDoor);
+        SpyBrain.OnInteract -= OpenSlideDoors;
+        SpyBrain.OnInteract -= LookAtCarriageMap;
+
+        gameEventData.OnStationArrival.UnregisterListener(SetInputsForTrainStop);
+        gameEventData.OnStationLeave.UnregisterListener(SetInputsForTrainStart);
 
         Scenes.OnLoadStart -= StartInit;
         Scenes.OnLoadTrip0 -= TripInit;
@@ -182,6 +186,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void TripInit()
     {
+        trip.ticketsCheckedSinceLastStation = 0;
         trip.ticketsCheckedTotal = 0;
         possibleNPCsToTicketCheck = new NPCBrain[8];
     }
@@ -190,7 +195,9 @@ public class SpyBrain : MonoBehaviour
         trip.failed = false;
         stats.tutorialsCompleted = TutorialState.None;
         stats.startTrip = false;
+        stats.canCheckTicket = false;
         stats.startPos = new Vector2(transform.position.x, transform.position.y);
+        stats.movedFirstTime = false;
 
         trip.curUnlocks = UnlockType.None;
     }
@@ -198,7 +205,7 @@ public class SpyBrain : MonoBehaviour
     {
         if (!stats.playerInputsEnabled) return;
 
-        if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount == 1) || chosenNPC != null)
+        if ((playerInputs.ticketCheckKeyDown && stats.canCheckTicket && curNPCTicketCheckHoverCount == 1) || chosenNPC != null)
         {
             if (chosenNPC == null)
             {
@@ -214,7 +221,7 @@ public class SpyBrain : MonoBehaviour
                 SetState(SpyState.TicketCheck);
             }
         }
-        else if ((playerInputs.ticketCheckKeyDown && CanCheckTicket && curNPCTicketCheckHoverCount > 1) || PickingNPCToTicketCheck)
+        else if ((playerInputs.ticketCheckKeyDown && stats.canCheckTicket && curNPCTicketCheckHoverCount > 1) || PickingNPCToTicketCheck)
         {
             SetState(SpyState.PickingNPCTicketCheck);
         }
@@ -263,10 +270,11 @@ public class SpyBrain : MonoBehaviour
                         break;
                     }
                 }
-                if (playerInputs.interact)
+                if (playerInputs.interactKeyDown)
                 {
-                    gameEventData.OnInteract?.Raise();
+                    OnInteract?.Invoke();
                 }
+
             }
             break;
             case SpyState.Walk:
@@ -276,7 +284,7 @@ public class SpyBrain : MonoBehaviour
                     Flip(playerInputs.move < 0);
                     stats.targetXVelocity = settings.moveSpeed * playerInputs.move;
                     
-                    if (playerInputs.interact) gameEventData.OnInteract?.Raise();
+                    if (playerInputs.interactKeyDown) OnInteract?.Invoke();
                 }
                 else
                 {
@@ -323,7 +331,7 @@ public class SpyBrain : MonoBehaviour
             {
                 atlasRenderer.PlayClip(ref curClip);
 
-                if((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveDown || playerInputs.spacebarDown) && canExitState)
+                if((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveKeyDown || playerInputs.writeKeyDown) && canExitState)
                 {
                     chosenNPC.ToggleUnveil(true);
                     FinishWithChosenNPC();
@@ -334,15 +342,15 @@ public class SpyBrain : MonoBehaviour
             case SpyState.CarriageMap:
             {
                 atlasRenderer.PlayClip(ref curClip);
-                if (!playerInputs.interact) canExitState = true;
+                if (!playerInputs.interactKeyDown) canExitState = true;
 
-                if (playerInputs.interact && canExitState) checkingCarriageMap = false;
+                if (playerInputs.interactKeyDown && canExitState) checkingCarriageMap = false;
             }
             break;
             case SpyState.TalkingToAccomplice:
             {
                 atlasRenderer.PlayClip(ref curClip);
-                if ((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveDown || playerInputs.spacebarDown) && canExitState && stats.curTutorialState == TutorialState.None)
+                if ((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveKeyDown || playerInputs.writeKeyDown) && canExitState && stats.curTutorialState == TutorialState.None)
                 {
                     SceneController.GetUnlockPicker().Close();
                     FinishWithChosenNPC();
@@ -363,7 +371,7 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Notepad:
             {
-                if (playerInputs.notepadExitKeyUp) canExitState = true;
+                if (playerInputs.notepadToggleKeyUp) canExitState = true;
 
                 if (notepadData.curState != curNotepadState)
                 {
@@ -445,7 +453,6 @@ public class SpyBrain : MonoBehaviour
                 CalculateCollisionPoints();
                 if (camStats.curLocationState != LocationState.Station)
                 {
-
                     RaycastHit2D gangwayDoorLeftHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, layerSettings.trainLayers.gangwayDoor);
                     RaycastHit2D gangwayDoorRightHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, layerSettings.trainLayers.gangwayDoor);
                     bool isTouchingGangwayDoorLeft = gangwayDoorLeftHit.collider != null;
@@ -545,6 +552,11 @@ public class SpyBrain : MonoBehaviour
             case SpyState.Walk:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.Walking];
+                if (!stats.movedFirstTime)
+                {
+                    OnMoveFirstTime?.Invoke();
+                    stats.movedFirstTime = true;
+                }
             }
             break;
             case SpyState.TicketCheck:
@@ -648,7 +660,7 @@ public class SpyBrain : MonoBehaviour
                 OnFinishTicketInspect?.Invoke();
                 if (trip.ticketsCheckedSinceLastStation == trip.stationAhead.ticketsToCheckBeforeSpawn)
                 {
-                    CanCheckTicket = false;
+                    stats.canCheckTicket = false;
                 }
 
             }
@@ -692,7 +704,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void CheckIfTicketCheckHover()
     {
-        if (CanCheckTicket)
+        if (stats.canCheckTicket)
         {
             Bounds spyBounds = atlasRenderer.bounds;
 
@@ -826,14 +838,16 @@ public class SpyBrain : MonoBehaviour
         }
         slideDoors = foundSlideDoor;
     }
-    private void EnableCanOpenSlideDoor()
+    private void SetInputsForTrainStop()
     {
         slideDoors = null;
         canOpenSlideDoor = true;
+        stats.canCheckTicket = false;
     }
-    private void DisableCanOpenSlideDoor()
+    private void SetInputsForTrainStart()
     {
         canOpenSlideDoor = false;
+        stats.canCheckTicket = true;
     }
     private void OpenSlideDoors()
     {
@@ -968,10 +982,6 @@ public class SpyBrain : MonoBehaviour
         OnAfterOutcomeSequence?.Invoke();
     }
 
-    public static void ToggleTicketCheckAbility(bool toggle)
-    {
-        CanCheckTicket = toggle;
-    }
     private void OnDrawGizmos()
     {
         CalculateCollisionPoints();

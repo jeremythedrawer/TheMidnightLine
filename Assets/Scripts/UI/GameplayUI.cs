@@ -28,7 +28,7 @@ public class GameplayUI : MonoBehaviour
 
     public Ticket ticket;
 
-    public TicketIcon ticketIconPrefab;
+    public RailMap railMap;
 
     public AtlasRenderer carriageMap;
 
@@ -40,14 +40,9 @@ public class GameplayUI : MonoBehaviour
     public AtlasTextRenderer traitorCountText;
     public AtlasTextRenderer tutorialRenderer;
 
-    public Transform ticketIconTransform;
-
     [Header("Generated")]
-    public TicketIcon[] ticketIcons;
     
     public Notepad notepad;
-
-    public TicketIcon curTicketIcon;
     
     public CancellationTokenSource ctsNotepad;
     public CancellationTokenSource ctsTicket;
@@ -80,21 +75,17 @@ public class GameplayUI : MonoBehaviour
 
     private void OnEnable()
     {
-        gameEventData.OnStationLeave.RegisterListener(SetNewTicketIcons);
         gameEventData.OnStationLeave.RegisterListener(SetTraitorIcons);
         gameEventData.OnStationLeave.RegisterListener(HideKeyIcon);
 
-        gameEventData.OnStationArrival.RegisterListener(DisappearTicketIcons);
-
-        SpyBrain.OnTicketCheckHoverDisabled += RevertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverDisabled += HideKeyIcon;
-        SpyBrain.OnTicketCheckHoverEnabled += InvertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverEnabledFirstTime += ShowEIcon;
-        SpyBrain.OnAtSlideDoors += ShowWIcon;
+        SpyBrain.OnAtSlideDoors += ShowSpaceIcon;
         SpyBrain.OnWalkPastSlideDoors += HideKeyIcon;
 
         SpyBrain.OnEnteredTrain += DisappearKeyIcon;
         SpyBrain.OnTicketInspect += DisappearKeyIcon;
+        SpyBrain.OnTicketInspect += MoveRailMap;
         SpyBrain.OnOpenNotepad += SetToNotepadState;
         SpyBrain.OnCloseNotepad += SetToNoneState;
         SpyBrain.OnTicketInspect += SetToTicketState;
@@ -112,26 +103,23 @@ public class GameplayUI : MonoBehaviour
         UnlockPicker.OnMutliColorAbilityUnlock += MoveMulticolorMarkerTutorialIcon;
 
         Notepad.OnWriteColorMarkerFirstTime += SetTutorialTextToColor2;
+        Notepad.OnEraseDuringTutorial += SetTutorialTextToColor1;
 
         ColorPicker.OnSelectClueColorFirstTime += SetTutorialTextToColor3;
         ColorPicker.OnSelectSecondClueColorFirstTime += SetTutorialTextToMultiColor2;
     }
     private void OnDisable()
     {
-        gameEventData.OnStationLeave.UnregisterListener(SetNewTicketIcons);
         gameEventData.OnStationLeave.UnregisterListener(SetTraitorIcons);
         gameEventData.OnStationLeave.UnregisterListener(HideKeyIcon);
 
-        gameEventData.OnStationArrival.UnregisterListener(DisappearTicketIcons);
-
-        SpyBrain.OnTicketCheckHoverDisabled -= RevertCurTicketIcon;
         SpyBrain.OnTicketCheckHoverDisabled -= HideKeyIcon;
-        SpyBrain.OnTicketCheckHoverEnabled -= InvertCurTicketIcon;
-        SpyBrain.OnAtSlideDoors -= ShowWIcon;
+        SpyBrain.OnAtSlideDoors -= ShowSpaceIcon;
         SpyBrain.OnTicketCheckHoverEnabledFirstTime -= ShowEIcon;
         SpyBrain.OnWalkPastSlideDoors -= HideKeyIcon;
         SpyBrain.OnEnteredTrain -= DisappearKeyIcon;
         SpyBrain.OnTicketInspect -= DisappearKeyIcon;
+        SpyBrain.OnTicketInspect -= MoveRailMap;
         SpyBrain.OnOpenNotepad -= SetToNotepadState;
         SpyBrain.OnCloseNotepad -= SetToNoneState;
         SpyBrain.OnTicketInspect -= SetToTicketState;
@@ -149,6 +137,7 @@ public class GameplayUI : MonoBehaviour
         Scenes.OnLoadTrip0 -= Init;
 
         Notepad.OnWriteColorMarkerFirstTime -= SetTutorialTextToColor2;
+        Notepad.OnEraseDuringTutorial -= SetTutorialTextToColor1;
 
         ColorPicker.OnSelectClueColorFirstTime -= SetTutorialTextToColor3;
         ColorPicker.OnSelectSecondClueColorFirstTime -= SetTutorialTextToMultiColor2;
@@ -162,7 +151,6 @@ public class GameplayUI : MonoBehaviour
     private void Init()
     {
         InitPOVUI();
-        InitTicketIcons();
         InitUIElements();
     }
     private void SetState(UIState newState)
@@ -219,7 +207,7 @@ public class GameplayUI : MonoBehaviour
                 {
                     case TutorialState.Color1:
                     {
-                        if (canExitState && playerInputs.spacebarDown)
+                        if (canExitState && playerInputs.writeKeyDown)
                         {
                             if (!tutorialRenderer.hasText)
                             {
@@ -235,7 +223,7 @@ public class GameplayUI : MonoBehaviour
                     break;
                     case TutorialState.Color3:
                     {
-                        if (canExitState && playerInputs.spacebarDown)
+                        if (canExitState && playerInputs.writeKeyDown)
                         {
                             curTutorialIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 4);
                             curTutorialIcon.renderer.transform.SetParent(unlockPicker.transform, true);
@@ -253,7 +241,7 @@ public class GameplayUI : MonoBehaviour
                     break;
                     case TutorialState.MultiColor1:
                     {
-                        if (canExitState && playerInputs.spacebarDown)
+                        if (canExitState && playerInputs.writeKeyDown)
                         {
                             if (!tutorialRenderer.hasText)
                             {
@@ -264,7 +252,7 @@ public class GameplayUI : MonoBehaviour
                     break;
                     case TutorialState.MultiColor2:
                     {
-                        if (canExitState && playerInputs.spacebarDown)
+                        if (canExitState && playerInputs.writeKeyDown)
                         {
                             curTutorialIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 4);
                             curTutorialIcon.renderer.transform.SetParent(unlockPicker.transform, true);
@@ -315,33 +303,10 @@ public class GameplayUI : MonoBehaviour
                         }
                     }
                     break;
-                    case TutorialState.Ticket:
-                    {
-                        if (canExitState && playerInputs.spacebarDown)
-                        {
-                            if (!tutorialRenderer.hasText)
-                            {
-                                curTutorialIcon.ctsMove?.Cancel();
-                            }
-                            else
-                            {
-                                curTutorialIcon.MoveBackTutorialUIElement(tutorialRenderer);
-                                fadeBlack.FadeOut();
 
-                                curTicketIcon.RipStubTicket();
-                                curTicketIcon.InvertIcon(toggle: false);
-                                curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
-
-                                spyStats.tutorialsCompleted |= spyStats.curTutorialState;
-                                spyStats.curTutorialState = TutorialState.None;
-                                spyStats.playerInputsEnabled = true;
-                            }
-                        }
-                    }
-                    break;
                     case TutorialState.Traitor:
                     {
-                        if (canExitState && playerInputs.spacebarDown)
+                        if (canExitState && playerInputs.writeKeyDown)
                         {
                             if (!tutorialRenderer.hasText)
                             {
@@ -364,7 +329,7 @@ public class GameplayUI : MonoBehaviour
                     break;
                     case TutorialState.RuleOut:
                     {
-                        if (canExitState && playerInputs.spacebarDown)
+                        if (canExitState && playerInputs.writeKeyDown)
                         {
                             if (!tutorialRenderer.hasText)
                             {
@@ -387,7 +352,7 @@ public class GameplayUI : MonoBehaviour
                     break;
                     case TutorialState.Color1:
                     {
-                        if (canExitState && playerInputs.spacebarDown)
+                        if (canExitState && playerInputs.writeKeyDown)
                         {
                             if (!tutorialRenderer.hasText)
                             {
@@ -416,24 +381,6 @@ public class GameplayUI : MonoBehaviour
             case UIState.Ticket:
             {
                 MoveUIElement(ticket.transform, ticketInactivePos, ref ctsTicket, newState);
-
-                if (!options.skipTutorial && ((spyStats.tutorialsCompleted & TutorialState.Ticket) == 0))
-                {
-                    curTicketIcon.mainTicket.MoveTutorialUIElement(cameraStats, tutorialRenderer, options.ticketCountTutorialText);
-                    curTutorialIcon = curTicketIcon.mainTicket;
-                    fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f, uvPosX: 0, uvPosY: 0.5f);
-                    spyStats.curTutorialState = TutorialState.Ticket;
-                    spyStats.playerInputsEnabled = false;
-                }
-                else
-                {
-                    curTicketIcon.RipStubTicket();
-                    if (trip.ticketsCheckedSinceLastStation < ticketIcons.Length)
-                    {
-                        curTicketIcon = ticketIcons[trip.ticketsCheckedSinceLastStation];
-                    }
-                }
-
             }
             break;
             case UIState.CarriageMap:
@@ -544,22 +491,6 @@ public class GameplayUI : MonoBehaviour
         carriageMapInactivePos = new Vector3(halfCamWidth, carriageMapActivePos.y, carriageMap.transform.localPosition.z);
         carriageMap.transform.localPosition = carriageMapInactivePos;
     }
-    private void InitTicketIcons()
-    {
-        ticketIcons = new TicketIcon[3];
-
-        float ticketIconSpacing = ticketIconPrefab.mainTicket.renderer.bounds.size.x + ticketIconPrefab.stubTicket.renderer.bounds.size.x + TICKET_ICON_PADDING;
-        for (int i = 0; i < ticketIcons.Length; i++)
-        {
-            float xPos = ticketIconTransform.position.x + (ticketIconSpacing * i);
-            Vector3 pos = new Vector3(xPos, ticketIconTransform.position.y, ticketIconTransform.position.z);
-            TicketIcon ticketIcon = Instantiate(ticketIconPrefab, pos, Quaternion.identity, transform);
-            ticketIcon.Init();
-            ticketIcon.name = "TicketIcon" + i;
-            ticketIcons[i] = ticketIcon;
-        }
-        curTicketIcon = ticketIcons[0];
-    }
     private void InitUIElements()
     {
         traitorIcon.activePos = traitorIcon.renderer.transform.localPosition;
@@ -570,11 +501,6 @@ public class GameplayUI : MonoBehaviour
         redoButton.InitButton(ClickRedo, EnterButton, ExitButton, isHold: true);
         redoButton.activePos = redoButton.renderer.transform.localPosition;
     }
-    private void SetNewTicketIcons()
-    {
-        curTicketIcon = ticketIcons[0];
-        SettingNewTicketIcons().Forget();
-    }
     private void SetTraitorIcons()
     {
         if (trainStats.curStationIndex == 1)
@@ -583,37 +509,17 @@ public class GameplayUI : MonoBehaviour
             traitorCountText.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 4);
         }
     }
-    private void DisappearTicketIcons()
+    private void ShowSpaceIcon(Vector2 position)
     {
-        trip.ticketsCheckedSinceLastStation = 0;
-        DisappearingTicketIcons().Forget();
-    }
-    private void InvertCurTicketIcon()
-    {
-        curTicketIcon.InvertIcon(toggle: true);
-    }
-    private void RevertCurTicketIcon()
-    {
-        if (spyStats.curTutorialState != TutorialState.Ticket)
-        {
-            curTicketIcon?.InvertIcon(toggle: false);
-        }
-    }
-    private void ShowWIcon(Vector2 position)
-    {
-        ShowKeyIcon(keyIcon, position, KeySpriteIndices.W);
+        ShowKeyIcon(keyIcon, position, KeySpriteIndices.Space, Direction.Up);
     }
     private void ShowEIcon(Vector2 position)
     {
-        ShowKeyIcon(keyIcon, position, KeySpriteIndices.E);
+        ShowKeyIcon(keyIcon, position, KeySpriteIndices.E, Direction.Up);
     }
-    private void ShowQIcon(Vector2 position)
+    private void MoveRailMap()
     {
-        ShowKeyIcon(keyIcon, position, KeySpriteIndices.Q);
-    }
-    private void ShowSIcon(Vector2 position)
-    {
-        ShowKeyIcon(keyIcon, position, KeySpriteIndices.S);
+        railMap.MoveToNextPosition();
     }
     private void HideKeyIcon()
     {
@@ -625,6 +531,13 @@ public class GameplayUI : MonoBehaviour
         {
             DisappearingKeyIcon().Forget();
         }
+    }
+    private void SetTutorialTextToColor1()
+    {
+        tutorialRenderer.SetText(options.passengerColorMarkerTutorialText2);
+        spyStats.tutorialsCompleted |= spyStats.curTutorialState;
+        spyStats.curTutorialState = TutorialState.Color1;
+        tutorialRenderer.SetText(options.passengerColorMarkerTutorialText1);
     }
     private void SetTutorialTextToColor2()
     {
@@ -697,34 +610,5 @@ public class GameplayUI : MonoBehaviour
             await UniTask.Yield();
         }
         keyIcon.custom.w = 0;
-    }
-    private async UniTask SettingNewTicketIcons()
-    {
-        ticketCount = trip.stationAhead.ticketsToCheckBeforeSpawn;
-        int curTicketIconIndex = 0;
-
-        while(curTicketIconIndex < ticketCount)
-        {
-            ticketIcons[curTicketIconIndex].Appear();
-            curTicketIconIndex++;
-            await UniTask.WaitForSeconds(APPEARING_TIME);
-        }
-
-        SpyBrain.ToggleTicketCheckAbility(toggle: true);
-
-
-    }
-    private async UniTask DisappearingTicketIcons()
-    {
-        ticketCount = trip.stationAhead.ticketsToCheckBeforeSpawn;
-        int curTicketIconIndex = ticketCount - 1;
-
-        while (curTicketIconIndex >= 0)
-        {
-            ticketIcons[curTicketIconIndex].InvertIcon(toggle: false);
-            ticketIcons[curTicketIconIndex].Disappear();
-            curTicketIconIndex--;
-            await UniTask.WaitForSeconds(APPEARING_TIME);
-        }
     }
 }

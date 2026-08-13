@@ -97,7 +97,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                 {
                     AtlasRenderer renderer = spriteBatch.data.atlasRendererList[i];
 
-                    if (renderer == null || !renderer.gameObject.activeInHierarchy) continue;
+                    if (renderer == null || !renderer.gameObject.activeInHierarchy || !renderer.enabled) continue;
 #if UNITY_EDITOR
                     if (prefabStage != null) { if (renderer.gameObject.scene != prefabScene) continue; }
 #else

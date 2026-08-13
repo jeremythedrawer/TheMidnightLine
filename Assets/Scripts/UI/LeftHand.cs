@@ -55,15 +55,15 @@ public class LeftHand : MonoBehaviour
         ColorPicker.OnCloseCluePicker += ReturnAfterColorPickerClose;
         ColorPicker.OnOpenCluePicker += MoveForColorPicker;
 
-        Page.OnEnterColorKeyIcon += MoveToLeftOfPaper;
-        Page.OnExitColorKeyIcon += MoveBackToTextBounds;
+        Page.OnEnterIconCoveredByLeftHand += MoveToLeftOfPaper;
+        Page.OnExitIconCoveredByLeftHand += MoveBackToTextBounds;
     }
     private void OnDisable()
     {
         ColorPicker.OnCloseCluePicker -= ReturnAfterColorPickerClose;
         ColorPicker.OnOpenCluePicker -= MoveForColorPicker;
-        Page.OnEnterColorKeyIcon -= MoveToLeftOfPaper;
-        Page.OnExitColorKeyIcon -= MoveBackToTextBounds;
+        Page.OnEnterIconCoveredByLeftHand -= MoveToLeftOfPaper;
+        Page.OnExitIconCoveredByLeftHand -= MoveBackToTextBounds;
     }
     private void Update()
     {
@@ -110,7 +110,7 @@ public class LeftHand : MonoBehaviour
             case State.Stationary:
             {
                 atTargetPos = false;
-
+                Debug.Log("enter stationary");
                 atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.rotatePencil_clip.keyframeStartIndex].sprite);
             }
             break;
@@ -320,9 +320,12 @@ public class LeftHand : MonoBehaviour
     }
     public void ReturnAfterColorPickerClose()
     {
-        movedForColorPicker = false;
-        SetState(State.Stationary);
-        MoveToEdgeTextBounds(leftEdge: true);
+        if (curState == State.OffScreen)
+        {
+            movedForColorPicker = false;
+            SetState(State.Stationary);
+            MoveToEdgeTextBounds(leftEdge: true);
+        }
     }
     public void MoveForColorPicker()
     {

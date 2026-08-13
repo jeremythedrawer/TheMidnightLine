@@ -85,14 +85,14 @@ public class FadeBlack : MonoBehaviour
     {
         if (curState == (State.FinishedFadeIn | State.ReadyToSceneChange))
         {
-            if (playerInputs.mouseLeftUp || playerInputs.spacebarDown || playerInputs.move != 0)
+            if (playerInputs.mouseLeftUp || playerInputs.writeKeyDown || playerInputs.move != 0)
             {
                 FadeOutChangeScene();
             }
         }
         else if (curState == State.FadingIn || curState == State.WritingText)
         {
-            if (playerInputs.spacebarDown)
+            if (playerInputs.writeKeyDown)
             {
                 textRenderer.ctsWrite?.Cancel();
             }

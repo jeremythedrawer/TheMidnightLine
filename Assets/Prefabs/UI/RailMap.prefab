@@ -1,0 +1,226 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &2523886482159189457
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 9010971722259031338}
+  - component: {fileID: 5947928974426267937}
+  - component: {fileID: 6868102810369624901}
+  m_Layer: 0
+  m_Name: RailMap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &9010971722259031338
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2523886482159189457}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: -5.142, y: 1.448, z: 3}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7113535591912043711}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &5947928974426267937
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2523886482159189457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 2
+  batchKey:
+    texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
+    material: {fileID: 2100000, guid: de3e6501b9b8a1f4db7933d5e76fa415, type: 2}
+  atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 3
+  flipX: 0
+  flipY: 0
+  width: 229.98
+  height: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.056640625, y: 0.037109375, z: 0.095703125, w: 0.76171875}
+    uvPivot: {x: 0, y: 0.5}
+    worldSize: {x: 0.16111112, y: 0.10555556, z: 1}
+    index: 3
+  bounds:
+    m_Center: {x: 275.027, y: 2.208, z: -37}
+    m_Extent: {x: 5.169, y: 0.05277778, z: 0.1}
+  worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
+  uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.7734375, w: 0.7949219}
+  scaleAndFlip: {x: 229.98, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 1}
+  customBit: 0
+  boundsOffset: {x: 5.169, y: -0, z: 0}
+  worldPivotsAndSizes:
+  - {x: -0, y: -0.05277778, z: 0.055555556, w: 0}
+  - {x: 0.055555556, y: -0.05277778, z: 0.044444446, w: 0}
+  - {x: 10.276889, y: -0.05277778, z: 0.061111115, w: 0}
+  - {x: -0, y: -0.05277778, z: 0.055555556, w: 0.1}
+  - {x: 0.055555556, y: -0.05277778, z: 0.044444446, w: 0.1}
+  - {x: 10.276889, y: -0.05277778, z: 0.061111115, w: 0.1}
+  - {x: -0, y: 0.047222223, z: 0.055555556, w: 0.0055555534}
+  - {x: 0.055555556, y: 0.047222223, z: 0.044444446, w: 0.0055555534}
+  - {x: 10.276889, y: 0.047222223, z: 0.061111115, w: 0.0055555534}
+  uvSizesAndPositions:
+  - {x: 0.01953125, y: 0, z: 0.095703125, w: 0.76171875}
+  - {x: 0.015624998, y: 0, z: 0.115234375, w: 0.76171875}
+  - {x: 0.021484377, y: 0, z: 0.13085938, w: 0.76171875}
+  - {x: 0.01953125, y: 0.03515625, z: 0.095703125, w: 0.76171875}
+  - {x: 0.015624998, y: 0.03515625, z: 0.115234375, w: 0.76171875}
+  - {x: 0.021484377, y: 0.03515625, z: 0.13085938, w: 0.76171875}
+  - {x: 0.01953125, y: 0.0019531242, z: 0.095703125, w: 0.796875}
+  - {x: 0.015624998, y: 0.0019531242, z: 0.115234375, w: 0.796875}
+  - {x: 0.021484377, y: 0.0019531242, z: 0.13085938, w: 0.796875}
+  scalesAndFlips:
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 229.98, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 229.98, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 229.98, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  customs:
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 3
+  prevSpriteIndexFlipV: 3
+  isAnimating: 0
+  quadCount: 0
+--- !u!114 &6868102810369624901
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2523886482159189457}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: faa25bb56ff31194492d64af90aa7fda, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::RailMap
+  curTrip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
+  railMapRend: {fileID: 5947928974426267937}
+  trainPosRend: {fileID: 8336894279768623977}
+  stationIconRendPrefab: {fileID: 2534061568996187497, guid: 63480d720f7095549a4ec6e32c954146, type: 3}
+  ticketCheckIconRendPrefab: {fileID: 7939361133265274873, guid: e647849f8f7a272478b8f41e741e8bb8, type: 3}
+  positions: []
+  curPosIndex: 0
+--- !u!1001 &6311485761065984694
+PrefabInstance:
+  m_ObjectHideFlags: 0
+  serializedVersion: 2
+  m_Modification:
+    serializedVersion: 3
+    m_TransformParent: {fileID: 9010971722259031338}
+    m_Modifications:
+    - target: {fileID: 2604347157907401183, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: bounds.m_Center.x
+      value: -4.887
+      objectReference: {fileID: 0}
+    - target: {fileID: 2604347157907401183, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: bounds.m_Center.y
+      value: 1.448
+      objectReference: {fileID: 0}
+    - target: {fileID: 2604347157907401183, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: bounds.m_Center.z
+      value: 2.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832207258763515401, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: m_LocalPosition.x
+      value: 0.255
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832207258763515401, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: m_LocalPosition.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832207258763515401, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0.5
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832207258763515401, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: m_LocalRotation.w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832207258763515401, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: m_LocalRotation.x
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832207258763515401, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: m_LocalRotation.y
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832207258763515401, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: m_LocalRotation.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832207258763515401, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832207258763515401, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 3832207258763515401, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: m_LocalEulerAnglesHint.z
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5081126481063860600, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+      propertyPath: m_Name
+      value: RailMapPositionIcon
+      objectReference: {fileID: 0}
+    m_RemovedComponents: []
+    m_RemovedGameObjects: []
+    m_AddedGameObjects: []
+    m_AddedComponents: []
+  m_SourcePrefab: {fileID: 100100000, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+--- !u!4 &7113535591912043711 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 3832207258763515401, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+  m_PrefabInstance: {fileID: 6311485761065984694}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &8336894279768623977 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 2604347157907401183, guid: d26d4d33a3b776041a795d4390bc856a, type: 3}
+  m_PrefabInstance: {fileID: 6311485761065984694}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer

@@ -106,13 +106,14 @@ public class UnlockPicker : MonoBehaviour
                         }
                         else if ((selectedUnlockType & UnlockType.Color) != 0)
                         {
-                            if (trip.unlockedColorMarkerCount == 0)
+                            trip.unlockedColorMarkerCount++;
+
+                            if (trip.unlockedColorMarkerCount == 1)
                             {
                                 trip.curUnlocks |= UnlockType.Color;
                                 tutorialInUse = true;
                                 OnColorAbilityUnlock?.Invoke(icon);
                             }
-                            trip.unlockedColorMarkerCount++;
                         }
                         else if ((selectedUnlockType & UnlockType.MultiColor) != 0)
                         {

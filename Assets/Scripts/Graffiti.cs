@@ -1,4 +1,6 @@
+using Cysharp.Threading.Tasks;
 using System;
+using System.Threading;
 using UnityEngine;
 
 public class Graffiti : MonoBehaviour
@@ -7,33 +9,10 @@ public class Graffiti : MonoBehaviour
 
     public AtlasRenderer[] renderers;
     public AtlasSO atlas;
-    public bool active;
-    public float clock;
-
-    private void Update()
+    public CancellationTokenSource ctsDissappear;
+    private void OnDisable()
     {
-        if (!active) return;
-        clock -= Time.deltaTime;
-        float t = clock / LIFETIME;
-
-        for(int i = 0; i < renderers.Length; i++)
-        {
-            AtlasRenderer renderer = renderers[i];
-            renderer.custom.x = t;
-        }
-
-        if (clock <= 0)
-        {
-            for (int i = 0; i < renderers.Length; i++)
-            {
-                AtlasRenderer renderer = renderers[i];
-                renderer.enabled = false;
-            }
-            clock = 0;
-            active = false;
-            enabled = false;
-            NPCManager.ReturnGraffiti(this);
-        }
+        ctsDissappear?.Cancel();
     }
     public void SetSprites(int index)
     {
@@ -47,17 +26,49 @@ public class Graffiti : MonoBehaviour
     }
     public void UpdateAlpha(float alpha)
     {
-        if (active) return;
-
         for (int i = 0; i < renderers.Length; i++)
         {
             AtlasRenderer renderer = renderers[i];
             renderer.custom.x = alpha;
         }
     }
-    public void StartDisappearing()
+    public void Dissappear()
     {
-        active = true;
-        clock = LIFETIME;
+        ctsDissappear?.Cancel();
+        ctsDissappear = new CancellationTokenSource();
+
+        Dissappearing().Forget();
+    }
+
+    public async UniTask Dissappearing()
+    {
+        float clock = LIFETIME;
+
+        try
+        {
+            while (clock >= 0)
+            {
+                clock -= Time.deltaTime;
+                float t = clock / LIFETIME;
+            
+                for (int i = 0; i < renderers.Length; i++)
+                {
+                    AtlasRenderer renderer = renderers[i];
+                    renderer.custom.x = t;
+                }
+                await UniTask.Yield(ctsDissappear.Token);
+            }
+
+            for (int i = 0; i < renderers.Length; i++)
+            {
+                AtlasRenderer renderer = renderers[i];
+                renderer.enabled = false;
+            }
+            enabled = false;
+            NPCManager.ReturnGraffiti(this);
+        }
+        catch(OperationCanceledException)
+        {
+        }
     }
 }

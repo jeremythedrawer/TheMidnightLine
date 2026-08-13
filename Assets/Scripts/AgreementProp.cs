@@ -25,8 +25,10 @@ public class AgreementProp : MonoBehaviour
     {
         Scenes.OnLoadStart += StartSceneInit;
         Scenes.OnLoadScore += ScoreSceneInit;
+        
         StartUI.OnPlayAgain += PlayAgain;
-        gameEventData.OnInteract.RegisterListener(AgreementShown);
+
+        SpyBrain.OnInteract += AgreementShown;
     }
     private void OnDisable()
     {
@@ -35,7 +37,7 @@ public class AgreementProp : MonoBehaviour
 
         StartUI.OnPlayAgain -= PlayAgain;
 
-        gameEventData.OnInteract.UnregisterListener(AgreementShown);
+        SpyBrain.OnInteract -= AgreementShown;
     }
     public void Update()
     {
@@ -43,7 +45,7 @@ public class AgreementProp : MonoBehaviour
         {
             case SceneType.Start:
             {
-                if (notepadData.collected) return;
+                if (notepadData.signedAgreement) return;
                 CheckSpyEnterExit();
 
             }
@@ -87,7 +89,7 @@ public class AgreementProp : MonoBehaviour
         {
             case SceneType.Start:
             {
-                if (spyAtProp && !notepadData.signedAgreement)
+                if (spyAtProp && spyStats.playerInputsEnabled && !notepadData.signedAgreement)
                 {
                     OnAgreementCollect?.Invoke();
                     spyStats.playerInputsEnabled = false;

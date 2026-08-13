@@ -87,7 +87,6 @@ public class TrainController : MonoBehaviour
     public void Init()
     {
         trip.traitorsSpawned = 0;
-
         stats.curStationIndex = 0;
 
         stats.targetKMPH = trip.kmValues[0];
@@ -247,6 +246,7 @@ public class TrainController : MonoBehaviour
                 {
                     SpawnStation();
                     stats.targetVelocity = Vector2.zero;
+                    trip.ticketsCheckedSinceLastStation = 0;
                 }
                 HandleTrainMeters();
             }

@@ -839,6 +839,11 @@ public class AtlasFactory : EditorWindow
                 Rect oldRect = new Rect(oldSprite.uvSizeAndPos.z, oldSprite.uvSizeAndPos.w, oldSprite.uvSizeAndPos.x, oldSprite.uvSizeAndPos.y);
                 if (oldRect.Overlaps(newRect))
                 {
+                    SliceSprite newSliceSprite = newSliceSprites[i];
+                    newSliceSprite.sprite.uvPivot = oldSprite.uvPivot;
+                    newSliceSprites[i] = newSliceSprite;
+
+                    newSliceSprites.RemoveAt(i);
                     atlas.slicedSprites[j] = newSliceSprites[i];
                     newSliceSprites.RemoveAt(i);
                     break;

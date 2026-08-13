@@ -10,7 +10,7 @@
                     "name": "Movement",
                     "type": "Value",
                     "id": "ce64c997-ef89-45e1-aa13-bbd6b58a142a",
-                    "expectedControlType": "Integer",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -34,28 +34,19 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Shift",
-                    "type": "Button",
-                    "id": "83b2f63d-cc9e-4cd6-9b32-e6c01f091179",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "Preview",
-                    "type": "Button",
+                    "name": "Carousel",
+                    "type": "Value",
                     "id": "29cb3758-e4c2-47f0-8d05-8a604357ab6e",
-                    "expectedControlType": "",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
                 },
                 {
                     "name": "NotepadFlipPage",
-                    "type": "Button",
+                    "type": "Value",
                     "id": "c8af4062-217f-401f-95bd-5a7ea73996e1",
-                    "expectedControlType": "",
+                    "expectedControlType": "Axis",
                     "processors": "",
                     "interactions": "",
                     "initialStateCheck": true
@@ -119,7 +110,7 @@
                 {
                     "name": "",
                     "id": "6aca1f18-d5d7-4695-9384-53419fcb33c9",
-                    "path": "<Keyboard>/q",
+                    "path": "<Keyboard>/f",
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardAndMouse",
@@ -162,17 +153,6 @@
                 },
                 {
                     "name": "",
-                    "id": "6bd07fb2-5df3-4705-bd12-93802260570a",
-                    "path": "<Keyboard>/leftShift",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardAndMouse",
-                    "action": "Shift",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
                     "id": "3e15efda-1f44-4e30-b40c-78a9dd6e6352",
                     "path": "<Gamepad>/leftStick",
                     "interactions": "",
@@ -185,7 +165,7 @@
                 {
                     "name": "WASD Keys",
                     "id": "626d557e-2c9d-402c-b9bc-8e7ac09481f2",
-                    "path": "2DVector",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -194,7 +174,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Left",
+                    "name": "Negative",
                     "id": "7c52b209-923a-484b-8882-4a040f6fcf9f",
                     "path": "<Keyboard>/a",
                     "interactions": "",
@@ -205,7 +185,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Right",
+                    "name": "Positive",
                     "id": "caca8849-b11f-43c6-b191-d65402eea720",
                     "path": "<Keyboard>/d",
                     "interactions": "",
@@ -222,7 +202,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Preview",
+                    "action": "Carousel",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -233,7 +213,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Gamepad",
-                    "action": "Preview",
+                    "action": "Carousel",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -244,40 +224,40 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Gamepad",
-                    "action": "Preview",
+                    "action": "Carousel",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
                     "name": "Arrow Keys",
-                    "id": "b201c802-55b4-4684-82c7-b694f2d20749",
-                    "path": "2DVector",
+                    "id": "c8f076ea-b931-4ffe-81f2-e12aa9ed133a",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Preview",
+                    "action": "Carousel",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Right",
-                    "id": "3c7c30f4-b33b-4901-a0e5-58c2f9f316c0",
-                    "path": "<Keyboard>/a",
+                    "name": "Negative",
+                    "id": "40f83d77-228e-452c-94b7-2dcc22de130b",
+                    "path": "<Keyboard>/q",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;KeyboardAndMouse",
-                    "action": "Preview",
+                    "action": "Carousel",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Left",
-                    "id": "7fced24a-ab03-4fde-b584-e9d0fb64a87b",
-                    "path": "<Keyboard>/d",
+                    "name": "Positive",
+                    "id": "3300f456-6dcd-4b68-9b47-d87497e9b4c2",
+                    "path": "<Keyboard>/e",
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;KeyboardAndMouse",
-                    "action": "Preview",
+                    "action": "Carousel",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -317,7 +297,7 @@
                 {
                     "name": "Arrow Keys",
                     "id": "23a0dc79-19f5-4931-bd29-2493eb28850f",
-                    "path": "2DVector",
+                    "path": "1DAxis",
                     "interactions": "",
                     "processors": "",
                     "groups": "",
@@ -326,7 +306,7 @@
                     "isPartOfComposite": false
                 },
                 {
-                    "name": "Up",
+                    "name": "Positive",
                     "id": "8d5cb7e1-a641-4c73-8ca5-f713909e81cc",
                     "path": "<Keyboard>/w",
                     "interactions": "",
@@ -337,7 +317,7 @@
                     "isPartOfComposite": true
                 },
                 {
-                    "name": "Down",
+                    "name": "Negative",
                     "id": "69632192-5c51-41ec-bb94-9eb4b0f34aec",
                     "path": "<Keyboard>/s",
                     "interactions": "",
@@ -350,7 +330,7 @@
                 {
                     "name": "",
                     "id": "53ed4e0b-cf3b-4be7-8c70-37f46505c7a9",
-                    "path": "<Keyboard>/w",
+                    "path": "<Keyboard>/space",
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse;KeyboardAndMouse",

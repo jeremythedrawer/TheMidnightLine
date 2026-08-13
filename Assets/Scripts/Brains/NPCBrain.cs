@@ -454,7 +454,8 @@ public class NPCBrain : MonoBehaviour
 
                     case Behaviours.Known_vandal:
                     {
-                        graffiti.StartDisappearing();
+                        graffiti.Dissappear();
+
                         if (newState != NPCState.TicketCheck)
                         {
                             QueueForSeat();
@@ -520,7 +521,29 @@ public class NPCBrain : MonoBehaviour
             case NPCPath.ToStandInTrain:
             {
                 targetXPos = UnityEngine.Random.Range(curCarriage.insideBoundsCollider.bounds.min.x, curCarriage.insideBoundsCollider.bounds.max.x);
-                targetDist = targetXPos - transform.position.x;
+                
+                if (curBehaviourContext.behaviours == Behaviours.Known_vandal)
+                {
+                    for (int i = 0; i < curCarriage.interiorSlideDoors.Length; i++)
+                    {
+                        SlideDoors slideDoor = curCarriage.interiorSlideDoors[i];
+                        Bounds slideDoorBounds = slideDoor.boxCollider.bounds;
+                        float slideDoorWidth = slideDoorBounds.size.x;
+                        if (targetXPos > slideDoorBounds.min.x - slideDoorWidth && targetXPos < slideDoorBounds.max.x + slideDoorWidth)
+                        {
+                            if (targetXPos < slideDoorBounds.center.x)
+                            {
+                                targetXPos -= slideDoorBounds.size.x;
+                            }
+                            else
+                            {
+                                targetXPos += slideDoorBounds.size.x;
+                            }
+                            break;
+                        }
+                    }
+                    targetDist = targetXPos - transform.position.x;
+                }
 
                 SetStandingDepthInTrain();
             }
