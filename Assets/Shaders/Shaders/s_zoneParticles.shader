@@ -100,18 +100,11 @@ Shader "Custom/s_zoneParticles"
 
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
                 clip(tex.a - 0.001);
-                
-                half color = tex.r;
-
-                half minPos = _TrainBoundsMin.z + _TrainBoundsSize.z;
 
                 half normDepth = p.z/ FAR_CLIP;
                 half dayNightNDC = _DayNight * 2 - 1;
                 half dayNightInfluence = dayNightNDC * normDepth;
-
-
-               // half bayerValue = bayerFactor - (_DayNight * 1.75 - 0.875);
-                half bayer = BayerX8(color - dayNightInfluence, i.positionHCS.y);
+                half bayer = BayerX8(tex.r - dayNightInfluence, i.positionHCS.y);
 
                 half3 finalColor = lerp(_BlackColor, _WhiteColor, bayer);
                 return half4(finalColor, 1);

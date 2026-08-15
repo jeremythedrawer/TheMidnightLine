@@ -36,7 +36,8 @@ public class StartUI : MonoBehaviour
 
     public Material fadeBlackMaterial;
 
-    public ColorPicker mainColorPicker;
+    public ColorPicker darkColorPicker;
+    public ColorPicker lightColorPicker;
 
     public AgreementPage agreementPage;
 
@@ -598,7 +599,7 @@ public class StartUI : MonoBehaviour
 
         SetState(UIState.None);
 
-        notepad = SceneController.GetNotepad(transform);
+        notepad = SceneController.GetAndParentNotepad(transform);
     }
     private void StartTrip()
     {
@@ -626,7 +627,7 @@ public class StartUI : MonoBehaviour
     }
     private void GetNotepad()
     {
-        notepad = SceneController.GetNotepad(transform);
+        notepad = SceneController.GetAndParentNotepad(transform);
         notepad.PickUpNotepad();
         notepad.transform.localPosition = notepadData.offSceenLocalPos;
     }
@@ -730,11 +731,13 @@ public class StartUI : MonoBehaviour
     }
     private void DarkColorButtonClicked()
     {
-        mainColorPicker.Open(darkColorButton.renderer.background_renderer, ColorPicker.SelectType.Dark, ColorPicker.Direction.BottomRight);
+        darkColorPicker.Open(darkColorButton.renderer.background_renderer, ColorPicker.Direction.BottomRight);
+        lightColorPicker.Close();
     }
     private void LightColorButtonClicked()
     {
-        mainColorPicker.Open(lightColorButton.renderer.background_renderer, ColorPicker.SelectType.Light, ColorPicker.Direction.BottomRight);
+        lightColorPicker.Open(lightColorButton.renderer.background_renderer, ColorPicker.Direction.BottomRight);
+        darkColorPicker.Close();
     }
 
     private void ShowMoveKeyIcons()

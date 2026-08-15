@@ -71,7 +71,7 @@ public class Notepad : MonoBehaviour
     public Page activePage;
     public Page nextPage;
 
-    public ColorPicker colorPicker;
+    public ColorPicker clueColorPicker;
 
     public TraitorProfile activeTraitorProfile;
     
@@ -101,6 +101,7 @@ public class Notepad : MonoBehaviour
         LeftHand.OnFinishErasing += FinishErasing;
 
         ColorPicker.OnSelectClueColorFirstTime += SetUnlockAbilityIcons;
+        ColorPicker.OnSelectSecondClueColorFirstTime += SetUnlockAbilityIcons;
         gameEventData.OnFinishTripScene.RegisterListener(KeepNotepad);
     }
     private void OnDisable()
@@ -117,6 +118,7 @@ public class Notepad : MonoBehaviour
         LeftHand.OnFinishErasing -= FinishErasing;
 
         ColorPicker.OnSelectClueColorFirstTime -= SetUnlockAbilityIcons;
+        ColorPicker.OnSelectSecondClueColorFirstTime -= SetUnlockAbilityIcons;
 
         gameEventData.OnFinishTripScene.UnregisterListener(KeepNotepad);
     }
@@ -191,7 +193,7 @@ public class Notepad : MonoBehaviour
         SkipToPage(0);
         notepadData.curState = NotepadState.Stationary;
         notepadData.subState = SubState.None;
-        colorPicker = SceneController.GetClueColorPicker();
+        clueColorPicker = SceneController.GetClueColorPicker();
         leftHand.Reinit();
     }
     public void EnterNotepad()
@@ -216,7 +218,14 @@ public class Notepad : MonoBehaviour
         if (activePage.activePlayerWriteTextRenderer != null && sceneData.activeSceneType == SceneType.Trip)
         {
             leftHand.SetState(LeftHand.State.Stationary);
-            leftHand.MoveToEdgeTextBounds(leftEdge: true);
+            if (activePage.pageType == PageType.ColorKey)
+            {
+                leftHand.MoveToLeftOfPaper();
+            }
+            else
+            {
+                leftHand.MoveToEdgeTextBounds(leftEdge: true);
+            }
         }
         else
         {
@@ -393,7 +402,7 @@ public class Notepad : MonoBehaviour
                     }
                     break;
                 }
-                if (leftHand.atlasRenderer.curFrameIndex == notepadData.handFlipPage_clip.keyframeEndIndex)
+                if (!leftHand.atlasRenderer.isAnimating)
                 {
                     if (curKeyframeState == KeyframeState.None) return;
 
@@ -521,19 +530,21 @@ public class Notepad : MonoBehaviour
             break;
             case NotepadState.Stationary:
             {
+
                 if (sceneData.activeSceneType == SceneType.Trip && activePage.activePlayerWriteText == "" && playerInputs.carouselKeyDownValue != 0)
                 {
                     activePage.SwitchActivePreviewPlayerWriteText((int)playerInputs.carouselKeyDownValue);
                 }
 
-                if (activePage.pageType == PageType.ColorKey)
+                activePage.UpdatePage();
+
+                if (activePage.pageType == PageType.ColorKey && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
                 {
-                    if (playerInputs.numpad > 0 && playerInputs.numpad <= curTrip.unlockedColorMarkerCount)
+                    if (playerInputs.numpad == 1 || playerInputs.numpad == 2)
                     { 
-                        leftHand.MoveToEdgeTextBounds(leftEdge: true);
+                        leftHand.MoveToLeftOfPaper();
                     }
                 }
-                activePage.UpdatePage();
             }
             break;
         }
@@ -552,12 +563,10 @@ public class Notepad : MonoBehaviour
                     if ((notepadData.abilityIconsShown & UnlockType.Color) == 0 && (curTrip.curUnlocks & UnlockType.Color) != 0)
                     {
                         nextPage.InitNextColorRow(0);
-                        nextPage.SwitchWriteRow(0);
                     }
                     else if ((notepadData.abilityIconsShown & UnlockType.MultiColor) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
                     {
                         nextPage.InitNextColorRow(1);
-                        nextPage.SwitchWriteRow(1);
                     }
                 }
 
@@ -607,10 +616,24 @@ public class Notepad : MonoBehaviour
             break;
             case NotepadState.Stationary:
             {
-                if (prevState == NotepadState.Writing || prevState == NotepadState.Erasing)
+                if (spyStats.curTutorialState == TutorialState.None)
                 {
-                    leftHand.SetState(LeftHand.State.Stationary);
-                    leftHand.MoveToEdgeTextBounds(leftEdge: true);
+                    if (prevState == NotepadState.Writing || prevState == NotepadState.Erasing)
+                    {
+                        leftHand.SetState(LeftHand.State.Stationary);
+                        if (activePage.pageType == PageType.ColorKey)
+                        {
+                            leftHand.MoveToLeftOfPaper();
+                        }
+                        else
+                        {
+                            leftHand.MoveToEdgeTextBounds(leftEdge: true);
+                        }
+                    }
+                    else
+                    {
+                        leftHand.SetState(LeftHand.State.OffScreen);
+                    }
                 }
                 else
                 {
@@ -682,7 +705,8 @@ public class Notepad : MonoBehaviour
                         {
                             curTrip.selectedColorMarkerIndex = 0;
 
-                            colorPicker.Open(activePage.playerWriteRenderers[0], ColorPicker.SelectType.Clue);
+                            clueColorPicker.Open(activePage.playerWriteRenderers[0]);
+                            SceneController.GetNPCColorPicker().Close();
                             activePage.SetColorMarkerButtonSprite(0);
                             OnWriteColorMarkerFirstTime?.Invoke();
 
@@ -690,13 +714,14 @@ public class Notepad : MonoBehaviour
                             {
                                 activePage.InitNextColorRow(1);
                                 activePage.SwitchWriteRow(1);
-                                leftHand.MoveToEdgeTextBounds(leftEdge: true);
+                                leftHand.MoveToLeftOfPaper();
                             }
                         }
                         else if (activePage.playerWriteTextRenderers[1].completedWritingText && (spyStats.tutorialsCompleted & TutorialState.MultiColor2) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
                         {
                             curTrip.selectedColorMarkerIndex = 1;
-                            colorPicker.Open(activePage.playerWriteRenderers[1], ColorPicker.SelectType.Clue);
+                            clueColorPicker.Open(activePage.playerWriteRenderers[1]);
+                            SceneController.GetNPCColorPicker().Close();
                             activePage.SetColorMarkerButtonSprite(1);
                         }
                     }
@@ -708,7 +733,6 @@ public class Notepad : MonoBehaviour
             {
                 activePage.activePlayerWriteText = "";
                 leftHand.SetState(LeftHand.State.Stationary);
-                leftHand.MoveToEdgeTextBounds(leftEdge: true);    
                 notepadData.subState &= ~(SubState.EraseToggle);
 
                 switch (activePage.pageType)
@@ -728,7 +752,7 @@ public class Notepad : MonoBehaviour
 
             case NotepadState.Stationary:
             {
-                colorPicker?.Close();
+                clueColorPicker?.Close();
             }
             break;
         }
@@ -1045,7 +1069,6 @@ public class Notepad : MonoBehaviour
     }
     private async UniTask FlippingToPage(int pageIndex)
     {
-
         while(notepadData.curState != NotepadState.Stationary) await UniTask.Yield();
 
         if (activePage.pageIndex < pageIndex)

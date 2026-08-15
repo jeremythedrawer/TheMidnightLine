@@ -179,7 +179,6 @@ public class Carriage : MonoBehaviour
         }
         else
         {
-            seatData.filled[bestIndex] = true;
             npc.AssignSeat(bestIndex);
         }
 
@@ -249,11 +248,6 @@ public class Carriage : MonoBehaviour
     {
         curNPCList.Remove(npc);
         curNPCDict.Remove(npc.boxCollider);
-    }
-    public NPCBrain GetNPCFromCollider(BoxCollider2D collider)
-    {
-        curNPCDict.TryGetValue(collider, out NPCBrain npc);
-        return npc;
     }
     public NPCBrain GetPassenger(int index)
     {

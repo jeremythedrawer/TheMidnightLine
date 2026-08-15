@@ -32,7 +32,4 @@ public class OptionsSO : ScriptableObject
     public Color blackColor;
     public Color whiteColor;
     public bool useBayer;
-
-    [Header("Generated")]
-    public PickerState curState;
 }

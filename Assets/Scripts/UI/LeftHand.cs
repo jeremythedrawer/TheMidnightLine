@@ -54,16 +54,11 @@ public class LeftHand : MonoBehaviour
     {
         ColorPicker.OnCloseCluePicker += ReturnAfterColorPickerClose;
         ColorPicker.OnOpenCluePicker += MoveForColorPicker;
-
-        Page.OnEnterIconCoveredByLeftHand += MoveToLeftOfPaper;
-        Page.OnExitIconCoveredByLeftHand += MoveBackToTextBounds;
     }
     private void OnDisable()
     {
         ColorPicker.OnCloseCluePicker -= ReturnAfterColorPickerClose;
         ColorPicker.OnOpenCluePicker -= MoveForColorPicker;
-        Page.OnEnterIconCoveredByLeftHand -= MoveToLeftOfPaper;
-        Page.OnExitIconCoveredByLeftHand -= MoveBackToTextBounds;
     }
     private void Update()
     {
@@ -110,7 +105,6 @@ public class LeftHand : MonoBehaviour
             case State.Stationary:
             {
                 atTargetPos = false;
-                Debug.Log("enter stationary");
                 atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.rotatePencil_clip.keyframeStartIndex].sprite);
             }
             break;
@@ -267,7 +261,14 @@ public class LeftHand : MonoBehaviour
             case State.Erasing:
             {
                 atlasRenderer.PlayClipOneShotReverse(notepadData.rotatePencil_clip);
-                MoveToEdgeTextBounds(leftEdge: true);
+                if (activePage.pageType == AtlasUI.PageType.ColorKey)
+                {
+                    MoveToLeftOfPaper();
+                }
+                else
+                {
+                    MoveToEdgeTextBounds(leftEdge: true);
+                }
             }
             break;
 
@@ -285,13 +286,13 @@ public class LeftHand : MonoBehaviour
 
             case State.FlippingUp:
             {
-
+                atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.handFlipPage_clip.keyframeStartIndex].sprite);
             }
             break;
 
             case State.FlippingDown:
             {
-
+                atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.handFlipPage_clip.keyframeStartIndex].sprite);
             }
             break;
         }
@@ -325,7 +326,7 @@ public class LeftHand : MonoBehaviour
         if (curState == State.OffScreen)
         {
             SetState(State.Stationary);
-            MoveToEdgeTextBounds(leftEdge: true);
+            MoveToLeftOfPaper();
         }
     }
     public void MoveForColorPicker()

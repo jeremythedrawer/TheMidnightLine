@@ -7,7 +7,7 @@ using static Scenes;
 public class FadeBlack : MonoBehaviour
 {
     public const float DEFAULT_DEPTH = 2;
-    public const float NOTEPAD_DEPTH = 12.5f;
+    public const float NOTEPAD_DEPTH = 14.5f;
 
     [Flags] public enum State
     { 
@@ -229,6 +229,11 @@ public class FadeBlack : MonoBehaviour
     public void WaitAndSetSpacebar(float waitTime)
     {
         WaitingAndSettingSpacebar(waitTime).Forget();
+    }
+    public void CancelFadeBlack()
+    {
+        spacebarRenderer.custom.w = 0;
+        ctsFadeBlack?.Cancel();
     }
     private async UniTask WaitingAndSettingSpacebar(float waitTime)
     {

@@ -14,9 +14,6 @@ public class Page : MonoBehaviour
 
     public static AtlasClip paper_clip;
 
-    public static event Action OnEnterIconCoveredByLeftHand;
-    public static event Action OnExitIconCoveredByLeftHand;
-
     public PageType pageType;
     public TripPrompt promptType;
     public TripClue clueType;
@@ -155,7 +152,8 @@ public class Page : MonoBehaviour
                     
                     void ClickColor(IconUIElement icon)
                     {
-                        SceneController.GetClueColorPicker().Open(otherButtons[index].renderer, ColorPicker.SelectType.Clue);
+                        SceneController.GetClueColorPicker().Open(otherButtons[index].renderer);
+                        SceneController.GetNPCColorPicker().Close();
                         SwitchWriteRow(index);
                         trip.selectedColorMarkerIndex = activePlayerWriteRowIndex;
                     }
@@ -275,7 +273,7 @@ public class Page : MonoBehaviour
                 {
                     carouselLeftButton.UpdateButton(playerInputs);
                     carouselRightButton.UpdateButton(playerInputs);
-                    spaceBarButton.UpdateButton(playerInputs);
+                    if (activePlayerWriteText == "") spaceBarButton.UpdateButton(playerInputs);
                 }
 
             }
@@ -290,12 +288,13 @@ public class Page : MonoBehaviour
 
                     carouselLeftButton.UpdateButton(playerInputs);
                     carouselRightButton.UpdateButton(playerInputs);
-                    spaceBarButton.UpdateButton(playerInputs);
+                    if (activePlayerWriteText == "") spaceBarButton.UpdateButton(playerInputs);
 
-                    if ((trip.curUnlocks & UnlockType.Color & UnlockType.MultiColor) != 0)
+                    if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
                     {
                         otherButtons[1].UpdateButton(playerInputs);
-                        if (playerInputs.numpad > 0 && playerInputs.numpad <= trip.unlockedColorMarkerCount)
+
+                        if ((playerInputs.numpad == 1 && activePlayerWriteRowIndex != 0) || (playerInputs.numpad == 2 && activePlayerWriteRowIndex != 1))
                         {
                             SwitchWriteRow(playerInputs.numpad - 1);
                         }
@@ -441,7 +440,6 @@ public class Page : MonoBehaviour
     }
     public void WritePlayerWriteText()
     {
-
         playerWriteIndex = previewPlayerWriteIndices[activePlayerWriteRowIndex];
         activePlayerWriteText = activePlayerWriteTextRenderer.text;
         playerWriteTexts[activePlayerWriteRowIndex] = activePlayerWriteText;
@@ -450,9 +448,10 @@ public class Page : MonoBehaviour
         activePlayerWriteTextRenderer.SetAlignmentType(AtlasRendering.AtlasTextAlignmentType.Left);
         activePlayerWriteTextRenderer.transform.position = new Vector3(playerWriteTextBounds.min.x, playerWriteTextBounds.max.y, activePlayerWriteTextRenderer.transform.position.z);
 
-
+        ToggleSpacebarButton(false);
         activePlayerWriteTextRenderer.WriteText(activePlayerWriteText, LeftHand.WRITE_LETTER_TIME);
     }
+
     public void ErasePlayerWriteText()
     {
         playerWriteTexts[activePlayerWriteRowIndex] = "";
@@ -460,7 +459,6 @@ public class Page : MonoBehaviour
     }
     public void SwitchActivePreviewPlayerWriteText(int indexOffset)
     {
-        previewPlayerWriteIndices[activePlayerWriteRowIndex] += indexOffset;
 
         switch (pageType)
         {
@@ -470,6 +468,7 @@ public class Page : MonoBehaviour
                 {
                     case TripPrompt.Stations:
                     {
+                        previewPlayerWriteIndices[activePlayerWriteRowIndex] += indexOffset;
                         previewPlayerWriteIndices[activePlayerWriteRowIndex] = (previewPlayerWriteIndices[activePlayerWriteRowIndex] + trip.stationsDataArray.Length) % trip.stationsDataArray.Length;
                         activePreviewPlayerWriteText = trip.stationsDataArray[previewPlayerWriteIndices[activePlayerWriteRowIndex]].stationName;
                     }
@@ -479,7 +478,6 @@ public class Page : MonoBehaviour
                 activePlayerWriteTextRenderer.SetText(activePreviewPlayerWriteText, alpha: 0);
                 activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
                 playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePreviewPlayerWriteText);
-                SetCarouselAndSpaceIconPositions();
             }
             break;
 
@@ -491,6 +489,7 @@ public class Page : MonoBehaviour
                     {
                         if (activePlayerWriteTextRenderer != null)
                         {
+                            previewPlayerWriteIndices[activePlayerWriteRowIndex] += indexOffset;
                             int behaviourLength = (int)Behaviours.Count;
                             previewPlayerWriteIndices[activePlayerWriteRowIndex] = (previewPlayerWriteIndices[activePlayerWriteRowIndex] + behaviourLength) % behaviourLength;
                             Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
@@ -501,7 +500,6 @@ public class Page : MonoBehaviour
                             activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
                             
                             playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePreviewPlayerWriteText);
-                            SetCarouselAndSpaceIconPositions();
                         }
                     }
                     break;
@@ -526,12 +524,14 @@ public class Page : MonoBehaviour
 
                     activePreviewPlayerWriteText = trip.stationsDataArray[previewPlayerWriteIndices[activePlayerWriteRowIndex]].stationName;
                     activePlayerWriteTextRenderer.SetText(activePreviewPlayerWriteText, alpha: 0);
-                    playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePreviewPlayerWriteText);
                     activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
-                    
-                    SetCarouselAndSpaceIconPositions();
+
+                    playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePreviewPlayerWriteText);
+
+                    ToggleSpacebarButton(true);
                 }
 
+                ToggleCarouselButtons(true);
             }
             break;
 
@@ -539,53 +539,35 @@ public class Page : MonoBehaviour
             {
                 if (prevNotepadState == NotepadState.Erasing)
                 {
-                    int behaviourLength = (int)Behaviours.Count;
-                    previewPlayerWriteIndices[activePlayerWriteRowIndex] = (previewPlayerWriteIndices[activePlayerWriteRowIndex] + behaviourLength) % behaviourLength;
-                    Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
-                    Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndices[activePlayerWriteRowIndex]);
-                    activePreviewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
-
                     activePlayerWriteTextRenderer.SetAlignmentType(AtlasRendering.AtlasTextAlignmentType.Center);
                     activePlayerWriteTextRenderer.transform.localPosition = startPlayerWritePositions[activePlayerWriteRowIndex];
-                    activePlayerWriteTextRenderer.SetText(activePreviewPlayerWriteText, alpha: 0);
-
+                    
+                    SetColorKeyPagePlayerWriteText(activePlayerWriteTextRenderer);
+                    ToggleSpacebarButton(true);
                 }
                 else if (prevNotepadState != NotepadState.Writing)
                 {
                     if ((trip.curUnlocks & UnlockType.Color) != 0)
                     {
-                        for (int i = 0; i < trip.unlockedColorMarkerCount; i++)
+                        if (playerWriteTexts[0] == "")
                         {
-                            if (playerWriteTexts[i] != "") continue;
+                            SetColorKeyPagePlayerWriteText(playerWriteTextRenderers[0]);
+                        }
 
-                            AtlasTextRenderer curRend = playerWriteTextRenderers[i];
-                            int behaviourLength = (int)Behaviours.Count;
-                            previewPlayerWriteIndices[activePlayerWriteRowIndex] = (previewPlayerWriteIndices[activePlayerWriteRowIndex] + behaviourLength) % behaviourLength;
-                            Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
-                            Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndices[activePlayerWriteRowIndex]);
-                            activePreviewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
-                            curRend.SetText(activePreviewPlayerWriteText, alpha: 0);
+                        if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
+                        {
+                            if (playerWriteTexts[1] == "")
+                            {
+                                SetColorKeyPagePlayerWriteText(playerWriteTextRenderers[1]);
+                            }
                         }
 
                         if (activePlayerWriteTextRenderer == null) activePlayerWriteTextRenderer = playerWriteTextRenderers[activePlayerWriteRowIndex];
+                        
                         playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePreviewPlayerWriteText);
                         
-                        SetCarouselAndSpaceIconPositions();
-                    }
-                }
-                
-
-                for (int i = 0; i < trip.unlockedColorMarkerCount; i++)
-                {
-                    AtlasTextRenderer playerWriteTextRend = playerWriteTextRenderers[i];
-                    if (playerWriteTextRend.text == "") continue;
-                    if (playerWriteTexts[i] == "")
-                    {
-                        playerWriteTextRend.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
-                    }
-                    else
-                    {
-                        playerWriteTextRend.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 1, customChannel: 4);
+                        ToggleSpacebarButton(true);
+                        ToggleCarouselButtons(true);
                     }
                 }
 
@@ -594,12 +576,27 @@ public class Page : MonoBehaviour
 
             case PageType.Agreement:
             {
-                activePreviewPlayerWriteText = "{|}~";
+                activePreviewPlayerWriteText = "{|}~~{";
                 activePlayerWriteTextRenderer.SetText(activePreviewPlayerWriteText, alpha: 0);
                 activePlayerWriteTextRenderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
             }
             break;
         }
+    }
+    private void SetColorKeyPagePlayerWriteText(AtlasTextRenderer curRend)
+    {
+        int behaviourLength = (int)Behaviours.Count;
+
+        int nextPlayerWriteIndex = (previewPlayerWriteIndices[activePlayerWriteRowIndex] + behaviourLength) % behaviourLength;
+        previewPlayerWriteIndices[activePlayerWriteRowIndex] = nextPlayerWriteIndex;
+
+        Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
+        Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, nextPlayerWriteIndex);
+
+        activePreviewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
+
+        curRend.SetText(activePreviewPlayerWriteText, alpha: 0);
+        curRend.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: 0.5f, customChannel: 4);
     }
     public void SetActiveRendererText(string text)
     {
@@ -618,6 +615,12 @@ public class Page : MonoBehaviour
                 renderer.SetAppearTextAlpha(normAmount);
             }
         }
+        if (playerWriteRenderers.Length > 0)
+        {
+            carouselLeftButton.renderer.custom.w = normAmount;
+            carouselRightButton.renderer.custom.w = normAmount;
+            spaceBarButton.renderer.custom.w = normAmount;
+        }
     }
     public void SetPlayerWriteTextAlphaTop(float normAmount)
     {
@@ -632,16 +635,21 @@ public class Page : MonoBehaviour
                 renderer.SetAppearTextAlpha(normAmount);
             }
         }
+
+        if (playerWriteRenderers.Length > 0)
+        {
+            carouselLeftButton.renderer.custom.w = normAmount;
+            carouselRightButton.renderer.custom.w = normAmount;
+            spaceBarButton.renderer.custom.w = normAmount;
+        }
     }
     public void EnterColorButton(IconUIElement icon)
     {
         icon.renderer.custom.w = 1;
-        OnEnterIconCoveredByLeftHand?.Invoke();
     }
     public void ExitColorButton(IconUIElement icon)
     {
         icon.renderer.custom.w = 0;
-        OnExitIconCoveredByLeftHand?.Invoke();
     }
 
     public void EnterSpaceBarButton(IconUIElement icon)
@@ -727,16 +735,11 @@ public class Page : MonoBehaviour
     {
         icon.renderer.custom.x = 1;
         icon.renderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.Q);
-
-        OnEnterIconCoveredByLeftHand?.Invoke();
     }
     public void ExitCarouselLeftButton(IconUIElement icon)
     {
         icon.renderer.custom.x = 0;
-
         icon.renderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.LeftTriangle);
-
-        OnExitIconCoveredByLeftHand?.Invoke();
     }
     public void ClickCarouselLeftButton(IconUIElement icon)
     {
@@ -788,15 +791,44 @@ public class Page : MonoBehaviour
             activePlayerWriteTextRenderer = playerWriteTextRenderers[activePlayerWriteRowIndex];
             activePreviewPlayerWriteText = activePlayerWriteTextRenderer.text;
             activePlayerWriteText = playerWriteTexts[activePlayerWriteRowIndex];
+            playerWriteTextBounds = activePlayerWriteTextRenderer.GetBoundsNewText(activePreviewPlayerWriteText);
 
-            SetCarouselAndSpaceIconPositions();
+            bool showSpacebar = activePlayerWriteText == "";
+
+            SetCarouselAndSpaceIconPositions(showSpacebar);
         }
     }
-    public void SetCarouselAndSpaceIconPositions()
-    {        
-        carouselLeftButton.renderer.custom.w = 1;
-        carouselRightButton.renderer.custom.w = 1;
-        spaceBarButton.renderer.custom.w = 1;
+    public void ToggleCarouselButtons(bool toggle)
+    {
+        int alpha = toggle ? 1 : 0;
+
+        if (carouselLeftButton.renderer.custom.w != alpha)
+        {
+            carouselLeftButton.renderer.custom.w = 1 - alpha;
+            carouselRightButton.renderer.custom.w = 1 - alpha;
+
+            carouselLeftButton.renderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: alpha, customChannel: 4);
+            carouselRightButton.renderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: alpha, customChannel: 4);
+        }
+
+    }
+    public void ToggleSpacebarButton(bool toggle)
+    {
+        int alpha = toggle ? 1 : 0;
+
+        if (spaceBarButton.renderer.custom.w != alpha)
+        {
+            spaceBarButton.renderer.custom.w = 1 -alpha;
+            spaceBarButton.renderer.ChangeCustom(time: APPEAR_TEXT_TIME, newValue: alpha, customChannel: 4);
+        }
+    }
+    public void SetCarouselAndSpaceIconPositions(bool showSpacebar)
+    {
+        carouselLeftButton.renderer.custom.w = 0;
+        carouselRightButton.renderer.custom.w = 0;
+        ToggleCarouselButtons(toggle: true);
+        spaceBarButton.renderer.custom.w = 0;
+        ToggleSpacebarButton(showSpacebar);
 
         carouselLeftButton.renderer.transform.position = new Vector3(carouselLeftButton.renderer.transform.position.x, playerWriteTextBounds.center.y, carouselLeftButton.renderer.transform.position.z);
         carouselRightButton.renderer.transform.position = new Vector3(carouselRightButton.renderer.transform.position.x, playerWriteTextBounds.center.y, carouselRightButton.renderer.transform.position.z);

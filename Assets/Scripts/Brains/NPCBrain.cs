@@ -8,6 +8,8 @@ using static AtlasUI;
 using static NPC;
 using Cysharp.Threading.Tasks;
 using System.Threading;
+using static Train;
+
 
 
 
@@ -91,11 +93,11 @@ public class NPCBrain : MonoBehaviour
     public bool ticketHasBeenChecked;
     public bool playingGlyph;
     public bool behaving;
-    public bool disembarking;
+    public bool stopBehaving;
     public bool onTrain;
     public bool queuedForSeat;
     public bool queuedForSlideDoor;
-
+    public bool standLeftOfCarriage;
 
     public delegate void Callback();
     private void OnEnable()
@@ -120,7 +122,6 @@ public class NPCBrain : MonoBehaviour
     }
     private void Update()
     {
-        if (this == ExamplePassenger) return;
         ChooseStates();
         UpdateStates();
         UpdatePath();
@@ -153,7 +154,6 @@ public class NPCBrain : MonoBehaviour
     }
     public void BoardTrain()
     {
-        transform.SetParent(curCarriage.transform, true);
         trainStats.totalNPCsBoarded++;
         QueueForSeat();
         rigidBody.includeLayers = layerSettings.trainMask;
@@ -184,27 +184,40 @@ public class NPCBrain : MonoBehaviour
     {
         queuedForSeat = false;
         seatPosIndex = seatIndex;
+        curCarriage.seatData.filled[seatPosIndex] = true;
         targetXPos = curCarriage.seatData.xPos[seatPosIndex];
-        if (disembarking) return;
+        if (stopBehaving) return;
         SetPath(NPCPath.ToSeatInTrain);
     }
     public void FindStandingPosition()
     {
-        if (disembarking) return;
+        if (stopBehaving) return;
         SetPath(NPCPath.ToStandInTrain);
     }
     public void SetAsExample()
     {
         ExamplePassenger = this;
+
+        if (transform.position.x > curCarriage.insideBoundsCollider.bounds.center.x)
+        {
+            behaving = false;
+            stopBehaving = true;
+            standLeftOfCarriage = true;
+            curPath = NPCPath.None;
+            SetPath(NPCPath.ToStandInTrain);
+            StopSitting();
+        }
     }
     public void SetCustomDepth(int depth)
     {
         prevDepth = transform.position.z;
         transform.position = new Vector3(transform.position.x, transform.position.y, depth);
     }
-    public void ReturnExamplePassengerToPrevDepth()
+    public void ReturnExamplePassenger()
     {
+        stopBehaving = false;
         ExamplePassenger = null;
+        standLeftOfCarriage = false;
         transform.position = new Vector3(transform.position.x, transform.position.y, prevDepth);
     }
     private void DisableHover()
@@ -234,6 +247,7 @@ public class NPCBrain : MonoBehaviour
             atlasRenderer.customBit &= ~(int)ColorBits.Texture;
             atlasRenderer.customBit |= (int)ColorBits.Outline;
         }
+
         ticketHasBeenChecked = toggle;
     }
     private void SetState(NPCState newState)
@@ -535,6 +549,7 @@ public class NPCBrain : MonoBehaviour
                 {
                     curCarriage = curSlideDoors.carriage;
                     curCarriage.AddNPC(this);
+                    transform.SetParent(curCarriage.transform, worldPositionStays: true);
                 }
                 queuedForSlideDoor = false;
                 behaving = false;
@@ -548,8 +563,15 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCPath.ToStandInTrain:
             {
-                targetXPos = UnityEngine.Random.Range(curCarriage.insideBoundsCollider.bounds.min.x, curCarriage.insideBoundsCollider.bounds.max.x);
-                
+                if (standLeftOfCarriage)
+                {
+                    targetXPos = UnityEngine.Random.Range(curCarriage.insideBoundsCollider.bounds.min.x, curCarriage.insideBoundsCollider.bounds.center.x);
+                }
+                else
+                {
+                    targetXPos = UnityEngine.Random.Range(curCarriage.insideBoundsCollider.bounds.min.x, curCarriage.insideBoundsCollider.bounds.max.x);
+                }
+
                 if (curBehaviourContext.behaviours == Behaviours.Known_vandal)
                 {
                     for (int i = 0; i < curCarriage.interiorSlideDoors.Length; i++)
@@ -570,9 +592,9 @@ public class NPCBrain : MonoBehaviour
                             break;
                         }
                     }
-                    targetDist = targetXPos - transform.position.x;
                 }
 
+                targetDist = targetXPos - transform.position.x;
                 SetStandingDepthInTrain();
             }
             break;
@@ -761,7 +783,7 @@ public class NPCBrain : MonoBehaviour
             {
                 if (atlasRenderer.bounds.max.x < spawnData.bounds.min.x)
                 {
-                    disembarking = false;
+                    stopBehaving = false;
                     ToggleUnveil(false);
                     atlasRenderer.custom.x = 0;
                     atlasRenderer.custom.y = 0;
@@ -885,12 +907,9 @@ public class NPCBrain : MonoBehaviour
     private void PrepareToDisembarkTrain()
     {
         if (!onTrain || trip.stationAhead.stationIndex != profile.disembarkingStationIndex) return;
-        disembarking = true;
-        if (queuedForSeat) curCarriage.RemoveFromSeatQueue(this);
-        if (seatPosIndex != int.MaxValue && curCarriage.seatData.filled[seatPosIndex])
-        {
-            curCarriage.seatData.filled[seatPosIndex] = false;
-        }
+
+        stopBehaving = true;
+        StopSitting();
 
         Callback callback = SetPathToSlideDoorCallback;
         ctsWaitForRandSeconds?.Cancel();
@@ -899,20 +918,33 @@ public class NPCBrain : MonoBehaviour
     }
     private void QueueForSeat()
     {
-        if (disembarking) return;
+        if (stopBehaving) return;
         curCarriage?.AddToSeatQueue(this);
         queuedForSeat = true;
+    }
+    private void StopSitting()
+    {
+        if (queuedForSeat) curCarriage.RemoveFromSeatQueue(this);
+        if (seatPosIndex != int.MaxValue && curCarriage.seatData.filled[seatPosIndex])
+        {
+            curCarriage.seatData.filled[seatPosIndex] = false;
+        }
     }
     private void SetStandingDepthInTrain()
     {
         if (!onTrain) return;
+        if (this == ExamplePassenger)
+        {
+            prevDepth = trainStats.depthSections.frontStandingBack;
+            return;
+        }
         int depth = UnityEngine.Random.Range(trainStats.depthSections.frontStandingBack, trainStats.depthSections.backStandingFront);
         atlasRenderer.SetWorldDepth(depth);
     }
     private void PickNextBehaviour()
     {
         behaviourClock = 0;
-        if (!onTrain || disembarking) return;
+        if (!onTrain || stopBehaving) return;
 
         int maxBits = 32;
 

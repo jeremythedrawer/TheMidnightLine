@@ -20,6 +20,8 @@ public class AgreementPage : MonoBehaviour
 
     public Page page;
 
+    public IconUIElement spacebarButton;
+
     [Header("Generated")]
     public Vector3 offscreenPos;
     public Vector3 curPos;
@@ -52,9 +54,14 @@ public class AgreementPage : MonoBehaviour
     {
         if (atActivePos)
         {
-            if (playerInputs.writeKeyDown && page.activePlayerWriteText == "")
+            if (page.activePlayerWriteText == "")
             {
-                leftHand.SetState(LeftHand.State.Writing);
+                spacebarButton.UpdateButton(playerInputs);
+
+                if (playerInputs.writeKeyDown)
+                {
+                    leftHand.SetState(LeftHand.State.Writing);
+                }
             }
         }
     }
@@ -72,6 +79,23 @@ public class AgreementPage : MonoBehaviour
         page.InitAgreementPage();
         leftHand.Init();
         leftHand.SetState(LeftHand.State.OffScreen);
+
+        spacebarButton.InitButton(ClickSpaceBarButton, EnterSpaceBarButton, ExitSpaceBarButton);
+    }
+    public void EnterSpaceBarButton(IconUIElement icon)
+    {
+        if (page.activePlayerWriteText == "")
+        {
+            icon.renderer.custom.x = 1;
+        }
+    }
+    public void ExitSpaceBarButton(IconUIElement icon)
+    {
+        icon.renderer.custom.x = 0;
+    }
+    public void ClickSpaceBarButton(IconUIElement icon)
+    {
+        leftHand.SetState(LeftHand.State.Writing);
     }
     public void DisableSelf()
     {
@@ -98,10 +122,11 @@ public class AgreementPage : MonoBehaviour
     {
         leftHand.SetState(LeftHand.State.Stationary);
         leftHand.MoveToLeftOfPaper();
-        OnAgreementSigned?.Invoke();
         MoveToInactivePosition();
         spyStats.playerInputsEnabled = true;
         notepadData.signedAgreement = true;
+        
+        OnAgreementSigned?.Invoke();
     }
     public async UniTask MovingToActivePosition()
     {    
@@ -128,9 +153,8 @@ public class AgreementPage : MonoBehaviour
             transform.localPosition = curPos;
             await UniTask.Yield();
         }
-        gameObject.SetActive(false);
         notepadData.collected = true;
+        gameObject.SetActive(false);
         atActivePos = false;
-
     }
 }

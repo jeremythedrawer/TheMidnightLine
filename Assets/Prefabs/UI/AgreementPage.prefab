@@ -760,11 +760,12 @@ MonoBehaviour:
     curState: 0
     holdClock: 0
   spaceBarButton:
-    renderer: {fileID: 0}
+    renderer: {fileID: 7176295209252188030}
     holdToClick: 0
     activePos: {x: 0, y: 0, z: 0}
     curState: 0
     holdClock: 0
+  startPlayerWritePositions: []
   activePlayerWriteTextRenderer: {fileID: 1407368147541437526}
   pageNumberIconRenderers: []
   previewPlayerWriteIndices: 
@@ -797,6 +798,12 @@ MonoBehaviour:
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   leftHand: {fileID: 743686269389001816}
   page: {fileID: 3293984349451637370}
+  spacebarButton:
+    renderer: {fileID: 7176295209252188030}
+    holdToClick: 0
+    activePos: {x: 0, y: 0, z: 0}
+    curState: 0
+    holdClock: 0
   offscreenPos: {x: 0, y: 0, z: 0}
   curPos: {x: 0, y: 0, z: 0}
   atActivePos: 0
@@ -1707,3 +1714,14 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3353299440397550038, guid: 85212788bc9bc6247a6f604770341cf8, type: 3}
   m_PrefabInstance: {fileID: 8597458997851285343}
   m_PrefabAsset: {fileID: 0}
+--- !u!114 &7176295209252188030 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 1497197359425718305, guid: 85212788bc9bc6247a6f604770341cf8, type: 3}
+  m_PrefabInstance: {fileID: 8597458997851285343}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer

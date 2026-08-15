@@ -55,7 +55,6 @@ Shader "Custom/s_atlasNPC"
             float3 _BlackColor;
             float3 _ColorKey0;
             float3 _ColorKey1;
-            float3 _ColorKey2;
             float3 _MeridiaColor;
 
             float4 _TrainBoundsMin;
@@ -129,30 +128,18 @@ Shader "Custom/s_atlasNPC"
                 int diagonalMask = saturate(bitMask & DIAGONAL_TEXTURE_BIT);
                 half3 diagonal = diagonalMask * diagonalTex.r;
 
-                int colorMask = bitMask & ~(DIAGONAL_TEXTURE_BIT | MERIDIA_COLOR_BIT);
+                int colorMask = bitMask & 0x03;
 
                 int colKeyMask0 = colorMask == COLOR_KEY_BIT_0;
                 int colKeyMask1 = colorMask == COLOR_KEY_BIT_1;
-                int colKeyMask2 = colorMask == COLOR_KEY_BIT_2;
-
                 int colKeyMask01 = colorMask == (COLOR_KEY_BIT_0 | COLOR_KEY_BIT_1);
-                int colKeyMask02 = colorMask == (COLOR_KEY_BIT_0 | COLOR_KEY_BIT_2);
-                int colKeyMask12 = colorMask == (COLOR_KEY_BIT_1 | COLOR_KEY_BIT_2);
-
-                int colKeyMask012 = colorMask == (COLOR_KEY_BIT_0 | COLOR_KEY_BIT_1 | COLOR_KEY_BIT_2);
-
 
                 half3 colKey0 = colKeyMask0 * _ColorKey0;
                 half3 colKey1 = colKeyMask1 * _ColorKey1;
-                half3 colKey2 = colKeyMask2 * _ColorKey2;
 
                 half invertPatternR = 1 - stripesTex.r;
 
                 half3 colKey01 = colKeyMask01 * ((_ColorKey0 * stripesTex.r) + (_ColorKey1 * invertPatternR));
-                half3 colKey02 = colKeyMask02 * ((_ColorKey0 * stripesTex.r) + (_ColorKey2 * invertPatternR));
-                half3 colKey12 = colKeyMask12 * ((_ColorKey1 * stripesTex.r) + (_ColorKey2 * invertPatternR));
-
-                half3 colKey012 = colKeyMask012 * ((_ColorKey0 * (stripesTex.g - stripesTex.b)) + (_ColorKey1 * (stripesTex.b - stripesTex.g)) + (_ColorKey2 * (stripesTex.g * stripesTex.b)));
 
                 int meridiaColorMask = saturate(bitMask & MERIDIA_COLOR_BIT);
                 half3 meridiaColor = meridiaColorMask * _MeridiaColor;
@@ -161,7 +148,6 @@ Shader "Custom/s_atlasNPC"
 
                 half mouseColor = i.custom.y;
                 half ticketCheckHover = i.custom.w;
-
 
                 int texMask = saturate(bitMask & TEXTURE_BIT);
                 tex.r *= texMask;
@@ -174,9 +160,7 @@ Shader "Custom/s_atlasNPC"
                 outline *= outlineMask;
 
                 half3 finalColor = tex.r + outline;
-
-                finalColor += diagonal + colKey0 + colKey1 + colKey2 + colKey01 + colKey02 + colKey12 + colKey012 + blackColor + meridiaColor;
-
+                finalColor += diagonal + colKey0 + colKey1 + colKey01 + blackColor + meridiaColor;
                 float bayerColMask = BayerX8(mouseColor * 0.75, i.positionHCS.y);
                 finalColor += bayerColMask;
                 

@@ -134,7 +134,7 @@ public class InputManager : MonoBehaviour
 
     private void Start()
     {
-        playerInputs.mouseScreenPos.z = 1;
+        playerInputs.mouseScreenPos.z = 0.25f;
         SceneController.SetInputManager(this);
     }
     private void Update()

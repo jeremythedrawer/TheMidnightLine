@@ -99,17 +99,17 @@ Shader "Custom/s_atlasDepth"
                 i.uv *= uvSize;
                 i.uv += uvPos;
 
-                half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+                clip(tex.a - 0.001);
 
-                half grey = color.r + (-(_DayNight * 1.1 - 0.9));
 
-                float bayerFactor = i.worldPos.z / FAR_CLIP;
-                half bayerValue = bayerFactor * (_DayNight * 1.75 - 0.875);
-
-                half bayer = BayerX8((color.r - bayerValue), i.positionHCS.y);
+                
+                half normDepth = i.worldPos.z/ FAR_CLIP;
+                half dayNightNDC = _DayNight * 2 - 1;
+                half dayNightInfluence = dayNightNDC * normDepth;
+                half bayer = BayerX8(tex.r - dayNightInfluence, i.positionHCS.y);
 
                 half3 finalColor = lerp(_BlackColor, _WhiteColor, bayer);
-                clip(color.a - 0.001);
                 return half4 (finalColor, 1);
             }
             ENDHLSL

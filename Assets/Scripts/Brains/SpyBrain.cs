@@ -109,6 +109,7 @@ public class SpyBrain : MonoBehaviour
         AgreementProp.OnAgreementCollect += SetStateToIdle;
         AgreementProp.OnNotepadReturn += SetStateToIdle;
 
+
         HenchmanBrain.OnShoot += SetStateToShotAt;
 
         MeridiaTower.OnArriveAtBottomFloor += SetSpyToBottomFloor;
@@ -132,6 +133,7 @@ public class SpyBrain : MonoBehaviour
 
         AgreementProp.OnAgreementCollect -= SetStateToIdle;
         AgreementProp.OnNotepadReturn -= SetStateToIdle;
+
 
         HenchmanBrain.OnShoot -= SetStateToShotAt;
 
@@ -206,7 +208,7 @@ public class SpyBrain : MonoBehaviour
     {
         if (!stats.playerInputsEnabled) return;
 
-        if ((playerInputs.ticketCheckKeyDown && stats.canCheckTicket && curNPCTicketCheckHoverCount == 1) || chosenNPC != null)
+        if ((playerInputs.ticketCheckKeyDown && stats.canCheckTicket && curNPCTicketCheckHoverCount == 1 && !stats.checkingNotepad) || chosenNPC != null)
         {
             if (chosenNPC == null)
             {
@@ -334,7 +336,6 @@ public class SpyBrain : MonoBehaviour
 
                 if((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveKeyDown || playerInputs.writeKeyDown) && canExitState)
                 {
-                    chosenNPC.ToggleUnveil(true);
                     FinishWithChosenNPC();
                 }
                 if (!playerInputs.ticketCheckKeyHold && !playerInputs.mouseLeftHold && playerInputs.move == 0) canExitState = true;
@@ -351,10 +352,14 @@ public class SpyBrain : MonoBehaviour
             case SpyState.TalkingToAccomplice:
             {
                 atlasRenderer.PlayClip(ref curClip);
-                if ((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveKeyDown || playerInputs.writeKeyDown) && canExitState && stats.curTutorialState == TutorialState.None)
+                if ((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveKeyDown || playerInputs.writeKeyDown) && canExitState)
                 {
-                    SceneController.GetUnlockPicker().Close();
-                    FinishWithChosenNPC();
+                    if (stats.curTutorialState == TutorialState.None)
+                    {
+                        chosenNPC.talkingToSpy = false;
+                        chosenNPC = null;
+                        SceneController.GetUnlockPicker().Close();
+                    }
                 }
 
                 if (!playerInputs.ticketCheckKeyHold && !playerInputs.mouseLeftHold && playerInputs.move == 0) canExitState = true;
@@ -954,6 +959,8 @@ public class SpyBrain : MonoBehaviour
     public void FinishWithChosenNPC()
     {
         chosenNPC.talkingToSpy = false;
+        chosenNPC.ToggleUnveil(true);
+
         chosenNPC = null;
     }
     public void ChooseNPCTicketToCheck(NPCBrain npc)

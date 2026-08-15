@@ -16,8 +16,6 @@ public class CursorController : MonoBehaviour
     
     public static Bounds CursorBounds;
     
-    public static Vector3 CurWorldPos;
-    
     public static bool Active;
     public static bool CanClick;
 
@@ -57,8 +55,7 @@ public class CursorController : MonoBehaviour
         if (Active)
         {
             cursorRenderer.enabled = true;
-            CurWorldPos = playerInputs.mouseWorldPos;
-            transform.position = CurWorldPos;
+            transform.position = playerInputs.mouseWorldPos;
 
             CursorBounds = cursorRenderer.GetBounds();
 
@@ -74,7 +71,12 @@ public class CursorController : MonoBehaviour
 
                         if (hoveredNPCCount == 1)
                         {
-                            if (trip.unlockedColorMarkerCount == 0)
+                            if ((trip.curUnlocks & UnlockType.Color) != 0)
+                            {
+                                SceneController.GetNPCColorPicker().Open(selectedNPC.atlasRenderer);
+                                SceneController.GetClueColorPicker().Close();
+                            }
+                            else
                             {
                                 if ((selectedNPC.atlasRenderer.customBit & (int)ColorBits.Diagonal) == 0)
                                 {
@@ -85,16 +87,13 @@ public class CursorController : MonoBehaviour
                                     selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Diagonal);
                                 }
                             }
-                            else
-                            {
-                                SceneController.GetClueColorPicker().Open(selectedNPC.atlasRenderer, ColorPicker.SelectType.NPC);
-                            }
                             selectedNPC.ToggleHover(false);
 
                             if (selectedNPC == NPCBrain.ExamplePassenger)
                             {
                                 OnClickExamplePassenger?.Invoke();
-                                NPCBrain.ExamplePassenger.atlasRenderer.customBit &= ~(int)ColorBits.Outline;
+                                NPCBrain.ExamplePassenger.atlasRenderer.customBit &= ~((int)ColorBits.Outline);
+                                NPCBrain.ExamplePassenger.ReturnExamplePassenger();
                             }
                         }
                         else if (hoveredNPCCount > 1)
@@ -192,9 +191,12 @@ public class CursorController : MonoBehaviour
 
         if (NPCBrain.ExamplePassenger == null)
         {
-            for (int i = 0; i < SpyBrain.CurCarriage.curNPCList.Count; i++)
+            Carriage curCarriage = SpyBrain.CurCarriage;
+            for (int i = 0; i < curCarriage.curNPCList.Count; i++)
             {
-                NPCBrain npc = SpyBrain.CurCarriage.curNPCList[i];
+                NPCBrain npc = curCarriage.curNPCList[i];
+
+                if (spyStats.curState == Spy.SpyState.Notepad && npc.transform.position.x > curCarriage.insideBoundsCollider.bounds.center.x) return;
 
                 if (IsInsideBounds(npc.atlasRenderer.bounds, isClickable: false) && hoveredNPCCount < hoveredNPCs.Length)
                 {
@@ -242,7 +244,7 @@ public class CursorController : MonoBehaviour
         {
             cursorTag.SetText("");
             cursorTag.transform.SetParent(transform, worldPositionStays: true);
-            cursorTag.transform.localPosition = new Vector3(0, 0, -0.5f);
+            cursorTag.transform.localPosition = new Vector3(0, 0, cursorTag.transform.localPosition.z);
         }
     }
     public static bool IsInsideBounds(Bounds bounds,  bool isClickable)

@@ -108,21 +108,23 @@ public class UnlockPicker : MonoBehaviour
                         }
                         else if ((selectedUnlockType & UnlockType.Color) != 0)
                         {
-                            trip.unlockedColorMarkerCount++;
+                            trip.curUnlocks |= UnlockType.Color;
+                            tutorialInUse = true;
+                            
+                            OnColorAbilityUnlock?.Invoke(icon);
 
-                            if (trip.unlockedColorMarkerCount == 1)
-                            {
-                                trip.curUnlocks |= UnlockType.Color;
-                                tutorialInUse = true;
-                                OnColorAbilityUnlock?.Invoke(icon);
-                            }
+                            NPCBrain examplePassenger = selectedNPC.curCarriage.GetPassenger(index: 0);
+                            examplePassenger.SetAsExample();
                         }
                         else if ((selectedUnlockType & UnlockType.MultiColor) != 0)
                         {
                             trip.curUnlocks |= UnlockType.MultiColor;
-                            trip.unlockedColorMarkerCount++;
                             tutorialInUse = true;
+                            
                             OnMutliColorAbilityUnlock?.Invoke(icon);
+
+                            NPCBrain examplePassenger = selectedNPC.curCarriage.GetPassenger(index: 0);
+                            examplePassenger.SetAsExample();
                         }
                         break;
                     }

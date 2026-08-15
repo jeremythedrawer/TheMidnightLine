@@ -8,7 +8,10 @@ public class SceneController : MonoBehaviour
     public static Transform Transform;
 
     public static Notepad Notepad;
+    
     public static ColorPicker ClueColorPicker;
+    public static ColorPicker NPCColorPicker;
+
     public static NPCPicker NPCPicker;
     public static UnlockPicker UnlockPicker;
     public static SpyBrain Spy;
@@ -47,6 +50,10 @@ public class SceneController : MonoBehaviour
     {
         ClueColorPicker = colorPicker;
     }
+    public static void SetNPCColorPicker(ColorPicker colorPicker)
+    {
+        NPCColorPicker = colorPicker;
+    }
     public static void SetNPCPicker(NPCPicker npcPicker)
     {
         NPCPicker = npcPicker;
@@ -64,14 +71,22 @@ public class SceneController : MonoBehaviour
     {
         InputManager = inputManager;
     }
-    public static Notepad GetNotepad(Transform newTransform)
+    public static Notepad GetAndParentNotepad(Transform newTransform)
     {
         Notepad.transform.SetParent(newTransform, true);
+        return Notepad;
+    }
+    public static Notepad GetNotepad()
+    {
         return Notepad;
     }
     public static ColorPicker GetClueColorPicker()
     {
         return ClueColorPicker;
+    }
+    public static ColorPicker GetNPCColorPicker()
+    {
+        return NPCColorPicker;
     }
     public static NPCPicker GetNPCPicker()
     {

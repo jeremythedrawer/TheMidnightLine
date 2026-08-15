@@ -130,7 +130,7 @@ GameObject:
   - component: {fileID: 1849436935815050231}
   - component: {fileID: 8283568383269068160}
   m_Layer: 0
-  m_Name: MainColorPicker
+  m_Name: DarkColorPicker
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -258,7 +258,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::ColorPicker
   trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
-  colorsData: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
+  options: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   spyStats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
@@ -304,11 +304,12 @@ MonoBehaviour:
     curState: 0
     holdClock: 0
   paletteRenderer: {fileID: 1849436935815050231}
-  colorPickerType: 1
+  selectType: 2
   direction: 0
   colorGridXCount: 4
   colorGridYCount: 2
   selectedRenderer: {fileID: 0}
+  curState: 0
   defaultOpenColorRendPositions: []
   curOpenColorRendPositions: []
   curWorldPos: {x: 0, y: 0, z: 0}
@@ -329,7 +330,6 @@ MonoBehaviour:
   curSpriteHeight: 0
   tileWidth: 0
   tileHeight: 0
-  selectType: 0
   canClose: 0
 --- !u!1 &4090191359809188597
 GameObject:
