@@ -100,7 +100,11 @@ public class UnlockPicker : MonoBehaviour
                         {
                             trip.curUnlocks |= UnlockType.RuleOut;
                             tutorialInUse = true;
+
                             OnRuleOutAbilityUnlock?.Invoke(icon);
+
+                            NPCBrain examplePassenger = selectedNPC.curCarriage.GetPassenger(index: 0);
+                            examplePassenger.SetAsExample();
                         }
                         else if ((selectedUnlockType & UnlockType.Color) != 0)
                         {

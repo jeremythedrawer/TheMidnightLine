@@ -9,6 +9,8 @@ public class CursorController : MonoBehaviour
     const float VISIBLE_TIMER = 3f;
     const float MOVE_THRESHOLD = 0.01f;
 
+    public static event Action OnClickExamplePassenger;
+
     public static AtlasRenderer PrevRenderer;
     public static AtlasRenderer CursorRenderer;
     
@@ -88,6 +90,12 @@ public class CursorController : MonoBehaviour
                                 SceneController.GetClueColorPicker().Open(selectedNPC.atlasRenderer, ColorPicker.SelectType.NPC);
                             }
                             selectedNPC.ToggleHover(false);
+
+                            if (selectedNPC == NPCBrain.ExamplePassenger)
+                            {
+                                OnClickExamplePassenger?.Invoke();
+                                NPCBrain.ExamplePassenger.atlasRenderer.customBit &= ~(int)ColorBits.Outline;
+                            }
                         }
                         else if (hoveredNPCCount > 1)
                         {
@@ -103,6 +111,10 @@ public class CursorController : MonoBehaviour
                             if ((selectedNPC.atlasRenderer.customBit & ((int)ColorBits.Diagonal)) == 0)
                             {
                                 selectedNPC.atlasRenderer.customBit |= (int)ColorBits.Diagonal;
+                                if ((trip.curUnlocks & UnlockType.MultiColor) == 0)
+                                {
+                                    selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Color1);
+                                }
                             }
                             else
                             {
@@ -176,22 +188,36 @@ public class CursorController : MonoBehaviour
     {
         hoveredNPCCount = 0;
         bool hoveringRevealedNPC = false;
-        bool canClick = (trip.curUnlocks & UnlockType.RuleOut) != 0;
-        for (int i = 0; i < SpyBrain.CurCarriage.curNPCList.Count; i++)
-        {
-            NPCBrain npc = SpyBrain.CurCarriage.curNPCList[i];
+        bool canClick = (trip.curUnlocks & UnlockType.RuleOut) != 0; // TODO : Find a way to not have the cursor flicker between sprites
 
-            if (IsInsideBounds(npc.atlasRenderer.bounds, isClickable: canClick) && hoveredNPCCount < hoveredNPCs.Length)
+        if (NPCBrain.ExamplePassenger == null)
+        {
+            for (int i = 0; i < SpyBrain.CurCarriage.curNPCList.Count; i++)
             {
-                hoveredNPCs[hoveredNPCCount] = npc;
-                hoveredNPCCount++;
-                npc.ToggleHover(true);
-                if (npc.ticketHasBeenChecked) hoveringRevealedNPC = true;
+                NPCBrain npc = SpyBrain.CurCarriage.curNPCList[i];
+
+                if (IsInsideBounds(npc.atlasRenderer.bounds, isClickable: false) && hoveredNPCCount < hoveredNPCs.Length)
+                {
+                    hoveredNPCs[hoveredNPCCount] = npc;
+                    hoveredNPCCount++;
+                    npc.ToggleHover(true);
+                    if (npc.ticketHasBeenChecked) hoveringRevealedNPC = true;
+                }
+                else
+                {
+                    npc.ToggleHover(false);
+                }
             }
-            else
-            {
-                npc.ToggleHover(false);
-            }
+        }
+        else if (IsInsideBounds(NPCBrain.ExamplePassenger.atlasRenderer.bounds, isClickable: false))
+        {
+            hoveredNPCs[0] = NPCBrain.ExamplePassenger;
+            hoveredNPCCount++;
+            NPCBrain.ExamplePassenger.ToggleHover(true);
+        }
+        else
+        {
+            NPCBrain.ExamplePassenger.ToggleHover(false);
         }
 
         if (hoveredNPCCount == 1 && hoveringRevealedNPC)
@@ -225,35 +251,4 @@ public class CursorController : MonoBehaviour
         if (inside && isClickable) CanClick = true;
         return inside;
     }
-    //public static bool EnteredBounds(AtlasRenderer renderer)
-    //{
-    //    if (IsInsideBounds(renderer.GetBounds()))
-    //    {
-    //        if (PrevRenderer != renderer)
-    //        {
-    //            PrevRenderer = renderer;
-    //            return true;
-    //        }
-    //        else
-    //        {
-    //            return false;
-    //        }
-    //    }
-    //    else
-    //    {
-    //        return false;
-    //    }
-    //}
-    //public static bool ExitBounds()
-    //{
-    //    if (PrevRenderer != null && !IsInsideBounds(PrevRenderer.GetBounds()))
-    //    {
-    //        PrevRenderer = null;
-    //        return true;
-    //    }
-    //    else
-    //    {
-    //        return false;
-    //    }
-    //}
 }

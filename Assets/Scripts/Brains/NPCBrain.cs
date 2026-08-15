@@ -20,6 +20,8 @@ public class NPCBrain : MonoBehaviour
     public static event Action OnTraitorBoardedTrain;
     public static event Action OnTraitorDisembarkedTrain;
 
+    public static NPCBrain ExamplePassenger;
+
     public AtlasRenderer atlasRenderer;
     public Rigidbody2D rigidBody;
     public BoxCollider2D boxCollider;
@@ -62,6 +64,7 @@ public class NPCBrain : MonoBehaviour
     public float atlasIndexClock;
     public float move;
     public float alphaClock;
+    public float prevDepth;
 
     public Vector2 curSpriteMarkerLocalPosition;
 
@@ -79,6 +82,9 @@ public class NPCBrain : MonoBehaviour
 
     public int curFrameIndex;
     public int prevAtlasIndex;
+    public int seatQueueIndex;
+    public int boardTrainQueueIndex;
+    public int disembarkTrainQueueIndex;
 
     public bool startFade;
     public bool talkingToSpy;
@@ -90,9 +96,6 @@ public class NPCBrain : MonoBehaviour
     public bool queuedForSeat;
     public bool queuedForSlideDoor;
 
-    public int seatQueueIndex;
-    public int boardTrainQueueIndex;
-    public int disembarkTrainQueueIndex;
 
     public delegate void Callback();
     private void OnEnable()
@@ -117,6 +120,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void Update()
     {
+        if (this == ExamplePassenger) return;
         ChooseStates();
         UpdateStates();
         UpdatePath();
@@ -145,6 +149,7 @@ public class NPCBrain : MonoBehaviour
         {
             curBehaviour = GetRandomBehaviour();
         }
+        atlasRenderer.customBit |= (int)ColorBits.Outline;
     }
     public void BoardTrain()
     {
@@ -188,6 +193,20 @@ public class NPCBrain : MonoBehaviour
         if (disembarking) return;
         SetPath(NPCPath.ToStandInTrain);
     }
+    public void SetAsExample()
+    {
+        ExamplePassenger = this;
+    }
+    public void SetCustomDepth(int depth)
+    {
+        prevDepth = transform.position.z;
+        transform.position = new Vector3(transform.position.x, transform.position.y, depth);
+    }
+    public void ReturnExamplePassengerToPrevDepth()
+    {
+        ExamplePassenger = null;
+        transform.position = new Vector3(transform.position.x, transform.position.y, prevDepth);
+    }
     private void DisableHover()
     {
         atlasRenderer.custom.y = 0;
@@ -205,7 +224,16 @@ public class NPCBrain : MonoBehaviour
     }
     public void ToggleUnveil(bool toggle)
     {
-        atlasRenderer.custom.z = toggle ? 1 : 0;
+        if (toggle)
+        {
+            atlasRenderer.customBit |= (int)ColorBits.Texture;
+            atlasRenderer.customBit &= ~(int)ColorBits.Outline;
+        }
+        else
+        {
+            atlasRenderer.customBit &= ~(int)ColorBits.Texture;
+            atlasRenderer.customBit |= (int)ColorBits.Outline;
+        }
         ticketHasBeenChecked = toggle;
     }
     private void SetState(NPCState newState)
@@ -553,30 +581,71 @@ public class NPCBrain : MonoBehaviour
                 if (trip.stationAhead.isFrontOfTrain)
                 {
                     bool foundDoor = false;
-                    for(int i = 0; i < trainStats.exteriorSlideDoorXBounds.Length; i++)
+                    if (role == Role.Accomplice)
                     {
-                        if (transform.position.x > trainStats.exteriorSlideDoorXBounds[i])
+                        for (int i = 0; i < trainStats.exteriorSlideDoorXBounds.Length; i++)
                         {
-                            curSlideDoors = TrainController.ExteriorSlideDoors[i];
-                            
-                            foundDoor = true;
-                            break;
+                            if (transform.position.x > trainStats.exteriorSlideDoorXBounds[i])
+                            {
+                                curSlideDoors = TrainController.ExteriorSlideDoors[i];
+
+                                if (curSlideDoors.carriage.curNPCList.Count > 0 && curSlideDoors.carriage.curNPCList[0].profile.disembarkingStationIndex != profile.boardingStationIndex)
+                                {
+                                    foundDoor = true;
+                                    break;
+                                }
+                            }
                         }
                     }
+                    else
+                    {
+                        for (int i = 0; i < trainStats.exteriorSlideDoorXBounds.Length; i++)
+                        {
+                            if (transform.position.x > trainStats.exteriorSlideDoorXBounds[i])
+                            {
+                                curSlideDoors = TrainController.ExteriorSlideDoors[i];
+
+                                foundDoor = true;
+                                break;
+                            }
+                        }
+                    }
+
                     if (!foundDoor) curSlideDoors = TrainController.ExteriorSlideDoors[^1];
                 }
                 else
                 {
                     bool foundDoor = false;
-                    for (int i = 0; i < trainStats.interiorSlideDoorXBounds.Length; i++)
+                    if (role == Role.Accomplice)
                     {
-                        if (transform.position.x > trainStats.interiorSlideDoorXBounds[i])
+                        for (int i = 0; i < trainStats.interiorSlideDoorXBounds.Length; i++)
                         {
-                            curSlideDoors = TrainController.InteriorSlideDoors[i];
-                            foundDoor = true;
-                            break;
+                            if (transform.position.x > trainStats.interiorSlideDoorXBounds[i])
+                            {
+                                curSlideDoors = TrainController.InteriorSlideDoors[i];
+
+                                if (curSlideDoors.carriage.curNPCList.Count > 0 && curSlideDoors.carriage.curNPCList[0].profile.disembarkingStationIndex != profile.boardingStationIndex)
+                                {
+                                    foundDoor = true;
+                                    break;
+                                }
+                            }
                         }
                     }
+                    else
+                    {
+                        for (int i = 0; i < trainStats.interiorSlideDoorXBounds.Length; i++)
+                        {
+                            if (transform.position.x > trainStats.interiorSlideDoorXBounds[i])
+                            {
+                                curSlideDoors = TrainController.InteriorSlideDoors[i];
+
+                                foundDoor = true;
+                                break;
+                            }
+                        }
+                    }
+
                     if (!foundDoor) curSlideDoors = TrainController.InteriorSlideDoors[^1];
                 }
 

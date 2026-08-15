@@ -104,10 +104,15 @@ Shader "Custom/s_zoneParticles"
                 half color = tex.r;
 
                 half minPos = _TrainBoundsMin.z + _TrainBoundsSize.z;
-                half bayerFactor = (p.z - minPos) / (FAR_CLIP - minPos);
-                half bayerValue = bayerFactor * (_DayNight * 1.75 - 0.875);
 
-                half bayer = BayerX8((color - bayerValue), i.positionHCS.y);
+                half normDepth = p.z/ FAR_CLIP;
+                half dayNightNDC = _DayNight * 2 - 1;
+                half dayNightInfluence = dayNightNDC * normDepth;
+
+
+               // half bayerValue = bayerFactor - (_DayNight * 1.75 - 0.875);
+                half bayer = BayerX8(color - dayNightInfluence, i.positionHCS.y);
+
                 half3 finalColor = lerp(_BlackColor, _WhiteColor, bayer);
                 return half4(finalColor, 1);
             }

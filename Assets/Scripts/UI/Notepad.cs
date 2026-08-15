@@ -133,10 +133,11 @@ public class Notepad : MonoBehaviour
     public void Init()
     {
         SceneController.KeepNotepad(this);
+        colorKeyPage.gameObject.SetActive(false);
         gameObject.SetActive(false);
         CreateNPCProfiles();
     }
-    public void PickUpNotepad()
+    public void PickUpNotepad() 
     {
         gameObject.SetActive(true);
 
@@ -872,7 +873,7 @@ public class Notepad : MonoBehaviour
                 int stationsLeft = curTrip.stationsDataArray.Length - i;
                 float normSpawnIndex = (float)j / (float)station.bystanderSpawnCount;
                 float gaussianNormSpawnIndex = NormalGaussianValue(normSpawnIndex);
-                bystanderProfile.disembarkingStationIndex = Mathf.Min(i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft), curTrip.stationsDataArray.Length - 1);
+                bystanderProfile.disembarkingStationIndex = Mathf.Min(i + 1 + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft), curTrip.stationsDataArray.Length - 1);
 
                 station.bystanderProfiles[j] = bystanderProfile;
             }

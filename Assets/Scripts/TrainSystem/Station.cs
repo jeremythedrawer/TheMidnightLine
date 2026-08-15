@@ -3,7 +3,6 @@ using static NPC;
 using static Train;
 public class Station : MonoBehaviour
 {
-    const float SPAWN_BUFFER = 5f;
     public StationSO station;
     public TrainStatsSO trainStats;
     public TripSO trip;
@@ -23,14 +22,13 @@ public class Station : MonoBehaviour
     public void SpawnNPCs()
     {
         AtlasRenderer activePlatformRenderer = station.isFrontOfTrain ? frontPlatformRenderer : backPlatformRenderer;
-        activePlatformRenderer.UpdateBounds();
-        
+
         for (int i = 0; i < station.bystanderProfiles.Length; i++)
         {
             NPCProfile bystanderProfile = station.bystanderProfiles[i];
-            float randXPos = Random.Range(activePlatformRenderer.bounds.min.x + SPAWN_BUFFER, activePlatformRenderer.bounds.max.x - SPAWN_BUFFER);
+            float randXPos = Random.Range(activePlatformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, activePlatformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
 
-            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, activePlatformRenderer.transform.position.z);
+            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
 
             NPCBrain bystander = NPCManager.GetNPC(trip.npcDataArray[bystanderProfile.npcPrefabIndex].prefab, spawnPos, activePlatformRenderer.transform);
             
@@ -51,9 +49,9 @@ public class Station : MonoBehaviour
         for (int i = trip.traitorsSpawned; i < maxTraitorSpawnIndex; i++)
         {
             TraitorProfile traitorProfile = trip.traitorProfiles[i];
-            float randXPos = Random.Range(activePlatformRenderer.bounds.min.x + SPAWN_BUFFER, activePlatformRenderer.bounds.max.x - SPAWN_BUFFER);
-            
-            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, activePlatformRenderer.transform.position.z);
+            float randXPos = Random.Range(activePlatformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, activePlatformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
+
+            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
 
             NPCBrain traitor = NPCManager.GetNPC(trip.npcDataArray[traitorProfile.npcProfile.npcPrefabIndex].prefab, spawnPos, activePlatformRenderer.transform);
             traitor.profile = traitorProfile.npcProfile;
@@ -71,9 +69,10 @@ public class Station : MonoBehaviour
         for (int i = 0; i < station.accompliceProfiles.Length; i++)
         {
             NPCProfile accompliceProfile = station.accompliceProfiles[i];
-            float randXPos = Random.Range(activePlatformRenderer.bounds.min.x + SPAWN_BUFFER, activePlatformRenderer.bounds.max.x - SPAWN_BUFFER);
 
-            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, activePlatformRenderer.transform.position.z);
+            float randXPos = Random.Range(activePlatformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, activePlatformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
+
+            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
 
             NPCBrain accomplice = NPCManager.GetNPC(trip.npcDataArray[accompliceProfile.npcPrefabIndex].prefab, spawnPos, activePlatformRenderer.transform);
 
@@ -88,7 +87,6 @@ public class Station : MonoBehaviour
             }
             accomplice.Init();
         }
-
     }
     public void SetFrontParallaxPosition()
     {

@@ -284,21 +284,21 @@ public class Page : MonoBehaviour
             {
                 leftButton.UpdateButton(playerInputs);
 
-                if ((notepadData.abilityIconsShown & UnlockType.Color) != 0)
+                if ((trip.curUnlocks & UnlockType.Color) != 0)
                 {
-                    if (playerInputs.numpad > 0 && playerInputs.numpad <= trip.unlockedColorMarkerCount)
-                    {
-                        SwitchWriteRow(playerInputs.numpad - 1);
-                    }
                     otherButtons[0].UpdateButton(playerInputs);
 
                     carouselLeftButton.UpdateButton(playerInputs);
                     carouselRightButton.UpdateButton(playerInputs);
                     spaceBarButton.UpdateButton(playerInputs);
 
-                    if ((notepadData.abilityIconsShown & UnlockType.MultiColor) != 0)
+                    if ((trip.curUnlocks & UnlockType.Color & UnlockType.MultiColor) != 0)
                     {
                         otherButtons[1].UpdateButton(playerInputs);
+                        if (playerInputs.numpad > 0 && playerInputs.numpad <= trip.unlockedColorMarkerCount)
+                        {
+                            SwitchWriteRow(playerInputs.numpad - 1);
+                        }
                     }
                 }
             }

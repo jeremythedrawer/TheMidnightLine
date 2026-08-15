@@ -554,8 +554,6 @@ public class StartUI : MonoBehaviour
         fadeBlack.SetAlpha(1);
         fadeBlack.FadeOut();
 
-        options.skipTutorial = false;
-
         SetState(UIState.StartMenu);
     }
     private void ScoreSceneInit()
@@ -692,8 +690,6 @@ public class StartUI : MonoBehaviour
         playAgainButton.MoveAway(camStats, Direction.Left);
         thankYouMessage.MoveAway(camStats, Direction.Left);
         quitButton.MoveAway(camStats, Direction.Left);
-
-        options.skipTutorial = false;
 
         agreementPage.gameObject.SetActive(true);
         agreementPage.Init();

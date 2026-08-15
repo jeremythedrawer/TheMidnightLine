@@ -21,6 +21,7 @@ public class CameraController : MonoBehaviour
     public LayerSettingsSO layerSettings;
     public GameEventDataSO gameEventData;
     public SceneData sceneData;
+    public NotepadData notepadData;
 
     public RenderTexture carriageBoundsRT;
     public ComputeShader carriageBoundsCompute;
@@ -174,6 +175,26 @@ public class CameraController : MonoBehaviour
             }
             break;
             case LocationState.MeetingRoom:
+            {
+                if (!isShaking)
+                {
+                    if (notepadData.collected && sceneData.activeSceneType == Scenes.SceneType.Start)
+                    {
+                        float distFromCenter = (spyStats.bounds.center.x + 3) - stats.curLocationBounds.center.x;
+                        float t = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
+                        targetWorldPos.x = Mathf.Lerp(stats.curLocationBounds.center.x, (spyStats.bounds.center.x + 3) + curXOffset, t);
+                        targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, stats.curLocationBounds.min.x + stats.camBounds.extents.x, stats.curLocationBounds.max.x - stats.camBounds.extents.x);
+                    }
+                    else
+                    {
+                        float distFromCenter = spyStats.bounds.center.x - stats.curLocationBounds.center.x;
+                        float t = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
+                        targetWorldPos.x = Mathf.Lerp(stats.curLocationBounds.center.x, spyStats.bounds.center.x + curXOffset, t);
+                        targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, stats.curLocationBounds.min.x + stats.camBounds.extents.x, stats.curLocationBounds.max.x - stats.camBounds.extents.x);
+                    }                    
+                }
+            }
+            break;
             case LocationState.Bunker:
             {
                 if (!isShaking)

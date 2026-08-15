@@ -103,17 +103,20 @@ public static class AtlasUI
         Diagonal = 1 << 3,
         Meridia = 1 << 4,
         Invert = 1 << 5,
+        Outline = 1 << 6,
+        Texture = 1 << 7,
     }
     [Flags] public enum TutorialState
     {
         None = 0,
         Traitor = 1 << 0,
-        RuleOut = 1 << 1,
-        Color1 = 1 << 2,
-        Color2 = 1 << 3,
-        Color3 = 1 << 4,
-        MultiColor1 = 1 << 5,
-        MultiColor2 = 1 << 6,
+        RuleOut1 = 1 << 1,
+        RuleOut2 = 1 << 2,
+        Color1 = 1 << 3,
+        Color2 = 1 << 4,
+        Color3 = 1 << 5,
+        MultiColor1 = 1 << 6,
+        MultiColor2 = 1 << 7,
     }
     [Flags] public enum KeyIconActions
     {

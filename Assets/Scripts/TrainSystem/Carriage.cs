@@ -1,10 +1,9 @@
 using Cysharp.Threading.Tasks;
 using System;
 using System.Collections.Generic;
-using System.Runtime.ConstrainedExecution;
 using System.Threading;
 using UnityEngine;
-using static Atlas;
+
 using static NPC;
 using static Train;
 
@@ -255,6 +254,10 @@ public class Carriage : MonoBehaviour
     {
         curNPCDict.TryGetValue(collider, out NPCBrain npc);
         return npc;
+    }
+    public NPCBrain GetPassenger(int index)
+    {
+        return curNPCList[index];
     }
     private async UniTask MovingDown()
     {

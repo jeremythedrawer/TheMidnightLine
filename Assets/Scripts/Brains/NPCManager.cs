@@ -92,7 +92,7 @@ public class NPCManager : MonoBehaviour
 
         queue.Enqueue(glyphInstance);
     }
-    public static NPCBrain GetNPC(NPCBrain npcPrefab, Vector3 spawnPos, Transform parent)
+    public static NPCBrain GetNPC(NPCBrain npcPrefab, Vector3 localPos, Transform parent)
     {
         if (!NPCPoolDict.TryGetValue(npcPrefab, out Queue<NPCBrain> queue))
         {
@@ -104,11 +104,12 @@ public class NPCManager : MonoBehaviour
         {
             NPCBrain npc = queue.Dequeue();
             npc.gameObject.SetActive(true);
-            npc.transform.position = spawnPos;
             npc.gameObject.transform.parent = parent;
+            npc.transform.localPosition = localPos;
             return npc;
         }
-        NPCBrain newNPC = Instantiate(npcPrefab, spawnPos, Quaternion.identity, parent);
+        NPCBrain newNPC = Instantiate(npcPrefab, parent);
+        newNPC.transform.localPosition = localPos;
 
         return newNPC;
     }

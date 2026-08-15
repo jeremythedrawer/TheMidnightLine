@@ -523,8 +523,26 @@ public class TrainController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireCube(stats.totalBounds.center, stats.totalBounds.size);
-        Gizmos.DrawLine(new Vector3(stats.totalBounds.min.x, stats.totalBounds.center.y, stats.totalBounds.min.z) , new Vector3(stats.totalBounds.max.x, stats.totalBounds.center.y, stats.totalBounds.min.z));
-        Gizmos.DrawLine(new Vector3(stats.totalBounds.center.x, stats.totalBounds.min.y, stats.totalBounds.min.z), new Vector3(stats.totalBounds.center.x, stats.totalBounds.max.y, stats.totalBounds.min.z));
+        Gizmos.DrawWireSphere(stats.totalBounds.center, 0.1f);
+
+        if(nextStation != null)
+        {
+            Gizmos.color = Color.blue;
+            if (nextStation.station.isFrontOfTrain)
+            {
+                for (int i = 0; i < stats.exteriorSlideDoorXBounds.Length; i++)
+                {
+                    Gizmos.DrawLine(new Vector2(stats.exteriorSlideDoorXBounds[i], stats.totalBounds.min.y), new Vector2(stats.exteriorSlideDoorXBounds[i], stats.totalBounds.max.y));
+                }
+            }
+            else
+            {
+                for (int i = 0; i < stats.interiorSlideDoorXBounds.Length; i++)
+                {
+                    Gizmos.DrawLine(new Vector2(stats.interiorSlideDoorXBounds[i], stats.totalBounds.min.y), new Vector2(stats.interiorSlideDoorXBounds[i], stats.totalBounds.max.y));
+                }
+            }
+        }
     }
     public void SkipMoveTrainToStartPosition()
     {

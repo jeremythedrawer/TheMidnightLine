@@ -6,6 +6,8 @@
 #define DIAGONAL_TEXTURE_BIT 1 << 3
 #define MERIDIA_COLOR_BIT 1 << 4
 #define INVERT_BIT 1 << 5
+#define OUTLINE_BIT 1 << 6
+#define TEXTURE_BIT 1 << 7
 
 
 static const float2 BOX_BLUR_OFFSET[4] =

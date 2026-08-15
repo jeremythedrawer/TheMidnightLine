@@ -186,24 +186,15 @@ public class ColorPicker : MonoBehaviour
                         {
                             if ((selectedRenderer.customBit & (1 << colorIndex)) != 0)
                             {
-                                if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
-                                {
-                                    selectedRenderer.customBit &= ~(1 << colorIndex);
-                                }
-                                else
-                                {
-                                    selectedRenderer.customBit = 0;
-                                }
+                                selectedRenderer.customBit &= ~(1 << colorIndex);
                             }
                             else
                             {
-                                if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
+                                selectedRenderer.customBit |= 1 << colorIndex;
+
+                                if ((trip.curUnlocks & UnlockType.MultiColor) == 0)
                                 {
-                                    selectedRenderer.customBit |= 1 << colorIndex;
-                                }
-                                else
-                                {
-                                    selectedRenderer.customBit = 1 << colorIndex;
+                                    selectedRenderer.customBit &= ~((int)ColorBits.Diagonal);
                                 }
                             }
                         }
@@ -211,24 +202,15 @@ public class ColorPicker : MonoBehaviour
                         {
                             if ((selectedRenderer.customBit & (int)ColorBits.Diagonal) != 0)
                             {
-                                if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
-                                {
-                                    selectedRenderer.customBit &= ~((int)ColorBits.Diagonal);
-                                }
-                                else
-                                {
-                                    selectedRenderer.customBit = 0;
-                                }
+                                selectedRenderer.customBit &= ~((int)ColorBits.Diagonal);
                             }
                             else
                             {
-                                if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
+                                selectedRenderer.customBit |= (int)ColorBits.Diagonal;
+
+                                if ((trip.curUnlocks & UnlockType.MultiColor) == 0)
                                 {
-                                    selectedRenderer.customBit |= (int)ColorBits.Diagonal;
-                                }
-                                else
-                                {
-                                    selectedRenderer.customBit = (int)ColorBits.Diagonal;
+                                    selectedRenderer.customBit &= ~((int)ColorBits.Color1);
                                 }
                             }
                         }
@@ -364,7 +346,6 @@ public class ColorPicker : MonoBehaviour
 
         AtlasRenderer firstColorRend = colorIcons[0].renderer;
         Vector4 paletteBottomRightWPS = paletteRenderer.worldPivotsAndSizes[5];
-        Debug.Log(paletteBottomRightWPS);
         Vector2 firstColorRendPos = new Vector2(paletteBottomRightWPS.x + firstColorRend.worldPivotAndSize.x, paletteBottomRightWPS.y - firstColorRend.worldPivotAndSize.y);
 
         for (int y = 0; y < colorGridYCount;  y++)

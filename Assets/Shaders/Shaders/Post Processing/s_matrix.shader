@@ -36,12 +36,12 @@ Shader "Custom/s_matrix"
 			float2 centerUV = input.texcoord * aspect * 0.5;
 			float4 noiseTex = SAMPLE_TEXTURE2D_X(_NoiseTexture, sampler_NoiseTexture, centerUV);
 			//return noiseTex;
-			float gradient = input.texcoord.y; 
+			float gradient = input.texcoord.y;
 
 			float horizon = sin(min(gradient + _DayNight, PI * 0.5) * PI) * 0.5 + 0.5;
 			float stars = step(1, noiseTex.r + _DayNight * 0.13); //* (1-horizon));
 			horizon = BayerX8(horizon, input.texcoord.y * _ScreenParams.y);
-
+			horizon += (1 - _DayNight) * 0.5;
 
 			float depth = 0;
 

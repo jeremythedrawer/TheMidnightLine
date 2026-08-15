@@ -311,7 +311,6 @@ public class AtlasRenderer : MonoBehaviour
         {
             customs[i] = custom;
         }
-        Debug.Log(gameObject.name + " | " + custom);
     }
     public void SetWidthFromWorldSpace(float worldWidth, SimpleSprite sprite)
     {
