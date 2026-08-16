@@ -16,30 +16,18 @@ MonoBehaviour:
   ticketsToCheckBeforeSpawn: 3
   bystanderSpawnCount: 2
   traitorSpawnCount: 1
-  accompliceSpawnCount: 3
+  accompliceSpawnCount: 0
   isFrontOfTrain: 0
   stationName: Gorov
   stationIndex: 1
-  exitLocalPosX: -6.05
+  exitLocalPosX: -3.3800173
   bystanderProfiles:
   - boardingStationIndex: 1
     disembarkingStationIndex: 3
-    npcPrefabIndex: 7
-    behaviours: 256
+    npcPrefabIndex: 6
+    behaviours: 3
   - boardingStationIndex: 1
     disembarkingStationIndex: 6
-    npcPrefabIndex: 4
-    behaviours: 33
-  accompliceProfiles:
-  - boardingStationIndex: 1
-    disembarkingStationIndex: 7
-    npcPrefabIndex: 1
-    behaviours: 0
-  - boardingStationIndex: 1
-    disembarkingStationIndex: 7
-    npcPrefabIndex: 5
-    behaviours: 0
-  - boardingStationIndex: 1
-    disembarkingStationIndex: 7
-    npcPrefabIndex: 1
-    behaviours: 0
+    npcPrefabIndex: 3
+    behaviours: 6
+  accompliceProfiles: []

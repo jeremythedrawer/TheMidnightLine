@@ -78,6 +78,8 @@ public class NPCManager : MonoBehaviour
         }
 
         VisualEffect newVisualEffect = Instantiate(glyphPrefab, parent);
+        newVisualEffect.Reinit();
+        newVisualEffect.Stop();
         return newVisualEffect;
     }
     public static void ReturnGlyph(VisualEffect glyphPrefab, VisualEffect glyphInstance)

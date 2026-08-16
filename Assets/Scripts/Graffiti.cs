@@ -14,6 +14,11 @@ public class Graffiti : MonoBehaviour
     {
         ctsDissappear?.Cancel();
     }
+    private void OnDestroy()
+    {
+        ctsDissappear?.Cancel();
+        
+    }
     public void SetSprites(int index)
     {
         for (int i = 0; i < renderers.Length; i++)

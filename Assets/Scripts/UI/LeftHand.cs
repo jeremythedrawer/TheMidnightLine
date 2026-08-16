@@ -106,6 +106,7 @@ public class LeftHand : MonoBehaviour
             {
                 atTargetPos = false;
                 atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.rotatePencil_clip.keyframeStartIndex].sprite);
+                MoveToLeftOfPaper();
             }
             break;
 
@@ -228,15 +229,7 @@ public class LeftHand : MonoBehaviour
                         if (activePage.activePlayerWriteTextRenderer != null && !movedForColorPicker && sceneData.activeSceneType == Scenes.SceneType.Trip)
                         {
                             SetState(State.Stationary);
-                            if (activePage.pageType == AtlasUI.PageType.ColorKey)
-                            {
-                                MoveToLeftOfPaper();
-                            }
-                            else
-                            {
-                                MoveToEdgeTextBounds(leftEdge: true);
-                            }
-
+                            MoveToLeftOfPaper();
                         }
                     }
                 }
@@ -269,14 +262,7 @@ public class LeftHand : MonoBehaviour
             case State.Erasing:
             {
                 atlasRenderer.PlayClipOneShotReverse(notepadData.rotatePencil_clip);
-                if (activePage.pageType == AtlasUI.PageType.ColorKey)
-                {
-                    MoveToLeftOfPaper();
-                }
-                else
-                {
-                    MoveToEdgeTextBounds(leftEdge: true);
-                }
+                MoveToLeftOfPaper();
             }
             break;
 

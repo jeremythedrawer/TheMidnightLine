@@ -148,7 +148,7 @@ public class GameplayUI : MonoBehaviour
         ColorPicker.OnSelectClueColorFirstTime -= SetTutorialTextToColor3;
         ColorPicker.OnSelectSecondClueColorFirstTime -= SetTutorialTextToMultiColor2;
 
-        CursorController.OnClickExamplePassenger += FinishTutorial;
+        CursorController.OnClickExamplePassenger -= FinishTutorial;
     }
     private void Update()
     {

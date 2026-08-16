@@ -128,6 +128,7 @@ public class Page : MonoBehaviour
 
                 for (int i = 0; i < playerWriteTextRenderers.Length; i++)
                 {
+                    playerWriteTextRenderers[i].SetAlignmentType(AtlasRendering.AtlasTextAlignmentType.Center);
                     playerWriteTextRenderers[i].SetText("");
                     startPlayerWritePositions[i] = playerWriteTextRenderers[i].transform.localPosition;
                 }
@@ -155,7 +156,7 @@ public class Page : MonoBehaviour
                         SceneController.GetClueColorPicker().Open(otherButtons[index].renderer);
                         SceneController.GetNPCColorPicker().Close();
                         SwitchWriteRow(index);
-                        trip.selectedColorMarkerIndex = activePlayerWriteRowIndex;
+                        notepadData.selectedColorMarkerIndex = activePlayerWriteRowIndex;
                     }
 
                     otherButtons[i].InitButton(ClickColor, EnterColorButton, ExitColorButton);
@@ -181,6 +182,9 @@ public class Page : MonoBehaviour
                     playerWriteTextRenderers[i].SetText("");
                     startPlayerWritePositions[i] = playerWriteTextRenderers[i].transform.localPosition;
                 }
+                activePlayerWriteTextRenderer = null;
+                playerWriteIndex = 0;
+                activePlayerWriteRowIndex = 0;
             }
             break;
         }
@@ -813,7 +817,6 @@ public class Page : MonoBehaviour
             notepadData.subState |= SubState.EraseToggle;
         }
     }
-
     public void UpdateMugShotReveal(float t)
     {
         AtlasRenderer coveredMugShot = playerWriteRenderers[0];

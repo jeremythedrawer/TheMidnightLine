@@ -32,6 +32,7 @@ public class ColorPicker : MonoBehaviour
     public PlayerInputsSO playerInputs;
     public SpyStatsSO spyStats;
     public CameraStatsSO camStats;
+    public NotepadData notepadData;
 
     public IconUIElement[] colorIcons;
     public AtlasRenderer paletteRenderer;
@@ -183,9 +184,9 @@ public class ColorPicker : MonoBehaviour
                     case SelectType.Clue:
                     {
                         Color selectedColor = options.selectableClueColors[index];
-                        trip.selectedClueMarkerColors[trip.selectedColorMarkerIndex] = selectedColor;
+                        trip.selectedClueMarkerColors[notepadData.selectedColorMarkerIndex] = selectedColor;
                         Color linearColor = selectedColor.linear;
-                        Shader.SetGlobalColor("_ColorKey" + trip.selectedColorMarkerIndex, linearColor);
+                        Shader.SetGlobalColor("_ColorKey" + notepadData.selectedColorMarkerIndex, linearColor);
                         selectedRenderer.custom.x = linearColor.r;
                         selectedRenderer.custom.y = linearColor.g;
                         selectedRenderer.custom.z = linearColor.b;

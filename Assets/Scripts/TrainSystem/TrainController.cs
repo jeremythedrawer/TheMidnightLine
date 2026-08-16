@@ -196,7 +196,6 @@ public class TrainController : MonoBehaviour
                         carriages[i].UnlockExteriorSlideDoors();
                         carriages[i].SetSignToCurrentStation(trip.stationAhead.stationName);
                     }
-                    stats.activeSlideDoorsMask = layerSettings.trainLayers.exteriorSlideDoors;
                 }
                 else
                 {
@@ -205,7 +204,6 @@ public class TrainController : MonoBehaviour
                         carriages[i].UnlockInteriorDoors();
                         carriages[i].SetSignToCurrentStation(trip.stationAhead.stationName);
                     }
-                    stats.activeSlideDoorsMask = layerSettings.trainLayers.interiorSlideDoors;
                 }
                 gameEventData.OnStationArrival.Raise();
             }

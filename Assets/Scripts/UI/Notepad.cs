@@ -216,15 +216,6 @@ public class Notepad : MonoBehaviour
         if (activePage.activePlayerWriteTextRenderer != null && sceneData.activeSceneType == SceneType.Trip)
         {
             leftHand.SetState(LeftHand.State.Stationary);
-
-            if (activePage.pageType == PageType.ColorKey)
-            {
-                leftHand.MoveToLeftOfPaper();
-            }
-            else
-            {
-                leftHand.MoveToEdgeTextBounds(leftEdge: true);
-            }
         }
         else
         {
@@ -613,14 +604,6 @@ public class Notepad : MonoBehaviour
                     if (prevState == NotepadState.Writing || prevState == NotepadState.Erasing)
                     {
                         leftHand.SetState(LeftHand.State.Stationary);
-                        if (activePage.pageType == PageType.ColorKey)
-                        {
-                            leftHand.MoveToLeftOfPaper();
-                        }
-                        else
-                        {
-                            leftHand.MoveToEdgeTextBounds(leftEdge: true);
-                        }
                     }
                     else
                     {
@@ -666,14 +649,14 @@ public class Notepad : MonoBehaviour
                     {
                         if (spyStats.curTutorialState == TutorialState.Color2)
                         {
-                            curTrip.selectedColorMarkerIndex = 0;
+                            notepadData.selectedColorMarkerIndex = 0;
 
                             clueColorPicker.Open(activePage.playerWriteRenderers[0]);
                             SceneController.GetNPCColorPicker().Close();
                         }
                         else if (spyStats.curTutorialState == TutorialState.MultiColor1 && activePage.activePlayerWriteText != "")
                         {
-                            curTrip.selectedColorMarkerIndex = 1;
+                            notepadData.selectedColorMarkerIndex = 1;
                             clueColorPicker.Open(activePage.playerWriteRenderers[1]);
                             SceneController.GetNPCColorPicker().Close();
                         }
@@ -715,7 +698,7 @@ public class Notepad : MonoBehaviour
                     {
                         if (activePage.playerWriteTextRenderers[0].completedWritingText && spyStats.curTutorialState == TutorialState.Color1)
                         {
-                            curTrip.selectedColorMarkerIndex = 0;
+                            notepadData.selectedColorMarkerIndex = 0;
 
                             clueColorPicker.Open(activePage.playerWriteRenderers[0]);
                             SceneController.GetNPCColorPicker().Close();
@@ -724,7 +707,7 @@ public class Notepad : MonoBehaviour
                         }
                         else if (activePage.playerWriteTextRenderers[1].completedWritingText && spyStats.curTutorialState == TutorialState.MultiColor1)
                         {
-                            curTrip.selectedColorMarkerIndex = 1;
+                            notepadData.selectedColorMarkerIndex = 1;
                             clueColorPicker.Open(activePage.playerWriteRenderers[1]);
                             SceneController.GetNPCColorPicker().Close();
                             activePage.SetColorMarkerButtonSprite(index: 1, unlocked: true);

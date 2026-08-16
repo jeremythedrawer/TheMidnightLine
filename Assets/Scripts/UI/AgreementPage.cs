@@ -121,7 +121,6 @@ public class AgreementPage : MonoBehaviour
     private void FinishWritingSignature()
     {
         leftHand.SetState(LeftHand.State.Stationary);
-        leftHand.MoveToLeftOfPaper();
         MoveToInactivePosition();
         spyStats.playerInputsEnabled = true;
         notepadData.signedAgreement = true;
@@ -141,7 +140,6 @@ public class AgreementPage : MonoBehaviour
         atActivePos = true;
         page.SetPreviewPlayerWriteTexts(NotepadState.None);
         leftHand.SetState(LeftHand.State.Stationary);
-        leftHand.MoveToLeftOfPaper();
     }
     public async UniTask MovingToInactivePosition()
     {
