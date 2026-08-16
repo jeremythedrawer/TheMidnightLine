@@ -9,6 +9,7 @@
 #define INVERT_BIT 1 << 5
 #define OUTLINE_BIT 1 << 6
 #define TEXTURE_BIT 1 << 7
+#define CARRIAGE_SDF_BIT 1 << 8
 
 
 static const float2 BOX_BLUR_OFFSET[4] =

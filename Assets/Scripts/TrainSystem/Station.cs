@@ -6,31 +6,26 @@ public class Station : MonoBehaviour
     public StationSO station;
     public TrainStatsSO trainStats;
     public TripSO trip;
-    public AtlasRenderer frontPlatformRenderer;
-    public AtlasRenderer backPlatformRenderer;
+    public AtlasRenderer platformRenderer;
     public Transform exitTransform;
 
     public ParallaxController parallaxController;
-    public ParallaxController frontParallaxController;
     public void OnEnable()
     {
         station.exitLocalPosX = exitTransform.localPosition.x;
         parallaxController.SetParrallaxFactor();
         parallaxController.SetWorldPos(transform.position);
-        SetFrontParallaxPosition();
     }
     public void SpawnNPCs()
     {
-        AtlasRenderer activePlatformRenderer = station.isFrontOfTrain ? frontPlatformRenderer : backPlatformRenderer;
-
         for (int i = 0; i < station.bystanderProfiles.Length; i++)
         {
             NPCProfile bystanderProfile = station.bystanderProfiles[i];
-            float randXPos = Random.Range(activePlatformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, activePlatformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
+            float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
 
-            NPCBrain bystander = NPCManager.GetNPC(trip.npcDataArray[bystanderProfile.npcPrefabIndex].prefab, spawnPos, activePlatformRenderer.transform);
+            NPCBrain bystander = NPCManager.GetNPC(trip.npcDataArray[bystanderProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
             
             bystander.profile = bystanderProfile;
             bystander.role = Role.Bystander;
@@ -49,11 +44,11 @@ public class Station : MonoBehaviour
         for (int i = trip.traitorsSpawned; i < maxTraitorSpawnIndex; i++)
         {
             TraitorProfile traitorProfile = trip.traitorProfiles[i];
-            float randXPos = Random.Range(activePlatformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, activePlatformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
+            float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
 
-            NPCBrain traitor = NPCManager.GetNPC(trip.npcDataArray[traitorProfile.npcProfile.npcPrefabIndex].prefab, spawnPos, activePlatformRenderer.transform);
+            NPCBrain traitor = NPCManager.GetNPC(trip.npcDataArray[traitorProfile.npcProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
             traitor.profile = traitorProfile.npcProfile;
             traitor.role = Role.Traitor;
             traitor.boardingStation = station;
@@ -70,11 +65,11 @@ public class Station : MonoBehaviour
         {
             NPCProfile accompliceProfile = station.accompliceProfiles[i];
 
-            float randXPos = Random.Range(activePlatformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, activePlatformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
+            float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
 
-            NPCBrain accomplice = NPCManager.GetNPC(trip.npcDataArray[accompliceProfile.npcPrefabIndex].prefab, spawnPos, activePlatformRenderer.transform);
+            NPCBrain accomplice = NPCManager.GetNPC(trip.npcDataArray[accompliceProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
 
             accomplice.profile = accompliceProfile;
             accomplice.role = Role.Accomplice;
@@ -88,11 +83,11 @@ public class Station : MonoBehaviour
             accomplice.Init();
         }
     }
-    public void SetFrontParallaxPosition()
-    {
-        frontParallaxController.SetParrallaxFactor();
-        float posX = TRAIN_WORLD_POS_X + ((transform.position.x - TRAIN_WORLD_POS_X) * (frontParallaxController.parallaxFactor / parallaxController.parallaxFactor));
-        Vector2 pos = new Vector2(posX, 0);
-        frontParallaxController.SetWorldPos(pos);
-    }
+    //public void SetFrontParallaxPosition()
+    //{
+    //    frontParallaxController.SetParrallaxFactor();
+    //    float posX = TRAIN_WORLD_POS_X + ((transform.position.x - TRAIN_WORLD_POS_X) * (frontParallaxController.parallaxFactor / parallaxController.parallaxFactor));
+    //    Vector2 pos = new Vector2(posX, 0);
+    //    frontParallaxController.SetWorldPos(pos);
+    //}
 }

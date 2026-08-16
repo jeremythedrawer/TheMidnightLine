@@ -65,7 +65,7 @@ public class SpyBrain : MonoBehaviour
     
     public GangwayDoor curGangwayDoor;
     
-    public CarriageMapProp curCarriageMap;
+    public CarriageMapProp curCarriageMapProp;
 
 
     public AtlasClip curClip;
@@ -308,25 +308,34 @@ public class SpyBrain : MonoBehaviour
 
                 stats.bounds = atlasRenderer.bounds;
 
-                if (canOpenSlideDoor && !stats.checkingNotepad)
-                {
-                    switch (camStats.curLocationState)
-                    { 
-                        case LocationState.Station:
+                switch (camStats.curLocationState)
+                { 
+                    case LocationState.Station:
+                    {
+                        if (canOpenSlideDoor && !stats.checkingNotepad)
                         {
                             GetSlideDoorAtStation();
                         }
-                        break;
-                    
-                        case LocationState.Carriage:
-                        {
-                            if ((notepadData.profileWriteCount == trip.traitorProfiles.Length || trainStats.curStationIndex == trip.stationsDataArray.Length - 1) && trainStats.curStationIndex > 0)
-                            {
-                                GetSlideDoorInTrain();
-                            }
-                        }
-                        break;
                     }
+                    break;
+                    
+                    case LocationState.Carriage:
+                    {
+                        if (canOpenSlideDoor && !stats.checkingNotepad && (notepadData.profileWriteCount == trip.traitorProfiles.Length || trainStats.curStationIndex == trip.stationsDataArray.Length - 1) && trainStats.curStationIndex > 0)
+                        {
+                            GetSlideDoorInTrain();
+                        }
+
+                        if (curCarriageMapProp == null)
+                        {
+                            EnterCarriageMap();
+                        }
+                        else
+                        {
+                            ExitCarriageMap();
+                        }
+                    }
+                    break;
                 }
             }
             break;
@@ -674,7 +683,7 @@ public class SpyBrain : MonoBehaviour
             case SpyState.CarriageMap:
             {
                 OnUncheckCarriageMap?.Invoke();
-                curCarriageMap.StopUsing();
+                ExitCarriageMap();
                 checkingCarriageMap = false;
             }
             break;
@@ -883,7 +892,7 @@ public class SpyBrain : MonoBehaviour
 
                             Station station = TrainController.NextStationInstance;
                         
-                            AtlasRenderer stationPlatform = station.station.isFrontOfTrain ? station.frontPlatformRenderer : station.backPlatformRenderer;
+                            AtlasRenderer stationPlatform = station.platformRenderer;
                         
                             transform.SetParent(stationPlatform.transform, true);
                         
@@ -916,23 +925,32 @@ public class SpyBrain : MonoBehaviour
             break;
         }
     }
+    private void EnterCarriageMap()
+    {
+        for (int i = 0; i < CurCarriage.maps.Length; i++)
+        {
+            CarriageMapProp map = CurCarriage.maps[i];
+            Bounds mapBounds = map.atlasRenderer.bounds;
+            if (stats.bounds.center.x > mapBounds.min.x && stats.bounds.center.x < mapBounds.max.x)
+            {
+                curCarriageMapProp = map;
+                curCarriageMapProp.Enter();
+            }
+        }
+    }
     private void LookAtCarriageMap()
     {
-        if (CurCarriage == null) return;
+        if (checkingCarriageMap || curCarriageMapProp == null || camStats.curLocationState != LocationState.Carriage || stats.curTutorialState != TutorialState.None) return;
 
-        if (!checkingCarriageMap)
+        curCarriageMapProp.Use();
+        checkingCarriageMap = true;
+    }
+    private void ExitCarriageMap()
+    {
+        if (stats.bounds.center.x < curCarriageMapProp.atlasRenderer.bounds.min.x || stats.bounds.center.x > curCarriageMapProp.atlasRenderer.bounds.max.x)
         {
-            for (int i = 0; i < CurCarriage.maps.Length; i++)
-            {
-                CarriageMapProp map = CurCarriage.maps[i];
-                Bounds mapBounds = map.atlasRenderer.bounds;
-                if (stats.bounds.center.x > mapBounds.min.x && stats.bounds.center.x < mapBounds.max.x)
-                {
-                    curCarriageMap = map;
-                    curCarriageMap.Use();
-                    checkingCarriageMap = true;
-                }
-            }
+            curCarriageMapProp.Exit();
+            curCarriageMapProp = null;
         }
     }
     private void Flip(bool flip)

@@ -102,7 +102,7 @@ public class UnlockPicker : MonoBehaviour
 
                             OnRuleOutAbilityUnlock?.Invoke(icon);
 
-                            NPCBrain examplePassenger = selectedNPC.curCarriage.GetPassenger(index: 0);
+                            NPCBrain examplePassenger = selectedNPC.curCarriage.GetFirstPassenger();
                             examplePassenger.SetAsExample();
                         }
                         else if ((selectedUnlockType & UnlockType.Color) != 0)
@@ -112,7 +112,7 @@ public class UnlockPicker : MonoBehaviour
                             
                             OnColorAbilityUnlock?.Invoke(icon);
 
-                            NPCBrain examplePassenger = selectedNPC.curCarriage.GetPassenger(index: 0);
+                            NPCBrain examplePassenger = selectedNPC.curCarriage.GetFirstPassenger();
                             examplePassenger.SetAsExample();
                         }
                         else if ((selectedUnlockType & UnlockType.MultiColor) != 0)
@@ -122,7 +122,7 @@ public class UnlockPicker : MonoBehaviour
                             
                             OnMutliColorAbilityUnlock?.Invoke(icon);
 
-                            NPCBrain examplePassenger = selectedNPC.curCarriage.GetPassenger(index: 0);
+                            NPCBrain examplePassenger = selectedNPC.curCarriage.GetFirstPassenger();
                             examplePassenger.SetAsExample();
                         }
                         break;

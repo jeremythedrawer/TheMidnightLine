@@ -302,7 +302,7 @@ public class ColorPicker : MonoBehaviour
                     colorIcons[i].UpdateButton(playerInputs);
                 }
 
-                if (canClose && (playerInputs.mouseLeftDown) && !CursorController.IsInsideBounds(paletteRenderer.bounds, isClickable: false))
+                if (canClose && (playerInputs.mouseLeftDown) && !CursorController.IsInsideBounds(paletteRenderer.bounds, isClickable: false) && spyStats.curTutorialState == TutorialState.None)
                 {
                     Close();
                 }

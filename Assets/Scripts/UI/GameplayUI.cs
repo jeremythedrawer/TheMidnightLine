@@ -105,7 +105,7 @@ public class GameplayUI : MonoBehaviour
         UnlockPicker.OnMutliColorAbilityUnlock += MoveMulticolorMarkerTutorialIcon;
 
         Notepad.OnWriteColorMarkerFirstTime += SetTutorialTextToColor2;
-        Notepad.OnRevertTutorial += SetTutorialTextBackToColor1;
+        Notepad.OnRevertTutorial += SetTutorialTextBack;
 
         ColorPicker.OnSelectClueColorFirstTime += SetTutorialTextToColor3;
         ColorPicker.OnSelectSecondClueColorFirstTime += SetTutorialTextToMultiColor2;
@@ -143,7 +143,7 @@ public class GameplayUI : MonoBehaviour
         Scenes.OnLoadTrip0 -= Init;
 
         Notepad.OnWriteColorMarkerFirstTime -= SetTutorialTextToColor2;
-        Notepad.OnRevertTutorial -= SetTutorialTextBackToColor1;
+        Notepad.OnRevertTutorial -= SetTutorialTextBack;
 
         ColorPicker.OnSelectClueColorFirstTime -= SetTutorialTextToColor3;
         ColorPicker.OnSelectSecondClueColorFirstTime -= SetTutorialTextToMultiColor2;
@@ -554,11 +554,20 @@ public class GameplayUI : MonoBehaviour
         tutorialRenderer.SetText("");
 
     }
-    private void SetTutorialTextBackToColor1()
+    private void SetTutorialTextBack()
     {
-        spyStats.tutorialsCompleted &= ~(TutorialState.Color1 | TutorialState.Color2 | TutorialState.Color3);
-        spyStats.curTutorialState = TutorialState.Color1;
-        tutorialRenderer.SetText(options.passengerColorMarkerTutorialText1);
+        if (spyStats.curTutorialState == TutorialState.Color2 || spyStats.curTutorialState == TutorialState.Color3)
+        {
+            spyStats.tutorialsCompleted &= ~(TutorialState.Color1 | TutorialState.Color2 | TutorialState.Color3);
+            spyStats.curTutorialState = TutorialState.Color1;
+            tutorialRenderer.SetText(options.passengerColorMarkerTutorialText1);
+        }
+        else if (spyStats.curTutorialState == TutorialState.MultiColor2)
+        {
+            spyStats.tutorialsCompleted &= ~(TutorialState.MultiColor1 | TutorialState.MultiColor2);
+            spyStats.curTutorialState = TutorialState.MultiColor1;
+            tutorialRenderer.SetText(options.passengerMulticolorMarkerTutorialText1);
+        }
     }
     private void SetTutorialTextToColor2()
     {

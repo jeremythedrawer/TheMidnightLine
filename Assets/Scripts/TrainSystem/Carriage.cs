@@ -42,7 +42,7 @@ public class Carriage : MonoBehaviour
     public CancellationTokenSource ctsFade;
 
     public List<NPCBrain> curNPCList;
-    public Dictionary<BoxCollider2D, NPCBrain> curNPCDict;
+    public NPCBrain firstNPC;
 
     public SeatData seatData;
     
@@ -65,13 +65,20 @@ public class Carriage : MonoBehaviour
     private void Start()
     {
         curNPCList = new List<NPCBrain>();
-        curNPCDict = new Dictionary<BoxCollider2D, NPCBrain>();
 
         for(int i = 0; i < exteriorSlideDoors.Length; i++)
         {
             exteriorSlideDoors[i].carriage = this;
             interiorSlideDoors[i].carriage = this;
         }
+    }
+    private void OnEnable()
+    {
+        gameEventData.OnStationLeave.RegisterListener(SetFirstPassenger);
+    }
+    private void OnDisable()
+    {
+        gameEventData.OnStationLeave.UnregisterListener(SetFirstPassenger);
     }
     private void Update()
     {
@@ -164,8 +171,11 @@ public class Carriage : MonoBehaviour
         for (int i = 0; i < seatAmount; i++)
         {
             if (seatData.filled[i]) continue;
+            float seatPosX = seatData.xPos[i];
 
-            float dist = Mathf.Abs(npcX - seatData.xPos[i]);
+            if (npc == firstNPC && seatPosX > insideBoundsCollider.bounds.center.x) continue;
+
+            float dist = Mathf.Abs(npcX - seatPosX);
             if (dist < closestDist)
             {
                 closestDist = dist;
@@ -241,17 +251,54 @@ public class Carriage : MonoBehaviour
     }
     public void AddNPC(NPCBrain npc)
     {
+        if (firstNPC == null && npc.role != Role.Accomplice) firstNPC = npc;
+
         curNPCList.Add(npc);
-        curNPCDict.Add(npc.boxCollider, npc);
     }
     public void RemoveNPC(NPCBrain npc)
     {
         curNPCList.Remove(npc);
-        curNPCDict.Remove(npc.boxCollider);
+
+        if (npc == firstNPC) firstNPC = null;
     }
-    public NPCBrain GetPassenger(int index)
+    public NPCBrain GetFirstPassenger()
     {
-        return curNPCList[index];
+        return firstNPC;
+    }
+    public void SetFirstPassenger()
+    {
+        if (firstNPC == null) return;
+
+        NPCBrain npcNotAccomplice = null;
+        bool foundAccomplice = false;
+        for (int i = 0; i < curNPCList.Count; i++)
+        {
+            NPCBrain npc = curNPCList[i];
+            if (npc.role != Role.Accomplice)
+            {
+                npcNotAccomplice = npc;
+
+                if (npcNotAccomplice.transform.position.x < insideBoundsCollider.bounds.center.x)
+                {
+                    firstNPC = npcNotAccomplice;
+                    return;
+                }
+            }
+            else
+            {
+                foundAccomplice = true;
+            }
+        }
+
+        if (npcNotAccomplice != null)
+        {
+            npcNotAccomplice.MoveNPCToLeftOfCarriage();
+            return;
+        }
+        if (foundAccomplice)
+        {
+            Debug.LogWarning("Did not set first NPC where accomplice is");
+        }
     }
     private async UniTask MovingDown()
     {

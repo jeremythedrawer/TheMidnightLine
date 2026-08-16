@@ -235,28 +235,37 @@ public class Page : MonoBehaviour
         }
         proceduralRenderers[index].ChangeCustom(time: 1, newValue: 1, customChannel: 4);
     }
-    public void SetColorMarkerButtonSprite(int index)
+    public void SetColorMarkerButtonSprite(int index, bool unlocked)
     {
         AtlasRenderer playerWriteRend = playerWriteRenderers[index];
-
         switch (index)
         {
             case 0:
             {
-                playerWriteRend.UpdateSpriteInputsByIndex(ONE_NUMPAD_SPRITE_INDEX);
+                if (unlocked)
+                {
+                    playerWriteRend.UpdateSpriteInputsByIndex(ONE_NUMPAD_SPRITE_INDEX);
+                }
+                else
+                {
+                    playerWriteRend.UpdateSpriteInputsByIndex(LOCK_SPRITE_INDEX);
+                }
             }
             break;
             case 1:
             {
-                playerWriteRend.UpdateSpriteInputsByIndex(TWO_NUMPAD_SPRITE_INDEX);
+                if (unlocked)
+                {
+                    playerWriteRend.UpdateSpriteInputsByIndex(TWO_NUMPAD_SPRITE_INDEX);
+                }
+                else
+                {
+                    playerWriteRend.UpdateSpriteInputsByIndex(LOCK_SPRITE_INDEX);
+                }
             }
             break;
         }
         proceduralRenderers[index].ChangeCustom(time: 1, newValue: 1, customChannel: 4);
-    }
-    public void UpdateExitButton()
-    {
-        exitButton.UpdateButton(playerInputs);
     }
     public void UpdatePage()
     {
@@ -264,11 +273,14 @@ public class Page : MonoBehaviour
         {
             case PageType.Prompt:
             {
+                exitButton.UpdateButton(playerInputs);
                 rightButton.UpdateButton(playerInputs);
             }
             break;
             case PageType.Profile:
             {
+                exitButton.UpdateButton(playerInputs);
+                
                 rightButton.UpdateButton(playerInputs);
                 leftButton.UpdateButton(playerInputs);
                 if (sceneData.activeSceneType == Scenes.SceneType.Trip)
@@ -282,11 +294,15 @@ public class Page : MonoBehaviour
             break;
             case PageType.ColorKey:
             {
+                if (spyStats.curTutorialState == TutorialState.None)
+                {
+                    exitButton.UpdateButton(playerInputs);
+                }
+                
                 leftButton.UpdateButton(playerInputs);
 
                 if ((trip.curUnlocks & UnlockType.Color) != 0)
                 {
-                    otherButtons[0].UpdateButton(playerInputs);
 
                     carouselLeftButton.UpdateButton(playerInputs);
                     carouselRightButton.UpdateButton(playerInputs);
@@ -294,13 +310,30 @@ public class Page : MonoBehaviour
 
                     if ((trip.curUnlocks & UnlockType.MultiColor) != 0)
                     {
-                        otherButtons[1].UpdateButton(playerInputs);
-
-                        if ((playerInputs.numpad == 1 && activePlayerWriteRowIndex != 0) || (playerInputs.numpad == 2 && activePlayerWriteRowIndex != 1))
+                        if ((spyStats.tutorialsCompleted & TutorialState.MultiColor1) != 0)
                         {
-                            SwitchWriteRow(playerInputs.numpad - 1);
+                            otherButtons[1].UpdateButton(playerInputs);
+                            otherButtons[0].UpdateButton(playerInputs);
+                        }
+
+                        if (spyStats.curTutorialState == TutorialState.None)
+                        {
+                            bool switchingTo1 = playerInputs.numpad == 1 && activePlayerWriteRowIndex != 0;
+                            bool switchingTo2 = playerInputs.numpad == 2 && activePlayerWriteRowIndex != 1;
+                            if(switchingTo1 ||  switchingTo2)
+                            {
+                                SwitchWriteRow(playerInputs.numpad - 1);
+                            }
                         }
                     }
+                    else
+                    {
+                        if ((spyStats.tutorialsCompleted & TutorialState.Color1) != 0)
+                        {
+                            otherButtons[0].UpdateButton(playerInputs);
+                        }
+                    }
+                    
                 }
             }
             break;

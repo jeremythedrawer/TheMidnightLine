@@ -228,7 +228,15 @@ public class LeftHand : MonoBehaviour
                         if (activePage.activePlayerWriteTextRenderer != null && !movedForColorPicker && sceneData.activeSceneType == Scenes.SceneType.Trip)
                         {
                             SetState(State.Stationary);
-                            MoveToEdgeTextBounds(leftEdge: true);
+                            if (activePage.pageType == AtlasUI.PageType.ColorKey)
+                            {
+                                MoveToLeftOfPaper();
+                            }
+                            else
+                            {
+                                MoveToEdgeTextBounds(leftEdge: true);
+                            }
+
                         }
                     }
                 }
@@ -349,13 +357,6 @@ public class LeftHand : MonoBehaviour
             targetLocalPos.z = notepadData.leftHandDepthFront;
         }
 
-    }
-    public void MoveBackToTextBounds()
-    {
-        if (curState == State.Stationary)
-        {
-            MoveToEdgeTextBounds(leftEdge: true);
-        }
     }
     public void MoveToEdgeTextBounds(bool leftEdge)
     {

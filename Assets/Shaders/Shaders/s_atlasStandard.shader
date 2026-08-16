@@ -45,9 +45,6 @@ Shader "Custom/s_atlasStandard"
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
-            TEXTURE2D(_CarriageBoundsTexture);
-            SAMPLER(sampler_CarriageBoundsTexture);
-
             float3 _BlackColor;
             float3 _WhiteColor;
             float _DayNight;
@@ -98,21 +95,12 @@ Shader "Custom/s_atlasStandard"
                 i.uv *= uvSize;
                 i.uv += uvPos;
 
-                half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half grey = color.r + (-(_DayNight * 1.1 - 0.9) * _DayNightFactor);
+                half grey = tex.r + (-(_DayNight * 1.1 - 0.9) * _DayNightFactor);
                 half3 finalColor = lerp(_BlackColor, _WhiteColor, saturate(grey));
 
-                float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;
-                half4 carriageSDF = SAMPLE_TEXTURE2D(_CarriageBoundsTexture, sampler_CarriageBoundsTexture, worldToTrain);
-                float bayer = BayerX8(carriageSDF.r + 0.5,  i.positionHCS.y);
-
-                float outside = max(step(worldToTrain.x, 0.0), step(1.0, worldToTrain.x));
-                outside = max(outside,max(step(worldToTrain.y, 0.0),step(1.0, worldToTrain.y)));
-                outside = max(outside, step(_TrainBoundsMin.z,i.worldPos.z));
-                float alpha = max(bayer, outside) * color.a;
-
-                clip(alpha - 0.001);
+                clip(tex.a - 0.001);
                 return half4 (finalColor, 1);
             }
             ENDHLSL

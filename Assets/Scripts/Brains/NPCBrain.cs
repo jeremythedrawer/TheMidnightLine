@@ -97,7 +97,6 @@ public class NPCBrain : MonoBehaviour
     public bool onTrain;
     public bool queuedForSeat;
     public bool queuedForSlideDoor;
-    public bool standLeftOfCarriage;
 
     public delegate void Callback();
     private void OnEnable()
@@ -168,7 +167,7 @@ public class NPCBrain : MonoBehaviour
     public void DisembarkTrain()
     {
         Station station = TrainController.NextStationInstance;
-        AtlasRenderer stationPlatform = station.station.isFrontOfTrain ? station.frontPlatformRenderer : station.backPlatformRenderer;
+        AtlasRenderer stationPlatform = station.platformRenderer;
         transform.SetParent(stationPlatform.transform, true);
         atlasRenderer.SetWorldDepth((int)stationPlatform.transform.position.z);
         rigidBody.includeLayers = layerSettings.stationMask;
@@ -179,6 +178,19 @@ public class NPCBrain : MonoBehaviour
         {
             OnTraitorDisembarkedTrain?.Invoke();
         }
+
+        if (curCarriage.GetFirstPassenger() == this)
+        {
+            curCarriage.SetFirstPassenger();
+        }
+    }
+    public void MoveNPCToLeftOfCarriage()
+    {
+        behaving = false;
+        stopBehaving = true;
+        curPath = NPCPath.None;
+        SetPath(NPCPath.ToStandInTrain);
+        StopSitting();
     }
     public void AssignSeat(int seatIndex)
     {
@@ -197,19 +209,10 @@ public class NPCBrain : MonoBehaviour
     public void SetAsExample()
     {
         ExamplePassenger = this;
-
-        if (transform.position.x > curCarriage.insideBoundsCollider.bounds.center.x)
-        {
-            behaving = false;
-            stopBehaving = true;
-            standLeftOfCarriage = true;
-            curPath = NPCPath.None;
-            SetPath(NPCPath.ToStandInTrain);
-            StopSitting();
-        }
     }
     public void SetCustomDepth(int depth)
     {
+        if (depth == transform.position.z) return;
         prevDepth = transform.position.z;
         transform.position = new Vector3(transform.position.x, transform.position.y, depth);
     }
@@ -217,7 +220,6 @@ public class NPCBrain : MonoBehaviour
     {
         stopBehaving = false;
         ExamplePassenger = null;
-        standLeftOfCarriage = false;
         transform.position = new Vector3(transform.position.x, transform.position.y, prevDepth);
     }
     private void DisableHover()
@@ -563,7 +565,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCPath.ToStandInTrain:
             {
-                if (standLeftOfCarriage)
+                if (curCarriage.GetFirstPassenger() == this)
                 {
                     targetXPos = UnityEngine.Random.Range(curCarriage.insideBoundsCollider.bounds.min.x, curCarriage.insideBoundsCollider.bounds.center.x);
                 }
@@ -572,7 +574,7 @@ public class NPCBrain : MonoBehaviour
                     targetXPos = UnityEngine.Random.Range(curCarriage.insideBoundsCollider.bounds.min.x, curCarriage.insideBoundsCollider.bounds.max.x);
                 }
 
-                if (curBehaviourContext.behaviours == Behaviours.Known_vandal)
+                if (curBehaviourContext != null && curBehaviourContext.behaviours == Behaviours.Known_vandal)
                 {
                     for (int i = 0; i < curCarriage.interiorSlideDoors.Length; i++)
                     {
@@ -603,18 +605,35 @@ public class NPCBrain : MonoBehaviour
                 if (trip.stationAhead.isFrontOfTrain)
                 {
                     bool foundDoor = false;
+                    
                     if (role == Role.Accomplice)
                     {
+                        float distToCurSlideDoor = float.MaxValue;
+
                         for (int i = 0; i < trainStats.exteriorSlideDoorXBounds.Length; i++)
                         {
-                            if (transform.position.x > trainStats.exteriorSlideDoorXBounds[i])
-                            {
-                                curSlideDoors = TrainController.ExteriorSlideDoors[i];
+                            SlideDoors slideDoor = TrainController.ExteriorSlideDoors[i];
 
-                                if (curSlideDoors.carriage.curNPCList.Count > 0 && curSlideDoors.carriage.curNPCList[0].profile.disembarkingStationIndex != profile.boardingStationIndex)
+                            if (slideDoor.carriage.firstNPC != null && slideDoor.carriage.firstNPC.profile.disembarkingStationIndex != profile.boardingStationIndex)
+                            {
+                                foundDoor = true;
+                            }
+
+                            if (foundDoor)
+                            {
+                                if (curSlideDoors == null)
                                 {
-                                    foundDoor = true;
-                                    break;
+                                    curSlideDoors = slideDoor;
+                                    distToCurSlideDoor = Mathf.Abs(transform.position.x - curSlideDoors.transform.position.x);
+                                }
+                                else
+                                {
+                                    float distToNewSlideDoor = Mathf.Abs(transform.position.x - slideDoor.transform.position.x);
+                                    if (distToNewSlideDoor < distToCurSlideDoor)
+                                    {
+                                        curSlideDoors = slideDoor;
+                                        distToCurSlideDoor += distToNewSlideDoor;
+                                    }
                                 }
                             }
                         }
@@ -631,25 +650,42 @@ public class NPCBrain : MonoBehaviour
                                 break;
                             }
                         }
+                        
+                        if (!foundDoor) curSlideDoors = TrainController.ExteriorSlideDoors[^1];
                     }
 
-                    if (!foundDoor) curSlideDoors = TrainController.ExteriorSlideDoors[^1];
                 }
                 else
                 {
                     bool foundDoor = false;
                     if (role == Role.Accomplice)
                     {
+                        float distToCurSlideDoor = float.MaxValue;
+
                         for (int i = 0; i < trainStats.interiorSlideDoorXBounds.Length; i++)
                         {
-                            if (transform.position.x > trainStats.interiorSlideDoorXBounds[i])
-                            {
-                                curSlideDoors = TrainController.InteriorSlideDoors[i];
+                            SlideDoors slideDoor = TrainController.InteriorSlideDoors[i];
 
-                                if (curSlideDoors.carriage.curNPCList.Count > 0 && curSlideDoors.carriage.curNPCList[0].profile.disembarkingStationIndex != profile.boardingStationIndex)
+                            if (slideDoor.carriage.firstNPC != null && slideDoor.carriage.firstNPC.profile.disembarkingStationIndex != profile.boardingStationIndex)
+                            {
+                                foundDoor = true;
+                            }
+
+                            if (foundDoor)
+                            {
+                                if(curSlideDoors == null)
                                 {
-                                    foundDoor = true;
-                                    break;
+                                    curSlideDoors = slideDoor;
+                                    distToCurSlideDoor = Mathf.Abs(transform.position.x - curSlideDoors.transform.position.x);
+                                }
+                                else
+                                {
+                                    float distToNewSlideDoor = Mathf.Abs(transform.position.x - slideDoor.transform.position.x);
+                                    if (distToNewSlideDoor < distToCurSlideDoor)
+                                    {
+                                        curSlideDoors = slideDoor;
+                                        distToCurSlideDoor += distToNewSlideDoor;
+                                    }
                                 }
                             }
                         }
@@ -666,9 +702,10 @@ public class NPCBrain : MonoBehaviour
                                 break;
                             }
                         }
+
+                        if (!foundDoor) curSlideDoors = TrainController.InteriorSlideDoors[^1];
                     }
 
-                    if (!foundDoor) curSlideDoors = TrainController.InteriorSlideDoors[^1];
                 }
 
                 float extents = boxCollider.bounds.extents.x;
@@ -687,15 +724,24 @@ public class NPCBrain : MonoBehaviour
                     curCarriage.seatData.filled[seatPosIndex] = false;
                     seatPosIndex = int.MaxValue;
                 }
-                if (queuedForSeat) curCarriage.RemoveFromSeatQueue(this); // To prevent them from going back to the chair if they are queued
+                if (queuedForSeat) curCarriage.RemoveFromSeatQueue(this);
                 SetStandingDepthInTrain();
-                if (curCarriage.smokersRoomData.Length > 1 && curCarriage.smokersRoomData[1].npcCount < curCarriage.smokersRoomData[0].npcCount) // selected smoker room is based on which room has less npcs
+
+                if (curCarriage.GetFirstPassenger() == this)
                 {
                     smokerRoomIndex = 1;
                 }
                 else
                 {
-                    smokerRoomIndex = 0;
+                    if (curCarriage.smokersRoomData.Length > 1 && curCarriage.smokersRoomData[1].npcCount < curCarriage.smokersRoomData[0].npcCount)
+                    {
+                        smokerRoomIndex = 1;
+                    }
+                    else
+                    {
+                        smokerRoomIndex = 0;
+                    }
+
                 }
 
                 curCarriage.smokersRoomData[smokerRoomIndex].npcCount++;

@@ -339,7 +339,7 @@ public class TrainController : MonoBehaviour
             case TrainStates.Stopped:
             {
                 stats.totalNPCsBoarded = 0;
-                stats.distToSpawnNextStation = stats.trainToMaxSpawnDist - trip.stationAhead.station_prefab.frontPlatformRenderer.transform.localPosition.x;
+                stats.distToSpawnNextStation = stats.trainToMaxSpawnDist - trip.stationAhead.station_prefab.platformRenderer.transform.localPosition.x;
                 closingSlideDoors = false;
                 gameEventData.OnStationLeave.Raise();
             }
@@ -349,11 +349,10 @@ public class TrainController : MonoBehaviour
     private void SpawnStation()
     {
         NextStationInstance = stations[stats.curStationIndex];
-        float stationXPos = spawnData.bounds.max.x + (NextStationInstance.transform.position.x - NextStationInstance.frontPlatformRenderer.bounds.min.x);
+        float stationXPos = spawnData.bounds.max.x + (NextStationInstance.transform.position.x - NextStationInstance.platformRenderer.bounds.min.x);
         NextStationInstance.transform.position = new Vector3(stationXPos, 0, 0);
         NextStationInstance.gameObject.SetActive(true);
         NextStationInstance.SpawnNPCs();
-        NextStationInstance.SetFrontParallaxPosition();
         gameEventData.OnStationSpawn.Raise();
     }
     private void CloseAllSlideDoors()

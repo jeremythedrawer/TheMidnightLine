@@ -124,8 +124,6 @@ public class Notepad : MonoBehaviour
     }
     private void Update()
     {
-        activePage.UpdateExitButton();
-
         if ((notepadData.subState & SubState.InUse) != 0)
         {
             UpdateState();
@@ -218,6 +216,7 @@ public class Notepad : MonoBehaviour
         if (activePage.activePlayerWriteTextRenderer != null && sceneData.activeSceneType == SceneType.Trip)
         {
             leftHand.SetState(LeftHand.State.Stationary);
+
             if (activePage.pageType == PageType.ColorKey)
             {
                 leftHand.MoveToLeftOfPaper();
@@ -529,7 +528,7 @@ public class Notepad : MonoBehaviour
 
                 activePage.UpdatePage();
 
-                if (activePage.pageType == PageType.ColorKey && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
+                if (activePage.pageType == PageType.ColorKey && (curTrip.curUnlocks & UnlockType.MultiColor) != 0 && spyStats.curTutorialState == TutorialState.None)
                 {
                     if (playerInputs.numpad == 1 || playerInputs.numpad == 2)
                     { 
@@ -602,6 +601,7 @@ public class Notepad : MonoBehaviour
                 if (spyStats.curTutorialState != TutorialState.None)
                 {
                     OnRevertTutorial?.Invoke();
+                    activePage.SetColorMarkerButtonSprite(activePage.activePlayerWriteRowIndex, unlocked: false);
                 }
 
             }
@@ -671,7 +671,7 @@ public class Notepad : MonoBehaviour
                             clueColorPicker.Open(activePage.playerWriteRenderers[0]);
                             SceneController.GetNPCColorPicker().Close();
                         }
-                        else if (spyStats.curTutorialState == TutorialState.MultiColor1)
+                        else if (spyStats.curTutorialState == TutorialState.MultiColor1 && activePage.activePlayerWriteText != "")
                         {
                             curTrip.selectedColorMarkerIndex = 1;
                             clueColorPicker.Open(activePage.playerWriteRenderers[1]);
@@ -713,28 +713,21 @@ public class Notepad : MonoBehaviour
 
                     case PageType.ColorKey:
                     {
-                        if (activePage.playerWriteTextRenderers[0].completedWritingText && (spyStats.tutorialsCompleted & TutorialState.Color3) == 0 && (curTrip.curUnlocks & UnlockType.Color) != 0)
+                        if (activePage.playerWriteTextRenderers[0].completedWritingText && spyStats.curTutorialState == TutorialState.Color1)
                         {
                             curTrip.selectedColorMarkerIndex = 0;
 
                             clueColorPicker.Open(activePage.playerWriteRenderers[0]);
                             SceneController.GetNPCColorPicker().Close();
-                            activePage.SetColorMarkerButtonSprite(0);
+                            activePage.SetColorMarkerButtonSprite(index: 0, unlocked: true);
                             OnWriteColorMarkerFirstTime?.Invoke();
-
-                            if ((spyStats.tutorialsCompleted & TutorialState.MultiColor2) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
-                            {
-                                activePage.InitNextColorRow(1);
-                                activePage.SwitchWriteRow(1);
-                                leftHand.MoveToLeftOfPaper();
-                            }
                         }
-                        else if (activePage.playerWriteTextRenderers[1].completedWritingText && (spyStats.tutorialsCompleted & TutorialState.MultiColor2) == 0 && (curTrip.curUnlocks & UnlockType.MultiColor) != 0)
+                        else if (activePage.playerWriteTextRenderers[1].completedWritingText && spyStats.curTutorialState == TutorialState.MultiColor1)
                         {
                             curTrip.selectedColorMarkerIndex = 1;
                             clueColorPicker.Open(activePage.playerWriteRenderers[1]);
                             SceneController.GetNPCColorPicker().Close();
-                            activePage.SetColorMarkerButtonSprite(1);
+                            activePage.SetColorMarkerButtonSprite(index: 1, unlocked: true);
                         }
                     }
                     break;
