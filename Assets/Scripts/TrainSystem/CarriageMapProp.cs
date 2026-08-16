@@ -10,19 +10,24 @@ public class CarriageMapProp : MonoBehaviour
 
     [Header("Generated")]
     public CancellationTokenSource ctsInvert;
-    public void Use()
-    {
-        ctsInvert?.Cancel();
-        ctsInvert = new CancellationTokenSource();
-        Using().Forget();
-    }
-    public void Exit()
+    public void Revert()
     {
         ctsInvert?.Cancel();
         ctsInvert = new CancellationTokenSource();
         Exiting().Forget();
     }
     public void Enter()
+    {
+        ctsInvert?.Cancel();
+        atlasRenderer.custom.x = 1;
+    }
+    public void Exit()
+    {
+        ctsInvert?.Cancel();
+        atlasRenderer.custom.x = 0;
+
+    }
+    public void Invert()
     {
         ctsInvert?.Cancel();
         ctsInvert = new CancellationTokenSource();
@@ -37,33 +42,12 @@ public class CarriageMapProp : MonoBehaviour
             {
                 elapsedTime += Time.deltaTime;
                 float t = elapsedTime / EFFECT_TIME;
-                atlasRenderer.custom.x = t * 0.25f;
-                await UniTask.Yield(ctsInvert.Token);
-            }
-
-            atlasRenderer.custom.x = 0.25f;
-        }
-        catch (OperationCanceledException)
-        {
-
-        }
-    }
-    private async UniTask Using()
-    {
-        float elapsedTime = atlasRenderer.custom.x * EFFECT_TIME;
-        try
-        {
-            while (elapsedTime < EFFECT_TIME)
-            {
-                elapsedTime += Time.deltaTime;
-                float t = elapsedTime / EFFECT_TIME;
                 atlasRenderer.custom.x = t;
                 await UniTask.Yield(ctsInvert.Token);
             }
 
-            atlasRenderer.custom.x = 1;
         }
-        catch(OperationCanceledException)
+        catch (OperationCanceledException)
         {
 
         }

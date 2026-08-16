@@ -603,9 +603,7 @@ public class NPCBrain : MonoBehaviour
             case NPCPath.ToSlideDoor:
             {
                 if (trip.stationAhead.isFrontOfTrain)
-                {
-                    bool foundDoor = false;
-                    
+                {                    
                     if (role == Role.Accomplice)
                     {
                         float distToCurSlideDoor = float.MaxValue;
@@ -613,13 +611,13 @@ public class NPCBrain : MonoBehaviour
                         for (int i = 0; i < trainStats.exteriorSlideDoorXBounds.Length; i++)
                         {
                             SlideDoors slideDoor = TrainController.ExteriorSlideDoors[i];
-
+                            bool validDoor = false;
                             if (slideDoor.carriage.firstNPC != null && slideDoor.carriage.firstNPC.profile.disembarkingStationIndex != profile.boardingStationIndex)
                             {
-                                foundDoor = true;
+                                validDoor = true;
                             }
 
-                            if (foundDoor)
+                            if (validDoor)
                             {
                                 if (curSlideDoors == null)
                                 {
@@ -640,6 +638,7 @@ public class NPCBrain : MonoBehaviour
                     }
                     else
                     {
+                        bool foundDoor = false;
                         for (int i = 0; i < trainStats.exteriorSlideDoorXBounds.Length; i++)
                         {
                             if (transform.position.x > trainStats.exteriorSlideDoorXBounds[i])
@@ -657,7 +656,6 @@ public class NPCBrain : MonoBehaviour
                 }
                 else
                 {
-                    bool foundDoor = false;
                     if (role == Role.Accomplice)
                     {
                         float distToCurSlideDoor = float.MaxValue;
@@ -666,12 +664,13 @@ public class NPCBrain : MonoBehaviour
                         {
                             SlideDoors slideDoor = TrainController.InteriorSlideDoors[i];
 
+                            bool validDoor = false;
                             if (slideDoor.carriage.firstNPC != null && slideDoor.carriage.firstNPC.profile.disembarkingStationIndex != profile.boardingStationIndex)
                             {
-                                foundDoor = true;
+                                validDoor = true;
                             }
 
-                            if (foundDoor)
+                            if (validDoor)
                             {
                                 if(curSlideDoors == null)
                                 {
@@ -692,6 +691,7 @@ public class NPCBrain : MonoBehaviour
                     }
                     else
                     {
+                        bool foundDoor = false;
                         for (int i = 0; i < trainStats.interiorSlideDoorXBounds.Length; i++)
                         {
                             if (transform.position.x > trainStats.interiorSlideDoorXBounds[i])
@@ -741,7 +741,6 @@ public class NPCBrain : MonoBehaviour
                     {
                         smokerRoomIndex = 0;
                     }
-
                 }
 
                 curCarriage.smokersRoomData[smokerRoomIndex].npcCount++;

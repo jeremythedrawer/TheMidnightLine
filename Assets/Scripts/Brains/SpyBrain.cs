@@ -685,6 +685,8 @@ public class SpyBrain : MonoBehaviour
                 OnUncheckCarriageMap?.Invoke();
                 ExitCarriageMap();
                 checkingCarriageMap = false;
+
+                curCarriageMapProp.Invert();
             }
             break;
             case SpyState.TalkingToAccomplice:
@@ -830,7 +832,9 @@ public class SpyBrain : MonoBehaviour
     private void GetSlideDoorInTrain()
     {
         Bounds spyBounds = stats.bounds;
+
         SlideDoors foundSlideDoor = null;
+        
         for (int i = 0; i < CurCarriage.interiorSlideDoors.Length; i++)
         {
             SlideDoors slideDoor = CurCarriage.interiorSlideDoors[i];
@@ -851,6 +855,7 @@ public class SpyBrain : MonoBehaviour
         {
             OnWalkPastSlideDoors?.Invoke();
         }
+        
         slideDoors = foundSlideDoor;
     }
     private void SetInputsForTrainStop()
@@ -942,7 +947,7 @@ public class SpyBrain : MonoBehaviour
     {
         if (checkingCarriageMap || curCarriageMapProp == null || camStats.curLocationState != LocationState.Carriage || stats.curTutorialState != TutorialState.None) return;
 
-        curCarriageMapProp.Use();
+        curCarriageMapProp.Revert();
         checkingCarriageMap = true;
     }
     private void ExitCarriageMap()

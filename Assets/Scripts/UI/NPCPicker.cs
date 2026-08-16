@@ -125,11 +125,11 @@ public class NPCPicker : MonoBehaviour
     }
     private void EnterColorIcon(IconUIElement icon)
     {
-        icon.renderer.custom.w = 0;
+        icon.renderer.customBit |= (int)ColorBits.Invert;
     }
     private void ExitColorIcon(IconUIElement icon)
     {
-        icon.renderer.custom.w = 1;
+        icon.renderer.customBit &= ~(int)ColorBits.Invert;
     }
 
     private void SetState(PickerState newState)
@@ -262,51 +262,8 @@ public class NPCPicker : MonoBehaviour
                 if (npcBrain.ticketHasBeenChecked) npcIconIndex += 1;
 
                 iconRend.UpdateSpriteInputsByIndex(npcIconIndex);
-
-                if (npcBrain.role == Role.Accomplice)
-                {
-                    iconRend.customBit |= (int)ColorBits.Meridia;
-
-                    if ((npcBrain.atlasRenderer.customBit & (int)ColorBits.Diagonal) != 0)
-                    {
-                        iconRend.customBit |= (int)ColorBits.Diagonal;
-                    }
-                    else
-                    {
-                        iconRend.customBit &= ~((int)ColorBits.Diagonal);
-                    }
-                }
-                else
-                {
-                    int npcColorIndex = Convert.ToInt32($"{npcBrain.atlasRenderer.customBit}", 10) - 1;
-                    if (npcColorIndex >= 0) 
-                    {
-                        if (npcColorIndex < trip.selectedClueMarkerColors.Length)
-                        {
-                            Color iconColor = trip.selectedClueMarkerColors[npcColorIndex].linear;
-                            iconRend.custom.x = iconColor.r; 
-                            iconRend.custom.y = iconColor.g; 
-                            iconRend.custom.z = iconColor.b;
-                            iconRend.customBit = 0;
-                        }
-                        else
-                        {
-                            iconRend.custom.x = 0;
-                            iconRend.custom.y = 0;
-                            iconRend.custom.z = 0;
-                            iconRend.customBit = (int)ColorBits.Diagonal;
-                        }
-                    }
-                    else
-                    {
-                        iconRend.custom.x = 0;
-                        iconRend.custom.y = 0;
-                        iconRend.custom.z = 0;
-                        iconRend.customBit = 0;
-                    }
-
-                }
-                iconRend.custom.w = 0;
+                iconRend.customBit = npcBrain.atlasRenderer.customBit;
+                iconRend.customBit &= ~(int)ColorBits.Invert;
             }
             else
             {

@@ -6,7 +6,6 @@ using static AtlasUI;
 using static Spy;
 public class GameplayUI : MonoBehaviour
 {
-    const float TICKET_ICON_PADDING = 0.2f;
     const float APPEARING_TIME = 0.5f;
 
     public static event Action OnIncreaseTraitorCountFirstTime;
