@@ -13,11 +13,12 @@ public class RailMap : MonoBehaviour
 
     public AtlasRenderer railMapRend;
     public AtlasRenderer trainPosRend;
+
     public AtlasRenderer stationIconRendPrefab;
     public AtlasRenderer ticketCheckIconRendPrefab;
 
     [Header("Generated")]
-    AtlasRenderer[] markIcons;
+    public AtlasRenderer[] markIcons;
     public float[] positions;
 
     public int curPosIndex;

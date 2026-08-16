@@ -30,5 +30,7 @@ public class TripSO : ScriptableObject
 
     public UnlockType curUnlocks;
 
+    public float curDayNightValue;
+
     public bool failed;
 }

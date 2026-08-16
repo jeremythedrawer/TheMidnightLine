@@ -178,6 +178,7 @@ public class SpyBrain : MonoBehaviour
 
         rigidBody.includeLayers = layerSettings.stationMask;
 
+        stats.curState = SpyState.Idle;
         SetState(SpyState.None);
 
         SceneController.SetSpyBrain(this);

@@ -24,7 +24,6 @@ public class SpawnMaster : MonoBehaviour
     [Header("Generated")]
     public int nextSpawnIndex;
     public float delayParticleQueueClock;
-    public float curDayNight;
     public CancellationTokenSource ctsDayNight;
     public Queue<DelayedParticleData> delayedParticlesQueue;
     private void OnEnable()
@@ -70,6 +69,7 @@ public class SpawnMaster : MonoBehaviour
 
         InitParticles();
         ChangeParticles();
+        trip.curDayNightValue = trip.dayNightValues[0];
     }
     private void InitBoundParameters()
     {
@@ -615,7 +615,7 @@ public class SpawnMaster : MonoBehaviour
     {
         float nextDayNight = trip.dayNightValues[Mathf.Min(trip.ticketsCheckedTotal, trip.dayNightValues.Length - 1)];
         float elapsedTime = 0;
-        float dayNight = curDayNight;
+        float dayNight = trip.curDayNightValue;
         try
         {
             while(elapsedTime < DAY_NIGHT_TRANSITION_TIME)
@@ -623,17 +623,17 @@ public class SpawnMaster : MonoBehaviour
                 elapsedTime += Time.deltaTime;
                 float t = elapsedTime / DAY_NIGHT_TRANSITION_TIME;
 
-                dayNight = Mathf.Lerp(curDayNight, nextDayNight, t);
+                dayNight = Mathf.Lerp(trip.curDayNightValue, nextDayNight, t);
 
                 Shader.SetGlobalFloat("_DayNight", dayNight);
                 await UniTask.Yield(ctsDayNight.Token);
             }
-            curDayNight = nextDayNight;
-            Shader.SetGlobalFloat("_DayNight", curDayNight);
+            trip.curDayNightValue = nextDayNight;
+            Shader.SetGlobalFloat("_DayNight", trip.curDayNightValue);
         }
         catch (OperationCanceledException)
         {
-            curDayNight = dayNight;
+            trip.curDayNightValue = dayNight;
         }
     }
     private void Dispose()

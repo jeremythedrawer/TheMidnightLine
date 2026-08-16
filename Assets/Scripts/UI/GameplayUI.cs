@@ -71,7 +71,7 @@ public class GameplayUI : MonoBehaviour
     public float fadeBlackClock;
 
     public bool canExitState;
-
+    public bool uiAtNightMode;
     private void OnEnable()
     {
         gameEventData.OnStationLeave.RegisterListener(SetTraitorIcons);
@@ -83,7 +83,7 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnWalkPastSlideDoors += HideKeyIcon;
         SpyBrain.OnEnteredTrain += AppearRailMap;
         SpyBrain.OnExitTrain += DissappearRailMap;
-
+        SpyBrain.OnTicketInspect += SetDayNightUI;
         SpyBrain.OnEnteredTrain += DisappearKeyIcon;
         SpyBrain.OnTicketInspect += DisappearKeyIcon;
         SpyBrain.OnTicketInspect += MoveRailMap;
@@ -122,6 +122,7 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnWalkPastSlideDoors -= HideKeyIcon;
         SpyBrain.OnEnteredTrain -= DisappearKeyIcon;
         SpyBrain.OnExitTrain -= DissappearRailMap;
+        SpyBrain.OnTicketInspect -= SetDayNightUI;
         SpyBrain.OnTicketInspect -= DisappearKeyIcon;
         SpyBrain.OnTicketInspect -= MoveRailMap;
         SpyBrain.OnOpenNotepad -= SetToNotepadState;
@@ -622,6 +623,26 @@ public class GameplayUI : MonoBehaviour
         traitorCount--;
         traitorCountText.SetText("x" + traitorCount);
     }
+    private void SetDayNightUI()
+    {
+        if (trip.curDayNightValue >= 0.5f)
+        {
+            if (!uiAtNightMode)
+            {
+                traitorCountText.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
+                uiAtNightMode = true;
+            }
+        }
+        else
+        {
+            if (uiAtNightMode)
+            {
+                traitorCountText.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
+                uiAtNightMode = false;
+            }
+        }
+    }
+
     private void ClickRedo(IconUIElement icon)
     {
         icon.renderer.custom.x = 0;

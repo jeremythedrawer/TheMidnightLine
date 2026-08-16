@@ -664,13 +664,7 @@ public class NPCBrain : MonoBehaviour
                         {
                             SlideDoors slideDoor = TrainController.InteriorSlideDoors[i];
 
-                            bool validDoor = false;
-                            if (slideDoor.carriage.firstNPC != null && slideDoor.carriage.firstNPC.profile.disembarkingStationIndex != profile.boardingStationIndex)
-                            {
-                                validDoor = true;
-                            }
-
-                            if (validDoor)
+                            if (slideDoor.carriage.firstNPC != null)
                             {
                                 if(curSlideDoors == null)
                                 {
