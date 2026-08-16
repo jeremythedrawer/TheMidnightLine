@@ -105,7 +105,7 @@ public class GameplayUI : MonoBehaviour
         UnlockPicker.OnMutliColorAbilityUnlock += MoveMulticolorMarkerTutorialIcon;
 
         Notepad.OnWriteColorMarkerFirstTime += SetTutorialTextToColor2;
-        Notepad.OnEraseDuringTutorial += SetTutorialTextBackToColor1;
+        Notepad.OnRevertTutorial += SetTutorialTextBackToColor1;
 
         ColorPicker.OnSelectClueColorFirstTime += SetTutorialTextToColor3;
         ColorPicker.OnSelectSecondClueColorFirstTime += SetTutorialTextToMultiColor2;
@@ -143,7 +143,7 @@ public class GameplayUI : MonoBehaviour
         Scenes.OnLoadTrip0 -= Init;
 
         Notepad.OnWriteColorMarkerFirstTime -= SetTutorialTextToColor2;
-        Notepad.OnEraseDuringTutorial -= SetTutorialTextBackToColor1;
+        Notepad.OnRevertTutorial -= SetTutorialTextBackToColor1;
 
         ColorPicker.OnSelectClueColorFirstTime -= SetTutorialTextToColor3;
         ColorPicker.OnSelectSecondClueColorFirstTime -= SetTutorialTextToMultiColor2;

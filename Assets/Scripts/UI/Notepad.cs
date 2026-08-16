@@ -39,7 +39,7 @@ public class Notepad : MonoBehaviour
     }
 
     public static event Action OnWriteColorMarkerFirstTime;
-    public static event Action OnEraseDuringTutorial;
+    public static event Action OnRevertTutorial;
 
     public PlayerInputsSO playerInputs;
     public TripSO curTrip;
@@ -383,10 +383,8 @@ public class Notepad : MonoBehaviour
                     case 4:
                     {
                         if (curKeyframeState == KeyframeState.TogglePageContentsTopHalf) return;
-                        if (nextPage.activePlayerWriteText == "")
-                        {
-                            nextPage.SetPlayerWriteTextAlphaTop(normAmount: 0);
-                        }
+                        nextPage.SetPlayerWriteTextAlphaTop(normAmount: 0);
+
                         activePage.TogglePageContentTopHalf(false);
                         curKeyframeState = KeyframeState.TogglePageContentsTopHalf;
                     }
@@ -455,12 +453,9 @@ public class Notepad : MonoBehaviour
                     case 2:
                     {
                         if (curKeyframeState == KeyframeState.TogglePageContentsBottomHalf) return;
-                        pages[activePageIndex - 1].TogglePageContentBottomHalf(true);
+                        nextPage.TogglePageContentBottomHalf(true);
+                        nextPage.SetPlayerWriteTextAlphaBottom(normAmount: 0);
 
-                        if (pages[activePageIndex - 1].activePlayerWriteText == "")
-                        {
-                            pages[activePageIndex - 1].SetPlayerWriteTextAlphaBottom(normAmount: 0);
-                        }
                         curKeyframeState = KeyframeState.TogglePageContentsBottomHalf;
                     }
                     break;
@@ -468,12 +463,9 @@ public class Notepad : MonoBehaviour
                     {
                         if (curKeyframeState == KeyframeState.TogglePageContentsTopHalf) return;
 
-                        pages[activePageIndex - 1].TogglePageContentTopHalf(true);
+                        nextPage.TogglePageContentTopHalf(true);
+                        nextPage.SetPlayerWriteTextAlphaTop(normAmount: 0);
 
-                        if (pages[activePageIndex - 1].activePlayerWriteText == "")
-                        {
-                            pages[activePageIndex - 1].SetPlayerWriteTextAlphaTop(normAmount: 0);
-                        }
                         curKeyframeState = KeyframeState.TogglePageContentsTopHalf;
                     }
                     break;
@@ -481,7 +473,7 @@ public class Notepad : MonoBehaviour
                     {
                         if (curKeyframeState == KeyframeState.PaperClip) return;
 
-                        pages[activePageIndex - 1].PlayPaperClipReverse();
+                        nextPage.PlayPaperClipReverse();
 
                         curKeyframeState = KeyframeState.PaperClip;
                     }
@@ -491,7 +483,7 @@ public class Notepad : MonoBehaviour
                         if (curKeyframeState == KeyframeState.ChangeDepth) return;
 
                         leftHand.atlasRenderer.SetLocalDepth(notepadData.leftHandDepthFront);
-                        pages[activePageIndex - 1].SetPageDepth(notepadData.leftHandDepthFront + 2);
+                        nextPage.SetPageDepth(notepadData.leftHandDepthFront + 2);
 
 
                         curKeyframeState = KeyframeState.ChangeDepth;
@@ -530,7 +522,6 @@ public class Notepad : MonoBehaviour
             break;
             case NotepadState.Stationary:
             {
-
                 if (sceneData.activeSceneType == SceneType.Trip && activePage.activePlayerWriteText == "" && playerInputs.carouselKeyDownValue != 0)
                 {
                     activePage.SwitchActivePreviewPlayerWriteText((int)playerInputs.carouselKeyDownValue);
@@ -574,14 +565,15 @@ public class Notepad : MonoBehaviour
 
                 curKeyframeState = KeyframeState.Start;
                 notepadData.subState |= SubState.IsFlippingUp;
-                notepadData.subState &= ~(SubState.WillFlipUp);                
+                notepadData.subState &= ~(SubState.WillFlipUp);
             }
             break;
             case NotepadState.FlippingDown:
             {
                 activePage.SetPageDepth(rightHand_renderer.transform.localPosition.z - 1);
 
-                pages[activePageIndex - 1].gameObject.SetActive(true);
+                nextPage = pages[activePageIndex - 1];
+                nextPage.gameObject.SetActive(true);
 
                 curKeyframeState = KeyframeState.Start;
                 
@@ -609,7 +601,7 @@ public class Notepad : MonoBehaviour
 
                 if (spyStats.curTutorialState != TutorialState.None)
                 {
-                    OnEraseDuringTutorial?.Invoke();
+                    OnRevertTutorial?.Invoke();
                 }
 
             }
@@ -668,6 +660,26 @@ public class Notepad : MonoBehaviour
         {
             case NotepadState.FlippingUp:
             {
+                switch (activePage.pageType)
+                {
+                    case PageType.ColorKey:
+                    {
+                        if (spyStats.curTutorialState == TutorialState.Color2)
+                        {
+                            curTrip.selectedColorMarkerIndex = 0;
+
+                            clueColorPicker.Open(activePage.playerWriteRenderers[0]);
+                            SceneController.GetNPCColorPicker().Close();
+                        }
+                        else if (spyStats.curTutorialState == TutorialState.MultiColor1)
+                        {
+                            curTrip.selectedColorMarkerIndex = 1;
+                            clueColorPicker.Open(activePage.playerWriteRenderers[1]);
+                            SceneController.GetNPCColorPicker().Close();
+                        }
+                    }
+                    break;
+                }
             }
             break;
 

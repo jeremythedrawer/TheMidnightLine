@@ -196,6 +196,8 @@ public class Page : MonoBehaviour
     {
         AtlasTextRenderer playerWriteTextRend = playerWriteTextRenderers[nextIndex];
 
+        if (playerWriteTextRend.enabled) return;
+
         int traitorIndex = nextIndex % trip.traitorProfiles.Length;
         Behaviours behaviours = trip.traitorProfiles[traitorIndex].npcProfile.behaviours;
 
@@ -606,11 +608,12 @@ public class Page : MonoBehaviour
     {
         for (int i = 0; i < playerWriteTextRenderers.Length; i++)
         {
+            if (playerWriteTexts[i] != "") continue;
+            
             AtlasTextRenderer renderer = playerWriteTextRenderers[i];
 
             if (renderer.transform.localPosition.y < FLIP_LOCAL_POS_Y)
             {
-                if (playerWriteTexts[i] != "") continue;
 
                 renderer.SetAppearTextAlpha(normAmount);
             }
@@ -626,12 +629,12 @@ public class Page : MonoBehaviour
     {
         for (int i = 0; i < playerWriteTextRenderers.Length; i++)
         {
+            if (playerWriteTexts[i] != "") continue;
+            
             AtlasTextRenderer renderer = playerWriteTextRenderers[i];
 
             if (renderer.transform.localPosition.y >= FLIP_LOCAL_POS_Y)
             {
-                if (playerWriteTexts[i] != "") continue;
-
                 renderer.SetAppearTextAlpha(normAmount);
             }
         }
