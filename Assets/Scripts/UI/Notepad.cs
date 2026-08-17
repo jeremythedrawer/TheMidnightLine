@@ -993,19 +993,37 @@ public class Notepad : MonoBehaviour
     }
     private bool ToFlipUp()
     {
-        return ((playerInputs.flipKeyDownValue == 1 && activePageIndex < lastPageIndex) || (notepadData.subState & (SubState.WillFlipUp | SubState.IsFlippingUp)) != 0) && (notepadData.subState & SubState.CanFlipUp) != 0;
+        bool canFlipUp = (notepadData.subState & SubState.CanFlipUp) != 0;
+        bool validFlipUpInputted = playerInputs.flipKeyDownValue == 1 && activePageIndex < lastPageIndex;
+        bool isFlippingUp = (notepadData.subState & (SubState.WillFlipUp | SubState.IsFlippingUp)) != 0;
+        
+        return (validFlipUpInputted || isFlippingUp) && canFlipUp;
     }
     private bool ToFlipDown()
     {
-        return ((playerInputs.flipKeyDownValue == -1 && activePageIndex > 0) || (notepadData.subState & (SubState.WillFlipDown | SubState.IsFlippingDown)) != 0) && (notepadData.subState & SubState.CanFlipDown) != 0;
+        bool canFlipDown = (notepadData.subState & SubState.CanFlipDown) != 0;
+        bool validFlipDownInputted = playerInputs.flipKeyDownValue == -1 && activePageIndex > 0;
+        bool isFlippingDown = (notepadData.subState & (SubState.WillFlipDown | SubState.IsFlippingDown)) != 0;
+
+        return (validFlipDownInputted || isFlippingDown) && canFlipDown;
     }
     private bool ToErase()
     {
-        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.carouselKeyDownValue != 0 && activePage.activePlayerWriteText != "") || (notepadData.subState & SubState.EraseToggle) != 0;
+        bool validEraseInputted = playerInputs.carouselKeyDownValue != 0 && activePage.activePlayerWriteText != "";
+        bool atCorrectScene = sceneData.activeSceneType == SceneType.Trip;
+        bool isErasing = (notepadData.subState & SubState.EraseToggle) != 0;
+        bool isNotFlipping = (notepadData.subState & (SubState.IsFlippingDown | SubState.IsFlippingUp)) == 0;
+
+        return (atCorrectScene && validEraseInputted && isNotFlipping) || isErasing;
     }
     private bool ToWrite()
     {
-        return (sceneData.activeSceneType == SceneType.Trip && playerInputs.writeKeyDown && activePage.activePlayerWriteText == "" && activePage.activePlayerWriteTextRenderer != null) || (notepadData.subState & SubState.WriteToggle) != 0;
+        bool validWriteInputted = playerInputs.writeKeyDown && activePage.activePlayerWriteText == "" && activePage.activePlayerWriteTextRenderer != null;
+        bool atCorrectScene = sceneData.activeSceneType == SceneType.Trip;
+        bool isWriting = (notepadData.subState & SubState.WriteToggle) != 0;
+        bool isNotFlipping = (notepadData.subState & (SubState.IsFlippingDown | SubState.IsFlippingUp)) == 0;
+
+        return (atCorrectScene && validWriteInputted && isNotFlipping) || isWriting;
     }
     private string GenerateName(Gender gender, Ethnicity ethnicity)
     {

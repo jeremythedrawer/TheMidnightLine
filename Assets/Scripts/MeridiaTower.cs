@@ -11,6 +11,8 @@ public class MeridiaTower : MonoBehaviour
     public static event Action OnExitStartElevator;
     public static event Action OnEnterStartElevator;
 
+    public static event Action OnScrollingUp;
+
     public static event Action<Vector2> OnSpyEnterTripDoor;
     public static event Action OnSpyExitTripDoor;
 
@@ -56,11 +58,11 @@ public class MeridiaTower : MonoBehaviour
 
         SpyBrain.OnAfterOutcomeSequence += MoveDownToBetweenFloors;
         SpyBrain.OnAfterOutcomeSequence += MoveMeetingWallUp;
-        SpyBrain.OnEnteredElevatorGoingUp += MoveUpToBetweenFloors;
+        SpyBrain.OnInteract += WalkThroughStartDoor;
 
         StartUI.OnPlayAgain += MoveToBottomFloor;
 
-        SpyBrain.OnInteract += WalkThroughStartDoor;
+        startElevator.elevatorDoor.onDoorClose += MoveUpToBetweenFloors;
 
     }
     private void OnDisable()
@@ -73,12 +75,12 @@ public class MeridiaTower : MonoBehaviour
 
         SpyBrain.OnAfterOutcomeSequence -= MoveDownToBetweenFloors;
         SpyBrain.OnAfterOutcomeSequence -= MoveMeetingWallUp;
-        SpyBrain.OnEnteredElevatorGoingUp -= MoveUpToBetweenFloors;
+        SpyBrain.OnInteract -= WalkThroughStartDoor;
 
         StartUI.OnPlayAgain -= MoveToBottomFloor;
 
-        SpyBrain.OnInteract -= WalkThroughStartDoor;
-
+        startElevator.elevatorDoor.onDoorClose += MoveUpToBetweenFloors;
+        
         ctsElevatorMove?.Cancel();
     }
 
@@ -341,6 +343,7 @@ public class MeridiaTower : MonoBehaviour
             }
             transform.position = new Vector3(transform.position.x, targetPosY, transform.position.z);
             scroll = ScrollState.Up;
+            OnScrollingUp?.Invoke();
         }
         catch (OperationCanceledException)
         {

@@ -11,6 +11,7 @@ using UnityEditor.IMGUI.Controls;
 using static Atlas;
 public class RoomDoor : MonoBehaviour
 {
+    public event Action onDoorClose;
     public enum State
     {
         Closed,
@@ -111,7 +112,7 @@ public class RoomDoor : MonoBehaviour
             break;
             case State.Closed:
             {
-
+                onDoorClose?.Invoke();
             }
             break;
             case State.Opening:

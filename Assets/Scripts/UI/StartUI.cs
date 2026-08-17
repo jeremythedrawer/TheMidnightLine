@@ -123,11 +123,11 @@ public class StartUI : MonoBehaviour
 
         SpyBrain.OnOpenNotepad += SetToNotepadState;
         SpyBrain.OnCloseNotepad += SetToNoneState;
-        SpyBrain.OnEnteredElevatorGoingUp += SetToStartMenuState;
         SpyBrain.OnMoveFirstTime += HideKeyIcons;
 
         MeridiaTower.OnSpyEnterTripDoor += ShowSpaceIcon;
         MeridiaTower.OnSpyExitTripDoor += HideKeyIcons;
+        MeridiaTower.OnScrollingUp += SetToStartMenuState;
 
         Scenes.OnLoadScore += ScoreSceneInit;
         Scenes.OnLoadStart += StartSceneInit;
@@ -135,10 +135,6 @@ public class StartUI : MonoBehaviour
         FadeBlack.OnFinishFadeOut += SetToNoneStateFromOutcome;
 
         CameraController.OnArrivedAtElevator += SetToEndMenuState;
-
-        MeridiaTower.OnEnterStartElevator += SetToStartMenuState;
-        MeridiaTower.OnExitStartElevator += SetToNoneState;
-
         gameEventData.OnStartTrip.RegisterListener(StartTrip);
     }
     private void OnDisable()
@@ -155,11 +151,11 @@ public class StartUI : MonoBehaviour
 
         SpyBrain.OnOpenNotepad -= SetToNotepadState;
         SpyBrain.OnCloseNotepad -= SetToNoneState;
-        SpyBrain.OnEnteredElevatorGoingUp -= SetToStartMenuState;
         SpyBrain.OnMoveFirstTime -= HideKeyIcons;
 
         MeridiaTower.OnSpyEnterTripDoor -= ShowSpaceIcon;
         MeridiaTower.OnSpyExitTripDoor -= HideKeyIcons;
+        MeridiaTower.OnScrollingUp -= SetToStartMenuState;
 
         Scenes.OnLoadStart -= StartSceneInit;
         Scenes.OnLoadScore -= ScoreSceneInit;
@@ -169,8 +165,6 @@ public class StartUI : MonoBehaviour
 
         CameraController.OnArrivedAtElevator -= SetToEndMenuState;
 
-        MeridiaTower.OnEnterStartElevator -= SetToStartMenuState;
-        MeridiaTower.OnExitStartElevator -= SetToNoneState;
 
         gameEventData.OnStartTrip.UnregisterListener(StartTrip);
     }
@@ -657,7 +651,7 @@ public class StartUI : MonoBehaviour
         SetState(UIState.Notepad);
     }
     private void SetToStartMenuState()
-    {
+    { 
         SetState(UIState.StartMenu);
     }
     private void SetToOutcomeState()

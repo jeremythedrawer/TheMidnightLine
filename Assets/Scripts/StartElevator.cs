@@ -6,7 +6,7 @@ using static MeridiaTower;
 using static Spy;
 
 public class StartElevator : MonoBehaviour
-{    
+{
     public MeridiaTowerData meridiaTowerData;
     public CameraStatsSO camStats;
 
