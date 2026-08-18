@@ -129,102 +129,6 @@ MonoBehaviour:
     max: Infinity
     enumValues: []
     descendantCount: 0
-  - name: _WorldSize_QuarterNote
-    path: _WorldSize_QuarterNote
-    tooltip: 
-    space: -1
-    spaceable: 0
-    sheetType: m_Vector2f
-    realType: Vector2
-    defaultValue:
-      m_Type:
-        m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.07222223281860352,"y":0.19444440305233003}'
-    min: -Infinity
-    max: Infinity
-    enumValues: []
-    descendantCount: 0
-  - name: _WorldSize_EighthNote
-    path: _WorldSize_EighthNote
-    tooltip: 
-    space: -1
-    spaceable: 0
-    sheetType: m_Vector2f
-    realType: Vector2
-    defaultValue:
-      m_Type:
-        m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.1388888955116272,"y":0.19444440305233003}'
-    min: -Infinity
-    max: Infinity
-    enumValues: []
-    descendantCount: 0
-  - name: _WorldSize_BeamedEighthNote
-    path: _WorldSize_BeamedEighthNote
-    tooltip: 
-    space: -1
-    spaceable: 0
-    sheetType: m_Vector2f
-    realType: Vector2
-    defaultValue:
-      m_Type:
-        m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.16666670143604279,"y":0.20555560290813447}'
-    min: -Infinity
-    max: Infinity
-    enumValues: []
-    descendantCount: 0
-  - name: _UVSizeAndPos_QuarterNote
-    path: _UVSizeAndPos_QuarterNote
-    tooltip: 
-    space: -1
-    spaceable: 0
-    sheetType: m_Vector4f
-    realType: Vector4
-    defaultValue:
-      m_Type:
-        m_SerializableType: UnityEngine.Vector4, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.1015625,"y":0.2734375,"z":0.5546875,"w":0.0703125}'
-    min: -Infinity
-    max: Infinity
-    enumValues: []
-    descendantCount: 0
-  - name: _UVSizeAndPos_EighthNote
-    path: _UVSizeAndPos_EighthNote
-    tooltip: 
-    space: -1
-    spaceable: 0
-    sheetType: m_Vector4f
-    realType: Vector4
-    defaultValue:
-      m_Type:
-        m_SerializableType: UnityEngine.Vector4, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.1953125,"y":0.2734375,"z":0.2890625,"w":0.0625}'
-    min: -Infinity
-    max: Infinity
-    enumValues: []
-    descendantCount: 0
-  - name: _UVSizeAndPos_BeamedEighthNote
-    path: _UVSizeAndPos_BeamedEighthNote
-    tooltip: 
-    space: -1
-    spaceable: 0
-    sheetType: m_Vector4f
-    realType: Vector4
-    defaultValue:
-      m_Type:
-        m_SerializableType: UnityEngine.Vector4, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.234375,"y":0.2890625,"z":0.0078125,"w":0.0390625}'
-    min: -Infinity
-    max: Infinity
-    enumValues: []
-    descendantCount: 0
   m_ImportDependencies: []
   m_GraphVersion: 18
   m_ResourceVersion: 1
@@ -3335,13 +3239,13 @@ MonoBehaviour:
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
+  m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
   m_OutputSlots:
   - {fileID: 8926484042661615334}
   m_ExposedName: _WorldSize_QuarterNote
-  m_Exposed: 1
+  m_Exposed: 0
   m_Order: 2
   m_Category: 
   m_Min:
@@ -3393,7 +3297,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.07222223281860352,"y":0.19444440305233003}'
+      m_SerializableObject: '{"x":0.0833333432674408,"y":0.20555560290813447}'
     m_Space: -1
   m_Property:
     name: o
@@ -3588,13 +3492,13 @@ MonoBehaviour:
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
+  m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
   m_OutputSlots:
   - {fileID: 8926484042661615341}
   m_ExposedName: _UVSizeAndPos_QuarterNote
-  m_Exposed: 1
+  m_Exposed: 0
   m_Order: 5
   m_Category: 
   m_Min:
@@ -3647,7 +3551,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector4, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.1015625,"y":0.2734375,"z":0.5546875,"w":0.0703125}'
+      m_SerializableObject: '{"x":0.1171875,"y":0.2890625,"z":0.546875,"w":0.0625}'
     m_Space: -1
   m_Property:
     name: o
@@ -3805,13 +3709,13 @@ MonoBehaviour:
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
+  m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
   m_OutputSlots:
   - {fileID: 8926484042661615347}
   m_ExposedName: _UVSizeAndPos_EighthNote
-  m_Exposed: 1
+  m_Exposed: 0
   m_Order: 6
   m_Category: 
   m_Min:
@@ -3864,7 +3768,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector4, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.1953125,"y":0.2734375,"z":0.2890625,"w":0.0625}'
+      m_SerializableObject: '{"x":0.2109375,"y":0.2890625,"z":0.28125,"w":0.0546875}'
     m_Space: -1
   m_Property:
     name: o
@@ -4022,13 +3926,13 @@ MonoBehaviour:
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
+  m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
   m_OutputSlots:
   - {fileID: 8926484042661615353}
   m_ExposedName: _UVSizeAndPos_BeamedEighthNote
-  m_Exposed: 1
+  m_Exposed: 0
   m_Order: 7
   m_Category: 
   m_Min:
@@ -4081,7 +3985,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector4, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.234375,"y":0.2890625,"z":0.0078125,"w":0.0390625}'
+      m_SerializableObject: '{"x":0.25,"y":0.3046875,"z":0.0,"w":0.03125}'
     m_Space: -1
   m_Property:
     name: o
@@ -4239,13 +4143,13 @@ MonoBehaviour:
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
+  m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
   m_OutputSlots:
   - {fileID: 8926484042661615359}
   m_ExposedName: _WorldSize_EighthNote
-  m_Exposed: 1
+  m_Exposed: 0
   m_Order: 3
   m_Category: 
   m_Min:
@@ -4296,7 +4200,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.1388888955116272,"y":0.19444440305233003}'
+      m_SerializableObject: '{"x":0.15000000596046449,"y":0.20555560290813447}'
     m_Space: -1
   m_Property:
     name: o
@@ -4388,13 +4292,13 @@ MonoBehaviour:
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
+  m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
   m_OutputSlots:
   - {fileID: 8926484042661615363}
   m_ExposedName: _WorldSize_BeamedEighthNote
-  m_Exposed: 1
+  m_Exposed: 0
   m_Order: 4
   m_Category: 
   m_Min:
@@ -4445,7 +4349,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.16666670143604279,"y":0.20555560290813447}'
+      m_SerializableObject: '{"x":0.17777779698371888,"y":0.21666669845581056}'
     m_Space: -1
   m_Property:
     name: o

@@ -156,38 +156,6 @@ MonoBehaviour:
     max: Infinity
     enumValues: []
     descendantCount: 0
-  - name: _UVSizeAndPos
-    path: _UVSizeAndPos
-    tooltip: 
-    space: -1
-    spaceable: 0
-    sheetType: m_Vector4f
-    realType: Vector4
-    defaultValue:
-      m_Type:
-        m_SerializableType: UnityEngine.Vector4, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.171875,"y":0.34375,"z":0.7890625,"w":0.0078125}'
-    min: -Infinity
-    max: Infinity
-    enumValues: []
-    descendantCount: 0
-  - name: _WorldSize
-    path: _WorldSize
-    tooltip: 
-    space: -1
-    spaceable: 0
-    sheetType: m_Vector2f
-    realType: Vector2
-    defaultValue:
-      m_Type:
-        m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
-          Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.12222220003604889,"y":0.24444440007209779}'
-    min: -Infinity
-    max: Infinity
-    enumValues: []
-    descendantCount: 0
   m_ImportDependencies: []
   m_GraphVersion: 18
   m_ResourceVersion: 1
@@ -3005,13 +2973,13 @@ MonoBehaviour:
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
+  m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
   m_OutputSlots:
   - {fileID: 8926484042661615226}
   m_ExposedName: _UVSizeAndPos
-  m_Exposed: 1
+  m_Exposed: 0
   m_Order: 5
   m_Category: 
   m_Min:
@@ -3064,7 +3032,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector4, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.171875,"y":0.34375,"z":0.7890625,"w":0.0078125}'
+      m_SerializableObject: '{"x":0.1875,"y":0.359375,"z":0.78125,"w":0.0}'
     m_Space: -1
   m_Property:
     name: o
@@ -3222,13 +3190,13 @@ MonoBehaviour:
   m_Parent: {fileID: 114350483966674976}
   m_Children: []
   m_UIPosition: {x: 0, y: 0}
-  m_UICollapsed: 1
+  m_UICollapsed: 0
   m_UISuperCollapsed: 0
   m_InputSlots: []
   m_OutputSlots:
   - {fileID: 8926484042661615232}
   m_ExposedName: _WorldSize
-  m_Exposed: 1
+  m_Exposed: 0
   m_Order: 6
   m_Category: 
   m_Min:
@@ -3279,7 +3247,7 @@ MonoBehaviour:
       m_Type:
         m_SerializableType: UnityEngine.Vector2, UnityEngine.CoreModule, Version=0.0.0.0,
           Culture=neutral, PublicKeyToken=null
-      m_SerializableObject: '{"x":0.12222220003604889,"y":0.24444440007209779}'
+      m_SerializableObject: '{"x":0.13333329558372498,"y":0.2555555999279022}'
     m_Space: -1
   m_Property:
     name: o

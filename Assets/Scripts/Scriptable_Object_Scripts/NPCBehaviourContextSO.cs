@@ -14,7 +14,9 @@ public class NPCBehaviourContextSO : ScriptableObject
     public float maxTime;
 
     public Behaviours behaviours;
+    public NPCMotion sittingPrepMotion;
     public NPCMotion sittingMotion;
+    public NPCMotion standingPrepMotion;
     public NPCMotion standingMotion;
     public NPCPath pathToTake;
 }

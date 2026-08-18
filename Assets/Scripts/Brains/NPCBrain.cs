@@ -97,6 +97,7 @@ public class NPCBrain : MonoBehaviour
     public bool onTrain;
     public bool queuedForSeat;
     public bool queuedForSlideDoor;
+    public bool playingPrepBehaviour;
 
     public delegate void Callback();
     private void OnEnable()
@@ -334,13 +335,28 @@ public class NPCBrain : MonoBehaviour
                     stateDuration = UnityEngine.Random.Range(curBehaviourContext.minTime, curBehaviourContext.maxTime);
                 }
 
-                if (curPath == NPCPath.SittingInTrain)
+                if (curBehaviourContext.sittingPrepMotion != NPCMotion.None)
                 {
-                    curClip = atlas.clipDict[(int)curBehaviourContext.sittingMotion];
+                    if (curPath == NPCPath.SittingInTrain)
+                    {
+                        curClip = atlas.clipDict[(int)curBehaviourContext.sittingPrepMotion];
+                    }
+                    else
+                    {
+                        curClip = atlas.clipDict[(int)curBehaviourContext.standingPrepMotion];
+                    }
+                    playingPrepBehaviour = true;
                 }
                 else
                 {
-                    curClip = atlas.clipDict[(int)curBehaviourContext.standingMotion];
+                    if (curPath == NPCPath.SittingInTrain)
+                    {
+                        curClip = atlas.clipDict[(int)curBehaviourContext.sittingMotion];
+                    }
+                    else
+                    {
+                        curClip = atlas.clipDict[(int)curBehaviourContext.standingMotion];
+                    }
                 }
             }
             break;
@@ -392,6 +408,22 @@ public class NPCBrain : MonoBehaviour
 
             case NPCState.Behaviour:
             {
+                if (playingPrepBehaviour)
+                {
+                    if (atlasRenderer.curFrameIndex == curClip.keyframeEndIndex)
+                    {
+                        if (curPath == NPCPath.SittingInTrain)
+                        {
+                            curClip = atlas.clipDict[(int)curBehaviourContext.sittingMotion];
+                        }
+                        else
+                        {
+                            curClip = atlas.clipDict[(int)curBehaviourContext.standingMotion];
+                        }
+                        playingPrepBehaviour = false;
+                    }
+                }
+
                 if (curGlyph != null)
                 {
                     atlasRenderer.PlayClip(ref curClip, curGlyph.transform);

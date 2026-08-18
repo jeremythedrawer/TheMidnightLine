@@ -53,8 +53,9 @@ public static class NPC
         Enjoys_reading = 1 << 5,
         Frequently_ill = 1 << 6,
         Known_vandal = 1 << 7,
-        Gets_Distracted = 1 << 8,
-        Count = 9, 
+        Gets_distracted = 1 << 8,
+        Takes_photos = 1 << 9,
+        Count = 10, 
     }
 
     [Flags] public enum Appearences

@@ -36,6 +36,10 @@ public static class Atlas
         Vandalising,
         SittingDistracted,
         StandingDistracted,
+        SittingGettingCamera,
+        StandingGettingCamera,
+        SittingTakingPhotos,
+        StandingTakingPhotos,
     }
     public enum SpyMotion
     {

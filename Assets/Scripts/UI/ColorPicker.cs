@@ -62,6 +62,7 @@ public class ColorPicker : MonoBehaviour
     public Vector2 sliceWorldSize;
 
     public int activeColorAmount;
+    public int activeButtonAmount;
     public int curGridRowCount;
     public int curGridColCount;
     public int selectedDarkColorIndex;
@@ -298,9 +299,28 @@ public class ColorPicker : MonoBehaviour
             case PickerState.Opening:
             case PickerState.Opened:
             {
-                for (int i = 0; i < activeColorAmount; i++)
+                switch(selectType)
                 {
-                    colorIcons[i].UpdateButton(playerInputs);
+                    case SelectType.Clue:
+                    case SelectType.Light:
+                    case SelectType.Dark:
+                    {
+                        for (int i = 0; i < activeColorAmount; i++)
+                        {
+                            colorIcons[i].UpdateButton(playerInputs);
+                        }
+                    }
+                    break;
+
+                    case SelectType.NPC:
+                    {
+                        for (int i = 0; i < activeButtonAmount; i++)
+                        {
+                            colorIcons[i].UpdateButton(playerInputs);
+                        }
+                    }
+                    break;
+
                 }
 
                 if (canClose && (playerInputs.mouseLeftDown) && !CursorController.IsInsideBounds(paletteRenderer.bounds, isClickable: false) && spyStats.curTutorialState == TutorialState.None)
@@ -488,7 +508,7 @@ public class ColorPicker : MonoBehaviour
             case SelectType.NPC:
             {
                 activeColorAmount = trip.selectedClueMarkerColors.Length;
-
+                int unlockCount = 0;
                 for (int i = 0; i < activeColorAmount; i++)
                 {
                     AtlasRenderer colorRend = colorIcons[i].renderer;
@@ -500,6 +520,7 @@ public class ColorPicker : MonoBehaviour
                             if ((selectedRenderer.customBit & ((int)ColorBits.Diagonal)) != 0)
                             {
                                 colorRend.UpdateSpriteInputsByIndex(TICK_SPRITE_INDEX);
+
                             }
                             else
                             {
@@ -533,6 +554,8 @@ public class ColorPicker : MonoBehaviour
                                 colorRend.custom.x = color.r;
                                 colorRend.custom.y = color.g;
                                 colorRend.custom.z = color.b;
+
+                                unlockCount++;
                             }
                             else
                             {
@@ -566,6 +589,8 @@ public class ColorPicker : MonoBehaviour
                                 colorRend.custom.x = color.r;
                                 colorRend.custom.y = color.g;
                                 colorRend.custom.z = color.b;
+
+                                unlockCount++;
                             }
                             else
                             {
@@ -581,7 +606,13 @@ public class ColorPicker : MonoBehaviour
                         break;
                     }
                     colorRend.custom.w = 1;
+
+                    if ((trip.curUnlocks & (UnlockType)(1 << i)) != 0)
+                    {
+                        unlockCount++;
+                    }
                 }
+                activeButtonAmount = unlockCount;
             }
             break;
 
