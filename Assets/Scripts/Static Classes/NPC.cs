@@ -55,9 +55,8 @@ public static class NPC
         Known_vandal = 1 << 7,
         Gets_distracted = 1 << 8,
         Takes_photos = 1 << 9,
-        Count = 10, 
     }
-
+    public const int BEHAVIOURS_COUNT = 10;
     [Flags] public enum Appearences
     {
         None = 0,

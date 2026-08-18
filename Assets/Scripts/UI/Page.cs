@@ -179,12 +179,15 @@ public class Page : MonoBehaviour
                     behaviourButton.custom.z = 0;
                     behaviourButton.custom.w = 1;
 
+                    playerWriteTextRenderers[i].SetAlignmentType(AtlasRendering.AtlasTextAlignmentType.Center);
                     playerWriteTextRenderers[i].SetText("");
                     startPlayerWritePositions[i] = playerWriteTextRenderers[i].transform.localPosition;
                 }
                 activePlayerWriteTextRenderer = null;
                 playerWriteIndex = 0;
                 activePlayerWriteRowIndex = 0;
+
+                SwitchWriteRow(index: 0);
             }
             break;
         }
@@ -529,9 +532,9 @@ public class Page : MonoBehaviour
                         if (activePlayerWriteTextRenderer != null)
                         {
                             previewPlayerWriteIndices[activePlayerWriteRowIndex] += indexOffset;
-                            int behaviourLength = (int)Behaviours.Count;
-                            previewPlayerWriteIndices[activePlayerWriteRowIndex] = (previewPlayerWriteIndices[activePlayerWriteRowIndex] + behaviourLength) % behaviourLength;
-                            Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
+
+                            previewPlayerWriteIndices[activePlayerWriteRowIndex] = (previewPlayerWriteIndices[activePlayerWriteRowIndex] + BEHAVIOURS_COUNT) % BEHAVIOURS_COUNT;
+                            Behaviours allBehaviours = (Behaviours)~((1 << BEHAVIOURS_COUNT) | (int)Behaviours.None);
                             Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, previewPlayerWriteIndices[activePlayerWriteRowIndex]);
                             activePreviewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];
                             
@@ -624,12 +627,10 @@ public class Page : MonoBehaviour
     }
     private void SetColorKeyPagePlayerWriteText(AtlasTextRenderer curRend)
     {
-        int behaviourLength = (int)Behaviours.Count;
-
-        int nextPlayerWriteIndex = (previewPlayerWriteIndices[activePlayerWriteRowIndex] + behaviourLength) % behaviourLength;
+        int nextPlayerWriteIndex = (previewPlayerWriteIndices[activePlayerWriteRowIndex] + BEHAVIOURS_COUNT) % BEHAVIOURS_COUNT;
         previewPlayerWriteIndices[activePlayerWriteRowIndex] = nextPlayerWriteIndex;
 
-        Behaviours allBehaviours = (Behaviours)~((1 << behaviourLength) | (int)Behaviours.None);
+        Behaviours allBehaviours = (Behaviours)~((1 << BEHAVIOURS_COUNT) | (int)Behaviours.None);
         Behaviours activeBehaviour = GetBehaviourAtIndex(allBehaviours, nextPlayerWriteIndex);
 
         activePreviewPlayerWriteText = npcData.behaviourStringDict[activeBehaviour];

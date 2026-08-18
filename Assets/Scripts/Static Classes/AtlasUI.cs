@@ -770,7 +770,7 @@ public static class AtlasUI
         int count = 0;
         foreach (Behaviours flag in Enum.GetValues(typeof(Behaviours)))
         {
-            if (flag == Behaviours.None || flag == Behaviours.Count) continue;
+            if (flag == Behaviours.None) continue;
 
             if ((behaviours & flag) != 0)
             {

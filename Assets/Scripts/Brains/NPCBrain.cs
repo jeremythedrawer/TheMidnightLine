@@ -155,9 +155,10 @@ public class NPCBrain : MonoBehaviour
     public void BoardTrain()
     {
         trainStats.totalNPCsBoarded++;
+        Debug.Log("Total NPCS boarded " + trainStats.totalNPCsBoarded);
+        onTrain = true;
         QueueForSeat();
         rigidBody.includeLayers = layerSettings.trainMask;
-        onTrain = true;
         SetStandingDepthInTrain();
 
         if (role == Role.Traitor)
@@ -188,7 +189,7 @@ public class NPCBrain : MonoBehaviour
     public void MoveNPCToLeftOfCarriage()
     {
         behaving = false;
-        stopBehaving = true;
+        
         curPath = NPCPath.None;
         SetPath(NPCPath.ToStandInTrain);
         StopSitting();
@@ -317,7 +318,7 @@ public class NPCBrain : MonoBehaviour
                 if (curBehaviourContext.glyphPrefab != null)
                 {
                     curGlyph = NPCManager.GetGlyph(curBehaviourContext.glyphPrefab, transform);
-                    curGlyph.transform.position = new Vector3(transform.position.x, transform.position.y, trainStats.depthSections.frontStandingFront);
+                    curGlyph.transform.position = transform.position;
                 }
 
                 if (curBehaviour == Behaviours.Known_vandal)
@@ -372,15 +373,27 @@ public class NPCBrain : MonoBehaviour
 
                 atlasRenderer.PlayClip(ref curClip);
 
-                if (role != Role.Accomplice)
+                if (onTrain)
                 {
                     behaviourClock += Time.deltaTime;
+
                     if (behaviourClock > stateDuration)
                     {
-                        PickNextBehaviour();
+                        if ((NPCMotion)curClip.motionIndex == NPCMotion.StandingBlinking || (NPCMotion)curClip.motionIndex == NPCMotion.StandingBreathing)
+                        {
+                            QueueForSeat();
+                        }
+                        else
+                        {
+                            if (role != Role.Accomplice)
+                            {
+                                PickNextBehaviour();
+                            }
+                        }
+                    
+                        behaviourClock = 0;
                     }
                 }
-
             }
             break;
             case NPCState.Walking:
@@ -1014,7 +1027,7 @@ public class NPCBrain : MonoBehaviour
     }
     private void PickNextBehaviour()
     {
-        behaviourClock = 0;
+
         if (!onTrain || stopBehaving) return;
 
         int maxBits = 32;

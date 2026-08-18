@@ -261,8 +261,10 @@ public class LeftHand : MonoBehaviour
 
             case State.Erasing:
             {
-                atlasRenderer.PlayClipOneShotReverse(notepadData.rotatePencil_clip);
-                MoveToLeftOfPaper();
+                if ((notepadData.subState & (Notepad.SubState.IsFlippingDown | Notepad.SubState.IsFlippingDown)) == 0)
+                {
+                    atlasRenderer.PlayClipOneShotReverse(notepadData.rotatePencil_clip);
+                }
             }
             break;
 

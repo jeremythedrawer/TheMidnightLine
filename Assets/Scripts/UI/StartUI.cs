@@ -263,24 +263,43 @@ public class StartUI : MonoBehaviour
                     int index = i;
 
 
-                    void OnEnter(IconUIElement icon)
+                    void OnEnterExit(IconUIElement icon)
                     {
                         hoveredPage = profilePages[index];
                         icon.renderer.custom.x = 1;
                     }
-                    void OnExit(IconUIElement icon)
+                    void OnExitExit(IconUIElement icon)
                     {
                         icon.renderer.custom.x = 0;
                     }
-                    void OnClick(IconUIElement icon)
+                    void OnClickExit(IconUIElement icon)
                     {
                         activePage = profilePages[index];
                         curTraitorProfile = trip.traitorProfiles[activePage.traitorIndex];
                         MovePageToActivePosition();
                         icon.renderer.custom.x = 0;
                     }
-                    profilePage.exitButton.InitButton(OnClick, OnEnter, OnExit);
-                    
+
+                    void OnEnterSpacebar(IconUIElement icon)
+                    {
+                        icon.renderer.custom.x = 1;
+                    }
+                    void OnExitSpacebar(IconUIElement icon)
+                    {
+                        icon.renderer.custom.x = 0;
+                    }
+                    void OnClickSpacebar(IconUIElement icon)
+                    {
+                        HandleInputRevealSequence();
+                    }
+                    profilePage.exitButton.InitButton(OnClickExit, OnEnterExit, OnExitExit);
+
+                    profilePage.carouselLeftButton.renderer.enabled = false;
+                    profilePage.carouselRightButton.renderer.enabled = false;
+
+                    profilePage.spaceBarButton.renderer.custom.w = 1;
+                    profilePage.spaceBarButton.InitButton(OnClickSpacebar, OnEnterSpacebar, OnExitSpacebar);
+
                     profilePage.transform.SetParent(transform, worldPositionStays: true);
                     
                     outcomePageStartPos.z = Notepad.ACTIVE_POS.z + (i * 3);
@@ -405,80 +424,10 @@ public class StartUI : MonoBehaviour
                             page.transform.localPosition = new Vector3(page.transform.localPosition.x, curPosY, page.transform.localPosition.z);
                         }
 
-                        if (playerInputs.writeKeyDown || playerInputs.mouseLeftDown)
+                        activePage.spaceBarButton.UpdateButton(playerInputs);
+                        if (playerInputs.writeKeyDown)
                         {
-                            if (curTraitorProfile.found)
-                            {
-                                if ((curRevealSequence & RevealSequence.Mugshot) == 0)
-                                {
-                                    RevealMugshot();
-                                    curRevealSequence |= RevealSequence.Mugshot;
-                                    curTraitorsShown++;
-                                }
-                                else if ((curRevealSequence & RevealSequence.LocationText) == 0)
-                                {
-                                    WriteLocationText();
-                                    curRevealSequence |= RevealSequence.LocationText;
-                                }
-                                else if ((curRevealSequence & RevealSequence.ArrestText) == 0)
-                                {
-                                    WriteArrestText();
-                                    curRevealSequence |= RevealSequence.ArrestText;
-                                }
-                                else
-                                {
-                                    MovePageToEndPosition();
-                                    
-                                    locationMessage.renderer.ChangeCustom(time: 1f, newValue: 0, customChannel: 4);
-                                    arrestMessage.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 4);
-
-                                    curRevealSequence = RevealSequence.None;
-
-                                    activePage = null;
-
-                                    curTraitorProfilesReviewed++;
-                                    if (curTraitorProfilesReviewed == trip.traitorProfiles.Length || skipOutcomeSequence)
-                                    {
-                                        fadeBlack.FadeOut();
-                                        traitorsFoundMessage.MoveAway(camStats, Direction.Left);
-                                    }
-                                }
-                            }
-                            else
-                            {
-                                if ((curRevealSequence & RevealSequence.Mugshot) == 0)
-                                {
-                                    RevealMugshot();
-
-                                    trip.failed = true;
-                                    curRevealSequence |= RevealSequence.Mugshot;
-                                }
-                                else if ((curRevealSequence & RevealSequence.ShowCorrectStation) == 0)
-                                {
-                                    int correctionStationIndex = curTraitorProfile.npcProfile.disembarkingStationIndex;
-                                    string correctStation = trip.stationsDataArray[correctionStationIndex].name;
-                                    
-                                    CancelCurrentOutcomeTask();
-                                    activePage.SetActiveRendererText(correctStation);
-                                    activePage.activePlayerWriteTextRenderer.SetAppearTextAlpha(normAmount: 0);
-                                    activePage.activePlayerWriteTextRenderer.ChangeCustom(time: 1f, newValue: 1, customChannel: 4);
-
-                                    curRevealSequence |= RevealSequence.ShowCorrectStation;
-                                }
-                                else
-                                {
-                                    MovePageToEndPosition();
-                                    curRevealSequence = RevealSequence.None;
-                                    activePage = null;
-
-                                    curTraitorProfilesReviewed++;
-                                    if (curTraitorProfilesReviewed == trip.traitorProfiles.Length || skipOutcomeSequence)
-                                    {
-                                        fadeBlack.FadeOut();
-                                        traitorsFoundMessage.MoveAway(camStats, Direction.Left);
-                                    }
-                                }
-                            }
+                            HandleInputRevealSequence();
                         }
                     }
                 }
@@ -634,6 +583,81 @@ public class StartUI : MonoBehaviour
         fadeBlack.FadeOut();
     }
 
+    private void HandleInputRevealSequence()
+    {
+        if (curTraitorProfile.found)
+        {
+            if ((curRevealSequence & RevealSequence.Mugshot) == 0)
+            {
+                RevealMugshot();
+                curRevealSequence |= RevealSequence.Mugshot;
+                curTraitorsShown++;
+            }
+            else if ((curRevealSequence & RevealSequence.LocationText) == 0)
+            {
+                WriteLocationText();
+                curRevealSequence |= RevealSequence.LocationText;
+            }
+            else if ((curRevealSequence & RevealSequence.ArrestText) == 0)
+            {
+                WriteArrestText();
+                curRevealSequence |= RevealSequence.ArrestText;
+            }
+            else
+            {
+                MovePageToEndPosition();
+
+                locationMessage.renderer.ChangeCustom(time: 1f, newValue: 0, customChannel: 4);
+                arrestMessage.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 4);
+
+                curRevealSequence = RevealSequence.None;
+
+                activePage = null;
+
+                curTraitorProfilesReviewed++;
+                if (curTraitorProfilesReviewed == trip.traitorProfiles.Length || skipOutcomeSequence)
+                {
+                    fadeBlack.FadeOut();
+                    traitorsFoundMessage.MoveAway(camStats, Direction.Left);
+                }
+            }
+        }
+        else
+        {
+            if ((curRevealSequence & RevealSequence.Mugshot) == 0)
+            {
+                RevealMugshot();
+
+                trip.failed = true;
+                curRevealSequence |= RevealSequence.Mugshot;
+            }
+            else if ((curRevealSequence & RevealSequence.ShowCorrectStation) == 0)
+            {
+                int correctionStationIndex = curTraitorProfile.npcProfile.disembarkingStationIndex;
+                string correctStation = trip.stationsDataArray[correctionStationIndex].name;
+
+                CancelCurrentOutcomeTask();
+                activePage.SetActiveRendererText(correctStation);
+                activePage.activePlayerWriteTextRenderer.SetAppearTextAlpha(normAmount: 0);
+                activePage.activePlayerWriteTextRenderer.ChangeCustom(time: 1f, newValue: 1, customChannel: 4);
+
+                curRevealSequence |= RevealSequence.ShowCorrectStation;
+            }
+            else
+            {
+                MovePageToEndPosition();
+                curRevealSequence = RevealSequence.None;
+                activePage = null;
+
+                curTraitorProfilesReviewed++;
+                if (curTraitorProfilesReviewed == trip.traitorProfiles.Length || skipOutcomeSequence)
+                {
+                    fadeBlack.FadeOut();
+                    traitorsFoundMessage.MoveAway(camStats, Direction.Left);
+                }
+            }
+        }
+    }
     private void SetToNoneStateFromOutcome()
     {
         if(curState == UIState.Outcome)
@@ -811,6 +835,7 @@ public class StartUI : MonoBehaviour
         ctsOutcomePageMove?.Cancel();
         ctsOutcomePageMove = new CancellationTokenSource();
     }
+
     private async UniTask MovingProfilePagesToStartOutComePosition()
     {
         try

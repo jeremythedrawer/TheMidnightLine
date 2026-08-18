@@ -49,7 +49,7 @@ public class FadeBlack : MonoBehaviour
     }
     private void FadeToBlackToScoreScene()
     {
-        FadeInChangeScene("...or you will be SHOT", Scenes.SceneType.Score, sceneIndex: 1);
+        FadeInChangeScene("Performance Review", Scenes.SceneType.Score, sceneIndex: 1);
     }
     public void FadeInChangeScene(string text, SceneType sceneType, int sceneIndex, float uvPosX = 0, float uvPosY = 0, float alpha = 0, float fadeBlackZPos = DEFAULT_DEPTH)
     {

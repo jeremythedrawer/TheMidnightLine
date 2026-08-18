@@ -92,7 +92,10 @@ public class CursorController : MonoBehaviour
                             if (selectedNPC == NPCBrain.ExamplePassenger)
                             {
                                 OnClickExamplePassenger?.Invoke();
-                                NPCBrain.ExamplePassenger.atlasRenderer.customBit &= ~((int)ColorBits.Outline);
+                                if (NPCBrain.ExamplePassenger.ticketHasBeenChecked)
+                                {
+                                    NPCBrain.ExamplePassenger.atlasRenderer.customBit &= ~((int)ColorBits.Outline);
+                                }
                                 NPCBrain.ExamplePassenger.ReturnExamplePassenger();
                             }
                         }

@@ -589,7 +589,7 @@ public class Notepad : MonoBehaviour
                 
                 notepadData.subState |= SubState.EraseToggle;
 
-                if (spyStats.curTutorialState != TutorialState.None)
+                if (spyStats.curTutorialState != TutorialState.None && activePage.pageType == PageType.ColorKey)
                 {
                     OnRevertTutorial?.Invoke();
                     activePage.SetColorMarkerButtonSprite(activePage.activePlayerWriteRowIndex, unlocked: false);
@@ -759,13 +759,12 @@ public class Notepad : MonoBehaviour
 
             int behaviourValue = (int)npc.behaviours;
 
-            int[] validFlags = new int[32];
+            int[] validFlags = new int[BEHAVIOURS_COUNT];
             int flagCount = 0;
 
-            for (int j = 0; j < 32; j++)
+            for (int j = 0; j < BEHAVIOURS_COUNT; j++)
             {
                 int flag = 1 << j;
-
                 if ((behaviourValue & flag) != 0)
                 {
                     validFlags[flagCount] = flag;
@@ -775,7 +774,7 @@ public class Notepad : MonoBehaviour
             for (int j = 0; j < flagCount; j++)
             {
                 Behaviours firstBehaviour = (Behaviours)validFlags[j];
-                for (int k = j; k < flagCount; k++)
+                for (int k = j + 1; k < flagCount; k++)
                 {
                     Behaviours secondBehaviour = (Behaviours)validFlags[k];
                     Behaviours twoBehaviours = firstBehaviour | secondBehaviour;
@@ -785,15 +784,7 @@ public class Notepad : MonoBehaviour
                         behaviours = twoBehaviours,
                         npcPrefabIndex = i,
                     };
-
-                    if (k == j)
-                    {
-                        bystanderProfiles.Add(npcProfile);
-                    }
-                    else
-                    {
-                        totalNPCProfiles.Add(npcProfile);
-                    }
+                    totalNPCProfiles.Add(npcProfile);
                 }
             }
         }

@@ -554,8 +554,6 @@ public class ColorPicker : MonoBehaviour
                                 colorRend.custom.x = color.r;
                                 colorRend.custom.y = color.g;
                                 colorRend.custom.z = color.b;
-
-                                unlockCount++;
                             }
                             else
                             {
@@ -589,8 +587,6 @@ public class ColorPicker : MonoBehaviour
                                 colorRend.custom.x = color.r;
                                 colorRend.custom.y = color.g;
                                 colorRend.custom.z = color.b;
-
-                                unlockCount++;
                             }
                             else
                             {

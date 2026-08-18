@@ -271,9 +271,9 @@ public class TrainController : MonoBehaviour
                                 if (stats.slideDoorsAmountOpened == 0)
                                 {
                                     stats.curStationIndex++;
-                                        trip.stationAhead = trip.stationsDataArray[stats.curStationIndex];
-                                        NextStationInstance = null;
-                                        stats.targetVelocity.x = KMPHToVelocity(DEFAULT_TARGET_KMPH);
+                                    trip.stationAhead = trip.stationsDataArray[stats.curStationIndex];
+                                    NextStationInstance = null;
+                                    stats.targetVelocity.x = KMPHToVelocity(DEFAULT_TARGET_KMPH);
                                 }
                             }
                         }
@@ -472,6 +472,7 @@ public class TrainController : MonoBehaviour
         stats.targetNightValue = trip.dayNightValues[ticketParamsIndex];
         stats.targetVelocity.x = KMPHToVelocity(stats.targetKMPH);
         metersTravelledOnBezier = 0;
+        metersTravelled = 0;
         MoveOnBezier().Forget();
     }
     private void InitAtStartPosition()

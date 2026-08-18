@@ -224,70 +224,83 @@ public class SpawnMaster : MonoBehaviour
         for (int i = 0; i < particleAtlas.posDataIndexOffset; i++)
         {
             ParticlePosData posData = particleAtlas.posData[i];
+
             if (posData.ticketCheckEnd > trip.ticketsCheckedTotal) continue;
 
-            if (posData.spawnState != SpawnState.MovingOut)
+            switch(posData.spawnState)
             {
-                if (posData.postScrollers != null)
+                case SpawnState.MovingIn:
                 {
-                    int particleIndex = (spawnComputeData.moveInputs[posData.maxParticleIndex] & (int)ParticleMoveInputs.PostAtMinBit) != 0 ? posData.minParticleIndex : posData.maxParticleIndex;
-                    for (int j = 0; j < posData.postScrollers.Length; j++)
+                    //Delay until alive
+                }
+                break;
+
+                case SpawnState.Alive:
+                {
+                    if (posData.postScrollers != null)
                     {
-                        EdgeScroller postScroller = posData.postScrollers[j];
+                        int particleIndex = (spawnComputeData.moveInputs[posData.maxParticleIndex] & (int)ParticleMoveInputs.PostAtMinBit) != 0 ? posData.minParticleIndex : posData.maxParticleIndex;
+                        for (int j = 0; j < posData.postScrollers.Length; j++)
+                        {
+                            EdgeScroller postScroller = posData.postScrollers[j];
 
-                        postScroller.mpb = GetMPB();
-                        postScroller.argsBuffer = GetArgsBuffer();
-                        postScroller.edgeSpriteDataBuffer = GetEdgeSpriteBuffer();
-                        postScroller.edgeSpriteDataBuffer.SetData(postScroller.spriteData);
+                            postScroller.mpb = GetMPB();
+                            postScroller.argsBuffer = GetArgsBuffer();
+                            postScroller.edgeSpriteDataBuffer = GetEdgeSpriteBuffer();
+                            postScroller.edgeSpriteDataBuffer.SetData(postScroller.spriteData);
 
-                        postScroller.mpb.SetTexture("_AtlasTexture", particleAtlas.atlas.texture);
+                            postScroller.mpb.SetTexture("_AtlasTexture", particleAtlas.atlas.texture);
 
-                        postScroller.mpb.SetBuffer("_Particles", spawnComputeData.outputBuffer);
-                        postScroller.mpb.SetBuffer("_SpriteData", particleAtlas.spriteDataBuffer);
-                        postScroller.mpb.SetBuffer("_EdgeSpriteData", postScroller.edgeSpriteDataBuffer);
+                            postScroller.mpb.SetBuffer("_Particles", spawnComputeData.outputBuffer);
+                            postScroller.mpb.SetBuffer("_SpriteData", particleAtlas.spriteDataBuffer);
+                            postScroller.mpb.SetBuffer("_EdgeSpriteData", postScroller.edgeSpriteDataBuffer);
 
-                        postScroller.mpb.SetInt("_ParticleOffset", particleIndex);
+                            postScroller.mpb.SetInt("_ParticleOffset", particleIndex);
 
-                        posData.postScrollers[j] = postScroller;
+                            posData.postScrollers[j] = postScroller;
+                        }
                     }
-                }
 
-                for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
-                {
-                    uint newMoveInput = spawnComputeData.moveInputs[j];
-                    newMoveInput |= (int)ParticleMoveInputs.Dying;
-                    spawnComputeData.moveInputs[j] = newMoveInput;
-                }
-                posData.spawnState = SpawnState.MovingOut;
-                particleAtlas.posData[i] = posData;
-            }
-            else
-            {
-                bool isDead = true;
-                for (int k = posData.minParticleIndex; k <= posData.maxParticleIndex; k++)
-                {
-                    if ((spawnComputeData.moveInputs[k] & (uint)ParticleMoveInputs.Dead) == 0)
+                    for (int j = posData.minParticleIndex; j <= posData.maxParticleIndex; j++)
                     {
-                        isDead = false;
-                        break;
+                        uint newMoveInput = spawnComputeData.moveInputs[j];
+                        newMoveInput |= (int)ParticleMoveInputs.Dying;
+                        spawnComputeData.moveInputs[j] = newMoveInput;
                     }
+                    posData.spawnState = SpawnState.MovingOut;
+                    particleAtlas.posData[i] = posData;
                 }
+                break;
 
-                if (!isDead) continue;
-
-                if (posData.mpb != null)
+                case SpawnState.MovingOut:
                 {
-                    ReturnMPB(posData.mpb);
-                    posData.mpb = null;
+                    bool isDead = true;
+                    for (int k = posData.minParticleIndex; k <= posData.maxParticleIndex; k++)
+                    {
+                        if ((spawnComputeData.moveInputs[k] & (uint)ParticleMoveInputs.Dead) == 0)
+                        {
+                            isDead = false;
+                            break;
+                        }
+                    }
 
-                }
-                if (posData.quadScaleBuffer != null)
-                {
-                    ReturnQuadScaleBuffer(posData.quadScaleBuffer);
-                    posData.quadScaleBuffer = null;
-                }
+                    if (!isDead) continue;
 
-                if (i == particleAtlas.posDataIndexOffset - 1 && particleAtlas.posDataIndexOffset == particleAtlas.posData.Length) particleAtlas.isCompleted = true;
+                    if (posData.mpb != null)
+                    {
+                        ReturnMPB(posData.mpb);
+                        posData.mpb = null;
+
+                    }
+                    if (posData.quadScaleBuffer != null)
+                    {
+                        ReturnQuadScaleBuffer(posData.quadScaleBuffer);
+                        posData.quadScaleBuffer = null;
+                    }
+
+                    if (i == particleAtlas.posDataIndexOffset - 1 && particleAtlas.posDataIndexOffset == particleAtlas.posData.Length) particleAtlas.isCompleted = true;
+                }
+                break;
             }
 
             particleAtlas.posData[i] = posData;

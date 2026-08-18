@@ -18,8 +18,11 @@ public class Station : MonoBehaviour
     }
     public void SpawnNPCs()
     {
+        int totalNPCSSpawned = 0;
+
         for (int i = 0; i < station.bystanderProfiles.Length; i++)
         {
+            totalNPCSSpawned++;
             NPCProfile bystanderProfile = station.bystanderProfiles[i];
             float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
 
@@ -43,6 +46,7 @@ public class Station : MonoBehaviour
 
         for (int i = trip.traitorsSpawned; i < maxTraitorSpawnIndex; i++)
         {
+            totalNPCSSpawned++;
             TraitorProfile traitorProfile = trip.traitorProfiles[i];
             float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
 
@@ -63,6 +67,7 @@ public class Station : MonoBehaviour
 
         for (int i = 0; i < station.accompliceProfiles.Length; i++)
         {
+            totalNPCSSpawned++;
             NPCProfile accompliceProfile = station.accompliceProfiles[i];
 
             float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
@@ -82,6 +87,7 @@ public class Station : MonoBehaviour
             }
             accomplice.Init();
         }
+        Debug.Log("Total NPCS spawned" + totalNPCSSpawned);
     }
     //public void SetFrontParallaxPosition()
     //{

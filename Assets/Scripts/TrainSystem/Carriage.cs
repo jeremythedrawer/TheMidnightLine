@@ -142,6 +142,11 @@ public class Carriage : MonoBehaviour
     }
     public void AddToSeatQueue(NPCBrain npc)
     {
+        if (seatQueue.npcsCount == seatAmount)
+        {
+            npc.FindStandingPosition();
+            return;
+        }
         npc.seatQueueIndex = seatQueue.npcsCount;
         seatQueue.npcs[seatQueue.npcsCount] = npc;
         seatQueue.npcsCount++;

@@ -119,6 +119,7 @@ public static class Atlas
         Climb = 1 << 4,
         Coughing = 1 << 5,
         QuestionMark = 1 << 6,
+
     }
     public enum SpriteMode
     {
