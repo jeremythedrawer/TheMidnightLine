@@ -106,7 +106,9 @@ Shader "Custom/s_zoneParticles"
                 half dayNightInfluence = dayNightNDC * normDepth;
                 half bayer = BayerX8(tex.r - dayNightInfluence, i.positionHCS.y);
 
-                half3 finalColor = lerp(_BlackColor, _WhiteColor, bayer);
+
+                half3 nightFactor = lerp(_WhiteColor, _BlackColor, _DayNight * normDepth);
+                half3 finalColor = lerp(_BlackColor, nightFactor, bayer);
                 return half4(finalColor, 1);
             }
             ENDHLSL

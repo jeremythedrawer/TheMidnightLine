@@ -382,7 +382,7 @@ public class SpyBrain : MonoBehaviour
                     PickingNPCToTicketCheck = false;
                 }
 
-                if (playerInputs.mouseLeftUp) canExitState = true;
+                if (!playerInputs.ticketCheckKeyHold && !playerInputs.mouseLeftHold && playerInputs.move == 0) canExitState = true;
             }
             break;
             case SpyState.Notepad:
@@ -622,7 +622,6 @@ public class SpyBrain : MonoBehaviour
             case SpyState.PickingNPCTicketCheck:
             {
                 PickingNPCToTicketCheck = true;
-                NPCPicker npcPicker = SceneController.GetNPCPicker();
                 QuickSortNPCByXPos(possibleNPCsToTicketCheck, 0, curNPCTicketCheckHoverCount - 1);
 
                 for (int i = 0; i < curNPCTicketCheckHoverCount; i++)
@@ -630,6 +629,7 @@ public class SpyBrain : MonoBehaviour
                     possibleNPCsToTicketCheck[i].talkingToSpy = true;
                 }
 
+                NPCPicker npcPicker = SceneController.GetNPCPicker();
                 npcPicker.Open(possibleNPCsToTicketCheck, curNPCTicketCheckHoverCount, PickerFunctionType.TicketCheck);
 
             }

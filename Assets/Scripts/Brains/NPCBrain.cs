@@ -98,6 +98,7 @@ public class NPCBrain : MonoBehaviour
     public bool queuedForSeat;
     public bool queuedForSlideDoor;
     public bool playingPrepBehaviour;
+    public bool toQueueForSeat;
 
     public delegate void Callback();
     private void OnEnable()
@@ -379,18 +380,19 @@ public class NPCBrain : MonoBehaviour
 
                     if (behaviourClock > stateDuration)
                     {
-                        if ((NPCMotion)curClip.motionIndex == NPCMotion.StandingBlinking || (NPCMotion)curClip.motionIndex == NPCMotion.StandingBreathing)
+                        if (toQueueForSeat && (NPCMotion)curClip.motionIndex == NPCMotion.StandingBlinking || (NPCMotion)curClip.motionIndex == NPCMotion.StandingBreathing)
                         {
                             QueueForSeat();
+                            toQueueForSeat = false;
                         }
                         else
                         {
                             if (role != Role.Accomplice)
                             {
                                 PickNextBehaviour();
-                            }
+                            }                    
+                            toQueueForSeat = true;
                         }
-                    
                         behaviourClock = 0;
                     }
                 }
