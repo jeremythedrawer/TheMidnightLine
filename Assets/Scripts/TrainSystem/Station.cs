@@ -87,7 +87,6 @@ public class Station : MonoBehaviour
             }
             accomplice.Init();
         }
-        Debug.Log("Total NPCS spawned" + totalNPCSSpawned);
     }
     //public void SetFrontParallaxPosition()
     //{

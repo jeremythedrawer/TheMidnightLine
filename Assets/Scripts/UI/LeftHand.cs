@@ -226,7 +226,10 @@ public class LeftHand : MonoBehaviour
 
                         atTargetPos = true;
 
-                        if (activePage.activePlayerWriteTextRenderer != null && !movedForColorPicker && sceneData.activeSceneType == Scenes.SceneType.Trip)
+                        bool notepadInUse = (notepadData.subState & Notepad.SubState.InUse) != 0;
+                        bool atTripScene = sceneData.activeSceneType == Scenes.SceneType.Trip;
+                        bool pageHasWritableText = activePage.activePlayerWriteTextRenderer != null;
+                        if (pageHasWritableText && !movedForColorPicker && atTripScene && notepadInUse)
                         {
                             SetState(State.Stationary);
                             MoveToLeftOfPaper();

@@ -124,6 +124,7 @@ public class Notepad : MonoBehaviour
     }
     private void Update()
     {
+        activePage.exitButton.UpdateButton(playerInputs);
         if ((notepadData.subState & SubState.InUse) != 0)
         {
             UpdateState();
@@ -198,6 +199,7 @@ public class Notepad : MonoBehaviour
     {
         EnterState(NotepadState.None);
 
+        
         if (activePage.pageType == PageType.ColorKey)
         {
             if ((notepadData.abilityIconsShown & UnlockType.Color) == 0 && (curTrip.curUnlocks & UnlockType.Color) != 0)

@@ -186,8 +186,6 @@ public class Page : MonoBehaviour
                 activePlayerWriteTextRenderer = null;
                 playerWriteIndex = 0;
                 activePlayerWriteRowIndex = 0;
-
-                SwitchWriteRow(index: 0);
             }
             break;
         }

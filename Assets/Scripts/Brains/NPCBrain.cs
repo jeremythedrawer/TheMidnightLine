@@ -156,7 +156,6 @@ public class NPCBrain : MonoBehaviour
     public void BoardTrain()
     {
         trainStats.totalNPCsBoarded++;
-        Debug.Log("Total NPCS boarded " + trainStats.totalNPCsBoarded);
         onTrain = true;
         QueueForSeat();
         rigidBody.includeLayers = layerSettings.trainMask;
