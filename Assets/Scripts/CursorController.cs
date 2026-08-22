@@ -92,10 +92,7 @@ public class CursorController : MonoBehaviour
                             if (selectedNPC == NPCBrain.ExamplePassenger)
                             {
                                 OnClickExamplePassenger?.Invoke();
-                                if (NPCBrain.ExamplePassenger.ticketHasBeenChecked)
-                                {
-                                    NPCBrain.ExamplePassenger.atlasRenderer.customBit &= ~((int)ColorBits.Outline);
-                                }
+
                                 NPCBrain.ExamplePassenger.ReturnExamplePassenger();
                             }
                         }
@@ -214,15 +211,18 @@ public class CursorController : MonoBehaviour
                 }
             }
         }
-        else if (IsInsideBounds(NPCBrain.ExamplePassenger.atlasRenderer.bounds, isClickable: false))
+        else if (NPCBrain.ExamplePassenger.atDepthForExample)
         {
-            hoveredNPCs[0] = NPCBrain.ExamplePassenger;
-            hoveredNPCCount++;
-            NPCBrain.ExamplePassenger.ToggleHover(true);
-        }
-        else
-        {
-            NPCBrain.ExamplePassenger.ToggleHover(false);
+            if (IsInsideBounds(NPCBrain.ExamplePassenger.atlasRenderer.bounds, isClickable: false))
+            {
+                hoveredNPCs[0] = NPCBrain.ExamplePassenger;
+                hoveredNPCCount++;
+                NPCBrain.ExamplePassenger.ToggleHover(true);
+            }
+            else
+            {
+                NPCBrain.ExamplePassenger.ToggleHover(false);
+            }
         }
 
         if (hoveredNPCCount == 1 && hoveringRevealedNPC)

@@ -53,6 +53,7 @@ Shader "Custom/s_atlasNPC"
             
 
             float3 _BlackColor;
+            float3 _WhiteColor;
             float3 _ColorKey0;
             float3 _ColorKey1;
             float3 _MeridiaColor;
@@ -163,7 +164,8 @@ Shader "Custom/s_atlasNPC"
                 finalColor += diagonal + colKey0 + colKey1 + colKey01 + blackColor + meridiaColor;
                 float bayerColMask = BayerX8(mouseColor * 0.75, i.positionHCS.y);
                 finalColor += bayerColMask;
-                
+                finalColor = min(finalColor, _WhiteColor);
+
                 float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;
                 half4 carriageSDF = SAMPLE_TEXTURE2D(_CarriageBoundsTexture, sampler_CarriageBoundsTexture, worldToTrain);
                 float bayer = BayerX8(carriageSDF.r + 0.5,  i.positionHCS.y);

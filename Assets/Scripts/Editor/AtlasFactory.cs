@@ -843,7 +843,6 @@ public class AtlasFactory : EditorWindow
                     newSliceSprite.sprite.uvPivot = oldSprite.uvPivot;
                     newSliceSprites[i] = newSliceSprite;
 
-                    newSliceSprites.RemoveAt(i);
                     atlas.slicedSprites[j] = newSliceSprites[i];
                     newSliceSprites.RemoveAt(i);
                     break;

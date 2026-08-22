@@ -10,7 +10,7 @@ public static class AtlasSpawn
     public const float MAIN_MAX = 26.0f;
 
     public const int TRAIN_TRACKS_DEPTH = 6;
-    public const int TRAIN_LINE_DEPTH = 5;
+    public const int TRAIN_LINE_DEPTH = 25;
     public const float TRAIN_WHEEL_HEIGHT = -0.903f;
     public const float TRAIN_LINE_HEIGHT = 2.353f;
 

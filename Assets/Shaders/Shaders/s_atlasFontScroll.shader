@@ -36,6 +36,8 @@ Shader "Custom/s_atlasFontScroll"
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
+            float3 _WhiteColor;
+
             Varyings vert(Attributes v)
             {
                 Varyings o;
@@ -90,7 +92,7 @@ Shader "Custom/s_atlasFontScroll"
                 half alpha = color.a * rightMask * leftMask;
 
                 clip(alpha - 0.001);
-                return half4 (finalColor, 1);
+                return half4 (finalColor * _WhiteColor, 1);
             }
             ENDHLSL
         }

@@ -17,42 +17,18 @@ MonoBehaviour:
   posData:
   - preScrollers: []
     postScrollers: []
-    prefabGUID: 73003fd2c9941f8428e7816d1debbff5
-    quadScales:
-    - {x: 6, y: 1, z: 0, w: 0}
-    prevDepthIndices: {x: 0, y: 0}
-    widthType: 2
-    spawnState: 2
-    ticketCheckStart: 0
-    ticketCheckEnd: 21
-    quadCount: 2
-    particleCount: 2
-    minParticleIndex: 0
-    maxParticleIndex: 1
-    depth: 5
-    depthSize: 1
-    spriteIndex: 0
-    spritesPerParticle: 1
-    posY: 2.353
-    posX: 0
-    scaleY: 1
-    scaleX: 6
-    randScale: 0
-    elevate: 0
-  - preScrollers: []
-    postScrollers: []
     prefabGUID: 88213bfcf45a1e14dbff676518b881d0
     quadScales:
     - {x: 12, y: 1, z: 0, w: 0}
     prevDepthIndices: {x: 0, y: 0}
     widthType: 2
-    spawnState: 2
+    spawnState: 1
     ticketCheckStart: 0
     ticketCheckEnd: 16
     quadCount: 2
     particleCount: 2
-    minParticleIndex: 2
-    maxParticleIndex: 3
+    minParticleIndex: 0
+    maxParticleIndex: 1
     depth: 6
     depthSize: 1
     spriteIndex: 3
@@ -65,12 +41,36 @@ MonoBehaviour:
     elevate: 0
   - preScrollers: []
     postScrollers: []
+    prefabGUID: 73003fd2c9941f8428e7816d1debbff5
+    quadScales:
+    - {x: 6, y: 1, z: 0, w: 0}
+    prevDepthIndices: {x: 0, y: 0}
+    widthType: 2
+    spawnState: 1
+    ticketCheckStart: 0
+    ticketCheckEnd: 21
+    quadCount: 2
+    particleCount: 2
+    minParticleIndex: 2
+    maxParticleIndex: 3
+    depth: 25
+    depthSize: 1
+    spriteIndex: 0
+    spritesPerParticle: 1
+    posY: 2.353
+    posX: 0
+    scaleY: 1
+    scaleX: 6
+    randScale: 0
+    elevate: 0
+  - preScrollers: []
+    postScrollers: []
     prefabGUID: 9ecf53fd39bcd6b4aa1f68c82bea7bdb
     quadScales:
     - {x: 61, y: 1, z: 0, w: 0}
     prevDepthIndices: {x: 0, y: 0}
     widthType: 2
-    spawnState: 2
+    spawnState: 1
     ticketCheckStart: 0
     ticketCheckEnd: 16
     quadCount: 2
@@ -94,7 +94,7 @@ MonoBehaviour:
     - {x: 12, y: 1, z: 0, w: 0}
     prevDepthIndices: {x: 0, y: 0}
     widthType: 2
-    spawnState: 2
+    spawnState: 1
     ticketCheckStart: 0
     ticketCheckEnd: 10
     quadCount: 2
@@ -118,7 +118,7 @@ MonoBehaviour:
     - {x: 12, y: 1, z: 0, w: 0}
     prevDepthIndices: {x: 0, y: 0}
     widthType: 2
-    spawnState: 2
+    spawnState: 1
     ticketCheckStart: 0
     ticketCheckEnd: 15
     quadCount: 2
@@ -140,7 +140,7 @@ MonoBehaviour:
     prefabGUID: b1cb8e4805978934c88f2d54dccf7603
     quadScales:
     - {x: 14, y: 1, z: 0, w: 0}
-    prevDepthIndices: {x: 2, y: 3}
+    prevDepthIndices: {x: 0, y: 1}
     widthType: 2
     spawnState: 2
     ticketCheckStart: 16
@@ -174,7 +174,7 @@ MonoBehaviour:
     - {x: 11, y: 0.99999994, z: 0, w: 0}
     prevDepthIndices: {x: 223, y: 306}
     widthType: 2
-    spawnState: 2
+    spawnState: 1
     ticketCheckStart: 16
     ticketCheckEnd: 18
     quadCount: 2
@@ -198,7 +198,7 @@ MonoBehaviour:
     - {x: 12, y: 1, z: 0, w: 0}
     prevDepthIndices: {x: 10, y: 11}
     widthType: 2
-    spawnState: 2
+    spawnState: 1
     ticketCheckStart: 18
     ticketCheckEnd: 21
     quadCount: 2
@@ -222,7 +222,7 @@ MonoBehaviour:
     - {x: 1, y: 1, z: 0, w: 0}
     prevDepthIndices: {x: 4, y: 5}
     widthType: 0
-    spawnState: 2
+    spawnState: 1
     ticketCheckStart: 18
     ticketCheckEnd: 21
     quadCount: 2
@@ -239,7 +239,7 @@ MonoBehaviour:
     scaleX: 1
     randScale: 0
     elevate: 1
-  posDataIndexOffset: 9
+  posDataIndexOffset: 0
   spriteCount: 12
   isCompleted: 0
   spriteData:

@@ -169,6 +169,8 @@ public class Carriage : MonoBehaviour
 
         NPCBrain npc = seatQueue.npcs[seatQueue.npcsCount - 1];
 
+        if (npc.seatPosIndex != int.MaxValue) return;
+
         float npcX = npc.transform.position.x;
         float closestDist = float.PositiveInfinity;
         int bestIndex = int.MaxValue;
@@ -351,10 +353,9 @@ public class Carriage : MonoBehaviour
         {
         }
     }
-    private void OnDrawGizmos()
+    private void OnDrawGizmosSelected()
     {
         if (seatRenderers.Length < 0 || seatData.xPos.Length < 0) return;
-        Gizmos.color = Color.red;
 
         AtlasRenderer seatRenderer = seatRenderers[0];
         float yPos = seatRenderer.bounds.center.y;
@@ -366,6 +367,15 @@ public class Carriage : MonoBehaviour
             float xPos = seatData.xPos[i];
             Vector3 center = new Vector3(xPos, yPos, zPos);
             Vector3 size = new Vector3(tileWidth, ySize, 0);
+
+            if (seatData.filled[i])
+            {
+                Gizmos.color = Color.red;
+            }
+            else
+            {
+                Gizmos.color = Color.green;
+            }
             Gizmos.DrawWireCube(center, size);
         }
     }

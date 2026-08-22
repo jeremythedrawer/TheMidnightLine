@@ -86,6 +86,7 @@ public class StartUI : MonoBehaviour
 
     public int curTraitorsShown;
     public int curTraitorProfilesReviewed;
+    public int outcomePageCompletedMask;
 
     public UIState curState;
 
@@ -262,6 +263,28 @@ public class StartUI : MonoBehaviour
                     Page profilePage = notepad.pages[i + 1];
                     int index = i;
 
+                    int numpadIconIndex = -1;
+                    switch (index)
+                    {
+                        case 0:
+                        {
+                            numpadIconIndex = ONE_NUMPAD_SPRITE_INDEX;
+                        }
+                        break;
+                        case 1:
+                        {
+                            numpadIconIndex = TWO_NUMPAD_SPRITE_INDEX;
+                        }
+                        break;
+                        case 2:
+                        {
+                            numpadIconIndex = THREE_NUMPAD_SPRITE_INDEX;
+                        }
+                        break;
+                    }
+                    profilePage.exitButton.renderer.UpdateSpriteInputsByIndex(numpadIconIndex);
+                    profilePage.exitButton.renderer.FlipHSimple(false);
+                    profilePage.exitButton.renderer.FlipVSimple(false);
 
                     void OnEnterExit(IconUIElement icon)
                     {
@@ -296,6 +319,8 @@ public class StartUI : MonoBehaviour
 
                     profilePage.carouselLeftButton.renderer.enabled = false;
                     profilePage.carouselRightButton.renderer.enabled = false;
+                    profilePage.leftButton.renderer.enabled = false;
+                    profilePage.rightButton.renderer.enabled = false;
 
                     profilePage.spaceBarButton.renderer.custom.w = 1;
                     profilePage.spaceBarButton.InitButton(OnClickSpacebar, OnEnterSpacebar, OnExitSpacebar);
@@ -410,6 +435,14 @@ public class StartUI : MonoBehaviour
                             {
                                 float curPosY = Mathf.Lerp(page.transform.localPosition.y, outcomePageInactivePositions[i].y, Time.deltaTime * MOVE_DAMP);
                                 page.transform.localPosition = new Vector3(page.transform.localPosition.x, curPosY, page.transform.localPosition.z);
+                            }
+
+                            if (playerInputs.numpad == i + 1 && (outcomePageCompletedMask & (1 << i)) == 0)
+                            {
+                                activePage = page;
+                                curTraitorProfile = trip.traitorProfiles[activePage.traitorIndex];
+                                MovePageToActivePosition();
+                                outcomePageCompletedMask |= (1 << i);
                             }
                         }
                     }

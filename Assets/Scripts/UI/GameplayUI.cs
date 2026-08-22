@@ -7,7 +7,7 @@ using static Spy;
 public class GameplayUI : MonoBehaviour
 {
     const float APPEARING_TIME = 0.5f;
-
+    const float RESET_TIME = 2;
     public static event Action OnIncreaseTraitorCountFirstTime;
 
     public PlayerInputsSO playerInputs;
@@ -69,6 +69,8 @@ public class GameplayUI : MonoBehaviour
 
     public float naturalMoveClock;
     public float fadeBlackClock;
+    
+    public float resetClock;
 
     public bool canExitState;
     public bool uiAtNightMode;
@@ -83,7 +85,6 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnWalkPastSlideDoors += HideKeyIcon;
         SpyBrain.OnEnteredTrain += AppearRailMap;
         SpyBrain.OnExitTrain += DissappearRailMap;
-        SpyBrain.OnTicketInspect += SetDayNightUI;
         SpyBrain.OnEnteredTrain += DisappearKeyIcon;
         SpyBrain.OnTicketInspect += DisappearKeyIcon;
         SpyBrain.OnTicketInspect += MoveRailMap;
@@ -122,7 +123,6 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnWalkPastSlideDoors -= HideKeyIcon;
         SpyBrain.OnEnteredTrain -= DisappearKeyIcon;
         SpyBrain.OnExitTrain -= DissappearRailMap;
-        SpyBrain.OnTicketInspect -= SetDayNightUI;
         SpyBrain.OnTicketInspect -= DisappearKeyIcon;
         SpyBrain.OnTicketInspect -= MoveRailMap;
         SpyBrain.OnOpenNotepad -= SetToNotepadState;
@@ -155,6 +155,20 @@ public class GameplayUI : MonoBehaviour
         UpdateState();
         redoButton.UpdateButton(playerInputs);
         fadeBlack.CheckToFadeOutSceneChange();
+
+        if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.RightShift))
+        {
+            resetClock += Time.deltaTime;
+            if (resetClock > RESET_TIME)
+            {
+                Redo();
+                resetClock = 0;
+            }
+        }
+        else if (resetClock != 0)
+        {
+            resetClock = 0;
+        }
     }
     private void Init()
     {
@@ -232,7 +246,17 @@ public class GameplayUI : MonoBehaviour
                     break;
                     case TutorialState.Color3:
                     {
-
+                        if (canExitState && playerInputs.writeKeyDown)
+                        {
+                            if (!tutorialRenderer.hasText)
+                            {
+                                curTutorialIcon.ctsMove?.Cancel();
+                            }
+                            else
+                            {
+                                FinishTutorial();
+                            }
+                        }
                     }
                     break;
                     case TutorialState.MultiColor1:
@@ -251,17 +275,7 @@ public class GameplayUI : MonoBehaviour
 
                         if (canExitState && playerInputs.writeKeyDown)
                         {
-                            curTutorialIcon.renderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 4);
-                            curTutorialIcon.renderer.transform.SetParent(unlockPicker.transform, true);
-
-                            fadeBlack.FadeOut();
-
-                            spyStats.tutorialsCompleted |= spyStats.curTutorialState;
-                            spyStats.curTutorialState = TutorialState.None;
-                            spyStats.playerInputsEnabled = true;
-                            tutorialRenderer.SetText("");
-
-                            spyStats.checkingNotepad = false;
+                            FinishTutorial();
                         }
                     }
                     break;
@@ -339,8 +353,21 @@ public class GameplayUI : MonoBehaviour
                                 spyStats.curTutorialState = TutorialState.RuleOut2;
                                 NPCBrain.ExamplePassenger.SetCustomDepth(-39);
                                 NPCBrain.ExamplePassenger.atlasRenderer.customBit |= (int)ColorBits.Outline;
-                                fadeBlack.spacebarRenderer.custom.w = 0;
-                                fadeBlack.CancelFadeBlack();
+                            }
+                        }
+                    }
+                    break;
+                    case TutorialState.RuleOut2:
+                    {
+                        if (canExitState && playerInputs.writeKeyDown)
+                        {
+                            if (!tutorialRenderer.hasText)
+                            {
+                                curTutorialIcon.ctsMove?.Cancel();
+                            }
+                            else
+                            {
+                                FinishTutorial();
                             }
                         }
                     }
@@ -483,8 +510,6 @@ public class GameplayUI : MonoBehaviour
         
         traitorIcon.renderer.SetAlpha(0);
         traitorCountText.SetAppearTextAlpha(0);
-
-        redoButton.InitButton(ClickRedo, EnterButton, ExitButton, isHold: true);
         redoButton.activePos = redoButton.renderer.transform.localPosition;
     }
     private void SetTraitorIcons()
@@ -552,6 +577,7 @@ public class GameplayUI : MonoBehaviour
         spyStats.curTutorialState = TutorialState.None;
         spyStats.playerInputsEnabled = true;
         tutorialRenderer.SetText("");
+        NPCBrain.ExamplePassenger.ReturnExamplePassenger();
 
     }
     private void SetTutorialTextBack()
@@ -623,30 +649,10 @@ public class GameplayUI : MonoBehaviour
         traitorCount--;
         traitorCountText.SetText("x" + traitorCount);
     }
-    private void SetDayNightUI()
-    {
-        if (trip.curDayNightValue >= 0.5f)
-        {
-            if (!uiAtNightMode)
-            {
-                traitorCountText.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
-                uiAtNightMode = true;
-            }
-        }
-        else
-        {
-            if (uiAtNightMode)
-            {
-                traitorCountText.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
-                uiAtNightMode = false;
-            }
-        }
-    }
 
-    private void ClickRedo(IconUIElement icon)
+    private void Redo()
     {
-        icon.renderer.custom.x = 0;
-        fadeBlack.FadeInChangeScene("", Scenes.SceneType.Start, sceneIndex: 1);
+        fadeBlack.FadeInChangeScene("New Game", Scenes.SceneType.Start, sceneIndex: 1);
         SceneController.KeepNotepad(notepad);
         notepad.gameObject.SetActive(false);
     }

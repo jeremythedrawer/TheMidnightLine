@@ -9,6 +9,8 @@ using static NPC;
 using Cysharp.Threading.Tasks;
 using System.Threading;
 using static Train;
+using System.Linq;
+
 
 
 
@@ -99,7 +101,7 @@ public class NPCBrain : MonoBehaviour
     public bool queuedForSlideDoor;
     public bool playingPrepBehaviour;
     public bool toQueueForSeat;
-
+    public bool atDepthForExample;
     public delegate void Callback();
     private void OnEnable()
     {
@@ -192,7 +194,6 @@ public class NPCBrain : MonoBehaviour
         
         curPath = NPCPath.None;
         SetPath(NPCPath.ToStandInTrain);
-        StopSitting();
     }
     public void AssignSeat(int seatIndex)
     {
@@ -217,12 +218,18 @@ public class NPCBrain : MonoBehaviour
         if (depth == transform.position.z) return;
         prevDepth = transform.position.z;
         transform.position = new Vector3(transform.position.x, transform.position.y, depth);
+        atDepthForExample = true;
     }
     public void ReturnExamplePassenger()
     {
+        if (ticketHasBeenChecked)
+        {
+            atlasRenderer.customBit &= ~((int)ColorBits.Outline);
+        }
         stopBehaving = false;
         ExamplePassenger = null;
         transform.position = new Vector3(transform.position.x, transform.position.y, prevDepth);
+        atDepthForExample = false;
     }
     private void DisableHover()
     {
@@ -581,6 +588,7 @@ public class NPCBrain : MonoBehaviour
             case NPCPath.SittingInTrain:
             {
                 float seatDepthOffset = (float)seatPosIndex / (float)curCarriage.seatData.xPos.Length;
+
                 atlasRenderer.SetWorldDepth(trainStats.depthSections.carriageSeat + seatDepthOffset);
                 transform.position = new Vector3(targetXPos, transform.position.y, transform.position.z);
                 atlasRenderer.FlipHSimple(false);
@@ -588,11 +596,14 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCPath.StandingInTrain:
             {
+                StopSitting();
                 SetStandingDepthInTrain();
             }
             break;
             case NPCPath.AtSlideDoor:
             {
+                StopSitting();
+
                 if (!onTrain)
                 {
                     curCarriage = curSlideDoors.carriage;
@@ -611,13 +622,48 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCPath.ToStandInTrain:
             {
+                StopSitting();
+
                 if (curCarriage.GetFirstPassenger() == this)
                 {
                     targetXPos = UnityEngine.Random.Range(curCarriage.insideBoundsCollider.bounds.min.x, curCarriage.insideBoundsCollider.bounds.center.x);
                 }
                 else
                 {
-                    targetXPos = UnityEngine.Random.Range(curCarriage.insideBoundsCollider.bounds.min.x, curCarriage.insideBoundsCollider.bounds.max.x);
+                    List<NPCBrain> npcs = curCarriage.curNPCList.OrderBy(npc => npc.transform.position.x).ToList();
+
+                    float leftBound = curCarriage.insideBoundsCollider.bounds.min.x;
+                    float rightBound = curCarriage.insideBoundsCollider.bounds.max.x;
+
+                    float largestGapSize = 0f;
+                    float largestGapPos = leftBound;
+
+                    float previousX = leftBound;
+
+                    foreach (NPCBrain npc in npcs)
+                    {
+                        float currentX = npc.transform.position.x;
+
+                        float gap = currentX - previousX;
+
+                        if (gap > largestGapSize)
+                        {
+                            largestGapSize = gap;
+                            largestGapPos = previousX;
+                        }
+
+                        previousX = currentX;
+                    }
+
+                    float finalGap = rightBound - previousX;
+
+                    if (finalGap > largestGapSize)
+                    {
+                        largestGapSize = finalGap;
+                        largestGapPos = previousX;
+                    }
+
+                    targetXPos = largestGapPos + largestGapSize * 0.5f;
                 }
 
                 if (curBehaviourContext != null && curBehaviourContext.behaviours == Behaviours.Known_vandal)
@@ -648,6 +694,8 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCPath.ToSlideDoor:
             {
+                StopSitting();
+
                 if (trip.stationAhead.isFrontOfTrain)
                 {                    
                     if (role == Role.Accomplice)
@@ -759,12 +807,7 @@ public class NPCBrain : MonoBehaviour
             break;
             case NPCPath.ToSmokerRoom:
             {
-                if (seatPosIndex != int.MaxValue && curCarriage.seatData.filled[seatPosIndex])
-                {
-                    curCarriage.seatData.filled[seatPosIndex] = false;
-                    seatPosIndex = int.MaxValue;
-                }
-                if (queuedForSeat) curCarriage.RemoveFromSeatQueue(this);
+                StopSitting();
                 SetStandingDepthInTrain();
 
                 if (curCarriage.GetFirstPassenger() == this)
@@ -788,15 +831,14 @@ public class NPCBrain : MonoBehaviour
                 targetDist = targetXPos - transform.position.x;
             }
             break;
-
             case NPCPath.AtSmokerRoom:
             {
                 SetStandingDepthInTrain();
             }
-            break;
-
+            break; 
             case NPCPath.ToExitStation:
             {
+
                 targetXPos = trip.stationsDataArray[profile.disembarkingStationIndex].exitLocalPosX;
                 targetDist = targetXPos - transform.localPosition.x;
             }
@@ -1013,6 +1055,7 @@ public class NPCBrain : MonoBehaviour
         if (seatPosIndex != int.MaxValue && curCarriage.seatData.filled[seatPosIndex])
         {
             curCarriage.seatData.filled[seatPosIndex] = false;
+            seatPosIndex = int.MaxValue;
         }
     }
     private void SetStandingDepthInTrain()

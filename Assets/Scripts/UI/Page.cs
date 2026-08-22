@@ -11,6 +11,7 @@ public class Page : MonoBehaviour
     public const float PAGE_NUMBER_ICON_BUFFER_X = 0.05f;
     public const float PAGE_NUMBER_ICON_BUFFER_Y = 0.15f;
     public const float SPACE_BUTTON_BUFFER = 0.05f;
+    public const float COLOR_KEY_TEXT_POS_X = 0.137f;
 
     public static AtlasClip paper_clip;
 
@@ -114,6 +115,10 @@ public class Page : MonoBehaviour
             break;
             case PageType.Profile:
             {
+                exitButton.renderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.Corner);
+                exitButton.renderer.FlipVSimple(true);
+                exitButton.renderer.FlipHSimple(true);
+
                 exitButton.InitButton(ClickExitButton, EnterExitButton, ExitExitButton);
                 rightButton.InitButton(ClickRightButton, EnterRightButton, ExitRightButton);
                 leftButton.InitButton(ClickLeftButton, EnterLeftButton, ExitLeftButton);
@@ -122,15 +127,25 @@ public class Page : MonoBehaviour
                 carouselRightButton.InitButton(ClickCarouselRightButton, EnterCarouselRightButton, ExitCarouselRightButton);
                 spaceBarButton.InitButton(ClickSpaceBarButton, EnterSpaceBarButton, ExitSpaceBarButton);
 
+
+                carouselLeftButton.renderer.enabled = true;
+                carouselRightButton.renderer.enabled = true;
+                leftButton.renderer.enabled = true;
+                rightButton.renderer.enabled = true;
+
                 carouselLeftButton.renderer.custom.w = 0;
                 carouselRightButton.renderer.custom.w = 0;
                 spaceBarButton.renderer.custom.w = 0;
 
+
+
                 for (int i = 0; i < playerWriteTextRenderers.Length; i++)
                 {
-                    playerWriteTextRenderers[i].SetAlignmentType(AtlasRendering.AtlasTextAlignmentType.Center);
-                    playerWriteTextRenderers[i].SetText("");
-                    startPlayerWritePositions[i] = playerWriteTextRenderers[i].transform.localPosition;
+                    AtlasTextRenderer textRend = playerWriteTextRenderers[i];
+                    textRend.SetAlignmentType(AtlasRendering.AtlasTextAlignmentType.Center);
+                    textRend.SetText("");
+                    textRend.transform.localPosition = new Vector3(0, textRend.transform.localPosition.y, textRend.transform.localPosition.z);
+                    startPlayerWritePositions[i] = textRend.transform.localPosition;
                 }
             }
             break;
@@ -179,9 +194,11 @@ public class Page : MonoBehaviour
                     behaviourButton.custom.z = 0;
                     behaviourButton.custom.w = 1;
 
-                    playerWriteTextRenderers[i].SetAlignmentType(AtlasRendering.AtlasTextAlignmentType.Center);
-                    playerWriteTextRenderers[i].SetText("");
-                    startPlayerWritePositions[i] = playerWriteTextRenderers[i].transform.localPosition;
+                    AtlasTextRenderer textRend = playerWriteTextRenderers[i];
+                    textRend.SetAlignmentType(AtlasRendering.AtlasTextAlignmentType.Center);
+                    textRend.SetText("");
+                    textRend.transform.localPosition = new Vector3(COLOR_KEY_TEXT_POS_X, textRend.transform.localPosition.y, textRend.transform.localPosition.z);
+                    startPlayerWritePositions[i] = textRend.transform.localPosition;
                 }
                 activePlayerWriteTextRenderer = null;
                 playerWriteIndex = 0;

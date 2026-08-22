@@ -44,6 +44,7 @@ Shader "Custom/s_atlasColor"
             float4 _DiagonalTexture_TexelSize;
 
             float3 _BlackColor;
+            float3 _WhiteColor;
             float3 _MeridiaColor;
 
             Varyings vert(Attributes v)
@@ -121,7 +122,7 @@ Shader "Custom/s_atlasColor"
                 half3 finalCol = lerp(lerp(blackColor + meridiaColor, (blackTex + col), border), lerp(blackColor + meridiaColor, col, whiteTex), t);
 
                 clip((tex.a) - 0.001);
-                return half4 (finalCol.rgb, 1);
+                return half4 (min(finalCol.rgb, _WhiteColor), 1);
             }
             ENDHLSL
         }

@@ -39,6 +39,7 @@ Shader "Custom/s_atlasSpy"
             SAMPLER(sampler_AtlasTexture);
 
             float3 _BlackColor;
+            float3 _WhiteColor;
             float3 _MeridiaColor;
 
             float _DayNight;
@@ -88,7 +89,7 @@ Shader "Custom/s_atlasSpy"
                 i.uv += uvPos;
                 half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half3 finalColor = color.r + _MeridiaColor;
+                half3 finalColor = lerp(_MeridiaColor, _WhiteColor, color.r);
 
                 clip(color.a - 0.001);
                 return half4 (finalColor, 1);

@@ -16,6 +16,7 @@ Shader "Custom/s_atlasRotate"
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
+            #include "Assets/Shaders/HLSL/AtlasParticles.hlsl"
             #pragma vertex vert
             #pragma fragment frag
 
@@ -31,6 +32,7 @@ Shader "Custom/s_atlasRotate"
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
                 uint instanceID : TEXCOORD1;
+                float3 worldPos : TEXCOORD2;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -77,7 +79,7 @@ Shader "Custom/s_atlasRotate"
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
                 o.instanceID = v.instanceID;
-
+                o.worldPos = worldPos;
                 return o;
             }
 
@@ -99,12 +101,15 @@ Shader "Custom/s_atlasRotate"
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;
                 i.uv += uvPos;
-                half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
-                half grey = color.r + (-(_DayNight * 1.1 - 0.9) * _DayNightFactor);
-                half3 finalColor = lerp(_BlackColor, _WhiteColor, grey);
+                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+                float divisor = 35;
+                half normDepth = round(i.worldPos.z/divisor) * divisor / FAR_CLIP;
+                half3 nightFactor = lerp(_WhiteColor, _BlackColor, _DayNight * normDepth);
+                half grey = tex.r + (-(_DayNight * 1.1 - 0.9) * normDepth);
+                half3 finalColor = lerp(_BlackColor, nightFactor, saturate(grey));
 
-                clip(color.a - 0.001);
+                clip(tex.a - 0.001);
                 return half4 (finalColor, 1);
             }
             ENDHLSL
