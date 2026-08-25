@@ -238,12 +238,12 @@ public static class AtlasUI
         {
         }
     }
-    public static Behaviours GetBehaviourAtIndex(Behaviours behaviours, int index)
+    public static Habits GetBehaviourAtIndex(Habits behaviours, int index)
     {
         int count = 0;
-        foreach (Behaviours flag in Enum.GetValues(typeof(Behaviours)))
+        foreach (Habits flag in Enum.GetValues(typeof(Habits)))
         {
-            if (flag == Behaviours.None) continue;
+            if (flag == Habits.None) continue;
 
             if ((behaviours & flag) != 0)
             {
@@ -251,7 +251,7 @@ public static class AtlasUI
                 count++;
             }
         }
-        return Behaviours.None;
+        return Habits.None;
     }
     public static Dictionary<TEnum, string> InitEnumToStringDict<TEnum>() where TEnum : Enum
     {

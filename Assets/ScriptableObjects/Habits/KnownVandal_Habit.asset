@@ -9,14 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd177bb62fd7f5147b69e6b35c3f9f37, type: 3}
-  m_Name: KnownVandal_BehaviourContext
+  m_Script: {fileID: 11500000, guid: 261d0d26bcf115f4fb33d9970742a94e, type: 3}
+  m_Name: KnownVandal_Habit
   m_EditorClassIdentifier: Assembly-CSharp::NPCBehaviourContextSO
   glyphPrefab: {fileID: 0}
-  wasFoundSentence: "{name}:\n\nFound in the back \nalleys of \n{location}."
+  wasFoundSentence: '{name}:
+
+    Found in the back alleys of {location}.'
   minTime: 20
   maxTime: 40
-  behaviours: 128
+  habit: 128
+  sittingPrepMotion: 0
   sittingMotion: 0
+  standingPrepMotion: 0
   standingMotion: 19
   pathToTake: 9

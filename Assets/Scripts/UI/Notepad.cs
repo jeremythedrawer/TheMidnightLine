@@ -41,11 +41,10 @@ public class Notepad : MonoBehaviour
 
     public InputData playerInputs;
     public TripData curTrip;
-    public NPCsData npcData;
+    public PassengerData npcData;
     public CameraData camStats;
     public SpyData spyStats;
     public SceneData sceneData;
-    public GameEventData gameEventData;
     public Options colorsData;
 
     public NotepadData notepadData;
@@ -93,7 +92,7 @@ public class Notepad : MonoBehaviour
         
         StartUI.OnPlayAgain += Init;
 
-        gameEventData.OnFinishTripScene.RegisterListener(KeepNotepad);
+        TrainController.OnFinishTripScene += KeepNotepad;
     }
     private void OnDisable()
     {
@@ -103,7 +102,7 @@ public class Notepad : MonoBehaviour
         
         StartUI.OnPlayAgain -= Init;
 
-        gameEventData.OnFinishTripScene.UnregisterListener(KeepNotepad);
+        TrainController.OnFinishTripScene -= KeepNotepad;
     }
     private void Update()
     {
@@ -138,7 +137,7 @@ public class Notepad : MonoBehaviour
         if (pages == null || pages.Length == 0)
         {
             AtlasUI.PromptStringDict = InitEnumToStringDict<TripPrompt>();
-            npcData.behaviourStringDict = InitEnumToStringDict<Behaviours>();
+            npcData.habitStringDict = InitEnumToStringDict<Habits>();
 
             Vector3 flipWorldPos = new Vector3();
             flipWorldPos.x = bindingRingsRend.transform.localPosition.x;
@@ -509,11 +508,11 @@ public class Notepad : MonoBehaviour
             }
             for (int j = 0; j < flagCount; j++)
             {
-                Behaviours firstBehaviour = (Behaviours)validFlags[j];
+                Habits firstBehaviour = (Habits)validFlags[j];
                 for (int k = j + 1; k < flagCount; k++)
                 {
-                    Behaviours secondBehaviour = (Behaviours)validFlags[k];
-                    Behaviours twoBehaviours = firstBehaviour | secondBehaviour;
+                    Habits secondBehaviour = (Habits)validFlags[k];
+                    Habits twoBehaviours = firstBehaviour | secondBehaviour;
 
                     NPCProfile npcProfile = new NPCProfile
                     {

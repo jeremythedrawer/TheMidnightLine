@@ -9,14 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd177bb62fd7f5147b69e6b35c3f9f37, type: 3}
-  m_Name: FrequentlyIll_BehaviourContext
+  m_Script: {fileID: 11500000, guid: 261d0d26bcf115f4fb33d9970742a94e, type: 3}
+  m_Name: FrequentlyIll_Habit
   m_EditorClassIdentifier: Assembly-CSharp::NPCBehaviourContextSO
-  glyphPrefab: {fileID: 1881641155756931871, guid: 7d4ae8297aa67ee40b87e0889c64126a, type: 3}
-  wasFoundSentence: "{name}:\n\nFound at a local \nchemist of \n{location}."
-  minTime: 5
-  maxTime: 10
-  behaviours: 64
+  glyphPrefab: {fileID: 0}
+  wasFoundSentence: '{name}:
+
+    Found at a local chemist of {location}.'
+  minTime: 8
+  maxTime: 15
+  habit: 64
   sittingPrepMotion: 0
   sittingMotion: 7
   standingPrepMotion: 0

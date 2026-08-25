@@ -9,14 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd177bb62fd7f5147b69e6b35c3f9f37, type: 3}
-  m_Name: TakesNaps_BehaviourContext
+  m_Script: {fileID: 11500000, guid: 261d0d26bcf115f4fb33d9970742a94e, type: 3}
+  m_Name: EnjoysReading_Habit
   m_EditorClassIdentifier: Assembly-CSharp::NPCBehaviourContextSO
-  glyphPrefab: {fileID: 8140541614597190951, guid: 0a5aaaf8a9dc6f14e9efe7ecc0a8e25e, type: 3}
-  wasFoundSentence: "{name}:\n\nFound sleeping at a \nbus stop in \n{location}."
-  minTime: 30
+  glyphPrefab: {fileID: 0}
+  wasFoundSentence: '{name}:
+
+    Found at a library in {location}.'
+  minTime: 20
   maxTime: 40
-  behaviours: 2
-  sittingMotion: 8
-  standingMotion: 17
+  habit: 32
+  sittingPrepMotion: 0
+  sittingMotion: 6
+  standingPrepMotion: 0
+  standingMotion: 15
   pathToTake: 0

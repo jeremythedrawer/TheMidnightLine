@@ -4,7 +4,7 @@ using static Atlas;
 using static NPC;
 
 [CreateAssetMenu(fileName = "name_BehaviourContext", menuName = "Midnight Line SOs / NPC Behaviour Context")]
-public class NPCBehaviourContextSO : ScriptableObject
+public class HabitData : ScriptableObject
 {
     public VisualEffect glyphPrefab;
 
@@ -13,7 +13,7 @@ public class NPCBehaviourContextSO : ScriptableObject
     public float minTime;
     public float maxTime;
 
-    public Behaviours behaviours;
+    public Habits habit;
     public NPCMotion sittingPrepMotion;
     public NPCMotion sittingMotion;
     public NPCMotion standingPrepMotion;

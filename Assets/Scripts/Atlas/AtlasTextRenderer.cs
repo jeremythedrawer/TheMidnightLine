@@ -280,10 +280,8 @@ public class AtlasTextRenderer : MonoBehaviour
             }
             else
             {
-                if (curLineText.Length > 0)
-                {
-                    curLineText += " ";
-                }
+                if (curLineText.Length > 0) curLineText += " ";
+
                 curLineText += word;
                 curLineWidth = newLineWidth;
             }

@@ -9,14 +9,18 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd177bb62fd7f5147b69e6b35c3f9f37, type: 3}
-  m_Name: ListensToMusic_BehaviourContext
+  m_Script: {fileID: 11500000, guid: 261d0d26bcf115f4fb33d9970742a94e, type: 3}
+  m_Name: GetsDistracted_Habit
   m_EditorClassIdentifier: Assembly-CSharp::NPCBehaviourContextSO
-  glyphPrefab: {fileID: 8898805483392028272, guid: 6d2feea3f9febc34e9aaf6a57dbbc27a, type: 3}
-  wasFoundSentence: "{name}:\n\nFound at a record \nshop near \n{location}."
+  glyphPrefab: {fileID: 0}
+  wasFoundSentence: '{name}:
+
+    Found in the middle of Main Road in {location}.'
   minTime: 15
   maxTime: 30
-  behaviours: 8
-  sittingMotion: 5
-  standingMotion: 14
+  habit: 256
+  sittingPrepMotion: 0
+  sittingMotion: 20
+  standingPrepMotion: 0
+  standingMotion: 21
   pathToTake: 0

@@ -7,7 +7,7 @@ public class HingedDoor : MonoBehaviour
     private static float DOOR_MOVE_TIME = 0.3f;
 
     [SerializeField] BoxCollider2D wallCollider;
-    [SerializeField] LayerSettingsSO layerSettings;
+    [SerializeField] LayerData layerSettings;
     [SerializeField] AtlasRenderer atlasRenderer;
     [SerializeField] Carriage carriage;
     [SerializeField] SpyData spyStats;

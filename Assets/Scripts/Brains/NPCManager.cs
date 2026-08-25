@@ -10,7 +10,7 @@ public class NPCManager : MonoBehaviour
     public static Dictionary<NPCBrain, Queue<NPCBrain>> NPCPoolDict;
 
     public TripData trip;
-    public NPCsData npcsData;
+    public PassengerData npcsData;
     public Texture2D diagonalTexture;
     public AtlasSO glyphAtlas;
 
@@ -27,7 +27,7 @@ public class NPCManager : MonoBehaviour
         Scenes.OnLoadTrip0 += InitPoolsDict;
         graffitiPool = new Graffiti[MAX_GRAFFITI_RENDERERS];
         graffitiRendererCount = -1;
-        npcsData.behaviourContextDict = SetBehaviourContextDictionary(npcsData.behaviourContexts);
+        npcsData.habitDataDict = SetBehaviourContextDictionary(npcsData.habitDataArray);
     }
     private void OnDisable()
     {

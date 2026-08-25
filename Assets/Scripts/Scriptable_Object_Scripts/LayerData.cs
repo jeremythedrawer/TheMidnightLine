@@ -3,7 +3,7 @@ using System.Reflection;
 using UnityEngine;
 
 [CreateAssetMenu(fileName = "LayerSettings_SO", menuName = "Midnight Line SOs / Layer Settings SO")]
-public class LayerSettingsSO : ScriptableObject
+public class LayerData : ScriptableObject
 {
     [Serializable] public struct StationLayers
     {

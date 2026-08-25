@@ -9,14 +9,16 @@ MonoBehaviour:
   m_GameObject: {fileID: 0}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: cd177bb62fd7f5147b69e6b35c3f9f37, type: 3}
-  m_Name: TakesPhotos_BehaviourContext
+  m_Script: {fileID: 11500000, guid: 261d0d26bcf115f4fb33d9970742a94e, type: 3}
+  m_Name: TakesPhotos_Habit
   m_EditorClassIdentifier: Assembly-CSharp::NPCBehaviourContextSO
   glyphPrefab: {fileID: 0}
-  wasFoundSentence: "{name}:\n\nFound taking \nphotos of people \nnear {location}."
+  wasFoundSentence: '{name}:
+
+    Found taking photos of people near {location}.'
   minTime: 30
   maxTime: 40
-  behaviours: 512
+  habit: 512
   sittingPrepMotion: 22
   sittingMotion: 24
   standingPrepMotion: 23

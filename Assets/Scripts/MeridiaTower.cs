@@ -27,7 +27,6 @@ public class MeridiaTower : MonoBehaviour
     public MeridiaTowerData meridiaTowerData;
     public CameraData camStats;
     public SceneData sceneData;
-    public GameEventData gameEventData;
     public InputData playerInputs;
 
     public Room elevatorRoom;

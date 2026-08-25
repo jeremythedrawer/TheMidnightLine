@@ -21,7 +21,7 @@ public class Page : MonoBehaviour
     public TripClue clueType;
 
     public TripData trip;
-    public NPCsData npcData;
+    public PassengerData npcData;
     public SpyData spyData;
     public InputData playerInputs;
     public NotepadData notepadData;
@@ -138,8 +138,8 @@ public class Page : MonoBehaviour
     {
         for (int i = 0; i < proceduralTextRenderers.Length; i++)
         {
-            Behaviours behaviour = GetBehaviourAtIndex(traitorProfile.npcProfile.behaviours, i);
-            proceduralTextRenderers[i].SetText(npcData.behaviourStringDict[behaviour]);
+            Habits behaviour = GetBehaviourAtIndex(traitorProfile.npcProfile.behaviours, i);
+            proceduralTextRenderers[i].SetText(npcData.habitStringDict[behaviour]);
         }
 
         AtlasRenderer coveredMugShot = playerWriteRenderers[0];

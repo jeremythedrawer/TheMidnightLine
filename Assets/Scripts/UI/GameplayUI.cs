@@ -13,7 +13,6 @@ public class GameplayUI : MonoBehaviour
     public InputData playerInputs;
     public CameraData cameraStats;
     public SpyData spyStats;
-    public GameEventData gameEventData;
     public NotepadData notepadData;
     public TripData trip;
     public Options options;
@@ -74,8 +73,8 @@ public class GameplayUI : MonoBehaviour
     public bool uiAtNightMode;
     private void OnEnable()
     {
-        gameEventData.OnStationLeave.RegisterListener(SetTraitorIcons);
-        gameEventData.OnStationLeave.RegisterListener(HideKeyIcon);
+        TrainController.OnStationLeave += SetTraitorIcons;
+        TrainController.OnFinishTripScene += HideKeyIcon;
 
         SpyBrain.OnTicketCheckHoverDisabled += HideKeyIcon;
         SpyBrain.OnTicketCheckHoverEnabledFirstTime += ShowEIcon;
@@ -100,8 +99,8 @@ public class GameplayUI : MonoBehaviour
     }
     private void OnDisable()
     {
-        gameEventData.OnStationLeave.UnregisterListener(SetTraitorIcons);
-        gameEventData.OnStationLeave.UnregisterListener(HideKeyIcon);
+        TrainController.OnStationLeave -= SetTraitorIcons;
+        TrainController.OnFinishTripScene -= HideKeyIcon;
 
         SpyBrain.OnTicketCheckHoverDisabled -= HideKeyIcon;
         SpyBrain.OnAtSlideDoors -= ShowSpaceIcon;

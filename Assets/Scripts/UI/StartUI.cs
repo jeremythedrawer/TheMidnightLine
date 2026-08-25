@@ -31,14 +31,13 @@ public class StartUI : MonoBehaviour
     public ColorPicker lightColorPicker;
 
     public TripData trip;
-    public GameEventData gameEventData;
     public CameraData camData;
     public InputData inputData;
     public NotepadData notepadData;
     public Options options;
     public SceneData sceneData;
     public SpyData spyStats;
-    public NPCsData npcsData;
+    public PassengerData passengerData;
     public MeridiaTowerData meridiaTowerData;
     public CursorData cursorData;
 
@@ -112,7 +111,7 @@ public class StartUI : MonoBehaviour
         FadeBlack.OnFinishFadeOut += SetToNoneStateFromOutcome;
 
         CameraController.OnArrivedAtElevator += SetToEndMenuState;
-        gameEventData.OnStartTrip.RegisterListener(StartTrip);
+        RoomDoor.OnStartTrip += StartTrip;
     }
     private void OnDisable()
     {
@@ -140,7 +139,7 @@ public class StartUI : MonoBehaviour
         CameraController.OnArrivedAtElevator -= SetToEndMenuState;
 
 
-        gameEventData.OnStartTrip.UnregisterListener(StartTrip);
+        RoomDoor.OnStartTrip -= StartTrip;
     }
     private void Update()
     {

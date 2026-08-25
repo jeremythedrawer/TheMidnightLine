@@ -26,11 +26,10 @@ public class NPCBrain : MonoBehaviour
     public BoxCollider2D boxCollider;
     
     public NPCSO npc;
-    public NPCsData npcData;
-    public LayerSettingsSO layerSettings;
+    public PassengerData npcData;
+    public LayerData layerSettings;
     public TrainSettingsSO trainSettings;
     public TrainData trainStats;
-    public GameEventData gameEventData;
     public InputData playerInputs;
     public SpyData spyStats;
     public TripData trip;
@@ -42,7 +41,7 @@ public class NPCBrain : MonoBehaviour
     public StationSO boardingStation;
     public StationSO disembarkingStation;
     
-    public NPCBehaviourContextSO curBehaviourContext;
+    public HabitData curBehaviourContext;
 
     public SlideDoors curSlideDoors;
     
@@ -70,7 +69,7 @@ public class NPCBrain : MonoBehaviour
     public NPCProfile profile;
     public AtlasClip curClip;
         
-    public Behaviours curBehaviour;
+    public Habits curBehaviour;
     public NPCState curState;
     public NPCPath curPath;
     public NPCPath prevPath;
@@ -100,21 +99,21 @@ public class NPCBrain : MonoBehaviour
     public delegate void Callback();
     private void OnEnable()
     {
-        gameEventData.OnStationArrival.RegisterListener(PrepareToBoardTrain);
-        gameEventData.OnStationSpawn.RegisterListener(PrepareToDisembarkTrain);
+        TrainController.OnStationArrival += PrepareToBoardTrain;
+        TrainController.OnStationSpawn += PrepareToDisembarkTrain;
         CursorController.OnMouseDisabled += DisableHover;
     }
     private void OnDisable()
     {
-        gameEventData.OnStationSpawn.UnregisterListener(PrepareToDisembarkTrain);
-        gameEventData.OnStationArrival.UnregisterListener(PrepareToBoardTrain);
+        TrainController.OnStationArrival -= PrepareToBoardTrain;
+        TrainController.OnStationSpawn -= PrepareToDisembarkTrain;
         CursorController.OnMouseDisabled -= DisableHover;
         ctsWaitForRandSeconds?.Cancel();
     }
     private void OnDestroy()
     {
-        gameEventData.OnStationSpawn.UnregisterListener(PrepareToDisembarkTrain);
-        gameEventData.OnStationArrival.UnregisterListener(PrepareToBoardTrain);
+        TrainController.OnStationArrival -= PrepareToBoardTrain;
+        TrainController.OnStationSpawn -= PrepareToDisembarkTrain;
         CursorController.OnMouseDisabled -= DisableHover;        
         ctsWaitForRandSeconds?.Cancel();
     }
@@ -176,11 +175,6 @@ public class NPCBrain : MonoBehaviour
         if (role == Role.Traitor)
         {
             OnTraitorDisembarkedTrain?.Invoke();
-        }
-
-        if (curCarriage.GetFirstPassenger() == this)
-        {
-            curCarriage.SetFirstPassenger();
         }
     }
     public void MoveNPCToLeftOfCarriage()
@@ -311,7 +305,7 @@ public class NPCBrain : MonoBehaviour
                     curGlyph.transform.position = transform.position;
                 }
 
-                if (curBehaviour == Behaviours.Known_vandal)
+                if (curBehaviour == Habits.Known_vandal)
                 {
                     graffiti = NPCManager.GetGraffitiRenderer(npcData.graffitiPrefab);
                     int graffitiIndex = UnityEngine.Random.Range(0, graffiti.atlas.simpleSprites.Length - 1);
@@ -438,12 +432,12 @@ public class NPCBrain : MonoBehaviour
                             curGlyph.gameObject.SetActive(true);
                             curGlyph.Play();
                             playingGlyph = true;
-                            if (curBehaviour == Behaviours.Smoke_addict)
+                            if (curBehaviour == Habits.Smoke_addict)
                             {
                                 curGlyph.SetFloat("_Lifetime", stateDuration - behaviourClock);
                             }
 
-                            if (curBehaviour == Behaviours.Always_on_call)
+                            if (curBehaviour == Habits.Always_on_call)
                             {
 
                             }
@@ -461,7 +455,7 @@ public class NPCBrain : MonoBehaviour
                 }
                 behaviourClock += Time.deltaTime;
 
-                if (curBehaviour == Behaviours.Known_vandal)
+                if (curBehaviour == Habits.Known_vandal)
                 {
                     graffiti.UpdateAlpha(behaviourClock / stateDuration);
                 }
@@ -513,7 +507,7 @@ public class NPCBrain : MonoBehaviour
 
                 switch(curBehaviour)
                 {
-                    case Behaviours.Smoke_addict:
+                    case Habits.Smoke_addict:
                     {
                         curGlyph.Reinit();
                         curGlyph.gameObject.SetActive(false);
@@ -526,13 +520,13 @@ public class NPCBrain : MonoBehaviour
                     }
                     break;
 
-                    case Behaviours.Always_on_call:
+                    case Habits.Always_on_call:
                     {
                         curGlyph.gameObject.SetActive(false);
                     }
                     break;
 
-                    case Behaviours.Known_vandal:
+                    case Habits.Known_vandal:
                     {
                         graffiti.Dissappear();
 
@@ -607,49 +601,42 @@ public class NPCBrain : MonoBehaviour
             {
                 StopSitting();
 
-                if (curCarriage.GetFirstPassenger() == this)
+                List<NPCBrain> npcs = curCarriage.curNPCList.OrderBy(npc => npc.transform.position.x).ToList();
+
+                float leftBound = curCarriage.insideBoundsCollider.bounds.min.x;
+                float rightBound = curCarriage.insideBoundsCollider.bounds.max.x;
+
+                float largestGapSize = 0f;
+                float largestGapPos = leftBound;
+
+                float previousX = leftBound;
+
+                foreach (NPCBrain npc in npcs)
                 {
-                    targetXPos = UnityEngine.Random.Range(curCarriage.insideBoundsCollider.bounds.min.x, curCarriage.insideBoundsCollider.bounds.center.x);
-                }
-                else
-                {
-                    List<NPCBrain> npcs = curCarriage.curNPCList.OrderBy(npc => npc.transform.position.x).ToList();
+                    float currentX = npc.transform.position.x;
 
-                    float leftBound = curCarriage.insideBoundsCollider.bounds.min.x;
-                    float rightBound = curCarriage.insideBoundsCollider.bounds.max.x;
+                    float gap = currentX - previousX;
 
-                    float largestGapSize = 0f;
-                    float largestGapPos = leftBound;
-
-                    float previousX = leftBound;
-
-                    foreach (NPCBrain npc in npcs)
+                    if (gap > largestGapSize)
                     {
-                        float currentX = npc.transform.position.x;
-
-                        float gap = currentX - previousX;
-
-                        if (gap > largestGapSize)
-                        {
-                            largestGapSize = gap;
-                            largestGapPos = previousX;
-                        }
-
-                        previousX = currentX;
-                    }
-
-                    float finalGap = rightBound - previousX;
-
-                    if (finalGap > largestGapSize)
-                    {
-                        largestGapSize = finalGap;
+                        largestGapSize = gap;
                         largestGapPos = previousX;
                     }
 
-                    targetXPos = largestGapPos + largestGapSize * 0.5f;
+                    previousX = currentX;
                 }
 
-                if (curBehaviourContext != null && curBehaviourContext.behaviours == Behaviours.Known_vandal)
+                float finalGap = rightBound - previousX;
+
+                if (finalGap > largestGapSize)
+                {
+                    largestGapSize = finalGap;
+                    largestGapPos = previousX;
+                }
+
+                targetXPos = largestGapPos + largestGapSize * 0.5f;
+
+                if (curBehaviourContext != null && curBehaviourContext.habit == Habits.Known_vandal)
                 {
                     for (int i = 0; i < curCarriage.interiorSlideDoors.Length; i++)
                     {
@@ -793,20 +780,13 @@ public class NPCBrain : MonoBehaviour
                 StopSitting();
                 SetStandingDepthInTrain();
 
-                if (curCarriage.GetFirstPassenger() == this)
+                if (curCarriage.smokersRoomData.Length > 1 && curCarriage.smokersRoomData[1].npcCount < curCarriage.smokersRoomData[0].npcCount)
                 {
                     smokerRoomIndex = 1;
                 }
                 else
                 {
-                    if (curCarriage.smokersRoomData.Length > 1 && curCarriage.smokersRoomData[1].npcCount < curCarriage.smokersRoomData[0].npcCount)
-                    {
-                        smokerRoomIndex = 1;
-                    }
-                    else
-                    {
-                        smokerRoomIndex = 0;
-                    }
+                    smokerRoomIndex = 0;
                 }
 
                 curCarriage.smokersRoomData[smokerRoomIndex].npcCount++;
@@ -1061,10 +1041,10 @@ public class NPCBrain : MonoBehaviour
             int nextIndex = (currentIndex + i) % maxBits;
             int nextBit = 1 << nextIndex;
 
-            if ((profile.behaviours & (Behaviours)nextBit) != 0)
+            if ((profile.behaviours & (Habits)nextBit) != 0)
             {
-                curBehaviour = (Behaviours)nextBit;
-                curBehaviourContext = npcData.behaviourContextDict[curBehaviour];
+                curBehaviour = (Habits)nextBit;
+                curBehaviourContext = npcData.habitDataDict[curBehaviour];
 
                 if (curBehaviourContext.pathToTake != NPCPath.None)
                 {
@@ -1106,21 +1086,21 @@ public class NPCBrain : MonoBehaviour
     {
         return UnityEngine.Random.Range(0, 2) == 0 ? motion1 : motion2;
     }
-    public Behaviours GetRandomBehaviour()
+    public Habits GetRandomBehaviour()
     {
-        Behaviours[] allBehaviours = (Behaviours[])Enum.GetValues(typeof(Behaviours));
+        Habits[] allBehaviours = (Habits[])Enum.GetValues(typeof(Habits));
 
-        List<Behaviours> allowedBehaviours = new List<Behaviours>();
+        List<Habits> allowedBehaviours = new List<Habits>();
         for (int i = 0; i < allBehaviours.Length; i++)
         {
-            Behaviours b = allBehaviours[i];
+            Habits b = allBehaviours[i];
             if (b != 0 && profile.behaviours.HasFlag(b))
             {
                 allowedBehaviours.Add(b);
             }
         }
 
-        Behaviours selectedBehaviour = allowedBehaviours[UnityEngine.Random.Range(0, allowedBehaviours.Count)];
+        Habits selectedBehaviour = allowedBehaviours[UnityEngine.Random.Range(0, allowedBehaviours.Count)];
         return selectedBehaviour;
     }
 #if UNITY_EDITOR

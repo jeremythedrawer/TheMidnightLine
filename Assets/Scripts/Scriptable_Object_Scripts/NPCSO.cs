@@ -13,7 +13,7 @@ public class NPCSO : ScriptableObject
     
     public int mugShotIndex;
     
-    public Behaviours behaviours;
+    public Habits behaviours;
     public Gender gender;
     public Ethnicity ethnicity;
     

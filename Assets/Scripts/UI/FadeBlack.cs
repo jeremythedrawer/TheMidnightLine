@@ -22,8 +22,6 @@ public class FadeBlack : MonoBehaviour
     public static event Action OnFinishFadeOut;
 
     public InputData playerInputs;
-    public GameEventData gameEventData;
-
     public SceneData sceneData;
     public Material fadeBlackMaterial;
 
@@ -40,12 +38,12 @@ public class FadeBlack : MonoBehaviour
     public float curUVPosX;
     public float curUVPosY;
     private void OnEnable()
-    {
-        gameEventData.OnFinishTripScene.RegisterListener(FadeToBlackToScoreScene);
+    {        
+        TrainController.OnFinishTripScene += FadeToBlackToScoreScene;
     }
     private void OnDisable()
     {
-        gameEventData.OnFinishTripScene.UnregisterListener(FadeToBlackToScoreScene);
+        TrainController.OnFinishTripScene -= FadeToBlackToScoreScene;
     }
     private void FadeToBlackToScoreScene()
     {

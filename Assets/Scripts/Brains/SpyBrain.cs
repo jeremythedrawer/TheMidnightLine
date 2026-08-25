@@ -41,8 +41,7 @@ public class SpyBrain : MonoBehaviour
     public InputData inputData;
     public TrainData trainData;
     public TrainSettingsSO trainSettings;
-    public LayerSettingsSO layerSettings;
-    public GameEventData gameEventData;
+    public LayerData layerSettings;
     public CameraData camStats;
     public Options options;
     public NotepadData notepadData;
@@ -96,8 +95,8 @@ public class SpyBrain : MonoBehaviour
         SpyBrain.OnInteract += OpenSlideDoors;
         SpyBrain.OnInteract += LookAtCarriageMap;
 
-        gameEventData.OnStationArrival.RegisterListener(SetInputsForTrainStop);
-        gameEventData.OnStationLeave.RegisterListener(SetInputsForTrainStart);
+        TrainController.OnStationArrival += SetInputsForTrainStop;
+        TrainController.OnStationLeave += SetInputsForTrainStart;
 
         Scenes.OnLoadStart += StartInit;
         Scenes.OnLoadTrip0 += TripInit;
@@ -121,8 +120,8 @@ public class SpyBrain : MonoBehaviour
         SpyBrain.OnInteract -= OpenSlideDoors;
         SpyBrain.OnInteract -= LookAtCarriageMap;
 
-        gameEventData.OnStationArrival.UnregisterListener(SetInputsForTrainStop);
-        gameEventData.OnStationLeave.UnregisterListener(SetInputsForTrainStart);
+        TrainController.OnStationArrival -= SetInputsForTrainStop;
+        TrainController.OnStationLeave -= SetInputsForTrainStart;
 
         Scenes.OnLoadStart -= StartInit;
         Scenes.OnLoadTrip0 -= TripInit;

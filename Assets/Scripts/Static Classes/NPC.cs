@@ -42,7 +42,7 @@ public static class NPC
         ToExitStation,
         AtSmokerRoom,
     }
-    [Flags] public enum Behaviours
+    [Flags] public enum Habits
     {
         None = 0,
         Smoke_addict = 1 << 0,
@@ -104,7 +104,7 @@ public static class NPC
         public int disembarkingStationIndex;
 
         public int npcPrefabIndex;
-        public Behaviours behaviours;
+        public Habits behaviours;
     }
     [Serializable] public struct TraitorProfile
     {
@@ -168,13 +168,13 @@ public static class NPC
         return left;
     }
 
-    public static Dictionary<Behaviours, NPCBehaviourContextSO> SetBehaviourContextDictionary(NPCBehaviourContextSO[] behaviourContexts)
+    public static Dictionary<Habits, HabitData> SetBehaviourContextDictionary(HabitData[] behaviourContexts)
     {
-        Dictionary<Behaviours, NPCBehaviourContextSO> dict = new Dictionary<Behaviours, NPCBehaviourContextSO>();
+        Dictionary<Habits, HabitData> dict = new Dictionary<Habits, HabitData>();
 
-        foreach (NPCBehaviourContextSO context in behaviourContexts)
+        foreach (HabitData context in behaviourContexts)
         {
-            dict[context.behaviours] = context;
+            dict[context.habit] = context;
         }
 
         return dict;

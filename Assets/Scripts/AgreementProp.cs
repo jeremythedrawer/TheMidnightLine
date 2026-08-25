@@ -13,7 +13,6 @@ public class AgreementProp : MonoBehaviour
     public MeshRenderer shinyRenderer;
 
     public SceneData sceneData;
-    public GameEventData gameEventData;
     public NotepadData notepadData;
     public SpyData spyStats;
 

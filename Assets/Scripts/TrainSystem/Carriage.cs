@@ -17,8 +17,7 @@ public class Carriage : MonoBehaviour
     public TrainData trainStats;
     public TrainSettingsSO trainSettings;
     public TripData trip;
-    public GameEventData gameEventData;
-    public LayerSettingsSO layerSettings;
+    public LayerData layerSettings;
     public AtlasSO graffitiAtlas;
 
     public AtlasTextRenderer nextStationSignRenderer;
@@ -71,14 +70,7 @@ public class Carriage : MonoBehaviour
             interiorSlideDoors[i].carriage = this;
         }
     }
-    private void OnEnable()
-    {
-        gameEventData.OnStationLeave.RegisterListener(SetFirstPassenger);
-    }
-    private void OnDisable()
-    {
-        gameEventData.OnStationLeave.UnregisterListener(SetFirstPassenger);
-    }
+
     private void Update()
     {
         ProcessSeatQueue();
@@ -266,45 +258,6 @@ public class Carriage : MonoBehaviour
         curNPCList.Remove(npc);
 
         if (npc == firstNPC) firstNPC = null;
-    }
-    public NPCBrain GetFirstPassenger()
-    {
-        return firstNPC;
-    }
-    public void SetFirstPassenger()
-    {
-        if (firstNPC == null) return;
-
-        NPCBrain npcNotAccomplice = null;
-        bool foundAccomplice = false;
-        for (int i = 0; i < curNPCList.Count; i++)
-        {
-            NPCBrain npc = curNPCList[i];
-            if (npc.role != Role.Accomplice)
-            {
-                npcNotAccomplice = npc;
-
-                if (npcNotAccomplice.transform.position.x < insideBoundsCollider.bounds.center.x)
-                {
-                    firstNPC = npcNotAccomplice;
-                    return;
-                }
-            }
-            else
-            {
-                foundAccomplice = true;
-            }
-        }
-
-        if (npcNotAccomplice != null)
-        {
-            npcNotAccomplice.MoveNPCToLeftOfCarriage();
-            return;
-        }
-        if (foundAccomplice)
-        {
-            Debug.LogWarning("Did not set first NPC where accomplice is");
-        }
     }
     private async UniTask MovingDown()
     {

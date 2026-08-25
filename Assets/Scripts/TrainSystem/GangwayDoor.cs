@@ -13,7 +13,7 @@ public class GangwayDoor : MonoBehaviour
     public Transform rightDoor;
     public Transform leftDoor;
     public BoxCollider2D wallCollider;
-    public LayerSettingsSO layerSettings;
+    public LayerData layerSettings;
     public bool isLeftOfCarriage;
     [Header("Generated")]
     public float curX;

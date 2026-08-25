@@ -22,7 +22,7 @@ public class CursorController : MonoBehaviour
     public static event Action OnMouseDisabled;
 
     public InputData inputData;
-    public LayerSettingsSO layerSettings;
+    public LayerData layerSettings;
     public SpyData spyData;
     public CameraData camData;
     public TripData trip;

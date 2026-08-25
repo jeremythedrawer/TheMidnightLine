@@ -7,7 +7,6 @@ public class InputManager : MonoBehaviour
 {
     public InputData playerInputs;
     public SpyData spyStats;
-    public GameEventData gameEventData;
     public SceneData sceneData;
 
     PlayerInput playerInput;
@@ -171,9 +170,5 @@ public class InputManager : MonoBehaviour
     {
         curDevice = value.device;
         OnDeviceChanged?.Invoke(value.device.displayName);
-    }
-    private void OnApplicationQuit()
-    {
-        gameEventData.OnResetTrip?.Raise();
     }
 }

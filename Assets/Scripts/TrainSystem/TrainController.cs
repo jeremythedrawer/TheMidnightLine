@@ -24,13 +24,18 @@ public class TrainController : MonoBehaviour
     public static SlideDoors[] InteriorSlideDoors;
 
     public static event Action OnTrainAtStartPosition;
+    public static event Action OnFinishTripScene;
+    public static event Action OnMetersAtSpawnBounds;
+    public static event Action OnStationSpawn;
+    public static event Action OnStationLeave;
+    public static event Action OnStationArrival;
+    public static event Action OnTrainDeceleration;
 
     public TrainSettingsSO settings;
     public TrainData stats;
-    public LayerSettingsSO layerSettings;
+    public LayerData layerSettings;
     public TripData trip;
     public SpawnData spawnData;
-    public GameEventData gameEventData;
     public SpyData spyStats;
     public CameraData camStats;
 
@@ -174,7 +179,7 @@ public class TrainController : MonoBehaviour
             case TrainStates.Decelerating:
             {
                 stats.prevPeakVelocity = stats.curVelocity.x;
-                gameEventData.OnTrainDeceleration.Raise();
+                OnTrainDeceleration.Invoke();
             }
             break;
 
@@ -205,7 +210,7 @@ public class TrainController : MonoBehaviour
                         carriages[i].SetSignToCurrentStation(trip.stationAhead.stationName);
                     }
                 }
-                gameEventData.OnStationArrival.Raise();
+                OnStationArrival.Invoke();
             }
             break;
         }
@@ -339,7 +344,7 @@ public class TrainController : MonoBehaviour
                 stats.totalNPCsBoarded = 0;
                 stats.distToSpawnNextStation = stats.trainToMaxSpawnDist - trip.stationAhead.station_prefab.platformRenderer.transform.localPosition.x;
                 closingSlideDoors = false;
-                gameEventData.OnStationLeave.Raise();
+                OnStationLeave.Invoke();
             }
             break;
         }
@@ -351,7 +356,7 @@ public class TrainController : MonoBehaviour
         NextStationInstance.transform.position = new Vector3(stationXPos, 0, 0);
         NextStationInstance.gameObject.SetActive(true);
         NextStationInstance.SpawnNPCs();
-        gameEventData.OnStationSpawn.Raise();
+        OnStationSpawn.Invoke();
     }
     private void CloseAllSlideDoors()
     {
@@ -459,7 +464,7 @@ public class TrainController : MonoBehaviour
         metersTravelled += stats.curVelocity.x * Time.deltaTime;
         if (metersTravelled > spawnData.bounds.size.x)
         {
-            gameEventData.OnMetersAtSpawnBounds.Raise();
+            OnMetersAtSpawnBounds.Invoke();
             metersTravelled = 0;
         }
         Shader.SetGlobalFloat("_MetersTravelled", metersTravelled);
@@ -513,7 +518,7 @@ public class TrainController : MonoBehaviour
             transform.position = new Vector3(stats.targetPosition, transform.position.y, transform.position.z);
             await UniTask.Yield(trainCTS.Token);
         }
-        gameEventData.OnFinishTripScene.Raise();
+        OnFinishTripScene.Invoke();
     }
 
 #if UNITY_EDITOR

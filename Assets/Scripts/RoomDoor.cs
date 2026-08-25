@@ -11,6 +11,7 @@ using UnityEditor.IMGUI.Controls;
 using static Atlas;
 public class RoomDoor : MonoBehaviour
 {
+    public static event Action OnStartTrip;
     public event Action onDoorClose;
     public enum State
     {
@@ -30,8 +31,6 @@ public class RoomDoor : MonoBehaviour
         EnteredBounds = 1 << 5,
         ExitBounds = 1 << 6,
     }
-
-    public GameEventData gameEventData;
     public SpyData spyStats;
     public CameraData camStats;
     public SceneData sceneData;
@@ -62,12 +61,6 @@ public class RoomDoor : MonoBehaviour
     public State curState;
     public SubState curSubState;
     public SubState prevSubState;
-
-
-#if UNITY_EDITOR
-    [Header("Editor")]
-    public bool skipToScore;
-#endif
     private void Start()
     {
         clip = atlasRenderer.atlas.clipDict[(int)motion];
@@ -250,19 +243,8 @@ public class RoomDoor : MonoBehaviour
     {
         if (curState == State.Opened && (curSubState & SubState.InBounds) != 0 && !spyStats.startTrip && !atlasRenderer.isAnimating)
         {
-#if UNITY_EDITOR
-            if (skipToScore)
-            {
-                gameEventData.OnFinishTripScene.Raise();
-            }
-            else
-            {
-                gameEventData.OnStartTrip.Raise();
-            }
-#else
-            gameEventData.OnStartTrip.Raise();
-#endif
-                SpyBrain spy = SceneController.GetSpy();
+            OnStartTrip.Invoke();
+            SpyBrain spy = SceneController.GetSpy();
             spy.SetNewPosition(new Vector3(spy.transform.position.x, spy.transform.position.y, rightDepth));
             leftRoom.MoveUp();
             spyStats.startTrip = true;

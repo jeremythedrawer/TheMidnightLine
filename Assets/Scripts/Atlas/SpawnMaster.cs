@@ -14,12 +14,10 @@ public class SpawnMaster : MonoBehaviour
     const float DAY_NIGHT_TRANSITION_TIME = 5;
 
     public SpawnData spawnData;
-    public CameraSettingsSO camSettings;
-    public CameraData camStats;
+    public CameraData camData;
     public TripData trip;
     public TrainData trainStats;
-    public GameEventData gameEventData;
-    public Options colorSO;
+    public Options options;
 
     [Header("Generated")]
     public int nextSpawnIndex;
@@ -35,13 +33,13 @@ public class SpawnMaster : MonoBehaviour
         }
 #endif
         SpyBrain.OnTicketInspect += ChangeParticles;
-        gameEventData.OnMetersAtSpawnBounds.RegisterListener(DespawnEdgeScrollers);
+        TrainController.OnMetersAtSpawnBounds += DespawnEdgeScrollers;
         Scenes.OnLoadTrip2 += Init;
     }
     private void OnDisable()
     {
         SpyBrain.OnTicketInspect -= ChangeParticles;
-        gameEventData.OnMetersAtSpawnBounds.UnregisterListener(DespawnEdgeScrollers);
+        TrainController.OnMetersAtSpawnBounds -= DespawnEdgeScrollers;
         Scenes.OnLoadTrip2 -= Init;
         Dispose();
     }
@@ -74,14 +72,14 @@ public class SpawnMaster : MonoBehaviour
     private void InitBoundParameters()
     {
         spawnData.bounds.center = new Vector3(TRAIN_WORLD_POS_X, 0, FAR_CLIP * 0.5f);
-        spawnData.bounds.size = new Vector3(trip.stationsDataArray[0].station_prefab.platformRenderer.bounds.size.x + camStats.camBounds.size.x, trainStats.totalBounds.size.y + camStats.camBounds.size.y, FAR_CLIP);
+        spawnData.bounds.size = new Vector3(trip.stationsDataArray[0].station_prefab.platformRenderer.bounds.size.x + camData.camBounds.size.x, trainStats.totalBounds.size.y + camData.camBounds.size.y, FAR_CLIP);
         transform.position = spawnData.bounds.min;
 
     }
     private void UpdateSpawnCompute(ref SpawnComputeData computeData)
     {
-        computeData.compute.SetVector("_CamVelocity", camStats.curVelocity);
-        if (camStats.curLocationState != LocationState.Station)
+        computeData.compute.SetVector("_CamVelocity", camData.curVelocity);
+        if (camData.curLocationState != LocationState.Station)
         {
             computeData.compute.SetVector("_TrainVelocity", trainStats.curVelocity);
         }
