@@ -5,9 +5,9 @@ using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.Users;
 public class InputManager : MonoBehaviour
 {
-    public PlayerInputsSO playerInputs;
-    public SpyStatsSO spyStats;
-    public GameEventDataSO gameEventData;
+    public InputData playerInputs;
+    public SpyData spyStats;
+    public GameEventData gameEventData;
     public SceneData sceneData;
 
     PlayerInput playerInput;

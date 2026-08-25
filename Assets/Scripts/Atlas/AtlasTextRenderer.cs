@@ -1,5 +1,10 @@
+using System;
+using System.Threading;
 using System.Collections.Generic;
+
 using UnityEngine;
+
+using Cysharp.Threading.Tasks;
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -9,13 +14,30 @@ using UnityEditor.IMGUI.Controls;
 using static Atlas;
 using static AtlasRendering;
 using static AtlasUI;
-using System.Threading;
-using Cysharp.Threading.Tasks;
-using System;
 
 [ExecuteAlways]
 public class AtlasTextRenderer : MonoBehaviour
 {
+    public enum AtlasTextRendererType
+    {
+        Simple,
+        Scroll,
+        Border,
+    }
+    public enum AtlasTextAlignmentType
+    {
+        Left,
+        Center,
+        Right,
+    }
+    [Serializable]
+    public struct TextBoxData
+    {
+        public Vector2 size;
+        public float[] wordPosXArray;
+        public float[] lineWidthArray;
+    }
+
     public AtlasTextRendererType rendererType;
 
     public BatchKey batchKey;
@@ -32,11 +54,12 @@ public class AtlasTextRenderer : MonoBehaviour
     public float scrollBoundSize;
 
     [Header("Border Settings")]
-    public AtlasRenderer background_renderer;
+    public AtlasRenderer backgroundRenderer;
 
     [Header("Generated")]
     public CancellationTokenSource ctsWrite;
     public CancellationTokenSource ctsChangeCustom;
+
 
     public TextBoxData textBoxData;
     
@@ -65,7 +88,7 @@ public class AtlasTextRenderer : MonoBehaviour
     {
         if (textAtlas == null) return;
         if (batchKey.material == null) return;
-        SetText(text);
+        SetTextWorld(text);
 
         bounds = GetBoundsNewText(text);
     }
@@ -91,25 +114,7 @@ public class AtlasTextRenderer : MonoBehaviour
     }
     public void SetText(string inputText, float alpha = 1)
     {
-        if (inputText == null) return;
-        text = inputText;
-
-        int maxChars = text.Length;
-
-        worldPivotsAndSizes = new Vector4[maxChars];
-        uvSizesAndPositions = new Vector4[maxChars];
-        scalesAndFlips = new Vector4[maxChars];
-
-        if (customs == null || customs.Length != maxChars) customs = new Vector4[maxChars];
-        
-        curAlpha = alpha;
-
-        for (int i = 0; i < customs.Length; i++ )
-        {
-            customs[i].w = curAlpha;
-        }
-
-        SetTextWorld();
+        SetTextWorld(inputText);
         
         switch (rendererType)
         {
@@ -144,7 +149,7 @@ public class AtlasTextRenderer : MonoBehaviour
             customs[i].w = normAmount;
         }
     }
-    public void UpdateBounds()
+    public void SetBounds()
     {
         bounds.center = transform.position + boundsOffset;
     }
@@ -179,119 +184,175 @@ public class AtlasTextRenderer : MonoBehaviour
     }
     private void SetBorderText()
     {
-        borderLocalPos.z = background_renderer.transform.localPosition.z;
+        borderLocalPos.z = backgroundRenderer.transform.localPosition.z;
 
         switch (alignmentType)
         {
             case AtlasTextAlignmentType.Left:
             {
-                borderLocalPos.x = -background_renderer.worldPivotsAndSizes[0].z;
+                borderLocalPos.x = -backgroundRenderer.worldPivotsAndSizes[0].z;
             }
             break;
             case AtlasTextAlignmentType.Center:
             {
-                borderLocalPos.x = -bounds.extents.x - background_renderer.worldPivotsAndSizes[0].z;
+                borderLocalPos.x = -bounds.extents.x - backgroundRenderer.worldPivotsAndSizes[0].z;
 
             }
             break;
             case AtlasTextAlignmentType.Right:
             {
 
-                borderLocalPos.x = -bounds.size.x - background_renderer.worldPivotsAndSizes[0].z;
+                borderLocalPos.x = -bounds.size.x - backgroundRenderer.worldPivotsAndSizes[0].z;
             }
             break;
         }
 
-        borderLocalPos.y = -background_renderer.worldPivotsAndSizes[0].w - bounds.size.y;
+        borderLocalPos.y = -backgroundRenderer.worldPivotsAndSizes[0].w - bounds.size.y;
 
         if (!hasText)
         {
-            background_renderer.enabled = false;
+            backgroundRenderer.enabled = false;
         }
         else
         {
-            background_renderer.enabled = true;
+            backgroundRenderer.enabled = true;
 
             Vector2 worldSize = new Vector2();
             worldSize.x = bounds.size.x + BORDER_PADDING * 2;
             worldSize.y = bounds.size.y + BORDER_PADDING * 2;
 
-            background_renderer.transform.localPosition = borderLocalPos;
+            backgroundRenderer.transform.localPosition = borderLocalPos;
 
-            background_renderer.SetNineSliceSizeFromWorldSpace(worldSize, background_renderer.atlas.slicedSprites[background_renderer.spriteIndex]);
+            backgroundRenderer.SetNineSliceSizeFromWorldSpace(worldSize, backgroundRenderer.atlas.slicedSprites[backgroundRenderer.spriteIndex]);
         }
     }
-    public void SetTextWorld()
+    public void SetTextWorld(string inputText)
     {
-        textBoxData = GetTextBoxData(text);
+        if (inputText == null) return;
+        text = inputText;
 
-        float newLineOffsetScale = 0;
-
-        switch(alignmentType)
-        {
-            case AtlasTextAlignmentType.Left:
-            {
-                newLineOffsetScale = 0;
-            }
-            break;
-            case AtlasTextAlignmentType.Center:
-            {
-                newLineOffsetScale = 0.5f;
-            }
-            break;
-            case AtlasTextAlignmentType.Right:
-            {
-                newLineOffsetScale = 1f;
-            }
-            break;
-        }
-
-        int spriteIndex = 0;
         int maxChars = text.Length;
-        int curLineIndex = 0;
 
-        float startLineWidth = textBoxData.lineWidths[curLineIndex];
+        worldPivotsAndSizes = new Vector4[maxChars];
+        uvSizesAndPositions = new Vector4[maxChars];
+        scalesAndFlips = new Vector4[maxChars];
+        customs = new Vector4[maxChars];
 
-        float curPosX = -(startLineWidth * newLineOffsetScale);
-        float curPosY = -textAtlas.typeWorldHeight;
+        string[] words = text.Split(' ');
+        
+        textBoxData.wordPosXArray = new float[words.Length];
+        
+        List<string> linesTextList = new List<string>();
+        List<float> lineWidthList = new List<float>();
 
-        for (int i = 0; i < text.Length; i++)
+        string curLineText = "";
+        float curLineWidth = 0f;
+
+        for (int i = 0; i < words.Length; i++)
         {
-            char c = text[i];
-            if (c == ' ')
+            string word = words[i];
+
+            float wordWidth = 0f;
+
+            for (int j = 0; j < word.Length; j++)
             {
-                curPosX += spacing;
-                continue;
+                char c = word[j];
+
+                int letterIndex = c - 33;
+
+                if (letterIndex < 0) continue;
+
+                SimpleSprite sprite = textAtlas.atlas.simpleSprites[letterIndex];
+
+                wordWidth += sprite.worldSize.x + kerning;
             }
-            if (c == '\n')
+
+            float spacingWidth = curLineText.Length > 0 ? spacing : 0f;
+            float newLineWidth = curLineWidth + spacingWidth + wordWidth;
+
+
+            if (curLineText.Length > 0 && newLineWidth > textBoxData.size.x)
             {
-                curPosY -= textAtlas.typeWorldHeight;
-                
-                curLineIndex++;
-                float lineWidth = textBoxData.lineWidths[curLineIndex];
-                
-                curPosX = -(lineWidth * newLineOffsetScale);
-                continue;
+                linesTextList.Add(curLineText);
+                lineWidthList.Add(newLineWidth - wordWidth - spacingWidth);
+                curLineText = word;
+                curLineWidth = wordWidth;
             }
-
-            int letterIndex = c - 33;
-
-            if (letterIndex < 0) continue;
-            SimpleSprite sprite = textAtlas.atlas.simpleSprites[letterIndex];
-
-            float letterPos = curPosX * kerning;
-            Vector4 worldPivotAndSize = new Vector4(letterPos, curPosY, sprite.worldSize.x, sprite.worldSize.y);
-            worldPivotsAndSizes[spriteIndex] = worldPivotAndSize;
-
-            float widthRatio = sprite.worldSize.x / LETTER_ADVANCE;
-            float advanceScale = widthRatio * 0.5f + 0.5f;
-            curPosX += LETTER_ADVANCE * advanceScale;
-
-            uvSizesAndPositions[spriteIndex] = sprite.uvSizeAndPos;
-            scalesAndFlips[spriteIndex] = Vector4.one;
-            spriteIndex++;
-
+            else
+            {
+                if (curLineText.Length > 0)
+                {
+                    curLineText += " ";
+                }
+                curLineText += word;
+                curLineWidth = newLineWidth;
+            }
         }
+
+        if (curLineText.Length > 0)
+        {
+            linesTextList.Add(curLineText);
+            lineWidthList.Add(curLineWidth);
+        }
+
+        textBoxData.lineWidthArray = lineWidthList.ToArray();
+
+        float curPosY = -textAtlas.typeWorldHeight;
+        int spriteIndex = 0;
+
+
+        for (int i = 0; i < linesTextList.Count; i++)
+        {
+            string line = linesTextList[i];
+            float lineWidth = lineWidthList[i];
+
+            float curPosX = 0;
+
+            if (alignmentType == AtlasTextAlignmentType.Center)
+            {
+                curPosX = -(lineWidth * 0.5f);
+            }
+            else if (alignmentType == AtlasTextAlignmentType.Right)
+            {
+                curPosX = -lineWidth;
+            }
+
+            for (int  j = 0; j < line.Length; j++)
+            {
+                char c = line[j];
+
+                if (c == ' ')
+                {
+                    curPosX += spacing;
+                    continue;
+                }
+
+                int letterIndex = c - 33;
+
+                if (letterIndex < 0) continue;
+
+                SimpleSprite sprite = textAtlas.atlas.simpleSprites[letterIndex];
+
+                Vector4 worldPivSize = new Vector4();
+
+                worldPivSize.x = curPosX;
+                worldPivSize.y = curPosY;
+                worldPivSize.z = sprite.worldSize.x;
+                worldPivSize.w = sprite.worldSize.y;
+
+                worldPivotsAndSizes[spriteIndex] = worldPivSize;
+                uvSizesAndPositions[spriteIndex] = sprite.uvSizeAndPos;
+                scalesAndFlips[spriteIndex] = Vector4.one;
+                customs[spriteIndex] = Vector4.one;
+
+                spriteIndex++;
+
+                curPosX += sprite.worldSize.x + kerning;
+            }
+            curPosY -= textAtlas.typeWorldHeight;
+        }
+
+        textBoxData.size.y = curPosY + textAtlas.typeWorldHeight; 
         if (maxChars == 0)
         {
             bounds.size = Vector3.zero;
@@ -390,8 +451,6 @@ public class AtlasTextRenderer : MonoBehaviour
     {
         Bounds bounds = new Bounds();
 
-        TextBoxData textBoxData = GetTextBoxData(text);
-
         bounds.size = textBoxData.size;
         
         switch (alignmentType)
@@ -418,58 +477,7 @@ public class AtlasTextRenderer : MonoBehaviour
 
         return bounds;
     }
-    private TextBoxData GetTextBoxData(string text)
-    {
-        float maxX = 0;
-        float curPosX = 0;
 
-        float curPosY = -textAtlas.typeWorldHeight;
-        List<float> linesWidths = new List<float>();
-
-        float maxLineX = 0;
-
-        for (int i = 0; i < text.Length; i++)
-        {
-            char c = text[i];
-            if (c == ' ')
-            {
-                curPosX += spacing;
-                continue;
-            }
-            if (c == '\n')
-            {
-                linesWidths.Add(maxLineX / kerning);
-                maxLineX = 0;   
-                curPosX = 0;
-                curPosY -= textAtlas.typeWorldHeight;
-                continue;
-            }
-            
-            int letterIndex = c - 33;
-            
-            if (letterIndex < 0) continue;
-
-            SimpleSprite sprite = textAtlas.atlas.simpleSprites[letterIndex];
-
-            float letterPos = curPosX * kerning;
-            float right = letterPos + sprite.worldSize.x;
-
-            if (right > maxX) maxX = right;
-            if (right > maxLineX) maxLineX = right;
-
-            float widthRatio = sprite.worldSize.x / LETTER_ADVANCE;
-            float advanceScale = widthRatio * 0.5f + 0.5f;
-            curPosX += LETTER_ADVANCE * advanceScale;
-        }
-
-        linesWidths.Add(maxLineX / kerning);
-
-        return new TextBoxData()
-        {
-            size = new Vector2 (maxX, -curPosY),
-            lineWidths = linesWidths.ToArray(),
-        };
-    }
     private async UniTask WritingText(string text, float writeLetterTime, OnCompletedWritingText callback, bool setTextIfCancelled)
     {
         int stationNameLetterCount = text.Length;
@@ -648,19 +656,6 @@ public class AtlasTextRenderer : MonoBehaviour
         Gizmos.color = Color.clear;
         Gizmos.DrawCube(bounds.center, bounds.size);
     }
-    private void OnDrawGizmosSelected()
-    {
-
-        Gizmos.color = Color.indigo;
-        Gizmos.DrawWireCube(bounds.center, bounds.size);
-        switch(rendererType)
-        {
-            case AtlasTextRendererType.Simple:
-            {
-            }
-            break;
-        }
-    }
 #endif
 }
 
@@ -676,12 +671,48 @@ public class AtlasTextRendererEditor : Editor
 
         switch(textRend.rendererType)
         {
-            case AtlasTextRendererType.Simple:
+            case AtlasTextRenderer.AtlasTextRendererType.Simple:
             {
+                boundsHandle.size = textRend.textBoxData.size;
 
+                float centerX = textRend.transform.position.x;
+
+                switch (textRend.alignmentType)
+                {
+                    case AtlasTextRenderer.AtlasTextAlignmentType.Left:
+                    {
+                        centerX += boundsHandle.size.x * 0.5f;
+                    }
+                    break;
+
+                    case AtlasTextRenderer.AtlasTextAlignmentType.Center:
+                    {
+
+                    }
+                    break;
+
+                    case AtlasTextRenderer.AtlasTextAlignmentType.Right:
+                    {
+
+                        centerX -= boundsHandle.size.x * 0.5f;
+                    }
+                    break;
+                }
+
+
+                boundsHandle.center = new Vector3(centerX, textRend.transform.position.y - boundsHandle.size.y * 0.5f, textRend.transform.position.z);
+                boundsHandle.SetColor(Color.green);
+                boundsHandle.DrawHandle();
+
+                if (EditorGUI.EndChangeCheck())
+                {
+                    Undo.RecordObject(textRend, "Resize Textbox");
+                    textRend.textBoxData.size = boundsHandle.size;
+                    textRend.SetText(textRend.text);
+                }
             }
             break;
-            case AtlasTextRendererType.Scroll:
+            case AtlasTextRenderer.AtlasTextRendererType.Scroll:
             {
                 float scrollBoundsXPos = textRend.transform.position.x + textRend.scrollBoundSize * 0.5f;
                 boundsHandle.center = new Vector3(scrollBoundsXPos, textRend.bounds.center.y, textRend.transform.position.z);

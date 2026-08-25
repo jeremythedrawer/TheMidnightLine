@@ -26,7 +26,7 @@ public class NotepadData : ScriptableObject
     public float leftHandDepthBack;
 
     public int profileWriteCount;
-    public int selectedColorMarkerIndex;
+    public int selectedPatternIndex;
 
     public bool collected;
     public bool signedAgreement;

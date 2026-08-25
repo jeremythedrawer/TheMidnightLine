@@ -3,10 +3,10 @@ using static AtlasSpawn;
 using static Atlas;
 public class ParallaxController : MonoBehaviour
 {
-    public TrainStatsSO trainStats;
+    public TrainData trainStats;
     public SpawnData spawnData;
     public AtlasRenderer leftRenderer;
-    public CameraStatsSO camStats;
+    public CameraData camStats;
     public bool ignoreSpawnBounds;
     
 

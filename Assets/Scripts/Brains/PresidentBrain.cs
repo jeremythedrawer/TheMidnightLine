@@ -12,8 +12,8 @@ public class PresidentBrain : MonoBehaviour
 
     public AtlasRenderer atlasRenderer;
 
-    public TripSO curTrip;
-    public SpyStatsSO spyStats;
+    public TripData curTrip;
+    public SpyData spyStats;
     public MeridiaTowerData meridiaTowerData;
 
     public float handShakeDist;

@@ -9,8 +9,8 @@ public class HenchmanBrain : MonoBehaviour
     public const float SHOOT_HOLD_TIME = 0.125f;
     public static event Action OnShoot;
 
-    public SpyStatsSO spyStats;
-    public TripSO curTrip;
+    public SpyData spyStats;
+    public TripData curTrip;
 
     public AtlasRenderer atlasRenderer;
     

@@ -18,7 +18,7 @@ public class Room : MonoBehaviour
 
     const float MOVE_WALL_TIME = 0.8f;
 
-    public CameraStatsSO camStats;
+    public CameraData camStats;
     public MeridiaTowerData meridiaTowerData;
 
     public AtlasRenderer exteriorWallRenderer;

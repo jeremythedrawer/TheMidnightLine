@@ -14,16 +14,16 @@ public class UnlockPicker : MonoBehaviour
     public const int COLOR_ICON_SPRITE_INDEX = 20;
     public const int MULTI_COLOR_ICON_SPRITE_INDEX = 23;
 
-    public static event Action<IconUIElement> OnRuleOutAbilityUnlock;
-    public static event Action<IconUIElement> OnColorAbilityUnlock;
-    public static event Action<IconUIElement> OnMutliColorAbilityUnlock;
+    public static event Action<IconButton> OnRuleOutAbilityUnlock;
+    public static event Action<IconButton> OnColorAbilityUnlock;
+    public static event Action<IconButton> OnMutliColorAbilityUnlock;
 
-    public IconUIElement[] icons;
+    public IconButton[] icons;
 
-    public TripSO trip;
-    public PlayerInputsSO playerInputs;
-    public CameraStatsSO camStats;
-    public SpyStatsSO spyStats;
+    public TripData trip;
+    public InputData playerInputs;
+    public CameraData camStats;
+    public SpyData spyStats;
 
     public AtlasRenderer paletteRenderer;
 
@@ -42,8 +42,6 @@ public class UnlockPicker : MonoBehaviour
     public Vector2 iconRendererWorldSize;
     public Vector2 sliceWorldSize;
 
-    public PickerState curPickerState;
-    public PickerState enteredPickerState;
     public UnlockType curUnlockSelectionMask;
 
     public int curGridColCount;
@@ -68,19 +66,26 @@ public class UnlockPicker : MonoBehaviour
     private void Init()
     {
         SceneController.SetUnlockPicker(this);
-        curPickerState = PickerState.Closed;
         SetOpenPosAndSize();
 
         paletteRenderer.customBit = (int)ColorBits.Meridia;
 
+        void EnterColorIcon(IconButton icon)
+        {
+            icon.atlasRenderer.custom.x = 1;
+        }
+        void ExitColorIcon(IconButton icon)
+        {
+            icon.atlasRenderer.custom.x = 0;
+        }
         for (int i = 0; i < icons.Length; i++)
         {
-            icons[i].renderer.customBit = (int)ColorBits.Meridia;
-            icons[i].renderer.enabled = false;
+            icons[i].atlasRenderer.customBit = (int)ColorBits.Meridia;
+            icons[i].atlasRenderer.enabled = false;
 
             int index = i;
 
-            void ClickIcon(IconUIElement icon)
+            void ClickIcon(IconButton icon)
             {
                 int validIndex = 0;
                 for (int j = 0; j < 32; j++)
@@ -101,9 +106,6 @@ public class UnlockPicker : MonoBehaviour
                             tutorialInUse = true;
 
                             OnRuleOutAbilityUnlock?.Invoke(icon);
-
-                            NPCBrain examplePassenger = selectedNPC.curCarriage.GetFirstPassenger();
-                            examplePassenger.SetAsExample();
                         }
                         else if ((selectedUnlockType & UnlockType.Color) != 0)
                         {
@@ -112,8 +114,6 @@ public class UnlockPicker : MonoBehaviour
                             
                             OnColorAbilityUnlock?.Invoke(icon);
 
-                            NPCBrain examplePassenger = selectedNPC.curCarriage.GetFirstPassenger();
-                            examplePassenger.SetAsExample();
                         }
                         else if ((selectedUnlockType & UnlockType.MultiColor) != 0)
                         {
@@ -121,9 +121,6 @@ public class UnlockPicker : MonoBehaviour
                             tutorialInUse = true;
                             
                             OnMutliColorAbilityUnlock?.Invoke(icon);
-
-                            NPCBrain examplePassenger = selectedNPC.curCarriage.GetFirstPassenger();
-                            examplePassenger.SetAsExample();
                         }
                         break;
                     }
@@ -138,72 +135,22 @@ public class UnlockPicker : MonoBehaviour
 
     }
 
-    private void EnterColorIcon(IconUIElement icon)
-    {
-        icon.renderer.custom.x = 1;
-    }
-    private void ExitColorIcon(IconUIElement icon)
-    {
-        icon.renderer.custom.x = 0;
-    }
-
-    private void SetState(PickerState newState)
-    {
-        if (curPickerState == newState) return;
-        ExitState();
-        curPickerState = newState;
-        enteredPickerState = newState;
-        EnterState();
-    }
     private void UpdateState()
     {
-        if (spyStats.curTutorialState != TutorialState.None) return;
-        switch (curPickerState)
+        for (int i = 0; i < curGridColCount; i++)
         {
-            case PickerState.Opening:
-            case PickerState.Opened:
-            {
-                for (int i = 0; i < curGridColCount; i++)
-                {
-                    icons[i].UpdateButton(playerInputs);
-                }
-                if (camStats.curLocationState != Spy.LocationState.Carriage)
-                {
-                    Close();
-                }
-            }
-            break;
+            icons[i].UpdateButton();
         }
-    }
-    private void EnterState()
-    {
-        switch (curPickerState)
+        if (camStats.curLocationState != Spy.LocationState.Carriage)
         {
-            case PickerState.Opening:
-            {
-            }
-            break;
-            case PickerState.Opened:
-            {
-
-            }
-            break;
-            case PickerState.Closed:
-            {
-
-            }
-            break;
+            Close();
         }
-    }
-    private void ExitState()
-    {
-
     }
     public void SetOpenPosAndSize()
     {
         openIconRendererPositions = new Vector2[icons.Length];
 
-        AtlasRenderer firstIconRend = icons[0].renderer;
+        AtlasRenderer firstIconRend = icons[0].atlasRenderer;
         Vector4 paletteBottomRightWPS = paletteRenderer.worldPivotsAndSizes[5];
         Vector2 firstIconRendPos = new Vector2(paletteBottomRightWPS.x + firstIconRend.worldPivotAndSize.x, paletteBottomRightWPS.y - firstIconRend.worldPivotAndSize.y);
 
@@ -216,7 +163,7 @@ public class UnlockPicker : MonoBehaviour
             {
                 int flatIndex = x + rowIndex;
 
-                AtlasRenderer npcIconRend = icons[flatIndex].renderer;
+                AtlasRenderer npcIconRend = icons[flatIndex].atlasRenderer;
 
                 float xPos = firstIconRendPos.x - (x * GRID_GAP);
                 openIconRendererPositions[flatIndex] = new Vector3(xPos, yPos, -1);
@@ -239,23 +186,10 @@ public class UnlockPicker : MonoBehaviour
 
         sliceWorldSize = new Vector2(paletteBottomLeftWPS.z + paletteTopRightWPS.z, paletteBottomLeftWPS.w + paletteTopRightWPS.w);
     }
-    public void TurnOff()
-    {
-        paletteRenderer.enabled = false;
 
-        if (!tutorialInUse)
-        {
-            for (int i = 0; i < curGridColCount; i++)
-            {
-                icons[i].renderer.enabled = false;
-            }
-        }
-
-        selectedNPC = null;
-        transform.SetParent(null);
-    }
-    public void TurnOn(int unlockSelectionAmount, UnlockType unlockType,  NPCBrain npc)
+    public void Open(int unlockSelectionAmount, UnlockType unlockType, NPCBrain npc)
     {
+
         tutorialInUse = false;
         paletteRenderer.enabled = true;
 
@@ -267,7 +201,7 @@ public class UnlockPicker : MonoBehaviour
 
         if ((unlockType & UnlockType.RuleOut) != 0)
         {
-            AtlasRenderer iconRend = icons[iconIndex].renderer;
+            AtlasRenderer iconRend = icons[iconIndex].atlasRenderer;
             iconRend.enabled = true;
             iconRend.UpdateSpriteInputsByIndex(RULE_OUT_ICON_SPRITE_INDEX);
             iconRend.custom.x = 0;
@@ -276,10 +210,10 @@ public class UnlockPicker : MonoBehaviour
             iconRend.custom.w = 1;
             iconIndex++;
         }
-        
+
         if ((unlockType & UnlockType.Color) != 0)
         {
-            AtlasRenderer iconRend = icons[iconIndex].renderer;
+            AtlasRenderer iconRend = icons[iconIndex].atlasRenderer;
             iconRend.enabled = true;
             iconRend.custom.x = 0;
             iconRend.custom.y = 0;
@@ -291,7 +225,7 @@ public class UnlockPicker : MonoBehaviour
 
         if ((unlockType & UnlockType.MultiColor) != 0)
         {
-            AtlasRenderer iconRend = icons[iconIndex].renderer;
+            AtlasRenderer iconRend = icons[iconIndex].atlasRenderer;
             iconRend.enabled = true;
             iconRend.custom.x = 0;
             iconRend.custom.y = 0;
@@ -320,36 +254,24 @@ public class UnlockPicker : MonoBehaviour
         paletteRenderer.transform.position = curWorldPos;
         paletteRenderer.width = tileWidth;
         paletteRenderer.height = tileHeight;
-    }
-    public void Open(int unlockSelectionAmount, UnlockType unlockType, NPCBrain npc)
-    {
-        if (curPickerState == PickerState.Closed)
-        {
-            ctsOpen?.Cancel();
-            ctsOpen = new CancellationTokenSource();
 
+        ctsOpen?.Cancel();
+        ctsOpen = new CancellationTokenSource();
 
-            TurnOn(unlockSelectionAmount, unlockType, npc);
-            Opening().Forget();
-        }
+        Opening().Forget();
     }
     public void Close()
     {
-        if (curPickerState == PickerState.Opened || curPickerState == PickerState.Opening)
-        {
-            ctsOpen?.Cancel();
-            ctsOpen = new CancellationTokenSource();
+        ctsOpen?.Cancel();
+        ctsOpen = new CancellationTokenSource();
 
-            transform.SetParent(selectedNPC.transform);
-            Closing().Forget();
-        }
+        transform.SetParent(selectedNPC.transform);
+        Closing().Forget();
     }
     public async UniTask Opening()
     {
         try
         {
-            SetState(PickerState.Opening);
-
             float totalTime = curGridColCount * OPEN_TIME_ROW_COL;
             openClock = Mathf.Max(openClock, 0);
 
@@ -368,23 +290,19 @@ public class UnlockPicker : MonoBehaviour
                 for (int i = 0; i < curGridColCount; i++)
                 {
                     float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
-                    icons[i].renderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
+                    icons[i].atlasRenderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
                 }
                 await UniTask.Yield(ctsOpen.Token);
             }
-            SetState(PickerState.Opened);
         }
         catch (OperationCanceledException)
         {
-            SetState(PickerState.Opened);
         }
     }
     public async UniTask Closing()
     {
         try
         {
-            SetState(PickerState.Closing);
-
             float totalTime = curGridColCount * OPEN_TIME_ROW_COL;
             openClock = Mathf.Min(openClock, totalTime);
 
@@ -402,18 +320,16 @@ public class UnlockPicker : MonoBehaviour
                 for (int i = 0; i < curGridColCount; i++)
                 {
                     float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
-                    icons[i].renderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
+                    icons[i].atlasRenderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
                 }
                 await UniTask.Yield(ctsOpen.Token);
             }
-            SetState(PickerState.Closed);
 
-            TurnOff();
-
+            paletteRenderer.enabled = false;
+            selectedNPC = null;
         }
         catch (OperationCanceledException)
         {
-            SetState(PickerState.Closed);
         }
     }
 }

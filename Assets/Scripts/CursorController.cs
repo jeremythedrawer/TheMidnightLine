@@ -6,27 +6,27 @@ using static NPC;
 using static AtlasUI;
 public class CursorController : MonoBehaviour
 {
+    const int CURSOR_SPRITE_INDEX = 2;
+    const int POINTER_SPRITE_INDEX = 7;
+
     const float VISIBLE_TIMER = 3f;
     const float MOVE_THRESHOLD = 0.01f;
-
-    public static event Action OnClickExamplePassenger;
 
     public static AtlasRenderer PrevRenderer;
     public static AtlasRenderer CursorRenderer;
     
-    public static Bounds CursorBounds;
-    
-    public static bool Active;
-    public static bool CanClick;
+    public bool active;
+    public bool canClick;
 
     public static event Action OnMouseEnabled;
     public static event Action OnMouseDisabled;
 
-    public PlayerInputsSO playerInputs;
+    public InputData inputData;
     public LayerSettingsSO layerSettings;
-    public SpyStatsSO spyStats;
-    public CameraStatsSO camStats;
-    public TripSO trip;
+    public SpyData spyData;
+    public CameraData camData;
+    public TripData trip;
+    public CursorData cursorData;
 
     public SceneData sceneData;
 
@@ -52,20 +52,20 @@ public class CursorController : MonoBehaviour
     
     private void Update()
     {
-        if (Active)
+        if (active)
         {
             cursorRenderer.enabled = true;
-            transform.position = playerInputs.mouseWorldPos;
+            transform.position = inputData.mouseWorldPos;
 
-            CursorBounds = cursorRenderer.GetBounds();
+            cursorData.bounds = cursorRenderer.GetBounds();
 
-            if (sceneData.activeSceneType == Scenes.SceneType.Trip && camStats.curLocationState != Spy.LocationState.Station)
+            if (sceneData.activeSceneType == Scenes.SceneType.Trip && camData.curLocationState != Spy.LocationState.Station)
             {
-                if (cursorIsMoving && SceneController.GetNPCPicker().curPickerState == PickerState.Closed) HoverNPC();
+                if (cursorIsMoving) HoverNPC();
                 
                 if ((trip.curUnlocks & UnlockType.RuleOut) != 0)
                 {
-                    if (playerInputs.mouseLeftDown)
+                    if (inputData.mouseLeftDown)
                     {
                         NPCBrain selectedNPC = hoveredNPCs[0];
 
@@ -88,13 +88,6 @@ public class CursorController : MonoBehaviour
                                 }
                             }
                             selectedNPC.ToggleHover(false);
-
-                            if (selectedNPC == NPCBrain.ExamplePassenger)
-                            {
-                                OnClickExamplePassenger?.Invoke();
-
-                                NPCBrain.ExamplePassenger.ReturnExamplePassenger();
-                            }
                         }
                         else if (hoveredNPCCount > 1)
                         {
@@ -102,7 +95,7 @@ public class CursorController : MonoBehaviour
                             SceneController.GetNPCPicker().Open(hoveredNPCs, hoveredNPCCount, PickerFunctionType.Color);
                         }
                     }
-                    else if (playerInputs.mouseRightDown)
+                    else if (inputData.mouseRightDown)
                     {
                         NPCBrain selectedNPC = hoveredNPCs[0];
                         if (hoveredNPCCount == 1)
@@ -133,7 +126,7 @@ public class CursorController : MonoBehaviour
         else
         {
             cursorRenderer.enabled = false;
-            if (spyStats.moveVelocity.x != 0)
+            if (spyData.moveVelocity.x != 0)
             {
                 EraseCursorTag();
             }
@@ -142,16 +135,16 @@ public class CursorController : MonoBehaviour
     private void LateUpdate()
     {
         Vector2 mouseDelta = Mouse.current.delta.ReadValue();
-        if (mouseDelta.sqrMagnitude < MOVE_THRESHOLD && !playerInputs.mouseLeftHold)
+        if (mouseDelta.sqrMagnitude < MOVE_THRESHOLD && !inputData.mouseLeftHold)
         {
             cursorIsMoving = false;
             timer += Time.deltaTime;
 
             if (timer > VISIBLE_TIMER)
             {
-                if (Active)
+                if (active)
                 {
-                    Active = false;
+                    active = false;
                     OnMouseDisabled?.Invoke();
                 }
             }
@@ -159,27 +152,26 @@ public class CursorController : MonoBehaviour
         else
         {
             cursorIsMoving = true;
-            if (!Active)
+            if (!active)
             {
                 timer = 0;
-                Active = true;
+                active = true;
                 OnMouseEnabled?.Invoke();
             }
         }
-
-        if (CanClick)
+        if (canClick)
         {
-            if (cursorRenderer.spriteIndex == (int)KeySpriteIndices.Cursor)
+            if (cursorRenderer.spriteIndex == CURSOR_SPRITE_INDEX)
             {
-                cursorRenderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.Pointer);
+                cursorRenderer.UpdateSpriteInputsByIndex(POINTER_SPRITE_INDEX);
             }
-            CanClick = false;
+            canClick = false;
         }
         else
         {
-            if (cursorRenderer.spriteIndex == (int)KeySpriteIndices.Pointer)
+            if (cursorRenderer.spriteIndex == POINTER_SPRITE_INDEX)
             {
-                cursorRenderer.UpdateSpriteInputsByIndex((int)KeySpriteIndices.Cursor);
+                cursorRenderer.UpdateSpriteInputsByIndex(CURSOR_SPRITE_INDEX);
             }
         }
     }
@@ -189,39 +181,23 @@ public class CursorController : MonoBehaviour
         bool hoveringRevealedNPC = false;
         bool canClick = (trip.curUnlocks & UnlockType.RuleOut) != 0; // TODO : Find a way to not have the cursor flicker between sprites
 
-        if (NPCBrain.ExamplePassenger == null)
+        Carriage curCarriage = SpyBrain.CurCarriage;
+        for (int i = 0; i < curCarriage.curNPCList.Count; i++)
         {
-            Carriage curCarriage = SpyBrain.CurCarriage;
-            for (int i = 0; i < curCarriage.curNPCList.Count; i++)
-            {
-                NPCBrain npc = curCarriage.curNPCList[i];
+            NPCBrain npc = curCarriage.curNPCList[i];
 
-                if (spyStats.curState == Spy.SpyState.Notepad && npc.transform.position.x > curCarriage.insideBoundsCollider.bounds.center.x) return;
+            if (spyData.curState == Spy.SpyState.Notepad && npc.transform.position.x > curCarriage.insideBoundsCollider.bounds.center.x) return;
 
-                if (IsInsideBounds(npc.atlasRenderer.bounds, isClickable: false) && hoveredNPCCount < hoveredNPCs.Length)
-                {
-                    hoveredNPCs[hoveredNPCCount] = npc;
-                    hoveredNPCCount++;
-                    npc.ToggleHover(true);
-                    if (npc.ticketHasBeenChecked) hoveringRevealedNPC = true;
-                }
-                else
-                {
-                    npc.ToggleHover(false);
-                }
-            }
-        }
-        else if (NPCBrain.ExamplePassenger.atDepthForExample)
-        {
-            if (IsInsideBounds(NPCBrain.ExamplePassenger.atlasRenderer.bounds, isClickable: false))
+            if (cursorData.IsInsideBounds(npc.atlasRenderer.bounds, isClickable: false) && hoveredNPCCount < hoveredNPCs.Length)
             {
-                hoveredNPCs[0] = NPCBrain.ExamplePassenger;
+                hoveredNPCs[hoveredNPCCount] = npc;
                 hoveredNPCCount++;
-                NPCBrain.ExamplePassenger.ToggleHover(true);
+                npc.ToggleHover(true);
+                if (npc.ticketHasBeenChecked) hoveringRevealedNPC = true;
             }
             else
             {
-                NPCBrain.ExamplePassenger.ToggleHover(false);
+                npc.ToggleHover(false);
             }
         }
 
@@ -238,7 +214,7 @@ public class CursorController : MonoBehaviour
     public void WriteCursorTag(NPCBrain npc)
     {
         cursorTag.SetText(trip.stationsDataArray[npc.profile.disembarkingStationIndex].name);
-        cursorTag.transform.position = new Vector3(npc.atlasRenderer.bounds.center.x, npc.atlasRenderer.bounds.max.y + cursorTag.background_renderer.bounds.size.y, cursorTag.transform.position.z);
+        cursorTag.transform.position = new Vector3(npc.atlasRenderer.bounds.center.x, npc.atlasRenderer.bounds.max.y + cursorTag.backgroundRenderer.bounds.size.y, cursorTag.transform.position.z);
         cursorTag.transform.SetParent(npc.transform, worldPositionStays: true);
     }
     public void EraseCursorTag()
@@ -249,11 +225,5 @@ public class CursorController : MonoBehaviour
             cursorTag.transform.SetParent(transform, worldPositionStays: true);
             cursorTag.transform.localPosition = new Vector3(0, 0, cursorTag.transform.localPosition.z);
         }
-    }
-    public static bool IsInsideBounds(Bounds bounds,  bool isClickable)
-    {
-        bool inside = CursorBounds.min.x >= bounds.min.x && CursorBounds.min.x <= bounds.max.x && CursorBounds.max.y >= bounds.min.y && CursorBounds.max.y <= bounds.max.y;
-        if (inside && isClickable) CanClick = true;
-        return inside;
     }
 }

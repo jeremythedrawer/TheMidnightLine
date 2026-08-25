@@ -13,13 +13,12 @@ public class CameraController : MonoBehaviour
     public static event Action OnArrivedAtElevator;
 
     public CameraSettingsSO settings;
-    public CameraStatsSO stats;
-    public SpyStatsSO spyStats;
-    public TrainStatsSO trainStats;
-    public SpySettingsSO spySettings;
-    public PlayerInputsSO spyInputs;
+    public CameraData stats;
+    public SpyData spyData;
+    public TrainData trainStats;
+    public InputData spyInputs;
     public LayerSettingsSO layerSettings;
-    public GameEventDataSO gameEventData;
+    public GameEventData gameEventData;
     public SceneData sceneData;
     public NotepadData notepadData;
 
@@ -85,7 +84,7 @@ public class CameraController : MonoBehaviour
         ChooseStates();
         UpdateStates();
 
-        curXOffset = spyStats.spriteFlip ? -settings.horizontalOffset : settings.horizontalOffset;
+        curXOffset = spyData.spriteFlip ? -settings.horizontalOffset : settings.horizontalOffset;
         stats.camBounds.center = transform.position;
 
         stats.worldToCam = cam.worldToCameraMatrix;
@@ -158,17 +157,17 @@ public class CameraController : MonoBehaviour
         {
             case LocationState.Station:
             {
-                targetWorldPos.x = spyStats.bounds.center.x + curXOffset;
+                targetWorldPos.x = spyData.bounds.center.x + curXOffset;
             }
             break;
 
             case LocationState.Carriage:
             {
-                float distFromCenter = spyStats.bounds.center.x - stats.curLocationBounds.center.x;
+                float distFromCenter = spyData.bounds.center.x - stats.curLocationBounds.center.x;
 
                 float carriageT = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
 
-                targetWorldPos.x = Mathf.Lerp(stats.curLocationBounds.center.x, spyStats.bounds.center.x + curXOffset, carriageT);
+                targetWorldPos.x = Mathf.Lerp(stats.curLocationBounds.center.x, spyData.bounds.center.x + curXOffset, carriageT);
                 carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);
                 
                 carriageBoundsCompute.Dispatch(carriageBoundsKernel, threadGroupX, threadGroupY, 1);
@@ -180,16 +179,16 @@ public class CameraController : MonoBehaviour
                 {
                     if (notepadData.collected && sceneData.activeSceneType == Scenes.SceneType.Start)
                     {
-                        float distFromCenter = (spyStats.bounds.center.x + 3) - stats.curLocationBounds.center.x;
+                        float distFromCenter = (spyData.bounds.center.x + 3) - stats.curLocationBounds.center.x;
                         float t = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
-                        targetWorldPos.x = Mathf.Lerp(stats.curLocationBounds.center.x, (spyStats.bounds.center.x + 3) + curXOffset, t);
+                        targetWorldPos.x = Mathf.Lerp(stats.curLocationBounds.center.x, (spyData.bounds.center.x + 3) + curXOffset, t);
                         targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, stats.curLocationBounds.min.x + stats.camBounds.extents.x, stats.curLocationBounds.max.x - stats.camBounds.extents.x);
                     }
                     else
                     {
-                        float distFromCenter = spyStats.bounds.center.x - stats.curLocationBounds.center.x;
+                        float distFromCenter = spyData.bounds.center.x - stats.curLocationBounds.center.x;
                         float t = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
-                        targetWorldPos.x = Mathf.Lerp(stats.curLocationBounds.center.x, spyStats.bounds.center.x + curXOffset, t);
+                        targetWorldPos.x = Mathf.Lerp(stats.curLocationBounds.center.x, spyData.bounds.center.x + curXOffset, t);
                         targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, stats.curLocationBounds.min.x + stats.camBounds.extents.x, stats.curLocationBounds.max.x - stats.camBounds.extents.x);
                     }                    
                 }
@@ -199,16 +198,16 @@ public class CameraController : MonoBehaviour
             {
                 if (!isShaking)
                 {
-                    float distFromCenter = spyStats.bounds.center.x - stats.curLocationBounds.center.x;
+                    float distFromCenter = spyData.bounds.center.x - stats.curLocationBounds.center.x;
                     float t = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
-                    targetWorldPos.x = Mathf.Lerp(stats.curLocationBounds.center.x, spyStats.bounds.center.x + curXOffset, t);
+                    targetWorldPos.x = Mathf.Lerp(stats.curLocationBounds.center.x, spyData.bounds.center.x + curXOffset, t);
                     targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, stats.curLocationBounds.min.x + stats.camBounds.extents.x, stats.curLocationBounds.max.x - stats.camBounds.extents.x);
                 }
             }
             break;
             case LocationState.Gangway:
             {
-                targetWorldPos.x = spyStats.bounds.center.x + curXOffset;
+                targetWorldPos.x = spyData.bounds.center.x + curXOffset;
 
                 carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);
 
@@ -218,7 +217,7 @@ public class CameraController : MonoBehaviour
 
             case LocationState.Elevator:
             {
-                if ((spyStats.curState == SpyState.ShotAt || spyStats.curState == SpyState.HandShake) && (rawCurWorldPos - targetWorldPos).sqrMagnitude < 0.05f)
+                if ((spyData.curState == SpyState.ShotAt || spyData.curState == SpyState.HandShake) && (rawCurWorldPos - targetWorldPos).sqrMagnitude < 0.05f)
                 {
                     OnArrivedAtElevator?.Invoke();
                 }
@@ -297,7 +296,7 @@ public class CameraController : MonoBehaviour
     }
     private void MoveToPlayer()
     {
-        targetWorldPos.x = spyStats.bounds.center.x;
+        targetWorldPos.x = spyData.bounds.center.x;
     }
     private void SetToSlowDamping()
     {

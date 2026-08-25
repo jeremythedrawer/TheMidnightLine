@@ -73,7 +73,7 @@ public class AtlasRenderer : MonoBehaviour
 
         switch (rendererType)
         {
-            case AtlasRendererType.SimpleWorld:
+            case AtlasRendererType.Simple:
             {
                 if (atlas.simpleSprites.Length == 0) { Debug.LogWarning("Atlas does not have Simple Sprites at: " + name); return; }
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.simpleSprites.Length - 1);
@@ -81,7 +81,7 @@ public class AtlasRenderer : MonoBehaviour
             }
             break;
             
-            case AtlasRendererType.MotionWorld:
+            case AtlasRendererType.Motion:
             {
                 if (atlas.motionSprites.Length == 0) { Debug.LogWarning("Atlas does not have Motion Sprites at: " + name); return; }
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.motionSprites.Length - 1);
@@ -91,7 +91,7 @@ public class AtlasRenderer : MonoBehaviour
             }
             break;
 
-            case AtlasRendererType.SliceWorld:
+            case AtlasRendererType.Slice:
             {
                 if (atlas.slicedSprites.Length == 0) { Debug.LogWarning("Atlas does not have Sliced Sprites at: " + name); return; }
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.slicedSprites.Length - 1);
@@ -109,7 +109,7 @@ public class AtlasRenderer : MonoBehaviour
     {
         switch (rendererType)
         {
-            case AtlasRendererType.MotionWorld:
+            case AtlasRendererType.Motion:
             {
                 atlas.clipDict = BuildClipKeys(atlas.clips);
             }
@@ -120,7 +120,7 @@ public class AtlasRenderer : MonoBehaviour
     {
         switch (rendererType)
         {
-            case AtlasRendererType.MotionWorld:
+            case AtlasRendererType.Motion:
             {
                 atlas.clipDict = BuildClipKeys(atlas.clips);
             }
@@ -147,20 +147,20 @@ public class AtlasRenderer : MonoBehaviour
     {
         switch (rendererType)
         { 
-            case AtlasRendererType.SimpleWorld:
+            case AtlasRendererType.Simple:
             {
                 UpdateSpriteInputs(atlas.simpleSprites[index]);
 
             }
             break;
 
-            case AtlasRendererType.MotionWorld:
+            case AtlasRendererType.Motion:
             {
                 UpdateSpriteInputs(atlas.motionSprites[index].sprite);
             }
             break;
 
-            case AtlasRendererType.SliceWorld:
+            case AtlasRendererType.Slice:
             {
                 UpdateSlicedSpriteInputs(atlas.slicedSprites[index]);
             }
@@ -192,7 +192,7 @@ public class AtlasRenderer : MonoBehaviour
     {
         switch(rendererType)
         {
-            case AtlasRendererType.SliceWorld:
+            case AtlasRendererType.Slice:
             {
                 SliceSprite sliceSprite = atlas.slicedSprites[spriteIndex];
                 Vector4 centerWorldPivot = worldPivotsAndSizes[4];
@@ -204,8 +204,8 @@ public class AtlasRenderer : MonoBehaviour
                 bounds.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldPivot.z * width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldPivot.w * height) + sliceSprite.worldSlices.w, 0.2f);
             }
             break;
-            case AtlasRendererType.MotionWorld:
-            case AtlasRendererType.SimpleWorld:
+            case AtlasRendererType.Motion:
+            case AtlasRendererType.Simple:
             {
                 bounds.center = new Vector3(transform.position.x + boundsOffset.x, transform.position.y + boundsOffset.y, transform.position.z);
                 bounds.size = new Vector3(scaleAndFlip.x * worldPivotAndSize.z, scaleAndFlip.y * worldPivotAndSize.w, 0.2f);
@@ -603,7 +603,7 @@ public class AtlasRendererEditor : Editor
 
             switch (rend.rendererType)
             {
-                case AtlasRendererType.SliceWorld:
+                case AtlasRendererType.Slice:
                 {
                     SliceSprite sliceSprite = rend.atlas.slicedSprites[rend.spriteIndex];
 
@@ -611,8 +611,8 @@ public class AtlasRendererEditor : Editor
                     boundsHandle.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldPivot.z * rend.width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldPivot.w * rend.height) + sliceSprite.worldSlices.w, 0.2f);
                 }
                 break;
-                case AtlasRendererType.MotionWorld:
-                case AtlasRendererType.SimpleWorld:
+                case AtlasRendererType.Motion:
+                case AtlasRendererType.Simple:
                 {
                     boundsHandle.size = new Vector3(rend.sprite.worldSize.x * rend.width, rend.sprite.worldSize.y * rend.height, 0.2f);
                 }
@@ -629,7 +629,7 @@ public class AtlasRendererEditor : Editor
 
             switch (rend.rendererType)
             {
-                case AtlasRendererType.SliceWorld:
+                case AtlasRendererType.Slice:
                 {
                     SliceSprite sliceSprite = rend.atlas.slicedSprites[rend.spriteIndex];
                     Vector4 centerWorldPivot = rend.worldPivotsAndSizes[4];
@@ -641,8 +641,8 @@ public class AtlasRendererEditor : Editor
                     rend.UpdateSlicedSpriteInputs(sliceSprite);
                 }
                 break;
-                case AtlasRendererType.MotionWorld:
-                case AtlasRendererType.SimpleWorld:
+                case AtlasRendererType.Motion:
+                case AtlasRendererType.Simple:
                 {
                     rend.width = boundsHandle.size.x / rend.sprite.worldSize.x;
                     rend.height = boundsHandle.size.y / rend.sprite.worldSize.y;

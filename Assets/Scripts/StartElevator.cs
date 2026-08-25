@@ -8,7 +8,7 @@ using static Spy;
 public class StartElevator : MonoBehaviour
 {
     public MeridiaTowerData meridiaTowerData;
-    public CameraStatsSO camStats;
+    public CameraData camStats;
 
     public BoxCollider2D elevatorGround;
     

@@ -26,13 +26,13 @@ public class TrainController : MonoBehaviour
     public static event Action OnTrainAtStartPosition;
 
     public TrainSettingsSO settings;
-    public TrainStatsSO stats;
+    public TrainData stats;
     public LayerSettingsSO layerSettings;
-    public TripSO trip;
+    public TripData trip;
     public SpawnData spawnData;
-    public GameEventDataSO gameEventData;
-    public SpyStatsSO spyStats;
-    public CameraStatsSO camStats;
+    public GameEventData gameEventData;
+    public SpyData spyStats;
+    public CameraData camStats;
 
     public AtlasRenderer backSprite;
     public AtlasRenderer driversPit; 

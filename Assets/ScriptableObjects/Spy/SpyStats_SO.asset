@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f7e7a2f9d0ad0254fbc14127144ab481, type: 3}
+  m_Name: SpyStats_SO
+  m_EditorClassIdentifier: 
+  moveSpeed: 1.5
+  groundAccelation: 12
+  groundDecelaration: 0.5
+  groundBufferVertical: 0.018
+  groundBufferHorizontal: 0.176
+  wallWidthBuffer: 0.09
+  wasteBuffer: 0.35
+  depthPositionInTrain: 0
+  boardingStationName: Gorov
+  disembarkingStationName: Viskov Passage
+  moveVelocity: {x: 0, y: 0}
+  startPos: {x: 263.845, y: -3.85}
+  targetXVelocity: 1.5
+  curState: 6
+  tutorialsCompleted: 15
+  curTutorialState: 16
+  spriteFlip: 0
+  walkingIntoWall: 0
+  startTrip: 1
+  checkingNotepad: 1
+  playerInputsEnabled: 0
+  canCheckTicket: 1
+  movedFirstTime: 1
+  bounds:
+    m_Center: {x: 308.21024, y: 0.4552981, z: 9}
+    m_Extent: {x: 0.1, y: 0.45, z: 0.1}
+  curGroundLayer:
+    serializedVersion: 2
+    m_Bits: 128
+  curWallLayer:
+    serializedVersion: 2
+    m_Bits: 128

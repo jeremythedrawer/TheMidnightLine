@@ -4,8 +4,8 @@ using static Train;
 public class Station : MonoBehaviour
 {
     public StationSO station;
-    public TrainStatsSO trainStats;
-    public TripSO trip;
+    public TrainData trainStats;
+    public TripData trip;
     public AtlasRenderer platformRenderer;
     public Transform exitTransform;
 

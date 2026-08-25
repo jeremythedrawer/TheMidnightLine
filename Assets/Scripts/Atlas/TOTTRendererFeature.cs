@@ -11,10 +11,10 @@ using static AtlasSpawn;
 
 public class TOTTRendererFeature : ScriptableRendererFeature
 {
-    public TripSO trip;
+    public TripData trip;
     public SpawnData spawnerData;
-    public SpyStatsSO spyStats;
-    public CameraStatsSO cameraStats;
+    public SpyData spyStats;
+    public CameraData cameraStats;
     public Mesh quad;
 
     public Material matrixMaterial;
@@ -26,7 +26,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     private PixelPerfectPass pixelPerfectPass;
     private class AtlasPassData
     {
-        public CameraStatsSO cameraStats;
+        public CameraData cameraStats;
     }
 
     public override void Create()
@@ -47,11 +47,11 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     }
     private class AtlasBatchPass : ScriptableRenderPass
     {
-        private static CameraStatsSO cameraStats;
+        private static CameraData cameraStats;
         private static Mesh quad;
         private uint[] args;
         
-        public AtlasBatchPass( CameraStatsSO camStats, Mesh quadToUse)
+        public AtlasBatchPass( CameraData camStats, Mesh quadToUse)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
             cameraStats = camStats;
@@ -83,7 +83,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             });
         }
 
-        private static void ExecuteBatch(RasterCommandBuffer cmd, CameraStatsSO camStats, Mesh quad, ref uint[] args)
+        private static void ExecuteBatch(RasterCommandBuffer cmd, CameraData camStats, Mesh quad, ref uint[] args)
         {
 #if UNITY_EDITOR
             PrefabStage prefabStage = PrefabStageUtility.GetCurrentPrefabStage();
@@ -108,8 +108,8 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
                     switch (renderer.rendererType)
                     { 
-                        case AtlasRendererType.SimpleWorld:
-                        case AtlasRendererType.MotionWorld:
+                        case AtlasRendererType.Simple:
+                        case AtlasRendererType.Motion:
                         {
                             SpriteData spriteData = spriteBatch.data.spriteData[count];
 
@@ -124,7 +124,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                         }
                         break;
 
-                        case AtlasRendererType.SliceWorld:
+                        case AtlasRendererType.Slice:
                         {
                             for (int j = 0; j < renderer.worldPivotsAndSizes.Length; j++)
                             {
@@ -197,11 +197,11 @@ public class TOTTRendererFeature : ScriptableRendererFeature
     }
     private class AtlasParticlePass : ScriptableRenderPass
     {
-        private TripSO trip;
+        private TripData trip;
         private SpawnData spawner;
-        private SpyStatsSO spyStats;
+        private SpyData spyStats;
         private static Mesh quad;
-        public AtlasParticlePass(TripSO curTrip, SpawnData spawner, SpyStatsSO spyStats, Mesh quadToUse)
+        public AtlasParticlePass(TripData curTrip, SpawnData spawner, SpyData spyStats, Mesh quadToUse)
         {
             renderPassEvent = RenderPassEvent.AfterRenderingOpaques;
             trip = curTrip;

@@ -37,18 +37,16 @@ public class SpyBrain : MonoBehaviour
     public AtlasRenderer atlasRenderer;
     
     [Header("Scriptable Objects")]
-    public SpySettingsSO settings;
-    public MaterialIDSO materialIDs;
-    public SpyStatsSO stats;
-    public PlayerInputsSO playerInputs;
-    public TrainStatsSO trainStats;
+    public SpyData spyData;
+    public InputData inputData;
+    public TrainData trainData;
     public TrainSettingsSO trainSettings;
     public LayerSettingsSO layerSettings;
-    public GameEventDataSO gameEventData;
-    public CameraStatsSO camStats;
-    public OptionsSO options;
+    public GameEventData gameEventData;
+    public CameraData camStats;
+    public Options options;
     public NotepadData notepadData;
-    public TripSO trip;
+    public TripData trip;
     public SceneData sceneData;
     public MeridiaTowerData meridiaTowerData;
 
@@ -149,14 +147,14 @@ public class SpyBrain : MonoBehaviour
     private void FixedUpdate()
     {
         FixedUpdateStates();
-        bool leftWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, stats.curWallLayer);
-        bool rightWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, stats.curWallLayer);
+        bool leftWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, spyData.curWallLayer);
+        bool rightWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, spyData.curWallLayer);
 
-        stats.walkingIntoWall = (leftWallTouch && playerInputs.move == -1) || (rightWallTouch && playerInputs.move == 1);
+        spyData.walkingIntoWall = (leftWallTouch && inputData.move == -1) || (rightWallTouch && inputData.move == 1);
     }
     private void PlayAgainInit()
     {
-        stats.playerInputsEnabled = true;
+        spyData.playerInputsEnabled = true;
         sceneData.activeSceneType = Scenes.SceneType.Start;
 
         EveryInit();
@@ -168,17 +166,17 @@ public class SpyBrain : MonoBehaviour
         atlas = atlasRenderer.atlas;
         atlas.UpdateClipDictionary();
 
-        stats.curGroundLayer = layerSettings.stationLayers.ground;
-        stats.curWallLayer = layerSettings.stationWallLayers;
-        stats.bounds = atlasRenderer.bounds;
-        stats.checkingNotepad = false;
+        spyData.curGroundLayer = layerSettings.stationLayers.ground;
+        spyData.curWallLayer = layerSettings.stationWallLayers;
+        spyData.bounds = atlasRenderer.bounds;
+        spyData.checkingNotepad = false;
 
-        stats.curTutorialState = TutorialState.None;
-        stats.playerInputsEnabled = true;
+        spyData.curTutorialState = TutorialState.None;
+        spyData.playerInputsEnabled = true;
 
         rigidBody.includeLayers = layerSettings.stationMask;
 
-        stats.curState = SpyState.Idle;
+        spyData.curState = SpyState.Idle;
         SetState(SpyState.None);
 
         SceneController.SetSpyBrain(this);
@@ -197,19 +195,19 @@ public class SpyBrain : MonoBehaviour
     private void StartInit()
     {
         trip.failed = false;
-        stats.tutorialsCompleted = TutorialState.None;
-        stats.startTrip = false;
-        stats.canCheckTicket = false;
-        stats.startPos = new Vector2(transform.position.x, transform.position.y);
-        stats.movedFirstTime = false;
+        spyData.tutorialsCompleted = TutorialState.None;
+        spyData.startTrip = false;
+        spyData.canCheckTicket = false;
+        spyData.startPos = new Vector2(transform.position.x, transform.position.y);
+        spyData.movedFirstTime = false;
 
         trip.curUnlocks = UnlockType.None;
     }
     private void ChooseState()
     {
-        if (!stats.playerInputsEnabled) return;
+        if (!spyData.playerInputsEnabled) return;
 
-        if ((playerInputs.ticketCheckKeyDown && stats.canCheckTicket && curNPCTicketCheckHoverCount == 1 && !stats.checkingNotepad) || chosenNPC != null)
+        if ((inputData.ticketCheckKeyDown && spyData.canCheckTicket && curNPCTicketCheckHoverCount == 1 && !spyData.checkingNotepad) || chosenNPC != null)
         {
             if (chosenNPC == null)
             {
@@ -225,11 +223,11 @@ public class SpyBrain : MonoBehaviour
                 SetState(SpyState.TicketCheck);
             }
         }
-        else if ((playerInputs.ticketCheckKeyDown && stats.canCheckTicket && curNPCTicketCheckHoverCount > 1) || PickingNPCToTicketCheck)
+        else if ((inputData.ticketCheckKeyDown && spyData.canCheckTicket && curNPCTicketCheckHoverCount > 1) || PickingNPCToTicketCheck)
         {
             SetState(SpyState.PickingNPCTicketCheck);
         }
-        else if ((notepadData.collected && playerInputs.notepadToggleKeyDown) || stats.checkingNotepad)
+        else if ((notepadData.collected && inputData.notepadToggleKeyDown) || spyData.checkingNotepad)
         {
             SetState(SpyState.Notepad);
         }
@@ -237,7 +235,7 @@ public class SpyBrain : MonoBehaviour
         {
             SetState(SpyState.CarriageMap);
         }
-        else if (playerInputs.move != 0 && !stats.walkingIntoWall)
+        else if (inputData.move != 0 && !spyData.walkingIntoWall)
         {
             SetState(SpyState.Walk);
         }
@@ -248,13 +246,13 @@ public class SpyBrain : MonoBehaviour
     }
     private void UpdateStates()
     {
-        switch (stats.curState)
+        switch (spyData.curState)
         {
             case SpyState.Idle:
             {
                 atlasRenderer.PlayClip(ref curClip);
 
-                if (canOpenSlideDoor && !stats.checkingNotepad)
+                if (canOpenSlideDoor && !spyData.checkingNotepad)
                 {
                     switch (camStats.curLocationState)
                     {
@@ -266,7 +264,7 @@ public class SpyBrain : MonoBehaviour
 
                         case LocationState.Carriage:
                         {
-                            if (notepadData.profileWriteCount == trip.traitorProfiles.Length && trainStats.curStationIndex > 0)
+                            if (notepadData.profileWriteCount == trip.traitorProfiles.Length && trainData.curStationIndex > 0)
                             {
                                 GetSlideDoorInTrain();
                             }
@@ -274,7 +272,7 @@ public class SpyBrain : MonoBehaviour
                         break;
                     }
                 }
-                if (playerInputs.interactKeyDown)
+                if (inputData.interactKeyDown)
                 {
                     OnInteract?.Invoke();
                 }
@@ -283,37 +281,37 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Walk:
             {
-                if (stats.playerInputsEnabled)
+                if (spyData.playerInputsEnabled)
                 {
-                    Flip(playerInputs.move < 0);
-                    stats.targetXVelocity = settings.moveSpeed * playerInputs.move;
+                    Flip(inputData.move < 0);
+                    spyData.targetXVelocity = spyData.moveSpeed * inputData.move;
                     
-                    if (playerInputs.interactKeyDown) OnInteract?.Invoke();
+                    if (inputData.interactKeyDown) OnInteract?.Invoke();
                 }
                 else
                 {
-                    if (curWorldPos.x <= stats.startPos.x)
+                    if (curWorldPos.x <= spyData.startPos.x)
                     {
                         OnEnteredElevatorGoingUp.Invoke();
                         PlayAgainInit();
                     }
                 }
                 atlasRenderer.PlayClip(ref curClip);
-                stats.moveVelocity.x = Mathf.Lerp(stats.moveVelocity.x, stats.targetXVelocity, settings.groundAccelation * Time.deltaTime);
+                spyData.moveVelocity.x = Mathf.Lerp(spyData.moveVelocity.x, spyData.targetXVelocity, spyData.groundAccelation * Time.deltaTime);
 
-                curWorldPos.x += stats.moveVelocity.x * Time.deltaTime;
+                curWorldPos.x += spyData.moveVelocity.x * Time.deltaTime;
                 curWorldPos.y = transform.position.y;
                 curWorldPos.z = transform.position.z;
 
                 transform.position = curWorldPos;
 
-                stats.bounds = atlasRenderer.bounds;
+                spyData.bounds = atlasRenderer.bounds;
 
                 switch (camStats.curLocationState)
                 { 
                     case LocationState.Station:
                     {
-                        if (canOpenSlideDoor && !stats.checkingNotepad)
+                        if (canOpenSlideDoor && !spyData.checkingNotepad)
                         {
                             GetSlideDoorAtStation();
                         }
@@ -322,7 +320,7 @@ public class SpyBrain : MonoBehaviour
                     
                     case LocationState.Carriage:
                     {
-                        if (canOpenSlideDoor && !stats.checkingNotepad && (notepadData.profileWriteCount == trip.traitorProfiles.Length || trainStats.curStationIndex == trip.stationsDataArray.Length - 1) && trainStats.curStationIndex > 0)
+                        if (canOpenSlideDoor && !spyData.checkingNotepad && (notepadData.profileWriteCount == trip.traitorProfiles.Length || trainData.curStationIndex == trip.stationsDataArray.Length - 1) && trainData.curStationIndex > 0)
                         {
                             GetSlideDoorInTrain();
                         }
@@ -344,27 +342,27 @@ public class SpyBrain : MonoBehaviour
             {
                 atlasRenderer.PlayClip(ref curClip);
 
-                if((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveKeyDown || playerInputs.writeKeyDown) && canExitState)
+                if((inputData.ticketCheckKeyUp || inputData.mouseLeftUp || inputData.moveKeyDown || inputData.writeKeyDown) && canExitState)
                 {
                     FinishWithChosenNPC();
                 }
-                if (!playerInputs.ticketCheckKeyHold && !playerInputs.mouseLeftHold && playerInputs.move == 0) canExitState = true;
+                if (!inputData.ticketCheckKeyHold && !inputData.mouseLeftHold && inputData.move == 0) canExitState = true;
             }
             break;
             case SpyState.CarriageMap:
             {
                 atlasRenderer.PlayClip(ref curClip);
-                if (!playerInputs.interactKeyDown) canExitState = true;
+                if (!inputData.interactKeyDown) canExitState = true;
 
-                if (playerInputs.interactKeyDown && canExitState) checkingCarriageMap = false;
+                if (inputData.interactKeyDown && canExitState) checkingCarriageMap = false;
             }
             break;
             case SpyState.TalkingToAccomplice:
             {
                 atlasRenderer.PlayClip(ref curClip);
-                if ((playerInputs.ticketCheckKeyUp || playerInputs.mouseLeftUp || playerInputs.moveKeyDown || playerInputs.writeKeyDown) && canExitState)
+                if ((inputData.ticketCheckKeyUp || inputData.mouseLeftUp || inputData.moveKeyDown || inputData.writeKeyDown) && canExitState)
                 {
-                    if (stats.curTutorialState == TutorialState.None)
+                    if (spyData.curTutorialState == TutorialState.None)
                     {
                         chosenNPC.talkingToSpy = false;
                         chosenNPC = null;
@@ -372,22 +370,22 @@ public class SpyBrain : MonoBehaviour
                     }
                 }
 
-                if (!playerInputs.ticketCheckKeyHold && !playerInputs.mouseLeftHold && playerInputs.move == 0) canExitState = true;
+                if (!inputData.ticketCheckKeyHold && !inputData.mouseLeftHold && inputData.move == 0) canExitState = true;
             }
             break;
             case SpyState.PickingNPCTicketCheck:
             {
-                if ((playerInputs.mouseLeftUp || playerInputs.move != 0) && canExitState)
+                if ((inputData.mouseLeftUp || inputData.move != 0) && canExitState)
                 {
                     PickingNPCToTicketCheck = false;
                 }
 
-                if (!playerInputs.ticketCheckKeyHold && !playerInputs.mouseLeftHold && playerInputs.move == 0) canExitState = true;
+                if (!inputData.ticketCheckKeyHold && !inputData.mouseLeftHold && inputData.move == 0) canExitState = true;
             }
             break;
             case SpyState.Notepad:
             {
-                if (playerInputs.notepadToggleKeyUp) canExitState = true;
+                if (inputData.notepadToggleKeyUp) canExitState = true;
 
                 if (notepadData.curState != curNotepadState)
                 {
@@ -411,19 +409,6 @@ public class SpyBrain : MonoBehaviour
                             curClip = atlas.clipDict[(int)SpyMotion.NotepadHolding];
                         }
                         break;
-                        case NotepadState.Writing:
-                        {
-                            curClip = atlas.clipDict[(int)SpyMotion.NotepadWriting];
-                            atlasRenderer.PlayClipOneShot(curClip);
-                        }
-                        break;
-                        case NotepadState.Erasing:
-                        {
-                            curClip = atlas.clipDict[(int)SpyMotion.NotepadWriting];
-                            atlasRenderer.PlayClipOneShotReverse(curClip);
-
-                        }
-                        break;
                     }
                     curNotepadState = notepadData.curState;
                 }
@@ -431,9 +416,9 @@ public class SpyBrain : MonoBehaviour
                 if (curNotepadState == NotepadState.Stationary)
                 {
                     atlasRenderer.PlayClip(ref curClip);
-                    if (playerInputs.notepadToggleKeyDown && canExitState)
+                    if (inputData.notepadToggleKeyDown && canExitState)
                     {
-                        stats.checkingNotepad = false;
+                        spyData.checkingNotepad = false;
                     }
                 }
             }
@@ -457,7 +442,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void FixedUpdateStates()
     {
-        switch (stats.curState)
+        switch (spyData.curState)
         {
             case SpyState.Idle:
             {
@@ -549,16 +534,16 @@ public class SpyBrain : MonoBehaviour
     }
     private void SetState(SpyState newState)
     {
-        if (stats.curState == newState) return;
+        if (spyData.curState == newState) return;
         ExitState();
-        stats.curState = newState;
+        spyData.curState = newState;
         EnterState();
     }
     private void EnterState()
     {
         canExitState = false;
 
-        switch (stats.curState)
+        switch (spyData.curState)
         {
             case SpyState.Idle:
             {
@@ -568,10 +553,10 @@ public class SpyBrain : MonoBehaviour
             case SpyState.Walk:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.Walking];
-                if (!stats.movedFirstTime)
+                if (!spyData.movedFirstTime)
                 {
                     OnMoveFirstTime?.Invoke();
-                    stats.movedFirstTime = true;
+                    spyData.movedFirstTime = true;
                 }
             }
             break;
@@ -581,8 +566,8 @@ public class SpyBrain : MonoBehaviour
 
                 curClip = atlas.clipDict[(int)SpyMotion.Ticket];
 
-                stats.boardingStationName = trip.stationsDataArray[chosenNPC.profile.boardingStationIndex].name;
-                stats.disembarkingStationName = trip.stationsDataArray[chosenNPC.profile.disembarkingStationIndex].name;
+                spyData.boardingStationName = trip.stationsDataArray[chosenNPC.profile.boardingStationIndex].name;
+                spyData.disembarkingStationName = trip.stationsDataArray[chosenNPC.profile.disembarkingStationIndex].name;
                 trip.ticketsCheckedTotal++;
 
                 OnTicketInspect?.Invoke();
@@ -644,13 +629,13 @@ public class SpyBrain : MonoBehaviour
             {
                 curClip = atlas.clipDict[(int)SpyMotion.ShotByGun];
                 atlasRenderer.PlayClipOneShot(curClip);
-                stats.playerInputsEnabled = false;
+                spyData.playerInputsEnabled = false;
             }
             break;
             case SpyState.HandShake:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.Handshake];
-                stats.playerInputsEnabled = false;
+                spyData.playerInputsEnabled = false;
                 WaitToPlayAgain();
             }
             break;
@@ -658,7 +643,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void ExitState()
     {
-        switch (stats.curState)
+        switch (spyData.curState)
         {
             case SpyState.Idle:
             {
@@ -667,7 +652,7 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.Walk:
             {
-                stats.moveVelocity.x = 0;
+                spyData.moveVelocity.x = 0;
             }
             break;
             case SpyState.TicketCheck:
@@ -676,7 +661,7 @@ public class SpyBrain : MonoBehaviour
                 OnFinishTicketInspect?.Invoke();
                 if (trip.ticketsCheckedSinceLastStation == trip.stationAhead.ticketsToCheckBeforeSpawn)
                 {
-                    stats.canCheckTicket = false;
+                    spyData.canCheckTicket = false;
                 }
 
             }
@@ -722,7 +707,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void CheckIfTicketCheckHover()
     {
-        if (stats.canCheckTicket)
+        if (spyData.canCheckTicket)
         {
             Bounds spyBounds = atlasRenderer.bounds;
 
@@ -771,13 +756,13 @@ public class SpyBrain : MonoBehaviour
     }
     private void CalculateCollisionPoints()
     {
-        if (settings == null) return;
+        if (spyData == null) return;
 
-        float groundLeft = transform.position.x - settings.groundBufferHorizontal;
-        float groundRight = transform.position.x + settings.groundBufferHorizontal;
-        float groundBottom = transform.position.y - settings.groundBufferVertical;
-        float wallLeft = boxCollider.bounds.center.x - settings.wallWidthBuffer;
-        float wallRight = boxCollider.bounds.center.x + settings.wallWidthBuffer;
+        float groundLeft = transform.position.x - spyData.groundBufferHorizontal;
+        float groundRight = transform.position.x + spyData.groundBufferHorizontal;
+        float groundBottom = transform.position.y - spyData.groundBufferVertical;
+        float wallLeft = boxCollider.bounds.center.x - spyData.wallWidthBuffer;
+        float wallRight = boxCollider.bounds.center.x + spyData.wallWidthBuffer;
         collisionData.groundLeft = new Vector2(groundLeft, groundBottom);
         collisionData.groundRight = new Vector2(groundRight, groundBottom);
 
@@ -787,10 +772,10 @@ public class SpyBrain : MonoBehaviour
     }
     private void GetSlideDoorAtStation()
     {
-        Bounds spyBounds = stats.bounds;
+        Bounds spyBounds = spyData.bounds;
         SlideDoors foundSlideDoor = null;
 
-        if (trip.stationsDataArray[trainStats.curStationIndex].isFrontOfTrain)
+        if (trip.stationsDataArray[trainData.curStationIndex].isFrontOfTrain)
         {
             for (int i = 0; i < TrainController.ExteriorSlideDoors.Length; i++)
             {
@@ -832,7 +817,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void GetSlideDoorInTrain()
     {
-        Bounds spyBounds = stats.bounds;
+        Bounds spyBounds = spyData.bounds;
 
         SlideDoors foundSlideDoor = null;
         
@@ -863,16 +848,16 @@ public class SpyBrain : MonoBehaviour
     {
         slideDoors = null;
         canOpenSlideDoor = true;
-        stats.canCheckTicket = false;
+        spyData.canCheckTicket = false;
     }
     private void SetInputsForTrainStart()
     {
         canOpenSlideDoor = false;
-        stats.canCheckTicket = true;
+        spyData.canCheckTicket = true;
     }
     private void OpenSlideDoors()
     {
-        if (slideDoors == null || !canOpenSlideDoor || stats.checkingNotepad) return;
+        if (slideDoors == null || !canOpenSlideDoor || spyData.checkingNotepad) return;
 
         switch(slideDoors.curState)
         {
@@ -888,10 +873,10 @@ public class SpyBrain : MonoBehaviour
                 {
                     case LocationState.Carriage:
                     {
-                        if (trainStats.curStationIndex > 0)
+                        if (trainData.curStationIndex > 0)
                         {
-                            stats.curGroundLayer = layerSettings.stationLayers.ground;
-                            stats.curWallLayer = layerSettings.stationWallLayers;
+                            spyData.curGroundLayer = layerSettings.stationLayers.ground;
+                            spyData.curWallLayer = layerSettings.stationWallLayers;
                             camStats.curLocationState = LocationState.Station;
 
                             rigidBody.includeLayers = layerSettings.stationMask;
@@ -913,15 +898,15 @@ public class SpyBrain : MonoBehaviour
                         CurCarriage = slideDoors.carriage;
                         CurCarriage.MoveDown();
 
-                        stats.curGroundLayer = layerSettings.trainLayers.ground;
-                        stats.curWallLayer = layerSettings.trainWallLayers;
+                        spyData.curGroundLayer = layerSettings.trainLayers.ground;
+                        spyData.curWallLayer = layerSettings.trainWallLayers;
                         camStats.curLocationState = LocationState.Carriage;
                         camStats.curLocationBounds = CurCarriage.totalBounds;
                         rigidBody.includeLayers = layerSettings.trainMask;
                         
                         transform.SetParent(CurCarriage.transform, true);
 
-                        atlasRenderer.SetWorldDepth(trainStats.depthSections.frontStandingBack);
+                        atlasRenderer.SetWorldDepth(trainData.depthSections.frontStandingBack);
                         OnEnteredTrain?.Invoke();
                     }
                     break;
@@ -937,7 +922,7 @@ public class SpyBrain : MonoBehaviour
         {
             CarriageMapProp map = CurCarriage.maps[i];
             Bounds mapBounds = map.atlasRenderer.bounds;
-            if (stats.bounds.center.x > mapBounds.min.x && stats.bounds.center.x < mapBounds.max.x)
+            if (spyData.bounds.center.x > mapBounds.min.x && spyData.bounds.center.x < mapBounds.max.x)
             {
                 curCarriageMapProp = map;
                 curCarriageMapProp.Enter();
@@ -946,14 +931,14 @@ public class SpyBrain : MonoBehaviour
     }
     private void LookAtCarriageMap()
     {
-        if (checkingCarriageMap || curCarriageMapProp == null || camStats.curLocationState != LocationState.Carriage || stats.curTutorialState != TutorialState.None) return;
+        if (checkingCarriageMap || curCarriageMapProp == null || camStats.curLocationState != LocationState.Carriage || spyData.curTutorialState != TutorialState.None) return;
 
         curCarriageMapProp.Revert();
         checkingCarriageMap = true;
     }
     private void ExitCarriageMap()
     {
-        if (stats.bounds.center.x < curCarriageMapProp.atlasRenderer.bounds.min.x || stats.bounds.center.x > curCarriageMapProp.atlasRenderer.bounds.max.x)
+        if (spyData.bounds.center.x < curCarriageMapProp.atlasRenderer.bounds.min.x || spyData.bounds.center.x > curCarriageMapProp.atlasRenderer.bounds.max.x)
         {
             curCarriageMapProp.Exit();
             curCarriageMapProp = null;
@@ -961,7 +946,7 @@ public class SpyBrain : MonoBehaviour
     }
     private void Flip(bool flip)
     {
-        stats.spriteFlip = flip;
+        spyData.spriteFlip = flip;
         atlasRenderer.FlipHSimple(flip);
     }
     public void SetStateToNotepad()
@@ -999,7 +984,7 @@ public class SpyBrain : MonoBehaviour
     {
         SetState(SpyState.Walk);
         Flip(true);
-        stats.targetXVelocity = -settings.moveSpeed;
+        spyData.targetXVelocity = -spyData.moveSpeed;
         transform.position = new Vector3(meridiaTowerData.bottomFloorCenterTopPos.x, meridiaTowerData.bottomFloorCenterTopPos.y, transform.position.z);
         curWorldPos = transform.position;
     }
@@ -1023,7 +1008,7 @@ public class SpyBrain : MonoBehaviour
 
         Gizmos.color = Color.indianRed;
 
-        Gizmos.color = stats.walkingIntoWall ? Color.forestGreen : Color.red;
+        Gizmos.color = spyData.walkingIntoWall ? Color.forestGreen : Color.red;
         Gizmos.DrawLine(collisionData.wallLeft, boxCollider.bounds.center);
         Gizmos.DrawLine(collisionData.wallRight, boxCollider.bounds.center);
 

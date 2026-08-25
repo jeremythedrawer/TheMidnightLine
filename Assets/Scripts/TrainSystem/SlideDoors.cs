@@ -18,7 +18,7 @@ public class SlideDoors : MonoBehaviour
         Closing,
     }
 
-    public TrainStatsSO trainStats;
+    public TrainData trainStats;
     public TrainSettingsSO trainSettings;
 
     public AtlasRenderer rightSlideDoorRenderer;

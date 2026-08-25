@@ -15,11 +15,11 @@ public class SpawnMaster : MonoBehaviour
 
     public SpawnData spawnData;
     public CameraSettingsSO camSettings;
-    public CameraStatsSO camStats;
-    public TripSO trip;
-    public TrainStatsSO trainStats;
-    public GameEventDataSO gameEventData;
-    public OptionsSO colorSO;
+    public CameraData camStats;
+    public TripData trip;
+    public TrainData trainStats;
+    public GameEventData gameEventData;
+    public Options colorSO;
 
     [Header("Generated")]
     public int nextSpawnIndex;

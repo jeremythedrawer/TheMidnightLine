@@ -10,12 +10,13 @@ public class NPCPicker : MonoBehaviour
     public const int GRID_X_COUNT = 8;
     public const int GRID_Y_COUNT = 1;
 
-    public IconUIElement[] icons;
+    public IconButton[] icons;
 
-    public TripSO trip;
-    public PlayerInputsSO playerInputs;
-    public OptionsSO colorData;
-    public CameraStatsSO cameraStats;
+    public TripData trip;
+    public InputData inputData;
+    public Options colorData;
+    public CameraData camData;
+    public CursorData cursorData;
 
     public AtlasRenderer paletteRenderer;
 
@@ -36,8 +37,6 @@ public class NPCPicker : MonoBehaviour
     public Vector2 iconRendererWorldSize;
     public Vector2 sliceWorldSize;
 
-    public PickerState curPickerState;
-    public PickerState enteredPickerState;
     public PickerFunctionType functionType;
 
     public int curGridColCount;
@@ -49,8 +48,6 @@ public class NPCPicker : MonoBehaviour
     public float tileWidth;
     public float tileHeight;
 
-    public bool canClose;
-
     private void OnEnable()
     {
         Scenes.OnLoadTrip0 += Init;
@@ -61,19 +58,35 @@ public class NPCPicker : MonoBehaviour
     }
     private void Update()
     {
-        UpdateState();
+        for (int i = 0; i < curGridColCount; i++)
+        {
+            icons[i].UpdateButton();
+        }
+
+        if ((inputData.mouseLeftUp || inputData.mouseRightUp || camData.curLocationState != Spy.LocationState.Carriage) && !cursorData.IsInsideBounds(paletteRenderer.bounds, isClickable: false))
+        {
+            Close();
+        }
     }
     private void Init()
     {
         SceneController.SetNPCPicker(this);
-        curPickerState = PickerState.Closed;
         SetOpenPosAndSize();
+
+        void EnterColorIcon(IconButton icon)
+        {
+            icon.atlasRenderer.customBit |= (int)ColorBits.Invert;
+        }
+        void ExitColorIcon(IconButton icon)
+        {
+            icon.atlasRenderer.customBit &= ~(int)ColorBits.Invert;
+        }
 
         for (int i = 0; i < icons.Length; i++)
         {
             int index = i;
 
-            void ClickIcon(IconUIElement icon)
+            void ClickIcon(IconButton icon)
             {
                 switch (functionType)
                 {
@@ -120,80 +133,16 @@ public class NPCPicker : MonoBehaviour
                 }
                 Close();
             }
+
             icons[i].InitButton(ClickIcon, EnterColorIcon, ExitColorIcon);
         }
     }
-    private void EnterColorIcon(IconUIElement icon)
-    {
-        icon.renderer.customBit |= (int)ColorBits.Invert;
-    }
-    private void ExitColorIcon(IconUIElement icon)
-    {
-        icon.renderer.customBit &= ~(int)ColorBits.Invert;
-    }
 
-    private void SetState(PickerState newState)
-    {
-        if (curPickerState == newState) return;
-        ExitState();
-        curPickerState = newState;
-        enteredPickerState = newState;
-        EnterState();
-    }
-    private void UpdateState()
-    {
-        switch (curPickerState)
-        {
-            case PickerState.Opening:
-            case PickerState.Opened:
-            {
-                for (int i = 0; i < curGridColCount; i++)
-                {
-                    icons[i].UpdateButton(playerInputs);
-                }
-
-                if (canClose && (playerInputs.mouseLeftUp || playerInputs.mouseRightUp || cameraStats.curLocationState != Spy.LocationState.Carriage) && !CursorController.IsInsideBounds(paletteRenderer.bounds, isClickable: false))
-                {
-                    Close();
-                }
-                if (playerInputs.mouseLeftUp || playerInputs.ticketCheckKeyUp || playerInputs.mouseRightUp)
-                {
-                    canClose = true;
-                }
-            }
-            break;
-        }
-    }
-    private void EnterState()
-    {
-        switch (curPickerState)
-        {
-            case PickerState.Opening:
-            {
-                canClose = false;
-            }
-            break;
-            case PickerState.Opened:
-            {
-
-            }
-            break;
-            case PickerState.Closed:
-            {
-
-            }
-            break;
-        }
-    }
-    private void ExitState()
-    {
-
-    }
     public void SetOpenPosAndSize()
     {
         openIconRendererPositions = new Vector2[icons.Length];
 
-        AtlasRenderer firstColorRend = icons[0].renderer;
+        AtlasRenderer firstColorRend = icons[0].atlasRenderer;
         Vector4 paletteBottomRightWPS = paletteRenderer.worldPivotsAndSizes[5];
         Vector2 firstColorRendPos = new Vector2(paletteBottomRightWPS.x + firstColorRend.worldPivotAndSize.x, paletteBottomRightWPS.y - firstColorRend.worldPivotAndSize.y);
 
@@ -206,7 +155,7 @@ public class NPCPicker : MonoBehaviour
             {
                 int flatIndex = x + rowIndex;
 
-                AtlasRenderer npcIconRend = icons[flatIndex].renderer;
+                AtlasRenderer npcIconRend = icons[flatIndex].atlasRenderer;
 
                 float xPos = firstColorRendPos.x - (x * GRID_GAP);
                 openIconRendererPositions[flatIndex] = new Vector3(xPos, yPos, -1);
@@ -229,20 +178,11 @@ public class NPCPicker : MonoBehaviour
 
         sliceWorldSize = new Vector2(paletteBottomLeftWPS.z + paletteTopRightWPS.z, paletteBottomLeftWPS.w + paletteTopRightWPS.w);
     }
-    public void TurnOff()
-    {
-        paletteRenderer.enabled = false;
 
-        for (int i = 0; i < curGridColCount; i++)
-        {
-            icons[i].renderer.enabled = false;
-        }
-
-        selectedRenderer = null;
-        transform.SetParent(null);
-    }
-    public void TurnOn(NPCBrain[] npcs, int npcCount)
+    public void Open(NPCBrain[] npcs, int npcCount, PickerFunctionType funcType)
     {
+        functionType = funcType;
+
         paletteRenderer.enabled = true;
 
         possibleNPCs = npcs;
@@ -250,7 +190,7 @@ public class NPCPicker : MonoBehaviour
 
         for (int i = 0; i < possibleNPCs.Length; i++)
         {
-            AtlasRenderer iconRend = icons[i].renderer;
+            AtlasRenderer iconRend = icons[i].atlasRenderer;
             NPCBrain npcBrain = possibleNPCs[i];
 
             if (npcBrain == null) break;
@@ -292,104 +232,24 @@ public class NPCPicker : MonoBehaviour
         paletteRenderer.transform.position = curWorldPos;
         paletteRenderer.width = tileWidth;
         paletteRenderer.height = tileHeight;
-    }
-    public void Open(NPCBrain[] npcs, int npcCount, PickerFunctionType funcType)
-    {
-        if (curPickerState == PickerState.Closed)
-        {
-            ctsOpen?.Cancel();
-            ctsOpen = new CancellationTokenSource();
 
-            functionType = funcType;
-
-            TurnOn(npcs, npcCount);
-            Opening().Forget();
-        }
+        ctsOpen?.Cancel();
+        ctsOpen = new CancellationTokenSource();
+        
+        Opening().Forget();
     }
-    public void Adjust(NPCBrain[] npcs, int npcCount)
+    public void Close()
     {
         ctsOpen?.Cancel();
         ctsOpen = new CancellationTokenSource();
 
-        TurnOn(npcs, npcCount);
-        Adjusting().Forget();
-    }
-    public void Close()
-    {
-        if (curPickerState == PickerState.Opened || curPickerState == PickerState.Opening)
-        {
-            ctsOpen?.Cancel();
-            ctsOpen = new CancellationTokenSource();
-
-            transform.SetParent(selectedRenderer.transform);
-            Closing().Forget();
-        }
-    }
-    public async UniTask Adjusting()
-    {
-        try
-        {
-            SetState(PickerState.Adjusting);
-
-            float totalTime = curGridColCount * OPEN_TIME_ROW_COL;
-
-            if (openClock > totalTime)
-            {
-                while (openClock > totalTime)
-                {
-                    openClock -= Time.deltaTime;
-
-                    float t = openClock / totalTime;
-
-                    float easeOutT = Curves.EaseOutT(t, 5);
-                    curSpriteWidth = openSpriteWidth * easeOutT;
-
-                    paletteRenderer.width = curSpriteWidth;
-                    paletteRenderer.UpdateSliceSpriteInputsSelf();
-                    for (int i = 0; i < curGridColCount; i++)
-                    {
-                        float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
-                        icons[i].renderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
-                    }
-                    await UniTask.Yield(ctsOpen.Token);
-                }
-            }
-            else
-            {
-                while (openClock < totalTime)
-                {
-                    openClock += Time.deltaTime;
-                    float t = openClock / totalTime;
-
-                    float easeOutT = Curves.EaseOutT(t, 5);
-
-                    curSpriteWidth = openSpriteWidth * easeOutT;
-
-                    paletteRenderer.width = curSpriteWidth;
-                    paletteRenderer.UpdateSliceSpriteInputsSelf();
-
-                    for (int i = 0; i < curGridColCount; i++)
-                    {
-                        float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
-                        icons[i].renderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
-                    }
-                    await UniTask.Yield(ctsOpen.Token);
-                }
-            }
-
-            SetState(PickerState.Opened);
-        }
-        catch
-        {
-
-        }
+        transform.SetParent(selectedRenderer.transform);
+        Closing().Forget();
     }
     public async UniTask Opening()
     {
         try
         {
-            SetState(PickerState.Opening);
-
             float totalTime = curGridColCount * OPEN_TIME_ROW_COL;
             openClock = Mathf.Max(openClock, 0);
 
@@ -408,23 +268,19 @@ public class NPCPicker : MonoBehaviour
                 for (int i = 0; i < curGridColCount; i++)
                 {
                     float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
-                    icons[i].renderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
+                    icons[i].atlasRenderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
                 }
                 await UniTask.Yield(ctsOpen.Token);
             }
-            SetState(PickerState.Opened);
         }
         catch (OperationCanceledException)
         {
-            SetState(PickerState.Opened);
         }
     }
     public async UniTask Closing()
     {
         try
         {
-            SetState(PickerState.Closing);
-
             float totalTime =  curGridColCount * OPEN_TIME_ROW_COL;
             openClock = Mathf.Min(openClock, totalTime);
 
@@ -442,17 +298,18 @@ public class NPCPicker : MonoBehaviour
                 for (int i = 0; i < curGridColCount; i++)
                 {
                     float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
-                    icons[i].renderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
+                    icons[i].atlasRenderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
                 }
                 await UniTask.Yield(ctsOpen.Token);
             }
-            SetState(PickerState.Closed);
-            TurnOff();
+
+            paletteRenderer.enabled = false;
+            selectedRenderer = null;
 
         }
         catch (OperationCanceledException)
         {
-            SetState(PickerState.Closed);
+
         }
     }
 }

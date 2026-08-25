@@ -13,9 +13,9 @@ public class AgreementProp : MonoBehaviour
     public MeshRenderer shinyRenderer;
 
     public SceneData sceneData;
-    public GameEventDataSO gameEventData;
+    public GameEventData gameEventData;
     public NotepadData notepadData;
-    public SpyStatsSO spyStats;
+    public SpyData spyStats;
 
 
     [Header("Generated")]

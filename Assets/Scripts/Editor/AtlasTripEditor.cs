@@ -29,7 +29,7 @@ public class AtlasTripEditor : EditorWindow
     GUIStyle depthLabel;
     GUIStyle graphHeaderLabel;
 
-    TripSO trip;
+    TripData trip;
 
     ParticleAtlas selectedParticleAtlas;
     
@@ -201,7 +201,7 @@ public class AtlasTripEditor : EditorWindow
         
         EditorGUI.BeginChangeCheck();
 
-        trip = (TripSO)EditorGUI.ObjectField(tripInputRect, GUIContent.none, trip, typeof(TripSO), allowSceneObjects: false);
+        trip = (TripData)EditorGUI.ObjectField(tripInputRect, GUIContent.none, trip, typeof(TripData), allowSceneObjects: false);
 
         if (EditorGUI.EndChangeCheck())
         {
@@ -934,7 +934,7 @@ public class AtlasTripEditor : EditorWindow
 
         AtlasRenderer mainAtlasRenderer = selectedPrefab.GetComponent<AtlasRenderer>();
 
-        if (mainAtlasRenderer.rendererType == AtlasRendererType.SliceWorld)
+        if (mainAtlasRenderer.rendererType == AtlasRendererType.Slice)
         {
             posData.widthType = ParticleWidthType.Sliced;
         }

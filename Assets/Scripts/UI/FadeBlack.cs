@@ -21,8 +21,8 @@ public class FadeBlack : MonoBehaviour
 
     public static event Action OnFinishFadeOut;
 
-    public PlayerInputsSO playerInputs;
-    public GameEventDataSO gameEventData;
+    public InputData playerInputs;
+    public GameEventData gameEventData;
 
     public SceneData sceneData;
     public Material fadeBlackMaterial;

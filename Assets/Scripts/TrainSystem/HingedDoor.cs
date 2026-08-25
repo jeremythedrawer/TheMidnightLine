@@ -10,7 +10,7 @@ public class HingedDoor : MonoBehaviour
     [SerializeField] LayerSettingsSO layerSettings;
     [SerializeField] AtlasRenderer atlasRenderer;
     [SerializeField] Carriage carriage;
-    [SerializeField] SpyStatsSO spyStats;
+    [SerializeField] SpyData spyStats;
 
     [Header("Generated")]
     public bool isOpen;

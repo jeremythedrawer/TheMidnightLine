@@ -268,13 +268,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ef53669b2a2d62d4497445ae48eefd02, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  chosenNPC: {fileID: 0}
   rigidBody: {fileID: 2814450545205291383}
   boxCollider: {fileID: 4281581721833017353}
   atlasRenderer: {fileID: 5735628127011101087}
-  settings: {fileID: 11400000, guid: ff622072eaf75a443bdc1bbda3340ef0, type: 2}
   materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
-  stats: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  spyData: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
@@ -287,11 +285,12 @@ MonoBehaviour:
   sceneData: {fileID: 11400000, guid: 3293190d726975e43a124435917a650c, type: 2}
   meridiaTowerData: {fileID: 11400000, guid: 0c096b94ad74a7a42a53acea7c2760e8, type: 2}
   possibleNPCsToTicketCheck: []
+  chosenNPC: {fileID: 0}
   atlas: {fileID: 0}
   slideDoors: {fileID: 0}
   smokingRoomDoor: {fileID: 0}
   curGangwayDoor: {fileID: 0}
-  curCarriageMap: {fileID: 0}
+  curCarriageMapProp: {fileID: 0}
   curClip:
     clipName: 
     clipType: 0

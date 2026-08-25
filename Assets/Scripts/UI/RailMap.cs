@@ -9,7 +9,7 @@ public class RailMap : MonoBehaviour
     public const float MOVE_TIME = 3f;
     public const float APPEARING_TIME = 1f;
 
-    public TripSO curTrip;
+    public TripData curTrip;
 
     public AtlasRenderer railMapRend;
     public AtlasRenderer trainPosRend;

@@ -15,31 +15,10 @@ public static class AtlasRendering
 
     public enum AtlasRendererType
     { 
-        SimpleWorld,
-        MotionWorld,
-        SliceWorld,
-    }
-    public enum AtlasTextRendererType
-    {
         Simple,
-        Scroll,
-        Border,
+        Motion,
+        Slice,
     }
-    public enum AtlasTextAlignmentType
-    {
-        Left,
-        Center,
-        Right,
-    }
-
-
-    [Serializable] public struct TextBoxData
-    {
-        public Vector2 size;
-        public float[] lineWidths;
-    }
-
-
     [Serializable] public struct BatchKey
     {
         public Texture2D texture;

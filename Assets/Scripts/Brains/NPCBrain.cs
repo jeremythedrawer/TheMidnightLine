@@ -1,19 +1,16 @@
 using System;
+using System.Collections.Generic;
+using System.Threading;
+using System.Linq;
+
 using UnityEngine;
 using UnityEngine.VFX;
-using System.Collections.Generic;
+
+using Cysharp.Threading.Tasks;
 
 using static Atlas;
 using static AtlasUI;
 using static NPC;
-using Cysharp.Threading.Tasks;
-using System.Threading;
-using static Train;
-using System.Linq;
-
-
-
-
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -24,23 +21,21 @@ public class NPCBrain : MonoBehaviour
     public static event Action OnTraitorBoardedTrain;
     public static event Action OnTraitorDisembarkedTrain;
 
-    public static NPCBrain ExamplePassenger;
-
     public AtlasRenderer atlasRenderer;
     public Rigidbody2D rigidBody;
     public BoxCollider2D boxCollider;
     
     public NPCSO npc;
-    public NPCsDataSO npcData;
+    public NPCsData npcData;
     public LayerSettingsSO layerSettings;
     public TrainSettingsSO trainSettings;
-    public TrainStatsSO trainStats;
-    public GameEventDataSO gameEventData;
-    public PlayerInputsSO playerInputs;
-    public SpyStatsSO spyStats;
-    public TripSO trip;
+    public TrainData trainStats;
+    public GameEventData gameEventData;
+    public InputData playerInputs;
+    public SpyData spyStats;
+    public TripData trip;
     public SpawnData spawnData;
-    public CameraStatsSO camStats;
+    public CameraData camStats;
 
     [Header("Generated")]
     public AtlasSO atlas;
@@ -209,17 +204,6 @@ public class NPCBrain : MonoBehaviour
         if (stopBehaving) return;
         SetPath(NPCPath.ToStandInTrain);
     }
-    public void SetAsExample()
-    {
-        ExamplePassenger = this;
-    }
-    public void SetCustomDepth(int depth)
-    {
-        if (depth == transform.position.z) return;
-        prevDepth = transform.position.z;
-        transform.position = new Vector3(transform.position.x, transform.position.y, depth);
-        atDepthForExample = true;
-    }
     public void ReturnExamplePassenger()
     {
         if (ticketHasBeenChecked)
@@ -227,7 +211,6 @@ public class NPCBrain : MonoBehaviour
             atlasRenderer.customBit &= ~((int)ColorBits.Outline);
         }
         stopBehaving = false;
-        ExamplePassenger = null;
         transform.position = new Vector3(transform.position.x, transform.position.y, prevDepth);
         atDepthForExample = false;
     }
@@ -1061,11 +1044,6 @@ public class NPCBrain : MonoBehaviour
     private void SetStandingDepthInTrain()
     {
         if (!onTrain) return;
-        if (this == ExamplePassenger)
-        {
-            prevDepth = trainStats.depthSections.frontStandingBack;
-            return;
-        }
         int depth = UnityEngine.Random.Range(trainStats.depthSections.frontStandingBack, trainStats.depthSections.backStandingFront);
         atlasRenderer.SetWorldDepth(depth);
     }

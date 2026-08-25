@@ -1,0 +1,16 @@
+using System;
+using System.Collections.Generic;
+using UnityEngine;
+using UnityEngine.VFX;
+using static NPC;
+
+[CreateAssetMenu(fileName = "NPCs_Data_SO", menuName = "Midnight Line SOs / NPCs Data SO")]
+public class NPCsData : ScriptableObject
+{
+    public NPCBehaviourContextSO[] behaviourContexts;
+    public Graffiti graffitiPrefab;
+    
+    [Header("Generated")]
+    public Dictionary<Behaviours, string> behaviourStringDict;
+    public Dictionary<Behaviours, NPCBehaviourContextSO> behaviourContextDict;
+}

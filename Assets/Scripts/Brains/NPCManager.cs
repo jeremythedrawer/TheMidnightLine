@@ -9,8 +9,8 @@ public class NPCManager : MonoBehaviour
     public static Dictionary<VisualEffect, Queue<VisualEffect>> GlyphPoolDict;
     public static Dictionary<NPCBrain, Queue<NPCBrain>> NPCPoolDict;
 
-    public TripSO trip;
-    public NPCsDataSO npcsData;
+    public TripData trip;
+    public NPCsData npcsData;
     public Texture2D diagonalTexture;
     public AtlasSO glyphAtlas;
 

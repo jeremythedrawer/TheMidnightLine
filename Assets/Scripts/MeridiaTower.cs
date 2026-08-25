@@ -23,12 +23,12 @@ public class MeridiaTower : MonoBehaviour
         Down,
     }
 
-    public SpyStatsSO spyStats;
+    public SpyData spyStats;
     public MeridiaTowerData meridiaTowerData;
-    public CameraStatsSO camStats;
+    public CameraData camStats;
     public SceneData sceneData;
-    public GameEventDataSO gameEventData;
-    public PlayerInputsSO playerInputs;
+    public GameEventData gameEventData;
+    public InputData playerInputs;
 
     public Room elevatorRoom;
     public Room meetingRoom;
@@ -54,8 +54,6 @@ public class MeridiaTower : MonoBehaviour
 
         Scenes.OnLoadScore += MoveToMeetingFloor;
 
-        AgreementPage.OnAgreementSigned += UnlockTripDoor;
-
         SpyBrain.OnAfterOutcomeSequence += MoveDownToBetweenFloors;
         SpyBrain.OnAfterOutcomeSequence += MoveMeetingWallUp;
         SpyBrain.OnInteract += WalkThroughStartDoor;
@@ -71,7 +69,6 @@ public class MeridiaTower : MonoBehaviour
 
         Scenes.OnLoadScore -= MoveToMeetingFloor;
 
-        AgreementPage.OnAgreementSigned -= UnlockTripDoor;
 
         SpyBrain.OnAfterOutcomeSequence -= MoveDownToBetweenFloors;
         SpyBrain.OnAfterOutcomeSequence -= MoveMeetingWallUp;

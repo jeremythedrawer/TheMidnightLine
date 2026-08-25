@@ -14,12 +14,11 @@ public class Carriage : MonoBehaviour
     public AtlasRenderer[] seatRenderers;
     public AtlasRenderer[] grapPoleRenderers;
 
-    public TrainStatsSO trainStats;
+    public TrainData trainStats;
     public TrainSettingsSO trainSettings;
-    public TripSO trip;
-    public GameEventDataSO gameEventData;
+    public TripData trip;
+    public GameEventData gameEventData;
     public LayerSettingsSO layerSettings;
-    public MaterialIDSO materialIDs;
     public AtlasSO graffitiAtlas;
 
     public AtlasTextRenderer nextStationSignRenderer;

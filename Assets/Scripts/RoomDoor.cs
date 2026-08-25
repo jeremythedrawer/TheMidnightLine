@@ -31,9 +31,9 @@ public class RoomDoor : MonoBehaviour
         ExitBounds = 1 << 6,
     }
 
-    public GameEventDataSO gameEventData;
-    public SpyStatsSO spyStats;
-    public CameraStatsSO camStats;
+    public GameEventData gameEventData;
+    public SpyData spyStats;
+    public CameraData camStats;
     public SceneData sceneData;
     public MeridiaTowerData meridiaTowerData;
 
