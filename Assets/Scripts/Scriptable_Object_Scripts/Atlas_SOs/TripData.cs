@@ -6,6 +6,8 @@ using static NPC;
 [CreateAssetMenu(fileName = "Trip", menuName = "Atlas / Trip")]
 public class TripData : ScriptableObject
 {
+    public string title;
+
     public TripPrompt prompt;
     public TripClue clue;
     public ParticleAtlas[] particleAtlasArray;

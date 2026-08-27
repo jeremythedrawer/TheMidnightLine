@@ -110,9 +110,9 @@ public class Page : MonoBehaviour
             notepadData.subState |= SubState.IsFlippingUp;
         }
 
-        exitButton.InitButton(ClickExitButton, EnterButton, ExitButton);
-        rightButton.InitButton(ClickRightButton, EnterButton, ExitButton);
-        leftButton.InitButton(ClickLeftButton, EnterButton, ExitButton);
+        //exitButton.InitButton(ClickExitButton, EnterButton, ExitButton);
+        //rightButton.InitButton(ClickRightButton, EnterButton, ExitButton);
+        //leftButton.InitButton(ClickLeftButton, EnterButton, ExitButton);
     }
     public void UpdatePage()
     {

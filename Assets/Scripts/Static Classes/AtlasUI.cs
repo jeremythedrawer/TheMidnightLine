@@ -20,7 +20,6 @@ public static class AtlasUI
     public const float PENCIL_VERTICAL_FREQUENCY = 7f;
     public const float PENCIL_VERTICAL_MAGNITUDE = 0.07f;
 
-    public const float BORDER_PADDING = 0f;
     public const float LETTER_ADVANCE = 0.122f;
     public const float APPEAR_TEXT_TIME = 0.2f;
     public const float FADE_BLACK_DURATION = 1f;
@@ -28,7 +27,6 @@ public static class AtlasUI
     public const float NATURAL_TICK_RATE = 2.5f;
     public const float TARGET_MARGIN = 0.01f;
     public const float MOVE_DAMP = 4;
-    public const float OPEN_TIME_ROW_COL = 0.0625f;
     public const float GRID_GAP = 0.272f;
     public const float NOTEPAD_INACTIVE_OFFSET = 0.39f;
     public const float UI_POSITION_BUFFER = 0.3f;
@@ -95,6 +93,9 @@ public static class AtlasUI
         Invert = 1 << 5,
         Outline = 1 << 6,
         Texture = 1 << 7,
+        RedChannel = 1 << 8,
+        GreenChannel = 1 << 9,
+        BlueChannel = 1 << 10,
     }
     [Flags] public enum TutorialState
     {

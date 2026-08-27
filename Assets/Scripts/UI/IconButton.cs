@@ -7,38 +7,30 @@ using static AtlasUI;
 
 public class IconButton : MonoBehaviour
 {
-    public delegate void OnClick(IconButton icon);
-    public delegate void OnEnter(IconButton icon);
-    public delegate void OnExit(IconButton icon);
+    public delegate void Callback(IconButton icon);
 
     public InputData inputData;
     public CursorData cursorData;
     public CameraData camData;
 
     public AtlasRenderer atlasRenderer;
-    
-    public bool holdToClick;
-
+ 
     [Header("Generated")]
     public Vector3 activePos;
     public ButtonState curState;
-    public float holdClock;
 
-    public OnClick OnClickCallback;
-    public OnEnter OnEnterCallback;
-    public OnExit OnExitCallback;
+    public Callback OnMouseUpCallback;
+    public Callback OnMouseDownCallback;
+    public Callback OnEnterCallback;
+    public Callback OnExitCallback;
 
     public CancellationTokenSource ctsMove;
-    public void InitButton(OnClick onClickCallback, OnEnter onEnterCallback, OnExit onExitCallback, bool isHold = false)
+    public void InitButton(Callback onMouseUp, Callback onMouseDown, Callback onEnter, Callback onExit)
     {
-        OnClickCallback = onClickCallback;
-        OnEnterCallback = onEnterCallback;
-        OnExitCallback = onExitCallback;
-        holdToClick = isHold;
-        InitPos();
-    }
-    public void InitPos()
-    {
+        OnMouseUpCallback = onMouseUp;
+        OnMouseDownCallback = onMouseDown;
+        OnEnterCallback = onEnter;
+        OnExitCallback = onExit;
         atlasRenderer.SetBounds();
         activePos = atlasRenderer.transform.localPosition;
     }
@@ -64,15 +56,8 @@ public class IconButton : MonoBehaviour
                 }
                 else if (inputData.mouseLeftDown)
                 {
+                    OnMouseDownCallback(this);
                     curState = ButtonState.Clicked;
-                    if (!holdToClick)
-                    {
-                        OnClickCallback(this);
-                    }
-                    else
-                    {
-                        holdClock = 0;
-                    }
                 }
             }
             break;
@@ -85,18 +70,9 @@ public class IconButton : MonoBehaviour
                 }
                 else if (inputData.mouseLeftUp)
                 {
+                    OnMouseUpCallback(this);
                     OnEnterCallback(this);
                     curState = ButtonState.Hovered;
-                }
-
-                if (holdToClick)
-                {
-                    holdClock += Time.deltaTime;
-
-                    if (holdClock > 3)
-                    {
-                        OnClickCallback(this);
-                    }
                 }
             }
             break;

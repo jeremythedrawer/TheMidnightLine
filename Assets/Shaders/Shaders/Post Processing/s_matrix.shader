@@ -2,7 +2,8 @@ Shader "Custom/s_matrix"
 {
 	Properties
     {
-        [NoScaleOffset] _NoiseTexture("Noise Atlas", 2D) = "white" {}
+        [NoScaleOffset] _StarTexture("Star Texture", 2D) = "white" {}
+        [NoScaleOffset] _NoiseTexture("Noise Texture", 2D) = "white" {}
 		_Test("Test", Range(0,1)) = 0
     }
 	HLSLINCLUDE
@@ -13,12 +14,16 @@ Shader "Custom/s_matrix"
 		#include "Assets/Shaders/HLSL/ColorSpace.hlsl"
 		#include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
 		#include "Assets/Shaders/HLSL/AtlasParticles.hlsl"
+		
 		TEXTURE2D(_SourceTex);
 		SAMPLER(sampler_SourceTex);
-
+		
 		TEXTURE2D(_NoiseTexture);
 		SAMPLER(sampler_NoiseTexture);
 
+		TEXTURE2D(_StarTexture);
+		SAMPLER(sampler_StarTexture);
+		float4 _StarTexture_TexelSize;
 		float _PlayerDepth;
 
 		float _MetersTravelled;
@@ -32,14 +37,20 @@ Shader "Custom/s_matrix"
 
 		half4 frag(Varyings input) : SV_TARGET
 		{
-			float2 aspect = float2(_ScreenParams.x / _ScreenParams.y, 1);
-			float2 centerUV = input.texcoord * aspect * 0.5;
-			float4 noiseTex = SAMPLE_TEXTURE2D_X(_NoiseTexture, sampler_NoiseTexture, centerUV);
-			//return noiseTex;
+			float2 pixelPos = input.texcoord * _ScreenParams.xy;
+			float2 texSize = _StarTexture_TexelSize.zw;
+
+			float2 starUV = frac(pixelPos / texSize);
+
+			float4 starTex = SAMPLE_TEXTURE2D_X(_StarTexture, sampler_StarTexture, starUV);
+
+			float4 noiseTex = SAMPLE_TEXTURE2D_X(_NoiseTexture, sampler_NoiseTexture, starUV + _Time.y * 0.01);
+
+			float glowStars = step(0.01, starTex.r * noiseTex.r + starTex.g);
 			float gradient = input.texcoord.y;
 
 			float horizon = sin(min(gradient + _DayNight, PI * 0.5) * PI) * 0.5 + 0.5;
-			float stars = step(1, noiseTex.r + _DayNight * 0.13); //* (1-horizon));
+			float stars = glowStars * _DayNight;
 			horizon = BayerX8(horizon, input.texcoord.y * _ScreenParams.y);
 			//horizon += (1 - _DayNight) * 0.25;
 

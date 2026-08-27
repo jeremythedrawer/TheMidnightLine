@@ -1120,7 +1120,9 @@ public class AtlasTripEditor : EditorWindow
                         {
                             int sliceSpriteIndex = Mathf.FloorToInt(k / 9);
                             SliceSprite sliceSprite = selectedParticleAtlas.atlas.slicedSprites[sliceSpriteIndex];
-                            Vector4[] worldPivotsAndSizes = SetWorldPivotAndSizes(sliceSprite, 1, 1, false, false);
+                            Vector4[] worldPivotsAndSizes = new Vector4[9];
+
+                            SetWorldPivotAndSizes(sliceSprite, 1, 1, false, false, ref worldPivotsAndSizes);
 
                             for (int l = 0; l < posData.spritesPerParticle; l++)
                             {

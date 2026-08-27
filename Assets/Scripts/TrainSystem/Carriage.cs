@@ -14,7 +14,7 @@ public class Carriage : MonoBehaviour
     public AtlasRenderer[] seatRenderers;
     public AtlasRenderer[] grapPoleRenderers;
 
-    public TrainData trainStats;
+    public TrainData trainData;
     public TrainSettingsSO trainSettings;
     public TripData trip;
     public LayerData layerSettings;
@@ -105,7 +105,7 @@ public class Carriage : MonoBehaviour
     }
     public void SetSignToNextStation(string stationName)
     {
-        string text = (trainStats.curStationIndex < trip.stationsDataArray.Length ? "Next Station is " : "Terminating at ") + stationName;
+        string text = (trainData.curStationIndex < trip.stationsDataArray.Length ? "Next Station is " : "Terminating at ") + stationName;
         nextStationSignRenderer.SetText(text);
     }
     public void SetSignToCurrentStation(string stationName)
@@ -261,14 +261,14 @@ public class Carriage : MonoBehaviour
     }
     private async UniTask MovingDown()
     {
-        float elaspedTime = alpha * trainSettings.exteriorWallFadeTime;
+        float elaspedTime = alpha * trainData.exteriorWallFadeTime;
         try
         {
-            while (elaspedTime < trainSettings.exteriorWallFadeTime)
+            while (elaspedTime < trainData.exteriorWallFadeTime)
             {
                 elaspedTime += Time.deltaTime;
 
-                alpha = elaspedTime / trainSettings.exteriorWallFadeTime;
+                alpha = elaspedTime / trainData.exteriorWallFadeTime;
                 alpha = alpha < 0.5 ? 16 * alpha * alpha * alpha * alpha * alpha : 1 - Mathf.Pow(-2 * alpha + 2, 5) * 0.5f; 
                 for (int i = 0; i < exteriorRenderers.Length; i++)
                 {
@@ -284,14 +284,14 @@ public class Carriage : MonoBehaviour
     }
     private async UniTask MovingUp()
     {
-        float elaspedTime = alpha * trainSettings.exteriorWallFadeTime;
+        float elaspedTime = alpha * trainData.exteriorWallFadeTime;
         try
         {
             while (elaspedTime > 0)
             {
                 elaspedTime -= Time.deltaTime;
 
-                alpha = elaspedTime / trainSettings.exteriorWallFadeTime;
+                alpha = elaspedTime / trainData.exteriorWallFadeTime;
                 alpha = alpha < 0.5 ? 16 * alpha * alpha * alpha * alpha * alpha : 1 - Mathf.Pow(-2 * alpha + 2, 5) * 0.5f;
                 for (int i = 0; i < exteriorRenderers.Length; i++)
                 {

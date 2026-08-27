@@ -130,7 +130,7 @@ public class UnlockPicker : MonoBehaviour
                 selectedNPC.atlasRenderer.custom.z = 1;
                 selectedNPC.ticketHasBeenChecked = true;
             }
-            icons[i].InitButton(ClickIcon, EnterColorIcon, ExitColorIcon);
+            //icons[i].InitButton(ClickIcon, EnterColorIcon, ExitColorIcon);
         }
 
     }
@@ -258,7 +258,7 @@ public class UnlockPicker : MonoBehaviour
         ctsOpen?.Cancel();
         ctsOpen = new CancellationTokenSource();
 
-        Opening().Forget();
+        //Opening().Forget();
     }
     public void Close()
     {
@@ -266,70 +266,70 @@ public class UnlockPicker : MonoBehaviour
         ctsOpen = new CancellationTokenSource();
 
         transform.SetParent(selectedNPC.transform);
-        Closing().Forget();
+       // Closing().Forget();
     }
-    public async UniTask Opening()
-    {
-        try
-        {
-            float totalTime = curGridColCount * OPEN_TIME_ROW_COL;
-            openClock = Mathf.Max(openClock, 0);
+    //public async UniTask Opening()
+    //{
+    //    try
+    //    {
+    //        float totalTime = curGridColCount * OPEN_TIME_ROW_COL;
+    //        openClock = Mathf.Max(openClock, 0);
 
-            while (openClock < totalTime)
-            {
-                openClock += Time.deltaTime;
-                float t = openClock / totalTime;
+    //        while (openClock < totalTime)
+    //        {
+    //            openClock += Time.deltaTime;
+    //            float t = openClock / totalTime;
 
-                float easeOutT = Curves.EaseOutT(t, 5);
+    //            float easeOutT = Curves.EaseOutT(t, 5);
 
-                curSpriteWidth = openSpriteWidth * easeOutT;
+    //            curSpriteWidth = openSpriteWidth * easeOutT;
 
-                paletteRenderer.width = curSpriteWidth;
-                paletteRenderer.UpdateSliceSpriteInputsSelf();
+    //            paletteRenderer.width = curSpriteWidth;
+    //            paletteRenderer.UpdateSliceSpriteInputsSelf();
 
-                for (int i = 0; i < curGridColCount; i++)
-                {
-                    float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
-                    icons[i].atlasRenderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
-                }
-                await UniTask.Yield(ctsOpen.Token);
-            }
-        }
-        catch (OperationCanceledException)
-        {
-        }
-    }
-    public async UniTask Closing()
-    {
-        try
-        {
-            float totalTime = curGridColCount * OPEN_TIME_ROW_COL;
-            openClock = Mathf.Min(openClock, totalTime);
+    //            for (int i = 0; i < curGridColCount; i++)
+    //            {
+    //                float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
+    //                icons[i].atlasRenderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
+    //            }
+    //            await UniTask.Yield(ctsOpen.Token);
+    //        }
+    //    }
+    //    catch (OperationCanceledException)
+    //    {
+    //    }
+    //}
+    //public async UniTask Closing()
+    //{
+    //    try
+    //    {
+    //        float totalTime = curGridColCount * OPEN_TIME_ROW_COL;
+    //        openClock = Mathf.Min(openClock, totalTime);
 
-            while (openClock > 0)
-            {
-                openClock -= Time.deltaTime;
+    //        while (openClock > 0)
+    //        {
+    //            openClock -= Time.deltaTime;
 
-                float t = openClock / totalTime;
+    //            float t = openClock / totalTime;
 
-                float easeOutT = Curves.EaseOutT(t, 5);
-                curSpriteWidth = openSpriteWidth * easeOutT;
+    //            float easeOutT = Curves.EaseOutT(t, 5);
+    //            curSpriteWidth = openSpriteWidth * easeOutT;
 
-                paletteRenderer.width = curSpriteWidth;
-                paletteRenderer.UpdateSliceSpriteInputsSelf();
-                for (int i = 0; i < curGridColCount; i++)
-                {
-                    float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
-                    icons[i].atlasRenderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
-                }
-                await UniTask.Yield(ctsOpen.Token);
-            }
+    //            paletteRenderer.width = curSpriteWidth;
+    //            paletteRenderer.UpdateSliceSpriteInputsSelf();
+    //            for (int i = 0; i < curGridColCount; i++)
+    //            {
+    //                float posX = Mathf.Lerp(closeIconRendererPosition.x, openIconRendererPositions[i].x, easeOutT);
+    //                icons[i].atlasRenderer.transform.localPosition = new Vector3(posX, closeIconRendererPosition.y, closeIconRendererPosition.z);
+    //            }
+    //            await UniTask.Yield(ctsOpen.Token);
+    //        }
 
-            paletteRenderer.enabled = false;
-            selectedNPC = null;
-        }
-        catch (OperationCanceledException)
-        {
-        }
-    }
+    //        paletteRenderer.enabled = false;
+    //        selectedNPC = null;
+    //    }
+    //    catch (OperationCanceledException)
+    //    {
+    //    }
+    //}
 }

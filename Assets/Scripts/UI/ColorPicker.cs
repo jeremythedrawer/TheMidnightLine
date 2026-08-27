@@ -2,12 +2,23 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using UnityEngine;
-using static Atlas;
+
 using static AtlasUI;
 public class ColorPicker : MonoBehaviour
 {
-    public static event Action OnCloseCluePicker;
-    public static event Action OnOpenCluePicker;
+    public enum PickerType
+    { 
+        DarkColor,
+        LightColor,
+    }
+
+    const float OPEN_TIME = 0.5f;
+    const float BUTTON_PADDING = 0.05f;
+    const float BUTTON_DEPTH = -0.1f;
+    const float SELECTED_BUTTON_DEPTH = -0.2f;
+
+
+    public PickerType pickerType;
 
     public TripData trip;
     public Options options;
@@ -15,75 +26,288 @@ public class ColorPicker : MonoBehaviour
     public CameraData camStats;
     public NotepadData notepadData;
 
-    public IconButton[] patternButtons;
-    public IconButton exitButton;
-
-    public AtlasRenderer paletteRenderer;
-
-    public int colorGridXCount = 4;
-    public int colorGridYCount = 4;
-
+    public TextButton textButton;
+    
     [Header("Generated")]
-    public CancellationTokenSource ctsOpen;
+    public IconButton[] colorButtons;
 
-    public Vector2[] defaultOpenColorRendPositions;
-    public Vector2[] curOpenColorRendPositions;
+    public Color[] selectableColors;
 
-    public Vector3 defaultCloseColorRendPos;
-    public Vector3 curCloseColorRendPos;
-    public Vector3 paletteCenterSliceWorldSize;
+    public Vector3[] openColorButtonPositions;
+    public Vector3[] curColorButtonPositions;
+    
+    public Vector3 closeButtonPosition;
 
-    public Vector2 colorRendererWorldSize;
-    public Vector2 sliceWorldSize;
+    public int globalShaderID;
+    public int selectedIndex;
 
-    public int activeButtonAmount;
-    public int curGridRowCount;
-    public int curGridColCount;
-    public int selectedDarkColorIndex;
-    public int selectedLightColorIndex;
-
+    public float openWidth;
+    public float closeWidth;
     public float openClock;
-    public float openSpriteWidth;
-    public float openSpriteHeight;
-    public float curSpriteWidth;
-    public float curSpriteHeight;
-    public float tileWidth;
-    public float tileHeight;
 
-    public bool canClose;
+    public bool isOpen;
+
+    public CancellationTokenSource ctsOpen;
 
     private void Start()
     {
+        SetType();
         Init();
+    }
+    private void SetType()
+    {
+        switch(pickerType)
+        {
+            case PickerType.DarkColor:
+            {
+                globalShaderID = options.darkColorID;
+                selectableColors = options.selectableDarkColors;
+            }
+            break;
+
+            case PickerType.LightColor:
+            {
+                globalShaderID = options.lightColorID;
+                selectableColors = options.selectableLightColors;
+            }
+            break;
+        }
+        
     }
     private void Init()
     {
-        SetOpenPosAndSize();
+        curColorButtonPositions = new Vector3[selectableColors.Length];
+        colorButtons = new IconButton[selectableColors.Length];
+        openColorButtonPositions = new Vector3[selectableColors.Length];
+
+
+        Vector3 colorButtonSize = options.colorButtonPrefab.atlasRenderer.sprite.worldSize;
+        Vector4 middlePivSize = textButton.backgroundRenderer.worldPivotsAndSizes[4];
+
+        float colorButtonCellWidth = colorButtonSize.x + BUTTON_PADDING;
+
+        closeButtonPosition.x = middlePivSize.x + textButton.textRenderer.bounds.size.x + (colorButtonSize.x * 0.5f);
+        closeButtonPosition.y = middlePivSize.y + (colorButtonSize.y * 0.5f);
+        closeButtonPosition.z = BUTTON_DEPTH;
+
+        closeWidth = textButton.backgroundRenderer.width + (colorButtonCellWidth / middlePivSize.z);
+        textButton.backgroundRenderer.width = closeWidth;
+        textButton.backgroundRenderer.UpdateSliceSpriteInputsSelf();
+
+        float totalWidth = colorButtonCellWidth * (selectableColors.Length - 1);
+        openWidth = closeWidth + (totalWidth / middlePivSize.z);
 
         void EnterButton(IconButton icon)
         {
-            icon.atlasRenderer.custom.w = 0;
+            if (pickerType == PickerType.DarkColor)
+            {
+                icon.atlasRenderer.customBit |= (int)ColorBits.GreenChannel;
+            }
+            else
+            { 
+                icon.atlasRenderer.customBit |= (int)ColorBits.RedChannel;
+            }
         }
         void ExitButton(IconButton icon)
         {
-            icon.atlasRenderer.custom.w = 1;
-        }
-
-        for (int i = 0; i < patternButtons.Length; i++)
-        {
-            int index = i;
-
-            void ClickPattern(IconButton icon)
+            if (pickerType == PickerType.DarkColor)
             {
-                options.selectedPatternIndex = index;
+                icon.atlasRenderer.customBit &= ~(int)ColorBits.GreenChannel;
             }
-            patternButtons[i].InitButton(ClickPattern, EnterButton, ExitButton);
+            else
+            {
+                icon.atlasRenderer.customBit &= ~(int)ColorBits.RedChannel;
+            }
+            icon.atlasRenderer.customBit &= ~(int)ColorBits.Invert;
         }
-        void ClickExit(IconButton icon)
+
+        void MouseDown(IconButton icon)
         {
-            Close();
+            icon.atlasRenderer.customBit ^= (int)ColorBits.Invert;
         }
-        exitButton.InitButton(ClickExit, EnterButton, ExitButton);
+
+        if (pickerType == PickerType.DarkColor)
+        {
+            for (int i = 0; i < selectableColors.Length; i++)
+            {
+                IconButton colorButton = Instantiate(options.colorButtonPrefab, textButton.backgroundRenderer.transform);
+                colorButton.transform.localPosition = closeButtonPosition;
+
+                Color selectableColor = selectableColors[i];
+                colorButton.atlasRenderer.custom = selectableColor.linear;
+
+                if (i != selectedIndex)
+                {
+                    colorButton.atlasRenderer.enabled = false;
+                }
+                else
+                {
+                    colorButton.atlasRenderer.customBit |= (int)ColorBits.RedChannel;
+                    colorButton.atlasRenderer.customBit &= ~(int)ColorBits.Invert;
+                }
+
+                int index = i;
+                void MouseUpColor(IconButton icon)
+                {
+                    if (isOpen)
+                    {
+                        icon.atlasRenderer.customBit |= (int)ColorBits.RedChannel;
+                        icon.atlasRenderer.customBit ^= (int)ColorBits.Invert;
+
+                        Shader.SetGlobalColor(globalShaderID, selectableColor.linear);
+                        options.darkColor = selectableColor;
+                        selectedIndex = index;
+                        curColorButtonPositions[index].z = SELECTED_BUTTON_DEPTH;
+
+                        for (int j = 0; j < colorButtons.Length; j++)
+                        {
+                            if (j == selectedIndex) continue;
+                            IconButton colorButton = colorButtons[j];
+
+                            colorButton.atlasRenderer.customBit &= ~(int)ColorBits.RedChannel;
+                            curColorButtonPositions[j].z = BUTTON_DEPTH;
+                        }
+                    }
+                    else
+                    {
+                        Open();
+                    }
+                }
+                colorButton.InitButton(MouseUpColor, MouseDown, EnterButton, ExitButton);
+
+                colorButtons[i] = colorButton;
+                curColorButtonPositions[i] = closeButtonPosition;
+
+                Vector3 openPos = new Vector3();
+                openPos.x = closeButtonPosition.x + ((colorButton.atlasRenderer.sprite.worldSize.x + BUTTON_PADDING) * i);
+                openPos.y = closeButtonPosition.y;
+                openPos.z = closeButtonPosition.z;
+
+                openColorButtonPositions[i] = openPos;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < selectableColors.Length; i++)
+            {
+                IconButton colorButton = Instantiate(options.colorButtonPrefab, textButton.backgroundRenderer.transform);
+                colorButton.transform.localPosition = closeButtonPosition;
+
+                Color selectableColor = selectableColors[i];
+                colorButton.atlasRenderer.custom = selectableColor.linear;
+
+                if (i != selectedIndex)
+                {
+                    colorButton.atlasRenderer.enabled = false;
+                }
+                else
+                {
+                    colorButton.atlasRenderer.customBit |= (int)ColorBits.GreenChannel;
+                    colorButton.atlasRenderer.customBit &= ~(int)ColorBits.Invert;
+                }
+
+                int index = i;
+                void MouseUpColor(IconButton icon)
+                {
+                    if (isOpen)
+                    {
+                        icon.atlasRenderer.customBit |= (int)ColorBits.GreenChannel;
+                        icon.atlasRenderer.customBit ^= (int)ColorBits.Invert;
+
+                        Shader.SetGlobalColor(globalShaderID, selectableColor.linear);
+                        options.lightColor = selectableColor;
+                        selectedIndex = index;
+                        curColorButtonPositions[index].z = SELECTED_BUTTON_DEPTH;
+
+                        for (int j = 0; j < colorButtons.Length; j++)
+                        {
+                            if (j == selectedIndex) continue;
+                            IconButton colorButton = colorButtons[j];
+
+                            colorButton.atlasRenderer.customBit &= ~(int)ColorBits.GreenChannel;
+                            curColorButtonPositions[j].z = BUTTON_DEPTH;
+                        }
+                    }
+                    else
+                    {
+                        Open();
+                    }
+                }
+                colorButton.InitButton(MouseUpColor, MouseDown, EnterButton, ExitButton);
+
+                colorButtons[i] = colorButton;
+                curColorButtonPositions[i] = closeButtonPosition;
+
+                Vector3 openPos = new Vector3();
+                openPos.x = closeButtonPosition.x + ((colorButton.atlasRenderer.sprite.worldSize.x + BUTTON_PADDING) * i);
+                openPos.y = closeButtonPosition.y;
+                openPos.z = closeButtonPosition.z;
+
+                openColorButtonPositions[i] = openPos;
+            }
+        }
+
+        void MouseUpText(TextButton icon)
+        {
+            if (isOpen)
+            {
+                for (int i = 0; i < colorButtons.Length; i++)
+                {
+                    IconButton colorButton = colorButtons[i];
+                    if (colorButton.curState == ButtonState.Hovered || colorButton.curState == ButtonState.Clicked) return;
+                }
+                Close();
+            }
+            else
+            {
+                Open();
+            }
+
+            icon.backgroundRenderer.customBit &= ~(int)ColorBits.Invert;
+            icon.textRenderer.customBit |= (int)ColorBits.Invert;
+        }
+        void MouseDownText(TextButton icon)
+        {
+            if (isOpen)
+            {
+                for (int i = 0; i < colorButtons.Length; i++)
+                {
+                    IconButton colorButton = colorButtons[i];
+                    if (colorButton.curState == ButtonState.Hovered || colorButton.curState == ButtonState.Clicked) return;
+                }
+            }
+
+            icon.backgroundRenderer.customBit ^= (int)ColorBits.Invert;
+            icon.textRenderer.customBit ^= (int)ColorBits.Invert;
+        }
+        void EnterButtonText(TextButton icon)
+        {
+            if (isOpen)
+            {
+                for (int i = 0; i < colorButtons.Length; i++)
+                {
+                    IconButton colorButton = colorButtons[i];
+                    if (colorButton.curState == ButtonState.Hovered || colorButton.curState == ButtonState.Clicked) return;
+                }
+            }
+            icon.backgroundRenderer.customBit |= (int)ColorBits.GreenChannel;
+        }
+        void ExitButtonText(TextButton icon)
+        {
+            if (isOpen)
+            {
+                for (int i = 0; i < colorButtons.Length; i++)
+                {
+                    IconButton colorButton = colorButtons[i];
+                    if (colorButton.curState == ButtonState.Hovered || colorButton.curState == ButtonState.Clicked) return;
+                }
+            }
+            icon.backgroundRenderer.customBit &= ~(int)ColorBits.GreenChannel;
+            icon.backgroundRenderer.customBit &= ~(int)ColorBits.Invert;
+            icon.textRenderer.customBit |= (int)ColorBits.Invert;
+        }
+
+        textButton.InitButton(MouseUpText, MouseDownText, EnterButtonText, ExitButtonText);
     }
     private void Update()
     {
@@ -91,93 +315,33 @@ public class ColorPicker : MonoBehaviour
     }
     private void UpdatePicker()
     {
-        for (int i = 0; i < patternButtons.Length; i++)
+        textButton.UpdateButton();
+        if (isOpen)
         {
-            patternButtons[i].UpdateButton();
-        }
-        exitButton.UpdateButton();
-    }
-    public void SetOpenPosAndSize()
-    {
-        defaultOpenColorRendPositions = new Vector2[patternButtons.Length];
-        curOpenColorRendPositions = new Vector2[patternButtons.Length];
-
-        AtlasRenderer firstColorRend = patternButtons[0].atlasRenderer;
-        Vector4 paletteBottomRightWPS = paletteRenderer.worldPivotsAndSizes[5];
-        Vector2 firstColorRendPos = new Vector2(paletteBottomRightWPS.x + firstColorRend.worldPivotAndSize.x, paletteBottomRightWPS.y - firstColorRend.worldPivotAndSize.y);
-
-        for (int y = 0; y < colorGridYCount;  y++)
-        {
-            int rowIndex = y * colorGridXCount;
-            float yPos = firstColorRendPos.y + (y * GRID_GAP);
-
-            for (int x = 0; x < colorGridXCount; x++)
+            for (int i = 0; i < colorButtons.Length; i++)
             {
-                int flatIndex = x + rowIndex;
-
-                AtlasRenderer colorRend = patternButtons[flatIndex].atlasRenderer;
-
-                float xPos = firstColorRendPos.x - (x * GRID_GAP);
-                defaultOpenColorRendPositions[flatIndex] = new Vector3(xPos, yPos, -1);
-
-                colorRend.transform.localPosition = defaultOpenColorRendPositions[flatIndex];
+                colorButtons[i].UpdateButton();
             }
         }
-
-        defaultCloseColorRendPos = new Vector3(firstColorRendPos.x, firstColorRendPos.y, -0.1f);
-        colorRendererWorldSize = firstColorRend.sprite.worldSize;
-        
-        Vector4 paletteCenterWPS = paletteRenderer.worldPivotsAndSizes[4];
-        paletteCenterSliceWorldSize = new Vector2(paletteCenterWPS.z, paletteCenterWPS.w);
-
-        Vector4 paletteBottomLeftWPS = paletteRenderer.worldPivotsAndSizes[0];
-        Vector4 paletteTopRightWPS = paletteRenderer.worldPivotsAndSizes[8];
-
-        sliceWorldSize = new Vector2(paletteBottomLeftWPS.z + paletteTopRightWPS.z, paletteBottomLeftWPS.w + paletteTopRightWPS.w);
     }
-    public void TurnOn(AtlasRenderer rend, Direction direction = Direction.Right)
+    public void Open()
     {
-        paletteRenderer.UpdateSliceSpriteInputsSelf();
-
-        for (int i = 0; i < patternButtons.Length; i++)
+        isOpen = true;
+        for (int i = 0; i < colorButtons.Length; i++)
         {
-            AtlasRenderer patternButton = patternButtons[i].atlasRenderer;
-            SimpleSprite patterSprite = options.patternAtlas.simpleSprites[i];
-            patternButton.custom = patterSprite.uvSizeAndPos;
-            patternButton.UpdateSpriteInputsByIndex(COLOR_SQUARE_SPRITE_INDEX);
+            if (i == selectedIndex) continue;
+            colorButtons[i].atlasRenderer.enabled = true;
         }
 
-        OnOpenCluePicker?.Invoke();
-
-        curGridColCount = Mathf.Min(patternButtons.Length, colorGridXCount);
-        curGridRowCount = Mathf.CeilToInt((float)patternButtons.Length / (float)colorGridXCount);
-
-        int curXGapCount = curGridColCount - 1;
-        int curYGapCount = curGridRowCount - 1;
-
-        float totalGapWidth = curXGapCount * GRID_GAP;
-        float totalGapHeight = curYGapCount * GRID_GAP;
-
-        tileWidth = colorRendererWorldSize.x / paletteCenterSliceWorldSize.x;
-        tileHeight = colorRendererWorldSize.y / paletteCenterSliceWorldSize.y;
-
-        openSpriteWidth = (tileWidth * curGridColCount) + totalGapWidth;
-        openSpriteHeight = (tileHeight * curGridRowCount) + totalGapHeight;
-
-        paletteRenderer.width = tileWidth;
-        paletteRenderer.height = tileHeight;
-    }
-    public void Open(AtlasRenderer rend, Direction direction = Direction.Right)
-    {
         ctsOpen?.Cancel();
         ctsOpen = new CancellationTokenSource();
-
-        TurnOn(rend, direction);
 
         Opening().Forget();
     }
     public void Close()
     {
+        isOpen = false;
+
         ctsOpen?.Cancel();
         ctsOpen = new CancellationTokenSource();
         Closing().Forget();
@@ -186,105 +350,63 @@ public class ColorPicker : MonoBehaviour
     {
         try
         {
-            float totalTime = curGridRowCount * curGridColCount * OPEN_TIME_ROW_COL;
-            openClock = Mathf.Max(openClock, 0);
-
-            float rowsToClose = (float)(curGridRowCount - 1);
-            float colsToClose = (float)(curGridColCount - 1);
-
-            float normRowTime = rowsToClose / (rowsToClose + colsToClose);
-            float normColTime = 1 - normRowTime;
-            
-            while (openClock < totalTime)
+            while (openClock <= OPEN_TIME)
             {
                 openClock += Time.deltaTime;
-                float t = openClock / totalTime;
-     
-                if (t < normColTime)
+                float t = openClock / OPEN_TIME;
+                t = Curves.EaseInOutCubic(t);
+                textButton.backgroundRenderer.width = Mathf.Lerp(closeWidth, openWidth, t);
+                textButton.backgroundRenderer.UpdateSliceSpriteInputsSelf();
+
+                for (int i = 0; i < colorButtons.Length; i++)
                 {
-                    float easeOutT = Curves.EaseOutT(t / normColTime, 5);
-
-                    curSpriteWidth = openSpriteWidth * easeOutT;
-
-                    paletteRenderer.width = curSpriteWidth;
-                    paletteRenderer.UpdateSliceSpriteInputsSelf();
-
-                    for (int i = 0; i < patternButtons.Length; i++)
-                    {
-                        float posX = Mathf.Lerp(curCloseColorRendPos.x, curOpenColorRendPositions[i].x, easeOutT);
-                        patternButtons[i].transform.localPosition = new Vector3(posX, curCloseColorRendPos.y, curCloseColorRendPos.z);
-                    }
+                    IconButton patternButton = colorButtons[i];
+                    Vector3 openPos = openColorButtonPositions[i];
+                    curColorButtonPositions[i].x = Mathf.Lerp(closeButtonPosition.x, openPos.x, t);
+                    patternButton.transform.localPosition = curColorButtonPositions[i];
                 }
-                else
-                {
-                    float easOutT = Curves.EaseOutT((t - normColTime) / normRowTime, 5);
-                    curSpriteHeight = Mathf.Lerp(tileHeight, openSpriteHeight, easOutT);
-                    paletteRenderer.height = curSpriteHeight;
-                    paletteRenderer.UpdateSliceSpriteInputsSelf();
 
-                    for (int i = 0; i < patternButtons.Length; i++)
-                    {
-                        float posY = Mathf.Lerp(curCloseColorRendPos.y, curOpenColorRendPositions[i].y, easOutT);
-                        patternButtons[i].transform.localPosition = new Vector3(curOpenColorRendPositions[i].x, posY, curCloseColorRendPos.z);
-                    }
-                }
-                await UniTask.Yield(ctsOpen.Token);
+                await UniTask.Yield();
             }
         }
         catch (OperationCanceledException)
         {
+
         }
     }
     public async UniTask Closing() 
     {
         try
         {
-            float totalTime = curGridRowCount * curGridColCount * OPEN_TIME_ROW_COL;
-            openClock = Mathf.Min(openClock, totalTime);
-
-            float rowsToClose = (float)(curGridRowCount - 1);
-            float colsToClose = (float)(curGridColCount - 1);
-
-            float normRowTime = rowsToClose / (rowsToClose + colsToClose);
-            float normColTime = 1 - normRowTime;
-
-            while (openClock > 0)
+            while (openClock >= 0)
             {
                 openClock -= Time.deltaTime;
+                float t = openClock / OPEN_TIME;
+                t = Curves.EaseInOutCubic(t);
+                textButton.backgroundRenderer.width = Mathf.Lerp(closeWidth, openWidth, t);
+                textButton.backgroundRenderer.UpdateSliceSpriteInputsSelf();
 
-                float t = openClock / totalTime; 
-
-                if (t < normColTime)
+                for (int i = 0; i < colorButtons.Length; i++)
                 {
-                    float easeOutT = Curves.EaseOutT(t / normColTime, 5);
-                    curSpriteWidth = openSpriteWidth * easeOutT;
-
-                    paletteRenderer.width = curSpriteWidth;
-                    paletteRenderer.UpdateSliceSpriteInputsSelf();
-                    for (int i = 0; i < patternButtons.Length; i++)
-                    {
-                        float posX = Mathf.Lerp(curCloseColorRendPos.x, curOpenColorRendPositions[i].x, easeOutT);
-                        patternButtons[i].transform.localPosition = new Vector3(posX, curCloseColorRendPos.y, curCloseColorRendPos.z);
-                    }
+                    IconButton patternButton = colorButtons[i];
+                    Vector3 openPos = openColorButtonPositions[i];
+                    curColorButtonPositions[i].x = Mathf.Lerp(closeButtonPosition.x, openPos.x, t);
+                    patternButton.transform.localPosition = curColorButtonPositions[i];
                 }
-                else
-                {
-                    float easOutT = Curves.EaseOutT((t - normColTime) / normRowTime, 5);
-                    curSpriteHeight = Mathf.Lerp(tileHeight, openSpriteHeight, easOutT);
-                    paletteRenderer.height = curSpriteHeight;
-                    paletteRenderer.UpdateSliceSpriteInputsSelf();
 
-                    for (int i = 0; i < patternButtons.Length; i++)
-                    {
-                        float posY = Mathf.Lerp(curCloseColorRendPos.y, curOpenColorRendPositions[i].y, easOutT);
-                        patternButtons[i].transform.localPosition = new Vector3(curOpenColorRendPositions[i].x, posY, curCloseColorRendPos.z);
-                    }
-                }
-                await UniTask.Yield(ctsOpen.Token);
+                await UniTask.Yield();
+            }
+            for (int i = 0; i < colorButtons.Length; i++)
+            {
+                if (i == selectedIndex) continue;
+
+                IconButton colorButton = colorButtons[i];
+                colorButton.atlasRenderer.enabled = false;
             }
         }
         catch (OperationCanceledException)
         {
+
         }
     }
 }

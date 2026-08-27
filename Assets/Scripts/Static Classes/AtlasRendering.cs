@@ -324,27 +324,22 @@ public static class AtlasRendering
 
         return quad;
     }
-    public static Vector4[] GetScaleAndFlipSliceNineSliceArray(float width, float height, int flipX, int flipY)
+    public static void SetScaleAndFlipSliceNineSliceArray(float width, float height, int flipX, int flipY, ref Vector4[] scaleAndFlip)
     {
         Vector4 scaleFlipCQuad = new Vector4(1, 1, flipX, flipY);
         Vector4 scaleFlipHQuad = new Vector4(width, 1, flipX, flipY);
         Vector4 scaleFlipVQuad = new Vector4(1, height, flipX, flipY);
         Vector4 scaleFlipMQuad = new Vector4(width, height, flipX, flipY);
 
-        return new Vector4[]
-        {
-            scaleFlipCQuad,
-            scaleFlipHQuad,
-            scaleFlipCQuad,
-
-            scaleFlipVQuad,
-            scaleFlipMQuad,
-            scaleFlipVQuad,
-
-            scaleFlipCQuad,
-            scaleFlipHQuad,
-            scaleFlipCQuad
-        };
+        scaleAndFlip[0] = scaleFlipCQuad;
+        scaleAndFlip[1] = scaleFlipHQuad;
+        scaleAndFlip[2] = scaleFlipCQuad;
+        scaleAndFlip[3] = scaleFlipVQuad;
+        scaleAndFlip[4] = scaleFlipMQuad;
+        scaleAndFlip[5] = scaleFlipVQuad;
+        scaleAndFlip[6] = scaleFlipCQuad;
+        scaleAndFlip[7] = scaleFlipHQuad;
+        scaleAndFlip[8] = scaleFlipCQuad;
     }
     public static Vector4[] GetQuadScalesNineSlice(float width, float height, SliceSprite sliceSprite)
     {
@@ -369,7 +364,7 @@ public static class AtlasRendering
             new Vector4(1, 1, pivotWidth, pivotHeight),
         };
     }
-    public static Vector4[] SetWorldPivotAndSizes(SliceSprite sliceSprite, float width, float height, bool flipX, bool flipY)
+    public static void SetWorldPivotAndSizes(SliceSprite sliceSprite, float width, float height, bool flipX, bool flipY, ref Vector4[] worldPivSize)
     {
         float centerWorldSliceWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
         float centerWorldSliceHeight = sliceSprite.sprite.worldSize.y - sliceSprite.worldSlices.z - sliceSprite.worldSlices.w;
@@ -406,10 +401,15 @@ public static class AtlasRendering
         Vector4 q7 = new Vector4(pX1, pY2, centerWorldSliceWidth, sliceSprite.worldSlices.w);
         Vector4 q8 = new Vector4(pX2, pY2, sliceSprite.worldSlices.y, sliceSprite.worldSlices.w);
 
-        return new Vector4[]
-        {
-            q0, q1, q2, q3, q4, q5, q6, q7, q8
-        };
+        worldPivSize[0] = q0;
+        worldPivSize[1] = q1;
+        worldPivSize[2] = q2;
+        worldPivSize[3] = q3;
+        worldPivSize[4] = q4;
+        worldPivSize[5] = q5;
+        worldPivSize[6] = q6;
+        worldPivSize[7] = q7;
+        worldPivSize[8] = q8;
     }
 }
 

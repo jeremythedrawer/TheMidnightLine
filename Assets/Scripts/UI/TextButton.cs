@@ -6,15 +6,14 @@ using static Atlas;
 using static AtlasUI;
 public class TextButton : MonoBehaviour
 {
-    public delegate void OnClick(TextButton text);
-    public delegate void OnEnter(TextButton text);
-    public delegate void OnExit(TextButton text);
+    public delegate void Callback(TextButton icon);
 
     public InputData inputData;
     public CursorData cursorData;
     public CameraData camData;
 
     public AtlasTextRenderer textRenderer;
+    public AtlasRenderer backgroundRenderer;
 
     public bool holdToClick;
 
@@ -23,20 +22,20 @@ public class TextButton : MonoBehaviour
 
     public ButtonState curState;
 
-    public float holdClock;
-
-    public OnClick OnClickCallback;
-    public OnEnter OnEnterCallback;
-    public OnExit OnExitCallback;
+    public Callback OnMouseUpCallback;
+    public Callback OnMouseDownCallback;
+    public Callback OnEnterCallback;
+    public Callback OnExitCallback;
 
     public CancellationTokenSource ctsMove;
-    public void InitButton(OnClick onClickCallback, OnEnter onEnterCallback, OnExit onExitCallback, bool isHold = false)
+    public void InitButton(Callback onMouseUp, Callback onMouseDown, Callback onEnter, Callback onExit)
     {
-        OnClickCallback = onClickCallback;
-        OnEnterCallback = onEnterCallback;
-        OnExitCallback = onExitCallback;
-        holdToClick = isHold;
-        InitPos();
+        OnMouseUpCallback = onMouseUp;
+        OnMouseDownCallback = onMouseDown;
+        OnEnterCallback = onEnter;
+        OnExitCallback = onExit;
+        backgroundRenderer.SetBounds();
+        activePos = backgroundRenderer.transform.localPosition;
     }
     public void InitPos()
     {
@@ -48,7 +47,7 @@ public class TextButton : MonoBehaviour
         {
             case ButtonState.Unhovered:
             {
-                if (cursorData.IsInsideBounds(textRenderer.bounds, isClickable: true))
+                if (cursorData.IsInsideBounds(backgroundRenderer.bounds, isClickable: true))
                 {
                     OnEnterCallback(this);
                     curState = ButtonState.Hovered;
@@ -57,46 +56,30 @@ public class TextButton : MonoBehaviour
             break;
             case ButtonState.Hovered:
             {
-                if (!cursorData.IsInsideBounds(textRenderer.bounds, isClickable: true))
+                if (!cursorData.IsInsideBounds(backgroundRenderer.bounds, isClickable: true))
                 {
                     OnExitCallback(this);
                     curState = ButtonState.Unhovered;
                 }
                 else if (inputData.mouseLeftDown)
                 {
+                    OnMouseDownCallback(this);
                     curState = ButtonState.Clicked;
-                    if (!holdToClick)
-                    {
-                        OnClickCallback(this);
-                    }
-                    else
-                    {
-                        holdClock = 0;
-                    }
                 }
             }
             break;
             case ButtonState.Clicked:
             {
-                if (!cursorData.IsInsideBounds(textRenderer.bounds, isClickable: true))
+                if (!cursorData.IsInsideBounds(backgroundRenderer.bounds, isClickable: true))
                 {
                     OnExitCallback(this);
                     curState = ButtonState.Unhovered;
                 }
                 else if (inputData.mouseLeftUp)
                 {
+                    OnMouseUpCallback(this);
                     OnEnterCallback(this);
                     curState = ButtonState.Hovered;
-                }
-
-                if (holdToClick)
-                {
-                    holdClock += Time.deltaTime;
-
-                    if (holdClock > 3)
-                    {
-                        OnClickCallback(this);
-                    }
                 }
             }
             break;

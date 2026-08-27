@@ -10,15 +10,6 @@ using static Scenes;
 
 public class StartUI : MonoBehaviour
 {
-    const float OVERSHOOT_MULTIPLIER = 0.1f;
-    const float OUTCOME_PAGE_X_OFFSET = 0.1f;
-    const float MUGSHOT_REVEAL_TIME = 2f;
-
-    const float OUTCOME_PAGE_MOVE_X = 0.5f;
-    const float OUTCOME_PAGE_MOVE_Y = 0.5f;
-
-    public static event Action OnPlayAgain;
-    public static event Action OnFinishedOutcomeSequence;
     public static event Action OnClickOptions;
     public static event Action OnClickBackFromOptions;
     public static event Action OnStartButtonClicked;
@@ -27,16 +18,12 @@ public class StartUI : MonoBehaviour
 
     public Material fadeBlackMaterial;
 
-    public ColorPicker darkColorPicker;
-    public ColorPicker lightColorPicker;
-
-    public TripData trip;
     public CameraData camData;
     public InputData inputData;
     public NotepadData notepadData;
     public Options options;
     public SceneData sceneData;
-    public SpyData spyStats;
+    public SpyData spyData;
     public PassengerData passengerData;
     public MeridiaTowerData meridiaTowerData;
     public CursorData cursorData;
@@ -90,13 +77,6 @@ public class StartUI : MonoBehaviour
     public bool skipOutcomeSequence;
     private void OnEnable()
     {        
-        AgreementProp.OnSpyEnter += ShowSpaceIcon;
-        AgreementProp.OnSpyExit += HideKeyIcons;
-        AgreementProp.OnAgreementCollect += HideKeyIcons;
-        AgreementProp.OnAgreementCollect += SetFadeForAgreement;
-        AgreementProp.OnNotepadReturn += HideKeyIcons;
-        AgreementProp.OnNotepadReturn += SetToOutcomeState;
-
         SpyBrain.OnOpenNotepad += SetToNotepadState;
         SpyBrain.OnCloseNotepad += SetToNoneState;
         SpyBrain.OnMoveFirstTime += HideKeyIcons;
@@ -115,13 +95,6 @@ public class StartUI : MonoBehaviour
     }
     private void OnDisable()
     {
-        AgreementProp.OnSpyEnter -= ShowSpaceIcon;
-        AgreementProp.OnSpyExit -= HideKeyIcons;
-        AgreementProp.OnAgreementCollect -= SetFadeForAgreement;
-        AgreementProp.OnAgreementCollect -= HideKeyIcons;
-        AgreementProp.OnNotepadReturn -= HideKeyIcons;
-        AgreementProp.OnNotepadReturn -= SetToOutcomeState;
-
         SpyBrain.OnOpenNotepad -= SetToNotepadState;
         SpyBrain.OnCloseNotepad -= SetToNoneState;
         SpyBrain.OnMoveFirstTime -= HideKeyIcons;
@@ -132,7 +105,6 @@ public class StartUI : MonoBehaviour
 
         Scenes.OnLoadStart -= StartSceneInit;
         Scenes.OnLoadScore -= ScoreSceneInit;
-
 
         FadeBlack.OnFinishFadeOut -= SetToNoneStateFromOutcome;
 
@@ -167,7 +139,6 @@ public class StartUI : MonoBehaviour
             break;
             case UIState.OptionsMenu:
             {
-                optionsButton.textRenderer.SetText("Back");
                 quitButton.MoveAway(Direction.Right);
                 startButton.MoveAway(Direction.Right);
 
@@ -176,7 +147,7 @@ public class StartUI : MonoBehaviour
                 darkColorButton.MoveToActive();
                 lightColorButton.MoveToActive();
 
-                spyStats.playerInputsEnabled = false;
+                spyData.playerInputsEnabled = false;
 
                 OnClickOptions?.Invoke();
             }
@@ -241,7 +212,7 @@ public class StartUI : MonoBehaviour
 
             case UIState.StartMenu:
             {
-                UpdateMainMenuButtons();
+               // UpdateMainMenuButtons();
             }
             break;
 
@@ -270,7 +241,7 @@ public class StartUI : MonoBehaviour
         {
             case UIState.StartMenu:
             {
-                spyStats.playerInputsEnabled = true;
+                spyData.playerInputsEnabled = true;
             }
             break;
             case UIState.OptionsMenu:
@@ -283,7 +254,7 @@ public class StartUI : MonoBehaviour
                 darkColorButton.MoveAway(Direction.Left);
                 lightColorButton.MoveAway(Direction.Left);
 
-                spyStats.playerInputsEnabled = true;
+                spyData.playerInputsEnabled = true;
                 OnClickBackFromOptions?.Invoke();
             }
             break;
@@ -302,15 +273,13 @@ public class StartUI : MonoBehaviour
     }
     private void StartSceneInit()
     {
-        startButton.InitButton(StartButtonClicked, EnterTextButton, ExitTextButton);
-        optionsButton.InitButton(OptionsButtonClicked, EnterTextButton, ExitTextButton);
-        quitButton.InitButton(QuitButtonClicked, EnterTextButton, ExitTextButton);
+        //startButton.InitButton(StartButtonClicked, EnterTextButton, ExitTextButton);
+        //optionsButton.InitButton(OptionsButtonClicked, EnterTextButton, ExitTextButton);
+        //quitButton.InitButton(QuitButtonClicked, EnterTextButton, ExitTextButton);
         
-        darkColorButton.InitButton(DarkColorButtonClicked, EnterTextButton, ExitTextButton);
-        lightColorButton.InitButton(LightColorButtonClicked, EnterTextButton, ExitTextButton);
 
-        darkColorButton.SetAway(Direction.Left);
-        lightColorButton.SetAway(Direction.Left);
+        //darkColorButton.SetAway(Direction.Left);
+        //lightColorButton.SetAway(Direction.Left);
 
         Shader.SetGlobalFloat("_DayNight", 1);
 
@@ -321,19 +290,19 @@ public class StartUI : MonoBehaviour
     }
     private void ScoreSceneInit()
     {
-        startButton.InitButton(StartButtonClicked, EnterTextButton, ExitTextButton);
-        optionsButton.InitButton(OptionsButtonClicked, EnterTextButton, ExitTextButton);
-        quitButton.InitButton(QuitButtonClicked, EnterTextButton, ExitTextButton);
+        //startButton.InitButton(StartButtonClicked, EnterTextButton, ExitTextButton);
+        //optionsButton.InitButton(OptionsButtonClicked, EnterTextButton, ExitTextButton);
+        //quitButton.InitButton(QuitButtonClicked, EnterTextButton, ExitTextButton);
         
-        darkColorButton.InitButton(DarkColorButtonClicked, EnterTextButton, ExitTextButton);
-        lightColorButton.InitButton(LightColorButtonClicked, EnterTextButton, ExitTextButton);
+        //darkColorButton.InitButton(DarkColorButtonClicked, EnterTextButton, ExitTextButton);
+        //lightColorButton.InitButton(LightColorButtonClicked, EnterTextButton, ExitTextButton);
 
         startButton.SetAway(Direction.Left);
         optionsButton.SetAway(Direction.Left);
         quitButton.SetAway(Direction.Left);
 
-        darkColorButton.SetAway(Direction.Left);
-        lightColorButton.SetAway(Direction.Left);
+        //darkColorButton.SetAway(Direction.Left);
+        //lightColorButton.SetAway(Direction.Left);
 
         fadeBlack.SetAlpha(1);
         fadeBlack.FadeOut();
@@ -368,19 +337,9 @@ public class StartUI : MonoBehaviour
     {
         keyIconRenderers[index].enabled = false;
     }
-    private void GetNotepad()
-    {
-        notepad = SceneController.GetAndParentNotepad(transform);
-        notepad.PickUpNotepad();
-        notepad.transform.localPosition = notepadData.offSceenLocalPos;
-    }
     private void SetFadeForAgreement()
     {
         fadeBlack.FadeIn(value: 1, uvPosX: 0.5f, uvPosY: 0, alpha: 0.2f, FadeBlack.NOTEPAD_DEPTH);
-    }
-    private void SetFadeOut()
-    {
-        fadeBlack.FadeOut();
     }
     private void SetToNoneStateFromOutcome()
     {
@@ -410,12 +369,12 @@ public class StartUI : MonoBehaviour
     {
         SetState(UIState.EndMenu);
     }
-    private void UpdateMainMenuButtons()
-    {
-        startButton.UpdateButton();
-        quitButton.UpdateButton();
-        optionsButton.UpdateButton();
-    }
+    //private void UpdateMainMenuButtons()
+    //{
+    //    startButton.UpdateButton();
+    //    quitButton.UpdateButton();
+    //    optionsButton.UpdateButton();
+    //}
     private void UpdateOptionsButtons()
     {
         optionsButton.UpdateButton();
@@ -425,12 +384,6 @@ public class StartUI : MonoBehaviour
     private void UpdateEndMenuButtons()
     {
         quitButton.UpdateButton();
-    }
-    private void PlayAgainClicked()
-    {
-        quitButton.MoveAway(Direction.Left);
-
-        OnPlayAgain?.Invoke();
     }
     private void StartButtonClicked(TextButton text)
     {
@@ -463,16 +416,6 @@ public class StartUI : MonoBehaviour
     {
         Application.Quit();
     }
-    private void DarkColorButtonClicked(TextButton text)
-    {
-        darkColorPicker.Open(darkColorButton.textRenderer.backgroundRenderer, Direction.Right);
-        lightColorPicker.Close();
-    }
-    private void LightColorButtonClicked(TextButton text)
-    {
-        lightColorPicker.Open(lightColorButton.textRenderer.backgroundRenderer, Direction.Right);
-        darkColorPicker.Close();
-    }
     private void EnterTextButton(TextButton text)
     {
        // text.textRenderer.Set
@@ -483,11 +426,21 @@ public class StartUI : MonoBehaviour
     }
     private void ShowMoveKeyIcons()
     {
-        if (!spyStats.movedFirstTime)
+        if (!spyData.movedFirstTime)
         {
-            ShowKeyIcon(keyIconRenderers[0], new Vector2(spyStats.bounds.min.x, spyStats.bounds.center.y), KeyboardBindingIconIndices.A, Direction.Left);
+            ShowKeyIcon(keyIconRenderers[0], new Vector2(spyData.bounds.min.x, spyData.bounds.center.y), KeyboardBindingIconIndices.A, Direction.Left);
 
-            ShowKeyIcon(keyIconRenderers[1], new Vector2(spyStats.bounds.max.x, spyStats.bounds.center.y), KeyboardBindingIconIndices.D, Direction.Right);
+            ShowKeyIcon(keyIconRenderers[1], new Vector2(spyData.bounds.max.x, spyData.bounds.center.y), KeyboardBindingIconIndices.D, Direction.Right);
         }
     }
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
+    {
+        if (camData == null) return;
+
+        Gizmos.color = Color.cyan;
+
+        Gizmos.DrawWireCube(camData.camBounds.center, camData.camBounds.size);
+    }
+#endif
 }

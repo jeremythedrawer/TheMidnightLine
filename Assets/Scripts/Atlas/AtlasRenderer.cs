@@ -13,7 +13,6 @@ using UnityEditor.IMGUI.Controls;
 using static Atlas;
 using static AtlasRendering;
 using static AtlasUI;
-using Unity.Collections.LowLevel.Unsafe;
 
 [ExecuteAlways]
 public class AtlasRenderer : MonoBehaviour
@@ -61,6 +60,7 @@ public class AtlasRenderer : MonoBehaviour
     public int prevSpriteIndexFlipH;
     public int prevSpriteIndexFlipV;
     public bool isAnimating;
+
     public CancellationTokenSource ctsOneShot;
     public CancellationTokenSource ctsChangeCustom;
 
@@ -95,7 +95,7 @@ public class AtlasRenderer : MonoBehaviour
             {
                 if (atlas.slicedSprites.Length == 0) { Debug.LogWarning("Atlas does not have Sliced Sprites at: " + name); return; }
                 spriteIndex = Mathf.Clamp(spriteIndex, 0, atlas.slicedSprites.Length - 1);
-                customs = new Vector4[9];
+                InitSlice();
                 UpdateSlicedSpriteInputs(atlas.slicedSprites[spriteIndex]);
             }
             break;
@@ -103,7 +103,6 @@ public class AtlasRenderer : MonoBehaviour
         
         batchKey.texture = atlas.texture;
         RegisterRenderer(this);
-
     }
     private void Awake()
     {
@@ -150,7 +149,6 @@ public class AtlasRenderer : MonoBehaviour
             case AtlasRendererType.Simple:
             {
                 UpdateSpriteInputs(atlas.simpleSprites[index]);
-
             }
             break;
 
@@ -279,25 +277,30 @@ public class AtlasRenderer : MonoBehaviour
         scaleAndFlip.x = width;
         scaleAndFlip.y = height;
 
-        uvSizesAndPositions = new Vector4[9];
         Array.Copy(sliceSprite.uvSizeAndPos, uvSizesAndPositions, sliceSprite.uvSizeAndPos.Length);
         
         FlipHSlice(flipX, sliceSprite);
         FlipVSlice(flipY, sliceSprite);
 
-        scalesAndFlips = GetScaleAndFlipSliceNineSliceArray(width, height, flipX ? -1 : 1, flipY ? -1 : 1);
-        worldPivotsAndSizes = SetWorldPivotAndSizes(sliceSprite, width, height, flipX, flipY);
+        SetScaleAndFlipSliceNineSliceArray(width, height, flipX ? -1 : 1, flipY ? -1 : 1, ref scalesAndFlips);
 
-        for (int i = 0;  i < customs.Length; i++)
-        {
-            customs[i] = custom;
-        }
+        SetWorldPivotAndSizes(sliceSprite, width, height, flipX, flipY, ref worldPivotsAndSizes);
+
+        for (int i = 0;  i < customs.Length; i++) customs[i] = custom;
+
         Vector4 centerWorldPivot = worldPivotsAndSizes[4];
         bounds.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldPivot.z * width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldPivot.w * height) + sliceSprite.worldSlices.w, 0.2f);
 
         if (boxCollider == null) return;
         boxCollider.size = bounds.size;
         boxCollider.offset = boundsOffset;
+    }
+    public void InitSlice()
+    {
+        scalesAndFlips = new Vector4[9];
+        worldPivotsAndSizes = new Vector4[9];
+        uvSizesAndPositions = new Vector4[9];
+        customs = new Vector4[9];
     }
     public void SetSliceCustom(float x = 0, float y = 0, float z = 0, float w = 0)
     {
@@ -608,13 +611,13 @@ public class AtlasRendererEditor : Editor
                     SliceSprite sliceSprite = rend.atlas.slicedSprites[rend.spriteIndex];
 
                     Vector4 centerWorldPivot = rend.worldPivotsAndSizes[4];
-                    boundsHandle.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldPivot.z * rend.width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldPivot.w * rend.height) + sliceSprite.worldSlices.w, 0.2f);
+                    boundsHandle.size = new Vector3(sliceSprite.worldSlices.x + (centerWorldPivot.z * rend.width) + sliceSprite.worldSlices.y, sliceSprite.worldSlices.z + (centerWorldPivot.w * rend.height) + sliceSprite.worldSlices.w, 0f);
                 }
                 break;
                 case AtlasRendererType.Motion:
                 case AtlasRendererType.Simple:
                 {
-                    boundsHandle.size = new Vector3(rend.sprite.worldSize.x * rend.width, rend.sprite.worldSize.y * rend.height, 0.2f);
+                    boundsHandle.size = new Vector3(rend.sprite.worldSize.x * rend.width, rend.sprite.worldSize.y * rend.height, 0f);
                 }
                 break;
             }

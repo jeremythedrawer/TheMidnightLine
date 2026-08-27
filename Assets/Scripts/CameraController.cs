@@ -14,9 +14,9 @@ public class CameraController : MonoBehaviour
 
     public CameraData camData;
     public SpyData spyData;
-    public TrainData trainStats;
+    public TrainData trainData;
     public InputData spyInputs;
-    public LayerData layerSettings;
+    public LayerData layerData;
     public SceneData sceneData;
     public NotepadData notepadData;
 
@@ -52,8 +52,6 @@ public class CameraController : MonoBehaviour
 
         HenchmanBrain.OnShoot += ShakeFromGunShot;
 
-        StartUI.OnPlayAgain += SetToNormalDamping;
-
         SpyBrain.OnAfterOutcomeSequence += SetToSlowDamping;
     }
     private void OnDisable()
@@ -69,8 +67,6 @@ public class CameraController : MonoBehaviour
         HenchmanBrain.OnShoot -= ShakeFromGunShot;
 
         SpyBrain.OnAfterOutcomeSequence -= SetToSlowDamping;
-
-        StartUI.OnPlayAgain -= SetToNormalDamping;
 
 #if UNITY_EDITOR
         camData.curVelocity = Vector3.zero;
@@ -129,8 +125,8 @@ public class CameraController : MonoBehaviour
     private void SetCarriageSDFCompute()
     {
         carriageBoundsRT.Release();
-        carriageBoundsRT.width = (int)(trainStats.totalBounds.size.x * CARRIAGE_BOUNDS_TEXTURE_SCALE);
-        carriageBoundsRT.height = (int)(trainStats.totalBounds.size.y * CARRIAGE_BOUNDS_TEXTURE_SCALE);
+        carriageBoundsRT.width = (int)(trainData.totalBounds.size.x * CARRIAGE_BOUNDS_TEXTURE_SCALE);
+        carriageBoundsRT.height = (int)(trainData.totalBounds.size.y * CARRIAGE_BOUNDS_TEXTURE_SCALE);
         carriageBoundsRT.enableRandomWrite = true;
         carriageBoundsRT.Create();
 
@@ -242,13 +238,13 @@ public class CameraController : MonoBehaviour
 
             case LocationState.Carriage:
             {
-                carriageBoundsCompute.SetVector("_BoundsCenter", (camData.curLocationBounds.center - trainStats.totalBounds.min));
+                carriageBoundsCompute.SetVector("_BoundsCenter", (camData.curLocationBounds.center - trainData.totalBounds.min));
                 carriageBoundsCompute.SetVector("_BoundsSize", camData.curLocationBounds.size);
             }
             break;
             case LocationState.Gangway:
             {
-                carriageBoundsCompute.SetVector("_BoundsCenter", (camData.curLocationBounds.center - trainStats.totalBounds.min));
+                carriageBoundsCompute.SetVector("_BoundsCenter", (camData.curLocationBounds.center - trainData.totalBounds.min));
                 carriageBoundsCompute.SetVector("_BoundsSize", camData.curLocationBounds.size);
             }
             break;

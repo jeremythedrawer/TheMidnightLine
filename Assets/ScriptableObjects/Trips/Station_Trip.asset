@@ -10,8 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fddbeef0d64ccf64e964534b06a31700, type: 3}
-  m_Name: Demo_Trip
+  m_Name: Station_Trip
   m_EditorClassIdentifier: Assembly-CSharp::TripSO
+  title: End of the line
   prompt: 1
   clue: 1
   particleAtlasArray:
@@ -108,10 +109,6 @@ MonoBehaviour:
   - 22
   - 22.2
   stationAhead: {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
-  selectedClueMarkerColors:
-  - {r: 0, g: 0, b: 0, a: 1}
-  - {r: 0, g: 0, b: 0, a: 1}
-  - {r: 0, g: 0, b: 0, a: 1}
   traitorProfiles:
   - npcProfile:
       boardingStationIndex: 1

@@ -11,8 +11,8 @@ GameObject:
   - component: {fileID: 4787624463287863098}
   - component: {fileID: 8121811400885595123}
   - component: {fileID: 2814450545205291383}
-  - component: {fileID: 5735628127011101087}
   - component: {fileID: 4281581721833017353}
+  - component: {fileID: 5735628127011101087}
   - component: {fileID: 8541590373058370183}
   m_Layer: 6
   m_Name: Spy
@@ -160,6 +160,52 @@ Rigidbody2D:
   m_SleepingMode: 0
   m_CollisionDetection: 1
   m_Constraints: 4
+--- !u!61 &4281581721833017353
+BoxCollider2D:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8772790425813503437}
+  m_Enabled: 1
+  serializedVersion: 3
+  m_Density: 1
+  m_Material: {fileID: 0}
+  m_IncludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_ExcludeLayers:
+    serializedVersion: 2
+    m_Bits: 0
+  m_LayerOverridePriority: 0
+  m_ForceSendLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ForceReceiveLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_ContactCaptureLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_CallbackLayers:
+    serializedVersion: 2
+    m_Bits: 4294967295
+  m_IsTrigger: 0
+  m_UsedByEffector: 0
+  m_CompositeOperation: 0
+  m_CompositeOrder: 0
+  m_Offset: {x: -0.008758545, y: 0.45295334}
+  m_SpriteTilingProperty:
+    border: {x: 0, y: 0, z: 0, w: 0}
+    pivot: {x: 0.5, y: 0}
+    oldSize: {x: 1.18, y: 3.2}
+    newSize: {x: 1.24, y: 3.23}
+    adaptiveTilingThreshold: 0.5
+    drawMode: 0
+    adaptiveTiling: 0
+  m_AutoTiling: 0
+  m_Size: {x: 0.11450195, y: 0.87156224}
+  m_EdgeRadius: 0
 --- !u!114 &5735628127011101087
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -210,52 +256,6 @@ MonoBehaviour:
   prevSpriteIndexFlipV: 0
   isAnimating: 0
   quadCount: 0
---- !u!61 &4281581721833017353
-BoxCollider2D:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8772790425813503437}
-  m_Enabled: 1
-  serializedVersion: 3
-  m_Density: 1
-  m_Material: {fileID: 0}
-  m_IncludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_ExcludeLayers:
-    serializedVersion: 2
-    m_Bits: 0
-  m_LayerOverridePriority: 0
-  m_ForceSendLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ForceReceiveLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_ContactCaptureLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_CallbackLayers:
-    serializedVersion: 2
-    m_Bits: 4294967295
-  m_IsTrigger: 0
-  m_UsedByEffector: 0
-  m_CompositeOperation: 0
-  m_CompositeOrder: 0
-  m_Offset: {x: -0.008758545, y: 0.45295334}
-  m_SpriteTilingProperty:
-    border: {x: 0, y: 0, z: 0, w: 0}
-    pivot: {x: 0.5, y: 0}
-    oldSize: {x: 1.18, y: 3.2}
-    newSize: {x: 1.24, y: 3.23}
-    adaptiveTilingThreshold: 0.5
-    drawMode: 0
-    adaptiveTiling: 0
-  m_AutoTiling: 0
-  m_Size: {x: 0.11450195, y: 0.87156224}
-  m_EdgeRadius: 0
 --- !u!114 &8541590373058370183
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -271,13 +271,11 @@ MonoBehaviour:
   rigidBody: {fileID: 2814450545205291383}
   boxCollider: {fileID: 4281581721833017353}
   atlasRenderer: {fileID: 5735628127011101087}
-  materialIDs: {fileID: 11400000, guid: 4fa920be33167e04ead96f131ef4ff79, type: 2}
   spyData: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
-  playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
-  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+  inputData: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
+  trainData: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
   trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
   layerSettings: {fileID: 11400000, guid: 421dd4070ff8b8348b1a8bab8546c571, type: 2}
-  gameEventData: {fileID: 11400000, guid: 919c5bfccdfff6746b0aca13dfb8dfb5, type: 2}
   camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   options: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
   notepadData: {fileID: 11400000, guid: 8e516d659eb1fc449bc178ad3fb0113d, type: 2}
@@ -288,7 +286,6 @@ MonoBehaviour:
   chosenNPC: {fileID: 0}
   atlas: {fileID: 0}
   slideDoors: {fileID: 0}
-  smokingRoomDoor: {fileID: 0}
   curGangwayDoor: {fileID: 0}
   curCarriageMapProp: {fileID: 0}
   curClip:

@@ -35,17 +35,11 @@ public class HenchmanBrain : MonoBehaviour
     {
         Scenes.OnLoadStart += SetToSittingState;
         Scenes.OnLoadScore += SetToSittingState;
-        
-        StartUI.OnPlayAgain += SetToSittingState;
-        StartUI.OnFinishedOutcomeSequence += SetWillShoot;
     }
     private void OnDisable()
     {
         Scenes.OnLoadStart -= SetToSittingState;
         Scenes.OnLoadScore -= SetToSittingState;
-
-        StartUI.OnPlayAgain -= SetToSittingState;
-        StartUI.OnFinishedOutcomeSequence -= SetWillShoot;
     }
     private void Update()
     {

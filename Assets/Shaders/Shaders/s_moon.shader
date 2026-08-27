@@ -25,6 +25,7 @@ Shader "Custom/s_moon"
 
             float _DayNight;
             float3 _WhiteColor;
+            float3 _BlackColor;
 
             struct Attributes
             {
@@ -73,12 +74,13 @@ Shader "Custom/s_moon"
 
                 float fade = i.uv.y * (1 - _Fade) + _Fade;
 
-                float fullMoon = ceil(circle) * floor(cutCircle);
-                float mask = fullMoon * fade;
+                float fullMoon = ceil(circle);
+                float crescentMoon = fullMoon * floor(cutCircle);
+                float mask = crescentMoon * fade;
                 mask = BayerX8(mask, i.positionHCS.y + (_Time.y * _FadeSpeed));
 
-                float3 finalColor = mask * _WhiteColor;
-                clip(mask - 0.001);
+                float3 finalColor = lerp(_BlackColor, _WhiteColor, mask);
+                clip(fullMoon - 0.001);
                 return half4(finalColor, 1);
             }
             ENDHLSL

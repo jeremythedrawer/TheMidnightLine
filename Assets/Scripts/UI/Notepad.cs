@@ -36,9 +36,6 @@ public class Notepad : MonoBehaviour
         InUse = 1 << 10,
     }
 
-    public static event Action OnWriteColorMarkerFirstTime;
-    public static event Action OnRevertTutorial;
-
     public InputData playerInputs;
     public TripData curTrip;
     public PassengerData npcData;
@@ -89,8 +86,6 @@ public class Notepad : MonoBehaviour
         Scenes.OnLoadTrip1 += Reinit;
         Scenes.OnLoadScore += Reinit;
         Scenes.OnLoadStart += Init;
-        
-        StartUI.OnPlayAgain += Init;
 
         TrainController.OnFinishTripScene += KeepNotepad;
     }
@@ -99,8 +94,6 @@ public class Notepad : MonoBehaviour
         Scenes.OnLoadTrip1 -= Reinit;
         Scenes.OnLoadScore -= Reinit;
         Scenes.OnLoadStart -= Init;
-        
-        StartUI.OnPlayAgain -= Init;
 
         TrainController.OnFinishTripScene -= KeepNotepad;
     }

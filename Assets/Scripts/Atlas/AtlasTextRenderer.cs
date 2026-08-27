@@ -218,8 +218,8 @@ public class AtlasTextRenderer : MonoBehaviour
             backgroundRenderer.enabled = true;
 
             Vector2 worldSize = new Vector2();
-            worldSize.x = bounds.size.x + BORDER_PADDING * 2;
-            worldSize.y = bounds.size.y + BORDER_PADDING * 2;
+            worldSize.x = bounds.size.x;
+            worldSize.y = bounds.size.y;
 
             backgroundRenderer.transform.localPosition = borderLocalPos;
 
@@ -337,11 +337,18 @@ public class AtlasTextRenderer : MonoBehaviour
                 worldPivSize.y = curPosY;
                 worldPivSize.z = sprite.worldSize.x;
                 worldPivSize.w = sprite.worldSize.y;
-
                 worldPivotsAndSizes[spriteIndex] = worldPivSize;
+
+                Vector4 custom = new Vector4();
+                custom.x = 0;
+                custom.y = 0;
+                custom.z = 0;
+                custom.w = 1;
+                customs[spriteIndex] = custom;
+
+
                 uvSizesAndPositions[spriteIndex] = sprite.uvSizeAndPos;
                 scalesAndFlips[spriteIndex] = Vector4.one;
-                customs[spriteIndex] = Vector4.one;
 
                 spriteIndex++;
 
@@ -350,7 +357,7 @@ public class AtlasTextRenderer : MonoBehaviour
             curPosY -= textAtlas.typeWorldHeight;
         }
 
-        textBoxData.size.y = curPosY + textAtlas.typeWorldHeight; 
+        textBoxData.size.y = Mathf.Abs(curPosY + textAtlas.typeWorldHeight); 
         if (maxChars == 0)
         {
             bounds.size = Vector3.zero;
@@ -670,6 +677,7 @@ public class AtlasTextRendererEditor : Editor
         switch(textRend.rendererType)
         {
             case AtlasTextRenderer.AtlasTextRendererType.Simple:
+            case AtlasTextRenderer.AtlasTextRendererType.Border:
             {
                 boundsHandle.size = textRend.textBoxData.size;
 

@@ -12,18 +12,7 @@ public class LayerData : ScriptableObject
     [Serializable] public struct TrainLayers
     {
         public LayerMask ground;
-        public LayerMask interiorSlideDoors;
-        public LayerMask exteriorSlideDoors;
-        public LayerMask carriageChairs;
-        public LayerMask insideCarriageBounds;
-        public LayerMask gangwayBounds;
-        public LayerMask roofBounds;
-        public LayerMask climbingBounds;
         public LayerMask gangwayDoor;
-        public LayerMask smokingRoom;
-        public LayerMask smokingRoomDoor;
-        public LayerMask carriage;
-        public LayerMask carriageMap;
     }
 
     public StationLayers stationLayers;
@@ -31,10 +20,6 @@ public class LayerData : ScriptableObject
 
     public LayerMask stationWallLayers;
     public LayerMask trainWallLayers;
-
-    public LayerMask spy;
-    public LayerMask npc;
-
 
     [Header("Generated")]
     public LayerMask stationMask;

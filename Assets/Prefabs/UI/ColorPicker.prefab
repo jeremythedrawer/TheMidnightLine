@@ -1,0 +1,257 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &1383577117877000667
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6247253459606769700}
+  - component: {fileID: 1849436935815050231}
+  - component: {fileID: 8283568383269068160}
+  m_Layer: 0
+  m_Name: ColorPicker
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6247253459606769700
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383577117877000667}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 2891258752870711489}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1849436935815050231
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383577117877000667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 2
+  batchKey:
+    texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
+    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
+  atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 2
+  flipX: 0
+  flipY: 0
+  width: 1.8702348
+  height: 0.5364129
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.16796875, y: 0.17773438, z: 0, w: 0.6972656}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.47777778, y: 0.50555557, z: 1}
+    index: 2
+  bounds:
+    m_Center: {x: 257.74237, y: -2.2495532, z: 0.1}
+    m_Extent: {x: 0.37184143, y: 0.1793765, z: 0.1}
+  worldPivotAndSize: {x: -0, y: -0, z: 1.3388889, w: 0.33333334}
+  uvSizeAndPosition: {x: 0.94140625, y: 0.234375, z: 0.01171875, w: 0.54296875}
+  scaleAndFlip: {x: 1.8702348, y: 0.5364129, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 1}
+  customBit: 0
+  boundsOffset: {x: 0.37184143, y: 0.1793765, z: 0.1}
+  worldPivotsAndSizes:
+  - {x: -0, y: -0, z: 0.08888889, w: 0.1}
+  - {x: 0.08888889, y: -0, z: 0.30555555, w: 0.1}
+  - {x: 0.66034955, y: -0, z: 0.08333334, w: 0.1}
+  - {x: -0, y: 0.1, z: 0.08888889, w: 0.3166667}
+  - {x: 0.08888889, y: 0.1, z: 0.30555555, w: 0.3166667}
+  - {x: 0.66034955, y: 0.1, z: 0.08333334, w: 0.3166667}
+  - {x: -0, y: 0.2698641, z: 0.08888889, w: 0.08888888}
+  - {x: 0.08888889, y: 0.2698641, z: 0.30555555, w: 0.08888888}
+  - {x: 0.66034955, y: 0.2698641, z: 0.08333334, w: 0.08888888}
+  uvSizesAndPositions:
+  - {x: 0.03125, y: 0.03515625, z: 0, w: 0.6972656}
+  - {x: 0.10742187, y: 0.03515625, z: 0.03125, w: 0.6972656}
+  - {x: 0.029296879, y: 0.03515625, z: 0.13867188, w: 0.6972656}
+  - {x: 0.03125, y: 0.11132813, z: 0, w: 0.7324219}
+  - {x: 0.10742187, y: 0.11132813, z: 0.03125, w: 0.7324219}
+  - {x: 0.029296879, y: 0.11132813, z: 0.13867188, w: 0.7324219}
+  - {x: 0.03125, y: 0.031249998, z: 0, w: 0.84375}
+  - {x: 0.10742187, y: 0.031249998, z: 0.03125, w: 0.84375}
+  - {x: 0.029296879, y: 0.031249998, z: 0.13867188, w: 0.84375}
+  scalesAndFlips:
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1.8702348, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 0.5364129, z: 1, w: 1}
+  - {x: 1.8702348, y: 0.5364129, z: 1, w: 1}
+  - {x: 1, y: 0.5364129, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1.8702348, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  customs:
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 2
+  prevSpriteIndexFlipV: 2
+  isAnimating: 0
+  quadCount: 0
+--- !u!114 &8283568383269068160
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1383577117877000667}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a85b4b835b9bb56408bec25b17ebb3a3, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::ColorPicker
+  pickerType: 0
+  trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
+  options: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
+  spyData: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  notepadData: {fileID: 11400000, guid: 8e516d659eb1fc449bc178ad3fb0113d, type: 2}
+  exitButton: {fileID: 8807520455932932759}
+  atlasRenderer: {fileID: 1849436935815050231}
+  colorButtons: []
+  selectableColors: []
+  openColorButtonPositions: []
+  curColorButtonPositions: []
+  closeButtonPosition: {x: 0, y: 0, z: 0}
+  exitButtonOpenPosition: {x: 0, y: 0, z: 0}
+  exitButtonClosePosition: {x: 0, y: 0, z: 0}
+  exitButtonCurPosition: {x: 0, y: 0, z: 0}
+  globalShaderID: 0
+  selectedIndex: 0
+  openWidth: 0
+  closeWidth: 0
+  openClock: 0
+  isOpen: 0
+--- !u!1 &4019575806844247063
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 2891258752870711489}
+  - component: {fileID: 1338314156166662083}
+  - component: {fileID: 8807520455932932759}
+  m_Layer: 0
+  m_Name: ExitButton
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &2891258752870711489
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4019575806844247063}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.522, y: 0.181, z: -0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6247253459606769700}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1338314156166662083
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4019575806844247063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
+    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
+  atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 14
+  flipX: 1
+  flipY: 0
+  width: 1
+  height: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.076171875, y: 0.0625, z: 0.7109375, w: 0.7441406}
+    uvPivot: {x: 0.5, y: 0.5}
+    worldSize: {x: 0.21666667, y: 0.17777778, z: 1}
+    index: 14
+  bounds:
+    m_Center: {x: 0.522, y: 0.181, z: -0.1}
+    m_Extent: {x: 0.108333334, y: 0.08888889, z: 0.1}
+  worldPivotAndSize: {x: -0.108333334, y: -0.08888889, z: 0.21666667, w: 0.17777778}
+  uvSizeAndPosition: {x: 0.076171875, y: 0.0625, z: 0.7109375, w: 0.7441406}
+  scaleAndFlip: {x: 1, y: 1, z: -1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 1}
+  customBit: 0
+  boundsOffset: {x: 0, y: 0, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 14
+  prevSpriteIndexFlipV: 14
+  isAnimating: 0
+  quadCount: 0
+--- !u!114 &8807520455932932759
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4019575806844247063}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5ff9b693826b3b4890e48a7b54ff281, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::IconButton
+  inputData: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
+  cursorData: {fileID: 11400000, guid: e3005a8f04497a742b74cb7f231e3683, type: 2}
+  camData: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  atlasRenderer: {fileID: 1338314156166662083}
+  activePos: {x: 0, y: 0, z: 0}
+  curState: 0

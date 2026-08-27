@@ -57,8 +57,6 @@ public class MeridiaTower : MonoBehaviour
         SpyBrain.OnAfterOutcomeSequence += MoveMeetingWallUp;
         SpyBrain.OnInteract += WalkThroughStartDoor;
 
-        StartUI.OnPlayAgain += MoveToBottomFloor;
-
         startElevator.elevatorDoor.onDoorClose += MoveUpToBetweenFloors;
 
     }
@@ -68,12 +66,9 @@ public class MeridiaTower : MonoBehaviour
 
         Scenes.OnLoadScore -= MoveToMeetingFloor;
 
-
         SpyBrain.OnAfterOutcomeSequence -= MoveDownToBetweenFloors;
         SpyBrain.OnAfterOutcomeSequence -= MoveMeetingWallUp;
         SpyBrain.OnInteract -= WalkThroughStartDoor;
-
-        StartUI.OnPlayAgain -= MoveToBottomFloor;
 
         startElevator.elevatorDoor.onDoorClose += MoveUpToBetweenFloors;
         

@@ -4,13 +4,12 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-using static AtlasRendering;
-using static AtlasUI;
-
 [CreateAssetMenu(fileName = "Options", menuName = "Data / Options")]
 public class Options : ScriptableObject
 {
     public AtlasSO patternAtlas;
+
+    public IconButton colorButtonPrefab;
 
     public Color meridiaColor;
     public Color vinroseColor;
@@ -31,14 +30,18 @@ public class Options : ScriptableObject
     [TextArea(3, 10)] public string passengerMulticolorMarkerTutorialText2;
 
     [Header("User Picked")]
-    public Color blackColor;
-    public Color whiteColor;
+    public Color darkColor;
+    public Color lightColor;
+
+    public int darkColorIndex;
+    public int lightColorIndex;
+
     public bool useBayer;
 
 
     [Header("Generated")]
-    public int blackColorID;
-    public int whiteColorID;
+    public int darkColorID;
+    public int lightColorID;
     public int meridiaColorID;
     public int vinroseColorID;
     public int patternTextureID;
@@ -50,14 +53,14 @@ public class Options : ScriptableObject
     }
     public void SetGlobalShaderVariables()
     {
-        blackColorID = Shader.PropertyToID("_BlackColor");
-        whiteColorID = Shader.PropertyToID("_WhiteColor");
+        darkColorID = Shader.PropertyToID("_BlackColor");
+        lightColorID = Shader.PropertyToID("_WhiteColor");
         meridiaColorID = Shader.PropertyToID("_MeridiaColor");
         patternTextureID = Shader.PropertyToID("_PatternTexture");
         vinroseColorID = Shader.PropertyToID("_VinroseColor");
 
-        Shader.SetGlobalColor(blackColorID, blackColor.linear);
-        Shader.SetGlobalColor(whiteColorID, whiteColor.linear);
+        Shader.SetGlobalColor(darkColorID, darkColor.linear);
+        Shader.SetGlobalColor(lightColorID, lightColor.linear);
         Shader.SetGlobalColor(meridiaColorID, meridiaColor.linear);
         Shader.SetGlobalColor(vinroseColorID, vinroseColor.linear);
 

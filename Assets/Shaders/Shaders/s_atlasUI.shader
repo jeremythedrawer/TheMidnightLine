@@ -11,6 +11,7 @@ Shader "Custom/s_atlasUI"
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
+            #include "Assets/Shaders/HLSL/ColorSpace.hlsl"
             #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
             #pragma vertex vert
             #pragma fragment frag
@@ -97,14 +98,33 @@ Shader "Custom/s_atlasUI"
                 int meridiaColorMask = saturate(bitMask & MERIDIA_COLOR_BIT);
                 float3 meridiaColor = meridiaColorMask * _MeridiaColor;
                 float3 blackColor = (1 - meridiaColorMask) * _BlackColor;
+                blackColor += meridiaColor;
 
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-                half invertTex = 1 - tex.r;
+
+                int redMask = saturate(bitMask & RED_BIT);
+                int greenMask = saturate(bitMask & GREEN_BIT);
+
+                tex.r *= redMask;
+                tex.g *= greenMask;
+
+                half fullMask = saturate(tex.r + tex.g + tex.b);
+
+                half invertTex = 1 - fullMask;
 
                 int invertMask = saturate(bitMask & INVERT_BIT);
-                half t = lerp(tex.r, invertTex, invertMask);
+                half t = lerp(fullMask, invertTex, invertMask);
 
-                half3 finalColor = lerp(blackColor + meridiaColor + i.custom.rgb, _WhiteColor, t);
+                float tCol = round(LinearLightness(i.custom.rgb));
+
+                half useCol = saturate(ceil(i.custom.r + i.custom.g + i.custom.b));
+
+                half3 darkCol = lerp(i.custom.rgb, blackColor, tCol);
+                half3 lightCol = lerp(_WhiteColor, i.custom.rgb, tCol);
+                darkCol = lerp(blackColor, darkCol, useCol);
+                lightCol = lerp(_WhiteColor, lightCol, useCol);                
+                half3 finalColor = lerp(darkCol, lightCol, t);
+                
                 
                 clip((tex.a * i.custom.a) - 0.001);
                 return half4 (finalColor, 1);

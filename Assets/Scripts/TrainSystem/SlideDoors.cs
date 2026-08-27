@@ -18,8 +18,7 @@ public class SlideDoors : MonoBehaviour
         Closing,
     }
 
-    public TrainData trainStats;
-    public TrainSettingsSO trainSettings;
+    public TrainData trainData;
 
     public AtlasRenderer rightSlideDoorRenderer;
     public AtlasRenderer leftSlideDoorRenderer;
@@ -76,7 +75,7 @@ public class SlideDoors : MonoBehaviour
             case State.Opening:
             {
                 moveTimer += Time.deltaTime;
-                float t = moveTimer / trainSettings.doorMoveTime;
+                float t = moveTimer / trainData.doorMoveTime;
                 rightSlideDoorPos.x = activeMoveAmount * t;
                 leftSlideDoorPos.x = activeMoveAmount * -t;
                 rightSlideDoor_transform.localPosition = rightSlideDoorPos;
@@ -121,7 +120,7 @@ public class SlideDoors : MonoBehaviour
             case State.Closing:
             {
                 moveTimer -= Time.deltaTime;
-                float t = moveTimer/ trainSettings.doorMoveTime;
+                float t = moveTimer/ trainData.doorMoveTime;
 
                 rightSlideDoorPos.x = activeMoveAmount * t;
                 leftSlideDoorPos.x = activeMoveAmount * -t;
@@ -175,7 +174,7 @@ public class SlideDoors : MonoBehaviour
                 rightSlideDoor_transform.localPosition = rightSlideDoorPos;
                 leftSlideDoor_transform.localPosition = leftSlideDoorPos;
 
-                trainStats.slideDoorsAmountOpened++;
+                trainData.slideDoorsAmountOpened++;
             }
             break;
 
@@ -183,7 +182,7 @@ public class SlideDoors : MonoBehaviour
             {
                 rightSlideDoorPos = rightSlideDoor_transform.localPosition;
                 leftSlideDoorPos = leftSlideDoor_transform.localPosition;
-                moveTimer = trainSettings.doorMoveTime;
+                moveTimer = trainData.doorMoveTime;
 
             }
             break;
@@ -197,7 +196,7 @@ public class SlideDoors : MonoBehaviour
                 leftSlideDoor_transform.localPosition = leftSlideDoorPos;
                 if (prevState == State.Closing)
                 {
-                    trainStats.slideDoorsAmountOpened--;
+                    trainData.slideDoorsAmountOpened--;
                 }
             }
             break;

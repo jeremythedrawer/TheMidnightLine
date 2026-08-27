@@ -4,7 +4,13 @@ using static Train;
 
 [CreateAssetMenu(fileName = "TrainStats_SO", menuName = "Midnight Line SOs / Train Stats SO")]
 public class TrainData : ScriptableObject
-{    
+{
+    public float acceleration = 1.0f;
+    public float deceleration = 1.1f;
+    public float doorMoveTime = 2.0f;
+    public float exteriorWallFadeTime = 1f;
+
+    [Header("Generated")]
     public Bounds totalBounds;
     
     public DepthSections depthSections;

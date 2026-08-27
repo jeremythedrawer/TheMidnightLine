@@ -58,8 +58,6 @@ public class SpyBrain : MonoBehaviour
     
     public SlideDoors slideDoors;
     
-    public HingedDoor smokingRoomDoor;
-    
     public GangwayDoor curGangwayDoor;
     
     public CarriageMapProp curCarriageMapProp;
@@ -102,10 +100,6 @@ public class SpyBrain : MonoBehaviour
         Scenes.OnLoadTrip0 += TripInit;
 
         GameplayUI.OnIncreaseTraitorCountFirstTime += SetStateToIdle;
-        
-        AgreementProp.OnAgreementCollect += SetStateToIdle;
-        AgreementProp.OnNotepadReturn += SetStateToIdle;
-
 
         HenchmanBrain.OnShoot += SetStateToShotAt;
 
@@ -127,10 +121,6 @@ public class SpyBrain : MonoBehaviour
         Scenes.OnLoadTrip0 -= TripInit;
 
         GameplayUI.OnIncreaseTraitorCountFirstTime -= SetStateToIdle;
-
-        AgreementProp.OnAgreementCollect -= SetStateToIdle;
-        AgreementProp.OnNotepadReturn -= SetStateToIdle;
-
 
         HenchmanBrain.OnShoot -= SetStateToShotAt;
 

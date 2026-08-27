@@ -1,0 +1,40 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2a8cb41fd55a2b94f9d90434a784d11b, type: 3}
+  m_Name: TrainData
+  m_EditorClassIdentifier: 
+  totalBounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+  depthSections:
+    front: 0
+    back: 0
+    frontStandingBack: 0
+    frontStandingFront: 0
+    backStandingBack: 0
+    backStandingFront: 0
+    carriageSeat: 0
+  exteriorSlideDoorXBounds: []
+  interiorSlideDoorXBounds: []
+  curVelocity: {x: 0, y: 0}
+  targetVelocity: {x: 0, y: 0}
+  targetElevatePos: {x: 0, y: 0}
+  prevPeakVelocity: 0
+  targetPosition: 0
+  targetKMPH: 0
+  targetNightValue: 0
+  distToSpawnNextStation: 0
+  trainToMaxSpawnDist: 0
+  curStationIndex: 0
+  totalNPCsBoarded: 0
+  targetNPCsToBoard: 0
+  slideDoorsAmountOpened: 0

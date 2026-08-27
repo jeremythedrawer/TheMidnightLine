@@ -5,7 +5,7 @@ using UnityEngine;
 
 public class Gangway : MonoBehaviour
 {
-    public TrainSettingsSO trainSettings;
+    public TrainData trainData;
     public AtlasRenderer exteriorRenderer;
     [Header("Generated")]
     public float alpha;
@@ -32,14 +32,14 @@ public class Gangway : MonoBehaviour
 
     private async UniTask MovingDown()
     {
-        float elaspedTime = alpha * trainSettings.exteriorWallFadeTime;
+        float elaspedTime = alpha * trainData.exteriorWallFadeTime;
         try
         {
-            while (elaspedTime < trainSettings.exteriorWallFadeTime)
+            while (elaspedTime < trainData.exteriorWallFadeTime)
             {
                 elaspedTime += Time.deltaTime;
 
-                alpha = elaspedTime / trainSettings.exteriorWallFadeTime;
+                alpha = elaspedTime / trainData.exteriorWallFadeTime;
                 alpha = alpha < 0.5 ? 16 * alpha * alpha * alpha * alpha * alpha : 1 - Mathf.Pow(-2 * alpha + 2, 5) * 0.5f;
                 exteriorRenderer.custom.z = alpha;
 
@@ -52,14 +52,14 @@ public class Gangway : MonoBehaviour
     }
     private async UniTask MovingUp()
     {
-        float elaspedTime = alpha * trainSettings.exteriorWallFadeTime;
+        float elaspedTime = alpha * trainData.exteriorWallFadeTime;
         try
         {
             while (elaspedTime > 0)
             {
                 elaspedTime -= Time.deltaTime;
 
-                alpha = elaspedTime / trainSettings.exteriorWallFadeTime;
+                alpha = elaspedTime / trainData.exteriorWallFadeTime;
                 alpha = alpha < 0.5 ? 16 * alpha * alpha * alpha * alpha * alpha : 1 - Mathf.Pow(-2 * alpha + 2, 5) * 0.5f;
                 exteriorRenderer.custom.z = alpha;
 
