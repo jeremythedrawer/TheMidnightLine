@@ -12,10 +12,21 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: ce73eedfed03a0d40975efc29f5502ef, type: 3}
   m_Name: CursorData
   m_EditorClassIdentifier: Assembly-CSharp::CursorData
-  hoverSFX: {fileID: 8300000, guid: 60972e1732a16b64ab4550f36506c501, type: 3}
-  clickSFX: {fileID: 8300000, guid: 2939aabbea24caf4888d9c8755d185a9, type: 3}
-  bounds:
-    m_Center: {x: 266.2155, y: -1.4972223, z: -39.75}
+  inputData: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
+  buttonDepths:
+  - -38.9
+  - -39.1
+  - -39.1
+  - -39.1
+  - -39.1
+  - -39.1
+  - 0
+  - 0
+  cursorBounds:
+    m_Center: {x: 255.54886, y: -5.052778, z: -39.75}
     m_Extent: {x: 0.055555556, y: 0.075, z: 0.1}
-  canClick: 0
-  isHovering: 1
+  curDepth: 0
+  prevDepth: 0
+  hoverCount: 0
+  changeButton: 0
+  isHovering: 0

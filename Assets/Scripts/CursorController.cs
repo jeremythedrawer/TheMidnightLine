@@ -25,7 +25,8 @@ public class CursorController : MonoBehaviour
     public TripData trip;
     public CursorData cursorData;
     public SceneData sceneData;
-    
+    public Options options;
+
     public AtlasRenderer cursorRenderer;
     public AtlasTextRenderer cursorTag;
     public AudioSource audioSource;
@@ -48,14 +49,22 @@ public class CursorController : MonoBehaviour
         cursorTag.SetText("");
         hoveredNPCs = new NPCBrain[8];
     }
-    
+
+    private void OnEnable()
+    {
+        SliderController.OnChangeSoundEffectsVolume += UpdateVolume;
+    }
+    private void OnDisable()
+    {
+        SliderController.OnChangeSoundEffectsVolume -= UpdateVolume;
+    }
     private void Update()
     {
         if (active)
         {
             if (inputData.mouseLeftUp && cursorData.isHovering)
             {
-                audioSource.PlayOneShot(cursorData.clickSFX);
+                audioSource.PlayOneShot(options.soundEffects.cursorClick);
             }
             cursorRenderer.enabled = true;
             transform.position = inputData.mouseWorldPos;
@@ -95,7 +104,7 @@ public class CursorController : MonoBehaviour
         if (cursorData.changeButton)
         {
             cursorRenderer.UpdateSpriteInputsByIndex(POINTER_SPRITE_INDEX);
-            audioSource.PlayOneShot(cursorData.hoverSFX);
+            audioSource.PlayOneShot(options.soundEffects.cursorHover);
             cursorData.changeButton = false;
         }
         else if (!cursorData.isHovering)
@@ -105,5 +114,10 @@ public class CursorController : MonoBehaviour
                 cursorRenderer.UpdateSpriteInputsByIndex(CURSOR_SPRITE_INDEX);
             }
         }
+    }
+
+    private void UpdateVolume()
+    {
+        audioSource.volume = options.soundEffects.volume;
     }
 }

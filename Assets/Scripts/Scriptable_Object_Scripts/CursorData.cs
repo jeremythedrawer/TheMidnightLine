@@ -3,9 +3,7 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "CursorData", menuName = "Data / Cursor Data")]
 public class CursorData : ScriptableObject
 {
-    public AudioClip hoverSFX;
-    public AudioClip clickSFX;
-
+    public InputData inputData;
     public float[] buttonDepths;
 
     public Bounds cursorBounds;

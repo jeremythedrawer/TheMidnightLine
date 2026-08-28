@@ -28,12 +28,13 @@ public class StartUI : MonoBehaviour
     public MeridiaTowerData meridiaTowerData;
     public CursorData cursorData;
 
+    public AudioSource audioSource;
+
     public TextButton startButton;
     public TextButton optionsButton;
     public TextButton quitButton;
-
-    public TextButton darkColorButton;
-    public TextButton lightColorButton;
+    public SliderController musicVolumeSlider;
+    public SliderController soundEffectsVolumeSlider;
 
     public FadeBlack fadeBlack;
 
@@ -92,6 +93,8 @@ public class StartUI : MonoBehaviour
 
         CameraController.OnArrivedAtElevator += SetToEndMenuState;
         RoomDoor.OnStartTrip += StartTrip;
+
+        SliderController.OnChangeMusicVolume += SetMusicVolume;
     }
     private void OnDisable()
     {
@@ -110,8 +113,9 @@ public class StartUI : MonoBehaviour
 
         CameraController.OnArrivedAtElevator -= SetToEndMenuState;
 
-
         RoomDoor.OnStartTrip -= StartTrip;
+        
+        SliderController.OnChangeMusicVolume -= SetMusicVolume;
     }
     private void Update()
     {
@@ -132,9 +136,7 @@ public class StartUI : MonoBehaviour
         {
             case UIState.StartMenu:
             {
-                startButton.MoveToActive();
-                optionsButton.MoveToActive();
-                quitButton.MoveToActive();
+
             }
             break;
             case UIState.OptionsMenu:
@@ -143,9 +145,6 @@ public class StartUI : MonoBehaviour
                 startButton.MoveAway(Direction.Right);
 
                 optionsButton.MoveToRight();
-
-                darkColorButton.MoveToActive();
-                lightColorButton.MoveToActive();
 
                 spyData.playerInputsEnabled = false;
 
@@ -212,7 +211,7 @@ public class StartUI : MonoBehaviour
 
             case UIState.StartMenu:
             {
-               // UpdateMainMenuButtons();
+               UpdateMainMenuButtons();
             }
             break;
 
@@ -251,9 +250,6 @@ public class StartUI : MonoBehaviour
                 quitButton.MoveToActive();
                 optionsButton.MoveToActive();
 
-                darkColorButton.MoveAway(Direction.Left);
-                lightColorButton.MoveAway(Direction.Left);
-
                 spyData.playerInputsEnabled = true;
                 OnClickBackFromOptions?.Invoke();
             }
@@ -274,9 +270,47 @@ public class StartUI : MonoBehaviour
     private void StartSceneInit()
     {
         //startButton.InitButton(StartButtonClicked, EnterTextButton, ExitTextButton);
-        //optionsButton.InitButton(OptionsButtonClicked, EnterTextButton, ExitTextButton);
-        //quitButton.InitButton(QuitButtonClicked, EnterTextButton, ExitTextButton);
-        
+        void MouseDownText(TextButton icon)
+        {
+            icon.backgroundRenderer.customBit ^= (int)ColorBits.Invert;
+            icon.textRenderer.customBit ^= (int)ColorBits.Invert;
+        }
+        void EnterButtonText(TextButton icon)
+        {
+            icon.backgroundRenderer.customBit |= (int)ColorBits.GreenChannel;
+        }
+        void ExitButtonText(TextButton icon)
+        {
+            icon.backgroundRenderer.customBit &= ~(int)ColorBits.GreenChannel;
+            icon.backgroundRenderer.customBit &= ~(int)ColorBits.Invert;
+            icon.textRenderer.customBit |= (int)ColorBits.Invert;
+        }
+
+        void QuitButtonClicked(TextButton text)
+        {
+            Application.Quit();
+        }
+
+        void OptionsButtonUp(TextButton text)
+        {
+            switch (curState)
+            {
+                case UIState.StartMenu:
+                {
+                    SetState(UIState.OptionsMenu);
+                }
+                break;
+                case UIState.OptionsMenu:
+                {
+                    SetState(UIState.StartMenu);
+                }
+                break;
+            }
+        }
+
+        optionsButton.InitButton(OptionsButtonUp, MouseDownText, EnterButtonText, ExitButtonText);
+        quitButton.InitButton(QuitButtonClicked, MouseDownText, EnterButtonText, ExitButtonText);
+
 
         //darkColorButton.SetAway(Direction.Left);
         //lightColorButton.SetAway(Direction.Left);
@@ -286,6 +320,8 @@ public class StartUI : MonoBehaviour
         fadeBlack.SetAlpha(1);
         fadeBlack.FadeOut();
 
+        audioSource.clip = options.music.menu;        
+        audioSource.Play();
         SetState(UIState.StartMenu);
     }
     private void ScoreSceneInit()
@@ -369,17 +405,19 @@ public class StartUI : MonoBehaviour
     {
         SetState(UIState.EndMenu);
     }
-    //private void UpdateMainMenuButtons()
-    //{
-    //    startButton.UpdateButton();
-    //    quitButton.UpdateButton();
-    //    optionsButton.UpdateButton();
-    //}
+    private void SetMusicVolume()
+    {
+        audioSource.volume = options.music.volume;
+    }
+    private void UpdateMainMenuButtons()
+    {
+        //startButton.UpdateButton();
+        quitButton.UpdateButton();
+        optionsButton.UpdateButton();
+    }
     private void UpdateOptionsButtons()
     {
         optionsButton.UpdateButton();
-        darkColorButton.UpdateButton();
-        lightColorButton.UpdateButton();
     }
     private void UpdateEndMenuButtons()
     {
@@ -396,34 +434,8 @@ public class StartUI : MonoBehaviour
         
         OnStartButtonClicked?.Invoke();
     }
-    private void OptionsButtonClicked(TextButton text)
-    {
-        switch(curState)
-        {
-            case UIState.StartMenu:
-            {
-                SetState(UIState.OptionsMenu);
-            }
-            break;
-            case UIState.OptionsMenu:
-            {
-                SetState(UIState.StartMenu);
-            }
-            break;
-        }
-    }
-    private void QuitButtonClicked(TextButton text)
-    {
-        Application.Quit();
-    }
-    private void EnterTextButton(TextButton text)
-    {
-       // text.textRenderer.Set
-    }
-    private void ExitTextButton(TextButton button)
-    {
 
-    }
+
     private void ShowMoveKeyIcons()
     {
         if (!spyData.movedFirstTime)

@@ -81,34 +81,34 @@ public class Page : MonoBehaviour
             }
         }
 
-        void EnterButton(IconButton icon)
-        {
-            icon.atlasRenderer.custom.x = 1;
-        }
-        void ExitButton(IconButton icon)
-        {
-            icon.atlasRenderer.custom.x = 0;
-        }
-        void ClickExitButton(IconButton icon)
-        {
-            if (spyData.checkingNotepad)
-            {
-                spyData.checkingNotepad = false;
-            }
-            else
-            {
-                spyData.checkingNotepad = true;
-            }
-        }
-        void ClickLeftButton(IconButton icon)
-        {
-            notepadData.subState |= SubState.IsFlippingDown;
-        }
+        //void EnterButton(IconButton icon)
+        //{
+        //    icon.atlasRenderer.custom.x = 1;
+        //}
+        //void ExitButton(IconButton icon)
+        //{
+        //    icon.atlasRenderer.custom.x = 0;
+        //}
+        //void ClickExitButton(IconButton icon)
+        //{
+        //    if (spyData.checkingNotepad)
+        //    {
+        //        spyData.checkingNotepad = false;
+        //    }
+        //    else
+        //    {
+        //        spyData.checkingNotepad = true;
+        //    }
+        //}
+        //void ClickLeftButton(IconButton icon)
+        //{
+        //    notepadData.subState |= SubState.IsFlippingDown;
+        //}
 
-        void ClickRightButton(IconButton icon)
-        {
-            notepadData.subState |= SubState.IsFlippingUp;
-        }
+        //void ClickRightButton(IconButton icon)
+        //{
+        //    notepadData.subState |= SubState.IsFlippingUp;
+        //}
 
         //exitButton.InitButton(ClickExitButton, EnterButton, ExitButton);
         //rightButton.InitButton(ClickRightButton, EnterButton, ExitButton);

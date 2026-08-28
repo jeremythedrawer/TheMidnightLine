@@ -63,17 +63,19 @@ public class IconButton : MonoBehaviour
             break;
             case ButtonState.Clicked:
             {
-                if (!cursorData.IsInsideBounds(atlasRenderer.bounds, isClickable: true))
-                {
-                    OnExitCallback(this);
-                    curState = ButtonState.Unhovered;
-                }
-                else if (inputData.mouseLeftUp)
+                if (inputData.mouseLeftUp)
                 {
                     OnMouseUpCallback(this);
                     OnEnterCallback(this);
                     curState = ButtonState.Hovered;
                 }
+
+                if (!cursorData.IsInsideBounds(atlasRenderer.bounds, isClickable: true) && !inputData.mouseLeftHold)
+                {
+                    OnExitCallback(this);
+                    curState = ButtonState.Unhovered;
+                }
+                
             }
             break;
         }
