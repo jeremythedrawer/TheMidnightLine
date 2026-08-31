@@ -301,8 +301,8 @@ public class GameplayUI : MonoBehaviour
         notepad = SceneController.GetAndParentNotepad(transform);
         notepad.transform.localPosition = notepadData.inactiveLocalPos;
 
-        float halfCamWidth = cameraStats.camBounds.extents.x;
-        float halfCamHeight = cameraStats.camBounds.extents.y;
+        float halfCamWidth = cameraStats.bounds.extents.x;
+        float halfCamHeight = cameraStats.bounds.extents.y;
 
         ticketActivePos = ticket.transform.localPosition;
         ticketInactivePos = new Vector3(halfCamWidth, -halfCamHeight + ticket.totalBounds.size.y, ticket.transform.localPosition.z);

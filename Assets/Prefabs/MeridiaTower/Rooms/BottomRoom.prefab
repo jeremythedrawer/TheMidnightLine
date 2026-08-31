@@ -9,7 +9,6 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 5752331848463562331}
-  - component: {fileID: 4262156998851192010}
   m_Layer: 0
   m_Name: BottomRoom
   m_TagString: Untagged
@@ -34,28 +33,6 @@ Transform:
   - {fileID: 1305935492378056556}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &4262156998851192010
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 5688680027185685504}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: dd4fffa1903fc624891dccb0607c7320, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: Assembly-CSharp::Room
-  camStats: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
-  meridiaTowerData: {fileID: 11400000, guid: 0c096b94ad74a7a42a53acea7c2760e8, type: 2}
-  exteriorWallRenderer: {fileID: 0}
-  leftWallCollider: {fileID: 0}
-  rightWallCollider: {fileID: 0}
-  locationState: 7
-  bounds:
-    m_Center: {x: 264.53796, y: -6.1196876, z: 8}
-    m_Extent: {x: 0.97520447, y: 1.1184278, z: 0.27980995}
-  curMoveDownWallValue: 0
 --- !u!1001 &977703191653040638
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -108,13 +85,17 @@ PrefabInstance:
       propertyPath: m_Name
       value: BottomFloor
       objectReference: {fileID: 0}
+    - target: {fileID: 6197372913652572726, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7044238463706584467, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: flipY
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7044238463706584467, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: width
-      value: 194.32341
+      value: 489.49033
       objectReference: {fileID: 0}
     - target: {fileID: 7044238463706584467, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: height
@@ -134,7 +115,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7044238463706584467, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: boundsOffset.x
-      value: 3.2387238
+      value: 8.158173
       objectReference: {fileID: 0}
     - target: {fileID: 7044238463706584467, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: boundsOffset.y
@@ -146,7 +127,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7044238463706584467, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: scaleAndFlip.x
-      value: 194.32341
+      value: 489.49033
       objectReference: {fileID: 0}
     - target: {fileID: 7044238463706584467, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: scaleAndFlip.y
@@ -158,11 +139,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7044238463706584467, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 1.2887237
+      value: 8.158173
       objectReference: {fileID: 0}
     - target: {fileID: 7044238463706584467, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -7.7916665
+      value: -0.51166654
       objectReference: {fileID: 0}
     - target: {fileID: 7044238463706584467, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: bounds.m_Center.z
@@ -170,7 +151,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7044238463706584467, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: bounds.m_Extent.x
-      value: 3.2387238
+      value: 8.158173
       objectReference: {fileID: 0}
     - target: {fileID: 7044238463706584467, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: bounds.m_Extent.y
@@ -238,7 +219,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8224176825605461968, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: m_Size.x
-      value: 6.4774475
+      value: 16.316345
       objectReference: {fileID: 0}
     - target: {fileID: 8224176825605461968, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: m_Size.y
@@ -246,7 +227,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8224176825605461968, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: m_Offset.x
-      value: 3.2387238
+      value: 8.158173
       objectReference: {fileID: 0}
     - target: {fileID: 8224176825605461968, guid: 0b44f92cc1a005247a9bad2387050878, type: 3}
       propertyPath: m_Offset.y
@@ -332,11 +313,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 9103103627595502992, guid: 6c32cfd6f4d20814c973eba928ddaeee, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 264.7394
+      value: 266.68942
       objectReference: {fileID: 0}
     - target: {fileID: 9103103627595502992, guid: 6c32cfd6f4d20814c973eba928ddaeee, type: 3}
       propertyPath: bounds.m_Center.y
-      value: -6.143667
+      value: 1.1363332
       objectReference: {fileID: 0}
     - target: {fileID: 9103103627595502992, guid: 6c32cfd6f4d20814c973eba928ddaeee, type: 3}
       propertyPath: bounds.m_Extent.x

@@ -44,13 +44,13 @@ Shader "Custom/s_matrix"
 
 			float4 starTex = SAMPLE_TEXTURE2D_X(_StarTexture, sampler_StarTexture, starUV);
 
-			float4 noiseTex = SAMPLE_TEXTURE2D_X(_NoiseTexture, sampler_NoiseTexture, starUV + _Time.y * 0.01);
+			float4 noiseTex = SAMPLE_TEXTURE2D_X(_NoiseTexture, sampler_NoiseTexture, starUV + _Time.y * 0.02);
 
 			float glowStars = step(0.01, starTex.r * noiseTex.r + starTex.g);
 			float gradient = input.texcoord.y;
 
 			float horizon = sin(min(gradient + _DayNight, PI * 0.5) * PI) * 0.5 + 0.5;
-			float stars = glowStars * _DayNight;
+			float stars = glowStars * _DayNight * gradient;
 			horizon = BayerX8(horizon, input.texcoord.y * _ScreenParams.y);
 			//horizon += (1 - _DayNight) * 0.25;
 

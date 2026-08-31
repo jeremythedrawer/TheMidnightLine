@@ -104,11 +104,16 @@ Shader "Custom/s_atlasUI"
 
                 int redMask = saturate(bitMask & RED_BIT);
                 int greenMask = saturate(bitMask & GREEN_BIT);
+                int blueMask = saturate(bitMask & BLUE_BIT);
 
-                tex.r *= redMask;
-                tex.g *= greenMask;
+                half whiteTex = tex.r * tex.g * tex.b;
 
-                half fullMask = saturate(tex.r + tex.g + tex.b);
+                half redTex = tex.r * redMask;
+                half greenTex = tex.g * greenMask;
+                half blueTex = tex.b * blueMask;
+
+
+                half fullMask = saturate(whiteTex + redTex + greenTex + blueTex);
 
                 half invertTex = 1 - fullMask;
 

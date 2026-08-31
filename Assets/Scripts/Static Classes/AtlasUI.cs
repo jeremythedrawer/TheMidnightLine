@@ -141,7 +141,7 @@ public static class AtlasUI
         None,
         StartMenu,
         OptionsMenu,
-        EndMenu,
+        MapMenu,
         Notepad,
         Ticket,
         CarriageMap,
@@ -153,6 +153,14 @@ public static class AtlasUI
         Unhovered,
         Hovered,
         Clicked,
+    }
+    public enum ButtonFunctionType
+    {
+        None,
+        Begin,
+        Options,
+        Quit,
+        Back,
     }
     public enum KeyboardBindingIconIndices
     { 

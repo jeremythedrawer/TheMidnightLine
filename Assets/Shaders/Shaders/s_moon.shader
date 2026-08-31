@@ -58,7 +58,7 @@ Shader "Custom/s_moon"
                 float worldCamTop = unity_OrthoParams.y + _WorldSpaceCameraPos.y;
 
                 float3 worldPos = TransformObjectToWorld(objPos);
-                worldPos.y = lerp(worldPos.y - scale.y, worldPos.y + (worldCamTop * 0.75), _DayNight);
+                //worldPos.y = lerp(worldPos.y - scale.y, worldPos.y + (worldCamTop * 0.75), _DayNight);
                 
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;

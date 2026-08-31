@@ -1,0 +1,143 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: fddbeef0d64ccf64e964534b06a31700, type: 3}
+  m_Name: BehindTheGoals_Trip
+  m_EditorClassIdentifier: Assembly-CSharp::TripSO
+  title: Behind the Goals
+  prompt: 1
+  clue: 1
+  particleAtlasArray:
+  - {fileID: 11400000, guid: 08004104ecb4a2341be1e6470a875502, type: 2}
+  - {fileID: 11400000, guid: 6ccacd0695c412449b407c87b3ab6a1e, type: 2}
+  - {fileID: 11400000, guid: 2b0388f0ffe3cf94db5ec4344fb0b062, type: 2}
+  - {fileID: 11400000, guid: abf5051c889b6444aa08499e01c10fc4, type: 2}
+  - {fileID: 11400000, guid: 357154f373a41684ea6991690bd10c52, type: 2}
+  - {fileID: 11400000, guid: 550abf757e9f50645b3d06cb79ddfb74, type: 2}
+  - {fileID: 11400000, guid: 6ed87a1ca417091488a94b5784d18b75, type: 2}
+  stationsDataArray:
+  - {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
+  - {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
+  - {fileID: 11400000, guid: 134e92c40424a324c80e62fb7525f100, type: 2}
+  - {fileID: 11400000, guid: 9f6e7f784f9a69e45888de3dba9c0035, type: 2}
+  - {fileID: 11400000, guid: fb864fd428b19724aaa23f291b0ae7c2, type: 2}
+  - {fileID: 11400000, guid: eb5f645bebb98e94587ae21c24fa0179, type: 2}
+  - {fileID: 11400000, guid: 943d44fe5abb9e34a8ac880c80c72af9, type: 2}
+  - {fileID: 11400000, guid: b93f4eeb1c65e734e87b647acbb56161, type: 2}
+  npcDataArray:
+  - {fileID: 11400000, guid: 52a61a80ebb4dde4dadba09e6230cb24, type: 2}
+  - {fileID: 11400000, guid: 8b2f9c6da9033cd4a8c6c5677fbb3e2c, type: 2}
+  - {fileID: 11400000, guid: fceb5d5663efb334594da568dbdda9ee, type: 2}
+  - {fileID: 11400000, guid: 1d1f8d46e230b6140be513acdbfef0f0, type: 2}
+  - {fileID: 11400000, guid: c76632ac0a69b974aaa74e6cd1646b89, type: 2}
+  - {fileID: 11400000, guid: 8357ed2722fa5fd439046aa12a4199b6, type: 2}
+  - {fileID: 11400000, guid: ed55ab0ee584afd459355277d983c98b, type: 2}
+  - {fileID: 11400000, guid: adbbf3e2e7f721843a635fe3790ce01a, type: 2}
+  - {fileID: 11400000, guid: db5336e69a6e4d249972c3779baa0266, type: 2}
+  dayNightValues:
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0
+  - 0.1
+  - 0.2
+  - 0.3
+  - 0.4
+  - 0.5
+  - 0.6
+  - 0.7
+  - 0.8
+  - 0.9
+  - 1
+  elevationValues:
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  - {x: 0, y: 0}
+  kmValues:
+  - 34.1
+  - 22.2
+  - 34.1
+  - 34.1
+  - 34.1
+  - 34.1
+  - 34.1
+  - 34.1
+  - 34.1
+  - 40
+  - 40
+  - 40
+  - 40
+  - 30
+  - 30
+  - 30
+  - 30
+  - 22
+  - 22
+  - 22
+  - 22.2
+  stationAhead: {fileID: 11400000, guid: b74d14809eb8dd545ab71e09260acf54, type: 2}
+  traitorProfiles:
+  - npcProfile:
+      boardingStationIndex: 1
+      disembarkingStationIndex: 6
+      npcPrefabIndex: 7
+      behaviours: 24
+    fullName: Johnathan Richardson
+    mugShotIndex: 7
+    found: 0
+  - npcProfile:
+      boardingStationIndex: 2
+      disembarkingStationIndex: 6
+      npcPrefabIndex: 8
+      behaviours: 768
+    fullName: Samira Dermas
+    mugShotIndex: 8
+    found: 0
+  - npcProfile:
+      boardingStationIndex: 4
+      disembarkingStationIndex: 6
+      npcPrefabIndex: 1
+      behaviours: 10
+    fullName: Martin Richardson
+    mugShotIndex: 1
+    found: 0
+  ticketsCheckedSinceLastStation: 0
+  ticketsCheckedTotal: 0
+  traitorsSpawned: 0
+  curUnlocks: 0
+  curDayNightValue: 0
+  failed: 0
+  unlocked: 0

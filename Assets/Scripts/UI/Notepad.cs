@@ -143,8 +143,8 @@ public class Notepad : MonoBehaviour
 
             leftHand.Init();
 
-            float halfCamWidth = camStats.camBounds.extents.x;
-            float halfCamHeight = camStats.camBounds.extents.y;
+            float halfCamWidth = camStats.bounds.extents.x;
+            float halfCamHeight = camStats.bounds.extents.y;
             float binderBoundsOffsetX = bindingRingsRend.bounds.max.x - transform.position.x;
             notepadData.inactiveLocalPos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + NOTEPAD_INACTIVE_OFFSET, ACTIVE_POS.z);
             notepadData.offSceenLocalPos = new Vector3(notepadData.inactiveLocalPos.x, -halfCamHeight - NOTEPAD_INACTIVE_OFFSET, ACTIVE_POS.z); 

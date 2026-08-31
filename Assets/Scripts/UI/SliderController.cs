@@ -1,5 +1,6 @@
 using System;
 using UnityEngine;
+using UnityEngine.Audio;
 using static AtlasUI;
 using static ColorPicker;
 
@@ -41,17 +42,6 @@ public class SliderController : MonoBehaviour
         void ButtonUp(IconButton icon)
         {
             icon.atlasRenderer.customBit ^= (int)ColorBits.Invert;
-
-            if (sliderType == SliderType.Music)
-            {
-                options.music.volume = Mathf.InverseLerp(minSlideDist, maxSlideDist, sliderLocalPos.x);
-                OnChangeMusicVolume?.Invoke();
-            }
-            else if (sliderType == SliderType.SoundEffects)
-            {
-                options.soundEffects.volume = Mathf.InverseLerp(minSlideDist, maxSlideDist, sliderLocalPos.x);
-                OnChangeSoundEffectsVolume?.Invoke();
-            }
         }
         void ButtonDown(IconButton icon)
         {
@@ -82,8 +72,21 @@ public class SliderController : MonoBehaviour
         if (button.curState == ButtonState.Clicked)
         {
             sliderLocalPos.x = button.transform.parent.InverseTransformPoint(inputData.mouseWorldPos).x + startDragDelta;
-            sliderLocalPos.x = Mathf.Clamp(sliderLocalPos.x, minSlideDist, maxSlideDist);
+            sliderLocalPos.x = Mathf.Clamp(sliderLocalPos.x, minSlideDist + Mathf.Epsilon, maxSlideDist);
             button.transform.localPosition = sliderLocalPos;
+
+            float t = Mathf.InverseLerp(minSlideDist, maxSlideDist, sliderLocalPos.x);
+            t *= t;
+            if (sliderType == SliderType.Music)
+            {
+                options.music.volume = t;
+                OnChangeMusicVolume?.Invoke();
+            }
+            else if (sliderType == SliderType.SoundEffects)
+            {
+                options.soundEffects.volume = t;
+                OnChangeSoundEffectsVolume?.Invoke();
+            }
         }
     }
 }

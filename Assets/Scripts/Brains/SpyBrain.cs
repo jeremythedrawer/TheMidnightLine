@@ -41,13 +41,12 @@ public class SpyBrain : MonoBehaviour
     public InputData inputData;
     public TrainData trainData;
     public TrainSettingsSO trainSettings;
-    public LayerData layerSettings;
+    public LayerData layerData;
     public CameraData camStats;
     public Options options;
     public NotepadData notepadData;
     public TripData trip;
     public SceneData sceneData;
-    public MeridiaTowerData meridiaTowerData;
 
     [Header("Generated")]
     public NPCBrain[] possibleNPCsToTicketCheck;
@@ -101,12 +100,6 @@ public class SpyBrain : MonoBehaviour
 
         GameplayUI.OnIncreaseTraitorCountFirstTime += SetStateToIdle;
 
-        HenchmanBrain.OnShoot += SetStateToShotAt;
-
-        MeridiaTower.OnArriveAtBottomFloor += SetSpyToBottomFloor;
-
-        PresidentBrain.OnShakeHands += SetStateToHandShake;
-
         EveryInit();
     }
     private void OnDisable()
@@ -121,12 +114,6 @@ public class SpyBrain : MonoBehaviour
         Scenes.OnLoadTrip0 -= TripInit;
 
         GameplayUI.OnIncreaseTraitorCountFirstTime -= SetStateToIdle;
-
-        HenchmanBrain.OnShoot -= SetStateToShotAt;
-
-        PresidentBrain.OnShakeHands -= SetStateToHandShake;
-
-        MeridiaTower.OnArriveAtBottomFloor -= SetSpyToBottomFloor;
     }
     private void Update()
     {
@@ -136,10 +123,6 @@ public class SpyBrain : MonoBehaviour
     private void FixedUpdate()
     {
         FixedUpdateStates();
-        bool leftWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, spyData.curWallLayer);
-        bool rightWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, spyData.curWallLayer);
-
-        spyData.walkingIntoWall = (leftWallTouch && inputData.move == -1) || (rightWallTouch && inputData.move == 1);
     }
     private void PlayAgainInit()
     {
@@ -151,19 +134,20 @@ public class SpyBrain : MonoBehaviour
     }
     private void EveryInit()
     {
+        layerData.CombineAllLayerMasks();
         curWorldPos = transform.position;
         atlas = atlasRenderer.atlas;
         atlas.UpdateClipDictionary();
 
-        spyData.curGroundLayer = layerSettings.stationLayers.ground;
-        spyData.curWallLayer = layerSettings.stationWallLayers;
+        spyData.curGroundLayer = layerData.stationLayers.ground;
+        spyData.curWallLayer = layerData.stationWallLayers;
         spyData.bounds = atlasRenderer.bounds;
         spyData.checkingNotepad = false;
 
         spyData.curTutorialState = TutorialState.None;
         spyData.playerInputsEnabled = true;
 
-        rigidBody.includeLayers = layerSettings.stationMask;
+        rigidBody.includeLayers = layerData.stationMask;
 
         spyData.curState = SpyState.Idle;
         SetState(SpyState.None);
@@ -412,21 +396,6 @@ public class SpyBrain : MonoBehaviour
                 }
             }
             break;
-            case SpyState.ShotAt:
-            {
-                if (!atlasRenderer.isAnimating && !finishedGettingShot)
-                {
-                    finishedGettingShot = true;
-                    WaitToPlayAgain();
-                }
-            }
-            break;
-            case SpyState.HandShake:
-            {
-                atlasRenderer.PlayClip(ref curClip);
-            }
-            break;
-
         }
     }
     private void FixedUpdateStates()
@@ -443,8 +412,8 @@ public class SpyBrain : MonoBehaviour
                 CalculateCollisionPoints();
                 if (camStats.curLocationState != LocationState.Station)
                 {
-                    RaycastHit2D gangwayDoorLeftHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, layerSettings.trainLayers.gangwayDoor);
-                    RaycastHit2D gangwayDoorRightHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, layerSettings.trainLayers.gangwayDoor);
+                    RaycastHit2D gangwayDoorLeftHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, layerData.trainLayers.gangwayDoor);
+                    RaycastHit2D gangwayDoorRightHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, layerData.trainLayers.gangwayDoor);
                     bool isTouchingGangwayDoorLeft = gangwayDoorLeftHit.collider != null;
                     bool isTouchingGangwayDoorRight = gangwayDoorRightHit.collider != null;
 
@@ -614,20 +583,6 @@ public class SpyBrain : MonoBehaviour
                 OnOpenNotepad?.Invoke();
             }
             break;
-            case SpyState.ShotAt:
-            {
-                curClip = atlas.clipDict[(int)SpyMotion.ShotByGun];
-                atlasRenderer.PlayClipOneShot(curClip);
-                spyData.playerInputsEnabled = false;
-            }
-            break;
-            case SpyState.HandShake:
-            {
-                curClip = atlas.clipDict[(int)SpyMotion.Handshake];
-                spyData.playerInputsEnabled = false;
-                WaitToPlayAgain();
-            }
-            break;
         }
     }
     private void ExitState()
@@ -758,6 +713,10 @@ public class SpyBrain : MonoBehaviour
         collisionData.wallLeft = new Vector2(wallLeft, boxCollider.bounds.center.y);
         collisionData.wallRight = new Vector2(wallRight, boxCollider.bounds.center.y);
 
+        bool leftWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, spyData.curWallLayer);
+        bool rightWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, spyData.curWallLayer);
+        spyData.walkingIntoWall = (leftWallTouch && inputData.move == -1) || (rightWallTouch && inputData.move == 1);
+
     }
     private void GetSlideDoorAtStation()
     {
@@ -864,11 +823,11 @@ public class SpyBrain : MonoBehaviour
                     {
                         if (trainData.curStationIndex > 0)
                         {
-                            spyData.curGroundLayer = layerSettings.stationLayers.ground;
-                            spyData.curWallLayer = layerSettings.stationWallLayers;
+                            spyData.curGroundLayer = layerData.stationLayers.ground;
+                            spyData.curWallLayer = layerData.stationWallLayers;
                             camStats.curLocationState = LocationState.Station;
 
-                            rigidBody.includeLayers = layerSettings.stationMask;
+                            rigidBody.includeLayers = layerData.stationMask;
 
                             Station station = TrainController.NextStationInstance;
                         
@@ -887,11 +846,11 @@ public class SpyBrain : MonoBehaviour
                         CurCarriage = slideDoors.carriage;
                         CurCarriage.MoveDown();
 
-                        spyData.curGroundLayer = layerSettings.trainLayers.ground;
-                        spyData.curWallLayer = layerSettings.trainWallLayers;
+                        spyData.curGroundLayer = layerData.trainLayers.ground;
+                        spyData.curWallLayer = layerData.trainWallLayers;
                         camStats.curLocationState = LocationState.Carriage;
                         camStats.curLocationBounds = CurCarriage.totalBounds;
-                        rigidBody.includeLayers = layerSettings.trainMask;
+                        rigidBody.includeLayers = layerData.trainMask;
                         
                         transform.SetParent(CurCarriage.transform, true);
 
@@ -946,14 +905,6 @@ public class SpyBrain : MonoBehaviour
     {
         SetState(SpyState.Idle);
     }
-    public void SetStateToShotAt()
-    {
-        SetState(SpyState.ShotAt);
-    }
-    public void SetStateToHandShake()
-    {
-        SetState(SpyState.HandShake);
-    }
     public void FinishWithChosenNPC()
     {
         chosenNPC.talkingToSpy = false;
@@ -964,29 +915,6 @@ public class SpyBrain : MonoBehaviour
     public void ChooseNPCTicketToCheck(NPCBrain npc)
     {
         chosenNPC = npc;
-    }
-    private void WaitToPlayAgain()
-    {
-        WaitingToPlayAgain().Forget();
-    }
-    private void SetSpyToBottomFloor()
-    {
-        SetState(SpyState.Walk);
-        Flip(true);
-        spyData.targetXVelocity = -spyData.moveSpeed;
-        transform.position = new Vector3(meridiaTowerData.bottomFloorCenterTopPos.x, meridiaTowerData.bottomFloorCenterTopPos.y, transform.position.z);
-        curWorldPos = transform.position;
-    }
-    private async UniTask WaitingToPlayAgain()
-    {
-        float clock = 0;
-        while(clock < PLAY_AGAIN_HOLD_TIME)
-        {
-            clock += Time.deltaTime;
-            await UniTask.Yield();
-        }
-        camStats.curLocationState = LocationState.Elevator;
-        OnAfterOutcomeSequence?.Invoke();
     }
 
     private void OnDrawGizmos()

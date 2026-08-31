@@ -35,19 +35,13 @@ public class Options : ScriptableObject
     public Color[] selectableDarkColors;
     public Color[] selectableLightColors;
 
-    [TextArea(3, 10)] public string traitorCountTutorialText;
-    
-    [TextArea(3, 10)] public string passengerRuleOutTutorialText1;
-    [TextArea(3, 10)] public string passengerRuleOutTutorialText2;
-
-    [TextArea(3, 10)] public string passengerColorMarkerTutorialText1;
-    [TextArea(3, 10)] public string passengerColorMarkerTutorialText2;
-    [TextArea(3, 10)] public string passengerColorMarkerTutorialText3;
-
-    [TextArea(3, 10)] public string passengerMulticolorMarkerTutorialText1;
-    [TextArea(3, 10)] public string passengerMulticolorMarkerTutorialText2;
+    public RegionData thirdPointRegion;
+    public RegionData secondPointRegion;
+    public RegionData firstPointRegion;
+    public RegionData capitalRegion;
 
     [Header("User Picked")]
+    public TripData curTrip;
     public Color darkColor;
     public Color lightColor;
 
@@ -55,7 +49,6 @@ public class Options : ScriptableObject
     public int lightColorIndex;
 
     public bool useBayer;
-
 
     [Header("Generated")]
     public int darkColorID;

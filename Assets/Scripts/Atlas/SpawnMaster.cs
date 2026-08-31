@@ -72,7 +72,7 @@ public class SpawnMaster : MonoBehaviour
     private void InitBoundParameters()
     {
         spawnData.bounds.center = new Vector3(TRAIN_WORLD_POS_X, 0, FAR_CLIP * 0.5f);
-        spawnData.bounds.size = new Vector3(trip.stationsDataArray[0].station_prefab.platformRenderer.bounds.size.x + camData.camBounds.size.x, trainStats.totalBounds.size.y + camData.camBounds.size.y, FAR_CLIP);
+        spawnData.bounds.size = new Vector3(trip.stationsDataArray[0].station_prefab.platformRenderer.bounds.size.x + camData.bounds.size.x, trainStats.totalBounds.size.y + camData.bounds.size.y, FAR_CLIP);
         transform.position = spawnData.bounds.min;
 
     }

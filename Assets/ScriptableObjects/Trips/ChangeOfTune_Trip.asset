@@ -10,9 +10,9 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: fddbeef0d64ccf64e964534b06a31700, type: 3}
-  m_Name: Station_Trip
+  m_Name: ChangeOfTune_Trip
   m_EditorClassIdentifier: Assembly-CSharp::TripSO
-  title: End of the line
+  title: Change of Tune
   prompt: 1
   clue: 1
   particleAtlasArray:
@@ -113,26 +113,26 @@ MonoBehaviour:
   - npcProfile:
       boardingStationIndex: 1
       disembarkingStationIndex: 6
-      npcPrefabIndex: 8
-      behaviours: 96
-    fullName: NoFirstName
-    mugShotIndex: 8
+      npcPrefabIndex: 7
+      behaviours: 24
+    fullName: Johnathan Richardson
+    mugShotIndex: 7
     found: 0
   - npcProfile:
       boardingStationIndex: 2
       disembarkingStationIndex: 6
-      npcPrefabIndex: 4
-      behaviours: 3
-    fullName: Natalie Gerald
-    mugShotIndex: 0
+      npcPrefabIndex: 8
+      behaviours: 768
+    fullName: Samira Dermas
+    mugShotIndex: 8
     found: 0
   - npcProfile:
       boardingStationIndex: 4
       disembarkingStationIndex: 6
-      npcPrefabIndex: 6
-      behaviours: 5
-    fullName: Ivan Petrov
-    mugShotIndex: 4
+      npcPrefabIndex: 1
+      behaviours: 10
+    fullName: Martin Richardson
+    mugShotIndex: 1
     found: 0
   ticketsCheckedSinceLastStation: 0
   ticketsCheckedTotal: 0
@@ -140,3 +140,4 @@ MonoBehaviour:
   curUnlocks: 0
   curDayNightValue: 0
   failed: 0
+  unlocked: 0

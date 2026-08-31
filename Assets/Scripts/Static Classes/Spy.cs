@@ -13,8 +13,6 @@ public static class Spy
         TalkingToAccomplice,
         Notepad,
         CarriageMap,
-        ShotAt,
-        HandShake,
     }
 
     public enum LocationState
@@ -23,10 +21,7 @@ public static class Spy
         Station,
         Carriage,
         Gangway,
-        MeetingRoom,
-        Bunker,
-        Elevator,
-        BottomFloor,
+        Menu,
     }
 
     [Serializable] public struct CollisionData

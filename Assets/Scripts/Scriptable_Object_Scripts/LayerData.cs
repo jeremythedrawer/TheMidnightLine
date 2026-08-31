@@ -25,10 +25,6 @@ public class LayerData : ScriptableObject
     public LayerMask stationMask;
     public LayerMask trainMask;
 
-    private void OnEnable()
-    {
-        CombineAllLayerMasks();
-    }
     public void CombineAllLayerMasks()
     {
         stationMask = CombineLayerMasks(stationLayers);

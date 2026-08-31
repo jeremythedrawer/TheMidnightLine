@@ -10,10 +10,6 @@ using static Scenes;
 
 public class StartUI : MonoBehaviour
 {
-    public static event Action OnClickOptions;
-    public static event Action OnClickBackFromOptions;
-    public static event Action OnStartButtonClicked;
-
     public AtlasRenderer[] keyIconRenderers;
 
     public Material fadeBlackMaterial;
@@ -25,16 +21,15 @@ public class StartUI : MonoBehaviour
     public SceneData sceneData;
     public SpyData spyData;
     public PassengerData passengerData;
-    public MeridiaTowerData meridiaTowerData;
     public CursorData cursorData;
 
     public AudioSource audioSource;
 
-    public TextButton startButton;
-    public TextButton optionsButton;
-    public TextButton quitButton;
-    public SliderController musicVolumeSlider;
-    public SliderController soundEffectsVolumeSlider;
+    public Menu startMenu;
+    public Menu optionsMenu;
+    public Menu mapMenu;
+
+    public CountryMap countryMap;
 
     public FadeBlack fadeBlack;
 
@@ -55,8 +50,6 @@ public class StartUI : MonoBehaviour
     public int curTraitorsShown;
     public int curTraitorProfilesReviewed;
     public int outcomePageCompletedMask;
-
-    public UIState curState;
 
     public bool canExitState;
     public bool atOptions;
@@ -82,17 +75,14 @@ public class StartUI : MonoBehaviour
         SpyBrain.OnCloseNotepad += SetToNoneState;
         SpyBrain.OnMoveFirstTime += HideKeyIcons;
 
-        MeridiaTower.OnSpyEnterTripDoor += ShowSpaceIcon;
-        MeridiaTower.OnSpyExitTripDoor += HideKeyIcons;
-        MeridiaTower.OnScrollingUp += SetToStartMenuState;
+        Menu.OnClickBegin += SetToMapMenuState;
+        Menu.OnClickOptions += SetToOptionsMenuState;
+        Menu.OnClickBackToStartMenu += SetToStartMenuState;
 
         Scenes.OnLoadScore += ScoreSceneInit;
         Scenes.OnLoadStart += StartSceneInit;
 
         FadeBlack.OnFinishFadeOut += SetToNoneStateFromOutcome;
-
-        CameraController.OnArrivedAtElevator += SetToEndMenuState;
-        RoomDoor.OnStartTrip += StartTrip;
 
         SliderController.OnChangeMusicVolume += SetMusicVolume;
     }
@@ -102,18 +92,14 @@ public class StartUI : MonoBehaviour
         SpyBrain.OnCloseNotepad -= SetToNoneState;
         SpyBrain.OnMoveFirstTime -= HideKeyIcons;
 
-        MeridiaTower.OnSpyEnterTripDoor -= ShowSpaceIcon;
-        MeridiaTower.OnSpyExitTripDoor -= HideKeyIcons;
-        MeridiaTower.OnScrollingUp -= SetToStartMenuState;
+        Menu.OnClickBegin -= SetToMapMenuState;
+        Menu.OnClickOptions -= SetToOptionsMenuState;
+        Menu.OnClickBackToStartMenu -= SetToStartMenuState;
 
         Scenes.OnLoadStart -= StartSceneInit;
         Scenes.OnLoadScore -= ScoreSceneInit;
 
         FadeBlack.OnFinishFadeOut -= SetToNoneStateFromOutcome;
-
-        CameraController.OnArrivedAtElevator -= SetToEndMenuState;
-
-        RoomDoor.OnStartTrip -= StartTrip;
         
         SliderController.OnChangeMusicVolume -= SetMusicVolume;
     }
@@ -124,36 +110,32 @@ public class StartUI : MonoBehaviour
     }
     private void SetState(UIState newState)
     {
-        if (curState == newState) return;
+        if (camData.curUIState == newState) return;
         ExitState();
-        curState = newState;
+        camData.curUIState = newState;
         EnterState();
     }
     public void EnterState()
     {
         canExitState = false;
-        switch (curState)
+        switch (camData.curUIState)
         {
             case UIState.StartMenu:
             {
-
+                camData.curLocationBounds = startMenu.bounds;
+                camData.curLocationState = Spy.LocationState.Menu;
             }
             break;
             case UIState.OptionsMenu:
             {
-                quitButton.MoveAway(Direction.Right);
-                startButton.MoveAway(Direction.Right);
-
-                optionsButton.MoveToRight();
-
-                spyData.playerInputsEnabled = false;
-
-                OnClickOptions?.Invoke();
+                camData.curLocationBounds = optionsMenu.bounds;
+                camData.curLocationState = Spy.LocationState.Menu;
             }
             break;
-            case UIState.EndMenu:
+            case UIState.MapMenu:
             {
-                quitButton.MoveToActive();
+                camData.curLocationBounds = mapMenu.bounds;
+                camData.curLocationState = Spy.LocationState.Menu;
             }
             break;
 
@@ -172,16 +154,13 @@ public class StartUI : MonoBehaviour
             break;
             case UIState.None:
             {
-                startButton.MoveAway(Direction.Left);
-                optionsButton.MoveAway(Direction.Left);
-                quitButton.MoveAway(Direction.Left);
             }
             break;
         }
     }
     private void UpdateState()
     {
-        switch (curState)
+        switch (camData.curUIState)
         {
             case UIState.Notepad:
             {
@@ -211,19 +190,20 @@ public class StartUI : MonoBehaviour
 
             case UIState.StartMenu:
             {
-               UpdateMainMenuButtons();
+                startMenu.UpdateMenu();
             }
             break;
 
             case UIState.OptionsMenu:
             {
-                UpdateOptionsButtons();
+                optionsMenu.UpdateMenu();
             }
             break;
 
-            case UIState.EndMenu:
+            case UIState.MapMenu:
             {
-                UpdateEndMenuButtons();
+                mapMenu.UpdateMenu();
+                countryMap.UpdateButtons();
             }
             break;
 
@@ -236,7 +216,7 @@ public class StartUI : MonoBehaviour
     }
     private void ExitState()
     {
-        switch (curState)
+        switch (camData.curUIState)
         {
             case UIState.StartMenu:
             {
@@ -245,18 +225,11 @@ public class StartUI : MonoBehaviour
             break;
             case UIState.OptionsMenu:
             {
-                optionsButton.textRenderer.SetText("Options");
-                startButton.MoveToActive();
-                quitButton.MoveToActive();
-                optionsButton.MoveToActive();
-
                 spyData.playerInputsEnabled = true;
-                OnClickBackFromOptions?.Invoke();
             }
             break;
             case UIState.Notepad:
             {
-                MoveUIElement(notepad.transform, notepadData.inactiveLocalPos, ref ctsNotepad, curState);
                 notepad.ExitNotepad();
             }
             break;
@@ -269,77 +242,18 @@ public class StartUI : MonoBehaviour
     }
     private void StartSceneInit()
     {
-        //startButton.InitButton(StartButtonClicked, EnterTextButton, ExitTextButton);
-        void MouseDownText(TextButton icon)
-        {
-            icon.backgroundRenderer.customBit ^= (int)ColorBits.Invert;
-            icon.textRenderer.customBit ^= (int)ColorBits.Invert;
-        }
-        void EnterButtonText(TextButton icon)
-        {
-            icon.backgroundRenderer.customBit |= (int)ColorBits.GreenChannel;
-        }
-        void ExitButtonText(TextButton icon)
-        {
-            icon.backgroundRenderer.customBit &= ~(int)ColorBits.GreenChannel;
-            icon.backgroundRenderer.customBit &= ~(int)ColorBits.Invert;
-            icon.textRenderer.customBit |= (int)ColorBits.Invert;
-        }
-
-        void QuitButtonClicked(TextButton text)
-        {
-            Application.Quit();
-        }
-
-        void OptionsButtonUp(TextButton text)
-        {
-            switch (curState)
-            {
-                case UIState.StartMenu:
-                {
-                    SetState(UIState.OptionsMenu);
-                }
-                break;
-                case UIState.OptionsMenu:
-                {
-                    SetState(UIState.StartMenu);
-                }
-                break;
-            }
-        }
-
-        optionsButton.InitButton(OptionsButtonUp, MouseDownText, EnterButtonText, ExitButtonText);
-        quitButton.InitButton(QuitButtonClicked, MouseDownText, EnterButtonText, ExitButtonText);
-
-
-        //darkColorButton.SetAway(Direction.Left);
-        //lightColorButton.SetAway(Direction.Left);
-
         Shader.SetGlobalFloat("_DayNight", 1);
 
         fadeBlack.SetAlpha(1);
         fadeBlack.FadeOut();
 
-        audioSource.clip = options.music.menu;        
+        audioSource.clip = options.music.menu;   
+        audioSource.volume = options.music.volume;
         audioSource.Play();
         SetState(UIState.StartMenu);
     }
     private void ScoreSceneInit()
     {
-        //startButton.InitButton(StartButtonClicked, EnterTextButton, ExitTextButton);
-        //optionsButton.InitButton(OptionsButtonClicked, EnterTextButton, ExitTextButton);
-        //quitButton.InitButton(QuitButtonClicked, EnterTextButton, ExitTextButton);
-        
-        //darkColorButton.InitButton(DarkColorButtonClicked, EnterTextButton, ExitTextButton);
-        //lightColorButton.InitButton(LightColorButtonClicked, EnterTextButton, ExitTextButton);
-
-        startButton.SetAway(Direction.Left);
-        optionsButton.SetAway(Direction.Left);
-        quitButton.SetAway(Direction.Left);
-
-        //darkColorButton.SetAway(Direction.Left);
-        //lightColorButton.SetAway(Direction.Left);
-
         fadeBlack.SetAlpha(1);
         fadeBlack.FadeOut();
 
@@ -348,19 +262,6 @@ public class StartUI : MonoBehaviour
         SetState(UIState.None);
 
         notepad = SceneController.GetAndParentNotepad(transform);
-    }
-    private void StartTrip()
-    {
-        fadeBlack.FadeInChangeScene("FIND where the TRAITORS are GOING", SceneType.Trip, sceneIndex: 2);
-        for (int i = 0; i < keyIconRenderers.Length; i++)
-        {
-            keyIconRenderers[i].enabled = false;
-        }
-        SceneController.KeepNotepad(notepad);
-    }
-    private void ShowSpaceIcon(Vector2 position)
-    {
-        ShowKeyIcon(keyIconRenderers[0], position, KeyboardBindingIconIndices.Spacebar, Direction.Up);
     }
     private void HideKeyIcons()
     {
@@ -373,13 +274,9 @@ public class StartUI : MonoBehaviour
     {
         keyIconRenderers[index].enabled = false;
     }
-    private void SetFadeForAgreement()
-    {
-        fadeBlack.FadeIn(value: 1, uvPosX: 0.5f, uvPosY: 0, alpha: 0.2f, FadeBlack.NOTEPAD_DEPTH);
-    }
     private void SetToNoneStateFromOutcome()
     {
-        if(curState == UIState.Outcome)
+        if(camData.curUIState == UIState.Outcome)
         {
             SetState(UIState.None);
         }
@@ -397,62 +294,16 @@ public class StartUI : MonoBehaviour
     { 
         SetState(UIState.StartMenu);
     }
-    private void SetToOutcomeState()
+    private void SetToOptionsMenuState()
     {
-        SetState(UIState.Outcome);
+        SetState(UIState.OptionsMenu);
     }
-    private void SetToEndMenuState()
+    private void SetToMapMenuState()
     {
-        SetState(UIState.EndMenu);
+        SetState(UIState.MapMenu);
     }
     private void SetMusicVolume()
     {
         audioSource.volume = options.music.volume;
     }
-    private void UpdateMainMenuButtons()
-    {
-        //startButton.UpdateButton();
-        quitButton.UpdateButton();
-        optionsButton.UpdateButton();
-    }
-    private void UpdateOptionsButtons()
-    {
-        optionsButton.UpdateButton();
-    }
-    private void UpdateEndMenuButtons()
-    {
-        quitButton.UpdateButton();
-    }
-    private void StartButtonClicked(TextButton text)
-    {
-        startButton.MoveAway(Direction.Left);
-        optionsButton.MoveAway(Direction.Left);
-        quitButton.MoveAway(Direction.Left);
-
-        ShowMoveKeyIcons();
-        SetState(UIState.None);
-        
-        OnStartButtonClicked?.Invoke();
-    }
-
-
-    private void ShowMoveKeyIcons()
-    {
-        if (!spyData.movedFirstTime)
-        {
-            ShowKeyIcon(keyIconRenderers[0], new Vector2(spyData.bounds.min.x, spyData.bounds.center.y), KeyboardBindingIconIndices.A, Direction.Left);
-
-            ShowKeyIcon(keyIconRenderers[1], new Vector2(spyData.bounds.max.x, spyData.bounds.center.y), KeyboardBindingIconIndices.D, Direction.Right);
-        }
-    }
-#if UNITY_EDITOR
-    private void OnDrawGizmosSelected()
-    {
-        if (camData == null) return;
-
-        Gizmos.color = Color.cyan;
-
-        Gizmos.DrawWireCube(camData.camBounds.center, camData.camBounds.size);
-    }
-#endif
 }

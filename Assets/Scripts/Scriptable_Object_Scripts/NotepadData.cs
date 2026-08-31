@@ -29,7 +29,7 @@ public class NotepadData : ScriptableObject
     public int selectedPatternIndex;
 
     public bool collected;
-    public bool signedAgreement;
+
     public bool playerHasUsedExitKey;
     public bool playerHasUsedLeftKey;
     public bool playerHasUsedRightKey;

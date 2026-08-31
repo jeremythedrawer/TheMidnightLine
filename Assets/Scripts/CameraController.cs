@@ -10,7 +10,6 @@ public class CameraController : MonoBehaviour
     const float CARRIAGE_BOUNDS_TEXTURE_SCALE = 32f;
     const float NORMAL_DAMPING = 3;
     const float SLOW_DAMPING = 1;
-    public static event Action OnArrivedAtElevator;
 
     public CameraData camData;
     public SpyData spyData;
@@ -43,29 +42,13 @@ public class CameraController : MonoBehaviour
     {
         Init();
         Scenes.OnLoadTrip0 += TripInit;
-        Scenes.OnLoadStart += TowerInit;
-        Scenes.OnLoadScore += TowerInit;
-
-        StartUI.OnClickOptions += MoveToOptionsMenu;
-        StartUI.OnClickBackFromOptions += MoveToMainMenu;
-        StartUI.OnStartButtonClicked += MoveToPlayer;
-
         HenchmanBrain.OnShoot += ShakeFromGunShot;
-
         SpyBrain.OnAfterOutcomeSequence += SetToSlowDamping;
     }
     private void OnDisable()
     {
         Scenes.OnLoadTrip0 -= TripInit;
-        Scenes.OnLoadStart -= TowerInit;
-        Scenes.OnLoadScore -= TowerInit;
-
-        StartUI.OnClickOptions -= MoveToOptionsMenu;
-        StartUI.OnClickBackFromOptions -= MoveToMainMenu;
-        StartUI.OnStartButtonClicked -= MoveToPlayer;
-            
         HenchmanBrain.OnShoot -= ShakeFromGunShot;
-
         SpyBrain.OnAfterOutcomeSequence -= SetToSlowDamping;
 
 #if UNITY_EDITOR
@@ -79,7 +62,7 @@ public class CameraController : MonoBehaviour
         UpdateStates();
 
         curXOffset = spyData.spriteFlip ? -camData.horizontalOffset : camData.horizontalOffset;
-        camData.camBounds.center = transform.position;
+        camData.bounds.center = transform.position;
 
         camData.worldToCam = cam.worldToCameraMatrix;
         camData.camToWorld = cam.cameraToWorldMatrix;
@@ -107,20 +90,16 @@ public class CameraController : MonoBehaviour
         camData.curWorldPos = transform.position;
         rawCurWorldPos = transform.position;
 
-        camData.camBounds = new Bounds();
-        camData.camBounds.size = new Vector3(cam.orthographicSize * 2 * cam.aspect, cam.orthographicSize * 2, cam.farClipPlane + cam.nearClipPlane);
+        camData.bounds = new Bounds();
+        camData.bounds.size = new Vector3(cam.orthographicSize * 2 * cam.aspect, cam.orthographicSize * 2, cam.farClipPlane + cam.nearClipPlane);
         camData.worldUnitsPerPixel = (cam.orthographicSize * 2) / Screen.height;
 
-        Shader.SetGlobalVector("_CameraSizeAndPos", new Vector4(camData.camBounds.size.x, camData.camBounds.size.y, camData.camBounds.center.x, camData.camBounds.center.y));
+        Shader.SetGlobalVector("_CameraSizeAndPos", new Vector4(camData.bounds.size.x, camData.bounds.size.y, camData.bounds.center.x, camData.bounds.center.y));
     }
     private void TripInit()
     {        
         camData.curLocationState = LocationState.Station;        
         SetCarriageSDFCompute();
-    }
-    private void TowerInit()
-    {
-        camData.curLocationState = LocationState.Elevator;
     }
     private void SetCarriageSDFCompute()
     {
@@ -167,38 +146,7 @@ public class CameraController : MonoBehaviour
                 carriageBoundsCompute.Dispatch(carriageBoundsKernel, threadGroupX, threadGroupY, 1);
             }
             break;
-            case LocationState.MeetingRoom:
-            {
-                if (!isShaking)
-                {
-                    if (notepadData.collected && sceneData.activeSceneType == Scenes.SceneType.Start)
-                    {
-                        float distFromCenter = (spyData.bounds.center.x + 3) - camData.curLocationBounds.center.x;
-                        float t = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
-                        targetWorldPos.x = Mathf.Lerp(camData.curLocationBounds.center.x, (spyData.bounds.center.x + 3) + curXOffset, t);
-                        targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, camData.curLocationBounds.min.x + camData.camBounds.extents.x, camData.curLocationBounds.max.x - camData.camBounds.extents.x);
-                    }
-                    else
-                    {
-                        float distFromCenter = spyData.bounds.center.x - camData.curLocationBounds.center.x;
-                        float t = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
-                        targetWorldPos.x = Mathf.Lerp(camData.curLocationBounds.center.x, spyData.bounds.center.x + curXOffset, t);
-                        targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, camData.curLocationBounds.min.x + camData.camBounds.extents.x, camData.curLocationBounds.max.x - camData.camBounds.extents.x);
-                    }                    
-                }
-            }
-            break;
-            case LocationState.Bunker:
-            {
-                if (!isShaking)
-                {
-                    float distFromCenter = spyData.bounds.center.x - camData.curLocationBounds.center.x;
-                    float t = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
-                    targetWorldPos.x = Mathf.Lerp(camData.curLocationBounds.center.x, spyData.bounds.center.x + curXOffset, t);
-                    targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, camData.curLocationBounds.min.x + camData.camBounds.extents.x, camData.curLocationBounds.max.x - camData.camBounds.extents.x);
-                }
-            }
-            break;
+
             case LocationState.Gangway:
             {
                 targetWorldPos.x = spyData.bounds.center.x + curXOffset;
@@ -209,12 +157,10 @@ public class CameraController : MonoBehaviour
             }
             break;
 
-            case LocationState.Elevator:
+            case LocationState.Menu:
             {
-                if ((spyData.curState == SpyState.ShotAt || spyData.curState == SpyState.HandShake) && (rawCurWorldPos - targetWorldPos).sqrMagnitude < 0.05f)
-                {
-                    OnArrivedAtElevator?.Invoke();
-                }
+                targetWorldPos.x = camData.curLocationBounds.center.x;
+                targetWorldPos.y = camData.curLocationBounds.center.y;
             }
             break;
         }
@@ -248,19 +194,6 @@ public class CameraController : MonoBehaviour
                 carriageBoundsCompute.SetVector("_BoundsSize", camData.curLocationBounds.size);
             }
             break;
-            case LocationState.Elevator:
-            {
-                if (sceneData.activeSceneType == Scenes.SceneType.Start)
-                {
-                    Bounds curLocBounds = camData.curLocationBounds;
-                    targetWorldPos.x = curLocBounds.center.x + (curLocBounds.size.x * 0.25f);
-                }
-                else if (sceneData.activeSceneType == Scenes.SceneType.Score)
-                {
-                    MoveToPlayer();
-                }
-            }
-            break;
         }
     }
     private void ExitState()
@@ -278,27 +211,10 @@ public class CameraController : MonoBehaviour
             break;
         }
     }
-    private void MoveToOptionsMenu()
-    {
-        Bounds curLocBounds = camData.curLocationBounds;
-        targetWorldPos.x = curLocBounds.min.x + (curLocBounds.size.x * 0.25f);
-    }
-    private void MoveToMainMenu()
-    {
-        Bounds curLocBounds = camData.curLocationBounds;
-        targetWorldPos.x = curLocBounds.center.x + (curLocBounds.size.x * 0.25f);
-    }
-    private void MoveToPlayer()
-    {
-        targetWorldPos.x = spyData.bounds.center.x;
-    }
+
     private void SetToSlowDamping()
     {
         curDamping = SLOW_DAMPING;
-    }
-    private void SetToNormalDamping()
-    {
-        curDamping = NORMAL_DAMPING;
     }
     public static Vector3 GetSnappedPosition(Vector3 pos, float unitsPerPixel)
     {

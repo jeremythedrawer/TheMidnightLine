@@ -8,6 +8,8 @@ public class TextButton : MonoBehaviour
 {
     public delegate void Callback(TextButton icon);
 
+    public ButtonFunctionType buttonFunctionType;
+
     public InputData inputData;
     public CursorData cursorData;
     public CameraData camData;
@@ -102,12 +104,12 @@ public class TextButton : MonoBehaviour
         {
             case Direction.Left:
             {
-                targetPos.x = -camData.camBounds.extents.x - buttonBounds.size.x;
+                targetPos.x = -camData.bounds.extents.x - buttonBounds.size.x;
             }
             break;
             case Direction.Right:
             {
-                targetPos.x = camData.camBounds.extents.x + buttonBounds.size.x;
+                targetPos.x = camData.bounds.extents.x + buttonBounds.size.x;
             }
             break;
         }
@@ -137,12 +139,12 @@ public class TextButton : MonoBehaviour
         {
             case Direction.Left:
             {
-                targetPos.x = -camData.camBounds.extents.x - buttonBounds.size.x;
+                targetPos.x = -camData.bounds.extents.x - buttonBounds.size.x;
             }
             break;
             case Direction.Right:
             {
-                targetPos.x = camData.camBounds.extents.x + buttonBounds.size.x;
+                targetPos.x = camData.bounds.extents.x + buttonBounds.size.x;
             }
             break;
         }

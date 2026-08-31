@@ -1,4 +1,5 @@
 using UnityEngine;
+using static AtlasUI;
 using static Spy;
 
 [CreateAssetMenu(fileName = "CameraStats_SO", menuName = "Midnight Line SOs / Camera Stats SO")]
@@ -18,7 +19,7 @@ public class CameraData : ScriptableObject
     public Matrix4x4 worldToCam;
     public Matrix4x4 camToWorld;
 
-    public Bounds camBounds;
+    public Bounds bounds;
 
     public Vector3 curWorldPos;
     public Vector3 prevWorldPos;
@@ -26,6 +27,7 @@ public class CameraData : ScriptableObject
 
     public Bounds curLocationBounds;
     public LocationState curLocationState;
+    public UIState curUIState;
 
     public float worldUnitsPerPixel;
 }

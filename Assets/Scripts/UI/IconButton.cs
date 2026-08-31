@@ -9,12 +9,15 @@ public class IconButton : MonoBehaviour
 {
     public delegate void Callback(IconButton icon);
 
+    public ButtonFunctionType button;
+
     public InputData inputData;
     public CursorData cursorData;
     public CameraData camData;
 
     public AtlasRenderer atlasRenderer;
- 
+
+    public bool alphaTest;
     [Header("Generated")]
     public Vector3 activePos;
     public ButtonState curState;
@@ -40,24 +43,51 @@ public class IconButton : MonoBehaviour
         {
             case ButtonState.Unhovered:
             {
-                if (cursorData.IsInsideBounds(atlasRenderer.bounds, isClickable: true))
+                if (alphaTest)
                 {
-                    OnEnterCallback(this);
-                    curState = ButtonState.Hovered;
+                    if(cursorData.IsInsideSprite(atlasRenderer, isClickable: true))
+                    {
+                        OnEnterCallback(this);
+                        curState = ButtonState.Hovered;
+                    }
+                }
+                else
+                {
+                    if (cursorData.IsInsideBounds(atlasRenderer.bounds, isClickable: true))
+                    {
+                        OnEnterCallback(this);
+                        curState = ButtonState.Hovered;
+                    }
                 }
             }
             break;
             case ButtonState.Hovered:
             {
-                if (!cursorData.IsInsideBounds(atlasRenderer.bounds, isClickable: true))
+                if (alphaTest)
                 {
-                    OnExitCallback(this);
-                    curState = ButtonState.Unhovered;
+                    if (!cursorData.IsInsideSprite(atlasRenderer, isClickable: true))
+                    {
+                        OnExitCallback(this);
+                        curState = ButtonState.Unhovered;
+                    }
+                    else if (inputData.mouseLeftDown)
+                    {
+                        OnMouseDownCallback(this);
+                        curState = ButtonState.Clicked;
+                    }
                 }
-                else if (inputData.mouseLeftDown)
+                else
                 {
-                    OnMouseDownCallback(this);
-                    curState = ButtonState.Clicked;
+                    if (!cursorData.IsInsideBounds(atlasRenderer.bounds, isClickable: true))
+                    {
+                        OnExitCallback(this);
+                        curState = ButtonState.Unhovered;
+                    }
+                    else if (inputData.mouseLeftDown)
+                    {
+                        OnMouseDownCallback(this);
+                        curState = ButtonState.Clicked;
+                    }
                 }
             }
             break;
@@ -70,12 +100,22 @@ public class IconButton : MonoBehaviour
                     curState = ButtonState.Hovered;
                 }
 
-                if (!cursorData.IsInsideBounds(atlasRenderer.bounds, isClickable: true) && !inputData.mouseLeftHold)
+                if (alphaTest)
                 {
-                    OnExitCallback(this);
-                    curState = ButtonState.Unhovered;
+                    if (!cursorData.IsInsideSprite(atlasRenderer, isClickable: true) && !inputData.mouseLeftHold)
+                    {
+                        OnExitCallback(this);
+                        curState = ButtonState.Unhovered;
+                    }
                 }
-                
+                else
+                {
+                    if (!cursorData.IsInsideBounds(atlasRenderer.bounds, isClickable: true) && !inputData.mouseLeftHold)
+                    {
+                        OnExitCallback(this);
+                        curState = ButtonState.Unhovered;
+                    }
+                }
             }
             break;
         }
@@ -97,12 +137,12 @@ public class IconButton : MonoBehaviour
         {
             case Direction.Left:
             {
-                targetPos.x = -camData.camBounds.extents.x - buttonBounds.size.x;
+                targetPos.x = -camData.bounds.extents.x - buttonBounds.size.x;
             }
             break;
             case Direction.Right:
             {
-                targetPos.x = camData.camBounds.extents.x + buttonBounds.size.x;
+                targetPos.x = camData.bounds.extents.x + buttonBounds.size.x;
             }
             break;
         }
@@ -132,12 +172,12 @@ public class IconButton : MonoBehaviour
         {
             case Direction.Left:
             {
-                targetPos.x = -camData.camBounds.extents.x - buttonBounds.size.x;
+                targetPos.x = -camData.bounds.extents.x - buttonBounds.size.x;
             }
             break;
             case Direction.Right:
             {
-                targetPos.x = camData.camBounds.extents.x + buttonBounds.size.x;
+                targetPos.x = camData.bounds.extents.x + buttonBounds.size.x;
             }
             break;
         }

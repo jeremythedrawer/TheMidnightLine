@@ -192,7 +192,7 @@ public class LeftHand : MonoBehaviour
         SimpleSprite holdingPencilSprite = atlasRenderer.atlas.motionSprites[HOLDING_PENCIL_SPRITE_INDEX].sprite;
         float worldPivotOffsetY = holdingPencilSprite.worldSize.y * (1 - holdingPencilSprite.uvPivot.y);
 
-        notepadData.leftHandOffScreenLocalPos.y = camStats.camBounds.extents.y - Notepad.ACTIVE_POS.y - camStats.camBounds.size.y - worldPivotOffsetY;
+        notepadData.leftHandOffScreenLocalPos.y = camStats.bounds.extents.y - Notepad.ACTIVE_POS.y - camStats.bounds.size.y - worldPivotOffsetY;
         notepadData.leftHandOffScreenLocalPos.x = -Notepad.ACTIVE_POS.x * 0.5f;
         notepadData.leftHandOffScreenLocalPos.z = transform.localPosition.z;
     }
