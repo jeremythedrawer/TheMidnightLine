@@ -4,7 +4,7 @@ using UnityEngine;
 using static Atlas;
 using static AtlasUI;
 using static Notepad;
-using static NPC;
+using static Passenger;
 public class Page : MonoBehaviour
 {
     public const float CONTENTS_LOCAL_POS_Z = -0.1f;
@@ -26,7 +26,6 @@ public class Page : MonoBehaviour
     public InputData playerInputs;
     public NotepadData notepadData;
     public Options options;
-    public SceneData sceneData;
 
     public AtlasRenderer pageNumberIconPrefab;
 

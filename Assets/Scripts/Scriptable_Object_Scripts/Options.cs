@@ -1,5 +1,7 @@
 using UnityEngine;
 using System;
+using static AtlasUI;
+
 
 
 #if UNITY_EDITOR
@@ -40,6 +42,7 @@ public class Options : ScriptableObject
     public RegionData firstPointRegion;
     public RegionData capitalRegion;
 
+    public SpyData spyData;
     [Header("User Picked")]
     public TripData curTrip;
     public Color darkColor;
@@ -58,6 +61,10 @@ public class Options : ScriptableObject
     public int patternTextureID;
 
     public int selectedPatternIndex;
+
+    public TutorialState tutorialsCompleted;
+    public TutorialState curTutorialState;
+
     private void OnEnable()
     {
         SetGlobalShaderVariables();

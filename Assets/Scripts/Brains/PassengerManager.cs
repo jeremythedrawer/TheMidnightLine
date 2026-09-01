@@ -1,63 +1,56 @@
-using Cysharp.Threading.Tasks;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
-using static NPC;
-public class NPCManager : MonoBehaviour
-{
-    public const int MAX_GRAFFITI_RENDERERS = 8;
-    public static Dictionary<VisualEffect, Queue<VisualEffect>> GlyphPoolDict;
-    public static Dictionary<NPCBrain, Queue<NPCBrain>> NPCPoolDict;
 
-    public TripData trip;
-    public PassengerData npcsData;
+using static Passenger;
+public class PassengerManager : MonoBehaviour
+{
+    public PassengerData passengerData;
     public Texture2D diagonalTexture;
     public AtlasSO glyphAtlas;
 
     [Header("Generated")]
-
-    public static Graffiti[] graffitiPool;
-    
     public bool npcFindingChair;
     public int totalAgentCount;
-    public static int graffitiRendererCount;
+
 
     private void OnEnable()
     {
-        Scenes.OnLoadTrip0 += InitPoolsDict;
-        graffitiPool = new Graffiti[MAX_GRAFFITI_RENDERERS];
-        graffitiRendererCount = -1;
-        npcsData.habitDataDict = SetBehaviourContextDictionary(npcsData.habitDataArray);
+        RegionMap.OnStartTrip += InitPoolsDict;
     }
     private void OnDisable()
     {
-        Scenes.OnLoadTrip0 -= InitPoolsDict;
+        RegionMap.OnStartTrip -= InitPoolsDict;
     }
-
+    private void Start()
+    {
+        GraffitiPool = new Graffiti[MAX_GRAFFITI_RENDERERS];
+        graffitiActiveCount = -1;
+        passengerData.habitDataDict = SetBehaviourContextDictionary(passengerData.habitDataArray);
+    }
     public static Graffiti GetGraffitiRenderer(Graffiti graffitiPrefab)
     {
         Graffiti graffitInstance;
 
-        if (graffitiRendererCount < 0)
+        if (graffitiActiveCount < 0)
         {
             graffitInstance = Instantiate(graffitiPrefab);
 
         }
         else
         {
-            graffitInstance = graffitiPool[graffitiRendererCount];
-            graffitiRendererCount--;
+            graffitInstance = GraffitiPool[graffitiActiveCount];
+            graffitiActiveCount--;
         }
 
         return graffitInstance;
     }
-
     public static void ReturnGraffiti(Graffiti graffiti)
     {
-        if (graffitiRendererCount == MAX_GRAFFITI_RENDERERS - 1) return;
+        if (graffitiActiveCount == MAX_GRAFFITI_RENDERERS - 1) return;
 
-        graffitiRendererCount++;
-        graffitiPool[graffitiRendererCount] = graffiti;
+        graffitiActiveCount++;
+        GraffitiPool[graffitiActiveCount] = graffiti;
     }
     public static VisualEffect GetGlyph(VisualEffect glyphPrefab, Transform parent)
     {
@@ -86,7 +79,7 @@ public class NPCManager : MonoBehaviour
     {
         glyphInstance.Stop();
         glyphInstance.gameObject.transform.parent = null;
-        if(!GlyphPoolDict.TryGetValue(glyphPrefab, out Queue<VisualEffect> queue))
+        if (!GlyphPoolDict.TryGetValue(glyphPrefab, out Queue<VisualEffect> queue))
         {
             queue = new Queue<VisualEffect>();
             GlyphPoolDict[glyphPrefab] = queue;
@@ -94,47 +87,47 @@ public class NPCManager : MonoBehaviour
 
         queue.Enqueue(glyphInstance);
     }
-    public static NPCBrain GetNPC(NPCBrain npcPrefab, Vector3 localPos, Transform parent)
+    public static PassengerBrain GetNPC(PassengerBrain npcPrefab, Vector3 localPos, Transform parent)
     {
-        if (!NPCPoolDict.TryGetValue(npcPrefab, out Queue<NPCBrain> queue))
+        if (!PassengerPoolDict.TryGetValue(npcPrefab, out Queue<PassengerBrain> queue))
         {
-            queue = new Queue<NPCBrain>();
-            NPCPoolDict.Add(npcPrefab, queue);
+            queue = new Queue<PassengerBrain>();
+            PassengerPoolDict.Add(npcPrefab, queue);
         }
 
         if (queue.Count > 0)
         {
-            NPCBrain npc = queue.Dequeue();
+            PassengerBrain npc = queue.Dequeue();
             npc.gameObject.SetActive(true);
             npc.gameObject.transform.parent = parent;
             npc.transform.localPosition = localPos;
             return npc;
         }
-        NPCBrain newNPC = Instantiate(npcPrefab, parent);
+        PassengerBrain newNPC = Instantiate(npcPrefab, parent);
         newNPC.transform.localPosition = localPos;
 
         return newNPC;
     }
-    public static void ReturnNPC(NPCBrain npcPrefab, NPCBrain npcInstance)
+    public static void ReturnNPC(PassengerBrain npcPrefab, PassengerBrain npcInstance)
     {
         npcInstance.gameObject.transform.parent = null;
-        if (!NPCPoolDict.TryGetValue(npcPrefab, out Queue<NPCBrain> queue))
+        if (!PassengerPoolDict.TryGetValue(npcPrefab, out Queue<PassengerBrain> queue))
         {
-            queue = new Queue<NPCBrain>();
-            NPCPoolDict.Add(npcPrefab, queue);
+            queue = new Queue<PassengerBrain>();
+            PassengerPoolDict.Add(npcPrefab, queue);
         }
         queue.Enqueue(npcInstance);
         npcInstance.gameObject.SetActive(false);
     }
     private void InitPoolsDict()
     {
-        if (NPCPoolDict != null)
+        if (PassengerPoolDict != null)
         {
-            NPCPoolDict.Clear();
+            PassengerPoolDict.Clear();
         }
         else
         {
-            NPCPoolDict = new Dictionary<NPCBrain, Queue<NPCBrain>>();
+            PassengerPoolDict = new Dictionary<PassengerBrain, Queue<PassengerBrain>>();
         }
 
         if (GlyphPoolDict != null)

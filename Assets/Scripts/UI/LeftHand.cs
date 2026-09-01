@@ -23,7 +23,6 @@ public class LeftHand : MonoBehaviour
 
     public CameraData camStats;
     public TripData curTrip;
-    public SceneData sceneData;
 
     public AtlasRenderer atlasRenderer;
     public NotepadData notepadData;
@@ -131,8 +130,7 @@ public class LeftHand : MonoBehaviour
                         atTargetPos = true;
 
                         bool notepadInUse = (notepadData.subState & Notepad.SubState.InUse) != 0;
-                        bool atTripScene = sceneData.activeSceneType == Scenes.SceneType.Trip;
-                        if (atTripScene && notepadInUse)
+                        if (notepadInUse)
                         {
                             SetState(State.Stationary);
                         }

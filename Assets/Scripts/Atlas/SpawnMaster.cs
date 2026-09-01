@@ -1,12 +1,16 @@
 using Cysharp.Threading.Tasks;
+
 using System;
 using System.Collections.Generic;
 using System.Threading;
+
 using UnityEngine;
 using UnityEngine.Rendering;
+
 using static AtlasSpawn;
 using static Spy;
 using static Train;
+
 [ExecuteAlways]
 public class SpawnMaster : MonoBehaviour
 {
@@ -15,11 +19,11 @@ public class SpawnMaster : MonoBehaviour
 
     public SpawnData spawnData;
     public CameraData camData;
-    public TripData trip;
     public TrainData trainStats;
     public Options options;
 
     [Header("Generated")]
+
     public int nextSpawnIndex;
     public float delayParticleQueueClock;
     public CancellationTokenSource ctsDayNight;
@@ -34,13 +38,13 @@ public class SpawnMaster : MonoBehaviour
 #endif
         SpyBrain.OnTicketInspect += ChangeParticles;
         TrainController.OnMetersAtSpawnBounds += DespawnEdgeScrollers;
-        Scenes.OnLoadTrip2 += Init;
+        RegionMap.OnStartTrip += Init;
     }
     private void OnDisable()
     {
         SpyBrain.OnTicketInspect -= ChangeParticles;
         TrainController.OnMetersAtSpawnBounds -= DespawnEdgeScrollers;
-        Scenes.OnLoadTrip2 -= Init;
+        RegionMap.OnStartTrip -= Init;
         Dispose();
     }
     private void Update()
@@ -67,12 +71,12 @@ public class SpawnMaster : MonoBehaviour
 
         InitParticles();
         ChangeParticles();
-        trip.curDayNightValue = trip.dayNightValues[0];
+        options.curTrip.curDayNightValue = options.curTrip.dayNightValues[0];
     }
     private void InitBoundParameters()
     {
-        spawnData.bounds.center = new Vector3(TRAIN_WORLD_POS_X, 0, FAR_CLIP * 0.5f);
-        spawnData.bounds.size = new Vector3(trip.stationsDataArray[0].station_prefab.platformRenderer.bounds.size.x + camData.bounds.size.x, trainStats.totalBounds.size.y + camData.bounds.size.y, FAR_CLIP);
+        spawnData.bounds.center = new Vector3(0, 0, FAR_CLIP * 0.5f);
+        spawnData.bounds.size = new Vector3(options.curTrip.stationsDataArray[0].station_prefab.platformRenderer.bounds.size.x + camData.bounds.size.x, trainStats.totalBounds.size.y + camData.bounds.size.y, FAR_CLIP);
         transform.position = spawnData.bounds.min;
 
     }
@@ -173,9 +177,9 @@ public class SpawnMaster : MonoBehaviour
     }
     private void InitParticles()
     {
-        for (int i = 0; i < trip.particleAtlasArray.Length; i++)
+        for (int i = 0; i < options.curTrip.particleAtlasArray.Length; i++)
         {
-            ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
+            ParticleAtlas particleAtlas = options.curTrip.particleAtlasArray[i];
 
             particleAtlas.spriteDataBuffer?.Release();
 
@@ -192,9 +196,9 @@ public class SpawnMaster : MonoBehaviour
         spawnData.zoneData.moveInputBuffer.GetData(spawnData.zoneData.moveInputs);
         spawnData.scrollData.moveInputBuffer.GetData(spawnData.scrollData.moveInputs);
 
-        for (int i = 0; i < trip.particleAtlasArray.Length; i++)
+        for (int i = 0; i < options.curTrip.particleAtlasArray.Length; i++)
         {
-            ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
+            ParticleAtlas particleAtlas = options.curTrip.particleAtlasArray[i];
 
             switch(particleAtlas.particleType)
             {
@@ -223,7 +227,7 @@ public class SpawnMaster : MonoBehaviour
         {
             ParticlePosData posData = particleAtlas.posData[i];
 
-            if (posData.ticketCheckEnd > trip.ticketsCheckedTotal) continue;
+            if (posData.ticketCheckEnd > options.curTrip.ticketsCheckedTotal) continue;
 
             switch(posData.spawnState)
             {
@@ -312,7 +316,7 @@ public class SpawnMaster : MonoBehaviour
         {
             ParticlePosData posData = particleAtlas.posData[i];
 
-            if (trip.ticketsCheckedTotal < posData.ticketCheckStart)
+            if (options.curTrip.ticketsCheckedTotal < posData.ticketCheckStart)
             {
                 newOffset = i;
                 break;
@@ -600,9 +604,9 @@ public class SpawnMaster : MonoBehaviour
         {
             spawnData.scrollData.moveInputs = request.GetData<uint>().ToArray();
 
-            for(int i = 0; i < trip.particleAtlasArray.Length; i++)
+            for(int i = 0; i < options.curTrip.particleAtlasArray.Length; i++)
             {
-                ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
+                ParticleAtlas particleAtlas = options.curTrip.particleAtlasArray[i];
 
                 if (particleAtlas.particleType != ParticleType.Scroll) continue;
 
@@ -624,9 +628,9 @@ public class SpawnMaster : MonoBehaviour
     }
     private async UniTask UpdatingSky()
     {
-        float nextDayNight = trip.dayNightValues[Mathf.Min(trip.ticketsCheckedTotal, trip.dayNightValues.Length - 1)];
+        float nextDayNight = options.curTrip.dayNightValues[Mathf.Min(options.curTrip.ticketsCheckedTotal, options.curTrip.dayNightValues.Length - 1)];
         float elapsedTime = 0;
-        float dayNight = trip.curDayNightValue;
+        float dayNight = options.curTrip.curDayNightValue;
         try
         {
             while(elapsedTime < DAY_NIGHT_TRANSITION_TIME)
@@ -634,17 +638,17 @@ public class SpawnMaster : MonoBehaviour
                 elapsedTime += Time.deltaTime;
                 float t = elapsedTime / DAY_NIGHT_TRANSITION_TIME;
 
-                dayNight = Mathf.Lerp(trip.curDayNightValue, nextDayNight, t);
+                dayNight = Mathf.Lerp(options.curTrip.curDayNightValue, nextDayNight, t);
 
                 Shader.SetGlobalFloat("_DayNight", dayNight);
                 await UniTask.Yield(ctsDayNight.Token);
             }
-            trip.curDayNightValue = nextDayNight;
-            Shader.SetGlobalFloat("_DayNight", trip.curDayNightValue);
+            options.curTrip.curDayNightValue = nextDayNight;
+            Shader.SetGlobalFloat("_DayNight", options.curTrip.curDayNightValue);
         }
         catch (OperationCanceledException)
         {
-            trip.curDayNightValue = dayNight;
+            options.curTrip.curDayNightValue = dayNight;
         }
     }
     private void Dispose()
@@ -652,9 +656,9 @@ public class SpawnMaster : MonoBehaviour
         DisposeCompute(ref spawnData.zoneData);
         DisposeCompute(ref spawnData.scrollData);
 
-        for (int i = 0; i < trip.particleAtlasArray.Length; i++)
+        for (int i = 0; i < options.curTrip.particleAtlasArray.Length; i++)
         {
-            ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
+            ParticleAtlas particleAtlas = options.curTrip.particleAtlasArray[i];
             for (int j = 0; j < particleAtlas.posData.Length; j++)
             {
                 ParticlePosData posData = particleAtlas.posData[j];

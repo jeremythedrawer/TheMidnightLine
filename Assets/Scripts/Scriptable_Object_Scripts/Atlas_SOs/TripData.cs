@@ -1,7 +1,7 @@
 using UnityEngine;
 
 using static AtlasUI;
-using static NPC;
+using static Passenger;
 
 [CreateAssetMenu(fileName = "Trip", menuName = "Data / Trip")]
 public class TripData : ScriptableObject
@@ -31,6 +31,5 @@ public class TripData : ScriptableObject
 
     public float curDayNightValue;
 
-    public bool failed;
     public bool unlocked;
 }

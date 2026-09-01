@@ -1,6 +1,6 @@
 using System.Collections.Generic;
 using UnityEngine;
-using static NPC;
+using static Passenger;
 [CreateAssetMenu(fileName = "Station_SO", menuName = "Midnight Line SOs / Station SO")]
 public class StationSO : ScriptableObject
 {

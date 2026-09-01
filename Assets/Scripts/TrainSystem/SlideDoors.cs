@@ -1,6 +1,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
-using static NPC;
+using static Passenger;
 
 public class SlideDoors : MonoBehaviour
 {
@@ -53,8 +53,8 @@ public class SlideDoors : MonoBehaviour
 
         boardTrainQueue = new NPCQueue();
         disembarkTrainQueue = new NPCQueue();
-        boardTrainQueue.npcs = new NPCBrain[MAX_QUEUE_SIZE];
-        disembarkTrainQueue.npcs = new NPCBrain[MAX_QUEUE_SIZE];
+        boardTrainQueue.npcs = new PassengerBrain[MAX_QUEUE_SIZE];
+        disembarkTrainQueue.npcs = new PassengerBrain[MAX_QUEUE_SIZE];
     }
     private void Update()
     {
@@ -95,7 +95,7 @@ public class SlideDoors : MonoBehaviour
                     disembarkTrainQueue.timer += Time.deltaTime;
                     if (disembarkTrainQueue.timer > QUEUE_TICK_RATE)
                     {
-                        NPCBrain npc = disembarkTrainQueue.npcs[disembarkTrainQueue.npcsCount - 1];
+                        PassengerBrain npc = disembarkTrainQueue.npcs[disembarkTrainQueue.npcsCount - 1];
                         npc.DisembarkTrain();
                         disembarkTrainQueue.npcsCount--;
                         disembarkTrainQueue.timer = 0;
@@ -107,7 +107,7 @@ public class SlideDoors : MonoBehaviour
 
                     if (boardTrainQueue.timer > QUEUE_TICK_RATE)
                     {
-                        NPCBrain npc = boardTrainQueue.npcs[boardTrainQueue.npcsCount - 1];
+                        PassengerBrain npc = boardTrainQueue.npcs[boardTrainQueue.npcsCount - 1];
                         npc.BoardTrain();
 
                         boardTrainQueue.npcsCount--;
@@ -221,13 +221,13 @@ public class SlideDoors : MonoBehaviour
             SetState(State.Locked);
         }
     }
-    public void AddToBoardTrainQueue(NPCBrain npc)
+    public void AddToBoardTrainQueue(PassengerBrain npc)
     {
         npc.boardTrainQueueIndex = boardTrainQueue.npcsCount;
         boardTrainQueue.npcs[boardTrainQueue.npcsCount] = npc;
         boardTrainQueue.npcsCount++;
     }
-    public void AddToDisembarkTrainQueue(NPCBrain npc)
+    public void AddToDisembarkTrainQueue(PassengerBrain npc)
     {
         npc.disembarkTrainQueueIndex = disembarkTrainQueue.npcsCount;
         disembarkTrainQueue.npcs[disembarkTrainQueue.npcsCount] = npc;

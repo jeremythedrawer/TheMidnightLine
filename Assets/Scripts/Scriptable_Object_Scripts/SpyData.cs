@@ -6,6 +6,8 @@ using static AtlasUI;
 [CreateAssetMenu(fileName = "SpyData", menuName = "Data / Spy Data")]
 public class SpyData : ScriptableObject
 {
+    public SpyBrain spy;
+
     [Header("Settings")]
     public float moveSpeed = 1.5f;
     public float groundAccelation = 12f;
@@ -21,14 +23,10 @@ public class SpyData : ScriptableObject
     public string disembarkingStationName;
     
     public Vector2 moveVelocity;
-    public Vector2 startPos;
     
     public float targetXVelocity;
 
     public SpyState curState;
-
-    public TutorialState tutorialsCompleted;
-    public TutorialState curTutorialState;
 
     public bool spriteFlip;
     public bool walkingIntoWall;
@@ -36,8 +34,6 @@ public class SpyData : ScriptableObject
     public bool checkingNotepad;
     public bool playerInputsEnabled;
     public bool canCheckTicket;
-
-    public bool movedFirstTime;
 
     public Bounds bounds;
     

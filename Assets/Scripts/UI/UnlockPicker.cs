@@ -4,7 +4,7 @@ using System.Threading;
 using UnityEngine;
 
 using static AtlasUI;
-using static NPC;
+using static Passenger;
 public class UnlockPicker : MonoBehaviour
 {
     public const int GRID_X_COUNT = 3;
@@ -29,7 +29,7 @@ public class UnlockPicker : MonoBehaviour
 
     [Header("Generated")]
 
-    public NPCBrain selectedNPC;
+    public PassengerBrain selectedNPC;
 
     public CancellationTokenSource ctsOpen;
 
@@ -187,7 +187,7 @@ public class UnlockPicker : MonoBehaviour
         sliceWorldSize = new Vector2(paletteBottomLeftWPS.z + paletteTopRightWPS.z, paletteBottomLeftWPS.w + paletteTopRightWPS.w);
     }
 
-    public void Open(int unlockSelectionAmount, UnlockType unlockType, NPCBrain npc)
+    public void Open(int unlockSelectionAmount, UnlockType unlockType, PassengerBrain npc)
     {
 
         tutorialInUse = false;

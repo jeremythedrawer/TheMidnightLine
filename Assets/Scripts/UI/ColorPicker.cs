@@ -247,7 +247,7 @@ public class ColorPicker : MonoBehaviour
             }
         }
 
-        void MouseUpText(TextButton icon)
+        void MouseUpText()
         {
             if (isOpen)
             {
@@ -263,10 +263,10 @@ public class ColorPicker : MonoBehaviour
                 Open();
             }
 
-            icon.backgroundRenderer.customBit &= ~(int)ColorBits.Invert;
-            icon.textRenderer.customBit |= (int)ColorBits.Invert;
+            textButton.backgroundRenderer.customBit &= ~(int)ColorBits.Invert;
+            textButton.textRenderer.customBit |= (int)ColorBits.Invert;
         }
-        void MouseDownText(TextButton icon)
+        void MouseDownText()
         {
             if (isOpen)
             {
@@ -277,10 +277,10 @@ public class ColorPicker : MonoBehaviour
                 }
             }
 
-            icon.backgroundRenderer.customBit ^= (int)ColorBits.Invert;
-            icon.textRenderer.customBit ^= (int)ColorBits.Invert;
+            textButton.backgroundRenderer.customBit ^= (int)ColorBits.Invert;
+            textButton.textRenderer.customBit ^= (int)ColorBits.Invert;
         }
-        void EnterButtonText(TextButton icon)
+        void EnterButtonText()
         {
             if (isOpen)
             {
@@ -290,9 +290,9 @@ public class ColorPicker : MonoBehaviour
                     if (colorButton.curState == ButtonState.Hovered || colorButton.curState == ButtonState.Clicked) return;
                 }
             }
-            icon.backgroundRenderer.customBit |= (int)ColorBits.GreenChannel;
+            textButton.backgroundRenderer.customBit |= (int)ColorBits.GreenChannel;
         }
-        void ExitButtonText(TextButton icon)
+        void ExitButtonText()
         {
             if (isOpen)
             {
@@ -302,9 +302,9 @@ public class ColorPicker : MonoBehaviour
                     if (colorButton.curState == ButtonState.Hovered || colorButton.curState == ButtonState.Clicked) return;
                 }
             }
-            icon.backgroundRenderer.customBit &= ~(int)ColorBits.GreenChannel;
-            icon.backgroundRenderer.customBit &= ~(int)ColorBits.Invert;
-            icon.textRenderer.customBit |= (int)ColorBits.Invert;
+            textButton.backgroundRenderer.customBit &= ~(int)ColorBits.GreenChannel;
+            textButton.backgroundRenderer.customBit &= ~(int)ColorBits.Invert;
+            textButton.textRenderer.customBit |= (int)ColorBits.Invert;
         }
 
         textButton.InitButton(MouseUpText, MouseDownText, EnterButtonText, ExitButtonText);

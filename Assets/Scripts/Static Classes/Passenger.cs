@@ -2,9 +2,10 @@ using System;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
+
 using static Atlas;
-using static NPC;
-public static class NPC
+using static Passenger;
+public static class Passenger
 {
     public const float MIN_START_MOVE_TIME = 0.3f;
     public const float MAX_START_MOVE_TIME = 1f;
@@ -133,12 +134,20 @@ public static class NPC
 
     [Serializable] public struct NPCQueue
     {
-        public NPCBrain[] npcs;
+        public PassengerBrain[] npcs;
         public int npcsCount;
         public float timer;
     }
 
-    public static void QuickSortNPCByXPos(NPCBrain[] npcs, int left, int right)
+
+    public const int MAX_GRAFFITI_RENDERERS = 8;
+
+    public static Dictionary<VisualEffect, Queue<VisualEffect>> GlyphPoolDict;
+    public static Dictionary<PassengerBrain, Queue<PassengerBrain>> PassengerPoolDict;
+    public static Graffiti[] GraffitiPool;
+    public static int graffitiActiveCount;
+
+    public static void QuickSortNPCByXPos(PassengerBrain[] npcs, int left, int right)
     {
         if (left >= right) return;
 
@@ -147,7 +156,7 @@ public static class NPC
         QuickSortNPCByXPos(npcs, left, index - 1);
         QuickSortNPCByXPos(npcs, index, right);
     }
-    private static int PartitionNPC(NPCBrain[] npcs, int left, int right)
+    private static int PartitionNPC(PassengerBrain[] npcs, int left, int right)
     {
         float pivot = npcs[(left + right) / 2].transform.position.x;
 
@@ -167,7 +176,6 @@ public static class NPC
 
         return left;
     }
-
     public static Dictionary<Habits, HabitData> SetBehaviourContextDictionary(HabitData[] behaviourContexts)
     {
         Dictionary<Habits, HabitData> dict = new Dictionary<Habits, HabitData>();

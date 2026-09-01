@@ -27,26 +27,7 @@ public class Menu : MonoBehaviour
     }
     private void InitButtons()
     {
-        void MouseDownText(TextButton icon)
-        {
-            icon.backgroundRenderer.customBit ^= (int)ColorBits.Invert;
-            icon.textRenderer.customBit ^= (int)ColorBits.Invert;
-        }
-        void EnterButtonText(TextButton icon)
-        {
-            icon.backgroundRenderer.customBit |= (int)ColorBits.GreenChannel;
-        }
-        void ExitButtonText(TextButton icon)
-        {
-            icon.backgroundRenderer.customBit &= ~(int)ColorBits.GreenChannel;
-            icon.backgroundRenderer.customBit &= ~(int)ColorBits.Invert;
-            icon.textRenderer.customBit |= (int)ColorBits.Invert;
-        }
-        void MouseUpText(TextButton icon)
-        {
-            icon.backgroundRenderer.customBit &= ~(int)ColorBits.Invert;
-            icon.textRenderer.customBit |= (int)ColorBits.Invert;
-        }
+
 
         for (int i = 0; i < textButtons.Length; i++)
         {
@@ -56,47 +37,47 @@ public class Menu : MonoBehaviour
             {
                 case ButtonFunctionType.Begin:
                 {
-                    void Start(TextButton icon)
+                    void Start()
                     {
                         OnClickBegin?.Invoke();
-                        MouseUpText(icon);
+                        textButton.MouseUpText();
                     }
-                    textButton.InitButton(Start, MouseDownText, EnterButtonText, ExitButtonText);
+                    textButton.InitButton(onMouseUp: Start);
                 }
                 break;
 
                 case ButtonFunctionType.Options:
                 {
-                    void Options(TextButton icon)
+                    void Options()
                     {
                         OnClickOptions?.Invoke();
-                        MouseUpText(icon);
+                        textButton.MouseUpText();
                     }
-                    textButton.InitButton(Options, MouseDownText, EnterButtonText, ExitButtonText);
+                    textButton.InitButton(Options);
                 }
                 break;
 
 
                 case ButtonFunctionType.Quit:
                 {
-                    void Quit(TextButton icon)
+                    void Quit()
                     {
                         Application.Quit();
-                        MouseUpText(icon);
+                        textButton.MouseUpText();
                     }
 
-                    textButton.InitButton(Quit, MouseDownText, EnterButtonText, ExitButtonText);
+                    textButton.InitButton(Quit);
                 }
                 break;
 
                 case ButtonFunctionType.Back:
                 {
-                    void Back(TextButton icon)
+                    void Back()
                     {
                         OnClickBackToStartMenu?.Invoke();
-                        MouseUpText(icon);
+                        textButton.MouseUpText();
                     }
-                    textButton.InitButton(Back, MouseDownText, EnterButtonText, ExitButtonText);
+                    textButton.InitButton(Back);
                 }
                 break;
             }

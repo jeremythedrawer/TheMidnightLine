@@ -49,9 +49,14 @@ public class RegionMap : MonoBehaviour
             void MouseUp(IconButton icon)
             {
                 TripButton button = tripButtons[index];
+
                 options.curTrip = button.trip;
-                OnStartTrip?.Invoke();
+                options.curTrip.ticketsCheckedSinceLastStation = 0;
+                options.curTrip.ticketsCheckedTotal = 0;
+                options.curTrip.traitorsSpawned = 0;
                 icon.atlasRenderer.customBit ^= (int)ColorBits.Invert;
+                
+                OnStartTrip?.Invoke();
             }
 
             TripButton regionButton = tripButtons[i];

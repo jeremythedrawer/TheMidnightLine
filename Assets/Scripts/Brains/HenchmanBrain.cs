@@ -2,7 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using UnityEngine;
 using static Atlas;
-using static NPC;
+using static Passenger;
 public class HenchmanBrain : MonoBehaviour
 {
     const int SHOOTING_FRAME_INDEX = 22;
@@ -31,16 +31,6 @@ public class HenchmanBrain : MonoBehaviour
 
     public bool hasShot;
     public bool willShoot;
-    private void OnEnable()
-    {
-        Scenes.OnLoadStart += SetToSittingState;
-        Scenes.OnLoadScore += SetToSittingState;
-    }
-    private void OnDisable()
-    {
-        Scenes.OnLoadStart -= SetToSittingState;
-        Scenes.OnLoadScore -= SetToSittingState;
-    }
     private void Update()
     {
         UpdateState();
@@ -115,14 +105,7 @@ public class HenchmanBrain : MonoBehaviour
             break;
         }
     }
-    private void SetToSittingState()
-    {
-        SetState(HenchmanState.Sitting);
-    }
-    private void SetWillShoot()
-    {
-        if (curTrip.failed) willShoot = true;
-    }
+
     private void PauseFrame()
     {
         PausingFrame().Forget();

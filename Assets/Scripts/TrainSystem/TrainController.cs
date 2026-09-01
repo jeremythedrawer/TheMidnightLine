@@ -34,7 +34,7 @@ public class TrainController : MonoBehaviour
     public TrainSettingsSO settings;
     public TrainData trainData;
     public LayerData layerSettings;
-    public TripData trip;
+    public Options options;
     public SpawnData spawnData;
     public SpyData spyStats;
     public CameraData camStats;
@@ -91,17 +91,12 @@ public class TrainController : MonoBehaviour
     }
     public void Init()
     {
-        trip.traitorsSpawned = 0;
         trainData.curStationIndex = 0;
-
-        trainData.targetKMPH = trip.kmValues[0];
-
+        trainData.targetKMPH = options.curTrip.kmValues[0];
         trainData.curVelocity.x = KMPHToVelocity(trainData.targetKMPH);
         trainData.targetVelocity = Vector2.zero;
-
         trainData.totalNPCsBoarded = 0;
         trainData.slideDoorsAmountOpened = 0;
-
         trainData.targetElevatePos = Vector2.zero;
 
         trainCTS = new CancellationTokenSource();
@@ -113,7 +108,7 @@ public class TrainController : MonoBehaviour
 
         trainData.targetPosition = transform.position.x;
 
-        float offset = TRAIN_WORLD_POS_X - transform.position.x;
+        float offset = -transform.position.x;
 
         for (int i = 0; i < carriages.Length; i++)
         {
@@ -419,7 +414,7 @@ public class TrainController : MonoBehaviour
     {
         Station firstStation = stations[trainData.curStationIndex];
         NextStationInstance = firstStation;
-        firstStation.transform.position = new Vector3(TRAIN_WORLD_POS_X, 0, 0);
+        firstStation.transform.position = Vector3.zero;
 
         firstStation.gameObject.SetActive(true);
         firstStation.SpawnNPCs();
@@ -482,7 +477,7 @@ public class TrainController : MonoBehaviour
     }
     private void InitAtStartPosition()
     {
-        transform.position = new Vector3(TRAIN_WORLD_POS_X, transform.position.y, transform.position.z);
+        transform.position = new Vector3(0, transform.position.y, transform.position.z);
         SetBounds();
         SetSlideDoorPositions();
         trainData.trainToMaxSpawnDist = spawnData.bounds.max.x - trainData.totalBounds.center.x;

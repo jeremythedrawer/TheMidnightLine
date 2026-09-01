@@ -4,7 +4,7 @@ using System.Threading;
 using UnityEngine;
 
 using static AtlasUI;
-using static NPC;
+using static Passenger;
 public class NPCPicker : MonoBehaviour
 {
     public const int GRID_X_COUNT = 8;
@@ -22,7 +22,7 @@ public class NPCPicker : MonoBehaviour
 
     [Header("Generated")]
 
-    public NPCBrain[] possibleNPCs;
+    public PassengerBrain[] possibleNPCs;
 
     public AtlasRenderer selectedRenderer;
 
@@ -98,7 +98,7 @@ public class NPCPicker : MonoBehaviour
 
                     case PickerFunctionType.Color:
                     {
-                        NPCBrain selectedNPC = possibleNPCs[index];
+                        PassengerBrain selectedNPC = possibleNPCs[index];
                         if ((trip.curUnlocks & UnlockType.Color) == 0)
                         {
                             if ((selectedNPC.atlasRenderer.customBit & ((int)ColorBits.Diagonal)) == 0)
@@ -119,7 +119,7 @@ public class NPCPicker : MonoBehaviour
 
                     case PickerFunctionType.RuleOut:
                     {
-                        NPCBrain selectedNPC = possibleNPCs[index];
+                        PassengerBrain selectedNPC = possibleNPCs[index];
                         if ((selectedNPC.atlasRenderer.customBit & ((int)ColorBits.Diagonal)) == 0)
                         {
                             selectedNPC.atlasRenderer.customBit |= (int)ColorBits.Diagonal;
@@ -179,7 +179,7 @@ public class NPCPicker : MonoBehaviour
         sliceWorldSize = new Vector2(paletteBottomLeftWPS.z + paletteTopRightWPS.z, paletteBottomLeftWPS.w + paletteTopRightWPS.w);
     }
 
-    public void Open(NPCBrain[] npcs, int npcCount, PickerFunctionType funcType)
+    public void Open(PassengerBrain[] npcs, int npcCount, PickerFunctionType funcType)
     {
         functionType = funcType;
 
@@ -191,7 +191,7 @@ public class NPCPicker : MonoBehaviour
         for (int i = 0; i < possibleNPCs.Length; i++)
         {
             AtlasRenderer iconRend = icons[i].atlasRenderer;
-            NPCBrain npcBrain = possibleNPCs[i];
+            PassengerBrain npcBrain = possibleNPCs[i];
 
             if (npcBrain == null) break;
 

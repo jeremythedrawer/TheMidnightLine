@@ -7,7 +7,7 @@ using UnityEngine;
 using UnityEditor;
 #endif
 
-using static NPC;
+using static Passenger;
 
 [CreateAssetMenu(fileName = "NPCs_Data_SO", menuName = "Midnight Line SOs / NPCs Data SO")]
 public class PassengerData : ScriptableObject

@@ -2,7 +2,7 @@ using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
 
-using static NPC;
+using static Passenger;
 using static AtlasUI;
 public class CursorController : MonoBehaviour
 {
@@ -24,7 +24,6 @@ public class CursorController : MonoBehaviour
     public CameraData camData;
     public TripData trip;
     public CursorData cursorData;
-    public SceneData sceneData;
     public Options options;
 
     public AtlasRenderer cursorRenderer;
@@ -33,7 +32,7 @@ public class CursorController : MonoBehaviour
 
     [Header("Generated")]
 
-    public NPCBrain[] hoveredNPCs;
+    public PassengerBrain[] hoveredNPCs;
 
     public int hoveredNPCCount;
 
@@ -47,7 +46,7 @@ public class CursorController : MonoBehaviour
         Cursor.visible = false;
         CursorRenderer = cursorRenderer;
         cursorTag.SetText("");
-        hoveredNPCs = new NPCBrain[8];
+        hoveredNPCs = new PassengerBrain[8];
     }
 
     private void OnEnable()

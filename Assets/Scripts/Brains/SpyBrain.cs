@@ -4,7 +4,7 @@ using UnityEngine;
 using static Atlas;
 using static AtlasUI;
 using static Spy;
-using static NPC;
+using static Passenger;
 using Cysharp.Threading.Tasks;
 public class SpyBrain : MonoBehaviour
 {
@@ -45,13 +45,10 @@ public class SpyBrain : MonoBehaviour
     public CameraData camStats;
     public Options options;
     public NotepadData notepadData;
-    public TripData trip;
-    public SceneData sceneData;
 
     [Header("Generated")]
-    public NPCBrain[] possibleNPCsToTicketCheck;
-
-    public NPCBrain chosenNPC;
+    public PassengerBrain[] possibleNPCsToTicketCheck;
+    public PassengerBrain chosenNPC;
 
     public AtlasSO atlas;
     
@@ -95,12 +92,9 @@ public class SpyBrain : MonoBehaviour
         TrainController.OnStationArrival += SetInputsForTrainStop;
         TrainController.OnStationLeave += SetInputsForTrainStart;
 
-        Scenes.OnLoadStart += StartInit;
-        Scenes.OnLoadTrip0 += TripInit;
-
         GameplayUI.OnIncreaseTraitorCountFirstTime += SetStateToIdle;
 
-        EveryInit();
+        Init();
     }
     private void OnDisable()
     {
@@ -110,10 +104,11 @@ public class SpyBrain : MonoBehaviour
         TrainController.OnStationArrival -= SetInputsForTrainStop;
         TrainController.OnStationLeave -= SetInputsForTrainStart;
 
-        Scenes.OnLoadStart -= StartInit;
-        Scenes.OnLoadTrip0 -= TripInit;
-
         GameplayUI.OnIncreaseTraitorCountFirstTime -= SetStateToIdle;
+    }
+    private void Start()
+    {
+        Init();
     }
     private void Update()
     {
@@ -124,57 +119,32 @@ public class SpyBrain : MonoBehaviour
     {
         FixedUpdateStates();
     }
-    private void PlayAgainInit()
-    {
-        spyData.playerInputsEnabled = true;
-        sceneData.activeSceneType = Scenes.SceneType.Start;
-
-        EveryInit();
-        StartInit();
-    }
-    private void EveryInit()
+    private void Init()
     {
         layerData.CombineAllLayerMasks();
-        curWorldPos = transform.position;
-        atlas = atlasRenderer.atlas;
-        atlas.UpdateClipDictionary();
 
+        spyData.startTrip = false;
+        spyData.canCheckTicket = false;
         spyData.curGroundLayer = layerData.stationLayers.ground;
         spyData.curWallLayer = layerData.stationWallLayers;
         spyData.bounds = atlasRenderer.bounds;
         spyData.checkingNotepad = false;
-
-        spyData.curTutorialState = TutorialState.None;
+        spyData.curState = SpyState.Idle;
         spyData.playerInputsEnabled = true;
 
+        possibleNPCsToTicketCheck = new PassengerBrain[8];
+        
         rigidBody.includeLayers = layerData.stationMask;
+        curWorldPos = transform.position;
+        atlas = atlasRenderer.atlas;
+        atlas.UpdateClipDictionary();
 
-        spyData.curState = SpyState.Idle;
         SetState(SpyState.None);
-
-        SceneController.SetSpyBrain(this);
     }
     public void SetNewPosition(Vector3 newPosition)
     {
         curWorldPos = newPosition;
         transform.position = newPosition;
-    }
-    private void TripInit()
-    {
-        trip.ticketsCheckedSinceLastStation = 0;
-        trip.ticketsCheckedTotal = 0;
-        possibleNPCsToTicketCheck = new NPCBrain[8];
-    }
-    private void StartInit()
-    {
-        trip.failed = false;
-        spyData.tutorialsCompleted = TutorialState.None;
-        spyData.startTrip = false;
-        spyData.canCheckTicket = false;
-        spyData.startPos = new Vector2(transform.position.x, transform.position.y);
-        spyData.movedFirstTime = false;
-
-        trip.curUnlocks = UnlockType.None;
     }
     private void ChooseState()
     {
@@ -237,7 +207,7 @@ public class SpyBrain : MonoBehaviour
 
                         case LocationState.Carriage:
                         {
-                            if (notepadData.profileWriteCount == trip.traitorProfiles.Length && trainData.curStationIndex > 0)
+                            if (notepadData.profileWriteCount == options.curTrip.traitorProfiles.Length && trainData.curStationIndex > 0)
                             {
                                 GetSlideDoorInTrain();
                             }
@@ -261,14 +231,7 @@ public class SpyBrain : MonoBehaviour
                     
                     if (inputData.interactKeyDown) OnInteract?.Invoke();
                 }
-                else
-                {
-                    if (curWorldPos.x <= spyData.startPos.x)
-                    {
-                        OnEnteredElevatorGoingUp.Invoke();
-                        PlayAgainInit();
-                    }
-                }
+
                 atlasRenderer.PlayClip(ref curClip);
                 spyData.moveVelocity.x = Mathf.Lerp(spyData.moveVelocity.x, spyData.targetXVelocity, spyData.groundAccelation * Time.deltaTime);
 
@@ -632,7 +595,7 @@ public class SpyBrain : MonoBehaviour
 
                 for (int i = 0; i < curNPCTicketCheckHoverCount; i++)
                 {
-                    NPCBrain npc = possibleNPCsToTicketCheck[i];
+                    PassengerBrain npc = possibleNPCsToTicketCheck[i];
                     if (npc != chosenNPC)
                     {
                         npc.talkingToSpy = false;
@@ -661,7 +624,7 @@ public class SpyBrain : MonoBehaviour
             {
                 if (curNPCTicketCheckHoverCount < possibleNPCsToTicketCheck.Length)
                 {
-                    NPCBrain npc = CurCarriage.curNPCList[i];
+                    PassengerBrain npc = CurCarriage.curNPCList[i];
                     if (npc.ticketHasBeenChecked) continue;
 
                     Bounds npcBounds = npc.atlasRenderer.bounds;
@@ -912,7 +875,7 @@ public class SpyBrain : MonoBehaviour
 
         chosenNPC = null;
     }
-    public void ChooseNPCTicketToCheck(NPCBrain npc)
+    public void ChooseNPCTicketToCheck(PassengerBrain npc)
     {
         chosenNPC = npc;
     }

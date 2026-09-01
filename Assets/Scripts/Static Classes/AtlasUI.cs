@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 using static Atlas;
-using static NPC;
+using static Passenger;
 public static class AtlasUI
 {
     public const int COLOR_SQUARE_SPRITE_INDEX = 5;

@@ -5,8 +5,7 @@ using System.Threading;
 using UnityEngine;
 
 using static AtlasUI;
-using static NPC;
-using static Scenes;
+using static Passenger;
 
 public class StartUI : MonoBehaviour
 {
@@ -18,7 +17,6 @@ public class StartUI : MonoBehaviour
     public InputData inputData;
     public NotepadData notepadData;
     public Options options;
-    public SceneData sceneData;
     public SpyData spyData;
     public PassengerData passengerData;
     public CursorData cursorData;
@@ -79,7 +77,8 @@ public class StartUI : MonoBehaviour
         Menu.OnClickOptions += SetToOptionsMenuState;
         Menu.OnClickBackToStartMenu += SetToStartMenuState;
 
-        Scenes.OnLoadScore += ScoreSceneInit;
+        RegionMap.OnStartTrip += FadeToChangeToTripScene;
+
         Scenes.OnLoadStart += StartSceneInit;
 
         FadeBlack.OnFinishFadeOut += SetToNoneStateFromOutcome;
@@ -96,8 +95,9 @@ public class StartUI : MonoBehaviour
         Menu.OnClickOptions -= SetToOptionsMenuState;
         Menu.OnClickBackToStartMenu -= SetToStartMenuState;
 
+        RegionMap.OnStartTrip -= FadeToChangeToTripScene;
+
         Scenes.OnLoadStart -= StartSceneInit;
-        Scenes.OnLoadScore -= ScoreSceneInit;
 
         FadeBlack.OnFinishFadeOut -= SetToNoneStateFromOutcome;
         
@@ -243,25 +243,20 @@ public class StartUI : MonoBehaviour
     private void StartSceneInit()
     {
         Shader.SetGlobalFloat("_DayNight", 1);
-
         fadeBlack.SetAlpha(1);
         fadeBlack.FadeOut();
+
+        fadeBlack.transform.SetParent(Camera.main.transform);
+        fadeBlack.transform.localPosition = Vector3.zero;
 
         audioSource.clip = options.music.menu;   
         audioSource.volume = options.music.volume;
         audioSource.Play();
         SetState(UIState.StartMenu);
     }
-    private void ScoreSceneInit()
+    private void FadeToChangeToTripScene()
     {
-        fadeBlack.SetAlpha(1);
-        fadeBlack.FadeOut();
-
-        Shader.SetGlobalFloat("_DayNight", 1);
-
-        SetState(UIState.None);
-
-        notepad = SceneController.GetAndParentNotepad(transform);
+        fadeBlack.FadeInChangeScene("Cool text", sceneIndex: 2);
     }
     private void HideKeyIcons()
     {

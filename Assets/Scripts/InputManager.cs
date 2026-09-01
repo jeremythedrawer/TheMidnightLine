@@ -7,7 +7,6 @@ public class InputManager : MonoBehaviour
 {
     public InputData playerInputs;
     public SpyData spyStats;
-    public SceneData sceneData;
 
     PlayerInput playerInput;
 
@@ -134,12 +133,9 @@ public class InputManager : MonoBehaviour
     private void Start()
     {
         playerInputs.mouseScreenPos.z = 0.25f;
-        SceneController.SetInputManager(this);
     }
     private void Update()
     {
-        if (!sceneData.sceneLoaded) return;
-
         Vector2 screenPos = Mouse.current.position.ReadValue();
         playerInputs.mouseScreenPos.x = Mathf.Clamp(screenPos.x, 0f, Screen.width);
         playerInputs.mouseScreenPos.y = Mathf.Clamp(screenPos.y, 0f, Screen.height);

@@ -17,7 +17,6 @@ public class GameplayUI : MonoBehaviour
     public TripData trip;
     public Options options;
     public TrainData trainData;
-    public SceneData sceneData;
     public CursorData cursorData;
 
     public FadeBlack fadeBlack;
@@ -92,8 +91,8 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnUncheckCarriageMap += SetToNoneState;
         SpyBrain.OnCheckCarriageMap += SetToCarriageMapState;
 
-        NPCBrain.OnTraitorDisembarkedTrain += DecreaseTraitorCount;
-        NPCBrain.OnTraitorBoardedTrain += IncreaseTraitorCount;
+        PassengerBrain.OnTraitorDisembarkedTrain += DecreaseTraitorCount;
+        PassengerBrain.OnTraitorBoardedTrain += IncreaseTraitorCount;
 
         Scenes.OnLoadTrip0 += Init;
     }
@@ -118,8 +117,8 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnCheckCarriageMap -= SetToCarriageMapState;
         SpyBrain.OnEnteredTrain += AppearRailMap;
         
-        NPCBrain.OnTraitorDisembarkedTrain -= DecreaseTraitorCount;
-        NPCBrain.OnTraitorBoardedTrain -= IncreaseTraitorCount;
+        PassengerBrain.OnTraitorDisembarkedTrain -= DecreaseTraitorCount;
+        PassengerBrain.OnTraitorBoardedTrain -= IncreaseTraitorCount;
 
         Scenes.OnLoadTrip0 -= Init;
     }
@@ -351,16 +350,6 @@ public class GameplayUI : MonoBehaviour
             DisappearingKeyIcon().Forget();
         }
     }
-    private void FinishTutorial()
-    {
-        fadeBlack.FadeOut();
-
-        spyStats.tutorialsCompleted |= spyStats.curTutorialState;
-        spyStats.curTutorialState = TutorialState.None;
-        spyStats.playerInputsEnabled = true;
-        tutorialRenderer.SetText("");
-
-    }
     private void IncreaseTraitorCount()
     {
         traitorCount++;
@@ -385,7 +374,7 @@ public class GameplayUI : MonoBehaviour
 
     private void Redo()
     {
-        fadeBlack.FadeInChangeScene("New Game", Scenes.SceneType.Start, sceneIndex: 1);
+        fadeBlack.FadeInChangeScene("New Game", sceneIndex: 1);
         SceneController.KeepNotepad(notepad);
         notepad.gameObject.SetActive(false);
     }

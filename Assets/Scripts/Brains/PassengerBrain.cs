@@ -10,13 +10,13 @@ using Cysharp.Threading.Tasks;
 
 using static Atlas;
 using static AtlasUI;
-using static NPC;
+using static Passenger;
 
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
 
-public class NPCBrain : MonoBehaviour
+public class PassengerBrain : MonoBehaviour
 {
     public static event Action OnTraitorBoardedTrain;
     public static event Action OnTraitorDisembarkedTrain;
@@ -26,7 +26,7 @@ public class NPCBrain : MonoBehaviour
     public BoxCollider2D boxCollider;
     
     public NPCSO npc;
-    public PassengerData npcData;
+    public PassengerData passengerData;
     public LayerData layerSettings;
     public TrainSettingsSO trainSettings;
     public TrainData trainStats;
@@ -301,13 +301,13 @@ public class NPCBrain : MonoBehaviour
             {
                 if (curBehaviourContext.glyphPrefab != null)
                 {
-                    curGlyph = NPCManager.GetGlyph(curBehaviourContext.glyphPrefab, transform);
+                    curGlyph = PassengerManager.GetGlyph(curBehaviourContext.glyphPrefab, transform);
                     curGlyph.transform.position = transform.position;
                 }
 
                 if (curBehaviour == Habits.Known_vandal)
                 {
-                    graffiti = NPCManager.GetGraffitiRenderer(npcData.graffitiPrefab);
+                    graffiti = PassengerManager.GetGraffitiRenderer(passengerData.graffitiPrefab);
                     int graffitiIndex = UnityEngine.Random.Range(0, graffiti.atlas.simpleSprites.Length - 1);
                     graffiti.SetSprites(graffitiIndex);
                     graffiti.transform.position = new Vector3(transform.position.x, atlasRenderer.bounds.max.y, trainStats.depthSections.carriageSeat + 1.5f);
@@ -502,7 +502,7 @@ public class NPCBrain : MonoBehaviour
 
             case NPCState.Behaviour:
             {
-                if (curGlyph != null) NPCManager.ReturnGlyph(curBehaviourContext.glyphPrefab, curGlyph);
+                if (curGlyph != null) PassengerManager.ReturnGlyph(curBehaviourContext.glyphPrefab, curGlyph);
 
 
                 switch(curBehaviour)
@@ -601,7 +601,7 @@ public class NPCBrain : MonoBehaviour
             {
                 StopSitting();
 
-                List<NPCBrain> npcs = curCarriage.curNPCList.OrderBy(npc => npc.transform.position.x).ToList();
+                List<PassengerBrain> npcs = curCarriage.curNPCList.OrderBy(npc => npc.transform.position.x).ToList();
 
                 float leftBound = curCarriage.insideBoundsCollider.bounds.min.x;
                 float rightBound = curCarriage.insideBoundsCollider.bounds.max.x;
@@ -611,7 +611,7 @@ public class NPCBrain : MonoBehaviour
 
                 float previousX = leftBound;
 
-                foreach (NPCBrain npc in npcs)
+                foreach (PassengerBrain npc in npcs)
                 {
                     float currentX = npc.transform.position.x;
 
@@ -880,7 +880,7 @@ public class NPCBrain : MonoBehaviour
                     atlasRenderer.custom.z = 0;
                     atlasRenderer.custom.w = 0;
                     atlasRenderer.customBit = 0;
-                    NPCManager.ReturnNPC(trip.npcDataArray[profile.npcPrefabIndex].prefab , this);
+                    PassengerManager.ReturnNPC(trip.npcDataArray[profile.npcPrefabIndex].prefab , this);
                 }
             }
             break;
@@ -1044,7 +1044,7 @@ public class NPCBrain : MonoBehaviour
             if ((profile.behaviours & (Habits)nextBit) != 0)
             {
                 curBehaviour = (Habits)nextBit;
-                curBehaviourContext = npcData.habitDataDict[curBehaviour];
+                curBehaviourContext = passengerData.habitDataDict[curBehaviour];
 
                 if (curBehaviourContext.pathToTake != NPCPath.None)
                 {

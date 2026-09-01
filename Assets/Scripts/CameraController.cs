@@ -16,7 +16,6 @@ public class CameraController : MonoBehaviour
     public TrainData trainData;
     public InputData spyInputs;
     public LayerData layerData;
-    public SceneData sceneData;
     public NotepadData notepadData;
 
     public RenderTexture carriageBoundsRT;
@@ -41,20 +40,15 @@ public class CameraController : MonoBehaviour
     private void OnEnable()
     {
         Init();
-        Scenes.OnLoadTrip0 += TripInit;
+        RegionMap.OnStartTrip += TripInit;
         HenchmanBrain.OnShoot += ShakeFromGunShot;
         SpyBrain.OnAfterOutcomeSequence += SetToSlowDamping;
     }
     private void OnDisable()
     {
-        Scenes.OnLoadTrip0 -= TripInit;
+        RegionMap.OnStartTrip -= TripInit;
         HenchmanBrain.OnShoot -= ShakeFromGunShot;
         SpyBrain.OnAfterOutcomeSequence -= SetToSlowDamping;
-
-#if UNITY_EDITOR
-        camData.curVelocity = Vector3.zero;
-        Graphics.Blit(Texture2D.whiteTexture, carriageBoundsRT);
-#endif
     }
     private void Update()
     {

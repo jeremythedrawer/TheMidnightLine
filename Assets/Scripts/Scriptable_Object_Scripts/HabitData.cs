@@ -1,7 +1,7 @@
 using UnityEngine;
 using UnityEngine.VFX;
 using static Atlas;
-using static NPC;
+using static Passenger;
 
 [CreateAssetMenu(fileName = "name_BehaviourContext", menuName = "Midnight Line SOs / NPC Behaviour Context")]
 public class HabitData : ScriptableObject

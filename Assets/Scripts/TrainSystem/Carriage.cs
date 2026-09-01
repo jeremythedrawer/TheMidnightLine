@@ -4,7 +4,7 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
-using static NPC;
+using static Passenger;
 using static Train;
 
 public class Carriage : MonoBehaviour
@@ -39,8 +39,8 @@ public class Carriage : MonoBehaviour
     
     public CancellationTokenSource ctsFade;
 
-    public List<NPCBrain> curNPCList;
-    public NPCBrain firstNPC;
+    public List<PassengerBrain> curNPCList;
+    public PassengerBrain firstNPC;
 
     public SeatData seatData;
     
@@ -62,7 +62,7 @@ public class Carriage : MonoBehaviour
 
     private void Start()
     {
-        curNPCList = new List<NPCBrain>();
+        curNPCList = new List<PassengerBrain>();
 
         for(int i = 0; i < exteriorSlideDoors.Length; i++)
         {
@@ -131,7 +131,7 @@ public class Carriage : MonoBehaviour
 
         MovingDown().Forget();
     }
-    public void AddToSeatQueue(NPCBrain npc)
+    public void AddToSeatQueue(PassengerBrain npc)
     {
         if (seatQueue.npcsCount == seatAmount)
         {
@@ -142,7 +142,7 @@ public class Carriage : MonoBehaviour
         seatQueue.npcs[seatQueue.npcsCount] = npc;
         seatQueue.npcsCount++;
     }
-    public void RemoveFromSeatQueue(NPCBrain npc)
+    public void RemoveFromSeatQueue(PassengerBrain npc)
     {
         if (seatQueue.npcsCount == 0) return;
         int lastIndex = seatQueue.npcsCount - 1;
@@ -158,7 +158,7 @@ public class Carriage : MonoBehaviour
         seatQueue.timer += Time.deltaTime;
         if (seatQueue.timer < QUEUE_TICK_RATE) return;
 
-        NPCBrain npc = seatQueue.npcs[seatQueue.npcsCount - 1];
+        PassengerBrain npc = seatQueue.npcs[seatQueue.npcsCount - 1];
 
         if (npc.seatPosIndex != int.MaxValue) return;
 
@@ -235,7 +235,7 @@ public class Carriage : MonoBehaviour
             }
         }
         seatQueue = new NPCQueue();
-        seatQueue.npcs = new NPCBrain[seatAmount];
+        seatQueue.npcs = new PassengerBrain[seatAmount];
     }
     public void SetTotalBounds(float offset)
     {
@@ -247,13 +247,13 @@ public class Carriage : MonoBehaviour
         }
         totalBounds.center = new Vector3(totalBounds.center.x + offset, totalBounds.center.y, totalBounds.center.z);
     }
-    public void AddNPC(NPCBrain npc)
+    public void AddNPC(PassengerBrain npc)
     {
         if (firstNPC == null && npc.role != Role.Accomplice) firstNPC = npc;
 
         curNPCList.Add(npc);
     }
-    public void RemoveNPC(NPCBrain npc)
+    public void RemoveNPC(PassengerBrain npc)
     {
         curNPCList.Remove(npc);
 

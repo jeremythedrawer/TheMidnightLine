@@ -1,5 +1,5 @@
 using UnityEngine;
-using static NPC;
+using static Passenger;
 using static Train;
 public class Station : MonoBehaviour
 {
@@ -28,7 +28,7 @@ public class Station : MonoBehaviour
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
 
-            NPCBrain bystander = NPCManager.GetNPC(trip.npcDataArray[bystanderProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
+            PassengerBrain bystander = PassengerManager.GetNPC(trip.npcDataArray[bystanderProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
             
             bystander.profile = bystanderProfile;
             bystander.role = Role.Bystander;
@@ -52,7 +52,7 @@ public class Station : MonoBehaviour
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
 
-            NPCBrain traitor = NPCManager.GetNPC(trip.npcDataArray[traitorProfile.npcProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
+            PassengerBrain traitor = PassengerManager.GetNPC(trip.npcDataArray[traitorProfile.npcProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
             traitor.profile = traitorProfile.npcProfile;
             traitor.role = Role.Traitor;
             traitor.boardingStation = station;
@@ -74,7 +74,7 @@ public class Station : MonoBehaviour
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
 
-            NPCBrain accomplice = NPCManager.GetNPC(trip.npcDataArray[accompliceProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
+            PassengerBrain accomplice = PassengerManager.GetNPC(trip.npcDataArray[accompliceProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
 
             accomplice.profile = accompliceProfile;
             accomplice.role = Role.Accomplice;

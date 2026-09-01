@@ -70,7 +70,7 @@ public class Graffiti : MonoBehaviour
                 renderer.enabled = false;
             }
             enabled = false;
-            NPCManager.ReturnGraffiti(this);
+            PassengerManager.ReturnGraffiti(this);
         }
         catch(OperationCanceledException)
         {

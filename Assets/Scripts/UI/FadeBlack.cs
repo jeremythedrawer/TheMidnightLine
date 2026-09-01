@@ -2,8 +2,8 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using UnityEngine;
+
 using static AtlasUI;
-using static Scenes;
 public class FadeBlack : MonoBehaviour
 {
     public const float DEFAULT_DEPTH = 2;
@@ -22,41 +22,37 @@ public class FadeBlack : MonoBehaviour
     public static event Action OnFinishFadeOut;
 
     public InputData playerInputs;
-    public SceneData sceneData;
     public Material fadeBlackMaterial;
 
 
     public AtlasTextRenderer textRenderer;
-    public AtlasRenderer spacebarRenderer;
+    public TextButton continueButton;
 
     public CancellationTokenSource ctsFadeBlack;
 
     [Header("Generated")]
-    public SceneType curSceneType;
     public State curState;
     public int curSceneIndex;
     public float curUVPosX;
     public float curUVPosY;
-    private void OnEnable()
-    {        
-        TrainController.OnFinishTripScene += FadeToBlackToScoreScene;
-    }
-    private void OnDisable()
+
+    private void Start()
     {
-        TrainController.OnFinishTripScene -= FadeToBlackToScoreScene;
+        
     }
-    private void FadeToBlackToScoreScene()
+    private void InitButton()
     {
-        FadeInChangeScene("Performance Review", Scenes.SceneType.Score, sceneIndex: 1);
+
+        continueButton.InitButton();
     }
-    public void FadeInChangeScene(string text, SceneType sceneType, int sceneIndex, float uvPosX = 0, float uvPosY = 0, float alpha = 0, float fadeBlackZPos = DEFAULT_DEPTH)
+    public void FadeInChangeScene(string text, int sceneIndex, float uvPosX = 0, float uvPosY = 0, float alpha = 0, float fadeBlackZPos = DEFAULT_DEPTH)
     {
         ctsFadeBlack?.Cancel();
         ctsFadeBlack = new CancellationTokenSource();
         transform.localPosition = new Vector3(0, 0, fadeBlackZPos);
         curUVPosX = uvPosX;
         curUVPosY = uvPosY;
-        FadingInChangeScene(text, sceneType, sceneIndex, alpha).Forget();
+        FadingInChangeScene(text, sceneIndex, alpha).Forget();
     }
     public void FadeInWithSpacebar(float value, float spacebarWaitTime, float uvPosX = 0, float uvPosY = 0, float alpha = 0, float fadeBlackZPos = DEFAULT_DEPTH)
     {
@@ -105,13 +101,39 @@ public class FadeBlack : MonoBehaviour
     }
     public void FadeOutChangeScene()
     {
-        Scenes.SetScene(sceneData, curSceneType, curSceneIndex);
+        Scenes.SetScene(curSceneIndex);
         ctsFadeBlack?.Cancel();
         ctsFadeBlack = new CancellationTokenSource();
 
         FadingOut().Forget();
     }
-    private async UniTask FadingInChangeScene(string text, SceneType sceneType, int sceneIndex, float alpha = 0)
+    public void SetAlpha(float value, float uvPosX = 0, float uvPosY = 0, float alpha = 0)
+    {
+        fadeBlackMaterial.SetFloat("_Value", value);
+        fadeBlackMaterial.SetFloat("_UVPosX", uvPosX);
+        fadeBlackMaterial.SetFloat("_UVPosY", uvPosY);
+        fadeBlackMaterial.SetFloat("_Alpha", alpha);
+    }
+    private void FinishWritingWithSceneChange()
+    {
+        curState = (State.FinishedFadeIn | State.ReadyToSceneChange);
+        WaitAndSetSpacebar(waitTime: 1);
+    }
+    public void WaitAndSetSpacebar(float waitTime)
+    {
+        WaitingAndSettingSpacebar(waitTime).Forget();
+    }
+    public void CancelFadeBlack()
+    {
+        continueButton.gameObject.SetActive(false);
+        ctsFadeBlack?.Cancel();
+    }
+    private async UniTask WaitingAndSettingSpacebar(float waitTime)
+    {
+        await UniTask.WaitForSeconds(waitTime, cancellationToken: ctsFadeBlack.Token);
+        continueButton.gameObject.SetActive(true);
+    }
+    private async UniTask FadingInChangeScene(string text, int sceneIndex, float alpha = 0)
     {
         try
         {
@@ -130,7 +152,6 @@ public class FadeBlack : MonoBehaviour
                 await UniTask.Yield(ctsFadeBlack.Token);
             }
             fadeBlackMaterial.SetFloat("_Value", 1);
-            curSceneType = sceneType;
             curSceneIndex = sceneIndex;
             curState = State.WritingText;
             textRenderer.WriteText(text, PRINT_LETTER_TIME, FinishWritingWithSceneChange, setTextIfCancelled: true);
@@ -138,7 +159,6 @@ public class FadeBlack : MonoBehaviour
         }
         catch (OperationCanceledException) { }
     }
-
     private async UniTask FadingInSpacebar(float newValue, float alpha, float spacebarWaitTime)
     {
         try
@@ -195,7 +215,7 @@ public class FadeBlack : MonoBehaviour
         try
         {
             float elapsedTime = fadeBlackMaterial.GetFloat("_Value");
-            spacebarRenderer.custom.w = 0;
+            continueButton.gameObject.SetActive(false);
             curState = State.FadingOut;
             while (elapsedTime > 0)
             {
@@ -211,31 +231,5 @@ public class FadeBlack : MonoBehaviour
             OnFinishFadeOut?.Invoke();
         }
         catch (OperationCanceledException) { }
-    }
-    public void SetAlpha(float value, float uvPosX = 0, float uvPosY = 0, float alpha = 0)
-    {
-        fadeBlackMaterial.SetFloat("_Value", value);
-        fadeBlackMaterial.SetFloat("_UVPosX", uvPosX);
-        fadeBlackMaterial.SetFloat("_UVPosY", uvPosY);
-        fadeBlackMaterial.SetFloat("_Alpha", alpha);
-    }
-    private void FinishWritingWithSceneChange()
-    {
-        curState = (State.FinishedFadeIn | State.ReadyToSceneChange);
-        WaitAndSetSpacebar(waitTime: 1);
-    }
-    public void WaitAndSetSpacebar(float waitTime)
-    {
-        WaitingAndSettingSpacebar(waitTime).Forget();
-    }
-    public void CancelFadeBlack()
-    {
-        spacebarRenderer.custom.w = 0;
-        ctsFadeBlack?.Cancel();
-    }
-    private async UniTask WaitingAndSettingSpacebar(float waitTime)
-    {
-        await UniTask.WaitForSeconds(waitTime, cancellationToken: ctsFadeBlack.Token);
-        spacebarRenderer.custom.w = 1;
     }
 }

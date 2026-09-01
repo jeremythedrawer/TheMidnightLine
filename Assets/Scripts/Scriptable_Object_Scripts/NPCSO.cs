@@ -1,9 +1,9 @@
 using UnityEngine;
-using static NPC;
+using static Passenger;
 [CreateAssetMenu(fileName = "NPCSO", menuName = "Midnight Line SOs / NPC SO")]
 public class NPCSO : ScriptableObject
 {
-    public NPCBrain prefab;
+    public PassengerBrain prefab;
 
     [TextArea(3,10)]public string offenceSentence;
 

@@ -5,8 +5,7 @@ using UnityEngine;
 using UnityEngine.InputSystem.LowLevel;
 using static Atlas;
 using static AtlasUI;
-using static NPC;
-using static Scenes;
+using static Passenger;
 public class Notepad : MonoBehaviour
 {
     public const int MIN_STATION_STOPS = 1;
@@ -41,7 +40,6 @@ public class Notepad : MonoBehaviour
     public PassengerData npcData;
     public CameraData camStats;
     public SpyData spyStats;
-    public SceneData sceneData;
     public Options colorsData;
 
     public NotepadData notepadData;
@@ -84,7 +82,6 @@ public class Notepad : MonoBehaviour
     private void OnEnable()
     {
         Scenes.OnLoadTrip1 += Reinit;
-        Scenes.OnLoadScore += Reinit;
         Scenes.OnLoadStart += Init;
 
         TrainController.OnFinishTripScene += KeepNotepad;
@@ -92,7 +89,6 @@ public class Notepad : MonoBehaviour
     private void OnDisable()
     {
         Scenes.OnLoadTrip1 -= Reinit;
-        Scenes.OnLoadScore -= Reinit;
         Scenes.OnLoadStart -= Init;
 
         TrainController.OnFinishTripScene -= KeepNotepad;
@@ -174,16 +170,8 @@ public class Notepad : MonoBehaviour
     public void EnterNotepad()
     {
         EnterState(NotepadState.None);
-
-        if (sceneData.activeSceneType == SceneType.Trip)
-        {
-            leftHand.SetState(LeftHand.State.Stationary);
-        }
-        else
-        {
-            leftHand.SetState(LeftHand.State.OffScreen);
-        }
-            spyStats.checkingNotepad = true;
+        leftHand.SetState(LeftHand.State.OffScreen);
+        spyStats.checkingNotepad = true;
     }
     public void ExitNotepad()
     {
