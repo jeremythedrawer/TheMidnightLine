@@ -88,7 +88,7 @@ public class AtlasTextRenderer : MonoBehaviour
     {
         if (textAtlas == null) return;
         if (batchKey.material == null) return;
-        SetTextWorld(text);
+        SetTextWorld(text, 1);
 
         bounds = GetBoundsNewText(text);
     }
@@ -114,7 +114,7 @@ public class AtlasTextRenderer : MonoBehaviour
     }
     public void SetText(string inputText, float alpha = 1)
     {
-        SetTextWorld(inputText);
+        SetTextWorld(inputText, alpha);
         
         switch (rendererType)
         {
@@ -226,7 +226,7 @@ public class AtlasTextRenderer : MonoBehaviour
             backgroundRenderer.SetNineSliceSizeFromWorldSpace(worldSize, backgroundRenderer.atlas.slicedSprites[backgroundRenderer.spriteIndex]);
         }
     }
-    public void SetTextWorld(string inputText)
+    public void SetTextWorld(string inputText, float alpha)
     {
         if (inputText == null) return;
         text = inputText;
@@ -343,9 +343,8 @@ public class AtlasTextRenderer : MonoBehaviour
                 custom.x = 0;
                 custom.y = 0;
                 custom.z = 0;
-                custom.w = 1;
+                custom.w = alpha;
                 customs[spriteIndex] = custom;
-
 
                 uvSizesAndPositions[spriteIndex] = sprite.uvSizeAndPos;
                 scalesAndFlips[spriteIndex] = Vector4.one;
@@ -630,7 +629,6 @@ public class AtlasTextRenderer : MonoBehaviour
         {
             float elapsed = 0;
             float startValue = customs[0].w;
-
             while (elapsed < time)
             {
                 elapsed += Time.deltaTime;
@@ -670,6 +668,7 @@ public class AtlasTextRendererEditor : Editor
 {
     BoxBoundsHandle boundsHandle = new BoxBoundsHandle();
 
+    Vector4 custom;
     private void OnSceneGUI()
     {
         AtlasTextRenderer textRend = (AtlasTextRenderer)target;
@@ -735,6 +734,28 @@ public class AtlasTextRendererEditor : Editor
                 }
             }
             break;
+        }
+
+    }
+
+    public override void OnInspectorGUI()
+    {
+        AtlasTextRenderer textRenderer = (AtlasTextRenderer)target;
+        base.OnInspectorGUI();
+        EditorGUI.BeginChangeCheck();
+
+        EditorGUILayout.LabelField("Editor");
+        custom.x = EditorGUILayout.Slider(custom.x, 0, 1);
+        custom.y = EditorGUILayout.Slider(custom.y, 0, 1);
+        custom.z = EditorGUILayout.Slider(custom.z, 0, 1);
+        custom.w = EditorGUILayout.Slider(custom.w, 0, 1);
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            for (int i = 0; i < textRenderer.customs.Length; i++)
+            {
+                textRenderer.customs[i] = custom;
+            }
         }
 
     }

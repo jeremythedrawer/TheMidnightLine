@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 4060302966162867912}
   - component: {fileID: 4409810573997885993}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SpikeFence
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3781174437403520025}
   - component: {fileID: 7986218080301673795}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Building
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -173,7 +173,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 4741541458634704027}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -206,7 +206,7 @@ GameObject:
   - component: {fileID: 4288739208554878568}
   - component: {fileID: 2209353661814701400}
   - component: {fileID: 632288581041624891}
-  m_Layer: 15
+  m_Layer: 7
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -371,7 +371,7 @@ GameObject:
   - component: {fileID: 8401079783212209761}
   - component: {fileID: 9142836604103921040}
   - component: {fileID: 1871317785357049319}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Mirogradska
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -427,7 +427,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Station
   station: {fileID: 11400000, guid: 134e92c40424a324c80e62fb7525f100, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
+  options: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
   platformRenderer: {fileID: 2209353661814701400}
   exitTransform: {fileID: 4741541458634704027}
   parallaxController: {fileID: 1871317785357049319}
@@ -467,7 +467,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8710205211242886828}
   - component: {fileID: 2671000404010841491}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: SpikeFence (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -551,6 +551,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StationBin
       objectReference: {fileID: 0}
+    - target: {fileID: 116282177015100011, guid: bc90e3a08beb56245b0e01c517b8db8e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6113877982123957830, guid: bc90e3a08beb56245b0e01c517b8db8e, type: 3}
       propertyPath: m_LocalPosition.x
       value: -17.781998
@@ -632,6 +636,10 @@ PrefabInstance:
     - target: {fileID: 1480898102046865986, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_Name
       value: StationWall (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1480898102046865986, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3066907409969786012, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -721,6 +729,10 @@ PrefabInstance:
       propertyPath: bounds.m_Center.z
       value: 24
       objectReference: {fileID: 0}
+    - target: {fileID: 9218927784503943888, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -750,6 +762,10 @@ PrefabInstance:
     - target: {fileID: 1480898102046865986, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_Name
       value: StationWall
+      objectReference: {fileID: 0}
+    - target: {fileID: 1480898102046865986, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3066907409969786012, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -815,6 +831,10 @@ PrefabInstance:
       propertyPath: bounds.m_Center.z
       value: 22
       objectReference: {fileID: 0}
+    - target: {fileID: 9218927784503943888, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -836,6 +856,10 @@ PrefabInstance:
     - target: {fileID: 116282177015100011, guid: bc90e3a08beb56245b0e01c517b8db8e, type: 3}
       propertyPath: m_Name
       value: StationBin (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 116282177015100011, guid: bc90e3a08beb56245b0e01c517b8db8e, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6113877982123957830, guid: bc90e3a08beb56245b0e01c517b8db8e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -963,6 +987,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlankedStationChair (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 7647405897051827566, guid: 3375eece402cb5046bcbbd91c944fa4e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1037,6 +1065,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlankedStationChair
       objectReference: {fileID: 0}
+    - target: {fileID: 7647405897051827566, guid: 3375eece402cb5046bcbbd91c944fa4e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1058,6 +1090,10 @@ PrefabInstance:
     - target: {fileID: 4014503387319705307, guid: 47ca876e5fe326a4593cf6a18080a995, type: 3}
       propertyPath: m_Name
       value: StationRecycleBin
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014503387319705307, guid: 47ca876e5fe326a4593cf6a18080a995, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5929884884113082248, guid: 47ca876e5fe326a4593cf6a18080a995, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1185,6 +1221,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlankedStationChair (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7647405897051827566, guid: 3375eece402cb5046bcbbd91c944fa4e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1291,6 +1331,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StationLight (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6272254112587291745, guid: 71ac33a8c0a895f45903c192265811b2, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6455278894788031322, guid: 71ac33a8c0a895f45903c192265811b2, type: 3}
       propertyPath: bounds.m_Center.x
       value: 335.93262
@@ -1352,6 +1396,10 @@ PrefabInstance:
     - target: {fileID: 4014503387319705307, guid: 47ca876e5fe326a4593cf6a18080a995, type: 3}
       propertyPath: m_Name
       value: StationRecycleBin (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014503387319705307, guid: 47ca876e5fe326a4593cf6a18080a995, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5929884884113082248, guid: 47ca876e5fe326a4593cf6a18080a995, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1427,6 +1475,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: StationBin (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 116282177015100011, guid: bc90e3a08beb56245b0e01c517b8db8e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 6113877982123957830, guid: bc90e3a08beb56245b0e01c517b8db8e, type: 3}
       propertyPath: m_LocalPosition.x
       value: 17.03801
@@ -1500,6 +1552,10 @@ PrefabInstance:
     - target: {fileID: 4014503387319705307, guid: 47ca876e5fe326a4593cf6a18080a995, type: 3}
       propertyPath: m_Name
       value: StationRecycleBin (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4014503387319705307, guid: 47ca876e5fe326a4593cf6a18080a995, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5929884884113082248, guid: 47ca876e5fe326a4593cf6a18080a995, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1627,6 +1683,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: PlankedStationChair (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7647405897051827566, guid: 3375eece402cb5046bcbbd91c944fa4e, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1732,6 +1792,10 @@ PrefabInstance:
     - target: {fileID: 6238025236859194683, guid: 71ac33a8c0a895f45903c192265811b2, type: 3}
       propertyPath: m_Name
       value: StationLight
+      objectReference: {fileID: 0}
+    - target: {fileID: 6272254112587291745, guid: 71ac33a8c0a895f45903c192265811b2, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6455278894788031322, guid: 71ac33a8c0a895f45903c192265811b2, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1846,6 +1910,10 @@ PrefabInstance:
     - target: {fileID: 7647405897051827566, guid: 3375eece402cb5046bcbbd91c944fa4e, type: 3}
       propertyPath: m_Name
       value: PlankedStationChair (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 7647405897051827566, guid: 3375eece402cb5046bcbbd91c944fa4e, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

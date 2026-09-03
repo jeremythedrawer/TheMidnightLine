@@ -5,7 +5,8 @@ public class Station : MonoBehaviour
 {
     public StationSO station;
     public TrainData trainStats;
-    public TripData trip;
+    public Options options;
+
     public AtlasRenderer platformRenderer;
     public Transform exitTransform;
 
@@ -27,13 +28,12 @@ public class Station : MonoBehaviour
             float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
-
-            PassengerBrain bystander = PassengerManager.GetNPC(trip.npcDataArray[bystanderProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
+            PassengerBrain bystander = PassengerManager.GetNPC(options.curTrip.passengers[bystanderProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
             
             bystander.profile = bystanderProfile;
             bystander.role = Role.Bystander;
             bystander.boardingStation = station;
-            bystander.disembarkingStation = trip.stationsDataArray[bystanderProfile.disembarkingStationIndex];
+            bystander.disembarkingStation = options.curTrip.stationsDataArray[bystanderProfile.disembarkingStationIndex];
 
             if (i % 2 == 0)
             {
@@ -42,28 +42,28 @@ public class Station : MonoBehaviour
             bystander.Init();
         }
 
-        int maxTraitorSpawnIndex = trip.traitorsSpawned + station.traitorSpawnCount;
+        int maxTraitorSpawnIndex = options.curTrip.traitorsSpawned + station.traitorSpawnCount;
 
-        for (int i = trip.traitorsSpawned; i < maxTraitorSpawnIndex; i++)
+        for (int i = options.curTrip.traitorsSpawned; i < maxTraitorSpawnIndex; i++)
         {
             totalNPCSSpawned++;
-            TraitorProfile traitorProfile = trip.traitorProfiles[i];
+            TraitorProfile traitorProfile = options.curTrip.traitorProfiles[i];
             float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
 
-            PassengerBrain traitor = PassengerManager.GetNPC(trip.npcDataArray[traitorProfile.npcProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
+            PassengerBrain traitor = PassengerManager.GetNPC(options.curTrip.passengers[traitorProfile.npcProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
             traitor.profile = traitorProfile.npcProfile;
             traitor.role = Role.Traitor;
             traitor.boardingStation = station;
-            traitor.disembarkingStation = trip.stationsDataArray[traitorProfile.npcProfile.disembarkingStationIndex];
+            traitor.disembarkingStation = options.curTrip.stationsDataArray[traitorProfile.npcProfile.disembarkingStationIndex];
             if (i % 2 == 0)
             {
                 traitor.atlasRenderer.FlipHSimple(true);
             }
             traitor.Init();
         }
-        trip.traitorsSpawned += station.traitorSpawnCount;
+        options.curTrip.traitorsSpawned += station.traitorSpawnCount;
 
         for (int i = 0; i < station.accompliceProfiles.Length; i++)
         {
@@ -74,12 +74,12 @@ public class Station : MonoBehaviour
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
 
-            PassengerBrain accomplice = PassengerManager.GetNPC(trip.npcDataArray[accompliceProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
+            PassengerBrain accomplice = PassengerManager.GetNPC(options.curTrip.passengers[accompliceProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
 
             accomplice.profile = accompliceProfile;
             accomplice.role = Role.Accomplice;
             accomplice.boardingStation = station;
-            accomplice.disembarkingStation = trip.stationsDataArray[accompliceProfile.disembarkingStationIndex];
+            accomplice.disembarkingStation = options.curTrip.stationsDataArray[accompliceProfile.disembarkingStationIndex];
 
             if (i % 2 == 0)
             {

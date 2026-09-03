@@ -37,7 +37,7 @@ public class Notepad : MonoBehaviour
 
     public InputData playerInputs;
     public TripData curTrip;
-    public PassengerData npcData;
+    public PassengersData npcData;
     public CameraData camStats;
     public SpyData spyStats;
     public Options colorsData;
@@ -79,20 +79,6 @@ public class Notepad : MonoBehaviour
     {
         Init();
     }
-    private void OnEnable()
-    {
-        Scenes.OnLoadTrip1 += Reinit;
-        Scenes.OnLoadStart += Init;
-
-        TrainController.OnFinishTripScene += KeepNotepad;
-    }
-    private void OnDisable()
-    {
-        Scenes.OnLoadTrip1 -= Reinit;
-        Scenes.OnLoadStart -= Init;
-
-        TrainController.OnFinishTripScene -= KeepNotepad;
-    }
     private void Update()
     {
         activePage.exitButton.UpdateButton();
@@ -105,7 +91,6 @@ public class Notepad : MonoBehaviour
     }
     public void Init()
     {
-        SceneController.KeepNotepad(this);
         colorKeyPage.gameObject.SetActive(false);
         gameObject.SetActive(false);
         CreateNPCProfiles();
@@ -155,16 +140,11 @@ public class Notepad : MonoBehaviour
             Reinit();
         }
     }
-    private void KeepNotepad()
-    {
-        SceneController.KeepNotepad(this);
-    }
     private void Reinit()
     {
         SkipToPage(0);
         notepadData.curState = NotepadState.Stationary;
         notepadData.subState = SubState.None;
-        clueColorPicker = SceneController.GetClueColorPicker();
         leftHand.Reinit();
     }
     public void EnterNotepad()
@@ -469,9 +449,9 @@ public class Notepad : MonoBehaviour
         List<NPCProfile> totalNPCProfiles = new List<NPCProfile>();
         List<NPCProfile> bystanderProfiles = new List<NPCProfile>();
 
-        for (int i = 0; i < curTrip.npcDataArray.Length; i++)
+        for (int i = 0; i < curTrip.passengers.Length; i++)
         {
-            NPCSO npc = curTrip.npcDataArray[i];
+            PassengerData npc = curTrip.passengers[i];
 
             int behaviourValue = (int)npc.behaviours;
 
@@ -530,7 +510,7 @@ public class Notepad : MonoBehaviour
                 float gaussianNormSpawnIndex = NormalGaussianValue(normSpawnIndex);
                 traitorProfile.disembarkingStationIndex = Mathf.Min(i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft) + MIN_STATION_STOPS, curTrip.stationsDataArray.Length - 1);
 
-                NPCSO traitor = curTrip.npcDataArray[traitorProfile.npcPrefabIndex];
+                PassengerData traitor = curTrip.passengers[traitorProfile.npcPrefabIndex];
 
                 string name = GenerateName(traitor.gender, traitor.ethnicity);
                 curTrip.traitorProfiles[traitorIndex] = new TraitorProfile()
@@ -561,7 +541,7 @@ public class Notepad : MonoBehaviour
 
             for (int j = 0; j < station.accompliceSpawnCount; j++)
             {
-                int randPrefabIndex = UnityEngine.Random.Range(0, curTrip.npcDataArray.Length);
+                int randPrefabIndex = UnityEngine.Random.Range(0, curTrip.passengers.Length);
                 NPCProfile accompliceProfile = new NPCProfile();
 
                 accompliceProfile.npcPrefabIndex = randPrefabIndex;

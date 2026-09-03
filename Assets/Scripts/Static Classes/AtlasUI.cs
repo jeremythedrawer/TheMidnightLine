@@ -142,6 +142,7 @@ public static class AtlasUI
         StartMenu,
         OptionsMenu,
         MapMenu,
+        TripTitleMenu,
         Notepad,
         Ticket,
         CarriageMap,
@@ -161,6 +162,7 @@ public static class AtlasUI
         Options,
         Quit,
         Back,
+        Continue,
     }
     public enum KeyboardBindingIconIndices
     { 

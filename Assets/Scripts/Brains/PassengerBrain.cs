@@ -25,16 +25,15 @@ public class PassengerBrain : MonoBehaviour
     public Rigidbody2D rigidBody;
     public BoxCollider2D boxCollider;
     
-    public NPCSO npc;
+    public Options options;
     public PassengerData passengerData;
-    public LayerData layerSettings;
-    public TrainSettingsSO trainSettings;
-    public TrainData trainStats;
-    public InputData playerInputs;
-    public SpyData spyStats;
-    public TripData trip;
+    public PassengersData passengersData;
+    public LayerData layerData;
+    public TrainData trainData;
+    public InputData inputData;
+    public SpyData spyData;
     public SpawnData spawnData;
-    public CameraData camStats;
+    public CameraData camData;
 
     [Header("Generated")]
     public AtlasSO atlas;
@@ -132,7 +131,7 @@ public class PassengerBrain : MonoBehaviour
         seatPosIndex = int.MaxValue;
         atlas = atlasRenderer.atlas;
 
-        rigidBody.includeLayers = layerSettings.stationMask;
+        rigidBody.includeLayers = layerData.stationMask;
         curPath = NPCPath.ToStandAtStation;
 
         smokerRoomIndex = -1;
@@ -151,10 +150,10 @@ public class PassengerBrain : MonoBehaviour
     }
     public void BoardTrain()
     {
-        trainStats.totalNPCsBoarded++;
+        trainData.totalNPCsBoarded++;
         onTrain = true;
         QueueForSeat();
-        rigidBody.includeLayers = layerSettings.trainMask;
+        rigidBody.includeLayers = layerData.trainMask;
         SetStandingDepthInTrain();
 
         if (role == Role.Traitor)
@@ -168,7 +167,7 @@ public class PassengerBrain : MonoBehaviour
         AtlasRenderer stationPlatform = station.platformRenderer;
         transform.SetParent(stationPlatform.transform, true);
         atlasRenderer.SetWorldDepth((int)stationPlatform.transform.position.z);
-        rigidBody.includeLayers = layerSettings.stationMask;
+        rigidBody.includeLayers = layerData.stationMask;
         onTrain = false;
         curCarriage.RemoveNPC(this);
         SetPath(NPCPath.ToExitStation);
@@ -214,7 +213,7 @@ public class PassengerBrain : MonoBehaviour
     }
     public void ToggleHover(bool toggle)
     {
-        if ((trip.curUnlocks & UnlockType.RuleOut) != 0)
+        if ((options.curTrip.curUnlocks & UnlockType.RuleOut) != 0)
         {
             atlasRenderer.custom.y = toggle ? 1 : 0;
         }
@@ -274,7 +273,7 @@ public class PassengerBrain : MonoBehaviour
         {
             case NPCState.Idling:
             {
-                stateDuration = UnityEngine.Random.Range(npc.idleDurationRange.x, npc.idleDurationRange.y);
+                stateDuration = UnityEngine.Random.Range(passengerData.idleDurationRange.x, passengerData.idleDurationRange.y);
                 EnterIdlePath();
             }
             break;
@@ -307,12 +306,12 @@ public class PassengerBrain : MonoBehaviour
 
                 if (curBehaviour == Habits.Known_vandal)
                 {
-                    graffiti = PassengerManager.GetGraffitiRenderer(passengerData.graffitiPrefab);
+                    graffiti = PassengerManager.GetGraffitiRenderer(passengersData.graffitiPrefab);
                     int graffitiIndex = UnityEngine.Random.Range(0, graffiti.atlas.simpleSprites.Length - 1);
                     graffiti.SetSprites(graffitiIndex);
-                    graffiti.transform.position = new Vector3(transform.position.x, atlasRenderer.bounds.max.y, trainStats.depthSections.carriageSeat + 1.5f);
+                    graffiti.transform.position = new Vector3(transform.position.x, atlasRenderer.bounds.max.y, trainData.depthSections.carriageSeat + 1.5f);
                     graffiti.transform.SetParent(curCarriage.transform);
-                    atlasRenderer.SetWorldDepth(trainStats.depthSections.backStandingBack);
+                    atlasRenderer.SetWorldDepth(trainData.depthSections.backStandingBack);
                 }
 
                 if (prevState != NPCState.TicketCheck)
@@ -471,7 +470,7 @@ public class PassengerBrain : MonoBehaviour
         {
             case NPCState.Walking:
             {
-                targetXVelocity = npc.moveSpeed * move;
+                targetXVelocity = passengerData.moveSpeed * move;
                 Vector3 localPos = transform.localPosition;
                 localPos.x += targetXVelocity * Time.fixedDeltaTime;
                 transform.localPosition = localPos;
@@ -566,7 +565,7 @@ public class PassengerBrain : MonoBehaviour
             {
                 float seatDepthOffset = (float)seatPosIndex / (float)curCarriage.seatData.xPos.Length;
 
-                atlasRenderer.SetWorldDepth(trainStats.depthSections.carriageSeat + seatDepthOffset);
+                atlasRenderer.SetWorldDepth(trainData.depthSections.carriageSeat + seatDepthOffset);
                 transform.position = new Vector3(targetXPos, transform.position.y, transform.position.z);
                 atlasRenderer.FlipHSimple(false);
             }
@@ -666,13 +665,13 @@ public class PassengerBrain : MonoBehaviour
             {
                 StopSitting();
 
-                if (trip.stationAhead.isFrontOfTrain)
+                if (options.curTrip.stationAhead.isFrontOfTrain)
                 {                    
                     if (role == Role.Accomplice)
                     {
                         float distToCurSlideDoor = float.MaxValue;
 
-                        for (int i = 0; i < trainStats.exteriorSlideDoorXBounds.Length; i++)
+                        for (int i = 0; i < trainData.exteriorSlideDoorXBounds.Length; i++)
                         {
                             SlideDoors slideDoor = TrainController.ExteriorSlideDoors[i];
                             bool validDoor = false;
@@ -703,9 +702,9 @@ public class PassengerBrain : MonoBehaviour
                     else
                     {
                         bool foundDoor = false;
-                        for (int i = 0; i < trainStats.exteriorSlideDoorXBounds.Length; i++)
+                        for (int i = 0; i < trainData.exteriorSlideDoorXBounds.Length; i++)
                         {
-                            if (transform.position.x > trainStats.exteriorSlideDoorXBounds[i])
+                            if (transform.position.x > trainData.exteriorSlideDoorXBounds[i])
                             {
                                 curSlideDoors = TrainController.ExteriorSlideDoors[i];
 
@@ -724,7 +723,7 @@ public class PassengerBrain : MonoBehaviour
                     {
                         float distToCurSlideDoor = float.MaxValue;
 
-                        for (int i = 0; i < trainStats.interiorSlideDoorXBounds.Length; i++)
+                        for (int i = 0; i < trainData.interiorSlideDoorXBounds.Length; i++)
                         {
                             SlideDoors slideDoor = TrainController.InteriorSlideDoors[i];
 
@@ -750,9 +749,9 @@ public class PassengerBrain : MonoBehaviour
                     else
                     {
                         bool foundDoor = false;
-                        for (int i = 0; i < trainStats.interiorSlideDoorXBounds.Length; i++)
+                        for (int i = 0; i < trainData.interiorSlideDoorXBounds.Length; i++)
                         {
-                            if (transform.position.x > trainStats.interiorSlideDoorXBounds[i])
+                            if (transform.position.x > trainData.interiorSlideDoorXBounds[i])
                             {
                                 curSlideDoors = TrainController.InteriorSlideDoors[i];
 
@@ -802,7 +801,7 @@ public class PassengerBrain : MonoBehaviour
             case NPCPath.ToExitStation:
             {
 
-                targetXPos = trip.stationsDataArray[profile.disembarkingStationIndex].exitLocalPosX;
+                targetXPos = options.curTrip.stationsDataArray[profile.disembarkingStationIndex].exitLocalPosX;
                 targetDist = targetXPos - transform.localPosition.x;
             }
             break;
@@ -859,7 +858,7 @@ public class PassengerBrain : MonoBehaviour
             break;
             case NPCPath.StandingAtStation:
             {
-                if (prevPath == NPCPath.ToSlideDoor && camStats.curLocationState != Spy.LocationState.Station)
+                if (prevPath == NPCPath.ToSlideDoor && camData.curLocationState != Spy.LocationState.Station)
                 {
                     SetPath(NPCPath.ToSlideDoor);
                 }
@@ -880,7 +879,7 @@ public class PassengerBrain : MonoBehaviour
                     atlasRenderer.custom.z = 0;
                     atlasRenderer.custom.w = 0;
                     atlasRenderer.customBit = 0;
-                    PassengerManager.ReturnNPC(trip.npcDataArray[profile.npcPrefabIndex].prefab , this);
+                    PassengerManager.ReturnNPC(options.curTrip.passengers[profile.npcPrefabIndex].prefab , this);
                 }
             }
             break;
@@ -930,7 +929,7 @@ public class PassengerBrain : MonoBehaviour
             {
                 NPCMotion standingMotion = RandomIdleMotion(NPCMotion.StandingBlinking, NPCMotion.StandingBreathing);
 
-                if (camStats.curLocationState == Spy.LocationState.Station && trainStats.curStationIndex > 0)
+                if (camData.curLocationState == Spy.LocationState.Station && trainData.curStationIndex > 0)
                 {
                     SetPath(NPCPath.StandingAtStation);
                 }
@@ -996,7 +995,7 @@ public class PassengerBrain : MonoBehaviour
     }
     private void PrepareToDisembarkTrain()
     {
-        if (!onTrain || trip.stationAhead.stationIndex != profile.disembarkingStationIndex) return;
+        if (!onTrain || options.curTrip.stationAhead.stationIndex != profile.disembarkingStationIndex) return;
 
         stopBehaving = true;
         StopSitting();
@@ -1024,7 +1023,7 @@ public class PassengerBrain : MonoBehaviour
     private void SetStandingDepthInTrain()
     {
         if (!onTrain) return;
-        int depth = UnityEngine.Random.Range(trainStats.depthSections.frontStandingBack, trainStats.depthSections.backStandingFront);
+        int depth = UnityEngine.Random.Range(trainData.depthSections.frontStandingBack, trainData.depthSections.backStandingFront);
         atlasRenderer.SetWorldDepth(depth);
     }
     private void PickNextBehaviour()
@@ -1044,7 +1043,7 @@ public class PassengerBrain : MonoBehaviour
             if ((profile.behaviours & (Habits)nextBit) != 0)
             {
                 curBehaviour = (Habits)nextBit;
-                curBehaviourContext = passengerData.habitDataDict[curBehaviour];
+                curBehaviourContext = passengersData.habitDataDict[curBehaviour];
 
                 if (curBehaviourContext.pathToTake != NPCPath.None)
                 {
@@ -1058,7 +1057,7 @@ public class PassengerBrain : MonoBehaviour
     }
     private void PrepareToBoardTrain()
     {
-        if (onTrain || trip.stationAhead.stationIndex != profile.boardingStationIndex) return;
+        if (onTrain || options.curTrip.stationAhead.stationIndex != profile.boardingStationIndex) return;
         Callback callback = SetPathToSlideDoorCallback;
         ctsWaitForRandSeconds?.Cancel();
         ctsWaitForRandSeconds = new CancellationTokenSource();

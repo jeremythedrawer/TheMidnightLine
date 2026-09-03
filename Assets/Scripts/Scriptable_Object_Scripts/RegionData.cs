@@ -4,6 +4,7 @@ using UnityEngine;
 public class RegionData : ScriptableObject
 {
     public TripData[] trips;
+    public TrainController train;
 
     [Header("Generated")]
     public bool unlocked;

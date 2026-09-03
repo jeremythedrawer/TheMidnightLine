@@ -1,16 +1,22 @@
+using Proselyte.Sigils;
 using System;
 using UnityEngine;
 using static AtlasUI;
 
 public class Menu : MonoBehaviour
 {
-    public static event Action OnClickBegin;
+    public static event Action OnClickToMap;
     public static event Action OnClickOptions;
     public static event Action OnClickBackToStartMenu;
+    public static event Action OnClickContinueMenu;
 
     public TextButton[] textButtons;
-    public CameraData camData;
+    public AtlasTextRenderer[] texts;
 
+    public CameraData camData;
+    public Options options;
+
+    public GameEvent onBeginTrip;
     [Header("Generated")]
     public Bounds bounds;
 
@@ -27,8 +33,6 @@ public class Menu : MonoBehaviour
     }
     private void InitButtons()
     {
-
-
         for (int i = 0; i < textButtons.Length; i++)
         {
             TextButton textButton = textButtons[i];
@@ -39,7 +43,16 @@ public class Menu : MonoBehaviour
                 {
                     void Start()
                     {
-                        OnClickBegin?.Invoke();
+                        if (options.thirdPointRegion.trips[0].completed)
+                        {
+                            OnClickToMap?.Invoke();
+                        }
+                        else
+                        {
+                            options.curRegion = options.thirdPointRegion;
+                            options.curTrip = options.thirdPointRegion.trips[0];
+                            onBeginTrip?.Raise();
+                        }
                         textButton.MouseUpText();
                     }
                     textButton.InitButton(onMouseUp: Start);
@@ -80,7 +93,25 @@ public class Menu : MonoBehaviour
                     textButton.InitButton(Back);
                 }
                 break;
+
+                case ButtonFunctionType.Continue:
+                {
+                    void Continue()
+                    {
+                        OnClickContinueMenu?.Invoke();
+                        textButton.MouseUpText();
+                    }
+                    textButton.InitButton(Continue);
+                }
+                break;
             }
+        }
+    }
+    public void ShowButtons(bool toggle)
+    {
+        for (int i = 0; i < textButtons.Length; i++)
+        {
+            textButtons[i].enabled = toggle;
         }
     }
     public void UpdateMenu()

@@ -48,13 +48,9 @@ public class NPCPicker : MonoBehaviour
     public float tileWidth;
     public float tileHeight;
 
-    private void OnEnable()
+    private void Start()
     {
-        Scenes.OnLoadTrip0 += Init;
-    }
-    private void OnDisable()
-    {
-        Scenes.OnLoadTrip0 -= Init;
+        Init();
     }
     private void Update()
     {
@@ -70,72 +66,7 @@ public class NPCPicker : MonoBehaviour
     }
     private void Init()
     {
-        SceneController.SetNPCPicker(this);
         SetOpenPosAndSize();
-
-        void EnterColorIcon(IconButton icon)
-        {
-            icon.atlasRenderer.customBit |= (int)ColorBits.Invert;
-        }
-        void ExitColorIcon(IconButton icon)
-        {
-            icon.atlasRenderer.customBit &= ~(int)ColorBits.Invert;
-        }
-
-        for (int i = 0; i < icons.Length; i++)
-        {
-            int index = i;
-
-            void ClickIcon(IconButton icon)
-            {
-                switch (functionType)
-                {
-                    case PickerFunctionType.TicketCheck:
-                    {
-                        SceneController.GetSpy().ChooseNPCTicketToCheck(possibleNPCs[index]);
-                    }
-                    break;
-
-                    case PickerFunctionType.Color:
-                    {
-                        PassengerBrain selectedNPC = possibleNPCs[index];
-                        if ((trip.curUnlocks & UnlockType.Color) == 0)
-                        {
-                            if ((selectedNPC.atlasRenderer.customBit & ((int)ColorBits.Diagonal)) == 0)
-                            {
-                                selectedNPC.atlasRenderer.customBit |= (int)ColorBits.Diagonal;
-                            }
-                            else
-                            {
-                                selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Diagonal);
-                            }
-                        }
-                        else
-                        {
-                            SceneController.GetNPCColorPicker().Open();
-                        }
-                    }
-                    break;
-
-                    case PickerFunctionType.RuleOut:
-                    {
-                        PassengerBrain selectedNPC = possibleNPCs[index];
-                        if ((selectedNPC.atlasRenderer.customBit & ((int)ColorBits.Diagonal)) == 0)
-                        {
-                            selectedNPC.atlasRenderer.customBit |= (int)ColorBits.Diagonal;
-                        }
-                        else
-                        {
-                            selectedNPC.atlasRenderer.customBit &= ~((int)ColorBits.Diagonal);
-                        }
-                    }
-                    break;
-                }
-                Close();
-            }
-
-            //icons[i].InitButton(ClickIcon, EnterColorIcon, ExitColorIcon);
-        }
     }
 
     public void SetOpenPosAndSize()
@@ -198,7 +129,7 @@ public class NPCPicker : MonoBehaviour
             if (i < npcCount)
             {
                 iconRend.enabled = true;
-                int npcIconIndex = (npcBrain.npc.mugShotIndex * 2);
+                int npcIconIndex = (npcBrain.passengerData.mugShotIndex * 2);
                 if (npcBrain.ticketHasBeenChecked) npcIconIndex += 1;
 
                 iconRend.UpdateSpriteInputsByIndex(npcIconIndex);

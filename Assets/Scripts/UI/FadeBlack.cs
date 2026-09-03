@@ -16,7 +16,6 @@ public class FadeBlack : MonoBehaviour
         WritingText,
         FinishedFadeIn,
         FinishedFadeOut,
-        ReadyToSceneChange,
     }
 
     public static event Action OnFinishFadeOut;
@@ -75,33 +74,8 @@ public class FadeBlack : MonoBehaviour
         curUVPosY = uvPosY;
         FadingIn(value, alpha).Forget();
     }
-    public void CheckToFadeOutSceneChange()
-    {
-        if (curState == (State.FinishedFadeIn | State.ReadyToSceneChange))
-        {
-            if (playerInputs.mouseLeftUp || playerInputs.writeKeyDown || playerInputs.move != 0)
-            {
-                FadeOutChangeScene();
-            }
-        }
-        else if (curState == State.FadingIn || curState == State.WritingText)
-        {
-            if (playerInputs.writeKeyDown)
-            {
-                textRenderer.ctsWrite?.Cancel();
-            }
-        }
-    }
     public void FadeOut()
     {
-        ctsFadeBlack?.Cancel();
-        ctsFadeBlack = new CancellationTokenSource();
-
-        FadingOut().Forget();
-    }
-    public void FadeOutChangeScene()
-    {
-        Scenes.SetScene(curSceneIndex);
         ctsFadeBlack?.Cancel();
         ctsFadeBlack = new CancellationTokenSource();
 
@@ -113,11 +87,6 @@ public class FadeBlack : MonoBehaviour
         fadeBlackMaterial.SetFloat("_UVPosX", uvPosX);
         fadeBlackMaterial.SetFloat("_UVPosY", uvPosY);
         fadeBlackMaterial.SetFloat("_Alpha", alpha);
-    }
-    private void FinishWritingWithSceneChange()
-    {
-        curState = (State.FinishedFadeIn | State.ReadyToSceneChange);
-        WaitAndSetSpacebar(waitTime: 1);
     }
     public void WaitAndSetSpacebar(float waitTime)
     {
@@ -154,7 +123,7 @@ public class FadeBlack : MonoBehaviour
             fadeBlackMaterial.SetFloat("_Value", 1);
             curSceneIndex = sceneIndex;
             curState = State.WritingText;
-            textRenderer.WriteText(text, PRINT_LETTER_TIME, FinishWritingWithSceneChange, setTextIfCancelled: true);
+            //textRenderer.WriteText(text, PRINT_LETTER_TIME, FinishWritingWithSceneChange, setTextIfCancelled: true);
 
         }
         catch (OperationCanceledException) { }

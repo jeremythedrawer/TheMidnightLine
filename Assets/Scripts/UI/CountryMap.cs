@@ -58,6 +58,7 @@ public class CountryMap : MonoBehaviour
             meridiaMapRenderer.gameObject.SetActive(false);
             thirdPointMap.gameObject.SetActive(true);
             backButton.gameObject.SetActive(true);
+            options.curRegion = options.thirdPointRegion;
             curMap = thirdPointMap;
         }
 

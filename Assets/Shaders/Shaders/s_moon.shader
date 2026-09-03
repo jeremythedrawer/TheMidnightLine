@@ -54,11 +54,9 @@ Shader "Custom/s_moon"
                 float2 scale;
                 scale.x = length(unity_ObjectToWorld._m00_m10_m20);
                 scale.y = length(unity_ObjectToWorld._m01_m11_m21);
-
-                float worldCamTop = unity_OrthoParams.y + _WorldSpaceCameraPos.y;
-
+                float camHeight = unity_OrthoParams.y * 2;
                 float3 worldPos = TransformObjectToWorld(objPos);
-                //worldPos.y = lerp(worldPos.y - scale.y, worldPos.y + (worldCamTop * 0.75), _DayNight);
+                worldPos.y -= camHeight * (1-_DayNight);
                 
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
@@ -80,7 +78,7 @@ Shader "Custom/s_moon"
                 mask = BayerX8(mask, i.positionHCS.y + (_Time.y * _FadeSpeed));
 
                 float3 finalColor = lerp(_BlackColor, _WhiteColor, mask);
-                clip(fullMoon - 0.001);
+                clip(mask - 0.001);
                 return half4(finalColor, 1);
             }
             ENDHLSL

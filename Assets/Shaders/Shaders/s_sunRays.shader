@@ -61,11 +61,10 @@ Shader "Custom/s_sunRays"
                 float2 scale;
                 scale.x = length(unity_ObjectToWorld._m00_m10_m20);
                 scale.y = length(unity_ObjectToWorld._m01_m11_m21);
-
-                float worldCamTop = unity_OrthoParams.y + _WorldSpaceCameraPos.y;
-
+                float camHeight = unity_OrthoParams.y * 2;
                 float3 worldPos = TransformObjectToWorld(objPos);
-                worldPos.y = lerp(worldPos.y + worldCamTop, worldPos.y - scale.y, _DayNight);
+                worldPos.y -= camHeight * _DayNight;
+
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
                 o.worldPos = worldPos;
@@ -75,8 +74,7 @@ Shader "Custom/s_sunRays"
             half4 frag(Varyings i) : SV_Target
             {
 			    float time = _Time.y * _RotSpeed;
-			    float sunSize = lerp(_PulseMinSize, _PulseMaxSize, sin(time * _PulseSpeed) * 0.5 + 0.5);
-
+			    float sunSize = lerp(_PulseMinSize, _PulseMaxSize, sin(time * _PulseSpeed) * 0.5 + 0.5) * (1-_DayNight);
 
                 float2 centerUV = i.uv * 2 - 1;
 

@@ -1,3 +1,4 @@
+using Proselyte.Sigils;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.VFX;
@@ -5,7 +6,8 @@ using UnityEngine.VFX;
 using static Passenger;
 public class PassengerManager : MonoBehaviour
 {
-    public PassengerData passengerData;
+    public GameEvent onBeginTrip;
+    public PassengersData passengerData;
     public Texture2D diagonalTexture;
     public AtlasSO glyphAtlas;
 
@@ -16,11 +18,11 @@ public class PassengerManager : MonoBehaviour
 
     private void OnEnable()
     {
-        RegionMap.OnStartTrip += InitPoolsDict;
+        onBeginTrip.RegisterListener(InitPoolsDict);
     }
     private void OnDisable()
     {
-        RegionMap.OnStartTrip -= InitPoolsDict;
+        onBeginTrip.UnregisterListener(InitPoolsDict);
     }
     private void Start()
     {

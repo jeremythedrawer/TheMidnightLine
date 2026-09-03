@@ -69,6 +69,7 @@ public class SliderController : MonoBehaviour
     private void UpdateSlider()
     {
         button.UpdateButton();
+
         if (button.curState == ButtonState.Clicked)
         {
             sliderLocalPos.x = button.transform.parent.InverseTransformPoint(inputData.mouseWorldPos).x + startDragDelta;

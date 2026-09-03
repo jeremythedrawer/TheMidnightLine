@@ -101,6 +101,8 @@ Shader "Custom/s_atlasUI"
                 blackColor += meridiaColor;
 
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+                half alpha = BayerX8((tex.a * i.custom.a), i.positionHCS.y); 
+                clip(alpha - 0.001);
 
                 int redMask = saturate(bitMask & RED_BIT);
                 int greenMask = saturate(bitMask & GREEN_BIT);
@@ -129,9 +131,7 @@ Shader "Custom/s_atlasUI"
                 darkCol = lerp(blackColor, darkCol, useCol);
                 lightCol = lerp(_WhiteColor, lightCol, useCol);                
                 half3 finalColor = lerp(darkCol, lightCol, t);
-                
-                
-                clip((tex.a * i.custom.a) - 0.001);
+
                 return half4 (finalColor, 1);
             }
             ENDHLSL

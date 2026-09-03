@@ -40,13 +40,11 @@ public class CameraController : MonoBehaviour
     private void OnEnable()
     {
         Init();
-        RegionMap.OnStartTrip += TripInit;
         HenchmanBrain.OnShoot += ShakeFromGunShot;
         SpyBrain.OnAfterOutcomeSequence += SetToSlowDamping;
     }
     private void OnDisable()
     {
-        RegionMap.OnStartTrip -= TripInit;
         HenchmanBrain.OnShoot -= ShakeFromGunShot;
         SpyBrain.OnAfterOutcomeSequence -= SetToSlowDamping;
     }
@@ -89,11 +87,8 @@ public class CameraController : MonoBehaviour
         camData.worldUnitsPerPixel = (cam.orthographicSize * 2) / Screen.height;
 
         Shader.SetGlobalVector("_CameraSizeAndPos", new Vector4(camData.bounds.size.x, camData.bounds.size.y, camData.bounds.center.x, camData.bounds.center.y));
-    }
-    private void TripInit()
-    {        
-        camData.curLocationState = LocationState.Station;        
-        SetCarriageSDFCompute();
+
+        camData.curLocationState = LocationState.Menu;
     }
     private void SetCarriageSDFCompute()
     {
@@ -125,6 +120,7 @@ public class CameraController : MonoBehaviour
             case LocationState.Station:
             {
                 targetWorldPos.x = spyData.bounds.center.x + curXOffset;
+                targetWorldPos.y = spyData.bounds.center.y;
             }
             break;
 

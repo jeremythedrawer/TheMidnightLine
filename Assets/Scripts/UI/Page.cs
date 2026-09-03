@@ -21,7 +21,7 @@ public class Page : MonoBehaviour
     public TripClue clueType;
 
     public TripData trip;
-    public PassengerData npcData;
+    public PassengersData npcData;
     public SpyData spyData;
     public InputData playerInputs;
     public NotepadData notepadData;

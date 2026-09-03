@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5156028957744866426}
   - component: {fileID: 2069968943598981032}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuildingWall_leftFront (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 7417209214674835813}
   - component: {fileID: 2760858562243806358}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuildingWall_leftFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 7009951296616833025}
   - component: {fileID: 7984465553792076042}
   - component: {fileID: 5970183146856195421}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Vyskov Passage
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -265,7 +265,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Station
   station: {fileID: 11400000, guid: 943d44fe5abb9e34a8ac880c80c72af9, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
+  options: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
   platformRenderer: {fileID: 8122243838295327252}
   exitTransform: {fileID: 9065888923847162420}
   parallaxController: {fileID: 5970183146856195421}
@@ -306,7 +306,7 @@ GameObject:
   - component: {fileID: 3137240130472602026}
   - component: {fileID: 67012439964533474}
   - component: {fileID: 8122243838295327252}
-  m_Layer: 15
+  m_Layer: 7
   m_Name: Platform
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -470,7 +470,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2741411066957265314}
   - component: {fileID: 7781648113334865096}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuildingWall_leftBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -552,7 +552,7 @@ GameObject:
   m_Component:
   - component: {fileID: 3102277708703133396}
   - component: {fileID: 9128192584129019760}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuildingWall_leftBack (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -634,7 +634,7 @@ GameObject:
   m_Component:
   - component: {fileID: 545977703179835746}
   - component: {fileID: 3501112631542285155}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuildingWall_bottom
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -716,7 +716,7 @@ GameObject:
   m_Component:
   - component: {fileID: 6836761885960357157}
   - component: {fileID: 1087572396116790958}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuildingWall_top
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -798,7 +798,7 @@ GameObject:
   m_Component:
   - component: {fileID: 5563981119920326897}
   - component: {fileID: 4990322885654595402}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BackWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -879,7 +879,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 9065888923847162420}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -965,6 +965,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VendingMachine (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 6941684785654458942, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1038,6 +1042,10 @@ PrefabInstance:
     - target: {fileID: 6128688438741889970, guid: 29d6fe7436a72e846927cf557dd21ce7, type: 3}
       propertyPath: m_Name
       value: Vyskov Passage Sign
+      objectReference: {fileID: 0}
+    - target: {fileID: 6128688438741889970, guid: 29d6fe7436a72e846927cf557dd21ce7, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -1113,6 +1121,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VendingMachine (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 6941684785654458942, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1131,6 +1143,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7009951296616833025}
     m_Modifications:
+    - target: {fileID: 2458866773247461260, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3399905151176318421, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
       propertyPath: m_LocalPosition.x
       value: -17.050018
@@ -1247,6 +1263,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pillar
       objectReference: {fileID: 0}
+    - target: {fileID: 7148250807945580285, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8026882762059011734, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1280,6 +1304,10 @@ PrefabInstance:
     - target: {fileID: 5619957642418841397, guid: c3e3570b9a712bb41bce368123321515, type: 3}
       propertyPath: m_Name
       value: Doorway
+      objectReference: {fileID: 0}
+    - target: {fileID: 5619957642418841397, guid: c3e3570b9a712bb41bce368123321515, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6801625858193392903, guid: c3e3570b9a712bb41bce368123321515, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1395,6 +1423,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VendingMachine (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 6941684785654458942, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1416,6 +1448,10 @@ PrefabInstance:
     - target: {fileID: 1480898102046865986, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_Name
       value: StationWall
+      objectReference: {fileID: 0}
+    - target: {fileID: 1480898102046865986, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3066907409969786012, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1476,6 +1512,10 @@ PrefabInstance:
     - target: {fileID: 6529591359439808583, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: bounds.m_Center.y
       value: 0.5083333
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218927784503943888, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6529591359439808583, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
@@ -1556,6 +1596,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlurocentTubeLight (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 8286573679760689497, guid: 3cb8186833180b142acc6dc32cf25e0a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1630,6 +1674,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VendingMachine (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 6941684785654458942, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1648,6 +1696,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7009951296616833025}
     m_Modifications:
+    - target: {fileID: 2458866773247461260, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3399905151176318421, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 21.50998
@@ -1764,6 +1816,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pillar (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 7148250807945580285, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8026882762059011734, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1838,6 +1898,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VendingMachine (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 6941684785654458942, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1899,6 +1963,10 @@ PrefabInstance:
     - target: {fileID: 2544863427295501808, guid: cf0a07aab49ee34428751aefa33f5d9e, type: 3}
       propertyPath: m_Name
       value: DoubleScreens (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2544863427295501808, guid: cf0a07aab49ee34428751aefa33f5d9e, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7668030003255404843, guid: cf0a07aab49ee34428751aefa33f5d9e, type: 3}
       propertyPath: boundsOffset.x
@@ -1977,6 +2045,10 @@ PrefabInstance:
     - target: {fileID: 6768906749837389401, guid: 05477c75b00c4394eb80ab489557a6b6, type: 3}
       propertyPath: m_Name
       value: Elevator
+      objectReference: {fileID: 0}
+    - target: {fileID: 6768906749837389401, guid: 05477c75b00c4394eb80ab489557a6b6, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7785525832985410112, guid: 05477c75b00c4394eb80ab489557a6b6, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2068,6 +2140,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlurocentTubeLight (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 8286573679760689497, guid: 3cb8186833180b142acc6dc32cf25e0a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2129,6 +2205,10 @@ PrefabInstance:
     - target: {fileID: 2544863427295501808, guid: cf0a07aab49ee34428751aefa33f5d9e, type: 3}
       propertyPath: m_Name
       value: DoubleScreens (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2544863427295501808, guid: cf0a07aab49ee34428751aefa33f5d9e, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7668030003255404843, guid: cf0a07aab49ee34428751aefa33f5d9e, type: 3}
       propertyPath: boundsOffset.x
@@ -2220,6 +2300,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VendingMachine (10)
       objectReference: {fileID: 0}
+    - target: {fileID: 6941684785654458942, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2238,6 +2322,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7009951296616833025}
     m_Modifications:
+    - target: {fileID: 2458866773247461260, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3399905151176318421, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 5.0690002
@@ -2354,6 +2442,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pillar (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 7148250807945580285, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8026882762059011734, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2432,6 +2528,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlurocentTubeLight (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8286573679760689497, guid: 3cb8186833180b142acc6dc32cf25e0a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2450,6 +2550,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7009951296616833025}
     m_Modifications:
+    - target: {fileID: 2458866773247461260, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3399905151176318421, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
       propertyPath: m_LocalPosition.x
       value: -7.76001
@@ -2566,6 +2670,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pillar (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 7148250807945580285, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8026882762059011734, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2624,6 +2736,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1549422369682075820, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2007677947243151519, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
       value: 302.54333
@@ -2647,6 +2763,10 @@ PrefabInstance:
     - target: {fileID: 2200256854336772495, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: batchKey.depthOrder
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758989573106263124, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: spriteIndex
@@ -2747,6 +2867,14 @@ PrefabInstance:
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: sprite.uvSizeAndPos.z
       value: 0.122802734
+      objectReference: {fileID: 0}
+    - target: {fileID: 3605563764140190889, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4379448014316368593, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4785185323857569911, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2856,9 +2984,21 @@ PrefabInstance:
       propertyPath: sprite.uvSizeAndPos.z
       value: 0.122802734
       objectReference: {fileID: 0}
+    - target: {fileID: 8301915069343740835, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8548621493231357973, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8789434518737744951, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: m_Name
       value: Ticket Gate (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8789434518737744951, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8892438272199440312, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2950,6 +3090,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlurocentTubeLight (9)
       objectReference: {fileID: 0}
+    - target: {fileID: 8286573679760689497, guid: 3cb8186833180b142acc6dc32cf25e0a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3028,6 +3172,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlurocentTubeLight (6)
       objectReference: {fileID: 0}
+    - target: {fileID: 8286573679760689497, guid: 3cb8186833180b142acc6dc32cf25e0a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3046,6 +3194,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7009951296616833025}
     m_Modifications:
+    - target: {fileID: 2458866773247461260, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3399905151176318421, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 11.059998
@@ -3162,6 +3314,14 @@ PrefabInstance:
       propertyPath: m_Name
       value: Pillar (4)
       objectReference: {fileID: 0}
+    - target: {fileID: 7148250807945580285, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8026882762059011734, guid: d5b3da6bd473eba4cbcd1ac36c3755f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3223,6 +3383,10 @@ PrefabInstance:
     - target: {fileID: 6768906749837389401, guid: 05477c75b00c4394eb80ab489557a6b6, type: 3}
       propertyPath: m_Name
       value: Elevator (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6768906749837389401, guid: 05477c75b00c4394eb80ab489557a6b6, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7785525832985410112, guid: 05477c75b00c4394eb80ab489557a6b6, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3314,6 +3478,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlurocentTubeLight (8)
       objectReference: {fileID: 0}
+    - target: {fileID: 8286573679760689497, guid: 3cb8186833180b142acc6dc32cf25e0a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3375,6 +3543,10 @@ PrefabInstance:
     - target: {fileID: 2133600136792505637, guid: 79105ab01a82f064aa8ff453e97d1513, type: 3}
       propertyPath: m_Name
       value: TicketBox (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2133600136792505637, guid: 79105ab01a82f064aa8ff453e97d1513, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8799046137349763940, guid: 79105ab01a82f064aa8ff453e97d1513, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3450,6 +3622,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: TicketBox
       objectReference: {fileID: 0}
+    - target: {fileID: 2133600136792505637, guid: 79105ab01a82f064aa8ff453e97d1513, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8799046137349763940, guid: 79105ab01a82f064aa8ff453e97d1513, type: 3}
       propertyPath: bounds.m_Center.x
       value: 305.19278
@@ -3520,6 +3696,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1549422369682075820, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2007677947243151519, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
       value: 298.42435
@@ -3544,6 +3724,10 @@ PrefabInstance:
       propertyPath: batchKey.depthOrder
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 2758989573106263124, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
       value: 299.0218
@@ -3555,6 +3739,14 @@ PrefabInstance:
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: batchKey.depthOrder
       value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 3605563764140190889, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4379448014316368593, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4785185323857569911, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3580,9 +3772,21 @@ PrefabInstance:
       propertyPath: batchKey.depthOrder
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 8301915069343740835, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8548621493231357973, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8789434518737744951, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: m_Name
       value: Ticket Gate
+      objectReference: {fileID: 0}
+    - target: {fileID: 8789434518737744951, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8892438272199440312, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3670,6 +3874,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VendingMachine
       objectReference: {fileID: 0}
+    - target: {fileID: 6941684785654458942, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3731,6 +3939,10 @@ PrefabInstance:
     - target: {fileID: 6768906749837389401, guid: 05477c75b00c4394eb80ab489557a6b6, type: 3}
       propertyPath: m_Name
       value: Elevator (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6768906749837389401, guid: 05477c75b00c4394eb80ab489557a6b6, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7785525832985410112, guid: 05477c75b00c4394eb80ab489557a6b6, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3818,6 +4030,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VendingMachine (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 6941684785654458942, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3876,6 +4092,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1549422369682075820, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2007677947243151519, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
       value: 299.25034
@@ -3900,6 +4120,10 @@ PrefabInstance:
       propertyPath: batchKey.depthOrder
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 2758989573106263124, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
       value: 299.84778
@@ -3911,6 +4135,14 @@ PrefabInstance:
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: batchKey.depthOrder
       value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 3605563764140190889, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4379448014316368593, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4785185323857569911, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3936,9 +4168,21 @@ PrefabInstance:
       propertyPath: batchKey.depthOrder
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 8301915069343740835, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8548621493231357973, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8789434518737744951, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: m_Name
       value: Ticket Gate (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8789434518737744951, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8892438272199440312, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
@@ -4013,6 +4257,10 @@ PrefabInstance:
     - target: {fileID: 2544863427295501808, guid: cf0a07aab49ee34428751aefa33f5d9e, type: 3}
       propertyPath: m_Name
       value: DoubleScreens (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2544863427295501808, guid: cf0a07aab49ee34428751aefa33f5d9e, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7668030003255404843, guid: cf0a07aab49ee34428751aefa33f5d9e, type: 3}
       propertyPath: boundsOffset.x
@@ -4108,6 +4356,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlurocentTubeLight (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 8286573679760689497, guid: 3cb8186833180b142acc6dc32cf25e0a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4169,6 +4421,10 @@ PrefabInstance:
     - target: {fileID: 2544863427295501808, guid: cf0a07aab49ee34428751aefa33f5d9e, type: 3}
       propertyPath: m_Name
       value: DoubleScreens (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2544863427295501808, guid: cf0a07aab49ee34428751aefa33f5d9e, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7668030003255404843, guid: cf0a07aab49ee34428751aefa33f5d9e, type: 3}
       propertyPath: boundsOffset.x
@@ -4264,6 +4520,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlurocentTubeLight (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 8286573679760689497, guid: 3cb8186833180b142acc6dc32cf25e0a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4342,6 +4602,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlurocentTubeLight
       objectReference: {fileID: 0}
+    - target: {fileID: 8286573679760689497, guid: 3cb8186833180b142acc6dc32cf25e0a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -4400,6 +4664,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1549422369682075820, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2007677947243151519, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
       value: 300.08334
@@ -4424,6 +4692,10 @@ PrefabInstance:
       propertyPath: batchKey.depthOrder
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 2758989573106263124, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
       value: 300.6808
@@ -4435,6 +4707,14 @@ PrefabInstance:
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: batchKey.depthOrder
       value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 3605563764140190889, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4379448014316368593, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4785185323857569911, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
@@ -4460,9 +4740,21 @@ PrefabInstance:
       propertyPath: batchKey.depthOrder
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 8301915069343740835, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8548621493231357973, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8789434518737744951, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: m_Name
       value: Ticket Gate (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8789434518737744951, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8892438272199440312, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
@@ -4534,6 +4826,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1549422369682075820, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2007677947243151519, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
       value: 300.90335
@@ -4558,6 +4854,10 @@ PrefabInstance:
       propertyPath: batchKey.depthOrder
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 2758989573106263124, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
       value: 301.5008
@@ -4569,6 +4869,14 @@ PrefabInstance:
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: batchKey.depthOrder
       value: 24
+      objectReference: {fileID: 0}
+    - target: {fileID: 3605563764140190889, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4379448014316368593, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4785185323857569911, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
@@ -4594,9 +4902,21 @@ PrefabInstance:
       propertyPath: batchKey.depthOrder
       value: 25
       objectReference: {fileID: 0}
+    - target: {fileID: 8301915069343740835, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8548621493231357973, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8789434518737744951, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: m_Name
       value: Ticket Gate (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8789434518737744951, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8892438272199440312, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
@@ -4672,6 +4992,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Elevator (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 6768906749837389401, guid: 05477c75b00c4394eb80ab489557a6b6, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7785525832985410112, guid: 05477c75b00c4394eb80ab489557a6b6, type: 3}
       propertyPath: bounds.m_Center.x
       value: 308.86612
@@ -4742,6 +5066,10 @@ PrefabInstance:
       propertyPath: m_LocalEulerAnglesHint.z
       value: 0
       objectReference: {fileID: 0}
+    - target: {fileID: 1549422369682075820, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2007677947243151519, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
       value: 301.72336
@@ -4765,6 +5093,10 @@ PrefabInstance:
     - target: {fileID: 2200256854336772495, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: batchKey.depthOrder
       value: 25
+      objectReference: {fileID: 0}
+    - target: {fileID: 2758989573106263124, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: spriteIndex
@@ -4865,6 +5197,14 @@ PrefabInstance:
     - target: {fileID: 2991235278058495198, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: sprite.uvSizeAndPos.z
       value: 0.122802734
+      objectReference: {fileID: 0}
+    - target: {fileID: 3605563764140190889, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 4379448014316368593, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 4785185323857569911, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
@@ -4974,9 +5314,21 @@ PrefabInstance:
       propertyPath: sprite.uvSizeAndPos.z
       value: 0.122802734
       objectReference: {fileID: 0}
+    - target: {fileID: 8301915069343740835, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
+    - target: {fileID: 8548621493231357973, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8789434518737744951, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: m_Name
       value: Ticket Gate (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8789434518737744951, guid: ee4430776689ed049b00f397ff19e800, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8892438272199440312, guid: ee4430776689ed049b00f397ff19e800, type: 3}
       propertyPath: bounds.m_Center.x
@@ -5064,6 +5416,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: VendingMachine (5)
       objectReference: {fileID: 0}
+    - target: {fileID: 6941684785654458942, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5137,6 +5493,10 @@ PrefabInstance:
     - target: {fileID: 6941684785654458942, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
       propertyPath: m_Name
       value: VendingMachine (6)
+      objectReference: {fileID: 0}
+    - target: {fileID: 6941684785654458942, guid: 4acd3439ab955524d90a0fa0e0dbd7db, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -5216,6 +5576,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: FlurocentTubeLight (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8286573679760689497, guid: 3cb8186833180b142acc6dc32cf25e0a, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -5237,6 +5601,10 @@ PrefabInstance:
     - target: {fileID: 1480898102046865986, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_Name
       value: StationWall (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1480898102046865986, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3066907409969786012, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -5297,6 +5665,10 @@ PrefabInstance:
     - target: {fileID: 6529591359439808583, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: bounds.m_Center.y
       value: 0.5083333
+      objectReference: {fileID: 0}
+    - target: {fileID: 9218927784503943888, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6529591359439808583, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}

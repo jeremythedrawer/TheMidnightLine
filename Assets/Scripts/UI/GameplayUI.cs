@@ -93,8 +93,6 @@ public class GameplayUI : MonoBehaviour
 
         PassengerBrain.OnTraitorDisembarkedTrain += DecreaseTraitorCount;
         PassengerBrain.OnTraitorBoardedTrain += IncreaseTraitorCount;
-
-        Scenes.OnLoadTrip0 += Init;
     }
     private void OnDisable()
     {
@@ -119,13 +117,10 @@ public class GameplayUI : MonoBehaviour
         
         PassengerBrain.OnTraitorDisembarkedTrain -= DecreaseTraitorCount;
         PassengerBrain.OnTraitorBoardedTrain -= IncreaseTraitorCount;
-
-        Scenes.OnLoadTrip0 -= Init;
     }
     private void Update()
     {
         UpdateState();
-        fadeBlack.CheckToFadeOutSceneChange();
 
         if (Input.GetKey(KeyCode.LeftShift) && Input.GetKey(KeyCode.RightShift))
         {
@@ -211,41 +206,6 @@ public class GameplayUI : MonoBehaviour
             break;
             case UIState.None:
             {
-                switch(spyStats.curTutorialState)
-                {
-                    case TutorialState.None:
-                    {
-                        if(notepad.transform.parent == transform)
-                        {
-                            if (canExitState && cursorData.IsInsideBounds(notepad.activePage.paperRenderer.bounds, isClickable: true))
-                            {
-                                ctsNotepad?.Cancel();
-                                notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.hoverLocalPos, Time.deltaTime * MOVE_DAMP);
-                            }
-                            else
-                            {
-                                notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, notepadData.inactiveLocalPos, Time.deltaTime * MOVE_DAMP);
-                            }
-                        }
-                    }
-                    break;
-
-                    case TutorialState.Traitor:
-                    {
-                        if (canExitState && playerInputs.writeKeyDown)
-                        {
-                            fadeBlack.FadeOut();
-
-                            traitorIconRenderer.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 1);
-                            traitorCountText.ChangeCustom(time: 0.8f, newValue: 0, customChannel: 1);
-                            
-                            spyStats.tutorialsCompleted |= spyStats.curTutorialState;
-                            spyStats.curTutorialState = TutorialState.None;
-                            spyStats.playerInputsEnabled = true;
-                        }
-                    }
-                    break;
-                }
                 canExitState = true;
             }
             break;
@@ -259,7 +219,6 @@ public class GameplayUI : MonoBehaviour
             {
                 MoveUIElement(notepad.transform, notepadData.inactiveLocalPos, ref ctsNotepad, newState);
                 notepad.ExitNotepad();
-                SceneController.GetClueColorPicker().Close();
             }
             break;
             case UIState.Ticket:
@@ -297,7 +256,6 @@ public class GameplayUI : MonoBehaviour
     }
     private void InitPOVUI()
     {
-        notepad = SceneController.GetAndParentNotepad(transform);
         notepad.transform.localPosition = notepadData.inactiveLocalPos;
 
         float halfCamWidth = cameraStats.bounds.extents.x;
@@ -354,17 +312,6 @@ public class GameplayUI : MonoBehaviour
     {
         traitorCount++;
         traitorCountText.SetText("x" + traitorCount);
-
-        if (((spyStats.tutorialsCompleted & TutorialState.Traitor) == 0))
-        {
-            fadeBlack.FadeInWithSpacebar(value: 0.8f, spacebarWaitTime: 2.5f, uvPosX: 0, uvPosY: 0.5f);
-            spyStats.curTutorialState = TutorialState.Traitor;
-            spyStats.playerInputsEnabled = false;
-
-            traitorIconRenderer.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
-            traitorCountText.ChangeCustom(time: 0.8f, newValue: 1, customChannel: 1);
-            OnIncreaseTraitorCountFirstTime?.Invoke();
-        }
     }
     private void DecreaseTraitorCount()
     {
@@ -375,7 +322,6 @@ public class GameplayUI : MonoBehaviour
     private void Redo()
     {
         fadeBlack.FadeInChangeScene("New Game", sceneIndex: 1);
-        SceneController.KeepNotepad(notepad);
         notepad.gameObject.SetActive(false);
     }
 

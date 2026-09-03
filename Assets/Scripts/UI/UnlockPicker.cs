@@ -65,7 +65,6 @@ public class UnlockPicker : MonoBehaviour
     }
     private void Init()
     {
-        SceneController.SetUnlockPicker(this);
         SetOpenPosAndSize();
 
         paletteRenderer.customBit = (int)ColorBits.Meridia;

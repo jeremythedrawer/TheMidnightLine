@@ -10,7 +10,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2114077029513791810}
   - component: {fileID: 4937822353542665121}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuildingWall_entranceBack
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -92,7 +92,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1277003123466619033}
   - component: {fileID: 4003446573763526196}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuildingWall_entranceFront (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -175,7 +175,7 @@ GameObject:
   - component: {fileID: 5630562908657084053}
   - component: {fileID: 1853732391651947824}
   - component: {fileID: 4163126939401119239}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Meridia Hall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -248,7 +248,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::Station
   station: {fileID: 11400000, guid: b93f4eeb1c65e734e87b647acbb56161, type: 2}
   trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  trip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
+  options: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
   platformRenderer: {fileID: 8577651122141955607}
   exitTransform: {fileID: 3481965584387039340}
   parallaxController: {fileID: 4163126939401119239}
@@ -288,7 +288,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8576740848219867342}
   - component: {fileID: 5692402876583120488}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BackWall
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -370,7 +370,7 @@ GameObject:
   m_Component:
   - component: {fileID: 467511597548261172}
   - component: {fileID: 7019635265656574384}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuildingWall_entranceFront
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -452,7 +452,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1283577336745383863}
   - component: {fileID: 1800295783906645480}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuildingWall_entranceBack (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -534,7 +534,7 @@ GameObject:
   m_Component:
   - component: {fileID: 1818486404080721278}
   - component: {fileID: 4132822946924540420}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: BuildingWall_top (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -615,7 +615,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 3481965584387039340}
-  m_Layer: 0
+  m_Layer: 7
   m_Name: Exit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -717,6 +717,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EscalatorSign (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 8614535974788619944, guid: 1e681e837d6ff3e4bbe9c70c44834b59, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -778,6 +782,10 @@ PrefabInstance:
     - target: {fileID: 8763983152069793916, guid: 15f3892f3ae7a114aab3915f5c10915d, type: 3}
       propertyPath: m_Name
       value: MetalBoltedPillar
+      objectReference: {fileID: 0}
+    - target: {fileID: 8763983152069793916, guid: 15f3892f3ae7a114aab3915f5c10915d, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8883091038905188368, guid: 15f3892f3ae7a114aab3915f5c10915d, type: 3}
       propertyPath: boundsOffset.y
@@ -857,6 +865,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MetalBoltedPillar (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 8763983152069793916, guid: 15f3892f3ae7a114aab3915f5c10915d, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8883091038905188368, guid: 15f3892f3ae7a114aab3915f5c10915d, type: 3}
       propertyPath: boundsOffset.y
       value: 1.2763042
@@ -906,6 +918,10 @@ PrefabInstance:
     - target: {fileID: 3617232179661004955, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
       propertyPath: m_Name
       value: CeilingSecurity
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617232179661004955, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3754611070619138169, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1009,6 +1025,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MetalBoltedPillar (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 8763983152069793916, guid: 15f3892f3ae7a114aab3915f5c10915d, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 8883091038905188368, guid: 15f3892f3ae7a114aab3915f5c10915d, type: 3}
       propertyPath: boundsOffset.y
       value: 1.2763042
@@ -1058,6 +1078,10 @@ PrefabInstance:
     - target: {fileID: 3617232179661004955, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
       propertyPath: m_Name
       value: CeilingSecurity (2)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617232179661004955, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3754611070619138169, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -1120,6 +1144,10 @@ PrefabInstance:
     - target: {fileID: 2041139686618295239, guid: a0b897d84f02fa14087ef057195d0ab4, type: 3}
       propertyPath: m_Name
       value: MeridiaHallSign
+      objectReference: {fileID: 0}
+    - target: {fileID: 2041139686618295239, guid: a0b897d84f02fa14087ef057195d0ab4, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 6118487271001323848, guid: a0b897d84f02fa14087ef057195d0ab4, type: 3}
       propertyPath: bounds.m_Center.x
@@ -1263,6 +1291,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: EscalatorSign
       objectReference: {fileID: 0}
+    - target: {fileID: 8614535974788619944, guid: 1e681e837d6ff3e4bbe9c70c44834b59, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1357,6 +1389,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SimplePillar (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 5198488209359650887, guid: b6cef9fd79094da48aada7c75a848b6f, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1418,6 +1454,10 @@ PrefabInstance:
     - target: {fileID: 8763983152069793916, guid: 15f3892f3ae7a114aab3915f5c10915d, type: 3}
       propertyPath: m_Name
       value: MetalBoltedPillar (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 8763983152069793916, guid: 15f3892f3ae7a114aab3915f5c10915d, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 8883091038905188368, guid: 15f3892f3ae7a114aab3915f5c10915d, type: 3}
       propertyPath: boundsOffset.y
@@ -1953,6 +1993,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: BackPlatform
       objectReference: {fileID: 0}
+    - target: {fileID: 6067462038399153422, guid: c91ba1a2d1645bb41bfe1eb43de343c8, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -1985,6 +2029,10 @@ PrefabInstance:
     - target: {fileID: 1480898102046865986, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_Name
       value: StationWall
+      objectReference: {fileID: 0}
+    - target: {fileID: 1480898102046865986, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3066907409969786012, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2054,6 +2102,10 @@ PrefabInstance:
       propertyPath: bounds.m_Center.z
       value: 23
       objectReference: {fileID: 0}
+    - target: {fileID: 9218927784503943888, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6529591359439808583, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
     m_RemovedGameObjects: []
@@ -2088,6 +2140,10 @@ PrefabInstance:
     - target: {fileID: 3617232179661004955, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
       propertyPath: m_Name
       value: CeilingSecurity (3)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617232179661004955, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3754611070619138169, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2191,6 +2247,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HVAC_End
       objectReference: {fileID: 0}
+    - target: {fileID: 2209597804690398377, guid: f229224af4405124290c1a6cba233bf5, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2355306398893265560, guid: f229224af4405124290c1a6cba233bf5, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -2269,6 +2329,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: MetalSupport
       objectReference: {fileID: 0}
+    - target: {fileID: 5808540974828333566, guid: d7118202910861140bd77b97b56f4095, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7712912720850399111, guid: d7118202910861140bd77b97b56f4095, type: 3}
       propertyPath: width
       value: 4.9857697
@@ -2334,6 +2398,10 @@ PrefabInstance:
     - target: {fileID: 1480898102046865986, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_Name
       value: StationWall (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 1480898102046865986, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3066907409969786012, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2427,6 +2495,10 @@ PrefabInstance:
       propertyPath: bounds.m_Center.z
       value: 23
       objectReference: {fileID: 0}
+    - target: {fileID: 9218927784503943888, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents:
     - {fileID: 6529591359439808583, guid: 8129cc072c4af43439e68398dcc7df60, type: 3}
     m_RemovedGameObjects: []
@@ -2490,6 +2562,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HVAC_End (2)
       objectReference: {fileID: 0}
+    - target: {fileID: 2209597804690398377, guid: f229224af4405124290c1a6cba233bf5, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2355306398893265560, guid: f229224af4405124290c1a6cba233bf5, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -2539,6 +2615,10 @@ PrefabInstance:
     - target: {fileID: 3617232179661004955, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
       propertyPath: m_Name
       value: CeilingSecurity (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617232179661004955, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3754611070619138169, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2658,6 +2738,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stairs
       objectReference: {fileID: 0}
+    - target: {fileID: 6503905002904566233, guid: 57cf7bafe6aeda842baf0adb5366ba54, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2679,6 +2763,10 @@ PrefabInstance:
     - target: {fileID: 4943949663939863714, guid: 926618fe0ef1a2d4fb49626c2448c7c4, type: 3}
       propertyPath: m_Name
       value: Vent
+      objectReference: {fileID: 0}
+    - target: {fileID: 4943949663939863714, guid: 926618fe0ef1a2d4fb49626c2448c7c4, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7932492385910480799, guid: 926618fe0ef1a2d4fb49626c2448c7c4, type: 3}
       propertyPath: bounds.m_Center.x
@@ -2806,6 +2894,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CeilingSign
       objectReference: {fileID: 0}
+    - target: {fileID: 3711783786127256400, guid: d2e0445586edc60449e0078ed68e4022, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -2855,6 +2947,10 @@ PrefabInstance:
     - target: {fileID: 3617232179661004955, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
       propertyPath: m_Name
       value: CeilingSecurity (5)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617232179661004955, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3754611070619138169, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
       propertyPath: m_LocalPosition.x
@@ -2957,6 +3053,10 @@ PrefabInstance:
     - target: {fileID: 2209597804690398377, guid: f229224af4405124290c1a6cba233bf5, type: 3}
       propertyPath: m_Name
       value: HVAC_End (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 2209597804690398377, guid: f229224af4405124290c1a6cba233bf5, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 2355306398893265560, guid: f229224af4405124290c1a6cba233bf5, type: 3}
       propertyPath: m_Enabled
@@ -3068,6 +3168,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Stairs (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 6503905002904566233, guid: 57cf7bafe6aeda842baf0adb5366ba54, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3146,6 +3250,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: SimplePillar
       objectReference: {fileID: 0}
+    - target: {fileID: 5198488209359650887, guid: b6cef9fd79094da48aada7c75a848b6f, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
     m_AddedGameObjects: []
@@ -3167,6 +3275,10 @@ PrefabInstance:
     - target: {fileID: 2173038132494709222, guid: 665ba14682ca28341b0d1f8859c4c71e, type: 3}
       propertyPath: m_Name
       value: PipePillar
+      objectReference: {fileID: 0}
+    - target: {fileID: 2173038132494709222, guid: 665ba14682ca28341b0d1f8859c4c71e, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 5410584560209680494, guid: 665ba14682ca28341b0d1f8859c4c71e, type: 3}
       propertyPath: m_LocalPosition.x
@@ -3270,6 +3382,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: CeilingSecurity (7)
       objectReference: {fileID: 0}
+    - target: {fileID: 3617232179661004955, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 3754611070619138169, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
       propertyPath: m_LocalPosition.x
       value: 26.34
@@ -3372,6 +3488,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: HVAC_End (3)
       objectReference: {fileID: 0}
+    - target: {fileID: 2209597804690398377, guid: f229224af4405124290c1a6cba233bf5, type: 3}
+      propertyPath: m_Layer
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 2355306398893265560, guid: f229224af4405124290c1a6cba233bf5, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -3409,6 +3529,10 @@ PrefabInstance:
     - target: {fileID: 4943949663939863714, guid: 926618fe0ef1a2d4fb49626c2448c7c4, type: 3}
       propertyPath: m_Name
       value: Vent (1)
+      objectReference: {fileID: 0}
+    - target: {fileID: 4943949663939863714, guid: 926618fe0ef1a2d4fb49626c2448c7c4, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 7932492385910480799, guid: 926618fe0ef1a2d4fb49626c2448c7c4, type: 3}
       propertyPath: bounds.m_Center.x
@@ -3495,6 +3619,10 @@ PrefabInstance:
     - target: {fileID: 3617232179661004955, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
       propertyPath: m_Name
       value: CeilingSecurity (4)
+      objectReference: {fileID: 0}
+    - target: {fileID: 3617232179661004955, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
+      propertyPath: m_Layer
+      value: 7
       objectReference: {fileID: 0}
     - target: {fileID: 3754611070619138169, guid: 6a09447337b2cc543930d9b193f6f6f1, type: 3}
       propertyPath: m_LocalPosition.x

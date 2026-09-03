@@ -42,8 +42,12 @@ public class Options : ScriptableObject
     public RegionData firstPointRegion;
     public RegionData capitalRegion;
 
+
     public SpyData spyData;
+
+    public float dayNightTransitionTime = 5f;
     [Header("User Picked")]
+    public RegionData curRegion;
     public TripData curTrip;
     public Color darkColor;
     public Color lightColor;
@@ -59,6 +63,7 @@ public class Options : ScriptableObject
     public int meridiaColorID;
     public int vinroseColorID;
     public int patternTextureID;
+    public int dayNightID;
 
     public int selectedPatternIndex;
 
@@ -76,6 +81,8 @@ public class Options : ScriptableObject
         meridiaColorID = Shader.PropertyToID("_MeridiaColor");
         patternTextureID = Shader.PropertyToID("_PatternTexture");
         vinroseColorID = Shader.PropertyToID("_VinroseColor");
+        dayNightID = Shader.PropertyToID("_DayNight");
+
 
         Shader.SetGlobalColor(darkColorID, darkColor.linear);
         Shader.SetGlobalColor(lightColorID, lightColor.linear);
@@ -89,6 +96,7 @@ public class Options : ScriptableObject
 [CustomEditor(typeof(Options))]
 public class OptionsSOEditor : Editor
 {
+    float dayNight = 0;
     public override void OnInspectorGUI()
     {
         base.OnInspectorGUI();
@@ -99,6 +107,14 @@ public class OptionsSOEditor : Editor
         if (GUILayout.Button(setGlobalVariableContent))
         {
             options.SetGlobalShaderVariables();
+        }
+
+        EditorGUI.BeginChangeCheck();
+        dayNight = EditorGUILayout.Slider(dayNight, 0, 1);
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            Shader.SetGlobalFloat(options.dayNightID, dayNight);
         }
     }
 }

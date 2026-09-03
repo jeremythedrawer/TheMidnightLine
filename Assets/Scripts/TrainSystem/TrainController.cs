@@ -31,7 +31,6 @@ public class TrainController : MonoBehaviour
     public static event Action OnStationArrival;
     public static event Action OnTrainDeceleration;
 
-    public TrainSettingsSO settings;
     public TrainData trainData;
     public LayerData layerSettings;
     public Options options;
@@ -68,18 +67,20 @@ public class TrainController : MonoBehaviour
     private void OnEnable()
     {
         SpyBrain.OnTicketInspect += UpdateTicketInspectParams;
-        Scenes.OnLoadTrip1 += Init;
     }
     private void OnDisable()
     {
         SpyBrain.OnTicketInspect -= UpdateTicketInspectParams;
-        Scenes.OnLoadTrip1 -= Init;
         
         trainCTS?.Cancel();
         trainCTS?.Dispose();
         trainCTS = null;
 
         trainData.curVelocity = Vector2.zero;
+    }
+    private void Start()
+    {
+        Init();
     }
     private void Update()
     {
@@ -116,21 +117,8 @@ public class TrainController : MonoBehaviour
             carriage.SetSeatData(offset);
             carriage.SetSmokerRoomData(offset);
             carriage.SetTotalBounds(offset);
-            carriage.SetSignToNextStation(trip.stationAhead.stationName);
+            carriage.SetSignToNextStation(options.curTrip.stationAhead.stationName);
         }
-
-#if UNITY_EDITOR
-        if (skipMoveToStart)
-        {
-            SkipMoveTrainToStartPosition();
-        }
-        else
-        {
-            MoveTrainToStartPosition().Forget();
-        }
-#else
-        MoveTrainToStartPosition().Forget();
-#endif
     }
     private void ChooseState()
     {
@@ -166,7 +154,7 @@ public class TrainController : MonoBehaviour
             {
                 for (int i = 0; i < carriages.Length; i++)
                 {
-                    carriages[i].SetSignToNextStation(trip.stationAhead.stationName);
+                    carriages[i].SetSignToNextStation(options.curTrip.stationAhead.stationName);
                 }
             }
             break;
@@ -174,7 +162,7 @@ public class TrainController : MonoBehaviour
             case TrainStates.Decelerating:
             {
                 trainData.prevPeakVelocity = trainData.curVelocity.x;
-                OnTrainDeceleration.Invoke();
+                OnTrainDeceleration?.Invoke();
             }
             break;
 
@@ -186,15 +174,15 @@ public class TrainController : MonoBehaviour
 
             case TrainStates.Stopped:
             {
-                trainData.targetNPCsToBoard = trip.stationAhead.bystanderSpawnCount + trip.stationAhead.traitorSpawnCount + trip.stationAhead.accompliceSpawnCount;
+                trainData.targetNPCsToBoard = options.curTrip.stationAhead.bystanderSpawnCount + options.curTrip.stationAhead.traitorSpawnCount + options.curTrip.stationAhead.accompliceSpawnCount;
                 trainData.curVelocity = Vector2.zero;
 
-                if (trip.stationAhead.isFrontOfTrain)
+                if (options.curTrip.stationAhead.isFrontOfTrain)
                 {
                     for (int i = 0; i < carriages.Length; i++)
                     {
                         carriages[i].UnlockExteriorSlideDoors();
-                        carriages[i].SetSignToCurrentStation(trip.stationAhead.stationName);
+                        carriages[i].SetSignToCurrentStation(options.curTrip.stationAhead.stationName);
                     }
                 }
                 else
@@ -202,7 +190,7 @@ public class TrainController : MonoBehaviour
                     for (int i = 0; i < carriages.Length; i++)
                     {
                         carriages[i].UnlockInteriorDoors();
-                        carriages[i].SetSignToCurrentStation(trip.stationAhead.stationName);
+                        carriages[i].SetSignToCurrentStation(options.curTrip.stationAhead.stationName);
                     }
                 }
                 OnStationArrival.Invoke();
@@ -240,11 +228,11 @@ public class TrainController : MonoBehaviour
             break;
             case TrainStates.AtMaxSpeed:
             {
-                if (trip.ticketsCheckedSinceLastStation == trip.stationAhead.ticketsToCheckBeforeSpawn)
+                if (options.curTrip.ticketsCheckedSinceLastStation == options.curTrip.stationAhead.ticketsToCheckBeforeSpawn)
                 {
                     SpawnStation();
                     trainData.targetVelocity = Vector2.zero;
-                    trip.ticketsCheckedSinceLastStation = 0;
+                    options.curTrip.ticketsCheckedSinceLastStation = 0;
                 }
                 HandleTrainMeters();
             }
@@ -258,7 +246,7 @@ public class TrainController : MonoBehaviour
                     {
                         offTrainClock = 0;
 
-                        if (trainData.curStationIndex < trip.stationsDataArray.Length - 1)
+                        if (trainData.curStationIndex < options.curTrip.stationsDataArray.Length - 1)
                         {
                             if (trainData.totalNPCsBoarded == trainData.targetNPCsToBoard)
                             {
@@ -271,7 +259,7 @@ public class TrainController : MonoBehaviour
                                 if (trainData.slideDoorsAmountOpened == 0)
                                 {
                                     trainData.curStationIndex++;
-                                    trip.stationAhead = trip.stationsDataArray[trainData.curStationIndex];
+                                    options.curTrip.stationAhead = options.curTrip.stationsDataArray[trainData.curStationIndex];
                                     NextStationInstance = null;
                                     trainData.targetVelocity.x = KMPHToVelocity(DEFAULT_TARGET_KMPH);
                                 }
@@ -337,7 +325,7 @@ public class TrainController : MonoBehaviour
             case TrainStates.Stopped:
             {
                 trainData.totalNPCsBoarded = 0;
-                trainData.distToSpawnNextStation = trainData.trainToMaxSpawnDist - trip.stationAhead.station_prefab.platformRenderer.transform.localPosition.x;
+                trainData.distToSpawnNextStation = trainData.trainToMaxSpawnDist - options.curTrip.stationAhead.station_prefab.platformRenderer.transform.localPosition.x;
                 closingSlideDoors = false;
                 OnStationLeave.Invoke();
             }
@@ -355,7 +343,7 @@ public class TrainController : MonoBehaviour
     }
     private void CloseAllSlideDoors()
     {
-        if (trip.stationAhead.isFrontOfTrain)
+        if (options.curTrip.stationAhead.isFrontOfTrain)
         {
             for (int i = 0; i < carriages.Length; i++)
             {
@@ -421,13 +409,13 @@ public class TrainController : MonoBehaviour
     }
     private void InitStations()
     {
-        trip.stationAhead = trip.stationsDataArray[0];
+        options.curTrip.stationAhead = options.curTrip.stationsDataArray[0];
 
-        stations = new Station[trip.stationsDataArray.Length];
+        stations = new Station[options.curTrip.stationsDataArray.Length];
 
-        for (int i = 0; i < trip.stationsDataArray.Length; i++)
+        for (int i = 0; i < options.curTrip.stationsDataArray.Length; i++)
         {
-            StationSO stationData = trip.stationsDataArray[i];
+            StationSO stationData = options.curTrip.stationsDataArray[i];
             stationData.stationName = stationData.station_prefab.name;
             stationData.stationIndex = i;
             Station station = Instantiate(stationData.station_prefab, null);
@@ -466,10 +454,10 @@ public class TrainController : MonoBehaviour
     }
     private void UpdateTicketInspectParams()
     {
-        int ticketParamsIndex = trip.ticketsCheckedTotal - 1;
-        trainData.targetElevatePos = trip.elevationValues[ticketParamsIndex];
-        trainData.targetKMPH = trip.kmValues[ticketParamsIndex];
-        trainData.targetNightValue = trip.dayNightValues[ticketParamsIndex];
+        int ticketParamsIndex = options.curTrip.ticketsCheckedTotal - 1;
+        trainData.targetElevatePos = options.curTrip.elevationValues[ticketParamsIndex];
+        trainData.targetKMPH = options.curTrip.kmValues[ticketParamsIndex];
+        trainData.targetNightValue = options.curTrip.dayNightValues[ticketParamsIndex];
         trainData.targetVelocity.x = KMPHToVelocity(trainData.targetKMPH);
         metersTravelledOnBezier = 0;
         metersTravelled = 0;

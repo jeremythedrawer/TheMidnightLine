@@ -1,10 +1,11 @@
+using Proselyte.Sigils;
 using System;
 using UnityEngine;
 using static AtlasUI;
 
 public class RegionMap : MonoBehaviour
 {
-    public static event Action OnStartTrip;
+    public GameEvent onBeginTrip;
     [Serializable] public struct TripButton
     {
         public IconButton button;
@@ -55,8 +56,8 @@ public class RegionMap : MonoBehaviour
                 options.curTrip.ticketsCheckedTotal = 0;
                 options.curTrip.traitorsSpawned = 0;
                 icon.atlasRenderer.customBit ^= (int)ColorBits.Invert;
-                
-                OnStartTrip?.Invoke();
+
+                onBeginTrip?.Raise();
             }
 
             TripButton regionButton = tripButtons[i];

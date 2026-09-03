@@ -1,9 +1,9 @@
 using Cysharp.Threading.Tasks;
-
+using Proselyte.Sigils;
 using System;
 using System.Collections.Generic;
 using System.Threading;
-
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.Rendering;
 
@@ -15,12 +15,15 @@ using static Train;
 public class SpawnMaster : MonoBehaviour
 {
     const float DELAYED_PARTICLE_QUEUE_TICK = 1f;
-    const float DAY_NIGHT_TRANSITION_TIME = 5;
 
+
+    public GameEvent onBeginTrip;
+
+    public Options options;
+    public SpyData spyData;
     public SpawnData spawnData;
     public CameraData camData;
     public TrainData trainStats;
-    public Options options;
 
     [Header("Generated")]
 
@@ -30,31 +33,25 @@ public class SpawnMaster : MonoBehaviour
     public Queue<DelayedParticleData> delayedParticlesQueue;
     private void OnEnable()
     {
-#if UNITY_EDITOR
-        if (!Application.isPlaying)
-        {
-            Init();
-        }
-#endif
         SpyBrain.OnTicketInspect += ChangeParticles;
         TrainController.OnMetersAtSpawnBounds += DespawnEdgeScrollers;
-        RegionMap.OnStartTrip += Init;
+        onBeginTrip.RegisterListener(Init);
     }
     private void OnDisable()
     {
         SpyBrain.OnTicketInspect -= ChangeParticles;
         TrainController.OnMetersAtSpawnBounds -= DespawnEdgeScrollers;
-        RegionMap.OnStartTrip -= Init;
+        onBeginTrip.UnregisterListener(Init);
         Dispose();
     }
     private void Update()
     {
+        if (!spawnData.active) return;
         UpdateSpawnCompute(ref spawnData.scrollData);
         UpdateSpawnCompute(ref spawnData.zoneData);
         UpdateDelayedParticleQueue();
-
     }
-    private void Init()
+    public void Init()
     {
         Dispose();
         delayedParticlesQueue = new Queue<DelayedParticleData>();
@@ -71,7 +68,21 @@ public class SpawnMaster : MonoBehaviour
 
         InitParticles();
         ChangeParticles();
+
         options.curTrip.curDayNightValue = options.curTrip.dayNightValues[0];
+
+        if (Application.isPlaying)
+        {
+            SpawnSpyAndTrain();
+        }
+    }
+    private void SpawnSpyAndTrain()
+    {
+        SpyBrain spy = Instantiate(spyData.spy);
+        spy.transform.position = Vector3.zero;
+
+        TrainController train = Instantiate(options.curRegion.train);
+        train.transform.position = new Vector3(-100, 0, 0);
     }
     private void InitBoundParameters()
     {
@@ -630,25 +641,25 @@ public class SpawnMaster : MonoBehaviour
     {
         float nextDayNight = options.curTrip.dayNightValues[Mathf.Min(options.curTrip.ticketsCheckedTotal, options.curTrip.dayNightValues.Length - 1)];
         float elapsedTime = 0;
-        float dayNight = options.curTrip.curDayNightValue;
+        float startDayNight = Shader.GetGlobalFloat(options.dayNightID);
+        
         try
         {
-            while(elapsedTime < DAY_NIGHT_TRANSITION_TIME)
+            while(elapsedTime < options.dayNightTransitionTime)
             {
                 elapsedTime += Time.deltaTime;
-                float t = elapsedTime / DAY_NIGHT_TRANSITION_TIME;
+                float t = elapsedTime / options.dayNightTransitionTime;
 
-                dayNight = Mathf.Lerp(options.curTrip.curDayNightValue, nextDayNight, t);
+                float dayNight = Mathf.Lerp(startDayNight, nextDayNight, t);
 
-                Shader.SetGlobalFloat("_DayNight", dayNight);
+                Shader.SetGlobalFloat(options.dayNightID, dayNight);
                 await UniTask.Yield(ctsDayNight.Token);
             }
             options.curTrip.curDayNightValue = nextDayNight;
-            Shader.SetGlobalFloat("_DayNight", options.curTrip.curDayNightValue);
+            Shader.SetGlobalFloat(options.dayNightID, options.curTrip.curDayNightValue);
         }
         catch (OperationCanceledException)
         {
-            options.curTrip.curDayNightValue = dayNight;
         }
     }
     private void Dispose()
@@ -726,3 +737,22 @@ public class SpawnMaster : MonoBehaviour
     }
 #endif
 }
+
+#if UNITY_EDITOR
+[CustomEditor(typeof(SpawnMaster))]
+public class SpawnMasterEditor : Editor
+{
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+
+        SpawnMaster spawnMaster = (SpawnMaster)target;
+
+        GUIContent initButtonContent = new GUIContent("Init");
+        if (GUILayout.Button(initButtonContent))
+        {
+            spawnMaster.Init();
+        }
+    }
+}
+#endif

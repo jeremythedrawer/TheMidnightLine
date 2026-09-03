@@ -101,14 +101,18 @@ Shader "Custom/s_zoneParticles"
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
                 clip(tex.a - 0.001);
 
+
+                float gradient = i.positionHCS.y / _ScreenParams.y;
+			    float horizon = sin(min(gradient + _DayNight, PI * 0.5) * PI) * 0.5 + 0.5;
+
                 half normDepth = p.z/ FAR_CLIP;
                 half dayNightNDC = _DayNight * 2 - 1;
-                half dayNightInfluence = dayNightNDC * normDepth;
-                half bayer = BayerX8(tex.r - dayNightInfluence, i.positionHCS.y);
+                half dayNightInfluence = tex.r - dayNightNDC * normDepth;
 
+                half bayerInput = lerp(dayNightInfluence * horizon, dayNightInfluence + horizon, _DayNight);
+                half bayer = BayerX8(bayerInput, i.positionHCS.y);
 
-                half3 nightFactor = lerp(_WhiteColor, _BlackColor, _DayNight * normDepth);
-                half3 finalColor = lerp(_BlackColor, nightFactor, bayer);
+                half3 finalColor = lerp(_BlackColor, _WhiteColor, bayer);
                 return half4(finalColor, 1);
             }
             ENDHLSL

@@ -12,7 +12,7 @@ public class TripData : ScriptableObject
     public TripClue clue;
     public ParticleAtlas[] particleAtlasArray;
     public StationSO[] stationsDataArray;
-    public NPCSO[] npcDataArray;
+    public PassengerData[] passengers;
 
     public float[] dayNightValues;
     public Vector2[] elevationValues;
@@ -32,4 +32,5 @@ public class TripData : ScriptableObject
     public float curDayNightValue;
 
     public bool unlocked;
+    public bool completed;
 }

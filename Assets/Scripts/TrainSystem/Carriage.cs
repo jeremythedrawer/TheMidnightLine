@@ -15,7 +15,6 @@ public class Carriage : MonoBehaviour
     public AtlasRenderer[] grapPoleRenderers;
 
     public TrainData trainData;
-    public TrainSettingsSO trainSettings;
     public TripData trip;
     public LayerData layerSettings;
     public AtlasSO graffitiAtlas;
