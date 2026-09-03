@@ -2,17 +2,19 @@ using Proselyte.Sigils;
 using System;
 using UnityEngine;
 using static AtlasUI;
+using static Passenger;
 
 public class RegionMap : MonoBehaviour
 {
-    public GameEvent onBeginTrip;
     [Serializable] public struct TripButton
     {
         public IconButton button;
         public TripData trip;
     }
 
+    public GameEvent onBeginTrip;
     public Options options;
+    public CameraData camData;
 
     public TripButton[] tripButtons;
 
@@ -57,6 +59,7 @@ public class RegionMap : MonoBehaviour
                 options.curTrip.traitorsSpawned = 0;
                 icon.atlasRenderer.customBit ^= (int)ColorBits.Invert;
 
+                camData.curLocationState = Spy.LocationState.Title;
                 onBeginTrip?.Raise();
             }
 

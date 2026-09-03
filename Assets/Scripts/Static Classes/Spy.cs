@@ -22,6 +22,7 @@ public static class Spy
         Carriage,
         Gangway,
         Menu,
+        Title,
     }
 
     [Serializable] public struct CollisionData

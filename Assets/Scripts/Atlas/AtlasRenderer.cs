@@ -570,15 +570,26 @@ public class AtlasRenderer : MonoBehaviour
                 float t = elapsed / time;
                 await UniTask.Yield(ctsChangeCustom.Token);
                 custom.w = Mathf.Lerp(startValue, newValue, t);
+                for (int i = 0; i < customs.Length; i++)
+                {
+                    customs[i].w = custom.w;
+                }
             }
             custom.w = newValue;
+            for (int i = 0; i < customs.Length; i++)
+            {
+                customs[i].w = custom.w;
+            }
         }
         catch (OperationCanceledException)
         {
             custom.w = newValue;
+            for (int i = 0; i < customs.Length; i++)
+            {
+                customs[i].w = custom.w;
+            }
         }
     }
-
 
 #if UNITY_EDITOR
     private void OnDrawGizmos()

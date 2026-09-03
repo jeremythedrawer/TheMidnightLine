@@ -93,8 +93,12 @@ public class SpawnMaster : MonoBehaviour
     }
     private void UpdateSpawnCompute(ref SpawnComputeData computeData)
     {
-        computeData.compute.SetVector("_CamVelocity", camData.curVelocity);
-        if (camData.curLocationState != LocationState.Station)
+        bool onTrain = camData.curLocationState == LocationState.Carriage || camData.curLocationState == LocationState.Gangway;
+        if (camData.curLocationState == LocationState.Station || onTrain)
+        {
+            computeData.compute.SetVector("_CamVelocity", camData.curVelocity);
+        }
+        if (onTrain)
         {
             computeData.compute.SetVector("_TrainVelocity", trainStats.curVelocity);
         }

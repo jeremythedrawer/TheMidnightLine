@@ -9,7 +9,7 @@ Shader "Custom/s_sunRays"
         _PulseSpeed("Pulse Speed", float) = 10
         _PulseMaxSize("Pulse Max Size", Range(0.01, 0.27)) = 0.25
         _PulseMinSize("Pulse Min Size", Range(0.01, 0.27)) = 0.02 
-
+        _Alpha("Alpha", Range(0,1)) = 1
 
     }
 
@@ -52,6 +52,7 @@ Shader "Custom/s_sunRays"
                 float _PulseSpeed;
                 float _PulseMaxSize;
                 float _PulseMinSize;
+                float _Alpha;
             CBUFFER_END
 
             Varyings vert(Attributes v)
@@ -95,12 +96,14 @@ Shader "Custom/s_sunRays"
 			    float rays = asin(sinT * pow((sinT * 0.5 + 0.5), 5)) + max(asin(sinT * sinT),0);
 
 			    float sunRays = round(saturate(rays - noise + sun + saturate(sun)));
+
                 float3 finalColor = sunRays * _WhiteColor;
 
                 half horizonThreshold = step(0, i.worldPos.y);
                 half alpha = sunRays * horizonThreshold;
 
-                clip(alpha- 0.001);
+                half bayerAlpha = BayerX8(_Alpha, i.positionHCS.y);
+                clip(alpha * bayerAlpha - 0.001);
                 return half4(finalColor, 1);
             }
             ENDHLSL

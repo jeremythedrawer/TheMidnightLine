@@ -46,10 +46,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::AtlasTextRenderer
   rendererType: 0
   batchKey:
-    texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
+    texture: {fileID: 2800000, guid: fe95d01be9651f44189e326a5b89cf0a, type: 3}
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
-  textAtlas: {fileID: 11400000, guid: 03871f642f841d447a7b9560fa5d0c24, type: 2}
-  text: 
+  textAtlas: {fileID: 11400000, guid: f3a78deb900790f4e97e214fefe6b5ab, type: 2}
+  text: Hello
   kerning: 0.04
   spacing: 0.03
   alignmentType: 1
@@ -58,21 +58,42 @@ MonoBehaviour:
   scrollBoundSize: 0
   backgroundRenderer: {fileID: 0}
   textBoxData:
-    size: {x: 4.609375, y: 0}
+    size: {x: 4.609375, y: 0.22777778}
     wordPosXArray:
     - 0
-    lineWidthArray: []
+    lineWidthArray:
+    - 0.77777785
   bounds:
-    m_Center: {x: -0.06997681, y: 0, z: 11.5}
-    m_Extent: {x: 2.3046875, y: 0, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
-  boundsOffset: {x: 0, y: -0, z: 0}
+    m_Center: {x: -0.06997681, y: -0.11388889, z: 11.5}
+    m_Extent: {x: 2.3046875, y: 0.11388889, z: 0}
+  worldPivotsAndSizes:
+  - {x: -0.38888893, y: -0.22777778, z: 0.15555556, w: 0.22222222}
+  - {x: -0.19333336, y: -0.22777778, z: 0.13333334, w: 0.22222222}
+  - {x: -0.020000018, y: -0.22777778, z: 0.06666667, w: 0.22222222}
+  - {x: 0.08666665, y: -0.22777778, z: 0.06666667, w: 0.22222222}
+  - {x: 0.19333333, y: -0.22777778, z: 0.15555556, w: 0.22222222}
+  uvSizesAndPositions:
+  - {x: 0.0546875, y: 0.078125, z: 0.8984375, w: 0.83984375}
+  - {x: 0.046875, y: 0.078125, z: 0.41796875, w: 0.67578125}
+  - {x: 0.0234375, y: 0.078125, z: 0.72265625, w: 0.67578125}
+  - {x: 0.0234375, y: 0.078125, z: 0.72265625, w: 0.67578125}
+  - {x: 0.0546875, y: 0.078125, z: 0.8730469, w: 0.67578125}
+  scalesAndFlips:
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  customs:
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  boundsOffset: {x: 0, y: -0.11388889, z: 0}
   curAlpha: 1
-  customBit: 32
-  hasText: 0
+  customBit: 0
+  hasText: 1
   erasingText: 0
   completedWritingText: 0
   borderLocalPos: {x: 0, y: 0, z: 0}
@@ -180,6 +201,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b2d839b3667ced2468a91f2a72b686a0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::FadeBlack
+  options: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   fadeBlackMaterial: {fileID: 2100000, guid: d7e800c5760a0a94698f28dbdb5c3a9e, type: 2}
   textRenderer: {fileID: 1450194209863424034}

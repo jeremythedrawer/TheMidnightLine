@@ -142,7 +142,6 @@ public static class AtlasUI
         StartMenu,
         OptionsMenu,
         MapMenu,
-        TripTitleMenu,
         Notepad,
         Ticket,
         CarriageMap,

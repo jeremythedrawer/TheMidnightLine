@@ -7,7 +7,11 @@ Shader "Custom/s_atlasDepth"
 
     SubShader
     {
-        Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
+        Tags
+        {
+            "Queue" = "Geometry"
+            "RenderType" = "Opaque"
+        }
         ZWrite On
         ZTest LEqual
         Blend SrcAlpha OneMinusSrcAlpha
@@ -43,6 +47,7 @@ Shader "Custom/s_atlasDepth"
                 float3 worldPos : TEXCOORD1;
                 float4 uvSizeAndPos : TEXCOORD2;
                 float4 scaleAndFlip : TEXCOORD3;
+                float4 custom : TEXCOORD4;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
@@ -82,6 +87,7 @@ Shader "Custom/s_atlasDepth"
                 o.uv = v.uv;
                 o.uvSizeAndPos = spriteData.uvSizeAndPos;
                 o.scaleAndFlip = spriteData.scaleAndFlip;
+                o.custom = spriteData.custom;
                 return o;
             }
 
@@ -93,6 +99,8 @@ Shader "Custom/s_atlasDepth"
                 float2 scale = i.scaleAndFlip.xy;
                 float2 flip = i.scaleAndFlip.zw;
 
+                float2 texUV = i.uv;
+
                 i.uv *= scale;
                 i.uv = frac(i.uv);
                 i.uv = (i.uv - 0.5) * flip + 0.5;
@@ -100,7 +108,10 @@ Shader "Custom/s_atlasDepth"
                 i.uv += uvPos;
 
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-                clip(tex.a - 0.001);
+
+                half alpha = BayerX8(texUV.y - pow(1-i.custom.a, 2), i.positionHCS.y);
+
+                clip(tex.a * alpha - 0.001);
 
 			    float gradient = i.positionHCS.y / _ScreenParams.y;
 			    float horizon = sin(min(gradient + _DayNight, PI * 0.5) * PI) * 0.5 + 0.5;

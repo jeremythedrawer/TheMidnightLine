@@ -8,11 +8,9 @@ using UnityEngine;
 using static AtlasUI;
 using static Passenger;
 
-public class UIController : MonoBehaviour
+public class WorldUIController : MonoBehaviour
 {
-    public AtlasRenderer[] keyIconRenderers;
-
-    public Material fadeBlackMaterial;
+    public AtlasRenderer[] buildingRenderers;
 
     public CameraData camData;
     public InputData inputData;
@@ -22,16 +20,13 @@ public class UIController : MonoBehaviour
     public PassengersData passengerData;
     public CursorData cursorData;
 
-    public AudioSource audioSource;
+    public AudioSource audioSource;    
 
     public Menu startMenu;
     public Menu optionsMenu;
     public Menu mapMenu;
-    public Menu tripTitleMenu;
 
     public CountryMap countryMap;
-
-    public FadeBlack fadeBlack;
 
     public GameEvent onBeginTrip;
 
@@ -48,8 +43,6 @@ public class UIController : MonoBehaviour
 
     public float outcomePageEndPosX;
     public float outcomePageHoverPosY;
-
-    public float tripTitleMenuClock;
 
     public int curTraitorsShown;
     public int curTraitorProfilesReviewed;
@@ -82,7 +75,8 @@ public class UIController : MonoBehaviour
         Menu.OnClickOptions += SetToOptionsMenuState;
         Menu.OnClickBackToStartMenu += SetToStartMenuState;
 
-        onBeginTrip.RegisterListener(SetToTripTitleMenuState);
+        onBeginTrip.RegisterListener(SetToNoneState);
+        onBeginTrip.RegisterListener(DisappearBuildings);
 
         FadeBlack.OnFinishFadeOut += SetToNoneStateFromOutcome;
 
@@ -97,7 +91,8 @@ public class UIController : MonoBehaviour
         Menu.OnClickOptions -= SetToOptionsMenuState;
         Menu.OnClickBackToStartMenu -= SetToStartMenuState;
 
-        onBeginTrip.UnregisterListener(SetToTripTitleMenuState);
+        onBeginTrip.UnregisterListener(SetToNoneState);
+        onBeginTrip.UnregisterListener(DisappearBuildings);
         
         SliderController.OnChangeMusicVolume -= SetMusicVolume;
     }
@@ -112,11 +107,7 @@ public class UIController : MonoBehaviour
     private void Init()
     {
         Shader.SetGlobalFloat(options.dayNightID, 1);
-        fadeBlack.SetAlpha(1);
-        fadeBlack.FadeOut();
 
-        fadeBlack.transform.SetParent(Camera.main.transform);
-        fadeBlack.transform.localPosition = Vector3.zero;
 
         audioSource.clip = options.music.menu;   
         audioSource.volume = options.music.volume;
@@ -149,17 +140,6 @@ public class UIController : MonoBehaviour
             case UIState.MapMenu:
             {
                 camData.curLocationBounds = mapMenu.bounds;
-            }
-            break;
-
-            case UIState.TripTitleMenu:
-            {
-                camData.curLocationBounds = tripTitleMenu.bounds;
-
-                tripTitleMenuClock = 0;
-
-                tripTitleMenu.texts[0].SetText(options.curTrip.title, alpha: 0);
-                tripTitleMenu.texts[0].ChangeCustom(options.dayNightTransitionTime, 1, customChannel: 4);
             }
             break;
 
@@ -231,20 +211,6 @@ public class UIController : MonoBehaviour
             }
             break;
 
-            case UIState.TripTitleMenu:
-            {
-                tripTitleMenu.UpdateMenu();
-
-                tripTitleMenuClock += Time.deltaTime;
-
-                if (tripTitleMenuClock > options.dayNightTransitionTime)
-                {
-                    SetState(UIState.None);
-                    camData.curLocationState = Spy.LocationState.Station;
-                }
-            }
-            break;
-
             case UIState.Outcome:
             {
             }
@@ -309,15 +275,19 @@ public class UIController : MonoBehaviour
         }
         else
         {
-            SetState(UIState.TripTitleMenu);
+            SetState(UIState.None);
         }
-    }
-    private void SetToTripTitleMenuState()
-    {
-        SetState(UIState.TripTitleMenu);
     }
     private void SetMusicVolume()
     {
         audioSource.volume = options.music.volume;
+    }
+    private void DisappearBuildings()
+    {
+        for (int i = 0; i < buildingRenderers.Length; i++)
+        {
+            AtlasRenderer building = buildingRenderers[i];
+            building.ChangeCustom(options.dayNightTransitionTime, newValue: 0, customChannel: 4);
+        }
     }
 }

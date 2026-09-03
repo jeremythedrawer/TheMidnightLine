@@ -11,6 +11,8 @@ public class CameraController : MonoBehaviour
     const float NORMAL_DAMPING = 3;
     const float SLOW_DAMPING = 1;
 
+    public CamUIController camUIController;
+
     public CameraData camData;
     public SpyData spyData;
     public TrainData trainData;
@@ -31,12 +33,14 @@ public class CameraController : MonoBehaviour
 
     public float curXOffset;
     public float curDamping;
+    public float startTripTitlePosY;
 
     public int carriageBoundsKernel;
     public int threadGroupX;
     public int threadGroupY;
 
     public bool isShaking;
+    public bool showingTitle;
     private void OnEnable()
     {
         Init();
@@ -52,18 +56,7 @@ public class CameraController : MonoBehaviour
     {
         ChooseStates();
         UpdateStates();
-
-        curXOffset = spyData.spriteFlip ? -camData.horizontalOffset : camData.horizontalOffset;
-        camData.bounds.center = transform.position;
-
-        camData.worldToCam = cam.worldToCameraMatrix;
-        camData.camToWorld = cam.cameraToWorldMatrix;
-        
-        camData.prevWorldPos = camData.curWorldPos;
-        rawCurWorldPos = Vector3.Lerp(rawCurWorldPos, targetWorldPos, Time.deltaTime * curDamping);
-        camData.curWorldPos = GetSnappedPosition(rawCurWorldPos, camData.worldUnitsPerPixel);
-        transform.position = camData.curWorldPos;
-        camData.curVelocity = -(camData.curWorldPos - camData.prevWorldPos) / Time.unscaledDeltaTime;
+        SmoothMove();
     }
     private void LateUpdate()
     {
@@ -119,8 +112,8 @@ public class CameraController : MonoBehaviour
         {
             case LocationState.Station:
             {
+                curXOffset = spyData.spriteFlip ? -camData.horizontalOffset : camData.horizontalOffset;
                 targetWorldPos.x = spyData.bounds.center.x + curXOffset;
-                targetWorldPos.y = spyData.bounds.center.y;
             }
             break;
 
@@ -129,7 +122,7 @@ public class CameraController : MonoBehaviour
                 float distFromCenter = spyData.bounds.center.x - camData.curLocationBounds.center.x;
 
                 float carriageT = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
-
+                curXOffset = spyData.spriteFlip ? -camData.horizontalOffset : camData.horizontalOffset;
                 targetWorldPos.x = Mathf.Lerp(camData.curLocationBounds.center.x, spyData.bounds.center.x + curXOffset, carriageT);
                 carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);
                 
@@ -139,6 +132,7 @@ public class CameraController : MonoBehaviour
 
             case LocationState.Gangway:
             {
+                curXOffset = spyData.spriteFlip ? -camData.horizontalOffset : camData.horizontalOffset;
                 targetWorldPos.x = spyData.bounds.center.x + curXOffset;
 
                 carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);
@@ -151,6 +145,31 @@ public class CameraController : MonoBehaviour
             {
                 targetWorldPos.x = camData.curLocationBounds.center.x;
                 targetWorldPos.y = camData.curLocationBounds.center.y;
+            }
+            break;
+
+            case LocationState.Title:
+            {
+                camData.tripTitleMenuClock += Time.deltaTime;
+                float t = camData.tripTitleMenuClock / camData.tripTitleTime;
+                t = Curves.EaseInOutCubic(t);
+                targetWorldPos.y = Mathf.Lerp(startTripTitlePosY, spyData.bounds.center.y, t);
+
+                if (t > 0.5f)
+                {
+                    if (!showingTitle)
+                    {
+                        camUIController.SetTitleText();
+                        camUIController.SetTitleAlpha(1);
+                        showingTitle = true;
+                    }
+                }
+
+                if (Mathf.Abs(camData.curWorldPos.y - spyData.bounds.center.y) < 0.01f)
+                {
+                    camUIController.DissappearTitleAlpha();
+                    camData.curLocationState = LocationState.Station;
+                }
             }
             break;
         }
@@ -184,6 +203,14 @@ public class CameraController : MonoBehaviour
                 carriageBoundsCompute.SetVector("_BoundsSize", camData.curLocationBounds.size);
             }
             break;
+            case LocationState.Title:
+            {
+                startTripTitlePosY = transform.position.y;
+                camData.tripTitleMenuClock = 0;
+                curXOffset = 0;
+                showingTitle = false;
+            }
+            break;
         }
     }
     private void ExitState()
@@ -201,7 +228,18 @@ public class CameraController : MonoBehaviour
             break;
         }
     }
+    private void SmoothMove()
+    {
+        camData.prevWorldPos = camData.curWorldPos;
+        rawCurWorldPos = Vector3.Lerp(rawCurWorldPos, targetWorldPos, Time.deltaTime * curDamping);
+        camData.curWorldPos = GetSnappedPosition(rawCurWorldPos, camData.worldUnitsPerPixel);
+        transform.position = camData.curWorldPos;
+        camData.bounds.center = transform.position;
 
+        camData.curVelocity = -(camData.curWorldPos - camData.prevWorldPos) / Time.unscaledDeltaTime;
+        Shader.SetGlobalVector("_CamVelocity", camData.curVelocity);
+        Shader.SetGlobalVector("_CamPos", camData.curWorldPos);
+    }
     private void SetToSlowDamping()
     {
         curDamping = SLOW_DAMPING;

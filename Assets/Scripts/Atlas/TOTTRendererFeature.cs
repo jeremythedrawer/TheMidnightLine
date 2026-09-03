@@ -306,6 +306,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         {
             public TextureHandle curSourceColor;
             public TextureHandle targetColor;
+            public TextureHandle depthTexture;
             public Material material;
         }
         public override void RecordRenderGraph(RenderGraph renderGraph, ContextContainer frameData)
@@ -322,16 +323,18 @@ public class TOTTRendererFeature : ScriptableRendererFeature
             TextureHandle texHandle = renderGraph.CreateTexture(camColorTexDesc);
 
             PixelPerfectPassData passData;
-            using (IRasterRenderGraphBuilder preBuilder = renderGraph.AddRasterRenderPass<PixelPerfectPassData>("Pixel Perfect Pass", out passData))
+            using (IRasterRenderGraphBuilder builder = renderGraph.AddRasterRenderPass<PixelPerfectPassData>("Pixel Perfect Pass", out passData))
             {
                 passData.curSourceColor = resourceData.cameraColor;
                 passData.targetColor = texHandle;
                 passData.material = rendererFeature.pixelPerfectMaterial;
+                passData.depthTexture = resourceData.activeDepthTexture;
 
-                preBuilder.UseTexture(passData.curSourceColor);
-                preBuilder.SetRenderAttachment(passData.targetColor, index: 0, AccessFlags.WriteAll);
+                builder.UseTexture(passData.curSourceColor);
+                builder.UseTexture(passData.depthTexture, AccessFlags.Read);
+                builder.SetRenderAttachment(passData.targetColor, index: 0, AccessFlags.WriteAll);
 
-                preBuilder.SetRenderFunc((PixelPerfectPassData data, RasterGraphContext ctx) =>
+                builder.SetRenderFunc((PixelPerfectPassData data, RasterGraphContext ctx) =>
                 {
                     ExecutePixelPerfectPass(data, ctx);
                 });
@@ -342,6 +345,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         private static void ExecutePixelPerfectPass(PixelPerfectPassData passData, RasterGraphContext ctx)
         {
             Blitter.BlitTexture(ctx.cmd, passData.curSourceColor, Vector2.one, passData.material, pass: 0);
+            passData.material.SetTexture("_CameraDepthTexture", passData.depthTexture);
         }
     }
     private class MatrixPass : ScriptableRenderPass

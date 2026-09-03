@@ -51,6 +51,7 @@ public class Menu : MonoBehaviour
                         {
                             options.curRegion = options.thirdPointRegion;
                             options.curTrip = options.thirdPointRegion.trips[0];
+                            camData.curLocationState = Spy.LocationState.Title;
                             onBeginTrip?.Raise();
                         }
                         textButton.MouseUpText();

@@ -20,6 +20,7 @@ public class FadeBlack : MonoBehaviour
 
     public static event Action OnFinishFadeOut;
 
+    public Options options;
     public InputData playerInputs;
     public Material fadeBlackMaterial;
 
@@ -37,11 +38,10 @@ public class FadeBlack : MonoBehaviour
 
     private void Start()
     {
-        
+        textRenderer.SetText("");
     }
     private void InitButton()
     {
-
         continueButton.InitButton();
     }
     public void FadeInChangeScene(string text, int sceneIndex, float uvPosX = 0, float uvPosY = 0, float alpha = 0, float fadeBlackZPos = DEFAULT_DEPTH)
@@ -96,6 +96,35 @@ public class FadeBlack : MonoBehaviour
     {
         continueButton.gameObject.SetActive(false);
         ctsFadeBlack?.Cancel();
+    }
+
+    public void OrTextBit(ColorBits bit)
+    {
+        textRenderer.customBit |= (int)bit;
+    }
+    public void AndTextBit(ColorBits bit)
+    {
+        textRenderer.customBit &= ~(int)bit;
+    }
+    public void SetTitleText()
+    {
+        textRenderer.SetText(options.curTrip.title, alpha: 0);
+    }
+    public void WriteTitleText()
+    {
+        textRenderer.WriteText(options.curTrip.title, options.dayNightTransitionTime / ((float)options.curTrip.title.Length * 4));
+    }
+    public void AppearText(float time)
+    {
+        textRenderer.ChangeCustom(time, 1, customChannel: 4);
+    }
+    public void DissappearText(float time)
+    {
+        textRenderer.ChangeCustom(time, 0, customChannel: 4);
+    }
+    public void SetTitleTextAlpha(float t)
+    {
+        textRenderer.SetAppearTextAlpha(t);
     }
     private async UniTask WaitingAndSettingSpacebar(float waitTime)
     {
