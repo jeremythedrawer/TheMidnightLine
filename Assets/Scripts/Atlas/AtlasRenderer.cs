@@ -64,6 +64,8 @@ public class AtlasRenderer : MonoBehaviour
     public CancellationTokenSource ctsOneShot;
     public CancellationTokenSource ctsChangeCustom;
 
+    public delegate void OnFinishOneShot();
+
     [Header("Sliced Generated")]
     public int quadCount;
 
@@ -320,8 +322,9 @@ public class AtlasRenderer : MonoBehaviour
         width = worldWidth / sprite.worldSize.x;
         UpdateSpriteInputs(sprite);
     }
-    public void SetNineSliceSizeFromWorldSpace(Vector2 worldSize, SliceSprite sliceSprite)
+    public void SetNineSliceSizeFromWorldSpace(Vector2 worldSize)
     {
+        SliceSprite sliceSprite = atlas.slicedSprites[spriteIndex];
         float centerWorldSliceWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
         float centerWorldSliceHeight = sliceSprite.sprite.worldSize.y - sliceSprite.worldSlices.z - sliceSprite.worldSlices.w;
         width = worldSize.x / centerWorldSliceWidth;
@@ -350,13 +353,13 @@ public class AtlasRenderer : MonoBehaviour
         UpdateSpriteInputs(sprite);
         isAnimating = true;
     }
-    public void PlayClipOneShot(AtlasClip clip, Transform markerTransform = null)
+    public void PlayClipOneShot(AtlasClip clip, Transform markerTransform = null, OnFinishOneShot callback = null)
     {
         ctsOneShot?.Cancel();
         ctsOneShot = null;
         ctsOneShot = new CancellationTokenSource();
 
-        PlayingClipOneShot(clip, markerTransform).Forget();
+        PlayingClipOneShot(clip, markerTransform, callback).Forget();
     }
     public void PlayClipReverse(AtlasClip clip, Transform markerTransform = null)
     {
@@ -432,7 +435,7 @@ public class AtlasRenderer : MonoBehaviour
     {
         custom.w = alpha;
     }
-    private async UniTask PlayingClipOneShot(AtlasClip clip, Transform markerTransform = null)
+    private async UniTask PlayingClipOneShot(AtlasClip clip, Transform markerTransform = null, OnFinishOneShot callback = null)
     {
         keyframeClock = 0;
         int lastIndex = clip.keyframeEndIndex;
@@ -458,6 +461,10 @@ public class AtlasRenderer : MonoBehaviour
                 await UniTask.Yield(ctsOneShot.Token);
             }
             isAnimating = false;
+            if (callback != null)
+            {
+                callback();
+            }
         }
         catch (OperationCanceledException)
         { 

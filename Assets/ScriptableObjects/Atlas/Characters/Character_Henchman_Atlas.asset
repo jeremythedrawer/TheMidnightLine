@@ -1,0 +1,153 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 33fd095fffb8f844e9fa149db1599080, type: 3}
+  m_Name: Character_Henchman_Atlas
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasSO
+  texture: {fileID: 2800000, guid: ac84d2d5582430a4f88c43c22854166d, type: 3}
+  spriteConnectColor:
+    serializedVersion: 2
+    rgba: 0
+  entityMotionType: 5
+  pivotColor:
+    serializedVersion: 2
+    rgba: 4278190335
+  sliceColor:
+    serializedVersion: 2
+    rgba: 0
+  motionSprites:
+  - sprite:
+      uvSizeAndPos: {x: 0.047851562, y: 0.15820312, z: 0, w: 0.83984375}
+      uvPivot: {x: 0.71428573, y: 0}
+      worldSize: {x: 0.27222222, y: 0.9, z: 1}
+      index: 0
+    markers: []
+    holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.07421875, y: 0.15917969, z: 0.048828125, w: 0.83984375}
+      uvPivot: {x: 0.4868421, y: 0}
+      worldSize: {x: 0.42222223, y: 0.90555555, z: 1}
+      index: 1
+    markers: []
+    holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.061523438, y: 0.16015625, z: 0.123046875, w: 0.83984375}
+      uvPivot: {x: 0.5714286, y: 0}
+      worldSize: {x: 0.35, y: 0.9111111, z: 1}
+      index: 2
+    markers: []
+    holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.048828125, y: 0.15917969, z: 0.18457031, w: 0.83984375}
+      uvPivot: {x: 0.7, y: 0}
+      worldSize: {x: 0.2777778, y: 0.90555555, z: 1}
+      index: 3
+    markers: []
+    holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15820312, z: 0.23339844, w: 0.83984375}
+      uvPivot: {x: 0.7777778, y: 0}
+      worldSize: {x: 0.25, y: 0.9, z: 1}
+      index: 4
+    markers: []
+    holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.064453125, y: 0.15917969, z: 0.2783203, w: 0.83984375}
+      uvPivot: {x: 0.530303, y: 0}
+      worldSize: {x: 0.36666667, y: 0.90555555, z: 1}
+      index: 5
+    markers: []
+    holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.059570312, y: 0.15917969, z: 0.34277344, w: 0.83984375}
+      uvPivot: {x: 0.6229508, y: 0}
+      worldSize: {x: 0.33888888, y: 0.90555555, z: 1}
+      index: 6
+    markers: []
+    holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.043945312, y: 0.15917969, z: 0.4033203, w: 0.83984375}
+      uvPivot: {x: 0.7777778, y: 0}
+      worldSize: {x: 0.25, y: 0.90555555, z: 1}
+      index: 7
+    markers: []
+    holdFrames: 3
+  - sprite:
+      uvSizeAndPos: {x: 0.046875, y: 0.15820312, z: 0.44921875, w: 0.83984375}
+      uvPivot: {x: 0.5833333, y: 0}
+      worldSize: {x: 0.26666668, y: 0.9, z: 1}
+      index: 8
+    markers: []
+    holdFrames: 5
+  - sprite:
+      uvSizeAndPos: {x: 0.052734375, y: 0.15820312, z: 0.515625, w: 0.83984375}
+      uvPivot: {x: 0.4074074, y: 0}
+      worldSize: {x: 0.3, y: 0.9, z: 1}
+      index: 9
+    markers: []
+    holdFrames: 5
+  - sprite:
+      uvSizeAndPos: {x: 0.060546875, y: 0.15820312, z: 0.5703125, w: 0.83984375}
+      uvPivot: {x: 0.3548387, y: 0}
+      worldSize: {x: 0.34444445, y: 0.9, z: 1}
+      index: 10
+    markers: []
+    holdFrames: 10
+  - sprite:
+      uvSizeAndPos: {x: 0.060546875, y: 0.15820312, z: 0.63183594, w: 0.83984375}
+      uvPivot: {x: 0.3548387, y: 0}
+      worldSize: {x: 0.34444445, y: 0.9, z: 1}
+      index: 11
+    markers: []
+    holdFrames: 10
+  - sprite:
+      uvSizeAndPos: {x: 0.046875, y: 0.15820312, z: 0.6933594, w: 0.83984375}
+      uvPivot: {x: 0.5833333, y: 0}
+      worldSize: {x: 0.26666668, y: 0.9, z: 1}
+      index: 12
+    markers: []
+    holdFrames: 50
+  - sprite:
+      uvSizeAndPos: {x: 0.046875, y: 0.15917969, z: 0.74316406, w: 0.83984375}
+      uvPivot: {x: 0.5833333, y: 0}
+      worldSize: {x: 0.26666668, y: 0.90555555, z: 1}
+      index: 13
+    markers: []
+    holdFrames: 10
+  - sprite:
+      uvSizeAndPos: {x: 0.046875, y: 0.16015625, z: 0.79296875, w: 0.83984375}
+      uvPivot: {x: 0.5833333, y: 0}
+      worldSize: {x: 0.26666668, y: 0.9111111, z: 1}
+      index: 14
+    markers: []
+    holdFrames: 50
+  simpleSprites: []
+  slicedSprites: []
+  clips:
+  - clipName: Walking
+    clipType: 0
+    motionIndex: 1
+    keyframeStartIndex: 0
+    keyframeEndIndex: 7
+    time: 0
+  - clipName: OpenSuitcase
+    clipType: 2
+    motionIndex: 2
+    keyframeStartIndex: 8
+    keyframeEndIndex: 11
+    time: 0
+  - clipName: StandingBreathing
+    clipType: 1
+    motionIndex: 3
+    keyframeStartIndex: 12
+    keyframeEndIndex: 14
+    time: 0
+  markers: []

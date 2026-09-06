@@ -11,7 +11,6 @@ public class SpyBrain : MonoBehaviour
     const float PLAY_AGAIN_HOLD_TIME = 3f;
     public static Carriage CurCarriage;
 
-    public static event Action OnAfterOutcomeSequence;
     public static event Action OnTicketCheckHoverEnabled;
     public static event Action<Vector2> OnTicketCheckHoverEnabledFirstTime;
     public static event Action OnTicketCheckHoverDisabled;
@@ -90,8 +89,6 @@ public class SpyBrain : MonoBehaviour
         TrainController.OnStationArrival += SetInputsForTrainStop;
         TrainController.OnStationLeave += SetInputsForTrainStart;
 
-        GameplayUI.OnIncreaseTraitorCountFirstTime += SetStateToIdle;
-
         Init();
     }
     private void OnDisable()
@@ -101,8 +98,6 @@ public class SpyBrain : MonoBehaviour
 
         TrainController.OnStationArrival -= SetInputsForTrainStop;
         TrainController.OnStationLeave -= SetInputsForTrainStart;
-
-        GameplayUI.OnIncreaseTraitorCountFirstTime -= SetStateToIdle;
     }
     private void Start()
     {
@@ -847,17 +842,22 @@ public class SpyBrain : MonoBehaviour
         chosenNPC = npc;
     }
 
-    private void OnDrawGizmos()
+#if UNITY_EDITOR
+    private void OnDrawGizmosSelected()
     {
         CalculateCollisionPoints();
         Gizmos.color = Color.orange;
         Gizmos.DrawLine(collisionData.groundLeft, collisionData.groundRight);
 
-        Gizmos.color = Color.indianRed;
+        Gizmos.color = Color.red;
 
         Gizmos.color = spyData.walkingIntoWall ? Color.forestGreen : Color.red;
         Gizmos.DrawLine(collisionData.wallLeft, boxCollider.bounds.center);
         Gizmos.DrawLine(collisionData.wallRight, boxCollider.bounds.center);
 
+        Gizmos.DrawWireSphere(transform.position, spyData.interactionDist);
+
+
     }
+#endif
 }

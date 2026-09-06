@@ -8,7 +8,6 @@ public class GameplayUI : MonoBehaviour
 {
     const float APPEARING_TIME = 0.5f;
     const float RESET_TIME = 2;
-    public static event Action OnIncreaseTraitorCountFirstTime;
 
     public InputData playerInputs;
     public CameraData cameraStats;
@@ -20,8 +19,6 @@ public class GameplayUI : MonoBehaviour
     public CursorData cursorData;
 
     public FadeBlack fadeBlack;
-
-    public UnlockPicker unlockPicker;
     
 
     public Material fadeBlackMaterial; 
@@ -279,11 +276,11 @@ public class GameplayUI : MonoBehaviour
     }
     private void ShowSpaceIcon(Vector2 position)
     {
-        ShowKeyIcon(keyIcon, position, KeyboardBindingIconIndices.Spacebar, Direction.Up);
+        ShowKeyIcon(keyIcon, position, KeybindSpriteIndices.Spacebar, Direction.Up);
     }
     private void ShowEIcon(Vector2 position)
     {
-        ShowKeyIcon(keyIcon, position, KeyboardBindingIconIndices.E, Direction.Up);
+        ShowKeyIcon(keyIcon, position, KeybindSpriteIndices.E, Direction.Up);
     }
     private void AppearRailMap()
     {

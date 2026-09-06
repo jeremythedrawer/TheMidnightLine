@@ -1,36 +1,28 @@
 using Cysharp.Threading.Tasks;
+using Proselyte.Sigils;
 using System;
 using UnityEngine;
 using static Atlas;
 using static Passenger;
+using static AtlasUI;
 public class HenchmanBrain : MonoBehaviour
 {
-    const int SHOOTING_FRAME_INDEX = 22;
-    public const float SHOOT_HOLD_TIME = 0.125f;
-    public static event Action OnShoot;
-
-    public SpyData spyStats;
-    public TripData curTrip;
+    public SpyData spyData;
+    public Options options;
+    public UIData uiData;
 
     public AtlasRenderer atlasRenderer;
-    
-    public Material postProcessingMaterial;
 
-    public HenchmanMotion sittingMotion;
-
-    public float shootDist;
-
-    public bool isShooter;
+    public GameEvent onShowKeyIcon;
+    public GameEvent onOpenDialogueBubble;
 
     [Header("Generated")]
     public HenchmanState curState;
-    
     public AtlasClip curClip;
-
-    public int curFrameIndex;
-
-    public bool hasShot;
-    public bool willShoot;
+    private void Start()
+    {
+        SetState(HenchmanState.Idle);
+    }
     private void Update()
     {
         UpdateState();
@@ -46,17 +38,24 @@ public class HenchmanBrain : MonoBehaviour
     {
         switch (curState)
         {
-            case HenchmanState.Sitting:
+            case HenchmanState.Walking:
             {
-                hasShot = false;
-                willShoot = false;
-                curClip = atlasRenderer.atlas.clipDict[(int)sittingMotion];
+                curClip = atlasRenderer.atlas.clipDict[(int)HenchmanMotion.Walking];
             }
             break;
-            case HenchmanState.Shooting:
+            case HenchmanState.OpeningSuitcase:
             {
-                curClip = atlasRenderer.atlas.clipDict[(int)HenchmanMotion.ShootGun];
-                atlasRenderer.PlayClipOneShot(curClip);
+                curClip = atlasRenderer.atlas.clipDict[(int)HenchmanMotion.OpenSuitcase];
+                atlasRenderer.PlayClipOneShot(curClip, callback: SetNotepadText);
+
+
+            }
+            break;
+            case HenchmanState.Idle:
+            {
+                curClip = atlasRenderer.atlas.clipDict[(int)HenchmanMotion.StandingBreathing];
+
+
             }
             break;
         }
@@ -65,25 +64,25 @@ public class HenchmanBrain : MonoBehaviour
     {
         switch (curState)
         {
-            case HenchmanState.Sitting:
+            case HenchmanState.Walking:
+            {
+                atlasRenderer.PlayClip(ref curClip);
+            }
+            break;
+            case HenchmanState.OpeningSuitcase:
+            {
+
+            }
+            break;
+            case HenchmanState.Idle:
             {
                 atlasRenderer.PlayClip(ref curClip);
 
-                if (isShooter && willShoot && spyStats.spriteFlip && spyStats.bounds.center.x < transform.position.x + shootDist)
+                float spyDist = Mathf.Abs(spyData.bounds.center.x - atlasRenderer.bounds.center.x);
+
+                if (spyDist < spyData.interactionDist)
                 {
-                    SetState(HenchmanState.Shooting);
-                }
-            }
-            break;
-            case HenchmanState.Shooting:
-            {
-                if (!hasShot && atlasRenderer.curFrameIndex == SHOOTING_FRAME_INDEX)
-                {
-                    OnShoot?.Invoke();
-                    postProcessingMaterial.SetInt("_Invert", 1);
-                    hasShot = true;
-                    Time.timeScale = 0;
-                    PauseFrame();
+                    SetState(HenchmanState.OpeningSuitcase);
                 }
             }
             break;
@@ -93,12 +92,12 @@ public class HenchmanBrain : MonoBehaviour
     {
         switch (curState)
         {
-            case HenchmanState.Sitting:
+            case HenchmanState.Walking:
             {
 
             }
             break;
-            case HenchmanState.Shooting:
+            case HenchmanState.OpeningSuitcase:
             {
 
             }
@@ -106,31 +105,27 @@ public class HenchmanBrain : MonoBehaviour
         }
     }
 
-    private void PauseFrame()
+    private void SetKeyIcon()
     {
-        PausingFrame().Forget();
-    }
-    private async UniTask PausingFrame()
-    {
-        float clock = 0;
-        while(clock < SHOOT_HOLD_TIME)
-        {
-            clock += Time.unscaledDeltaTime;
-            await UniTask.Yield();
-        }
-        Time.timeScale = 1;
-        postProcessingMaterial.SetInt("_Invert", 0);
+        uiData.keyBindSpriteIndex = (int)KeybindSpriteIndices.E;
+        uiData.keyBindWorldPos.x = atlasRenderer.bounds.center.x;
+        uiData.keyBindWorldPos.y = atlasRenderer.bounds.max.y + uiData.keyBindIconWorldSize.y + KEY_ICON_POS_BUFFER;
+        uiData.keyBindWorldPos.z = atlasRenderer.bounds.max.z;
+
+        onShowKeyIcon?.Raise();
     }
 
+    private void SetNotepadText()
+    {
+        uiData.curDialogueText = "Take this";
+        uiData.curDialogueBubbleBounds = atlasRenderer.bounds;
+        onOpenDialogueBubble?.Raise();
+
+    }
 #if UNITY_EDITOR
     private void OnDrawGizmosSelected()
     {
-        if (isShooter)
-        {
-            Gizmos.color = Color.red;
-            Vector3 shootPos = new Vector3(transform.position.x + shootDist, transform.position.y, transform.position.z);
-            Gizmos.DrawLine(transform.position, shootPos);
-        }
+        
     }
 #endif
 }

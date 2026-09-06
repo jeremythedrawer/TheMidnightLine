@@ -89,15 +89,9 @@ public static class Passenger
     public enum HenchmanState
     {
         None,
-        Sitting,
-        Shooting,
-    }
-    public enum PresidentState
-    { 
-        None,
-        Sitting,
-        StartHandshake,
-        Handshaking,
+        Walking,
+        OpeningSuitcase,
+        Idle,
     }
     [Serializable] public struct NPCProfile
     {

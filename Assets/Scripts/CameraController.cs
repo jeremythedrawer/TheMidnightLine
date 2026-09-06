@@ -12,6 +12,9 @@ public class CameraController : MonoBehaviour
     const float SLOW_DAMPING = 1;
 
     public CamUIController camUIController;
+    public AudioSource audioSource;
+
+    public Options options;
 
     public CameraData camData;
     public SpyData spyData;
@@ -44,13 +47,10 @@ public class CameraController : MonoBehaviour
     private void OnEnable()
     {
         Init();
-        HenchmanBrain.OnShoot += ShakeFromGunShot;
-        SpyBrain.OnAfterOutcomeSequence += SetToSlowDamping;
     }
     private void OnDisable()
     {
-        HenchmanBrain.OnShoot -= ShakeFromGunShot;
-        SpyBrain.OnAfterOutcomeSequence -= SetToSlowDamping;
+
     }
     private void Update()
     {
@@ -112,7 +112,6 @@ public class CameraController : MonoBehaviour
         {
             case LocationState.Station:
             {
-                curXOffset = spyData.spriteFlip ? -camData.horizontalOffset : camData.horizontalOffset;
                 targetWorldPos.x = spyData.bounds.center.x + curXOffset;
             }
             break;
@@ -154,6 +153,10 @@ public class CameraController : MonoBehaviour
                 float t = camData.tripTitleMenuClock / camData.tripTitleTime;
                 t = Curves.EaseInOutCubic(t);
                 targetWorldPos.y = Mathf.Lerp(startTripTitlePosY, spyData.bounds.center.y, t);
+
+                float windVol = -Mathf.Cos(t * 2 * Mathf.PI) * 0.5f + 0.5f;
+
+                audioSource.volume = windVol * options.soundEffects.volume;
 
                 if (t > 0.5f)
                 {
@@ -209,6 +212,8 @@ public class CameraController : MonoBehaviour
                 camData.tripTitleMenuClock = 0;
                 curXOffset = 0;
                 showingTitle = false;
+
+                audioSource.PlayOneShot(options.soundEffects.wind);
             }
             break;
         }
@@ -263,10 +268,6 @@ public class CameraController : MonoBehaviour
     private float GetSnappedOrthoSize()
     {
         return (Screen.height * 0.5f / PIXELS_PER_UNIT);
-    }
-    private void ShakeFromGunShot()
-    {
-        Shake(time: 0.5f, intensity: 5f);
     }
     private void Shake(float time, float intensity)
     {

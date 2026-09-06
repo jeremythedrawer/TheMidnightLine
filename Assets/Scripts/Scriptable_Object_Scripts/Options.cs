@@ -21,6 +21,8 @@ public class Options : ScriptableObject
     {
         public AudioClip cursorHover;
         public AudioClip cursorClick;
+        public AudioClip wind;
+        public AudioClip gong;
         public float volume;
     }
 
@@ -42,8 +44,9 @@ public class Options : ScriptableObject
     public RegionData firstPointRegion;
     public RegionData capitalRegion;
 
-
     public SpyData spyData;
+
+    public HenchmanBrain henchmanPrefab;
 
     public float dayNightTransitionTime = 5f;
     [Header("User Picked")]

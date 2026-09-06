@@ -19,6 +19,7 @@ public class WorldUIController : MonoBehaviour
     public SpyData spyData;
     public PassengersData passengerData;
     public CursorData cursorData;
+    public UIData uiData;
 
     public AudioSource audioSource;    
 
@@ -29,6 +30,9 @@ public class WorldUIController : MonoBehaviour
     public CountryMap countryMap;
 
     public GameEvent onBeginTrip;
+    public GameEvent onShowKeyIcon;
+
+    public AtlasRenderer keybindRenderer;
 
     [Header("Generated")]
 
@@ -41,16 +45,8 @@ public class WorldUIController : MonoBehaviour
     public Vector3 outcomePageActivePos;
     public Vector3 outcomePageStartPos;
 
-    public float outcomePageEndPosX;
-    public float outcomePageHoverPosY;
-
-    public int curTraitorsShown;
-    public int curTraitorProfilesReviewed;
-    public int outcomePageCompletedMask;
-
     public bool canExitState;
     public bool atOptions;
-    public bool outcomeSetUpCompleted;
 
     public Page[] profilePages;
 
@@ -77,6 +73,9 @@ public class WorldUIController : MonoBehaviour
 
         onBeginTrip.RegisterListener(SetToNoneState);
         onBeginTrip.RegisterListener(DisappearBuildings);
+        onBeginTrip.RegisterListener(LowerMusicVolume);
+
+        onShowKeyIcon.RegisterListener(SetKeyBindIcon);
 
         FadeBlack.OnFinishFadeOut += SetToNoneStateFromOutcome;
 
@@ -93,7 +92,10 @@ public class WorldUIController : MonoBehaviour
 
         onBeginTrip.UnregisterListener(SetToNoneState);
         onBeginTrip.UnregisterListener(DisappearBuildings);
+        onBeginTrip.UnregisterListener(LowerMusicVolume);
         
+        onShowKeyIcon.UnregisterListener(SetKeyBindIcon);
+
         SliderController.OnChangeMusicVolume -= SetMusicVolume;
     }
     private void Start()
@@ -108,6 +110,7 @@ public class WorldUIController : MonoBehaviour
     {
         Shader.SetGlobalFloat(options.dayNightID, 1);
 
+        uiData.keyBindIconWorldSize = keybindRenderer.sprite.worldSize;
 
         audioSource.clip = options.music.menu;   
         audioSource.volume = options.music.volume;
@@ -288,6 +291,27 @@ public class WorldUIController : MonoBehaviour
         {
             AtlasRenderer building = buildingRenderers[i];
             building.ChangeCustom(options.dayNightTransitionTime, newValue: 0, customChannel: 4);
+        }
+    }
+    private void LowerMusicVolume()
+    {
+        LoweringMusicVolume().Forget();
+    }
+    private void SetKeyBindIcon()
+    {
+        keybindRenderer.transform.position = uiData.keyBindWorldPos;
+        keybindRenderer.UpdateSpriteInputsByIndex(uiData.keyBindSpriteIndex);
+    }
+    private async UniTask LoweringMusicVolume()
+    {
+        float clock = 0f;
+        float time = 1f;
+        while(clock < time)
+        {
+            clock += Time.deltaTime;
+            float t = 1 - Mathf.Pow(clock / time, 2);
+            audioSource.volume = t * options.music.volume;
+            await UniTask.Yield();
         }
     }
 }

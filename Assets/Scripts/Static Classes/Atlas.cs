@@ -58,23 +58,12 @@ public static class Atlas
         None,
         TrainDoor,
     }
-    public enum MeridiaCabinetMotion
-    {
-        None,
-        Clock,
-        Door,
-        Elevator,
-    }
     public enum HenchmanMotion
     {
         None,
-        SittingBreathing1,
-        SittingBreathing2,
-        SittingBreathing3,
-        SittingBreathing4,
-        SittingBreathing5,
-        SittingBreathing6,
-        ShootGun,
+        Walking,
+        OpenSuitcase,
+        StandingBreathing,
     }
     public enum PresidentMotion
     {
@@ -98,9 +87,7 @@ public static class Atlas
         Spy,
         Notepad,
         Train,
-        MeridiaCabinet,
         MeridiaHenchman,
-        MeridiaPresident,
     }
     public enum ClipType
     {
@@ -190,9 +177,7 @@ public static class Atlas
         { EntityMotionType.Spy, typeof(SpyMotion) },
         { EntityMotionType.Train, typeof(TrainMotion) },
         { EntityMotionType.Notepad, typeof(NotepadMotion) },
-        { EntityMotionType.MeridiaCabinet, typeof(MeridiaCabinetMotion) },
         { EntityMotionType.MeridiaHenchman, typeof(HenchmanMotion) },
-        { EntityMotionType.MeridiaPresident, typeof(PresidentMotion) }
     };
 
 }

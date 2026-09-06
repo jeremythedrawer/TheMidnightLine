@@ -83,6 +83,13 @@ public class SpawnMaster : MonoBehaviour
 
         TrainController train = Instantiate(options.curRegion.train);
         train.transform.position = new Vector3(-100, 0, 0);
+
+        HenchmanBrain henchman = Instantiate(options.henchmanPrefab);
+        Vector3 henchmanStartPos = new Vector3();
+        henchmanStartPos.x = -train.trainData.totalBounds.extents.x;
+        henchmanStartPos.y = 0;
+        henchmanStartPos.z = 0;
+        henchman.transform.position = henchmanStartPos;
     }
     private void InitBoundParameters()
     {
@@ -653,7 +660,7 @@ public class SpawnMaster : MonoBehaviour
             {
                 elapsedTime += Time.deltaTime;
                 float t = elapsedTime / options.dayNightTransitionTime;
-
+                t = Curves.EaseInOutCubic(t);
                 float dayNight = Mathf.Lerp(startDayNight, nextDayNight, t);
 
                 Shader.SetGlobalFloat(options.dayNightID, dayNight);

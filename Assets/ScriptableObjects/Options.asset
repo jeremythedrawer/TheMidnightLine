@@ -20,6 +20,8 @@ MonoBehaviour:
   soundEffects:
     cursorHover: {fileID: 8300000, guid: 60972e1732a16b64ab4550f36506c501, type: 3}
     cursorClick: {fileID: 8300000, guid: 2939aabbea24caf4888d9c8755d185a9, type: 3}
+    wind: {fileID: 8300000, guid: 0549ad09843434a4a9f31a3cf172172e, type: 3}
+    gong: {fileID: 8300000, guid: 1a07e5de218c4644aa580e4c38fab227, type: 3}
     volume: 1
   meridiaColor: {r: 0.3962264, g: 0, b: 0.076652825, a: 0}
   vinroseColor: {r: 0, g: 0.38679248, b: 0.37661377, a: 0}
@@ -40,15 +42,21 @@ MonoBehaviour:
   firstPointRegion: {fileID: 11400000, guid: 5a7da2108320d9d48a4630eccdf5b335, type: 2}
   capitalRegion: {fileID: 11400000, guid: 512515662cd30a84c8cd764e913fca12, type: 2}
   spyData: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
+  henchmanPrefab: {fileID: 2811610635611506340, guid: 889bef27015f9e64681d902b81375343, type: 3}
+  dayNightTransitionTime: 5
+  curRegion: {fileID: 11400000, guid: 1c4db5b59d74b464aa0179e0184b41c9, type: 2}
   curTrip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   darkColor: {r: 0.078431375, g: 0.098039225, b: 0.15294118, a: 1}
   lightColor: {r: 1, g: 1, b: 1, a: 1}
   darkColorIndex: 3
   lightColorIndex: 0
   useBayer: 0
-  darkColorID: 1248
-  lightColorID: 1249
-  meridiaColorID: 1254
-  vinroseColorID: 1553
-  patternTextureID: 1267
+  darkColorID: 980
+  lightColorID: 981
+  meridiaColorID: 982
+  vinroseColorID: 984
+  patternTextureID: 983
+  dayNightID: 985
   selectedPatternIndex: 4
+  tutorialsCompleted: 0
+  curTutorialState: 0

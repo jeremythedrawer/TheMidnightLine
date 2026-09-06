@@ -7,13 +7,6 @@ using static Atlas;
 using static Passenger;
 public static class AtlasUI
 {
-    public const int COLOR_SQUARE_SPRITE_INDEX = 5;
-    public const int ONE_NUMPAD_SPRITE_INDEX = 12;
-    public const int TWO_NUMPAD_SPRITE_INDEX = 13;
-    public const int THREE_NUMPAD_SPRITE_INDEX = 14;
-    public const int LOCK_SPRITE_INDEX = 18;
-    public const int TICK_SPRITE_INDEX = 22;
-    public const int FOUR_NUMPAD_SPRITE_INDEX = 25;
     public const int HOLDING_PENCIL_SPRITE_INDEX = 16;
 
     public const float PENCIL_DISTANCE_THRESHOLD = 0.05f;
@@ -31,6 +24,8 @@ public static class AtlasUI
     public const float NOTEPAD_INACTIVE_OFFSET = 0.39f;
     public const float UI_POSITION_BUFFER = 0.3f;
     public const float PRINT_LETTER_TIME = 0.05f;
+
+    public const float KEY_ICON_POS_BUFFER = 0.15f;
 
     public static float TransitionTime = -Mathf.Log(TARGET_MARGIN) / MOVE_DAMP;
 
@@ -163,7 +158,7 @@ public static class AtlasUI
         Back,
         Continue,
     }
-    public enum KeyboardBindingIconIndices
+    public enum KeybindSpriteIndices
     { 
         Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, 
         A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
@@ -199,7 +194,7 @@ public static class AtlasUI
         cts = new CancellationTokenSource();
         MovingUIElement(transform, cts, nextPos, curState).Forget();
     }
-    public static void ShowKeyIcon(AtlasRenderer renderer, Vector2 position, KeyboardBindingIconIndices keySpriteIndex, Direction direction)
+    public static void ShowKeyIcon(AtlasRenderer renderer, Vector2 position, KeybindSpriteIndices keySpriteIndex, Direction direction)
     {
         renderer.enabled = true;
         renderer.custom.w = 1;
