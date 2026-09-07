@@ -52,10 +52,7 @@ public class Notepad : MonoBehaviour
 
     public TextAsset namesJSON;
 
-    public Page traitorPagePrefab;
-    public Page promptPage;
-    public Page colorKeyPage;
-
+    public Page frontPage;
     [Header("Generated")]
 
     public Page[] pages;
@@ -91,7 +88,6 @@ public class Notepad : MonoBehaviour
     }
     public void Init()
     {
-        colorKeyPage.gameObject.SetActive(false);
         gameObject.SetActive(false);
         CreateNPCProfiles();
     }
@@ -99,46 +95,36 @@ public class Notepad : MonoBehaviour
     {
         gameObject.SetActive(true);
 
-        activePage = promptPage;
+        activePage = frontPage;
         leftHand.SetActivePage(activePage);
 
-        notepadData.abilityIconsShown = UnlockType.None;
         notepadData.subState = SubState.None;
-        notepadData.profileWriteCount = 0;
 
         notepadData.curState = NotepadState.Stationary;
 
-        if (pages == null || pages.Length == 0)
-        {
-            AtlasUI.PromptStringDict = InitEnumToStringDict<TripPrompt>();
-            npcData.habitStringDict = InitEnumToStringDict<Habits>();
+        AtlasUI.PromptStringDict = InitEnumToStringDict<TripPrompt>();
+        npcData.habitStringDict = InitEnumToStringDict<Habits>();
 
-            Vector3 flipWorldPos = new Vector3();
-            flipWorldPos.x = bindingRingsRend.transform.localPosition.x;
-            flipWorldPos.y = bindingRingsRend.transform.localPosition.y;
-            flipWorldPos.z = leftHand.transform.localPosition.z;
-            notepadData.leftHandFlipPos = flipWorldPos;
-            notepadData.leftHandDepthFront = bindingRingsRend.transform.localPosition.z - 1;
-            notepadData.leftHandDepthBack = rightHand_renderer.transform.localPosition.z + 1;
-            notepadData.activePageDepth = bindingRingsRend.transform.localPosition.z + 1;
+        Vector3 flipWorldPos = new Vector3();
+        flipWorldPos.x = bindingRingsRend.transform.localPosition.x;
+        flipWorldPos.y = bindingRingsRend.transform.localPosition.y;
+        flipWorldPos.z = leftHand.transform.localPosition.z;
+        notepadData.leftHandFlipPos = flipWorldPos;
+        notepadData.leftHandDepthFront = bindingRingsRend.transform.localPosition.z - 1;
+        notepadData.leftHandDepthBack = rightHand_renderer.transform.localPosition.z + 1;
+        notepadData.activePageDepth = bindingRingsRend.transform.localPosition.z + 1;
 
-            leftHand.Init();
+        leftHand.Init();
 
-            float halfCamWidth = camStats.bounds.extents.x;
-            float halfCamHeight = camStats.bounds.extents.y;
-            float binderBoundsOffsetX = bindingRingsRend.bounds.max.x - transform.position.x;
-            notepadData.inactiveLocalPos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + NOTEPAD_INACTIVE_OFFSET, ACTIVE_POS.z);
-            notepadData.offSceenLocalPos = new Vector3(notepadData.inactiveLocalPos.x, -halfCamHeight - NOTEPAD_INACTIVE_OFFSET, ACTIVE_POS.z); 
-            float bindingRingsHeight = bindingRingsRend.bounds.size.y;
-            notepadData.hoverLocalPos = new Vector3(notepadData.inactiveLocalPos.x, notepadData.inactiveLocalPos.y + bindingRingsHeight, ACTIVE_POS.z);
+        float halfCamWidth = camStats.bounds.extents.x;
+        float halfCamHeight = camStats.bounds.extents.y;
+        float binderBoundsOffsetX = bindingRingsRend.bounds.max.x - transform.position.x;
+        notepadData.inactiveLocalPos = new Vector3(halfCamWidth - binderBoundsOffsetX, -halfCamHeight + NOTEPAD_INACTIVE_OFFSET, ACTIVE_POS.z);
+        notepadData.offSceenLocalPos = new Vector3(notepadData.inactiveLocalPos.x, -halfCamHeight - NOTEPAD_INACTIVE_OFFSET, ACTIVE_POS.z); 
+        float bindingRingsHeight = bindingRingsRend.bounds.size.y;
+        notepadData.hoverLocalPos = new Vector3(notepadData.inactiveLocalPos.x, notepadData.inactiveLocalPos.y + bindingRingsHeight, ACTIVE_POS.z);
 
-            CreatePages();
-        }
-        else
-        {
-            ResetPages();
-            Reinit();
-        }
+        CreatePages();
     }
     private void Reinit()
     {
@@ -160,37 +146,17 @@ public class Notepad : MonoBehaviour
     }
     private void ChooseState()
     {
-        switch (activePage.pageType)
+        if (ToFlipUp())
         {
-            case PageType.Prompt:
-            {
-                if (ToFlipUp())
-                {
-                    SetState(NotepadState.FlippingUp);
-                }
-                else
-                {
-                    SetState(NotepadState.Stationary);
-                }
-            }
-            break;
-
-            case PageType.Profile:
-            {
-                if (ToFlipUp())
-                {
-                    SetState(NotepadState.FlippingUp);
-                }
-                else if (ToFlipDown())
-                {
-                    SetState(NotepadState.FlippingDown);
-                }
-                else
-                {
-                    SetState(NotepadState.Stationary);
-                }
-            }
-            break;
+            SetState(NotepadState.FlippingUp);
+        }
+        else if (ToFlipDown())
+        {
+            SetState(NotepadState.FlippingDown);
+        }
+        else
+        {
+            SetState(NotepadState.Stationary);
         }
     }
     private void SetState(NotepadState newState)
@@ -212,8 +178,6 @@ public class Notepad : MonoBehaviour
         {
             Page page = pages[i];
             page.paperRenderer.UpdateSpriteInputsByIndex(12);
-            page.TogglePageContentTopHalf(true);
-            page.TogglePageContentBottomHalf(true);
             page.SetPageDepth(bindingRingsRend.transform.localPosition.z + 3);
         }
         activePage.SetPageDepth(notepadData.activePageDepth);
@@ -258,8 +222,6 @@ public class Notepad : MonoBehaviour
                     case 3:
                     {
                         if (curKeyframeState == KeyframeState.TogglePageContentsBottomHalf) return;
-
-                        activePage.TogglePageContentBottomHalf(false);
                         curKeyframeState = KeyframeState.TogglePageContentsBottomHalf;
                     }
                     break;
@@ -267,8 +229,6 @@ public class Notepad : MonoBehaviour
                     case 4:
                     {
                         if (curKeyframeState == KeyframeState.TogglePageContentsTopHalf) return;
-
-                        activePage.TogglePageContentTopHalf(false);
                         curKeyframeState = KeyframeState.TogglePageContentsTopHalf;
                     }
                     break;
@@ -336,17 +296,12 @@ public class Notepad : MonoBehaviour
                     case 2:
                     {
                         if (curKeyframeState == KeyframeState.TogglePageContentsBottomHalf) return;
-                        nextPage.TogglePageContentBottomHalf(true);
-
                         curKeyframeState = KeyframeState.TogglePageContentsBottomHalf;
                     }
                     break;
                     case 3:
                     {
                         if (curKeyframeState == KeyframeState.TogglePageContentsTopHalf) return;
-
-                        nextPage.TogglePageContentTopHalf(true);
-
                         curKeyframeState = KeyframeState.TogglePageContentsTopHalf;
                     }
                     break;
@@ -581,10 +536,11 @@ public class Notepad : MonoBehaviour
     private void CreatePages()
     {
         List<Page> pageList = new List<Page>();
-        pageList.Add(promptPage);
+
+        pageList.Add(frontPage);
 
         int totalPages = curTrip.traitorProfiles.Length + 2;
-        promptPage.Init(0, totalPages);
+        frontPage.Init(pageIndexInput: 0);
 
         List<int> randIndicesList = new List<int>(curTrip.traitorProfiles.Length);
         for(int i = 0; i < curTrip.traitorProfiles.Length; i++)
@@ -599,48 +555,18 @@ public class Notepad : MonoBehaviour
             TraitorProfile traitorProfile = curTrip.traitorProfiles[traitorIndex];
             randIndicesList.RemoveAt(randIndex);
 
-            Page traitorPage = Instantiate(traitorPagePrefab, transform);
+            ProfilePage traitorPage = Instantiate(notepadData.profilePagePrefab, transform);
             traitorPage.transform.localPosition = new Vector3(0, 0, notepadData.leftHandDepthBack - 1);
-            traitorPage.InitProfile(traitorProfile, i + 1, totalPages);
+            traitorPage.InitProfile(traitorProfile, i + 1);
             traitorPage.traitorIndex = traitorIndex;
             traitorPage.gameObject.name = "Page_" + i;
 
-            pageList.Add(traitorPage);
+            pageList.Add(traitorPage.page);
             traitorPage.gameObject.SetActive(false);
         }
-        
-        pageList.Add(colorKeyPage);
-        colorKeyPage.Init(totalPages - 1, totalPages);
 
         pages = pageList.ToArray();
         lastPageIndex = pages.Length - 1;
-    }
-    private void ResetPages()
-    {
-        List<int> randIndicesList = new List<int>(curTrip.traitorProfiles.Length);
-
-        promptPage.Init(0, pages.Length);
-        for (int i = 0; i < curTrip.traitorProfiles.Length; i++)
-        {
-            randIndicesList.Add(i);
-        }
-
-        for (int i = 1; i < pages.Length - 1; i++)
-        {
-            int randIndex = UnityEngine.Random.Range(0, randIndicesList.Count);
-            int traitorIndex = randIndicesList[randIndex];
-            TraitorProfile traitorProfile = curTrip.traitorProfiles[traitorIndex];
-            randIndicesList.RemoveAt(randIndex);
-
-            Page traitorPage = pages[i];
-            traitorPage.transform.SetParent(transform);
-            traitorPage.transform.localPosition = new Vector3(0, 0, notepadData.leftHandDepthBack - 1);
-            traitorPage.InitProfile(traitorProfile, i, pages.Length);
-            traitorPage.traitorIndex = traitorIndex;
-            traitorPage.gameObject.name = "Page_" + i;
-            traitorPage.gameObject.SetActive(false);
-        }
-        colorKeyPage.Init(pages.Length - 1, pages.Length);
     }
     private float NormalGaussianValue(float t)
     {

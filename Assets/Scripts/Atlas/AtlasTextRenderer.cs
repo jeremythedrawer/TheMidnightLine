@@ -97,10 +97,12 @@ public class AtlasTextRenderer : MonoBehaviour
         batchKey.texture = textAtlas?.atlas?.texture;
         textAtlas?.SetWorldSpaceLineHeight();
         RegisterTextRenderer(this);
+        if (backgroundRenderer != null) backgroundRenderer.enabled = true;
     }
     private void OnDisable()
     {
         UnregisterTextRenderer(this);
+        if (backgroundRenderer != null) backgroundRenderer.enabled = false;
     }
     private void Update()
     {

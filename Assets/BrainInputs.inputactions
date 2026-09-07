@@ -25,15 +25,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Writing",
-                    "type": "Button",
-                    "id": "72e47197-bc13-40fa-93ac-3437fee94115",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Carousel",
                     "type": "Value",
                     "id": "29cb3758-e4c2-47f0-8d05-8a604357ab6e",
@@ -52,7 +43,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Ticket",
+                    "name": "Talk",
                     "type": "Button",
                     "id": "7257163c-c77d-4fdc-ac70-2c491b6abde3",
                     "expectedControlType": "",
@@ -126,28 +117,6 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "NotepadToggle",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7f782792-99b6-4af6-af1f-948a97fc1e5e",
-                    "path": "<Keyboard>/space",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "KeyboardAndMouse",
-                    "action": "Writing",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "652db379-7914-40fe-b47e-0e76476eb37a",
-                    "path": "<Gamepad>/buttonSouth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Writing",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -330,10 +299,10 @@
                 {
                     "name": "",
                     "id": "53ed4e0b-cf3b-4be7-8c70-37f46505c7a9",
-                    "path": "<Keyboard>/space",
+                    "path": "<Keyboard>/w",
                     "interactions": "",
                     "processors": "",
-                    "groups": "Keyboard&Mouse;KeyboardAndMouse",
+                    "groups": "Keyboard&Mouse;KeyboardAndMouse;Gamepad",
                     "action": "Interact",
                     "isComposite": false,
                     "isPartOfComposite": false
@@ -411,7 +380,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";KeyboardAndMouse",
-                    "action": "Ticket",
+                    "action": "Talk",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -422,7 +391,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Ticket",
+                    "action": "Talk",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

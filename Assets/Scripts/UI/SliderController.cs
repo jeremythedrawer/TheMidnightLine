@@ -39,25 +39,13 @@ public class SliderController : MonoBehaviour
     }
     private void Init()
     {
-        void ButtonUp(IconButton icon)
+        void MouseDown()
         {
-            icon.atlasRenderer.customBit ^= (int)ColorBits.Invert;
-        }
-        void ButtonDown(IconButton icon)
-        {
-            icon.atlasRenderer.customBit ^= (int)ColorBits.Invert;
+            button.MouseDown();
+            button.atlasRenderer.customBit ^= (int)ColorBits.Invert;
             startDragDelta = button.transform.position.x - inputData.mouseWorldPos.x;
         }
-        void EnterButton(IconButton icon)
-        {
-            icon.atlasRenderer.customBit |= (int)ColorBits.GreenChannel;
-        }
-        void ExitButton(IconButton icon)
-        {
-            icon.atlasRenderer.customBit &= ~(int)ColorBits.GreenChannel;
-            icon.atlasRenderer.customBit &= ~(int)ColorBits.Invert;
-        }
-        button.InitButton(ButtonUp, ButtonDown, EnterButton, ExitButton);
+        button.InitButton(onMouseDown: MouseDown);
         
         Vector4[] worldPivAndSizes = rangeRenderer.worldPivotsAndSizes;
         minSlideDist = worldPivAndSizes[1].x;

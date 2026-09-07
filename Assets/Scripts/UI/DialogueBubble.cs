@@ -14,25 +14,29 @@ public class DialogueBubble : MonoBehaviour
 
     public AtlasTextRenderer textRenderer;
     public AtlasRenderer tailRenderer;
-    public AtlasRenderer iconRenderer;
 
     public GameEvent onOpenDialogueBubble;
+    public GameEvent onCloseDialogueBubble;
     [Header("Generated")]    
     public Vector3 worldPos;
 
     public Vector2 size;
 
+    public float clock;
     public CancellationTokenSource ctsOpen;
 
     private void OnEnable()
     {
         onOpenDialogueBubble.RegisterListener(Open);
+        onCloseDialogueBubble.RegisterListener(Close);
 
         ctsOpen = new CancellationTokenSource();
     }
     private void OnDisable()
     {
         onOpenDialogueBubble.UnregisterListener(Open);
+        onCloseDialogueBubble.UnregisterListener(Close);
+
         ctsOpen?.Cancel();
     }
     private void Open()
@@ -42,21 +46,24 @@ public class DialogueBubble : MonoBehaviour
         worldPos.z = uiData.curDialogueBubbleBounds.min.z;
         transform.position = worldPos;
 
-        textRenderer.SetText("");
+        textRenderer.enabled = true;
+        tailRenderer.enabled = true;
 
-        //iconRenderer.SetAlpha(0);
-        
-
-        textRenderer.backgroundRenderer.enabled = true;
+        ctsOpen?.Cancel();
+        ctsOpen = new CancellationTokenSource();
         Opening().Forget();
     }
-
+    private void Close()
+    {
+        ctsOpen?.Cancel();
+        ctsOpen = new CancellationTokenSource();
+        Closing().Forget();
+    }
     private async UniTask Opening()
     {
-        float clock = 0;
         try
         {
-            while (clock < OPEN_HEIGHT_TIME)
+            while (clock <= OPEN_HEIGHT_TIME)
             {
                 float t = clock / OPEN_HEIGHT_TIME;
                 t = Curves.EaseOutT(t, 2);
@@ -72,6 +79,37 @@ public class DialogueBubble : MonoBehaviour
             textRenderer.backgroundRenderer.SetNineSliceSizeFromWorldSpace(size);
 
             textRenderer.WriteText(uiData.curDialogueText, WRITE_LETTER_TIME);
+        }
+        catch (OperationCanceledException)
+        {
+            textRenderer.SetText(uiData.curDialogueText);
+            size = textRenderer.textBoxData.size;
+        }
+    }
+    private async UniTask Closing()
+    {
+        try
+        {
+            textRenderer.EraseText(WRITE_LETTER_TIME);
+
+            while(textRenderer.hasText) await UniTask.Yield();
+
+            while (clock >= 0)
+            {
+                float t = clock / OPEN_HEIGHT_TIME;
+                t = Curves.EaseOutT(t, 2);
+                size.y = textRenderer.textAtlas.typeWorldHeight * t;
+                textRenderer.backgroundRenderer.SetNineSliceSizeFromWorldSpace(size);
+
+                clock -= Time.deltaTime;
+
+                await UniTask.Yield(ctsOpen.Token);
+
+            }
+
+            textRenderer.enabled = false;
+            tailRenderer.enabled = false;
+
         }
         catch (OperationCanceledException)
         {

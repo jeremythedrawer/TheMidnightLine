@@ -3,25 +3,25 @@ using UnityEngine;
 using UnityEngine.InputSystem;
 using UnityEngine.InputSystem.LowLevel;
 using UnityEngine.InputSystem.Users;
+
+using static UnityEngine.InputSystem.InputAction;
+
+using static AtlasUI;
+using UnityEngine.InputSystem.Controls;
 public class InputManager : MonoBehaviour
 {
-    public InputData playerInputs;
-    public SpyData spyStats;
-
-    PlayerInput playerInput;
+    public InputData inputData;
+    public SpyData spyData;
+    public PlayerInput playerInput;
 
     InputAction moveAction;
 
     InputAction notepadToggleAction;
-    InputAction notepadFlipPageAction;
-
-    InputAction writeAction;
+    InputAction notepadFlipAction;
     InputAction carouselAction;
     InputAction numpadAction;
-
-    InputAction ticketAction;
+    InputAction talkAction;
     InputAction interactAction;
-
     InputAction mouseLeftDownAction;
     InputAction mosueLeftPressAction;
     InputAction mouseRightPressAction;
@@ -32,92 +32,8 @@ public class InputManager : MonoBehaviour
 
     private void Awake()
     {
-        playerInput = GetComponent<PlayerInput>();
-
-        moveAction = playerInput.actions["Player/Movement"];
-
-        notepadToggleAction = playerInput.actions["Player/NotepadToggle"];
-        notepadFlipPageAction = playerInput.actions["Player/NotepadFlipPage"];
-
-        writeAction = playerInput.actions["Player/Writing"];
-        carouselAction = playerInput.actions["Player/Carousel"];
-        numpadAction = playerInput.actions["Player/Numpad"];
-
-        ticketAction = playerInput.actions["Player/Ticket"];
-        interactAction = playerInput.actions["Player/Interact"];
-
-        mouseLeftDownAction = playerInput.actions["Player/MouseLeftDown"];
-        mosueLeftPressAction = playerInput.actions["Player/MouseLeftPress"];
-        mouseRightPressAction = playerInput.actions["Player/MouseRightDown"];
-
-        moveAction.started += context =>
-        {
-            playerInputs.moveKeyDown = true;
-        };
-        moveAction.performed += context =>
-        {
-            float move = context.ReadValue<float>();
-            playerInputs.move = (int)move;
-        };
-        moveAction.canceled += context =>
-        {
-            playerInputs.move = 0;
-            playerInputs.moveKeyUp = true;
-        };
-
-        notepadToggleAction.started += context => playerInputs.notepadToggleKeyDown = true;
-        notepadToggleAction.canceled += context => playerInputs.notepadToggleKeyUp = true;
-
-        notepadFlipPageAction.started += context =>
-        {
-            float value = context.ReadValue<float>();
-            playerInputs.flipKeyDownValue = (int)value;
-        };
-
-        writeAction.started += context => playerInputs.writeKeyDown = true;
-
-        carouselAction.started += context =>
-        {
-            float carouselValue = context.ReadValue<float>();
-            playerInputs.carouselKeyDownValue = (int)carouselValue;
-        };
-
-        numpadAction.started += context =>
-        {
-            InputBinding activeBinding = numpadAction.GetBindingForControl(context.control).Value;
-            playerInputs.numpad = numpadAction.GetBindingIndex(activeBinding);
-        };
-
-        ticketAction.started += context => playerInputs.ticketCheckKeyDown = true;
-        ticketAction.performed += context => playerInputs.ticketCheckKeyHold = true;
-
-        ticketAction.canceled += context =>
-        {
-            playerInputs.ticketCheckKeyUp = true;
-            playerInputs.ticketCheckKeyHold = false;
-        };
-
-        interactAction.started += context =>
-        {
-            playerInputs.interactKeyDown = true;
-        };
-
-        mouseLeftDownAction.started += context => playerInputs.mouseLeftDown = true;
-
-        mosueLeftPressAction.performed += context => playerInputs.mouseLeftHold = true;
-
-        mosueLeftPressAction.canceled += context =>
-        {
-            playerInputs.mouseLeftUp = true;
-            playerInputs.mouseLeftHold = false;
-        };
-
-        mouseRightPressAction.started += context => playerInputs.mouseRightDown = true;
-
-        mouseRightPressAction.canceled += context =>
-        {
-            playerInputs.mouseRightUp = true;
-        };
+        InitInputs();
+        SetKeybindSpriteIndices();
     }
 
     private void OnEnable()
@@ -132,39 +48,186 @@ public class InputManager : MonoBehaviour
 
     private void Start()
     {
-        playerInputs.mouseScreenPos.z = 0.25f;
+        inputData.mouseScreenPos.z = 0.25f;
     }
     private void Update()
     {
         Vector2 screenPos = Mouse.current.position.ReadValue();
-        playerInputs.mouseScreenPos.x = Mathf.Clamp(screenPos.x, 0f, Screen.width);
-        playerInputs.mouseScreenPos.y = Mathf.Clamp(screenPos.y, 0f, Screen.height);
-        playerInputs.mouseWorldPos = Camera.main.ScreenToWorldPoint(playerInputs.mouseScreenPos);
+        inputData.mouseScreenPos.x = Mathf.Clamp(screenPos.x, 0f, Screen.width);
+        inputData.mouseScreenPos.y = Mathf.Clamp(screenPos.y, 0f, Screen.height);
+        inputData.mouseWorldPos = Camera.main.ScreenToWorldPoint(inputData.mouseScreenPos);
     }
 
     private void LateUpdate()
     {
-        playerInputs.notepadToggleKeyDown = false;
-        playerInputs.notepadToggleKeyUp = false;
-        playerInputs.writeKeyDown = false;
-        playerInputs.ticketCheckKeyDown = false;
-        playerInputs.ticketCheckKeyUp = false;
-        playerInputs.interactKeyDown = false;
+        inputData.notepadToggleKeyDown = false;
+        inputData.notepadToggleKeyUp = false;
+        inputData.talkKeyDown = false;
+        inputData.talkKeyUp = false;
+        inputData.interactKeyDown = false;
 
-        playerInputs.mouseLeftDown = false;
-        playerInputs.mouseLeftUp = false;
-        playerInputs.mouseRightDown = false;
-        playerInputs.mouseRightUp = false;
-        playerInputs.moveKeyUp = false;
-        playerInputs.moveKeyDown = false;
+        inputData.mouseLeftDown = false;
+        inputData.mouseLeftUp = false;
+        inputData.mouseRightDown = false;
+        inputData.mouseRightUp = false;
+        inputData.moveKeyUp = false;
+        inputData.moveKeyDown = false;
 
-        playerInputs.carouselKeyDownValue = 0;
-        playerInputs.flipKeyDownValue = 0;
-        playerInputs.numpad = -1;
+        inputData.carouselKeyDownValue = 0;
+        inputData.flipKeyDownValue = 0;
+        inputData.numpad = -1;
+    }
+    private void InitInputs()
+    {
+        moveAction = playerInput.actions["Player/Movement"];
+
+        notepadToggleAction = playerInput.actions["Player/NotepadToggle"];
+        notepadFlipAction = playerInput.actions["Player/NotepadFlipPage"];
+
+        carouselAction = playerInput.actions["Player/Carousel"];
+        numpadAction = playerInput.actions["Player/Numpad"];
+
+        talkAction = playerInput.actions["Player/Talk"];
+        interactAction = playerInput.actions["Player/Interact"];
+
+        mouseLeftDownAction = playerInput.actions["Player/MouseLeftDown"];
+        mosueLeftPressAction = playerInput.actions["Player/MouseLeftPress"];
+        mouseRightPressAction = playerInput.actions["Player/MouseRightDown"];
+
+        moveAction.started += OnStartMove;
+        moveAction.performed += OnPerformMove;
+        moveAction.canceled += OnCancelMove;
+
+        notepadToggleAction.started += OnStartToggleNotepad;
+        notepadToggleAction.canceled += OnCancelToggleNotepad;
+
+        notepadFlipAction.started += OnStartNotepadFlip;
+
+        carouselAction.started += OnStartCarousel;
+
+        numpadAction.started += OnStartNumpad;
+
+        talkAction.started += OnStartTalk;
+        talkAction.performed += OnPerformTalk;
+
+        talkAction.canceled += OnCancelTalk;
+
+        interactAction.started += OnStartInteract;
+
+        mouseLeftDownAction.started += OnStartLeftMouse;
+
+        mosueLeftPressAction.performed += OnPerformLeftMouse;
+
+        mosueLeftPressAction.canceled += OnCancelLeftMouse;
+
+        mouseRightPressAction.started += OnStartRightMouse;
+
+        mouseRightPressAction.canceled += OnCancelRightMouse;
+    }
+
+    private void SetKeybindSpriteIndices()
+    {
+        inputData.interactSpriteIndex = GetKeybindSpriteIndex(talkAction);
+    }
+
+    private void OnStartMove(CallbackContext ctx)
+    {
+        inputData.moveKeyDown = true;
+    }
+    private void OnPerformMove(CallbackContext ctx)
+    {
+        float move = ctx.ReadValue<float>();
+        inputData.move = (int)move;
+    }
+    private void OnCancelMove(CallbackContext ctx)
+    {
+        inputData.move = 0;
+        inputData.moveKeyUp = true;
+    }
+    private void OnStartToggleNotepad(CallbackContext ctx)
+    {
+        inputData.notepadToggleKeyDown = true;
+    }
+    private void OnCancelToggleNotepad(CallbackContext ctx)
+    {
+        inputData.notepadToggleKeyUp = true;
+    }
+    private void OnStartNotepadFlip(CallbackContext ctx)
+    {
+        float value = ctx.ReadValue<float>();
+        inputData.flipKeyDownValue = (int)value;
+    }
+    private void OnStartCarousel(CallbackContext ctx)
+    {
+        float carouselValue = ctx.ReadValue<float>();
+        inputData.carouselKeyDownValue = (int)carouselValue;
+    }
+    private void OnStartTalk(CallbackContext ctx)
+    {
+        inputData.talkKeyDown = true;
+    }
+    private void OnStartNumpad(CallbackContext ctx)
+    {
+        InputBinding activeBinding = numpadAction.GetBindingForControl(ctx.control).Value;
+        inputData.numpad = numpadAction.GetBindingIndex(activeBinding);
+    }
+    private void OnPerformTalk(CallbackContext ctx)
+    {
+        inputData.talkKeyHold = true;
+    }
+    private void OnCancelTalk(CallbackContext ctx)
+    {
+        inputData.talkKeyUp = true;
+        inputData.talkKeyHold = false;
+    }
+    private void OnStartInteract(CallbackContext ctx)
+    {
+        inputData.interactKeyDown = true;
+    }
+    private void OnStartLeftMouse(CallbackContext ctx)
+    {
+        inputData.mouseLeftDown = true;
+    }
+    private void OnPerformLeftMouse(CallbackContext ctx)
+    {
+        inputData.mouseLeftHold = true;
+    }
+    private void OnCancelLeftMouse(CallbackContext ctx)
+    {
+        inputData.mouseLeftUp = true;
+        inputData.mouseLeftHold = false;
+    }
+    private void OnStartRightMouse(CallbackContext ctx)
+    {
+        inputData.mouseRightDown = true;
+    }
+    private void OnCancelRightMouse(CallbackContext ctx)
+    {
+        inputData.mouseRightUp = true;
     }
     private void CheckDevice(InputControl value, InputEventPtr ptr)
     {
         curDevice = value.device;
         OnDeviceChanged?.Invoke(value.device.displayName);
     }
+
+    private KeybindSpriteIndex GetKeybindSpriteIndex(InputAction action)
+    {
+        string path = action.bindings[0].effectivePath;
+
+        string keyName = path.Replace("<Keyboard>/", "").ToLower();
+
+        if (keyName.StartsWith("digit")) return (KeybindSpriteIndex)int.Parse(keyName.Substring(startIndex: 5));
+
+        if (keyName.Length == 1 && char.IsLetter(keyName[0]))
+        {
+            int index = 10 + (char.ToUpper(keyName[0]) - 'A');
+            return (KeybindSpriteIndex)index;
+        }
+
+        if (keyName == "space") return KeybindSpriteIndex.Spacebar;
+
+        throw new ArgumentException($"Unsupported key: {keyName}");
+    }
+
 }

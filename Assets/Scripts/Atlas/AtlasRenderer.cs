@@ -376,12 +376,12 @@ public class AtlasRenderer : MonoBehaviour
         sprite = motionSprite.sprite;
         UpdateSpriteInputs(sprite);
     }
-    public void PlayClipOneShotReverse(AtlasClip clip, Transform markerTransform = null)
+    public void PlayClipOneShotReverse(AtlasClip clip, Transform markerTransform = null, OnFinishOneShot callback = null)
     {
         ctsOneShot?.Cancel();
         ctsOneShot = null;
         ctsOneShot = new CancellationTokenSource();
-        PlayingClipOneShotReverse(clip, markerTransform).Forget();
+        PlayingClipOneShotReverse(clip, markerTransform, callback).Forget();
 
     }
     public void PlayManualClip(ref AtlasClip clip, float currentTime, Transform markerTransform = null)
@@ -471,7 +471,7 @@ public class AtlasRenderer : MonoBehaviour
             isAnimating = false;
         }
     }
-    private async UniTask PlayingClipOneShotReverse(AtlasClip clip, Transform markerTransform = null)
+    private async UniTask PlayingClipOneShotReverse(AtlasClip clip, Transform markerTransform = null, OnFinishOneShot callback = null)
     {
         keyframeClock = 0;
         curFrameIndex = clip.keyframeEndIndex;
@@ -498,6 +498,10 @@ public class AtlasRenderer : MonoBehaviour
                 await UniTask.Yield(ctsOneShot.Token);
             }
             isAnimating = false;
+            if (callback != null)
+            {
+                callback();
+            }
 
         }
         catch (OperationCanceledException)

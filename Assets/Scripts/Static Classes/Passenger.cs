@@ -90,7 +90,7 @@ public static class Passenger
     {
         None,
         Walking,
-        OpeningSuitcase,
+        Suitcase,
         Idle,
     }
     [Serializable] public struct NPCProfile

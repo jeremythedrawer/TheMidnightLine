@@ -1,0 +1,26 @@
+#pragma kernel CSPageFlip
+
+RWTexture2D<float4> _SDFTexture;
+Texture2D<float4> _POVUITexture;
+
+uint2 _SDFTextureSize;
+
+float4 _UVSizeAndPos;
+
+[numthreads(8,8,1)]
+void CSMain (uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= _SDFTextureSize.x || id.y >= _SDFTextureSize.y)
+        return;
+    
+    float2 uv = (float2)id.xy / (float2)_SDFTextureSize.xy;
+    
+    int3 location = int3(id.xy, 0);
+    location.xy *= _UVSizeAndPos.xy;
+    location.xy += _UVSizeAndPos.zw;
+    
+    float4 povTex = _POVUITexture.Load(location);
+    
+    float finalMask = povTex.a;
+    _SDFTexture[id.xy] = float4(finalMask.xxxx);
+}

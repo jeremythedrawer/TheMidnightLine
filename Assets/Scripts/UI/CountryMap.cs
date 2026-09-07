@@ -29,31 +29,21 @@ public class CountryMap : MonoBehaviour
     }
     private void InitButtons()
     {
-        void EnterButton(IconButton icon)
+        void EnterButtonThirdPoint()
         {
-            icon.atlasRenderer.customBit |= (int)ColorBits.GreenChannel;
-            icon.atlasRenderer.customBit &= ~(int)ColorBits.BlueChannel;
+            thirdPointButton.atlasRenderer.customBit |= (int)ColorBits.GreenChannel;
+            thirdPointButton.atlasRenderer.customBit &= ~(int)ColorBits.BlueChannel;
         }
-        void ExitButton(IconButton icon)
+        void ExitButtonThirdPoint()
         {
-            icon.atlasRenderer.customBit &= ~(int)ColorBits.GreenChannel;
-            icon.atlasRenderer.customBit |= (int)ColorBits.BlueChannel;
-            icon.atlasRenderer.customBit &= ~(int)ColorBits.Invert;
-        }
-
-        void MouseDown(IconButton icon)
-        {
-            icon.atlasRenderer.customBit ^= (int)ColorBits.Invert;
+            thirdPointButton.atlasRenderer.customBit &= ~(int)ColorBits.GreenChannel;
+            thirdPointButton.atlasRenderer.customBit |= (int)ColorBits.BlueChannel;
+            thirdPointButton.atlasRenderer.customBit &= ~(int)ColorBits.Invert;
         }
 
-        void MouseUpBase(IconButton icon)
+        void MouseUpThirdPoint()
         {
-            icon.atlasRenderer.customBit ^= (int)ColorBits.Invert;
-        }
-
-        void MouseUpThirdPoint(IconButton icon)
-        {
-            MouseUpBase(icon);
+            thirdPointButton.MouseUp();
 
             meridiaMapRenderer.gameObject.SetActive(false);
             thirdPointMap.gameObject.SetActive(true);
@@ -62,19 +52,17 @@ public class CountryMap : MonoBehaviour
             curMap = thirdPointMap;
         }
 
-        void MouseUpBackButton(IconButton icon)
+        void MouseUpBackButton()
         {
+            backButton.MouseUp();
+
             meridiaMapRenderer.gameObject.SetActive(true);
             curMap.gameObject.SetActive(false);
             curMap = null;
             backButton.gameObject.SetActive(false);
         }
-        firstPointButton.InitButton(MouseUpThirdPoint, MouseDown, EnterButton, ExitButton);
-        secondPointButton.InitButton(MouseUpThirdPoint, MouseDown, EnterButton, ExitButton);
-        thirdPointButton.InitButton(MouseUpThirdPoint, MouseDown, EnterButton, ExitButton);
-        capitalRegionButton.InitButton(MouseUpThirdPoint, MouseDown, EnterButton, ExitButton);
-
-        backButton.InitButton(MouseUpBackButton, MouseDown, EnterButton, ExitButton);
+        thirdPointButton.InitButton(onMouseUp: MouseUpThirdPoint, onEnter: EnterButtonThirdPoint, onExit: ExitButtonThirdPoint);
+        backButton.InitButton(onMouseUp: MouseUpBackButton);
     }
     private void InitMaps()
     {

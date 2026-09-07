@@ -21,11 +21,13 @@ public class LeftHand : MonoBehaviour
 
     public static event Action OnAtStationaryPos;
 
+    public Options options;
     public CameraData camStats;
-    public TripData curTrip;
+    public NotepadData notepadData;
+
+    public RenderTexture flipPageRenderTexture;
 
     public AtlasRenderer atlasRenderer;
-    public NotepadData notepadData;
 
     [Header("Generated")]
     public Page activePage;
@@ -63,7 +65,6 @@ public class LeftHand : MonoBehaviour
             case State.Stationary:
             {
                 atTargetPos = false;
-                atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.rotatePencil_clip.keyframeStartIndex].sprite);
             }
             break;
 
@@ -81,14 +82,14 @@ public class LeftHand : MonoBehaviour
             case State.FlippingUp:
             {
                 transform.localPosition = new Vector3(notepadData.leftHandFlipPos.x, notepadData.leftHandFlipPos.y, notepadData.leftHandDepthFront);
-                atlasRenderer.PlayClipOneShot(notepadData.handFlipPage_clip);
+                atlasRenderer.PlayClipOneShot(notepadData.handFlipPageClip);
             }
             break;
 
             case State.FlippingDown:
             {
                 transform.localPosition = new Vector3(notepadData.leftHandFlipPos.x, notepadData.leftHandFlipPos.y, notepadData.leftHandDepthBack);
-                atlasRenderer.PlayClipOneShotReverse(notepadData.handFlipPage_clip);
+                atlasRenderer.PlayClipOneShotReverse(notepadData.handFlipPageClip);
             }
             break;
         }
@@ -170,13 +171,13 @@ public class LeftHand : MonoBehaviour
 
             case State.FlippingUp:
             {
-                atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.handFlipPage_clip.keyframeStartIndex].sprite);
+                atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.handFlipPageClip.keyframeStartIndex].sprite);
             }
             break;
 
             case State.FlippingDown:
             {
-                atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.handFlipPage_clip.keyframeStartIndex].sprite);
+                atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.handFlipPageClip.keyframeStartIndex].sprite);
             }
             break;
         }
@@ -184,8 +185,7 @@ public class LeftHand : MonoBehaviour
     public void Init()
     {
         targetLocalPos = notepadData.leftHandOffScreenLocalPos;
-        notepadData.handFlipPage_clip = atlasRenderer.atlas.clipDict[(int)NotepadMotion.FlipHand];
-        notepadData.rotatePencil_clip = atlasRenderer.atlas.clipDict[(int)NotepadMotion.RotatingPencil];
+        notepadData.handFlipPageClip = atlasRenderer.atlas.clipDict[(int)NotepadMotion.FlipHand];
 
         SimpleSprite holdingPencilSprite = atlasRenderer.atlas.motionSprites[HOLDING_PENCIL_SPRITE_INDEX].sprite;
         float worldPivotOffsetY = holdingPencilSprite.worldSize.y * (1 - holdingPencilSprite.uvPivot.y);
@@ -201,6 +201,6 @@ public class LeftHand : MonoBehaviour
     public void SetLeftHandOffScreen()
     {
         targetLocalPos = notepadData.leftHandFlipPos;
-        atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.handFlipPage_clip.keyframeStartIndex].sprite);
+        atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.handFlipPageClip.keyframeStartIndex].sprite);
     }
 }

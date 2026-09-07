@@ -7,7 +7,7 @@ using static AtlasUI;
 
 public class IconButton : MonoBehaviour
 {
-    public delegate void Callback(IconButton icon);
+    public delegate void Callback();
 
     public ButtonFunctionType button;
 
@@ -28,12 +28,12 @@ public class IconButton : MonoBehaviour
     public Callback OnExitCallback;
 
     public CancellationTokenSource ctsMove;
-    public void InitButton(Callback onMouseUp, Callback onMouseDown, Callback onEnter, Callback onExit)
+    public void InitButton(Callback onMouseUp = null, Callback onMouseDown = null, Callback onEnter = null, Callback onExit = null)
     {
-        OnMouseUpCallback = onMouseUp;
-        OnMouseDownCallback = onMouseDown;
-        OnEnterCallback = onEnter;
-        OnExitCallback = onExit;
+        OnMouseUpCallback = onMouseUp ?? MouseUp;
+        OnMouseDownCallback = onMouseDown ?? MouseDown;
+        OnEnterCallback = onEnter ?? EnterButton;
+        OnExitCallback = onExit ?? ExitButton;
         atlasRenderer.SetBounds();
         activePos = atlasRenderer.transform.localPosition;
     }
@@ -47,7 +47,7 @@ public class IconButton : MonoBehaviour
                 {
                     if(cursorData.IsInsideSprite(atlasRenderer, isClickable: true))
                     {
-                        OnEnterCallback(this);
+                        OnEnterCallback();
                         curState = ButtonState.Hovered;
                     }
                 }
@@ -55,7 +55,7 @@ public class IconButton : MonoBehaviour
                 {
                     if (cursorData.IsInsideBounds(atlasRenderer.bounds, isClickable: true))
                     {
-                        OnEnterCallback(this);
+                        OnEnterCallback();
                         curState = ButtonState.Hovered;
                     }
                 }
@@ -67,12 +67,12 @@ public class IconButton : MonoBehaviour
                 {
                     if (!cursorData.IsInsideSprite(atlasRenderer, isClickable: true))
                     {
-                        OnExitCallback(this);
+                        OnExitCallback();
                         curState = ButtonState.Unhovered;
                     }
                     else if (inputData.mouseLeftDown)
                     {
-                        OnMouseDownCallback(this);
+                        OnMouseDownCallback();
                         curState = ButtonState.Clicked;
                     }
                 }
@@ -80,12 +80,12 @@ public class IconButton : MonoBehaviour
                 {
                     if (!cursorData.IsInsideBounds(atlasRenderer.bounds, isClickable: true))
                     {
-                        OnExitCallback(this);
+                        OnExitCallback();
                         curState = ButtonState.Unhovered;
                     }
                     else if (inputData.mouseLeftDown)
                     {
-                        OnMouseDownCallback(this);
+                        OnMouseDownCallback();
                         curState = ButtonState.Clicked;
                     }
                 }
@@ -95,8 +95,8 @@ public class IconButton : MonoBehaviour
             {
                 if (inputData.mouseLeftUp)
                 {
-                    OnMouseUpCallback(this);
-                    OnEnterCallback(this);
+                    OnMouseUpCallback();
+                    OnEnterCallback();
                     curState = ButtonState.Hovered;
                 }
 
@@ -104,7 +104,7 @@ public class IconButton : MonoBehaviour
                 {
                     if (!cursorData.IsInsideSprite(atlasRenderer, isClickable: true) && !inputData.mouseLeftHold)
                     {
-                        OnExitCallback(this);
+                        OnExitCallback();
                         curState = ButtonState.Unhovered;
                     }
                 }
@@ -112,7 +112,7 @@ public class IconButton : MonoBehaviour
                 {
                     if (!cursorData.IsInsideBounds(atlasRenderer.bounds, isClickable: true) && !inputData.mouseLeftHold)
                     {
-                        OnExitCallback(this);
+                        OnExitCallback();
                         curState = ButtonState.Unhovered;
                     }
                 }
@@ -120,128 +120,21 @@ public class IconButton : MonoBehaviour
             break;
         }
     }
-    public void MoveAway(Direction dir)
+    public void MouseDown()
     {
-        ctsMove?.Cancel();
-        ctsMove = new CancellationTokenSource();
-        MovingAway(dir).Forget();
+        atlasRenderer.customBit ^= (int)ColorBits.Invert;
     }
-    public void SetAway(Direction dir)
+    public void EnterButton()
     {
-        Bounds buttonBounds = atlasRenderer.GetBounds();
-
-        Vector3 buttonPos = atlasRenderer.transform.localPosition;
-        Vector3 targetPos = buttonPos;
-
-        switch (dir)
-        {
-            case Direction.Left:
-            {
-                targetPos.x = -camData.bounds.extents.x - buttonBounds.size.x;
-            }
-            break;
-            case Direction.Right:
-            {
-                targetPos.x = camData.bounds.extents.x + buttonBounds.size.x;
-            }
-            break;
-        }
-        atlasRenderer.transform.localPosition = targetPos;
+        atlasRenderer.customBit |= (int)ColorBits.GreenChannel;
     }
-    public void MoveToRight()
+    public void ExitButton()
     {
-        ctsMove?.Cancel();
-        ctsMove = new CancellationTokenSource();
-        MovingRight().Forget();
+        atlasRenderer.customBit &= ~(int)ColorBits.GreenChannel;
+        atlasRenderer.customBit &= ~(int)ColorBits.Invert;
     }
-    public void MoveToActive()
+    public void MouseUp()
     {
-        ctsMove?.Cancel();
-        ctsMove = new CancellationTokenSource();
-        MovingToActive().Forget();
-    }
-    private async UniTask MovingAway(Direction dir)
-    {
-        Transform buttonTransform = atlasRenderer.transform;
-        Bounds buttonBounds = atlasRenderer.GetBounds();
-
-        Vector3 buttonPos = atlasRenderer.transform.localPosition;
-        Vector3 targetPos = buttonPos;
-
-        switch (dir)
-        {
-            case Direction.Left:
-            {
-                targetPos.x = -camData.bounds.extents.x - buttonBounds.size.x;
-            }
-            break;
-            case Direction.Right:
-            {
-                targetPos.x = camData.bounds.extents.x + buttonBounds.size.x;
-            }
-            break;
-        }
-        try
-        {
-            while ((buttonPos - targetPos).sqrMagnitude > 0.005f)
-            {
-                buttonPos = Vector3.Lerp(buttonPos, targetPos, Time.deltaTime * 2);
-
-                buttonTransform.localPosition = buttonPos;
-
-                await UniTask.Yield(ctsMove.Token);
-            }
-            buttonTransform.localPosition = targetPos;
-
-        }
-        catch (OperationCanceledException)
-        {
-
-        }
-    }
-    private async UniTask MovingRight()
-    {
-        Transform buttonTransform = atlasRenderer.transform;
-        Bounds bounds = atlasRenderer.GetBounds();
-
-        SimpleSprite sprite = atlasRenderer.sprite;
-
-        Vector3 curPos = buttonTransform.localPosition;
-
-        float ndcPivot = sprite.uvPivot.x * 2 - 1;
-        float targetPosX = -activePos.x + (sprite.worldSize.x * ndcPivot);
-        try
-        {
-            while (Mathf.Abs(curPos.x - targetPosX) > 0.005f)
-            {
-                curPos.x = Mathf.Lerp(curPos.x, targetPosX, Time.deltaTime * 2);
-                buttonTransform.localPosition = curPos;
-
-                await UniTask.Yield(ctsMove.Token);
-            }
-        }
-        catch (OperationCanceledException)
-        {
-        }
-    }
-    private async UniTask MovingToActive()
-    {
-        Transform buttonTransform = atlasRenderer.transform;
-        Bounds buttonBounds = atlasRenderer.GetBounds();
-        Vector3 buttonPos = buttonTransform.localPosition;
-        try
-        {
-            while ((buttonPos - activePos).sqrMagnitude > 0.005f)
-            {
-                buttonPos = Vector3.Lerp(buttonPos, activePos, Time.deltaTime * 2);
-                buttonTransform.localPosition = buttonPos;
-
-                await UniTask.Yield(ctsMove.Token);
-            }
-        }
-        catch (OperationCanceledException)
-        {
-
-        }
+        atlasRenderer.customBit &= ~(int)ColorBits.Invert;
     }
 }

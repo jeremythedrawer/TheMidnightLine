@@ -12,19 +12,15 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968269b1d6895ab46b4078836056d640, type: 3}
   m_Name: NotepadData
   m_EditorClassIdentifier: Assembly-CSharp::NotepadData
-  handFlipPage_clip:
-    clipName: FlipHand
-    clipType: 2
-    motionIndex: 1
+  pageNumberIconButtonPrefab: {fileID: -6395749938034069037, guid: c804325f81d94484c949bfef646d1f6d, type: 3}
+  frontPagePrefab: {fileID: 8233736125140590318, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
+  profilePagePrefab: {fileID: 8318585845017434699, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
+  handFlipPageClip:
+    clipName: 
+    clipType: 0
+    motionIndex: 0
     keyframeStartIndex: 0
-    keyframeEndIndex: 11
-    time: 0
-  rotatePencil_clip:
-    clipName: RotatingPencil
-    clipType: 2
-    motionIndex: 3
-    keyframeStartIndex: 16
-    keyframeEndIndex: 20
+    keyframeEndIndex: 0
     time: 0
   leftHandOffScreenLocalPos: {x: -1.7899933, y: -3.7222223, z: 1}
   inactiveLocalPos: {x: 4.576101, y: -1.3877778, z: 5}
@@ -34,12 +30,11 @@ MonoBehaviour:
   curState: 1
   prevState: 2
   subState: 192
-  abilityIconsShown: 0
   leftHandDepthFront: 1
   activePageDepth: 3
   leftHandDepthBack: 8
-  profileWriteCount: 3
   selectedPatternIndex: 0
+  pageCount: 0
   collected: 0
   playerHasUsedExitKey: 0
   playerHasUsedLeftKey: 0

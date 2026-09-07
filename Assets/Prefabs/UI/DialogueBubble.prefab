@@ -60,14 +60,12 @@ MonoBehaviour:
   backgroundRenderer: {fileID: 3632106824206071415}
   textBoxData:
     size: {x: 0.7549515, y: 0.18333334}
-    wordPosXArray:
-    - 0
-    - 0
     lineWidthArray:
     - 0.7277778
+    maxLineWidth: 0.7277778
   bounds:
     m_Center: {x: 0, y: 0.30033332, z: 0}
-    m_Extent: {x: 0.37747574, y: 0.09166667, z: 0}
+    m_Extent: {x: 0.3638889, y: 0.09166667, z: 0}
   worldPivotsAndSizes:
   - {x: -0.3638889, y: -0.18333334, z: 0.06666667, w: 0.18333334}
   - {x: -0.25722224, y: -0.18333334, z: 0.044444446, w: 0.18333334}
@@ -166,8 +164,10 @@ MonoBehaviour:
   tailRenderer: {fileID: 4751673011259834027}
   iconRenderer: {fileID: 0}
   onOpenDialogueBubble: {fileID: 11400000, guid: f3d8a8d686328054dad567dd57b98d70, type: 2}
+  onCloseDialogueBubble: {fileID: 11400000, guid: 003d008063889704498983ba18aeffac, type: 2}
   worldPos: {x: 0, y: 0, z: 0}
   size: {x: 0, y: 0}
+  clock: 0
 --- !u!1 &8135665717365048212
 GameObject:
   m_ObjectHideFlags: 0

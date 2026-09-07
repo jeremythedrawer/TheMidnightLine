@@ -1,6 +1,8 @@
 using System;
 using UnityEngine;
 
+using static AtlasUI;
+
 [CreateAssetMenu(fileName = "SpyInputs_SO", menuName = "Midnight Line SOs / Spy Inputs SO")]
 public class InputData : ScriptableObject
 {
@@ -12,14 +14,14 @@ public class InputData : ScriptableObject
     public int move;
     public int numpad;
 
+    public KeybindSpriteIndex interactSpriteIndex;
+
     public bool notepadToggleKeyDown;
     public bool notepadToggleKeyUp;
 
-    public bool writeKeyDown;
-
-    public bool ticketCheckKeyDown;
-    public bool ticketCheckKeyHold;
-    public bool ticketCheckKeyUp;
+    public bool talkKeyDown;
+    public bool talkKeyHold;
+    public bool talkKeyUp;
     
     public bool interactKeyDown;
     

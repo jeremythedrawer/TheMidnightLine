@@ -31,6 +31,7 @@ public class WorldUIController : MonoBehaviour
 
     public GameEvent onBeginTrip;
     public GameEvent onShowKeyIcon;
+    public GameEvent onHideKeyIcon;
 
     public AtlasRenderer keybindRenderer;
 
@@ -76,6 +77,8 @@ public class WorldUIController : MonoBehaviour
         onBeginTrip.RegisterListener(LowerMusicVolume);
 
         onShowKeyIcon.RegisterListener(SetKeyBindIcon);
+        
+        onHideKeyIcon.RegisterListener(HideKeybindIcon);
 
         FadeBlack.OnFinishFadeOut += SetToNoneStateFromOutcome;
 
@@ -95,6 +98,8 @@ public class WorldUIController : MonoBehaviour
         onBeginTrip.UnregisterListener(LowerMusicVolume);
         
         onShowKeyIcon.UnregisterListener(SetKeyBindIcon);
+        
+        onHideKeyIcon.UnregisterListener(HideKeybindIcon);
 
         SliderController.OnChangeMusicVolume -= SetMusicVolume;
     }
@@ -111,6 +116,7 @@ public class WorldUIController : MonoBehaviour
         Shader.SetGlobalFloat(options.dayNightID, 1);
 
         uiData.keyBindIconWorldSize = keybindRenderer.sprite.worldSize;
+        uiData.keyBindSpriteIndex = -1;
 
         audioSource.clip = options.music.menu;   
         audioSource.volume = options.music.volume;
@@ -299,8 +305,13 @@ public class WorldUIController : MonoBehaviour
     }
     private void SetKeyBindIcon()
     {
+        keybindRenderer.enabled = true;
         keybindRenderer.transform.position = uiData.keyBindWorldPos;
         keybindRenderer.UpdateSpriteInputsByIndex(uiData.keyBindSpriteIndex);
+    }
+    private void HideKeybindIcon()
+    {
+        keybindRenderer.enabled = false;
     }
     private async UniTask LoweringMusicVolume()
     {

@@ -152,7 +152,13 @@ Shader "Custom/s_atlasNPC"
 
                 int texMask = saturate(bitMask & TEXTURE_BIT);
                 tex.r *= texMask;
-                
+
+                int greenMask = saturate(bitMask & GREEN_BIT);
+
+                tex.g *= (sin(_Time.y * PI) * 0.5 + 0.5) * greenMask;
+                tex.g = BayerX8(tex.g, i.positionHCS.y);
+                tex.r += tex.g;
+
                 half invertOutline = 1 - outline;
                 
                 outline = lerp(outline, invertOutline, lerp(ticketCheckHover, 1 - ticketCheckHover, texMask));

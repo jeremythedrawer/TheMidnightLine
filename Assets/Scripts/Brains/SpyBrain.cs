@@ -143,7 +143,7 @@ public class SpyBrain : MonoBehaviour
     {
         if (!spyData.playerInputsEnabled) return;
 
-        if ((inputData.ticketCheckKeyDown && spyData.canCheckTicket && curNPCTicketCheckHoverCount == 1 && !spyData.checkingNotepad) || chosenNPC != null)
+        if ((inputData.talkKeyDown && spyData.canCheckTicket && curNPCTicketCheckHoverCount == 1 && !spyData.checkingNotepad) || chosenNPC != null)
         {
             if (chosenNPC == null)
             {
@@ -159,7 +159,7 @@ public class SpyBrain : MonoBehaviour
                 SetState(SpyState.TicketCheck);
             }
         }
-        else if ((inputData.ticketCheckKeyDown && spyData.canCheckTicket && curNPCTicketCheckHoverCount > 1) || PickingNPCToTicketCheck)
+        else if ((inputData.talkKeyDown && spyData.canCheckTicket && curNPCTicketCheckHoverCount > 1) || PickingNPCToTicketCheck)
         {
             SetState(SpyState.PickingNPCTicketCheck);
         }
@@ -200,7 +200,7 @@ public class SpyBrain : MonoBehaviour
 
                         case LocationState.Carriage:
                         {
-                            if (notepadData.profileWriteCount == options.curTrip.traitorProfiles.Length && trainData.curStationIndex > 0)
+                            if (trainData.curStationIndex > 0)
                             {
                                 GetSlideDoorInTrain();
                             }
@@ -271,11 +271,11 @@ public class SpyBrain : MonoBehaviour
             {
                 atlasRenderer.PlayClip(ref curClip);
 
-                if((inputData.ticketCheckKeyUp || inputData.mouseLeftUp || inputData.moveKeyDown || inputData.writeKeyDown) && canExitState)
+                if((inputData.talkKeyUp || inputData.mouseLeftUp || inputData.moveKeyDown) && canExitState)
                 {
                     FinishWithChosenNPC();
                 }
-                if (!inputData.ticketCheckKeyHold && !inputData.mouseLeftHold && inputData.move == 0) canExitState = true;
+                if (!inputData.talkKeyHold && !inputData.mouseLeftHold && inputData.move == 0) canExitState = true;
             }
             break;
             case SpyState.CarriageMap:
@@ -289,13 +289,13 @@ public class SpyBrain : MonoBehaviour
             case SpyState.TalkingToAccomplice:
             {
                 atlasRenderer.PlayClip(ref curClip);
-                if ((inputData.ticketCheckKeyUp || inputData.mouseLeftUp || inputData.moveKeyDown || inputData.writeKeyDown) && canExitState)
+                if ((inputData.talkKeyUp || inputData.mouseLeftUp || inputData.moveKeyDown) && canExitState)
                 {
                     chosenNPC.talkingToSpy = false;
                     chosenNPC = null;
                 }
 
-                if (!inputData.ticketCheckKeyHold && !inputData.mouseLeftHold && inputData.move == 0) canExitState = true;
+                if (!inputData.talkKeyHold && !inputData.mouseLeftHold && inputData.move == 0) canExitState = true;
             }
             break;
             case SpyState.PickingNPCTicketCheck:
@@ -305,7 +305,7 @@ public class SpyBrain : MonoBehaviour
                     PickingNPCToTicketCheck = false;
                 }
 
-                if (!inputData.ticketCheckKeyHold && !inputData.mouseLeftHold && inputData.move == 0) canExitState = true;
+                if (!inputData.talkKeyHold && !inputData.mouseLeftHold && inputData.move == 0) canExitState = true;
             }
             break;
             case SpyState.Notepad:

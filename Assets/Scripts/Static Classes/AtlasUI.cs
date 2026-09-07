@@ -110,12 +110,6 @@ public static class AtlasUI
         EnterTrain = 1 << 6,
         ExitTrain = 1 << 7,
     }
-    public enum PageType
-    { 
-        None,
-        Prompt,
-        Profile,
-    }
     public enum TripPrompt
     {
         None,
@@ -158,7 +152,7 @@ public static class AtlasUI
         Back,
         Continue,
     }
-    public enum KeybindSpriteIndices
+    public enum KeybindSpriteIndex
     { 
         Zero, One, Two, Three, Four, Five, Six, Seven, Eight, Nine, 
         A, B, C, D, E, F, G, H, I, J, K, L, M, N, O, P, Q, R, S, T, U, V, W, X, Y, Z,
@@ -194,7 +188,7 @@ public static class AtlasUI
         cts = new CancellationTokenSource();
         MovingUIElement(transform, cts, nextPos, curState).Forget();
     }
-    public static void ShowKeyIcon(AtlasRenderer renderer, Vector2 position, KeybindSpriteIndices keySpriteIndex, Direction direction)
+    public static void ShowKeyIcon(AtlasRenderer renderer, Vector2 position, KeybindSpriteIndex keySpriteIndex, Direction direction)
     {
         renderer.enabled = true;
         renderer.custom.w = 1;

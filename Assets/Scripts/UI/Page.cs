@@ -16,27 +16,16 @@ public class Page : MonoBehaviour
 
     public static AtlasClip paperClip;
 
-    public PageType pageType;
-    public TripPrompt promptType;
-    public TripClue clueType;
-
-    public TripData trip;
     public PassengersData npcData;
     public SpyData spyData;
-    public InputData playerInputs;
+    public InputData inputData;
     public NotepadData notepadData;
     public Options options;
 
-    public AtlasRenderer pageNumberIconPrefab;
-
     public AtlasRenderer paperRenderer;
 
-    public AtlasTextRenderer[] proceduralTextRenderers;
-    public AtlasTextRenderer[] readOnlyTextRenderers;
-
-    public AtlasRenderer[] proceduralRenderers;
-    public AtlasRenderer[] readOnlyRenderers;
-    public AtlasRenderer[] playerWriteRenderers;
+    public AtlasTextRenderer[] textRenderers;
+    public AtlasRenderer[] iconRenderers;
 
     public IconButton leftButton;
     public IconButton rightButton;
@@ -44,29 +33,63 @@ public class Page : MonoBehaviour
 
     [Header("Generated")]
 
-    public AtlasRenderer[] pageNumberIconRenderers;
-
-    public int traitorIndex;
+    public IconButton[] pageNumberIconButtons;
     public int pageIndex;
-    public void Init(int pageIndexInput, int totalPages)
+    public void Init(int pageIndexInput)
     {
         paperClip = paperRenderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
+        pageIndex = pageIndexInput;
 
-        if (pageNumberIconRenderers == null || pageNumberIconRenderers.Length == 0)
+        InitPageNumberIcons();
+        InitPageButtons();
+    }
+    private void InitPageButtons()
+    {
+        void MouseUpLeftButton()
         {
-            pageNumberIconRenderers = new AtlasRenderer[totalPages];
-            pageIndex = pageIndexInput;
+            leftButton.MouseUp();
+            notepadData.subState |= SubState.IsFlippingDown;
+        }
+        void MouseUpRightButton()
+        {
+            rightButton.MouseUp();
+            notepadData.subState |= SubState.IsFlippingUp;
+        }
+        void MouseUpExitButton()
+        {
+            exitButton.MouseUp();
+            if (spyData.checkingNotepad)
+            {
+                spyData.checkingNotepad = false;
+            }
+            else
+            {
+                spyData.checkingNotepad = true;
+            }
+        }
 
-            Bounds pageNumberIconBounds = pageNumberIconPrefab.bounds;
+        leftButton?.InitButton(MouseUpLeftButton);
+        rightButton?.InitButton(MouseUpRightButton);
+        exitButton?.InitButton(MouseUpExitButton);
+    }
+    private void InitPageNumberIcons()
+    {
+        if (pageNumberIconButtons == null || pageNumberIconButtons.Length == 0)
+        {
+            pageNumberIconButtons = new IconButton[notepadData.pageCount];
+            pageIndex = notepadData.pageCount;
+
+            Bounds pageNumberIconBounds = notepadData.pageNumberIconButtonPrefab.atlasRenderer.bounds;
             float colSize = pageNumberIconBounds.size.x + PAGE_NUMBER_ICON_BUFFER_X;
+
             Vector3 startPos = new Vector3();
-            startPos.x = (float)totalPages * colSize * -0.5f;
+            startPos.x = (float)notepadData.pageCount * colSize * -0.5f;
             startPos.y = -paperRenderer.bounds.size.y + PAGE_NUMBER_ICON_BUFFER_Y;
             startPos.z = CONTENTS_LOCAL_POS_Z;
 
-            for (int i = 0; i < totalPages; i++)
+            for (int i = 0; i < notepadData.pageCount; i++)
             {
-                AtlasRenderer pageNumberIcon = Instantiate(pageNumberIconPrefab, transform);
+                IconButton pageNumberIcon = Instantiate(notepadData.pageNumberIconButtonPrefab, transform);
                 Vector3 localPos = startPos;
 
                 localPos.x += i * colSize;
@@ -74,167 +97,26 @@ public class Page : MonoBehaviour
 
                 if (i == pageIndex)
                 {
-                    pageNumberIcon.custom.x = 1f;
+                    pageNumberIcon.atlasRenderer.customBit |= (int)ColorBits.RedChannel;
                 }
-                pageNumberIconRenderers[i] = pageNumberIcon;
+
+                int index = i;
+                void MouseUp()
+                {
+                    pageNumberIcon.MouseUp();
+                    //TODO: Set active page to the selected
+                }
+                pageNumberIcon.InitButton(onMouseUp: MouseUp);
+
+                pageNumberIconButtons[i] = pageNumberIcon;
             }
         }
-
-        //void EnterButton(IconButton icon)
-        //{
-        //    icon.atlasRenderer.custom.x = 1;
-        //}
-        //void ExitButton(IconButton icon)
-        //{
-        //    icon.atlasRenderer.custom.x = 0;
-        //}
-        //void ClickExitButton(IconButton icon)
-        //{
-        //    if (spyData.checkingNotepad)
-        //    {
-        //        spyData.checkingNotepad = false;
-        //    }
-        //    else
-        //    {
-        //        spyData.checkingNotepad = true;
-        //    }
-        //}
-        //void ClickLeftButton(IconButton icon)
-        //{
-        //    notepadData.subState |= SubState.IsFlippingDown;
-        //}
-
-        //void ClickRightButton(IconButton icon)
-        //{
-        //    notepadData.subState |= SubState.IsFlippingUp;
-        //}
-
-        //exitButton.InitButton(ClickExitButton, EnterButton, ExitButton);
-        //rightButton.InitButton(ClickRightButton, EnterButton, ExitButton);
-        //leftButton.InitButton(ClickLeftButton, EnterButton, ExitButton);
     }
     public void UpdatePage()
     {
-        switch (pageType)
-        {
-            case PageType.Prompt:
-            {
-                exitButton.UpdateButton();
-                rightButton.UpdateButton();
-            }
-            break;
-            case PageType.Profile:
-            {
-                exitButton.UpdateButton();
-                
-                rightButton.UpdateButton();
-                leftButton.UpdateButton();
-            }
-            break;
-        }
-    }
-    public void InitProfile(TraitorProfile traitorProfile, int pageIndex, int totalPages)
-    {
-        for (int i = 0; i < proceduralTextRenderers.Length; i++)
-        {
-            Habits behaviour = GetBehaviourAtIndex(traitorProfile.npcProfile.behaviours, i);
-            proceduralTextRenderers[i].SetText(npcData.habitStringDict[behaviour]);
-        }
-
-        AtlasRenderer coveredMugShot = playerWriteRenderers[0];
-        AtlasRenderer uncoveredMugShot = playerWriteRenderers[1];
-
-        int uncoveredMugShotIndex = traitorProfile.mugShotIndex * 2;
-        int coveredMugShotIndex = uncoveredMugShotIndex + 1;
-        coveredMugShot.UpdateSpriteInputs(coveredMugShot.atlas.simpleSprites[coveredMugShotIndex]);
-
-        coveredMugShot.custom.x = 0;
-        coveredMugShot.custom.y = 0;
-        coveredMugShot.custom.z = 0;
-        coveredMugShot.custom.w = 0;
-        coveredMugShot.customBit &= ~(int)ColorBits.Diagonal;
-
-        uncoveredMugShot.UpdateSpriteInputs(uncoveredMugShot.atlas.simpleSprites[uncoveredMugShotIndex]);
-        Init(pageIndex, totalPages);
-    }
-    public void TogglePageContentBottomHalf(bool toggle)
-    {
-        ToggleTextRenderers(readOnlyTextRenderers, toggle, topHalf: false);
-        ToggleTextRenderers(proceduralTextRenderers, toggle, topHalf: false);
-
-        ToggleRenderers(readOnlyRenderers, toggle, topHalf: false);
-        ToggleRenderers(playerWriteRenderers, toggle, topHalf: false);
-        ToggleRenderers(pageNumberIconRenderers, toggle, topHalf: false);
-    }
-    public void TogglePageContentTopHalf(bool toggle)
-    {
-        ToggleTextRenderers(readOnlyTextRenderers, toggle, topHalf: true);
-        ToggleTextRenderers(proceduralTextRenderers, toggle, topHalf: true);
-
-        ToggleRenderers(readOnlyRenderers, toggle, topHalf: true);
-        ToggleRenderers(playerWriteRenderers, toggle, topHalf: true);
-        ToggleRenderers(pageNumberIconRenderers, toggle, topHalf: true);
-    }
-    public void ToggleTextRenderers(AtlasTextRenderer[] textRenderers, bool toggle, bool topHalf)
-    {
-        if (textRenderers != null)
-        {
-            if (topHalf)
-            {
-                for (int i = 0; i < textRenderers.Length; i++)
-                {
-                    AtlasTextRenderer renderer = textRenderers[i];
-                    if (renderer.transform.localPosition.y >= FLIP_LOCAL_POS_Y)
-                    {
-                        renderer.enabled = toggle;
-                    }
-                }
-            }
-            else
-            {
-                for (int i = 0; i < textRenderers.Length; i++)
-                {
-                    AtlasTextRenderer renderer = textRenderers[i];
-                    if (renderer.transform.localPosition.y < FLIP_LOCAL_POS_Y)
-                    {
-                        renderer.enabled = toggle;
-                    }
-                }
-            }
-        }
-    }
-    public void ToggleRenderers(AtlasRenderer[] renderers, bool toggle, bool topHalf)
-    {
-        if (topHalf)
-        {
-            for (int i = 0; i < renderers.Length; i++)
-            {
-                AtlasRenderer rend = renderers[i];
-
-                float localBoundsMinY = transform.InverseTransformPoint(rend.GetBounds().center).y;
-
-                if (localBoundsMinY >= FLIP_LOCAL_POS_Y)
-                {
-                    rend.enabled = toggle;
-
-
-                }
-            }
-        }
-        else
-        {
-            for (int i = 0; i < renderers.Length; i++)
-            {
-                AtlasRenderer rend = renderers[i];
-
-                float localBoundsMaxY = transform.InverseTransformPoint(rend.GetBounds().center).y;
-
-                if (localBoundsMaxY < FLIP_LOCAL_POS_Y)
-                {
-                    rend.enabled = toggle;
-                }
-            }
-        }
+        exitButton?.UpdateButton();
+        rightButton?.UpdateButton();
+        leftButton?.UpdateButton();
     }
     public void PlayPaperClip()
     {
@@ -247,10 +129,5 @@ public class Page : MonoBehaviour
     public void SetPageDepth(float localDepth)
     {
         transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, localDepth);
-    }
-    public void UpdateMugShotReveal(float t)
-    {
-        AtlasRenderer coveredMugShot = playerWriteRenderers[0];
-        coveredMugShot.custom.x = Mathf.Clamp01(t);
     }
 }

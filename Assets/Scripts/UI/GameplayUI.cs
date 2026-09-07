@@ -276,11 +276,11 @@ public class GameplayUI : MonoBehaviour
     }
     private void ShowSpaceIcon(Vector2 position)
     {
-        ShowKeyIcon(keyIcon, position, KeybindSpriteIndices.Spacebar, Direction.Up);
+        ShowKeyIcon(keyIcon, position, KeybindSpriteIndex.Spacebar, Direction.Up);
     }
     private void ShowEIcon(Vector2 position)
     {
-        ShowKeyIcon(keyIcon, position, KeybindSpriteIndices.E, Direction.Up);
+        ShowKeyIcon(keyIcon, position, KeybindSpriteIndex.E, Direction.Up);
     }
     private void AppearRailMap()
     {

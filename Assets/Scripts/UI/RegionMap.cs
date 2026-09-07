@@ -29,42 +29,42 @@ public class RegionMap : MonoBehaviour
     }
     private void InitButtons()
     {
-        void EnterButton(IconButton icon)
-        {
-            icon.atlasRenderer.customBit |= (int)ColorBits.GreenChannel;
-            icon.atlasRenderer.customBit &= ~(int)ColorBits.BlueChannel;
-        }
-        void ExitButton(IconButton icon)
-        {
-            icon.atlasRenderer.customBit &= ~(int)ColorBits.GreenChannel;
-            icon.atlasRenderer.customBit |= (int)ColorBits.BlueChannel;
-            icon.atlasRenderer.customBit &= ~(int)ColorBits.Invert;
-        }
 
-        void MouseDown(IconButton icon)
-        {
-            icon.atlasRenderer.customBit ^= (int)ColorBits.Invert;
-        }
+
 
         for (int i = 0; i < tripButtons.Length; i++)
         {
             int index = i;
-            void MouseUp(IconButton icon)
+            void MouseUp()
             {
-                TripButton button = tripButtons[index];
+                TripButton tripButton = tripButtons[index];
 
-                options.curTrip = button.trip;
+                options.curTrip = tripButton.trip;
                 options.curTrip.ticketsCheckedSinceLastStation = 0;
                 options.curTrip.ticketsCheckedTotal = 0;
                 options.curTrip.traitorsSpawned = 0;
-                icon.atlasRenderer.customBit ^= (int)ColorBits.Invert;
+                tripButton.button.atlasRenderer.customBit ^= (int)ColorBits.Invert;
 
                 camData.curLocationState = Spy.LocationState.Title;
                 onBeginTrip?.Raise();
             }
+            void EnterButton()
+            {
+                TripButton tripButton = tripButtons[index];
 
+                tripButton.button.atlasRenderer.customBit |= (int)ColorBits.GreenChannel;
+                tripButton.button.atlasRenderer.customBit &= ~(int)ColorBits.BlueChannel;
+            }
+            void ExitButton()
+            {
+                TripButton tripButton = tripButtons[index];
+
+                tripButton.button.atlasRenderer.customBit &= ~(int)ColorBits.GreenChannel;
+                tripButton.button.atlasRenderer.customBit |= (int)ColorBits.BlueChannel;
+                tripButton.button.atlasRenderer.customBit &= ~(int)ColorBits.Invert;
+            }
             TripButton regionButton = tripButtons[i];
-            regionButton.button.InitButton(MouseUp, MouseDown, EnterButton, ExitButton);
+            regionButton.button.InitButton(onMouseUp: MouseUp, onEnter: EnterButton, onExit: ExitButton);
         }
     }
     private void UpdateUnlocks()

@@ -6,8 +6,11 @@ using static Notepad;
 [CreateAssetMenu(fileName = "NotepadData", menuName = "Midnight Line SOs / Notepad")]
 public class NotepadData : ScriptableObject
 {
-    public AtlasClip handFlipPage_clip;
-    public AtlasClip rotatePencil_clip;
+    public IconButton pageNumberIconButtonPrefab;
+    public Page frontPagePrefab;
+    public ProfilePage profilePagePrefab;
+    [Header("Generated")]
+    public AtlasClip handFlipPageClip;
 
     public Vector3 leftHandOffScreenLocalPos;
     public Vector3 inactiveLocalPos;
@@ -19,14 +22,13 @@ public class NotepadData : ScriptableObject
     public NotepadState curState;
     public NotepadState prevState;
     public SubState subState;
-    public UnlockType abilityIconsShown;
 
     public float leftHandDepthFront;
     public float activePageDepth;
     public float leftHandDepthBack;
 
-    public int profileWriteCount;
     public int selectedPatternIndex;
+    public int pageCount;
 
     public bool collected;
 
