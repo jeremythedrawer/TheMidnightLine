@@ -8,7 +8,7 @@ uint2 _SDFTextureSize;
 float4 _UVSizeAndPos;
 
 [numthreads(8,8,1)]
-void CSMain (uint3 id : SV_DispatchThreadID)
+void CSPageFlip(uint3 id : SV_DispatchThreadID)
 {
     if (id.x >= _SDFTextureSize.x || id.y >= _SDFTextureSize.y)
         return;

@@ -8,6 +8,8 @@ using static AtlasUI;
 using static Passenger;
 public class Notepad : MonoBehaviour
 {
+
+    public const float PAGE_FLIP_RT_SCALE = 32f;
     public const int MIN_STATION_STOPS = 1;
 
     public static Vector3 ACTIVE_POS = new Vector3(3.57998657f, 1, 5);
@@ -90,6 +92,27 @@ public class Notepad : MonoBehaviour
     {
         gameObject.SetActive(false);
         CreateNPCProfiles();
+        InitPageFlipCompute();
+
+    }
+    private void InitPageFlipCompute()
+    {
+        notepadData.pageFlipRT.Release();
+        notepadData.pageFlipRT.width = (int)(frontPage.paperRenderer.bounds.size.x * PAGE_FLIP_RT_SCALE);
+        notepadData.pageFlipRT.height = (int)(frontPage.paperRenderer.bounds.size.y * PAGE_FLIP_RT_SCALE);
+        notepadData.pageFlipRT.enableRandomWrite = true;
+        notepadData.pageFlipRT.Create();
+
+        Graphics.Blit(Texture2D.whiteTexture, notepadData.pageFlipRT);
+
+        notepadData.pageFlipThreadGroupX = Mathf.CeilToInt(notepadData.pageFlipRT.width / 8.0f);
+        notepadData.pageFlipThreadGroupY = Mathf.CeilToInt(notepadData.pageFlipRT.height / 8.0f);
+
+        notepadData.pageFlipKernel = notepadData.pageFlipCompute.FindKernel("CSPageFlip");
+        notepadData.pageFlipCompute.SetTexture(notepadData.pageFlipKernel, "_SDFTexture", notepadData.pageFlipRT);
+        notepadData.pageFlipCompute.SetVector("_TextureSize", new Vector4(notepadData.pageFlipRT.width, notepadData.pageFlipRT.height, 0, 0));
+
+        Shader.SetGlobalTexture("_PageFlipMaskTexture", notepadData.pageFlipRT);
     }
     public void PickUpNotepad() 
     {

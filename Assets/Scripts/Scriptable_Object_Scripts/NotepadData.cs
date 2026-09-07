@@ -9,6 +9,9 @@ public class NotepadData : ScriptableObject
     public IconButton pageNumberIconButtonPrefab;
     public Page frontPagePrefab;
     public ProfilePage profilePagePrefab;
+
+    public RenderTexture pageFlipRT;
+    public ComputeShader pageFlipCompute;
     [Header("Generated")]
     public AtlasClip handFlipPageClip;
 
@@ -29,6 +32,11 @@ public class NotepadData : ScriptableObject
 
     public int selectedPatternIndex;
     public int pageCount;
+
+    public int pageFlipThreadGroupX;
+    public int pageFlipThreadGroupY;
+
+    public int pageFlipKernel;
 
     public bool collected;
 

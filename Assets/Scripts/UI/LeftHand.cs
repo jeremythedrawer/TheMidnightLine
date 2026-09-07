@@ -142,13 +142,15 @@ public class LeftHand : MonoBehaviour
 
             case State.FlippingUp:
             {
-
+                notepadData.pageFlipCompute.SetVector("_UVSizeAndPos", atlasRenderer.uvSizeAndPosition);
+                notepadData.pageFlipCompute.Dispatch(notepadData.pageFlipKernel, notepadData.pageFlipThreadGroupX, notepadData.pageFlipThreadGroupY, 0);
             }
             break;
 
             case State.FlippingDown:
             {
-
+                notepadData.pageFlipCompute.SetVector("_UVSizeAndPos", atlasRenderer.uvSizeAndPosition);
+                notepadData.pageFlipCompute.Dispatch(notepadData.pageFlipKernel, notepadData.pageFlipThreadGroupX, notepadData.pageFlipThreadGroupY, 0);
             }
             break;
         }
