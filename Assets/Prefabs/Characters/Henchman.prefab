@@ -48,7 +48,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -58,9 +58,9 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 50
   Pan2D: 0
-  rolloffMode: 0
+  rolloffMode: 1
   BypassEffects: 0
   BypassListenerEffects: 0
   BypassReverbZones: 0
@@ -93,7 +93,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -272,7 +272,10 @@ MonoBehaviour:
   spyData: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   uiData: {fileID: 11400000, guid: 13467edc5a628744e8291f244c44db27, type: 2}
   inputData: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
+  notepadData: {fileID: 11400000, guid: 8e516d659eb1fc449bc178ad3fb0113d, type: 2}
+  audioData: {fileID: 11400000, guid: 366fa884df96e77449150a5fdde208bd, type: 2}
   atlasRenderer: {fileID: 8312574823374561200}
+  audioSource: {fileID: 8099043674557259294}
   onShowKeyIcon: {fileID: 11400000, guid: 7b2f554edf3f8574bb92d0e5d62073df, type: 2}
   onHideKeyIcon: {fileID: 11400000, guid: a6a5f89b955e41f4e982a00a2a0977dd, type: 2}
   onOpenDialogueBubble: {fileID: 11400000, guid: f3d8a8d686328054dad567dd57b98d70, type: 2}

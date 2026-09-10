@@ -661,6 +661,8 @@ public class AtlasFactory : EditorWindow
             }
             newMotionSprite.sprite = newSimpleSprite;
 
+            newMotionSprite.audioIndex = -1;
+
             if (motionSpritesFound < newMotionSprites.Count)
             {
                 newMotionSprites[motionSpritesFound] = newMotionSprite;
@@ -812,6 +814,7 @@ public class AtlasFactory : EditorWindow
                 {
                     atlas.motionSprites[j] = newMotionSprites[i];
                     atlas.motionSprites[j].holdFrames = oldMotionSprite.holdFrames;
+                    //atlas.motionSprites[j].audioIndex = oldMotionSprite.audioIndex;
                     newMotionSprites.RemoveAt(i);
                     break;
                 }
@@ -885,7 +888,7 @@ public class AtlasFactory : EditorWindow
         Handles.color = atlas.pivotColor;
         Handles.DrawWireDisc(pivotPos, Vector3.forward, MARKER_SIZE);
 
-        GUIStyle spriteTextStyle = new GUIStyle(EditorStyles.boldLabel)
+        GUIStyle boldLabelTextStyle = new GUIStyle(EditorStyles.boldLabel)
         {
             alignment = TextAnchor.UpperLeft,
             normal = { textColor = Color.white }
@@ -895,13 +898,13 @@ public class AtlasFactory : EditorWindow
 
         GUIContent indexGUIContent = new GUIContent("Index: " + atlasSprite.index.ToString());
 
-        Vector2 indexTextSize = spriteTextStyle.CalcSize(indexGUIContent);
+        Vector2 indexTextSize = boldLabelTextStyle.CalcSize(indexGUIContent);
 
         Vector2 spriteIndexTextPos = new Vector2(gridRect.xMax - indexTextSize.x, gridRect.yMax - indexTextSize.y);
         Rect spriteIndexTextRect = new Rect(spriteIndexTextPos, indexTextSize);
 
 
-        GUI.Label(spriteIndexTextRect, indexGUIContent, spriteTextStyle);
+        GUI.Label(spriteIndexTextRect, indexGUIContent, boldLabelTextStyle);
 
         Color defaultColor = Color.grey;
 
@@ -932,12 +935,12 @@ public class AtlasFactory : EditorWindow
 
                 if (atlasSprite.index >= atlasClip.keyframeStartIndex && atlasSprite.index <= atlasClip.keyframeEndIndex)
                 {
-                    GUIContent clipGUIContent = new GUIContent("Clip: " + atlasClip.clipName);
-                    Vector2 clipTextSize = spriteTextStyle.CalcSize(clipGUIContent);
+                    GUIContent clipGUIContent = new GUIContent(atlasClip.clipName);
+                    Vector2 clipTextSize = boldLabelTextStyle.CalcSize(clipGUIContent);
                     Vector2 clipNameTextPos = new Vector2(gridRect.xMax - clipTextSize.x, gridRect.yMax - indexTextSize.y - clipTextSize.y);
 
                     Rect clipNameRect = new Rect(clipNameTextPos, clipTextSize);
-                    GUI.Label(clipNameRect, clipGUIContent, spriteTextStyle);
+                    GUI.Label(clipNameRect, clipGUIContent, boldLabelTextStyle);
                     defaultColor = unselectedColor;
                     break;
                 }
@@ -964,19 +967,38 @@ public class AtlasFactory : EditorWindow
                 }
             }
 
-            Rect holdTimeRect = new Rect(spriteRect.xMin, spriteRect.yMax, spriteRect.width, 16);
+            GUIContent holdFramesLabelContent = new GUIContent("HF:");
+            Vector2 holdFramesLabelTextSize = boldLabelTextStyle.CalcSize(holdFramesLabelContent);
+            Rect holdFramesLabelRect = new Rect(gridRect.xMin, gridRect.yMax - holdFramesLabelTextSize.y, holdFramesLabelTextSize.x, holdFramesLabelTextSize.y);
+            GUI.Label(holdFramesLabelRect, holdFramesLabelContent);
+
+            GUIStyle numberStyle = EditorStyles.numberField;
+
+            int holdFramesInput = motionSprite.holdFrames;
+            GUIContent holdFramesInputContent = new GUIContent(holdFramesInput.ToString());
+            Vector2 holdFramesInputTextSize = numberStyle.CalcSize(holdFramesInputContent);
+            Rect holdFramesInputRect = new Rect(holdFramesLabelRect.xMax, gridRect.yMax - holdFramesInputTextSize.y, holdFramesInputTextSize.x, holdFramesInputTextSize.y);
+
+            GUIContent audioIndexLabelContent = new GUIContent("AI:");
+            Vector2 audioIndexLabelTextSize = boldLabelTextStyle.CalcSize(audioIndexLabelContent);
+            Rect audioIndexLabelRect = new Rect(holdFramesInputRect.xMax, gridRect.yMax - audioIndexLabelTextSize.y, audioIndexLabelTextSize.x, audioIndexLabelTextSize.y);
+            GUI.Label(audioIndexLabelRect, audioIndexLabelContent);
+
+            int audioIndexInput = motionSprite.audioIndex;
+            GUIContent audioIndexInputContent = new GUIContent(audioIndexInput.ToString());
+            Vector2 audioIndexInputTextSize = numberStyle.CalcSize(audioIndexInputContent);
+            Rect audioIndexInputRect = new Rect(audioIndexLabelRect.xMax, gridRect.yMax - audioIndexInputTextSize.y, audioIndexInputTextSize.x, audioIndexInputTextSize.y);
 
             EditorGUI.BeginChangeCheck();
-
-            atlas.motionSprites[motionSprite.sprite.index].holdFrames = EditorGUI.IntField(holdTimeRect, atlas.motionSprites[motionSprite.sprite.index].holdFrames);
+            int motionSpriteIndex = motionSprite.sprite.index;
+            atlas.motionSprites[motionSpriteIndex].holdFrames = EditorGUI.IntField(holdFramesInputRect, holdFramesInput, numberStyle);
+            atlas.motionSprites[motionSpriteIndex].audioIndex = EditorGUI.IntField(audioIndexInputRect, audioIndexInput, numberStyle);
 
             if (EditorGUI.EndChangeCheck())
             {
                 EditorUtility.SetDirty(atlas);
                 AssetDatabase.SaveAssetIfDirty(atlas);
             }
-
-
         }
         else if (slicedSpriteNullable.HasValue)
         {

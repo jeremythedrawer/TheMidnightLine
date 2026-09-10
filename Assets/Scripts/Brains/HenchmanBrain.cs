@@ -7,15 +7,17 @@ using static Passenger;
 using static AtlasUI;
 public class HenchmanBrain : MonoBehaviour
 {
-    public static event Action OnCollectNotepad;
-
+    public static event Action OnGiveNotepad;
     public Options options;
 
     public SpyData spyData;
     public UIData uiData;
     public InputData inputData;
+    public NotepadData notepadData;
+    public AudioData audioData;
 
     public AtlasRenderer atlasRenderer;
+    public AudioSource audioSource;
 
     public GameEvent onShowKeyIcon;
     public GameEvent onHideKeyIcon;
@@ -52,7 +54,7 @@ public class HenchmanBrain : MonoBehaviour
             case HenchmanState.Suitcase:
             {
                 curClip = atlasRenderer.atlas.clipDict[(int)HenchmanMotion.OpenSuitcase];
-                atlasRenderer.PlayClipOneShot(curClip, callback: FlashSuitcase);
+                atlasRenderer.PlayClipOneShot(curClip, callback: FlashSuitcase, audioSource: audioSource, audioData: audioData);
             }
             break;
             case HenchmanState.Idle:
@@ -68,7 +70,7 @@ public class HenchmanBrain : MonoBehaviour
         {
             case HenchmanState.Walking:
             {
-                atlasRenderer.PlayClip(ref curClip);
+                atlasRenderer.PlayClip(curClip);
             }
             break;
             case HenchmanState.Suitcase:
@@ -83,6 +85,7 @@ public class HenchmanBrain : MonoBehaviour
                     {
                         if (inputData.talkKeyDown)
                         {
+                            OnGiveNotepad?.Invoke();
                             SetState(HenchmanState.Idle);
                             HideKeyIcon();
                         }
@@ -100,7 +103,7 @@ public class HenchmanBrain : MonoBehaviour
             break;
             case HenchmanState.Idle:
             {
-                atlasRenderer.PlayClip(ref curClip);
+                atlasRenderer.PlayClip(curClip);
                 float rawSpyDist = spyData.bounds.center.x - atlasRenderer.bounds.center.x;
                 atlasRenderer.FlipHSimple(rawSpyDist < 0);
 
@@ -149,6 +152,10 @@ public class HenchmanBrain : MonoBehaviour
             uiData.keyBindWorldPos.y = atlasRenderer.bounds.max.y + uiData.keyBindIconWorldSize.y + KEY_ICON_POS_BUFFER;
             uiData.keyBindWorldPos.z = atlasRenderer.bounds.max.z;
             onShowKeyIcon?.Raise();
+
+            audioSource.volume = audioData.soundEffectsVolume;
+            int randWuhIndex = UnityEngine.Random.Range(0, audioData.wuh.Length);
+            audioSource.PlayOneShot(audioData.wuh[randWuhIndex]);
         }
     }
     private void HideKeyIcon()

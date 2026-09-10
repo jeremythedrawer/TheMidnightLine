@@ -2,8 +2,6 @@ using UnityEngine;
 using System;
 using static AtlasUI;
 
-
-
 #if UNITY_EDITOR
 using UnityEditor;
 #endif
@@ -11,27 +9,9 @@ using UnityEditor;
 [CreateAssetMenu(fileName = "Options", menuName = "Data / Options")]
 public class Options : ScriptableObject
 {
-    [Serializable] public struct Music
-    {
-        public AudioClip menu;
-        public float volume;
-    }
-
-    [Serializable] public struct SoundEffects
-    {
-        public AudioClip cursorHover;
-        public AudioClip cursorClick;
-        public AudioClip wind;
-        public AudioClip gong;
-        public float volume;
-    }
-
     public AtlasSO patternAtlas;
 
     public IconButton colorButtonPrefab;
-
-    public Music music;
-    public SoundEffects soundEffects;
 
     public Color meridiaColor;
     public Color vinroseColor;

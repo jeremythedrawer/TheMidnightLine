@@ -139,6 +139,8 @@ public static class Atlas
     {
         public SimpleSprite sprite;
         public MarkerPosition[] markers;
+
+        public int audioIndex;
         public int holdFrames;
     }
     [Serializable] public struct SliceSprite
@@ -155,7 +157,8 @@ public static class Atlas
         public int motionIndex;
         public int keyframeStartIndex;
         public int keyframeEndIndex;
-        public float time;
+
+        public AudioClip[] audioClips;
     }
     public static Dictionary<int, AtlasClip> BuildClipKeys(AtlasClip[] clips)
     {

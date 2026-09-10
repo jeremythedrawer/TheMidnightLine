@@ -21,7 +21,7 @@ public class SimpleMotionPlayer : MonoBehaviour
 
     private void Update()
     {
-        atlasRenderer.PlayClip(ref clip);
+        atlasRenderer.PlayClip(clip);
     }
 }
 

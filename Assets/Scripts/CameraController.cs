@@ -10,12 +10,14 @@ public class CameraController : MonoBehaviour
     const float CARRIAGE_BOUNDS_TEXTURE_SCALE = 32f;
     const float NORMAL_DAMPING = 3;
     const float SLOW_DAMPING = 1;
+    const float SOUND_DAMP = 0.5f;
 
     public CamUIController camUIController;
     public AudioSource audioSource;
 
     public Options options;
 
+    public AudioData audioData;
     public CameraData camData;
     public SpyData spyData;
     public TrainData trainData;
@@ -156,7 +158,7 @@ public class CameraController : MonoBehaviour
 
                 float windVol = -Mathf.Cos(t * 2 * Mathf.PI) * 0.5f + 0.5f;
 
-                audioSource.volume = windVol * options.soundEffects.volume;
+                audioSource.volume = windVol * audioData.soundEffectsVolume;
 
                 if (t > 0.5f)
                 {
@@ -190,7 +192,10 @@ public class CameraController : MonoBehaviour
         {
             case LocationState.Station:
             {
-
+                audioSource.Stop();
+                audioSource.clip = audioData.stationAmbience;
+                audioSource.Play();
+                InterpolateVolume(targetVol: 1, time: 5);
             }
             break;
 
@@ -213,7 +218,9 @@ public class CameraController : MonoBehaviour
                 curXOffset = 0;
                 showingTitle = false;
 
-                audioSource.PlayOneShot(options.soundEffects.wind);
+                audioSource.volume = audioData.soundEffectsVolume;
+                audioSource.clip = audioData.wind;
+                audioSource.Play();
             }
             break;
         }
@@ -268,6 +275,28 @@ public class CameraController : MonoBehaviour
     private float GetSnappedOrthoSize()
     {
         return (Screen.height * 0.5f / PIXELS_PER_UNIT);
+    }
+    private void InterpolateVolume(float targetVol, float time)
+    {
+        InterpolatingVolume(targetVol, time).Forget();
+    }
+    private async UniTask InterpolatingVolume(float targetVol, float time)
+    {
+        float clock = 0;
+
+        while (clock < time)
+        {
+            float t = clock / time;
+            
+            t = Mathf.Pow(t, 2);
+
+            audioSource.volume = t * targetVol;
+
+            clock += Time.deltaTime;
+
+            await UniTask.Yield();
+        }
+        audioSource.volume = targetVol;
     }
     private void Shake(float time, float intensity)
     {

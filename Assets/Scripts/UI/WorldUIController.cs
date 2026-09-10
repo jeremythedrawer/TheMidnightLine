@@ -20,8 +20,10 @@ public class WorldUIController : MonoBehaviour
     public PassengersData passengerData;
     public CursorData cursorData;
     public UIData uiData;
+    public AudioData audioData;
 
-    public AudioSource audioSource;    
+    public AudioSource audioSource;
+    public AudioSource keybindAudioSource;
 
     public Menu startMenu;
     public Menu optionsMenu;
@@ -118,8 +120,8 @@ public class WorldUIController : MonoBehaviour
         uiData.keyBindIconWorldSize = keybindRenderer.sprite.worldSize;
         uiData.keyBindSpriteIndex = -1;
 
-        audioSource.clip = options.music.menu;   
-        audioSource.volume = options.music.volume;
+        audioSource.clip = audioData.menu;   
+        audioSource.volume = audioData.musicVolume;
         audioSource.Play();
         SetState(UIState.StartMenu);
     }
@@ -289,7 +291,7 @@ public class WorldUIController : MonoBehaviour
     }
     private void SetMusicVolume()
     {
-        audioSource.volume = options.music.volume;
+        audioSource.volume = audioData.musicVolume;
     }
     private void DisappearBuildings()
     {
@@ -308,6 +310,9 @@ public class WorldUIController : MonoBehaviour
         keybindRenderer.enabled = true;
         keybindRenderer.transform.position = uiData.keyBindWorldPos;
         keybindRenderer.UpdateSpriteInputsByIndex(uiData.keyBindSpriteIndex);
+        
+        keybindAudioSource.volume = audioData.soundEffectsVolume;
+        keybindAudioSource.PlayOneShot(audioData.cursorHover);
     }
     private void HideKeybindIcon()
     {
@@ -321,7 +326,7 @@ public class WorldUIController : MonoBehaviour
         {
             clock += Time.deltaTime;
             float t = 1 - Mathf.Pow(clock / time, 2);
-            audioSource.volume = t * options.music.volume;
+            audioSource.volume = t * audioData.musicVolume;
             await UniTask.Yield();
         }
     }

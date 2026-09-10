@@ -15,6 +15,8 @@ MonoBehaviour:
   pageNumberIconButtonPrefab: {fileID: -6395749938034069037, guid: c804325f81d94484c949bfef646d1f6d, type: 3}
   frontPagePrefab: {fileID: 8233736125140590318, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
   profilePagePrefab: {fileID: 8318585845017434699, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
+  pageFlipRT: {fileID: 8400000, guid: ac48f6333cf7b0f469e5654b263b7850, type: 2}
+  pageFlipCompute: {fileID: 7200000, guid: 2413e0d134bf1904eb9ad47ede6d7b2b, type: 3}
   handFlipPageClip:
     clipName: 
     clipType: 0
@@ -35,6 +37,9 @@ MonoBehaviour:
   leftHandDepthBack: 8
   selectedPatternIndex: 0
   pageCount: 0
+  pageFlipThreadGroupX: 0
+  pageFlipThreadGroupY: 0
+  pageFlipKernel: 0
   collected: 0
   playerHasUsedExitKey: 0
   playerHasUsedLeftKey: 0

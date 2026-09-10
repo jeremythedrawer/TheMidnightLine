@@ -31,18 +31,12 @@ public class LeftHand : MonoBehaviour
 
     [Header("Generated")]
     public Page activePage;
-
-    public Bounds curTextBounds;
     
     public Vector3 targetLocalPos;
 
     public State curState;
 
-    public float totalPencilTime;
-    public float curPencilTime;
-
     public bool atTargetPos;
-    public bool movedForColorPicker;
     private void Update()
     {
         UpdateState();

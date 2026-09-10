@@ -22,6 +22,8 @@ public class FadeBlack : MonoBehaviour
 
     public Options options;
     public InputData playerInputs;
+    public AudioData audioData;
+
     public Material fadeBlackMaterial;
 
     public AtlasTextRenderer textRenderer;
@@ -111,8 +113,8 @@ public class FadeBlack : MonoBehaviour
     public void SetTitleText()
     {
         textRenderer.SetText(options.curTrip.title, alpha: 0);
-        audioSource.volume = options.soundEffects.volume;
-        audioSource.PlayOneShot(options.soundEffects.gong);
+        audioSource.volume = audioData.soundEffectsVolume;
+        audioSource.PlayOneShot(audioData.gong);
     }
     public void WriteTitleText()
     {

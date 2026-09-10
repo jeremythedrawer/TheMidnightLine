@@ -90,10 +90,8 @@ public class Notepad : MonoBehaviour
     }
     public void Init()
     {
-        gameObject.SetActive(false);
         CreateNPCProfiles();
         InitPageFlipCompute();
-
     }
     private void InitPageFlipCompute()
     {
@@ -116,8 +114,6 @@ public class Notepad : MonoBehaviour
     }
     public void PickUpNotepad() 
     {
-        gameObject.SetActive(true);
-
         activePage = frontPage;
         leftHand.SetActivePage(activePage);
 

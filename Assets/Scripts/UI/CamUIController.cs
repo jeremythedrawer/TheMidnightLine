@@ -5,7 +5,20 @@ public class CamUIController : MonoBehaviour
 {
     public FadeBlack fadeBlack;
 
+    public NotepadData notepadData;
     public CameraData camData;
+
+    [Header("Generated")]
+    public Notepad notepad;
+
+    private void OnEnable()
+    {
+        HenchmanBrain.OnGiveNotepad += CreateNotepad;
+    }
+    private void OnDisable()
+    {
+        HenchmanBrain.OnGiveNotepad -= CreateNotepad;
+    }
     public void Start()
     {
         Init();
@@ -31,5 +44,10 @@ public class CamUIController : MonoBehaviour
     public void SetTitleText()
     {
         fadeBlack.SetTitleText();
+    }
+
+    private void CreateNotepad()
+    {
+        notepad = Instantiate(notepadData.notepadPrefab, transform);
     }
 }

@@ -354,7 +354,7 @@ public class PassengerBrain : MonoBehaviour
             {
                 UpdateIdlePath();
 
-                atlasRenderer.PlayClip(ref curClip);
+                atlasRenderer.PlayClip(curClip);
 
                 if (onTrain)
                 {
@@ -383,7 +383,7 @@ public class PassengerBrain : MonoBehaviour
             case NPCState.Walking:
             {
                 move = Mathf.Sign(targetDist);
-                atlasRenderer.PlayClip(ref curClip);
+                atlasRenderer.PlayClip(curClip);
                 atlasRenderer.FlipHSimple(move < 0);
 
                 if (curPath == NPCPath.ToExitStation)
@@ -399,7 +399,7 @@ public class PassengerBrain : MonoBehaviour
             break;
             case NPCState.TicketCheck:
             {
-                atlasRenderer.PlayClip(ref curClip);
+                atlasRenderer.PlayClip(curClip);
             }
             break;
 
@@ -423,7 +423,7 @@ public class PassengerBrain : MonoBehaviour
 
                 if (curGlyph != null)
                 {
-                    atlasRenderer.PlayClip(ref curClip, curGlyph.transform);
+                    atlasRenderer.PlayClip(curClip, curGlyph.transform);
                     if (atlas.motionSprites[atlasRenderer.sprite.index].markers.Length > 0)
                     {
                         if (!playingGlyph)
@@ -450,7 +450,7 @@ public class PassengerBrain : MonoBehaviour
                 }
                 else
                 {
-                    atlasRenderer.PlayClip(ref curClip);
+                    atlasRenderer.PlayClip(curClip);
                 }
                 behaviourClock += Time.deltaTime;
 

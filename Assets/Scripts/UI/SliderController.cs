@@ -18,6 +18,7 @@ public class SliderController : MonoBehaviour
 
     public Options options;
     public InputData inputData;
+    public AudioData audioData;
 
     public IconButton button;
 
@@ -68,12 +69,12 @@ public class SliderController : MonoBehaviour
             t *= t;
             if (sliderType == SliderType.Music)
             {
-                options.music.volume = t;
+                audioData.musicVolume = t;
                 OnChangeMusicVolume?.Invoke();
             }
             else if (sliderType == SliderType.SoundEffects)
             {
-                options.soundEffects.volume = t;
+                audioData.soundEffectsVolume = t;
                 OnChangeSoundEffectsVolume?.Invoke();
             }
         }

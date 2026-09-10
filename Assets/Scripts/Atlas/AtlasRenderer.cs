@@ -60,6 +60,7 @@ public class AtlasRenderer : MonoBehaviour
     public int prevSpriteIndexFlipH;
     public int prevSpriteIndexFlipV;
     public bool isAnimating;
+    public bool isPlayingSound;
 
     public CancellationTokenSource ctsOneShot;
     public CancellationTokenSource ctsChangeCustom;
@@ -331,7 +332,7 @@ public class AtlasRenderer : MonoBehaviour
         height = worldSize.y / centerWorldSliceHeight;
         UpdateSlicedSpriteInputs(sliceSprite);
     }
-    public void PlayClip(ref AtlasClip clip, Transform markerTransform = null)
+    public void PlayClip(AtlasClip clip, Transform markerTransform = null, AudioSource audioSource = null, AudioData audioData = null)
     {
         if (clip.motionIndex != curMotionIndex)
         {
@@ -340,7 +341,11 @@ public class AtlasRenderer : MonoBehaviour
         }
         MotionSprite motionSprite = GetNextKeyframeIndex(atlas, clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
 
-        if (motionSprite.sprite.index == sprite.index) return;
+        if (motionSprite.sprite.index == sprite.index)
+        {
+            isPlayingSound = false;
+            return;
+        }
 
         if (markerTransform != null && motionSprite.markers.Length > 0)
         {
@@ -349,17 +354,25 @@ public class AtlasRenderer : MonoBehaviour
             markerPos.z = markerTransform.localPosition.z;
             markerTransform.localPosition = markerPos;
         }
+
+        if (motionSprite.audioIndex != -1)
+        {
+            audioSource.volume = audioData.soundEffectsVolume;
+            audioSource.PlayOneShot(clip.audioClips[motionSprite.audioIndex]);
+            isPlayingSound = true;
+        }
+
         sprite = motionSprite.sprite;
         UpdateSpriteInputs(sprite);
         isAnimating = true;
     }
-    public void PlayClipOneShot(AtlasClip clip, Transform markerTransform = null, OnFinishOneShot callback = null)
+    public void PlayClipOneShot(AtlasClip clip, Transform markerTransform = null, OnFinishOneShot callback = null, AudioSource audioSource = null, AudioData audioData = null)
     {
         ctsOneShot?.Cancel();
         ctsOneShot = null;
         ctsOneShot = new CancellationTokenSource();
 
-        PlayingClipOneShot(clip, markerTransform, callback).Forget();
+        PlayingClipOneShot(clip, markerTransform, callback, audioSource, audioData).Forget();
     }
     public void PlayClipReverse(AtlasClip clip, Transform markerTransform = null)
     {
@@ -435,7 +448,7 @@ public class AtlasRenderer : MonoBehaviour
     {
         custom.w = alpha;
     }
-    private async UniTask PlayingClipOneShot(AtlasClip clip, Transform markerTransform = null, OnFinishOneShot callback = null)
+    private async UniTask PlayingClipOneShot(AtlasClip clip, Transform markerTransform = null, OnFinishOneShot callback = null, AudioSource audioSource = null, AudioData audioData = null)
     {
         keyframeClock = 0;
         int lastIndex = clip.keyframeEndIndex;
@@ -446,7 +459,11 @@ public class AtlasRenderer : MonoBehaviour
             while (curFrameIndex < lastIndex)
             {
                 MotionSprite motionSprite = GetNextKeyframeIndex(atlas, clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
-                if (motionSprite.sprite.index != sprite.index)
+                if (motionSprite.sprite.index == sprite.index)
+                {
+                    isPlayingSound = false;
+                }
+                else
                 {
                     if (markerTransform != null && motionSprite.markers.Length > 0)
                     {
@@ -454,6 +471,12 @@ public class AtlasRenderer : MonoBehaviour
                         if (flipX) markerPos.x *= -1;
                         markerPos.z = markerTransform.localPosition.z;
                         markerTransform.localPosition = markerPos;
+                    }
+                    if (motionSprite.audioIndex != -1)
+                    {
+                        audioSource.volume = audioData.soundEffectsVolume;
+                        audioSource.PlayOneShot(clip.audioClips[motionSprite.audioIndex]);
+                        isPlayingSound = true;
                     }
                     sprite = motionSprite.sprite;
                     UpdateSpriteInputs(sprite);

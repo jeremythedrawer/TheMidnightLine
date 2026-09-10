@@ -24,6 +24,7 @@ public class CursorController : MonoBehaviour
     public CameraData camData;
     public TripData trip;
     public CursorData cursorData;
+    public AudioData audioData;
     public Options options;
 
     public AtlasRenderer cursorRenderer;
@@ -63,7 +64,7 @@ public class CursorController : MonoBehaviour
         {
             if (inputData.mouseLeftUp && cursorData.isHovering)
             {
-                audioSource.PlayOneShot(options.soundEffects.cursorClick);
+                audioSource.PlayOneShot(audioData.cursorClick);
             }
             cursorRenderer.enabled = true;
             transform.position = inputData.mouseWorldPos;
@@ -103,7 +104,7 @@ public class CursorController : MonoBehaviour
         if (cursorData.changeButton)
         {
             cursorRenderer.UpdateSpriteInputsByIndex(POINTER_SPRITE_INDEX);
-            audioSource.PlayOneShot(options.soundEffects.cursorHover);
+            audioSource.PlayOneShot(audioData.cursorHover);
             cursorData.changeButton = false;
         }
         else if (!cursorData.isHovering)
@@ -117,6 +118,6 @@ public class CursorController : MonoBehaviour
 
     private void UpdateVolume()
     {
-        audioSource.volume = options.soundEffects.volume;
+        audioSource.volume = audioData.soundEffectsVolume;
     }
 }

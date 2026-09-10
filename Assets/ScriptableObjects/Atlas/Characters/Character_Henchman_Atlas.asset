@@ -30,6 +30,7 @@ MonoBehaviour:
       worldSize: {x: 0.27222222, y: 0.9, z: 1}
       index: 0
     markers: []
+    audioIndex: -1
     holdFrames: 3
   - sprite:
       uvSizeAndPos: {x: 0.07421875, y: 0.15917969, z: 0.048828125, w: 0.83984375}
@@ -37,6 +38,7 @@ MonoBehaviour:
       worldSize: {x: 0.42222223, y: 0.90555555, z: 1}
       index: 1
     markers: []
+    audioIndex: -1
     holdFrames: 3
   - sprite:
       uvSizeAndPos: {x: 0.061523438, y: 0.16015625, z: 0.123046875, w: 0.83984375}
@@ -44,6 +46,7 @@ MonoBehaviour:
       worldSize: {x: 0.35, y: 0.9111111, z: 1}
       index: 2
     markers: []
+    audioIndex: -1
     holdFrames: 3
   - sprite:
       uvSizeAndPos: {x: 0.048828125, y: 0.15917969, z: 0.18457031, w: 0.83984375}
@@ -51,6 +54,7 @@ MonoBehaviour:
       worldSize: {x: 0.2777778, y: 0.90555555, z: 1}
       index: 3
     markers: []
+    audioIndex: -1
     holdFrames: 3
   - sprite:
       uvSizeAndPos: {x: 0.043945312, y: 0.15820312, z: 0.23339844, w: 0.83984375}
@@ -58,6 +62,7 @@ MonoBehaviour:
       worldSize: {x: 0.25, y: 0.9, z: 1}
       index: 4
     markers: []
+    audioIndex: -1
     holdFrames: 3
   - sprite:
       uvSizeAndPos: {x: 0.064453125, y: 0.15917969, z: 0.2783203, w: 0.83984375}
@@ -65,6 +70,7 @@ MonoBehaviour:
       worldSize: {x: 0.36666667, y: 0.90555555, z: 1}
       index: 5
     markers: []
+    audioIndex: -1
     holdFrames: 3
   - sprite:
       uvSizeAndPos: {x: 0.059570312, y: 0.15917969, z: 0.34277344, w: 0.83984375}
@@ -72,6 +78,7 @@ MonoBehaviour:
       worldSize: {x: 0.33888888, y: 0.90555555, z: 1}
       index: 6
     markers: []
+    audioIndex: -1
     holdFrames: 3
   - sprite:
       uvSizeAndPos: {x: 0.043945312, y: 0.15917969, z: 0.4033203, w: 0.83984375}
@@ -79,6 +86,7 @@ MonoBehaviour:
       worldSize: {x: 0.25, y: 0.90555555, z: 1}
       index: 7
     markers: []
+    audioIndex: -1
     holdFrames: 3
   - sprite:
       uvSizeAndPos: {x: 0.046875, y: 0.15820312, z: 0.44921875, w: 0.83984375}
@@ -86,6 +94,7 @@ MonoBehaviour:
       worldSize: {x: 0.26666668, y: 0.9, z: 1}
       index: 8
     markers: []
+    audioIndex: -1
     holdFrames: 5
   - sprite:
       uvSizeAndPos: {x: 0.052734375, y: 0.15820312, z: 0.515625, w: 0.83984375}
@@ -93,6 +102,7 @@ MonoBehaviour:
       worldSize: {x: 0.3, y: 0.9, z: 1}
       index: 9
     markers: []
+    audioIndex: -1
     holdFrames: 5
   - sprite:
       uvSizeAndPos: {x: 0.060546875, y: 0.15820312, z: 0.5703125, w: 0.83984375}
@@ -100,6 +110,7 @@ MonoBehaviour:
       worldSize: {x: 0.34444445, y: 0.9, z: 1}
       index: 10
     markers: []
+    audioIndex: 0
     holdFrames: 10
   - sprite:
       uvSizeAndPos: {x: 0.060546875, y: 0.15820312, z: 0.63183594, w: 0.83984375}
@@ -107,6 +118,7 @@ MonoBehaviour:
       worldSize: {x: 0.34444445, y: 0.9, z: 1}
       index: 11
     markers: []
+    audioIndex: -1
     holdFrames: 10
   - sprite:
       uvSizeAndPos: {x: 0.046875, y: 0.15820312, z: 0.6933594, w: 0.83984375}
@@ -114,6 +126,7 @@ MonoBehaviour:
       worldSize: {x: 0.26666668, y: 0.9, z: 1}
       index: 12
     markers: []
+    audioIndex: -1
     holdFrames: 50
   - sprite:
       uvSizeAndPos: {x: 0.046875, y: 0.15917969, z: 0.74316406, w: 0.83984375}
@@ -121,6 +134,7 @@ MonoBehaviour:
       worldSize: {x: 0.26666668, y: 0.90555555, z: 1}
       index: 13
     markers: []
+    audioIndex: -1
     holdFrames: 10
   - sprite:
       uvSizeAndPos: {x: 0.046875, y: 0.16015625, z: 0.79296875, w: 0.83984375}
@@ -128,6 +142,7 @@ MonoBehaviour:
       worldSize: {x: 0.26666668, y: 0.9111111, z: 1}
       index: 14
     markers: []
+    audioIndex: -1
     holdFrames: 50
   simpleSprites: []
   slicedSprites: []
@@ -137,17 +152,18 @@ MonoBehaviour:
     motionIndex: 1
     keyframeStartIndex: 0
     keyframeEndIndex: 7
-    time: 0
+    audioClips: []
   - clipName: OpenSuitcase
     clipType: 2
     motionIndex: 2
     keyframeStartIndex: 8
     keyframeEndIndex: 11
-    time: 0
+    audioClips:
+    - {fileID: 8300000, guid: 1c10873ed3e54e248ba9e647bdc0d4f0, type: 3}
   - clipName: StandingBreathing
     clipType: 1
     motionIndex: 3
     keyframeStartIndex: 12
     keyframeEndIndex: 14
-    time: 0
+    audioClips: []
   markers: []

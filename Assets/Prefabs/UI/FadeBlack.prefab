@@ -59,14 +59,12 @@ MonoBehaviour:
   backgroundRenderer: {fileID: 0}
   textBoxData:
     size: {x: 4.609375, y: 0.22777778}
-    wordPosXArray:
-    - 0
-    - 0
     lineWidthArray:
     - 1.5455556
+    maxLineWidth: 1.5455556
   bounds:
-    m_Center: {x: 0, y: -0.11388889, z: 0.9}
-    m_Extent: {x: 2.3046875, y: 0.11388889, z: 0}
+    m_Center: {x: -0.06997681, y: -0.11388889, z: 12.4}
+    m_Extent: {x: 0.7727778, y: 0.11388889, z: 0}
   worldPivotsAndSizes:
   - {x: -0.7727778, y: -0.22777778, z: 0.14444445, w: 0.22222222}
   - {x: -0.58833337, y: -0.22777778, z: 0.13333334, w: 0.22222222}
@@ -322,6 +320,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::FadeBlack
   options: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
   playerInputs: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
+  audioData: {fileID: 11400000, guid: 366fa884df96e77449150a5fdde208bd, type: 2}
   fadeBlackMaterial: {fileID: 2100000, guid: d7e800c5760a0a94698f28dbdb5c3a9e, type: 2}
   textRenderer: {fileID: 1450194209863424034}
   audioSource: {fileID: 3772685404562749828}
@@ -432,7 +431,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 0
+      value: -0.06997681
       objectReference: {fileID: 0}
     - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: bounds.m_Center.y
@@ -440,11 +439,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: bounds.m_Center.z
-      value: 0
+      value: 11.5
       objectReference: {fileID: 0}
     - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: bounds.m_Extent.x
-      value: 0.70869446
+      value: 0.71555555
       objectReference: {fileID: 0}
     - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: bounds.m_Extent.y
@@ -463,6 +462,10 @@ PrefabInstance:
       value: 0.22777778
       objectReference: {fileID: 0}
     - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
+      propertyPath: customs.Array.data[5].w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: customs.Array.data[6].w
       value: 1
       objectReference: {fileID: 0}
@@ -471,8 +474,28 @@ PrefabInstance:
       value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
+      propertyPath: textBoxData.maxLineWidth
+      value: 1.4311111
+      objectReference: {fileID: 0}
+    - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: scalesAndFlips.Array.size
       value: 8
+      objectReference: {fileID: 0}
+    - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
+      propertyPath: scalesAndFlips.Array.data[5].w
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
+      propertyPath: scalesAndFlips.Array.data[5].x
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
+      propertyPath: scalesAndFlips.Array.data[5].y
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
+      propertyPath: scalesAndFlips.Array.data[5].z
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 3097631008010475687, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: scalesAndFlips.Array.data[6].w
@@ -800,7 +823,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8301492207987582700, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: boundsOffset.x
-      value: 0.7948055
+      value: -0
       objectReference: {fileID: 0}
     - target: {fileID: 8301492207987582700, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: boundsOffset.y
@@ -859,16 +882,40 @@ PrefabInstance:
       value: 4.638727
       objectReference: {fileID: 0}
     - target: {fileID: 8301492207987582700, guid: a60205565b75911419fff067243fa492, type: 3}
+      propertyPath: worldPivotsAndSizes.Array.data[0].x
+      value: -0.7948055
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301492207987582700, guid: a60205565b75911419fff067243fa492, type: 3}
+      propertyPath: worldPivotsAndSizes.Array.data[1].x
+      value: -0.70591664
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301492207987582700, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: worldPivotsAndSizes.Array.data[2].x
-      value: 1.5062777
+      value: 0.71147215
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301492207987582700, guid: a60205565b75911419fff067243fa492, type: 3}
+      propertyPath: worldPivotsAndSizes.Array.data[3].x
+      value: -0.7948055
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301492207987582700, guid: a60205565b75911419fff067243fa492, type: 3}
+      propertyPath: worldPivotsAndSizes.Array.data[4].x
+      value: -0.70591664
       objectReference: {fileID: 0}
     - target: {fileID: 8301492207987582700, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: worldPivotsAndSizes.Array.data[5].x
-      value: 1.5062777
+      value: 0.71147215
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301492207987582700, guid: a60205565b75911419fff067243fa492, type: 3}
+      propertyPath: worldPivotsAndSizes.Array.data[6].x
+      value: -0.7948055
       objectReference: {fileID: 0}
     - target: {fileID: 8301492207987582700, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: worldPivotsAndSizes.Array.data[6].y
       value: 0.32777777
+      objectReference: {fileID: 0}
+    - target: {fileID: 8301492207987582700, guid: a60205565b75911419fff067243fa492, type: 3}
+      propertyPath: worldPivotsAndSizes.Array.data[7].x
+      value: -0.70591664
       objectReference: {fileID: 0}
     - target: {fileID: 8301492207987582700, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: worldPivotsAndSizes.Array.data[7].y
@@ -876,7 +923,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8301492207987582700, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: worldPivotsAndSizes.Array.data[8].x
-      value: 1.5062777
+      value: 0.71147215
       objectReference: {fileID: 0}
     - target: {fileID: 8301492207987582700, guid: a60205565b75911419fff067243fa492, type: 3}
       propertyPath: worldPivotsAndSizes.Array.data[8].y

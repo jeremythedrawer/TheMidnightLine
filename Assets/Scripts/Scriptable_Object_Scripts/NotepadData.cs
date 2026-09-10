@@ -6,6 +6,7 @@ using static Notepad;
 [CreateAssetMenu(fileName = "NotepadData", menuName = "Midnight Line SOs / Notepad")]
 public class NotepadData : ScriptableObject
 {
+    public Notepad notepadPrefab;
     public IconButton pageNumberIconButtonPrefab;
     public Page frontPagePrefab;
     public ProfilePage profilePagePrefab;

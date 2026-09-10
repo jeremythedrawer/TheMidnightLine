@@ -53,8 +53,10 @@ public class InputManager : MonoBehaviour
     private void Update()
     {
         Vector2 screenPos = Mouse.current.position.ReadValue();
+        
         inputData.mouseScreenPos.x = Mathf.Clamp(screenPos.x, 0f, Screen.width);
         inputData.mouseScreenPos.y = Mathf.Clamp(screenPos.y, 0f, Screen.height);
+
         inputData.mouseWorldPos = Camera.main.ScreenToWorldPoint(inputData.mouseScreenPos);
     }
 
