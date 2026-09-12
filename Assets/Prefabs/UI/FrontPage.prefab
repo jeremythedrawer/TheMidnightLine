@@ -55,7 +55,6 @@ MonoBehaviour:
   inputData: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
   notepadData: {fileID: 11400000, guid: 8e516d659eb1fc449bc178ad3fb0113d, type: 2}
   options: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
-  paperRenderer: {fileID: 3598620314432380526}
   textRenderers:
   - {fileID: 8070614675649696053}
   iconRenderers:
@@ -63,6 +62,7 @@ MonoBehaviour:
   - {fileID: 677024129354709009}
   - {fileID: 3094556095863168479}
   - {fileID: 7114494391338617459}
+  paperRenderer: {fileID: 3598620314432380526}
   leftButton: {fileID: 0}
   rightButton: {fileID: 7369649909495058999}
   exitButton: {fileID: 7831967573454425506}
@@ -94,7 +94,7 @@ Transform:
   m_GameObject: {fileID: 6925634221628178441}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.064, y: -1.626, z: -1}
+  m_LocalPosition: {x: 0.064, y: -1.626, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -115,7 +115,7 @@ MonoBehaviour:
   rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
-    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
+    material: {fileID: 2100000, guid: ce962544984a07f45927fb9707e99b35, type: 2}
   textAtlas: {fileID: 11400000, guid: 03871f642f841d447a7b9560fa5d0c24, type: 2}
   text: Traitor Profiles
   kerning: 0.05
@@ -132,7 +132,7 @@ MonoBehaviour:
     - 0.68333334
     maxLineWidth: 0.68333334
   bounds:
-    m_Center: {x: 300.064, y: 0.11066657, z: 15.92}
+    m_Center: {x: 300.064, y: 0.11066657, z: 16.82}
     m_Extent: {x: 0.34166667, y: 0.18333334, z: 0}
   worldPivotsAndSizes:
   - {x: -0.31111112, y: -0.18333334, z: 0.06666667, w: 0.18333334}
@@ -236,7 +236,7 @@ Transform:
   m_GameObject: {fileID: 6998747632880932279}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0.046, y: -1.127, z: -1}
+  m_LocalPosition: {x: 0.046, y: -1.127, z: -0.1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -257,7 +257,7 @@ MonoBehaviour:
   rendererType: 0
   batchKey:
     texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
-    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
+    material: {fileID: 2100000, guid: ce962544984a07f45927fb9707e99b35, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   boxCollider: {fileID: 0}
   spriteIndex: 14
@@ -272,7 +272,7 @@ MonoBehaviour:
     worldSize: {x: 0.76666665, y: 0.81666666, z: 1}
     index: 14
   bounds:
-    m_Center: {x: 300.046, y: 0.793, z: 15.92}
+    m_Center: {x: 300.046, y: 0.793, z: 16.82}
     m_Extent: {x: 0.38333333, y: 0.40833333, z: 0.1}
   worldPivotAndSize: {x: -0.38333333, y: -0.40833333, z: 0.76666665, w: 0.81666666}
   uvSizeAndPosition: {x: 0.26953125, y: 0.28710938, z: 0.005859375, w: 0.40625}
@@ -291,6 +291,7 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 14
   prevSpriteIndexFlipV: 14
   isAnimating: 0
+  isPlayingSound: 0
   quadCount: 0
 --- !u!114 &5703785320338597996
 MonoBehaviour:
@@ -334,7 +335,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7708814865246798285, guid: f25a1a3e20e61c548996a44662353bc7, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 7708814865246798285, guid: f25a1a3e20e61c548996a44662353bc7, type: 3}
       propertyPath: m_LocalRotation.w
@@ -365,6 +366,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8027454041395354321, guid: f25a1a3e20e61c548996a44662353bc7, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8027454041395354321, guid: f25a1a3e20e61c548996a44662353bc7, type: 3}
+      propertyPath: batchKey.material
+      value: 
+      objectReference: {fileID: 2100000, guid: ce962544984a07f45927fb9707e99b35, type: 2}
+    - target: {fileID: 8027454041395354321, guid: f25a1a3e20e61c548996a44662353bc7, type: 3}
       propertyPath: bounds.m_Center.x
       value: 300.043
       objectReference: {fileID: 0}
@@ -374,7 +383,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8027454041395354321, guid: f25a1a3e20e61c548996a44662353bc7, type: 3}
       propertyPath: bounds.m_Center.z
-      value: 15.92
+      value: 16.82
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
@@ -406,6 +415,14 @@ PrefabInstance:
     m_TransformParent: {fileID: 7380519998003774169}
     m_Modifications:
     - target: {fileID: 1882177056989218274, guid: ae4539b8bdeb3514188a00275acbfa02, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1882177056989218274, guid: ae4539b8bdeb3514188a00275acbfa02, type: 3}
+      propertyPath: batchKey.material
+      value: 
+      objectReference: {fileID: 2100000, guid: ce962544984a07f45927fb9707e99b35, type: 2}
+    - target: {fileID: 1882177056989218274, guid: ae4539b8bdeb3514188a00275acbfa02, type: 3}
       propertyPath: bounds.m_Center.x
       value: 300.683
       objectReference: {fileID: 0}
@@ -415,7 +432,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1882177056989218274, guid: ae4539b8bdeb3514188a00275acbfa02, type: 3}
       propertyPath: bounds.m_Center.z
-      value: 15.92
+      value: 16.82
       objectReference: {fileID: 0}
     - target: {fileID: 1980229006213690019, guid: ae4539b8bdeb3514188a00275acbfa02, type: 3}
       propertyPath: m_LocalPosition.x
@@ -427,7 +444,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1980229006213690019, guid: ae4539b8bdeb3514188a00275acbfa02, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 1980229006213690019, guid: ae4539b8bdeb3514188a00275acbfa02, type: 3}
       propertyPath: m_LocalRotation.w
@@ -501,6 +518,14 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7380519998003774169}
     m_Modifications:
+    - target: {fileID: 1111183994278983019, guid: dc4d6f094856c2943bf9d4756929ed3e, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 1111183994278983019, guid: dc4d6f094856c2943bf9d4756929ed3e, type: 3}
+      propertyPath: batchKey.material
+      value: 
+      objectReference: {fileID: 2100000, guid: ce962544984a07f45927fb9707e99b35, type: 2}
     - target: {fileID: 1111183994278983019, guid: dc4d6f094856c2943bf9d4756929ed3e, type: 3}
       propertyPath: bounds.m_Center.x
       value: 300.04443
@@ -600,7 +625,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5210363695832520489, guid: 1a5753332a5109842b0ffb74fd069463, type: 3}
       propertyPath: m_LocalPosition.z
-      value: -1
+      value: -0.1
       objectReference: {fileID: 0}
     - target: {fileID: 5210363695832520489, guid: 1a5753332a5109842b0ffb74fd069463, type: 3}
       propertyPath: m_LocalRotation.w
@@ -631,6 +656,14 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8214745143486504670, guid: 1a5753332a5109842b0ffb74fd069463, type: 3}
+      propertyPath: m_Enabled
+      value: 1
+      objectReference: {fileID: 0}
+    - target: {fileID: 8214745143486504670, guid: 1a5753332a5109842b0ffb74fd069463, type: 3}
+      propertyPath: batchKey.material
+      value: 
+      objectReference: {fileID: 2100000, guid: ce962544984a07f45927fb9707e99b35, type: 2}
+    - target: {fileID: 8214745143486504670, guid: 1a5753332a5109842b0ffb74fd069463, type: 3}
       propertyPath: bounds.m_Center.x
       value: 299.469
       objectReference: {fileID: 0}
@@ -640,7 +673,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8214745143486504670, guid: 1a5753332a5109842b0ffb74fd069463, type: 3}
       propertyPath: bounds.m_Center.z
-      value: 15.92
+      value: 16.82
       objectReference: {fileID: 0}
     m_RemovedComponents: []
     m_RemovedGameObjects: []

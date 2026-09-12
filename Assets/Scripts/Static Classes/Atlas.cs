@@ -159,6 +159,7 @@ public static class Atlas
         public int keyframeEndIndex;
 
         public AudioClip[] audioClips;
+        public Action[] actions;
     }
     public static Dictionary<int, AtlasClip> BuildClipKeys(AtlasClip[] clips)
     {

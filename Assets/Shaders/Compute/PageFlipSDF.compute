@@ -1,26 +1,72 @@
 #pragma kernel CSPageFlip
 
-RWTexture2D<float4> _SDFTexture;
+RWTexture2D<float> _SDFTexture;
 Texture2D<float4> _POVUITexture;
 
+SamplerState sampler_PointClamp;
+
 uint2 _SDFTextureSize;
-
 float4 _UVSizeAndPos;
+float4 _ViewportRect;
 
-[numthreads(8,8,1)]
+bool _Reverse;
+
+[numthreads(8, 8, 1)]
 void CSPageFlip(uint3 id : SV_DispatchThreadID)
 {
     if (id.x >= _SDFTextureSize.x || id.y >= _SDFTextureSize.y)
         return;
+    float2 screenUV = (float2(id.xy) + 0.5) / float2(_SDFTextureSize);
     
-    float2 uv = (float2)id.xy / (float2)_SDFTextureSize.xy;
+    float2 spriteUV = (screenUV - _ViewportRect.xy) / _ViewportRect.zw;
     
-    int3 location = int3(id.xy, 0);
-    location.xy *= _UVSizeAndPos.xy;
-    location.xy += _UVSizeAndPos.zw;
+    float4 curSDF = _SDFTexture[id.xy];
     
-    float4 povTex = _POVUITexture.Load(location);
+    if (spriteUV.x < 0.0 || spriteUV.x > 1.0 || spriteUV.y < 0.0 || spriteUV.y > 1.0)
+    {
+        return;
+    }
     
-    float finalMask = povTex.a;
-    _SDFTexture[id.xy] = float4(finalMask.xxxx);
+    float2 atlasUV = _UVSizeAndPos.zw + spriteUV * _UVSizeAndPos.xy;
+
+    float4 curSprite = _POVUITexture.SampleLevel(sampler_PointClamp, atlasUV, 0);
+    
+    
+    float mask = max(curSDF.x, curSprite.a);
+    
+    _SDFTexture[id.xy] = mask.x;
+}
+
+#pragma kernel CSPropagate
+
+[numthreads(8, 1, 1)]
+void CSPropagate(uint3 id : SV_DispatchThreadID)
+{
+    if (id.x >= _SDFTextureSize.x)
+        return;
+
+    float mask = 0;
+    if (_Reverse)
+    {
+        for (uint y = 0; y < _SDFTextureSize.y; y++)
+        {
+            float curSDF = _SDFTexture[uint2(id.x, y)];
+            
+            mask = max(mask, curSDF);
+            
+            _SDFTexture[uint2(id.x, y)] = mask.x;
+        }
+
+    }
+    else
+    {
+        for (int y = (int) _SDFTextureSize.y - 1; y >= 0; --y)
+        {
+            float curSDF = _SDFTexture[uint2(id.x, y)];
+
+            mask = max(mask, curSDF);
+
+            _SDFTexture[uint2(id.x, y)] = mask.x;
+        }        
+    }
 }

@@ -27,7 +27,6 @@ Shader "Custom/s_atlasDepth"
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
-            #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
 	        #include "Assets/Shaders/HLSL/AtlasParticles.hlsl"
 
             #pragma vertex vert

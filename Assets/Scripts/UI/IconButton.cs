@@ -36,6 +36,8 @@ public class IconButton : MonoBehaviour
         OnExitCallback = onExit ?? ExitButton;
         atlasRenderer.SetBounds();
         activePos = atlasRenderer.transform.localPosition;
+
+        OnExitCallback();
     }
     public void UpdateButton()
     {
@@ -127,10 +129,12 @@ public class IconButton : MonoBehaviour
     public void EnterButton()
     {
         atlasRenderer.customBit |= (int)ColorBits.GreenChannel;
+        atlasRenderer.customBit &= ~(int)ColorBits.BlueChannel;
     }
     public void ExitButton()
     {
         atlasRenderer.customBit &= ~(int)ColorBits.GreenChannel;
+        atlasRenderer.customBit |= (int)ColorBits.BlueChannel;
         atlasRenderer.customBit &= ~(int)ColorBits.Invert;
     }
     public void MouseUp()

@@ -12,7 +12,6 @@ Shader "Custom/s_atlasNPC"
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
-            #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
 
             #pragma vertex vert
             #pragma fragment frag

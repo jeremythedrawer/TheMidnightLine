@@ -33,13 +33,13 @@ public class SpawnMaster : MonoBehaviour
     public Queue<DelayedParticleData> delayedParticlesQueue;
     private void OnEnable()
     {
-        SpyBrain.OnTicketInspect += ChangeParticles;
+        SpyBrain.OnTalkToPassenger += ChangeParticles;
         TrainController.OnMetersAtSpawnBounds += DespawnEdgeScrollers;
         onBeginTrip.RegisterListener(Init);
     }
     private void OnDisable()
     {
-        SpyBrain.OnTicketInspect -= ChangeParticles;
+        SpyBrain.OnTalkToPassenger -= ChangeParticles;
         TrainController.OnMetersAtSpawnBounds -= DespawnEdgeScrollers;
         onBeginTrip.UnregisterListener(Init);
         Dispose();
@@ -249,7 +249,7 @@ public class SpawnMaster : MonoBehaviour
         {
             ParticlePosData posData = particleAtlas.posData[i];
 
-            if (posData.ticketCheckEnd > options.curTrip.ticketsCheckedTotal) continue;
+            if (posData.ticketCheckEnd > options.curTrip.passengersTalkToTotal) continue;
 
             switch(posData.spawnState)
             {
@@ -338,7 +338,7 @@ public class SpawnMaster : MonoBehaviour
         {
             ParticlePosData posData = particleAtlas.posData[i];
 
-            if (options.curTrip.ticketsCheckedTotal < posData.ticketCheckStart)
+            if (options.curTrip.passengersTalkToTotal < posData.ticketCheckStart)
             {
                 newOffset = i;
                 break;
@@ -650,7 +650,7 @@ public class SpawnMaster : MonoBehaviour
     }
     private async UniTask UpdatingSky()
     {
-        float nextDayNight = options.curTrip.dayNightValues[Mathf.Min(options.curTrip.ticketsCheckedTotal, options.curTrip.dayNightValues.Length - 1)];
+        float nextDayNight = options.curTrip.dayNightValues[Mathf.Min(options.curTrip.passengersTalkToTotal, options.curTrip.dayNightValues.Length - 1)];
         float elapsedTime = 0;
         float startDayNight = Shader.GetGlobalFloat(options.dayNightID);
         

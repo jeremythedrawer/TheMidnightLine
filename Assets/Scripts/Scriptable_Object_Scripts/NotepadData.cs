@@ -16,7 +16,7 @@ public class NotepadData : ScriptableObject
     [Header("Generated")]
     public AtlasClip handFlipPageClip;
 
-    public Vector3 leftHandOffScreenLocalPos;
+    public Vector3 activeLocalPos;
     public Vector3 inactiveLocalPos;
     public Vector3 hoverLocalPos;
     public Vector3 offSceenLocalPos;
@@ -38,10 +38,7 @@ public class NotepadData : ScriptableObject
     public int pageFlipThreadGroupY;
 
     public int pageFlipKernel;
+    public int pagePropergateKernel;
 
     public bool collected;
-
-    public bool playerHasUsedExitKey;
-    public bool playerHasUsedLeftKey;
-    public bool playerHasUsedRightKey;
 }

@@ -66,11 +66,11 @@ public class TrainController : MonoBehaviour
     }
     private void OnEnable()
     {
-        SpyBrain.OnTicketInspect += UpdateTicketInspectParams;
+        SpyBrain.OnTalkToPassenger += UpdateTicketInspectParams;
     }
     private void OnDisable()
     {
-        SpyBrain.OnTicketInspect -= UpdateTicketInspectParams;
+        SpyBrain.OnTalkToPassenger -= UpdateTicketInspectParams;
         
         trainCTS?.Cancel();
         trainCTS?.Dispose();
@@ -228,11 +228,11 @@ public class TrainController : MonoBehaviour
             break;
             case TrainStates.AtMaxSpeed:
             {
-                if (options.curTrip.ticketsCheckedSinceLastStation == options.curTrip.stationAhead.ticketsToCheckBeforeSpawn)
+                if (options.curTrip.passengersTalkToSinceLastStation == options.curTrip.stationAhead.ticketsToCheckBeforeSpawn)
                 {
                     SpawnStation();
                     trainData.targetVelocity = Vector2.zero;
-                    options.curTrip.ticketsCheckedSinceLastStation = 0;
+                    options.curTrip.passengersTalkToSinceLastStation = 0;
                 }
                 HandleTrainMeters();
             }
@@ -454,7 +454,7 @@ public class TrainController : MonoBehaviour
     }
     private void UpdateTicketInspectParams()
     {
-        int ticketParamsIndex = options.curTrip.ticketsCheckedTotal - 1;
+        int ticketParamsIndex = options.curTrip.passengersTalkToTotal - 1;
         trainData.targetElevatePos = options.curTrip.elevationValues[ticketParamsIndex];
         trainData.targetKMPH = options.curTrip.kmValues[ticketParamsIndex];
         trainData.targetNightValue = options.curTrip.dayNightValues[ticketParamsIndex];

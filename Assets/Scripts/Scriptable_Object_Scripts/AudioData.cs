@@ -18,6 +18,8 @@ public class AudioData : ScriptableObject
     public AudioClip wind;
     public AudioClip stationAmbience;
     public AudioClip suitcaseClick;
+    public AudioClip sweep;
+    public AudioClip pageFlipUp;
     public AudioClip[] footStepsConcrete;
     [Header("Voices")]
     public AudioClip[] wuh;

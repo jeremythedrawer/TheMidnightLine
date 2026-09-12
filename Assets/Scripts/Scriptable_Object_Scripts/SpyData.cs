@@ -30,9 +30,7 @@ public class SpyData : ScriptableObject
     public bool spriteFlip;
     public bool walkingIntoWall;
     public bool startTrip;
-    public bool checkingNotepad;
     public bool playerInputsEnabled;
-    public bool canCheckTicket;
 
     public Bounds bounds;
     

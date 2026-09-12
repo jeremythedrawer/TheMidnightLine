@@ -28,7 +28,6 @@ public class CursorController : MonoBehaviour
     public Options options;
 
     public AtlasRenderer cursorRenderer;
-    public AtlasTextRenderer cursorTag;
     public AudioSource audioSource;
 
     [Header("Generated")]
@@ -46,7 +45,6 @@ public class CursorController : MonoBehaviour
     {
         Cursor.visible = false;
         CursorRenderer = cursorRenderer;
-        cursorTag.SetText("");
         hoveredNPCs = new PassengerBrain[8];
     }
 

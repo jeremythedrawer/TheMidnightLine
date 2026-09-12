@@ -60,12 +60,12 @@ public class AtlasRenderer : MonoBehaviour
     public int prevSpriteIndexFlipH;
     public int prevSpriteIndexFlipV;
     public bool isAnimating;
-    public bool isPlayingSound;
 
     public CancellationTokenSource ctsOneShot;
     public CancellationTokenSource ctsChangeCustom;
 
     public delegate void OnFinishOneShot();
+    public event Action<MotionSprite> onChangeKeyframe;
 
     [Header("Sliced Generated")]
     public int quadCount;
@@ -223,10 +223,6 @@ public class AtlasRenderer : MonoBehaviour
     {
         transform.position = new Vector3(transform.position.x, transform.position.y, newDepth);
     }
-    public void SetLocalDepth(float newDepth)
-    {
-        transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, newDepth);
-    }
     public void FlipHSimple(bool flipLeft)
     {
         flipX = flipLeft;
@@ -343,9 +339,9 @@ public class AtlasRenderer : MonoBehaviour
 
         if (motionSprite.sprite.index == sprite.index)
         {
-            isPlayingSound = false;
             return;
         }
+        
 
         if (markerTransform != null && motionSprite.markers.Length > 0)
         {
@@ -359,9 +355,9 @@ public class AtlasRenderer : MonoBehaviour
         {
             audioSource.volume = audioData.soundEffectsVolume;
             audioSource.PlayOneShot(clip.audioClips[motionSprite.audioIndex]);
-            isPlayingSound = true;
         }
 
+        onChangeKeyframe?.Invoke(motionSprite);
         sprite = motionSprite.sprite;
         UpdateSpriteInputs(sprite);
         isAnimating = true;
@@ -459,11 +455,8 @@ public class AtlasRenderer : MonoBehaviour
             while (curFrameIndex < lastIndex)
             {
                 MotionSprite motionSprite = GetNextKeyframeIndex(atlas, clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
-                if (motionSprite.sprite.index == sprite.index)
-                {
-                    isPlayingSound = false;
-                }
-                else
+
+                if (motionSprite.sprite.index != sprite.index)
                 {
                     if (markerTransform != null && motionSprite.markers.Length > 0)
                     {
@@ -476,10 +469,12 @@ public class AtlasRenderer : MonoBehaviour
                     {
                         audioSource.volume = audioData.soundEffectsVolume;
                         audioSource.PlayOneShot(clip.audioClips[motionSprite.audioIndex]);
-                        isPlayingSound = true;
                     }
                     sprite = motionSprite.sprite;
                     UpdateSpriteInputs(sprite);
+
+                    onChangeKeyframe?.Invoke(motionSprite);
+
                 }
                 await UniTask.Yield(ctsOneShot.Token);
             }
@@ -516,6 +511,8 @@ public class AtlasRenderer : MonoBehaviour
                     }
                     sprite = motionSprite.sprite;
                     UpdateSpriteInputs(sprite);
+
+                    onChangeKeyframe?.Invoke(motionSprite);
                 }
 
                 await UniTask.Yield(ctsOneShot.Token);

@@ -218,7 +218,7 @@ public class PassengerBrain : MonoBehaviour
             atlasRenderer.custom.y = toggle ? 1 : 0;
         }
     }
-    public void ToggleTicketCheckHover(bool toggle)
+    public void ToggleHoverTalk(bool toggle)
     {
         atlasRenderer.custom.w = toggle ? 1 : 0; 
     }

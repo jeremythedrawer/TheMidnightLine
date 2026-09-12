@@ -1,26 +1,18 @@
-Shader "Custom/s_atlasTicketIcons"
+Shader "Custom/s_atlasNotepadUI"
 {
-    Properties
-    {
-        [NoScaleOffset] _AtlasTexture("Texture Atlas", 2D) = "white"
-    }
-
     SubShader
     {
-        Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
+        Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
         ZWrite On
         ZTest LEqual
         Blend SrcAlpha OneMinusSrcAlpha
-
         Pass
         {
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
-            #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
             #pragma vertex vert
             #pragma fragment frag
-
 
             struct Attributes
             {
@@ -33,20 +25,26 @@ Shader "Custom/s_atlasTicketIcons"
             {
                 float4 positionHCS : SV_POSITION;
                 float2 uv : TEXCOORD0;
-                float4 uvSizeAndPos : TEXCOORD1;
-                float4 scaleAndFlip : TEXCOORD2;
-                float4 custom : TEXCOORD3;
+                float3 worldPos : TEXCOORD1;
+                float4 uvSizeAndPos : TEXCOORD2;
+                float4 scaleAndFlip : TEXCOORD3;
+                float4 pivotAndSize : TEXCOORD4;
+                float4 custom : TEXCOORD5;
+                int customBit : TEXCOORD6;
             };
 
             StructuredBuffer<AtlasSprite> _SpriteData;
-            
+
             TEXTURE2D(_AtlasTexture);
             SAMPLER(sampler_AtlasTexture);
 
-            float3 _TicketCheckColor;
+            TEXTURE2D(_PageFlipMaskTexture);
+            SAMPLER(sampler_PageFlipMaskTexture);
+            float4 _PageFlipMaskTexture_TexelSize;
+
             float3 _BlackColor;
+            float3 _MeridiaColor;
             float3 _WhiteColor;
-            float _DayNight;
 
             Varyings vert(Attributes v)
             {
@@ -65,46 +63,40 @@ Shader "Custom/s_atlasTicketIcons"
 
                 objPos *= size * scale;
                 objPos += pivot;
-                objPos.x += spriteData.custom.y * spriteData.custom.a;
-                float3 worldPos = float3(position.xy + objPos, position.z);
 
+                float3 worldPos = float3(position.xy + objPos, position.z);
+                o.worldPos = worldPos;
                 o.positionHCS = TransformWorldToHClip(worldPos);
                 o.uv = v.uv;
                 o.uvSizeAndPos = spriteData.uvSizeAndPos;
                 o.scaleAndFlip = spriteData.scaleAndFlip;
+                o.pivotAndSize = spriteData.pivotAndSize;
                 o.custom = spriteData.custom;
-
+                o.customBit = spriteData.customBit;
                 return o;
+
             }
 
             half4 frag(Varyings i) : SV_Target
             {
-                float2 uvSize = i.uvSizeAndPos.xy;
-                float2 uvPos = i.uvSizeAndPos.zw;
-                
-                float2 scale = i.scaleAndFlip.xy;
-                float2 flip = i.scaleAndFlip.zw;
+                float2 uv = SpriteUV(i.uv, i.uvSizeAndPos, i.scaleAndFlip);
+                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, uv);
 
-                i.uv *= scale;
-                i.uv = frac(i.uv);
-                i.uv = (i.uv - 0.5) * flip + 0.5;
-                i.uv *= uvSize;
-                i.uv += uvPos;
-                half4 color = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+                half4 finalColor = UIColor(i.customBit, tex, i.custom, _BlackColor, _WhiteColor, _MeridiaColor, i.positionHCS.y);
 
-                half ticketCheck = BayerX8(i.custom.x, i.positionHCS.y);
+                float2 normScreenUV = i.positionHCS.xy / _ScreenParams.xy;
+                half4 pageFlipTex = SAMPLE_TEXTURE2D(_PageFlipMaskTexture, sampler_PageFlipMaskTexture, normScreenUV);
 
-                half colorA = lerp(color.r, 1 - color.r, ticketCheck);
-                half colorB = lerp(1 - color.r, color.r, ticketCheck); 
+                int invertMask = saturate(i.customBit & INVERT_NOTEPAD_BIT);
 
-                float dayNightBayer = BayerX8(round(_DayNight), i.positionHCS.y);
-                half dayNightInvertColor = lerp(colorA, colorB, dayNightBayer);
+                half pageFlipMask = lerp(pageFlipTex.a, 1 - pageFlipTex.a, invertMask);
+                //return half4(pageFlipMask.xxx, 1);
+                half alpha = finalColor.a * pageFlipMask;
 
-                half3 finalColor = lerp(_BlackColor, _WhiteColor, dayNightInvertColor);
 
-                half alpha = BayerX8(color.a - i.custom.a, i.positionHCS.y);
                 clip(alpha - 0.001);
-                return half4 (finalColor, 1);
+
+                return finalColor;
             }
             ENDHLSL
         }

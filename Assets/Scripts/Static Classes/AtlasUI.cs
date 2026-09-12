@@ -45,29 +45,13 @@ public static class AtlasUI
         Stationary,
         FlippingUp,
         FlippingDown,
+        Inactive,
     }
     public enum PickerFunctionType
     {
         TicketCheck,
         Color,
         RuleOut,
-    }
-    [Flags] public enum NotepadSubState
-    {
-        None = 0,
-        IsFlippingUp = 1 << 0,
-        IsFlippingDown = 1 << 1,
-        WriteToggle = 1 << 2,
-        EraseToggle = 1 << 3,
-        RevealToggle = 1 << 4,
-        WillFlipUp = 1 << 5,
-        WillFlipDown = 1 << 6,
-        CanFlipUp = 1 << 7,
-        CanFlipDown = 1 << 8,
-        CanWillFlipUp = 1 << 9,
-        CanWillFlipDown = 1 << 10,
-        OnScreen = 1 << 11,
-        InUse = 1 << 12,
     }
     [Flags]public enum UnlockType
     { 
@@ -91,6 +75,7 @@ public static class AtlasUI
         RedChannel = 1 << 8,
         GreenChannel = 1 << 9,
         BlueChannel = 1 << 10,
+        InvertNotepadFlip = 1 << 11,
     }
     [Flags] public enum TutorialState
     {
@@ -134,7 +119,6 @@ public static class AtlasUI
         Notepad,
         Ticket,
         CarriageMap,
-        Outcome,
 
     }
     public enum ButtonState

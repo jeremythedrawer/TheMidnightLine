@@ -104,6 +104,9 @@ public class HenchmanBrain : MonoBehaviour
             case HenchmanState.Idle:
             {
                 atlasRenderer.PlayClip(curClip);
+
+                if (notepadData.collected) return;
+
                 float rawSpyDist = spyData.bounds.center.x - atlasRenderer.bounds.center.x;
                 atlasRenderer.FlipHSimple(rawSpyDist < 0);
 

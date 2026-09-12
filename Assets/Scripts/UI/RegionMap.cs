@@ -40,8 +40,8 @@ public class RegionMap : MonoBehaviour
                 TripButton tripButton = tripButtons[index];
 
                 options.curTrip = tripButton.trip;
-                options.curTrip.ticketsCheckedSinceLastStation = 0;
-                options.curTrip.ticketsCheckedTotal = 0;
+                options.curTrip.passengersTalkToSinceLastStation = 0;
+                options.curTrip.passengersTalkToTotal = 0;
                 options.curTrip.traitorsSpawned = 0;
                 tripButton.button.atlasRenderer.customBit ^= (int)ColorBits.Invert;
 

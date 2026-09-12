@@ -8,9 +8,8 @@ public static class Spy
         None,
         Idle,
         Walk,
-        PickingNPCTicketCheck,
-        TicketCheck,
-        TalkingToAccomplice,
+        PickingPassenger,
+        TalkingToPassenger,
         Notepad,
         CarriageMap,
     }

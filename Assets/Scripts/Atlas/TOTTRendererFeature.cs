@@ -239,7 +239,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                 {
                     ParticlePosData posData = particleAtlas.posData[j];
 
-                    if (trip.ticketsCheckedTotal < posData.ticketCheckStart) break;
+                    if (trip.passengersTalkToTotal < posData.ticketCheckStart) break;
                     
                     if (posData.argsBuffer == null) continue;
 

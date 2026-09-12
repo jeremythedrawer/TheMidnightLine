@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 using static Atlas;
+using static Notepad;
 public class LeftHand : MonoBehaviour
 {
     public enum State
@@ -24,19 +25,30 @@ public class LeftHand : MonoBehaviour
     public Options options;
     public CameraData camStats;
     public NotepadData notepadData;
+    public AudioData audioData;
 
     public RenderTexture flipPageRenderTexture;
 
     public AtlasRenderer atlasRenderer;
+    public AudioSource audioSource;
 
     [Header("Generated")]
     public Page activePage;
+    public Page nextPage;
     
     public Vector3 targetLocalPos;
 
     public State curState;
 
     public bool atTargetPos;
+    private void OnEnable()
+    {
+        atlasRenderer.onChangeKeyframe += HandSpriteChange;
+    }
+    private void OnDisable()
+    {
+        atlasRenderer.onChangeKeyframe -= HandSpriteChange;
+    }
     private void Update()
     {
         UpdateState();
@@ -44,6 +56,10 @@ public class LeftHand : MonoBehaviour
     public void SetActivePage(Page page)
     {
         activePage = page;
+    }
+    public void SetNextPage(Page page) 
+    { 
+        nextPage = page; 
     }
     public void SetState(State newState)
     {
@@ -69,21 +85,29 @@ public class LeftHand : MonoBehaviour
                 Bounds rendBounds = atlasRenderer.GetBounds();
                 Vector4 uvPivot = atlasRenderer.sprite.uvPivot;
                 Vector3 spritePivotOffset = new Vector3(rendBounds.extents.x * (1 - uvPivot.x), rendBounds.size.y * (1 - uvPivot.y));
-                targetLocalPos = notepadData.leftHandOffScreenLocalPos - spritePivotOffset;
+                //targetLocalPos = notepadData.leftHandOffScreenLocalPos - spritePivotOffset;
             }
             break;
 
             case State.FlippingUp:
             {
                 transform.localPosition = new Vector3(notepadData.leftHandFlipPos.x, notepadData.leftHandFlipPos.y, notepadData.leftHandDepthFront);
+                
                 atlasRenderer.PlayClipOneShot(notepadData.handFlipPageClip);
+                
+                Graphics.Blit(Texture2D.blackTexture, notepadData.pageFlipRT);
+                notepadData.pageFlipCompute.SetBool("_Reverse", false);
             }
             break;
 
             case State.FlippingDown:
             {
                 transform.localPosition = new Vector3(notepadData.leftHandFlipPos.x, notepadData.leftHandFlipPos.y, notepadData.leftHandDepthBack);
+                
                 atlasRenderer.PlayClipOneShotReverse(notepadData.handFlipPageClip);
+
+                Graphics.Blit(Texture2D.blackTexture, notepadData.pageFlipRT);
+                notepadData.pageFlipCompute.SetBool("_Reverse", true);
             }
             break;
         }
@@ -120,7 +144,7 @@ public class LeftHand : MonoBehaviour
                         Bounds rendBounds = atlasRenderer.GetBounds();
                         Vector4 uvPivot = atlasRenderer.sprite.uvPivot;
                         Vector3 spritePivotOffset = new Vector3(rendBounds.extents.x * (1 - uvPivot.x), rendBounds.size.y * (1 - uvPivot.y));
-                        transform.localPosition = notepadData.leftHandOffScreenLocalPos - spritePivotOffset;
+                       // transform.localPosition = notepadData.leftHandOffScreenLocalPos - spritePivotOffset;
 
                         atTargetPos = true;
 
@@ -136,15 +160,13 @@ public class LeftHand : MonoBehaviour
 
             case State.FlippingUp:
             {
-                notepadData.pageFlipCompute.SetVector("_UVSizeAndPos", atlasRenderer.uvSizeAndPosition);
-                notepadData.pageFlipCompute.Dispatch(notepadData.pageFlipKernel, notepadData.pageFlipThreadGroupX, notepadData.pageFlipThreadGroupY, 0);
+
             }
             break;
 
             case State.FlippingDown:
             {
-                notepadData.pageFlipCompute.SetVector("_UVSizeAndPos", atlasRenderer.uvSizeAndPosition);
-                notepadData.pageFlipCompute.Dispatch(notepadData.pageFlipKernel, notepadData.pageFlipThreadGroupX, notepadData.pageFlipThreadGroupY, 0);
+
             }
             break;
         }
@@ -168,6 +190,7 @@ public class LeftHand : MonoBehaviour
             case State.FlippingUp:
             {
                 atlasRenderer.UpdateSpriteInputs(atlasRenderer.atlas.motionSprites[notepadData.handFlipPageClip.keyframeStartIndex].sprite);
+
             }
             break;
 
@@ -178,21 +201,87 @@ public class LeftHand : MonoBehaviour
             break;
         }
     }
+    private void HandSpriteChange(MotionSprite curSprite)
+    {
+        switch(curSprite.sprite.index)
+        {
+            case 2:
+            {
+                if (curState == State.FlippingDown)
+                {
+                    Graphics.Blit(Texture2D.whiteTexture, notepadData.pageFlipRT);
+                }
+            }
+            break;
+            case 3:
+            case 4:
+            case 5:
+            {
+                DispatchPageFlipCompute();
+            }
+            break;
+
+            case 6:
+            {
+                if (curState == State.FlippingDown)
+                {
+                    transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, notepadData.leftHandDepthFront);
+                    nextPage.SetPageDepth(notepadData.leftHandDepthFront + 2);
+                }
+                DispatchPageFlipCompute();
+            }
+            break;
+
+            case 7:
+            {
+                if (curState == State.FlippingUp)
+                {
+                    activePage.SetPageDepth(notepadData.leftHandDepthBack + 1);
+                    transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, notepadData.leftHandDepthBack);
+
+                    DispatchPageFlipCompute();
+                }
+            }
+            break;
+
+            case 8:
+            {
+                if (curState == State.FlippingUp)
+                {
+                    DispatchPageFlipCompute();
+                }
+            }
+            break;
+        }
+    }
+    private void DispatchPageFlipCompute()
+    {
+        Vector3 viewportMin = Camera.main.WorldToViewportPoint(atlasRenderer.bounds.min);
+        Vector3 viewportMax = Camera.main.WorldToViewportPoint(atlasRenderer.bounds.max);
+        Vector2 viewportSize = viewportMax - viewportMin;
+
+        notepadData.pageFlipCompute.SetVector("_ViewportRect", new Vector4(viewportMin.x, viewportMin.y, viewportSize.x, viewportSize.y));
+
+        notepadData.pageFlipCompute.SetVector("_UVSizeAndPos", atlasRenderer.uvSizeAndPosition);
+
+        notepadData.pageFlipCompute.Dispatch(notepadData.pageFlipKernel, notepadData.pageFlipThreadGroupX, notepadData.pageFlipThreadGroupY, 1);
+        notepadData.pageFlipCompute.Dispatch(notepadData.pagePropergateKernel, notepadData.pageFlipThreadGroupX, notepadData.pageFlipThreadGroupY, 1);
+    }
     public void Init()
     {
-        targetLocalPos = notepadData.leftHandOffScreenLocalPos;
+        //targetLocalPos = notepadData.leftHandOffScreenLocalPos;
         notepadData.handFlipPageClip = atlasRenderer.atlas.clipDict[(int)NotepadMotion.FlipHand];
 
         SimpleSprite holdingPencilSprite = atlasRenderer.atlas.motionSprites[HOLDING_PENCIL_SPRITE_INDEX].sprite;
         float worldPivotOffsetY = holdingPencilSprite.worldSize.y * (1 - holdingPencilSprite.uvPivot.y);
 
-        notepadData.leftHandOffScreenLocalPos.y = camStats.bounds.extents.y - Notepad.ACTIVE_POS.y - camStats.bounds.size.y - worldPivotOffsetY;
-        notepadData.leftHandOffScreenLocalPos.x = -Notepad.ACTIVE_POS.x * 0.5f;
-        notepadData.leftHandOffScreenLocalPos.z = transform.localPosition.z;
+       // notepadData.leftHandOffScreenLocalPos.y = camStats.bounds.extents.y - Notepad.ACTIVE_POS.y - camStats.bounds.size.y - worldPivotOffsetY;
+       // notepadData.leftHandOffScreenLocalPos.x = -Notepad.ACTIVE_POS.x * 0.5f;
+       // notepadData.leftHandOffScreenLocalPos.z = transform.localPosition.z;
     }
     public void Reinit()
     {
-        targetLocalPos = notepadData.leftHandOffScreenLocalPos;
+        //targetLocalPos = notepadData.leftHandOffScreenLocalPos;
     }
     public void SetLeftHandOffScreen()
     {

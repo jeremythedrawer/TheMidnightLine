@@ -23,8 +23,8 @@ public class TripData : ScriptableObject
     
     public TraitorProfile[] traitorProfiles;
 
-    public int ticketsCheckedSinceLastStation;
-    public int ticketsCheckedTotal;
+    public int passengersTalkToSinceLastStation;
+    public int passengersTalkToTotal;
     public int traitorsSpawned;
 
     public UnlockType curUnlocks;

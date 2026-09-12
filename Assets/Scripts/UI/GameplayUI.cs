@@ -72,19 +72,18 @@ public class GameplayUI : MonoBehaviour
         TrainController.OnStationLeave += SetTraitorIcons;
         TrainController.OnFinishTripScene += HideKeyIcon;
 
-        SpyBrain.OnTicketCheckHoverDisabled += HideKeyIcon;
-        SpyBrain.OnTicketCheckHoverEnabledFirstTime += ShowEIcon;
+        SpyBrain.OnHoverTalkDisabled += HideKeyIcon;
+        SpyBrain.OnHoverTalkFirstTime += ShowEIcon;
         SpyBrain.OnAtSlideDoors += ShowSpaceIcon;
         SpyBrain.OnWalkPastSlideDoors += HideKeyIcon;
         SpyBrain.OnEnteredTrain += AppearRailMap;
         SpyBrain.OnExitTrain += DissappearRailMap;
         SpyBrain.OnEnteredTrain += DisappearKeyIcon;
-        SpyBrain.OnTicketInspect += DisappearKeyIcon;
-        SpyBrain.OnTicketInspect += MoveRailMap;
+        SpyBrain.OnTalkToPassenger += DisappearKeyIcon;
+        SpyBrain.OnTalkToPassenger += MoveRailMap;
         SpyBrain.OnOpenNotepad += SetToNotepadState;
         SpyBrain.OnCloseNotepad += SetToNoneState;
-        SpyBrain.OnTicketInspect += SetToTicketState;
-        SpyBrain.OnFinishTicketInspect += SetToNoneState;
+        SpyBrain.OnTalkToPassenger += SetToTicketState;
         SpyBrain.OnUncheckCarriageMap += SetToNoneState;
         SpyBrain.OnCheckCarriageMap += SetToCarriageMapState;
 
@@ -96,18 +95,17 @@ public class GameplayUI : MonoBehaviour
         TrainController.OnStationLeave -= SetTraitorIcons;
         TrainController.OnFinishTripScene -= HideKeyIcon;
 
-        SpyBrain.OnTicketCheckHoverDisabled -= HideKeyIcon;
+        SpyBrain.OnHoverTalkDisabled -= HideKeyIcon;
         SpyBrain.OnAtSlideDoors -= ShowSpaceIcon;
-        SpyBrain.OnTicketCheckHoverEnabledFirstTime -= ShowEIcon;
+        SpyBrain.OnHoverTalkFirstTime -= ShowEIcon;
         SpyBrain.OnWalkPastSlideDoors -= HideKeyIcon;
         SpyBrain.OnEnteredTrain -= DisappearKeyIcon;
         SpyBrain.OnExitTrain -= DissappearRailMap;
-        SpyBrain.OnTicketInspect -= DisappearKeyIcon;
-        SpyBrain.OnTicketInspect -= MoveRailMap;
+        SpyBrain.OnTalkToPassenger -= DisappearKeyIcon;
+        SpyBrain.OnTalkToPassenger -= MoveRailMap;
         SpyBrain.OnOpenNotepad -= SetToNotepadState;
         SpyBrain.OnCloseNotepad -= SetToNoneState;
-        SpyBrain.OnTicketInspect -= SetToTicketState;
-        SpyBrain.OnFinishTicketInspect -= SetToNoneState;
+        SpyBrain.OnTalkToPassenger -= SetToTicketState;
         SpyBrain.OnUncheckCarriageMap -= SetToNoneState;
         SpyBrain.OnCheckCarriageMap -= SetToCarriageMapState;
         SpyBrain.OnEnteredTrain += AppearRailMap;
@@ -153,7 +151,6 @@ public class GameplayUI : MonoBehaviour
             case UIState.Notepad:
             {
                 notepad.EnterNotepad();
-                naturalMovePos = Notepad.ACTIVE_POS;
                 ctsNotepad?.Cancel();
             }
             break;
@@ -183,7 +180,6 @@ public class GameplayUI : MonoBehaviour
         {
             case UIState.Notepad:
             {
-                UpdateNaturalPos(Notepad.ACTIVE_POS, ref naturalMovePos);
                 notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
 
                 if ((notepad.transform.localPosition - naturalMovePos).sqrMagnitude < 0.05f) notepadData.subState |= Notepad.SubState.InUse;

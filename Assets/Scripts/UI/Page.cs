@@ -7,6 +7,8 @@ using static Notepad;
 using static Passenger;
 public class Page : MonoBehaviour
 {
+    public static event Action OnMouseUpExitButton;
+
     public const float CONTENTS_LOCAL_POS_Z = -0.1f;
     public const float FLIP_LOCAL_POS_Y = -1.656f;
     public const float PAGE_NUMBER_ICON_BUFFER_X = 0.05f;
@@ -14,18 +16,16 @@ public class Page : MonoBehaviour
     public const float SPACE_BUTTON_BUFFER = 0.05f;
     public const float COLOR_KEY_TEXT_POS_X = 0.137f;
 
-    public static AtlasClip paperClip;
-
     public PassengersData npcData;
     public SpyData spyData;
     public InputData inputData;
     public NotepadData notepadData;
     public Options options;
 
-    public AtlasRenderer paperRenderer;
-
     public AtlasTextRenderer[] textRenderers;
     public AtlasRenderer[] iconRenderers;
+    
+    public AtlasRenderer paperRenderer;
 
     public IconButton leftButton;
     public IconButton rightButton;
@@ -37,7 +37,6 @@ public class Page : MonoBehaviour
     public int pageIndex;
     public void Init(int pageIndexInput)
     {
-        paperClip = paperRenderer.atlas.clipDict[(int)NotepadMotion.FlipPage];
         pageIndex = pageIndexInput;
 
         InitPageNumberIcons();
@@ -58,14 +57,7 @@ public class Page : MonoBehaviour
         void MouseUpExitButton()
         {
             exitButton.MouseUp();
-            if (spyData.checkingNotepad)
-            {
-                spyData.checkingNotepad = false;
-            }
-            else
-            {
-                spyData.checkingNotepad = true;
-            }
+            OnMouseUpExitButton?.Invoke();
         }
 
         leftButton?.InitButton(MouseUpLeftButton);
@@ -77,7 +69,6 @@ public class Page : MonoBehaviour
         if (pageNumberIconButtons == null || pageNumberIconButtons.Length == 0)
         {
             pageNumberIconButtons = new IconButton[notepadData.pageCount];
-            pageIndex = notepadData.pageCount;
 
             Bounds pageNumberIconBounds = notepadData.pageNumberIconButtonPrefab.atlasRenderer.bounds;
             float colSize = pageNumberIconBounds.size.x + PAGE_NUMBER_ICON_BUFFER_X;
@@ -118,16 +109,53 @@ public class Page : MonoBehaviour
         rightButton?.UpdateButton();
         leftButton?.UpdateButton();
     }
-    public void PlayPaperClip()
-    {
-        paperRenderer.PlayClipOneShot(paperClip);
-    }
-    public void PlayPaperClipReverse()
-    {
-        paperRenderer.PlayClipOneShotReverse(paperClip);
-    }
     public void SetPageDepth(float localDepth)
     {
         transform.localPosition = new Vector3(transform.localPosition.x, transform.localPosition.y, localDepth);
+    }
+    public void SetInvertNotepadMaskBit(bool invert)
+    {
+        if (invert)
+        {
+            for (int i = 0; i < textRenderers.Length; i++)
+            {
+                textRenderers[i].customBit |= (int)ColorBits.InvertNotepadFlip;
+            }
+
+            for (int i = 0; i < iconRenderers.Length; i++)
+            {
+                iconRenderers[i].customBit |= (int)ColorBits.InvertNotepadFlip;
+            }
+            paperRenderer.customBit |= (int)ColorBits.InvertNotepadFlip;
+            if (leftButton) leftButton.atlasRenderer.customBit |= (int)ColorBits.InvertNotepadFlip;
+            if (rightButton) rightButton.atlasRenderer.customBit |= (int)ColorBits.InvertNotepadFlip;
+            exitButton.atlasRenderer.customBit |= (int)ColorBits.InvertNotepadFlip;
+
+            for (int i = 0; i < pageNumberIconButtons.Length; i++)
+            {
+                pageNumberIconButtons[i].atlasRenderer.customBit |= (int)ColorBits.InvertNotepadFlip;
+            }
+        }
+        else
+        {
+            for (int i = 0; i < textRenderers.Length; i++)
+            {
+                textRenderers[i].customBit &= ~(int)ColorBits.InvertNotepadFlip;
+            }
+
+            for (int i = 0; i < iconRenderers.Length; i++)
+            {
+                iconRenderers[i].customBit &= ~(int)ColorBits.InvertNotepadFlip;
+            }
+            paperRenderer.customBit &= ~(int)ColorBits.InvertNotepadFlip;
+            if (leftButton) leftButton.atlasRenderer.customBit &= ~(int)ColorBits.InvertNotepadFlip;
+            if (rightButton) rightButton.atlasRenderer.customBit &= ~(int)ColorBits.InvertNotepadFlip;
+            exitButton.atlasRenderer.customBit &= ~(int)ColorBits.InvertNotepadFlip;
+
+            for (int i = 0; i < pageNumberIconButtons.Length; i++)
+            {
+                pageNumberIconButtons[i].atlasRenderer.customBit &= ~(int)ColorBits.InvertNotepadFlip;
+            }
+        }
     }
 }

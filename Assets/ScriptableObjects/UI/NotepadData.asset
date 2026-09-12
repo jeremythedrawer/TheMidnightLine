@@ -12,35 +12,33 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 968269b1d6895ab46b4078836056d640, type: 3}
   m_Name: NotepadData
   m_EditorClassIdentifier: Assembly-CSharp::NotepadData
+  notepadPrefab: {fileID: 2612292025983585526, guid: 8010e88a71a866340a86afe42e97187b, type: 3}
   pageNumberIconButtonPrefab: {fileID: -6395749938034069037, guid: c804325f81d94484c949bfef646d1f6d, type: 3}
   frontPagePrefab: {fileID: 8233736125140590318, guid: 0ff1b1a1a1ff6d04a913c0215efe89f1, type: 3}
   profilePagePrefab: {fileID: 8318585845017434699, guid: 5e1606afbb4833b4c9fb675ce0af2b56, type: 3}
   pageFlipRT: {fileID: 8400000, guid: ac48f6333cf7b0f469e5654b263b7850, type: 2}
   pageFlipCompute: {fileID: 7200000, guid: 2413e0d134bf1904eb9ad47ede6d7b2b, type: 3}
   handFlipPageClip:
-    clipName: 
-    clipType: 0
-    motionIndex: 0
+    clipName: FlipHand
+    clipType: 2
+    motionIndex: 1
     keyframeStartIndex: 0
-    keyframeEndIndex: 0
-    time: 0
-  leftHandOffScreenLocalPos: {x: -1.7899933, y: -3.7222223, z: 1}
-  inactiveLocalPos: {x: 4.576101, y: -1.3877778, z: 5}
-  hoverLocalPos: {x: 4.576101, y: -1.1433333, z: 5}
-  offSceenLocalPos: {x: 4.576101, y: -2.1677778, z: 5}
+    keyframeEndIndex: 11
+    audioClips: []
+  activeLocalPos: {x: 4.251098, y: 1.1989136, z: 20}
+  inactiveLocalPos: {x: 4.4669895, y: -1.3877792, z: 20}
+  hoverLocalPos: {x: 4.4669895, y: -1.1433334, z: 20}
+  offSceenLocalPos: {x: -4.1983438, y: -2.1677778, z: 5}
   leftHandFlipPos: {x: 0.06, y: -0.088}
-  curState: 1
-  prevState: 2
-  subState: 192
+  curState: 2
+  prevState: 1
+  subState: 0
   leftHandDepthFront: 1
   activePageDepth: 3
   leftHandDepthBack: 8
   selectedPatternIndex: 0
   pageCount: 0
-  pageFlipThreadGroupX: 0
-  pageFlipThreadGroupY: 0
+  pageFlipThreadGroupX: 7
+  pageFlipThreadGroupY: 10
   pageFlipKernel: 0
   collected: 0
-  playerHasUsedExitKey: 0
-  playerHasUsedLeftKey: 0
-  playerHasUsedRightKey: 0

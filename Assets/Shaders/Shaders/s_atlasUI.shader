@@ -11,8 +11,6 @@ Shader "Custom/s_atlasUI"
             HLSLPROGRAM
             #include "Packages/com.unity.render-pipelines.universal/ShaderLibrary/Core.hlsl"
             #include "Assets/Shaders/HLSL/AtlasSprites.hlsl"
-            #include "Assets/Shaders/HLSL/ColorSpace.hlsl"
-            #include "Assets/Shaders/HLSL/DitherShaderFunctions.hlsl"
             #pragma vertex vert
             #pragma fragment frag
 
@@ -80,59 +78,14 @@ Shader "Custom/s_atlasUI"
 
             half4 frag(Varyings i) : SV_Target
             {
+                float2 uv = SpriteUV(i.uv, i.uvSizeAndPos, i.scaleAndFlip);
+                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, uv);
 
-                //return half4(i.id.xxx / 9 ,1 );
-                float2 uvSize = i.uvSizeAndPos.xy;
-                float2 uvPos = i.uvSizeAndPos.zw;
-                
-                float2 scale = i.scaleAndFlip.xy;
-                float2 flip = i.scaleAndFlip.zw;
+                half4 finalColor = UIColor(i.customBit, tex, i.custom, _BlackColor, _WhiteColor, _MeridiaColor, i.positionHCS.y);
 
-                i.uv *= scale;
-                i.uv = frac(i.uv);
-                i.uv = (i.uv - 0.5) * flip + 0.5;
-                i.uv *= uvSize;
-                i.uv += uvPos;
+                clip(finalColor.a - 0.001);
 
-                int bitMask = i.customBit;
-                int meridiaColorMask = saturate(bitMask & MERIDIA_COLOR_BIT);
-                float3 meridiaColor = meridiaColorMask * _MeridiaColor;
-                float3 blackColor = (1 - meridiaColorMask) * _BlackColor;
-                blackColor += meridiaColor;
-
-                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-                half alpha = BayerX8((tex.a * i.custom.a), i.positionHCS.y); 
-                clip(alpha - 0.001);
-
-                int redMask = saturate(bitMask & RED_BIT);
-                int greenMask = saturate(bitMask & GREEN_BIT);
-                int blueMask = saturate(bitMask & BLUE_BIT);
-
-                half whiteTex = tex.r * tex.g * tex.b;
-
-                half redTex = tex.r * redMask;
-                half greenTex = tex.g * greenMask;
-                half blueTex = tex.b * blueMask;
-
-
-                half fullMask = saturate(whiteTex + redTex + greenTex + blueTex);
-
-                half invertTex = 1 - fullMask;
-
-                int invertMask = saturate(bitMask & INVERT_BIT);
-                half t = lerp(fullMask, invertTex, invertMask);
-
-                float tCol = round(LinearLightness(i.custom.rgb));
-
-                half useCol = saturate(ceil(i.custom.r + i.custom.g + i.custom.b));
-
-                half3 darkCol = lerp(i.custom.rgb, blackColor, tCol);
-                half3 lightCol = lerp(_WhiteColor, i.custom.rgb, tCol);
-                darkCol = lerp(blackColor, darkCol, useCol);
-                lightCol = lerp(_WhiteColor, lightCol, useCol);                
-                half3 finalColor = lerp(darkCol, lightCol, t);
-
-                return half4 (finalColor, 1);
+                return finalColor;
             }
             ENDHLSL
         }
