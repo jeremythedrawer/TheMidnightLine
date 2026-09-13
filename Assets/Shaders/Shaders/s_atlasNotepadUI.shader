@@ -90,7 +90,6 @@ Shader "Custom/s_atlasNotepadUI"
                 int invertMask = saturate(i.customBit & INVERT_NOTEPAD_BIT);
 
                 half pageFlipMask = lerp(pageFlipTex.a, 1 - pageFlipTex.a, invertMask);
-                //return half4(pageFlipMask.xxx, 1);
                 half alpha = finalColor.a * pageFlipMask;
 
 

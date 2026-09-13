@@ -91,8 +91,9 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 7910079628831785843}
-  - component: {fileID: 8546514872825154048}
+  - component: {fileID: 578391454714965005}
   - component: {fileID: 1947835105430571282}
+  - component: {fileID: 8546514872825154048}
   m_Layer: 16
   m_Name: SlideDoors_interior
   m_TagString: Untagged
@@ -117,40 +118,103 @@ Transform:
   - {fileID: 6748688604042277783}
   m_Father: {fileID: 0}
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &8546514872825154048
-MonoBehaviour:
+--- !u!82 &578391454714965005
+AudioSource:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 4773278680072365645}
   m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 874bf1172ab6e7047bd479128420855f, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  trainStats: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
-  trainSettings: {fileID: 11400000, guid: bfa9f65f6c0e2674f8246ed16f2fb651, type: 2}
-  rightSlideDoorRenderer: {fileID: 210511920772162634}
-  leftSlideDoorRenderer: {fileID: 4786430230042699320}
-  boxCollider: {fileID: 1947835105430571282}
-  curState: 0
-  rightSlideDoor_transform: {fileID: 6748688604042277783}
-  leftSlideDoor_transform: {fileID: 5406099015200027308}
-  carriage: {fileID: 0}
-  rightSlideDoorPos: {x: 0, y: 0, z: 0}
-  leftSlideDoorPos: {x: 0, y: 0, z: 0}
-  activeMoveAmount: 0
-  unlockMoveAmount: 0
-  moveTimer: 0
-  boardTrainQueue:
-    npcs: []
-    npcsCount: 0
-    timer: 0
-  disembarkTrainQueue:
-    npcs: []
-    npcsCount: 0
-    timer: 0
+  serializedVersion: 4
+  OutputAudioMixerGroup: {fileID: 0}
+  m_audioClip: {fileID: 0}
+  m_Resource: {fileID: 0}
+  m_PlayOnAwake: 0
+  m_Volume: 1
+  m_Pitch: 1
+  Loop: 0
+  Mute: 0
+  Spatialize: 0
+  SpatializePostEffects: 0
+  Priority: 128
+  DopplerLevel: 1
+  MinDistance: 1.1226454
+  MaxDistance: 5.2129364
+  Pan2D: 0
+  rolloffMode: 0
+  BypassEffects: 0
+  BypassListenerEffects: 0
+  BypassReverbZones: 0
+  rolloffCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    - serializedVersion: 3
+      time: 1
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  panLevelCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  spreadCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 0
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
+  reverbZoneMixCustomCurve:
+    serializedVersion: 2
+    m_Curve:
+    - serializedVersion: 3
+      time: 0
+      value: 1
+      inSlope: 0
+      outSlope: 0
+      tangentMode: 0
+      weightedMode: 0
+      inWeight: 0.33333334
+      outWeight: 0.33333334
+    m_PreInfinity: 2
+    m_PostInfinity: 2
+    m_RotationOrder: 4
 --- !u!61 &1947835105430571282
 BoxCollider2D:
   m_ObjectHideFlags: 0
@@ -197,6 +261,41 @@ BoxCollider2D:
   m_AutoTiling: 0
   m_Size: {x: 0.5591583, y: 0.9827286}
   m_EdgeRadius: 0
+--- !u!114 &8546514872825154048
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4773278680072365645}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 874bf1172ab6e7047bd479128420855f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  trainData: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
+  audioData: {fileID: 11400000, guid: 366fa884df96e77449150a5fdde208bd, type: 2}
+  rightSlideDoorRenderer: {fileID: 210511920772162634}
+  leftSlideDoorRenderer: {fileID: 4786430230042699320}
+  boxCollider: {fileID: 1947835105430571282}
+  audioSource: {fileID: 578391454714965005}
+  curState: 0
+  rightSlideDoor_transform: {fileID: 6748688604042277783}
+  leftSlideDoor_transform: {fileID: 5406099015200027308}
+  carriage: {fileID: 0}
+  rightSlideDoorPos: {x: 0, y: 0, z: 0}
+  leftSlideDoorPos: {x: 0, y: 0, z: 0}
+  activeMoveAmount: 0
+  unlockMoveAmount: 0
+  moveTimer: 0
+  boardTrainQueue:
+    npcs: []
+    npcsCount: 0
+    timer: 0
+  disembarkTrainQueue:
+    npcs: []
+    npcsCount: 0
+    timer: 0
 --- !u!1 &7582128904083616402
 GameObject:
   m_ObjectHideFlags: 0

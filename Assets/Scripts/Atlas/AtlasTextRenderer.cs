@@ -182,7 +182,7 @@ public class AtlasTextRenderer : MonoBehaviour
         {
             case AtlasTextAlignmentType.Left:
             {
-                borderLocalPos.x = textBoxData.size.x * 0.5f;
+                borderLocalPos.x = bounds.extents.x;
             }
             break;
 
@@ -194,7 +194,7 @@ public class AtlasTextRenderer : MonoBehaviour
 
             case AtlasTextAlignmentType.Right:
             {
-                borderLocalPos.x = -textBoxData.size.x * 0.5f;
+                borderLocalPos.x = -bounds.extents.x;
             }
             break;
         }
@@ -446,7 +446,7 @@ public class AtlasTextRenderer : MonoBehaviour
         {
             case AtlasTextAlignmentType.Left:
             {
-                boundsOffset = new Vector3(textBoxData.size.x * 0.5f, -textBoxData.size.y * 0.5f, 0f);
+                boundsOffset = new Vector3(bounds.extents.x, -bounds.extents.y, 0f);
             }
             break;
 
@@ -458,7 +458,7 @@ public class AtlasTextRenderer : MonoBehaviour
 
             case AtlasTextAlignmentType.Right:
             {
-                boundsOffset = new Vector3(-textBoxData.size.x * 0.5f, -textBoxData.size.y * 0.5f, 0f);
+                boundsOffset = new Vector3(-bounds.extents.x, -textBoxData.size.y * 0.5f, 0f);
             }
             break;
         }

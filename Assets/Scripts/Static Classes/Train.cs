@@ -5,8 +5,9 @@ public static class Train
 {
     public const float KM_TO_MPS = 0.27777777778f;
     public const float CLOSE_TO_STOP_VELOCITY = 0.05f;
-    public enum TrainStates
+    public enum TrainState
     { 
+        None,
         Accelerating,
         Decelerating,
         Stopped,
@@ -50,6 +51,24 @@ public static class Train
     {
         float maxDelta = accelSpeed * Time.deltaTime;
         return Mathf.MoveTowards(curVelocity, targetVelocity, maxDelta);
+    }
+    public static float GetBreakTime(float curVelocity, float decelSpeed, float targetWorldPos)
+    {
+        float distToTarget = Mathf.Abs(targetWorldPos);
+        float brakeDistance = GetBrakeDistance(curVelocity, decelSpeed, 0);
+
+        float brakeTime = curVelocity /decelSpeed;
+        
+        if (distToTarget <= brakeDistance)
+        {
+            return brakeTime;
+        }
+
+        float cruiseDist = distToTarget - brakeDistance;
+        float cruiseTime = cruiseDist / curVelocity;
+
+
+        return cruiseTime + brakeTime;
     }
 
     public static float DecreaseVelocityToTarget(float curVelocity, float targetVelocity, float initVelocity, float decelSpeed, float targetWorldPos)

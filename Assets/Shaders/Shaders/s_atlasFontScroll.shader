@@ -53,7 +53,7 @@ Shader "Custom/s_atlasFontScroll"
                 float scrollSpeed = spriteData.custom.z;
                 float scrollingBackwards = spriteData.custom.w;
 
-                float buffer = 0.05;
+                float buffer = 0.1;
                 float repeatWidth = max(scrollBoundWidth, textBoundWidth);
                 
                 float time = _Time.y * scrollSpeed;

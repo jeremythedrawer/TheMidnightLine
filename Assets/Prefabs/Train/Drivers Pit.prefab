@@ -12,7 +12,7 @@ GameObject:
   - component: {fileID: 4236172537894789572}
   - component: {fileID: 2622812054174737368}
   - component: {fileID: 3940102715005726435}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Drivers Pit
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -68,7 +68,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 0.13888931, y: 0}
+  m_Offset: {x: 0.4888916, y: 0.82222223}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -78,7 +78,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 0.2777778, y: 1.1277778}
+  m_Size: {x: 0.9777778, y: 1.6444445}
   m_EdgeRadius: 0
 --- !u!114 &2622812054174737368
 MonoBehaviour:
@@ -96,29 +96,28 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: e1edd17d92e032046aa612e8800a7509, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: 6
   atlas: {fileID: 11400000, guid: fb673222491d6fc408a687b2b5c457e7, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 4236172537894789572}
-  spriteIndex: 14
+  spriteIndex: 15
   flipX: 0
   flipY: 0
   width: 1
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.024414062, y: 0.099121094, z: 0.27246094, w: 0.43017578}
-    uvPivot: {x: 0, y: 0.5}
-    worldSize: {x: 0.2777778, y: 1.1277778, z: 1}
-    index: 14
+    uvSizeAndPos: {x: 0.0859375, y: 0.14453125, z: 0.1508789, w: 0.38916016}
+    uvPivot: {x: 0, y: 0}
+    worldSize: {x: 0.9777778, y: 1.6444445, z: 1}
+    index: 15
   bounds:
-    m_Center: {x: 40.428806, y: 0.4600001, z: 6}
-    m_Extent: {x: 0.1388889, y: 0.5638889, z: 0.1}
-  worldPivotAndSize: {x: -0, y: -0.5638889, z: 0.2777778, w: 1.1277778}
-  uvSizeAndPosition: {x: 0.024414062, y: 0.099121094, z: 0.27246094, w: 0.43017578}
+    m_Center: {x: 40.778805, y: 1.2822223, z: 6}
+    m_Extent: {x: 0.4888889, y: 0.82222223, z: 0.1}
+  worldPivotAndSize: {x: -0, y: -0, z: 0.9777778, w: 1.6444445}
+  uvSizeAndPosition: {x: 0.0859375, y: 0.14453125, z: 0.1508789, w: 0.38916016}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 0.1388889, y: 0, z: 0}
+  customBit: 0
+  boundsOffset: {x: 0.4888889, y: 0.82222223, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -127,8 +126,8 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 14
-  prevSpriteIndexFlipV: 14
+  prevSpriteIndexFlipH: 15
+  prevSpriteIndexFlipV: 15
   isAnimating: 0
   quadCount: 0
 --- !u!114 &3940102715005726435

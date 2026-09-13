@@ -29,7 +29,7 @@ public class ProfilePage : MonoBehaviour
         coveredMugShotRenderer.custom.x = 0;
         coveredMugShotRenderer.custom.y = 0;
         coveredMugShotRenderer.custom.z = 0;
-        coveredMugShotRenderer.custom.w = 0;
+        coveredMugShotRenderer.custom.w = 1;
         coveredMugShotRenderer.customBit &= ~(int)ColorBits.Diagonal;
 
         uncoveredMugShotRenderer.UpdateSpriteInputs(uncoveredMugShotRenderer.atlas.simpleSprites[uncoveredMugShotIndex]);

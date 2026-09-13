@@ -4,6 +4,10 @@ using System.Collections.Generic;
 using System.Threading;
 using UnityEngine;
 
+#if UNITY_EDITOR
+using UnityEditor;
+#endif
+
 using static Passenger;
 using static Train;
 
@@ -331,3 +335,4 @@ public class Carriage : MonoBehaviour
         }
     }
 }
+

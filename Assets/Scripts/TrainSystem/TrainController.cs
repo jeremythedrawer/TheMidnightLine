@@ -36,10 +36,12 @@ public class TrainController : MonoBehaviour
     public Options options;
     public SpawnData spawnData;
     public SpyData spyStats;
-    public CameraData camStats;
+    public CameraData camData;
+    public AudioData audioData;
 
     public AtlasRenderer backSprite;
-    public AtlasRenderer driversPit; 
+    public AtlasRenderer driversPit;
+    public AudioSource audioSource;
 
     [Header("Generated")]
     public Carriage[] carriages;
@@ -50,16 +52,19 @@ public class TrainController : MonoBehaviour
 
     public CancellationTokenSource trainCTS;
     
-    public TrainStates curState;
+    public TrainState curState;
 
     public float metersTravelled;
     public float metersTravelledOnBezier;
     public float renderTextureScale;
     public float offTrainClock;
+    public float decelClock;
 
     public bool skipMoveToStart;
     public bool closingSlideDoors;
     public bool atStartPosition;
+    public bool started;
+    public bool isPlayingDecelSound;
     private void OnValidate()
     {
         SetBounds();
@@ -67,10 +72,12 @@ public class TrainController : MonoBehaviour
     private void OnEnable()
     {
         SpyBrain.OnTalkToPassenger += UpdateTicketInspectParams;
+        HenchmanBrain.OnGiveNotepad += MoveTrainToStartPosition;
     }
     private void OnDisable()
     {
         SpyBrain.OnTalkToPassenger -= UpdateTicketInspectParams;
+        HenchmanBrain.OnGiveNotepad -= MoveTrainToStartPosition;
         
         trainCTS?.Cancel();
         trainCTS?.Dispose();
@@ -84,8 +91,11 @@ public class TrainController : MonoBehaviour
     }
     private void Update()
     {
-        ChooseState();
-        UpdateState();
+        if (started)
+        {
+            ChooseState();
+            UpdateState();
+        }
 #if UNITY_EDITOR
         nextStation = NextStationInstance;
 #endif
@@ -124,22 +134,22 @@ public class TrainController : MonoBehaviour
     {
         if (trainData.curVelocity.x < CLOSE_TO_STOP_VELOCITY && trainData.targetVelocity.x == 0 && atStartPosition)
         {
-            SetState(TrainStates.Stopped);
+            SetState(TrainState.Stopped);
         }
         else if ((trainData.curVelocity.x - trainData.targetVelocity.x) > VELOCITY_BUFFER)
         {
-            SetState(TrainStates.Decelerating);
+            SetState(TrainState.Decelerating);
         }
         else if ((trainData.curVelocity.x - trainData.targetVelocity.x) < -VELOCITY_BUFFER)
         {
-            SetState(TrainStates.Accelerating);
+            SetState(TrainState.Accelerating);
         }
         else if (trainData.targetVelocity.x != 0)
         {
-            SetState(TrainStates.AtMaxSpeed);
+            SetState(TrainState.AtMaxSpeed);
         }
     }
-    private void SetState(TrainStates newState)
+    private void SetState(TrainState newState)
     {
         if (curState == newState) return;
         ExitState();
@@ -150,29 +160,38 @@ public class TrainController : MonoBehaviour
     {
         switch (curState)
         { 
-            case TrainStates.Accelerating:
+            case TrainState.Accelerating:
             {
                 for (int i = 0; i < carriages.Length; i++)
                 {
                     carriages[i].SetSignToNextStation(options.curTrip.stationAhead.stationName);
+
+                    audioSource.volume = audioData.soundEffectsVolume;
+                    if (camData.curLocationState != LocationState.Carriage && camData.curLocationState != LocationState.Gangway)
+                    {
+                        audioSource.PlayOneShot(audioData.trainLeavingOutside);
+                    }
                 }
             }
             break;
 
-            case TrainStates.Decelerating:
+            case TrainState.Decelerating:
             {
                 trainData.prevPeakVelocity = trainData.curVelocity.x;
                 OnTrainDeceleration?.Invoke();
+
+                decelClock = GetBreakTime(trainData.curVelocity.x, trainData.deceleration, trainData.targetPosition);
+                isPlayingDecelSound = false;
             }
             break;
 
-            case TrainStates.AtMaxSpeed:
+            case TrainState.AtMaxSpeed:
             {
 
             }
             break;
 
-            case TrainStates.Stopped:
+            case TrainState.Stopped:
             {
                 trainData.targetNPCsToBoard = options.curTrip.stationAhead.bystanderSpawnCount + options.curTrip.stationAhead.traitorSpawnCount + options.curTrip.stationAhead.accompliceSpawnCount;
                 trainData.curVelocity = Vector2.zero;
@@ -202,13 +221,13 @@ public class TrainController : MonoBehaviour
     {
         switch (curState)
         {
-            case TrainStates.Accelerating:
+            case TrainState.Accelerating:
             {
                 trainData.curVelocity.x = ChangeVelocity(trainData.curVelocity.x, trainData.targetVelocity.x, trainData.acceleration);
                 HandleTrainMeters();
             }
             break;
-            case TrainStates.Decelerating:
+            case TrainState.Decelerating:
             {
                 if (atStartPosition)
                 {
@@ -223,10 +242,21 @@ public class TrainController : MonoBehaviour
                         trainData.curVelocity.x = ChangeVelocity(trainData.curVelocity.x, trainData.targetVelocity.x, trainData.deceleration);
                     }
                 }
+
+                if (!isPlayingDecelSound)
+                {
+                    decelClock -= Time.deltaTime;
+                    if (decelClock < audioData.trainArrivingOutside.length)
+                    {
+                        audioSource.volume = audioData.soundEffectsVolume;
+                        audioSource.PlayOneShot(audioData.trainArrivingOutside);
+                        isPlayingDecelSound = true;
+                    }
+                }
                 HandleTrainMeters();
             }
             break;
-            case TrainStates.AtMaxSpeed:
+            case TrainState.AtMaxSpeed:
             {
                 if (options.curTrip.passengersTalkToSinceLastStation == options.curTrip.stationAhead.ticketsToCheckBeforeSpawn)
                 {
@@ -237,9 +267,9 @@ public class TrainController : MonoBehaviour
                 HandleTrainMeters();
             }
             break;
-            case TrainStates.Stopped:
+            case TrainState.Stopped:
             {
-                switch (camStats.curLocationState)
+                switch (camData.curLocationState)
                 {
                     case LocationState.Carriage:
                     case LocationState.Gangway:
@@ -304,25 +334,25 @@ public class TrainController : MonoBehaviour
     {
         switch (curState)
         {
-            case TrainStates.Accelerating:
+            case TrainState.Accelerating:
             {
 
             }
             break;
 
-            case TrainStates.Decelerating:
+            case TrainState.Decelerating:
             {
 
             }
             break;
 
-            case TrainStates.AtMaxSpeed:
+            case TrainState.AtMaxSpeed:
             {
 
             }
             break;
 
-            case TrainStates.Stopped:
+            case TrainState.Stopped:
             {
                 trainData.totalNPCsBoarded = 0;
                 trainData.distToSpawnNextStation = trainData.trainToMaxSpawnDist - options.curTrip.stationAhead.station_prefab.platformRenderer.transform.localPosition.x;
@@ -472,6 +502,13 @@ public class TrainController : MonoBehaviour
         OnTrainAtStartPosition?.Invoke();
         atStartPosition = true;
     }
+    private void MoveTrainToStartPosition()
+    {
+        trainCTS?.Cancel();
+        trainCTS = new CancellationTokenSource();
+        started = true;
+        MovingTrainToStartPosition().Forget();
+    }
     private async UniTask MoveOnBezier()
     {
         while(metersTravelledOnBezier < trainData.targetElevatePos.x)
@@ -480,14 +517,21 @@ public class TrainController : MonoBehaviour
             await UniTask.Yield();
         }
     }
-    private async UniTask MoveTrainToStartPosition()
+    private async UniTask MovingTrainToStartPosition()
     {
-        while (trainData.curVelocity.x > 0)
+        try
         {
-            trainData.targetPosition += trainData.curVelocity.x * Time.deltaTime;
-            trainData.curVelocity.x = DecreaseVelocityToTarget(trainData.curVelocity.x, trainData.targetVelocity.x, trainData.prevPeakVelocity, trainData.deceleration, trainData.targetPosition);
-            transform.position = new Vector3(trainData.targetPosition, transform.position.y, transform.position.z);
-            await UniTask.Yield(trainCTS.Token);
+            while (trainData.curVelocity.x > 0)
+            {
+                trainData.targetPosition += trainData.curVelocity.x * Time.deltaTime;
+                trainData.curVelocity.x = DecreaseVelocityToTarget(trainData.curVelocity.x, trainData.targetVelocity.x, trainData.prevPeakVelocity, trainData.deceleration, trainData.targetPosition);
+                transform.position = new Vector3(trainData.targetPosition, transform.position.y, transform.position.z);
+                await UniTask.Yield(trainCTS.Token);
+            }
+        }
+        catch (OperationCanceledException)
+        {
+
         }
         InitAtStartPosition();
     }

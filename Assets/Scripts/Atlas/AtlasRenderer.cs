@@ -636,6 +636,8 @@ public class AtlasRenderer : MonoBehaviour
 public class AtlasRendererEditor : Editor
 {
     BoxBoundsHandle boundsHandle = new BoxBoundsHandle();
+
+    ColorBits colorBits;
     private void OnSceneGUI()
     {
         AtlasRenderer rend = (AtlasRenderer)target;
@@ -698,6 +700,24 @@ public class AtlasRendererEditor : Editor
 
         }
 
+    }
+
+    public override void OnInspectorGUI()
+    {
+        base.OnInspectorGUI();
+        AtlasRenderer atlasRenderer = (AtlasRenderer)target;
+
+        EditorGUI.BeginChangeCheck();
+        GUIContent coloBitsContent = new GUIContent("Color Bits");
+        EditorGUILayout.LabelField("Editor");
+        colorBits = (ColorBits)EditorGUILayout.EnumFlagsField(coloBitsContent, (ColorBits)atlasRenderer.customBit);
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            Undo.RecordObject(atlasRenderer, "Change Color Bits");
+            atlasRenderer.customBit = (int)colorBits;
+            EditorUtility.SetDirty(atlasRenderer);
+        }
     }
 }
 #endif

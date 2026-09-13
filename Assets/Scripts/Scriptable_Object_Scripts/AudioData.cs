@@ -20,6 +20,13 @@ public class AudioData : ScriptableObject
     public AudioClip suitcaseClick;
     public AudioClip sweep;
     public AudioClip pageFlipUp;
+    public AudioClip slideDoorsReadyToOpen;
+    public AudioClip slideDoorsOpening;
+    public AudioClip slideDoorsClosing;
+    public AudioClip trainArrivingOutside;
+    public AudioClip trainArrivingInside;
+    public AudioClip trainLeavingOutside;
+    public AudioClip trainLeavingInside;
     public AudioClip[] footStepsConcrete;
     [Header("Voices")]
     public AudioClip[] wuh;

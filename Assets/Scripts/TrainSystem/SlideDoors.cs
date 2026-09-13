@@ -19,10 +19,13 @@ public class SlideDoors : MonoBehaviour
     }
 
     public TrainData trainData;
+    public AudioData audioData;
 
     public AtlasRenderer rightSlideDoorRenderer;
     public AtlasRenderer leftSlideDoorRenderer;
     public BoxCollider2D boxCollider;
+    public AudioSource audioSource;
+
 
     [Header("Generated")]
     public State curState;
@@ -153,6 +156,8 @@ public class SlideDoors : MonoBehaviour
         {
             case State.Unlocked:
             {
+                audioSource.volume = audioData.soundEffectsVolume;
+                audioSource.PlayOneShot(audioData.slideDoorsReadyToOpen);
             }
             break;
 
@@ -161,6 +166,9 @@ public class SlideDoors : MonoBehaviour
                 rightSlideDoorPos = rightSlideDoor_transform.localPosition;
                 leftSlideDoorPos = leftSlideDoor_transform.localPosition;
                 moveTimer = 0;
+
+                audioSource.volume = audioData.soundEffectsVolume;
+                audioSource.PlayOneShot(audioData.slideDoorsOpening);
             }
             break;
 
@@ -184,6 +192,9 @@ public class SlideDoors : MonoBehaviour
                 leftSlideDoorPos = leftSlideDoor_transform.localPosition;
                 moveTimer = trainData.doorMoveTime;
 
+
+                audioSource.volume = audioData.soundEffectsVolume;
+                audioSource.PlayOneShot(audioData.slideDoorsClosing);
             }
             break;
 
