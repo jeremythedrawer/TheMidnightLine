@@ -136,32 +136,32 @@ public class Carriage : MonoBehaviour
     }
     public void AddToSeatQueue(PassengerBrain npc)
     {
-        if (seatQueue.npcsCount == seatAmount)
+        if (seatQueue.passengerCount == seatAmount)
         {
             npc.FindStandingPosition();
             return;
         }
-        npc.seatQueueIndex = seatQueue.npcsCount;
-        seatQueue.npcs[seatQueue.npcsCount] = npc;
-        seatQueue.npcsCount++;
+        npc.seatQueueIndex = seatQueue.passengerCount;
+        seatQueue.npcs[seatQueue.passengerCount] = npc;
+        seatQueue.passengerCount++;
     }
     public void RemoveFromSeatQueue(PassengerBrain npc)
     {
-        if (seatQueue.npcsCount == 0) return;
-        int lastIndex = seatQueue.npcsCount - 1;
+        if (seatQueue.passengerCount == 0) return;
+        int lastIndex = seatQueue.passengerCount - 1;
 
         seatQueue.npcs[npc.seatQueueIndex] = seatQueue.npcs[lastIndex];
         seatQueue.npcs[lastIndex] = npc;
-        seatQueue.npcsCount--;
+        seatQueue.passengerCount--;
     }
     private void ProcessSeatQueue()
     {
-        if (seatQueue.npcsCount == 0) return;
+        if (seatQueue.passengerCount == 0) return;
 
         seatQueue.timer += Time.deltaTime;
         if (seatQueue.timer < QUEUE_TICK_RATE) return;
 
-        PassengerBrain npc = seatQueue.npcs[seatQueue.npcsCount - 1];
+        PassengerBrain npc = seatQueue.npcs[seatQueue.passengerCount - 1];
 
         if (npc.seatPosIndex != int.MaxValue) return;
 
@@ -193,7 +193,7 @@ public class Carriage : MonoBehaviour
             npc.AssignSeat(bestIndex);
         }
 
-        seatQueue.npcsCount--;
+        seatQueue.passengerCount--;
         seatQueue.timer = 0;
     }
     public void SetSmokerRoomData(float offset)

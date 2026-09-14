@@ -23,7 +23,7 @@ public class SpawnMaster : MonoBehaviour
     public SpyData spyData;
     public SpawnData spawnData;
     public CameraData camData;
-    public TrainData trainStats;
+    public TrainData trainData;
 
     [Header("Generated")]
 
@@ -83,18 +83,11 @@ public class SpawnMaster : MonoBehaviour
 
         TrainController train = Instantiate(options.curRegion.train);
         train.transform.position = new Vector3(-100, 0, 0);
-
-        HenchmanBrain henchman = Instantiate(options.henchmanPrefab);
-        Vector3 henchmanStartPos = new Vector3();
-        henchmanStartPos.x = -train.trainData.totalBounds.extents.x;
-        henchmanStartPos.y = 0;
-        henchmanStartPos.z = 0;
-        henchman.transform.position = henchmanStartPos;
     }
     private void InitBoundParameters()
     {
         spawnData.bounds.center = new Vector3(0, 0, FAR_CLIP * 0.5f);
-        spawnData.bounds.size = new Vector3(options.curTrip.stationsDataArray[0].station_prefab.platformRenderer.bounds.size.x + camData.bounds.size.x, trainStats.totalBounds.size.y + camData.bounds.size.y, FAR_CLIP);
+        spawnData.bounds.size = new Vector3(options.curTrip.stationsDataArray[0].station_prefab.platformRenderer.bounds.size.x + camData.bounds.size.x, trainData.totalBounds.size.y + camData.bounds.size.y, FAR_CLIP);
         transform.position = spawnData.bounds.min;
 
     }
@@ -107,7 +100,7 @@ public class SpawnMaster : MonoBehaviour
         }
         if (onTrain)
         {
-            computeData.compute.SetVector("_TrainVelocity", trainStats.curVelocity);
+            computeData.compute.SetVector("_TrainVelocity", trainData.curVelocity);
         }
         computeData.compute.SetFloat("_DeltaTime", Time.deltaTime);
         computeData.compute.Dispatch(computeData.updateKernel, computeData.groupSize, 1, 1);

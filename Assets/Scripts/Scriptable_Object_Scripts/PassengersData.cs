@@ -14,7 +14,8 @@ public class PassengersData : ScriptableObject
 {
     public UnityEngine.Object habitsFolder; 
     public Graffiti graffitiPrefab;
-    
+   
+
     [Header("Generated")]
     public HabitData[] habitDataArray;
     public Dictionary<Habits, string> habitStringDict;

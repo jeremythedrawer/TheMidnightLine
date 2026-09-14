@@ -84,6 +84,8 @@ public class CameraController : MonoBehaviour
         Shader.SetGlobalVector("_CameraSizeAndPos", new Vector4(camData.bounds.size.x, camData.bounds.size.y, camData.bounds.center.x, camData.bounds.center.y));
 
         camData.curLocationState = LocationState.Menu;
+
+        SetCarriageSDFCompute();
     }
     private void SetCarriageSDFCompute()
     {

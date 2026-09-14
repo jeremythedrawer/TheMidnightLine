@@ -28,6 +28,7 @@ public class AudioData : ScriptableObject
     public AudioClip trainLeavingOutside;
     public AudioClip trainLeavingInside;
     public AudioClip[] footStepsConcrete;
+    public AudioClip[] footStepTrain;
     [Header("Voices")]
     public AudioClip[] wuh;
 

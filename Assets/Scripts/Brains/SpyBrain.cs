@@ -89,7 +89,7 @@ public class SpyBrain : MonoBehaviour
         TrainController.OnStationArrival += SetInputsForTrainStop;
         TrainController.OnStationLeave += SetInputsForTrainStart;
 
-        atlasRenderer.onChangeKeyframe += OnChangeFootStepSound;
+        atlasRenderer.onChangeKeyframe += HandleKeyframeChange;
 
         Init();
     }
@@ -101,7 +101,7 @@ public class SpyBrain : MonoBehaviour
         TrainController.OnStationArrival -= SetInputsForTrainStop;
         TrainController.OnStationLeave -= SetInputsForTrainStart;
 
-        atlasRenderer.onChangeKeyframe -= OnChangeFootStepSound;
+        atlasRenderer.onChangeKeyframe -= HandleKeyframeChange;
     }
     private void Start()
     {
@@ -203,10 +203,7 @@ public class SpyBrain : MonoBehaviour
                         break;
                     }
                 }
-                if (inputData.interactKeyDown)
-                {
-                    OnInteract?.Invoke();
-                }
+                if (inputData.interactKeyDown) OnInteract?.Invoke();
 
             }
             break;
@@ -540,12 +537,21 @@ public class SpyBrain : MonoBehaviour
             break;
         }
     }
-    private void OnChangeFootStepSound(MotionSprite curSprite)
+    private void HandleKeyframeChange(MotionSprite curSprite)
     {
-        if (curSprite.audioIndex == 0)
+        switch (spyData.curState)
         {
-            int randFootstepIndex = UnityEngine.Random.Range(0, audioData.footStepsConcrete.Length);
-            curClip.audioClips[0] = audioData.footStepsConcrete[randFootstepIndex];
+            case SpyState.Walk:
+            {
+                if (curSprite.audioIndex == 0)
+                {
+                    AudioClip[] footStepSounds = camData.curLocationState == LocationState.Station ? audioData.footStepsConcrete : audioData.footStepTrain;
+
+                    int randFootstepIndex = UnityEngine.Random.Range(0, footStepSounds.Length);
+                    curClip.audioClips[0] = footStepSounds[randFootstepIndex];
+                }
+            }
+            break;
         }
     }
     private void CheckIfTicketCheckHover()

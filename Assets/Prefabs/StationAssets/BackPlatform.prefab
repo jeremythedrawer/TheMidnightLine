@@ -67,7 +67,7 @@ BoxCollider2D:
   m_UsedByEffector: 0
   m_CompositeOperation: 0
   m_CompositeOrder: 0
-  m_Offset: {x: 28.444443, y: -0.4861111}
+  m_Offset: {x: 26.919443, y: -0.4861111}
   m_SpriteTilingProperty:
     border: {x: 0, y: 0, z: 0, w: 0}
     pivot: {x: 0, y: 0}
@@ -77,7 +77,7 @@ BoxCollider2D:
     drawMode: 0
     adaptiveTiling: 0
   m_AutoTiling: 0
-  m_Size: {x: 56.88889, y: 0.9722222}
+  m_Size: {x: 53.838886, y: 0.9722222}
   m_EdgeRadius: 0
 --- !u!114 &5403357206962717204
 MonoBehaviour:
@@ -91,7 +91,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
-  rendererType: 0
+  rendererType: 2
   batchKey:
     texture: {fileID: 2800000, guid: 4bd321d6ab1cee54aa36e5e3e11116c9, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
@@ -109,17 +109,54 @@ MonoBehaviour:
     worldSize: {x: 5.688889, y: 0.9722222, z: 1}
     index: 2
   bounds:
-    m_Center: {x: -1.8755627, y: -0.4861111, z: 30.05}
-    m_Extent: {x: 28.444445, y: 0.4861111, z: 0.1}
+    m_Center: {x: 301.01944, y: -0.4861111, z: 23}
+    m_Extent: {x: 26.919443, y: 0.4861111, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0.9722222, z: 5.688889, w: 0.9722222}
   uvSizeAndPosition: {x: 1, y: 0.17089844, z: 0, w: 0.47753906}
   scaleAndFlip: {x: 10, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
-  boundsOffset: {x: 28.444445, y: -0.4861111, z: 0}
-  worldPivotsAndSizes: []
-  uvSizesAndPositions: []
-  scalesAndFlips: []
-  customs: []
+  customBit: 0
+  boundsOffset: {x: 26.919443, y: -0.4861111, z: 0}
+  worldPivotsAndSizes:
+  - {x: -0, y: -0.9722222, z: 0.16111112, w: 0}
+  - {x: 0.16111112, y: -0.9722222, z: 5.35, w: 0}
+  - {x: 53.66111, y: -0.9722222, z: 0.17777778, w: 0}
+  - {x: -0, y: -0.9722222, z: 0.16111112, w: 0.6388889}
+  - {x: 0.16111112, y: -0.9722222, z: 5.35, w: 0.6388889}
+  - {x: 53.66111, y: -0.9722222, z: 0.17777778, w: 0.6388889}
+  - {x: -0, y: -0.3333333, z: 0.16111112, w: 0.3333333}
+  - {x: 0.16111112, y: -0.3333333, z: 5.35, w: 0.3333333}
+  - {x: 53.66111, y: -0.3333333, z: 0.17777778, w: 0.3333333}
+  uvSizesAndPositions:
+  - {x: 0.028320312, y: 0, z: 0, w: 0.47753906}
+  - {x: 0.9404297, y: 0, z: 0.028320312, w: 0.47753906}
+  - {x: 0.03125, y: 0, z: 0.96875, w: 0.47753906}
+  - {x: 0.028320312, y: 0.11230469, z: 0, w: 0.47753906}
+  - {x: 0.9404297, y: 0.11230469, z: 0.028320312, w: 0.47753906}
+  - {x: 0.03125, y: 0.11230469, z: 0.96875, w: 0.47753906}
+  - {x: 0.028320312, y: 0.058593746, z: 0, w: 0.58984375}
+  - {x: 0.9404297, y: 0.058593746, z: 0.028320312, w: 0.58984375}
+  - {x: 0.03125, y: 0.058593746, z: 0.96875, w: 0.58984375}
+  scalesAndFlips:
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 10, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 10, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 10, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  customs:
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
+  - {x: 0, y: 0, z: 0, w: 0}
   keyframeClock: 0
   curFrameIndex: 0
   prevFrameIndex: 0

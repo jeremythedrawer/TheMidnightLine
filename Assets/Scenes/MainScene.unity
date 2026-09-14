@@ -266,7 +266,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1179406903285272030, guid: a357243f5dd735f4ebe10d861ca52aa1, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1516026230374020713, guid: a357243f5dd735f4ebe10d861ca52aa1, type: 3}
       propertyPath: m_LocalScale.x
@@ -278,11 +278,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1516026230374020713, guid: a357243f5dd735f4ebe10d861ca52aa1, type: 3}
       propertyPath: m_LocalPosition.x
-      value: -5.39
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1516026230374020713, guid: a357243f5dd735f4ebe10d861ca52aa1, type: 3}
       propertyPath: m_LocalPosition.y
-      value: 88.43
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1516026230374020713, guid: a357243f5dd735f4ebe10d861ca52aa1, type: 3}
       propertyPath: m_LocalPosition.z
@@ -1090,6 +1090,10 @@ PrefabInstance:
       propertyPath: bounds.m_Center.z
       value: -36.1
       objectReference: {fileID: 0}
+    - target: {fileID: 6918634768823538128, guid: e5ba183648799be42a8f93d6041d5d8f, type: 3}
+      propertyPath: OutputAudioMixerGroup
+      value: 
+      objectReference: {fileID: 1296359123443507439, guid: 9a04da78e8bb5d84f99dc51ed4f022a0, type: 2}
     - target: {fileID: 7621464800628983968, guid: e5ba183648799be42a8f93d6041d5d8f, type: 3}
       propertyPath: bounds.m_Center.y
       value: 95.37511
@@ -1116,7 +1120,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8022540191908669574, guid: e5ba183648799be42a8f93d6041d5d8f, type: 3}
       propertyPath: bounds.m_Center.x
-      value: -4.62255
+      value: -4.623889
       objectReference: {fileID: 0}
     - target: {fileID: 8022540191908669574, guid: e5ba183648799be42a8f93d6041d5d8f, type: 3}
       propertyPath: bounds.m_Extent.x
@@ -1453,6 +1457,14 @@ PrefabInstance:
       propertyPath: bounds.m_Center.y
       value: 96.34433
       objectReference: {fileID: 0}
+    - target: {fileID: 2379171273572628866, guid: 3b94b71eaa71297409a684400e303787, type: 3}
+      propertyPath: Priority
+      value: 128
+      objectReference: {fileID: 0}
+    - target: {fileID: 2379171273572628866, guid: 3b94b71eaa71297409a684400e303787, type: 3}
+      propertyPath: m_Volume
+      value: 0.0091658775
+      objectReference: {fileID: 0}
     - target: {fileID: 5071245694387021145, guid: 3b94b71eaa71297409a684400e303787, type: 3}
       propertyPath: bounds.m_Center.y
       value: 96.164444
@@ -1586,6 +1598,10 @@ PrefabInstance:
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
+    - target: {fileID: 186391526444955506, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
+      propertyPath: trainData
+      value: 
+      objectReference: {fileID: 11400000, guid: 1f6bcdbf3caa6f840a6e80c98f8e1dff, type: 2}
     - target: {fileID: 6553536322854344460, guid: aa3fea43630fd4c4ca16fbe13d6ba29b, type: 3}
       propertyPath: m_Name
       value: SpawnMaster

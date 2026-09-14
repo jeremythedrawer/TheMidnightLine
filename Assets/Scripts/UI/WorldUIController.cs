@@ -4,7 +4,7 @@ using System;
 using System.Threading;
 
 using UnityEngine;
-
+using UnityEngine.Audio;
 using static AtlasUI;
 using static Passenger;
 
@@ -217,7 +217,8 @@ public class WorldUIController : MonoBehaviour
     }
     private void LowerMusicVolume()
     {
-        LoweringMusicVolume().Forget();
+        AudioMixerSnapshot snapShot = audioSource.outputAudioMixerGroup.audioMixer.FindSnapshot("Station");
+        snapShot.TransitionTo(4);
     }
     private void SetKeyBindIcon()
     {
@@ -232,17 +233,5 @@ public class WorldUIController : MonoBehaviour
     private void HideKeybindIcon()
     {
         keybindRenderer.enabled = false;
-    }
-    private async UniTask LoweringMusicVolume()
-    {
-        float clock = 0f;
-        float time = 1f;
-        while(clock < time)
-        {
-            clock += Time.deltaTime;
-            float t = 1 - Mathf.Pow(clock / time, 2);
-            audioSource.volume = t * audioData.musicVolume;
-            await UniTask.Yield();
-        }
     }
 }

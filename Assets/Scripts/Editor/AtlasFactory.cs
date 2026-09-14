@@ -814,7 +814,7 @@ public class AtlasFactory : EditorWindow
                 {
                     atlas.motionSprites[j] = newMotionSprites[i];
                     atlas.motionSprites[j].holdFrames = oldMotionSprite.holdFrames;
-                    //atlas.motionSprites[j].audioIndex = oldMotionSprite.audioIndex;
+                    atlas.motionSprites[j].audioIndex = oldMotionSprite.audioIndex;
                     newMotionSprites.RemoveAt(i);
                     break;
                 }

@@ -46,7 +46,7 @@ MonoBehaviour:
       worldSize: {x: 0.37222221, y: 0.8833333, z: 1}
       index: 2
     markers: []
-    audioIndex: -1
+    audioIndex: 0
     holdFrames: 3
   - sprite:
       uvSizeAndPos: {x: 0.045898438, y: 0.15625, z: 0.17578125, w: 0.8417969}
@@ -78,7 +78,7 @@ MonoBehaviour:
       worldSize: {x: 0.37777779, y: 0.8833333, z: 1}
       index: 6
     markers: []
-    audioIndex: -1
+    audioIndex: 0
     holdFrames: 3
   - sprite:
       uvSizeAndPos: {x: 0.046875, y: 0.15625, z: 0.39746094, w: 0.8417969}
@@ -542,7 +542,8 @@ MonoBehaviour:
     motionIndex: 18
     keyframeStartIndex: 0
     keyframeEndIndex: 7
-    audioClips: []
+    audioClips:
+    - {fileID: 0}
   markers:
   - color:
       serializedVersion: 2

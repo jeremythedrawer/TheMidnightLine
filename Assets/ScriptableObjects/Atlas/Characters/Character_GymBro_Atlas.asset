@@ -46,7 +46,7 @@ MonoBehaviour:
       worldSize: {x: 0.31111112, y: 0.8, z: 1}
       index: 2
     markers: []
-    audioIndex: -1
+    audioIndex: 0
     holdFrames: 3
   - sprite:
       uvSizeAndPos: {x: 0.041015625, y: 0.13964844, z: 0.16210938, w: 0.86035156}
@@ -78,7 +78,7 @@ MonoBehaviour:
       worldSize: {x: 0.32222223, y: 0.8, z: 1}
       index: 6
     markers: []
-    audioIndex: -1
+    audioIndex: 0
     holdFrames: 3
   - sprite:
       uvSizeAndPos: {x: 0.043945312, y: 0.13964844, z: 0.37304688, w: 0.86035156}
@@ -490,7 +490,7 @@ MonoBehaviour:
       worldSize: {x: 0.2777778, y: 0.79444444, z: 1}
       index: 57
     markers: []
-    audioIndex: 0
+    audioIndex: -1
     holdFrames: 5
   - sprite:
       uvSizeAndPos: {x: 0.046875, y: 0.14257812, z: 0.94921875, w: 0.5654297}
@@ -936,7 +936,8 @@ MonoBehaviour:
     motionIndex: 18
     keyframeStartIndex: 0
     keyframeEndIndex: 7
-    audioClips: []
+    audioClips:
+    - {fileID: 0}
   - clipName: SittingDistracted
     clipType: 1
     motionIndex: 20

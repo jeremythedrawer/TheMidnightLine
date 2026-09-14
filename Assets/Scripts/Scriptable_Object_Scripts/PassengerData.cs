@@ -9,7 +9,7 @@ public class PassengerData : ScriptableObject
 
     public Vector2 idleDurationRange = new Vector2(10, 30);
 
-    public float moveSpeed = 5f;
+    public float moveSpeed = 1f;
     
     public int mugShotIndex;
     

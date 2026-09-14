@@ -9,7 +9,7 @@ public class RailMap : MonoBehaviour
     public const float MOVE_TIME = 3f;
     public const float APPEARING_TIME = 1f;
 
-    public TripData curTrip;
+    public Options options;
 
     public AtlasRenderer railMapRend;
     public AtlasRenderer trainPosRend;
@@ -31,8 +31,8 @@ public class RailMap : MonoBehaviour
     }
     private void Init()
     {
-        int ticketCheckAmount = (curTrip.stationsDataArray.Length - 1) * 2;
-        int totalPositions = curTrip.stationsDataArray.Length + ticketCheckAmount;
+        int ticketCheckAmount = (options.curTrip.stationsDataArray.Length - 1) * 2;
+        int totalPositions = options.curTrip.stationsDataArray.Length + ticketCheckAmount;
         positions = new float[totalPositions];
 
         Vector4[] worldPivAndSizes = railMapRend.worldPivotsAndSizes;

@@ -15,33 +15,25 @@ MonoBehaviour:
   spy: {fileID: 8541590373058370183, guid: 37df719e448d99348b4c927f4d824ea7, type: 3}
   moveSpeed: 1.5
   groundAccelation: 12
-  groundDecelaration: 0.5
   groundBufferVertical: 0.018
   groundBufferHorizontal: 0.176
   wallWidthBuffer: 0.16
-  wasteBuffer: 0.35
-  depthPositionInTrain: 0
-  boardingStationName: Gorov
-  disembarkingStationName: Viskov Passage
+  interactionDist: 0.5
+  boardingStationName: Old Vinrose
+  disembarkingStationName: East Borge
   moveVelocity: {x: 0, y: 0}
-  startPos: {x: 263.845, y: -3.85}
   targetXVelocity: -1.5
   curState: 1
-  tutorialsCompleted: 0
-  curTutorialState: 0
   spriteFlip: 1
   walkingIntoWall: 0
   startTrip: 0
-  checkingNotepad: 0
   playerInputsEnabled: 1
-  canCheckTicket: 0
-  movedFirstTime: 1
   bounds:
-    m_Center: {x: 263.92255, y: -3.4252882, z: 0}
-    m_Extent: {x: 0.18611111, y: 0.44722223, z: 0.1}
+    m_Center: {x: 5.820335, y: 0.45, z: 9}
+    m_Extent: {x: 0.094444446, y: 0.45, z: 0.1}
   curGroundLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 64
   curWallLayer:
     serializedVersion: 2
-    m_Bits: 128
+    m_Bits: 64

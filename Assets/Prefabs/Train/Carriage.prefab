@@ -317,7 +317,7 @@ MonoBehaviour:
   smokersRoomData: []
   seatQueue:
     npcs: []
-    npcsCount: 0
+    passengerCount: 0
     timer: 0
   totalBounds:
     m_Center: {x: 0, y: 0, z: 0}
@@ -652,7 +652,7 @@ MonoBehaviour:
     worldSize: {x: 0.7888889, y: 0.3888889, z: 1}
     index: 1
   bounds:
-    m_Center: {x: 149.01964, y: -0.20355573, z: 15.1}
+    m_Center: {x: 107.93601, y: -53.891556, z: 15.1}
     m_Extent: {x: 0.51364136, y: 0.19444445, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
@@ -814,7 +814,7 @@ GameObject:
   m_Component:
   - component: {fileID: 2346879776068311354}
   - component: {fileID: 2577312437334839122}
-  m_Layer: 7
+  m_Layer: 6
   m_Name: Roof
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1104,7 +1104,7 @@ MonoBehaviour:
     worldSize: {x: 0.7888889, y: 0.3888889, z: 1}
     index: 1
   bounds:
-    m_Center: {x: 154.43077, y: -0.20355573, z: 15.1}
+    m_Center: {x: 113.34715, y: -53.891556, z: 15.1}
     m_Extent: {x: 0.62777776, y: 0.19444445, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
@@ -1334,7 +1334,7 @@ MonoBehaviour:
     worldSize: {x: 0.7888889, y: 0.3888889, z: 1}
     index: 1
   bounds:
-    m_Center: {x: 151.62077, y: -0.20355573, z: 15.1}
+    m_Center: {x: 110.53715, y: -53.891556, z: 15.1}
     m_Extent: {x: 1.3277776, y: 0.19444445, z: 0.1}
   worldPivotAndSize: {x: -0, y: -0, z: 5.1, w: 2.2055554}
   uvSizeAndPosition: {x: 0.2241211, y: 0.09692383, z: 0.00048828125, w: 0.5998535}
@@ -1416,7 +1416,7 @@ Transform:
   m_GameObject: {fileID: 7844801019564369261}
   serializedVersion: 2
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 3}
+  m_LocalPosition: {x: 0, y: -0.035, z: 3}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_ConstrainProportionsScale: 0
   m_Children: []
@@ -1452,7 +1452,7 @@ MonoBehaviour:
     worldSize: {x: 9.033334, y: 1.6055555, z: 1}
     index: 6
   bounds:
-    m_Center: {x: 110.90637, y: -53.647224, z: 3}
+    m_Center: {x: 110.90637, y: -53.682224, z: 3}
     m_Extent: {x: 4.516667, y: 0.80277777, z: 0.1}
   worldPivotAndSize: {x: -4.516667, y: -0, z: 9.033334, w: 1.6055555}
   uvSizeAndPosition: {x: 0.7939453, y: 0.14111328, z: 0, w: 0.8588867}
@@ -1564,7 +1564,7 @@ GameObject:
   m_Component:
   - component: {fileID: 8687254295969806247}
   - component: {fileID: 4967624362453220076}
-  m_Layer: 8
+  m_Layer: 0
   m_Name: InsideCarriageBounds
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -2820,11 +2820,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 152.13577
+      value: 111.05215
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.y
-      value: 0.60422057
+      value: -53.08378
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.z
@@ -4910,11 +4910,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 154.438
+      value: 113.35438
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.y
-      value: 0.6042221
+      value: -53.08378
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.z
@@ -6039,11 +6039,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.x
-      value: 148.80699
+      value: 107.72337
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.y
-      value: 0.60422057
+      value: -53.08378
       objectReference: {fileID: 0}
     - target: {fileID: 608667747782479339, guid: e1b0732992e3d4b4cb7a265757e943c8, type: 3}
       propertyPath: bounds.m_Center.z

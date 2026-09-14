@@ -12,7 +12,6 @@ public class GangwayDoor : MonoBehaviour
     public Gangway gangway;
     public Transform rightDoor;
     public Transform leftDoor;
-    public BoxCollider2D wallCollider;
     public LayerData layerSettings;
     public bool isLeftOfCarriage;
     [Header("Generated")]
@@ -36,7 +35,6 @@ public class GangwayDoor : MonoBehaviour
         isOpen = true;
 
         Opening().Forget();
-        wallCollider.enabled = false;
     }
     public void CloseDoors()
     {
@@ -46,7 +44,6 @@ public class GangwayDoor : MonoBehaviour
         ctsMove = new CancellationTokenSource();
 
         Closing().Forget();
-        wallCollider.enabled = true;
     }
 
     private async UniTask Closing()

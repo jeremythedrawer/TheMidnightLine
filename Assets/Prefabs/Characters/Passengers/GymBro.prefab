@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 7958201747531856237}
   - component: {fileID: 4272808597913193147}
   - component: {fileID: 94976023300698573}
-  m_Layer: 14
+  m_Layer: 0
   m_Name: GymBro
   m_TagString: Untagged
   m_Icon: {fileID: -964228994112308473, guid: 0000000000000000d000000000000000, type: 0}
@@ -48,7 +48,7 @@ AudioSource:
   OutputAudioMixerGroup: {fileID: 0}
   m_audioClip: {fileID: 0}
   m_Resource: {fileID: 0}
-  m_PlayOnAwake: 1
+  m_PlayOnAwake: 0
   m_Volume: 1
   m_Pitch: 1
   Loop: 0
@@ -58,7 +58,7 @@ AudioSource:
   Priority: 128
   DopplerLevel: 1
   MinDistance: 1
-  MaxDistance: 500
+  MaxDistance: 2
   Pan2D: 0
   rolloffMode: 0
   BypassEffects: 0
@@ -93,7 +93,7 @@ AudioSource:
     m_Curve:
     - serializedVersion: 3
       time: 0
-      value: 0
+      value: 1
       inSlope: 0
       outSlope: 0
       tangentMode: 0
@@ -271,6 +271,7 @@ MonoBehaviour:
   atlasRenderer: {fileID: 4272808597913193147}
   rigidBody: {fileID: 118950378541814445}
   boxCollider: {fileID: 7958201747531856237}
+  audioSource: {fileID: 8099043674557259294}
   options: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
   passengerData: {fileID: 11400000, guid: adbbf3e2e7f721843a635fe3790ce01a, type: 2}
   passengersData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
@@ -280,6 +281,7 @@ MonoBehaviour:
   spyData: {fileID: 11400000, guid: 6e9d474f1647bae408ae2251a361b752, type: 2}
   spawnData: {fileID: 11400000, guid: cb76807a71f74704a94a0f5cfe3b2c50, type: 2}
   camData: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  audioData: {fileID: 11400000, guid: 366fa884df96e77449150a5fdde208bd, type: 2}
   atlas: {fileID: 0}
   boardingStation: {fileID: 0}
   disembarkingStation: {fileID: 0}
@@ -310,7 +312,7 @@ MonoBehaviour:
     motionIndex: 0
     keyframeStartIndex: 0
     keyframeEndIndex: 0
-    time: 0
+    audioClips: []
   curBehaviour: 0
   curState: 0
   curPath: 0

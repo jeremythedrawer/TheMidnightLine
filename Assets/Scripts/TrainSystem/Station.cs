@@ -4,7 +4,7 @@ using static Train;
 public class Station : MonoBehaviour
 {
     public StationSO station;
-    public TrainData trainStats;
+    public TrainData trainData;
     public Options options;
 
     public AtlasRenderer platformRenderer;
@@ -20,12 +20,11 @@ public class Station : MonoBehaviour
     public void SpawnNPCs()
     {
         int totalNPCSSpawned = 0;
-
         for (int i = 0; i < station.bystanderProfiles.Length; i++)
         {
             totalNPCSSpawned++;
             NPCProfile bystanderProfile = station.bystanderProfiles[i];
-            float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
+            float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainData.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainData.totalBounds.extents.x);
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
             PassengerBrain bystander = PassengerManager.GetNPC(options.curTrip.passengers[bystanderProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
@@ -48,7 +47,7 @@ public class Station : MonoBehaviour
         {
             totalNPCSSpawned++;
             TraitorProfile traitorProfile = options.curTrip.traitorProfiles[i];
-            float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
+            float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainData.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainData.totalBounds.extents.x);
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
 
@@ -70,7 +69,7 @@ public class Station : MonoBehaviour
             totalNPCSSpawned++;
             NPCProfile accompliceProfile = station.accompliceProfiles[i];
 
-            float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainStats.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainStats.totalBounds.extents.x);
+            float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainData.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainData.totalBounds.extents.x);
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
 
@@ -87,6 +86,16 @@ public class Station : MonoBehaviour
             }
             accomplice.Init();
         }
+
+        HenchmanBrain henchman = Instantiate(options.henchmanPrefab);
+        Vector3 henchmanStartPos = new Vector3();
+        henchmanStartPos.x = -trainData.totalBounds.extents.x;
+        henchmanStartPos.y = 0;
+        henchmanStartPos.z = 0;
+
+        henchman.transform.position = henchmanStartPos;
+
+        henchman.transform.SetParent(platformRenderer.transform, worldPositionStays: true);
     }
     //public void SetFrontParallaxPosition()
     //{

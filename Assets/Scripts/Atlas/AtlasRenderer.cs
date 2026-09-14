@@ -341,7 +341,7 @@ public class AtlasRenderer : MonoBehaviour
         {
             return;
         }
-        
+        onChangeKeyframe?.Invoke(motionSprite);
 
         if (markerTransform != null && motionSprite.markers.Length > 0)
         {
@@ -357,7 +357,6 @@ public class AtlasRenderer : MonoBehaviour
             audioSource.PlayOneShot(clip.audioClips[motionSprite.audioIndex]);
         }
 
-        onChangeKeyframe?.Invoke(motionSprite);
         sprite = motionSprite.sprite;
         UpdateSpriteInputs(sprite);
         isAnimating = true;

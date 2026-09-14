@@ -78,13 +78,14 @@ public class SlideDoors : MonoBehaviour
             case State.Opening:
             {
                 moveTimer += Time.deltaTime;
-                float t = moveTimer / trainData.doorMoveTime;
+                float t = moveTimer / audioData.slideDoorsOpening.length;
+                t = Curves.EaseOutT(t, 2);
                 rightSlideDoorPos.x = activeMoveAmount * t;
                 leftSlideDoorPos.x = activeMoveAmount * -t;
                 rightSlideDoor_transform.localPosition = rightSlideDoorPos;
                 leftSlideDoor_transform.localPosition = leftSlideDoorPos;
 
-                if (t >= 1)
+                if (moveTimer >= audioData.slideDoorsOpening.length)
                 {
                     SetState(State.Opened);
                 }
@@ -93,27 +94,27 @@ public class SlideDoors : MonoBehaviour
 
             case State.Opened:
             {
-                if (disembarkTrainQueue.npcsCount > 0)
+                if (disembarkTrainQueue.passengerCount > 0)
                 {
                     disembarkTrainQueue.timer += Time.deltaTime;
                     if (disembarkTrainQueue.timer > QUEUE_TICK_RATE)
                     {
-                        PassengerBrain npc = disembarkTrainQueue.npcs[disembarkTrainQueue.npcsCount - 1];
+                        PassengerBrain npc = disembarkTrainQueue.npcs[disembarkTrainQueue.passengerCount - 1];
                         npc.DisembarkTrain();
-                        disembarkTrainQueue.npcsCount--;
+                        disembarkTrainQueue.passengerCount--;
                         disembarkTrainQueue.timer = 0;
                     }
                 }
-                else if (boardTrainQueue.npcsCount > 0)
+                else if (boardTrainQueue.passengerCount > 0)
                 {
                     boardTrainQueue.timer += Time.deltaTime;
 
                     if (boardTrainQueue.timer > QUEUE_TICK_RATE)
                     {
-                        PassengerBrain npc = boardTrainQueue.npcs[boardTrainQueue.npcsCount - 1];
+                        PassengerBrain npc = boardTrainQueue.npcs[boardTrainQueue.passengerCount - 1];
                         npc.BoardTrain();
 
-                        boardTrainQueue.npcsCount--;
+                        boardTrainQueue.passengerCount--;
                         boardTrainQueue.timer = 0;
                     }
                 }
@@ -123,7 +124,8 @@ public class SlideDoors : MonoBehaviour
             case State.Closing:
             {
                 moveTimer -= Time.deltaTime;
-                float t = moveTimer/ trainData.doorMoveTime;
+                float t = moveTimer/ audioData.slideDoorsClosing.length;
+                t = Curves.EaseOutT(t, 2);
 
                 rightSlideDoorPos.x = activeMoveAmount * t;
                 leftSlideDoorPos.x = activeMoveAmount * -t;
@@ -190,7 +192,7 @@ public class SlideDoors : MonoBehaviour
             {
                 rightSlideDoorPos = rightSlideDoor_transform.localPosition;
                 leftSlideDoorPos = leftSlideDoor_transform.localPosition;
-                moveTimer = trainData.doorMoveTime;
+                moveTimer = audioData.slideDoorsClosing.length;
 
 
                 audioSource.volume = audioData.soundEffectsVolume;
@@ -234,15 +236,15 @@ public class SlideDoors : MonoBehaviour
     }
     public void AddToBoardTrainQueue(PassengerBrain npc)
     {
-        npc.boardTrainQueueIndex = boardTrainQueue.npcsCount;
-        boardTrainQueue.npcs[boardTrainQueue.npcsCount] = npc;
-        boardTrainQueue.npcsCount++;
+        npc.boardTrainQueueIndex = boardTrainQueue.passengerCount;
+        boardTrainQueue.npcs[boardTrainQueue.passengerCount] = npc;
+        boardTrainQueue.passengerCount++;
     }
     public void AddToDisembarkTrainQueue(PassengerBrain npc)
     {
-        npc.disembarkTrainQueueIndex = disembarkTrainQueue.npcsCount;
-        disembarkTrainQueue.npcs[disembarkTrainQueue.npcsCount] = npc;
-        disembarkTrainQueue.npcsCount++;
+        npc.disembarkTrainQueueIndex = disembarkTrainQueue.passengerCount;
+        disembarkTrainQueue.npcs[disembarkTrainQueue.passengerCount] = npc;
+        disembarkTrainQueue.passengerCount++;
     }
     public void ResetDoors()
     {

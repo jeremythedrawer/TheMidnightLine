@@ -129,7 +129,7 @@ public static class Passenger
     [Serializable] public struct NPCQueue
     {
         public PassengerBrain[] npcs;
-        public int npcsCount;
+        public int passengerCount;
         public float timer;
     }
 

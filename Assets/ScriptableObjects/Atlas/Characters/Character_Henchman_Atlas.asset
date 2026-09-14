@@ -46,7 +46,7 @@ MonoBehaviour:
       worldSize: {x: 0.35, y: 0.9111111, z: 1}
       index: 2
     markers: []
-    audioIndex: -1
+    audioIndex: 0
     holdFrames: 3
   - sprite:
       uvSizeAndPos: {x: 0.048828125, y: 0.15917969, z: 0.18457031, w: 0.83984375}
@@ -78,7 +78,7 @@ MonoBehaviour:
       worldSize: {x: 0.33888888, y: 0.90555555, z: 1}
       index: 6
     markers: []
-    audioIndex: -1
+    audioIndex: 0
     holdFrames: 3
   - sprite:
       uvSizeAndPos: {x: 0.043945312, y: 0.15917969, z: 0.4033203, w: 0.83984375}
@@ -152,7 +152,8 @@ MonoBehaviour:
     motionIndex: 1
     keyframeStartIndex: 0
     keyframeEndIndex: 7
-    audioClips: []
+    audioClips:
+    - {fileID: 0}
   - clipName: OpenSuitcase
     clipType: 2
     motionIndex: 2

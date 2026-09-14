@@ -11,6 +11,8 @@ using Cysharp.Threading.Tasks;
 using static Atlas;
 using static AtlasUI;
 using static Passenger;
+using static Spy;
+
 
 #if UNITY_EDITOR
 using UnityEditor;
@@ -24,7 +26,8 @@ public class PassengerBrain : MonoBehaviour
     public AtlasRenderer atlasRenderer;
     public Rigidbody2D rigidBody;
     public BoxCollider2D boxCollider;
-    
+    public AudioSource audioSource;
+
     public Options options;
     public PassengerData passengerData;
     public PassengersData passengersData;
@@ -34,6 +37,7 @@ public class PassengerBrain : MonoBehaviour
     public SpyData spyData;
     public SpawnData spawnData;
     public CameraData camData;
+    public AudioData audioData;
 
     [Header("Generated")]
     public AtlasSO atlas;
@@ -101,12 +105,15 @@ public class PassengerBrain : MonoBehaviour
         TrainController.OnStationArrival += PrepareToBoardTrain;
         TrainController.OnStationSpawn += PrepareToDisembarkTrain;
         CursorController.OnMouseDisabled += DisableHover;
+        atlasRenderer.onChangeKeyframe += HandleKeyframeChange;
     }
     private void OnDisable()
     {
         TrainController.OnStationArrival -= PrepareToBoardTrain;
         TrainController.OnStationSpawn -= PrepareToDisembarkTrain;
         CursorController.OnMouseDisabled -= DisableHover;
+
+        atlasRenderer.onChangeKeyframe -= HandleKeyframeChange;
         ctsWaitForRandSeconds?.Cancel();
     }
     private void OnDestroy()
@@ -354,7 +361,7 @@ public class PassengerBrain : MonoBehaviour
             {
                 UpdateIdlePath();
 
-                atlasRenderer.PlayClip(curClip);
+                atlasRenderer.PlayClip(curClip, audioSource: audioSource, audioData: audioData);
 
                 if (onTrain)
                 {
@@ -383,7 +390,7 @@ public class PassengerBrain : MonoBehaviour
             case NPCState.Walking:
             {
                 move = Mathf.Sign(targetDist);
-                atlasRenderer.PlayClip(curClip);
+                atlasRenderer.PlayClip(curClip, audioSource: audioSource, audioData: audioData);
                 atlasRenderer.FlipHSimple(move < 0);
 
                 if (curPath == NPCPath.ToExitStation)
@@ -421,9 +428,9 @@ public class PassengerBrain : MonoBehaviour
                     }
                 }
 
+
                 if (curGlyph != null)
                 {
-                    atlasRenderer.PlayClip(curClip, curGlyph.transform);
                     if (atlas.motionSprites[atlasRenderer.sprite.index].markers.Length > 0)
                     {
                         if (!playingGlyph)
@@ -447,11 +454,13 @@ public class PassengerBrain : MonoBehaviour
                         playingGlyph = false;
                         curGlyph.Stop();
                     }
+                    atlasRenderer.PlayClip(curClip, markerTransform: curGlyph.transform, audioSource: audioSource, audioData: audioData);
                 }
                 else
                 {
-                    atlasRenderer.PlayClip(curClip);
+                    atlasRenderer.PlayClip(curClip, audioSource: audioSource, audioData: audioData);
                 }
+
                 behaviourClock += Time.deltaTime;
 
                 if (curBehaviour == Habits.Known_vandal)
@@ -1066,6 +1075,23 @@ public class PassengerBrain : MonoBehaviour
     private void SetPathToSlideDoorCallback()
     {
         SetPath(NPCPath.ToSlideDoor);
+    }
+    private void HandleKeyframeChange(MotionSprite curSprite)
+    {
+        switch (curState)
+        {
+            case NPCState.Walking:
+            {
+                if (curSprite.audioIndex == 0)
+                {
+                    AudioClip[] footStepSounds = onTrain ? audioData.footStepTrain : audioData.footStepsConcrete;
+
+                    int randFootstepIndex = UnityEngine.Random.Range(0, footStepSounds.Length);
+                    curClip.audioClips[0] = footStepSounds[randFootstepIndex];
+                }
+            }
+            break;
+        }
     }
     private async UniTask WaitForRandomSeconds(Callback callback)
     {
