@@ -18,8 +18,6 @@ public class SpyData : ScriptableObject
     public float interactionDist = 1f;
 
     [Header("Generated")]
-    public string boardingStationName;
-    public string disembarkingStationName;
     
     public Vector2 moveVelocity;
     

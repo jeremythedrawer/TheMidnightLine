@@ -11,12 +11,12 @@ public class DialogueBubble : MonoBehaviour
     const float OPEN_HEIGHT_TIME = 0.25f;
 
     public UIData uiData;
+    public ActionData actionData;
+
 
     public AtlasTextRenderer textRenderer;
     public AtlasRenderer tailRenderer;
 
-    public GameEvent onOpenDialogueBubble;
-    public GameEvent onCloseDialogueBubble;
     [Header("Generated")]    
     public Vector3 worldPos;
 
@@ -27,15 +27,15 @@ public class DialogueBubble : MonoBehaviour
 
     private void OnEnable()
     {
-        onOpenDialogueBubble.RegisterListener(Open);
-        onCloseDialogueBubble.RegisterListener(Close);
+        actionData.onOpenDialogueBubble += Open;
+        actionData.onCloseDialogueBubble += Close;
 
         ctsOpen = new CancellationTokenSource();
     }
     private void OnDisable()
     {
-        onOpenDialogueBubble.UnregisterListener(Open);
-        onCloseDialogueBubble.UnregisterListener(Close);
+        actionData.onOpenDialogueBubble -= Open;
+        actionData.onCloseDialogueBubble -= Close;
 
         ctsOpen?.Cancel();
     }
@@ -43,7 +43,7 @@ public class DialogueBubble : MonoBehaviour
     {
         worldPos.x = uiData.curDialogueBubbleBounds.center.x;
         worldPos.y = uiData.curDialogueBubbleBounds.max.y + uiData.keyBindIconWorldSize.y;
-        worldPos.z = uiData.curDialogueBubbleBounds.min.z;
+        worldPos.z = -1;
         transform.position = worldPos;
 
         textRenderer.enabled = true;

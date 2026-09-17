@@ -72,8 +72,6 @@ public class GameplayUI : MonoBehaviour
         TrainController.OnStationLeave += SetTraitorIcons;
         TrainController.OnFinishTripScene += HideKeyIcon;
 
-        SpyBrain.OnHoverTalkDisabled += HideKeyIcon;
-        SpyBrain.OnHoverTalkFirstTime += ShowEIcon;
         SpyBrain.OnEnteredTrain += AppearRailMap;
         SpyBrain.OnExitTrain += DissappearRailMap;
         SpyBrain.OnEnteredTrain += DisappearKeyIcon;
@@ -93,8 +91,6 @@ public class GameplayUI : MonoBehaviour
         TrainController.OnStationLeave -= SetTraitorIcons;
         TrainController.OnFinishTripScene -= HideKeyIcon;
 
-        SpyBrain.OnHoverTalkDisabled -= HideKeyIcon;
-        SpyBrain.OnHoverTalkFirstTime -= ShowEIcon;
         SpyBrain.OnEnteredTrain -= DisappearKeyIcon;
         SpyBrain.OnExitTrain -= DissappearRailMap;
         SpyBrain.OnTalkToPassenger -= DisappearKeyIcon;
@@ -154,7 +150,6 @@ public class GameplayUI : MonoBehaviour
             {
                 ticket.gameObject.SetActive(true);
                 naturalMovePos = ticketActivePos;
-                ticket.SetText(spyStats.boardingStationName, spyStats.disembarkingStationName);
                 ctsTicket?.Cancel();
             }
             break;

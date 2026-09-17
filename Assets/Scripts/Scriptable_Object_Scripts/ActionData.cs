@@ -6,5 +6,7 @@ public class ActionData : ScriptableObject
 {
     public Action onShowKeyIcon;
     public Action onHideKeyIcon;
+    public Action onOpenDialogueBubble;
+    public Action onCloseDialogueBubble;
 
 }

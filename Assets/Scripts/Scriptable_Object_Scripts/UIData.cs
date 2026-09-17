@@ -1,4 +1,3 @@
-using Proselyte.Sigils;
 using UnityEngine;
 
 

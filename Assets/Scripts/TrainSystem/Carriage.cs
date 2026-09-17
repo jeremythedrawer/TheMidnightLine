@@ -196,17 +196,17 @@ public class Carriage : MonoBehaviour
         seatQueue.passengerCount--;
         seatQueue.timer = 0;
     }
-    public void SetSmokerRoomData(float offset)
+    public void SetSmokerRoomData()
     {
         smokersRoomData = new SmokersRoomData[smokingRoomColliders.Length];
 
         for (int i = 0; i < smokersRoomData.Length; i++)
         {
-            smokersRoomData[i].minXPos = smokingRoomColliders[i].bounds.min.x + offset;
-            smokersRoomData[i].maxXPos = smokingRoomColliders[i].bounds.max.x + offset;
+            smokersRoomData[i].minXPos = smokingRoomColliders[i].bounds.min.x;
+            smokersRoomData[i].maxXPos = smokingRoomColliders[i].bounds.max.x;
         }
     }
-    public void SetSeatData(float offset)
+    public void SetSeatData()
     {
         AtlasRenderer seatRenderer = seatRenderers[0];
         float tileWidth = seatRenderer.atlas.slicedSprites[seatRenderer.spriteIndex].worldSlices.x;
@@ -233,14 +233,14 @@ public class Carriage : MonoBehaviour
 
             for (int j = 0; j < seatsPerRenderer[i]; j++)
             {
-                seatData.xPos[seatIndex] = (firstSeatPos + (tileWidth * j)) + offset;
+                seatData.xPos[seatIndex] = (firstSeatPos + (tileWidth * j));
                 seatIndex++;
             }
         }
         seatQueue = new NPCQueue();
         seatQueue.npcs = new PassengerBrain[seatAmount];
     }
-    public void SetTotalBounds(float offset)
+    public void SetTotalBounds()
     {
         totalBounds = insideBoundsCollider.bounds;
 
@@ -248,7 +248,7 @@ public class Carriage : MonoBehaviour
         {
             totalBounds.Encapsulate(smokingRoomColliders[i].bounds);
         }
-        totalBounds.center = new Vector3(totalBounds.center.x + offset, totalBounds.center.y, totalBounds.center.z);
+        totalBounds.center = new Vector3(totalBounds.center.x, totalBounds.center.y, totalBounds.center.z);
     }
     public void AddNPC(PassengerBrain npc)
     {

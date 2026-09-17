@@ -124,9 +124,6 @@ public class TrainController : MonoBehaviour
         for (int i = 0; i < carriages.Length; i++)
         {
             Carriage carriage = carriages[i];
-            carriage.SetSeatData(offset);
-            carriage.SetSmokerRoomData(offset);
-            carriage.SetTotalBounds(offset);
             carriage.SetSignToNextStation(options.curTrip.stationAhead.stationName);
         }
     }
@@ -497,6 +494,13 @@ public class TrainController : MonoBehaviour
     {
         transform.position = new Vector3(0, transform.position.y, transform.position.z);
         SetBounds();
+        for (int i = 0; i < carriages.Length; i++)
+        {
+            Carriage carriage = carriages[i];
+            carriage.SetTotalBounds();
+            carriage.SetSeatData();
+            carriage.SetSmokerRoomData();
+        }
         SetSlideDoorPositions();
         trainData.trainToMaxSpawnDist = spawnData.bounds.max.x - trainData.totalBounds.center.x;
         OnTrainAtStartPosition?.Invoke();

@@ -29,9 +29,6 @@ public class RegionMap : MonoBehaviour
     }
     private void InitButtons()
     {
-
-
-
         for (int i = 0; i < tripButtons.Length; i++)
         {
             int index = i;

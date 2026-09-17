@@ -11,9 +11,6 @@ public class SpyBrain : MonoBehaviour
     const float PLAY_AGAIN_HOLD_TIME = 3f;
     public static Carriage CurCarriage;
 
-    public static event Action OnHoverTalkEnabled;
-    public static event Action<Vector2> OnHoverTalkFirstTime;
-    public static event Action OnHoverTalkDisabled;
     public static event Action OnEnteredTrain;
     public static event Action OnTalkToPassenger;
     public static event Action OnOpenNotepad;
@@ -459,8 +456,9 @@ public class SpyBrain : MonoBehaviour
             {
                 passengerToTalkTo.talkingToSpy = true;
 
-                spyData.boardingStationName = options.curTrip.stationsDataArray[passengerToTalkTo.profile.boardingStationIndex].name;
-                spyData.disembarkingStationName = options.curTrip.stationsDataArray[passengerToTalkTo.profile.disembarkingStationIndex].name;
+                uiData.curDialogueText = options.curTrip.stationsDataArray[passengerToTalkTo.profile.disembarkingStationIndex].name;
+                uiData.curDialogueBubbleBounds = passengerToTalkTo.atlasRenderer.bounds;
+                actionData.onOpenDialogueBubble?.Invoke();
 
                 options.curTrip.passengersTalkToTotal++;
 
@@ -515,6 +513,7 @@ public class SpyBrain : MonoBehaviour
             break;
             case SpyState.TalkingToPassenger:
             {
+                actionData.onCloseDialogueBubble?.Invoke();
                 options.curTrip.passengersTalkToSinceLastStation++;
             }
             break;
@@ -589,16 +588,19 @@ public class SpyBrain : MonoBehaviour
 
             if (curPassengerHoverTalkCount == 0)
             {
-                OnHoverTalkDisabled?.Invoke();
+                actionData.onHideKeyIcon?.Invoke();
             }
             else
             {
-                OnHoverTalkEnabled?.Invoke();
-
                 if (options.curTrip.passengersTalkToTotal == 0)
                 {
-                    AtlasRenderer npcRend = possiblePassengers[0].atlasRenderer;
-                    OnHoverTalkFirstTime?.Invoke(new Vector2(npcRend.transform.position.x, npcRend.bounds.max.y));
+                    AtlasRenderer passengerRend = possiblePassengers[0].atlasRenderer;
+                    uiData.keyBindWorldPos.x = passengerRend.bounds.center.x;
+                    uiData.keyBindWorldPos.y = passengerRend.bounds.max.y + uiData.keyBindIconWorldSize.y;
+                    uiData.keyBindWorldPos.z = passengerRend.transform.position.z - 0.1f;
+                    uiData.keyBindSpriteIndex = (int)KeybindSpriteIndex.E;
+                    
+                    actionData.onShowKeyIcon?.Invoke();
                 }
 
             }
