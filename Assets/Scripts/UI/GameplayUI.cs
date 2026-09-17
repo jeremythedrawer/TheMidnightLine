@@ -74,8 +74,6 @@ public class GameplayUI : MonoBehaviour
 
         SpyBrain.OnHoverTalkDisabled += HideKeyIcon;
         SpyBrain.OnHoverTalkFirstTime += ShowEIcon;
-        SpyBrain.OnAtSlideDoors += ShowSpaceIcon;
-        SpyBrain.OnWalkPastSlideDoors += HideKeyIcon;
         SpyBrain.OnEnteredTrain += AppearRailMap;
         SpyBrain.OnExitTrain += DissappearRailMap;
         SpyBrain.OnEnteredTrain += DisappearKeyIcon;
@@ -96,9 +94,7 @@ public class GameplayUI : MonoBehaviour
         TrainController.OnFinishTripScene -= HideKeyIcon;
 
         SpyBrain.OnHoverTalkDisabled -= HideKeyIcon;
-        SpyBrain.OnAtSlideDoors -= ShowSpaceIcon;
         SpyBrain.OnHoverTalkFirstTime -= ShowEIcon;
-        SpyBrain.OnWalkPastSlideDoors -= HideKeyIcon;
         SpyBrain.OnEnteredTrain -= DisappearKeyIcon;
         SpyBrain.OnExitTrain -= DissappearRailMap;
         SpyBrain.OnTalkToPassenger -= DisappearKeyIcon;

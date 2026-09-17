@@ -21,6 +21,7 @@ public class WorldUIController : MonoBehaviour
     public CursorData cursorData;
     public UIData uiData;
     public AudioData audioData;
+    public ActionData actionData;
 
     public AudioSource audioSource;
     public AudioSource keybindAudioSource;
@@ -32,8 +33,6 @@ public class WorldUIController : MonoBehaviour
     public CountryMap countryMap;
 
     public GameEvent onBeginTrip;
-    public GameEvent onShowKeyIcon;
-    public GameEvent onHideKeyIcon;
 
     public AtlasRenderer keybindRenderer;
 
@@ -59,9 +58,9 @@ public class WorldUIController : MonoBehaviour
         onBeginTrip.RegisterListener(DisappearBuildings);
         onBeginTrip.RegisterListener(LowerMusicVolume);
 
-        onShowKeyIcon.RegisterListener(SetKeyBindIcon);
+        actionData.onShowKeyIcon += SetKeyBindIcon;
         
-        onHideKeyIcon.RegisterListener(HideKeybindIcon);
+        actionData.onHideKeyIcon += HideKeybindIcon;
 
         SliderController.OnChangeMusicVolume += SetMusicVolume;
     }
@@ -74,10 +73,10 @@ public class WorldUIController : MonoBehaviour
         onBeginTrip.UnregisterListener(SetToNoneState);
         onBeginTrip.UnregisterListener(DisappearBuildings);
         onBeginTrip.UnregisterListener(LowerMusicVolume);
-        
-        onShowKeyIcon.UnregisterListener(SetKeyBindIcon);
-        
-        onHideKeyIcon.UnregisterListener(HideKeybindIcon);
+
+        actionData.onHideKeyIcon -= SetKeyBindIcon;
+
+        actionData.onHideKeyIcon -= HideKeybindIcon;
 
         SliderController.OnChangeMusicVolume -= SetMusicVolume;
     }

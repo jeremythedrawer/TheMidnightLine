@@ -14,8 +14,6 @@ public class SpyBrain : MonoBehaviour
     public static event Action OnHoverTalkEnabled;
     public static event Action<Vector2> OnHoverTalkFirstTime;
     public static event Action OnHoverTalkDisabled;
-    public static event Action<Vector2> OnAtSlideDoors;
-    public static event Action OnWalkPastSlideDoors;
     public static event Action OnEnteredTrain;
     public static event Action OnTalkToPassenger;
     public static event Action OnOpenNotepad;
@@ -42,6 +40,8 @@ public class SpyBrain : MonoBehaviour
     public NotepadData notepadData;
     public AudioData audioData;
     public Options options;
+    public ActionData actionData;
+    public UIData uiData;
 
     [Header("Generated")]
     public PassengerBrain[] possiblePassengers;
@@ -657,12 +657,17 @@ public class SpyBrain : MonoBehaviour
         if (foundSlideDoor != null && slideDoors == null)
         {
             foundSlideDoor.ToggleInvertDoors(true);
-            OnAtSlideDoors?.Invoke(new Vector2(foundSlideDoor.boxCollider.bounds.center.x, foundSlideDoor.boxCollider.bounds.max.y));
+            uiData.keyBindWorldPos.x = foundSlideDoor.boxCollider.bounds.center.x;
+            uiData.keyBindWorldPos.y = foundSlideDoor.boxCollider.bounds.max.y;
+            uiData.keyBindWorldPos.z = transform.position.z;
+            uiData.keyBindSpriteIndex = (int)KeybindSpriteIndex.W;
+            actionData.onShowKeyIcon?.Invoke();
         }
         else if (foundSlideDoor == null && slideDoors != null)
         {
             slideDoors.ToggleInvertDoors(false);
-            OnWalkPastSlideDoors?.Invoke();
+            uiData.keyBindSpriteIndex = -1;
+            actionData.onHideKeyIcon?.Invoke();
         }
         slideDoors = foundSlideDoor;
     }
@@ -685,12 +690,18 @@ public class SpyBrain : MonoBehaviour
 
         if (foundSlideDoor != null && slideDoors == null)
         {
-            OnAtSlideDoors?.Invoke(new Vector2(foundSlideDoor.boxCollider.bounds.center.x, foundSlideDoor.boxCollider.bounds.max.y));
-
+            foundSlideDoor.ToggleInvertDoors(true);
+            uiData.keyBindWorldPos.x = foundSlideDoor.boxCollider.bounds.center.x;
+            uiData.keyBindWorldPos.y = foundSlideDoor.boxCollider.bounds.max.y;
+            uiData.keyBindWorldPos.z = transform.position.z;
+            uiData.keyBindSpriteIndex = (int)KeybindSpriteIndex.W;
+            actionData.onShowKeyIcon?.Invoke();
         }
         else if (foundSlideDoor == null && slideDoors != null)
         {
-            OnWalkPastSlideDoors?.Invoke();
+            slideDoors.ToggleInvertDoors(false);
+            uiData.keyBindSpriteIndex = -1;
+            actionData.onHideKeyIcon?.Invoke();
         }
         
         slideDoors = foundSlideDoor;
@@ -735,7 +746,11 @@ public class SpyBrain : MonoBehaviour
                             AtlasRenderer stationPlatform = station.platformRenderer;
                         
                             transform.SetParent(stationPlatform.transform, true);
-                        
+
+                            slideDoors.ToggleInvertDoors(false);
+                            uiData.keyBindSpriteIndex = -1;
+                            actionData.onHideKeyIcon?.Invoke();
+
                             atlasRenderer.SetWorldDepth((int)stationPlatform.transform.position.z);
                             OnExitTrain?.Invoke();
                         }
@@ -756,6 +771,11 @@ public class SpyBrain : MonoBehaviour
                         transform.SetParent(CurCarriage.transform, true);
 
                         atlasRenderer.SetWorldDepth(trainData.depthSections.frontStandingBack);
+
+                        slideDoors.ToggleInvertDoors(false);
+                        uiData.keyBindSpriteIndex = -1;
+                        actionData.onHideKeyIcon?.Invoke();
+
                         OnEnteredTrain?.Invoke();
                     }
                     break;

@@ -15,12 +15,11 @@ public class HenchmanBrain : MonoBehaviour
     public InputData inputData;
     public NotepadData notepadData;
     public AudioData audioData;
+    public ActionData actionData;
 
     public AtlasRenderer atlasRenderer;
     public AudioSource audioSource;
 
-    public GameEvent onShowKeyIcon;
-    public GameEvent onHideKeyIcon;
     public GameEvent onOpenDialogueBubble;
     public GameEvent onCloseDialogueBubble;
 
@@ -154,7 +153,7 @@ public class HenchmanBrain : MonoBehaviour
             uiData.keyBindWorldPos.x = atlasRenderer.bounds.center.x;
             uiData.keyBindWorldPos.y = atlasRenderer.bounds.max.y + uiData.keyBindIconWorldSize.y + KEY_ICON_POS_BUFFER;
             uiData.keyBindWorldPos.z = atlasRenderer.bounds.max.z;
-            onShowKeyIcon?.Raise();
+            actionData.onShowKeyIcon?.Invoke();
 
             audioSource.volume = audioData.soundEffectsVolume;
             int randWuhIndex = UnityEngine.Random.Range(0, audioData.wuh.Length);
@@ -166,7 +165,7 @@ public class HenchmanBrain : MonoBehaviour
         if (uiData.keyBindSpriteIndex != -1)
         {
             uiData.keyBindSpriteIndex = -1;
-            onHideKeyIcon?.Raise();
+            actionData.onHideKeyIcon?.Invoke();
         }
     }
     private void FlashSuitcase()
