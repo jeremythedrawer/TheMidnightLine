@@ -291,7 +291,6 @@ MonoBehaviour:
   prevSpriteIndexFlipH: 14
   prevSpriteIndexFlipV: 14
   isAnimating: 0
-  isPlayingSound: 0
   quadCount: 0
 --- !u!114 &5703785320338597996
 MonoBehaviour:
@@ -414,6 +413,10 @@ PrefabInstance:
     serializedVersion: 3
     m_TransformParent: {fileID: 7380519998003774169}
     m_Modifications:
+    - target: {fileID: 1882177056989218274, guid: ae4539b8bdeb3514188a00275acbfa02, type: 3}
+      propertyPath: customBit
+      value: 528
+      objectReference: {fileID: 0}
     - target: {fileID: 1882177056989218274, guid: ae4539b8bdeb3514188a00275acbfa02, type: 3}
       propertyPath: m_Enabled
       value: 1
@@ -621,7 +624,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 5210363695832520489, guid: 1a5753332a5109842b0ffb74fd069463, type: 3}
       propertyPath: m_LocalPosition.y
-      value: -0.21
+      value: -0.281
       objectReference: {fileID: 0}
     - target: {fileID: 5210363695832520489, guid: 1a5753332a5109842b0ffb74fd069463, type: 3}
       propertyPath: m_LocalPosition.z
@@ -656,6 +659,10 @@ PrefabInstance:
       value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8214745143486504670, guid: 1a5753332a5109842b0ffb74fd069463, type: 3}
+      propertyPath: customBit
+      value: 528
+      objectReference: {fileID: 0}
+    - target: {fileID: 8214745143486504670, guid: 1a5753332a5109842b0ffb74fd069463, type: 3}
       propertyPath: m_Enabled
       value: 1
       objectReference: {fileID: 0}
@@ -669,7 +676,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8214745143486504670, guid: 1a5753332a5109842b0ffb74fd069463, type: 3}
       propertyPath: bounds.m_Center.y
-      value: 1.7099999
+      value: 1.6389999
       objectReference: {fileID: 0}
     - target: {fileID: 8214745143486504670, guid: 1a5753332a5109842b0ffb74fd069463, type: 3}
       propertyPath: bounds.m_Center.z

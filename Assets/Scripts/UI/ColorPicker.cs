@@ -37,6 +37,8 @@ public class ColorPicker : MonoBehaviour
     public Vector3[] curColorButtonPositions;
     
     public Vector3 closeButtonPosition;
+    public Vector3 closeBackgroundPosition;
+    public Vector3 openBackgroundPosition;
 
     public int globalShaderID;
     public int selectedIndex;
@@ -86,24 +88,39 @@ public class ColorPicker : MonoBehaviour
 
         float colorButtonCellWidth = colorButtonSize.x + BUTTON_PADDING;
 
-        closeButtonPosition.x = middlePivSize.x + textButton.textRenderer.bounds.size.x + (colorButtonSize.x * 0.5f);
-        closeButtonPosition.y = middlePivSize.y + (colorButtonSize.y * 0.5f);
-        closeButtonPosition.z = BUTTON_DEPTH;
+        float initBackgroundWorldWidth = textButton.backgroundRenderer.bounds.size.x;
 
         closeWidth = textButton.backgroundRenderer.width + (colorButtonCellWidth / middlePivSize.z);
         textButton.backgroundRenderer.width = closeWidth;
         textButton.backgroundRenderer.UpdateSliceSpriteInputsSelf();
 
+        float newBackgroundWorldWidth = textButton.backgroundRenderer.bounds.size.x;
+        float backgroundWorldWidthDiff = newBackgroundWorldWidth - initBackgroundWorldWidth;
+        closeBackgroundPosition.x = textButton.backgroundRenderer.transform.localPosition.x + (backgroundWorldWidthDiff * 0.5f);
+        closeBackgroundPosition.y = textButton.backgroundRenderer.transform.localPosition.y;
+        closeBackgroundPosition.z = textButton.backgroundRenderer.transform.localPosition.z;
+
+        openBackgroundPosition.x = textButton.backgroundRenderer.transform.localPosition.x + (backgroundWorldWidthDiff * 0.5f * selectableColors.Length);
+        openBackgroundPosition.y = textButton.backgroundRenderer.transform.localPosition.y; 
+        openBackgroundPosition.z = textButton.backgroundRenderer.transform.localPosition.z; 
+          
+        textButton.backgroundRenderer.transform.localPosition = closeBackgroundPosition;
+
+
         float totalWidth = colorButtonCellWidth * (selectableColors.Length - 1);
         openWidth = closeWidth + (totalWidth / middlePivSize.z);
 
+
+        closeButtonPosition.x = textButton.textRenderer.bounds.size.x + (colorButtonSize.x * 0.5f);
+        closeButtonPosition.y = - (colorButtonSize.y * 0.5f);
+        closeButtonPosition.z = 0;
 
 
         if (pickerType == PickerType.DarkColor)
         {
             for (int i = 0; i < selectableColors.Length; i++)
             {
-                IconButton colorButton = Instantiate(options.colorButtonPrefab, textButton.backgroundRenderer.transform);
+                IconButton colorButton = Instantiate(options.colorButtonPrefab, textButton.transform);
                 colorButton.transform.localPosition = closeButtonPosition;
 
                 Color selectableColor = selectableColors[i];
@@ -186,7 +203,7 @@ public class ColorPicker : MonoBehaviour
         {
             for (int i = 0; i < selectableColors.Length; i++)
             {
-                IconButton colorButton = Instantiate(options.colorButtonPrefab, textButton.backgroundRenderer.transform);
+                IconButton colorButton = Instantiate(options.colorButtonPrefab, textButton.transform);
                 colorButton.transform.localPosition = closeButtonPosition;
 
                 Color selectableColor = selectableColors[i];
@@ -377,7 +394,7 @@ public class ColorPicker : MonoBehaviour
                 t = Curves.EaseInOutCubic(t);
                 textButton.backgroundRenderer.width = Mathf.Lerp(closeWidth, openWidth, t);
                 textButton.backgroundRenderer.UpdateSliceSpriteInputsSelf();
-
+                textButton.backgroundRenderer.transform.localPosition = Vector3.Lerp(closeBackgroundPosition, openBackgroundPosition, t);
                 for (int i = 0; i < colorButtons.Length; i++)
                 {
                     IconButton patternButton = colorButtons[i];
@@ -405,6 +422,7 @@ public class ColorPicker : MonoBehaviour
                 t = Curves.EaseInOutCubic(t);
                 textButton.backgroundRenderer.width = Mathf.Lerp(closeWidth, openWidth, t);
                 textButton.backgroundRenderer.UpdateSliceSpriteInputsSelf();
+                textButton.backgroundRenderer.transform.localPosition = Vector3.Lerp(closeBackgroundPosition, openBackgroundPosition, t);
 
                 for (int i = 0; i < colorButtons.Length; i++)
                 {

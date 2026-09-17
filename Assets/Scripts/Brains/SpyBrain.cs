@@ -345,6 +345,11 @@ public class SpyBrain : MonoBehaviour
             case SpyState.Walk:
             {
                 CalculateCollisionPoints();
+                
+                bool leftWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, spyData.curWallLayer);
+                bool rightWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, spyData.curWallLayer);
+                spyData.walkingIntoWall = (leftWallTouch && inputData.move == -1) || (rightWallTouch && inputData.move == 1);
+
                 if (camData.curLocationState == LocationState.Carriage || camData.curLocationState == LocationState.Gangway)
                 {
                     RaycastHit2D gangwayDoorLeftHit = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, layerData.trainLayers.gangwayDoor);
@@ -613,11 +618,6 @@ public class SpyBrain : MonoBehaviour
 
         collisionData.wallLeft = new Vector2(wallLeft, boxCollider.bounds.center.y);
         collisionData.wallRight = new Vector2(wallRight, boxCollider.bounds.center.y);
-
-        bool leftWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallLeft, spyData.curWallLayer);
-        bool rightWallTouch = Physics2D.Linecast(boxCollider.bounds.center, collisionData.wallRight, spyData.curWallLayer);
-        spyData.walkingIntoWall = (leftWallTouch && inputData.move == -1) || (rightWallTouch && inputData.move == 1);
-
     }
     private void GetSlideDoorAtStation()
     {

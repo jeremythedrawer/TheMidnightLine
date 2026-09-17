@@ -6,7 +6,6 @@ public class SlideDoors : MonoBehaviour
 {
     const float UNLOCK_MOVE_AMOUNT_PERCENT = 0.01f;
     const float OPEN_MOVE_AMOUNT_PERCENT = 0.99f;
-    const float UNLOCK_MOVE_TIME = 0.3f;
     const int MAX_QUEUE_SIZE = 128;
     const float QUEUE_TICK_RATE = 0.3f;
     public enum State
@@ -23,14 +22,14 @@ public class SlideDoors : MonoBehaviour
 
     public AtlasRenderer rightSlideDoorRenderer;
     public AtlasRenderer leftSlideDoorRenderer;
+
     public BoxCollider2D boxCollider;
     public AudioSource audioSource;
 
-
     [Header("Generated")]
     public State curState;
-    public Transform rightSlideDoor_transform;
-    public Transform leftSlideDoor_transform;
+    public Transform rightSlideDoorTransform;
+    public Transform leftSlideDoorTransform;
     public Carriage carriage;
 
     public Vector3 rightSlideDoorPos;
@@ -47,10 +46,9 @@ public class SlideDoors : MonoBehaviour
     }
     private void Start()
     {
-        ResetDoors();
         curState = State.Locked;
-        rightSlideDoor_transform = rightSlideDoorRenderer.transform;
-        leftSlideDoor_transform = leftSlideDoorRenderer.transform;
+        rightSlideDoorTransform = rightSlideDoorRenderer.transform;
+        leftSlideDoorTransform = leftSlideDoorRenderer.transform;
         activeMoveAmount = rightSlideDoorRenderer.sprite.worldSize.x * OPEN_MOVE_AMOUNT_PERCENT;
         unlockMoveAmount = rightSlideDoorRenderer.sprite.worldSize.x * UNLOCK_MOVE_AMOUNT_PERCENT;
 
@@ -58,6 +56,8 @@ public class SlideDoors : MonoBehaviour
         disembarkTrainQueue = new NPCQueue();
         boardTrainQueue.npcs = new PassengerBrain[MAX_QUEUE_SIZE];
         disembarkTrainQueue.npcs = new PassengerBrain[MAX_QUEUE_SIZE];
+        
+        ResetDoors();
     }
     private void Update()
     {
@@ -65,7 +65,7 @@ public class SlideDoors : MonoBehaviour
     }
     private void SetState(State newState)
     {
-        if(newState == curState) return;
+        if (newState == curState) return;
         ExitState();
         State prevState = curState;
         curState = newState;
@@ -82,8 +82,8 @@ public class SlideDoors : MonoBehaviour
                 t = Curves.EaseOutT(t, 2);
                 rightSlideDoorPos.x = activeMoveAmount * t;
                 leftSlideDoorPos.x = activeMoveAmount * -t;
-                rightSlideDoor_transform.localPosition = rightSlideDoorPos;
-                leftSlideDoor_transform.localPosition = leftSlideDoorPos;
+                rightSlideDoorTransform.localPosition = rightSlideDoorPos;
+                leftSlideDoorTransform.localPosition = leftSlideDoorPos;
 
                 if (moveTimer >= audioData.slideDoorsOpening.length)
                 {
@@ -130,8 +130,8 @@ public class SlideDoors : MonoBehaviour
                 rightSlideDoorPos.x = activeMoveAmount * t;
                 leftSlideDoorPos.x = activeMoveAmount * -t;
 
-                rightSlideDoor_transform.localPosition = rightSlideDoorPos;
-                leftSlideDoor_transform.localPosition = leftSlideDoorPos;
+                rightSlideDoorTransform.localPosition = rightSlideDoorPos;
+                leftSlideDoorTransform.localPosition = leftSlideDoorPos;
 
                 if (t <= 0)
                 {
@@ -165,8 +165,8 @@ public class SlideDoors : MonoBehaviour
 
             case State.Opening:
             {
-                rightSlideDoorPos = rightSlideDoor_transform.localPosition;
-                leftSlideDoorPos = leftSlideDoor_transform.localPosition;
+                rightSlideDoorPos = rightSlideDoorTransform.localPosition;
+                leftSlideDoorPos = leftSlideDoorTransform.localPosition;
                 moveTimer = 0;
 
                 audioSource.volume = audioData.soundEffectsVolume;
@@ -181,8 +181,8 @@ public class SlideDoors : MonoBehaviour
 
                 rightSlideDoorPos.x = activeMoveAmount;
                 leftSlideDoorPos.x = -activeMoveAmount;
-                rightSlideDoor_transform.localPosition = rightSlideDoorPos;
-                leftSlideDoor_transform.localPosition = leftSlideDoorPos;
+                rightSlideDoorTransform.localPosition = rightSlideDoorPos;
+                leftSlideDoorTransform.localPosition = leftSlideDoorPos;
 
                 trainData.slideDoorsAmountOpened++;
             }
@@ -190,8 +190,8 @@ public class SlideDoors : MonoBehaviour
 
             case State.Closing:
             {
-                rightSlideDoorPos = rightSlideDoor_transform.localPosition;
-                leftSlideDoorPos = leftSlideDoor_transform.localPosition;
+                rightSlideDoorPos = rightSlideDoorTransform.localPosition;
+                leftSlideDoorPos = leftSlideDoorTransform.localPosition;
                 moveTimer = audioData.slideDoorsClosing.length;
 
 
@@ -205,8 +205,8 @@ public class SlideDoors : MonoBehaviour
 
                 rightSlideDoorPos.x = 0;
                 leftSlideDoorPos.x = 0;
-                rightSlideDoor_transform.localPosition = rightSlideDoorPos;
-                leftSlideDoor_transform.localPosition = leftSlideDoorPos;
+                rightSlideDoorTransform.localPosition = rightSlideDoorPos;
+                leftSlideDoorTransform.localPosition = leftSlideDoorPos;
                 if (prevState == State.Closing)
                 {
                     trainData.slideDoorsAmountOpened--;
@@ -234,22 +234,22 @@ public class SlideDoors : MonoBehaviour
             SetState(State.Locked);
         }
     }
-    public void AddToBoardTrainQueue(PassengerBrain npc)
+    public void AddToBoardTrainQueue(PassengerBrain passenger)
     {
-        npc.boardTrainQueueIndex = boardTrainQueue.passengerCount;
-        boardTrainQueue.npcs[boardTrainQueue.passengerCount] = npc;
+        passenger.boardTrainQueueIndex = boardTrainQueue.passengerCount;
+        boardTrainQueue.npcs[boardTrainQueue.passengerCount] = passenger;
         boardTrainQueue.passengerCount++;
     }
-    public void AddToDisembarkTrainQueue(PassengerBrain npc)
+    public void AddToDisembarkTrainQueue(PassengerBrain passenger)
     {
-        npc.disembarkTrainQueueIndex = disembarkTrainQueue.passengerCount;
-        disembarkTrainQueue.npcs[disembarkTrainQueue.passengerCount] = npc;
+        passenger.disembarkTrainQueueIndex = disembarkTrainQueue.passengerCount;
+        disembarkTrainQueue.npcs[disembarkTrainQueue.passengerCount] = passenger;
         disembarkTrainQueue.passengerCount++;
     }
     public void ResetDoors()
     {
         curState = State.Locked;
-        rightSlideDoor_transform.localPosition = new Vector3(0, 0, rightSlideDoor_transform.localPosition.z);
-        leftSlideDoor_transform.localPosition = new Vector3(0, 0, leftSlideDoor_transform.localPosition.z);
+        rightSlideDoorTransform.localPosition = new Vector3(0, 0, rightSlideDoorTransform.localPosition.z);
+        leftSlideDoorTransform.localPosition = new Vector3(0, 0, leftSlideDoorTransform.localPosition.z);
     }
 }

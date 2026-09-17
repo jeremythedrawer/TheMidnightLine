@@ -70,22 +70,21 @@ public class Notepad : MonoBehaviour
 
     private void OnEnable()
     {
-        Page.OnMouseUpExitButton += HandlePageExitButton;
+        Page.OnExitNotepad += ToggleNotepad;
     }
     private void OnDisable()
     {
         notepadData.subState = SubState.None;
         notepadData.collected = false;
         Graphics.Blit(Texture2D.whiteTexture, notepadData.pageFlipRT);
-        Page.OnMouseUpExitButton -= HandlePageExitButton;
+        Page.OnExitNotepad -= ToggleNotepad;
     }
     private void Update()
     {
-        activePage.exitButton.UpdateButton();
+        UpdateState();
 
         if ((notepadData.subState & SubState.InUse) != 0)
         {
-            UpdateState();
             ChooseState();
         }
     }
@@ -219,12 +218,12 @@ public class Notepad : MonoBehaviour
                 }
                 else
                 {
-                    if (activePage.pageIndex < lastPageIndex - 1 && inputData.flipKeyDownValue == 1)
+                    if (activePage.pageIndex < lastPageIndex - 1 && inputData.notepadFlipValue == 1 && inputData.notepadFlipKeyUp)
                     {
                         notepadData.subState |= SubState.WillFlipUp;
                         notepadData.subState &= ~(SubState.WillFlipDown);
                     }
-                    if (activePage.pageIndex > 0 && inputData.flipKeyDownValue == -1)
+                    if (activePage.pageIndex > 0 && inputData.notepadFlipValue == -1 && inputData.notepadFlipKeyUp)
                     {
                         notepadData.subState |= SubState.WillFlipDown;
                         notepadData.subState &= ~(SubState.WillFlipUp);
@@ -251,12 +250,12 @@ public class Notepad : MonoBehaviour
                 }
                 else
                 {
-                    if (activePage.pageIndex < lastPageIndex && inputData.flipKeyDownValue == 1)
+                    if (activePage.pageIndex < lastPageIndex && inputData.notepadFlipValue == 1 && inputData.notepadFlipKeyUp)
                     {
                         notepadData.subState |= SubState.WillFlipUp;
                         notepadData.subState &= ~(SubState.WillFlipDown);
                     }
-                    else if (activePage.pageIndex > 1 && inputData.flipKeyDownValue == -1)
+                    else if (activePage.pageIndex > 1 && inputData.notepadFlipValue == -1 && inputData.notepadFlipKeyUp)
                     {
                         notepadData.subState |= SubState.WillFlipDown;
                         notepadData.subState &= ~(SubState.WillFlipUp);
@@ -282,18 +281,16 @@ public class Notepad : MonoBehaviour
             case NotepadState.Stationary:
             {
                 activePage.UpdatePage();
-                UpdateNaturalPos(notepadData.activeLocalPos, ref curLocalPos);
-                transform.localPosition = Vector3.Lerp(transform.localPosition, curLocalPos, Time.deltaTime * MOVE_DAMP);
+
+                if ((notepadData.subState & SubState.InUse) != 0)
+                {
+                    UpdateNaturalPos(notepadData.activeLocalPos, ref curLocalPos);
+                    transform.localPosition = Vector3.Lerp(transform.localPosition, curLocalPos, Time.deltaTime * MOVE_DAMP);
+                }
+                
                 if (inputData.notepadToggleKeyUp)
                 {
-                    if (!canExitState)
-                    {
-                        canExitState = true;
-                    }
-                    else
-                    {
-                        notepadData.subState ^= SubState.InUse;
-                    }
+                    ToggleNotepad();
                 }
             }
             break;
@@ -432,7 +429,7 @@ public class Notepad : MonoBehaviour
 
                 int stationsLeft = options.curTrip.stationsDataArray.Length - i;
                 float normSpawnIndex = UnityEngine.Random.Range(0, stationsLeft + 1) / (float)stationsLeft;
-                float gaussianNormSpawnIndex = NormalGaussianValue(normSpawnIndex);
+                float gaussianNormSpawnIndex = Curves.NormalGaussianValue(normSpawnIndex);
                 traitorProfile.disembarkingStationIndex = Mathf.Min(i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft) + MIN_STATION_STOPS, options.curTrip.stationsDataArray.Length - 1);
 
                 PassengerData traitor = options.curTrip.passengers[traitorProfile.npcPrefabIndex];
@@ -494,7 +491,7 @@ public class Notepad : MonoBehaviour
 
                 int stationsLeft = options.curTrip.stationsDataArray.Length - i;
                 float normSpawnIndex = (float)j / (float)station.bystanderSpawnCount;
-                float gaussianNormSpawnIndex = NormalGaussianValue(normSpawnIndex);
+                float gaussianNormSpawnIndex = Curves.NormalGaussianValue(normSpawnIndex);
                 bystanderProfile.disembarkingStationIndex = Mathf.Min(i + 1 + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft), options.curTrip.stationsDataArray.Length - 1);
 
                 station.bystanderProfiles[j] = bystanderProfile;
@@ -526,7 +523,7 @@ public class Notepad : MonoBehaviour
             randIndicesList.RemoveAt(randIndex);
 
             ProfilePage traitorPage = Instantiate(notepadData.profilePagePrefab, transform);
-            traitorPage.transform.localPosition = new Vector3(0, 0, notepadData.leftHandDepthBack - 1);
+            traitorPage.transform.localPosition = new Vector3(0, 0, notepadData.leftHandDepthBack - 1.5f);
 
             int pageIndex = i + 1;
             traitorPage.InitProfile(traitorProfile, pageIndex);
@@ -540,14 +537,10 @@ public class Notepad : MonoBehaviour
         pages = pageList.ToArray();
         lastPageIndex = pages.Length - 1;
     }
-    private float NormalGaussianValue(float t)
-    {
-        return Mathf.Exp(-(Mathf.Pow(t - 0.5f, 2) / 0.045f)) * 0.5f;
-    }
     private bool ToFlipUp()
     {
         bool canFlipUp = (notepadData.subState & SubState.CanFlipUp) != 0;
-        bool validFlipUpInputted = inputData.flipKeyDownValue == 1 && activePage.pageIndex < lastPageIndex;
+        bool validFlipUpInputted = inputData.notepadFlipKeyUp && inputData.notepadFlipValue == 1 && activePage.pageIndex < lastPageIndex;
         bool isFlippingUp = (notepadData.subState & (SubState.WillFlipUp | SubState.IsFlippingUp)) != 0;
         
         return (validFlipUpInputted || isFlippingUp) && canFlipUp;
@@ -555,7 +548,7 @@ public class Notepad : MonoBehaviour
     private bool ToFlipDown()
     {
         bool canFlipDown = (notepadData.subState & SubState.CanFlipDown) != 0;
-        bool validFlipDownInputted = inputData.flipKeyDownValue == -1 && activePage.pageIndex > 0;
+        bool validFlipDownInputted = inputData.notepadFlipKeyUp && inputData.notepadFlipValue == -1 && activePage.pageIndex > 0;
         bool isFlippingDown = (notepadData.subState & (SubState.WillFlipDown | SubState.IsFlippingDown)) != 0;
 
         return (validFlipDownInputted || isFlippingDown) && canFlipDown;
@@ -596,7 +589,7 @@ public class Notepad : MonoBehaviour
 
         return firstName + " " + lastName;
     }
-    private void HandlePageExitButton()
+    private void ToggleNotepad()
     {
         notepadData.subState ^= SubState.InUse;
 

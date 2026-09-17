@@ -7,7 +7,7 @@ using static Notepad;
 using static Passenger;
 public class Page : MonoBehaviour
 {
-    public static event Action OnMouseUpExitButton;
+    public static event Action OnExitNotepad;
 
     public const float CONTENTS_LOCAL_POS_Z = -0.1f;
     public const float FLIP_LOCAL_POS_Y = -1.656f;
@@ -57,7 +57,7 @@ public class Page : MonoBehaviour
         void MouseUpExitButton()
         {
             exitButton.MouseUp();
-            OnMouseUpExitButton?.Invoke();
+            OnExitNotepad?.Invoke();
         }
 
         leftButton?.InitButton(MouseUpLeftButton);
@@ -108,6 +108,11 @@ public class Page : MonoBehaviour
         exitButton?.UpdateButton();
         rightButton?.UpdateButton();
         leftButton?.UpdateButton();
+
+        for (int i = 0; i < pageNumberIconButtons.Length; i++)
+        {
+            pageNumberIconButtons[i].UpdateButton();
+        }
     }
     public void SetPageDepth(float localDepth)
     {

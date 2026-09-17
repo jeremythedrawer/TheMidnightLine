@@ -10,7 +10,7 @@ public class InputData : ScriptableObject
     public Vector3 mouseWorldPos;
     
     public int carouselKeyDownValue;
-    public int flipKeyDownValue;
+    public int notepadFlipValue;
     public int move;
     public int numpad;
 
@@ -24,7 +24,8 @@ public class InputData : ScriptableObject
     public bool talkKeyUp;
     
     public bool interactKeyDown;
-    
+    public bool notepadFlipKeyUp;
+
     public bool moveKeyUp;
     public bool moveKeyDown;
 

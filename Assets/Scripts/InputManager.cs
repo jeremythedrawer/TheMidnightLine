@@ -7,7 +7,6 @@ using UnityEngine.InputSystem.Users;
 using static UnityEngine.InputSystem.InputAction;
 
 using static AtlasUI;
-using UnityEngine.InputSystem.Controls;
 public class InputManager : MonoBehaviour
 {
     public InputData inputData;
@@ -53,7 +52,7 @@ public class InputManager : MonoBehaviour
     private void Update()
     {
         Vector2 screenPos = Mouse.current.position.ReadValue();
-        
+
         inputData.mouseScreenPos.x = Mathf.Clamp(screenPos.x, 0f, Screen.width);
         inputData.mouseScreenPos.y = Mathf.Clamp(screenPos.y, 0f, Screen.height);
 
@@ -67,6 +66,7 @@ public class InputManager : MonoBehaviour
         inputData.talkKeyDown = false;
         inputData.talkKeyUp = false;
         inputData.interactKeyDown = false;
+        inputData.notepadFlipKeyUp = false;
 
         inputData.mouseLeftDown = false;
         inputData.mouseLeftUp = false;
@@ -76,7 +76,6 @@ public class InputManager : MonoBehaviour
         inputData.moveKeyDown = false;
 
         inputData.carouselKeyDownValue = 0;
-        inputData.flipKeyDownValue = 0;
         inputData.numpad = -1;
     }
     private void InitInputs()
@@ -104,6 +103,7 @@ public class InputManager : MonoBehaviour
         notepadToggleAction.canceled += OnCancelToggleNotepad;
 
         notepadFlipAction.started += OnStartNotepadFlip;
+        notepadFlipAction.canceled += OnCancelNotepadFlip;
 
         carouselAction.started += OnStartCarousel;
 
@@ -157,7 +157,11 @@ public class InputManager : MonoBehaviour
     private void OnStartNotepadFlip(CallbackContext ctx)
     {
         float value = ctx.ReadValue<float>();
-        inputData.flipKeyDownValue = (int)value;
+        inputData.notepadFlipValue = (int)value;
+    }
+    private void OnCancelNotepadFlip(CallbackContext ctx)
+    {
+        inputData.notepadFlipKeyUp = true;
     }
     private void OnStartCarousel(CallbackContext ctx)
     {

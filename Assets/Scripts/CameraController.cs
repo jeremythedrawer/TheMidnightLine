@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using System;
+using System.Threading;
 using UnityEngine;
 
 using static Atlas;
@@ -29,6 +30,8 @@ public class CameraController : MonoBehaviour
     public ComputeShader carriageBoundsCompute;
 
     [Header("Generated")]
+    public CancellationTokenSource ctsVolume;
+
     public Camera cam;
     
     public LocationState curState;
@@ -52,7 +55,8 @@ public class CameraController : MonoBehaviour
     }
     private void OnDisable()
     {
-
+        ctsVolume?.Cancel();
+        ctsVolume?.Dispose();
     }
     private void Update()
     {
@@ -272,7 +276,7 @@ public class CameraController : MonoBehaviour
     }
     private void SendDataToPixelPerfectShader()
     {
-        Shader.SetGlobalVector("_SnapDiff", rawCurWorldPos - camData.curWorldPos);
+       // Shader.SetGlobalVector("_SnapDiff", rawCurWorldPos - camData.curWorldPos);
     }
     private float GetSnappedOrthoSize()
     {
@@ -280,25 +284,35 @@ public class CameraController : MonoBehaviour
     }
     private void InterpolateVolume(float targetVol, float time)
     {
+        ctsVolume?.Cancel();
+        ctsVolume?.Dispose();
+        ctsVolume = new CancellationTokenSource();
         InterpolatingVolume(targetVol, time).Forget();
     }
     private async UniTask InterpolatingVolume(float targetVol, float time)
     {
         float clock = 0;
 
-        while (clock < time)
+        try
         {
-            float t = clock / time;
+            while (clock < time)
+            {
+                float t = clock / time;
             
-            t = Mathf.Pow(t, 2);
+                t = Mathf.Pow(t, 2);
 
-            audioSource.volume = t * targetVol;
+                audioSource.volume = t * targetVol;
 
-            clock += Time.deltaTime;
+                clock += Time.deltaTime;
 
-            await UniTask.Yield();
+                await UniTask.Yield(ctsVolume.Token);
+            }
+            audioSource.volume = targetVol;
         }
-        audioSource.volume = targetVol;
+        catch(OperationCanceledException)
+        {
+
+        }
     }
     private void Shake(float time, float intensity)
     {

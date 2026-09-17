@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5664027592249379307}
   - component: {fileID: 4242328913838918447}
   m_Layer: 0
-  m_Name: SlideDoor_right
+  m_Name: SlideDoorRight
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -234,8 +234,8 @@ MonoBehaviour:
   boxCollider: {fileID: 592955796763587438}
   audioSource: {fileID: 7623856592962111984}
   curState: 0
-  rightSlideDoor_transform: {fileID: 5664027592249379307}
-  leftSlideDoor_transform: {fileID: 6355935853720996048}
+  rightSlideDoorTransform: {fileID: 0}
+  leftSlideDoorTransform: {fileID: 0}
   carriage: {fileID: 0}
   rightSlideDoorPos: {x: 0, y: 0, z: 0}
   leftSlideDoorPos: {x: 0, y: 0, z: 0}
@@ -244,11 +244,11 @@ MonoBehaviour:
   moveTimer: 0
   boardTrainQueue:
     npcs: []
-    npcsCount: 0
+    passengerCount: 0
     timer: 0
   disembarkTrainQueue:
     npcs: []
-    npcsCount: 0
+    passengerCount: 0
     timer: 0
 --- !u!61 &592955796763587438
 BoxCollider2D:
@@ -307,7 +307,7 @@ GameObject:
   - component: {fileID: 6355935853720996048}
   - component: {fileID: 5192504948783074246}
   m_Layer: 0
-  m_Name: SlideDoor_left
+  m_Name: SlideDoorLeft
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

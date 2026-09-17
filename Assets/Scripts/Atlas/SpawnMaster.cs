@@ -257,6 +257,7 @@ public class SpawnMaster : MonoBehaviour
                     if (posData.postScrollers != null)
                     {
                         int particleIndex = (spawnComputeData.moveInputs[posData.maxParticleIndex] & (int)ParticleMoveInputs.PostAtMinBit) != 0 ? posData.minParticleIndex : posData.maxParticleIndex;
+
                         for (int j = 0; j < posData.postScrollers.Length; j++)
                         {
                             EdgeScroller postScroller = posData.postScrollers[j];
