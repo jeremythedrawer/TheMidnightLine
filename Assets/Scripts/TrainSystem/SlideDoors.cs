@@ -1,5 +1,6 @@
 using Cysharp.Threading.Tasks;
 using UnityEngine;
+using static AtlasUI;
 using static Passenger;
 
 public class SlideDoors : MonoBehaviour
@@ -232,6 +233,19 @@ public class SlideDoors : MonoBehaviour
         else
         {
             SetState(State.Locked);
+        }
+    }
+    public void ToggleInvertDoors(bool invert)
+    {
+        if (invert)
+        {
+            rightSlideDoorRenderer.customBit |= (int)ColorBits.Invert;
+            leftSlideDoorRenderer.customBit |= (int)ColorBits.Invert;
+        }
+        else
+        {
+            rightSlideDoorRenderer.customBit &= ~(int)ColorBits.Invert;
+            leftSlideDoorRenderer.customBit &= ~(int)ColorBits.Invert;
         }
     }
     public void AddToBoardTrainQueue(PassengerBrain passenger)

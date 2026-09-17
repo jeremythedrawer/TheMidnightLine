@@ -656,10 +656,12 @@ public class SpyBrain : MonoBehaviour
 
         if (foundSlideDoor != null && slideDoors == null)
         {
+            foundSlideDoor.ToggleInvertDoors(true);
             OnAtSlideDoors?.Invoke(new Vector2(foundSlideDoor.boxCollider.bounds.center.x, foundSlideDoor.boxCollider.bounds.max.y));
         }
         else if (foundSlideDoor == null && slideDoors != null)
         {
+            slideDoors.ToggleInvertDoors(false);
             OnWalkPastSlideDoors?.Invoke();
         }
         slideDoors = foundSlideDoor;

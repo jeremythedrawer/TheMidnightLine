@@ -32,6 +32,7 @@ Shader "Custom/s_exteriorWalls"
                 float3 worldPos : TEXCOORD3;
                 float3 spritePos : TEXCOORD4;
                 float4 custom : TEXCOORD5;
+                int customBit : TEXCOORD6;
             };
 
             CBUFFER_START(UnityPerMaterial)
@@ -74,6 +75,7 @@ Shader "Custom/s_exteriorWalls"
                 o.uvSizeAndPos = spriteData.uvSizeAndPos;
                 o.scaleAndFlip = spriteData.scaleAndFlip;
                 o.custom = spriteData.custom;
+                o.customBit = spriteData.customBit;
                 return o;
             }
 
@@ -93,10 +95,17 @@ Shader "Custom/s_exteriorWalls"
                 i.uv *= uvSize;
                 i.uv += uvPos;
                 half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+
+                int bitMask = i.customBit;
+                int invertMask = saturate(bitMask & INVERT_BIT);
+                half invertTex = 1 - tex.r;
+                half texMask = lerp(tex.r, invertTex, invertMask);
+
+
                 float divisor = 35;
                 half normDepth = round(i.worldPos.z/divisor) * divisor / FAR_CLIP;
                 half3 nightFactor = lerp(_WhiteColor, _BlackColor, _DayNight * normDepth);
-                half grey = tex.r + (-(_DayNight * 1.1 - 0.9) * normDepth);
+                half grey = texMask + (-(_DayNight * 1.1 - 0.9) * normDepth);
                 half3 finalColor = lerp(_BlackColor, nightFactor, saturate(grey));
 
                 half worldClip = step(i.spritePos.y, i.worldPos.y);
