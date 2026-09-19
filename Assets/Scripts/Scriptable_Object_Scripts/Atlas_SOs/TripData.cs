@@ -24,7 +24,7 @@ public class TripData : ScriptableObject
     public TraitorProfile[] traitorProfiles;
 
     public int passengersTalkToSinceLastStation;
-    public int passengersTalkToTotal;
+    public int passengersTalkedToTotal;
     public int traitorsSpawned;
 
     public UnlockType curUnlocks;

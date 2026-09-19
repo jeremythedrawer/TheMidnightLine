@@ -355,6 +355,7 @@ public class AtlasRenderer : MonoBehaviour
         {
             audioSource.volume = audioData.soundEffectsVolume;
             audioSource.PlayOneShot(clip.audioClips[motionSprite.audioIndex]);
+            
         }
 
         sprite = motionSprite.sprite;
@@ -651,6 +652,7 @@ public class AtlasRendererEditor : Editor
             {
                 case AtlasRendererType.Slice:
                 {
+                    if (rend.atlas == null) return;
                     SliceSprite sliceSprite = rend.atlas.slicedSprites[rend.spriteIndex];
 
                     Vector4 centerWorldPivot = rend.worldPivotsAndSizes[4];

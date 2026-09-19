@@ -15,8 +15,8 @@ public class Menu : MonoBehaviour
 
     public CameraData camData;
     public Options options;
+    public ActionData actionData;
 
-    public GameEvent onBeginTrip;
     [Header("Generated")]
     public Bounds bounds;
 
@@ -52,10 +52,10 @@ public class Menu : MonoBehaviour
                             options.curRegion = options.thirdPointRegion;
                             options.curTrip = options.thirdPointRegion.trips[0];
                             options.curTrip.passengersTalkToSinceLastStation = 0;
-                            options.curTrip.passengersTalkToTotal = 0;
+                            options.curTrip.passengersTalkedToTotal = 0;
                             options.curTrip.traitorsSpawned = 0;
                             camData.curLocationState = Spy.LocationState.Title;
-                            onBeginTrip?.Raise();
+                            actionData.onBeginTrip?.Invoke();
                         }
                         textButton.MouseUpText();
                     }

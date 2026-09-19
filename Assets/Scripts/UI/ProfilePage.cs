@@ -7,10 +7,14 @@ public class ProfilePage : MonoBehaviour
     public Page page;
 
     public PassengersData passengersData;
+    public Options options;
 
     public AtlasRenderer coveredMugShotRenderer;
     public AtlasRenderer uncoveredMugShotRenderer;
+
     public AtlasTextRenderer[] habitTextRenderers;
+
+    public AtlasTextRenderer stationTextRenderer;
 
     [Header("Generated")]
     public int traitorIndex;
@@ -18,10 +22,12 @@ public class ProfilePage : MonoBehaviour
     {
         for (int i = 0; i < habitTextRenderers.Length; i++)
         {
-            Habits behaviour = GetBehaviourAtIndex(traitorProfile.npcProfile.behaviours, i);
+            Habits behaviour = GetBehaviourAtIndex(traitorProfile.passengerProfile.habits, i);
             habitTextRenderers[i].SetText(passengersData.habitStringDict[behaviour]);
         }
-
+        int disembarkingStationIndex = traitorProfile.passengerProfile.disembarkingStationIndex;
+        string disembarkingStationName = options.curTrip.stationsDataArray[disembarkingStationIndex].name;
+        stationTextRenderer.SetText(disembarkingStationName);
         int uncoveredMugShotIndex = traitorProfile.mugShotIndex * 2;
         int coveredMugShotIndex = uncoveredMugShotIndex + 1;
         coveredMugShotRenderer.UpdateSpriteInputs(coveredMugShotRenderer.atlas.simpleSprites[coveredMugShotIndex]);

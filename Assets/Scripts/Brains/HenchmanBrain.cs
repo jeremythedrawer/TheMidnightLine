@@ -7,7 +7,6 @@ using static Passenger;
 using static AtlasUI;
 public class HenchmanBrain : MonoBehaviour
 {
-    public static event Action OnGiveNotepad;
     public Options options;
 
     public SpyData spyData;
@@ -84,7 +83,7 @@ public class HenchmanBrain : MonoBehaviour
                     {
                         if (inputData.talkKeyDown)
                         {
-                            OnGiveNotepad?.Invoke();
+                            actionData.onGiveNotepad?.Invoke();
                             SetState(HenchmanState.Idle);
                             HideKeyIcon();
                         }

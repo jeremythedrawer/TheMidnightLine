@@ -1325,11 +1325,3 @@ public class AtlasFactory : EditorWindow
     }
 
 }
-
-//    ))
-//  .-#-------.
-// /___________\ My cozy little house protected from the monstrosity above. VISITS: 1
-//  | [] _ [] |
-//  |   |*|   |
-//  |   | |   |
-//  ^^^^^^^^^^^

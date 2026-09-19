@@ -32,8 +32,6 @@ public class WorldUIController : MonoBehaviour
 
     public CountryMap countryMap;
 
-    public GameEvent onBeginTrip;
-
     public AtlasRenderer keybindRenderer;
 
     [Header("Generated")]
@@ -54,9 +52,9 @@ public class WorldUIController : MonoBehaviour
         Menu.OnClickOptions += SetToOptionsMenuState;
         Menu.OnClickBackToStartMenu += SetToStartMenuState;
 
-        onBeginTrip.RegisterListener(SetToNoneState);
-        onBeginTrip.RegisterListener(DisappearBuildings);
-        onBeginTrip.RegisterListener(LowerMusicVolume);
+        actionData.onBeginTrip += SetToNoneState;
+        actionData.onBeginTrip += DisappearBuildings;
+        actionData.onBeginTrip += LowerMusicVolume;
 
         actionData.onShowKeyIcon += SetKeyBindIcon;
         
@@ -70,9 +68,9 @@ public class WorldUIController : MonoBehaviour
         Menu.OnClickOptions -= SetToOptionsMenuState;
         Menu.OnClickBackToStartMenu -= SetToStartMenuState;
 
-        onBeginTrip.UnregisterListener(SetToNoneState);
-        onBeginTrip.UnregisterListener(DisappearBuildings);
-        onBeginTrip.UnregisterListener(LowerMusicVolume);
+        actionData.onBeginTrip -= SetToNoneState;
+        actionData.onBeginTrip -= DisappearBuildings;
+        actionData.onBeginTrip -= LowerMusicVolume;
 
         actionData.onHideKeyIcon -= SetKeyBindIcon;
 

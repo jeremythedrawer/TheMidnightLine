@@ -51,11 +51,11 @@ public class Station : MonoBehaviour
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
 
-            PassengerBrain traitor = PassengerManager.GetNPC(options.curTrip.passengers[traitorProfile.npcProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
-            traitor.profile = traitorProfile.npcProfile;
+            PassengerBrain traitor = PassengerManager.GetNPC(options.curTrip.passengers[traitorProfile.passengerProfile.npcPrefabIndex].prefab, spawnPos, platformRenderer.transform);
+            traitor.profile = traitorProfile.passengerProfile;
             traitor.role = Role.Traitor;
             traitor.boardingStation = station;
-            traitor.disembarkingStation = options.curTrip.stationsDataArray[traitorProfile.npcProfile.disembarkingStationIndex];
+            traitor.disembarkingStation = options.curTrip.stationsDataArray[traitorProfile.passengerProfile.disembarkingStationIndex];
             if (i % 2 == 0)
             {
                 traitor.atlasRenderer.FlipHSimple(true);
@@ -97,11 +97,4 @@ public class Station : MonoBehaviour
 
         henchman.transform.SetParent(platformRenderer.transform, worldPositionStays: true);
     }
-    //public void SetFrontParallaxPosition()
-    //{
-    //    frontParallaxController.SetParrallaxFactor();
-    //    float posX = TRAIN_WORLD_POS_X + ((transform.position.x - TRAIN_WORLD_POS_X) * (frontParallaxController.parallaxFactor / parallaxController.parallaxFactor));
-    //    Vector2 pos = new Vector2(posX, 0);
-    //    frontParallaxController.SetWorldPos(pos);
-    //}
 }

@@ -9,7 +9,6 @@ using static AtlasUI;
 using static Passenger;
 public class Notepad : MonoBehaviour
 {
-    public const int MIN_STATION_STOPS = 1;
     public const float MOVE_TIME = 1.5f;
 
     [Flags] public enum SubState
@@ -43,8 +42,6 @@ public class Notepad : MonoBehaviour
     public AudioSource audioSource;
     public AudioData audioData;
 
-    public TextAsset namesJSON;
-
     public Page frontPage;
 
     [Header("Generated")]
@@ -58,8 +55,6 @@ public class Notepad : MonoBehaviour
     public CancellationTokenSource ctsMove;
 
     public TraitorProfile activeTraitorProfile;
-    
-    public NameData nameData;
 
     public Vector3 curLocalPos;
 
@@ -90,7 +85,6 @@ public class Notepad : MonoBehaviour
     }
     public void Init()
     {
-        CreateNPCProfiles();
         PickUpNotepad();
         CreatePages();
         InitPageFlipCompute();
@@ -364,140 +358,6 @@ public class Notepad : MonoBehaviour
         }
 
     }
-    private void CreateNPCProfiles()
-    {
-        nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
-
-        List<NPCProfile> totalNPCProfiles = new List<NPCProfile>();
-        List<NPCProfile> bystanderProfiles = new List<NPCProfile>();
-
-        for (int i = 0; i < options.curTrip.passengers.Length; i++)
-        {
-            PassengerData npc = options.curTrip.passengers[i];
-
-            int behaviourValue = (int)npc.behaviours;
-
-            int[] validFlags = new int[BEHAVIOURS_COUNT];
-            int flagCount = 0;
-
-            for (int j = 0; j < BEHAVIOURS_COUNT; j++)
-            {
-                int flag = 1 << j;
-                if ((behaviourValue & flag) != 0)
-                {
-                    validFlags[flagCount] = flag;
-                    flagCount++;
-                }
-            }
-            for (int j = 0; j < flagCount; j++)
-            {
-                Habits firstBehaviour = (Habits)validFlags[j];
-                for (int k = j + 1; k < flagCount; k++)
-                {
-                    Habits secondBehaviour = (Habits)validFlags[k];
-                    Habits twoBehaviours = firstBehaviour | secondBehaviour;
-
-                    NPCProfile npcProfile = new NPCProfile
-                    {
-                        behaviours = twoBehaviours,
-                        npcPrefabIndex = i,
-                    };
-                    totalNPCProfiles.Add(npcProfile);
-                }
-            }
-        }
-
-        int totalTraitorsInTrip = 0;
-
-        for (int i = 0; i < options.curTrip.stationsDataArray.Length; i++)
-        {
-            StationSO station = options.curTrip.stationsDataArray[i];
-            totalTraitorsInTrip += station.traitorSpawnCount;
-        }
-        options.curTrip.traitorProfiles = new TraitorProfile[totalTraitorsInTrip];;
-
-        int traitorIndex = 0;
-        for (int i = 0; i < options.curTrip.stationsDataArray.Length; i++)
-        {
-            StationSO station = options.curTrip.stationsDataArray[i];
-
-            for (int j = 0; j < station.traitorSpawnCount; j++)
-            {
-                int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
-                NPCProfile traitorProfile = totalNPCProfiles[randProfileIndex];
-                traitorProfile.boardingStationIndex = i;
-
-                int stationsLeft = options.curTrip.stationsDataArray.Length - i;
-                float normSpawnIndex = UnityEngine.Random.Range(0, stationsLeft + 1) / (float)stationsLeft;
-                float gaussianNormSpawnIndex = Curves.NormalGaussianValue(normSpawnIndex);
-                traitorProfile.disembarkingStationIndex = Mathf.Min(i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft) + MIN_STATION_STOPS, options.curTrip.stationsDataArray.Length - 1);
-
-                PassengerData traitor = options.curTrip.passengers[traitorProfile.npcPrefabIndex];
-
-                string name = GenerateName(traitor.gender, traitor.ethnicity);
-                options.curTrip.traitorProfiles[traitorIndex] = new TraitorProfile()
-                {
-                    npcProfile = traitorProfile,
-                    mugShotIndex = traitor.mugShotIndex,
-                    fullName = name,
-                };
-
-                totalNPCProfiles.RemoveAt(randProfileIndex);
-
-                for (int k = totalNPCProfiles.Count - 1; k >= 0; k--)
-                {
-                    if (totalNPCProfiles[k].npcPrefabIndex != traitorProfile.npcPrefabIndex) continue;
-
-                    bystanderProfiles.Add(totalNPCProfiles[k]);
-                    totalNPCProfiles.RemoveAt(k);
-                }
-
-                traitorIndex++;
-            }
-        }
-
-        for (int i = 0; i < options.curTrip.stationsDataArray.Length; i++)
-        {
-            StationSO station = options.curTrip.stationsDataArray[i];
-            station.accompliceProfiles = new NPCProfile[station.accompliceSpawnCount];
-
-            for (int j = 0; j < station.accompliceSpawnCount; j++)
-            {
-                int randPrefabIndex = UnityEngine.Random.Range(0, options.curTrip.passengers.Length);
-                NPCProfile accompliceProfile = new NPCProfile();
-
-                accompliceProfile.npcPrefabIndex = randPrefabIndex;
-                accompliceProfile.boardingStationIndex = i;
-                accompliceProfile.disembarkingStationIndex = options.curTrip.stationsDataArray.Length - 1;
-
-                station.accompliceProfiles[j] = accompliceProfile;
-            }
-
-        }
-
-        totalNPCProfiles.AddRange(bystanderProfiles);
-        for (int i = 0; i < options.curTrip.stationsDataArray.Length; i++)
-        {
-            StationSO station = options.curTrip.stationsDataArray[i];
-
-            station.bystanderProfiles = new NPCProfile[station.bystanderSpawnCount];
-
-            for (int j = 0; j < station.bystanderSpawnCount; j++)
-            {
-                int randIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
-                NPCProfile bystanderProfile = totalNPCProfiles[randIndex];
-
-                bystanderProfile.boardingStationIndex = i;
-
-                int stationsLeft = options.curTrip.stationsDataArray.Length - i;
-                float normSpawnIndex = (float)j / (float)station.bystanderSpawnCount;
-                float gaussianNormSpawnIndex = Curves.NormalGaussianValue(normSpawnIndex);
-                bystanderProfile.disembarkingStationIndex = Mathf.Min(i + 1 + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft), options.curTrip.stationsDataArray.Length - 1);
-
-                station.bystanderProfiles[j] = bystanderProfile;
-            }
-        }
-    }
     private void CreatePages()
     {
         List<Page> pageList = new List<Page>();
@@ -552,42 +412,6 @@ public class Notepad : MonoBehaviour
         bool isFlippingDown = (notepadData.subState & (SubState.WillFlipDown | SubState.IsFlippingDown)) != 0;
 
         return (validFlipDownInputted || isFlippingDown) && canFlipDown;
-    }
-    private string GenerateName(Gender gender, Ethnicity ethnicity)
-    {
-        string genderString = gender.ToString();
-        string ethnicityString = ethnicity.ToString();
-        List<FirstName> firstNamesList = new List<FirstName>();
-
-        for (int i = 0; i < nameData.firstNames.Length; i++)
-        {
-            FirstName fn = nameData.firstNames[i];
-            if (fn.gender.Equals(genderString, StringComparison.OrdinalIgnoreCase) &&
-                fn.ethnicity.Equals(ethnicityString, StringComparison.OrdinalIgnoreCase))
-            {
-                firstNamesList.Add(fn);
-            }
-        }
-        if (firstNamesList.Count == 0) return "NoFirstName";
-
-        int firstNameIndex = UnityEngine.Random.Range(0, firstNamesList.Count);
-        string firstName = firstNamesList[firstNameIndex].name;
-
-        List<LastName> lastNameList = new List<LastName>();
-        for (int i = 0; i < nameData.lastNames.Length; i++)
-        {
-            LastName ln = nameData.lastNames[i];
-            if (ln.ethnicity.Equals(ethnicityString, StringComparison.OrdinalIgnoreCase))
-            {
-                lastNameList.Add(ln);
-            }
-        }
-        if (lastNameList.Count == 0) return firstName;
-
-        int lastNameIndex = UnityEngine.Random.Range(0, lastNameList.Count);
-        string lastName = lastNameList[lastNameIndex].name;
-
-        return firstName + " " + lastName;
     }
     private void ToggleNotepad()
     {

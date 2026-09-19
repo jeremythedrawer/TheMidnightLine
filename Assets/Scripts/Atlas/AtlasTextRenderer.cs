@@ -88,7 +88,7 @@ public class AtlasTextRenderer : MonoBehaviour
     {
         if (textAtlas == null) return;
         if (batchKey.material == null) return;
-        SetTextWorld(text, 1);
+        SetText(text);
 
         bounds = GetBoundsNewText(text);
     }
@@ -659,6 +659,7 @@ public class AtlasTextRendererEditor : Editor
     BoxBoundsHandle boundsHandle = new BoxBoundsHandle();
 
     Vector4 custom;
+    ColorBits colorBits;
     private void OnSceneGUI()
     {
         AtlasTextRenderer textRend = (AtlasTextRenderer)target;
@@ -748,6 +749,17 @@ public class AtlasTextRendererEditor : Editor
             }
         }
 
+        EditorGUI.BeginChangeCheck();
+        GUIContent coloBitsContent = new GUIContent("Color Bits");
+        EditorGUILayout.LabelField("Editor");
+        colorBits = (ColorBits)EditorGUILayout.EnumFlagsField(coloBitsContent, (ColorBits)textRenderer.customBit);
+
+        if (EditorGUI.EndChangeCheck())
+        {
+            Undo.RecordObject(textRenderer, "Change Color Bits");
+            textRenderer.customBit = (int)colorBits;
+            EditorUtility.SetDirty(textRenderer);
+        }
     }
 }
 #endif

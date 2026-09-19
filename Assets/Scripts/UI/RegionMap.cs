@@ -12,9 +12,9 @@ public class RegionMap : MonoBehaviour
         public TripData trip;
     }
 
-    public GameEvent onBeginTrip;
     public Options options;
     public CameraData camData;
+    public ActionData actionData;
 
     public TripButton[] tripButtons;
 
@@ -38,12 +38,12 @@ public class RegionMap : MonoBehaviour
 
                 options.curTrip = tripButton.trip;
                 options.curTrip.passengersTalkToSinceLastStation = 0;
-                options.curTrip.passengersTalkToTotal = 0;
+                options.curTrip.passengersTalkedToTotal = 0;
                 options.curTrip.traitorsSpawned = 0;
                 tripButton.button.atlasRenderer.customBit ^= (int)ColorBits.Invert;
 
                 camData.curLocationState = Spy.LocationState.Title;
-                onBeginTrip?.Raise();
+                actionData.onBeginTrip?.Invoke();
             }
             void EnterButton()
             {

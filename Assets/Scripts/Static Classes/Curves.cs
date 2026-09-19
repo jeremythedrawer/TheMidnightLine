@@ -11,7 +11,10 @@ public static class Curves
     {
         return Mathf.Max(1 - Mathf.Pow(1 - t, p), 0);
     }
-
+    public static float EaseInT(float t, float p)
+    {
+        return Mathf.Max(Mathf.Pow(t, p), 0);
+    }
     public static float NormalGaussianValue(float t)
     {
         return Mathf.Exp(-(Mathf.Pow(t - 0.5f, 2) / 0.045f)) * 0.5f;

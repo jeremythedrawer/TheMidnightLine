@@ -4,6 +4,10 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "UIData", menuName = "Data / UI Data")]
 public class UIData : ScriptableObject
 {
+    public StationLineMap stationLineMapPrefrab;
+
+
+    [Header("Generated")]
     public string curDialogueText;
 
     public Bounds curDialogueBubbleBounds;

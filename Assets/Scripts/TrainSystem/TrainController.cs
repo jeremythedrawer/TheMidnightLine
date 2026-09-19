@@ -38,6 +38,7 @@ public class TrainController : MonoBehaviour
     public SpyData spyStats;
     public CameraData camData;
     public AudioData audioData;
+    public ActionData actionData;
 
     public AtlasRenderer backSprite;
     public AtlasRenderer driversPit;
@@ -72,12 +73,12 @@ public class TrainController : MonoBehaviour
     private void OnEnable()
     {
         SpyBrain.OnTalkToPassenger += UpdateTicketInspectParams;
-        HenchmanBrain.OnGiveNotepad += MoveTrainToStartPosition;
+        actionData.onGiveNotepad += MoveTrainToStartPosition;
     }
     private void OnDisable()
     {
         SpyBrain.OnTalkToPassenger -= UpdateTicketInspectParams;
-        HenchmanBrain.OnGiveNotepad -= MoveTrainToStartPosition;
+        actionData.onGiveNotepad -= MoveTrainToStartPosition;
         
         trainCTS?.Cancel();
         trainCTS?.Dispose();
@@ -481,7 +482,7 @@ public class TrainController : MonoBehaviour
     }
     private void UpdateTicketInspectParams()
     {
-        int ticketParamsIndex = options.curTrip.passengersTalkToTotal - 1;
+        int ticketParamsIndex = options.curTrip.passengersTalkedToTotal - 1;
         trainData.targetElevatePos = options.curTrip.elevationValues[ticketParamsIndex];
         trainData.targetKMPH = options.curTrip.kmValues[ticketParamsIndex];
         trainData.targetNightValue = options.curTrip.dayNightValues[ticketParamsIndex];

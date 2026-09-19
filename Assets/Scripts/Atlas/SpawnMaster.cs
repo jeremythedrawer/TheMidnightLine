@@ -16,14 +16,12 @@ public class SpawnMaster : MonoBehaviour
 {
     const float DELAYED_PARTICLE_QUEUE_TICK = 1f;
 
-
-    public GameEvent onBeginTrip;
-
     public Options options;
     public SpyData spyData;
     public SpawnData spawnData;
     public CameraData camData;
     public TrainData trainData;
+    public ActionData actionData;
 
     [Header("Generated")]
 
@@ -35,13 +33,13 @@ public class SpawnMaster : MonoBehaviour
     {
         SpyBrain.OnTalkToPassenger += ChangeParticles;
         TrainController.OnMetersAtSpawnBounds += DespawnEdgeScrollers;
-        onBeginTrip.RegisterListener(Init);
+        actionData.onCreatedPassengerProfiles += Init;
     }
     private void OnDisable()
     {
         SpyBrain.OnTalkToPassenger -= ChangeParticles;
         TrainController.OnMetersAtSpawnBounds -= DespawnEdgeScrollers;
-        onBeginTrip.UnregisterListener(Init);
+        actionData.onCreatedPassengerProfiles -= Init;
         Dispose();
     }
     private void Update()
@@ -242,7 +240,7 @@ public class SpawnMaster : MonoBehaviour
         {
             ParticlePosData posData = particleAtlas.posData[i];
 
-            if (posData.ticketCheckEnd > options.curTrip.passengersTalkToTotal) continue;
+            if (posData.ticketCheckEnd > options.curTrip.passengersTalkedToTotal) continue;
 
             switch(posData.spawnState)
             {
@@ -332,7 +330,7 @@ public class SpawnMaster : MonoBehaviour
         {
             ParticlePosData posData = particleAtlas.posData[i];
 
-            if (options.curTrip.passengersTalkToTotal < posData.ticketCheckStart)
+            if (options.curTrip.passengersTalkedToTotal < posData.ticketCheckStart)
             {
                 newOffset = i;
                 break;
@@ -644,7 +642,7 @@ public class SpawnMaster : MonoBehaviour
     }
     private async UniTask UpdatingSky()
     {
-        float nextDayNight = options.curTrip.dayNightValues[Mathf.Min(options.curTrip.passengersTalkToTotal, options.curTrip.dayNightValues.Length - 1)];
+        float nextDayNight = options.curTrip.dayNightValues[Mathf.Min(options.curTrip.passengersTalkedToTotal, options.curTrip.dayNightValues.Length - 1)];
         float elapsedTime = 0;
         float startDayNight = Shader.GetGlobalFloat(options.dayNightID);
         

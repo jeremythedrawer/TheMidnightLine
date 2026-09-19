@@ -111,32 +111,32 @@ MonoBehaviour:
   - 22.2
   stationAhead: {fileID: 11400000, guid: 732a9ee9660ea3e45b45c4f7f0827635, type: 2}
   traitorProfiles:
-  - npcProfile:
+  - passengerProfile:
       boardingStationIndex: 1
-      disembarkingStationIndex: 6
-      npcPrefabIndex: 5
-      behaviours: 96
-    fullName: Penelope Gerald
-    mugShotIndex: 6
-    found: 0
-  - npcProfile:
-      boardingStationIndex: 2
-      disembarkingStationIndex: 4
-      npcPrefabIndex: 4
-      behaviours: 34
-    fullName: Natalie Gerald
-    mugShotIndex: 0
-    found: 0
-  - npcProfile:
-      boardingStationIndex: 4
-      disembarkingStationIndex: 6
-      npcPrefabIndex: 6
-      behaviours: 3
+      disembarkingStationIndex: 3
+      npcPrefabIndex: 9
+      behaviours: 5
     fullName: Ivan Petrov
     mugShotIndex: 4
     found: 0
-  ticketsCheckedSinceLastStation: 0
-  ticketsCheckedTotal: 0
+  - passengerProfile:
+      boardingStationIndex: 2
+      disembarkingStationIndex: 4
+      npcPrefabIndex: 1
+      behaviours: 136
+    fullName: Ahad Eltayeb
+    mugShotIndex: 5
+    found: 0
+  - passengerProfile:
+      boardingStationIndex: 4
+      disembarkingStationIndex: 6
+      npcPrefabIndex: 7
+      behaviours: 33
+    fullName: Penelope Richardson
+    mugShotIndex: 0
+    found: 0
+  passengersTalkToSinceLastStation: 3
+  passengersTalkedToTotal: 3
   traitorsSpawned: 0
   curUnlocks: 0
   curDayNightValue: 0

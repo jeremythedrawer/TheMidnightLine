@@ -176,7 +176,7 @@ public class CameraController : MonoBehaviour
                     }
                 }
 
-                if (Mathf.Abs(camData.curWorldPos.y - spyData.bounds.center.y) < 0.01f)
+                if (Mathf.Abs(camData.curWorldPos.y - spyData.bounds.center.y) < 1f)
                 {
                     camUIController.DissappearTitleAlpha();
                     camData.curLocationState = LocationState.Station;

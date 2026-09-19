@@ -1,0 +1,246 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!1 &3111363570929812176
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7478812261705833209}
+  - component: {fileID: 3603566930549275056}
+  m_Layer: 0
+  m_Name: Text
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7478812261705833209
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3111363570929812176}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0.078, y: 0, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6043873334839883903}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3603566930549275056
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3111363570929812176}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f55b4786e96a8dd42b04bb6173006f35, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasTextRenderer
+  rendererType: 0
+  batchKey:
+    texture: {fileID: 2800000, guid: 3ad480baf5f57c44c806202a60d9a7b6, type: 3}
+    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
+  textAtlas: {fileID: 11400000, guid: 03871f642f841d447a7b9560fa5d0c24, type: 2}
+  text: Plinkard
+  kerning: 0.04
+  spacing: 0.07
+  alignmentType: 0
+  color: {r: 0, g: 0, b: 0, a: 0}
+  scrollSpeed: 0
+  scrollBoundSize: 0
+  backgroundRenderer: {fileID: 0}
+  textBoxData:
+    size: {x: 1.3494353, y: 0.18333334}
+    lineWidthArray:
+    - 0.60333335
+    maxLineWidth: 0.60333335
+  bounds:
+    m_Center: {x: 0.33466667, y: 2.2873352, z: -0.1}
+    m_Extent: {x: 0.30166668, y: 0.09166667, z: 0}
+  worldPivotsAndSizes:
+  - {x: 0, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.08444445, y: -0.18333334, z: 0.016666668, w: 0.18333334}
+  - {x: 0.14111112, y: -0.18333334, z: 0.016666668, w: 0.18333334}
+  - {x: 0.1977778, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.28222224, y: -0.18333334, z: 0.03888889, w: 0.18333334}
+  - {x: 0.36111113, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  - {x: 0.44555557, y: -0.18333334, z: 0.033333335, w: 0.18333334}
+  - {x: 0.5188889, y: -0.18333334, z: 0.044444446, w: 0.18333334}
+  uvSizesAndPositions:
+  - {x: 0.03125, y: 0.12890625, z: 0.7265625, w: 0.73828125}
+  - {x: 0.01171875, y: 0.12890625, z: 0.72265625, w: 0.60546875}
+  - {x: 0.01171875, y: 0.12890625, z: 0.65625, w: 0.60546875}
+  - {x: 0.03125, y: 0.12890625, z: 0.79296875, w: 0.60546875}
+  - {x: 0.02734375, y: 0.12890625, z: 0.69140625, w: 0.60546875}
+  - {x: 0.03125, y: 0.12890625, z: 0.375, w: 0.60546875}
+  - {x: 0.0234375, y: 0.12890625, z: 0.93359375, w: 0.60546875}
+  - {x: 0.03125, y: 0.12890625, z: 0.48046875, w: 0.60546875}
+  scalesAndFlips:
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  - {x: 1, y: 1, z: 1, w: 1}
+  customs:
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  - {x: 0, y: 0, z: 0, w: 1}
+  boundsOffset: {x: 0.30166668, y: -0.09166667, z: 0}
+  curAlpha: 1
+  customBit: 32
+  hasText: 1
+  erasingText: 0
+  completedWritingText: 0
+  borderLocalPos: {x: 0, y: 0, z: 0}
+--- !u!1 &8009057799991757828
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 6043873334839883903}
+  - component: {fileID: 3782776967654678460}
+  m_Layer: 0
+  m_Name: StationLineMap
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &6043873334839883903
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8009057799991757828}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: -0.045, y: 2.3790019, z: -0.1}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children:
+  - {fileID: 7730558810676417243}
+  - {fileID: 7478812261705833209}
+  m_Father: {fileID: 0}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3782776967654678460
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8009057799991757828}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: e36b899a87f2c804fa850b19fa50de78, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::StationLineMap
+  textRenderer: {fileID: 3603566930549275056}
+  renderers:
+  - {fileID: 3936032405703631439}
+  - {fileID: 0}
+  - {fileID: 0}
+  totalBounds:
+    m_Center: {x: 0, y: 0, z: 0}
+    m_Extent: {x: 0, y: 0, z: 0}
+--- !u!1 &8329873410153239810
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 7730558810676417243}
+  - component: {fileID: 3936032405703631439}
+  m_Layer: 0
+  m_Name: Stub
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &7730558810676417243
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8329873410153239810}
+  serializedVersion: 2
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0.033, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 6043873334839883903}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &3936032405703631439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8329873410153239810}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 49592698cdf4aa8419644125cf221aef, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::AtlasRenderer
+  rendererType: 0
+  batchKey:
+    texture: {fileID: 2800000, guid: e6a06ed8e4eb76949b70a8ef90d41dcc, type: 3}
+    material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
+  atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
+  boxCollider: {fileID: 0}
+  spriteIndex: 0
+  flipX: 0
+  flipY: 0
+  width: 1
+  height: 1
+  cam: {fileID: 0}
+  sprite:
+    uvSizeAndPos: {x: 0.037109375, y: 0.04296875, z: 0.052734375, w: 0.95703125}
+    uvPivot: {x: 0.5, y: 1}
+    worldSize: {x: 0.10555556, y: 0.12222222, z: 1}
+    index: 0
+  bounds:
+    m_Center: {x: -0.045, y: 2.2848907, z: -0.1}
+    m_Extent: {x: 0.05277778, y: 0.06111111, z: 0.1}
+  worldPivotAndSize: {x: -0.05277778, y: -0.12222222, z: 0.10555556, w: 0.12222222}
+  uvSizeAndPosition: {x: 0.037109375, y: 0.04296875, z: 0.052734375, w: 0.95703125}
+  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  custom: {x: 0, y: 0, z: 0, w: 1}
+  customBit: 0
+  boundsOffset: {x: 0, y: -0.06111111, z: 0}
+  worldPivotsAndSizes: []
+  uvSizesAndPositions: []
+  scalesAndFlips: []
+  customs: []
+  keyframeClock: 0
+  curFrameIndex: 0
+  prevFrameIndex: 0
+  curMotionIndex: 0
+  prevSpriteIndexFlipH: 0
+  prevSpriteIndexFlipV: 0
+  isAnimating: 0
+  quadCount: 0

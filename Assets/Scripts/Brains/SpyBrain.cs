@@ -8,15 +8,12 @@ using static Passenger;
 using Cysharp.Threading.Tasks;
 public class SpyBrain : MonoBehaviour
 {
-    const float PLAY_AGAIN_HOLD_TIME = 3f;
     public static Carriage CurCarriage;
 
     public static event Action OnEnteredTrain;
     public static event Action OnTalkToPassenger;
     public static event Action OnOpenNotepad;
     public static event Action OnCloseNotepad;
-    public static event Action OnCheckCarriageMap;
-    public static event Action OnUncheckCarriageMap;
     public static event Action OnInteract;
     public static event Action OnExitTrain;
 
@@ -449,18 +446,19 @@ public class SpyBrain : MonoBehaviour
             case SpyState.CarriageMap:
             {
                 curClip = atlas.clipDict[(int)SpyMotion.StandingBreathing];
-                OnCheckCarriageMap?.Invoke();
+                actionData.onShowCarriageMap?.Invoke();
             }
             break;
             case SpyState.TalkingToPassenger:
             {
                 passengerToTalkTo.talkingToSpy = true;
+                passengerToTalkTo.ToggleUnveil(toggle: true);
 
                 uiData.curDialogueText = options.curTrip.stationsDataArray[passengerToTalkTo.profile.disembarkingStationIndex].name;
                 uiData.curDialogueBubbleBounds = passengerToTalkTo.atlasRenderer.bounds;
                 actionData.onOpenDialogueBubble?.Invoke();
 
-                options.curTrip.passengersTalkToTotal++;
+                options.curTrip.passengersTalkedToTotal++;
 
                 curClip = atlas.clipDict[(int)SpyMotion.StandingBreathing];
 
@@ -504,7 +502,7 @@ public class SpyBrain : MonoBehaviour
 
             case SpyState.CarriageMap:
             {
-                OnUncheckCarriageMap?.Invoke();
+                actionData.onHideCarriageMap?.Invoke();
                 ExitCarriageMap();
                 checkingCarriageMap = false;
 
@@ -586,24 +584,24 @@ public class SpyBrain : MonoBehaviour
                 }
             }
 
-            if (curPassengerHoverTalkCount == 0)
+        }
+        if (curPassengerHoverTalkCount == 0)
+        {
+            actionData.onHideKeyIcon?.Invoke();
+        }
+        else
+        {
+            if (options.curTrip.passengersTalkedToTotal == 0)
             {
-                actionData.onHideKeyIcon?.Invoke();
-            }
-            else
-            {
-                if (options.curTrip.passengersTalkToTotal == 0)
-                {
-                    AtlasRenderer passengerRend = possiblePassengers[0].atlasRenderer;
-                    uiData.keyBindWorldPos.x = passengerRend.bounds.center.x;
-                    uiData.keyBindWorldPos.y = passengerRend.bounds.max.y + uiData.keyBindIconWorldSize.y;
-                    uiData.keyBindWorldPos.z = passengerRend.transform.position.z - 0.1f;
-                    uiData.keyBindSpriteIndex = (int)KeybindSpriteIndex.E;
-                    
-                    actionData.onShowKeyIcon?.Invoke();
-                }
+                AtlasRenderer passengerRend = possiblePassengers[0].atlasRenderer;
+                uiData.keyBindWorldPos.x = passengerRend.bounds.center.x;
+                uiData.keyBindWorldPos.y = passengerRend.bounds.max.y + uiData.keyBindIconWorldSize.y;
+                uiData.keyBindWorldPos.z = passengerRend.transform.position.z - 0.1f;
 
+                uiData.keyBindSpriteIndex = (int)KeybindSpriteIndex.E;
+                actionData.onShowKeyIcon?.Invoke();
             }
+
         }
     }
     private void CalculateCollisionPoints()

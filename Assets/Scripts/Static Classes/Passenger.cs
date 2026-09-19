@@ -57,7 +57,7 @@ public static class Passenger
         Gets_distracted = 1 << 8,
         Takes_photos = 1 << 9,
     }
-    public const int BEHAVIOURS_COUNT = 10;
+    public const int HABIT_COUNT = 10;
     [Flags] public enum Appearences
     {
         None = 0,
@@ -99,11 +99,11 @@ public static class Passenger
         public int disembarkingStationIndex;
 
         public int npcPrefabIndex;
-        public Habits behaviours;
+        public Habits habits;
     }
     [Serializable] public struct TraitorProfile
     {
-        public NPCProfile npcProfile;
+        public NPCProfile passengerProfile;
         public string fullName;
         public int mugShotIndex;
         public bool found;    

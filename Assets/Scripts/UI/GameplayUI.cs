@@ -80,8 +80,6 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnOpenNotepad += SetToNotepadState;
         SpyBrain.OnCloseNotepad += SetToNoneState;
         SpyBrain.OnTalkToPassenger += SetToTicketState;
-        SpyBrain.OnUncheckCarriageMap += SetToNoneState;
-        SpyBrain.OnCheckCarriageMap += SetToCarriageMapState;
 
         PassengerBrain.OnTraitorDisembarkedTrain += DecreaseTraitorCount;
         PassengerBrain.OnTraitorBoardedTrain += IncreaseTraitorCount;
@@ -98,8 +96,6 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnOpenNotepad -= SetToNotepadState;
         SpyBrain.OnCloseNotepad -= SetToNoneState;
         SpyBrain.OnTalkToPassenger -= SetToTicketState;
-        SpyBrain.OnUncheckCarriageMap -= SetToNoneState;
-        SpyBrain.OnCheckCarriageMap -= SetToCarriageMapState;
         SpyBrain.OnEnteredTrain += AppearRailMap;
         
         PassengerBrain.OnTraitorDisembarkedTrain -= DecreaseTraitorCount;
@@ -114,7 +110,6 @@ public class GameplayUI : MonoBehaviour
             resetClock += Time.deltaTime;
             if (resetClock > RESET_TIME)
             {
-                Redo();
                 resetClock = 0;
             }
         }
@@ -301,12 +296,6 @@ public class GameplayUI : MonoBehaviour
     {
         traitorCount--;
         traitorCountText.SetText("x" + traitorCount);
-    }
-
-    private void Redo()
-    {
-        fadeBlack.FadeInChangeScene("New Game", sceneIndex: 1);
-        notepad.gameObject.SetActive(false);
     }
 
     private async UniTask DisappearingKeyIcon()

@@ -1049,7 +1049,7 @@ public class PassengerBrain : MonoBehaviour
             int nextIndex = (currentIndex + i) % maxBits;
             int nextBit = 1 << nextIndex;
 
-            if ((profile.behaviours & (Habits)nextBit) != 0)
+            if ((profile.habits & (Habits)nextBit) != 0)
             {
                 curBehaviour = (Habits)nextBit;
                 curBehaviourContext = passengersData.habitDataDict[curBehaviour];
@@ -1119,7 +1119,7 @@ public class PassengerBrain : MonoBehaviour
         for (int i = 0; i < allBehaviours.Length; i++)
         {
             Habits b = allBehaviours[i];
-            if (b != 0 && profile.behaviours.HasFlag(b))
+            if (b != 0 && profile.habits.HasFlag(b))
             {
                 allowedBehaviours.Add(b);
             }

@@ -15,7 +15,6 @@ public static class AtlasUI
 
     public const float LETTER_ADVANCE = 0.122f;
     public const float APPEAR_TEXT_TIME = 0.2f;
-    public const float FADE_BLACK_DURATION = 1f;
     public const float NATURAL_RADIUS = 0.1f;
     public const float NATURAL_TICK_RATE = 2.5f;
     public const float TARGET_MARGIN = 0.01f;
