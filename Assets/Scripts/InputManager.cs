@@ -17,10 +17,10 @@ public class InputManager : MonoBehaviour
 
     InputAction notepadToggleAction;
     InputAction notepadFlipAction;
-    InputAction carouselAction;
     InputAction numpadAction;
     InputAction talkAction;
     InputAction interactAction;
+    InputAction focusAction;
     InputAction mouseLeftDownAction;
     InputAction mosueLeftPressAction;
     InputAction mouseRightPressAction;
@@ -66,6 +66,7 @@ public class InputManager : MonoBehaviour
         inputData.talkKeyDown = false;
         inputData.talkKeyUp = false;
         inputData.interactKeyDown = false;
+        inputData.focusKeyDown = false;
         inputData.notepadFlipKeyUp = false;
 
         inputData.mouseLeftDown = false;
@@ -75,7 +76,6 @@ public class InputManager : MonoBehaviour
         inputData.moveKeyUp = false;
         inputData.moveKeyDown = false;
 
-        inputData.carouselKeyDownValue = 0;
         inputData.numpad = -1;
     }
     private void InitInputs()
@@ -85,11 +85,11 @@ public class InputManager : MonoBehaviour
         notepadToggleAction = playerInput.actions["Player/NotepadToggle"];
         notepadFlipAction = playerInput.actions["Player/NotepadFlipPage"];
 
-        carouselAction = playerInput.actions["Player/Carousel"];
         numpadAction = playerInput.actions["Player/Numpad"];
 
         talkAction = playerInput.actions["Player/Talk"];
         interactAction = playerInput.actions["Player/Interact"];
+        focusAction = playerInput.actions["Player/Focus"];
 
         mouseLeftDownAction = playerInput.actions["Player/MouseLeftDown"];
         mosueLeftPressAction = playerInput.actions["Player/MouseLeftPress"];
@@ -105,8 +105,6 @@ public class InputManager : MonoBehaviour
         notepadFlipAction.started += OnStartNotepadFlip;
         notepadFlipAction.canceled += OnCancelNotepadFlip;
 
-        carouselAction.started += OnStartCarousel;
-
         numpadAction.started += OnStartNumpad;
 
         talkAction.started += OnStartTalk;
@@ -115,6 +113,8 @@ public class InputManager : MonoBehaviour
         talkAction.canceled += OnCancelTalk;
 
         interactAction.started += OnStartInteract;
+
+        focusAction.started += OnStartFocus;
 
         mouseLeftDownAction.started += OnStartLeftMouse;
 
@@ -163,11 +163,7 @@ public class InputManager : MonoBehaviour
     {
         inputData.notepadFlipKeyUp = true;
     }
-    private void OnStartCarousel(CallbackContext ctx)
-    {
-        float carouselValue = ctx.ReadValue<float>();
-        inputData.carouselKeyDownValue = (int)carouselValue;
-    }
+
     private void OnStartTalk(CallbackContext ctx)
     {
         inputData.talkKeyDown = true;
@@ -189,6 +185,10 @@ public class InputManager : MonoBehaviour
     private void OnStartInteract(CallbackContext ctx)
     {
         inputData.interactKeyDown = true;
+    }
+    private void OnStartFocus(CallbackContext cts)
+    {
+        inputData.focusKeyDown = true;
     }
     private void OnStartLeftMouse(CallbackContext ctx)
     {

@@ -13,5 +13,7 @@ public class ActionData : ScriptableObject
     public Action onHideCarriageMap;
     public Action onBeginTrip;
     public Action onCreatedPassengerProfiles;
+    public Action onFocus;
+    public Action onUnfocus;
 
 }

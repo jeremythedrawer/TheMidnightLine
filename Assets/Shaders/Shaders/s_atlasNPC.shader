@@ -1,11 +1,25 @@
 Shader "Custom/s_atlasNPC"
 {
+    Properties
+    {
+        [Enum(UnityEngine.Rendering.StencilOp)]
+        _StencilOp("Stencil Operation", Float) = 1
+    }
+
+
     SubShader
     {
         Tags { "RenderType" = "Transparent" "Queue" = "Transparent" }
         ZWrite On
         ZTest LEqual
         Blend SrcAlpha OneMinusSrcAlpha
+
+        Stencil
+        {
+            Ref 2
+            Comp Always
+            Pass [_StencilOp]
+        }
 
         Pass
         {

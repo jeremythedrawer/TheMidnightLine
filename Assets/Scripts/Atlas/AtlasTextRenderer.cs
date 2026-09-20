@@ -38,6 +38,8 @@ public class AtlasTextRenderer : MonoBehaviour
         public float maxLineWidth;
     }
 
+    public delegate void Callback();
+
     public AtlasTextRendererType rendererType;
 
     public BatchKey batchKey;
@@ -372,7 +374,7 @@ public class AtlasTextRenderer : MonoBehaviour
         completedWritingText = false;
         ErasingText(writeLetterTime).Forget();
     }
-    public void ChangeCustom(float time, float newValue, int customChannel)
+    public void ChangeCustom(float time, float newValue, int customChannel, Callback callback = null)
     {
         ctsChangeCustom?.Cancel();
         ctsChangeCustom = new CancellationTokenSource();
@@ -381,25 +383,25 @@ public class AtlasTextRenderer : MonoBehaviour
         {
             case 1:
             {
-                ChangingCustomX(time, newValue).Forget();
+                ChangingCustomX(time, newValue, callback).Forget();
 
             }
             break;
             case 2:
             {
-                ChangingCustomY(time, newValue).Forget();
+                ChangingCustomY(time, newValue, callback).Forget();
 
             }
             break;
             case 3:
             {
-                ChangingCustomZ(time, newValue).Forget();
+                ChangingCustomZ(time, newValue, callback).Forget();
 
             }
             break;
             case 4:
             {
-                ChangingCustomW(time, newValue).Forget();
+                ChangingCustomW(time, newValue, callback).Forget();
 
             }
             break;
@@ -515,7 +517,7 @@ public class AtlasTextRenderer : MonoBehaviour
             erasingText = false;
         }
     }
-    private async UniTask ChangingCustomX(float time, float newValue)
+    private async UniTask ChangingCustomX(float time, float newValue, Callback callback = null)
     {
         try
         {
@@ -537,6 +539,7 @@ public class AtlasTextRenderer : MonoBehaviour
             {
                 customs[i].x = newValue;
             }
+            if (callback != null) callback();
         }
         catch (OperationCanceledException)
         {
@@ -544,9 +547,10 @@ public class AtlasTextRenderer : MonoBehaviour
             {
                 customs[i].x = newValue;
             }
+            if (callback != null) callback();
         }
     }
-    private async UniTask ChangingCustomY(float time, float newValue)
+    private async UniTask ChangingCustomY(float time, float newValue, Callback callback = null)
     {
         try
         {
@@ -568,6 +572,8 @@ public class AtlasTextRenderer : MonoBehaviour
             {
                 customs[i].y = newValue;
             }
+            if (callback != null) callback();
+
         }
         catch (OperationCanceledException)
         {
@@ -575,9 +581,10 @@ public class AtlasTextRenderer : MonoBehaviour
             {
                 customs[i].y = newValue;
             }
+            if (callback != null) callback();
         }
     }
-    private async UniTask ChangingCustomZ(float time, float newValue)
+    private async UniTask ChangingCustomZ(float time, float newValue, Callback callback = null)
     {
         try
         {
@@ -599,6 +606,7 @@ public class AtlasTextRenderer : MonoBehaviour
             {
                 customs[i].z = newValue;
             }
+            if (callback != null) callback();
         }
         catch (OperationCanceledException)
         {
@@ -606,9 +614,10 @@ public class AtlasTextRenderer : MonoBehaviour
             {
                 customs[i].z = newValue;
             }
+            if (callback != null) callback();
         }
     }
-    private async UniTask ChangingCustomW(float time, float newValue)
+    private async UniTask ChangingCustomW(float time, float newValue, Callback callback = null)
     {
         try
         {
@@ -629,6 +638,7 @@ public class AtlasTextRenderer : MonoBehaviour
             {
                 customs[i].w = newValue;
             }
+            if (callback != null) callback();
         }
         catch (OperationCanceledException)
         {
@@ -636,6 +646,7 @@ public class AtlasTextRenderer : MonoBehaviour
             {
                 customs[i].w = newValue;
             }
+            if (callback != null) callback();
         }
     }
 #if UNITY_EDITOR

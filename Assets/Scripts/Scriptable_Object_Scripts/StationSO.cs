@@ -13,7 +13,6 @@ public class StationSO : ScriptableObject
 
     public bool isFrontOfTrain;
     [Header("Generated")]
-    public string stationName;
     public int stationIndex;
     public float exitLocalPosX;
     public NPCProfile[] bystanderProfiles;

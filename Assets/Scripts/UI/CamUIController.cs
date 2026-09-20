@@ -22,6 +22,7 @@ public class CamUIController : MonoBehaviour
     public NotepadData notepadData;
     public CameraData camData;
     public ActionData actionData;
+    public TrainData trainData;
 
     [Header("Generated")]
     public Notepad notepad;
@@ -36,14 +37,24 @@ public class CamUIController : MonoBehaviour
     private void OnEnable()
     {
         actionData.onGiveNotepad += CreateNotepad;
+        
         actionData.onShowCarriageMap += MoveCarriageMapToActivePosition;
+        
         actionData.onHideCarriageMap += MoveCarriageMapToInacivePosition;
+
+        actionData.onFocus += FadeToFocus;
+        actionData.onUnfocus += FadeOut;
     }
     private void OnDisable()
     {
         actionData.onGiveNotepad -= CreateNotepad;
+        
         actionData.onShowCarriageMap -= MoveCarriageMapToActivePosition;
+        
         actionData.onHideCarriageMap -= MoveCarriageMapToInacivePosition;
+        
+        actionData.onFocus -= FadeToFocus;
+        actionData.onUnfocus -= FadeOut;
     }
     public void Start()
     {
@@ -77,7 +88,14 @@ public class CamUIController : MonoBehaviour
         notepad = Instantiate(notepadData.notepadPrefab, transform);
         notepad.Init();
     }
-
+    private void FadeToFocus()
+    {
+        fadeBlack.FadeIn(value: 1, time: 0.25f, alpha: 0.25f, fadeBlackZPos: trainData.depthSections.carriageSeat + 1, usePassengerStencil: true);
+    }
+    private void FadeOut()
+    {
+        fadeBlack.FadeOut(time: 0.5f);
+    }
     private void MoveCarriageMapToActivePosition()
     {
         ctsCarriageMapMove?.Cancel();

@@ -561,7 +561,7 @@ public class AtlasTripEditor : EditorWindow
             StationSO station = trip.stationsDataArray[stationIndex];
             if (station.ticketsToCheckBeforeSpawn == ticketChecks)
             {
-                GUIContent stationGUI = new GUIContent(station.stationName);
+                GUIContent stationGUI = new GUIContent(station.name);
                 Vector2 stationLabelSize = stationStyle.CalcSize(stationGUI);
 
                 Rect stationRect = new Rect(posX - (stationLabelSize.x * 0.5f), stationRectPosY, stationLabelSize.x, stationLabelSize.y);

@@ -12,6 +12,7 @@ public static class Spy
         TalkingToPassenger,
         Notepad,
         CarriageMap,
+        Focus,
     }
 
     public enum LocationState

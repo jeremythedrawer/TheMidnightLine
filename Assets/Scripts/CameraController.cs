@@ -49,6 +49,7 @@ public class CameraController : MonoBehaviour
 
     public bool isShaking;
     public bool showingTitle;
+    public bool hidingTitle;
     private void OnEnable()
     {
         Init();
@@ -121,6 +122,7 @@ public class CameraController : MonoBehaviour
             case LocationState.Station:
             {
                 targetWorldPos.x = spyData.bounds.center.x + curXOffset;
+                targetWorldPos.y = spyData.bounds.center.y;
             }
             break;
 
@@ -166,19 +168,20 @@ public class CameraController : MonoBehaviour
 
                 audioSource.volume = windVol * audioData.soundEffectsVolume;
 
-                if (t > 0.5f)
+                if (t > 0.5f && !showingTitle)
                 {
-                    if (!showingTitle)
-                    {
-                        camUIController.SetTitleText();
-                        camUIController.SetTitleAlpha(1);
-                        showingTitle = true;
-                    }
+                    camUIController.SetTitleText();
+                    camUIController.SetTitleAlpha(1);
+                    showingTitle = true;
                 }
-
-                if (Mathf.Abs(camData.curWorldPos.y - spyData.bounds.center.y) < 1f)
+                else if (t > 0.9f && !hidingTitle)
                 {
                     camUIController.DissappearTitleAlpha();
+                    hidingTitle = true;
+                }
+
+                if (Mathf.Abs(camData.curWorldPos.y - spyData.bounds.center.y) < 0.5f)
+                {
                     camData.curLocationState = LocationState.Station;
                 }
             }

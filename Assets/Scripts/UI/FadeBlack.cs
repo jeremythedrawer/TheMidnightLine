@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using UnityEngine;
+using UnityEngine.Rendering;
 
 using static AtlasUI;
 public class FadeBlack : MonoBehaviour
@@ -23,6 +24,7 @@ public class FadeBlack : MonoBehaviour
     public Options options;
     public InputData playerInputs;
     public AudioData audioData;
+    public PassengersData passengersData; 
 
     public Material fadeBlackMaterial;
 
@@ -39,7 +41,7 @@ public class FadeBlack : MonoBehaviour
     public int curSceneIndex;
     public float curUVPosX;
     public float curUVPosY;
-
+    public float curValue;
     private void Start()
     {
         textRenderer.SetText("");
@@ -48,7 +50,7 @@ public class FadeBlack : MonoBehaviour
     {
         continueButton.InitButton();
     }
-    public void FadeIn(float value, float time, float uvPosX = 0, float uvPosY = 0, float alpha = 0, float fadeBlackZPos = DEFAULT_DEPTH)
+    public void FadeIn(float value, float time, float uvPosX = 0, float uvPosY = 0, float alpha = 0, float fadeBlackZPos = DEFAULT_DEPTH, bool usePassengerStencil = false)
     {
         ctsFadeBlack?.Cancel();
         ctsFadeBlack = new CancellationTokenSource();
@@ -57,6 +59,15 @@ public class FadeBlack : MonoBehaviour
 
         curUVPosX = uvPosX;
         curUVPosY = uvPosY;
+
+        if (usePassengerStencil)
+        {
+            passengersData.passsengerMaterial.SetFloat("_StencilOp", (float)StencilOp.Replace);
+        }
+        else
+        {
+            passengersData.passsengerMaterial.SetFloat("_StencilOp", (float)StencilOp.Keep);
+        }
         FadingIn(value, alpha, time).Forget();
     }
     public void FadeOut(float time)
@@ -111,7 +122,11 @@ public class FadeBlack : MonoBehaviour
     }
     public void DissappearText(float time)
     {
-        textRenderer.ChangeCustom(time, 0, customChannel: 4);
+        void EmptyText()
+        {
+            textRenderer.SetText("");
+        }
+        textRenderer.ChangeCustom(time, 0, customChannel: 4, EmptyText);
     }
     public void SetTitleTextAlpha(float t)
     {
@@ -136,8 +151,8 @@ public class FadeBlack : MonoBehaviour
             
             while (elapsedTime < totalTime)
             {
-                float t = (elapsedTime / totalTime) * value;
-                fadeBlackMaterial.SetFloat("_Value", t);
+                curValue = (elapsedTime / totalTime) * value;
+                fadeBlackMaterial.SetFloat("_Value", curValue);
                 elapsedTime += Time.deltaTime;
                 await UniTask.Yield(ctsFadeBlack.Token);
             }
@@ -150,14 +165,14 @@ public class FadeBlack : MonoBehaviour
     {
         try
         {
-            float elapsedTime = fadeBlackMaterial.GetFloat("_Value");
+            float elapsedTime = curValue * time;
             continueButton.gameObject.SetActive(false);
             curState = State.FadingOut;
             while (elapsedTime > 0)
             {
-                float t = elapsedTime / time;
-                fadeBlackMaterial.SetFloat("_Value", t);
-                textRenderer.SetAppearTextAlpha(t);
+                curValue = elapsedTime / time;
+                fadeBlackMaterial.SetFloat("_Value", curValue);
+                textRenderer.SetAppearTextAlpha(curValue);
                 elapsedTime -= Time.deltaTime;
                 await UniTask.Yield(ctsFadeBlack.Token);
             }

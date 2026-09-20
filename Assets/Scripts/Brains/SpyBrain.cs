@@ -14,7 +14,6 @@ public class SpyBrain : MonoBehaviour
     public static event Action OnTalkToPassenger;
     public static event Action OnOpenNotepad;
     public static event Action OnCloseNotepad;
-    public static event Action OnInteract;
     public static event Action OnExitTrain;
 
     public static bool PickingNPCToTicketCheck;
@@ -49,7 +48,6 @@ public class SpyBrain : MonoBehaviour
     
     public CarriageMapProp curCarriageMapProp;
 
-
     public AtlasClip curClip;
 
     public CollisionData collisionData;
@@ -70,16 +68,13 @@ public class SpyBrain : MonoBehaviour
     public bool canExitState;
     public bool checkingCarriageMap;
     public bool canOpenSlideDoor;
-    public bool finishedGettingShot;
+    public bool isFocusing;
     private void OnValidate()
     {
         CalculateCollisionPoints();
     }
     private void OnEnable()
     {
-        SpyBrain.OnInteract += OpenSlideDoors;
-        SpyBrain.OnInteract += LookAtCarriageMap;
-
         TrainController.OnStationArrival += SetInputsForTrainStop;
         TrainController.OnStationLeave += SetInputsForTrainStart;
 
@@ -89,9 +84,6 @@ public class SpyBrain : MonoBehaviour
     }
     private void OnDisable()
     {
-        SpyBrain.OnInteract -= OpenSlideDoors;
-        SpyBrain.OnInteract -= LookAtCarriageMap;
-
         TrainController.OnStationArrival -= SetInputsForTrainStop;
         TrainController.OnStationLeave -= SetInputsForTrainStart;
 
@@ -156,6 +148,10 @@ public class SpyBrain : MonoBehaviour
         {
             SetState(SpyState.Notepad);
         }
+        else if (isFocusing)
+        {
+            SetState(SpyState.Focus);
+        }
         else if (checkingCarriageMap)
         {
             SetState(SpyState.CarriageMap);
@@ -197,8 +193,16 @@ public class SpyBrain : MonoBehaviour
                         break;
                     }
                 }
-                if (inputData.interactKeyDown) OnInteract?.Invoke();
-
+                if (inputData.interactKeyDown)
+                {
+                    OpenSlideDoors();
+                    LookAtCarriageMap();
+                }
+                if (inputData.focusKeyDown)
+                {
+                    isFocusing = true;
+                    actionData.onFocus?.Invoke();
+                }
             }
             break;
             case SpyState.Walk:
@@ -208,7 +212,16 @@ public class SpyBrain : MonoBehaviour
                     Flip(inputData.move < 0);
                     spyData.targetXVelocity = spyData.moveSpeed * inputData.move;
                     
-                    if (inputData.interactKeyDown) OnInteract?.Invoke();
+                    if (inputData.interactKeyDown)
+                    {
+                        OpenSlideDoors();
+                        LookAtCarriageMap();
+                    }
+                    if (inputData.focusKeyDown)
+                    {
+                        isFocusing = true;
+                        actionData.onFocus?.Invoke();
+                    }
                 }
 
                 atlasRenderer.PlayClip(curClip, audioSource: audioSource, audioData: audioData);
@@ -255,13 +268,22 @@ public class SpyBrain : MonoBehaviour
 
             }
             break;
-
+            case SpyState.Focus:
+            {
+                if (inputData.focusKeyDown && canExitState)
+                {
+                    isFocusing = false;
+                    actionData.onUnfocus?.Invoke();
+                }
+                canExitState = true;
+            }
+            break;
             case SpyState.CarriageMap:
             {
                 atlasRenderer.PlayClip(curClip);
-                if (!inputData.interactKeyDown) canExitState = true;
 
                 if (inputData.interactKeyDown && canExitState) checkingCarriageMap = false;
+                canExitState = true;
             }
             break;
             case SpyState.TalkingToPassenger:

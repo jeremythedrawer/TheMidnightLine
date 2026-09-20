@@ -25,15 +25,6 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Carousel",
-                    "type": "Value",
-                    "id": "29cb3758-e4c2-47f0-8d05-8a604357ab6e",
-                    "expectedControlType": "Axis",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": true
-                },
-                {
                     "name": "NotepadFlipPage",
                     "type": "Value",
                     "id": "c8af4062-217f-401f-95bd-5a7ea73996e1",
@@ -46,6 +37,15 @@
                     "name": "Talk",
                     "type": "Button",
                     "id": "7257163c-c77d-4fdc-ac70-2c491b6abde3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "Focus",
+                    "type": "Button",
+                    "id": "866a618d-0660-4119-a3ac-a9b4f32694dd",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -161,72 +161,6 @@
                     "processors": "",
                     "groups": "Keyboard&Mouse;KeyboardAndMouse",
                     "action": "Movement",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Right Stick",
-                    "id": "a1eb8400-7074-4206-abb1-9c44dc852646",
-                    "path": "2DVector",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Carousel",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "Right",
-                    "id": "68d06775-7ebc-4f95-ad36-7b0ef5872dbc",
-                    "path": "<Gamepad>/leftStick/right",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse;Gamepad",
-                    "action": "Carousel",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Left",
-                    "id": "7404c0f6-d384-43fc-a4e1-fd087d6c41ab",
-                    "path": "<Gamepad>/leftStick/left",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse;Gamepad",
-                    "action": "Carousel",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Arrow Keys",
-                    "id": "c8f076ea-b931-4ffe-81f2-e12aa9ed133a",
-                    "path": "1DAxis",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "",
-                    "action": "Carousel",
-                    "isComposite": true,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "Negative",
-                    "id": "40f83d77-228e-452c-94b7-2dcc22de130b",
-                    "path": "<Keyboard>/q",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse;KeyboardAndMouse",
-                    "action": "Carousel",
-                    "isComposite": false,
-                    "isPartOfComposite": true
-                },
-                {
-                    "name": "Positive",
-                    "id": "3300f456-6dcd-4b68-9b47-d87497e9b4c2",
-                    "path": "<Keyboard>/e",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Keyboard&Mouse;KeyboardAndMouse",
-                    "action": "Carousel",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -392,6 +326,28 @@
                     "processors": "",
                     "groups": ";Gamepad",
                     "action": "Talk",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "bebc8c7a-083e-44d4-809c-57f58513d58f",
+                    "path": "<Keyboard>/f",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";KeyboardAndMouse",
+                    "action": "Focus",
+                    "isComposite": false,
+                    "isPartOfComposite": false
+                },
+                {
+                    "name": "",
+                    "id": "545a2ce9-1811-4e0c-8e11-06b533b80414",
+                    "path": "<Gamepad>/buttonSouth",
+                    "interactions": "",
+                    "processors": "",
+                    "groups": ";Gamepad",
+                    "action": "Focus",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

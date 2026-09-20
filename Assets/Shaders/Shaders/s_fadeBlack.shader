@@ -6,7 +6,6 @@ Shader "Custom/s_fadeBlack"
         _UVPosX("UV Pos X", Range(0,1)) = 0
         _UVPosY("UV Pos Y", Range(0,1)) = 0
         _Value("Value", Range(0,1)) = 0
-        [NoScaleOffset] _NoiseTexture("Noise Texture", 2D) = "white"
     }
 
     SubShader
@@ -15,6 +14,14 @@ Shader "Custom/s_fadeBlack"
         ZWrite On
         ZTest LEqual
         Blend SrcAlpha OneMinusSrcAlpha
+
+        Stencil
+        {
+            Ref 2
+            Comp NotEqual
+            Pass Keep
+        }
+
         Pass
         {
             HLSLPROGRAM
@@ -30,9 +37,6 @@ Shader "Custom/s_fadeBlack"
                 float _UVPosY;
                 float _Value;
             CBUFFER_END
-
-            TEXTURE2D(_NoiseTexture);
-            SAMPLER(sampler_NoiseTexture);
 
 
             struct Attributes

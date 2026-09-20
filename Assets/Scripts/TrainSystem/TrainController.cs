@@ -125,7 +125,7 @@ public class TrainController : MonoBehaviour
         for (int i = 0; i < carriages.Length; i++)
         {
             Carriage carriage = carriages[i];
-            carriage.SetSignToNextStation(options.curTrip.stationAhead.stationName);
+            carriage.SetSignToNextStation(options.curTrip.stationAhead.name);
         }
     }
     private void ChooseState()
@@ -162,7 +162,7 @@ public class TrainController : MonoBehaviour
             {
                 for (int i = 0; i < carriages.Length; i++)
                 {
-                    carriages[i].SetSignToNextStation(options.curTrip.stationAhead.stationName);
+                    carriages[i].SetSignToNextStation(options.curTrip.stationAhead.name);
 
                     audioSource.volume = audioData.soundEffectsVolume;
                     if (camData.curLocationState != LocationState.Carriage && camData.curLocationState != LocationState.Gangway)
@@ -199,7 +199,7 @@ public class TrainController : MonoBehaviour
                     for (int i = 0; i < carriages.Length; i++)
                     {
                         carriages[i].UnlockExteriorSlideDoors();
-                        carriages[i].SetSignToCurrentStation(options.curTrip.stationAhead.stationName);
+                        carriages[i].SetSignToCurrentStation(options.curTrip.stationAhead.name);
                     }
                 }
                 else
@@ -207,7 +207,7 @@ public class TrainController : MonoBehaviour
                     for (int i = 0; i < carriages.Length; i++)
                     {
                         carriages[i].UnlockInteriorDoors();
-                        carriages[i].SetSignToCurrentStation(options.curTrip.stationAhead.stationName);
+                        carriages[i].SetSignToCurrentStation(options.curTrip.stationAhead.name);
                     }
                 }
                 OnStationArrival.Invoke();
@@ -444,7 +444,6 @@ public class TrainController : MonoBehaviour
         for (int i = 0; i < options.curTrip.stationsDataArray.Length; i++)
         {
             StationSO stationData = options.curTrip.stationsDataArray[i];
-            stationData.stationName = stationData.station_prefab.name;
             stationData.stationIndex = i;
             Station station = Instantiate(stationData.station_prefab, null);
             stations[i] = station;
