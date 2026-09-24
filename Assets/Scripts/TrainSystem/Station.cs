@@ -11,11 +11,16 @@ public class Station : MonoBehaviour
     public Transform exitTransform;
 
     public ParallaxController parallaxController;
+
+    public PassengerBrain[] passengers;
+    public int passengerCount;
     public void OnEnable()
     {
         station.exitLocalPosX = exitTransform.localPosition.x;
         parallaxController.SetParrallaxFactor();
         parallaxController.SetWorldPos(transform.position);
+
+        passengers = new PassengerBrain[64];
     }
     public void SpawnNPCs()
     {
@@ -23,7 +28,7 @@ public class Station : MonoBehaviour
         for (int i = 0; i < station.bystanderProfiles.Length; i++)
         {
             totalNPCSSpawned++;
-            NPCProfile bystanderProfile = station.bystanderProfiles[i];
+            PassengerProfile bystanderProfile = station.bystanderProfiles[i];
             float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainData.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainData.totalBounds.extents.x);
 
             Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
@@ -39,6 +44,9 @@ public class Station : MonoBehaviour
                 bystander.atlasRenderer.FlipHSimple(true);
             }
             bystander.Init();
+
+            passengers[passengerCount] = bystander;
+            passengerCount++;
         }
 
         int maxTraitorSpawnIndex = options.curTrip.traitorsSpawned + station.traitorSpawnCount;
@@ -61,13 +69,16 @@ public class Station : MonoBehaviour
                 traitor.atlasRenderer.FlipHSimple(true);
             }
             traitor.Init();
+
+            passengers[passengerCount] = traitor;
+            passengerCount++;
         }
         options.curTrip.traitorsSpawned += station.traitorSpawnCount;
 
         for (int i = 0; i < station.accompliceProfiles.Length; i++)
         {
             totalNPCSSpawned++;
-            NPCProfile accompliceProfile = station.accompliceProfiles[i];
+            PassengerProfile accompliceProfile = station.accompliceProfiles[i];
 
             float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainData.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainData.totalBounds.extents.x);
 
@@ -85,6 +96,9 @@ public class Station : MonoBehaviour
                 accomplice.atlasRenderer.FlipHSimple(true);
             }
             accomplice.Init();
+
+            passengers[passengerCount] = accomplice;
+            passengerCount++;
         }
 
         HenchmanBrain henchman = Instantiate(options.henchmanPrefab);

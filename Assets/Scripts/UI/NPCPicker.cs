@@ -59,7 +59,7 @@ public class NPCPicker : MonoBehaviour
             icons[i].UpdateButton();
         }
 
-        if ((inputData.mouseLeftUp || inputData.mouseRightUp || camData.curLocationState != Spy.LocationState.Carriage) && !cursorData.IsInsideBounds(paletteRenderer.bounds, isClickable: false))
+        if ((inputData.mouseLeftUp || camData.curLocationState != Spy.LocationState.Carriage) && !cursorData.IsInsideBounds(paletteRenderer.bounds, isClickable: false))
         {
             Close();
         }
@@ -130,7 +130,7 @@ public class NPCPicker : MonoBehaviour
             {
                 iconRend.enabled = true;
                 int npcIconIndex = (npcBrain.passengerData.mugShotIndex * 2);
-                if (npcBrain.ticketHasBeenChecked) npcIconIndex += 1;
+                if (npcBrain.revealed) npcIconIndex += 1;
 
                 iconRend.UpdateSpriteInputsByIndex(npcIconIndex);
                 iconRend.customBit = npcBrain.atlasRenderer.customBit;

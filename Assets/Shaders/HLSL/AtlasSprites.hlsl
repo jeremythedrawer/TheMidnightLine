@@ -3,12 +3,12 @@
 #define COLOR_KEY_BIT_0 1 << 0
 #define COLOR_KEY_BIT_1 1 << 1
 #define COLOR_KEY_BIT_2 1 << 2
-
 #define DIAGONAL_TEXTURE_BIT 1 << 3
 #define MERIDIA_COLOR_BIT 1 << 4
 #define INVERT_BIT 1 << 5
-#define OUTLINE_BIT 1 << 6
-#define TEXTURE_BIT 1 << 7
+#define VINROSE_BIT 1 << 6
+#define OSCILLATE_BIT 1 << 7
+
 #define RED_BIT 1 << 8
 #define GREEN_BIT 1 << 9
 #define BLUE_BIT 1 << 10

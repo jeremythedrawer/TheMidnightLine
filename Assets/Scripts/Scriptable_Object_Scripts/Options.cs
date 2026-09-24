@@ -34,6 +34,8 @@ public class Options : ScriptableObject
     public TripData curTrip;
     public Color darkColor;
     public Color lightColor;
+    public Color markerColor1;
+    public Color markerColor2;
 
     public int darkColorIndex;
     public int lightColorIndex;
@@ -45,7 +47,9 @@ public class Options : ScriptableObject
     public int lightColorID;
     public int meridiaColorID;
     public int vinroseColorID;
-    public int patternTextureID;
+    public int markerColor1ID;
+    public int markerColor2ID;
+
     public int dayNightID;
 
     public int selectedPatternIndex;
@@ -62,8 +66,10 @@ public class Options : ScriptableObject
         darkColorID = Shader.PropertyToID("_BlackColor");
         lightColorID = Shader.PropertyToID("_WhiteColor");
         meridiaColorID = Shader.PropertyToID("_MeridiaColor");
-        patternTextureID = Shader.PropertyToID("_PatternTexture");
         vinroseColorID = Shader.PropertyToID("_VinroseColor");
+        markerColor1ID = Shader.PropertyToID("_MarkerColor1");
+        markerColor2ID = Shader.PropertyToID("_MarkerColor2");
+
         dayNightID = Shader.PropertyToID("_DayNight");
 
 
@@ -71,8 +77,8 @@ public class Options : ScriptableObject
         Shader.SetGlobalColor(lightColorID, lightColor.linear);
         Shader.SetGlobalColor(meridiaColorID, meridiaColor.linear);
         Shader.SetGlobalColor(vinroseColorID, vinroseColor.linear);
-
-        Shader.SetGlobalTexture(patternTextureID, patternAtlas.texture);
+        Shader.SetGlobalColor(markerColor1ID, markerColor1.linear);
+        Shader.SetGlobalColor(markerColor2ID, markerColor2.linear);
     }
 }
 #if UNITY_EDITOR

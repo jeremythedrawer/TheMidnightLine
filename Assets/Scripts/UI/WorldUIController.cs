@@ -25,6 +25,7 @@ public class WorldUIController : MonoBehaviour
 
     public AudioSource audioSource;
     public AudioSource keybindAudioSource;
+    public AudioSource arrowAudioSource;
 
     public Menu startMenu;
     public Menu optionsMenu;
@@ -33,6 +34,7 @@ public class WorldUIController : MonoBehaviour
     public CountryMap countryMap;
 
     public AtlasRenderer keybindRenderer;
+    public AtlasRenderer arrowRenderer;
 
     [Header("Generated")]
 
@@ -57,8 +59,11 @@ public class WorldUIController : MonoBehaviour
         actionData.onBeginTrip += LowerMusicVolume;
 
         actionData.onShowKeyIcon += SetKeyBindIcon;
-        
         actionData.onHideKeyIcon += HideKeybindIcon;
+
+        actionData.onFocus += SetToFocusState;
+        actionData.onFocusSwitchPassenger += PlayArrowSound;
+        actionData.onUnfocus += SetToNoneState;
 
         SliderController.OnChangeMusicVolume += SetMusicVolume;
     }
@@ -73,8 +78,11 @@ public class WorldUIController : MonoBehaviour
         actionData.onBeginTrip -= LowerMusicVolume;
 
         actionData.onHideKeyIcon -= SetKeyBindIcon;
-
         actionData.onHideKeyIcon -= HideKeybindIcon;
+
+        actionData.onFocus -= SetToFocusState;
+        actionData.onFocusSwitchPassenger -= PlayArrowSound;
+        actionData.onUnfocus -= SetToNoneState;
 
         SliderController.OnChangeMusicVolume -= SetMusicVolume;
     }
@@ -130,6 +138,12 @@ public class WorldUIController : MonoBehaviour
                 camData.curLocationBounds = mapMenu.bounds;
             }
             break;
+            case UIState.Focus:
+            {
+                PlayArrowSound();
+                arrowRenderer.enabled = true;
+            }
+            break;
             case UIState.None:
             {
             }
@@ -158,6 +172,12 @@ public class WorldUIController : MonoBehaviour
                 countryMap.UpdateButtons();
             }
             break;
+
+            case UIState.Focus:
+            {
+                arrowRenderer.transform.position = uiData.arrowWorldPos;
+            }
+            break;
         }
         canExitState = true;
     }
@@ -173,6 +193,11 @@ public class WorldUIController : MonoBehaviour
             case UIState.OptionsMenu:
             {
                 spyData.playerInputsEnabled = true;
+            }
+            break;
+            case UIState.Focus:
+            {
+                arrowRenderer.enabled = false;
             }
             break;
         }
@@ -226,6 +251,15 @@ public class WorldUIController : MonoBehaviour
         
         keybindAudioSource.volume = audioData.soundEffectsVolume;
         keybindAudioSource.PlayOneShot(audioData.cursorHover);
+    }
+    private void SetToFocusState()
+    {
+        SetState(UIState.Focus);
+    }
+    private void PlayArrowSound()
+    {
+        arrowAudioSource.volume = audioData.soundEffectsVolume;
+        arrowAudioSource.PlayOneShot(audioData.cursorHover);
     }
     private void HideKeybindIcon()
     {

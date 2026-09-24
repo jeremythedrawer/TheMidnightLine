@@ -15,9 +15,6 @@ public class CursorController : MonoBehaviour
     public static AtlasRenderer PrevRenderer;
     public static AtlasRenderer CursorRenderer;
     
-    public static event Action OnMouseEnabled;
-    public static event Action OnMouseDisabled;
-
     public InputData inputData;
     public LayerData layerSettings;
     public SpyData spyData;
@@ -84,8 +81,8 @@ public class CursorController : MonoBehaviour
             {
                 if (active)
                 {
+                    cursorRenderer.enabled = false;
                     active = false;
-                    OnMouseDisabled?.Invoke();
                 }
             }
         }
@@ -94,9 +91,9 @@ public class CursorController : MonoBehaviour
             cursorIsMoving = true;
             if (!active)
             {
+                cursorRenderer.enabled = true;
                 timer = 0;
                 active = true;
-                OnMouseEnabled?.Invoke();
             }
         }
         if (cursorData.changeButton)

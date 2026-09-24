@@ -15,6 +15,6 @@ public class StationSO : ScriptableObject
     [Header("Generated")]
     public int stationIndex;
     public float exitLocalPosX;
-    public NPCProfile[] bystanderProfiles;
-    public NPCProfile[] accompliceProfiles;
+    public PassengerProfile[] bystanderProfiles;
+    public PassengerProfile[] accompliceProfiles;
 }

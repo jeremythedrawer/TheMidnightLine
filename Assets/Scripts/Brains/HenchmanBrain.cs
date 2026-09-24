@@ -81,7 +81,7 @@ public class HenchmanBrain : MonoBehaviour
                     float absSpyDist = Mathf.Abs(rawSpyDist);
                     if (absSpyDist < spyData.interactionDist)
                     {
-                        if (inputData.talkKeyDown)
+                        if (inputData.primaryInteractInputTrigger.keyDown)
                         {
                             actionData.onGiveNotepad?.Invoke();
                             SetState(HenchmanState.Idle);
@@ -113,7 +113,7 @@ public class HenchmanBrain : MonoBehaviour
                 {
                     SetKeyIcon();
 
-                    if (inputData.talkKeyDown)
+                    if (inputData.primaryInteractInputTrigger.keyDown)
                     {                   
                         SetState(HenchmanState.Suitcase);
                         HideKeyIcon();
@@ -148,7 +148,7 @@ public class HenchmanBrain : MonoBehaviour
     {
         if (uiData.keyBindSpriteIndex == -1)
         {
-            uiData.keyBindSpriteIndex = (int)inputData.interactSpriteIndex;
+            uiData.keyBindSpriteIndex = (int)inputData.primaryInteractInputTrigger.keybindSpriteIndex;
             uiData.keyBindWorldPos.x = atlasRenderer.bounds.center.x;
             uiData.keyBindWorldPos.y = atlasRenderer.bounds.max.y + uiData.keyBindIconWorldSize.y + KEY_ICON_POS_BUFFER;
             uiData.keyBindWorldPos.z = atlasRenderer.bounds.max.z;

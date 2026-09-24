@@ -39,8 +39,8 @@ public class SlideDoors : MonoBehaviour
     public float activeMoveAmount;
     public float unlockMoveAmount;
     public float moveTimer;
-    public NPCQueue boardTrainQueue;
-    public NPCQueue disembarkTrainQueue;
+    public PassengerQueue boardTrainQueue;
+    public PassengerQueue disembarkTrainQueue;
     private void OnDisable()
     {
         ResetDoors();
@@ -53,10 +53,10 @@ public class SlideDoors : MonoBehaviour
         activeMoveAmount = rightSlideDoorRenderer.sprite.worldSize.x * OPEN_MOVE_AMOUNT_PERCENT;
         unlockMoveAmount = rightSlideDoorRenderer.sprite.worldSize.x * UNLOCK_MOVE_AMOUNT_PERCENT;
 
-        boardTrainQueue = new NPCQueue();
-        disembarkTrainQueue = new NPCQueue();
-        boardTrainQueue.npcs = new PassengerBrain[MAX_QUEUE_SIZE];
-        disembarkTrainQueue.npcs = new PassengerBrain[MAX_QUEUE_SIZE];
+        boardTrainQueue = new PassengerQueue();
+        disembarkTrainQueue = new PassengerQueue();
+        boardTrainQueue.passengers = new PassengerBrain[MAX_QUEUE_SIZE];
+        disembarkTrainQueue.passengers = new PassengerBrain[MAX_QUEUE_SIZE];
         
         ResetDoors();
     }
@@ -100,7 +100,7 @@ public class SlideDoors : MonoBehaviour
                     disembarkTrainQueue.timer += Time.deltaTime;
                     if (disembarkTrainQueue.timer > QUEUE_TICK_RATE)
                     {
-                        PassengerBrain npc = disembarkTrainQueue.npcs[disembarkTrainQueue.passengerCount - 1];
+                        PassengerBrain npc = disembarkTrainQueue.passengers[disembarkTrainQueue.passengerCount - 1];
                         npc.DisembarkTrain();
                         disembarkTrainQueue.passengerCount--;
                         disembarkTrainQueue.timer = 0;
@@ -112,7 +112,7 @@ public class SlideDoors : MonoBehaviour
 
                     if (boardTrainQueue.timer > QUEUE_TICK_RATE)
                     {
-                        PassengerBrain npc = boardTrainQueue.npcs[boardTrainQueue.passengerCount - 1];
+                        PassengerBrain npc = boardTrainQueue.passengers[boardTrainQueue.passengerCount - 1];
                         npc.BoardTrain();
 
                         boardTrainQueue.passengerCount--;
@@ -251,13 +251,13 @@ public class SlideDoors : MonoBehaviour
     public void AddToBoardTrainQueue(PassengerBrain passenger)
     {
         passenger.boardTrainQueueIndex = boardTrainQueue.passengerCount;
-        boardTrainQueue.npcs[boardTrainQueue.passengerCount] = passenger;
+        boardTrainQueue.passengers[boardTrainQueue.passengerCount] = passenger;
         boardTrainQueue.passengerCount++;
     }
     public void AddToDisembarkTrainQueue(PassengerBrain passenger)
     {
         passenger.disembarkTrainQueueIndex = disembarkTrainQueue.passengerCount;
-        disembarkTrainQueue.npcs[disembarkTrainQueue.passengerCount] = passenger;
+        disembarkTrainQueue.passengers[disembarkTrainQueue.passengerCount] = passenger;
         disembarkTrainQueue.passengerCount++;
     }
     public void ResetDoors()

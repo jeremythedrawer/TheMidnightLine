@@ -26,7 +26,6 @@ public class SpyData : ScriptableObject
     public SpyState curState;
 
     public bool spriteFlip;
-    public bool walkingIntoWall;
     public bool startTrip;
     public bool playerInputsEnabled;
 

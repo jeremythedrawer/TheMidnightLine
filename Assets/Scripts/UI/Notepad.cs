@@ -212,12 +212,12 @@ public class Notepad : MonoBehaviour
                 }
                 else
                 {
-                    if (activePage.pageIndex < lastPageIndex - 1 && inputData.notepadFlipValue == 1 && inputData.notepadFlipKeyUp)
+                    if (activePage.pageIndex < lastPageIndex - 1 && inputData.verticalInputAxis.keyDownValue == 1)
                     {
                         notepadData.subState |= SubState.WillFlipUp;
                         notepadData.subState &= ~(SubState.WillFlipDown);
                     }
-                    if (activePage.pageIndex > 0 && inputData.notepadFlipValue == -1 && inputData.notepadFlipKeyUp)
+                    if (activePage.pageIndex > 0 && inputData.verticalInputAxis.keyDownValue == -1)
                     {
                         notepadData.subState |= SubState.WillFlipDown;
                         notepadData.subState &= ~(SubState.WillFlipUp);
@@ -244,12 +244,12 @@ public class Notepad : MonoBehaviour
                 }
                 else
                 {
-                    if (activePage.pageIndex < lastPageIndex && inputData.notepadFlipValue == 1 && inputData.notepadFlipKeyUp)
+                    if (activePage.pageIndex < lastPageIndex && inputData.verticalInputAxis.keyDownValue == 1)
                     {
                         notepadData.subState |= SubState.WillFlipUp;
                         notepadData.subState &= ~(SubState.WillFlipDown);
                     }
-                    else if (activePage.pageIndex > 1 && inputData.notepadFlipValue == -1 && inputData.notepadFlipKeyUp)
+                    else if (activePage.pageIndex > 1 && inputData.verticalInputAxis.keyDownValue == -1)
                     {
                         notepadData.subState |= SubState.WillFlipDown;
                         notepadData.subState &= ~(SubState.WillFlipUp);
@@ -282,7 +282,7 @@ public class Notepad : MonoBehaviour
                     transform.localPosition = Vector3.Lerp(transform.localPosition, curLocalPos, Time.deltaTime * MOVE_DAMP);
                 }
                 
-                if (inputData.notepadToggleKeyUp)
+                if (inputData.secondaryInteractInputTrigger.keyDown)
                 {
                     ToggleNotepad();
                 }
@@ -400,7 +400,7 @@ public class Notepad : MonoBehaviour
     private bool ToFlipUp()
     {
         bool canFlipUp = (notepadData.subState & SubState.CanFlipUp) != 0;
-        bool validFlipUpInputted = inputData.notepadFlipKeyUp && inputData.notepadFlipValue == 1 && activePage.pageIndex < lastPageIndex;
+        bool validFlipUpInputted = inputData.verticalInputAxis.keyDownValue == 1 && activePage.pageIndex < lastPageIndex;
         bool isFlippingUp = (notepadData.subState & (SubState.WillFlipUp | SubState.IsFlippingUp)) != 0;
         
         return (validFlipUpInputted || isFlippingUp) && canFlipUp;
@@ -408,7 +408,7 @@ public class Notepad : MonoBehaviour
     private bool ToFlipDown()
     {
         bool canFlipDown = (notepadData.subState & SubState.CanFlipDown) != 0;
-        bool validFlipDownInputted = inputData.notepadFlipKeyUp && inputData.notepadFlipValue == -1 && activePage.pageIndex > 0;
+        bool validFlipDownInputted = inputData.verticalInputAxis.keyDownValue == -1 && activePage.pageIndex > 0;
         bool isFlippingDown = (notepadData.subState & (SubState.WillFlipDown | SubState.IsFlippingDown)) != 0;
 
         return (validFlipDownInputted || isFlippingDown) && canFlipDown;

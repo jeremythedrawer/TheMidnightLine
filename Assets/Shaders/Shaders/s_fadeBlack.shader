@@ -12,7 +12,7 @@ Shader "Custom/s_fadeBlack"
     {
         Tags { "Queue" = "Transparent" "RenderType"="Transparent" }
         ZWrite On
-        ZTest LEqual
+        ZTest Less
         Blend SrcAlpha OneMinusSrcAlpha
 
         Stencil
@@ -83,4 +83,6 @@ Shader "Custom/s_fadeBlack"
             ENDHLSL
         }
     }
+
+    CustomEditor "NoMaterialPreviewGUI"
 }

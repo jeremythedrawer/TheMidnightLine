@@ -59,17 +59,11 @@ float2 Rotate(float2 p, float angle)
     return float2(c * p.x - s * p.y, s * p.x + c * p.y);
 }
 
-float BayerMatrix(float value, float bayerIndex, float2 pixelCoord)
+float BayerMatrix(float value, float2 pixelCoord)
 {    
-    const int N = 8;
-
-    uint y = (uint)pixelCoord.y % N;
-
-    int pattern[8] = { 0, 4, 2, 6, 1, 5, 3, 7 };
-
-    float threshold = (pattern[y] + 0.5) / N;
-
-    return value >= threshold ? 1.0 : 0.0;
+    float bayer = GetBayer8(pixelCoord.x, pixelCoord.y);
+    
+    return step(bayer, value);
 }
 
 float1 BayerX8(float value, float2 pixelCoord)

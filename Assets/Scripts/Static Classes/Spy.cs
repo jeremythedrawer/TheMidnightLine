@@ -8,12 +8,28 @@ public static class Spy
         None,
         Idle,
         Walk,
-        PickingPassenger,
         TalkingToPassenger,
         Notepad,
         CarriageMap,
         Focus,
     }
+    [Flags] public enum SpySubState
+    {
+        None = 0,
+        CheckingCarriageMap = 1 << 0,
+        IsFocusing = 1 << 1,
+        IsTalkingToPassenger = 1 << 2,
+    }
+
+    public enum TargetType
+    { 
+        None,
+        Passenger,
+        SlideDoors,
+        Gangway,
+        CarriageMap,
+    }
+
 
     public enum LocationState
     {

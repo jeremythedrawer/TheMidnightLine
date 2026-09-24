@@ -69,8 +69,8 @@ public static class AtlasUI
         Diagonal = 1 << 3,
         Meridia = 1 << 4,
         Invert = 1 << 5,
-        Outline = 1 << 6,
-        Texture = 1 << 7,
+        Vinrose = 1 << 6,
+        Oscillate = 1 << 7,
         RedChannel = 1 << 8,
         GreenChannel = 1 << 9,
         BlueChannel = 1 << 10,
@@ -116,8 +116,8 @@ public static class AtlasUI
         OptionsMenu,
         MapMenu,
         Notepad,
-        Ticket,
         CarriageMap,
+        Focus,
 
     }
     public enum ButtonState

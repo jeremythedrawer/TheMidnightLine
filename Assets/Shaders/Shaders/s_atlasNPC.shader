@@ -57,19 +57,16 @@ Shader "Custom/s_atlasNPC"
 
             TEXTURE2D(_CarriageBoundsTexture);
             SAMPLER(sampler_CarriageBoundsTexture);
-
-            TEXTURE2D(_DiagonalTexture);
-            SAMPLER(sampler_DiagonalTexture);
-
-            TEXTURE2D(_StripesTexture);
-            SAMPLER(sampler_StripesTexture);
             
 
             float3 _BlackColor;
             float3 _WhiteColor;
-            float3 _ColorKey0;
-            float3 _ColorKey1;
+
+            float3 _MarkerColor1;
+            float3 _MarkerColor2;
+            
             float3 _MeridiaColor;
+            float3 _VinroseColor;
 
             float4 _TrainBoundsMin;
             float4 _TrainBoundsSize;
@@ -111,78 +108,52 @@ Shader "Custom/s_atlasNPC"
                 float2 scale = i.scaleAndFlip.xy;
                 float2 flip = i.scaleAndFlip.zw;
 
-                i.uv *= scale;
-                i.uv = frac(i.uv);
-                i.uv = (i.uv - 0.5) * flip + 0.5;
-                i.uv *= uvSize;
+                float2 uv = i.uv;
+                uv *= scale;
+                uv = frac(i.uv);
+                uv = (i.uv - 0.5) * flip + 0.5;
+                uv *= uvSize;
 
-                float2 diagonalTexUV = i.uv;
-
-                i.uv += uvPos;
+                uv += uvPos;
                 
-                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-                half4 diagonalTex = SAMPLE_TEXTURE2D(_DiagonalTexture, sampler_DiagonalTexture, diagonalTexUV);
-                half4 stripesTex = SAMPLE_TEXTURE2D(_StripesTexture, sampler_StripesTexture, diagonalTexUV);
-
                 int bitMask = i.customBit;
 
+                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, uv);
 
-                half outline = 0;
-                for (int index = 0; index < 4; index++)
-                {
-                    float2 uvOffset = i.uv + (BOX_BLUR_OFFSET[index] / _AtlasTexture_TexelSize.zw);
-                    half4 blurTex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, uvOffset);
-                    outline += blurTex.a;
-                }
-                outline /= 4;
-                outline *= (1 - outline);
-                outline = ceil(outline);
-
-
-                int diagonalMask = saturate(bitMask & DIAGONAL_TEXTURE_BIT);
-                half3 diagonal = diagonalMask * diagonalTex.r;
-
-                int colorMask = bitMask & 0x03;
-
-                int colKeyMask0 = colorMask == COLOR_KEY_BIT_0;
-                int colKeyMask1 = colorMask == COLOR_KEY_BIT_1;
-                int colKeyMask01 = colorMask == (COLOR_KEY_BIT_0 | COLOR_KEY_BIT_1);
-
-                half3 colKey0 = colKeyMask0 * _ColorKey0;
-                half3 colKey1 = colKeyMask1 * _ColorKey1;
-
-                half invertPatternR = 1 - stripesTex.r;
-
-                half3 colKey01 = colKeyMask01 * ((_ColorKey0 * stripesTex.r) + (_ColorKey1 * invertPatternR));
-
-                int meridiaColorMask = saturate(bitMask & MERIDIA_COLOR_BIT);
-                half3 meridiaColor = meridiaColorMask * _MeridiaColor;
-
-                half3 blackColor = (1 - meridiaColorMask) * _BlackColor;
-
-                half mouseColor = i.custom.y;
-                half ticketCheckHover = i.custom.w;
-
-                int texMask = saturate(bitMask & TEXTURE_BIT);
-                tex.r *= texMask;
+                half detail = tex.r;
+                half outline = tex.g;
+                int highlight = tex.b;
 
                 int greenMask = saturate(bitMask & GREEN_BIT);
+                int redMask = saturate(bitMask & RED_BIT);
+                int blueMask = saturate(bitMask & BLUE_BIT);
+                int meridiaColorMask = saturate(bitMask & MERIDIA_COLOR_BIT);
+                int vinroseColorMask = saturate(bitMask & VINROSE_BIT);
+                int invertMask = saturate(bitMask & INVERT_BIT);
+                int oscillateMask = saturate(bitMask & OSCILLATE_BIT);
 
-                tex.g *= (sin(_Time.y * PI) * 0.5 + 0.5) * greenMask;
-                tex.g = BayerX8(tex.g, i.positionHCS.y);
-                tex.r += tex.g;
+                detail *= redMask;
+                outline *= greenMask;
+                highlight *= blueMask;
 
-                half invertOutline = 1 - outline;
+
+                half3 meridiaColor = meridiaColorMask * _MeridiaColor;
+                half3 vinroseColor = vinroseColorMask * _VinroseColor;
                 
-                outline = lerp(outline, invertOutline, lerp(ticketCheckHover, 1 - ticketCheckHover, texMask));
-                
-                int outlineMask = saturate(bitMask & OUTLINE_BIT);
-                outline *= outlineMask;
+                half3 blackColor = (1 - (meridiaColorMask * vinroseColorMask)) * _BlackColor;
 
-                half3 finalColor = tex.r + outline;
-                finalColor += diagonal + colKey0 + colKey1 + colKey01 + blackColor + meridiaColor;
-                float bayerColMask = BayerX8(mouseColor * 0.75, i.positionHCS.y);
-                finalColor += bayerColMask;
+                half stripes = round(frac(i.uv.y * 2)); 
+                int colKeyMask0 = saturate(bitMask & COLOR_KEY_BIT_0) * stripes;
+                int colKeyMask1 = saturate(bitMask & COLOR_KEY_BIT_1) * (1 - stripes);
+
+                half3 colKey0 = colKeyMask0 * _MarkerColor1;
+                half3 colKey1 = colKeyMask1 * _MarkerColor2;
+
+                int finalMask = max(detail, outline);
+                finalMask = (finalMask ^ highlight);
+                finalMask = lerp(finalMask, 1-finalMask, invertMask);
+
+                half3 finalColor = finalMask + colKey0 + colKey1 + blackColor + meridiaColor + vinroseColor;
                 finalColor = min(finalColor, _WhiteColor);
 
                 float2 worldToTrain = (i.worldPos.xy - _TrainBoundsMin.xy) / _TrainBoundsSize.xy;

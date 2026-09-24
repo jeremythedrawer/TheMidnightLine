@@ -63,6 +63,10 @@ Shader "Custom/s_atlasUI"
                 objPos *= size * scale;
                 objPos += pivot;
 
+                int hoverMask = saturate(spriteData.customBit & OSCILLATE_BIT);
+                float hoverOffset = (sin(_Time.y * 2) * 0.5 + 0.5) * 0.1;
+                objPos.y += hoverOffset * hoverMask;
+                
                 float3 worldPos = float3(position.xy + objPos, position.z);
                 o.worldPos = worldPos;
                 o.positionHCS = TransformWorldToHClip(worldPos);

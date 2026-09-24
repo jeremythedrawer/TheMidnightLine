@@ -179,7 +179,7 @@ public static class AtlasRendering
         int curFrame = (int)(keyframeClock * FRAMES_PER_SEC);
      
         if (curFrame < curMotionSprite.holdFrames) return curMotionSprite;
-
+        
         switch (clip.clipType)
         {
             case ClipType.Loop:

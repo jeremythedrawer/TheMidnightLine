@@ -155,8 +155,8 @@ public class PassengerManager : MonoBehaviour
     {
         nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
 
-        List<NPCProfile> totalNPCProfiles = new List<NPCProfile>();
-        List<NPCProfile> bystanderProfiles = new List<NPCProfile>();
+        List<PassengerProfile> totalNPCProfiles = new List<PassengerProfile>();
+        List<PassengerProfile> bystanderProfiles = new List<PassengerProfile>();
 
         for (int i = 0; i < options.curTrip.passengers.Length; i++)
         {
@@ -184,7 +184,7 @@ public class PassengerManager : MonoBehaviour
                     Habits secondHabit = (Habits)validFlags[k];
                     Habits twoHabits = firstHabit | secondHabit;
 
-                    NPCProfile npcProfile = new NPCProfile
+                    PassengerProfile npcProfile = new PassengerProfile
                     {
                         habits = twoHabits,
                         npcPrefabIndex = i,
@@ -211,7 +211,7 @@ public class PassengerManager : MonoBehaviour
             for (int j = 0; j < station.traitorSpawnCount; j++)
             {
                 int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
-                NPCProfile traitorProfile = totalNPCProfiles[randProfileIndex];
+                PassengerProfile traitorProfile = totalNPCProfiles[randProfileIndex];
                 traitorProfile.boardingStationIndex = i;
 
                 int stationsLeft = options.curTrip.stationsDataArray.Length - i;
@@ -246,12 +246,12 @@ public class PassengerManager : MonoBehaviour
         for (int i = 0; i < options.curTrip.stationsDataArray.Length; i++)
         {
             StationSO station = options.curTrip.stationsDataArray[i];
-            station.accompliceProfiles = new NPCProfile[station.accompliceSpawnCount];
+            station.accompliceProfiles = new PassengerProfile[station.accompliceSpawnCount];
 
             for (int j = 0; j < station.accompliceSpawnCount; j++)
             {
                 int randPrefabIndex = UnityEngine.Random.Range(0, options.curTrip.passengers.Length);
-                NPCProfile accompliceProfile = new NPCProfile();
+                PassengerProfile accompliceProfile = new PassengerProfile();
 
                 accompliceProfile.npcPrefabIndex = randPrefabIndex;
                 accompliceProfile.boardingStationIndex = i;
@@ -267,12 +267,12 @@ public class PassengerManager : MonoBehaviour
         {
             StationSO station = options.curTrip.stationsDataArray[i];
 
-            station.bystanderProfiles = new NPCProfile[station.bystanderSpawnCount];
+            station.bystanderProfiles = new PassengerProfile[station.bystanderSpawnCount];
 
             for (int j = 0; j < station.bystanderSpawnCount; j++)
             {
                 int randIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
-                NPCProfile bystanderProfile = totalNPCProfiles[randIndex];
+                PassengerProfile bystanderProfile = totalNPCProfiles[randIndex];
 
                 bystanderProfile.boardingStationIndex = i;
 

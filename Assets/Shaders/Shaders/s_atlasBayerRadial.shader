@@ -92,7 +92,6 @@ Shader "Custom/s_atlasBayerRadial"
                 float radial = length(centerUV);
                 half alpha = radial - revealT;
                 alpha = saturate(alpha); 
-                alpha = BayerMatrix(alpha, 1, i.positionHCS.xy);
 
                 float diagonalGradient = normUV.y + normUV.x;
 

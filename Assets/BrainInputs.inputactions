@@ -7,7 +7,7 @@
             "id": "dfe46dea-6076-44ea-b825-57c5f8187ea6",
             "actions": [
                 {
-                    "name": "Movement",
+                    "name": "Horizontal",
                     "type": "Value",
                     "id": "ce64c997-ef89-45e1-aa13-bbd6b58a142a",
                     "expectedControlType": "Axis",
@@ -16,16 +16,7 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "NotepadToggle",
-                    "type": "Button",
-                    "id": "ac29e519-7e48-478f-ad63-b10ac44b06d3",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "NotepadFlipPage",
+                    "name": "Vertical",
                     "type": "Value",
                     "id": "c8af4062-217f-401f-95bd-5a7ea73996e1",
                     "expectedControlType": "Axis",
@@ -34,9 +25,18 @@
                     "initialStateCheck": true
                 },
                 {
-                    "name": "Talk",
+                    "name": "PrimaryInteract",
                     "type": "Button",
                     "id": "7257163c-c77d-4fdc-ac70-2c491b6abde3",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "SecondaryInteract",
+                    "type": "Button",
+                    "id": "ac29e519-7e48-478f-ad63-b10ac44b06d3",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -52,45 +52,18 @@
                     "initialStateCheck": false
                 },
                 {
-                    "name": "Interact",
-                    "type": "Button",
-                    "id": "0019b702-153e-4405-9d44-74cf08b254b0",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MouseLeftDown",
-                    "type": "Button",
-                    "id": "1af8fd30-8fe4-4f4c-87b1-c1f605c32f84",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MouseRightDown",
-                    "type": "Button",
-                    "id": "73571761-00bf-4c54-b882-0dbeac47e502",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
-                    "name": "MouseLeftPress",
-                    "type": "Button",
-                    "id": "ff3a6989-e3be-4b6d-89f9-ccdf399cf291",
-                    "expectedControlType": "",
-                    "processors": "",
-                    "interactions": "",
-                    "initialStateCheck": false
-                },
-                {
                     "name": "Numpad",
                     "type": "Button",
                     "id": "04046e87-de17-4e10-b713-3e78ab059871",
+                    "expectedControlType": "",
+                    "processors": "",
+                    "interactions": "",
+                    "initialStateCheck": false
+                },
+                {
+                    "name": "CursorLeftDown",
+                    "type": "Button",
+                    "id": "1af8fd30-8fe4-4f4c-87b1-c1f605c32f84",
                     "expectedControlType": "",
                     "processors": "",
                     "interactions": "",
@@ -105,7 +78,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "KeyboardAndMouse",
-                    "action": "NotepadToggle",
+                    "action": "SecondaryInteract",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -116,7 +89,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "NotepadToggle",
+                    "action": "SecondaryInteract",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -127,7 +100,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Movement",
+                    "action": "Horizontal",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -138,7 +111,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "Movement",
+                    "action": "Horizontal",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -149,7 +122,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse;KeyboardAndMouse",
-                    "action": "Movement",
+                    "action": "Horizontal",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -160,7 +133,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "Keyboard&Mouse;KeyboardAndMouse",
-                    "action": "Movement",
+                    "action": "Horizontal",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -171,7 +144,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "NotepadFlipPage",
+                    "action": "Vertical",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -182,7 +155,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Gamepad",
-                    "action": "NotepadFlipPage",
+                    "action": "Vertical",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -193,7 +166,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;Gamepad",
-                    "action": "NotepadFlipPage",
+                    "action": "Vertical",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -204,7 +177,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": "",
-                    "action": "NotepadFlipPage",
+                    "action": "Vertical",
                     "isComposite": true,
                     "isPartOfComposite": false
                 },
@@ -215,7 +188,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;KeyboardAndMouse",
-                    "action": "NotepadFlipPage",
+                    "action": "Vertical",
                     "isComposite": false,
                     "isPartOfComposite": true
                 },
@@ -226,31 +199,9 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Keyboard&Mouse;KeyboardAndMouse",
-                    "action": "NotepadFlipPage",
+                    "action": "Vertical",
                     "isComposite": false,
                     "isPartOfComposite": true
-                },
-                {
-                    "name": "",
-                    "id": "53ed4e0b-cf3b-4be7-8c70-37f46505c7a9",
-                    "path": "<Keyboard>/w",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": "Keyboard&Mouse;KeyboardAndMouse;Gamepad",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "78a21926-7677-4e99-84ae-eb92f0c6106a",
-                    "path": "<Gamepad>/buttonNorth",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "Interact",
-                    "isComposite": false,
-                    "isPartOfComposite": false
                 },
                 {
                     "name": "",
@@ -259,7 +210,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";KeyboardAndMouse",
-                    "action": "MouseLeftDown",
+                    "action": "CursorLeftDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -270,40 +221,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "MouseLeftDown",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "675c6d37-bb60-46e5-ad6e-f388667b6d0e",
-                    "path": "<Mouse>/rightButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";KeyboardAndMouse",
-                    "action": "MouseRightDown",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "84e21741-fc51-4e22-ae95-a2a8c07b2fa3",
-                    "path": "<Mouse>/leftButton",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";KeyboardAndMouse",
-                    "action": "MouseLeftPress",
-                    "isComposite": false,
-                    "isPartOfComposite": false
-                },
-                {
-                    "name": "",
-                    "id": "7b317af2-7ada-4581-a4b2-9b53bbd417b9",
-                    "path": "<Gamepad>/rightStickPress",
-                    "interactions": "",
-                    "processors": "",
-                    "groups": ";Gamepad",
-                    "action": "MouseLeftPress",
+                    "action": "CursorLeftDown",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -314,7 +232,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";KeyboardAndMouse",
-                    "action": "Talk",
+                    "action": "PrimaryInteract",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },
@@ -325,7 +243,7 @@
                     "interactions": "",
                     "processors": "",
                     "groups": ";Gamepad",
-                    "action": "Talk",
+                    "action": "PrimaryInteract",
                     "isComposite": false,
                     "isPartOfComposite": false
                 },

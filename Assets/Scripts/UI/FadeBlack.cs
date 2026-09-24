@@ -24,7 +24,8 @@ public class FadeBlack : MonoBehaviour
     public Options options;
     public InputData playerInputs;
     public AudioData audioData;
-    public PassengersData passengersData; 
+    public PassengersData passengersData;
+    public UIData uidata;
 
     public Material fadeBlackMaterial;
 
@@ -56,7 +57,7 @@ public class FadeBlack : MonoBehaviour
         ctsFadeBlack = new CancellationTokenSource();
 
         transform.localPosition = new Vector3(0, 0, fadeBlackZPos);
-
+        uidata.fadeBlackWorldPos = transform.position;
         curUVPosX = uvPosX;
         curUVPosY = uvPosY;
 

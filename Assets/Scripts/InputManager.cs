@@ -13,17 +13,13 @@ public class InputManager : MonoBehaviour
     public SpyData spyData;
     public PlayerInput playerInput;
 
-    InputAction moveAction;
-
-    InputAction notepadToggleAction;
-    InputAction notepadFlipAction;
-    InputAction numpadAction;
-    InputAction talkAction;
-    InputAction interactAction;
-    InputAction focusAction;
-    InputAction mouseLeftDownAction;
-    InputAction mosueLeftPressAction;
-    InputAction mouseRightPressAction;
+    public InputAction horizontalAction;
+    public InputAction verticalAction;
+    public InputAction primaryInteractAction;
+    public InputAction secondaryInteractAction;
+    public InputAction focusAction;
+    public InputAction numpadAction;
+    public InputAction cursorLeftDownAction;
 
     Action<string> OnDeviceChanged;
 
@@ -61,134 +57,67 @@ public class InputManager : MonoBehaviour
 
     private void LateUpdate()
     {
-        inputData.notepadToggleKeyDown = false;
-        inputData.notepadToggleKeyUp = false;
-        inputData.talkKeyDown = false;
-        inputData.talkKeyUp = false;
-        inputData.interactKeyDown = false;
-        inputData.focusKeyDown = false;
-        inputData.notepadFlipKeyUp = false;
+        inputData.horizontalInputAxis.keyDownValue = 0;
+        inputData.horizontalInputAxis.keyUpValue = 0;
 
-        inputData.mouseLeftDown = false;
-        inputData.mouseLeftUp = false;
-        inputData.mouseRightDown = false;
-        inputData.mouseRightUp = false;
-        inputData.moveKeyUp = false;
-        inputData.moveKeyDown = false;
+        inputData.verticalInputAxis.keyDownValue = 0;
+        inputData.verticalInputAxis.keyUpValue = 0;
+
+        inputData.primaryInteractInputTrigger.keyDown = false;
+        inputData.primaryInteractInputTrigger.keyUp = false;
+
+        inputData.secondaryInteractInputTrigger.keyDown = false;
+        inputData.secondaryInteractInputTrigger.keyUp = false;
+
+        inputData.focusInputTrigger.keyDown = false;
+        inputData.focusInputTrigger.keyUp = false;
 
         inputData.numpad = -1;
+        inputData.mouseLeftDown = false;
+        inputData.mouseLeftUp = false;
     }
     private void InitInputs()
     {
-        moveAction = playerInput.actions["Player/Movement"];
-
-        notepadToggleAction = playerInput.actions["Player/NotepadToggle"];
-        notepadFlipAction = playerInput.actions["Player/NotepadFlipPage"];
-
-        numpadAction = playerInput.actions["Player/Numpad"];
-
-        talkAction = playerInput.actions["Player/Talk"];
-        interactAction = playerInput.actions["Player/Interact"];
+        horizontalAction = playerInput.actions["Player/Horizontal"];
+        verticalAction = playerInput.actions["Player/Vertical"];
+        primaryInteractAction = playerInput.actions["Player/PrimaryInteract"];
+        secondaryInteractAction = playerInput.actions["Player/SecondaryInteract"];
         focusAction = playerInput.actions["Player/Focus"];
+        numpadAction = playerInput.actions["Player/Numpad"];
+        cursorLeftDownAction = playerInput.actions["Player/CursorLeftDown"];
 
-        mouseLeftDownAction = playerInput.actions["Player/MouseLeftDown"];
-        mosueLeftPressAction = playerInput.actions["Player/MouseLeftPress"];
-        mouseRightPressAction = playerInput.actions["Player/MouseRightDown"];
+        horizontalAction.started += inputData.horizontalInputAxis.OnStart;
+        horizontalAction.canceled += inputData.horizontalInputAxis.OnCancel;
 
-        moveAction.started += OnStartMove;
-        moveAction.performed += OnPerformMove;
-        moveAction.canceled += OnCancelMove;
+        verticalAction.started += inputData.verticalInputAxis.OnStart;
+        verticalAction.canceled += inputData.verticalInputAxis.OnCancel;
 
-        notepadToggleAction.started += OnStartToggleNotepad;
-        notepadToggleAction.canceled += OnCancelToggleNotepad;
+        primaryInteractAction.started += inputData.primaryInteractInputTrigger.OnStart;
+        primaryInteractAction.canceled += inputData.primaryInteractInputTrigger.OnCancel;
 
-        notepadFlipAction.started += OnStartNotepadFlip;
-        notepadFlipAction.canceled += OnCancelNotepadFlip;
+        secondaryInteractAction.started += inputData.secondaryInteractInputTrigger.OnStart;
+        secondaryInteractAction.canceled += inputData.secondaryInteractInputTrigger.OnCancel;
+
+        focusAction.started += inputData.focusInputTrigger.OnStart;
+        focusAction.canceled += inputData.focusInputTrigger.OnCancel;
 
         numpadAction.started += OnStartNumpad;
 
-        talkAction.started += OnStartTalk;
-        talkAction.performed += OnPerformTalk;
-
-        talkAction.canceled += OnCancelTalk;
-
-        interactAction.started += OnStartInteract;
-
-        focusAction.started += OnStartFocus;
-
-        mouseLeftDownAction.started += OnStartLeftMouse;
-
-        mosueLeftPressAction.performed += OnPerformLeftMouse;
-
-        mosueLeftPressAction.canceled += OnCancelLeftMouse;
-
-        mouseRightPressAction.started += OnStartRightMouse;
-
-        mouseRightPressAction.canceled += OnCancelRightMouse;
+        cursorLeftDownAction.started += OnStartLeftMouse;
+        cursorLeftDownAction.performed += OnPerformLeftMouse;
+        cursorLeftDownAction.canceled += OnCancelLeftMouse;
     }
 
     private void SetKeybindSpriteIndices()
     {
-        inputData.interactSpriteIndex = GetKeybindSpriteIndex(talkAction);
+        inputData.horizontalInputAxis.postiveKeybindSpriteIndex = GetAxisKeybindSpriteIndex(horizontalAction, isPositive: true);
+        inputData.horizontalInputAxis.negativeKeybindSpriteIndex = GetAxisKeybindSpriteIndex(horizontalAction, isPositive: false);
     }
 
-    private void OnStartMove(CallbackContext ctx)
-    {
-        inputData.moveKeyDown = true;
-    }
-    private void OnPerformMove(CallbackContext ctx)
-    {
-        float move = ctx.ReadValue<float>();
-        inputData.move = (int)move;
-    }
-    private void OnCancelMove(CallbackContext ctx)
-    {
-        inputData.move = 0;
-        inputData.moveKeyUp = true;
-    }
-    private void OnStartToggleNotepad(CallbackContext ctx)
-    {
-        inputData.notepadToggleKeyDown = true;
-    }
-    private void OnCancelToggleNotepad(CallbackContext ctx)
-    {
-        inputData.notepadToggleKeyUp = true;
-    }
-    private void OnStartNotepadFlip(CallbackContext ctx)
-    {
-        float value = ctx.ReadValue<float>();
-        inputData.notepadFlipValue = (int)value;
-    }
-    private void OnCancelNotepadFlip(CallbackContext ctx)
-    {
-        inputData.notepadFlipKeyUp = true;
-    }
-
-    private void OnStartTalk(CallbackContext ctx)
-    {
-        inputData.talkKeyDown = true;
-    }
     private void OnStartNumpad(CallbackContext ctx)
     {
         InputBinding activeBinding = numpadAction.GetBindingForControl(ctx.control).Value;
         inputData.numpad = numpadAction.GetBindingIndex(activeBinding);
-    }
-    private void OnPerformTalk(CallbackContext ctx)
-    {
-        inputData.talkKeyHold = true;
-    }
-    private void OnCancelTalk(CallbackContext ctx)
-    {
-        inputData.talkKeyUp = true;
-        inputData.talkKeyHold = false;
-    }
-    private void OnStartInteract(CallbackContext ctx)
-    {
-        inputData.interactKeyDown = true;
-    }
-    private void OnStartFocus(CallbackContext cts)
-    {
-        inputData.focusKeyDown = true;
     }
     private void OnStartLeftMouse(CallbackContext ctx)
     {
@@ -203,37 +132,19 @@ public class InputManager : MonoBehaviour
         inputData.mouseLeftUp = true;
         inputData.mouseLeftHold = false;
     }
-    private void OnStartRightMouse(CallbackContext ctx)
-    {
-        inputData.mouseRightDown = true;
-    }
-    private void OnCancelRightMouse(CallbackContext ctx)
-    {
-        inputData.mouseRightUp = true;
-    }
     private void CheckDevice(InputControl value, InputEventPtr ptr)
     {
         curDevice = value.device;
         OnDeviceChanged?.Invoke(value.device.displayName);
     }
 
-    private KeybindSpriteIndex GetKeybindSpriteIndex(InputAction action)
+    [ContextMenu("Axis Test")] public KeybindSpriteIndex GetAxisKeybindSpriteIndex(InputAction action, bool isPositive)
     {
         string path = action.bindings[0].effectivePath;
 
         string keyName = path.Replace("<Keyboard>/", "").ToLower();
 
-        if (keyName.StartsWith("digit")) return (KeybindSpriteIndex)int.Parse(keyName.Substring(startIndex: 5));
-
-        if (keyName.Length == 1 && char.IsLetter(keyName[0]))
-        {
-            int index = 10 + (char.ToUpper(keyName[0]) - 'A');
-            return (KeybindSpriteIndex)index;
-        }
-
-        if (keyName == "space") return KeybindSpriteIndex.Spacebar;
-
-        throw new ArgumentException($"Unsupported key: {keyName}");
+        return KeybindSpriteIndex.Q;
     }
 
 }

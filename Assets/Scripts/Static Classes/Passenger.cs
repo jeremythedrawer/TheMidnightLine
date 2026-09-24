@@ -10,13 +10,17 @@ public static class Passenger
     public const float MIN_START_MOVE_TIME = 0.3f;
     public const float MAX_START_MOVE_TIME = 1f;
 
-    public enum NPCState
+    public enum PassengerState
     {
         None,
         Idling,
         Walking,
         TicketCheck,
         Behaviour,
+    }
+    public enum PassengerSubState
+    { 
+        
     }
 
     public enum Role
@@ -93,7 +97,7 @@ public static class Passenger
         Suitcase,
         Idle,
     }
-    [Serializable] public struct NPCProfile
+    [Serializable] public struct PassengerProfile
     {
         public int boardingStationIndex;
         public int disembarkingStationIndex;
@@ -103,7 +107,7 @@ public static class Passenger
     }
     [Serializable] public struct TraitorProfile
     {
-        public NPCProfile passengerProfile;
+        public PassengerProfile passengerProfile;
         public string fullName;
         public int mugShotIndex;
         public bool found;    
@@ -126,9 +130,9 @@ public static class Passenger
         public string name;
     }
 
-    [Serializable] public struct NPCQueue
+    [Serializable] public struct PassengerQueue
     {
-        public PassengerBrain[] npcs;
+        public PassengerBrain[] passengers;
         public int passengerCount;
         public float timer;
     }
@@ -141,28 +145,28 @@ public static class Passenger
     public static Graffiti[] GraffitiPool;
     public static int graffitiActiveCount;
 
-    public static void QuickSortNPCByXPos(PassengerBrain[] npcs, int left, int right)
+    public static void QuickSortPassengerByXPos(PassengerBrain[] passengers, int left, int right)
     {
         if (left >= right) return;
 
-        int index = PartitionNPC(npcs, left, right);
+        int index = PartitionNPC(passengers, left, right);
 
-        QuickSortNPCByXPos(npcs, left, index - 1);
-        QuickSortNPCByXPos(npcs, index, right);
+        QuickSortPassengerByXPos(passengers, left, index - 1);
+        QuickSortPassengerByXPos(passengers, index, right);
     }
-    private static int PartitionNPC(PassengerBrain[] npcs, int left, int right)
+    private static int PartitionNPC(PassengerBrain[] passengers, int left, int right)
     {
-        float pivot = npcs[(left + right) / 2].transform.position.x;
+        float pivot = passengers[(left + right) / 2].transform.position.x;
 
         while (left <= right)
         {
-            while (npcs[left].transform.position.x > pivot) left++;
+            while (passengers[left].transform.position.x < pivot) left++;
 
-            while (npcs[right].transform.position.x < pivot) right--;
+            while (passengers[right].transform.position.x > pivot) right--;
 
             if (left <= right)
             {
-                (npcs[left], npcs[right]) = (npcs[right], npcs[left]);
+                (passengers[left], passengers[right]) = (passengers[right], passengers[left]);
                 left++;
                 right--;
             }

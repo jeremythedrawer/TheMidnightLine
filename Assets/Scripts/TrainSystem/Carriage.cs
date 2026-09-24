@@ -42,17 +42,19 @@ public class Carriage : MonoBehaviour
     
     public CancellationTokenSource ctsFade;
 
-    public List<PassengerBrain> curNPCList;
-    public PassengerBrain firstNPC;
+    public PassengerBrain[] curPassengers;
+    public PassengerBrain[] sortedPassengers;
 
     public SeatData seatData;
     
     public SmokersRoomData[] smokersRoomData;
 
-    public NPCQueue seatQueue;
+    public PassengerQueue seatQueue;
     
     public Bounds totalBounds;
-    
+
+    public int passengerCount;
+
     public int seatAmount;
     public int graffitiKernel;
     public int threadGroupX;
@@ -65,8 +67,8 @@ public class Carriage : MonoBehaviour
 
     private void Start()
     {
-        curNPCList = new List<PassengerBrain>();
-
+        curPassengers = new PassengerBrain[32];
+        sortedPassengers = new PassengerBrain[32];
         for(int i = 0; i < exteriorSlideDoors.Length; i++)
         {
             exteriorSlideDoors[i].carriage = this;
@@ -142,7 +144,7 @@ public class Carriage : MonoBehaviour
             return;
         }
         npc.seatQueueIndex = seatQueue.passengerCount;
-        seatQueue.npcs[seatQueue.passengerCount] = npc;
+        seatQueue.passengers[seatQueue.passengerCount] = npc;
         seatQueue.passengerCount++;
     }
     public void RemoveFromSeatQueue(PassengerBrain npc)
@@ -150,8 +152,8 @@ public class Carriage : MonoBehaviour
         if (seatQueue.passengerCount == 0) return;
         int lastIndex = seatQueue.passengerCount - 1;
 
-        seatQueue.npcs[npc.seatQueueIndex] = seatQueue.npcs[lastIndex];
-        seatQueue.npcs[lastIndex] = npc;
+        seatQueue.passengers[npc.seatQueueIndex] = seatQueue.passengers[lastIndex];
+        seatQueue.passengers[lastIndex] = npc;
         seatQueue.passengerCount--;
     }
     private void ProcessSeatQueue()
@@ -161,7 +163,7 @@ public class Carriage : MonoBehaviour
         seatQueue.timer += Time.deltaTime;
         if (seatQueue.timer < QUEUE_TICK_RATE) return;
 
-        PassengerBrain npc = seatQueue.npcs[seatQueue.passengerCount - 1];
+        PassengerBrain npc = seatQueue.passengers[seatQueue.passengerCount - 1];
 
         if (npc.seatPosIndex != int.MaxValue) return;
 
@@ -174,7 +176,7 @@ public class Carriage : MonoBehaviour
             if (seatData.filled[i]) continue;
             float seatPosX = seatData.xPos[i];
 
-            if (npc == firstNPC && seatPosX > insideBoundsCollider.bounds.center.x) continue;
+            if (seatPosX > insideBoundsCollider.bounds.center.x) continue;
 
             float dist = Mathf.Abs(npcX - seatPosX);
             if (dist < closestDist)
@@ -237,8 +239,8 @@ public class Carriage : MonoBehaviour
                 seatIndex++;
             }
         }
-        seatQueue = new NPCQueue();
-        seatQueue.npcs = new PassengerBrain[seatAmount];
+        seatQueue = new PassengerQueue();
+        seatQueue.passengers = new PassengerBrain[seatAmount];
     }
     public void SetTotalBounds()
     {
@@ -250,17 +252,60 @@ public class Carriage : MonoBehaviour
         }
         totalBounds.center = new Vector3(totalBounds.center.x, totalBounds.center.y, totalBounds.center.z);
     }
-    public void AddNPC(PassengerBrain npc)
+    public void AddPassenger(PassengerBrain passenger)
     {
-        if (firstNPC == null && npc.role != Role.Accomplice) firstNPC = npc;
-
-        curNPCList.Add(npc);
+        curPassengers[passengerCount] = passenger;
+        passenger.carriagePassengersIndex = passengerCount;
+        passengerCount++;
     }
-    public void RemoveNPC(PassengerBrain npc)
+    public void RemovePassenger(PassengerBrain passenger)
     {
-        curNPCList.Remove(npc);
+        int lastIndex = passengerCount - 1;
+        PassengerBrain lastPassenger = curPassengers[lastIndex];
+        curPassengers[passenger.carriagePassengersIndex] = lastPassenger;
+        passengerCount--;
+    }
+    public float GetPositionBetweenLargestGap()
+    {
+        for (int i = 0; i < passengerCount; i++)
+        {
+            sortedPassengers[i] = curPassengers[i];
+        }
+        QuickSortPassengerByXPos(sortedPassengers, 0, passengerCount - 1);
 
-        if (npc == firstNPC) firstNPC = null;
+        float leftBound = insideBoundsCollider.bounds.min.x;
+        float rightBound = insideBoundsCollider.bounds.max.x;
+
+        float largestGapSize = 0f;
+        float largestGapPos = leftBound;
+
+        float previousX = leftBound;
+
+        for (int i = 0; i < passengerCount; i++)
+        {
+            PassengerBrain passenger = sortedPassengers[i];
+            float currentX = passenger.transform.position.x;
+
+            float gap = currentX - previousX;
+
+            if (gap > largestGapSize)
+            {
+                largestGapSize = gap;
+                largestGapPos = previousX;
+            }
+
+            previousX = currentX;
+        }
+
+        float finalGap = rightBound - previousX;
+
+        if (finalGap > largestGapSize)
+        {
+            largestGapSize = finalGap;
+            largestGapPos = previousX;
+        }
+
+        return largestGapPos + largestGapSize * 0.5f;
     }
     private async UniTask MovingDown()
     {

@@ -11,6 +11,13 @@ Shader "Custom/s_atlasSpy"
         ZWrite On
         ZTest LEqual
         Blend SrcAlpha OneMinusSrcAlpha
+
+        Stencil
+        {
+            Ref 2
+            Comp GEqual
+            Pass Zero
+        }
         Pass
         {
             HLSLPROGRAM

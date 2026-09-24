@@ -79,7 +79,6 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnTalkToPassenger += MoveRailMap;
         SpyBrain.OnOpenNotepad += SetToNotepadState;
         SpyBrain.OnCloseNotepad += SetToNoneState;
-        SpyBrain.OnTalkToPassenger += SetToTicketState;
 
         PassengerBrain.OnTraitorDisembarkedTrain += DecreaseTraitorCount;
         PassengerBrain.OnTraitorBoardedTrain += IncreaseTraitorCount;
@@ -95,7 +94,6 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnTalkToPassenger -= MoveRailMap;
         SpyBrain.OnOpenNotepad -= SetToNotepadState;
         SpyBrain.OnCloseNotepad -= SetToNoneState;
-        SpyBrain.OnTalkToPassenger -= SetToTicketState;
         SpyBrain.OnEnteredTrain += AppearRailMap;
         
         PassengerBrain.OnTraitorDisembarkedTrain -= DecreaseTraitorCount;
@@ -141,13 +139,6 @@ public class GameplayUI : MonoBehaviour
                 ctsNotepad?.Cancel();
             }
             break;
-            case UIState.Ticket:
-            {
-                ticket.gameObject.SetActive(true);
-                naturalMovePos = ticketActivePos;
-                ctsTicket?.Cancel();
-            }
-            break;
             case UIState.CarriageMap:
             {
                 carriageMap.gameObject.SetActive(true);
@@ -172,12 +163,6 @@ public class GameplayUI : MonoBehaviour
                 canExitState = true;
             }
             break;
-            case UIState.Ticket:
-            {
-                UpdateNaturalPos(ticketActivePos, ref naturalMovePos);
-                ticket.transform.localPosition = Vector3.Lerp(ticket.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
-            }
-            break;
             case UIState.CarriageMap:
             {
                 carriageMap.transform.localPosition = Vector3.Lerp(carriageMap.transform.localPosition, carriageMapActivePos, Time.deltaTime * MOVE_DAMP);
@@ -200,11 +185,6 @@ public class GameplayUI : MonoBehaviour
                 notepad.ExitNotepad();
             }
             break;
-            case UIState.Ticket:
-            {
-                MoveUIElement(ticket.transform, ticketInactivePos, ref ctsTicket, newState);
-            }
-            break;
             case UIState.CarriageMap:
             {
                 MoveUIElement(carriageMap.transform, carriageMapInactivePos, ref ctsCarriageMap, newState);
@@ -220,10 +200,6 @@ public class GameplayUI : MonoBehaviour
     private void SetToNotepadState()
     {
         SetState(UIState.Notepad);
-    }
-    private void SetToTicketState()
-    {
-        SetState(UIState.Ticket);
     }
     private void SetToCarriageMapState()
     {

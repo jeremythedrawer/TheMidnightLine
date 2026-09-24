@@ -13,6 +13,8 @@ public class UIData : ScriptableObject
     public Bounds curDialogueBubbleBounds;
 
     public Vector3 keyBindWorldPos;
+    public Vector3 arrowWorldPos;
+    public Vector3 fadeBlackWorldPos;
 
     public Vector2 keyBindIconWorldSize;
     
