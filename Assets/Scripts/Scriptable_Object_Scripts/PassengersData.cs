@@ -21,6 +21,9 @@ public class PassengersData : ScriptableObject
     public Dictionary<Habits, string> habitStringDict;
     public Dictionary<Habits, HabitData> habitDataDict;
 
+    public Bounds focusedPassengerBounds;
+
+
 #if UNITY_EDITOR
     public void OnValidate()
     {

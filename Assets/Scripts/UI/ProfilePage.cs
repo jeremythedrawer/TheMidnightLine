@@ -22,7 +22,7 @@ public class ProfilePage : MonoBehaviour
     {
         for (int i = 0; i < habitTextRenderers.Length; i++)
         {
-            Habits behaviour = GetBehaviourAtIndex(traitorProfile.passengerProfile.habits, i);
+            Habits behaviour = GetHabitAtIndex(traitorProfile.passengerProfile.habits, i);
             habitTextRenderers[i].SetText(passengersData.habitStringDict[behaviour]);
         }
         int disembarkingStationIndex = traitorProfile.passengerProfile.disembarkingStationIndex;

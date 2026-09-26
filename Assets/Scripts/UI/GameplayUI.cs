@@ -77,11 +77,7 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnEnteredTrain += DisappearKeyIcon;
         SpyBrain.OnTalkToPassenger += DisappearKeyIcon;
         SpyBrain.OnTalkToPassenger += MoveRailMap;
-        SpyBrain.OnOpenNotepad += SetToNotepadState;
         SpyBrain.OnCloseNotepad += SetToNoneState;
-
-        PassengerBrain.OnTraitorDisembarkedTrain += DecreaseTraitorCount;
-        PassengerBrain.OnTraitorBoardedTrain += IncreaseTraitorCount;
     }
     private void OnDisable()
     {
@@ -92,12 +88,9 @@ public class GameplayUI : MonoBehaviour
         SpyBrain.OnExitTrain -= DissappearRailMap;
         SpyBrain.OnTalkToPassenger -= DisappearKeyIcon;
         SpyBrain.OnTalkToPassenger -= MoveRailMap;
-        SpyBrain.OnOpenNotepad -= SetToNotepadState;
         SpyBrain.OnCloseNotepad -= SetToNoneState;
         SpyBrain.OnEnteredTrain += AppearRailMap;
         
-        PassengerBrain.OnTraitorDisembarkedTrain -= DecreaseTraitorCount;
-        PassengerBrain.OnTraitorBoardedTrain -= IncreaseTraitorCount;
     }
     private void Update()
     {
@@ -133,18 +126,6 @@ public class GameplayUI : MonoBehaviour
 
         switch (curState)
         {
-            case UIState.Notepad:
-            {
-                notepad.EnterNotepad();
-                ctsNotepad?.Cancel();
-            }
-            break;
-            case UIState.CarriageMap:
-            {
-                carriageMap.gameObject.SetActive(true);
-                ctsCarriageMap?.Cancel();
-            }
-            break;
             case UIState.None:
             {
             }
@@ -155,19 +136,6 @@ public class GameplayUI : MonoBehaviour
     {
         switch (curState)
         {
-            case UIState.Notepad:
-            {
-                notepad.transform.localPosition = Vector3.Lerp(notepad.transform.localPosition, naturalMovePos, Time.deltaTime * MOVE_DAMP);
-
-                if ((notepad.transform.localPosition - naturalMovePos).sqrMagnitude < 0.05f) notepadData.subState |= Notepad.SubState.InUse;
-                canExitState = true;
-            }
-            break;
-            case UIState.CarriageMap:
-            {
-                carriageMap.transform.localPosition = Vector3.Lerp(carriageMap.transform.localPosition, carriageMapActivePos, Time.deltaTime * MOVE_DAMP);
-            }
-            break;
             case UIState.None:
             {
                 canExitState = true;
@@ -179,31 +147,12 @@ public class GameplayUI : MonoBehaviour
     {
         switch (curState)
         {
-            case UIState.Notepad:
-            {
-                MoveUIElement(notepad.transform, notepadData.inactiveLocalPos, ref ctsNotepad, newState);
-                notepad.ExitNotepad();
-            }
-            break;
-            case UIState.CarriageMap:
-            {
-                MoveUIElement(carriageMap.transform, carriageMapInactivePos, ref ctsCarriageMap, newState);
-            }
-            break;
             case UIState.None:
             {
 
             }
             break;
         }
-    }
-    private void SetToNotepadState()
-    {
-        SetState(UIState.Notepad);
-    }
-    private void SetToCarriageMapState()
-    {
-        SetState(UIState.CarriageMap);
     }
     private void SetToNoneState()
     {

@@ -9,13 +9,10 @@ public class ActionData : ScriptableObject
 
     public Action onOpenDialogueBubble;
     public Action onCloseDialogueBubble;
-    public Action onGiveNotepad;
-    public Action onShowCarriageMap;
-    public Action onHideCarriageMap;
     public Action onBeginTrip;
     public Action onCreatedPassengerProfiles;
+    public Action onAtFirstStation;
 
-    public Action onFocus;
-    public Action onUnfocus;
-    public Action onFocusSwitchPassenger;
+    public Action onTraitorBoarded;
+    public Action onTraitorDisembarked;
 }

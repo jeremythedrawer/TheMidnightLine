@@ -38,11 +38,11 @@ public class RegionMap : MonoBehaviour
 
                 options.curTrip = tripButton.trip;
                 options.curTrip.passengersTalkToSinceLastStation = 0;
-                options.curTrip.passengersTalkedToTotal = 0;
+                options.curTrip.passengersCheckedTotal = 0;
                 options.curTrip.traitorsSpawned = 0;
                 tripButton.button.atlasRenderer.customBit ^= (int)ColorBits.Invert;
 
-                camData.curLocationState = Spy.LocationState.Title;
+                camData.curLocationState = CameraData.LocationState.Title;
                 actionData.onBeginTrip?.Invoke();
             }
             void EnterButton()

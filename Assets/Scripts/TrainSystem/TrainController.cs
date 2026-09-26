@@ -73,22 +73,20 @@ public class TrainController : MonoBehaviour
     private void OnEnable()
     {
         SpyBrain.OnTalkToPassenger += UpdateTicketInspectParams;
-        actionData.onGiveNotepad += MoveTrainToStartPosition;
+        actionData.onBeginTrip += MoveTrainToStartPosition;
+        actionData.onAtFirstStation += MoveTrainToStartPosition;
     }
     private void OnDisable()
     {
         SpyBrain.OnTalkToPassenger -= UpdateTicketInspectParams;
-        actionData.onGiveNotepad -= MoveTrainToStartPosition;
+        actionData.onBeginTrip -= MoveTrainToStartPosition;
+        actionData.onAtFirstStation -= MoveTrainToStartPosition;
         
         trainCTS?.Cancel();
         trainCTS?.Dispose();
         trainCTS = null;
 
         trainData.curVelocity = Vector2.zero;
-    }
-    private void Start()
-    {
-        Init();
     }
     private void Update()
     {
@@ -103,6 +101,9 @@ public class TrainController : MonoBehaviour
     }
     public void Init()
     {
+        transform.position = new Vector3(-100, 0, 0);
+        
+
         trainData.curStationIndex = 0;
         trainData.targetKMPH = options.curTrip.kmValues[0];
         trainData.curVelocity.x = KMPHToVelocity(trainData.targetKMPH);
@@ -165,7 +166,7 @@ public class TrainController : MonoBehaviour
                     carriages[i].SetSignToNextStation(options.curTrip.stationAhead.name);
 
                     audioSource.volume = audioData.soundEffectsVolume;
-                    if (camData.curLocationState != LocationState.Carriage && camData.curLocationState != LocationState.Gangway)
+                    if (camData.curLocationState != CameraData.LocationState.Carriage)
                     {
                         audioSource.PlayOneShot(audioData.trainLeavingOutside);
                     }
@@ -269,8 +270,7 @@ public class TrainController : MonoBehaviour
             {
                 switch (camData.curLocationState)
                 {
-                    case LocationState.Carriage:
-                    case LocationState.Gangway:
+                    case CameraData.LocationState.Carriage:
                     {
                         offTrainClock = 0;
 
@@ -296,7 +296,7 @@ public class TrainController : MonoBehaviour
                     }
                     break;
 
-                    case LocationState.Station:
+                    case CameraData.LocationState.Station:
                     {
                         if (trainData.curStationIndex > 0)
                         {
@@ -366,7 +366,7 @@ public class TrainController : MonoBehaviour
         float stationXPos = spawnData.bounds.max.x + (NextStationInstance.transform.position.x - NextStationInstance.platformRenderer.bounds.min.x);
         NextStationInstance.transform.position = new Vector3(stationXPos, 0, 0);
         NextStationInstance.gameObject.SetActive(true);
-        NextStationInstance.SpawnNPCs();
+        NextStationInstance.Init();
         OnStationSpawn.Invoke();
     }
     private void CloseAllSlideDoors()
@@ -433,7 +433,7 @@ public class TrainController : MonoBehaviour
         firstStation.transform.position = Vector3.zero;
 
         firstStation.gameObject.SetActive(true);
-        firstStation.SpawnNPCs();
+        firstStation.Init();
     }
     private void InitStations()
     {
@@ -481,7 +481,7 @@ public class TrainController : MonoBehaviour
     }
     private void UpdateTicketInspectParams()
     {
-        int ticketParamsIndex = options.curTrip.passengersTalkedToTotal - 1;
+        int ticketParamsIndex = options.curTrip.passengersCheckedTotal - 1;
         trainData.targetElevatePos = options.curTrip.elevationValues[ticketParamsIndex];
         trainData.targetKMPH = options.curTrip.kmValues[ticketParamsIndex];
         trainData.targetNightValue = options.curTrip.dayNightValues[ticketParamsIndex];

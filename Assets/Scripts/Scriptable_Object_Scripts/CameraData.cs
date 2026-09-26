@@ -5,8 +5,18 @@ using static Spy;
 [CreateAssetMenu(fileName = "CameraStats_SO", menuName = "Midnight Line SOs / Camera Stats SO")]
 public class CameraData : ScriptableObject
 {
+    public enum LocationState
+    {
+        None,
+        Station,
+        Carriage,
+        Menu,
+        Title,
+    }
+
     public float horizontalOffset = 10f;
     public float tripTitleTime = 10f;
+    public float cursorPanningMoveSpeed = 1f;
 
     public Bounds bounds;
 
@@ -21,4 +31,5 @@ public class CameraData : ScriptableObject
     public float worldUnitsPerPixel;
     public float tripTitleMenuClock;
 
+    public float halfExtentsX;
 }

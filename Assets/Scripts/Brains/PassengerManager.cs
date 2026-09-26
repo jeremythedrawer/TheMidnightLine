@@ -9,7 +9,6 @@ public class PassengerManager : MonoBehaviour
 {
     public PassengersData passengerData;
 
-    
     public AtlasSO glyphAtlas;
     public Options options;
     public ActionData actionData;
@@ -26,12 +25,14 @@ public class PassengerManager : MonoBehaviour
     private void OnEnable()
     {
         actionData.onBeginTrip += InitPoolsDict;
-        actionData.onBeginTrip += CreateNPCProfiles;
+        actionData.onBeginTrip += CreatePassengerProfiles;
+        actionData.onBeginTrip += InitHabitStringDictionary;
     }
     private void OnDisable()
     {
         actionData.onBeginTrip -= InitPoolsDict;
-        actionData.onBeginTrip -= CreateNPCProfiles;
+        actionData.onBeginTrip -= CreatePassengerProfiles;
+        actionData.onBeginTrip -= InitHabitStringDictionary;
     }
     private void Start()
     {
@@ -98,28 +99,28 @@ public class PassengerManager : MonoBehaviour
 
         queue.Enqueue(glyphInstance);
     }
-    public static PassengerBrain GetNPC(PassengerBrain npcPrefab, Vector3 localPos, Transform parent)
+    public static PassengerBrain GetPassenger(PassengerBrain passengerPrefab, Vector3 localPos, Transform parent)
     {
-        if (!PassengerPoolDict.TryGetValue(npcPrefab, out Queue<PassengerBrain> queue))
+        if (!PassengerPoolDict.TryGetValue(passengerPrefab, out Queue<PassengerBrain> queue))
         {
             queue = new Queue<PassengerBrain>();
-            PassengerPoolDict.Add(npcPrefab, queue);
+            PassengerPoolDict.Add(passengerPrefab, queue);
         }
 
         if (queue.Count > 0)
         {
-            PassengerBrain npc = queue.Dequeue();
-            npc.gameObject.SetActive(true);
-            npc.gameObject.transform.parent = parent;
-            npc.transform.localPosition = localPos;
-            return npc;
+            PassengerBrain passenger = queue.Dequeue();
+            passenger.gameObject.SetActive(true);
+            passenger.gameObject.transform.parent = parent;
+            passenger.transform.localPosition = localPos;
+            return passenger;
         }
-        PassengerBrain newNPC = Instantiate(npcPrefab, parent);
-        newNPC.transform.localPosition = localPos;
+        PassengerBrain newPassenger = Instantiate(passengerPrefab, parent);
+        newPassenger.transform.localPosition = localPos;
 
-        return newNPC;
+        return newPassenger;
     }
-    public static void ReturnNPC(PassengerBrain npcPrefab, PassengerBrain npcInstance)
+    public static void ReturnPassenger(PassengerBrain npcPrefab, PassengerBrain npcInstance)
     {
         npcInstance.gameObject.transform.parent = null;
         if (!PassengerPoolDict.TryGetValue(npcPrefab, out Queue<PassengerBrain> queue))
@@ -150,8 +151,11 @@ public class PassengerManager : MonoBehaviour
             GlyphPoolDict = new Dictionary<VisualEffect, Queue<VisualEffect>>();
         }
     }
-
-    private void CreateNPCProfiles()
+    private void InitHabitStringDictionary()
+    {
+        passengerData.habitStringDict = InitEnumToStringDict<Habits>();
+    }
+    private void CreatePassengerProfiles()
     {
         nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
 

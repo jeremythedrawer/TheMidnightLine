@@ -67,7 +67,7 @@ public class ParallaxController : MonoBehaviour
     public void UpdateWorldPos()
     {
         velocity = camStats.curVelocity * Time.deltaTime * (1 - parallaxFactor);
-        if (camStats.curLocationState == Spy.LocationState.Carriage || camStats.curLocationState == Spy.LocationState.Gangway)
+        if (camStats.curLocationState == CameraData.LocationState.Carriage)
         {
             velocity += trainStats.curVelocity * Time.deltaTime * parallaxFactor;
         }

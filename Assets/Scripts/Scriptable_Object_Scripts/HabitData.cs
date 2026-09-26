@@ -14,9 +14,9 @@ public class HabitData : ScriptableObject
     public float maxTime;
 
     public Habits habit;
-    public NPCMotion sittingPrepMotion;
-    public NPCMotion sittingMotion;
-    public NPCMotion standingPrepMotion;
-    public NPCMotion standingMotion;
-    public NPCPath pathToTake;
+    public PassengerMotion sittingPrepMotion;
+    public PassengerMotion sittingMotion;
+    public PassengerMotion standingPrepMotion;
+    public PassengerMotion standingMotion;
+    public PassengerPath pathToTake;
 }

@@ -57,6 +57,7 @@ public class AtlasTextRenderer : MonoBehaviour
 
     [Header("Border Settings")]
     public AtlasRenderer backgroundRenderer;
+    public Vector2 margin;
 
     [Header("Generated")]
     public CancellationTokenSource ctsWrite;
@@ -201,14 +202,14 @@ public class AtlasTextRenderer : MonoBehaviour
             break;
         }
 
-        borderLocalPos.y = -textBoxData.size.y - backgroundRenderer.worldPivotsAndSizes[0].w;
+        borderLocalPos.y = -textBoxData.size.y - backgroundRenderer.worldPivotsAndSizes[0].w - margin.y;
         borderLocalPos.z = backgroundRenderer.transform.localPosition.z;
 
         backgroundRenderer.enabled = true;
 
         Vector2 worldSize = new Vector2();
-        worldSize.x = bounds.size.x;
-        worldSize.y = bounds.size.y;
+        worldSize.x = bounds.size.x + (margin.x * 2);  
+        worldSize.y = bounds.size.y + (margin.y * 2);
 
         backgroundRenderer.transform.localPosition = borderLocalPos;
 
@@ -232,7 +233,7 @@ public class AtlasTextRenderer : MonoBehaviour
         List<float> lineWidthList = new List<float>();
 
         string curLineText = "";
-        float curLineWidth = 0f;
+        float curLineWidth = -kerning;
         float maxLineWidth = 0f;
         for (int i = 0; i < words.Length; i++)
         {
@@ -262,7 +263,7 @@ public class AtlasTextRenderer : MonoBehaviour
                 lineWidthList.Add(curLineWidth);
 
                 curLineText = word;
-                curLineWidth = wordWidth;
+                curLineWidth = wordWidth - kerning;
                 if (curLineWidth > maxLineWidth) maxLineWidth = curLineWidth;
             }
             else

@@ -43,7 +43,6 @@ public class Carriage : MonoBehaviour
     public CancellationTokenSource ctsFade;
 
     public PassengerBrain[] curPassengers;
-    public PassengerBrain[] sortedPassengers;
 
     public SeatData seatData;
     
@@ -68,7 +67,6 @@ public class Carriage : MonoBehaviour
     private void Start()
     {
         curPassengers = new PassengerBrain[32];
-        sortedPassengers = new PassengerBrain[32];
         for(int i = 0; i < exteriorSlideDoors.Length; i++)
         {
             exteriorSlideDoors[i].carriage = this;
@@ -267,11 +265,12 @@ public class Carriage : MonoBehaviour
     }
     public float GetPositionBetweenLargestGap()
     {
+        QuickSortPassengerByXPos(curPassengers, 0, passengerCount - 1);
         for (int i = 0; i < passengerCount; i++)
         {
-            sortedPassengers[i] = curPassengers[i];
+            PassengerBrain passenger = curPassengers[i];
+            passenger.carriagePassengersIndex = i;
         }
-        QuickSortPassengerByXPos(sortedPassengers, 0, passengerCount - 1);
 
         float leftBound = insideBoundsCollider.bounds.min.x;
         float rightBound = insideBoundsCollider.bounds.max.x;
@@ -283,7 +282,7 @@ public class Carriage : MonoBehaviour
 
         for (int i = 0; i < passengerCount; i++)
         {
-            PassengerBrain passenger = sortedPassengers[i];
+            PassengerBrain passenger = curPassengers[i];
             float currentX = passenger.transform.position.x;
 
             float gap = currentX - previousX;

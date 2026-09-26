@@ -30,7 +30,7 @@ public static class Passenger
         Accomplice
     }
 
-    public enum NPCPath
+    public enum PassengerPath
     {
         None,
         SittingInTrain,
@@ -62,20 +62,6 @@ public static class Passenger
         Takes_photos = 1 << 9,
     }
     public const int HABIT_COUNT = 10;
-    [Flags] public enum Appearences
-    {
-        None = 0,
-        LongWhiteHair = 1 << 0,
-        Necklace = 1 << 1,
-        ShortWhiteHair = 1 << 2,
-        Suit = 1 << 3,
-        ShortBlackHair = 1 << 4,
-        RoundGlasses = 1 << 5,
-        LongBlackHair = 1 << 6,
-        Beanie = 1 << 7,
-        CurlyWhiteHair = 1 << 8,
-        WhiteDreadlocks = 1 << 9,
-    }
 
     public enum Gender
     { 
@@ -185,5 +171,35 @@ public static class Passenger
 
         return dict;
     }
+    public static Habits GetHabitAtIndex(Habits habits, int index)
+    {
+        int count = 0;
+        foreach (Habits flag in Enum.GetValues(typeof(Habits)))
+        {
+            if (flag == Habits.None) continue;
+
+            if ((habits & flag) != 0)
+            {
+                if (count == index) return flag;
+                count++;
+            }
+        }
+        return Habits.None;
+    }
+    public static Dictionary<TEnum, string> InitEnumToStringDict<TEnum>() where TEnum : Enum
+    {
+        Dictionary<TEnum, string> dict = new Dictionary<TEnum, string>();
+
+        Array values = Enum.GetValues(typeof(TEnum));
+
+        foreach (TEnum value in values)
+        {
+            int int32 = Convert.ToInt32(value);
+            if (int32 == 0) continue;
+            dict.Add(value, value.ToString().Replace("_", " "));
+        }
+        return dict;
+    }
+
 }
 

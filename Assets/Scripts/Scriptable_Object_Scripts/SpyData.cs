@@ -6,7 +6,6 @@ using static AtlasUI;
 [CreateAssetMenu(fileName = "SpyData", menuName = "Data / Spy Data")]
 public class SpyData : ScriptableObject
 {
-    public SpyBrain spy;
 
     [Header("Settings")]
     public float moveSpeed = 1.5f;

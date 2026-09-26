@@ -27,18 +27,6 @@ public static class Spy
         Passenger,
         SlideDoors,
         Gangway,
-        CarriageMap,
-    }
-
-
-    public enum LocationState
-    {
-        None,
-        Station,
-        Carriage,
-        Gangway,
-        Menu,
-        Title,
     }
 
     [Serializable] public struct CollisionData

@@ -149,26 +149,26 @@ MonoBehaviour:
     material: {fileID: 2100000, guid: 9bbeacfeb78658342bbfa92aa2ecec79, type: 2}
   atlas: {fileID: 11400000, guid: 15ed1a6063631874a95d9c278631ee34, type: 2}
   boxCollider: {fileID: 0}
-  spriteIndex: 2
+  spriteIndex: 4
   flipX: 0
   flipY: 0
   width: 1
   height: 1
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.0390625, y: 0.052734375, z: 0.091796875, w: 0.9472656}
-    uvPivot: {x: 0, y: 1}
-    worldSize: {x: 0.11111111, y: 0.15, z: 1}
-    index: 2
+    uvSizeAndPos: {x: 0.072265625, y: 0.072265625, z: 0.21875, w: 0.92578125}
+    uvPivot: {x: 0.5, y: 0.5}
+    worldSize: {x: 0.20555556, y: 0.20555556, z: 1}
+    index: 4
   bounds:
-    m_Center: {x: 300.61554, y: 3.315, z: -39}
-    m_Extent: {x: 0.055555556, y: 0.075, z: 0.1}
-  worldPivotAndSize: {x: -0, y: -0.15, z: 0.11111111, w: 0.15}
-  uvSizeAndPosition: {x: 0.0390625, y: 0.052734375, z: 0.091796875, w: 0.9472656}
+    m_Center: {x: 300.56, y: 3.39, z: -39}
+    m_Extent: {x: 0.10277778, y: 0.10277778, z: 0.1}
+  worldPivotAndSize: {x: -0.10277778, y: -0.10277778, z: 0.20555556, w: 0.20555556}
+  uvSizeAndPosition: {x: 0.072265625, y: 0.072265625, z: 0.21875, w: 0.92578125}
   scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 1}
   customBit: 0
-  boundsOffset: {x: 0.055555556, y: -0.075, z: 0}
+  boundsOffset: {x: 0, y: 0, z: 0}
   worldPivotsAndSizes: []
   uvSizesAndPositions: []
   scalesAndFlips: []
@@ -177,10 +177,9 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 2
-  prevSpriteIndexFlipV: 2
+  prevSpriteIndexFlipH: 4
+  prevSpriteIndexFlipV: 4
   isAnimating: 0
-  isPlayingSound: 0
   quadCount: 0
 --- !u!114 &6855063242500057171
 MonoBehaviour:
@@ -203,7 +202,6 @@ MonoBehaviour:
   audioData: {fileID: 11400000, guid: 366fa884df96e77449150a5fdde208bd, type: 2}
   options: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
   cursorRenderer: {fileID: 2498722044689734534}
-  cursorTag: {fileID: 0}
   audioSource: {fileID: 4996128697394023256}
   hoveredNPCs: []
   hoveredNPCCount: 0

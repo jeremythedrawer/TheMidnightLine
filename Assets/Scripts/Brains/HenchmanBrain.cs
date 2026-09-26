@@ -83,7 +83,6 @@ public class HenchmanBrain : MonoBehaviour
                     {
                         if (inputData.primaryInteractInputTrigger.keyDown)
                         {
-                            actionData.onGiveNotepad?.Invoke();
                             SetState(HenchmanState.Idle);
                             HideKeyIcon();
                         }

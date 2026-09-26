@@ -69,18 +69,8 @@ public class SpawnMaster : MonoBehaviour
 
         options.curTrip.curDayNightValue = options.curTrip.dayNightValues[0];
 
-        if (Application.isPlaying)
-        {
-            SpawnSpyAndTrain();
-        }
-    }
-    private void SpawnSpyAndTrain()
-    {
-        SpyBrain spy = Instantiate(spyData.spy);
-        spy.transform.position = Vector3.zero;
-
         TrainController train = Instantiate(options.curRegion.train);
-        train.transform.position = new Vector3(-100, 0, 0);
+        train.Init();
     }
     private void InitBoundParameters()
     {
@@ -91,8 +81,8 @@ public class SpawnMaster : MonoBehaviour
     }
     private void UpdateSpawnCompute(ref SpawnComputeData computeData)
     {
-        bool onTrain = camData.curLocationState == LocationState.Carriage || camData.curLocationState == LocationState.Gangway;
-        if (camData.curLocationState == LocationState.Station || onTrain)
+        bool onTrain = camData.curLocationState == CameraData.LocationState.Carriage;
+        if (camData.curLocationState == CameraData.LocationState.Station || onTrain)
         {
             computeData.compute.SetVector("_CamVelocity", camData.curVelocity);
         }
@@ -240,7 +230,7 @@ public class SpawnMaster : MonoBehaviour
         {
             ParticlePosData posData = particleAtlas.posData[i];
 
-            if (posData.ticketCheckEnd > options.curTrip.passengersTalkedToTotal) continue;
+            if (posData.ticketCheckEnd > options.curTrip.passengersCheckedTotal) continue;
 
             switch(posData.spawnState)
             {
@@ -330,7 +320,7 @@ public class SpawnMaster : MonoBehaviour
         {
             ParticlePosData posData = particleAtlas.posData[i];
 
-            if (options.curTrip.passengersTalkedToTotal < posData.ticketCheckStart)
+            if (options.curTrip.passengersCheckedTotal < posData.ticketCheckStart)
             {
                 newOffset = i;
                 break;
@@ -642,7 +632,7 @@ public class SpawnMaster : MonoBehaviour
     }
     private async UniTask UpdatingSky()
     {
-        float nextDayNight = options.curTrip.dayNightValues[Mathf.Min(options.curTrip.passengersTalkedToTotal, options.curTrip.dayNightValues.Length - 1)];
+        float nextDayNight = options.curTrip.dayNightValues[Mathf.Min(options.curTrip.passengersCheckedTotal, options.curTrip.dayNightValues.Length - 1)];
         float elapsedTime = 0;
         float startDayNight = Shader.GetGlobalFloat(options.dayNightID);
         
@@ -730,6 +720,7 @@ public class SpawnMaster : MonoBehaviour
 
         computeData.compute.SetVector("_CamVelocity", Vector4.zero);
         computeData.compute.SetVector("_TrainVelocity", Vector4.zero);
+
 
     }
 #if UNITY_EDITOR

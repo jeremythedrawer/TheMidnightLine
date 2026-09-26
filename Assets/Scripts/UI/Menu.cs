@@ -52,9 +52,9 @@ public class Menu : MonoBehaviour
                             options.curRegion = options.thirdPointRegion;
                             options.curTrip = options.thirdPointRegion.trips[0];
                             options.curTrip.passengersTalkToSinceLastStation = 0;
-                            options.curTrip.passengersTalkedToTotal = 0;
+                            options.curTrip.passengersCheckedTotal = 0;
                             options.curTrip.traitorsSpawned = 0;
-                            camData.curLocationState = Spy.LocationState.Title;
+                            camData.curLocationState = CameraData.LocationState.Title;
                             actionData.onBeginTrip?.Invoke();
                         }
                         textButton.MouseUpText();
@@ -128,6 +128,7 @@ public class Menu : MonoBehaviour
     }
     private void OnDrawGizmosSelected()
     {
+        if (camData == null) return;
         Gizmos.color = Color.yellow;
 
         Gizmos.DrawWireCube(transform.position, camData.bounds.size);

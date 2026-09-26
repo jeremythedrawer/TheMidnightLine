@@ -130,7 +130,7 @@ public class Notepad : MonoBehaviour
         notepadData.collected = true;
 
         AtlasUI.PromptStringDict = InitEnumToStringDict<TripPrompt>();
-        passengerData.habitStringDict = InitEnumToStringDict<Habits>();
+
 
         Vector3 flipWorldPos = new Vector3();
         flipWorldPos.x = bindingRingsRend.transform.localPosition.x;

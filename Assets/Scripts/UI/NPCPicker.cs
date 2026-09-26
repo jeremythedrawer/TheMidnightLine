@@ -58,11 +58,6 @@ public class NPCPicker : MonoBehaviour
         {
             icons[i].UpdateButton();
         }
-
-        if ((inputData.mouseLeftUp || camData.curLocationState != Spy.LocationState.Carriage) && !cursorData.IsInsideBounds(paletteRenderer.bounds, isClickable: false))
-        {
-            Close();
-        }
     }
     private void Init()
     {

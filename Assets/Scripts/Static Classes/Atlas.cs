@@ -12,7 +12,7 @@ public static class Atlas
     public static int FLOAT3_SIZE = FLOAT_SIZE * 3;
     public static int FLOAT4_SIZE = FLOAT_SIZE * 4;
     public static int INT_SIZE = sizeof(uint);
-    public enum NPCMotion // NOTE(Jeremy): If adding a new motion put it at the bottom or it will mess with the clip indexes for the clip dictionary.
+    public enum PassengerMotion // NOTE(Jeremy): If adding a new motion put it at the bottom or it will mess with the clip indexes for the clip dictionary.
     {
         None,
         SittingBlinking,
@@ -177,7 +177,7 @@ public static class Atlas
     public static readonly Dictionary<EntityMotionType, Type> MotionEnumDictionary =
     new Dictionary<EntityMotionType, Type>
     {
-        { EntityMotionType.NPC, typeof(NPCMotion) },
+        { EntityMotionType.NPC, typeof(PassengerMotion) },
         { EntityMotionType.Spy, typeof(SpyMotion) },
         { EntityMotionType.Train, typeof(TrainMotion) },
         { EntityMotionType.Notepad, typeof(NotepadMotion) },

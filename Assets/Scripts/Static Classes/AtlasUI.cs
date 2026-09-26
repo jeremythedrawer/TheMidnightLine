@@ -115,10 +115,6 @@ public static class AtlasUI
         StartMenu,
         OptionsMenu,
         MapMenu,
-        Notepad,
-        CarriageMap,
-        Focus,
-
     }
     public enum ButtonState
     {
@@ -219,34 +215,5 @@ public static class AtlasUI
         catch (OperationCanceledException)
         {
         }
-    }
-    public static Habits GetBehaviourAtIndex(Habits behaviours, int index)
-    {
-        int count = 0;
-        foreach (Habits flag in Enum.GetValues(typeof(Habits)))
-        {
-            if (flag == Habits.None) continue;
-
-            if ((behaviours & flag) != 0)
-            {
-                if (count == index) return flag;
-                count++;
-            }
-        }
-        return Habits.None;
-    }
-    public static Dictionary<TEnum, string> InitEnumToStringDict<TEnum>() where TEnum : Enum
-    {
-        Dictionary<TEnum, string> dict = new Dictionary<TEnum, string>();
-
-        Array values = Enum.GetValues(typeof(TEnum));
-
-        foreach (TEnum value in values)
-        {
-            int int32 = Convert.ToInt32(value);
-            if (int32 == 0) continue;
-            dict.Add(value, value.ToString().Replace("_", " "));
-        }
-        return dict;
     }
 }
