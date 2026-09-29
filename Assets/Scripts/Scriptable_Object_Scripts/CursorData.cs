@@ -4,13 +4,31 @@ using static Atlas;
 [CreateAssetMenu(fileName = "CursorData", menuName = "Data / Cursor Data")]
 public class CursorData : ScriptableObject
 {
+    public enum CursorSpriteType
+    {
+        Arrow = 2,
+        Point = 6,
+        Pencil = 16,
+        Eye = 17,
+    }
+    public enum PassengerSelectionMode
+    {
+        Unmasking,
+        Suspecting,
+    }
+
     public InputData inputData;
+
+    [Header("Generated")]
     public float[] buttonDepths;
 
     public Bounds cursorBounds;
 
     public float curDepth;
     public float prevDepth;
+
+    public CursorSpriteType curCursorSpriteType;
+    public PassengerSelectionMode curPassengerSelectionMode;
 
     public int hoverCount;
 
@@ -42,7 +60,9 @@ public class CursorData : ScriptableObject
         Texture2D tex = renderer.batchKey.texture;
         float u = Mathf.InverseLerp(renderer.bounds.min.x, renderer.bounds.max.x, inputData.mouseWorldPos.x);
         float v = Mathf.InverseLerp(renderer.bounds.min.y, renderer.bounds.max.y, inputData.mouseWorldPos.y);
-        
+
+        if (renderer.flipX) u = (u - 0.5f) * -1f + 0.5f;
+        if (renderer.flipY) v = (v - 0.5f) * -1f + 0.5f;
         u *= sprite.uvSizeAndPos.x;
         u += sprite.uvSizeAndPos.z;
 

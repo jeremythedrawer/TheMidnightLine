@@ -13,69 +13,86 @@ MonoBehaviour:
   m_Name: West Borge
   m_EditorClassIdentifier: 
   station_prefab: {fileID: 1017561232239447498, guid: 7efbdb1e8c7f26447b794adaa10b19a9, type: 3}
+  places:
+  - West Wing Hospital
+  - War Memorial
+  - Ricks Shed
   ticketsToCheckBeforeSpawn: 3
   bystanderSpawnCount: 13
   traitorSpawnCount: 0
   accompliceSpawnCount: 1
   isFrontOfTrain: 0
-  stationName: West Borge
   stationIndex: 3
   exitLocalPosX: -4.5800095
   bystanderProfiles:
   - boardingStationIndex: 3
     disembarkingStationIndex: 5
-    npcPrefabIndex: 1
-    behaviours: 24
+    placeIndex: 0
+    prefabIndex: 3
+    habits: 3
   - boardingStationIndex: 3
     disembarkingStationIndex: 5
-    npcPrefabIndex: 8
-    behaviours: 320
+    placeIndex: 0
+    prefabIndex: 9
+    habits: 3
   - boardingStationIndex: 3
     disembarkingStationIndex: 5
-    npcPrefabIndex: 5
-    behaviours: 34
+    placeIndex: 0
+    prefabIndex: 4
+    habits: 6
   - boardingStationIndex: 3
     disembarkingStationIndex: 5
-    npcPrefabIndex: 6
-    behaviours: 3
+    placeIndex: 0
+    prefabIndex: 0
+    habits: 130
   - boardingStationIndex: 3
     disembarkingStationIndex: 6
-    npcPrefabIndex: 6
-    behaviours: 6
+    placeIndex: 0
+    prefabIndex: 1
+    habits: 136
   - boardingStationIndex: 3
     disembarkingStationIndex: 6
-    npcPrefabIndex: 8
-    behaviours: 768
+    placeIndex: 0
+    prefabIndex: 1
+    habits: 130
   - boardingStationIndex: 3
     disembarkingStationIndex: 7
-    npcPrefabIndex: 5
-    behaviours: 96
+    placeIndex: 0
+    prefabIndex: 4
+    habits: 6
   - boardingStationIndex: 3
     disembarkingStationIndex: 7
-    npcPrefabIndex: 6
-    behaviours: 5
+    placeIndex: 0
+    prefabIndex: 8
+    habits: 66
   - boardingStationIndex: 3
     disembarkingStationIndex: 6
-    npcPrefabIndex: 5
-    behaviours: 34
+    placeIndex: 0
+    prefabIndex: 8
+    habits: 34
   - boardingStationIndex: 3
     disembarkingStationIndex: 6
-    npcPrefabIndex: 4
-    behaviours: 33
+    placeIndex: 0
+    prefabIndex: 5
+    habits: 264
   - boardingStationIndex: 3
     disembarkingStationIndex: 5
-    npcPrefabIndex: 8
-    behaviours: 768
+    placeIndex: 0
+    prefabIndex: 7
+    habits: 33
   - boardingStationIndex: 3
     disembarkingStationIndex: 5
-    npcPrefabIndex: 8
-    behaviours: 320
+    placeIndex: 0
+    prefabIndex: 6
+    habits: 96
   - boardingStationIndex: 3
     disembarkingStationIndex: 5
-    npcPrefabIndex: 2
-    behaviours: 5
+    placeIndex: 0
+    prefabIndex: 5
+    habits: 272
   accompliceProfiles:
   - boardingStationIndex: 3
     disembarkingStationIndex: 7
-    npcPrefabIndex: 6
-    behaviours: 0
+    placeIndex: 0
+    prefabIndex: 1
+    habits: 0

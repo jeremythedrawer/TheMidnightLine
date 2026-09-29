@@ -159,7 +159,7 @@ public class PassengerManager : MonoBehaviour
     {
         nameData = JsonUtility.FromJson<NameData>(namesJSON.text);
 
-        List<PassengerProfile> totalNPCProfiles = new List<PassengerProfile>();
+        List<PassengerProfile> totalPassengerProfiles = new List<PassengerProfile>();
         List<PassengerProfile> bystanderProfiles = new List<PassengerProfile>();
 
         for (int i = 0; i < options.curTrip.passengers.Length; i++)
@@ -188,12 +188,12 @@ public class PassengerManager : MonoBehaviour
                     Habits secondHabit = (Habits)validFlags[k];
                     Habits twoHabits = firstHabit | secondHabit;
 
-                    PassengerProfile npcProfile = new PassengerProfile
+                    PassengerProfile passengerProfile = new PassengerProfile
                     {
                         habits = twoHabits,
-                        npcPrefabIndex = i,
+                        prefabIndex = i,
                     };
-                    totalNPCProfiles.Add(npcProfile);
+                    totalPassengerProfiles.Add(passengerProfile);
                 }
             }
         }
@@ -214,33 +214,37 @@ public class PassengerManager : MonoBehaviour
 
             for (int j = 0; j < station.traitorSpawnCount; j++)
             {
-                int randProfileIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
-                PassengerProfile traitorProfile = totalNPCProfiles[randProfileIndex];
-                traitorProfile.boardingStationIndex = i;
+                int randProfileIndex = UnityEngine.Random.Range(0, totalPassengerProfiles.Count);
+                PassengerProfile passengerProfile = totalPassengerProfiles[randProfileIndex];
+                passengerProfile.boardingStationIndex = i;
 
                 int stationsLeft = options.curTrip.stationsDataArray.Length - i;
                 float normSpawnIndex = UnityEngine.Random.Range(0, stationsLeft + 1) / (float)stationsLeft;
                 float gaussianNormSpawnIndex = Curves.NormalGaussianValue(normSpawnIndex);
-                traitorProfile.disembarkingStationIndex = Mathf.Min(i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft) + 1, options.curTrip.stationsDataArray.Length - 1);
+                
+                passengerProfile.disembarkingStationIndex = Mathf.Min(i + Mathf.CeilToInt(gaussianNormSpawnIndex * stationsLeft) + 1, options.curTrip.stationsDataArray.Length - 1);
 
-                PassengerData traitor = options.curTrip.passengers[traitorProfile.npcPrefabIndex];
+                PassengerData traitor = options.curTrip.passengers[passengerProfile.prefabIndex];
 
                 string name = GenerateName(traitor.gender, traitor.ethnicity);
-                options.curTrip.traitorProfiles[traitorIndex] = new TraitorProfile()
+
+                TraitorProfile traitorProfile = new TraitorProfile();
+                traitorProfile.passengerProfile = passengerProfile;
+                traitorProfile.mugShotIndex = traitor.mugShotIndex;
+                traitorProfile.traitorIndex = traitorIndex;
+                traitorProfile.selectedStationIndex = -1;
+                traitorProfile.fullName = name;
+
+                options.curTrip.traitorProfiles[traitorIndex] = traitorProfile;
+
+                totalPassengerProfiles.RemoveAt(randProfileIndex);
+
+                for (int k = totalPassengerProfiles.Count - 1; k >= 0; k--)
                 {
-                    passengerProfile = traitorProfile,
-                    mugShotIndex = traitor.mugShotIndex,
-                    fullName = name,
-                };
+                    if (totalPassengerProfiles[k].prefabIndex != passengerProfile.prefabIndex) continue;
 
-                totalNPCProfiles.RemoveAt(randProfileIndex);
-
-                for (int k = totalNPCProfiles.Count - 1; k >= 0; k--)
-                {
-                    if (totalNPCProfiles[k].npcPrefabIndex != traitorProfile.npcPrefabIndex) continue;
-
-                    bystanderProfiles.Add(totalNPCProfiles[k]);
-                    totalNPCProfiles.RemoveAt(k);
+                    bystanderProfiles.Add(totalPassengerProfiles[k]);
+                    totalPassengerProfiles.RemoveAt(k);
                 }
 
                 traitorIndex++;
@@ -257,7 +261,7 @@ public class PassengerManager : MonoBehaviour
                 int randPrefabIndex = UnityEngine.Random.Range(0, options.curTrip.passengers.Length);
                 PassengerProfile accompliceProfile = new PassengerProfile();
 
-                accompliceProfile.npcPrefabIndex = randPrefabIndex;
+                accompliceProfile.prefabIndex = randPrefabIndex;
                 accompliceProfile.boardingStationIndex = i;
                 accompliceProfile.disembarkingStationIndex = options.curTrip.stationsDataArray.Length - 1;
 
@@ -266,7 +270,7 @@ public class PassengerManager : MonoBehaviour
 
         }
 
-        totalNPCProfiles.AddRange(bystanderProfiles);
+        totalPassengerProfiles.AddRange(bystanderProfiles);
         for (int i = 0; i < options.curTrip.stationsDataArray.Length; i++)
         {
             StationSO station = options.curTrip.stationsDataArray[i];
@@ -275,8 +279,8 @@ public class PassengerManager : MonoBehaviour
 
             for (int j = 0; j < station.bystanderSpawnCount; j++)
             {
-                int randIndex = UnityEngine.Random.Range(0, totalNPCProfiles.Count);
-                PassengerProfile bystanderProfile = totalNPCProfiles[randIndex];
+                int randIndex = UnityEngine.Random.Range(0, totalPassengerProfiles.Count);
+                PassengerProfile bystanderProfile = totalPassengerProfiles[randIndex];
 
                 bystanderProfile.boardingStationIndex = i;
 

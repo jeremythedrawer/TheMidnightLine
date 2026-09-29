@@ -13,25 +13,31 @@ MonoBehaviour:
   m_Name: Plinkard
   m_EditorClassIdentifier: 
   station_prefab: {fileID: 1017561232239447498, guid: f0cc9e9c368834b46babe4d23fff0232, type: 3}
+  places:
+  - Toomrik Cemetery
+  - Ropland Hotel
+  - The Lighthouse
   ticketsToCheckBeforeSpawn: 3
   bystanderSpawnCount: 2
   traitorSpawnCount: 1
   accompliceSpawnCount: 1
   isFrontOfTrain: 0
-  stationName: Gorov
   stationIndex: 1
   exitLocalPosX: -3.3800173
   bystanderProfiles:
   - boardingStationIndex: 1
     disembarkingStationIndex: 3
-    npcPrefabIndex: 5
-    behaviours: 34
+    placeIndex: 0
+    prefabIndex: 4
+    habits: 6
   - boardingStationIndex: 1
     disembarkingStationIndex: 6
-    npcPrefabIndex: 5
-    behaviours: 96
+    placeIndex: 0
+    prefabIndex: 7
+    habits: 34
   accompliceProfiles:
   - boardingStationIndex: 1
     disembarkingStationIndex: 7
-    npcPrefabIndex: 4
-    behaviours: 0
+    placeIndex: 0
+    prefabIndex: 0
+    habits: 0

@@ -69,7 +69,6 @@ public class GameplayUI : MonoBehaviour
     public bool uiAtNightMode;
     private void OnEnable()
     {
-        TrainController.OnStationLeave += SetTraitorIcons;
         TrainController.OnFinishTripScene += HideKeyIcon;
 
         SpyBrain.OnEnteredTrain += AppearRailMap;
@@ -81,7 +80,6 @@ public class GameplayUI : MonoBehaviour
     }
     private void OnDisable()
     {
-        TrainController.OnStationLeave -= SetTraitorIcons;
         TrainController.OnFinishTripScene -= HideKeyIcon;
 
         SpyBrain.OnEnteredTrain -= DisappearKeyIcon;

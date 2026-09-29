@@ -6,8 +6,7 @@ using static Passenger;
 using static AtlasUI;
 public class CursorController : MonoBehaviour
 {
-    const int CURSOR_SPRITE_INDEX = 2;
-    const int POINTER_SPRITE_INDEX = 6;
+
 
     const float VISIBLE_TIMER = 3f;
     const float MOVE_THRESHOLD = 0.01f;
@@ -40,9 +39,7 @@ public class CursorController : MonoBehaviour
     
     private void Start()
     {
-        Cursor.visible = false;
-        CursorRenderer = cursorRenderer;
-        hoveredNPCs = new PassengerBrain[8];
+        Init();
     }
 
     private void OnEnable()
@@ -71,8 +68,7 @@ public class CursorController : MonoBehaviour
     {
         cursorData.CheckButtonResults();
 
-        Vector2 mouseDelta = Mouse.current.delta.ReadValue();
-        if (mouseDelta.sqrMagnitude < MOVE_THRESHOLD && !inputData.mouseLeftHold && !cursorData.isHovering)
+        if (inputData.mouseDelta.sqrMagnitude < MOVE_THRESHOLD && !inputData.mouseLeftHold && !cursorData.isHovering)
         {
             cursorIsMoving = false;
             timer += Time.deltaTime;
@@ -98,19 +94,26 @@ public class CursorController : MonoBehaviour
         }
         if (cursorData.changeButton)
         {
-            cursorRenderer.UpdateSpriteInputsByIndex(POINTER_SPRITE_INDEX);
+            cursorRenderer.UpdateSpriteInputsByIndex((int)cursorData.curCursorSpriteType);
             audioSource.PlayOneShot(audioData.cursorHover);
             cursorData.changeButton = false;
         }
         else if (!cursorData.isHovering)
         {
-            if (cursorRenderer.spriteIndex == POINTER_SPRITE_INDEX)
+            if (cursorRenderer.spriteIndex != (int)CursorData.CursorSpriteType.Arrow)
             {
-                cursorRenderer.UpdateSpriteInputsByIndex(CURSOR_SPRITE_INDEX);
+                cursorRenderer.UpdateSpriteInputsByIndex((int)CursorData.CursorSpriteType.Arrow);
             }
         }
     }
+    private void Init()
+    {
+        Cursor.visible = false;
+        CursorRenderer = cursorRenderer;
+        hoveredNPCs = new PassengerBrain[8];
 
+        cursorData.curCursorSpriteType = CursorData.CursorSpriteType.Arrow;
+    }
     private void UpdateVolume()
     {
         audioSource.volume = audioData.soundEffectsVolume;

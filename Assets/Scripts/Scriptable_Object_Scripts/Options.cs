@@ -11,13 +11,12 @@ public class Options : ScriptableObject
 {
     public AtlasSO patternAtlas;
 
-    public IconButton colorButtonPrefab;
-
     public Color meridiaColor;
     public Color vinroseColor;
 
     public Color[] selectableDarkColors;
     public Color[] selectableLightColors;
+    public Color[] markerColors;
 
     public RegionData thirdPointRegion;
     public RegionData secondPointRegion;
@@ -34,8 +33,6 @@ public class Options : ScriptableObject
     public TripData curTrip;
     public Color darkColor;
     public Color lightColor;
-    public Color markerColor1;
-    public Color markerColor2;
 
     public int darkColorIndex;
     public int lightColorIndex;
@@ -77,8 +74,8 @@ public class Options : ScriptableObject
         Shader.SetGlobalColor(lightColorID, lightColor.linear);
         Shader.SetGlobalColor(meridiaColorID, meridiaColor.linear);
         Shader.SetGlobalColor(vinroseColorID, vinroseColor.linear);
-        Shader.SetGlobalColor(markerColor1ID, markerColor1.linear);
-        Shader.SetGlobalColor(markerColor2ID, markerColor2.linear);
+        Shader.SetGlobalColor(markerColor1ID, markerColors[0].linear);
+        Shader.SetGlobalColor(markerColor2ID, markerColors[1].linear);
     }
 }
 #if UNITY_EDITOR

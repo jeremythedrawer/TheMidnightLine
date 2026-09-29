@@ -4,13 +4,12 @@ using UnityEngine;
 [CreateAssetMenu(fileName = "UIData", menuName = "Data / UI Data")]
 public class UIData : ScriptableObject
 {
+    public IconButton colorButton;
     public AtlasRenderer tripMapStub;
     public IconButton tripMapStationButton;
 
     [Header("Generated")]
     public string curDialogueText;
-
-    public Bounds curDialogueBubbleBounds;
 
     public Vector3 keyBindWorldPos;
     public Vector3 arrowWorldPos;

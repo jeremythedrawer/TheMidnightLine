@@ -9,7 +9,7 @@ public class CameraController : MonoBehaviour
 {
     const float GAUSSIAN_VARIANCE = 90;
     const float CARRIAGE_BOUNDS_TEXTURE_SCALE = 32f;
-    const float NORMAL_DAMPING = 3;
+    const float NORMAL_DAMPING = 6;
     const float SLOW_DAMPING = 1;
     const float SOUND_DAMP = 0.5f;
 
@@ -40,6 +40,7 @@ public class CameraController : MonoBehaviour
     public CameraData.LocationState curState;
     
     public Vector3 targetWorldPos;
+    public Vector3 focusWorldPos;
     public Vector3 rawCurWorldPos;
 
     public float curDamping;
@@ -54,12 +55,19 @@ public class CameraController : MonoBehaviour
     public bool hidingTitle;
     private void OnEnable()
     {
-        Init();
+        actionData.onFocusPassenger += FocusOnPassenger;
+        actionData.onFocusCarriage += FocusOnCarriage;
     }
     private void OnDisable()
     {
+        actionData.onFocusPassenger -= FocusOnPassenger;
+        actionData.onFocusCarriage -= FocusOnCarriage;
         ctsVolume?.Cancel();
         ctsVolume?.Dispose();
+    }
+    private void Start()
+    {
+        Init();
     }
     private void Update()
     {
@@ -126,13 +134,17 @@ public class CameraController : MonoBehaviour
             {
                 if (inputData.mouseWorldPos.y > camUIController.bottomPanel.atlasRenderer.bounds.max.y)
                 {
-                    if (inputData.mouseWorldPos.x < (camData.bounds.min.x + camData.halfExtentsX))
+                    float leftPanThreshold = camData.bounds.min.x + camData.halfExtentsX;
+                    float rightPanThreshold = camData.bounds.max.x - camData.halfExtentsX;
+                    if (inputData.mouseWorldPos.x < leftPanThreshold)
                     {
-                        targetWorldPos.x -= Time.deltaTime * camData.cursorPanningMoveSpeed;
+                        float t = Mathf.InverseLerp(leftPanThreshold, camData.bounds.min.x, inputData.mouseWorldPos.x);
+                        targetWorldPos.x -= Time.deltaTime * camData.cursorPanningMoveSpeed * t;
                     }
-                    else if (inputData.mouseWorldPos.x > (camData.bounds.max.x - camData.halfExtentsX))
+                    else if (inputData.mouseWorldPos.x > rightPanThreshold)
                     {
-                        targetWorldPos.x += Time.deltaTime * camData.cursorPanningMoveSpeed;
+                        float t = Mathf.InverseLerp(rightPanThreshold, camData.bounds.max.x, inputData.mouseWorldPos.x);
+                        targetWorldPos.x += Time.deltaTime * camData.cursorPanningMoveSpeed * t;
                     }
                 }
 
@@ -143,12 +155,30 @@ public class CameraController : MonoBehaviour
 
             case CameraData.LocationState.Carriage:
             {
-                float distFromCenter = passengersData.focusedPassengerBounds.center.x - camData.curLocationBounds.center.x;
+                if (inputData.mouseWorldPos.y > camUIController.bottomPanel.atlasRenderer.bounds.max.y)
+                {
+                    float leftPanThreshold = camData.curLocationBounds.min.x;
+                    float rightPanThreshold = camData.curLocationBounds.max.x;
+                    if (inputData.mouseWorldPos.x < leftPanThreshold)
+                    {
+                        float t = Mathf.InverseLerp(leftPanThreshold, camData.bounds.min.x, inputData.mouseWorldPos.x);
+                        targetWorldPos.x -= Time.deltaTime * camData.cursorPanningMoveSpeed * t;
+                    }
+                    else if (inputData.mouseWorldPos.x > rightPanThreshold)
+                    {
+                        float t = Mathf.InverseLerp(rightPanThreshold, camData.bounds.max.x, inputData.mouseWorldPos.x);
+                        targetWorldPos.x += Time.deltaTime * camData.cursorPanningMoveSpeed * t;
+                    }
+                    else
+                    {
+                        targetWorldPos.x = focusWorldPos.x;
+                    }
+                }
+                float margin = camData.bounds.extents.x * 0.7f;
+                targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, camData.curLocationBounds.min.x + margin, camData.curLocationBounds.max.x - margin);
+                targetWorldPos.y = passengersData.focusedPassengerBounds.center.y;
 
-                float carriageT = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
-                targetWorldPos.x = Mathf.Lerp(camData.curLocationBounds.center.x, passengersData.focusedPassengerBounds.center.x, carriageT);
-                carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);
-                
+                carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);                
                 carriageBoundsCompute.Dispatch(carriageBoundsKernel, threadGroupX, threadGroupY, 1);
             }
             break;
@@ -248,9 +278,22 @@ public class CameraController : MonoBehaviour
         Shader.SetGlobalVector("_CamVelocity", camData.curVelocity);
         Shader.SetGlobalVector("_CamPos", camData.curWorldPos);
     }
-    private void SetToSlowDamping()
+    private void FocusOnPassenger()
     {
-        curDamping = SLOW_DAMPING;
+        targetWorldPos.x = passengersData.focusedPassengerBounds.center.x;
+        targetWorldPos.y = passengersData.focusedPassengerBounds.center.y;
+
+        focusWorldPos = targetWorldPos;
+
+        float distFromCenter = passengersData.focusedPassengerBounds.center.x - camData.curLocationBounds.center.x;
+        float carriageT = (1.0f - Mathf.Exp(-(distFromCenter * distFromCenter / GAUSSIAN_VARIANCE)));
+        targetWorldPos.x = Mathf.Lerp(camData.curLocationBounds.center.x, passengersData.focusedPassengerBounds.center.x, carriageT);
+    }
+    private void FocusOnCarriage()
+    {
+        targetWorldPos.x = Carriage.ActiveCarriage.exteriorButton.atlasRenderer.bounds.center.x;
+        targetWorldPos.y = Carriage.ActiveCarriage.exteriorButton.atlasRenderer.bounds.center.y;
+        focusWorldPos = targetWorldPos;
     }
     public static Vector3 GetSnappedPosition(Vector3 pos, float unitsPerPixel)
     {

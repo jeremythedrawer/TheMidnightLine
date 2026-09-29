@@ -90,14 +90,13 @@ public class CamUIControllerEditor : Editor
         Vector3 newInactiveActiveBottomPanelWorldPos = Handles.PositionHandle(inactiveBottomPanelWorldPos, camUIController.transform.rotation);
 
 
-
         if (EditorGUI.EndChangeCheck())
         {
-            Undo.RecordObject(camUIController, "Move Bottom Panel Position");
+            Undo.RecordObject(camUIController.uiData, "Move Bottom Panel Position");
             camUIController.uiData.activeBottomPanelLocalPos = camUIController.transform.InverseTransformPoint(newActiveActiveBottomPanelWorldPos);
             camUIController.uiData.inactiveBottomPaneLocalPos = camUIController.transform.InverseTransformPoint(newInactiveActiveBottomPanelWorldPos);
 
-            EditorUtility.SetDirty(camUIController);
+            EditorUtility.SetDirty(camUIController.uiData);
         }
 
         Handles.color = Color.yellow;

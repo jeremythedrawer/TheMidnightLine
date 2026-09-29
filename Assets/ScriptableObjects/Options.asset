@@ -13,9 +13,8 @@ MonoBehaviour:
   m_Name: Options
   m_EditorClassIdentifier: Assembly-CSharp::ColorsSO
   patternAtlas: {fileID: 11400000, guid: 3ed54d8732409a948b71aa71c46673d0, type: 2}
-  colorButtonPrefab: {fileID: 1745777037594629186, guid: 410457b60eb135c4ea73fee96c606f02, type: 3}
-  meridiaColor: {r: 0.3962264, g: 0, b: 0.076652825, a: 0}
-  vinroseColor: {r: 0, g: 0.38679248, b: 0.37661377, a: 0}
+  meridiaColor: {r: 0.3962264, g: 0, b: 0.076652825, a: 1}
+  vinroseColor: {r: 0, g: 0.38679248, b: 0.37661377, a: 1}
   selectableDarkColors:
   - {r: 0.078431375, g: 0.098039225, b: 0.15294118, a: 1}
   - {r: 0.13333334, g: 0.09019608, b: 0.08235294, a: 1}
@@ -28,6 +27,9 @@ MonoBehaviour:
   - {r: 0.4575472, g: 1, b: 0.47692055, a: 1}
   - {r: 0.4764151, g: 1, b: 0.9626011, a: 1}
   - {r: 1, g: 0.5613208, b: 0.5613208, a: 1}
+  markerColors:
+  - {r: 1, g: 0, b: 0.16212654, a: 1}
+  - {r: 0, g: 0.24652743, b: 1, a: 1}
   thirdPointRegion: {fileID: 11400000, guid: 1c4db5b59d74b464aa0179e0184b41c9, type: 2}
   secondPointRegion: {fileID: 11400000, guid: 90d452c4751339c4b9881d71f3301352, type: 2}
   firstPointRegion: {fileID: 11400000, guid: 5a7da2108320d9d48a4630eccdf5b335, type: 2}
@@ -39,18 +41,16 @@ MonoBehaviour:
   curTrip: {fileID: 11400000, guid: 3ecef53ac6c73b544b1f389ef5a7179a, type: 2}
   darkColor: {r: 0.078431375, g: 0.098039225, b: 0.15294118, a: 1}
   lightColor: {r: 1, g: 1, b: 1, a: 1}
-  markerColor1: {r: 0.8679245, g: 0.49706703, b: 0.12691349, a: 0}
-  markerColor2: {r: 0.5510394, g: 0.01960782, b: 0.85882354, a: 0}
   darkColorIndex: 3
   lightColorIndex: 0
   useBayer: 0
-  darkColorID: 994
-  lightColorID: 995
-  meridiaColorID: 996
-  vinroseColorID: 998
-  markerColor1ID: 2097
-  markerColor2ID: 2098
-  dayNightID: 999
+  darkColorID: 990
+  lightColorID: 991
+  meridiaColorID: 992
+  vinroseColorID: 993
+  markerColor1ID: 994
+  markerColor2ID: 995
+  dayNightID: 996
   selectedPatternIndex: 4
   tutorialsCompleted: 0
   curTutorialState: 0

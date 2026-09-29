@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 8099043674557259294}
   - component: {fileID: 1668742700679149109}
   - component: {fileID: 94976023300698573}
+  - component: {fileID: -2101610870004604533}
   m_Layer: 0
   m_Name: FatTradie
   m_TagString: Untagged
@@ -195,6 +196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   atlasRenderer: {fileID: 1668742700679149109}
   audioSource: {fileID: 8099043674557259294}
+  iconButton: {fileID: -2101610870004604533}
   options: {fileID: 11400000, guid: 51eadfd8ff7a07247a4b36513a9b9778, type: 2}
   passengerData: {fileID: 11400000, guid: fceb5d5663efb334594da568dbdda9ee, type: 2}
   passengersData: {fileID: 11400000, guid: b9524287f0a3cbc4ea8e9220c3cf5cbc, type: 2}
@@ -204,6 +206,8 @@ MonoBehaviour:
   camData: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
   audioData: {fileID: 11400000, guid: 366fa884df96e77449150a5fdde208bd, type: 2}
   actionData: {fileID: 11400000, guid: 231883ae0dc43f84c993352e10a97b08, type: 2}
+  uiData: {fileID: 11400000, guid: 13467edc5a628744e8291f244c44db27, type: 2}
+  cursorData: {fileID: 11400000, guid: e3005a8f04497a742b74cb7f231e3683, type: 2}
   atlas: {fileID: 0}
   boardingStation: {fileID: 0}
   disembarkingStation: {fileID: 0}
@@ -215,7 +219,8 @@ MonoBehaviour:
   profile:
     boardingStationIndex: 0
     disembarkingStationIndex: 0
-    npcPrefabIndex: 0
+    placeIndex: 0
+    prefabIndex: 0
     habits: 0
   curClip:
     clipName: 
@@ -257,3 +262,23 @@ MonoBehaviour:
   playingPrepBehaviour: 0
   toQueueForSeat: 0
   atDepthForExample: 0
+--- !u!114 &-2101610870004604533
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1439452552751748441}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a5ff9b693826b3b4890e48a7b54ff281, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: Assembly-CSharp::IconButton
+  button: 0
+  inputData: {fileID: 11400000, guid: 5fc2f520b9240324e939869b7293a219, type: 2}
+  cursorData: {fileID: 11400000, guid: e3005a8f04497a742b74cb7f231e3683, type: 2}
+  camData: {fileID: 11400000, guid: 85ad57680f966be4a9af5d6941bfc0fe, type: 2}
+  atlasRenderer: {fileID: 1668742700679149109}
+  alphaTest: 1
+  activePos: {x: 0, y: 0, z: 0}
+  curState: 0

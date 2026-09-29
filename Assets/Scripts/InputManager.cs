@@ -53,6 +53,8 @@ public class InputManager : MonoBehaviour
         inputData.mouseScreenPos.y = Mathf.Clamp(screenPos.y, 0f, Screen.height);
 
         inputData.mouseWorldPos = Camera.main.ScreenToWorldPoint(inputData.mouseScreenPos);
+
+        inputData.mouseDelta = Mouse.current.delta.ReadValue();
     }
 
     private void LateUpdate()

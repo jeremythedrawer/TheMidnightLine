@@ -27,7 +27,6 @@ public class TrainController : MonoBehaviour
     public static event Action OnFinishTripScene;
     public static event Action OnMetersAtSpawnBounds;
     public static event Action OnStationSpawn;
-    public static event Action OnStationLeave;
     public static event Action OnStationArrival;
     public static event Action OnTrainDeceleration;
 
@@ -84,9 +83,12 @@ public class TrainController : MonoBehaviour
         
         trainCTS?.Cancel();
         trainCTS?.Dispose();
-        trainCTS = null;
 
         trainData.curVelocity = Vector2.zero;
+    }
+    private void OnDestroy()
+    {
+        
     }
     private void Update()
     {
@@ -295,32 +297,6 @@ public class TrainController : MonoBehaviour
                         }
                     }
                     break;
-
-                    case CameraData.LocationState.Station:
-                    {
-                        if (trainData.curStationIndex > 0)
-                        {
-                            offTrainClock += Time.deltaTime;
-                         
-                            if (offTrainClock < OFF_TRAIN_TIME_BUFFER) return;
-                            
-                            if (!closingSlideDoors)
-                            {
-                                CloseAllSlideDoors();
-                                closingSlideDoors = true;
-                            }
-
-                            if (trainData.slideDoorsAmountOpened == 0)
-                            {
-                                SpyBrain.CurCarriage.MoveUp();
-                                trainCTS?.Cancel();
-                                trainCTS = new CancellationTokenSource();
-                                MoveTrainAwayFromCamera().Forget();
-                                trainData.targetVelocity.x = KMPHToVelocity(DEFAULT_TARGET_KMPH);
-                            }
-                        }
-                    }
-                    break;
                 }
 
 
@@ -355,7 +331,6 @@ public class TrainController : MonoBehaviour
                 trainData.totalNPCsBoarded = 0;
                 trainData.distToSpawnNextStation = trainData.trainToMaxSpawnDist - options.curTrip.stationAhead.station_prefab.platformRenderer.transform.localPosition.x;
                 closingSlideDoors = false;
-                OnStationLeave.Invoke();
             }
             break;
         }
@@ -532,12 +507,12 @@ public class TrainController : MonoBehaviour
                 transform.position = new Vector3(trainData.targetPosition, transform.position.y, transform.position.z);
                 await UniTask.Yield(trainCTS.Token);
             }
+
+            InitAtStartPosition();
         }
         catch (OperationCanceledException)
         {
-
         }
-        InitAtStartPosition();
     }
     private async UniTask MoveTrainAwayFromCamera()
     {

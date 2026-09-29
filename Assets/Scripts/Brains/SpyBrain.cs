@@ -78,7 +78,6 @@ public class SpyBrain : MonoBehaviour
     private void OnEnable()
     {
         TrainController.OnStationArrival += SetInputsForTrainStop;
-        TrainController.OnStationLeave += SetInputsForTrainStart;
 
         atlasRenderer.onChangeKeyframe += HandleKeyframeChange;
 
@@ -87,7 +86,6 @@ public class SpyBrain : MonoBehaviour
     private void OnDisable()
     {
         TrainController.OnStationArrival -= SetInputsForTrainStop;
-        TrainController.OnStationLeave -= SetInputsForTrainStart;
 
         atlasRenderer.onChangeKeyframe -= HandleKeyframeChange;
     }
@@ -466,8 +464,7 @@ public class SpyBrain : MonoBehaviour
                 activePassenger.ToggleUnveil(toggle: true);
 
                 uiData.curDialogueText = options.curTrip.stationsDataArray[activePassenger.profile.disembarkingStationIndex].name;
-                uiData.curDialogueBubbleBounds = activePassenger.atlasRenderer.bounds;
-                actionData.onOpenDialogueBubble?.Invoke();
+                actionData.onFocusPassenger?.Invoke();
 
                 options.curTrip.passengersCheckedTotal++;
 

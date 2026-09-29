@@ -13,6 +13,10 @@ MonoBehaviour:
   m_Name: Old Vinrose
   m_EditorClassIdentifier: 
   station_prefab: {fileID: 6700324006200157766, guid: a6bd14f8ce78f87409d71c0d0d7cbdca, type: 3}
+  places:
+  - Op Shop
+  - Ol Police Station
+  - Golf Course
   ticketsToCheckBeforeSpawn: 0
   bystanderSpawnCount: 20
   traitorSpawnCount: 0
@@ -23,14 +27,102 @@ MonoBehaviour:
   bystanderProfiles:
   - boardingStationIndex: 0
     disembarkingStationIndex: 2
-    npcPrefabIndex: 4
-    habits: 6
+    placeIndex: 0
+    prefabIndex: 9
+    habits: 5
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    placeIndex: 0
+    prefabIndex: 6
+    habits: 320
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    placeIndex: 0
+    prefabIndex: 9
+    habits: 3
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    placeIndex: 0
+    prefabIndex: 2
+    habits: 10
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    placeIndex: 0
+    prefabIndex: 3
+    habits: 5
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    placeIndex: 0
+    prefabIndex: 8
+    habits: 66
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 3
+    placeIndex: 0
+    prefabIndex: 6
+    habits: 96
   - boardingStationIndex: 0
     disembarkingStationIndex: 4
-    npcPrefabIndex: 4
+    placeIndex: 0
+    prefabIndex: 5
+    habits: 24
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 5
+    placeIndex: 0
+    prefabIndex: 4
+    habits: 5
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 5
+    placeIndex: 0
+    prefabIndex: 1
+    habits: 130
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 5
+    placeIndex: 0
+    prefabIndex: 3
     habits: 6
   - boardingStationIndex: 0
+    disembarkingStationIndex: 5
+    placeIndex: 0
+    prefabIndex: 9
+    habits: 6
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 5
+    placeIndex: 0
+    prefabIndex: 1
+    habits: 10
+  - boardingStationIndex: 0
     disembarkingStationIndex: 4
-    npcPrefabIndex: 5
-    habits: 272
+    placeIndex: 0
+    prefabIndex: 4
+    habits: 6
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 3
+    placeIndex: 0
+    prefabIndex: 9
+    habits: 6
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    placeIndex: 0
+    prefabIndex: 9
+    habits: 3
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    placeIndex: 0
+    prefabIndex: 4
+    habits: 5
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    placeIndex: 0
+    prefabIndex: 3
+    habits: 3
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    placeIndex: 0
+    prefabIndex: 4
+    habits: 3
+  - boardingStationIndex: 0
+    disembarkingStationIndex: 2
+    placeIndex: 0
+    prefabIndex: 6
+    habits: 544
   accompliceProfiles: []

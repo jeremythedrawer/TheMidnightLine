@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using UnityEngine;
+using static AtlasUI;
 using static Passenger;
 
 public class BottomPanel : MonoBehaviour
@@ -13,34 +14,37 @@ public class BottomPanel : MonoBehaviour
         None = 0,
         Traitors = 1 << 0,
         TripMap = 1 << 1,
-        Markers = 1 << 2,
         Profile = 1 << 3,
-        Stations = 1 << 4,
+        Station = 1 << 4,
     }
 
     public AtlasRenderer atlasRenderer;
-    public AtlasRenderer tripMapLineRenderer;
-    public AtlasRenderer profileMugshotRenderer;
+    public TextButton unmaskingButton;
+    public TextButton suspectingButton;
 
-
-    public Transform traitorsGroup;
-    public Transform tripMapGroup;
-    public Transform profileGroup;
-    public Transform markerGroup;
-
-    public IconButton[] mugshotIconButtons;
-
-    public IconButton profileExitButton;
-
-    public AtlasTextRenderer stationNameTextRenderer;
-    public AtlasTextRenderer checkNumberTextRenderer;
-
-    public AtlasTextRenderer[] habitTextRenderers;
-    
     public Options options;
     public ActionData actionData;
     public UIData uiData;
     public PassengersData passengersData;
+
+    [Header("Trip Map")]
+    public Transform tripMapGroup;
+    public AtlasRenderer tripMapLineRenderer;
+    [Header("Traitors")]
+    public IconButton[] traitorMugshotIconButtons;
+    public Transform traitorsGroup;
+    [Header("Profile")]
+    public Transform profileGroup;
+    public AtlasRenderer profileMugshotRenderer;
+    public IconButton profileExitButton;
+    public AtlasTextRenderer[] profileHabitTextRenderers;
+    public TextButton[] profileStationButtons;
+    [Header("Station")]
+    public Transform stationGroup;
+    public AtlasTextRenderer stationNameTextRenderer;
+    public AtlasTextRenderer[] stationPlaceTextRenderers;
+    public IconButton stationExitButton;
+    
     [Header("Generated")]
     public IconButton[] stationIconButtons;
 
@@ -49,26 +53,24 @@ public class BottomPanel : MonoBehaviour
     public TraitorProfile curTraitorProfile;
 
     public Vector3 curLocalPosition;
-    
-    public Vector3 traitorsGroupPosition;
-    public Vector3 tripMapGroupPosition;
-    public Vector3 profileGroupPosition;
-    public Vector3 markerGroupPosition;
 
     public Groups curGroups;
 
     public float activeGroupHeight;
     public float inactiveGroupHeight;
 
-    public float transitionClock;
     public float moveClock;
 
-    public CancellationTokenSource ctsTransition;
+    public int selectedProfileStationButtonIndex;
+
+    public CancellationTokenSource ctsTransitionLeft;
+    public CancellationTokenSource ctsTransitionRight;
     public CancellationTokenSource ctsMove;
     private void OnEnable()
     {
         actionData.onBeginTrip += SetTripMapGroup;
         actionData.onBeginTrip += SetProfileGroup;
+        actionData.onBeginTrip += SetStationGroup;
         actionData.onAtFirstStation += MoveToActivePosition;
         actionData.onCreatedPassengerProfiles += SetTraitorsGroup;
     }
@@ -76,22 +78,21 @@ public class BottomPanel : MonoBehaviour
     {
         actionData.onBeginTrip -= SetTripMapGroup;
         actionData.onBeginTrip -= SetProfileGroup;
+        actionData.onBeginTrip -= SetStationGroup;
         actionData.onAtFirstStation -= MoveToActivePosition;
         actionData.onCreatedPassengerProfiles -= SetTraitorsGroup;
 
-        ctsTransition?.Cancel();
-        ctsTransition?.Dispose();
+        ctsTransitionLeft?.Cancel();
+        ctsTransitionLeft?.Dispose();
 
+        ctsTransitionRight?.Cancel();
+        ctsTransitionRight?.Dispose();
+        
         ctsMove?.Cancel();
         ctsMove?.Dispose();
     }
     private void Start()
     {
-        traitorsGroupPosition = traitorsGroup.localPosition;
-        tripMapGroupPosition = tripMapGroup.localPosition;
-        profileGroupPosition = profileGroup.localPosition;
-        markerGroupPosition = markerGroup.localPosition;
-
         activeGroupHeight = traitorsGroup.localPosition.y;
         inactiveGroupHeight = profileGroup.localPosition.y;
 
@@ -102,9 +103,9 @@ public class BottomPanel : MonoBehaviour
     {
         if ((curGroups & Groups.Traitors) != 0)
         {
-            for (int i = 0; i < mugshotIconButtons.Length; i++)
+            for (int i = 0; i < traitorMugshotIconButtons.Length; i++)
             {
-                IconButton mugShotButton = mugshotIconButtons[i];
+                IconButton mugShotButton = traitorMugshotIconButtons[i];
                 mugShotButton.UpdateButton();
             }
         }
@@ -121,35 +122,54 @@ public class BottomPanel : MonoBehaviour
         if ((curGroups & Groups.Profile) != 0)
         {
             profileExitButton.UpdateButton();
+            for (int i = 0; i < profileStationButtons.Length; i++)
+            {
+                TextButton stationButton = profileStationButtons[i];
+                stationButton.UpdateButton();
+            }
+        }
+
+        if ((curGroups & Groups.Station) != 0)
+        {
+            stationExitButton.UpdateButton();
         }
     }
     private void SetTraitorsGroup()
     {
-        for (int i = 0; i < mugshotIconButtons.Length; i++)
+        for (int i = 0; i < traitorMugshotIconButtons.Length; i++)
         {
             TraitorProfile traitorProfile = options.curTrip.traitorProfiles[i];
 
-            IconButton mugShotIcon = mugshotIconButtons[i];
+            IconButton mugShotIcon = traitorMugshotIconButtons[i];
             AtlasRenderer mugshotRenderer = mugShotIcon.atlasRenderer;
             
             mugshotRenderer.UpdateSpriteInputsByIndex(traitorProfile.mugShotIndex);
 
+            int index = i;
             void OnMouseUp()
             {
                 mugShotIcon.MouseUp();
-                curTraitorProfile = traitorProfile;
+                curTraitorProfile = options.curTrip.traitorProfiles[index];
                 profileMugshotRenderer.UpdateSpriteInputsByIndex(curTraitorProfile.mugShotIndex);
-                for (int j = 0; j < habitTextRenderers.Length; j++)
+
+                for (int j = 0; j < profileHabitTextRenderers.Length; j++)
                 {
-                    AtlasTextRenderer habitTextRenderer = habitTextRenderers[j];
+                    AtlasTextRenderer habitTextRenderer = profileHabitTextRenderers[j];
                     Habits curHabit = GetHabitAtIndex(curTraitorProfile.passengerProfile.habits, j);
                     string habitText = passengersData.habitStringDict[curHabit];
                     habitTextRenderer.SetText(habitText);
 
-                    curGroups |= Groups.Profile;
-                    curGroups &= ~(Groups.Traitors | Groups.TripMap);
                 }
-                TransitionToProfileGroup();
+                
+                profileStationButtons[selectedProfileStationButtonIndex].backgroundRenderer.customBit &= ~(int)ColorBits.Meridia;
+                if (curTraitorProfile.selectedStationIndex != -1)
+                {
+                    selectedProfileStationButtonIndex = curTraitorProfile.selectedStationIndex; 
+                    profileStationButtons[curTraitorProfile.selectedStationIndex].backgroundRenderer.customBit |= (int)ColorBits.Meridia;
+                }
+                TransitionGroup(profileGroup, traitorsGroup, ctsTransitionLeft);
+                curGroups |= Groups.Profile;
+                curGroups &= ~Groups.Traitors;
             }
 
             mugShotIcon.InitButton(onMouseUp: OnMouseUp);
@@ -157,7 +177,6 @@ public class BottomPanel : MonoBehaviour
     }
     private void SetTripMapGroup()
     {
-
         Bounds tripMapLineBounds = tripMapLineRenderer.bounds;
         float startXPos = -tripMapLineRenderer.bounds.extents.x;
         float stationSegment = tripMapLineRenderer.bounds.size.x / (options.curTrip.stationsDataArray.Length - 1);
@@ -181,9 +200,15 @@ public class BottomPanel : MonoBehaviour
                 curStationData = stationData;
                 stationNameTextRenderer.SetText(curStationData.name);
 
-                int curChecksToStation = checksToStation - options.curTrip.passengersCheckedTotal;
-                string checkNumberText = curChecksToStation.ToString();
-                checkNumberTextRenderer.SetText(checkNumberText);
+                for (int j = 0; j < stationPlaceTextRenderers.Length; j++)
+                {
+                    AtlasTextRenderer textRenderer = stationPlaceTextRenderers[j];
+                    string place = curStationData.places[j];
+                    textRenderer.SetText(place);
+                }
+                TransitionGroup(stationGroup, tripMapGroup, ctsTransitionRight);
+                curGroups |= Groups.Station;
+                curGroups &= ~Groups.TripMap;
             }
             stationIconButton.InitButton(onMouseUp: OnMouseUp);
             stationIconButton.transform.localPosition = localPos;
@@ -199,32 +224,64 @@ public class BottomPanel : MonoBehaviour
             }
         }
     }
+    private void SetStationGroup()
+    {
+        void MouseUp()
+        {
+            stationExitButton.MouseUp();
+            TransitionGroup(tripMapGroup, stationGroup, ctsTransitionRight);
+            curGroups |= Groups.TripMap;
+            curGroups &= ~Groups.Station;
+        }
+        stationExitButton.InitButton(onMouseUp: MouseUp);
+    }
     private void SetProfileGroup()
     {
         void OnMouseUpExit()
         {
             profileExitButton.MouseUp();
 
-            TransitionToTratorsAndTripMapGroups();
+            TransitionGroup(traitorsGroup, profileGroup, ctsTransitionLeft);
 
-            curGroups |= (Groups.Traitors | Groups.TripMap);
+            curGroups |= Groups.Traitors;
             curGroups &= ~Groups.Profile;
         }
         profileExitButton.InitButton(onMouseUp: OnMouseUpExit);
-    }
-    private void TransitionToProfileGroup()
-    {
-        ctsTransition?.Cancel();
-        ctsTransition = new CancellationTokenSource();
 
-        TransitioningToProfileGroup().Forget();
-    }
-    private void TransitionToTratorsAndTripMapGroups()
-    {
-        ctsTransition?.Cancel();
-        ctsTransition = new CancellationTokenSource();
+        for (int i = 0; i < profileStationButtons.Length; i++)
+        {
+            TextButton stationButton = profileStationButtons[i];
+            int index = i;
 
-        TransitioningToTratorsAndTripMapGroups().Forget();
+            void MouseUp()
+            {
+                stationButton.MouseUpText();
+                stationButton.backgroundRenderer.customBit ^= (int)ColorBits.Meridia;
+                
+                if (curTraitorProfile.selectedStationIndex == index)
+                {
+                    curTraitorProfile.selectedStationIndex = -1;
+                }
+                else
+                {
+                    if (curTraitorProfile.selectedStationIndex != -1)
+                    {
+                        profileStationButtons[curTraitorProfile.selectedStationIndex].backgroundRenderer.customBit &= ~(int)ColorBits.Meridia;
+                    }
+                    curTraitorProfile.selectedStationIndex = index;
+                    selectedProfileStationButtonIndex = index;
+                }
+                options.curTrip.traitorProfiles[curTraitorProfile.traitorIndex] = curTraitorProfile;
+            }
+            stationButton.InitButton(onMouseUp: MouseUp);
+        }
+    }
+    private void TransitionGroup(Transform toGroup, Transform fromGroup, CancellationTokenSource cts)
+    {
+        cts?.Cancel();
+        cts = new CancellationTokenSource();
+
+        TransitioningGroups(toGroup, fromGroup, cts).Forget();
     }
     private void MoveToActivePosition()
     {
@@ -233,10 +290,15 @@ public class BottomPanel : MonoBehaviour
 
         MovingToActivePosition().Forget();
     }
-    private async UniTask TransitioningToProfileGroup()
+    private async UniTask TransitioningGroups(Transform toGroup, Transform fromGroup, CancellationTokenSource cts)
     {
         try
         {
+            Vector3 toPosition = toGroup.localPosition;
+            Vector3 fromPosition = fromGroup.localPosition;
+
+            float transitionClock = Mathf.InverseLerp(inactiveGroupHeight, activeGroupHeight, toPosition.y) * TRANSITION_TIME;
+
             while(transitionClock < TRANSITION_TIME)
             {
                 float t = transitionClock / TRANSITION_TIME;
@@ -244,17 +306,15 @@ public class BottomPanel : MonoBehaviour
 
                 float curInactiveHeight = Mathf.Lerp(activeGroupHeight, inactiveGroupHeight, t);
                 float curActiveHeight = Mathf.Lerp(inactiveGroupHeight, activeGroupHeight, t);
-                traitorsGroupPosition.y = curInactiveHeight;
-                tripMapGroupPosition.y = curInactiveHeight;
-                profileGroupPosition.y = curActiveHeight;
+                fromPosition.y = curInactiveHeight;
+                toPosition.y = curActiveHeight;
 
-                traitorsGroup.localPosition = traitorsGroupPosition;
-                tripMapGroup.localPosition = tripMapGroupPosition;
-                profileGroup.localPosition = profileGroupPosition;
+                toGroup.localPosition = toPosition;
+                fromGroup.localPosition = fromPosition;
 
                 transitionClock += Time.deltaTime;
 
-                await UniTask.Yield(ctsTransition.Token);
+                await UniTask.Yield(cts.Token);
             }
         }
         catch(OperationCanceledException)
@@ -262,37 +322,6 @@ public class BottomPanel : MonoBehaviour
 
         }
     }
-
-    private async UniTask TransitioningToTratorsAndTripMapGroups()
-    {
-        try
-        {
-            while (transitionClock > 0)
-            {
-                float t = transitionClock / TRANSITION_TIME;
-                t = Curves.EaseInOutCubic(t);
-
-                float curInactiveHeight = Mathf.Lerp(activeGroupHeight, inactiveGroupHeight, t);
-                float curActiveHeight = Mathf.Lerp(inactiveGroupHeight, activeGroupHeight, t);
-                traitorsGroupPosition.y = curInactiveHeight;
-                tripMapGroupPosition.y = curInactiveHeight;
-                profileGroupPosition.y = curActiveHeight;
-
-                traitorsGroup.localPosition = traitorsGroupPosition;
-                tripMapGroup.localPosition = tripMapGroupPosition;
-                profileGroup.localPosition = profileGroupPosition;
-
-                transitionClock -= Time.deltaTime;
-
-                await UniTask.Yield(ctsTransition.Token);
-            }
-        }
-        catch (OperationCanceledException)
-        {
-
-        }
-    }
-
     private async UniTask MovingToActivePosition()
     {
         try
@@ -314,7 +343,6 @@ public class BottomPanel : MonoBehaviour
         }
         catch (OperationCanceledException)
         {
-            curGroups = Groups.TripMap | Groups.Traitors;
         }
     }
 }

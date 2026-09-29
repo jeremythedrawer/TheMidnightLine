@@ -87,8 +87,9 @@ public static class Passenger
     {
         public int boardingStationIndex;
         public int disembarkingStationIndex;
+        public int placeIndex;
 
-        public int npcPrefabIndex;
+        public int prefabIndex;
         public Habits habits;
     }
     [Serializable] public struct TraitorProfile
@@ -96,7 +97,9 @@ public static class Passenger
         public PassengerProfile passengerProfile;
         public string fullName;
         public int mugShotIndex;
-        public bool found;    
+        public int traitorIndex;
+        public int selectedStationIndex; 
+        public bool found;
     }
 
     [Serializable] public struct NameData

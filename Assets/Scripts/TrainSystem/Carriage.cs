@@ -10,22 +10,26 @@ using UnityEditor;
 
 using static Passenger;
 using static Train;
+using static AtlasUI;
 
 public class Carriage : MonoBehaviour
 {
     const float QUEUE_TICK_RATE = 0.3f;
-    public AtlasRenderer[] exteriorRenderers;
-    public AtlasRenderer[] seatRenderers;
-    public AtlasRenderer[] grapPoleRenderers;
+
+    public static Carriage ActiveCarriage;
+
 
     public TrainData trainData;
     public TripData trip;
     public LayerData layerSettings;
-    public AtlasSO graffitiAtlas;
+    public CameraData camData;
+    public ActionData actionData;
+
+    public AtlasRenderer[] exteriorRenderers;
+    public AtlasRenderer[] seatRenderers;
+    public AtlasRenderer[] grapPoleRenderers;
 
     public AtlasTextRenderer nextStationSignRenderer;
-
-    public AtlasRenderer carriageWallRenderer;
 
     public BoxCollider2D insideBoundsCollider;
     public BoxCollider2D[] smokingRoomColliders;
@@ -35,7 +39,7 @@ public class Carriage : MonoBehaviour
     
     public CarriageMapProp[] maps;
 
-    public RenderTexture graffitiRT;
+    public IconButton exteriorButton;
 
     [Header("Generated")]
     public Transform[] wheelTransforms;
@@ -66,17 +70,64 @@ public class Carriage : MonoBehaviour
 
     private void Start()
     {
+        Init();
+    }
+    
+    private void Update()
+    {
+        ProcessSeatQueue();
+        UpdateButton();
+    }
+    private void Init()
+    {
         curPassengers = new PassengerBrain[32];
-        for(int i = 0; i < exteriorSlideDoors.Length; i++)
+        for (int i = 0; i < exteriorSlideDoors.Length; i++)
         {
             exteriorSlideDoors[i].carriage = this;
             interiorSlideDoors[i].carriage = this;
         }
-    }
 
-    private void Update()
+        void OnMouseDown()
+        {
+            exteriorButton.MouseDown();
+            for (int i = 0; i < exteriorSlideDoors.Length; i++)
+            {
+                SlideDoors slideDoor = exteriorSlideDoors[i];
+                slideDoor.leftSlideDoorRenderer.customBit ^= (int)ColorBits.Invert;
+                slideDoor.rightSlideDoorRenderer.customBit ^= (int)ColorBits.Invert;
+            }
+        }
+        void OnMouseUp()
+        {
+            exteriorButton.MouseUp();
+            for (int i = 0; i < exteriorSlideDoors.Length; i++)
+            {
+                SlideDoors slideDoor = exteriorSlideDoors[i];
+                slideDoor.leftSlideDoorRenderer.customBit &= ~(int)ColorBits.Invert;
+                slideDoor.rightSlideDoorRenderer.customBit &= ~(int)ColorBits.Invert;
+            }
+
+            MoveDown();
+
+            ActiveCarriage?.MoveUp();
+            ActiveCarriage = this;
+
+            PassengerBrain.SetActivePassengerToNull();
+            actionData.onCloseDialogueBubble?.Invoke();
+
+            camData.curLocationState = CameraData.LocationState.Carriage;
+            camData.curLocationBounds = totalBounds;
+
+            actionData.onFocusCarriage?.Invoke();
+        }
+        exteriorButton.InitButton(onMouseUp: OnMouseUp, onMouseDown: OnMouseDown);
+    }
+    private void UpdateButton()
     {
-        ProcessSeatQueue();
+        if (ActiveCarriage != this)
+        {
+            exteriorButton.UpdateButton();
+        }
     }
     public void UnlockInteriorDoors()
     {
@@ -145,14 +196,19 @@ public class Carriage : MonoBehaviour
         seatQueue.passengers[seatQueue.passengerCount] = npc;
         seatQueue.passengerCount++;
     }
-    public void RemoveFromSeatQueue(PassengerBrain npc)
+    public void RemoveFromSeatQueue(PassengerBrain passenger)
     {
         if (seatQueue.passengerCount == 0) return;
         int lastIndex = seatQueue.passengerCount - 1;
 
-        seatQueue.passengers[npc.seatQueueIndex] = seatQueue.passengers[lastIndex];
-        seatQueue.passengers[lastIndex] = npc;
+        seatQueue.passengers[passenger.seatQueueIndex] = seatQueue.passengers[lastIndex];
+        seatQueue.passengers[lastIndex] = passenger;
         seatQueue.passengerCount--;
+        
+        if (seatQueue.passengerCount < 0)
+        {
+            Debug.Log(passenger.name + " | " + name + " | " + seatQueue.passengerCount);
+        }
     }
     private void ProcessSeatQueue()
     {

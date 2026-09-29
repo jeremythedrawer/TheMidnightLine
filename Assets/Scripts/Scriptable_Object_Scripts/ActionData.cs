@@ -7,7 +7,8 @@ public class ActionData : ScriptableObject
     public Action onShowKeyIcon;
     public Action onHideKeyIcon;
 
-    public Action onOpenDialogueBubble;
+    public Action onFocusPassenger;
+    public Action onFocusCarriage;
     public Action onCloseDialogueBubble;
     public Action onBeginTrip;
     public Action onCreatedPassengerProfiles;

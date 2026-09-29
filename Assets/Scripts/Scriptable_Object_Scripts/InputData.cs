@@ -82,5 +82,6 @@ public class InputData : ScriptableObject
 
     public Vector3 mouseScreenPos;
     public Vector3 mouseWorldPos;
+    public Vector3 mouseDelta;
 
 }

@@ -92,6 +92,7 @@ public class TextButton : MonoBehaviour
     private void EnterButtonText()
     {
         backgroundRenderer.customBit |= (int)ColorBits.GreenChannel;
+        textRenderer.customBit &= ~(int)ColorBits.Invert;
     }
     private void ExitButtonText()
     {

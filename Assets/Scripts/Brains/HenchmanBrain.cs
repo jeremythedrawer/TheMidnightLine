@@ -170,13 +170,6 @@ public class HenchmanBrain : MonoBehaviour
     {
         atlasRenderer.customBit |= (int)ColorBits.GreenChannel;
     }
-    private void SetDialogueText(string text)
-    {
-        uiData.curDialogueText = text;
-        uiData.curDialogueBubbleBounds = atlasRenderer.bounds;
-        onOpenDialogueBubble?.Raise();
-
-    }
     private void SetToIdle()
     {
         SetState(HenchmanState.Idle);

@@ -94,18 +94,29 @@ Shader "Custom/s_exteriorWalls"
                 i.uv = (i.uv - 0.5) * flip + 0.5;
                 i.uv *= uvSize;
                 i.uv += uvPos;
-                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
 
                 int bitMask = i.customBit;
+                
+                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
+
+                half detail = tex.r;
+                half outline = tex.g;
+
                 int invertMask = saturate(bitMask & INVERT_BIT);
-                half invertTex = 1 - tex.r;
-                half texMask = lerp(tex.r, invertTex, invertMask);
+                int greenMask = saturate(bitMask & GREEN_BIT);
+
+                outline *= greenMask;
+
+                half finalMask = detail + outline;
+
+                half invertTex = 1 - finalMask;
+                finalMask = lerp(finalMask, invertTex, invertMask);
 
 
                 float divisor = 35;
                 half normDepth = round(i.worldPos.z/divisor) * divisor / FAR_CLIP;
                 half3 nightFactor = lerp(_WhiteColor, _BlackColor, _DayNight * normDepth);
-                half grey = texMask + (-(_DayNight * 1.1 - 0.9) * normDepth);
+                half grey = finalMask + (-(_DayNight * 1.1 - 0.9) * normDepth);
                 half3 finalColor = lerp(_BlackColor, nightFactor, saturate(grey));
 
                 half worldClip = step(i.spritePos.y, i.worldPos.y);

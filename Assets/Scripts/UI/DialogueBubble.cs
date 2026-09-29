@@ -23,40 +23,53 @@ public class DialogueBubble : MonoBehaviour
     public Vector2 size;
 
     public float clock;
+
+    public bool opened;
     public CancellationTokenSource ctsOpen;
 
     private void OnEnable()
     {
-        actionData.onOpenDialogueBubble += Open;
+        actionData.onFocusPassenger += Open;
         actionData.onCloseDialogueBubble += Close;
 
         ctsOpen = new CancellationTokenSource();
     }
     private void OnDisable()
     {
-        actionData.onOpenDialogueBubble -= Open;
+        actionData.onFocusPassenger -= Open;
         actionData.onCloseDialogueBubble -= Close;
 
         ctsOpen?.Cancel();
     }
+    private void Start()
+    {
+        worldPos.z = -1;
+    }
+    private void Update()
+    {
+        if (opened)
+        {
+            Bounds passengerBounds = PassengerBrain.ActivePassenger.atlasRenderer.bounds;
+            worldPos.y = passengerBounds.max.y + uiData.keyBindIconWorldSize.y;
+            worldPos.x = passengerBounds.center.x;
+            transform.position = worldPos;
+        }
+    }
     private void Open()
     {
-        worldPos.x = uiData.curDialogueBubbleBounds.center.x;
-        worldPos.y = uiData.curDialogueBubbleBounds.max.y + uiData.keyBindIconWorldSize.y;
-        worldPos.z = -1;
-        transform.position = worldPos;
-
         textRenderer.enabled = true;
         tailRenderer.enabled = true;
 
         ctsOpen?.Cancel();
         ctsOpen = new CancellationTokenSource();
+        opened = true;
         Opening().Forget();
     }
     private void Close()
     {
         ctsOpen?.Cancel();
         ctsOpen = new CancellationTokenSource();
+        opened = false;
         Closing().Forget();
     }
     private async UniTask Opening()

@@ -20,8 +20,11 @@ using UnityEditor;
 
 public class PassengerBrain : MonoBehaviour
 {
+    public static PassengerBrain ActivePassenger;
+
     public AtlasRenderer atlasRenderer;
     public AudioSource audioSource;
+    public IconButton iconButton;
 
     public Options options;
     public PassengerData passengerData;
@@ -32,6 +35,8 @@ public class PassengerBrain : MonoBehaviour
     public CameraData camData;
     public AudioData audioData;
     public ActionData actionData;
+    public UIData uiData;
+    public CursorData cursorData;
 
     [Header("Generated")]
     public AtlasSO atlas;
@@ -106,6 +111,10 @@ public class PassengerBrain : MonoBehaviour
         atlasRenderer.onChangeKeyframe -= HandleKeyframeChange;
         ctsWaitForRandSeconds?.Cancel();
     }
+    private void Start()
+    {
+        InitButton();
+    }
     private void OnDestroy()
     {
         TrainController.OnStationArrival -= PrepareToBoardTrain;
@@ -117,6 +126,7 @@ public class PassengerBrain : MonoBehaviour
         ChooseStates();
         UpdateStates();
         UpdatePath();
+        UpdateButton();
     }
     private void FixedUpdate()
     {
@@ -132,6 +142,7 @@ public class PassengerBrain : MonoBehaviour
         smokerRoomIndex = -1;
         targetAlpha = 1;
 
+        profile.placeIndex = UnityEngine.Random.Range(0, 2);
 
         if (role == Role.Accomplice)
         {
@@ -142,6 +153,35 @@ public class PassengerBrain : MonoBehaviour
             curHabit = GetRandomBehaviour();
         }
         atlasRenderer.customBit |= (int)ColorBits.GreenChannel;
+    }
+    private void InitButton()
+    {
+        void Enter()
+        {
+            atlasRenderer.customBit |= (int)ColorBits.BlueChannel;
+            
+        }
+        void Exit()
+        {
+            atlasRenderer.customBit &= ~(int)ColorBits.BlueChannel;
+            atlasRenderer.customBit &= ~(int)ColorBits.Invert;
+        }
+        void MouseUp()
+        {
+            iconButton.MouseUp();
+            if (cursorData.curPassengerSelectionMode == CursorData.PassengerSelectionMode.Unmasking)
+            {
+                atlasRenderer.customBit |= (int)ColorBits.RedChannel;
+                uiData.curDialogueText = disembarkingStation.places[profile.placeIndex];
+                actionData.onFocusPassenger?.Invoke();
+            }
+            else
+            {
+
+            }
+            ActivePassenger = this;
+        }
+        iconButton.InitButton(onMouseUp: MouseUp, onEnter: Enter, onExit: Exit);
     }
     public void BoardTrain()
     {
@@ -169,12 +209,10 @@ public class PassengerBrain : MonoBehaviour
             actionData.onTraitorDisembarked?.Invoke();
         }
     }
-    public void MoveNPCToLeftOfCarriage()
+    private void UpdateButton()
     {
-        behaving = false;
-        
-        curPath = PassengerPath.None;
-        SetPath(PassengerPath.ToStandInTrain);
+        if (Carriage.ActiveCarriage != curCarriage) return;
+        iconButton.UpdateButton();
     }
     public void AssignSeat(int seatIndex)
     {
@@ -189,10 +227,6 @@ public class PassengerBrain : MonoBehaviour
     {
         if (stopBehaving) return;
         SetPath(PassengerPath.ToStandInTrain);
-    }
-    public void ToggleFocus(bool toggle)
-    {
-        atlasRenderer.custom.w = toggle ? 1 : 0; 
     }
     public void ToggleUnveil(bool toggle)
     {
@@ -550,8 +584,6 @@ public class PassengerBrain : MonoBehaviour
             break;
             case PassengerPath.AtSlideDoor:
             {
-                StopSitting();
-
                 if (!onTrain)
                 {
                     curCarriage = curSlideDoors.carriage;
@@ -752,7 +784,7 @@ public class PassengerBrain : MonoBehaviour
                     atlasRenderer.custom.z = 0;
                     atlasRenderer.custom.w = 0;
                     atlasRenderer.customBit = 0;
-                    PassengerManager.ReturnPassenger(options.curTrip.passengers[profile.npcPrefabIndex].prefab , this);
+                    PassengerManager.ReturnPassenger(options.curTrip.passengers[profile.prefabIndex].prefab , this);
                 }
             }
             break;
@@ -991,6 +1023,11 @@ public class PassengerBrain : MonoBehaviour
 
         Habits selectedBehaviour = allowedBehaviours[UnityEngine.Random.Range(0, allowedBehaviours.Count)];
         return selectedBehaviour;
+    }
+
+    public static void SetActivePassengerToNull()
+    {
+        ActivePassenger = null;
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
