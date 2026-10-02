@@ -14,7 +14,6 @@ public class WorldUIController : MonoBehaviour
 
     public CameraData camData;
     public InputData inputData;
-    public NotepadData notepadData;
     public Options options;
     public SpyData spyData;
     public PassengersData passengerData;

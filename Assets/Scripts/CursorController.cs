@@ -1,9 +1,9 @@
 using System;
 using UnityEngine;
 using UnityEngine.InputSystem;
-
-using static Passenger;
 using static AtlasUI;
+using static Passenger;
+using static UnityEngine.InputSystem.InputAction;
 public class CursorController : MonoBehaviour
 {
 
@@ -40,11 +40,6 @@ public class CursorController : MonoBehaviour
     private void Start()
     {
         Init();
-    }
-
-    private void OnEnable()
-    {
-        SliderController.OnChangeSoundEffectsVolume += UpdateVolume;
     }
     private void OnDisable()
     {
@@ -96,6 +91,7 @@ public class CursorController : MonoBehaviour
         {
             cursorRenderer.UpdateSpriteInputsByIndex((int)cursorData.curCursorSpriteType);
             audioSource.PlayOneShot(audioData.cursorHover);
+
             cursorData.changeButton = false;
         }
         else if (!cursorData.isHovering)
@@ -106,13 +102,18 @@ public class CursorController : MonoBehaviour
             }
         }
     }
+    
+    private void PlayAudioOnClick(CallbackContext ctx)
+    {
+        audioSource.PlayOneShot(audioData.cursorClick);
+    }
     private void Init()
     {
         Cursor.visible = false;
         CursorRenderer = cursorRenderer;
         hoveredNPCs = new PassengerBrain[8];
 
-        cursorData.curCursorSpriteType = CursorData.CursorSpriteType.Arrow;
+        cursorData.curCursorSpriteType = CursorData.CursorSpriteType.Point;
     }
     private void UpdateVolume()
     {

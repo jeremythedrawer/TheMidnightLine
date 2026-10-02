@@ -23,7 +23,6 @@ public class CameraController : MonoBehaviour
     public TrainData trainData;
     public InputData inputData;
     public LayerData layerData;
-    public NotepadData notepadData;
     public ActionData actionData;
     public PassengersData passengersData;
     public SpawnData spawnData;

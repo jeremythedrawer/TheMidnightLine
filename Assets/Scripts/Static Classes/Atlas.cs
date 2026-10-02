@@ -41,53 +41,16 @@ public static class Atlas
         SittingTakingPhotos,
         StandingTakingPhotos,
     }
-    public enum SpyMotion
-    {
-        None,
-        StandingBreathing,
-        Ticket,
-        NotepadHolding,
-        NotepadFlipping,
-        NotepadWriting,
-        Walking,
-        Handshake,
-        ShotByGun,
-    }
     public enum TrainMotion
     {
         None,
         TrainDoor,
     }
-    public enum HenchmanMotion
-    {
-        None,
-        Walking,
-        OpenSuitcase,
-        StandingBreathing,
-    }
-    public enum PresidentMotion
-    {
-        None,
-        SittingBreathing,
-        StartHandshake,
-        Handshake,
-    }
-    public enum NotepadMotion
-    {
-        None,
-        FlipHand,
-        FlipPage,
-        RotatingPencil,
-    }
-
     public enum EntityMotionType
     {
         None,
-        NPC,
-        Spy,
-        Notepad,
+        Passenger,
         Train,
-        MeridiaHenchman,
     }
     public enum ClipType
     {
@@ -95,18 +58,6 @@ public static class Atlas
         PingPong,
         OneShot,
         Manual,
-    }
-    [Flags] public enum MarkerType
-    {
-        None = 0,
-        Smoke = 1 << 0,
-        Talking = 1 << 1,
-        SleepingZs = 1 << 2,
-        Music = 1 << 3,
-        Climb = 1 << 4,
-        Coughing = 1 << 5,
-        QuestionMark = 1 << 6,
-
     }
     public enum SpriteMode
     {
@@ -118,27 +69,22 @@ public static class Atlas
         UISlice,
         UIText,
     }
-    [Serializable] public struct MarkerKey
-    {
-        public Color32 color;
-        public MarkerType type;
-    }
-    [Serializable] public struct MarkerPosition
-    {
-        public Vector2 objectPos;
-        public MarkerType type;
-    }
+
     [Serializable] public struct SimpleSprite
     {
+        public Vector2[] customPositions;
+        
         public Vector4 uvSizeAndPos;
-        public Vector2 uvPivot;
+        
         public Vector3 worldSize;
+        
+        public Vector2 uvPivot;
+        
         public int index;
     }
     [Serializable] public struct MotionSprite
     {
         public SimpleSprite sprite;
-        public MarkerPosition[] markers;
 
         public int audioIndex;
         public int holdFrames;
@@ -146,8 +92,9 @@ public static class Atlas
     [Serializable] public struct SliceSprite
     {
         public SimpleSprite sprite;
-        public Vector4 slice;
         public Vector4[] uvSizeAndPos;
+
+        public Vector4 slice;
         public Vector4 worldSlices;
     }
     [Serializable] public struct AtlasClip
@@ -177,11 +124,8 @@ public static class Atlas
     public static readonly Dictionary<EntityMotionType, Type> MotionEnumDictionary =
     new Dictionary<EntityMotionType, Type>
     {
-        { EntityMotionType.NPC, typeof(PassengerMotion) },
-        { EntityMotionType.Spy, typeof(SpyMotion) },
+        { EntityMotionType.Passenger, typeof(PassengerMotion) },
         { EntityMotionType.Train, typeof(TrainMotion) },
-        { EntityMotionType.Notepad, typeof(NotepadMotion) },
-        { EntityMotionType.MeridiaHenchman, typeof(HenchmanMotion) },
     };
 
 }

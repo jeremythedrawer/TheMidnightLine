@@ -168,7 +168,7 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 #else
                     //if (renderer.bounds.max.x < cameraStats.camWorldLeft || renderer.bounds.min.x > cameraStats.camWorldRight || renderer.bounds.max.y < cameraStats.camWorldBottom || renderer.bounds.min.y > cameraStats.camWorldTop) continue;
 #endif
-                    for (int j = 0; j < renderer.worldPivotsAndSizes.Length; j++)
+                    for (int j = 0; j < renderer.textBoxData.charCount; j++)
                     {
                         SpriteData spriteData = textBatch.data.spriteData[count];
 

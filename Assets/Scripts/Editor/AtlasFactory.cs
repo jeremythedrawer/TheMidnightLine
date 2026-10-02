@@ -8,69 +8,70 @@ using static UnityEngine.GUI;
 
 public class AtlasFactory : EditorWindow
 {
-    static Color selectedColor = Color.red;
-    static Color unselectedColor = new Color(0, 0.5f, 0.5f);
-
-    const float MARKER_SIZE = 2f;
-
-    static GUILayoutOption[] headerLayout;
-    static GUILayoutOption[] inputLayout;
-    static GUILayoutOption[] buttonLayout;
-
-    static GUILayoutOption[] clipButtonLayout;
-    static GUILayoutOption[] clipToggleLayout;
-    static GUILayoutOption[] clipEnumLayout;
-    static GUILayoutOption[] clipIntLayout;
-
-    static Vector2 directoryScroll;
-    static Vector2 clipScroll;
-
-    public AtlasSO atlas;
-    public Texture2D markerTexture;
-    public bool generateSprites;
-
-    public float cellSize;
-    public int selectedGridIndex;
+    public const float MARKER_SIZE = 2f;
     
+    public AtlasSO atlas;
 
-    //Preview
-    private int selectedMotionIndex;
-    private bool[] enabledClipsCheckboxes;
-    private Array atlasEnum_array;
+    public GUILayoutOption[] headerLayout;
+    public GUILayoutOption[] inputLayout;
+    public GUILayoutOption[] buttonLayout;
+    public GUILayoutOption[] clipButtonLayout;
+    public GUILayoutOption[] clipToggleLayout;
+    public GUILayoutOption[] clipEnumLayout;
+    public GUILayoutOption[] clipIntLayout;
+    public GUILayoutOption[] spriteDirectoryLayout;
+    public GUILayoutOption[] previewLayout;
+    public GUILayoutOption[] overviewLayout;
 
-    private SimpleSprite previewSprite;
-    private int flip;
+    public List<SimpleSprite> newSimpleSprites;
+    public List<MotionSprite> newMotionSprites;
+    public List<SliceSprite> newSliceSprites;
+    
+    public Array atlasEnumArray;
 
-    List<SimpleSprite> newSimpleSprites;
-    List<MotionSprite> newMotionSprites;
-    List<SliceSprite> newSliceSprites;
-
-    //Simple
-    private Vector2[] simplePivots = new Vector2[]
+    public Vector2[] simplePivots = new Vector2[]
     {
         new Vector2(0.0f, 1.0f), new Vector2(0.5f, 1.0f), new Vector2(1.0f, 1.0f),
         new Vector2(0.0f, 0.5f), new Vector2(0.5f, 0.5f), new Vector2(1.0f, 0.5f),
         new Vector2(0.0f, 0.0f), new Vector2(0.5f, 0.0f), new Vector2(1.0f, 0.0f),
     };
 
-    //Motion
-    private AtlasClip previewClip;
-    private float editorTimeDelta;
-    private double lastEditorTime;
-    private int curFrameIndex;
-    private int prevFrameIndex;
-    private bool startMotion;
-    private int simpleSpritesFound;
-    private int motionSpritesFound;
-    private int sliceSpritesFound;
+    public bool[] enabledClipsCheckboxes;
 
-    GUILayoutOption[] spriteDirectoryLayout;
-    GUILayoutOption[] previewLayout;
-    GUILayoutOption[] overviewLayout;
+    public AtlasClip previewClip;
+    
+    public SimpleSprite previewSprite;
+    
+    public Color selectedColor = Color.red;
+    public Color unselectedColor = new Color(0, 0.5f, 0.5f);
+    public Color pivotColor = Color.red;
+    public Color customPostionColor = Color.green;
+    public Color sliceColor = Color.blue;
+    public Color connectColor = new Color(1, 1, 0, 1);
 
-    private float directoryWidth = 0.33f;
-    private float previewWidth = 0.33f;
-    private float overviewWidth = 0.33f;
+    public Vector2 directoryScroll;
+    public Vector2 clipScroll;
+
+    public double lastEditorTime;
+    
+    public float cellSize;
+    public float editorTimeDelta;
+    public float overviewWidth;
+    public float directoryWidth;
+    public float previewWidth;
+
+    public int selectedGridIndex;
+    public int selectedMotionIndex;
+    public int flip;
+    public int simpleSpritesFound;
+    public int motionSpritesFound;
+    public int sliceSpritesFound;
+    public int curFrameIndex;
+    public int prevFrameIndex;
+    
+    public bool generateSprites;
+    public bool startMotion;
+
 
     [MenuItem("Tools/Atlas Factory")]
     private static void Open()
@@ -128,7 +129,6 @@ public class AtlasFactory : EditorWindow
 
             EditorGUI.BeginChangeCheck();
             atlas = (AtlasSO)EditorGUILayout.ObjectField("Atlas", atlas, typeof(AtlasSO), allowSceneObjects: false, inputLayout);
-            markerTexture = (Texture2D)EditorGUILayout.ObjectField("Marker Texture", markerTexture, typeof(Texture2D), allowSceneObjects: false, inputLayout);
             generateSprites = GUILayout.Button("Generate Sprites", buttonLayout);
 
         }
@@ -162,8 +162,8 @@ public class AtlasFactory : EditorWindow
     {
         if (MotionEnumDictionary.TryGetValue(atlas.entityMotionType, out Type enumType))
         {
-            atlasEnum_array = Enum.GetValues(enumType);
-            enabledClipsCheckboxes = new bool[atlasEnum_array.Length];
+            atlasEnumArray = Enum.GetValues(enumType);
+            enabledClipsCheckboxes = new bool[atlasEnumArray.Length];
 
             for (int i = 0; i < atlas.clips.Length; i++)
             {
@@ -281,7 +281,7 @@ public class AtlasFactory : EditorWindow
             int validClipIndex = 0;
             for (int i = 0; i < enabledClipsCheckboxes.Length; i++)
             {
-                Enum enumValue = (Enum)atlasEnum_array.GetValue(i);
+                Enum enumValue = (Enum)atlasEnumArray.GetValue(i);
 
                 EditorGUILayout.BeginHorizontal();
                 {
@@ -452,11 +452,12 @@ public class AtlasFactory : EditorWindow
     }
     private void GenerateSprites()
     {
-        Color32[] atlasPixels = atlas.texture.GetPixels32();
-        Color32[] markerPixels = new Color32[0];
+        Color[] atlasPixels = atlas.texture.GetPixels();
+        Color[] markerPixels = new Color[0];
+        Texture2D markerTexture = atlas.markerTexture;
         if (markerTexture != null)
         {
-            markerPixels = markerTexture.GetPixels32();
+            markerPixels = markerTexture.GetPixels();
         }
         bool[] visited = new bool[atlasPixels.Length];
 
@@ -519,7 +520,7 @@ public class AtlasFactory : EditorWindow
         SortAtlasSprites();
         SetSpriteArray();
     }
-    private List<Vector2Int> FloodFill(int startX, int startY, int width, int height, ref bool[] visited, Color32[] atlasPixels, Color32[] markerPixels = null)
+    private List<Vector2Int> FloodFill(int startX, int startY, int width, int height, ref bool[] visited, Color[] atlasPixels, Color[] markerPixels = null)
     {
         List<Vector2Int> result = new List<Vector2Int>();
         Queue<Vector2Int> queue = new Queue<Vector2Int>();
@@ -530,7 +531,9 @@ public class AtlasFactory : EditorWindow
         {
             Vector2Int p = queue.Dequeue();
             if (p.x < 0 || p.x >= width || p.y < 0 || p.y >= height) continue; // skip if the current pixel isnt within the texture bounds
+            
             int index = p.x + p.y * width; // Convert to 1D array
+            
             if (visited[index]) continue; // skip if the pixel is already apart of another sprite
 
             bool isSolid = atlasPixels[index].a > 0;
@@ -538,12 +541,8 @@ public class AtlasFactory : EditorWindow
             bool isMarker = false;
             if (markerPixels != null)
             {
-                Color32 m = markerPixels[index];
-                isMarker =
-                    m.r == atlas.spriteConnectColor.r &&
-                    m.g == atlas.spriteConnectColor.g &&
-                    m.b == atlas.spriteConnectColor.b &&
-                    m.a == 255;
+                Color m = markerPixels[index];
+                isMarker = m == pivotColor;
             }
 
             if (!isSolid && !isMarker) continue;
@@ -571,7 +570,7 @@ public class AtlasFactory : EditorWindow
         }
         return result;
     }
-    private void CreateAtlasSprite(List<Vector2Int> pixelPositions, float texWidth, float texHeight, Color32[] pixelColors, int index)
+    private void CreateAtlasSprite(List<Vector2Int> pixelPositions, float texWidth, float texHeight, Color[] pixelColors, int index)
     {
         float minX = float.MaxValue;
         float minY = float.MaxValue;
@@ -588,47 +587,47 @@ public class AtlasFactory : EditorWindow
             maxY = Mathf.Max(maxY, p.y);
         }
         
-        List<MarkerPosition> spriteMarkersList = new List<MarkerPosition>();
+        List<Vector2> customPositionList = new List<Vector2>();
         Vector2 pivot = new Vector2(minX, minY);
         Vector2[] slices = new Vector2[2];
-        bool foundPivot = false;
+        bool pivotFound = false;
         int slicesFound = 0;
-
+        Texture2D markerTexture = atlas.markerTexture;
         if (markerTexture != null)
         {
-            Color32[] markerPixels = markerTexture.GetPixels32();
+            Color[] markerPixels = markerTexture.GetPixels();
 
             for (int x = (int)minX; x <= maxX; x++)
             {
                 for (int y = (int)minY; y <= maxY; y++)
                 {
                     int pixelIndex = x + y * (int)texWidth;
-                    Color32 pixelColor = markerPixels[pixelIndex];
-                    if (pixelColor.a == 0) continue;
+                    Color32 markerPixel = markerPixels[pixelIndex];
 
-                    if (!foundPivot && pixelColor.r == atlas.pivotColor.r && pixelColor.g == atlas.pivotColor.g && pixelColor.b == atlas.pivotColor.b)
+                    if (markerPixel.a == 0) continue;
+
+                    if (markerPixel == pivotColor)
                     {
                         pivot.x = x;
                         pivot.y = y;
-                        foundPivot = true;
+                        pivotFound = true;
                     }
-                    if (slicesFound < slices.Length && pixelColor.r == atlas.sliceColor.r && pixelColor.g == atlas.sliceColor.g && pixelColor.b == atlas.sliceColor.b)
+
+                    if (markerPixel == sliceColor)
                     {
                         slices[slicesFound].x = x;
                         slices[slicesFound].y = y;
                         slicesFound++;
                     }
 
-                    for (int j = 0; j < atlas.markers.Length; j++)
+                    if (markerPixel == customPostionColor)
                     {
-                        MarkerKey atlasMarker = atlas.markers[j];
+                        Vector2 newCustomPosition = new Vector2();
 
-                        if (atlasMarker.color.r != pixelColor.r || atlasMarker.color.g != pixelColor.g || atlasMarker.color.b != pixelColor.b) continue;
-                        MarkerPosition newSpriteMarker = new MarkerPosition();
-                        newSpriteMarker.type = atlasMarker.type;
-                        newSpriteMarker.objectPos.x = (x - minX) / PIXELS_PER_UNIT;
-                        newSpriteMarker.objectPos.y = (y - minY) / PIXELS_PER_UNIT;
-                        spriteMarkersList.Add(newSpriteMarker);
+                        newCustomPosition.x = (x - minX) / PIXELS_PER_UNIT;
+                        newCustomPosition.y = (y - minY) / PIXELS_PER_UNIT;
+
+                        customPositionList.Add(newCustomPosition);
                     }
                 }
             }
@@ -646,18 +645,24 @@ public class AtlasFactory : EditorWindow
 
         newSimpleSprite.worldSize.x = spriteWidth / PIXELS_PER_UNIT;
         newSimpleSprite.worldSize.y = spriteHeight / PIXELS_PER_UNIT;
-        newSimpleSprite.worldSize.z = 1f;
+        newSimpleSprite.worldSize.z = 0f;
 
-        if (foundPivot)
+        newSimpleSprite.customPositions = customPositionList.ToArray();
+
+        if (pivotFound)
         {
             MotionSprite newMotionSprite = new MotionSprite();
 
             newSimpleSprite.uvPivot.x = (pivot.x - minX) / spriteWidth;
             newSimpleSprite.uvPivot.y = (pivot.y - minY) / spriteHeight;
-            newMotionSprite.markers = spriteMarkersList.ToArray();
-            for (int i = 0; i < newMotionSprite.markers.Length; i++)
+
+            for (int i = 0; i < newSimpleSprite.customPositions.Length; i++)
             {
-                newMotionSprite.markers[i].objectPos.x -= (newSimpleSprite.uvPivot.x * newSimpleSprite.worldSize.x);
+                Vector2 customPositionPivotOffset = new Vector2();
+                customPositionPivotOffset.x = newSimpleSprite.uvPivot.x * newSimpleSprite.worldSize.x;
+                customPositionPivotOffset.y = newSimpleSprite.uvPivot.y * newSimpleSprite.worldSize.y;
+                
+                newSimpleSprite.customPositions[i] -= customPositionPivotOffset;
             }
             newMotionSprite.sprite = newSimpleSprite;
 
@@ -863,38 +868,55 @@ public class AtlasFactory : EditorWindow
         }
         atlas.slicedSprites = sliceSpritesTemp.ToArray();
     }
+
     private void DrawAtlasSprite(SimpleSprite atlasSprite, int gridIndex, MotionSprite? motionSpriteNullable = null, SliceSprite? slicedSpriteNullable = null)
     {
         Rect gridRect = GUILayoutUtility.GetRect(cellSize, cellSize, GUILayout.ExpandWidth(false));
 
-        Vector2 uvSize = new Vector2(atlasSprite.uvSizeAndPos.x, atlasSprite.uvSizeAndPos.y);
-        Vector2 uvPos = new Vector2(atlasSprite.uvSizeAndPos.z, atlasSprite.uvSizeAndPos.w);
-        
-        Rect uvRect = new Rect(uvPos, uvSize);
+        Vector2 uvSize = new Vector2();
+        uvSize.x = atlasSprite.uvSizeAndPos.x;
+        uvSize.y = atlasSprite.uvSizeAndPos.y;
+
+        Vector2 uvPos = new Vector2();
+        uvPos.x = atlasSprite.uvSizeAndPos.z;
+        uvPos.y = atlasSprite.uvSizeAndPos.w;
+
+        Rect uvRect = new Rect();
+        uvRect.position = uvPos;
+        uvRect.size = uvSize;
 
         float spritePixelWidth = atlasSprite.uvSizeAndPos.x * atlas.texture.width;
         float spritePixelHeight = atlasSprite.uvSizeAndPos.y * atlas.texture.height;
 
-        float aspectRatio = Mathf.Min(gridRect.width / spritePixelWidth, gridRect.height / spritePixelHeight);
-        Vector2 drawSize = new Vector2(spritePixelWidth * aspectRatio, spritePixelHeight * aspectRatio);
-        Rect spriteRect = new Rect(gridRect.xMin, gridRect.yMin, drawSize.x * 0.9f, drawSize.y * 0.9f);
+        float aspectWidth = gridRect.width / spritePixelWidth;
+        float aspectHeight = gridRect.height / spritePixelHeight;
+        float aspectRatio = Mathf.Min(aspectWidth, aspectHeight);
 
-        GUI.DrawTextureWithTexCoords(spriteRect, atlas.texture, uvRect);
+        Vector2 drawSize = new Vector2();
+        drawSize.x = spritePixelWidth * aspectRatio * 0.9f;
+        drawSize.y = spritePixelHeight * aspectRatio * 0.9f;
 
-        Vector2 pivotPos = new Vector2(Mathf.Lerp(spriteRect.xMin, spriteRect.xMax, atlasSprite.uvPivot.x),Mathf.Lerp(spriteRect.yMax, spriteRect.yMin, atlasSprite.uvPivot.y));
-        Rect pivotRect = new Rect(pivotPos - Vector2.one * MARKER_SIZE, Vector2.one * MARKER_SIZE);
+        Vector2 drawPos = new Vector2();
+        drawPos.x = gridRect.xMin;
+        drawPos.y = gridRect.yMin;
+
+        Rect drawRect = new Rect();
+        drawRect.position = drawPos;
+        drawRect.size = drawSize;
+
+        GUI.DrawTextureWithTexCoords(drawRect, atlas.texture, uvRect);
+
+        Vector2 pivotPos = new Vector2();
+        pivotPos.x = Mathf.Lerp(drawRect.xMin, drawRect.xMax, atlasSprite.uvPivot.x);
+        pivotPos.y = Mathf.Lerp(drawRect.yMax, drawRect.yMin, atlasSprite.uvPivot.y);
 
         Handles.BeginGUI();
-        Handles.color = atlas.pivotColor;
+        Handles.color = pivotColor;
         Handles.DrawWireDisc(pivotPos, Vector3.forward, MARKER_SIZE);
 
-        GUIStyle boldLabelTextStyle = new GUIStyle(EditorStyles.boldLabel)
-        {
-            alignment = TextAnchor.UpperLeft,
-            normal = { textColor = Color.white }
-        };
-
-
+        GUIStyle boldLabelTextStyle = new GUIStyle(EditorStyles.boldLabel);
+        boldLabelTextStyle.alignment = TextAnchor.UpperLeft;
+        boldLabelTextStyle.normal.textColor = Color.white;
 
         GUIContent indexGUIContent = new GUIContent("Index: " + atlasSprite.index.ToString());
 
@@ -902,8 +924,6 @@ public class AtlasFactory : EditorWindow
 
         Vector2 spriteIndexTextPos = new Vector2(gridRect.xMax - indexTextSize.x, gridRect.yMax - indexTextSize.y);
         Rect spriteIndexTextRect = new Rect(spriteIndexTextPos, indexTextSize);
-
-
         GUI.Label(spriteIndexTextRect, indexGUIContent, boldLabelTextStyle);
 
         Color defaultColor = Color.grey;
@@ -920,6 +940,21 @@ public class AtlasFactory : EditorWindow
                 selectedGridIndex = gridIndex;
                 previewSprite = atlasSprite;
                 e.Use();
+            }
+        }
+        if (atlasSprite.customPositions != null)
+        {
+            for (int i = 0; i < atlasSprite.customPositions.Length; i++)
+            {
+                Vector2 customPos = atlasSprite.customPositions[i];
+                Vector2 markerPixelPos = customPos * PIXELS_PER_UNIT;
+                Vector2 markerNormalized = new Vector2(markerPixelPos.x / spritePixelWidth, markerPixelPos.y / spritePixelHeight);
+                markerNormalized.x += atlasSprite.uvPivot.x;
+                markerNormalized.y += atlasSprite.uvPivot.y;
+                Vector2 markerRectPos = new Vector2(Mathf.Lerp(drawRect.xMin, drawRect.xMax, markerNormalized.x), Mathf.Lerp(drawRect.yMax, drawRect.yMin, markerNormalized.y));
+                Rect markerRect = new Rect(markerRectPos - Vector2.one * MARKER_SIZE, Vector2.one * (MARKER_SIZE * 2));
+                Handles.color = customPostionColor;
+                Handles.DrawWireDisc(markerRectPos, Vector3.forward, MARKER_SIZE);
             }
         }
 
@@ -945,27 +980,7 @@ public class AtlasFactory : EditorWindow
                     break;
                 }
             }
-            for (int i = 0; i < motionSprite.markers.Length; i++)
-            {
-                MarkerPosition marker = motionSprite.markers[i];
 
-                for (int j = 0; j < atlas.markers.Length; j++)
-                {
-                    MarkerKey atlasMarker = atlas.markers[j];
-                    if ((marker.type & atlasMarker.type) != 0)
-                    {
-                        Vector2 markerPixelPos = marker.objectPos * PIXELS_PER_UNIT;
-                        Vector2 markerNormalized = new Vector2(markerPixelPos.x / spritePixelWidth, markerPixelPos.y / spritePixelHeight);
-                        markerNormalized.x += atlasSprite.uvPivot.x;
-                        markerNormalized.y += atlasSprite.uvPivot.y;
-                        Vector2 markerRectPos =  new Vector2(Mathf.Lerp(spriteRect.xMin, spriteRect.xMax, markerNormalized.x), Mathf.Lerp(spriteRect.yMax, spriteRect.yMin, markerNormalized.y));
-                        Rect markerRect = new Rect(markerRectPos - Vector2.one * MARKER_SIZE, Vector2.one * (MARKER_SIZE * 2));
-                        Handles.color = atlasMarker.color;
-                        Handles.DrawWireDisc(markerRectPos, Vector3.forward, MARKER_SIZE);
-                        break;
-                    }
-                }
-            }
 
             GUIContent holdFramesLabelContent = new GUIContent("HF:");
             Vector2 holdFramesLabelTextSize = boldLabelTextStyle.CalcSize(holdFramesLabelContent);
@@ -1006,16 +1021,16 @@ public class AtlasFactory : EditorWindow
             {
                 SliceSprite slicedSprite = slicedSpriteNullable.Value;
                 Handles.color = Color.orange;
-                float leftPos = (slicedSprite.slice.x * spriteRect.width) + spriteRect.xMin;
-                float rightPos = (slicedSprite.slice.y * spriteRect.width) + spriteRect.xMin;
-                float bottomPos = spriteRect.yMax - (slicedSprite.slice.z * spriteRect.height);
-                float topPos = spriteRect.yMax - (slicedSprite.slice.w * spriteRect.height);
+                float leftPos = (slicedSprite.slice.x * drawRect.width) + drawRect.xMin;
+                float rightPos = (slicedSprite.slice.y * drawRect.width) + drawRect.xMin;
+                float bottomPos = drawRect.yMax - (slicedSprite.slice.z * drawRect.height);
+                float topPos = drawRect.yMax - (slicedSprite.slice.w * drawRect.height);
 
-                Handles.DrawLine(new Vector3(leftPos, spriteRect.yMin), new Vector3(leftPos, spriteRect.yMax));
-                Handles.DrawLine(new Vector3(rightPos, spriteRect.yMin), new Vector3(rightPos, spriteRect.yMax));
+                Handles.DrawLine(new Vector3(leftPos, drawRect.yMin), new Vector3(leftPos, drawRect.yMax));
+                Handles.DrawLine(new Vector3(rightPos, drawRect.yMin), new Vector3(rightPos, drawRect.yMax));
 
-                Handles.DrawLine(new Vector3(spriteRect.xMin, bottomPos), new Vector3(spriteRect.xMax, bottomPos));
-                Handles.DrawLine(new Vector3(spriteRect.xMin, topPos), new Vector3(spriteRect.xMax, topPos));
+                Handles.DrawLine(new Vector3(drawRect.xMin, bottomPos), new Vector3(drawRect.xMax, bottomPos));
+                Handles.DrawLine(new Vector3(drawRect.xMin, topPos), new Vector3(drawRect.xMax, topPos));
 
                 for (int i = 0; i < simplePivots.Length; i++)
                 {
@@ -1112,7 +1127,7 @@ public class AtlasFactory : EditorWindow
 
         if (selectedGridIndex == gridIndex)
         {
-            float quarterWidth = spriteRect.width * 0.25f;
+            float quarterWidth = drawRect.width * 0.25f;
             Vector2 shiftLeftPos = new Vector2(gridRect.center.x - quarterWidth, gridRect.center.y);
             Vector2 shiftRightPos = new Vector2(gridRect.center.x + quarterWidth, gridRect.center.y);
             Rect shiftLeftRect = new Rect(shiftLeftPos, spriteButtonSize);
@@ -1229,6 +1244,7 @@ public class AtlasFactory : EditorWindow
         }
         Handles.EndGUI();
     }
+
     private void UpdateMotionPreview()
     {
         if (atlas == null || atlas.motionSprites == null || atlas.clipDict == null) return;

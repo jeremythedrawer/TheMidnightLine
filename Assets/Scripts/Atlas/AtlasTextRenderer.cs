@@ -18,6 +18,8 @@ using static AtlasUI;
 [ExecuteAlways]
 public class AtlasTextRenderer : MonoBehaviour
 {
+    const int MAX_CHARS = 256;
+    const int MAX_LINES = 16;
     public enum AtlasTextRendererType
     {
         Simple,
@@ -35,7 +37,11 @@ public class AtlasTextRenderer : MonoBehaviour
     {
         public Vector2 size;
         public float[] lineWidthArray;
+        public string[] lineTextArray;
+
         public float maxLineWidth;
+        public int lineCount;
+        public int charCount;
     }
 
     public delegate void Callback();
@@ -46,10 +52,9 @@ public class AtlasTextRenderer : MonoBehaviour
     public TextAtlas textAtlas;
 
     [TextArea(3, 10)] public string text;
-    public float kerning = 1.1f;
-    public float spacing = 1;
+    [Range(0, 0.1f)] public float kerning = 0.02f;
+    [Range(0, 0.2f)]public float spacing = 0.04f;
     public AtlasTextAlignmentType alignmentType;
-    public Color color;
 
     [Header("Scroll Settings")]
     public float scrollSpeed;
@@ -62,7 +67,6 @@ public class AtlasTextRenderer : MonoBehaviour
     [Header("Generated")]
     public CancellationTokenSource ctsWrite;
     public CancellationTokenSource ctsChangeCustom;
-
 
     public TextBoxData textBoxData;
     
@@ -79,7 +83,6 @@ public class AtlasTextRenderer : MonoBehaviour
 
     public int customBit;
 
-    public bool hasText;
     public bool erasingText;
     public bool completedWritingText;
     [Header("Border Generated")]
@@ -91,6 +94,8 @@ public class AtlasTextRenderer : MonoBehaviour
     {
         if (textAtlas == null) return;
         if (batchKey.material == null) return;
+        textBoxData.lineWidthArray = new float[MAX_LINES];
+        textBoxData.lineTextArray = new string[MAX_LINES];
         SetText(text);
 
         bounds = GetBoundsNewText(text);
@@ -101,6 +106,15 @@ public class AtlasTextRenderer : MonoBehaviour
         textAtlas?.SetWorldSpaceLineHeight();
         RegisterTextRenderer(this);
         if (backgroundRenderer != null) backgroundRenderer.enabled = true;
+
+        worldPivotsAndSizes = new Vector4[MAX_CHARS];
+        uvSizesAndPositions = new Vector4[MAX_CHARS];
+        scalesAndFlips = new Vector4[MAX_CHARS];
+        customs = new Vector4[MAX_CHARS];
+
+        textBoxData.lineWidthArray = new float[MAX_LINES];
+        textBoxData.lineTextArray = new string[MAX_LINES];
+                SetText(text);
     }
     private void OnDisable()
     {
@@ -125,7 +139,6 @@ public class AtlasTextRenderer : MonoBehaviour
         {
             case AtlasTextRendererType.Simple:
             {
-                SetColorText(color);
             }
             break;
             case AtlasTextRendererType.Scroll:
@@ -137,7 +150,6 @@ public class AtlasTextRenderer : MonoBehaviour
             case AtlasTextRendererType.Border:
             {
                 bounds = GetBoundsNewText(text);
-                SetColorText(color);
                 SetBorderText();
             }
             break;
@@ -218,23 +230,18 @@ public class AtlasTextRenderer : MonoBehaviour
     public void SetTextWorld(string inputText, float alpha)
     {
         if (inputText == null) return;
+
         text = inputText;
 
-        int maxChars = text.Length;
-
-        worldPivotsAndSizes = new Vector4[maxChars];
-        uvSizesAndPositions = new Vector4[maxChars];
-        scalesAndFlips = new Vector4[maxChars];
-        customs = new Vector4[maxChars];
-
-        string[] words = text.Split(' ');
-        
-        List<string> linesTextList = new List<string>();
-        List<float> lineWidthList = new List<float>();
+        textBoxData.lineCount = 0;
+        textBoxData.charCount = 0;
 
         string curLineText = "";
         float curLineWidth = -kerning;
         float maxLineWidth = 0f;
+        
+        string[] words = text.Split(' ');
+
         for (int i = 0; i < words.Length; i++)
         {
             string word = words[i];
@@ -259,9 +266,9 @@ public class AtlasTextRenderer : MonoBehaviour
 
             if (curLineText.Length > 0 && newLineWidth > textBoxData.size.x)
             {
-                linesTextList.Add(curLineText);
-                lineWidthList.Add(curLineWidth);
-
+                textBoxData.lineTextArray[textBoxData.lineCount] = curLineText;
+                textBoxData.lineWidthArray[textBoxData.lineCount] = curLineWidth;
+                textBoxData.lineCount++;
                 curLineText = word;
                 curLineWidth = wordWidth - kerning;
                 if (curLineWidth > maxLineWidth) maxLineWidth = curLineWidth;
@@ -272,27 +279,29 @@ public class AtlasTextRenderer : MonoBehaviour
 
                 curLineText += word;
                 curLineWidth = newLineWidth;
-                if (curLineWidth > maxLineWidth) maxLineWidth = curLineWidth;
             }
+
+            if (curLineWidth > maxLineWidth) maxLineWidth = curLineWidth;
+            textBoxData.charCount += word.Length;
         }
 
         if (curLineText.Length > 0)
         {
-            linesTextList.Add(curLineText);
-            lineWidthList.Add(curLineWidth);
+            textBoxData.lineTextArray[textBoxData.lineCount] = curLineText;
+            textBoxData.lineWidthArray[textBoxData.lineCount] = curLineWidth;
+            textBoxData.lineCount++;
         }
 
-        textBoxData.lineWidthArray = lineWidthList.ToArray();
         textBoxData.maxLineWidth = maxLineWidth;
 
         float curPosY = -textAtlas.typeWorldHeight;
         int spriteIndex = 0;
 
 
-        for (int i = 0; i < linesTextList.Count; i++)
+        for (int i = 0; i < textBoxData.lineCount; i++)
         {
-            string line = linesTextList[i];
-            float lineWidth = lineWidthList[i];
+            string line = textBoxData.lineTextArray[i];
+            float lineWidth = textBoxData.lineWidthArray[i];
 
             float curPosX = 0;
 
@@ -348,15 +357,6 @@ public class AtlasTextRenderer : MonoBehaviour
 
         textBoxData.size.y = Mathf.Max(Mathf.Abs(curPosY + textAtlas.typeWorldHeight), textAtlas.typeWorldHeight); 
         bounds.size = new Vector2(maxLineWidth, textBoxData.size.y);
-        if (maxChars == 0)
-        {
-            hasText = false;
-        }
-        else
-        {
-            hasText = true;
-        }
-
     }
     public void CancelWriting()
     {
@@ -671,11 +671,12 @@ public class AtlasTextRendererEditor : Editor
     BoxBoundsHandle boundsHandle = new BoxBoundsHandle();
 
     Vector4 custom;
-    ColorBits colorBits;
     private void OnSceneGUI()
     {
         AtlasTextRenderer textRend = (AtlasTextRenderer)target;
 
+        EditorGUI.BeginChangeCheck();
+        
         switch(textRend.rendererType)
         {
             case AtlasTextRenderer.AtlasTextRendererType.Simple:
@@ -741,6 +742,8 @@ public class AtlasTextRendererEditor : Editor
 
     }
 
+
+    ColorBits colorBits;
     public override void OnInspectorGUI()
     {
         AtlasTextRenderer textRenderer = (AtlasTextRenderer)target;

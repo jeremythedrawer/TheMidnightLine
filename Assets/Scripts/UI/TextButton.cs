@@ -32,7 +32,7 @@ public class TextButton : MonoBehaviour
     public CancellationTokenSource ctsMove;
     public void InitButton(Callback onMouseUp = null, Callback onMouseDown = null, Callback onEnter = null, Callback onExit = null)
     {
-        OnMouseUpCallback = onMouseUp ?? MouseUpText;
+        OnMouseUpCallback = onMouseUp ?? MouseUp;
         OnMouseDownCallback = onMouseDown ?? MouseDownText;
         OnEnterCallback = onEnter ?? EnterButtonText;
         OnExitCallback = onExit ?? ExitButtonText;
@@ -100,7 +100,7 @@ public class TextButton : MonoBehaviour
         backgroundRenderer.customBit &= ~(int)ColorBits.Invert;
         textRenderer.customBit |= (int)ColorBits.Invert;
     }
-    public void MouseUpText()
+    public void MouseUp()
     {
         backgroundRenderer.customBit &= ~(int)ColorBits.Invert;
         textRenderer.customBit |= (int)ColorBits.Invert;

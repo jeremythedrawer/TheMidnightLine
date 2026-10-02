@@ -57,7 +57,7 @@ public class Menu : MonoBehaviour
                             camData.curLocationState = CameraData.LocationState.Title;
                             actionData.onBeginTrip?.Invoke();
                         }
-                        textButton.MouseUpText();
+                        textButton.MouseUp();
                     }
                     textButton.InitButton(onMouseUp: Start);
                 }
@@ -68,7 +68,7 @@ public class Menu : MonoBehaviour
                     void Options()
                     {
                         OnClickOptions?.Invoke();
-                        textButton.MouseUpText();
+                        textButton.MouseUp();
                     }
                     textButton.InitButton(Options);
                 }
@@ -80,7 +80,7 @@ public class Menu : MonoBehaviour
                     void Quit()
                     {
                         Application.Quit();
-                        textButton.MouseUpText();
+                        textButton.MouseUp();
                     }
 
                     textButton.InitButton(Quit);
@@ -92,7 +92,7 @@ public class Menu : MonoBehaviour
                     void Back()
                     {
                         OnClickBackToStartMenu?.Invoke();
-                        textButton.MouseUpText();
+                        textButton.MouseUp();
                     }
                     textButton.InitButton(Back);
                 }
@@ -103,7 +103,7 @@ public class Menu : MonoBehaviour
                     void Continue()
                     {
                         OnClickContinueMenu?.Invoke();
-                        textButton.MouseUpText();
+                        textButton.MouseUp();
                     }
                     textButton.InitButton(Continue);
                 }

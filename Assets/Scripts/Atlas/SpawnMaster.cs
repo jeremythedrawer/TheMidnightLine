@@ -31,13 +31,13 @@ public class SpawnMaster : MonoBehaviour
     public Queue<DelayedParticleData> delayedParticlesQueue;
     private void OnEnable()
     {
-        SpyBrain.OnTalkToPassenger += ChangeParticles;
+        //SpyBrain.OnTalkToPassenger += ChangeParticles;
         TrainController.OnMetersAtSpawnBounds += DespawnEdgeScrollers;
         actionData.onCreatedPassengerProfiles += Init;
     }
     private void OnDisable()
     {
-        SpyBrain.OnTalkToPassenger -= ChangeParticles;
+        //SpyBrain.OnTalkToPassenger -= ChangeParticles;
         TrainController.OnMetersAtSpawnBounds -= DespawnEdgeScrollers;
         actionData.onCreatedPassengerProfiles -= Init;
         Dispose();

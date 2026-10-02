@@ -337,15 +337,15 @@ public class AtlasRenderer : MonoBehaviour
         }
         MotionSprite motionSprite = GetNextKeyframeIndex(atlas, clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
 
-        if (motionSprite.sprite.index == sprite.index)
-        {
-            return;
-        }
+        if (motionSprite.sprite.index == sprite.index) return;
+        
+        sprite = motionSprite.sprite;
+
         onChangeKeyframe?.Invoke(motionSprite);
 
-        if (markerTransform != null && motionSprite.markers.Length > 0)
+        if (markerTransform != null && sprite.customPositions.Length > 0)
         {
-            Vector3 markerPos = motionSprite.markers[0].objectPos;
+            Vector3 markerPos = sprite.customPositions[0];
             if (flipX) markerPos.x *= -1;
             markerPos.z = markerTransform.localPosition.z;
             markerTransform.localPosition = markerPos;
@@ -358,7 +358,6 @@ public class AtlasRenderer : MonoBehaviour
             
         }
 
-        sprite = motionSprite.sprite;
         UpdateSpriteInputs(sprite);
         isAnimating = true;
     }
@@ -369,44 +368,6 @@ public class AtlasRenderer : MonoBehaviour
         ctsOneShot = new CancellationTokenSource();
 
         PlayingClipOneShot(clip, markerTransform, callback, audioSource, audioData).Forget();
-    }
-    public void PlayClipReverse(AtlasClip clip, Transform markerTransform = null)
-    {
-        MotionSprite motionSprite = GetNextKeyframeSpriteReverse(atlas, clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
-        if (motionSprite.sprite.index == sprite.index) return;
-
-        if (markerTransform != null && motionSprite.markers.Length > 0)
-        {
-            Vector3 markerPos = motionSprite.markers[0].objectPos;
-            if (flipX) markerPos.x *= -1;
-            markerPos.z = markerTransform.localPosition.z;
-            markerTransform.localPosition = markerPos;
-        }
-        sprite = motionSprite.sprite;
-        UpdateSpriteInputs(sprite);
-    }
-    public void PlayClipOneShotReverse(AtlasClip clip, Transform markerTransform = null, OnFinishOneShot callback = null)
-    {
-        ctsOneShot?.Cancel();
-        ctsOneShot = null;
-        ctsOneShot = new CancellationTokenSource();
-        PlayingClipOneShotReverse(clip, markerTransform, callback).Forget();
-
-    }
-    public void PlayManualClip(ref AtlasClip clip, float currentTime, Transform markerTransform = null)
-    {
-        MotionSprite motionSprite = GetNextKeyframeSpriteManual(atlas, clip, currentTime);
-        if (motionSprite.sprite.index == sprite.index) return;
-
-        if (markerTransform != null && motionSprite.markers.Length > 0)
-        {
-            Vector3 markerPos = motionSprite.markers[0].objectPos;
-            if (flipX) markerPos.x *= -1;
-            markerPos.z = markerTransform.localPosition.z;
-            markerTransform.localPosition = markerPos;
-        }
-        sprite = motionSprite.sprite;
-        UpdateSpriteInputs(sprite);
     }
     public void ChangeCustom(float time, float newValue, int customChannel)
     {
@@ -440,10 +401,6 @@ public class AtlasRenderer : MonoBehaviour
             break;
         }
     }
-    public void SetAlpha(float alpha)
-    {
-        custom.w = alpha;
-    }
     private async UniTask PlayingClipOneShot(AtlasClip clip, Transform markerTransform = null, OnFinishOneShot callback = null, AudioSource audioSource = null, AudioData audioData = null)
     {
         keyframeClock = 0;
@@ -456,26 +413,26 @@ public class AtlasRenderer : MonoBehaviour
             {
                 MotionSprite motionSprite = GetNextKeyframeIndex(atlas, clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
 
-                if (motionSprite.sprite.index != sprite.index)
+                if (motionSprite.sprite.index == sprite.index) await UniTask.Yield(ctsOneShot.Token);
+
+                sprite = motionSprite.sprite;
+                onChangeKeyframe?.Invoke(motionSprite);
+               
+                if (markerTransform != null && sprite.customPositions.Length > 0)
                 {
-                    if (markerTransform != null && motionSprite.markers.Length > 0)
-                    {
-                        Vector3 markerPos = motionSprite.markers[0].objectPos;
-                        if (flipX) markerPos.x *= -1;
-                        markerPos.z = markerTransform.localPosition.z;
-                        markerTransform.localPosition = markerPos;
-                    }
-                    if (motionSprite.audioIndex != -1)
-                    {
-                        audioSource.volume = audioData.soundEffectsVolume;
-                        audioSource.PlayOneShot(clip.audioClips[motionSprite.audioIndex]);
-                    }
-                    sprite = motionSprite.sprite;
-                    UpdateSpriteInputs(sprite);
-
-                    onChangeKeyframe?.Invoke(motionSprite);
-
+                    Vector3 markerPos = sprite.customPositions[0];
+                    if (flipX) markerPos.x *= -1;
+                    markerPos.z = markerTransform.localPosition.z;
+                    markerTransform.localPosition = markerPos;
                 }
+                if (motionSprite.audioIndex != -1)
+                {
+                    audioSource.volume = audioData.soundEffectsVolume;
+                    audioSource.PlayOneShot(clip.audioClips[motionSprite.audioIndex]);
+                }
+                UpdateSpriteInputs(sprite);
+
+                onChangeKeyframe?.Invoke(motionSprite);
                 await UniTask.Yield(ctsOneShot.Token);
             }
             isAnimating = false;
@@ -486,46 +443,6 @@ public class AtlasRenderer : MonoBehaviour
         }
         catch (OperationCanceledException)
         { 
-            isAnimating = false;
-        }
-    }
-    private async UniTask PlayingClipOneShotReverse(AtlasClip clip, Transform markerTransform = null, OnFinishOneShot callback = null)
-    {
-        keyframeClock = 0;
-        curFrameIndex = clip.keyframeEndIndex;
-        try
-        {
-            isAnimating = true;
-            while (curFrameIndex > clip.keyframeStartIndex)
-            {
-                MotionSprite motionSprite = GetNextKeyframeSpriteReverse(atlas, clip, ref keyframeClock, ref curFrameIndex, ref prevFrameIndex);
-
-                if (motionSprite.sprite.index != sprite.index)
-                {
-                    if (markerTransform != null && motionSprite.markers.Length > 0)
-                    {
-                        Vector3 markerPos = motionSprite.markers[0].objectPos;
-                        if (flipX) markerPos.x *= -1;
-                        markerPos.z = markerTransform.localPosition.z;
-                        markerTransform.localPosition = markerPos;
-                    }
-                    sprite = motionSprite.sprite;
-                    UpdateSpriteInputs(sprite);
-
-                    onChangeKeyframe?.Invoke(motionSprite);
-                }
-
-                await UniTask.Yield(ctsOneShot.Token);
-            }
-            isAnimating = false;
-            if (callback != null)
-            {
-                callback();
-            }
-
-        }
-        catch (OperationCanceledException)
-        {
             isAnimating = false;
         }
     }

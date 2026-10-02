@@ -93,12 +93,19 @@ public class CursorData : ScriptableObject
             return;
         }
 
-        for (int i = 0; i < hoverCount; i++)
+        if (hoverCount == 1)
         {
-            float depth = buttonDepths[i];
-            if (depth < curDepth)
+            curDepth = buttonDepths[0];
+        }
+        else
+        {
+            for (int i = 0; i < hoverCount; i++)
             {
-                curDepth = depth;
+                float depth = buttonDepths[i];
+                if (depth < curDepth)
+                {
+                    curDepth = depth;
+                }
             }
         }
 

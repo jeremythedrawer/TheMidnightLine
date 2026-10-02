@@ -159,12 +159,21 @@ public class PassengerBrain : MonoBehaviour
         void Enter()
         {
             atlasRenderer.customBit |= (int)ColorBits.BlueChannel;
-            
+
+            if (cursorData.curPassengerSelectionMode == CursorData.PassengerSelectionMode.Unmasking)
+            {
+                cursorData.curCursorSpriteType = CursorData.CursorSpriteType.Eye;
+            }
+            else
+            {
+                cursorData.curCursorSpriteType = CursorData.CursorSpriteType.Pencil;
+            }
         }
         void Exit()
         {
             atlasRenderer.customBit &= ~(int)ColorBits.BlueChannel;
             atlasRenderer.customBit &= ~(int)ColorBits.Invert;
+            cursorData.curCursorSpriteType = CursorData.CursorSpriteType.Point;
         }
         void MouseUp()
         {
@@ -172,7 +181,8 @@ public class PassengerBrain : MonoBehaviour
             if (cursorData.curPassengerSelectionMode == CursorData.PassengerSelectionMode.Unmasking)
             {
                 atlasRenderer.customBit |= (int)ColorBits.RedChannel;
-                uiData.curDialogueText = disembarkingStation.places[profile.placeIndex];
+                uiData.curDialogueText = disembarkingStation.places[profile.placeIndex];                
+
                 actionData.onFocusPassenger?.Invoke();
             }
             else
@@ -429,7 +439,7 @@ public class PassengerBrain : MonoBehaviour
 
                 if (curGlyph != null)
                 {
-                    if (atlas.motionSprites[atlasRenderer.sprite.index].markers.Length > 0)
+                    if (atlasRenderer.sprite.customPositions.Length > 0)
                     {
                         if (!playingGlyph)
                         {
@@ -1024,7 +1034,6 @@ public class PassengerBrain : MonoBehaviour
         Habits selectedBehaviour = allowedBehaviours[UnityEngine.Random.Range(0, allowedBehaviours.Count)];
         return selectedBehaviour;
     }
-
     public static void SetActivePassengerToNull()
     {
         ActivePassenger = null;

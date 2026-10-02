@@ -25,8 +25,6 @@ public class Options : ScriptableObject
 
     public SpyData spyData;
 
-    public HenchmanBrain henchmanPrefab;
-
     public float dayNightTransitionTime = 5f;
     [Header("User Picked")]
     public RegionData curRegion;

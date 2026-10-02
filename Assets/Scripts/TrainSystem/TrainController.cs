@@ -71,13 +71,11 @@ public class TrainController : MonoBehaviour
     }
     private void OnEnable()
     {
-        SpyBrain.OnTalkToPassenger += UpdateTicketInspectParams;
         actionData.onBeginTrip += MoveTrainToStartPosition;
         actionData.onAtFirstStation += MoveTrainToStartPosition;
     }
     private void OnDisable()
     {
-        SpyBrain.OnTalkToPassenger -= UpdateTicketInspectParams;
         actionData.onBeginTrip -= MoveTrainToStartPosition;
         actionData.onAtFirstStation -= MoveTrainToStartPosition;
         

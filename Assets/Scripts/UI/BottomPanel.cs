@@ -2,6 +2,7 @@ using Cysharp.Threading.Tasks;
 using System;
 using System.Threading;
 using UnityEngine;
+using static Atlas;
 using static AtlasUI;
 using static Passenger;
 
@@ -26,6 +27,7 @@ public class BottomPanel : MonoBehaviour
     public ActionData actionData;
     public UIData uiData;
     public PassengersData passengersData;
+    public CursorData cursorData;
 
     [Header("Trip Map")]
     public Transform tripMapGroup;
@@ -43,7 +45,10 @@ public class BottomPanel : MonoBehaviour
     public Transform stationGroup;
     public AtlasTextRenderer stationNameTextRenderer;
     public AtlasTextRenderer[] stationPlaceTextRenderers;
+    public AtlasRenderer stationMapRenderer;
     public IconButton stationExitButton;
+    public TextButton stationNextButton;
+    public TextButton stationPreviousButton;
     
     [Header("Generated")]
     public IconButton[] stationIconButtons;
@@ -98,9 +103,31 @@ public class BottomPanel : MonoBehaviour
 
         transform.localPosition = uiData.inactiveBottomPaneLocalPos;
         curLocalPosition = transform.localPosition;
+
+        void SuspectingMouseUp()
+        {
+            suspectingButton.MouseUp();
+            cursorData.curPassengerSelectionMode = CursorData.PassengerSelectionMode.Suspecting;
+            suspectingButton.backgroundRenderer.customBit |= (int)ColorBits.Meridia;
+            unmaskingButton.backgroundRenderer.customBit &= ~(int)ColorBits.Meridia;
+            
+        }
+        void UnmaskingMouseUp()
+        {
+            suspectingButton.MouseUp();
+            cursorData.curPassengerSelectionMode = CursorData.PassengerSelectionMode.Unmasking;
+            unmaskingButton.backgroundRenderer.customBit |= (int)ColorBits.Meridia;
+            suspectingButton.backgroundRenderer.customBit &= ~(int)ColorBits.Meridia;
+        }
+
+        suspectingButton.InitButton(onMouseUp: SuspectingMouseUp);
+        unmaskingButton.InitButton(onMouseUp: UnmaskingMouseUp);
     }
     private void Update()
     {
+        suspectingButton.UpdateButton();
+        unmaskingButton.UpdateButton();
+
         if ((curGroups & Groups.Traitors) != 0)
         {
             for (int i = 0; i < traitorMugshotIconButtons.Length; i++)
@@ -132,6 +159,8 @@ public class BottomPanel : MonoBehaviour
         if ((curGroups & Groups.Station) != 0)
         {
             stationExitButton.UpdateButton();
+            stationNextButton.UpdateButton();
+            stationPreviousButton.UpdateButton();
         }
     }
     private void SetTraitorsGroup()
@@ -193,18 +222,28 @@ public class BottomPanel : MonoBehaviour
             IconButton stationIconButton = Instantiate(uiData.tripMapStationButton, tripMapLineRenderer.transform);
             localPos.x = startXPos + (stationSegment * i);
 
-            int checksToStation = i * 3;
+            SimpleSprite stationMapSprite = stationMapRenderer.atlas.simpleSprites[i];
             void OnMouseUp()
             {
                 stationIconButton.MouseUp();
                 curStationData = stationData;
                 stationNameTextRenderer.SetText(curStationData.name);
-
+                stationMapRenderer.UpdateSpriteInputs(stationMapSprite);
                 for (int j = 0; j < stationPlaceTextRenderers.Length; j++)
                 {
                     AtlasTextRenderer textRenderer = stationPlaceTextRenderers[j];
+                    
                     string place = curStationData.places[j];
                     textRenderer.SetText(place);
+                    
+                    Vector2 placePos = stationMapSprite.customPositions[j];
+                    
+                    Vector3 placeLocalPos = new Vector3();
+                    placeLocalPos.x = placePos.x;
+                    placeLocalPos.y = placePos.y;
+                    placeLocalPos.z = textRenderer.transform.localPosition.z;
+
+                    textRenderer.transform.localPosition = placeLocalPos;
                 }
                 TransitionGroup(stationGroup, tripMapGroup, ctsTransitionRight);
                 curGroups |= Groups.Station;
@@ -226,14 +265,75 @@ public class BottomPanel : MonoBehaviour
     }
     private void SetStationGroup()
     {
-        void MouseUp()
+        void ExitMouseUp()
         {
             stationExitButton.MouseUp();
             TransitionGroup(tripMapGroup, stationGroup, ctsTransitionRight);
             curGroups |= Groups.TripMap;
             curGroups &= ~Groups.Station;
         }
-        stationExitButton.InitButton(onMouseUp: MouseUp);
+        void PrevStationMouseUp()
+        {
+            stationPreviousButton.MouseUp();
+            int prevStationIndex = curStationData.stationIndex - 1;
+            if (prevStationIndex < 0) prevStationIndex = options.curTrip.stationsDataArray.Length - 1;
+
+            curStationData = options.curTrip.stationsDataArray[prevStationIndex];
+            SimpleSprite stationMapSprite = stationMapRenderer.atlas.simpleSprites[prevStationIndex];
+
+            stationNameTextRenderer.SetText(curStationData.name);
+            
+            stationMapRenderer.UpdateSpriteInputs(stationMapSprite);
+
+            for (int j = 0; j < stationPlaceTextRenderers.Length; j++)
+            {
+                AtlasTextRenderer textRenderer = stationPlaceTextRenderers[j];
+
+                string place = curStationData.places[j];
+                textRenderer.SetText(place);
+
+                Vector2 placePos = stationMapSprite.customPositions[j];
+
+                Vector3 placeLocalPos = new Vector3();
+                placeLocalPos.x = placePos.x;
+                placeLocalPos.y = placePos.y;
+                placeLocalPos.z = textRenderer.transform.localPosition.z;
+
+                textRenderer.transform.localPosition = placeLocalPos;
+            }
+        }
+        void NextStationMouseUp()
+        {
+            stationNextButton.MouseUp();
+            int nextStationIndex = curStationData.stationIndex + 1;
+            if (nextStationIndex == options.curTrip.stationsDataArray.Length) nextStationIndex = 0;
+            curStationData = options.curTrip.stationsDataArray[nextStationIndex];
+            SimpleSprite stationMapSprite = stationMapRenderer.atlas.simpleSprites[nextStationIndex];
+
+            stationNameTextRenderer.SetText(curStationData.name);
+
+            stationMapRenderer.UpdateSpriteInputs(stationMapSprite);
+
+            for (int j = 0; j < stationPlaceTextRenderers.Length; j++)
+            {
+                AtlasTextRenderer textRenderer = stationPlaceTextRenderers[j];
+
+                string place = curStationData.places[j];
+                textRenderer.SetText(place);
+
+                Vector2 placePos = stationMapSprite.customPositions[j];
+
+                Vector3 placeLocalPos = new Vector3();
+                placeLocalPos.x = placePos.x;
+                placeLocalPos.y = placePos.y;
+                placeLocalPos.z = textRenderer.transform.localPosition.z;
+
+                textRenderer.transform.localPosition = placeLocalPos;
+            }
+        }
+        stationExitButton.InitButton(onMouseUp: ExitMouseUp);
+        stationPreviousButton.InitButton(onMouseUp:  PrevStationMouseUp);
+        stationNextButton.InitButton(onMouseUp:  NextStationMouseUp);
     }
     private void SetProfileGroup()
     {
@@ -255,7 +355,7 @@ public class BottomPanel : MonoBehaviour
 
             void MouseUp()
             {
-                stationButton.MouseUpText();
+                stationButton.MouseUp();
                 stationButton.backgroundRenderer.customBit ^= (int)ColorBits.Meridia;
                 
                 if (curTraitorProfile.selectedStationIndex == index)

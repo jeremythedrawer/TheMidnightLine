@@ -105,7 +105,7 @@ public class DialogueBubble : MonoBehaviour
         {
             textRenderer.EraseText(WRITE_LETTER_TIME);
 
-            while(textRenderer.hasText) await UniTask.Yield();
+            while(textRenderer.textBoxData.charCount != 0) await UniTask.Yield();
 
             while (clock >= 0)
             {
