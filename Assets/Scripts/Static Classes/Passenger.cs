@@ -88,8 +88,8 @@ public static class Passenger
         public int boardingStationIndex;
         public int disembarkingStationIndex;
         public int placeIndex;
-
         public int prefabIndex;
+        public int id;
         public Habits habits;
     }
     [Serializable] public struct TraitorProfile

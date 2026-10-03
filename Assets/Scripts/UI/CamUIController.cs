@@ -33,39 +33,36 @@ public class CamUIController : MonoBehaviour
 
     private void OnEnable()
     {
+        actionData.onSuspect += Suspect;
+        actionData.onUnsuspect += FadeOut;
     }
+
     private void OnDisable()
     {
+        actionData.onSuspect -= Suspect;
+        actionData.onUnsuspect -= FadeOut;
     }
-    public void Start()
-    {
-        Init();
-    }
-    private void Init()
-    {
-        fadeBlack.SetAlpha(value: 1);
-        fadeBlack.FadeOut(time: 1);
-    }
-    public void WriteTitleText()
-    {
-        fadeBlack.AndTextBit(ColorBits.Invert);
-        fadeBlack.WriteTitleText();
-    }
+
     public void SetTitleAlpha(float alpha)
     {
         fadeBlack.SetTitleTextAlpha(alpha);
+    }
+    public void Suspect()
+    {
+        fadeBlack.FadeIn(value: 0.8f, time: 0.5f, fadeBlackZPos: 8, usePassengerStencil: true);
+    }
+    public void FadeOut()
+    {
+        fadeBlack.FadeOut(time: 0.5f);
     }
     public void DissappearTitleAlpha()
     {
         fadeBlack.DissappearText(1f);
     }
+    
     public void SetTitleText()
     {
         fadeBlack.SetTitleText();
-    }
-    private void FadeOut()
-    {
-        fadeBlack.FadeOut(time: 0.5f);
     }
 }
 

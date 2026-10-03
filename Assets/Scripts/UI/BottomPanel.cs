@@ -10,6 +10,8 @@ public class BottomPanel : MonoBehaviour
 {
     const float TRANSITION_TIME = 1f;
     const float MOVE_TIME = 1f;
+    const float STATION_BUTTON_ROW_MOVE_TIME = 0.25f;
+    const float OUTCOME_TIME = 2f;
     [Flags] public enum Groups
     { 
         None = 0,
@@ -20,8 +22,6 @@ public class BottomPanel : MonoBehaviour
     }
 
     public AtlasRenderer atlasRenderer;
-    public TextButton unmaskingButton;
-    public TextButton suspectingButton;
 
     public Options options;
     public ActionData actionData;
@@ -40,7 +40,9 @@ public class BottomPanel : MonoBehaviour
     public AtlasRenderer profileMugshotRenderer;
     public IconButton profileExitButton;
     public AtlasTextRenderer[] profileHabitTextRenderers;
+    public AtlasTextRenderer profileWhatStationTextRenderer;
     public TextButton[] profileStationButtons;
+    public TextButton suspectingButton;
     [Header("Station")]
     public Transform stationGroup;
     public AtlasTextRenderer stationNameTextRenderer;
@@ -54,7 +56,9 @@ public class BottomPanel : MonoBehaviour
     public IconButton[] stationIconButtons;
 
     public StationSO curStationData;
-    
+
+    public float[] profileStationButtonPosYs;
+
     public TraitorProfile curTraitorProfile;
 
     public Vector3 curLocalPosition;
@@ -63,70 +67,51 @@ public class BottomPanel : MonoBehaviour
 
     public float activeGroupHeight;
     public float inactiveGroupHeight;
-
     public float moveClock;
 
     public int selectedProfileStationButtonIndex;
 
+    public bool profilStationButtonsActive;
+
     public CancellationTokenSource ctsTransitionLeft;
     public CancellationTokenSource ctsTransitionRight;
     public CancellationTokenSource ctsMove;
+    public CancellationTokenSource ctsProfileStationButtonTransition;
+    public CancellationTokenSource ctsRevealTraitorOutcome;
+
     private void OnEnable()
     {
         actionData.onBeginTrip += SetTripMapGroup;
         actionData.onBeginTrip += SetProfileGroup;
         actionData.onBeginTrip += SetStationGroup;
+
         actionData.onAtFirstStation += MoveToActivePosition;
+
         actionData.onCreatedPassengerProfiles += SetTraitorsGroup;
+
+        actionData.onSuspectPassenger += ShowStationButtons;
     }
     private void OnDisable()
     {
         actionData.onBeginTrip -= SetTripMapGroup;
         actionData.onBeginTrip -= SetProfileGroup;
         actionData.onBeginTrip -= SetStationGroup;
+
         actionData.onAtFirstStation -= MoveToActivePosition;
+
         actionData.onCreatedPassengerProfiles -= SetTraitorsGroup;
 
-        ctsTransitionLeft?.Cancel();
-        ctsTransitionLeft?.Dispose();
+        actionData.onSuspectPassenger -= ShowStationButtons;
 
-        ctsTransitionRight?.Cancel();
-        ctsTransitionRight?.Dispose();
-        
-        ctsMove?.Cancel();
-        ctsMove?.Dispose();
+        CleanUpCancelTokens();
     }
     private void Start()
     {
-        activeGroupHeight = traitorsGroup.localPosition.y;
-        inactiveGroupHeight = profileGroup.localPosition.y;
-
-        transform.localPosition = uiData.inactiveBottomPaneLocalPos;
-        curLocalPosition = transform.localPosition;
-
-        void SuspectingMouseUp()
-        {
-            suspectingButton.MouseUp();
-            cursorData.curPassengerSelectionMode = CursorData.PassengerSelectionMode.Suspecting;
-            suspectingButton.backgroundRenderer.customBit |= (int)ColorBits.Meridia;
-            unmaskingButton.backgroundRenderer.customBit &= ~(int)ColorBits.Meridia;
-            
-        }
-        void UnmaskingMouseUp()
-        {
-            suspectingButton.MouseUp();
-            cursorData.curPassengerSelectionMode = CursorData.PassengerSelectionMode.Unmasking;
-            unmaskingButton.backgroundRenderer.customBit |= (int)ColorBits.Meridia;
-            suspectingButton.backgroundRenderer.customBit &= ~(int)ColorBits.Meridia;
-        }
-
-        suspectingButton.InitButton(onMouseUp: SuspectingMouseUp);
-        unmaskingButton.InitButton(onMouseUp: UnmaskingMouseUp);
+        Init();
     }
     private void Update()
     {
         suspectingButton.UpdateButton();
-        unmaskingButton.UpdateButton();
 
         if ((curGroups & Groups.Traitors) != 0)
         {
@@ -149,10 +134,15 @@ public class BottomPanel : MonoBehaviour
         if ((curGroups & Groups.Profile) != 0)
         {
             profileExitButton.UpdateButton();
-            for (int i = 0; i < profileStationButtons.Length; i++)
+            suspectingButton.UpdateButton();
+
+            if (profilStationButtonsActive)
             {
-                TextButton stationButton = profileStationButtons[i];
-                stationButton.UpdateButton();
+                for (int i = 0; i < profileStationButtons.Length; i++)
+                {
+                    TextButton stationButton = profileStationButtons[i];
+                    stationButton.UpdateButton();
+                }
             }
         }
 
@@ -162,6 +152,60 @@ public class BottomPanel : MonoBehaviour
             stationNextButton.UpdateButton();
             stationPreviousButton.UpdateButton();
         }
+    }
+    private void Init()
+    {
+        activeGroupHeight = traitorsGroup.localPosition.y;
+        inactiveGroupHeight = profileGroup.localPosition.y;
+
+        transform.localPosition = uiData.inactiveBottomPaneLocalPos;
+        curLocalPosition = transform.localPosition;
+        profileWhatStationTextRenderer.SetText("");
+    }
+    private void CleanUpCancelTokens()
+    {
+        ctsTransitionLeft?.Cancel();
+        ctsTransitionLeft?.Dispose();
+
+        ctsTransitionRight?.Cancel();
+        ctsTransitionRight?.Dispose();
+        
+        ctsMove?.Cancel();
+        ctsMove?.Dispose();
+
+        ctsProfileStationButtonTransition?.Cancel();
+        ctsProfileStationButtonTransition?.Dispose();
+
+        ctsRevealTraitorOutcome?.Cancel();
+        ctsRevealTraitorOutcome?.Dispose();
+    }
+    private void ShowStationButtons()
+    {
+        if (profileWhatStationTextRenderer.text != "") return;
+        
+        void ShowStationButtons()
+        {
+            ctsProfileStationButtonTransition?.Cancel();
+            ctsProfileStationButtonTransition = new CancellationTokenSource();
+
+            for (int i = 0; i < profileStationButtons.Length; i++)
+            {
+                TextButton stationButton = profileStationButtons[i];
+                string stationName = options.curTrip.stationsDataArray[i].name;
+                stationButton.textRenderer.SetText(stationName);
+                Vector3 localPos = new Vector3();
+                localPos.x = stationButton.transform.localPosition.x;
+                localPos.y = profileWhatStationTextRenderer.transform.localPosition.y;
+                localPos.z = stationButton.transform.localPosition.z;
+                stationButton.transform.localPosition = localPos;
+            }
+
+            ShowingStationButtons().Forget();
+        }
+        
+        string whatStationText = "What station are they going to?";
+        
+        profileWhatStationTextRenderer.WriteText(whatStationText, writeLetterTime: 0.02f, callback: ShowStationButtons);
     }
     private void SetTraitorsGroup()
     {
@@ -200,8 +244,11 @@ public class BottomPanel : MonoBehaviour
                 curGroups |= Groups.Profile;
                 curGroups &= ~Groups.Traitors;
             }
-
-            mugShotIcon.InitButton(onMouseUp: OnMouseUp);
+            void OnMouseExit()
+            {
+                atlasRenderer.customBit &= ~(int)ColorBits.GreenChannel;
+            }
+            mugShotIcon.InitButton(onMouseUp: OnMouseUp, onExit: OnMouseExit);
         }
     }
     private void SetTripMapGroup()
@@ -340,13 +387,69 @@ public class BottomPanel : MonoBehaviour
         void OnMouseUpExit()
         {
             profileExitButton.MouseUp();
-
-            TransitionGroup(traitorsGroup, profileGroup, ctsTransitionLeft);
+            
+            cursorData.curPassengerSelectionMode = CursorData.PassengerSelectionMode.Unmasking;
+            suspectingButton.backgroundRenderer.customBit &= ~(int)ColorBits.Meridia;
+            suspectingButton.textRenderer.SetText("Suspect");
+            HideStationButtons();
+            PassengerBrain.UnsuspectActivePassenger();
+            actionData.onUnsuspect?.Invoke();
 
             curGroups |= Groups.Traitors;
             curGroups &= ~Groups.Profile;
+            TransitionGroup(traitorsGroup, profileGroup, ctsTransitionLeft);
         }
         profileExitButton.InitButton(onMouseUp: OnMouseUpExit);
+        
+        void SuspectingMouseUp()
+        {
+            suspectingButton.MouseUp();
+            if (cursorData.curPassengerSelectionMode == CursorData.PassengerSelectionMode.Suspecting)
+            {
+                if (curTraitorProfile.selectedStationIndex == -1)
+                {
+                    cursorData.curPassengerSelectionMode = CursorData.PassengerSelectionMode.Unmasking;
+                    suspectingButton.backgroundRenderer.customBit &= ~(int)ColorBits.Meridia;
+                    suspectingButton.textRenderer.SetText("Suspect");
+                    HideStationButtons();
+                    PassengerBrain.UnsuspectActivePassenger();
+                    actionData.onUnsuspect?.Invoke();
+                }
+                else
+                {
+                    bool selectedCorrectStation = curTraitorProfile.selectedStationIndex == curTraitorProfile.passengerProfile.disembarkingStationIndex;
+                    bool selectedCorrectPassneger = curTraitorProfile.passengerProfile.id == PassengerBrain.ActivePassenger.profile.id;
+                    if (selectedCorrectPassneger && selectedCorrectStation)
+                    {
+                        profileMugshotRenderer.customBit |= (int)ColorBits.RedChannel;
+                    }
+                    else
+                    {
+                       profileMugshotRenderer.customBit |= (int)ColorBits.BlueChannel;
+                    }
+
+                    ctsRevealTraitorOutcome?.Cancel();
+                    ctsRevealTraitorOutcome = new CancellationTokenSource();
+                    RevealingTraitorOutcome().Forget();
+                }
+            }
+            else
+            {
+                cursorData.curPassengerSelectionMode = CursorData.PassengerSelectionMode.Suspecting;
+                suspectingButton.backgroundRenderer.customBit |= (int)ColorBits.Meridia;
+                suspectingButton.textRenderer.SetText("Cancel");
+                actionData.onSuspect?.Invoke();                
+            }
+        }
+        suspectingButton.InitButton(onMouseUp: SuspectingMouseUp);
+
+        int profileStationButtonRows = Mathf.CeilToInt(profileStationButtons.Length * 0.5f);
+        profileStationButtonPosYs = new float[profileStationButtonRows];
+        for (int i = 0; i < profileStationButtonRows; i++)
+        {
+            TextButton profileStationButton = profileStationButtons[i];
+            profileStationButtonPosYs[i] = profileStationButton.transform.localPosition.y;
+        }
 
         for (int i = 0; i < profileStationButtons.Length; i++)
         {
@@ -361,6 +464,7 @@ public class BottomPanel : MonoBehaviour
                 if (curTraitorProfile.selectedStationIndex == index)
                 {
                     curTraitorProfile.selectedStationIndex = -1;
+                    suspectingButton.textRenderer.SetText("Cancel");
                 }
                 else
                 {
@@ -370,10 +474,13 @@ public class BottomPanel : MonoBehaviour
                     }
                     curTraitorProfile.selectedStationIndex = index;
                     selectedProfileStationButtonIndex = index;
+
+                    suspectingButton.textRenderer.SetText("Submit");
                 }
                 options.curTrip.traitorProfiles[curTraitorProfile.traitorIndex] = curTraitorProfile;
             }
             stationButton.InitButton(onMouseUp: MouseUp);
+            stationButton.textRenderer.SetText("");
         }
     }
     private void TransitionGroup(Transform toGroup, Transform fromGroup, CancellationTokenSource cts)
@@ -389,6 +496,12 @@ public class BottomPanel : MonoBehaviour
         ctsMove = new CancellationTokenSource();
 
         MovingToActivePosition().Forget();
+    }
+    private void HideStationButtons()
+    {
+        ctsProfileStationButtonTransition?.Cancel();
+        ctsProfileStationButtonTransition = new CancellationTokenSource();
+        HidingStationButtons().Forget();
     }
     private async UniTask TransitioningGroups(Transform toGroup, Transform fromGroup, CancellationTokenSource cts)
     {
@@ -444,5 +557,137 @@ public class BottomPanel : MonoBehaviour
         catch (OperationCanceledException)
         {
         }
+    }
+    private async UniTask ShowingStationButtons()
+    {
+        float clock = 0;
+        Vector3 localPos = new Vector3();
+
+        int curRowIndex = profileStationButtonPosYs.Length - 1;
+        float prevTargetPosY = profileWhatStationTextRenderer.transform.localPosition.y;
+        float curTargetPosY =  profileStationButtonPosYs[curRowIndex];
+        try
+        {
+            while(true)
+            {
+                float t = clock / STATION_BUTTON_ROW_MOVE_TIME;
+                t = Curves.EaseInOutCubic(t);
+                clock += Time.deltaTime;
+
+                localPos.y = Mathf.Lerp(prevTargetPosY, curTargetPosY, t);
+                for (int i = 0; i < profileStationButtons.Length; i++)
+                {
+                    TextButton stationButton = profileStationButtons[i];                
+                    float rowIndex = i % profileStationButtonPosYs.Length;
+
+                    if (rowIndex > curRowIndex) continue;
+
+                    localPos.x = stationButton.transform.localPosition.x;
+                    localPos.z = profileWhatStationTextRenderer.transform.localPosition.z + ((profileStationButtonPosYs.Length - rowIndex) * 0.02f);
+                    stationButton.transform.localPosition = localPos;
+                }
+
+                if (clock > STATION_BUTTON_ROW_MOVE_TIME)
+                {
+                    curRowIndex--;
+                    if (curRowIndex < 0) break;
+                    prevTargetPosY = curTargetPosY;
+                    curTargetPosY = profileStationButtonPosYs[curRowIndex];
+                    clock = 0;                
+                }
+                await UniTask.Yield(ctsProfileStationButtonTransition.Token);
+            }
+            profilStationButtonsActive = true;
+        }
+        catch(OperationCanceledException)
+        {
+
+        }
+    }
+    private async UniTask HidingStationButtons()
+    {
+        float clock = 0;
+        Vector3 localPos = new Vector3();
+
+        int curRowIndex = 1;
+        float prevTargetPosY = profileStationButtonPosYs[0];
+        float curTargetPosY = profileStationButtonPosYs[curRowIndex];
+        try
+        {
+            while (true)
+            {
+                float t = clock / STATION_BUTTON_ROW_MOVE_TIME;
+                t = Curves.EaseInOutCubic(t);
+                clock += Time.deltaTime;
+
+                localPos.y = Mathf.Lerp(prevTargetPosY, curTargetPosY, t);
+                for (int i = 0; i < profileStationButtons.Length; i++)
+                {
+                    TextButton stationButton = profileStationButtons[i];
+                    float rowIndex = i % profileStationButtonPosYs.Length;
+
+                    if (rowIndex >= curRowIndex) continue;
+
+                    localPos.x = stationButton.transform.localPosition.x;
+                    localPos.z = profileWhatStationTextRenderer.transform.localPosition.z + ((profileStationButtonPosYs.Length - rowIndex) * 0.02f);
+                    stationButton.transform.localPosition = localPos;
+                }
+
+                if (clock > STATION_BUTTON_ROW_MOVE_TIME)
+                {
+                    curRowIndex++;
+                    clock = 0;
+                    prevTargetPosY = curTargetPosY;
+                    if (curRowIndex == profileStationButtonPosYs.Length)
+                    {
+                        curTargetPosY = profileWhatStationTextRenderer.transform.localPosition.y;
+                    }
+                    else if (curRowIndex > profileStationButtonPosYs.Length)
+                    {
+                        break;
+                    }
+                    else
+                    {
+                        curTargetPosY = profileStationButtonPosYs[curRowIndex];
+                    }
+                }
+                await UniTask.Yield(ctsProfileStationButtonTransition.Token);
+            }
+
+            profilStationButtonsActive = false;
+            for (int i = 0; i < profileStationButtons.Length; i++)
+            {
+                TextButton stationButton = profileStationButtons[i];
+                stationButton.textRenderer.SetText("");
+            }
+            profileWhatStationTextRenderer.EraseText(writeLetterTime: 0.02f);
+        }
+        catch (OperationCanceledException) { }
+    }
+    private async UniTask RevealingTraitorOutcome()
+    {
+        float clock = 0;
+        try
+        {
+            while(clock < OUTCOME_TIME)
+            {
+                float t = clock / OUTCOME_TIME;
+                clock += Time.deltaTime;
+                profileMugshotRenderer.custom.x = t;
+
+                await UniTask.Yield(ctsRevealTraitorOutcome.Token);
+            }
+
+            cursorData.curPassengerSelectionMode = CursorData.PassengerSelectionMode.Unmasking;
+            suspectingButton.backgroundRenderer.customBit &= ~(int)ColorBits.Meridia;
+            suspectingButton.textRenderer.SetText("Suspect");
+            HideStationButtons();
+            actionData.onUnsuspect?.Invoke();
+        }
+        catch
+        {
+
+        }
+
     }
 }

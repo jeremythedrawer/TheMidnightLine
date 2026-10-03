@@ -6,8 +6,14 @@ public class ActionData : ScriptableObject
 {
     public Action onShowKeyIcon;
     public Action onHideKeyIcon;
-
+    public Action onSuspect;
+    public Action onUnsuspect;
+    
     public Action onFocusPassenger;
+    public Action onUnmaskPassenger;
+    public Action onSuspectPassenger;
+    public Action onUnsuspectPassenger;
+
     public Action onFocusCarriage;
     public Action onCloseDialogueBubble;
     public Action onBeginTrip;

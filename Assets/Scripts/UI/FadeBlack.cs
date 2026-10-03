@@ -8,7 +8,6 @@ using static AtlasUI;
 public class FadeBlack : MonoBehaviour
 {
     public const float DEFAULT_DEPTH = 2;
-    public const float NOTEPAD_DEPTH = 14.5f;
 
     [Flags] public enum State
     { 
@@ -26,6 +25,7 @@ public class FadeBlack : MonoBehaviour
     public AudioData audioData;
     public PassengersData passengersData;
     public UIData uidata;
+    public ActionData actionData;
 
     public Material fadeBlackMaterial;
 
@@ -46,10 +46,8 @@ public class FadeBlack : MonoBehaviour
     private void Start()
     {
         textRenderer.SetText("");
-    }
-    private void InitButton()
-    {
-        continueButton.InitButton();
+        SetAlpha(value: 1);
+        FadeOut(time: 1);
     }
     public void FadeIn(float value, float time, float uvPosX = 0, float uvPosY = 0, float alpha = 0, float fadeBlackZPos = DEFAULT_DEPTH, bool usePassengerStencil = false)
     {
@@ -85,16 +83,6 @@ public class FadeBlack : MonoBehaviour
         fadeBlackMaterial.SetFloat("_UVPosY", uvPosY);
         fadeBlackMaterial.SetFloat("_Alpha", alpha);
     }
-    public void WaitAndSetSpacebar(float waitTime)
-    {
-        WaitingAndSettingSpacebar(waitTime).Forget();
-    }
-    public void CancelFadeBlack()
-    {
-        continueButton.gameObject.SetActive(false);
-        ctsFadeBlack?.Cancel();
-    }
-
     public void OrTextBit(ColorBits bit)
     {
         textRenderer.customBit |= (int)bit;
@@ -132,11 +120,6 @@ public class FadeBlack : MonoBehaviour
     public void SetTitleTextAlpha(float t)
     {
         textRenderer.SetAppearTextAlpha(t);
-    }
-    private async UniTask WaitingAndSettingSpacebar(float waitTime)
-    {
-        await UniTask.WaitForSeconds(waitTime, cancellationToken: ctsFadeBlack.Token);
-        continueButton.gameObject.SetActive(true);
     }
     private async UniTask FadingIn(float value, float alpha, float time)
     {

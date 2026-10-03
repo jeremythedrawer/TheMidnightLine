@@ -69,43 +69,31 @@ Shader "Custom/s_atlasBayerRadial"
 
             half4 frag(Varyings i) : SV_Target
             {
-                float2 coveredUVSize = i.uvSizeAndPos.xy;
-                float2 coveredUVPos = i.uvSizeAndPos.zw;
+                float2 uv = SpriteUV(i.uv, i.uvSizeAndPos, i.scaleAndFlip);
+
+                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, uv);
+                half whiteTex = tex.r * tex.g * tex.b;
+
+                int bitMask = i.customBit;
+
+                int redMask = saturate(bitMask & RED_BIT);
+                int greenMask = saturate(bitMask & GREEN_BIT);
+                int blueMask = saturate(bitMask & BLUE_BIT);
+
+                float time = i.custom.x;
+                half detail = tex.r * time * redMask;
+                half cross = tex.b * time * blueMask;
                 
-                float2 scale = i.scaleAndFlip.xy;
-                float2 flip = i.scaleAndFlip.zw;
+                float2 centerUV = i.uv * 2 - 1;
+                half circle = length(centerUV);
 
-                float2 normUV = i.uv;
-                i.uv *= coveredUVSize;
-                i.uv += coveredUVPos;
-                
-                half4 tex = SAMPLE_TEXTURE2D(_AtlasTexture, sampler_AtlasTexture, i.uv);
-                tex.r = lerp(tex.r, 1 - tex.r, i.custom.w);
+                half revealMask = max(detail, cross);
+                revealMask = BayerX8(revealMask - circle, i.positionHCS.y);
+                half hover = tex.g * greenMask;
 
-                int toReveal = saturate(i.customBit & DIAGONAL_TEXTURE_BIT);
-                int toHide = floor(1 - toReveal);
-
-                float revealT = (i.custom.x * toReveal) * 2 - 1;
-                float hideT = (i.custom.x * toHide) * 2 - 1.5;
-
-                float2 centerUV = normUV * 2 - 1;
-                float radial = length(centerUV);
-                half alpha = radial - revealT;
-                alpha = saturate(alpha); 
-
-                float diagonalGradient = normUV.y + normUV.x;
-
-                half diagonal = diagonalGradient + hideT;
-                diagonal = saturate(diagonal) * 0.125;
-                diagonal = BayerX8(diagonal, i.positionHCS.x - i.positionHCS.y);
-
-                int meridiaColorMask = saturate(i.customBit & MERIDIA_COLOR_BIT);
-                float3 meridiaColor = meridiaColorMask * _MeridiaColor;
-                float3 blackColor = (1 - meridiaColorMask) * _BlackColor;
-
-                half3 finalColor = lerp(blackColor + diagonal + meridiaColor, _WhiteColor, tex.r);
-                clip(alpha - 0.001);
-
+                half finalMask = saturate(revealMask + hover + whiteTex);
+                half3 finalColor = finalMask + _BlackColor;
+                clip(tex.a - 0.001);
                 return half4 (finalColor, 1);
             }
             ENDHLSL

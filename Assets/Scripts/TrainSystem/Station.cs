@@ -73,7 +73,7 @@ public class Station : MonoBehaviour
             TraitorProfile traitorProfile = options.curTrip.traitorProfiles[i];
             float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainData.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainData.totalBounds.extents.x);
 
-            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
+            Vector3 spawnPos = new Vector3(randXPos, transform.position.y, 0);
 
             PassengerBrain traitor = PassengerManager.GetPassenger(options.curTrip.passengers[traitorProfile.passengerProfile.prefabIndex].prefab, spawnPos, platformRenderer.transform);
             traitor.profile = traitorProfile.passengerProfile;
@@ -99,7 +99,7 @@ public class Station : MonoBehaviour
 
             float randXPos = Random.Range(platformRenderer.bounds.extents.x - trainData.totalBounds.extents.x, platformRenderer.bounds.extents.x + trainData.totalBounds.extents.x);
 
-            Vector3 spawnPos = new Vector3(randXPos, transform.position.y + 0.1f, 0);
+            Vector3 spawnPos = new Vector3(randXPos, transform.position.y, 0);
 
             PassengerBrain accomplice = PassengerManager.GetPassenger(options.curTrip.passengers[accompliceProfile.prefabIndex].prefab, spawnPos, platformRenderer.transform);
 

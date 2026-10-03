@@ -114,6 +114,7 @@ public class CursorController : MonoBehaviour
         hoveredNPCs = new PassengerBrain[8];
 
         cursorData.curCursorSpriteType = CursorData.CursorSpriteType.Point;
+        cursorData.curPassengerSelectionMode = CursorData.PassengerSelectionMode.Unmasking;
     }
     private void UpdateVolume()
     {

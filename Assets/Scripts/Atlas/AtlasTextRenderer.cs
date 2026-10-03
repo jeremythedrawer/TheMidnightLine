@@ -193,6 +193,11 @@ public class AtlasTextRenderer : MonoBehaviour
     }
     private void SetBorderText()
     {
+        if (text == "")
+        {
+            backgroundRenderer.enabled = false;
+            return;
+        }
         switch (alignmentType)
         {
             case AtlasTextAlignmentType.Left:

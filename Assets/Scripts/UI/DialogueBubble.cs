@@ -29,14 +29,14 @@ public class DialogueBubble : MonoBehaviour
 
     private void OnEnable()
     {
-        actionData.onFocusPassenger += Open;
+        actionData.onUnmaskPassenger += Open;
         actionData.onCloseDialogueBubble += Close;
 
         ctsOpen = new CancellationTokenSource();
     }
     private void OnDisable()
     {
-        actionData.onFocusPassenger -= Open;
+        actionData.onUnmaskPassenger -= Open;
         actionData.onCloseDialogueBubble -= Close;
 
         ctsOpen?.Cancel();

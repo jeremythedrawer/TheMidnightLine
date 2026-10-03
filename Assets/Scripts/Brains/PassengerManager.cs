@@ -162,6 +162,7 @@ public class PassengerManager : MonoBehaviour
         List<PassengerProfile> totalPassengerProfiles = new List<PassengerProfile>();
         List<PassengerProfile> bystanderProfiles = new List<PassengerProfile>();
 
+        int passengerId = 0;
         for (int i = 0; i < options.curTrip.passengers.Length; i++)
         {
             PassengerData passenger = options.curTrip.passengers[i];
@@ -192,8 +193,10 @@ public class PassengerManager : MonoBehaviour
                     {
                         habits = twoHabits,
                         prefabIndex = i,
+                        id = passengerId
                     };
                     totalPassengerProfiles.Add(passengerProfile);
+                    passengerId++;
                 }
             }
         }

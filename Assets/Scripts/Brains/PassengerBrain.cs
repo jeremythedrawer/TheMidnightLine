@@ -182,13 +182,23 @@ public class PassengerBrain : MonoBehaviour
             {
                 atlasRenderer.customBit |= (int)ColorBits.RedChannel;
                 uiData.curDialogueText = disembarkingStation.places[profile.placeIndex];                
-
-                actionData.onFocusPassenger?.Invoke();
+                actionData.onUnmaskPassenger?.Invoke();
             }
             else
             {
-
+                if ((atlasRenderer.customBit & (int)ColorBits.Vinrose) != 0)
+                {
+                    atlasRenderer.customBit &= ~(int)ColorBits.Vinrose;
+                    actionData.onUnsuspectPassenger?.Invoke();
+                }
+                else
+                {
+                    if (ActivePassenger != null) ActivePassenger.atlasRenderer.customBit &= ~(int)ColorBits.Vinrose;
+                    atlasRenderer.customBit |= (int)ColorBits.Vinrose;
+                    actionData.onSuspectPassenger?.Invoke();
+                }
             }
+            actionData.onFocusPassenger?.Invoke();
             ActivePassenger = this;
         }
         iconButton.InitButton(onMouseUp: MouseUp, onEnter: Enter, onExit: Exit);
@@ -1037,6 +1047,10 @@ public class PassengerBrain : MonoBehaviour
     public static void SetActivePassengerToNull()
     {
         ActivePassenger = null;
+    }
+    public static void UnsuspectActivePassenger()
+    {
+        if (ActivePassenger != null) ActivePassenger.atlasRenderer.customBit &= ~(int)ColorBits.Vinrose;
     }
 #if UNITY_EDITOR
     private void OnDrawGizmos()
