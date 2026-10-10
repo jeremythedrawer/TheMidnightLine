@@ -15,7 +15,6 @@ public class TripData : ScriptableObject
     public PassengerData[] passengers;
 
     public float[] dayNightValues;
-    public Vector2[] elevationValues;
     public float[] kmValues;
 
     [Header("Generated")]
@@ -23,8 +22,8 @@ public class TripData : ScriptableObject
     
     public TraitorProfile[] traitorProfiles;
 
-    public int passengersTalkToSinceLastStation;
-    public int passengersCheckedTotal;
+    public int passengersUnmaskedSinceLastStation;
+    public int passengersUnmaskedTotal;
     public int traitorsSpawned;
 
     public UnlockType curUnlocks;

@@ -80,7 +80,7 @@ Shader "Custom/s_atlasBayerRadial"
                 int greenMask = saturate(bitMask & GREEN_BIT);
                 int blueMask = saturate(bitMask & BLUE_BIT);
 
-                float time = i.custom.x;
+                float time = i.custom.x * 2;
                 half detail = tex.r * time * redMask;
                 half cross = tex.b * time * blueMask;
                 

@@ -8,7 +8,6 @@ public class StationSO : ScriptableObject
 
     public string[] places;
 
-    public int ticketsToCheckBeforeSpawn = 0;
     public int bystanderSpawnCount = 10;
     public int traitorSpawnCount = 2;
     public int accompliceSpawnCount = 0;

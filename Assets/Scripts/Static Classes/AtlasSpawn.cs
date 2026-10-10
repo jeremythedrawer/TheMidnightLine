@@ -6,8 +6,8 @@ using UnityEngine;
 using static AtlasRendering;
 public static class AtlasSpawn
 {
-    public const float MAIN_MIN = 3.0f;
-    public const float MAIN_MAX = 26.0f;
+    public const float TRAIN_DEPTH_MIN = 3.0f;
+    public const float TRAIN_DEPTH_MAX = 26.0f;
 
     public const int TRAIN_TRACKS_DEPTH = 6;
     public const int TRAIN_LINE_DEPTH = 25;
@@ -53,7 +53,6 @@ public static class AtlasSpawn
         Dying = 1 << 1,
         Dead = 1 << 2,
         FirstOutOfBounds = 1 << 3,
-        Elevation = 1 << 4,
         PostAtMinBit = 1 << 5,
 
     }
@@ -62,14 +61,13 @@ public static class AtlasSpawn
         Zone,
         Scroll,
     }
-
-
     public enum ParticleWidthType
     { 
         Simple,
-        Sliced,
-        Tiled,
+        Tile,
+        Slice,
     }
+
     public enum SpawnState
     { 
         None,
@@ -80,13 +78,13 @@ public static class AtlasSpawn
 
     [Serializable] public struct EdgeSpriteData
     {
-        public uint spriteIndex;
+        public int spriteIndex;
         public Vector4 offset;
         public Vector4 scale;
     }
     [Serializable] public struct EdgeScroller
     {
-        public EdgeSpriteData[] spriteData;
+        public EdgeSpriteData[] edgeSpriteDataArray;
         public MaterialPropertyBlock mpb;
         public GraphicsBuffer argsBuffer;
         public GraphicsBuffer edgeSpriteDataBuffer;
@@ -94,11 +92,11 @@ public static class AtlasSpawn
 
     [Serializable] public struct ParticlePosData
     {
-        public EdgeScroller[] preScrollers;
-        public EdgeScroller[] postScrollers;
+        public EdgeScroller preScroller;
+        public EdgeScroller postScroller;
+        public Vector4[] quadScales;
 
         public string prefabGUID;
-        public Vector4[] quadScales;
 
         public Vector2Int prevDepthIndices;
         
@@ -109,8 +107,8 @@ public static class AtlasSpawn
         public ParticleWidthType widthType;
         public SpawnState spawnState;
 
-        public int ticketCheckStart;
-        public int ticketCheckEnd;
+        public int startStation;
+        public int endStation;
 
         public uint quadCount;
 
@@ -118,7 +116,7 @@ public static class AtlasSpawn
         public int minParticleIndex;
         public int maxParticleIndex;
 
-        public int depth;
+        public int posZ;
         public int depthSize;
         
         public int spriteIndex;
@@ -128,9 +126,6 @@ public static class AtlasSpawn
         public float posX;
         public float scaleY;
         public float scaleX;
-        public float randScale;
-
-        public bool elevate;
     }
 
     [Serializable] public struct ParticleSpritesData

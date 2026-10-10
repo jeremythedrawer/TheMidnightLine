@@ -5,14 +5,13 @@ using UnityEngine;
 public class UIData : ScriptableObject
 {
     public IconButton colorButton;
-    public AtlasRenderer tripMapStub;
     public IconButton tripMapStationButton;
 
     [Header("Generated")]
     public string curDialogueText;
 
+    public Vector3 curDialogueWorldPosition;
     public Vector3 keyBindWorldPos;
-    public Vector3 arrowWorldPos;
     public Vector3 fadeBlackWorldPos;
     public Vector3 inactiveBottomPaneLocalPos;
     public Vector3 activeBottomPanelLocalPos;

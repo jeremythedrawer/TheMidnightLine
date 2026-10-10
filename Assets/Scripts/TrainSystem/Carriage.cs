@@ -185,15 +185,15 @@ public class Carriage : MonoBehaviour
 
         MovingDown().Forget();
     }
-    public void AddToSeatQueue(PassengerBrain npc)
+    public void AddToSeatQueue(PassengerBrain passenger)
     {
         if (seatQueue.passengerCount == seatAmount)
         {
-            npc.FindStandingPosition();
+            passenger.FindStandingPosition();
             return;
         }
-        npc.seatQueueIndex = seatQueue.passengerCount;
-        seatQueue.passengers[seatQueue.passengerCount] = npc;
+        passenger.seatQueueIndex = seatQueue.passengerCount;
+        seatQueue.passengers[seatQueue.passengerCount] = passenger;
         seatQueue.passengerCount++;
     }
     public void RemoveFromSeatQueue(PassengerBrain passenger)
@@ -217,11 +217,11 @@ public class Carriage : MonoBehaviour
         seatQueue.timer += Time.deltaTime;
         if (seatQueue.timer < QUEUE_TICK_RATE) return;
 
-        PassengerBrain npc = seatQueue.passengers[seatQueue.passengerCount - 1];
+        PassengerBrain passenger = seatQueue.passengers[seatQueue.passengerCount - 1];
 
-        if (npc.seatPosIndex != int.MaxValue) return;
+        if (passenger.seatPosIndex != int.MaxValue) return;
 
-        float npcX = npc.transform.position.x;
+        float npcX = passenger.transform.position.x;
         float closestDist = float.PositiveInfinity;
         int bestIndex = int.MaxValue;
 
@@ -242,14 +242,19 @@ public class Carriage : MonoBehaviour
 
         if (bestIndex == int.MaxValue)
         {
-            npc.FindStandingPosition();
+            passenger.FindStandingPosition();
         }
         else
         {
-            npc.AssignSeat(bestIndex);
+            passenger.AssignSeat(bestIndex);
         }
 
+        if (seatQueue.passengerCount == 0) return;
         seatQueue.passengerCount--;
+        if (seatQueue.passengerCount < 0)
+        {
+            Debug.Log(passenger.name + " | " + name + " | " + seatQueue.passengerCount);
+        }
         seatQueue.timer = 0;
     }
     public void SetSmokerRoomData()

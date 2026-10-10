@@ -51,8 +51,8 @@ public class Menu : MonoBehaviour
                         {
                             options.curRegion = options.thirdPointRegion;
                             options.curTrip = options.thirdPointRegion.trips[0];
-                            options.curTrip.passengersTalkToSinceLastStation = 0;
-                            options.curTrip.passengersCheckedTotal = 0;
+                            options.curTrip.passengersUnmaskedSinceLastStation = 0;
+                            options.curTrip.passengersUnmaskedTotal = 0;
                             options.curTrip.traitorsSpawned = 0;
                             camData.curLocationState = CameraData.LocationState.Title;
                             actionData.onBeginTrip?.Invoke();

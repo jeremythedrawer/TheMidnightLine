@@ -37,8 +37,8 @@ public class RegionMap : MonoBehaviour
                 TripButton tripButton = tripButtons[index];
 
                 options.curTrip = tripButton.trip;
-                options.curTrip.passengersTalkToSinceLastStation = 0;
-                options.curTrip.passengersCheckedTotal = 0;
+                options.curTrip.passengersUnmaskedSinceLastStation = 0;
+                options.curTrip.passengersUnmaskedTotal = 0;
                 options.curTrip.traitorsSpawned = 0;
                 tripButton.button.atlasRenderer.customBit ^= (int)ColorBits.Invert;
 

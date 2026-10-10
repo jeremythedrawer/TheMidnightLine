@@ -19,7 +19,6 @@ public class TrainData : ScriptableObject
 
     public Vector2 curVelocity;
     public Vector2 targetVelocity;
-    public Vector2 targetElevatePos;
 
     public float prevPeakVelocity;
     public float targetPosition;

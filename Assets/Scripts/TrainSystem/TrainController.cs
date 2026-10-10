@@ -34,7 +34,6 @@ public class TrainController : MonoBehaviour
     public LayerData layerSettings;
     public Options options;
     public SpawnData spawnData;
-    public SpyData spyStats;
     public CameraData camData;
     public AudioData audioData;
     public ActionData actionData;
@@ -73,14 +72,15 @@ public class TrainController : MonoBehaviour
     {
         actionData.onBeginTrip += MoveTrainToStartPosition;
         actionData.onAtFirstStation += MoveTrainToStartPosition;
+        actionData.onGoToNextStation += SetToNextStation;
     }
     private void OnDisable()
     {
         actionData.onBeginTrip -= MoveTrainToStartPosition;
         actionData.onAtFirstStation -= MoveTrainToStartPosition;
+        actionData.onGoToNextStation -= SetToNextStation;
         
-        trainCTS?.Cancel();
-        trainCTS?.Dispose();
+        CleanUpTokens();
 
         trainData.curVelocity = Vector2.zero;
     }
@@ -110,7 +110,6 @@ public class TrainController : MonoBehaviour
         trainData.targetVelocity = Vector2.zero;
         trainData.totalNPCsBoarded = 0;
         trainData.slideDoorsAmountOpened = 0;
-        trainData.targetElevatePos = Vector2.zero;
 
         trainCTS = new CancellationTokenSource();
 
@@ -257,11 +256,14 @@ public class TrainController : MonoBehaviour
             break;
             case TrainState.AtMaxSpeed:
             {
-                if (options.curTrip.passengersTalkToSinceLastStation == options.curTrip.stationAhead.ticketsToCheckBeforeSpawn)
+                if (spawnData.toSpawnNextStation)
                 {
                     SpawnStation();
-                    trainData.targetVelocity = Vector2.zero;
-                    options.curTrip.passengersTalkToSinceLastStation = 0;
+                    trainData.targetVelocity.x = 0;
+                    trainData.curVelocity.y = 0;
+                    options.curTrip.passengersUnmaskedSinceLastStation = 0;
+
+                    spawnData.toSpawnNextStation = false;
                 }
                 HandleTrainMeters();
             }
@@ -452,16 +454,23 @@ public class TrainController : MonoBehaviour
         }
         Shader.SetGlobalFloat("_MetersTravelled", metersTravelled);
     }
+    private void CleanUpTokens()
+    {
+        trainCTS?.Cancel();
+        trainCTS?.Dispose();
+    }
+    private void SetToNextStation()
+    {
+        spawnData.toSpawnNextStation = true;
+    }
     private void UpdateTicketInspectParams()
     {
-        int ticketParamsIndex = options.curTrip.passengersCheckedTotal - 1;
-        trainData.targetElevatePos = options.curTrip.elevationValues[ticketParamsIndex];
+        int ticketParamsIndex = options.curTrip.passengersUnmaskedTotal - 1;
         trainData.targetKMPH = options.curTrip.kmValues[ticketParamsIndex];
         trainData.targetNightValue = options.curTrip.dayNightValues[ticketParamsIndex];
         trainData.targetVelocity.x = KMPHToVelocity(trainData.targetKMPH);
         metersTravelledOnBezier = 0;
         metersTravelled = 0;
-        MoveOnBezier().Forget();
     }
     private void InitAtStartPosition()
     {
@@ -485,14 +494,6 @@ public class TrainController : MonoBehaviour
         trainCTS = new CancellationTokenSource();
         started = true;
         MovingTrainToStartPosition().Forget();
-    }
-    private async UniTask MoveOnBezier()
-    {
-        while(metersTravelledOnBezier < trainData.targetElevatePos.x)
-        {
-            trainData.curVelocity.y = GetElevateVelocityBezier(trainData.curVelocity, trainData.targetElevatePos, ref metersTravelledOnBezier).y;
-            await UniTask.Yield();
-        }
     }
     private async UniTask MovingTrainToStartPosition()
     {

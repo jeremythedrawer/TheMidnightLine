@@ -10,7 +10,7 @@ public class ParticleAtlas : ScriptableObject
     public ParticleType particleType;
 
     [Header("Trip Editor")]
-    public ParticlePosData[] posData;
+    public ParticlePosData[] posDataArray;
     
     public int posDataIndexOffset;
     public int spriteCount;

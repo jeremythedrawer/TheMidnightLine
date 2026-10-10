@@ -10,7 +10,10 @@ public class ActionData : ScriptableObject
     public Action onUnsuspect;
     
     public Action onFocusPassenger;
+    public Action onHoverUnmaskedPassenger;
+    public Action onUnhoverUnmaskedPassenger;
     public Action onUnmaskPassenger;
+
     public Action onSuspectPassenger;
     public Action onUnsuspectPassenger;
 
@@ -22,4 +25,6 @@ public class ActionData : ScriptableObject
 
     public Action onTraitorBoarded;
     public Action onTraitorDisembarked;
+
+    public Action onGoToNextStation;
 }

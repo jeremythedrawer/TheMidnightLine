@@ -4,6 +4,7 @@ using static AtlasSpawn;
 public class SpawnData : ScriptableObject
 {
     [Header("Generated")]
+    public bool toSpawnNextStation;
     public bool active;
     public Bounds bounds;
 

@@ -163,6 +163,16 @@ public class PassengerBrain : MonoBehaviour
             if (cursorData.curPassengerSelectionMode == CursorData.PassengerSelectionMode.Unmasking)
             {
                 cursorData.curCursorSpriteType = CursorData.CursorSpriteType.Eye;
+
+                if ((atlasRenderer.customBit & (int)ColorBits.RedChannel) != 0)
+                {
+                    uiData.curDialogueText = disembarkingStation.places[profile.placeIndex];
+
+                    uiData.curDialogueWorldPosition.y = atlasRenderer.bounds.max.y + uiData.keyBindIconWorldSize.y;
+                    uiData.curDialogueWorldPosition.x = atlasRenderer.bounds.center.x;
+
+                    actionData.onHoverUnmaskedPassenger?.Invoke();
+                }
             }
             else
             {
@@ -173,6 +183,11 @@ public class PassengerBrain : MonoBehaviour
         {
             atlasRenderer.customBit &= ~(int)ColorBits.BlueChannel;
             atlasRenderer.customBit &= ~(int)ColorBits.Invert;
+
+            if (ActivePassenger != this && (atlasRenderer.customBit & (int)ColorBits.RedChannel) != 0)
+            {
+                actionData.onUnhoverUnmaskedPassenger?.Invoke();
+            }
             cursorData.curCursorSpriteType = CursorData.CursorSpriteType.Point;
         }
         void MouseUp()

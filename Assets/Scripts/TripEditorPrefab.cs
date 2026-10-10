@@ -1,8 +1,10 @@
 using UnityEngine;
 
+using static AtlasSpawn;
 public class TripEditorPrefab : MonoBehaviour
 {
+    public ParticleWidthType widthType;
     public AtlasRenderer mainRenderer;
-    public AtlasRenderer[] preScrollers;
-    public AtlasRenderer[] postScrollers;
+    public AtlasRenderer[] preScrollerRenderers;
+    public AtlasRenderer[] postScrollersRenderers;
 }

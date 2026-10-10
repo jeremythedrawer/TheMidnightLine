@@ -235,11 +235,11 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                 ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
                 if (particleAtlas.isCompleted) continue;
 
-                for (int j = 0; j < particleAtlas.posData.Length; j++)
+                for (int j = 0; j < particleAtlas.posDataArray.Length; j++)
                 {
-                    ParticlePosData posData = particleAtlas.posData[j];
+                    ParticlePosData posData = particleAtlas.posDataArray[j];
 
-                    if (trip.passengersCheckedTotal < posData.ticketCheckStart) break;
+                    if (trip.passengersUnmaskedTotal < posData.startStation) break;
                     
                     if (posData.argsBuffer == null) continue;
 
@@ -262,27 +262,21 @@ public class TOTTRendererFeature : ScriptableRendererFeature
                             {
                                 case SpawnState.MovingIn:
                                 {
-                                    if (posData.preScrollers == null) return;
-                                    for (int k = 0; k < posData.preScrollers.Length; k++)
-                                    {
-                                        EdgeScroller preScroller = posData.preScrollers[k];
-                                        argsSpawn[1] = (uint)preScroller.spriteData.Length;
-                                        preScroller.argsBuffer.SetData(argsSpawn);
-                                        cmd.DrawProceduralIndirect(Matrix4x4.identity, spawner.edgeScrollMaterial, shaderPass: 0, MeshTopology.Triangles, preScroller.argsBuffer, argsOffset: 0, preScroller.mpb);
-                                    }
+                                    EdgeSpriteData[] preScrollerSpriteDataArray = posData.preScroller.edgeSpriteDataArray;
+                                    if (preScrollerSpriteDataArray == null) return;
+                                    argsSpawn[1] = (uint)preScrollerSpriteDataArray.Length;
+                                    posData.preScroller.argsBuffer.SetData(argsSpawn);
+                                    cmd.DrawProceduralIndirect(Matrix4x4.identity, spawner.edgeScrollMaterial, shaderPass: 0, MeshTopology.Triangles, posData.preScroller.argsBuffer, argsOffset: 0, posData.preScroller.mpb);
                                 }
                                 break;
                                 case SpawnState.MovingOut:
                                 {
-                                    if (posData.postScrollers == null)
-                                    for (int k = 0; k < posData.postScrollers.Length; k++)
-                                    {
-                                        EdgeScroller postScroller = posData.postScrollers[k];
-                                        argsSpawn[1] = (uint)postScroller.spriteData.Length;
-                                        Debug.Log(postScroller.spriteData.Length);
-                                        postScroller.argsBuffer.SetData(argsSpawn);
-                                        cmd.DrawProceduralIndirect(Matrix4x4.identity, spawner.edgeScrollMaterial, shaderPass: 0, MeshTopology.Triangles, postScroller.argsBuffer, argsOffset: 0, postScroller.mpb);
-                                    }
+                                    EdgeSpriteData[] postScrollerSpriteDataArray = posData.postScroller.edgeSpriteDataArray;
+
+                                    if (postScrollerSpriteDataArray == null) return;
+                                    argsSpawn[1] = (uint)postScrollerSpriteDataArray.Length;
+                                    posData.postScroller.argsBuffer.SetData(argsSpawn);
+                                    cmd.DrawProceduralIndirect(Matrix4x4.identity, spawner.edgeScrollMaterial, shaderPass: 0, MeshTopology.Triangles, posData.postScroller.argsBuffer, argsOffset: 0, posData.postScroller.mpb);
                                 }
                                 break;
                             }

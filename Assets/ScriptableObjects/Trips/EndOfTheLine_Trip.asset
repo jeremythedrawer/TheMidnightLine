@@ -16,9 +16,9 @@ MonoBehaviour:
   prompt: 1
   clue: 1
   particleAtlasArray:
+  - {fileID: 11400000, guid: 2b0388f0ffe3cf94db5ec4344fb0b062, type: 2}
   - {fileID: 11400000, guid: 08004104ecb4a2341be1e6470a875502, type: 2}
   - {fileID: 11400000, guid: 6ccacd0695c412449b407c87b3ab6a1e, type: 2}
-  - {fileID: 11400000, guid: 2b0388f0ffe3cf94db5ec4344fb0b062, type: 2}
   - {fileID: 11400000, guid: abf5051c889b6444aa08499e01c10fc4, type: 2}
   - {fileID: 11400000, guid: 357154f373a41684ea6991690bd10c52, type: 2}
   - {fileID: 11400000, guid: 550abf757e9f50645b3d06cb79ddfb74, type: 2}
@@ -44,10 +44,10 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 8357ed2722fa5fd439046aa12a4199b6, type: 2}
   - {fileID: 11400000, guid: ed55ab0ee584afd459355277d983c98b, type: 2}
   dayNightValues:
-  - 0
-  - 0
-  - 0
-  - 0
+  - 0.916
+  - 0.753
+  - 0.343
+  - 0.349
   - 0
   - 0
   - 0
@@ -65,33 +65,11 @@ MonoBehaviour:
   - 0.8
   - 0.9
   - 1
-  elevationValues:
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
-  - {x: 0, y: 0}
   kmValues:
-  - 34.1
-  - 22.2
-  - 34.1
-  - 34.1
+  - 35
+  - 27.3
+  - 36
+  - 35.1
   - 34.1
   - 34.1
   - 34.1
@@ -114,29 +92,41 @@ MonoBehaviour:
   - passengerProfile:
       boardingStationIndex: 1
       disembarkingStationIndex: 3
-      npcPrefabIndex: 9
-      behaviours: 5
+      placeIndex: 0
+      prefabIndex: 0
+      id: 0
+      habits: 0
     fullName: Ivan Petrov
     mugShotIndex: 4
+    traitorIndex: 0
+    selectedStationIndex: 0
     found: 0
   - passengerProfile:
       boardingStationIndex: 2
       disembarkingStationIndex: 4
-      npcPrefabIndex: 1
-      behaviours: 136
+      placeIndex: 0
+      prefabIndex: 0
+      id: 0
+      habits: 0
     fullName: Ahad Eltayeb
     mugShotIndex: 5
+    traitorIndex: 0
+    selectedStationIndex: 0
     found: 0
   - passengerProfile:
       boardingStationIndex: 4
       disembarkingStationIndex: 6
-      npcPrefabIndex: 7
-      behaviours: 33
+      placeIndex: 0
+      prefabIndex: 0
+      id: 0
+      habits: 0
     fullName: Penelope Richardson
     mugShotIndex: 0
+    traitorIndex: 0
+    selectedStationIndex: 0
     found: 0
-  passengersTalkToSinceLastStation: 3
-  passengersTalkedToTotal: 3
+  passengersUnmaskedSinceLastStation: 0
+  passengersUnmaskedTotal: 0
   traitorsSpawned: 0
   curUnlocks: 0
   curDayNightValue: 0

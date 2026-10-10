@@ -24,12 +24,14 @@ public class DialogueBubble : MonoBehaviour
 
     public float clock;
 
-    public bool opened;
+    public bool followPassenger;
     public CancellationTokenSource ctsOpen;
 
     private void OnEnable()
     {
         actionData.onUnmaskPassenger += Open;
+        actionData.onHoverUnmaskedPassenger += TurnOn;
+        actionData.onUnhoverUnmaskedPassenger += TurnOff;
         actionData.onCloseDialogueBubble += Close;
 
         ctsOpen = new CancellationTokenSource();
@@ -37,22 +39,24 @@ public class DialogueBubble : MonoBehaviour
     private void OnDisable()
     {
         actionData.onUnmaskPassenger -= Open;
+        actionData.onHoverUnmaskedPassenger -= TurnOn;
+        actionData.onUnhoverUnmaskedPassenger -= TurnOff;
         actionData.onCloseDialogueBubble -= Close;
 
         ctsOpen?.Cancel();
     }
     private void Start()
     {
-        worldPos.z = -1;
+        uiData.curDialogueWorldPosition.z = -1;
     }
     private void Update()
     {
-        if (opened)
+        if (followPassenger)
         {
             Bounds passengerBounds = PassengerBrain.ActivePassenger.atlasRenderer.bounds;
-            worldPos.y = passengerBounds.max.y + uiData.keyBindIconWorldSize.y;
-            worldPos.x = passengerBounds.center.x;
-            transform.position = worldPos;
+            uiData.curDialogueWorldPosition.x = passengerBounds.center.x;
+            uiData.curDialogueWorldPosition.y = passengerBounds.max.y + uiData.keyBindIconWorldSize.y;
+            transform.position = uiData.curDialogueWorldPosition;
         }
     }
     private void Open()
@@ -62,14 +66,32 @@ public class DialogueBubble : MonoBehaviour
 
         ctsOpen?.Cancel();
         ctsOpen = new CancellationTokenSource();
-        opened = true;
+        followPassenger = true;
         Opening().Forget();
+    }
+    private void TurnOn()
+    {
+        ctsOpen?.Cancel();
+
+        textRenderer.enabled = true;
+        tailRenderer.enabled = true;
+        followPassenger = false;
+        textRenderer.SetText(uiData.curDialogueText);
+        size = textRenderer.textBoxData.size;
+        transform.position = uiData.curDialogueWorldPosition;
+        textRenderer.backgroundRenderer.SetNineSliceSizeFromWorldSpace(size);
+    }
+    private void TurnOff()
+    {
+        ctsOpen?.Cancel();
+        textRenderer.enabled = false;
+        tailRenderer.enabled = false;
     }
     private void Close()
     {
         ctsOpen?.Cancel();
         ctsOpen = new CancellationTokenSource();
-        opened = false;
+        followPassenger = false;
         Closing().Forget();
     }
     private async UniTask Opening()
@@ -95,8 +117,6 @@ public class DialogueBubble : MonoBehaviour
         }
         catch (OperationCanceledException)
         {
-            textRenderer.SetText(uiData.curDialogueText);
-            size = textRenderer.textBoxData.size;
         }
     }
     private async UniTask Closing()
@@ -105,7 +125,7 @@ public class DialogueBubble : MonoBehaviour
         {
             textRenderer.EraseText(WRITE_LETTER_TIME);
 
-            while(textRenderer.textBoxData.charCount != 0) await UniTask.Yield();
+            while(textRenderer.textBoxData.charCount != 0) await UniTask.Yield(ctsOpen.Token);
 
             while (clock >= 0)
             {
@@ -126,8 +146,6 @@ public class DialogueBubble : MonoBehaviour
         }
         catch (OperationCanceledException)
         {
-            textRenderer.SetText(uiData.curDialogueText);
-            size = textRenderer.textBoxData.size;
         }
     }
 }

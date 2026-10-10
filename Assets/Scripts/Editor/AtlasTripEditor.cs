@@ -1,5 +1,7 @@
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Ports;
 using System.Linq;
 using UnityEditor;
 using UnityEngine;
@@ -7,76 +9,95 @@ using UnityEngine;
 using static Atlas;
 using static AtlasRendering;
 using static AtlasSpawn;
+using static System.Collections.Specialized.BitVector32;
 
 public class AtlasTripEditor : EditorWindow
 {
-    const float ROW_HEIGHT = 20;
-    const float COLUMN_WIDTH = 150;
-    const float GRAPH_POS_Y = 100;
-    const float PADDING = 70;
-    const float SIDE_PANEL_WIDTH = 250;
-    const float EDGE_SCROLLER_INPUT_AMOUNT = 3;
-    const float FULL_RECT_HEIGHT = 3000;
+    [Flags] public enum AdjustState
+    { 
+        None = 0,
+        LeftSize = 1 << 0,
+        RightSize = 1 << 1,
+        TopSize = 1 << 2,
+        BottomSize = 1 << 3,
+        Position = 1 << 4,
+    }
 
-    const int STATION_LABEL_ROW = 1;
-    const int NPC_GRADIENT_ROW = 2;
-    const int KM_LABEL_ROW = 3;
-    const int DAY_NIGHT_ROW = 4;
-    const int ELEVATION_ROW = 5;
 
-    static SpawnData spawnData;
+    public const float COLUMN_WIDTH = 150;
+    public const float GRAPH_POS_Y = 100;
+    public const float PADDING = 70;
+    public const float FULL_RECT_HEIGHT = 3000;
+    public const float OBJECT_FIELD_WIDTH = 100; 
+
+    public static SpawnData spawnData;
+
+    public GUIStyle boldStyle;
+    public GUIStyle headerStyle;
+    public GUIStyle leftPanelStyle;
+    public GUIStyle buttonStyle;
+
+    public TripData trip;
+
+    public ParticleAtlas selectedParticleAtlas;
     
-    GUIStyle depthLabel;
-    GUIStyle graphHeaderLabel;
+    public TripEditorPrefab prefabInput;
 
-    TripData trip;
+    public Dictionary<AtlasSO, ParticleAtlas> atlasParticleAtlasDict;
 
-    ParticleAtlas selectedParticleAtlas;
-    
-    TripEditorPrefab selectedPrefab;
+    public Color[] particleAtlasColors;
 
-    Color[] particleAtlasColors;
+    float[] kmphInputValues;
+    float[] dayNightInputValues;
 
-    Vector2[] selectedElevationValues;
+    public Vector2 graphScroll;
+    public Vector2 sidePanelScroll;
+    public Vector2 randomInput;
 
-    float[] selectedKMValues;
-    float[] selectedDayNightValues;
+    float curPosY;
+    float curPosX;
 
-    Rect fullRect;
-    Rect graphScrollRect;
-    Rect graphRect;
-    Rect sidePanelScrollRect;
-    Rect sidePanelRect;
-
-    ParticleWidthType selectedWidthType;
-
-    Vector2 graphScroll;
-    Vector2 sidePanelScroll;
+    public ParticleWidthType selectedWidthType;
+    public AdjustState adjustState;
 
     int selectedParticleCount;
     int selectedPosDataIndex;
-    int curPosY;
-    int totalTicketChecks;
-    int dragOffsetWidth;
-    int dragOffsetHeight;
-    int dragOffsetStartX;
-    int dragOffsetStartY;
-
-    float selectedRandScale;
-    float graphRowHeight;
+    int clickEndStation;
+    int clickDepthSize;
+    int clickStartStation;
+    int clickPosZ;
+    int clickMousePosX;
+    int clickMousePosY;
 
     bool adjustingBar;
-    bool isAdjustingMetersStart;
-    bool isAdjustingDepthSize;
-    bool selectedElevation;
-
-    Dictionary<AtlasSO, ParticleAtlas> atlasToParticleAtlasDict;
 
     [MenuItem("Tools/Atlas Trip Editor")]
     private static void Open()
     {
-        AtlasTripEditor tripEditor = GetWindow<AtlasTripEditor>("Atlas Trip Editor");
+        OnOpen();
+    }
+    private void OnEnable()
+    {
+    }
+    private void OnSelectionChange()
+    {
+    }
+    private void OnGUI()
+    {
+        Init();
+
+        SetGUIStyles();
+        DrawFirstRow();
+        DrawSecondRow();
+        //DrawThirdRow();
+        DrawFourthRow();
+        //DrawGraph();
+    }
+    public static void OnOpen()
+    {
+        GetWindow<AtlasTripEditor>("Atlas Trip Editor");
         string spawnDataPath = AssetDatabase.GUIDToAssetPath("cb76807a71f74704a94a0f5cfe3b2c50");
+
         if (Directory.Exists(spawnDataPath))
         {
             SpawnData foundSpawnData = AssetDatabase.LoadAssetAtPath<SpawnData>(spawnDataPath);
@@ -86,542 +107,1202 @@ public class AtlasTripEditor : EditorWindow
             }
         }
     }
-    private void OnGUI()
-    {
-        Init();
-
-        DrawFirstHeader();
-        DrawSecondHeader();
-        DrawThirdHeader();
-        DrawTripSettings();
-
-        DrawGraph();
-        DrawSidePanel();
-    }
     public void Init()
     {
-        if (spawnData == null)
-        {
-            string spawnDataPath = AssetDatabase.GUIDToAssetPath("cb76807a71f74704a94a0f5cfe3b2c50");
-            
-            if (!AssetDatabase.AssetPathExists(spawnDataPath)) return;
-            SpawnData foundSpawnData = AssetDatabase.LoadAssetAtPath<SpawnData>(spawnDataPath);
-            if (foundSpawnData == null) return;
-            spawnData = foundSpawnData;
-        }
-
-        fullRect = new Rect(0, 0, position.width, FULL_RECT_HEIGHT);
-
-        float doublePadding = PADDING * 2;
-        Vector2 graphPos = new Vector2(PADDING, GRAPH_POS_Y);
-        Vector2 graphSize = new Vector2(position.width - SIDE_PANEL_WIDTH - (PADDING * 2), FULL_RECT_HEIGHT - GRAPH_POS_Y);
-
-        graphRect = new Rect(graphPos, graphSize);
-        graphScrollRect = new Rect(0, graphRect.y + 100, graphRect.width + doublePadding, position.height - (graphRect.y + GRAPH_POS_Y));
-
-        Vector2 sidePanelPos = new Vector2(graphRect.xMax + doublePadding, graphRect.y);
-        Vector2 sidePanelSize = new Vector2(SIDE_PANEL_WIDTH - doublePadding, fullRect.height);
-
-        sidePanelRect = new Rect(sidePanelPos, sidePanelSize);
-        sidePanelScrollRect = new Rect(0, graphScrollRect.y, position.width, position.height);
-
-        graphRowHeight = graphRect.height / FAR_CLIP;
-
-        depthLabel = new GUIStyle();
-        depthLabel.alignment = TextAnchor.MiddleRight;
-        depthLabel.normal.textColor = Color.white;
-        depthLabel.fontSize = 16;
-
-        graphHeaderLabel = new GUIStyle();
-        graphHeaderLabel.alignment = TextAnchor.LowerLeft;
-        graphHeaderLabel.normal.textColor = Color.white;
-        graphHeaderLabel.fontSize = 16;
-        graphHeaderLabel.fontStyle = FontStyle.Normal;
-
         curPosY = 0;
 
         if (trip != null)
         {
-            totalTicketChecks = 0;
-            for (int i = 0; i < trip.stationsDataArray.Length; i++)
-            {
-                StationSO station = trip.stationsDataArray[i];
-                totalTicketChecks += station.ticketsToCheckBeforeSpawn;
-            }
-            trip.dayNightValues = CorrectArrayLength(trip.dayNightValues);
-            trip.elevationValues = CorrectArrayLength(trip.elevationValues);
-            trip.kmValues = CorrectArrayLength(trip.kmValues);
+            dayNightInputValues = trip.dayNightValues;
+            kmphInputValues = trip.kmValues;
 
-            selectedDayNightValues = trip.dayNightValues;
-            selectedElevationValues = trip.elevationValues;
-            selectedKMValues = trip.kmValues;
+            atlasParticleAtlasDict = new Dictionary<AtlasSO, ParticleAtlas>();
 
             particleAtlasColors = new Color[trip.particleAtlasArray.Length];
-            for (int i = 0; i < particleAtlasColors.Length; i++)
+            for (int i = 0; i < trip.particleAtlasArray.Length; i++)
             {
+                ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
                 particleAtlasColors[i] = Color.HSVToRGB((float)i / (float)particleAtlasColors.Length, 1, 1);
                 particleAtlasColors[i].a = 0.5f;
+
+                atlasParticleAtlasDict[particleAtlas.atlas] = particleAtlas;
             }
         }
     }
-    private T[] CorrectArrayLength<T>(T[] array)
+    private void SetGUIStyles()
     {
-        if (array ==  null)
-        {
-            return new T[totalTicketChecks];
-        }
+        boldStyle = new GUIStyle();
+        boldStyle.alignment = TextAnchor.UpperLeft;
+        boldStyle.normal.textColor = Color.white;
+        boldStyle.fontStyle = FontStyle.Bold;
+        boldStyle.padding.left = 10;
+        boldStyle.padding.right = 10;
+        boldStyle.padding.top = 5;
+        boldStyle.padding.bottom = 5;
 
-        int diff = array.Length - totalTicketChecks;
+
+        buttonStyle = new GUIStyle(GUI.skin.button);
+        buttonStyle.alignment = TextAnchor.UpperLeft;
+        buttonStyle.normal.textColor = Color.white;
+        buttonStyle.active.textColor = Color.black;
+        buttonStyle.fontStyle = FontStyle.Bold;
+        buttonStyle.padding.left = 10;
+        buttonStyle.padding.right = 10;
+        buttonStyle.padding.top = 5;
+        buttonStyle.padding.bottom = 5;
 
 
-        List<T> list = array.ToList();
-        if (diff < 0)
-        {
-            for (int i = 0; i < -diff; i++)
-            {
-                T t = array[i];
-                list.Add(t);
-            }
-        }
-        else if (diff > 0)
-        {
-            int startRemoveIndex = array.Length - diff;
-            list.RemoveRange(startRemoveIndex, diff);
-        }
+        headerStyle = new GUIStyle();
+        headerStyle.alignment = TextAnchor.MiddleCenter;
+        headerStyle.normal.textColor = Color.white;
+        headerStyle.fontSize = 16;
+        headerStyle.fontStyle = FontStyle.Bold;
 
-        return list.ToArray();
+        leftPanelStyle = new GUIStyle();
+        leftPanelStyle.alignment = TextAnchor.UpperRight;
+        leftPanelStyle.normal.textColor = Color.white;
+        leftPanelStyle.fontStyle = FontStyle.Normal;
+        leftPanelStyle.fontSize = 12;
+        leftPanelStyle.padding.left = 10;
+        leftPanelStyle.padding.right = 10;
     }
-    private void DrawFirstHeader()
+    private void DrawFirstRow()
     {
-        Rect tripLabelRect = new Rect(0, curPosY, graphRect.x, ROW_HEIGHT);
-        GUIContent tripContent = new GUIContent("Trip");
-        EditorGUI.LabelField(tripLabelRect, tripContent);
+        curPosX = 0;
+        curPosY = 0;
 
-        Rect tripInputRect = new Rect(graphRect.x, curPosY, COLUMN_WIDTH, ROW_HEIGHT);
-        
+        GUIContent tripContent = new GUIContent("Trip");        
+        Vector2 tripLabelSize = boldStyle.CalcSize(tripContent);
+        Vector2 tripLabelPos = new Vector2();
+        tripLabelPos.x = curPosX;
+        tripLabelPos.y = curPosY;
+        Rect tripLabelRect = new Rect();
+        tripLabelRect.position = tripLabelPos;
+        tripLabelRect.size = tripLabelSize;
+        GUI.Label(tripLabelRect, tripContent, boldStyle);
+        curPosX += tripLabelSize.x;
+
+        Vector2 tripInputPos = new Vector2();
+        tripInputPos.x = curPosX;
+        tripInputPos.y = curPosY;
+        Vector2 tripInputSize = new Vector2();
+        tripInputSize.x = OBJECT_FIELD_WIDTH;
+        tripInputSize.y = tripLabelSize.y;
+        curPosX += tripInputSize.x;
+
+        Rect tripInputRect = new Rect();
+        tripInputRect.position = tripInputPos;
+        tripInputRect.size = tripInputSize;
+
         EditorGUI.BeginChangeCheck();
-
         trip = (TripData)EditorGUI.ObjectField(tripInputRect, GUIContent.none, trip, typeof(TripData), allowSceneObjects: false);
-
-        if (EditorGUI.EndChangeCheck())
-        {
-            if (trip == null) return;
-            totalTicketChecks = 0;
-            for (int i = 0; i < trip.stationsDataArray.Length; i++)
-            {
-                StationSO station = trip.stationsDataArray[i];
-                totalTicketChecks += station.ticketsToCheckBeforeSpawn;
-            }
-        }
-
-        curPosY += (int)ROW_HEIGHT;
+        curPosY += tripInputSize.y;
     }
-    private void DrawSecondHeader()
+    private void DrawSecondRow()
     {
         if (trip == null) return;
 
-        float curPosX = graphRect.x;
+        curPosX = 0;
 
-        Rect atlasOptionsLabelRect = new Rect(0, curPosY, graphRect.x, ROW_HEIGHT);
-        EditorGUI.LabelField(atlasOptionsLabelRect, "Array");
+        GUIContent prefabLabelContent = new GUIContent("Prefab");
+        Vector2 prefabLabelPos = new Vector2();
+        prefabLabelPos.x = curPosX;
+        prefabLabelPos.y = curPosY;
+        Vector2 prefabLabelSize = boldStyle.CalcSize(prefabLabelContent);
+        Rect prefabLabelRect = new Rect();
+        prefabLabelRect.position = prefabLabelPos;
+        prefabLabelRect.size = prefabLabelSize;
+        GUI.Label(prefabLabelRect, prefabLabelContent, boldStyle);
+        
+        curPosX += prefabLabelSize.x;
 
-        Rect prefabLabelRect = new Rect(curPosX, curPosY, COLUMN_WIDTH, ROW_HEIGHT);
-        curPosX += prefabLabelRect.width;
-        EditorGUI.LabelField(prefabLabelRect, "Prefab");
+        Vector2 prefabInputPos = new Vector2();
+        prefabInputPos.x = curPosX;
+        prefabInputPos.y = curPosY;
+        Vector2 prefabInputSize = new Vector2();
+        prefabInputSize.x = OBJECT_FIELD_WIDTH;
+        prefabInputSize.y = prefabLabelSize.y;
+        Rect prefabInputRect = new Rect();
+        prefabInputRect.position = prefabInputPos;
+        prefabInputRect.size = prefabInputSize;
 
+        EditorGUI.BeginChangeCheck();
+        prefabInput = (TripEditorPrefab)EditorGUI.ObjectField(prefabInputRect, GUIContent.none, prefabInput, typeof(TripEditorPrefab), allowSceneObjects: false);
 
-        Rect selectedPrefabRect = new Rect(curPosX, curPosY, COLUMN_WIDTH, ROW_HEIGHT);
-        curPosX += selectedPrefabRect.width;
-        selectedPrefab = (TripEditorPrefab)EditorGUI.ObjectField(selectedPrefabRect, selectedPrefab, typeof(TripEditorPrefab), allowSceneObjects: false);
-
-
-        Rect addPosDataRect = new Rect(curPosX, curPosY, COLUMN_WIDTH, ROW_HEIGHT);
-        curPosX += addPosDataRect.width;
-
-        bool addParticleData = GUI.Button(addPosDataRect, "Add Particle");
-        if (addParticleData)
+        if (EditorGUI.EndChangeCheck())
         {
-            if (atlasToParticleAtlasDict == null)
+            if (prefabInput != null)
             {
-                atlasToParticleAtlasDict = new Dictionary<AtlasSO, ParticleAtlas>();
-                for (int i = 0; i < trip.particleAtlasArray.Length; i++)
-                {
-                    ParticleAtlas particleAtlasKeyValue = trip.particleAtlasArray[i];
-                    atlasToParticleAtlasDict.Add(particleAtlasKeyValue.atlas, particleAtlasKeyValue);
-                }
+                selectedParticleAtlas = atlasParticleAtlasDict[prefabInput.mainRenderer.atlas];
             }
-            if (atlasToParticleAtlasDict.TryGetValue(selectedPrefab.mainRenderer.atlas, out selectedParticleAtlas))
+        }
+
+        curPosX += prefabInputSize.x;
+
+        GUIContent addParticleContent = new GUIContent("Add Particle");
+        Vector2 addParticleDataPos = new Vector2();
+        addParticleDataPos.x = curPosX;
+        addParticleDataPos.y = curPosY;
+        Vector2 addParticleDataSize = buttonStyle.CalcSize(addParticleContent);
+        Rect addParticleDataRect = new Rect();
+        addParticleDataRect.position = addParticleDataPos;
+        addParticleDataRect.size = addParticleDataSize;
+        bool addParticleData = GUI.Button(addParticleDataRect, addParticleContent, buttonStyle);
+        
+        curPosX += addParticleDataSize.x;
+
+        if (addParticleData && prefabInput != null)
+        {
+            randomInput.x = 0;
+            randomInput.y = 0;
+
+            ParticlePosData[] particleDataArray = new ParticlePosData[selectedParticleAtlas.posDataArray.Length + 1];
+
+            for (int i = 0; i < selectedParticleAtlas.posDataArray.Length; i++)
             {
-                List<ParticlePosData> particleDataList = selectedParticleAtlas.posData.ToList();
+                particleDataArray[i] = selectedParticleAtlas.posDataArray[i];
+            }
 
-                ParticlePosData newParticleData = new ParticlePosData();
-                newParticleData.ticketCheckStart = 0;
-                newParticleData.ticketCheckEnd = 1;
-                newParticleData.depth = 1;
-                newParticleData.depthSize = 1;
+            ParticlePosData newPosData = new ParticlePosData();
+            newPosData.startStation = 0;
+            newPosData.endStation = 1;
+            newPosData.posZ = 1;
+            newPosData.posY = prefabInput.transform.position.y;
+            newPosData.depthSize = 1;
+            newPosData.widthType = prefabInput.widthType;
+            newPosData.spritesPerParticle = newPosData.widthType == ParticleWidthType.Slice ? 9 : 1;
+            string assetPath = AssetDatabase.GetAssetPath(prefabInput);
+            newPosData.prefabGUID = AssetDatabase.AssetPathToGUID(assetPath);
 
-                newParticleData.spriteIndex = 0;
-                newParticleData.scaleX = 1;
-                newParticleData.scaleY = 1;
-                newParticleData.randScale = 0;
-                newParticleData.widthType = ParticleWidthType.Simple;
-                
-                string assetPath = AssetDatabase.GetAssetPath(selectedPrefab);
-                newParticleData.prefabGUID = AssetDatabase.AssetPathToGUID(assetPath);
-                particleDataList.Add(newParticleData);
+            switch (selectedParticleAtlas.particleType)
+            {
+                case ParticleType.Scroll:
+                {
+                    newPosData.particleCount = 2;
 
-                selectedParticleAtlas.posData = particleDataList.ToArray();
+                    switch (newPosData.widthType)
+                    {
+                        case ParticleWidthType.Simple:
+                        {
+                            newPosData.spriteIndex = prefabInput.mainRenderer.spriteIndex;
+                            
+                            newPosData.scaleX = prefabInput.mainRenderer.width;
+                            newPosData.scaleY = prefabInput.mainRenderer.height;
 
-                selectedPosDataIndex = selectedParticleAtlas.posData.Length - 1;
+                            newPosData.quadScales = new Vector4[1];
+                            Vector4 quadScale = new Vector4();
+                            quadScale.x = newPosData.scaleX;
+                            quadScale.y = newPosData.scaleY;
+                            newPosData.quadScales[0] = quadScale;
+                        }
+                        break;
+                        case ParticleWidthType.Tile:
+                        {
+                            newPosData.spriteIndex = prefabInput.mainRenderer.spriteIndex;
+                            
+                            newPosData.scaleX = Mathf.Ceil(spawnData.bounds.size.x / prefabInput.mainRenderer.worldPivotAndSize.z);
+                            newPosData.scaleY = prefabInput.mainRenderer.height;
+                            
+                            newPosData.quadScales = new Vector4[1];
+                            Vector4 quadScale = new Vector4();
+                            quadScale.x = newPosData.scaleX;
+                            quadScale.y = newPosData.scaleY;
+                            newPosData.quadScales[0] = quadScale;
+                        }
+                        break;
+                        case ParticleWidthType.Slice:
+                        {
+                            newPosData.spriteIndex = selectedParticleAtlas.atlas.simpleSprites.Length + (prefabInput.mainRenderer.spriteIndex * 9);
 
-                ParticlePosData posData = selectedParticleAtlas.posData[selectedPosDataIndex];
+                            ParticleSpritesData leftSprite = selectedParticleAtlas.spriteData[newPosData.spriteIndex + 3];
+                            ParticleSpritesData centerSprite = selectedParticleAtlas.spriteData[newPosData.spriteIndex + 4];
+                            ParticleSpritesData rightSprite = selectedParticleAtlas.spriteData[newPosData.spriteIndex + 5];
 
+                            newPosData.scaleX = (spawnData.bounds.size.x - leftSprite.worldPivotAndSize.z - rightSprite.worldPivotAndSize.z) / centerSprite.worldPivotAndSize.z;
+
+                            SliceSprite sliceSprite = selectedParticleAtlas.atlas.slicedSprites[prefabInput.mainRenderer.spriteIndex];
+                            newPosData.quadScales = GetQuadScalesNineSlice(newPosData.scaleX, newPosData.scaleY, sliceSprite);
+                        }
+                        break;
+                    }
+                }
+                break;
+                case ParticleType.Zone:
+                {
+                    newPosData.spriteIndex = 0;
+                    newPosData.particleCount = selectedParticleCount;
+                    newPosData.quadCount = (uint)(newPosData.spritesPerParticle * newPosData.particleCount);
+                    switch (newPosData.widthType)
+                    {
+                        case ParticleWidthType.Simple:
+                        {
+                            newPosData.scaleX = prefabInput.mainRenderer.width;
+                            newPosData.scaleY = prefabInput.mainRenderer.height;
+
+                            newPosData.quadScales = new Vector4[1];
+                            Vector4 quadScale = new Vector4();
+                            quadScale.x = newPosData.scaleX;
+                            quadScale.y = newPosData.scaleY;
+                            newPosData.quadScales[0] = quadScale;
+                        }
+                        break;
+
+                        case ParticleWidthType.Tile:
+                        {
+                            newPosData.scaleX = prefabInput.mainRenderer.width;
+                            newPosData.scaleY = prefabInput.mainRenderer.height;
+                            newPosData.quadScales = new Vector4[selectedParticleCount];
+
+                            for (int i = 0; i < newPosData.particleCount; i++)
+                            {
+                                Vector4 quadScale = new Vector4();
+                                quadScale.x = newPosData.scaleX;
+                                quadScale.y = newPosData.scaleY;
+                                newPosData.quadScales[i] = quadScale;
+                            }
+                        }
+                        break;
+
+                        case ParticleWidthType.Slice:
+                        {
+                            newPosData.scaleX = prefabInput.mainRenderer.width;
+                            newPosData.scaleY = prefabInput.mainRenderer.height;
+
+                            newPosData.quadScales = new Vector4[newPosData.quadCount];
+                            int totalIndex = 0;
+                            for (int i = 0; i < newPosData.particleCount; i++)
+                            {
+                                SliceSprite sliceSprite = selectedParticleAtlas.atlas.slicedSprites[prefabInput.mainRenderer.spriteIndex];
+
+                                Vector4[] quadScales = GetQuadScalesNineSlice(newPosData.scaleX, newPosData.scaleY, sliceSprite);
+
+                                for (int j = 0; j < quadScales.Length; j++)
+                                {
+                                    newPosData.quadScales[totalIndex] = quadScales[j];
+                                    totalIndex++;
+                                }
+                            }
+                        }
+                        break;
+                    }
+                }
+                break;
+            }
+            if (prefabInput.preScrollerRenderers != null)
+            {
+                EdgeScroller preScroller = new EdgeScroller();
+                preScroller.edgeSpriteDataArray = new EdgeSpriteData[prefabInput.preScrollerRenderers.Length];
+                float posXOffset = 0;
+
+                for (int i = 0; i < prefabInput.preScrollerRenderers.Length; i++)
+                {
+                    AtlasRenderer preScrollerRenderer = prefabInput.preScrollerRenderers[i];
+                    
+                    EdgeSpriteData preScrollerSpriteData = new EdgeSpriteData();
+                    preScrollerSpriteData.spriteIndex = preScrollerRenderer.spriteIndex;
+
+                    Vector4 offset = new Vector4();
+                    offset.x = preScrollerRenderer.transform.localPosition.x;
+                    offset.y = preScrollerRenderer.transform.localPosition.y;
+                    offset.z = preScrollerRenderer.transform.localPosition.z;
+
+                    preScrollerSpriteData.offset = offset;
+
+                    Vector4 scale = new Vector4();
+                    scale.x = preScrollerRenderer.width;
+                    scale.y = preScrollerRenderer.height;
+
+                    preScrollerSpriteData.scale = scale;
+
+                    preScroller.edgeSpriteDataArray[i] = preScrollerSpriteData;
+
+                    if (offset.x < posXOffset) posXOffset = offset.x;
+                }
+
+                newPosData.preScroller = preScroller;
+                newPosData.posX = -posXOffset;
+            }
+            if (prefabInput.postScrollersRenderers != null)
+            {
+                EdgeScroller postScroller = new EdgeScroller();
+                postScroller.edgeSpriteDataArray = new EdgeSpriteData[prefabInput.postScrollersRenderers.Length];
+
+                float widthOffset;
+                if (newPosData.widthType == ParticleWidthType.Slice)
+                {
+                    widthOffset = selectedParticleAtlas.spriteData[newPosData.spriteIndex].worldPivotAndSize.z;
+                    widthOffset += newPosData.scaleX * selectedParticleAtlas.spriteData[newPosData.spriteIndex + 1].worldPivotAndSize.z;
+                    widthOffset += selectedParticleAtlas.spriteData[newPosData.spriteIndex + 2].worldPivotAndSize.z;
+                }
+                else
+                {
+                    widthOffset = newPosData.scaleX * selectedParticleAtlas.spriteData[newPosData.spriteIndex].worldPivotAndSize.z;
+                }
+                for (int i = 0; i < prefabInput.postScrollersRenderers.Length; i++)
+                {
+                    AtlasRenderer postScrollerRenderer = prefabInput.postScrollersRenderers[i];
+
+                    EdgeSpriteData postScrollerSpriteData = new EdgeSpriteData();
+                    postScrollerSpriteData.spriteIndex = postScrollerRenderer.spriteIndex;
+
+                    Vector4 offset = new Vector4();
+                    offset.x = postScrollerRenderer.transform.localPosition.x + widthOffset;
+                    offset.y = postScrollerRenderer.transform.localPosition.y;
+                    offset.z = postScrollerRenderer.transform.localPosition.z;
+
+                    postScrollerSpriteData.offset = offset;
+
+                    Vector4 scale = new Vector4();
+                    scale.x = postScrollerRenderer.width;
+                    scale.y = postScrollerRenderer.height;
+
+                    postScrollerSpriteData.scale = scale;
+
+                    postScroller.edgeSpriteDataArray[i] = postScrollerSpriteData;
+                }
+
+                newPosData.postScroller = postScroller;
+            }
+            
+            particleDataArray[selectedParticleAtlas.posDataArray.Length] = newPosData;
+            selectedParticleAtlas.posDataArray = particleDataArray;
+
+            selectedPosDataIndex = selectedParticleAtlas.posDataArray.Length - 1;
+
+            ParticlePosData posData = selectedParticleAtlas.posDataArray[selectedPosDataIndex];
+
+            selectedParticleCount = posData.particleCount;
+            Repaint();
+        }
+
+        GUIContent removeParticleDataContent = new GUIContent("Remove Particle");
+        Vector2 removeParticleDataPos = new Vector2();
+        removeParticleDataPos.x = curPosX;
+        removeParticleDataPos.y = curPosY;
+        Vector2 removeParticleDataSize = buttonStyle.CalcSize(removeParticleDataContent);
+        Rect removeParticleDataRect = new Rect();
+        removeParticleDataRect.position = removeParticleDataPos;
+        removeParticleDataRect.size = removeParticleDataSize;
+        bool removeParticleData = GUI.Button(removeParticleDataRect, removeParticleDataContent, buttonStyle);
+
+        curPosX += removeParticleDataSize.x;
+
+        if (removeParticleData && selectedParticleAtlas != null)
+        {
+            List<ParticlePosData> particleDataList = selectedParticleAtlas.posDataArray.ToList();
+            particleDataList.RemoveAt(selectedPosDataIndex);
+            selectedParticleAtlas.posDataArray = particleDataList.ToArray();
+            selectedPosDataIndex = Mathf.Clamp(selectedPosDataIndex - 1, 0, selectedParticleAtlas.posDataArray.Length - 1);
+
+            if (selectedParticleAtlas.posDataArray.Length > 0)
+            {
+                ParticlePosData posData = selectedParticleAtlas.posDataArray[selectedPosDataIndex];
                 selectedParticleCount = posData.particleCount;
-                selectedRandScale = posData.randScale;
-                selectedWidthType = posData.widthType;
-
-                ApplyPrefabToPosData(ref newParticleData);
-            }
-
-        }
-
-        Rect removePosDataRect = new Rect(curPosX, curPosY, COLUMN_WIDTH, ROW_HEIGHT);
-        curPosX += removePosDataRect.width;
-
-        bool removeParticleData = GUI.Button(removePosDataRect, "Remove Particle");
-        if (removeParticleData)
-        {
-            if (atlasToParticleAtlasDict == null)
-            {
-                atlasToParticleAtlasDict = new Dictionary<AtlasSO, ParticleAtlas>();
-                for (int i = 0; i < trip.particleAtlasArray.Length; i++)
-                {
-                    ParticleAtlas particleAtlasKeyValue = trip.particleAtlasArray[i];
-                    atlasToParticleAtlasDict.Add(particleAtlasKeyValue.atlas, particleAtlasKeyValue);
-                }
-            }
-
-            if (atlasToParticleAtlasDict.TryGetValue(selectedPrefab.mainRenderer.atlas, out selectedParticleAtlas))
-            {
-                List<ParticlePosData> particleDataList = selectedParticleAtlas.posData.ToList();
-                particleDataList.RemoveAt(selectedPosDataIndex);
-                selectedParticleAtlas.posData = particleDataList.ToArray();
-                selectedPosDataIndex = Mathf.Clamp(selectedPosDataIndex - 1, 0, selectedParticleAtlas.posData.Length - 1);
-
-                if (selectedParticleAtlas.posData.Length > 0)
-                {
-                    ParticlePosData posData = selectedParticleAtlas.posData[selectedPosDataIndex];
-                    selectedParticleCount = posData.particleCount;
-                }
             }
         }
 
+        GUIContent applyChangesContent = new GUIContent("Apply Changes");
+        Vector2 applyChangesPos = new Vector2();
+        applyChangesPos.x = curPosX;
+        applyChangesPos.y = curPosY;
+        Vector2 applyChangesSize = buttonStyle.CalcSize(applyChangesContent);
+        Rect applyChangesRect = new Rect();
+        applyChangesRect.position = applyChangesPos;
+        applyChangesRect.size = applyChangesSize;
+        bool appliedChanges = GUI.Button(applyChangesRect, applyChangesContent, buttonStyle);
 
-        Rect applyChangesRect = new Rect(curPosX, curPosY, COLUMN_WIDTH, ROW_HEIGHT);
         curPosX += applyChangesRect.width;
-        bool appliedChanges = GUI.Button(applyChangesRect, "Apply Changes");
 
-
-        if (appliedChanges)
+        if (appliedChanges && selectedParticleAtlas != null)
         {
-            if (selectedPrefab == null)
+            string assetPath = AssetDatabase.GetAssetPath(prefabInput);
+            string assetGUID = AssetDatabase.AssetPathToGUID(assetPath);
+
+            for (int i = 0; i < selectedParticleAtlas.posDataArray.Length; i++)
             {
-                selectedParticleAtlas = null;
-            }
-            if (atlasToParticleAtlasDict == null)
-            {
-                atlasToParticleAtlasDict = new Dictionary<AtlasSO, ParticleAtlas>();
-                for (int i = 0; i < trip.particleAtlasArray.Length; i++)
+                ParticlePosData posData = selectedParticleAtlas.posDataArray[i];
+                
+                if (posData.prefabGUID != assetGUID) continue;
+
+                posData.posY = prefabInput.transform.position.y;
+                posData.widthType = prefabInput.widthType;
+                posData.spritesPerParticle = posData.widthType == ParticleWidthType.Slice ? 9 : 1;
+                switch (selectedParticleAtlas.particleType)
                 {
-                    ParticleAtlas particleAtlasKeyValue = trip.particleAtlasArray[i];
-                    atlasToParticleAtlasDict.Add(particleAtlasKeyValue.atlas, particleAtlasKeyValue);
+                    case ParticleType.Scroll:
+                    {
+                        posData.particleCount = 2;
+
+                        switch (posData.widthType)
+                        {
+                            case ParticleWidthType.Simple:
+                            {
+                                posData.spriteIndex = prefabInput.mainRenderer.spriteIndex;
+
+                                posData.scaleX = prefabInput.mainRenderer.width;
+                                posData.scaleY = prefabInput.mainRenderer.height;
+
+                                posData.quadScales = new Vector4[1];
+                                Vector4 quadScale = new Vector4();
+                                quadScale.x = posData.scaleX;
+                                quadScale.y = posData.scaleY;
+                                posData.quadScales[0] = quadScale;
+                            }
+                            break;
+                            case ParticleWidthType.Tile:
+                            {
+                                posData.spriteIndex = prefabInput.mainRenderer.spriteIndex;
+
+                                posData.scaleX = Mathf.Ceil(spawnData.bounds.size.x / prefabInput.mainRenderer.worldPivotAndSize.z);
+                                posData.scaleY = prefabInput.mainRenderer.height;
+
+                                posData.quadScales = new Vector4[1];
+                                Vector4 quadScale = new Vector4();
+                                quadScale.x = posData.scaleX;
+                                quadScale.y = posData.scaleY;
+                                posData.quadScales[0] = quadScale;
+                            }
+                            break;
+                            case ParticleWidthType.Slice:
+                            {
+                                posData.spriteIndex = selectedParticleAtlas.atlas.simpleSprites.Length + (prefabInput.mainRenderer.spriteIndex * 9);
+
+                                ParticleSpritesData leftSprite = selectedParticleAtlas.spriteData[posData.spriteIndex + 3];
+                                ParticleSpritesData centerSprite = selectedParticleAtlas.spriteData[posData.spriteIndex + 4];
+                                ParticleSpritesData rightSprite = selectedParticleAtlas.spriteData[posData.spriteIndex + 5];
+
+                                posData.scaleX = (spawnData.bounds.size.x - leftSprite.worldPivotAndSize.z - rightSprite.worldPivotAndSize.z) / centerSprite.worldPivotAndSize.z;
+
+                                SliceSprite sliceSprite = selectedParticleAtlas.atlas.slicedSprites[prefabInput.mainRenderer.spriteIndex];
+                                posData.quadScales = GetQuadScalesNineSlice(posData.scaleX, posData.scaleY, sliceSprite);
+                            }
+                            break;
+                        }
+                    }
+                    break;
+                    case ParticleType.Zone:
+                    {
+                        posData.spriteIndex = 0;
+                        posData.particleCount = selectedParticleCount;
+                        posData.quadCount = (uint)(posData.spritesPerParticle * posData.particleCount);
+
+                        switch (posData.widthType)
+                        {
+                            case ParticleWidthType.Simple:
+                            {
+                                posData.scaleX = prefabInput.mainRenderer.width;
+                                posData.scaleY = prefabInput.mainRenderer.height;
+
+                                posData.quadScales = new Vector4[1];
+                                Vector4 quadScale = new Vector4();
+                                quadScale.x = posData.scaleX;
+                                quadScale.y = posData.scaleY;
+                                posData.quadScales[0] = quadScale;
+                            }
+                            break;
+
+                            case ParticleWidthType.Tile:
+                            {
+                                posData.scaleX = prefabInput.mainRenderer.width;
+                                posData.scaleY = prefabInput.mainRenderer.height;
+                                posData.quadScales = new Vector4[selectedParticleCount];
+
+                                for (int j = 0; j < posData.particleCount; j++)
+                                {
+                                    float randScaleX = UnityEngine.Random.Range(-randomInput.x, randomInput.x);
+                                    float randScaleY = UnityEngine.Random.Range(-randomInput.y, randomInput.y);
+                                    randScaleX = Mathf.Max(posData.scaleX + randScaleX, 1);
+                                    randScaleY = Mathf.Max(posData.scaleY + randScaleY, 1);
+
+                                    Vector4 quadScale = new Vector4();
+                                    quadScale.x = randScaleX;
+                                    quadScale.y = randScaleY;
+                                    posData.quadScales[j] = quadScale;
+                                }
+                            }
+                            break;
+
+                            case ParticleWidthType.Slice:
+                            {
+                                posData.scaleX = prefabInput.mainRenderer.width;
+                                posData.scaleY = prefabInput.mainRenderer.height;
+
+                                posData.quadScales = new Vector4[posData.quadCount];
+                                int totalIndex = 0;
+                                for (int j = 0; j < posData.particleCount; j++)
+                                {
+                                    float randScaleX = UnityEngine.Random.Range(-randomInput.x, randomInput.x);
+                                    float randScaleY = UnityEngine.Random.Range(-randomInput.y, randomInput.y);
+                                    randScaleX = Mathf.Max(posData.scaleX + randScaleX, 1);
+                                    randScaleY = Mathf.Max(posData.scaleY + randScaleY, 1);
+
+                                    SliceSprite sliceSprite = selectedParticleAtlas.atlas.slicedSprites[prefabInput.mainRenderer.spriteIndex];
+
+                                    Vector4[] quadScales = GetQuadScalesNineSlice(randScaleX, randScaleY, sliceSprite);
+
+                                    for (int k = 0; k < quadScales.Length; k++)
+                                    {
+                                        posData.quadScales[totalIndex] = quadScales[k];
+                                        totalIndex++;
+                                    }
+                                }
+                            }
+                            break;
+                        }
                 }
+                break;
+                }
+
+                if (prefabInput.preScrollerRenderers != null)
+                {
+                    EdgeScroller preScroller = new EdgeScroller();
+                    preScroller.edgeSpriteDataArray = new EdgeSpriteData[prefabInput.preScrollerRenderers.Length];
+                    float posXOffset = 0;
+
+                    for (int j = 0; j < prefabInput.preScrollerRenderers.Length; j++)
+                    {
+                        AtlasRenderer preScrollerRenderer = prefabInput.preScrollerRenderers[j];
+
+                        EdgeSpriteData preScrollerSpriteData = new EdgeSpriteData();
+                        preScrollerSpriteData.spriteIndex = preScrollerRenderer.spriteIndex;
+
+                        Vector4 offset = new Vector4();
+                        offset.x = preScrollerRenderer.transform.localPosition.x;
+                        offset.y = preScrollerRenderer.transform.localPosition.y;
+                        offset.z = preScrollerRenderer.transform.localPosition.z;
+
+                        preScrollerSpriteData.offset = offset;
+
+                        Vector4 scale = new Vector4();
+                        scale.x = preScrollerRenderer.width;
+                        scale.y = preScrollerRenderer.height;
+
+                        preScrollerSpriteData.scale = scale;
+
+                        preScroller.edgeSpriteDataArray[j] = preScrollerSpriteData;
+
+                        if (offset.x < posXOffset) posXOffset = offset.x;
+                    }
+
+                    posData.preScroller = preScroller;
+                    posData.posX = -posXOffset;
+                }
+                if (prefabInput.postScrollersRenderers != null)
+                {
+                    EdgeScroller postScroller = new EdgeScroller();
+                    postScroller.edgeSpriteDataArray = new EdgeSpriteData[prefabInput.postScrollersRenderers.Length];
+
+                    float widthOffset;
+                    if (posData.widthType == ParticleWidthType.Slice)
+                    {
+                        widthOffset = selectedParticleAtlas.spriteData[posData.spriteIndex].worldPivotAndSize.z;
+                        widthOffset += posData.scaleX * selectedParticleAtlas.spriteData[posData.spriteIndex + 1].worldPivotAndSize.z;
+                        widthOffset += selectedParticleAtlas.spriteData[posData.spriteIndex + 2].worldPivotAndSize.z;
+                    }
+                    else
+                    {
+                        widthOffset = posData.scaleX * selectedParticleAtlas.spriteData[posData.spriteIndex].worldPivotAndSize.z;
+                    }
+
+                    for (int j = 0; j < prefabInput.postScrollersRenderers.Length; j++)
+                    {
+                        AtlasRenderer postScrollerRenderer = prefabInput.postScrollersRenderers[j];
+
+                        EdgeSpriteData postScrollerSpriteData = new EdgeSpriteData();
+                        postScrollerSpriteData.spriteIndex = postScrollerRenderer.spriteIndex;
+
+                        Vector4 offset = new Vector4();
+                        offset.x = postScrollerRenderer.transform.localPosition.x + widthOffset;
+                        offset.y = postScrollerRenderer.transform.localPosition.y;
+                        offset.z = postScrollerRenderer.transform.localPosition.z;
+
+                        postScrollerSpriteData.offset = offset;
+
+                        Vector4 scale = new Vector4();
+                        scale.x = postScrollerRenderer.width;
+                        scale.y = postScrollerRenderer.height;
+
+                        postScrollerSpriteData.scale = scale;
+
+                        postScroller.edgeSpriteDataArray[j] = postScrollerSpriteData;
+                    }
+
+                    posData.postScroller = postScroller;
+                }
+
+                selectedParticleAtlas.posDataArray[i] = posData;
             }
 
-            if (selectedPosDataIndex != -1 && atlasToParticleAtlasDict.TryGetValue(selectedPrefab.mainRenderer.atlas, out selectedParticleAtlas))
-            {
-                ParticlePosData selectedPosData = selectedParticleAtlas.posData[selectedPosDataIndex];
-                ApplyPrefabToPosData(ref selectedPosData);
-            }
-            else
-            {
-                selectedParticleAtlas = null;
-            }
+
         }
 
-        curPosY += (int)ROW_HEIGHT;
+        curPosY += applyChangesSize.y;
     }
-    private void DrawThirdHeader()
+    private void DrawThirdRow()
     {
         if (trip == null || selectedPosDataIndex == -1) return;
         
-        Rect posDataLabelRect = new Rect(0, curPosY, graphRect.x, ROW_HEIGHT);
-        EditorGUI.LabelField(posDataLabelRect, "Pos Data");
-
-        float curPosX = graphRect.x;
-
-        if (selectedParticleAtlas == null || selectedParticleAtlas.posData.Length == 0) return;
-        
-        Rect elevationToggleLabelRect = new Rect(curPosX, curPosY, COLUMN_WIDTH / 2, ROW_HEIGHT);
-        curPosX += elevationToggleLabelRect.width;
-        EditorGUI.LabelField(elevationToggleLabelRect, "Elevate");
-
-        Rect elevationToggleRect = new Rect(curPosX, curPosY, COLUMN_WIDTH / 2, ROW_HEIGHT);
-        curPosX += elevationToggleRect.width;
-        EditorGUI.BeginChangeCheck();
-        selectedElevation = EditorGUI.Toggle(elevationToggleRect, selectedElevation);
-        if (EditorGUI.EndChangeCheck())
-        {
-            atlasToParticleAtlasDict = new Dictionary<AtlasSO, ParticleAtlas>();
-            for (int i = 0; i < trip.particleAtlasArray.Length; i++)
-            {
-                ParticleAtlas particleAtlasKeyValue = trip.particleAtlasArray[i];
-                atlasToParticleAtlasDict.Add(particleAtlasKeyValue.atlas, particleAtlasKeyValue);
-            }
-
-            if (atlasToParticleAtlasDict.TryGetValue(selectedPrefab.mainRenderer.atlas, out selectedParticleAtlas))
-            {
-                ParticlePosData selectedPosData = selectedParticleAtlas.posData[selectedPosDataIndex];
-                selectedPosData.elevate = selectedElevation;
-                selectedParticleAtlas.posData[selectedPosDataIndex] = selectedPosData;
-            }
-        }
+        curPosX = 0;
 
 
         switch (selectedParticleAtlas.particleType)
         {
             case ParticleType.Zone:
             {
-                Rect selectedParticleCountLabelRect = new Rect(curPosX, curPosY, COLUMN_WIDTH / 2, ROW_HEIGHT);
-                curPosX += selectedParticleCountLabelRect.width;
-                EditorGUI.LabelField(selectedParticleCountLabelRect, "Count");
+                GUIContent countLabelContent = new GUIContent("Count");
+                Vector2 countLabelPos = new Vector2();
+                countLabelPos.x = curPosX;
+                countLabelPos.y = curPosY;
+                Vector2 countLabelSize = boldStyle.CalcSize(countLabelContent);
+                Rect countLabelRect = new Rect();
+                countLabelRect.position = countLabelPos;
+                countLabelRect.size = countLabelSize;
+                GUI.Label(countLabelRect, countLabelContent, boldStyle);
 
-                Rect selectedParticleCountRect = new Rect(curPosX, curPosY, COLUMN_WIDTH / 2, ROW_HEIGHT);
-                curPosX += selectedParticleCountRect.width;
+                curPosX += countLabelSize.x;
+
+                GUIContent countInputContent = new GUIContent("Count Input");
+                Vector2 countInputPos = new Vector2();
+                countInputPos.x = curPosX;
+                countInputPos.y = curPosY;
+                Vector2 countInputSize = boldStyle.CalcSize(countInputContent);
+                Rect countInputRect = new Rect();
+                countInputRect.position = countInputPos;
+                countInputRect.size = countInputSize;
+
+                curPosX += countInputSize.x;
 
                 EditorGUI.BeginChangeCheck();
-                selectedParticleCount = EditorGUI.IntSlider(selectedParticleCountRect, selectedParticleCount, 1, ZONE_PARTICLE_COUNT);
+                selectedParticleCount = EditorGUI.IntSlider(countInputRect, countInputContent, selectedParticleCount, 1, ZONE_PARTICLE_COUNT);
                 if (EditorGUI.EndChangeCheck())
                 {
-                    if (atlasToParticleAtlasDict.TryGetValue(selectedPrefab.mainRenderer.atlas, out selectedParticleAtlas))
-                    {
-                        ParticlePosData selectedPosData = selectedParticleAtlas.posData[selectedPosDataIndex];
-                        selectedPosData.particleCount = selectedParticleCount;
-                        selectedParticleAtlas.posData[selectedPosDataIndex] = selectedPosData;
-                    }
+                    ParticlePosData selectedPosData = selectedParticleAtlas.posDataArray[selectedPosDataIndex];
+                    selectedPosData.particleCount = selectedParticleCount;
+                    selectedParticleAtlas.posDataArray[selectedPosDataIndex] = selectedPosData;
                 }
 
-
-                switch (selectedParticleAtlas.posData[selectedPosDataIndex].widthType)
+                ParticlePosData posData = selectedParticleAtlas.posDataArray[selectedPosDataIndex];
+                if (posData.widthType == ParticleWidthType.Simple)
                 {
-                    case ParticleWidthType.Tiled:
-                    case ParticleWidthType.Sliced:
+
+                }
+                else
+                {
+                    GUIContent randomLabelContent = new GUIContent("Random");
+                    Vector2 randomLabelPos = new Vector2();
+                    randomLabelPos.x = curPosX;
+                    randomLabelPos.y = curPosY;
+                    Vector2 randomLabelSize = boldStyle.CalcSize(randomLabelContent);
+                    Rect randomLabelRect = new Rect();
+                    randomLabelRect.position = randomLabelPos;
+                    randomLabelRect.size = randomLabelSize;
+                    GUI.Label(randomLabelRect, randomLabelContent, boldStyle);
+
+                    curPosX += randomLabelSize.x;
+
+                    GUIContent randomInputContent = new GUIContent("Random Input");
+                    Vector2 randomInputPos = new Vector2();
+                    randomInputPos.x = curPosX;
+                    randomInputPos.y = curPosY;
+                    Vector2 randomInputSize = boldStyle.CalcSize(randomInputContent);
+                    Rect randomInputRect = new Rect();
+                    randomInputRect.position = randomInputPos;
+                    randomInputRect.size = randomInputSize;
+
+                    curPosX += randomInputSize.x;
+                    EditorGUI.BeginChangeCheck();
+                    randomInput = EditorGUI.Vector2Field(randomInputRect, randomInputContent, randomInput);
+                    if (EditorGUI.EndChangeCheck())
                     {
-                        Rect randScaleLabelRect = new Rect(curPosX, curPosY, COLUMN_WIDTH / 2, ROW_HEIGHT);
-                        curPosX += randScaleLabelRect.width;
-                        EditorGUI.LabelField(randScaleLabelRect, "Random");
+                        posData.quadScales = new Vector4[posData.quadCount];
+                        int totalIndex = 0;
 
-                        Rect randScaleRect = new Rect(curPosX, curPosY, COLUMN_WIDTH / 2, ROW_HEIGHT);
-                        curPosX += randScaleRect.width;
-
-                        EditorGUI.BeginChangeCheck();
-                        selectedRandScale = EditorGUI.Slider(randScaleRect, selectedRandScale, 0, 10);
-                        if (EditorGUI.EndChangeCheck())
+                        switch (posData.widthType)
                         {
-                            if (atlasToParticleAtlasDict.TryGetValue(selectedPrefab.mainRenderer.atlas, out selectedParticleAtlas))
+                            case ParticleWidthType.Tile:
                             {
-                                ParticlePosData selectedPosData = selectedParticleAtlas.posData[selectedPosDataIndex];
-                                selectedPosData.randScale = selectedRandScale;
-                                selectedParticleAtlas.posData[selectedPosDataIndex] = selectedPosData;
+                                for (int i = 0; i < posData.particleCount; i++)
+                                {
+                                    float randScaleX = UnityEngine.Random.Range(-randomInput.x, randomInput.x);
+                                    float randScaleY = UnityEngine.Random.Range(-randomInput.y, randomInput.y);
+                                    randScaleX = Mathf.Max(posData.scaleX + randScaleX, 1);
+                                    randScaleY = Mathf.Max(posData.scaleY + randScaleY, 1);
+
+                                    Vector4 quadScales = new Vector4();
+                                    quadScales.x = randScaleX;
+                                    quadScales.y = randScaleY;
+
+                                    for (int k = 0; k < posData.quadScales.Length; k++)
+                                    {
+                                        posData.quadScales[totalIndex] = quadScales;
+                                        totalIndex++;
+                                    }
+                                }
                             }
+                            break;
+
+                            case ParticleWidthType.Slice:
+                            {
+                                for (int i = 0; i < posData.particleCount; i++)
+                                {
+                                    float randScaleX = UnityEngine.Random.Range(-randomInput.x, randomInput.x);
+                                    float randScaleY = UnityEngine.Random.Range(-randomInput.y, randomInput.y);
+                                    randScaleX = Mathf.Max(posData.scaleX + randScaleX, 1);
+                                    randScaleY = Mathf.Max(posData.scaleY + randScaleY, 1);
+
+                                    SliceSprite sliceSprite = selectedParticleAtlas.atlas.slicedSprites[prefabInput.mainRenderer.spriteIndex];
+
+                                    Vector4[] quadScales = GetQuadScalesNineSlice(randScaleX, randScaleY, sliceSprite);
+
+                                    for (int k = 0; k < quadScales.Length; k++)
+                                    {
+                                        posData.quadScales[totalIndex] = quadScales[k];
+                                        totalIndex++;
+                                    }
+                                }
+                            }
+                            break;
                         }
-
+                        selectedParticleAtlas.posDataArray[selectedPosDataIndex] = posData;
                     }
-                    break;
                 }
-            }
-            break;
-        }
-
-        if (selectedParticleAtlas.posData[selectedPosDataIndex].widthType != ParticleWidthType.Sliced)
-        {
-            Rect widthTypeLabelRect = new Rect(curPosX, curPosY, COLUMN_WIDTH / 2, ROW_HEIGHT);
-            curPosX += widthTypeLabelRect.width;
-
-            EditorGUI.LabelField(widthTypeLabelRect, "Width");
-
-            Rect widthTypeRect = new Rect(curPosX, curPosY, COLUMN_WIDTH / 2, ROW_HEIGHT);
-            curPosX += widthTypeRect.width;
-
-            EditorGUI.BeginChangeCheck();
-            selectedWidthType = (ParticleWidthType)EditorGUI.EnumPopup(widthTypeRect, selectedWidthType);
-            if (EditorGUI.EndChangeCheck())
-            {
-                if (atlasToParticleAtlasDict.TryGetValue(selectedPrefab.mainRenderer.atlas, out selectedParticleAtlas))
-                {
-                    ParticlePosData selectedPosData = selectedParticleAtlas.posData[selectedPosDataIndex];
-                    selectedPosData.widthType = selectedWidthType;
-                    selectedParticleAtlas.posData[selectedPosDataIndex] = selectedPosData;
-                }
+                break;
             }
         }
+        GUIContent widthTypeLabelContent = new GUIContent("Width Type");
+        Vector2 widthTypePos = new Vector2();
+        widthTypePos.x = curPosX;
+        widthTypePos.y = curPosY;
+        Vector2 widthTypeSize = boldStyle.CalcSize(widthTypeLabelContent);
+        Rect widthTypeLabelRect = new Rect();
+        widthTypeLabelRect.position = widthTypePos;
+        widthTypeLabelRect.size = widthTypeSize;
+        curPosX += widthTypeSize.x;
 
-        curPosY += (int)ROW_HEIGHT;
-    }
-    private void DrawSidePanel()
-    {
-        if (trip == null) return;
-        if (selectedParticleAtlas == null) return;
+        EditorGUI.LabelField(widthTypeLabelRect, widthTypeLabelContent, boldStyle);
 
-        if (selectedParticleAtlas.particleType != ParticleType.Scroll) return;
 
-        Event e = Event.current;
+        GUIContent widthTypeInputContent = new GUIContent("Width Type Input");
+        Vector2 widthTypeInputPos = new Vector2();
+        widthTypeInputPos.x = curPosX;
+        widthTypeInputPos.y = curPosY;
+        Vector2 widthTypeInputSize = boldStyle.CalcSize(widthTypeInputContent);
+        Rect widthTypeInputRect = new Rect();
+        widthTypeInputRect.position = widthTypeInputPos;
+        widthTypeInputRect.size = widthTypeInputSize;
+        curPosX += widthTypeInputSize.x;
 
-        if (selectedParticleAtlas.posData.Length == 0) return;
-        ParticlePosData posData = selectedParticleAtlas.posData[selectedPosDataIndex];
-
-        float halfSidePanelWidth = sidePanelRect.width * 0.5f;
-        float quarterSidePanelWidth = sidePanelRect.width * 0.25f; 
-
-        Rect preScrollerObjectRect = new Rect(sidePanelRect.x, ROW_HEIGHT * 3, halfSidePanelWidth + quarterSidePanelWidth, ROW_HEIGHT);
-        Rect postScrollerObjectRect = new Rect(sidePanelRect.x, preScrollerObjectRect.y + ROW_HEIGHT, preScrollerObjectRect.width, ROW_HEIGHT);
-
-        if (posData.preScrollers == null || posData.preScrollers.Length == 0) return;
-
-        sidePanelScroll = GUI.BeginScrollView(sidePanelScrollRect, sidePanelScroll, fullRect);
+        EditorGUI.BeginChangeCheck();
+        selectedWidthType = (ParticleWidthType)EditorGUI.EnumPopup(widthTypeInputRect, widthTypeLabelContent, selectedWidthType);
+        if (EditorGUI.EndChangeCheck())
         {
-            Handles.BeginGUI();
-            {
-                Handles.DrawSolidRectangleWithOutline(sidePanelRect, Color.clear, Color.white);
-                float containterHeight = ROW_HEIGHT * EDGE_SCROLLER_INPUT_AMOUNT;
-                
-                Rect preScrollerHeaderRect = new Rect(sidePanelRect.x, sidePanelRect.y, sidePanelRect.width, ROW_HEIGHT);
-                EditorGUI.LabelField(preScrollerHeaderRect, new GUIContent("Pre Scrollers"));
-                DrawEdgeScrollers(posData.preScrollers[0].spriteData, containterHeight, e, selectedParticleAtlas, ROW_HEIGHT, isPreScroller: true);
-
-
-            }
-            Handles.EndGUI();
+            ParticlePosData selectedPosData = selectedParticleAtlas.posDataArray[selectedPosDataIndex];
+            selectedPosData.widthType = selectedWidthType;
+            selectedParticleAtlas.posDataArray[selectedPosDataIndex] = selectedPosData;
         }
-        GUI.EndScrollView();
+
+        curPosY += widthTypeInputSize.y;
     }
-    private void DrawEdgeScrollers(EdgeSpriteData[] edgeScrollers, float containerHeight, Event e, ParticleAtlas particleAtlas, float startHeight, bool isPreScroller)
-    {
-        for (int i = 0; i < edgeScrollers.Length; i++)
-        {
-            EdgeSpriteData edgeScroller = edgeScrollers[i];
-
-            float posY = startHeight + sidePanelRect.y + containerHeight * i;
-
-            Handles.DrawLine(new Vector2(sidePanelRect.x, posY), new Vector2(sidePanelRect.xMax, posY));
-
-            Rect texPosRect = new Rect(sidePanelRect.x, posY, sidePanelRect.width, containerHeight);
-
-            ParticleSpritesData s = particleAtlas.spriteData[edgeScroller.spriteIndex];
-
-            Vector2 uvPos = new Vector2(s.uvSizeAndPos.z, s.uvSizeAndPos.w);
-            Vector2 uvSize = new Vector2(s.uvSizeAndPos.x, s.uvSizeAndPos.y);
-
-            Rect texUVRect = new Rect(uvPos, uvSize);
-            GUI.DrawTextureWithTexCoords(texPosRect, particleAtlas.atlas.texture, texUVRect);
-        }
-    }
-    private void DrawTripSettings()
+    private void DrawFourthRow()
     {
         if (trip == null || trip.stationsDataArray.Length == 0) return;
 
-        float ticketCheckColWidth = graphRect.width / (float)totalTicketChecks;
+        curPosX = 0;
 
-        int stationIndex = 0;
-        int ticketChecks = 0;
+        float scrollWindowWidth = position.width - (PADDING * 2);
+        float graphWidth = scrollWindowWidth - PADDING;
+        float graphColWidth = graphWidth / (float)trip.stationsDataArray.Length;
 
-        float stationRectPosY = curPosY + (ROW_HEIGHT * STATION_LABEL_ROW);
-        float npcGradientPosY = curPosY + (ROW_HEIGHT * NPC_GRADIENT_ROW);
-        float kmRectPosY = curPosY + (ROW_HEIGHT * KM_LABEL_ROW);
-        float dayNightRectPosY = curPosY + (ROW_HEIGHT * DAY_NIGHT_ROW);
-        float elevationRectPosY = curPosY + (ROW_HEIGHT * ELEVATION_ROW);
-
-        GUIStyle stationStyle = new GUIStyle()
+        float stationHeaderHeight = 0;
+        curPosX = PADDING;
+        for (int i = 0; i < trip.stationsDataArray.Length; i++)
         {
-            alignment = TextAnchor.MiddleCenter,
-            normal = new GUIStyleState()
-            {
-                textColor = Color.white,
-            },
-            fontSize = 16,
-            fontStyle = FontStyle.Bold
-        };
+            StationSO station = trip.stationsDataArray[i];
 
-        Rect npcGradientRect = new Rect(graphRect.x, npcGradientPosY, graphRect.size.x, ROW_HEIGHT);
+            GUIContent stationHeaderContent = new GUIContent(station.name);
+            Vector2 stationHeaderPos = new Vector2();
+            stationHeaderPos.x = curPosX;
+            stationHeaderPos.y = curPosY;
+            stationHeaderHeight = headerStyle.CalcHeight(stationHeaderContent, graphColWidth);
+            Vector2 stationHeaderSize = new Vector2();
+            stationHeaderSize.x = graphColWidth;
+            stationHeaderSize.y = stationHeaderHeight;
+            Rect stationHeaderRect = new Rect();
+            stationHeaderRect.position = stationHeaderPos;
+            stationHeaderRect.size = stationHeaderSize;
+            GUI.Label(stationHeaderRect, stationHeaderContent, headerStyle);
 
-
-        for (int i = 0; i <= totalTicketChecks; i++)
-        {
-            float posX = graphRect.x + i * ticketCheckColWidth;
-            StationSO station = trip.stationsDataArray[stationIndex];
-            if (station.ticketsToCheckBeforeSpawn == ticketChecks)
-            {
-                GUIContent stationGUI = new GUIContent(station.name);
-                Vector2 stationLabelSize = stationStyle.CalcSize(stationGUI);
-
-                Rect stationRect = new Rect(posX - (stationLabelSize.x * 0.5f), stationRectPosY, stationLabelSize.x, stationLabelSize.y);
-
-                Rect stationLabelRect = new Rect(stationRect.min, stationLabelSize);
-                GUI.Label(stationLabelRect, stationGUI, stationStyle);
-
-                stationIndex++;
-                ticketChecks = 0;
-            }
-            ticketChecks++;
-
-            if (i <  totalTicketChecks)
-            {
-                Rect kmSliderRect = new Rect(posX, kmRectPosY, ticketCheckColWidth, ROW_HEIGHT);
-                selectedKMValues[i] = EditorGUI.Slider(kmSliderRect, GUIContent.none, selectedKMValues[i], 10, 100);
-
-                Rect dayNightSliderRect = new Rect(posX, dayNightRectPosY, ticketCheckColWidth, ROW_HEIGHT);
-                selectedDayNightValues[i] = EditorGUI.Slider(dayNightSliderRect, GUIContent.none, selectedDayNightValues[i], 0, 1);
-
-                Rect elevationXLabelRect = new Rect(posX, elevationRectPosY, ROW_HEIGHT, ROW_HEIGHT);
-                Rect elevationYLabelRect = new Rect(posX, elevationRectPosY + ROW_HEIGHT, ROW_HEIGHT, ROW_HEIGHT);
-                EditorGUI.LabelField(elevationXLabelRect, "X");
-                EditorGUI.LabelField(elevationYLabelRect, "Y");
-
-                Rect elevationSlideXRect = new Rect(posX + elevationXLabelRect.width, elevationRectPosY, ticketCheckColWidth - elevationXLabelRect.width, ROW_HEIGHT);
-                Rect elevationSlideYRect = new Rect(posX + elevationYLabelRect.width, elevationRectPosY + ROW_HEIGHT, ticketCheckColWidth - elevationYLabelRect.width, ROW_HEIGHT);
-                selectedElevationValues[i].x = EditorGUI.Slider(elevationSlideXRect, GUIContent.none, selectedElevationValues[i].x, 0, 500);
-                selectedElevationValues[i].y = EditorGUI.Slider(elevationSlideYRect, GUIContent.none, selectedElevationValues[i].y, -20, 20);
-            }
+            curPosX += graphColWidth;
         }
 
-        GUIStyle style = new GUIStyle()
+        curPosX = PADDING;
+        curPosY += stationHeaderHeight;
+
+
+        GUIContent kmphLabelContent = new GUIContent("KMPH");
+        Vector2 kmphLabelSize = leftPanelStyle.CalcSize(kmphLabelContent);
+        Vector2 kmphLabelPos = new Vector2();
+        kmphLabelPos.x = curPosX - kmphLabelSize.x;
+        kmphLabelPos.y = curPosY;
+        Rect kmphLabelRect = new Rect();
+        kmphLabelRect.position = kmphLabelPos;
+        kmphLabelRect.size = kmphLabelSize;
+        GUI.Label(kmphLabelRect, kmphLabelContent, leftPanelStyle);
+
+        for (int i = 0; i < trip.stationsDataArray.Length; i++)
         {
-            alignment = TextAnchor.UpperLeft,
-            normal = new GUIStyleState()
+            Vector2 kmphInputPos = new Vector2();
+            kmphInputPos.x = curPosX;
+            kmphInputPos.y = curPosY;
+            Vector2 kmphInputSize = new Vector2();
+            kmphInputSize.x = graphColWidth;
+            kmphInputSize.y = kmphLabelSize.y;
+            Rect kmphInputRect = new Rect();
+            kmphInputRect.position = kmphInputPos;
+            kmphInputRect.size = kmphInputSize;
+
+            kmphInputValues[i] = EditorGUI.Slider(kmphInputRect, kmphInputValues[i], 10, 50);
+            curPosX += graphColWidth;
+        }
+
+        curPosX = PADDING;
+        curPosY += kmphLabelSize.y;
+
+        GUIContent dayNightLabelContent = new GUIContent("Day/Night");
+        Vector2 dayNightLabelSize = leftPanelStyle.CalcSize(dayNightLabelContent);
+        Vector2 dayNightLabelPos = new Vector2();
+        dayNightLabelPos.x = curPosX - dayNightLabelSize.x;
+        dayNightLabelPos.y = curPosY;
+        Rect dayNightLabelRect = new Rect();
+        dayNightLabelRect.position = dayNightLabelPos;
+        dayNightLabelRect.size = dayNightLabelSize;
+        GUI.Label(dayNightLabelRect, dayNightLabelContent, leftPanelStyle);
+
+        for (int i = 0; i < trip.stationsDataArray.Length; i++)
+        {
+            Vector2 dayNightInputPos = new Vector2();
+            dayNightInputPos.x = curPosX;
+            dayNightInputPos.y = curPosY;
+            Vector2 dayNightInputSize = new Vector2();
+            dayNightInputSize.x = graphColWidth;
+            dayNightInputSize.y = dayNightLabelSize.y;
+            Rect dayNightInputRect = new Rect();
+            dayNightInputRect.position = dayNightInputPos;
+            dayNightInputRect.size = dayNightInputSize;
+
+            dayNightInputValues[i] = EditorGUI.Slider(dayNightInputRect, dayNightInputValues[i], 0, 1);
+            curPosX += graphColWidth;
+        }
+
+        curPosX = 0;
+        curPosY += dayNightLabelSize.y;
+
+        Vector2 graphWindowPos = new Vector2();
+        graphWindowPos.x = curPosX;
+        graphWindowPos.y = curPosY;
+        Vector2 graphWindowSize = new Vector2();
+        graphWindowSize.x = position.width;
+        graphWindowSize.y = position.height - curPosY;
+        Rect graphWindowRect = new Rect();
+        graphWindowRect.position = graphWindowPos;
+        graphWindowRect.size = graphWindowSize;
+
+        Vector2 graphScrollPos = new Vector2();
+        graphScrollPos.x = curPosX;
+        graphScrollPos.y = curPosY;
+        Vector2 graphScrollSize = new Vector2();
+        graphScrollSize.x = scrollWindowWidth;
+        graphScrollSize.y = FULL_RECT_HEIGHT;
+        Rect graphScrollRect = new Rect();
+        graphScrollRect.position = graphScrollPos;
+        graphScrollRect.size = graphScrollSize;
+
+        float graphRowHeight = graphScrollRect.height / FAR_CLIP;
+
+        graphScroll = GUI.BeginScrollView(graphWindowRect, graphScroll, graphScrollRect);
+        Handles.BeginGUI();
+
+        float trainWorldPosZIndex = TRAIN_DEPTH_MIN - 1;
+        float trainWorldSizeZIndex = TRAIN_DEPTH_MAX - trainWorldPosZIndex;
+        Vector2 trainAreaPos = new Vector2();
+        trainAreaPos.x = PADDING + graphScrollRect.xMin;
+        trainAreaPos.y = graphScrollRect.yMin + (trainWorldPosZIndex * graphRowHeight);
+        Vector2 trainAreaSize = new Vector2();
+        trainAreaSize.x = graphWidth;
+        trainAreaSize.y = trainWorldSizeZIndex * graphRowHeight;
+        Rect trainAreaRect = new Rect();
+        trainAreaRect.position = trainAreaPos;
+        trainAreaRect.size = trainAreaSize;
+        Handles.DrawSolidRectangleWithOutline(trainAreaRect, Color.darkRed, Color.clear);
+
+        Handles.DrawSolidRectangleWithOutline(graphScrollRect, Color.clear, Color.cyan);
+
+        Handles.color = Color.white;
+        
+        for (int i = 0; i < trip.stationsDataArray.Length; i++)
+        {
+            float colLinePosX = PADDING + (graphColWidth * i);
+            Vector2 colLineTopPos = new Vector2();
+            colLineTopPos.x = colLinePosX;
+            colLineTopPos.y = graphScrollRect.yMin;
+            Vector2 colLineBottomPos = new Vector2();   
+            colLineBottomPos.x = colLinePosX;
+            colLineBottomPos.y = graphScrollRect.yMax;
+            Handles.DrawLine(colLineTopPos, colLineBottomPos);
+        }
+
+        for (int i = 0; i < FAR_CLIP; i++)
+        {
+            float rowPosY = graphScrollRect.yMin + (graphRowHeight * i);
+            Vector2 rowLeftPos = new Vector2();
+            rowLeftPos.x = graphScrollRect.xMin + PADDING;
+            rowLeftPos.y = rowPosY;
+            Vector2 rowRightPos = new Vector2();
+            rowRightPos.x = graphScrollRect.xMax;
+            rowRightPos.y = rowPosY;
+            Handles.DrawLine(rowLeftPos, rowRightPos);
+
+            string posZLabelText = "";
+            int posZ = i + 1;
+            switch (posZ)
             {
-                textColor = Color.white
-            },
-        };
+                case TRAIN_LINE_DEPTH:
+                {
+                    posZLabelText = "LINE";
+                }
+                break;
 
-        Rect kmLabelRect = new Rect(0, kmRectPosY, graphRect.x, ROW_HEIGHT);
-        GUIContent kmContent = new GUIContent("KMPH");
-        GetFontFromRect(ref style, kmLabelRect, kmContent);
-        GUI.Label(kmLabelRect, kmContent, style);
+                case TRAIN_TRACKS_DEPTH:
+                {
+                    posZLabelText = "TRACKS";
 
-        Rect dayNightLabelRect = new Rect(0, dayNightRectPosY, graphRect.x, ROW_HEIGHT);
-        GUIContent dayNightContent = new GUIContent("Day/Night");
-        GetFontFromRect(ref style, dayNightLabelRect, dayNightContent);
-        GUI.Label(dayNightLabelRect, dayNightContent, style);
+                }
+                break;
 
-        Rect elevationLabelRect = new Rect(0, elevationRectPosY, graphRect.x, ROW_HEIGHT);
-        GUIContent elevationContent = new GUIContent("Elevation");
-        GetFontFromRect(ref style, elevationLabelRect, elevationContent);
-        GUI.Label(elevationLabelRect, elevationContent, style);
+                default:
+                {
+                    posZLabelText = posZ.ToString();
+                }
+                break;
+            }
+            GUIContent posZLabelContent = new GUIContent(posZLabelText);
+            Vector2 posZLabelSize = leftPanelStyle.CalcSize(posZLabelContent);
+            rowLeftPos.x -= posZLabelSize.x;
+            Rect posZLabelRect = new Rect();
+            posZLabelRect.position = rowLeftPos;
+            posZLabelRect.size = posZLabelSize;
+            GUI.Label(posZLabelRect, posZLabelContent, leftPanelStyle);
+        }
 
+        Event e = Event.current;
+        bool clickedBar = false;
+        for (int i = 0; i < trip.particleAtlasArray.Length; i++)
+        {
+            ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
 
+            if (particleAtlas.posDataArray == null) continue;
 
+            for (int j = 0; j < particleAtlas.posDataArray.Length; j++)
+            {
+                ParticlePosData posData = particleAtlas.posDataArray[j];
 
+                float stationLength = posData.endStation - posData.startStation;
+                Vector2 barPos = new Vector2();
+                barPos.x = PADDING + (posData.startStation * graphColWidth);
+                barPos.y = graphScrollRect.yMin + (posData.posZ - 1) * graphRowHeight;
+                Vector2 barSize = new Vector2();
+                barSize.x = stationLength * graphColWidth;
+                barSize.y = posData.depthSize * graphRowHeight;
+                Rect barRect = new Rect();
+                barRect.position = barPos;
+                barRect.size = barSize;
 
+                GUID posDataGuid = new GUID(posData.prefabGUID);
+                TripEditorPrefab posDataPrefab = (TripEditorPrefab)AssetDatabase.LoadAssetByGUID(posDataGuid, typeof(TripEditorPrefab));
+
+                Vector2 thirdSize = new Vector2();
+                thirdSize.x = barRect.size.x / 3;
+                thirdSize.y = barRect.size.y / 3;
+
+                if (e.type == EventType.MouseDown && barRect.Contains(e.mousePosition))
+                {
+                    selectedParticleAtlas = trip.particleAtlasArray[i];
+                    selectedPosDataIndex = j;
+                    clickedBar = true;
+                    adjustingBar = true;
+
+                    clickMousePosX = (int)((e.mousePosition.x - graphScrollRect.xMin) / graphColWidth);
+                    clickMousePosY = (int)((e.mousePosition.y - graphScrollRect.yMin) / graphRowHeight) + 1;
+
+                    clickStartStation = posData.startStation;
+                    clickEndStation = posData.endStation;
+                    clickPosZ = posData.posZ;
+                    clickDepthSize = posData.depthSize;
+
+                    adjustState = AdjustState.None;
+
+                    switch (particleAtlas.particleType)
+                    {
+                        case ParticleType.Zone:
+                        {
+                            if (e.mousePosition.y < (barRect.min.y + thirdSize.y))
+                            {
+                                adjustState |= AdjustState.TopSize;
+                            }
+                            else if (e.mousePosition.y > (barRect.max.y - thirdSize.y))
+                            {
+                                adjustState |= AdjustState.BottomSize;
+                            }
+
+                            if (e.mousePosition.x < (barRect.min.x + thirdSize.x))
+                            {
+                                adjustState |= AdjustState.LeftSize;
+                            }
+                            else if (e.mousePosition.x > (barRect.max.x - thirdSize.x))
+                            {
+                                adjustState |= AdjustState.RightSize;
+                            }
+
+                            if (adjustState == AdjustState.None)
+                            {
+                                adjustState = AdjustState.Position;
+                            }
+                        }
+                        break;
+
+                        case ParticleType.Scroll:
+                        {
+                            if (e.mousePosition.x < (barRect.min.x + thirdSize.x))
+                            {
+                                adjustState |= AdjustState.LeftSize;
+                            }
+                            else if (e.mousePosition.x > (barRect.max.x - thirdSize.x))
+                            {
+                                adjustState |= AdjustState.RightSize;
+                            }
+
+                            if (adjustState == AdjustState.None)
+                            {
+                                adjustState = AdjustState.Position;
+                            }
+                        }
+                        break;
+                    }
+
+                    selectedParticleCount = posData.particleCount;
+                    selectedWidthType = posData.widthType;
+
+                    prefabInput = posDataPrefab;
+                    Repaint();
+                }
+
+                if (selectedPosDataIndex == j && selectedParticleAtlas == trip.particleAtlasArray[i])
+                {
+                    if (e.type == EventType.MouseDrag)
+                    {
+                        int dragMousePosX = (int)((e.mousePosition.x - graphScrollRect.xMin) / graphColWidth);
+                        int dragMousePosY = (int)((e.mousePosition.y - graphScrollRect.yMin) / graphRowHeight) + 1;
+
+                        if ((adjustState & AdjustState.LeftSize) != 0)
+                        {
+                            int curStationStart = dragMousePosX;
+                            posData.startStation = Mathf.Clamp(curStationStart, 0, posData.endStation - 1);
+                        }
+                        else if ((adjustState & AdjustState.RightSize) != 0)
+                        {
+                            int curEndStation = dragMousePosX;
+                            posData.endStation = Mathf.Clamp(curEndStation, posData.startStation + 1, trip.stationsDataArray.Length);
+                        }
+                        
+                        if ((adjustState & AdjustState.TopSize) != 0)
+                        {
+                            int curPosZ = clickPosZ + (dragMousePosY - clickMousePosY);
+                            int curDepthSize = clickDepthSize + (clickMousePosY - dragMousePosY);
+
+                            posData.posZ = Mathf.Clamp(curPosZ, 1, (int)FAR_CLIP - 1);
+                            posData.depthSize = Mathf.Clamp(curDepthSize, 1, (int)FAR_CLIP - posData.posZ);
+                        }
+                        else if ((adjustState & AdjustState.BottomSize) != 0)
+                        {
+                            int curDepthSize = clickDepthSize - (clickMousePosY - dragMousePosY);
+                            posData.depthSize = Mathf.Clamp(curDepthSize, 1, (int)FAR_CLIP - posData.posZ);
+                        }
+
+                        if (adjustState == AdjustState.Position)
+                        {
+                            int curPosZ = clickPosZ + (dragMousePosY - clickMousePosY);
+                            posData.posZ = Mathf.Clamp(curPosZ, 1, (int)FAR_CLIP - 1);
+
+                            int curStationStart = clickStartStation + (dragMousePosX - clickMousePosX);
+                            posData.startStation = curStationStart;
+
+                            int curStationEnd = clickEndStation + (dragMousePosX - clickMousePosX);
+                            posData.endStation = Mathf.Clamp(curStationEnd, posData.startStation + 1, trip.stationsDataArray.Length);
+                        }
+                        particleAtlas.posDataArray[j] = posData;
+                    
+                        Repaint();
+                    }
+
+                    Handles.DrawSolidRectangleWithOutline(barRect, particleAtlasColors[i] * 1.2f, Color.green);
+
+                    Vector2 firstThirdColTop = new Vector2();
+                    firstThirdColTop.x = barRect.xMin + thirdSize.x;
+                    firstThirdColTop.y = barRect.yMin;
+
+                    Vector2 firstThirdColBottom = new Vector2();
+                    firstThirdColBottom.x = barRect.xMin + thirdSize.x;
+                    firstThirdColBottom.y = barRect.yMax;
+
+                    Vector2 secondThirdColTop = new Vector2();
+                    secondThirdColTop.x = barRect.xMax - thirdSize.x;
+                    secondThirdColTop.y = barRect.yMin;
+
+                    Vector2 secondThirdColBottom = new Vector2();
+                    secondThirdColBottom.x = barRect.xMax - thirdSize.x;
+                    secondThirdColBottom.y = barRect.yMax;
+
+                    Vector2 firstThirdRowLeft = new Vector2();
+                    firstThirdRowLeft.x = barRect.xMin;
+                    firstThirdRowLeft.y = barRect.yMin + thirdSize.y;
+
+                    Vector2 firstThirdRowRight = new Vector2();
+                    firstThirdRowRight.x = barRect.xMax;
+                    firstThirdRowRight.y = barRect.yMin + thirdSize.y;
+
+                    Vector2 secondThirdRowLeft = new Vector2();
+                    secondThirdRowLeft.x = barRect.xMin;
+                    secondThirdRowLeft.y = barRect.yMax - thirdSize.y;
+
+                    Vector2 secondThirdRowRight = new Vector2();
+                    secondThirdRowRight.x = barRect.xMax;
+                    secondThirdRowRight.y = barRect.yMax - thirdSize.y;
+
+                    Handles.DrawLine(firstThirdColTop, firstThirdColBottom);
+                    Handles.DrawLine(secondThirdColTop, secondThirdColBottom);
+                    Handles.DrawLine(firstThirdRowLeft, firstThirdRowRight);
+                    Handles.DrawLine(secondThirdRowLeft, secondThirdRowRight);
+
+                    GUIContent posDataLabelContent = new GUIContent(posDataPrefab.name);
+                    GUI.Label(barRect, posDataLabelContent, headerStyle);
+                }
+                else
+                {
+                    Handles.DrawSolidRectangleWithOutline(barRect, particleAtlasColors[i], Color.black);
+                    GUIContent posDataLabelContent = new GUIContent(posDataPrefab.name);
+                    GUI.Label(barRect, posDataLabelContent, boldStyle);
+                }
+
+            }
+        }
+        if (e.type == EventType.MouseDown && !clickedBar)
+        {
+            selectedPosDataIndex = -1;
+            selectedParticleAtlas = null;
+            Repaint();
+        }
+        Handles.EndGUI();
+        GUI.EndScrollView();
     }
     private void GetFontFromRect(ref GUIStyle style, Rect rect, GUIContent content)
     {
@@ -637,6 +1318,7 @@ public class AtlasTripEditor : EditorWindow
         }
         style.fontSize = fontSize;
     }
+    /*
     private void DrawGraph()
     {
         if (trip == null || trip.stationsDataArray.Length == 0) return;
@@ -655,7 +1337,7 @@ public class AtlasTripEditor : EditorWindow
         horLineLeft.x = graphRect.xMin;
         horLineRight.x = graphRect.xMax;
 
-        float totalTicketCheckXIncrement = (1 / (float)totalTicketChecks) * graphRect.width;
+        float stationColWidth = (1 / (float)trip.stationsDataArray.Length) * graphRect.width;
 
         EditorGUILayout.BeginVertical();
         {
@@ -663,54 +1345,6 @@ public class AtlasTripEditor : EditorWindow
             {
                 Handles.BeginGUI();
                 {
-                    Vector2 trainRectPos = new Vector2(graphRect.xMin, graphRect.yMin + ((MAIN_MIN - 1) * graphRowHeight));
-                    Vector2 trainRectSize = new Vector2(graphRect.size.x,(MAIN_MAX - MAIN_MIN + 1) * graphRowHeight);
-                    Rect trainRect = new Rect(trainRectPos, trainRectSize);
-                    Handles.DrawSolidRectangleWithOutline(trainRect, Color.darkRed, Color.clear);
-
-                    int ticketChecksStation = trip.stationsDataArray[0].ticketsToCheckBeforeSpawn;
-                    for (int i = 0; i <= totalTicketChecks;i++)
-                    {
-                        float posX = graphRect.x + i * totalTicketCheckXIncrement;
-                        vertLineTop.x = posX;
-                        vertLineBottom.x = posX;
-
-                        if (i == ticketChecksStation)
-                        {
-                            Handles.color = Color.yellow;
-                            ticketChecksStation += trip.stationsDataArray[Mathf.Min(i + 1, trip.stationsDataArray.Length - 1)].ticketsToCheckBeforeSpawn; 
-                        }
-                        else
-                        {
-                            Handles.color = Color.white;
-                        }
-                        Handles.DrawLine(vertLineTop, vertLineBottom);
-                    }
-
-                    for (int i = 0; i <= FAR_CLIP; i++)
-                    {
-                        float posY = graphRect.yMin + (i * graphRowHeight);
-                        horLineLeft.y = posY;
-                        horLineRight.y = posY;
-                        Handles.color = Color.white;
-                        Handles.DrawLine(horLineLeft, horLineRight);
-
-                        if (i == 0) continue;
-
-                        string depthString = (i).ToString();
-                        
-                        if (i == TRAIN_LINE_DEPTH)
-                        {
-                            depthString = "LINES";
-                        }
-                        else if (i == TRAIN_TRACKS_DEPTH)
-                        {
-                            depthString = "TRACKS";
-                        }
-                        Vector2 labelSize = depthLabel.CalcSize(new GUIContent(depthString));
-                        Vector2 depthLabelPos = new Vector2(graphRect.xMin -  5, posY - (graphRowHeight - (labelSize.y * 0.5f)));
-                        Handles.Label(depthLabelPos, depthString, depthLabel);
-                    }
 
                     for (int i = 0; i < trip.particleAtlasArray.Length; i++)
                     {
@@ -718,18 +1352,18 @@ public class AtlasTripEditor : EditorWindow
 
                         if (particleAtlas.spriteData.Length == 0) continue;
 
-                        for (int j = 0; j < particleAtlas.posData.Length; j++)
+                        for (int j = 0; j < particleAtlas.posDataArray.Length; j++)
                         {
-                            ParticlePosData posData = particleAtlas.posData[j];
+                            ParticlePosData posData = particleAtlas.posDataArray[j];
 
-                            float ticketCheckSize = posData.ticketCheckEnd - posData.ticketCheckStart;
-                            float barWidth = ticketCheckSize * totalTicketCheckXIncrement;
+                            float ticketCheckSize = posData.endStation - posData.startStation;
+                            float barWidth = ticketCheckSize * stationColWidth;
                             float barHeight = Mathf.Max(graphRowHeight * posData.depthSize, graphRowHeight);
-                            float barX = graphRect.xMin + posData.ticketCheckStart * totalTicketCheckXIncrement;
+                            float barX = graphRect.xMin + posData.startStation * stationColWidth;
 
-                            float graphDepth = (posData.depth - 1);
+                            float graphDepth = (posData.posZ - 1);
                             float barY = graphRect.yMin + graphDepth * graphRowHeight;
-                            
+
                             Rect barRect = new Rect(barX, barY, barWidth, barHeight);
 
                             Handles.DrawSolidRectangleWithOutline(barRect, particleAtlasColors[i], Color.black);
@@ -738,7 +1372,7 @@ public class AtlasTripEditor : EditorWindow
                             TripEditorPrefab posDataPrefab = (TripEditorPrefab)AssetDatabase.LoadAssetByGUID(posDataGuid, typeof(TripEditorPrefab));
 
                             EditorGUI.LabelField(barRect, posDataPrefab.name, GUIStyle.none);
-                            
+
                             if (e.type == EventType.MouseDown && barRect.Contains(e.mousePosition))
                             {
                                 selectedParticleAtlas = trip.particleAtlasArray[i];
@@ -747,11 +1381,11 @@ public class AtlasTripEditor : EditorWindow
 
                                 clickedBar = true;
 
-                                int mouseTicketXPos = (int)((e.mousePosition.x - graphRect.xMin) / totalTicketCheckXIncrement);
+                                int mouseTicketXPos = (int)((e.mousePosition.x - graphRect.xMin) / stationColWidth);
                                 int mouseDepthYPos = (int)((e.mousePosition.y - graphRect.yMin) / graphRowHeight);
 
-                                dragOffsetStartX = mouseTicketXPos - posData.ticketCheckStart;
-                                dragOffsetStartY = mouseDepthYPos - (int)posData.depth;
+                                dragOffsetStartX = mouseTicketXPos - posData.startStation;
+                                dragOffsetStartY = mouseDepthYPos - (int)posData.posZ;
 
                                 dragOffsetWidth = (int)(mouseTicketXPos - ticketCheckSize);
                                 dragOffsetHeight = (int)(mouseDepthYPos - posData.depthSize);
@@ -760,11 +1394,11 @@ public class AtlasTripEditor : EditorWindow
                                 isAdjustingDepthSize = e.mousePosition.y > barRect.center.y && particleAtlas.particleType == ParticleType.Zone;
 
                                 selectedParticleCount = posData.particleCount;
-                                selectedRandScale = posData.randScale;
+                                randomInput = posData.randScale;
                                 selectedWidthType = posData.widthType;
                                 selectedElevation = posData.elevate;
 
-                                selectedPrefab = posDataPrefab;
+                                prefabInput = posDataPrefab;
                                 Repaint();
                             }
 
@@ -774,33 +1408,33 @@ public class AtlasTripEditor : EditorWindow
 
                             if (e.type == EventType.MouseDrag && adjustingBar)
                             {
-                                int mouseTicketXPos = (int)((e.mousePosition.x - graphRect.xMin) / totalTicketCheckXIncrement);
+                                int mouseTicketXPos = (int)((e.mousePosition.x - graphRect.xMin) / stationColWidth);
                                 int mouseDepthYPos = (int)((e.mousePosition.y - graphRect.yMin) / graphRowHeight);
 
                                 if (isAdjustingMetersStart)
                                 {
                                     int curTicketStart = mouseTicketXPos - dragOffsetStartX;
-                                    posData.ticketCheckStart = Mathf.Clamp(curTicketStart, 0, posData.ticketCheckEnd - 1);
+                                    posData.startStation = Mathf.Clamp(curTicketStart, 0, posData.endStation - 1);
                                 }
                                 else
                                 {
-                                    int curTicketEnd = posData.ticketCheckStart + (mouseTicketXPos - dragOffsetWidth);
-                                    posData.ticketCheckEnd = Mathf.Clamp(curTicketEnd, posData.ticketCheckStart + 1 , totalTicketChecks);
+                                    int curTicketEnd = posData.startStation + (mouseTicketXPos - dragOffsetWidth);
+                                    posData.endStation = Mathf.Clamp(curTicketEnd, posData.startStation + 1, trip.stationsDataArray.Length);
                                 }
                                 if (isAdjustingDepthSize)
                                 {
                                     int curDepthSize = mouseDepthYPos - dragOffsetHeight;
-                                    posData.depthSize = Mathf.Clamp(curDepthSize, 1, (int)FAR_CLIP - posData.depth);
+                                    posData.depthSize = Mathf.Clamp(curDepthSize, 1, (int)FAR_CLIP - posData.posZ);
                                 }
                                 else
                                 {
                                     int curDepth = mouseDepthYPos - dragOffsetStartY;
-                                    posData.depth = Mathf.Clamp(curDepth, 1, (int)FAR_CLIP);
+                                    posData.posZ = Mathf.Clamp(curDepth, 1, (int)FAR_CLIP);
                                 }
                                 Repaint();
                             }
 
-                            particleAtlas.posData[j] = posData;
+                            particleAtlas.posDataArray[j] = posData;
 
                             if (e.type == EventType.MouseUp && adjustingBar)
                             {
@@ -823,340 +1457,6 @@ public class AtlasTripEditor : EditorWindow
         }
         EditorGUILayout.EndVertical();
     }
-    private void ApplyPrefabToPosData(ref ParticlePosData posData)
-    {
-        if (selectedPrefab == null) return;
-
-        atlasToParticleAtlasDict = new Dictionary<AtlasSO, ParticleAtlas>();
-        for (int i = 0; i < trip.particleAtlasArray.Length; i++)
-        {
-            ParticleAtlas particleAtlasKeyValue = trip.particleAtlasArray[i];
-            atlasToParticleAtlasDict.Add(particleAtlasKeyValue.atlas, particleAtlasKeyValue);
-        }
-
-        if (atlasToParticleAtlasDict.TryGetValue(selectedPrefab.mainRenderer.atlas, out ParticleAtlas particleAtlas))
-        {
-            selectedParticleAtlas = particleAtlas;
-        }
-        
-        if (selectedPrefab.preScrollers.Length > 0)
-        {
-            if (posData.preScrollers == null || posData.preScrollers.Length == 0)
-            {
-                posData.preScrollers = new EdgeScroller[1];
-                posData.preScrollers[0].spriteData = new EdgeSpriteData[selectedPrefab.preScrollers.Length];
-            }
-
-            float posXOffset = 0;
-            for (int i = 0; i < selectedPrefab.preScrollers.Length; i++)
-            {
-                AtlasRenderer atlasRenderer = selectedPrefab.preScrollers[i];
-                posData.preScrollers[0].spriteData[i] = new EdgeSpriteData()
-                {
-                    spriteIndex = (uint)atlasRenderer.spriteIndex,
-                    offset = new Vector4(atlasRenderer.transform.localPosition.x, atlasRenderer.transform.localPosition.y, atlasRenderer.transform.localPosition.z),
-                    scale = new Vector4(atlasRenderer.width, atlasRenderer.height),
-                };
-
-                if (posXOffset > atlasRenderer.transform.localPosition.x)
-                {
-                    posXOffset = atlasRenderer.transform.localPosition.x;
-                }
-            }
-            posData.posX = -posXOffset;
-        }
-        else
-        {
-            posData.preScrollers = null;
-            posData.posX = 0;
-        }
-
-        if (selectedPrefab.postScrollers.Length > 0)
-        {
-            if (posData.postScrollers == null || posData.postScrollers.Length == 0)
-            {
-                posData.postScrollers = new EdgeScroller[1];
-                posData.postScrollers[0].spriteData = new EdgeSpriteData[selectedPrefab.preScrollers.Length];
-            }
-
-            
-            if (posData.widthType == ParticleWidthType.Sliced)
-            {
-                for (int i = 0; i < selectedPrefab.postScrollers.Length; i++)
-                {
-                    AtlasRenderer atlasRenderer = selectedPrefab.postScrollers[i];
-
-                    float widthOffset = particleAtlas.spriteData[posData.spriteIndex].worldPivotAndSize.z;
-                    widthOffset += posData.scaleX * particleAtlas.spriteData[posData.spriteIndex + 1].worldPivotAndSize.z;
-                    widthOffset += particleAtlas.spriteData[posData.spriteIndex + 2].worldPivotAndSize.z;
-                    posData.postScrollers[0].spriteData[i] = new EdgeSpriteData()
-                    {
-                        spriteIndex = (uint)atlasRenderer.spriteIndex,
-                        offset = new Vector4(atlasRenderer.transform.localPosition.x + widthOffset, atlasRenderer.transform.localPosition.y, atlasRenderer.transform.localPosition.z),
-                        scale = new Vector4(atlasRenderer.width, atlasRenderer.height),
-                    };
-                }
-            }
-            else
-            {
-                for (int i = 0; i < selectedPrefab.postScrollers.Length; i++)
-                {
-                    AtlasRenderer atlasRenderer = selectedPrefab.postScrollers[i];
-
-                    float widthOffset = posData.scaleX * particleAtlas.spriteData[posData.spriteIndex].worldPivotAndSize.z;
-                    posData.postScrollers[0].spriteData[i] = new EdgeSpriteData()
-                    {
-                        spriteIndex = (uint)atlasRenderer.spriteIndex,
-                        offset = new Vector4(atlasRenderer.transform.localPosition.x + widthOffset, atlasRenderer.transform.localPosition.y, atlasRenderer.transform.localPosition.z),
-                        scale = new Vector4(atlasRenderer.width, atlasRenderer.height),
-                    };
-                }
-
-            }
-        }
-        else
-        {
-            posData.postScrollers = null;
-        }
-
-
-        if (selectedPosDataIndex >= selectedParticleAtlas.posData.Length)
-        {
-            selectedPosDataIndex = selectedParticleAtlas.posData.Length - 1;
-        }
-        selectedParticleAtlas.posData[selectedPosDataIndex] = posData;
-        Repaint();
-
-        string assetPath = AssetDatabase.GetAssetPath(selectedPrefab);
-        posData.prefabGUID = AssetDatabase.AssetPathToGUID(assetPath);
-        posData.quadCount = (uint)(posData.particleCount * posData.spritesPerParticle);
-        posData.elevate = selectedElevation;
-
-        AtlasRenderer mainAtlasRenderer = selectedPrefab.GetComponent<AtlasRenderer>();
-
-        if (mainAtlasRenderer.rendererType == AtlasRendererType.Slice)
-        {
-            posData.widthType = ParticleWidthType.Sliced;
-        }
-        else
-        {
-            posData.widthType = selectedWidthType;
-        }
-
-
-        switch (posData.widthType)
-        {
-            case ParticleWidthType.Tiled:
-            case ParticleWidthType.Simple:
-            {
-                posData.spritesPerParticle = 1;
-            }
-            break;
-
-            case ParticleWidthType.Sliced:
-            {
-                posData.spritesPerParticle = 9;
-            }
-            break;
-        }
-
-        switch (posData.depth)
-        {
-            case TRAIN_LINE_DEPTH:
-            {
-                posData.posY = TRAIN_LINE_HEIGHT;
-            }
-            break;
-            case TRAIN_TRACKS_DEPTH:
-            {
-                posData.posY = TRAIN_WHEEL_HEIGHT;
-            }
-            break;
-            default:
-            {
-                posData.posY = selectedPrefab.transform.position.y;
-            }
-            break;
-        }
-
-        switch (selectedParticleAtlas.particleType)
-        {
-            case ParticleType.Scroll:
-            {
-                posData.particleCount = 2;
-
-                posData.scaleX = mainAtlasRenderer.width;
-                posData.scaleY = mainAtlasRenderer.height;
-
-                switch (posData.widthType)
-                {
-                    case ParticleWidthType.Simple:
-                    {
-                        posData.spriteIndex = mainAtlasRenderer.spriteIndex;
-
-                        ParticleSpritesData newSpriteData = selectedParticleAtlas.spriteData[posData.spriteIndex];
-                        SimpleSprite sprite = selectedParticleAtlas.atlas.simpleSprites[posData.spriteIndex];
-                        newSpriteData.uvSizeAndPos = sprite.uvSizeAndPos;
-                        newSpriteData.worldPivotAndSize = mainAtlasRenderer.worldPivotAndSize;
-
-                        posData.quadScales = new Vector4[] { new Vector4(posData.scaleX, posData.scaleY, 0, 0) };
-
-                        selectedParticleAtlas.spriteData[posData.spriteIndex] = newSpriteData;
-                    }
-                    break;
-                    case ParticleWidthType.Tiled:
-                    {
-                        posData.spriteIndex = mainAtlasRenderer.spriteIndex;
-
-                        ParticleSpritesData newSpriteData = selectedParticleAtlas.spriteData[posData.spriteIndex];
-                        SimpleSprite sprite = selectedParticleAtlas.atlas.simpleSprites[posData.spriteIndex];
-                        newSpriteData.uvSizeAndPos = sprite.uvSizeAndPos;
-                        newSpriteData.worldPivotAndSize = mainAtlasRenderer.worldPivotAndSize;
-
-                        posData.scaleX = Mathf.CeilToInt(spawnData.bounds.size.x / newSpriteData.worldPivotAndSize.z);
-                        posData.quadScales = new Vector4[] { new Vector4(posData.scaleX, posData.scaleY, 0, 0) };
-
-                        selectedParticleAtlas.spriteData[posData.spriteIndex] = newSpriteData;
-                    }
-                    break;
-                    case ParticleWidthType.Sliced:
-                    {
-                        posData.spriteIndex = selectedParticleAtlas.atlas.simpleSprites.Length + (mainAtlasRenderer.spriteIndex * 9);
-
-                        ParticleSpritesData leftSprite = selectedParticleAtlas.spriteData[posData.spriteIndex + 3];
-                        ParticleSpritesData centerSprite = selectedParticleAtlas.spriteData[posData.spriteIndex + 4];
-                        ParticleSpritesData rightSprite = selectedParticleAtlas.spriteData[posData.spriteIndex + 5];
-                        posData.scaleX = (spawnData.bounds.size.x - leftSprite.worldPivotAndSize.z - rightSprite.worldPivotAndSize.z) / centerSprite.worldPivotAndSize.z;
-
-                        SliceSprite sliceSprite = mainAtlasRenderer.atlas.slicedSprites[mainAtlasRenderer.spriteIndex];
-                        posData.quadScales = GetQuadScalesNineSlice(posData.scaleX, posData.scaleY, sliceSprite);
-
-                        for (int k = 0; k < posData.spritesPerParticle; k++)
-                        {
-                            ParticleSpritesData particleSpriteData = selectedParticleAtlas.spriteData[posData.spriteIndex + k];
-                            ParticleSpritesData newSpriteData = new ParticleSpritesData();
-                            newSpriteData.uvSizeAndPos = sliceSprite.uvSizeAndPos[k];
-                            newSpriteData.worldPivotAndSize = mainAtlasRenderer.worldPivotsAndSizes[k];
-                            selectedParticleAtlas.spriteData[posData.spriteIndex + k] = newSpriteData;
-                        }
-                    }
-                    break;
-                }
-            }
-            break;
-
-            case ParticleType.Zone:
-            {
-                posData.spriteIndex = 0;
-                posData.particleCount = selectedParticleCount;
-
-                switch (posData.widthType)
-                {
-                    case ParticleWidthType.Simple:
-                    {
-                        posData.quadScales = new Vector4[] { new Vector4(posData.scaleX, posData.scaleY, 0, 0) };
-
-                        for (int k = 0; k < selectedParticleAtlas.spriteData.Length; k++)
-                        {
-                            ParticleSpritesData newSpriteData = selectedParticleAtlas.spriteData[k];
-                            SimpleSprite sprite = selectedParticleAtlas.atlas.simpleSprites[k];
-                            newSpriteData.uvSizeAndPos = sprite.uvSizeAndPos;
-                            float pivotX = sprite.uvPivot.x * sprite.worldSize.x;
-                            float pivotY = sprite.uvPivot.y * sprite.worldSize.y;
-                            newSpriteData.worldPivotAndSize = new Vector4(pivotX, pivotY, sprite.worldSize.x, sprite.worldSize.y);
-                            selectedParticleAtlas.spriteData[k] = newSpriteData;
-                        }
-                    }
-                    break;
-
-                    case ParticleWidthType.Tiled:
-                    {
-                        posData.randScale = selectedRandScale;
-
-                        List<Vector4> quadScales_list = new List<Vector4>();
-                        for (int k = 0; k < posData.particleCount; k++)
-                        {
-                            float randScaleX = UnityEngine.Random.Range(-posData.randScale, posData.randScale);
-                            float randScaleY = UnityEngine.Random.Range(-posData.randScale, posData.randScale);
-                            randScaleX = Mathf.Max(posData.scaleX + randScaleX, 1);
-                            randScaleY = Mathf.Max(posData.scaleY + randScaleY, 1);
-                            quadScales_list.Add(new Vector4(randScaleX, randScaleY, 0, 0));
-                        }
-                        posData.quadScales = quadScales_list.ToArray();
-
-                        for (int k = 0; k < selectedParticleAtlas.spriteData.Length; k++)
-                        {
-                            ParticleSpritesData newSpriteData = selectedParticleAtlas.spriteData[k];
-                            SimpleSprite sprite = selectedParticleAtlas.atlas.simpleSprites[k];
-                            newSpriteData.uvSizeAndPos = sprite.uvSizeAndPos;
-                            float pivotX = sprite.uvPivot.x * sprite.worldSize.x;
-                            float pivotY = sprite.uvPivot.y * sprite.worldSize.y;
-                            newSpriteData.worldPivotAndSize = new Vector4(pivotX, pivotY, sprite.worldSize.x, sprite.worldSize.y);
-                            selectedParticleAtlas.spriteData[k] = newSpriteData;
-                        }
-                    }
-                    break;
-
-                    case ParticleWidthType.Sliced:
-                    {
-                        posData.randScale = selectedRandScale;
-                        posData.scaleX = selectedPrefab.mainRenderer.width;
-                        posData.scaleY = selectedPrefab.mainRenderer.height;
-                        List<Vector4> quadScales_list = new List<Vector4>();
-                        for (int k = 0; k < posData.particleCount; k++)
-                        {
-                            float randScaleX = UnityEngine.Random.Range(-posData.randScale, posData.randScale);
-                            float randScaleY = UnityEngine.Random.Range(-posData.randScale, posData.randScale);
-                            randScaleX = Mathf.Max(posData.scaleX + randScaleX, 1);
-                            randScaleY = Mathf.Max(posData.scaleY + randScaleY, 1);
-                            int sliceSpriteIndex = (k % selectedParticleAtlas.atlas.slicedSprites.Length);
-                            SliceSprite sliceSprite = selectedParticleAtlas.atlas.slicedSprites[sliceSpriteIndex];
-
-                            quadScales_list.AddRange(GetQuadScalesNineSlice(randScaleX, randScaleY, sliceSprite));
-                        }
-                        posData.quadScales = quadScales_list.ToArray();
-
-                        for (int k = 0; k < selectedParticleAtlas.spriteData.Length; k += posData.spritesPerParticle)
-                        {
-                            int sliceSpriteIndex = Mathf.FloorToInt(k / 9);
-                            SliceSprite sliceSprite = selectedParticleAtlas.atlas.slicedSprites[sliceSpriteIndex];
-                            Vector4[] worldPivotsAndSizes = new Vector4[9];
-
-                            SetWorldPivotAndSizes(sliceSprite, 1, 1, false, false, ref worldPivotsAndSizes);
-
-                            for (int l = 0; l < posData.spritesPerParticle; l++)
-                            {
-                                ParticleSpritesData particleSpriteData = selectedParticleAtlas.spriteData[k + l];
-                                ParticleSpritesData newSpriteData = new ParticleSpritesData();
-                                newSpriteData.uvSizeAndPos = sliceSprite.uvSizeAndPos[l];
-                                newSpriteData.worldPivotAndSize = worldPivotsAndSizes[l];
-
-                                selectedParticleAtlas.spriteData[k + l] = newSpriteData;
-                            }
-                        }
-                    }
-                    break;
-                }
-            }
-            break;
-        }
-
-        selectedParticleAtlas.posData[selectedPosDataIndex] = posData;
-        SaveOrderedPosData();  
-    }
-    private float GetScaledWidth(ParticleSpritesData spriteData, ParticleAtlas particleAtlas)
-    {
-        float spritePixelWidth = spriteData.uvSizeAndPos.x * particleAtlas.atlas.texture.width;
-        float spritePixelHeight = spriteData.uvSizeAndPos.y * particleAtlas.atlas.texture.height;
-        float scale = graphRowHeight / spritePixelHeight;
-        return spritePixelWidth * scale;
-    }
-    private float GetScaledHeight(ParticleSpritesData spriteData, ParticleAtlas particleAtlas)
-    {
-        float spritePixelHeight = spriteData.uvSizeAndPos.y * particleAtlas.atlas.texture.height;
-        float scale = graphRowHeight / spritePixelHeight;
-        return spritePixelHeight * scale;
-    }
     private void SaveOrderedPosData()
     {
         bool anyChanged = false;
@@ -1166,12 +1466,12 @@ public class AtlasTripEditor : EditorWindow
             ParticleAtlas particleAtlas = trip.particleAtlasArray[i];
 
             ParticlePosData[] ordered =
-                particleAtlas.posData
-                .OrderBy(p => p.ticketCheckStart)
-                .ThenBy(p => p.depth)
+                particleAtlas.posDataArray
+                .OrderBy(p => p.startStation)
+                .ThenBy(p => p.posZ)
                 .ToArray();
 
-            particleAtlas.posData = ordered;
+            particleAtlas.posDataArray = ordered;
         }
 
         SetParticleIndices(ParticleType.Zone, ZONE_PARTICLE_COUNT);
@@ -1188,14 +1488,14 @@ public class AtlasTripEditor : EditorWindow
         {
             ParticleAtlas atlas = trip.particleAtlasArray[i];
 
-            for (int j = 0; j < atlas.posData.Length; j++)
+            for (int j = 0; j < atlas.posDataArray.Length; j++)
             {
-                allPosData.Add((atlas, j, atlas.posData[j]));
+                allPosData.Add((atlas, j, atlas.posDataArray[j]));
             }
         }
 
         allPosData = allPosData
-            .OrderBy(p => p.posData.ticketCheckStart)
+            .OrderBy(p => p.posData.startStation)
             .ToList();
 
         HashSet<ParticleAtlas> dirtyAtlases = new HashSet<ParticleAtlas>();
@@ -1204,7 +1504,7 @@ public class AtlasTripEditor : EditorWindow
         {
             ParticlePosData posData = entry.posData;
 
-            if (latestDepthMap.TryGetValue(posData.depth, out ParticlePosData prevPosData))
+            if (latestDepthMap.TryGetValue(posData.posZ, out ParticlePosData prevPosData))
             {
                 posData.prevDepthIndices = new Vector2Int(
                     prevPosData.minParticleIndex,
@@ -1216,9 +1516,9 @@ public class AtlasTripEditor : EditorWindow
                 posData.prevDepthIndices = new Vector2Int(0, 0);
             }
 
-            entry.atlas.posData[entry.index] = posData;
+            entry.atlas.posDataArray[entry.index] = posData;
             
-            latestDepthMap[posData.depth] = posData;
+            latestDepthMap[posData.posZ] = posData;
 
             dirtyAtlases.Add(entry.atlas);
         }
@@ -1235,7 +1535,7 @@ public class AtlasTripEditor : EditorWindow
         int minParticle = 0;
         int maxParticle = -1;
 
-        for (int i = 0; i < totalTicketChecks; i++)
+        for (int i = 0; i < trip.stationsDataArray.Length; i++)
         {
             for (int j = 0; j < trip.particleAtlasArray.Length; j++)
             {
@@ -1243,11 +1543,11 @@ public class AtlasTripEditor : EditorWindow
 
                 if (particleAtlas.particleType != particleType) continue;
 
-                for (int k = 0; k < particleAtlas.posData.Length; k++)
+                for (int k = 0; k < particleAtlas.posDataArray.Length; k++)
                 {
-                    ParticlePosData posData = particleAtlas.posData[k];
+                    ParticlePosData posData = particleAtlas.posDataArray[k];
 
-                    if (posData.ticketCheckStart != i) continue;
+                    if (posData.startStation != i) continue;
 
                     maxParticle += (int)posData.particleCount;
                     maxParticle %= maxParticleCount;
@@ -1255,11 +1555,12 @@ public class AtlasTripEditor : EditorWindow
                     posData.minParticleIndex = minParticle;
                     posData.maxParticleIndex = maxParticle;
 
-                    particleAtlas.posData[k] = posData;
+                    particleAtlas.posDataArray[k] = posData;
                     minParticle = maxParticle + 1;
                     minParticle %= maxParticleCount;
                 }
             }
         }
     }
+*/
 }
