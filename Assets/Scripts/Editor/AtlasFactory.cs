@@ -542,7 +542,7 @@ public class AtlasFactory : EditorWindow
             if (markerPixels != null)
             {
                 Color m = markerPixels[index];
-                isMarker = m == pivotColor;
+                isMarker = m == connectColor;
             }
 
             if (!isSolid && !isMarker) continue;
@@ -602,7 +602,7 @@ public class AtlasFactory : EditorWindow
                 for (int y = (int)minY; y <= maxY; y++)
                 {
                     int pixelIndex = x + y * (int)texWidth;
-                    Color32 markerPixel = markerPixels[pixelIndex];
+                    Color markerPixel = markerPixels[pixelIndex];
 
                     if (markerPixel.a == 0) continue;
 

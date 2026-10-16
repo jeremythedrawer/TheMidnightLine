@@ -11,7 +11,7 @@ using static AtlasSpawn;
 
 public class TOTTRendererFeature : ScriptableRendererFeature
 {
-    public TripData trip;
+    public Options options;
     public SpawnData spawnerData;
     public SpyData spyStats;
     public CameraData cameraStats;
@@ -29,11 +29,12 @@ public class TOTTRendererFeature : ScriptableRendererFeature
         public CameraData cameraStats;
     }
 
+
     public override void Create()
     {
         if (quad == null) quad = AtlasRendering.SetQuad();
         batchPass = new AtlasBatchPass(cameraStats, quad);
-        particlePass = new AtlasParticlePass(trip, spawnerData, spyStats, quad);
+        particlePass = new AtlasParticlePass(options.curTrip, spawnerData, spyStats, quad);
         matrixPass = new MatrixPass(this);
         pixelPerfectPass = new PixelPerfectPass(this);
     }
@@ -241,9 +242,9 @@ public class TOTTRendererFeature : ScriptableRendererFeature
 
                     if (trip.passengersUnmaskedTotal < posData.startStation) break;
                     
-                    if (posData.argsBuffer == null) continue;
-
+                    if (posData.argsBuffer == null || argsSpawn == null) continue;
                     argsSpawn[1] = posData.quadCount;
+
                     posData.argsBuffer.SetData(argsSpawn);
 
                     switch(particleAtlas.particleType)

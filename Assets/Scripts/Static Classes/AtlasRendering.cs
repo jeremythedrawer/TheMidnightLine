@@ -6,6 +6,7 @@ using UnityEditor;
 #endif
 using UnityEngine;
 using static Atlas;
+using static AtlasSpawn;
 public static class AtlasRendering
 {
     public const int MAX_SPRITE_DATA_COUNT = 1024;
@@ -341,11 +342,33 @@ public static class AtlasRendering
         scaleAndFlip[7] = scaleFlipHQuad;
         scaleAndFlip[8] = scaleFlipCQuad;
     }
-    public static Vector4[] GetQuadScalesNineSlice(float width, float height, SliceSprite sliceSprite)
+    public static Vector4[] GetQuadScalesFromSliceSprite(float width, float height, SliceSprite sliceSprite)
     {
         float centerWidth = sliceSprite.sprite.worldSize.x - sliceSprite.worldSlices.x - sliceSprite.worldSlices.y;
         float centerHeight = sliceSprite.sprite.worldSize.y - sliceSprite.worldSlices.z - sliceSprite.worldSlices.w;
 
+        float pivotWidth = (width - 1) * centerWidth;
+        float pivotHeight = (height - 1) * centerHeight;
+
+        return new Vector4[]
+        {
+            new Vector4(1, 1, 0, 0),
+            new Vector4(width, 1, 0, 0),
+            new Vector4(1, 1, pivotWidth, 0),
+
+            new Vector4(1, height, 0, 0),
+            new Vector4(width, height, 0, 0),
+            new Vector4(1, height, pivotWidth, 0),
+
+            new Vector4(1, 1, 0, pivotHeight),
+            new Vector4(width, 1, 0, pivotHeight),
+            new Vector4(1, 1, pivotWidth, pivotHeight),
+        };
+    }
+    public static Vector4[] GetQuadScalesFromParticleSpriteData(float width, float height, ParticleSpritesData centerSpriteData)
+    {
+        float centerWidth = centerSpriteData.worldPivotAndSize.z;
+        float centerHeight = centerSpriteData.worldPivotAndSize.w;
         float pivotWidth = (width - 1) * centerWidth;
         float pivotHeight = (height - 1) * centerHeight;
 

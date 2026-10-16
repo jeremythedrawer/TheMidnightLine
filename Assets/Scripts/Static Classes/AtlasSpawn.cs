@@ -96,10 +96,10 @@ public static class AtlasSpawn
         public EdgeScroller postScroller;
         public Vector4[] quadScales;
 
-        public string prefabGUID;
 
         public Vector2Int prevDepthIndices;
         
+
         public MaterialPropertyBlock mpb;
         public GraphicsBuffer argsBuffer;
         public GraphicsBuffer quadScaleBuffer;
@@ -107,10 +107,10 @@ public static class AtlasSpawn
         public ParticleWidthType widthType;
         public SpawnState spawnState;
 
+        public uint quadCount;
+
         public int startStation;
         public int endStation;
-
-        public uint quadCount;
 
         public int particleCount;
         public int minParticleIndex;
@@ -126,6 +126,11 @@ public static class AtlasSpawn
         public float posX;
         public float scaleY;
         public float scaleX;
+
+#if UNITY_EDITOR
+        public string prefabGUID;
+        public Vector2 randomFactor;
+#endif
     }
 
     [Serializable] public struct ParticleSpritesData

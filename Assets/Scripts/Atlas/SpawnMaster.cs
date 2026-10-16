@@ -33,14 +33,14 @@ public class SpawnMaster : MonoBehaviour
     {
         //SpyBrain.OnTalkToPassenger += ChangeParticles;
         TrainController.OnMetersAtSpawnBounds += DespawnEdgeScrollers;
-        actionData.onCreatedPassengerProfiles += Init;
+        actionData.onCreatedPassengerProfiles += StartGameInit;
         actionData.onGoToNextStation += ChangeParticles;
     }
     private void OnDisable()
     {
         //SpyBrain.OnTalkToPassenger -= ChangeParticles;
         TrainController.OnMetersAtSpawnBounds -= DespawnEdgeScrollers;
-        actionData.onCreatedPassengerProfiles -= Init;
+        actionData.onCreatedPassengerProfiles -= StartGameInit;
         Dispose();
     }
     private void Update()
@@ -67,7 +67,10 @@ public class SpawnMaster : MonoBehaviour
 
         InitParticles();
         ChangeParticles();
-
+    }
+    private void StartGameInit()
+    {
+        Init();
         options.curTrip.curDayNightValue = options.curTrip.dayNightValues[0];
 
         TrainController train = Instantiate(options.curRegion.train);

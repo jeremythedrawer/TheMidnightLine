@@ -148,7 +148,7 @@ public class CameraController : MonoBehaviour
                 }
 
                 targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, spawnData.bounds.min.x + camData.bounds.extents.x, spawnData.bounds.max.x - camData.bounds.extents.x);
-                targetWorldPos.y = passengersData.focusedPassengerBounds.center.y;
+                targetWorldPos.y = passengersData.focusedPassengerBounds.min.y;
             }
             break;
 
@@ -175,7 +175,7 @@ public class CameraController : MonoBehaviour
                 }
                 float margin = camData.bounds.extents.x * 0.7f;
                 targetWorldPos.x = Mathf.Clamp(targetWorldPos.x, camData.curLocationBounds.min.x + margin, camData.curLocationBounds.max.x - margin);
-                targetWorldPos.y = passengersData.focusedPassengerBounds.center.y;
+                targetWorldPos.y = passengersData.focusedPassengerBounds.min.y;
 
                 carriageBoundsCompute.SetFloat("_DeltaTime", Time.deltaTime);                
                 carriageBoundsCompute.Dispatch(carriageBoundsKernel, threadGroupX, threadGroupY, 1);

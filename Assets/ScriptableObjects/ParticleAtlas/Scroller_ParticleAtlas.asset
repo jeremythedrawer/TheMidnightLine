@@ -14,8 +14,33 @@ MonoBehaviour:
   m_EditorClassIdentifier: Assembly-CSharp::ParticleAtlas
   atlas: {fileID: 11400000, guid: ec75e3acfe7cd124aadcb376658cc12c, type: 2}
   particleType: 1
-  posDataArray: []
-  posDataIndexOffset: 0
+  posDataArray:
+  - preScroller:
+      edgeSpriteDataArray: []
+    postScroller:
+      edgeSpriteDataArray: []
+    quadScales:
+    - {x: 12, y: 1, z: 0, w: 0}
+    prevDepthIndices: {x: 0, y: 0}
+    widthType: 1
+    spawnState: 1
+    quadCount: 2
+    startStation: 0
+    endStation: 1
+    particleCount: 2
+    minParticleIndex: 0
+    maxParticleIndex: 1
+    posZ: 6
+    depthSize: 1
+    spriteIndex: 3
+    spritesPerParticle: 1
+    posY: 0
+    posX: -0
+    scaleY: 1
+    scaleX: 12
+    prefabGUID: 88213bfcf45a1e14dbff676518b881d0
+    randomFactor: {x: 0, y: 0}
+  posDataIndexOffset: 1
   spriteCount: 12
   isCompleted: 0
   spriteData:

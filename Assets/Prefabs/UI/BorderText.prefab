@@ -57,9 +57,10 @@ MonoBehaviour:
   height: 0.5789473
   cam: {fileID: 0}
   sprite:
+    customPositions: []
     uvSizeAndPos: {x: 0.16796875, y: 0.17773438, z: 0, w: 0.6972656}
-    uvPivot: {x: 0.5, y: 0}
     worldSize: {x: 0.47777778, y: 0.50555557, z: 1}
+    uvPivot: {x: 0.5, y: 0}
     index: 2
   bounds:
     m_Center: {x: -6.861468, y: 94.84277, z: -35.800003}
@@ -172,6 +173,7 @@ MonoBehaviour:
   text: Hello
   kerning: 0.09
   spacing: 2.83
+  verticalText: 0
   alignmentType: 0
   scrollSpeed: 0
   scrollBoundSize: 0
@@ -213,7 +215,7 @@ MonoBehaviour:
     - 
     - 
     - 
-    maxLineWidth: 0.52666676
+    maxLineDimension: 0.52666676
     lineCount: 1
     charCount: 5
   bounds:

@@ -49,44 +49,39 @@ MonoBehaviour:
   batchKey:
     texture: {fileID: 2800000, guid: 313de085264ddc848953f5be439b2d09, type: 3}
     material: {fileID: 2100000, guid: 55dc98ed088cfbb40922655a7eb144e5, type: 2}
-    depthOrder: -19
   atlas: {fileID: 11400000, guid: 7bd15aca28e0873468552b14aa4bd880, type: 2}
-  camStats: {fileID: 0}
   boxCollider: {fileID: 0}
   spriteIndex: 0
   flipX: 0
   flipY: 0
   width: 5.24
   height: 12.85
-  text: 
-  kerning: 1.1
-  spacing: 1
-  scrollSize: 0
-  textToCenter: 0
   cam: {fileID: 0}
   sprite:
-    uvSizeAndPos: {x: 0.41015625, y: 0.28027344, z: 0.0029296875, w: 0.43359375}
+    customPositions: []
+    uvSizeAndPos: {x: 0.24316406, y: 0.13183594, z: 0.28808594, w: 0.76660156}
+    worldSize: {x: 1.3833333, y: 0.75, z: 1}
     uvPivot: {x: 0, y: 0}
-    worldSize: {x: 2.3333333, y: 1.5944444, z: 1}
-    index: 3
+    index: 0
   bounds:
     m_Center: {x: 102.24233, y: 2.3500001, z: -19.89}
     m_Extent: {x: 2.882333, y: 2.3500001, z: 0.1}
   worldPivotAndSize: {x: 0, y: 0, z: 2.3333333, w: 1.5944444}
   uvSizeAndPosition: {x: 0.41015625, y: 0.28027344, z: 0.0029296875, w: 0.43359375}
-  scaleAndFlip: {x: 1, y: 1, z: 1, w: 1}
+  scaleAndFlip: {x: 5.24, y: 12.85, z: 1, w: 1}
   custom: {x: 0, y: 0, z: 0, w: 0}
+  customBit: 0
   boundsOffset: {x: 2.882333, y: 2.3500001, z: 0.1}
   worldPivotsAndSizes:
-  - {x: 0, y: 0, z: 0.19999999, w: 0}
-  - {x: -0.19999999, y: 0, z: 1.0333333, w: 0}
-  - {x: -5.6146665, y: 0, z: 0.14999999, w: 0}
-  - {x: 0, y: -0, z: 0.19999999, w: 0.33333334}
-  - {x: -0.19999999, y: -0, z: 1.0333333, w: 0.33333334}
-  - {x: -5.6146665, y: -0, z: 0.14999999, w: 0.33333334}
-  - {x: 0, y: -4.283334, z: 0.19999999, w: 0.41666666}
-  - {x: -0.19999999, y: -4.283334, z: 1.0333333, w: 0.41666666}
-  - {x: -5.6146665, y: -4.283334, z: 0.14999999, w: 0.41666666}
+  - {x: -0, y: -0, z: 0.19999999, w: 0}
+  - {x: 0.19999999, y: -0, z: 1.0333333, w: 0}
+  - {x: 5.6146665, y: -0, z: 0.14999999, w: 0}
+  - {x: -0, y: 0, z: 0.19999999, w: 0.33333334}
+  - {x: 0.19999999, y: 0, z: 1.0333333, w: 0.33333334}
+  - {x: 5.6146665, y: 0, z: 0.14999999, w: 0.33333334}
+  - {x: -0, y: 4.283334, z: 0.19999999, w: 0.41666666}
+  - {x: 0.19999999, y: 4.283334, z: 1.0333333, w: 0.41666666}
+  - {x: 5.6146665, y: 4.283334, z: 0.14999999, w: 0.41666666}
   uvSizesAndPositions:
   - {x: 0.03515625, y: 0, z: 0.28808594, w: 0.76660156}
   - {x: 0.18164062, y: 0, z: 0.3232422, w: 0.76660156}
@@ -121,11 +116,10 @@ MonoBehaviour:
   curFrameIndex: 0
   prevFrameIndex: 0
   curMotionIndex: 0
-  prevSpriteIndexFlipH: 3
-  prevSpriteIndexFlipV: 3
+  prevSpriteIndexFlipH: 0
+  prevSpriteIndexFlipV: 0
   isAnimating: 0
   quadCount: 0
-  hasText: 0
 --- !u!114 &442350294545246999
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -138,6 +132,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 27bd6af9ba3f0e2478e744ca408714d8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: Assembly-CSharp::TripEditorPrefab
+  widthType: 2
   mainRenderer: {fileID: 2150744849369591105}
-  preScrollers: []
-  postScrollers: []
+  preScrollerRenderers: []
+  postScrollersRenderers: []
