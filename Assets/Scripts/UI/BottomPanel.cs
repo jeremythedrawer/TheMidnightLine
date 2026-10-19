@@ -31,6 +31,7 @@ public class BottomPanel : MonoBehaviour
     public CursorData cursorData;
 
     public TextButton nextStationButton;
+    public IconButton[] colorButtons;
 
     [Header("Trip Map")]
     public Transform tripMapGroup;
@@ -119,8 +120,13 @@ public class BottomPanel : MonoBehaviour
     }
     private void Update()
     {
-
         nextStationButton.UpdateButton();
+
+        for(int i = 0;  i< colorButtons.Length; i++)
+        {
+            IconButton colButton = colorButtons[i];
+            colButton.UpdateButton();
+        }
 
         if ((curGroups & Groups.Traitors) != 0)
         {
@@ -179,6 +185,41 @@ public class BottomPanel : MonoBehaviour
             actionData.onGoToNextStation?.Invoke();
         }
         nextStationButton.InitButton(onMouseUp: NextStationMouseUp);
+
+        for (int i = 0; i < colorButtons.Length; i++)
+        {
+            IconButton colButton = colorButtons[i];
+
+            int index = i;
+            void MouseUp()
+            {
+                colButton.MouseUp();
+
+                if (options.selectedColorIndex != index)
+                {
+                    cursorData.curPassengerSelectionMode = CursorData.PassengerSelectionMode.Coloring;
+
+                    if (options.selectedColorIndex != -1)
+                    {
+                        IconButton prevColButton = colorButtons[options.selectedColorIndex];
+                        prevColButton.atlasRenderer.customBit &= ~(int)ColorBits.RedChannel;
+                    }
+
+                    colButton.atlasRenderer.customBit |= (int)ColorBits.RedChannel;
+                    options.selectedColorIndex = index;
+                }
+                else
+                {
+                    cursorData.curPassengerSelectionMode = CursorData.PassengerSelectionMode.Unmasking;
+                    colButton.atlasRenderer.customBit &= ~(int)ColorBits.RedChannel;
+                    options.selectedColorIndex = -1;
+                }
+            }
+            colButton.InitButton(onMouseUp: MouseUp);
+
+            colButton.atlasRenderer.custom = options.markerColors[i].linear;
+        }
+        options.selectedColorIndex = -1;
     }
     private void CleanUpCancelTokens()
     {

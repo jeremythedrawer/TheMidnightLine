@@ -23,7 +23,6 @@ public class TrainController : MonoBehaviour
     public static SlideDoors[] ExteriorSlideDoors;
     public static SlideDoors[] InteriorSlideDoors;
 
-    public static event Action OnTrainAtStartPosition;
     public static event Action OnFinishTripScene;
     public static event Action OnMetersAtSpawnBounds;
     public static event Action OnStationSpawn;
@@ -61,7 +60,6 @@ public class TrainController : MonoBehaviour
 
     public bool skipMoveToStart;
     public bool closingSlideDoors;
-    public bool atStartPosition;
     public bool started;
     public bool isPlayingDecelSound;
     private void OnValidate()
@@ -104,12 +102,13 @@ public class TrainController : MonoBehaviour
         transform.position = new Vector3(-100, 0, 0);
         
 
-        trainData.curStationIndex = 0;
+        trainData.nextStationIndex = 0;
         trainData.targetKMPH = options.curTrip.kmValues[0];
         trainData.curVelocity.x = KMPHToVelocity(trainData.targetKMPH);
         trainData.targetVelocity = Vector2.zero;
         trainData.totalNPCsBoarded = 0;
         trainData.slideDoorsAmountOpened = 0;
+        trainData.atStartPosition = false;
 
         trainCTS = new CancellationTokenSource();
 
@@ -130,7 +129,7 @@ public class TrainController : MonoBehaviour
     }
     private void ChooseState()
     {
-        if (trainData.curVelocity.x < CLOSE_TO_STOP_VELOCITY && trainData.targetVelocity.x == 0 && atStartPosition)
+        if (trainData.curVelocity.x < CLOSE_TO_STOP_VELOCITY && trainData.targetVelocity.x == 0 && trainData.atStartPosition)
         {
             SetState(TrainState.Stopped);
         }
@@ -227,7 +226,7 @@ public class TrainController : MonoBehaviour
             break;
             case TrainState.Decelerating:
             {
-                if (atStartPosition)
+                if (trainData.atStartPosition)
                 {
                     if (NextStationInstance != null)
                     {
@@ -276,7 +275,7 @@ public class TrainController : MonoBehaviour
                     {
                         offTrainClock = 0;
 
-                        if (trainData.curStationIndex < options.curTrip.stationsDataArray.Length - 1)
+                        if (trainData.nextStationIndex < options.curTrip.stationsDataArray.Length - 1)
                         {
                             if (trainData.totalNPCsBoarded == trainData.targetNPCsToBoard)
                             {
@@ -288,8 +287,8 @@ public class TrainController : MonoBehaviour
 
                                 if (trainData.slideDoorsAmountOpened == 0)
                                 {
-                                    trainData.curStationIndex++;
-                                    options.curTrip.stationAhead = options.curTrip.stationsDataArray[trainData.curStationIndex];
+                                    trainData.nextStationIndex++;
+                                    options.curTrip.stationAhead = options.curTrip.stationsDataArray[trainData.nextStationIndex];
                                     NextStationInstance = null;
                                     trainData.targetVelocity.x = KMPHToVelocity(DEFAULT_TARGET_KMPH);
                                 }
@@ -337,7 +336,7 @@ public class TrainController : MonoBehaviour
     }
     private void SpawnStation()
     {
-        NextStationInstance = stations[trainData.curStationIndex];
+        NextStationInstance = stations[trainData.nextStationIndex];
         float stationXPos = spawnData.bounds.max.x + (NextStationInstance.transform.position.x - NextStationInstance.platformRenderer.bounds.min.x);
         NextStationInstance.transform.position = new Vector3(stationXPos, 0, 0);
         NextStationInstance.gameObject.SetActive(true);
@@ -403,7 +402,7 @@ public class TrainController : MonoBehaviour
     }
     private void SpawnFirstStation()
     {
-        Station firstStation = stations[trainData.curStationIndex];
+        Station firstStation = stations[trainData.nextStationIndex];
         NextStationInstance = firstStation;
         firstStation.transform.position = Vector3.zero;
 
@@ -485,8 +484,7 @@ public class TrainController : MonoBehaviour
         }
         SetSlideDoorPositions();
         trainData.trainToMaxSpawnDist = spawnData.bounds.max.x - trainData.totalBounds.center.x;
-        OnTrainAtStartPosition?.Invoke();
-        atStartPosition = true;
+        trainData.atStartPosition = true;
     }
     private void MoveTrainToStartPosition()
     {

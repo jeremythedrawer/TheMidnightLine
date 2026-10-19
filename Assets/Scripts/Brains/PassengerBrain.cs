@@ -160,23 +160,35 @@ public class PassengerBrain : MonoBehaviour
         {
             atlasRenderer.customBit |= (int)ColorBits.BlueChannel;
 
-            if (cursorData.curPassengerSelectionMode == CursorData.PassengerSelectionMode.Unmasking)
+            switch(cursorData.curPassengerSelectionMode)
             {
-                cursorData.curCursorSpriteType = CursorData.CursorSpriteType.Eye;
-
-                if ((atlasRenderer.customBit & (int)ColorBits.RedChannel) != 0)
+                case CursorData.PassengerSelectionMode.Unmasking:
                 {
-                    uiData.curDialogueText = disembarkingStation.places[profile.placeIndex];
+                    cursorData.curCursorSpriteType = CursorData.CursorSpriteType.Eye;
 
-                    uiData.curDialogueWorldPosition.y = atlasRenderer.bounds.max.y + uiData.keyBindIconWorldSize.y;
-                    uiData.curDialogueWorldPosition.x = atlasRenderer.bounds.center.x;
+                    if ((atlasRenderer.customBit & (int)ColorBits.RedChannel) != 0)
+                    {
+                        uiData.curDialogueText = disembarkingStation.places[profile.placeIndex];
 
-                    actionData.onHoverUnmaskedPassenger?.Invoke();
+                        uiData.curDialogueWorldPosition.y = atlasRenderer.bounds.max.y + uiData.keyBindIconWorldSize.y;
+                        uiData.curDialogueWorldPosition.x = atlasRenderer.bounds.center.x;
+
+                        actionData.onHoverUnmaskedPassenger?.Invoke();
+                    }
                 }
-            }
-            else
-            {
-                cursorData.curCursorSpriteType = CursorData.CursorSpriteType.Pencil;
+                break;
+
+                case CursorData.PassengerSelectionMode.Suspecting:
+                {
+                    cursorData.curCursorSpriteType = CursorData.CursorSpriteType.Suspect;
+                }
+                break;
+
+                case CursorData.PassengerSelectionMode.Coloring:
+                {
+                    cursorData.curCursorSpriteType = CursorData.CursorSpriteType.Pencil;
+                }
+                break;
             }
         }
         void Exit()
@@ -193,26 +205,41 @@ public class PassengerBrain : MonoBehaviour
         void MouseUp()
         {
             iconButton.MouseUp();
-            if (cursorData.curPassengerSelectionMode == CursorData.PassengerSelectionMode.Unmasking)
-            {
-                atlasRenderer.customBit |= (int)ColorBits.RedChannel;
-                uiData.curDialogueText = disembarkingStation.places[profile.placeIndex];                
-                actionData.onUnmaskPassenger?.Invoke();
-            }
-            else
-            {
-                if ((atlasRenderer.customBit & (int)ColorBits.Vinrose) != 0)
+
+            switch (cursorData.curPassengerSelectionMode)
+            { 
+                case CursorData.PassengerSelectionMode.Unmasking:
                 {
-                    atlasRenderer.customBit &= ~(int)ColorBits.Vinrose;
-                    actionData.onUnsuspectPassenger?.Invoke();
+                    atlasRenderer.customBit |= (int)ColorBits.RedChannel;
+                    uiData.curDialogueText = disembarkingStation.places[profile.placeIndex];
+                    actionData.onUnmaskPassenger?.Invoke();
                 }
-                else
+                break;
+
+                case CursorData.PassengerSelectionMode.Suspecting:
                 {
-                    if (ActivePassenger != null) ActivePassenger.atlasRenderer.customBit &= ~(int)ColorBits.Vinrose;
-                    atlasRenderer.customBit |= (int)ColorBits.Vinrose;
-                    actionData.onSuspectPassenger?.Invoke();
+                    if ((atlasRenderer.customBit & (int)ColorBits.Vinrose) != 0)
+                    {
+                        atlasRenderer.customBit &= ~(int)ColorBits.Vinrose;
+                        actionData.onUnsuspectPassenger?.Invoke();
+                    }
+                    else
+                    {
+                        if (ActivePassenger != null) ActivePassenger.atlasRenderer.customBit &= ~(int)ColorBits.Vinrose;
+                        atlasRenderer.customBit |= (int)ColorBits.Vinrose;
+                        actionData.onSuspectPassenger?.Invoke();
+                    }
                 }
+                break;
+
+                case CursorData.PassengerSelectionMode.Coloring:
+                {
+
+                }
+                break;
+
             }
+
             actionData.onFocusPassenger?.Invoke();
             ActivePassenger = this;
         }
@@ -869,7 +896,7 @@ public class PassengerBrain : MonoBehaviour
             {
                 PassengerMotion standingMotion = RandomIdleMotion(PassengerMotion.StandingBlinking, PassengerMotion.StandingBreathing);
 
-                if (camData.curLocationState == CameraData.LocationState.Station && trainData.curStationIndex > 0)
+                if (camData.curLocationState == CameraData.LocationState.Station && trainData.nextStationIndex > 0)
                 {
                     SetPath(PassengerPath.StandingAtStation);
                 }

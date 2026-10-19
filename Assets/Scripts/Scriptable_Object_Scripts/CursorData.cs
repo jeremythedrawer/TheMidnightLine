@@ -6,15 +6,17 @@ public class CursorData : ScriptableObject
 {
     public enum CursorSpriteType
     {
-        Arrow = 2,
-        Point = 6,
-        Pencil = 16,
-        Eye = 17,
+        Arrow = 6,
+        Point = 5,
+        Pencil = 8,
+        Suspect = 9,
+        Eye = 10,
     }
     public enum PassengerSelectionMode
     {
         Unmasking,
         Suspecting,
+        Coloring,
     }
 
     public InputData inputData;

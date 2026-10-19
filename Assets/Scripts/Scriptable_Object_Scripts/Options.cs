@@ -47,7 +47,7 @@ public class Options : ScriptableObject
 
     public int dayNightID;
 
-    public int selectedPatternIndex;
+    public int selectedColorIndex;
 
     public TutorialState tutorialsCompleted;
     public TutorialState curTutorialState;

@@ -27,9 +27,11 @@ public class TrainData : ScriptableObject
     public float distToSpawnNextStation;
     public float trainToMaxSpawnDist;
 
-    public int curStationIndex;
+    public int nextStationIndex;
     public int totalNPCsBoarded;
     public int targetNPCsToBoard;
     public int slideDoorsAmountOpened;
+
+    public bool atStartPosition;
 
 }

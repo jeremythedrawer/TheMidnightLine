@@ -182,23 +182,26 @@ public class AtlasTextRenderer : MonoBehaviour
             backgroundRenderer.enabled = false;
             return;
         }
+        Vector4 centerLeftWPS = backgroundRenderer.worldPivotsAndSizes[3];
+        Vector4 centerRightWPS = backgroundRenderer.worldPivotsAndSizes[5];
+        float xOffset = (centerRightWPS.z - centerLeftWPS.z) * 0.5f;
         switch (alignmentType)
         {
             case AtlasTextAlignmentType.Left:
             {
-                borderLocalPos.x = bounds.extents.x;
+                borderLocalPos.x = bounds.extents.x + xOffset;
             }
             break;
 
             case AtlasTextAlignmentType.Center:
             {
-                borderLocalPos.x = 0;
+                borderLocalPos.x = xOffset;
             }
             break;
 
             case AtlasTextAlignmentType.Right:
             {
-                borderLocalPos.x = -bounds.extents.x;
+                borderLocalPos.x = -bounds.extents.x + xOffset;
             }
             break;
         }
@@ -215,6 +218,7 @@ public class AtlasTextRenderer : MonoBehaviour
         backgroundRenderer.transform.localPosition = borderLocalPos;
 
         backgroundRenderer.SetNineSliceSizeFromWorldSpace(worldSize);
+
     }
     public void SetTextWorld(string inputText, float alpha)
     {

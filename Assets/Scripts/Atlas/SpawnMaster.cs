@@ -31,16 +31,16 @@ public class SpawnMaster : MonoBehaviour
     public Queue<DelayedParticleData> delayedParticlesQueue;
     private void OnEnable()
     {
-        //SpyBrain.OnTalkToPassenger += ChangeParticles;
+        
         TrainController.OnMetersAtSpawnBounds += DespawnEdgeScrollers;
         actionData.onCreatedPassengerProfiles += StartGameInit;
         actionData.onGoToNextStation += ChangeParticles;
     }
     private void OnDisable()
     {
-        //SpyBrain.OnTalkToPassenger -= ChangeParticles;
         TrainController.OnMetersAtSpawnBounds -= DespawnEdgeScrollers;
         actionData.onCreatedPassengerProfiles -= StartGameInit;
+        actionData.onGoToNextStation -= ChangeParticles;
         Dispose();
     }
     private void Update()
@@ -234,7 +234,7 @@ public class SpawnMaster : MonoBehaviour
         {
             ParticlePosData posData = particleAtlas.posDataArray[i];
 
-            if (posData.endStation > options.curTrip.passengersUnmaskedTotal) continue;
+            if (posData.endStation > trainData.nextStationIndex) continue;
 
             switch(posData.spawnState)
             {
@@ -317,7 +317,7 @@ public class SpawnMaster : MonoBehaviour
         {
             ParticlePosData posData = particleAtlas.posDataArray[i];
 
-            if (options.curTrip.passengersUnmaskedTotal < posData.startStation)
+            if (trainData.nextStationIndex < posData.startStation)
             {
                 newOffset = i;
                 break;

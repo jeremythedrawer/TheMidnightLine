@@ -57,7 +57,6 @@ public class Carriage : MonoBehaviour
     public Bounds totalBounds;
 
     public int passengerCount;
-
     public int seatAmount;
     public int graffitiKernel;
     public int threadGroupX;
@@ -124,6 +123,8 @@ public class Carriage : MonoBehaviour
     }
     private void UpdateButton()
     {
+        if (!trainData.atStartPosition) return;
+
         if (ActiveCarriage != this)
         {
             exteriorButton.UpdateButton();
@@ -159,7 +160,7 @@ public class Carriage : MonoBehaviour
     }
     public void SetSignToNextStation(string stationName)
     {
-        string text = (trainData.curStationIndex < trip.stationsDataArray.Length ? "Next Station is " : "Terminating at ") + stationName;
+        string text = (trainData.nextStationIndex < trip.stationsDataArray.Length ? "Next Station is " : "Terminating at ") + stationName;
         nextStationSignRenderer.SetText(text);
     }
     public void SetSignToCurrentStation(string stationName)
